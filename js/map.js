@@ -115,13 +115,6 @@ SOTE.widget.Map.prototype.init = function(){
 	        div: this.containerId,
 	        theme: null,
 	        controls: [
-	            new OpenLayers.Control.Attribution(),                
-                new OpenLayers.Control.LayerSwitcher({'ascending':false}),
-                new OpenLayers.Control.Permalink(),
-                new OpenLayers.Control.ScaleLine(),
-                new OpenLayers.Control.Permalink('permalink'),
-                //new OpenLayers.Control.MousePosition(),
-                new OpenLayers.Control.OverviewMap()
                 
 	        ],
 	        layers: [
@@ -159,7 +152,7 @@ SOTE.widget.Map.prototype.init = function(){
 	    });
         
 
-        
+        // Add user controls, if necessary
         if (this.hasControls)
         {	
         	this.map.addControl(new OpenLayers.Control.TouchNavigation({
@@ -167,10 +160,18 @@ SOTE.widget.Map.prototype.init = function(){
 	                    enableKinetic: true
 	                }
 	            }));
-	        
 	        this.map.addControl(new OpenLayers.Control.ZoomPanel());
         	this.map.addControl(new OpenLayers.Control.KeyboardDefaults());
         	this.map.addControl(new OpenLayers.Control.Navigation());
+        	this.map.addControl(new OpenLayers.Control.LayerSwitcher({'ascending':false}));
+        	this.map.addControl(new OpenLayers.Control.Permalink('permalink'));
+            this.map.addControl(new OpenLayers.Control.OverviewMap());
+        	
+        	// While these aren't controls, per se, they are extra decorations
+			this.map.addControl(new OpenLayers.Control.Attribution());
+			this.map.addControl(new OpenLayers.Control.ScaleLine());
+			
+
         	
         	// this.map.addControl(new OpenLayers.Control.PanZoomBar());
         }
@@ -182,43 +183,25 @@ SOTE.widget.Map.prototype.init = function(){
         	this.map.addControl(new OpenLayers.Control.ZoomBox());
         }
         
-        
-        this.map.setCenter(
-            new OpenLayers.LonLat(-71.147, 42.472).transform(
-                new OpenLayers.Projection("EPSG:4326"),
-                this.map.getProjectionObject()
-            ), 12);
             
         
-        // TODO: Parse bounding box string and apply to map
-        // bbox is getting passed alright, extents are not being set properly;  
-        // something is wrong with projection - annotated box draws fine on Bing maps, not on OSM
-        // wait for real map data and configure proper extents, etc
-        
+        // Parse bounding box string and apply to map
+        // Need to convert from lat/lon to map's native coord system
         var extent = new OpenLayers.Bounds.fromString(this.bbox, false).transform(
                 new OpenLayers.Projection("EPSG:4326"),
                 this.map.getProjectionObject()); 
         this.map.zoomToExtent(extent, true);
         
         
-        // !!! speaking a different language.  This shows up as a small box off the coast of africa
-        // will probably have to reproject coordinates as done above for setting map center.
-         //(-45,-45, 0, 45).transform(
-         var bounds = new OpenLayers.Bounds(-180, -85, 180, 85).transform(
-                new OpenLayers.Projection("EPSG:4326"),
-                this.map.getProjectionObject()); 
-         //this.map.zoomToExtent(bounds);
-        var boxes = new OpenLayers.Layer.Boxes("boxes");
-	    var box = new OpenLayers.Marker.Box(bounds);
-    	boxes.addMarker(box);
-    	this.map.addLayer(boxes);
-    	
-    	//this.map.zoomToExtent(bounds, true);
+        // Test code to show a "box" overlay at a given set of coords
+         // var bounds = new OpenLayers.Bounds(-180, -85, 180, 85).transform(
+                // new OpenLayers.Projection("EPSG:4326"),
+                // this.map.getProjectionObject()); 
+        // var boxes = new OpenLayers.Layer.Boxes("boxes");
+	    // var box = new OpenLayers.Marker.Box(bounds);
+    	// boxes.addMarker(box);
+    	// this.map.addLayer(boxes);
         
-        
-
-        
-      
 };
 
 /**
@@ -230,7 +213,8 @@ SOTE.widget.Map.prototype.init = function(){
   *
 */
 SOTE.widget.Map.prototype.setValue = function(value){
-  // Content
+  
+	return this.setExtent(value);
 };
 
 /**
@@ -241,7 +225,18 @@ SOTE.widget.Map.prototype.setValue = function(value){
   *
 */
 SOTE.widget.Map.prototype.getValue = function(){
-  // Content
+
+	// Retrieve current extent
+	var extent = this.map.getExtent();
+	
+	// Check for invalid response, return 0s if necessary
+	if (extent == null)
+		return "0, 0, 0, 0";  
+	
+	// Otherwise object is valid, convert to lat/lon and return as string
+	return extent.transform(
+			this.map.getProjectionObject(),
+            new OpenLayers.Projection("EPSG:4326")).toString();
 };
 
 /**
@@ -253,7 +248,7 @@ SOTE.widget.Map.prototype.getValue = function(){
   * 
 */
 SOTE.widget.Map.prototype.updateComponent = function(querystring){
-  // Content
+  // TODO: Content
 };
 
 /**
@@ -265,7 +260,7 @@ SOTE.widget.Map.prototype.updateComponent = function(querystring){
   *
 */
 SOTE.widget.Map.prototype.loadFromQuery = function(qs){
-  // Content
+  // TODO: Content
 };
 
 /**
@@ -276,7 +271,29 @@ SOTE.widget.Map.prototype.loadFromQuery = function(qs){
   * @returns {boolean} true or false depending on whether the selected option(s) meet the validation criteria
 */
 SOTE.widget.Map.prototype.validate = function(){
-  // Content
+  
+	// Retrieve current extent
+	var extent = this.map.getExtent();
+	
+	// Check for invalid response, return false if necessary
+	if (extent == null)
+		return false;
+	
+	// Otherwise object is valid, convert to lat/lon
+	var latLonExtent = 
+		extent.transform(
+			this.map.getProjectionObject(),
+            new OpenLayers.Projection("EPSG:4326")).toString();
+	
+	// Validate bounds
+	if ((latLonExtent.left < -180) ||
+		(latLonExtent.right > 180) ||
+		(latLonExtent.top > 90) ||
+		(latLonExtent.bottom < -90))
+		return false;
+		
+	// else
+	return true;
 };
 
 /**
@@ -287,7 +304,7 @@ SOTE.widget.Map.prototype.validate = function(){
   *
 */
 SOTE.widget.Map.prototype.setDataSourceUrl = function(datasourceurl){
-  // Content
+  // TODO: Content
 };
 
 /**
@@ -298,7 +315,7 @@ SOTE.widget.Map.prototype.setDataSourceUrl = function(datasourceurl){
   *
 */
 SOTE.widget.Map.prototype.getDataSourceUrl = function(){
-  // Content
+  // TODO: Content
 };
 
 /**
@@ -309,7 +326,8 @@ SOTE.widget.Map.prototype.getDataSourceUrl = function(){
   *
 */
 SOTE.widget.Map.prototype.setStatus = function(s){
-  // Content
+  
+  this.statusStr = s;
 };
 
 /**
@@ -320,7 +338,8 @@ SOTE.widget.Map.prototype.setStatus = function(s){
   *
 */
 SOTE.widget.Map.prototype.getStatus = function(){
-  // Content
+  
+	return this.statusStr;
 };
 
 /**
@@ -332,6 +351,15 @@ SOTE.widget.Map.prototype.getStatus = function(){
   *
 */
 SOTE.widget.Map.prototype.setExtent = function(extent){
-  // Content
+
+    // Parse bounding box string and apply to map
+    // Need to convert from lat/lon to map's native coord system
+    var extent = new OpenLayers.Bounds.fromString(extent, false).transform(
+            new OpenLayers.Projection("EPSG:4326"),
+            this.map.getProjectionObject()); 
+    this.map.zoomToExtent(extent, true);
+    
+    // TODO: validate extent?
+    return true;
 };
 
