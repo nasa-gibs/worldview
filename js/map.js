@@ -118,10 +118,32 @@ SOTE.widget.Map.prototype.init = function(){
                 
 	        ],
 	        layers: [
+	        	new OpenLayers.Layer.WMS(
+	            	"Tiled WMS - Aqua/MODIS", 
+	            	"http://map1.vis.earthdata.nasa.gov/data/wms.cgi", 
+	            	{ layers: "AQUA_MODIS", Format: 'image/jpeg' }, 
+	            	{'tileSize': new OpenLayers.Size(512,512), buffer: 0,
+	            	transitionEffect: 'resize',
+	            	projection: "EPSG:4326", numZoomLevels: 9,  maxExtent: new OpenLayers.Bounds(-180,-1350,180,90), 
+	            	maxResolution: 1.125}),
+
+	        	new OpenLayers.Layer.WMS(
+	            	"Tiled WMS - Terra/MODIS", 
+	            	"http://map1.vis.earthdata.nasa.gov/data/wms.cgi", 
+	            	{ layers: "TERRA_MODIS", Format: 'image/jpeg' }, 
+	            	{'tileSize': new OpenLayers.Size(512,512), buffer: 0,
+	            	transitionEffect: 'resize',
+	            	projection: "EPSG:4326", numZoomLevels: 9,  maxExtent: new OpenLayers.Bounds(-180,-1350,180,90), 
+	            	maxResolution: 1.125}),
+	        
+	        
 	            new OpenLayers.Layer.OSM("OpenStreetMap", null, {
 	                transitionEffect: 'resize',
 	                sphericalMercator: true
 	            }),
+	            
+	             
+	            
 	            // new OpenLayers.Layer.WMS("NASA WMS Service",
 						// "http://onearth.jpl.nasa.gov/wms.cgi?",
  						// {
@@ -150,6 +172,14 @@ SOTE.widget.Map.prototype.init = function(){
 	        //center: new OpenLayers.LonLat(742000, 5861000),
 	        zoom: 3
 	    });
+	    
+	    
+	    //var aquaLayerOpts = { projection: "EPSG:4326", numZoomLevels: 9,  maxExtent: new OpenLayers.Bounds(-180,-90,180,90) };
+	       
+	    //aquaLayer.setIsBaseLayer(true);
+	    //aquaLayer.addOptions(aquaLayerOpts);
+	
+	    //this.map.addLayer(aquaLayer);
         
 
         // Add user controls, if necessary
@@ -183,6 +213,11 @@ SOTE.widget.Map.prototype.init = function(){
         	this.map.addControl(new OpenLayers.Control.ZoomBox());
         }
         
+        // Restrict valid extent to (-180, -90, 180, 90) since Tiled WMS uses (-180, -1350, 180, 90)
+        var restrictedExtent = new OpenLayers.Bounds.fromString("-180, -90, 180, 90", false).transform(
+                new OpenLayers.Projection("EPSG:4326"),
+                this.map.getProjectionObject()); 
+        this.map.restrictedExtent = restrictedExtent;
             
         
         // Parse bounding box string and apply to map
