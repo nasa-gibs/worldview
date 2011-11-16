@@ -9,7 +9,7 @@ left: 20px;
 div.olControlZoomPanel div {
     width: 36px;
     height: 36px;
-    background-image: url(js/ext/openlayers-2.11/examples/img/mobile-zoombar.png);
+    background-image: url(../js/ext/openlayers-2.11/examples/img/mobile-zoombar.png);
     left: 0;
 }
 div.olControlZoomPanel .olControlZoomInItemInactive {
@@ -23,6 +23,21 @@ div.olControlZoomPanel .olControlZoomToMaxExtentItemInactive {
 div.olControlZoomPanel .olControlZoomOutItemInactive {
     top: 72px;
     background-position: 0 -72px;
+}
+
+div.olControlPermalink {
+	right: 10px;
+	bottom: 10px;
+}
+
+/*div.olControlLayerSwitcher {
+	right: 18px;
+	top: 10px;
+}*/
+
+div.olControlScaleLine {
+	left: 10px;
+	bottom: 10px;
 }
 
 /*  CSS for full-screen map div and mobile device support  */
