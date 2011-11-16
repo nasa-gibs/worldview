@@ -47,10 +47,6 @@ SOTE.widget.Map = function(containerId, config){
 	    config.bbox = "-180, -90, 180, 90";
 	}	
 	
-	// TODO: are these necessary?
-	if(config.register === undefined){
-	    config.register = true;
-	}
 	
 	if(config.dataSourceUrl === undefined){
 	    config.dataSourceUrl = null;
@@ -70,6 +66,7 @@ SOTE.widget.Map = function(containerId, config){
     this.hasControls = config.hasControls;
     this.isSelectable = config.isSelectable;
     this.bbox = config.bbox;
+    this.date = config.date;
        
     this.value = "";
 	this.register = config.register;
@@ -78,12 +75,10 @@ SOTE.widget.Map = function(containerId, config){
 	this.dataSourceUrl = config.dataSourceUrl;
 	this.statusStr = "";
 	this.disabled = false;
-	// this.render();
   
   
 	// Initialize the map
 	this.init();
-  
 };
 
 /**
@@ -114,73 +109,92 @@ SOTE.widget.Map.prototype.init = function(){
         this.map = new OpenLayers.Map({
 	        div: this.containerId,
 	        theme: null,
+	        allOverlays: true,
 	        controls: [
                 
 	        ],
 	        layers: [
+	        
 	        	new OpenLayers.Layer.WMS(
-	            	"Tiled WMS - Aqua/MODIS", 
-	            	"http://map1.vis.earthdata.nasa.gov/data/wms.cgi", 
-	            	{ layers: "AQUA_MODIS", Format: 'image/jpeg' }, 
-	            	{'tileSize': new OpenLayers.Size(512,512), buffer: 0,
-	            	transitionEffect: 'resize',
-	            	projection: "EPSG:4326", numZoomLevels: 9,  maxExtent: new OpenLayers.Bounds(-180,-1350,180,90), 
-	            	maxResolution: 1.125}),
-
-	        	new OpenLayers.Layer.WMS(
-	            	"Tiled WMS - Terra/MODIS", 
+	            	"Terra/MODIS - latest", 
 	            	"http://map1.vis.earthdata.nasa.gov/data/wms.cgi", 
 	            	{ layers: "TERRA_MODIS", Format: 'image/jpeg' }, 
 	            	{'tileSize': new OpenLayers.Size(512,512), buffer: 0,
 	            	transitionEffect: 'resize',
-	            	projection: "EPSG:4326", numZoomLevels: 9,  maxExtent: new OpenLayers.Bounds(-180,-1350,180,90), 
-	            	maxResolution: 1.125}),
+	            	projection: "EPSG:4326", numZoomLevels: 10,  maxExtent: new OpenLayers.Bounds(-180,-1350,180,90), 
+	            	maxResolution: 1.125, visibility: false}),
 	        
-	        
-	            new OpenLayers.Layer.OSM("OpenStreetMap", null, {
-	                transitionEffect: 'resize',
-	                sphericalMercator: true
-	            }),
-	            
-	             
-	            
-	            // new OpenLayers.Layer.WMS("NASA WMS Service",
-						// "http://onearth.jpl.nasa.gov/wms.cgi?",
- 						// {
-							// layers: 'global_mosaic'
-							// , styles: 'visual'
- 						// },
-						// {
-							// tileSize: new OpenLayers.Size(512,512)
- 						// }
-				// ),
-		         new OpenLayers.Layer.VirtualEarth("Shaded", {
-                	 type: VEMapStyle.Shaded,
-                	 transitionEffect: 'resize',
-                	 sphericalMercator: true
-            	 })//,
-            	// new OpenLayers.Layer.VirtualEarth("Hybrid", {
-                	// type: VEMapStyle.Hybrid,
-                	// transitionEffect: 'resize'
-            	// }),
-            	// new OpenLayers.Layer.VirtualEarth("Aerial", {
-                	// type: VEMapStyle.Aerial,
-                	// transitionEffect: 'resize'
-            	// })
+	        	new OpenLayers.Layer.WMS(
+	            	"Aqua/MODIS - latest", 
+	            	"http://map1.vis.earthdata.nasa.gov/data/wms.cgi", 
+	            	{ layers: "AQUA_MODIS", Format: 'image/jpeg' }, 
+	            	{'tileSize': new OpenLayers.Size(512,512), buffer: 0,
+	            	transitionEffect: 'resize',
+	            	projection: "EPSG:4326", numZoomLevels: 10,  maxExtent: new OpenLayers.Bounds(-180,-1350,180,90), 
+	            	maxResolution: 1.125, visibility: true}),	            	
+ 
+	            	
+	           	new OpenLayers.Layer.WMS(
+	            	"11/12/2011", 
+	            	"http://map1.vis.earthdata.nasa.gov/data/wms.cgi", 
+	            	{ time: "2011-11-12", layers: "TERRA_MODIS", Format: 'image/jpeg' }, 
+	            	{'tileSize': new OpenLayers.Size(512,512), buffer: 0,
+	            	transitionEffect: 'resize',
+	            	projection: "EPSG:4326", numZoomLevels: 10,  maxExtent: new OpenLayers.Bounds(-180,-1350,180,90), 
+	            	maxResolution: 1.125, visibility: false}),
+	            	
+	           	new OpenLayers.Layer.WMS(
+	            	"11/11/2011", 
+	            	"http://map1.vis.earthdata.nasa.gov/data/wms.cgi", 
+	            	{ time: "2011-11-11", layers: "TERRA_MODIS", Format: 'image/jpeg' }, 
+	            	{'tileSize': new OpenLayers.Size(512,512), buffer: 0,
+	            	transitionEffect: 'resize',
+	            	projection: "EPSG:4326", numZoomLevels: 10,  maxExtent: new OpenLayers.Bounds(-180,-1350,180,90), 
+	            	maxResolution: 1.125, visibility: false}),
 
+	           	new OpenLayers.Layer.WMS(
+	            	"11/10/2011", 
+	            	"http://map1.vis.earthdata.nasa.gov/data/wms.cgi", 
+	            	{ time: "2011-11-10", layers: "TERRA_MODIS", Format: 'image/jpeg' }, 
+	            	{'tileSize': new OpenLayers.Size(512,512), buffer: 0,
+	            	transitionEffect: 'resize',
+	            	projection: "EPSG:4326", numZoomLevels: 10,  maxExtent: new OpenLayers.Bounds(-180,-1350,180,90), 
+	            	maxResolution: 1.125, visibility: false}),
+
+	           	new OpenLayers.Layer.WMS(
+	            	"11/09/2011", 
+	            	"http://map1.vis.earthdata.nasa.gov/data/wms.cgi", 
+	            	{ time: "2011-11-09", layers: "TERRA_MODIS", Format: 'image/jpeg' }, 
+	            	{'tileSize': new OpenLayers.Size(512,512), buffer: 0,
+	            	transitionEffect: 'resize',
+	            	projection: "EPSG:4326", numZoomLevels: 10,  maxExtent: new OpenLayers.Bounds(-180,-1350,180,90), 
+	            	maxResolution: 1.125, visibility: false}),
+	            	
+	           	new OpenLayers.Layer.WMS(
+	            	"11/08/2011", 
+	            	"http://map1.vis.earthdata.nasa.gov/data/wms.cgi", 
+	            	{ time: "2011-11-08", layers: "TERRA_MODIS", Format: 'image/jpeg' }, 
+	            	{'tileSize': new OpenLayers.Size(512,512), buffer: 0,
+	            	transitionEffect: 'resize',
+	            	projection: "EPSG:4326", numZoomLevels: 10,  maxExtent: new OpenLayers.Bounds(-180,-1350,180,90), 
+	            	maxResolution: 1.125, visibility: false})            	
+
+
+	        
+	        
+	            // new OpenLayers.Layer.OSM("OpenStreetMap", null, {
+	                // transitionEffect: 'resize',
+	                // sphericalMercator: true,
+	                // visibility: false
+	            // })
+	            
+	           
+ 
 	        ],
 	        //center: new OpenLayers.LonLat(742000, 5861000),
-	        zoom: 3
+	        zoom: 2
 	    });
-	    
-	    
-	    //var aquaLayerOpts = { projection: "EPSG:4326", numZoomLevels: 9,  maxExtent: new OpenLayers.Bounds(-180,-90,180,90) };
-	       
-	    //aquaLayer.setIsBaseLayer(true);
-	    //aquaLayer.addOptions(aquaLayerOpts);
-	
-	    //this.map.addLayer(aquaLayer);
-        
+	        
 
         // Add user controls, if necessary
         if (this.hasControls)
@@ -193,16 +207,19 @@ SOTE.widget.Map.prototype.init = function(){
 	        this.map.addControl(new OpenLayers.Control.ZoomPanel());
         	this.map.addControl(new OpenLayers.Control.KeyboardDefaults());
         	this.map.addControl(new OpenLayers.Control.Navigation());
-        	this.map.addControl(new OpenLayers.Control.LayerSwitcher({'ascending':false}));
-        	this.map.addControl(new OpenLayers.Control.Permalink('permalink'));
-            this.map.addControl(new OpenLayers.Control.OverviewMap());
+        	this.map.addControl(new OpenLayers.Control.LayerSwitcher({displayClass: 'olControlLayerSwitcher', 'ascending':false}));
+        	this.map.addControl(new OpenLayers.Control.Permalink({displayClass: 'olControlPermalink'}));
+            //this.map.addControl(new OpenLayers.Control.OverviewMap());
         	
         	// While these aren't controls, per se, they are extra decorations
 			this.map.addControl(new OpenLayers.Control.Attribution());
-			this.map.addControl(new OpenLayers.Control.ScaleLine());
+			this.map.addControl(new OpenLayers.Control.ScaleLine({displayClass: 'olControlScaleLine'}));
 			
-
-        	
+			// Set mousewheel sensitivity
+			var navControl = this.map.getControlsByClass("OpenLayers.Control.Navigation")[0];
+			navControl.handlers.wheel.interval = 60;
+			navControl.handlers.wheel.cumulative = false;
+			
         	// this.map.addControl(new OpenLayers.Control.PanZoomBar());
         }
         
@@ -213,31 +230,58 @@ SOTE.widget.Map.prototype.init = function(){
         	this.map.addControl(new OpenLayers.Control.ZoomBox());
         }
         
+        
         // Restrict valid extent to (-180, -90, 180, 90) since Tiled WMS uses (-180, -1350, 180, 90)
         var restrictedExtent = new OpenLayers.Bounds.fromString("-180, -90, 180, 90", false).transform(
                 new OpenLayers.Projection("EPSG:4326"),
                 this.map.getProjectionObject()); 
         this.map.restrictedExtent = restrictedExtent;
-            
+        
         
         // Parse bounding box string and apply to map
         // Need to convert from lat/lon to map's native coord system
         var extent = new OpenLayers.Bounds.fromString(this.bbox, false).transform(
                 new OpenLayers.Projection("EPSG:4326"),
                 this.map.getProjectionObject()); 
-        this.map.zoomToExtent(extent, true);
+                
+                
+        if (extent == null)
+        {
+        	alert("passed-in bounds invalid for some reason")
+        	
+        }
+        // else
+        	// this.map.zoomToExtent(extent, true);
         
         
-        // Test code to show a "box" overlay at a given set of coords
-         // var bounds = new OpenLayers.Bounds(-180, -85, 180, 85).transform(
-                // new OpenLayers.Projection("EPSG:4326"),
-                // this.map.getProjectionObject()); 
-        // var boxes = new OpenLayers.Layer.Boxes("boxes");
-	    // var box = new OpenLayers.Marker.Box(bounds);
-    	// boxes.addMarker(box);
-    	// this.map.addLayer(boxes);
         
+        // Set selected date to be active - do this by deselecting everything else
+        // if (this.map.layers.length > 0)
+        // {
+        	// // Iterate through all layers
+        	// for (var i=0; i<this.map.layers.length; i++)
+        	// {
+        		// // Check if current layer is of selected date
+        		// if (this.map.layers[i].name == this.date)
+				// {        		
+        			// this.map.layers[i].setVisibility(true);
+        			// alert("found name match: "+this.map.layers[i].name);
+        		// }
+        		// else
+        			// this.map.layers[i].setVisibility(false);
+//         		
+        	// }
+        // }
+        
+		var selectedLayer = this.map.getLayersByName(this.date);
+		if ((selectedLayer != null) && (selectedLayer.length > 0))
+		{
+			// this.map.setBaseLayer(selectedLayer[0]);
+			selectedLayer[0].setVisibility(true);
+		}
 };
+
+
 
 /**
   * Sets the visible extent in the map from the passed in value, if valid.  formatted as [containerId]=w,s,e,n
@@ -273,6 +317,60 @@ SOTE.widget.Map.prototype.getValue = function(){
 			this.map.getProjectionObject(),
             new OpenLayers.Projection("EPSG:4326")).toString();
 };
+
+/**
+ * Gets number of time steps currently stored by map
+ * 
+ * @returns {int} number of time steps
+ */
+SOTE.widget.Map.prototype.getNumTimeSteps = function(){
+	
+	// TODO: fix this hack by actually computing number of time steps
+	return this.map.layers.length;
+}
+
+/**
+ * Sets a given layer to be visible or hidden
+ * 
+ * @param {int} layer number to modify
+ * @param {boolean} true to set visible, false to hide
+ */
+SOTE.widget.Map.prototype.setLayerVisibility = function(layerNum, visible)
+{
+	if ((layerNum > this.map.layers.length) ||
+		(layerNum < 0))
+		return;
+		
+	this.map.layers[layerNum].setVisibility(visible);
+}
+
+/**
+ * Sets fractional opacity for a given layer
+ * 
+ * @param {int} layer number to modify
+ * @param {float} opacity value between 0 and 1
+ */
+SOTE.widget.Map.prototype.setLayerOpacity = function(layerNum, opacity)
+{
+	if ((layerNum > this.map.layers.length) ||
+		(layerNum < 0))
+		return;
+		
+	this.map.layers[layerNum].setOpacity(opacity);
+}
+
+/**
+ * Registers a user-specified function to be called back after a user is done panning or zooming
+ * 
+ * @param {function} function to be registered
+ * @param {context} context of function
+ */
+SOTE.widget.Map.prototype.addPanZoomEndCallback = function(func, context)
+{
+	// Set up callbacks for pan/zoom end
+	// TODO: register this to an internal function and call a "fire" event to 
+	this.map.events.register("moveend", context, func);
+}
 
 /**
   * Change the base layers based on dependencies (i.e. extent, date, data product)
@@ -312,7 +410,10 @@ SOTE.widget.Map.prototype.validate = function(){
 	
 	// Check for invalid response, return false if necessary
 	if (extent == null)
+	{
+		this.setStatus("Could not retrieve current extent");
 		return false;
+	}
 	
 	// Otherwise object is valid, convert to lat/lon
 	var latLonExtent = 
@@ -325,7 +426,11 @@ SOTE.widget.Map.prototype.validate = function(){
 		(latLonExtent.right > 180) ||
 		(latLonExtent.top > 90) ||
 		(latLonExtent.bottom < -90))
+	{
+		this.setStatus("Current extent is out of bounds");
 		return false;
+	}
+		
 		
 	// else
 	return true;
@@ -391,10 +496,60 @@ SOTE.widget.Map.prototype.setExtent = function(extent){
     // Need to convert from lat/lon to map's native coord system
     var extent = new OpenLayers.Bounds.fromString(extent, false).transform(
             new OpenLayers.Projection("EPSG:4326"),
-            this.map.getProjectionObject()); 
+            this.map.getProjectionObject());
+
+	if (extent == null)
+	{
+		this.setStatus("Could not set extent");
+		return false;
+	}           
+  
+ 	// else
     this.map.zoomToExtent(extent, true);
-    
-    // TODO: validate extent?
     return true;
 };
 
+
+/**
+ * Fires an event in the registry when the component value is changed
+ * 
+ * @author T. Joshi 
+ */
+SOTE.widget.Map.prototype.fire = function(){
+ 
+    this.selectionEvent.fire();
+    if(this.register === true){
+        if(REGISTRY){
+		    REGISTRY.fire(this);
+        }
+        else{
+		    alert("no REGISTRY so no event REGISTRY event to fire");
+        }
+    }
+
+
+};
+
+
+/**
+ * Updates the component bounds based on dependencies in the registry
+ *      
+ * @param {String} specifies additional parameters for the data source url to be fetched from in format starttime=&endtime= 
+ * @author T. Joshi 
+ */
+SOTE.widget.Map.prototype.updateComponent = function(qs){
+    if(this.dataSourceUrl === null){
+	alert("There is no external data source url specified.  Cannot update component!");
+        return false;
+    }
+    var dataSourceUrl = this.dataSourceUrl + "?" + qs;
+    this.setStatus("Updating data map based on data changes ... ",true);
+    // YAHOO.util.Connect.asyncRequest('GET', dataSourceUrl,
+    // { 
+	// success:SANDBOX.widget.BoundingBoxPicker.fetchDataSuccessHandler,
+	// failure:SANDBOX.widget.BoundingBoxPicker.fetchDataFailureHandler,
+	// argument: {self:this,format:"xml"}
+    // } );
+
+ 
+};
