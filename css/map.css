@@ -9,7 +9,7 @@ left: 20px;
 div.olControlZoomPanel div {
     width: 36px;
     height: 36px;
-    background-image: url(../js/ext/openlayers-2.11/examples/img/mobile-zoombar.png);
+/*    background-image: url(../js/ext/openlayers-2.11/examples/img/mobile-zoombar.png);*/
     left: 0;
 }
 div.olControlZoomPanel .olControlZoomInItemInactive {
