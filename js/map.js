@@ -121,8 +121,8 @@ SOTE.widget.Map.prototype.init = function(){
 	            	{ layers: "TERRA_MODIS", Format: 'image/jpeg' }, 
 	            	{'tileSize': new OpenLayers.Size(512,512), buffer: 0,
 	            	transitionEffect: 'resize',
-	            	projection: "EPSG:4326", numZoomLevels: 10,  maxExtent: new OpenLayers.Bounds(-180,-1350,180,90), 
-	            	maxResolution: 1.125, visibility: false}),
+	            	projection: "EPSG:4326", numZoomLevels: 9,  maxExtent: new OpenLayers.Bounds(-180,-1350,180,90), 
+	            	maxResolution: 0.5625, visibility: false}),
 	        
 	        	new OpenLayers.Layer.WMS(
 	            	"Aqua/MODIS - latest", 
@@ -130,8 +130,8 @@ SOTE.widget.Map.prototype.init = function(){
 	            	{ layers: "AQUA_MODIS", Format: 'image/jpeg' }, 
 	            	{'tileSize': new OpenLayers.Size(512,512), buffer: 0,
 	            	transitionEffect: 'resize',
-	            	projection: "EPSG:4326", numZoomLevels: 10,  maxExtent: new OpenLayers.Bounds(-180,-1350,180,90), 
-	            	maxResolution: 1.125, visibility: true}),	            	
+	            	projection: "EPSG:4326", numZoomLevels: 9,  maxExtent: new OpenLayers.Bounds(-180,-1350,180,90), 
+	            	maxResolution: 0.5625, visibility: true}),	            	
  
 	            	
 	           	new OpenLayers.Layer.WMS(
@@ -140,8 +140,8 @@ SOTE.widget.Map.prototype.init = function(){
 	            	{ time: "2011-11-12", layers: "TERRA_MODIS", Format: 'image/jpeg' }, 
 	            	{'tileSize': new OpenLayers.Size(512,512), buffer: 0,
 	            	transitionEffect: 'resize',
-	            	projection: "EPSG:4326", numZoomLevels: 10,  maxExtent: new OpenLayers.Bounds(-180,-1350,180,90), 
-	            	maxResolution: 1.125, visibility: false}),
+	            	projection: "EPSG:4326", numZoomLevels: 9,  maxExtent: new OpenLayers.Bounds(-180,-1350,180,90), 
+	            	maxResolution: 0.5625, visibility: false}),
 	            	
 	           	new OpenLayers.Layer.WMS(
 	            	"11/11/2011", 
@@ -149,8 +149,8 @@ SOTE.widget.Map.prototype.init = function(){
 	            	{ time: "2011-11-11", layers: "TERRA_MODIS", Format: 'image/jpeg' }, 
 	            	{'tileSize': new OpenLayers.Size(512,512), buffer: 0,
 	            	transitionEffect: 'resize',
-	            	projection: "EPSG:4326", numZoomLevels: 10,  maxExtent: new OpenLayers.Bounds(-180,-1350,180,90), 
-	            	maxResolution: 1.125, visibility: false}),
+	            	projection: "EPSG:4326", numZoomLevels: 9,  maxExtent: new OpenLayers.Bounds(-180,-1350,180,90), 
+	            	maxResolution: 0.5625, visibility: false}),
 
 	           	new OpenLayers.Layer.WMS(
 	            	"11/10/2011", 
@@ -158,8 +158,8 @@ SOTE.widget.Map.prototype.init = function(){
 	            	{ time: "2011-11-10", layers: "TERRA_MODIS", Format: 'image/jpeg' }, 
 	            	{'tileSize': new OpenLayers.Size(512,512), buffer: 0,
 	            	transitionEffect: 'resize',
-	            	projection: "EPSG:4326", numZoomLevels: 10,  maxExtent: new OpenLayers.Bounds(-180,-1350,180,90), 
-	            	maxResolution: 1.125, visibility: false}),
+	            	projection: "EPSG:4326", numZoomLevels: 9,  maxExtent: new OpenLayers.Bounds(-180,-1350,180,90), 
+	            	maxResolution: 0.5625, visibility: false}),
 
 	           	new OpenLayers.Layer.WMS(
 	            	"11/09/2011", 
@@ -167,8 +167,8 @@ SOTE.widget.Map.prototype.init = function(){
 	            	{ time: "2011-11-09", layers: "TERRA_MODIS", Format: 'image/jpeg' }, 
 	            	{'tileSize': new OpenLayers.Size(512,512), buffer: 0,
 	            	transitionEffect: 'resize',
-	            	projection: "EPSG:4326", numZoomLevels: 10,  maxExtent: new OpenLayers.Bounds(-180,-1350,180,90), 
-	            	maxResolution: 1.125, visibility: false}),
+	            	projection: "EPSG:4326", numZoomLevels: 9,  maxExtent: new OpenLayers.Bounds(-180,-1350,180,90), 
+	            	maxResolution: 0.5625, visibility: false}),
 	            	
 	           	new OpenLayers.Layer.WMS(
 	            	"11/08/2011", 
@@ -176,8 +176,8 @@ SOTE.widget.Map.prototype.init = function(){
 	            	{ time: "2011-11-08", layers: "TERRA_MODIS", Format: 'image/jpeg' }, 
 	            	{'tileSize': new OpenLayers.Size(512,512), buffer: 0,
 	            	transitionEffect: 'resize',
-	            	projection: "EPSG:4326", numZoomLevels: 10,  maxExtent: new OpenLayers.Bounds(-180,-1350,180,90), 
-	            	maxResolution: 1.125, visibility: false})            	
+	            	projection: "EPSG:4326", numZoomLevels: 9,  maxExtent: new OpenLayers.Bounds(-180,-1350,180,90), 
+	            	maxResolution: 0.5625, visibility: false})            	
 
 
 	        
