@@ -372,17 +372,6 @@ SOTE.widget.Map.prototype.addPanZoomEndCallback = function(func, context)
 	this.map.events.register("moveend", context, func);
 }
 
-/**
-  * Change the base layers based on dependencies (i.e. extent, date, data product)
-  * 
-  * @this {map}
-  * @param {String} querystring contains all values of dependencies (from registry)
-  * @returns {boolean} true or false depending on if the component still validates with the new criteria
-  * 
-*/
-SOTE.widget.Map.prototype.updateComponent = function(querystring){
-  // TODO: Content
-};
 
 /**
   * Sets the selected option(s) from the query string [containerId]=w,s,e,n
@@ -532,12 +521,14 @@ SOTE.widget.Map.prototype.fire = function(){
 
 
 /**
- * Updates the component bounds based on dependencies in the registry
- *      
- * @param {String} specifies additional parameters for the data source url to be fetched from in format starttime=&endtime= 
- * @author T. Joshi 
- */
-SOTE.widget.Map.prototype.updateComponent = function(qs){
+  * Change the base layers based on dependencies (i.e. extent, date, data product)
+  * 
+  * @this {map}
+  * @param {String} querystring contains all values of dependencies (from registry)
+  * @returns {boolean} true or false depending on if the component still validates with the new criteria
+  * 
+*/
+Map.prototype.updateComponent = function(qs){
     if(this.dataSourceUrl === null){
 	alert("There is no external data source url specified.  Cannot update component!");
         return false;
