@@ -28,8 +28,6 @@ SOTE.namespace = function()
 
 SOTE.namespace("widget");
 
-SOTE.widget.Component.prototype = new SOTE.widget.Component;
-
 /**
   * Instantiate the component  
   *
@@ -152,7 +150,6 @@ SOTE.widget.Component.prototype.setStatus = function(s){
 SOTE.widget.Component.prototype.getStatus = function(){
   // Content
 };
-
 
 
 
