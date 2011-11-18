@@ -213,7 +213,7 @@ SOTE.widget.AccordionPicker.prototype.updateComponent = function(querystring){
   *
 */
 SOTE.widget.AccordionPicker.prototype.loadFromQuery = function(qs){
-	return this.setValue(extractFromQuery("categoryPicker",qs));
+	return this.setValue(SOTE.util.extractFromQuery("categoryPicker",qs));
 };
 
 /**
