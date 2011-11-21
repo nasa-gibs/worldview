@@ -1,5 +1,5 @@
-/** SOTE.widget.Map.prototype = new SOTE.widget.Component; */
 SOTE.namespace("SOTE.widget.Map");
+SOTE.widget.Map.prototype = new SOTE.widget.Component;
 
 
 /**
@@ -29,6 +29,9 @@ SOTE.widget.Map = function(containerId, config){
 	// Store the container's ID
 	this.containerId=containerId;
 	this.id = containerId;  
+
+	// Constants
+	this.SEDAC_BORDER_LAYER_NAME = "Admin Boundaries &#40;SEDAC&#41;"; 
 
 	// Define an object for holding configuration 
 	if (config===undefined){
@@ -177,15 +180,22 @@ SOTE.widget.Map.prototype.init = function(){
 	            	{'tileSize': new OpenLayers.Size(512,512), buffer: 0,
 	            	transitionEffect: 'resize',
 	            	projection: "EPSG:4326", numZoomLevels: 9,  maxExtent: new OpenLayers.Bounds(-180,-1350,180,90), 
-	            	maxResolution: 0.5625, visibility: false})            	
-
+	            	maxResolution: 0.5625, visibility: false}),
+	            	
+//	            new OpenLayers.Layer.OSM( "Simple OSM Map"),
+	            	
+	            new OpenLayers.Layer.WMS( this.SEDAC_BORDER_LAYER_NAME, 
+            		"http://sedac.ciesin.columbia.edu/geoserver/wms?", 
+            		{layers:"cartographic:esri-administrative-boundaries_level-1",
+            		transparent:true},  
+            		{isBaseLayer:false, visibility:true, opacity:0.35, transitioneffect: 'resize'})
 
 	        
-	        
+	        	// OSM projection system apparently is not compatible with that of Tiled WMS
 	            // new OpenLayers.Layer.OSM("OpenStreetMap", null, {
 	                // transitionEffect: 'resize',
 	                // sphericalMercator: true,
-	                // visibility: false
+	                // visibility: true
 	            // })
 	            
 	           
@@ -340,7 +350,11 @@ SOTE.widget.Map.prototype.setLayerVisibility = function(layerNum, visible)
 	if ((layerNum > this.map.layers.length) ||
 		(layerNum < 0))
 		return;
-		
+	
+	// Ensure SEDAC admin boundaries layer remains in place
+	if (this.map.layers[layerNum].name == this.SEDAC_BORDER_LAYER_NAME)
+		return;
+	
 	this.map.layers[layerNum].setVisibility(visible);
 }
 
@@ -506,16 +520,12 @@ SOTE.widget.Map.prototype.setExtent = function(extent){
  */
 SOTE.widget.Map.prototype.fire = function(){
  
-    this.selectionEvent.fire();
-    if(this.register === true){
-        if(REGISTRY){
-		    REGISTRY.fire(this);
-        }
-        else{
-		    alert("no REGISTRY so no event REGISTRY event to fire");
-        }
-    }
-
+	if(REGISTRY){
+		REGISTRY.fire(this);
+	}
+	else{
+		alert("No REGISTRY found! Cannot fire to REGISTRY from AccordionPicker!");
+	}
 
 };
 
@@ -528,19 +538,19 @@ SOTE.widget.Map.prototype.fire = function(){
   * @returns {boolean} true or false depending on if the component still validates with the new criteria
   * 
 */
-Map.prototype.updateComponent = function(qs){
+SOTE.widget.Map.prototype.updateComponent = function(qs){
     if(this.dataSourceUrl === null){
 	alert("There is no external data source url specified.  Cannot update component!");
         return false;
     }
-    var dataSourceUrl = this.dataSourceUrl + "?" + qs;
-    this.setStatus("Updating data map based on data changes ... ",true);
-    // YAHOO.util.Connect.asyncRequest('GET', dataSourceUrl,
-    // { 
-	// success:SANDBOX.widget.BoundingBoxPicker.fetchDataSuccessHandler,
-	// failure:SANDBOX.widget.BoundingBoxPicker.fetchDataFailureHandler,
-	// argument: {self:this,format:"xml"}
-    // } );
+    
+	var qs = (querystring === undefined)? "":querystring;
+	SOTE.util.getJSON(
+		this.dataSourceUrl+querystring,
+		{self:this},
+		SOTE.widget.AccordionPicker.handleUpdateSuccess,
+		SOTE.widget.AccordionPicker.handleUpdateFailure
+	);
 
  
 };
