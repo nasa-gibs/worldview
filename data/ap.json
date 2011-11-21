@@ -1,0 +1,44 @@
+{
+	
+			"Tilak 1": [
+					{
+						"label":"Key 1.1",
+						"value":"11",
+						"type":"single",
+						"disabled":true
+
+					},
+					{
+						"label":"Key 1.2",
+						"value":"12",
+						"type":"single"
+					},
+					{
+						"label":"Key 1.3",
+						"value":"13",
+						"type":"single"
+					},
+					{
+						"label":"Key 1.4",
+						"value":"14",
+						"type":"multi"
+					}
+				],
+				"Category 2": [
+					{
+						"label":"Key 2.1",
+						"value":"21",
+						"type":"single"
+					},
+					{
+						"label":"Key 2.2",
+						"value":"22",
+						"type":"single"
+					},
+					{
+						"label":"Key 2.3",
+						"value":"23",
+						"type":"multi"
+					}
+				]
+			}
