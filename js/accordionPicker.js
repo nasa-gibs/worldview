@@ -65,6 +65,29 @@ SOTE.widget.AccordionPicker = function(containerId, config){
 */
 SOTE.widget.AccordionPicker.prototype.init = function(){
 	
+	this.render();
+	
+    if(REGISTRY){
+ 		REGISTRY.register(this.id,this);
+	}
+	else{
+		alert("No REGISTRY found!  Cannot register AccordionPicker!");
+	}
+	
+	
+};
+
+/**
+  * Renders the UI accordion from this.items
+  *
+  *  
+  * @this {AccordionPicker}
+  * 
+*/
+SOTE.widget.AccordionPicker.prototype.render = function(){
+
+	this.container.innerHTML = "";
+
 	var accordion = document.createElement("form");
 	accordion.setAttribute("class","accordion");
 	accordion.setAttribute("id",this.id+"accordion");
@@ -82,8 +105,9 @@ SOTE.widget.AccordionPicker.prototype.init = function(){
 			}
 			else {
 				var id = this.id + category + "Item" + i;
+				var disabled = (item.disabled !== undefined && item.disabled === true)? "disabled":""; 
 				var type = (item.type === "single")? "radio":"checkbox"; 
-				catListItem.innerHTML = "<input value='"+item.value+"' name='"+this.id+item.type+"' id='"+id+"' type='"+type+"'"+"/>";
+				catListItem.innerHTML = "<input value='"+item.value+"' name='"+this.id+item.type+"' id='"+id+"' type='"+type+"'"+" "+disabled+"/>";
 				catListItem.innerHTML += "<label for='"+id+"'>"+item.label+"</label>";
 				catList.appendChild(catListItem);
 			} 
@@ -96,16 +120,7 @@ SOTE.widget.AccordionPicker.prototype.init = function(){
 	$('.accordion').accordion("option","collapsible",true);
 	$('.accordion').accordion("option","active",false);
 	
-    if(REGISTRY){
- 		REGISTRY.register(this.id,this);
-	}
-	else{
-		alert("No REGISTRY found!  Cannot register AccordionPicker!");
-	}
-	
-	
 };
-
 /**
   * Fires an event to the registry when the state of the component is changed
   *
@@ -139,7 +154,7 @@ SOTE.widget.AccordionPicker.prototype.setValue = function(values){
 	var radioButtons = document.getElementsByName(this.id+"single");
 	
 	for(var i=0; i < radioButtons.length; ++i){
-		if(radioButtons[i].value === base){
+		if(radioButtons[i].value === base && radioButtons[i].disabled === false){
 			radioButtons[i].checked = true;
 		}
 		else {
@@ -151,13 +166,13 @@ SOTE.widget.AccordionPicker.prototype.setValue = function(values){
 	
 	for(var i=0; i < checkboxes.length; ++i){
 		for(var j=1; j < selectedItems.length; ++j){
-			if(checkboxes[i].value === selectedItems[j]){
+			if(checkboxes[i].value === selectedItems[j] && checkboxes[i].disabled === false){
 				checkboxes[i].checked = true;
 			}
 		}
 	}
 	
-	return; //this.validate();
+	return this.validate();
 	
 };
 
@@ -180,6 +195,8 @@ SOTE.widget.AccordionPicker.prototype.getValue = function(){
 		}
 	}
 	
+	if(selected.length === 0){ selected.push("none"); };
+	
 	var checkboxes = document.getElementsByName(this.id+"multi");
 	
 	for(var i=0; i < checkboxes.length; ++i){
@@ -201,8 +218,40 @@ SOTE.widget.AccordionPicker.prototype.getValue = function(){
   * 
 */
 SOTE.widget.AccordionPicker.prototype.updateComponent = function(querystring){
-  // Content
+	var qs = (querystring === undefined)? "":querystring;
+	SOTE.util.getJSON(
+		this.dataSourceUrl+querystring,
+		{self:this},
+		SOTE.widget.AccordionPicker.handleUpdateSuccess,
+		SOTE.widget.AccordionPicker.handleUpdateFailure
+	);
 };
+
+/**
+  * Static function to handle a successful retrieval from the data accessor
+  * 
+  * @this {AccordionPicker}
+  * @param {Object,String,Object,Object} data is the data passed back from the call, status is the response status, xhr is the applicable xmlhttprequest object, args are the custom arguments passed
+  * 
+*/
+SOTE.widget.AccordionPicker.handleUpdateSuccess = function(data,status,xhr,args){
+	var value = args.self.getValue();
+	args.self.items = data;
+	args.self.render();
+	args.self.setValue(value);
+};
+
+/**
+  * Static function to handle a failed retrieval from the data accessor
+  * 
+  * @this {AccordionPicker}
+  * @param {Object,String,String,Object} xhr is the applicable xmlhttprequest object, status is the response status, error is the thrown error, args are the custom arguments passed
+  * 
+*/
+SOTE.widget.AccordionPicker.handleUpdateFailure = function(xhr,status,error,args){
+	alert("Failed to load data accessor: " + error);
+};
+
 
 /**
   * Sets the selected option(s) from the query string [containerId]=[options]
@@ -213,7 +262,7 @@ SOTE.widget.AccordionPicker.prototype.updateComponent = function(querystring){
   *
 */
 SOTE.widget.AccordionPicker.prototype.loadFromQuery = function(qs){
-	return this.setValue(SOTE.util.extractFromQuery("categoryPicker",qs));
+	return this.setValue(SOTE.util.extractFromQuery(this.id,qs));
 };
 
 /**
@@ -231,6 +280,10 @@ SOTE.widget.AccordionPicker.prototype.validate = function(){
 	for(var i=0; i < radioButtons.length; ++i){
 		if(radioButtons[i].checked === true){
 			++radioCount;
+		}
+		if(radioButtons[i].disabled === true && radioButtons[i].checked === true){
+			this.setStatus("Disabled items cannot be selected!");
+			isValid = false;
 		}
 	}
 	
