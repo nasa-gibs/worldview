@@ -18,3 +18,22 @@ SOTE.util.extractFromQuery = function(key,qs){
 	else
 		return val[1];
 };
+
+/**
+  * Generates a request to the server and forwards the response to the success/failure callback
+  * Usage: SOTE.util.getJSON(<url>,<args to pass through>,<success callback>,<failure callback>);
+  * 
+  * @param {String,Object,Function,Function} url is the url to send the request, args are the arguments to pass to callback, success is the callback on a successful request, failure is the callback on a failed request
+  * 
+*/
+SOTE.util.getJSON = function(url, args, success, failure){
+	var successHandler = function(data,status,xhr) { return success(data,status,xhr,args); };
+	var failureHandler = function(xhr,status,error) { return failure(xhr,status,error,args); };
+	
+	$.ajax({
+	    url: url,
+	    dataType: 'json',
+	    success: successHandler,
+	    error: failureHandler
+	});
+}
