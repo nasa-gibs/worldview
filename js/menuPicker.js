@@ -1,3 +1,5 @@
+SOTE.namespace("SOTE.widget.MenuPicker");
+
 SOTE.widget.MenuPicker.prototype = new SOTE.widget.Component;
 
 /**
@@ -9,13 +11,41 @@ SOTE.widget.MenuPicker.prototype = new SOTE.widget.Component;
   * @this {menuPicker}
   * @param {String} containerId is the container id of the div in which to render the object 
   * @param {Object} [config] is a hash allowing configuration of this component
-  * @config {Object[]} [items] a JS Array of JS Objects: items[i..n].key, items[i..n].value pairs representing the available options
-  * @config {String} [selected] the key of the initially selected option
+  *   @config {Object[]} [items] a JS Array of JS Objects: items[i..n].label, items[i..n].value pairs
+  *     representing the available options. Each object can also contain an optional disabled: true
+  *   @config {String} [selected] the key of the initially selected option
   * @augments SOTE.widget.Component
   * 
 */
 SOTE.widget.MenuPicker = function(containerId, config){
-  // Content
+	//Get the ID of the container element
+	this.container = document.getElementById(containerId);
+
+	if (this.container == null){
+		this.setStatus("Error: element '" + containerId + "' not found!");
+		return;
+	}
+	this.id = containerId;
+	
+	//Define an object for holding configuration 
+	if (config === undefined){
+		config = {};
+	}
+	if (config.items === undefined){
+		config.items = [];
+	}
+	if (config.selected === undefined){
+		config.selected = null;
+	}
+	if(config.dataSourceUrl === undefined){
+	    config.dataSourceUrl = null;
+	}
+	
+	this.menuItems = config.items;
+	this.menuItemSelected = config.selected;
+	this.dataSourceUrl = config.dataSourceUrl;
+	this.statusStr = "";
+	this.init();
 };
 
 /**
@@ -26,7 +56,69 @@ SOTE.widget.MenuPicker = function(containerId, config){
   * 
 */
 SOTE.widget.MenuPicker.prototype.init = function(){
-  // Content
+	this.render();
+	
+	if(REGISTRY){
+		REGISTRY.register(this.id,this);
+	}
+	else{
+		alert("No REGISTRY so could not register MenuPicker");
+	}
+};
+
+/*
+ * Renders the UI menu
+ */
+SOTE.widget.MenuPicker.prototype.render = function(){
+	// Get rid of previously defined stuff
+	this.container.innerHTML = "";
+	$('#' + this.id).undelegate("click");
+	
+	var menuUL = document.createElement('ul');
+
+	for (var i=0; i < this.menuItems.length; i++) {
+		var liID = this.id + "_" + "item" + i;
+		var menuLI = document.createElement('li');
+		menuLI.setAttribute('id',liID);
+		menuLI.innerHTML = this.menuItems[i].label;
+		
+		if (this.menuItems[i].value === this.menuItemSelected){
+			this.setValue(this.menuItems[i].value);
+			menuLI.setAttribute('class', "selected");
+		}
+		
+		menuUL.appendChild(menuLI);
+		
+		if (!(this.menuItems[i].disabled === true))
+			$('#' + this.id).delegate("#" + liID, "click", {val:this.menuItems[i].value, self:this}, SOTE.widget.MenuPicker.bindClick);
+			// Use when we change to JQuery 1.7
+			//$('#' + this.id).on("click", "#" + liID, {val:this.menuItems[i].value, self:this}, SOTE.widget.MenuPicker.bindClick);
+		else
+			menuLI.setAttribute('class', "disabled");
+	}
+	
+	this.container.appendChild(menuUL);
+};
+
+/**
+ * Handler for clicking on an li
+ */
+SOTE.widget.MenuPicker.bindClick = function(event){
+	event.data.self.setValue(event.data.val);
+};
+
+/**
+ * Fires an event in the registry when the component value is changed
+ * 
+ * @this {SOTE.widget.MenuPicker}
+ */
+SOTE.widget.MenuPicker.prototype.fire = function(){
+	if(REGISTRY){
+		REGISTRY.fire(this);
+	}
+	else{
+		alert("No REGISTRY so no event REGISTRY event to fire");
+	}
 };
 
 /**
@@ -38,7 +130,18 @@ SOTE.widget.MenuPicker.prototype.init = function(){
   *
 */
 SOTE.widget.MenuPicker.prototype.setValue = function(value){
-  // Content
+	var oldValue = this.value;
+	this.value = value;
+	var validation = this.validate();
+	
+	if (validation) {
+		$('#' + this.value).removeClass('selected');
+		$('#' + value).addClass('selected');
+	}
+	else {
+		this.value = oldValue;
+	}
+	return validation;
 };
 
 /**
@@ -49,7 +152,7 @@ SOTE.widget.MenuPicker.prototype.setValue = function(value){
   *
 */
 SOTE.widget.MenuPicker.prototype.getValue = function(){
-  // Content
+	return this.value;
 };
 
 /**
@@ -61,7 +164,41 @@ SOTE.widget.MenuPicker.prototype.getValue = function(){
   * 
 */
 SOTE.widget.MenuPicker.prototype.updateComponent = function(querystring){
-  // Content
+	var qs = (querystring === undefined) ? "" : querystring;
+	SOTE.util.getJSON(
+		this.dataSourceUrl + qs,
+		{self:this},
+		SOTE.widget.MenuPicker.handleUpdateSuccess,
+		SOTE.widget.MenuPicker.handleUpdateFailure
+	);
+};
+
+/**
+  * Static function to handle a successful retrieval from the data accessor
+  * 
+  * @this {AccordionPicker}
+  * @param {Object,String,Object,Object} data is the data passed back from the call, status is the response status, xhr is the applicable xmlhttprequest object, args are the custom arguments passed
+  * 
+*/
+SOTE.widget.MenuPicker.handleUpdateSuccess = function(data,status,xhr,args){
+	var value = args.self.getValue();
+	args.self.menuItems = data.items;
+	
+	// If the old selected LI no longer exists, set selected val to null 
+	if (!args.self.setValue(value))
+		args.self.value = null;
+	args.self.render();
+};
+
+/**
+  * Static function to handle a failed retrieval from the data accessor
+  * 
+  * @this {AccordionPicker}
+  * @param {Object,String,String,Object} xhr is the applicable xmlhttprequest object, status is the response status, error is the thrown error, args are the custom arguments passed
+  * 
+*/
+SOTE.widget.MenuPicker.handleUpdateFailure = function(xhr,status,error,args){
+	alert("Failed to load data accessor: " + error);
 };
 
 /**
@@ -72,7 +209,7 @@ SOTE.widget.MenuPicker.prototype.updateComponent = function(querystring){
   *
 */
 SOTE.widget.MenuPicker.prototype.loadFromQuery = function(qs){
-  // Content
+	return this.setValue(SOTE.util.extractFromQuery(this.id,qs));
 };
 
 /**
@@ -83,7 +220,25 @@ SOTE.widget.MenuPicker.prototype.loadFromQuery = function(qs){
   *    is one of the available options
 */
 SOTE.widget.MenuPicker.prototype.validate = function(){
-  // Content
+	var valid = false;
+	var matcheditem = false;
+	
+	for (var i=0; i < this.menuItems.length; i++) {
+		if ((this.menuItems[i].value === this.value) && !(this.menuItems[i].disabled === true)) {
+			valid = true;
+			matcheditem = true;
+			break;
+		}
+		else if (this.menuItems[i].value === this.value) {
+			this.setStatus("List item with value = " + this.menuItems[i].value + " is disabled");
+			matcheditem = true;
+			break;
+		}
+	}
+	if (matcheditem == false)
+		this.setStatus("List item value = " + this.value + " is not valid");
+
+	return valid;
 };
 
 /**
@@ -94,7 +249,7 @@ SOTE.widget.MenuPicker.prototype.validate = function(){
   *
 */
 SOTE.widget.MenuPicker.prototype.setDataSourceUrl = function(datasourceurl){
-  // Content
+	this.dataSourceUrl = datasourceurl;
 };
 
 /**
@@ -105,7 +260,7 @@ SOTE.widget.MenuPicker.prototype.setDataSourceUrl = function(datasourceurl){
   *
 */
 SOTE.widget.MenuPicker.prototype.getDataSourceUrl = function(){
-  // Content
+	return this.dataSourceUrl;
 };
 
 /**
@@ -116,7 +271,7 @@ SOTE.widget.MenuPicker.prototype.getDataSourceUrl = function(){
   *
 */
 SOTE.widget.MenuPicker.prototype.setStatus = function(s){
-  // Content
+	this.statusStr = s;
 };
 
 /**
@@ -127,7 +282,7 @@ SOTE.widget.MenuPicker.prototype.setStatus = function(s){
   *
 */
 SOTE.widget.MenuPicker.prototype.getStatus = function(){
-  // Content
+	return this.statusStr;
 };
 
 /**
@@ -164,15 +319,3 @@ SOTE.widget.MenuPicker.prototype.removeItem = function(item){
 SOTE.widget.MenuPicker.prototype.length = function(){
   // Content
 };
-
-
-// Additional Functions
-// clear, addMultipleItems 
-
-
-
-
-
-
-
-

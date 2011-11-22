@@ -1,0 +1,33 @@
+ul {
+	margin: 0;
+	padding: 0;
+	background: #666;
+	width: 150px;
+}
+
+ul li {
+	color: #fff;
+	list-style: none;
+	border: 1px solid black;
+	padding: .2em 1em;
+	height: auto;
+}
+
+ul li:hover {
+	background-color: #9B1C26;
+	padding-bottom: 1em;
+	border-bottom: 2px;
+	border-bottom-color: #000000;
+	border-bottom-style: solid;
+	margin: -1px;
+}
+
+ul li.disabled{
+	background: #999;
+}
+
+ul li.disabled:hover{
+	border: 1px solid black;
+	padding: .2em 1em;
+	margin: 0;
+}
