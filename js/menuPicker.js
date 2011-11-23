@@ -80,7 +80,7 @@ SOTE.widget.MenuPicker.prototype.render = function(){
 		var liID = this.id + "_" + "item" + i;
 		var menuLI = document.createElement('li');
 		menuLI.setAttribute('id',liID);
-		menuLI.innerHTML = this.menuItems[i].label;
+		menuLI.innerHTML = "<div>" + this.menuItems[i].label + "</div>";
 		
 		if (this.menuItems[i].value === this.menuItemSelected){
 			this.setValue(this.menuItems[i].value);
