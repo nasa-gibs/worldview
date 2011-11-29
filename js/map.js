@@ -367,7 +367,8 @@ SOTE.widget.Map.prototype.setLayerVisibility = function(layerNum, visible)
 SOTE.widget.Map.prototype.setLayerOpacity = function(layerNum, opacity)
 {
 	if ((layerNum > this.map.layers.length) ||
-		(layerNum < 0))
+		(layerNum < 0) ||
+		(this.map.layers[layerNum].name == this.SEDAC_BORDER_LAYER_NAME))
 		return;
 		
 	this.map.layers[layerNum].setOpacity(opacity);
