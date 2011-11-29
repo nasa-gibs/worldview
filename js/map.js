@@ -61,7 +61,11 @@ SOTE.widget.Map = function(containerId, config){
 
  	if(config.maxHeight === undefined){
 	    config.maxHeight = null;
-	}	
+	}
+	
+	if (config.layers === undefined){
+		config.layers = null;	
+	}
   
   
   	// this.selectionEvent = new YAHOO.util.CustomEvent("SelectionEvent",this);
@@ -70,7 +74,6 @@ SOTE.widget.Map = function(containerId, config){
     this.isSelectable = config.isSelectable;
     this.bbox = config.bbox;
     this.date = config.date;
-       
     this.value = "";
 	this.register = config.register;
 	this.maxWidth = config.maxWidth;
@@ -78,6 +81,7 @@ SOTE.widget.Map = function(containerId, config){
 	this.dataSourceUrl = config.dataSourceUrl;
 	this.statusStr = "";
 	this.disabled = false;
+	this.layers = config.layers;
   
   
 	// Initialize the map
@@ -108,102 +112,50 @@ SOTE.widget.Map.prototype.init = function(){
 		setTimeout(fixSize, 700);
 		setTimeout(fixSize, 1500);
 		
-		// Init map, include support for mobile devices
+		
+		// Init map
         this.map = new OpenLayers.Map({
 	        div: this.containerId,
 	        theme: null,
+	        controls: [],
 	        allOverlays: true,
-	        controls: [
-                
-	        ],
-	        layers: [
-	        
-	        	new OpenLayers.Layer.WMS(
-	            	"Terra/MODIS - latest", 
-	            	"http://map1.vis.earthdata.nasa.gov/data/wms.cgi", 
-	            	{ layers: "TERRA_MODIS", Format: 'image/jpeg' }, 
-	            	{'tileSize': new OpenLayers.Size(512,512), buffer: 0,
-	            	transitionEffect: 'resize',
-	            	projection: "EPSG:4326", numZoomLevels: 9,  maxExtent: new OpenLayers.Bounds(-180,-1350,180,90), 
-	            	maxResolution: 0.5625, visibility: false}),
-	        
-	        	new OpenLayers.Layer.WMS(
-	            	"Aqua/MODIS - latest", 
-	            	"http://map1.vis.earthdata.nasa.gov/data/wms.cgi", 
-	            	{ layers: "AQUA_MODIS", Format: 'image/jpeg' }, 
-	            	{'tileSize': new OpenLayers.Size(512,512), buffer: 0,
-	            	transitionEffect: 'resize',
-	            	projection: "EPSG:4326", numZoomLevels: 9,  maxExtent: new OpenLayers.Bounds(-180,-1350,180,90), 
-	            	maxResolution: 0.5625, visibility: true}),	            	
- 
-	            	
-	           	new OpenLayers.Layer.WMS(
-	            	"11/12/2011", 
-	            	"http://map1.vis.earthdata.nasa.gov/data/wms.cgi", 
-	            	{ time: "2011-11-12", layers: "TERRA_MODIS", Format: 'image/jpeg' }, 
-	            	{'tileSize': new OpenLayers.Size(512,512), buffer: 0,
-	            	transitionEffect: 'resize',
-	            	projection: "EPSG:4326", numZoomLevels: 9,  maxExtent: new OpenLayers.Bounds(-180,-1350,180,90), 
-	            	maxResolution: 0.5625, visibility: false}),
-	            	
-	           	new OpenLayers.Layer.WMS(
-	            	"11/11/2011", 
-	            	"http://map1.vis.earthdata.nasa.gov/data/wms.cgi", 
-	            	{ time: "2011-11-11", layers: "TERRA_MODIS", Format: 'image/jpeg' }, 
-	            	{'tileSize': new OpenLayers.Size(512,512), buffer: 0,
-	            	transitionEffect: 'resize',
-	            	projection: "EPSG:4326", numZoomLevels: 9,  maxExtent: new OpenLayers.Bounds(-180,-1350,180,90), 
-	            	maxResolution: 0.5625, visibility: false}),
-
-	           	new OpenLayers.Layer.WMS(
-	            	"11/10/2011", 
-	            	"http://map1.vis.earthdata.nasa.gov/data/wms.cgi", 
-	            	{ time: "2011-11-10", layers: "TERRA_MODIS", Format: 'image/jpeg' }, 
-	            	{'tileSize': new OpenLayers.Size(512,512), buffer: 0,
-	            	transitionEffect: 'resize',
-	            	projection: "EPSG:4326", numZoomLevels: 9,  maxExtent: new OpenLayers.Bounds(-180,-1350,180,90), 
-	            	maxResolution: 0.5625, visibility: false}),
-
-	           	new OpenLayers.Layer.WMS(
-	            	"11/09/2011", 
-	            	"http://map1.vis.earthdata.nasa.gov/data/wms.cgi", 
-	            	{ time: "2011-11-09", layers: "TERRA_MODIS", Format: 'image/jpeg' }, 
-	            	{'tileSize': new OpenLayers.Size(512,512), buffer: 0,
-	            	transitionEffect: 'resize',
-	            	projection: "EPSG:4326", numZoomLevels: 9,  maxExtent: new OpenLayers.Bounds(-180,-1350,180,90), 
-	            	maxResolution: 0.5625, visibility: false}),
-	            	
-	           	new OpenLayers.Layer.WMS(
-	            	"11/08/2011", 
-	            	"http://map1.vis.earthdata.nasa.gov/data/wms.cgi", 
-	            	{ time: "2011-11-08", layers: "TERRA_MODIS", Format: 'image/jpeg' }, 
-	            	{'tileSize': new OpenLayers.Size(512,512), buffer: 0,
-	            	transitionEffect: 'resize',
-	            	projection: "EPSG:4326", numZoomLevels: 9,  maxExtent: new OpenLayers.Bounds(-180,-1350,180,90), 
-	            	maxResolution: 0.5625, visibility: false}),
-	            	
-//	            new OpenLayers.Layer.OSM( "Simple OSM Map"),
-	            	
-	            new OpenLayers.Layer.WMS( this.SEDAC_BORDER_LAYER_NAME, 
-            		"http://sedac.ciesin.columbia.edu/geoserver/wms?", 
-            		{layers:"cartographic:esri-administrative-boundaries_level-1",
-            		transparent:true},  
-            		{isBaseLayer:false, visibility:true, opacity:0.35, transitioneffect: 'resize'})
-
-	        
-	        	// OSM projection system apparently is not compatible with that of Tiled WMS
-	            // new OpenLayers.Layer.OSM("OpenStreetMap", null, {
-	                // transitionEffect: 'resize',
-	                // sphericalMercator: true,
-	                // visibility: true
-	            // })
-	            
-	           
- 
-	        ],
-	        //center: new OpenLayers.LonLat(742000, 5861000),
 	        zoom: 2
 	    });
+	    
+	    
+	    // Add any passed-in layers
+	    if ((this.layers != null) && (this.layers.length > 0))
+	    {
+		    for (var i=0; i<this.layers.length; i++)
+		    {
+		    	// TODO: check if all necessary fields are present
+		    	this.map.addLayer(
+		    		new OpenLayers.Layer.WMS(this.layers[i].displayName, 
+		    			this.layers[i].urls,
+		    			{ time: this.layers[i].time, 
+		    			  layers: this.layers[i].wmsProductName, 
+		    			  Format: this.layers[i].format
+		    			},
+		    			{ 'tileSize': new OpenLayers.Size(this.layers[i].tileSize[0], this.layers[i].tileSize[1]),
+		    			  buffer: 0, 
+		    			  transitionEffect: 'resize', 
+		    			  projection: this.layers[i].projection, 
+		    			  numZoomLevels: this.layers[i].numZoomLevels, 
+		    			  maxExtent: new OpenLayers.Bounds(this.layers[i].maxExtent[0], this.layers[i].maxExtent[1], this.layers[i].maxExtent[2], this.layers[i].maxExtent[3]),
+		    			  maxResolution: this.layers[i].maxResolution,
+		    			  visibility: false}
+		    			));
+		    }
+	
+			// Add SEDAC borders layer
+			this.map.addLayer(
+				new OpenLayers.Layer.WMS( this.SEDAC_BORDER_LAYER_NAME, 
+	            		"http://sedac.ciesin.columbia.edu/geoserver/wms?", 
+	            		{layers:"cartographic:esri-administrative-boundaries_level-1",
+	            		transparent:true},  
+	            		{isBaseLayer:false, visibility:true, opacity:0.35, transitioneffect: 'resize'}));	 
+		}	    
+	    
 	        
 
         // Add user controls, if necessary
