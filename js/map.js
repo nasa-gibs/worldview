@@ -81,7 +81,7 @@ SOTE.widget.Map = function(containerId, config){
 	this.dataSourceUrl = config.dataSourceUrl;
 	this.statusStr = "";
 	this.disabled = false;
-	this.layers = config.layers;
+	//this.layers = config.layers;
   
   
 	// Initialize the map
@@ -118,35 +118,19 @@ SOTE.widget.Map.prototype.init = function(){
 	        div: this.containerId,
 	        theme: null,
 	        controls: [],
+	        maxExtent: new OpenLayers.Bounds(-180,-1350,180,90),
+	        projection:"EPSG:4326",
+	        numZoomLevels:9, 
+	        maxResolution:0.5625,
 	        allOverlays: true,
 	        zoom: 2
 	    });
 	    
 	    
 	    // Add any passed-in layers
-	    if ((this.layers != null) && (this.layers.length > 0))
-	    {
-		    for (var i=0; i<this.layers.length; i++)
-		    {
-		    	// TODO: check if all necessary fields are present
-		    	this.map.addLayer(
-		    		new OpenLayers.Layer.WMS(this.layers[i].displayName, 
-		    			this.layers[i].urls,
-		    			{ time: this.layers[i].time, 
-		    			  layers: this.layers[i].wmsProductName, 
-		    			  Format: this.layers[i].format
-		    			},
-		    			{ 'tileSize': new OpenLayers.Size(this.layers[i].tileSize[0], this.layers[i].tileSize[1]),
-		    			  buffer: 0, 
-		    			  transitionEffect: 'resize', 
-		    			  projection: this.layers[i].projection, 
-		    			  numZoomLevels: this.layers[i].numZoomLevels, 
-		    			  maxExtent: new OpenLayers.Bounds(this.layers[i].maxExtent[0], this.layers[i].maxExtent[1], this.layers[i].maxExtent[2], this.layers[i].maxExtent[3]),
-		    			  maxResolution: this.layers[i].maxResolution,
-		    			  visibility: false}
-		    			));
-		    }
-	
+	    // if ((this.layers != null) && (this.layers.length > 0))
+	    // {
+
 			// Add SEDAC borders layer
 			this.map.addLayer(
 				new OpenLayers.Layer.WMS( this.SEDAC_BORDER_LAYER_NAME, 
@@ -154,7 +138,7 @@ SOTE.widget.Map.prototype.init = function(){
 	            		{layers:"cartographic:esri-administrative-boundaries_level-1",
 	            		transparent:true},  
 	            		{isBaseLayer:false, visibility:true, opacity:0.35, transitioneffect: 'resize'}));	 
-		}	    
+//		}	    
 	    
 	        
 
@@ -244,6 +228,33 @@ SOTE.widget.Map.prototype.init = function(){
 };
 
 
+SOTE.widget.Map.prototype.addLayers = function(layers)
+{
+    for (var i=0; i<layers.length; i++)
+    {
+    	// TODO: check if all necessary fields are present
+    	this.map.addLayer(
+    		new OpenLayers.Layer.WMS(layers[i].displayName, 
+    			layers[i].urls,
+    			{ time: layers[i].time, 
+    			  layers: layers[i].wmsProductName, 
+    			  Format: layers[i].format
+    			},
+    			{ 'tileSize': new OpenLayers.Size(layers[i].tileSize[0], layers[i].tileSize[1]),
+    			  buffer: 0, 
+    			  transitionEffect: 'resize', 
+    			  projection: layers[i].projection, 
+    			  numZoomLevels: layers[i].numZoomLevels, 
+    			  maxExtent: new OpenLayers.Bounds(layers[i].maxExtent[0], layers[i].maxExtent[1], layers[i].maxExtent[2], layers[i].maxExtent[3]),
+    			  maxResolution: layers[i].maxResolution,
+    			  visibility: false
+    			}
+    		));
+    }
+
+	
+}
+
 
 /**
   * Sets the visible extent in the map from the passed in value, if valid.  formatted as [containerId]=w,s,e,n
@@ -279,6 +290,11 @@ SOTE.widget.Map.prototype.getValue = function(){
 			this.map.getProjectionObject(),
             new OpenLayers.Projection("EPSG:4326")).toString();
 };
+
+SOTE.widget.Map.prototype.getAllLayers = function()
+{
+	return this.map.layers;
+}
 
 /**
  * Gets number of time steps currently stored by map
@@ -501,9 +517,7 @@ SOTE.widget.Map.prototype.updateComponent = function(qs){
 	SOTE.util.getJSON(
 		this.dataSourceUrl+querystring,
 		{self:this},
-		SOTE.widget.AccordionPicker.handleUpdateSuccess,
-		SOTE.widget.AccordionPicker.handleUpdateFailure
-	);
-
- 
+		SOTE.widget.Map.handleUpdateSuccess,
+		SOTE.widget.Map.handleUpdateFailure
+	); 
 };
