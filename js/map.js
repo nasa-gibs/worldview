@@ -47,7 +47,7 @@ SOTE.widget.Map = function(containerId, config){
 	}
 
  	if(config.bbox === undefined){
-	    config.bbox = "-180, -90, 180, 90";
+	    config.bbox = "-175, -85, 175, 85";
 	}	
 	
 	
@@ -183,18 +183,19 @@ SOTE.widget.Map.prototype.init = function(){
         
         // Parse bounding box string and apply to map
         // Need to convert from lat/lon to map's native coord system
-        var extent = new OpenLayers.Bounds.fromString(this.bbox, false).transform(
-                new OpenLayers.Projection("EPSG:4326"),
-                this.map.getProjectionObject()); 
-                
-                
-        if (extent == null)
-        {
-        	alert("passed-in bounds invalid for some reason")
-        	
-        }
-        // else
-        	// this.map.zoomToExtent(extent, true);
+        // var extent = new OpenLayers.Bounds.fromString(this.bbox, false).transform(
+                // new OpenLayers.Projection("EPSG:4326"),
+                // this.map.getProjectionObject()); 
+//                 
+//                 
+        // if (extent == null)
+        // {
+        	// alert("passed-in bounds invalid for some reason")
+//         	
+        // }
+         //else
+        
+        //this.setExtent(this.bbox);
         
         
         
