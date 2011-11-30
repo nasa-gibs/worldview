@@ -91,7 +91,7 @@ SOTE.widget.Map = function(containerId, config){
 	this.statusStr = "";
 	this.disabled = false;
 	this.time = config.time;
-	this.baselayer = config.baselayer;
+	this.baseLayer = config.baseLayer;
   
 	// Initialize the map
 	this.init();
@@ -102,9 +102,9 @@ SOTE.widget.Map = function(containerId, config){
   	
   	
   	// Set active layer if params set
-  	if ((this.time != null) && (this.baselayer != null))
+  	if ((this.time != null) && (this.baseLayer != null))
   	{
-  		this.activateLayerDisableTheRest(this.baselayer, this.time);
+  		this.activateLayerDisableTheRest(this.baseLayer,this.time);
   	}	
 
 
