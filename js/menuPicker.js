@@ -28,21 +28,20 @@ SOTE.widget.MenuPicker = function(containerId, config){
 	this.id = containerId;
 	
 	//Define an object for holding configuration 
-	if (config === undefined){
+	if (config === undefined)
 		config = {};
-	}
-	if (config.items === undefined){
+	if (config.items === undefined)
 		config.items = [];
-	}
-	if (config.selected === undefined){
+	if (config.selected === undefined)
 		config.selected = null;
-	}
-	if(config.dataSourceUrl === undefined){
+	if (config.isCollapsible === undefined)
+		config.isCollapsible = false;
+	if (config.dataSourceUrl === undefined)
 	    config.dataSourceUrl = null;
-	}
 	
 	this.menuItems = config.items;
 	this.menuItemSelected = config.selected;
+	this.menuIsCollapsible = config.isCollapsible;
 	this.dataSourceUrl = config.dataSourceUrl;
 	this.statusStr = "";
 	this.init();
@@ -75,6 +74,10 @@ SOTE.widget.MenuPicker.prototype.render = function(){
 	$('#' + this.id).undelegate("click");
 	
 	var menuUL = document.createElement('ul');
+	var ulClass = "menuPicker";
+	if (this.menuIsCollapsible === true)
+		ulClass += " collapsible";
+	menuUL.setAttribute('class', ulClass);
 
 	for (var i=0; i < this.menuItems.length; i++) {
 		var liID = this.id + "_" + "item" + i;
@@ -96,7 +99,7 @@ SOTE.widget.MenuPicker.prototype.render = function(){
 		else
 			menuLI.setAttribute('class', "disabled");
 	}
-	
+
 	this.container.appendChild(menuUL);
 };
 
