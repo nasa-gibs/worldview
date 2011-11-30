@@ -1,7 +1,5 @@
 SOTE.namespace("SOTE.widget.MapSote");
 
-var isSoteMapDataCached;
-var soteMapData = null;
 
 /**
   * Instantiate the map;  subclass of SOTE.widget.Map that is SOTE-specific
@@ -26,8 +24,10 @@ SOTE.widget.MapSote = function(containerId, config)
 	SOTE.widget.Map.call(this, containerId, config);
 	
 	// Load SOTE-specific data into MapSote
-	isSoteMapDataCached = false;
+	this.isSoteMapDataCached = false;
 	this.updateComponent("");
+	
+	this.setExtent(this.bbox);
 	
 	// test
 	this.updateComponent("?products=Aqua_MODIS&time=2011-11-26T00:00:00&transition=standard");
@@ -43,11 +43,11 @@ SOTE.widget.MapSote.prototype = new SOTE.widget.Map;
  */
 SOTE.widget.MapSote.prototype.getNumTimeStepsAvailable = function()
 {
-	if (!isSoteMapDataCached)
+	if (!this.isSoteMapDataCached)
 		return -1;
 
 	// TODO: compute based on date values in soteMapData, not the length		
-	return soteMapData.length;
+	return this.soteMapData.length;
 }
 
 
@@ -64,9 +64,9 @@ SOTE.widget.MapSote.prototype.getNumTimeStepsAvailable = function()
 SOTE.widget.Map.prototype.updateComponent = function(querystring)
 {	
 	// Load SOTE-specific map data if not already cached
-	if (!isSoteMapDataCached)
+	if (!this.isSoteMapDataCached)
 	{
-		soteMapData =
+		this.soteMapData =
 			[
 				// {displayName: "Terra_MODIS_latest", wmsProductName: "TERRA_MODIS", time:"", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
 				// {displayName: "Aqua_MODIS_latest", wmsProductName: "AQUA_MODIS", time:"", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
@@ -92,10 +92,10 @@ SOTE.widget.Map.prototype.updateComponent = function(querystring)
 			];
 			
 		// Load into map
-		this.addLayers(soteMapData);
+		this.addLayers(this.soteMapData);
 		
 		// Update flag upon successful load
-		isSoteMapDataCached = true;
+		this.isSoteMapDataCached = true;
 	}
 	
 
