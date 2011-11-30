@@ -73,7 +73,7 @@ SOTE.widget.Map = function(containerId, config){
     this.hasControls = config.hasControls;
     this.isSelectable = config.isSelectable;
     this.bbox = config.bbox;
-    this.date = config.date;
+    //this.date = config.date;
     this.value = "";
 	this.register = config.register;
 	this.maxWidth = config.maxWidth;
@@ -127,18 +127,15 @@ SOTE.widget.Map.prototype.init = function(){
 	    });
 	    
 	    
-	    // Add any passed-in layers
-	    // if ((this.layers != null) && (this.layers.length > 0))
-	    // {
 
-			// Add SEDAC borders layer
-			this.map.addLayer(
-				new OpenLayers.Layer.WMS( this.SEDAC_BORDER_LAYER_NAME, 
-	            		"http://sedac.ciesin.columbia.edu/geoserver/wms?", 
-	            		{layers:"cartographic:esri-administrative-boundaries_level-1",
-	            		transparent:true},  
-	            		{isBaseLayer:false, visibility:true, opacity:0.35, transitioneffect: 'resize'}));	 
-//		}	    
+		// Add SEDAC borders layer
+		// this.map.addLayer(
+			// new OpenLayers.Layer.WMS( this.SEDAC_BORDER_LAYER_NAME, 
+            		// "http://sedac.ciesin.columbia.edu/geoserver/wms?", 
+            		// {layers:"cartographic:esri-administrative-boundaries_level-1",
+            		// transparent:true},  
+            		// {isBaseLayer:false, visibility:true, opacity:0.35, transitioneffect: 'resize'}));	 
+
 	    
 	        
 
@@ -219,12 +216,12 @@ SOTE.widget.Map.prototype.init = function(){
         	// }
         // }
         
-		var selectedLayer = this.map.getLayersByName(this.date);
-		if ((selectedLayer != null) && (selectedLayer.length > 0))
-		{
-			// this.map.setBaseLayer(selectedLayer[0]);
-			selectedLayer[0].setVisibility(true);
-		}
+		// var selectedLayer = this.map.getLayersByName(this.date);
+		// if ((selectedLayer != null) && (selectedLayer.length > 0))
+		// {
+			// // this.map.setBaseLayer(selectedLayer[0]);
+			// selectedLayer[0].setVisibility(true);
+		// }
 };
 
 
@@ -341,6 +338,22 @@ SOTE.widget.Map.prototype.setLayerOpacity = function(layerNum, opacity)
 		
 	this.map.layers[layerNum].setOpacity(opacity);
 }
+
+
+/**
+ * Registers a user-specified function to be called back after a user is done panning or zooming
+ * 
+ * @param {function} function to be registered
+ * @param {context} context of function
+ */
+SOTE.widget.Map.prototype.addPanZoomStartCallback = function(func, context)
+{
+	// Set up callbacks for pan/zoom end
+	// TODO: register this to an internal function and call a "fire" event to 
+	this.map.events.register("movestart", context, func);
+}
+
+
 
 /**
  * Registers a user-specified function to be called back after a user is done panning or zooming
