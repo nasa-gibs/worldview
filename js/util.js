@@ -37,3 +37,17 @@ SOTE.util.getJSON = function(url, args, success, failure){
 	    error: failureHandler
 	});
 }
+
+
+/**
+ * Function to add leading zeros to a number, if necessary
+ * 
+ * @param num 		number to pad
+ * @param places	number of 0s to add
+ * 
+ * @returns formatted number as a string
+ */
+SOTE.util.zeroPad = function(num, places) {
+  var zero = places - num.toString().length + 1;
+  return Array(+(zero > 0 && zero)).join("0") + num;
+}
