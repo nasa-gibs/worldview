@@ -24,8 +24,8 @@ SOTE.widget.MapSote = function(containerId, config)
 	SOTE.widget.Map.call(this, containerId, config);
 	
 	// Load SOTE-specific data into MapSote
-	this.isSoteMapDataCached = false;
-	this.updateComponent("");
+	//this.isSoteMapDataCached = false;
+	//this.updateComponent("");
 	
 	this.setExtent(this.bbox);
 	
