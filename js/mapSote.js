@@ -33,7 +33,7 @@ SOTE.widget.MapSote = function(containerId, config)
 	this.setExtent(this.bbox);
 	
 	// test
-	this.updateComponent("?products=Aqua_MODIS.SEDAC_PopulationDensity&time=2011-11-26T00:00:00&transition=standard");
+	this.updateComponent("?products=Aqua_MODIS.SEDAC_PopulationDensity.SEDAC_AdminBoundaries&time=2011-11-26T00:00:00&transition=standard");
 };
 
 
@@ -78,6 +78,7 @@ SOTE.widget.Map.prototype.updateComponent = function(querystring)
 				// {displayName: "Terra_MODIS_latest", wmsProductName: "TERRA_MODIS", time:"", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
 				// {displayName: "Aqua_MODIS_latest", wmsProductName: "AQUA_MODIS", time:"", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },			
 				{displayName: "SEDAC_PopulationDensity", wmsProductName: "population", time:"", format: "image/png", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },	
+				{displayName: "SEDAC_AdminBoundaries", wmsProductName: "cartographic:esri-administrative-boundaries_level-1", time:"", urls:["http://sedac.ciesin.columbia.edu/geoserver/wms?"], layers:"cartographic:esri-administrative-boundaries_level-1", transparent:true, projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
 				{displayName: "Aqua_MODIS__2011-11-26", wmsProductName: "AQUA_MODIS", time:"2011-11-26", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
 				{displayName: "Aqua_MODIS__2011-11-25", wmsProductName: "AQUA_MODIS", time:"2011-11-25", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
 				{displayName: "Aqua_MODIS__2011-11-24", wmsProductName: "AQUA_MODIS", time:"2011-11-24", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
@@ -89,6 +90,8 @@ SOTE.widget.Map.prototype.updateComponent = function(querystring)
 				{displayName: "Aqua_MODIS__2011-11-18", wmsProductName: "AQUA_MODIS", time:"2011-11-18", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
 				{displayName: "Aqua_MODIS__2011-11-17", wmsProductName: "AQUA_MODIS", time:"2011-11-17", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 }
 			];
+
+
 			
 		// Load into map
 		this.addLayers(this.soteMapData);
@@ -198,7 +201,7 @@ SOTE.widget.Map.prototype.updateComponent = function(querystring)
 					else
 					{
 						allLayers[i].setZIndex(1);
-						allLayers[i].setOpacity(0.2);
+						allLayers[i].setOpacity(0.35);
 					}
 					
 					layerModified = true;
