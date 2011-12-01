@@ -40,7 +40,7 @@ SOTE.widget.MenuPicker = function(containerId, config){
 	    config.dataSourceUrl = null;
 	
 	this.menuItems = config.items;
-	this.initialItemSelected = config.selected;
+	this.selectedValue = config.selected;
 	this.menuIsCollapsible = config.isCollapsible;
 	this.dataSourceUrl = config.dataSourceUrl;
 	this.statusStr = "";
@@ -88,7 +88,7 @@ SOTE.widget.MenuPicker.prototype.render = function(){
 		menuLI.setAttribute('id',liID);
 		menuLI.innerHTML = "<div>" + this.menuItems[i].label + "</div>";
 				
-		if (this.menuItems[i].value === this.initialItemSelected){
+		if (this.menuItems[i].value === this.selectedValue){
 			this.setValue(this.menuItems[i].value);
 			menuLI.setAttribute('class', "selected");
 		}
