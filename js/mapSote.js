@@ -27,6 +27,9 @@ SOTE.widget.MapSote = function(containerId, config)
 	//this.isSoteMapDataCached = false;
 	//this.updateComponent("");
 	
+	// Init
+	this.isLayerCachingEnabled = false;
+	
 	this.setExtent(this.bbox);
 	
 	// test
@@ -50,6 +53,10 @@ SOTE.widget.MapSote.prototype.getNumTimeStepsAvailable = function()
 	return this.soteMapData.length;
 }
 
+SOTE.widget.MapSote.prototype.setLayerCaching = function(enable)
+{
+	this.isLayerCachingEnabled = enable;
+}
 
 /**
   * Change the base layers based on dependencies (i.e. extent, date, data product)
@@ -109,7 +116,6 @@ SOTE.widget.Map.prototype.updateComponent = function(querystring)
 	var activeLayers = SOTE.util.extractFromQuery("products", qs);
 	var activeTransition = SOTE.util.extractFromQuery("transition", qs);
 	var activeTime = SOTE.util.extractFromQuery("time", qs);
-	var isMapCachingEnabled = SOTE.util.extractFromQuery("cachemaps", qs);
 	
 	
 	// Apply querystring request to map
@@ -124,12 +130,6 @@ SOTE.widget.Map.prototype.updateComponent = function(querystring)
 		return;
 	}
 
-	// Check if maps should be cached
-	if ((isMapCachingEnabled == "") || (isMapCachingEnabled == "false"))
-		isMapCachingEnabled = false;
-	else
-		isMapCachingEnabled = true;
-		
 
 	// Determine appropriate layer opacities based on currently-selected time
 	
@@ -202,7 +202,7 @@ SOTE.widget.Map.prototype.updateComponent = function(querystring)
 			// Disable the layer if it hasn't been selected
 			if (!layerModified)
 			{
-				if (!isMapCachingEnabled)
+				if (!this.isLayerCachingEnabled)
 					allLayers[i].setVisibility(false);
 				allLayers[i].setOpacity(0.0);			 				
 			}
