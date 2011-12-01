@@ -40,7 +40,7 @@ SOTE.widget.MenuPicker = function(containerId, config){
 	    config.dataSourceUrl = null;
 	
 	this.menuItems = config.items;
-	this.menuItemSelected = config.selected;
+	this.initialItemSelected = config.selected;
 	this.menuIsCollapsible = config.isCollapsible;
 	this.dataSourceUrl = config.dataSourceUrl;
 	this.statusStr = "";
@@ -80,12 +80,15 @@ SOTE.widget.MenuPicker.prototype.render = function(){
 	menuUL.setAttribute('class', ulClass);
 
 	for (var i=0; i < this.menuItems.length; i++) {
+		// Generate liID and save for use in validate()
 		var liID = this.id + "_" + "item" + i;
+		this.menuItems[i].liID = liID;
+
 		var menuLI = document.createElement('li');
 		menuLI.setAttribute('id',liID);
 		menuLI.innerHTML = "<div>" + this.menuItems[i].label + "</div>";
-		
-		if (this.menuItems[i].value === this.menuItemSelected){
+				
+		if (this.menuItems[i].value === this.initialItemSelected){
 			this.setValue(this.menuItems[i].value);
 			menuLI.setAttribute('class', "selected");
 		}
@@ -133,16 +136,17 @@ SOTE.widget.MenuPicker.prototype.fire = function(){
   *
 */
 SOTE.widget.MenuPicker.prototype.setValue = function(value){
-	var oldValue = this.value;
-	this.value = value;
+	var oldSelectedValue = this.selectedValue;
+	var oldSelectedId = this.selectedId;
+	this.selectedValue = value;
 	var validation = this.validate();
 	
 	if (validation) {
-		$('#' + this.value).removeClass('selected');
-		$('#' + value).addClass('selected');
+		$('#' + oldSelectedId).removeClass('selected');
+		$('#' + this.selectedId).addClass('selected');
 	}
 	else {
-		this.value = oldValue;
+		this.selectedValue = oldSelectedValue;
 	}
 	return validation;
 };
@@ -155,7 +159,7 @@ SOTE.widget.MenuPicker.prototype.setValue = function(value){
   *
 */
 SOTE.widget.MenuPicker.prototype.getValue = function(){
-	return this.value;
+	return this.selectedValue;
 };
 
 /**
@@ -227,19 +231,20 @@ SOTE.widget.MenuPicker.prototype.validate = function(){
 	var matcheditem = false;
 	
 	for (var i=0; i < this.menuItems.length; i++) {
-		if ((this.menuItems[i].value === this.value) && !(this.menuItems[i].disabled === true)) {
+		if ((this.menuItems[i].value === this.selectedValue) && !(this.menuItems[i].disabled === true)) {
 			valid = true;
 			matcheditem = true;
+			this.selectedId = this.menuItems[i].liID;
 			break;
 		}
-		else if (this.menuItems[i].value === this.value) {
+		else if (this.menuItems[i].value === this.selectedValue) {
 			this.setStatus("List item with value = " + this.menuItems[i].value + " is disabled");
 			matcheditem = true;
 			break;
 		}
 	}
 	if (matcheditem == false)
-		this.setStatus("List item value = " + this.value + " is not valid");
+		this.setStatus("List item value = " + this.selectedValue + " is not valid");
 
 	return valid;
 };
