@@ -111,7 +111,8 @@ SOTE.widget.Map = function(containerId, config){
   	// Set extent
   	this.setExtent(this.bbox);
 
-	
+	// TODO: Set up callback for when pan/zoom ends to auto-call the "fire" function
+	// this.map.events.register("moveend", this, this.fire); 
 };
 
 
@@ -125,7 +126,7 @@ SOTE.widget.Map.prototype.activateLayerDisableTheRest = function(baselayer, time
 	for (var i=0; i<nLayers; i++)
 	{		
 		// Enable this layer if string matches
-		if (allLayers[i].name == new String(baselayer + "_" + time))
+		if (allLayers[i].name == new String(baselayer + "__" + time))
 		{
 			allLayers[i].setVisibility(true);
 			allLayers[i].setOpacity(1.0);
@@ -276,28 +277,107 @@ SOTE.widget.Map.prototype.init = function(){
 };
 
 
+SOTE.widget.Map.prototype.checkWmsParam = function(param)
+{
+	if ((param === undefined) ||
+		(param == null) ||
+		(param == ""))
+		return false;		
+	
+	// else
+	return true;
+		
+}
+
+
 SOTE.widget.Map.prototype.addLayers = function(layers)
 {
     for (var i=0; i<layers.length; i++)
     {
-    	// TODO: check if all necessary fields are present
-    	this.map.addLayer(
-    		new OpenLayers.Layer.WMS(layers[i].displayName, 
-    			layers[i].urls,
-    			{ time: layers[i].time, 
-    			  layers: layers[i].wmsProductName, 
-    			  Format: layers[i].format
-    			},
-    			{ 'tileSize': new OpenLayers.Size(layers[i].tileSize[0], layers[i].tileSize[1]),
-    			  buffer: 0, 
-    			  transitionEffect: 'resize', 
-    			  projection: layers[i].projection, 
-    			  numZoomLevels: layers[i].numZoomLevels, 
-    			  maxExtent: new OpenLayers.Bounds(layers[i].maxExtent[0], layers[i].maxExtent[1], layers[i].maxExtent[2], layers[i].maxExtent[3]),
-    			  maxResolution: layers[i].maxResolution,
-    			  visibility: false
-    			}
-    		));
+    	// Fill optional parameters, as necessary
+		if (!this.checkWmsParam(layers[i].displayName))
+			layers[i].displayName = "unnamed";
+			
+		if (!this.checkWmsParam(layers[i].time))
+			layers[i].time = "";	
+		
+		if (!this.checkWmsParam(layers[i].format))
+			layers[i].format = "image/jpeg";  // default to jpeg
+		
+		if (!this.checkWmsParam(layers[i].transparent))
+			layers[i].transparent = true;
+			
+		if (!this.checkWmsParam(layers[i].projection))
+			layers[i].projection = "EPSG:4326";
+		
+		if (!this.checkWmsParam(layers[i].numZoomLevels))
+			layers[i].numZoomLevels = 9;
+			
+		if (!this.checkWmsParam(layers[i].maxExtent))
+			layers[i].maxExtent = [-180, -1350, 180, 90];
+			
+		if (!this.checkWmsParam(layers[i].maxResolution))
+			layers[i].maxResolution = 0.5625;
+		
+				
+		// Check required params
+		if (!this.checkWmsParam(layers[i].urls))
+		{
+			alert("invalid / no URL passed in for layer "+layers[i].displayName);
+			continue;
+		}
+		
+		if (!this.checkWmsParam(layers[i].wmsProductName))
+		{
+			alert("invalid / unspecified WMS 'layer' parameter");
+			continue;
+		}
+
+
+
+		// Handle Tiled WMS layers differently than standard WMS layers;  include "transparent:true" in first section
+    	if (!this.checkWmsParam(layers[i].tileSize))
+    	{
+    		// If 'tileSize' isn't set, consider this layer a "standard" WMS layer
+			this.map.addLayer(
+				new OpenLayers.Layer.WMS(layers[i].displayName, 
+	            		layers[i].urls, 
+	            		{
+	            			layers:layers[i].wmsProductName,
+	            			transparent:true
+	            		},  
+	            		{
+	            			isBaseLayer:false, 
+	            			visibility:false, 
+	            			transitioneffect: 'resize', 
+	            			projection: layers[i].projection
+	            			// TODO: other params: maxExtent, numZoomLevels, maxResolution?
+	            		 }));    		
+    	}
+    	else
+    	{
+    		// If 'tileSize' is set, this should be a Tiled WMS layer
+	    	this.map.addLayer(
+	    		new OpenLayers.Layer.WMS(layers[i].displayName, 
+	    			layers[i].urls,
+	    			{ time: layers[i].time, 
+	    			  layers: layers[i].wmsProductName, 
+	    			  Format: layers[i].format
+	    			},
+	    			{ 
+	    			  'tileSize': new OpenLayers.Size(layers[i].tileSize[0], layers[i].tileSize[1]),
+	    			  buffer: 0, 
+	    			  transitionEffect: 'resize', 
+	    			  projection: layers[i].projection, 
+	    			  numZoomLevels: layers[i].numZoomLevels, 
+	    			  maxExtent: new OpenLayers.Bounds(layers[i].maxExtent[0], layers[i].maxExtent[1], layers[i].maxExtent[2], layers[i].maxExtent[3]),
+	    			  maxResolution: layers[i].maxResolution,
+	    			  visibility: false
+	    			}
+	    		));    		
+    	}
+    	
+    	
     }
 
 	
@@ -402,6 +482,7 @@ SOTE.widget.Map.prototype.addPanZoomStartCallback = function(func, context)
 	// Set up callbacks for pan/zoom end
 	this.map.events.register("movestart", context, func);
 }
+
 
 
 
@@ -556,7 +637,7 @@ SOTE.widget.Map.prototype.fire = function(){
 		REGISTRY.fire(this);
 	}
 	else{
-		alert("No REGISTRY found! Cannot fire to REGISTRY from AccordionPicker!");
+		alert("No REGISTRY found! Cannot fire to REGISTRY from Map!");
 	}
 
 };
@@ -581,7 +662,8 @@ SOTE.widget.Map.prototype.updateComponent = function(qs){
 			[
 				// {displayName: "Terra_MODIS_latest", wmsProductName: "TERRA_MODIS", time:"", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
 				// {displayName: "Aqua_MODIS_latest", wmsProductName: "AQUA_MODIS", time:"", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
-				{displayName: "SEDAC_PopulationDensity", wmsProductName: "population", time:"", format: "image/png", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },	
+				{displayName: "SEDAC_PopulationDensity", wmsProductName: "population", time:"", format: "image/png", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
+				{displayName: "SEDAC_AdminBoundaries", wmsProductName: "cartographic:esri-administrative-boundaries_level-1", time:"", urls:["http://sedac.ciesin.columbia.edu/geoserver/wms?"], layers:"cartographic:esri-administrative-boundaries_level-1", transparent:true, projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },	
 				{displayName: "Aqua_MODIS__2011-11-26", wmsProductName: "AQUA_MODIS", time:"2011-11-26", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
 				{displayName: "Aqua_MODIS__2011-11-25", wmsProductName: "AQUA_MODIS", time:"2011-11-25", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
 				{displayName: "Aqua_MODIS__2011-11-24", wmsProductName: "AQUA_MODIS", time:"2011-11-24", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
