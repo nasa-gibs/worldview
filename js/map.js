@@ -47,7 +47,7 @@ SOTE.widget.Map = function(containerId, config){
 	}
 
  	if(config.bbox === undefined){
-	    config.bbox = "-175, -85, 175, 85";
+	    config.bbox = "-148.359375,-47.25,4.78125,60.1875"; //"-175, -85, 175, 85";
 	}	
 	
 	
