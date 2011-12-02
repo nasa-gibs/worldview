@@ -1,4 +1,5 @@
-SOTE.widget.DateSpan.prototype = new SOTE.widget.Component;
+SOTE.namespace("SOTE.widget.DateSpan");
+
 
 /**
   * Instantiate the dateSpan  
@@ -25,8 +26,73 @@ SOTE.widget.DateSpan.prototype = new SOTE.widget.Component;
   * 
 */
 SOTE.widget.DateSpan = function(containerId, config){
-  // Content
+	this.container=document.getElementById(containerId);
+	if (this.container==null){
+		this.setStatus("Error: element '"+containerId+"' not found!",true);
+		return;
+	}
+	this.id = containerId;
+	//Store the container's ID
+	this.containerId=containerId;	
+
+	//Define an object for holding configuration 
+	if (config===undefined){
+		config={}; 
+	}
+ 
+	if(config.dataSourceUrl === undefined){
+	    config.dataSourceUrl = null;
+	}
+
+	if(config.thumbSource === undefined){
+	    config.thumbSource = null; 
+	}
+
+ 	if(config.extent === undefined){
+	    config.extent = null;
+	}	
+	
+	if(config.product === undefined){
+		config.product = null;
+	}
+
+	if(config.endDate === undefined){
+		config.endDate = new Date("11/26/2011");
+	}
+
+	if(config.range === undefined){
+		config.range = 5*24*60*60*1000;
+	}
+	
+	if(config.selected === undefined){
+		config.selected = new Date(config.endDate.getTime());
+	}
+	
+	if(config.slideToSelect === undefined){
+		config.slideToSelect = true;
+	}
+	
+	if(config.isCollapsed === undefined){
+		config.isCollapsed = (config.thumbSource === null)? true: false;
+	}
+       
+    this.value = "";
+    this.maps = [];
+	this.endDate = config.endDate;
+	this.range = config.range; //in milliseconds
+	this.isCollapsed = config.isCollapsed;
+	this.slideToSelect = config.slideToSelect;
+	this.thumbSource = config.thumbSource;
+	this.extent = config.extent;
+	this.product = config.product;
+	this.value = config.selected;
+	this.dataSourceUrl = config.dataSourceUrl;
+	this.statusStr = "";
+	this.init();
 };
+
+SOTE.widget.DateSpan.prototype = new SOTE.widget.Component;
+
 
 /**
   * Displays the selectable dateSpan in HTML containing a thumbnail for each day in the span.  If the date range contains 
@@ -37,7 +103,71 @@ SOTE.widget.DateSpan = function(containerId, config){
   * @requires SOTE.widget.Map
 */
 SOTE.widget.DateSpan.prototype.init = function(){
-  // Content
+	
+	this.container.setAttribute("class","datespan");
+	var bgStripe = document.createElement('div');
+	bgStripe.setAttribute('class','horizontalContainer');
+	var spanContainer = document.createElement('div');
+	spanContainer.setAttribute('class','spanContainer');
+	bgStripe.appendChild(spanContainer);
+	this.container.appendChild(bgStripe);
+	
+	var numOfDays = this.range/24/60/60/1000;
+	
+	for(var i=0; i < numOfDays; ++i){
+		var mapDiv = document.createElement('div');
+		mapDiv.setAttribute('id','mapdiv'+i);
+		mapDiv.setAttribute('class','dateitem');
+		spanContainer.appendChild(mapDiv);
+		
+		var time = new Date(this.endDate.getTime() - i*24*60*60*1000);
+		var timeString = time.getFullYear() + "-" + eval(time.getMonth()+1) + "-" + time.getDate();
+		this.maps.push(new SOTE.widget.Map('mapdiv'+i,{baseLayer:"Aqua_MODIS",time:timeString,hasControls:false}));
+	}
+	
+	var slider = document.createElement('div');
+	slider.setAttribute('id','sliderDiv');
+	slider.innerHTML = '<input type="range" name="slider" id="slider" value="0" min="0" max="100" step="5" />';
+	spanContainer.appendChild(slider);
+
+	$('#slider').slider(); 
+	$('#slider').bind("change",{self:this},SOTE.widget.DateSpan.handleSlide);
+
+    if(REGISTRY){
+ 		REGISTRY.register(this.id,this);
+	}
+	else{
+		alert("No REGISTRY found!  Cannot register AccordionPicker!");
+	}
+
+};
+
+/**
+  * Fires an event to the registry when the state of the component is changed
+  *
+  * @this {DateSpan}
+  *
+*/
+SOTE.widget.DateSpan.prototype.fire = function(){
+
+	if(REGISTRY){
+		REGISTRY.fire(this);
+	}
+	else{
+		alert("No REGISTRY found! Cannot fire to REGISTRY from AccordionPicker!");
+	}
+
+};
+
+
+SOTE.widget.DateSpan.handleSlide = function(e,ui){
+	var value = e.target.value;
+	var self = e.data.self;
+	
+	var x = self.range * (value)/100;
+	var time = new Date(self.endDate.getTime() - x);
+	
+	self.setValue(time.toUTCString());
 };
 
 /**
@@ -49,7 +179,8 @@ SOTE.widget.DateSpan.prototype.init = function(){
   *
 */
 SOTE.widget.DateSpan.prototype.setValue = function(value){
-  // Content
+	this.value = new Date(value);
+	this.fire();
 };
 
 /**
@@ -60,7 +191,10 @@ SOTE.widget.DateSpan.prototype.setValue = function(value){
   *
 */
 SOTE.widget.DateSpan.prototype.getValue = function(){
-  // Content
+	var timeString = this.value.getFullYear() + "-" + SOTE.util.zeroPad(eval(this.value.getMonth()+1),2) + "-" + 
+		SOTE.util.zeroPad(this.value.getDate(),2) + "T" + SOTE.util.zeroPad(this.value.getHours(),2) + ":" + 
+		SOTE.util.zeroPad(this.value.getMinutes(),2) + ":" + SOTE.util.zeroPad(this.value.getSeconds(),2);
+	return ""+this.id +"="+timeString+"&transition=standard";
 };
 
 /**
@@ -71,8 +205,11 @@ SOTE.widget.DateSpan.prototype.getValue = function(){
   * @returns {boolean} true or false depending on if the selected date validates against the updated criteria
   * 
 */
-SOTE.widget.DateSpan.prototype.updateComponent = function(querystring){
-  // Content
+SOTE.widget.DateSpan.prototype.updateComponent = function(qs){
+	var bbox = SOTE.util.extractFromQuery('map',qs);
+	for(var i=0; i<this.maps.length; i++){
+		this.maps[i].setValue(bbox);
+	}
 };
 
 /**
