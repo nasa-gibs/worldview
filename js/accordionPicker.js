@@ -47,11 +47,13 @@ SOTE.widget.AccordionPicker = function(containerId, config){
 	}	
        
     this.value = "";
-	this.items = config.items;
+	//this.items = config.items;
 	this.selected = config.selected;
 	this.dataSourceUrl = config.dataSourceUrl;
 	this.statusStr = "";
 	this.init();
+	this.updateComponent("");
+
 }
 
 /**
@@ -85,16 +87,18 @@ SOTE.widget.AccordionPicker.prototype.init = function(){
   * 
 */
 SOTE.widget.AccordionPicker.prototype.render = function(){
-
+	if(this.items === undefined){return false;}
 	this.container.innerHTML = "";
 
 	var accordion = document.createElement("form");
 	accordion.setAttribute("class","accordion");
 	accordion.setAttribute("id",this.id+"accordion");
 	for(var category in this.items){
+		var htmlCategory = category.replace(" ","");
 		var catHeader = document.createElement("a");
 		catHeader.setAttribute("href","#");
-		catHeader.innerHTML = category;
+		catHeader.setAttribute("id",this.id+htmlCategory );
+		catHeader.innerHTML = "<span>"+category+"</span>";
 		accordion.appendChild(catHeader);
 		var catList = document.createElement("ul");
 		for(var i=0; i < this.items[category].length; i++){
@@ -104,11 +108,11 @@ SOTE.widget.AccordionPicker.prototype.render = function(){
 				alert("Invalid list item!");
 			}
 			else {
-				var id = this.id + category + "Item" + i;
+				var id = this.id + htmlCategory + "Item" + item.value;
 				var disabled = (item.disabled !== undefined && item.disabled === true)? "disabled":""; 
 				var type = (item.type === "single")? "radio":"checkbox"; 
-				catListItem.innerHTML = "<input value='"+item.value+"' name='"+this.id+item.type+"' id='"+id+"' type='"+type+"'"+" "+disabled+"/>";
-				catListItem.innerHTML += "<label for='"+id+"'>"+item.label+"</label>";
+				catListItem.innerHTML = "<input value='"+item.value+"' class='accordionFormItem' name='"+this.id+item.type+"' id='"+id+"' type='"+type+"'"+" "+disabled+"/>";
+				catListItem.innerHTML += "<label for='"+id+"'><span class='accordionLabel'>"+item.label+"</span><span class='accordionSub'>"+item.sublabel+"</span></label>";
 				catList.appendChild(catListItem);
 			} 
 		}
@@ -118,9 +122,22 @@ SOTE.widget.AccordionPicker.prototype.render = function(){
 	
 	$('.accordion').accordion();
 	$('.accordion').accordion("option","collapsible",true);
-	$('.accordion').accordion("option","active",false);
+	$('.accordionFormItem').bind('click',{self:this},SOTE.widget.AccordionPicker.handleSelection);
+
+	
+	
+	
 	
 };
+
+SOTE.widget.AccordionPicker.handleSelection = function(e){
+	var self = e.data.self;
+	self.fire();
+	
+	
+};
+
+
 /**
   * Fires an event to the registry when the state of the component is changed
   *
@@ -206,7 +223,7 @@ SOTE.widget.AccordionPicker.prototype.getValue = function(){
 	}
 	
 	var value = selected.join(".");
-	return value;
+	return this.id + "=" + value;
 };
 
 /**
