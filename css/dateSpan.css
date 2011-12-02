@@ -1,0 +1,19 @@
+.spanContainer { height:130px; float:right;  overflow:visible; width:75%; margin-top:40px;}
+.datespan div.olMap {width:15%; height:100px; 
+float:left;
+-moz-box-shadow: 0 0 5px 5px #111;
+-webkit-box-shadow: 0 0 5px 5px #111;
+box-shadow: 0 0 5px 5px #111;
+margin:15px 5% 0 0 !important;
+position:relative; left: 2.5%;
+display:block;
+} 
+.dateSpanSlider {visibility:hidden;}
+div.ui-slider{height:0px;  width:79.9%; border:red 0px solid; z-index:1002; float:left; margin:0 0 0 2.5%;}
+div.ui-slider-switch {display:none} 
+a.ui-slider-handle{height:170px; width:18.77%; background:rgba(228,108,10,.4); border:#E46C0A 2px solid; z-index:1004; position:absolute; top:-155px; margin-left:0px; margin-top:0px;}
+a.ui-btn {margin:0;}
+a.ui-shadow {box-shadow:none;}
+a.ui-btn-up-c {box-shadow:none;}
+#mapdiv {margin:0; padding:0; left:0px;}
+  
