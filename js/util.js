@@ -11,7 +11,7 @@ SOTE.namespace("SOTE.util");
 SOTE.util.extractFromQuery = function(key,qs){
 	//if (default_==null) default_="";
 	//key = key.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-	var regex = new RegExp("[\\?&#]"+key+"=([^&#]*)");
+	var regex = new RegExp("[\\?&#]*"+key+"=([^&#]*)");
 	var val = regex.exec(qs);
 	if(val == null)
     	return "";
