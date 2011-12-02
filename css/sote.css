@@ -1,0 +1,117 @@
+#hazard ul {
+	padding: 0;
+	margin-left: 0;
+	font: 10px "Gill Sans", sans-serif;
+	text-align: center;
+}
+
+#hazard ul li {
+	margin: 0;
+	float: left;
+	width: 90px;
+	border-width: 1.5pt;
+}
+
+#hazard ul li.disabled {
+	color: rgb(156,156,156);
+}
+
+#hazard ul.collapsible li div {
+	position: absolute;
+	left: -999em;
+}
+
+#hazard ul.collapsible:hover li div {
+	position: relative;
+	left: 0;
+}
+
+#hazard ul li:hover {
+	border-color: yellow;
+}
+
+#hazard_item0 {
+	background-color: rgb(149,55,53);
+	border-color: rgb(217,150,148);
+}
+
+#hazard_item0.disabled, #hazard_item0.disabled:hover {
+	background-color: rgb(92,76,77);
+	border-color: rgb(113,95,96);
+}
+
+#hazard_item1 {
+	background-color: rgb(23,55,94);
+	border-color: rgb(85,142,213);
+}
+
+#hazard_item1.disabled, #hazard_item1.disabled:hover {
+	background-color: rgb(54,66,76);
+	border-color: rgb(78,100,119);
+}
+
+#hazard_item2 {
+	background-color: rgb(74,69,42);
+	border-color: rgb(148,138,84);
+}
+
+#hazard_item2.disabled, #hazard_item2.disabled:hover {
+	background-color: rgb(58,56,52);
+	border-color: rgb(105,99,78);
+}
+
+#hazard_item3 {
+	background-color: rgb(160,162,108);
+	border-color: rgb(209,212,111);
+}
+
+#hazard_item3.disabled, #hazard_item3.disabled:hover {
+	background-color: rgb(101,103,86);
+	border-color: rgb(127,128,97);
+}
+
+#hazard_item4 {
+	background-color: rgb(127,127,127);
+	border-color: rgb(166,166,166);
+}
+
+#hazard_item4.disabled, #hazard_item4.disabled:hover {
+	background-color: rgb(63,63,63);
+	border-color: rgb(97,97,97);
+}
+
+#hazard_item5 {
+	background-color: rgb(79,98,40);
+	border-color: rgb(101,117,79);
+}
+
+#hazard_item5.disabled, #hazard_item5.disabled:hover {
+	background-color: rgb(83,83,67);
+	border-color: rgb(101,117,79);
+}
+
+#hazard_item6 {
+	background-color: rgb(64,49,82);
+	border-color: rgb(179,162,199);
+}
+
+#transition ul {
+	font: 10px "Gill Sans", sans-serif;
+	text-align: center;
+	color: rgb(38,38,38);
+}
+
+#transition ul li, #transition ul li.disabled, #transition ul li.disabled:hover {
+	background-color: rgb(76,89,92);
+	border-color: rgb(112,135,136);
+	border-width: .75pt;
+}
+
+#transition ul li.selected {
+	background-color: rgb(152,72,7);
+	border-color: rgb(250,192,144);
+}
+
+#transition ul li:hover {
+	border-color: yellow;
+}
