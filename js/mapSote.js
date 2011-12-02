@@ -201,7 +201,7 @@ SOTE.widget.Map.prototype.updateComponent = function(querystring)
 					else
 					{
 						allLayers[i].setZIndex(1);
-						allLayers[i].setOpacity(0.35);
+						allLayers[i].setOpacity(0.5);
 					}
 					
 					layerModified = true;
