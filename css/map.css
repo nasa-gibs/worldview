@@ -2,9 +2,10 @@
 div.olControlZoomPanel {
 height: 108px;
 width: 36px;
-position: absolute;
-top: 20px;
-left: 20px;
+position: relative !important;
+float:right;
+margin:0 20px 0 0;
+
 }
 div.olControlZoomPanel div {
     width: 36px;

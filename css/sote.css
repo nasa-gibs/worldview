@@ -1,3 +1,20 @@
+body, div, ul, li {margin:0; padding:0; }
+
+div.horizontalContainer {width:100%; display:block; float:left; background-color:rgba(38,38,38,0.7); position:absolute;  bottom:0; z-index:1002; overflow:visible; height:180px;}
+
+#products { z-index:1006; display:block; float:left;  position:absolute; left:0; top:25%;}
+
+#banner {
+	z-index:1006; float:left; position:relative;
+}
+
+#hazard, #transition {z-index:1007; clear:both; float:left; display:block; position:relative; }
+
+#transition {width:22%; height:100px; text-shadow:none; color: #262626; margin-top:55px;}
+#hazard {top:-13; }
+
+#map {position:absolute !important; left:0; top:0; }
+
 #hazard ul {
 	padding: 0;
 	margin-left: 0;
@@ -8,8 +25,8 @@
 #hazard ul li {
 	margin: 0;
 	float: left;
-	width: 90px;
 	border-width: 1.5pt;
+	padding: 0 5px 0 5px;
 }
 
 #hazard ul li.disabled {
@@ -98,7 +115,6 @@
 #transition ul {
 	font: 10px "Gill Sans", sans-serif;
 	text-align: center;
-	color: rgb(38,38,38);
 }
 
 #transition ul li, #transition ul li.disabled, #transition ul li.disabled:hover {

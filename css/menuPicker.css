@@ -8,7 +8,6 @@ ul.menuPicker {
 
 ul.menuPicker li {
 	border: 1px solid black;
-	width: 90px;
 	background: #666;
 	padding: .2em 1em;
 }
