@@ -87,11 +87,11 @@ SOTE.util.Registry = function () {
 	  } 
 	  //alert("Registry: fire: producer: "+this.getComponentId(comp)+", evtObj: "+evtObjA[i].consumerId+", recursive: "+recursive+", no fire val: "+noFireVal);
 	  if(evtObjA[i].consumerId != noFireVal.split("=")[1]){
-	    if(recursive.length > 0){ 
+	    /*if(recursive.length > 0){ 
               evtObjA[i].componentUpdate.fire(comp.getValue()+"&norecurse="+recursive);
-	    }else{
+	    }else{*/
               evtObjA[i].componentUpdate.fire(comp.getValue());
-	    }
+	    //}
 	  }
         }
       }
