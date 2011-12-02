@@ -105,12 +105,12 @@ SOTE.widget.DateSpan.prototype = new SOTE.widget.Component;
 SOTE.widget.DateSpan.prototype.init = function(){
 	
 	this.container.setAttribute("class","datespan");
-	var bgStripe = document.createElement('div');
-	bgStripe.setAttribute('class','horizontalContainer');
+	//var bgStripe = document.createElement('div');
+	//bgStripe.setAttribute('class','horizontalContainer');
 	var spanContainer = document.createElement('div');
 	spanContainer.setAttribute('class','spanContainer');
-	bgStripe.appendChild(spanContainer);
-	this.container.appendChild(bgStripe);
+	//bgStripe.appendChild(spanContainer);
+	this.container.appendChild(spanContainer);
 	
 	var numOfDays = this.range/24/60/60/1000;
 	
@@ -126,12 +126,12 @@ SOTE.widget.DateSpan.prototype.init = function(){
 	}
 	
 	var slider = document.createElement('div');
-	slider.setAttribute('id','sliderDiv');
-	slider.innerHTML = '<input type="range" name="slider" id="slider" value="0" min="0" max="100" step="5" />';
+	slider.setAttribute('id',this.id+'sliderDiv');
+	slider.innerHTML = '<input type="range" name="slider" id="'+this.id+'slider" class="dateSpanSlider" value="0" min="0" max="100" step="5" />';
 	spanContainer.appendChild(slider);
 
-	$('#slider').slider(); 
-	$('#slider').bind("change",{self:this},SOTE.widget.DateSpan.handleSlide);
+	$('#'+this.id+'slider').slider(); 
+	$('#'+this.id+'slider').bind("change",{self:this},SOTE.widget.DateSpan.handleSlide);
 
     if(REGISTRY){
  		REGISTRY.register(this.id,this);
