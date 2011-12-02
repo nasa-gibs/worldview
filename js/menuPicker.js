@@ -55,7 +55,10 @@ SOTE.widget.MenuPicker = function(containerId, config){
   * 
 */
 SOTE.widget.MenuPicker.prototype.init = function(){
-	this.render();
+	if ((this.menuItems.length == 0) && (this.dataSourceUrl !== null))
+		this.updateComponent();
+	else
+		this.render();
 	
 	if(REGISTRY){
 		REGISTRY.register(this.id,this);
