@@ -95,6 +95,13 @@ SOTE.widget.Map = function(containerId, config){
   
 	// Initialize the map
 	this.init();
+    if(REGISTRY){
+ 		REGISTRY.register(this.id,this);
+	}
+	else{
+		alert("No REGISTRY found!  Cannot register AccordionPicker!");
+	}
+	
 
   	// Load layers into memory
   	this.isSoteMapDataCached = false;
@@ -112,9 +119,18 @@ SOTE.widget.Map = function(containerId, config){
   	this.setExtent(this.bbox);
 
 	// TODO: Set up callback for when pan/zoom ends to auto-call the "fire" function
-	// this.map.events.register("moveend", this, this.fire); 
+	this.map.events.register("moveend", this, this.handleMapChange); 
 };
 
+SOTE.widget.Map.prototype.handleMapChange = function(evt){
+	var latLon = evt.object.getExtent().transform(
+			evt.object.getProjectionObject(),
+            new OpenLayers.Projection("EPSG:4326")).toString();
+    
+    this.setValue(latLon);
+    this.fire();
+	
+};
 
 SOTE.widget.Map.prototype.activateLayerDisableTheRest = function(baselayer, time)
 {
@@ -137,7 +153,7 @@ SOTE.widget.Map.prototype.activateLayerDisableTheRest = function(baselayer, time
 		}	
 	}
 
-}
+};
 
 /**
   * Displays the map with a base layer and pan and zoom controls (if hasControls is true)
@@ -406,7 +422,7 @@ SOTE.widget.Map.prototype.setValue = function(value){
 */
 SOTE.widget.Map.prototype.getValue = function(){
 
-	// Retrieve current extent
+/*	// Retrieve current extent
 	var extent = this.map.getExtent();
 	
 	// Check for invalid response, return 0s if necessary
@@ -416,7 +432,8 @@ SOTE.widget.Map.prototype.getValue = function(){
 	// Otherwise object is valid, convert to lat/lon and return as string
 	return extent.transform(
 			this.map.getProjectionObject(),
-            new OpenLayers.Projection("EPSG:4326")).toString();
+            new OpenLayers.Projection("EPSG:4326")).toString();*/
+	return this.id + "=" + this.value;
 };
 
 SOTE.widget.Map.prototype.getAllLayers = function()
@@ -610,18 +627,21 @@ SOTE.widget.Map.prototype.setExtent = function(extent){
 
     // Parse bounding box string and apply to map
     // Need to convert from lat/lon to map's native coord system
-    var extent = new OpenLayers.Bounds.fromString(extent, false).transform(
+    var OLExtent = new OpenLayers.Bounds.fromString(extent, false).transform(
             new OpenLayers.Projection("EPSG:4326"),
             this.map.getProjectionObject());
 
-	if (extent == null)
+	if (OLExtent == null)
 	{
 		this.setStatus("Could not set extent");
 		return false;
 	}           
-  
+	else {
+		this.value = extent;
+	}
+	
  	// else
-    this.map.zoomToExtent(extent, true);
+    this.map.zoomToExtent(OLExtent, true);
     return true;
 };
 
