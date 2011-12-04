@@ -15,7 +15,7 @@
         {
         	"label": "Dust Score",
         	"sublabel": "Aqua / AIRS",
-        	"value": "Dust_Score",
+        	"value": "AIRS_Dust",
         	"type":"multi"
         }
 	],
