@@ -57,7 +57,7 @@ SOTE.widget.DateSpan = function(containerId, config){
 	}
 
 	if(config.endDate === undefined){
-		config.endDate = new Date("11/26/2011");
+		config.endDate = new Date("11/30/2011");
 	}
 
 	if(config.range === undefined){
@@ -122,12 +122,12 @@ SOTE.widget.DateSpan.prototype.init = function(){
 		
 		var time = new Date(this.endDate.getTime() - i*24*60*60*1000);
 		var timeString = time.getFullYear() + "-" + eval(time.getMonth()+1) + "-" + time.getDate();
-		this.maps.push(new SOTE.widget.Map('mapdiv'+i,{baseLayer:"Aqua_MODIS",time:timeString,hasControls:false}));
+		this.maps.push(new SOTE.widget.Map('mapdiv'+i,{baseLayer:"Terra_MODIS",time:timeString,hasControls:false}));
 	}
 	
 	var slider = document.createElement('div');
 	slider.setAttribute('id',this.id+'sliderDiv');
-	slider.innerHTML = '<input type="range" name="slider" id="'+this.id+'slider" class="dateSpanSlider" value="0" min="0" max="100" step="5" />';
+	slider.innerHTML = '<input type="range" name="slider" id="'+this.id+'slider" class="dateSpanSlider" value="0" min="0" max="100" step="1" />';
 	spanContainer.appendChild(slider);
 
 	$('#'+this.id+'slider').slider(); 
