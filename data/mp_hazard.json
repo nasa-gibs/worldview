@@ -16,11 +16,6 @@
 			"disabled": true
 		},
 		{
-			"label": "Severe Storms",
-			"value": "ss",
-			"disabled": true
-		},
-		{
 			"label": "Smoke Plumes",
 			"value": "sp",
 			"disabled": true
