@@ -1,8 +1,94 @@
-<html>
-	<head>
-		<title>State Of The Earth</title>
-	</head>
-	<body>
-		<p>State Of The Earth</p>
-	</body>
+
+<head>
+	<title>EOSDIS Worldview (Alpha)</title>
+	
+	<!-- meta defines -->
+	<meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />	
+
+	<!-- Dependency --> 
+	<script src="http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js" ></script>
+	
+	<!-- Event source file -->
+	<script src="http://yui.yahooapis.com/2.9.0/build/event/event-min.js" ></script>
+
+	<!-- CSS for JQuery -->
+	<link type="text/css" href="css/ext/jquery/jquery.mobile-1.0rc2.css" rel="Stylesheet" />
+
+	
+	
+	<script type="text/javascript" src="js/ext/jquery/jquery-1.6.4.js"></script>
+
+
+	<!-- JQuery mobile load should be after SOTE-specific JS but didn't work at first;  need to retry -->
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>
+
+	<script type="text/javascript" src="js/ext/jquery/jquery.mobile-1.0rc2.js"></script>
+
+
+	<!-- Combo-handled YUI CSS files: -->
+	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.9.0/build/container/assets/skins/sam/container.css">
+	<!-- Combo-handled YUI JS files: -->
+	<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&2.9.0/build/dragdrop/dragdrop-min.js&2.9.0/build/container/container-min.js"></script>
+
+	
+	
+	<!-- CSS for OpenLayers	 -->
+	<link type="text/css" href="css/ext/openlayers-2.11/openlayers.defaulttheme.style.css" rel="StyleSheet" />
+	<link type="text/css" href="css/ext/openlayers-2.11/openlayers.example.style.css" rel="StyleSheet" />
+	<link type="text/css" href="css/ext/openlayers-2.11/openlayers.style.mobile-jq.css" rel="StyleSheet" />
+	
+	
+	<!-- CSS for map style -->
+	<link type="text/css" href="css/map.css" rel="Stylesheet" /> 
+	<link type="text/css" href="css/dateSpan.css" rel="Stylesheet" /> 
+	<link type="text/css" href="css/menuPicker.css" rel="Stylesheet" /> 
+	<link type="text/css" href="css/accordionPicker.css" rel="Stylesheet" /> 
+	<link type="text/css" href="css/sote.css" rel="Stylesheet" /> 
+
+
+	<!-- External Javascript includes -->
+	<script type="text/javascript" src="js/ext/openlayers-2.11/OpenLayers.js?mobile"></script>
+	<script type="text/javascript" src="js/ext/datejs/date.js"></script>
+	<script type="text/javascript" src="js/ext/colorbox/jquery.colorbox-min.js"></script>
+
+	
+	<!-- SOTE component includes -->
+	<script type="text/javascript" src="js/component.js"></script>
+	<script type="text/javascript" src="js/registry.js"></script>
+	<script type="text/javascript" src="js/util.js"></script>
+	<script type="text/javascript" src="js/map.js"></script>
+	<script type="text/javascript" src="js/mapSote.js"></script>
+	<script type="text/javascript" src="js/dateSpan.js"></script>
+	<script type="text/javascript" src="js/menuPicker.js"></script>
+	<script type="text/javascript" src="js/accordionPicker.js"></script>
+	<script type="text/javascript" src="js/sote.js"></script>
+ 
+
+</head>
+
+	
+	
+<body>
+	<div data-role="page" id="mappage">	
+		<div data-role="content">
+			<div id="banner"><img src='images/worldview.png' /></div>
+			<!-- <div id="aboutus"><a id='aboutus_link' class='aboutus_link' href='javascript:showOverlay();'><img src='images/aboutIcon.png' /></a></div>-->
+			<div id="hazard"></div>
+			<div id="products"></div>
+			<div id="map"></div>
+			<div class="horizontalContainer">
+				<div id="time" ></div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		REGISTRY.addEventListener("map","time");
+        REGISTRY.addEventListener("time","map");
+        REGISTRY.addEventListener("products","map","time");
+        REGISTRY.addEventListener("hazard","products");
+	</script>
+</body>
+
 </html>
