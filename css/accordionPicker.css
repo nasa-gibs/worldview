@@ -1,13 +1,14 @@
-.ui-accordion { display:block; width:230px; background:#444444; color:#fff; font: 12px "Gill Sans",sans-serif;}
-.ui-accordion a{ display: block;}
+.ui-accordion { display:block; width:230px; background:#444444; color:#fff; font: 1.05em "Gill Sans",sans-serif; text-shadow:none; font-weight:120;}
+.ui-accordion a{ display: block; text-decoration:none;}
 
 
 .ui-accordion label span.accordionLabel {display:inline-block; font-weight:250;}
 .ui-accordion label span.accordionSub {display:block; font-weight:200; margin-left:21px;}
 
-a.ui-accordion-header { background: #777777; border-radius: 0 0 0 0; border: #558ED5 1px solid; color:#fff; width:100%; }
-ul.ui-accordion-content {background: #555555; border-radius: 0 0 0 0; color:#fff; font-size:10px;}
-a.ui-accordion-header span { margin-left:25px;}
-a.ui-accordion-header span.ui-icon {}
-a.ui-accordion-header span.ui-icon-triangle-1-e { margin-left:-5px; }
-a.ui-accordion-header span.ui-icon-triangle-1-s { margin-left:-5px; } 
+a.ui-accordion-header { background: #777777; border-radius: 0 0 0 0; border: #558ED5 1px solid; color:#fff;  padding:2px 5px;}
+ul.ui-accordion-content {list-style-type:none; background: #555555; border-radius: 0 0 0 0; color:#fff; font-size:.85em; display:block; overflow:hidden;}
+ul.ui-accordion-content li{border:#444444 1px solid; background: #555555; border-width: 1px 0 1px 0; width:100%; padding: 2px 0px 2px 10px; }
+a.ui-accordion-header span { margin-left:5px;}
+a.ui-accordion-header span.ui-icon { }
+a.ui-accordion-header span.ui-icon-triangle-1-e { margin: 2px 0 0 0; float:left; width:14px; height:12px; display:block; background:transparent url("../images/collapsed.png");}
+a.ui-accordion-header span.ui-icon-triangle-1-s { margin: 2px 0 0 0;float:left; width:14px; height:12px; display:block; background:transparent url("../images/expanded.png"); } 
