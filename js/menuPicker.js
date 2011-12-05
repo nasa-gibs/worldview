@@ -151,6 +151,7 @@ SOTE.widget.MenuPicker.prototype.setValue = function(value){
 	else {
 		this.selectedValue = oldSelectedValue;
 	}
+	this.fire();
 	return validation;
 };
 
@@ -162,7 +163,7 @@ SOTE.widget.MenuPicker.prototype.setValue = function(value){
   *
 */
 SOTE.widget.MenuPicker.prototype.getValue = function(){
-	return this.selectedValue;
+	return this.id+"="+this.selectedValue;
 };
 
 /**

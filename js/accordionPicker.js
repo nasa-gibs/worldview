@@ -89,11 +89,24 @@ SOTE.widget.AccordionPicker.prototype.init = function(){
 SOTE.widget.AccordionPicker.prototype.render = function(){
 	if(this.items === undefined){return false;}
 	this.container.innerHTML = "";
+	var htmlExpanded;
+	var selected;
+	var defaultSelection = null; 
 
 	var accordion = document.createElement("form");
 	accordion.setAttribute("class","accordion");
 	accordion.setAttribute("id",this.id+"accordion");
 	for(var category in this.items){
+		if(category === "expanded"){
+			if(this.items[category] !== undefined && this.items[category] !== ""){
+				htmlExpanded = this.items[category].replace(" ","");
+			}
+			continue;
+		}
+		if(category === "selected"){
+			selected = this.items[category];
+			continue;
+		}
 		var htmlCategory = category.replace(" ","");
 		var catHeader = document.createElement("a");
 		catHeader.setAttribute("href","#");
@@ -103,6 +116,9 @@ SOTE.widget.AccordionPicker.prototype.render = function(){
 		var catList = document.createElement("ul");
 		for(var i=0; i < this.items[category].length; i++){
 			var item = this.items[category][i];
+			if(defaultSelection === null){
+				defaultSelection = item.value;
+			}
 			var catListItem = document.createElement("li");
 			if(item.type !== "single" && item.type !== "multi"){
 				alert("Invalid list item!");
@@ -121,8 +137,18 @@ SOTE.widget.AccordionPicker.prototype.render = function(){
 	this.container.appendChild(accordion);
 	
 	$('.accordion').accordion();
-	$('.accordion').accordion("option","collapsible",true);
+	//$('.accordion').accordion("option","collapsible",true);
 	$('.accordionFormItem').bind('click',{self:this},SOTE.widget.AccordionPicker.handleSelection);
+
+	if(htmlExpanded !== undefined){
+		$('.accordion').accordion("activate","#"+this.id+htmlExpanded);
+	}
+	if(selected !== undefined && selected !== ""){
+		this.setValue(selected);
+	}
+	else {
+		this.setValue(defaultSelection);
+	}
 
 	
 	
@@ -132,6 +158,7 @@ SOTE.widget.AccordionPicker.prototype.render = function(){
 
 SOTE.widget.AccordionPicker.handleSelection = function(e){
 	var self = e.data.self;
+    self.value = SOTE.util.extractFromQuery(self.id,self.getValue());
 	self.fire();
 	
 	
@@ -189,6 +216,9 @@ SOTE.widget.AccordionPicker.prototype.setValue = function(values){
 		}
 	}
 	
+	this.value = values;
+	this.fire();
+	
 	return this.validate();
 	
 };
@@ -212,7 +242,7 @@ SOTE.widget.AccordionPicker.prototype.getValue = function(){
 		}
 	}
 	
-	if(selected.length === 0){ selected.push("none"); };
+	if(selected.length === 0){ selected.push(""); };
 	
 	var checkboxes = document.getElementsByName(this.id+"multi");
 	
@@ -237,8 +267,8 @@ SOTE.widget.AccordionPicker.prototype.getValue = function(){
 SOTE.widget.AccordionPicker.prototype.updateComponent = function(querystring){
 	var qs = (querystring === undefined)? "":querystring;
 	SOTE.util.getJSON(
-		this.dataSourceUrl+querystring,
-		{self:this},
+		this.dataSourceUrl+"?"+querystring,
+		{self:this,qs:querystring},
 		SOTE.widget.AccordionPicker.handleUpdateSuccess,
 		SOTE.widget.AccordionPicker.handleUpdateFailure
 	);
@@ -252,12 +282,13 @@ SOTE.widget.AccordionPicker.prototype.updateComponent = function(querystring){
   * 
 */
 SOTE.widget.AccordionPicker.handleUpdateSuccess = function(data,status,xhr,args){
-	var value = args.self.getValue();
+	var expanded = SOTE.util.extractFromQuery("hazard",args.qs);
+	data.expanded = (expanded !== undefined && expanded !== "" && expanded !== null)? expanded:data.expanded;
+	data.selected = (data.selected === undefined || data.selected === "")? SOTE.util.extractFromQuery(args.self.id,args.self.getValue()):data.selected;
 	args.self.items = data;
 	args.self.render();
-	args.self.setValue(value);
 };
-
+ 
 /**
   * Static function to handle a failed retrieval from the data accessor
   * 

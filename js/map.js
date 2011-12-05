@@ -174,7 +174,7 @@ SOTE.widget.Map.prototype.activateLayersDisableTheRest = function(activeLayerNam
 			{
 				allLayers[i].setVisibility(true);
 				allLayers[i].setOpacity(1.0);
-				if (j>0)
+				if (i>1)
 					allLayers[i].setZIndex(1); 
 				isLayerFound = true;
 			}			

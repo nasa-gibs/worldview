@@ -56,7 +56,7 @@ SOTE.widget.MapSote.prototype.getNumTimeStepsAvailable = function()
 
 	// TODO: compute based on date values in soteMapData, not the length		
 	return this.soteMapData.length;
-}
+};
 
 SOTE.widget.MapSote.prototype.setLayerCaching = function(enable)
 {

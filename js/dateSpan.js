@@ -85,7 +85,7 @@ SOTE.widget.DateSpan = function(containerId, config){
 	this.thumbSource = config.thumbSource;
 	this.extent = config.extent;
 	this.product = config.product;
-	this.value = config.selected;
+	this.value = config.selected; 
 	this.dataSourceUrl = config.dataSourceUrl;
 	this.statusStr = "";
 	this.init();
@@ -109,25 +109,33 @@ SOTE.widget.DateSpan.prototype.init = function(){
 	//bgStripe.setAttribute('class','horizontalContainer');
 	var spanContainer = document.createElement('div');
 	spanContainer.setAttribute('class','spanContainer');
+	spanContainer.setAttribute('id',this.id+'spanContainer');
 	//bgStripe.appendChild(spanContainer);
 	this.container.appendChild(spanContainer);
+	var labelForSpanContainer = document.createElement('label');
+	labelForSpanContainer.setAttribute('for',this.id+'spanContainer');
+	labelForSpanContainer.setAttribute('class','spanContainerLabel');
+	labelForSpanContainer.innerHTML = "<span class='.annotation'>* drag the slider to select a date</span><span id='"+this.id+
+		"spanContainerLabelDate'class='spanContainerLabelDate'></span><span id='"+this.id+
+		"spanContainerLabelTime' class='spanContainerLabelTime'></span>";
+	this.container.appendChild(labelForSpanContainer); 
 	
 	var numOfDays = this.range/24/60/60/1000;
-	
+	var startDate = new Date(this.endDate.getTime() - this.range);
 	for(var i=0; i < numOfDays; ++i){
 		var mapDiv = document.createElement('div');
 		mapDiv.setAttribute('id','mapdiv'+i);
 		mapDiv.setAttribute('class','dateitem');
 		spanContainer.appendChild(mapDiv);
-		
-		var time = new Date(this.endDate.getTime() - i*24*60*60*1000);
+		var time = new Date(startDate.getTime() + i*24*60*60*1000);
+		//var time = new Date(this.endDate.getTime() - i*24*60*60*1000);
 		var timeString = time.getFullYear() + "-" + eval(time.getMonth()+1) + "-" + time.getDate();
 		this.maps.push(new SOTE.widget.Map('mapdiv'+i,{baseLayer:"Terra_MODIS",time:timeString,hasControls:false}));
 	}
 	
 	var slider = document.createElement('div');
 	slider.setAttribute('id',this.id+'sliderDiv');
-	slider.innerHTML = '<input type="range" name="slider" id="'+this.id+'slider" class="dateSpanSlider" value="0" min="0" max="100" step="1" />';
+	slider.innerHTML = '<input type="range" name="slider" id="'+this.id+'slider" class="dateSpanSlider" value="100" min="0" max="100" step="1" />';
 	spanContainer.appendChild(slider);
 
 	$('#'+this.id+'slider').slider(); 
@@ -139,6 +147,11 @@ SOTE.widget.DateSpan.prototype.init = function(){
 	else{
 		alert("No REGISTRY found!  Cannot register AccordionPicker!");
 	}
+
+	this.spanDate = document.getElementById(this.id+"spanContainerLabelDate");
+	this.spanTime = document.getElementById(this.id+"spanContainerLabelTime");
+
+	this.setVisualDate();
 
 };
 
@@ -164,9 +177,9 @@ SOTE.widget.DateSpan.handleSlide = function(e,ui){
 	var value = e.target.value;
 	var self = e.data.self;
 	
-	var x = self.range * (value)/100;
+	var x = self.range * (100-value)/100;
 	var time = new Date(self.endDate.getTime() - x);
-	
+	self.setVisualDate();
 	self.setValue(time.toUTCString());
 };
 
@@ -181,6 +194,13 @@ SOTE.widget.DateSpan.handleSlide = function(e,ui){
 SOTE.widget.DateSpan.prototype.setValue = function(value){
 	this.value = new Date(value);
 	this.fire();
+};
+
+SOTE.widget.DateSpan.prototype.setVisualDate = function(){
+	this.spanDate.innerHTML = this.value.getFullYear() + "-" + SOTE.util.zeroPad(eval(this.value.getMonth()+1),2) + "-" + 
+		SOTE.util.zeroPad(this.value.getDate(),2);
+	this.spanTime.innerHTML = SOTE.util.zeroPad(this.value.getHours(),2) + ":" + 
+		SOTE.util.zeroPad(this.value.getMinutes(),2) + ":" + SOTE.util.zeroPad(this.value.getSeconds(),2);
 };
 
 /**
@@ -207,7 +227,15 @@ SOTE.widget.DateSpan.prototype.getValue = function(){
 */
 SOTE.widget.DateSpan.prototype.updateComponent = function(qs){
 	var bbox = SOTE.util.extractFromQuery('map',qs);
-	for(var i=0; i<this.maps.length; i++){
+	var products = SOTE.util.extractFromQuery('products',qs);
+	var activeLayers = products.split(".");
+	var numOfDays = this.range/24/60/60/1000;
+	var startDate = new Date(this.endDate.getTime() - this.range);
+	for(var i=0; i<numOfDays; i++){
+		var time = new Date(startDate.getTime() + i*24*60*60*1000);
+		var timeString = time.getFullYear() + "-" + SOTE.util.zeroPad(eval(time.getMonth()+1),2) + "-" + 
+			SOTE.util.zeroPad(time.getDate(),2);
+		this.maps[i].activateLayersDisableTheRest(activeLayers,timeString);
 		this.maps[i].setValue(bbox);
 	}
 };
