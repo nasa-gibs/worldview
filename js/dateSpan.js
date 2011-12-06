@@ -59,6 +59,9 @@ SOTE.widget.DateSpan = function(containerId, config){
 	if(config.endDate === undefined){
 		config.endDate = new Date("11/30/2011");
 	}
+	else{
+		config.endDate = new Date(config.endDate);
+	}
 
 	if(config.range === undefined){
 		config.range = 5*24*60*60*1000;
