@@ -1,4 +1,3 @@
-
 <head>
 	<title>EOSDIS Worldview (Alpha)</title>
 	
@@ -68,8 +67,6 @@
 
 </head>
 
-	
-	
 <body class="yui-skin-sam">
 	<div data-role="page" id="mappage">	
 		<div data-role="content">
@@ -85,10 +82,15 @@
 	</div>
 	<script type="text/javascript">
 		REGISTRY.addEventListener("map","time");
-        REGISTRY.addEventListener("time","map");
-        REGISTRY.addEventListener("products","map","time");
-        REGISTRY.addEventListener("hazard","products");
+		REGISTRY.addEventListener("time","map");
+		REGISTRY.addEventListener("products","map","time");
+		REGISTRY.addEventListener("hazard","products");
 	</script>
+
+	<!-- BEGIN: Unica Page Tag -->
+	<!-- Copyright 2004-2010 Unica Corporation.  All rights reserved. -->
+	<script type="text/javascript" language="JavaScript" src="/sites/all/themes/earthdata/js/ntpagetag.js"></script>
+	<!-- END: Unica Page Tag -->
 </body>
 
 </html>
