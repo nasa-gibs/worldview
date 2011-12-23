@@ -68,6 +68,11 @@ html, body {
     padding       : 2px 4px;
     border-radius : 5px 0 0 0;
 }
+
+div.olMap {
+    background-color: #FFFFFF;
+}
+
 div.olControlZoomPanel .olControlZoomInItemInactive,
 div.olControlZoomPanel .olControlZoomOutItemInactive {
     /*background: rgba(0,0,0,0.4);*/
