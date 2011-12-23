@@ -58,7 +58,6 @@ SOTE.widget.DateSpan = function(containerId, config){
 
 	if(config.endDate === undefined){
 		config.endDate = new Date();
-		config.endDate = new Date(eval(config.endDate.getMonth()+1)+"/"+config.endDate.getDate()+"/"+config.endDate.getFullYear());
 	}
 	else{
 		config.endDate = new Date(config.endDate);
@@ -131,9 +130,14 @@ SOTE.widget.DateSpan.prototype.init = function(){
 		mapDiv.setAttribute('id','mapdiv'+i);
 		mapDiv.setAttribute('class','dateitem');
 		spanContainer.appendChild(mapDiv);
-		var time = new Date(startDate.getTime() + i*24*60*60*1000);
+		var time = new Date(startDate.getTime() + (i+1)*24*60*60*1000);
 		//var time = new Date(this.endDate.getTime() - i*24*60*60*1000);
-		var timeString = time.getFullYear() + "-" + eval(time.getMonth()+1) + "-" + time.getDate();
+		//var timeString = time.getUTCFullYear() + "-" + eval(time.getUTCMonth()+1) + "-" + time.getUTCDate();
+		//timeString += "T"+
+		var timeString = time.getUTCFullYear() + "-" + SOTE.util.zeroPad(eval(time.getUTCMonth()+1),2) + "-" + 
+			SOTE.util.zeroPad(time.getUTCDate(),2);
+		timeString += "T" + SOTE.util.zeroPad(time.getUTCHours(),2) + ":" + 
+			SOTE.util.zeroPad(time.getUTCMinutes(),2) + ":" + SOTE.util.zeroPad(time.getUTCSeconds(),2);
 		this.maps.push(new SOTE.widget.Map('mapdiv'+i,{baseLayer:"Terra_MODIS",time:timeString,hasControls:false}));
 	}
 	
@@ -201,10 +205,10 @@ SOTE.widget.DateSpan.prototype.setValue = function(value){
 };
 
 SOTE.widget.DateSpan.prototype.setVisualDate = function(){
-	this.spanDate.innerHTML = this.value.getFullYear() + "-" + SOTE.util.zeroPad(eval(this.value.getMonth()+1),2) + "-" + 
-		SOTE.util.zeroPad(this.value.getDate(),2);
-	this.spanTime.innerHTML = SOTE.util.zeroPad(this.value.getHours(),2) + ":" + 
-		SOTE.util.zeroPad(this.value.getMinutes(),2) + ":" + SOTE.util.zeroPad(this.value.getSeconds(),2);
+	this.spanDate.innerHTML = this.value.getUTCFullYear() + "-" + SOTE.util.zeroPad(eval(this.value.getUTCMonth()+1),2) + "-" + 
+		SOTE.util.zeroPad(this.value.getUTCDate(),2);
+	this.spanTime.innerHTML = SOTE.util.zeroPad(this.value.getUTCHours(),2) + ":" + 
+		SOTE.util.zeroPad(this.value.getUTCMinutes(),2) + ":" + SOTE.util.zeroPad(this.value.getUTCSeconds(),2);
 };
 
 /**
@@ -215,9 +219,9 @@ SOTE.widget.DateSpan.prototype.setVisualDate = function(){
   *
 */
 SOTE.widget.DateSpan.prototype.getValue = function(){
-	var timeString = this.value.getFullYear() + "-" + SOTE.util.zeroPad(eval(this.value.getMonth()+1),2) + "-" + 
-		SOTE.util.zeroPad(this.value.getDate(),2) + "T" + SOTE.util.zeroPad(this.value.getHours(),2) + ":" + 
-		SOTE.util.zeroPad(this.value.getMinutes(),2) + ":" + SOTE.util.zeroPad(this.value.getSeconds(),2);
+	var timeString = this.value.getUTCFullYear() + "-" + SOTE.util.zeroPad(eval(this.value.getUTCMonth()+1),2) + "-" + 
+		SOTE.util.zeroPad(this.value.getUTCDate(),2) + "T" + SOTE.util.zeroPad(this.value.getUTCHours(),2) + ":" + 
+		SOTE.util.zeroPad(this.value.getUTCMinutes(),2) + ":" + SOTE.util.zeroPad(this.value.getUTCSeconds(),2);
 	return ""+this.id +"="+timeString+"&transition=standard";
 };
 
@@ -236,9 +240,11 @@ SOTE.widget.DateSpan.prototype.updateComponent = function(qs){
 	var numOfDays = this.range/24/60/60/1000;
 	var startDate = new Date(this.endDate.getTime() - this.range);
 	for(var i=0; i<numOfDays; i++){
-		var time = new Date(startDate.getTime() + i*24*60*60*1000);
-		var timeString = time.getFullYear() + "-" + SOTE.util.zeroPad(eval(time.getMonth()+1),2) + "-" + 
-			SOTE.util.zeroPad(time.getDate(),2);
+		var time = new Date(startDate.getTime() + (i+1)*24*60*60*1000);
+		var timeString = time.getUTCFullYear() + "-" + SOTE.util.zeroPad(eval(time.getUTCMonth()+1),2) + "-" + 
+			SOTE.util.zeroPad(time.getUTCDate(),2);
+		timeString += "T" + SOTE.util.zeroPad(time.getUTCHours(),2) + ":" + 
+			SOTE.util.zeroPad(time.getUTCMinutes(),2) + ":" + SOTE.util.zeroPad(time.getUTCSeconds(),2);
 		this.maps[i].activateLayersDisableTheRest(activeLayers,timeString);
 		this.maps[i].setValue(bbox);
 	}

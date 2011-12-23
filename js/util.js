@@ -51,3 +51,29 @@ SOTE.util.zeroPad = function(num, places) {
   var zero = places - num.toString().length + 1;
   return Array(+(zero > 0 && zero)).join("0") + num;
 }
+
+
+/**
+ * Returns a JS Date Object given an ISO8601 formatted UTC datetime string
+ * 
+ * @param {String} dateAsString is the UTC datetime string in ISO8601 format
+ * 
+ * @returns {Date} New date instantiated from string
+ */
+SOTE.util.UTCDateFromISO8601String = function( dateAsString )
+{
+	var dateTimeArr = dateAsString.split(/T/);
+
+	var yyyymmdd = dateTimeArr[0];
+	var hhmmss = dateTimeArr[1];
+	
+	// Parse elements of date and time
+	var year = yyyymmdd.split("-")[0];
+	var month = eval(yyyymmdd.split("-")[1]-1);
+	var day = yyyymmdd.split("-")[2];
+	var hour = hhmmss.split(":")[0];
+	var minute = hhmmss.split(":")[1];
+	var second = hhmmss.split(":")[2];
+	
+  	return new Date( Date.UTC( year,month,day,hour,minute,second ));
+}

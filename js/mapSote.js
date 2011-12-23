@@ -38,7 +38,7 @@ SOTE.widget.MapSote = function(containerId, config)
 	this.map.events.register("movestart", this, this.handleMapMoveStart); 
 	
 	// test
-	this.updateComponent("?products=Terra_MODIS.SEDAC_PopulationDensity.SEDAC_AdminBoundaries&time=2011-11-30T00:00:00&transition=standard");
+	//this.updateComponent("?products=Terra_MODIS.SEDAC_PopulationDensity.SEDAC_AdminBoundaries&time=2011-11-30T00:00:00&transition=standard");
 };
 
 
@@ -92,7 +92,7 @@ SOTE.widget.MapSote.prototype.handleMapMoveStart = function(evt)
   * @returns {boolean} true or false depending on if the component still validates with the new criteria
   * 
 */
-SOTE.widget.Map.prototype.updateComponent = function(querystring)
+SOTE.widget.MapSote.prototype.updateComponent = function(querystring)
 {	
 	// Load SOTE-specific map data if not already cached
 	if (!this.isSoteMapDataCached)
@@ -103,6 +103,12 @@ SOTE.widget.Map.prototype.updateComponent = function(querystring)
 				// {displayName: "Aqua_MODIS_latest", wmsProductName: "AQUA_MODIS", time:"", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },			
 				{displayName: "population", wmsProductName: "population", time:"", format: "image/png", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },	
 				{displayName: "cartographic:esri-administrative-boundaries_level-1", wmsProductName: "cartographic:esri-administrative-boundaries_level-1", time:"", urls:["http://sedac.ciesin.columbia.edu/geoserver/wms?"], layers:"cartographic:esri-administrative-boundaries_level-1", transparent:true, projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
+				{displayName: "Aqua_MODIS__2011-12-26", wmsProductName: "AQUA_MODIS", time:"2011-12-26", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
+				{displayName: "Aqua_MODIS__2011-12-25", wmsProductName: "AQUA_MODIS", time:"2011-12-25", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
+				{displayName: "Aqua_MODIS__2011-12-24", wmsProductName: "AQUA_MODIS", time:"2011-12-24", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
+				{displayName: "Aqua_MODIS__2011-12-23", wmsProductName: "AQUA_MODIS", time:"2011-12-23", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
+				{displayName: "Aqua_MODIS__2011-12-22", wmsProductName: "AQUA_MODIS", time:"2011-12-22", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
+				{displayName: "Aqua_MODIS__2011-12-21", wmsProductName: "AQUA_MODIS", time:"2011-12-21", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
 				{displayName: "Aqua_MODIS__2011-12-20", wmsProductName: "AQUA_MODIS", time:"2011-12-20", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
 				{displayName: "Aqua_MODIS__2011-12-19", wmsProductName: "AQUA_MODIS", time:"2011-12-19", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
 				{displayName: "Aqua_MODIS__2011-12-18", wmsProductName: "AQUA_MODIS", time:"2011-12-18", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
@@ -123,6 +129,12 @@ SOTE.widget.Map.prototype.updateComponent = function(querystring)
 				{displayName: "Aqua_MODIS__2011-12-03", wmsProductName: "AQUA_MODIS", time:"2011-12-03", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
 				{displayName: "Aqua_MODIS__2011-12-02", wmsProductName: "AQUA_MODIS", time:"2011-12-02", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
 				{displayName: "Aqua_MODIS__2011-12-01", wmsProductName: "AQUA_MODIS", time:"2011-12-01", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
+				{displayName: "Terra_MODIS__2011-12-26", wmsProductName: "TERRA_MODIS", time:"2011-12-26", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
+				{displayName: "Terra_MODIS__2011-12-25", wmsProductName: "TERRA_MODIS", time:"2011-12-25", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
+				{displayName: "Terra_MODIS__2011-12-24", wmsProductName: "TERRA_MODIS", time:"2011-12-24", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
+				{displayName: "Terra_MODIS__2011-12-23", wmsProductName: "TERRA_MODIS", time:"2011-12-23", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
+				{displayName: "Terra_MODIS__2011-12-22", wmsProductName: "TERRA_MODIS", time:"2011-12-22", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
+				{displayName: "Terra_MODIS__2011-12-21", wmsProductName: "TERRA_MODIS", time:"2011-12-21", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
 				{displayName: "Terra_MODIS__2011-12-20", wmsProductName: "TERRA_MODIS", time:"2011-12-20", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
 				{displayName: "Terra_MODIS__2011-12-19", wmsProductName: "TERRA_MODIS", time:"2011-12-19", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
 				{displayName: "Terra_MODIS__2011-12-18", wmsProductName: "TERRA_MODIS", time:"2011-12-18", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
@@ -143,6 +155,12 @@ SOTE.widget.Map.prototype.updateComponent = function(querystring)
 				{displayName: "Terra_MODIS__2011-12-03", wmsProductName: "TERRA_MODIS", time:"2011-12-03", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
 				{displayName: "Terra_MODIS__2011-12-02", wmsProductName: "TERRA_MODIS", time:"2011-12-02", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
 				{displayName: "Terra_MODIS__2011-12-01", wmsProductName: "TERRA_MODIS", time:"2011-12-01", format: "image/jpeg", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
+				{displayName: "AIRS_Dust__2011-12-26", wmsProductName: "AIRS_Dust", time:"2011-12-26", format: "image/png", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
+				{displayName: "AIRS_Dust__2011-12-25", wmsProductName: "AIRS_Dust", time:"2011-12-25", format: "image/png", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
+				{displayName: "AIRS_Dust__2011-12-24", wmsProductName: "AIRS_Dust", time:"2011-12-24", format: "image/png", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
+				{displayName: "AIRS_Dust__2011-12-23", wmsProductName: "AIRS_Dust", time:"2011-12-23", format: "image/png", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
+				{displayName: "AIRS_Dust__2011-12-22", wmsProductName: "AIRS_Dust", time:"2011-12-22", format: "image/png", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
+				{displayName: "AIRS_Dust__2011-12-21", wmsProductName: "AIRS_Dust", time:"2011-12-21", format: "image/png", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
 				{displayName: "AIRS_Dust__2011-12-20", wmsProductName: "AIRS_Dust", time:"2011-12-20", format: "image/png", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
 				{displayName: "AIRS_Dust__2011-12-19", wmsProductName: "AIRS_Dust", time:"2011-12-19", format: "image/png", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
 				{displayName: "AIRS_Dust__2011-12-18", wmsProductName: "AIRS_Dust", time:"2011-12-18", format: "image/png", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
@@ -255,10 +273,10 @@ SOTE.widget.Map.prototype.updateComponent = function(querystring)
 	{
 		// Don't do any fancy opacity adjustments, just show the date that's closest to time slider position
 		var selectedDate = null;
-		if (fracTimeOfDay < 0.50)
+//		if (fracTimeOfDay < 0.50)
 			selectedDate = new String(t0);
-		else
-			selectedDate = new String(t1);
+//		else
+//			selectedDate = new String(t1);
 			
 		// Enable layers of selected Date, disable the rest
 		var allLayers = this.getAllLayers();
