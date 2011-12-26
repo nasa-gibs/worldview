@@ -32,7 +32,13 @@
 	        "sublabel": "SEDAC / L1 Admin Boundaries",
 	        "value": "cartographic:esri-administrative-boundaries_level-1",
 	        "type": "multi"
-		}
+		},
+		{
+	        "label": "Global Labels",
+	        "sublabel": "SEDAC / Global Labels",
+	        "value": "cartographic:00-global-labels",
+	        "type": "multi"
+		}		
 	]
 }
 
