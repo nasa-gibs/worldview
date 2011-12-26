@@ -396,40 +396,44 @@ SOTE.widget.Map.prototype.addLayers = function(layers)
     	if (!this.checkWmsParam(layers[i].tileSize))
     	{
     		// If 'tileSize' isn't set, consider this layer a "standard" WMS layer
+    		// Note: other params like maxExtent, numZoomLevels, maxResolution are ignored for standard WMS layers
 			this.map.addLayer(
-				new OpenLayers.Layer.WMS(layers[i].displayName, 
+				new OpenLayers.Layer.WMS(
+						layers[i].displayName, 
 	            		layers[i].urls, 
 	            		{
-	            			layers:layers[i].wmsProductName,
-	            			transparent:true
+	            			layers: layers[i].wmsProductName,
+	            			transparent: layers[i].transparent
 	            		},  
 	            		{
-	            			isBaseLayer:false, 
-	            			visibility:false, 
+	            			isBaseLayer: false, 
+	            			visibility: false, 
 	            			transitioneffect: 'resize', 
-	            			projection: layers[i].projection
-	            			// TODO: other params: maxExtent, numZoomLevels, maxResolution?
+	            			projection: layers[i].projection	            			
 	            		 }));    		
     	}
     	else
     	{
     		// If 'tileSize' is set, this should be a Tiled WMS layer
+    		// Note: "transparent" flag is not being used for tiled layers since image format is already being specified   
 	    	this.map.addLayer(
-	    		new OpenLayers.Layer.WMS(layers[i].displayName, 
+	    		new OpenLayers.Layer.WMS(
+	    			layers[i].displayName, 
 	    			layers[i].urls,
-	    			{ time: layers[i].time, 
-	    			  layers: layers[i].wmsProductName, 
-	    			  Format: layers[i].format
+	    			{ 
+	    				time: layers[i].time, 
+	    			  	layers: layers[i].wmsProductName, 
+	    			  	Format: layers[i].format
 	    			},
 	    			{ 
-	    			  'tileSize': new OpenLayers.Size(layers[i].tileSize[0], layers[i].tileSize[1]),
-	    			  buffer: 0, 
-	    			  transitionEffect: 'resize', 
-	    			  projection: layers[i].projection, 
-	    			  numZoomLevels: layers[i].numZoomLevels, 
-	    			  maxExtent: new OpenLayers.Bounds(layers[i].maxExtent[0], layers[i].maxExtent[1], layers[i].maxExtent[2], layers[i].maxExtent[3]),
-	    			  maxResolution: layers[i].maxResolution,
-	    			  visibility: false
+						'tileSize': new OpenLayers.Size(layers[i].tileSize[0], layers[i].tileSize[1]),
+						buffer: 0, 
+						transitionEffect: 'resize', 
+						projection: layers[i].projection, 
+						numZoomLevels: layers[i].numZoomLevels, 
+						maxExtent: new OpenLayers.Bounds(layers[i].maxExtent[0], layers[i].maxExtent[1], layers[i].maxExtent[2], layers[i].maxExtent[3]),
+						maxResolution: layers[i].maxResolution,
+						visibility: false
 	    			}
 	    		));    		
     	}
@@ -730,8 +734,8 @@ SOTE.widget.Map.prototype.updateComponent = function(qs){
 		var staticProductLayers = 
 			[			
 				{displayName: "population", wmsProductName: "population", time:"", format: "image/png", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
-				{displayName: "cartographic:esri-administrative-boundaries_level-1", wmsProductName: "cartographic:esri-administrative-boundaries_level-1", time:"", urls:["http://sedac.ciesin.columbia.edu/geoserver/wms?"], layers:"cartographic:esri-administrative-boundaries_level-1", transparent:true, projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
-				{displayName: "cartographic:00-global-labels", wmsProductName: "cartographic:00-global-labels", time:"", urls:["http://sedac.ciesin.columbia.edu/geoserver/wms?"], layers:"cartographic:00-global-labels", transparent:true, projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 }
+				{displayName: "cartographic:esri-administrative-boundaries_level-1", wmsProductName: "cartographic:esri-administrative-boundaries_level-1", time:"", urls:["http://sedac.ciesin.columbia.edu/geoserver/wms?"], layers:"cartographic:esri-administrative-boundaries_level-1", transparent:true, projection:"EPSG:4326"},
+				{displayName: "cartographic:00-global-labels", wmsProductName: "cartographic:00-global-labels", time:"", urls:["http://sedac.ciesin.columbia.edu/geoserver/wms?"], layers:"cartographic:00-global-labels", transparent:true, projection:"EPSG:4326"}
 			];
 
 		// Generate a layer for each product for each day, then concatenate with static layer array
