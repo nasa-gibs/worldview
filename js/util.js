@@ -77,3 +77,50 @@ SOTE.util.UTCDateFromISO8601String = function( dateAsString )
 	
   	return new Date( Date.UTC( year,month,day,hour,minute,second ));
 }
+
+/**
+ * Generates an array of OpenLayers layers for the specified product: one for each
+ * day starting from the current day, working backwards for a total of numDays
+ * 
+ * 
+ * @param displayNameStr		name shown in OL layer list;  mostly for debugging at this point
+ * @param wmsProductNameStr		the product name recognized by the WMS server
+ * @param formatStr				the type of image format expected in return, e.g., "image/jpeg"
+ * @param urlsArr				an array containing a set of URLs to the WMS;  multiple array entries can be provided to allow more parallel access to WMS server
+ * @param tileSizeArr			a 2-entry integer array containing the tile dimensions in pixels
+ * @param projectionStr			string containing the projection, e.g., "EPSG:4326"
+ * @param numZoomLevelsInt		number of zoom levels contained in the data
+ * @param maxExtentArr			a 4-entry array containing the max extent of the layer
+ * @param maxResolutionFloat	max resolution of the data (degrees/pixel)
+ * @param numDays				number of days to generate;  i.e., a value of 3 would generate today, yesterday, and two days ago
+ * 
+ * @returns		an array whose elements contain a single day of the specified product
+ * 
+ */
+SOTE.util.generateProductLayersForDateRange = function(displayNameStr, wmsProductNameStr, formatStr, urlsArr, tileSizeArr, projectionStr, numZoomLevelsInt, maxExtentArr, maxResolutionFloat, numDays)
+{
+
+	// Get current date
+	var curDate = new Date();
+	
+	// Generate layer for each day
+	var returnArr = new Array(numDays);
+	for (var i=0; i<numDays; i++)
+	{		
+		// Generate YYYY-MM-DD string
+	  	var dateStr = curDate.getUTCFullYear() + "-" + SOTE.util.zeroPad(eval(curDate.getUTCMonth()+1),2) + "-" + 
+			SOTE.util.zeroPad(curDate.getUTCDate(),2);
+		
+		// Generate layer entry
+		returnArr[i] = {displayName: (displayNameStr + "__" + dateStr), wmsProductName: wmsProductNameStr, 
+			time: dateStr, format: formatStr, urls: urlsArr, tileSize: tileSizeArr, projection: projectionStr, 
+			numZoomLevels: numZoomLevelsInt, maxExtent: maxExtentArr, maxResolution: maxResolutionFloat }; 
+	
+		// Compute next date value by subtracting one day (in ms) from currently stored value
+		curDate = new Date(curDate - (1000*60*60*24));	
+	}
+	
+
+	return returnArr;
+}
+
