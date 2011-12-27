@@ -28,10 +28,10 @@ SOTE.widget.Map = function(containerId, config){
 	
 	// Store the container's ID
 	this.containerId=containerId;
-	this.id = containerId;  
+	this.id = containerId;   
 
 	// Constants
-	this.SEDAC_BORDER_LAYER_NAME = "Admin Boundaries &#40;SEDAC&#41;"; 
+	this.OVERLAY_OPACITY = 0.55;
 
 	// Define an object for holding configuration 
 	if (config===undefined){
@@ -114,18 +114,25 @@ SOTE.widget.Map = function(containerId, config){
   	// Set active layer if params set
   	if ((this.time != null) && (this.baseLayer != null))
   	{
-  		this.activateLayerDisableTheRest(this.baseLayer,this.time);
+  		this.activateRelevantLayersDisableTheRest([this.baseLayer],this.time);
   	}	
 
 
   	// Set extent
   	this.setExtent(this.bbox);
 
-	// TODO: Set up callback for when pan/zoom ends to auto-call the "fire" function
-	this.map.events.register("moveend", this, this.handleMapChange); 
+	// Set up callback for when pan/zoom ends to auto-call the "fire" function
+	this.map.events.register("moveend", this, this.handleMapMoveEnd); 
 };
 
-SOTE.widget.Map.prototype.handleMapChange = function(evt){
+
+/**
+ * OpenLayers callback that's called as soon as user stops moving the map and releases
+ * the mouse/touch;  currently used to notify all listeners that the map extent
+ * has changed.
+ */
+SOTE.widget.Map.prototype.handleMapMoveEnd = function(evt)
+{
 	var latLon = evt.object.getExtent().transform(
 			evt.object.getProjectionObject(),
             new OpenLayers.Projection("EPSG:4326")).toString();
@@ -135,32 +142,16 @@ SOTE.widget.Map.prototype.handleMapChange = function(evt){
 	
 };
 
-SOTE.widget.Map.prototype.activateLayerDisableTheRest = function(layerName, time)
-{
-	// Enable layers of selected Date, disable the rest
-	var allLayers = this.getAllLayers();
-	var nLayers = allLayers.length;
-	var myDate = SOTE.util.UTCDateFromISO8601String(time);
-	time = myDate.getUTCFullYear() + "-" + eval(myDate.getUTCMonth()+1) + "-" + myDate.getUTCDate();
-	// Loop through all loaded OpenLayers layers
-	for (var i=0; i<nLayers; i++)
-	{		
-		// Enable this layer if string matches
-		if ((allLayers[i].name == new String(layerName + "__" + time)) ||
-			(allLayers[i].name == new String(layerName)))
-		{
-			allLayers[i].setVisibility(true);
-			allLayers[i].setOpacity(1.0);
-		}
-		else
-		{
-			allLayers[i].setVisibility(false);	
-		}	
-	}
 
-};
-
-SOTE.widget.Map.prototype.activateLayersDisableTheRest = function(activeLayerNames, time)
+/**
+ * Activates/enables the specified products at the specified time step;  useful to
+ * ensure that only the currently-enabled products at the specified time are currently
+ * being displayed.
+ * 
+ * @param 	an array of strings containing the currently-active product names
+ * @param 	string of desired UTC time  
+ */
+SOTE.widget.Map.prototype.activateRelevantLayersDisableTheRest = function(activeProductNames, time)
 {
 	// Enable layers of selected Date, disable the rest
 	var allLayers = this.getAllLayers();
@@ -172,16 +163,27 @@ SOTE.widget.Map.prototype.activateLayersDisableTheRest = function(activeLayerNam
 	{	
 		// Enable this layer if in list of active layers
 		var isLayerFound = false;
-		for (var j=0; j<activeLayerNames.length; j++)
+		for (var j=0; j<activeProductNames.length; j++)
 		{
-			if ((allLayers[i].name == new String(activeLayerNames[j] + "__" + time)) ||
-				(allLayers[i].name == new String(activeLayerNames[j])))
+			if ((allLayers[i].name == new String(activeProductNames[j] + "__" + time)) ||
+				(allLayers[i].name == new String(activeProductNames[j])))
 			{
+				// Assume base layer is first element of product list and force it to have the lowest z-index
+				// (a z-index of 0 is lowest, higher numbers are drawn on top)
+				// Also: Set opacity to 1.0 for base layer, a fraction of it for overlays (until controls can be made)
 				allLayers[i].setVisibility(true);
-				allLayers[i].setOpacity(1.0);
-				if (i>1)
-					allLayers[i].setZIndex(1); 
 				isLayerFound = true;
+				
+				if (j==0)
+				{
+					allLayers[i].setZIndex(0);
+					allLayers[i].setOpacity(1.0);
+				}
+				else
+				{
+					allLayers[i].setZIndex(1);
+					allLayers[i].setOpacity(this.OVERLAY_OPACITY);
+				}
 			}			
 			
 		}
@@ -196,6 +198,7 @@ SOTE.widget.Map.prototype.activateLayersDisableTheRest = function(activeLayerNam
 	}
 
 };
+
 
 /**
   * Displays the map with a base layer and pan and zoom controls (if hasControls is true)
@@ -235,18 +238,7 @@ SOTE.widget.Map.prototype.init = function(){
 	        zoom: 2
 	    });
 	    
-	    
-
-		// Add SEDAC borders layer
-		// this.map.addLayer(
-			// new OpenLayers.Layer.WMS( this.SEDAC_BORDER_LAYER_NAME, 
-            		// "http://sedac.ciesin.columbia.edu/geoserver/wms?", 
-            		// {layers:"cartographic:esri-administrative-boundaries_level-1",
-            		// transparent:true},  
-            		// {isBaseLayer:false, visibility:true, opacity:0.35, transitioneffect: 'resize'}));	 
-
-	    
-	        
+	          
 
         // Add user controls, if necessary
         if (this.hasControls)
@@ -289,51 +281,17 @@ SOTE.widget.Map.prototype.init = function(){
         this.map.restrictedExtent = restrictedExtent;
         
         
-        // Parse bounding box string and apply to map
-        // Need to convert from lat/lon to map's native coord system
-        // var extent = new OpenLayers.Bounds.fromString(this.bbox, false).transform(
-                // new OpenLayers.Projection("EPSG:4326"),
-                // this.map.getProjectionObject()); 
-//                 
-//                 
-        // if (extent == null)
-        // {
-        	// alert("passed-in bounds invalid for some reason")
-//         	
-        // }
-         //else
-        
-        //this.setExtent(this.bbox);
-        
-        
-        
-        // Set selected date to be active - do this by deselecting everything else
-        // if (this.map.layers.length > 0)
-        // {
-        	// // Iterate through all layers
-        	// for (var i=0; i<this.map.layers.length; i++)
-        	// {
-        		// // Check if current layer is of selected date
-        		// if (this.map.layers[i].name == this.date)
-				// {        		
-        			// this.map.layers[i].setVisibility(true);
-        			// alert("found name match: "+this.map.layers[i].name);
-        		// }
-        		// else
-        			// this.map.layers[i].setVisibility(false);
-//         		
-        	// }
-        // }
-        
-		// var selectedLayer = this.map.getLayersByName(this.date);
-		// if ((selectedLayer != null) && (selectedLayer.length > 0))
-		// {
-			// // this.map.setBaseLayer(selectedLayer[0]);
-			// selectedLayer[0].setVisibility(true);
-		// }
+		// TODO: set extent?        
+      
 };
 
 
+/**
+ * Checks if the given parameter is defined, not null, and not empty.
+ * 
+ * @param 	the parameter in question
+ * @returns	true if the parameter is defined, not null, and not empty;  returns false otherwise 
+ */
 SOTE.widget.Map.prototype.checkWmsParam = function(param)
 {
 	if ((param === undefined) ||
@@ -346,7 +304,18 @@ SOTE.widget.Map.prototype.checkWmsParam = function(param)
 		
 }
 
-
+/**
+ * Adds the given layer(s) to this.map.
+ * 
+ * @param 	an array where each entry contains a set of parameters needed for a WMS or Tiled WMS layer;
+ * 		for each WMS layer: {displayName: "", wmsProductName: "", urls:[], layers:"", transparent:boolean, projection:""}
+ * 		for each Tiled WMS layer: {displayName: "", wmsProductName: "", time:"", format: "", urls:[], tileSize:[], projection:"", numZoomLevels:int, maxExtent:[], maxResolution:float } 
+ * 
+ * 
+ * See SOTE.widget.MapSote.prototype.updateComponent for concrete examples 
+ * and SOTE.util.generateProductLayersForDateRange for more detail on each parameter
+ * 
+ */
 SOTE.widget.Map.prototype.addLayers = function(layers)
 {
     for (var i=0; i<layers.length; i++)
@@ -395,8 +364,11 @@ SOTE.widget.Map.prototype.addLayers = function(layers)
 		// Handle Tiled WMS layers differently than standard WMS layers;  include "transparent:true" in first section
     	if (!this.checkWmsParam(layers[i].tileSize))
     	{
-    		// If 'tileSize' isn't set, consider this layer a "standard" WMS layer
+    		// If 'tileSize' isn't set, consider this layer a "standard" WMS layer    		
     		// Note: other params like maxExtent, numZoomLevels, maxResolution are ignored for standard WMS layers
+    		if (layers[i].time != "")
+    			alert("\"Time\" parameter is untested/unimplemented for standard WMS layers");
+    		
 			this.map.addLayer(
 				new OpenLayers.Layer.WMS(
 						layers[i].displayName, 
@@ -437,11 +409,7 @@ SOTE.widget.Map.prototype.addLayers = function(layers)
 	    			}
 	    		));    		
     	}
-    	
-    	
     }
-
-	
 }
 
 
@@ -457,6 +425,7 @@ SOTE.widget.Map.prototype.setValue = function(value){
   
 	return this.setExtent(value);
 };
+
 
 /**
   * Gets the currently visible extent [containerId]=w,s,e,n
@@ -481,83 +450,13 @@ SOTE.widget.Map.prototype.getValue = function(){
 	return this.id + "=" + this.value;
 };
 
+
+/**
+ * Returns raw list of this.map's current layers
+ */
 SOTE.widget.Map.prototype.getAllLayers = function()
 {
 	return this.map.layers;
-}
-
-/**
- * Gets number of time steps currently stored by map
- * 
- * @returns {int} number of time steps
- */
-SOTE.widget.Map.prototype.getNumTimeSteps = function(){
-	
-	// TODO: fix this hack by actually computing number of time steps
-	return this.map.layers.length;
-}
-
-/**
- * Sets a given layer to be visible or hidden
- * 
- * @param {int} layer number to modify
- * @param {boolean} true to set visible, false to hide
- */
-SOTE.widget.Map.prototype.setLayerVisibility = function(layerNum, visible)
-{
-	if ((layerNum > this.map.layers.length) ||
-		(layerNum < 0))
-		return;
-	
-	// Ensure SEDAC admin boundaries layer remains in place
-	if (this.map.layers[layerNum].name == this.SEDAC_BORDER_LAYER_NAME)
-		return;
-	
-	this.map.layers[layerNum].setVisibility(visible);
-}
-
-/**
- * Sets fractional opacity for a given layer
- * 
- * @param {int} layer number to modify
- * @param {float} opacity value between 0 and 1
- */
-SOTE.widget.Map.prototype.setLayerOpacity = function(layerNum, opacity)
-{
-	if ((layerNum > this.map.layers.length) ||
-		(layerNum < 0) ||
-		(this.map.layers[layerNum].name == this.SEDAC_BORDER_LAYER_NAME))
-		return;
-		
-	this.map.layers[layerNum].setOpacity(opacity);
-}
-
-
-/**
- * Registers a user-specified function to be called back after a user is done panning or zooming
- * 
- * @param {function} function to be registered
- * @param {context} context of function
- */
-SOTE.widget.Map.prototype.addPanZoomStartCallback = function(func, context)
-{
-	// Set up callbacks for pan/zoom end
-	this.map.events.register("movestart", context, func);
-}
-
-
-
-
-/**
- * Registers a user-specified function to be called back after a user is done panning or zooming
- * 
- * @param {function} function to be registered
- * @param {context} context of function
- */
-SOTE.widget.Map.prototype.addPanZoomEndCallback = function(func, context)
-{
-	// Set up callbacks for pan/zoom end 
-	this.map.events.register("moveend", context, func);
 }
 
 
@@ -572,6 +471,7 @@ SOTE.widget.Map.prototype.addPanZoomEndCallback = function(func, context)
 SOTE.widget.Map.prototype.loadFromQuery = function(qs){
   // TODO: Content
 };
+
 
 /**
   * Validates that the w,s,e,n coordinates are not null, both lat coordinates (n,s) are between -90,90, and both
