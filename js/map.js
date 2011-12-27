@@ -46,8 +46,22 @@ SOTE.widget.Map = function(containerId, config){
 	    config.isSelectable = false; 
 	}
 
- 	if(config.bbox === undefined){
-	    config.bbox = "-148.359375,-47.25,4.78125,60.1875"; //"-175, -85, 175, 85";
+ 	if(config.bbox === undefined)
+ 	{
+ 		// Set default extent according to time of day:  
+ 		//   at 00:00 UTC, start at far eastern edge of map: "20.6015625,-46.546875,179.9296875,53.015625"
+ 		//   at 23:00 UTC, start at far western edge of map: "-179.9296875,-46.546875,-20.6015625,53.015625"
+	 	var curHour = new Date().getUTCHours();
+
+		// For earlier hours when data is still being filled in, force a far eastern perspective
+		if (curHour < 9)
+			curHour = 0;
+
+		// Compute east/west bounds
+		var minLon = 20.6015625 + curHour * (-200.53125/23.0);
+		var maxLon = minLon + 159.328125;
+ 		 
+	    config.bbox = minLon.toString() + ",-46.546875,"+maxLon.toString()+",53.015625"; //"-148.359375,-47.25,4.78125,60.1875"; //"-175, -85, 175, 85";
 	}	
 	
 	
@@ -635,6 +649,8 @@ SOTE.widget.Map.prototype.updateComponent = function(qs){
 			[			
 				{displayName: "population", wmsProductName: "population", time:"", format: "image/png", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625 },
 				{displayName: "cartographic:esri-administrative-boundaries_level-1", wmsProductName: "cartographic:esri-administrative-boundaries_level-1", time:"", urls:["http://sedac.ciesin.columbia.edu/geoserver/wms?"], layers:"cartographic:esri-administrative-boundaries_level-1", transparent:true, projection:"EPSG:4326"},
+				{displayName: "cartographic:00-gpw-v3-national-admin-boundaries", wmsProductName: "cartographic:00-gpw-v3-national-admin-boundaries", time:"", urls:["http://sedac.ciesin.columbia.edu/geoserver/ows"], layers:"cartographic:00-gpw-v3-national-admin-boundaries", transparent:true, projection:"EPSG:4326"},
+				{displayName: "gpw-v3-coastlines", wmsProductName: "gpw-v3-coastlines", time:"", urls:["http://sedac.ciesin.columbia.edu/geoserver/wms?"], layers:"gpw-v3-coastlines", transparent:true, projection:"EPSG:4326"},
 				{displayName: "cartographic:00-global-labels", wmsProductName: "cartographic:00-global-labels", time:"", urls:["http://sedac.ciesin.columbia.edu/geoserver/wms?"], layers:"cartographic:00-global-labels", transparent:true, projection:"EPSG:4326"}
 			];
 
