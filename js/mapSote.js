@@ -37,27 +37,21 @@ SOTE.widget.MapSote = function(containerId, config)
 	// Register callback for when movement begins
 	this.map.events.register("movestart", this, this.handleMapMoveStart); 
 	
-	// test
-	//this.updateComponent("?products=Terra_MODIS.SEDAC_PopulationDensity.SEDAC_AdminBoundaries&time=2011-11-30T00:00:00&transition=standard");
 };
 
 
 SOTE.widget.MapSote.prototype = new SOTE.widget.Map;
 
+
 /**
- * Gets number of time steps currently loaded.
+ * Sets whether the existing time steps (ie layers) are allowed to remain enabled/active even if that
+ * particular time step isn't selected - the layer's opacity is simply reduced to 0;  this
+ * is necessary to enable instantaneous switching between time steps instead of needing to
+ * reload the data on every time change.  It becomes a burden when panning/zooming, though, so
+ * this function should be used carefully.
  * 
- * Function is currently a hack.
+ * @param {boolean}		true to enable caching
  */
-SOTE.widget.MapSote.prototype.getNumTimeStepsAvailable = function()
-{
-	if (!this.isSoteMapDataCached)
-		return -1;
-
-	// TODO: compute based on date values in soteMapData, not the length		
-	return this.soteMapData.length;
-};
-
 SOTE.widget.MapSote.prototype.setLayerCaching = function(enable)
 {
 	this.isLayerCachingEnabled = enable;
@@ -65,14 +59,15 @@ SOTE.widget.MapSote.prototype.setLayerCaching = function(enable)
 
 
 /**
- * 
+ * OpenLayers callback that's called as soon as user begins moving the map;  currently used to 
+ * disable layer caching
  */
 SOTE.widget.MapSote.prototype.handleMapMoveStart = function(evt)
 {
 	// Disable map caching after pan/zoom
 	this.setLayerCaching(false);
 	
-	// TODO: Set only active time step(s) to be enabled  zzz
+	// TODO: Set only active time step(s) to be enabled 
 	// Currently:  this terrible hack
 	if (this.terribleQsSaver != "")
 	{
@@ -220,7 +215,6 @@ SOTE.widget.MapSote.prototype.updateComponent = function(querystring)
 			for (var j=0; j<activeLayerNames.length; j++)
 			{
 				// Enable this layer if string matches zzz
-				//if (allLayers[i].name == new String(activeLayerNames[j] + "_" + selectedDate))
 				if ((allLayers[i].name == new String(activeLayerNames[j] + "__" + selectedDate)) ||
 				    (allLayers[i].name == new String(activeLayerNames[j])))
 				{
@@ -239,7 +233,7 @@ SOTE.widget.MapSote.prototype.updateComponent = function(querystring)
 					else
 					{
 						allLayers[i].setZIndex(1);
-						allLayers[i].setOpacity(0.5);
+						allLayers[i].setOpacity(this.OVERLAY_OPACITY);
 					}
 					
 					layerModified = true;
@@ -266,9 +260,6 @@ SOTE.widget.MapSote.prototype.updateComponent = function(querystring)
 		return;
 	}
 	 
-
-	
-	
 	
 };
 
