@@ -23,21 +23,31 @@
 	"Other": [
         {
 	        "label": "Population Density",
-	        "sublabel": "SEDAC Gridded Population of the World",
+	        "sublabel": "SEDAC Gridded Population of the World, v3",
 	        "value": "population",
-	        "type": "multi"
+	        "type": "multi",
+	        "selected": "false"
 		},
 		{
 	        "label": "Administrative Boundaries",
 	        "sublabel": "SEDAC / L1 Admin Boundaries",
 	        "value": "cartographic:esri-administrative-boundaries_level-1",
-	        "type": "multi"
+	        "type": "multi",
+	        "selected": "false"
+		},
+		{
+	        "label": "National Boundaries",
+	        "sublabel": "SEDAC / National Boundaries, v3",
+	        "value": "cartographic:00-gpw-v3-national-admin-boundaries",
+	        "type": "multi",
+	        "selected": "true"
 		},
 		{
 	        "label": "Global Labels",
 	        "sublabel": "SEDAC / Global Labels",
 	        "value": "cartographic:00-global-labels",
-	        "type": "multi"
+	        "type": "multi",
+	        "selected": "false"
 		}		
 	]
 }
