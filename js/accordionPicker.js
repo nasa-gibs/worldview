@@ -130,6 +130,12 @@ SOTE.widget.AccordionPicker.prototype.render = function(){
 				catListItem.innerHTML = "<input value='"+item.value+"' class='accordionFormItem' name='"+this.id+item.type+"' id='"+id+"' type='"+type+"'"+" "+disabled+"/>";
 				catListItem.innerHTML += "<label for='"+id+"'><span class='accordionLabel'>"+item.label+"</span><span class='accordionSub'>"+item.sublabel+"</span></label>";
 				catList.appendChild(catListItem);
+				
+				// If "selected" value is true in json, add current item to list of default selection(s)
+				if ((item.selected !== undefined) && (item.selected=="true"))
+				{
+					defaultSelection = defaultSelection + "." + item.value;
+				}
 			} 
 		}
 		accordion.appendChild(catList);
