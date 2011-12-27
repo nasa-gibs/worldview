@@ -236,7 +236,7 @@ SOTE.widget.DateSpan.prototype.getValue = function(){
 SOTE.widget.DateSpan.prototype.updateComponent = function(qs){
 	var bbox = SOTE.util.extractFromQuery('map',qs);
 	var products = SOTE.util.extractFromQuery('products',qs);
-	var activeLayers = products.split(".");
+	var activeProducts = products.split(".");
 	var numOfDays = this.range/24/60/60/1000;
 	var startDate = new Date(this.endDate.getTime() - this.range);
 	for(var i=0; i<numOfDays; i++){
@@ -245,7 +245,7 @@ SOTE.widget.DateSpan.prototype.updateComponent = function(qs){
 			SOTE.util.zeroPad(time.getUTCDate(),2);
 		timeString += "T" + SOTE.util.zeroPad(time.getUTCHours(),2) + ":" + 
 			SOTE.util.zeroPad(time.getUTCMinutes(),2) + ":" + SOTE.util.zeroPad(time.getUTCSeconds(),2);
-		this.maps[i].activateLayersDisableTheRest(activeLayers,timeString);
+		this.maps[i].activateRelevantLayersDisableTheRest(activeProducts,timeString);
 		this.maps[i].setValue(bbox);
 	}
 };
