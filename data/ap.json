@@ -37,8 +37,8 @@
 		},
 		{
 	        "label": "National Boundaries",
-	        "sublabel": "SEDAC / National Boundaries, v3",
-	        "value": "cartographic:00-gpw-v3-national-admin-boundaries",
+	        "sublabel": "SEDAC / National Boundaries",
+	        "value": "cartographic:national-boundaries",
 	        "type": "multi",
 	        "selected": "true"
 		},
