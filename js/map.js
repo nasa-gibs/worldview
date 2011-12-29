@@ -262,7 +262,11 @@ SOTE.widget.Map.prototype.init = function(){
 	                    enableKinetic: true
 	                }
 	            }));
-	        this.map.addControl(new OpenLayers.Control.ZoomPanel());
+	        
+	        var zoomPanel = new OpenLayers.Control.ZoomPanel();
+	        zoomPanel.title = "zoom in/out";
+	        this.map.addControl(zoomPanel);
+	        
         	this.map.addControl(new OpenLayers.Control.KeyboardDefaults());
         	this.map.addControl(new OpenLayers.Control.Navigation());
         	//this.map.addControl(new OpenLayers.Control.LayerSwitcher({displayClass: 'olControlLayerSwitcher', 'ascending':false}));
@@ -288,8 +292,8 @@ SOTE.widget.Map.prototype.init = function(){
         }
         
         
-        // Restrict valid extent to (-180, -90, 180, 90) since Tiled WMS uses (-180, -1350, 180, 90)
-        var restrictedExtent = new OpenLayers.Bounds.fromString("-180, -90, 180, 90", false).transform(
+        // Restrict valid extent to ~(-180, -90, 180, 90) since Tiled WMS uses (-180, -1350, 180, 90)
+        var restrictedExtent = new OpenLayers.Bounds.fromString("-180, -100, 180, 100", false).transform(
                 new OpenLayers.Projection("EPSG:4326"),
                 this.map.getProjectionObject()); 
         this.map.restrictedExtent = restrictedExtent;
