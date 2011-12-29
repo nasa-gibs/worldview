@@ -78,6 +78,37 @@ SOTE.util.UTCDateFromISO8601String = function( dateAsString )
   	return new Date( Date.UTC( year,month,day,hour,minute,second ));
 }
 
+
+/**
+ * Returns the name of the integer day of week specified
+ * 
+ * @param	an integer value from 0-6;  0=Sunday, 1=Monday, etc
+ * @returns	the name of the specified day of week 
+ */
+SOTE.util.DayNameFromUTCDayInt = function(dayOfWeekInt)
+{
+	switch (dayOfWeekInt)
+	{
+		case 0:
+			return "Sunday";
+		case 1:
+			return "Monday";
+		case 2:
+			return "Tuesday";
+		case 3:
+			return "Wednesday";
+		case 4:
+			return "Thursday";
+		case 5:
+			return "Friday";
+		case 6:
+			return "Saturday";
+		default:
+			return "Invalid";
+	}
+	
+}
+
 /**
  * Generates an array of OpenLayers layers for the specified product: one for each
  * day starting from the current day, working backwards for a total of numDays
