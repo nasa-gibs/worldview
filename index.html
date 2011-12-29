@@ -5,6 +5,8 @@
 	<meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />	
+	<meta name="keywords" content="nasa, worldview, nasa worldview, eosdis worldview, satellite imagery, remote sensing, natural hazards, natural disasters, near real-time, nrt, lance, wildfire management, air quality, weather forecasting, agriculture, dust storms, smoke plumes, vegetation, severe storms, shipping, fisheries, floods, drought, oil spills"/>
+	<meta name="description" content="Interactive interface for browsing full-resolution, global, near real-time satellite imagery.  Supports time-critical application areas such as wildfire management, air quality measurements, and weather forecasting.  Data is generally available within three hours of observation." />
 
 	<!-- Dependency --> 
 	<script src="http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js" ></script>
@@ -49,6 +51,7 @@
 
 	<!-- External Javascript includes -->
 	<script type="text/javascript" src="js/ext/openlayers-2.11/OpenLayers.js?mobile"></script>
+<!-- 	<script type="text/javascript" src="js/ext/openlayers-2.11/OpenLayers-unminified.js?mobile"></script> -->
 	<script type="text/javascript" src="js/ext/datejs/date.js"></script>
 	<script type="text/javascript" src="js/ext/colorbox/jquery.colorbox-min.js"></script>
 
@@ -70,7 +73,7 @@
 <body class="yui-skin-sam">
 	<div data-role="page" id="mappage">	
 		<div data-role="content">
-			<div id="banner"><img src='images/worldview.png' /></div>
+			<div id="banner"><img src='images/worldview.png' usemap="#bannermap" /></div>
 			<div id="aboutus"><a id='aboutus_link' class='aboutus_link' href='javascript:showOverlay();'><img src='images/aboutIcon.png' /></a></div>
 			<div id="hazard"></div>
 			<div id="products"></div>
@@ -78,6 +81,13 @@
 			<div class="horizontalContainer">
 				<div id="time" ></div>
 			</div>
+			
+			
+			<map name="bannermap">
+			  <area shape="rect" alt="http://lance.nasa.gov" coords="253,42,370,53" href="http://lance.nasa.gov" target="_blank" />
+			  <area shape="circle" alt="http://www.nasa.gov" coords="47,30,21" href="http://www.nasa.gov" target="_blank" />
+			</map>
+			
 		</div>
 	</div>
 	<script type="text/javascript">
