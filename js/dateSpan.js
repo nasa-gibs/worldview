@@ -120,7 +120,7 @@ SOTE.widget.DateSpan.prototype.init = function(){
 	labelForSpanContainer.setAttribute('class','spanContainerLabel');
 	labelForSpanContainer.innerHTML = "<span class='.annotation'>* drag the slider to select a date</span><span id='"+this.id+
 		"spanContainerLabelDate'class='spanContainerLabelDate'></span><span id='"+this.id+
-		"spanContainerLabelTime' class='spanContainerLabelTime'></span>";
+		"spanContainerLabelDay' class='spanContainerLabelDay'></span>";
 	this.container.appendChild(labelForSpanContainer); 
 	
 	var numOfDays = this.range/24/60/60/1000;
@@ -157,7 +157,7 @@ SOTE.widget.DateSpan.prototype.init = function(){
 	}
 
 	this.spanDate = document.getElementById(this.id+"spanContainerLabelDate");
-	this.spanTime = document.getElementById(this.id+"spanContainerLabelTime");
+	this.spanDay = document.getElementById(this.id+"spanContainerLabelDay");
 
 	this.setVisualDate();
 
@@ -207,8 +207,7 @@ SOTE.widget.DateSpan.prototype.setValue = function(value){
 SOTE.widget.DateSpan.prototype.setVisualDate = function(){
 	this.spanDate.innerHTML = this.value.getUTCFullYear() + "-" + SOTE.util.zeroPad(eval(this.value.getUTCMonth()+1),2) + "-" + 
 		SOTE.util.zeroPad(this.value.getUTCDate(),2);
-	this.spanTime.innerHTML = SOTE.util.zeroPad(this.value.getUTCHours(),2) + ":" + 
-		SOTE.util.zeroPad(this.value.getUTCMinutes(),2) + ":" + SOTE.util.zeroPad(this.value.getUTCSeconds(),2);
+	this.spanDay.innerHTML = SOTE.util.DayNameFromUTCDayInt(this.value.getUTCDay());
 };
 
 /**
