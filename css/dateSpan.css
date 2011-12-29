@@ -1,6 +1,6 @@
 .spanContainerLabel {width:25%; float:left; text-shadow:none; display:block; height:120px; margin-top:20px; text-align:center; font-size:1em; color:#fff;}
-.spanContainerLabelDate,.spanContainerLabelTime {display:block; font-size:2.5em;}
-.spanContainerLabelTime{font-size:1.9em;}
+.spanContainerLabelDate,.spanContainerLabelDay {display:block; font-size:2.5em;}
+.spanContainerLabelDay{font-size:1.6em;}
 .spanContainer { height:130px; float:right;  overflow:visible; width:75%; margin-top:10px;}
 .datespan div.olMap {width:15%; height:100px; 
 float:left;
