@@ -171,7 +171,7 @@ SOTE.widget.Map.prototype.activateRelevantLayersDisableTheRest = function(active
 	var allLayers = this.getAllLayers();
 	var nLayers = allLayers.length;
 	var myDate = SOTE.util.UTCDateFromISO8601String(time);
-	time = myDate.getUTCFullYear() + "-" + eval(myDate.getUTCMonth()+1) + "-" + myDate.getUTCDate();
+	time = myDate.getUTCFullYear() + "-" + SOTE.util.zeroPad(eval(myDate.getUTCMonth()+1),2) + "-" + SOTE.util.zeroPad(myDate.getUTCDate(),2);
 	// Loop through all loaded OpenLayers layers
 	for (var i=0; i<nLayers; i++)
 	{	
