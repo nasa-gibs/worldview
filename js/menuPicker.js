@@ -30,17 +30,12 @@ SOTE.widget.MenuPicker = function(containerId, config){
 	//Define an object for holding configuration 
 	if (config === undefined)
 		config = {};
-	if (config.items === undefined)
-		config.items = [];
-	if (config.selected === undefined)
-		config.selected = null;
 	if (config.isCollapsible === undefined)
 		config.isCollapsible = false;
 	if (config.dataSourceUrl === undefined)
 	    config.dataSourceUrl = null;
-	
-	this.menuItems = config.items;
-	this.selectedValue = config.selected;
+
+	this.selectedValue = null;
 	this.menuIsCollapsible = config.isCollapsible;
 	this.dataSourceUrl = config.dataSourceUrl;
 	this.statusStr = "";
@@ -55,17 +50,12 @@ SOTE.widget.MenuPicker = function(containerId, config){
   * 
 */
 SOTE.widget.MenuPicker.prototype.init = function(){
-	if ((this.menuItems.length == 0) && (this.dataSourceUrl !== null))
-		this.updateComponent();
-	else
-		this.render();
+	this.updateComponent();
 	
-	if(REGISTRY){
+	if (REGISTRY)
 		REGISTRY.register(this.id,this);
-	}
-	else{
+	else
 		alert("No REGISTRY so could not register MenuPicker");
-	}
 };
 
 /*
@@ -90,15 +80,15 @@ SOTE.widget.MenuPicker.prototype.render = function(){
 		var menuLI = document.createElement('li');
 		menuLI.setAttribute('id',liID);
 		menuLI.innerHTML = "<div>" + this.menuItems[i].label + "</div>";
-				
-		if (this.menuItems[i].value === this.selectedValue){
+
+		if ((this.selectedValue !== null) && (this.menuItems[i].value === this.selectedValue)) {
 			this.setValue(this.menuItems[i].value);
 			menuLI.setAttribute('class', "selected");
 		}
 		
 		menuUL.appendChild(menuLI);
 		
-		if (!(this.menuItems[i].disabled === true))
+		if (this.menuItems[i].disabled !== true)
 			$('#' + this.id).delegate("#" + liID, "click", {val:this.menuItems[i].value, self:this}, SOTE.widget.MenuPicker.bindClick);
 			// Use when we change to JQuery 1.7
 			//$('#' + this.id).on("click", "#" + liID, {val:this.menuItems[i].value, self:this}, SOTE.widget.MenuPicker.bindClick);
@@ -163,7 +153,7 @@ SOTE.widget.MenuPicker.prototype.setValue = function(value){
   *
 */
 SOTE.widget.MenuPicker.prototype.getValue = function(){
-	return this.id+"="+this.selectedValue;
+	return this.id + "=" + this.selectedValue;
 };
 
 /**
@@ -176,12 +166,13 @@ SOTE.widget.MenuPicker.prototype.getValue = function(){
 */
 SOTE.widget.MenuPicker.prototype.updateComponent = function(querystring){
 	var qs = (querystring === undefined) ? "" : querystring;
-	SOTE.util.getJSON(
-		this.dataSourceUrl + qs,
-		{self:this},
-		SOTE.widget.MenuPicker.handleUpdateSuccess,
-		SOTE.widget.MenuPicker.handleUpdateFailure
-	);
+	if (this.dataSourceUrl !== null)
+		SOTE.util.getJSON(
+			this.dataSourceUrl + "?" + qs,
+			{self:this},
+			SOTE.widget.MenuPicker.handleUpdateSuccess,
+			SOTE.widget.MenuPicker.handleUpdateFailure
+		);
 };
 
 /**
@@ -192,8 +183,9 @@ SOTE.widget.MenuPicker.prototype.updateComponent = function(querystring){
   * 
 */
 SOTE.widget.MenuPicker.handleUpdateSuccess = function(data,status,xhr,args){
-	var value = args.self.getValue();
+	var value = SOTE.util.extractFromQuery(args.self.id,args.self.getValue());
 	args.self.menuItems = data.items;
+	args.self.selectedValue = data.selected;
 	
 	// If the old selected LI no longer exists, set selected val to null 
 	if (!args.self.setValue(value))
@@ -235,7 +227,7 @@ SOTE.widget.MenuPicker.prototype.validate = function(){
 	var matcheditem = false;
 	
 	for (var i=0; i < this.menuItems.length; i++) {
-		if ((this.menuItems[i].value === this.selectedValue) && !(this.menuItems[i].disabled === true)) {
+		if ((this.menuItems[i].value === this.selectedValue) && (this.menuItems[i].disabled !== true)) {
 			valid = true;
 			matcheditem = true;
 			this.selectedId = this.menuItems[i].liID;
