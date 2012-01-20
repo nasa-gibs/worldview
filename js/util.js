@@ -123,12 +123,13 @@ SOTE.util.DayNameFromUTCDayInt = function(dayOfWeekInt)
  * @param numZoomLevelsInt		number of zoom levels contained in the data
  * @param maxExtentArr			a 4-entry array containing the max extent of the layer
  * @param maxResolutionFloat	max resolution of the data (degrees/pixel)
+ * @param preferredOpacity		preferred opacity for this layer [0.0, 1.0]
  * @param numDays				number of days to generate;  i.e., a value of 3 would generate today, yesterday, and two days ago
  * 
  * @returns		an array whose elements contain a single day of the specified product
  * 
  */
-SOTE.util.generateProductLayersForDateRange = function(displayNameStr, wmsProductNameStr, formatStr, urlsArr, tileSizeArr, projectionStr, numZoomLevelsInt, maxExtentArr, maxResolutionFloat, numDays)
+SOTE.util.generateProductLayersForDateRange = function(displayNameStr, wmsProductNameStr, formatStr, urlsArr, tileSizeArr, projectionStr, numZoomLevelsInt, maxExtentArr, maxResolutionFloat, preferredOpacityFloat, numDays)
 {
 
 	// Get current date
@@ -145,7 +146,8 @@ SOTE.util.generateProductLayersForDateRange = function(displayNameStr, wmsProduc
 		// Generate layer entry
 		returnArr[i] = {displayName: (displayNameStr + "__" + dateStr), wmsProductName: wmsProductNameStr, 
 			time: dateStr, format: formatStr, urls: urlsArr, tileSize: tileSizeArr, projection: projectionStr, 
-			numZoomLevels: numZoomLevelsInt, maxExtent: maxExtentArr, maxResolution: maxResolutionFloat }; 
+			numZoomLevels: numZoomLevelsInt, maxExtent: maxExtentArr, maxResolution: maxResolutionFloat, 
+			preferredOpacity: preferredOpacityFloat }; 
 	
 		// Compute next date value by subtracting one day (in ms) from currently stored value
 		curDate = new Date(curDate - (1000*60*60*24));	
