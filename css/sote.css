@@ -14,7 +14,7 @@ div.horizontalContainer {width:100%; display:block; float:left; background-color
 
 .hidden {display:none;}
 
-#products { z-index:1006; display:block; float:left;  position:absolute; left:0; top:25%;}
+#products { z-index:1006; display:block; float:left;  position:absolute; left:0; top:15%;}
 
 #banner {
 	z-index:1006; float:left; position:relative;
