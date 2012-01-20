@@ -4,10 +4,10 @@ div.olControlPermalink {
 	bottom: 10px;
 }
 
-/*div.olControlLayerSwitcher {
-	right: 18px;
-	top: 10px;
-}*/
+div.olControlLayerSwitcher {
+	right: 0px;
+	top: 150px;
+}
 
 div.olControlScaleLine {
 	left: 10px;
@@ -63,15 +63,16 @@ div.olControlZoomPanel div {
 
 div.olControlZoomPanel .olControlZoomInItemInactive,
 div.olControlZoomPanel .olControlZoomOutItemInactive {
-    background-color:rgba(38,38,38,0.7);
     position: absolute;
 }
 div.olControlZoomPanel .olControlZoomInItemInactive {
+	background-color:rgba(38,38,38,0.7);
 	top: 0;
     background-position: 0 0;
     border-radius: 5px 5px 0 0;
 }
 div.olControlZoomPanel .olControlZoomOutItemInactive {
+	background-color:rgba(38,38,38,0.7);
     top: 72px;
     background-position: 0 -72px;	
     border-radius: 0 0 5px 5px ;
