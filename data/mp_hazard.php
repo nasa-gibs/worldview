@@ -3,18 +3,13 @@
 		"items" => array(
 			array(
 				"label" => "Wildfires",
-				"value" => "wf",
-				"disabled" => true
+				"value" => "Wildfires",
+				"disabled" => false
 			),
 			array(
-				"label" => "Air Quality",
-				"value" => "aq",
-				"disabled" => true
-			),
-			array(
-				"label" => "Agriculture",
-				"value" => "ag",
-				"disabled" => true
+				"label" => "Drought",
+				"value" => "Drought",
+				"disabled" => false
 			),
 			/*array(
 				"label" => "Severe Storms",
@@ -23,17 +18,23 @@
 			),*/
 			array(
 				"label" => "Smoke Plumes",
-				"value" => "sp",
-				"disabled" => true
+				"value" => "SmokePlumes",
+				"disabled" => false
 			),
 			array(
 				"label" => "Vegetation",
-				"value" => "veg",
-				"disabled" => true
+				"value" => "Vegetation",
+				"disabled" => false
+			),
+			array(
+				"label" => "Shipping",
+				"value" => "Shipping",
+				"disabled" => false
 			),
 			array(
 				"label" => "Dust Storms",
-				"value" => "DustStorms"
+				"value" => "DustStorms",
+				"disabled" => false
 			)
 		),
 		//"selected" => "DustStorms"
