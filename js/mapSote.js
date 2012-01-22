@@ -34,8 +34,9 @@ SOTE.widget.MapSote = function(containerId, config)
 	
 	this.setExtent(this.bbox);
 	
-	// Register callback for when movement begins
-	this.map.events.register("movestart", this, this.handleMapMoveStart); 
+	// Register callbacks for when movement begins and zoom ends
+	this.map.events.register("movestart", this, this.handleMapMoveStart);
+	this.map.events.register("zoomend", this, this.handleMapZoomEnd);  
 	
 };
 
@@ -75,6 +76,37 @@ SOTE.widget.MapSote.prototype.handleMapMoveStart = function(evt)
 		this.updateComponent(this.terribleQsSaver);
 	}
 	
+}
+
+/**
+ * OpenLayers callback that's called whenever a zoom action ends;  currently used to 
+ * update zoom button opacity if at limits of zoom levels
+ */
+SOTE.widget.MapSote.prototype.handleMapZoomEnd = function(evt)
+{
+	// "Disable" zoom in icon if zoomed to highest level
+	if (this.map.zoom == this.map.numZoomLevels-1)
+	{
+		$('.olControlZoomInCustomItemInactive').css("background-color", "rgba(38,38,38,0.3)");
+		$('.olControlZoomInCustomItemInactive').css("color", "#AAAAAA");
+	}
+	else
+	{
+		$('.olControlZoomInCustomItemInactive').css("background-color", "rgba(38,38,38,0.7)");
+		$('.olControlZoomInCustomItemInactive').css("color", "#FFFFFF");
+	}
+
+	// "Disable" zoom out icon if zoomed to lowest level
+	if (this.map.zoom == 0)
+	{
+		$('.olControlZoomOutCustomItemInactive').css("background-color", "rgba(38,38,38,0.3)");
+		$('.olControlZoomOutCustomItemInactive').css("color", "#AAAAAA");
+	}
+	else
+	{
+		$('.olControlZoomOutCustomItemInactive').css("background-color", "rgba(38,38,38,0.7)");
+		$('.olControlZoomOutCustomItemInactive').css("color", "#FFFFFF");
+	}	
 }
 
 /**
