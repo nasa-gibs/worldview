@@ -257,11 +257,26 @@ SOTE.widget.Map.prototype.init = function(){
 
         // Add user controls, if necessary
         if (this.hasControls)
-        {		        
-	        var zoomPanel = new OpenLayers.Control.ZoomPanel();
-	        zoomPanel.title = "zoom in/out";
-	        this.map.addControl(zoomPanel);
-	        
+        {	
+        	// Create zoom in/out controls	        	        
+	        var zoomInControl = new OpenLayers.Control.ZoomIn();
+	        zoomInControl.title = 'zoom in';
+	        zoomInControl.displayClass = 'olControlZoomInCustom';
+	        zoomInControl.id = 'zoomInCustomId';
+			
+			var zoomOutControl = new OpenLayers.Control.ZoomOut();
+	        zoomOutControl.title = 'zoom out';
+	        zoomOutControl.displayClass = 'olControlZoomOutCustom';
+	        zoomOutControl.id = 'zoomOutCustomId';
+
+	        // Create panel to hold zoom controls and add to map
+	        var zoomPanel = new OpenLayers.Control.Panel();
+            zoomPanel.displayClass = 'olControlZoomPanelCustom';
+		    zoomPanel.addControls(zoomInControl);
+		    zoomPanel.addControls(zoomOutControl);
+		    this.map.addControl(zoomPanel);
+		    
+	        // Add navigation controls
         	this.map.addControl(new OpenLayers.Control.KeyboardDefaults());
         	this.map.addControl(new OpenLayers.Control.Navigation({
         			dragPanOptions: {
@@ -274,7 +289,7 @@ SOTE.widget.Map.prototype.init = function(){
         	
         	// While these aren't controls, per se, they are extra decorations
 			this.map.addControl(new OpenLayers.Control.Attribution());
-			//this.map.addControl(new OpenLayers.Control.ScaleLine({displayClass: 'olControlScaleLine'}));
+			this.map.addControl(new OpenLayers.Control.ScaleLine({displayClass: 'olControlScaleLineCustom'}));
 			
 			// Add graticule
 			var graticuleLineStyle = new OpenLayers.Symbolizer.Line(
