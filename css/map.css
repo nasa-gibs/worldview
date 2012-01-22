@@ -9,10 +9,31 @@ div.olControlLayerSwitcher {
 	top: 150px;
 }
 
-div.olControlScaleLine {
-	left: 10px;
-	bottom: 10px;
+div.olControlScaleLineCustom {
+	position: absolute;
+	right: 12px;
+	bottom: 160px;
+	z-index: 2000;
+	
+	display: block;
+   	font-size: xx-small;
+   	color: #EEEEEE;
 }
+
+.olControlScaleLineCustomBottom {
+   border: solid 2px black;
+   border-bottom: none;
+   margin-top:-2px;
+   text-align: center;
+   background-color:rgba(38,38,38,0.4);
+}
+.olControlScaleLineCustomTop {
+   border: solid 2px black;
+   border-top: none;
+   text-align: center;
+   background-color:rgba(38,38,38,0.4);
+}
+
 
 /*  CSS for full-screen map div and mobile device support  */
 html, body {
