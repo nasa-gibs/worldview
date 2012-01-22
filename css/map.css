@@ -68,58 +68,65 @@ div.olMap {
 }
 
 
-
-div.olControlZoomPanel {
+/*  Zoom panel controls */
+div.olControlZoomPanelCustom {
+	top: 71px;
+    left: 14px;
 	height: 108px;
 	width: 36px;
 	position: relative !important;
 	float:right;
 	margin:0 20px 0 0;
+	cursor: pointer;
 }
-div.olControlZoomPanel div {
+
+div.olControlZoomPanelCustom div {
     width: 36px;
     height: 36px;
     left: 0;
 }
 
-div.olControlZoomPanel .olControlZoomInItemInactive,
-div.olControlZoomPanel .olControlZoomOutItemInactive {
+div.olControlZoomPanelCustom .olControlZoomInCustomItemInactive,
+div.olControlZoomPanelCustom .olControlZoomOutCustomItemInactive {
     position: absolute;
 }
-div.olControlZoomPanel .olControlZoomInItemInactive {
+div.olControlZoomPanelCustom .olControlZoomInCustomItemInactive {
 	background-color:rgba(38,38,38,0.7);
 	top: 0;
     background-position: 0 0;
     border-radius: 5px 5px 0 0;
 }
-div.olControlZoomPanel .olControlZoomOutItemInactive {
+div.olControlZoomPanelCustom .olControlZoomOutCustomItemInactive {
 	background-color:rgba(38,38,38,0.7);
     top: 72px;
     background-position: 0 -72px;	
     border-radius: 0 0 5px 5px ;
     top: 37px;
 }
-div.olControlZoomPanel .olControlZoomOutItemInactive:after ,
-div.olControlZoomPanel .olControlZoomInItemInactive:after{
+div.olControlZoomPanelCustom .olControlZoomOutCustomItemInactive:after ,
+div.olControlZoomPanelCustom .olControlZoomInCustomItemInactive:after{
     font-weight: bold;
     content   : '+';
     font-size : 36px;
     padding:  7px;
     z-index: 2000;
-    color     : #fff;
+    color     : #FFFFFF;
     line-height: 1em;
 }
-div.olControlZoomPanel .olControlZoomOutItemInactive:after{
+div.olControlZoomPanelCustom .olControlZoomOutCustomItemInactive:after{
     content: '–';
     line-height: 0.9em;
     padding: 0 8px;
 }
 
-div.olControlZoomPanel .olControlZoomToMaxExtentItemInactive {
+div.olControlZoomPanelCustom .olControlZoomToMaxExtentItemInactive {
     top: 36px;
     background-position: 0 -36px;
     display: none;
 }
+
+/*  End Zoom Panel */
+
 
 #title, #tags, #shortdesc {
     display: none;
