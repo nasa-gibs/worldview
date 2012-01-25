@@ -1,4 +1,24 @@
 window.onload = function(){// Initialize "static" vars
+
+	// Test for IE and show warning, if necessary
+	if (/MSIE (\d+\.\d+);/.test(navigator.userAgent))
+	{
+		var ieWarningOverlay = new YAHOO.widget.Panel("iewarning", { zIndex:1020, visible:false } );
+		var msg = "<div>" + 
+			"<h3>Internet Explorer is not currently supported</h3>"+
+			"<p>Worldview uses a set of browser technologies that are not currently supported by Internet Explorer.  " +
+			"We are awaiting the release of IE version 10 and are hopeful that it will load Worldview properly.  " +
+			"In the meantime, please try loading this page in Mozilla Firefox, Google Chrome, Apple Safari, or a tablet device.  " +
+			"<br /><br />Thanks for your patience.</p>" +
+			"<br /><p>-The Worldview development team";
+			
+		ieWarningOverlay.setBody(msg);
+		ieWarningOverlay.render(document.body);
+		ieWarningOverlay.show();
+		ieWarningOverlay.center();
+	}
+	
+
 	// Create map
 	var m = new SOTE.widget.MapSote("map",{baseLayer:"Terra_MODIS"});
 	var a = new SOTE.widget.AccordionPicker("products",{dataSourceUrl:"data/ap.json"});
