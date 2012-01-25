@@ -4,6 +4,7 @@ body, div, ul, li {margin:0; padding:0; }
 .yui-skin-sam .yui-panel-container .hd{ background:rgba(0,0,0,0.5); color:#ffffff; border:none; padding:0;}
 .yui-skin-sam .yui-panel-container .bd{ background:rgba(0,0,0,0.8); color:#d5d5d5;}
 .yui-skin-sam .yui-panel-container .bd h3{ color:#FFFFFF; font: 18px "Gill Sans", sans-serif; font-weight:400; text-decoration:none; }
+.yui-skin-sam .yui-panel-container .bd h4{ color:#000000; font: 18px "Gill Sans", sans-serif; font-weight:400; text-decoration:none; }
 .yui-skin-sam .yui-panel-container .bd a {color: #48a8ff; }
 
 
