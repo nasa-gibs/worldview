@@ -26,6 +26,24 @@
 	        "sublabel": "MODIS Fire and Thermal Anomalies",
 	        "value": "fires48",
 	        "type": "multi"
+		},
+		{
+	        "label": "Aerosol Index",
+	        "sublabel": "Aura / OMI",
+	        "value": "OMI_Aerosol_Index",
+	        "type": "multi"
+		},
+		{
+	        "label": "Aerosol Optical Depth",
+	        "sublabel": "Aura / OMI",
+	        "value": "OMI_Aerosol_Optical_Depth",
+	        "type": "multi"
+		},
+		{
+	        "label": "Absorbing Aerosol Optical Depth",
+	        "sublabel": "Aura / OMI",
+	        "value": "OMI_Absorbing_Aerosol_Optical_Depth",
+	        "type": "multi"
 		}
 	],
 
@@ -109,6 +127,24 @@
 	        "sublabel": "Terra / MODIS",
 	        "value": "MODIS_Terra_CorrectedReflectance_Bands367",
 	        "type": "single"
+		},
+		{
+	        "label": "Aerosol Index",
+	        "sublabel": "Aura / OMI",
+	        "value": "OMI_Aerosol_Index",
+	        "type": "multi"
+		},
+		{
+	        "label": "Aerosol Optical Depth",
+	        "sublabel": "Aura / OMI",
+	        "value": "OMI_Aerosol_Optical_Depth",
+	        "type": "multi"
+		},
+		{
+	        "label": "Absorbing Aerosol Optical Depth",
+	        "sublabel": "Aura / OMI",
+	        "value": "OMI_Absorbing_Aerosol_Optical_Depth",
+	        "type": "multi"
 		}
 	],
 
@@ -137,27 +173,52 @@
 	        "value": "MODIS_Aqua_CorrectedReflectance_Bands721",
 	        "type": "single"
 		},
-        {
-	        "label": "Volcano Hazard: Frequency and Distribution",
-	        "sublabel": "SEDAC Global Volcano Hazard Frequency and Distribution, v1 (1979–2000)",
-	        "value": "ndh-volcano-hazard-frequency-distribution",
-	        "type": "multi",
-	        "selected": "false"
+		{
+	        "label": "Sulfur Dioxide (Lower Troposphere)",
+	        "sublabel": "Aura / OMI",
+	        "value": "OMI_SO2_Lower_Troposphere",
+	        "type": "multi"
+		},
+		{
+	        "label": "Sulfur Dioxide (Middle Troposphere)",
+	        "sublabel": "Aura / OMI",
+	        "value": "OMI_SO2_Middle_Troposphere",
+	        "type": "multi"
+		},
+		{
+	        "label": "Sulfur Dioxide (Upper Troposphere and Stratosphere)",
+	        "sublabel": "Aura / OMI",
+	        "value": "OMI_SO2_Upper_Troposphere_and_Stratosphere",
+	        "type": "multi"
+		},
+		{
+	        "label": "Sulfur Dioxide (Planetary Boundary Layer)",
+	        "sublabel": "Aura / OMI",
+	        "value": "OMI_SO2_Planetary_Boundary_Layer",
+	        "type": "multi"
 		},
         {
-	        "label": "Volcano Hazard: Mortality Risk",
-	        "sublabel": "SEDAC Global Volcano Mortality Risks and Distribution, v1 (2000)",
-	        "value": "ndh-volcano-mortality-risks-distribution",
-	        "type": "multi",
-	        "selected": "false"
-		},
+             "label": "Volcano Hazard: Frequency and Distribution",
+             "sublabel": "SEDAC Global Volcano Hazard Frequency and Distribution, v1 (1979–2000)",
+             "value": "ndh-volcano-hazard-frequency-distribution",
+             "type": "multi",
+             "selected": "false"
+        },
         {
-	        "label": "Volcano Hazard: Economic Risk",
-	        "sublabel": "SEDAC Global Volcano Proportional Economic Loss Risk Deciles, v1 (2000)",
-	        "value": "ndh-volcano-proportional-economic-loss-risk-deciles",
-	        "type": "multi",
-	        "selected": "false"
-		}	
+             "label": "Volcano Hazard: Mortality Risk",
+             "sublabel": "SEDAC Global Volcano Mortality Risks and Distribution, v1 (2000)",
+             "value": "ndh-volcano-mortality-risks-distribution",
+             "type": "multi",
+             "selected": "false"
+        },
+        {
+             "label": "Volcano Hazard: Economic Risk",
+             "sublabel": "SEDAC Global Volcano Proportional Economic Loss Risk Deciles, v1 (2000)",
+             "value": "ndh-volcano-proportional-economic-loss-risk-deciles",
+             "type": "multi",
+             "selected": "false"
+        }
+
 	],
 	
 	"Vegetation": [
@@ -184,7 +245,14 @@
 	        "sublabel": "Terra / MODIS",
 	        "value": "MODIS_Terra_Snow_Cover",
 	        "type": "multi"
+		},
+		{
+	        "label": "Cloud Pressure",
+	        "sublabel": "Aura / OMI",
+	        "value": "OMI_Cloud_Pressure",
+	        "type": "multi"
 		}
+		
 	
 	],
 
@@ -241,7 +309,25 @@
         	"sublabel": "Aqua / AIRS",
         	"value": "AIRS_Dust",
         	"type":"multi"
-        }
+        },
+		{
+	        "label": "Aerosol Index",
+	        "sublabel": "Aura / OMI",
+	        "value": "OMI_Aerosol_Index",
+	        "type": "multi"
+		},
+		{
+	        "label": "Aerosol Optical Depth",
+	        "sublabel": "Aura / OMI",
+	        "value": "OMI_Aerosol_Optical_Depth",
+	        "type": "multi"
+		},
+		{
+	        "label": "Absorbing Aerosol Optical Depth",
+	        "sublabel": "Aura / OMI",
+	        "value": "OMI_Absorbing_Aerosol_Optical_Depth",
+	        "type": "multi"
+		}
 	],
 
 
