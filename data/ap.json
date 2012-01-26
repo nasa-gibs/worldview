@@ -361,6 +361,13 @@
 	        "selected": "true"
 		},
 		{
+	        "label": "Coastlines",
+	        "sublabel": "SEDAC / Coastlines v3",
+	        "value": "gpw-v3-coastlines",
+	        "type": "multi",
+	        "selected": "false"
+		},	
+		{
 	        "label": "Global Labels",
 	        "sublabel": "SEDAC / Global Labels",
 	   		"value": "cartographic:00-global-labels",
