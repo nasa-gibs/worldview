@@ -554,7 +554,7 @@ SOTE.widget.Map.prototype.getAllLayers = function()
   *
 */
 SOTE.widget.Map.prototype.loadFromQuery = function(qs){
-  // TODO: Content
+	return this.setValue(SOTE.util.extractFromQuery(this.id,qs));
 };
 
 
