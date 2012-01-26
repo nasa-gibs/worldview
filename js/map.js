@@ -109,6 +109,7 @@ SOTE.widget.Map = function(containerId, config){
 	this.disabled = false;
 	this.time = config.time;
 	this.baseLayer = config.baseLayer;
+	this.graticule = null;
   
 	// Initialize the map
 	this.init();
@@ -188,12 +189,16 @@ SOTE.widget.Map.prototype.activateRelevantLayersDisableTheRest = function(active
 				
 				if (j==0)
 				{
-					allLayers[i].setZIndex(0);
+					this.map.setLayerZIndex(allLayers[i], 0);
 					allLayers[i].setOpacity(1.0);
 				}
 				else
 				{
-					allLayers[i].setZIndex(1);
+					// Set z-ordering of layers in the map object 
+					if (this.checkWmsParam(allLayers[i].metadata.bringToFront) && allLayers[i].metadata.bringToFront)
+						this.map.setLayerZIndex(allLayers[i], nLayers-1);
+						
+					// Set layer opacity
 					if (this.checkWmsParam(allLayers[i].metadata.preferredOpacity))
 						allLayers[i].setOpacity(allLayers[i].metadata.preferredOpacity);
 					else
@@ -310,7 +315,7 @@ SOTE.widget.Map.prototype.init = function(){
 					fontOpacity: 1.0
 				}
 			);			
-			var graticule = new OpenLayers.Control.Graticule({
+			this.graticule = new OpenLayers.Control.Graticule({
 				layerName: 'ol_graticule',
                 numPoints: 2, 
                 labelled: true,
@@ -318,7 +323,7 @@ SOTE.widget.Map.prototype.init = function(){
                 labelSymbolizer: graticuleLabelStyle
             });
             
-			this.map.addControl(graticule);
+			this.map.addControl(this.graticule);
 			
 			// Set mousewheel sensitivity
 			var navControl = this.map.getControlsByClass("OpenLayers.Control.Navigation")[0];
@@ -410,6 +415,9 @@ SOTE.widget.Map.prototype.addLayers = function(layers)
 		if (!this.checkWmsParam(layers[i].preferredOpacity))
 			layers[i].preferredOpacity = this.DEFAULT_OVERLAY_OPACITY;
 		
+		if (!this.checkWmsParam(layers[i].bringToFront))
+			layers[i].bringToFront = false;
+		
 				
 		// Check required params
 		if (!this.checkWmsParam(layers[i].urls))
@@ -447,7 +455,10 @@ SOTE.widget.Map.prototype.addLayers = function(layers)
 	            			visibility: false, 
 	            			transitioneffect: 'resize', 
 	            			projection: layers[i].projection,
-	            			metadata: { preferredOpacity: layers[i].preferredOpacity }	            			
+	            			metadata: { 
+	            				preferredOpacity: layers[i].preferredOpacity,
+	            				bringToFront: layers[i].bringToFront
+	            				}	            			
 	            		 }));    		
     	}
     	else
@@ -472,11 +483,18 @@ SOTE.widget.Map.prototype.addLayers = function(layers)
 						maxExtent: new OpenLayers.Bounds(layers[i].maxExtent[0], layers[i].maxExtent[1], layers[i].maxExtent[2], layers[i].maxExtent[3]),
 						maxResolution: layers[i].maxResolution,
 						visibility: false,
-						metadata: { preferredOpacity: layers[i].preferredOpacity }
+            			metadata: { 
+            				preferredOpacity: layers[i].preferredOpacity,
+            				bringToFront: layers[i].bringToFront
+            				}	            			
 	    			}
 	    		));    		
     	}
     }
+    
+    // Force graticule layer to be on top of all other layers
+    if (this.graticule != null)
+    	this.map.setLayerZIndex(this.graticule.gratLayer, this.getAllLayers().length-1);
 }
 
 
@@ -719,9 +737,9 @@ SOTE.widget.Map.prototype.updateComponent = function(qs){
 				// {displayName: "fires24", wmsProductName: "fires24", time:"", urls:["http://firefly.geog.umd.edu/wms/wms?"], layers:"fires24", transparent:true, projection:"EPSG:4326", preferredOpacity: 1.0},
 				// {displayName: "fires48", wmsProductName: "fires48", time:"", urls:["http://firefly.geog.umd.edu/wms/wms?"], layers:"fires48", transparent:true, projection:"EPSG:4326", preferredOpacity: 1.0},				{displayName: "cartographic:esri-administrative-boundaries_level-1", wmsProductName: "cartographic:esri-administrative-boundaries_level-1", time:"", urls:["http://sedac.ciesin.columbia.edu/geoserver/wms?"], layers:"cartographic:esri-administrative-boundaries_level-1", transparent:true, projection:"EPSG:4326", preferredOpacity: 0.55},
 
-				{displayName: "cartographic:national-boundaries", wmsProductName: "cartographic:national-boundaries", time:"", urls:["http://sedac.ciesin.columbia.edu/geoserver/ows"], layers:"cartographic:national-boundaries", transparent:true, projection:"EPSG:4326", preferredOpacity: 0.55},
-				{displayName: "gpw-v3-coastlines", wmsProductName: "gpw-v3-coastlines", time:"", urls:["http://sedac.ciesin.columbia.edu/geoserver/wms?"], layers:"gpw-v3-coastlines", transparent:true, projection:"EPSG:4326", preferredOpacity: 0.85},
-				{displayName: "cartographic:00-global-labels", wmsProductName: "cartographic:00-global-labels", time:"", urls:["http://sedac.ciesin.columbia.edu/geoserver/wms?"], layers:"cartographic:00-global-labels", transparent:true, projection:"EPSG:4326", preferredOpacity: 0.95 }
+				{displayName: "cartographic:national-boundaries", wmsProductName: "cartographic:national-boundaries", time:"", urls:["http://sedac.ciesin.columbia.edu/geoserver/ows"], layers:"cartographic:national-boundaries", transparent:true, projection:"EPSG:4326", preferredOpacity: 0.55, bringToFront: true },
+				{displayName: "gpw-v3-coastlines", wmsProductName: "gpw-v3-coastlines", time:"", urls:["http://sedac.ciesin.columbia.edu/geoserver/wms?"], layers:"gpw-v3-coastlines", transparent:true, projection:"EPSG:4326", preferredOpacity: 0.85, bringToFront: true },
+				{displayName: "cartographic:00-global-labels", wmsProductName: "cartographic:00-global-labels", time:"", urls:["http://sedac.ciesin.columbia.edu/geoserver/wms?"], layers:"cartographic:00-global-labels", transparent:true, projection:"EPSG:4326", preferredOpacity: 0.95, bringToFront: true }
 			];
 
 		// Generate a layer for each product for each day, then concatenate with static layer array
