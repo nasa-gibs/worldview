@@ -145,10 +145,10 @@ SOTE.widget.MapSote.prototype.updateComponent = function(querystring)
 				{displayName: "ndh-volcano-mortality-risks-distribution", wmsProductName: "ndh-volcano-mortality-risks-distribution", time:"", format: "image/png", urls:["http://sedac.ciesin.columbia.edu/geoserver/ows"], projection:"EPSG:4326", preferredOpacity: 0.75 },
 				{displayName: "fires24", wmsProductName: "fires24", time:"", urls:["http://firefly.geog.umd.edu/wms/wms?"], layers:"fires24", transparent:true, projection:"EPSG:4326", preferredOpacity: 1.0},
 				{displayName: "fires48", wmsProductName: "fires48", time:"", urls:["http://firefly.geog.umd.edu/wms/wms?"], layers:"fires48", transparent:true, projection:"EPSG:4326", preferredOpacity: 1.0},
-				{displayName: "cartographic:esri-administrative-boundaries_level-1", wmsProductName: "cartographic:esri-administrative-boundaries_level-1", time:"", urls:["http://sedac.ciesin.columbia.edu/geoserver/wms?"], layers:"cartographic:esri-administrative-boundaries_level-1", transparent:true, projection:"EPSG:4326", preferredOpacity: 0.55},
-				{displayName: "cartographic:national-boundaries", wmsProductName: "cartographic:national-boundaries", time:"", urls:["http://sedac.ciesin.columbia.edu/geoserver/ows"], layers:"cartographic:national-boundaries", transparent:true, projection:"EPSG:4326", preferredOpacity: 0.55},
-				{displayName: "gpw-v3-coastlines", wmsProductName: "gpw-v3-coastlines", time:"", urls:["http://sedac.ciesin.columbia.edu/geoserver/wms?"], layers:"gpw-v3-coastlines", transparent:true, projection:"EPSG:4326", preferredOpacity: 0.85},
-				{displayName: "cartographic:00-global-labels", wmsProductName: "cartographic:00-global-labels", time:"", urls:["http://sedac.ciesin.columbia.edu/geoserver/wms?"], layers:"cartographic:00-global-labels", transparent:true, projection:"EPSG:4326", preferredOpacity: 0.95 }
+				{displayName: "cartographic:esri-administrative-boundaries_level-1", wmsProductName: "cartographic:esri-administrative-boundaries_level-1", time:"", urls:["http://sedac.ciesin.columbia.edu/geoserver/wms?"], layers:"cartographic:esri-administrative-boundaries_level-1", transparent:true, projection:"EPSG:4326", preferredOpacity: 0.55, bringToFront: true },
+				{displayName: "cartographic:national-boundaries", wmsProductName: "cartographic:national-boundaries", time:"", urls:["http://sedac.ciesin.columbia.edu/geoserver/ows"], layers:"cartographic:national-boundaries", transparent:true, projection:"EPSG:4326", preferredOpacity: 0.55, bringToFront: true },
+				{displayName: "gpw-v3-coastlines", wmsProductName: "gpw-v3-coastlines", time:"", urls:["http://sedac.ciesin.columbia.edu/geoserver/wms?"], layers:"gpw-v3-coastlines", transparent:true, projection:"EPSG:4326", preferredOpacity: 0.85, bringToFront: true},
+				{displayName: "cartographic:00-global-labels", wmsProductName: "cartographic:00-global-labels", time:"", urls:["http://sedac.ciesin.columbia.edu/geoserver/wms?"], layers:"cartographic:00-global-labels", transparent:true, projection:"EPSG:4326", preferredOpacity: 0.95, bringToFront: true }
 			];
 
 		// Generate a layer for each product for each day, then concatenate with static layer array
@@ -291,12 +291,16 @@ SOTE.widget.MapSote.prototype.updateComponent = function(querystring)
 					// Also: Set opacity to 1.0 for base layer, a fraction of it for overlays (until controls can be made)
 					if (j==0)
 					{
-						allLayers[i].setZIndex(0);
+						this.map.setLayerZIndex(allLayers[i], 0);
 						allLayers[i].setOpacity(1.0);
 					}
 					else
 					{
-						allLayers[i].setZIndex(1);
+						// Set Z-layering
+						if (this.checkWmsParam(allLayers[i].metadata.bringToFront) && allLayers[i].metadata.bringToFront)
+							this.map.setLayerZIndex(allLayers[i], nLayers-1);						
+						
+						// Set opacity
 						if (this.checkWmsParam(allLayers[i].metadata.preferredOpacity))
 							allLayers[i].setOpacity(allLayers[i].metadata.preferredOpacity);
 						else
@@ -314,8 +318,8 @@ SOTE.widget.MapSote.prototype.updateComponent = function(querystring)
 					allLayers[i].setVisibility(false);
 				allLayers[i].setOpacity(0.0);
 				
-				// Reset z-index (assume it is an overlay)
-				allLayers[i].setZIndex(1); 	
+				// Reset z-index?  (assume it is an overlay)
+				//this.map.setLayerZIndex(allLayers[i], 1); 	
 			}
 		}
 		
