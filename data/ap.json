@@ -28,6 +28,18 @@
 	        "type": "multi"
 		},
 		{
+	        "label": "Carbon Monoxide (Total Column, Day)",
+	        "sublabel": "Aqua / AIRS",
+	        "value": "AIRS_CO_Total_Column_Day",
+	        "type": "multi"
+		},
+		{
+	        "label": "Carbon Monoxide (Total Column, Night)",
+	        "sublabel": "Aqua / AIRS",
+	        "value": "AIRS_CO_Total_Column_Night",
+	        "type": "multi"
+		},
+		{
 	        "label": "Aerosol Index",
 	        "sublabel": "Aura / OMI",
 	        "value": "OMI_Aerosol_Index",
@@ -71,6 +83,18 @@
 	        "label": "Snow Cover",
 	        "sublabel": "Terra / MODIS",
 	        "value": "MODIS_Terra_Snow_Cover",
+	        "type": "multi"
+		},
+		{
+	        "label": "Precipitation Estimate (Day)",
+	        "sublabel": "Aqua / AIRS",
+	        "value": "AIRS_Precipitation_Day",
+	        "type": "multi"
+		},
+		{
+	        "label": "Precipitation Estimate (Night)",
+	        "sublabel": "Aqua / AIRS",
+	        "value": "AIRS_Precipitation_Night",
 	        "type": "multi"
 		},
         {
@@ -129,6 +153,18 @@
 	        "type": "single"
 		},
 		{
+	        "label": "Carbon Monoxide (Total Column, Day)",
+	        "sublabel": "Aqua / AIRS",
+	        "value": "AIRS_CO_Total_Column_Day",
+	        "type": "multi"
+		},
+		{
+	        "label": "Carbon Monoxide (Total Column, Night)",
+	        "sublabel": "Aqua / AIRS",
+	        "value": "AIRS_CO_Total_Column_Night",
+	        "type": "multi"
+		},
+		{
 	        "label": "Aerosol Index",
 	        "sublabel": "Aura / OMI",
 	        "value": "OMI_Aerosol_Index",
@@ -174,6 +210,18 @@
 	        "type": "single"
 		},
 		{
+	        "label": "Sulphur Dioxide (Day)",
+	        "sublabel": "Aqua / AIRS",
+	        "value": "AIRS_SO2_Index_Day",
+	        "type": "multi"
+		},
+		{
+	        "label": "Sulphur Dioxide (Night)",
+	        "sublabel": "Aqua / AIRS",
+	        "value": "AIRS_SO2_Index_Night",
+	        "type": "multi"
+		},
+		{
 	        "label": "Sulfur Dioxide (Lower Troposphere)",
 	        "sublabel": "Aura / OMI",
 	        "value": "OMI_SO2_Lower_Troposphere",
@@ -196,28 +244,7 @@
 	        "sublabel": "Aura / OMI",
 	        "value": "OMI_SO2_Planetary_Boundary_Layer",
 	        "type": "multi"
-		},
-        {
-             "label": "Volcano Hazard: Frequency and Distribution",
-             "sublabel": "SEDAC Global Volcano Hazard Frequency and Distribution, v1 (1979–2000)",
-             "value": "ndh-volcano-hazard-frequency-distribution",
-             "type": "multi",
-             "selected": "false"
-        },
-        {
-             "label": "Volcano Hazard: Mortality Risk",
-             "sublabel": "SEDAC Global Volcano Mortality Risks and Distribution, v1 (2000)",
-             "value": "ndh-volcano-mortality-risks-distribution",
-             "type": "multi",
-             "selected": "false"
-        },
-        {
-             "label": "Volcano Hazard: Economic Risk",
-             "sublabel": "SEDAC Global Volcano Proportional Economic Loss Risk Deciles, v1 (2000)",
-             "value": "ndh-volcano-proportional-economic-loss-risk-deciles",
-             "type": "multi",
-             "selected": "false"
-        }
+		}
 
 	],
 	
@@ -244,6 +271,12 @@
 	        "label": "Snow Cover",
 	        "sublabel": "Terra / MODIS",
 	        "value": "MODIS_Terra_Snow_Cover",
+	        "type": "multi"
+		},
+		{
+	        "label": "Visible Radiance",
+	        "sublabel": "Aqua / AIRS",
+	        "value": "AIRS_Visible_Radiance",
 	        "type": "multi"
 		},
 		{
@@ -307,7 +340,7 @@
         {
         	"label": "Dust Score",
         	"sublabel": "Aqua / AIRS",
-        	"value": "AIRS_Dust",
+        	"value": "AIRS_Dust_Score",
         	"type":"multi"
         },
 		{
