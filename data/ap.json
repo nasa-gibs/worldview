@@ -4,17 +4,17 @@
 
 	"Wildfires": [
 		{
-	        "label": "Land Surface Reflectance (True Color)",
+	        "label": "Land Surface Reflectance (7-2-1)",
 	        "sublabel": "Terra / MODIS",
-	        "value": "Terra_MODIS",
+	        "value": "MODIS_Terra_SurfaceReflectance_Bands721",
 	        "type": "single"
 		},
 		{
-	        "label": "Land Surface Reflectance (True Color)",
+	        "label": "Land Surface Reflectance (7-2-1)",
 	        "sublabel": "Aqua / MODIS",
-	        "value": "Aqua_MODIS",
+	        "value": "MODIS_Aqua_SurfaceReflectance_Bands721",
 	        "type": "single"
-		},
+		},	
 		{
 	        "label": "Wildfires (Past 24 Hours)",
 	        "sublabel": "MODIS Fire and Thermal Anomalies",
@@ -25,6 +25,42 @@
 	        "label": "Wildfires (Past 48 Hours)",
 	        "sublabel": "MODIS Fire and Thermal Anomalies",
 	        "value": "fires48",
+	        "type": "multi"
+		},
+		{
+	        "label": "Aerosol Optical Depth",
+	        "sublabel": "Terra / MODIS",
+	        "value": "MODIS_Terra_Aerosol",
+	        "type": "multi"
+		},
+		{
+	        "label": "Aerosol Optical Depth",
+	        "sublabel": "Aqua / MODIS",
+	        "value": "MODIS_Aqua_Aerosol",
+	        "type": "multi"
+		},
+		{
+	        "label": "Land Surface Temperature (Day)",
+	        "sublabel": "Terra / MODIS",
+	        "value": "MODIS_Terra_Land_Surface_Temp_Day",
+	        "type": "multi"
+		},
+		{
+	        "label": "Land Surface Temperature (Night)",
+	        "sublabel": "Terra / MODIS",
+	        "value": "MODIS_Terra_Land_Surface_Temp_Night",
+	        "type": "multi"
+		},
+		{
+	        "label": "Land Surface Temperature (Day)",
+	        "sublabel": "Aqua / MODIS",
+	        "value": "MODIS_Aqua_Land_Surface_Temp_Day",
+	        "type": "multi"
+		},
+		{
+	        "label": "Land Surface Temperature (Night)",
+	        "sublabel": "Aqua / MODIS",
+	        "value": "MODIS_Aqua_Land_Surface_Temp_Night",
 	        "type": "multi"
 		},
 		{
@@ -62,15 +98,21 @@
 
 	"Drought": [
 		{
-	        "label": "Land Surface Reflectance (True Color)",
+	        "label": "Corrected Reflectance (True Color)",
 	        "sublabel": "Terra / MODIS",
 	        "value": "Terra_MODIS",
 	        "type": "single"
 		},
 		{
-	        "label": "Land Surface Reflectance (True Color)",
+	        "label": "Corrected Reflectance (True Color)",
 	        "sublabel": "Aqua / MODIS",
 	        "value": "Aqua_MODIS",
+	        "type": "single"
+		},
+		{
+	        "label": "Land Surface Reflectance (1-2-1)",
+	        "sublabel": "Terra / MODIS",
+	        "value": "MODIS_Terra_SurfaceReflectance_Bands121",
 	        "type": "single"
 		},
 		{
@@ -125,11 +167,35 @@
 		{
 	        "label": "Land Surface Reflectance (True Color)",
 	        "sublabel": "Terra / MODIS",
-	        "value": "Terra_MODIS",
+	        "value": "MODIS_Terra_SurfaceReflectance_Bands143",
 	        "type": "single"
 		},
 		{
 	        "label": "Land Surface Reflectance (True Color)",
+	        "sublabel": "Aqua / MODIS",
+	        "value": "MODIS_Aqua_SurfaceReflectance_Bands143",
+	        "type": "single"
+		},
+		{
+	        "label": "Land Surface Reflectance (7-2-1)",
+	        "sublabel": "Terra / MODIS",
+	        "value": "MODIS_Terra_SurfaceReflectance_Bands721",
+	        "type": "single"
+		},
+		{
+	        "label": "Land Surface Reflectance (7-2-1)",
+	        "sublabel": "Aqua / MODIS",
+	        "value": "MODIS_Aqua_SurfaceReflectance_Bands721",
+	        "type": "single"
+		},	
+		{
+	        "label": "Corrected Reflectance (True Color)",
+	        "sublabel": "Terra / MODIS",
+	        "value": "Terra_MODIS",
+	        "type": "single"
+		},
+		{
+	        "label": "Corrected Reflectance (True Color)",
 	        "sublabel": "Aqua / MODIS",
 	        "value": "Aqua_MODIS",
 	        "type": "single"
@@ -151,6 +217,18 @@
 	        "sublabel": "Terra / MODIS",
 	        "value": "MODIS_Terra_CorrectedReflectance_Bands367",
 	        "type": "single"
+		},
+		{
+	        "label": "Aerosol Optical Depth",
+	        "sublabel": "Terra / MODIS",
+	        "value": "MODIS_Terra_Aerosol",
+	        "type": "multi"
+		},
+		{
+	        "label": "Aerosol Optical Depth",
+	        "sublabel": "Aqua / MODIS",
+	        "value": "MODIS_Aqua_Aerosol",
+	        "type": "multi"
 		},
 		{
 	        "label": "Carbon Monoxide (Total Column, Day)",
@@ -188,11 +266,35 @@
 		{
 	        "label": "Land Surface Reflectance (True Color)",
 	        "sublabel": "Terra / MODIS",
-	        "value": "Terra_MODIS",
+	        "value": "MODIS_Terra_SurfaceReflectance_Bands143",
 	        "type": "single"
 		},
 		{
 	        "label": "Land Surface Reflectance (True Color)",
+	        "sublabel": "Aqua / MODIS",
+	        "value": "MODIS_Aqua_SurfaceReflectance_Bands143",
+	        "type": "single"
+		},
+		{
+	        "label": "Land Surface Reflectance (7-2-1)",
+	        "sublabel": "Terra / MODIS",
+	        "value": "MODIS_Terra_SurfaceReflectance_Bands721",
+	        "type": "single"
+		},
+		{
+	        "label": "Land Surface Reflectance (7-2-1)",
+	        "sublabel": "Aqua / MODIS",
+	        "value": "MODIS_Aqua_SurfaceReflectance_Bands721",
+	        "type": "single"
+		},	
+		{
+	        "label": "Corrected Reflectance (True Color)",
+	        "sublabel": "Terra / MODIS",
+	        "value": "Terra_MODIS",
+	        "type": "single"
+		},
+		{
+	        "label": "Corrected Reflectance (True Color)",
 	        "sublabel": "Aqua / MODIS",
 	        "value": "Aqua_MODIS",
 	        "type": "single"
@@ -208,6 +310,18 @@
 	        "sublabel": "Aqua / MODIS",
 	        "value": "MODIS_Aqua_CorrectedReflectance_Bands721",
 	        "type": "single"
+		},
+		{
+	        "label": "Aerosol Optical Depth",
+	        "sublabel": "Terra / MODIS",
+	        "value": "MODIS_Terra_Aerosol",
+	        "type": "multi"
+		},
+		{
+	        "label": "Aerosol Optical Depth",
+	        "sublabel": "Aqua / MODIS",
+	        "value": "MODIS_Aqua_Aerosol",
+	        "type": "multi"
 		},
 		{
 	        "label": "Sulphur Dioxide (Day)",
@@ -250,17 +364,23 @@
 	
 	"Vegetation": [
 		{
-	        "label": "Land Surface Reflectance (True Color)",
+	        "label": "Corrected Reflectance (True Color)",
 	        "sublabel": "Terra / MODIS",
 	        "value": "Terra_MODIS",
 	        "type": "single"
 		},
 		{
-	        "label": "Land Surface Reflectance (True Color)",
+	        "label": "Corrected Reflectance (True Color)",
 	        "sublabel": "Aqua / MODIS",
 	        "value": "Aqua_MODIS",
 	        "type": "single"
 		},	
+		{
+	        "label": "Land Surface Reflectance (1-2-1)",
+	        "sublabel": "Terra / MODIS",
+	        "value": "MODIS_Terra_SurfaceReflectance_Bands121",
+	        "type": "single"
+		},
 		{
 	        "label": "Land Surface Reflectance (1-2-1)",
 	        "sublabel": "Aqua / MODIS",
@@ -274,9 +394,27 @@
 	        "type": "multi"
 		},
 		{
-	        "label": "Visible Radiance",
-	        "sublabel": "Aqua / AIRS",
-	        "value": "AIRS_Visible_Radiance",
+	        "label": "Land Surface Temperature (Day)",
+	        "sublabel": "Terra / MODIS",
+	        "value": "MODIS_Terra_Land_Surface_Temp_Day",
+	        "type": "multi"
+		},
+		{
+	        "label": "Land Surface Temperature (Night)",
+	        "sublabel": "Terra / MODIS",
+	        "value": "MODIS_Terra_Land_Surface_Temp_Night",
+	        "type": "multi"
+		},
+		{
+	        "label": "Land Surface Temperature (Day)",
+	        "sublabel": "Aqua / MODIS",
+	        "value": "MODIS_Aqua_Land_Surface_Temp_Day",
+	        "type": "multi"
+		},
+		{
+	        "label": "Land Surface Temperature (Night)",
+	        "sublabel": "Aqua / MODIS",
+	        "value": "MODIS_Aqua_Land_Surface_Temp_Night",
 	        "type": "multi"
 		},
 		{
@@ -294,11 +432,23 @@
 		{
 	        "label": "Land Surface Reflectance (True Color)",
 	        "sublabel": "Terra / MODIS",
-	        "value": "Terra_MODIS",
+	        "value": "MODIS_Terra_SurfaceReflectance_Bands143",
 	        "type": "single"
 		},
 		{
 	        "label": "Land Surface Reflectance (True Color)",
+	        "sublabel": "Aqua / MODIS",
+	        "value": "MODIS_Aqua_SurfaceReflectance_Bands143",
+	        "type": "single"
+		},
+		{
+	        "label": "Corrected Reflectance (True Color)",
+	        "sublabel": "Terra / MODIS",
+	        "value": "Terra_MODIS",
+	        "type": "single"
+		},
+		{
+	        "label": "Corrected Reflectance (True Color)",
 	        "sublabel": "Aqua / MODIS",
 	        "value": "Aqua_MODIS",
 	        "type": "single"
@@ -308,6 +458,42 @@
 	        "sublabel": "Terra / MODIS",
 	        "value": "MODIS_Terra_CorrectedReflectance_Bands367",
 	        "type": "single"
+		},
+		{
+	        "label": "Sea Ice Extent",
+	        "sublabel": "Terra / MODIS",
+	        "value": "MODIS_Terra_Sea_Ice",
+	        "type": "multi"
+		},
+		{
+	        "label": "Sea Ice Extent",
+	        "sublabel": "Aqua / MODIS",
+	        "value": "MODIS_Aqua_Sea_Ice",
+	        "type": "multi"
+		},
+		{
+	        "label": "Brightness Temperature (Band 31-Day)",
+	        "sublabel": "Terra / MODIS",
+	        "value": "MODIS_Terra_Brightness_Temp_Band31_Day",
+	        "type": "multi"
+		},
+		{
+	        "label": "Brightness Temperature (Band 31-Night)",
+	        "sublabel": "Terra / MODIS",
+	        "value": "MODIS_Terra_Brightness_Temp_Band31_Night",
+	        "type": "multi"
+		},
+		{
+	        "label": "Brightness Temperature (Band 31-Day)",
+	        "sublabel": "Aqua / MODIS",
+	        "value": "MODIS_Aqua_Brightness_Temp_Band31_Day",
+	        "type": "multi"
+		},
+		{
+	        "label": "Brightness Temperature (Band 31-Night)",
+	        "sublabel": "Aqua / MODIS",
+	        "value": "MODIS_Aqua_Brightness_Temp_Band31_Night",
+	        "type": "multi"
 		}
 	],
 	
@@ -316,11 +502,35 @@
 		{
 	        "label": "Land Surface Reflectance (True Color)",
 	        "sublabel": "Terra / MODIS",
-	        "value": "Terra_MODIS",
+	        "value": "MODIS_Terra_SurfaceReflectance_Bands143",
 	        "type": "single"
 		},
 		{
 	        "label": "Land Surface Reflectance (True Color)",
+	        "sublabel": "Aqua / MODIS",
+	        "value": "MODIS_Aqua_SurfaceReflectance_Bands143",
+	        "type": "single"
+		},
+		{
+	        "label": "Land Surface Reflectance (7-2-1)",
+	        "sublabel": "Terra / MODIS",
+	        "value": "MODIS_Terra_SurfaceReflectance_Bands721",
+	        "type": "single"
+		},
+		{
+	        "label": "Land Surface Reflectance (7-2-1)",
+	        "sublabel": "Aqua / MODIS",
+	        "value": "MODIS_Aqua_SurfaceReflectance_Bands721",
+	        "type": "single"
+		},	
+		{
+	        "label": "Corrected Reflectance (True Color)",
+	        "sublabel": "Terra / MODIS",
+	        "value": "Terra_MODIS",
+	        "type": "single"
+		},
+		{
+	        "label": "Corrected Reflectance (True Color)",
 	        "sublabel": "Aqua / MODIS",
 	        "value": "Aqua_MODIS",
 	        "type": "single"
@@ -336,6 +546,18 @@
 	        "sublabel": "Aqua / MODIS",
 	        "value": "MODIS_Aqua_CorrectedReflectance_Bands721",
 	        "type": "single"
+		},
+		{
+	        "label": "Aerosol Optical Depth",
+	        "sublabel": "Terra / MODIS",
+	        "value": "MODIS_Terra_Aerosol",
+	        "type": "multi"
+		},
+		{
+	        "label": "Aerosol Optical Depth",
+	        "sublabel": "Aqua / MODIS",
+	        "value": "MODIS_Aqua_Aerosol",
+	        "type": "multi"
 		},
         {
         	"label": "Dust Score",
@@ -361,6 +583,89 @@
 	        "value": "OMI_Absorbing_Aerosol_Optical_Depth",
 	        "type": "multi"
 		}
+	],
+
+	"Severe Storms": [
+		{
+	        "label": "Water Vapor (Day)",
+	        "sublabel": "Terra / MODIS",
+	        "value": "MODIS_Terra_Water_Vapor_5km_Day",
+	        "type": "multi"
+		},
+		{
+	        "label": "Water Vapor (Day)",
+	        "sublabel": "Aqua / MODIS",
+	        "value": "MODIS_Aqua_Water_Vapor_5km_Day",
+	        "type": "multi"
+		},
+		{
+	        "label": "Water Vapor (Night)",
+	        "sublabel": "Terra / MODIS",
+	        "value": "MODIS_Terra_Water_Vapor_5km_Night",
+	        "type": "multi"
+		},
+		{
+	        "label": "Water Vapor (Night)",
+	        "sublabel": "Aqua / MODIS",
+	        "value": "MODIS_Aqua_Water_Vapor_5km_Night",
+	        "type": "multi"
+		},
+		{
+	        "label": "Cloud Top Temperature (Day)",
+	        "sublabel": "Terra / MODIS",
+	        "value": "MODIS_Terra_Cloud_Top_Temp_Day",
+	        "type": "multi"
+		},
+		{
+	        "label": "Cloud Top Temperature (Day)",
+	        "sublabel": "Aqua / MODIS",
+	        "value": "MODIS_Aqua_Cloud_Top_Temp_Day",
+	        "type": "multi"
+		},		
+		{
+	        "label": "Cloud Top Temperature (Night)",
+	        "sublabel": "Terra / MODIS",
+	        "value": "MODIS_Terra_Cloud_Top_Temp_Night",
+	        "type": "multi"
+		},
+		{
+	        "label": "Cloud Top Temperature (Night)",
+	        "sublabel": "Aqua / MODIS",
+	        "value": "MODIS_Aqua_Cloud_Top_Temp_Night",
+	        "type": "multi"
+		},		
+		{
+	        "label": "Cloud Top Pressure (Day)",
+	        "sublabel": "Terra / MODIS",
+	        "value": "MODIS_Terra_Cloud_Top_Pressure_Day",
+	        "type": "multi"
+		},
+		{
+	        "label": "Cloud Top Pressure (Day)",
+	        "sublabel": "Aqua / MODIS",
+	        "value": "MODIS_Aqua_Cloud_Top_Pressure_Day",
+	        "type": "multi"
+		},		
+		{
+	        "label": "Cloud Top Pressure (Night)",
+	        "sublabel": "Terra / MODIS",
+	        "value": "MODIS_Terra_Cloud_Top_Pressure_Night",
+	        "type": "multi"
+		},
+		{
+	        "label": "Cloud Top Pressure (Night)",
+	        "sublabel": "Aqua / MODIS",
+	        "value": "MODIS_Aqua_Cloud_Top_Pressure_Night",
+	        "type": "multi"
+		},
+		{
+	        "label": "Cloud Pressure",
+	        "sublabel": "Aura / OMI",
+	        "value": "OMI_Cloud_Pressure",
+	        "type": "multi"
+		}
+
+
 	],
 
 
