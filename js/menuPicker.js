@@ -38,6 +38,7 @@ SOTE.widget.MenuPicker = function(containerId, config){
 	this.selectedValue = null;
 	this.menuIsCollapsible = config.isCollapsible;
 	this.dataSourceUrl = config.dataSourceUrl;
+	this.initRenderComplete = false;
 	this.statusStr = "";
 	this.init();
 };
@@ -94,6 +95,11 @@ SOTE.widget.MenuPicker.prototype.render = function(){
 			//$('#' + this.id).on("click", "#" + liID, {val:this.menuItems[i].value, self:this}, SOTE.widget.MenuPicker.bindClick);
 		else
 			menuLI.setAttribute('class', "disabled");
+	}
+	// Mark the component as ready in the registry if called via init() 
+	if ((this.initRenderComplete === false) && REGISTRY) {
+		this.initRenderComplete = true;
+		REGISTRY.markComponentReady(this.id);
 	}
 
 	this.container.appendChild(menuUL);
