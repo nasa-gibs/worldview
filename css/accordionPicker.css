@@ -6,7 +6,8 @@
 .ui-accordion label span.accordionSub {display:block; font-weight:200; margin-left:21px;}
 
 a.ui-accordion-header { background: rgba(140,140,140,0.5); border-radius: 0 0 0 0; border: rgba(30,30,30,0.2) 1px solid; color:#fff;  padding:2px 5px;}
-ul.ui-accordion-content {list-style-type:none; background: rgba(10,10,10,0.1); border-radius: 0 0 0 0; color:#fff; font-size:.85em; display:block; overflow:hidden;}
+ul.ui-accordion-content {
+	list-style-type:none; background: rgba(10,10,10,0.1); border-radius: 0 0 0 0; color:#fff; font-size:.85em; display:block; overflow-y:auto !important; overflow-x:hidden !important; height:150px !important;}
 ul.ui-accordion-content li{border:rgba(30,30,30,0.2) 1px solid; background: rgba(228,108,10,0.1); border-width: 1px 0 1px 0; width:100%; padding: 2px 0px 2px 10px; }
 a.ui-accordion-header span { margin-left:5px;}
 a.ui-accordion-header span.ui-icon { }
