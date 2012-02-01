@@ -8,6 +8,10 @@ SOTE.util.Registry = function () {
   this.evtRegistry = new Array();
   // holds consumers
   this.consumers = new Array();
+  // holds list of component ids that have marked themselves as ready
+  this.readyRegistry = new Array();
+  // holds array of callbacks for when all components are ready
+  this.allReadyCallbacks = new Array();
 
   // register a component
   this.register = function register(id,component){
@@ -248,6 +252,51 @@ SOTE.util.Registry = function () {
       coA.push(this.compRegistry[i]);
     }
     return coA;
+  }
+
+// Checks that all components are ready and fires off the callbacks if the are.
+  this.checkComponentsReady = function checkComponentsReady() {
+    // Determine if every registered components has marked themselves as ready
+    // Essentially, see if relevant components are a subset of readyRegistry.
+    var allReady = true;
+    var comps = this.getComponents();
+    for (var i=0; i < comps.length; i++) {
+      if (comps[i].obj.loadFromQuery == undefined)
+	continue;  // not considered
+
+      // see if comps[i].name is in readyRegistry.
+      var found = false;
+      for (var j=0; j < this.readyRegistry.length; j++) {
+        if (this.readyRegistry[j] == comps[i].name) {
+          found = true;
+        }
+      }
+	
+      if (!found) {
+        allReady = false;
+	break;
+      }
+    }
+    
+    // Call all callbacks if all components ready
+    if (allReady) {
+      for (var i=0; i < this.allReadyCallbacks.length; i++) {
+        var callback = this.allReadyCallbacks[i];
+        callback();
+       }
+    }
+  }
+
+  // Adds a callback function to be called once all components are ready.
+  this.addAllReadyCallback = function addAllReadyCallback(callback) {
+    this.allReadyCallbacks.push(callback);
+    this.checkComponentsReady(); // just in case all were marked before callback added
+  }
+ 
+  // Method for registered components to call when they are ready.
+  this.markComponentReady = function markComponentReady(id) {
+    this.readyRegistry.push(id);
+    this.checkComponentsReady(); // will check make necessary action if so
   }
 
   // get all of the user interface (selection) components in compRegistry 
