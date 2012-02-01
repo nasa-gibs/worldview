@@ -71,6 +71,7 @@ SOTE.widget.AccordionPicker.prototype.init = function(){
 	
     if(REGISTRY){
  		REGISTRY.register(this.id,this);
+ 		REGISTRY.markComponentReady(this.id);
 	}
 	else{
 		alert("No REGISTRY found!  Cannot register AccordionPicker!");
