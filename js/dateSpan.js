@@ -58,6 +58,17 @@ SOTE.widget.DateSpan = function(containerId, config){
 
 	if(config.endDate === undefined){
 		config.endDate = new Date();
+		var timeString = SOTE.util.zeroPad(eval(config.endDate.getUTCMonth()+1),2) + "/" + SOTE.util.zeroPad(config.endDate.getUTCDate(),2) + "/" +
+			config.endDate.getUTCFullYear() ;
+		config.endDate = new Date(timeString);
+		config.endDate.setHours(12);
+		config.endDate.setMinutes(00);
+		config.endDate.setSeconds(00);
+		var time = config.endDate.clone();
+		timeString = time.getUTCFullYear() + "-" + SOTE.util.zeroPad(eval(time.getUTCMonth()+1),2) + "-" + 
+			SOTE.util.zeroPad(time.getUTCDate(),2);
+		timeString += "T" + SOTE.util.zeroPad(time.getUTCHours(),2) + ":" + 
+			SOTE.util.zeroPad(time.getUTCMinutes(),2) + ":" + SOTE.util.zeroPad(time.getUTCSeconds(),2);
 	}
 	else{
 		config.endDate = new Date(config.endDate);
@@ -149,17 +160,20 @@ SOTE.widget.DateSpan.prototype.init = function(){
 	$('#'+this.id+'slider').slider(); 
 	$('#'+this.id+'slider').bind("change",{self:this},SOTE.widget.DateSpan.handleSlide);
 
-    if(REGISTRY){
- 		REGISTRY.register(this.id,this);
-	}
-	else{
-		alert("No REGISTRY found!  Cannot register AccordionPicker!");
-	}
 
 	this.spanDate = document.getElementById(this.id+"spanContainerLabelDate");
 	this.spanDay = document.getElementById(this.id+"spanContainerLabelDay");
 
 	this.setVisualDate();
+
+
+    if(REGISTRY){
+ 		REGISTRY.register(this.id,this);
+ 		REGISTRY.markComponentReady(this.id);
+	}
+	else{
+		alert("No REGISTRY found!  Cannot register AccordionPicker!");
+	}
 
 };
 
@@ -185,7 +199,7 @@ SOTE.widget.DateSpan.handleSlide = function(e,ui){
 	var value = e.target.value;
 	var self = e.data.self;
 	
-	var x = self.range * (100-value)/100;
+	var x = (self.range - (24*60*60*1000)) * (100-value)/100;
 	var time = new Date(self.endDate.getTime() - x);
 	self.setVisualDate();
 	self.setValue(time.toUTCString());
@@ -207,6 +221,8 @@ SOTE.widget.DateSpan.prototype.setValue = function(value){
 SOTE.widget.DateSpan.prototype.setVisualDate = function(){
 	this.spanDate.innerHTML = this.value.getUTCFullYear() + "-" + SOTE.util.zeroPad(eval(this.value.getUTCMonth()+1),2) + "-" + 
 		SOTE.util.zeroPad(this.value.getUTCDate(),2);
+	//this.spanDay.innerHTML = SOTE.util.zeroPad(this.value.getUTCHours(),2) + ":" + 
+	//		SOTE.util.zeroPad(this.value.getUTCMinutes(),2) + ":" + SOTE.util.zeroPad(this.value.getUTCSeconds(),2);
 	this.spanDay.innerHTML = SOTE.util.DayNameFromUTCDayInt(this.value.getUTCDay());
 };
 
