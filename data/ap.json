@@ -171,6 +171,18 @@
 
 	"Smoke Plumes": [
 		{
+	        "label": "Corrected Reflectance (True Color)",
+	        "sublabel": "Terra / MODIS",
+	        "value": "Terra_MODIS",
+	        "type": "single"
+		},
+		{
+	        "label": "Corrected Reflectance (True Color)",
+	        "sublabel": "Aqua / MODIS",
+	        "value": "Aqua_MODIS",
+	        "type": "single"
+		},
+		{
 	        "label": "Land Surface Reflectance (True Color)",
 	        "sublabel": "Terra / MODIS",
 	        "value": "MODIS_Terra_SurfaceReflectance_Bands143",
@@ -183,27 +195,9 @@
 	        "type": "single"
 		},
 		{
-	        "label": "Land Surface Reflectance (7-2-1)",
+	        "label": "Corrected Reflectance (3-6-7)",
 	        "sublabel": "Terra / MODIS",
-	        "value": "MODIS_Terra_SurfaceReflectance_Bands721",
-	        "type": "single"
-		},
-		{
-	        "label": "Land Surface Reflectance (7-2-1)",
-	        "sublabel": "Aqua / MODIS",
-	        "value": "MODIS_Aqua_SurfaceReflectance_Bands721",
-	        "type": "single"
-		},	
-		{
-	        "label": "Corrected Reflectance (True Color)",
-	        "sublabel": "Terra / MODIS",
-	        "value": "Terra_MODIS",
-	        "type": "single"
-		},
-		{
-	        "label": "Corrected Reflectance (True Color)",
-	        "sublabel": "Aqua / MODIS",
-	        "value": "Aqua_MODIS",
+	        "value": "MODIS_Terra_CorrectedReflectance_Bands367",
 	        "type": "single"
 		},
 		{
@@ -219,11 +213,17 @@
 	        "type": "single"
 		},
 		{
-	        "label": "Corrected Reflectance (3-6-7)",
+	        "label": "Land Surface Reflectance (7-2-1)",
 	        "sublabel": "Terra / MODIS",
-	        "value": "MODIS_Terra_CorrectedReflectance_Bands367",
+	        "value": "MODIS_Terra_SurfaceReflectance_Bands721",
 	        "type": "single"
 		},
+		{
+	        "label": "Land Surface Reflectance (7-2-1)",
+	        "sublabel": "Aqua / MODIS",
+	        "value": "MODIS_Aqua_SurfaceReflectance_Bands721",
+	        "type": "single"
+		},	
 		{
 	        "label": "Aerosol Optical Depth",
 	        "sublabel": "Terra / MODIS",
@@ -270,6 +270,18 @@
 
 	"Ash Plumes": [
 		{
+	        "label": "Corrected Reflectance (True Color)",
+	        "sublabel": "Terra / MODIS",
+	        "value": "Terra_MODIS",
+	        "type": "single"
+		},
+		{
+	        "label": "Corrected Reflectance (True Color)",
+	        "sublabel": "Aqua / MODIS",
+	        "value": "Aqua_MODIS",
+	        "type": "single"
+		},
+		{
 	        "label": "Land Surface Reflectance (True Color)",
 	        "sublabel": "Terra / MODIS",
 	        "value": "MODIS_Terra_SurfaceReflectance_Bands143",
@@ -282,15 +294,15 @@
 	        "type": "single"
 		},
 		{
-	        "label": "Corrected Reflectance (True Color)",
+	        "label": "Corrected Reflectance (7-2-1)",
 	        "sublabel": "Terra / MODIS",
-	        "value": "Terra_MODIS",
+	        "value": "MODIS_Terra_CorrectedReflectance_Bands721",
 	        "type": "single"
 		},
 		{
-	        "label": "Corrected Reflectance (True Color)",
+	        "label": "Corrected Reflectance (7-2-1)",
 	        "sublabel": "Aqua / MODIS",
-	        "value": "Aqua_MODIS",
+	        "value": "MODIS_Aqua_CorrectedReflectance_Bands721",
 	        "type": "single"
 		},
 		{
@@ -305,18 +317,6 @@
 	        "value": "MODIS_Aqua_SurfaceReflectance_Bands721",
 	        "type": "single"
 		},	
-		{
-	        "label": "Corrected Reflectance (7-2-1)",
-	        "sublabel": "Terra / MODIS",
-	        "value": "MODIS_Terra_CorrectedReflectance_Bands721",
-	        "type": "single"
-		},
-		{
-	        "label": "Corrected Reflectance (7-2-1)",
-	        "sublabel": "Aqua / MODIS",
-	        "value": "MODIS_Aqua_CorrectedReflectance_Bands721",
-	        "type": "single"
-		},
 		{
 	        "label": "Aerosol Optical Depth",
 	        "sublabel": "Terra / MODIS",
@@ -388,9 +388,6 @@
         }
 	],
 
-
-
-	
 
 	
 	"Vegetation": [
@@ -467,18 +464,6 @@
 
 	"Shipping": [
 		{
-	        "label": "Land Surface Reflectance (True Color)",
-	        "sublabel": "Terra / MODIS",
-	        "value": "MODIS_Terra_SurfaceReflectance_Bands143",
-	        "type": "single"
-		},
-		{
-	        "label": "Land Surface Reflectance (True Color)",
-	        "sublabel": "Aqua / MODIS",
-	        "value": "MODIS_Aqua_SurfaceReflectance_Bands143",
-	        "type": "single"
-		},
-		{
 	        "label": "Corrected Reflectance (True Color)",
 	        "sublabel": "Terra / MODIS",
 	        "value": "Terra_MODIS",
@@ -490,6 +475,18 @@
 	        "value": "Aqua_MODIS",
 	        "type": "single"
 		},	
+		{
+	        "label": "Land Surface Reflectance (True Color)",
+	        "sublabel": "Terra / MODIS",
+	        "value": "MODIS_Terra_SurfaceReflectance_Bands143",
+	        "type": "single"
+		},
+		{
+	        "label": "Land Surface Reflectance (True Color)",
+	        "sublabel": "Aqua / MODIS",
+	        "value": "MODIS_Aqua_SurfaceReflectance_Bands143",
+	        "type": "single"
+		},
 		{
 	        "label": "Corrected Reflectance (3-6-7)",
 	        "sublabel": "Terra / MODIS",
@@ -621,30 +618,6 @@
 	
 	"Dust Storms": [
 		{
-	        "label": "Land Surface Reflectance (True Color)",
-	        "sublabel": "Terra / MODIS",
-	        "value": "MODIS_Terra_SurfaceReflectance_Bands143",
-	        "type": "single"
-		},
-		{
-	        "label": "Land Surface Reflectance (True Color)",
-	        "sublabel": "Aqua / MODIS",
-	        "value": "MODIS_Aqua_SurfaceReflectance_Bands143",
-	        "type": "single"
-		},
-		{
-	        "label": "Land Surface Reflectance (7-2-1)",
-	        "sublabel": "Terra / MODIS",
-	        "value": "MODIS_Terra_SurfaceReflectance_Bands721",
-	        "type": "single"
-		},
-		{
-	        "label": "Land Surface Reflectance (7-2-1)",
-	        "sublabel": "Aqua / MODIS",
-	        "value": "MODIS_Aqua_SurfaceReflectance_Bands721",
-	        "type": "single"
-		},	
-		{
 	        "label": "Corrected Reflectance (True Color)",
 	        "sublabel": "Terra / MODIS",
 	        "value": "Terra_MODIS",
@@ -654,6 +627,18 @@
 	        "label": "Corrected Reflectance (True Color)",
 	        "sublabel": "Aqua / MODIS",
 	        "value": "Aqua_MODIS",
+	        "type": "single"
+		},
+		{
+	        "label": "Land Surface Reflectance (True Color)",
+	        "sublabel": "Terra / MODIS",
+	        "value": "MODIS_Terra_SurfaceReflectance_Bands143",
+	        "type": "single"
+		},
+		{
+	        "label": "Land Surface Reflectance (True Color)",
+	        "sublabel": "Aqua / MODIS",
+	        "value": "MODIS_Aqua_SurfaceReflectance_Bands143",
 	        "type": "single"
 		},
 		{
@@ -668,6 +653,18 @@
 	        "value": "MODIS_Aqua_CorrectedReflectance_Bands721",
 	        "type": "single"
 		},
+		{
+	        "label": "Land Surface Reflectance (7-2-1)",
+	        "sublabel": "Terra / MODIS",
+	        "value": "MODIS_Terra_SurfaceReflectance_Bands721",
+	        "type": "single"
+		},
+		{
+	        "label": "Land Surface Reflectance (7-2-1)",
+	        "sublabel": "Aqua / MODIS",
+	        "value": "MODIS_Aqua_SurfaceReflectance_Bands721",
+	        "type": "single"
+		},	
 		{
 	        "label": "Aerosol Optical Depth",
 	        "sublabel": "Terra / MODIS",
