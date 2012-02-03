@@ -789,6 +789,18 @@
 	        "type": "multi"
 		},
 		{
+	        "label": "Precipitation Estimate (Day)",
+	        "sublabel": "Aqua / AIRS",
+	        "value": "AIRS_Precipitation_Day",
+	        "type": "multi"
+		},
+		{
+	        "label": "Precipitation Estimate (Night)",
+	        "sublabel": "Aqua / AIRS",
+	        "value": "AIRS_Precipitation_Night",
+	        "type": "multi"
+		},
+		{
 	        "label": "Cloud Pressure",
 	        "sublabel": "Aura / OMI",
 	        "value": "OMI_Cloud_Pressure",
@@ -1048,6 +1060,12 @@
 	        "type": "multi"
 		},
 		{
+	        "label": "Cloud Top Temperature (Night)",
+	        "sublabel": "Aqua / MODIS",
+	        "value": "MODIS_Aqua_Cloud_Top_Temp_Night",
+	        "type": "multi"
+		},		
+		{
 	        "label": "Land Surface Temperature (Day)",
 	        "sublabel": "Terra / MODIS",
 	        "value": "MODIS_Terra_Land_Surface_Temp_Day",
@@ -1119,12 +1137,6 @@
 	        "value": "MODIS_Aqua_Water_Vapor_5km_Night",
 	        "type": "multi"
 		},
-		{
-	        "label": "Cloud Top Temperature (Night)",
-	        "sublabel": "Aqua / MODIS",
-	        "value": "MODIS_Aqua_Cloud_Top_Temp_Night",
-	        "type": "multi"
-		},		
 		{
 	        "label": "Carbon Monoxide (Total Column, Day)",
 	        "sublabel": "Aqua / AIRS",
