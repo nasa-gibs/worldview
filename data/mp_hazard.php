@@ -2,8 +2,13 @@
 	$items = array(
 		"items" => array(
 			array(
-				"label" => "Wildfires",
-				"value" => "Wildfires",
+				"label" => "Dust Storms",
+				"value" => "DustStorms",
+				"disabled" => false
+			),
+			array(
+				"label" => "Fires",
+				"value" => "Fires",
 				"disabled" => false
 			),
 			array(
@@ -29,11 +34,6 @@
 			array(
 				"label" => "Shipping",
 				"value" => "Shipping",
-				"disabled" => false
-			),
-			array(
-				"label" => "Dust Storms",
-				"value" => "DustStorms",
 				"disabled" => false
 			)
 		),
