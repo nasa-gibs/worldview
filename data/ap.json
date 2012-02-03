@@ -2,7 +2,7 @@
    
 
 
-	"Wildfires": [
+	"Fires": [
 		{
 	        "label": "Land Surface Reflectance (7-2-1)",
 	        "sublabel": "Terra / MODIS",
@@ -16,13 +16,13 @@
 	        "type": "single"
 		},	
 		{
-	        "label": "Wildfires (Past 24 Hours)",
+	        "label": "Fires (Past 24 Hours)",
 	        "sublabel": "MODIS Fire and Thermal Anomalies",
 	        "value": "fires24",
 	        "type": "multi"
 		},
 		{
-	        "label": "Wildfires (Past 48 Hours)",
+	        "label": "Fires (Past 48 Hours)",
 	        "sublabel": "MODIS Fire and Thermal Anomalies",
 	        "value": "fires48",
 	        "type": "multi"
