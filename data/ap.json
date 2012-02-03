@@ -330,15 +330,15 @@
 	        "type": "multi"
 		},
 		{
-	        "label": "Sulphur Dioxide (Day)",
+	        "label": "Sulphur Dioxide (Day, Prata Algorithm)",
 	        "sublabel": "Aqua / AIRS",
-	        "value": "AIRS_SO2_Index_Day",
+	        "value": "AIRS_Prata_SO2_Index_Day",
 	        "type": "multi"
 		},
 		{
-	        "label": "Sulphur Dioxide (Night)",
+	        "label": "Sulphur Dioxide (Night, Prata Algorithm)",
 	        "sublabel": "Aqua / AIRS",
-	        "value": "AIRS_SO2_Index_Night",
+	        "value": "AIRS_Prata_SO2_Index_Night",
 	        "type": "multi"
 		},
 		{
@@ -567,6 +567,18 @@
 	        "label": "Carbon Monoxide (Total Column, Night)",
 	        "sublabel": "Aqua / AIRS",
 	        "value": "AIRS_CO_Total_Column_Night",
+	        "type": "multi"
+		},
+		{
+	        "label": "Sulphur Dioxide (Day, Prata Algorithm)",
+	        "sublabel": "Aqua / AIRS",
+	        "value": "AIRS_Prata_SO2_Index_Day",
+	        "type": "multi"
+		},
+		{
+	        "label": "Sulphur Dioxide (Night, Prata Algorithm)",
+	        "sublabel": "Aqua / AIRS",
+	        "value": "AIRS_Prata_SO2_Index_Night",
 	        "type": "multi"
 		},
 		{
@@ -1144,15 +1156,15 @@
 	        "type": "multi"
 		},
 		{
-	        "label": "Sulphur Dioxide (Day)",
+	        "label": "Sulphur Dioxide (Day, Prata Algorithm)",
 	        "sublabel": "Aqua / AIRS",
-	        "value": "AIRS_SO2_Index_Day",
+	        "value": "AIRS_Prata_SO2_Index_Day",
 	        "type": "multi"
 		},
 		{
-	        "label": "Sulphur Dioxide (Night)",
+	        "label": "Sulphur Dioxide (Night, Prata Algorithm)",
 	        "sublabel": "Aqua / AIRS",
-	        "value": "AIRS_SO2_Index_Night",
+	        "value": "AIRS_Prata_SO2_Index_Night",
 	        "type": "multi"
 		},
 		{
