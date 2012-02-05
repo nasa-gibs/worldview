@@ -1350,7 +1350,7 @@
 	        "sublabel": "SEDAC / National Boundaries",
 	        "value": "cartographic:national-boundaries",
 	        "type": "multi",
-	        "selected": "false"
+	        "selected": "true"
 		},
         {
 	        "label": "Population Density",
