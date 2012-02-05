@@ -152,7 +152,7 @@ SOTE.widget.MapSote.prototype.updateComponent = function(querystring)
 			];
 
 		// Generate a layer for each product for each day, then concatenate with static layer array
-		var NUM_DAYS_TO_GENERATE = 6;
+		var NUM_DAYS_TO_GENERATE = 8;
 		this.soteMapData = staticProductLayers.concat(
 			SOTE.util.generateProductLayersForDateRange("Terra_MODIS", "TERRA_MODIS", "image/jpeg", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, NUM_DAYS_TO_GENERATE),
 			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_SurfaceReflectance_Bands143", "MODIS_Terra_SurfaceReflectance_Bands143", "image/jpeg", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, NUM_DAYS_TO_GENERATE),
