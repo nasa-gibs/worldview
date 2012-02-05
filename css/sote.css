@@ -8,7 +8,7 @@ body, div, ul, li {margin:0; padding:0; }
 .yui-skin-sam .yui-panel-container .bd a {color: #48a8ff; }
 
 
-div.horizontalContainer {width:100%; display:block; float:left; background-color:rgba(38,38,38,0.7); position:absolute;  bottom:0; z-index:1002; overflow:visible; height:145px;}
+div.horizontalContainer {width:100%; display:block; float:left; background-color:rgba(38,38,38,0.7); position:absolute; overflow:hidden; bottom:0; z-index:1002; }
 #aboutus {float:right; margin-top:5px; position:relative; z-index:1002;}
 #aboutus img {width:50px; height:44.5px; border:none;}
 #aboutus a{text-decoration:none; border:none;}

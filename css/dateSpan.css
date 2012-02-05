@@ -1,22 +1,27 @@
-.spanContainerLabel {width:25%; float:left; text-shadow:none; display:block; height:120px; margin-top:20px; text-align:center; font-size:1em; color:#fff;}
-.spanContainerLabelDate,.spanContainerLabelDay {display:block; font-size:2.5em;}
-.spanContainerLabelDay{font-size:1.6em;}
-.spanContainer { height:130px; float:right;  overflow:visible; width:75%; margin-top:10px;}
-.datespan div.olMap {width:15%; height:100px; 
+.spanContainerLabel {width:25%; float:left; text-shadow:none; display:block; margin-top:20px; text-align:center; font-size:.1em; color:#fff;}
+.spanContainerLabelDate,.spanContainerLabelDay {display:block; font-size:.25em;}
+.spanContainerLabelDay{font-size:.16em;}
+.spanContainer { float:right;  min-height:100%; width:97%; margin-top:10px; }
+.dateSpan {width:100%;}
+.datespan div.olMap {width:8.86%; height:100px; 
 float:left;
 -moz-box-shadow: 0 0 5px 5px #111;
 -webkit-box-shadow: 0 0 5px 5px #111;
 box-shadow: 0 0 5px 5px #111;
-margin:15px 5% 0 0 !important;
+margin:20px 5% 0 0 !important;
 position:relative; left: 2.5%;
 display:block; 
 } 
+a.ecbutton { display:block; width:24px; height:24px; float:right; margin-right:5px; position:relative; }
+a.collapse {background-image: url("../images/collapseDown.png"); }
+a.expand {background-image: url("../images/expandUp.png");}
 .dateSpanSlider {visibility:hidden;}
-div.ui-slider{height:0px;  width:79.9%; border:red 0px solid; z-index:1002; float:left; margin:0 0 0 2.5%;}
+div.ui-slider{height:0px;  width:82.95%; border:red 0px solid; z-index:1002; float:left; margin:0 0 0 2.5%;}
 div.ui-slider-switch {display:none} 
-a.ui-slider-handle{height:135px; width:18.77%; background:rgba(228,108,10,.4); border:#E46C0A 2px solid; z-index:1004; position:absolute; top:-125px; margin-left:0px; margin-top:0px;}
-a.ui-btn {margin:0;}
-a.ui-shadow {box-shadow:none;}
+a.ui-slider-handle{height:130px; display:block; width:10.7%; background:rgba(228,108,10,.4); border:#E46C0A 2px solid; z-index:1004; position:relative; top:-142px; margin: 10px 0 0 0 !important; padding: 5px 0 5px 0; }
+span.sliderText {font: 14px/14px "Gill Sans", sans-serif, serif; font-weight:500; color:#fff; text-shadow:none; z-index:1005;}
+a.ui-btn {margin:0;} 
+a.ui-shadow {box-shadow:none;} 
 a.ui-btn-up-c {box-shadow:none;}
 #mapdiv {margin:0; padding:0; left:0px;}
  

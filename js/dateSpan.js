@@ -75,7 +75,7 @@ SOTE.widget.DateSpan = function(containerId, config){
 	}
 
 	if(config.range === undefined){
-		config.range = 5*24*60*60*1000;
+		config.range = 7*24*60*60*1000;
 	}
 	
 	if(config.selected === undefined){
@@ -87,7 +87,11 @@ SOTE.widget.DateSpan = function(containerId, config){
 	}
 	
 	if(config.isCollapsed === undefined){
-		config.isCollapsed = (config.thumbSource === null)? true: false;
+		config.isCollapsed = (config.thumbSource === null || config.hasThumbnail === false)? true: false;
+	}
+	
+	if(config.hasThumbnail === undefined){
+		config.hasThumbnail = true;
 	}
        
     this.value = "";
@@ -97,6 +101,7 @@ SOTE.widget.DateSpan = function(containerId, config){
 	this.isCollapsed = config.isCollapsed;
 	this.slideToSelect = config.slideToSelect;
 	this.thumbSource = config.thumbSource;
+	this.hasThumbnail = config.hasThumbnail;
 	this.extent = config.extent;
 	this.product = config.product;
 	this.value = config.selected; 
@@ -121,19 +126,22 @@ SOTE.widget.DateSpan.prototype.init = function(){
 	this.container.setAttribute("class","datespan");
 	//var bgStripe = document.createElement('div');
 	//bgStripe.setAttribute('class','horizontalContainer');
+	var expandCollapseButton = document.createElement('a');
+	expandCollapseButton.setAttribute('class','ecbutton collapse');
+	this.container.appendChild(expandCollapseButton);
 	var spanContainer = document.createElement('div');
 	spanContainer.setAttribute('class','spanContainer');
 	spanContainer.setAttribute('id',this.id+'spanContainer');
 	//bgStripe.appendChild(spanContainer);
 	this.container.appendChild(spanContainer);
-	var labelForSpanContainer = document.createElement('label');
+	/*var labelForSpanContainer = document.createElement('label');
 	labelForSpanContainer.setAttribute('for',this.id+'spanContainer');
 	labelForSpanContainer.setAttribute('class','spanContainerLabel');
 	labelForSpanContainer.innerHTML = "<span class='.annotation'>* drag the slider to select a date</span><span id='"+this.id+
 		"spanContainerLabelDate'class='spanContainerLabelDate'></span><span id='"+this.id+
 		"spanContainerLabelDay' class='spanContainerLabelDay'></span>";
 	this.container.appendChild(labelForSpanContainer); 
-	
+	*/
 	var numOfDays = this.range/24/60/60/1000;
 	var startDate = new Date(this.endDate.getTime() - this.range);
 	for(var i=0; i < numOfDays; ++i){
@@ -151,6 +159,7 @@ SOTE.widget.DateSpan.prototype.init = function(){
 			SOTE.util.zeroPad(time.getUTCMinutes(),2) + ":" + SOTE.util.zeroPad(time.getUTCSeconds(),2);
 		this.maps.push(new SOTE.widget.Map('mapdiv'+i,{baseLayer:"Terra_MODIS",time:timeString,hasControls:false}));
 	}
+
 	
 	var slider = document.createElement('div');
 	slider.setAttribute('id',this.id+'sliderDiv');
@@ -159,7 +168,16 @@ SOTE.widget.DateSpan.prototype.init = function(){
 
 	$('#'+this.id+'slider').slider(); 
 	$('#'+this.id+'slider').bind("change",{self:this},SOTE.widget.DateSpan.handleSlide);
+	
+	$('.ecbutton').bind("click",{self:this},SOTE.widget.DateSpan.toggle);
 
+	if(this.isCollapsed){
+		this.isCollapsed = false;
+		var e = new Object();
+		e.data = new Object();
+		e.data.self = this;
+		SOTE.widget.DateSpan.toggle(e);	
+	}
 
 	this.spanDate = document.getElementById(this.id+"spanContainerLabelDate");
 	this.spanDay = document.getElementById(this.id+"spanContainerLabelDay");
@@ -199,11 +217,58 @@ SOTE.widget.DateSpan.handleSlide = function(e,ui){
 	var value = e.target.value;
 	var self = e.data.self;
 	
+/*	var numOfDays = self.range/24/60/60/1000;
+	var increment = 100/numOfDays;
+	var prev = 0;
+	for(var i=increment; i<100; i+=increment){
+		var avg = (prev+i)/2;
+		if(value > prev && value < avg){
+			value = prev;
+			break;
+		}
+		if(value > avg && value < increment){
+			value = increment;
+			break;
+		}
+		prev = i;
+	}
+	$('#'+self.id+'slider').slider("value",value);*/
 	var x = (self.range - (24*60*60*1000)) * (100-value)/100;
 	var time = new Date(self.endDate.getTime() - x);
-	self.setVisualDate();
 	self.setValue(time.toUTCString());
+	self.setVisualDate();
+
 };
+
+SOTE.widget.DateSpan.toggle = function(e,ui){
+	var self = e.data.self;
+	if(self.isCollapsed){
+		$('.ecbutton').removeClass('expand').addClass('collapse');
+		$('a.ui-slider-handle').css('top','-142px');
+		self.isCollapsed = false;
+		self.showMaps();
+		self.updateComponent(self.cachedQs);
+	}
+	else{
+		$('.ecbutton').removeClass('collapse').addClass('expand');
+		$('a.ui-slider-handle').css('top','-25px');
+		self.isCollapsed = true;
+		self.hideMaps();
+
+	} 
+};
+
+SOTE.widget.DateSpan.prototype.hideMaps = function(){
+	for(var i=0; i<this.maps.length; ++i){
+		$("#"+this.maps[i].id).css('display','none');
+	}
+}
+
+SOTE.widget.DateSpan.prototype.showMaps = function(){
+	for(var i=0; i<this.maps.length; ++i){
+		$("#"+this.maps[i].id).css('display','block');
+	}
+}
 
 /**
   * Sets the selected date in the dateSpan from the passed in date string (ISO8601 format), if valid
@@ -219,11 +284,17 @@ SOTE.widget.DateSpan.prototype.setValue = function(value){
 };
 
 SOTE.widget.DateSpan.prototype.setVisualDate = function(){
-	this.spanDate.innerHTML = this.value.getUTCFullYear() + "-" + SOTE.util.zeroPad(eval(this.value.getUTCMonth()+1),2) + "-" + 
+	/*this.spanDate.innerHTML = this.value.getUTCFullYear() + "-" + SOTE.util.zeroPad(eval(this.value.getUTCMonth()+1),2) + "-" + 
 		SOTE.util.zeroPad(this.value.getUTCDate(),2);
 	//this.spanDay.innerHTML = SOTE.util.zeroPad(this.value.getUTCHours(),2) + ":" + 
 	//		SOTE.util.zeroPad(this.value.getUTCMinutes(),2) + ":" + SOTE.util.zeroPad(this.value.getUTCSeconds(),2);
 	this.spanDay.innerHTML = SOTE.util.DayNameFromUTCDayInt(this.value.getUTCDay());
+	*/
+	
+	var dateString = this.value.getUTCFullYear() + "-" + SOTE.util.zeroPad(eval(this.value.getUTCMonth()+1),2) + "-" + 
+		SOTE.util.zeroPad(this.value.getUTCDate(),2);
+	
+	$("a.ui-slider-handle").html("<span class='sliderText'>"+dateString+"</span>");
 };
 
 /**
@@ -252,16 +323,21 @@ SOTE.widget.DateSpan.prototype.updateComponent = function(qs){
 	var bbox = SOTE.util.extractFromQuery('map',qs);
 	var products = SOTE.util.extractFromQuery('products',qs);
 	var activeProducts = products.split(".");
-	var numOfDays = this.range/24/60/60/1000;
-	var startDate = new Date(this.endDate.getTime() - this.range);
-	for(var i=0; i<numOfDays; i++){
-		var time = new Date(startDate.getTime() + (i+1)*24*60*60*1000);
-		var timeString = time.getUTCFullYear() + "-" + SOTE.util.zeroPad(eval(time.getUTCMonth()+1),2) + "-" + 
-			SOTE.util.zeroPad(time.getUTCDate(),2);
-		timeString += "T" + SOTE.util.zeroPad(time.getUTCHours(),2) + ":" + 
-			SOTE.util.zeroPad(time.getUTCMinutes(),2) + ":" + SOTE.util.zeroPad(time.getUTCSeconds(),2);
-		this.maps[i].activateRelevantLayersDisableTheRest(activeProducts,timeString);
-		this.maps[i].setValue(bbox);
+	if(this.isCollapsed === false){
+		var numOfDays = this.range/24/60/60/1000;
+		var startDate = new Date(this.endDate.getTime() - this.range);
+		for(var i=0; i<numOfDays; i++){
+			var time = new Date(startDate.getTime() + (i+1)*24*60*60*1000);
+			var timeString = time.getUTCFullYear() + "-" + SOTE.util.zeroPad(eval(time.getUTCMonth()+1),2) + "-" + 
+				SOTE.util.zeroPad(time.getUTCDate(),2);
+			timeString += "T" + SOTE.util.zeroPad(time.getUTCHours(),2) + ":" + 
+				SOTE.util.zeroPad(time.getUTCMinutes(),2) + ":" + SOTE.util.zeroPad(time.getUTCSeconds(),2);
+			this.maps[i].activateRelevantLayersDisableTheRest(activeProducts,timeString);
+			this.maps[i].setValue(bbox);
+		}
+	}
+	else {
+		this.cachedQs = qs;
 	}
 };
 
