@@ -22,9 +22,9 @@ window.onload = function(){// Initialize "static" vars
 	// Create map
 	var m = new SOTE.widget.MapSote("map",{baseLayer:"Terra_MODIS"});
 	var a = new SOTE.widget.AccordionPicker("products",{dataSourceUrl:"data/ap.json"});
-	var h = new SOTE.widget.MenuPicker("hazard",{isCollapsible: true, dataSourceUrl:"data/mp_hazard.php"});
+	//var h = new SOTE.widget.MenuPicker("hazard",{dataSourceUrl:"data/mp_hazard.php"});
 	//var tr = new SOTE.widget.MenuPicker("transition",{dataSourceUrl:"data/mp_transition.php"});
-	var map = new SOTE.widget.DateSpan("time");
+	var map = new SOTE.widget.DateSpan("time",{hasThumbnail:false});
 
 }
 

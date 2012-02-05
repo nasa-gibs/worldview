@@ -91,10 +91,26 @@
 		</div>
 	</div>
 	<script type="text/javascript">
+
 		REGISTRY.addEventListener("map","time");
 		REGISTRY.addEventListener("time","map");
 		REGISTRY.addEventListener("products","map","time");
-		REGISTRY.addEventListener("hazard","products");
+		//REGISTRY.addEventListener("hazard","products");
+
+/*		function testQS(){
+			  var comps = REGISTRY.getUIComponents();
+              for (var i=0; i < comps.length; i++) {
+                comps[i].loadFromQuery(queryString);
+              }
+		}
+		
+		var queryString = window.location.hash.substring(1);
+		
+		if (queryString.length > 0) {
+            REGISTRY.addAllReadyCallback(testQS);
+		}
+*/		
+
 	</script>
 
 	<!-- BEGIN: Unica Page Tag -->
