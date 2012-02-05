@@ -1,6 +1,7 @@
 {
   
 	"expanded":"Dust Storms",
+	"selected": "Terra_MODIS.cartographic:national-boundaries",
 	"Dust Storms": [
 		{
 	        "label": "Corrected Reflectance (True Color)",
