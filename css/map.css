@@ -1,64 +1,4 @@
 
-div.olControlPermalink {
-	right: 10px;
-	bottom: 10px;
-}
-
-
-.olControlLayerSwitcher {
-    position: absolute;
-    top: 180px;
-    right: 0px;
-    width: 35em;
-    font-family: sans-serif;
-    font-weight: bold;
-    margin-top: 3px;
-    margin-left: 3px;
-    margin-bottom: 3px;
-    font-size: smaller;
-    color: white;
-    background-color: transparent;
-}
-
-.olControlLayerSwitcher .layersDiv {
-    padding-top: 5px;
-    padding-left: 1px;
-    padding-bottom: 5px;
-    padding-right: 3px;
-    background-color: darkblue;
-    width: 100%;
-
-}
-
-
-.olControlLayerSwitcher .layersDiv .baseLbl,
-.olControlLayerSwitcher .layersDiv .dataLbl {
-    margin-top: 3px;
-    margin-left: 3px;
-    margin-bottom: 3px;
-
-}
-
-.olControlLayerSwitcher .layersDiv .baseLayersDiv{
-     padding-left: 10px;
-        overflow: auto;
-        height: 80px;
-        opacity: 1 !important;
-}
-
-.olControlLayerSwitcher .layersDiv .dataLayersDiv {
-    padding-left: 10px;
-        overflow: auto;
-        height: 250px;
-        opacity: 1 !important;
-}
-
-.olControlLayerSwitcher .maximizeDiv,
-.olControlLayerSwitcher .minimizeDiv {
-    top: 5px;
-    right: 0px;
-}
-
 
 
 div.olControlScaleLineCustom {
@@ -178,6 +118,64 @@ div.olControlZoomPanelCustom .olControlZoomToMaxExtentItemInactive {
 }
 
 /*  End Zoom Panel */
+
+
+
+
+.olControlLayerSwitcher {
+    position: absolute;
+    top: 180px;
+    right: 0px;
+    width: 35em;
+    font-family: sans-serif;
+    font-weight: bold;
+    margin-top: 3px;
+    margin-left: 3px;
+    margin-bottom: 3px;
+    font-size: smaller;
+    color: white;
+    background-color: transparent;
+}
+
+.olControlLayerSwitcher .layersDiv {
+    padding-top: 5px;
+    padding-left: 1px;
+    padding-bottom: 5px;
+    padding-right: 3px;
+    background-color: darkblue;
+    width: 100%;
+
+}
+
+
+.olControlLayerSwitcher .layersDiv .baseLbl,
+.olControlLayerSwitcher .layersDiv .dataLbl {
+    margin-top: 3px;
+    margin-left: 3px;
+    margin-bottom: 3px;
+
+}
+
+.olControlLayerSwitcher .layersDiv .baseLayersDiv{
+     padding-left: 10px;
+        overflow: auto;
+        height: 80px;
+        opacity: 1 !important;
+}
+
+.olControlLayerSwitcher .layersDiv .dataLayersDiv {
+    padding-left: 10px;
+        overflow: auto;
+        height: 250px;
+        opacity: 1 !important;
+}
+
+.olControlLayerSwitcher .maximizeDiv,
+.olControlLayerSwitcher .minimizeDiv {
+    top: 5px;
+    right: 0px;
+}
+
 
 
 #title, #tags, #shortdesc {
