@@ -244,6 +244,7 @@ SOTE.widget.DateSpan.toggle = function(e,ui){
 	var self = e.data.self;
 	if(self.isCollapsed){
 		$('.ecbutton').removeClass('expand').addClass('collapse');
+		$('.ecbutton').attr("title","Hide Date Thumbnails");
 		$('a.ui-slider-handle').css('top','-142px');
 		self.isCollapsed = false;
 		self.showMaps();
@@ -251,6 +252,7 @@ SOTE.widget.DateSpan.toggle = function(e,ui){
 	}
 	else{
 		$('.ecbutton').removeClass('collapse').addClass('expand');
+		$('.ecbutton').attr("title","Show Date Thumbnails");
 		$('a.ui-slider-handle').css('top','-25px');
 		self.isCollapsed = true;
 		self.hideMaps();
