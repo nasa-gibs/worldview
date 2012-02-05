@@ -49,6 +49,7 @@ SOTE.widget.AccordionPicker = function(containerId, config){
     this.value = "";
 	//this.items = config.items;
 	this.selected = config.selected;
+	this.initRenderComplete = false;
 	this.dataSourceUrl = config.dataSourceUrl;
 	this.statusStr = "";
 	this.init();
@@ -71,7 +72,6 @@ SOTE.widget.AccordionPicker.prototype.init = function(){
 	
     if(REGISTRY){
  		REGISTRY.register(this.id,this);
- 		REGISTRY.markComponentReady(this.id);
 	}
 	else{
 		alert("No REGISTRY found!  Cannot register AccordionPicker!");
@@ -117,15 +117,15 @@ SOTE.widget.AccordionPicker.prototype.render = function(){
 		var catList = document.createElement("ul");
 		for(var i=0; i < this.items[category].length; i++){
 			var item = this.items[category][i];
-			if(defaultSelection === null){
+			/*if(defaultSelection === null){
 				defaultSelection = item.value;
-			}
+			}*/
 			var catListItem = document.createElement("li");
 			if(item.type !== "single" && item.type !== "multi"){
 				alert("Invalid list item!");
 			}
 			else {
-				var id = this.id + htmlCategory + "Item" + item.value;
+				var id = this.id + htmlCategory + "Item" + i;
 				var disabled = (item.disabled !== undefined && item.disabled === true)? "disabled":""; 
 				var type = (item.type === "single")? "radio":"checkbox"; 
 				catListItem.innerHTML = "<input value='"+item.value+"' class='accordionFormItem' name='"+this.id+item.type+"' id='"+id+"' type='"+type+"'"+" "+disabled+"/>";
@@ -133,10 +133,10 @@ SOTE.widget.AccordionPicker.prototype.render = function(){
 				catList.appendChild(catListItem);
 				
 				// If "selected" value is true in json, add current item to list of default selection(s)
-				if ((item.selected !== undefined) && (item.selected=="true"))
+				/*if ((item.selected !== undefined) && (item.selected=="true"))
 				{
 					defaultSelection = defaultSelection + "." + item.value;
-				}
+				}*/
 			} 
 		}
 		accordion.appendChild(catList);
@@ -144,20 +144,30 @@ SOTE.widget.AccordionPicker.prototype.render = function(){
 	this.container.appendChild(accordion);
 	
 	$('.accordion').accordion();
+	$('.accordion').bind('accordionchange',{self:this},SOTE.widget.AccordionPicker.handleCategorySwitch);
 	//$('.accordion').accordion("option","collapsible",true);
 	$('.accordionFormItem').bind('click',{self:this},SOTE.widget.AccordionPicker.handleSelection);
 
-	if(htmlExpanded !== undefined){
-		$('.accordion').accordion("activate","#"+this.id+htmlExpanded);
-	}
 	if(selected !== undefined && selected !== ""){
 		this.setValue(selected);
 	}
-	else {
-		this.setValue(defaultSelection);
+
+	if(htmlExpanded !== undefined){
+		$('.accordion').accordion("activate","#"+this.id+htmlExpanded);
+		var activeBox = document.getElementById(this.id+htmlExpanded+"Item"+"0");
+		activeBox.checked = true;
+		this.fire();
 	}
 
-	
+/*	else {
+		this.setValue(defaultSelection);
+	}*/
+
+		// Mark the component as ready in the registry if called via init() 
+	if ((this.initRenderComplete === false) && REGISTRY) {
+		this.initRenderComplete = true;
+		REGISTRY.markComponentReady(this.id);
+	}
 	
 	
 	
@@ -165,10 +175,28 @@ SOTE.widget.AccordionPicker.prototype.render = function(){
 
 SOTE.widget.AccordionPicker.handleSelection = function(e){
 	var self = e.data.self;
+	self.syncCheckboxes(e.target);
     self.value = SOTE.util.extractFromQuery(self.id,self.getValue());
 	self.fire();
-	
-	
+};
+
+SOTE.widget.AccordionPicker.handleCategorySwitch = function(e,ui){
+	var self = e.data.self;
+	var oldCategory = (ui.oldHeader[0].id);
+	var newCategory = (ui.newHeader[0].id);
+	var checkedRadio;
+	var radioButtons = document.getElementsByName(self.id+"single");
+	for(var i=0; i<radioButtons.length; ++i){
+		if(radioButtons[i].disabled === false && radioButtons[i].id.indexOf(oldCategory) != -1 && radioButtons[i].checked === true){
+			checkedRadio = radioButtons[i].value;
+		}
+	}
+	for(var i=0; i<radioButtons.length; ++i){
+		if(radioButtons[i].disabled === false && radioButtons[i].id.indexOf(newCategory) != -1 && radioButtons[i].value === checkedRadio){
+			radioButtons[i].checked = true;
+		}
+	}
+	var categoryTest;
 };
 
 
@@ -227,6 +255,30 @@ SOTE.widget.AccordionPicker.prototype.setValue = function(values){
 	this.fire();
 	
 	return this.validate();
+	
+};
+
+/**
+  * Sets the selected option(s) in the AccordionPicker from the passed in value(s), if valid 
+  *     [containerId]=[options] (options is a dot delimited string with the first item containing
+  *     a single select item, and the remaining items containing the multi-select items).
+  *
+  * @this {AccordionPicker}
+  * @param {String} value is a dot delimited string of the key(s) of the option(s) to be set as selected
+  * @returns {boolean} true or false depending on if the new value(s) validates
+  *
+*/
+SOTE.widget.AccordionPicker.prototype.syncCheckboxes = function(targetEl){	
+	var targetState = targetEl.checked;
+	var checkboxes = document.getElementsByName(this.id+"multi");
+	
+	for(var i=0; i < checkboxes.length; ++i){
+			if(checkboxes[i].value === targetEl.value && checkboxes[i].disabled === false){
+				checkboxes[i].checked = targetState;
+			}
+	}
+	
+	return;
 	
 };
 
