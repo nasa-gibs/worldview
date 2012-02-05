@@ -1066,6 +1066,18 @@
 	        "type": "multi"
 		},		
 		{
+	        "label": "Fires (Past 24 Hours)",
+	        "sublabel": "MODIS Fire and Thermal Anomalies",
+	        "value": "fires24",
+	        "type": "multi"
+		},
+		{
+	        "label": "Fires (Past 48 Hours)",
+	        "sublabel": "MODIS Fire and Thermal Anomalies",
+	        "value": "fires48",
+	        "type": "multi"
+		},
+		{
 	        "label": "Land Surface Temperature (Day)",
 	        "sublabel": "Terra / MODIS",
 	        "value": "MODIS_Terra_Land_Surface_Temp_Day",
@@ -1337,7 +1349,7 @@
 	        "sublabel": "SEDAC / National Boundaries",
 	        "value": "cartographic:national-boundaries",
 	        "type": "multi",
-	        "selected": "true"
+	        "selected": "false"
 		},
         {
 	        "label": "Population Density",
