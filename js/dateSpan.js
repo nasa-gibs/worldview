@@ -157,7 +157,7 @@ SOTE.widget.DateSpan.prototype.init = function(){
 			SOTE.util.zeroPad(time.getUTCDate(),2);
 		timeString += "T" + SOTE.util.zeroPad(time.getUTCHours(),2) + ":" + 
 			SOTE.util.zeroPad(time.getUTCMinutes(),2) + ":" + SOTE.util.zeroPad(time.getUTCSeconds(),2);
-		this.maps.push(new SOTE.widget.Map('mapdiv'+i,{baseLayer:"Terra_MODIS",time:timeString,hasControls:false}));
+		this.maps.push(new SOTE.widget.Map('mapdiv'+i,{baseLayer:"MODIS_Terra_CorrectedReflectance_TrueColor",time:timeString,hasControls:false}));
 	}
 
 	
