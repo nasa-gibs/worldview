@@ -20,7 +20,7 @@ window.onload = function(){// Initialize "static" vars
 	
 
 	// Create map
-	var m = new SOTE.widget.MapSote("map",{baseLayer:"Terra_MODIS"});
+	var m = new SOTE.widget.MapSote("map",{baseLayer:"MODIS_Terra_CorrectedReflectance_TrueColor"});
 	var a = new SOTE.widget.AccordionPicker("products",{dataSourceUrl:"data/ap.json"});
 	//var h = new SOTE.widget.MenuPicker("hazard",{dataSourceUrl:"data/mp_hazard.php"});
 	//var tr = new SOTE.widget.MenuPicker("transition",{dataSourceUrl:"data/mp_transition.php"});
