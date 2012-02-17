@@ -117,9 +117,6 @@ SOTE.widget.AccordionPicker.prototype.render = function(){
 		var catList = document.createElement("ul");
 		for(var i=0; i < this.items[category].length; i++){
 			var item = this.items[category][i];
-			/*if(defaultSelection === null){
-				defaultSelection = item.value;
-			}*/
 			var catListItem = document.createElement("li");
 			if(item.type !== "single" && item.type !== "multi"){
 				alert("Invalid list item!");
@@ -130,13 +127,7 @@ SOTE.widget.AccordionPicker.prototype.render = function(){
 				var type = (item.type === "single")? "radio":"checkbox"; 
 				catListItem.innerHTML = "<input value='"+item.value+"' class='accordionFormItem' name='"+this.id+item.type+"' id='"+id+"' type='"+type+"'"+" "+disabled+"/>";
 				catListItem.innerHTML += "<label for='"+id+"'><span class='accordionLabel'>"+item.label+"</span><span class='accordionSub'>"+item.sublabel+"</span></label>";
-				catList.appendChild(catListItem);
-				
-				// If "selected" value is true in json, add current item to list of default selection(s)
-				/*if ((item.selected !== undefined) && (item.selected=="true"))
-				{
-					defaultSelection = defaultSelection + "." + item.value;
-				}*/
+				catList.appendChild(catListItem);				
 			} 
 		}
 		accordion.appendChild(catList);
