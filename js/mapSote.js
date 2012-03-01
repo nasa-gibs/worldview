@@ -38,6 +38,9 @@ SOTE.widget.MapSote = function(containerId, config)
 	this.map.events.register("movestart", this, this.handleMapMoveStart);
 	this.map.events.register("zoomend", this, this.handleMapZoomEnd);  
 	
+	// Force "zoom end" for widget init
+	this.handleMapZoomEnd(null);
+	
 };
 
 
