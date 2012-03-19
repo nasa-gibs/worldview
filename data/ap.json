@@ -901,7 +901,25 @@
 	        "sublabel": "Aqua / AIRS",
 	        "value": "AIRS_Precipitation_Night",
 	        "type": "multi"
-		}
+		},
+        {
+             "label": "Flood Hazard: Frequency and Distribution",
+             "sublabel": "SEDAC Global Flood Hazard Frequency and Distribution, v1 (1985–2003)",
+             "value": "ndh-flood-hazard-frequency-distribution",
+             "type": "multi"
+        },
+        {
+             "label": "Flood Hazard: Mortality Risk",
+             "sublabel": "SEDAC Global Flood Mortality Risks and Distribution, v1 (2000)",
+             "value": "ndh-flood-mortality-risks-distribution",
+             "type": "multi"
+        },
+        {
+             "label": "Flood Hazard: Economic Risk",
+             "sublabel": "SEDAC Global Flood Proportional Economic Loss Risk Deciles, v1 (2000)",
+             "value": "ndh-flood-proportional-economic-loss-risk-deciles",
+             "type": "multi"
+        }
 	],
 
 
