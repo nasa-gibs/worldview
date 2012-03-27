@@ -282,7 +282,7 @@ SOTE.widget.Map.prototype.init = function(){
 		    this.map.addControl(zoomPanel);
 		    
 	        // Add navigation controls
-        	this.map.addControl(new OpenLayers.Control.KeyboardDefaults());
+        	//this.map.addControl(new OpenLayers.Control.KeyboardDefaults());
         	this.map.addControl(new OpenLayers.Control.Navigation({
         			dragPanOptions: {
 	                    enableKinetic: true
