@@ -28,22 +28,12 @@ div.olControlScaleLineCustom {
 
 
 /*  CSS for full-screen map div and mobile device support  */
-html, body {
-    margin  : 0;
-    padding : 0;
-    height  : 100%;
-    width   : 100%;
-}
 @media only screen and (max-width: 600px) {
     html, body {
         height  : 117%;
     }
 }
-#mapdiv {
-    width    : 100%;
-    position : relative;
-    height   : 100%;
-}
+
 .olControlAttribution {
     position      : absolute;
     font-size     : 10px;
