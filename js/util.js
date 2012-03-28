@@ -19,6 +19,19 @@ SOTE.util.extractFromQuery = function(key,qs){
 		return val[1];
 };
 
+SOTE.util.throwError = function(errorTextHTML){
+	o = new YAHOO.widget.Panel("WVerror", {width:"300px", zIndex:1020, visible:false } );
+	o.setHeader('&nbsp;&nbsp;&nbsp;&nbsp;Warning');
+	o.setBody(errorTextHTML);
+	o.render(document.body);
+	o.show();
+	o.center();
+	o.hideEvent.subscribe(function(i) {
+    	setTimeout(function() {o.destroy();}, 25);
+	});
+
+};
+
 /**
   * Generates a request to the server and forwards the response to the success/failure callback
   * Usage: SOTE.util.getJSON(<url>,<args to pass through>,<success callback>,<failure callback>);

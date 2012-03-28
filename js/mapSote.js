@@ -253,14 +253,18 @@ SOTE.widget.MapSote.prototype.updateComponent = function(querystring)
 	// Apply querystring request to map
 	
 	// Extract the baselayer and overlays
-	var activeLayerNames = null;
+	var activeLayerNames = new Array();
 	if (activeLayers != ""){
-		activeLayerNames = activeLayers.split(".");
+		var a = activeLayers.split(".");
+		for(var i=1; i<a.length; ++i){
+			activeLayerNames.push(a[i]);
+		}
+		
 	}
 	if ((activeLayerNames == null) || (activeLayerNames.length < 1))
 	{
-		alert("No products provided in querystring to soteMap class");
-		return;
+		//alert("No products provided in querystring to soteMap class");
+		return; 
 	}
 
 	// Determine appropriate layer opacities based on currently-selected time

@@ -50,8 +50,8 @@
 
 
 	<!-- External Javascript includes -->
-	<script type="text/javascript" src="js/ext/openlayers-2.11/OpenLayers.js?mobile"></script>
-<!-- 	<script type="text/javascript" src="js/ext/openlayers-2.11/OpenLayers-unminified.js?mobile"></script> -->
+	<!--<script type="text/javascript" src="js/ext/openlayers-2.11/OpenLayers.js?mobile"></script>-->
+ 	<script type="text/javascript" src="js/ext/openlayers-2.11/OpenLayers-unmin.js?mobile"></script>
 	<script type="text/javascript" src="js/ext/datejs/date.js"></script>
 	<script type="text/javascript" src="js/ext/colorbox/jquery.colorbox-min.js"></script>
 
@@ -75,13 +75,14 @@
 		<div data-role="content">
 			<div id="banner"><img src='images/worldview.png' usemap="#bannermap" /></div>
 			<div id="aboutus"><a id='aboutus_link' class='aboutus_link' href='javascript:showOverlay();'><img src='images/aboutIcon.png' /></a></div>
+			<div id="permalink"><a id='perma_link' class='aboutus_link' href='javascript:showPermalink();'><img src='images/permalinkIcon.png' /></a></div>
 			<div id="hazard"></div>
 			<div id="products"></div>
 			<div id="map"></div>
 			<div class="horizontalContainer">
-				<div id="time" ></div>
+				<div id="time"></div>
 			</div>
-			
+			 
 			
 <!-- 			<map name="bannermap">
 			  <area shape="rect" alt="http://lance.nasa.gov" coords="253,42,370,53" href="http://lance.nasa.gov" target="_blank" />
@@ -98,19 +99,21 @@
 		REGISTRY.addEventListener("products","map","time");
 		//REGISTRY.addEventListener("hazard","products");
 
-/*		function testQS(){
-			  var comps = REGISTRY.getUIComponents();
+		function testQS(){
+			  var comps = REGISTRY.getComponents();
               for (var i=0; i < comps.length; i++) {
-                comps[i].loadFromQuery(queryString);
+              	if(typeof comps[i].obj.loadFromQuery == 'function'){
+                	comps[i].obj.loadFromQuery(queryString);
+               	}
               }
 		}
 		
-		var queryString = window.location.hash.substring(1);
+		var queryString = window.location.search.substring(1);
 		
 		if (queryString.length > 0) {
             REGISTRY.addAllReadyCallback(testQS);
 		}
-*/		
+		
 
 	</script>
 

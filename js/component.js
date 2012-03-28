@@ -6,7 +6,7 @@ if (typeof SOTE=="undefined") {
     * @description Takes out all SOTE components, widgets, and utilities out of the global namespace.
     *
   */
-  var SOTE = {};
+  var SOTE = new Object();
 }
 
 // Creates namespace(s) under SOTE

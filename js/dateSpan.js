@@ -235,8 +235,12 @@ SOTE.widget.DateSpan.handleSlide = function(e,ui){
 	$('#'+self.id+'slider').slider("value",value);*/
 	var x = (self.range - (24*60*60*1000)) * (100-value)/100;
 	var time = new Date(self.endDate.getTime() - x);
-	self.setValue(time.toUTCString());
-	self.setVisualDate();
+	if(self.value.getTime() !== time.getTime()){
+		self.value = time.clone();
+		self.setVisualDate();
+		self.fire();
+	}
+	
 
 };
 
@@ -281,8 +285,19 @@ SOTE.widget.DateSpan.prototype.showMaps = function(){
   *
 */
 SOTE.widget.DateSpan.prototype.setValue = function(value){
-	this.value = new Date(value);
-	this.fire();
+	var d = SOTE.util.UTCDateFromISO8601String(value);
+	var startDate = this.endDate.getTime() - (this.range -24*60*60*1000);
+	if(d.getTime() <= this.endDate.getTime() && d.getTime() >= startDate)
+	{
+		this.value = d.clone();
+		var visualPositionDifference = ((this.endDate.getTime() - this.value.getTime())/(this.range - 24*60*60*1000))*100;
+		$('#'+this.id+'slider').val(100-visualPositionDifference).slider("refresh");
+		this.setVisualDate();
+		this.fire();
+	}
+	else{
+		SOTE.util.throwError("The date in your permalink has expired.  As of right now, Worldview only retains the past 7 days of data.  The date has been adjusted to today's date.");
+	}
 };
 
 SOTE.widget.DateSpan.prototype.setVisualDate = function(){
@@ -293,8 +308,8 @@ SOTE.widget.DateSpan.prototype.setVisualDate = function(){
 	this.spanDay.innerHTML = SOTE.util.DayNameFromUTCDayInt(this.value.getUTCDay());
 	*/
 	
-	var dateString = this.value.getUTCFullYear() + "-" + SOTE.util.zeroPad(eval(this.value.getUTCMonth()+1),2) + "-" + 
-		SOTE.util.zeroPad(this.value.getUTCDate(),2);
+	var dateString = this.value.getFullYear() + "-" + SOTE.util.zeroPad(eval(this.value.getMonth()+1),2) + "-" + 
+		SOTE.util.zeroPad(this.value.getDate(),2);
 	
 	$("a.ui-slider-handle").html("<span class='sliderText'>"+dateString+"</span>");
 };
@@ -307,10 +322,7 @@ SOTE.widget.DateSpan.prototype.setVisualDate = function(){
   *
 */
 SOTE.widget.DateSpan.prototype.getValue = function(){
-	var timeString = this.value.getUTCFullYear() + "-" + SOTE.util.zeroPad(eval(this.value.getUTCMonth()+1),2) + "-" + 
-		SOTE.util.zeroPad(this.value.getUTCDate(),2) + "T" + SOTE.util.zeroPad(this.value.getUTCHours(),2) + ":" + 
-		SOTE.util.zeroPad(this.value.getUTCMinutes(),2) + ":" + SOTE.util.zeroPad(this.value.getUTCSeconds(),2);
-	return ""+this.id +"="+timeString+"&transition=standard";
+	return ""+this.id +"="+SOTE.util.ISO8601StringFromDate(this.value)+"&transition=standard";
 };
 
 /**
@@ -324,7 +336,11 @@ SOTE.widget.DateSpan.prototype.getValue = function(){
 SOTE.widget.DateSpan.prototype.updateComponent = function(qs){
 	var bbox = SOTE.util.extractFromQuery('map',qs);
 	var products = SOTE.util.extractFromQuery('products',qs);
-	var activeProducts = products.split(".");
+	var a = products.split(".");
+	var activeProducts = new Array();
+	for(var i=1; i < a.length; ++i){
+		activeProducts.push(a[i])
+	}
 	if(this.isCollapsed === false){
 		var numOfDays = this.range/24/60/60/1000;
 		var startDate = new Date(this.endDate.getTime() - this.range);
@@ -352,7 +368,7 @@ SOTE.widget.DateSpan.prototype.updateComponent = function(qs){
   *
 */
 SOTE.widget.DateSpan.prototype.loadFromQuery = function(qs){
-  // Content
+	return this.setValue(SOTE.util.extractFromQuery(this.id,qs));
 };
 
 /**

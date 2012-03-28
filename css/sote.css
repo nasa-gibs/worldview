@@ -11,12 +11,14 @@ div {display:block;}
 #permpanel h3 {color:#FFFFFF; font: 12px "Gill Sans", sans-serif; font-weight:100; text-decoration:none;}
 #permpanel input[type='text']{width:280px;}
 
-div.horizontalContainer {width:100%; display:block; float:left; min-height:40px; background-color:rgba(0,0,0,0.93); position:absolute; overflow:hidden; bottom:0; z-index:1002; }
+div.horizontalContainer {width:100%; display:block; float:left; min-height:40px; background-color:rgba(0,0,0,0.8); position:absolute; overflow:hidden; bottom:0; z-index:1002; }
 #aboutus,#permalink {float:right; margin-top:5px; position:relative; z-index:1002;display:block; width:50px; }
 #aboutus,#permalink img {width:50px; height:44.5px; border:none;}
 #aboutus,#permalink a{text-decoration:none; border:none;}
 
-.hidden {display:none;}
+#permalink_content {margin-top:10px;}
+
+.hidden {display:none;} 
 
 #products { z-index:1006; display:block; float:left;  position:absolute; left:0; top:15%;}
 

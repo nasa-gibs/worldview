@@ -271,7 +271,7 @@ SOTE.util.Registry = function () {
           found = true;
         }
       }
-	
+	 
       if (!found) {
         allReady = false;
 	break;

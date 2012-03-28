@@ -17,7 +17,6 @@ window.onload = function(){// Initialize "static" vars
 		ieWarningOverlay.show();
 		ieWarningOverlay.center();
 	}
-	
 
 	// Create map
 	var m = new SOTE.widget.MapSote("map",{baseLayer:"MODIS_Terra_CorrectedReflectance_TrueColor"});
@@ -53,6 +52,48 @@ function showOverlay(){
 	
 	this.overlay.show();
 	this.overlay.center();
+
+}
+
+function showPermalink(){
+	if(this.permOverlay === undefined){
+		this.permOverlay = new YAHOO.widget.Panel("panel_perm", {width:"300px", zIndex:1020, visible:false } );
+		var item = 	"<div id='permpanel' >"+
+			"<!-- <h3>Permalink:</h3> -->"+
+			"<span style='font-weight:400; font-size:12px; line-spacing:24px; '><i>Copy and paste the following link to share this view:</i></span>" + 
+			"<input type='text' value='' name='permalink_content' id='permalink_content' />" +
+			"<p><br />Note: Worldview contains only the most recent 7 days of data, this link will expire after the currently selected time is older than 7 days.</p>" +
+		"</div>";
+		this.permOverlay.setHeader('&nbsp;&nbsp;&nbsp;&nbsp;Permalink');
+		this.permOverlay.setBody(item);
+		this.permOverlay.render(document.body);
+	}
+	var qs = "?";
+	var comps = REGISTRY.getComponents();
+  	for (var i=0; i < comps.length; i++) {
+  		if(typeof comps[i].obj.getValue == 'function'){
+    		qs+= comps[i].obj.getValue() + "&";
+   		}
+  	}
+  	
+  	var map = SOTE.util.extractFromQuery("map",qs);
+  	var products = SOTE.util.extractFromQuery("products",qs);
+  	var time = SOTE.util.extractFromQuery("time",qs);
+  	
+  	qs = "?map="+map+"&products="+products+"&time="+time;
+  	
+  	var url = window.location.href;
+  	var prefix = url.split("?")[0];
+  	//alert(prefix);
+  	prefix = (prefix !== null && prefix !== undefined)? prefix: url;
+  	
+  	$('#permalink_content').val(prefix+qs);
+
+	this.permOverlay.show();
+	this.permOverlay.center();
+	
+	document.getElementById('permalink_content').focus();
+  	document.getElementById('permalink_content').select();
 
 }
 

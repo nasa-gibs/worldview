@@ -137,6 +137,9 @@ SOTE.widget.Map = function(containerId, config){
 
 	// Set up callback for when pan/zoom ends to auto-call the "fire" function
 	this.map.events.register("moveend", this, this.handleMapMoveEnd); 
+	if(REGISTRY){
+ 		REGISTRY.markComponentReady(this.id);
+	}
 };
 
 
@@ -315,15 +318,15 @@ SOTE.widget.Map.prototype.init = function(){
 					fontOpacity: 1.0
 				}
 			);			
-			this.graticule = new OpenLayers.Control.Graticule({
+		/*	this.graticule = new OpenLayers.Control.Graticule({
 				layerName: 'ol_graticule',
                 numPoints: 2, 
                 labelled: true,
                 lineSymbolizer: graticuleLineStyle,
                 labelSymbolizer: graticuleLabelStyle
             });
-            
-			this.map.addControl(this.graticule);
+        */     
+		//	this.map.addControl(this.graticule);
 			
 			// Set mousewheel sensitivity
 			var navControl = this.map.getControlsByClass("OpenLayers.Control.Navigation")[0];
