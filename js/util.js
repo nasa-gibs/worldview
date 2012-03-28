@@ -75,9 +75,16 @@ SOTE.util.UTCDateFromISO8601String = function( dateAsString )
 	var minute = hhmmss.split(":")[1];
 	var second = hhmmss.split(":")[2];
 	
-  	return new Date( Date.UTC( year,month,day,hour,minute,second ));
+  	return new Date( year,month,day,hour,minute,second );
 }
 
+SOTE.util.ISO8601StringFromDate = function( d )
+{
+	var timeString = d.getFullYear() + "-" + SOTE.util.zeroPad(eval(d.getMonth()+1),2) + "-" + 
+		SOTE.util.zeroPad(d.getDate(),2) + "T" + SOTE.util.zeroPad(d.getHours(),2) + ":" + 
+		SOTE.util.zeroPad(d.getMinutes(),2) + ":" + SOTE.util.zeroPad(d.getSeconds(),2);
+	return timeString;
+}
 
 /**
  * Returns the name of the integer day of week specified

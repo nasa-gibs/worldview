@@ -49,6 +49,7 @@ SOTE.widget.AccordionPicker = function(containerId, config){
     this.value = "";
 	//this.items = config.items;
 	this.selected = config.selected;
+	this.expanded = null;
 	this.initRenderComplete = false;
 	this.dataSourceUrl = config.dataSourceUrl;
 	this.statusStr = "";
@@ -93,7 +94,6 @@ SOTE.widget.AccordionPicker.prototype.render = function(){
 	var htmlExpanded;
 	var selected;
 	var defaultSelection = null; 
-
 	var accordion = document.createElement("form");
 	accordion.setAttribute("class","accordion");
 	accordion.setAttribute("id",this.id+"accordion");
@@ -133,22 +133,31 @@ SOTE.widget.AccordionPicker.prototype.render = function(){
 		accordion.appendChild(catList);
 	}
 	this.container.appendChild(accordion);
-	
+	var accordionToggler = document.createElement("a");
+	accordionToggler.setAttribute("class","accordionToggler atcollapse");
+	this.isCollapsed = false;
+	var e = new Object();
+	e.data = new Object();
+	e.data.self = this;
+	//SOTE.widget.AccordionPicker.toggle(e,null);
+	this.container.appendChild(accordionToggler);
+	$('.accordionToggler').bind('click',{self:this},SOTE.widget.AccordionPicker.toggle);
 	$('.accordion').accordion();
 	$('.accordion').bind('accordionchange',{self:this},SOTE.widget.AccordionPicker.handleCategorySwitch);
 	//$('.accordion').accordion("option","collapsible",true);
 	$('.accordionFormItem').bind('click',{self:this},SOTE.widget.AccordionPicker.handleSelection);
 
 	if(selected !== undefined && selected !== ""){
-		this.setValue(selected);
+		this.setValue(htmlExpanded + "." + selected);
 	}
 
-	if(htmlExpanded !== undefined){
+	/*if(htmlExpanded !== undefined){
 		$('.accordion').accordion("activate","#"+this.id+htmlExpanded);
+		this.expanded = this.id + htmlExpanded;
 		var activeBox = document.getElementById(this.id+htmlExpanded+"Item"+"0");
-		activeBox.checked = true;
+		if(activeBox !== null) activeBox.checked = true;
 		this.fire();
-	}
+	}*/ 
 
 /*	else {
 		this.setValue(defaultSelection);
@@ -171,23 +180,56 @@ SOTE.widget.AccordionPicker.handleSelection = function(e){
 	self.fire();
 };
 
+SOTE.widget.AccordionPicker.toggle = function(e,ui){
+	var self = e.data.self;
+	if(self.isCollapsed){
+		$('.accordionToggler').removeClass('atexpand').addClass('atcollapse');
+		$('.accordionToggler').attr("title","Hide Products");
+		$('.accordion').css('display','block');
+		self.isCollapsed = false;
+	}
+	else{
+		$('.accordionToggler').removeClass('atcollapse').addClass('atexpand');
+		$('.accordionToggler').attr("title","Show Products");
+		$('.accordion').css('display','none');
+		self.isCollapsed = true;
+	} 	
+};
+
 SOTE.widget.AccordionPicker.handleCategorySwitch = function(e,ui){
 	var self = e.data.self;
 	var oldCategory = (ui.oldHeader[0].id);
 	var newCategory = (ui.newHeader[0].id);
-	var checkedRadio;
-	var radioButtons = document.getElementsByName(self.id+"single");
-	for(var i=0; i<radioButtons.length; ++i){
-		if(radioButtons[i].disabled === false && radioButtons[i].id.indexOf(oldCategory) != -1 && radioButtons[i].checked === true){
-			checkedRadio = radioButtons[i].value;
+	var checkedRadio = null;
+	var anyChecked = false;
+	
+	if(self.expanded !== newCategory){
+		self.expanded = newCategory;
+		var radioButtons = document.getElementsByName(self.id+"single");
+		for(var i=0; i<radioButtons.length; ++i){
+			if(radioButtons[i].disabled === false && radioButtons[i].id.indexOf(oldCategory) != -1 && radioButtons[i].checked === true){
+				checkedRadio = radioButtons[i].value;
+			}
 		}
-	}
-	for(var i=0; i<radioButtons.length; ++i){
-		if(radioButtons[i].disabled === false && radioButtons[i].id.indexOf(newCategory) != -1 && radioButtons[i].value === checkedRadio){
-			radioButtons[i].checked = true;
+		if(checkedRadio !== null){
+			for(var i=0; i<radioButtons.length; ++i){
+				if(radioButtons[i].disabled === false && radioButtons[i].id.indexOf(newCategory) != -1 && radioButtons[i].value === checkedRadio){
+					radioButtons[i].checked = true;
+					anyChecked = true;
+				}
+			}
 		}
+		
+		if(!anyChecked){
+			var activeBox = document.getElementById(newCategory+"Item"+"0");
+			var radioString = new String(self.id+"single");
+			if(activeBox !== null && activeBox.name == radioString) self.setValue(self.expanded + "." + activeBox.value);
+		}
+		
+		var categoryTest;
 	}
-	var categoryTest;
+	$('.accordion').blur();
+
 };
 
 
@@ -220,17 +262,37 @@ SOTE.widget.AccordionPicker.prototype.fire = function(){
 */
 SOTE.widget.AccordionPicker.prototype.setValue = function(values){
 	var selectedItems = values.split(".");
-	var base = selectedItems[0];
+	var expanded = selectedItems[0];
+	var base = selectedItems[1];
 	var radioButtons = document.getElementsByName(this.id+"single");
+	var found = false;
+	
+	var expandedName = expanded;
+	var reg = new RegExp(this.id+"(.+)");
+	if(reg.test(expanded) == false){
+		expandedName = this.id + expanded;
+	}
+	if(this.expanded === null || this.expanded !== expandedName) {
+		$('.accordion').accordion("activate","#"+expandedName);
+		this.expanded = expandedName;
+	}
 	
 	for(var i=0; i < radioButtons.length; ++i){
-		if(radioButtons[i].value === base && radioButtons[i].disabled === false){
+		if(radioButtons[i].value === base && radioButtons[i].disabled === false && radioButtons[i].id.indexOf(expanded) != -1 ){
 			radioButtons[i].checked = true;
-		}
-		else {
-			radioButtons[i].checked = false;
+			found = true;
+			break;
 		}
 	}
+	
+	if(!found){
+		for(var i=0; i < radioButtons.length; ++i){
+			if(radioButtons[i].value === base && radioButtons[i].disabled === false){
+				radioButtons[i].checked = true;
+			}
+		}
+	}
+	
 	
 	var checkboxes = document.getElementsByName(this.id+"multi");
 	
@@ -244,7 +306,7 @@ SOTE.widget.AccordionPicker.prototype.setValue = function(values){
 	
 	this.value = values;
 	this.fire();
-	
+	$('.accordion').blur();
 	return this.validate();
 	
 };
@@ -283,6 +345,7 @@ SOTE.widget.AccordionPicker.prototype.syncCheckboxes = function(targetEl){
 */
 SOTE.widget.AccordionPicker.prototype.getValue = function(){
 	var selected = new Array();
+	var added = new Object();
 	var radioButtons = document.getElementsByName(this.id+"single");
 	
 	for(var i=0; i < radioButtons.length; ++i){
@@ -298,11 +361,18 @@ SOTE.widget.AccordionPicker.prototype.getValue = function(){
 	
 	for(var i=0; i < checkboxes.length; ++i){
 		if(checkboxes[i].checked === true){
-			selected.push(checkboxes[i].value);
+			if(! (checkboxes[i].value in added) ){
+				selected.push(checkboxes[i].value);
+				added[checkboxes[i].value] = 1;
+			}
 		}
 	}
 	
-	var value = selected.join(".");
+	var reg = new RegExp(this.id+"(.+)");
+	
+	var expanded = reg.exec(this.expanded);
+	
+	var value = expanded[1] + "." + selected.join(".");
 	return this.id + "=" + value;
 };
 
