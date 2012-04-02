@@ -158,6 +158,7 @@ SOTE.widget.DateSpan.prototype.init = function(){
 		timeString += "T" + SOTE.util.zeroPad(time.getUTCHours(),2) + ":" + 
 			SOTE.util.zeroPad(time.getUTCMinutes(),2) + ":" + SOTE.util.zeroPad(time.getUTCSeconds(),2);
 		this.maps.push(new SOTE.widget.Map('mapdiv'+i,{baseLayer:"MODIS_Terra_CorrectedReflectance_TrueColor",time:timeString,hasControls:false}));
+		$('#mapdiv'+i).bind("click",{self:this,time:time.clone()},SOTE.widget.DateSpan.snapToTime);
 	}
 
 	
@@ -168,6 +169,7 @@ SOTE.widget.DateSpan.prototype.init = function(){
 
 	$('#'+this.id+'slider').slider(); 
 	$('#'+this.id+'slider').bind("change",{self:this},SOTE.widget.DateSpan.handleSlide);
+	$('#'+this.id+'slider').siblings('.ui-slider').bind("vmouseup",{self:this},SOTE.widget.DateSpan.snap);
 	
 	$('.ecbutton').bind("click",{self:this},SOTE.widget.DateSpan.toggle);
 
@@ -262,6 +264,35 @@ SOTE.widget.DateSpan.toggle = function(e,ui){
 		self.hideMaps();
 
 	} 
+};
+
+SOTE.widget.DateSpan.snap = function(e,ui){
+	var self = e.data.self;
+	var value = $("#"+self.id+"slider").val();
+	var x = (self.range - (24*60*60*1000)) * (100-value)/100;
+	var time = new Date(self.endDate.getTime() - x);
+	time.setHours(12);
+	time.setMinutes(0);
+	time.setSeconds(0);
+	time = new Date(time.getTime() - time.getTimezoneOffset()*60000);
+	var timeString = time.getUTCFullYear() + "-" + SOTE.util.zeroPad(eval(time.getUTCMonth()+1),2) + "-" + 
+	SOTE.util.zeroPad(time.getUTCDate(),2);
+	timeString += "T" + SOTE.util.zeroPad(time.getUTCHours(),2) + ":" + 
+	SOTE.util.zeroPad(time.getUTCMinutes(),2) + ":" + SOTE.util.zeroPad(time.getUTCSeconds(),2);
+	self.setValue(timeString);
+};
+
+SOTE.widget.DateSpan.snapToTime = function(e,ui){
+	var self = e.data.self;
+	var time = e.data.time;
+	time = new Date(time.getTime() - time.getTimezoneOffset()*60000);
+	
+	var timeString = time.getUTCFullYear() + "-" + SOTE.util.zeroPad(eval(time.getUTCMonth()+1),2) + "-" + 
+		SOTE.util.zeroPad(time.getUTCDate(),2);
+	timeString += "T" + SOTE.util.zeroPad(time.getUTCHours(),2) + ":" + 
+		SOTE.util.zeroPad(time.getUTCMinutes(),2) + ":" + SOTE.util.zeroPad(time.getUTCSeconds(),2);
+
+	self.setValue(timeString);
 };
 
 SOTE.widget.DateSpan.prototype.hideMaps = function(){
