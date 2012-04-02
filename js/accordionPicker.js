@@ -220,11 +220,11 @@ SOTE.widget.AccordionPicker.handleCategorySwitch = function(e,ui){
 			}
 		}
 		
-		if(!anyChecked){
+		/*if(!anyChecked){
 			var activeBox = document.getElementById(newCategory+"Item"+"0");
 			var radioString = new String(self.id+"single");
 			if(activeBox !== null && activeBox.name == radioString) self.setValue(self.expanded + "." + activeBox.value);
-		}
+		}*/
 		
 		var categoryTest;
 	}
