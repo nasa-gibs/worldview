@@ -1356,12 +1356,6 @@
 		),
         array(
 	        "label" =>  "Population Density",
-	        "sublabel" =>  "SEDAC Gridded Population of the World, v3",
-	        "value" =>  "population",
-	        "type" =>  "multi"
-		),
-        array(
-	        "label" =>  "Population Density",
 	        "sublabel" =>  "SEDAC GRUMP v1 Population Count 2000",
 	        "value" =>  "grump-v1-population-count_2000",
 	        "type" =>  "multi"
@@ -1376,12 +1370,6 @@
 
 
 	"Other" =>  array(
-        array(
-	        "label" =>  "Population Density",
-	        "sublabel" =>  "SEDAC Gridded Population of the World, v3",
-	        "value" =>  "population",
-	        "type" =>  "multi"
-		),
         array(
 	        "label" =>  "Population Density",
 	        "sublabel" =>  "SEDAC GRUMP v1 Population Count 2000",
