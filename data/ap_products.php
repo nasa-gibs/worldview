@@ -902,6 +902,12 @@
 	        "value" =>  "AIRS_Precipitation_Night",
 	        "type" =>  "multi"
 		),
+		array(
+	        "label" =>  "Land-Water Mask",
+	        "sublabel" =>  "Terra-Aqua / MODIS",
+	        "value" =>  "MODIS_Land_Water_Mask",
+	        "type" =>  "multi"
+		),		
         array(
              "label" =>  "Flood Hazard:Frequency and Distribution",
              "sublabel" =>  "SEDAC Global Flood Hazard Frequency and Distribution, v1 (1985–2003)",
@@ -1168,6 +1174,12 @@
 	        "value" =>  "MODIS_Aqua_Water_Vapor_5km_Night",
 	        "type" =>  "multi"
 		),
+		array(
+	        "label" =>  "Land-Water Mask",
+	        "sublabel" =>  "Terra-Aqua / MODIS",
+	        "value" =>  "MODIS_Land_Water_Mask",
+	        "type" =>  "multi"
+		),		
 		array(
 	        "label" =>  "Carbon Monoxide (Total Column, Day)",
 	        "sublabel" =>  "Aqua / AIRS",
