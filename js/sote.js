@@ -39,7 +39,7 @@ function showOverlay(){
 			"<h3>Disclaimer</h3>"+
 			"<p>The LANCE system is operated by the NASA/GSFC Earth Science Data Information System (ESDIS). The information presented through the LANCE Rapid Response system and the LANCE FIRMS are provided “as is” and users bear all responsibility and liability for their use of data, and for any loss of business or profits, or for any indirect, incidental or consequential damages arising out of any use of, or inability to use, the data, even if NASA or ESDIS were previously advised of the possibility of such damages, or for any other claim by you or any other person. Please read the full disclaimer <a href='http://earthdata.nasa.gov/data/nrt-data/disclaimer' target='_blank'>here</a>.</p>"+
 			"<h3>Support</h3>"+
-			"<p>Comments/suggestions/problem reports are welcome via <a href='mailto:eosdis-usersupport@lists.nasa.gov?subject=Feedback%20for%20EOSDIS%20Worldview%20tool'>eosdis-usersupport@lists.nasa.gov</a>.  Please note that Internet Explorer is not currently supported and we are working to determine if and when it can be.</p>"+			
+			"<p>Comments/suggestions/problem reports are welcome via <a href='mailto:support@earthdata.nasa.gov?subject=Feedback%20for%20EOSDIS%20Worldview%20tool'>support@earthdata.nasa.gov</a>.  Please note that Internet Explorer is not currently supported and we are working to determine if and when it can be.</p>"+			
 			"<br /><p>"+
 				"Page Editor: <a href='mailto:tilak.joshi@nasa.gov'>Tilak Joshi</a><br />"+ 
 				"Responsible NASA Official:  <a href='mailto:ryan.a.boller@nasa.gov'>Ryan Boller</a>"+
