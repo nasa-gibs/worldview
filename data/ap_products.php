@@ -104,6 +104,18 @@
 	        "type" =>  "single"
 		),
 		array(
+	        "label" =>  "Corrected Reflectance (7-2-1)",
+	        "sublabel" =>  "Terra / MODIS",
+	        "value" =>  "MODIS_Terra_CorrectedReflectance_Bands721",
+	        "type" =>  "single"
+		),
+		array(
+	        "label" =>  "Corrected Reflectance (7-2-1)",
+	        "sublabel" =>  "Aqua / MODIS",
+	        "value" =>  "MODIS_Aqua_CorrectedReflectance_Bands721",
+	        "type" =>  "single"
+		),
+		array(
 	        "label" =>  "Land Surface Reflectance (7-2-1)",
 	        "sublabel" =>  "Terra / MODIS",
 	        "value" =>  "MODIS_Terra_SurfaceReflectance_Bands721",
@@ -902,12 +914,12 @@
 	        "value" =>  "AIRS_Precipitation_Night",
 	        "type" =>  "multi"
 		),
-		array(
-	        "label" =>  "Land-Water Mask",
-	        "sublabel" =>  "Terra-Aqua / MODIS",
-	        "value" =>  "MODIS_Land_Water_Mask",
-	        "type" =>  "multi"
-		),		
+		// array(
+	        // "label" =>  "Global 250m Water Map",
+	        // "sublabel" =>  "Terra-Aqua / MODIS",
+	        // "value" =>  "MODIS_Land_Water_Mask",
+	        // "type" =>  "multi"
+		// ),		
         array(
              "label" =>  "Flood Hazard:Frequency and Distribution",
              "sublabel" =>  "SEDAC Global Flood Hazard Frequency and Distribution, v1 (1985–2003)",
@@ -1174,12 +1186,12 @@
 	        "value" =>  "MODIS_Aqua_Water_Vapor_5km_Night",
 	        "type" =>  "multi"
 		),
-		array(
-	        "label" =>  "Land-Water Mask",
-	        "sublabel" =>  "Terra-Aqua / MODIS",
-	        "value" =>  "MODIS_Land_Water_Mask",
-	        "type" =>  "multi"
-		),		
+		// array(
+	        // "label" =>  "Global 250m Water Map",
+	        // "sublabel" =>  "Terra-Aqua / MODIS",
+	        // "value" =>  "MODIS_Land_Water_Mask",
+	        // "type" =>  "multi"
+		// ),		
 		array(
 	        "label" =>  "Carbon Monoxide (Total Column, Day)",
 	        "sublabel" =>  "Aqua / AIRS",
@@ -1366,6 +1378,12 @@
 	        "value" =>  "cartographic:national-boundaries",
 	        "type" =>  "multi"
 		),
+		array(
+	        "label" =>  "National Boundaries (locally cached)",
+	        "sublabel" =>  "SEDAC / National Boundaries",
+	        "value" =>  "sedac_bound",
+	        "type" =>  "multi"
+		),
         array(
 	        "label" =>  "Population Density",
 	        "sublabel" =>  "SEDAC GRUMP v1 Population Count 2000",
@@ -1383,6 +1401,12 @@
 
 	"Other" =>  array(
         array(
+	        "label" =>  "Population Density - WMTS",
+	        "sublabel" =>  "WMTS test layer - OnMoon",
+	        "value" =>  "populationWmts",
+	        "type" =>  "multi"
+		),
+        array(
 	        "label" =>  "Population Density",
 	        "sublabel" =>  "SEDAC GRUMP v1 Population Count 2000",
 	        "value" =>  "grump-v1-population-count_2000",
@@ -1398,6 +1422,12 @@
 	        "label" =>  "National Boundaries",
 	        "sublabel" =>  "SEDAC / National Boundaries",
 	        "value" =>  "cartographic:national-boundaries",
+	        "type" =>  "multi"
+		),
+		array(
+	        "label" =>  "National Boundaries (locally cached)",
+	        "sublabel" =>  "SEDAC / National Boundaries",
+	        "value" =>  "sedac_bound",
 	        "type" =>  "multi"
 		),
 		array(
