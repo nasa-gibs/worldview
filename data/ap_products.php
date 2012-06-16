@@ -1,7 +1,7 @@
 <?php
 	$json = array(
 	"expanded" => "Dust Storms",
-	"selected" =>  "MODIS_Terra_CorrectedReflectance_TrueColor.cartographic:national-boundaries",
+	"selected" =>  "MODIS_Terra_CorrectedReflectance_TrueColor.sedac_bound",
 	"Dust Storms" =>  array(
 		array(
 	        "label" =>  "Corrected Reflectance (True Color)",
@@ -1375,12 +1375,6 @@
 		array(
 	        "label" =>  "National Boundaries",
 	        "sublabel" =>  "SEDAC / National Boundaries",
-	        "value" =>  "cartographic:national-boundaries",
-	        "type" =>  "multi"
-		),
-		array(
-	        "label" =>  "National Boundaries (locally cached)",
-	        "sublabel" =>  "SEDAC / National Boundaries",
 	        "value" =>  "sedac_bound",
 	        "type" =>  "multi"
 		),
@@ -1400,12 +1394,12 @@
 
 
 	"Other" =>  array(
-        array(
-	        "label" =>  "Population Density - WMTS",
-	        "sublabel" =>  "WMTS test layer - OnMoon",
-	        "value" =>  "populationWmts",
-	        "type" =>  "multi"
-		),
+        // array(
+	        // "label" =>  "Population Density - WMTS",
+	        // "sublabel" =>  "WMTS test layer - OnMoon",
+	        // "value" =>  "populationWmts",
+	        // "type" =>  "multi"
+		// ),
         array(
 	        "label" =>  "Population Density",
 	        "sublabel" =>  "SEDAC GRUMP v1 Population Count 2000",
@@ -1420,12 +1414,6 @@
 		),
 		array(
 	        "label" =>  "National Boundaries",
-	        "sublabel" =>  "SEDAC / National Boundaries",
-	        "value" =>  "cartographic:national-boundaries",
-	        "type" =>  "multi"
-		),
-		array(
-	        "label" =>  "National Boundaries (locally cached)",
 	        "sublabel" =>  "SEDAC / National Boundaries",
 	        "value" =>  "sedac_bound",
 	        "type" =>  "multi"
