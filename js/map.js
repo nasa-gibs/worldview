@@ -483,7 +483,7 @@ SOTE.widget.Map.prototype.addLayers = function(layers)
 
 
 
-		// Handle Tiled WMS layers differently than standard WMS layers;  include "transparent:true" in first section
+		// Handle tiled layers differently than standard WMS layers;  include "transparent:true" in first section
     	if (!this.checkWmsParam(layers[i].tileSize))
     	{
     		// If 'tileSize' isn't set, consider this layer a "standard" WMS layer    		
@@ -512,34 +512,75 @@ SOTE.widget.Map.prototype.addLayers = function(layers)
     	}
     	else
     	{
-    		// If 'tileSize' is set, this should be a Tiled WMS layer
+    		// If 'tileSize' is set, this should be a tiled layer
     		// Note: "transparent" flag is not being used for tiled layers since image format is already being specified   
-	    	this.map.addLayer(
-	    		new OpenLayers.Layer.WMS(
-	    			layers[i].displayName, 
-	    			layers[i].urls,
-	    			{ 
-	    				time: layers[i].time, 
-	    			  	layers: layers[i].wmsProductName, 
-	    			  	Format: layers[i].format
-	    			},
-	    			{ 
-						'tileSize': new OpenLayers.Size(layers[i].tileSize[0], layers[i].tileSize[1]),
-						buffer: 0, 
-						transitionEffect: layers[i].transitionEffect, 
-						projection: layers[i].projection, 
-						numZoomLevels: layers[i].numZoomLevels, 
-						maxExtent: new OpenLayers.Bounds(layers[i].maxExtent[0], layers[i].maxExtent[1], layers[i].maxExtent[2], layers[i].maxExtent[3]),
-						maxResolution: layers[i].maxResolution,
-						resolutions: layers[i].resolutions,
-						serverResolutions: layers[i].serverResolutions,
-						visibility: false,
-            			metadata: { 
-            				preferredOpacity: layers[i].preferredOpacity,
-            				bringToFront: layers[i].bringToFront
-            				}	            			
-	    			}
-	    		));    		
+	    	//this.map.addLayer(
+	    	//	new OpenLayers.Layer.WMS(
+	    			//layers[i].displayName, 
+	    			//layers[i].urls,
+	    			//{ 
+	    			//	time: layers[i].time, 
+	    			//  	layers: layers[i].wmsProductName, 
+	    			//  	Format: layers[i].format
+	    			//},
+	    			//{ 
+					//	'tileSize': new OpenLayers.Size(layers[i].tileSize[0], layers[i].tileSize[1]),
+					//  buffer: 0, 
+					//	transitionEffect: layers[i].transitionEffect, 
+					//	projection: layers[i].projection, 
+					//	numZoomLevels: layers[i].numZoomLevels, 
+					//	maxExtent: new OpenLayers.Bounds(layers[i].maxExtent[0], layers[i].maxExtent[1], layers[i].maxExtent[2], layers[i].maxExtent[3]),
+					//	maxResolution: layers[i].maxResolution,
+					//	resolutions: layers[i].resolutions,
+					//	serverResolutions: layers[i].serverResolutions,
+					//	visibility: false,
+            		//	metadata: { 
+            		//		preferredOpacity: layers[i].preferredOpacity,
+            		//		bringToFront: layers[i].bringToFront
+            		//		}	            			
+	    			//}
+	    		//));
+	    		
+	    	
+	    	var wmtsLayer = 
+			    new OpenLayers.Layer.WMTS(
+			    {
+			        name: layers[i].displayName,
+			        url: layers[i].urls,
+			        layer: layers[i].wmsProductName,
+			        matrixSet: layers[i].projection,
+			        //matrixIds: matrixIds,
+			        format: layers[i].format,
+			        buffer: 0,
+			        //time: layers[i].timeStr, 
+			        style: "",
+			        opacity: layers[i].preferredOpacity,
+			        transitionEffect: layers[i].transitionEffect,
+			        projection: layers[i].projection,
+			        numZoomLevels: layers[i].numZoomLevels, // unclear if this is necessary
+			        maxResolution: layers[i].maxResolution, // unclear if this is necessary
+			        resolutions: layers[i].resolutions, // unclear if this is necessary
+			        serverResolutions: layers[i].serverResolutions,
+			    	visibility: false,
+					metadata: { 
+						preferredOpacity: layers[i].preferredOpacity,
+						bringToFront: layers[i].bringToFront
+					},
+					'tileSize': new OpenLayers.Size(layers[i].tileSize[0], layers[i].tileSize[1]),
+					maxExtent: new OpenLayers.Bounds(layers[i].maxExtent[0], layers[i].maxExtent[1], layers[i].maxExtent[2], layers[i].maxExtent[3]),
+			        isBaseLayer: false
+			    }
+			    
+			    );
+			
+			
+			// Time parameter is not being included in request to server in the current version of OL (2.12RC7);
+			// need to use this hack to force inclusion of the time parameter.  
+			wmtsLayer.mergeNewParams({time:layers[i].time});
+			
+			this.map.addLayer(wmtsLayer);	
+	    			
+	    		    		
     	}
     }
     
@@ -548,91 +589,6 @@ SOTE.widget.Map.prototype.addLayers = function(layers)
     	this.map.setLayerZIndex(this.graticule.gratLayer, this.getAllLayers().length-1);
 }
 
-
-/**
- * Stub for adding WMTS layers  zzz
- */
-SOTE.widget.Map.prototype.addWmtsLayers = function()
-{
-	
-
-	
-	var popLayer = 
-		{
-			displayName: "populationWmts", wmsProductName: "populationWmts", time:"", format: "image/png", 
-			urls:["http://onmoon.lmmp.nasa.gov/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", 
-			numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625, preferredOpacity: 0.55 
-		};
-
-	var layers = [ popLayer ];
-	
-	for (var i=0; i<layers.length; i++)
-	{
-		// If tile matrix identifiers differ from zoom levels (0, 1, 2, ...)
-	    // then they must be explicitly provided.
-	    // var matrixIds = new Array(26);
-	    // for (var j=0; j < layers[i].numZoomLevels; ++j) {
-	        // matrixIds[j] = layers[i].projection + ":" + j;
-	    // }
-	
-		var wmtsLayer = 
-		    new OpenLayers.Layer.WMTS(
-		    {
-		        name: layers[i].displayName,
-		        url: layers[i].urls,
-		        layer: layers[i].wmsProductName,
-		        matrixSet: layers[i].projection,
-		        //matrixIds: matrixIds,
-		        format: layers[i].format,
-		        time: layers[i].time, 
-		        style: "",
-		        opacity: 0.7,
-		        isBaseLayer: false
-		    },
-		    {
-		    	//'tileSize': new OpenLayers.Size(layers[i].tileSize[0], layers[i].tileSize[1]),
-		    	transitionEffect: 'resize', 	
-		    	maxExtent: new OpenLayers.Bounds(layers[i].maxExtent[0], layers[i].maxExtent[1], layers[i].maxExtent[2], layers[i].maxExtent[3]),
-		    	visibility: false,
-				metadata: { 
-					preferredOpacity: layers[i].preferredOpacity,
-					bringToFront: layers[i].bringToFront
-					}
-		    }
-		    );   
-		
-		wmtsLayer.setTileSize(new OpenLayers.Size(layers[i].tileSize[0], layers[i].tileSize[1]));
-		
-		this.map.addLayer(wmtsLayer);
-		
-		
-		// var blah = new OpenLayers.Layer.WMS(
-			// layers[i].displayName, 
-			// layers[i].urls,
-			// { 
-				// time: layers[i].time, 
-			  	// layers: layers[i].wmsProductName, 
-			  	// Format: layers[i].format
-			// },
-			// { 
-				//'tileSize': new OpenLayers.Size(layers[i].tileSize[0], layers[i].tileSize[1]),
-				// // buffer: 0, 
-				// transitionEffect: 'resize', 
-				// projection: layers[i].projection, 
-				// numZoomLevels: layers[i].numZoomLevels, 
-				// maxExtent: new OpenLayers.Bounds(layers[i].maxExtent[0], layers[i].maxExtent[1], layers[i].maxExtent[2], layers[i].maxExtent[3]),
-				// // maxResolution: layers[i].maxResolution,
-				// // resolutions: layers[i].resolutions,
-				// // serverResolutions: layers[i].serverResolutions,
-				// visibility: false,
-				// metadata: { 
-					// preferredOpacity: layers[i].preferredOpacity,
-					// bringToFront: layers[i].bringToFront
-					// }	            			
-			// });
-		    
-	}	
-}
 
 
 /**
@@ -855,8 +811,8 @@ SOTE.widget.Map.prototype.updateComponent = function(qs){
 		// Define static layers
 		var staticProductLayers = 
 			[			
-				//{displayName: "population", wmsProductName: "population", time:"", format: "image/png", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625, preferredOpacity: 0.55 },
-				{displayName: "MODIS_Land_Water_Mask", wmsProductName: "MODIS_Land_Water_Mask", time:"", format: "image/png", urls:["http://map1.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625, preferredOpacity: 0.75, bringToFront:true },
+				//{displayName: "population", wmsProductName: "population", time:"", format: "image/png", urls:["http://map1.vis.earthdata.nasa.gov/wmts/wmts.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625, preferredOpacity: 0.55 },
+				{displayName: "MODIS_Land_Water_Mask", wmsProductName: "MODIS_Land_Water_Mask", time:"", format: "image/png", urls:["http://map1.vis.earthdata.nasa.gov/wmts/wmts.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625, preferredOpacity: 0.75, bringToFront:true },
 				{displayName: "grump-v1-population-count_2000", wmsProductName: "grump-v1-population-count_2000", time:"", format: "image/png", urls:["http://sedac.ciesin.columbia.edu/geoserver/ows"], projection:"EPSG:4326", preferredOpacity: 0.55 },
 				{displayName: "ndh-cyclone-hazard-frequency-distribution", wmsProductName: "ndh-cyclone-hazard-frequency-distribution", time:"", format: "image/png", urls:["http://sedac.ciesin.columbia.edu/geoserver/ows"], projection:"EPSG:4326", preferredOpacity: 0.75 },
 				{displayName: "ndh-cyclone-proportional-economic-loss-risk-deciles", wmsProductName: "ndh-cyclone-proportional-economic-loss-risk-deciles", time:"", format: "image/png", urls:["http://sedac.ciesin.columbia.edu/geoserver/ows"], projection:"EPSG:4326", preferredOpacity: 0.75 },
@@ -876,7 +832,7 @@ SOTE.widget.Map.prototype.updateComponent = function(qs){
 				// {displayName: "fires48", wmsProductName: "fires48", time:"", urls:["http://firefly.geog.umd.edu/wms/wms?"], layers:"fires48", transparent:true, projection:"EPSG:4326", preferredOpacity: 1.0},				{displayName: "cartographic:esri-administrative-boundaries_level-1", wmsProductName: "cartographic:esri-administrative-boundaries_level-1", time:"", urls:["http://sedac.ciesin.columbia.edu/geoserver/wms?"], layers:"cartographic:esri-administrative-boundaries_level-1", transparent:true, projection:"EPSG:4326", preferredOpacity: 0.55},
 
 				// {displayName: "cartographic:national-boundaries", wmsProductName: "cartographic:national-boundaries", time:"", urls:["http://sedac.ciesin.columbia.edu/geoserver/ows"], layers:"cartographic:national-boundaries", transparent:true, projection:"EPSG:4326", preferredOpacity: 0.55, bringToFront: true },
-				{displayName: "sedac_bound", wmsProductName: "sedac_bound", time:"", format: "image/png", urls:["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625, preferredOpacity: 0.55, bringToFront: true, transitionEffect:"none" },
+				{displayName: "sedac_bound", wmsProductName: "sedac_bound", time:"", format: "image/png", urls:["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], tileSize:[512,512], projection:"EPSG:4326", numZoomLevels:9, maxExtent:[-180,-1350,180,90], maxResolution:0.5625, preferredOpacity: 0.55, bringToFront: true, transitionEffect:"none" },
 				{displayName: "gpw-v3-coastlines", wmsProductName: "gpw-v3-coastlines", time:"", urls:["http://sedac.ciesin.columbia.edu/geoserver/wms?"], layers:"gpw-v3-coastlines", transparent:true, projection:"EPSG:4326", preferredOpacity: 0.85, bringToFront: true },
 				{displayName: "cartographic:00-global-labels", wmsProductName: "cartographic:00-global-labels", time:"", urls:["http://sedac.ciesin.columbia.edu/geoserver/wms?"], layers:"cartographic:00-global-labels", transparent:true, projection:"EPSG:4326", preferredOpacity: 0.95, bringToFront: true }
 			];
@@ -884,67 +840,64 @@ SOTE.widget.Map.prototype.updateComponent = function(qs){
 
 		
 		this.soteMapData = staticProductLayers.concat(			
-			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_CorrectedReflectance_TrueColor", "MODIS_Terra_CorrectedReflectance_TrueColor", "image/jpeg", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_250m),
-			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_SurfaceReflectance_Bands143", "MODIS_Terra_SurfaceReflectance_Bands143", "image/jpeg", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_500m),
-			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_CorrectedReflectance_TrueColor", "MODIS_Aqua_CorrectedReflectance_TrueColor", "image/jpeg", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_250m),
-			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_SurfaceReflectance_Bands143", "MODIS_Aqua_SurfaceReflectance_Bands143", "image/jpeg", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_500m),
-			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_CorrectedReflectance_Bands721", "MODIS_Terra_CorrectedReflectance_Bands721", "image/jpeg", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_250m),
-			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_CorrectedReflectance_Bands721", "MODIS_Aqua_CorrectedReflectance_Bands721", "image/jpeg", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_250m),
-			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_SurfaceReflectance_Bands721", "MODIS_Terra_SurfaceReflectance_Bands721", "image/jpeg", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_500m),
-			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_SurfaceReflectance_Bands721", "MODIS_Aqua_SurfaceReflectance_Bands721", "image/jpeg", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_500m),
-			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_CorrectedReflectance_Bands367", "MODIS_Terra_CorrectedReflectance_Bands367", "image/jpeg", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_250m),
-			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_SurfaceReflectance_Bands121", "MODIS_Terra_SurfaceReflectance_Bands121", "image/jpeg", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_500m),
-			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_SurfaceReflectance_Bands121", "MODIS_Aqua_SurfaceReflectance_Bands121", "image/jpeg", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_500m),
+			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_CorrectedReflectance_TrueColor", "MODIS_Terra_CorrectedReflectance_TrueColor", "image/jpeg", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_250m),
+			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_SurfaceReflectance_Bands143", "MODIS_Terra_SurfaceReflectance_Bands143", "image/jpeg", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_500m),
+			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_CorrectedReflectance_TrueColor", "MODIS_Aqua_CorrectedReflectance_TrueColor", "image/jpeg", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_250m),
+			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_SurfaceReflectance_Bands143", "MODIS_Aqua_SurfaceReflectance_Bands143", "image/jpeg", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_500m),
+			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_CorrectedReflectance_Bands721", "MODIS_Terra_CorrectedReflectance_Bands721", "image/jpeg", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_250m),
+			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_CorrectedReflectance_Bands721", "MODIS_Aqua_CorrectedReflectance_Bands721", "image/jpeg", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_250m),
+			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_SurfaceReflectance_Bands721", "MODIS_Terra_SurfaceReflectance_Bands721", "image/jpeg", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_500m),
+			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_SurfaceReflectance_Bands721", "MODIS_Aqua_SurfaceReflectance_Bands721", "image/jpeg", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_500m),
+			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_CorrectedReflectance_Bands367", "MODIS_Terra_CorrectedReflectance_Bands367", "image/jpeg", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_250m),
+			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_SurfaceReflectance_Bands121", "MODIS_Terra_SurfaceReflectance_Bands121", "image/jpeg", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_500m),
+			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_SurfaceReflectance_Bands121", "MODIS_Aqua_SurfaceReflectance_Bands121", "image/jpeg", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_500m),
 
-			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_Snow_Cover", "MODIS_Terra_Snow_Cover", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_500m),
-			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_Snow_Cover", "MODIS_Aqua_Snow_Cover", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_500m),	
-			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_Sea_Ice", "MODIS_Terra_Sea_Ice", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_1km),
-			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_Sea_Ice", "MODIS_Aqua_Sea_Ice", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_1km),			
-			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_Land_Surface_Temp_Day", "MODIS_Terra_Land_Surface_Temp_Day", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_1km),
-			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_Land_Surface_Temp_Day", "MODIS_Aqua_Land_Surface_Temp_Day", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_1km),
-			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_Land_Surface_Temp_Night", "MODIS_Terra_Land_Surface_Temp_Night", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_1km),
-			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_Land_Surface_Temp_Night", "MODIS_Aqua_Land_Surface_Temp_Night", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_1km),
-			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_Brightness_Temp_Band31_Day", "MODIS_Terra_Brightness_Temp_Band31_Day", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_1km),
-			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_Brightness_Temp_Band31_Day", "MODIS_Aqua_Brightness_Temp_Band31_Day", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_1km),
-			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_Brightness_Temp_Band31_Night", "MODIS_Terra_Brightness_Temp_Band31_Night", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_1km),
-			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_Brightness_Temp_Band31_Night", "MODIS_Aqua_Brightness_Temp_Band31_Night", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_1km),									
-			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_Aerosol", "MODIS_Terra_Aerosol", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
-			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_Aerosol", "MODIS_Aqua_Aerosol", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
-			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_Water_Vapor_5km_Day", "MODIS_Terra_Water_Vapor_5km_Day", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_5km),
-			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_Water_Vapor_5km_Day", "MODIS_Aqua_Water_Vapor_5km_Day", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_5km),
-			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_Water_Vapor_5km_Night", "MODIS_Terra_Water_Vapor_5km_Night", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_5km),
-			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_Water_Vapor_5km_Night", "MODIS_Aqua_Water_Vapor_5km_Night", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_5km),
-			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_Cloud_Top_Pressure_Day", "MODIS_Terra_Cloud_Top_Pressure_Day", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
-			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_Cloud_Top_Pressure_Day", "MODIS_Aqua_Cloud_Top_Pressure_Day", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
-			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_Cloud_Top_Pressure_Night", "MODIS_Terra_Cloud_Top_Pressure_Night", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
-			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_Cloud_Top_Pressure_Night", "MODIS_Aqua_Cloud_Top_Pressure_Night", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
-			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_Cloud_Top_Temp_Day", "MODIS_Terra_Cloud_Top_Temp_Day", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
-			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_Cloud_Top_Temp_Day", "MODIS_Aqua_Cloud_Top_Temp_Day", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
-			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_Cloud_Top_Temp_Night", "MODIS_Terra_Cloud_Top_Temp_Night", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
-			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_Cloud_Top_Temp_Night", "MODIS_Aqua_Cloud_Top_Temp_Night", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
-			SOTE.util.generateProductLayersForDateRange("AIRS_Dust_Score", "AIRS_Dust_Score", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
-			SOTE.util.generateProductLayersForDateRange("AIRS_CO_Total_Column_Day", "AIRS_CO_Total_Column_Day", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
-			SOTE.util.generateProductLayersForDateRange("AIRS_CO_Total_Column_Night", "AIRS_CO_Total_Column_Night", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
-			SOTE.util.generateProductLayersForDateRange("AIRS_Prata_SO2_Index_Day", "AIRS_Prata_SO2_Index_Day", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
-			SOTE.util.generateProductLayersForDateRange("AIRS_Prata_SO2_Index_Night", "AIRS_Prata_SO2_Index_Night", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
-			SOTE.util.generateProductLayersForDateRange("AIRS_Precipitation_Day", "AIRS_Precipitation_Day", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
-			SOTE.util.generateProductLayersForDateRange("AIRS_Precipitation_Night", "AIRS_Precipitation_Night", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
+			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_Snow_Cover", "MODIS_Terra_Snow_Cover", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_500m),
+			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_Snow_Cover", "MODIS_Aqua_Snow_Cover", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_500m),	
+			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_Sea_Ice", "MODIS_Terra_Sea_Ice", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_1km),
+			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_Sea_Ice", "MODIS_Aqua_Sea_Ice", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_1km),			
+			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_Land_Surface_Temp_Day", "MODIS_Terra_Land_Surface_Temp_Day", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_1km),
+			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_Land_Surface_Temp_Day", "MODIS_Aqua_Land_Surface_Temp_Day", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_1km),
+			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_Land_Surface_Temp_Night", "MODIS_Terra_Land_Surface_Temp_Night", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_1km),
+			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_Land_Surface_Temp_Night", "MODIS_Aqua_Land_Surface_Temp_Night", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_1km),
+			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_Brightness_Temp_Band31_Day", "MODIS_Terra_Brightness_Temp_Band31_Day", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_1km),
+			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_Brightness_Temp_Band31_Day", "MODIS_Aqua_Brightness_Temp_Band31_Day", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_1km),
+			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_Brightness_Temp_Band31_Night", "MODIS_Terra_Brightness_Temp_Band31_Night", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_1km),
+			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_Brightness_Temp_Band31_Night", "MODIS_Aqua_Brightness_Temp_Band31_Night", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_1km),									
+			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_Aerosol", "MODIS_Terra_Aerosol", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
+			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_Aerosol", "MODIS_Aqua_Aerosol", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
+			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_Water_Vapor_5km_Day", "MODIS_Terra_Water_Vapor_5km_Day", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_5km),
+			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_Water_Vapor_5km_Day", "MODIS_Aqua_Water_Vapor_5km_Day", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_5km),
+			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_Water_Vapor_5km_Night", "MODIS_Terra_Water_Vapor_5km_Night", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_5km),
+			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_Water_Vapor_5km_Night", "MODIS_Aqua_Water_Vapor_5km_Night", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_5km),
+			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_Cloud_Top_Pressure_Day", "MODIS_Terra_Cloud_Top_Pressure_Day", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
+			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_Cloud_Top_Pressure_Day", "MODIS_Aqua_Cloud_Top_Pressure_Day", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
+			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_Cloud_Top_Pressure_Night", "MODIS_Terra_Cloud_Top_Pressure_Night", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
+			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_Cloud_Top_Pressure_Night", "MODIS_Aqua_Cloud_Top_Pressure_Night", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
+			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_Cloud_Top_Temp_Day", "MODIS_Terra_Cloud_Top_Temp_Day", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
+			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_Cloud_Top_Temp_Day", "MODIS_Aqua_Cloud_Top_Temp_Day", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
+			SOTE.util.generateProductLayersForDateRange("MODIS_Terra_Cloud_Top_Temp_Night", "MODIS_Terra_Cloud_Top_Temp_Night", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
+			SOTE.util.generateProductLayersForDateRange("MODIS_Aqua_Cloud_Top_Temp_Night", "MODIS_Aqua_Cloud_Top_Temp_Night", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
+			SOTE.util.generateProductLayersForDateRange("AIRS_Dust_Score", "AIRS_Dust_Score", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
+			SOTE.util.generateProductLayersForDateRange("AIRS_CO_Total_Column_Day", "AIRS_CO_Total_Column_Day", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
+			SOTE.util.generateProductLayersForDateRange("AIRS_CO_Total_Column_Night", "AIRS_CO_Total_Column_Night", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
+			SOTE.util.generateProductLayersForDateRange("AIRS_Prata_SO2_Index_Day", "AIRS_Prata_SO2_Index_Day", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
+			SOTE.util.generateProductLayersForDateRange("AIRS_Prata_SO2_Index_Night", "AIRS_Prata_SO2_Index_Night", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
+			SOTE.util.generateProductLayersForDateRange("AIRS_Precipitation_Day", "AIRS_Precipitation_Day", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
+			SOTE.util.generateProductLayersForDateRange("AIRS_Precipitation_Night", "AIRS_Precipitation_Night", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
 			
-			SOTE.util.generateProductLayersForDateRange("OMI_Cloud_Pressure", "OMI_Cloud_Pressure", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
-			SOTE.util.generateProductLayersForDateRange("OMI_Aerosol_Index", "OMI_Aerosol_Index", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
-			SOTE.util.generateProductLayersForDateRange("OMI_Aerosol_Optical_Depth", "OMI_Aerosol_Optical_Depth", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
-			SOTE.util.generateProductLayersForDateRange("OMI_Absorbing_Aerosol_Optical_Depth", "OMI_Absorbing_Aerosol_Optical_Depth", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
-			SOTE.util.generateProductLayersForDateRange("OMI_SO2_Lower_Troposphere", "OMI_SO2_Lower_Troposphere", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
-			SOTE.util.generateProductLayersForDateRange("OMI_SO2_Middle_Troposphere", "OMI_SO2_Middle_Troposphere", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
-			SOTE.util.generateProductLayersForDateRange("OMI_SO2_Upper_Troposphere_and_Stratosphere", "OMI_SO2_Upper_Troposphere_and_Stratosphere", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
-			SOTE.util.generateProductLayersForDateRange("OMI_SO2_Planetary_Boundary_Layer", "OMI_SO2_Planetary_Boundary_Layer", "image/png", ["http://map1a.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1b.vis.earthdata.nasa.gov/data/wms.cgi", "http://map1c.vis.earthdata.nasa.gov/data/wms.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km)
+			SOTE.util.generateProductLayersForDateRange("OMI_Cloud_Pressure", "OMI_Cloud_Pressure", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
+			SOTE.util.generateProductLayersForDateRange("OMI_Aerosol_Index", "OMI_Aerosol_Index", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
+			SOTE.util.generateProductLayersForDateRange("OMI_Aerosol_Optical_Depth", "OMI_Aerosol_Optical_Depth", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
+			SOTE.util.generateProductLayersForDateRange("OMI_Absorbing_Aerosol_Optical_Depth", "OMI_Absorbing_Aerosol_Optical_Depth", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
+			SOTE.util.generateProductLayersForDateRange("OMI_SO2_Lower_Troposphere", "OMI_SO2_Lower_Troposphere", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
+			SOTE.util.generateProductLayersForDateRange("OMI_SO2_Middle_Troposphere", "OMI_SO2_Middle_Troposphere", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
+			SOTE.util.generateProductLayersForDateRange("OMI_SO2_Upper_Troposphere_and_Stratosphere", "OMI_SO2_Upper_Troposphere_and_Stratosphere", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km),
+			SOTE.util.generateProductLayersForDateRange("OMI_SO2_Planetary_Boundary_Layer", "OMI_SO2_Planetary_Boundary_Layer", "image/png", ["http://map1a.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1b.vis.earthdata.nasa.gov/wmts/wmts.cgi", "http://map1c.vis.earthdata.nasa.gov/wmts/wmts.cgi"], [512,512], "EPSG:4326", 9, [-180,-1350,180,90], 0.5625, 1.0, this.NUM_DAYS_TO_GENERATE, this.RESOLUTIONS_ON_SCREEN_ALL, this.RESOLUTIONS_ON_SERVER_2km)
 			);
 
-		// Load full and Tiled WMS layers into secondary map(s)
+		// Load full and tiled WMS layers into secondary map(s)
 		this.addLayers(this.soteMapData);
-		
-		// Load WMTS layers
-		// this.addWmtsLayers();
 		
 		// Update flag upon successful load
 		this.isSoteMapDataCached = true;
