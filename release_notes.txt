@@ -1,0 +1,26 @@
+NASA EOSDIS Worldview
+Release Notes
+
+http://earthdata.nasa.gov/labs/worldview/
+
+
+Release 2012/07/14
+
+* New Features
+	- User interface redesigned for product selection and currently-shown layers 
+	- Color bars are available for palette-based products
+	- Arctic and Antarctic views are integrated into main interface
+	- Lower-resolution layers are dynamically rescaled on the client to be visible at higher zoom levels
+	- Orbital tracks for Terra, Aqua, and Aura are available
+	
+
+* Updates
+	- Fires are viewable on a per-day basis as opposed to "past 24/48 hours"
+	- Documentation for Worldview's backend, the Global Imagery Browse Services (GIBS), has been published (http://earthdata.nasa.gov/gibs)
+	- Worldview now uses the OGC Web Map Tile Service (WMTS) to retrieve tiled imagery from GIBS
+	- OpenLayers library updated to version 2.12 from 2.11
+
+
+* Known Issues
+	- Permalinks to polar views may not retain their selected layers upon load
+
