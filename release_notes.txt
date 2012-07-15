@@ -4,7 +4,7 @@ Release Notes
 http://earthdata.nasa.gov/labs/worldview/
 
 
-Release 2012/07/14
+Release 2012/07/15
 
 * New Features
 	- User interface redesigned for product selection and currently-shown layers 
@@ -23,4 +23,4 @@ Release 2012/07/14
 
 * Known Issues
 	- Permalinks to polar views may not retain their selected layers upon load
-
+	- Arctic land boundaries don't match actual land  
