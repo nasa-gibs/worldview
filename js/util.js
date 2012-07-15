@@ -178,8 +178,40 @@ SOTE.util.generateProductLayersForDateRange = function(displayNameStr, wmsProduc
 	
 
 	return returnArr;
-}
+};
 
+
+/**
+ * Adds WMTS TileMatrixSet to returned array 
+ */
+SOTE.util.generateProductLayersForDateRangeTMS = function(displayNameStr, wmsProductNameStr, formatStr, urlsArr, tileSizeArr, projectionStr, numZoomLevelsInt, maxExtentArr, maxResolutionFloat, preferredOpacityFloat, numDays, screenResolutionsArr, serverResolutionsArr, tileMatrixSetStr)
+{
+
+	// Get current date
+	var curDate = new Date();
+	
+	// Generate layer for each day
+	var returnArr = new Array(numDays);
+	for (var i=0; i<numDays; i++)
+	{		
+		// Generate YYYY-MM-DD string
+	  	var dateStr = curDate.getUTCFullYear() + "-" + SOTE.util.zeroPad(eval(curDate.getUTCMonth()+1),2) + "-" + 
+			SOTE.util.zeroPad(curDate.getUTCDate(),2);
+		
+		// Generate layer entry
+		returnArr[i] = {displayName: (displayNameStr + "__" + dateStr), wmsProductName: wmsProductNameStr, 
+			time: dateStr, format: formatStr, urls: urlsArr, tileSize: tileSizeArr, projection: projectionStr, 
+			numZoomLevels: numZoomLevelsInt, maxExtent: maxExtentArr, maxResolution: maxResolutionFloat, 
+			resolutions: screenResolutionsArr, serverResolutions: serverResolutionsArr, 
+			tileMatrixSet: tileMatrixSetStr, preferredOpacity: preferredOpacityFloat }; 
+	
+		// Compute next date value by subtracting one day (in ms) from currently stored value
+		curDate = new Date(curDate - (1000*60*60*24));	
+	}
+	
+
+	return returnArr;
+};
 
 
 
@@ -280,4 +312,3 @@ SOTE.util.generateWmsProductLayersForDateRange = function(displayNameStr, wmsPro
 
 	return returnArr;
 }
-
