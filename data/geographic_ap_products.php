@@ -114,15 +114,21 @@
 	        "type" => "single", "category" => "baselayers"
 		),	
 		array(
-	        "label" =>  "Fires (Past 24 Hours)",
-	        "sublabel" =>  "MODIS Fire and Thermal Anomalies",
-	        "value" =>  "fires24",
+	        "label" =>  "Fires (Day and Night)",
+	        "sublabel" =>  "Terra/ and Aqua/MODIS Fire and Thermal Anomalies",
+	        "value" =>  "MODIS_Fires_All",
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
-	        "label" =>  "Fires (Past 48 Hours)",
-	        "sublabel" =>  "MODIS Fire and Thermal Anomalies",
-	        "value" =>  "fires48",
+	        "label" =>  "Fires (Day and Night)",
+	        "sublabel" =>  "Terra/MODIS Fire and Thermal Anomalies",
+	        "value" =>  "MODIS_Fires_Terra",
+	        "type" => "multi", "category" => "overlays"
+		),
+		array(
+	        "label" =>  "Fires (Day and Night)",
+	        "sublabel" =>  "Aqua/MODIS Fire and Thermal Anomalies",
+	        "value" =>  "MODIS_Fires_Aqua",
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
@@ -900,12 +906,6 @@
 	        "value" =>  "AIRS_Precipitation_Night",
 	        "type" => "multi", "category" => "overlays"
 		),
-		array(
-	        "label" =>  "Land-Water Mask",
-	        "sublabel" =>  "Terra-Aqua / MODIS",
-	        "value" =>  "MODIS_Land_Water_Mask",
-	        "type" => "multi", "category" => "overlays"
-		),		
         array(
              "label" =>  "Flood Hazard:Frequency and Distribution",
              "sublabel" =>  "SEDAC Global Flood Hazard Frequency and Distribution, v1 (1985–2003)",
@@ -1085,15 +1085,21 @@
 	        "type" => "multi", "category" => "overlays"
 		),		
 		array(
-	        "label" =>  "Fires (Past 24 Hours)",
-	        "sublabel" =>  "MODIS Fire and Thermal Anomalies",
-	        "value" =>  "fires24",
+	        "label" =>  "Fires (Day and Night)",
+	        "sublabel" =>  "Terra/ and Aqua/MODIS Fire and Thermal Anomalies",
+	        "value" =>  "MODIS_Fires_All",
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
-	        "label" =>  "Fires (Past 48 Hours)",
-	        "sublabel" =>  "MODIS Fire and Thermal Anomalies",
-	        "value" =>  "fires48",
+	        "label" =>  "Fires (Day and Night)",
+	        "sublabel" =>  "Terra/MODIS Fire and Thermal Anomalies",
+	        "value" =>  "MODIS_Fires_Terra",
+	        "type" => "multi", "category" => "overlays"
+		),
+		array(
+	        "label" =>  "Fires (Day and Night)",
+	        "sublabel" =>  "Aqua/MODIS Fire and Thermal Anomalies",
+	        "value" =>  "MODIS_Fires_Aqua",
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
@@ -1357,7 +1363,7 @@
 		array(
 	        "label" =>  "National Boundaries",
 	        "sublabel" =>  "SEDAC / National Boundaries",
-	        "value" =>  "cartographic:national-boundaries",
+	        "value" =>  "sedac_bound",
 	        "type" => "multi", "category" => "overlays"
 		),
         array(
@@ -1390,7 +1396,7 @@
 		array(
 	        "label" =>  "National Boundaries",
 	        "sublabel" =>  "SEDAC / National Boundaries",
-	        "value" =>  "cartographic:national-boundaries",
+	        "value" =>  "sedac_bound",
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
@@ -1409,6 +1415,42 @@
 	        "label" =>  "Latitude-Longitude Lines",
 	        "sublabel" =>  "OpenLayers / Graticule Control",
 	        "value" =>  "ol_graticule",
+	        "type" => "multi", "category" => "overlays"
+		),
+		array(
+	        "label" =>  "Orbital Track (Ascending)",
+	        "sublabel" =>  "Space-Track.org / Terra",
+	        "value" =>  "Terra_Orbit_Asc",
+	        "type" => "multi", "category" => "overlays"
+		),
+		array(
+	        "label" =>  "Orbital Track (Descending)",
+	        "sublabel" =>  "Space-Track.org / Terra",
+	        "value" =>  "Terra_Orbit_Dsc",
+	        "type" => "multi", "category" => "overlays"
+		),
+		array(
+	        "label" =>  "Orbital Track (Ascending)",
+	        "sublabel" =>  "Space-Track.org / Aqua",
+	        "value" =>  "Aqua_Orbit_Asc",
+	        "type" => "multi", "category" => "overlays"
+		),
+		array(
+	        "label" =>  "Orbital Track (Descending)",
+	        "sublabel" =>  "Space-Track.org / Aqua",
+	        "value" =>  "Aqua_Orbit_Dsc",
+	        "type" => "multi", "category" => "overlays"
+		),
+		array(
+	        "label" =>  "Orbital Track (Ascending)",
+	        "sublabel" =>  "Space-Track.org / Aura",
+	        "value" =>  "Aura_Orbit_Asc",
+	        "type" => "multi", "category" => "overlays"
+		),
+		array(
+	        "label" =>  "Orbital Track (Descending)",
+	        "sublabel" =>  "Space-Track.org / Aura",
+	        "value" =>  "Aura_Orbit_Dsc",
 	        "type" => "multi", "category" => "overlays"
 		)
 	)
