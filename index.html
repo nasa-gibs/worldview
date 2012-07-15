@@ -1,3 +1,4 @@
+<html>
 <head>
 	<title>EOSDIS Worldview (Alpha)</title>
 	
@@ -36,9 +37,9 @@
 	
 	
 	<!-- CSS for OpenLayers	 -->
-	<link type="text/css" href="css/ext/openlayers-2.12/openlayers.defaulttheme.style.css" rel="StyleSheet" />
-	<link type="text/css" href="css/ext/openlayers-2.12/openlayers.example.style.css" rel="StyleSheet" />
-	<link type="text/css" href="css/ext/openlayers-2.12/openlayers.style.mobile-jq.css" rel="StyleSheet" />
+	<link type="text/css" href="css/ext/openlayers-2.11/openlayers.defaulttheme.style.css" rel="StyleSheet" />
+	<link type="text/css" href="css/ext/openlayers-2.11/openlayers.example.style.css" rel="StyleSheet" />
+	<link type="text/css" href="css/ext/openlayers-2.11/openlayers.style.mobile-jq.css" rel="StyleSheet" />
 	
 	
 	<!-- CSS for map style -->
@@ -46,11 +47,13 @@
 	<link type="text/css" href="css/dateSpan.css" rel="Stylesheet" /> 
 	<link type="text/css" href="css/menuPicker.css" rel="Stylesheet" /> 
 	<link type="text/css" href="css/accordionPicker.css" rel="Stylesheet" /> 
+	<link type="text/css" href="css/bank.css" rel="Stylesheet" /> 
+	<link type="text/css" href="css/selector.css" rel="Stylesheet" /> 
 	<link type="text/css" href="css/sote.css" rel="Stylesheet" /> 
 
 
 	<!-- External Javascript includes -->
-	<script type="text/javascript" src="js/ext/openlayers-2.12/OpenLayers.js?mobile"></script>
+	<script type="text/javascript" src="js/ext/openlayers-2.12rc7/OpenLayers.js?mobile"></script>
 	<script type="text/javascript" src="js/ext/datejs/date.js"></script>
 <!-- 	<script type="text/javascript" src="js/ext/colorbox/jquery.colorbox-min.js"></script> -->
 
@@ -64,6 +67,9 @@
 	<script type="text/javascript" src="js/dateSpan.js"></script>
 	<script type="text/javascript" src="js/menuPicker.js"></script>
 	<script type="text/javascript" src="js/accordionPicker.js"></script>
+	<script type="text/javascript" src="js/bank.js"></script>
+	<script type="text/javascript" src="js/switch.js"></script>
+	<script type="text/javascript" src="js/selector.js"></script>
 	<script type="text/javascript" src="js/sote.js"></script>
  
 
@@ -78,6 +84,7 @@
 			<div id="hazard"></div>
 			<div id="products"></div>
 			<div id="map"></div>
+			<div id="switch"></div>
 			<div class="horizontalContainer">
 				<div id="time"></div>
 			</div>
@@ -95,7 +102,9 @@
 
 		REGISTRY.addEventListener("map","time");
 		REGISTRY.addEventListener("time","map");
-		REGISTRY.addEventListener("products","map","time");
+		REGISTRY.addEventListener("switch","map","products","selectorbox","time");
+		REGISTRY.addEventListener("products","map","time","selectorbox");
+		REGISTRY.addEventListener("selectorbox","products");
 		//REGISTRY.addEventListener("hazard","products");
 
 		function testQS(){

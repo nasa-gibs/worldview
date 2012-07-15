@@ -18,17 +18,29 @@ window.onload = function(){// Initialize "static" vars
 		ieWarningOverlay.center();
 	}
 
-	// Create map
+	this.selector = new YAHOO.widget.Panel("selector", { zIndex:1019, visible:false } );
+	this.selector.setBody("<div id='selectorbox'></div>");
+	this.selector.render(document.body);
+
+	// Create map 
 	var m = new SOTE.widget.MapSote("map",{baseLayer:"MODIS_Terra_CorrectedReflectance_TrueColor"});
-	var a = new SOTE.widget.AccordionPicker("products",{dataSourceUrl:"data/ap_products.php"});
+	var ss = new SOTE.widget.Switch("switch",{dataSourceUrl:"a",selected:"geographic"});
+	var a = new SOTE.widget.Bank("products",{dataSourceUrl:"ap_products.php",title:"My Layers",selected:{antarctic:"baselayers.MODIS_Terra_CorrectedReflectance_TrueColor~overlays.polarview:coastS10", arctic:"baselayers.MODIS_Terra_CorrectedReflectance_TrueColor~overlays.polarview:coastArctic10",geographic:"baselayers.MODIS_Terra_CorrectedReflectance_TrueColor"},categories:["Base Layers","Overlays"],callback:this.showSelector,selector:this.selector});
+	var s = new SOTE.widget.Selector("selectorbox",{dataSourceUrl:"ap_products.php",categories:["Base Layers","Overlays"]});
 	//var h = new SOTE.widget.MenuPicker("hazard",{dataSourceUrl:"data/mp_hazard.php"});
 	//var tr = new SOTE.widget.MenuPicker("transition",{dataSourceUrl:"data/mp_transition.php"});
 	var map = new SOTE.widget.DateSpan("time",{hasThumbnail:false});
 
+};
+
+function showSelector(e){
+	var selector = e.data.selector;
+	selector.show();
+	selector.center();
 }
 
 function showOverlay(){
-	if(this.overlay === undefined){
+	if(this.overlay === undefined){ 
 		this.overlay = new YAHOO.widget.Panel("panel1", { zIndex:1020, visible:false } );
 		var item = 	"<div >"+
 			"<h3>Welcome to Worldview</h3>"+
@@ -79,8 +91,10 @@ function showPermalink(){
   	var map = SOTE.util.extractFromQuery("map",qs);
   	var products = SOTE.util.extractFromQuery("products",qs);
   	var time = SOTE.util.extractFromQuery("time",qs);
+  	var s = SOTE.util.extractFromQuery("switch",qs);
+
   	
-  	qs = "?map="+map+"&products="+products+"&time="+time;
+  	qs = "?map="+map+"&products="+products+"&time="+time+"&switch="+s;
   	
   	var url = window.location.href;
   	var prefix = url.split("?")[0];

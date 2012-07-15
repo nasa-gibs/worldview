@@ -350,17 +350,25 @@ SOTE.widget.DateSpan.prototype.getValue = function(){
 SOTE.widget.DateSpan.prototype.updateComponent = function(qs){
 	var bbox = SOTE.util.extractFromQuery('map',qs);
 	var products = SOTE.util.extractFromQuery('products',qs);
-	var a = products.split(".");
+	var a = products.split("~");
 	var activeProducts = new Array();
-	for(var i=1; i < a.length; ++i){
-		activeProducts.push(a[i])
+
+	var base = a[0].split(".");
+	var overlays = a[1].split(".");
+	for(var i=1; i<base.length; ++i){
+		activeProducts.push(base[i]);
 	}
-	if(this.isCollapsed === false){
+	for(var i=1; i<overlays.length; ++i){
+		activeProducts.push(overlays[i]);
+	}
+
+	if(this.isCollapsed == false){
 		var numOfDays = this.range/24/60/60/1000;
 		var startDate = new Date(this.endDate.getTime() - this.range);
 		for(var i=0; i<numOfDays; i++){
 			var time = new Date(startDate.getTime() + (i+1)*24*60*60*1000);
 			var timeString = SOTE.util.ISO8601StringFromDate(time);
+			this.maps[i].updateComponent(qs);
 			this.maps[i].activateRelevantLayersDisableTheRest(activeProducts,timeString);
 			this.maps[i].setValue(bbox);
 		}
