@@ -126,17 +126,23 @@
 	        "sublabel" =>  "Aqua / MODIS",
 	        "value" =>  "MODIS_Aqua_SurfaceReflectance_Bands721",
 	        "type" =>  "single"
-		),	
+		),
 		array(
-	        "label" =>  "Fires (Past 24 Hours)",
-	        "sublabel" =>  "MODIS Fire and Thermal Anomalies",
-	        "value" =>  "fires24",
+	        "label" =>  "Fires (Day and Night)",
+	        "sublabel" =>  "Terra/ and Aqua/MODIS Fire and Thermal Anomalies",
+	        "value" =>  "MODIS_Fires_All",
 	        "type" =>  "multi"
 		),
 		array(
-	        "label" =>  "Fires (Past 48 Hours)",
-	        "sublabel" =>  "MODIS Fire and Thermal Anomalies",
-	        "value" =>  "fires48",
+	        "label" =>  "Fires (Day and Night)",
+	        "sublabel" =>  "Terra/MODIS Fire and Thermal Anomalies",
+	        "value" =>  "MODIS_Fires_Terra",
+	        "type" =>  "multi"
+		),
+		array(
+	        "label" =>  "Fires (Day and Night)",
+	        "sublabel" =>  "Aqua/MODIS Fire and Thermal Anomalies",
+	        "value" =>  "MODIS_Fires_Aqua",
 	        "type" =>  "multi"
 		),
 		array(
@@ -1103,15 +1109,21 @@
 	        "type" =>  "multi"
 		),		
 		array(
-	        "label" =>  "Fires (Past 24 Hours)",
-	        "sublabel" =>  "MODIS Fire and Thermal Anomalies",
-	        "value" =>  "fires24",
+	        "label" =>  "Fires (Day and Night)",
+	        "sublabel" =>  "Terra/ and Aqua/MODIS Fire and Thermal Anomalies",
+	        "value" =>  "MODIS_Fires_All",
+	        "type" =>  "multi"
+		),		
+		array(
+	        "label" =>  "Fires (Day and Night)",
+	        "sublabel" =>  "Terra/MODIS Fire and Thermal Anomalies",
+	        "value" =>  "MODIS_Fires_Terra",
 	        "type" =>  "multi"
 		),
 		array(
-	        "label" =>  "Fires (Past 48 Hours)",
-	        "sublabel" =>  "MODIS Fire and Thermal Anomalies",
-	        "value" =>  "fires48",
+	        "label" =>  "Fires (Day and Night)",
+	        "sublabel" =>  "Aqua/MODIS Fire and Thermal Anomalies",
+	        "value" =>  "MODIS_Fires_Aqua",
 	        "type" =>  "multi"
 		),
 		array(
@@ -1389,6 +1401,42 @@
 	        "sublabel" =>  "OpenLayers / Graticule Control",
 	        "value" =>  "ol_graticule",
 	        "type" =>  "multi"
+		),
+		array(
+	        "label" =>  "Orbital Track (ascending)",
+	        "sublabel" =>  "Terra / Space-Track.org",
+	   		"value" =>  "Terra_Orbit_Asc",
+	        "type" =>  "multi"
+		),
+		array(
+	        "label" =>  "Orbital Track (descending)",
+	        "sublabel" =>  "Terra / Space-Track.org",
+	   		"value" =>  "Terra_Orbit_Dsc",
+	        "type" =>  "multi"
+		),
+		array(
+	        "label" =>  "Orbital Track (ascending)",
+	        "sublabel" =>  "Aqua / Space-Track.org",
+	   		"value" =>  "Aqua_Orbit_Asc",
+	        "type" =>  "multi"
+		),
+		array(
+	        "label" =>  "Orbital Track (descending)",
+	        "sublabel" =>  "Aqua / Space-Track.org",
+	   		"value" =>  "Aqua_Orbit_Dsc",
+	        "type" =>  "multi"
+		),
+		array(
+	        "label" =>  "Orbital Track (ascending)",
+	        "sublabel" =>  "Aura / Space-Track.org",
+	   		"value" =>  "Aura_Orbit_Asc",
+	        "type" =>  "multi"
+		),
+		array(
+	        "label" =>  "Orbital Track (descending)",
+	        "sublabel" =>  "Aura / Space-Track.org",
+	   		"value" =>  "Aura_Orbit_Dsc",
+	        "type" =>  "multi"
 		)
 	),
 
@@ -1434,6 +1482,42 @@
 	        "label" =>  "Latitude-Longitude Lines",
 	        "sublabel" =>  "OpenLayers / Graticule Control",
 	        "value" =>  "ol_graticule",
+	        "type" =>  "multi"
+		),
+		array(
+	        "label" =>  "Orbital Track (ascending)",
+	        "sublabel" =>  "Terra / Space-Track.org",
+	   		"value" =>  "Terra_Orbit_Asc",
+	        "type" =>  "multi"
+		),
+		array(
+	        "label" =>  "Orbital Track (descending)",
+	        "sublabel" =>  "Terra / Space-Track.org",
+	   		"value" =>  "Terra_Orbit_Dsc",
+	        "type" =>  "multi"
+		),
+		array(
+	        "label" =>  "Orbital Track (ascending)",
+	        "sublabel" =>  "Aqua / Space-Track.org",
+	   		"value" =>  "Aqua_Orbit_Asc",
+	        "type" =>  "multi"
+		),
+		array(
+	        "label" =>  "Orbital Track (descending)",
+	        "sublabel" =>  "Aqua / Space-Track.org",
+	   		"value" =>  "Aqua_Orbit_Dsc",
+	        "type" =>  "multi"
+		),
+		array(
+	        "label" =>  "Orbital Track (ascending)",
+	        "sublabel" =>  "Aura / Space-Track.org",
+	   		"value" =>  "Aura_Orbit_Asc",
+	        "type" =>  "multi"
+		),
+		array(
+	        "label" =>  "Orbital Track (descending)",
+	        "sublabel" =>  "Aura / Space-Track.org",
+	   		"value" =>  "Aura_Orbit_Dsc",
 	        "type" =>  "multi"
 		)
 	)
