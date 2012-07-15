@@ -165,6 +165,7 @@ SOTE.widget.DateSpan.prototype.init = function(){
 	
 	$('.ecbutton').bind("click",{self:this},SOTE.widget.DateSpan.toggle);
 
+	this.isCollapsed = false;
 	if(this.isCollapsed){
 		this.isCollapsed = false;
 		var e = new Object();
