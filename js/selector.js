@@ -115,8 +115,9 @@ SOTE.widget.Selector.prototype.render = function(){
 	title.innerHTML = "Choose Your Interest Area";
 	titleContainer.appendChild(title);
 	this.container.appendChild(titleContainer);
-	
+	var count = 0;
 	for(var i in this.data){
+		count++;
 		if(i !== "All" && i !== "palettes"){
 			var catItem = document.createElement("li");
 			var formatted = i.replace(/\s/g, "");
@@ -128,6 +129,11 @@ SOTE.widget.Selector.prototype.render = function(){
 			$("#"+this.id).delegate("#" + formatted,'click',{self:this,category:i},SOTE.widget.Selector.loadCategory);
 		}
 		
+	}
+	
+	if(count <= 2){
+		SOTE.widget.Selector.loadCategory({ data: {self:this,category:"All"}, back: true });
+		return;
 	}
 	
 	this.container.appendChild(catList);	
@@ -170,6 +176,8 @@ SOTE.widget.Selector.loadCategory = function(e){
 	var self = e.data.self;
 	var cat = e.data.category;
 	self.openCat = cat;
+	var back = (e.back)? false:true;
+
 	
 	var categories = new Object;
 	self.container.innerHTML = "";
@@ -217,6 +225,26 @@ SOTE.widget.Selector.loadCategory = function(e){
 		subItem.appendChild(itemInput);
 		subItem.appendChild(itemHead);
 		subItem.appendChild(itemP);
+		
+		// Uncomment this line and the "self.renderCanvases" line below to add color bars
+		
+		/*if(self.data.palettes[item.value]){
+			var p = self.data.palettes[item.value];
+			var palette = document.createElement("span");
+			palette.setAttribute("class","palette");
+			palette.style.marginTop = "10px";
+			palette.style.overflow = "hidden";
+			palette.style.display = "block";
+			var paletteString = "<span class='p-min' style='margin-right:10px;'>"+p.min+"</span>" +
+				 "<canvas id='canvas"+self.id+item.value+"' width=100px height=14px'></canvas>" +
+				 "<span class='p-max' style='margin-left:10px;'>"+p.max+"</span>";
+			if(p.units && p.units != ""){
+				paletteString += "<span class='units' style='margin-left:3px;'>("+p.units+")</span>";
+			}
+			palette.innerHTML = paletteString;
+			subItem.appendChild(palette);
+		}*/
+		
 		categories[item.category].appendChild(subItem);
 		$("#"+self.id).delegate("#" + formatted,'click',{self:self},SOTE.widget.Selector.toggleValue);
 	}
@@ -227,16 +255,35 @@ SOTE.widget.Selector.loadCategory = function(e){
 	}
 	
 	self.container.appendChild(form);
-	
-	var subBack = document.createElement("a");
-	subBack.setAttribute("id","subback");
-	subBack.setAttribute("class","flowbutton");
-	subBack.setAttribute("href","javascript:void(0);");
-	subBack.innerHTML = "<< <b>go back</b> and reselect my interest area";
-	self.container.appendChild(subBack);
-	$("#"+self.id).delegate("#" + "subback",'click',{self:self},SOTE.widget.Selector.callRender);
+	//self.renderCanvases(cat);	
+	if(back){
+		var subBack = document.createElement("a");
+		subBack.setAttribute("id","subback");
+		subBack.setAttribute("class","flowbutton");
+		subBack.setAttribute("href","javascript:void(0);");
+		subBack.innerHTML = "<< <b>go back</b> and reselect my interest area";
+		self.container.appendChild(subBack);
+		$("#"+self.id).delegate("#" + "subback",'click',{self:self},SOTE.widget.Selector.callRender);
+	}
 	self.adjustSelected();
 	
+};
+
+SOTE.widget.Selector.prototype.renderCanvases = function(cat){
+	for(var i=0; i< this.data[cat].length; i++){
+		var item = this.data[cat][i];
+		if(this.data.palettes[item.value]){
+			var p = this.data.palettes[item.value];
+			var width = 100/p.palette.length;
+			var canvas = document.getElementById("canvas"+this.id+item.value);
+			var context = canvas.getContext('2d');
+			for(var k=0; k<p.palette.length; ++k){
+				context.fillStyle = "rgba("+ p.palette[k] +")";
+				context.fillRect (width*k,0,width,14);
+			}
+		}
+	}
+
 };
 
 SOTE.widget.Selector.prototype.adjustSelected = function(){
