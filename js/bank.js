@@ -85,9 +85,17 @@ SOTE.widget.Bank.prototype.buildMeta = function(cb,val){
 SOTE.widget.Bank.handleMetaSuccess = function(data,status,xhr,args){
 	var self = args.self;
 	for(var i in data){
-		for(var j=0; j<data[i].length; j++){
-			self.meta[data[i][j].value] = {label:data[i][j].label,sublabel:data[i][j].sublabel};
+		if(i != "palettes") {
+			for(var j=0; j<data[i].length; j++){
+				self.meta[data[i][j].value] = {label:data[i][j].label,sublabel:data[i][j].sublabel};
+			}
 		}
+	}
+	for(var i in data['palettes']){
+		self.meta[i].units = data['palettes'][i].units;
+		self.meta[i].min = data['palettes'][i].min;
+		self.meta[i].max = data['palettes'][i].max;
+		self.meta[i].palette = data['palettes'][i].palette;
 	}
 
 	if(args.callback){
@@ -176,6 +184,36 @@ SOTE.widget.Bank.prototype.render = function(){
 				if(this.meta !== null && this.meta[this.values[formattedCategoryName.toLowerCase()][j].value]){
 					item.innerHTML += "<h4>"+this.meta[this.values[formattedCategoryName.toLowerCase()][j].value].label+"</h4>";
 					item.innerHTML += "<p>"+this.meta[this.values[formattedCategoryName.toLowerCase()][j].value].sublabel+"</p>";
+					var m = this.meta[this.values[formattedCategoryName.toLowerCase()][j].value];
+					/*if(m.paletteString){
+						item.innerHTML += m.paletteString;
+					}
+					else if(m.palette){
+						var paletteString = "<ul class='palette'>";
+						paletteString += "<li class='p-min' style='margin-right:10px;'>"+m.min+"</li>";
+						var width = 100/m.palette.length;
+						for(var k=0; k<m.palette.length; ++k){
+							paletteString += "<li class='p-color' style='display:block; height:14px; width:"+width+"px; background:rgba(" +
+								+ m.palette[k]["r"] + "," + m.palette[k]["g"] + "," + m.palette[k]["b"] + "," + m.palette[k]["a"] + ");'></li>";
+						}
+						paletteString += "<li class='p-max' style='margin-left:10px;'>"+this.meta[this.values[formattedCategoryName.toLowerCase()][j].value].max+"</li>";
+						if(m.units && m.units != ""){
+							paletteString += "<li class='units' style='margin-left:3px;'>("+m.units+")</li>";
+						} 
+						paletteString += "</ul>";
+						m.paletteString = paletteString;
+						item.innerHTML += paletteString;
+					}*/
+					if(m.palette){
+						var paletteString = "<span class='palette'><span class='p-min' style='margin-right:10px;'>"+m.min+"</span>" +
+							 "<canvas id='canvas"+this.values[formattedCategoryName.toLowerCase()][j].value+"' width=100px height=14px'></canvas>" +
+							 "<span class='p-max' style='margin-left:10px;'>"+m.max+"</span>";
+						if(m.units && m.units != ""){
+							paletteString += "<span class='units' style='margin-left:3px;'>("+m.units+")</span></span>";
+						}
+						item.innerHTML += paletteString;
+					}
+					
 				}
 				else{
 					item.innerHTML += "<h4>"+this.values[formattedCategoryName.toLowerCase()][j].value+"</h4>";
@@ -187,6 +225,7 @@ SOTE.widget.Bank.prototype.render = function(){
 		container.appendChild(category);
 	}
 	this.container.appendChild(container);
+	this.renderCanvases();
 	var accordionToggler = document.createElement("a");
 	accordionToggler.setAttribute("class","accordionToggler atcollapse");
 	this.isCollapsed = false;
@@ -202,6 +241,28 @@ SOTE.widget.Bank.prototype.render = function(){
 		REGISTRY.markComponentReady(this.id);
 	}
 	
+};
+
+SOTE.widget.Bank.prototype.renderCanvases = function(){
+
+	for(var i=0; i<this.categories.length; i++){
+		var formattedCategoryName = this.categories[i].replace(/\s/g, "");
+		if(this.values !== null && this.values[formattedCategoryName.toLowerCase()]){
+			for(var j=0; j<this.values[formattedCategoryName.toLowerCase()].length; j++){
+				var val = this.values[formattedCategoryName.toLowerCase()][j].value;
+				var m = this.meta[this.values[formattedCategoryName.toLowerCase()][j].value];
+				if(m.palette){
+					var width = 100/m.palette.length;
+					var canvas = document.getElementById("canvas"+val);
+					var context = canvas.getContext('2d');
+					for(var k=0; k<m.palette.length; ++k){
+						context.fillStyle = "rgba("+ m.palette[k] +")";
+						context.fillRect (width*k,0,width,14);
+					}
+				}
+			}
+		}
+	}
 };
 
 SOTE.widget.Bank.toggle = function(e,ui){

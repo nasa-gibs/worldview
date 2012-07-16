@@ -117,7 +117,7 @@ SOTE.widget.Selector.prototype.render = function(){
 	this.container.appendChild(titleContainer);
 	
 	for(var i in this.data){
-		if(i !== "All"){
+		if(i !== "All" && i !== "palettes"){
 			var catItem = document.createElement("li");
 			var formatted = i.replace(/\s/g, "");
 			itemLink = document.createElement("a");
