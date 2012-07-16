@@ -1410,43 +1410,43 @@
 	        "sublabel" =>  "OpenLayers / Graticule Control",
 	        "value" =>  "ol_graticule",
 	        "type" => "multi", "category" => "overlays"
-		),
-		array(
-	        "label" =>  "Orbital Track (Ascending)",
-	        "sublabel" =>  "Space-Track.org / Terra",
-	        "value" =>  "Terra_Orbit_Asc",
-	        "type" => "multi", "category" => "overlays"
-		),
-		array(
-	        "label" =>  "Orbital Track (Descending)",
-	        "sublabel" =>  "Space-Track.org / Terra",
-	        "value" =>  "Terra_Orbit_Dsc",
-	        "type" => "multi", "category" => "overlays"
-		),
-		array(
-	        "label" =>  "Orbital Track (Ascending)",
-	        "sublabel" =>  "Space-Track.org / Aqua",
-	        "value" =>  "Aqua_Orbit_Asc",
-	        "type" => "multi", "category" => "overlays"
-		),
-		array(
-	        "label" =>  "Orbital Track (Descending)",
-	        "sublabel" =>  "Space-Track.org / Aqua",
-	        "value" =>  "Aqua_Orbit_Dsc",
-	        "type" => "multi", "category" => "overlays"
-		),
-		array(
-	        "label" =>  "Orbital Track (Ascending)",
-	        "sublabel" =>  "Space-Track.org / Aura",
-	        "value" =>  "Aura_Orbit_Asc",
-	        "type" => "multi", "category" => "overlays"
-		),
-		array(
-	        "label" =>  "Orbital Track (Descending)",
-	        "sublabel" =>  "Space-Track.org / Aura",
-	        "value" =>  "Aura_Orbit_Dsc",
-	        "type" => "multi", "category" => "overlays"
 		)
+		// array(
+	        // "label" =>  "Orbital Track (Ascending)",
+	        // "sublabel" =>  "Space-Track.org / Terra",
+	        // "value" =>  "Terra_Orbit_Asc",
+	        // "type" => "multi", "category" => "overlays"
+		// ),
+		// array(
+	        // "label" =>  "Orbital Track (Descending)",
+	        // "sublabel" =>  "Space-Track.org / Terra",
+	        // "value" =>  "Terra_Orbit_Dsc",
+	        // "type" => "multi", "category" => "overlays"
+		// ),
+		// array(
+	        // "label" =>  "Orbital Track (Ascending)",
+	        // "sublabel" =>  "Space-Track.org / Aqua",
+	        // "value" =>  "Aqua_Orbit_Asc",
+	        // "type" => "multi", "category" => "overlays"
+		// ),
+		// array(
+	        // "label" =>  "Orbital Track (Descending)",
+	        // "sublabel" =>  "Space-Track.org / Aqua",
+	        // "value" =>  "Aqua_Orbit_Dsc",
+	        // "type" => "multi", "category" => "overlays"
+		// ),
+		// array(
+	        // "label" =>  "Orbital Track (Ascending)",
+	        // "sublabel" =>  "Space-Track.org / Aura",
+	        // "value" =>  "Aura_Orbit_Asc",
+	        // "type" => "multi", "category" => "overlays"
+		// ),
+		// array(
+	        // "label" =>  "Orbital Track (Descending)",
+	        // "sublabel" =>  "Space-Track.org / Aura",
+	        // "value" =>  "Aura_Orbit_Dsc",
+	        // "type" => "multi", "category" => "overlays"
+		// )
 	),
 	"palettes" => array(
 		"AIRS_Precipitation_Day" => array(
