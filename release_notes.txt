@@ -19,6 +19,7 @@ Release 2012/07/15
 	- Documentation for Worldview's backend, the Global Imagery Browse Services (GIBS), has been published (http://earthdata.nasa.gov/gibs)
 	- Worldview now uses the OGC Web Map Tile Service (WMTS) to retrieve tiled imagery from GIBS
 	- OpenLayers library updated to version 2.12 from 2.11
+	- This "release notes" document created.
 
 
 * Known Issues
