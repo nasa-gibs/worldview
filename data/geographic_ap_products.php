@@ -1175,12 +1175,6 @@
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
-	        "label" =>  "Land-Water Mask",
-	        "sublabel" =>  "Terra-Aqua / MODIS",
-	        "value" =>  "MODIS_Land_Water_Mask",
-	        "type" => "multi", "category" => "overlays"
-		),		
-		array(
 	        "label" =>  "Carbon Monoxide (Total Column, Day)",
 	        "sublabel" =>  "Aqua / AIRS",
 	        "value" =>  "AIRS_CO_Total_Column_Day",
