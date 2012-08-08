@@ -51,13 +51,13 @@
 		        "type" => "single", "category" => "baselayers"
 			),
 			array(
-		        "label"=> "Sea Ice Extent",
+		        "label"=> "Sea Ice",
 		        "sublabel"=> "Terra / MODIS",
 		        "value"=> "MODIS_Terra_Sea_Ice",
 		        "type" => "multi", "category" => "overlays"
 			),
 			array(
-		        "label"=> "Sea Ice Extent",
+		        "label"=> "Sea Ice",
 		        "sublabel"=> "Aqua / MODIS",
 		        "value"=> "MODIS_Aqua_Sea_Ice",
 		        "type" => "multi", "category" => "overlays"
@@ -86,9 +86,8 @@
 		        "sublabel"=> "Polarview / Graticule",
 		        "value"=> "polarview:graticule3031_10x30",
 		        "type" => "multi", "category" => "overlays"
-		        
 			)
-			
+
 		),
 		"palettes" => array(
 		"MODIS_Terra_Brightness_Temp_Band31_Day" => array(
