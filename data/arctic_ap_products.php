@@ -58,13 +58,13 @@
 
 			),
 			array(
-		        "label"=> "Sea Ice Extent",
+		        "label"=> "Sea Ice",
 		        "sublabel"=> "Terra / MODIS",
 		        "value"=> "MODIS_Terra_Sea_Ice",
 		        "type" => "multi", "category" => "overlays"
 			),
 			array(
-		        "label"=> "Sea Ice Extent",
+		        "label"=> "Sea Ice",
 		        "sublabel"=> "Aqua / MODIS",
 		        "value"=> "MODIS_Aqua_Sea_Ice",
 		        "type" => "multi", "category" => "overlays"
