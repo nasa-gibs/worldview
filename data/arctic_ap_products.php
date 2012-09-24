@@ -23,34 +23,6 @@
 
 			),
 			array(
-		        "label"=> "Brightness Temperature (Band 31-Day)",
-		        "sublabel"=> "Terra / MODIS",
-		        "value"=> "MODIS_Terra_Brightness_Temp_Band31_Day",
-		        "type" => "single", "category" => "baselayers"
-
-			),
-			array(
-		        "label"=> "Brightness Temperature (Band 31-Night)",
-		        "sublabel"=> "Terra / MODIS",
-		        "value"=> "MODIS_Terra_Brightness_Temp_Band31_Night", 
-		        "type" => "single", "category" => "baselayers"
-
-			),
-			array(
-		        "label"=> "Brightness Temperature (Band 31-Day)",
-		        "sublabel"=> "Aqua / MODIS",
-		        "value"=> "MODIS_Aqua_Brightness_Temp_Band31_Day",
-		        "type" => "single", "category" => "baselayers"
-
-			),
-			array(
-		        "label"=> "Brightness Temperature (Band 31-Night)",
-		        "sublabel"=> "Aqua / MODIS",
-		        "value"=> "MODIS_Aqua_Brightness_Temp_Band31_Night",
-		        "type" => "single", "category" => "baselayers"
-
-			),
-			array(
 		        "label"=> "Empty",
 		        "sublabel"=> "",
 		        "value"=> "NON_EXISTENT_LAYER",
@@ -70,6 +42,12 @@
 		        "type" => "multi", "category" => "overlays"
 			),
 			array(
+		        "label"=> "Daily Polar Gridded Sea Ice Concentrations",
+		        "sublabel"=> "NSIDC / NRT DMSP SSM/I-SSMIS",
+		        "value"=> "NSIDC_Sea_Ice_Concentration",
+		        "type" => "multi", "category" => "overlays"
+			),
+			array(
 		        "label"=> "Snow Cover",
 		        "sublabel"=> "Terra / MODIS",
 		        "value"=> "MODIS_Terra_Snow_Cover",
@@ -80,6 +58,46 @@
 		        "sublabel"=> "Aqua / MODIS",
 		        "value"=> "MODIS_Aqua_Snow_Cover",
 		        "type" => "multi", "category" => "overlays"
+			),
+			array(
+		        "label"=> "Chlorophyll A",
+		        "sublabel"=> "Aqua / MODIS (OBPG)",
+		        "value"=> "OBPG_MODIS_Aqua_Chlorophyll_A",
+		        "type" => "multi", "category" => "overlays"
+			),
+			array(
+		        "label"=> "Sea Surface Temperature (11µ-Day)",
+		        "sublabel"=> "Aqua / MODIS (OBPG)",
+		        "value"=> "OBPG_SeaSurfaceTemperature_11_Day",
+		        "type" => "multi", "category" => "overlays"
+			),
+			array(
+		        "label"=> "Brightness Temperature (Band 31-Day)",
+		        "sublabel"=> "Terra / MODIS",
+		        "value"=> "MODIS_Terra_Brightness_Temp_Band31_Day",
+		        "type" => "multi", "category" => "overlays"
+
+			),
+			array(
+		        "label"=> "Brightness Temperature (Band 31-Night)",
+		        "sublabel"=> "Terra / MODIS",
+		        "value"=> "MODIS_Terra_Brightness_Temp_Band31_Night", 
+		        "type" => "multi", "category" => "overlays"
+
+			),
+			array(
+		        "label"=> "Brightness Temperature (Band 31-Day)",
+		        "sublabel"=> "Aqua / MODIS",
+		        "value"=> "MODIS_Aqua_Brightness_Temp_Band31_Day",
+		        "type" => "multi", "category" => "overlays"
+
+			),
+			array(
+		        "label"=> "Brightness Temperature (Band 31-Night)",
+		        "sublabel"=> "Aqua / MODIS",
+		        "value"=> "MODIS_Aqua_Brightness_Temp_Band31_Night",
+		        "type" => "multi", "category" => "overlays"
+
 			),
 	        array(
 		        "label"=> "Population Density",
