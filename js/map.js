@@ -35,8 +35,15 @@ SOTE.widget.Map = function(containerId, config){
 	//
 	this.DEFAULT_OVERLAY_OPACITY = 0.95;
 	
+	var currentDate = new Date();
+	var gibsStartDate = new Date(2012, 5, 1, 0, 0, 0, 0);
+
+	// Compute number of days by converting from ms
+	var numDaysToGenerate = (currentDate.getTime() - gibsStartDate.getTime()) / (24 * 60 * 60 * 1000) + 1;
+
 	// Number of "days" to generate for each layer 
-	this.NUM_DAYS_TO_GENERATE = 8;
+	this.NUM_DAYS_TO_GENERATE = Math.round(numDaysToGenerate);
+
 	
 	// Resolutions / zoom levels supported by the current map
 	this.RESOLUTIONS_ON_SCREEN_GEO_ALL =  
