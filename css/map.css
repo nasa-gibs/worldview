@@ -166,6 +166,13 @@ div.olControlZoomPanelCustom .olControlZoomToMaxExtentItemInactive {
     right: 0px;
 }
 
+.olLayerGridTile .olTileImage {
+    -webkit-transition: none;
+    -moz-transition: none;
+    -o-transition: all 0 none;
+    transition: none;
+}
+
 
 
 #title, #tags, #shortdesc {
