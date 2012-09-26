@@ -1,8 +1,8 @@
 .spanContainerLabel {width:25%; float:left; text-shadow:none; display:block; margin-top:20px; text-align:center; font-size:.1em; color:#fff;}
 .spanContainerLabelDate,.spanContainerLabelDay {display:block; font-size:.25em;}
 .spanContainerLabelDay{font-size:.16em;}
-.spanContainer { float:right;  min-height:100%; width:97%; margin-top:10px; margin-bottom:10px;}
-.dateSpan {width:100%;}
+.spanContainer { float:left;  min-height:100%; width:100%;}
+.datespan {width:100%; overflow:hidden; background:none;}
 .datespan div.olMap {width:11.78%; height:100px; 
 float:left;
 -moz-box-shadow: 0 0 5px 5px #111;
@@ -13,14 +13,26 @@ margin:20px 0 0 2.5% !important;
 position:relative; left:-1.25%;
 display:block; 
 } 
-a.ecbutton { display:block; width:24px; height:24px; float:right; margin-right:5px; position:relative; }
-a.collapse {background-image: url("../images/collapseDown.png"); }
-a.expand {background-image: url("../images/expandUp.png");}
-.dateSpanSlider {visibility:hidden;}
-div.ui-slider{height:0px;  width:85.5%; border:red 0px solid; z-index:1002; float:left; margin:0 0 0 7.24%;}
-div.ui-slider-switch {display:none} 
-a.ui-slider-handle{height:130px; display:block; width:14%; background:rgba(228,108,10,.2); border:#E46C0A 2px solid; z-index:1004; position:relative; top:-142px; margin: 10px 0 0 -7% !important; padding: 5px 0 5px 0; }
-span.sliderText {font: 14px/14px "Gill Sans", sans-serif, serif; font-weight:500; color:#fff; text-shadow:none; z-index:1005;}
+a.ecbutton { display:block; width:24px; height:29px; float:left; position:relative; background: rgba(68,68,68,.85);}
+a.collapse {background-image: url("../images/collapseDown.png"); background-repeat:no-repeat;}
+a.expand {background-image: url("../images/expandUp.png"); background-repeat:no-repeat;}
+.dateSpanSlider {display:none !important;}
+div.slider {background: rgba(68,68,68,.85); margin-bottom:0px;}
+ul.sliderLabel {text-shadow: none; color:#ccc; margin:-20px 0 0 0; background:none; height:20px; overflow:hidden;}
+ul.sliderLabel li {float:left; background:none; margin:0px;}
+div.sliderDivYear {clear:both;}
+div.sliderDivMonth {background: rgba(68,68,68,.6);}
+div.sliderDivDay {}
+a.ui-slider-handle {position:relative;  height:80%; top:-3%; background: rgba(31,143,237,.26); border: #1f8fed 2px solid; }
+div.ui-slider {border:none; background:transparent; width:100%; margin:0px; top:0px; height:23px;}
+/*.sliderDivDay a.ui-slider-handle {margin-left:-15px !important;}
+.sliderDivMonth a.ui-slider-handle {width:54px; margin-left:-30px !important;}
+.sliderDivYear a.ui-slider-handle {width:54px; margin-left:-30px !important;}*/
+
+.dateHolder {display:inline-block; float:left; width:15%; background: rgba(68,68,68,.85); margin-bottom:10px; text-shadow:none; color:#ccc; font-weight:bold; text-align:center; padding:5px 0px; }
+
+/*a.ui-slider-handle{height:130px; display:block; width:14%; background:rgba(228,108,10,.2); border:#E46C0A 2px solid; z-index:1004; position:relative; top:-142px; margin: 10px 0 0 -7% !important; padding: 5px 0 5px 0; }*/
+/*span.sliderText {font: 14px/14px "Gill Sans", sans-serif, serif; font-weight:500; color:#fff; text-shadow:none; z-index:1005;}*/
 a.ui-btn {margin:0;} 
 a.ui-shadow {box-shadow:none;} 
 a.ui-btn-up-c {box-shadow:none;} 

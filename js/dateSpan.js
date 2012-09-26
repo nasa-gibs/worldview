@@ -26,6 +26,15 @@ SOTE.namespace("SOTE.widget.DateSpan");
   * 
 */
 SOTE.widget.DateSpan = function(containerId, config){
+	this.SLIDER_WIDTH = 100;
+    this.DAY_IN_MS = 24*60*60*1000;
+    this.sliders = new Object();
+	this.sliders["Year"] = [2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012];
+	this.sliders["Month"] = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+	this.sliders["Day"] = [01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
+ 
+    this.sliderContent = [];
+	
 	this.container=document.getElementById(containerId);
 	if (this.container==null){
 		this.setStatus("Error: element '"+containerId+"' not found!",true);
@@ -69,8 +78,20 @@ SOTE.widget.DateSpan = function(containerId, config){
 		config.endDate = new Date(config.endDate);
 	}
 
+	if(config.startDate === undefined){
+		config.startDate = new Date();
+		var timeString = "06/01/2012";
+		config.startDate = new Date(timeString);
+		config.startDate.setHours(12);
+		config.startDate.setMinutes(00);
+		config.startDate.setSeconds(00);
+	}
+	else{
+		config.endDate = new Date(config.endDate);
+	}
+
 	if(config.range === undefined){
-		config.range = 7*24*60*60*1000;
+		config.range = 7*this.DAY_IN_MS;
 	}
 	
 	if(config.selected === undefined){
@@ -91,6 +112,7 @@ SOTE.widget.DateSpan = function(containerId, config){
        
     this.value = "";
     this.maps = [];
+    this.startDate = config.startDate;
 	this.endDate = config.endDate;
 	this.range = config.range; //in milliseconds
 	this.isCollapsed = config.isCollapsed;
@@ -118,67 +140,29 @@ SOTE.widget.DateSpan.prototype = new SOTE.widget.Component;
 */
 SOTE.widget.DateSpan.prototype.init = function(){
 	
+	// inherit styles into the user-specified div
 	this.container.setAttribute("class","datespan");
-	//var bgStripe = document.createElement('div');
-	//bgStripe.setAttribute('class','horizontalContainer');
-	var expandCollapseButton = document.createElement('a');
-	expandCollapseButton.setAttribute('class','ecbutton collapse');
-	this.container.appendChild(expandCollapseButton);
-	var spanContainer = document.createElement('div');
-	spanContainer.setAttribute('class','spanContainer');
-	spanContainer.setAttribute('id',this.id+'spanContainer');
-	//bgStripe.appendChild(spanContainer);
-	this.container.appendChild(spanContainer);
-	/*var labelForSpanContainer = document.createElement('label');
-	labelForSpanContainer.setAttribute('for',this.id+'spanContainer');
-	labelForSpanContainer.setAttribute('class','spanContainerLabel');
-	labelForSpanContainer.innerHTML = "<span class='.annotation'>* drag the slider to select a date</span><span id='"+this.id+
-		"spanContainerLabelDate'class='spanContainerLabelDate'></span><span id='"+this.id+
-		"spanContainerLabelDay' class='spanContainerLabelDay'></span>";
-	this.container.appendChild(labelForSpanContainer); 
-	*/
-	var numOfDays = this.range/24/60/60/1000;
-	var startDate = new Date(this.endDate.getTime() - this.range);
-	for(var i=0; i < numOfDays; ++i){
-		var mapDiv = document.createElement('div');
-		mapDiv.setAttribute('id','mapdiv'+i);
-		mapDiv.setAttribute('class','dateitem');
-		spanContainer.appendChild(mapDiv);
-		var time = new Date(startDate.getTime() + (i+1)*24*60*60*1000);
-		//var time = new Date(this.endDate.getTime() - i*24*60*60*1000);
-		//var timeString = time.getUTCFullYear() + "-" + eval(time.getUTCMonth()+1) + "-" + time.getUTCDate();
-		//timeString += "T"+
-		var timeString = SOTE.util.ISO8601StringFromDate(time);
-		this.maps.push(new SOTE.widget.Map('mapdiv'+i,{baseLayer:"MODIS_Terra_CorrectedReflectance_TrueColor",time:timeString,hasControls:false}));
-		$('#mapdiv'+i).bind("click",{self:this,time:time.clone()},SOTE.widget.DateSpan.snapToTime);
-	}
 
+	var dateHolder = document.createElement('div');
+	dateHolder.setAttribute('id',this.id+'dateHolder');
+	dateHolder.setAttribute('class','dateHolder');
+	dateHolder.innerHTML = 'Friday September 21, 2012';
+	this.container.appendChild(dateHolder);
 	
-	var slider = document.createElement('div');
-	slider.setAttribute('id',this.id+'sliderDiv');
-	slider.innerHTML = '<input type="range" name="slider" id="'+this.id+'slider" class="dateSpanSlider" value="100" min="0" max="100" step="1" />';
-	spanContainer.appendChild(slider);
+	var ecbutton = document.createElement("a");
+	ecbutton.setAttribute("class","ecbutton collapse");
+	ecbutton.setAttribute("id",this.id+"ecbutton");
+	this.container.appendChild(ecbutton);
 
-	$('#'+this.id+'slider').slider(); 
-	$('#'+this.id+'slider').bind("change",{self:this},SOTE.widget.DateSpan.handleSlide);
-	$('#'+this.id+'slider').siblings('.ui-slider').bind("vmouseup",{self:this},SOTE.widget.DateSpan.snap);
-	
-	$('.ecbutton').bind("click",{self:this},SOTE.widget.DateSpan.toggle);
-
-	this.isCollapsed = true;
-	if(this.isCollapsed){
-		this.isCollapsed = false;
-		var e = new Object();
-		e.data = new Object();
-		e.data.self = this;
-		SOTE.widget.DateSpan.toggle(e);	
-	}
-
-	this.spanDate = document.getElementById(this.id+"spanContainerLabelDate");
-	this.spanDay = document.getElementById(this.id+"spanContainerLabelDay");
+	this.createSlider("Year");
+	this.createSlider("Month");
+	this.createSlider("Day");
 
 	this.setVisualDate();
 
+	this.setValue(SOTE.util.ISO8601StringFromDate(this.value));
+
+	$('#'+this.id+'ecbutton').bind("click",{self:this},SOTE.widget.DateSpan.toggle);
 
     if(REGISTRY){
  		REGISTRY.register(this.id,this);
@@ -188,6 +172,42 @@ SOTE.widget.DateSpan.prototype.init = function(){
 		alert("No REGISTRY found!  Cannot register AccordionPicker!");
 	}
 
+};
+
+
+SOTE.widget.DateSpan.prototype.createSlider = function(type){
+	var slider = document.createElement('div');
+	slider.setAttribute('id',this.id+'sliderDiv'+type);
+	slider.setAttribute('class','sliderDiv'+type+' slider');
+	slider.innerHTML = '<input type="range" name="slider" id="'+this.id+'slider'+type+'" class="dateSpanSlider" value="'+this.SLIDER_WIDTH+'" min="0" max="'+this.SLIDER_WIDTH+'" step="1" />';
+	this.container.appendChild(slider);
+	
+	var width = 0;
+	
+	var labels = this.sliders[type];
+	
+	if(labels != undefined){
+		width = 50/labels.length;
+		spacer = 50/labels.length;
+		if(type=='Month'){ width=60/labels.length; spacer=40/labels.length;}
+		var label = document.createElement('ul');
+		label.setAttribute('class','sliderLabel');
+		for(var i=0; i<labels.length; ++i){
+			var item = document.createElement('li');
+			item.innerHTML = labels[i];
+			item.style.width = width + "%";
+			item.style.marginLeft = spacer/2 + "%";
+			item.style.marginRight = spacer/2 + "%"; 
+			label.appendChild(item);
+		}	
+		this.container.appendChild(label);
+	}
+		
+	$('#'+this.id+'slider'+type).slider(); 
+	$('#'+this.id+'slider'+type).bind("change",{self:this,type:type},SOTE.widget.DateSpan.handleSlide);
+	$('#'+this.id+'slider'+type).siblings('.ui-slider').bind("vmouseup",{self:this,type:type},SOTE.widget.DateSpan.snap);	    
+	if(width!=0){$('.sliderDiv'+type+' a.ui-slider-handle').css('width',eval(width*1.5)+"%");}
+	    
 };
 
 /**
@@ -210,31 +230,51 @@ SOTE.widget.DateSpan.prototype.fire = function(){
 
 SOTE.widget.DateSpan.handleSlide = function(e,ui){
 	var value = e.target.value;
+	var type = e.data.type;
 	var self = e.data.self;
+
+	var numitems = self.sliders[type].length;
+
+	var displacement = Math.floor(value*(numitems/self.SLIDER_WIDTH));
 	
-/*	var numOfDays = self.range/24/60/60/1000;
-	var increment = 100/numOfDays;
-	var prev = 0;
-	for(var i=increment; i<100; i+=increment){
-		var avg = (prev+i)/2;
-		if(value > prev && value < avg){
-			value = prev;
-			break;
+	if(self.sliders[type][displacement]){
+		var newDate = self.value.clone();
+		if(type == "Year"){
+			newDate.setYear(self.sliders[type][displacement]);
 		}
-		if(value > avg && value < increment){
-			value = increment;
-			break;
+		else if (type == "Month"){
+			newDate.setMonth(displacement);
 		}
-		prev = i;
+		else if (type == "Day"){
+			newDate.setDate(self.sliders[type][displacement]);
+		}
+		
+		if(newDate.getTime() >= self.startDate.getTime() && newDate.getTime() <= self.endDate.getTime()){
+			self.value = newDate.clone();
+		}
+		
 	}
-	$('#'+self.id+'slider').slider("value",value);*/
-	var x = (self.range - (24*60*60*1000)) * (100-value)/100;
+	else {
+		if(displacement >= self.sliders[type].length){
+			self.setValue(SOTE.util.ISO8601StringFromDate(self.endDate));
+		}
+		else if(displacement < 0){
+			self.setValue(SOTE.util.ISO8601StringFromDate(self.startDate));
+		}
+	}
+	
+	self.setVisualDate();	
+	self.fire()
+
+/*
+	var x = (self.range - self.DAY_IN_MS) * (self.SLIDER_WIDTH-value)/self.SLIDER_WIDTH;
+	
 	var time = new Date(self.endDate.getTime() - x);
 	if(self.value.getTime() !== time.getTime()){
 		self.value = time.clone();
 		self.setVisualDate();
 		self.fire();
-	}
+	}*/
 	
 
 };
@@ -243,32 +283,67 @@ SOTE.widget.DateSpan.toggle = function(e,ui){
 	var self = e.data.self;
 	if(self.isCollapsed){
 		$('.ecbutton').removeClass('expand').addClass('collapse');
-		$('.ecbutton').attr("title","Hide Date Thumbnails");
-		$('a.ui-slider-handle').css('top','-142px');
+		$('.ecbutton').attr("title","Hide Date Sliders");
+		//$('a.ui-slider-handle').css('top','-142px');
 		self.isCollapsed = false;
-		self.showMaps();
-		self.updateComponent(self.cachedQs);
+		self.showSliders();
 	}
 	else{
 		$('.ecbutton').removeClass('collapse').addClass('expand');
-		$('.ecbutton').attr("title","Show Date Thumbnails");
-		$('a.ui-slider-handle').css('top','-25px');
+		$('.ecbutton').attr("title","Show Date Sliders");
+		//$('a.ui-slider-handle').css('top','-25px');
 		self.isCollapsed = true;
-		self.hideMaps();
-
+		self.hideSliders();
 	} 
 };
 
 SOTE.widget.DateSpan.snap = function(e,ui){
 	var self = e.data.self;
-	var value = $("#"+self.id+"slider").val();
-	var x = (self.range - (24*60*60*1000)) * (100-value)/100;
+	var type = e.data.type;
+	var numitems = self.sliders[type].length;
+	var value = $("#"+self.id+"slider"+type).val();
+	//alert("value: " + value + "; numitems: " + numitems);
+	var displacement = Math.floor(value*(numitems/self.SLIDER_WIDTH));
+	var width = self.SLIDER_WIDTH/numitems;
+	var move = (type=="Year")? displacement*width + .5:displacement*width;
+	$("#"+self.id+"slider"+type).val((move)).slider("refresh");
+	//alert(self.sliders[type][displacement]);
+	if(self.sliders[type][displacement]){
+		var newDate = self.value.clone();
+		if(type == "Year"){
+			newDate.setYear(self.sliders[type][displacement]);
+		}
+		else if (type == "Month"){
+			newDate.setMonth(displacement);
+		}
+		else if (type == "Day"){
+			newDate.setDate(self.sliders[type][displacement]);
+		}
+		
+		
+		if(newDate.getTime() >= self.startDate.getTime() && newDate.getTime() <= self.endDate.getTime()){
+			self.value = newDate.clone();
+		}
+		
+		self.setValue(SOTE.util.ISO8601StringFromDate(self.value));
+
+	}
+	else {
+		if(displacement >= self.sliders[type].length){
+			self.setValue(SOTE.util.ISO8601StringFromDate(self.endDate));
+		}
+		else if(displacement < 0) {
+			self.setValue(SOTE.util.ISO8601StringFromDate(self.startDate));
+		}
+	}
+	self.setVisualDate();
+	/*var x = (self.range - (24*60*60*1000)) * (100-value)/100;
 	var time = new Date(self.endDate.getTime() - x);
 	time.setHours(12);
 	time.setMinutes(0);
 	time.setSeconds(0);
 
-	self.setValue(SOTE.util.ISO8601StringFromDate(time));
+	self.setValue(SOTE.util.ISO8601StringFromDate(time));*/
 };
 
 SOTE.widget.DateSpan.snapToTime = function(e,ui){
@@ -276,18 +351,18 @@ SOTE.widget.DateSpan.snapToTime = function(e,ui){
 	var time = e.data.time;
 	//time = new Date(time.getTime() - time.getTimezoneOffset()*60000);
 	
-	self.setValue(SOTE.util.ISO8601StringFromDate(time));
+	//self.setValue(SOTE.util.ISO8601StringFromDate(time));
 };
 
-SOTE.widget.DateSpan.prototype.hideMaps = function(){
-	for(var i=0; i<this.maps.length; ++i){
-		$("#"+this.maps[i].id).css('display','none');
+SOTE.widget.DateSpan.prototype.hideSliders = function(){
+	for(var i in this.sliders){
+		$("#"+this.id+"sliderDiv"+i).css('display','none');
 	}
 }
 
-SOTE.widget.DateSpan.prototype.showMaps = function(){
-	for(var i=0; i<this.maps.length; ++i){
-		$("#"+this.maps[i].id).css('display','block');
+SOTE.widget.DateSpan.prototype.showSliders = function(){
+	for(var i in this.sliders){
+		$("#"+this.id+"sliderDiv"+i).css('display','block');
 	}
 }
 
@@ -302,31 +377,38 @@ SOTE.widget.DateSpan.prototype.showMaps = function(){
 SOTE.widget.DateSpan.prototype.setValue = function(value){
 	var d = SOTE.util.UTCDateFromISO8601String(value);
 	var startDate = this.endDate.getTime() - (this.range -24*60*60*1000);
-	if(d.getTime() <= this.endDate.getTime() && d.getTime() >= startDate)
+	var monthNames = [ "January", "February", "March", "April", "May", "June",
+    	"July", "August", "September", "October", "November", "December" ];
+	
+	if(d.getTime() <= this.endDate.getTime() && d.getTime() >= this.startDate.getTime())
 	{
-		this.value = d.clone();
-		var visualPositionDifference = ((this.endDate.getTime() - this.value.getTime())/(this.range - 24*60*60*1000))*100;
-		$('#'+this.id+'slider').val(100-visualPositionDifference).slider("refresh");
+		this.value = d;
+		var values = new Object();
+		values["Year"] = this.sliders["Year"].indexOf(this.value.getFullYear());
+		values["Month"] = this.value.getMonth();
+		values["Day"] = this.sliders["Day"].indexOf(this.value.getDate());
+		
+		for(var type in values){
+			var numitems = this.sliders[type].length;
+			var displacement = values[type];
+			var width = this.SLIDER_WIDTH/numitems;
+			var move = (type=="Year")? displacement*width + .5: displacement*width;
+			$("#"+this.id+"slider"+type).val(move).slider("refresh");			
+		}
+
 		this.setVisualDate();
 		this.fire();
 	}
 	else{
-		SOTE.util.throwError("The date in your permalink has expired.  As of right now, Worldview only retains the past 7 days of data.  The date has been adjusted to today's date.");
+		SOTE.util.throwError("The date "+value+" in your permalink has expired.  As of right now, Worldview only retains data as of "+SOTE.util.ISO8601StringFromDate(this.startDate)+".  The date has been adjusted to today's date.");
 	}
 };
 
 SOTE.widget.DateSpan.prototype.setVisualDate = function(){
-	/*this.spanDate.innerHTML = this.value.getUTCFullYear() + "-" + SOTE.util.zeroPad(eval(this.value.getUTCMonth()+1),2) + "-" + 
-		SOTE.util.zeroPad(this.value.getUTCDate(),2);
-	//this.spanDay.innerHTML = SOTE.util.zeroPad(this.value.getUTCHours(),2) + ":" + 
-	//		SOTE.util.zeroPad(this.value.getUTCMinutes(),2) + ":" + SOTE.util.zeroPad(this.value.getUTCSeconds(),2);
-	this.spanDay.innerHTML = SOTE.util.DayNameFromUTCDayInt(this.value.getUTCDay());
-	*/
-	
 	var dateString = this.value.getFullYear() + "-" + SOTE.util.zeroPad(eval(this.value.getMonth()+1),2) + "-" + 
 		SOTE.util.zeroPad(this.value.getDate(),2);
-	
-	$("a.ui-slider-handle").html("<span class='sliderText'>"+dateString+"</span>");
+	$('#'+this.id+'dateHolder').html(dateString);
+	//$("a.ui-slider-handle").html("<span class='sliderText'>"+dateString+"</span>");
 };
 
 /**
@@ -349,7 +431,7 @@ SOTE.widget.DateSpan.prototype.getValue = function(){
   * 
 */
 SOTE.widget.DateSpan.prototype.updateComponent = function(qs){
-	var bbox = SOTE.util.extractFromQuery('map',qs);
+/*	var bbox = SOTE.util.extractFromQuery('map',qs);
 	var products = SOTE.util.extractFromQuery('products',qs);
 	var a = products.split("~");
 	var activeProducts = new Array();
@@ -376,7 +458,7 @@ SOTE.widget.DateSpan.prototype.updateComponent = function(qs){
 	}
 	else {
 		this.cachedQs = qs;
-	}
+	}*/
 };
 
 /**
