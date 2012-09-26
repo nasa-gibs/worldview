@@ -19,7 +19,7 @@ a.expand {background-image: url("../images/expandUp.png"); background-repeat:no-
 .dateSpanSlider {display:none !important;}
 div.slider {background: rgba(68,68,68,.85); margin-bottom:0px;}
 ul.sliderLabel {text-shadow: none; color:#ccc; margin:-20px 0 0 0; background:none; height:20px; overflow:hidden;}
-ul.sliderLabel li {float:left; background:none; margin:0px;}
+ul.sliderLabel li {float:left; background:none; margin:0px; text-align:center;}
 div.sliderDivYear {clear:both;}
 div.sliderDivMonth {background: rgba(68,68,68,.6);}
 div.sliderDivDay {}

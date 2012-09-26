@@ -1,4 +1,5 @@
 html,body, div, ul, li {display:block; margin:0; padding:0; }
+body {min-width:600px;}
 div {display:block;}
 
 .yui-skin-sam .yui-panel {background: transparent; width:700px; 	font: 13px "Gill Sans", sans-serif; font-weight:100;}  
@@ -18,7 +19,7 @@ div {display:block;}
 #permpanel h3 {color:#FFFFFF; font: 12px "Gill Sans", sans-serif; font-weight:100; text-decoration:none;}
 #permpanel input[type='text']{width:280px;}
 
-div.horizontalContainer {width:100%; display:block; float:left; min-height:40px; background-color:rgba(68,68,68,.85); position:absolute; overflow:hidden; bottom:0; z-index:1002; }
+div.horizontalContainer {width:100%; display:block; float:left;  position:absolute;  overflow:hidden; bottom:0; z-index:1002; padding: 5px 0 5px 0;}
 #aboutus,#permalink {float:right; margin-top:5px; position:relative; z-index:1002;display:block; width:50px; }
 #aboutus,#permalink img {width:50px; height:44.5px; border:none;}
 #aboutus,#permalink a{text-decoration:none; border:none;}

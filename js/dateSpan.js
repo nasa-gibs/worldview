@@ -26,11 +26,11 @@ SOTE.namespace("SOTE.widget.DateSpan");
   * 
 */
 SOTE.widget.DateSpan = function(containerId, config){
-	this.SLIDER_WIDTH = 100;
+	this.SLIDER_WIDTH = 1280;
     this.DAY_IN_MS = 24*60*60*1000;
     this.sliders = new Object();
 	this.sliders["Year"] = [2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012];
-	this.sliders["Month"] = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+	this.sliders["Month"] = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 	this.sliders["Day"] = [01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
  
     this.sliderContent = [];
@@ -189,7 +189,7 @@ SOTE.widget.DateSpan.prototype.createSlider = function(type){
 	if(labels != undefined){
 		width = 50/labels.length;
 		spacer = 50/labels.length;
-		if(type=='Month'){ width=60/labels.length; spacer=40/labels.length;}
+		//if(type=='Month'){ width=60/labels.length; spacer=40/labels.length;}
 		var label = document.createElement('ul');
 		label.setAttribute('class','sliderLabel');
 		for(var i=0; i<labels.length; ++i){
@@ -206,7 +206,7 @@ SOTE.widget.DateSpan.prototype.createSlider = function(type){
 	$('#'+this.id+'slider'+type).slider(); 
 	$('#'+this.id+'slider'+type).bind("change",{self:this,type:type},SOTE.widget.DateSpan.handleSlide);
 	$('#'+this.id+'slider'+type).siblings('.ui-slider').bind("vmouseup",{self:this,type:type},SOTE.widget.DateSpan.snap);	    
-	if(width!=0){$('.sliderDiv'+type+' a.ui-slider-handle').css('width',eval(width*1.5)+"%");}
+	if(width!=0){$('.sliderDiv'+type+' a.ui-slider-handle').css('width',eval(width*1.1)+"%");}
 	    
 };
 
@@ -249,7 +249,10 @@ SOTE.widget.DateSpan.handleSlide = function(e,ui){
 			newDate.setDate(self.sliders[type][displacement]);
 		}
 		
-		if(newDate.getTime() >= self.startDate.getTime() && newDate.getTime() <= self.endDate.getTime()){
+		if(!(newDate.getTime() >= self.startDate.getTime() && newDate.getTime() <= self.endDate.getTime())){
+			self.setValue(SOTE.util.ISO8601StringFromDate(self.value));			
+		}
+		else {
 			self.value = newDate.clone();
 		}
 		
@@ -305,7 +308,7 @@ SOTE.widget.DateSpan.snap = function(e,ui){
 	//alert("value: " + value + "; numitems: " + numitems);
 	var displacement = Math.floor(value*(numitems/self.SLIDER_WIDTH));
 	var width = self.SLIDER_WIDTH/numitems;
-	var move = (type=="Year")? displacement*width + .5:displacement*width;
+	var move = displacement*width + (width/4) - (width*.05);
 	$("#"+self.id+"slider"+type).val((move)).slider("refresh");
 	//alert(self.sliders[type][displacement]);
 	if(self.sliders[type][displacement]){
@@ -321,11 +324,14 @@ SOTE.widget.DateSpan.snap = function(e,ui){
 		}
 		
 		
-		if(newDate.getTime() >= self.startDate.getTime() && newDate.getTime() <= self.endDate.getTime()){
+		if(!(newDate.getTime() >= self.startDate.getTime() && newDate.getTime() <= self.endDate.getTime())){
+			self.setValue(SOTE.util.ISO8601StringFromDate(self.value));			
+		}
+		else {
 			self.value = newDate.clone();
 		}
 		
-		self.setValue(SOTE.util.ISO8601StringFromDate(self.value));
+		//self.setValue(SOTE.util.ISO8601StringFromDate(self.value));
 
 	}
 	else {
@@ -392,7 +398,7 @@ SOTE.widget.DateSpan.prototype.setValue = function(value){
 			var numitems = this.sliders[type].length;
 			var displacement = values[type];
 			var width = this.SLIDER_WIDTH/numitems;
-			var move = (type=="Year")? displacement*width + .5: displacement*width;
+			var move =  displacement*width + (width/4) - (width*.05);
 			$("#"+this.id+"slider"+type).val(move).slider("refresh");			
 		}
 
@@ -481,6 +487,7 @@ SOTE.widget.DateSpan.prototype.loadFromQuery = function(qs){
 */
 SOTE.widget.DateSpan.prototype.validate = function(){
   // Content
+  
 };
 
 /**
