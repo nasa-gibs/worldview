@@ -758,17 +758,17 @@
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
-	        "label" =>  "Cloud Top Temperature (Day)",
-	        "sublabel" =>  "Aqua / MODIS",
-	        "value" =>  "MODIS_Aqua_Cloud_Top_Temp_Day",
-	        "type" => "multi", "category" => "overlays"
-		),		
-		array(
 	        "label" =>  "Cloud Top Temperature (Night)",
 	        "sublabel" =>  "Terra / MODIS",
 	        "value" =>  "MODIS_Terra_Cloud_Top_Temp_Night",
 	        "type" => "multi", "category" => "overlays"
 		),
+		array(
+	        "label" =>  "Cloud Top Temperature (Day)",
+	        "sublabel" =>  "Aqua / MODIS",
+	        "value" =>  "MODIS_Aqua_Cloud_Top_Temp_Day",
+	        "type" => "multi", "category" => "overlays"
+		),		
 		array(
 	        "label" =>  "Cloud Top Temperature (Night)",
 	        "sublabel" =>  "Aqua / MODIS",
@@ -1043,17 +1043,17 @@
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
-	        "label" =>  "Cloud Top Pressure (Day)",
-	        "sublabel" =>  "Aqua / MODIS",
-	        "value" =>  "MODIS_Aqua_Cloud_Top_Pressure_Day",
-	        "type" => "multi", "category" => "overlays"
-		),		
-		array(
 	        "label" =>  "Cloud Top Pressure (Night)",
 	        "sublabel" =>  "Terra / MODIS",
 	        "value" =>  "MODIS_Terra_Cloud_Top_Pressure_Night",
 	        "type" => "multi", "category" => "overlays"
 		),
+		array(
+	        "label" =>  "Cloud Top Pressure (Day)",
+	        "sublabel" =>  "Aqua / MODIS",
+	        "value" =>  "MODIS_Aqua_Cloud_Top_Pressure_Day",
+	        "type" => "multi", "category" => "overlays"
+		),		
 		array(
 	        "label" =>  "Cloud Top Pressure (Night)",
 	        "sublabel" =>  "Aqua / MODIS",
