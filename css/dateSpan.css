@@ -23,6 +23,7 @@ ul.sliderLabel li {float:left; background:none; margin:0px; text-align:center;}
 div.sliderDivYear {clear:both;}
 div.sliderDivMonth {background: rgba(68,68,68,.6);}
 div.sliderDivDay {}
+.disabledItem {color:#444444 !important;}
 a.ui-slider-handle {position:relative;  height:80%; top:-3%; background: rgba(31,143,237,.26); border: #1f8fed 2px solid; }
 div.ui-slider {border:none; background:transparent; width:100%; margin:0px; top:0px; height:23px;}
 /*.sliderDivDay a.ui-slider-handle {margin-left:-15px !important;}

@@ -32,6 +32,7 @@ SOTE.widget.DateSpan = function(containerId, config){
 	this.sliders["Year"] = [2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012];
 	this.sliders["Month"] = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 	this.sliders["Day"] = [01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
+ 	this.months = [31,28,31,30,31,30,31,31,30,31,30,31];
  
     this.sliderContent = [];
 	
@@ -80,7 +81,7 @@ SOTE.widget.DateSpan = function(containerId, config){
 
 	if(config.startDate === undefined){
 		config.startDate = new Date();
-		var timeString = "06/01/2012";
+		var timeString = "05/08/2012";
 		config.startDate = new Date(timeString);
 		config.startDate.setHours(12);
 		config.startDate.setMinutes(00);
@@ -194,6 +195,7 @@ SOTE.widget.DateSpan.prototype.createSlider = function(type){
 		label.setAttribute('class','sliderLabel');
 		for(var i=0; i<labels.length; ++i){
 			var item = document.createElement('li');
+			item.setAttribute('id',this.id+type+'sliderItem'+i);
 			item.innerHTML = labels[i];
 			item.style.width = width + "%";
 			item.style.marginLeft = spacer/2 + "%";
@@ -243,14 +245,30 @@ SOTE.widget.DateSpan.handleSlide = function(e,ui){
 			newDate.setYear(self.sliders[type][displacement]);
 		}
 		else if (type == "Month"){
-			newDate.setMonth(displacement);
+			if(self.value.getDate() > self.months[displacement]){
+				newDate.setDate(self.months[displacement]);
+				newDate.setMonth(displacement);
+				self.setValue(SOTE.util.ISO8601StringFromDate(newDate));
+			}
+			else{
+				newDate.setMonth(displacement);
+			}
 		}
 		else if (type == "Day"){
-			newDate.setDate(self.sliders[type][displacement]);
+			if(self.sliders[type][displacement] <= self.months[self.value.getMonth()]){
+				newDate.setDate(self.sliders[type][displacement]);	
+			}
+			else {
+				newDate.setDate(self.months[self.value.getMonth()]);
+				self.setValue(SOTE.util.ISO8601StringFromDate(newDate));
+			}
 		}
 		
-		if(!(newDate.getTime() >= self.startDate.getTime() && newDate.getTime() <= self.endDate.getTime())){
-			self.setValue(SOTE.util.ISO8601StringFromDate(self.value));			
+		if(newDate.getTime() < self.startDate.getTime()){
+			self.setValue(SOTE.util.ISO8601StringFromDate(self.startDate));			
+		}
+		else if(newDate.getTime() > self.endDate.getTime()){
+			self.setValue(SOTE.util.ISO8601StringFromDate(self.endDate));						
 		}
 		else {
 			self.value = newDate.clone();
@@ -259,13 +277,13 @@ SOTE.widget.DateSpan.handleSlide = function(e,ui){
 	}
 	else {
 		if(displacement >= self.sliders[type].length){
-			self.setValue(SOTE.util.ISO8601StringFromDate(self.endDate));
+			self.setValue(SOTE.util.ISO8601StringFromDate(self.value));
 		}
 		else if(displacement < 0){
-			self.setValue(SOTE.util.ISO8601StringFromDate(self.startDate));
+			self.setValue(SOTE.util.ISO8601StringFromDate(self.value));
 		}
 	}
-	
+	self.validate();	
 	self.setVisualDate();	
 	self.fire()
 
@@ -317,15 +335,31 @@ SOTE.widget.DateSpan.snap = function(e,ui){
 			newDate.setYear(self.sliders[type][displacement]);
 		}
 		else if (type == "Month"){
-			newDate.setMonth(displacement);
+			if(self.value.getDate() > self.months[displacement]){
+				newDate.setDate(self.months[displacement]);
+				newDate.setMonth(displacement);
+				self.setValue(SOTE.util.ISO8601StringFromDate(newDate));
+			}
+			else{
+				newDate.setMonth(displacement);
+			}
 		}
 		else if (type == "Day"){
-			newDate.setDate(self.sliders[type][displacement]);
+			if(self.sliders[type][displacement] <= self.months[self.value.getMonth()]){
+				newDate.setDate(self.sliders[type][displacement]);	
+			}
+			else {
+				newDate.setDate(self.months[self.value.getMonth()]);
+				self.setValue(SOTE.util.ISO8601StringFromDate(newDate));
+			}
 		}
 		
 		
-		if(!(newDate.getTime() >= self.startDate.getTime() && newDate.getTime() <= self.endDate.getTime())){
-			self.setValue(SOTE.util.ISO8601StringFromDate(self.value));			
+		if(newDate.getTime() < self.startDate.getTime()){
+			self.setValue(SOTE.util.ISO8601StringFromDate(self.startDate));			
+		}
+		else if(newDate.getTime() > self.endDate.getTime()){
+			self.setValue(SOTE.util.ISO8601StringFromDate(self.endDate));						
 		}
 		else {
 			self.value = newDate.clone();
@@ -336,12 +370,13 @@ SOTE.widget.DateSpan.snap = function(e,ui){
 	}
 	else {
 		if(displacement >= self.sliders[type].length){
-			self.setValue(SOTE.util.ISO8601StringFromDate(self.endDate));
+			self.setValue(SOTE.util.ISO8601StringFromDate(self.value));
 		}
 		else if(displacement < 0) {
-			self.setValue(SOTE.util.ISO8601StringFromDate(self.startDate));
+			self.setValue(SOTE.util.ISO8601StringFromDate(self.value));
 		}
 	}
+	self.validate();
 	self.setVisualDate();
 	/*var x = (self.range - (24*60*60*1000)) * (100-value)/100;
 	var time = new Date(self.endDate.getTime() - x);
@@ -381,7 +416,13 @@ SOTE.widget.DateSpan.prototype.showSliders = function(){
   *
 */
 SOTE.widget.DateSpan.prototype.setValue = function(value){
-	var d = SOTE.util.UTCDateFromISO8601String(value);
+	var vals = SOTE.util.getValuesFromISO8601String(value);
+	if(vals[2] > this.months[vals[1]]){
+		vals[2] = this.months[vals[1]];
+	}	
+	
+	var d = new Date(vals[0],vals[1],vals[2],vals[3],vals[4],vals[5]);
+	
 	var startDate = this.endDate.getTime() - (this.range -24*60*60*1000);
 	var monthNames = [ "January", "February", "March", "April", "May", "June",
     	"July", "August", "September", "October", "November", "December" ];
@@ -402,6 +443,7 @@ SOTE.widget.DateSpan.prototype.setValue = function(value){
 			$("#"+this.id+"slider"+type).val(move).slider("refresh");			
 		}
 
+		this.validate();
 		this.setVisualDate();
 		this.fire();
 	}
@@ -486,7 +528,42 @@ SOTE.widget.DateSpan.prototype.loadFromQuery = function(qs){
   * @returns {boolean} true or false depending on whether the date is not null and within bounds
 */
 SOTE.widget.DateSpan.prototype.validate = function(){
-  // Content
+	var curr = this.value.clone();
+	var startYear = this.startDate.getFullYear();
+	var startMonth = this.startDate.getMonth();
+	var startDay = this.startDate.getDate();
+	var endYear = this.endDate.getFullYear();
+	var endMonth = this.endDate.getMonth();
+	var endDay = this.endDate.getDate();
+	for(var type in this.sliders){
+		for(var i=0; i<this.sliders[type].length; ++i){
+			var descriptor = this.id+type+"sliderItem"+i;
+			if(type == "Year"){
+				if(this.sliders[type][i] < startYear || this.sliders[type][i] > endYear){
+					$("#"+descriptor).addClass("disabledItem");
+				}
+				else {
+					$("#"+descriptor).removeClass("disabledItem");					
+				}
+			}
+			if(type == "Month"){
+				if( (curr.getFullYear() == startYear && i < startMonth ) || (curr.getFullYear() == endYear && i > endMonth) ){
+					$("#"+descriptor).addClass("disabledItem");
+				}
+				else {
+					$("#"+descriptor).removeClass("disabledItem");										
+				}
+			}
+			if(type == "Day"){
+				if( (this.sliders[type][i] > this.months[curr.getMonth()]) || (curr.getFullYear() == startYear && curr.getMonth() == startMonth && this.sliders[type][i] < startDay) ||  (curr.getFullYear() == endYear && curr.getMonth() == endMonth && this.sliders[type][i] > endDay) ){
+					$("#"+descriptor).addClass("disabledItem");
+				}
+				else {
+					$("#"+descriptor).removeClass("disabledItem");										
+				}
+			}
+		}
+	}
   
 };
 
