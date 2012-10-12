@@ -4,7 +4,7 @@
 div.olControlScaleLineCustom {
 	position: absolute;
 	right: 12px;
-	bottom: 160px;
+	bottom: 100px;
 	z-index: 2000;
 	
 	display: block;
