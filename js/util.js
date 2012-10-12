@@ -149,9 +149,12 @@ SOTE.util.DayNameFromUTCDayInt = function(dayOfWeekInt)
 
 /**
  * Generates an array of OpenLayers layers for the specified product: one for each
- * day starting from the current day, working backwards for a total of numDays
+ * day starting from the current day, working backwards for a total of numDays.
+ * If the passed-in "product" doesn't match the "displayNameStr", the function
+ * returns an empty array.
  * 
  * 
+ * @param product				the product as specified from the querystring
  * @param displayNameStr		name shown in OL layer list;  mostly for debugging at this point
  * @param wmsProductNameStr		the product name recognized by the WMS server
  * @param formatStr				the type of image format expected in return, e.g., "image/jpeg"
@@ -166,11 +169,14 @@ SOTE.util.DayNameFromUTCDayInt = function(dayOfWeekInt)
  * @param screenResolutionsArr	an array of screen resolutions that this layer should support
  * @param serverResolutionsArr	an array of resolutions that are available for this layer on the server
  * 
- * @returns		an array whose elements contain a single day of the specified product
+ * @returns		if querystring product matches displayNameStr, returns an array whose elements contain a single day of the specified product
  * 
  */
-SOTE.util.generateProductLayersForDateRange = function(displayNameStr, wmsProductNameStr, formatStr, urlsArr, tileSizeArr, projectionStr, numZoomLevelsInt, maxExtentArr, maxResolutionFloat, preferredOpacityFloat, numDays, screenResolutionsArr, serverResolutionsArr)
+SOTE.util.generateProductLayersForDateRange = function(product, displayNameStr, wmsProductNameStr, formatStr, urlsArr, tileSizeArr, projectionStr, numZoomLevelsInt, maxExtentArr, maxResolutionFloat, preferredOpacityFloat, numDays, screenResolutionsArr, serverResolutionsArr)
 {
+	// Check if these layers should be generated
+	if (product != displayNameStr)
+		return [];
 
 	// Get current date
 	var curDate = new Date();
@@ -202,8 +208,11 @@ SOTE.util.generateProductLayersForDateRange = function(displayNameStr, wmsProduc
 /**
  * Adds WMTS TileMatrixSet to returned array 
  */
-SOTE.util.generateProductLayersForDateRangeTMS = function(displayNameStr, wmsProductNameStr, formatStr, urlsArr, tileSizeArr, projectionStr, numZoomLevelsInt, maxExtentArr, maxResolutionFloat, preferredOpacityFloat, numDays, screenResolutionsArr, serverResolutionsArr, tileMatrixSetStr)
+SOTE.util.generateProductLayersForDateRangeTMS = function(product, displayNameStr, wmsProductNameStr, formatStr, urlsArr, tileSizeArr, projectionStr, numZoomLevelsInt, maxExtentArr, maxResolutionFloat, preferredOpacityFloat, numDays, screenResolutionsArr, serverResolutionsArr, tileMatrixSetStr)
 {
+	// Check if these layers should be generated
+	if (product != displayNameStr)
+		return [];
 
 	// Get current date
 	var curDate = new Date();
@@ -288,10 +297,12 @@ SOTE.util.generateProductLayersForDateRangeNoOversample = function(displayNameSt
 /**
  * Generates an array of OpenLayers layers for the specified product: one for each
  * day starting from the current day, working backwards for a total of numDays.
+ * If the passed-in "product" doesn't match the "displayNameStr", the function
+ * returns an empty array.
  * 
  * This version of the function is for full (i.e., non-tiled) WMS layers 
  * 
- * 
+ * @param product				the product as specified from the querystring
  * @param displayNameStr		name shown in OL layer list;  mostly for debugging at this point
  * @param wmsProductNameStr		the product name recognized by the WMS server
  * @param formatStr				the type of image format expected in return, e.g., "image/jpeg"
@@ -304,8 +315,12 @@ SOTE.util.generateProductLayersForDateRangeNoOversample = function(displayNameSt
  * @returns		an array whose elements contain a single day of the specified product
  * 
  */
-SOTE.util.generateWmsProductLayersForDateRange = function(displayNameStr, wmsProductNameStr, formatStr, urlsArr, projectionStr, preferredOpacityFloat, isSingleTile, numDays)
+SOTE.util.generateWmsProductLayersForDateRange = function(product, displayNameStr, wmsProductNameStr, formatStr, urlsArr, projectionStr, preferredOpacityFloat, isSingleTile, numDays)
 {
+	// Check if these layers should be generated
+	if (product != displayNameStr)
+		return [];
+
 
 	// Get current date
 	var curDate = new Date();
