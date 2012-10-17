@@ -54,7 +54,7 @@ function showOverlay(){
 			"<p>Comments/suggestions/problem reports are welcome via <a href='mailto:support@earthdata.nasa.gov?subject=Feedback%20for%20EOSDIS%20Worldview%20tool'>support@earthdata.nasa.gov</a>.  Please note that Internet Explorer is not currently supported and we are working to determine if and when it can be.</p>"+			
 			"<br /><p>"+
 				"Version:  <a href='release_notes.txt' target='_blank'>2012-07-15</a><br />"+
-				"Page Editor: <a href='mailto:tilak.joshi@nasa.gov'>Tilak Joshi</a><br />"+ 
+				"Front-End Lead/Architect: <a href='mailto:tilak.joshi@nasa.gov'>Tilak Joshi</a><br />"+ 
 				"Responsible NASA Official:  <a href='mailto:ryan.a.boller@nasa.gov'>Ryan Boller</a><br />"+
 			"</p>"+ 	
 		"</div>";
