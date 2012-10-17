@@ -3,7 +3,7 @@
 .selector h2 {display:inline-block; float: left; color:#ffffff; font-size: 18px; font-weight:100; border:none; padding:6px 0;}
 .selector h3 {display:inline-block; float: left; color:#333333; font-size: 14px; font-weight:100; border:none; text-decoration:none; }
 .selector div,.selector ul {display:block; overflow:hidden; width:98%; margin:0 auto; padding:5px;}
-.selector li.selectorItem {padding:0; display:block; background:#fff; width:200px; height:38px;border-radius:5px; padding:5px; margin-top:10px; float:left; margin-left:5px;}
+.selector li.selectorItem {padding:0; display:block; background:#fff; width:200px; height:38px;border-radius:5px; padding:5px; margin-top:10px; float:left; margin-left:5px; overflow:hidden;}
 .selector li.selectorItem input {float:right;}
 .selector li.selectorItem h4 {font-size:9px !important; font-weight:bold !important; color: #141b4c !important;}
 .selector ul.category { min-height:170px; background: rgba(255,255,255,.7); border-radius:5px; margin-top:10px; max-height:190px; overflow:auto;}
