@@ -3,15 +3,31 @@ Release Notes
 
 http://earthdata.nasa.gov/labs/worldview/
 
+Release 0.2.0
+* New Features
+	- Redesigned time slider allows selection of dates beginning in May 2012
+	- Orbital tracks for Terra, Aqua, and Aura are available
+	
 
-Release 2012/07/15
+* Updates
+	- A layer mask to show areas of "data vs no data" are now available for Terra and Aqua MODIS
+	- Tweaked "pannable area" to be less restrictive
+	- Overhauled the way map layers are managed;  as a result, startup time and interactivity are improved
+
+
+* Known Issues
+	- Arctic land boundaries don't match actual land  
+	- Impossible to remove all layers
+
+
+
+Release 0.1.0 (2012/07/15)
 
 * New Features
 	- User interface redesigned for product selection and currently-shown layers 
 	- Color bars are available for palette-based products
 	- Arctic and Antarctic views are integrated into main interface
 	- Lower-resolution layers are dynamically rescaled on the client to be visible at higher zoom levels
-	- Orbital tracks for Terra, Aqua, and Aura are available
 	
 
 * Updates
