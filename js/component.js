@@ -24,7 +24,7 @@ SOTE.namespace = function()
     }
   }
   return obj;
-}
+};
 
 SOTE.namespace("widget");
 
