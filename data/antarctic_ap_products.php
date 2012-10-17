@@ -39,12 +39,6 @@
 		        "type" => "multi", "category" => "overlays"
 			),
 			array(
-		        "label"=> "Daily Polar Gridded Sea Ice Concentrations",
-		        "sublabel"=> "NSIDC / NRT DMSP SSM/I-SSMIS",
-		        "value"=> "NSIDC_Sea_Ice_Concentration",
-		        "type" => "multi", "category" => "overlays"
-			),
-			array(
 		        "label"=> "Snow Cover",
 		        "sublabel"=> "Terra / MODIS",
 		        "value"=> "MODIS_Terra_Snow_Cover",
@@ -95,18 +89,6 @@
 		        "label"=> "Latitude-Longitude Lines",
 		        "sublabel"=> "Polarview / Graticule",
 		        "value"=> "polarview:graticule3031_10x30",
-		        "type" => "multi", "category" => "overlays"
-			),
-			array(
-		        "label"=> "Latitude-Longitude Lines",
-		        "sublabel"=> "NSIDC / Graticule",
-		        "value"=> "lat_long_grid",
-		        "type" => "multi", "category" => "overlays"
-			),
-			array(
-		        "label"=> "Coastlines",
-		        "sublabel"=> "NSIDC / Coastlines",
-		        "value"=> "coastlines",
 		        "type" => "multi", "category" => "overlays"
 			)
 			
