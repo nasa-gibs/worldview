@@ -400,6 +400,39 @@ SOTE.widget.Map.prototype.init = function(){
 			this.map.addControl(new OpenLayers.Control.Attribution());
 			this.map.addControl(new OpenLayers.Control.ScaleLine({displayClass: 'olControlScaleLineCustom'}));
 			
+			
+			// Add running lat-lon
+			if (this.projection == "EPSG:4326")
+			{
+				this.map.addControl(new OpenLayers.Control.MousePosition(
+					{
+						//displayProjection: this.projection, 
+						formatOutput: function(mouseLonLat) {							
+								return mouseLonLat.lon.toFixed(3) + "&#176;, " + mouseLonLat.lat.toFixed(3) + "&#176;";
+						  }
+					}));
+			}
+			// TODO: define polar projections and convert to degrees; OL doesn't know how to handle them
+			// else if ((this.projection == "EPSG:3995") || (this.projection == "EPSG:3031")) 
+			// {
+				// this.map.addControl(new OpenLayers.Control.MousePosition(
+					// {
+						// // numDigits: 2,
+						// //displayProjection: "EPSG:4326",  
+						// formatOutput: function(mouseLonLat) {
+							// // Convert to lat/lon from meters				 
+							// // var projArctic = new OpenLayers.Projection("EPSG:3995");
+							// // var projGeo = new OpenLayers.Projection("EPSG:4326");
+// 
+							// // var point = new OpenLayers.LonLat(mouseLonLat.lon, mouseLonLat.lat);
+							// // point.transform(projArctic, projGeo);							
+							// // return " " + point.lon.toFixed(3) + "&#176;, " + point.lat.toFixed(3) + "&#176; ";
+// 							
+							// return " " + Math.round(mouseLonLat.lon) + "m, " + Math.round(mouseLonLat.lat) + "m ";
+						  // }
+					// }));
+			// }
+			
 			// Add graticule
 			this.addGraticuleLayer();
 			
