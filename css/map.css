@@ -1,4 +1,16 @@
 
+div.olControlMousePosition {
+	position: absolute;
+	right: 12px; 
+	bottom: 80px;
+	z-index: 2000;
+	padding: 1px 8px;
+
+	display: block;
+   	font-size: xx-small;
+   	color: #EEEEEE;
+   	background-color:rgba(38,38,38,0.4);
+}
 
 
 div.olControlScaleLineCustom {
