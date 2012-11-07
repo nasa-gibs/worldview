@@ -75,7 +75,6 @@ function showPermalink(){
 			"<!-- <h3>Permalink:</h3> -->"+
 			"<span style='font-weight:400; font-size:12px; line-spacing:24px; '>Copy and paste the following link to share this view:</span>" + 
 			"<input type='text' value='' name='permalink_content' id='permalink_content' />" +
-			"<p><br /><i>Note: Worldview contains only the most recent 7 days of data, this link will expire after the currently selected time is older than 7 days.</i></p>" +
 		"</div>";
 		this.permOverlay.setHeader('&nbsp;&nbsp;&nbsp;&nbsp;Permalink');
 		this.permOverlay.setBody(item);
