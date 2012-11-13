@@ -412,6 +412,25 @@ SOTE.widget.Map.prototype.init = function(){
 						  }
 					}));
 			}
+			else if (this.projection == "EPSG:3031")
+			{
+				this.map.addControl(new OpenLayers.Control.MousePosition(
+					{
+						formatOutput: function(mouseLonLat) {			
+								return "EPSG:3031 coords: " + Math.round(mouseLonLat.lon) + "m, " + Math.round(mouseLonLat.lat) + "m";
+						  }
+					}));
+			}
+			else if (this.projection == "EPSG:3995")
+			{
+				this.map.addControl(new OpenLayers.Control.MousePosition(
+					{
+						formatOutput: function(mouseLonLat) {			
+								return "EPSG:3995 coords: " + Math.round(mouseLonLat.lon) + "m, " + Math.round(mouseLonLat.lat) + "m";
+						  }
+					}));
+			}
+			
 			// TODO: define polar projections and convert to degrees; OL doesn't know how to handle them
 			// else if ((this.projection == "EPSG:3995") || (this.projection == "EPSG:3031")) 
 			// {
