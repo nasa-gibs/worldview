@@ -1,3 +1,4 @@
+var rb;
 window.onload = function(){// Initialize "static" vars
 
 	// Test for IE and show warning, if necessary
@@ -30,6 +31,10 @@ window.onload = function(){// Initialize "static" vars
 	//var h = new SOTE.widget.MenuPicker("hazard",{dataSourceUrl:"data/mp_hazard.php"});
 	//var tr = new SOTE.widget.MenuPicker("transition",{dataSourceUrl:"data/mp_transition.php"});
 	var map = new SOTE.widget.DateSpan("time",{hasThumbnail:false});
+	//Image download variables
+	rb = new SOTE.widget.RubberBand("rubberband");
+    var id = new SOTE.widget.ImageDownload("imagedownload",{baseLayer:"MODIS_Terra_CorrectedReflectance_TrueColor"});
+
 
 };
 
@@ -111,3 +116,8 @@ function showPermalink(){
 
 }
 
+
+function showRubberBand(){
+	rb.draw("map");
+	
+}
