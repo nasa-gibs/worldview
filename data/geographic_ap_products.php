@@ -728,6 +728,18 @@
 
 	"Severe Storms" =>  array(
 		array(
+	        "label" =>  "Corrected Reflectance (True Color)",
+	        "sublabel" =>  "Terra / MODIS",
+	        "value" =>  "MODIS_Terra_CorrectedReflectance_TrueColor",
+	        "type" => "single", "category" => "baselayers"
+		),
+		array(
+	        "label" =>  "Corrected Reflectance (True Color)",
+	        "sublabel" =>  "Aqua / MODIS",
+	        "value" =>  "MODIS_Aqua_CorrectedReflectance_TrueColor",
+	        "type" => "single", "category" => "baselayers"
+		),
+		array(
 	        "label" =>  "Water Vapor (Day)",
 	        "sublabel" =>  "Terra / MODIS",
 	        "value" =>  "MODIS_Terra_Water_Vapor_5km_Day",
@@ -998,6 +1010,12 @@
 	        "label" =>  "Land Surface Reflectance (7-2-1)",
 	        "sublabel" =>  "Aqua / MODIS",
 	        "value" =>  "MODIS_Aqua_SurfaceReflectance_Bands721",
+	        "type" => "single", "category" => "baselayers"
+		),
+		array(
+	        "label" =>  "City Lights 2012",
+	        "sublabel" =>  "Suomi NPP / VIIRS via NASA Earth Observatory",
+	        "value" =>  "VIIRS_CityLights_2012",
 	        "type" => "single", "category" => "baselayers"
 		),
 		array(
@@ -1423,6 +1441,18 @@
 	),
 
 	"Other" =>  array(
+		array(
+	        "label" =>  "Empty",
+	        "sublabel" =>  "",
+	        "value" =>  "NON_EXISTENT_LAYER",
+	        "type" => "single", "category" => "baselayers"
+		),
+		array(
+	        "label" =>  "City Lights 2012",
+	        "sublabel" =>  "Suomi NPP / VIIRS via NASA Earth Observatory",
+	        "value" =>  "VIIRS_CityLights_2012",
+	        "type" => "single", "category" => "baselayers"
+		),
         array(
 	        "label" =>  "Population Density",
 	        "sublabel" =>  "SEDAC GRUMP v1 Population Count 2000",
