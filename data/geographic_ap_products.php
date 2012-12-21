@@ -1013,7 +1013,7 @@
 	        "type" => "single", "category" => "baselayers"
 		),
 		array(
-	        "label" =>  "City Lights 2012",
+	        "label" =>  "Earth at Night 2012",
 	        "sublabel" =>  "Suomi NPP / VIIRS via NASA Earth Observatory",
 	        "value" =>  "VIIRS_CityLights_2012",
 	        "type" => "single", "category" => "baselayers"
@@ -1448,7 +1448,7 @@
 	        "type" => "single", "category" => "baselayers"
 		),
 		array(
-	        "label" =>  "City Lights 2012",
+	        "label" =>  "Earth at Night 2012",
 	        "sublabel" =>  "Suomi NPP / VIIRS via NASA Earth Observatory",
 	        "value" =>  "VIIRS_CityLights_2012",
 	        "type" => "single", "category" => "baselayers"
