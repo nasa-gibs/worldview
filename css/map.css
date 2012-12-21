@@ -185,6 +185,9 @@ div.olControlZoomPanelCustom .olControlZoomToMaxExtentItemInactive {
     transition: none;
 }
 
+.olImageLoadError {
+    background-color: transparent !important;
+}
 
 
 #title, #tags, #shortdesc {
