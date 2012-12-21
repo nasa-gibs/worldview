@@ -3,6 +3,13 @@ Release Notes
 
 http://earthdata.nasa.gov/labs/worldview/
 
+
+Release 0.2.1
+* Updates
+	- Added Suomi NPP/VIIRS City Lights 2012 imagery layer
+
+
+
 Release 0.2.0
 * New Features
 	- Redesigned time slider allows selection of dates beginning in May 2012
