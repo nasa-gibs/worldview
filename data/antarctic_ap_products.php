@@ -80,11 +80,10 @@
 			),
 			array(
 		        "label"=> "Coastlines",
-		        "sublabel"=> "Polarview / Coastlines",
-		        "value"=> "polarview:coastS10",
-		        "type" => "multi", "category" => "overlays"
-		        
-			),	
+		        "sublabel"=> "ADD SCAR / Coastlines",
+		        "value"=> "antarctic_coastlines",
+		        "type" => "multi", "category" => "overlays"		        
+			),		
 			array(
 		        "label"=> "Latitude-Longitude Lines",
 		        "sublabel"=> "Polarview / Graticule",
