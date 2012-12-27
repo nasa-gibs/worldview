@@ -168,7 +168,7 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
    	var lonlat2 = this.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(x2, y1));
  
      
-     var dlURL  = "http://map2.vis.earthdata.nasa.gov/data/download.php?"; 
+     var dlURL  = "http://map2.vis.earthdata.nasa.gov/imagegen/?"; 
      
   	 
   	 var dTime = new Date((time.split("T"))[0]+"T00:00:00");
