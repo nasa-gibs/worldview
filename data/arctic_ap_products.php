@@ -90,7 +90,7 @@
 			array(
 		        "label"=> "Coastlines",
 		        "sublabel"=> "Polarview / Coastlines",
-		        "value"=> "polarview:coastArctic10",
+		        "value"=> "arctic_coastlines",
 		        "type" => "multi", "category" => "overlays"
 			),
 			array(
