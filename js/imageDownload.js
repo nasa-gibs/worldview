@@ -35,6 +35,7 @@ SOTE.widget.ImageDownload = function(containerId, config){
 		 config={};
 	}
 	
+	this.alignTo = config.alignTo;
 	this.id = containerId;
 	this.map = null;
 	this.WMTSLayer = null;
@@ -60,7 +61,14 @@ SOTE.widget.ImageDownload.prototype = new SOTE.widget.Component;
 SOTE.widget.ImageDownload.prototype.init = function(){
 	this.container.setAttribute("class","imagedownload");
 	
-    if(REGISTRY){
+	var self = this;
+	
+	SOTE.widget.ImageDownload.setPosition(this);
+	$(window).resize(function() {
+		SOTE.widget.ImageDownload.setPosition(self);
+	});
+	
+    if(REGISTRY){ 
  		REGISTRY.register(this.id,this);
  		REGISTRY.markComponentReady(this.id);
 	}
@@ -105,18 +113,23 @@ SOTE.widget.ImageDownload.prototype.init = function(){
 			this.map.addLayer(this.WMTSLayer); 
 			
 		
-	var htmlElements = "<center>Resolution:<select id='selImgResolution'><option value='1'>250m</option><option value='2'>500m</option><option value='4'>1km</option><option value='20'>5km</option><option value='40'>10km</option></select> | ";
-    htmlElements +="Format: <select id='selImgFormat'><option value='JPEG'>JPEG</option><option value='PNG'>PNG</option><option value='Gtiff'>GeoTIFF</option></select>  | ";
-    htmlElements += "<input type='button' id='btnImgDownload' value='Download'/>"; 
-    htmlElements +="<br>Estimated Uncompressed Image Size: ~ <span id='imgFileSize'> </span> MB (<span id='imgWidth''></span> x <span id='imgHeight'></span> pixels) <br>(Max. allowed uncompressed image size: 250 MB) ";
-	htmlElements +="<br><hr width='50%'/><font size='-1'>[Click on the camera icon to exit the download model.]</font></center>";
+	var htmlElements = "<div>Resolution:<select id='selImgResolution'><option value='1'>250m</option><option value='2'>500m</option><option value='4'>1km</option><option value='20'>5km</option><option value='40'>10km</option></select>";
+    htmlElements +="<br />Format: <select id='selImgFormat'><option value='JPEG'>JPEG</option><option value='PNG'>PNG</option><option value='Gtiff'>GeoTIFF</option></select>";
+    htmlElements +="<br />Raw Image Size: ~ <span id='imgFileSize'> </span> MB <br />(<span id='imgWidth''></span> x <span id='imgHeight'></span> pixels)";
+    htmlElements += "<br /><span style='font-size:10px; color:#aaa; font-style:italic;'>(Max Size: 250 MB)</span> ";//(<span id='imgWidth''></span> x <span id='imgHeight'></span> pixels) 
+    htmlElements += "<br /><input type='button' id='btnImgDownload' value='Download'/>"; 
+	htmlElements +="</div>";
 	
     $("#"+this.id).html(htmlElements); 	
     	
     
 };
 
-
+SOTE.widget.ImageDownload.setPosition = function(self){
+	var offset = $("#"+self.alignTo.id).offset();
+	var left = offset.left + parseInt($("#"+self.alignTo.id).css("width")) - parseInt($("#"+self.id).css("width"));
+	$("#"+self.id).css("left",left+"px");
+};
 
 /**
   * Sets the passed HTML string as the component's value
@@ -154,7 +167,7 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
 	
 	var bbox = SOTE.util.extractFromQuery('map',qs);
 	var time = SOTE.util.extractFromQuery('time',qs);
-	var pixels = SOTE.util.extractFromQuery('rubberband', qs);
+	var pixels = SOTE.util.extractFromQuery('camera', qs);
   	var s = SOTE.util.extractFromQuery('switch',qs);
   	var products = SOTE.util.extractFromQuery('products',qs);
   	
@@ -196,8 +209,8 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
     	$("#imgWidth").text((imgWidth));
     	$("#imgHeight").text((imgHeight));
 		$("#imgFileSize").text(imgFilesize);
-		if(imgFilesize>250)	{ $("#imgFileSize").css("color", "red");  $("#btnImgDownload").attr("disabled", "disabled"); }
-		else { $("#imgFileSize").css("color", "black"); $("#btnImgDownload").removeAttr("disabled"); }
+		if(imgFilesize>250)	{ $("#imgFileSize").css("color", "#D99694");  $("#btnImgDownload").attr("disabled", "disabled"); }
+		else { $("#imgFileSize").css("color", "white"); $("#btnImgDownload").removeAttr("disabled"); }
 		})
      .change();
      

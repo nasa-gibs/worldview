@@ -318,7 +318,33 @@
       $origimg.after($img).hide();
 
     } else {
-      $img = $origimg.css(img_css).show(); 
+      $img = $origimg.clone().css(img_css).show(); 
+
+      $img.width($origimg.width());
+      $img.height($origimg.height());
+
+	  /*$img.css("width",$(window).width());
+      $img.css("height",$(window).height());*/       
+
+	  if(options.fullScreen){
+		  $(window).resize(function() {
+	
+				boundx = $(window).width();
+				boundy = $(window).height();
+	
+				Selection.refresh();
+	
+				if (options.shade) {
+					Shade.resize(boundx,boundy);
+					Shade.refresh();
+				}
+				
+				
+	
+			});
+	  }
+      $origimg.hide();
+      
       img_mode = false;
       if (options.shade === null) { options.shade = true; }
     }
@@ -328,11 +354,18 @@
     var boundx = $img.width(),
         boundy = $img.height(),
         
+        hldrx = (options.fullScreen)? '100%': boundx,
+        hldry = (options.fullScreen)? '100%': boundy,
         
-        $div = $('<div />').width(boundx).height(boundy).addClass(cssClass('holder')).css({
+        $div = $('<div />').width(hldrx).height(hldry).addClass(cssClass('holder')).css({
         position: 'relative',
-        backgroundColor: options.bgColor
+        backgroundColor: options.bgColor,
       }).insertAfter($origimg).append($img);
+      
+      if( options.fullScreen ){
+	      $img.css("width",'100%');
+	      $img.css("height",'100%');
+	  }
 
     if (options.addClass) {
       $div.addClass(options.addClass);
@@ -375,7 +408,7 @@
     }
 
     var bound = options.boundary;
-    var $trk = newTracker().width(boundx + (bound * 2)).height(boundy + (bound * 2)).css({
+    var $trk = newTracker().width(hldrx + (bound * 2)).height(hldry + (bound * 2)).css({
       position: 'absolute',
       top: px(-bound),
       left: px(-bound),
@@ -1426,8 +1459,8 @@
     //}}}
     function destroy() //{{{
     {
-      $div.empty();
-      $origimg.show();
+      $div.remove();
+      $origimg.css(img_css).show();
       $(obj).removeData('Jcrop');
     }
     //}}}

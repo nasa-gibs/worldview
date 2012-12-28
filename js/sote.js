@@ -22,6 +22,9 @@ window.onload = function(){// Initialize "static" vars
 	this.selector = new YAHOO.widget.Panel("selector", { zIndex:1019, visible:false } );
 	this.selector.setBody("<div id='selectorbox'></div>");
 	this.selector.render(document.body);
+	var sel_id = this.selector.id;
+	this.selector.beforeHideEvent.subscribe(function(e){ $("#"+sel_id).css("display","none");})
+	this.selector.beforeShowEvent.subscribe(function(e){$("#"+sel_id).css("display","block");})
 
 	// Create map 
 	var m = new SOTE.widget.MapSote("map",{baseLayer:"MODIS_Terra_CorrectedReflectance_TrueColor"});
@@ -32,8 +35,8 @@ window.onload = function(){// Initialize "static" vars
 	//var tr = new SOTE.widget.MenuPicker("transition",{dataSourceUrl:"data/mp_transition.php"});
 	var map = new SOTE.widget.DateSpan("time",{hasThumbnail:false});
 	//Image download variables
-	rb = new SOTE.widget.RubberBand("rubberband");
-    var id = new SOTE.widget.ImageDownload("imagedownload",{baseLayer:"MODIS_Terra_CorrectedReflectance_TrueColor"});
+	rb = new SOTE.widget.RubberBand("camera",{icon:"images/camera.png",onicon:"images/cameraon.png",cropee:"map"});
+    var id = new SOTE.widget.ImageDownload("imagedownload",{baseLayer:"MODIS_Terra_CorrectedReflectance_TrueColor",alignTo: rb});
 
 
 };
@@ -70,7 +73,9 @@ function showOverlay(){
 	
 	this.overlay.show();
 	this.overlay.center();
-
+	var overlay_id = this.overlay.id;
+	this.overlay.beforeHideEvent.subscribe(function(e){$("#"+overlay_id).css("display","none");});
+	this.overlay.beforeShowEvent.subscribe(function(e){$("#"+overlay_id).css("display","block");})
 }
 
 function showPermalink(){
@@ -113,7 +118,6 @@ function showPermalink(){
 	
 	document.getElementById('permalink_content').focus();
   	document.getElementById('permalink_content').select();
-
 }
 
 

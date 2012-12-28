@@ -37,55 +37,68 @@
 	<!-- Combo-handled YUI JS files: -->
 	<script type="text/javascript" src="js/ext/yui/combo-event-dragdrop-container-min.js"></script>
 
-	
-	
 	<!-- CSS for OpenLayers	 -->
 	<link type="text/css" href="css/ext/openlayers-2.12/openlayers.defaulttheme.style.css" rel="StyleSheet" />
 	<link type="text/css" href="css/ext/openlayers-2.12/openlayers.example.style.css" rel="StyleSheet" />
 	<link type="text/css" href="css/ext/openlayers-2.12/openlayers.style.mobile-jq.css" rel="StyleSheet" />
-	
+
 	
 	<!-- CSS for map style -->
-	<link type="text/css" href="css/map-min.css?v=0.2.1" rel="Stylesheet" />
-	<link type="text/css" href="css/dateSpan-min.css?v=0.2.1" rel="Stylesheet" /> 
-	<link type="text/css" href="css/menuPicker-min.css?v=0.2.1" rel="Stylesheet" /> 
-	<link type="text/css" href="css/accordionPicker-min.css?v=0.2.1" rel="Stylesheet" /> 
-	<link type="text/css" href="css/bank-min.css?v=0.2.1" rel="Stylesheet" /> 
-	<link type="text/css" href="css/selector-min.css?v=0.2.1" rel="Stylesheet" /> 
-	<link type="text/css" href="css/sote-min.css?v=0.2.1" rel="Stylesheet" /> 
-
+	<link type="text/css" href="css/map-min.css?v=0.3.0" rel="Stylesheet" /> 
+	<link type="text/css" href="css/dateSpan-min.css?v=0.3.0" rel="Stylesheet" /> 
+	<link type="text/css" href="css/menuPicker-min.css?v=0.3.0" rel="Stylesheet" /> 
+	<link type="text/css" href="css/accordionPicker-min.css?v=0.3.0" rel="Stylesheet" /> 
+	<link type="text/css" href="css/bank-min.css?v=0.3.0" rel="Stylesheet" /> 
+	<link type="text/css" href="css/selector-min.css?v=0.3.0" rel="Stylesheet" /> 
+	<link type="text/css" href="css/sote-min.css?v=0.3.0" rel="Stylesheet" /> 
+    <link type="text/css" href="css/ext/jcrop/jcrop.css" rel="Stylesheet" /> 
 
 	<!-- External Javascript includes -->
 	<script type="text/javascript" src="js/ext/openlayers-2.12/OpenLayers.js?mobile"></script>
 	<script type="text/javascript" src="js/ext/datejs/date.js"></script>
+	<script type="text/javascript" src="js/ext/jcrop/jcrop.js"></script>
 	
 	<!-- SOTE component includes -->
-	<script type="text/javascript" src="js/component-min.js?v=0.2.1"></script>
-	<script type="text/javascript" src="js/registry-min.js?v=0.2.1"></script>
-	<script type="text/javascript" src="js/util-min.js?v=0.2.1"></script>
-	<script type="text/javascript" src="js/map-min.js?v=0.2.1"></script>
-	<script type="text/javascript" src="js/mapSote-min.js?v=0.2.1"></script>
-	<script type="text/javascript" src="js/dateSpan-min.js?v=0.2.1"></script>
-	<script type="text/javascript" src="js/menuPicker-min.js?v=0.2.1"></script>
-	<script type="text/javascript" src="js/accordionPicker-min.js?v=0.2.1"></script>
-	<script type="text/javascript" src="js/bank-min.js?v=0.2.1"></script>
-	<script type="text/javascript" src="js/switch-min.js?v=0.2.1"></script>
-	<script type="text/javascript" src="js/selector-min.js?v=0.2.1"></script>
-	<script type="text/javascript" src="js/sote-min.js?v=0.2.1"></script> 
- 
+	<script type="text/javascript" src="js/component-min.js?v=0.3.0"></script>
+	<script type="text/javascript" src="js/registry-min.js?v=0.3.0"></script>
+	<script type="text/javascript" src="js/util-min.js?v=0.3.0"></script>
+	<script type="text/javascript" src="js/map-min.js?v=0.3.0"></script>
+	<script type="text/javascript" src="js/mapSote-min.js?v=0.3.0"></script>
+	<script type="text/javascript" src="js/dateSpan-min.js?v=0.3.0"></script>
+	<script type="text/javascript" src="js/rubberBand-min.js?v=0.3.0"></script> 
+	<script type="text/javascript" src="js/imageDownload-min.js?v=0.3.0"></script>
+	<script type="text/javascript" src="js/menuPicker-min.js?v=0.3.0"></script>
+	<script type="text/javascript" src="js/accordionPicker-min.js?v=0.3.0"></script>
+	<script type="text/javascript" src="js/bank-min.js?v=0.3.0"></script>
+	<script type="text/javascript" src="js/switch-min.js?v=0.3.0"></script>
+	<script type="text/javascript" src="js/selector-min.js?v=0.3.0"></script>
+	<script type="text/javascript" src="js/sote-min.js?v=0.3.0"></script>
+
 
 </head>
 
 <body class="yui-skin-sam">
 	<div data-role="page" id="mappage">	
 		<div data-role="content">
-			<div id="banner"><img src='images/worldview.png' usemap="#bannermap" /></div>
-			<div id="aboutus"><a id='aboutus_link' class='aboutus_link' href='javascript:showOverlay();'><img src='images/aboutIcon.png' /></a></div>
-			<div id="permalink"><a id='perma_link' class='aboutus_link' href='javascript:showPermalink();'><img src='images/permalinkIcon.png' /></a></div>
+			<div id="banner"><img class='logo' src='images/logo.png' />
+				<ul>
+					<li><a id='aboutus_link' class='toolbaricon' href='javascript:showOverlay();'><img src='images/information.png' /></a></li>
+					<!--<li><a id='camera_link' class='toolbaricon' href='javascript:showRubberBand();'><img src='images/camera.png' /></a></li>-->
+					<li><div id='camera'></div></li>
+					<li><div id="switch"></div></li>
+					<li><a id='perma_link' class='toolbaricon' href='javascript:showPermalink();'><img src='images/permalink.png' /></a></li>
+				</ul>
+				
+			</div>
+			<!--<div id="aboutus"><a id='aboutus_link' class='aboutus_link' href='javascript:showOverlay();'><img src='images/aboutIcon.png' /></a></div>
+			<div id="permalink"><a id='perma_link' class='aboutus_link' href='javascript:showPermalink();'><img src='images/permalinkIcon.png' /></a></div>-->
 			<div id="hazard"></div>
 			<div id="products"></div>
 			<div id="map"></div>
-			<div id="switch"></div>
+
+			<div id="imagedownload"></div>
+			<div id="dlMap"></div>
+						
 			<div class="horizontalContainer">
 				<div id="time"></div>
 			</div>
@@ -94,12 +107,19 @@
 	</div>
 	<script type="text/javascript">
 
-		REGISTRY.addEventListener("map","time");
+		REGISTRY.addEventListener("map","time","imagedownload");
+		REGISTRY.addEventListener("time","map","imagedownload");
+		REGISTRY.addEventListener("switch","map","products","selectorbox","time", "imagedownload", "camera");
+		REGISTRY.addEventListener("products","map","time","selectorbox","imagedownload");
+		REGISTRY.addEventListener("selectorbox","products");
+		REGISTRY.addEventListener("camera","imagedownload");
+
+		/*REGISTRY.addEventListener("map","time");
 		REGISTRY.addEventListener("time","map");
 		REGISTRY.addEventListener("switch","map","products","selectorbox","time");
 		REGISTRY.addEventListener("products","map","time","selectorbox");
 		REGISTRY.addEventListener("selectorbox","products");
-		//REGISTRY.addEventListener("hazard","products");
+		//REGISTRY.addEventListener("hazard","products");*/
 
 		function testQS(){
 			  var comps = REGISTRY.getComponents();
@@ -116,7 +136,6 @@
             REGISTRY.addAllReadyCallback(testQS);
 		}
 		
-
 	</script>
 
 	<!-- Crazy Egg Metrics -->

@@ -3,37 +3,44 @@ body {min-width:600px;}
 div {display:block;}
 
 .yui-skin-sam .yui-panel {background: transparent; width:700px; 	font: 13px "Gill Sans", sans-serif; font-weight:100;}  
-.yui-skin-sam .yui-panel-container .hd{ background:rgba(0,0,0,0.5); color:#ffffff; border:none; padding:0;}
-.yui-skin-sam .yui-panel-container .bd{ background:rgba(0,0,0,0.8); color:#d5d5d5;}
+.yui-skin-sam .yui-panel-container .hd{ background:rgba(45,45,45,0.5); color:#ffffff; border:none; padding:0;}
+.yui-skin-sam .yui-panel-container .bd{ background:rgba(45,45,45,0.75); color:#d5d5d5;}
 .yui-skin-sam .yui-panel-container .bd h3{ color:#FFFFFF; font: 18px "Gill Sans", sans-serif; font-weight:400; text-decoration:none; }
 .yui-skin-sam .yui-panel-container .bd h4{ color:#000000; font: 18px "Gill Sans", sans-serif; font-weight:400; text-decoration:none; }
 .yui-skin-sam .yui-panel-container .bd a {color: #48a8ff; }
 
-#switch {display:block; position:absolute;  border-radius:5px; top:150px; overflow:hidden; background: rgba(68,68,68,.85); right:0px; z-index:1000; margin-right:5px;}
-#switch div{display:block; border-radius:5px; padding:5px;}
-#switch img {display:block !important;}
+#switch {  overflow:hidden; z-index:1000; }
+#switch div{display:block; }
+#switch img {display:block !important; width:40px; height:40px; }
+#switch ul li {margin:0px !important;}
 #switch ul li div.hidden {display:none; }
-#switch ul li:hover div.hidden {display:block;}
+#switch ul li:hover div.hidden {display:block; background: rgba(45,45,45,0.75); border-radius:0 0 5px 5px; position:relative; top:-1px;}
+#switch ul li:hover div.hidden a img {border:transparent 1px solid;}
+#switch ul li:hover div.hidden a:hover img {border: #fff 1px solid; }
+#switchcurrent {border:transparent 1px solid;}
 /*#switch ul li div.hidden a:hover img {border:#155678 2px solid; }*/
 
 #permpanel h3 {color:#FFFFFF; font: 12px "Gill Sans", sans-serif; font-weight:100; text-decoration:none;}
 #permpanel input[type='text']{width:280px;}
 
-div.horizontalContainer {width:100%; display:block; float:left;  position:absolute;  overflow:hidden; bottom:0; z-index:1002; padding: 5px 0 5px 0;}
-#imgDownloadLink,#aboutus,#permalink {float:right; margin-top:5px; position:relative; z-index:1002;display:block; width:50px; }
+div.horizontalContainer {width:100%; display:block; float:left;  position:absolute;  overflow:hidden; bottom:0; z-index:200; padding: 5px 0 5px 0;}
+/*#imgDownloadLink,#aboutus,#permalink {float:right; margin-top:5px; position:relative; z-index:1002;display:block; width:50px; }
 #imgDownloadLink,#aboutus,#permalink img {width:50px; height:44.5px; border:none;}
-#imgDownloadLink,#aboutus,#permalink a{text-decoration:none; border:none;}
+#imgDownloadLink,#aboutus,#permalink a{text-decoration:none; border:none;}*/
 
 
 #permalink_content {margin-top:10px;}
 
 .hidden {display:none;} 
 
-#products { z-index:1006; display:block; float:left;  position:absolute; left:0; top:15%;}
+#products { z-index:200; display:block; float:left;  position:absolute; left:0; top:15%;}
 
 #banner {
-	z-index:1006; float:left; position:relative;
+	display:block; z-index:291; float:left; position:relative; width:100%; height: 49px; background: transparent url("../images/toolbarbg.png");
 }
+#banner img.logo {padding:11px 5px;}
+#banner ul {float:right;}
+#banner ul li {display:block; float:right; margin:3px 3px;}
 
 #hazard, #transition {z-index:1007; clear:both; float:left; display:block; position:relative; }
 
@@ -46,10 +53,9 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
 }
 
 #rubberband {position:absolute !important; left:0; top:0; width:100%;  height:100%;  z-index:-3; display:none; overflow:hidden; }
-#imagedownload {z-index:1006;  position:fixed;width:400px;height:100px;background-color:#36424C; display:none; opacity:0.7;
-				 float:right; top:0px; right:200px; -moz-border-radius: 15px;border-radius: 15px;font: 13px "Gill Sans", sans-serif; font-weight:100;}
-#rbImageHolder{position:absolute !important; left:0; top:0; opacity:0.3; z-index:-10; width:100%; height:100%; overflow:hidden;}
-#rbImage {position:absolute !important; left:0; top:0; width:100%; height:100%; opacity:0.1 !important;  overflow:hidden;  }
+#imagedownload {z-index:1005; width:160px; min-height:100px; position:absolute; display:none; background: rgba(45,45,45,0.75);
+				text-shadow:none; color:white; float:left; font-size:11px; text-align: left; top:44px; padding:5px; border-radius: 0 0 5px 5px;}
+#imgFileSize {color:#D99694;}
 
 #hazard ul {
 	padding: 0;

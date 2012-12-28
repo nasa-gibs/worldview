@@ -139,7 +139,7 @@ SOTE.widget.MapSote.prototype.handleMapZoomEnd = function(evt)
 	}
 	else
 	{
-		$('.olControlZoomInCustomItemInactive').css("background-color", "rgba(68,68,68,0.85)");
+		$('.olControlZoomInCustomItemInactive').css("background-color", "rgba(45,45,45,0.75)");
 		$('.olControlZoomInCustomItemInactive').css("color", "#FFFFFF");
 	}
 
@@ -151,7 +151,7 @@ SOTE.widget.MapSote.prototype.handleMapZoomEnd = function(evt)
 	}
 	else
 	{
-		$('.olControlZoomOutCustomItemInactive').css("background-color", "rgba(68,68,68,0.85)");
+		$('.olControlZoomOutCustomItemInactive').css("background-color", "rgba(45,45,45,0.75)");
 		$('.olControlZoomOutCustomItemInactive').css("color", "#FFFFFF");
 	}	
 	

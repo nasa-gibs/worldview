@@ -67,7 +67,7 @@ SOTE.widget.Switch.prototype.init = function(){
 	}
 	
 	
-};
+}; 
 
 /**
   * Renders the UI accordion from this.items

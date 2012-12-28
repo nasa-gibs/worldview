@@ -64,7 +64,7 @@ div.olMap {
 
 /*  Zoom panel controls */
 div.olControlZoomPanelCustom {
-	top: 71px;
+	top: 91px;
     left: 14px;
 	height: 108px;
 	width: 36px;
@@ -75,8 +75,8 @@ div.olControlZoomPanelCustom {
 }
 
 div.olControlZoomPanelCustom div {
-    width: 36px;
-    height: 36px;
+    width: 24px;
+    height: 24px;
     left: 0;
 }
 
@@ -85,32 +85,36 @@ div.olControlZoomPanelCustom .olControlZoomOutCustomItemInactive {
     position: absolute;
 }
 div.olControlZoomPanelCustom .olControlZoomInCustomItemInactive {
-    background: rgba(68,68,68,.85);
+    background: rgba(45,45,45,.75);
 	top: 0;
     background-position: 0 0;
     border-radius: 5px 5px 0 0;
+    /*box-shadow: 0 0 4px 1px #bbb;*/
+
 }
 div.olControlZoomPanelCustom .olControlZoomOutCustomItemInactive {
-    background: rgba(68,68,68,.85);
+    background: rgba(45,45,45,.75);
     top: 72px;
     background-position: 0 -72px;	
     border-radius: 0 0 5px 5px ;
-    top: 37px;
+    top: 27px;
+   	/*box-shadow: 0 0 4px 1px #bbb;*/
+
 }
 div.olControlZoomPanelCustom .olControlZoomOutCustomItemInactive:after ,
 div.olControlZoomPanelCustom .olControlZoomInCustomItemInactive:after{
     font-weight: bold;
     content   : '+';
-    font-size : 36px;
-    padding:  7px;
+    font-size : 24px;
+    padding:  5px;
     z-index: 2000;
     color     : #FFFFFF;
     line-height: 1em;
 }
 div.olControlZoomPanelCustom .olControlZoomOutCustomItemInactive:after{
     content: '–';
-    line-height: 0.9em;
-    padding: 0 8px;
+    line-height: 1em;
+    padding: 5px;
 }
 
 div.olControlZoomPanelCustom .olControlZoomToMaxExtentItemInactive {

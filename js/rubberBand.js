@@ -25,8 +25,12 @@ SOTE.widget.RubberBand = function (containerId, config){
 	if(config===undefined) {
 		 config={};
 	}
+	this.icon = config.icon;
+	this.onicon = config.onicon;
+	this.cropee = config.cropee;
 	this.projectionSwitch="geographic";
 	this.id = containerId;
+	this.state = "off";
 	this.jcropAPI = null;
 	//this.windowURL = "";
 	
@@ -44,6 +48,10 @@ SOTE.widget.RubberBand.prototype = new SOTE.widget.Component;
 */
 SOTE.widget.RubberBand.prototype.init = function(){
 	this.container.setAttribute("class","rubberband");
+	
+	this.container.innerHTML = "<a id='"+this.id+"camera_link' class='toolbaricon'><img src='"+this.icon+"' /></a>";
+	$('#'+this.id+"camera_link").bind('click',{self:this},SOTE.widget.RubberBand.toggle);
+	
 	if(REGISTRY){
  		REGISTRY.register(this.id,this);
  		REGISTRY.markComponentReady(this.id); 
@@ -52,6 +60,22 @@ SOTE.widget.RubberBand.prototype.init = function(){
 		alert("No REGISTRY found!  Cannot register Rubber Band!");
 	}
 };
+
+SOTE.widget.RubberBand.toggle = function(o){
+	var self = o.data.self;
+	if(self.state == "off"){
+		self.state = "on";
+		$("#"+self.id+"camera_link img").attr("src",self.onicon);
+		$("#imagedownload").show('slide', {direction: 'up'}, 1000);	
+		self.draw();
+	}
+	else{
+		self.state = "off";
+		$("#"+self.id+"camera_link img").attr("src",self.icon);
+		self.jcropAPI.destroy(); 
+		$("#imagedownload").hide('slide', {direction: 'up'}, 1000); 	
+	}
+}
 
 /**
   * Sets the values for the rubberband (x1, y1, x2, y2, width, height) from the passed "coordinates" object of JCrop  *
@@ -72,8 +96,13 @@ SOTE.widget.RubberBand.prototype.setValue = function(c) {
   *
 */
 SOTE.widget.RubberBand.prototype.getValue = function() {
-	var returnVal = this.id + "=" + this.coords.x+","+this.coords.y+","+this.coords.x2+","+this.coords.y2+","+this.coords.w+","+this.coords.h;
-	return returnVal;
+	if(this.coords){
+		var returnVal = this.id + "=" + this.coords.x+","+this.coords.y+","+this.coords.x2+","+this.coords.y2+","+this.coords.w+","+this.coords.h;
+		return returnVal;
+	}
+	else {
+		return;
+	}
 };
 
 /**
@@ -161,53 +190,28 @@ SOTE.widget.RubberBand.prototype.getStatus = function(){
   * 
   *
 */
-SOTE.widget.RubberBand.prototype.draw =  function(mapId) {
+SOTE.widget.RubberBand.prototype.draw =  function() {
   
-   if(this.projectionSwitch !="geographic"){
-   	alert("The download feature is currently available for geograpic projection only.");
-   	return -1;
-   }
+	if(this.projectionSwitch !="geographic"){
+  		alert("The download feature is currently available for geograpic projection only.");
+   		return -1;
+	}
   
- 
-   
-  var self=this;
-  
-  jQuery(function($){  
-   if(document.getElementById('imagedownload').style.display != "block") {
-   	   $("#cameraIcon").css('border', "solid 2px red");
-       //$("#imagedownload").show("slow");
-        $("#imagedownload").show('slide', {direction: 'right'}, 1000);
-   	    $("#rbImageHolder").css("z-index", 1000);
-   	    $("#rbImageHolder").css("width", "100%"); 
-   	    $("#rbImageHolder").css("height", "100%"); 
-   	    $("#rbImageHolder").show();
-   	  //  $("#rbImage").show();
-  		//document.getElementById('rbImage').style.display='block';
- 
-    	$("#rbImage").Jcrop({			
+ 	var self = this;
+
+  	$("#"+this.cropee).Jcrop({			
         	bgColor:     'black',
-            bgOpacity:   0.0,
+            bgOpacity:   0.3,
             onSelect:  function(c){SOTE.widget.RubberBand.handleChange(c, self);},
-            onChange: function(c){SOTE.widget.RubberBand.handleChange(c, self);}
-            },function(){
-              self.jcropAPI = this;
-         }); 
-            //self.jcropAPI.setOptions({ bgOpacity: 0.0 });
-            self.jcropAPI.setSelect([($(window).width()/2)-100,($(window).height()/2)-100,($(window).width()/2)+100,($(window).height()/2)+100]);  
-        //    self.jcropAPI.enable();
-    }
-     else { 
-     	
-     	//self.jcropAPI.release(); 
-     	//self.jcropAPI.disable(); 
-     	$("#cameraIcon").css('border','none');
-     	$("#rbImageHolder").css("z-index", -10);
-		$("#imagedownload").hide('slide', {direction: 'right'}, 1000);
-     	$('#rbImageHolder').hide();
-  	 //	$('#rbImage').hide();
-          
-     }	 
-  });     
+            onChange: function(c){SOTE.widget.RubberBand.handleChange(c, self);},
+            fullScreen: true
+            }); 
+    
+    this.jcropAPI = $('#'+this.cropee).data('Jcrop');
+            
+	this.jcropAPI.setSelect([($(window).width()/2)-100,($(window).height()/2)-100,($(window).width()/2)+100,($(window).height()/2)+100]);   
+    
+ 	
 };
 
 
