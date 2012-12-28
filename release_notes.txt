@@ -3,6 +3,27 @@ Release Notes
 
 http://earthdata.nasa.gov/labs/worldview/
 
+Release 0.3.0
+* New Features
+	- Full-resolution imagery can now be selected and downloaded while in the geographic projection
+	- Horizontal and vertical coordinates (e.g., latitude and longitude) of the point directly below the mouse cursor are now shown
+	
+
+* Updates
+	- A toolbar was created to hold certain user interface elements 
+
+
+* Known Issues
+	- Orbital tracks may not be available for dates older than ten days
+	- On iOS, layers cannot be scrolled or reordered 
+	
+
+
+Release 0.2.2
+* Updates
+	- Fixed end-of-year bug
+
+
 
 Release 0.2.1
 * Updates
