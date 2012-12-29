@@ -66,7 +66,8 @@ SOTE.widget.Map = function(containerId, config){
 		 1024.0, 512.0, 256.0];
 		 
 	this.TILEMATRIXSET_GEO_250m = "EPSG4326_250m";
-		 
+	this.TILEMATRIXSET_ANTARCTIC_250m = "EPSG3031_250m";
+	this.TILEMATRIXSET_ARCTIC_250m = "EPSG3995_250m";	 
 		 
 	this.RESOLUTIONS_ON_SERVER_GEO_500m =  
 		[0.5625, 0.28125, 0.140625,
@@ -78,6 +79,8 @@ SOTE.widget.Map = function(containerId, config){
 		 1024.0, 512.0];
 		 
 	this.TILEMATRIXSET_GEO_500m = "EPSG4326_500m";
+	this.TILEMATRIXSET_ANTARCTIC_500m = "EPSG3031_500m";
+	this.TILEMATRIXSET_ARCTIC_500m = "EPSG3995_500m";
 
 
 	this.RESOLUTIONS_ON_SERVER_GEO_1km =  
@@ -90,6 +93,8 @@ SOTE.widget.Map = function(containerId, config){
 		 1024.0];	
 		 
 	this.TILEMATRIXSET_GEO_1km = "EPSG4326_1km";
+	this.TILEMATRIXSET_ANTARCTIC_1km = "EPSG3031_1km";
+	this.TILEMATRIXSET_ARCTIC_1km = "EPSG3995_1km";
 	
 		 
 	this.RESOLUTIONS_ON_SERVER_GEO_2km =  
@@ -100,6 +105,8 @@ SOTE.widget.Map = function(containerId, config){
 		[8192.0, 4096.0, 2048.0];
 		
 	this.TILEMATRIXSET_GEO_2km = "EPSG4326_2km";
+	this.TILEMATRIXSET_ANTARCTIC_2km = "EPSG3031_2km";
+	this.TILEMATRIXSET_ARCTIC_2km = "EPSG3995_2km";
 		 	
 
 	// Define an object for holding configuration 
@@ -603,8 +610,10 @@ SOTE.widget.Map.prototype.addLayers = function(layers)
 		{
 			if (layers[i].projection == "EPSG:4326")
 				layers[i].tileMatrixSet = this.TILEMATRIXSET_GEO_250m;
-			else
-				layers[i].tileMatrixSet = this.TILEMATRIXSET_POLAR_250m;
+			else if (layers[i].projection == "EPSG:3995")
+				layers[i].tileMatrixSet = this.TILEMATRIXSET_ARCTIC_250m;
+			else 
+				layers[i].tileMatrixSet = this.TILEMATRIXSET_ANTARCTIC_250m;
 		}
 				
 		// Check required params
@@ -660,7 +669,7 @@ SOTE.widget.Map.prototype.addLayers = function(layers)
     	{
     		// If 'tileSize' is set, this should be a tiled layer
     		// Note: "transparent" flag is not being used for tiled layers since image format is already being specified   
-    		if(this.projection != "EPSG:4326"){
+    		if ((this.projection != "EPSG:4326")){ // && (this.projection != "EPSG:3031")) {
 	    	this.map.addLayer(
 	    		new OpenLayers.Layer.WMS(
 	    			layers[i].displayName, 
@@ -719,7 +728,7 @@ SOTE.widget.Map.prototype.addLayers = function(layers)
 			        isBaseLayer: false
 			    }
 			    
-			    );
+		    );
 			
 			
 			// Time parameter is not being included in request to server in the current version of OL (2.12RC7);
