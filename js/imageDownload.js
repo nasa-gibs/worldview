@@ -95,8 +95,8 @@ SOTE.widget.ImageDownload.prototype.init = function(){
        this.WMTSLayer =  new OpenLayers.Layer.WMTS(
 			    {
 			        name: "dl",
-			        url: "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-			        layer: "Download",
+			        url: "", 
+			        layer: "ImageDownload",
 			        matrixSet: "EPSG4326_250m",
 			        projection: "EPSG:4326",
 			        serverResolutions: this.RESOLUTIONS_ON_SERVER_GEO_250m,
@@ -104,13 +104,15 @@ SOTE.widget.ImageDownload.prototype.init = function(){
 					'tileSize': new OpenLayers.Size(512, 512),
 					maxExtent: new OpenLayers.Bounds(-180,-90,180,90),
 					style: "_null",
+					visibility: false,
 			        isBaseLayer: true
 			    }
 			    
 			    );
 			
+			this.map.addLayer(this.WMTSLayer);
 			
-			this.map.addLayer(this.WMTSLayer); 
+			this.WMTSLayer.setVisibility(false); 
 			
 		
 	var htmlElements = "<div>Resolution:<select id='selImgResolution'><option value='1'>250m</option><option value='2'>500m</option><option value='4'>1km</option><option value='20'>5km</option><option value='40'>10km</option></select>";
@@ -183,7 +185,7 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
      
      var dlURL  = "http://map2.vis.earthdata.nasa.gov/imagegen/?"; 
      
-  	 
+     
   	 var dTime = new Date((time.split("T"))[0]+"T00:00:00");
   	 
   	 //Julian date, padded with two zeros (to ensure the julian date is always in DDD format).
