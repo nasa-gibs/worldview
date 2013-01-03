@@ -3,8 +3,8 @@ body {min-width:600px;}
 div {display:block;}
 
 .yui-skin-sam .yui-panel {background: transparent; width:700px; 	font: 13px "Gill Sans", sans-serif; font-weight:100;}  
-.yui-skin-sam .yui-panel-container .hd{ background:rgba(45,45,45,0.5); color:#ffffff; border:none; padding:0;}
-.yui-skin-sam .yui-panel-container .bd{ background:rgba(45,45,45,0.75); color:#d5d5d5;}
+.yui-skin-sam .yui-panel-container .hd{ background:rgba(38, 43, 49, 0.65); color:#ffffff; border:none; padding:0;}
+.yui-skin-sam .yui-panel-container .bd{ background:rgba(38, 43, 49, 0.65); color:#d5d5d5;}
 .yui-skin-sam .yui-panel-container .bd h3{ color:#FFFFFF; font: 18px "Gill Sans", sans-serif; font-weight:400; text-decoration:none; }
 .yui-skin-sam .yui-panel-container .bd h4{ color:#000000; font: 18px "Gill Sans", sans-serif; font-weight:400; text-decoration:none; }
 .yui-skin-sam .yui-panel-container .bd a {color: #48a8ff; }
@@ -14,7 +14,7 @@ div {display:block;}
 #switch img {display:block !important; width:40px; height:40px; }
 #switch ul li {margin:0px !important;}
 #switch ul li div.hidden {display:none; }
-#switch ul li:hover div.hidden {display:block; background: rgba(45,45,45,0.75); border-radius:0 0 5px 5px; position:relative; top:-1px;}
+#switch ul li:hover div.hidden {display:block; background: rgba(38, 43, 49, 0.65); border-radius:0 0 5px 5px; position:relative; top:-1px;}
 #switch ul li:hover div.hidden a img {border:transparent 1px solid;}
 #switch ul li:hover div.hidden a:hover img {border: #fff 1px solid; }
 #switchcurrent {border:transparent 1px solid;}
@@ -53,7 +53,7 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
 }
 
 #rubberband {position:absolute !important; left:0; top:0; width:100%;  height:100%;  z-index:-3; display:none; overflow:hidden; }
-#imagedownload {z-index:1005; width:160px; min-height:100px; position:absolute; display:none; background: rgba(45,45,45,0.75);
+#imagedownload {z-index:1005; width:160px; min-height:100px; position:absolute; display:none; background: rgba(38, 43, 49, 0.45);
 				text-shadow:none; color:white; float:left; font-size:11px; text-align: left; top:44px; padding:5px; border-radius: 0 0 5px 5px;}
 #imgFileSize {color:#D99694;}
 

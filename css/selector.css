@@ -17,7 +17,7 @@
 .selector ul.toplevel li {float:left; width:auto; margin: 20px 20px 0 0;}
 .selector ul.toplevel img {border-radius:5px; border:#fff 2px solid; }
 .selector ul.toplevel a p {width:100%; text-align:center; color:#ffffff; font-weight:400; font-size: 12px;}
-#selector .bd {background: rgba(45,45,45,.75) !important; border-radius: 0 0 10px 10px; }
-#selector .hd {background: rgba(45,45,45,.65) !important;border-radius: 10px 10px 0 0; }
+#selector .bd {background: rgba(38, 43, 49, 0.65) !important; border-radius: 0 0 10px 10px; }
+#selector .hd {background: rgba(38, 43, 49, 0.65) !important;border-radius: 10px 10px 0 0; }
 #selector_c .yui-panel {border-radius:10px;}
 #selector_c .underlay {border-radius:10px;}
