@@ -186,7 +186,11 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
      var dlURL  = "http://map2.vis.earthdata.nasa.gov/imagegen/?"; 
      
      
-  	 var dTime = new Date((time.split("T"))[0]+"T00:00:00");
+  	 //var dTime = new Date((time.split(/T/))[0]+"T00:00:00");
+  	 var dTime = SOTE.util.UTCDateFromISO8601String(time);
+  	 dTime.setHours(0);
+  	 dTime.setMinutes(0);
+  	 dTime.setSeconds(0);
   	 
   	 //Julian date, padded with two zeros (to ensure the julian date is always in DDD format).
   	 var jDate = "00" + (1+Math.ceil((dTime - new Date(dTime.getFullYear(),0,1)) / 86400000));
