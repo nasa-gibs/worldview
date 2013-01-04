@@ -1,0 +1,38 @@
+<project name="WorldView" default="dist" basedir=".">
+	<description><![CDATA[
+WorldView build script
+]]>
+	</description>
+	
+	<property name="build" location="${basedir}/build"/>
+	<property name="dist" location="${basedir}/dist"/>
+	<property name="doc" location="${build}/worldview-doc"/>
+	<property name="src.js" location="${basedir}/js"/>
+	
+	<property name="local.lib" location="${user.home}/local/lib"/>
+	<property name="local.lib.java" location="${local.lib}/java"/>
+	<property name="local.lib.ant" location="${local.lib.java}/ant"/>
+	
+	<property name="jsdoc.home" location="${user.home}/local/opt/jsdoc"/>
+	
+	<taskdef name="jsdoc" classname="net.jannon.ant.tasks.JsDoc3"
+			 classpath="${local.lib.ant}/jsdoc3-ant-task-1.0.jar:${jsdoc.home}/lib/js.jar"/>
+	
+	<target name="clean" description="deletes build and dist directories">
+		<delete dir="${build}"/>
+		<delete dir="${dist}"/>
+	</target>	
+			
+	<target name="dist" depends="clean,doc" 
+		    description="generates distribution artifacts">
+		<tar destfile="${dist}/worldview-doc.tar.bz2"
+			 basedir="${build}" includes="worldview-doc/**" 
+			 compression="bzip2"/>
+	</target>
+	
+	<target name="doc" description="builds documentation">
+		<mkdir dir="${doc}"/>
+		<jsdoc jsdochome="${jsdoc.home}" to="${doc}" dir="${src.js}"/>
+	</target>
+	
+</project>	

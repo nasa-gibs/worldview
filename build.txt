@@ -1,0 +1,41 @@
+Required Dependencies
+=====================
+
+* JSDoc3: https://github.com/jsdoc3/jsdoc
+
+Unpack into ~/local/opt/jsdoc
+
+$ mkdir -p ~/local/opt
+$ cd ~/local/opt
+$ tar xf ~/Downloads/jsdoc-3.0.1.tar.gz
+$ ln -s jsdoc-3.0.1 jsdoc
+
+* JSDoc3 Ant Task: https://github.com/jannon/jsdoc3-ant-task
+
+Clone the repository and build:
+
+$ cd /tmp
+$ git clone https://github.com/jannon/jsdoc3-ant-task.git
+$ cd jsdoc3-ant-task
+$ ant dist
+$ mkdir -p ~/local/lib/java/ant
+$ cp build/jar/jsdoc3-ant-task-1.0.jar ~/local/lib/java/ant
+
+Targets
+=======
+
+To generate documentation in the build/doc directory:
+
+$ ant doc
+
+To generate distribution artifacts in the dist directory:
+
+$ ant dist
+
+To clean up:
+
+$ ant clean
+
+
+
+ 
