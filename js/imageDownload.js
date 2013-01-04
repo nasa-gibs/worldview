@@ -37,7 +37,7 @@ SOTE.widget.ImageDownload = function(containerId, config){
 	
 	this.alignTo = config.alignTo;
 	this.id = containerId;
-	this.map = null;
+	this.map = config.m.map;
 	this.WMTSLayer = null;
 	
     if (config.baselayer === undefined)
@@ -77,43 +77,6 @@ SOTE.widget.ImageDownload.prototype.init = function(){
 	}
 
 	this.projectionSwitch = "geographic";
-    this.map = new OpenLayers.Map({
-		        div: "dlMap",
-		        theme: null,
-		        controls: [],
-		        maxExtent: new OpenLayers.Bounds(-180,-90,180,90),
-		        projection:"EPSG:4326",
-		        numZoomLevels:9, 
-		        fractionalZoom: false,
-		        resolutions: this.RESOLUTIONS_ON_SCREEN_GEO_ALL,
-		        allOverlays: false,
-		        zoom: 2
-		    });
-   
-    
-   
-       this.WMTSLayer =  new OpenLayers.Layer.WMTS(
-			    {
-			        name: "dl",
-			        url: "", 
-			        layer: "ImageDownload",
-			        matrixSet: "EPSG4326_250m",
-			        projection: "EPSG:4326",
-			        serverResolutions: this.RESOLUTIONS_ON_SERVER_GEO_250m,
-			    	visibility: false,
-					'tileSize': new OpenLayers.Size(512, 512),
-					maxExtent: new OpenLayers.Bounds(-180,-90,180,90),
-					style: "_null",
-					visibility: false,
-			        isBaseLayer: true
-			    }
-			    
-			    );
-			
-			this.map.addLayer(this.WMTSLayer);
-			
-			this.WMTSLayer.setVisibility(false); 
-			
 		
 	var htmlElements = "<div>Resolution:<select id='selImgResolution'><option value='1'>250m</option><option value='2'>500m</option><option value='4'>1km</option><option value='20'>5km</option><option value='40'>10km</option></select>";
     htmlElements +="<br />Format: <select id='selImgFormat'><option value='JPEG'>JPEG</option><option value='PNG'>PNG</option><option value='Gtiff'>GeoTIFF</option></select>";
@@ -176,9 +139,7 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
   	
   	var px = pixels.split(",");
 	var x1 = px[0]; var y1= px[1]; var x2 = px[2]; var y2=px[3];
-	this.map.zoomToExtent(new OpenLayers.Bounds.fromString(bbox));
-	
-  	var currExtent = this.map.getExtent();
+
    	var lonlat1 = this.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(x1, y2));
    	var lonlat2 = this.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(x2, y1));
  

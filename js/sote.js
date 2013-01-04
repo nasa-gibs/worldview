@@ -36,7 +36,7 @@ window.onload = function(){// Initialize "static" vars
 	var map = new SOTE.widget.DateSpan("time",{hasThumbnail:false});
 	//Image download variables
 	rb = new SOTE.widget.RubberBand("camera",{icon:"images/camera.png",onicon:"images/cameraon.png",cropee:"map"});
-    var id = new SOTE.widget.ImageDownload("imagedownload",{baseLayer:"MODIS_Terra_CorrectedReflectance_TrueColor",alignTo: rb});
+    var id = new SOTE.widget.ImageDownload("imagedownload",{baseLayer:"MODIS_Terra_CorrectedReflectance_TrueColor",alignTo: rb, m:m});
 
 
 };
