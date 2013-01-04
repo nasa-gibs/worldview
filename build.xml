@@ -1,4 +1,4 @@
-<project name="WorldView" default="dist" basedir=".">
+<project name="WorldView" default="web" basedir=".">
 	<description><![CDATA[
 WorldView build script
 ]]>
@@ -6,33 +6,127 @@ WorldView build script
 	
 	<property name="build" location="${basedir}/build"/>
 	<property name="dist" location="${basedir}/dist"/>
+	<property name="web" location="${build}/worldview"/>
+	<property name="web.debug" location="${build}/worldview-debug"/>
 	<property name="doc" location="${build}/worldview-doc"/>
 	<property name="src.js" location="${basedir}/js"/>
+		
+	<property name="jsdoc.home" 
+			  location="${user.home}/local/packages/jsdoc-3.0.1"/>
+	<property name="jsdoc.ant.home" 
+			  location="${user.home}/local/packages/jsdoc3-ant-task"/>
+	<property name="yui-compressor.home" 
+			  location="${user.home}/local/packages/yuicompressor-2.4.7"/>
+	<property name="yui-compressor.ant.home"
+			  location="${user.home}/local/packages/yui-compressor-ant-task-0.5"/>
+
+	<taskdef name="jsdoc" 
+			 classname="net.jannon.ant.tasks.JsDoc3"
+			 classpath="${jsdoc.ant.home}/jsdoc3-ant-task-1.0.jar:${jsdoc.home}/lib/js.jar"/>
 	
-	<property name="local.lib" location="${user.home}/local/lib"/>
-	<property name="local.lib.java" location="${local.lib}/java"/>
-	<property name="local.lib.ant" location="${local.lib.java}/ant"/>
-	
-	<property name="jsdoc.home" location="${user.home}/local/opt/jsdoc"/>
-	
-	<taskdef name="jsdoc" classname="net.jannon.ant.tasks.JsDoc3"
-			 classpath="${local.lib.ant}/jsdoc3-ant-task-1.0.jar:${jsdoc.home}/lib/js.jar"/>
+	<taskdef name="yui-compressor"
+			 classname="net.noha.tools.ant.yuicompressor.tasks.YuiCompressorTask"
+		     classpath="${yui-compressor.home}/build/yuicompressor-2.4.7.jar:${yui-compressor.ant.home}/bin/yui-compressor-ant-task-0.5.jar"/>
 	
 	<target name="clean" description="deletes build and dist directories">
 		<delete dir="${build}"/>
 		<delete dir="${dist}"/>
 	</target>	
+
+	<target name="web" description="builds minified web site">
+		<delete dir="${web}"/>
+		<delete dir="${build}/minify"/>
+		<mkdir dir="${web}"/>
+		<mkdir dir="${build}/minify"/>
+		
+		<copy todir="${web}/css">
+			<fileset dir="${basedir}/css"/>
+		</copy>
+		<copy todir="${web}/data">
+			<fileset dir="${basedir}/data"/>
+		</copy>
+		<copy todir="${web}/images">
+			<fileset dir="${basedir}/images"/>
+		</copy>
+		<copy todir="${web}/js">
+			<fileset dir="${basedir}/js"/>
+		</copy>
+		<copy todir="${web}">
+			<fileset dir="${basedir}">
+				<include name="index.html"/>
+			</fileset>
+		</copy>
+		
+		<!-- Debug version that is not minified -->
+		<delete dir="${web.debug}"/>		
+		<mkdir dir="${web.debug}"/>
+		<copy todir="${web.debug}">
+			<fileset dir="${web}"/>
+		</copy>
+		
+		<concat destfile="${build}/minify/worldview.js" force="no">
+			<fileset dir="${web}/js" includes="component.js"/>
+			<fileset dir="${web}/js" includes="registry.js"/>
+			<fileset dir="${web}/js" includes="util.js"/>
+			<fileset dir="${web}/js" includes="map.js"/>
+			<fileset dir="${web}/js" includes="mapSote.js"/>
+			<fileset dir="${web}/js" includes="dateSpan.js"/>
+			<fileset dir="${web}/js" includes="rubberBand.js"/>
+			<fileset dir="${web}/js" includes="imageDownload.js"/>
+			<fileset dir="${web}/js" includes="menuPicker.js"/>
+			<fileset dir="${web}/js" includes="accordionPicker.js"/>
+			<fileset dir="${web}/js" includes="bank.js"/>
+			<fileset dir="${web}/js" includes="switch.js"/>
+			<fileset dir="${web}/js" includes="selector.js"/>
+			<fileset dir="${web}/js" includes="sote.js"/>
+		</concat>
+		
+		<yui-compressor warn="false" charset="UTF-8" 
+			fromdir="${build}/minify" 
+			todir="${build}/minify">
+			<include name="worldview.js"/>
+		</yui-compressor>
+		
+		<delete>
+			<fileset dir="${web}/js">
+				<include name="*.js"/>
+			</fileset>
+		</delete>
+		
+		<move file="${build}/minify/worldview-min.js" todir="${web}/js"/>
+		
+		<replaceregexp 
+			file="${web}/index.html"
+			match=".!--(.*worldview-min.js.*)--."
+			replace="\1"/>
+		<replaceregexp 
+			file="${web}/index.html"
+			match="^.*js.dev.*$"
+			replace=""
+			byline="true"/>
+	</target>
+	
+		
+	<target name="doc" description="builds documentation">
+		<delete dir="${doc}"/>
+		<mkdir dir="${doc}"/>
+		<jsdoc jsdochome="${jsdoc.home}" to="${doc}" dir="${src.js}"/>
+	</target>
 			
-	<target name="dist" depends="clean,doc" 
+	<target name="dist" depends="clean,web,doc" 
 		    description="generates distribution artifacts">
+		<tar destfile="${dist}/worldview.tar.bz2"
+			 basedir="${build}" includes="worldview/**" 
+			 compression="bzip2"/>
+		<tar destfile="${dist}/worldview-debug.tar.bz2"
+			 basedir="${build}" includes="worldview-debug/**"
+			 compression="bzip2"/>
+		
 		<tar destfile="${dist}/worldview-doc.tar.bz2"
 			 basedir="${build}" includes="worldview-doc/**" 
 			 compression="bzip2"/>
 	</target>
 	
-	<target name="doc" description="builds documentation">
-		<mkdir dir="${doc}"/>
-		<jsdoc jsdochome="${jsdoc.home}" to="${doc}" dir="${src.js}"/>
-	</target>
+
 	
 </project>	
