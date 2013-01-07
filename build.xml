@@ -39,6 +39,9 @@ WorldView build script
 		<mkdir dir="${web}"/>
 		<mkdir dir="${build}/minify"/>
 		
+		<!-- Create a copy of all web resources. 
+			 TODO: This would be easier if all files were contained under a 
+			 'src' directory -->
 		<copy todir="${web}/css">
 			<fileset dir="${basedir}/css"/>
 		</copy>
@@ -63,8 +66,71 @@ WorldView build script
 		<copy todir="${web.debug}">
 			<fileset dir="${web}"/>
 		</copy>
-		
+				
+		<!-- WorldView stylesheet files to minify -->
+		<echo message="Concatenating Stylesheet Files"/>
+		<concat destfile="${build}/minify/worldview.css" force="no">
+			
+			<!-- JQuery -->
+			<fileset dir="${web}/css/ext"
+			 includes="jquery/jquery.mobile-1.0rc2.css"/>
+			
+			<!-- Combo-handled YUI files -->
+			<fileset dir="${web}/css/ext"
+			 includes="yui/combo-container-min.css"/>
+			
+			<!-- OpenLayers styles -->
+			<fileset dir="${web}/css/ext" 
+			 includes="openlayers-2.12/openlayers.defaulttheme.style.css"/>
+			<fileset dir="${web}/css/ext"
+			 includes="openlayers-2.12/openlayers.example.style.css"/>
+			<fileset dir="${web}/css/ext"
+			 includes="openlayers-2.12/openlayers.style.mobile-jq.css"/>
+			
+			<!-- SOTE styles -->
+			<fileset dir="${web}/css" includes="map.css"/>
+			<fileset dir="${web}/css" includes="dateSpan.css"/>
+			<fileset dir="${web}/css" includes="menuPicker.css"/>
+			<fileset dir="${web}/css" includes="accordionPicker.css"/>
+			<fileset dir="${web}/css" includes="bank.css"/>
+			<fileset dir="${web}/css" includes="selector.css"/>
+			<fileset dir="${web}/css" includes="sote.css"/>
+			<fileset dir="${web}/css" includes="ext/jcrop/jcrop.css"/>
+		</concat>
+			
+		<!-- WorldView JavaScript files to minifiy -->
+		<echo message="Concatenating JavaScript Files"/>
 		<concat destfile="${build}/minify/worldview.js" force="no">
+			
+			<!-- Dependency -->
+			<fileset dir="${web}/js/ext"
+			 includes="yui/yahoo-min.js"/>
+			
+			<!-- Event source file -->
+			<fileset dir="${web}/js/ext"
+			 includes="yui/event-min.js"/>
+			
+			<!-- JQuery -->
+			<fileset dir="${web}/js/ext"
+			 includes="jquery/jquery-1.6.4.js"/>
+			<fileset dir="${web}/js/ext"
+			 includes="jqueryui-1.8.16/jquery-ui.min.js"/>
+			<fileset dir="${web}/js/ext"
+			 includes="jquery/jquery.mobile-1.0rc2.js"/>
+			
+			<!-- Combo handled YUI files --> 
+			<fileset dir="${web}/js/ext" 
+			 includes="yui/combo-event-dragdrop-container-min.js"/>
+			
+			<!-- External Javascript includes -->
+			<fileset dir="${web}/js/ext" 
+			 includes="openlayers-2.12/OpenLayers.js"/>
+			<fileset dir="${web}/js/ext" 
+			 includes="datejs/date.js"/>
+			<fileset dir="${web}/js/ext" 
+			 includes="jcrop/jcrop.js"/>
+				
+			<!-- SOTE component includes -->
 			<fileset dir="${web}/js" includes="component.js"/>
 			<fileset dir="${web}/js" includes="registry.js"/>
 			<fileset dir="${web}/js" includes="util.js"/>
@@ -81,24 +147,49 @@ WorldView build script
 			<fileset dir="${web}/js" includes="sote.js"/>
 		</concat>
 		
+		<!-- Build in a separate directory. Non-minified versions need to be
+		     deleted, so do that first before copying in the minified files -->
 		<yui-compressor warn="false" charset="UTF-8" 
 			fromdir="${build}/minify" 
 			todir="${build}/minify">
+			<include name="worldview.css"/>
 			<include name="worldview.js"/>
 		</yui-compressor>
 		
 		<delete>
+			<fileset dir="${web}/css">
+				<include name="*.css"/>
+			</fileset>
+			<!-- Explicit until all files have been minified -->
+			<fileset dir="${web}/css/ext/jcrop">
+				<include name="jcrop.css"/>
+			</fileset>
 			<fileset dir="${web}/js">
 				<include name="*.js"/>
 			</fileset>
 		</delete>
 		
+		<move file="${build}/minify/worldview-min.css" todir="${web}/css"/>
 		<move file="${build}/minify/worldview-min.js" todir="${web}/js"/>
 		
+		<!-- Uncomment the references to the minified versions in 
+		     the index.html file -->
+		<replaceregexp 
+			file="${web}/index.html"
+			match=".!--(.*worldview-min.css.*)--."
+			replace="\1"/>
 		<replaceregexp 
 			file="${web}/index.html"
 			match=".!--(.*worldview-min.js.*)--."
 			replace="\1"/>
+	
+		<!-- Remove references to the non-minified versions. Those lines 
+		     should contain the text "js.dev" or "css.dev" -->
+		<replaceregexp 
+			file="${web}/index.html"
+			match="^.*css.dev.*$"
+			replace=""
+			byline="true"/>
 		<replaceregexp 
 			file="${web}/index.html"
 			match="^.*js.dev.*$"
