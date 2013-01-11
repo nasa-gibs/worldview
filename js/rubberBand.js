@@ -49,7 +49,7 @@ SOTE.widget.RubberBand.prototype = new SOTE.widget.Component;
 SOTE.widget.RubberBand.prototype.init = function(){
 	this.container.setAttribute("class","rubberband");
 	
-	this.container.innerHTML = "<a id='"+this.id+"camera_link' class='toolbaricon'><img src='"+this.icon+"' /></a>";
+	this.container.innerHTML = "<a id='"+this.id+"camera_link' class='toolbaricon' title='Take a snapshot'><img src='"+this.icon+"' /></a>";
 	$('#'+this.id+"camera_link").bind('click',{self:this},SOTE.widget.RubberBand.toggle);
 	
 	if(REGISTRY){

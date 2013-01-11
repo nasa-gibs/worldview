@@ -81,7 +81,7 @@ SOTE.widget.Switch.prototype.render = function(){
 	this.container.innerHTML = "";
 	$('#'+this.id).addClass('switch');
 	//<ul><li><div><a></a><a></a><a></a></div></li></ul>
-	this.container.innerHTML = "<ul><li><div><img id='"+this.id+"current' src='images/geographic.png' /></div><div class='hidden'><a id='arctic'><img id='"+this.id+"arctic' src='images/arctic.png' /></a><a id='geographic'><img id='"+this.id+"geographic' src='images/geographic.png' /></a><a id='antarctic'><img id='"+this.id+"antarctic' src='images/antarctic.png' /></a></div></li></ul>";
+	this.container.innerHTML = "<ul><li><div class='sw_current' title='Choose a projection'></div><div class='hidden'><a id='arctic' class='sw_arctic' title='Arctic'></a><a id='geographic' class='sw_geographic' title='Geographic'></a><a id='antarctic' class='sw_antarctic' title='Antarctic'></a></div></li></ul>";
 	$('#arctic').bind('click',{self:this,val:'arctic'},SOTE.widget.Switch.setVal);
 	$('#geographic').bind('click',{self:this,val:'geographic'},SOTE.widget.Switch.setVal);
 	$('#antarctic').bind('click',{self:this,val:'antarctic'},SOTE.widget.Switch.setVal);
@@ -97,7 +97,12 @@ SOTE.widget.Switch.setVal = function(o){
 	var self = o.data.self;
 	var val = o.data.val;
 	self.value = val;
-	$("#" + self.id+"current").attr("src","images/"+self.value+".png");
+	$('div.sw_current').css("background-image","url(images/"+self.value+".png)").hover(function() {
+       $(this).css("background-image","url(images/"+self.value+"on.png)"); 
+    }, 
+    function() {
+       $(this).css("background-image","url(images/"+self.value+".png)"); 
+    });
 	self.fire();
 };
 

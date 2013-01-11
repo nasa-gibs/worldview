@@ -153,7 +153,8 @@ SOTE.widget.Bank.prototype.render = function(){
 	title.innerHTML = this.title;
 	var ext = document.createElement("a");
 	ext.setAttribute("id","callSelectorLink");
-	ext.setAttribute("class","callSelectorLink")
+	ext.setAttribute("class","callSelectorLink");
+	ext.setAttribute("title","Show Product Listing");
 	
 	titleContainer.appendChild(title);
 	titleContainer.appendChild(ext);
@@ -228,6 +229,7 @@ SOTE.widget.Bank.prototype.render = function(){
 	this.renderCanvases();
 	var accordionToggler = document.createElement("a");
 	accordionToggler.setAttribute("class","accordionToggler atcollapse");
+	accordionToggler.setAttribute("title","Hide Products");
 	this.isCollapsed = false;
 	this.container.appendChild(accordionToggler);
 	$('.accordionToggler').bind('click',{self:this},SOTE.widget.Bank.toggle);

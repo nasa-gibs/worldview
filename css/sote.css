@@ -11,12 +11,20 @@ div {display:block;}
 
 #switch {  overflow:hidden; z-index:1000; }
 #switch div{display:block; }
-#switch img {display:block !important; width:40px; height:40px; }
+#switch a,div.sw_current {display:block !important; width:40px; height:40px;}
+#switch div.sw_current {background-image:url("../images/geographic.png");}
+#switch div.sw_current:hover {background-image:url("../images/geographicon.png");}
 #switch ul li {margin:0px !important;}
 #switch ul li div.hidden {display:none; }
+#switch ul li div.hidden a.sw_arctic { background-image:url("../images/arctic.png");}
+#switch ul li div.hidden a.sw_antarctic {background-image:url("../images/antarctic.png");}
+#switch ul li div.hidden a.sw_geographic {background-image:url("../images/geographic.png");}
+#switch ul li div.hidden a.sw_arctic:hover { background-image:url("../images/arcticon.png");}
+#switch ul li div.hidden a.sw_antarctic:hover {background-image:url("../images/antarcticon.png");}
+#switch ul li div.hidden a.sw_geographic:hover {background-image:url("../images/geographicon.png");}
+
 #switch ul li:hover div.hidden {display:block; background: rgba(38, 43, 49, 0.65); border-radius:0 0 5px 5px; position:relative; top:-1px;}
-#switch ul li:hover div.hidden a img {border:transparent 1px solid;}
-#switch ul li:hover div.hidden a:hover img {border: #fff 1px solid; }
+/*#switch ul li:hover div.hidden a:hover img {border: #fff 1px solid; }*/
 #switchcurrent {border:transparent 1px solid;}
 /*#switch ul li div.hidden a:hover img {border:#155678 2px solid; }*/
 

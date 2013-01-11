@@ -104,7 +104,7 @@ SOTE.widget.DateSpan = function(containerId, config){
 	}
 	
 	if(config.isCollapsed === undefined){
-		config.isCollapsed = (config.thumbSource === null || config.hasThumbnail === false)? true: false;
+		config.isCollapsed = false;//(config.thumbSource === null || config.hasThumbnail === false)? true: false;
 	}
 	
 	if(config.hasThumbnail === undefined){
@@ -351,14 +351,14 @@ SOTE.widget.DateSpan.toggle = function(e,ui){
 	var self = e.data.self;
 	if(self.isCollapsed){
 		$('.ecbutton').removeClass('expand').addClass('collapse');
-		$('.ecbutton').attr("title","Hide Date Sliders");
+		$('.ecbutton').attr("title","Hide Date Slider");
 		//$('a.ui-slider-handle').css('top','-142px');
 		self.isCollapsed = false;
 		self.showSliders();
 	}
 	else{
 		$('.ecbutton').removeClass('collapse').addClass('expand');
-		$('.ecbutton').attr("title","Show Date Sliders");
+		$('.ecbutton').attr("title","Show Date Slider");
 		//$('a.ui-slider-handle').css('top','-25px');
 		self.isCollapsed = true;
 		self.hideSliders();
