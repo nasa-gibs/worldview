@@ -14,7 +14,8 @@ Release 0.3.0
 
 
 * Known Issues
-	- Orbital tracks may not be available for dates older than ten days
+	- In time slider, the "Dec" label can intermittently disappear based on the browser's width
+	- After switching to a polar projection, browser resizes trigger a change in the current view 
 	- On iOS, layers cannot be scrolled or reordered 
 	
 
