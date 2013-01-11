@@ -739,15 +739,15 @@
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
-	        "label" =>  "Water Vapor (Day)",
-	        "sublabel" =>  "Aqua / MODIS",
-	        "value" =>  "MODIS_Aqua_Water_Vapor_5km_Day",
-	        "type" => "multi", "category" => "overlays"
-		),
-		array(
 	        "label" =>  "Water Vapor (Night)",
 	        "sublabel" =>  "Terra / MODIS",
 	        "value" =>  "MODIS_Terra_Water_Vapor_5km_Night",
+	        "type" => "multi", "category" => "overlays"
+		),
+		array(
+	        "label" =>  "Water Vapor (Day)",
+	        "sublabel" =>  "Aqua / MODIS",
+	        "value" =>  "MODIS_Aqua_Water_Vapor_5km_Day",
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
@@ -1168,15 +1168,15 @@
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
-	        "label" =>  "Water Vapor (Day)",
-	        "sublabel" =>  "Aqua / MODIS",
-	        "value" =>  "MODIS_Aqua_Water_Vapor_5km_Day",
-	        "type" => "multi", "category" => "overlays"
-		),
-		array(
 	        "label" =>  "Water Vapor (Night)",
 	        "sublabel" =>  "Terra / MODIS",
 	        "value" =>  "MODIS_Terra_Water_Vapor_5km_Night",
+	        "type" => "multi", "category" => "overlays"
+		),
+		array(
+	        "label" =>  "Water Vapor (Day)",
+	        "sublabel" =>  "Aqua / MODIS",
+	        "value" =>  "MODIS_Aqua_Water_Vapor_5km_Day",
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
