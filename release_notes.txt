@@ -14,7 +14,7 @@ Release 0.3.0
 
 
 * Known Issues
-	- In time slider, the "Dec" label can intermittently disappear based on the browser's width
+	- In time slider, the "Dec" and "2013" labels can intermittently disappear based on the browser's width
 	- After switching to a polar projection, browser resizes trigger a change in the current view 
 	- On iOS, layers cannot be scrolled or reordered 
 	
