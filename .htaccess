@@ -1,0 +1,18 @@
+# Requires mod_expires to be enabled.
+<IfModule mod_expires.c>
+  # Enable expirations.
+  ExpiresActive On
+
+  #Dont cache html files or php
+  <FilesMatch \.(html|php)$>
+     ExpiresDefault A0
+  </FilesMatch>
+  #cache for one hour
+  <FilesMatch \.(css|javascript|jsp)$>
+     ExpiresDefault A3600
+  </FilesMatch>
+  #cache for one day
+  <FilesMatch \.(jpg|png|gif|jpeg|icon|wav|mpeg|mp4|fla)$>
+     ExpiresDefault A86400
+  </FilesMatch>
+</IfModule>
