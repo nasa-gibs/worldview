@@ -548,14 +548,7 @@
 	        "sublabel" =>  "Aqua / MODIS",
 	        "value" =>  "MODIS_Aqua_Land_Surface_Temp_Night",
 	        "type" => "multi", "category" => "overlays"
-		),
-		array(
-	        "label" =>  "Cloud Pressure",
-	        "sublabel" =>  "Aura / OMI",
-	        "value" =>  "OMI_Cloud_Pressure",
-	        "type" => "multi", "category" => "overlays"
 		)
-		
 	
 	),
 
