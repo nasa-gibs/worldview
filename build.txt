@@ -1,6 +1,6 @@
 Required Dependencies
 =====================
-
+ 
 Run the "download-deps" script to download and unpack all dependencies.
 
 - YUI Compressor, Version 2.4.7 
