@@ -1,0 +1,29 @@
+<project name="js" basedir=".">
+
+	<filelist id="js.files" dir="${src.web.js.dir}">
+		<file name="ext/yui/yahoo-min.js"/>
+		<file name="ext/yui/event-min.js"/>
+		<file name="ext/jquery/jquery-1.6.4.js"/>
+		<file name="ext/jqueryui-1.8.16/jquery-ui.min.js"/>
+		<file name="ext/jquery/jquery.mobile-1.0rc2.js"/>
+		<file name="ext/yui/combo-event-dragdrop-container-min.js"/>
+		<file name="ext/openlayers-2.12/OpenLayers.js"/>
+		<file name="ext/datejs/date.js"/>
+		<file name="ext/jcrop/jcrop.js"/>
+		<file name="component.js"/>
+		<file name="registry.js"/>
+		<file name="util.js"/>
+		<file name="map.js"/>
+		<file name="mapSote.js"/>
+		<file name="dateSpan.js"/>
+		<file name="rubberBand.js"/>
+		<file name="imageDownload.js"/>
+		<file name="menuPicker.js"/>
+		<file name="accordionPicker.js"/>
+		<file name="bank.js"/>
+		<file name="switch.js"/>
+		<file name="selector.js"/>
+		<file name="sote.js"/>
+	</filelist>
+	
+</project>

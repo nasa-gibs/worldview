@@ -1,3 +1,7 @@
+build
+dist
+lib
+
 # Ignore the Eclipse files for now
 .project
 .settings

@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<project name="yui-compressor" basedir="." default="resolve">
+
+	<dirname property="yui-compressor.basedir" file="${ant.file.yui-compressor}"/>
+	<property file="${yui-compressor.basedir}/build.properties"/>
+	
+	<target name="resolve" depends="download,unpack"/>
+	
+	<target name="download">
+		<get src="${yui-compressor.url}" dest="${lib.artifacts.dir}" 
+			 skipexisting="true"/>
+	</target>
+		
+	<target name="check-package">
+		<available file="${yui-compressor.package.dir}" property="available"/>
+	</target>
+		
+	<target name="unpack" unless="available">
+		<unzip src="${lib.artifacts.dir}/${yui-compressor.artifact}" 
+			   dest="${lib.packages.dir}"/>
+	</target>
+		
+</project>
