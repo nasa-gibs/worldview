@@ -162,9 +162,9 @@
 
 	</target>
 	
-    <target name="test" depends="web">
-        <delete dir="${build.test.dir}"/>
-        <mkdir dir="${build.test.dir}"/>
+	<target name="test-prod" depends="web" description="Test minified js files">
+        <delete dir="${build.test.dir}/min"/>
+        <mkdir dir="${build.test.dir}/min"/>
         <exec executable="java">
             <arg value="-jar"/>
             <arg value="${js-test-driver.jar.path}"/>
@@ -176,9 +176,33 @@
             <arg value="all"/>
             <arg value="--testOutput"/>
             <arg value="${build.test.dir}"/>
+            <arg value="--config"/>
+            <arg value="jsTestDriver-prod.conf"/>
+        </exec>
+	</target>
+    
+    <target name="test-devel" description="Test development js files">
+        <delete dir="${build.test.dir}/min"/>
+        <mkdir dir="${build.test.dir}/min"/>
+        <exec executable="java">
+            <arg value="-jar"/>
+            <arg value="${js-test-driver.jar.path}"/>
+            <arg value="--port"/>
+            <arg value="${js-test-driver.port}"/>
+            <arg value="--browser"/>
+            <arg value="${js-test-driver.macosx.browsers}"/>
+            <arg value="--tests"/>
+            <arg value="all"/>
+            <arg value="--testOutput"/>
+            <arg value="${build.test.dir}"/>
+            <arg value="--config"/>
+            <arg value="jsTestDriver-devel.conf"/>
         </exec>
     </target>
         
+    <target name="test" depends="test-prod,test-devel"
+            description="Run test suite on production and development files"/>
+     
 	<target name="dist" depends="clean,web,doc" 
 		    description="Generates distribution artifacts">
 		<tar destfile="${dist.dir}/worldview.tar.bz2"

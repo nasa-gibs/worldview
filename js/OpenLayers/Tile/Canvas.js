@@ -97,7 +97,8 @@ OpenLayers.Tile.Canvas = OpenLayers.Class(OpenLayers.Tile.Image,
 	 * See <code>OpenLayers.Tile.Image</code>.
 	 * 
 	 * <p>
-	 * Also hides the canvas element.
+	 * Also hides the canvas element and clears the image load error class if
+	 * set.
 	 * </p>
 	 */
 	clear: function() {
