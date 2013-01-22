@@ -12,10 +12,11 @@
 	</target>
 		
 	<target name="check-package">
-		<available file="${js-test-driver.jar.path}" property="available"/>
+		<available file="${js-test-driver.jar.path}" 
+		           property="js-test-driver.available"/>
 	</target>
 		
-	<target name="copy" unless="available">
+	<target name="copy" unless="js-test-driver.available">
 		<copy todir="${lib.packages.dir}" 
 		      file="${lib.artifacts.dir}/${js-test-driver.jar}"/>	
 	</target>

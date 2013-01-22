@@ -7,10 +7,10 @@
 	<target name="resolve" depends="build"/>
 	
 	<target name="check-package">
-		<available file="${jsdoc-ant.jar.path}" property="available"/>
+		<available file="${jsdoc-ant.jar.path}" property="jsdoc-ant.available"/>
 	</target>
 	
-	<target name="build" depends="check-package" unless="available">
+	<target name="build" depends="check-package" unless="jsdoc-ant.available">
 		<delete dir="${jsdoc-ant.repository}"/>
 		
 		<!-- Don't pull history, just get the latest -->

@@ -12,10 +12,10 @@
 	</target>
 		
 	<target name="check-package">
-		<available file="${jsdoc.package.dir}" property="available"/>
+		<available file="${jsdoc.package.dir}" property="jsdoc.available"/>
 	</target>
 		
-	<target name="unpack" unless="available">
+	<target name="unpack" depends="check-package" unless="jsdoc.available">
 		<unzip src="${lib.artifacts.dir}/${jsdoc.artifact}" 
 			   dest="${lib.packages.dir}"/>
 		

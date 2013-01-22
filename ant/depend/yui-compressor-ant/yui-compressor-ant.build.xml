@@ -12,10 +12,12 @@
 	</target>
 		
 	<target name="check-package">
-		<available file="${yui-compressor-ant.package.dir}" property="available"/>
+		<available file="${yui-compressor-ant.package.dir}" 
+		           property="yui-compressor-ant.available"/>
 	</target>
 		
-	<target name="unpack" unless="available">
+	<target name="unpack" depends="check-package" 
+	        unless="yui-compressor-ant.available">
 		<unzip src="${lib.artifacts.dir}/${yui-compressor-ant.artifact}" 
 			   dest="${lib.packages.dir}/${yui-compressor-ant.package}"/>
 	</target>

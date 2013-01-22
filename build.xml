@@ -40,9 +40,7 @@
 		<taskdef name="jsdoc" 
 			classname="uk.co.darrenhurley.ant.tasks.JsDocToolkit" 
 			classpath="${jsdoc-ant.jar.path}:${jsdoc.home.dir}/java/classes/js.jar"/>
-		
-		<echo message="classpath: ${yui-compressor.jar.path}:${yui-compressor-ant.jar.path}"/>
-		
+				
 		<taskdef name="yui-compressor"
 				 classname="net.noha.tools.ant.yuicompressor.tasks.YuiCompressorTask"
 			     classpath="${yui-compressor.jar.path}:${yui-compressor-ant.jar.path}"/>
@@ -164,6 +162,23 @@
 
 	</target>
 	
+    <target name="test" depends="web">
+        <delete dir="${build.test.dir}"/>
+        <mkdir dir="${build.test.dir}"/>
+        <exec executable="java">
+            <arg value="-jar"/>
+            <arg value="${js-test-driver.jar.path}"/>
+            <arg value="--port"/>
+            <arg value="${js-test-driver.port}"/>
+            <arg value="--browser"/>
+            <arg value="${js-test-driver.macosx.browsers}"/>
+            <arg value="--tests"/>
+            <arg value="all"/>
+            <arg value="--testOutput"/>
+            <arg value="${build.test.dir}"/>
+        </exec>
+    </target>
+        
 	<target name="dist" depends="clean,web,doc" 
 		    description="Generates distribution artifacts">
 		<tar destfile="${dist.dir}/worldview.tar.bz2"
