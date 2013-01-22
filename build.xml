@@ -52,10 +52,15 @@
 	<target name="doc" depends="deps"
 		 	description="Generates documentation in the build directory">
 		
-		<!-- Depth = 1: Don't document the external libraries -->
+		<!-- Don't document the external libraries -->
 		<jsdoc jsdochome="${jsdoc.home.dir}" template="jsdoc" 
-			   outputdir="${build.doc.dir}" inputdir="${src.web.js.dir}"
-			   depth="1"/>
+			   outputdir="${build.doc.dir}" includeprivate="false"
+			   includeundocumented="true">
+			<fileset dir="${src.web.js.dir}">
+				<include name="*.js"/>
+				<include name="OpenLayers/**/*.js"/>
+			</fileset>	
+		</jsdoc>	
 	</target>
 		
 	<target name="web" depends="init,deps" description="Builds minified web site">
