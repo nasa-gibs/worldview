@@ -1,7 +1,10 @@
 /*
  * NASA Worldview
  * 
- * Copyright (C) 2011 - 2013 United States Government as represented by the 
+ * This code was originally developed at NASA/Goddard Space Flight Center for
+ * the Earth Science Data and Information System (ESDIS) project. 
+ *
+ * Copyright (C) 2013 United States Government as represented by the 
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
