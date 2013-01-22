@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<project name="js-test-driver" basedir="." default="resolve">
+
+	<dirname property="js-test-driver.basedir" file="${ant.file.js-test-driver}"/>
+	<property file="${js-test-driver.basedir}/build.properties"/>
+	
+	<target name="resolve" depends="download,copy"/>
+	
+	<target name="download">
+		<get src="${js-test-driver.url}" dest="${lib.artifacts.dir}" 
+			 skipexisting="true"/>
+	</target>
+		
+	<target name="check-package">
+		<available file="${js-test-driver.jar.path}" property="available"/>
+	</target>
+		
+	<target name="copy" unless="available">
+		<copy todir="${lib.packages.dir}" 
+		      file="${lib.artifacts.dir}/${js-test-driver.jar}"/>	
+	</target>
+		
+</project>
