@@ -163,16 +163,9 @@ OpenLayers.Tile.Canvas = OpenLayers.Class(OpenLayers.Tile.Image,
 	 * 
 	 * @private
 	 */
-	onImageLoad: function() {
-        var i;
-        var imageData;
-        var lookup;
-        var lookupTable;
- 		var pixels;
- 		var color;
- 		 		
+	onImageLoad: function() { 		 		
 	    var graphics = this.canvas.getContext("2d");
-         
+        
         OpenLayers.Event.stopObservingElement(this.imgDiv);
 		
 		this.canvas.width = this.imgDiv.width;
@@ -180,16 +173,25 @@ OpenLayers.Tile.Canvas = OpenLayers.Class(OpenLayers.Tile.Image,
 		
 		graphics.drawImage(this.imgDiv, 0, 0);
 		
-		if ( this.layer.lookUpTable ) {
-			lookupTable = this.layer.lookUpTable;
-			imageData = graphics.getImageData(0, 0, this.canvas.width, 
+		if ( this.layer.lookupTable ) {
+			var lookupTable = this.layer.lookupTable;
+			var imageData = graphics.getImageData(0, 0, this.canvas.width, 
 				this.canvas.height);
-			pixels = new Uint32Array(imageData.data);
-			
-			for ( i = 0; i < pixels.length; i++ ) {
-				color = lookupTable[pixels[i]];
+			var pixels = imageData.data;
+				
+			for ( var i = 0; i < pixels.length; i += 4 ) {
+                var lookup = 
+                    (pixels[0] << 24) |
+                    (pixels[1] << 16) |
+                    (pixels[2] << 8)  |
+                    pixels[3];
+                    
+				var color = lookupTable[lookup];
 				if ( color ) {
-					pixels[i] = color;
+					pixels[0] = color >> 24 & 0xff;
+					pixels[1] = color >> 16 & 0xff;
+					pixels[2] = color >> 8 & 0xff;
+					pixels[3] = color & 0xff;
 				}
 			}
 		}

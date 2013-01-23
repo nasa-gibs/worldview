@@ -180,26 +180,28 @@
             <arg value="jsTestDriver-prod.conf"/>
         </exec>
 	</target>
-    
-    <target name="test-devel" description="Test development js files">
-        <delete dir="${build.test.dir}/min"/>
-        <mkdir dir="${build.test.dir}/min"/>
-        <exec executable="java">
+            
+    <target name="start-test-server">
+        <exec executable="java" spawn="true">
             <arg value="-jar"/>
             <arg value="${js-test-driver.jar.path}"/>
             <arg value="--port"/>
             <arg value="${js-test-driver.port}"/>
-            <arg value="--browser"/>
-            <arg value="${js-test-driver.macosx.browsers}"/>
+        </exec>
+        <echo message="Capture browser at http://localhost:${js-test-driver.port}"/>  
+    </target>
+    
+    <target name="test-devel">
+        <exec executable="java">
+            <arg value="-jar"/>
+            <arg value="${js-test-driver.jar.path}"/>
             <arg value="--tests"/>
             <arg value="all"/>
-            <arg value="--testOutput"/>
-            <arg value="${build.test.dir}"/>
             <arg value="--config"/>
             <arg value="jsTestDriver-devel.conf"/>
         </exec>
     </target>
-        
+
     <target name="test" depends="test-prod,test-devel"
             description="Run test suite on production and development files"/>
      
