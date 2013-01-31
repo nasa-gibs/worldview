@@ -1,0 +1,22 @@
+Title: Documentation
+
+Group: About
+
+Worldview Documentation.
+
+NaturalDocs is used to automatically generate this documentation. 
+
+See Also: http://www.naturaldocs.org/
+
+Group: Building
+
+Generating the documentation from source.
+
+In the project root directory, type in the following command
+
+> ant doc
+
+Generated HTML files can be found in build/doc.
+
+
+

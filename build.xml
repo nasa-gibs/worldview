@@ -36,11 +36,7 @@
 			<fileset dir="${src.depend.dir}" includes="${build.depends}"/>
 			<property name="basedir" value="${basedir}"/>
 		</subant>
-		
-		<taskdef name="jsdoc" 
-			classname="uk.co.darrenhurley.ant.tasks.JsDocToolkit" 
-			classpath="${jsdoc-ant.jar.path}:${jsdoc.home.dir}/java/classes/js.jar"/>
-				
+						
 		<taskdef name="yui-compressor"
 				 classname="net.noha.tools.ant.yuicompressor.tasks.YuiCompressorTask"
 			     classpath="${yui-compressor.jar.path}:${yui-compressor-ant.jar.path}"/>
@@ -50,15 +46,26 @@
 	<target name="doc" depends="deps"
 		 	description="Generates documentation in the build directory">
 		
-		<!-- Don't document the external libraries -->
-		<jsdoc jsdochome="${jsdoc.home.dir}" template="jsdoc" 
-			   outputdir="${build.doc.dir}" includeprivate="false"
-			   includeundocumented="true">
-			<fileset dir="${src.web.js.dir}">
-				<include name="*.js"/>
-				<include name="OpenLayers/**/*.js"/>
-			</fileset>	
-		</jsdoc>	
+		<mkdir dir="${build.doc.dir}"/>
+		
+		<exec executable="perl">
+		    <arg value="${natural-docs.bin}"/>
+		    <arg value="-i"/>		    
+		    <arg value="${src.web.js.dir}"/>
+            <arg value="-i"/>           
+            <arg value="doc/Topics"/>
+		    <arg value="-o"/>
+		    <arg value="HTML"/>
+		    <arg value="${build.doc.dir}"/>
+		    <arg value="-p"/>
+		    <arg value="doc/NaturalDocs"/>
+		    <arg value="-xi"/>
+		    <arg value="${src.web.js.dir}/ext"/>
+		    <arg value="-s"/>
+		    <arg value="Default"/>
+		    <arg value="Worldview"/>
+		</exec>
+
 	</target>
 		
 	<target name="web" depends="init,deps" description="Builds minified web site">
@@ -161,49 +168,27 @@
 		  </move>
 
 	</target>
-	
-	<target name="test-prod" depends="web" description="Test minified js files">
-        <delete dir="${build.test.dir}/min"/>
-        <mkdir dir="${build.test.dir}/min"/>
-        <exec executable="java">
-            <arg value="-jar"/>
-            <arg value="${js-test-driver.jar.path}"/>
-            <arg value="--port"/>
-            <arg value="${js-test-driver.port}"/>
-            <arg value="--browser"/>
-            <arg value="${js-test-driver.macosx.browsers}"/>
-            <arg value="--tests"/>
-            <arg value="all"/>
-            <arg value="--testOutput"/>
-            <arg value="${build.test.dir}"/>
-            <arg value="--config"/>
-            <arg value="jsTestDriver-prod.conf"/>
-        </exec>
-	</target>
-            
-    <target name="start-test-server">
+    
+    <target name="start-test-server" depends="deps">
         <exec executable="java" spawn="true">
             <arg value="-jar"/>
             <arg value="${js-test-driver.jar.path}"/>
             <arg value="--port"/>
             <arg value="${js-test-driver.port}"/>
         </exec>
-        <echo message="Capture browser at http://localhost:${js-test-driver.port}"/>  
+        <echo message="Capture browser at http://localhost:${js-test-driver.port}/capture"/>  
     </target>
     
-    <target name="test-devel">
+    <target name="test">
         <exec executable="java">
             <arg value="-jar"/>
             <arg value="${js-test-driver.jar.path}"/>
             <arg value="--tests"/>
             <arg value="all"/>
             <arg value="--config"/>
-            <arg value="jsTestDriver-devel.conf"/>
+            <arg value="test/jsTestDriver.conf"/>
         </exec>
     </target>
-
-    <target name="test" depends="test-prod,test-devel"
-            description="Run test suite on production and development files"/>
      
 	<target name="dist" depends="clean,web,doc" 
 		    description="Generates distribution artifacts">

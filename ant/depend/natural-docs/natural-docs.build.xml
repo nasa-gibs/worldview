@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<project name="natural-docs" basedir="." default="resolve">
+
+	<dirname property="natural-docs.basedir" file="${ant.file.natural-docs}"/>
+	<property file="${natural-docs.basedir}/build.properties"/>
+	
+	<target name="resolve" depends="download,unpack"/>
+	
+	<target name="download">
+		<get src="${natural-docs.url}" dest="${lib.artifacts.dir}" 
+			 skipexisting="true"/>
+	</target>
+		
+	<target name="check-package">
+		<available file="${natural-docs.package.dir}" property="natural-docs.available"/>
+	</target>
+		
+	<target name="unpack" depends="check-package" unless="natural-docs.available">
+	    <mkdir dir="${natural-docs.package.dir}"/>
+		<unzip src="${lib.artifacts.dir}/${natural-docs.artifact}" 
+			   dest="${natural-docs.package.dir}"/>
+	</target>
+		
+</project>

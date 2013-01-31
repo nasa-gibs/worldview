@@ -1,0 +1,40 @@
+Title: Testing
+
+Group: About
+
+Worldview Test Suites.
+
+- <JsTestDriver at http://code.google.com/p/js-test-driver> is used for unit tests.
+- <JsMockito at http://jsmockito.org/> is used for mocking.
+
+The JsTestDriver configuration is found at test/jsTestDriver.conf. 
+
+Anytime a new JavaScript source file is added, it must be added to the
+configuration file in the load section. Files must be listed in the
+correct order.
+
+Anytime a new JavaScript test file is added to a new directory, it
+must be added to the configuration file in the test section.
+
+Group: Running
+
+Running the test suites.
+
+JsTestDriver uses actual web browsers to execute all of the test
+code. A small test server is used to register each web browser and to
+dispatch test cases. To start the test server, execute the following
+command from the project root directory.
+
+> ant start-test-server
+
+Now open each browser to test in and navigate to this url to register
+the browser:
+
+http://localhost:8811/capture
+
+Now run the test entire unit test suite with the following
+
+> ant test
+
+
+

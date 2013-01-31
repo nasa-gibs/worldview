@@ -1,0 +1,21 @@
+body {
+    padding: 20px;
+    background: #eeeeee;
+}
+
+.layer {
+    padding: 10px;
+    margin: 5px;
+    width: 200px;
+    background: white;
+    border: 1px solid black;
+    text-align: center;
+}
+
+.layer .name {
+    text-align: center;
+}
+
+.palette {
+    margin: 5px;
+}

@@ -1,6 +1,8 @@
 build
 dist
 lib
+doc/NaturalDocs/Data
+doc/NaturalDocs/LastCrash.txt
 
 # Ignore the Eclipse files for now
 .project
