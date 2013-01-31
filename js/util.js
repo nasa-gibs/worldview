@@ -200,7 +200,7 @@ SOTE.util.clampIndex = function(array, index) {
 }
 
 /**
- * Function: rgbToHsv
+ * Function: rgb2hsv
  * 
  * Converts an RGB color value to HSV. Conversion formula
  * adapted from http://en.wikipedia.org/wiki/HSV_color_space.
@@ -225,7 +225,7 @@ SOTE.util.clampIndex = function(array, index) {
  * Object { h=0.5833333333333334, s=0.6666666666666666, v=0.23529411764705882}
  * (end code)
  */
-SOTE.util.rgbToHsv = function(r, g, b){
+SOTE.util.rgb2hsv= function(r, g, b){
     r = r/255, g = g/255, b = b/255;
     var max = Math.max(r, g, b), min = Math.min(r, g, b);
     var h, s, v = max;
@@ -248,7 +248,7 @@ SOTE.util.rgbToHsv = function(r, g, b){
 }
 
 /**
- * Function: hsvToRgb
+ * Function: hsv2rgb
  * 
  * Converts an HSV color value to RGB. Conversion formula
  * adapted from http://en.wikipedia.org/wiki/HSV_color_space.
@@ -273,7 +273,7 @@ SOTE.util.rgbToHsv = function(r, g, b){
  * Object { r=20, g=40, b=60}
  * (end code)
  */
-SOTE.util.hsvToRgb = function(h, s, v){
+SOTE.util.hsv2rgb = function(h, s, v){
     var r, g, b;
 
     var i = Math.floor(h * 6);
@@ -289,6 +289,94 @@ SOTE.util.hsvToRgb = function(h, s, v){
         case 3: r = p, g = q, b = v; break;
         case 4: r = t, g = p, b = v; break;
         case 5: r = v, g = p, b = q; break;
+    }
+
+    return { 
+        r: Math.round(r * 255), 
+        g: Math.round(g * 255), 
+        b: Math.round(b * 255)
+    };
+}
+
+/**
+ * Function rgb2hsl
+ * 
+ * Converts an RGB color value to HSL. Conversion formula
+ * adapted from http://en.wikipedia.org/wiki/HSL_color_space.
+ * Assumes r, g, and b are contained in the set [0, 255] and
+ * returns h, s, and l in the set [0, 1].
+ *
+ * See Also:
+ * http://mjijackson.com/2008/02/rgb-to-hsl-and-rgb-to-hsv-color-model-conversion-algorithms-in-javascript
+ * 
+ * Parameters:
+ * r - The red color value
+ * g - The green color value
+ * b - The blue color value
+ * 
+ * Returns:
+ * The HSL representation as an object with h, s, and l properties.
+ */
+SOTE.util.rgb2hsl = function(r, g, b) {
+    r /= 255, g /= 255, b /= 255;
+    var max = Math.max(r, g, b), min = Math.min(r, g, b);
+    var h, s, l = (max + min) / 2;
+
+    if(max == min){
+        h = s = 0; // achromatic
+    }else{
+        var d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch(max){
+            case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+            case g: h = (b - r) / d + 2; break;
+            case b: h = (r - g) / d + 4; break;
+        }
+        h /= 6;
+    }
+
+    return {h: h, s: s, l: l};
+}
+
+/**
+ * Function: hsl2rgb
+ * 
+ * Converts an HSL color value to RGB. Conversion formula
+ * adapted from http://en.wikipedia.org/wiki/HSL_color_space.
+ * Assumes h, s, and l are contained in the set [0, 1] and
+ * returns r, g, and b in the set [0, 255].
+ *
+ * See Also:
+ * http://mjijackson.com/2008/02/rgb-to-hsl-and-rgb-to-hsv-color-model-conversion-algorithms-in-javascript
+ * 
+ * Parameters:
+ * h - The hue
+ * s - The saturation
+ * l - The lightness
+ * 
+ * Returns:
+ * The RGB representation as an object with r, g, and b properties.
+ */
+SOTE.util.hsl2rgb = function(h, s, l) {
+    var r, g, b;
+
+    if(s == 0){
+        r = g = b = l; // achromatic
+    }else{
+        function hue2rgb(p, q, t){
+            if(t < 0) t += 1;
+            if(t > 1) t -= 1;
+            if(t < 1/6) return p + (q - p) * 6 * t;
+            if(t < 1/2) return q;
+            if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+            return p;
+        }
+
+        var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        var p = 2 * l - q;
+        r = hue2rgb(p, q, h + 1/3);
+        g = hue2rgb(p, q, h);
+        b = hue2rgb(p, q, h - 1/3);
     }
 
     return { 

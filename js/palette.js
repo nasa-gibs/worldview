@@ -49,33 +49,49 @@ $(function() {
             var segmentLength = end.at - begin.at;
             var segmentDistance = (segmentLength !== 0) ? 
                     (distance - begin.at) / segmentLength : 0;
-              
-            var hsvEnd = util.rgbToHsv(end.r, end.g, end.b);
-            var hsvBegin = util.rgbToHsv(begin.r, begin.g, begin.b);
-            
-            var h = hsvBegin.h + (segmentDistance * (hsvEnd.h - hsvBegin.h));
-            var s = hsvBegin.s + (segmentDistance * (hsvEnd.s - hsvBegin.s));
-            var v = hsvBegin.v + (segmentDistance * (hsvEnd.v - hsvBegin.v));
-                  
-            var rgb = util.hsvToRgb(h, s, v);
-            
-            lut.push(rgb);
-            
-            /*
-            lut.push({
-                r: Math.floor(begin.r + (segmentDistance * (end.r - begin.r))),
-                g: Math.floor(begin.g + (segmentDistance * (end.g - begin.g))),
-                b: Math.floor(begin.b + (segmentDistance * (end.b - begin.b))),                
-            });
-            */
+
+            if ( palette.method === "rgb" ) {
+                lut.push(ns.rgbInterpolate(segmentDistance, begin, end));
+            } else if ( palette.method == "hsl" ) {
+                lut.push(ns.hslInterpolate(segmentDistance, begin, end));
+            } else {
+                lut.push(ns.hsvInterpolate(segmentDistance, begin, end));
+            }
         }        
         return lut;
     }
     
-    var init = function() {
-        drawCheckerboard();
+
+    ns.rgbInterpolate = function(percent, begin, end) {
+        return {
+            r: Math.round(begin.r + (percent * (end.r - begin.r))),
+            g: Math.round(begin.g + (percent * (end.g - begin.g))),
+            b: Math.round(begin.b + (percent * (end.b - begin.b))),              
+        }    
     }
     
+    ns.hsvInterpolate = function(percent, rgbBegin, rgbEnd) {
+        var hsvBegin = util.rgb2hsv(rgbBegin.r, rgbBegin.g, rgbBegin.b);
+        var hsvEnd = util.rgb2hsv(rgbEnd.r, rgbEnd.g, rgbEnd.b);
+        
+        var h = hsvBegin.h + (percent * (hsvEnd.h - hsvBegin.h));
+        var s = hsvBegin.s + (percent * (hsvEnd.s - hsvBegin.s));
+        var v = hsvBegin.v + (percent * (hsvEnd.v - hsvBegin.v));        
+            
+        return util.hsv2rgb(h, s, v);
+    }
+
+    ns.hslInterpolate = function(percent, rgbBegin, rgbEnd) {
+        var hslBegin = util.rgb2hsl(rgbBegin.r, rgbBegin.g, rgbBegin.b);
+        var hslEnd = util.rgb2hsl(rgbEnd.r, rgbEnd.g, rgbEnd.b);
+        
+        var h = hslBegin.h + (percent * (hslEnd.h - hslBegin.h));
+        var s = hslBegin.s + (percent * (hslEnd.s - hslBegin.s));
+        var l = hslBegin.l + (percent * (hslEnd.l - hslBegin.l));        
+            
+        return util.hsl2rgb(h, s, l);
+    }
+       
     var drawCheckerboard = function() {
         var size = 7;
         
@@ -96,6 +112,10 @@ $(function() {
         ns.CHECKERBOARD = g.createPattern(canvas, "repeat");
     }
 
+    var init = function() {
+        drawCheckerboard();
+    }
+    
     init();
     
 });

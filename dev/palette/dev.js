@@ -15,6 +15,23 @@ $(function() {
         ]        
     };
 
+    r2g_rgb = {
+        method: "rgb",
+        stops: [
+            { at: 0.0, r: 0xff, g: 0x00, b: 0x00 },
+            { at: 1.0, r: 0x00, g: 0xff, b: 0x00 }
+        ]        
+    };
+
+    r2g_hsl = {
+        method: "hsl",
+        stops: [
+            { at: 0.0, r: 0xff, g: 0x00, b: 0x00 },
+            { at: 1.0, r: 0x00, g: 0xff, b: 0x00 }
+        ]        
+    };
+    
+        
     g2r = {
         stops: [
             { at: 0.0, r: 0x00, g: 0xff, b: 0x00 },
@@ -81,6 +98,51 @@ $(function() {
         bins: 100,
         palette: r2g
     });
+    
+    /** Red to Green, RGB */
+    new ColorBar({
+        selector: "#r2g-rgb-2",
+        bins: 2,
+        palette: r2g_rgb
+    });
+    new ColorBar({
+        selector: "#r2g-rgb-3",
+        bins: 3,
+        palette: r2g_rgb
+    });
+    new ColorBar({
+        selector: "#r2g-rgb-10",
+        bins: 10,
+        palette: r2g_rgb
+    });
+    new ColorBar({
+        selector: "#r2g-rgb-100",
+        bins: 100,
+        palette: r2g_rgb
+    });
+    
+    /** Red to Green, HSL */
+    new ColorBar({
+        selector: "#r2g-hsl-2",
+        bins: 2,
+        palette: r2g_hsl
+    });
+    new ColorBar({
+        selector: "#r2g-hsl-3",
+        bins: 3,
+        palette: r2g_hsl
+    });
+    new ColorBar({
+        selector: "#r2g-hsl-10",
+        bins: 10,
+        palette: r2g_hsl
+    });
+    new ColorBar({
+        selector: "#r2g-hsl-100",
+        bins: 100,
+        palette: r2g_hsl
+    });
+    
 
     /** Green to Red */
     new ColorBar({
