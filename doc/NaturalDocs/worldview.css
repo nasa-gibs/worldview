@@ -3,3 +3,10 @@ p {
    margin-bottom: 1em;
 }
 
+.ContentPage .Firefox #Menu {
+    width: 35ex;
+}
+
+.ContentPage .Firefox #Content {
+    margin-left: 35ex;
+}

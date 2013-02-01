@@ -57,6 +57,7 @@ Group: Code Reference  {
    File: OpenLayers.Tile.Canvas  (/Users/jmcgann/Code/Aptana/worldview/js/OpenLayers/Tile/Canvas.js)
    File: SOTE.util  (/Users/jmcgann/Code/Aptana/worldview/js/util.js)
    File: SOTE.widget.palette  (/Users/jmcgann/Code/Aptana/worldview/js/palette.js)
+   File: SOTE.widget.palette.ColorBar  (no auto-title, /Users/jmcgann/Code/Aptana/worldview/js/colorBar.js)
    }  # Group: Code Reference
 
 Group: Index  {

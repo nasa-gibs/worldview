@@ -52,10 +52,8 @@ $(function() {
 
             if ( palette.method === "rgb" ) {
                 lut.push(ns.rgbInterpolate(segmentDistance, begin, end));
-            } else if ( palette.method == "hsl" ) {
-                lut.push(ns.hslInterpolate(segmentDistance, begin, end));
             } else {
-                lut.push(ns.hsvInterpolate(segmentDistance, begin, end));
+                lut.push(ns.hslInterpolate(segmentDistance, begin, end));
             }
         }        
         return lut;
@@ -70,28 +68,113 @@ $(function() {
         }    
     }
     
-    ns.hsvInterpolate = function(percent, rgbBegin, rgbEnd) {
-        var hsvBegin = util.rgb2hsv(rgbBegin.r, rgbBegin.g, rgbBegin.b);
-        var hsvEnd = util.rgb2hsv(rgbEnd.r, rgbEnd.g, rgbEnd.b);
-        
-        var h = hsvBegin.h + (percent * (hsvEnd.h - hsvBegin.h));
-        var s = hsvBegin.s + (percent * (hsvEnd.s - hsvBegin.s));
-        var v = hsvBegin.v + (percent * (hsvEnd.v - hsvBegin.v));        
-            
-        return util.hsv2rgb(h, s, v);
-    }
-
     ns.hslInterpolate = function(percent, rgbBegin, rgbEnd) {
-        var hslBegin = util.rgb2hsl(rgbBegin.r, rgbBegin.g, rgbBegin.b);
-        var hslEnd = util.rgb2hsl(rgbEnd.r, rgbEnd.g, rgbEnd.b);
+        var hslBegin = ns.rgb2hsl(rgbBegin.r, rgbBegin.g, rgbBegin.b);
+        var hslEnd = ns.rgb2hsl(rgbEnd.r, rgbEnd.g, rgbEnd.b);
         
         var h = hslBegin.h + (percent * (hslEnd.h - hslBegin.h));
         var s = hslBegin.s + (percent * (hslEnd.s - hslBegin.s));
         var l = hslBegin.l + (percent * (hslEnd.l - hslBegin.l));        
             
-        return util.hsl2rgb(h, s, l);
+        return ns.hsl2rgb(h, s, l);
     }
-       
+    
+    /**
+     * Function: rgb2hsl
+     * 
+     * Converts an RGB color value to HSL. Conversion formula
+     * adapted from http://en.wikipedia.org/wiki/HSL_color_space.
+     * Assumes r, g, and b are contained in the set [0, 255] and
+     * returns h, s, and l in the set [0, 1].
+     *
+     * See Also:
+     * http://mjijackson.com/2008/02/rgb-to-hsl-and-rgb-to-hsv-color-model-conversion-algorithms-in-javascript
+     * 
+     * Parameters:
+     * r - The red color value
+     * g - The green color value
+     * b - The blue color value
+     * 
+     * Returns:
+     * The HSL representation as an object with h, s, and l properties.
+     * 
+     * Example:
+     * > >>> SOTE.widget.palette.rgb2hsl(10, 20, 30)
+     * > Object { h=0.5833333333333334, s=0.5, l=0.0784313725490196}
+     */
+    ns.rgb2hsl = function(r, g, b) {
+        r /= 255, g /= 255, b /= 255;
+        var max = Math.max(r, g, b), min = Math.min(r, g, b);
+        var h, s, l = (max + min) / 2;
+    
+        if ( max == min ) {
+            h = s = 0; // achromatic
+        } else {
+            var d = max - min;
+            s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+            switch ( max ) {
+                case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                case g: h = (b - r) / d + 2; break;
+                case b: h = (r - g) / d + 4; break;
+            }
+            h /= 6;
+        }
+    
+        return {h: h, s: s, l: l};
+    }
+
+    /**
+     * Function: hsl2rgb
+     * 
+     * Converts an HSL color value to RGB. Conversion formula
+     * adapted from http://en.wikipedia.org/wiki/HSL_color_space.
+     * Assumes h, s, and l are contained in the set [0, 1] and
+     * returns r, g, and b in the set [0, 255].
+     *
+     * See Also:
+     * http://mjijackson.com/2008/02/rgb-to-hsl-and-rgb-to-hsv-color-model-conversion-algorithms-in-javascript
+     * 
+     * Parameters:
+     * h - The hue
+     * s - The saturation
+     * l - The lightness
+     * 
+     * Returns:
+     * The RGB representation as an object with r, g, and b properties.
+     * 
+     * Example:
+     * > >>> SOTE.widget.palette.hsl2rgb(0.5833, 0.5, 0.078)
+     * > Object { r=10, g=20, b=30}
+     */
+    ns.hsl2rgb = function(h, s, l) {
+        var r, g, b;
+    
+        if ( s == 0 ) {
+            r = g = b = l; // achromatic
+        } else {
+            function hue2rgb(p, q, t) {
+                if(t < 0) t += 1;
+                if(t > 1) t -= 1;
+                if(t < 1/6) return p + (q - p) * 6 * t;
+                if(t < 1/2) return q;
+                if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+                return p;
+            }
+    
+            var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+            var p = 2 * l - q;
+            r = hue2rgb(p, q, h + 1/3);
+            g = hue2rgb(p, q, h);
+            b = hue2rgb(p, q, h - 1/3);
+        }
+    
+        return { 
+            r: Math.round(r * 255), 
+            g: Math.round(g * 255), 
+            b: Math.round(b * 255)
+        };
+    }
+   
     var drawCheckerboard = function() {
         var size = 7;
         
@@ -120,68 +203,3 @@ $(function() {
     
 });
 
-/**
- * Class: SOTE.widget.palette.ColorBar
- * 
- * ColorBar class.
- */
-SOTE.widget.palette.ColorBar = function(spec) {
-   
-    var self = {};
-    var ns = SOTE.widget.palette;
-    var $canvas;
-    var canvas; 
-    var g;
-
-    self.checkerboard = ns.CHECKERBOARD;
-    self.bins = 255;
-    self.palette = null;
-    
-    /**
-     * Constructor: ColorBar
-     */
-    var init = function() {
-        $canvas = $(spec.selector);
-        if ( $canvas.length === 0 ) {
-            throw "No such element: " + spec.selector;
-        }
-        canvas = $canvas.get(0);
-        canvas.width = $canvas.width();
-        canvas.height = $canvas.height();
-        
-        g = canvas.getContext("2d");
-        
-        self.count = spec.count || 255;        
-        self.checkerboard = spec.checkerboard || self.checkerboard;
-        self.palette = spec.palette || self.palette;
-        self.bins = spec.bins || self.bins;
-        $canvas.css("background", "#ff0000");
-        self.redraw();
-    }
-    
-    /**
-     * Method: redraw
-     */
-    self.redraw = function() {
-        drawBackground();
-        if ( !self.palette ) {
-            return;
-        }
-        var lut = ns.toLookup(self.bins, self.palette);
-        var binWidth = canvas.width / self.bins;
-        var stripeWidth = ( binWidth < 1 ) ? 1 : binWidth;
-        for ( var bin = 0; bin < self.bins; bin++ ) {
-            g.fillStyle = "rgb(" + 
-                [lut[bin].r, lut[bin].g, lut[bin].b].join() + ")";
-            g.fillRect(bin * binWidth, 0, stripeWidth, canvas.height);
-        }
-    }
-    
-    var drawBackground = function() {
-        g.fillStyle = self.checkerboard;
-        g.fillRect(0, 0, canvas.width, canvas.height);
-    }
-        
-    init();
-    return self;
-}

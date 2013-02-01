@@ -76,28 +76,6 @@ $(function() {
         bins: 100,
         palette: b2w
     });
-
-    /** Red to Green */
-    new ColorBar({
-        selector: "#r2g-2",
-        bins: 2,
-        palette: r2g
-    });
-    new ColorBar({
-        selector: "#r2g-3",
-        bins: 3,
-        palette: r2g
-    });
-    new ColorBar({
-        selector: "#r2g-10",
-        bins: 10,
-        palette: r2g
-    });
-    new ColorBar({
-        selector: "#r2g-100",
-        bins: 100,
-        palette: r2g
-    });
     
     /** Red to Green, RGB */
     new ColorBar({
