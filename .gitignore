@@ -7,3 +7,4 @@ doc/NaturalDocs/LastCrash.txt
 # Ignore the Eclipse files for now
 .project
 .settings
+.pydevproject

@@ -60,9 +60,10 @@ SOTE.widget.palette.ColorBar = function(spec) {
         var binWidth = canvas.width / self.bins;
         var stripeWidth = ( binWidth < 1 ) ? 1 : binWidth;
         for ( var bin = 0; bin < self.bins; bin++ ) {
-            g.fillStyle = "rgb(" + 
-                [lut[bin].r, lut[bin].g, lut[bin].b].join() + ")";
-            g.fillRect(bin * binWidth, 0, stripeWidth, canvas.height);
+            g.fillStyle = "rgba(" + 
+                [lut[bin].r, lut[bin].g, lut[bin].b, lut[bin].a].join() + ")";
+            g.fillRect(Math.floor(bin * binWidth), 0, 
+                       stripeWidth, canvas.height);
         }
     }
     

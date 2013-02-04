@@ -2,15 +2,15 @@
 <html>
     <head>
         <title>Palette</title>
-        <link rel="stylesheet" type="text/css" href="../../css/palette.css"/>
-        <link rel="stylesheet" type="text/css" href="dev.css"/>
+        <link rel="stylesheet" type="text/css" href="../../../css/palette.css"/>
+        <link rel="stylesheet" type="text/css" href="neo.css"/>
  
-        <script type="text/javascript" src="../../js/ext/jquery/jquery-1.6.4.js"></script>        
-        <script type="text/javascript" src="../../js/component.js"></script>
-        <script type="text/javascript" src="../../js/util.js"></script>
-        <script type="text/javascript" src="../../js/palette.js"></script>
-        <script type="text/javascript" src="../../js/colorBar.js"></script>
-        <script type="text/javascript" src="dev.js"></script>   
+        <script type="text/javascript" src="../../../js/ext/jquery/jquery-1.6.4.js"></script>        
+        <script type="text/javascript" src="../../../js/component.js"></script>
+        <script type="text/javascript" src="../../../js/util.js"></script>
+        <script type="text/javascript" src="../../../js/palette.js"></script>
+        <script type="text/javascript" src="../../../js/colorBar.js"></script>
+        <script type="text/javascript" src="neo.js"></script>   
     </head>
     <body>
         <h1>Palette Demo</h1>
@@ -124,6 +124,41 @@
             <tr>
                 <td>          
                     <div class="layer">
+                        <span class="name">Red to Green, Alpha: 2 Bins</span>
+                        <div>
+                            <canvas class="palette" id="r2g-alpha-2"></canavs>
+                        </div>
+                    </div>   
+                </td>
+                <td>          
+                    <div class="layer">
+                        <span class="name">Red to Green, Alpha: 3 Bins</span>
+                        <div>
+                            <canvas class="palette" id="r2g-alpha-3"></canavs>
+                        </div>
+                    </div>   
+                </td>
+                <td>          
+                    <div class="layer">
+                        <span class="name">Red to Green, Alpha: 10 Bins</span>
+                        <div>
+                            <canvas class="palette" id="r2g-alpha-10"></canavs>
+                        </div>
+                    </div>   
+                </td>
+                <td>          
+                    <div class="layer">
+                        <span class="name">Red to Green, Alpha: 100 Bins</span>
+                        <div>
+                            <canvas class="palette" id="r2g-alpha-100"></canavs>
+                        </div>
+                    </div>   
+                </td>
+            </tr>
+            
+            <tr>
+                <td>          
+                    <div class="layer">
                         <span class="name">Green to Red: 2 Bins</span>
                         <div>
                             <canvas class="palette" id="g2r-2"></canavs>
@@ -226,6 +261,86 @@
                 </td>
             </tr>
             
+            <tr>
+                <td>
+                    <div class="layer">
+                        <span class="name">BGYR Solid: 2 Bins</span>
+                        <div>
+                            <canvas class="palette" id="bgyr-solid-2"></canavs>
+                        </div>
+                    </div>   
+                </td>
+                <td>
+                    <div class="layer">
+                        <span class="name">BGYR Solid: 3 Bins</span>
+                        <div>
+                            <canvas class="palette" id="bgyr-solid-3"></canavs>
+                        </div>
+                    </div>   
+                </td>
+                <td>
+                    <div class="layer">
+                        <span class="name">BGYR Solid: 10 Bins</span>
+                        <div>
+                            <canvas class="palette" id="bgyr-solid-10"></canavs>
+                        </div>
+                    </div>   
+                </td>
+                <td>          
+                    <div class="layer">
+                        <span class="name">BGYR Solid: 100 Bins</span>
+                        <div>
+                            <canvas class="palette" id="bgyr-solid-100"></canavs>
+                        </div>
+                    </div>   
+                </td>
+            </tr>
+            
+            <tr>
+                <td>
+                    <div class="layer">
+                        <span class="name">Indexed: 2 Bins</span>
+                        <div>
+                            <canvas class="palette" id="indexed-2"></canavs>
+                        </div>
+                    </div>   
+                </td>
+                <td>
+                    <div class="layer">
+                        <span class="name">Indexed: 3 Bins</span>
+                        <div>
+                            <canvas class="palette" id="indexed-3"></canavs>
+                        </div>
+                    </div>   
+                </td>
+                <td>
+                    <div class="layer">
+                        <span class="name">Indexed: 10 Bins</span>
+                        <div>
+                            <canvas class="palette" id="indexed-10"></canavs>
+                        </div>
+                    </div>   
+                </td>
+                <td>          
+                    <div class="layer">
+                        <span class="name">indexed: 100 Bins</span>
+                        <div>
+                            <canvas class="palette" id="indexed-100"></canavs>
+                        </div>
+                    </div>   
+                </td>
+            </tr>
+            
+            <tr>
+                <td>
+                    <div class="layer">
+                        <span class="name">Hue, 0 - 359 degrees</span>
+                        <div>
+                            <canvas class="palette" id="circle"></canavs>
+                        </div>
+                    </div>   
+                </td>
+            </tr>
         </table>         
     </body>
 </html>

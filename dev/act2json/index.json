@@ -1,0 +1,25 @@
+[{
+    "id":    "land_temperature",
+    "name":  "Land Surface Temperature",
+    "input": "neo/modis_lst.act"
+},{
+    "id":    "sea_temperature",
+    "name":  "Sea Surface Temperature",
+    "input": "neo/amsre_sst.act"
+},{
+    "id":    "snow_cover",
+    "name":  "Snow Cover",
+    "input": "neo/modis_snow.act"
+},{
+    "id":    "aerosol_depth", 
+    "name":  "Aerosol Optical Depth",
+    "input": "neo/modis_aer_od.act"    
+},{
+    "id":    "carbon_monoxide",
+    "name":  "Carbon Monoxide",
+    "input": "neo/mopitt_co.act"
+},{
+    "id":    "water_vapor",
+    "name":  "Water Vapor",
+    "input": "neo/modis_sky_wv.act"
+}]        

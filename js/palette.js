@@ -17,7 +17,11 @@
 SOTE.namespace("SOTE.widget.palette");
 
 $(function() {
+    
+    // This namespace
     var ns = SOTE.widget.palette;
+    
+    // Namespace aliases
     var util = SOTE.util;
     
     /**
@@ -35,8 +39,18 @@ $(function() {
         var stops = palette.stops;
         var lut = [];
         var currentStop = 0;
+        
+        var min = palette.min || 0;
+        var max = palette.max || 1;
+        
         for ( var bin = 0; bin < bins; bin++ ) {
-            var distance = bin / (bins - 1);
+            var distance;
+            if ( palette.type === "index" ) { 
+                distance = bin;                
+            } else { // palette.positions === "percentage" 
+                distance = bin / (bins - 1); 
+            }
+
             for ( var i = currentStop; i < stops.length; i++ ) {
                 if ( distance <= stops[i].at ) {
                     break;
@@ -49,10 +63,18 @@ $(function() {
             var segmentLength = end.at - begin.at;
             var segmentDistance = (segmentLength !== 0) ? 
                     (distance - begin.at) / segmentLength : 0;
-
-            if ( palette.method === "rgb" ) {
+            
+            if ( distance < min || distance > max ) {
+                lut.push({r: 0, g: 0, b: 0, a: 0});
+            } else if ( palette.type === "solid" || palette.type === "index" ) {
+                if ( segmentDistance < 1 ) {
+                    lut.push({r: begin.r, g: begin.g, b: begin.b, a: 0xff});                        
+                } else {
+                    lut.push({r: end.r, g: end.g, b: end.b, a: 0xff});
+                }
+            } else if ( palette.interpolate === "rgb" ) {
                 lut.push(ns.rgbInterpolate(segmentDistance, begin, end));
-            } else {
+            } else { // interpolate === "hsl"
                 lut.push(ns.hslInterpolate(segmentDistance, begin, end));
             }
         }        
@@ -64,19 +86,37 @@ $(function() {
         return {
             r: Math.round(begin.r + (percent * (end.r - begin.r))),
             g: Math.round(begin.g + (percent * (end.g - begin.g))),
-            b: Math.round(begin.b + (percent * (end.b - begin.b))),              
+            b: Math.round(begin.b + (percent * (end.b - begin.b))), 
+            a: 0xff             
         }    
     }
     
     ns.hslInterpolate = function(percent, rgbBegin, rgbEnd) {
         var hslBegin = ns.rgb2hsl(rgbBegin.r, rgbBegin.g, rgbBegin.b);
         var hslEnd = ns.rgb2hsl(rgbEnd.r, rgbEnd.g, rgbEnd.b);
-        
+  
+        // Hue is a circle. Traverse the shortest route. If the distance 
+        // between the two endpoints is more than half the circle, add one
+        // to the smallest value.
+        var distance = Math.abs(hslBegin.h - hslEnd.h);      
+        if ( distance > 0.5 ) {
+            if ( hslBegin.h < hslEnd.h ) {
+                hslBegin += 1.0;
+            } else {
+                hslEnd += 1.0;
+            }
+        }
         var h = hslBegin.h + (percent * (hslEnd.h - hslBegin.h));
         var s = hslBegin.s + (percent * (hslEnd.s - hslBegin.s));
         var l = hslBegin.l + (percent * (hslEnd.l - hslBegin.l));        
-            
-        return ns.hsl2rgb(h, s, l);
+           
+        // Normalize back to the range of 0 - 1
+        if ( h > 1.0 ) {
+            h -= 1.0;
+        }
+        var result = ns.hsl2rgb(h, s, l);
+        result.a = 0xff;
+        return result;
     }
     
     /**
@@ -144,7 +184,7 @@ $(function() {
      * 
      * Example:
      * > >>> SOTE.widget.palette.hsl2rgb(0.5833, 0.5, 0.078)
-     * > Object { r=10, g=20, b=30}
+     * > Object { r=10, g=20, b=30 }
      */
     ns.hsl2rgb = function(h, s, l) {
         var r, g, b;
@@ -176,7 +216,7 @@ $(function() {
     }
    
     var drawCheckerboard = function() {
-        var size = 7;
+        var size = 2;
         
         var canvas = document.createElement("canvas");
         canvas.width = size * 2;
