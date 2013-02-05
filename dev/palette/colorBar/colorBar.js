@@ -1,37 +1,54 @@
-$(function() {    
-    var ColorBar = SOTE.widget.palette.ColorBar;
+$(function() {   
+    var ColorBar = Worldview.Visual.ColorBar;
     
+    var palettes = [];
+    var showBins = [2, 3, 10, 100];
+        
     b2w = {
+        id: "b2w",
+        name: "Black to White",
         stops: [
             { at: 0.0, r: 0x00, g: 0x00, b: 0x00 },
             { at: 1.0, r: 0xff, g: 0xff, b: 0xff }
         ]
     };
+    palettes.push(b2w);
     
-    r2g = {
-        stops: [
-            { at: 0.0, r: 0xff, g: 0x00, b: 0x00 },
-            { at: 1.0, r: 0x00, g: 0xff, b: 0x00 }
-        ]        
-    };
-
     r2g_rgb = {
+        id: "r2g_rgb",
+        name: "Red to Green, RGB",
         interpolate: "rgb",
         stops: [
             { at: 0.0, r: 0xff, g: 0x00, b: 0x00 },
             { at: 1.0, r: 0x00, g: 0xff, b: 0x00 }
         ]        
     };
+    palettes.push(r2g_rgb);
 
-    r2g_hsl = {
+    r2g_rgb = {
+        id: "r2g_hsl",
+        name: "Red to Green, HSL",
         interpolate: "hsl",
         stops: [
             { at: 0.0, r: 0xff, g: 0x00, b: 0x00 },
             { at: 1.0, r: 0x00, g: 0xff, b: 0x00 }
         ]        
     };
+    palettes.push(r2g_rgb);    
+    
+    g2r = {
+        id: "g2r",
+        name: "Green to Red",
+        stops: [
+            { at: 0.0, r: 0x00, g: 0xff, b: 0x00 },
+            { at: 1.0, r: 0xff, g: 0x00, b: 0x00 }
+        ]        
+    };
+    palettes.push(g2r);
     
     r2g_alpha = {
+        id: "r2g_alpha",
+        name: "10% Cutoffs",
         min: 0.1,
         max: 0.9,
         stops: [
@@ -39,263 +56,104 @@ $(function() {
             { at: 1.0, r: 0x00, g: 0xff, b: 0x00 }
         ]        
     };
-            
-    g2r = {
-        stops: [
-            { at: 0.0, r: 0x00, g: 0xff, b: 0x00 },
-            { at: 1.0, r: 0xff, g: 0x00, b: 0x00 }
-        ]        
-    };
+    palettes.push(r2g_alpha);
     
-    b2y2r = {
+    byr = {
+        id: "byr",
+        name: "Blue-Yellow-Red",
         stops: [
             { at: 0.0, r: 0x00, g: 0x00, b: 0xff },
             { at: 0.5, r: 0xff, g: 0xff, b: 0x00 },
             { at: 1.0, r: 0xff, g: 0x00, b: 0x00 }
         ]
     };
-
-    b2y2r_right = {
+    palettes.push(byr);
+    
+    byr_right = {
+        id: "byr_right",
+        name: "Yellow at 80%",
         stops: [
             { at: 0.0, r: 0x00, g: 0x00, b: 0xff },
             { at: 0.8, r: 0xff, g: 0xff, b: 0x00 },
             { at: 1.0, r: 0xff, g: 0x00, b: 0x00 }
         ]
     };
+    palettes.push(byr_right);
     
     bgyr_solid = {
+        id: "bgyr_solid",
+        name: "BGYR Solid",
         type: "solid",
         stops: [
             { at: 0.0, r: 0x00, g: 0x00, b: 0xff },
             { at: 0.6, r: 0x00, g: 0xff, b: 0x00 },
             { at: 0.8, r: 0xff, g: 0xff, b: 0x00 },
-            { at: 1.0, r: 0xff, g: 0x00, b: 0x00 }
+            { at: 0.95, r: 0xff, g: 0x00, b: 0x00 }
         ]
     };
+    palettes.push(bgyr_solid);
     
     circle = {
+        id: "circle",
+        name: "Hue Shortest",
         stops: [
             { at: 0.0, r: 0xec, g: 0x1b, b: 0x1b }, // Hue 0 degrees
             { at: 1.0, r: 0xec, g: 0x1b, b: 0x1e }  // Hue 359 degrees
         ]
     }
-           
-   indexed = {
-        type: "index",
-        stops: [
-            { at: 0, r: 0x00, g: 0x00, b: 0x00 },
-            { at: 2, r: 0xff, g: 0x00, b: 0x00 },
-            { at: 5, r: 0xff, g: 0x00, b: 0xff },
-            { at: 9, r: 0xff, g: 0xff, b: 0xff },
+    palettes.push(circle);
+    
+    classified = {
+        id: "classified",
+        name: "Classified",
+        table: [
+            { r: 0x18, g: 0x18, b: 0x80 },
+            { r: 0x21, g: 0x8a, b: 0x21 },
+            { r: 0x32, g: 0xcd, b: 0x31 },
+            { r: 0x9a, g: 0xcd, b: 0x32 },
+            { r: 0x99, g: 0xf9, b: 0x97 },
+            { r: 0x90, g: 0xbb, b: 0x8e },
+            { r: 0xbc, g: 0x8e, b: 0x90 },
+            { r: 0xf5, g: 0xde, b: 0xb4 },
+            { r: 0xda, g: 0xeb, b: 0x9d },
+            { r: 0xff, g: 0xd6, b: 0x00 }  
         ]
     }
+    palettes.push(classified);
     
-    /* Black to White */
-    new ColorBar({
-        selector: "#b2w-2",
-        bins: 2,
-        palette: b2w
-    });
-    new ColorBar({
-        selector: "#b2w-3",
-        bins: 3,
-        palette: b2w
-    });
-    new ColorBar({
-        selector: "#b2w-10",
-        bins: 10,
-        palette: b2w
-    });
-    new ColorBar({
-        selector: "#b2w-100",
-        bins: 100,
-        palette: b2w
-    });
+    var template = Handlebars.compile([
+        '<td>',          
+            '<div class="layer">',
+                '<span class="name">{{name}}: {{bins}} Bins</span>',
+                '<div>',
+                    '<canvas class="palette" id="{{id}}-{{bins}}"></canavs>',
+                 '</div>',
+            '</div>',   
+        '</td>'].join("\n"));
     
-    /** Red to Green, RGB */
-    new ColorBar({
-        selector: "#r2g-rgb-2",
-        bins: 2,
-        palette: r2g_rgb
-    });
-    new ColorBar({
-        selector: "#r2g-rgb-3",
-        bins: 3,
-        palette: r2g_rgb
-    });
-    new ColorBar({
-        selector: "#r2g-rgb-10",
-        bins: 10,
-        palette: r2g_rgb
-    });
-    new ColorBar({
-        selector: "#r2g-rgb-100",
-        bins: 100,
-        palette: r2g_rgb
-    });
-    
-    /** Red to Green, HSL */
-    new ColorBar({
-        selector: "#r2g-hsl-2",
-        bins: 2,
-        palette: r2g_hsl
-    });
-    new ColorBar({
-        selector: "#r2g-hsl-3",
-        bins: 3,
-        palette: r2g_hsl
-    });
-    new ColorBar({
-        selector: "#r2g-hsl-10",
-        bins: 10,
-        palette: r2g_hsl
-    });
-    new ColorBar({
-        selector: "#r2g-hsl-100",
-        bins: 100,
-        palette: r2g_hsl
-    });
-    
-    /* Red to Green, with Alpha */
-    new ColorBar({
-        selector: "#r2g-alpha-2",
-        bins: 2,
-        palette: r2g_alpha
-    });
-    new ColorBar({
-        selector: "#r2g-alpha-3",
-        bins: 3,
-        palette: r2g_alpha
-    });
-    new ColorBar({
-        selector: "#r2g-alpha-10",
-        bins: 10,
-        palette: r2g_alpha
-    });
-    new ColorBar({
-        selector: "#r2g-alpha-100",
-        bins: 100,
-        palette: r2g_alpha
-    });
-    
-    
-    /** Green to Red */
-    new ColorBar({
-        selector: "#g2r-2",
-        bins: 2,
-        palette: g2r
-    });
-    new ColorBar({
-        selector: "#g2r-3",
-        bins: 3,
-        palette: g2r
-    });
-    new ColorBar({
-        selector: "#g2r-10",
-        bins: 10,
-        palette: g2r
-    });
-    new ColorBar({
-        selector: "#g2r-100",
-        bins: 100,
-        palette: g2r
-    });
-    
-    /* Blue to Yellow to Red */
-   new ColorBar({
-        selector: "#b2y2r-2",
-        bins: 2,
-        palette: b2y2r
-   });
-   new ColorBar({
-        selector: "#b2y2r-3",
-        bins: 3,
-        palette: b2y2r
-   });
-   new ColorBar({
-        selector: "#b2y2r-10",
-        bins: 10,
-        palette: b2y2r
-   });
-   new ColorBar({
-        selector: "#b2y2r-100",
-        bins: 100,
-        palette: b2y2r
-   });
-   
-    /* Blue to Yellow to Red - Mid to Right */
-   new ColorBar({
-        selector: "#b2y2r-right-2",
-        bins: 2,
-        palette: b2y2r_right
-   });
-   new ColorBar({
-        selector: "#b2y2r-right-3",
-        bins: 3,
-        palette: b2y2r_right
-   });
-   new ColorBar({
-        selector: "#b2y2r-right-10",
-        bins: 10,
-        palette: b2y2r_right
-   });
-   new ColorBar({
-        selector: "#b2y2r-right-100",
-        bins: 100,
-        palette: b2y2r_right
-   });
-   
-    /* Blue-Green-Yellow-Red Solid */
-   new ColorBar({
-        selector: "#bgyr-solid-2",
-        bins: 2,
-        palette: bgyr_solid
-   });
-   new ColorBar({
-        selector: "#bgyr-solid-3",
-        bins: 3,
-        palette: bgyr_solid
-   });
-   new ColorBar({
-        selector: "#bgyr-solid-10",
-        bins: 10,
-        palette: bgyr_solid
-   });
-   new ColorBar({
-        selector: "#bgyr-solid-100",
-        bins: 100,
-        palette: bgyr_solid
-   });
-      
-    /* Indexed */
-   new ColorBar({
-        selector: "#indexed-2",
-        bins: 2,
-        palette: indexed
-   });
-   new ColorBar({
-        selector: "#indexed-3",
-        bins: 3,
-        palette: indexed
-   });
-   new ColorBar({
-        selector: "#indexed-10",
-        bins: 10,
-        palette: indexed
-   });
-   new ColorBar({
-        selector: "#indexed-100",
-        bins: 100,
-        palette: indexed
-   });
-   
-    /* Hue Circle Test */
-   new ColorBar({
-        selector: "#circle",
-        bins: 100,
-        palette: circle
-   });
-   
-   
-   
+    for ( var iPalette = 0; iPalette < palettes.length; iPalette++ ) {
+        var palette = palettes[iPalette];
+        var row = "";
+        for ( var iBins = 0; iBins < showBins.length; iBins++ ) {
+            var bins = showBins[iBins];
+            row += template({
+                id: palette.id,
+                name: palette.name,
+                bins: bins
+            });
+        }
+        $("#colorBars").append("<tr>" + row + "</tr>");
+    }
+
+    for ( var iPalette = 0; iPalette < palettes.length; iPalette++ ) {
+        var palette = palettes[iPalette];
+        for ( var iBins = 0; iBins < showBins.length; iBins++ ) {
+            var bins = showBins[iBins];
+            ColorBar({
+                selector: "#" + palette.id + "-" + bins,
+                bins: bins,
+                palette: palette
+            });       
+        }
+    } 
 });

@@ -56,8 +56,24 @@ Group: Code Reference  {
 
    File: OpenLayers.Tile.Canvas  (/Users/jmcgann/Code/Aptana/worldview/js/OpenLayers/Tile/Canvas.js)
    File: SOTE.util  (/Users/jmcgann/Code/Aptana/worldview/js/util.js)
-   File: SOTE.widget.palette  (/Users/jmcgann/Code/Aptana/worldview/js/palette.js)
-   File: SOTE.widget.palette.ColorBar  (no auto-title, /Users/jmcgann/Code/Aptana/worldview/js/colorBar.js)
+   File: Worldview  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview.js)
+
+   Group: Worldview  {
+
+      File: Visual  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Visual.js)
+
+      Group: Visual  {
+
+         File: ColorBar  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Visual/ColorBar.js)
+         File: ColorHSL  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Visual/ColorHSL.js)
+         File: ColorRGBA  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Visual/ColorRGBA.js)
+         File: Lookup  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Visual/Lookup.js)
+         File: Palette  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Visual/Palette.js)
+         File: StopRGBA  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Visual/StopRGBA.js)
+         }  # Group: Visual
+
+      }  # Group: Worldview
+
    }  # Group: Code Reference
 
 Group: Index  {
@@ -66,6 +82,7 @@ Group: Index  {
    Class Index: Classes
    Constant Index: Constants
    Function Index: Functions
+   Property Index: Properties
    }  # Group: Index
 
 

@@ -1,5 +1,5 @@
 $(function() {    
-    var ColorBar = SOTE.widget.palette.ColorBar;
+    var ColorBar = Worldview.Visual.ColorBar;
 
     var onLoad = function(data, textStatus, jqXHR) {
         var colorBarTemplate = Handlebars.compile([
@@ -17,9 +17,9 @@ $(function() {
                 name: entry.name,
                 id: entry.id
             }));
-            new ColorBar({
+            ColorBar({
                 selector: "#" + entry.id,
-                bins: 256,
+                bins: 255,
                 palette: entry
             });
         }

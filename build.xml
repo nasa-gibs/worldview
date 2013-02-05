@@ -64,6 +64,8 @@
 		    <arg value="-s"/>
 		    <arg value="Default"/>
 		    <arg value="Worldview"/>
+		    <arg value="-img"/>
+		    <arg value="doc/Images"/>
 		</exec>
 
 	</target>

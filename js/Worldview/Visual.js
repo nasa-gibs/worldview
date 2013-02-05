@@ -10,67 +10,99 @@
  */
 
 /**
- * Namespace: SOTE.widget.palette
- * 
- * Client side adjusting of data display palettes.
+ * Namespace: Worldview.Visual
+ * Visualization of science data.
  */
-SOTE.namespace("SOTE.widget.palette");
+Worldview.namespace("Visual");
 
 $(function() {
     
     // This namespace
-    var ns = SOTE.widget.palette;
+    var ns = Worldview.Visual;
     
     // Namespace aliases
     var util = SOTE.util;
     
+    //-------------------------------------------------------------------------
+    // Public
+    //-------------------------------------------------------------------------
+    
     /**
      * Constant: CHECKERBOARD
-     * 
-     * A canvas pattern of a gray based checkerboard used to denote 
-     * transparency.
+     * A canvas pattern of a gray checkerboard used to denote transparency.
      */
     ns.CHECKERBOARD = null;
-
+    
     /**
      * Function: toLookup
+     * Converts a <Palette> to a <Lookup>. The lookup table is generated
+     * for a certain number of equally spaced bins. Each bin is assigned
+     * a distance along the range and its color is determined by the stop
+     * locations in the palette. The first bin is always at 0% and the last
+     * bin is always at 100%. 
+     * 
+     * If the type is gradient, the color value will be interpolated from the
+     * stops that it fits within. If it is before the first stop, it will be
+     * the color of the first stop. If it is after the last stop, it will be
+     * the color of the last stop. Colors can be interpolated in the HSL 
+     * color space (by default or if type is "hsl") or in the RGB color space
+     * (if the type is "rgb"). If the type is "solid", the color will be equal
+     * to the stop it rounds down to.   
+     * 
+     * Alpha values in the stop definitions are ignored. If the bin is not 
+     * within the min and max values, the alpha is set to zero, otherwise the
+     * alpha is set to 0xff.
+     * 
+     * Parameters:
+     * bins - Number of entries that the output lookup table should contain
+     * palette - The <Palette> to convert
+     * 
+     * Returns:
+     * A <Lookup>.
      */
-    ns.toLookup = function(bins, palette) {
+    ns.toLookup = function(bins, palette) {        
         var stops = palette.stops;
         var lut = [];
+        
+        // Each bin in the sequence must be at the current stop or later.
+        // Save the current index and not iterate through each time.
         var currentStop = 0;
         
         var min = palette.min || 0;
         var max = palette.max || 1;
         
         for ( var bin = 0; bin < bins; bin++ ) {
-            var distance;
-            if ( palette.type === "index" ) { 
-                distance = bin;                
-            } else { // palette.positions === "percentage" 
-                distance = bin / (bins - 1); 
-            }
+            // Percentange this bin is located at along the range.
+            var distance = bin / (bins - 1); 
 
+            // If the current distance is greater than the current stop,
+            // keep advancing until that is not true.
             for ( var i = currentStop; i < stops.length; i++ ) {
                 if ( distance <= stops[i].at ) {
                     break;
                 }
             }
-            currentStop = i;         
+            currentStop = i;
+            
+            // The bin is between these two stops         
             var end = stops[util.clampIndex(stops, i)];
             var begin = stops[util.clampIndex(stops, i-1)];
             
+            // Find out how far this bin in between the stops
             var segmentLength = end.at - begin.at;
             var segmentDistance = (segmentLength !== 0) ? 
                     (distance - begin.at) / segmentLength : 0;
             
+            // Witin the cutoffs? 
             if ( distance < min || distance > max ) {
-                lut.push({r: 0, g: 0, b: 0, a: 0});
-            } else if ( palette.type === "solid" || palette.type === "index" ) {
+                lut.push(ns.ColorRGBA(0, 0, 0, 0));
+            } else if ( palette.type === "solid" ) {
+                // For solid colors, always pick the color of the beginning
+                // stop unless we are at the very end.
                 if ( segmentDistance < 1 ) {
-                    lut.push({r: begin.r, g: begin.g, b: begin.b, a: 0xff});                        
+                    lut.push(ns.ColorRGBA(begin.r, begin.g, begin.b));                        
                 } else {
-                    lut.push({r: end.r, g: end.g, b: end.b, a: 0xff});
+                    lut.push(ns.ColorRGBA(end.r, end.g, end.b));
                 }
             } else if ( palette.interpolate === "rgb" ) {
                 lut.push(ns.rgbInterpolate(segmentDistance, begin, end));
@@ -81,7 +113,20 @@ $(function() {
         return lut;
     }
     
-
+    /**
+     * Function: rgbInterpolate
+     * Interpolates a color value between two other colors via the RGB color
+     * space. Alpha values are ignored and are always set to 0xff. 
+     * 
+     * Parameters:
+     * percent - The distance between the two colors as a percentage in the
+     *           range of [0.0, 1.0].
+     * begin   - The beginning <ColorRGBA>
+     * end     - The ending <ColorRGBA>
+     * 
+     * Returns:
+     * The interpolated color as a <ColorRGBA>.
+     */
     ns.rgbInterpolate = function(percent, begin, end) {
         return {
             r: Math.round(begin.r + (percent * (end.r - begin.r))),
@@ -91,9 +136,23 @@ $(function() {
         }    
     }
     
-    ns.hslInterpolate = function(percent, rgbBegin, rgbEnd) {
-        var hslBegin = ns.rgb2hsl(rgbBegin.r, rgbBegin.g, rgbBegin.b);
-        var hslEnd = ns.rgb2hsl(rgbEnd.r, rgbEnd.g, rgbEnd.b);
+    /**
+     * Function: hslInterpolate
+     * Interpolates a color value between two other colors via the HSL
+     * color space. Alpha values are ignored and are always set to 0xff.
+     * 
+     * Parameters:
+     * percent  - The distance between the two colors as a percentage in the
+     *            range of [0.0, 1.0].
+     * rgbBegin - The beginning <ColorRGBA>
+     * rgbEnd   - The ending <ColorRGBA>
+     * 
+     * Returns:
+     * The interpoalted color as a <ColorRGBA>.
+     */
+     ns.hslInterpolate = function(percent, rgbBegin, rgbEnd) {
+        var hslBegin = ns.rgb2hsl(rgbBegin);
+        var hslEnd = ns.rgb2hsl(rgbEnd);
   
         // Hue is a circle. Traverse the shortest route. If the distance 
         // between the two endpoints is more than half the circle, add one
@@ -101,9 +160,9 @@ $(function() {
         var distance = Math.abs(hslBegin.h - hslEnd.h);      
         if ( distance > 0.5 ) {
             if ( hslBegin.h < hslEnd.h ) {
-                hslBegin += 1.0;
+                hslBegin.h += 1.0;
             } else {
-                hslEnd += 1.0;
+                hslEnd.h += 1.0;
             }
         }
         var h = hslBegin.h + (percent * (hslEnd.h - hslBegin.h));
@@ -114,35 +173,34 @@ $(function() {
         if ( h > 1.0 ) {
             h -= 1.0;
         }
-        var result = ns.hsl2rgb(h, s, l);
-        result.a = 0xff;
-        return result;
+        return ns.hsl2rgb(ns.ColorHSL(h, s, l));
     }
     
     /**
      * Function: rgb2hsl
-     * 
      * Converts an RGB color value to HSL. Conversion formula
      * adapted from http://en.wikipedia.org/wiki/HSL_color_space.
-     * Assumes r, g, and b are contained in the set [0, 255] and
-     * returns h, s, and l in the set [0, 1].
      *
      * See Also:
      * http://mjijackson.com/2008/02/rgb-to-hsl-and-rgb-to-hsv-color-model-conversion-algorithms-in-javascript
      * 
      * Parameters:
-     * r - The red color value
-     * g - The green color value
-     * b - The blue color value
+     * color - The <ColorRGBA> value to convert.
      * 
      * Returns:
-     * The HSL representation as an object with h, s, and l properties.
+     * The converted <ColorHSL> value.
      * 
      * Example:
-     * > >>> SOTE.widget.palette.rgb2hsl(10, 20, 30)
-     * > Object { h=0.5833333333333334, s=0.5, l=0.0784313725490196}
+     * (begin code)
+     * >>> Worldview.Visual.rgb2hsl({r: 10, g: 20, b: 30})
+     * Object { h=0.5833333333333334, s=0.5, l=0.0784313725490196}
+     * (end code)
      */
-    ns.rgb2hsl = function(r, g, b) {
+    ns.rgb2hsl = function(color) {
+        var r = color.r;
+        var g = color.g
+        var b = color.b;
+        
         r /= 255, g /= 255, b /= 255;
         var max = Math.max(r, g, b), min = Math.min(r, g, b);
         var h, s, l = (max + min) / 2;
@@ -160,33 +218,34 @@ $(function() {
             h /= 6;
         }
     
-        return {h: h, s: s, l: l};
+        return ns.ColorHSL(h, s, l);
     }
 
     /**
      * Function: hsl2rgb
-     * 
      * Converts an HSL color value to RGB. Conversion formula
      * adapted from http://en.wikipedia.org/wiki/HSL_color_space.
-     * Assumes h, s, and l are contained in the set [0, 1] and
-     * returns r, g, and b in the set [0, 255].
      *
      * See Also:
      * http://mjijackson.com/2008/02/rgb-to-hsl-and-rgb-to-hsv-color-model-conversion-algorithms-in-javascript
      * 
      * Parameters:
-     * h - The hue
-     * s - The saturation
-     * l - The lightness
+     * color - The <ColorHSL> to convert.
      * 
      * Returns:
-     * The RGB representation as an object with r, g, and b properties.
+     * The converted <ColorRGBA> value.
      * 
      * Example:
-     * > >>> SOTE.widget.palette.hsl2rgb(0.5833, 0.5, 0.078)
-     * > Object { r=10, g=20, b=30 }
+     * (begin code)
+     * >>> Worldview.Visual.hsl2rgb({h: 0.5833, s: 0.5, l: 0.078})
+     * Object { r=10, g=20, b=30 }
+     * (end code)
      */
-    ns.hsl2rgb = function(h, s, l) {
+    ns.hsl2rgb = function(color) {
+        var h = color.h;
+        var s = color.s;
+        var l = color.l;
+        
         var r, g, b;
     
         if ( s == 0 ) {
@@ -208,13 +267,17 @@ $(function() {
             b = hue2rgb(p, q, h - 1/3);
         }
     
-        return { 
-            r: Math.round(r * 255), 
-            g: Math.round(g * 255), 
-            b: Math.round(b * 255)
-        };
+        return ns.ColorRGBA(
+            Math.round(r * 255), 
+            Math.round(g * 255), 
+            Math.round(b * 255));
     }
-   
+    
+    //-------------------------------------------------------------------------
+    // Private
+    //-------------------------------------------------------------------------
+        
+    // Draws the default checkboard pattern   
     var drawCheckerboard = function() {
         var size = 2;
         
@@ -235,11 +298,11 @@ $(function() {
         ns.CHECKERBOARD = g.createPattern(canvas, "repeat");
     }
 
+    // Static initialization
     var init = function() {
         drawCheckerboard();
     }
     
     init();
-    
 });
 

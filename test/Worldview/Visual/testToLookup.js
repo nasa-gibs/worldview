@@ -8,13 +8,13 @@
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
-TestCase("palette.toLookup", {
+TestCase("Visual.toLookup", {
 
     ns: null,
     
     setUp: function() {
         // This namespace
-        ns = SOTE.widget.palette;
+        ns = Worldview.Visual;
     },
     
     // Are the 2 bins the same as the begin and end stops?
@@ -148,8 +148,7 @@ TestCase("palette.toLookup", {
         
         assertEquals(0x00, lut[0].a);
         assertEquals(0xff, lut[1].a);
-        assertEquals(0x00, lut[2].a);
-        
-    }
+        assertEquals(0x00, lut[2].a);        
+    },
     
 });
