@@ -15,3 +15,10 @@
  */
 JsHamcrest.Integration.JsTestDriver();
 JsMockito.Integration.JsTestDriver();
+
+/**
+ * Required elements that must appear in the document
+ */
+$(function() {
+    $(document.body).append("<div id='map'></div>");
+});
