@@ -40,14 +40,14 @@ Worldview.Visual.Lookup = function(spec) {
          * 
          * Identifier for this lookup (optional).
          */ 
-        id: spec.id || undefined,
+        id: spec.id || null,
         
         /**
          * Property: name
          * 
          * Descriptive name for this lookup (optional).
          */  
-        name: spec.name || undefined,
+        name: spec.name || null,
                 
         /**
          * Property: table

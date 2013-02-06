@@ -10,14 +10,20 @@
  */
 TestCase("Visual.ColorBar", {
     
+    // This namespace
     ns: null,
     
+    // Dimensions of the canvas
     width: null,
     height: null,
         
+    // Actual canvas object
     canvas: null,
     
+    // Graphics context for drawing on the canvas
     g: null,
+    
+    // Background pattern of solid red
     pattern: null,
     
     setUp: function() {
@@ -53,6 +59,7 @@ TestCase("Visual.ColorBar", {
         pattern = g.createPattern(background, "repeat");
     },
     
+    // Is only the background drawn if no palette is specified?
     testEmpty: function() {
         var colorBar = ns.ColorBar({
             selector: "#test-colorBar",
@@ -101,15 +108,16 @@ TestCase("Visual.ColorBar", {
             bins: 10, 
             background: pattern,
             palette: {
+                interpolate: "rgb",
                 stops: [
                     { at: 0.0, r: 0x00, g: 0x00, b: 0x00 },
-                    { at: 1.0, r: 0xff, g: 0xff, b: 0xff }
+                    { at: 1.0, r: 0x00, g: 0xff, b: 0xff }
                 ]
             }});        
             
         var pixels = g.getImageData(0, 0, width, height).data;
         for ( var i = 0; i < pixels.length; i += 4 ) {
-            assertNotEquals(0xff, pixels[0]);
+            assertEquals(0x00, pixels[i]);
         }
     },
 

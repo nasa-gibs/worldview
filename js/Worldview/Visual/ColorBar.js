@@ -76,7 +76,7 @@ Worldview.Visual.ColorBar = function(spec) {
      * The <Palette> or <Lookup> to render in the canvas. If not specified, this 
      * value is null and no palette will be rendered.
      */
-    self.palette = spec.palette;
+    self.palette = spec.palette || null;
     
     /**
      * Constructor: ColorBar

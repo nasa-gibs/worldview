@@ -69,7 +69,7 @@ $(function() {
         var currentStop = 0;
         
         var min = palette.min || 0;
-        var max = palette.max || 1;
+        var max = ( palette.max === undefined ) ? 1 : palette.max;
         
         for ( var bin = 0; bin < bins; bin++ ) {
             // Percentange this bin is located at along the range.

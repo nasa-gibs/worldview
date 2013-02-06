@@ -60,27 +60,27 @@ Worldview.Visual.Palette = function(spec) {
          * Property: id
          * Identifier for this palette.
          */
-        id: spec.id || undefined, 
+        id: spec.id || null, 
         
         /**
          * Property: name
          * Name for this palette.
          */
-        name: spec.name || undefined,
+        name: spec.name || null,
         
         /**
          * Property: min
          * Minimum display value. Values below this percentage will be
          * transparent. Valid range is [0.0, 1.0].
          */
-        min: spec.min || undefined,
+        min: spec.min || 0.0,
         
         /**
          * Property: max
          * Maximum display value. Values above this percentage will be 
          * transparent. Valid range is [0.0, 1.0].
          */
-        max: spec.max || 1.0,
+        max: ( spec.max === undefined ) ? 1.0 : spec.max,
         
         /**
          * Property: type
