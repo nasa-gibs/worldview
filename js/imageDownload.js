@@ -136,15 +136,13 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
   	var s = SOTE.util.extractFromQuery('switch',qs);
   	var products = SOTE.util.extractFromQuery('products',qs);
   	
-  	
   	var px = pixels.split(",");
 	var x1 = px[0]; var y1= px[1]; var x2 = px[2]; var y2=px[3];
 
    	var lonlat1 = this.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(x1, y2));
    	var lonlat2 = this.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(x2, y1));
  
-     
-     var dlURL  = "http://map2.vis.earthdata.nasa.gov/imagegen/?"; 
+    var dlURL  = "http://map2.vis.earthdata.nasa.gov/imagegen/?"; 
      
      
   	 //var dTime = new Date((time.split(/T/))[0]+"T00:00:00");
@@ -158,14 +156,30 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
   	 dlURL += "TIME="+dTime.getFullYear()+(jDate).substr((jDate.length)-3);
   	 
   	
-  	 dlURL += "&extent="+lonlat1.lon+"+"+lonlat1.lat+"+"+lonlat2.lon+"+"+lonlat2.lat;	
-  	 dlURL += "&LAYERS="+ (((((products).replace("baselayers.","")).replace("overlays.","")).replace(/~/g,"+")).replace(/\./g,"+"));
-  	 
+  	 dlURL += "&extent="+lonlat1.lon+","+lonlat1.lat+","+lonlat2.lon+","+lonlat2.lat;
   	
-  	
-  	 //$("#"+this.id).html($("#"+this.id).html());
-	 
-     var imgWidth=0; var imgHeight=0;
+  	 dlURL +="&layers=";
+  	//Reverse the order of overlays to get the correct layer ordering.
+	if (products != ""){
+		var a = products.split("~");
+		var base = a[0].split(".");
+		
+		var overlays = a[1].split(".");
+		overlays.reverse(); overlays.pop();
+		for(var i=1; i<base.length; ++i){
+			dlURL += base[i]+",";
+		}
+		for(var i=0; i<overlays.length; i++){
+			dlURL+= overlays[i]+",";
+		}
+		
+	//remove the extra ","
+	dlURL = dlURL.slice(0,-1);
+	
+	}
+	
+	
+  	 var imgWidth=0; var imgHeight=0;
 	    
 	 $("select#selImgResolution").change(function () {
          	    imgRes =  $("#selImgResolution option:selected").val(); 
@@ -181,9 +195,10 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
 		})
      .change();
      
+     
       $("#btnImgDownload").unbind('click').click(function(){
-      	 window.open(dlURL+"&format="+$("#selImgFormat option:selected").val()+"&size="+$("#imgWidth").text()+"+"+$("#imgHeight").text(),"_blank");
-         //alert(dlURL+"&format="+$("#selImgFormat option:selected").val()+"&size="+$("#imgWidth").text()+"+"+$("#imgHeight").text());
+      	 window.open(dlURL+"&format="+$("#selImgFormat option:selected").val()+"&width="+$("#imgWidth").text()+"&height="+$("#imgHeight").text(),"_blank");
+         //console.log(dlURL+"&format="+$("#selImgFormat option:selected").val()+"&size="+$("#imgWidth").text()+"+"+$("#imgHeight").text());
       });
      
      this.setValue(dlURL);
