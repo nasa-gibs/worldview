@@ -136,7 +136,6 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
   	var s = SOTE.util.extractFromQuery('switch',qs);
   	var products = SOTE.util.extractFromQuery('products',qs);
   	
-  	
   	var px = pixels.split(",");
 	var x1 = px[0]; var y1= px[1]; var x2 = px[2]; var y2=px[3];
 
@@ -158,7 +157,9 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
   	 dlURL += "TIME="+dTime.getFullYear()+(jDate).substr((jDate.length)-3);
   	 
   	
-  	 dlURL += "&extent="+lonlat1.lon+"+"+lonlat1.lat+"+"+lonlat2.lon+"+"+lonlat2.lat;	
+  	 dlURL += "&extent="+lonlat1.lon+"+"+lonlat1.lat+"+"+lonlat2.lon+"+"+lonlat2.lat;
+  	
+  	 	
   	 dlURL += "&LAYERS="+ (((((products).replace("baselayers.","")).replace("overlays.","")).replace(/~/g,"+")).replace(/\./g,"+"));
   	 
   	
@@ -182,7 +183,7 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
      .change();
      
       $("#btnImgDownload").unbind('click').click(function(){
-      	 window.open(dlURL+"&format="+$("#selImgFormat option:selected").val()+"&size="+$("#imgWidth").text()+"+"+$("#imgHeight").text(),"_blank");
+      	 window.open(dlURL+"&format="+$("#selImgFormat option:selected").val()+"&width="+$("#imgWidth").text()+"&height="+$("#imgHeight").text(),"_blank");
          //alert(dlURL+"&format="+$("#selImgFormat option:selected").val()+"&size="+$("#imgWidth").text()+"+"+$("#imgHeight").text());
       });
      
