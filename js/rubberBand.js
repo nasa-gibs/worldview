@@ -76,7 +76,7 @@ SOTE.widget.RubberBand.toggle = function(o){
 		$("#imagedownload").hide('slide', {direction: 'up'}, 1000); 	
 	}
 	else {
-  		SOTE.util.throwError("The download feature is currently available for geograpic projection only.");
+  		SOTE.util.throwError("The download feature is currently available for geographic projection only.");
 	}
 }
 
