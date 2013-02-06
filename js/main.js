@@ -1,4 +1,4 @@
-$(function(){// Initialize "static" vars
+window.onload = function(){// Initialize "static" vars
 
     // Test for IE and show warning, if necessary
     if (/MSIE (\d+\.\d+);/.test(navigator.userAgent))
@@ -37,4 +37,4 @@ $(function(){// Initialize "static" vars
     rb = new SOTE.widget.RubberBand("camera",{icon:"images/camera.png",onicon:"images/cameraon.png",cropee:"map"});
     var id = new SOTE.widget.ImageDownload("imagedownload",{baseLayer:"MODIS_Terra_CorrectedReflectance_TrueColor",alignTo: rb, m:m});
 
-});
+};
