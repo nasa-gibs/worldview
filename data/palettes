@@ -1,7 +1,8 @@
 [
     {
+        "description": "Land Surface Temperature",
         "id": "land_temperature",
-        "name": "Land Surface Temperature",
+        "name": "Bright Spectrum",
         "stops": [
             {
                 "at": "0.0",
@@ -1536,8 +1537,9 @@
         ]
     },
     {
+        "description": "Sea Surface Temperature",
         "id": "sea_temperature",
-        "name": "Sea Surface Temperature",
+        "name": "Blue Spectrum",
         "stops": [
             {
                 "at": "0.0",
@@ -3072,8 +3074,9 @@
         ]
     },
     {
+        "description": "Snow Cover",
         "id": "snow_cover",
-        "name": "Snow Cover",
+        "name": "Blue to White",
         "stops": [
             {
                 "at": "0.0",
@@ -4608,8 +4611,9 @@
         ]
     },
     {
+        "description": "Aerosol Optical Depth",
         "id": "aerosol_depth",
-        "name": "Aerosol Optical Depth",
+        "name": "Light to Brown",
         "stops": [
             {
                 "at": "0.0",
@@ -6144,8 +6148,9 @@
         ]
     },
     {
+        "description": "Carbon Monoxide",
         "id": "carbon_monoxide",
-        "name": "Carbon Monoxide",
+        "name": "Light to Red",
         "stops": [
             {
                 "at": "0.0",
@@ -7680,8 +7685,9 @@
         ]
     },
     {
+        "description": "Water Vapor",
         "id": "water_vapor",
-        "name": "Water Vapor",
+        "name": "White to Blue",
         "stops": [
             {
                 "at": "0.0",

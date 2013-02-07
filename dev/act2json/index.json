@@ -1,25 +1,31 @@
 [{
-    "id":    "land_temperature",
-    "name":  "Land Surface Temperature",
-    "input": "neo/modis_lst.act"
+    "id":           "land_temperature",
+    "name":         "Bright Spectrum",
+    "description":  "Land Surface Temperature",
+    "input":        "neo/modis_lst.act"
 },{
-    "id":    "sea_temperature",
-    "name":  "Sea Surface Temperature",
-    "input": "neo/amsre_sst.act"
+    "id":           "sea_temperature",
+    "name":         "Blue Spectrum",
+    "description":  "Sea Surface Temperature",
+    "input":        "neo/amsre_sst.act"
 },{
-    "id":    "snow_cover",
-    "name":  "Snow Cover",
-    "input": "neo/modis_snow.act"
+    "id":           "snow_cover",
+    "name":         "Blue to White",
+    "description":  "Snow Cover",
+    "input":        "neo/modis_snow.act"
 },{
-    "id":    "aerosol_depth", 
-    "name":  "Aerosol Optical Depth",
-    "input": "neo/modis_aer_od.act"    
+    "id":           "aerosol_depth",
+    "name":         "Light to Brown",
+    "description":  "Aerosol Optical Depth",
+    "input":        "neo/modis_aer_od.act"    
 },{
-    "id":    "carbon_monoxide",
-    "name":  "Carbon Monoxide",
-    "input": "neo/mopitt_co.act"
+    "id":           "carbon_monoxide",
+    "name":         "Light to Red",
+    "description":  "Carbon Monoxide",
+    "input":        "neo/mopitt_co.act"
 },{
-    "id":    "water_vapor",
-    "name":  "Water Vapor",
-    "input": "neo/modis_sky_wv.act"
+    "id":           "water_vapor",
+    "name":         "White to Blue",
+    "description":  "Water Vapor",
+    "input":        "neo/modis_sky_wv.act"
 }]        
