@@ -40,8 +40,9 @@ Worldview.Visual.StockPaletteSelector = function(spec) {
             var palette = palettes[i];
             var item = {
                 text: palette.name,
+                description: palette.description,
                 value: i,
-                selected: false,
+                selected: i == 0,
                 imageSrc: palette.image
             };
             items.push(item);
@@ -54,7 +55,7 @@ Worldview.Visual.StockPaletteSelector = function(spec) {
             onSelected: function(data) {
                 console.log(data);
             }
-        });
+        })
     };
     
     var serviceError = function(jqXHR, textStatus, errorThrown) {

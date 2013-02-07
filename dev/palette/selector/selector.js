@@ -4,6 +4,6 @@ $(function() {
    
    ns.STOCK_PALETTE_ENDPOINT = "../../../data/palettes";
    
-   ns.StockPaletteSelector({selector: "#palettes"});
+   ns.StockPaletteSelector({selector: "#palette-selector"});
     
 });
