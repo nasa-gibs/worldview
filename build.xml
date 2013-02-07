@@ -167,6 +167,7 @@ WorldView build script
 				<include name="jcrop.css"/>
 			</fileset>
 			<fileset dir="${web}/js">
+                <exclude name="ie_warning.js"/>
 				<include name="*.js"/>
 			</fileset>
 		</delete>
