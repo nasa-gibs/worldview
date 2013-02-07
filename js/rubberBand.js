@@ -202,6 +202,7 @@ SOTE.widget.RubberBand.prototype.draw =  function() {
             bgOpacity:   0.3,
             onSelect:  function(c){SOTE.widget.RubberBand.handleChange(c, self);},
             onChange: function(c){SOTE.widget.RubberBand.handleChange(c, self);},
+            onRelease: function(c){SOTE.widget.RubberBand.toggle({data: {self:self} }); },
             fullScreen: true
             }); 
     

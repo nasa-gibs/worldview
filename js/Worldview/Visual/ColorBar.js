@@ -90,18 +90,22 @@ Worldview.Visual.ColorBar = function(spec) {
      * An error if the canvas element could not be found.  
      */
     var init = function() {
-        $canvas = $(spec.selector);
-        if ( $canvas.length === 0 ) {
-            throw "No such canavs element (" + spec.selector + 
-                  ") for the ColorBar";
+        if ( spec.canvas ) {
+            canvas = spec.canvas;
+        } else {
+            $canvas = $(spec.selector);
+            if ( $canvas.length === 0 ) {
+                throw "No such canavs element (" + spec.selector + 
+                      ") for the ColorBar";
+            }
+            canvas = $canvas.get(0);
+
+            // The canavs dimensions does not equal the element dimensions! Make
+            // them the same or scaling will occur.
+            canvas.width = $canvas.width();
+            canvas.height = $canvas.height();
         }
-        canvas = $canvas.get(0);
-        
-        // The canavs dimensions does not equal the element dimensions! Make
-        // them the same or scaling will occur.
-        canvas.width = $canvas.width();
-        canvas.height = $canvas.height();
-        
+         
         g = canvas.getContext("2d");
         self.redraw();
     }

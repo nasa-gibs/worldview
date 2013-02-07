@@ -24,6 +24,7 @@ if __name__ == "__main__":
             palettes += [{
                 "id": act["id"],
                 "name": act["name"],
+                "description": act["description"],
                 "stops": lut
             }]
     
