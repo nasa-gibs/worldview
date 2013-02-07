@@ -37,7 +37,7 @@ SOTE.widget.ImageDownload = function(containerId, config){
 	
 	this.alignTo = config.alignTo;
 	this.id = containerId;
-	this.map = config.m.map;
+	this.m = config.m;
 	this.WMTSLayer = null;
 	
     if (config.baselayer === undefined)
@@ -139,8 +139,8 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
   	var px = pixels.split(",");
 	var x1 = px[0]; var y1= px[1]; var x2 = px[2]; var y2=px[3];
 
-   	var lonlat1 = this.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(x1, y2));
-   	var lonlat2 = this.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(x2, y1));
+   	var lonlat1 = this.m.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(x1, y2));
+   	var lonlat2 = this.m.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(x2, y1));
  
     var dlURL  = "http://map2.vis.earthdata.nasa.gov/imagegen/?"; 
      

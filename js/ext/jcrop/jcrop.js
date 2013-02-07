@@ -318,7 +318,7 @@
       $origimg.after($img).hide();
 
     } else {
-      $img = $origimg.clone().css(img_css).show(); 
+      $img = $origimg.clone().removeAttr('id').css(img_css).show(); 
 
       $img.width($origimg.width());
       $img.height($origimg.height());
