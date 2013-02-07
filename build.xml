@@ -57,6 +57,8 @@ WorldView build script
 		<copy todir="${web}">
 			<fileset dir="${basedir}">
 				<include name="index.html"/>
+				<include name="release_notes.txt"/>
+				<include name=".htaccess"/>
 			</fileset>
 		</copy>
 		
