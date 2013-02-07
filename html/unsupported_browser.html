@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<head>
+    <title>EOSDIS Worldview (Alpha)</title>
+    <style>
+        body {
+            background-color: black;
+        }
+        
+        #unsupported {
+            position: fixed;
+            width: 500px;
+            height: 300px;
+            left: 50%;
+            top: 50%;
+            margin-left: -250px;
+            margin-top: -150px;
+            padding: 20px;
+            background-color: #ffffee;
+            border: 1px solid: #ffffff;
+        }
+        
+        h4 {
+            text-align: center;
+        }
+        
+        #continue {
+            font-size: 14pt;
+            text-align: center;
+        }
+        
+    </style>
+    
+    <script>
+        window.onload = function() {
+            var link = document.getElementById("continue");
+            if ( location.search.length == 0 ) {
+                link.href = "../index.html?unsupported"
+            } else {
+                link.href = "../index.html" + location.search + "&unsupported";
+            }
+        }
+    </script>
+</head>
+<body>
+    <img src="../images/logo.png">
+    <div id="unsupported"> 
+        <h4>Internet Explorer is not currently supported</h4>
+        <p>
+        Worldview uses a set of browser technologies that are not currently 
+        supported by Internet Explorer. We are awaiting the release of IE version  
+        10 and are hopeful that it will load Worldview properly. In the meantime, 
+        please try loading this page in Mozilla Firefox, Google Chrome, Apple
+        Safari, or a tablet device.
+        </p>
+        <p>
+        Thanks for your patience.
+        </p>
+        <p>
+        -The Worldview development team
+        </p>
+        <h4>
+            <a id="continue">Continue anyway</a>
+        </h4>
+    </div>   
+</body>

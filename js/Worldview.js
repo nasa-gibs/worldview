@@ -18,4 +18,3 @@
            
 })(window.Worldview = window.Worldview || {});
 
-
