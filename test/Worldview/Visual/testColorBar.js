@@ -8,7 +8,7 @@
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
-TestCase("Visual.ColorBar", {
+TestCase("Worldview.Visual.ColorBar", {
     
     // This namespace
     ns: null,

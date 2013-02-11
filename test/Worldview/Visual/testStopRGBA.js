@@ -8,7 +8,7 @@
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
-TestCase("Visual.StopRGBA", {
+TestCase("Worldview.Visual.StopRGBA", {
     
     ns: null,
     

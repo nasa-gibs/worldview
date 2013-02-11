@@ -54,6 +54,8 @@
 		    <arg value="${src.web.js.dir}"/>
             <arg value="-i"/>           
             <arg value="doc/Topics"/>
+            <arg value="-i"/>
+            <arg value="test/lib"/>
 		    <arg value="-o"/>
 		    <arg value="HTML"/>
 		    <arg value="${build.doc.dir}"/>
@@ -191,7 +193,18 @@
             <arg value="test/jsTestDriver.conf"/>
         </exec>
     </target>
-     
+
+    <target name="test-one">
+        <exec executable="java">
+            <arg value="-jar"/>
+            <arg value="${js-test-driver.jar.path}"/>
+            <arg value="--tests"/>
+            <arg value="${test}"/>
+            <arg value="--config"/>
+            <arg value="test/jsTestDriver.conf"/>
+        </exec>
+    </target>
+         
 	<target name="dist" depends="clean,web,doc" 
 		    description="Generates distribution artifacts">
 		<tar destfile="${dist.dir}/worldview.tar.bz2"

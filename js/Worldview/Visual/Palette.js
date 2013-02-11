@@ -44,17 +44,14 @@ Worldview.namespace("Visual");
  * });
  * (end code)
  * 
- */
-
+ * Constructor: Palette
+ * Creates a new instance.
+ * 
+ * Parameters:
+ * spec - Accepts all properties as an associative array.
+ */ 
 Worldview.Visual.Palette = function(spec) { 
     
-    /**
-     * Constructor: Worldview.Visual.Palette
-     * Creates a new instance.
-     * 
-     * Parameters:
-     * spec - Accepts all properties as an associative array.
-     */
     return { 
         /**
          * Property: id
@@ -103,8 +100,8 @@ Worldview.Visual.Palette = function(spec) {
         
         /**
          * Property: stops
-         * Array of color stops of type <Worldview.Visual.StopRGB>. If not
-         * specified, this value is set to an emtpy array.
+         * Array of color stops of type <StopRGBA>. If not specified, this 
+         * value is set to an emtpy array.
          */
         stops: spec.stops || [],
     };

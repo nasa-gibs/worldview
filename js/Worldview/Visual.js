@@ -28,11 +28,24 @@ $(function() {
     //-------------------------------------------------------------------------
     
     /**
-     * Constant: CHECKERBOARD
+     * Property: checkerboard
      * A canvas pattern of a gray checkerboard used to denote transparency.
      */
-    ns.CHECKERBOARD = null;
+    ns.checkerboard = null;
     
+    /**
+     * Property: STOCK_PALETTE_ENDPOINT
+     * The relative URL to use when loading stock palette information.
+     */
+    ns.stockPaletteEndpoint = "data/palettes";
+    
+    /**
+     * Property: stockPalettes
+     * An array of stock <Palettes> the user can choose from. This value is
+     * initially set to null. Call <loadStockPalettes> to set this value.
+     */
+    ns.stockPalettes = null;
+        
     /**
      * Function: toLookup
      * Converts a <Palette> to a <Lookup>. The lookup table is generated
@@ -93,7 +106,7 @@ $(function() {
             var segmentDistance = (segmentLength !== 0) ? 
                     (distance - begin.at) / segmentLength : 0;
             
-            // Witin the cutoffs? 
+            // Within the cutoffs? 
             if ( distance < min || distance > max ) {
                 lut.push(ns.ColorRGBA(0, 0, 0, 0));
             } else if ( palette.type === "solid" ) {
@@ -273,6 +286,58 @@ $(function() {
             Math.round(b * 255));
     }
     
+    /**
+     * Function: loadStockPalettes
+     * Loads the stock <Palette> definitions from the web server. Palettes
+     * are loaded from the relative URL defined in <stockPaletteEndpoint> and
+     * are placed in <stockPalettes>. If palettes have already been loaded,
+     * this method only invokes the success callback.
+     * 
+     * Parameters:
+     * - success: Callback executed after the palettes have been loaded. The
+     *            callback should have no parameters. Obtain loaded palettes
+     *            from <stockPalettes>.
+     * - error:   Callback executed if there is an error loading the palettes.
+     *            The callback should have two paraemters, the error message
+     *            and the error status.
+     */    
+    ns.loadStockPalettes = function(success, error) {
+                        
+        if ( ns.stockPalettes ) { 
+            success();
+            return;
+        }
+        
+        var palettesLoaded = function(palettes) {            
+            // Generate images for the combo box selector.
+            var canvas = document.createElement("canvas");
+            canvas.width = 100;
+            canvas.height = 14;
+            
+            for ( var i = 0; i < palettes.length; i ++ ) {
+                var palette = palettes[i];
+                
+                ns.ColorBar({
+                    canvas: canvas,
+                    palette: palette
+                });
+                palette.image = canvas.toDataURL("image/png");
+            }
+            ns.stockPalettes = palettes;                
+            success(palettes);    
+        }
+        
+        $.ajax({
+            url: ns.stockPaletteEndpoint,
+            dataType: "json",
+            success: palettesLoaded,
+            error: function(jqXHR, textStatus, errorThrown) { 
+                error(errorThrown, textStatus);
+            }
+        });
+        
+    }
+    
     //-------------------------------------------------------------------------
     // Private
     //-------------------------------------------------------------------------
@@ -295,7 +360,7 @@ $(function() {
         g.fillRect(0, size, size, size);
         g.fillRect(size, 0, size, size);
         
-        ns.CHECKERBOARD = g.createPattern(canvas, "repeat");
+        ns.checkerboard = g.createPattern(canvas, "repeat");
     }
 
     // Static initialization

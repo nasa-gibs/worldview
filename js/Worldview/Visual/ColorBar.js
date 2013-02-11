@@ -57,9 +57,9 @@ Worldview.Visual.ColorBar = function(spec) {
      * Property: background
      * 
      * Canvas pattern to use as the background. If not specified, 
-     * <CHECKERBOARD> is used.
+     * <checkerboard> is used.
      */
-    self.background = spec.background || ns.CHECKERBOARD;
+    self.background = spec.background || ns.checkerboard;
     
     /**
      * Property: bins

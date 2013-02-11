@@ -8,7 +8,7 @@
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
-TestCase("Visual", {
+TestCase("Worldview.Visual", {
 
     ns: null,
     
@@ -18,8 +18,8 @@ TestCase("Visual", {
 
     // Ensure the checkerboard got assigned to a value during initialization    
     testCheckerboard: function() {
-        assertNotUndefined(ns.CHECKERBOARD);
-        assertNotNull(ns.CHECKERBOARD);
+        assertNotUndefined(ns.checkerboard);
+        assertNotNull(ns.checkerboard);
     },
     
     // Check that a percentage of zero is at the beginning.

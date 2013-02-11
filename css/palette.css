@@ -4,17 +4,17 @@
     border: 2px solid #aaaaaa;
 }
 
-#palette-selector .dd-selected-image {
+#xpalette-selector .dd-selected-image {
     margin-top: 14px;
     margin-right: 10px;
     border: 1px solid black;
 }
 
-#palette-selector .dd-option-image {
+#xpalette-selector .dd-option-image {
     border: 1px solid black;
     margin-right: 10px;    
 }
 
-#palette-selector .dd-option-description {
+#xpalette-selector .dd-option-description {
     margin-left: 75px;
 }

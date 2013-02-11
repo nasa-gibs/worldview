@@ -69,6 +69,7 @@ Group: Code Reference  {
          File: ColorRGBA  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Visual/ColorRGBA.js)
          File: Lookup  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Visual/Lookup.js)
          File: Palette  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Visual/Palette.js)
+         File: PaletteSelector  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Visual/PaletteSelector.js)
          File: StopRGBA  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Visual/StopRGBA.js)
          }  # Group: Visual
 
@@ -76,13 +77,16 @@ Group: Code Reference  {
 
    }  # Group: Code Reference
 
+File: TestSuite  (/Users/jmcgann/Code/Aptana/worldview/test/lib/TestSuite.js)
+File: TestSuite.Patcher  (/Users/jmcgann/Code/Aptana/worldview/test/lib/TestSuite/Patcher.js)
+
 Group: Index  {
 
    Index: Everything
    Class Index: Classes
-   Constant Index: Constants
    Function Index: Functions
    Property Index: Properties
+   Constant Index: Constants
    }  # Group: Index
 
 
@@ -90,3 +94,4 @@ Group: Index  {
 ##### Do not change or remove these lines. #####
 Data: 1(D3333a6GH63lE9`p\\30ufG3KItp\p37uHof/8G73l6)
 Data: 1(h3333a6GH63lE9`p\\30ufG3KItp\p37uHof/8G73fu93LuI896)
+Data: 1(T3333a6GH63lE9`p\\30ufG3KItp\p37uHof/8G73tG6t3o8Y)
