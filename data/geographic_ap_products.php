@@ -61,6 +61,12 @@
 	        "value" =>  "MODIS_Aqua_Aerosol",
 	        "type" => "multi", "category" => "overlays"
 		),
+		array(
+	        "label" =>  "MODIS Combined Value-Added Aerosol Optical Index",
+	        "sublabel" =>  "Terra and Aqua / MODIS",
+	        "value" =>  "MODIS_Combined_Value_Added_AOD",
+	        "type" => "multi", "category" => "overlays"
+		),
         array(
         	"label" =>  "Dust Score",
         	"sublabel" =>  "Aqua / AIRS",
@@ -141,6 +147,12 @@
 	        "label" =>  "Aerosol Optical Depth",
 	        "sublabel" =>  "Aqua / MODIS",
 	        "value" =>  "MODIS_Aqua_Aerosol",
+	        "type" => "multi", "category" => "overlays"
+		),
+		array(
+	        "label" =>  "MODIS Combined Value-Added Aerosol Optical Index",
+	        "sublabel" =>  "Terra and Aqua / MODIS",
+	        "value" =>  "MODIS_Combined_Value_Added_AOD",
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
@@ -338,6 +350,12 @@
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
+	        "label" =>  "MODIS Combined Value-Added Aerosol Optical Index",
+	        "sublabel" =>  "Terra and Aqua / MODIS",
+	        "value" =>  "MODIS_Combined_Value_Added_AOD",
+	        "type" => "multi", "category" => "overlays"
+		),
+		array(
 	        "label" =>  "Carbon Monoxide (Total Column, Day)",
 	        "sublabel" =>  "Aqua / AIRS",
 	        "value" =>  "AIRS_CO_Total_Column_Day",
@@ -428,6 +446,12 @@
 	        "label" =>  "Aerosol Optical Depth",
 	        "sublabel" =>  "Aqua / MODIS",
 	        "value" =>  "MODIS_Aqua_Aerosol",
+	        "type" => "multi", "category" => "overlays"
+		),
+		array(
+	        "label" =>  "MODIS Combined Value-Added Aerosol Optical Index",
+	        "sublabel" =>  "Terra and Aqua / MODIS",
+	        "value" =>  "MODIS_Combined_Value_Added_AOD",
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
@@ -646,6 +670,12 @@
 	        "label" =>  "Aerosol Optical Depth",
 	        "sublabel" =>  "Aqua / MODIS",
 	        "value" =>  "MODIS_Aqua_Aerosol",
+	        "type" => "multi", "category" => "overlays"
+		),
+		array(
+	        "label" =>  "MODIS Combined Value-Added Aerosol Optical Index",
+	        "sublabel" =>  "Terra and Aqua / MODIS",
+	        "value" =>  "MODIS_Combined_Value_Added_AOD",
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
@@ -1021,6 +1051,12 @@
 	        "label" =>  "Aerosol Optical Depth",
 	        "sublabel" =>  "Aqua / MODIS",
 	        "value" =>  "MODIS_Aqua_Aerosol",
+	        "type" => "multi", "category" => "overlays"
+		),
+		array(
+	        "label" =>  "MODIS Combined Value-Added Aerosol Optical Index",
+	        "sublabel" =>  "Terra and Aqua / MODIS",
+	        "value" =>  "MODIS_Combined_Value_Added_AOD",
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
