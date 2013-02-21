@@ -1,6 +1,4 @@
 window.onload = function(){// Initialize "static" vars
-
-    Logging.debug("Worldview.Map");
     
 	var entryPoint = function() {
 	    var log = Logging.Logger();
