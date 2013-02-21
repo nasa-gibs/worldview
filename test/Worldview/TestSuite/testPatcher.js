@@ -11,31 +11,52 @@
 
 TestCase("TestSuite.Patcher", {
     
+    patcher: null,
+    
     setUp: function() {
-        Worldview.foo = "FOO";
+        patcher = TestSuite.Patcher();
+        window.__TEST_PATCHER = {}
+        window.__TEST_PATCHER.foo = "FOO";
     },
     
     tearDown: function() {
-        delete Worldview.foo;
+        patcher.undo();
+        delete window.__TEST_PATCHER;
     },
     
     // Check to see if a patch and undo are successful
     testPatch: function() {
-        var patcher = TestSuite.Patcher();
-        patcher.apply("Worldview.foo", "BAR");
-        assertEquals("BAR", Worldview.foo);
+        patcher.apply("__TEST_PATCHER.foo", "BAR");
+        assertEquals("BAR", __TEST_PATCHER.foo);
         patcher.undo();
-        assertEquals("FOO", Worldview.foo);
+        assertEquals("FOO", __TEST_PATCHER.foo);
     },
     
     // Make sure when double patched, it returns to the original value
     testPatchMultiple: function() {
-        var patcher = TestSuite.Patcher();
-        patcher.apply("Worldview.foo", "one");
-        patcher.apply("Worldview.foo", "two");
-        assertEquals("two", Worldview.foo);
+        patcher.apply("__TEST_PATCHER.foo", "one");
+        patcher.apply("__TEST_PATCHER.foo", "two");
+        assertEquals("two", __TEST_PATCHER.foo);
         patcher.undo();
-        assertEquals("FOO", Worldview.foo);
+        assertEquals("FOO", __TEST_PATCHER.foo);
+    },
+    
+    // Check patching an undefined value
+    testPatchUndefined: function() {
+        patcher.apply("__TEST_PATCHER.foo", undefined);
+        assertUndefined(__TEST_PATCHER.foo);
+    },
+    
+    // Check there is a good error message when a parent in the object 
+    // path is undefined
+    testInvalidParent: function() {
+        try {
+            patcher.apply("__TEST_PATCHER.bar");   
+            fail();
+        } catch ( message ) {
+            assertEquals("In __TEST_PATCHER.bar, bar is undefined", message);
+        }
     }
+    
 });
 

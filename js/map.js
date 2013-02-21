@@ -395,10 +395,9 @@ SOTE.widget.Map.prototype.init = function(){
 	        // Add navigation controls
         	//this.map.addControl(new OpenLayers.Control.KeyboardDefaults());
         	this.map.addControl(new OpenLayers.Control.Navigation({
-        			dragPanOptions: {
-	                    enableKinetic: true
-	                }
-        		
+    			dragPanOptions: {
+                    enableKinetic: true
+                }
         	}));
         	//this.map.addControl(new OpenLayers.Control.LayerSwitcher({displayClass: 'olControlLayerSwitcher', 'ascending':false}));
             //this.map.addControl(new OpenLayers.Control.OverviewMap());

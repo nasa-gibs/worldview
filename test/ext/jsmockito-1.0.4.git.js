@@ -392,7 +392,7 @@ JsMockito = {
    */
   spy: function(delegate) {
     return (typeof delegate == 'function')?
-      JsMockito.mockFunction(delegate) : JsMockito.mock(delegate);
+      JsMockito.mockFunction(delegate) : JsMockito.mock(delegate, delegate);
   },
 
   contextCaptureFunction: function(defaultContext, handler) {
@@ -521,6 +521,7 @@ JsMockito = {
   }
 };
 
+if (typeof exports !== "undefined") exports.JsMockito = JsMockito;// vi:ts=2 sw=2 expandtab
 
 /**
  * Create a mockable and stubbable anonymous function.
@@ -625,9 +626,10 @@ JsMockito._export.push('mockFunction');
 /**
  * Create a mockable and stubbable objects.
  *
- * <p>A mock is created with the constructor for an object as an argument.
- * Once created, the mock object will have all the same methods as the source
- * object which, when invoked, will return undefined by default.</p>
+ * <p>A mock is created with the constructor for an object, or a prototype
+ * object, as an argument.  Once created, the mock object will have all the
+ * same methods as the source object which, when invoked, will return undefined
+ * by default.</p>
  *
  * <p>Stub declarations may then be made for these methods to have them return
  * useful values or perform actions when invoked.</p>
@@ -648,25 +650,32 @@ JsMockito._export.push('mockFunction');
  * JsMockito.verify(mockObj).add(1, 4); // will throw an exception
  * </pre>
  *
+ * Alternatively, using a prototype:
+ *
+ * <pre>
+ * myPrototype = {
+ *   add: function(a, b) { return a + b }
+ * };
+ *
+ * var mockObj = JsMockito.mock(myPrototype);
+ * mockObj.add(5, 4); // result is undefined
+ * </pre>
+ *
  * @param Obj {function} the constructor for the object to be mocked
  * @return {object} a mock object
  */
-JsMockito.mock = function(Obj) {
-  var delegate = {};
-  if (typeof Obj != "function") {
-    delegate = Obj;
-    Obj = function() { };
-    Obj.prototype = delegate; 
-    Obj.prototype.constructor = Obj;
-  }
+JsMockito.mock = function(Obj, delegate) {
+  delegate = delegate || {};
+
   var MockObject = function() { };
-  MockObject.prototype = new Obj;
+  MockObject.prototype = (typeof Obj == "function")? new Obj : Obj;
   MockObject.prototype.constructor = MockObject;
 
   var mockObject = new MockObject();
   var stubBuilders = {};
   var verifiers = {};
-  
+  var mockFunctions = [];
+
   var contextMatcher = JsHamcrest.Matchers.sameAs(mockObject);
 
   var addMockMethod = function(name) {
@@ -677,9 +686,11 @@ JsMockito.mock = function(Obj) {
         return delegate[name].apply(context, arguments);
       };
     }
-    mockObject[name] = JsMockito.mockFunction('obj.' + name, delegateMethod);
-    stubBuilders[name] = mockObject[name]._jsMockitoStubBuilder;
-    verifiers[name] = mockObject[name]._jsMockitoVerifier;
+    var mockFunc = JsMockito.mockFunction('obj.' + name, delegateMethod);
+    mockObject[name] = mockFunc;
+    stubBuilders[name] = mockFunc._jsMockitoStubBuilder;
+    verifiers[name] = mockFunc._jsMockitoVerifier;
+    mockFunctions.push(mockFunc);
   };
 
   for (var methodName in mockObject) {
@@ -708,11 +719,7 @@ JsMockito.mock = function(Obj) {
   };
 
   mockObject._jsMockitoMockFunctions = function() {
-    return JsMockito.objectValues(
-      JsMockito.mapObject(mockObject, function(func) {
-        return JsMockito.isMock(func)? func : null;
-      })
-    );
+    return mockFunctions;
   };
 
   return mockObject;
@@ -975,6 +982,14 @@ JsMockito.Integration = {
    */
   JsTestDriver: function() {
     JsMockito.Integration.importTo(window);
+  },
+  
+  /**
+   * Make the public JsMockito API available to Node.js / NodeUnit
+   * @see JsMockito.Integration.importTo(global)
+   */
+  Nodeunit: function() {
+    JsMockito.Integration.importTo(global);
   },
 
   /**
