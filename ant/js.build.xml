@@ -24,6 +24,18 @@
 		<file name="switch.js"/>
 		<file name="selector.js"/>
 		<file name="sote.js"/>
+		
+		<file name="Logging.js"/>
+		<file name="Worldview.js"/>
+		<file name="Worldview/OpenLayers.js"/>
+		<file name="Worldview/OpenLayers/ProductMap.js"/>
+        <file name="Worldview/OpenLayers/Product.js"/>
+        <file name="Worldview/OpenLayers/StaticProduct.js"/>
+        <file name="Worldview/OpenLayers/DailyProduct.js"/>
+        <file name="Worldview/OpenLayers/GraticuleLayer.js"/>
+        <file name="Worldview/Widget/Map.js"/>
+        <file name="Worldview/Widget/WorldviewMap.js"/>
+
 		<file name="main.js"/>
 	</filelist>
 	
