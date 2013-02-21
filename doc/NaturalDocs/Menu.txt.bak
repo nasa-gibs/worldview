@@ -62,14 +62,10 @@ Group: Code Reference  {
    Group: Worldview  {
 
       File: OpenLayers  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/OpenLayers.js)
+      File: OpenLayers.DailyProduct  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/OpenLayers/DailyProduct.js)
+      File: OpenLayers.ProductMap  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/OpenLayers/ProductMap.js)
+      File: OpenLayers.StaticProduct  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/OpenLayers/StaticProduct.js)
       File: Visual  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Visual.js)
-
-      Group: OpenLayers  {
-
-         File: DailyProduct  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/OpenLayers/DailyProduct.js)
-         File: ProductMap  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/OpenLayers/ProductMap.js)
-         File: StaticProduct  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/OpenLayers/StaticProduct.js)
-         }  # Group: OpenLayers
 
       Group: JSON  {
 

@@ -130,79 +130,82 @@ SOTE.widget.ImageDownload.prototype.getValue = function(){
 
 SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
 	
-	var bbox = SOTE.util.extractFromQuery('map',qs);
-	var time = SOTE.util.extractFromQuery('time',qs);
-	var pixels = SOTE.util.extractFromQuery('camera', qs);
-  	var s = SOTE.util.extractFromQuery('switch',qs);
-  	var products = SOTE.util.extractFromQuery('products',qs);
-  	
-  	var px = pixels.split(",");
-	var x1 = px[0]; var y1= px[1]; var x2 = px[2]; var y2=px[3];
-
-   	var lonlat1 = this.m.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(x1, y2));
-   	var lonlat2 = this.m.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(x2, y1));
- 
-    var dlURL  = "http://map2.vis.earthdata.nasa.gov/imagegen/?"; 
+	try {
+    	var bbox = SOTE.util.extractFromQuery('map',qs);
+    	var time = SOTE.util.extractFromQuery('time',qs);
+    	var pixels = SOTE.util.extractFromQuery('camera', qs);
+      	var s = SOTE.util.extractFromQuery('switch',qs);
+      	var products = SOTE.util.extractFromQuery('products',qs);
+      	
+      	var px = pixels.split(",");
+    	var x1 = px[0]; var y1= px[1]; var x2 = px[2]; var y2=px[3];
+    
+       	var lonlat1 = this.m.productMap.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(x1, y2));
+       	var lonlat2 = this.m.productMap.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(x2, y1));
      
-     
-  	 //var dTime = new Date((time.split(/T/))[0]+"T00:00:00");
-  	 var dTime = SOTE.util.UTCDateFromISO8601String(time);
-  	 dTime.setHours(0);
-  	 dTime.setMinutes(0);
-  	 dTime.setSeconds(0);
-  	 
-  	 //Julian date, padded with two zeros (to ensure the julian date is always in DDD format).
-  	 var jDate = "00" + (1+Math.ceil((dTime - new Date(dTime.getFullYear(),0,1)) / 86400000));
-  	 dlURL += "TIME="+dTime.getFullYear()+(jDate).substr((jDate.length)-3);
-  	 
-  	
-  	 dlURL += "&extent="+lonlat1.lon+","+lonlat1.lat+","+lonlat2.lon+","+lonlat2.lat;
-  	
-  	 dlURL +="&layers=";
-  	//Reverse the order of overlays to get the correct layer ordering.
-	if (products != ""){
-		var a = products.split("~");
-		var base = a[0].split(".");
-		
-		var overlays = a[1].split(".");
-		overlays.reverse(); overlays.pop();
-		for(var i=1; i<base.length; ++i){
-			dlURL += base[i]+",";
-		}
-		for(var i=0; i<overlays.length; i++){
-			dlURL+= overlays[i]+",";
-		}
-		
-	//remove the extra ","
-	dlURL = dlURL.slice(0,-1);
-	
-	}
-	
-	
-  	 var imgWidth=0; var imgHeight=0;
-	    
-	 $("select#selImgResolution").change(function () {
-         	    imgRes =  $("#selImgResolution option:selected").val(); 
-                imgWidth =  Math.round((Math.abs(lonlat2.lon - lonlat1.lon) / 0.002197) / Number(imgRes));
-				imgHeight = Math.round((Math.abs(lonlat2.lat - lonlat1.lat) / 0.002197) / Number(imgRes)); 
-	 		    imgFilesize =  ((imgWidth * imgHeight * 24) / 8388608).toFixed(2);
-
-    	$("#imgWidth").text((imgWidth));
-    	$("#imgHeight").text((imgHeight));
-		$("#imgFileSize").text(imgFilesize);
-		if(imgFilesize>250)	{ $("#imgFileSize").css("color", "#D99694");  $("#btnImgDownload").attr("disabled", "disabled"); }
-		else { $("#imgFileSize").css("color", "white"); $("#btnImgDownload").removeAttr("disabled"); }
-		})
-     .change();
-     
-     
-      $("#btnImgDownload").unbind('click').click(function(){
-      	 window.open(dlURL+"&format="+$("#selImgFormat option:selected").val()+"&width="+$("#imgWidth").text()+"&height="+$("#imgHeight").text(),"_blank");
-         //console.log(dlURL+"&format="+$("#selImgFormat option:selected").val()+"&size="+$("#imgWidth").text()+"+"+$("#imgHeight").text());
-      });
-     
-     this.setValue(dlURL);
- 	
+        var dlURL  = "http://map2.vis.earthdata.nasa.gov/imagegen/?"; 
+         
+         
+      	 //var dTime = new Date((time.split(/T/))[0]+"T00:00:00");
+      	 var dTime = SOTE.util.UTCDateFromISO8601String(time);
+      	 dTime.setHours(0);
+      	 dTime.setMinutes(0);
+      	 dTime.setSeconds(0);
+      	 
+      	 //Julian date, padded with two zeros (to ensure the julian date is always in DDD format).
+      	 var jDate = "00" + (1+Math.ceil((dTime - new Date(dTime.getFullYear(),0,1)) / 86400000));
+      	 dlURL += "TIME="+dTime.getFullYear()+(jDate).substr((jDate.length)-3);
+      	 
+      	
+      	 dlURL += "&extent="+lonlat1.lon+","+lonlat1.lat+","+lonlat2.lon+","+lonlat2.lat;
+      	
+      	 dlURL +="&layers=";
+      	//Reverse the order of overlays to get the correct layer ordering.
+    	if (products != ""){
+    		var a = products.split("~");
+    		var base = a[0].split(".");
+    		
+    		var overlays = a[1].split(".");
+    		overlays.reverse(); overlays.pop();
+    		for(var i=1; i<base.length; ++i){
+    			dlURL += base[i]+",";
+    		}
+    		for(var i=0; i<overlays.length; i++){
+    			dlURL+= overlays[i]+",";
+    		}
+    		
+    	//remove the extra ","
+    	dlURL = dlURL.slice(0,-1);
+    	
+    	}
+    	
+    	
+      	 var imgWidth=0; var imgHeight=0;
+    	    
+    	 $("select#selImgResolution").change(function () {
+             	    imgRes =  $("#selImgResolution option:selected").val(); 
+                    imgWidth =  Math.round((Math.abs(lonlat2.lon - lonlat1.lon) / 0.002197) / Number(imgRes));
+    				imgHeight = Math.round((Math.abs(lonlat2.lat - lonlat1.lat) / 0.002197) / Number(imgRes)); 
+    	 		    imgFilesize =  ((imgWidth * imgHeight * 24) / 8388608).toFixed(2);
+    
+        	$("#imgWidth").text((imgWidth));
+        	$("#imgHeight").text((imgHeight));
+    		$("#imgFileSize").text(imgFilesize);
+    		if(imgFilesize>250)	{ $("#imgFileSize").css("color", "#D99694");  $("#btnImgDownload").attr("disabled", "disabled"); }
+    		else { $("#imgFileSize").css("color", "white"); $("#btnImgDownload").removeAttr("disabled"); }
+    		})
+         .change();
+         
+         
+          $("#btnImgDownload").unbind('click').click(function(){
+          	 window.open(dlURL+"&format="+$("#selImgFormat option:selected").val()+"&width="+$("#imgWidth").text()+"&height="+$("#imgHeight").text(),"_blank");
+             //console.log(dlURL+"&format="+$("#selImgFormat option:selected").val()+"&size="+$("#imgWidth").text()+"+"+$("#imgHeight").text());
+          });
+         
+         this.setValue(dlURL);
+    } catch ( cause ) { 
+        Worldview.error("Unable to update download box", cause);
+    }
 };
 
 

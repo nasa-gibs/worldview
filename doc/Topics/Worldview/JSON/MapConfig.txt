@@ -1,0 +1,42 @@
+Class: Worldview.JSON.MapConfig
+Map configuration provided at the data/map endpoint.
+
+Property: defaultProjection
+The default projection used when the application starts. Must be one of the
+names defined in the <projections> section.
+
+Property: projections
+Configuration values for each projection supported in Worldview of type
+<Projection>. Keyed by projection name.
+
+Example:
+(begin code)
+"projections": {
+    "geographic": {
+        ...
+    },
+    "arctic": {
+        ...
+    }
+}
+(end code)
+
+Property: products
+Configration values for each product supported in Worldview of type 
+<Worldview.JSON.MapConfig.Product>. Keyed by product name.
+
+Example:
+(begin code)
+"products" : {
+    "MODIS_Terra_CorrectedReflectance_TrueColor": {
+        ...
+    },
+    "sedac_bound": {
+        ...
+    }
+}
+(end code)
+
+
+
+
