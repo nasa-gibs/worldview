@@ -2,6 +2,11 @@ window.onload = function(){// Initialize "static" vars
     
 	var entryPoint = function() {
 	    var log = Logging.Logger();
+	    
+	    $.get("notice.txt", function(message) {
+	        var html = message.replace(/\n/g, "<br/>");
+	        Worldview.notify(html);
+	    });
 	    	    
 	    this.selector = new YAHOO.widget.Panel("selector", { zIndex:1019, visible:false } );
 	    this.selector.setBody("<div id='selectorbox'></div>");

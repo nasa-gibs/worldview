@@ -83,7 +83,38 @@
             });
         }
     };
+    
+    /**
+     * Function: notify
+     * Displays a message to the end user in a dialog box.
+     * 
+     * Parameters:
+     * message - The message to display to the user.
+     * title   - Title for the dialog box (optional). If not specified, the
+     * title will be "Notice".
+     */    
+    ns.notify = function(message, title) {
+        log.info(message);
         
+        if ( window.YAHOO && window.YAHOO.widget && 
+                window.YAHOO.widget.Panel ) {
+            o = new YAHOO.widget.Panel("WVerror", {
+                width: "300px", 
+                zIndex: 1020, 
+                visible: false 
+            });
+            title = title || "Notice";
+            o.setHeader('&nbsp;&nbsp;&nbsp;&nbsp;' + title);
+            o.setBody(message);
+            o.render(document.body);
+            o.show();
+            o.center();
+            o.hideEvent.subscribe(function(i) {
+                setTimeout(function() {o.destroy();}, 25);
+            });
+        }    
+    };
+    
     /**
      * Function: size
      * Gets the number of properties in an object. This only includes 
