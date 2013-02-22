@@ -101,9 +101,9 @@ SOTE.widget.Selector.handleLoadSuccess = function(data,status,xhr,args){
   * 
 */
 SOTE.widget.Selector.prototype.render = function(){
-
-	this.container.innerHTML = "";
-
+   
+	//this.container.innerHTML = "";
+	$("#"+this.id).empty();
 	$('#'+this.id).addClass('selector');
 	
 	var catList = document.createElement("ul");
@@ -144,6 +144,7 @@ SOTE.widget.Selector.prototype.render = function(){
 	subFront.setAttribute("href","javascript:void(0);");
 	subFront.innerHTML = "<b>skip this step</b> to see all available layers >>";
 	this.container.appendChild(subFront);
+    $("#"+this.id).undelegate("#" + "subfront",'click');
 	$("#"+this.id).delegate("#" + "subfront",'click',{self:this,category:"All"},SOTE.widget.Selector.loadCategory);
 	
 	// Mark the component as ready in the registry if called via init() 
@@ -180,7 +181,9 @@ SOTE.widget.Selector.loadCategory = function(e){
 
 	
 	var categories = new Object;
-	self.container.innerHTML = "";
+	//self.container.innerHTML = "";
+    $("#"+self.id).empty();
+	
 	var titleContainer = document.createElement("div");
 	var title = document.createElement("h2");
 	title.innerHTML = "Choose Your Layers: " + cat;
@@ -263,6 +266,7 @@ SOTE.widget.Selector.loadCategory = function(e){
 		subBack.setAttribute("href","javascript:void(0);");
 		subBack.innerHTML = "<< <b>go back</b> and reselect my interest area";
 		self.container.appendChild(subBack);
+        $("#"+self.id).undelegate("#" + "subback",'click');
 		$("#"+self.id).delegate("#" + "subback",'click',{self:self},SOTE.widget.Selector.callRender);
 	}
 	self.adjustSelected();
