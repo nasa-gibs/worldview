@@ -9,16 +9,16 @@
  * All Rights Reserved.
  */
 
-Worldview.namespace("Visual");
+Worldview.namespace("Palette");
 
 /**
- * Class: Worldview.Visual.ColorBar
+ * Class: Worldview.Palette.ColorBar
  * Renders a <Palette> in a canvas. Color transitions are placed along the
  * x axis. 
  *
  * Example:
  * (begin code)
- * var colorBar = Worldview.Visual.ColorBar({
+ * var colorBar = Worldview.Palette.ColorBar({
  *     selector: "#colorBarCanvas", 
  *     bins: 10,
  *     palette: { 
@@ -34,10 +34,10 @@ Worldview.namespace("Visual");
  * (see black_to_white_color_bar.png)
  *
  */
-Worldview.Visual.ColorBar = function(spec) {
+Worldview.Palette.ColorBar = function(spec) {
        
     // This namespace
-    var ns = Worldview.Visual;
+    var ns = Worldview.Palette;
     
     // The canvas to render in as a jQuery object
     var $canvas = null;

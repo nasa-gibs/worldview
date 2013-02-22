@@ -9,10 +9,10 @@
  * All Rights Reserved.
  */
 
-Worldview.namespace("Visual");
+Worldview.namespace("Palette");
 
 /**
- * Class: Worldview.Visual.Palette
+ * Class: Worldview.Palette.Palette
  * Color palette defined by color stops. Each stop is located along the 
  * available range as a percentage between zero and one. 
  * 
@@ -24,7 +24,7 @@ Worldview.namespace("Visual");
  * Example:
  * To define a palette that is a gradient from black to white:
  * (begin code)
- * var palette = Worldview.Visual.Palette({
+ * var palette = Worldview.Palette.Palette({
  *     stops: [
  *         { at: 0.0, r: 0x00, g: 0x00, b: 0x00 },
  *         { at: 1.0, r: 0xff, g: 0xff, b: 0xff },
@@ -35,7 +35,7 @@ Worldview.namespace("Visual");
  * To define a palette that is a gradient from red to green but passing 
  * through blue half way through: 
  * (begin code)
- * var palette = Worldview.Visual.Palette({
+ * var palette = Worldview.Palette.Palette({
  *     stops: [
  *         { at: 0.0, r: 0xff, g: 0x00, b: 0x00 },
  *         { at: 0.5, r: 0x00, g: 0xff, b: 0xff },
@@ -50,7 +50,7 @@ Worldview.namespace("Visual");
  * Parameters:
  * spec - Accepts all properties as an associative array.
  */ 
-Worldview.Visual.Palette = function(spec) { 
+Worldview.Palette.Palette = function(spec) { 
     
     return { 
         /**

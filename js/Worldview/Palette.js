@@ -10,15 +10,15 @@
  */
 
 /**
- * Namespace: Worldview.Visual
+ * Namespace: Worldview.Palette
  * Visualization of science data.
  */
-Worldview.namespace("Visual");
+Worldview.namespace("Palette");
 
 $(function() {
     
     // This namespace
-    var ns = Worldview.Visual;
+    var ns = Worldview.Palette;
     
     // Namespace aliases
     var util = SOTE.util;
@@ -205,7 +205,7 @@ $(function() {
      * 
      * Example:
      * (begin code)
-     * >>> Worldview.Visual.rgb2hsl({r: 10, g: 20, b: 30})
+     * >>> Worldview.Palette.rgb2hsl({r: 10, g: 20, b: 30})
      * Object { h=0.5833333333333334, s=0.5, l=0.0784313725490196}
      * (end code)
      */
@@ -250,7 +250,7 @@ $(function() {
      * 
      * Example:
      * (begin code)
-     * >>> Worldview.Visual.hsl2rgb({h: 0.5833, s: 0.5, l: 0.078})
+     * >>> Worldview.Palette.hsl2rgb({h: 0.5833, s: 0.5, l: 0.078})
      * Object { r=10, g=20, b=30 }
      * (end code)
      */

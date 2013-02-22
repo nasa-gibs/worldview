@@ -9,7 +9,7 @@
  * All Rights Reserved.
  */
 
-TestCase("Worldview.Visual.PaletteSelector", {
+TestCase("Worldview.Palette.PaletteSelector", {
    
     // This namespace
     ns: null,
@@ -18,7 +18,7 @@ TestCase("Worldview.Visual.PaletteSelector", {
     palettes: null,
         
     setUp: function() {
-        ns = Worldview.Visual;
+        ns = Worldview.Palette;
         
         $(document.body).append("<div id='--test-palette-selector'></div>");
         

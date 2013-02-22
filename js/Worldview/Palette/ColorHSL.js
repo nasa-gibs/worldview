@@ -9,17 +9,17 @@
  * All Rights Reserved.
  */
 
-Worldview.namespace("Visual");
+Worldview.namespace("Palette");
 
 /**
- * Class: Worldview.Visual.ColorHSL
+ * Class: Worldview.Palette.ColorHSL
  * Represents a color in the HSL color space.
  *
  * Example: 
  * For a red color
  * 
  * (begin code)
- * var color = Worldview.Visual.ColorHSL(0x00, 0xff, 0xff);
+ * var color = Worldview.Palette.ColorHSL(0x00, 0xff, 0xff);
  * (end code)
  * 
  * Constructor: ColorHSL
@@ -33,7 +33,7 @@ Worldview.namespace("Visual");
  * l - The lightness value in the range of [0.0, 1.0]. If not specified, this
  *     value is zero.
  */
-Worldview.Visual.ColorHSL = function(h, s, l) {
+Worldview.Palette.ColorHSL = function(h, s, l) {
 
     return {
         /**

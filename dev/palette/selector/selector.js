@@ -1,6 +1,6 @@
 $(function() {
        
-   var ns = Worldview.Visual;
+   var ns = Worldview.Palette;
    
    var onLoad = function(palettes) {
        var paletteSelector = ns.PaletteSelector({

@@ -8,7 +8,7 @@
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
-TestCase("Worldview.Visual.ColorBar", {
+TestCase("Worldview.Palette.ColorBar", {
     
     // This namespace
     ns: null,
@@ -27,7 +27,7 @@ TestCase("Worldview.Visual.ColorBar", {
     pattern: null,
     
     setUp: function() {
-        ns = Worldview.Visual;
+        ns = Worldview.Palette;
         width = 10;
         height = 1;
         

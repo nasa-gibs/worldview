@@ -9,10 +9,10 @@
  * All Rights Reserved.
  */
 
-Worldview.namespace("Visual");
+Worldview.namespace("Palette");
 
 /**
- * Class: Worldview.Visual.Lookup
+ * Class: Worldview.Palette.Lookup
  * Indexed based color lookup table.
  * 
  * Constructor: Lookup
@@ -23,7 +23,7 @@ Worldview.namespace("Visual");
  * 
  * Example:
  * (begin code)
- * var lookup = Worldview.Visual.Lookup({
+ * var lookup = Worldview.Palette.Lookup({
  *     id: "my_lookup",
  *     name: "My Lookup",
  *     table: [
@@ -32,7 +32,7 @@ Worldview.namespace("Visual");
  *     ]
  * });
  */
-Worldview.Visual.Lookup = function(spec) { 
+Worldview.Palette.Lookup = function(spec) { 
         
     return {
         /**
@@ -52,7 +52,7 @@ Worldview.Visual.Lookup = function(spec) {
         /**
          * Property: table
          * 
-         * Array that maps index values to <Worldview.Visual.ColorRGBA> 
+         * Array that maps index values to <Worldview.Palette.ColorRGBA> 
          * objects. For example, a value of 2 should use the color found at 
          * table[2]. If not specified, this value is an empty array.
          */

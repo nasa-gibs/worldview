@@ -8,13 +8,13 @@
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
-TestCase("Worldview.Visual.toLookup", {
+TestCase("Worldview.Palette.toLookup", {
 
     ns: null,
     
     setUp: function() {
         // This namespace
-        ns = Worldview.Visual;
+        ns = Worldview.Palette;
     },
     
     // Are the 2 bins the same as the begin and end stops?

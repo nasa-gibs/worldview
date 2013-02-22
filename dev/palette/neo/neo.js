@@ -1,5 +1,5 @@
 $(function() {    
-    var ColorBar = Worldview.Visual.ColorBar;
+    var ColorBar = Worldview.Palette.ColorBar;
 
     var onLoad = function(data, textStatus, jqXHR) {
         var colorBarTemplate = Handlebars.compile([

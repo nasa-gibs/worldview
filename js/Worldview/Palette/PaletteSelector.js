@@ -9,10 +9,10 @@
  * All Rights Reserved.
  */
 
-Worldview.namespace("Visual");
+Worldview.namespace("Palette");
 
 /**
- * Class: Worldview.Visual.PaletteSelector
+ * Class: Worldview.Palette.PaletteSelector
  * Combo box to select a color palette. This uses 
  * <msDropDown at http://www.marghoobsuleman.com/jquery-image-dropdownk> to 
  * render the combo box. 
@@ -24,10 +24,10 @@ Worldview.namespace("Visual");
  * spec.selector - The jQuery selector of the container to render in.
  * spec.palettes - Array of <Palettes> to display in the combo box.
  */   
-Worldview.Visual.PaletteSelector = function(spec) {
+Worldview.Palette.PaletteSelector = function(spec) {
     
     // This namespace
-    var ns = Worldview.Visual;
+    var ns = Worldview.Palette;
     
     // Public exports
     var self = {};

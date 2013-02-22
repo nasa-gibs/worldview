@@ -9,17 +9,17 @@
  * All Rights Reserved.
  */
 
-Worldview.namespace("Visual");
+Worldview.namespace("Palette");
 
 /**
- * Class: Worldview.Visual.ColorRGBA
+ * Class: Worldview.Palette.ColorRGBA
  * Represents a color in the RGBA color space.
  *
  * Example: 
  * For a yellow color
  * 
  * (begin code)
- * var color = Worldview.Visual.ColorRGBA(0xff, 0xff, 0x00, 0xff);
+ * var color = Worldview.Palette.ColorRGBA(0xff, 0xff, 0x00, 0xff);
  * (end code)
  * 
  * Constructor: ColorRGB
@@ -35,7 +35,7 @@ Worldview.namespace("Visual");
  * a - The alpha color value in the range of [0, 0xff]. Zero is 
  *     transparent, 0xff is opaque. If not specified, this value is 0xff.
  */ 
-Worldview.Visual.ColorRGBA = function(r, g, b, a) {
+Worldview.Palette.ColorRGBA = function(r, g, b, a) {
 
     return {
         /**

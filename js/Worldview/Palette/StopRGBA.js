@@ -9,10 +9,10 @@
  * All Rights Reserved.
  */
 
-Worldview.namespace("Visual");
+Worldview.namespace("Palette");
 
 /**
- * Class: Worldview.Visual.StopRGBA
+ * Class: Worldview.Palette.StopRGBA
  * Defines a color value at a percentage along a color range.
  * 
  * Example:
@@ -40,7 +40,7 @@ Worldview.namespace("Visual");
  * a  - The alpha color value in the range of [0, 0xff]. Zero is 
  *      transparent, 0xff is opaque. If not specified, this value is 0xff.
  */
- Worldview.Visual.StopRGBA = function(at, r, g, b, a) {
+ Worldview.Palette.StopRGBA = function(at, r, g, b, a) {
 
     var self = ns.ColorRGBA(r, g, b, a);
     

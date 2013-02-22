@@ -8,12 +8,12 @@
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
-TestCase("Worldview.Visual.ColorHSL", {
+TestCase("Worldview.Palette.ColorHSL", {
     
     ns: null,
     
     setUp: function() {
-        ns = Worldview.Visual;
+        ns = Worldview.Palette;
     },
     
     // Check that the default values are correct.

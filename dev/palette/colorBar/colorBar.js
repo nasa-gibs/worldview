@@ -1,5 +1,5 @@
 $(function() {   
-    var ColorBar = Worldview.Visual.ColorBar;
+    var ColorBar = Worldview.Palette.ColorBar;
     
     var palettes = [];
     var showBins = [2, 3, 10, 100];

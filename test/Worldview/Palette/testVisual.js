@@ -8,12 +8,12 @@
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
-TestCase("Worldview.Visual", {
+TestCase("Worldview.Palette", {
 
     ns: null,
     
     setUp: function() {
-        ns = Worldview.Visual;
+        ns = Worldview.Palette;
     },
 
     // Ensure the checkerboard got assigned to a value during initialization    
