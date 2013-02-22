@@ -1,6 +1,11 @@
 var rb;
 window.onload = function(){// Initialize "static" vars
 
+    $.get("notice.txt", function(message) {
+        var html = message.replace(/\n/g, "<br/>");
+        SOTE.util.throwError(html);    
+    });
+    
 	this.selector = new YAHOO.widget.Panel("selector", { zIndex:1019, visible:false } );
 	this.selector.setBody("<div id='selectorbox'></div>");
 	this.selector.render(document.body);
