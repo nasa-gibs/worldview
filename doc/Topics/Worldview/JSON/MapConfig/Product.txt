@@ -12,7 +12,7 @@ Example:
 (begin code)
 "MODIS_Terra_CorrectedReflectance_TrueColor": {
     "layer": "MODIS_Terra_CorrectedReflectance_TrueColor",
-    "productClass": "Worldview.OpenLayers.DailyProduct",
+    "productClass": "Worldview.Map.DailyProduct",
     "layerClass": "OpenLayers.Layer.WMTS",
     
     "name": "Corrected Reflectance (True Color)",
@@ -63,7 +63,7 @@ Identifier used to reference the layer from the remote map service.
 
 Property: productClass
 The Product object to create to manage the layers for this product. Either
-<Worldview.OpenLayers.DailyProduct> or <Worldview.OpenLayers.StaticProduct>.
+<Worldview.Map.DailyProduct> or <Worldview.Map.StaticProduct>.
 
 Property: layerClass
 The OpenLayers.Layer class used to create layers for this product as needed.

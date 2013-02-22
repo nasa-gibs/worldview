@@ -9,9 +9,9 @@
  * All Rights Reserved.
  */
 
-Worldview.namespace("OpenLayers");
+Worldview.namespace("Map");
 
-Worldview.OpenLayers.GraticuleLayer = OpenLayers.Class(OpenLayers.Layer, {
+Worldview.Map.GraticuleLayer = OpenLayers.Class(OpenLayers.Layer, {
     
     graticuleLineStyle: null,
     graticuleLabelStyle: null,
@@ -63,5 +63,5 @@ Worldview.OpenLayers.GraticuleLayer = OpenLayers.Class(OpenLayers.Layer, {
     /*
      * Name of this class per OpenLayers convention.
      */
-    CLASS_NAME: "Worldview.OpenLayers.GraticuleLayer"                      
+    CLASS_NAME: "Worldview.Map.GraticuleLayer"                      
 });

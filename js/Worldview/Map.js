@@ -10,10 +10,10 @@
  */
  
 /**
- * Namespace: Worldview.OpenLayers
+ * Namespace: Worldview.Map
  * Worldview specific code when using OpenLayers.
  */
-Worldview.namespace("OpenLayers");
+Worldview.namespace("Map");
 
 $(function(ns) {
     
@@ -26,7 +26,7 @@ $(function(ns) {
      * 
      * Example:
      * (begin code)
-     * var contorl = Worldview.OpenLayers.COORDINATE_CONTROLS["geographic"];
+     * var contorl = Worldview.Map.COORDINATE_CONTROLS["geographic"];
      * (end code)
      */
     ns.COORDINATE_CONTROLS = {
@@ -52,4 +52,4 @@ $(function(ns) {
         })
     };
 
-}(Worldview.OpenLayers));
+}(Worldview.Map));

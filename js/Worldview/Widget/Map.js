@@ -84,7 +84,7 @@ Worldview.Widget.Map = function(containerId, spec) {
     var onConfigLoad = function(result) {
         try {
             self.config = result;
-            self.productMap = Worldview.OpenLayers.ProductMap(containerId, 
+            self.productMap = Worldview.Map.ProductMap(containerId, 
                     self.config, self);
             
             $.each(self.config.products, function(name, config) {

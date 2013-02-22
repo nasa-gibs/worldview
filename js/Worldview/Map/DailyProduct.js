@@ -9,10 +9,10 @@
  * All Rights Reserved.
  */
 
-Worldview.namespace("OpenLayers");
+Worldview.namespace("Map");
 
 /**
- * Class: Worldview.OpenLayers.DailyProduct
+ * Class: Worldview.Map.DailyProduct
  * Product that updates on a daily basis.
  * 
  * A requirement in Worldview is to be able to slide between several dates
@@ -32,9 +32,9 @@ Worldview.namespace("OpenLayers");
  *          layerClass which defines the type of layer to create (e.g., 
  *          OpenLayers.Layer.WMTS)
  */
-Worldview.OpenLayers.DailyProduct = function(map, config) {
+Worldview.Map.DailyProduct = function(map, config) {
     
-    var self = Worldview.OpenLayers.Product(config);
+    var self = Worldview.Map.Product(config);
     
     // The current z-index for all layers.
     var zIndex = 0;

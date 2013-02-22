@@ -9,15 +9,18 @@
  * All Rights Reserved.
  */
 
-TestCase("OpenLayers.DailyProduct", TestSuite.TestCases({
+TestCase("Map.DailyProduct", TestSuite.TestCases({
     
     ns: null,
+    patcher: null,
     mockMap: null,
     mockLayers: null,
     product: null,
     
     setUp: function() {
-        ns = Worldview.OpenLayers;
+        ns = Worldview.Map;
+        patcher = TestSuite.Patcher();
+        
         mockMap = mock({
             addLayer: function() {},
             events: {},
@@ -34,10 +37,12 @@ TestCase("OpenLayers.DailyProduct", TestSuite.TestCases({
         };
         
         mockConfig = {
-            layerClass: "__TEST_LAYER_CLASS"
+            product: "daily",
+            type: "wmts"
         };
         mockLayers = [];
-        window.__TEST_LAYER_CLASS = function() { 
+        
+        patcher.apply("OpenLayers.Layer.WMTS", function() {
             var self = {};
             self.mergeNewParams = function() {};
             self.opacity =  0;
@@ -49,21 +54,21 @@ TestCase("OpenLayers.DailyProduct", TestSuite.TestCases({
             self.getVisibility = function() { return self.visibility; };
             mockLayers.push(self);
             return self;
-        };
+        });
         product = ns.DailyProduct(mockMap, mockConfig);
     },
     
     tearDown: function() {
-        delete window.__TEST_LAYER_CLASS;
+        patcher.undo();
     },
         
-    // Check that an exception is thrown if the layerClass does not exist
+    // Check that an exception is thrown if the product type does not exist
     testInvalidLayerClass: function() {
         try {
-            ns.DailyProduct(mockMap, { layerClass: "foo" });
+            ns.DailyProduct(mockMap, { type: "foo" });
             fail("foo should not be a valid layerClass");
         } catch ( message ) {
-            assertEquals("No such layerClass: foo; In foo, foo is undefined",
+            assertEquals("Unsupported layer type: foo",
                     message);
         }
     },

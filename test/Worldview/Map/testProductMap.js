@@ -9,14 +9,14 @@
  * All Rights Reserved.
  */
 
-TestCase("OpenLayers.ProductMap", TestSuite.TestCases({
+TestCase("Map.ProductMap", TestSuite.TestCases({
     
     ns: null,
     patcher: null,
     mapConfig: null,
     
     setUp: function() {
-        ns = Worldview.OpenLayers;
+        ns = Worldview.Map;
         patcher = TestSuite.Patcher();
         
         mapConfig = {
@@ -27,8 +27,8 @@ TestCase("OpenLayers.ProductMap", TestSuite.TestCases({
             },
             products: {
                 alpha: {
-                    productClass: "__TEST_PRODUCT_CLASS",
-                    layerClass: "__TEST_LAYER_CLASS",
+                    product: "daily",
+                    type: "wmts",
                     projections: {
                         geographic: {},
                         arctic: {},
@@ -36,8 +36,8 @@ TestCase("OpenLayers.ProductMap", TestSuite.TestCases({
                     }
                 },
                 beta: {
-                    productClass: "__TEST_PRODUCT_CLASS",
-                    layerClass: "__TEST_LAYER_CLASS",
+                    product: "daily",
+                    type: "wmts",
                     projections: {
                         geographic: {},
                         arctic: {},
@@ -45,15 +45,15 @@ TestCase("OpenLayers.ProductMap", TestSuite.TestCases({
                     }
                 },
                 gamma: {
-                    productClass: "__TEST_PRODUCT_CLASS",
-                    layerClass: "__TEST_LAYER_CLASS",
+                    product: "daily",
+                    type: "wmts",
                     projections: {
                         arctic: {}
                     }
                 },
                 delta: {
-                    productClass: "__TEST_PRODUCT_CLASS",
-                    layerClass: "__TEST_LAYER_CLASS",
+                    product: "daily",
+                    type: "wmts",
                     projections: {
                         antarctic: {}
                     }
@@ -61,22 +61,20 @@ TestCase("OpenLayers.ProductMap", TestSuite.TestCases({
             }           
         };
         
-        window.__TEST_PRODUCT_CLASS = function() {
+        patcher.apply("Worldview.Map.DailyProduct",  function() {
             return { 
                 setDay: mockFunction(),
                 setZIndex: mockFunction(),
                 dispose: mockFunction()
             };
-        };
-        window.__TEST_LAYER_CLASS = function() {};
+        });
+        patcher.apply("OpenLayers.Layer.WMTS", function() {});
         
         $("<div id='__TEST_PRODUCT_MAP'></div>").appendTo("body");
     },
     
     tearDown: function() {
         patcher.undo();
-        delete window.__TEST_PRODUCT_CLASS;
-        delete window.__TEST_LAYER_CLASS;
     },
     
     // Check that an error is thrown if the map container is not defined

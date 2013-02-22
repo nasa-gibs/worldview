@@ -21,7 +21,7 @@ TestCase("CanvasTile", {
         var mockMap = mock(OpenLayers.Map);
         mockLayer.map = mockMap;
         
-        tile = new OpenLayers.Tile.Canvas(
+        tile = new Worldview.Map.CanvasTile(
             mockLayer, 
             new OpenLayers.Pixel(0, 0),         // screen location
             new OpenLayers.Bounds(0, 0, 1, 1),  // lat/lon bb

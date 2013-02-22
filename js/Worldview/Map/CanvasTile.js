@@ -9,8 +9,10 @@
  * All Rights Reserved.
  */
 
+Worldview.namespace("Map");
+
 /**
- * Class: OpenLayers.Tile.Canvas 
+ * Class: Worldview.Map.CanvasTile
  * 
  * Cavas based tile generator. The default tile generator, 
  * OpenLayers.Tile.Image renders each tile in an image element. This generator 
@@ -20,7 +22,7 @@
  * (start code)
  * var myLayer = new OpenLayers.Layer.WMTS({
  *     name: "My Layer",
- *     tileClass: OpenLayers.Tile.Canvas, 
+ *     tileClass: Worldview.Map.CanvasTile, 
  *     ...
  * });
  * (end code)
@@ -42,7 +44,7 @@
  * };
  * (end code)
  */
-OpenLayers.Tile.Canvas = OpenLayers.Class(OpenLayers.Tile.Image, {
+Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
 	
 	/*
 	 * Element that contains the canvas to draw the tile. Initially set to 
@@ -171,6 +173,6 @@ OpenLayers.Tile.Canvas = OpenLayers.Class(OpenLayers.Tile.Image, {
 	/*
 	 * Name of this class per OpenLayers convention.
 	 */
-	CLASS_NAME: "OpenLayers.Tile.Canvas"
+	CLASS_NAME: "Worldview.Map.CanvasTile"
 	
 });

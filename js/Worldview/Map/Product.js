@@ -9,9 +9,9 @@
  * All Rights Reserved.
  */
 
-Worldview.namespace("OpenLayers");
+Worldview.namespace("Map");
 
-Worldview.OpenLayers.Product = function(c) {
+Worldview.Map.Product = function(c) {
     
     var self = {};
     var config;
@@ -21,17 +21,17 @@ Worldview.OpenLayers.Product = function(c) {
     var init = function() {
         config = $.extend(true, {}, c);
         
-        var prop = config.properties;        
+        var prop = config.properties || {};        
         if ( prop.style === undefined ) { prop.style = ""; }
         if ( prop.tileSize ) {
             prop.tileSize = new OpenLayers.Size(prop.tileSize[0], 
                                                 prop.tileSize[1]);
         }
-        if ( config.properties.bringToFront === true ) {
+        if ( prop.bringToFront === true ) {
             self.bringToFront = true;
         }
-        if ( config.properties.transitionEffect === undefined ) {
-            config.properties.transitionEffect = "resize";
+        if ( prop.transitionEffect === undefined ) {
+            prop.transitionEffect = "resize";
         }     
     };
     
@@ -42,7 +42,7 @@ Worldview.OpenLayers.Product = function(c) {
         } else if ( config.type === "wmts") {
             return new OpenLayers.Layer.WMTS(config.properties);
         } else if ( config.type === "graticule") {
-            return new Worldview.OpenLayers.GraticuleLayer(config.name, 
+            return new Worldview.Map.GraticuleLayer(config.name, 
                     config.properties);
         } else {
             throw "Unsupported layer type: " + config.type;

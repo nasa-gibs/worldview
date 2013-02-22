@@ -9,10 +9,10 @@
  * All Rights Reserved.
  */
  
-Worldview.namespace("OpenLayers");
+Worldview.namespace("Map");
 
 /**
- * Class: Worldview.OpenLayers.ProductMap
+ * Class: Worldview.Map.ProductMap
  * Map object that handles GIBS products. 
  * 
  * Constructor: ProductMap
@@ -27,7 +27,7 @@ Worldview.namespace("OpenLayers");
  * Throws:
  * An exception if no DOM element exists with the provided containerId.
  */
-Worldview.OpenLayers.ProductMap = function(containerId, mapConfig, component) {
+Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
     
     var log = Logging.Logger("Worldview.Map");
     var self = {};
@@ -347,7 +347,7 @@ Worldview.OpenLayers.ProductMap = function(containerId, mapConfig, component) {
         }));        
         
         var coordinateControl = 
-                Worldview.OpenLayers.COORDINATE_CONTROLS[projection];     
+                Worldview.Map.COORDINATE_CONTROLS[projection];     
         if ( coordinateControl ) {
             controls.push(coordinateControl);
         } else {
@@ -399,9 +399,9 @@ Worldview.OpenLayers.ProductMap = function(containerId, mapConfig, component) {
         }
 
         if ( config.product === "daily" ) {
-            return Worldview.OpenLayers.DailyProduct(map, config);
+            return Worldview.Map.DailyProduct(map, config);
         } else if ( config.product === "static" ) {
-            return Worldview.OpenLayers.StaticProduct(map, config);
+            return Worldview.Map.StaticProduct(map, config);
         }
         throw "Unsupported product type: " + config.product;
     };

@@ -52,7 +52,7 @@ $(function() {
         isBaseLayer: true,        
     };
     
-    var layerSet = Worldview.OpenLayers.GIBS.TemporalLayerSet({
+    var layerSet = Worldview.Map.GIBS.TemporalLayerSet({
         map: map,
         layerClass: OpenLayers.Layer.WMTS,
         options: modis

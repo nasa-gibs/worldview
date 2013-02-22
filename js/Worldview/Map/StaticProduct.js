@@ -9,10 +9,10 @@
  * All Rights Reserved.
  */
 
-Worldview.namespace("OpenLayers");
+Worldview.namespace("Map");
 
 /**
- * Class: Worldview.OpenLayers.StaticProduct
+ * Class: Worldview.Map.StaticProduct
  * Product that is not based on the current date or time.
  * 
  * Constructor: StaticProduct
@@ -25,9 +25,9 @@ Worldview.namespace("OpenLayers");
  *          layerClass which defines the type of layer to create (e.g., 
  *          OpenLayers.Layer.WMTS)
  */
-Worldview.OpenLayers.StaticProduct = function(map, config) {
+Worldview.Map.StaticProduct = function(map, config) {
     
-    var self = Worldview.OpenLayers.Product(config);
+    var self = Worldview.Map.Product(config);
     
     // There is only one layer and this is it
     var layer = null;
