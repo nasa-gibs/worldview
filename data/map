@@ -694,7 +694,7 @@
     },
     
     "MODIS_Combined_Value_Added_AOD": {
-        "name": "MODIS Combined Value-Added Aerosol Optical Index",
+        "name": "MODIS Combined Value-Added Aerosol Optical Depth",
         "description": "Terra and Aqua / MODIS",
 
         "product": "daily",
@@ -716,7 +716,9 @@
                 ],
                 "maxExtent": [-180, -90, 180, 90],
                 "matrixSet": "EPSG4326_2km",
-                "maxResolution": 0.5625
+                "maxResolution": 0.5625,
+                "serverResolutions": [0.5625, 0.28125, 0.140625,
+                                      0.0703125, 0.03515625, 0.017578125]
             }
         }
     },

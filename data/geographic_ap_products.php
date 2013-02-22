@@ -62,7 +62,7 @@
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
-	        "label" =>  "MODIS Combined Value-Added Aerosol Optical Index",
+	        "label" =>  "MODIS Combined Value-Added Aerosol Optical Depth",
 	        "sublabel" =>  "Terra and Aqua / MODIS",
 	        "value" =>  "MODIS_Combined_Value_Added_AOD",
 	        "type" => "multi", "category" => "overlays"
@@ -150,7 +150,7 @@
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
-	        "label" =>  "MODIS Combined Value-Added Aerosol Optical Index",
+	        "label" =>  "MODIS Combined Value-Added Aerosol Optical Depth",
 	        "sublabel" =>  "Terra and Aqua / MODIS",
 	        "value" =>  "MODIS_Combined_Value_Added_AOD",
 	        "type" => "multi", "category" => "overlays"
@@ -350,7 +350,7 @@
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
-	        "label" =>  "MODIS Combined Value-Added Aerosol Optical Index",
+	        "label" =>  "MODIS Combined Value-Added Aerosol Optical Depth",
 	        "sublabel" =>  "Terra and Aqua / MODIS",
 	        "value" =>  "MODIS_Combined_Value_Added_AOD",
 	        "type" => "multi", "category" => "overlays"
@@ -449,7 +449,7 @@
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
-	        "label" =>  "MODIS Combined Value-Added Aerosol Optical Index",
+	        "label" =>  "MODIS Combined Value-Added Aerosol Optical Depth",
 	        "sublabel" =>  "Terra and Aqua / MODIS",
 	        "value" =>  "MODIS_Combined_Value_Added_AOD",
 	        "type" => "multi", "category" => "overlays"
@@ -673,7 +673,7 @@
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
-	        "label" =>  "MODIS Combined Value-Added Aerosol Optical Index",
+	        "label" =>  "MODIS Combined Value-Added Aerosol Optical Depth",
 	        "sublabel" =>  "Terra and Aqua / MODIS",
 	        "value" =>  "MODIS_Combined_Value_Added_AOD",
 	        "type" => "multi", "category" => "overlays"
@@ -1054,7 +1054,7 @@
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
-	        "label" =>  "MODIS Combined Value-Added Aerosol Optical Index",
+	        "label" =>  "MODIS Combined Value-Added Aerosol Optical Depth",
 	        "sublabel" =>  "Terra and Aqua / MODIS",
 	        "value" =>  "MODIS_Combined_Value_Added_AOD",
 	        "type" => "multi", "category" => "overlays"
@@ -3962,6 +3962,24 @@
 				"170,0,0,255"
 			)
 		),
+        "MODIS_Combined_Value_Added_AOD" => array(
+            "units" => "",
+            "min" => "0.27",
+            "max" => "0.70",
+            "minValidPaletteIdx" => "12",
+            "maxValidPaletteIdx" => "20",
+            "palette" => array(
+                "0,80,0,255",
+                "0,136,0,255",
+                "0,220,0,255",
+                "255,255,0,255",
+                "240,190,64,255",
+                "187,136,0,255",
+                "122,90,3,255",
+                "110,0,0,255",
+                "170,0,0,255"
+            )
+        ),		
 		"MODIS_Terra_Brightness_Temp_Band31_Day" => array(
 			"units" => "K",
 			"min" => "190",
