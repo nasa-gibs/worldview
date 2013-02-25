@@ -4,6 +4,26 @@ Release Notes
 http://earthdata.nasa.gov/labs/worldview/
 
 -------------------------------------------------------------------------------
+Release 0.3.1
+-------------------------------------------------------------------------------
+* New Features
+    - Notification message can now be displayed on startup.
+
+* Updates
+    - Fixes issue where application can become unresponsive when going in and
+      out of many category groups.
+
+* Known Issues
+    - In time slider, the "Dec" and "2013" labels can intermittently disappear 
+      based on the browser's width
+    - After switching to a polar projection, browser resizes trigger a change in 
+      the current view 
+    - On iOS, layers cannot be scrolled or reordered 
+    - Arctic land boundaries don't match actual land  
+    - Impossible to remove all layers unless "Empty" base layer is selected
+    - Worldview does not work with Internet Explorer version 9 and below
+ 
+-------------------------------------------------------------------------------
 Release 0.3.0
 -------------------------------------------------------------------------------
 
@@ -15,17 +35,6 @@ Release 0.3.0
 
 * Updates
     - A toolbar was created to hold certain user interface elements 
-
-* Known Issues
-    - In time slider, the "Dec" and "2013" labels can intermittently disappear 
-      based on the browser's width
-    - After switching to a polar projection, browser resizes trigger a change in 
-      the current view 
-    - On iOS, layers cannot be scrolled or reordered 
-    - Arctic land boundaries don't match actual land  
-    - Impossible to remove all layers unless "Empty" base layer is selected
-    - Worldview does not work with Internet Explorer version 9 and below
-
 
 -------------------------------------------------------------------------------
 Release 0.2.2
