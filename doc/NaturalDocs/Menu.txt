@@ -55,21 +55,14 @@ Group: Development Notes  {
 Group: Code Reference  {
 
    File: Logging  (/Users/jmcgann/Code/Aptana/worldview/js/Logging.js)
-   File: OpenLayers.Tile.Canvas  (/Users/jmcgann/Code/Aptana/worldview/js/OpenLayers/Tile/Canvas.js)
    File: SOTE.util  (/Users/jmcgann/Code/Aptana/worldview/js/util.js)
+   File: TestSuite  (/Users/jmcgann/Code/Aptana/worldview/test/lib/TestSuite.js)
    File: Worldview  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview.js)
 
    Group: Worldview  {
 
-      File: OpenLayers  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/OpenLayers.js)
-      File: Visual  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Visual.js)
-
-      Group: OpenLayers  {
-
-         File: DailyProduct  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/OpenLayers/DailyProduct.js)
-         File: ProductMap  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/OpenLayers/ProductMap.js)
-         File: StaticProduct  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/OpenLayers/StaticProduct.js)
-         }  # Group: OpenLayers
+      File: Map  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map.js)
+      File: Palette  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Palette.js)
 
       Group: JSON  {
 
@@ -83,24 +76,35 @@ Group: Code Reference  {
 
          }  # Group: JSON
 
-      Group: Visual  {
+      Group: Map  {
 
-         File: ColorBar  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Visual/ColorBar.js)
-         File: ColorHSL  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Visual/ColorHSL.js)
-         File: ColorRGBA  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Visual/ColorRGBA.js)
-         File: Lookup  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Visual/Lookup.js)
-         File: Palette  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Visual/Palette.js)
-         File: PaletteSelector  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Visual/PaletteSelector.js)
-         File: StopRGBA  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Visual/StopRGBA.js)
-         }  # Group: Visual
+         File: CanvasTile  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/CanvasTile.js)
+         File: DailyProduct  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/DailyProduct.js)
+         File: Product  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/Product.js)
+         File: ProductMap  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/ProductMap.js)
+         File: StaticProduct  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/StaticProduct.js)
+         }  # Group: Map
+
+      Group: Palette  {
+
+         File: ColorBar  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Palette/ColorBar.js)
+         File: ColorHSL  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Palette/ColorHSL.js)
+         File: ColorRGBA  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Palette/ColorRGBA.js)
+         File: Lookup  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Palette/Lookup.js)
+         File: Palette  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Palette/Palette.js)
+         File: PaletteSelector  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Palette/PaletteSelector.js)
+         File: StopRGBA  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Palette/StopRGBA.js)
+         }  # Group: Palette
 
       }  # Group: Worldview
 
-   }  # Group: Code Reference
+   Group: TestSuite  {
 
-File: TestSuite  (/Users/jmcgann/Code/Aptana/worldview/test/lib/TestSuite.js)
-File: TestSuite.Patcher  (/Users/jmcgann/Code/Aptana/worldview/test/lib/TestSuite/Patcher.js)
-File: TestSuite.TestCases  (/Users/jmcgann/Code/Aptana/worldview/test/lib/TestSuite/TestCases.js)
+      File: Patcher  (no auto-title, /Users/jmcgann/Code/Aptana/worldview/test/lib/TestSuite/Patcher.js)
+      File: TestCases  (no auto-title, /Users/jmcgann/Code/Aptana/worldview/test/lib/TestSuite/TestCases.js)
+      }  # Group: TestSuite
+
+   }  # Group: Code Reference
 
 Group: Index  {
 

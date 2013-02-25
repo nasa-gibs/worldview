@@ -2,7 +2,7 @@ Class: Worldview.JSON.MapConfig.Projection
 Defines a map projection to be available within Worldview.
 
 Any property used to create an OpenLayers.Map object can be provided in this
-object. The properties listed below are the required properties.
+object. The properties listed below are properties specific to Worldview.
 
 Example:
 (begin code)
@@ -15,26 +15,21 @@ Example:
         0.5625, 0.28125, 0.140625,
         0.0703125, 0.03515625, 0.017578125,
         0.0087890625, 0.00439453125, 0.002197265625
-    ]
+    ],
+    "startCenter": [0, 0],
+    "startZoom": 1    
 }
 (end code)
 
-Property: projection
-Projection in the form of "EPSG:x" where x is the corresponding EPSG code
-for this projection.
-
 Property: name
-The name of this projection used in Worldview to reference this projection 
+The name of this projection used in Worldview to reference this projection. 
 (i.e. "geographic", "arctic", "antarctic").
 
-Property: maxExtent
-An array containing the minimum longitude, minimum latitude, maximum
-longitude, and the maximum latitude for this projection.
+Property: startCenter
+Starting map position for this projection. Array containing the latitude and 
+longitude values in the units of the projection.
 
-Property: numZoomLevels
-Number of zoom levels appropriate for all data products.
+Property: startZoom
+Starting zoom level for this projection.
 
-Property: resolutions
-Array of map resolutions as map units per pixel in decending order. There
-should be as many resolution entries as there are <numZoomLevels>
 

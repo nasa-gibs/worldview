@@ -24,6 +24,7 @@
 	<target name="clean" description="Removes the build and dist directories">
 		<delete dir="${build.dir}"/>
 		<delete dir="${dist.dir}"/>
+		<delete dir="doc/NaturalDocs/Data"/>
 	</target>
 	
 	<target name="distclean" depends="clean" 

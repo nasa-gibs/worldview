@@ -11,11 +11,25 @@
 
 Worldview.namespace("Map");
 
+/**
+ * Class: Worldview.Map.Product
+ * Provides common methods for all products.
+ * 
+ * Constructor: Worldview.Map.Product
+ * Creates a new instance.
+ * 
+ * Parameters:
+ * c - Configuration for this layer as a <Worldview.JSON.MapConfig.Product>
+ *     object.
+ */
 Worldview.Map.Product = function(c) {
     
     var self = {};
     var config;
     
+    /**
+     * True if this product should be displayed on top of all other products.
+     */
     self.bringToFront = false;
     
     var init = function() {
@@ -35,6 +49,9 @@ Worldview.Map.Product = function(c) {
         }     
     };
     
+    /**
+     * Creates a new layer based on the configuration provided. 
+     */
     self.createLayer = function() {      
         if ( config.type === "wms" ) {
             return new OpenLayers.Layer.WMS(config.name, config.url, 

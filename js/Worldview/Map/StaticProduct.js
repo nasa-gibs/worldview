@@ -15,15 +15,16 @@ Worldview.namespace("Map");
  * Class: Worldview.Map.StaticProduct
  * Product that is not based on the current date or time.
  * 
+ * Inherits from:
+ * <Worldview.Map.Product>
+ * 
  * Constructor: StaticProduct
  * Creates a new instance.
  * 
  * Parameters:
  * map - The map object that layers will be added and removed from.
- * config - Options passed to the OpenLayers.Layer constructor to create
- *          each layer. This object must also have one other property:
- *          layerClass which defines the type of layer to create (e.g., 
- *          OpenLayers.Layer.WMTS)
+ * config - Configuration for this layer as a <Worldview.JSON.MapConfig.Product>
+ *          object.
  */
 Worldview.Map.StaticProduct = function(map, config) {
     
