@@ -135,7 +135,10 @@ SOTE.widget.Switch.prototype.fire = function(){
 */
 SOTE.widget.Switch.prototype.setValue = function(valString){
 
-	this.value = valString;
+    if ( valString === "" ) {
+        valString = "geographic";
+    }
+	this.value = valString
 	$("#" + this.id+"current").attr("src","images/"+this.value+".png");
 	this.validate();
 	this.fire();

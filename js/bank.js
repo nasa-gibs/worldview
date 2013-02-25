@@ -46,7 +46,7 @@ SOTE.widget.Bank = function(containerId, config){
 	    config.callback = null; 
 	}
 
-	if(config.state === undefined){
+	if(config.state === undefined || config.state === ""){
 		config.state = "geographic";
 	}
 
@@ -433,14 +433,18 @@ SOTE.widget.Bank.handleUpdateSuccess = function(self,qs){
 	/*var expanded = SOTE.util.extractFromQuery("hazard",args.qs);
 	data.expanded = (expanded !== undefined && expanded !== "" && expanded !== null)? expanded:data.expanded;
 	data.selected = (data.selected === undefined || data.selected === "")? SOTE.util.extractFromQuery(args.self.id,args.self.getValue()):data.selected;*/
-	if(SOTE.util.extractFromQuery("switch",qs) == self.state){
+	var projection = SOTE.util.extractFromQuery("switch", qs);
+	if (projection === "") {
+	    projection = "geographic";
+	}
+	if(projection == self.state){
 		var vals = SOTE.util.extractFromQuery("selectorbox",qs)
 		self.values = self.unserialize(vals);
 		self.render();
 		self.fire();
 	}
 	else {
-		self.state = SOTE.util.extractFromQuery("switch",qs);
+		self.state = projection;
 		self.buildMeta();
 	}
 };
@@ -467,6 +471,9 @@ SOTE.widget.Bank.handleUpdateFailure = function(xhr,status,error,args){
 */
 SOTE.widget.Bank.prototype.loadFromQuery = function(qs){
 	var newState = SOTE.util.extractFromQuery("switch",qs);
+	if (newState === "" ) {
+	    newState = "geographic";
+	}
 	if(this.state != newState){
 		this.state = newState;
 		this.buildMeta(SOTE.widget.Bank.loadValue,SOTE.util.extractFromQuery(this.id,qs));

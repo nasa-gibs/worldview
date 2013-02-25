@@ -465,6 +465,9 @@ SOTE.widget.DateSpan.prototype.showSliders = function(){
   *
 */
 SOTE.widget.DateSpan.prototype.setValue = function(value){
+    if ( value === "" ) {
+        value = SOTE.util.ISO8601StringFromDate(new Date());
+    }
 	var vals = SOTE.util.getValuesFromISO8601String(value);
 	if(vals[2] > this.months[vals[1]]){
 		vals[2] = this.months[vals[1]];
