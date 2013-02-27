@@ -1,0 +1,29 @@
+#!/bin/bash
+#
+# NASA Worldview
+# 
+# This code was originally developed at NASA/Goddard Space Flight Center for
+# the Earth Science Data and Information System (ESDIS) project. 
+#
+# Copyright (C) 2013 United States Government as represented by the 
+# Administrator of the National Aeronautics and Space Administration.
+# All Rights Reserved.
+#
+
+BASEDIR=$(dirname "$0")/..
+TODAY=$(date "+%Y.%m.%d")
+
+ant -f $BASEDIR/build.xml clean web doc
+
+sed -i "" -E "s/\.(js|css)\?v=[^\"]+/&-$TODAY/g" \
+    $BASEDIR/build/{worldview,worldview-debug}/index.html 
+sed -i "" -E "s/VERSION = \"[^\"]+/&-$TODAY/g" \
+    $BASEDIR/build/worldview-debug/js/Worldview.js
+sed -i "" -E "s/VERSION=\"[^\"]+/&-$TODAY/g" \
+    $BASEDIR/build/worldview/js/worldview-min.js
+
+ant -f $BASEDIR/build.xml artifacts
+
+
+
+

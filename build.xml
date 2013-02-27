@@ -206,8 +206,11 @@
         </exec>
     </target>
          
-	<target name="dist" depends="clean,web,doc" 
-		    description="Generates distribution artifacts">
+	<target name="dist" depends="clean,web,doc,artifacts"
+	     description="Generates distribution artifacts"/>
+	
+	<target name="artifacts"
+         description="Generates distribution artifacts using existing build dir">	    
 		<tar destfile="${dist.dir}/worldview.tar.bz2"
 			 basedir="${build.dir}" includes="worldview/**" 
 			 compression="bzip2"/>
