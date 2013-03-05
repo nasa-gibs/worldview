@@ -48,7 +48,9 @@ Timestamp: Updated mm/dd/yyyy
 
 Group: Development Notes  {
 
+   File: Welcome  (/Users/jmcgann/Code/Aptana/worldview/doc/Topics/Welcome.txt)
    File: Documentation  (/Users/jmcgann/Code/Aptana/worldview/doc/Topics/Documentation.txt)
+   File: Release Procedure  (/Users/jmcgann/Code/Aptana/worldview/doc/Topics/Release_Procedure.txt)
    File: Testing  (/Users/jmcgann/Code/Aptana/worldview/doc/Topics/Testing.txt)
    }  # Group: Development Notes
 
