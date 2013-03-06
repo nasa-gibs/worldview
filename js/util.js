@@ -88,16 +88,23 @@ SOTE.util.UTCDateFromISO8601String = function( dateAsString )
 	var dateTimeArr = dateAsString.split(/T/);
 
 	var yyyymmdd = dateTimeArr[0];
-	var hhmmss = dateTimeArr[1];
 	
 	// Parse elements of date and time
 	var year = yyyymmdd.split("-")[0];
 	var month = eval(yyyymmdd.split("-")[1]-1);
 	var day = yyyymmdd.split("-")[2];
-	var hour = hhmmss.split(":")[0];
-	var minute = hhmmss.split(":")[1];
-	var second = hhmmss.split(":")[2];
 	
+	var hour = 0;
+	var minute = 0;
+	var second = 0;
+	
+    // Use default of midnight if time is not specified	
+	if ( dateTimeArr.length > 1 ) {
+        var hhmmss = dateTimeArr[1];
+    	var hour = hhmmss.split(":")[0];
+    	var minute = hhmmss.split(":")[1];
+    	var second = hhmmss.split(":")[2];
+	}
   	return new Date( year,month,day,hour,minute,second );
 }
 
@@ -106,15 +113,23 @@ SOTE.util.getValuesFromISO8601String = function( dateAsString )
 	var dateTimeArr = dateAsString.split(/T/);
 
 	var yyyymmdd = dateTimeArr[0];
-	var hhmmss = dateTimeArr[1];
 	
 	// Parse elements of date and time
 	var year = yyyymmdd.split("-")[0];
 	var month = eval(yyyymmdd.split("-")[1]-1);
 	var day = yyyymmdd.split("-")[2];
-	var hour = hhmmss.split(":")[0];
-	var minute = hhmmss.split(":")[1];
-	var second = hhmmss.split(":")[2];
+
+    var hour = 0;
+    var minute = 0;
+    var second = 0;
+    
+    // Use default of midnight if time is not specified
+    if ( dateTimeArr.length > 1 ) {
+        var hhmmss = dateTimeArr[1];
+        hour = hhmmss.split(":")[0];
+        minute = hhmmss.split(":")[1];
+        second = hhmmss.split(":")[2];
+	}
 	
   	return [year,month,day,hour,minute,second];
 }

@@ -30,15 +30,17 @@ Worldview.Widget.Map = function(containerId, spec) {
             .error(Worldview.ajaxError(onConfigLoadError));
     };  
 
-    self.setValue = function(extent) {
+    self.setValue = function(value) {
+        var static = Worldview.Widget.Map;
         log.debug("setValue: " + extent);
-        var bounds = OpenLayers.Bounds.fromString(extent);
-        self.productMap.map.zoomToExtent(bounds, true);
+        var extent = static.extentFromValue(value);
+        self.productMap.map.zoomToExtent(extent, true);
     };
     
     self.getValue = function() {
+        var static = Worldview.Widget.Map;
         var queryString = containerId + "=" + 
-                self.productMap.map.getExtent().toBBOX();
+                static.valueFromExtent(self.productMap.map.getExtent());
         log.debug("getValue: " + queryString);
         return queryString;
     };
@@ -113,4 +115,20 @@ Worldview.Widget.Map = function(containerId, spec) {
             
     init();
     return self;
-}
+};
+
+(function(ns) {
+    
+    ns.extentFromValue = function(value) {
+        return OpenLayers.Bounds.fromString(value.replace(/_/g, ","));    
+    };
+    
+    ns.valueFromExtent = function(extent) {
+        return extent.toBBOX().replace(/,/g, "_");
+    };
+    
+})(Worldview.Widget.Map);
+
+
+
+

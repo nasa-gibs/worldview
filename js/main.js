@@ -1,4 +1,4 @@
-window.onload = function(){// Initialize "static" vars
+$(function() {// Initialize "static" vars
     
 	var entryPoint = function() {
 	    var log = Logging.Logger();
@@ -7,7 +7,7 @@ window.onload = function(){// Initialize "static" vars
 	        var html = message.replace(/\n/g, "<br/>");
 	        Worldview.notify(html);
 	    });
-	    	    
+	    	            	    	    	    	            	    	    
 	    this.selector = new YAHOO.widget.Panel("selector", { zIndex:1019, visible:false } );
 	    this.selector.setBody("<div id='selectorbox'></div>");
 	    this.selector.render(document.body);
@@ -40,6 +40,35 @@ window.onload = function(){// Initialize "static" vars
         setTimeout(fixSize, 700);
         setTimeout(fixSize, 1500);
         	    
+        REGISTRY.addEventListener("map","time","imagedownload");
+        REGISTRY.addEventListener("time","map","imagedownload");
+        REGISTRY.addEventListener("switch","map","products","selectorbox","time", "imagedownload", "camera");
+        REGISTRY.addEventListener("products","map","time","selectorbox","imagedownload");
+        REGISTRY.addEventListener("selectorbox","products");
+        REGISTRY.addEventListener("camera","imagedownload");
+
+        /*REGISTRY.addEventListener("map","time");
+        REGISTRY.addEventListener("time","map");
+        REGISTRY.addEventListener("switch","map","products","selectorbox","time");
+        REGISTRY.addEventListener("products","map","time","selectorbox");
+        REGISTRY.addEventListener("selectorbox","products");
+        //REGISTRY.addEventListener("hazard","products");*/
+
+        function testQS(){
+              var comps = REGISTRY.getComponents();
+              for (var i=0; i < comps.length; i++) {
+                if(typeof comps[i].obj.loadFromQuery == 'function'){
+                    comps[i].obj.loadFromQuery(queryString);
+                }
+              }
+        }
+        
+        var queryString = Worldview.Permalink.decode(window.location.search.substring(1));
+        
+        if (queryString.length > 0) {
+            REGISTRY.addAllReadyCallback(testQS);
+        }
+                	    
         log.info(Worldview.NAME + ", Version " + Worldview.VERSION);	    
 	};
 	
@@ -49,4 +78,4 @@ window.onload = function(){// Initialize "static" vars
         Worldview.error("Failed to start Worldview", cause);
     }  
 		
-};
+});

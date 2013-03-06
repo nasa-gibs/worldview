@@ -27,6 +27,7 @@
 		
 		<file name="Logging.js"/>
 		<file name="Worldview.js"/>
+        <file name="Worldview/Permalink.js"/>
 		<file name="Worldview/Map.js"/>
 		<file name="Worldview/Map/ProductMap.js"/>
         <file name="Worldview/Map/Product.js"/>

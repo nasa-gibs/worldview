@@ -84,6 +84,7 @@
 
     <!-- js.dev --> <script type="text/javascript" src="js/Logging.js"></script> 
     <!-- js.dev --> <script type="text/javascript" src="js/Worldview.js"></script>
+    <!-- js.dev --> <script type="text/javascript" src="js/Worldview/Permalink.js"></script>
     <!-- js.dev --> <script type="text/javascript" src="js/Worldview/Map.js"></script>
 	<!-- js.dev --> <script type="text/javascript" src="js/Worldview/Map/ProductMap.js"></script>
     <!-- js.dev --> <script type="text/javascript" src="js/Worldview/Map/Product.js"></script>
@@ -105,7 +106,7 @@
 					<!--<li><a id='camera_link' class='toolbaricon' href='javascript:showRubberBand();'><img src='images/camera.png' /></a></li>-->
 					<li><div id='camera'></div></li>
 					<li><div id="switch"></div></li>
-					<li><a id='perma_link' class='toolbaricon' title='Permalink' href='javascript:showPermalink();'><img src='images/permalink.png' /></a></li>
+					<li><a id='perma_link' class='toolbaricon' title='Permalink' href='javascript:Worldview.Permalink.show();'><img src='images/permalink.png' /></a></li>
 				</ul>
 				
 			</div>
@@ -126,34 +127,7 @@
 	</div>
 	<script type="text/javascript">
 
-		REGISTRY.addEventListener("map","time","imagedownload");
-		REGISTRY.addEventListener("time","map","imagedownload");
-		REGISTRY.addEventListener("switch","map","products","selectorbox","time", "imagedownload", "camera");
-		REGISTRY.addEventListener("products","map","time","selectorbox","imagedownload");
-		REGISTRY.addEventListener("selectorbox","products");
-		REGISTRY.addEventListener("camera","imagedownload");
 
-		/*REGISTRY.addEventListener("map","time");
-		REGISTRY.addEventListener("time","map");
-		REGISTRY.addEventListener("switch","map","products","selectorbox","time");
-		REGISTRY.addEventListener("products","map","time","selectorbox");
-		REGISTRY.addEventListener("selectorbox","products");
-		//REGISTRY.addEventListener("hazard","products");*/
-
-		function testQS(){
-			  var comps = REGISTRY.getComponents();
-              for (var i=0; i < comps.length; i++) {
-              	if(typeof comps[i].obj.loadFromQuery == 'function'){
-                	comps[i].obj.loadFromQuery(queryString);
-               	}
-              }
-		}
-		
-		var queryString = window.location.search.substring(1);
-		
-		if (queryString.length > 0) {
-            REGISTRY.addAllReadyCallback(testQS);
-		}
 		
 	</script>
 

@@ -98,6 +98,7 @@ Group: Code Reference  {
          File: StopRGBA  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Palette/StopRGBA.js)
          }  # Group: Palette
 
+      File: Permalink  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Permalink.js)
       }  # Group: Worldview
 
    Group: TestSuite  {

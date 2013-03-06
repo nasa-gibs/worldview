@@ -520,7 +520,10 @@ SOTE.widget.DateSpan.prototype.setVisualDate = function(){
   *
 */
 SOTE.widget.DateSpan.prototype.getValue = function(){
-	return ""+this.id +"="+SOTE.util.ISO8601StringFromDate(this.value)+"&transition=standard";
+    var datestring = SOTE.util.ISO8601StringFromDate(this.value);
+    // Strip off the time, only use the date
+    var datestring = datestring.split("T")[0];
+	return ""+this.id +"="+datestring;
 };
 
 /**
