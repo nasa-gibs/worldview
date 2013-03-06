@@ -51,9 +51,10 @@ SOTE.widget.Bank = function(containerId, config){
 	}
 
        
-    this.values = null;
     this.state = config.state;
 	this.selected = config.selected;
+    this.values = this.unserialize(this.selected[this.state]);
+	
     this.dataSourceUrl = config.dataSourceUrl;
     this.title = config.title;
     this.callback = config.callback;
