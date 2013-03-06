@@ -243,7 +243,7 @@
         <sshexec host="${deploy.host}"
             username="${deploy.user}"
             keyfile="${user.home}/.ssh/id_rsa"
-            command="rm -rf ${deploy.dir}/worldview*; ( cd ${deploy.dir}; find artifacts -name '*.tar.bz2' -exec tar xf {} \; )"/>
+            command="rm -rf ${deploy.dir}/worldview*; ( cd ${deploy.dir}; find artifacts -name '*.tar.bz2' -exec tar xf {} \; ; chmod -R g+w worldview* )"/>
   </target>
   
 </project>
