@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<project name="jsch" basedir="." default="resolve">
+
+	<dirname property="jsch.basedir" file="${ant.file.jsch}"/>
+	<property file="${jsch.basedir}/build.properties"/>
+	
+	<target name="resolve" depends="download,copy"/>
+	
+	<target name="download">
+		<get src="${jsch.url}" dest="${lib.artifacts.dir}/${jsch.artifact}" 
+			 skipexisting="true"/>
+	</target>
+		
+	<target name="check-package">
+		<available file="${jsch.jar.path}" 
+		           property="jsch.available"/>
+	</target>
+		
+	<target name="copy" unless="jsch.available">
+		<copy todir="${user.home}/.ant/lib" 
+		      file="${lib.artifacts.dir}/${jsch.jar}"/>	
+	</target>
+		
+</project>

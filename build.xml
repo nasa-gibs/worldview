@@ -16,7 +16,8 @@
 
 	<target name="init">
 	    <tstamp>
-	        <format property="build.timestamp" pattern="MMMMM d yyyy, h:mm a z"/>
+	        <format property="build.timestamp" pattern="MMMMM d yyyy - h:mm a z"/>
+	        <format property="build.nonce" pattern="yyyyMMddHHmmssSSS"/>
 	    </tstamp>
 		<mkdir dir="${build.dir}"/>
 		<mkdir dir="${dist.dir}"/>
@@ -110,6 +111,9 @@
 		<replace file="${build.web.dir}/js/Worldview.js"
 		         token="@BUILD_TIMESTAMP@"
 		         value="${build.timestamp}"/>
+        <replace file="${build.web.dir}/index.html"
+                 token="@BUILD_NONCE@"
+                 value="${build.nonce}"/>
 		         
 		<!-- Debug version that is not minified -->
 		<delete dir="${build.web-debug.dir}"/>		
@@ -229,4 +233,17 @@
 			 compression="bzip2"/>
 	</target>
 
+    <target name="deploy" depends="dist">
+        <scp todir="${deploy.user}@${deploy.host}:${deploy.dir}/artifacts" trust="true" 
+            keyfile="${user.home}/.ssh/id_rsa">
+            <fileset dir="${dist.dir}">
+                <include name="*.tar.bz2"/>
+            </fileset>
+        </scp>  
+        <sshexec host="${deploy.host}"
+            username="${deploy.user}"
+            keyfile="${user.home}/.ssh/id_rsa"
+            command="rm -rf ${deploy.dir}/worldview*; ( cd ${deploy.dir}; find artifacts -name '*.tar.bz2' -exec tar xf {} \; )"/>
+  </target>
+  
 </project>
