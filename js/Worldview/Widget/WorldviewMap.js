@@ -16,6 +16,11 @@ Worldview.Widget.WorldviewMap = function(containerId, spec) {
     var ns = Worldview.Widget;
 
     var onReady = function() {
+        // FIXME: This is a major hack. Events that the map needs to initialize
+        // might occur before the map is ready. Once the map is ready, there
+        // is no easy way to find out what the current state is supposed to
+        // be. Just force an update using the current permalink. 
+        self.updateComponent(Worldview.Permalink.fromRegistry());
         setExtentToLeading();
     };
     spec.onReady = onReady;
