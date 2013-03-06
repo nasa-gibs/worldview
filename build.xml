@@ -15,6 +15,9 @@
 	<include file="${src.ant.dir}/js.build.xml"/>
 
 	<target name="init">
+	    <tstamp>
+	        <format property="build.timestamp" pattern="MMMMM d yyyy, h:mm a z"/>
+	    </tstamp>
 		<mkdir dir="${build.dir}"/>
 		<mkdir dir="${dist.dir}"/>
 		<mkdir dir="${lib.artifacts.dir}"/>
@@ -104,6 +107,10 @@
 			</fileset>
 		</copy>
 		
+		<replace file="${build.web.dir}/js/Worldview.js"
+		         token="@BUILD_TIMESTAMP@"
+		         value="${build.timestamp}"/>
+		         
 		<!-- Debug version that is not minified -->
 		<delete dir="${build.web-debug.dir}"/>		
 		<mkdir dir="${build.web-debug.dir}"/>

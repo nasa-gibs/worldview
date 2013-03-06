@@ -31,16 +31,15 @@ Worldview.Widget.Map = function(containerId, spec) {
     };  
 
     self.setValue = function(value) {
-        var static = Worldview.Widget.Map;
         log.debug("setValue: " + extent);
-        var extent = static.extentFromValue(value);
+        var extent = Worldview.Widget.Map.extentFromValue(value);
         self.productMap.map.zoomToExtent(extent, true);
     };
     
     self.getValue = function() {
-        var static = Worldview.Widget.Map;
         var queryString = containerId + "=" + 
-                static.valueFromExtent(self.productMap.map.getExtent());
+                Worldview.Widget.Map.valueFromExtent(
+                    self.productMap.map.getExtent());
         log.debug("getValue: " + queryString);
         return queryString;
     };

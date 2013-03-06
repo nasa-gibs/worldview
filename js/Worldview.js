@@ -18,6 +18,13 @@
     ns.VERSION = "0.4.0";
     
     /**
+     * Constant: BUILD_TIMESTAMP
+     * Date and time Worldview was built. This value is changed during the
+     * build process.
+     */
+    ns.BUILD_TIMESTAMP = "@BUILD_TIMESTAMP@";
+    
+    /**
      * Function: namespace
      * Defines a namespace under Worldview. Each argument is an object path
      * delimited by periods. For each path item, an empty object is created if 

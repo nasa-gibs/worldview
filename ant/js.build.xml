@@ -1,6 +1,6 @@
 <project name="js" basedir=".">
 
-	<filelist id="js.files" dir="${src.web.js.dir}">
+	<filelist id="js.files" dir="${build.web.js.dir}">
 		<file name="ext/yui/yahoo-min.js"/>
 		<file name="ext/yui/event-min.js"/>
 		<file name="ext/jquery/jquery-1.6.4.js"/>
