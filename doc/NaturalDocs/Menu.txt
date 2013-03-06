@@ -104,7 +104,7 @@ Group: Code Reference  {
    Group: TestSuite  {
 
       File: Patcher  (no auto-title, /Users/jmcgann/Code/Aptana/worldview/test/lib/TestSuite/Patcher.js)
-      File: TestCases  (no auto-title, /Users/jmcgann/Code/Aptana/worldview/test/lib/TestSuite/TestCases.js)
+      File: Tests  (/Users/jmcgann/Code/Aptana/worldview/test/lib/TestSuite/Tests.js)
       }  # Group: TestSuite
 
    }  # Group: Code Reference

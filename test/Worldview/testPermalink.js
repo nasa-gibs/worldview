@@ -9,7 +9,7 @@
  * All Rights Reserved.
  */
 
-TestCase("Permalink.fromObject", TestSuite.TestCases({
+TestCase("Permalink.fromObject", TestSuite.Tests({
     
     ns: null,
     
@@ -37,7 +37,7 @@ TestCase("Permalink.fromObject", TestSuite.TestCases({
         
 }));
 
-TestCase("Permalink.fromRegistry", TestSuite.TestCases({
+TestCase("Permalink.fromRegistry", TestSuite.Tests({
     
     ns: null,
     patcher: null,
@@ -75,7 +75,7 @@ TestCase("Permalink.fromRegistry", TestSuite.TestCases({
     
 }));
 
-TestCase("Permalink.decode", TestSuite.TestCases({
+TestCase("Permalink.decode", TestSuite.Tests({
     
     ns: null,
     

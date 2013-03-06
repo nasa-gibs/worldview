@@ -36,5 +36,23 @@ Now run the test entire unit test suite with the following
 
 > ant test
 
+To run a single test case, invoke the test-one target and pass in a test
+parameter with the name of the test to run. For example, to run the Foo test
+use the following
+
+> ant -Dtest=Foo test-one
+
+The names for test cases are hierarchical. If there are two tests named Foo.Bar
+and Foo.Baz, specifying to run the "Foo" test will run both.
+
+Group: Writing
+
+Writing unit tests is fairly straightforward and follows the xUnit conventions.
+The <JsTestDriver at http://code.google.com/p/js-test-driver> web site
+provides everything needed to write tests.
+
+Patching code can be used with the <TestSuite.Patcher> object. Be sure to also use
+<TestSuite.Tests> to ensure patching is undone in tearDown.
+ 
 
 

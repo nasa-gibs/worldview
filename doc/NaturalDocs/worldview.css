@@ -10,3 +10,22 @@ p {
 .ContentPage .Firefox #Content {
     margin-left: 35ex;
 }
+
+/* Copied from the OpenLayers css file */
+
+.MGroup {
+    font-variant: normal;
+    margin: 0.4em 0 0em 10px
+}
+
+.MTitle {
+    font-variant: normal;
+}
+
+.CGroup .CTitle {
+    font-variant: normal;
+}
+
+.SGroup .SEntry {
+    font-variant: normal;
+}

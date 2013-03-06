@@ -9,7 +9,7 @@
  * All Rights Reserved.
  */
 
-TestCase("Map.ProductMap", TestSuite.TestCases({
+TestCase("Map.ProductMap", TestSuite.Tests({
     
     ns: null,
     patcher: null,

@@ -9,12 +9,12 @@
  * All Rights Reserved.
  */
 
-TestCase("TestSuite.TestCases", {
+TestCase("TestSuite.Tests", {
    
    // Check that the setUp call is properly passed through
    testSetupCalled: function() {
        var called = false;
-       var tc = TestSuite.TestCases({
+       var tc = TestSuite.Tests({
            setUp: function() {
                called = true;
            }
@@ -26,7 +26,7 @@ TestCase("TestSuite.TestCases", {
    // Check that the tearDown call is properly passed through
    testTearDownCalled: function() {
        var called = false;
-       var tc = TestSuite.TestCases({
+       var tc = TestSuite.Tests({
            tearDown: function() {
                called = true;
            }
@@ -38,7 +38,7 @@ TestCase("TestSuite.TestCases", {
    // Check that the test call is properly passed through
    testTestCalled: function() {
        var called = false;
-       var tc = TestSuite.TestCases({
+       var tc = TestSuite.Tests({
            testSomething: function() {
                called = true;
            }
@@ -52,7 +52,7 @@ TestCase("TestSuite.TestCases", {
    // called
    testTearDownCalledOnError: function() {
        var called = false;
-       var tc = TestSuite.TestCases({
+       var tc = TestSuite.Tests({
            tearDown: function() {
                called = true;
            },

@@ -9,7 +9,7 @@
  * All Rights Reserved.
  */
 
-TestCase("Widget.Map", TestSuite.TestCases({
+TestCase("Widget.Map", TestSuite.Tests({
     
     ns: null,
     

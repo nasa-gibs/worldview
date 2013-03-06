@@ -9,7 +9,7 @@
  * All Rights Reserved.
  */
 
-TestCase("Logging.standard", TestSuite.TestCases({
+TestCase("Logging.standard", TestSuite.Tests({
     
     patcher: null,
     mockConsole: null,
@@ -109,7 +109,7 @@ TestCase("Logging.standard", TestSuite.TestCases({
                     
 }));
     
-TestCase("Logging.noConsole", TestSuite.TestCases({
+TestCase("Logging.noConsole", TestSuite.Tests({
         
     patcher: null,
     
@@ -133,7 +133,7 @@ TestCase("Logging.noConsole", TestSuite.TestCases({
 
 }));
 
-TestCase("Logging.onlyLog", TestSuite.TestCases({
+TestCase("Logging.onlyLog", TestSuite.Tests({
     
     patcher: null,
     mockLog: null,

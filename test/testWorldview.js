@@ -9,7 +9,7 @@
  * All Rights Reserved.
  */
 
-TestCase("Worldview.general", TestSuite.TestCases({
+TestCase("Worldview.general", TestSuite.Tests({
 
     testToISODateString: function() {
         assertEquals("2013-03-15", 
@@ -18,7 +18,7 @@ TestCase("Worldview.general", TestSuite.TestCases({
         
 }));
 
-TestCase("Worldview.namespace", TestSuite.TestCases({
+TestCase("Worldview.namespace", TestSuite.Tests({
 
     tearDown: function() {
         if ( Worldview.test) {
@@ -51,7 +51,7 @@ TestCase("Worldview.namespace", TestSuite.TestCases({
    
 }));
 
-TestCase("Worldview.error", TestSuite.TestCases({
+TestCase("Worldview.error", TestSuite.Tests({
     
     patcher: null,
     mockPanel: null,
@@ -105,7 +105,7 @@ TestCase("Worldview.error", TestSuite.TestCases({
     
 }));
 
-TestCase("Worldview.error.withoutYahoo", TestSuite.TestCases({
+TestCase("Worldview.error.withoutYahoo", TestSuite.Tests({
     
     patcher: null,
     
@@ -127,7 +127,7 @@ TestCase("Worldview.error.withoutYahoo", TestSuite.TestCases({
         
 }));
 
-TestCase("Worldview.getObjectByPath", TestSuite.TestCases({
+TestCase("Worldview.getObjectByPath", TestSuite.Tests({
     
     ns: null,
         
