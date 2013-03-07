@@ -115,6 +115,7 @@ $(function() {
     };
     
     /**
+     * Function: show
      * Display a dialog box to the user showing the current permalink.
      */
     ns.show = function() {

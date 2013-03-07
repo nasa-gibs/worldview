@@ -11,6 +11,23 @@
 
 Worldview.namespace("Widget");
 
+/**
+ * Class: Worldview.Widget.WorldviewMap
+ * Map features that are specific to Worldview.
+ * 
+ * Delegates to:
+ * <Worldview.Widget.Map>
+ * 
+ * Constructor: Worldview.Widget.WorldviewMap
+ * Creates a new instance.
+ * 
+ * Parameters:
+ * containerId - The id of the div element to place the map into
+ * spec.dataSourceUrl - The endpoint where configuration information should
+ *                      be obtained from.
+ * spec.onReady - function to be invoked once the map has read in the 
+ *                configuration and is ready to be used. 
+ */
 Worldview.Widget.WorldviewMap = function(containerId, spec) { 
 
     var ns = Worldview.Widget;
@@ -30,7 +47,16 @@ Worldview.Widget.WorldviewMap = function(containerId, spec) {
     var log = Logging.Logger("Worldview.Map");
     var lastState = {};
     var last = null;
-        
+    
+    /**
+     * Method: updateComponent
+     * Updates the map when the state of the application changes.
+     * 
+     * Parameters:
+     * queryString - If products=X is defined, ensure that only the layers for 
+     * X are visible. If switch=Y is defined, changes the projection of the
+     * map to Y if necessary. 
+     */    
     self.updateComponent = function(queryString) { 
         try {
             if ( !self.isReady() ) {
@@ -68,16 +94,17 @@ Worldview.Widget.WorldviewMap = function(containerId, spec) {
         }
     };
     
+    /* Set default extent according to time of day:  
+     * at 00:00 UTC, start at far eastern edge of map: 
+     *      "20.6015625,-46.546875,179.9296875,53.015625"
+     *    at 23:00 UTC, start at far western edge of map: 
+     *      "-179.9296875,-46.546875,-20.6015625,53.015625"
+     */
     var setExtentToLeading = function() {
         if ( self.productMap.projection !== "geographic" ) {
             return;
         }
         
-        // Set default extent according to time of day:  
-        //   at 00:00 UTC, start at far eastern edge of map: 
-        //      "20.6015625,-46.546875,179.9296875,53.015625"
-        //   at 23:00 UTC, start at far western edge of map: 
-        //      "-179.9296875,-46.546875,-20.6015625,53.015625"
         var curHour = new Date().getUTCHours();
 
         // For earlier hours when data is still being filled in, force a far 
@@ -99,7 +126,10 @@ Worldview.Widget.WorldviewMap = function(containerId, spec) {
 
         //this.fire();         
     };   
-        
+    
+    /**
+     * Converts the product listed in the query string into an array.
+     */    
     var splitProducts = function(state) {
         var results = [];
         var sets = state.products.split("~");

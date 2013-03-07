@@ -99,6 +99,13 @@ Group: Code Reference  {
          }  # Group: Palette
 
       File: Permalink  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Permalink.js)
+
+      Group: Widget  {
+
+         File: Map  (no auto-title, /Users/jmcgann/Code/Aptana/worldview/js/Worldview/Widget/Map.js)
+         File: WorldviewMap  (no auto-title, /Users/jmcgann/Code/Aptana/worldview/js/Worldview/Widget/WorldviewMap.js)
+         }  # Group: Widget
+
       }  # Group: Worldview
 
    Group: TestSuite  {
