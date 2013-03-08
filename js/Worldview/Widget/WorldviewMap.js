@@ -76,7 +76,8 @@ Worldview.Widget.WorldviewMap = function(containerId, spec) {
             
             log.debug(state);     
             
-            if ( state["switch"] !== last["switch"] ) {
+            if ( state["switch"] !== undefined && 
+                    state["switch"] !== last["switch"] ) {
                 var projection = state["switch"];
                 if ( !(projection in self.productMap.mapConfig.projections) ) {
                     var defaultProjection = 
@@ -91,6 +92,15 @@ Worldview.Widget.WorldviewMap = function(containerId, spec) {
                 self.productMap.set(state.products);
             }
             if ( state.time !== last.time ) {
+                if ( state.time === undefined ) {
+                    state.time = SOTE.util.ISO8601StringFromDate(new Date());
+                }
+                var date = new Date(state.time);
+                if ( isNaN(date.getTime()) ) {
+                    log.warn("Invalid time: " + state.time + ", using today");
+                    state.time = SOTE.util.ISO8601StringFromDate(new Date());
+                    date = new Date();                    
+                }
                 self.productMap.setDay(new Date(state.time));
             }           
 

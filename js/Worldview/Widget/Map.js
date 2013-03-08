@@ -113,7 +113,9 @@ Worldview.Widget.Map = function(containerId, spec) {
      */
     self.loadFromQuery = function(queryString) {
         log.debug("loadFromQuery: " + queryString);
+        var query = Worldview.queryStringToObject(queryString);
         self.updateComponent(queryString);
+        self.setValue(query.map);
     };
     
     /**

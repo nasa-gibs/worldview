@@ -26,6 +26,7 @@ SOTE.namespace("SOTE.widget.DateSpan");
   * 
 */
 SOTE.widget.DateSpan = function(containerId, config){
+    this.log = Logging.Logger("Worldview.Widget.DateSpan");
 	this.SLIDER_WIDTH = 1000;
     this.DAY_IN_MS = 24*60*60*1000;
     this.sliders = new Object();
@@ -469,6 +470,18 @@ SOTE.widget.DateSpan.prototype.setValue = function(value){
         value = SOTE.util.ISO8601StringFromDate(new Date());
     }
 	var vals = SOTE.util.getValuesFromISO8601String(value);
+	// Check to see if the date is valid, if not default to today
+	var valid = true;
+	$.each(vals, function(index, value) {
+	   if ( isNaN(value) ) {
+	       value = SOTE.util.ISO8601StringFromDate(new Date());
+	       vals = SOTE.util.getValuesFromISO8601String(value);
+	       valid = false;
+	   }    
+	});
+	if ( ! valid ) {
+	   this.log.warn("Invalid time: " + value + ", using today");    
+	}
 	if(vals[2] > this.months[vals[1]]){
 		vals[2] = this.months[vals[1]];
 	}	
