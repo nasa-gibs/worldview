@@ -491,6 +491,7 @@ SOTE.widget.Bank.handleUpdateFailure = function(xhr,status,error,args){
 */
 SOTE.widget.Bank.prototype.loadFromQuery = function(qs){
 	var newState = SOTE.util.extractFromQuery("switch",qs);
+	
 	if (newState === "" ) {
 	    newState = "geographic";
 	}
@@ -499,7 +500,7 @@ SOTE.widget.Bank.prototype.loadFromQuery = function(qs){
 		this.updateComponent(qs);
 	}
 	else {
-		this.sleep(SOTE.util.extractFromQuery(this.id,qs));
+	   this.sleep(SOTE.util.extractFromQuery(this.id,qs));
 	}
 };
 
@@ -508,8 +509,13 @@ SOTE.widget.Bank.prototype.sleep = function(v){
 }
 
 SOTE.widget.Bank.loadValue = function(args){
-	if(args.self.buildMetaDone == true){
-		args.self.setValue(args.val);
+	if(args.self.buildMetaDone == true) {
+	    // If products are not specified, use the defaults
+        if ( args.val.length === 0 ) {
+            args.self.setValue(args.self.selected[args.self.state]);
+        } else {
+		  args.self.setValue(args.val);
+	  }
 	}
 	else {
 		args.self.sleep(args.val);
