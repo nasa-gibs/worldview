@@ -19,6 +19,9 @@ SOTE.widget.Switch.prototype = new SOTE.widget.Component;
   * 
 */
 SOTE.widget.Switch = function(containerId, config){
+    this.log = Logging.Logger("Worldview.Widget.Switch");
+    this.VALID_PROJECTIONS = ["geographic", "arctic", "antarctic"];
+    
 	//Get the ID of the container element
 	this.container=document.getElementById(containerId);
 	if (this.container==null){
@@ -135,10 +138,17 @@ SOTE.widget.Switch.prototype.fire = function(){
 */
 SOTE.widget.Switch.prototype.setValue = function(valString){
 
+    // Check to see if the projection is valid. If not, default to the first
+    // projectiond defined.
     if ( valString === "" ) {
-        valString = "geographic";
+        this.value = this.VALID_PROJECTIONS[0];
+    } else if ( $.inArray(valString, this.VALID_PROJECTIONS) < 0 ) {
+        this.log.warn("Invalid projection: " + valString + ", using: " + 
+                this.VALID_PROJECTIONS[0]);
+        this.value = this.VALID_PROJECTIONS[0];
+    } else {
+	   this.value = valString;
     }
-	this.value = valString
 	$("#" + this.id+"current").attr("src","images/"+this.value+".png");
 	this.validate();
 	this.fire();

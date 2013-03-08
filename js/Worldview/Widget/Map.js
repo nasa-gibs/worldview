@@ -113,16 +113,7 @@ Worldview.Widget.Map = function(containerId, spec) {
      */
     self.loadFromQuery = function(queryString) {
         log.debug("loadFromQuery: " + queryString);
-
-        var query = Worldview.queryStringToObject(queryString);
-
-        var projection = query["switch"] || "geographic";
-        self.productMap.setProjection(projection)
-        
-        var extent = query[containerId];
-        if ( extent ) {
-            self.setValue(extent);
-        }
+        self.updateComponent(queryString);
     };
     
     /**
@@ -183,7 +174,7 @@ Worldview.Widget.Map = function(containerId, spec) {
     
     var onConfigLoad = function(result) {
         try {
-            self.config = result;
+            self.config = validateConfig(result);
             self.productMap = Worldview.Map.ProductMap(containerId, 
                     self.config, self);
             
@@ -211,6 +202,19 @@ Worldview.Widget.Map = function(containerId, spec) {
                 message);
     };
             
+    /*
+     * Make sure that all the required parameters exist in the map
+     * configuration.
+     */
+    var validateConfig = function(config) {
+        var keys = ["defaultProjection", "projections", "products"];
+        $.each(keys, function(index, key) {
+            if ( !(key in config) ) {
+                throw key + " is required in the map configuration";
+            }
+        });
+        return config;
+    }
     init();
     return self;
 };

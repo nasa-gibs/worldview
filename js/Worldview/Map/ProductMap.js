@@ -50,6 +50,12 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
     //-------------------------------------------------------------------------
     
     /**
+     * Property: mapConfig
+     * The <Wordlview.JSON.MapConfig> used in configuration (read only).
+     */
+    self.mapConfig = mapConfig;
+    
+    /**
      * Property: map
      * OpenLayers.Map object used for the currently selected projection
      * (read only).
@@ -240,7 +246,8 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
         
         var productConfig = productConfigs[name];
         if ( !productConfig ) {
-            throw "No such product: " + name;
+            log.warn("No such product: " + name);
+            return true;
         }
         if ( $.inArray(name, self.products) >= 0 ) {
             log.warn("Product already added: " + name);

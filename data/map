@@ -1,6 +1,8 @@
 {
-"projections": {
 
+"defaultProjection": "geographic",
+
+"projections": {   
     "geographic": {
         "name": "geographic",  
         "projection": "EPSG:4326",

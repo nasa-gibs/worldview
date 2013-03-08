@@ -77,7 +77,15 @@ Worldview.Widget.WorldviewMap = function(containerId, spec) {
             log.debug(state);     
             
             if ( state["switch"] !== last["switch"] ) {
-                self.productMap.setProjection(state["switch"]);
+                var projection = state["switch"];
+                if ( !(projection in self.productMap.mapConfig.projections) ) {
+                    var defaultProjection = 
+                        self.productMap.mapConfig.defaultProjection;
+                    log.warn("Invalid projection: " + projection + ", using: " + 
+                            defaultProjection);
+                    projection = defaultProjection;
+                }
+                self.productMap.setProjection(projection);
                 self.productMap.set(state.products);
             } else if ( state.productsString !== last.productsString ) {
                 self.productMap.set(state.products);
@@ -132,6 +140,9 @@ Worldview.Widget.WorldviewMap = function(containerId, spec) {
      */    
     var splitProducts = function(state) {
         var results = [];
+        if ( state.products === undefined ) {
+            return results;
+        }
         var sets = state.products.split("~");
         for ( var i = 0; i < sets.length; i++ ) {
             var set = sets[i];

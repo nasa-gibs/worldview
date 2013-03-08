@@ -19,6 +19,9 @@ SOTE.widget.Bank.prototype = new SOTE.widget.Component;
   * 
 */
 SOTE.widget.Bank = function(containerId, config){
+    this.log = Logging.Logger("Worldview.Widget.Bank");
+    this.VALID_PROJECTIONS = ["geographic", "artcic", "antarctic"];
+    
 	//Get the ID of the container element
 	this.container=document.getElementById(containerId);
 	if (this.container==null){
@@ -352,6 +355,18 @@ SOTE.widget.Bank.prototype.fire = function(){
 SOTE.widget.Bank.prototype.setValue = function(valString){
 
 	this.values = this.unserialize(valString);
+	for ( category in this.values ) {
+	    var validProducts = [];
+	    var self = this;
+	    $.each(this.values[category], function(index, product) {
+            if ( !(product.value in self.meta) ) {
+                self.log.warn("Invalid product: " + product.value);
+            } else {
+                validProducts.push(product);
+            }
+        });
+        this.values[category] = validProducts;
+	}
 	this.render();
 	this.fire();
 	
@@ -436,7 +451,11 @@ SOTE.widget.Bank.handleUpdateSuccess = function(self,qs){
 	data.selected = (data.selected === undefined || data.selected === "")? SOTE.util.extractFromQuery(args.self.id,args.self.getValue()):data.selected;*/
 	var projection = SOTE.util.extractFromQuery("switch", qs);
 	if (projection === "") {
-	    projection = "geographic";
+	    projection = self.VALID_PROJECTIONS[0];
+	} else if ($.inArray(projection, self.VALID_PROJECTIONS) < 0) {
+	    self.log.warn("Invalid projection: " + projection + ", using: " + 
+	           self.VALID_PROJECTIONS[0]);
+        projection = self.VALID_PROJECTIONS[0];
 	}
 	if(projection == self.state){
 		var vals = SOTE.util.extractFromQuery("selectorbox",qs)
@@ -477,7 +496,7 @@ SOTE.widget.Bank.prototype.loadFromQuery = function(qs){
 	}
 	if(this.state != newState){
 		this.state = newState;
-		this.buildMeta(SOTE.widget.Bank.loadValue,SOTE.util.extractFromQuery(this.id,qs));
+		this.updateComponent(qs);
 	}
 	else {
 		this.sleep(SOTE.util.extractFromQuery(this.id,qs));
