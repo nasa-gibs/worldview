@@ -247,7 +247,7 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
         var productConfig = productConfigs[name];
         if ( !productConfig ) {
             log.warn("No such product: " + name);
-            return true;
+            return false;
         }
         if ( $.inArray(name, self.products) >= 0 ) {
             log.warn("Product already added: " + name);

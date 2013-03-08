@@ -136,15 +136,11 @@ TestCase("Map.ProductMap", TestSuite.Tests({
         assertTrue($.inArray("alpha", productMap.products) >= 0);
     },
     
-    // Check that an error is thrown on an undefined product
+    // Check that nothing is added for an undefined product
     testAppendNoProduct: function() {
         productMap = ns.ProductMap("__TEST_PRODUCT_MAP", mapConfig); 
-        try {
-            productMap.append("omega");
-            fail("Product should not exist");
-        } catch ( message ) {
-            assertEquals("No such product: omega", message);
-        }
+        productMap.append("omega");
+        assertEquals(-1, $.inArray("omega", productMap.products));
     },
 
     // Check that only one layer exists after a duplicate add

@@ -25,12 +25,12 @@ $(function() {
     /**
      * Constant: ENCODING_EXCEPTIONS
      * Characters that should not be encoded with encodeURI component. An 
-     * array of objects where each object contains "replace" which is the
-     * regular expression to match after encoding, and "with" which is the 
+     * array of objects where each object contains "match" which is the
+     * regular expression to match after encoding, and "replace" which is the 
      * string to replace the match after encoding.
      */
     ns.ENCODING_EXCEPTIONS = [ 
-        { replace: new RegExp("%2C", "g"), with: "," }
+        { match: new RegExp("%2C", "g"), replace: "," }
     ];
     
     /**
@@ -177,7 +177,7 @@ $(function() {
     var encode = function(value) {
         var encoded = encodeURIComponent(value);
         $.each(ns.ENCODING_EXCEPTIONS, function(index, exception) {
-            encoded = encoded.replace(exception.replace, exception.with);  
+            encoded = encoded.replace(exception.match, exception.replace);  
         });
         return encoded;
     }
