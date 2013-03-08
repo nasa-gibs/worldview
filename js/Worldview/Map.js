@@ -51,5 +51,18 @@ $(function(ns) {
             },
         })
     };
+    
+    ns.isExtentValid = function(extent) {
+        if ( extent === undefined ) {
+            return false;
+        }
+        var valid = true;
+        $.each(extent.toArray(), function(index, value) {
+            if ( isNaN(value) ) {
+                valid = false;
+            }    
+        });
+        return valid;
+    }
 
 }(Worldview.Map));

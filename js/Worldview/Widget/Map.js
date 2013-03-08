@@ -65,8 +65,22 @@ Worldview.Widget.Map = function(containerId, spec) {
      * Y value. Commas instead of underscores are also accepted. 
      */
     self.setValue = function(value) {
-        log.debug("setValue: " + extent);
+        if ( value === undefined ) {
+            return;
+        }
+        
+        log.debug("setValue: " + value);
         var extent = OpenLayers.Bounds.fromString(value);
+        var map = self.productMap.map;
+     
+        // Verify that the viewport extent overlaps the valid extent, if
+        // invalid, just zoom out the max extent
+        if ( !Worldview.Map.isExtentValid(extent) || 
+                !extent.intersectsBounds(map.getExtent()) ) {
+            log.warn("Extent is invalid: " + extent + "; using " + 
+                    map.getExtent());
+            extent = map.getExtent();
+        }
         self.productMap.map.zoomToExtent(extent, true);
     };
     
