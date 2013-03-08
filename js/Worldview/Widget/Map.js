@@ -66,7 +66,7 @@ Worldview.Widget.Map = function(containerId, spec) {
      */
     self.setValue = function(value) {
         log.debug("setValue: " + extent);
-        var extent = Worldview.Widget.Map.extentFromValue(value);
+        var extent = OpenLayers.Bounds.fromString(value);
         self.productMap.map.zoomToExtent(extent, true);
     };
     
@@ -81,8 +81,7 @@ Worldview.Widget.Map = function(containerId, spec) {
      */
     self.getValue = function() {
         var queryString = containerId + "=" + 
-                Worldview.Widget.Map.valueFromExtent(
-                    self.productMap.map.getExtent());
+                    self.productMap.map.getExtent().toBBOX();
         log.debug("getValue: " + queryString);
         return queryString;
     };
@@ -201,48 +200,6 @@ Worldview.Widget.Map = function(containerId, spec) {
     init();
     return self;
 };
-
-/**
- * Namespace: Worldview.Widget.Map
- * Utility functions.
- */
-(function(ns) {
-    
-    /**
-     * Function: extentFromValue
-     * Converts an extent value in a query string to an OpenLayers.Bounds
-     * object. 
-     * 
-     * Parameters:
-     * value - String in the form of L_B_R_U where L is the left X value,
-     * B is the bottom Y value, R is the right X value, and U is the upper
-     * Y value. Commas instead of underscores are also accepted.
-     * 
-     * Returns:
-     * The OpenLayers.Bound object that represents the given extent.
-     */
-    ns.extentFromValue = function(value) {
-        return OpenLayers.Bounds.fromString(value.replace(/_/g, ","));    
-    };
-    
-    /**
-     * Function: valueFromExtent
-     * Converts an OpenLayers.Bounds object to a value that can be used 
-     * in a query string.
-     * 
-     * Parameters:
-     * extent - The extent as an OpenLayers.Bounds object.
-     * 
-     * Returns:
-     * String in the form of L_B_R_U where L is the left X value,
-     * B is the bottom Y value, R is the right X value, and U is the upper
-     * Y value. 
-     */
-    ns.valueFromExtent = function(extent) {
-        return extent.toBBOX().replace(/,/g, "_");
-    };
-    
-})(Worldview.Widget.Map);
 
 
 

@@ -23,6 +23,17 @@ $(function() {
     var permOverlay = null;
     
     /**
+     * Constant: ENCODING_EXCEPTIONS
+     * Characters that should not be encoded with encodeURI component. An 
+     * array of objects where each object contains "replace" which is the
+     * regular expression to match after encoding, and "with" which is the 
+     * string to replace the match after encoding.
+     */
+    ns.ENCODING_EXCEPTIONS = [ 
+        { replace: new RegExp("%2C", "g"), with: "," }
+    ];
+    
+    /**
      * Function: fromObject
      * Returns a query string using the properties and values of an object.
      * 
@@ -47,8 +58,7 @@ $(function() {
             if ( qs.length > 0 ) {
                 qs += "&";
             }
-            qs += encodeURIComponent(key) + "=" + 
-                encodeURIComponent(values[key]);
+            qs += encode(key) + "=" + encode(values[key]);
         }
         return "?" + qs;           
     };
@@ -159,5 +169,17 @@ $(function() {
         document.getElementById('permalink_content').focus();
         document.getElementById('permalink_content').select();                
     };
+    
+    /*
+     * Encode the URI component but convert exceptions back to their original
+     * values.
+     */
+    var encode = function(value) {
+        var encoded = encodeURIComponent(value);
+        $.each(ns.ENCODING_EXCEPTIONS, function(index, exception) {
+            encoded = encoded.replace(exception.replace, exception.with);  
+        });
+        return encoded;
+    }
         
 });

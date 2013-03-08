@@ -18,7 +18,7 @@ TestCase("Permalink.fromObject", TestSuite.Tests({
     },
     
     // Check that key/value pairs are encoded correctly
-    testFromObjectValid: function() {
+    testvalid: function() {
         var p = { 
             "foo": 1,
             "bar": "baz"
@@ -27,12 +27,19 @@ TestCase("Permalink.fromObject", TestSuite.Tests({
     },
 
     // Check that special characters are encoded correclty.
-    testFromObjectSpecialCharacters: function() {
+    testSpecialCharacters: function() {
         var p = { 
             "foo": " Z",
             "<bar": "baz"
         };
         assertEquals("?foo=%20Z&%3Cbar=baz", ns.fromObject(p));
+    },
+    
+    testCommaException: function() {
+        var p = {
+            "foo": "1,2"
+        };
+        assertEquals("?foo=1,2", ns.fromObject(p));
     }
         
 }));
