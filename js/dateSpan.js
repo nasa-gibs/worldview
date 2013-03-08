@@ -513,8 +513,19 @@ SOTE.widget.DateSpan.prototype.setValue = function(value){
 		this.setVisualDate();
 		this.fire();
 	}
-	else{
-		SOTE.util.throwError("The date "+value+" in your permalink has expired.  As of right now, Worldview only retains data as of "+SOTE.util.ISO8601StringFromDate(this.startDate)+".  The date has been adjusted to today's date.");
+	else {
+	    var thisDay = SOTE.util.ISO8601StringFromDate(d).split("T")[0];
+	    var startDay = SOTE.util.ISO8601StringFromDate(this.startDate).split("T")[0];
+	    var today = SOTE.util.ISO8601StringFromDate(this.endDate).split("T")[0];
+	    
+	    if ( d.getTime() < this.startDate.getTime() ) {
+	        SOTE.util.throwError("Data is not available for " + thisDay +
+	           ". The day of " + startDay + " is the earliest available " + 
+	           "data at this time. The date has been adjusted to today.");
+	    } else if ( d.getTime() >= this.endDate.getTime() ) {
+	        SOTE.util.throwError("Data is not available for " + thisDay + 
+	           " yet. Try again later. The date has been adjusted to today.")
+	    } 
 	}
 };
 
