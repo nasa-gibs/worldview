@@ -383,7 +383,7 @@ SOTE.widget.Bank.prototype.serialize = function(values){
 		serialized += formatted;
 		if(values[formatted]){
 			for(var j=0; j<values[formatted].length; j++){
-				serialized += "." + values[formatted][j].value;
+				serialized += "," + values[formatted][j].value;
 			}
 		}
 	}
@@ -394,7 +394,7 @@ SOTE.widget.Bank.prototype.unserialize = function(string){
 	var unserialized = new Object;
 	var categories = string.split("~");
 	for(var i=0; i<categories.length; i++){
-		var items = categories[i].split(".");
+		var items = categories[i].split(/[\.,]/);
 		unserialized[items[0]] = new Array;
 		for(var j=1; j<items.length; j++){
 			unserialized[items[0]].push({"value":items[j]});

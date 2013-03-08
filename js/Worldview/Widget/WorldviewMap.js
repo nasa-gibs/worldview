@@ -135,7 +135,7 @@ Worldview.Widget.WorldviewMap = function(containerId, spec) {
         var sets = state.products.split("~");
         for ( var i = 0; i < sets.length; i++ ) {
             var set = sets[i];
-            var items = set.split(".");
+            var items = set.split(",");
             // First item is the type (e.g., baselayer or overlay). Ignore it.
             for ( var j = 1; j < items.length; j++ ) {
                 results.push(items[j]);

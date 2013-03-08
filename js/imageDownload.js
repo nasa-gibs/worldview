@@ -163,7 +163,7 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
       	//Reverse the order of overlays to get the correct layer ordering.
     	if (products != ""){
     		var a = products.split("~");
-    		var base = a[0].split(".");
+    		var base = a[0].split(/[\.,]/);
     		
     		var overlays = a[1].split(".");
     		overlays.reverse(); overlays.pop();
