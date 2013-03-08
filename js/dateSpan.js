@@ -486,9 +486,9 @@ SOTE.widget.DateSpan.prototype.setValue = function(value){
 		vals[2] = this.months[vals[1]];
 	}	
 	
-	var d = new Date(vals[0],vals[1],vals[2],vals[3],vals[4],vals[5]);
+	var d = new Date(vals[0], vals[1], vals[2], 0, 0, 0);
 	
-	var startDate = this.endDate.getTime() - (this.range -24*60*60*1000);
+	var startDate = this.endDate.getTime() - (this.range - 24*60*60*1000);
 	var monthNames = [ "January", "February", "March", "April", "May", "June",
     	"July", "August", "September", "October", "November", "December" ];
 	

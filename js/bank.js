@@ -355,17 +355,30 @@ SOTE.widget.Bank.prototype.fire = function(){
 SOTE.widget.Bank.prototype.setValue = function(valString){
 
 	this.values = this.unserialize(valString);
-	for ( category in this.values ) {
-	    var validProducts = [];
-	    var self = this;
-	    $.each(this.values[category], function(index, product) {
-            if ( !(product.value in self.meta) ) {
-                self.log.warn("Invalid product: " + product.value);
-            } else {
-                validProducts.push(product);
-            }
-        });
-        this.values[category] = validProducts;
+	var valid = true;
+    var self = this;
+    
+	$.each(this.categories, function(index, name) {
+	   var category = name.replace(/\s/g, "").toLowerCase();
+	   if ( !(category in self.values) ) {
+	       self.log.warn("Invalid category: " + category + ", using defaults");
+	       self.values = self.unserialize(self.selected[self.state]);
+	       valid = false;
+	   }
+	});
+	
+	if ( valid ) {
+    	for ( category in this.values ) {
+    	    var validProducts = [];
+    	    $.each(this.values[category], function(index, product) {
+                if ( !(product.value in self.meta) ) {
+                    self.log.warn("Invalid product: " + product.value);
+                } else {
+                    validProducts.push(product);
+                }
+            });
+            this.values[category] = validProducts;
+    	}
 	}
 	this.render();
 	this.fire();
