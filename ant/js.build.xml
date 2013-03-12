@@ -10,6 +10,7 @@
 		<file name="ext/openlayers-2.12/OpenLayers.js"/>
 		<file name="ext/datejs/date.js"/>
 		<file name="ext/jcrop/jcrop.js"/>
+		<file name="ext/jquery.dd/jquery.dd.js"/>
 		<file name="component.js"/>
 		<file name="registry.js"/>
 		<file name="util.js"/>
@@ -24,7 +25,7 @@
 		<file name="switch.js"/>
 		<file name="selector.js"/>
 		<file name="sote.js"/>
-		
+	    	
 		<file name="Logging.js"/>
 		<file name="Worldview.js"/>
         <file name="Worldview/Permalink.js"/>
