@@ -28,6 +28,16 @@
 		<file name="Logging.js"/>
 		<file name="Worldview.js"/>
         <file name="Worldview/Permalink.js"/>
+        
+        <file name="Worldview/Palette.js"/>
+        <file name="Worldview/Palette/ColorBar.js"/>
+        <file name="Worldview/Palette/ColorHSL.js"/>
+        <file name="Worldview/Palette/ColorRGBA.js"/>
+        <file name="Worldview/Palette/Lookup.js"/>
+        <file name="Worldview/Palette/Palette.js"/>
+        <file name="Worldview/Palette/PaletteSelector.js"/>
+        <file name="Worldview/Palette/StopRGBA.js"/>
+        
 		<file name="Worldview/Map.js"/>
         <file name="Worldview/Map/CanvasTile.js"/>
 		<file name="Worldview/Map/ProductMap.js"/>
