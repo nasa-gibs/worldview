@@ -29,12 +29,14 @@
 		<file name="Worldview.js"/>
         <file name="Worldview/Permalink.js"/>
 		<file name="Worldview/Map.js"/>
+        <file name="Worldview/Map/CanvasTile.js"/>
 		<file name="Worldview/Map/ProductMap.js"/>
         <file name="Worldview/Map/Product.js"/>
         <file name="Worldview/Map/StaticProduct.js"/>
         <file name="Worldview/Map/DailyProduct.js"/>
         <file name="Worldview/Map/GraticuleLayer.js"/>
         <file name="Worldview/Widget/Map.js"/>
+        <file name="Worldview/Widget/PaletteManager.js"/>
         <file name="Worldview/Widget/WorldviewMap.js"/>
 
 		<file name="main.js"/>

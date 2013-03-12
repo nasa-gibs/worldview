@@ -16,6 +16,10 @@ body {
     text-align: center;
 }
 
+.name {
+    font-size: 9pt;
+}
+
 .palette {
     margin: 5px;
     width: 200px;

@@ -121,6 +121,23 @@ $(function() {
     }
     palettes.push(classified);
     
+    byrStopped = {
+        id: "byr-stopped",
+        name: "BYR, Stopped",
+        stops: [
+            { at: 0.0, r: 0x00, g: 0x00, b: 0xff },
+            { at: 0.5, r: 0xff, g: 0xff, b: 0x00 },
+            { at: 1.0, r: 0xff, g: 0x00, b: 0x00 }
+        ]
+    };
+    byrBins = [1, 2, 4, 8];
+    byrStops = [
+        [0.0],
+        [0.0, 0.75],
+        [0.0, 0.50, 0.80, 0.90],
+        [0.0, 0.20, 0.50, 0.70, 0.80, 0.85, 0.90, 0.95] 
+    ];
+        
     var template = Handlebars.compile([
         '<td>',          
             '<div class="layer">',
@@ -131,19 +148,24 @@ $(function() {
             '</div>',   
         '</td>'].join("\n"));
     
-    for ( var iPalette = 0; iPalette < palettes.length; iPalette++ ) {
-        var palette = palettes[iPalette];
+    var addRow = function(palette, binsArray) {
         var row = "";
-        for ( var iBins = 0; iBins < showBins.length; iBins++ ) {
-            var bins = showBins[iBins];
+        for ( var iBins = 0; iBins < binsArray.length; iBins++ ) {
+            var bins = binsArray[iBins];
             row += template({
                 id: palette.id,
                 name: palette.name,
                 bins: bins
             });
         }
-        $("#colorBars").append("<tr>" + row + "</tr>");
+        $("#colorBars").append("<tr>" + row + "</tr>");        
     }
+    
+    for ( var iPalette = 0; iPalette < palettes.length; iPalette++ ) {
+        var palette = palettes[iPalette];
+        addRow(palette, showBins);
+    }
+    addRow(byrStopped, [1, 2, 4, 8]);
 
     for ( var iPalette = 0; iPalette < palettes.length; iPalette++ ) {
         var palette = palettes[iPalette];
@@ -156,4 +178,13 @@ $(function() {
             });       
         }
     } 
+    $.each(byrStops, function(index, stops) {
+        var bins = byrBins[index];
+        ColorBar({
+            selector: "#" + byrStopped.id + "-" + bins,
+            bins: bins,
+            palette: byrStopped,
+            stops: stops
+        });    
+    });
 });

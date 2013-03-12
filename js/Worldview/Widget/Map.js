@@ -25,7 +25,7 @@ Worldview.namespace("Widget");
  * spec.onReady - function to be invoked once the map has read in the 
  *                configuration and is ready to be used. 
  */
-Worldview.Widget.Map = function(containerId, spec) { 
+Worldview.Widget.Map = function(containerId, config) { 
         
     var self = {};
     var log = Logging.Logger("Worldview.Map");
@@ -42,7 +42,7 @@ Worldview.Widget.Map = function(containerId, spec) {
      * The <Worldview.JSON.MapConfig> object retrieved from the server that 
      * defines the available projections and data products. 
      */
-    self.config = null;
+    self.config = config;
     
     var init = function() {
         if ( REGISTRY ) {
@@ -51,8 +51,20 @@ Worldview.Widget.Map = function(containerId, spec) {
             throw "Cannot register Map, REGISTRY not found";
         }
         
-        $.getJSON(spec.dataSourceUrl, onConfigLoad)
-            .error(Worldview.ajaxError(onConfigLoadError));
+        self.config = validateConfig(self.config);
+        self.productMap = Worldview.Map.ProductMap(containerId, 
+                self.config, self);
+        
+        $.each(self.config.products, function(name, config) {
+            if ( config.defaultLayer === "true" ) {
+                self.productMap.append(name);
+            }
+        });
+        
+        self.productMap.map.zoomToMaxExtent();
+        
+        REGISTRY.markComponentReady(containerId);
+        log.debug("Map is ready");
     };  
 
     /**
@@ -112,7 +124,7 @@ Worldview.Widget.Map = function(containerId, spec) {
      * in <setValue>
      */
     self.loadFromQuery = function(queryString) {
-        log.debug("loadFromQuery: " + queryString);
+        log.debug("WorldviewMap.loadFromQuery: " + queryString);
         var query = Worldview.queryStringToObject(queryString);
         self.updateComponent(queryString);
         self.setValue(query.map);
@@ -162,48 +174,7 @@ Worldview.Widget.Map = function(containerId, spec) {
     self.getStatus = function() {
         throw "getStatus: unsupported";
     };
-    
-    /**
-     * Indicates if the map is ready to be used.
-     * 
-     * Returns:
-     * true if the map has loaded configuration from the remote server and
-     * has initialized, otherwise returns false. 
-     */    
-    self.isReady = function() {
-        return self.productMap != null;
-    }
-    
-    var onConfigLoad = function(result) {
-        try {
-            self.config = validateConfig(result);
-            self.productMap = Worldview.Map.ProductMap(containerId, 
-                    self.config, self);
-            
-            $.each(self.config.products, function(name, config) {
-                if ( config.defaultLayer === "true" ) {
-                    self.productMap.append(name);
-                }
-            });
-            
-            self.productMap.map.zoomToMaxExtent();
-            
-            if ( spec.onReady ) {
-                spec.onReady();
-            }
-            
-            REGISTRY.markComponentReady(containerId);
-            log.debug("Map is ready");
-        } catch ( cause ) {
-            Worldview.error("Unable to configure map", cause);
-        }
-    };
-
-    var onConfigLoadError = function(message) { 
-        Worldview.error("Unable to load map configuration from server", 
-                message);
-    };
-            
+                
     /*
      * Make sure that all the required parameters exist in the map
      * configuration.

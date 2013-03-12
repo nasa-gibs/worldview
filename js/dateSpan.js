@@ -492,6 +492,9 @@ SOTE.widget.DateSpan.prototype.setValue = function(value){
 	var monthNames = [ "January", "February", "March", "April", "May", "June",
     	"July", "August", "September", "October", "November", "December" ];
 	
+	if(d.getTime() < this.startDate.getTime()) {
+	    d = this.startDate;
+	}
 	if(d.getTime() <= this.endDate.getTime() && d.getTime() >= this.startDate.getTime())
 	{
 		this.value = d;
@@ -519,10 +522,13 @@ SOTE.widget.DateSpan.prototype.setValue = function(value){
 	    var today = SOTE.util.ISO8601StringFromDate(this.endDate).split("T")[0];
 	    
 	    if ( d.getTime() < this.startDate.getTime() ) {
+	        /*
 	        SOTE.util.throwError("Data is not available for " + thisDay +
 	           ". The day of " + startDay + " is the earliest available " + 
 	           "data at this time. The date has been adjusted to today.");
+	           */
 	    } else if ( d.getTime() >= this.endDate.getTime() ) {
+	        
 	        SOTE.util.throwError("Data is not available for " + thisDay + 
 	           " yet. Try again later. The date has been adjusted to today.")
 	    } 

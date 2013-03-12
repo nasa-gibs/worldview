@@ -37,7 +37,7 @@ $(function() {
      * Property: STOCK_PALETTE_ENDPOINT
      * The relative URL to use when loading stock palette information.
      */
-    ns.stockPaletteEndpoint = "data/palettes";
+    ns.stockPaletteEndpoint = "data/config";
     
     /**
      * Property: stockPalettes
@@ -124,7 +124,16 @@ $(function() {
             }
         }        
         return lut;
-    }
+    };
+    
+    ns.mapLookup = function(indexed, stops) {
+        map = {};
+        $.each(stops, function(index, stop) {
+            var key = stop.r + "," + stop.g + "," + stop.b + "," + stop.a;
+            map[key] = indexed[index]; 
+        });
+        return map;
+    };
     
     /**
      * Function: rgbInterpolate
@@ -308,12 +317,13 @@ $(function() {
             return;
         }
         
-        var palettesLoaded = function(palettes) {            
+        var palettesLoaded = function(config) {            
             // Generate images for the combo box selector.
             var canvas = document.createElement("canvas");
             canvas.width = 100;
             canvas.height = 14;
             
+            var palettes = config.palettes;
             for ( var i = 0; i < palettes.length; i ++ ) {
                 var palette = palettes[i];
                 

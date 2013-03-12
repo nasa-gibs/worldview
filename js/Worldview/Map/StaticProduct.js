@@ -77,6 +77,14 @@ Worldview.Map.StaticProduct = function(map, config) {
         map.events.unregister("zoomend", self, refreshZOrder);    
     };
         
+    self.setLookup = function(lookup) {
+        layer.lookupTable = lookup;          
+    };
+    
+    self.clearLookup = function() {
+        delete layer.lookupTable;         
+    };        
+    
     //-------------------------------------------------------------------------
     // Private
     //-------------------------------------------------------------------------    

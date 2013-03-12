@@ -46,6 +46,9 @@ Worldview.Map.Product = function(c) {
         }
         if ( prop.transitionEffect === undefined ) {
             prop.transitionEffect = "resize";
+        }
+        if ( prop.tileClass !== undefined ) {
+            prop.tileClass = Worldview.getObjectByPath(prop.tileClass);
         }     
     };
     

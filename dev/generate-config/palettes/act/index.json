@@ -1,30 +1,30 @@
 [{
-    "id":           "Land_Temperature",
+    "id":           "NEO_Land_Temperature",
     "name":         "Bright Spectrum",
     "description":  "Land Surface Temperature",
     "input":        "neo/modis_lst.act"
 },{
-    "id":           "Sea_Temperature",
+    "id":           "NEO_Sea_Temperature",
     "name":         "Blue Spectrum",
     "description":  "Sea Surface Temperature",
     "input":        "neo/amsre_sst.act"
 },{
-    "id":           "Snow_Cover",
+    "id":           "NEO_Snow_Cover",
     "name":         "Blue to White",
     "description":  "Snow Cover",
     "input":        "neo/modis_snow.act"
 },{
-    "id":           "Aerosol_Depth",
+    "id":           "NEO_Aerosol_Depth",
     "name":         "Light to Brown",
     "description":  "Aerosol Optical Depth",
     "input":        "neo/modis_aer_od.act"    
 },{
-    "id":           "Carbon_Monoxide",
+    "id":           "NEO_Carbon_Monoxide",
     "name":         "Light to Red",
     "description":  "Carbon Monoxide",
     "input":        "neo/mopitt_co.act"
 },{
-    "id":           "Water_Vapor",
+    "id":           "NEO_Water_Vapor",
     "name":         "White to Blue",
     "description":  "Water Vapor",
     "input":        "neo/modis_sky_wv.act"

@@ -725,7 +725,8 @@
         "properties": {
             "layer": "MODIS_Terra_Aerosol",
             "format": "image/png",
-            "tileSize": [ 512, 512 ]
+            "tileSize": [ 512, 512 ],
+            "tileClass": "Worldview.Map.CanvasTile"
         },
 
         "projections": {

@@ -154,9 +154,13 @@ $(function() {
         var products = Worldview.extractFromQuery("products", qs);
         var time = Worldview.extractFromQuery("time", qs);
         var s = Worldview.extractFromQuery("switch", qs);
-
+        
         qs = "?map="+map+"&products="+products+"&time="+time+"&switch="+s;
-            
+        
+        var palettes = Worldview.extractFromQuery("palettes");
+        if ( palettes ) {
+            qs += "&palettes=" + palettes;
+        }    
         var url = window.location.href;
         var prefix = url.split("?")[0];
         prefix = (prefix !== null && prefix !== undefined) ? prefix: url;

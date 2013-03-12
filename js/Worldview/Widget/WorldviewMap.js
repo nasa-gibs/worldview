@@ -28,25 +28,20 @@ Worldview.namespace("Widget");
  * spec.onReady - function to be invoked once the map has read in the 
  *                configuration and is ready to be used. 
  */
-Worldview.Widget.WorldviewMap = function(containerId, spec) { 
+Worldview.Widget.WorldviewMap = function(containerId, config) { 
 
     var ns = Worldview.Widget;
-
-    var onReady = function() {
-        // FIXME: This is a major hack. Events that the map needs to initialize
-        // might occur before the map is ready. Once the map is ready, there
-        // is no easy way to find out what the current state is supposed to
-        // be. Just force an update using the current permalink. 
-        self.updateComponent(Worldview.Permalink.fromRegistry());
-        setExtentToLeading();
-    };
-    spec.onReady = onReady;
     
-    var self = ns.Map(containerId, spec);
+    var self = ns.Map(containerId, config);
     
     var log = Logging.Logger("Worldview.Map");
     var lastState = {};
     var last = null;
+    
+    var init = function() {
+        //Logging.debug("Worldview.Map");
+        setExtentToLeading();
+    };
     
     /**
      * Method: updateComponent
@@ -59,9 +54,6 @@ Worldview.Widget.WorldviewMap = function(containerId, spec) {
      */    
     self.updateComponent = function(queryString) { 
         try {
-            if ( !self.isReady() ) {
-                return;
-            }
             if ( !(self.productMap.projection in lastState) ) {
                 lastState[self.productMap.projection] = {};
             }
@@ -70,9 +62,13 @@ Worldview.Widget.WorldviewMap = function(containerId, spec) {
             if ( last.queryString === queryString ) {
                 return;
             }
+            log.debug("WorldviewMap.updateComponent.queryString: " + 
+                    queryString);
             var state = Worldview.queryStringToObject(queryString);
             state.productsString = state.products;
             state.products = splitProducts(state);
+            state.palettesString = state.palettes;
+            state.palettes = splitPalettes(state);
             
             log.debug(state);     
             
@@ -90,6 +86,9 @@ Worldview.Widget.WorldviewMap = function(containerId, spec) {
                 self.productMap.set(state.products);
             } else if ( state.productsString !== last.productsString ) {
                 self.productMap.set(state.products);
+                // If the products changed, force setting the palettes
+                // again
+                last.palettesString = "";
             }
             if ( state.time !== last.time ) {
                 if ( state.time === undefined ) {
@@ -103,7 +102,9 @@ Worldview.Widget.WorldviewMap = function(containerId, spec) {
                 }
                 self.productMap.setDay(new Date(state.time));
             }           
-
+            if ( state.palettesString !== last.palettesString ) {
+                self.productMap.setPalettes(state.palettes);
+            }
             last = state;
             last.queryString = queryString;
             lastState[self.productMap.projection] = last;
@@ -150,7 +151,7 @@ Worldview.Widget.WorldviewMap = function(containerId, spec) {
      */    
     var splitProducts = function(state) {
         var results = [];
-        if ( state.products === undefined ) {
+        if ( !state.products ) {
             return results;
         }
         var sets = state.products.split("~");
@@ -163,8 +164,24 @@ Worldview.Widget.WorldviewMap = function(containerId, spec) {
             }
         }
         return results;
-    }
+    };
     
+    var splitPalettes = function(state) {
+        var results = {};
+        if ( !state.palettes ) {
+            return results;
+        }
+        var definitions = state.palettes.split("~");
+        $.each(definitions, function(index, definition) {
+            var items = definition.split(",");
+            var product = items[0];
+            var palette = items[1];
+            results[product] = palette;
+        });
+        return results;
+    };
+    
+    init();
     return self;
 }
         

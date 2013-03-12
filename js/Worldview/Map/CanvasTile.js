@@ -54,6 +54,8 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
 	canvas: null,
 
 	initialize: function(layer, position, bounds, url, size, options) {
+	    // This is required or the browser will throw security exceptions
+        this.crossOriginKeyword = "anonymous";
 		OpenLayers.Tile.Image.prototype.initialize.apply(this, arguments);
 	},
 	
@@ -118,7 +120,7 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
 		var canvas = this.getCanvas();
 		return this.frame ? this.frame : canvas;
 	},
-
+    
 	/*
 	 * Draws the loaded image to the canvas and applies a lookup table if
 	 */
@@ -126,7 +128,8 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
 	    var graphics = this.canvas.getContext("2d");
         
         OpenLayers.Event.stopObservingElement(this.imgDiv);
-		
+        
+        //this.imgDiv.removeAttribute("crossorigin");		
 		this.canvas.width = this.imgDiv.width;
 		this.canvas.height = this.imgDiv.height;
 		
@@ -139,25 +142,23 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
 			var pixels = imageData.data;
 				
 			for ( var i = 0; i < pixels.length; i += 4 ) {
-                var lookup = 
-                    (pixels[0] << 24) |
-                    (pixels[1] << 16) |
-                    (pixels[2] << 8)  |
-                    pixels[3];
-                    
+                var lookup = pixels[i + 0] + "," + 
+                             pixels[i + 1] + "," + 
+                             pixels[i + 2] + "," + 
+                             pixels[i + 3];
 				var color = lookupTable[lookup];
 				if ( color ) {
-					pixels[0] = color >> 24 & 0xff;
-					pixels[1] = color >> 16 & 0xff;
-					pixels[2] = color >> 8 & 0xff;
-					pixels[3] = color & 0xff;
+					pixels[i + 0] = color.r
+					pixels[i + 1] = color.g
+					pixels[i + 2] = color.b
+					pixels[i + 3] = 0xff;
 				}
 			}
-		}
+            graphics.putImageData(imageData, 0, 0);		
+		} 
 		
 		this.canvas.style.visibility = "inherit";
 		this.canvas.style.opacity = this.layer.opacity;
-		
 		this.isLoading = false;
 		this.canvasContext = null;
 		this.events.triggerEvent("loadend");

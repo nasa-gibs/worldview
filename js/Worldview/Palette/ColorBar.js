@@ -70,6 +70,8 @@ Worldview.Palette.ColorBar = function(spec) {
      */
     self.bins = spec.bins || 255;
     
+    self.stops = spec.stops || null;
+    
     /**
      * Property: palette
      * 
@@ -126,22 +128,31 @@ Worldview.Palette.ColorBar = function(spec) {
         var lut = ( self.palette.table ) 
             ? self.palette.table 
             : ns.toLookup(self.bins, self.palette);
-
-        var binWidth = canvas.width / self.bins;
-        
-        // Each drawn stripe for the bin must be at least one pixel wide or
-        // the background will leak through due to rounding errors.
-        var stripeWidth = ( binWidth < 1 ) ? 1 : binWidth;
         
         for ( var bin = 0; bin < self.bins; bin++ ) {
+            var left;
+            var width;
+            
+            // If the bins are and not evenly spaced out, use the provided
+            // stops.
+            if ( self.stops ) {
+                var nextStop = ( bin < self.bins - 1 ) 
+                        ? self.stops[bin + 1] : 1.0;
+                left = Math.floor(self.stops[bin] * canvas.width); 
+                width = Math.ceil(canvas.width * 
+                        (nextStop - self.stops[bin]));
+            } else {
+                left = Math.floor(bin * (canvas.width / self.bins));
+                width = Math.ceil(canvas.width / self.bins);
+            }
+            
             // Only draw if there is a lookup entry and it is not completely
             // transparent
             if ( lut[bin] && lut[bin].a !== 0 ) {
                 // Always draw with no transparency
                 g.fillStyle = "rgba(" + 
                     [lut[bin].r, lut[bin].g, lut[bin].b, 0xff].join() + ")";
-                g.fillRect(Math.floor(bin * binWidth), 0, 
-                           stripeWidth, canvas.height);
+                g.fillRect(left, 0, width, canvas.height);
            }
         }
     }

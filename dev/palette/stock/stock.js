@@ -11,18 +11,18 @@ $(function() {
             '</div>'   
         ].join("\n"));
         
-        for ( var i = 0; i < data.length; i++ ) {
-            var entry = data[i];
+        var palettes = data.palettes;
+        $.each(palettes, function(name, palette) {
             $("#palettes").append(colorBarTemplate({
-                name: entry.name,
-                id: entry.id
+                name: name,
+                id: name
             }));
             ColorBar({
-                selector: "#" + entry.id,
+                selector: "#" + name,
                 bins: 255,
-                palette: entry
-            });
-        }
+                palette: palette
+            });            
+        });
     }
     
     var onError = function(jqXHR, textStatus, errorThrown) {
@@ -31,7 +31,7 @@ $(function() {
     }
     
     $.ajax({
-        url: "../../../data/palettes",
+        url: "../../../data/config",
         dataType: "json",
         success: onLoad,
         error: onError

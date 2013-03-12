@@ -58,6 +58,8 @@ Worldview.Map.DailyProduct = function(map, config) {
     // The day of the data displayed on the map
     var currentDay;
     
+    var lookupTable = null;
+    
     //-------------------------------------------------------------------------
     // Public
     //-------------------------------------------------------------------------
@@ -77,7 +79,11 @@ Worldview.Map.DailyProduct = function(map, config) {
      * d - The day to display.
      */
     self.setDay = function(d) {
-        currentDay = Worldview.toISODateString(d);
+        var ds = Worldview.toISODateString(d);
+        if ( ds === currentDay ) {
+            return;
+        }
+        currentDay = ds;
         
         var previousLayer = currentLayer;
         
@@ -87,7 +93,7 @@ Worldview.Map.DailyProduct = function(map, config) {
         }
         
         // If the layer has already been created, set it as the current
-        // lyaer.
+        // layer.
         if ( currentDay in validLayers ) {
             currentLayer = validLayers[currentDay];
             
@@ -101,6 +107,9 @@ Worldview.Map.DailyProduct = function(map, config) {
         // Otherwise, create a new layer
         } else { 
             currentLayer = self.createLayer();
+            if ( lookupTable != null ) {
+                currentLayer.lookupTable = lookupTable;
+            }
             currentLayer.mergeNewParams({ time: currentDay });
             validLayers[currentDay] = currentLayer;
             map.addLayer(currentLayer);
@@ -117,6 +126,26 @@ Worldview.Map.DailyProduct = function(map, config) {
             previousLayer.setZIndex(zIndex);
         }        
         currentLayer.setZIndex(zIndex + 1);
+    };
+    
+    self.setLookup = function(lookup) {
+        $.each(validLayers, function(index, layer) {
+            layer.lookupTable = lookup;
+        });
+        $.each(invalidLayers, function(index, layer) { 
+            layer.lookupTable = lookup;
+        });     
+        lookupTable = lookup;       
+    };
+    
+    self.clearLookup = function() {
+        $.each(validLayers, function(index, layer) {
+            delete layer.lookupTable;
+        });
+        $.each(invalidLayers, function(index, layer) { 
+            delete layer.lookupTable;
+        });         
+        lookupTable = null; 
     };
     
     /**
@@ -161,7 +190,7 @@ Worldview.Map.DailyProduct = function(map, config) {
         validLayers = {};
         $.each(invalidLayers, function(index, layer) { 
             map.removeLayer(layer);
-        })
+        });
         invalidLayers = {};
         map.events.unregister("movestart", self, onMoveStart);
         map.events.unregister("zoomend", self, onZoomEnd);        

@@ -226,6 +226,36 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
         refreshZOrder();   
     };
     
+    self.setPalettes = function(activePalettes) {
+        $.each(activeMaps, function(projection, map) {
+            $.each(map.products, function(name, product) {
+                if ( name in activePalettes ) {
+                    var productConfig = self.mapConfig.products[name];
+                    var renderedName = productConfig.rendered;
+                    var renderedPalette = self.mapConfig.palettes[renderedName];
+                    var paletteName = activePalettes[name];
+                    var palette = self.mapConfig.palettes[paletteName];
+                    var indexed = Worldview.Palette.toLookup(
+                        productConfig.bins, palette);
+                    var lookup = Worldview.Palette.mapLookup(
+                        indexed, renderedPalette.stops);     
+                    product.setLookup(lookup);
+                } else {
+                    product.clearLookup();
+                }
+            });
+        });
+    };
+
+    self.clearLookup = function(product, lookup) {
+        $.each(products, function(projection, activeProducts) {
+            var index = $.inArray(product, products);
+            if ( index >= 0 ) {
+                products[index].clearLookup(lookup);
+            }    
+        });
+    };
+        
     //-------------------------------------------------------------------------
     // Private
     //-------------------------------------------------------------------------
