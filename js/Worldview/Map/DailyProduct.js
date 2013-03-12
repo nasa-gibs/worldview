@@ -131,6 +131,7 @@ Worldview.Map.DailyProduct = function(map, config) {
     self.setLookup = function(lookup) {
         $.each(validLayers, function(index, layer) {
             layer.lookupTable = lookup;
+            layer.redraw();
         });
         $.each(invalidLayers, function(index, layer) { 
             layer.lookupTable = lookup;

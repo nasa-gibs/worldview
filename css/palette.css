@@ -1,8 +1,10 @@
-.palette {
+/*
+.colorBar {
     width: 100px;
-    height: 14px;
+    height: 30px;
     border: 2px solid #aaaaaa;
 }
+*/
 
 #xpalette-selector .dd-selected-image {
     margin-top: 14px;

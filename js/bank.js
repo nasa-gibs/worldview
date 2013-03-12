@@ -72,6 +72,7 @@ SOTE.widget.Bank = function(containerId, config){
 	this.initRenderComplete = false;
 	this.dataSourceUrl = config.dataSourceUrl;
 	this.statusStr = "";
+	this.paletteManager = config.paletteManager;
 	this.init();
 	//this.updateComponent(this.id+"=baselayers.MODIS_Terra_CorrectedReflectance_TrueColor-overlays.fires48.AIRS_Dust_Score.OMI_Aerosol_Index")
 
@@ -179,7 +180,7 @@ SOTE.widget.Bank.prototype.render = function(){
 		categoryTitle.innerHTML = this.categories[i];
 		categoryTitleEl.appendChild(categoryTitle);
 		category.appendChild(categoryTitleEl);
-		
+				
 		if(this.values !== null && this.values[formattedCategoryName.toLowerCase()]){
 			for(var j=0; j<this.values[formattedCategoryName.toLowerCase()].length; j++){
 				var item = document.createElement("li");
@@ -251,6 +252,8 @@ SOTE.widget.Bank.prototype.render = function(){
 
 SOTE.widget.Bank.prototype.renderCanvases = function(){
 
+    var self = this;
+    
 	for(var i=0; i<this.categories.length; i++){
 		var formattedCategoryName = this.categories[i].replace(/\s/g, "");
 		if(this.values !== null && this.values[formattedCategoryName.toLowerCase()]){
@@ -260,6 +263,9 @@ SOTE.widget.Bank.prototype.renderCanvases = function(){
 				if(m.palette){
 					var width = 100/m.palette.length;
 					var canvas = document.getElementById("canvas"+val);
+					canvas.onclick = function() {
+					    self.paletteManager.displaySelector(val);
+					};
 					var context = canvas.getContext('2d');
 					for(var k=0; k<m.palette.length; ++k){
 						context.fillStyle = "rgba("+ m.palette[k] +")";

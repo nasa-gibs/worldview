@@ -94,10 +94,10 @@ Worldview.Palette.ColorBar = function(spec) {
     var init = function() {
         if ( spec.canvas ) {
             canvas = spec.canvas;
-        } else {
+        } else if ( spec.selector ) {
             $canvas = $(spec.selector);
             if ( $canvas.length === 0 ) {
-                throw "No such canavs element (" + spec.selector + 
+                throw "No such canvas element (" + spec.selector + 
                       ") for the ColorBar";
             }
             canvas = $canvas.get(0);
@@ -106,6 +106,10 @@ Worldview.Palette.ColorBar = function(spec) {
             // them the same or scaling will occur.
             canvas.width = $canvas.width();
             canvas.height = $canvas.height();
+        } else {
+            canvas = docuemnt.createElement("canvas");
+            canvas.width = spec.width;
+            canvas.height = spec.height;
         }
          
         g = canvas.getContext("2d");
@@ -155,6 +159,10 @@ Worldview.Palette.ColorBar = function(spec) {
                 g.fillRect(left, 0, width, canvas.height);
            }
         }
+    }
+    
+    self.toImage = function() {
+        return canvas.toDataURL("image/png");
     }
     
     //-------------------------------------------------------------------------

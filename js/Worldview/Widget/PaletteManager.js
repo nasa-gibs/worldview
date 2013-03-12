@@ -39,12 +39,53 @@ Worldview.Widget.PaletteManager = function(containerId, config) {
             value = v;
             REGISTRY.fire(self);
         }
-    }
+    };
     
     self.getValue = function() {
         return containerId + "=" + value;
-    }
+    };
     
+    self.displaySelector = function(product) { 
+        var dialog = new YAHOO.widget.Panel("palette-selector-dialog", {
+            width: "300px", 
+            height: "500px",
+            zIndex: 1020, 
+            visible: false 
+        });
+        dialog.setHeader("Select palette");
+        dialog.setBody("<div id='palette-selector'></div>");
+        dialog.render(document.body);
+        dialog.show();
+        dialog.center();
+        dialog.hideEvent.subscribe(function(i) {
+            setTimeout(function() {dialog.destroy();}, 25);
+        });       
+        
+        var palettes = [];
+        var canvas = document.createElement("canvas");
+        canvas.width = 100;
+        canvas.height = 14;
+        
+        $.each(self.config.palettes, function(name, p) {
+            if ( p.source === "stock" ) {
+                var cb = Worldview.Palette.ColorBar({canvas: canvas, palette: p});
+                p.image = cb.toImage();
+                palettes.push(p);
+            }       
+        });
+   
+        var paletteSelector = Worldview.Palette.PaletteSelector({
+            selector: "#palette-selector",
+            palettes: palettes
+        });
+                 
+        paletteSelector.addSelectionListener(function(palette) {
+            console.log(palette); 
+            self.setValue(product + "," + palette.id);
+        });
+                                 
+    };
+
     self.loadFromQuery = function(queryString) {
         log.debug("PaletteManager.loadFromQuery: " + queryString);
         var query = Worldview.queryStringToObject(queryString);
