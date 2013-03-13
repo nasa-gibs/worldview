@@ -1,0 +1,24 @@
+{
+    "description": "SEDAC Global Volcano Hazard Frequency and Distribution, v1 (1980\u20132000)",
+    "name": "Volcano Hazard:Frequency and Distribution",
+    "parameters": {
+        "format": "image/png",
+        "layers": "ndh-volcano-hazard-frequency-distribution",
+        "transparent": "true"
+    },
+    "product": "static",
+    "projections": {
+        "geographic": {}
+    },
+    "properties": {
+        "opacity": 0.75,
+        "tileSize": [
+            512,
+            512
+        ]
+    },
+    "type": "wms",
+    "url": [
+        "http://sedac.ciesin.columbia.edu/geoserver/ows"
+    ]
+}

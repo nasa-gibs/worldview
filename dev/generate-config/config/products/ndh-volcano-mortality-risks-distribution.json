@@ -1,0 +1,24 @@
+{
+    "description": "SEDAC Global Volcano Mortality Risks and Distribution, v1 (2000)",
+    "name": "Volcano Hazard:Mortality Risk",
+    "parameters": {
+        "format": "image/png",
+        "layers": "ndh-volcano-mortality-risks-distribution",
+        "transparent": "true"
+    },
+    "product": "static",
+    "projections": {
+        "geographic": {}
+    },
+    "properties": {
+        "opacity": 0.75,
+        "tileSize": [
+            512,
+            512
+        ]
+    },
+    "type": "wms",
+    "url": [
+        "http://sedac.ciesin.columbia.edu/geoserver/ows"
+    ]
+}

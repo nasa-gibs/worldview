@@ -1,0 +1,25 @@
+{
+    "description": "Space-Track.org / Terra",
+    "name": "Orbital Track (Descending)",
+    "parameters": {
+        "format": "image/png",
+        "layers": "Terra_Orbit_Dsc",
+        "transparent": "true"
+    },
+    "product": "daily",
+    "projections": {
+        "geographic": {}
+    },
+    "properties": {
+        "tileSize": [
+            512,
+            512
+        ]
+    },
+    "type": "wms",
+    "url": [
+        "http://map2a.vis.earthdata.nasa.gov/wms/wms.php",
+        "http://map2b.vis.earthdata.nasa.gov/wms/wms.php",
+        "http://map2c.vis.earthdata.nasa.gov/wms/wms.php"
+    ]
+}

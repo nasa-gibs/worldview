@@ -1,0 +1,24 @@
+{
+    "description": "SEDAC Global Cyclone Mortality Risks and Distribution, v1 (2000)",
+    "name": "Cyclone Hazard:Mortality Risk",
+    "parameters": {
+        "format": "image/png",
+        "layers": "ndh-cyclone-mortality-risks-distribution",
+        "transparent": "true"
+    },
+    "product": "static",
+    "projections": {
+        "geographic": {}
+    },
+    "properties": {
+        "opacity": 0.75,
+        "tileSize": [
+            512,
+            512
+        ]
+    },
+    "type": "wms",
+    "url": [
+        "http://sedac.ciesin.columbia.edu/geoserver/ows"
+    ]
+}

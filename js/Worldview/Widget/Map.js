@@ -180,10 +180,16 @@ Worldview.Widget.Map = function(containerId, config) {
      * configuration.
      */
     var validateConfig = function(config) {
-        var keys = ["defaultProjection", "projections", "products"];
-        $.each(keys, function(index, key) {
+        var root = ["config", "projections", "products"];
+        $.each(root, function(index, key) {
             if ( !(key in config) ) {
                 throw key + " is required in the map configuration";
+            }
+        });
+        var _config = ["defaultProjection"];
+        $.each(_config, function(index, key) {
+            if ( !(key in config.config) ) {
+                throw "config." + key + " is required in the map configuraiton";
             }
         });
         return config;

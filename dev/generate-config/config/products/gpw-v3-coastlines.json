@@ -1,0 +1,26 @@
+{
+    "description": "SEDAC / Coastlines v3",
+    "name": "Coastlines",
+    "parameters": {
+        "bringToFront": "true",
+        "format": "image/png",
+        "layers": "gpw-v3-coastlines",
+        "transitionEffect": "none",
+        "transparent": "true"
+    },
+    "product": "static",
+    "projections": {
+        "geographic": {}
+    },
+    "properties": {
+        "opacity": 0.85,
+        "tileSize": [
+            512,
+            512
+        ]
+    },
+    "type": "wms",
+    "url": [
+        "http://sedac.ciesin.columbia.edu/geoserver/ows"
+    ]
+}

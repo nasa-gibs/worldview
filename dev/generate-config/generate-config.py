@@ -1,103 +1,65 @@
 #!/usr/bin/python
-
-import json
+#
+# NASA Worldview
+# 
+# This code was originally developed at NASA/Goddard Space Flight Center for
+# the Earth Science Data and Information System (ESDIS) project. 
+#
+# Copyright (C) 2013 United States Government as represented by the 
+# Administrator of the National Aeronautics and Space Administration.
+# All Rights Reserved.
+#
 import os
+from optparse import OptionParser
 import sys
+import json
 
+prog = os.path.basename(__file__)
 basedir = os.path.dirname(__file__)
+version = "1.0.0"
+help_description = """\
+Concatenates all configuration items in the config directory into one
+configuration file written to standard out.
+"""
 
-def palettes_v03():
-    index_file = open("%s/palettes/v03/index.json" % basedir)
-    index = json.load(index_file)
+parser = OptionParser(usage="Usage: %s [options]" % prog,
+                      version="%s version %s" % (prog, version),
+                      epilog=help_description)
+parser.add_option("-m", "--minify", action="store_true",
+                  help="minify the output instead of pretty printing")
+parser.add_option("-v", "--verbose", action="store_true",
+                  help="prints files being collected to standard error")
 
-    for item in index:
-        with open("%s/palettes/v03/%s" % (basedir, item["filename"])) as fp:
-            v03_meta = json.load(fp)
-        v03_palettes = v03_meta["palettes"]
-        for include in item["include"]:
-            if "as" in include:
-                palette_name = include["as"]
-            else:
-                palette_name = include["name"]
-            product_name = include["name"]
-            v03_palette = v03_palettes[product_name]["palette"]
-            v03_count = len(v03_palette)
-            previous_color = None
-            palette = []
-            use_bin_stops = False
-            bin_stops = []
-            for index, entry in enumerate(v03_palette):
-                if previous_color != entry:
-                    colors = entry.split(",");
-                    palette += [{
-                        "at": index / float(v03_count), 
-                        "r": colors[0],
-                        "g": colors[1],
-                        "b": colors[2],
-                        "a": colors[3]
-                    }]
-                    bin_stops += [index / float(v03_count)]
-                    previous_color = entry
-                else:
-                    use_bin_stops = True
-                base["palettes"][palette_name] = {
-                    "id": palette_name, 
-                    "source": "rendered",
-                    "type": "solid",
-                    "stops": palette
-                }
-                v03_product = v03_palettes[product_name]
-                product = base["products"][product_name]
-                product["min"] = v03_product["min"]
-                product["max"] = v03_product["max"]
-                product["units"] = v03_product["units"]
-                product["rendered"] = palette_name
-                product["bins"] = len(palette)
-                if use_bin_stops:
-                    product["stops"] = bin_stops
-                product["properties"]["tileClass"] = "Worldview.Map.CanvasTile"
+(options, args) = parser.parse_args()
+if len(args) != 0:
+    parser.error("Invalid number of arguments")
 
-def palettes_stock_act():    
-    with open("%s/palettes/act/index.json" % basedir) as fp:
-        index = json.load(fp)
-    for act in index:
-        with open("%s/palettes/act/%s" % (basedir, act["input"])) as fp:
-            data = fp.read()
-            lut = []
-            for i in xrange(0, 255 * 3, 3):
-                entry = {
-                    "at": str(i / 3.0 / 256.0),
-                    "r": ord(data[i]),
-                    "g": ord(data[i+1]),
-                    "b": ord(data[i+2]),
-                    "a": 255
-                }
-                lut += [entry]
-            base["palettes"][act["id"]] = {
-                "id": act["id"],
-                "name": act["name"],
-                "description": act["description"],
-                "source": "stock",
-                "stops": lut
-            }
-        
+config = {}
 
-with open("%s/base.json" % basedir) as fp:
-    base = json.load(fp)
-base["palettes"] = {}
+for root, dirs, files in os.walk("%s/config" % basedir):
+    this_dir = os.path.basename(root)
+    if this_dir == "config":
+        current = config
+    else:
+        current = config[this_dir]
 
-palettes_v03()
-palettes_stock_act()
+    for dir in dirs:
+        current[dir] = {}
+    for file in files:
+        if options.verbose:
+            sys.stderr.write("%s/%s\n" % (root, file))
+        id = os.path.splitext(file)[0]
+        with open(os.path.join(root, file)) as fp:
+            item = json.load(fp)
+        current[id] = item
 
-if len(sys.argv) >= 2 and (sys.argv[1] == "-c" or sys.argv[1] == "--compact"):
-    print json.dumps(base, sort_keys=True)
-else:
-    print json.dumps(base, sort_keys=True,
-                     indent=4, separators=(',', ': '))
+json_options = {
+    "sort_keys": True
+}
+if not options.minify:
+    json_options["indent"] = 4
+    json_options["separators"] = (',', ': ')
 
- 
-            
+print json.dumps(config, **json_options)
 
-
-            
 

@@ -1,0 +1,25 @@
+{
+    "description": "Space-Track.org / Aura",
+    "name": "Orbital Track (Descending)",
+    "parameters": {
+        "format": "image/png",
+        "layers": "Aura_Orbit_Dsc",
+        "transparent": "true"
+    },
+    "product": "daily",
+    "projections": {
+        "geographic": {}
+    },
+    "properties": {
+        "tileSize": [
+            512,
+            512
+        ]
+    },
+    "type": "wms",
+    "url": [
+        "http://map2a.vis.earthdata.nasa.gov/wms/wms.php",
+        "http://map2b.vis.earthdata.nasa.gov/wms/wms.php",
+        "http://map2c.vis.earthdata.nasa.gov/wms/wms.php"
+    ]
+}

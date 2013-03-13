@@ -1,0 +1,14 @@
+{
+    "id": "MODIS_Sea_Ice",
+    "source": "rendered",
+    "stops": [
+        {
+            "a": "255",
+            "at": 0.0,
+            "b": "214",
+            "g": "112",
+            "r": "218"
+        }
+    ],
+    "type": "solid"
+}

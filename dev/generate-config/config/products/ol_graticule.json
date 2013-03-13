@@ -1,0 +1,9 @@
+{
+    "description": "OpenLayers / Graticule Control",
+    "name": "Latitude-Longitude Lines",
+    "product": "static",
+    "projections": {
+        "geographic": {}
+    },
+    "type": "graticule"
+}

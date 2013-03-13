@@ -1,0 +1,25 @@
+{
+    "description": "SEDAC GRUMP v1 Population Count 2000",
+    "name": "Population Density",
+    "parameters": {
+        "format": "image/png",
+        "layers": "grump-v1-population-count_2000",
+        "transparent": "true"
+    },
+    "product": "static",
+    "projections": {
+        "arctic": {},
+        "geographic": {}
+    },
+    "properties": {
+        "opacity": 0.55,
+        "tileSize": [
+            512,
+            512
+        ]
+    },
+    "type": "wms",
+    "url": [
+        "http://sedac.ciesin.columbia.edu/geoserver/ows"
+    ]
+}

@@ -1,0 +1,103 @@
+{
+    "bins": 9,
+    "description": "Terra / MODIS",
+    "max": "100",
+    "min": "1",
+    "name": "Snow Cover",
+    "product": "daily",
+    "projections": {
+        "antarctic": {
+            "matrixSet": "EPSG3031_500m",
+            "maxExtent": [
+                -4194304,
+                -4194304,
+                4194304,
+                4194304
+            ],
+            "maxResolution": 8192.0,
+            "serverResolutions": [
+                8192.0,
+                4096.0,
+                2048.0,
+                1024.0,
+                512.0
+            ],
+            "url": [
+                "http://map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                "http://map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                "http://map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
+            ]
+        },
+        "arctic": {
+            "matrixSet": "EPSG3995_500m",
+            "maxExtent": [
+                -4194304,
+                -4194304,
+                4194304,
+                4194304
+            ],
+            "maxResolution": 8192.0,
+            "serverResolutions": [
+                8192.0,
+                4096.0,
+                2048.0,
+                1024.0,
+                512.0
+            ],
+            "url": [
+                "http://map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                "http://map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                "http://map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
+            ]
+        },
+        "geographic": {
+            "matrixSet": "EPSG4326_500m",
+            "maxExtent": [
+                -180,
+                -90,
+                180,
+                90
+            ],
+            "maxResolution": 0.5625,
+            "serverResolutions": [
+                0.5625,
+                0.28125,
+                0.140625,
+                0.0703125,
+                0.03515625,
+                0.017578125,
+                0.0087890625,
+                0.00439453125
+            ],
+            "url": [
+                "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+            ]
+        }
+    },
+    "properties": {
+        "format": "image/png",
+        "layer": "MODIS_Terra_Snow_Cover",
+        "tileClass": "Worldview.Map.CanvasTile",
+        "tileSize": [
+            512,
+            512
+        ]
+    },
+    "rendered": "MODIS_Snow_Cover",
+    "startDate": "2012-04-07",
+    "stops": [
+        0.0,
+        0.19,
+        0.29,
+        0.39,
+        0.49,
+        0.59,
+        0.69,
+        0.79,
+        0.89
+    ],
+    "type": "wmts",
+    "units": "%"
+}
