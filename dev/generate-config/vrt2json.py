@@ -149,12 +149,13 @@ def main():
             error("no color table found for %s; skipping" % vrt_filename)
             continue
 
-        # Only output "valid" range of palette indices
         previous_color = ""
         bins = vrt_meta["maxIndex"] - vrt_meta["minIndex"] + 1
         bin_stops = []
         use_bin_stops = False
         color_stops = []
+
+        # Only output "valid" range of palette indices
         for i in xrange(vrt_meta["minIndex"], vrt_meta["maxIndex"] + 1):
             bin = i - vrt_meta["minIndex"]
             entry = colorTableVals[i]
@@ -166,7 +167,11 @@ def main():
                 bin_stops += [entry["at"]]
                 color_stops += [entry]
             else:
+                # If the bins are likely to not be evenly spaced out 
+                # (e.g., previous color repeats), color stop definitions
+                # will need to be added to the product config
                 use_bin_stops = True
+
         palette_file_name = os.path.join(output_dir, 
                                          "%s.json" % vrt_meta["id"])
         notify("Writing palette: %s" % palette_file_name)
@@ -179,23 +184,30 @@ def main():
             }
             json.dump(palette, fp, sort_keys=True, indent=4,
                       separators=(',', ': '))
-        
+
+        # Product configurations needs to be updated to include the
+        # the number of bins, bin stops if necessary, and the name
+        # of the color palette it is rendered in.
         for product_id in vrt_meta["products"]:
             product_file_name = os.path.join(options.products_dir,
                                              "%s.json" % product_id)
             if not os.path.exists(product_file_name):
                 error("No such product configuration: %s" % product_file_name)
                 continue
+
             notify("Modifying product %s" % product_file_name)
             with open(product_file_name) as fp:
                 product = json.load(fp)
+
             product["bins"] = bins
             product["rendered"] = vrt_meta["id"]
             if use_bin_stops:
                 product["stops"] = bin_stops
             else:
+                # Delete any existing definitions just in case
                 if "stops" in product:
                     del product["stops"]
+
             with open(product_file_name, "w") as fp:
                 json.dump(product, fp, sort_keys=True, indent=4,
                           separators=(',', ': '))
