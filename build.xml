@@ -81,7 +81,7 @@
         <delete dir="${build.dir}/config"/>
         <mkdir dir="${build.dir}/config/"/>
             
-        <copy todir="${build.dir}/config">
+        <copy todir="${build.dir}/config" includeEmptyDirs="true">
             <fileset dir="${basedir}/dev/generate-config/config"/>
         </copy>
             

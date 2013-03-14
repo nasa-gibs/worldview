@@ -64,6 +64,8 @@ for root, dirs, files in os.walk(options.config_dir):
     for dir in dirs:
         current[dir] = {}
     for file in files:
+        if os.path.splitext(file)[1] != ".json":
+            continue
         notify("Reading: %s/%s\n" % (root, file))
         id = os.path.splitext(file)[0]
         with open(os.path.join(root, file)) as fp:
