@@ -85,7 +85,6 @@ Worldview.Widget.PaletteManager = function(containerId, config) {
         });
                  
         paletteSelector.addSelectionListener(function(palette) {
-            console.log(palette); 
             self.setValue(product + "," + palette.id);
         });
                                  
