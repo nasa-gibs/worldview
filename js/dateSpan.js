@@ -32,7 +32,7 @@ SOTE.widget.DateSpan = function(containerId, config){
     this.sliders = new Object();
 	this.sliders["Year"] = [2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013];
 	this.sliders["Month"] = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-	this.sliders["Day"] = [01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
+	this.sliders["Day"] = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
  	this.months = [31,28,31,30,31,30,31,31,30,31,30,31];
  
     this.sliderContent = [];
