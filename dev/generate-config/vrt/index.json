@@ -142,5 +142,31 @@
     "minIndex": 17,
     "maxIndex": 217,
     "products": [ "OMI_Cloud_Pressure" ]
+},
+{
+    "id": "OMI_SO2_Lower_Troposphere",
+    "filename": "rendered/OMI_SO2_TRL_template.vrt",
+    "minIndex": 99,
+    "maxIndex": 217,
+    "products": [ "OMI_SO2_Lower_Troposphere" ]
+},
+{
+    "id": "OMI_SO2_Middle_Troposphere_to_Stratosphere",
+    "filename": "rendered/OMI_SO2_ASTL_TRM_template.vrt",
+    "minIndex": 61,
+    "maxIndex": 217,
+    "products": [
+        "OMI_SO2_Middle_Troposphere",
+	"OMI_SO2_Upper_Troposphere_and_Stratosphere"
+    ]
+},
+{
+    "id": "OMI_SO2_Planetary_Boundary_Layer",
+    "filename": "rendered/OMI_SO2_PBL_template.vrt",
+    "minIndex": 139,
+    "maxIndex": 217,
+    "products": [ "OMI_SO2_Planetary_Boundary_Layer" ]
 }
 ]
+
+
