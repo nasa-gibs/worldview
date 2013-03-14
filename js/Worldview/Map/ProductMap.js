@@ -236,7 +236,7 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
                     var paletteName = activePalettes[name];
                     var palette = self.mapConfig.palettes[paletteName];
                     var indexed = Worldview.Palette.toLookup(
-                        productConfig.bins, palette);
+                        productConfig.bins, palette, productConfig.stops);
                     var lookup = Worldview.Palette.mapLookup(
                         indexed, renderedPalette.stops);     
                     product.setLookup(lookup);

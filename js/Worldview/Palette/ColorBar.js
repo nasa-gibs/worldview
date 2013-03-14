@@ -131,7 +131,7 @@ Worldview.Palette.ColorBar = function(spec) {
         // palette definition to a lookup table.
         var lut = ( self.palette.table ) 
             ? self.palette.table 
-            : ns.toLookup(self.bins, self.palette);
+            : ns.toLookup(self.bins, self.palette, self.stops);
         
         for ( var bin = 0; bin < self.bins; bin++ ) {
             var left;
@@ -143,13 +143,14 @@ Worldview.Palette.ColorBar = function(spec) {
                 var nextStop = ( bin < self.bins - 1 ) 
                         ? self.stops[bin + 1] : 1.0;
                 left = Math.floor(self.stops[bin] * canvas.width); 
-                width = Math.ceil(canvas.width * 
-                        (nextStop - self.stops[bin]));
+                width = Math.ceil(canvas.width * (nextStop - self.stops[bin]));
             } else {
                 left = Math.floor(bin * (canvas.width / self.bins));
                 width = Math.ceil(canvas.width / self.bins);
             }
-            
+            if ( width < 1 ) { 
+                width = 1;
+            }
             // Only draw if there is a lookup entry and it is not completely
             // transparent
             if ( lut[bin] && lut[bin].a !== 0 ) {

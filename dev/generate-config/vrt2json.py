@@ -180,7 +180,7 @@ def main():
                 "id": vrt_meta["id"],
                 "source": "rendered",
                 "stops": color_stops,
-                "type": "solid",
+                #"type": "solid",
             }
             json.dump(palette, fp, sort_keys=True, indent=4,
                       separators=(',', ': '))
@@ -199,7 +199,7 @@ def main():
             with open(product_file_name) as fp:
                 product = json.load(fp)
 
-            product["bins"] = bins
+            product["bins"] = len(bin_stops)
             product["rendered"] = vrt_meta["id"]
             if use_bin_stops:
                 product["stops"] = bin_stops

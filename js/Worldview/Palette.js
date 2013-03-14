@@ -73,7 +73,7 @@ $(function() {
      * Returns:
      * A <Lookup>.
      */
-    ns.toLookup = function(bins, palette) {        
+    ns.toLookup = function(bins, palette, binStops) {        
         var stops = palette.stops;
         var lut = [];
         
@@ -86,8 +86,15 @@ $(function() {
         
         for ( var bin = 0; bin < bins; bin++ ) {
             // Percentange this bin is located at along the range.
-            var distance = bin / (bins - 1); 
-
+            var distance;
+            if ( binStops ) {
+                // Select the middle of the bin when trying to fit this in
+                var nextStop = ( bin < bins - 1 ) ? binStops[bin + 1] : 1.0;
+                distance = binStops[bin] + ((nextStop - binStops[bin]) / 2.0);
+            } else { 
+                distance = bin / (bins - 1); 
+            }
+            
             // If the current distance is greater than the current stop,
             // keep advancing until that is not true.
             for ( var i = currentStop; i < stops.length; i++ ) {

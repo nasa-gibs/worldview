@@ -68,7 +68,12 @@ Worldview.Widget.PaletteManager = function(containerId, config) {
         
         $.each(self.config.palettes, function(name, p) {
             if ( p.source === "stock" ) {
-                var cb = Worldview.Palette.ColorBar({canvas: canvas, palette: p});
+                var cb = Worldview.Palette.ColorBar({
+                    canvas: canvas, 
+                    palette: p, 
+                    bins: self.config.products[product].bins,
+                    stops: self.config.products[product].stops
+                });
                 p.image = cb.toImage();
                 palettes.push(p);
             }       
