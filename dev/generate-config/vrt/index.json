@@ -13,7 +13,7 @@
     "id": "AIRS_Dust_Score",
     "filename": "rendered/AIRS_Dust_template.vrt",
     "minIndex": 1,
-    "maxIndex": 252,
+    "maxIndex": 251,
     "products": ["AIRS_Dust_Score"]
 },
 {
@@ -124,5 +124,23 @@
 	"MODIS_Aqua_Water_Vapor_5km_Day",
 	"MODIS_Aqua_Water_Vapor_5km_Night"
     ]
+},
+{
+    "id": "OMI_Aerosol",
+    "filename": "rendered/OMI_Aerosol_template.vrt",
+    "minIndex": 128,
+    "maxIndex": 217,
+    "products": [
+        "OMI_Absorbing_Aerosol_Optical_Depth",
+ 	"OMI_Aerosol_Index",
+	"OMI_Aerosol_Optical_Depth"
+    ]
+},
+{
+    "id": "OMI_Cloud_Pressure",
+    "filename": "rendered/OMI_CloudPressure_template.vrt",
+    "minIndex": 17,
+    "maxIndex": 217,
+    "products": [ "OMI_Cloud_Pressure" ]
 }
 ]
