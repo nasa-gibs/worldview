@@ -1,0 +1,128 @@
+[
+{
+    "id": "AIRS_CO_Total_Column",
+    "filename": "rendered/AIRS_CO_template.vrt",
+    "minIndex": 198,
+    "maxIndex": 251,
+    "products": [
+        "AIRS_CO_Total_Column_Day",
+	"AIRS_CO_Total_Column_Night"
+    ]
+},
+{
+    "id": "AIRS_Dust_Score",
+    "filename": "rendered/AIRS_Dust_template.vrt",
+    "minIndex": 1,
+    "maxIndex": 252,
+    "products": ["AIRS_Dust_Score"]
+},
+{
+    "id": "AIRS_Prata_SO2_Index",
+    "filename": "rendered/AIRS_Prata_SO2_template.vrt",
+    "minIndex": 1,
+    "maxIndex": 251,
+    "products": [
+        "AIRS_Prata_SO2_Index_Day",
+	"AIRS_Prata_SO2_Index_Night"
+    ]
+},
+{
+    "id": "AIRS_Precipitation",
+    "filename": "rendered/AIRS_Precip_template.vrt",
+    "minIndex": 61,
+    "maxIndex": 251,
+    "products": [
+        "AIRS_Precipitation_Day",
+	"AIRS_Precipitation_Night"
+    ]
+},
+{
+    "id": "MODIS_Aerosol",
+    "filename": "rendered/MOR4ODLO_template.vrt",
+    "minIndex": 12,
+    "maxIndex": 21,
+    "products": [
+        "MODIS_Terra_Aerosol",
+	"MODIS_Aqua_Aerosol",
+	"MODIS_Combined_Value_Added_AOD"
+    ]
+},
+{
+    "id": "MODIS_Brightness_Temp_Band31",
+    "filename": "rendered/MOR2B31_colortable.vrt",
+    "minIndex": 1,
+    "maxIndex": 254,
+    "products": [
+        "MODIS_Terra_Brightness_Temp_Band31_Day",
+	"MODIS_Terra_Brightness_Temp_Band31_Night",
+	"MODIS_Aqua_Brightness_Temp_Band31_Day",
+	"MODIS_Aqua_Brightness_Temp_Band31_Night"
+    ]
+},
+{
+    "id": "MODIS_Cloud_Top_Pressure",
+    "filename": "rendered/MOR6CTP_template.vrt",
+    "minIndex": 5,
+    "maxIndex": 20,
+    "products": [
+        "MODIS_Terra_Cloud_Top_Pressure_Day",
+	"MODIS_Terra_Cloud_Top_Pressure_Night"
+    ]
+},
+{
+    "id": "MODIS_Cloud_Top_Temp",
+    "filename": "rendered/MOR6CTT_template.vrt",
+    "minIndex": 5,
+    "maxIndex": 20,
+    "products": [
+        "MODIS_Terra_Cloud_Top_Temp_Day",
+	"MODIS_Terra_Cloud_Top_Temp_Night",
+	"MODIS_Aqua_Cloud_Top_Temp_Day",
+	"MODIS_Aqua_Cloud_Top_Temp_Night"
+    ]
+},
+{
+    "id": "MODIS_Land_Surface_Temp",
+    "filename": "rendered/MOR11LST_colortable.vrt",
+    "minIndex": 1,
+    "maxIndex": 251,
+    "products": [
+        "MODIS_Terra_Land_Surface_Temp_Day",
+	"MODIS_Terra_Land_Surface_Temp_Night",
+	"MODIS_Aqua_Land_Surface_Temp_Day",
+	"MODIS_Aqua_Land_Surface_Temp_Night"
+    ]
+},
+{
+    "id": "MODIS_Sea_Ice",
+    "filename": "rendered/MOR29SIR_colortable.vrt",
+    "minIndex": 0,
+    "maxIndex": 0,
+    "products": [
+        "MODIS_Terra_Sea_Ice",
+	"MODIS_Aqua_Sea_Ice"
+    ]
+},
+{
+    "id": "MODIS_Snow_Cover",
+    "filename": "rendered/MOR10FSC_colortable.vrt",
+    "minIndex": 1,
+    "maxIndex": 100,
+    "products": [
+        "MODIS_Terra_Snow_Cover",
+	"MODIS_Aqua_Snow_Cover"
+    ]
+},
+{
+    "id": "MODIS_Water_Vapor_5km",
+    "filename": "rendered/MOR5WVIR_template.vrt",
+    "minIndex": 5,
+    "maxIndex": 131,
+    "products": [
+        "MODIS_Terra_Water_Vapor_5km_Day",
+	"MODIS_Terra_Water_Vapor_5km_Night",
+	"MODIS_Aqua_Water_Vapor_5km_Day",
+	"MODIS_Aqua_Water_Vapor_5km_Night"
+    ]
+}
+]

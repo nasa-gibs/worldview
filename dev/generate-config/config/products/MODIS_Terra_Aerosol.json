@@ -1,5 +1,5 @@
 {
-    "bins": 9,
+    "bins": 8,
     "description": "Terra / MODIS",
     "max": "0.70",
     "min": "0.27",

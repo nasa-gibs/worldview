@@ -1,5 +1,5 @@
 {
-    "bins": 14,
+    "bins": 13,
     "description": "Terra / MODIS",
     "max": "290",
     "min": "220",
@@ -39,7 +39,7 @@
             512
         ]
     },
-    "rendered": "MODIS_Cloud_Top",
+    "rendered": "MODIS_Cloud_Top_Temp",
     "startDate": "2012-04-07",
     "type": "wmts",
     "units": "K"

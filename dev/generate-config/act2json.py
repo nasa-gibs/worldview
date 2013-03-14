@@ -16,32 +16,62 @@ import json
 
 prog = os.path.basename(__file__)
 basedir = os.path.dirname(__file__)
-version = "1.0.0"
+version = "1.1.0"
 help_description = """\
-Using act/index.json, this converts ACT (Adobe Color Table) files into
+Using a json index file, this converts ACT (Adobe Color Table) files into
 paletttes suitable for Worldview. Each color table is written out to
-the config/palettes directory.
+a separate file.
 """ 
 
-parser = OptionParser(usage="Usage: %s [options]" % prog,
+default_index = os.path.join(basedir, "act", "index.json")
+default_act_dir = os.path.join(basedir, "act")
+
+parser = OptionParser(usage="Usage: %s [options] <output_dir>" % prog,
                       version="%s version %s" % (prog, version),
                       epilog=help_description)
+parser.add_option("-a", "--act-dir", default=default_act_dir,
+                  help="use this as the base directory for ACT files "
+                       "instead of %s" % default_act_dir)
+parser.add_option("-i", "--index", default=default_index,
+                  help="use this index file instead of %s" % default_index)
 parser.add_option("-v", "--verbose", action="store_true",
                   help="prints information about tasks being performed")
 
 (options, args) = parser.parse_args()
 
-if len(args) != 0:
-    parser.error("Invalid number of arguments")
+def notify(message):
+    if options.verbose:
+        print "%s: %s" % (prog, message)
 
-index_file = "%s/act/index.json" % basedir
-with open(index_file) as fp:
+def error(message):
+    sys.stderr.write("%s: ERROR: %s\n" % (prog, message))
+
+def fatal(message):
+    error(message)
+    sys.exit(1)
+
+
+if len(args) != 1:
+    parser.error("Invalid number of arguments")
+output_dir = args[0]
+
+if not os.path.exists(options.index):
+    fatal("Index file %s does not exist" % options.index)
+if not os.path.exists(options.act_dir):
+    fatal("ACT base directory %s does not exist" % options.act_dir)
+if not os.path.exists(output_dir):
+    fatal("Output directory %s does not exist" % output_dir)
+
+notify("Index file: %s" % options.index)
+notify("ACT base directory: %s" % options.act_dir)
+notify("Output directory: %s" % output_dir)
+
+with open(options.index) as fp:
     index = json.load(fp)
 
 for act in index:
-    act_file = "%s/act/%s" % (basedir, act["input"])
-    if options.verbose:
-        print "from %s" % act_file
+    act_file = os.path.join(options.act_dir, act["input"])
+    notify("Reading ACT: %s" % act_file)
     with open(act_file) as fp:
         data = fp.read()
     stops = []
@@ -61,9 +91,8 @@ for act in index:
         "source": "stock",
         "stops": stops
     }
-    palette_file = "%s/config/palettes/%s.json" % (basedir, act["id"])
-    if options.verbose:
-        print "to   %s\n" % palette_file
+    palette_file = os.path.join(output_dir, "%s.json" % act["id"])
+    notify("Writing palette: %s" % palette_file)
     with open(palette_file, "w") as fp:
         json.dump(palette, fp, sort_keys=True, indent=4, 
                   separators=(',', ': '))

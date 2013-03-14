@@ -77,7 +77,52 @@
 
 	</target>
 		
-	<target name="web" depends="init,deps" description="Builds minified web site">
+    <target name="generate-config" description="Builds configuration file">
+        <delete dir="${build.dir}/config"/>
+        <mkdir dir="${build.dir}/config/"/>
+            
+        <copy todir="${build.dir}/config">
+            <fileset dir="${basedir}/dev/generate-config/config"/>
+        </copy>
+            
+        <exec executable="python">
+            <arg value="${basedir}/dev/generate-config/act2json.py"/>
+            <arg value="${build.dir}/config/palettes"/>
+        </exec>
+        
+        <exec executable="python">
+             <arg value="${basedir}/dev/generate-config/vrt2json.py"/>
+             <arg value="--products-dir"/>
+             <arg value="${build.dir}/config/products"/>
+             <arg value="${build.dir}/config/palettes"/>
+        </exec>
+        
+        <exec executable="python">
+            <arg value="${basedir}/dev/generate-config/generate-config.py"/>
+            <arg value="--config-dir"/>
+            <arg value="${build.dir}/config"/>
+            <arg value="--output"/>
+            <arg value="${build.dir}/config.json"/>
+        </exec>
+        
+        <!-- Development file -->
+        <delete file="${basedir}/data/config"/>
+        <copy file="${build.dir}/config.json" 
+              tofile="${basedir}/data/config"/>
+
+        <exec executable="python">
+            <arg value="${basedir}/dev/generate-config/generate-config.py"/>
+            <arg value="--config-dir"/>
+            <arg value="${build.dir}/config"/>
+            <arg value="--minify"/>
+            <arg value="--output"/>
+            <arg value="${build.dir}/config-min.json"/>
+        </exec>
+                
+    </target>
+    
+	<target name="web" depends="init,deps,generate-config" 
+	        description="Builds minified web site">
 		<delete dir="${build.web.dir}"/>
 		<mkdir dir="${build.web.dir}"/>
 		
@@ -122,6 +167,14 @@
 			<fileset dir="${build.web.dir}"/>
 		</copy>
 	
+	    <!-- Configuration file -->
+	    <delete file="${build.web.dir}/data/config"/>
+	    <copy file="${build.dir}/config-min.json"
+	          tofile="${build.web.dir}/data/config"/>
+        <delete file="${build.web-debug.dir}/data/config"/>
+        <copy file="${build.dir}/config.json"
+              tofile="${build.web-debug.dir}/data/config"/>
+              	          
 		<!-- Combine all css and js files into one file -->
 		<concat destfile="${build.dir}/minify/worldview.css" force="no">
 			<filelist refid="css.files"/>
