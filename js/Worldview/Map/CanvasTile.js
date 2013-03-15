@@ -52,7 +52,8 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
 	 * when clear() is invoked.
 	 */
 	canvas: null,
-
+    graphics: null,
+    
 	initialize: function(layer, position, bounds, url, size, options) {
 	    // This is required or the browser will throw security exceptions
         this.crossOriginKeyword = "anonymous";
@@ -66,6 +67,7 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
 		OpenLayers.Tile.Image.prototype.destroy.apply(this, arguments);	
 		if ( this.canvas ) {
 			this.canvas = null;
+			this.graphics = null;
 		}
 	},
 		
@@ -92,6 +94,7 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
 		
 		if ( !this.canvas ) {
 			this.canvas = document.createElement("canvas");
+			this.graphics = this.canvas.getContext("2d");
 			this.canvas.id = "OpenLayers.Tile.Canvas." + this.id;
 			this.canvas.className = "olTileImage";
 			
@@ -121,47 +124,51 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
 		return this.frame ? this.frame : canvas;
 	},
     
+    onTileRendered: function(results) {
+        var self = results.self;
+        var imageData = results.message.imageData;        
+        self.graphics.putImageData(imageData, 0, 0); 
+        
+        self.canvas.style.visibility = "inherit";
+        self.canvas.style.opacity = self.layer.opacity;
+        self.isLoading = false;
+        self.canvasContext = null;
+        self.events.triggerEvent("loadend");         
+    },
+    
 	/*
 	 * Draws the loaded image to the canvas and applies a lookup table if
 	 */
-	onImageLoad: function() { 		 		
-	    var graphics = this.canvas.getContext("2d");
-        
+    onImageLoad: function() {
         OpenLayers.Event.stopObservingElement(this.imgDiv);
         
-        //this.imgDiv.removeAttribute("crossorigin");		
-		this.canvas.width = this.imgDiv.width;
-		this.canvas.height = this.imgDiv.height;
-		
-		graphics.drawImage(this.imgDiv, 0, 0);
-		
+        //this.imgDiv.removeAttribute("crossorigin");       
+        this.canvas.width = this.imgDiv.width;
+        this.canvas.height = this.imgDiv.height;
+        
+		this.graphics.drawImage(this.imgDiv, 0, 0);
+	    
 		if ( this.layer.lookupTable ) {
 			var lookupTable = this.layer.lookupTable;
-			var imageData = graphics.getImageData(0, 0, this.canvas.width, 
-				this.canvas.height);
-			var pixels = imageData.data;
-				
-			for ( var i = 0; i < pixels.length; i += 4 ) {
-                var lookup = pixels[i + 0] + "," + 
-                             pixels[i + 1] + "," + 
-                             pixels[i + 2] + "," + 
-                             pixels[i + 3];
-				var color = lookupTable[lookup];
-				if ( color ) {
-					pixels[i + 0] = color.r
-					pixels[i + 1] = color.g
-					pixels[i + 2] = color.b
-					pixels[i + 3] = 0xff;
-				}
-			}
-            graphics.putImageData(imageData, 0, 0);		
-		} 
-		
-		this.canvas.style.visibility = "inherit";
-		this.canvas.style.opacity = this.layer.opacity;
-		this.isLoading = false;
-		this.canvasContext = null;
-		this.events.triggerEvent("loadend");
+            var imageData = this.graphics.getImageData(0, 0, this.canvas.width, 
+                    this.canvas.height);
+                
+			Worldview.Map.tileScheduler.submit({
+			    message: {
+			        lookupTable: lookupTable,
+			        imageData: imageData
+			    },
+			    callback: this.onTileRendered,
+			    self: this,
+			    transferables: [imageData]
+		    });
+		} else { 
+            this.canvas.style.visibility = "inherit";
+            this.canvas.style.opacity = this.layer.opacity;
+            this.isLoading = false;
+            this.canvasContext = null;
+            this.events.triggerEvent("loadend");    		        
+		}
 	},
 	
 	/*
@@ -177,3 +184,4 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
 	CLASS_NAME: "Worldview.Map.CanvasTile"
 	
 });
+
