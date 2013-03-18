@@ -205,6 +205,7 @@
 				<include name="**/*.js"/>
 				<!-- Web worker needs to load this directly, leave it around -->
 				<exclude name="**/TileWorker.js"/>
+                <exclude name="**/TileRenderer.js"/>
 			</fileset>
 		</delete>
 		
