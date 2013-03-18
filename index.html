@@ -19,7 +19,7 @@
 	<meta http-equiv="Pragma" content="no-cache">
 
 	<!-- CSS resources ==================================================== -->
-	<!-- <link type="text/css" href="css/worldview-min.css?v=@BUILD_NONCE@" rel="Stylesheet" /> -->
+	<!-- <link type="text/css" href="css/worldview-min.css?v=@BUILD_NONCE@" rel="Stylesheet" /> -->	
 		
 	<!-- JQuery -->
 	<!-- css.dev --> <link type="text/css" href="css/ext/jquery/jquery.mobile-1.0rc2.css" rel="Stylesheet" />
@@ -45,8 +45,12 @@
 	<!-- css.dev --> <link type="text/css" href="css/selector.css" rel="Stylesheet" /> 
 	<!-- css.dev --> <link type="text/css" href="css/sote.css" rel="Stylesheet" /> 
     <!-- css.dev --> <link type="text/css" href="css/ext/jcrop/jcrop.css" rel="Stylesheet" /> 
-
+	<!-- css.dev --> <link type="text/css" href="css/splash.css" rel="Stylesheet" /> 
 	
+	<!-- Joyride style -->
+    <!-- css.dev --> <link rel="stylesheet" href="css/ext/joyride/joyride-2.0.3.css" />
+        	
+        	
 	<!-- JavaScript resources ============================================= -->
 	<!-- <script type="text/javascript" src="js/worldview-min.js?v=@BUILD_NONCE@&mobile"></script> -->
 	
@@ -63,6 +67,20 @@
 	
 	<!-- Combo-handled YUI files: -->
 	<!-- js.dev --> <script type="text/javascript" src="js/ext/yui/combo-event-dragdrop-container-min.js"></script>
+	<!-- js.dev --> <script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+	<!-- js.dev --> <script src="http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js"></script>
+	<!-- js.dev --> <script src="http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js"></script>
+	<!-- js.dev --> <script src="http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js"></script>
+	<!-- js.dev --> <script src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+	<!-- js.dev --> <script src="http://yui.yahooapis.com/2.9.0/build/button/button-min.js"></script>
+	<!-- js.dev --> <script src="http://yui.yahooapis.com/2.9.0/build/container/container-min.js"></script>
+	<!-- js.dev --> <script src="http://yui.yahooapis.com/2.9.0/build/storage/storage-min.js" ></script>
+	<!-- js.dev --> <script src="http://yui.yahooapis.com/2.9.0/build/dom/dom-min.js"></script>
+
+	<!-- Joyride files -->
+	<!-- js.dev -->	<script type="text/javascript" src="js/ext/joyride/jquery.cookie.js"></script>
+	<!-- js.dev --> <script type="text/javascript" src="js/ext/joyride/jquery.joyride-2.0.3.js"></script>
+	<!-- js.dev --> <script type="text/javascript" src="js/ext/joyride/modernizr.mq.js"></script>
 	
 	<!-- External Javascript includes -->
 	<!-- js.dev --> <script type="text/javascript" src="js/ext/openlayers-2.12/OpenLayers.debug.js?mobile"></script>
@@ -85,6 +103,7 @@
 	<!-- js.dev --> <script type="text/javascript" src="js/switch.js"></script>
 	<!-- js.dev --> <script type="text/javascript" src="js/selector.js"></script>
 	<!-- js.dev --> <script type="text/javascript" src="js/sote.js"></script>
+	<!-- js.dev --> <script type="text/javascript" src="js/tour.js"></script>
 
     <!-- js.dev --> <script type="text/javascript" src="js/Logging.js"></script> 
     <!-- js.dev --> <script type="text/javascript" src="js/Worldview.js"></script>
@@ -117,19 +136,22 @@
 	<div data-role="page" id="mappage">	
 		<div data-role="content">
 			<div id="banner"><img class='logo' src='images/logo.png' />
-				<ul>
+				<ul id="toolbarlist">
 					<li><a id='aboutus_link' class='toolbaricon' title='Information' href='javascript:showOverlay();'><img src='images/information.png' /></a></li>
 					<!--<li><a id='camera_link' class='toolbaricon' href='javascript:showRubberBand();'><img src='images/camera.png' /></a></li>-->
 					<li><div id='camera'></div></li>
 					<li><div id="switch"></div></li>
 					<li><a id='perma_link' class='toolbaricon' title='Permalink' href='javascript:Worldview.Permalink.show();'><img src='images/permalink.png' /></a></li>
+					<!-- Dummy entry to adjust size of toolbar list so that tour panel displays correctly.
+						 SHOULD BE REMOVED when more entries are added to the toolbar. -->
+					<li><div id="tester" style="width: 200px"></div></li>
 				</ul>
 				
 			</div>
 			<!--<div id="aboutus"><a id='aboutus_link' class='aboutus_link' href='javascript:showOverlay();'><img src='images/aboutIcon.png' /></a></div>
 			<div id="permalink"><a id='perma_link' class='aboutus_link' href='javascript:showPermalink();'><img src='images/permalinkIcon.png' /></a></div>-->
 			<div id="hazard"></div>
-			<div id="products"></div>
+			<div id="products" style="padding-right:15px;"></div>
 			<div id="map"></div>
 
 			<div id="imagedownload"></div>
@@ -141,6 +163,12 @@
 			
 		</div>
 	</div>
+	<ol id="joyRideTipContent">
+		<li id="datePanel" data-id="timeecbutton" data-button="Next" data-options="tipLocation:top;tipAnimation:fade;nubPosition:bottom;bordered:true"></li>
+      	<li id="productPanel" data-id="products" data-button="Next" data-options="tipLocation:right;nubPosition:left;tipAnimation:fade;prevButton:true;bordered:true"></li>
+      	<li id="toolbarPanel" data-id="toolbarlist" data-button="Next" data-options="tipLocation:bottom;nubPosition:top;tipAnimation:fade;prevButton:true;bordered:true"></li>
+    	<li id="mapPanel" data-id="OpenLayers.Control.Panel_46" data-button="Next" data-options="tipLocation:left;nubPosition:left;prevButton:true;bordered:true"></li>
+   </ol> 
 
 	<!-- Crazy Egg Metrics -->
 	<script type="text/javascript">
