@@ -50,7 +50,7 @@ Worldview.Map.DailyProduct = function(map, config) {
     
     // Layers that are no longer valid because the map has moved. These
     // can be removed on the next map redrawn
-    var invalidLayers = {};
+    var invalidLayers = [];
     
     // The layer that is currently visible and seen by the user
     var currentLayer = null;
@@ -92,7 +92,7 @@ Worldview.Map.DailyProduct = function(map, config) {
         
         // If a layer was visible, hide it.
         if ( previousLayer ) { 
-            previousLayer.setOpacity(0);
+            previousLayer.div.style.opacity = 0;
         }
         
         // If the layer has already been created, set it as the current
@@ -118,25 +118,26 @@ Worldview.Map.DailyProduct = function(map, config) {
                 };
             }
             currentLayer = self.createLayer(additionalOptions);
-            if ( lookupTable != null ) {
+            currentLayer.mergeNewParams({ time: currentDay });
+            if ( lookupTable !== null ) {
                 currentLayer.lookupTable = lookupTable;
             }
-            currentLayer.mergeNewParams({ time: currentDay });
             validLayers[currentDay] = currentLayer;
+            currentLayer.div.style.opacity = 0;
             map.addLayer(currentLayer);
         }
-        
-        // Make sure the layer is visible. 
-        currentLayer.setOpacity(1);
-        if ( currentLayer.getVisibility() === false ) {
-            currentLayer.setVisibility(true);
-        }
-        
+                
         // The visible layer is one level higher than all the other layers
         if ( previousLayer ) {
             previousLayer.setZIndex(zIndex);
         }        
         currentLayer.setZIndex(zIndex + 1);
+        
+        // Make sure the layer is visible. 
+        currentLayer.div.style.opacity = currentLayer.opacity;
+        if ( currentLayer.getVisibility() === false ) {
+            currentLayer.setVisibility(true);
+        }        
     };
     
     self.setLookup = function(lookup) {
@@ -211,7 +212,7 @@ Worldview.Map.DailyProduct = function(map, config) {
         $.each(invalidLayers, function(index, layer) { 
             map.removeLayer(layer);
         });
-        invalidLayers = {};
+        invalidLayers = [];
         map.events.unregister("movestart", self, onMoveStart);
         map.events.unregister("zoomend", self, onZoomEnd);        
     };
@@ -234,10 +235,7 @@ Worldview.Map.DailyProduct = function(map, config) {
     var refreshZOrder = function() {
         $.each(validLayers, function(i, layer) {
             layer.setZIndex(zIndex);
-        });
-        $.each(invalidLayers, function(i, layer) { 
-            layer.setZIndex(zIndex);
-        });   
+        }); 
         if ( currentLayer ) {
             currentLayer.setZIndex(zIndex + 1);     
         }
@@ -255,11 +253,12 @@ Worldview.Map.DailyProduct = function(map, config) {
         for ( var day in validLayers ) {
             if ( validLayers.hasOwnProperty(day) ) {
                 if ( day !== currentDay ) {
-                    invalidLayers[day] = validLayers[day];
-                    invalidLayers[day].setVisibility(false);
+                    invalidLayers.push(validLayers[day]);
+                    validLayers[day].setVisibility(false);
                 }
             }
         }
+        previousLayer = null;
         validLayers = {};
         validLayers[currentDay] = currentLayer;
     };
@@ -271,15 +270,16 @@ Worldview.Map.DailyProduct = function(map, config) {
         invalidate();
         if ( all ) {
             validLayers = {};
-            invalidLayers[day] = currentLayer;
+            invalidLayers.push(currentLayer);
             currentLayer = null;
         }
-        for ( var day in invalidLayers ) {
-            if ( map.getLayerIndex(invalidLayers[day]) >= 0 ) {
-                map.removeLayer(invalidLayers[day]);
+        $.each(invalidLayers, function(index, layer) {
+            if ( map.getLayerIndex(layer) >= 0 ) {
+                map.removeLayer(layer);
             }
-        }
-        invalidLayers = {};
+        });
+        previousLayer = null;
+        invalidLayers = [];
         refreshZOrder();
     };
     

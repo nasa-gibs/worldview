@@ -136,14 +136,14 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
 	},
     
     setImgSrc: function() {
-        if ( this.imgDiv ) {
-            OpenLayers.Tile.Image.prototype.setImgSrc.apply(this, arguments);
-        }
         if ( this.canvas ) {
             this.log.debug(this.id + ": setImgSrc: " + arguments[0]);
             this.canvas.visibility = "hidden";
             this.canvas.opacity = 0;
             this.latestJobId = 0;
+        }
+        if ( this.imgDiv ) {
+            OpenLayers.Tile.Image.prototype.setImgSrc.apply(this, arguments);
         }
     },
     
@@ -169,8 +169,8 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
     
     applyLookup: function() { 
         this.isLoading = true;       
-        this.canvas.style.visibility = "hidden";
-        this.canvas.style.opacity = 0;
+        //this.canvas.style.visibility = "hidden";
+        //this.canvas.style.opacity = 0;
         
         var lookupTable = this.layer.lookupTable;
         var source = this.graphicsOriginal.getImageData(0, 0, this.canvas.width, 
