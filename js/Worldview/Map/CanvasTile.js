@@ -92,18 +92,21 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
 	 * style elements that OpenLayers.Tile.Image object applies to the image 
 	 * element to the canvas element.
 	 */
-	getCanvas: function() {
-		var image = this.getImage();
+	getCanvas: function(self) {
+	    if ( !self ) {
+	        self = this;
+	    }
+		var image = self.getImage();
 		var style;
 		
-		if ( !this.canvas ) {
-			this.canvas = document.createElement("canvas");
-			this.graphics = this.canvas.getContext("2d");
-			this.canvas.id = "OpenLayers.Tile.Canvas." + this.id;
-			this.canvas.className = "olTileImage";
+		if ( !self.canvas ) {
+			self.canvas = document.createElement("canvas");
+			self.graphics = self.canvas.getContext("2d");
+			self.canvas.id = "OpenLayers.Tile.Canvas." + self.id;
+			self.canvas.className = "olTileImage";
 			
-			style = this.canvas.style;
-			if ( this.frame ) {
+			style = self.canvas.style;
+			if ( self.frame ) {
 				style.left = image.style.left;
 				style.top = image.style.top;
 				style.width = image.style.width;
@@ -113,11 +116,11 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
 			style.opacity = image.style.opacity;
 			style.filter = image.style.filter;
 			style.position = image.style.position;
-			if ( this.frame ) {
-				this.frame.appendChild(this.canvas);
+			if ( self.frame ) {
+				self.frame.appendChild(self.canvas);
 			}
 		}
-		return this.canvas;
+		return self.canvas;
 	},
 	
 	/*
@@ -129,13 +132,14 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
 	},
     
     onTileRendered: function(results) {
-        var self = results.self;        
+        var self = results.self;    
+        var canvas = self.getCanvas(self);
         var imageData = results.message.destination;
   
         self.graphics.putImageData(imageData, 0, 0); 
         
-        self.canvas.style.visibility = "inherit";
-        self.canvas.style.opacity = self.layer.opacity;
+        canvas.style.visibility = "inherit";
+        canvas.style.opacity = self.layer.opacity;
         self.isLoading = false;
         self.canvasContext = null;
         self.events.triggerEvent("loadend");         
@@ -189,12 +193,14 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
 		}
 	},
 	
-	/*
-	 * FIXME
-	 */
-	onImageError: function() {
-			
-	},
+    createBackBuffer: function() {
+        if ( !this.canvas ) {
+            return;
+        }
+        var backBuffer = this.canvas;
+        this.canvas = null;
+        return backBuffer;
+    },
 	
 	/*
 	 * Name of this class per OpenLayers convention.
