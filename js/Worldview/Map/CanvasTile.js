@@ -55,6 +55,8 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
 	cavansOriginal: null,
     graphics: null,
     grpahicsOriginal: null,
+    latestJobId: null,
+    log: Logging.Logger("Worldview.Map.CanvasTile"),
     
 	initialize: function(layer, position, bounds, url, size, options) {
 	    // This is required or the browser will throw security exceptions
@@ -66,7 +68,9 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
      * Discards the canvas.
 	 */
 	destroy: function() {
+	    this.log.debug(this.id + ": destroy");
 		OpenLayers.Tile.Image.prototype.destroy.apply(this, arguments);	
+		this.clear();
 		if ( this.canvas ) {
 		    this.graphics = null;
 			this.canvas = null;
@@ -80,9 +84,11 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
 	 * set.
 	 */
 	clear: function() {
-		OpenLayers.Tile.Image.prototype.clear(this, arguments);
+	    this.log.debug(this.id + ": clear");
+		OpenLayers.Tile.Image.prototype.clear.apply(this, arguments);
 		if ( this.canvas ) {
 			this.canvas.style.visibility = "hidden";
+			this.canvas.style.opacity = 0;
 			OpenLayers.Element.removeClass(this.canvas, "olImageLoadError");
 		}
 	},
@@ -92,35 +98,33 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
 	 * style elements that OpenLayers.Tile.Image object applies to the image 
 	 * element to the canvas element.
 	 */
-	getCanvas: function(self) {
-	    if ( !self ) {
-	        self = this;
-	    }
-		var image = self.getImage();
+	getCanvas: function() {
+		var image = this.getImage();
 		var style;
 		
-		if ( !self.canvas ) {
-			self.canvas = document.createElement("canvas");
-			self.graphics = self.canvas.getContext("2d");
-			self.canvas.id = "OpenLayers.Tile.Canvas." + self.id;
-			self.canvas.className = "olTileImage";
+		if ( !this.canvas ) {
+			this.canvas = document.createElement("canvas");
+			this.graphics = this.canvas.getContext("2d");
+			this.canvas.id = "OpenLayers.Tile.Canvas." + this.id;
+			this.canvas.className = "olTileImage";
 			
-			style = self.canvas.style;
-			if ( self.frame ) {
+			style = this.canvas.style;
+			if ( this.frame ) {
 				style.left = image.style.left;
 				style.top = image.style.top;
 				style.width = image.style.width;
 				style.height = image.style.height;
 			}
-			style.visibility = image.style.visibility;
-			style.opacity = image.style.opacity;
+			//style.visibility = image.style.visibility;
+			style.visibility = "hidden";
+			style.opacity = 0;
 			style.filter = image.style.filter;
 			style.position = image.style.position;
-			if ( self.frame ) {
-				self.frame.appendChild(self.canvas);
+			if ( this.frame ) {
+				this.frame.appendChild(self.canvas);
 			}
 		}
-		return self.canvas;
+		return this.canvas;
 	},
 	
 	/*
@@ -131,30 +135,50 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
 		return this.frame ? this.frame : canvas;
 	},
     
+    setImgSrc: function() {
+        if ( this.imgDiv ) {
+            OpenLayers.Tile.Image.prototype.setImgSrc.apply(this, arguments);
+        }
+        if ( this.canvas ) {
+            this.log.debug(this.id + ": setImgSrc: " + arguments[0]);
+            this.canvas.visibility = "hidden";
+            this.canvas.opacity = 0;
+            this.latestJobId = 0;
+        }
+    },
+    
     onTileRendered: function(results) {
         var self = results.self;    
-        var canvas = self.getCanvas(self);
+        var canvas = self.canvas;
+        if ( !canvas || results.id !== self.latestJobId ) {
+            return;
+        }
+        self.log.debug("latestJobId: " + self.latestJobId + ", results.id" + results.id);
         var imageData = results.message.destination;
   
         self.graphics.putImageData(imageData, 0, 0); 
         
+        OpenLayers.Event.stopObservingElement(self.imgDiv);        
         canvas.style.visibility = "inherit";
         canvas.style.opacity = self.layer.opacity;
         self.isLoading = false;
         self.canvasContext = null;
-        self.events.triggerEvent("loadend");         
+        self.events.triggerEvent("loadend");  
+        self.log.debug(self.id + ": rendered");       
     },
     
-    applyLookup: function() {        
-        this.canvas.style.visiblity = "hidden";
+    applyLookup: function() { 
+        this.isLoading = true;       
+        this.canvas.style.visibility = "hidden";
+        this.canvas.style.opacity = 0;
         
         var lookupTable = this.layer.lookupTable;
         var source = this.graphicsOriginal.getImageData(0, 0, this.canvas.width, 
                 this.canvas.height);
         var destination = this.graphics.getImageData(0, 0, this.canvas.width,
                 this.canvas.height);
-            
-        Worldview.Map.tileScheduler.submit({
+                 
+        this.latestJobId = Worldview.Map.tileScheduler.submit({
             message: {
                 lookupTable: lookupTable,
                 source: source,
@@ -169,8 +193,7 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
 	 * Draws the loaded image to the canvas and applies a lookup table if
 	 */
     onImageLoad: function() {
-        OpenLayers.Event.stopObservingElement(this.imgDiv);
-        
+        this.log.debug(this.id + ": tile loaded");               
         this.canvasOriginal = document.createElement("canvas");
         this.graphicsOriginal = this.canvasOriginal.getContext("2d");
         this.canvasOriginal.width = this.imgDiv.width;
@@ -194,9 +217,10 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
 	},
 	
     createBackBuffer: function() {
-        if ( !this.canvas ) {
+        if ( !this.canvas || this.isLoading ) {
             return;
         }
+        this.log.debug(this.id + ": createBackBuffer");
         var backBuffer = this.canvas;
         this.canvas = null;
         return backBuffer;

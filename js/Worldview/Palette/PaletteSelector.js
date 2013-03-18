@@ -14,7 +14,7 @@ Worldview.namespace("Palette");
 /**
  * Class: Worldview.Palette.PaletteSelector
  * Combo box to select a color palette. This uses 
- * <msDropDown at http://www.marghoobsuleman.com/jquery-image-dropdownk> to 
+ * <msDropDown at http://www.marghoobsuleman.com/jquery-image-dropdown> to 
  * render the combo box. 
  * 
  * Constructor: PaletteSelector

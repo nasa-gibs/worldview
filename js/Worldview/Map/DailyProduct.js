@@ -100,13 +100,15 @@ Worldview.Map.DailyProduct = function(map, config) {
         if ( currentDay in validLayers ) {
             currentLayer = validLayers[currentDay];
             
+        /*    
         // If the layer was invalidated and scheduled for removal, reuse
         // it and bring it back to the valid set
         } else if ( currentDay in invalidLayers ) {
             currentLayer = invalidLayers[currentDay];
             validLayers[currentDay] = currentLayer;
             delete invalidLayers[currentDay];
-            
+        */
+           
         // Otherwise, create a new layer
         } else { 
             var additionalOptions = null;
