@@ -75,7 +75,6 @@
     "properties": {
         "format": "image/png",
         "layer": "MODIS_Terra_Sea_Ice",
-        "tileClass": "Worldview.Map.CanvasTile",
         "tileSize": [
             512,
             512

@@ -23332,7 +23332,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "AIRS_CO_Total_Column_Day",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -23387,7 +23386,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "AIRS_CO_Total_Column_Night",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -23442,7 +23440,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "AIRS_Dust_Score",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -23504,7 +23501,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "AIRS_Prata_SO2_Index_Day",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -23550,7 +23546,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "AIRS_Prata_SO2_Index_Night",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -23596,7 +23591,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "AIRS_Precipitation_Day",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -23823,7 +23817,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "AIRS_Precipitation_Night",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -24150,7 +24143,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "MODIS_Aqua_Aerosol",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -24239,7 +24231,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "MODIS_Aqua_Brightness_Temp_Band31_Day",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -24579,7 +24570,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "MODIS_Aqua_Brightness_Temp_Band31_Night",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -24875,7 +24865,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "MODIS_Aqua_Cloud_Top_Pressure_Day",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -24920,7 +24909,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "MODIS_Aqua_Cloud_Top_Pressure_Night",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -24966,7 +24954,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "MODIS_Aqua_Cloud_Top_Temp_Day",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -25012,7 +24999,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "MODIS_Aqua_Cloud_Top_Temp_Night",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -25282,7 +25268,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "MODIS_Aqua_Land_Surface_Temp_Day",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -25329,7 +25314,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "MODIS_Aqua_Land_Surface_Temp_Night",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -25418,7 +25402,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "MODIS_Aqua_Sea_Ice",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -25510,7 +25493,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "MODIS_Aqua_Snow_Cover",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -25831,7 +25813,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "MODIS_Aqua_Water_Vapor_5km_Day",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -25877,7 +25858,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "MODIS_Aqua_Water_Vapor_5km_Night",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -25923,7 +25903,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "MODIS_Combined_Value_Added_AOD",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -26044,7 +26023,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "MODIS_Terra_Aerosol",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -26133,7 +26111,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "MODIS_Terra_Brightness_Temp_Band31_Day",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -26473,7 +26450,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "MODIS_Terra_Brightness_Temp_Band31_Night",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -26770,7 +26746,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "MODIS_Terra_Cloud_Top_Pressure_Day",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -26816,7 +26791,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "MODIS_Terra_Cloud_Top_Pressure_Night",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -26862,7 +26836,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "MODIS_Terra_Cloud_Top_Temp_Day",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -26908,7 +26881,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "MODIS_Terra_Cloud_Top_Temp_Night",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -27268,7 +27240,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "MODIS_Terra_Land_Surface_Temp_Day",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -27315,7 +27286,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "MODIS_Terra_Land_Surface_Temp_Night",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -27404,7 +27374,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "MODIS_Terra_Sea_Ice",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -27496,7 +27465,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "MODIS_Terra_Snow_Cover",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -27817,7 +27785,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "MODIS_Terra_Water_Vapor_5km_Day",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -27863,7 +27830,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "MODIS_Terra_Water_Vapor_5km_Night",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -27909,7 +27875,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "OMI_Absorbing_Aerosol_Optical_Depth",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -27955,7 +27920,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "OMI_Aerosol_Index",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -28001,7 +27965,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "OMI_Aerosol_Optical_Depth",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -28047,7 +28010,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "OMI_Cloud_Pressure",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -28093,7 +28055,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "OMI_SO2_Lower_Troposphere",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -28139,7 +28100,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "OMI_SO2_Middle_Troposphere",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -28185,7 +28145,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "OMI_SO2_Planetary_Boundary_Layer",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512
@@ -28231,7 +28190,6 @@
             "properties": {
                 "format": "image/png",
                 "layer": "OMI_SO2_Upper_Troposphere_and_Stratosphere",
-                "tileClass": "Worldview.Map.CanvasTile",
                 "tileSize": [
                     512,
                     512

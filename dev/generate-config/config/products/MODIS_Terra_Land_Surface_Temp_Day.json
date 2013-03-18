@@ -33,7 +33,6 @@
     "properties": {
         "format": "image/png",
         "layer": "MODIS_Terra_Land_Surface_Temp_Day",
-        "tileClass": "Worldview.Map.CanvasTile",
         "tileSize": [
             512,
             512

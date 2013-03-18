@@ -79,6 +79,9 @@ Worldview.Map.DailyProduct = function(map, config) {
      * d - The day to display.
      */
     self.setDay = function(d) {
+        if ( !d ) {
+            return;
+        }
         var ds = Worldview.toISODateString(d);
         if ( ds === currentDay ) {
             return;
@@ -106,7 +109,13 @@ Worldview.Map.DailyProduct = function(map, config) {
             
         // Otherwise, create a new layer
         } else { 
-            currentLayer = self.createLayer();
+            var additionalOptions = null;
+            if ( lookupTable !== null ) {
+                additionalOptions = {
+                    tileClass: Worldview.Map.CanvasTile
+                };
+            }
+            currentLayer = self.createLayer(additionalOptions);
             if ( lookupTable != null ) {
                 currentLayer.lookupTable = lookupTable;
             }
@@ -129,23 +138,35 @@ Worldview.Map.DailyProduct = function(map, config) {
     };
     
     self.setLookup = function(lookup) {
-        $.each(validLayers, function(index, layer) {
-            layer.lookupTable = lookup;
-            layer.redraw();
-        });
-        $.each(invalidLayers, function(index, layer) { 
-            layer.lookupTable = lookup;
-        });     
-        lookupTable = lookup;       
+        if ( lookupTable === null ) { 
+            purge(true);
+            currentLayer = self.createLayer({
+                tileClass: Worldview.Map.CanvasTile
+            });
+            currentLayer.lookupTable = lookup;
+            validLayers[currentDay] = currentLayer;
+            map.addLayer(currentLayer);
+            currentLayer.setZIndex(zIndex + 1);
+        } else {
+            $.each(validLayers, function(index, layer) {
+                layer.lookupTable = lookup;
+                layer.redraw();
+            });
+            $.each(invalidLayers, function(index, layer) { 
+                layer.lookupTable = lookup;
+            });     
+        }
+        lookupTable = lookup;
     };
     
     self.clearLookup = function() {
-        $.each(validLayers, function(index, layer) {
-            delete layer.lookupTable;
-        });
-        $.each(invalidLayers, function(index, layer) { 
-            delete layer.lookupTable;
-        });         
+        if ( lookupTable !== null ) {
+            purge(true);
+            currentLayer = self.createLayer();
+            validLayers[currentDay] = currentLayer;
+            map.addLayer(currentLayer);
+            currentLayer.setZIndex(zIndex + 1);        
+        }    
         lookupTable = null; 
     };
     
@@ -211,7 +232,9 @@ Worldview.Map.DailyProduct = function(map, config) {
         $.each(invalidLayers, function(i, layer) { 
             layer.setZIndex(zIndex);
         });   
-        currentLayer.setZIndex(zIndex + 1);     
+        if ( currentLayer ) {
+            currentLayer.setZIndex(zIndex + 1);     
+        }
     };
     
     /*
@@ -238,8 +261,13 @@ Worldview.Map.DailyProduct = function(map, config) {
     /*
      * Remove all layers in the invalid set from the map.
      */
-    var purge = function() { 
+    var purge = function(all) { 
         invalidate();
+        if ( all ) {
+            validLayers = {};
+            invalidLayers[day] = currentLayer;
+            currentLayer = null;
+        }
         for ( var day in invalidLayers ) {
             if ( map.getLayerIndex(invalidLayers[day]) >= 0 ) {
                 map.removeLayer(invalidLayers[day]);
