@@ -148,13 +148,9 @@ Worldview.Map.DailyProduct = function(map, config) {
             map.addLayer(currentLayer);
             currentLayer.setZIndex(zIndex + 1);
         } else {
-            $.each(validLayers, function(index, layer) {
-                layer.lookupTable = lookup;
-                layer.redraw();
-            });
-            $.each(invalidLayers, function(index, layer) { 
-                layer.lookupTable = lookup;
-            });     
+            invalidate();
+            currentLayer.lookupTable = lookup;
+            applyLookup(currentLayer); 
         }
         lookupTable = lookup;
     };
@@ -216,12 +212,20 @@ Worldview.Map.DailyProduct = function(map, config) {
         invalidLayers = {};
         map.events.unregister("movestart", self, onMoveStart);
         map.events.unregister("zoomend", self, onZoomEnd);        
-    }
+    };
         
     //-------------------------------------------------------------------------
     // Private
     //-------------------------------------------------------------------------
         
+    var applyLookup = function(layer) {
+        $.each(layer.grid, function(index, row) {
+            $.each(row, function(index, tile) {
+                tile.applyLookup();    
+            });  
+        });     
+    };
+    
     /*
      * Sets the z-index on all layers.
      */
