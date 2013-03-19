@@ -40,17 +40,11 @@ Worldview.Map.DailyProduct = function(map, config) {
     // The current z-index for all layers.
     var zIndex = 0;
     
-    // The function used to create a new layer
-    var createLayer;
-    
-    // The layer that is currently displayed on the screen and all layers
-    // that have their opacity set to zero for quick display when moving
-    // the date.
-    var validLayers = {};
+    var cachedLayers = {};
     
     // Layers that are no longer valid because the map has moved. These
     // can be removed on the next map redrawn
-    var invalidLayers = [];
+    var staleLayers = [];
     
     // The layer that is currently visible and seen by the user
     var currentLayer = null;
@@ -59,6 +53,8 @@ Worldview.Map.DailyProduct = function(map, config) {
     var currentDay;
     
     var lookupTable = null;
+    
+    var reaperId = null;
     
     //-------------------------------------------------------------------------
     // Public
@@ -70,6 +66,46 @@ Worldview.Map.DailyProduct = function(map, config) {
         map.events.register("movestart", self, onMoveStart);
         map.events.register("zoomend", self, onZoomEnd);
     };
+    
+    var fetchLayer = function() {
+        var previousLayer = currentLayer;
+
+        // If a layer was visible, hide it.
+        if ( previousLayer ) { 
+            previousLayer.div.style.opacity = 0;
+        }
+        
+        if ( currentDay in cachedLayers ) {
+            currentLayer = cachedLayers[currentDay];
+            delete cachedLayers[currentDay];
+        } else {
+            var additionalOptions = null;
+            if ( lookupTable !== null ) {
+                additionalOptions = {
+                    tileClass: Worldview.Map.CanvasTile
+                };
+            }
+            currentLayer = self.createLayer(additionalOptions);
+            currentLayer.mergeNewParams({ time: currentDay });
+            if ( lookupTable !== null ) {
+                currentLayer.lookupTable = lookupTable;
+            }
+            currentLayer.div.style.opacity = 0;
+            map.addLayer(currentLayer);   
+        }
+        
+        // The visible layer is one level higher than all the other layers
+        if ( previousLayer ) {
+            previousLayer.setZIndex(zIndex);
+        }        
+        currentLayer.setZIndex(zIndex + 1);
+        
+        // Make sure the layer is visible. 
+        currentLayer.div.style.opacity = currentLayer.opacity;
+        if ( currentLayer.getVisibility() === false ) {
+            currentLayer.setVisibility(true);
+        }     
+    }
     
     /**
      * Method: setDay
@@ -83,108 +119,35 @@ Worldview.Map.DailyProduct = function(map, config) {
             return;
         }
         var ds = Worldview.toISODateString(d);
-        if ( ds === currentDay ) {
+        if ( currentLayer && ds === currentDay ) {
             return;
         }
+        if ( currentLayer ) {
+            cachedLayers[currentDay] = currentLayer;
+        }
         currentDay = ds;
-        
-        var previousLayer = currentLayer;
-        
-        // If a layer was visible, hide it.
-        if ( previousLayer ) { 
-            previousLayer.div.style.opacity = 0;
-        }
-        
-        // If the layer has already been created, set it as the current
-        // layer.
-        if ( currentDay in validLayers ) {
-            currentLayer = validLayers[currentDay];
-            
-        /*    
-        // If the layer was invalidated and scheduled for removal, reuse
-        // it and bring it back to the valid set
-        } else if ( currentDay in invalidLayers ) {
-            currentLayer = invalidLayers[currentDay];
-            validLayers[currentDay] = currentLayer;
-            delete invalidLayers[currentDay];
-        */
-           
-        // Otherwise, create a new layer
-        } else { 
-            var additionalOptions = null;
-            if ( lookupTable !== null ) {
-                additionalOptions = {
-                    tileClass: Worldview.Map.CanvasTile
-                };
-            }
-            currentLayer = self.createLayer(additionalOptions);
-            currentLayer.mergeNewParams({ time: currentDay });
-            if ( lookupTable !== null ) {
-                currentLayer.lookupTable = lookupTable;
-            }
-            validLayers[currentDay] = currentLayer;
-            currentLayer.div.style.opacity = 0;
-            map.addLayer(currentLayer);
-        }
-                
-        // The visible layer is one level higher than all the other layers
-        if ( previousLayer ) {
-            previousLayer.setZIndex(zIndex);
-        }        
-        currentLayer.setZIndex(zIndex + 1);
-        
-        // Make sure the layer is visible. 
-        currentLayer.div.style.opacity = currentLayer.opacity;
-        if ( currentLayer.getVisibility() === false ) {
-            currentLayer.setVisibility(true);
-        }        
+        fetchLayer();
     };
     
     self.setLookup = function(lookup) {
-        if ( lookupTable === null ) { 
-            purge(true);
-            currentLayer = self.createLayer({
-                tileClass: Worldview.Map.CanvasTile
-            });
-            currentLayer.lookupTable = lookup;
-            validLayers[currentDay] = currentLayer;
-            map.addLayer(currentLayer);
-            currentLayer.setZIndex(zIndex + 1);
+        var resetRequired = (lookupTable === null);
+        lookupTable = lookup;
+        if ( resetRequired ) { 
+            reset();
+            fetchLayer();
         } else {
-            invalidate();
+            clearCache();
             currentLayer.lookupTable = lookup;
             applyLookup(currentLayer); 
         }
-        lookupTable = lookup;
     };
     
     self.clearLookup = function() {
         if ( lookupTable !== null ) {
-            purge(true);
-            currentLayer = self.createLayer();
-            validLayers[currentDay] = currentLayer;
-            map.addLayer(currentLayer);
-            currentLayer.setZIndex(zIndex + 1);        
+            lookupTable = null;
+            reset();
+            fetchLayer();
         }    
-        lookupTable = null; 
-    };
-    
-    /**
-     * Method: getStatistics
-     * Gets number of valid and invalid layers.
-     *     
-     * Returns:
-     * A object containing two properites:
-     * - valid:   The number of layers that are active and can be used for
-     *            quickly flipping through days.
-     * - invalid: The number of layers that can no longer be used for display
-     *            and will be removed the next time the map is drawn.
-     */
-    self.getStatistics = function() {
-        return {
-            valid: Worldview.size(validLayers),
-            invalid: Worldview.size(invalidLayers)
-        };
     };
     
     /**
@@ -205,14 +168,10 @@ Worldview.Map.DailyProduct = function(map, config) {
      * Remove all layers from the map.
      */
     self.dispose = function() {
-        $.each(validLayers, function(index, layer) {
-            map.removeLayer(layer);
-        });
-        validLayers = {};
-        $.each(invalidLayers, function(index, layer) { 
-            map.removeLayer(layer);
-        });
-        invalidLayers = [];
+        reset();
+        if ( reaperId !== null ) {
+            clearTimeout(repaerId);
+        }
         map.events.unregister("movestart", self, onMoveStart);
         map.events.unregister("zoomend", self, onZoomEnd);        
     };
@@ -233,7 +192,7 @@ Worldview.Map.DailyProduct = function(map, config) {
      * Sets the z-index on all layers.
      */
     var refreshZOrder = function() {
-        $.each(validLayers, function(i, layer) {
+        $.each(cachedLayers, function(i, layer) {
             layer.setZIndex(zIndex);
         }); 
         if ( currentLayer ) {
@@ -241,54 +200,49 @@ Worldview.Map.DailyProduct = function(map, config) {
         }
     };
     
+    var reset = function() {
+        clearCache();
+        map.removeLayer(currentLayer);
+        currentLayer = null;
+    }
+    
     /*
      * Hide all layers that are not currently being displayed and move them
      * to the invalid set.
      */
-    var invalidate = function() {
-        if ( Worldview.size(validLayers) <= 1 ) {
-            return;
-        }
+    var clearCache = function() {
+        $.each(cachedLayers, function(day, layer) {
+            staleLayers.push(layer);    
+        });
+        cachedLayers = {};
 
-        for ( var day in validLayers ) {
-            if ( validLayers.hasOwnProperty(day) ) {
-                if ( day !== currentDay ) {
-                    invalidLayers.push(validLayers[day]);
-                    validLayers[day].setVisibility(false);
-                }
-            }
+        if ( reaperId !== null ) {
+            clearTimeout(reaperId);
         }
-        previousLayer = null;
-        validLayers = {};
-        validLayers[currentDay] = currentLayer;
+        reaperId = setTimeout(function() { reaper(); }, 2000);
     };
+    
     
     /*
      * Remove all layers in the invalid set from the map.
      */
-    var purge = function(all) { 
-        invalidate();
-        if ( all ) {
-            validLayers = {};
-            invalidLayers.push(currentLayer);
-            currentLayer = null;
-        }
-        $.each(invalidLayers, function(index, layer) {
+    var reaper = function(all) { 
+        $.each(staleLayers, function(index, layer) {
             if ( map.getLayerIndex(layer) >= 0 ) {
                 map.removeLayer(layer);
             }
-        });
-        previousLayer = null;
-        invalidLayers = [];
+        }); 
+        staleLayers = [];
         refreshZOrder();
+        reaperId = null;
     };
     
     var onMoveStart = function() {
-        invalidate();    
+        clearCache();    
     };
         
     var onZoomEnd = function() {
-        purge();
+        clearCache();
     };
     
     init();
