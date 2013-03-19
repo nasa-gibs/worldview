@@ -28,7 +28,7 @@ Worldview.namespace("Widget");
 Worldview.Widget.Map = function(containerId, config) { 
         
     var self = {};
-    var log = Logging.Logger("Worldview.Map");
+    var log = Logging.getLogger("Worldview.Map");
     
     /**
      * Property: productMap

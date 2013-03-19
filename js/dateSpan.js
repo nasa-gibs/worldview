@@ -26,7 +26,7 @@ SOTE.namespace("SOTE.widget.DateSpan");
   * 
 */
 SOTE.widget.DateSpan = function(containerId, config){
-    this.log = Logging.Logger("Worldview.Widget.DateSpan");
+    this.log = Logging.getLogger("Worldview.Widget.DateSpan");
 	this.SLIDER_WIDTH = 1000;
     this.DAY_IN_MS = 24*60*60*1000;
     this.sliders = new Object();

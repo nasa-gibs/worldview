@@ -19,7 +19,7 @@ SOTE.widget.Bank.prototype = new SOTE.widget.Component;
   * 
 */
 SOTE.widget.Bank = function(containerId, config){
-    this.log = Logging.Logger("Worldview.Widget.Bank");
+    this.log = Logging.getLogger("Worldview.Widget.Bank");
     this.VALID_PROJECTIONS = ["geographic", "artcic", "antarctic"];
     
 	//Get the ID of the container element

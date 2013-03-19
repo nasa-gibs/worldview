@@ -14,7 +14,7 @@ Worldview.namespace("Widget");
 Worldview.Widget.PaletteManager = function(containerId, config) {
     
     var self = {};
-    var log = Logging.Logger("Worldview.PaletteManager");
+    var log = Logging.getLogger("Worldview.PaletteManager");
     var value = "";
     var activePalettes = {};
     

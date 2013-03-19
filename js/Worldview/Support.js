@@ -4,7 +4,7 @@ Worldview.namespace("Support");
     
     ns.WEB_WORKERS = false;
     
-    var log = Logging.Logger();
+    var log = Logging.getLogger();
 
     /*
      * jQuery version 1.6 causes thousands of warnings to be emitted to the

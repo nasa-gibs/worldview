@@ -3,7 +3,7 @@
  */
 (function(ns) { 
  
-    var log = Logging.Logger("Worldview");
+    var log = Logging.getLogger("Worldview");
     
     /**
      * Constant: NAME

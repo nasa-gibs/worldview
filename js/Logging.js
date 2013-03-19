@@ -46,8 +46,19 @@
 (function(ns) {
     
     var debugging = {};
-    var debuggingAll = false;
-
+    var loggers = {};
+    
+    ns.getLogger = function(namespace) {
+        var logger = null;
+        if ( namespace in loggers ) {
+            logger = loggers[namespace];
+        } else {
+            logger = Logger();
+            loggers[namespace] = logger;
+        }
+        return logger;
+    }
+    
     /**
      * Function: debug
      * Enables debug logging.
@@ -58,10 +69,7 @@
      * for all <Loggers>.
      */
     ns.debug = function(namespace) {
-        if ( namespace === undefined ) {
-            debuggingAll = true;
-        }
-        debugging[namespace] = true;
+        ns.getLogger(namespace).setDebugEnabled(true);
     };
     
     /**
@@ -74,17 +82,11 @@
      * for all <Loggers> except for those explicitly enabled.
      */
     ns.undebug = function(namespace) {
-        if ( namespace === undefined ) {
-            debuggingAll = false;
-        } else {
-            if ( namespace in debugging ) {
-                delete debugging[namespace];
-            }
-        }
+        ns.getLogger(namespace).setDebugEnabled(false);
     };    
        
     /**
-     * Class: Logging.Logger
+     * Class: Logging.getLogger
      * Sample logger
      * 
      * Constructor: Logger
@@ -93,7 +95,7 @@
      * Parameters:
      * namespace - The name given to this logger.
      */    
-    ns.Logger = function(namespace) {
+     var Logger = function() {
 
         var self = {};
         
@@ -105,12 +107,8 @@
          * Parameters:
          * message - The message to print to the console.
          */
-        self.message = function(message) {
-            if ( console ) {
-                console.log(message);
-            }
-        };
-                
+        self.message = ( console && console.log ) || function() {};
+        
         /**
          * Method: error
          * Prints an error message to the console. Uses console.error if
@@ -120,15 +118,7 @@
          * Parameters:
          * message - The message to print to the console.
          */
-        self.error = function(message) {
-            if ( console ) {
-                if ( console.error ) {
-                    console.error(message);
-                } else {
-                    console.log(message);
-                }
-            }
-        };
+        self.error = console.error || self.mesesage; 
 
         /**
          * Method: warn
@@ -139,15 +129,8 @@
          * Parameters:
          * message - The message to print to the console.
          */
-        self.warn = function(message) {
-            if ( console ) {
-                if ( console.warn ) {
-                    console.warn(message);
-                } else {
-                    console.log(message);
-                }
-            }
-        };
+        self.warn = console.warn || self.message;
+        
         
         /**
          * Method: info
@@ -158,26 +141,14 @@
          * Parameters:
          * message - The message to print to the console.
          */
-        self.info = function(message) {
-            if ( console ) {
-                if ( console.info ) {
-                    console.info(message);
-                } else {
-                    console.log(message);
-                }
-            }
-        };
+        self.info = console.info || self.message;
         
         /**
          * Method: trace
          * Prints a stack trace to the console. If console.trace does not
          * exist, this method does nothing.
          */
-        self.trace = function() {
-            if ( console && console.trace ) {
-                console.trace();
-            }
-        };
+        self.trace = console.trace || function() {}
         
         /**
          * Method: debug
@@ -189,14 +160,17 @@
          * Parameters:
          * message - The message to print to the console.
          */
-        self.debug = function(message) {
-            if ( debuggingAll ) {
-                self.message(message);
-            } else if ( namespace !== undefined && namespace in debugging ) {
-                self.message(message);
+        self.debug = function() {};
+        
+        self.setDebugEnabled = function(enabled) {
+            if ( enabled ) {
+                self.debug = self.message;
+            } else {
+                self.debug = function() {};
             }
-        }
-       
+        };
+        
+        
         return self;       
     };
                 

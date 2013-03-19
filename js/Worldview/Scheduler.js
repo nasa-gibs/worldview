@@ -1,7 +1,7 @@
 
 Worldview.Scheduler = function(workerScript, maxJobs) {
     
-    var log = Logging.Logger("Worldview.Scheduler");
+    var log = Logging.getLogger("Worldview.Scheduler");
     var self = {};
     var workers = [];
     var queue = [];

@@ -29,7 +29,7 @@ Worldview.namespace("Map");
  */
 Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
     
-    var log = Logging.Logger("Worldview.Map");
+    var log = Logging.getLogger("Worldview.Map");
     var self = {};
     
     // Map objects, one for each supported projection

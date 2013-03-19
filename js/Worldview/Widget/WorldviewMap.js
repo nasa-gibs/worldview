@@ -34,7 +34,7 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
     
     var self = ns.Map(containerId, config);
     
-    var log = Logging.Logger("Worldview.Map");
+    var log = Logging.getLogger("Worldview.Map");
     var lastState = {};
     var last = null;
     

@@ -56,7 +56,7 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
     graphics: null,
     grpahicsOriginal: null,
     latestJobId: null,
-    log: Logging.Logger("Worldview.Map.CanvasTile"),
+    log: Logging.getLogger("Worldview.Map.CanvasTile"),
     
 	initialize: function(layer, position, bounds, url, size, options) {
 	    // This is required or the browser will throw security exceptions

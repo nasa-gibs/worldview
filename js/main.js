@@ -1,6 +1,6 @@
 $(function() {// Initialize "static" vars
 
-    var log = Logging.Logger();
+    var log = Logging.getLogger();
     var selector;
     
     var entryPoint = function() {      

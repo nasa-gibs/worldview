@@ -19,7 +19,7 @@ SOTE.widget.Switch.prototype = new SOTE.widget.Component;
   * 
 */
 SOTE.widget.Switch = function(containerId, config){
-    this.log = Logging.Logger("Worldview.Widget.Switch");
+    this.log = Logging.getLogger("Worldview.Widget.Switch");
     this.VALID_PROJECTIONS = ["geographic", "arctic", "antarctic"];
     
 	//Get the ID of the container element
