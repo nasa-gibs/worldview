@@ -11,6 +11,9 @@
 		<file name="ext/datejs/date.js"/>
 		<file name="ext/jcrop/jcrop.js"/>
 		<file name="ext/jquery.dd/jquery.dd.js"/>
+        <file name="ext/joyride/jquery.cookie.js"/>
+        <file name="ext/joyride/jquery.joyride-2.0.3.js"/>
+		<file name="ext/joyride/modernizr.mq.js"/>
 		<file name="component.js"/>
 		<file name="registry.js"/>
 		<file name="util.js"/>
@@ -25,6 +28,7 @@
 		<file name="switch.js"/>
 		<file name="selector.js"/>
 		<file name="sote.js"/>
+        <file name="tour.js"/>
 	    	
 		<file name="Logging.js"/>
 		<file name="Worldview.js"/>

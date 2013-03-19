@@ -170,7 +170,7 @@ Worldview.Map.DailyProduct = function(map, config) {
     self.dispose = function() {
         reset();
         if ( reaperId !== null ) {
-            clearTimeout(repaerId);
+            clearTimeout(reaperId);
         }
         map.events.unregister("movestart", self, onMoveStart);
         map.events.unregister("zoomend", self, onZoomEnd);        

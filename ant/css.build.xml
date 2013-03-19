@@ -16,7 +16,9 @@
 		<file name="bank.css"/>
 		<file name="selector.css"/>
 		<file name="sote.css"/>
+		<file name="splash.css"/>
 		<file name="ext/jcrop/jcrop.css"/>
+		<file name="ext/joyride/joyride-2.0.3.css"/>
 	</filelist>
 	
 </project>
