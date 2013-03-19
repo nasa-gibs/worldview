@@ -1,0 +1,115 @@
+/* These are just the demo styles and these can be removed and Orbit 
+will still work like a champ (except any content block needs a background which
+our demo gets from this sheet) */
+        
+/*	--------------------------------------------------
+	Global Reset & Standards
+	-------------------------------------------------- */
+	html, body { margin: 0; padding: 0; }
+	h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, cite, code, img, small, strike, strong, em, sub, sup, tt, dd, dl, dt, li, ol, ul, fieldset, form, label, legend, button, table, caption, tbody, tfoot, thead, tr, th, td, section { margin: 0; padding: 0; border: 0; font-weight: normal; font-style: normal; font-size: 100%; line-height: 1; font-family: inherit; text-align: left; }
+	table { border-collapse: collapse; border-spacing: 0; }
+	ol, ul { list-style: none; }
+
+
+	
+/* --------------------------------------------------
+	:: Grid
+	-------------------------------------------------- */
+
+	.container { padding: 40px 20px 0 20px; }
+	
+	.row { width: 100%; max-width: 940px; min-width: 727px; margin: 0 auto; }
+	/* To fix the grid into a certain size, set max-width to width */
+	.row .row { min-width: 0px; }
+	
+	.column, .columns { margin-left: 4.4%; float: left; min-height: 1px; position: relative; }
+	.column:first-child, .columns:first-child { margin-left: 0px; }
+	
+	.row .one.columns { width: 4.3%; }
+	.row .two.columns { width: 13%; }
+	.row .three.columns { width: 21.7%; }
+	.row .four.columns { width: 30.4%; }
+	.row .five.columns { width: 39.1%; }
+	.row .six.columns { width: 47.8%; }
+	.row .seven.columns { width: 56.5%; }
+	.row .eight.columns { width: 65.2%; }
+	.row .nine.columns { width: 73.9%; }
+	.row .ten.columns { width: 82.6%; }
+	.row .eleven.columns { width: 91.3%; }
+	.row .twelve.columns { width: 100%; }
+	
+	.row .offset-by-one 	{ margin-left: 8.7%;  }
+	.row .offset-by-two 	{ margin-left: 17.4%;  }
+	.row .offset-by-three 	{ margin-left: 26.1%;  }
+	.row .offset-by-four 	{ margin-left: 34.8%;  }
+	.row .offset-by-five 	{ margin-left: 43.5%;  }
+	.row .offset-by-six 	{ margin-left: 52.2%;  }
+	.row .offset-by-seven 	{ margin-left: 60.9%;  }
+	.row .offset-by-eight 	{ margin-left: 69.6%;  }
+	.row .offset-by-nine 	{ margin-left: 78.3%;  }
+	.row .offset-by-ten 	{ margin-left: 87%;  }
+	.row .offset-by-eleven 	{ margin-left: 95.7%;  }
+	
+	img, object, embed { max-width: 100%; }
+	img { -ms-interpolation-mode: bicubic; }
+		
+	
+	/* Clear the columns automagically */
+	 .row:after, .clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+	 .row:last-child:after { content: ""; }
+	 * html .row, * html .clearfix { height: 1%; }
+	 .row, .clearfix { display: inline-block; }
+	 .row, .clearfix { display: block; }
+
+
+
+	body { background: #fff; font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; font-size: 13px; line-height: 18px; text-shadow: 0 0 1px rgba(0,0,0,0.01); color: #555; }
+	
+	p {
+	  line-height: 1.25;
+	}
+	
+	h1 {
+		font-weight: bold; 
+		color: #222;
+		font-size: 36px;
+		line-height: 1.5;
+	}
+	
+	h2 { 
+	  font-weight: bold; 
+		color: #222;
+		font-size: 28px;
+		line-height: 1.25;
+	}
+	
+	h3 { 
+	  font-weight: bold; 
+		color: #222;
+		font-size: 22px;
+		line-height: 1.25;
+	}
+	
+	h4 { 
+	  font-weight: bold; 
+		color: #222;
+		font-size: 18px;
+		line-height: 1.25;
+	}
+		
+	h1 + a { 
+		color: #00baff;
+		text-decoration: none; 
+		font-weight: normal;
+		font-size: 20px;
+	}
+		
+	a:hover { text-decoration: underline; }
+	
+	hr {
+	  margin: 20px 0;
+	  border: solid 1px #ccc;
+	  border-width: 1px 0 0 0;
+	}
+	
+ 

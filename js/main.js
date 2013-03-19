@@ -77,7 +77,9 @@ $(function() {// Initialize "static" vars
             REGISTRY.addAllReadyCallback(testQS);
         }
                 	    
-        log.info(Worldview.NAME + ", Version " + Worldview.VERSION);	    
+        log.info(Worldview.NAME + ", Version " + Worldview.VERSION);	  
+        
+        startTour();   
     };
         
     var onConfigLoadError = function(message) {
