@@ -75,7 +75,7 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
      */
     self.projection = null;    
     
-    var init = function() {
+    var init = function() {        
         var $container = $("#" + containerId);
         if ( $container.length === 0 ) {
             throw "No container for ProductMap: " + containerId;
@@ -91,9 +91,10 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
             
             // Put in a bogus layer to act as the base layer to make the
             // map happy for setting up the starting location
-            newMap.addLayer(new OpenLayers.Layer({
+            var blankLayer = new OpenLayers.Layer("Blank", {
                 isBaseLayer: true
-            }));
+            });
+            newMap.addLayer(blankLayer);
             
             // If a starting location is provided, go there otherwise
             // zoom to max extent
@@ -103,6 +104,7 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
                 log.debug(projection + " start: " + startCenter + ", " + 
                         startZoom);
                 newMap.setCenter(startCenter, startZoom);
+                log.debug("Center is: " + newMap.getCenter() + ", " + newMap.getZoom());
             } else {
                 log.debug(projection + " start: maxExtent");
                 newMap.zoomToMaxExtent();

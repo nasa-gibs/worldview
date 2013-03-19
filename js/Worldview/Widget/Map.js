@@ -60,9 +60,7 @@ Worldview.Widget.Map = function(containerId, config) {
                 self.productMap.append(name);
             }
         });
-        
-        self.productMap.map.zoomToMaxExtent();
-        
+                
         REGISTRY.markComponentReady(containerId);
         log.debug("Map is ready");
     };  
