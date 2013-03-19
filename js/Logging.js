@@ -107,7 +107,8 @@
          * Parameters:
          * message - The message to print to the console.
          */
-        self.message = ( console && console.log ) || function() {};
+        self.message = ( console && console.log ) 
+                ? console.log.bind(console) : function() {};
         
         /**
          * Method: error
@@ -118,7 +119,8 @@
          * Parameters:
          * message - The message to print to the console.
          */
-        self.error = console.error || self.mesesage; 
+        self.error = console.error 
+                ? console.error.bind(console) : self.mesesage; 
 
         /**
          * Method: warn
@@ -129,8 +131,8 @@
          * Parameters:
          * message - The message to print to the console.
          */
-        self.warn = console.warn || self.message;
-        
+        self.warn = console.warn 
+                ? console.warn.bind(console) : self.message;
         
         /**
          * Method: info
@@ -141,7 +143,8 @@
          * Parameters:
          * message - The message to print to the console.
          */
-        self.info = console.info || self.message;
+        self.info = console.info 
+                ? console.info.bind(console) : self.message;
         
         /**
          * Method: trace
