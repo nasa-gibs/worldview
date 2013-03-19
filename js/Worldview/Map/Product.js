@@ -55,15 +55,20 @@ Worldview.Map.Product = function(c) {
     /**
      * Creates a new layer based on the configuration provided. 
      */
-    self.createLayer = function() {      
+    self.createLayer = function(additionalProperties) {
+        var properties = config.properties;
+        if ( additionalProperties ) {
+            properties = $.extend(true, {}, config.properties, 
+                    additionalProperties);
+        }  
         if ( config.type === "wms" ) {
             return new OpenLayers.Layer.WMS(config.name, config.url, 
-                    config.parameters, config.properties);
+                    config.parameters, properties);
         } else if ( config.type === "wmts") {
-            return new OpenLayers.Layer.WMTS(config.properties);
+            return new OpenLayers.Layer.WMTS(properties);
         } else if ( config.type === "graticule") {
             return new Worldview.Map.GraticuleLayer(config.name, 
-                    config.properties);
+                    properties);
         } else {
             throw "Unsupported layer type: " + config.type;
         }

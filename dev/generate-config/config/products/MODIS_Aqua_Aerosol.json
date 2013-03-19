@@ -32,7 +32,6 @@
     "properties": {
         "format": "image/png",
         "layer": "MODIS_Aqua_Aerosol",
-        "tileClass": "Worldview.Map.CanvasTile",
         "tileSize": [
             512,
             512

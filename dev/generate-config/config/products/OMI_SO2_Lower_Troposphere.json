@@ -32,7 +32,6 @@
     "properties": {
         "format": "image/png",
         "layer": "OMI_SO2_Lower_Troposphere",
-        "tileClass": "Worldview.Map.CanvasTile",
         "tileSize": [
             512,
             512

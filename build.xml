@@ -29,7 +29,9 @@
 		<delete dir="${build.dir}"/>
 		<delete dir="${dist.dir}"/>
 		<delete dir="${basedir}/doc/NaturalDocs/Data"/>
+		<!--
 		<delete file="${basedir}/data/config"/>
+		-->
 	</target>
 	
 	<target name="distclean" depends="clean" 
@@ -107,9 +109,11 @@
         </exec>
         
         <!-- Development file -->
+	<!--
         <delete file="${basedir}/data/config"/>
         <copy file="${build.dir}/config.json" 
               tofile="${basedir}/data/config"/>
+	-->
 
         <exec executable="python">
             <arg value="${basedir}/dev/generate-config/generate-config.py"/>
@@ -199,6 +203,9 @@
 			</fileset>
 			<fileset dir="${build.web.js.dir}">
 				<include name="**/*.js"/>
+				<!-- Web worker needs to load this directly, leave it around -->
+				<exclude name="**/TileWorker.js"/>
+                <exclude name="**/TileRenderer.js"/>
 			</fileset>
 		</delete>
 		

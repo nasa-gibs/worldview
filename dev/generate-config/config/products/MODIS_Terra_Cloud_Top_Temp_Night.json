@@ -32,7 +32,6 @@
     "properties": {
         "format": "image/png",
         "layer": "MODIS_Terra_Cloud_Top_Temp_Night",
-        "tileClass": "Worldview.Map.CanvasTile",
         "tileSize": [
             512,
             512

@@ -75,7 +75,6 @@
     "properties": {
         "format": "image/png",
         "layer": "MODIS_Aqua_Brightness_Temp_Band31_Night",
-        "tileClass": "Worldview.Map.CanvasTile",
         "tileSize": [
             512,
             512

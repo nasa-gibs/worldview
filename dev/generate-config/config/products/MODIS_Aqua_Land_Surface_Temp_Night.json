@@ -33,7 +33,6 @@
     "properties": {
         "format": "image/png",
         "layer": "MODIS_Aqua_Land_Surface_Temp_Night",
-        "tileClass": "Worldview.Map.CanvasTile",
         "tileSize": [
             512,
             512

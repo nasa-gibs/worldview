@@ -52,7 +52,11 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
 	 * when clear() is invoked.
 	 */
 	canvas: null,
+	cavansOriginal: null,
     graphics: null,
+    grpahicsOriginal: null,
+    latestJobId: null,
+    log: Logging.Logger("Worldview.Map.CanvasTile"),
     
 	initialize: function(layer, position, bounds, url, size, options) {
 	    // This is required or the browser will throw security exceptions
@@ -64,10 +68,14 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
      * Discards the canvas.
 	 */
 	destroy: function() {
+	    this.log.debug(this.id + ": destroy");
 		OpenLayers.Tile.Image.prototype.destroy.apply(this, arguments);	
+		this.clear();
 		if ( this.canvas ) {
+		    this.graphics = null;
 			this.canvas = null;
-			this.graphics = null;
+			this.graphicsOriginal = null;
+			this.canvasOriginal = null;
 		}
 	},
 		
@@ -76,9 +84,11 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
 	 * set.
 	 */
 	clear: function() {
-		OpenLayers.Tile.Image.prototype.clear(this, arguments);
+	    this.log.debug(this.id + ": clear");
+		OpenLayers.Tile.Image.prototype.clear.apply(this, arguments);
 		if ( this.canvas ) {
 			this.canvas.style.visibility = "hidden";
+			this.canvas.style.opacity = 0;
 			OpenLayers.Element.removeClass(this.canvas, "olImageLoadError");
 		}
 	},
@@ -105,12 +115,13 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
 				style.width = image.style.width;
 				style.height = image.style.height;
 			}
-			style.visibility = image.style.visibility;
-			style.opacity = image.style.opacity;
+			//style.visibility = image.style.visibility;
+			style.visibility = "hidden";
+			style.opacity = 0;
 			style.filter = image.style.filter;
 			style.position = image.style.position;
 			if ( this.frame ) {
-				this.frame.appendChild(this.canvas);
+				this.frame.appendChild(self.canvas);
 			}
 		}
 		return this.canvas;
@@ -124,44 +135,86 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
 		return this.frame ? this.frame : canvas;
 	},
     
+    setImgSrc: function() {
+        if ( this.canvas ) {
+            this.log.debug(this.id + ": setImgSrc: " + arguments[0]);
+            this.canvas.visibility = "hidden";
+            this.canvas.opacity = 0;
+            this.latestJobId = 0;
+        }
+        if ( this.imgDiv ) {
+            OpenLayers.Tile.Image.prototype.setImgSrc.apply(this, arguments);
+        }
+    },
+    
     onTileRendered: function(results) {
-        var self = results.self;
-        var imageData = results.message.imageData;        
+        var self = results.self;    
+        var canvas = self.canvas;
+        if ( !canvas || results.id !== self.latestJobId ) {
+            return;
+        }
+        self.log.debug("latestJobId: " + self.latestJobId + ", results.id" + results.id);
+        var imageData = results.message.destination;
+  
         self.graphics.putImageData(imageData, 0, 0); 
         
-        self.canvas.style.visibility = "inherit";
-        self.canvas.style.opacity = self.layer.opacity;
-        self.isLoading = false;
+        canvas.style.visibility = "inherit";
+        canvas.style.opacity = self.layer.opacity;
         self.canvasContext = null;
-        self.events.triggerEvent("loadend");         
+        self.isLoading = false;
+        self.events.triggerEvent("loadend");
+        self.log.debug(self.id + ": rendered");       
+    },
+    
+    applyLookup: function(imageLoaded) { 
+        if ( !this.canvas ) {
+            if ( imageLoaded ) {
+                this.isLoading = false;
+                this.events.triggerEvent("loadend");    
+            }
+            return;
+        }
+        this.isLoading = true;       
+        //this.canvas.style.visibility = "hidden";
+        //this.canvas.style.opacity = 0;
+        
+        var lookupTable = this.layer.lookupTable;
+        var source = this.graphicsOriginal.getImageData(0, 0, this.canvas.width, 
+                this.canvas.height);
+        var destination = this.graphics.getImageData(0, 0, this.canvas.width,
+                this.canvas.height);
+                 
+        this.latestJobId = Worldview.Map.tileScheduler.submit({
+            message: {
+                lookupTable: lookupTable,
+                source: source,
+                destination: destination
+            },
+            callback: this.onTileRendered,
+            self: this
+        });            
     },
     
 	/*
 	 * Draws the loaded image to the canvas and applies a lookup table if
 	 */
     onImageLoad: function() {
-        OpenLayers.Event.stopObservingElement(this.imgDiv);
+        OpenLayers.Event.stopObservingElement(this.imgDiv);        
         
-        //this.imgDiv.removeAttribute("crossorigin");       
-        this.canvas.width = this.imgDiv.width;
-        this.canvas.height = this.imgDiv.height;
+        this.log.debug(this.id + ": tile loaded");               
+        this.canvasOriginal = document.createElement("canvas");
+        this.graphicsOriginal = this.canvasOriginal.getContext("2d");
+        this.canvasOriginal.width = this.imgDiv.width;
+        this.canvasOriginal.height = this.imgDiv.height;
         
-		this.graphics.drawImage(this.imgDiv, 0, 0);
-	    
+        var canvas = this.getCanvas();
+        canvas.width = this.canvasOriginal.width;
+        canvas.height = this.canvasOriginal.height;
+        
+	    this.graphicsOriginal.drawImage(this.imgDiv, 0, 0);
+        	    
 		if ( this.layer.lookupTable ) {
-			var lookupTable = this.layer.lookupTable;
-            var imageData = this.graphics.getImageData(0, 0, this.canvas.width, 
-                    this.canvas.height);
-                
-			Worldview.Map.tileScheduler.submit({
-			    message: {
-			        lookupTable: lookupTable,
-			        imageData: imageData
-			    },
-			    callback: this.onTileRendered,
-			    self: this,
-			    transferables: [imageData]
-		    });
+            this.applyLookup(true);
 		} else { 
             this.canvas.style.visibility = "inherit";
             this.canvas.style.opacity = this.layer.opacity;
@@ -171,12 +224,15 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
 		}
 	},
 	
-	/*
-	 * FIXME
-	 */
-	onImageError: function() {
-			
-	},
+    createBackBuffer: function() {
+        if ( !this.canvas || this.isLoading ) {
+            return;
+        }
+        this.log.debug(this.id + ": createBackBuffer");
+        var backBuffer = this.canvas;
+        this.canvas = null;
+        return backBuffer;
+    },
 	
 	/*
 	 * Name of this class per OpenLayers convention.
