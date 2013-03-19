@@ -11,7 +11,6 @@
         "geographic": {}
     },
     "properties": {
-        "bringToFront": "true",
         "opacity": 0.55,
         "tileSize": [
             512,

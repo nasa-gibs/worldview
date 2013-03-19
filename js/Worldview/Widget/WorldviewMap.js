@@ -158,10 +158,16 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
         for ( var i = 0; i < sets.length; i++ ) {
             var set = sets[i];
             var items = set.split(",");
+            var values = [];
             // First item is the type (e.g., baselayer or overlay). Ignore it.
             for ( var j = 1; j < items.length; j++ ) {
-                results.push(items[j]);
+                values.push(items[j]);
             }
+            // Products are listed in the "opposite" order from what is 
+            // expected--the first layer is the layer to be drawn last. 
+            // Flip them.
+            values.reverse();
+            results = results.concat(values);
         }
         return results;
     };

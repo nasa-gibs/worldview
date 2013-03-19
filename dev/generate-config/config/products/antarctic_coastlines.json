@@ -28,7 +28,6 @@
         }
     },
     "properties": {
-        "bringToFront": "true",
         "format": "image/png",
         "layer": "antarctic_coastlines",
         "tileSize": [

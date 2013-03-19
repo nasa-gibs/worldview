@@ -28366,7 +28366,6 @@
                 }
             },
             "properties": {
-                "bringToFront": "true",
                 "format": "image/png",
                 "layer": "antarctic_coastlines",
                 "tileSize": [
@@ -28407,7 +28406,6 @@
                 }
             },
             "properties": {
-                "bringToFront": "true",
                 "format": "image/png",
                 "layer": "arctic_coastlines",
                 "tileSize": [
@@ -28422,7 +28420,6 @@
             "description": "SEDAC / Coastlines v3",
             "name": "Coastlines",
             "parameters": {
-                "bringToFront": "true",
                 "format": "image/png",
                 "layers": "cartographic:00-global-labels",
                 "transitionEffect": "none",
@@ -28458,7 +28455,6 @@
                 "geographic": {}
             },
             "properties": {
-                "bringToFront": "true",
                 "opacity": 0.55,
                 "tileSize": [
                     512,
@@ -28475,7 +28471,6 @@
             "description": "SEDAC / Coastlines v3",
             "name": "Coastlines",
             "parameters": {
-                "bringToFront": "true",
                 "format": "image/png",
                 "layers": "gpw-v3-coastlines",
                 "transitionEffect": "none",
@@ -28832,7 +28827,6 @@
                 "antarctic": {}
             },
             "properties": {
-                "bringToFront": "true",
                 "opacity": 0.75,
                 "tileSize": [
                     512,
@@ -28849,7 +28843,6 @@
             "description": "Polarview / Graticule",
             "name": "Latitude-Longitude Lines",
             "parameters": {
-                "bringToFront": "true",
                 "format": "image/png",
                 "layers": "polarview:graticuleN",
                 "transitionEffect": "none",
@@ -28904,7 +28897,6 @@
                 }
             },
             "properties": {
-                "bringToFront": true,
                 "defaultLayer": "true",
                 "format": "image/png",
                 "layer": "sedac_bound",

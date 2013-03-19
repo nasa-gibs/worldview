@@ -27,11 +27,6 @@ Worldview.Map.Product = function(c) {
     var self = {};
     var config;
     
-    /**
-     * True if this product should be displayed on top of all other products.
-     */
-    self.bringToFront = false;
-    
     var init = function() {
         config = $.extend(true, {}, c);
         
@@ -40,9 +35,6 @@ Worldview.Map.Product = function(c) {
         if ( prop.tileSize ) {
             prop.tileSize = new OpenLayers.Size(prop.tileSize[0], 
                                                 prop.tileSize[1]);
-        }
-        if ( prop.bringToFront === true ) {
-            self.bringToFront = true;
         }
         if ( prop.transitionEffect === undefined ) {
             prop.transitionEffect = "resize";

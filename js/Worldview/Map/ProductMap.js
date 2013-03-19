@@ -332,12 +332,6 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
                 product.setZIndex(index * 2);
             }
         });
-        $.each(self.products, function(index, name) { 
-            var product = self.map.products[name];
-            if ( product && product.bringToFront === true ) {
-                product.setZIndex(index * 2 + self.products.length * 2);
-            }
-        });
     };
     
     /*
