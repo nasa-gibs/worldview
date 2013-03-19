@@ -32,7 +32,6 @@
     "properties": {
         "format": "image/png",
         "layer": "OMI_Absorbing_Aerosol_Optical_Depth",
-        "tileClass": "Worldview.Map.CanvasTile",
         "tileSize": [
             512,
             512

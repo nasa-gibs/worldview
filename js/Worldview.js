@@ -70,8 +70,10 @@
      *           caught.
      */
     ns.error = function(message, cause) {
-        var causeMessage = ( cause === undefined ) ? "" : ": " + cause;
-        log.error(message + causeMessage);
+        log.error(message);
+        if ( cause ) {
+            log.error(cause);
+        }
    
         if ( window.YAHOO && window.YAHOO.widget && 
                 window.YAHOO.widget.Panel ) {

@@ -32,7 +32,6 @@
     "properties": {
         "format": "image/png",
         "layer": "OMI_SO2_Upper_Troposphere_and_Stratosphere",
-        "tileClass": "Worldview.Map.CanvasTile",
         "tileSize": [
             512,
             512

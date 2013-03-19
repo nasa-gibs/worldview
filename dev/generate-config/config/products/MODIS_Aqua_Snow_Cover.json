@@ -78,7 +78,6 @@
     "properties": {
         "format": "image/png",
         "layer": "MODIS_Aqua_Snow_Cover",
-        "tileClass": "Worldview.Map.CanvasTile",
         "tileSize": [
             512,
             512

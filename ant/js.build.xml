@@ -47,6 +47,7 @@
         <file name="Worldview/Map/StaticProduct.js"/>
         <file name="Worldview/Map/DailyProduct.js"/>
         <file name="Worldview/Map/GraticuleLayer.js"/>
+        <file name="Worldview/Map/TileRenderer.js"/>
         <file name="Worldview/Widget/Map.js"/>
         <file name="Worldview/Widget/PaletteManager.js"/>
         <file name="Worldview/Widget/WorldviewMap.js"/>

@@ -32,7 +32,6 @@
     "properties": {
         "format": "image/png",
         "layer": "OMI_Aerosol_Index",
-        "tileClass": "Worldview.Map.CanvasTile",
         "tileSize": [
             512,
             512

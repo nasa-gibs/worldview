@@ -1,10 +1,15 @@
 
+importScripts("TileRenderer.js");
+
 var handleEvent = function(event) {
     var message = event.data.message;
     var lookupTable = message.lookupTable;
-    var pixels = message.imageData.data;
-    var graphics = message.graphics;
+    var source = message.source;
+    var destination = message.destination;
+        
+    Worldview.Map.TileRenderer.renderLookup(lookupTable, source, destination);
     
+    /*
     for ( var i = 0; i < pixels.length; i += 4 ) {
         var lookup = pixels[i + 0] + "," + 
                      pixels[i + 1] + "," + 
@@ -18,11 +23,8 @@ var handleEvent = function(event) {
             pixels[i + 3] = 0xff;
         }
     }
-    if ( event.data.supportTransferables ) {
-        self.postMessage(event.data, [event.data.message.imageData]);
-    } else {
-        self.postMessage(event.data);
-    }
+    */
+    self.postMessage(event.data);
 };
 
 self.addEventListener("message", function(event) {

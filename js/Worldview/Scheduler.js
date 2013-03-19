@@ -68,6 +68,7 @@ Worldview.Scheduler = function(workerScript, maxJobs) {
         }
         log.debug("Completed job " + job.id + ", backlog: " + queue.length);
         jobs[results.id].callback({
+            id: job.id,
             message: results.message,
             self: jobs[results.id].self
         });
@@ -157,7 +158,8 @@ Worldview.Scheduler = function(workerScript, maxJobs) {
             execute(job);
         } else {
             enqueue(job);
-        }            
+        }      
+        return id;      
     }
     
         

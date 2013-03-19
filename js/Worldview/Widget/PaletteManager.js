@@ -16,6 +16,7 @@ Worldview.Widget.PaletteManager = function(containerId, config) {
     var self = {};
     var log = Logging.Logger("Worldview.PaletteManager");
     var value = "";
+    var activePalettes = {};
     
     self.config = config;
     
@@ -34,15 +35,31 @@ Worldview.Widget.PaletteManager = function(containerId, config) {
         if ( v === undefined ) {
             return;
         }
-        if ( v !== value ) {
-            log.debug("PaletteManager.setValue: " + v);
-            value = v;
-            REGISTRY.fire(self);
-        }
+        activePalettes = {};
+        var parts = v.split("~");
+        $.each(parts, function(index, part) {
+            var segments = v.split(",");
+            activePalettes[segments[0]] = segments[1];    
+        });
+        REGISTRY.fire(self);
     };
     
     self.getValue = function() {
-        return containerId + "=" + value;
+        try {
+            var parts = [];
+            $.each(activePalettes, function(product, palette) {
+                if ( palette ) {
+                    parts.push(product + "," + palette);
+                }
+            });
+            var qs = "";
+            if ( parts.length > 0 ) {
+                qs = containerId + "=" + parts.join("~");
+            }            
+            return qs;
+        } catch ( error ) {
+            Worldview.error("Unable to update", error);
+        }
     };
     
     self.displaySelector = function(product) { 
@@ -66,27 +83,56 @@ Worldview.Widget.PaletteManager = function(containerId, config) {
         canvas.width = 100;
         canvas.height = 14;
         
+        var productConfig = self.config.products[product];            
+        var renderedName = productConfig.rendered;
+        
+        var renderedPalette = Worldview.Palette.ColorBar({
+            canvas: canvas,
+            palette: config.palettes[renderedName],
+            bins: productConfig.bins,
+            stops: productConfig.stops
+        });
+        renderedPalette.name = "Default";
+        renderedPalette.image = renderedPalette.toImage();
+        palettes.push(renderedPalette);
+        
+        var activePalette = activePalettes[product];
+        var selected = null;
+                 
         $.each(self.config.palettes, function(name, p) {
             if ( p.source === "stock" ) {
                 var cb = Worldview.Palette.ColorBar({
                     canvas: canvas, 
                     palette: p, 
-                    bins: self.config.products[product].bins,
-                    stops: self.config.products[product].stops
+                    bins: productConfig.bins,
+                    stops: productConfig.stops
                 });
                 p.image = cb.toImage();
                 palettes.push(p);
+                if ( p.id === activePalette ) {
+                    selected = palettes.length - 1;
+                }
             }       
         });
-   
+    
         var paletteSelector = Worldview.Palette.PaletteSelector({
             selector: "#palette-selector",
             palettes: palettes
         });
-                 
+        if ( selected !== null ) {
+            paletteSelector.select(selected);
+        }
+                     
         paletteSelector.addSelectionListener(function(palette) {
-            self.setValue(product + "," + palette.id);
+            if ( palette.source === "rendered" ) {
+                delete activePalettes[product];
+            } else {
+                activePalettes[product] = palette.id; 
+            }
+            REGISTRY.fire(self);
         });
+        
+
                                  
     };
 

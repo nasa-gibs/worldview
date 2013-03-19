@@ -32,7 +32,6 @@
     "properties": {
         "format": "image/png",
         "layer": "OMI_Cloud_Pressure",
-        "tileClass": "Worldview.Map.CanvasTile",
         "tileSize": [
             512,
             512

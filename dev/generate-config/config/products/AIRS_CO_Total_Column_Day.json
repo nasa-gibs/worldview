@@ -32,7 +32,6 @@
     "properties": {
         "format": "image/png",
         "layer": "AIRS_CO_Total_Column_Day",
-        "tileClass": "Worldview.Map.CanvasTile",
         "tileSize": [
             512,
             512
