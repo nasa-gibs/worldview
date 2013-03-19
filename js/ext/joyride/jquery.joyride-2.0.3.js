@@ -97,9 +97,9 @@
 
             }
 
-            settings.$document.on('click.joyride', '.joyride-next-tip, .joyride-modal-bg', function (e) {
-              e.preventDefault();
+            settings.$document.on('click', '.joyride-next-tip, .joyride-modal-bg', function (e) {
               if(e.target.text === "Next") {
+              	e.preventDefault();
               	e.stopImmediatePropagation();
               	if (settings.$li.next().length < 1) {
                		methods.end();
@@ -116,8 +116,8 @@
 
 			//BETH
 			settings.$document.on('click.joyride', '.joyride-prev-tip, .joyride-modal-bg', function (e) {
-              e.preventDefault();
               if(e.target.text === "Prev") {
+              	e.preventDefault();
               	e.stopImmediatePropagation();
               	if (settings.$li.prev().length < 1) {
                 	methods.end();
