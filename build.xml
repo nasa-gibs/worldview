@@ -304,7 +304,7 @@
         <sshexec host="${deploy.host}"
             username="${deploy.user}"
             keyfile="${user.home}/.ssh/id_rsa"
-            command="rm -rf ${deploy.dir}/worldview*; ( cd ${deploy.dir}; find artifacts -name '*.tar.bz2' -exec tar xf {} \; ; chmod g+wx worldview* ; rm -r artifacts/*)"/>
+            command="rm -rf ${deploy.dir}/worldview*; ( cd ${deploy.dir}; rm -f worldview* ; find artifacts -name '*.tar.bz2' -exec tar xf {} \; ; chmod g+wx worldview* ; rm -r artifacts/*)"/>
   </target>
   
 </project>
