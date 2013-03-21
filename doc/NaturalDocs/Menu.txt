@@ -82,6 +82,7 @@ Group: Code Reference  {
 
          File: CanvasTile  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/CanvasTile.js)
          File: DailyProduct  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/DailyProduct.js)
+         File: LookupWorker  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/LookupWorker.js)
          File: Product  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/Product.js)
          File: ProductMap  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/ProductMap.js)
          File: StaticProduct  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/StaticProduct.js)
@@ -106,6 +107,7 @@ Group: Code Reference  {
          File: WorldviewMap  (no auto-title, /Users/jmcgann/Code/Aptana/worldview/js/Worldview/Widget/WorldviewMap.js)
          }  # Group: Widget
 
+      File: Scheduler  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Scheduler.js)
       }  # Group: Worldview
 
    Group: TestSuite  {

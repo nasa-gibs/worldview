@@ -13,7 +13,13 @@ $(function() {// Initialize "static" vars
                 .error(Worldview.ajaxError(onConfigLoadError));
     }
   
-    var onConfigLoad = function(config) {  	    	            	    	            	    	            	    	    	    	            	    	    
+    var init = function(config) {  	
+        
+        Worldview.Map.tileLookupScheduler = Worldview.Scheduler({
+            script: "js/Worldview/Map/LookupWorker.js", 
+            max: 4
+        });
+                    	            	    	            	    	            	    	    	    	            	    	    
         selector = new YAHOO.widget.Panel("selector", { zIndex:1019, visible:false } );
         selector.setBody("<div id='selectorbox'></div>");
         selector.render(document.body);
@@ -78,16 +84,48 @@ $(function() {// Initialize "static" vars
         }
                 	    
         log.info(Worldview.NAME + ", Version " + Worldview.VERSION);	  
-        
         startTour();   
     };
         
+    var onConfigLoad = function(config) {
+        try {
+            init(config);
+        } catch ( error ) {
+            Worldview.error("Unable to start Worldview", error);
+        }
+    };
+    
     var onConfigLoadError = function(message) {
         Worldview.error("Unable to load configuration from server", message);
     };
     
+    /*
+     * jQuery version 1.6 causes thousands of warnings to be emitted to the
+     * console on WebKit based browsers with the following message:
+     * 
+     * event.layerX and event.layerY are broken and deprecated in WebKit. They 
+     * will be removed from the engine in the near future.
+     *
+     * This has been fixed in jQuery 1.8 but Worldview currently doesn't 
+     * support that version. This fix copied from:
+     * 
+     * http://stackoverflow.com/questions/7825448/webkit-issues-with-event-layerx-and-event-layery
+     */
+    var jQueryLayerFix = function() {
+        // remove layerX and layerY
+        var all = $.event.props,
+            len = all.length,
+            res = [];
+        while (len--) {
+          var el = all[len];
+          if (el != 'layerX' && el != 'layerY') res.push(el);
+        }
+        $.event.props = res;        
+    };
+        
     try {
-       entryPoint();	
+        jQueryLayerFix();
+        entryPoint();	
     } catch ( cause ) {
         Worldview.error("Failed to start Worldview", cause);
     }  

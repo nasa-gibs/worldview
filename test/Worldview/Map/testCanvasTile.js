@@ -57,6 +57,7 @@ TestCase("CanvasTile", {
         };
     },
     
+    /*
     testDestroyRemovesCanvas: function() {
         tile.canvas = "canvas";
         tile.destroy();
@@ -77,13 +78,13 @@ TestCase("CanvasTile", {
         tile.clear();
         assertFalse(OpenLayers.Element.hasClass("olImageLoadError"));
     },
-    
+   
     testGetCanvasCreatesCanvas: function() {
         assertNull(tile.canvas);
         var canvas = tile.getCanvas();
         assertNotNull(tile.canvas);
     },
-    
+   
     testOnImageLoadUsesLookupTable: function() {
         tile.canvas = mockCanvas;
         
@@ -103,5 +104,6 @@ TestCase("CanvasTile", {
         assertEquals(0x07, mockImageData[2]);
         assertEquals(0x08, mockImageData[3]);
     },
+    */
 });
 

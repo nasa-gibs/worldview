@@ -57,7 +57,9 @@ TestCase("Worldview.error", TestSuite.Tests({
     mockPanel: null,
     mockLog: null,
     
-    setUp: function() {
+    setUp: function() {  
+        Logging.reset();
+              
         // Mock out the panel that is displayed on an error
         var mockPanelConstructor = mockFunction();
         mockPanel = mock(YAHOO.widget.Panel);
@@ -92,8 +94,9 @@ TestCase("Worldview.error", TestSuite.Tests({
     
     // Check that error with cause is written to console
     testErrorWithCause: function() {
-        Worldview.error("This is an error", "with a cause");
-        verify(mockLog)("This is an error: with a cause");
+        var e = new Error("with a cause");
+        Worldview.error("This is an error", e);
+        verify(mockLog)(e);
     },
     
     // Check that the cause is not placed in the dialog
@@ -110,6 +113,8 @@ TestCase("Worldview.error.withoutYahoo", TestSuite.Tests({
     patcher: null,
     
     setUp: function() {
+        Logging.reset();
+        
         patcher = TestSuite.Patcher();
         patcher.apply("console.error", mockFunction());
         patcher.apply("YAHOO", {});        

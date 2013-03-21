@@ -2,9 +2,7 @@
  * Namespace: Worldview
  */
 (function(ns) { 
- 
-    var log = Logging.getLogger("Worldview");
-    
+     
     /**
      * Constant: NAME
      * Official name of this application.
@@ -70,11 +68,13 @@
      *           caught.
      */
     ns.error = function(message, cause) {
-        log.error(message);
+        var log = Logging.getLogger();
         if ( cause ) {
             log.error(cause);
-        }
-   
+        } else {
+            log.error(message);
+        }       
+        
         if ( window.YAHOO && window.YAHOO.widget && 
                 window.YAHOO.widget.Panel ) {
             o = new YAHOO.widget.Panel("WVerror", {
@@ -103,7 +103,7 @@
      * title will be "Notice".
      */    
     ns.notify = function(message, title) {
-        log.info(message);
+        Logging.getLogger().info(message);
         
         if ( window.YAHOO && window.YAHOO.widget && 
                 window.YAHOO.widget.Panel ) {

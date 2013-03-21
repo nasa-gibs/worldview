@@ -65,6 +65,6 @@ $(function(ns) {
         return valid;
     };
     
-    ns.tileScheduler = Worldview.Scheduler("js/Worldview/Map/TileWorker.js", 4);
+    ns.tileLookupScheduler = null;
 
 }(Worldview.Map));

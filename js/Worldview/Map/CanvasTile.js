@@ -52,7 +52,7 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
 	 * when clear() is invoked.
 	 */
 	canvas: null,
-	cavansOriginal: null,
+	canvasOriginal: null,
     graphics: null,
     grpahicsOriginal: null,
     latestJobId: null,
@@ -151,19 +151,24 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
         var self = results.self;    
         var canvas = self.canvas;
         if ( !canvas || results.id !== self.latestJobId ) {
-            return;
+            self.log.debug(self.id + ": Discarding stale tile");
+        } else if ( results.status === "cancelled" ) {
+            self.log.debug(self.id + ": Cancelled");
+        } else if ( results.status === "error" ) {
+            self.log.error(self.id + ": Unable to render tile");
+        } else if ( results.status === "success" ){
+            var imageData = results.message.destination;
+            self.graphics.putImageData(imageData, 0, 0); 
+            canvas.style.visibility = "inherit";
+            canvas.style.opacity = self.layer.opacity;
+            self.canvasContext = null;
+            self.log.debug(self.id + ": rendered");       
+        } else {
+            throw new Error("Invalid status during tile rendering: " + 
+                    results.status);
         }
-        self.log.debug("latestJobId: " + self.latestJobId + ", results.id" + results.id);
-        var imageData = results.message.destination;
-  
-        self.graphics.putImageData(imageData, 0, 0); 
-        
-        canvas.style.visibility = "inherit";
-        canvas.style.opacity = self.layer.opacity;
-        self.canvasContext = null;
         self.isLoading = false;
         self.events.triggerEvent("loadend");
-        self.log.debug(self.id + ": rendered");       
     },
     
     applyLookup: function(imageLoaded) { 
@@ -175,8 +180,6 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
             return;
         }
         this.isLoading = true;       
-        //this.canvas.style.visibility = "hidden";
-        //this.canvas.style.opacity = 0;
         
         var lookupTable = this.layer.lookupTable;
         var source = this.graphicsOriginal.getImageData(0, 0, this.canvas.width, 
@@ -184,7 +187,7 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
         var destination = this.graphics.getImageData(0, 0, this.canvas.width,
                 this.canvas.height);
                  
-        this.latestJobId = Worldview.Map.tileScheduler.submit({
+        this.latestJobId = Worldview.Map.tileLookupScheduler.submit({
             message: {
                 lookupTable: lookupTable,
                 source: source,
