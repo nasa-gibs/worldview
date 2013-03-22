@@ -11,6 +11,10 @@
 
 Worldview.namespace("Map");
 
+/**
+ * Class: Worldview.Map.GraticleLayer
+ * Standard OpenLayers graticle control that acts like a layer.
+ */
 Worldview.Map.GraticuleLayer = OpenLayers.Class(OpenLayers.Layer, {
     
     graticuleLineStyle: null,
@@ -35,10 +39,11 @@ Worldview.Map.GraticuleLayer = OpenLayers.Class(OpenLayers.Layer, {
             fontColor: '#0000e1',
             fontOpacity: 1.0
         });   
-        
-
     },
     
+    /*
+     * Add the control when the layer is added to the map
+     */
     setMap: function(map) {
         OpenLayers.Layer.prototype.setMap.apply(this, arguments); 
         
@@ -53,6 +58,9 @@ Worldview.Map.GraticuleLayer = OpenLayers.Class(OpenLayers.Layer, {
         map.addControl(graticule);       
     },
     
+    /*
+     * Remove the contorl when the layer is removed from the map
+     */
     removeMap: function(map) {
         OpenLayers.Layer.prototype.removeMap.apply(this, arguments); 
         map.removeControl(graticule);   

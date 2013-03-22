@@ -52,6 +52,16 @@ $(function(ns) {
         })
     };
     
+    /**
+     * Function: isExtentValid
+     * Determines if an exent object contains valid values.
+     * 
+     * Parameters:
+     * extent - An OpenLayers.Bound ojbect
+     * 
+     * Returns:
+     * False if any of the values is NaN, otherwise returns true.
+     */
     ns.isExtentValid = function(extent) {
         if ( extent === undefined ) {
             return false;
@@ -65,6 +75,10 @@ $(function(ns) {
         return valid;
     };
     
+    /**
+     * Property: tileScheduler
+     * Scheduler used to render canvas tiles. Must be initialized on startup.
+     */
     ns.tileScheduler = null;
 
 }(Worldview.Map));

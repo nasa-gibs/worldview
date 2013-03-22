@@ -78,7 +78,7 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
     var init = function() {        
         var $container = $("#" + containerId);
         if ( $container.length === 0 ) {
-            throw "No container for ProductMap: " + containerId;
+            throw new Error("No container for ProductMap: " + containerId);
         }
         
         // Create map objects, one for each projection.     
@@ -137,7 +137,7 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
      */
     self.setProjection = function(projection) { 
         if ( !(projection in activeMaps) ) {
-            throw "Unsupported projection: " + projection;
+            throw new Error("Unsupported projection: " + projection);
         }
         log.debug("Switch projection: " + projection);
         
@@ -228,33 +228,40 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
         refreshZOrder();   
     };
     
+    /**
+     * Method: setPalettes
+     * Sets which products should have custom palettes applied.
+     * 
+     * Parameters:
+     * activePalettes - An object which has product names as properties
+     * and palette names as values.
+     */
     self.setPalettes = function(activePalettes) {
         $.each(activeMaps, function(projection, map) {
             $.each(map.products, function(name, product) {
                 if ( name in activePalettes ) {
+                    // Find the rendered palette for this product
                     var productConfig = self.mapConfig.products[name];
                     var renderedName = productConfig.rendered;
                     var renderedPalette = self.mapConfig.palettes[renderedName];
+                    
+                    // Find the palette that should be used instead
                     var paletteName = activePalettes[name];
                     var palette = self.mapConfig.palettes[paletteName];
+                    
+                    // Create a lookup table and map it to the color
+                    // values found in the rendered palette
                     var indexed = Worldview.Palette.toIndexedLookup(
                         productConfig.bins, palette, productConfig.stops);
                     var lookup = Worldview.Palette.toColorLookup(
-                        indexed, renderedPalette.stops);     
+                        indexed, renderedPalette.stops);
+                        
+                    // Apply     
                     product.setLookup(lookup);
                 } else {
                     product.clearLookup();
                 }
             });
-        });
-    };
-
-    self.clearLookup = function(product, lookup) {
-        $.each(products, function(projection, activeProducts) {
-            var index = $.inArray(product, products);
-            if ( index >= 0 ) {
-                products[index].clearLookup(lookup);
-            }    
         });
     };
         
@@ -436,7 +443,7 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
         } else if ( config.product === "static" ) {
             return Worldview.Map.StaticProduct(map, config);
         }
-        throw "Unsupported product type: " + config.product;
+        throw new Error("Unsupported product type: " + config.product);
     };
     
     var onZoomEnd = function(evt) {

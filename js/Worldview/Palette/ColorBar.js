@@ -97,8 +97,8 @@ Worldview.Palette.ColorBar = function(spec) {
         } else if ( spec.selector ) {
             $canvas = $(spec.selector);
             if ( $canvas.length === 0 ) {
-                throw "No such canvas element (" + spec.selector + 
-                      ") for the ColorBar";
+                throw new Error("No such canvas element (" + spec.selector + 
+                      ") for the ColorBar");
             }
             canvas = $canvas.get(0);
 

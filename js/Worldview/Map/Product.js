@@ -45,7 +45,15 @@ Worldview.Map.Product = function(c) {
     };
     
     /**
+     * Function: createLayer
      * Creates a new layer based on the configuration provided. 
+     * 
+     * Parameters:
+     * additionalProperties - If specified, these properites are merged into
+     *                        the product configuration to create the layer.
+     * 
+     * Return:
+     * An OpenLayers Layer.
      */
     self.createLayer = function(additionalProperties) {
         var properties = config.properties;
@@ -62,7 +70,7 @@ Worldview.Map.Product = function(c) {
             return new Worldview.Map.GraticuleLayer(config.name, 
                     properties);
         } else {
-            throw "Unsupported layer type: " + config.type;
+            throw new Error("Unsupported layer type: " + config.type);
         }
     };
     

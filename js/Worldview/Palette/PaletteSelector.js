@@ -50,7 +50,8 @@ Worldview.Palette.PaletteSelector = function(spec) {
     var init = function() {
         $container = $(spec.selector);
         if ( $container.length === 0 ) {
-            throw "Container not found for PaletteSelector: " + spec.selector;
+            throw new Error("Container not found for PaletteSelector: " + 
+                    spec.selector);
         }
                 
         var items = [];      

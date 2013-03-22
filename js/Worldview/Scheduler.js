@@ -61,7 +61,7 @@ Worldview.Scheduler = function(config) {
     var executing = 0;
     
     // Number of workers to start
-    var maxWorkers = maxWorkers || 1;
+    var maxWorkers = config.max || 1;
             
     //-------------------------------------------------------------------------
     // Public
@@ -143,6 +143,7 @@ Worldview.Scheduler = function(config) {
         }
         jobs[id] = job;
         
+        log.debug("Executing: " + executing);
         if ( executing < maxWorkers ) {
             execute(job);
         } else {

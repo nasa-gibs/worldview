@@ -86,6 +86,7 @@ Group: Code Reference  {
          File: Product  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/Product.js)
          File: ProductMap  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/ProductMap.js)
          File: StaticProduct  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/StaticProduct.js)
+         File: GraticleLayer  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/GraticuleLayer.js)
          }  # Group: Map
 
       Group: Palette  {

@@ -48,7 +48,7 @@ Worldview.Widget.Map = function(containerId, config) {
         if ( REGISTRY ) {
             REGISTRY.register(containerId, self);
         } else {
-            throw "Cannot register Map, REGISTRY not found";
+            throw new Error("Cannot register Map, REGISTRY not found");
         }
         
         self.config = validateConfig(self.config);
@@ -141,7 +141,7 @@ Worldview.Widget.Map = function(containerId, config) {
      * Throws an unsupported exception.
      */
     self.setDataSourceUrl = function(url) {
-        throw "setDataSourceUrl: unsupported";
+        throw new Error("setDataSourceUrl: unsupported");
     };
     
     /**
@@ -161,7 +161,7 @@ Worldview.Widget.Map = function(containerId, config) {
      * invoked.
      */
     self.setStatus = function(status) {
-        throw "setStatus: unsupported";      
+        throw new Error("setStatus: unsupported");      
     };
     
     /**
@@ -170,7 +170,7 @@ Worldview.Widget.Map = function(containerId, config) {
      * invoked.
      */
     self.getStatus = function() {
-        throw "getStatus: unsupported";
+        throw new Error("getStatus: unsupported");
     };
                 
     /*
@@ -187,7 +187,8 @@ Worldview.Widget.Map = function(containerId, config) {
         var _config = ["defaultProjection"];
         $.each(_config, function(index, key) {
             if ( !(key in config.config) ) {
-                throw "config." + key + " is required in the map configuraiton";
+                throw new Error("config." + key + " is required in the " + 
+                        "map configuraiton");
             }
         });
         return config;

@@ -26,7 +26,8 @@ Worldview.Widget.PaletteManager = function(containerId, config) {
         if ( REGISTRY ) {
             REGISTRY.register(containerId, self);
         } else {
-            throw "Cannot register PaletteManager, REGISTRY not found";
+            throw new Error("Cannot register PaletteManager, REGISTRY " + 
+                    "not found");
         }
         REGISTRY.markComponentReady(containerId);        
     };

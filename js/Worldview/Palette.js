@@ -429,11 +429,12 @@ $(function() {
  * Example:
  * (begin code) 
  * var lookup = {
- *     "{\"r\":0,\"g\":0,\"b\":255,\"a\":255}": { r: 0xff, g: 0x00, b: 0x00, a: 0xff }
+ *     "0,0,255,255": { r: 0xff, g: 0x00, b: 0x00, a: 0xff }
  *
  * (end code)
  * 
- * Each property in the object is a stringified <ColorRGBA> object that contains
+ * Each property in the object is a string containing integer red, green,
+ * blue, and alpha values separated by commas. Each property contains contains
  * a <ColorRGBA> value to map. 
  */
 

@@ -170,13 +170,24 @@
         var parent = window;
         $.each(nodes, function(index, node) {
             if ( parent[node] === undefined ) {
-                throw "In " + path + ", " + node + " is undefined";
+                throw new Error("In " + path + ", " + node + " is undefined");
             }
             parent = parent[node];
         });
         return parent;
     };    
     
+    /**
+     * Function: queryStringToObject
+     * Converts a query string into an object.
+     * 
+     * Parameters:
+     * queryString - The query string to convert
+     * 
+     * Return:
+     * An object where each property is one of the parameters found in the
+     * query string.
+     */
     ns.queryStringToObject = function(queryString) {
         var parameters = queryString.split("&");
         result = {};
@@ -189,7 +200,6 @@
     
     /**
      * Function: extractFromQuery
-     * 
      * Extracts the value of the given key from the querystring.
      * 
      * Parameters:
@@ -207,7 +217,19 @@
         else
             return val[1];
     };
-        
+    
+    /**
+     * Function: ajaxError
+     * Wrapper for handling AJAX errors when the XHR and status code is not
+     * necessary.
+     * 
+     * Parameters:
+     * handler - Callback to be invoked on error that accepts one argument, 
+     * the error that was thrown.
+     * 
+     * Returns:
+     * The function wrapper.
+     */    
     ns.ajaxError = function(handler) {
         return function(jqXHR, textStatus, errorThrown) {
             handler(errorThrown);
@@ -265,7 +287,7 @@
      */
      ns.clamp = function(min, max, value) {
         if ( min > max ) {
-            throw "Invalid clamp range (" + min + " - " + max + ")";
+            throw new Error("Invalid clamp range (" + min + " - " + max + ")");
         }
         if ( value < min ) { return min; }
         if ( value > max ) { return max; }
