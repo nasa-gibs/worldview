@@ -86,9 +86,10 @@ Worldview.Widget.Map = function(containerId, config) {
         // Verify that the viewport extent overlaps the valid extent, if
         // invalid, just zoom out the max extent
         if ( !Worldview.Map.isExtentValid(extent) || 
-                !extent.intersectsBounds(map.getExtent()) ) {
+                !extent.intersectsBounds(map.getMaxExtent()) ) {
             log.warn("Extent is invalid: " + extent + "; using " + 
                     map.getExtent());
+            log.info("Max extent: " + map.getMaxExtent());
             extent = map.getExtent();
         }
         self.productMap.map.zoomToExtent(extent, true);

@@ -129,14 +129,14 @@ SOTE.widget.ImageDownload.prototype.getValue = function(){
 
 
 SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
-	
+		
 	try {
     	var bbox = SOTE.util.extractFromQuery('map',qs);
     	var time = SOTE.util.extractFromQuery('time',qs);
     	var pixels = SOTE.util.extractFromQuery('camera', qs);
       	var s = SOTE.util.extractFromQuery('switch',qs);
       	var products = SOTE.util.extractFromQuery('products',qs);
-      	
+              	
       	var px = pixels.split(",");
     	var x1 = px[0]; var y1= px[1]; var x2 = px[2]; var y2=px[3];
     
@@ -165,7 +165,7 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
     		var a = products.split("~");
     		var base = a[0].split(/[\.,]/);
     		
-    		var overlays = a[1].split(".");
+    		var overlays = a[1].split(/[\.,]/);
     		overlays.reverse(); overlays.pop();
     		for(var i=1; i<base.length; ++i){
     			dlURL += base[i]+",";
@@ -178,7 +178,6 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
     	dlURL = dlURL.slice(0,-1);
     	
     	}
-    	
     	
       	 var imgWidth=0; var imgHeight=0;
     	    
