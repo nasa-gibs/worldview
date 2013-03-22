@@ -17,7 +17,7 @@ SOTE.namespace("SOTE.widget.RubberBand");
 SOTE.widget.RubberBand = function (containerId, config){  
     this.PALETTE_WARNING = 
         "Image download does not support the custom palette that you have " +
-        "applied. Would you like to reset the palette back to the default?";
+        "applied. Would you like to continue anyway?";
         
 	this.container=document.getElementById(containerId);	
 	this.coords = null;
@@ -38,7 +38,8 @@ SOTE.widget.RubberBand = function (containerId, config){
 	this.jcropAPI = null;
 	this.mapWidget = config.mapWidget;
 	this.paletteWidget = config.paletteWidget;
-	this.palettesActive = false;
+	this.previousPalettes = "";
+	this.currentPalettes = "";
 	//this.windowURL = "";
 	
 	this.init();
@@ -78,6 +79,10 @@ SOTE.widget.RubberBand.toggle = function(o){
         self.draw(); 
     };		
     
+    // When disabling the palettes, we need to wait for the map to reload all
+    // the tiles before enabling the crop box. The crop box copies all 
+    // elements in the map to do its background effect and if the map isn't
+    // ready yet, it will copy blank images. 
     var disablePalettes = function() {
         var map = self.mapWidget.productMap.map;
         var handler = function() {
@@ -85,11 +90,16 @@ SOTE.widget.RubberBand.toggle = function(o){
             toggleOn();
         };
         map.events.register("maploadend", map, handler);
+        
+        // Save the previous state to be restored later
+        self.previousPalettes = self.currentPalettes;
         self.paletteWidget.setValue("");        
     };
     
 	if(self.state == "off" && self.projectionSwitch == "geographic"){
-	    if (self.palettesActive) {
+	    // Confirm with the user they want to continue, and if so, disable
+	    // the palettes before bringing up the crop box.
+	    if (self.currentPalettes) {
 	        Worldview.ask({
 	            header: "Notice",
 	            message: self.PALETTE_WARNING,
@@ -104,6 +114,9 @@ SOTE.widget.RubberBand.toggle = function(o){
 		$("#"+self.id+"camera_link img").attr("src",self.icon);
 		self.jcropAPI.destroy(); 
 		$("#imagedownload").hide('slide', {direction: 'up'}, 1000); 	
+		if (self.previousPalettes) {
+		    self.paletteWidget.setValue(self.previousPalettes);
+		}
 	}
 	else {
   		SOTE.util.throwError("The download feature is currently available for geographic projection only.");
@@ -148,11 +161,7 @@ SOTE.widget.RubberBand.prototype.getValue = function() {
 */
 SOTE.widget.RubberBand.prototype.updateComponent = function(qs){
 		this.projectionSwitch =   SOTE.util.extractFromQuery("switch",qs);
-		if(SOTE.util.extractFromQuery("palettes",qs)){
-		  this.palettesActive = true;  
-		} else {
-          this.palettesActive = false;		  
-		}
+		this.currentPalettes = SOTE.util.extractFromQuery("palettes",qs);
 };
 
 /**

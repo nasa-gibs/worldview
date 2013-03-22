@@ -83,12 +83,15 @@ $(function() {// Initialize "static" vars
             REGISTRY.addAllReadyCallback(testQS);
         }
         
-        var release = Worldview.BUILD_TIMESTAMP;
-        if ( release === "@BUILD_TIMESTAMP@" ) {
-            release = "Development"
-        }        	    
-        log.info(Worldview.NAME + " - Version " + Worldview.VERSION + " - " +
-                release);	  
+        var banner = Worldview.NAME + " - Version " + Worldview.VERSION;
+        if ( Worldview.BUILD_TIMESTAMP !== "@BUILD_TIMESTAMP@" ) {
+            banner += " - " + Worldview.BUILD_TIMESTAMP;
+        } 	    
+        log.info(banner);
+        if ( Worldview.BUILD_TIMESTAMP === "@BUILD_TIMESTAMP@" ) {
+            log.warn("Development version");
+        }	  
+        
         startTour();   
     };
         
