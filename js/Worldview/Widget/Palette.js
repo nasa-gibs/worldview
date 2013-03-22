@@ -11,7 +11,7 @@
 
 Worldview.namespace("Widget");
 
-Worldview.Widget.PaletteManager = function(containerId, config) {
+Worldview.Widget.Palette = function(containerId, config) {
     
     var self = {};
     var log = Logging.getLogger("Worldview.PaletteManager");
@@ -56,7 +56,7 @@ Worldview.Widget.PaletteManager = function(containerId, config) {
             var qs = "";
             if ( parts.length > 0 ) {
                 qs = containerId + "=" + parts.join("~");
-            }            
+            }
             return qs;
         } catch ( error ) {
             Worldview.error("Unable to update", error);
@@ -131,10 +131,7 @@ Worldview.Widget.PaletteManager = function(containerId, config) {
                 activePalettes[product] = palette.id; 
             }
             REGISTRY.fire(self);
-        });
-        
-
-                                 
+        });                                 
     };
 
     self.loadFromQuery = function(queryString) {

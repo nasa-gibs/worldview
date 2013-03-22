@@ -29,7 +29,7 @@ $(function() {// Initialize "static" vars
         
         // Create map 
         var m = Worldview.Widget.WorldviewMap("map", config);
-        var palettes = Worldview.Widget.PaletteManager("palettes", config);
+        var palettes = Worldview.Widget.Palette("palettes", config);
         var ss = new SOTE.widget.Switch("switch",{dataSourceUrl:"a",selected:"geographic"});
         var a = new SOTE.widget.Bank("products",{paletteManager: palettes, dataSourceUrl:"ap_products.php",title:"My Layers",selected:{antarctic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,antarctic_coastlines", arctic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,arctic_coastlines",geographic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,sedac_bound"},categories:["Base Layers","Overlays"],callback:showSelector,selector:selector});
         var s = new SOTE.widget.Selector("selectorbox",{dataSourceUrl:"ap_products.php",categories:["Base Layers","Overlays"]});
@@ -37,7 +37,7 @@ $(function() {// Initialize "static" vars
         //var tr = new SOTE.widget.MenuPicker("transition",{dataSourceUrl:"data/mp_transition.php"});
         var map = new SOTE.widget.DateSpan("time",{hasThumbnail:false});
         //Image download variables
-        rb = new SOTE.widget.RubberBand("camera",{icon:"images/camera.png",onicon:"images/cameraon.png",cropee:"map"});
+        rb = new SOTE.widget.RubberBand("camera",{icon:"images/camera.png",onicon:"images/cameraon.png",cropee:"map",paletteWidget:palettes});
         var id = new SOTE.widget.ImageDownload("imagedownload",{baseLayer:"MODIS_Terra_CorrectedReflectance_TrueColor",alignTo: rb, m:m});		
         
         // Get rid of address bar on iphone/ipod
@@ -59,7 +59,7 @@ $(function() {// Initialize "static" vars
         REGISTRY.addEventListener("products","map","time","selectorbox","imagedownload");
         REGISTRY.addEventListener("selectorbox","products");
         REGISTRY.addEventListener("camera","imagedownload");
-        REGISTRY.addEventListener("palettes", "map");
+        REGISTRY.addEventListener("palettes","map","camera");
         
         /*REGISTRY.addEventListener("map","time");
         REGISTRY.addEventListener("time","map");

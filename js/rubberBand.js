@@ -14,7 +14,11 @@ SOTE.namespace("SOTE.widget.RubberBand");
 */
 
 
-SOTE.widget.RubberBand = function (containerId, config){   
+SOTE.widget.RubberBand = function (containerId, config){  
+    this.PALETTE_WARNING = 
+        "Image download does not support the custom palette that you have " +
+        "applied. Would you like to reset the palette back to the default?";
+        
 	this.container=document.getElementById(containerId);	
 	this.coords = null;
 	if (this.container==null){
@@ -32,6 +36,8 @@ SOTE.widget.RubberBand = function (containerId, config){
 	this.id = containerId;
 	this.state = "off";
 	this.jcropAPI = null;
+	this.paletteWidget = config.paletteWidget;
+	this.palettesActive = false;
 	//this.windowURL = "";
 	
 	this.init();
@@ -63,11 +69,22 @@ SOTE.widget.RubberBand.prototype.init = function(){
 
 SOTE.widget.RubberBand.toggle = function(o){
 	var self = o.data.self;
+		
 	if(self.state == "off" && self.projectionSwitch == "geographic"){
-		self.state = "on";
-		$("#"+self.id+"camera_link img").attr("src",self.onicon);
-		$("#imagedownload").show('slide', {direction: 'up'}, 1000);	
-		self.draw();
+	    if (self.palettesActive) {
+	        Worldview.ask({
+	            header: "Notice",
+	            message: self.PALETTE_WARNING,
+	            onYes: function() {
+	                self.paletteWidget.setValue("");
+	            }
+	        });
+	    } else {
+            self.state = "on";
+            $("#"+self.id+"camera_link img").attr("src",self.onicon);
+            $("#imagedownload").show('slide', {direction: 'up'}, 1000); 
+            self.draw();    
+        }
 	}
 	else if(self.projectionSwitch == "geographic"){
 		self.state = "off";
@@ -118,6 +135,11 @@ SOTE.widget.RubberBand.prototype.getValue = function() {
 */
 SOTE.widget.RubberBand.prototype.updateComponent = function(qs){
 		this.projectionSwitch =   SOTE.util.extractFromQuery("switch",qs);
+		if(SOTE.util.extractFromQuery("palettes",qs)){
+		  this.palettesActive = true;  
+		} else {
+          this.palettesActive = false;		  
+		}
 };
 
 /**
@@ -194,11 +216,11 @@ SOTE.widget.RubberBand.prototype.getStatus = function(){
   *
 */
 SOTE.widget.RubberBand.prototype.draw =  function() {
-  
- 	var self = this;
 
-  	$("#"+this.cropee).Jcrop({			
-        	bgColor:     'black',
+    var self = this;
+    
+    $("#"+this.cropee).Jcrop({          
+            bgColor:     'black',
             bgOpacity:   0.3,
             onSelect:  function(c){SOTE.widget.RubberBand.handleChange(c, self);},
             onChange: function(c){SOTE.widget.RubberBand.handleChange(c, self);},
@@ -208,9 +230,8 @@ SOTE.widget.RubberBand.prototype.draw =  function() {
     
     this.jcropAPI = $('#'+this.cropee).data('Jcrop');
             
-	this.jcropAPI.setSelect([($(window).width()/2)-100,($(window).height()/2)-100,($(window).width()/2)+100,($(window).height()/2)+100]);   
+    this.jcropAPI.setSelect([($(window).width()/2)-100,($(window).height()/2)-100,($(window).width()/2)+100,($(window).height()/2)+100]);         
     
- 	
 };
 
 

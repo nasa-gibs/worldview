@@ -125,6 +125,71 @@
     };
     
     /**
+     * Function: ask
+     * Asks the end user a yes or no question in a dialog box.
+     * 
+     * Parameters:
+     * spec.header    - Header text to be displayed in the dialog box. If not
+     *                  specified, "Notice" will be used.
+     * spec.message   - Message text to be displayed in the dialog box. If not
+     *                  specified, "Are you sure?" will be used.
+     * spec.noButton  - Text to be used in the no button. If not specified, 
+     *                  "No" will be used.
+     * spec.yesButton - Text to be used in the yes button. If not specified,
+     *                  "Yes" will be used.
+     * spec.onYes     - Function to execute when the yes button is pressed. If
+     *                  not specified, the dialog box simply closes.
+     * spec.onNo      - Function to execute when the no button is pressed. If
+     *                  not specified, the dialog box simply closes. 
+     */
+    ns.ask = function(spec) {
+        var dialog = new YAHOO.widget.SimpleDialog("dialog", {
+            width: "20em",
+            effect: {
+                effect: YAHOO.widget.ContainerEffect.FADE,
+                duration: 0.25
+            },
+            fixedcenter: true,
+            modal: true,
+            visible: false,
+            draggable: false
+        });
+        
+        var header = spec.header || "Notice";
+        dialog.setHeader("&nbsp;&nbsp;&nbsp;&nbsp;" + header);
+        dialog.setBody(spec.message || "Are you sure?");
+        
+        var handleYes = function() {
+            try {
+                this.hide();
+                if ( spec.onYes ) {
+                    spec.onYes();
+                }
+            } catch ( error ) {
+                Worldview.error("Internal error", error);
+            }
+        };
+        var handleNo = function() {
+            try {
+                this.hide();
+                if ( spec.onNo ) {
+                    spec.onNo();
+                }
+            } catch ( error ) {
+                Worldview.error("Internal error", error);
+            }
+        };
+        
+        var buttons = [
+            { text: spec.noButton || "No", handler: handleNo },
+            { text: spec.yesButton || "Yes", handler: handleYes }
+        ];
+        dialog.cfg.queueProperty("buttons", buttons); 
+        dialog.render(document.body);    
+        dialog.show();          
+    }
+    
+    /**
      * Function: size
      * Gets the number of properties in an object. This only includes 
      * properties where hasOwnProperty returns true.
