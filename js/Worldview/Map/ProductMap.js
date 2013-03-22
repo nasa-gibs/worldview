@@ -45,6 +45,10 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
     // Display products on the map for this day
     var currentDay = new Date();
     
+    // The number of layers in the processing of loading. This is used
+    // to fire maploadstart and maploadend events.
+    var layersLoading = 0;   
+      
     //-------------------------------------------------------------------------
     // Public
     //-------------------------------------------------------------------------
@@ -114,8 +118,8 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
             activeMaps[projection] = newMap;
             activeProducts[projection] = [];
             
-            newMap.events.register("addlayer", self, refreshZOrder);
-            newMap.events.register("removelayer", self, refreshZOrder);
+            newMap.events.register("addlayer", self, onAddLayer);
+            newMap.events.register("removelayer", self, onRemoveLayer);
             newMap.events.register("moveend", self, fireEvent);
             newMap.events.register("zoomend", self, onZoomEnd);
         });
@@ -475,6 +479,27 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
             $('.olControlZoomOutCustomItemInactive', '.map-' + self.projection)
                 .css("color", "#FFFFFF");
         }           
+    };
+      
+    var onAddLayer = function(event) {
+        var layer = event.layer;
+        layer.events.register("loadstart", layer, function() {
+            if ( layersLoading === 0 ) {
+                self.map.events.triggerEvent("maploadstart");
+            }
+            layersLoading++;
+        });
+        layer.events.register("loadend", layer, function() {
+            layersLoading--;
+            if ( layersLoading === 0 ) {
+                self.map.events.triggerEvent("maploadend");
+            }   
+        });
+        refreshZOrder();
+    };
+    
+    var onRemoveLayer = function(event) {
+        refreshZOrder();
     };
             
     init();

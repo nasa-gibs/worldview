@@ -36,6 +36,7 @@ SOTE.widget.RubberBand = function (containerId, config){
 	this.id = containerId;
 	this.state = "off";
 	this.jcropAPI = null;
+	this.mapWidget = config.mapWidget;
 	this.paletteWidget = config.paletteWidget;
 	this.palettesActive = false;
 	//this.windowURL = "";
@@ -69,21 +70,33 @@ SOTE.widget.RubberBand.prototype.init = function(){
 
 SOTE.widget.RubberBand.toggle = function(o){
 	var self = o.data.self;
-		
+
+    var toggleOn = function() {
+        self.state = "on";
+        $("#"+self.id+"camera_link img").attr("src",self.onicon);
+        $("#imagedownload").show('slide', {direction: 'up'}, 1000); 
+        self.draw(); 
+    };		
+    
+    var disablePalettes = function() {
+        var map = self.mapWidget.productMap.map;
+        var handler = function() {
+            map.events.unregister("maploadend", map, handler);
+            toggleOn();
+        };
+        map.events.register("maploadend", map, handler);
+        self.paletteWidget.setValue("");        
+    };
+    
 	if(self.state == "off" && self.projectionSwitch == "geographic"){
 	    if (self.palettesActive) {
 	        Worldview.ask({
 	            header: "Notice",
 	            message: self.PALETTE_WARNING,
-	            onYes: function() {
-	                self.paletteWidget.setValue("");
-	            }
+	            onYes: disablePalettes
 	        });
 	    } else {
-            self.state = "on";
-            $("#"+self.id+"camera_link img").attr("src",self.onicon);
-            $("#imagedownload").show('slide', {direction: 'up'}, 1000); 
-            self.draw();    
+            toggleOn();
         }
 	}
 	else if(self.projectionSwitch == "geographic"){
