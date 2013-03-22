@@ -166,3 +166,43 @@ TestCase("Worldview.getObjectByPath", TestSuite.Tests({
     }
     
 }));
+
+TestCase("Worldview.clamp", {
+    
+    array: null,
+    
+    setUp: function() {
+        array = [1, 2, 3, 4, 5];
+    },
+    
+    testClamp: function() {
+        assertEquals(5, Worldview.clamp(0, 10, 5));
+    },
+    
+    testClampOver: function() {
+        assertEquals(10, Worldview.clamp(0, 10, 11));
+    },
+    
+    testClampUnder: function() {
+        assertEquals(0, Worldview.clamp(0, 10, -1));
+    },
+    
+    testClampInvalidRange: function() {
+        assertException(function() {
+            Worldview.clamp(10, 0, 10);
+        })
+    },
+    
+    testClampIndex: function() {
+        assertEquals(3, Worldview.clampIndex(array, 3));
+    },
+    
+    testClampIndexOver: function() {
+        assertEquals(4, Worldview.clampIndex(array, 5));
+    },
+    
+    testClampIndexUnder: function() {
+        assertEquals(0, Worldview.clampIndex(array, -1));
+    }
+    
+});

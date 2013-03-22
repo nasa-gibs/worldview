@@ -24,8 +24,9 @@ TestCase("Worldview.Palette", {
     
     // Check that a percentage of zero is at the beginning.
     testRgbInterpolateLeft: function() {
-        var result = ns.rgbInterpolate(0.0, ns.ColorRGBA(0, 0, 0), 
-                                            ns.ColorRGBA(0xff, 0xff, 0xff));
+        var result = ns.rgbInterpolate(0.0, 
+            {r: 0,    g: 0,    b: 0,    a: 0xff}, 
+            {r: 0xff, g: 0xff, b: 0xff, a: 0xff});
         assertEquals(0, result.r);
         assertEquals(0, result.g);
         assertEquals(0, result.b);
@@ -34,8 +35,9 @@ TestCase("Worldview.Palette", {
 
     // Check that a percentage of one is at the end.
     testRgbInterpolateLeft: function() {
-        var result = ns.rgbInterpolate(1.0, ns.ColorRGBA(0, 0, 0), 
-                                            ns.ColorRGBA(0xff, 0xff, 0xff));
+        var result = ns.rgbInterpolate(1.0, 
+            {r: 0,    g: 0,    b: 0,    a: 0xff}, 
+            {r: 0xff, g: 0xff, b: 0xff, a: 0xff});
         assertEquals(0xff, result.r);
         assertEquals(0xff, result.g);
         assertEquals(0xff, result.b);
@@ -44,8 +46,9 @@ TestCase("Worldview.Palette", {
 
     // Check that a percentage of 0.5 is in the middle
     testRgbInterpolateCenter: function() {
-        var result = ns.rgbInterpolate(0.5, ns.ColorRGBA(0, 0, 0), 
-                                            ns.ColorRGBA(0xff, 0xff, 0xff));
+        var result = ns.rgbInterpolate(0.5, 
+            {r: 0,    g: 0,    b: 0,    a: 0xff}, 
+            {r: 0xff, g: 0xff, b: 0xff, a: 0xff});
         assertEquals(0x80, result.r);
         assertEquals(0x80, result.g);
         assertEquals(0x80, result.b);
@@ -54,8 +57,9 @@ TestCase("Worldview.Palette", {
         
     // Check that a percentage of zero is at the beginning.
     testHslInterpolateLeft: function() {
-        var result = ns.hslInterpolate(0.0, ns.ColorRGBA(10, 20, 30), 
-                                            ns.ColorRGBA(40, 50, 60));
+        var result = ns.hslInterpolate(0.0, 
+            {r: 10, g: 20, b: 30, a: 0xff}, 
+            {r: 40, g: 50, b: 60, a: 0xff});            
         assertEquals(10, result.r);
         assertEquals(20, result.g);
         assertEquals(30, result.b);
@@ -64,8 +68,9 @@ TestCase("Worldview.Palette", {
 
     // Check that a percentage of one is at the end.
     testHslInterpolateRight: function() {
-        var result = ns.hslInterpolate(1.0, ns.ColorRGBA(10, 20, 30), 
-                                            ns.ColorRGBA(40, 50, 60));
+        var result = ns.hslInterpolate(1.0, 
+            {r: 10, g: 20, b: 30, a: 0xff}, 
+            {r: 40, g: 50, b: 60, a: 0xff});   
         assertEquals(40, result.r);
         assertEquals(50, result.g);
         assertEquals(60, result.b);
@@ -74,8 +79,9 @@ TestCase("Worldview.Palette", {
 
     // Check that a percentage of 0.5 is in the middle.
     testHslInterpolateRight: function() {
-        var result = ns.hslInterpolate(0.5, ns.ColorRGBA(10, 20, 30), 
-                                            ns.ColorRGBA(40, 50, 60));
+        var result = ns.hslInterpolate(0.5, 
+            {r: 10, g: 20, b: 30, a: 0xff}, 
+            {r: 40, g: 50, b: 60, a: 0xff});   
         // Known good values
         assertEquals(23, result.r);
         assertEquals(35, result.g);

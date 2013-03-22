@@ -16,8 +16,12 @@
 
 	<target name="init">
 	    <tstamp>
-	        <format property="build.timestamp" pattern="MMMMM d yyyy - h:mm a z"/>
-	        <format property="build.nonce" pattern="yyyyMMddHHmmssSSS"/>
+	        <format property="build.timestamp" 
+	                pattern="MMMMM d, yyyy - H:mm z"
+	                timezone="UTC"/>
+	        <format property="build.nonce" 
+	                pattern="yyyyMMddHHmmssSSS"
+	                timezone="UTC"/>
 	    </tstamp>
 		<mkdir dir="${build.dir}"/>
 		<mkdir dir="${dist.dir}"/>

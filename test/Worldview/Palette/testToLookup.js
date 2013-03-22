@@ -8,7 +8,7 @@
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
-TestCase("Worldview.Palette.toLookup", {
+TestCase("Worldview.Palette.toIndexedLookup", {
 
     ns: null,
     
@@ -25,7 +25,7 @@ TestCase("Worldview.Palette.toLookup", {
                 { at: 1.0, r: 0xff, g: 0xff, b: 0xff }
             ]
         };
-        lut = ns.toLookup(2, palette);
+        lut = ns.toIndexedLookup(2, palette);
         assertEquals(0x00, lut[0].r);
         assertEquals(0xff, lut[1].r);    
     },
@@ -38,7 +38,7 @@ TestCase("Worldview.Palette.toLookup", {
                 { at: 1.0, r: 0xff, g: 0xff, b: 0xff }
             ]
         };
-        lut = ns.toLookup(3, palette);
+        lut = ns.toIndexedLookup(3, palette);
         assertEquals(0x00, lut[0].r);
         assertEquals(0x80, lut[1].r);
         assertEquals(0xff, lut[2].r);   
@@ -53,7 +53,7 @@ TestCase("Worldview.Palette.toLookup", {
                 { at: 1.0, r: 0x00, g: 0xff, b: 0x00 }
             ]
         };
-        lut = ns.toLookup(3, palette);
+        lut = ns.toIndexedLookup(3, palette);
         
         assertEquals(0x80, lut[1].r);
         assertEquals(0x80, lut[1].g);
@@ -69,7 +69,7 @@ TestCase("Worldview.Palette.toLookup", {
                 { at: 1.0, r: 0x00, g: 0xff, b: 0x00 }
             ]
         };
-        lut = ns.toLookup(3, palette);
+        lut = ns.toIndexedLookup(3, palette);
         
         assertEquals(0xff, lut[1].r);
         assertEquals(0xff, lut[1].g);
@@ -87,7 +87,7 @@ TestCase("Worldview.Palette.toLookup", {
                 { at: 1.0, r: 0xff, g: 0xff, b: 0xff }
             ]
         };
-        lut = ns.toLookup(11, palette);
+        lut = ns.toIndexedLookup(11, palette);
         
         // Bin 0: First stop
         assertEquals(0x00, lut[0].r);
@@ -126,7 +126,7 @@ TestCase("Worldview.Palette.toLookup", {
                 { at: 1.0, r: 0x03, g: 0x00, b: 0x00 }
             ]
         };
-        lut = ns.toLookup(11, palette);
+        lut = ns.toIndexedLookup(11, palette);
         
         assertEquals(0x01, lut[0].r);
         assertEquals(0x01, lut[6].r);
@@ -144,7 +144,7 @@ TestCase("Worldview.Palette.toLookup", {
                 { at: 0.0, r: 0xff, g: 0xff, b: 0xff }
             ]
         };
-        lut = ns.toLookup(3, palette);
+        lut = ns.toIndexedLookup(3, palette);
         
         assertEquals(0x00, lut[0].a);
         assertEquals(0xff, lut[1].a);

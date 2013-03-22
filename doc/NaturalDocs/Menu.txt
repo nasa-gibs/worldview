@@ -91,12 +91,8 @@ Group: Code Reference  {
       Group: Palette  {
 
          File: ColorBar  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Palette/ColorBar.js)
-         File: ColorHSL  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Palette/ColorHSL.js)
-         File: ColorRGBA  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Palette/ColorRGBA.js)
-         File: Lookup  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Palette/Lookup.js)
          File: Palette  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Palette/Palette.js)
          File: PaletteSelector  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Palette/PaletteSelector.js)
-         File: StopRGBA  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Palette/StopRGBA.js)
          }  # Group: Palette
 
       File: Permalink  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Permalink.js)

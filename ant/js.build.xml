@@ -35,12 +35,8 @@
                
         <file name="Worldview/Palette.js"/>
         <file name="Worldview/Palette/ColorBar.js"/>
-        <file name="Worldview/Palette/ColorHSL.js"/>
-        <file name="Worldview/Palette/ColorRGBA.js"/>
-        <file name="Worldview/Palette/Lookup.js"/>
         <file name="Worldview/Palette/Palette.js"/>
         <file name="Worldview/Palette/PaletteSelector.js"/>
-        <file name="Worldview/Palette/StopRGBA.js"/>
         
 		<file name="Worldview/Map.js"/>
         <file name="Worldview/Map/CanvasTile.js"/>
@@ -49,6 +45,7 @@
         <file name="Worldview/Map/StaticProduct.js"/>
         <file name="Worldview/Map/DailyProduct.js"/>
         <file name="Worldview/Map/GraticuleLayer.js"/>
+
         <file name="Worldview/Widget/Map.js"/>
         <file name="Worldview/Widget/PaletteManager.js"/>
         <file name="Worldview/Widget/WorldviewMap.js"/>

@@ -237,9 +237,9 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
                     var renderedPalette = self.mapConfig.palettes[renderedName];
                     var paletteName = activePalettes[name];
                     var palette = self.mapConfig.palettes[paletteName];
-                    var indexed = Worldview.Palette.toLookup(
+                    var indexed = Worldview.Palette.toIndexedLookup(
                         productConfig.bins, palette, productConfig.stops);
-                    var lookup = Worldview.Palette.mapLookup(
+                    var lookup = Worldview.Palette.toColorLookup(
                         indexed, renderedPalette.stops);     
                     product.setLookup(lookup);
                 } else {

@@ -172,47 +172,6 @@ SOTE.util.DayNameFromUTCDayInt = function(dayOfWeekInt)
 	
 }
 
-/**
- * Function: clamp
- * 
- * Ensures a value is between an minimum and a maximum.
- * 
- * Parameters:
- * min - Lower bound of the clamp range
- * max - Upper bound of the clamp range
- * 
- * Returns:
- * min if the value is below min, max if the value is above max,             
- * othewise returns value
- * 
- * Throws:      
- * If min is greater than max
- */
-SOTE.util.clamp = function(min, max, value) {
-    if ( min > max ) {
-        throw "Invalid clamp range (" + min + " - " + max + ")";
-    }
-    if ( value < min ) { return min; }
-    if ( value > max ) { return max; }
-    return value;
-}
-
-/**
- * Function: clampIndex
- * 
- * Clamps a value to a valid array index.
- * 
- * Parameters:
- * array - Clamp the index to this array
- * index - Index value
- * 
- * Returns:
- * Zero if the index is below zero, array.length - 1 if the index is greater 
- * than the maximum array index, otherwise returns index.
- */
-SOTE.util.clampIndex = function(array, index) {
-    return SOTE.util.clamp(0, array.length - 1, index);
-}
 
 /**
  * Generates an array of OpenLayers layers for the specified product: one for each

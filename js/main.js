@@ -82,8 +82,13 @@ $(function() {// Initialize "static" vars
         if (queryString.length > 0) {
             REGISTRY.addAllReadyCallback(testQS);
         }
-                	    
-        log.info(Worldview.NAME + ", Version " + Worldview.VERSION);	  
+        
+        var release = Worldview.BUILD_TIMESTAMP;
+        if ( release === "@BUILD_TIMESTAMP@" ) {
+            release = "Development"
+        }        	    
+        log.info(Worldview.NAME + " - Version " + Worldview.VERSION + " - " +
+                release);	  
         startTour();   
     };
         
