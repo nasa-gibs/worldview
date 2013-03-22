@@ -187,7 +187,7 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
         var destination = this.graphics.getImageData(0, 0, this.canvas.width,
                 this.canvas.height);
                  
-        this.latestJobId = Worldview.Map.tileLookupScheduler.submit({
+        this.latestJobId = Worldview.Map.tileScheduler.submit({
             message: {
                 lookupTable: lookupTable,
                 source: source,

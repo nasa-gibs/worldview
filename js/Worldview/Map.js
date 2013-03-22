@@ -65,6 +65,6 @@ $(function(ns) {
         return valid;
     };
     
-    ns.tileLookupScheduler = null;
+    ns.tileScheduler = null;
 
 }(Worldview.Map));

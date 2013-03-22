@@ -204,7 +204,7 @@
 			<fileset dir="${build.web.js.dir}">
 				<include name="**/*.js"/>
 				<!-- Web worker needs to load this directly, leave it around -->
-				<exclude name="**/LookupWorker.js"/>
+				<exclude name="**/TileWorker.js"/>
 			</fileset>
 		</delete>
 		

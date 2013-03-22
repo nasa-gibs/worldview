@@ -15,8 +15,8 @@ $(function() {// Initialize "static" vars
   
     var init = function(config) {  	
         
-        Worldview.Map.tileLookupScheduler = Worldview.Scheduler({
-            script: "js/Worldview/Map/LookupWorker.js", 
+        Worldview.Map.tileScheduler = Worldview.Scheduler({
+            script: "js/Worldview/Map/TileWorker.js", 
             max: 4
         });
                     	            	    	            	    	            	    	    	    	            	    	    

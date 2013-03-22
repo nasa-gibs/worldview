@@ -10,7 +10,7 @@
  */
 
 /**
- * Namespace: Worldview.Map.LookupWorker
+ * Namespace: Worldview.Map.TileWorker
  * Performs the task of applying a color lookup table from a source tile
  * to a destination tile. 
  * 
@@ -24,7 +24,7 @@
  * - cancel: Cancelles any outstanding work as soon as possible. No message 
  *           object is required.
  * 
- * Class: Worldview.Map.LookupWorker.Execute
+ * Class: Worldview.Map.TileWorker.Execute
  * The execute command requires the following object to be found in 
  * event.data.message
  * 

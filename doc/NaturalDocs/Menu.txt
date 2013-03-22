@@ -82,7 +82,7 @@ Group: Code Reference  {
 
          File: CanvasTile  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/CanvasTile.js)
          File: DailyProduct  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/DailyProduct.js)
-         File: LookupWorker  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/LookupWorker.js)
+         File: TileWorker  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/TileWorker.js)
          File: Product  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/Product.js)
          File: ProductMap  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/ProductMap.js)
          File: StaticProduct  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/StaticProduct.js)
