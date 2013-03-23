@@ -472,10 +472,10 @@ SOTE.widget.DateSpan.prototype.setValue = function(value){
 	var vals = SOTE.util.getValuesFromISO8601String(value);
 	// Check to see if the date is valid, if not default to today
 	var valid = true;
-	$.each(vals, function(index, value) {
-	   if ( isNaN(value) ) {
-	       value = SOTE.util.ISO8601StringFromDate(new Date());
-	       vals = SOTE.util.getValuesFromISO8601String(value);
+	$.each(vals, function(index, v) {
+	   if ( isNaN(v) ) {
+	       var today = SOTE.util.ISO8601StringFromDate(new Date());
+	       vals = SOTE.util.getValuesFromISO8601String(today);
 	       valid = false;
 	   }    
 	});

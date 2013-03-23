@@ -94,13 +94,13 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
                 if ( state.time === undefined ) {
                     state.time = SOTE.util.ISO8601StringFromDate(new Date());
                 }
-                var date = new Date(state.time);
+                var date = SOTE.util.UTCDateFromISO8601String(state.time);
                 if ( isNaN(date.getTime()) ) {
                     log.warn("Invalid time: " + state.time + ", using today");
                     state.time = SOTE.util.ISO8601StringFromDate(new Date());
                     date = new Date();                    
                 }
-                self.productMap.setDay(new Date(state.time));
+                self.productMap.setDay(date);
             }           
             if ( state.palettesString !== last.palettesString ) {
                 self.productMap.setPalettes(state.palettes);
