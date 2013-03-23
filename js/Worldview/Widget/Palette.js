@@ -14,19 +14,19 @@ Worldview.namespace("Widget");
 Worldview.Widget.Palette = function(containerId, config) {
     
     var self = {};
-    var log = Logging.getLogger("Worldview.PaletteManager");
+    var log = Logging.getLogger("Worldview.paletteWidget");
     var value = "";
     var activePalettes = {};
     
     self.config = config;
     
     var init = function() {
-        //Logging.debug("Worldview.PaletteManager");
-        log.debug("PaletteManager.init");
+        //Logging.debug("Worldview.paletteWidget");        
+        log.debug("paletteWidget.init");
         if ( REGISTRY ) {
             REGISTRY.register(containerId, self);
         } else {
-            throw new Error("Cannot register PaletteManager, REGISTRY " + 
+            throw new Error("Cannot register paletteWidget, REGISTRY " + 
                     "not found");
         }
         REGISTRY.markComponentReady(containerId);        
@@ -135,9 +135,13 @@ Worldview.Widget.Palette = function(containerId, config) {
     };
 
     self.loadFromQuery = function(queryString) {
-        log.debug("PaletteManager.loadFromQuery: " + queryString);
+        log.debug("paletteWidget.loadFromQuery: " + queryString);
         var query = Worldview.queryStringToObject(queryString);
-        self.setValue(query.palettes);    
+        if ( query.palettes && !Worldview.Support.allowCustomPalettes() ) {
+            Worldview.Support.showUnsupportedMessage("custom palette");
+        } else {
+            self.setValue(query.palettes);
+        }    
     };
     
     init();

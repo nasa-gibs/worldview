@@ -72,7 +72,7 @@ SOTE.widget.Bank = function(containerId, config){
 	this.initRenderComplete = false;
 	this.dataSourceUrl = config.dataSourceUrl;
 	this.statusStr = "";
-	this.paletteManager = config.paletteManager;
+	this.paletteWidget = config.paletteWidget;
 	this.init();
 	//this.updateComponent(this.id+"=baselayers.MODIS_Terra_CorrectedReflectance_TrueColor-overlays.fires48.AIRS_Dust_Score.OMI_Aerosol_Index")
 
@@ -264,7 +264,11 @@ SOTE.widget.Bank.prototype.renderCanvases = function(){
 					var width = 100/m.palette.length;
 					var canvas = document.getElementById("canvas"+val);
 					canvas.onclick = function() {
-					    self.paletteManager.displaySelector(val);
+					    if ( !Worldview.Support.allowCustomPalettes() ) {
+					        Worldview.Support.showUnsupportedMessage();
+					    } else {
+					       self.paletteWidget.displaySelector(val);
+				        }
 					};
 					var context = canvas.getContext('2d');
 					for(var k=0; k<m.palette.length; ++k){

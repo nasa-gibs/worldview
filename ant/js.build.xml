@@ -30,6 +30,7 @@
 	    	
 		<file name="Logging.js"/>
 		<file name="Worldview.js"/>
+		<file name="Worldview/Support.js"/>
         <file name="Worldview/Permalink.js"/>
         <file name="Worldview/Scheduler.js"/>
                
