@@ -31,7 +31,7 @@ $(function() {// Initialize "static" vars
         var m = Worldview.Widget.WorldviewMap("map", config);
         var palettes = Worldview.Widget.Palette("palettes", config);
         var ss = new SOTE.widget.Switch("switch",{dataSourceUrl:"a",selected:"geographic"});
-        var a = new SOTE.widget.Bank("products",{paletteWidget: palettes, dataSourceUrl:"ap_products.php",title:"My Layers",selected:{antarctic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,antarctic_coastlines", arctic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,arctic_coastlines",geographic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,sedac_bound"},categories:["Base Layers","Overlays"],callback:showSelector,selector:selector});
+        var a = new SOTE.widget.Bank("products",{paletteWidget: palettes, dataSourceUrl:"ap_products.php",title:"My Layers",selected:{antarctic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,antarctic_coastlines", arctic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,arctic_coastlines",geographic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,sedac_bound"},categories:["Base Layers","Overlays"],callback:showSelector,selector:selector,config:config});
         var s = new SOTE.widget.Selector("selectorbox",{dataSourceUrl:"ap_products.php",categories:["Base Layers","Overlays"]});
         //var h = new SOTE.widget.MenuPicker("hazard",{dataSourceUrl:"data/mp_hazard.php"});
         //var tr = new SOTE.widget.MenuPicker("transition",{dataSourceUrl:"data/mp_transition.php"});
@@ -59,7 +59,7 @@ $(function() {// Initialize "static" vars
         REGISTRY.addEventListener("products","map","time","selectorbox","imagedownload");
         REGISTRY.addEventListener("selectorbox","products");
         REGISTRY.addEventListener("camera","imagedownload");
-        REGISTRY.addEventListener("palettes","map","camera");
+        REGISTRY.addEventListener("palettes","map","camera","products");
         
         /*REGISTRY.addEventListener("map","time");
         REGISTRY.addEventListener("time","map");

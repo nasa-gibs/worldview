@@ -72,7 +72,9 @@ SOTE.widget.Bank = function(containerId, config){
 	this.initRenderComplete = false;
 	this.dataSourceUrl = config.dataSourceUrl;
 	this.statusStr = "";
+	this.config = config.config;
 	this.paletteWidget = config.paletteWidget;
+	this.queryString = "";
 	this.init();
 	//this.updateComponent(this.id+"=baselayers.MODIS_Terra_CorrectedReflectance_TrueColor-overlays.fires48.AIRS_Dust_Score.OMI_Aerosol_Index")
 
@@ -96,13 +98,18 @@ SOTE.widget.Bank.handleMetaSuccess = function(data,status,xhr,args){
 			}
 		}
 	}
-	for(var i in data['palettes']){
-		self.meta[i].units = data['palettes'][i].units;
-		self.meta[i].min = data['palettes'][i].min;
-		self.meta[i].max = data['palettes'][i].max;
-		self.meta[i].palette = data['palettes'][i].palette;
-	}
-
+	$.each(self.meta, function(name, meta) {
+	   if ( name in self.config.products ) {
+	       var product = self.config.products[name];
+	       if ( "rendered" in product ) {
+	           meta.units = product.units;
+	           meta.min = product.min;
+	           meta.max = product.max;
+	           meta.bins = product.bins;
+	           meta.palette = self.config.palettes[product.rendered];    
+	       }    
+	   }    
+	});
 	if(args.callback){
 		args.callback({self:self,val:args.val});
 	}
@@ -271,10 +278,14 @@ SOTE.widget.Bank.prototype.renderCanvases = function(){
 				        }
 					};
 					var context = canvas.getContext('2d');
-					for(var k=0; k<m.palette.length; ++k){
-						context.fillStyle = "rgba("+ m.palette[k] +")";
-						context.fillRect (width*k,0,width,14);
-					}
+					var palette = this.paletteWidget.getPalette(this.values[formattedCategoryName.toLowerCase()][j].value);
+
+                    var spec = {
+                        selector: "#canvas" + val,
+                        bins: m.bins,
+                        palette: palette
+                    };
+                    Worldview.Palette.ColorBar(spec);
 				}
 			}
 		}

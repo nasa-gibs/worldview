@@ -16,10 +16,10 @@ Worldview.Widget.Palette = function(containerId, config) {
     var self = {};
     var log = Logging.getLogger("Worldview.paletteWidget");
     var value = "";
-    var activePalettes = {};
     
     self.config = config;
-    
+    self.active = {};
+            
     var init = function() {
         //Logging.debug("Worldview.paletteWidget");        
         log.debug("paletteWidget.init");
@@ -32,11 +32,22 @@ Worldview.Widget.Palette = function(containerId, config) {
         REGISTRY.markComponentReady(containerId);        
     };
     
+    self.getPalette = function(product) {
+        var name = self.active[product];
+        if ( !name ) {
+            name = config.products[product].rendered;
+        }
+        if ( !name ) {
+            return null;
+        }
+        return config.palettes[name];    
+    }
+    
     self.setValue = function(v) {
         if ( v === undefined ) {
             return;
         }
-        activePalettes = {};
+        self.active = {};
         var parts = v.split("~");
         $.each(parts, function(index, part) {
             var segments = v.split(",");
@@ -48,7 +59,7 @@ Worldview.Widget.Palette = function(containerId, config) {
     self.getValue = function() {
         try {
             var parts = [];
-            $.each(activePalettes, function(product, palette) {
+            $.each(self.active, function(product, palette) {
                 if ( palette ) {
                     parts.push(product + "," + palette);
                 }
@@ -97,7 +108,7 @@ Worldview.Widget.Palette = function(containerId, config) {
         renderedPalette.image = renderedPalette.toImage();
         palettes.push(renderedPalette);
         
-        var activePalette = activePalettes[product];
+        var activePalette = self.active[product];
         var selected = null;
                  
         $.each(self.config.palettes, function(name, p) {
@@ -126,9 +137,9 @@ Worldview.Widget.Palette = function(containerId, config) {
                      
         paletteSelector.addSelectionListener(function(palette) {
             if ( palette.source === "rendered" ) {
-                delete activePalettes[product];
+                delete self.active[product];
             } else {
-                activePalettes[product] = palette.id; 
+                self.active[product] = palette.id; 
             }
             REGISTRY.fire(self);
         });                                 
