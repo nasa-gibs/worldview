@@ -58,8 +58,8 @@ Worldview.Palette.PaletteSelector = function(spec) {
         for ( var i = 0; i < palettes.length; i++ ) {
             var palette = palettes[i];
             var item = {
-                text: palette.name,
-                description: palette.description,
+                text: palette.name || "&nbsp;",
+                description: palette.description || "",
                 value: i,
                 image: palette.image
             };
@@ -69,8 +69,10 @@ Worldview.Palette.PaletteSelector = function(spec) {
         dropDown = $container.msDropDown({
             byJson: {
                 name: "Palettes",
-                data: items     
-            }
+                data: items,  
+                width: 225,
+            },
+            visibleRows: 5
         }).data("dd");
          
         $container.on("change", function() { 

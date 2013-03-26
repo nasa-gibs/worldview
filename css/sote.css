@@ -3,7 +3,7 @@ body {min-width:600px;}
 div {display:block;}
 
 .yui-skin-sam .yui-panel {background: transparent; width:700px; 	font: 13px "Gill Sans", sans-serif; font-weight:100;}  
-.yui-skin-sam .yui-panel-container .hd{ background:rgba(38, 43, 49, 0.65); color:#ffffff; border:none; padding:0;}
+.yui-skin-sam .yui-panel-container .hd{ background:rgba(38, 43, 49, 0.65); color:#ffffff; border-bottom: none; padding:0; padding-left: 10px;}
 .yui-skin-sam .yui-panel-container .bd{ background:rgba(18, 18, 18, 0.75); color:#d7d7d7;}
 .yui-skin-sam .yui-panel-container .ft{ background:rgba(18, 18, 18, 0.75); color:#d7d7d7;}
 .yui-skin-sam .yui-panel-container .bd h3{ color:#FFFFFF; font: 18px "Gill Sans", sans-serif; font-weight:400; text-decoration:none; }

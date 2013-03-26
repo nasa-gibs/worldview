@@ -92,19 +92,19 @@
             <fileset dir="${basedir}/dev/generate-config/config"/>
         </copy>
             
-        <exec executable="python">
+        <exec executable="python" failonerror="true">
             <arg value="${basedir}/dev/generate-config/act2json.py"/>
             <arg value="${build.dir}/config/palettes"/>
         </exec>
         
-        <exec executable="python">
+        <exec executable="python" failonerror="true">
              <arg value="${basedir}/dev/generate-config/vrt2json.py"/>
              <arg value="--products-dir"/>
              <arg value="${build.dir}/config/products"/>
              <arg value="${build.dir}/config/palettes"/>
         </exec>
         
-        <exec executable="python">
+        <exec executable="python" failonerror="true">
             <arg value="${basedir}/dev/generate-config/generate-config.py"/>
             <arg value="--config-dir"/>
             <arg value="${build.dir}/config"/>

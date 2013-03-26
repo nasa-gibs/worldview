@@ -38,6 +38,7 @@
             512
         ]
     },
+    "recommendedPalettes": [ "NEO_Land_Temperature" ],
     "rendered": "MODIS_Land_Surface_Temp",
     "startDate": "2012-04-07",
     "type": "wmts",

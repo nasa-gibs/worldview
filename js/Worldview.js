@@ -82,7 +82,7 @@
                 zIndex: 1020, 
                 visible: false 
             });
-            o.setHeader('&nbsp;&nbsp;&nbsp;&nbsp;Warning');
+            o.setHeader('Warning');
             o.setBody("An unexpected error has occurred.<br/><br/>" + message);
             o.render(document.body);
             o.show();
@@ -113,7 +113,7 @@
                 visible: false 
             });
             title = title || "Notice";
-            o.setHeader('&nbsp;&nbsp;&nbsp;&nbsp;' + title);
+            o.setHeader(title);
             o.setBody(message);
             o.render(document.body);
             o.show();
@@ -129,18 +129,19 @@
      * Asks the end user a yes or no question in a dialog box.
      * 
      * Parameters:
-     * spec.header    - Header text to be displayed in the dialog box. If not
-     *                  specified, "Notice" will be used.
-     * spec.message   - Message text to be displayed in the dialog box. If not
-     *                  specified, "Are you sure?" will be used.
-     * spec.noButton  - Text to be used in the no button. If not specified, 
-     *                  "No" will be used.
-     * spec.yesButton - Text to be used in the yes button. If not specified,
-     *                  "Yes" will be used.
-     * spec.onYes     - Function to execute when the yes button is pressed. If
-     *                  not specified, the dialog box simply closes.
-     * spec.onNo      - Function to execute when the no button is pressed. If
-     *                  not specified, the dialog box simply closes. 
+     * spec.header       - Header text to be displayed in the dialog box. If not
+     *                     specified, "Notice" will be used.
+     * spec.message      - Message text to be displayed in the dialog box. If 
+     *                     not specified, "Are you sure?" will be used.
+     * spec.okButton     - Text to be used in the no button. If not specified, 
+     *                     "OK" will be used.
+     * spec.cancelButton - Text to be used in the yes button. If not specified,
+     *                     "Cancel" will be used.
+     * spec.onOk         - Function to execute when the OK button is pressed. 
+     *                     If not specified, the dialog box simply closes.
+     * spec.onCancel     - Function to execute when the Cancel button is 
+     *                     pressed. If not specified, the dialog box simply 
+     *                     closes. 
      */
     ns.ask = function(spec) {
         var dialog = new YAHOO.widget.SimpleDialog("dialog", {
@@ -156,24 +157,24 @@
         });
         
         var header = spec.header || "Notice";
-        dialog.setHeader("&nbsp;&nbsp;&nbsp;&nbsp;" + header);
+        dialog.setHeader(header);
         dialog.setBody(spec.message || "Are you sure?");
         
-        var handleYes = function() {
+        var handleOk = function() {
             try {
                 this.hide();
-                if ( spec.onYes ) {
-                    spec.onYes();
+                if ( spec.onOk) {
+                    spec.onOk();
                 }
             } catch ( error ) {
                 Worldview.error("Internal error", error);
             }
         };
-        var handleNo = function() {
+        var handleCancel = function() {
             try {
                 this.hide();
-                if ( spec.onNo ) {
-                    spec.onNo();
+                if ( spec.onCancel ) {
+                    spec.onCancel();
                 }
             } catch ( error ) {
                 Worldview.error("Internal error", error);
@@ -181,8 +182,8 @@
         };
         
         var buttons = [
-            { text: spec.noButton || "No", handler: handleNo },
-            { text: spec.yesButton || "Yes", handler: handleYes }
+            { text: spec.okButton || "Cancel", handler: handleOk },
+            { text: spec.cancelButton || "OK", handler: handleCancel }
         ];
         dialog.cfg.queueProperty("buttons", buttons); 
         dialog.render(document.body);    

@@ -16,7 +16,7 @@ import json
 
 prog = os.path.basename(__file__)
 basedir = os.path.dirname(__file__)
-version = "1.1.0"
+version = "1.1.1"
 help_description = """\
 Using a json index file, this converts ACT (Adobe Color Table) files into
 paletttes suitable for Worldview. Each color table is written out to
@@ -66,14 +66,25 @@ notify("Index file: %s" % options.index)
 notify("ACT base directory: %s" % options.act_dir)
 notify("Output directory: %s" % output_dir)
 
-with open(options.index) as fp:
-    index = json.load(fp)
-
+try:
+    with open(options.index) as fp:
+        index = json.load(fp)
+except Exception as e:
+    sys.stderr.write("%s: Unable to load index %s\n%s" % (prog, options.index,
+                                                          str(e)))
+    sys.exit(1)
+                                                          
+return_code = 0    
 for act in index:
     act_file = os.path.join(options.act_dir, act["input"])
     notify("Reading ACT: %s" % act_file)
-    with open(act_file) as fp:
-        data = fp.read()
+    try:
+        with open(act_file) as fp:
+            data = fp.read()
+    except Exception as e:
+        sys.stderr.write("%s: Unable to load %s\n%s" % (prog, act_file, 
+                                                        str(e)))
+        return_code = 1
     stops = []
     for i in xrange(0, 255 * 3, 3):
         entry = {
@@ -86,8 +97,6 @@ for act in index:
         stops += [entry]
     palette = {
         "id": act["id"],
-        "name": act["name"],
-        "description": act["description"],
         "source": "stock",
         "stops": stops
     }
@@ -97,4 +106,6 @@ for act in index:
         json.dump(palette, fp, sort_keys=True, indent=4, 
                   separators=(',', ': '))
 
+
+sys.exit(return_code)
 

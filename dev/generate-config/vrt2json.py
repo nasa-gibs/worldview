@@ -18,7 +18,7 @@ import xml.parsers.expat
 
 prog = os.path.basename(__file__)
 basedir = os.path.dirname(__file__)
-version = "1.0.0"
+version = "1.0.1"
 help_description = """\
 Given an index file of VRT color tables, converts them into JSON palettes
 suitable for Worldview. Also updates existing product JSON files to include 
@@ -133,6 +133,8 @@ def main():
     with open(options.index) as fp:
         index = json.load(fp)
 
+    return_code = 0
+    
     for vrt_meta in index:
         # Retrieve product info for current iteration
         vrt_filename = os.path.join(options.vrt_dir, vrt_meta["filename"])
@@ -196,9 +198,14 @@ def main():
                 continue
 
             notify("Modifying product %s" % product_file_name)
-            with open(product_file_name) as fp:
-                product = json.load(fp)
-
+            try:
+                with open(product_file_name) as fp:
+                    product = json.load(fp)
+            except Exception as e:
+                sys.stderr.write("%s: Unable to load %s\n%s" %
+                                 (prog, product_file_name, str(e)))
+                return_code = 1
+                
             product["bins"] = len(bin_stops)
             product["rendered"] = vrt_meta["id"]
             if use_bin_stops:
@@ -211,6 +218,7 @@ def main():
             with open(product_file_name, "w") as fp:
                 json.dump(product, fp, sort_keys=True, indent=4,
                           separators=(',', ': '))
+    sys.exit(return_code)
 #end main
 
 if __name__ == "__main__":

@@ -37,6 +37,7 @@
             512
         ]
     },
+    "recommendedPalettes": [ "NEO_Aerosol_Depth" ],    
     "rendered": "OMI_Aerosol",
     "startDate": "2012-04-07",
     "type": "wmts",

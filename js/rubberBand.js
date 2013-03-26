@@ -103,7 +103,7 @@ SOTE.widget.RubberBand.toggle = function(o){
 	        Worldview.ask({
 	            header: "Notice",
 	            message: self.PALETTE_WARNING,
-	            onYes: disablePalettes
+	            onOk: disablePalettes
 	        });
 	    } else {
             toggleOn();

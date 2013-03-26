@@ -11,7 +11,7 @@
 
 Worldview.namespace("Widget");
 
-Worldview.Widget.Palette = function(containerId, config) {
+Worldview.Widget.Palette = function(containerId, config, spec) {
     
     var self = {};
     var log = Logging.getLogger("Worldview.paletteWidget");
@@ -19,6 +19,7 @@ Worldview.Widget.Palette = function(containerId, config) {
     
     self.config = config;
     self.active = {};
+    self.alignTo = spec.alignTo;
             
     var init = function() {
         //Logging.debug("Worldview.paletteWidget");        
@@ -75,17 +76,25 @@ Worldview.Widget.Palette = function(containerId, config) {
     };
     
     self.displaySelector = function(product) { 
-        var dialog = new YAHOO.widget.Panel("palette-selector-dialog", {
-            width: "300px", 
-            height: "500px",
+        var properties = {
+            width: "245px", 
+            height: "200px",
             zIndex: 1020, 
-            visible: false 
-        });
+            visible: false             
+        }
+        if ( self.alignTo ) {
+            var $element = $(self.alignTo);
+            properties.x = Math.ceil($element.offset().left + 
+                    $element.width() + 20);
+            properties.y = Math.ceil($element.offset().top);
+        }
+        
+        var dialog = new YAHOO.widget.Panel("palette-selector-dialog", 
+                properties);
         dialog.setHeader("Select palette");
         dialog.setBody("<div id='palette-selector'></div>");
         dialog.render(document.body);
         dialog.show();
-        dialog.center();
         dialog.hideEvent.subscribe(function(i) {
             setTimeout(function() {dialog.destroy();}, 25);
         });       
@@ -95,38 +104,56 @@ Worldview.Widget.Palette = function(containerId, config) {
         canvas.width = 100;
         canvas.height = 14;
         
+        // The default palette the product is rendered in
         var productConfig = self.config.products[product];            
         var renderedName = productConfig.rendered;
         
-        var renderedPalette = Worldview.Palette.ColorBar({
+        var renderedPalette = $.extend(true, {}, 
+                config.palettes[renderedName]);
+        var renderedColorBar = Worldview.Palette.ColorBar({
             canvas: canvas,
-            palette: config.palettes[renderedName],
+            palette: renderedPalette,
             bins: productConfig.bins,
             stops: productConfig.stops
         });
         renderedPalette.name = "Default";
-        renderedPalette.image = renderedPalette.toImage();
+        renderedPalette.image = renderedColorBar.toImage();
         palettes.push(renderedPalette);
         
         var activePalette = self.active[product];
         var selected = null;
                  
+        // Palettes for the drop down, place the recommended ones first
+        var recommendedPalettes = [];
+        var otherPalettes = [];
+                 
         $.each(self.config.palettes, function(name, p) {
             if ( p.source === "stock" ) {
-                var cb = Worldview.Palette.ColorBar({
+                var palette = $.extend(true, {}, p);
+                var colorBar = Worldview.Palette.ColorBar({
                     canvas: canvas, 
-                    palette: p, 
+                    palette: palette, 
                     bins: productConfig.bins,
                     stops: productConfig.stops
                 });
-                p.image = cb.toImage();
-                palettes.push(p);
-                if ( p.id === activePalette ) {
-                    selected = palettes.length - 1;
+                palette.image = colorBar.toImage();
+                if ( $.inArray(palette.id, 
+                        productConfig.recommendedPalettes) >= 0 ) {
+                    palette.name = "Recommended";
+                    recommendedPalettes.push(palette);
+                } else {
+                    otherPalettes.push(palette);
                 }
             }       
         });
-    
+        palettes = palettes.concat(recommendedPalettes, otherPalettes);
+        
+        $.each(palettes, function(index, palette) {
+            if ( palette.id === activePalette ) {
+                selected = index;
+            }    
+        });
+        
         var paletteSelector = Worldview.Palette.PaletteSelector({
             selector: "#palette-selector",
             palettes: palettes

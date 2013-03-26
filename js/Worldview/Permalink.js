@@ -140,7 +140,7 @@ $(function() {
                 "<span style='font-weight:400; font-size:12px; line-spacing:24px;'>Copy and paste the following link to share this view:</span>" + 
                 "<input type='text' value='' name='permalink_content' id='permalink_content' />" +
             "</div>";
-            permOverlay.setHeader('&nbsp;&nbsp;&nbsp;&nbsp;Permalink');
+            permOverlay.setHeader("Permalink");
             permOverlay.setBody(item);
             permOverlay.render(document.body);
         }

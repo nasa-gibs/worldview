@@ -31,7 +31,7 @@ SOTE.util.extractFromQuery = function(key,qs){
 
 SOTE.util.throwError = function(errorTextHTML){
 	o = new YAHOO.widget.Panel("WVerror", {width:"300px", zIndex:1020, visible:false } );
-	o.setHeader('&nbsp;&nbsp;&nbsp;&nbsp;Warning');
+	o.setHeader('Warning');
 	o.setBody(errorTextHTML);
 	o.render(document.body);
 	o.show();
