@@ -258,6 +258,16 @@ SOTE.widget.Bank.prototype.render = function(){
 };
 
 SOTE.widget.Bank.prototype.renderCanvases = function(){
+    
+    var openPaletteSelector = function(name) {
+        return function() {
+            if ( !Worldview.Support.allowCustomPalettes() ) {
+                Worldview.Support.showUnsupportedMessage();
+            } else {
+               self.paletteWidget.displaySelector(name);
+            }            
+        }
+    };
 
     var self = this;
     
@@ -270,13 +280,7 @@ SOTE.widget.Bank.prototype.renderCanvases = function(){
 				if(m.palette){
 					var width = 100/m.palette.length;
 					var canvas = document.getElementById("canvas"+val);
-					canvas.onclick = function() {
-					    if ( !Worldview.Support.allowCustomPalettes() ) {
-					        Worldview.Support.showUnsupportedMessage();
-					    } else {
-					       self.paletteWidget.displaySelector(val);
-				        }
-					};
+					canvas.onclick = openPaletteSelector(val);
 					var context = canvas.getContext('2d');
 					var palette = this.paletteWidget.getPalette(this.values[formattedCategoryName.toLowerCase()][j].value);
 

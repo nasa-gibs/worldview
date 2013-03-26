@@ -73,7 +73,7 @@ Worldview.Palette.PaletteSelector = function(spec) {
                 width: 225,
             },
             visibleRows: 5,
-            rowHeight: 20
+            rowHeight: 17
         }).data("dd");
         
         $container.on("change", function() { 

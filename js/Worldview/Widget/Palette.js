@@ -16,6 +16,7 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
     var self = {};
     var log = Logging.getLogger("Worldview.paletteWidget");
     var value = "";
+    var dialog = null;
     
     self.config = config;
     self.active = {};
@@ -76,9 +77,21 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
     };
     
     self.displaySelector = function(product) { 
+        if ( dialog ) {
+            dialog.hide();
+            setTimeout(function() {
+                showSelector(product);
+            }, 6);
+        } else {
+            showSelector(product);
+        }
+    }
+        
+    var showSelector = function(product) {
+        var productConfig = self.config.products[product];            
         var properties = {
             width: "245px", 
-            height: "225px",
+            height: "245px",
             visible: false,
             autofillheight: "body"             
         }
@@ -89,12 +102,18 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
             properties.y = Math.ceil($element.offset().top);
         }
         
-        var dialog = new YAHOO.widget.Panel("palette-selector-dialog", 
+        dialog = new YAHOO.widget.Panel("palette-selector-dialog", 
                 properties);
         dialog.setHeader("Select palette");
-        dialog.setBody("<div id='palette-selector'></div>");
+        dialog.setBody([
+            "<div class='product-name'>" + productConfig.name + "</div>",
+            "<div class='product-description'>" +
+                productConfig.description +
+            "</div>" +
+            "<div id='palette-selector'></div>"
+        ].join("\n"));  
         dialog.hideEvent.subscribe(function(i) {
-            setTimeout(function() {dialog.destroy();}, 25);
+            setTimeout(function() { dialog.destroy(); dialog = null; }, 5);
         });       
         dialog.render(document.body);  
                 
@@ -104,7 +123,6 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         canvas.height = 14;
         
         // The default palette the product is rendered in
-        var productConfig = self.config.products[product];            
         var renderedName = productConfig.rendered;
         
         var renderedPalette = $.extend(true, {}, 
