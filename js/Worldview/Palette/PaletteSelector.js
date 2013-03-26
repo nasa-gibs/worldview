@@ -72,9 +72,10 @@ Worldview.Palette.PaletteSelector = function(spec) {
                 data: items,  
                 width: 225,
             },
-            visibleRows: 5
+            visibleRows: 5,
+            rowHeight: 20
         }).data("dd");
-         
+        
         $container.on("change", function() { 
             fireSelectionEvent(palettes[dropDown.selectedIndex]);
         });

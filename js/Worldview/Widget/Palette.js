@@ -52,7 +52,7 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         var parts = v.split("~");
         $.each(parts, function(index, part) {
             var segments = v.split(",");
-            activePalettes[segments[0]] = segments[1];    
+            self.active[segments[0]] = segments[1];    
         });
         REGISTRY.fire(self);
     };
@@ -78,9 +78,10 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
     self.displaySelector = function(product) { 
         var properties = {
             width: "245px", 
-            height: "200px",
+            height: "225px",
             zIndex: 1020, 
-            visible: false             
+            visible: false,
+            autofillheight: "body"             
         }
         if ( self.alignTo ) {
             var $element = $(self.alignTo);
@@ -93,12 +94,11 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
                 properties);
         dialog.setHeader("Select palette");
         dialog.setBody("<div id='palette-selector'></div>");
-        dialog.render(document.body);
-        dialog.show();
         dialog.hideEvent.subscribe(function(i) {
             setTimeout(function() {dialog.destroy();}, 25);
         });       
-        
+        dialog.render(document.body);  
+                
         var palettes = [];
         var canvas = document.createElement("canvas");
         canvas.width = 100;
@@ -169,7 +169,9 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
                 self.active[product] = palette.id; 
             }
             REGISTRY.fire(self);
-        });                                 
+        });     
+        
+        dialog.show(); 
     };
 
     self.loadFromQuery = function(queryString) {

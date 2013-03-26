@@ -182,8 +182,8 @@
         };
         
         var buttons = [
-            { text: spec.okButton || "Cancel", handler: handleOk },
-            { text: spec.cancelButton || "OK", handler: handleCancel }
+            { text: spec.cancelButton || "Cancel", handler: handleCancel },
+            { text: spec.okButton || "OK", handler: handleOk }
         ];
         dialog.cfg.queueProperty("buttons", buttons); 
         dialog.render(document.body);    
