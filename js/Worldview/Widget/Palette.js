@@ -163,10 +163,13 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         }
                      
         paletteSelector.addSelectionListener(function(palette) {
+            var log = Logging.getLogger("Worldview.PaletteSelection");
             if ( palette.source === "rendered" ) {
                 delete self.active[product];
+                log.debug("Palette: default");
             } else {
-                self.active[product] = palette.id; 
+                self.active[product] = palette.id;
+                log.debug("Palette: " + palette.id); 
             }
             REGISTRY.fire(self);
         });     
