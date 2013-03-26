@@ -4,24 +4,100 @@
     "input":    "neo/modis_aer_od.act"    
 },
 {
+    "id":       "NEO_Aerosol_Particle_Radius",
+    "input":    "neo/modis_aer_ra.act"    
+},
+{
     "id":       "NEO_Carbon_Monoxide",
     "input":    "neo/mopitt_co.act"
 },
 {
-    "id":       "NEO_Chlorophyll Concentration",
+    "id":       "NEO_Cirrus Reflectance",
+    "input":    "neo/modis_cld_ci.act"
+},    
+{
+    "id":       "NEO_Chlorophyll_Concentration",
     "input":    "neo/modis_chlor.act"
 },
 {
-    "id":       "NEO_Land_Temperature",
+    "id":       "NEO_Cloud_Fraction",
+    "input":    "neo/modis_cld_fr.act"
+},
+{
+    "id":       "NEO_Cloud_Optical_Thickness",
+    "input":    "neo/modis_cld_ot.act"
+},
+{
+    "id":       "NEO_Cloud_Particle_Radius",
+    "input":    "neo/modis_cld_rd.act"
+},
+{
+    "id":       "NEO_Cloud_Water_Content",
+    "input":    "neo/modis_cld_wp.act"
+},
+{
+    "id":       "NEO_Land_Surface_Temperature",
     "input":    "neo/modis_lst.act"
+},
+{
+    "id":       "NEO_Land_Surface_Temperature_Anomaly",
+    "input":    "neo/modis_lst_anom.act"
+},
+{
+    "id":       "NEO_Leaf_Area_Index",
+    "input":    "neo/modis_lai.act"
+},
+{
+    "id":       "NEO_Outgoing Longwave Radiation",
+    "input":    "neo/ceres_lw.act"
+},
+{
+    "id":       "NEO_Ozone",
+    "input":    "neo/omi_ozone_to3.act"
+},
+{
+    "id":       "NEO_Primary Productivity",
+    "input":    "neo/modis_npp.act"
+},
+{
+    "id":       "NEO_Radiation",
+    "input":    "neo/ceres_net.act"
+},
+{
+    "id":       "NEO_Rainfall",
+    "input":    "neo/trmm_rainfall.act"
+},
+{
+    "id":       "NEO_Reflected Shortwave Radiation",
+    "input":    "neo/ceres_sw.act"
 },
 {
     "id":       "NEO_Sea_Temperature",
     "input":    "neo/amsre_sst.act"
 },
 {
+    "id":       "NEO_Sea_Temperature_Anomaly",
+    "input":    "neo/amsre_sst_anom.act"
+},
+{
     "id":       "NEO_Snow_Cover",
     "input":    "neo/modis_snow.act"
+},
+{
+    "id":       "NEO_Solar_Insolation",
+    "input":    "neo/ceres_insol.act"
+},
+{
+    "id":       "NEO_Temperature_Anomaly",
+    "input":    "neo/giss_temp_anom.act"
+},
+{
+    "id":       "NEO_Vegetation_Index",
+    "input":    "neo/modis_ndvi.act"
+},
+{
+    "id":       "NEO_Water_Equivalent_Anomaly",
+    "input":    "neo/grace_lwe_anom.act"
 },
 {
     "id":       "NEO_Water_Vapor",
