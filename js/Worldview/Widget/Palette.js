@@ -79,7 +79,6 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         var properties = {
             width: "245px", 
             height: "225px",
-            zIndex: 1020, 
             visible: false,
             autofillheight: "body"             
         }
