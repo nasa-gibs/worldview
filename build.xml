@@ -241,11 +241,11 @@
 		
 		<!-- Move the jQuery images to a location where it can be found
 		     in the minified form -->
-		  <move todir="${build.web.dir}/images">
-		    <fileset dir="${build.web.css.dir}/ext/jquery/images">
+		<move todir="${build.web.dir}/images">
+		  <fileset dir="${build.web.css.dir}/ext/jquery.mobile-1.0rc2/images">
 		      <include name="*"/>
-		    </fileset>
-		  </move>
+		  </fileset>
+        </move>
 
 	</target>
     

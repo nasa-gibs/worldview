@@ -1,19 +1,35 @@
 <project name="js" basedir=".">
 
 	<filelist id="js.files" dir="${build.web.js.dir}">
-		<file name="ext/yui/yahoo-min.js"/>
-		<file name="ext/yui/event-min.js"/>
-		<file name="ext/jquery/jquery-1.6.4.js"/>
-		<file name="ext/jqueryui-1.8.16/jquery-ui.min.js"/>
-		<file name="ext/jquery/jquery.mobile-1.0rc2.js"/>
-		<file name="ext/yui/combo-event-dragdrop-container-min.js"/>
+        <file name="ext/jquery-1.6.4/jquery.js"/>
+        <file name="ext/jqueryui-1.8.16/jquery-ui.min.js"/>
+        <file name="ext/jquery.mobile-1.0rc2/jquery.mobile.js"/>
+
+        <file name="ext/datejs-1.0-alpha-1/core-debug.js"/>
+        <file name="ext/datejs-1.0-alpha-1/en-US.js"/>
+        <file name="ext/datejs-1.0-alpha-1/time-debug.js"/>
+        <file name="ext/datejs-1.0-alpha-1/parser-debug.js"/>
+            
+		<file name="ext/yui-2.9.0/yahoo/yahoo.js"/>
+        <file name="ext/yui-2.9.0/event/event.js"/>
+        <file name="ext/yui-2.9.0/dom/dom.js"/>
+        <file name="ext/yui-2.9.0/dragdrop/dragdrop.js"/>
+        <file name="ext/yui-2.9.0/yahoo-dom-event/yahoo-dom-event.js"/>
+        <file name="ext/yui-2.9.0/animation/animation.js"/>
+        <file name="ext/yui-2.9.0/connection/connection.js"/>
+        <file name="ext/yui-2.9.0/element/element.js"/>
+        <file name="ext/yui-2.9.0/button/button.js"/>
+        <file name="ext/yui-2.9.0/container/container.js"/>
+        <file name="ext/yui-2.9.0/storage/storage.js"/>
+
+        <file name="ext/joyride-2.0.3/jquery.cookie.js"/>
+        <file name="ext/joyride-2.0.3/jquery.joyride-2.0.3.js"/>
+        <file name="ext/joyride-2.0.3/modernizr.mq.js"/>
+        
 		<file name="ext/openlayers-2.12/OpenLayers.js"/>
-		<file name="ext/datejs/date.js"/>
-		<file name="ext/jcrop/jcrop.js"/>
-		<file name="ext/jquery.dd/jquery.dd.js"/>
-        <file name="ext/joyride/jquery.cookie.js"/>
-        <file name="ext/joyride/jquery.joyride-2.0.3.js"/>
-		<file name="ext/joyride/modernizr.mq.js"/>
+		<file name="ext/jcrop-0.9.10-p1/jcrop.js"/>
+		<file name="ext/jquery.dd-3.3/jquery.dd.js"/>
+
 		<file name="component.js"/>
 		<file name="registry.js"/>
 		<file name="util.js"/>
