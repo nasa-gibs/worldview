@@ -56,7 +56,7 @@ $(function() {// Initialize "static" vars
         REGISTRY.addEventListener("map","time","imagedownload");
         REGISTRY.addEventListener("time","map","imagedownload");
         REGISTRY.addEventListener("switch","map","products","selectorbox","time", "imagedownload", "camera");
-        REGISTRY.addEventListener("products","map","time","selectorbox","imagedownload");
+        REGISTRY.addEventListener("products","map","time","selectorbox","imagedownload","palettes");
         REGISTRY.addEventListener("selectorbox","products");
         REGISTRY.addEventListener("camera","imagedownload");
         REGISTRY.addEventListener("palettes","map","camera","products");

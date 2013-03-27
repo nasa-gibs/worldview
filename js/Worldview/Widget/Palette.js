@@ -17,7 +17,8 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
     var log = Logging.getLogger("Worldview.Widget.Palette");
     var value = "";
     var dialog = null;
-        
+    var dialogForProduct = null;
+    
     self.config = config;
     self.active = {};
     self.alignTo = spec.alignTo;
@@ -76,6 +77,30 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         }
     };
     
+    self.updateComponent = function(queryString) {
+        queryString = queryString || "";
+        var changed = false;
+        try {
+            var state = Worldview.queryStringToObject(queryString);
+            state.products = splitProducts(state);
+            $.each(self.active, function(product, palette) {
+                if ( $.inArray(product, state.products) < 0 ) {
+                    log.debug("Removing palette for " + product);
+                    delete self.active[product];
+                    changed = true;
+                    if ( dialogForProduct === product ) {
+                        dialog.hide();
+                    }
+                }    
+            }); 
+            if ( changed ) {
+                REGISTRY.fire(self);
+            }
+        } catch ( error ) {
+            Worldview.error("Unable to update state", error);
+        }
+    };
+    
     self.displaySelector = function(product) { 
         if ( dialog ) {
             dialog.hide();
@@ -104,6 +129,7 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         
         dialog = new YAHOO.widget.Panel("palette-selector-dialog", 
                 properties);
+        dialogForProduct = product;
         dialog.setHeader("Select palette");
         dialog.setBody([
             "<div class='product-name'>" + productConfig.name + "</div>",
@@ -113,7 +139,11 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
             "<div id='palette-selector'></div>"
         ].join("\n"));  
         dialog.hideEvent.subscribe(function(i) {
-            setTimeout(function() { dialog.destroy(); dialog = null; }, 5);
+            setTimeout(function() { 
+                dialog.destroy(); 
+                dialog = null; 
+                dialogForProduct = null
+            }, 5);
         });       
         dialog.render(document.body);  
                 
@@ -199,6 +229,32 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         dialog.show(); 
     };
 
+    /**
+     * Converts the product listed in the query string into an array.
+     */    
+    var splitProducts = function(state) {
+        var results = [];
+        if ( !state.products ) {
+            return results;
+        }
+        var sets = state.products.split("~");
+        for ( var i = 0; i < sets.length; i++ ) {
+            var set = sets[i];
+            var items = set.split(",");
+            var values = [];
+            // First item is the type (e.g., baselayer or overlay). Ignore it.
+            for ( var j = 1; j < items.length; j++ ) {
+                values.push(items[j]);
+            }
+            // Products are listed in the "opposite" order from what is 
+            // expected--the first layer is the layer to be drawn last. 
+            // Flip them.
+            values.reverse();
+            results = results.concat(values);
+        }
+        return results;
+    };
+    
     self.loadFromQuery = function(queryString) {
         log.debug("paletteWidget.loadFromQuery: " + queryString);
         var query = Worldview.queryStringToObject(queryString);

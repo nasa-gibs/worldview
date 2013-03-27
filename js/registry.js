@@ -175,6 +175,11 @@ SOTE.util.Registry = function () {
     var additionalValues = getRegistryDependentValues(me.name, this.name);
     if(additionalValues != ""){
       args = args + "&" + additionalValues;
+    } else {
+      // HACK: args here is actually an array. The line above converts to 
+      // string if there are additionalValues. If not, follow the same
+      // trick.
+      args = args + "";
     }
     // get physical comp and do the update
     var comp = getGComponent(me.name);
