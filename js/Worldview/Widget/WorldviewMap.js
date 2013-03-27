@@ -39,7 +39,7 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
     var last = null;
     
     var init = function() {
-        Logging.debug("Worldview.Map");
+        //Logging.debug("Worldview.Map");
         setExtentToLeading();
     };
     
@@ -102,7 +102,6 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
                 self.productMap.setDay(date);
             }           
             if ( state.palettesString !== last.palettesString ) {
-                log.info(state.palettesString);
                 self.productMap.setPalettes(state.palettes);
             }
             last = state;
