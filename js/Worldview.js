@@ -22,6 +22,10 @@
      */
     ns.BUILD_TIMESTAMP = "@BUILD_TIMESTAMP@";
     
+    ns.isDevelopment = function() {
+        return ns.BUILD_TIMESTAMP === "@BUILD_TIMESTAMP@";
+    };
+    
     /**
      * Function: namespace
      * Defines a namespace under Worldview. Each argument is an object path

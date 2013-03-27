@@ -14,14 +14,14 @@ Worldview.namespace("Widget");
 Worldview.Widget.Palette = function(containerId, config, spec) {
     
     var self = {};
-    var log = Logging.getLogger("Worldview.paletteWidget");
+    var log = Logging.getLogger("Worldview.Widget.Palette");
     var value = "";
     var dialog = null;
-    
+        
     self.config = config;
     self.active = {};
     self.alignTo = spec.alignTo;
-            
+    
     var init = function() {
         //Logging.debug("Worldview.paletteWidget");        
         log.debug("paletteWidget.init");
@@ -136,7 +136,7 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         renderedPalette.name = "Default";
         renderedPalette.image = renderedColorBar.toImage();
         palettes.push(renderedPalette);
-        
+                
         var activePalette = self.active[product];
         var selected = null;
                  

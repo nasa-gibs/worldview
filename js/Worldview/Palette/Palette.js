@@ -98,6 +98,8 @@ Worldview.Palette.Palette = function(spec) {
          */
         interpolate: spec.interpolate || "hsl",
         
+        source: spec.source || "stock",
+        
         /**
          * Property: stops
          * Array of color stops of type <StopRGBA>. If not specified, this 

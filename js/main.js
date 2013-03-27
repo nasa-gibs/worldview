@@ -84,11 +84,11 @@ $(function() {// Initialize "static" vars
         }
         
         var banner = Worldview.NAME + " - Version " + Worldview.VERSION;
-        if ( Worldview.BUILD_TIMESTAMP !== "@BUILD_TIMESTAMP@" ) {
+        if ( !Worldview.isDevelopment() ) {
             banner += " - " + Worldview.BUILD_TIMESTAMP;
         } 	    
         log.info(banner);
-        if ( Worldview.BUILD_TIMESTAMP === "@BUILD_TIMESTAMP@" ) {
+        if ( Worldview.isDevelopment() ) {
             log.warn("Development version");
         }	  
         
@@ -97,7 +97,17 @@ $(function() {// Initialize "static" vars
         
     var onConfigLoad = function(config) {
         try {
-            init(Object.freeze(config));
+            if ( Worldview.isDevelopment() ) {
+                var debugPalette = Worldview.Palette.Palette({
+                    id: "__DEBUG",
+                    name: "Debug",
+                    stops: [{at: 0, r: 0, g: 0, b: 0, a: 0}]
+                });
+                config.palettes["__DEBUG"] = debugPalette;
+                config.paletteOrder.unshift("__DEBUG");
+            }
+            Worldview.config = Object.freeze(config);
+            init(Worldview.config);
         } catch ( error ) {
             Worldview.error("Unable to start Worldview", error);
         }
