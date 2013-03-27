@@ -116,7 +116,7 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         var productConfig = self.config.products[product];            
         var properties = {
             width: "245px", 
-            height: "245px",
+            height: "265px",
             visible: false,
             autofillheight: "body"             
         }
