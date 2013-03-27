@@ -144,7 +144,12 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         var recommendedPalettes = [];
         var otherPalettes = [];
                  
-        $.each(self.config.palettes, function(name, p) {
+        $.each(self.config.paletteOrder, function(index, name) {
+            var p = self.config.palettes[name];
+            if ( !p ) {
+                log.error("No such palette: " + name);
+                return;
+            }
             if ( p.source === "stock" ) {
                 var palette = $.extend(true, {}, p);
                 var colorBar = Worldview.Palette.ColorBar({

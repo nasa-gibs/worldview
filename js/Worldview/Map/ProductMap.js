@@ -241,7 +241,6 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
      * and palette names as values.
      */
     self.setPalettes = function(activePalettes) {
-        console.log(activePalettes);
         $.each(activeMaps, function(projection, map) {
             $.each(map.products, function(productName, product) {
                 var paletteName = activePalettes[productName];

@@ -16,7 +16,7 @@ import json
 
 prog = os.path.basename(__file__)
 basedir = os.path.dirname(__file__)
-version = "1.1.0"
+version = "1.2.0"
 help_description = """\
 Concatenates all configuration items a directory into one configuration file. 
 """

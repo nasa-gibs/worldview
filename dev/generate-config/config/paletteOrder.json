@@ -1,0 +1,19 @@
+[
+    "NEO_Aerosol_Depth",
+    "NEO_Carbon_Monoxide",
+    "NEO_Solar_Insolation",
+    "NEO_Water_Vapor",
+    "NEO_Cloud_Particle_Radius",
+    "NEO_Ozone",
+    "NEO_Rainfall",
+    "NEO_Snow_Cover",
+    "NEO_Cloud_Fraction",
+    "NEO_Cloud_Water_Content",
+    "NEO_Cirrus_Reflectance",
+    "NEO_Cloud_Optical_Thickness",
+    "NEO_Chlorophyll_Concentration",
+    "NEO_Sea_Temperature",
+    "NEO_Land_Surface_Temperature",
+    "NEO_Aerosol_Particle_Radius",
+    "NEO_Vegetation_Index"
+]
