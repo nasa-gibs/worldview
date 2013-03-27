@@ -176,6 +176,11 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
                  
         $.each(self.config.paletteOrder, function(index, name) {
             var p = self.config.palettes[name];
+            
+            // Skip this palette if configuration says to exclude
+            if ( $.inArray(name, productConfig.excludePalettes) >= 0 ) {
+                return;
+            }
             if ( !p ) {
                 log.error("No such palette: " + name);
                 return;

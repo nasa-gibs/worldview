@@ -23,7 +23,7 @@
     ns.BUILD_TIMESTAMP = "@BUILD_TIMESTAMP@";
     
     ns.isDevelopment = function() {
-        return ns.BUILD_TIMESTAMP === "@BUILD_TIMESTAMP@";
+        return ns.BUILD_TIMESTAMP.indexOf("BUILD_TIMESTAMP") >= 0;
     };
     
     /**

@@ -1,5 +1,6 @@
 {
     "description": "Aqua / AIRS",
+    "excludePalettes": ["NEO_Aerosol_Depth"],
     "max": "520",
     "min": "360",
     "name": "Dust Score",
