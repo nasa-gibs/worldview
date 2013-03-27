@@ -220,7 +220,7 @@ SOTE.widget.Bank.prototype.render = function(){
 					}*/
 					if(m.palette){
 						var paletteString = "<span class='palette'><span class='p-min' style='margin-right:10px;'>"+m.min+"</span>" +
-							 "<canvas class='colorBar' style='cursor: pointer' id='canvas"+this.values[formattedCategoryName.toLowerCase()][j].value+"' width=100px height=14px'></canvas>" +
+							 "<canvas class='colorBar' id='canvas"+this.values[formattedCategoryName.toLowerCase()][j].value+"' width=100px height=14px'></canvas>" +
 							 "<span class='p-max' style='margin-left:10px;'>"+m.max+"</span>";
 						if(m.units && m.units != ""){
 							paletteString += "<span class='units' style='margin-left:3px;'>("+m.units+")</span></span>";
@@ -281,7 +281,10 @@ SOTE.widget.Bank.prototype.renderCanvases = function(){
 				if(m.palette){
 					var width = 100/m.palette.length;
 					var canvas = document.getElementById("canvas"+val);
-					canvas.onclick = openPaletteSelector(val);
+					if ( m.palette.stops.length > 1 ) {
+					   canvas.onclick = openPaletteSelector(val);
+					   canvas.style.cursor = "pointer";
+				    }
 					var context = canvas.getContext('2d');
 					var palette = this.paletteWidget.getPalette(this.values[formattedCategoryName.toLowerCase()][j].value);
 
