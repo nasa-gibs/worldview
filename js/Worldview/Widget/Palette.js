@@ -88,11 +88,12 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
                     log.debug("Removing palette for " + product);
                     delete self.active[product];
                     changed = true;
-                    if ( dialogForProduct === product ) {
-                        dialog.hide();
-                    }
                 }    
             }); 
+            if ( dialogForProduct && 
+                    $.inArray(dialogForProduct, state.products) < 0 ) {
+                dialog.hide();
+            }        
             if ( changed ) {
                 REGISTRY.fire(self);
             }
