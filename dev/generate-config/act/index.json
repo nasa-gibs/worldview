@@ -8,10 +8,6 @@
     "input":    "neo/modis_cld_rd.act"
 },
 {
-    "id":       "NEO_Aerosol_Particle_Radius",
-    "input":    "neo/modis_aer_ra.act"    
-},
-{
     "id":       "NEO_Carbon_Monoxide",
     "input":    "neo/mopitt_co.act"
 },
