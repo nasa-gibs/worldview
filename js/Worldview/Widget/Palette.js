@@ -52,7 +52,7 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         self.active = {};
         var parts = v.split("~");
         $.each(parts, function(index, part) {
-            var segments = v.split(",");
+            var segments = part.split(",");
             self.active[segments[0]] = segments[1];    
         });
         REGISTRY.fire(self);

@@ -241,16 +241,17 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
      * and palette names as values.
      */
     self.setPalettes = function(activePalettes) {
+        console.log(activePalettes);
         $.each(activeMaps, function(projection, map) {
-            $.each(map.products, function(name, product) {
-                if ( name in activePalettes ) {
+            $.each(map.products, function(productName, product) {
+                var paletteName = activePalettes[productName];
+                if ( paletteName ) {
                     // Find the rendered palette for this product
-                    var productConfig = self.mapConfig.products[name];
+                    var productConfig = self.mapConfig.products[productName];
                     var renderedName = productConfig.rendered;
                     var renderedPalette = self.mapConfig.palettes[renderedName];
                     
                     // Find the palette that should be used instead
-                    var paletteName = activePalettes[name];
                     var palette = self.mapConfig.palettes[paletteName];
                     
                     // Create a lookup table and map it to the color
