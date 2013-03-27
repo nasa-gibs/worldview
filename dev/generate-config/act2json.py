@@ -97,6 +97,7 @@ for act in index:
         stops += [entry]
     palette = {
         "id": act["id"],
+        "name": act["name"],
         "source": "stock",
         "stops": stops
     }

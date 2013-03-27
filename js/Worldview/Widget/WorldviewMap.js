@@ -39,7 +39,7 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
     var last = null;
     
     var init = function() {
-        //Logging.debug("Worldview.Map");
+        Logging.debug("Worldview.Map");
         setExtentToLeading();
     };
     
@@ -62,8 +62,7 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
             if ( last.queryString === queryString ) {
                 return;
             }
-            log.debug("WorldviewMap.updateComponent.queryString: " + 
-                    queryString);
+            log.debug("WorldviewMap: updateComponent", queryString);
             var state = Worldview.queryStringToObject(queryString);
             state.productsString = state.products;
             state.products = splitProducts(state);
@@ -103,6 +102,7 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
                 self.productMap.setDay(date);
             }           
             if ( state.palettesString !== last.palettesString ) {
+                log.info(state.palettesString);
                 self.productMap.setPalettes(state.palettes);
             }
             last = state;

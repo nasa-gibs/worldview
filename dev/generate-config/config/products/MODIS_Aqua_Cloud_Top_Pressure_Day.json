@@ -37,7 +37,7 @@
             512
         ]
     },
-    "rendered": "MODIS_Cloud_Top",
+    "rendered": "MODIS_Cloud_Top_Pressure",
     "startDate": "2012-04-07",
     "type": "wmts",
     "units": "hPa"

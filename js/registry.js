@@ -12,7 +12,9 @@ SOTE.util.Registry = function () {
   this.readyRegistry = new Array();
   // holds array of callbacks for when all components are ready
   this.allReadyCallbacks = new Array();
-
+  // HACK: Components can check this value to ignore bogus state on startup
+  this.isLoadingQuery = false;
+  
   // register a component
   this.register = function register(id,component){
     var compObj = new ComponentObj(id,component);

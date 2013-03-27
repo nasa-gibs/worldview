@@ -37,7 +37,7 @@
             512
         ]
     },
-    "recommendedPalettes": [ "NEO_Water_Vapor" ],
+    "recommendedPalettes": [ "blue_1" ],
     "rendered": "MODIS_Water_Vapor_5km",
     "startDate": "2012-04-07",
     "type": "wmts",

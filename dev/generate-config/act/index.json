@@ -1,66 +1,99 @@
 [
 {
-    "id":       "NEO_Aerosol_Depth",
-    "input":    "neo/modis_aer_od.act"    
+    "id":       "orange_1",
+    "name":     "Orange 1",
+    "from":     "NEO_Aerosol_Depth",
+    "input":    "neo/modis_aer_od.act"
 },
 {
-    "id":       "NEO_Cloud_Particle_Radius",
+    "id":       "blue_2",
+    "name":     "Blue 2",
+    "from":     "NEO_Cloud_Particle_Radius",
     "input":    "neo/modis_cld_rd.act"
 },
 {
-    "id":       "NEO_Carbon_Monoxide",
+    "id":       "red_1",
+    "name":     "Red 1",
+    "from":     "NEO_Carbon_Monoxide",
     "input":    "neo/mopitt_co.act"
+
 },
 {
-    "id":       "NEO_Cirrus_Reflectance",
+    "id":       "purple_1",
+    "name":     "Purple 1",
+    "from":     "NEO_Cirrus_Reflectance",
     "input":    "neo/modis_cld_ci.act"
 },    
 {
-    "id":       "NEO_Chlorophyll_Concentration",
+    "id":       "blue_9",
+    "name":     "Blue 9",
+    "from":     "NEO_Chlorophyll_Concentration",
     "input":    "neo/modis_chlor.act"
 },
 {
-    "id":       "NEO_Cloud_Fraction",
+    "id":       "blue_6",
+    "name":     "Blue 6",
+    "from":     "NEO_Cloud_Fraction",
     "input":    "neo/modis_cld_fr.act"
 },
 {
-    "id":       "NEO_Cloud_Optical_Thickness",
+    "id":       "blue_8",
+    "name":     "Blue 8",
+    "from":     "NEO_Cloud_Optical_Thickness",
     "input":    "neo/modis_cld_ot.act"
 },
 {
-    "id":       "NEO_Cloud_Water_Content",
+    "id":       "blue_7",
+    "name":     "Blue 7",
+    "from":     "NEO_Cloud_Water_Content",
     "input":    "neo/modis_cld_wp.act"
 },
 {
-    "id":       "NEO_Land_Surface_Temperature",
+    "id":       "rainbow_1",
+    "name":     "Rainbow 1",
+    "from":     "NEO_Land_Surface_Temperature",
     "input":    "neo/modis_lst.act"
 },
 {
-    "id":       "NEO_Ozone",
+    "id":       "blue_3",
+    "name":     "Blue 3",
+    "from":     "NEO_Ozone",
     "input":    "neo/omi_ozone_to3.act"
 },
 {
-    "id":       "NEO_Rainfall",
+    "id":       "blue_4",
+    "name":     "Blue 4",
+    "from":     "NEO_Rainfall",
     "input":    "neo/trmm_rainfall.act"
 },
 {
-    "id":       "NEO_Sea_Temperature",
+    "id":       "purple_2",
+    "name":     "Purple 2",
+    "from":     "NEO_Sea_Temperature",
     "input":    "neo/amsre_sst.act"
 },
 {
-    "id":       "NEO_Snow_Cover",
+    "id":       "blue_5",
+    "name":     "Blue 5",
+    "from":     "NEO_Snow_Cover",
     "input":    "neo/modis_snow.act"
 },
 {
-    "id":       "NEO_Solar_Insolation",
+    "id":       "red_2",
+    "name":     "Red 2",
+    "from":     "NEO_Solar_Insolation",
     "input":    "neo/ceres_insol.act"
 },
 {
-    "id":       "NEO_Vegetation_Index",
+    "id":       "green_1",
+    "name":     "Green 1",
+    "from":     "NEO_Vegetation_Index",
     "input":    "neo/modis_ndvi.act"
 },
 {
-    "id":       "NEO_Water_Vapor",
+    "id":       "blue_1",
+    "name":     "Blue 1",
+    "from":     "NEO_Water_Vapor",
     "input":    "neo/modis_sky_wv.act"
 }
 ]        

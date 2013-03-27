@@ -71,12 +71,14 @@ $(function() {// Initialize "static" vars
         var queryString = Worldview.Permalink.decode(window.location.search.substring(1));
 
         function testQS(){
-              var comps = REGISTRY.getComponents();
-              for (var i=0; i < comps.length; i++) {
+            REGISTRY.isLoadingQuery = true;
+            var comps = REGISTRY.getComponents();
+            for (var i=0; i < comps.length; i++) {
                 if(typeof comps[i].obj.loadFromQuery == 'function'){
                     comps[i].obj.loadFromQuery(queryString);
                 }
-              }
+            }
+            REGISTRY.isLoadingQuery = false;
         }
                 
         if (queryString.length > 0) {

@@ -24,7 +24,7 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
     self.alignTo = spec.alignTo;
     
     var init = function() {
-        //Logging.debug("Worldview.paletteWidget");        
+        Logging.debug("Worldview.Widget.Palette");        
         log.debug("paletteWidget.init");
         if ( REGISTRY ) {
             REGISTRY.register(containerId, self);
@@ -50,6 +50,7 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         if ( v === undefined ) {
             return;
         }
+        log.debug("setValue: " + v);
         self.active = {};
         var parts = v.split("~");
         $.each(parts, function(index, part) {
@@ -78,10 +79,14 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
     };
     
     self.updateComponent = function(queryString) {
+        if ( REGISTRY.isLoadingQuery ) {
+            return;
+        }
         queryString = queryString || "";
         var changed = false;
         try {
             var state = Worldview.queryStringToObject(queryString);
+            log.debug("Palette: updateComponent", state);
             state.products = splitProducts(state);
             $.each(self.active, function(product, palette) {
                 if ( $.inArray(product, state.products) < 0 ) {
@@ -89,7 +94,8 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
                     delete self.active[product];
                     changed = true;
                 }    
-            }); 
+            });
+            
             if ( dialogForProduct && 
                     $.inArray(dialogForProduct, state.products) < 0 ) {
                 dialog.hide();
@@ -102,6 +108,16 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         }
     };
     
+    self.loadFromQuery = function(queryString) {
+        var query = Worldview.queryStringToObject(queryString);
+        log.debug("Palette: loadFromQuery", query);
+        if ( query.palettes && !Worldview.Support.allowCustomPalettes() ) {
+            Worldview.Support.showUnsupportedMessage("custom palette");
+        } else {
+            self.setValue(query.palettes);
+        }    
+    };
+        
     self.displaySelector = function(product) { 
         if ( dialog ) {
             dialog.hide();
@@ -198,7 +214,6 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
                 palette.image = colorBar.toImage();
                 if ( $.inArray(palette.id, 
                         productConfig.recommendedPalettes) >= 0 ) {
-                    palette.name = "Recommended";
                     recommendedPalettes.push(palette);
                 } else {
                     otherPalettes.push(palette);
@@ -262,15 +277,7 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         return results;
     };
     
-    self.loadFromQuery = function(queryString) {
-        log.debug("paletteWidget.loadFromQuery: " + queryString);
-        var query = Worldview.queryStringToObject(queryString);
-        if ( query.palettes && !Worldview.Support.allowCustomPalettes() ) {
-            Worldview.Support.showUnsupportedMessage("custom palette");
-        } else {
-            self.setValue(query.palettes);
-        }    
-    };
+
     
     init();
     return self;
