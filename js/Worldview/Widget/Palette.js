@@ -119,8 +119,9 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
             width: "245px", 
             height: "265px",
             visible: false,
-            autofillheight: "body"             
-        }
+            autofillheight: "body",
+            constraintoviewport: true              
+        };
         if ( self.alignTo ) {
             var $element = $(self.alignTo);
             properties.x = Math.ceil($element.offset().left + 
