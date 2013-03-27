@@ -106,6 +106,7 @@ SOTE.widget.Bank.handleMetaSuccess = function(data,status,xhr,args){
 	           meta.min = product.min;
 	           meta.max = product.max;
 	           meta.bins = product.bins;
+	           meta.stops = product.stops;
 	           meta.palette = self.config.palettes[product.rendered];    
 	       }    
 	   }    
@@ -287,6 +288,7 @@ SOTE.widget.Bank.prototype.renderCanvases = function(){
                     var spec = {
                         selector: "#canvas" + val,
                         bins: m.bins,
+                        stops: m.stops,
                         palette: palette
                     };
                     Worldview.Palette.ColorBar(spec);
