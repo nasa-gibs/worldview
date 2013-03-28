@@ -18,14 +18,14 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
     var value = "";
     var dialog = null;
     var dialogForProduct = null;
-    
+        
     self.config = config;
     self.active = {};
+    self.inactive = {};
     self.alignTo = spec.alignTo;
     
     var init = function() {
-        //Logging.debug("Worldview.Widget.Palette");        
-        log.debug("paletteWidget.init");
+        Logging.debug("Worldview.Widget.Palette");        
         if ( REGISTRY ) {
             REGISTRY.register(containerId, self);
         } else {
@@ -56,6 +56,7 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         $.each(parts, function(index, part) {
             var segments = part.split(",");
             self.active[segments[0]] = segments[1];    
+            self.inactive[segments[0]] = segments[1];
         });
         REGISTRY.fire(self);
     };
@@ -95,7 +96,14 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
                     changed = true;
                 }    
             });
-            
+            $.each(self.inactive, function(product, palette) {
+                if ( $.inArray(product, state.products) >= 0 && 
+                        !self.active[product] ) {
+                    log.debug("Restoring palette for " + product);
+                    self.active[product] = self.inactive[product];
+                    changed = true;
+                }
+            });
             if ( dialogForProduct && 
                     $.inArray(dialogForProduct, state.products) < 0 ) {
                 dialog.hide();
@@ -240,9 +248,11 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
             var log = Logging.getLogger("Worldview.PaletteSelection");
             if ( palette.source === "rendered" ) {
                 delete self.active[product];
+                delete self.inactive[product];
                 log.debug("Palette: default");
             } else {
                 self.active[product] = palette.id;
+                self.inactive[product] = palette.id;
                 log.debug("Palette: " + palette.id); 
             }
             REGISTRY.fire(self);
