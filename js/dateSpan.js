@@ -282,7 +282,8 @@ SOTE.widget.DateSpan.handleSlide = function(e,ui){
 	var value = e.target.value;
 	var type = e.data.type;
 	var self = e.data.self;
-
+    var oldDate = self.value;
+    
 	var numitems = self.sliders[type].length;
 
 	var displacement = Math.floor(value*(numitems/self.SLIDER_WIDTH));
@@ -332,9 +333,11 @@ SOTE.widget.DateSpan.handleSlide = function(e,ui){
 		}
 	}
 	self.validate();	
-	self.setVisualDate();	
-	self.fire()
-
+	if ( oldDate.compareTo(self.value) !== 0 ) {	
+	   self.fire()
+       self.setVisualDate();
+    }
+    
 /*
 	var x = (self.range - self.DAY_IN_MS) * (self.SLIDER_WIDTH-value)/self.SLIDER_WIDTH;
 	
@@ -497,6 +500,10 @@ SOTE.widget.DateSpan.prototype.setValue = function(value){
 	}
 	if(d.getTime() <= this.endDate.getTime() && d.getTime() >= this.startDate.getTime())
 	{
+	    var changed = false;
+	    if ( this.value.compareTo(d) !== 0 ) {
+	        changed = true;
+	    }
 		this.value = d;
 		var values = new Object();
 		values["Year"] = this.sliders["Year"].indexOf(this.value.getFullYear());
@@ -513,8 +520,10 @@ SOTE.widget.DateSpan.prototype.setValue = function(value){
 		}
 
 		this.validate();
-		this.setVisualDate();
-		this.fire();
+		if ( changed ) {
+          this.setVisualDate();
+		  this.fire();
+		}
 	}
 	else {
 	    var thisDay = SOTE.util.ISO8601StringFromDate(d).split("T")[0];
