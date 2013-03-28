@@ -25,7 +25,7 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
     self.alignTo = spec.alignTo;
     
     var init = function() {
-        Logging.debug("Worldview.Widget.Palette");        
+        //Logging.debug("Worldview.Widget.Palette");        
         if ( REGISTRY ) {
             REGISTRY.register(containerId, self);
         } else {
