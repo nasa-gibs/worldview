@@ -126,6 +126,11 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
         productConfigs = mapConfig.products;
         
         self.setProjection(mapConfig.defaultProjection || "geographic");
+        
+        $(document.body).mousemove(function(event) {
+            event.xy = {x: event.clientX, y: event.clientY };
+            self.map.events.triggerEvent("mousemove", event);
+        });
     };
     
     /**

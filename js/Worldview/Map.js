@@ -34,7 +34,7 @@ $(function(ns) {
             formatOutput: function(mouseLonLat) {                           
                     return mouseLonLat.lon.toFixed(3) + "&#176;, " + 
                            mouseLonLat.lat.toFixed(3) + "&#176;";
-             },         
+             },   
         }),
         "arctic": new OpenLayers.Control.MousePosition({
             formatOutput: function(mouseLonLat) {           
