@@ -38,14 +38,14 @@ $(function(ns) {
         }),
         "arctic": new OpenLayers.Control.MousePosition({
             formatOutput: function(mouseLonLat) {           
-                    return "EPSG:3031 coords: " + 
+                    return "EPSG:3995 coords: " + 
                             Math.round(mouseLonLat.lon) + "m, " + 
                             Math.round(mouseLonLat.lat) + "m";
              }
         }),
         "antarctic": new OpenLayers.Control.MousePosition({
             formatOutput: function(mouseLonLat) {           
-                    return "EPSG:3995 coords: " + 
+                    return "EPSG:3031 coords: " + 
                             Math.round(mouseLonLat.lon) + "m, " + 
                             Math.round(mouseLonLat.lat) + "m";
             },
