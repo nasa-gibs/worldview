@@ -958,6 +958,12 @@
              "sublabel" =>  "SEDAC Global Flood Proportional Economic Loss Risk Deciles, v1 (2000)",
              "value" =>  "ndh-flood-proportional-economic-loss-risk-deciles",
              "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" => "Water Mask",
+            "sublabel" => "Terra and Aqua / MODIS, SRTM",
+            "value" => "MODIS_Water_Mask",
+            "type" => "multi", "category" => "overlays"
         )
 	),
 
@@ -1466,7 +1472,13 @@
 	        "sublabel" =>  "Space-Track.org / Aura",
 	        "value" =>  "Aura_Orbit_Dsc",
 	        "type" => "multi", "category" => "overlays"
-		)
+		),
+        array(
+            "label" => "Water Mask",
+            "sublabel" => "Terra and Aqua / MODIS, SRTM",
+            "value" => "MODIS_Water_Mask",
+            "type" => "multi", "category" => "overlays"
+        )		
 	),
 
 	"Other" =>  array(
@@ -1565,7 +1577,13 @@
 	        "sublabel" =>  "Space-Track.org / Aura",
 	        "value" =>  "Aura_Orbit_Dsc",
 	        "type" => "multi", "category" => "overlays"
-		)
+		),
+        array(
+            "label" => "Water Mask",
+            "sublabel" => "Terra and Aqua / MODIS, SRTM",
+            "value" => "MODIS_Water_Mask",
+            "type" => "multi", "category" => "overlays"
+        )		
 	),
 	"palettes" => array(
 		"AIRS_Precipitation_Day" => array(

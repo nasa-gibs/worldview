@@ -89,8 +89,7 @@
 		        "sublabel"=> "Polarview / Graticule",
 		        "value"=> "polarview:graticule3031_10x30",
 		        "type" => "multi", "category" => "overlays"
-			)
-			
+			),			
 		),
 		"palettes" => array(
 		"MODIS_Terra_Brightness_Temp_Band31_Day" => array(
