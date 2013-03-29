@@ -1,7 +1,7 @@
 {
     "bins": 1,
-    "description": "Terra and Aqua / MODIS, SRTM",
-    "name": "Water Mask",
+    "description": "Terra / MODIS, SRTM",
+    "name": "Global 250m Water Map",
     "product": "static",
     "projections": { 
         "geographic": {

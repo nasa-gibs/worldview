@@ -45835,7 +45835,7 @@
         },
         "MODIS_Water_Mask": {
             "bins": 1,
-            "description": "Terra and Aqua / MODIS, SRTM",
+            "description": "Terra / MODIS, SRTM",
             "name": "Water Mask",
             "product": "static",
             "projections": {

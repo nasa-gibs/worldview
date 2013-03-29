@@ -942,8 +942,8 @@
 	        "type" => "multi", "category" => "overlays"
 		),
         array(
-            "label" => "Water Mask",
-            "sublabel" => "Terra and Aqua / MODIS, SRTM",
+            "label" => "Global 250m Water Map",
+            "sublabel" => "Terra / MODIS, SRTM",
             "value" => "MODIS_Water_Mask",
             "type" => "multi", "category" => "overlays"
         ),		
@@ -1426,8 +1426,8 @@
 	        "type" => "multi", "category" => "overlays"
 		),
         array(
-            "label" => "Water Mask",
-            "sublabel" => "Terra and Aqua / MODIS, SRTM",
+            "label" => "Global 250m Water Map",
+            "sublabel" => "Terra / MODIS, SRTM",
             "value" => "MODIS_Water_Mask",
             "type" => "multi", "category" => "overlays"
         ),   		
@@ -1531,8 +1531,8 @@
 	        "type" => "multi", "category" => "overlays"
 		),
         array(
-            "label" => "Water Mask",
-            "sublabel" => "Terra and Aqua / MODIS, SRTM",
+            "label" => "Global 250m Water Map",
+            "sublabel" => "Terra / MODIS, SRTM",
             "value" => "MODIS_Water_Mask",
             "type" => "multi", "category" => "overlays"
         ),       		
