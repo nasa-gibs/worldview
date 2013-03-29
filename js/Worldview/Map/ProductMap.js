@@ -102,7 +102,6 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
                 maxResolution: 0.5625,
                 units: config.units || "dd"
             };
-            log.info(options)
             var blankLayer = new OpenLayers.Layer("Blank", options);
             newMap.addLayer(blankLayer);
             

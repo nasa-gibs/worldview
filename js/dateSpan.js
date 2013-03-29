@@ -108,7 +108,6 @@ SOTE.widget.DateSpan = function(containerId, config){
     this.maps = [];
     this.startDate = config.startDate;
 	this.endDate = config.endDate;
-    console.log("start", this.startDate.toISOString(), "end", this.endDate.toISOString());
 	this.range = config.range; //in milliseconds
 	this.isCollapsed = config.isCollapsed;
 	this.slideToSelect = config.slideToSelect;
@@ -283,6 +282,7 @@ SOTE.widget.DateSpan.prototype.fire = function(){
 
 
 SOTE.widget.DateSpan.handleSlide = function(e,ui){
+    console.log("handleSlide");
 	var value = e.target.value;
 	var type = e.data.type;
 	var self = e.data.self;
@@ -312,7 +312,6 @@ SOTE.widget.DateSpan.handleSlide = function(e,ui){
 				newDate.setUTCDate(self.sliders[type][displacement]);	
 			}
 			else {
-				newDate.seUTCtDate(self.months[self.value.getUTCMonth()]);
 				self.setValue(newDate.toISOString());
 			}
 		}
@@ -374,6 +373,7 @@ SOTE.widget.DateSpan.toggle = function(e,ui){
 };
 
 SOTE.widget.DateSpan.snap = function(e,ui){
+    console.log("snap");
 	var self = e.data.self;
 	var type = e.data.type;
 	var numitems = self.sliders[type].length;
@@ -406,8 +406,8 @@ SOTE.widget.DateSpan.snap = function(e,ui){
 				newDate.setUTCDate(self.sliders[type][displacement]);	
 			}
 			else {
-				newDate.setUTCDate(self.months[self.value.getUTCMonth()]);
-				self.setValue(newDate.toISOString());
+			    newDate = this.value.clone();
+				self.setValue(newDate);
 			}
 		}
 		
@@ -484,7 +484,6 @@ SOTE.widget.DateSpan.prototype.setValue = function(value){
 	if(d.getTime() < this.startDate.getTime()) {
 	    d = this.startDate;
 	}
-	console.log("now", d.toISOString(), "start", this.startDate.toISOString(), "end", this.endDate.toISOString());
 	if(d.getTime() <= this.endDate.getTime() && 
 	       d.getTime() >= this.startDate.getTime()) {
 	    var changed = false;
@@ -524,8 +523,6 @@ SOTE.widget.DateSpan.prototype.setValue = function(value){
 	           "data at this time. The date has been adjusted to today.");
 	           */
 	    } else if ( d.getTime() >= this.endDate.getTime() )  {
-	        console.log("**********");
-	        throw Error("BLAH");
 	        SOTE.util.throwError("Data is not available for " + thisDay + 
 	           " yet. Try again later. The date has been adjusted to today.")
 	    } 
