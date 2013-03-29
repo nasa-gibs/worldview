@@ -7108,6 +7108,19 @@
                 }
             ]
         },
+        "MODIS_Water_Mask": {
+            "id": "MODIS_Water_Mask",
+            "source": "rendered",
+            "stops": [
+                {
+                    "a": 255,
+                    "at": 0,
+                    "b": 255,
+                    "g": 248,
+                    "r": 168
+                }
+            ]
+        },
         "MODIS_Water_Vapor_5km": {
             "id": "MODIS_Water_Vapor_5km",
             "source": "rendered",
@@ -45821,6 +45834,7 @@
             "units": "cm"
         },
         "MODIS_Water_Mask": {
+            "bins": 1,
             "description": "Terra and Aqua / MODIS, SRTM",
             "name": "Water Mask",
             "product": "static",
@@ -45858,6 +45872,7 @@
                     512
                 ]
             },
+            "rendered": "MODIS_Water_Mask",
             "type": "wmts"
         },
         "OMI_Absorbing_Aerosol_Optical_Depth": {

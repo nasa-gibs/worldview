@@ -104,8 +104,12 @@ SOTE.widget.Bank.handleMetaSuccess = function(data,status,xhr,args){
 	       var product = self.config.products[name];
 	       if ( "rendered" in product ) {
 	           meta.units = product.units;
-	           meta.min = product.min;
-	           meta.max = product.max;
+	           meta.min = ( product.min === undefined ) 
+	                   ? "&nbsp;&nbsp;&nbsp;&nbsp" 
+	                   : product.min;
+	           meta.max = ( product.max === undefined ) 
+	                   ? "&nbsp;&nbsp;&nbsp;" 
+                       : product.max;
 	           meta.bins = product.bins;
 	           meta.stops = product.stops;
 	           meta.palette = self.config.palettes[product.rendered];    
