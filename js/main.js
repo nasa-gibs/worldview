@@ -3,7 +3,20 @@ $(function() {// Initialize "static" vars
     var log = Logging.getLogger();
     var selector;
     
-    var entryPoint = function() {      
+    var entryPoint = function() {  
+        Worldview.Support.quirks();
+        
+        var query = Worldview.queryStringToObject(location.search);
+        if ( query.now ) {
+            try {
+                var now = Date.parseISOString(query.now);
+                Worldview.overrideNow(now);
+                log.warn("Overriding now: " + now.toISOString());   
+            } catch ( error ) {
+                log.error("Invalid now: " + query.now, error);
+            } 
+        }
+                    
         $.get("notice.txt", function(message) {
             var html = message.replace(/\n/g, "<br/>");
             Worldview.notify(html);
@@ -123,7 +136,6 @@ $(function() {// Initialize "static" vars
 
         
     try {
-        Worldview.Support.quirks();
         entryPoint();	
     } catch ( cause ) {
         Worldview.error("Failed to start Worldview", cause);

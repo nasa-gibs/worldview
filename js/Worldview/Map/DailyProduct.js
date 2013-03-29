@@ -69,7 +69,7 @@ Worldview.Map.DailyProduct = function(map, config) {
     //-------------------------------------------------------------------------
             
     var init = function() {
-        self.setDay(Worldview.now());
+        self.setDay(Worldview.today());
         
         map.events.register("movestart", self, onMoveStart);
         map.events.register("zoomend", self, onZoomEnd);
@@ -88,7 +88,7 @@ Worldview.Map.DailyProduct = function(map, config) {
         if ( !d ) {
             return;
         }
-        var ds = Worldview.toISODateString(d);
+        var ds = d.toISOStringDate();
         if ( currentLayer && ds === currentDay ) {
             return;
         }

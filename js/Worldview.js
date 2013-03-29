@@ -22,6 +22,8 @@
      */
     ns.BUILD_TIMESTAMP = "@BUILD_TIMESTAMP@";
     
+    ns.GIBS_HOUR_DELAY = 3;
+    
     ns.isDevelopment = function() {
         return ns.BUILD_TIMESTAMP.indexOf("BUILD_TIMESTAMP") >= 0;
     };
@@ -57,6 +59,23 @@
             }
         } 
         return obj;
+    };
+    
+    ns.now = function() {
+        return new Date();    
+    }
+    
+    ns.today = function() {
+        return new Date().clearUTCTime();
+    }
+        
+    ns.overrideNow = function(date) {
+        ns.now = function() {
+            return date;
+        }
+        ns.today = function() {
+            return date;
+        }
     };
     
     /**
@@ -259,6 +278,12 @@
      * query string.
      */
     ns.queryStringToObject = function(queryString) {
+        if ( !queryString ) {
+            return "";
+        }
+        if ( queryString[0] === "?" ) {
+            queryString = queryString.substring(1);
+        }
         var parameters = queryString.split("&");
         result = {};
         for ( var i = 0; i < parameters.length; i++ ) {    
@@ -305,40 +330,7 @@
             handler(errorThrown);
         };
     };
-    
-    /**
-     * Function: toISODateString
-     * Converts a date object to a string with the date is ISO format.
-     * 
-     * Example:
-     * (begin code)
-     * > Worldview.toISODateString(new Date(2013, 03, 15));
-     * "2013-03-15"
-     * (end code)
-     * 
-     * Parameters:
-     * date - Date object to convert
-     * 
-     * Returns:
-     * The date as a string in "YYYY-MM-DD" format.
-     */
-    ns.toISODateString = function(date) {
-        return date.toISOString().split("T")[0];        
-    };
-    
-    /**
-     * Function: now
-     * Gets the current date and time as a Date object. It is useful to 
-     * call this function instead of directly invoking the Date constructor
-     * for mocking out during test.
-     * 
-     * Returns:
-     * Date object with the current date and time.
-     */
-    ns.now = function() {
-        return new Date();
-    };
-    
+        
     /**
      * Function: clamp
      * 

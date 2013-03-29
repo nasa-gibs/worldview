@@ -90,14 +90,16 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
                 last.palettesString = "";
             }
             if ( state.time !== last.time ) {
+                var today = Worldview.today();
                 if ( state.time === undefined ) {
-                    state.time = SOTE.util.ISO8601StringFromDate(new Date());
+                    state.time = today.toISOStringDate();
                 }
-                var date = SOTE.util.UTCDateFromISO8601String(state.time);
+                var date = Date.parseISOString(state.time);
                 if ( isNaN(date.getTime()) ) {
-                    log.warn("Invalid time: " + state.time + ", using today");
-                    state.time = SOTE.util.ISO8601StringFromDate(new Date());
-                    date = new Date();                    
+                    log.warn("Invalid time: " + state.time + 
+                            ", using today: " + today.toISOStringDate());
+                    state.time = today.toISOStringDate();
+                    date = today;                   
                 }
                 self.productMap.setDay(date);
             }           
@@ -112,37 +114,40 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
         }
     };
     
-    /* Set default extent according to time of day:  
-     * at 00:00 UTC, start at far eastern edge of map: 
-     *      "20.6015625,-46.546875,179.9296875,53.015625"
-     *    at 23:00 UTC, start at far western edge of map: 
-     *      "-179.9296875,-46.546875,-20.6015625,53.015625"
-     */
     var setExtentToLeading = function() {
+        // Polar projections don't need to be positioned
         if ( self.productMap.projection !== "geographic" ) {
             return;
         }
+    
+        // Map center will be placed near the leading edge of NRT data. 
+        // Terra and Aqua cross the dateline at UTC midnight. Base calculations
+        // on the current hour.
+        var hour = Worldview.now().getUTCHours();
+        var map = self.productMap.map;
         
-        var curHour = new Date().getUTCHours();
+        // On average, there are 15 swaths per day
+        var zones = 15;
+        var degreesPerSwath = 360.0 / zones;
 
-        // For earlier hours when data is still being filled in, force a far 
-        // eastern perspective
-        if (curHour < 9)
-            curHour = 0;
-
-        // Compute east/west bounds
-        var minLon = 20.6015625 + curHour * (-200.53125/23.0);
-        var maxLon = minLon + 159.328125;
-                 
-        var bbox = minLon.toString() + ",-46.546875," + maxLon.toString() + 
-                ",53.015625";
+        // Compute the swath zone the map should be in. Work backwards.
+        var zone = zones - hour;
         
+        // Don't attempt to center the map at the extremes, place a buffer
+        // on either side.
+        var buffer = 3;
+       
+        // Adjust the zone to account for delay in processing.
+        zone = zone + Worldview.GIBS_HOUR_DELAY;
         
-        //this.setExtent("-146.390625,-93.921875,146.390625,93.953125",true);
-        self.productMap.map.zoomToExtent([
-                minLon, -46.546875, maxLon, 53.015625], true);
-
-        //this.fire();         
+        // Fit the zone within the buffer range
+        zone = Worldview.clamp(buffer, zones - buffer, zone);
+                
+        var lon = -180 + (zone * degreesPerSwath);
+        var lat = 0;
+        var zoomLevel = 2;
+        
+        map.setCenter(new OpenLayers.LonLat(lon, lat), zoomLevel);
     };   
     
     /**

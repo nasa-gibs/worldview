@@ -26,9 +26,11 @@ Worldview.namespace("Widget");
  *                configuration and is ready to be used. 
  */
 Worldview.Widget.Map = function(containerId, config) { 
-        
-    var self = {};
+
     var log = Logging.getLogger("Worldview.Map");
+    //Logging.debug("Worldview.Map");
+            
+    var self = {};
     
     /**
      * Property: productMap

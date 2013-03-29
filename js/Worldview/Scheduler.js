@@ -139,7 +139,7 @@ Worldview.Scheduler = function(config) {
         };
         
         if ( self.profile ) {
-            job.creationTime = Worldview.now();
+            job.creationTime = new Date();
         }
         jobs[id] = job;
         
@@ -233,7 +233,7 @@ Worldview.Scheduler = function(config) {
                 ", backlog: " + queue.length);
         
         if ( self.profile ) {
-            job.postedTime = Worldview.now();
+            job.postedTime = new Date();
         }
         var post = {
             command: "execute",
@@ -272,7 +272,7 @@ Worldview.Scheduler = function(config) {
      */
     var collectStatistics = function(job) {
         var stats = self.stats;
-        var endTime = Worldview.now();
+        var endTime = new Date();
         var totalTime = endTime - job.creationTime;
         var executionTime = endTime - job.postedTime;
         

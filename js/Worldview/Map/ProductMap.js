@@ -43,7 +43,7 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
     var activeProducts = {};
     
     // Display products on the map for this day
-    var currentDay = new Date();
+    var currentDay = Worldview.today();
     
     // The number of layers in the processing of loading. This is used
     // to fire maploadstart and maploadend events.
@@ -95,9 +95,15 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
             
             // Put in a bogus layer to act as the base layer to make the
             // map happy for setting up the starting location
-            var blankLayer = new OpenLayers.Layer("Blank", {
-                isBaseLayer: true
-            });
+            var options = {
+                isBaseLayer: true,
+                projection: config.projection,
+                maxExtent: config.maxExtent,
+                maxResolution: 0.5625,
+                units: config.units || "dd"
+            };
+            log.info(options)
+            var blankLayer = new OpenLayers.Layer("Blank", options);
             newMap.addLayer(blankLayer);
             
             // If a starting location is provided, go there otherwise

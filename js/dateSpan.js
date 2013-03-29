@@ -34,6 +34,9 @@ SOTE.widget.DateSpan = function(containerId, config){
 	this.sliders["Month"] = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 	this.sliders["Day"] = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
  	this.months = [31,28,31,30,31,30,31,31,30,31,30,31];
+ 	this.monthNames = [ "January", "February", "March", "April", "May", "June",
+                        "July", "August", "September", "October", "November", 
+                        "December" ];
  
     this.sliderContent = [];
 	
@@ -68,25 +71,14 @@ SOTE.widget.DateSpan = function(containerId, config){
 	}
 
 	if(config.endDate === undefined){
-		config.endDate = new Date();
-		var timeString = SOTE.util.zeroPad(eval(config.endDate.getUTCMonth()+1),2) + "/" + SOTE.util.zeroPad(config.endDate.getUTCDate(),2) + "/" +
-			config.endDate.getUTCFullYear() ;
-		config.endDate = new Date(timeString);
-		config.endDate.setHours(12);
-		config.endDate.setMinutes(00);
-		config.endDate.setSeconds(00);
+		config.endDate = Worldview.today();
 	}
 	else{
 		config.endDate = new Date(config.endDate);
 	}
 
 	if(config.startDate === undefined){
-		config.startDate = new Date();
-		var timeString = "05/08/2012";
-		config.startDate = new Date(timeString);
-		config.startDate.setHours(12);
-		config.startDate.setMinutes(00);
-		config.startDate.setSeconds(00);
+		config.startDate = new Date(Date.UTC(2012, 4, 8, 0, 0, 0));
 	}
 	else{
 		config.endDate = new Date(config.endDate);
@@ -165,7 +157,7 @@ SOTE.widget.DateSpan.prototype.init = function(){
 
 	this.setVisualDate();
 
-	this.setValue(SOTE.util.ISO8601StringFromDate(this.value));
+	this.setValue(this.value.toISOString());
 
 	$('#'+this.id+'ecbutton').bind("click",{self:this},SOTE.widget.DateSpan.toggle);
 
@@ -291,33 +283,33 @@ SOTE.widget.DateSpan.handleSlide = function(e,ui){
 	if(self.sliders[type][displacement]){
 		var newDate = self.value.clone();
 		if(type == "Year"){
-			newDate.setYear(self.sliders[type][displacement]);
+			newDate.setUTCFullYear(self.sliders[type][displacement]);
 		}
 		else if (type == "Month"){
-			if(self.value.getDate() > self.months[displacement]){
-				newDate.setDate(self.months[displacement]);
-				newDate.setMonth(displacement);
-				self.setValue(SOTE.util.ISO8601StringFromDate(newDate));
+			if(self.value.getUTCDate() > self.months[displacement]){
+				newDate.setUTCDate(self.months[displacement]);
+				newDate.setUTCMonth(displacement);
+				self.setValue(newDate.toISOString());
 			}
 			else{
-				newDate.setMonth(displacement);
+				newDate.setUTCMonth(displacement);
 			}
 		}
 		else if (type == "Day"){
-			if(self.sliders[type][displacement] <= self.months[self.value.getMonth()]){
-				newDate.setDate(self.sliders[type][displacement]);	
+			if(self.sliders[type][displacement] <= self.months[self.value.getUTCMonth()]){
+				newDate.setUTCDate(self.sliders[type][displacement]);	
 			}
 			else {
-				newDate.setDate(self.months[self.value.getMonth()]);
-				self.setValue(SOTE.util.ISO8601StringFromDate(newDate));
+				newDate.seUTCtDate(self.months[self.value.getUTCMonth()]);
+				self.setValue(newDate.toISOString());
 			}
 		}
 		
 		if(newDate.getTime() < self.startDate.getTime()){
-			self.setValue(SOTE.util.ISO8601StringFromDate(self.startDate));			
+			self.setValue(self.startDate.toISOString());			
 		}
 		else if(newDate.getTime() > self.endDate.getTime()){
-			self.setValue(SOTE.util.ISO8601StringFromDate(self.endDate));						
+			self.setValue(self.endDate.toISOString());						
 		}
 		else {
 			self.value = newDate.clone();
@@ -326,10 +318,10 @@ SOTE.widget.DateSpan.handleSlide = function(e,ui){
 	}
 	else {
 		if(displacement >= self.sliders[type].length){
-			self.setValue(SOTE.util.ISO8601StringFromDate(self.value));
+			self.setValue(self.value.toISOString());
 		}
 		else if(displacement < 0){
-			self.setValue(SOTE.util.ISO8601StringFromDate(self.value));
+			self.setValue(self.value.toISOString());
 		}
 	}
 	self.validate();	
@@ -385,34 +377,34 @@ SOTE.widget.DateSpan.snap = function(e,ui){
 	if(self.sliders[type][displacement]){
 		var newDate = self.value.clone();
 		if(type == "Year"){
-			newDate.setYear(self.sliders[type][displacement]);
+			newDate.setUTCFullYear(self.sliders[type][displacement]);
 		}
 		else if (type == "Month"){
-			if(self.value.getDate() > self.months[displacement]){
-				newDate.setDate(self.months[displacement]);
-				newDate.setMonth(displacement);
-				self.setValue(SOTE.util.ISO8601StringFromDate(newDate));
+			if(self.value.getUTCDate() > self.months[displacement]){
+				newDate.setUTCDate(self.months[displacement]);
+				newDate.setUTCMonth(displacement);
+				self.setValue(newDate.toISOString());
 			}
 			else{
-				newDate.setMonth(displacement);
+				newDate.setUTCMonth(displacement);
 			} 
 		}
 		else if (type == "Day"){
-			if(self.sliders[type][displacement] <= self.months[self.value.getMonth()]){
-				newDate.setDate(self.sliders[type][displacement]);	
+			if(self.sliders[type][displacement] <= self.months[self.value.getUTCMonth()]){
+				newDate.setUTCDate(self.sliders[type][displacement]);	
 			}
 			else {
-				newDate.setDate(self.months[self.value.getMonth()]);
-				self.setValue(SOTE.util.ISO8601StringFromDate(newDate));
+				newDate.setUTCDate(self.months[self.value.getUTCMonth()]);
+				self.setValue(newDate.toISOString());
 			}
 		}
 		
 		
 		if(newDate.getTime() < self.startDate.getTime()){
-			self.setValue(SOTE.util.ISO8601StringFromDate(self.startDate));			
+			self.setValue(self.startDate.toISOString());			
 		}
 		else if(newDate.getTime() > self.endDate.getTime()){
-			self.setValue(SOTE.util.ISO8601StringFromDate(self.endDate));						
+			self.setValue(self.endDate.toISOString());						
 		}
 		else {
 			self.value = newDate.clone();
@@ -423,10 +415,10 @@ SOTE.widget.DateSpan.snap = function(e,ui){
 	}
 	else {
 		if(displacement >= self.sliders[type].length){
-			self.setValue(SOTE.util.ISO8601StringFromDate(self.value));
+			self.setValue(self.value.toISOString());
 		}
 		else if(displacement < 0) {
-			self.setValue(SOTE.util.ISO8601StringFromDate(self.value));
+			self.setValue(self.value.toISOString());
 		}
 	}
 	self.validate();
@@ -469,46 +461,28 @@ SOTE.widget.DateSpan.prototype.showSliders = function(){
   *
 */
 SOTE.widget.DateSpan.prototype.setValue = function(value){
-    if ( value === "" ) {
-        value = SOTE.util.ISO8601StringFromDate(new Date());
+    var d = value ? Date.parseISOString(value) 
+                  : Worldview.today();
+    // Check to see if the date is valid, if not default to today
+    if (isNaN(d.getTime())) {
+        this.log.warn("Invalid time: " + value + ", using today");    
+        d = Worldview.today(); 
     }
-	var vals = SOTE.util.getValuesFromISO8601String(value);
-	// Check to see if the date is valid, if not default to today
-	var valid = true;
-	$.each(vals, function(index, v) {
-	   if ( isNaN(v) ) {
-	       var today = SOTE.util.ISO8601StringFromDate(new Date());
-	       vals = SOTE.util.getValuesFromISO8601String(today);
-	       valid = false;
-	   }    
-	});
-	if ( ! valid ) {
-	   this.log.warn("Invalid time: " + value + ", using today");    
-	}
-	if(vals[2] > this.months[vals[1]]){
-		vals[2] = this.months[vals[1]];
-	}	
-	
-	var d = new Date(vals[0], vals[1], vals[2], 0, 0, 0);
-	
-	var startDate = this.endDate.getTime() - (this.range - 24*60*60*1000);
-	var monthNames = [ "January", "February", "March", "April", "May", "June",
-    	"July", "August", "September", "October", "November", "December" ];
 	
 	if(d.getTime() < this.startDate.getTime()) {
 	    d = this.startDate;
 	}
-	if(d.getTime() <= this.endDate.getTime() && d.getTime() >= this.startDate.getTime())
-	{
+	if(d.getTime() <= this.endDate.getTime() && 
+	       d.getTime() >= this.startDate.getTime()) {
 	    var changed = false;
 	    if ( this.value.compareTo(d) !== 0 ) {
 	        changed = true;
 	    }
 		this.value = d;
 		var values = new Object();
-		values["Year"] = this.sliders["Year"].indexOf(this.value.getFullYear());
-		values["Month"] = this.value.getMonth();
-		values["Day"] = this.sliders["Day"].indexOf(this.value.getDate());
+		values["Year"] = this.sliders["Year"].indexOf(this.value.getUTCFullYear());
+		values["Month"] = this.value.getUTCMonth();
+		values["Day"] = this.sliders["Day"].indexOf(this.value.getUTCDate());
 		
 		for(var type in values){
 			var numitems = this.sliders[type].length;
@@ -526,9 +500,9 @@ SOTE.widget.DateSpan.prototype.setValue = function(value){
 		}
 	}
 	else {
-	    var thisDay = SOTE.util.ISO8601StringFromDate(d).split("T")[0];
-	    var startDay = SOTE.util.ISO8601StringFromDate(this.startDate).split("T")[0];
-	    var today = SOTE.util.ISO8601StringFromDate(this.endDate).split("T")[0];
+	    var thisDay = d.toISOStringDate();
+	    var startDay = this.startDate.toISOStringDate();
+	    var today = this.endDate.toISOStringDate();
 	    
 	    if ( d.getTime() < this.startDate.getTime() ) {
 	        /*
@@ -536,8 +510,7 @@ SOTE.widget.DateSpan.prototype.setValue = function(value){
 	           ". The day of " + startDay + " is the earliest available " + 
 	           "data at this time. The date has been adjusted to today.");
 	           */
-	    } else if ( d.getTime() >= this.endDate.getTime() ) {
-	        
+	    } else if ( d.getTime() >= this.endDate.getTime() )  {
 	        SOTE.util.throwError("Data is not available for " + thisDay + 
 	           " yet. Try again later. The date has been adjusted to today.")
 	    } 
@@ -545,8 +518,7 @@ SOTE.widget.DateSpan.prototype.setValue = function(value){
 };
 
 SOTE.widget.DateSpan.prototype.setVisualDate = function(){
-	var dateString = this.value.getFullYear() + "-" + SOTE.util.zeroPad(eval(this.value.getMonth()+1),2) + "-" + 
-		SOTE.util.zeroPad(this.value.getDate(),2);
+	var dateString = this.value.toISOStringDate();
 	$('#'+this.id+'dateHolder').html(dateString);
 	//$("a.ui-slider-handle").html("<span class='sliderText'>"+dateString+"</span>");
 };
@@ -559,9 +531,7 @@ SOTE.widget.DateSpan.prototype.setVisualDate = function(){
   *
 */
 SOTE.widget.DateSpan.prototype.getValue = function(){
-    var datestring = SOTE.util.ISO8601StringFromDate(this.value);
-    // Strip off the time, only use the date
-    var datestring = datestring.split("T")[0];
+    var datestring = this.value.toISOStringDate();
 	return ""+this.id +"="+datestring;
 };
 
@@ -624,12 +594,12 @@ SOTE.widget.DateSpan.prototype.loadFromQuery = function(qs){
 */
 SOTE.widget.DateSpan.prototype.validate = function(){
 	var curr = this.value.clone();
-	var startYear = this.startDate.getFullYear();
-	var startMonth = this.startDate.getMonth();
-	var startDay = this.startDate.getDate();
-	var endYear = this.endDate.getFullYear();
-	var endMonth = this.endDate.getMonth();
-	var endDay = this.endDate.getDate();
+	var startYear = this.startDate.getUTCFullYear();
+	var startMonth = this.startDate.getUTCMonth();
+	var startDay = this.startDate.getUTCDate();
+	var endYear = this.endDate.getUTCFullYear();
+	var endMonth = this.endDate.getUTCMonth();
+	var endDay = this.endDate.getUTCDate();
 	for(var type in this.sliders){
 		for(var i=0; i<this.sliders[type].length; ++i){
 			var descriptor = this.id+type+"sliderItem"+i;
