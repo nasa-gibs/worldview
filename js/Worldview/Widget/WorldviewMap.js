@@ -149,7 +149,7 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
         
         // Now that we are at the approxomiate center, move east a few zones
         // so most of the map is filled in
-        zone += 3;
+        zone += 4;
         
         // Fit the zone within the buffer range
         zone = Worldview.clamp(buffer, zones - buffer, Math.round(zone));
