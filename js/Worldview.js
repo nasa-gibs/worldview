@@ -70,11 +70,12 @@
     }
         
     ns.overrideNow = function(date) {
+        var overrideToday = date.clone().clearUTCTime();
         ns.now = function() {
-            return date;
+            return new Date(date.getTime());
         }
         ns.today = function() {
-            return date;
+            return new Date(overrideToday.getTime());
         }
     };
     

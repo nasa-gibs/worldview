@@ -81,7 +81,7 @@ SOTE.widget.DateSpan = function(containerId, config){
 		config.startDate = new Date(Date.UTC(2012, 4, 8, 0, 0, 0));
 	}
 	else{
-		config.endDate = new Date(config.endDate);
+		config.startDate = new Date(config.startDate);
 	}
 
 	if(config.range === undefined){
@@ -89,7 +89,7 @@ SOTE.widget.DateSpan = function(containerId, config){
 	}
 	
 	if(config.selected === undefined){
-		config.selected = new Date(config.endDate.getTime());
+	    config.selected = this.getToday();
 	}
 	
 	if(config.slideToSelect === undefined){
@@ -103,11 +103,12 @@ SOTE.widget.DateSpan = function(containerId, config){
 	if(config.hasThumbnail === undefined){
 		config.hasThumbnail = true;
 	}
-       
-    this.value = "";
+    
+
     this.maps = [];
     this.startDate = config.startDate;
 	this.endDate = config.endDate;
+    console.log("start", this.startDate.toISOString(), "end", this.endDate.toISOString());
 	this.range = config.range; //in milliseconds
 	this.isCollapsed = config.isCollapsed;
 	this.slideToSelect = config.slideToSelect;
@@ -125,7 +126,6 @@ SOTE.widget.DateSpan = function(containerId, config){
 };
 
 SOTE.widget.DateSpan.prototype = new SOTE.widget.Component;
-
 
 /**
   * Displays the selectable dateSpan in HTML containing a thumbnail for each day in the span.  If the date range contains 
@@ -171,6 +171,18 @@ SOTE.widget.DateSpan.prototype.init = function(){
 
 };
 
+SOTE.widget.DateSpan.prototype.getToday = function() {
+    // If at the beginning of the day, wait on the previous day until GIBS
+    // catches up.   
+    var today = Worldview.today();
+    var now = Worldview.now();
+    if ( now.getUTCHours() < Worldview.GIBS_HOUR_DELAY ) {
+        today.setUTCDate(today.getUTCDate() - 1);
+        return today;
+    } else {
+        return today;
+    }           
+};
 
 SOTE.widget.DateSpan.refreshSliders = function(e){
 	var self = e.data.self;
@@ -462,7 +474,7 @@ SOTE.widget.DateSpan.prototype.showSliders = function(){
 */
 SOTE.widget.DateSpan.prototype.setValue = function(value){
     var d = value ? Date.parseISOString(value) 
-                  : Worldview.today();
+                  : this.getToday();
     // Check to see if the date is valid, if not default to today
     if (isNaN(d.getTime())) {
         this.log.warn("Invalid time: " + value + ", using today");    
@@ -472,6 +484,7 @@ SOTE.widget.DateSpan.prototype.setValue = function(value){
 	if(d.getTime() < this.startDate.getTime()) {
 	    d = this.startDate;
 	}
+	console.log("now", d.toISOString(), "start", this.startDate.toISOString(), "end", this.endDate.toISOString());
 	if(d.getTime() <= this.endDate.getTime() && 
 	       d.getTime() >= this.startDate.getTime()) {
 	    var changed = false;
@@ -511,6 +524,8 @@ SOTE.widget.DateSpan.prototype.setValue = function(value){
 	           "data at this time. The date has been adjusted to today.");
 	           */
 	    } else if ( d.getTime() >= this.endDate.getTime() )  {
+	        console.log("**********");
+	        throw Error("BLAH");
 	        SOTE.util.throwError("Data is not available for " + thisDay + 
 	           " yet. Try again later. The date has been adjusted to today.")
 	    } 

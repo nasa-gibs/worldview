@@ -119,12 +119,19 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
         if ( self.productMap.projection !== "geographic" ) {
             return;
         }
+
+        var map = self.productMap.map;
     
         // Map center will be placed near the leading edge of NRT data. 
         // Terra and Aqua cross the dateline at UTC midnight. Base calculations
         // on the current hour.
         var hour = Worldview.now().getUTCHours();
-        var map = self.productMap.map;
+        
+        // On a new day, there will not be much processed data to show. Wait
+        // on the previous day until GIBS catches up.
+        if ( hour < Worldview.GIBS_HOUR_DELAY ) {
+            hour = 24;
+        }        
         
         // On average, there are 15 swaths per day
         var zones = 15;
@@ -137,11 +144,15 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
         // on either side.
         var buffer = 3;
        
-        // Adjust the zone to account for delay in processing.
+        // Adjust the zone east to account for delay in processing.
         zone = zone + Worldview.GIBS_HOUR_DELAY;
         
+        // Now that we are at the approxomiate center, move east a few zones
+        // so most of the map is filled in
+        zone += 3;
+        
         // Fit the zone within the buffer range
-        zone = Worldview.clamp(buffer, zones - buffer, zone);
+        zone = Worldview.clamp(buffer, zones - buffer, Math.round(zone));
                 
         var lon = -180 + (zone * degreesPerSwath);
         var lat = 0;
