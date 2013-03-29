@@ -627,7 +627,7 @@ SOTE.widget.DateSpan.prototype.validate = function(){
 				}
 			}
 			if(type == "Month"){
-				if( (curr.getFullYear() == startYear && i < startMonth ) || (curr.getFullYear() == endYear && i > endMonth) ){
+				if( (curr.getUTCFullYear() == startYear && i < startMonth ) || (curr.getUTCFullYear() == endYear && i > endMonth) ){
 					$("#"+descriptor).addClass("disabledItem");
 				}
 				else {
@@ -635,7 +635,7 @@ SOTE.widget.DateSpan.prototype.validate = function(){
 				}
 			}
 			if(type == "Day"){
-				if( (this.sliders[type][i] > this.months[curr.getMonth()]) || (curr.getFullYear() == startYear && curr.getMonth() == startMonth && this.sliders[type][i] < startDay) ||  (curr.getFullYear() == endYear && curr.getMonth() == endMonth && this.sliders[type][i] > endDay) ){
+				if( (this.sliders[type][i] > this.months[curr.getUTCMonth()]) || (curr.getUTCFullYear() == startYear && curr.getUTCMonth() == startMonth && this.sliders[type][i] < startDay) ||  (curr.getUTCFullYear() == endYear && curr.getUTCMonth() == endMonth && this.sliders[type][i] > endDay) ){
 					$("#"+descriptor).addClass("disabledItem");
 				}
 				else {
