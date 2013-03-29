@@ -56,6 +56,7 @@ Group: Development Notes  {
 
 Group: Code Reference  {
 
+   File: Date  (/Users/jmcgann/Code/Aptana/worldview/js/Date.js)
    File: Logging  (/Users/jmcgann/Code/Aptana/worldview/js/Logging.js)
    File: SOTE.util  (/Users/jmcgann/Code/Aptana/worldview/js/util.js)
    File: TestSuite  (/Users/jmcgann/Code/Aptana/worldview/test/lib/TestSuite.js)

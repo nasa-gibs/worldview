@@ -282,7 +282,6 @@ SOTE.widget.DateSpan.prototype.fire = function(){
 
 
 SOTE.widget.DateSpan.handleSlide = function(e,ui){
-    console.log("handleSlide");
 	var value = e.target.value;
 	var type = e.data.type;
 	var self = e.data.self;
@@ -373,7 +372,6 @@ SOTE.widget.DateSpan.toggle = function(e,ui){
 };
 
 SOTE.widget.DateSpan.snap = function(e,ui){
-    console.log("snap");
 	var self = e.data.self;
 	var type = e.data.type;
 	var numitems = self.sliders[type].length;

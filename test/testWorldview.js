@@ -9,15 +9,6 @@
  * All Rights Reserved.
  */
 
-TestCase("Worldview.general", TestSuite.Tests({
-
-    testToISODateString: function() {
-        assertEquals("2013-03-15", 
-            Worldview.toISODateString(new Date(2013, 02, 15)));
-    }
-        
-}));
-
 TestCase("Worldview.namespace", TestSuite.Tests({
 
     tearDown: function() {
@@ -159,9 +150,9 @@ TestCase("Worldview.getObjectByPath", TestSuite.Tests({
         try {
             ns.getObjectByPath("__TEST_GET_OBJECT_BY_PATH.XXX.bar");
             fail("Should not have been a valid path");
-        } catch ( message ) {
+        } catch ( error ) {
             assertEquals("In __TEST_GET_OBJECT_BY_PATH.XXX.bar, XXX is " + 
-                "undefined", message);
+                "undefined", error.message);
         }
     }
     
