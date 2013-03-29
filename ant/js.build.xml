@@ -5,11 +5,6 @@
         <file name="ext/jqueryui-1.8.16/jquery-ui.min.js"/>
         <file name="ext/jquery.mobile-1.0rc2/jquery.mobile.js"/>
 
-        <file name="ext/datejs-1.0-alpha-1/core-debug.js"/>
-        <file name="ext/datejs-1.0-alpha-1/en-US.js"/>
-        <file name="ext/datejs-1.0-alpha-1/time-debug.js"/>
-        <file name="ext/datejs-1.0-alpha-1/parser-debug.js"/>
-            
 		<file name="ext/yui-2.9.0/yahoo/yahoo.js"/>
         <file name="ext/yui-2.9.0/event/event.js"/>
         <file name="ext/yui-2.9.0/dom/dom.js"/>
@@ -45,7 +40,9 @@
         <file name="tour.js"/>
 	    	
 		<file name="Logging.js"/>
+		<file name="Date.js"/>
 		<file name="Worldview.js"/>
+        <file name="Worldview/Support.js"/>
 		<file name="Worldview/Support.js"/>
         <file name="Worldview/Permalink.js"/>
         <file name="Worldview/Scheduler.js"/>
