@@ -122,42 +122,30 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
 
         var map = self.productMap.map;
     
-        // Map center will be placed near the leading edge of NRT data. 
-        // Terra and Aqua cross the dateline at UTC midnight. Base calculations
-        // on the current hour.
-        var hour = Worldview.now().getUTCHours();
-        
-        // On a new day, there will not be much processed data to show. Wait
-        // on the previous day until GIBS catches up.
-        if ( hour < Worldview.GIBS_HOUR_DELAY ) {
-            hour = 24;
-        }        
-        
-        // On average, there are 15 swaths per day
-        var zones = 15;
-        var degreesPerSwath = 360.0 / zones;
+        // Set default extent according to time of day:  
+        //   at 00:00 UTC, start at far eastern edge of map: "20.6015625,-46.546875,179.9296875,53.015625"
+        //   at 23:00 UTC, start at far western edge of map: "-179.9296875,-46.546875,-20.6015625,53.015625"
+        var curHour = Worldview.now().getUTCHours();
 
-        // Compute the swath zone the map should be in. Work backwards.
-        var zone = zones - hour;
+        // For earlier hours when data is still being filled in, force a far eastern perspective
+        if (curHour < Worldview.GIBS_HOUR_DELAY) {
+            curHour = 23;
+        }
+        else if (curHour < 9) {
+            curHour = 0;
+        }
+
+        // Compute east/west bounds
+        var minLon = 20.6015625 + curHour * (-200.53125/23.0);
+        var maxLon = minLon + 159.328125;
         
-        // Don't attempt to center the map at the extremes, place a buffer
-        // on either side.
-        var buffer = 3;
-       
-        // Adjust the zone east to account for delay in processing.
-        zone = zone + Worldview.GIBS_HOUR_DELAY;
+        var minLat = -46.546875
+        var maxLat = 53.015625
         
-        // Now that we are at the approxomiate center, move east a few zones
-        // so most of the map is filled in
-        zone += 6;
-        
-        // Fit the zone within the buffer range
-        zone = Worldview.clamp(buffer, zones - buffer, Math.round(zone));
+        var lat = minLat + (Math.abs(maxLat - minLat) / 2.0);
+        var lon = minLon + (Math.abs(maxLon - minLon) / 2.0);
+        var zoomLevel = 2
                 
-        var lon = -180 + (zone * degreesPerSwath);
-        var lat = 0;
-        var zoomLevel = 2;
-        
         map.setCenter(new OpenLayers.LonLat(lon, lat), zoomLevel);
     };   
     
