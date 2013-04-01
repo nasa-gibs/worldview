@@ -1,9 +1,27 @@
 var rb;
 
 function showSelector(e){
+	console.log("show selector");
 	var selector = e.data.selector;
 	selector.show();
+	
+	// force center
 	selector.center();
+	var viewWidth = $(window).width();
+	var selWidth = parseInt(YAHOO.util.Dom.getStyle(selector.id, 'width'), 10);
+	var newX = (viewWidth - selWidth)/2;
+	YAHOO.util.Dom.setX(selector.id, newX);
+
+	// move if tour window is showing
+	var classList = document.getElementsByClassName('joyride-tip-guide bordered');
+	if(classList.length > 2) {
+		if((classList[0].style.display === "block") || (classList[1].style.display === "block")){
+	   		var tourWidth = $(".joyride-tip-guide").width();
+			var pos = YAHOO.util.Dom.getX(selector.id);
+			var newX = parseInt(pos, 10) + tourWidth - 20;
+			YAHOO.util.Dom.setX(selector.id, newX);
+		}
+	}
 }
 
 function showOverlay(){
