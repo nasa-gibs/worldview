@@ -2,7 +2,6 @@
     "description": "Polarview / Graticule",
     "name": "Latitude-Longitude Lines",
     "parameters": {
-        "bringToFront": "true",
         "format": "image/png",
         "layers": "polarview:graticuleN",
         "transitionEffect": "none",

@@ -31,7 +31,6 @@
         }
     },
     "properties": {
-        "bringToFront": true,
         "defaultLayer": "true",
         "format": "image/png",
         "layer": "sedac_bound",

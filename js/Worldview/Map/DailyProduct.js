@@ -22,7 +22,7 @@ Worldview.namespace("Map");
  * layers are invalidated and eligbile for removal the next time the map
  * needs to be redrawn.
  * 
- * Inherits from:
+ * Delegates to:
  * <Worldview.Map.Product>
  * 
  * Constructor: DailyProduct
@@ -40,10 +40,12 @@ Worldview.Map.DailyProduct = function(map, config) {
     // The current z-index for all layers.
     var zIndex = 0;
     
+    // Layers from previous days are cached for quick display when moving
+    // the time slider
     var cachedLayers = {};
     
     // Layers that are no longer valid because the map has moved. These
-    // can be removed on the next map redrawn
+    // are removed using a timeout to prevent map flickering. 
     var staleLayers = [];
     
     // The layer that is currently visible and seen by the user
@@ -52,20 +54,118 @@ Worldview.Map.DailyProduct = function(map, config) {
     // The day of the data displayed on the map
     var currentDay;
     
+    // Active lookup table for all layers in the product, null if no table
+    // is active
     var lookupTable = null;
     
+    // Timeout identifier for the reaper that cleans out stale layers.
     var reaperId = null;
+    
+    // Time, in seconds, to wait before reaping stale layers.
+    var reapDelay = 2000;
     
     //-------------------------------------------------------------------------
     // Public
     //-------------------------------------------------------------------------
             
     var init = function() {
-        self.setDay(Worldview.now());
+        self.setDay(Worldview.today());
         
         map.events.register("movestart", self, onMoveStart);
         map.events.register("zoomend", self, onZoomEnd);
     };
+        
+    /**
+     * Method: setDay
+     * Changes the map to display the product for the given day.
+     * 
+     * Parameters:
+     * d - The day to display.
+     */
+    self.setDay = function(d) {
+        // Don't do anything if nothing has changed or if there are no valid
+        // layers
+        if ( !d ) {
+            return;
+        }
+        var ds = d.toISOStringDate();
+        if ( currentLayer && ds === currentDay ) {
+            return;
+        }
+        
+        // If there is a current layer, cache it
+        if ( currentLayer ) {
+            cachedLayers[currentDay] = currentLayer;
+        }
+        currentDay = ds;
+        fetchLayer();
+    };
+
+    /**
+     * Method: setLookup
+     * Applies a lookup table to this product. If this product doesn't have
+     * a lookup table already, all layers are discarded and a new layer is
+     * created using <Worldview.Map.CanvasTile>. 
+     * 
+     * Parameters:
+     * lookup - The <ColorLookup> to apply.
+     */
+    self.setLookup = function(lookup) {
+        var resetRequired = (lookupTable === null);
+        lookupTable = lookup;
+        if ( resetRequired ) { 
+            reset();
+            fetchLayer();
+        } else {
+            clearCache();
+            currentLayer.lookupTable = lookup;
+            applyLookup(currentLayer); 
+        }
+    };
+    
+    /**
+     * Method: clearLookup
+     * Removes a lookup table from this product. If the product has a lookup
+     * table, all layers are discarded and a new layer using the standard
+     * tile renderer is created.
+     */
+    self.clearLookup = function() {
+        if ( lookupTable !== null ) {
+            lookupTable = null;
+            reset();
+            fetchLayer();
+        }    
+    };
+    
+    /**
+     * Method: setZIndex
+     * Sets the z-index for all layers in this product.
+     * 
+     * Parameters:
+     * index - The z-index to set. All layers are set with this z-index
+     * except for the visible layer which is set to index + 1.
+     */
+    self.setZIndex = function(index) {
+        zIndex = index;
+        refreshZOrder();
+    };
+    
+    /**
+     * Method: dispose
+     * Remove all layers from the map.
+     */
+    self.dispose = function() {
+        reset();
+        if ( reaperId !== null ) {
+            clearTimeout(reaperId);
+        }
+        map.events.unregister("movestart", self, onMoveStart);
+        map.events.unregister("zoomend", self, onZoomEnd);        
+    };
+        
+    //-------------------------------------------------------------------------
+    // Private
+    //-------------------------------------------------------------------------
     
     var fetchLayer = function() {
         var previousLayer = currentLayer;
@@ -105,81 +205,11 @@ Worldview.Map.DailyProduct = function(map, config) {
         if ( currentLayer.getVisibility() === false ) {
             currentLayer.setVisibility(true);
         }     
-    }
-    
-    /**
-     * Method: setDay
-     * Changes the map to display the product for the given day.
-     * 
-     * Parameters:
-     * d - The day to display.
-     */
-    self.setDay = function(d) {
-        if ( !d ) {
-            return;
-        }
-        var ds = Worldview.toISODateString(d);
-        if ( currentLayer && ds === currentDay ) {
-            return;
-        }
-        if ( currentLayer ) {
-            cachedLayers[currentDay] = currentLayer;
-        }
-        currentDay = ds;
-        fetchLayer();
     };
     
-    self.setLookup = function(lookup) {
-        var resetRequired = (lookupTable === null);
-        lookupTable = lookup;
-        if ( resetRequired ) { 
-            reset();
-            fetchLayer();
-        } else {
-            clearCache();
-            currentLayer.lookupTable = lookup;
-            applyLookup(currentLayer); 
-        }
-    };
-    
-    self.clearLookup = function() {
-        if ( lookupTable !== null ) {
-            lookupTable = null;
-            reset();
-            fetchLayer();
-        }    
-    };
-    
-    /**
-     * Method: setZIndex
-     * Sets the z-index for all layers in this product.
-     * 
-     * Parameters:
-     * index - The z-index to set. All layers are set with this z-index
-     * except for the visible layer which is set to index + 1.
-     */
-    self.setZIndex = function(index) {
-        zIndex = index;
-        refreshZOrder();
-    };
-    
-    /**
-     * Method: dispose
-     * Remove all layers from the map.
-     */
-    self.dispose = function() {
-        reset();
-        if ( reaperId !== null ) {
-            clearTimeout(reaperId);
-        }
-        map.events.unregister("movestart", self, onMoveStart);
-        map.events.unregister("zoomend", self, onZoomEnd);        
-    };
-        
-    //-------------------------------------------------------------------------
-    // Private
-    //-------------------------------------------------------------------------
-        
+    /*
+     * Iterates through each tile in the layer and applies the lookup.
+     */        
     var applyLookup = function(layer) {
         $.each(layer.grid, function(index, row) {
             $.each(row, function(index, tile) {
@@ -200,6 +230,10 @@ Worldview.Map.DailyProduct = function(map, config) {
         }
     };
     
+    /*
+     * Clears the cache and removes the current layer. Called when switching
+     * between a lookup and non-lookup based layer. 
+     */
     var reset = function() {
         clearCache();
         map.removeLayer(currentLayer);
@@ -208,7 +242,7 @@ Worldview.Map.DailyProduct = function(map, config) {
     
     /*
      * Hide all layers that are not currently being displayed and move them
-     * to the invalid set.
+     * to the stale set. Restart the reaper to remove those layers.
      */
     var clearCache = function() {
         $.each(cachedLayers, function(day, layer) {
@@ -219,7 +253,7 @@ Worldview.Map.DailyProduct = function(map, config) {
         if ( reaperId !== null ) {
             clearTimeout(reaperId);
         }
-        reaperId = setTimeout(function() { reaper(); }, 2000);
+        reaperId = setTimeout(function() { reaper(); }, reapDelay);
     };
     
     

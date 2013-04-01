@@ -140,13 +140,13 @@ $(function() {
                 "<span style='font-weight:400; font-size:12px; line-spacing:24px;'>Copy and paste the following link to share this view:</span>" + 
                 "<input type='text' value='' name='permalink_content' id='permalink_content' />" +
             "</div>";
-            permOverlay.setHeader('&nbsp;&nbsp;&nbsp;&nbsp;Permalink');
+            permOverlay.setHeader("Permalink");
             permOverlay.setBody(item);
             permOverlay.render(document.body);
         }
         
         var qs = ns.fromRegistry();
-
+        
         // FIXME: Some components currently have values that are not supposed
         // to be in the query string or return undefined values. For now,
         // pick out the actual values that are really needed
@@ -155,17 +155,17 @@ $(function() {
         var time = Worldview.extractFromQuery("time", qs);
         var s = Worldview.extractFromQuery("switch", qs);
         
-        qs = "?map="+map+"&products="+products+"&time="+time+"&switch="+s;
+        var link = "?map="+map+"&products="+products+"&time="+time+"&switch="+s;
         
-        var palettes = Worldview.extractFromQuery("palettes");
+        var palettes = Worldview.extractFromQuery("palettes", qs);
         if ( palettes ) {
-            qs += "&palettes=" + palettes;
+            link += "&palettes=" + palettes;
         }    
         var url = window.location.href;
         var prefix = url.split("?")[0];
         prefix = (prefix !== null && prefix !== undefined) ? prefix: url;
         
-        $('#permalink_content').val(prefix + qs);
+        $('#permalink_content').val(prefix + link);
     
         permOverlay.show();
         permOverlay.center();

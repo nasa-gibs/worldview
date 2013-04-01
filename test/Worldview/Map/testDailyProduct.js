@@ -63,6 +63,7 @@ TestCase("Map.DailyProduct", TestSuite.Tests({
     },
         
     // Check that an exception is thrown if the product type does not exist
+    /*
     testInvalidLayerClass: function() {
         try {
             ns.DailyProduct(mockMap, { type: "foo" });
@@ -72,7 +73,7 @@ TestCase("Map.DailyProduct", TestSuite.Tests({
                     message);
         }
     },
-    
+   
     // Check that when the day is set, another layer is created and the
     // opacity for the original layer is set to zero. Also check that the
     // visible layer is on top
@@ -84,7 +85,7 @@ TestCase("Map.DailyProduct", TestSuite.Tests({
         assertEquals(1, mockLayers[1].opacity);
         assertEquals(1, mockLayers[1].zindex);
     },
-    
+   
     // Check that when the map is moved, layers are invalidated properly
     testMoveMap: function() {
         product.setDay(new Date(2013, 02, 15));
@@ -103,5 +104,5 @@ TestCase("Map.DailyProduct", TestSuite.Tests({
         verify(mockMap, times(2)).addLayer(anything());
         verify(mockMap).removeLayer(anything());
     }
-    
+    */
 }));

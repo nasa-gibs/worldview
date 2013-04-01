@@ -14,7 +14,11 @@ SOTE.namespace("SOTE.widget.RubberBand");
 */
 
 
-SOTE.widget.RubberBand = function (containerId, config){   
+SOTE.widget.RubberBand = function (containerId, config){  
+    this.PALETTE_WARNING = 
+        "Image download does not yet support the custom palette that you " + 
+        "have applied. Would you like to continue anyway?";
+        
 	this.container=document.getElementById(containerId);	
 	this.coords = null;
 	if (this.container==null){
@@ -32,6 +36,10 @@ SOTE.widget.RubberBand = function (containerId, config){
 	this.id = containerId;
 	this.state = "off";
 	this.jcropAPI = null;
+	this.mapWidget = config.mapWidget;
+	this.paletteWidget = config.paletteWidget;
+	this.previousPalettes = "";
+	this.currentPalettes = "";
 	//this.windowURL = "";
 	
 	this.init();
@@ -63,17 +71,52 @@ SOTE.widget.RubberBand.prototype.init = function(){
 
 SOTE.widget.RubberBand.toggle = function(o){
 	var self = o.data.self;
+
+    var toggleOn = function() {
+        self.state = "on";
+        $("#"+self.id+"camera_link img").attr("src",self.onicon);
+        $("#imagedownload").show('slide', {direction: 'up'}, 1000); 
+        self.draw(); 
+    };		
+    
+    // When disabling the palettes, we need to wait for the map to reload all
+    // the tiles before enabling the crop box. The crop box copies all 
+    // elements in the map to do its background effect and if the map isn't
+    // ready yet, it will copy blank images. 
+    var disablePalettes = function() {
+        var map = self.mapWidget.productMap.map;
+        var handler = function() {
+            map.events.unregister("maploadend", map, handler);
+            toggleOn();
+        };
+        map.events.register("maploadend", map, handler);
+        
+        // Save the previous state to be restored later
+        self.previousPalettes = self.currentPalettes;
+        self.paletteWidget.setValue("");        
+    };
+    
 	if(self.state == "off" && self.projectionSwitch == "geographic"){
-		self.state = "on";
-		$("#"+self.id+"camera_link img").attr("src",self.onicon);
-		$("#imagedownload").show('slide', {direction: 'up'}, 1000);	
-		self.draw();
+	    // Confirm with the user they want to continue, and if so, disable
+	    // the palettes before bringing up the crop box.
+	    if (self.currentPalettes) {
+	        Worldview.ask({
+	            header: "Notice",
+	            message: self.PALETTE_WARNING,
+	            onOk: disablePalettes
+	        });
+	    } else {
+            toggleOn();
+        }
 	}
 	else if(self.projectionSwitch == "geographic"){
 		self.state = "off";
 		$("#"+self.id+"camera_link img").attr("src",self.icon);
 		self.jcropAPI.destroy(); 
 		$("#imagedownload").hide('slide', {direction: 'up'}, 1000); 	
+		if (self.previousPalettes) {
+		    self.paletteWidget.setValue(self.previousPalettes);
+		}
 	}
 	else {
   		SOTE.util.throwError("The download feature is currently available for geographic projection only.");
@@ -118,6 +161,7 @@ SOTE.widget.RubberBand.prototype.getValue = function() {
 */
 SOTE.widget.RubberBand.prototype.updateComponent = function(qs){
 		this.projectionSwitch =   SOTE.util.extractFromQuery("switch",qs);
+		this.currentPalettes = SOTE.util.extractFromQuery("palettes",qs);
 };
 
 /**
@@ -194,11 +238,11 @@ SOTE.widget.RubberBand.prototype.getStatus = function(){
   *
 */
 SOTE.widget.RubberBand.prototype.draw =  function() {
-  
- 	var self = this;
 
-  	$("#"+this.cropee).Jcrop({			
-        	bgColor:     'black',
+    var self = this;
+    
+    $("#"+this.cropee).Jcrop({          
+            bgColor:     'black',
             bgOpacity:   0.3,
             onSelect:  function(c){SOTE.widget.RubberBand.handleChange(c, self);},
             onChange: function(c){SOTE.widget.RubberBand.handleChange(c, self);},
@@ -208,9 +252,8 @@ SOTE.widget.RubberBand.prototype.draw =  function() {
     
     this.jcropAPI = $('#'+this.cropee).data('Jcrop');
             
-	this.jcropAPI.setSelect([($(window).width()/2)-100,($(window).height()/2)-100,($(window).width()/2)+100,($(window).height()/2)+100]);   
+    this.jcropAPI.setSelect([($(window).width()/2)-100,($(window).height()/2)-100,($(window).width()/2)+100,($(window).height()/2)+100]);         
     
- 	
 };
 
 

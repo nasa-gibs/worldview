@@ -11,23 +11,26 @@
 
 /**
  * Namespace: Logging
- * Simple logging utility.
+ * Simple logging utility. 
  * 
- * For basic logging
  * (begin code)
- * var log = Logger.getLogger()
+ * var log = Logging.getLogger()
  * log.message("This is a message");
  * (end code)
  * 
- * For debugging messages that can be turned on and off
+ * Debug messages can be turned on or off
  * (begin code)
  * var log = Logger.getLogger()
  * log.debug("This is not printed");
- * Logging.debug()
+ * 
+ * Logging.debug();
  * log.debug("This is printed");
+ * 
+ * Logging.undebug();
+ * log.debug("This is not printed");
  * (end code)
  * 
- * Assign names to loggers to turn debug logging on or off for certain loggers.
+ * Assign names to loggers
  * (begin code)
  * var logA = Logger.getLogger("A");
  * var logB = Logger.getLogger("B");
@@ -45,57 +48,91 @@
  */
 (function(ns) {
     
-    var debugging = {};
-    var debuggingAll = false;
-
+    var loggers = {};
+    var debugAll = false;
+    
     /**
-     * Function: debug
-     * Enables debug logging.
+     * Function: getLogger
+     * Gets the logger with the specified name. If a logger with that name
+     * does not exist, one is created.
      * 
      * Parameters:
-     * namespace - If specified, this enables debug logging for all <Loggers> 
-     * with the given namespace. If not specified, this enables debug logging
+     * name - Name of the logger to get. If not specified, the unnamed logger
+     * is returned. 
+     * 
+     * Returns:
+     * The <Logger> for the given name.
+     */
+    ns.getLogger = function(name) {
+        var logger = null;
+        name = name || "";
+        if ( name in loggers ) {
+            logger = loggers[name];
+        } else {
+            logger = Logger();
+            loggers[name] = logger;
+        }
+        if ( debugAll ) {
+            logger.setDebugEnabled(true);
+        }
+        return logger;
+    }
+    
+    /**
+     * Function: debug
+     * Turns on logging of debug messages.
+     * 
+     * Parameters:
+     * name - If specified, this enables debug logging for the <Logges> 
+     * with the given name. If not specified, this enables debug logging
      * for all <Loggers>.
      */
-    ns.debug = function(namespace) {
-        if ( namespace === undefined ) {
-            debuggingAll = true;
+    ns.debug = function(name) {
+        if ( name ) {
+            ns.getLogger(name).setDebugEnabled(true);
+        } else {
+            $.each(loggers, function(name, logger) {
+                logger.setDebugEnabled(true);
+            });
+            debugAll = true;
         }
-        debugging[namespace] = true;
     };
     
     /**
      * Function: undebug
-     * Disables debug logging.
+     * Turns off logging of debug messages.
      * 
      * Parameters:
-     * namespace - If specified, this disables logging for all <Loggers>
-     * with the given namespace. If not specified, this disables debug logging
-     * for all <Loggers> except for those explicitly enabled.
+     * namespace - If specified, this disables logging for the <Logger>
+     * with the given name. If not specified, this disables debug logging
+     * for all <Loggers>.
      */
-    ns.undebug = function(namespace) {
-        if ( namespace === undefined ) {
-            debuggingAll = false;
+    ns.undebug = function(name) {
+        if ( name ) {
+            ns.getLogger(name).setDebugEnabled(false);
         } else {
-            if ( namespace in debugging ) {
-                delete debugging[namespace];
-            }
+            $.each(loggers, function(name, logger) {
+                logger.setDebugEnabled(false);
+            });
+            debugAll = false;
         }
     };    
        
+    /*
+     * Clears out all the known loggers, useful for testing.
+     */
+    ns.reset = function() {
+        loggers = {}
+    }
+    
     /**
      * Class: Logging.Logger
-     * Sample logger
-     * 
-     * Constructor: Logger
-     * Creates a new instance.
-     * 
-     * Parameters:
-     * namespace - The name given to this logger.
+     * Logging methods.
      */    
-    ns.Logger = function(namespace) {
+     var Logger = function() {
 
         var self = {};
+        var debugEnabled = false;
         
         /**
          * Method: message
@@ -105,12 +142,9 @@
          * Parameters:
          * message - The message to print to the console.
          */
-        self.message = function(message) {
-            if ( console ) {
-                console.log(message);
-            }
-        };
-                
+        self.message = ( !console || !console.log ) 
+                ? function() {} : console.log.bind(console);
+        
         /**
          * Method: error
          * Prints an error message to the console. Uses console.error if
@@ -120,15 +154,8 @@
          * Parameters:
          * message - The message to print to the console.
          */
-        self.error = function(message) {
-            if ( console ) {
-                if ( console.error ) {
-                    console.error(message);
-                } else {
-                    console.log(message);
-                }
-            }
-        };
+        self.error = ( !console || !console.error ) 
+                ? self.message: console.error.bind(console);
 
         /**
          * Method: warn
@@ -139,15 +166,8 @@
          * Parameters:
          * message - The message to print to the console.
          */
-        self.warn = function(message) {
-            if ( console ) {
-                if ( console.warn ) {
-                    console.warn(message);
-                } else {
-                    console.log(message);
-                }
-            }
-        };
+        self.warn = ( !console || !console.warn ) 
+                ? self.message : console.warn.bind(console);
         
         /**
          * Method: info
@@ -158,45 +178,57 @@
          * Parameters:
          * message - The message to print to the console.
          */
-        self.info = function(message) {
-            if ( console ) {
-                if ( console.info ) {
-                    console.info(message);
-                } else {
-                    console.log(message);
-                }
-            }
-        };
+        self.info = ( !console || !console.info ) 
+                ? self.message : console.info.bind(console);
         
         /**
          * Method: trace
          * Prints a stack trace to the console. If console.trace does not
          * exist, this method does nothing.
          */
-        self.trace = function() {
-            if ( console && console.trace ) {
-                console.trace();
-            }
-        };
+        self.trace = ( !console || !console.trace )
+                ? function() {} : console.trace;
         
         /**
          * Method: debug
          * Prints a debug message to the console if debugging is enabled.
-         * Debugging can be enabled by calling Logging.debug with the namespace
-         * of this logger, or by calling Logging.debug with no parameters.
-         * If the console object does not exist, this method does nothin.
+         * Debugging can be enabled by calling Logging.debug with the name
+         * of this logger, by calling Logging.debug with no parameters, 
+         * or by calling setDebugEnabled on this logger. If the console object 
+         * does not exist, this method does nothing.
          * 
          * Parameters:
          * message - The message to print to the console.
          */
-        self.debug = function(message) {
-            if ( debuggingAll ) {
-                self.message(message);
-            } else if ( namespace !== undefined && namespace in debugging ) {
-                self.message(message);
+        self.debug = function() {};
+        
+        /**
+         * Method: setDebugEnabled
+         * Enables or disables logging of debug messages.
+         * 
+         * Parameters:
+         * enabled - if true, enables debug messages.
+         */
+        self.setDebugEnabled = function(enabled) {
+            if ( enabled ) {
+                self.debug = self.message;
+            } else {
+                self.debug = function() {};
             }
+            debugEnabled = enabled;
+        };
+        
+        /**
+         * Method: isDebugEnabled
+         * 
+         * Returns:
+         * true if debug messages will be printed to the console, otherwise
+         * returns false.
+         */
+        self.isDebugEnabled = function() {
+            return debugEnabled;
         }
-       
+        
         return self;       
     };
                 

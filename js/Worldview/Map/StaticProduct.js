@@ -76,13 +76,21 @@ Worldview.Map.StaticProduct = function(map, config) {
         map.events.unregister("movestart", self, refreshZOrder);
         map.events.unregister("zoomend", self, refreshZOrder);    
     };
-        
-    self.setLookup = function(lookup) {
-        layer.lookupTable = lookup;          
-    };
     
+    /**
+     * Method: setLookup
+     * Does nothing. This can be implemented once there is a static data 
+     * product that could be adjusted. 
+     */    
+    self.setLookup = function(lookup) {
+    };
+
+    /**
+     * Method: clearLookup
+     * Does nothing. This can be implemented once there is a static data 
+     * product that could be adjusted. 
+     */      
     self.clearLookup = function() {
-        delete layer.lookupTable;         
     };        
     
     //-------------------------------------------------------------------------

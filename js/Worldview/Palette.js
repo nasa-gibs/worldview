@@ -20,9 +20,6 @@ $(function() {
     // This namespace
     var ns = Worldview.Palette;
     
-    // Namespace aliases
-    var util = SOTE.util;
-    
     //-------------------------------------------------------------------------
     // Public
     //-------------------------------------------------------------------------
@@ -32,23 +29,10 @@ $(function() {
      * A canvas pattern of a gray checkerboard used to denote transparency.
      */
     ns.checkerboard = null;
-    
+            
     /**
-     * Property: STOCK_PALETTE_ENDPOINT
-     * The relative URL to use when loading stock palette information.
-     */
-    ns.stockPaletteEndpoint = "data/config";
-    
-    /**
-     * Property: stockPalettes
-     * An array of stock <Palettes> the user can choose from. This value is
-     * initially set to null. Call <loadStockPalettes> to set this value.
-     */
-    ns.stockPalettes = null;
-        
-    /**
-     * Function: toLookup
-     * Converts a <Palette> to a <Lookup>. The lookup table is generated
+     * Function: toIndexedLookup
+     * Converts a <Palette> to a <IndexedLookup>. The lookup table is generated
      * for a certain number of equally spaced bins. Each bin is assigned
      * a distance along the range and its color is determined by the stop
      * locations in the palette. The first bin is always at 0% and the last
@@ -71,9 +55,9 @@ $(function() {
      * palette - The <Palette> to convert
      * 
      * Returns:
-     * A <Lookup>.
+     * A <IndexedLookup>.
      */
-    ns.toLookup = function(bins, palette, binStops) {        
+    ns.toIndexedLookup = function(bins, palette, binStops) {        
         var stops = palette.stops;
         var lut = [];
         
@@ -105,8 +89,8 @@ $(function() {
             currentStop = i;
             
             // The bin is between these two stops         
-            var end = stops[util.clampIndex(stops, i)];
-            var begin = stops[util.clampIndex(stops, i-1)];
+            var end = stops[Worldview.clampIndex(stops, i)];
+            var begin = stops[Worldview.clampIndex(stops, i-1)];
             
             // Find out how far this bin in between the stops
             var segmentLength = end.at - begin.at;
@@ -115,14 +99,24 @@ $(function() {
             
             // Within the cutoffs? 
             if ( distance < min || distance > max ) {
-                lut.push(ns.ColorRGBA(0, 0, 0, 0));
+                lut.push({r: 0, b: 0, g: 0, a: 0});
             } else if ( palette.type === "solid" ) {
                 // For solid colors, always pick the color of the beginning
                 // stop unless we are at the very end.
                 if ( segmentDistance < 1 ) {
-                    lut.push(ns.ColorRGBA(begin.r, begin.g, begin.b));                        
+                    lut.push({
+                        r: begin.r, 
+                        g: begin.g, 
+                        b: begin.b, 
+                        a: 0xff
+                    });                        
                 } else {
-                    lut.push(ns.ColorRGBA(end.r, end.g, end.b));
+                    lut.push({
+                        r: end.r, 
+                        g: end.g, 
+                        b: end.b,
+                        a: 0xff
+                    });
                 }
             } else if ( palette.interpolate === "rgb" ) {
                 lut.push(ns.rgbInterpolate(segmentDistance, begin, end));
@@ -133,7 +127,20 @@ $(function() {
         return lut;
     };
     
-    ns.mapLookup = function(indexed, stops) {
+    /**
+     * Function: toColorLookup
+     * Maps an indexed lookup to a color-to-color lookup. This is used to take
+     * the palette definition of a rendered product to create a lookup table
+     * to map the original colors to a new set of colors. 
+     * 
+     * Parameters:
+     * indexed - An <IndexedLookup>
+     * stops - The original color values as an array of <StopRBGA>
+     * 
+     * Returns:
+     * A <ColorLookup> 
+     */
+    ns.toColorLookup = function(indexed, stops) {
         map = {};
         $.each(stops, function(index, stop) {
             var key = stop.r + "," + stop.g + "," + stop.b + "," + stop.a;
@@ -202,7 +209,7 @@ $(function() {
         if ( h > 1.0 ) {
             h -= 1.0;
         }
-        return ns.hsl2rgb(ns.ColorHSL(h, s, l));
+        return ns.hsl2rgb({h: h, s: s, l: l});
     }
     
     /**
@@ -247,7 +254,7 @@ $(function() {
             h /= 6;
         }
     
-        return ns.ColorHSL(h, s, l);
+        return {h: h, s: s, l: l};
     }
 
     /**
@@ -296,64 +303,14 @@ $(function() {
             b = hue2rgb(p, q, h - 1/3);
         }
     
-        return ns.ColorRGBA(
-            Math.round(r * 255), 
-            Math.round(g * 255), 
-            Math.round(b * 255));
-    }
+        return {
+            r: Math.round(r * 255), 
+            g: Math.round(g * 255), 
+            b: Math.round(b * 255),
+            a: 0xff
+        };
+    };
     
-    /**
-     * Function: loadStockPalettes
-     * Loads the stock <Palette> definitions from the web server. Palettes
-     * are loaded from the relative URL defined in <stockPaletteEndpoint> and
-     * are placed in <stockPalettes>. If palettes have already been loaded,
-     * this method only invokes the success callback.
-     * 
-     * Parameters:
-     * - success: Callback executed after the palettes have been loaded. The
-     *            callback should have no parameters. Obtain loaded palettes
-     *            from <stockPalettes>.
-     * - error:   Callback executed if there is an error loading the palettes.
-     *            The callback should have two paraemters, the error message
-     *            and the error status.
-     */    
-    ns.loadStockPalettes = function(success, error) {
-                        
-        if ( ns.stockPalettes ) { 
-            success();
-            return;
-        }
-        
-        var palettesLoaded = function(config) {            
-            // Generate images for the combo box selector.
-            var canvas = document.createElement("canvas");
-            canvas.width = 100;
-            canvas.height = 14;
-            
-            var palettes = config.palettes;
-            for ( var i = 0; i < palettes.length; i ++ ) {
-                var palette = palettes[i];
-                
-                ns.ColorBar({
-                    canvas: canvas,
-                    palette: palette
-                });
-                palette.image = canvas.toDataURL("image/png");
-            }
-            ns.stockPalettes = palettes;                
-            success(palettes);    
-        }
-        
-        $.ajax({
-            url: ns.stockPaletteEndpoint,
-            dataType: "json",
-            success: palettesLoaded,
-            error: function(jqXHR, textStatus, errorThrown) { 
-                error(errorThrown, textStatus);
-            }
-        });
-        
-    }
     
     //-------------------------------------------------------------------------
     // Private
@@ -388,3 +345,125 @@ $(function() {
     init();
 });
 
+/**
+ * Class: Worldview.Palette.ColorRGBA
+ * 
+ * Represents a color in the RGBA color space.
+ *
+ * Example: 
+ * For a yellow color
+ * 
+ * (begin code)
+ * var color = { r: 0xff, g: 0xff, b: 0x00, a: 0xff }
+ * (end code)
+ *   
+ * Property: r
+ * The red color value in the range of [0, 0xff]. 
+ * 
+ * Property: g
+ * The green color value in the range of [0, 0xff].
+ * 
+ * Property: b
+ * The blue color value in the range of [0, 0xff]. 
+ * 
+ * Property: a
+ * The alpha color value in the range of [0, 0xff]. Zero is transparent, 0xff 
+ * is opaque. 
+ */ 
+
+/**
+ * Class: Worldview.Palette.ColorHSL
+ * 
+ * Represents a color in the HSL color space.
+ *
+ * Example: 
+ * For a red color
+ * 
+ * (begin code)
+ * var color = { h: 0x00, s: 0xff, l: 0xff }
+ * (end code)
+ * 
+ * Property: h
+ * The hue value in the range of [0.0, 1.0].
+ * 
+ * Property: s 
+ * The saturation value in the range of [0.0, 1.0]. 
+ * 
+ * Property: l
+ * The lightness value in the range of [0.0, 1.0].
+ */
+
+/**
+ * Class: Worldview.Palette.IndexedLookup
+ * 
+ * Indexed based color lookup table.
+ * 
+ * Example:
+ * (begin code)
+ * var lookup = {
+ *     id: "my_lookup",
+ *     name: "My Lookup",
+ *     table: [
+ *         { r: 0x01, g: 0x02, b: 0x03, a: 0x04 },
+ *         { r: 0x05, g: 0x06, b: 0x07, a: 0x08 }
+ *     ]
+ * };
+ * (end code)
+ * 
+ * Property: id
+ * Identifier for this lookup (optional).
+ *
+ * Property: name
+ * Descriptive name for this lookup (optional).
+ * 
+ * Property: table
+ * Array that maps index values to <ColorRGBA> objects. For example, a value of 
+ * 2 should use the color found at table[2]. 
+ */
+
+/**
+ * Class: Worldview.Palette.ColorLookup
+ * 
+ * Lookup from one color value to another color value.
+ * 
+ * Example:
+ * (begin code) 
+ * var lookup = {
+ *     "0,0,255,255": { r: 0xff, g: 0x00, b: 0x00, a: 0xff }
+ *
+ * (end code)
+ * 
+ * Each property in the object is a string containing integer red, green,
+ * blue, and alpha values separated by commas. Each property contains contains
+ * a <ColorRGBA> value to map. 
+ */
+
+/**
+ * Class: Worldview.Palette.StopRGBA
+ * 
+ * Defines a color value at a percentage along a color range.
+ * 
+ * Example:
+ * For a red color stop at 40% along the range
+ * 
+ * (begin code)
+ * var stop = { at: 0.4, r: 0xff, g: 0x00, b: 0x00, a:0x00 };
+ * (end code)
+ * 
+ * Property: at
+ * The percentage along the color range where this stop is located in the range 
+ * of [0.0, 1.0].
+ * 
+ * Property: r
+ * The red color value in the range of [0, 0xff]. 
+ * 
+ * Property: g
+ * The green color value in the range of [0, 0xff].
+ * 
+ * Property: b 
+ * The blue color value in the range of [0, 0xff].
+ * 
+ * Property: a 
+ * a  - The alpha color value in the range of [0, 0xff]. Zero is transparent, 
+ * 0xff is opaque. 
+ */

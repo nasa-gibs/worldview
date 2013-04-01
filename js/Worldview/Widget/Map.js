@@ -26,9 +26,11 @@ Worldview.namespace("Widget");
  *                configuration and is ready to be used. 
  */
 Worldview.Widget.Map = function(containerId, config) { 
-        
+
+    var log = Logging.getLogger("Worldview.Map");
+    //Logging.debug("Worldview.Map");
+            
     var self = {};
-    var log = Logging.Logger("Worldview.Map");
     
     /**
      * Property: productMap
@@ -48,7 +50,7 @@ Worldview.Widget.Map = function(containerId, config) {
         if ( REGISTRY ) {
             REGISTRY.register(containerId, self);
         } else {
-            throw "Cannot register Map, REGISTRY not found";
+            throw new Error("Cannot register Map, REGISTRY not found");
         }
         
         self.config = validateConfig(self.config);
@@ -60,9 +62,7 @@ Worldview.Widget.Map = function(containerId, config) {
                 self.productMap.append(name);
             }
         });
-        
-        self.productMap.map.zoomToMaxExtent();
-        
+                
         REGISTRY.markComponentReady(containerId);
         log.debug("Map is ready");
     };  
@@ -88,9 +88,10 @@ Worldview.Widget.Map = function(containerId, config) {
         // Verify that the viewport extent overlaps the valid extent, if
         // invalid, just zoom out the max extent
         if ( !Worldview.Map.isExtentValid(extent) || 
-                !extent.intersectsBounds(map.getExtent()) ) {
+                !extent.intersectsBounds(map.getMaxExtent()) ) {
             log.warn("Extent is invalid: " + extent + "; using " + 
                     map.getExtent());
+            log.info("Max extent: " + map.getMaxExtent());
             extent = map.getExtent();
         }
         self.productMap.map.zoomToExtent(extent, true);
@@ -143,7 +144,7 @@ Worldview.Widget.Map = function(containerId, config) {
      * Throws an unsupported exception.
      */
     self.setDataSourceUrl = function(url) {
-        throw "setDataSourceUrl: unsupported";
+        throw new Error("setDataSourceUrl: unsupported");
     };
     
     /**
@@ -163,7 +164,7 @@ Worldview.Widget.Map = function(containerId, config) {
      * invoked.
      */
     self.setStatus = function(status) {
-        throw "setStatus: unsupported";      
+        throw new Error("setStatus: unsupported");      
     };
     
     /**
@@ -172,7 +173,7 @@ Worldview.Widget.Map = function(containerId, config) {
      * invoked.
      */
     self.getStatus = function() {
-        throw "getStatus: unsupported";
+        throw new Error("getStatus: unsupported");
     };
                 
     /*
@@ -189,7 +190,8 @@ Worldview.Widget.Map = function(containerId, config) {
         var _config = ["defaultProjection"];
         $.each(_config, function(index, key) {
             if ( !(key in config.config) ) {
-                throw "config." + key + " is required in the map configuraiton";
+                throw new Error("config." + key + " is required in the " + 
+                        "map configuraiton");
             }
         });
         return config;

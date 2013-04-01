@@ -2,7 +2,6 @@
     "description": "SEDAC / Coastlines v3",
     "name": "Coastlines",
     "parameters": {
-        "bringToFront": "true",
         "format": "image/png",
         "layers": "gpw-v3-coastlines",
         "transitionEffect": "none",

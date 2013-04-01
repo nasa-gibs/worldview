@@ -75,7 +75,7 @@ Worldview.Palette.ColorBar = function(spec) {
     /**
      * Property: palette
      * 
-     * The <Palette> or <Lookup> to render in the canvas. If not specified, this 
+     * The <Palette> or <IndexedLookup> to render in the canvas. If not specified, this 
      * value is null and no palette will be rendered.
      */
     self.palette = spec.palette || null;
@@ -97,8 +97,8 @@ Worldview.Palette.ColorBar = function(spec) {
         } else if ( spec.selector ) {
             $canvas = $(spec.selector);
             if ( $canvas.length === 0 ) {
-                throw "No such canvas element (" + spec.selector + 
-                      ") for the ColorBar";
+                throw new Error("No such canvas element (" + spec.selector + 
+                      ") for the ColorBar");
             }
             canvas = $canvas.get(0);
 
@@ -131,7 +131,7 @@ Worldview.Palette.ColorBar = function(spec) {
         // palette definition to a lookup table.
         var lut = ( self.palette.table ) 
             ? self.palette.table 
-            : ns.toLookup(self.bins, self.palette, self.stops);
+            : ns.toIndexedLookup(self.bins, self.palette, self.stops);
         
         for ( var bin = 0; bin < self.bins; bin++ ) {
             var left;

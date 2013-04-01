@@ -16,8 +16,12 @@
 
 	<target name="init">
 	    <tstamp>
-	        <format property="build.timestamp" pattern="MMMMM d yyyy - h:mm a z"/>
-	        <format property="build.nonce" pattern="yyyyMMddHHmmssSSS"/>
+	        <format property="build.timestamp" 
+	                pattern="MMMMM d, yyyy - H:mm z"
+	                timezone="UTC"/>
+	        <format property="build.nonce" 
+	                pattern="yyyyMMddHHmmssSSS"
+	                timezone="UTC"/>
 	    </tstamp>
 		<mkdir dir="${build.dir}"/>
 		<mkdir dir="${dist.dir}"/>
@@ -88,19 +92,19 @@
             <fileset dir="${basedir}/dev/generate-config/config"/>
         </copy>
             
-        <exec executable="python">
+        <exec executable="python" failonerror="true">
             <arg value="${basedir}/dev/generate-config/act2json.py"/>
             <arg value="${build.dir}/config/palettes"/>
         </exec>
         
-        <exec executable="python">
+        <exec executable="python" failonerror="true">
              <arg value="${basedir}/dev/generate-config/vrt2json.py"/>
              <arg value="--products-dir"/>
              <arg value="${build.dir}/config/products"/>
              <arg value="${build.dir}/config/palettes"/>
         </exec>
         
-        <exec executable="python">
+        <exec executable="python" failonerror="true">
             <arg value="${basedir}/dev/generate-config/generate-config.py"/>
             <arg value="--config-dir"/>
             <arg value="${build.dir}/config"/>
@@ -205,7 +209,6 @@
 				<include name="**/*.js"/>
 				<!-- Web worker needs to load this directly, leave it around -->
 				<exclude name="**/TileWorker.js"/>
-                <exclude name="**/TileRenderer.js"/>
 			</fileset>
 		</delete>
 		
@@ -238,11 +241,15 @@
 		
 		<!-- Move the jQuery images to a location where it can be found
 		     in the minified form -->
-		  <move todir="${build.web.dir}/images">
-		    <fileset dir="${build.web.css.dir}/ext/jquery/images">
+		<mkdir dir="${build.web.css.dir}/images"/>
+		<move todir="${build.web.dir}/images">
+		  <fileset dir="${build.web.css.dir}/ext/jquery.mobile-1.0rc2/images">
 		      <include name="*"/>
-		    </fileset>
-		  </move>
+		  </fileset>
+		</move>
+		<move todir="${build.web.css.dir}/images/jquery.dd-3.3">
+          <fileset dir="${build.web.css.dir}/ext/jquery.dd-3.3/images/jquery.dd-3.3"/>
+        </move>
 
 	</target>
     
@@ -304,7 +311,7 @@
         <sshexec host="${deploy.host}"
             username="${deploy.user}"
             keyfile="${user.home}/.ssh/id_rsa"
-            command="rm -rf ${deploy.dir}/worldview*; ( cd ${deploy.dir}; find artifacts -name '*.tar.bz2' -exec tar xf {} \; ; chmod -R g+w worldview* )"/>
+            command="rm -rf ${deploy.dir}/worldview*; ( cd ${deploy.dir}; rm -f worldview* ; find artifacts -name '*.tar.bz2' -exec tar xf {} \; ; chmod g+wx worldview* ; rm -r artifacts/*)"/>
   </target>
   
 </project>

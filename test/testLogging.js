@@ -12,7 +12,6 @@
 TestCase("Logging.standard", TestSuite.Tests({
     
     patcher: null,
-    mockConsole: null,
     
     setUp: function() {
         patcher = TestSuite.Patcher();
@@ -20,15 +19,15 @@ TestCase("Logging.standard", TestSuite.Tests({
     
     tearDown: function() {
         patcher.undo();
-        Logging.undebug("foo");
         Logging.undebug();
+        Logging.reset();
     },
     
     // Check that it passes through to the correct object
     testMessage: function() {
         var mockLog = mockFunction();
         patcher.apply("console.log", mockLog);
-        Logging.Logger().message("log");
+        Logging.getLogger("testMessage").message("log");
         verify(mockLog)("log");    
     },
 
@@ -36,7 +35,7 @@ TestCase("Logging.standard", TestSuite.Tests({
     testError: function() {
         var mockError = mockFunction();
         patcher.apply("console.error", mockError);
-        Logging.Logger().error("error");
+        Logging.getLogger("testError").error("error");
         verify(mockError)("error");
     },
     
@@ -44,7 +43,7 @@ TestCase("Logging.standard", TestSuite.Tests({
     testInfo: function() {
         var mockInfo = mockFunction();
         patcher.apply("console.info", mockInfo);
-        Logging.Logger().info("info");
+        Logging.getLogger("testInfo").info("info");
         verify(mockInfo)("info");    
     },   
 
@@ -52,7 +51,7 @@ TestCase("Logging.standard", TestSuite.Tests({
     testWarn: function() {
         var mockWarn = mockFunction();
         patcher.apply("console.warn", mockWarn);
-        Logging.Logger().warn("warn");
+        Logging.getLogger("testWarn").warn("warn");
         verify(mockWarn)("warn");    
     }, 
 
@@ -60,7 +59,7 @@ TestCase("Logging.standard", TestSuite.Tests({
     testTrace: function() {
         var mockTrace = mockFunction();
         patcher.apply("console.trace", mockTrace);
-        Logging.Logger().trace();
+        Logging.getLogger("testTrace").trace();
         verify(mockTrace)();    
     },
     
@@ -68,7 +67,7 @@ TestCase("Logging.standard", TestSuite.Tests({
     testDebugDisabled: function() {
         var mockLog = mockFunction();
         patcher.apply("console.log", mockLog);
-        Logging.Logger("foo").debug("foo");
+        Logging.getLogger("testDebugDisabled").debug("foo");
         verifyZeroInteractions(mockLog);
     },
     
@@ -76,35 +75,20 @@ TestCase("Logging.standard", TestSuite.Tests({
     testDebugEnabled: function() {
         var mockLog = mockFunction();
         patcher.apply("console.log", mockLog);
-        Logging.debug("foo");
-        Logging.Logger("foo").debug("foo");
+        Logging.debug("testDebugEnabled");
+        Logging.getLogger("testDebugEnabled").debug("foo");
         verify(mockLog)("foo");
-    },
-    
-    // Check for no output for debug with no namespace
-    testDebugDisabledNoNamespace: function() {
-        var mockLog = mockFunction();
-        patcher.apply("console.log", mockLog);
-        Logging.Logger().debug("foo");
-        verifyZeroInteractions(mockLog);
     },
         
-    // Check for output when all debughing is enabled with no namespace
-   testAllDebugEnabledNoNamespace: function() {
-        var mockLog = mockFunction();
-        patcher.apply("console.log", mockLog);
-        Logging.debug();
-        Logging.Logger().debug("foo");
-        verify(mockLog)("foo");
-    },
-    
-    // Check for output when all debugging is enabled with namespace
+    // Check for output when all debugging
     testAllDebugEnabled: function() {
         var mockLog = mockFunction();
         patcher.apply("console.log", mockLog);
         Logging.debug();
-        Logging.Logger("foo").debug("foo");
+        Logging.getLogger("testAllDebugE").debug("foo");
+        Logging.getLogger("bar").debug("bar");
         verify(mockLog)("foo");        
+        verify(mockLog)("bar");
     }
                     
 }));
@@ -120,15 +104,16 @@ TestCase("Logging.noConsole", TestSuite.Tests({
     
     tearDown: function() {
         patcher.undo();
+        Logging.reset();
     },
     
     // Test that no errors are thrown when console is undefined
     testAll: function() {
-        Logging.Logger().error("foo");
-        Logging.Logger().message("foo");
-        Logging.Logger().info("foo");
-        Logging.Logger().warn("foo");
-        Logging.Logger().trace("foo");
+        Logging.getLogger().error("foo");
+        Logging.getLogger().message("foo");
+        Logging.getLogger().info("foo");
+        Logging.getLogger().warn("foo");
+        Logging.getLogger().trace("foo");
     }
 
 }));
@@ -150,29 +135,30 @@ TestCase("Logging.onlyLog", TestSuite.Tests({
     
     tearDown: function() {
         patcher.undo();
+        Logging.reset();
     },
     
     // Check that log is called when error is not defined
     testError: function() {
-        Logging.Logger().error("foo");
+        Logging.getLogger().error("foo");
         verify(mockLog)("foo");
     },
 
     // Check that log is called when info is not defined    
     testInfo: function() {
-        Logging.Logger().info("foo");
+        Logging.getLogger().info("foo");
         verify(mockLog)("foo");
     },
     
     // Check that warn is called when error is not defined    
     testWarn: function() {
-        Logging.Logger().warn("foo");
+        Logging.getLogger().warn("foo");
         verify(mockLog)("foo");
     },
     
     // Check that there is no error when trace is not defined  
     testTrace: function() {
-        Logging.Logger().trace();
+        Logging.getLogger().trace();
     }
     
 }));

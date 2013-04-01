@@ -129,14 +129,14 @@ SOTE.widget.ImageDownload.prototype.getValue = function(){
 
 
 SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
-	
+		
 	try {
     	var bbox = SOTE.util.extractFromQuery('map',qs);
     	var time = SOTE.util.extractFromQuery('time',qs);
     	var pixels = SOTE.util.extractFromQuery('camera', qs);
       	var s = SOTE.util.extractFromQuery('switch',qs);
       	var products = SOTE.util.extractFromQuery('products',qs);
-      	
+              	
       	var px = pixels.split(",");
     	var x1 = px[0]; var y1= px[1]; var x2 = px[2]; var y2=px[3];
     
@@ -147,14 +147,11 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
          
          
       	 //var dTime = new Date((time.split(/T/))[0]+"T00:00:00");
-      	 var dTime = SOTE.util.UTCDateFromISO8601String(time);
-      	 dTime.setHours(0);
-      	 dTime.setMinutes(0);
-      	 dTime.setSeconds(0);
+      	 var dTime = Date.parseISOString(time).clearUTCTime();
       	 
       	 //Julian date, padded with two zeros (to ensure the julian date is always in DDD format).
-      	 var jDate = "00" + (1+Math.ceil((dTime - new Date(dTime.getFullYear(),0,1)) / 86400000));
-      	 dlURL += "TIME="+dTime.getFullYear()+(jDate).substr((jDate.length)-3);
+      	 var jDate = "00" + (1+Math.ceil((dTime - new Date(dTime.getUTCFullYear(),0,1)) / 86400000));
+      	 dlURL += "TIME="+dTime.getUTCFullYear()+(jDate).substr((jDate.length)-3);
       	 
       	
       	 dlURL += "&extent="+lonlat1.lon+","+lonlat1.lat+","+lonlat2.lon+","+lonlat2.lat;
@@ -165,7 +162,7 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
     		var a = products.split("~");
     		var base = a[0].split(/[\.,]/);
     		
-    		var overlays = a[1].split(".");
+    		var overlays = a[1].split(/[\.,]/);
     		overlays.reverse(); overlays.pop();
     		for(var i=1; i<base.length; ++i){
     			dlURL += base[i]+",";
@@ -178,7 +175,6 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
     	dlURL = dlURL.slice(0,-1);
     	
     	}
-    	
     	
       	 var imgWidth=0; var imgHeight=0;
     	    

@@ -9,15 +9,6 @@
  * All Rights Reserved.
  */
 
-TestCase("Worldview.general", TestSuite.Tests({
-
-    testToISODateString: function() {
-        assertEquals("2013-03-15", 
-            Worldview.toISODateString(new Date(2013, 02, 15)));
-    }
-        
-}));
-
 TestCase("Worldview.namespace", TestSuite.Tests({
 
     tearDown: function() {
@@ -57,7 +48,9 @@ TestCase("Worldview.error", TestSuite.Tests({
     mockPanel: null,
     mockLog: null,
     
-    setUp: function() {
+    setUp: function() {  
+        Logging.reset();
+              
         // Mock out the panel that is displayed on an error
         var mockPanelConstructor = mockFunction();
         mockPanel = mock(YAHOO.widget.Panel);
@@ -92,8 +85,9 @@ TestCase("Worldview.error", TestSuite.Tests({
     
     // Check that error with cause is written to console
     testErrorWithCause: function() {
-        Worldview.error("This is an error", "with a cause");
-        verify(mockLog)("This is an error: with a cause");
+        var e = new Error("with a cause");
+        Worldview.error("This is an error", e);
+        verify(mockLog)(e);
     },
     
     // Check that the cause is not placed in the dialog
@@ -110,6 +104,8 @@ TestCase("Worldview.error.withoutYahoo", TestSuite.Tests({
     patcher: null,
     
     setUp: function() {
+        Logging.reset();
+        
         patcher = TestSuite.Patcher();
         patcher.apply("console.error", mockFunction());
         patcher.apply("YAHOO", {});        
@@ -154,10 +150,50 @@ TestCase("Worldview.getObjectByPath", TestSuite.Tests({
         try {
             ns.getObjectByPath("__TEST_GET_OBJECT_BY_PATH.XXX.bar");
             fail("Should not have been a valid path");
-        } catch ( message ) {
+        } catch ( error ) {
             assertEquals("In __TEST_GET_OBJECT_BY_PATH.XXX.bar, XXX is " + 
-                "undefined", message);
+                "undefined", error.message);
         }
     }
     
 }));
+
+TestCase("Worldview.clamp", {
+    
+    array: null,
+    
+    setUp: function() {
+        array = [1, 2, 3, 4, 5];
+    },
+    
+    testClamp: function() {
+        assertEquals(5, Worldview.clamp(0, 10, 5));
+    },
+    
+    testClampOver: function() {
+        assertEquals(10, Worldview.clamp(0, 10, 11));
+    },
+    
+    testClampUnder: function() {
+        assertEquals(0, Worldview.clamp(0, 10, -1));
+    },
+    
+    testClampInvalidRange: function() {
+        assertException(function() {
+            Worldview.clamp(10, 0, 10);
+        })
+    },
+    
+    testClampIndex: function() {
+        assertEquals(3, Worldview.clampIndex(array, 3));
+    },
+    
+    testClampIndexOver: function() {
+        assertEquals(4, Worldview.clampIndex(array, 5));
+    },
+    
+    testClampIndexUnder: function() {
+        assertEquals(0, Worldview.clampIndex(array, -1));
+    }
+    
+});

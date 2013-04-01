@@ -27,11 +27,6 @@ Worldview.Map.Product = function(c) {
     var self = {};
     var config;
     
-    /**
-     * True if this product should be displayed on top of all other products.
-     */
-    self.bringToFront = false;
-    
     var init = function() {
         config = $.extend(true, {}, c);
         
@@ -40,9 +35,6 @@ Worldview.Map.Product = function(c) {
         if ( prop.tileSize ) {
             prop.tileSize = new OpenLayers.Size(prop.tileSize[0], 
                                                 prop.tileSize[1]);
-        }
-        if ( prop.bringToFront === true ) {
-            self.bringToFront = true;
         }
         if ( prop.transitionEffect === undefined ) {
             prop.transitionEffect = "resize";
@@ -53,7 +45,15 @@ Worldview.Map.Product = function(c) {
     };
     
     /**
+     * Function: createLayer
      * Creates a new layer based on the configuration provided. 
+     * 
+     * Parameters:
+     * additionalProperties - If specified, these properites are merged into
+     *                        the product configuration to create the layer.
+     * 
+     * Return:
+     * An OpenLayers Layer.
      */
     self.createLayer = function(additionalProperties) {
         var properties = config.properties;
@@ -70,7 +70,7 @@ Worldview.Map.Product = function(c) {
             return new Worldview.Map.GraticuleLayer(config.name, 
                     properties);
         } else {
-            throw "Unsupported layer type: " + config.type;
+            throw new Error("Unsupported layer type: " + config.type);
         }
     };
     

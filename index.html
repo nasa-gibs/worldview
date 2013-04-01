@@ -21,22 +21,20 @@
 	<!-- CSS resources ==================================================== -->
 	<!-- <link type="text/css" href="css/worldview-min.css?v=@BUILD_NONCE@" rel="Stylesheet" /> -->	
 		
-	<!-- JQuery -->
-	<!-- css.dev --> <link type="text/css" href="css/ext/jquery/jquery.mobile-1.0rc2.css" rel="Stylesheet" />
-		
-	<!-- Combo-handled YUI files -->
-	<!-- css.dev --> <link rel="stylesheet" type="text/css" href="css/ext/yui/combo-container-min.css" />
+	<!-- css.dev --> <link type="text/css" href="css/ext/jquery.mobile-1.0rc2/jquery.mobile-1.0rc2.css" rel="Stylesheet" />
 	
-	<!-- OpenLayers styles -->
+	<!-- css.dev --> <link type="text/css" href="css/ext/yui-2.9.0/combo-container-min.css" rel="Stylesheet" />
+	
 	<!-- css.dev --> <link type="text/css" href="css/ext/openlayers-2.12/openlayers.defaulttheme.style.css" rel="StyleSheet" />
 	<!-- css.dev --> <link type="text/css" href="css/ext/openlayers-2.12/openlayers.example.style.css" rel="StyleSheet" />
 	<!-- css.dev --> <link type="text/css" href="css/ext/openlayers-2.12/openlayers.style.mobile-jq.css" rel="StyleSheet" />
 	
-    <!-- css.dev --> <link rel="stylesheet" type="text/css" href="css/ext/jquery.dd/dd.css"/>
-    <!-- css.dev --> <link rel="stylesheet" type="text/css" href="css/ext/jquery.dd/skin2.css"/>
-    <!-- css.dev --> <link rel="stylesheet" type="text/css" href="css/palette.css"/>
+    <!-- css.dev --> <link type="text/css" href="css/ext/jquery.dd-3.3/dd.css" rel="Stylesheet" />
+    <!-- css.dev --> <link type="text/css" href="css/ext/jquery.dd-3.3/skin2.css" rel="Stylesheet" />
+
+    <!-- css.dev --> <link type="text/css" href="css/ext/joyride-2.0.3/joyride-2.0.3.css" rel="Stylesheet"/>
+    <!-- css.dev --> <link type="text/css" href="css/ext/jcrop-0.9.10-p1/jcrop.css" rel="Stylesheet" /> 
         	
-	<!-- SOTE styles -->
 	<!-- css.dev --> <link type="text/css" href="css/map.css" rel="Stylesheet" /> 
 	<!-- css.dev --> <link type="text/css" href="css/dateSpan.css" rel="Stylesheet" /> 
 	<!-- css.dev --> <link type="text/css" href="css/menuPicker.css" rel="Stylesheet" /> 
@@ -44,56 +42,42 @@
 	<!-- css.dev --> <link type="text/css" href="css/bank.css" rel="Stylesheet" /> 
 	<!-- css.dev --> <link type="text/css" href="css/selector.css" rel="Stylesheet" /> 
 	<!-- css.dev --> <link type="text/css" href="css/sote.css" rel="Stylesheet" /> 
-    <!-- css.dev --> <link type="text/css" href="css/ext/jcrop/jcrop.css" rel="Stylesheet" /> 
 	<!-- css.dev --> <link type="text/css" href="css/splash.css" rel="Stylesheet" /> 
+    <!-- css.dev --> <link type="text/css" href="css/palette.css" rel="Stylesheet"/>
 	
-	<!-- Joyride style -->
-    <!-- css.dev --> <link rel="stylesheet" href="css/ext/joyride/joyride-2.0.3.css" />
-        	
-        	
+        	  	
 	<!-- JavaScript resources ============================================= -->
 	<!-- <script type="text/javascript" src="js/worldview-min.js?v=@BUILD_NONCE@&mobile"></script> -->
-	
+		
 	<!-- Dependency --> 
-	<!-- js.dev --> <script src="js/ext/yui/yahoo-min.js" ></script>
-	
-	<!-- Event source file -->
-	<!-- js.dev --> <script src="js/ext/yui/event-min.js" ></script>
-	
-	<!-- JQuery mobile load should be after SOTE-specific JS but didn't work at first;  need to retry -->
-	<!-- js.dev --> <script type="text/javascript" src="js/ext/jquery/jquery-1.6.4.js"></script>
-	<!-- js.dev --> <script type="text/javascript" src="js/ext/jqueryui-1.8.16/jquery-ui.min.js" ></script>
-	<!-- js.dev --> <script type="text/javascript" src="js/ext/jquery/jquery.mobile-1.0rc2.js"></script>
-	
-	<!-- Combo-handled YUI files: -->
-	<!-- js.dev --> <script type="text/javascript" src="js/ext/yui/combo-event-dragdrop-container-min.js"></script>
-	<script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
-	<script src="http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js"></script>
-	<script src="http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js"></script>
-	<script src="http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js"></script>
-	<script src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
-	<script src="http://yui.yahooapis.com/2.9.0/build/button/button-min.js"></script>
-	<script src="http://yui.yahooapis.com/2.9.0/build/container/container-min.js"></script>
-	<script src="http://yui.yahooapis.com/2.9.0/build/storage/storage-min.js" ></script>
-	<script src="http://yui.yahooapis.com/2.9.0/build/dom/dom-min.js"></script>
+    <!-- JQuery mobile load should be after SOTE-specific JS but didn't work at first;  need to retry -->
+    <!-- js.dev --> <script type="text/javascript" src="js/ext/jquery-1.6.4/jquery.js"></script>
+    <!-- js.dev --> <script type="text/javascript" src="js/ext/jqueryui-1.8.16/jquery-ui.min.js" ></script>
+    <!-- js.dev --> <script type="text/javascript" src="js/ext/jquery.mobile-1.0rc2/jquery.mobile.js"></script>
+    
+	<!-- js.dev --> <script type="text/javascript" src="js/ext/yui-2.9.0/yahoo/yahoo.js"></script>
+	<!-- js.dev --> <script type="text/javascript" src="js/ext/yui-2.9.0/event/event.js"></script>
+    <!-- js.dev --> <script type="text/javascript" src="js/ext/yui-2.9.0/dom/dom.js"></script>
+	<!-- js.dev --> <script type="text/javascript" src="js/ext/yui-2.9.0/dragdrop/dragdrop.js"></script>
+	<!-- js.dev --> <script type="text/javascript" src="js/ext/yui-2.9.0/yahoo-dom-event/yahoo-dom-event.js"></script>
+	<!-- js.dev --> <script type="text/javascript" src="js/ext/yui-2.9.0/animation/animation.js"></script>
+    <!-- js.dev --> <script type="text/javascript" src="js/ext/yui-2.9.0/connection/connection.js"></script>
+    <!-- js.dev --> <script type="text/javascript" src="js/ext/yui-2.9.0/element/element.js"></script>    
+    <!-- js.dev --> <script type="text/javascript" src="js/ext/yui-2.9.0/button/button.js"></script>
+    <!-- js.dev --> <script type="text/javascript" src="js/ext/yui-2.9.0/container/container.js"></script>
+    <!-- js.dev --> <script type="text/javascript" src="js/ext/yui-2.9.0/storage/storage.js"></script>            
 
-	<!-- Joyride files -->
-	<!-- js.dev -->	<script type="text/javascript" src="js/ext/joyride/jquery.cookie.js"></script>
-	<!-- js.dev --> <script type="text/javascript" src="js/ext/joyride/jquery.joyride-2.0.3.js"></script>
-	<!-- js.dev --> <script type="text/javascript" src="js/ext/joyride/modernizr.mq.js"></script>
+	<!-- js.dev -->	<script type="text/javascript" src="js/ext/joyride-2.0.3/jquery.cookie.js"></script>
+	<!-- js.dev --> <script type="text/javascript" src="js/ext/joyride-2.0.3/jquery.joyride-2.0.3.js"></script>
+	<!-- js.dev --> <script type="text/javascript" src="js/ext/joyride-2.0.3/modernizr.mq.js"></script>
 	
-	<!-- External Javascript includes -->
 	<!-- js.dev --> <script type="text/javascript" src="js/ext/openlayers-2.12/OpenLayers.debug.js?mobile"></script>
-	<!-- js.dev --> <script type="text/javascript" src="js/ext/datejs/date.js"></script>
-	<!-- js.dev --> <script type="text/javascript" src="js/ext/jcrop/jcrop.js"></script>
-    <!-- js.dev --> <script type="text/javascript" src="js/ext/jquery.dd/jquery.dd.js"></script>  
+	<!-- js.dev --> <script type="text/javascript" src="js/ext/jcrop-0.9.10-p1/jcrop.js"></script>
+    <!-- js.dev --> <script type="text/javascript" src="js/ext/jquery.dd-3.3/jquery.dd.js"></script>  
         
-	<!-- SOTE component includes -->
 	<!-- js.dev --> <script type="text/javascript" src="js/component.js"></script>
 	<!-- js.dev --> <script type="text/javascript" src="js/registry.js"></script> 
 	<!-- js.dev --> <script type="text/javascript" src="js/util.js"></script>
-	<!-- js.dev --> <script type="text/javascript" src="js/map.js"></script>
-	<!-- js.dev --> <script type="text/javascript" src="js/mapSote.js"></script>
 	<!-- js.dev --> <script type="text/javascript" src="js/dateSpan.js"></script>
 	<!-- js.dev --> <script type="text/javascript" src="js/rubberBand.js"></script> 
 	<!-- js.dev --> <script type="text/javascript" src="js/imageDownload.js"></script>
@@ -106,18 +90,18 @@
 	<!-- js.dev --> <script type="text/javascript" src="js/tour.js"></script>
 
     <!-- js.dev --> <script type="text/javascript" src="js/Logging.js"></script> 
+    <!-- js.dev --> <script type="text/javascript" src="js/Date.js"></script>
+    
     <!-- js.dev --> <script type="text/javascript" src="js/Worldview.js"></script>
     <!-- js.dev --> <script type="text/javascript" src="js/Worldview/Support.js"></script>
     <!-- js.dev --> <script type="text/javascript" src="js/Worldview/Scheduler.js"></script>
     <!-- js.dev --> <script type="text/javascript" src="js/Worldview/Permalink.js"></script>
+    
     <!-- js.dev --> <script type="text/javascript" src="js/Worldview/Palette.js"></script>    
     <!-- js.dev --> <script type="text/javascript" src="js/Worldview/Palette/ColorBar.js"></script>    
-    <!-- js.dev --> <script type="text/javascript" src="js/Worldview/Palette/ColorHSL.js"></script>    
-    <!-- js.dev --> <script type="text/javascript" src="js/Worldview/Palette/ColorRGBA.js"></script>    
-    <!-- js.dev --> <script type="text/javascript" src="js/Worldview/Palette/Lookup.js"></script>    
     <!-- js.dev --> <script type="text/javascript" src="js/Worldview/Palette/Palette.js"></script>    
     <!-- js.dev --> <script type="text/javascript" src="js/Worldview/Palette/PaletteSelector.js"></script>    
-    <!-- js.dev --> <script type="text/javascript" src="js/Worldview/Palette/StopRGBA.js"></script>    
+    
     <!-- js.dev --> <script type="text/javascript" src="js/Worldview/Map.js"></script>
     <!-- js.dev --> <script type="text/javascript" src="js/Worldview/Map/CanvasTile.js"></script>
 	<!-- js.dev --> <script type="text/javascript" src="js/Worldview/Map/ProductMap.js"></script>
@@ -125,9 +109,9 @@
     <!-- js.dev --> <script type="text/javascript" src="js/Worldview/Map/StaticProduct.js"></script>
 	<!-- js.dev --> <script type="text/javascript" src="js/Worldview/Map/DailyProduct.js"></script>
     <!-- js.dev --> <script type="text/javascript" src="js/Worldview/Map/GraticuleLayer.js"></script>
-    <!-- js.dev --> <script type="text/javascript" src="js/Worldview/Map/TileRenderer.js"></script>
+	
 	<!-- js.dev --> <script type="text/javascript" src="js/Worldview/Widget/Map.js"></script>
-    <!-- js.dev --> <script type="text/javascript" src="js/Worldview/Widget/PaletteManager.js"></script>
+    <!-- js.dev --> <script type="text/javascript" src="js/Worldview/Widget/Palette.js"></script>
     <!-- js.dev --> <script type="text/javascript" src="js/Worldview/Widget/WorldviewMap.js"></script>
     	
 	<!-- js.dev --> <script type="text/javascript" src="js/main.js"></script>
