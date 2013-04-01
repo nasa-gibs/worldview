@@ -885,6 +885,7 @@
         settings.$current_tip.hide();
         settings.postStepCallback(settings.$li.index(), settings.$current_tip);
         settings.postRideCallback(settings.$li.index(), settings.$current_tip);
+        methods.destroy();
       },
 
       jquery_check : function () {
