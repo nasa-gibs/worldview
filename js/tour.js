@@ -91,7 +91,7 @@ function startTour() {
 	splashOverlay.setBody(item);
 	
 	/* set up all of the callout panels */
-	var productText = "<div>"+
+	var productText = "<div id=\"productDiv\">"+
 	                      "<h3>Product Picker</h3>"+
 	                      "</br>"+
 	                      "<p class='tour'>A <span class='highlight'>Base Layer</span> is an opaque background image - you can show one at a time. An <span class='highlight'>Overlay</span> is a partially transparent layer to view on top of the background - you can stack overlays.</p>"+
@@ -178,7 +178,14 @@ function startTour() {
 	var repeatTour = function(e) {
 		console.log("repeating tour");
 		e.stopPropagation();
-		$('#joyRideTipContent').joyride('restart');
+		$('#joyRideTipContent').joyride({template : {'link':'<a href="#" class="joyride-close-tip">X</a>'},
+                                         postStepCallback : function (index, tip) {
+                                         	 if(index == 3) {
+                                                 console.log("finished tour");
+    										     conclusionPanel.show();
+    										     conclusionPanel.center();
+    										 }
+                                         }});	
 		conclusionPanel.hide();
 		console.log("exiting repeat");
 	}
