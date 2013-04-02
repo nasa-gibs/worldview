@@ -356,7 +356,7 @@ SOTE.widget.Map.prototype.init = function(){
 		        div: this.containerId,
 		        theme: null,
 		        controls: [],
-		        maxExtent: new OpenLayers.Bounds(-4194300,-4194200,4194200,4194300); //-4194304,-4194304,4194304,4194304), 
+		        maxExtent: new OpenLayers.Bounds(-4194300,-4194200,4194200,4194300),  
 		        projection:this.projection,
 		        //maxResolution:8192.0,
 		        resolutions: this.RESOLUTIONS_ON_SCREEN_POLAR_ALL,
