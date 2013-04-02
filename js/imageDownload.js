@@ -14,17 +14,6 @@ SOTE.namespace("SOTE.widget.ImageDownload");
 */
 SOTE.widget.ImageDownload = function(containerId, config){
 	this.container=document.getElementById(containerId);	
-	this.coords = null;
-	this.RESOLUTIONS_ON_SCREEN_GEO_ALL =  
-		[0.5625, 0.28125, 0.140625,
-		 0.0703125, 0.03515625, 0.017578125,
-		 0.0087890625, 0.00439453125, 0.002197265625];
-		 
-	this.RESOLUTIONS_ON_SERVER_GEO_250m =  
-		[0.5625, 0.28125, 0.140625,
-		 0.0703125, 0.03515625, 0.017578125,
-		 0.0087890625, 0.00439453125, 0.002197265625];
-	
 	
 	if (this.container==null){
 		this.setStatus("Error: element '"+containerId+"' not found!",true);
@@ -137,35 +126,42 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
       	var s = SOTE.util.extractFromQuery('switch',qs);
       	var products = SOTE.util.extractFromQuery('products',qs);
       	
+      	
       	var px = pixels.split(",");
-    	var x1 = px[0]; var y1= px[1]; var x2 = px[2]; var y2=px[3];
-    
-       	var lonlat1 = this.m.productMap.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(x1, y2));
-       	var lonlat2 = this.m.productMap.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(x2, y1));
-     
-        var dlURL  = "http://map2.vis.earthdata.nasa.gov/imagegen/?"; 
+    	var x1 = px[0]; var y1= px[1]; var x2 = px[2]; var y2=px[3]; 
+      	var lonlat1 = this.m.productMap.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(Math.floor(x1), Math.floor(y2)));
+       	var lonlat2 = this.m.productMap.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(Math.floor(x2), Math.floor(y1)));
+       
+        var dlURL  = "http://map2.vis.earthdata.nasa.gov/imagegen/index2.php?"; 
          
-         
+        var conversionFactor = 256;
+        if (s=="geographic") {
+        	conversionFactor = 0.002197;
+        }
       	 //var dTime = new Date((time.split(/T/))[0]+"T00:00:00");
-      	 var dTime = SOTE.util.UTCDateFromISO8601String(time);
-      	 dTime.setHours(0);
-      	 dTime.setMinutes(0);
-      	 dTime.setSeconds(0);
+      	var dTime = SOTE.util.UTCDateFromISO8601String(time);
+      	dTime.setHours(0);
+      	dTime.setMinutes(0);
+      	dTime.setSeconds(0);
       	 
       	 //Julian date, padded with two zeros (to ensure the julian date is always in DDD format).
-      	 var jDate = "00" + (1+Math.ceil((dTime - new Date(dTime.getFullYear(),0,1)) / 86400000));
-      	 dlURL += "TIME="+dTime.getFullYear()+(jDate).substr((jDate.length)-3);
+      	var jDate = "00" + (1+Math.ceil((dTime - new Date(dTime.getFullYear(),0,1)) / 86400000));
+      	dlURL += "TIME="+dTime.getFullYear()+(jDate).substr((jDate.length)-3);
       	 
       	
-      	 dlURL += "&extent="+lonlat1.lon+","+lonlat1.lat+","+lonlat2.lon+","+lonlat2.lat;
+      	dlURL += "&extent="+lonlat1.lon+","+lonlat1.lat+","+lonlat2.lon+","+lonlat2.lat;
+      	 
+      	dlURL += "&switch="+s;
       	
-      	 dlURL +="&layers=";
+      	dlURL +="&layers=";
       	//Reverse the order of overlays to get the correct layer ordering.
+      	//baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,arctic_coastlines,MODIS_Terra_Sea_Ice
+      	//baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,sedac_bound_nogray,MODIS_Terra_Aerosol
     	if (products != ""){
     		var a = products.split("~");
-    		var base = a[0].split(/[\.,]/);
+    		var base = a[0].split(",");
     		
-    		var overlays = a[1].split(".");
+    		var overlays = a[1].split(",");
     		overlays.reverse(); overlays.pop();
     		for(var i=1; i<base.length; ++i){
     			dlURL += base[i]+",";
@@ -180,13 +176,13 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
     	}
     	
     	
-      	 var imgWidth=0; var imgHeight=0;
+      	var imgWidth=0; var imgHeight=0;
     	    
-    	 $("select#selImgResolution").change(function () {
+    	$("select#selImgResolution").change(function () {
              	    imgRes =  $("#selImgResolution option:selected").val(); 
-                    imgWidth =  Math.round((Math.abs(lonlat2.lon - lonlat1.lon) / 0.002197) / Number(imgRes));
-    				imgHeight = Math.round((Math.abs(lonlat2.lat - lonlat1.lat) / 0.002197) / Number(imgRes)); 
-    	 		    imgFilesize =  ((imgWidth * imgHeight * 24) / 8388608).toFixed(2);
+                    imgWidth =  Math.round((Math.abs(lonlat2.lon - lonlat1.lon) / conversionFactor) / Number(imgRes));
+    				imgHeight = Math.round((Math.abs(lonlat2.lat - lonlat1.lat) / conversionFactor) / Number(imgRes)); 
+    	 		    imgFilesize =  ((   imgWidth * imgHeight * 24) / 8388608).toFixed(2);
     
         	$("#imgWidth").text((imgWidth));
         	$("#imgHeight").text((imgHeight));

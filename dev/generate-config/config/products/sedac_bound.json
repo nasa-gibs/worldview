@@ -33,7 +33,7 @@
     "properties": {
         "defaultLayer": "true",
         "format": "image/png",
-        "layer": "sedac_bound",
+        "layer": "sedac_bound_nogray",
         "opacity": 0.95,
         "tileSize": [
             512,

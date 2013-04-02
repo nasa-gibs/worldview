@@ -356,7 +356,7 @@ SOTE.widget.Map.prototype.init = function(){
 		        div: this.containerId,
 		        theme: null,
 		        controls: [],
-		        maxExtent: new OpenLayers.Bounds(-4194304,-4194304,4194304,4194304), 
+		        maxExtent: new OpenLayers.Bounds(-4194300,-4194200,4194200,4194300); //-4194304,-4194304,4194304,4194304), 
 		        projection:this.projection,
 		        //maxResolution:8192.0,
 		        resolutions: this.RESOLUTIONS_ON_SCREEN_POLAR_ALL,
@@ -509,7 +509,7 @@ SOTE.widget.Map.prototype.init = function(){
 		  	}
 		  	else
 		  	{
-		  		this.setExtent("-4194304,-4194304,4194304,4194304",true);
+		  		this.setExtent("-4194300,-4194200,4194200,4194300",true);
 		  		this.fire(); 
 		  	}
 					  		
@@ -575,7 +575,7 @@ SOTE.widget.Map.prototype.addLayers = function(layers)
 			layers[i].numZoomLevels = (this.projection == "EPSG:4326")? 9:6;
 			
 		if (!this.checkWmsParam(layers[i].maxExtent))
-			layers[i].maxExtent = (this.projection == "EPSG:4326")? [-180, -1350, 180, 90]:[-4194304,-4194304,4194304,4194304];
+			layers[i].maxExtent = (this.projection == "EPSG:4326")? [-180, -1350, 180, 90]:[-4194300,-4194200,4194200,4194300];
 			
 		if (!this.checkWmsParam(layers[i].maxResolution))
 			layers[i].maxResolution = (this.projection == "EPSG:4326")? 0.5625: 8192.0;
