@@ -239,8 +239,9 @@
 			replace=""
 			byline="true"/>
 		
-		<!-- Move the jQuery images to a location where it can be found
-		     in the minified form -->
+		<!-- Move the images to locations where it can be found in the minified 
+		     form since the URLs in the CSS are relative and the location of
+		     the css has changed -->
 		<mkdir dir="${build.web.css.dir}/images"/>
 		<move todir="${build.web.dir}/images">
 		  <fileset dir="${build.web.css.dir}/ext/jquery.mobile-1.0rc2/images">
@@ -250,7 +251,7 @@
 		<move todir="${build.web.css.dir}/images/jquery.dd-3.3">
           <fileset dir="${build.web.css.dir}/ext/jquery.dd-3.3/images/jquery.dd-3.3"/>
         </move>
-
+        <move todir="${build.web.css.dir}" file="${build.web.css.dir}/ext/jcrop-0.9.10-p1/Jcrop.gif"/>
 	</target>
     
     <target name="start-test-server" depends="deps">
