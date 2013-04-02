@@ -137,7 +137,7 @@
             settings.$document.on('click.joyride', '.joyride-close-tip', function (e) {
               if(e.target.text === "X") {
               	e.preventDefault();
-              	methods.end();
+              	methods.endNoCallback();
               }
             });
 
@@ -887,6 +887,20 @@
         settings.postRideCallback(settings.$li.index(), settings.$current_tip);
         methods.destroy();
       },
+
+	  endNoCallback : function() {
+	  	        if (settings.cookieMonster) {
+          $.cookie(settings.cookieName, 'ridden', { expires: 365, domain: settings.cookieDomain });
+        }
+
+        if (settings.timer > 0) {
+          clearTimeout(settings.automate);
+        }
+
+        $('.joyride-modal-bg').hide();
+        settings.$current_tip.hide();
+        methods.destroy();
+	  },
 
       jquery_check : function () {
         // define on() and off() for older jQuery

@@ -121,9 +121,27 @@ function startTour() {
 	document.getElementById("datePanel").innerHTML = dateText;
 	
 	var toolbarText = "<div>"+
-	                      "<h3>Tool Bar</h3>"+
+	                      "<h3>Toolbar</h3>"+
 	                      "</br>"+
-	                      "<p class='tour\'>The <span class='highlight'>Tool Bar</span> includes tools to show arctic and antarctic views of the planet, create a shareable link, and download an image.  You can also view the \"About\" page to get more information on Worldview.</p>"+
+	                 	  "<p>The toolbar provides several additional utilities for interacting with Worldview.</p>"+
+	                      "<table class=\"tour\">"+
+	                          "<tr>" +
+	                              "<td><img src=\"images/permalinkon.png\"</td>"+
+	                              "<td><p class=\"tour\">The permalink icon lets you create a permanent, shareable link to a particular view in Worldview.</p></td>"+
+	                          "</tr>" + 
+	                          "<tr>" +
+	                              "<td><img src=\"images/globe.png\"</td>"+
+	                              "<td><p class=\"tour\">The globe icon lets you change between Arctic, geographic, and Antarctic projections of the world.</p></td>"+
+	                          "</tr>" +
+	                          "<tr>" +
+	                              "<td><img src=\"images/camera.png\"</td>"+
+	                              "<td><p class=\"tour\">The camera icon lets you download an image of your current view in Worldview. Palettes are not yet supporoted with this feature.</p></td>"+
+	                          "</tr>" + 
+	                          "<tr>" +
+	                              "<td><img src=\"images/informationon.png\"</td>"+
+	                              "<td><p class=\"tour\">The information icon provides you with more information on Worldview and its data sources.</p></td>"+
+	                          "</tr>" +
+	                      "</table>" +
 	                      "</br>"+
 		      	      "</div>";
 	document.getElementById("toolbarPanel").innerHTML = toolbarText;

@@ -84,7 +84,8 @@ button.skipTour:hover {
 
 /* tour panels */
 table.tour td{ 
-  padding:15px; }
+  padding:2px; 
+  vertical-align: top; }
 
 p.tour{ 
   color:white;
