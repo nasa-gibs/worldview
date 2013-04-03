@@ -185,8 +185,7 @@ Worldview.Map.DailyProduct = function(map, config) {
                     tileClass: Worldview.Map.CanvasTile
                 };
             }
-            currentLayer = self.createLayer(additionalOptions);
-            currentLayer.mergeNewParams({ time: currentDay });
+            currentLayer = self.createLayer(additionalOptions, currentDay);
             if ( lookupTable !== null ) {
                 currentLayer.lookupTable = lookupTable;
             }

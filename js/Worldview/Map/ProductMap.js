@@ -451,7 +451,6 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
             config.parameters.projection = 
                 mapConfig.projections[proj].projection;
         }
-
         if ( config.product === "daily" ) {
             return Worldview.Map.DailyProduct(map, config);
         } else if ( config.product === "static" ) {
