@@ -4,22 +4,22 @@ function showSelector(e){
 	console.log("show selector");
 	var selector = e.data.selector;
 	selector.show();
-	
+	var myid = "selector_c";
 	// force center
 	selector.center();
 	var viewWidth = $(window).width();
-	var selWidth = parseInt(YAHOO.util.Dom.getStyle(selector.id, 'width'), 10);
+	var selWidth = parseInt(YAHOO.util.Dom.getStyle(myid, 'width'), 10);
 	var newX = (viewWidth - selWidth)/2;
-	YAHOO.util.Dom.setX(selector.id, newX);
+	YAHOO.util.Dom.setX(myid, newX);
 
 	// move if tour window is showing
 	var classList = document.getElementsByClassName('joyride-tip-guide bordered');
 	if(classList.length > 2) {
 		if((classList[0].style.display === "block") || (classList[1].style.display === "block")){
 	   		var tourWidth = $(".joyride-tip-guide").width();
-			var pos = YAHOO.util.Dom.getX(selector.id);
+			var pos = YAHOO.util.Dom.getX(myid);
 			var newX = parseInt(pos, 10) + tourWidth - 20;
-			YAHOO.util.Dom.setX(selector.id, newX);
+			YAHOO.util.Dom.setX(myid, newX);
 		}
 	}
 }
