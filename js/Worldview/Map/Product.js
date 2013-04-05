@@ -75,44 +75,37 @@ Worldview.Map.Product = function(c) {
             properties = $.extend(true, {}, config.properties, 
                     additionalProperties);
         }  
+        var layer;
         if ( config.type === "wms" ) {
-            if ( day ) {
-                config.parameters.time = day;    
-            }
             // HACK 
             // TWMS requires an exact order for the parameters. Rebuild the 
             // parameter object and ensure the correct order. 
             if ( config.type === "wms" ) {
                 var oldParameters = config.parameters;
-                if ( oldParameters.time ) {
-                    config.parameters = {
-                        time: oldParameters.time,
-                        layers: oldParameters.layers,
-                        format: oldParameters.format
-                    };
-                } else {
-                    config.parameters = {
-                        layers: oldParameters.layers,
-                        format: oldParameters.format
-                    };                    
-                }
+                config.parameters = {
+                    layers: oldParameters.layers,
+                    format: oldParameters.format
+                };                    
                 $.each(oldParameters, function(key, value) {
-                    if ( key !== "layers" && key !== "format" 
-                            && key !== "time") {
+                    if ( key !== "layers" && key !== "format") {
                         config.parameters[key] = value;
                     }    
                 });
             }            
-            return new OpenLayers.Layer.WMS(config.name, config.url, 
+            layer = new OpenLayers.Layer.WMS(config.name, config.url, 
                     config.parameters, properties);
         } else if ( config.type === "wmts" ) {
-            return new OpenLayers.Layer.WMTS(properties);
+            layer = new OpenLayers.Layer.WMTS(properties);
         } else if ( config.type === "graticule" ) {
-            return new Worldview.Map.GraticuleLayer(config.name, 
+            layer = new Worldview.Map.GraticuleLayer(config.name, 
                     properties);
         } else {
             throw new Error("Unsupported layer type: " + config.type);
         }
+        if ( day ) { 
+            layer.mergeNewParams({time: day});
+        }
+        return layer;
     };
     
     init();

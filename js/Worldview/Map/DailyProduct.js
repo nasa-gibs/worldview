@@ -179,11 +179,9 @@ Worldview.Map.DailyProduct = function(map, config) {
             currentLayer = cachedLayers[currentDay];
             delete cachedLayers[currentDay];
         } else {
-            var additionalOptions = null;
+            var additionalOptions = {};
             if ( lookupTable !== null ) {
-                additionalOptions = {
-                    tileClass: Worldview.Map.CanvasTile
-                };
+                additionalOptions.tileClass = Worldview.Map.CanvasTile;
             }
             currentLayer = self.createLayer(additionalOptions, currentDay);
             if ( lookupTable !== null ) {
