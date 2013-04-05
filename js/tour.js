@@ -53,8 +53,8 @@ function startTour() {
 	var pos, width, height, xval, yval; // helpful calulation vars
 	
 	// splash screen overlay
-	var splashOverlay = new YAHOO.widget.Panel("splash", { zIndex:1020, visible:false, modal:true, draggable:false } );
-	var item = "<div>"+
+	var splashOverlay = new YAHOO.widget.Panel("splash", { zIndex:1020, visible:false, modal:true, draggable:false,  } );
+	var item = "<div class=\"splash\">"+
 		           "<h3>Welcome to Worldview!</h3>"+
 		           "</br>"+
 		           "<center>"+
@@ -173,7 +173,7 @@ function startTour() {
 																	  visible:false, 
 																	  modal:true,
 																	  draggable:false});
-	var conclusionText = "<div>"+
+	var conclusionText = "<div class=\"splash\">"+
 							 "<center>"+
 	                             "<h3>Finished!</h3>"+
 	                             "</br>"+
