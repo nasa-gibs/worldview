@@ -69,41 +69,31 @@ Worldview.Map.Product = function(c) {
      * Return:
      * An OpenLayers Layer.
      */
-    self.createLayer = function(additionalProperties, day) {
+    self.createLayer = function(additionalProperties, additionalParameters) {
         var properties = config.properties;
         if ( additionalProperties ) {
             properties = $.extend(true, {}, config.properties, 
                     additionalProperties);
+        }
+        var parameters = config.parameters;
+        if ( additionalParameters ) {
+            parameters = $.extend(true, {}, config.parameters, 
+                    additionalParameters);
         }  
         var layer;
         if ( config.type === "wms" ) {
-            // HACK 
-            // TWMS requires an exact order for the parameters. Rebuild the 
-            // parameter object and ensure the correct order. 
-            if ( config.type === "wms" ) {
-                var oldParameters = config.parameters;
-                config.parameters = {
-                    layers: oldParameters.layers,
-                    format: oldParameters.format
-                };                    
-                $.each(oldParameters, function(key, value) {
-                    if ( key !== "layers" && key !== "format") {
-                        config.parameters[key] = value;
-                    }    
-                });
-            }            
-            layer = new OpenLayers.Layer.WMS(config.name, config.url, 
-                    config.parameters, properties);
+            layer = new Worldview.Map.TWMSLayer(config.name, config.url, 
+                    parameters, properties);
         } else if ( config.type === "wmts" ) {
             layer = new OpenLayers.Layer.WMTS(properties);
+            if ( parameters && parameters.time ) {
+                layer.mergeNewParams({"time": parameters.time});
+            }
         } else if ( config.type === "graticule" ) {
             layer = new Worldview.Map.GraticuleLayer(config.name, 
                     properties);
         } else {
             throw new Error("Unsupported layer type: " + config.type);
-        }
-        if ( day ) { 
-            layer.mergeNewParams({time: day});
         }
         return layer;
     };
