@@ -127,8 +127,20 @@ Worldview.Widget.Map = function(containerId, config) {
     self.loadFromQuery = function(queryString) {
         log.debug("WorldviewMap.loadFromQuery: " + queryString);
         var query = Worldview.queryStringToObject(queryString);
+        if ( query.map ) {
+            self.setValue(query.map);
+        } else if ( query.center && query.zoom ) {
+            try {
+                var coordinate = query.center.split(",");
+                var lat = parseFloat(coordinate[0]);
+                var lon = parseFloat(coordinate[1]);
+                var center = new OpenLayers.LonLat(lon, lat);
+                self.productMap.map.setCenter(center, parseInt(query.zoom));
+            } catch ( error ) {
+                log.warn("Unable to set center and zoom: " + error);
+            }            
+        }
         self.updateComponent(queryString);
-        self.setValue(query.map);
     };
     
     /**
