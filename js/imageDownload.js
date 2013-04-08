@@ -27,7 +27,7 @@ SOTE.widget.ImageDownload = function(containerId, config){
 	this.alignTo = config.alignTo;
 	this.id = containerId;
 	this.m = config.m;
-	this.WMTSLayer = null;
+	
 	
     if (config.baselayer === undefined)
   	{
@@ -65,8 +65,6 @@ SOTE.widget.ImageDownload.prototype.init = function(){
 		alert("No REGISTRY found!  Cannot register Download!");
 	}
 
-	this.projectionSwitch = "geographic";
-		
 	var htmlElements = "<div>Resolution:<select id='selImgResolution'><option value='1'>250m</option><option value='2'>500m</option><option value='4'>1km</option><option value='20'>5km</option><option value='40'>10km</option></select>";
     htmlElements +="<br />Format: <select id='selImgFormat'><option value='image/jpeg'>JPEG</option><option value='image/png'>PNG</option><option value='image/geotiff'>GeoTIFF</option></select>";
     htmlElements +="<br />Raw Image Size: ~ <span id='imgFileSize'> </span> MB <br />(<span id='imgWidth''></span> x <span id='imgHeight'></span> pixels)";
@@ -131,12 +129,20 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
     	var x1 = px[0]; var y1= px[1]; var x2 = px[2]; var y2=px[3]; 
       	var lonlat1 = this.m.productMap.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(Math.floor(x1), Math.floor(y2)));
        	var lonlat2 = this.m.productMap.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(Math.floor(x2), Math.floor(y1)));
-       
+        
         var dlURL  = "http://map2.vis.earthdata.nasa.gov/imagegen/index2.php?"; 
          
         var conversionFactor = 256;
         if (s=="geographic") {
+        	if( !(0 != $('#selImgFormat option[value=KMZ]').length)) {
+        		$('#selImgFormat').append( $('<option></option>').val("KMZ").text("KMZ"));
+        	}
         	conversionFactor = 0.002197;
+        }
+        else { //polar 
+       	 if( 0 != $('#selImgFormat option[value=KMZ]').length) {
+        		$('#selImgFormat option[value=KMZ]').remove();
+        	}
         }
       	 //var dTime = new Date((time.split(/T/))[0]+"T00:00:00");
       	var dTime = SOTE.util.UTCDateFromISO8601String(time);
@@ -155,9 +161,7 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
       	
       	dlURL +="&layers=";
       	//Reverse the order of overlays to get the correct layer ordering.
-      	//baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,arctic_coastlines,MODIS_Terra_Sea_Ice
-      	//baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,sedac_bound_nogray,MODIS_Terra_Aerosol
-    	if (products != ""){
+      	if (products != ""){
     		var a = products.split("~");
     		var base = a[0].split(",");
     		
