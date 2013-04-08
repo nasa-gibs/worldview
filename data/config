@@ -46754,7 +46754,7 @@
                 0,
                 0
             ],
-            "startZoom": 1,
+            "startZoom": 0,
             "units": "m"
         },
         "arctic": {
@@ -46785,7 +46785,7 @@
                 0,
                 0
             ],
-            "startZoom": 1,
+            "startZoom": 0,
             "units": "m"
         },
         "geographic": {
