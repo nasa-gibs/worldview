@@ -46678,7 +46678,7 @@
                 "http://geos.polarview.aq/geoserver/wms?"
             ]
         },
-        "sedac_bound": {
+        "sedac_bound_nogray": {
             "description": "SEDAC / National Boundaries",
             "name": "National Boundaries",
             "product": "static",
@@ -46713,7 +46713,7 @@
             "properties": {
                 "defaultLayer": "true",
                 "format": "image/png",
-                "layer": "sedac_bound",
+                "layer": "sedac_bound_nogray",
                 "opacity": 0.95,
                 "tileSize": [
                     512,

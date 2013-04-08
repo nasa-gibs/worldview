@@ -1410,7 +1410,7 @@
 		array(
 	        "label" =>  "National Boundaries",
 	        "sublabel" =>  "SEDAC / National Boundaries",
-	        "value" =>  "sedac_bound",
+	        "value" =>  "sedac_bound_nogray",
 	        "type" => "multi", "category" => "overlays"
 		),
         array(
@@ -1509,7 +1509,7 @@
 		array(
 	        "label" =>  "National Boundaries",
 	        "sublabel" =>  "SEDAC / National Boundaries",
-	        "value" =>  "sedac_bound",
+	        "value" =>  "sedac_bound_nogray",
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
