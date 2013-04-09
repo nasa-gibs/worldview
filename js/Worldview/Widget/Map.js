@@ -132,9 +132,9 @@ Worldview.Widget.Map = function(containerId, config) {
         } else if ( query.center && query.zoom ) {
             try {
                 var coordinate = query.center.split(",");
-                var lat = parseFloat(coordinate[0]);
-                var lon = parseFloat(coordinate[1]);
-                var center = new OpenLayers.LonLat(lon, lat);
+                var x = parseFloat(coordinate[0]);
+                var y = parseFloat(coordinate[1]);
+                center = [x, y];
                 self.productMap.map.setCenter(center, parseInt(query.zoom));
             } catch ( error ) {
                 log.warn("Unable to set center and zoom: " + error);

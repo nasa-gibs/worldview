@@ -510,7 +510,7 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
     var onRemoveLayer = function(event) {
         refreshZOrder();
     };
-            
+           
     init();
     return self;
 }

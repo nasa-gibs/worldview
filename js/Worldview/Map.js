@@ -17,6 +17,8 @@ Worldview.namespace("Map");
 
 $(function(ns) {
     
+    var logPosition = Logging.getLogger("Worldview.Map.Position");
+    
     /**
      * Constant: COORDINATE_CONTROLS
      * An object that contains OpenLayers.Contorl.MousePosition objects
@@ -31,23 +33,35 @@ $(function(ns) {
      */
     ns.COORDINATE_CONTROLS = {
         "geographic": new OpenLayers.Control.MousePosition({
-            formatOutput: function(mouseLonLat) {                           
-                    return mouseLonLat.lon.toFixed(3) + "&#176;, " + 
-                           mouseLonLat.lat.toFixed(3) + "&#176;";
-             },   
+            formatOutput: function(mouseLonLat) { 
+                if ( logPosition.isDebugEnabled() ) {
+                    logPosition.debug(mouseLonLat.lon.toFixed(3) + "," + 
+                                      mouseLonLat.lat.toFixed(3));    
+                }                          
+                return mouseLonLat.lon.toFixed(3) + "&#176;, " + 
+                       mouseLonLat.lat.toFixed(3) + "&#176;";
+            }  
         }),
         "arctic": new OpenLayers.Control.MousePosition({
-            formatOutput: function(mouseLonLat) {           
-                    return "EPSG:3995 coords: " + 
-                            Math.round(mouseLonLat.lon) + "m, " + 
-                            Math.round(mouseLonLat.lat) + "m";
-             }
+            formatOutput: function(mouseLonLat) { 
+                if ( logPosition.isDebugEnabled() ) {
+                    logPosition.debug(Math.round(mouseLonLat.lon) + "," + 
+                                      Math.round(mouseLonLat.lat));  
+                }                          
+                return "EPSG:3995 coords: " + 
+                        Math.round(mouseLonLat.lon) + "m, " + 
+                        Math.round(mouseLonLat.lat) + "m";          
+            }
         }),
         "antarctic": new OpenLayers.Control.MousePosition({
             formatOutput: function(mouseLonLat) {           
-                    return "EPSG:3031 coords: " + 
-                            Math.round(mouseLonLat.lon) + "m, " + 
-                            Math.round(mouseLonLat.lat) + "m";
+                if ( logPosition.isDebugEnabled() ) {
+                    logPosition.debug(Math.round(mouseLonLat.lon) + "," + 
+                                      Math.round(mouseLonLat.lat));  
+                }                           
+                return "EPSG:3031 coords: " + 
+                        Math.round(mouseLonLat.lon) + "m, " + 
+                        Math.round(mouseLonLat.lat) + "m";                  
             },
         })
     };
