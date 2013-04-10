@@ -438,7 +438,11 @@ SOTE.widget.Bank.prototype.unserialize = function(string){
 		var items = categories[i].split(/[\.,]/);
 		unserialized[items[0]] = new Array;
 		for(var j=1; j<items.length; j++){
-			unserialized[items[0]].push({"value":items[j]});
+            if ( this.meta && !this.meta[items[j]] ) {
+                this.log.warn("No such product: " + items[j]);
+            } else {
+			    unserialized[items[0]].push({"value":items[j]});
+			}
 		}
 		
 	}
