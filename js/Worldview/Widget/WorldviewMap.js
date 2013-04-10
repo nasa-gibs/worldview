@@ -76,7 +76,7 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
                 var projection = state["switch"];
                 if ( !(projection in self.productMap.mapConfig.projections) ) {
                     var defaultProjection = 
-                        self.productMap.mapConfig.defaultProjection;
+                        self.productMap.mapConfig.config.defaultProjection;
                     log.warn("Invalid projection: " + projection + ", using: " + 
                             defaultProjection);
                     projection = defaultProjection;
