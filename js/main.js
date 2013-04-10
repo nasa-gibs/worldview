@@ -83,15 +83,27 @@ $(function() {// Initialize "static" vars
         //REGISTRY.addEventListener("hazard","products");*/
         
         var queryString = Worldview.Permalink.decode(window.location.search.substring(1));
-
+        var initOrder = [
+            ss, // projection
+            a, // products
+            map, // time
+            m, // map
+            palettes
+        ];
+        
         function testQS(){
             REGISTRY.isLoadingQuery = true;
+            $.each(initOrder, function(index, component) {
+                component.loadFromQuery(queryString);    
+            });
+            /*
             var comps = REGISTRY.getComponents();
             for (var i=0; i < comps.length; i++) {
                 if(typeof comps[i].obj.loadFromQuery == 'function'){
                     comps[i].obj.loadFromQuery(queryString);
                 }
             }
+            */
             REGISTRY.isLoadingQuery = false;
         }
                 
