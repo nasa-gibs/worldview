@@ -254,7 +254,10 @@ Worldview.Scheduler = function(config) {
             self.stats.queued++;
             job.queuedTime = new Date().getTime();
         }
+        // Switch to FIFO so that the most recent tiles are always rendered
+        // first
         queue.push(job);
+        //queue.shift(job);
     };
     
     /*
@@ -262,7 +265,10 @@ Worldview.Scheduler = function(config) {
      */
     var processQueue = function() {
         if ( queue.length > 0 && executing < maxWorkers ) {
-            var job = queue.shift();
+            // Switch to FIFO so that the most recent tiles are always rendered
+            // first
+            //var job = queue.shift();
+            var job = queue.pop();
             execute(job);
         }         
     };
