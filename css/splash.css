@@ -214,3 +214,7 @@ ul.tour li{
     padding:10px;
     border:1px solid black;
 }
+
+.joyride-tip-guide {
+    z-index: 100;
+}

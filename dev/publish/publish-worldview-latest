@@ -9,21 +9,8 @@
 # Administrator of the National Aeronautics and Space Administration.
 # All Rights Reserved.
 #
-set -e
+exec publish-worldview preview latest
 
-PROG=$(basename "$0")
-
-die() {
-    echo "$PROG: ERROR: $@" >&2
-    exit 1
-}
-
-SOURCE_DIR=~/src/worldview
-
-[ -e "$SOURCE_DIR" ] || die "No such directory: $SOURCE_DIR"
-
-( cd "$SOURCE_DIR" ; git pull )
-ant -f "$SOURCE_DIR/build.xml" deploy
 
 
 

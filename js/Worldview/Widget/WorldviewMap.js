@@ -76,7 +76,7 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
                 var projection = state["switch"];
                 if ( !(projection in self.productMap.mapConfig.projections) ) {
                     var defaultProjection = 
-                        self.productMap.mapConfig.defaultProjection;
+                        self.productMap.mapConfig.config.defaultProjection;
                     log.warn("Invalid projection: " + projection + ", using: " + 
                             defaultProjection);
                     projection = defaultProjection;
@@ -94,10 +94,12 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
                 if ( state.time === undefined ) {
                     state.time = today.toISOStringDate();
                 }
-                var date = Date.parseISOString(state.time);
-                if ( isNaN(date.getTime()) ) {
-                    log.warn("Invalid time: " + state.time + 
-                            ", using today: " + today.toISOStringDate());
+                var date;
+                try {
+                    date = Date.parseISOString(state.time);
+                } catch ( error ) {
+                    log.warn("Invalid time: " + state.time + ", reason: " + 
+                            error + "; using today: " + today.toISOStringDate());
                     state.time = today.toISOStringDate();
                     date = today;                   
                 }

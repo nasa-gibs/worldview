@@ -127,8 +127,20 @@ Worldview.Widget.Map = function(containerId, config) {
     self.loadFromQuery = function(queryString) {
         log.debug("WorldviewMap.loadFromQuery: " + queryString);
         var query = Worldview.queryStringToObject(queryString);
+        if ( query.map ) {
+            self.setValue(query.map);
+        } else if ( query.center && query.zoom ) {
+            try {
+                var coordinate = query.center.split(",");
+                var x = parseFloat(coordinate[0]);
+                var y = parseFloat(coordinate[1]);
+                center = [x, y];
+                self.productMap.map.setCenter(center, parseInt(query.zoom));
+            } catch ( error ) {
+                log.warn("Unable to set center and zoom: " + error);
+            }            
+        }
         self.updateComponent(queryString);
-        self.setValue(query.map);
     };
     
     /**

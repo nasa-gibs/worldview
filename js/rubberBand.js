@@ -71,7 +71,6 @@ SOTE.widget.RubberBand.prototype.init = function(){
 
 SOTE.widget.RubberBand.toggle = function(o){
 	var self = o.data.self;
-
     var toggleOn = function() {
         self.state = "on";
         $("#"+self.id+"camera_link img").attr("src",self.onicon);
@@ -96,7 +95,7 @@ SOTE.widget.RubberBand.toggle = function(o){
         self.paletteWidget.setValue("");        
     };
     
-	if(self.state == "off" && self.projectionSwitch == "geographic"){
+	if(self.state == "off") { // && self.projectionSwitch == "geographic"){
 	    // Confirm with the user they want to continue, and if so, disable
 	    // the palettes before bringing up the crop box.
 	    if (self.currentPalettes) {
@@ -109,7 +108,7 @@ SOTE.widget.RubberBand.toggle = function(o){
             toggleOn();
         }
 	}
-	else if(self.projectionSwitch == "geographic"){
+	else { //}(self.projectionSwitch == "geographic"){
 		self.state = "off";
 		$("#"+self.id+"camera_link img").attr("src",self.icon);
 		self.jcropAPI.destroy(); 
@@ -118,9 +117,9 @@ SOTE.widget.RubberBand.toggle = function(o){
 		    self.paletteWidget.setValue(self.previousPalettes);
 		}
 	}
-	else {
+	/*else {
   		SOTE.util.throwError("The download feature is currently available for geographic projection only.");
-	}
+	}*/
 }
 
 /**
@@ -253,7 +252,7 @@ SOTE.widget.RubberBand.prototype.draw =  function() {
     this.jcropAPI = $('#'+this.cropee).data('Jcrop');
             
     this.jcropAPI.setSelect([($(window).width()/2)-100,($(window).height()/2)-100,($(window).width()/2)+100,($(window).height()/2)+100]);         
-    
+
 };
 
 

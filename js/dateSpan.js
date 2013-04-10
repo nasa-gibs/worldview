@@ -471,11 +471,13 @@ SOTE.widget.DateSpan.prototype.showSliders = function(){
   *
 */
 SOTE.widget.DateSpan.prototype.setValue = function(value){
-    var d = value ? Date.parseISOString(value) 
-                  : this.getToday();
-    // Check to see if the date is valid, if not default to today
-    if (isNaN(d.getTime())) {
-        this.log.warn("Invalid time: " + value + ", using today");    
+    var d;
+    try {
+        var d = value ? Date.parseISOString(value) 
+                      : this.getToday();
+    } catch ( error ) {
+        this.log.warn("Invalid time: " + value + ", reason: " + error + 
+                       "; using today");    
         d = Worldview.today(); 
     }
 	

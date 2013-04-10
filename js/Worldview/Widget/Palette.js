@@ -37,7 +37,7 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
     
     self.getPalette = function(product) {
         var name = self.active[product];
-        if ( !name ) {
+        if ( !name || !config.palettes[name] ) {
             name = config.products[product].rendered;
         }
         if ( !name ) {

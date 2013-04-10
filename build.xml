@@ -6,7 +6,6 @@
 	
 	<property file="build.properties"/>
 	<property file="${src.ant.dir}/depend.properties"/>
-	<property file="${src.ant.dir}/deploy.properties"/>
 		
 	<include>
 		<fileset dir="${src.depend.dir}" includes="${build.depends}"/>
@@ -302,17 +301,4 @@
 			 compression="bzip2"/>
 	</target>
 
-    <target name="deploy" depends="dist">
-        <scp todir="${deploy.user}@${deploy.host}:${deploy.dir}/artifacts" trust="true" 
-            keyfile="${user.home}/.ssh/id_rsa">
-            <fileset dir="${dist.dir}">
-                <include name="*.tar.bz2"/>
-            </fileset>
-        </scp>  
-        <sshexec host="${deploy.host}"
-            username="${deploy.user}"
-            keyfile="${user.home}/.ssh/id_rsa"
-            command="rm -rf ${deploy.dir}/worldview*; ( cd ${deploy.dir}; rm -f worldview* ; find artifacts -name '*.tar.bz2' -exec tar xf {} \; ; chmod g+wx worldview* ; rm -r artifacts/*)"/>
-  </target>
-  
 </project>
