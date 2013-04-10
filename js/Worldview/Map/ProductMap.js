@@ -260,18 +260,22 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
                     var renderedName = productConfig.rendered;
                     var renderedPalette = self.mapConfig.palettes[renderedName];
                     
-                    // Find the palette that should be used instead
-                    var palette = self.mapConfig.palettes[paletteName];
-                    
-                    // Create a lookup table and map it to the color
-                    // values found in the rendered palette
-                    var indexed = Worldview.Palette.toIndexedLookup(
-                        productConfig.bins, palette, productConfig.stops);
-                    var lookup = Worldview.Palette.toColorLookup(
-                        indexed, renderedPalette.stops);
+                    if ( !renderedPalette ) {
+                        log.warn(productName + " does not support palettes");
+                    } else {
+                        // Find the palette that should be used instead
+                        var palette = self.mapConfig.palettes[paletteName];
                         
-                    // Apply     
-                    product.setLookup(lookup);
+                        // Create a lookup table and map it to the color
+                        // values found in the rendered palette
+                        var indexed = Worldview.Palette.toIndexedLookup(
+                            productConfig.bins, palette, productConfig.stops);
+                        var lookup = Worldview.Palette.toColorLookup(
+                            indexed, renderedPalette.stops);
+                            
+                        // Apply     
+                        product.setLookup(lookup);
+                    }
                 } else {
                     product.clearLookup();
                 }
