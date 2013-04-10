@@ -91,7 +91,7 @@ function startTour() {
 	splashOverlay.setBody(item);
 	
 	/* set up all of the callout panels */
-	var productText = "<div id=\"productDiv\">"+
+	var productText = "<div>"+
 	                      "<h3>Product Picker</h3>"+
 	                      "</br>"+
 	                      "<p class='tour'>A <span class='highlight'>Base Layer</span> is an opaque background image - you can show one at a time. An <span class='highlight'>Overlay</span> is a partially transparent layer to view on top of the background - you can stack overlays.</p>"+
