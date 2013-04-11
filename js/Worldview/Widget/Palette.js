@@ -197,17 +197,19 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         var selected = null;
                  
         // Palettes for the drop down, place the recommended ones first
-        $.each(productConfig.recommendedPalettes, function(index, name) {
-            var palette = config.palettes[name];
-            var colorBar = Worldview.Palette.ColorBar({
-                canvas: canvas,
-                palette: palette,
-                bins: productConfig.bins,
-                stops: productConfig.stops
+        if ( productConfig.recommendedPalettes ) {
+            $.each(productConfig.recommendedPalettes, function(index, name) {
+                var palette = config.palettes[name];
+                var colorBar = Worldview.Palette.ColorBar({
+                    canvas: canvas,
+                    palette: palette,
+                    bins: productConfig.bins,
+                    stops: productConfig.stops
+                });
+                palette.image = colorBar.toImage();
+                palettes.push(palette);    
             });
-            palette.image = colorBar.toImage();
-            palettes.push(palette);    
-        });
+        }
                  
         $.each(self.config.paletteOrder, function(index, name) {
             if ( $.inArray(name, productConfig.recommendedPalettes) >= 0 ) {

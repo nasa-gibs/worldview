@@ -41360,7 +41360,7 @@
             "bins": 14,
             "description": "Aqua / AIRS",
             "excludePalettes": [
-                "NEO_Aerosol_Depth"
+                "orange_1"
             ],
             "max": "520",
             "min": "360",
