@@ -37,6 +37,7 @@
             512
         ]
     },
+    "recommendedPalettes": [ "blue_1", "blue_3" ],
     "rendered": "AIRS_Precipitation",
     "startDate": "2012-04-07",
     "type": "wmts",

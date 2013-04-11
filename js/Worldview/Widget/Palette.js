@@ -197,10 +197,22 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         var selected = null;
                  
         // Palettes for the drop down, place the recommended ones first
-        var recommendedPalettes = [];
-        var otherPalettes = [];
+        $.each(productConfig.recommendedPalettes, function(index, name) {
+            var palette = config.palettes[name];
+            var colorBar = Worldview.Palette.ColorBar({
+                canvas: canvas,
+                palette: palette,
+                bins: productConfig.bins,
+                stops: productConfig.stops
+            });
+            palette.image = colorBar.toImage();
+            palettes.push(palette);    
+        });
                  
         $.each(self.config.paletteOrder, function(index, name) {
+            if ( $.inArray(name, productConfig.recommendedPalettes) >= 0 ) {
+                return;
+            }
             var p = self.config.palettes[name];
             
             // Skip this palette if configuration says to exclude
@@ -220,15 +232,9 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
                     stops: productConfig.stops
                 });
                 palette.image = colorBar.toImage();
-                if ( $.inArray(palette.id, 
-                        productConfig.recommendedPalettes) >= 0 ) {
-                    recommendedPalettes.push(palette);
-                } else {
-                    otherPalettes.push(palette);
-                }
+                palettes.push(palette);
             }       
         });
-        palettes = palettes.concat(recommendedPalettes, otherPalettes);
         
         $.each(palettes, function(index, palette) {
             if ( palette.id === activePalette ) {

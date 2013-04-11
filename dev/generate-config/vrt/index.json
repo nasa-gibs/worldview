@@ -66,7 +66,9 @@
     "maxIndex": 20,
     "products": [
         "MODIS_Terra_Cloud_Top_Pressure_Day",
-	"MODIS_Terra_Cloud_Top_Pressure_Night"
+	"MODIS_Terra_Cloud_Top_Pressure_Night",
+        "MODIS_Aqua_Cloud_Top_Pressure_Day",
+	"MODIS_Aqua_Cloud_Top_Pressure_Night"
     ]
 },
 {

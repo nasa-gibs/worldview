@@ -38,7 +38,7 @@
         ]
     },
     "rendered": "MODIS_Water_Vapor_5km",
-    "recommendPalettes": [ "NEO_Water_Vapor" ],
+    "recommendedPalettes": [ "blue_1" ],
     "startDate": "2012-04-07",
     "type": "wmts",
     "units": "cm"

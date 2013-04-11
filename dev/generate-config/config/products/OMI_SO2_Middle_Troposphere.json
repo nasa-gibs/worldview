@@ -37,6 +37,7 @@
             512
         ]
     },
+    "recommendedPalettes": [ "orange_1", "red_1" ],
     "rendered": "OMI_SO2_Middle_Troposphere",
     "startDate": "2012-04-07",
     "type": "wmts",

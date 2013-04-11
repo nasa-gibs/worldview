@@ -89,7 +89,7 @@
             512
         ]
     },
-    "recommendPalettes": [ "NEO_Snow_Cover" ],
+    "recommendedPalettes": [ "blue_4" ],
     "rendered": "MODIS_Snow_Cover",
     "startDate": "2012-04-07",
     "type": "wmts",
