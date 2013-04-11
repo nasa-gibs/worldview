@@ -92,6 +92,7 @@ SOTE.widget.RubberBand.toggle = function(o){
         
         // Save the previous state to be restored later
         self.previousPalettes = self.currentPalettes;
+        self.paletteWidget.noRestore = true;
         self.paletteWidget.setValue("");        
     };
     
@@ -114,6 +115,7 @@ SOTE.widget.RubberBand.toggle = function(o){
 		self.jcropAPI.destroy(); 
 		$("#imagedownload").hide('slide', {direction: 'up'}, 1000); 	
 		if (self.previousPalettes) {
+		    self.paletteWidget.noResture = false;
 		    self.paletteWidget.setValue(self.previousPalettes);
 		}
 	}

@@ -23,6 +23,7 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
     self.active = {};
     self.inactive = {};
     self.alignTo = spec.alignTo;
+    self.noRestore = false;
     
     var init = function() {
         //Logging.debug("Worldview.Widget.Palette");        
@@ -97,7 +98,8 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
                 }    
             });
             $.each(self.inactive, function(product, palette) {
-                if ( $.inArray(product, state.products) >= 0 && 
+                if ( !self.noRestore && 
+                        $.inArray(product, state.products) >= 0 && 
                         !self.active[product] ) {
                     log.debug("Restoring palette for " + product);
                     self.active[product] = self.inactive[product];
