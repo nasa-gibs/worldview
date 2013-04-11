@@ -10,13 +10,12 @@ Release 0.4.0
   - First-time users can take a tour that highlights the main features
     of Worldview.
   - Image download supported in polar projections.
-  - KMZ format option added for image downloads in the geographic
-    projection.
-  - Product color palettes can be changed by clicking on the color
-    legend in My Layers.
+  - KMZ format option added for image downloads in the geographic projection.
+  - Product color palettes can be changed by clicking on the colorlegend in 
+    My Layers.
   - New product: MODIS Combined Value-Added Aerosol Optical Depth
     (Terra and Aqua / MODIS)
-  - New product: Global 250m Water Map (Terrra / MODIS, SRTM)
+  - New product: Global 250m Water Map (Terra / MODIS, SRTM)
   
 * Updates
   - Image downloads for GeoTIFF now brings up a Save As... dialog.
@@ -39,7 +38,7 @@ Release 0.4.0
   - In time slider, the "Dec" and "2013" labels can intermittently disappear 
     based on the browser's width
   - On iOS, layers cannot be reordered 
-  - Arctic land boundaries don't match actual land  
+  - Polar land boundaries don't match actual land  
   - Worldview does not work with Internet Explorer version 10 and
     below
 
