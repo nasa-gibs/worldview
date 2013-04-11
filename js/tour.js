@@ -116,7 +116,7 @@ function startTour() {
 	                   "</br>"+
 	                   "<p class='tour'>The <span class='highlight'>Date Slider</span> is used to show imagery that was observed on a specific date.  You can click the slider to choose a date or drag the slider to view changes over time.</p>"+
 	                   "<p class='tour'><span class='tryIt'>Try It!</span></p>"+
-	                   "<p class='tour'>Use the date slider to change the date to August 23, 2012.</p>"+
+	                   "<p class='tour'>Use the date slider to change the date to 2012 Aug 23.</p>"+
 		      	   "</div>";
 	document.getElementById("datePanel").innerHTML = dateText;
 	
