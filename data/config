@@ -41360,7 +41360,7 @@
             "bins": 14,
             "description": "Aqua / AIRS",
             "excludePalettes": [
-                "NEO_Aerosol_Depth"
+                "orange_1"
             ],
             "max": "520",
             "min": "360",
@@ -41460,6 +41460,10 @@
                     512
                 ]
             },
+            "recommendedPalettes": [
+                "orange_1",
+                "red_1"
+            ],
             "rendered": "AIRS_Prata_SO2_Index",
             "startDate": "2012-04-07",
             "type": "wmts",
@@ -41505,6 +41509,10 @@
                     512
                 ]
             },
+            "recommendedPalettes": [
+                "orange_1",
+                "red_1"
+            ],
             "rendered": "AIRS_Prata_SO2_Index",
             "startDate": "2012-04-07",
             "type": "wmts",
@@ -41550,6 +41558,10 @@
                     512
                 ]
             },
+            "recommendedPalettes": [
+                "blue_1",
+                "blue_3"
+            ],
             "rendered": "AIRS_Precipitation",
             "startDate": "2012-04-07",
             "stops": [
@@ -41776,6 +41788,10 @@
                     512
                 ]
             },
+            "recommendedPalettes": [
+                "blue_1",
+                "blue_3"
+            ],
             "rendered": "AIRS_Precipitation",
             "startDate": "2012-04-07",
             "stops": [
@@ -42801,6 +42817,7 @@
             "units": "K"
         },
         "MODIS_Aqua_Cloud_Top_Pressure_Day": {
+            "bins": 16,
             "description": "Aqua / MODIS",
             "max": "950",
             "min": "250",
@@ -42839,12 +42856,16 @@
                     512
                 ]
             },
+            "recommendedPalettes": [
+                "blue_4"
+            ],
             "rendered": "MODIS_Cloud_Top_Pressure",
             "startDate": "2012-04-07",
             "type": "wmts",
             "units": "hPa"
         },
         "MODIS_Aqua_Cloud_Top_Pressure_Night": {
+            "bins": 16,
             "description": "Aqua / MODIS",
             "max": "950",
             "min": "250",
@@ -42883,6 +42904,9 @@
                     512
                 ]
             },
+            "recommendedPalettes": [
+                "blue_4"
+            ],
             "rendered": "MODIS_Cloud_Top_Pressure",
             "startDate": "2012-04-07",
             "type": "wmts",
@@ -42928,6 +42952,10 @@
                     512
                 ]
             },
+            "recommendedPalettes": [
+                "purple_2",
+                "rainbow_1"
+            ],
             "rendered": "MODIS_Cloud_Top_Temp",
             "startDate": "2012-04-07",
             "type": "wmts",
@@ -42973,6 +43001,10 @@
                     512
                 ]
             },
+            "recommendedPalettes": [
+                "purple_2",
+                "rainbow_1"
+            ],
             "rendered": "MODIS_Cloud_Top_Temp",
             "startDate": "2012-04-07",
             "type": "wmts",
@@ -43257,6 +43289,10 @@
             "recommendPalettes": [
                 "NEO_Land_Temperature"
             ],
+            "recommendedPalettes": [
+                "rainbow_1",
+                "purple_2"
+            ],
             "rendered": "MODIS_Land_Surface_Temp",
             "startDate": "2012-04-07",
             "type": "wmts",
@@ -43303,8 +43339,9 @@
                     512
                 ]
             },
-            "recommendPalettes": [
-                "NEO_Land_Temperature"
+            "recommendedPalettes": [
+                "rainbow_1",
+                "purple_2"
             ],
             "rendered": "MODIS_Land_Surface_Temp",
             "startDate": "2012-04-07",
@@ -43497,8 +43534,8 @@
                     512
                 ]
             },
-            "recommendPalettes": [
-                "NEO_Snow_Cover"
+            "recommendedPalettes": [
+                "blue_4"
             ],
             "rendered": "MODIS_Snow_Cover",
             "startDate": "2012-04-07",
@@ -43686,8 +43723,8 @@
                     512
                 ]
             },
-            "recommendPalettes": [
-                "NEO_Water_Vapor"
+            "recommendedPalettes": [
+                "blue_1"
             ],
             "rendered": "MODIS_Water_Vapor_5km",
             "startDate": "2012-04-07",
@@ -43734,8 +43771,8 @@
                     512
                 ]
             },
-            "recommendPalettes": [
-                "NEO_Water_Vapor"
+            "recommendedPalettes": [
+                "blue_1"
             ],
             "rendered": "MODIS_Water_Vapor_5km",
             "startDate": "2012-04-07",
@@ -43783,7 +43820,7 @@
                 ]
             },
             "recommendPalettes": [
-                "NEO_Aerosol_Depth"
+                "orange_1"
             ],
             "rendered": "MODIS_Aerosol",
             "startDate": "2012-04-07",
@@ -44643,6 +44680,9 @@
                     512
                 ]
             },
+            "recommendedPalettes": [
+                "blue_4"
+            ],
             "rendered": "MODIS_Cloud_Top_Pressure",
             "startDate": "2012-04-07",
             "type": "wmts",
@@ -44688,6 +44728,9 @@
                     512
                 ]
             },
+            "recommendedPalettes": [
+                "blue_4"
+            ],
             "rendered": "MODIS_Cloud_Top_Pressure",
             "startDate": "2012-04-07",
             "type": "wmts",
@@ -44733,6 +44776,10 @@
                     512
                 ]
             },
+            "recommendedPalettes": [
+                "purple_2",
+                "rainbow_1"
+            ],
             "rendered": "MODIS_Cloud_Top_Temp",
             "startDate": "2012-04-07",
             "type": "wmts",
@@ -44778,6 +44825,10 @@
                     512
                 ]
             },
+            "recommendedPalettes": [
+                "purple_2",
+                "rainbow_1"
+            ],
             "rendered": "MODIS_Cloud_Top_Temp",
             "startDate": "2012-04-07",
             "type": "wmts",
@@ -45156,7 +45207,8 @@
                 ]
             },
             "recommendedPalettes": [
-                "rainbow_1"
+                "rainbow_1",
+                "purple_2"
             ],
             "rendered": "MODIS_Land_Surface_Temp",
             "startDate": "2012-04-07",
@@ -45205,7 +45257,8 @@
                 ]
             },
             "recommendedPalettes": [
-                "rainbow_1"
+                "rainbow_1",
+                "purple_2"
             ],
             "rendered": "MODIS_Land_Surface_Temp",
             "startDate": "2012-04-07",
@@ -45399,7 +45452,7 @@
                 ]
             },
             "recommendedPalettes": [
-                "blue_5"
+                "blue_4"
             ],
             "rendered": "MODIS_Snow_Cover",
             "startDate": "2012-04-07",
@@ -45869,6 +45922,9 @@
                     512
                 ]
             },
+            "recommendedPalettes": [
+                "blue_4"
+            ],
             "rendered": "OMI_Cloud_Pressure",
             "startDate": "2012-04-07",
             "type": "wmts",
@@ -45914,6 +45970,10 @@
                     512
                 ]
             },
+            "recommendedPalettes": [
+                "orange_1",
+                "red_1"
+            ],
             "rendered": "OMI_SO2_Lower_Troposphere",
             "startDate": "2012-04-07",
             "type": "wmts",
@@ -45959,6 +46019,10 @@
                     512
                 ]
             },
+            "recommendedPalettes": [
+                "orange_1",
+                "red_1"
+            ],
             "rendered": "OMI_SO2_Middle_Troposphere_to_Stratosphere",
             "startDate": "2012-04-07",
             "type": "wmts",
@@ -46004,6 +46068,10 @@
                     512
                 ]
             },
+            "recommendedPalettes": [
+                "orange_1",
+                "red_1"
+            ],
             "rendered": "OMI_SO2_Planetary_Boundary_Layer",
             "startDate": "2012-04-07",
             "type": "wmts",
@@ -46049,6 +46117,10 @@
                     512
                 ]
             },
+            "recommendedPalettes": [
+                "orange_1",
+                "red_1"
+            ],
             "rendered": "OMI_SO2_Middle_Troposphere_to_Stratosphere",
             "startDate": "2012-04-07",
             "type": "wmts",

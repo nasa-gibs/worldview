@@ -4,44 +4,73 @@ Release Notes
 http://earthdata.nasa.gov/labs/worldview/
 
 -------------------------------------------------------------------------------
+Release 0.4.0
+-------------------------------------------------------------------------------
+* New Features
+  - First-time users can take a tour that highlights the main features
+    of Worldview.
+  - Image download supported in polar projections.
+  - KMZ format option added for image downloads in the geographic projection.
+  - Product color palettes can be changed by clicking on the colorlegend in 
+    My Layers.
+  - New product: MODIS Combined Value-Added Aerosol Optical Depth
+    (Terra and Aqua / MODIS)
+  - New product: Global 250m Water Map (Terra / MODIS, SRTM)
+  
+* Updates
+  - Image downloads for GeoTIFF now brings up a Save As... dialog.
+  - Product selection can now scroll on iPads.
+  - All layers can now be removed from the map.
+  - Invalid dates can no longer be selected in the date slider.
+  - Coordinates at the mouse pointer are now updated at any location
+    in the browser window.
+  - Resizing the browser window in polar projections no longer zooms
+    all the way in.
+  - Position and zoom level preserved when switching projections.
+  - Selected products, available products, and the current projection
+    icon are now correct when visiting a polar projection from a permalink.
+  - Between 00:00 and 03:00 UTC, the previous day is shown to account
+    for the near-real time processing delay.
+  
+* Known Issues
+  - Custom color palettes are not supported on Safari 5 or earlier.
+  - Custom color palettes can not be used in image download.
+  - In time slider, the "Dec" and "2013" labels can intermittently disappear 
+    based on the browser's width
+  - On iOS, layers cannot be reordered 
+  - Polar land boundaries don't match actual land  
+  - Worldview does not work with Internet Explorer version 10 and
+    below
+
+-------------------------------------------------------------------------------
 Release 0.3.1
 -------------------------------------------------------------------------------
 * New Features
-    - Notification message can now be displayed on startup.
+  - Notification message can now be displayed on startup.
 
 * Updates
-    - Fixes issue where application can become unresponsive when going in and
-      out of many category groups.
+  - Fixes issue where application can become unresponsive when going in and
+    out of many category groups.
 
-* Known Issues
-    - In time slider, the "Dec" and "2013" labels can intermittently disappear 
-      based on the browser's width
-    - After switching to a polar projection, browser resizes trigger a change in 
-      the current view 
-    - On iOS, layers cannot be scrolled or reordered 
-    - Arctic land boundaries don't match actual land  
-    - Impossible to remove all layers unless "Empty" base layer is selected
-    - Worldview does not work with Internet Explorer version 9 and below
- 
 -------------------------------------------------------------------------------
 Release 0.3.0
 -------------------------------------------------------------------------------
 
 * New Features
-    - Full-resolution imagery can now be selected and downloaded while in the 
-      geographic projection
-    - Horizontal and vertical coordinates (e.g., latitude and longitude) of the 
-      point directly below the mouse cursor are now shown
+  - Full-resolution imagery can now be selected and downloaded while in the 
+    geographic projection
+  - Horizontal and vertical coordinates (e.g., latitude and longitude) of the 
+    point directly below the mouse cursor are now shown
 
 * Updates
-    - A toolbar was created to hold certain user interface elements 
+  - A toolbar was created to hold certain user interface elements 
 
 -------------------------------------------------------------------------------
 Release 0.2.2
 -------------------------------------------------------------------------------
 
 * Updates
-    - Fixed end-of-year bug
+  - Fixed end-of-year bug
 
 
 -------------------------------------------------------------------------------
@@ -49,7 +78,7 @@ Release 0.2.1
 -------------------------------------------------------------------------------
 
 * Updates
-    - Added Suomi NPP/VIIRS City Lights 2012 imagery layer
+  - Added Suomi NPP/VIIRS City Lights 2012 imagery layer
 
 
 -------------------------------------------------------------------------------
@@ -57,19 +86,15 @@ Release 0.2.0
 -------------------------------------------------------------------------------
 
 * New Features
-    - Redesigned time slider allows selection of dates beginning in May 2012
-    - Orbital tracks for Terra, Aqua, and Aura are available
+  - Redesigned time slider allows selection of dates beginning in May 2012
+  - Orbital tracks for Terra, Aqua, and Aura are available
 	
 * Updates
-    - A layer mask to show areas of "data vs no data" are now available for 
-      Terra and Aqua MODIS
-    - Tweaked "pannable area" to be less restrictive
-    - Overhauled the way map layers are managed;  as a result, startup time and 
-	  interactivity are improved
-
-* Known Issues
-    - Arctic land boundaries don't match actual land  
-    - Impossible to remove all layers
+  - A layer mask to show areas of "data vs no data" are now available for 
+    Terra and Aqua MODIS
+  - Tweaked "pannable area" to be less restrictive
+  - Overhauled the way map layers are managed;  as a result, startup time and 
+    interactivity are improved
 
 
 -------------------------------------------------------------------------------
@@ -77,22 +102,18 @@ Release 0.1.0
 -------------------------------------------------------------------------------
 
 * New Features
-    - User interface redesigned for product selection and currently-shown 
-      layers 
-    - Color bars are available for palette-based products
-    - Arctic and Antarctic views are integrated into main interface
-    - Lower-resolution layers are dynamically rescaled on the client to be 
-      visible at higher zoom levels
+  - User interface redesigned for product selection and currently-shown 
+    layers 
+  - Color bars are available for palette-based products
+  - Arctic and Antarctic views are integrated into main interface
+  - Lower-resolution layers are dynamically rescaled on the client to be 
+    visible at higher zoom levels
 	
 * Updates
-    - Fires are viewable on a per-day basis as opposed to "past 24/48 hours"
-    - Documentation for Worldview's backend, the Global Imagery Browse 
-      Services (GIBS), has been published (http://earthdata.nasa.gov/gibs)
-    - Worldview now uses the OGC Web Map Tile Service (WMTS) to retrieve tiled 
-      imagery from GIBS
-    - OpenLayers library updated to version 2.12 from 2.11
-    - This "release notes" document created.
-
-* Known Issues
-    - Permalinks to polar views may not retain their selected layers upon load
-    - Arctic land boundaries don't match actual land  
+  - Fires are viewable on a per-day basis as opposed to "past 24/48 hours"
+  - Documentation for Worldview's backend, the Global Imagery Browse 
+    Services (GIBS), has been published (http://earthdata.nasa.gov/gibs)
+  - Worldview now uses the OGC Web Map Tile Service (WMTS) to retrieve tiled 
+    imagery from GIBS
+  - OpenLayers library updated to version 2.12 from 2.11
+  - This "release notes" document created.

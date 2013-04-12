@@ -23,6 +23,7 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
     self.active = {};
     self.inactive = {};
     self.alignTo = spec.alignTo;
+    self.noRestore = false;
     
     var init = function() {
         //Logging.debug("Worldview.Widget.Palette");        
@@ -97,7 +98,8 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
                 }    
             });
             $.each(self.inactive, function(product, palette) {
-                if ( $.inArray(product, state.products) >= 0 && 
+                if ( !self.noRestore && 
+                        $.inArray(product, state.products) >= 0 && 
                         !self.active[product] ) {
                     log.debug("Restoring palette for " + product);
                     self.active[product] = self.inactive[product];
@@ -197,10 +199,24 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         var selected = null;
                  
         // Palettes for the drop down, place the recommended ones first
-        var recommendedPalettes = [];
-        var otherPalettes = [];
+        if ( productConfig.recommendedPalettes ) {
+            $.each(productConfig.recommendedPalettes, function(index, name) {
+                var palette = config.palettes[name];
+                var colorBar = Worldview.Palette.ColorBar({
+                    canvas: canvas,
+                    palette: palette,
+                    bins: productConfig.bins,
+                    stops: productConfig.stops
+                });
+                palette.image = colorBar.toImage();
+                palettes.push(palette);    
+            });
+        }
                  
         $.each(self.config.paletteOrder, function(index, name) {
+            if ( $.inArray(name, productConfig.recommendedPalettes) >= 0 ) {
+                return;
+            }
             var p = self.config.palettes[name];
             
             // Skip this palette if configuration says to exclude
@@ -220,15 +236,9 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
                     stops: productConfig.stops
                 });
                 palette.image = colorBar.toImage();
-                if ( $.inArray(palette.id, 
-                        productConfig.recommendedPalettes) >= 0 ) {
-                    recommendedPalettes.push(palette);
-                } else {
-                    otherPalettes.push(palette);
-                }
+                palettes.push(palette);
             }       
         });
-        palettes = palettes.concat(recommendedPalettes, otherPalettes);
         
         $.each(palettes, function(index, palette) {
             if ( palette.id === activePalette ) {

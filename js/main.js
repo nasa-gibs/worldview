@@ -96,14 +96,6 @@ $(function() {// Initialize "static" vars
             $.each(initOrder, function(index, component) {
                 component.loadFromQuery(queryString);    
             });
-            /*
-            var comps = REGISTRY.getComponents();
-            for (var i=0; i < comps.length; i++) {
-                if(typeof comps[i].obj.loadFromQuery == 'function'){
-                    comps[i].obj.loadFromQuery(queryString);
-                }
-            }
-            */
             REGISTRY.isLoadingQuery = false;
         }
                 

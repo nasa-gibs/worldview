@@ -89,7 +89,7 @@
             512
         ]
     },
-    "recommendedPalettes": [ "blue_5" ],
+    "recommendedPalettes": [ "blue_4" ],
     "rendered": "MODIS_Snow_Cover",
     "startDate": "2012-04-07",
     "stops": [
