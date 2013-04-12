@@ -192,7 +192,7 @@ SOTE.widget.DateSpan.refreshSliders = function(e){
 
 SOTE.widget.DateSpan.prototype.refreshSlider = function(type){
 	var labels = this.sliders[type];
-	var wwidth = $(window).width();
+	var wwidth = $(window).width() - 10;
 		
 	if(labels != undefined){
 		var width = 50/labels.length;
@@ -220,7 +220,7 @@ SOTE.widget.DateSpan.prototype.createSlider = function(type){
 	this.container.appendChild(slider);
 	
 	var width = 0;
-	var wwidth = $(window).width();
+	var wwidth = $(window).width() - 10;
 	var labels = this.sliders[type];
 	
 	if(labels != undefined){

@@ -1,5 +1,5 @@
 html,body, div, ul, li {display:block; margin:0; padding:0; }
-body {min-width:600px;}
+body {/*min-width:600px;*/ width:100%;}
 div {display:block;}
 
 .yui-skin-sam .yui-panel {background: transparent; width:700px; 	font: 13px "Gill Sans", sans-serif; font-weight:100;}  
@@ -15,7 +15,7 @@ div {display:block;}
 #switch div.sw_current {background-image:url("../images/geographic.png");}
 #switch div.sw_current:hover {background-image:url("../images/geographicon.png");}
 #switch ul li {margin:0px !important;}
-#switch ul li div.hidden {display:none; }
+#switch ul li div.hidden {display:none; margin-top:2px; }
 #switch ul li div.hidden a.sw_arctic { background-image:url("../images/arctic.png");}
 #switch ul li div.hidden a.sw_antarctic {background-image:url("../images/antarctic.png");}
 #switch ul li div.hidden a.sw_geographic {background-image:url("../images/geographic.png");}
@@ -23,15 +23,22 @@ div {display:block;}
 #switch ul li div.hidden a.sw_antarctic:hover {background-image:url("../images/antarcticon.png");}
 #switch ul li div.hidden a.sw_geographic:hover {background-image:url("../images/geographicon.png");}
 
-#switch ul li:hover div.hidden {display:block; background: rgba(38, 43, 49, 0.65); border-radius:0 0 5px 5px; position:relative; top:-1px;}
+#switch ul li:hover div.hidden {display:block; background: rgba(38, 43, 49, 0.45); border-radius:0 0 5px 5px; position:relative; top:-1px;}
 /*#switch ul li:hover div.hidden a:hover img {border: #fff 1px solid; }*/
 #switchcurrent {border:transparent 1px solid;}
 /*#switch ul li div.hidden a:hover img {border:#155678 2px solid; }*/
 
+#info_drop { border:none; margin:0px;}
+#info_drop div.hidden a {display:block; color:#fff; font-weight:100; font-size: 11px; width:70px; padding: 2px 5px; text-align:right; text-decoration:none;}
+#info_drop div.hidden a:hover {background: rgba(38,43,49,0.45); }
+#info_drop:hover div.hidden {display:block; background: rgba(38,43,49,0.45); width:80px; margin-left:-40px; margin-top:2px;}
+#info {display:block; width:40px; height:40px; border:none;}
+
+
 #permpanel h3 {color:#FFFFFF; font: 12px "Gill Sans", sans-serif; font-weight:100; text-decoration:none;}
 #permpanel input[type='text']{width:280px;}
 
-div.horizontalContainer {width:100%; display:block; float:left;  position:absolute;  overflow:hidden; bottom:0; z-index:200; padding: 5px 0 5px 0;}
+div.horizontalContainer {width:100%; display:block; float:left;  position:absolute;  overflow:hidden; bottom:10px; z-index:200; padding: 5px 0 5px 0;}
 /*#imgDownloadLink,#aboutus,#permalink {float:right; margin-top:5px; position:relative; z-index:1002;display:block; width:50px; }
 #imgDownloadLink,#aboutus,#permalink img {width:50px; height:44.5px; border:none;}
 #imgDownloadLink,#aboutus,#permalink a{text-decoration:none; border:none;}*/
