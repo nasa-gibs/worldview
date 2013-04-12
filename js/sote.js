@@ -11,15 +11,23 @@ function showSelector(e){
 	var selWidth = parseInt(YAHOO.util.Dom.getStyle(myid, 'width'), 10);
 	var newX = (viewWidth - selWidth)/2;
 	YAHOO.util.Dom.setX(myid, newX);
+	console.log("selWidth = " + selWidth);
+	console.log("newX = " + newX);
+	
+	// get screen width
+	var devWidth = window.screen.availWidth;
 
-	// move if tour window is showing
-	var classList = document.getElementsByClassName('joyride-tip-guide bordered');
-	if(classList.length > 2) {
-		if((classList[0].style.display === "block") || (classList[1].style.display === "block")){
-	   		var tourWidth = $(".joyride-tip-guide").width();
-			var pos = YAHOO.util.Dom.getX(myid);
-			var newX = parseInt(pos, 10) + tourWidth - 20;
-			YAHOO.util.Dom.setX(myid, newX);
+	if(devWidth >= 1260 && viewWidth >= 1260) {
+	
+		// move if tour window is showing
+		var classList = document.getElementsByClassName('joyride-tip-guide bordered');
+		if(classList.length > 2) {
+			if((classList[0].style.display === "block") || (classList[1].style.display === "block")){
+	   			var tourWidth = $(".joyride-tip-guide").width();
+				var pos = YAHOO.util.Dom.getX(myid);
+				var newX = parseInt(pos, 10) + tourWidth - 20;
+				YAHOO.util.Dom.setX(myid, newX);
+			}
 		}
 	}
 }
