@@ -72,13 +72,16 @@ SOTE.widget.Bank = function(containerId, config){
 	this.initRenderComplete = false;
 	this.dataSourceUrl = config.dataSourceUrl;
 	this.statusStr = "";
-	this.paletteManager = config.paletteManager;
+	this.config = config.config;
+	this.paletteWidget = config.paletteWidget;
+	this.queryString = "";
 	this.init();
 	//this.updateComponent(this.id+"=baselayers.MODIS_Terra_CorrectedReflectance_TrueColor-overlays.fires48.AIRS_Dust_Score.OMI_Aerosol_Index")
 
 }
 
 SOTE.widget.Bank.prototype.buildMeta = function(cb,val){
+    this.buildMetaDone = false;
 	SOTE.util.getJSON(
 		"data/" + this.state + "_" + this.dataSourceUrl,
 		{self:this,callback:cb,val:val},
@@ -96,13 +99,23 @@ SOTE.widget.Bank.handleMetaSuccess = function(data,status,xhr,args){
 			}
 		}
 	}
-	for(var i in data['palettes']){
-		self.meta[i].units = data['palettes'][i].units;
-		self.meta[i].min = data['palettes'][i].min;
-		self.meta[i].max = data['palettes'][i].max;
-		self.meta[i].palette = data['palettes'][i].palette;
-	}
-
+	$.each(self.meta, function(name, meta) {
+	   if ( name in self.config.products ) {
+	       var product = self.config.products[name];
+	       if ( "rendered" in product ) {
+	           meta.units = product.units;
+	           meta.min = ( product.min === undefined ) 
+	                   ? "&nbsp;&nbsp;&nbsp;&nbsp" 
+	                   : product.min;
+	           meta.max = ( product.max === undefined ) 
+	                   ? "&nbsp;&nbsp;&nbsp;" 
+                       : product.max;
+	           meta.bins = product.bins;
+	           meta.stops = product.stops;
+	           meta.palette = self.config.palettes[product.rendered];    
+	       }    
+	   }    
+	});
 	if(args.callback){
 		args.callback({self:self,val:args.val});
 	}
@@ -212,7 +225,7 @@ SOTE.widget.Bank.prototype.render = function(){
 					}*/
 					if(m.palette){
 						var paletteString = "<span class='palette'><span class='p-min' style='margin-right:10px;'>"+m.min+"</span>" +
-							 "<canvas id='canvas"+this.values[formattedCategoryName.toLowerCase()][j].value+"' width=100px height=14px'></canvas>" +
+							 "<canvas class='colorBar' id='canvas"+this.values[formattedCategoryName.toLowerCase()][j].value+"' width=100px height=14px'></canvas>" +
 							 "<span class='p-max' style='margin-left:10px;'>"+m.max+"</span>";
 						if(m.units && m.units != ""){
 							paletteString += "<span class='units' style='margin-left:3px;'>("+m.units+")</span></span>";
@@ -251,6 +264,16 @@ SOTE.widget.Bank.prototype.render = function(){
 };
 
 SOTE.widget.Bank.prototype.renderCanvases = function(){
+    
+    var openPaletteSelector = function(name) {
+        return function() {
+            if ( !Worldview.Support.allowCustomPalettes() ) {
+                Worldview.Support.showUnsupportedMessage();
+            } else {
+               self.paletteWidget.displaySelector(name);
+            }            
+        }
+    };
 
     var self = this;
     
@@ -263,14 +286,20 @@ SOTE.widget.Bank.prototype.renderCanvases = function(){
 				if(m.palette){
 					var width = 100/m.palette.length;
 					var canvas = document.getElementById("canvas"+val);
-					canvas.onclick = function() {
-					    self.paletteManager.displaySelector(val);
-					};
+					if ( m.palette.stops.length > 1 ) {
+					   canvas.onclick = openPaletteSelector(val);
+					   canvas.style.cursor = "pointer";
+				    }
 					var context = canvas.getContext('2d');
-					for(var k=0; k<m.palette.length; ++k){
-						context.fillStyle = "rgba("+ m.palette[k] +")";
-						context.fillRect (width*k,0,width,14);
-					}
+					var palette = this.paletteWidget.getPalette(this.values[formattedCategoryName.toLowerCase()][j].value);
+
+                    var spec = {
+                        selector: "#canvas" + val,
+                        bins: m.bins,
+                        stops: m.stops,
+                        palette: palette
+                    };
+                    Worldview.Palette.ColorBar(spec);
 				}
 			}
 		}
@@ -364,28 +393,6 @@ SOTE.widget.Bank.prototype.setValue = function(valString){
 	var valid = true;
     var self = this;
     
-	$.each(this.categories, function(index, name) {
-	   var category = name.replace(/\s/g, "").toLowerCase();
-	   if ( !(category in self.values) ) {
-	       self.log.warn("Invalid category: " + category + ", using defaults");
-	       self.values = self.unserialize(self.selected[self.state]);
-	       valid = false;
-	   }
-	});
-	
-	if ( valid ) {
-    	for ( category in this.values ) {
-    	    var validProducts = [];
-    	    $.each(this.values[category], function(index, product) {
-                if ( !(product.value in self.meta) ) {
-                    self.log.warn("Invalid product: " + product.value);
-                } else {
-                    validProducts.push(product);
-                }
-            });
-            this.values[category] = validProducts;
-    	}
-	}
 	this.render();
 	this.fire();
 	
@@ -431,7 +438,11 @@ SOTE.widget.Bank.prototype.unserialize = function(string){
 		var items = categories[i].split(/[\.,]/);
 		unserialized[items[0]] = new Array;
 		for(var j=1; j<items.length; j++){
-			unserialized[items[0]].push({"value":items[j]});
+            if ( this.meta && !this.meta[items[j]] ) {
+                this.log.warn("No such product: " + items[j]);
+            } else {
+			    unserialized[items[0]].push({"value":items[j]});
+			}
 		}
 		
 	}

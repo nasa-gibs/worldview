@@ -1,6 +1,11 @@
 /* splash screen */
-#splash_c {background-color:rgba(38, 43, 49, 1); }
-#conclusionPanel_c {background-color:rgba(38, 43, 49, 1); }
+/*#splash_c {background-color:rgba(180, 205, 205, 1); }
+#conclusionPanel_c {background-color:rgba(38, 43, 49, 1); }*/
+
+#splash_c div{background-color:rgba(175, 181, 196, 1); }
+#conclusionPanel_c div{background-color:rgba(175, 181, 196, 1); }
+
+.yui-skin-sam .yui-panel-container .bd .splash h3{ color:rgb(38, 43, 49); font: 18px "Gill Sans", sans-serif; font-weight:400; text-decoration:none; }
 
 img.splash{ 
   display:block; 
@@ -11,10 +16,10 @@ table.splash td{
   padding:15px; }
 
 p.splash{ 
-  color:white }
+  color:rgb(38, 43, 49);  }
 
 p.splash span.highlight{ 
-  color:#48A8FF; }
+  font-weight:bold; }
 
 button.takeTour{ 
   float:right;
@@ -84,14 +89,15 @@ button.skipTour:hover {
 
 /* tour panels */
 table.tour td{ 
-  padding:15px; }
+  padding:2px; 
+  vertical-align: top; }
 
 p.tour{ 
-  color:white;
+  color:rgb(38, 43, 49);
   font-size:12px; }
 
 p.tour span.highlight{ 
-  color:#48A8FF; }
+  font-weight:bold; }
 
 p.tour span.tryIt{ 
   font-weight:bold; }
@@ -166,7 +172,7 @@ img.tour{
 
 ul.tour {
   margin-left: 1.5em; 
-  color:white; }
+  color:rgb(38, 43, 49);  }
   
 ul.tour li{ 
   margin-left: 1.5em; 
@@ -208,3 +214,8 @@ ul.tour li{
     padding:10px;
     border:1px solid black;
 }
+
+.joyride-tip-guide {
+    z-index: 201;
+}
+

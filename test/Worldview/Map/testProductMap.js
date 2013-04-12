@@ -82,8 +82,9 @@ TestCase("Map.ProductMap", TestSuite.Tests({
         try {
             ns.ProductMap("__NO_MAP", mapConfig);
             fail("__NO_MAP should not be a valid container");
-        } catch ( message ) {
-            assertEquals("No container for ProductMap: __NO_MAP", message);
+        } catch ( error ) {
+            assertEquals("No container for ProductMap: __NO_MAP", 
+                    error.message);
         }
     },
 
@@ -116,8 +117,8 @@ TestCase("Map.ProductMap", TestSuite.Tests({
         try {
             productMap = ns.ProductMap("__TEST_PRODUCT_MAP", mapConfig);   
             fail("foo should not be a valid projection");            
-        } catch ( message ) {
-            assertEquals("Unsupported projection: foo", message);
+        } catch ( error ) {
+            assertEquals("Unsupported projection: foo", error.message);
         }
     },
     

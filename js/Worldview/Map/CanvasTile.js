@@ -28,34 +28,40 @@ Worldview.namespace("Map");
  * (end code)
  * 
  * To apply a lookup table to dynamically change the colors of the tile, 
- * set a lookupTable property in OpenLayers.Layer with a mapping of RGBA 
- * integer values to RGBA integer values. Example:
+ * set a lookupTable property in OpenLayers.Layer with a <ColorLookup> object.
+ * Example:
  * 
  * (start code)
- * var grn = { r: 0x00, g: 0xff, b: 0xff, a: 0xff };
- * var red = { r: 0xff, g: 0x00, b: 0x00, a: 0xff };
- * 
- * var grnInt = ( grn.a << 24 | grn.b << 16 | grn.g << 8 | grn.r );
- * var redInt = ( red.a << 24 | grn.b << 16 | grn.g << 8 | grn.r );
+ * var red = { r: 255, g: 0x00, b: 0x00, a: 255 };
  * 
  * // Map green to blue
  * myLayer.lookupTable = {
- *     grnInt: redInt
+ *     "0,255,0,255": redInt
  * };
  * (end code)
  */
 Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
 	
-	/*
-	 * Element that contains the canvas to draw the tile. Initially set to 
-	 * null and created after the tile has been loaded. Set back to null
-	 * when clear() is invoked.
-	 */
+    // Element that contains the canvas to draw the tile. Initially set to 
+    // null and created after the tile has been loaded. Set back to null
+    // when clear() is invoked.
 	canvas: null,
-	cavansOriginal: null,
+	
+	// Canvas that contains the pixels of the original tile. This allows
+	// lookups to be applied multiple times without reloading the layer.
+	canvasOriginal: null,
+	
+	// Graphics context for the canvas
     graphics: null,
-    grpahicsOriginal: null,
+    
+    // Graphics context for the canvas containing the original image
+    graphicsOriginal: null,
+    
+    // The ID of the last job submitted to the scheduler. If a response
+    // comes back that is not this ID, the tile is stale and can be thrown
+    // out
     latestJobId: null,
+    
     log: Logging.getLogger("Worldview.Map.CanvasTile"),
     
 	initialize: function(layer, position, bounds, url, size, options) {
@@ -115,7 +121,6 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
 				style.width = image.style.width;
 				style.height = image.style.height;
 			}
-			//style.visibility = image.style.visibility;
 			style.visibility = "hidden";
 			style.opacity = 0;
 			style.filter = image.style.filter;
@@ -135,7 +140,12 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
 		return this.frame ? this.frame : canvas;
 	},
     
+    /*
+     * Relods a tile from the server. 
+     */
     setImgSrc: function() {
+        // If the tile is being reloaded, hide the canvas so that stale
+        // tiles are not visible
         if ( this.canvas ) {
             this.log.debug(this.id + ": setImgSrc: " + arguments[0]);
             this.canvas.visibility = "hidden";
@@ -147,37 +157,48 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
         }
     },
     
-    onTileRendered: function(results) {
-        var self = results.self;    
-        var canvas = self.canvas;
-        if ( !canvas || results.id !== self.latestJobId ) {
-            return;
-        }
-        self.log.debug("latestJobId: " + self.latestJobId + ", results.id" + results.id);
-        var imageData = results.message.destination;
-  
-        self.graphics.putImageData(imageData, 0, 0); 
+    /*
+     * Takes the loaded image and submits it to the scheduler to render the
+     * color lookup table.
+     */
+    onImageLoad: function() {
+        OpenLayers.Event.stopObservingElement(this.imgDiv);        
         
-        canvas.style.visibility = "inherit";
-        canvas.style.opacity = self.layer.opacity;
-        self.canvasContext = null;
-        self.isLoading = false;
-        self.events.triggerEvent("loadend");
-        self.log.debug(self.id + ": rendered");       
-    },
+        this.log.debug(this.id + ": tile loaded");  
+        
+        // Draw the image that was loaded and save it for anytime a color
+        // lookup needs to be applied             
+        this.canvasOriginal = document.createElement("canvas");
+        this.graphicsOriginal = this.canvasOriginal.getContext("2d");
+        this.canvasOriginal.width = this.imgDiv.width;
+        this.canvasOriginal.height = this.imgDiv.height;
+        this.graphicsOriginal.drawImage(this.imgDiv, 0, 0);
+                
+        // Ensure the canvas object has been created
+        var canvas = this.getCanvas();
+        canvas.width = this.canvasOriginal.width;
+        canvas.height = this.canvasOriginal.height;
+                
+        this.scheduleTile();
+    },    
     
-    applyLookup: function(imageLoaded) { 
+    /**
+     * Function: applyLookup
+     * Changes the lookup table for the tile and repaints the canvas.
+     */
+    applyLookup: function() { 
         if ( !this.canvas ) {
-            if ( imageLoaded ) {
-                this.isLoading = false;
-                this.events.triggerEvent("loadend");    
-            }
             return;
         }
         this.isLoading = true;       
-        //this.canvas.style.visibility = "hidden";
-        //this.canvas.style.opacity = 0;
-        
+        this.events.triggerEvent("loadstart");
+        this.scheduleTile();
+    },
+    
+    /*
+     * Submit the render operation to the scheduler.
+     */
+    scheduleTile: function() {
         var lookupTable = this.layer.lookupTable;
         var source = this.graphicsOriginal.getImageData(0, 0, this.canvas.width, 
                 this.canvas.height);
@@ -195,35 +216,48 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
         });            
     },
     
-	/*
-	 * Draws the loaded image to the canvas and applies a lookup table if
-	 */
-    onImageLoad: function() {
-        OpenLayers.Event.stopObservingElement(this.imgDiv);        
+    /*
+     * Callback for when the tile has finished rendering.
+     */    
+    onTileRendered: function(results) {
+        var self = results.self;    
+        var canvas = self.canvas;
         
-        this.log.debug(this.id + ": tile loaded");               
-        this.canvasOriginal = document.createElement("canvas");
-        this.graphicsOriginal = this.canvasOriginal.getContext("2d");
-        this.canvasOriginal.width = this.imgDiv.width;
-        this.canvasOriginal.height = this.imgDiv.height;
-        
-        var canvas = this.getCanvas();
-        canvas.width = this.canvasOriginal.width;
-        canvas.height = this.canvasOriginal.height;
-        
-	    this.graphicsOriginal.drawImage(this.imgDiv, 0, 0);
-        	    
-		if ( this.layer.lookupTable ) {
-            this.applyLookup(true);
-		} else { 
-            this.canvas.style.visibility = "inherit";
-            this.canvas.style.opacity = this.layer.opacity;
-            this.isLoading = false;
-            this.canvasContext = null;
-            this.events.triggerEvent("loadend");    		        
-		}
-	},
+        // If there is no longer a canvas (a zoom operation cleared it out
+        // for use in the back buffer) or this render is not the last tile
+        // submitted, this data is now stale and can be thrown away.
+        if ( !canvas || results.id !== self.latestJobId ) {
+            self.log.debug(self.id + ": Discarding stale tile");
+            
+        // If the operation was cancelled during execution, ignore the result.
+        } else if ( results.status === "cancelled" ) {
+            self.log.debug(self.id + ": Cancelled");
+            
+        // If there was an error during processing, report it here
+        } else if ( results.status === "error" ) {
+            self.log.error(self.id + ": Unable to render tile");
+            
+        // Draw the tile
+        } else if ( results.status === "success" ){
+            var imageData = results.message.destination;
+            self.graphics.putImageData(imageData, 0, 0); 
+            canvas.style.visibility = "inherit";
+            canvas.style.opacity = self.layer.opacity;
+            self.canvasContext = null;
+            self.log.debug(self.id + ": rendered");       
+        } else {
+            throw new Error("Invalid status during tile rendering: " + 
+                    results.status);
+        }
+        self.isLoading = false;
+        self.events.triggerEvent("loadend");
+    },
 	
+	/*
+	 * This is called during a zoom for the resize transition effect. It 
+	 * steals away the canvas object for use in the scaled image shown before
+	 * tiles are loaded.
+	 */
     createBackBuffer: function() {
         if ( !this.canvas || this.isLoading ) {
             return;

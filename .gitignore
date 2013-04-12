@@ -1,11 +1,11 @@
-build
-dist
-lib
-doc/NaturalDocs/Data
-doc/NaturalDocs/LastCrash.txt
-doc/NaturalDocs/Menu_Backup.txt
+/build
+/dist
+/lib
+/doc/NaturalDocs/Data
+/doc/NaturalDocs/LastCrash.txt
+/doc/NaturalDocs/Menu_Backup.txt
 
 # Ignore the Eclipse files for now
-.project
-.settings
-.pydevproject
+/.project
+/.settings
+/.pydevproject

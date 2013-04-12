@@ -43,8 +43,12 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
     var activeProducts = {};
     
     // Display products on the map for this day
-    var currentDay = new Date();
+    var currentDay = Worldview.today();
     
+    // The number of layers in the processing of loading. This is used
+    // to fire maploadstart and maploadend events.
+    var layersLoading = 0;   
+      
     //-------------------------------------------------------------------------
     // Public
     //-------------------------------------------------------------------------
@@ -78,7 +82,7 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
     var init = function() {        
         var $container = $("#" + containerId);
         if ( $container.length === 0 ) {
-            throw "No container for ProductMap: " + containerId;
+            throw new Error("No container for ProductMap: " + containerId);
         }
         
         // Create map objects, one for each projection.     
@@ -91,9 +95,14 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
             
             // Put in a bogus layer to act as the base layer to make the
             // map happy for setting up the starting location
-            var blankLayer = new OpenLayers.Layer("Blank", {
-                isBaseLayer: true
-            });
+            var options = {
+                isBaseLayer: true,
+                projection: config.projection,
+                maxExtent: config.maxExtent,
+                maxResolution: 0.5625,
+                units: config.units || "dd"
+            };
+            var blankLayer = new OpenLayers.Layer("Blank", options);
             newMap.addLayer(blankLayer);
             
             // If a starting location is provided, go there otherwise
@@ -114,14 +123,19 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
             activeMaps[projection] = newMap;
             activeProducts[projection] = [];
             
-            newMap.events.register("addlayer", self, refreshZOrder);
-            newMap.events.register("removelayer", self, refreshZOrder);
+            newMap.events.register("addlayer", self, onAddLayer);
+            newMap.events.register("removelayer", self, onRemoveLayer);
             newMap.events.register("moveend", self, fireEvent);
             newMap.events.register("zoomend", self, onZoomEnd);
         });
         productConfigs = mapConfig.products;
         
         self.setProjection(mapConfig.defaultProjection || "geographic");
+        
+        $(document.body).mousemove(function(event) {
+            event.xy = {x: event.clientX, y: event.clientY };
+            self.map.events.triggerEvent("mousemove", event);
+        });
     };
     
     /**
@@ -137,7 +151,7 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
      */
     self.setProjection = function(projection) { 
         if ( !(projection in activeMaps) ) {
-            throw "Unsupported projection: " + projection;
+            throw new Error("Unsupported projection: " + projection);
         }
         log.debug("Switch projection: " + projection);
         
@@ -228,33 +242,48 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
         refreshZOrder();   
     };
     
+    /**
+     * Method: setPalettes
+     * Sets which products should have custom palettes applied.
+     * 
+     * Parameters:
+     * activePalettes - An object which has product names as properties
+     * and palette names as values.
+     */
     self.setPalettes = function(activePalettes) {
         $.each(activeMaps, function(projection, map) {
-            $.each(map.products, function(name, product) {
-                if ( name in activePalettes ) {
-                    var productConfig = self.mapConfig.products[name];
+            $.each(map.products, function(productName, product) {
+                var paletteName = activePalettes[productName];
+                if ( paletteName ) {
+                    // Find the rendered palette for this product
+                    var productConfig = self.mapConfig.products[productName];
                     var renderedName = productConfig.rendered;
                     var renderedPalette = self.mapConfig.palettes[renderedName];
-                    var paletteName = activePalettes[name];
+                    
+                    if ( !renderedPalette ) {
+                        log.warn(productName + " does not support palettes");
+                        return;
+                    }
+                    // Find the palette that should be used instead
                     var palette = self.mapConfig.palettes[paletteName];
-                    var indexed = Worldview.Palette.toLookup(
+                    
+                    if ( !palette ) {
+                        log.warn("No such palette: " + paletteName);
+                        return;
+                    }
+                    // Create a lookup table and map it to the color
+                    // values found in the rendered palette
+                    var indexed = Worldview.Palette.toIndexedLookup(
                         productConfig.bins, palette, productConfig.stops);
-                    var lookup = Worldview.Palette.mapLookup(
-                        indexed, renderedPalette.stops);     
+                    var lookup = Worldview.Palette.toColorLookup(
+                        indexed, renderedPalette.stops);
+                        
+                    // Apply     
                     product.setLookup(lookup);
                 } else {
                     product.clearLookup();
                 }
             });
-        });
-    };
-
-    self.clearLookup = function(product, lookup) {
-        $.each(products, function(projection, activeProducts) {
-            var index = $.inArray(product, products);
-            if ( index >= 0 ) {
-                products[index].clearLookup(lookup);
-            }    
         });
     };
         
@@ -430,13 +459,12 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
             config.parameters.projection = 
                 mapConfig.projections[proj].projection;
         }
-
         if ( config.product === "daily" ) {
             return Worldview.Map.DailyProduct(map, config);
         } else if ( config.product === "static" ) {
             return Worldview.Map.StaticProduct(map, config);
         }
-        throw "Unsupported product type: " + config.product;
+        throw new Error("Unsupported product type: " + config.product);
     };
     
     var onZoomEnd = function(evt) {
@@ -469,7 +497,28 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
                 .css("color", "#FFFFFF");
         }           
     };
-            
+      
+    var onAddLayer = function(event) {
+        var layer = event.layer;
+        layer.events.register("loadstart", layer, function() {
+            if ( layersLoading === 0 ) {
+                self.map.events.triggerEvent("maploadstart");
+            }
+            layersLoading++;
+        });
+        layer.events.register("loadend", layer, function() {
+            layersLoading--;
+            if ( layersLoading === 0 ) {
+                self.map.events.triggerEvent("maploadend");
+            }   
+        });
+        refreshZOrder();
+    };
+    
+    var onRemoveLayer = function(event) {
+        refreshZOrder();
+    };
+           
     init();
     return self;
 }

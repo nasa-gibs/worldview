@@ -62,8 +62,7 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
             if ( last.queryString === queryString ) {
                 return;
             }
-            log.debug("WorldviewMap.updateComponent.queryString: " + 
-                    queryString);
+            log.debug("WorldviewMap: updateComponent", queryString);
             var state = Worldview.queryStringToObject(queryString);
             state.productsString = state.products;
             state.products = splitProducts(state);
@@ -77,7 +76,7 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
                 var projection = state["switch"];
                 if ( !(projection in self.productMap.mapConfig.projections) ) {
                     var defaultProjection = 
-                        self.productMap.mapConfig.defaultProjection;
+                        self.productMap.mapConfig.config.defaultProjection;
                     log.warn("Invalid projection: " + projection + ", using: " + 
                             defaultProjection);
                     projection = defaultProjection;
@@ -91,16 +90,20 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
                 last.palettesString = "";
             }
             if ( state.time !== last.time ) {
+                var today = Worldview.today();
                 if ( state.time === undefined ) {
-                    state.time = SOTE.util.ISO8601StringFromDate(new Date());
+                    state.time = today.toISOStringDate();
                 }
-                var date = new Date(state.time);
-                if ( isNaN(date.getTime()) ) {
-                    log.warn("Invalid time: " + state.time + ", using today");
-                    state.time = SOTE.util.ISO8601StringFromDate(new Date());
-                    date = new Date();                    
+                var date;
+                try {
+                    date = Date.parseISOString(state.time);
+                } catch ( error ) {
+                    log.warn("Invalid time: " + state.time + ", reason: " + 
+                            error + "; using today: " + today.toISOStringDate());
+                    state.time = today.toISOStringDate();
+                    date = today;                   
                 }
-                self.productMap.setDay(new Date(state.time));
+                self.productMap.setDay(date);
             }           
             if ( state.palettesString !== last.palettesString ) {
                 self.productMap.setPalettes(state.palettes);
@@ -113,37 +116,39 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
         }
     };
     
-    /* Set default extent according to time of day:  
-     * at 00:00 UTC, start at far eastern edge of map: 
-     *      "20.6015625,-46.546875,179.9296875,53.015625"
-     *    at 23:00 UTC, start at far western edge of map: 
-     *      "-179.9296875,-46.546875,-20.6015625,53.015625"
-     */
     var setExtentToLeading = function() {
+        // Polar projections don't need to be positioned
         if ( self.productMap.projection !== "geographic" ) {
             return;
         }
-        
-        var curHour = new Date().getUTCHours();
 
-        // For earlier hours when data is still being filled in, force a far 
-        // eastern perspective
-        if (curHour < 9)
+        var map = self.productMap.map;
+    
+        // Set default extent according to time of day:  
+        //   at 00:00 UTC, start at far eastern edge of map: "20.6015625,-46.546875,179.9296875,53.015625"
+        //   at 23:00 UTC, start at far western edge of map: "-179.9296875,-46.546875,-20.6015625,53.015625"
+        var curHour = Worldview.now().getUTCHours();
+
+        // For earlier hours when data is still being filled in, force a far eastern perspective
+        if (curHour < Worldview.GIBS_HOUR_DELAY) {
+            curHour = 23;
+        }
+        else if (curHour < 9) {
             curHour = 0;
+        }
 
         // Compute east/west bounds
         var minLon = 20.6015625 + curHour * (-200.53125/23.0);
         var maxLon = minLon + 159.328125;
-                 
-        var bbox = minLon.toString() + ",-46.546875," + maxLon.toString() + 
-                ",53.015625";
         
+        var minLat = -46.546875
+        var maxLat = 53.015625
         
-        //this.setExtent("-146.390625,-93.921875,146.390625,93.953125",true);
-        self.productMap.map.zoomToExtent([
-                minLon, -46.546875, maxLon, 53.015625], true);
-
-        //this.fire();         
+        var lat = minLat + (Math.abs(maxLat - minLat) / 2.0);
+        var lon = minLon + (Math.abs(maxLon - minLon) / 2.0);
+        var zoomLevel = 2
+                
+        map.setCenter(new OpenLayers.LonLat(lon, lat), zoomLevel);
     };   
     
     /**

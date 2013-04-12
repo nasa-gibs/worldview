@@ -31,7 +31,7 @@ Example:
     "MODIS_Terra_CorrectedReflectance_TrueColor": {
         ...
     },
-    "sedac_bound": {
+    "sedac_bound_nogray": {
         ...
     }
 }

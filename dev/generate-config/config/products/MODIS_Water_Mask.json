@@ -1,0 +1,42 @@
+{
+    "bins": 1,
+    "description": "Terra / MODIS, SRTM",
+    "name": "Global 250m Water Map",
+    "product": "static",
+    "projections": { 
+        "geographic": {
+            "matrixSet": "EPSG4326_250m",
+            "maxExtent": [
+                -180,
+                -90,
+                180,
+                90
+            ],
+            "maxResolution": 0.5625,
+            "serverResolutions": [
+                0.5625,
+                0.28125,
+                0.140625,
+                0.0703125,
+                0.03515625,
+                0.017578125,
+                0.0087890625
+            ],
+            "url": [
+                "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+            ]
+        }
+    },
+    "properties": {
+        "format": "image/png",
+        "layer": "MODIS_Water_Mask",
+        "tileSize": [
+            512,
+            512
+        ]
+    },
+    "rendered": "MODIS_Water_Mask",
+    "type": "wmts"
+}

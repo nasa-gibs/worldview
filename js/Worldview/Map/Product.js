@@ -39,31 +39,63 @@ Worldview.Map.Product = function(c) {
         if ( prop.transitionEffect === undefined ) {
             prop.transitionEffect = "resize";
         }
-        if ( prop.tileClass !== undefined ) {
-            prop.tileClass = Worldview.getObjectByPath(prop.tileClass);
-        }     
+      
+        // HACK: For the moment, some projections use TWMS and others use 
+        // WMTS. Copy the type attribute to the correct location if required
+        if ( config.properties.type ) {
+            config.type = config.properties.type;
+            delete config.properties.type;
+        }        
+        // If this is a WMS layer, the urls are passed in directly and not
+        // part of the parameters or properties
+        if ( config.type === "wms" && config.properties.url ) {
+            config.url = config.properties.url;
+            delete config.properties.url;
+        }        
+        // TWMS does not like the projection parameter, remove it
+        if ( config.type === "wms" && config.parameters ) {
+            delete config.parameters.projection;
+        }
     };
     
     /**
+     * Function: createLayer
      * Creates a new layer based on the configuration provided. 
+     * 
+     * Parameters:
+     * additionalProperties - If specified, these properites are merged into
+     *                        the product configuration to create the layer.
+     * 
+     * Return:
+     * An OpenLayers Layer.
      */
-    self.createLayer = function(additionalProperties) {
+    self.createLayer = function(additionalProperties, additionalParameters) {
         var properties = config.properties;
         if ( additionalProperties ) {
             properties = $.extend(true, {}, config.properties, 
                     additionalProperties);
+        }
+        var parameters = config.parameters;
+        if ( additionalParameters ) {
+            parameters = $.extend(true, {}, config.parameters, 
+                    additionalParameters);
         }  
+        var layer;
         if ( config.type === "wms" ) {
-            return new OpenLayers.Layer.WMS(config.name, config.url, 
-                    config.parameters, properties);
-        } else if ( config.type === "wmts") {
-            return new OpenLayers.Layer.WMTS(properties);
-        } else if ( config.type === "graticule") {
-            return new Worldview.Map.GraticuleLayer(config.name, 
+            layer = new Worldview.Map.TWMSLayer(config.name, config.url, 
+                    parameters, properties);
+        } else if ( config.type === "wmts" ) {
+            layer = new OpenLayers.Layer.WMTS(properties);
+            if ( parameters && parameters.time ) {
+                layer.mergeNewParams({"time": parameters.time});
+            }
+        } else if ( config.type === "graticule" ) {
+            layer = new Worldview.Map.GraticuleLayer(config.name, 
                     properties);
         } else {
-            throw "Unsupported layer type: " + config.type;
+            throw new Error("Unsupported layer type: " + config.type);
         }
+        return layer;
     };
     
     init();

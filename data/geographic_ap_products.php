@@ -942,6 +942,12 @@
 	        "type" => "multi", "category" => "overlays"
 		),
         array(
+            "label" => "Global 250m Water Map",
+            "sublabel" => "Terra / MODIS, SRTM",
+            "value" => "MODIS_Water_Mask",
+            "type" => "multi", "category" => "overlays"
+        ),		
+        array(
              "label" =>  "Flood Hazard:Frequency and Distribution",
              "sublabel" =>  "SEDAC Global Flood Hazard Frequency and Distribution, v1 (1985–2003)",
              "value" =>  "ndh-flood-hazard-frequency-distribution",
@@ -1419,6 +1425,12 @@
 	        "value" =>  "ol_graticule",
 	        "type" => "multi", "category" => "overlays"
 		),
+        array(
+            "label" => "Global 250m Water Map",
+            "sublabel" => "Terra / MODIS, SRTM",
+            "value" => "MODIS_Water_Mask",
+            "type" => "multi", "category" => "overlays"
+        ),   		
 		array(
 	        "label" =>  "Areas of No Data (mask)",
 	        "sublabel" =>  "Terra / MODIS",
@@ -1466,7 +1478,7 @@
 	        "sublabel" =>  "Space-Track.org / Aura",
 	        "value" =>  "Aura_Orbit_Dsc",
 	        "type" => "multi", "category" => "overlays"
-		)
+		)	
 	),
 
 	"Other" =>  array(
@@ -1518,6 +1530,12 @@
 	        "value" =>  "ol_graticule",
 	        "type" => "multi", "category" => "overlays"
 		),
+        array(
+            "label" => "Global 250m Water Map",
+            "sublabel" => "Terra / MODIS, SRTM",
+            "value" => "MODIS_Water_Mask",
+            "type" => "multi", "category" => "overlays"
+        ),       		
 		array(
 	        "label" =>  "Areas of No Data (mask)",
 	        "sublabel" =>  "Terra / MODIS",

@@ -56,6 +56,7 @@ Group: Development Notes  {
 
 Group: Code Reference  {
 
+   File: Date  (/Users/jmcgann/Code/Aptana/worldview/js/Date.js)
    File: Logging  (/Users/jmcgann/Code/Aptana/worldview/js/Logging.js)
    File: SOTE.util  (/Users/jmcgann/Code/Aptana/worldview/js/util.js)
    File: TestSuite  (/Users/jmcgann/Code/Aptana/worldview/test/lib/TestSuite.js)
@@ -82,20 +83,18 @@ Group: Code Reference  {
 
          File: CanvasTile  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/CanvasTile.js)
          File: DailyProduct  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/DailyProduct.js)
+         File: TileWorker  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/TileWorker.js)
          File: Product  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/Product.js)
          File: ProductMap  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/ProductMap.js)
          File: StaticProduct  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/StaticProduct.js)
+         File: GraticleLayer  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/GraticuleLayer.js)
          }  # Group: Map
 
       Group: Palette  {
 
          File: ColorBar  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Palette/ColorBar.js)
-         File: ColorHSL  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Palette/ColorHSL.js)
-         File: ColorRGBA  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Palette/ColorRGBA.js)
-         File: Lookup  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Palette/Lookup.js)
          File: Palette  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Palette/Palette.js)
          File: PaletteSelector  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Palette/PaletteSelector.js)
-         File: StopRGBA  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Palette/StopRGBA.js)
          }  # Group: Palette
 
       File: Permalink  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Permalink.js)
@@ -106,6 +105,7 @@ Group: Code Reference  {
          File: WorldviewMap  (no auto-title, /Users/jmcgann/Code/Aptana/worldview/js/Worldview/Widget/WorldviewMap.js)
          }  # Group: Widget
 
+      File: Scheduler  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Scheduler.js)
       }  # Group: Worldview
 
    Group: TestSuite  {

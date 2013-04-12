@@ -16,7 +16,7 @@ import json
 
 prog = os.path.basename(__file__)
 basedir = os.path.dirname(__file__)
-version = "1.1.0"
+version = "1.2.1"
 help_description = """\
 Concatenates all configuration items a directory into one configuration file. 
 """
@@ -68,9 +68,14 @@ for root, dirs, files in os.walk(options.config_dir):
             continue
         notify("Reading: %s/%s\n" % (root, file))
         id = os.path.splitext(file)[0]
-        with open(os.path.join(root, file)) as fp:
-            item = json.load(fp)
-        current[id] = item
+        filename = os.path.join(root, file)
+        try:
+            with open(filename) as fp:
+                item = json.load(fp)
+                current[id] = item
+        except Exception as e:
+            sys.stderr.write("%s: Unable to read %s: %s\n" % (prog, filename,
+                                                              str(e)))
 
 json_options = {
     "sort_keys": True

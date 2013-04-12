@@ -26,9 +26,11 @@ Worldview.namespace("Widget");
  *                configuration and is ready to be used. 
  */
 Worldview.Widget.Map = function(containerId, config) { 
-        
-    var self = {};
+
     var log = Logging.getLogger("Worldview.Map");
+    //Logging.debug("Worldview.Map");
+            
+    var self = {};
     
     /**
      * Property: productMap
@@ -48,7 +50,7 @@ Worldview.Widget.Map = function(containerId, config) {
         if ( REGISTRY ) {
             REGISTRY.register(containerId, self);
         } else {
-            throw "Cannot register Map, REGISTRY not found";
+            throw new Error("Cannot register Map, REGISTRY not found");
         }
         
         self.config = validateConfig(self.config);
@@ -86,9 +88,10 @@ Worldview.Widget.Map = function(containerId, config) {
         // Verify that the viewport extent overlaps the valid extent, if
         // invalid, just zoom out the max extent
         if ( !Worldview.Map.isExtentValid(extent) || 
-                !extent.intersectsBounds(map.getExtent()) ) {
+                !extent.intersectsBounds(map.getMaxExtent()) ) {
             log.warn("Extent is invalid: " + extent + "; using " + 
                     map.getExtent());
+            log.info("Max extent: " + map.getMaxExtent());
             extent = map.getExtent();
         }
         self.productMap.map.zoomToExtent(extent, true);
@@ -124,8 +127,20 @@ Worldview.Widget.Map = function(containerId, config) {
     self.loadFromQuery = function(queryString) {
         log.debug("WorldviewMap.loadFromQuery: " + queryString);
         var query = Worldview.queryStringToObject(queryString);
+        if ( query.map ) {
+            self.setValue(query.map);
+        } else if ( query.center && query.zoom ) {
+            try {
+                var coordinate = query.center.split(",");
+                var x = parseFloat(coordinate[0]);
+                var y = parseFloat(coordinate[1]);
+                center = [x, y];
+                self.productMap.map.setCenter(center, parseInt(query.zoom));
+            } catch ( error ) {
+                log.warn("Unable to set center and zoom: " + error);
+            }            
+        }
         self.updateComponent(queryString);
-        self.setValue(query.map);
     };
     
     /**
@@ -141,7 +156,7 @@ Worldview.Widget.Map = function(containerId, config) {
      * Throws an unsupported exception.
      */
     self.setDataSourceUrl = function(url) {
-        throw "setDataSourceUrl: unsupported";
+        throw new Error("setDataSourceUrl: unsupported");
     };
     
     /**
@@ -161,7 +176,7 @@ Worldview.Widget.Map = function(containerId, config) {
      * invoked.
      */
     self.setStatus = function(status) {
-        throw "setStatus: unsupported";      
+        throw new Error("setStatus: unsupported");      
     };
     
     /**
@@ -170,7 +185,7 @@ Worldview.Widget.Map = function(containerId, config) {
      * invoked.
      */
     self.getStatus = function() {
-        throw "getStatus: unsupported";
+        throw new Error("getStatus: unsupported");
     };
                 
     /*
@@ -187,7 +202,8 @@ Worldview.Widget.Map = function(containerId, config) {
         var _config = ["defaultProjection"];
         $.each(_config, function(index, key) {
             if ( !(key in config.config) ) {
-                throw "config." + key + " is required in the map configuraiton";
+                throw new Error("config." + key + " is required in the " + 
+                        "map configuraiton");
             }
         });
         return config;

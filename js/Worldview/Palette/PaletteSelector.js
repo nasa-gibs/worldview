@@ -50,15 +50,16 @@ Worldview.Palette.PaletteSelector = function(spec) {
     var init = function() {
         $container = $(spec.selector);
         if ( $container.length === 0 ) {
-            throw "Container not found for PaletteSelector: " + spec.selector;
+            throw new Error("Container not found for PaletteSelector: " + 
+                    spec.selector);
         }
                 
         var items = [];      
         for ( var i = 0; i < palettes.length; i++ ) {
             var palette = palettes[i];
             var item = {
-                text: palette.name,
-                description: palette.description,
+                text: palette.name || "&nbsp;",
+                description: palette.description || "",
                 value: i,
                 image: palette.image
             };
@@ -68,10 +69,13 @@ Worldview.Palette.PaletteSelector = function(spec) {
         dropDown = $container.msDropDown({
             byJson: {
                 name: "Palettes",
-                data: items     
-            }
+                data: items,  
+                width: 225,
+            },
+            visibleRows: 5,
+            rowHeight: 17
         }).data("dd");
-         
+        
         $container.on("change", function() { 
             fireSelectionEvent(palettes[dropDown.selectedIndex]);
         });

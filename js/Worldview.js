@@ -2,9 +2,7 @@
  * Namespace: Worldview
  */
 (function(ns) { 
- 
-    var log = Logging.getLogger("Worldview");
-    
+     
     /**
      * Constant: NAME
      * Official name of this application.
@@ -23,6 +21,12 @@
      * build process.
      */
     ns.BUILD_TIMESTAMP = "@BUILD_TIMESTAMP@";
+    
+    ns.GIBS_HOUR_DELAY = 3;
+    
+    ns.isDevelopment = function() {
+        return ns.BUILD_TIMESTAMP.indexOf("BUILD_TIMESTAMP") >= 0;
+    };
     
     /**
      * Function: namespace
@@ -57,6 +61,24 @@
         return obj;
     };
     
+    ns.now = function() {
+        return new Date();    
+    }
+    
+    ns.today = function() {
+        return new Date().clearUTCTime();
+    }
+        
+    ns.overrideNow = function(date) {
+        var overrideToday = date.clone().clearUTCTime();
+        ns.now = function() {
+            return new Date(date.getTime());
+        }
+        ns.today = function() {
+            return new Date(overrideToday.getTime());
+        }
+    };
+    
     /**
      * Function: error
      * Worldview general error handler. The error is reported to the browser
@@ -70,11 +92,13 @@
      *           caught.
      */
     ns.error = function(message, cause) {
-        log.error(message);
+        var log = Logging.getLogger();
         if ( cause ) {
             log.error(cause);
-        }
-   
+        } else {
+            log.error(message);
+        }       
+        
         if ( window.YAHOO && window.YAHOO.widget && 
                 window.YAHOO.widget.Panel ) {
             o = new YAHOO.widget.Panel("WVerror", {
@@ -82,7 +106,7 @@
                 zIndex: 1020, 
                 visible: false 
             });
-            o.setHeader('&nbsp;&nbsp;&nbsp;&nbsp;Warning');
+            o.setHeader('Warning');
             o.setBody("An unexpected error has occurred.<br/><br/>" + message);
             o.render(document.body);
             o.show();
@@ -103,7 +127,7 @@
      * title will be "Notice".
      */    
     ns.notify = function(message, title) {
-        log.info(message);
+        Logging.getLogger().info(message);
         
         if ( window.YAHOO && window.YAHOO.widget && 
                 window.YAHOO.widget.Panel ) {
@@ -113,7 +137,7 @@
                 visible: false 
             });
             title = title || "Notice";
-            o.setHeader('&nbsp;&nbsp;&nbsp;&nbsp;' + title);
+            o.setHeader(title);
             o.setBody(message);
             o.render(document.body);
             o.show();
@@ -123,6 +147,72 @@
             });
         }    
     };
+    
+    /**
+     * Function: ask
+     * Asks the end user a yes or no question in a dialog box.
+     * 
+     * Parameters:
+     * spec.header       - Header text to be displayed in the dialog box. If not
+     *                     specified, "Notice" will be used.
+     * spec.message      - Message text to be displayed in the dialog box. If 
+     *                     not specified, "Are you sure?" will be used.
+     * spec.okButton     - Text to be used in the no button. If not specified, 
+     *                     "OK" will be used.
+     * spec.cancelButton - Text to be used in the yes button. If not specified,
+     *                     "Cancel" will be used.
+     * spec.onOk         - Function to execute when the OK button is pressed. 
+     *                     If not specified, the dialog box simply closes.
+     * spec.onCancel     - Function to execute when the Cancel button is 
+     *                     pressed. If not specified, the dialog box simply 
+     *                     closes. 
+     */
+    ns.ask = function(spec) {
+        var dialog = new YAHOO.widget.SimpleDialog("dialog", {
+            width: "20em",
+            effect: {
+                effect: YAHOO.widget.ContainerEffect.FADE,
+                duration: 0.25
+            },
+            fixedcenter: true,
+            modal: true,
+            visible: false,
+            draggable: false
+        });
+        
+        var header = spec.header || "Notice";
+        dialog.setHeader(header);
+        dialog.setBody(spec.message || "Are you sure?");
+        
+        var handleOk = function() {
+            try {
+                this.hide();
+                if ( spec.onOk) {
+                    spec.onOk();
+                }
+            } catch ( error ) {
+                Worldview.error("Internal error", error);
+            }
+        };
+        var handleCancel = function() {
+            try {
+                this.hide();
+                if ( spec.onCancel ) {
+                    spec.onCancel();
+                }
+            } catch ( error ) {
+                Worldview.error("Internal error", error);
+            }
+        };
+        
+        var buttons = [
+            { text: spec.cancelButton || "Cancel", handler: handleCancel },
+            { text: spec.okButton || "OK", handler: handleOk }
+        ];
+        dialog.cfg.queueProperty("buttons", buttons); 
+        dialog.render(document.body);    
+        dialog.show();          
+    }
     
     /**
      * Function: size
@@ -170,14 +260,31 @@
         var parent = window;
         $.each(nodes, function(index, node) {
             if ( parent[node] === undefined ) {
-                throw "In " + path + ", " + node + " is undefined";
+                throw new Error("In " + path + ", " + node + " is undefined");
             }
             parent = parent[node];
         });
         return parent;
     };    
     
+    /**
+     * Function: queryStringToObject
+     * Converts a query string into an object.
+     * 
+     * Parameters:
+     * queryString - The query string to convert
+     * 
+     * Return:
+     * An object where each property is one of the parameters found in the
+     * query string.
+     */
     ns.queryStringToObject = function(queryString) {
+        if ( !queryString ) {
+            return "";
+        }
+        if ( queryString[0] === "?" ) {
+            queryString = queryString.substring(1);
+        }
         var parameters = queryString.split("&");
         result = {};
         for ( var i = 0; i < parameters.length; i++ ) {    
@@ -189,7 +296,6 @@
     
     /**
      * Function: extractFromQuery
-     * 
      * Extracts the value of the given key from the querystring.
      * 
      * Parameters:
@@ -207,46 +313,67 @@
         else
             return val[1];
     };
-        
+    
+    /**
+     * Function: ajaxError
+     * Wrapper for handling AJAX errors when the XHR and status code is not
+     * necessary.
+     * 
+     * Parameters:
+     * handler - Callback to be invoked on error that accepts one argument, 
+     * the error that was thrown.
+     * 
+     * Returns:
+     * The function wrapper.
+     */    
     ns.ajaxError = function(handler) {
         return function(jqXHR, textStatus, errorThrown) {
             handler(errorThrown);
         };
     };
-    
+        
     /**
-     * Function: toISODateString
-     * Converts a date object to a string with the date is ISO format.
+     * Function: clamp
      * 
-     * Example:
-     * (begin code)
-     * > Worldview.toISODateString(new Date(2013, 03, 15));
-     * "2013-03-15"
-     * (end code)
+     * Ensures a value is between an minimum and a maximum.
      * 
      * Parameters:
-     * date - Date object to convert
+     * min - Lower bound of the clamp range
+     * max - Upper bound of the clamp range
      * 
      * Returns:
-     * The date as a string in "YYYY-MM-DD" format.
+     * min if the value is below min, max if the value is above max,             
+     * othewise returns value
+     * 
+     * Throws:      
+     * If min is greater than max
      */
-    ns.toISODateString = function(date) {
-        return date.toISOString().split("T")[0];        
-    };
+     ns.clamp = function(min, max, value) {
+        if ( min > max ) {
+            throw new Error("Invalid clamp range (" + min + " - " + max + ")");
+        }
+        if ( value < min ) { return min; }
+        if ( value > max ) { return max; }
+        return value;
+    }
     
     /**
-     * Function: now
-     * Gets the current date and time as a Date object. It is useful to 
-     * call this function instead of directly invoking the Date constructor
-     * for mocking out during test.
+     * Function: clampIndex
+     * 
+     * Clamps a value to a valid array index.
+     * 
+     * Parameters:
+     * array - Clamp the index to this array
+     * index - Index value
      * 
      * Returns:
-     * Date object with the current date and time.
+     * Zero if the index is below zero, array.length - 1 if the index is greater 
+     * than the maximum array index, otherwise returns index.
      */
-    ns.now = function() {
-        return new Date();
-    };
-        
+    ns.clampIndex = function(array, index) {
+        return ns.clamp(0, array.length - 1, index);
+    }
+            
 })(window.Worldview = window.Worldview || {});
 
 

@@ -14,17 +14,6 @@ SOTE.namespace("SOTE.widget.ImageDownload");
 */
 SOTE.widget.ImageDownload = function(containerId, config){
 	this.container=document.getElementById(containerId);	
-	this.coords = null;
-	this.RESOLUTIONS_ON_SCREEN_GEO_ALL =  
-		[0.5625, 0.28125, 0.140625,
-		 0.0703125, 0.03515625, 0.017578125,
-		 0.0087890625, 0.00439453125, 0.002197265625];
-		 
-	this.RESOLUTIONS_ON_SERVER_GEO_250m =  
-		[0.5625, 0.28125, 0.140625,
-		 0.0703125, 0.03515625, 0.017578125,
-		 0.0087890625, 0.00439453125, 0.002197265625];
-	
 	
 	if (this.container==null){
 		this.setStatus("Error: element '"+containerId+"' not found!",true);
@@ -38,7 +27,7 @@ SOTE.widget.ImageDownload = function(containerId, config){
 	this.alignTo = config.alignTo;
 	this.id = containerId;
 	this.m = config.m;
-	this.WMTSLayer = null;
+	
 	
     if (config.baselayer === undefined)
   	{
@@ -76,8 +65,6 @@ SOTE.widget.ImageDownload.prototype.init = function(){
 		alert("No REGISTRY found!  Cannot register Download!");
 	}
 
-	this.projectionSwitch = "geographic";
-		
 	var htmlElements = "<div>Resolution:<select id='selImgResolution'><option value='1'>250m</option><option value='2'>500m</option><option value='4'>1km</option><option value='20'>5km</option><option value='40'>10km</option></select>";
     htmlElements +="<br />Format: <select id='selImgFormat'><option value='image/jpeg'>JPEG</option><option value='image/png'>PNG</option><option value='image/geotiff'>GeoTIFF</option></select>";
     htmlElements +="<br />Raw Image Size: ~ <span id='imgFileSize'> </span> MB <br />(<span id='imgWidth''></span> x <span id='imgHeight'></span> pixels)";
@@ -129,44 +116,52 @@ SOTE.widget.ImageDownload.prototype.getValue = function(){
 
 
 SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
-	
+		
 	try {
     	var bbox = SOTE.util.extractFromQuery('map',qs);
     	var time = SOTE.util.extractFromQuery('time',qs);
     	var pixels = SOTE.util.extractFromQuery('camera', qs);
       	var s = SOTE.util.extractFromQuery('switch',qs);
       	var products = SOTE.util.extractFromQuery('products',qs);
-      	
-      	var px = pixels.split(",");
-    	var x1 = px[0]; var y1= px[1]; var x2 = px[2]; var y2=px[3];
-    
-       	var lonlat1 = this.m.productMap.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(x1, y2));
-       	var lonlat2 = this.m.productMap.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(x2, y1));
-     
+     	var px = pixels.split(",");
+    	var x1 = px[0]; var y1= px[1]; var x2 = px[2]; var y2=px[3]; 
+      	var lonlat1 = this.m.productMap.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(Math.floor(x1), Math.floor(y2)));
+       	var lonlat2 = this.m.productMap.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(Math.floor(x2), Math.floor(y1)));
+        
         var dlURL  = "http://map2.vis.earthdata.nasa.gov/imagegen/?"; 
          
-         
-      	 //var dTime = new Date((time.split(/T/))[0]+"T00:00:00");
-      	 var dTime = SOTE.util.UTCDateFromISO8601String(time);
-      	 dTime.setHours(0);
-      	 dTime.setMinutes(0);
-      	 dTime.setSeconds(0);
-      	 
+        var conversionFactor = 256;
+        if (s=="geographic") {
+        	if( !(0 != $('#selImgFormat option[value=KMZ]').length)) {
+        		$('#selImgFormat').append( $('<option></option>').val("KMZ").text("KMZ"));
+        	}
+        	conversionFactor = 0.002197;
+        }
+        else { //polar 
+       	 if( 0 != $('#selImgFormat option[value=KMZ]').length) {
+        		$('#selImgFormat option[value=KMZ]').remove();
+        	}
+        }
+      	 var dTime = Date.parseISOString(time).clearUTCTime();
       	 //Julian date, padded with two zeros (to ensure the julian date is always in DDD format).
-      	 var jDate = "00" + (1+Math.ceil((dTime - new Date(dTime.getFullYear(),0,1)) / 86400000));
-      	 dlURL += "TIME="+dTime.getFullYear()+(jDate).substr((jDate.length)-3);
+      	 var jDate = "00" + (1+Math.ceil((dTime - new Date(dTime.getUTCFullYear(),0,1)) / 86400000));
+      	 dlURL += "TIME="+dTime.getUTCFullYear()+(jDate).substr((jDate.length)-3);
+
       	 
       	
-      	 dlURL += "&extent="+lonlat1.lon+","+lonlat1.lat+","+lonlat2.lon+","+lonlat2.lat;
+      	dlURL += "&extent="+lonlat1.lon+","+lonlat1.lat+","+lonlat2.lon+","+lonlat2.lat;
+      	 
+      	dlURL += "&switch="+s;
       	
-      	 dlURL +="&layers=";
+      	dlURL +="&layers=";
       	//Reverse the order of overlays to get the correct layer ordering.
-    	if (products != ""){
+      	if (products != ""){
     		var a = products.split("~");
-    		var base = a[0].split(/[\.,]/);
+    		var base = a[0].split(",");
     		
-    		var overlays = a[1].split(".");
-    		overlays.reverse(); overlays.pop();
+
+    		var overlays = a[1].split(/[\.,]/);
+  		    overlays.reverse(); overlays.pop();
     		for(var i=1; i<base.length; ++i){
     			dlURL += base[i]+",";
     		}
@@ -179,14 +174,15 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
     	
     	}
     	
-    	
+
       	 var imgWidth=0; var imgHeight=0;
+
     	    
-    	 $("select#selImgResolution").change(function () {
+    	$("select#selImgResolution").change(function () {
              	    imgRes =  $("#selImgResolution option:selected").val(); 
-                    imgWidth =  Math.round((Math.abs(lonlat2.lon - lonlat1.lon) / 0.002197) / Number(imgRes));
-    				imgHeight = Math.round((Math.abs(lonlat2.lat - lonlat1.lat) / 0.002197) / Number(imgRes)); 
-    	 		    imgFilesize =  ((imgWidth * imgHeight * 24) / 8388608).toFixed(2);
+                    imgWidth =  Math.round((Math.abs(lonlat2.lon - lonlat1.lon) / conversionFactor) / Number(imgRes));
+    				imgHeight = Math.round((Math.abs(lonlat2.lat - lonlat1.lat) / conversionFactor) / Number(imgRes)); 
+    	 		    imgFilesize =  ((   imgWidth * imgHeight * 24) / 8388608).toFixed(2);
     
         	$("#imgWidth").text((imgWidth));
         	$("#imgHeight").text((imgHeight));

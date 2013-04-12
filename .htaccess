@@ -4,7 +4,7 @@
   ExpiresActive On
 
   #Dont cache html files or php
-  <FilesMatch \.(html|php)$>
+  <FilesMatch \.(html|php|txt)$>
      ExpiresDefault A0
   </FilesMatch>
   #cache for one hour

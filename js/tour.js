@@ -53,8 +53,8 @@ function startTour() {
 	var pos, width, height, xval, yval; // helpful calulation vars
 	
 	// splash screen overlay
-	var splashOverlay = new YAHOO.widget.Panel("splash", { zIndex:1020, visible:false, modal:true, draggable:false } );
-	var item = "<div>"+
+	var splashOverlay = new YAHOO.widget.Panel("splash", { zIndex:1020, visible:false, modal:true, draggable:false,  } );
+	var item = "<div class=\"splash\">"+
 		           "<h3>Welcome to Worldview!</h3>"+
 		           "</br>"+
 		           "<center>"+
@@ -116,14 +116,32 @@ function startTour() {
 	                   "</br>"+
 	                   "<p class='tour'>The <span class='highlight'>Date Slider</span> is used to show imagery that was observed on a specific date.  You can click the slider to choose a date or drag the slider to view changes over time.</p>"+
 	                   "<p class='tour'><span class='tryIt'>Try It!</span></p>"+
-	                   "<p class='tour'>Use the date slider to change the date to August 23, 2012.</p>"+
+	                   "<p class='tour'>Use the date slider to change the date to 2012 Aug 23.</p>"+
 		      	   "</div>";
 	document.getElementById("datePanel").innerHTML = dateText;
 	
 	var toolbarText = "<div>"+
-	                      "<h3>Tool Bar</h3>"+
+	                      "<h3>Toolbar</h3>"+
 	                      "</br>"+
-	                      "<p class='tour\'>The <span class='highlight'>Tool Bar</span> includes tools to show arctic and antarctic views of the planet, create a shareable link, and download an image.  You can also view the \"About\" page to get more information on Worldview.</p>"+
+	                 	  "<p>The toolbar provides several additional utilities for interacting with Worldview.</p>"+
+	                      "<table class=\"tour\">"+
+	                          "<tr>" +
+	                              "<td><img src=\"images/permalinkon.png\"</td>"+
+	                              "<td><p class=\"tour\">The permalink icon lets you create a permanent, shareable link to a particular view in Worldview.</p></td>"+
+	                          "</tr>" + 
+	                          "<tr>" +
+	                              "<td><img src=\"images/globe.png\"</td>"+
+	                              "<td><p class=\"tour\">The globe icon lets you change between Arctic, geographic, and Antarctic projections of the world.</p></td>"+
+	                          "</tr>" +
+	                          "<tr>" +
+	                              "<td><img src=\"images/camera.png\"</td>"+
+	                              "<td><p class=\"tour\">The camera icon lets you download an image of your current view in Worldview. Palettes are not yet supporoted with this feature.</p></td>"+
+	                          "</tr>" + 
+	                          "<tr>" +
+	                              "<td><img src=\"images/informationon.png\"</td>"+
+	                              "<td><p class=\"tour\">The information icon provides you with more information on Worldview and its data sources.</p></td>"+
+	                          "</tr>" +
+	                      "</table>" +
 	                      "</br>"+
 		      	      "</div>";
 	document.getElementById("toolbarPanel").innerHTML = toolbarText;
@@ -155,7 +173,7 @@ function startTour() {
 																	  visible:false, 
 																	  modal:true,
 																	  draggable:false});
-	var conclusionText = "<div>"+
+	var conclusionText = "<div class=\"splash\">"+
 							 "<center>"+
 	                             "<h3>Finished!</h3>"+
 	                             "</br>"+
@@ -178,7 +196,14 @@ function startTour() {
 	var repeatTour = function(e) {
 		console.log("repeating tour");
 		e.stopPropagation();
-		$('#joyRideTipContent').joyride('restart');
+		$('#joyRideTipContent').joyride({template : {'link':'<a href="#" class="joyride-close-tip">X</a>'},
+                                         postStepCallback : function (index, tip) {
+                                         	 if(index == 3) {
+                                                 console.log("finished tour");
+    										     conclusionPanel.show();
+    										     conclusionPanel.center();
+    										 }
+                                         }});	
 		conclusionPanel.hide();
 		console.log("exiting repeat");
 	}

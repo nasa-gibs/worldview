@@ -12,7 +12,9 @@ SOTE.util.Registry = function () {
   this.readyRegistry = new Array();
   // holds array of callbacks for when all components are ready
   this.allReadyCallbacks = new Array();
-
+  // HACK: Components can check this value to ignore bogus state on startup
+  this.isLoadingQuery = false;
+  
   // register a component
   this.register = function register(id,component){
     var compObj = new ComponentObj(id,component);
@@ -175,6 +177,11 @@ SOTE.util.Registry = function () {
     var additionalValues = getRegistryDependentValues(me.name, this.name);
     if(additionalValues != ""){
       args = args + "&" + additionalValues;
+    } else {
+      // HACK: args here is actually an array. The line above converts to 
+      // string if there are additionalValues. If not, follow the same
+      // trick.
+      args = args + "";
     }
     // get physical comp and do the update
     var comp = getGComponent(me.name);

@@ -1,5 +1,6 @@
 {
     "description": "Aqua / AIRS",
+    "excludePalettes": ["orange_1"],
     "max": "520",
     "min": "360",
     "name": "Dust Score",
