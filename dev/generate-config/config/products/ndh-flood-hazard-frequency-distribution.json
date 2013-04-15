@@ -1,6 +1,6 @@
 {
     "description": "SEDAC Global Flood Hazard Frequency and Distribution, v1 (1980\u20132000)",
-    "name": "Flood Hazard:Frequency and Distribution",
+    "name": "Flood Hazard: Frequency and Distribution",
     "parameters": {
         "format": "image/png",
         "layers": "ndh-flood-hazard-frequency-distribution",

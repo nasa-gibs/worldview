@@ -1,6 +1,6 @@
 {
     "description": "SEDAC Global Cyclone Proportional Economic Loss Risk Deciles, v1 (2000)",
-    "name": "Cyclone Hazard:Economic Risk",
+    "name": "Cyclone Hazard: Economic Risk",
     "parameters": {
         "format": "image/png",
         "layers": "ndh-cyclone-proportional-economic-loss-risk-deciles",
@@ -8,7 +8,7 @@
     },
     "product": "static",
     "projections": {
-        "geographic": {}
+        "geographic": {} 
     },
     "properties": {
         "opacity": 0.75,

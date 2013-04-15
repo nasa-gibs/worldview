@@ -1,6 +1,6 @@
 {
     "description": "SEDAC Global Cyclone Hazard Frequency and Distribution, v1 (1980\u20132000)",
-    "name": "Cyclone Hazard:Frequency and Distribution",
+    "name": "Cyclone Hazard: Frequency and Distribution",
     "parameters": {
         "format": "image/png",
         "layers": "ndh-cyclone-hazard-frequency-distribution",
