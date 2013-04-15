@@ -455,13 +455,13 @@
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
-	        "label" =>  "Sulphur Dioxide (Day, Prata Algorithm)",
+	        "label" =>  "Sulfur Dioxide (Day, Prata Algorithm)",
 	        "sublabel" =>  "Aqua / AIRS",
 	        "value" =>  "AIRS_Prata_SO2_Index_Day",
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
-	        "label" =>  "Sulphur Dioxide (Night, Prata Algorithm)",
+	        "label" =>  "Sulfur Dioxide (Night, Prata Algorithm)",
 	        "sublabel" =>  "Aqua / AIRS",
 	        "value" =>  "AIRS_Prata_SO2_Index_Night",
 	        "type" => "multi", "category" => "overlays"
@@ -691,13 +691,13 @@
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
-	        "label" =>  "Sulphur Dioxide (Day, Prata Algorithm)",
+	        "label" =>  "Sulfur Dioxide (Day, Prata Algorithm)",
 	        "sublabel" =>  "Aqua / AIRS",
 	        "value" =>  "AIRS_Prata_SO2_Index_Day",
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
-	        "label" =>  "Sulphur Dioxide (Night, Prata Algorithm)",
+	        "label" =>  "Sulfur Dioxide (Night, Prata Algorithm)",
 	        "sublabel" =>  "Aqua / AIRS",
 	        "value" =>  "AIRS_Prata_SO2_Index_Night",
 	        "type" => "multi", "category" => "overlays"
@@ -1258,13 +1258,13 @@
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
-	        "label" =>  "Sulphur Dioxide (Day, Prata Algorithm)",
+	        "label" =>  "Sulfur Dioxide (Day, Prata Algorithm)",
 	        "sublabel" =>  "Aqua / AIRS",
 	        "value" =>  "AIRS_Prata_SO2_Index_Day",
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
-	        "label" =>  "Sulphur Dioxide (Night, Prata Algorithm)",
+	        "label" =>  "Sulfur Dioxide (Night, Prata Algorithm)",
 	        "sublabel" =>  "Aqua / AIRS",
 	        "value" =>  "AIRS_Prata_SO2_Index_Night",
 	        "type" => "multi", "category" => "overlays"

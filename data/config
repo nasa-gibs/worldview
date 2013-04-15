@@ -41425,7 +41425,7 @@
             "description": "Aqua / AIRS",
             "max": "30",
             "min": "0",
-            "name": "Sulphur Dioxide (Day, Prata Algorithm)",
+            "name": "Sulfur Dioxide (Day, Prata Algorithm)",
             "product": "daily",
             "projections": {
                 "geographic": {
@@ -41474,7 +41474,7 @@
             "description": "Aqua / AIRS",
             "max": "30",
             "min": "0",
-            "name": "Sulphur Dioxide (Night, Prata Algorithm)",
+            "name": "Sulfur Dioxide (Night, Prata Algorithm)",
             "product": "daily",
             "projections": {
                 "geographic": {
@@ -43819,7 +43819,7 @@
                     512
                 ]
             },
-            "recommendPalettes": [
+            "recommendedPalettes": [
                 "orange_1"
             ],
             "rendered": "MODIS_Aerosol",
