@@ -31,12 +31,11 @@ Release 0.4.0
     icon are now correct when visiting a polar projection from a permalink.
   - Between 00:00 and 03:00 UTC, the previous day is shown to account
     for the near-real time processing delay.
+  - In time slider, the "Dec" and "2013" labels no longer disappear.
   
 * Known Issues
   - Custom color palettes are not supported on Safari 5 or earlier.
   - Custom color palettes can not be used in image download.
-  - In time slider, the "Dec" and "2013" labels can intermittently disappear 
-    based on the browser's width
   - On iOS, layers cannot be reordered 
   - Polar land boundaries don't match actual land  
   - Worldview does not work with Internet Explorer version 10 and
