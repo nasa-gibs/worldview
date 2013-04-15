@@ -2,7 +2,7 @@
 div.olControlMousePosition {
 	position: absolute;
 	right: 12px; 
-	bottom: 80px;
+	bottom: 98px;
 	z-index: 2000;
 	padding: 1px 8px;
 
@@ -16,7 +16,7 @@ div.olControlMousePosition {
 div.olControlScaleLineCustom {
 	position: absolute;
 	right: 12px;
-	bottom: 100px;
+	bottom: 118px;
 	z-index: 2000;
 	
 	display: block;
@@ -69,7 +69,7 @@ div.olMap {
 
 /*  Zoom panel controls */
 div.olControlZoomPanelCustom {
-	top: 101px;
+	top: 125px;
     left: 14px;
 	height: 68px;
 	width: 36px;

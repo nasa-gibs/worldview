@@ -33,7 +33,7 @@ background: -o-linear-gradient(top,  rgba(35,40,45,0.65) 0%,rgba(0,5,10,0.65) 50
 background: -ms-linear-gradient(top,  rgba(35,40,45,0.65) 0%,rgba(0,5,10,0.65) 50%,rgba(35,40,45,0.65) 100%); /* IE10+ */
 background: linear-gradient(to bottom,  rgba(35,40,45,0.65) 0%,rgba(0,5,10,0.65) 50%,rgba(35,40,45,0.65) 100%); /* W3C */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bf2d2d2d', endColorstr='#bf2d2d2d',GradientType=0 ); /* IE6-9 */
-
+height:23px;
 
 }
 ul.sliderLabel {text-shadow: none; color:#fff; margin:-20px 0 0 0; background:none; height:20px; overflow:hidden; font-size:12px !important; font-weight:bold; line-height:20px !important;}

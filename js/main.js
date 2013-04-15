@@ -113,7 +113,7 @@ $(function() {// Initialize "static" vars
             log.warn("Development version");
         }	  
                  
-        startTour();   
+        startTour(false);   
     };
         
     var onConfigLoad = function(config) {
