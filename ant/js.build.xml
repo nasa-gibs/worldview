@@ -37,7 +37,6 @@
 		<file name="switch.js"/>
 		<file name="selector.js"/>
 		<file name="sote.js"/>
-        <file name="tour.js"/>
 	    	
 		<file name="Logging.js"/>
 		<file name="Date.js"/>
@@ -65,6 +64,7 @@
         <file name="Worldview/Widget/Palette.js"/>
         <file name="Worldview/Widget/WorldviewMap.js"/>
 
+        <file name="tour.js"/>
 		<file name="main.js"/>
 	</filelist>
 	
