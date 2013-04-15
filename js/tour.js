@@ -53,48 +53,47 @@ function startTour(noDisable) {
 	var pos, width, height, xval, yval; // helpful calulation vars
 	
 	// splash screen overlay
-	if(!this.splashOverlay){
-		this.splashOverlay = new YAHOO.widget.Panel("splash", { zIndex:1020, visible:false, modal:true, draggable:false,  } );
+	if(this.splashOverlay){
+	    this.splashOverlay.destroy();
+	}
+	this.splashOverlay = new YAHOO.widget.Panel("splash", { zIndex:1020, visible:false, modal:true, draggable:false,  } );
+
+	var item = "<div class=\"splash\">"+
+		           "<h3>Welcome to Worldview!</h3>"+
+		           "</br>"+
+		           "<center>"+
+		               "<p class=\"splash\">This new tool from NASA's <a href='http://earthdata.nasa.gov/about-eosdis' target='_blank'>EOSDIS</a> allows users to interactively browse satellite imagery in near real-time, generally within 3 hours of observation.  Use the tools described below to change the imagery on the map and compare it to past observations.</p>"+  
+		               "</br></br>"+
+		               "<table class=\"splash\">"+
+		                   "<tr>"+
+		                       "<td><img src=\"images/picker-mini.png\" alt=\"Product Picker\" width=\"100\" class=\"splash\"/></td>"+
+		                       "<td><img src=\"images/date-mini.png\" alt=\"Date Slider\" width=\"100\" class=\"splash\"/></td>"+
+		                       "<td><img src=\"images/toolbar-mini.png\" alt=\"Toolbar\" width=\"100\" class=\"splash\"/></td>"+
+		                       "<td><img src=\"images/map-mini.png\" alt=\"Map\" width=\"100\" class=\"splash\"/></td>"+
+		                   "</tr>"+
+		                   "<tr>"+
+		                       "<td><p class=\"splash\">Use the <span class=\"highlight\">Product Picker</span> on the left to choose the type of imagery to display on the map.</p></td>"+
+		               	       "<td><p class=\"splash\">Use the <span class=\"highlight\">Date Slider</span> on the bottom to choose the date of the observations.</p></td>"+
+		               	       "<td><p class=\"splash\">Use the <span class=\"highlight\">Tool Bar</span> at the top to see other tools for changing and saving the view.</p></td>"+
+		               	       "<td><p class=\"splash\">Use the <span class=\"highlight\">Map</span> itself to pan or zoom in on an area.</p></td>"+
+		                   "</tr>"+
+		                   "<tr>"+
+		                   "<td><p></p></td>"+
+		                   "</tr>"+
+		                   "<tr>"+
+		                       "<td rowspan=\"2\" colspan=\"2\"><button id='takeTour' type='button' class=\"takeTour\"; background-image:url('../images/splash-button.png')\">Take Tour</button></td>"+
+		                       "<td rowspan=\"2\" colspan=\"2\"><button id='skipTour' type='button' class=\"skipTour\">Skip Tour</button></td>"+
+					       "</tr>"+
+					       "<tr></tr>"+
+					       "<tr>"+
+					   	       "<td><p class=\"splash\"><input id='dontShowAgain' value=\"false\" type='checkbox'>Do not show again</p></td>"+
+					       "</tr>"+ 
+					   "</table>"+
+				   "</center>"+
+			   "</div>";
 	
-		var item = "<div class=\"splash\">"+
-			           "<h3>Welcome to Worldview!</h3>"+
-			           "</br>"+
-			           "<center>"+
-			               "<p class=\"splash\">This new tool from NASA's <a href='http://earthdata.nasa.gov/about-eosdis' target='_blank'>EOSDIS</a> allows users to interactively browse satellite imagery in near real-time, generally within 3 hours of observation.  Use the tools described below to change the imagery on the map and compare it to past observations.</p>"+  
-			               "</br></br>"+
-			               "<table class=\"splash\">"+
-			                   "<tr>"+
-			                       "<td><img src=\"images/picker-mini.png\" alt=\"Product Picker\" width=\"100\" class=\"splash\"/></td>"+
-			                       "<td><img src=\"images/date-mini.png\" alt=\"Date Slider\" width=\"100\" class=\"splash\"/></td>"+
-			                       "<td><img src=\"images/toolbar-mini.png\" alt=\"Toolbar\" width=\"100\" class=\"splash\"/></td>"+
-			                       "<td><img src=\"images/map-mini.png\" alt=\"Map\" width=\"100\" class=\"splash\"/></td>"+
-			                   "</tr>"+
-			                   "<tr>"+
-			                       "<td><p class=\"splash\">Use the <span class=\"highlight\">Product Picker</span> on the left to choose the type of imagery to display on the map.</p></td>"+
-			               	       "<td><p class=\"splash\">Use the <span class=\"highlight\">Date Slider</span> on the bottom to choose the date of the observations.</p></td>"+
-			               	       "<td><p class=\"splash\">Use the <span class=\"highlight\">Tool Bar</span> at the top to see other tools for changing and saving the view.</p></td>"+
-			               	       "<td><p class=\"splash\">Use the <span class=\"highlight\">Map</span> itself to pan or zoom in on an area.</p></td>"+
-			                   "</tr>"+
-			                   "<tr>"+
-			                   "<td><p></p></td>"+
-			                   "</tr>"+
-			                   "<tr>"+
-			                       "<td rowspan=\"2\" colspan=\"2\"><button id='takeTour' type='button' class=\"takeTour\"; background-image:url('../images/splash-button.png')\">Take Tour</button></td>"+
-			                       "<td rowspan=\"2\" colspan=\"2\"><button id='skipTour' type='button' class=\"skipTour\">Skip Tour</button></td>"+
-						       "</tr>"+
-						       "<tr></tr>"+
-						       "<tr>"+
-						   	       "<td><p class=\"splash\"><input id='dontShowAgain' value=\"false\" type='checkbox'>Do not show again</p></td>"+
-						       "</tr>"+ 
-						   "</table>"+
-					   "</center>"+
-				   "</div>";
-		
-		splashOverlay.setBody(item);
-	}
-	else {
-		splashOverlay.show();
-	}
+	splashOverlay.setBody(item);
+    splashOverlay.show();
 	
 	/* set up all of the callout panels */
 	var productText = "<div>"+
