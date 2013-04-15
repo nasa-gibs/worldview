@@ -27,6 +27,7 @@ SOTE.namespace("SOTE.widget.DateSpan");
 */
 SOTE.widget.DateSpan = function(containerId, config){
     this.log = Logging.getLogger("Worldview.Widget.DateSpan");
+    this.SLIDER_EVENT_DELAY = 250; // millseconds
 	this.SLIDER_WIDTH = 1000;
     this.DAY_IN_MS = 24*60*60*1000;
     this.sliders = new Object();
@@ -119,6 +120,12 @@ SOTE.widget.DateSpan = function(containerId, config){
 	this.dataSourceUrl = config.dataSourceUrl;
 	this.statusStr = "";
 	this.init();
+	
+	var self = this;
+	this.eventTimer = Worldview.Timer(function() {
+	    self.log.debug("dateSpan: fire");
+	    REGISTRY.fire(self);
+	}, this.SLIDER_EVENT_DELAY);
 	
 	$(window).bind("resize",{self:this},SOTE.widget.DateSpan.refreshSliders);
 	
@@ -270,14 +277,7 @@ SOTE.widget.DateSpan.prototype.createSlider = function(type){
   *
 */
 SOTE.widget.DateSpan.prototype.fire = function(){
-
-	if(REGISTRY){
-		REGISTRY.fire(this);
-	}
-	else{
-		alert("No REGISTRY found! Cannot fire to REGISTRY from AccordionPicker!");
-	}
-
+    this.eventTimer.restart();
 };
 
 

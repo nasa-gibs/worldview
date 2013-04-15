@@ -46,7 +46,8 @@
 		<file name="Worldview/Support.js"/>
         <file name="Worldview/Permalink.js"/>
         <file name="Worldview/Scheduler.js"/>
-               
+        <file name="Worldview/Timer.js"/>
+                       
         <file name="Worldview/Palette.js"/>
         <file name="Worldview/Palette/ColorBar.js"/>
         <file name="Worldview/Palette/Palette.js"/>
