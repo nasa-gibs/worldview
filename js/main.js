@@ -39,7 +39,7 @@ $(function() {// Initialize "static" vars
         selector.render(document.body);
         var sel_id = selector.id;
         selector.beforeHideEvent.subscribe(function(e){ $("#"+sel_id).css("display","none");})
-        selector.beforeHideEvent.subscribe(closeSelector);
+        //selector.beforeHideEvent.subscribe(closeSelector);
         selector.beforeShowEvent.subscribe(function(e){$("#"+sel_id).css("display","block");})
         //this.selector.subscribe("beforeHide", closeSelector);
         // Create map 

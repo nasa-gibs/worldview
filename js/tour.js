@@ -14,6 +14,9 @@ function startTour(noDisable) {
 	console.log("VIEWPORT:  width = " + viewWidth + ", height = " + viewHeight);
 	
 	if(devWidth < 500 || viewWidth < 500 || devHeight < 500 || viewHeight < 500) {
+		if(noDisable) {
+			Worldview.notify("Unfortunately the Worldview tour can only be viewed in larger web browser windows.");
+		}
 		return;
 	}
 	
@@ -175,6 +178,7 @@ function startTour(noDisable) {
 
 
 	/* conclusion screen after completing the tour */
+	if(!this.conclusionPanel){
 	var conclusionPanel = new YAHOO.widget.Panel("conclusionPanel", { zIndex:1020, 
 																	  visible:false, 
 																	  modal:true,
@@ -195,7 +199,7 @@ function startTour(noDisable) {
 		      	         "</div>";
 		      	  
 	conclusionPanel.setBody(conclusionText);
-
+	}
 	/*
 	 * Restart the tour at the beginning.
 	 */

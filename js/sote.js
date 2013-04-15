@@ -1,10 +1,12 @@
 var rb;
 
 function showSelector(e){
+	
 	console.log("show selector");
 	var selector = e.data.selector;
 	selector.show();
 	var myid = "selector_c";
+	
 	// force center
 	selector.center();
 	var viewWidth = $(window).width();
@@ -31,6 +33,25 @@ function showSelector(e){
 		}
 	}
 }
+
+/**
+ * Before closing the selector, move the product picker back to its
+ * original place if it's showing.
+ *//*
+function closeSelector(e){
+	
+	console.log("close selector");
+	var selector = e.data.selector;
+	
+	// force center
+	selector.center();
+	var viewWidth = $(window).width();
+	var selWidth = parseInt(YAHOO.util.Dom.getStyle(myid, 'width'), 10);
+	var newX = (viewWidth - selWidth)/2;
+	YAHOO.util.Dom.setX(myid, newX);
+	console.log("selWidth = " + selWidth);
+	console.log("newX = " + 0);
+}*/
 
 function showOverlay(){
 	if(this.overlay === undefined){ 
