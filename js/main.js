@@ -113,7 +113,7 @@ $(function() {// Initialize "static" vars
             log.warn("Development version");
         }	  
                  
-        startTour(false);   
+        Worldview.Tour.start(false);   
     };
         
     var onConfigLoad = function(config) {

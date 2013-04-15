@@ -88,7 +88,6 @@
 	<!-- js.dev --> <script type="text/javascript" src="js/switch.js"></script>
 	<!-- js.dev --> <script type="text/javascript" src="js/selector.js"></script>
 	<!-- js.dev --> <script type="text/javascript" src="js/sote.js"></script>
-	<!-- js.dev --> <script type="text/javascript" src="js/tour.js"></script>
 
     <!-- js.dev --> <script type="text/javascript" src="js/Logging.js"></script> 
     <!-- js.dev --> <script type="text/javascript" src="js/Date.js"></script>
@@ -116,6 +115,7 @@
     <!-- js.dev --> <script type="text/javascript" src="js/Worldview/Widget/Palette.js"></script>
     <!-- js.dev --> <script type="text/javascript" src="js/Worldview/Widget/WorldviewMap.js"></script>
     	
+    <!-- js.dev --> <script type="text/javascript" src="js/tour.js"></script>    	
 	<!-- js.dev --> <script type="text/javascript" src="js/main.js"></script>
 </head>
 
@@ -124,7 +124,7 @@
 		<div data-role="content">
 			<div id="banner"><img class='logo' src='images/logo.png' />
 				<ul id="toolbarlist">
-					<li><!--<a id='aboutus_link' class='toolbaricon' title='Information' href='javascript:showOverlay();'>--><div id='info_drop'><div id='info' title='Information'><img src='images/information.png' /></div><div class='hidden'><a href="mailto:support@earthdata.nasa.gov?subject=Feedback for EOSDIS Worldview tool" target="_blank" title='Feedback'>Feedback</a><a href='javascript:startTour(true);' title='Start Tour'>Start Tour</a><a href='javascript:showOverlay();' title='About Worldview'>About</a></div></div><!--</a>--></li>
+					<li><!--<a id='aboutus_link' class='toolbaricon' title='Information' href='javascript:showOverlay();'>--><div id='info_drop'><div id='info' title='Information'><img src='images/information.png' /></div><div class='hidden'><a href="mailto:support@earthdata.nasa.gov?subject=Feedback for EOSDIS Worldview tool" target="_blank" title='Feedback'>Feedback</a><a href='javascript:Worldview.Tour.start(true);' title='Start Tour'>Start Tour</a><a href='javascript:showOverlay();' title='About Worldview'>About</a></div></div><!--</a>--></li>
 					<!--<li><a id='camera_link' class='toolbaricon' href='javascript:showRubberBand();'><img src='images/camera.png' /></a></li>-->
 					<li><div id='camera'></div></li>
 					<li><div id="switch"></div></li>
