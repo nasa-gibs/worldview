@@ -16,8 +16,8 @@ SOTE.namespace("SOTE.widget.RubberBand");
 
 SOTE.widget.RubberBand = function (containerId, config){  
     this.PALETTE_WARNING = 
-        "Image download does not yet support the custom palette that you " + 
-        "have applied. Would you like to continue anyway?";
+        "Image download does not yet support the custom palette(s) that you " + 
+        "have applied. Would you like to continue with the default color palette(s)?";
         
 	this.container=document.getElementById(containerId);	
 	this.coords = null;
