@@ -388,11 +388,17 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
         zoomOutControl.title = "zoom out";
         zoomOutControl.displayClass = mapClass + "olControlZoomOutCustom";
 
+        var zoomToMaxExtentControl = new OpenLayers.Control.ZoomToMaxExtent();
+        zoomToMaxExtentControl.title = "zoom to max extent";
+        zoomToMaxExtentControl.displayClass = mapClass + 
+                "olControlZoomToMaxExtentCustom";
+        
         // Create panel to hold zoom controls and add to map
         var zoomPanel = new OpenLayers.Control.Panel();
         zoomPanel.displayClass = mapClass + "olControlZoomPanelCustom";
         zoomPanel.addControls(zoomInControl);
         zoomPanel.addControls(zoomOutControl);
+        zoomPanel.addControls(zoomToMaxExtentControl);
         controls.push(zoomPanel);
        
         // Add navigation controls
