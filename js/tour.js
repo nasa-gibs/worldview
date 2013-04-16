@@ -79,7 +79,7 @@ Worldview.namespace("Tour");
                            "</br></br>"+
                            "<table class=\"splash\">"+
                                "<tr>"+
-                                   "<td><img src=\"images/picker-mini.png\" alt=\"Product Picker\" width=\"100\" class=\"splash\"/></td>"+
+                                   "<td><img src=\"images/picker-mini.png\" alt=\"Product Picker\" width=\"100\" height=\"108\" class=\"splash\"/></td>"+
                                    "<td><img src=\"images/date-mini.png\" alt=\"Date Slider\" width=\"100\" class=\"splash\"/></td>"+
                                    "<td><img src=\"images/toolbar-mini.png\" alt=\"Toolbar\" width=\"100\" class=\"splash\"/></td>"+
                                    "<td><img src=\"images/map-mini.png\" alt=\"Map\" width=\"100\" class=\"splash\"/></td>"+
