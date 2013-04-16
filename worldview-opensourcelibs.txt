@@ -1,5 +1,5 @@
 NASA EOSDIS Worldview
-Acknowledgement and gratitude of open source libraries used
+Acknowledgement of Open Source Libraries
 
 http://earthdata.nasa.gov/labs/worldview/
 
