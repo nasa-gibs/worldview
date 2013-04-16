@@ -157,6 +157,7 @@
 			<fileset dir="${basedir}">
 				<include name="index.html"/>
 				<include name=".htaccess"/>
+				<include name="worldview-opensourcelibs.txt"/>
 				<include name="release_notes.txt"/>
 			</fileset>
 		</copy>
