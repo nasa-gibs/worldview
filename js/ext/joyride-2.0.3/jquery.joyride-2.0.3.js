@@ -614,27 +614,28 @@
         if (!/body/i.test(settings.$target.selector)) {
 
             if (methods.bottom()) {
+            
               settings.$next_tip.css({
                 top: (settings.$target.offset().top + nub_height + settings.$target.outerHeight()),
                 left: settings.$target.offset().left});
               methods.nub_position($nub, $border, settings.tipSettings.nubPosition, 'top');
 
             } else if (methods.top()) {
-
+			
               settings.$next_tip.css({
                 top: (settings.$target.offset().top - settings.$next_tip.outerHeight() - nub_height),
                 left: settings.$target.offset().left});
               methods.nub_position($nub, $border, settings.tipSettings.nubPosition, 'bottom');
 
             } else if (methods.right()) {
-
+			
               settings.$next_tip.css({
                 top: settings.$target.offset().top,
                 left: (settings.$target.outerWidth() + settings.$target.offset().left)});
               methods.nub_position($nub, $border, settings.tipSettings.nubPosition, 'left');
 
             } else if (methods.left()) {
-
+			
               settings.$next_tip.css({
                 top: settings.$target.offset().top,
                 left: (settings.$target.offset().left - settings.$next_tip.outerWidth() - nub_height)});
@@ -647,7 +648,7 @@
                 .removeClass('top')
                 .removeClass('right')
                 .removeClass('left');
-
+			
               settings.tipSettings.tipLocation = settings.tipSettings.tipLocationPattern[settings.attempts];
 
               settings.attempts++;
@@ -830,7 +831,7 @@
       corners : function (el) {
         var w = settings.$window,
             right = w.width() + w.scrollLeft(),
-            bottom = w.width() + w.scrollTop();
+            bottom = w.height() + w.scrollTop();
 
         return [
           el.offset().top <= w.scrollTop(),
