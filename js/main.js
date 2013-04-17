@@ -111,8 +111,11 @@ $(function() {// Initialize "static" vars
         if ( Worldview.isDevelopment() ) {
             log.warn("Development version");
         }	  
-                 
-        startTour();   
+        
+        // Do not start the tour if coming in via permalink         
+        if ( !queryString ) {         
+            startTour();  
+        } 
     };
         
     var onConfigLoad = function(config) {
