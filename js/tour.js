@@ -277,6 +277,11 @@ Worldview.namespace("Tour");
             storageEngine.setItem('hideSplash', !hideSplash);
         };
             
+            
+        $(window).resize(function() {
+        	 splashOverlay.center();
+        	 conclusionPanel.center();
+        });
         
         // assign events and start
         YAHOO.util.Event.on('takeTour', 'click', handleTakeTour);
