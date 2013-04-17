@@ -150,7 +150,7 @@ Worldview.namespace("Tour");
                                   "</tr>" +
                                   "<tr>" +
                                       "<td><img src=\"images/camera.png\"</td>"+
-                                      "<td><p class=\"tour\">The camera icon lets you download an image of your current view in Worldview. Palettes are not yet supporoted with this feature.</p></td>"+
+                                      "<td><p class=\"tour\">The camera icon lets you download an image of your current view in Worldview. User-selected palettes are not yet supported with this feature.</p></td>"+
                                   "</tr>" + 
                                   "<tr>" +
                                       "<td><img src=\"images/informationon.png\"</td>"+
