@@ -23,7 +23,7 @@ Worldview.namespace("Tour");
         console.log("DEVICE:  width = " + devWidth + ", height = " + devHeight);
         console.log("VIEWPORT:  width = " + viewWidth + ", height = " + viewHeight);
         
-        if(devWidth < 768 || viewWidth < 768 || devHeight < 600 || viewHeight < 600) {
+        if(devWidth < 768 || viewWidth < 768 || viewHeight < 600) {
             if(noDisable) {
                 Worldview.notify("Unfortunately the Worldview tour can only be viewed in larger web browser windows.");
             }

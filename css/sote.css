@@ -9,6 +9,7 @@ div {display:block;}
 .yui-skin-sam .yui-panel-container .bd h3{ color:#FFFFFF; font: 18px "Gill Sans", sans-serif; font-weight:400; text-decoration:none; }
 .yui-skin-sam .yui-panel-container .bd h4{ color:#000000; font: 18px "Gill Sans", sans-serif; font-weight:400; text-decoration:none; }
 .yui-skin-sam .yui-panel-container .bd a {color: #48a8ff; }
+.yui-overlay-hidden {display:none}
 
 #switch {  overflow:hidden; z-index:1000; }
 #switch div{display:block; }
