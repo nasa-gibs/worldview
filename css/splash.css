@@ -164,6 +164,8 @@ button.done:hover {
   background-image: -o-linear-gradient(top, #d9dddd, #c6c3c3);
   background-image: linear-gradient(top, #d9dddd, #c6c3c3);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#d9dddd, endColorstr=#c6c3c3);
 }
+
+.toolbarTip {margin-left:-195px;}
 			   
 img.tour{ 
   display:inline; 

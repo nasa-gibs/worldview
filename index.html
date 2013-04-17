@@ -128,9 +128,6 @@
 					<li><div id='camera'></div></li>
 					<li><div id="switch"></div></li>
 					<li><a id='perma_link' class='toolbaricon' title='Permalink' href='javascript:Worldview.Permalink.show();'><img src='images/permalink.png' /></a></li>
-					<!-- Dummy entry to adjust size of toolbar list so that tour panel displays correctly.
-						 SHOULD BE REMOVED when more entries are added to the toolbar. -->
-					<li><div id="tester" style="width: 200px"></div></li>
 				</ul>
 				
 			</div>
@@ -153,7 +150,7 @@
 		<li id="datePanel" data-id="timeecbutton" data-button="Next" data-options="tipLocation:top;tipAnimation:fade;nubPosition:bottom;bordered:true"></li>
       	<li id="productPanel" data-id="products" data-button="Next" data-options="tipLocation:right;nubPosition:left;tipAnimation:fade;prevButton:true;bordered:true"></li>
       	<li id="mapPanel" data-id="OpenLayers.Control.Panel_46" data-button="Next" data-options="tipLocation:left;nubPosition:left;prevButton:true;bordered:true"></li>
-      	<li id="toolbarPanel" data-id="toolbarlist" data-button="Next" data-options="tipLocation:bottom;nubPosition:top;tipAnimation:fade;prevButton:true;bordered:true"></li>
+      	<li id="toolbarPanel" class="toolbarTip" data-id="toolbarlist" data-button="Next" data-options="tipLocation:bottom;nubPosition:top;tipAnimation:fade;prevButton:true;bordered:true;class:toolbar"></li>
    </ol> 
 
 	<!-- Crazy Egg Metrics -->

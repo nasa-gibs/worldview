@@ -184,7 +184,7 @@
 
         opts.tip_class = opts.tip_class || '';
         if(isBordered) {
-        	opts.tip_class = "bordered";
+        	opts.tip_class += " bordered";
         }
         $blank = $(settings.template.tip).addClass(opts.tip_class);
         content = $.trim($(opts.li).html()) +
