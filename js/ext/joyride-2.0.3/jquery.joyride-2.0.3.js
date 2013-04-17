@@ -31,6 +31,7 @@
       'postRideCallback'     : $.noop,    // A method to call once the tour closes (canceled or complete)
       'postStepCallback'     : $.noop,    // A method to call after each step
       'bordered'             : false,     // true or false to control whether a border is shown
+      'adjustForPhone'       : true,      // change window position for phones (if false, windows show in default position)
       'template' : { // HTML segments for tip layout
         'link'       : '<a href="#close" class="joyride-close-tip">X</a>',
         'timer'      : '<div class="joyride-timer-indicator-wrap"><span class="joyride-timer-indicator"></span></div>',
@@ -168,25 +169,15 @@
       	var opts_arr = (opts.li.data('options') || ':').split(';');
         var opts_len = opts_arr.length;
 		var ii, p;
-		var isBordered;
+		var isBordered = settings.bordered;
 		
-        // parse options
-        for (ii = opts_len - 1; ii >= 0; ii--) {
-        	p = opts_arr[ii].split(':');
-        	
-        	if(p.length == 2) {
-        		if(p[0] == "bordered") {
-        			isBordered = p[1];
-        		}
-        	}	
-        }
-
 
         opts.tip_class = opts.tip_class || '';
         if(isBordered) {
         	opts.tip_class += " bordered";
         }
         $blank = $(settings.template.tip).addClass(opts.tip_class);
+
         content = $.trim($(opts.li).html()) +
           methods.button_text(opts.button_text, opts.li) +
           settings.template.link +
@@ -226,10 +217,7 @@
         	p = opts_arr[ii].split(':');
 
         	if (p.length === 2) {
-        		if(p[0] == "bordered") {
-        			console.log("in button_text, bordered = " + p[1]);
-        		}
-            	if(p[0] == "prevButton") {
+             	if(p[0] == "prevButton") {
             		if(p[1] == "true") {
             			hasPrev = true;
             		}
@@ -490,11 +478,18 @@
 
       // detect phones with media queries if supported.
       is_phone : function () {
-        if (Modernizr) {
-          return Modernizr.mq('only screen and (max-width: 767px)');
-        }
+      	if(settings.adjustForPhone) {
+      		console.log("adjustForPhone");
+        	if (Modernizr) {
+          	return Modernizr.mq('only screen and (max-width: 767px)');
+        	}
 
-        return (settings.$window.width() < 767) ? true : false;
+        	return (settings.$window.width() < 767) ? true : false;
+       	}
+       	else {
+       		console.log("no adjustForPhone");
+       		return false;
+       	}
       },
 
       hide : function () {
@@ -605,6 +600,8 @@
             nub_height = Math.ceil($nub.outerHeight() / 2),
             toggle = init || false;
 		
+		settings.$next_tip.removeClass("mobile");
+		
         // tip must not be "display: none" to calculate position
         if (toggle) {
           settings.$next_tip.css('visibility', 'hidden');
@@ -614,27 +611,28 @@
         if (!/body/i.test(settings.$target.selector)) {
 
             if (methods.bottom()) {
+            
               settings.$next_tip.css({
                 top: (settings.$target.offset().top + nub_height + settings.$target.outerHeight()),
                 left: settings.$target.offset().left});
               methods.nub_position($nub, $border, settings.tipSettings.nubPosition, 'top');
 
             } else if (methods.top()) {
-
+			
               settings.$next_tip.css({
                 top: (settings.$target.offset().top - settings.$next_tip.outerHeight() - nub_height),
                 left: settings.$target.offset().left});
               methods.nub_position($nub, $border, settings.tipSettings.nubPosition, 'bottom');
 
             } else if (methods.right()) {
-
+			
               settings.$next_tip.css({
                 top: settings.$target.offset().top,
                 left: (settings.$target.outerWidth() + settings.$target.offset().left)});
               methods.nub_position($nub, $border, settings.tipSettings.nubPosition, 'left');
 
             } else if (methods.left()) {
-
+			
               settings.$next_tip.css({
                 top: settings.$target.offset().top,
                 left: (settings.$target.offset().left - settings.$next_tip.outerWidth() - nub_height)});
@@ -647,7 +645,7 @@
                 .removeClass('top')
                 .removeClass('right')
                 .removeClass('left');
-
+			
               settings.tipSettings.tipLocation = settings.tipSettings.tipLocationPattern[settings.attempts];
 
               settings.attempts++;
@@ -676,6 +674,8 @@
             $border = $('.joyride-nub-border', settings.$prev_tip),
             nub_height = Math.ceil($nub.outerHeight() / 2),
             toggle = init || false;
+		
+		settings.$next_tip.addClass("mobile");
 		
         // tip must not be "display: none" to calculate position
         if (toggle) {
@@ -742,6 +742,7 @@
       },
       
       pos_phone : function (init) {
+      	console.log("pos_phone");
         var tip_height = settings.$next_tip.outerHeight(),
             tip_offset = settings.$next_tip.offset(),
             target_height = settings.$target.outerHeight(),
@@ -754,11 +755,13 @@
           .removeClass('right')
           .removeClass('left');
 
+		settings.$next_tip.addClass("mobile");
+
         if (toggle) {
           settings.$next_tip.css('visibility', 'hidden');
           settings.$next_tip.show();
         }
-
+		
         if (!/body/i.test(settings.$target.selector)) {
 
           if (methods.top()) {
@@ -830,7 +833,7 @@
       corners : function (el) {
         var w = settings.$window,
             right = w.width() + w.scrollLeft(),
-            bottom = w.width() + w.scrollTop();
+            bottom = w.height() + w.scrollTop();
 
         return [
           el.offset().top <= w.scrollTop(),

@@ -23,7 +23,7 @@ Worldview.namespace("Tour");
         console.log("DEVICE:  width = " + devWidth + ", height = " + devHeight);
         console.log("VIEWPORT:  width = " + viewWidth + ", height = " + viewHeight);
         
-        if(devWidth < 500 || viewWidth < 500 || devHeight < 500 || viewHeight < 500) {
+        if(devWidth < 768 || viewWidth < 768 || devHeight < 600 || viewHeight < 600) {
             if(noDisable) {
                 Worldview.notify("Unfortunately the Worldview tour can only be viewed in larger web browser windows.");
             }
@@ -218,7 +218,9 @@ Worldview.namespace("Tour");
         var repeatTour = function(e) {
             console.log("repeating tour");
             e.stopPropagation();
-            $('#joyRideTipContent').joyride({template : {'link':'<a href="#" class="joyride-close-tip">X</a>'},
+            $('#joyRideTipContent').joyride({adjustForPhone:false,
+            								 bordered:true,
+            								 template : {'link':'<a href="#" class="joyride-close-tip">X</a>'},
                                              postStepCallback : function (index, tip) {
                                                  if(index == 3) {
                                                      console.log("finished tour");
@@ -255,7 +257,9 @@ Worldview.namespace("Tour");
             e.stopPropagation();
             splashOverlay.hide();
             
-            $('#joyRideTipContent').joyride({template : {'link':'<a href="#" class="joyride-close-tip">X</a>'},
+            $('#joyRideTipContent').joyride({adjustForPhone:false,
+            								 bordered:true,
+            								 template : {'link':'<a href="#" class="joyride-close-tip">X</a>'},
                                              postStepCallback : function (index, tip) {
                                                  if(index == 3) {
                                                      console.log("finished tour");
