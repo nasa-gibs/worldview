@@ -1,6 +1,6 @@
 {
     "description": "SEDAC Global Drought Mortality Risks and Distribution, v1 (2000)",
-    "name": "Drought Hazard:Mortality Risk",
+    "name": "Drought Hazard: Mortality Risk",
     "parameters": {
         "format": "image/png",
         "layers": "ndh-drought-mortality-risks-distribution",

@@ -41425,7 +41425,7 @@
             "description": "Aqua / AIRS",
             "max": "30",
             "min": "0",
-            "name": "Sulphur Dioxide (Day, Prata Algorithm)",
+            "name": "Sulfur Dioxide (Day, Prata Algorithm)",
             "product": "daily",
             "projections": {
                 "geographic": {
@@ -43819,7 +43819,7 @@
                     512
                 ]
             },
-            "recommendPalettes": [
+            "recommendedPalettes": [
                 "orange_1"
             ],
             "rendered": "MODIS_Aerosol",
@@ -46405,7 +46405,7 @@
         },
         "ndh-cyclone-hazard-frequency-distribution": {
             "description": "SEDAC Global Cyclone Hazard Frequency and Distribution, v1 (1980\u20132000)",
-            "name": "Cyclone Hazard:Frequency and Distribution",
+            "name": "Cyclone Hazard: Frequency and Distribution",
             "parameters": {
                 "format": "image/png",
                 "layers": "ndh-cyclone-hazard-frequency-distribution",
@@ -46429,7 +46429,7 @@
         },
         "ndh-cyclone-mortality-risks-distribution": {
             "description": "SEDAC Global Cyclone Mortality Risks and Distribution, v1 (2000)",
-            "name": "Cyclone Hazard:Mortality Risk",
+            "name": "Cyclone Hazard: Mortality Risk",
             "parameters": {
                 "format": "image/png",
                 "layers": "ndh-cyclone-mortality-risks-distribution",
@@ -46453,7 +46453,7 @@
         },
         "ndh-cyclone-proportional-economic-loss-risk-deciles": {
             "description": "SEDAC Global Cyclone Proportional Economic Loss Risk Deciles, v1 (2000)",
-            "name": "Cyclone Hazard:Economic Risk",
+            "name": "Cyclone Hazard: Economic Risk",
             "parameters": {
                 "format": "image/png",
                 "layers": "ndh-cyclone-proportional-economic-loss-risk-deciles",
@@ -46477,7 +46477,7 @@
         },
         "ndh-drought-hazard-frequency-distribution": {
             "description": "SEDAC Global Drought Hazard Frequency and Distribution, v1 (1980\u20132000)",
-            "name": "Drought Hazard:Frequency and Distribution",
+            "name": "Drought Hazard: Frequency and Distribution",
             "parameters": {
                 "format": "image/png",
                 "layers": "ndh-drought-hazard-frequency-distribution",
@@ -46501,7 +46501,7 @@
         },
         "ndh-drought-mortality-risks-distribution": {
             "description": "SEDAC Global Drought Mortality Risks and Distribution, v1 (2000)",
-            "name": "Drought Hazard:Mortality Risk",
+            "name": "Drought Hazard: Mortality Risk",
             "parameters": {
                 "format": "image/png",
                 "layers": "ndh-drought-mortality-risks-distribution",
@@ -46525,7 +46525,7 @@
         },
         "ndh-drought-proportional-economic-loss-risk-deciles": {
             "description": "SEDAC Global Drought Proportional Economic Loss Risk Deciles, v1 (2000)",
-            "name": "Drought Hazard:Economic Risk",
+            "name": "Drought Hazard: Economic Risk",
             "parameters": {
                 "format": "image/png",
                 "layers": "ndh-drought-proportional-economic-loss-risk-deciles",
@@ -46549,7 +46549,7 @@
         },
         "ndh-flood-hazard-frequency-distribution": {
             "description": "SEDAC Global Flood Hazard Frequency and Distribution, v1 (1980\u20132000)",
-            "name": "Flood Hazard:Frequency and Distribution",
+            "name": "Flood Hazard: Frequency and Distribution",
             "parameters": {
                 "format": "image/png",
                 "layers": "ndh-flood-hazard-frequency-distribution",
@@ -46573,7 +46573,7 @@
         },
         "ndh-flood-mortality-risks-distribution": {
             "description": "SEDAC Global Flood Mortality Risks and Distribution, v1 (2000)",
-            "name": "Flood Hazard:Mortality Risk",
+            "name": "Flood Hazard: Mortality Risk",
             "parameters": {
                 "format": "image/png",
                 "layers": "ndh-flood-mortality-risks-distribution",
@@ -46597,7 +46597,7 @@
         },
         "ndh-flood-proportional-economic-loss-risk-deciles": {
             "description": "SEDAC Global Flood Proportional Economic Loss Risk Deciles, v1 (2000)",
-            "name": "Flood Hazard:Economic Risk",
+            "name": "Flood Hazard: Economic Risk",
             "parameters": {
                 "format": "image/png",
                 "layers": "ndh-flood-proportional-economic-loss-risk-deciles",
@@ -46621,7 +46621,7 @@
         },
         "ndh-volcano-hazard-frequency-distribution": {
             "description": "SEDAC Global Volcano Hazard Frequency and Distribution, v1 (1980\u20132000)",
-            "name": "Volcano Hazard:Frequency and Distribution",
+            "name": "Volcano Hazard: Frequency and Distribution",
             "parameters": {
                 "format": "image/png",
                 "layers": "ndh-volcano-hazard-frequency-distribution",
@@ -46645,7 +46645,7 @@
         },
         "ndh-volcano-mortality-risks-distribution": {
             "description": "SEDAC Global Volcano Mortality Risks and Distribution, v1 (2000)",
-            "name": "Volcano Hazard:Mortality Risk",
+            "name": "Volcano Hazard: Mortality Risk",
             "parameters": {
                 "format": "image/png",
                 "layers": "ndh-volcano-mortality-risks-distribution",
@@ -46669,7 +46669,7 @@
         },
         "ndh-volcano-proportional-economic-loss-risk-deciles": {
             "description": "SEDAC Global Volcano Proportional Economic Loss Risk Deciles, v1 (2000)",
-            "name": "Volcano Hazard:Economic Risk",
+            "name": "Volcano Hazard: Economic Risk",
             "parameters": {
                 "format": "image/png",
                 "layers": "ndh-volcano-proportional-economic-loss-risk-deciles",
