@@ -1318,6 +1318,18 @@
 	        "type" => "multi", "category" => "overlays"
 		),
         array(
+            "label" =>  "Ozone (46 hPA, Day)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_O3_46hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Ozone (46 hPA, Night)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_O3_46hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
              "label" =>  "Cyclone Hazard:Frequency and Distribution",
              "sublabel" =>  "SEDAC Global Cyclone Hazard Frequency and Distribution, v1 (1980–2000)",
              "value" =>  "ndh-cyclone-hazard-frequency-distribution",

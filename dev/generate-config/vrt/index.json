@@ -37,6 +37,16 @@
     ]
 },
 {
+    "id": "MLS_Ozone",
+    "filename": "rendered/MLS_color_table.xml",
+    "minIndex": 0,
+    "maxIndex": 255,
+    "products": [
+        "MLS_O3_46hPa_Day",
+        "MLS_O3_46hPa_Night"
+    ]
+},
+{
     "id": "MODIS_Aerosol",
     "filename": "rendered/MOR4ODLO_template.vrt",
     "minIndex": 12,
