@@ -150,6 +150,9 @@
 		<copy todir="${build.web.dir}/images">
 			<fileset dir="images"/>
 		</copy>
+        <copy todir="${build.web.dir}/html">
+            <fileset dir="html"/>
+        </copy>
 		<copy todir="${build.web.dir}/js">
 			<fileset dir="js"/>
 		</copy>
