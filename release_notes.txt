@@ -4,6 +4,20 @@ Release Notes
 http://earthdata.nasa.gov/labs/worldview/
 
 -------------------------------------------------------------------------------
+Release 0.4.1
+-------------------------------------------------------------------------------
+* Updates
+  - Fixed the file not found (404) error when using an unsupported browser.
+  
+* Known Issues
+  - Custom color palettes are not supported on Safari 5 or earlier.
+  - Custom color palettes can not be used in image download.
+  - On iOS, layers cannot be reordered 
+  - Polar land boundaries don't match actual land  
+  - Worldview does not work with Internet Explorer version 10 and
+    below
+    
+-------------------------------------------------------------------------------
 Release 0.4.0
 -------------------------------------------------------------------------------
 * New Features
@@ -33,14 +47,6 @@ Release 0.4.0
     for the near-real time processing delay.
   - In time slider, the "Dec" and "2013" labels no longer disappear.
   
-* Known Issues
-  - Custom color palettes are not supported on Safari 5 or earlier.
-  - Custom color palettes can not be used in image download.
-  - On iOS, layers cannot be reordered 
-  - Polar land boundaries don't match actual land  
-  - Worldview does not work with Internet Explorer version 10 and
-    below
-
 -------------------------------------------------------------------------------
 Release 0.3.1
 -------------------------------------------------------------------------------
