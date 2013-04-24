@@ -86,11 +86,9 @@ div.olControlZoomPanelCustom div {
 }
 
 div.olControlZoomPanelCustom .olControlZoomInCustomItemInactive,
-div.olControlZoomPanelCustom .olControlZoomOutCustomItemInactive,
-div.olControlZoomPanelCustom .olControlZoomToMaxExtentCustomItemInactive {
+div.olControlZoomPanelCustom .olControlZoomOutCustomItemInactive {
     position: absolute;
 }
-
 div.olControlZoomPanelCustom .olControlZoomInCustomItemInactive {
     background: rgba(45,50,55,0.5);
 	top: 0;
@@ -99,11 +97,10 @@ div.olControlZoomPanelCustom .olControlZoomInCustomItemInactive {
 }
 div.olControlZoomPanelCustom .olControlZoomOutCustomItemInactive {
     background: rgba(45,50,55,0.5);
-    /*top: 72px;*/
+    top: 72px;
     background-position: 0 -72px;	
     border-radius: 0 0 5px 5px ;
-    /*top: 35px;*/
-   top: 70px;
+    top: 35px;
 }
 div.olControlZoomPanelCustom .olControlZoomOutCustomItemInactive:after ,
 div.olControlZoomPanelCustom .olControlZoomInCustomItemInactive:after{
@@ -121,11 +118,10 @@ div.olControlZoomPanelCustom .olControlZoomOutCustomItemInactive:after{
     padding: 0 11px;
 }
 
-div.olControlZoomPanelCustom .olControlZoomToMaxExtentCustomItemInactive {
-    background: rgba(45,50,55,0.7);
-    top: 35px;
-    background-image: url('../images/zoomToMaxExtent.svg');
-    background-size: cover;
+div.olControlZoomPanelCustom .olControlZoomToMaxExtentItemInactive {
+    top: 36px;
+    background-position: 0 -36px;
+    display: none;
 }
 
 /*  End Zoom Panel */
