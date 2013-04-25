@@ -4,7 +4,7 @@ Release Notes
 http://earthdata.nasa.gov/labs/worldview/
 
 -------------------------------------------------------------------------------
-Release 0.4.1
+Release 0.4.1 - April 22, 2013
 -------------------------------------------------------------------------------
 * Updates
   - Fixed the file not found (404) error when using an unsupported browser.
@@ -16,16 +16,16 @@ Release 0.4.1
   - Polar land boundaries don't match actual land  
   - Worldview does not work with Internet Explorer version 10 and
     below
-    
+
 -------------------------------------------------------------------------------
-Release 0.4.0
+Release 0.4.0 - April 18, 2013
 -------------------------------------------------------------------------------
 * New Features
   - First-time users can take a tour that highlights the main features
     of Worldview.
   - Image download supported in polar projections.
   - KMZ format option added for image downloads in the geographic projection.
-  - Product color palettes can be changed by clicking on the colorlegend in 
+  - Product color palettes can be changed by clicking on the color legend in 
     My Layers.
   - New product: MODIS Combined Value-Added Aerosol Optical Depth
     (Terra and Aqua / MODIS)
@@ -48,7 +48,7 @@ Release 0.4.0
   - In time slider, the "Dec" and "2013" labels no longer disappear.
   
 -------------------------------------------------------------------------------
-Release 0.3.1
+Release 0.3.1 - February 26, 2013
 -------------------------------------------------------------------------------
 * New Features
   - Notification message can now be displayed on startup.
@@ -58,7 +58,7 @@ Release 0.3.1
     out of many category groups.
 
 -------------------------------------------------------------------------------
-Release 0.3.0
+Release 0.3.0 - February 7, 2013
 -------------------------------------------------------------------------------
 
 * New Features
