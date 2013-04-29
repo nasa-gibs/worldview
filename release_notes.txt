@@ -4,11 +4,12 @@ Release Notes
 http://earthdata.nasa.gov/labs/worldview/
 
 -------------------------------------------------------------------------------
-Release 0.4.1 - April 22, 2013
+Release 0.4.2 - April 29, 2013
 -------------------------------------------------------------------------------
 * Updates
-  - Fixed the file not found (404) error when using an unsupported browser.
-  
+  - Fixed issue where image download was using the wrong day in certain time 
+    zones.
+
 * Known Issues
   - Custom color palettes are not supported on Safari 5 or earlier.
   - Custom color palettes can not be used in image download.
@@ -17,6 +18,12 @@ Release 0.4.1 - April 22, 2013
   - Worldview does not work with Internet Explorer version 10 and
     below
 
+-------------------------------------------------------------------------------
+Release 0.4.1 - April 22, 2013
+-------------------------------------------------------------------------------
+* Updates
+  - Fixed the file not found (404) error when using an unsupported browser.
+  
 -------------------------------------------------------------------------------
 Release 0.4.0 - April 18, 2013
 -------------------------------------------------------------------------------
