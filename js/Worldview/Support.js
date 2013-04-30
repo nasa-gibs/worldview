@@ -49,7 +49,7 @@ Worldview.namespace("Support");
     
     ns.quirks = function() {
         jQueryLayerFix();
-        shimFreeze();
+        shimConsole();
     };
     
     var init = function() {
@@ -85,10 +85,12 @@ Worldview.namespace("Support");
         }
         $.event.props = res;        
     };
-            
-    var shimFreeze = function() {
-        if ( !Object.freeze ) {
-            Object.freeze = function() {}
+          
+    var shimConsole = function() {  
+        if ( !window.console ) {
+            window.console = {
+                log: function() {}
+            }    
         }
     };
     
