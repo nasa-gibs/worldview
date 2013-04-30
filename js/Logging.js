@@ -142,7 +142,7 @@
          * Parameters:
          * message - The message to print to the console.
          */
-        self.message = ( !console || !console.log ) 
+        self.message = ( !window.console || !window.console.log ) 
                 ? function() {} : console.log.bind(console);
         
         /**
@@ -154,7 +154,7 @@
          * Parameters:
          * message - The message to print to the console.
          */
-        self.error = ( !console || !console.error ) 
+        self.error = ( !window.console || !window.console.error ) 
                 ? self.message: console.error.bind(console);
 
         /**
@@ -166,7 +166,7 @@
          * Parameters:
          * message - The message to print to the console.
          */
-        self.warn = ( !console || !console.warn ) 
+        self.warn = ( !window.console || !window.console.warn ) 
                 ? self.message : console.warn.bind(console);
         
         /**
@@ -178,7 +178,7 @@
          * Parameters:
          * message - The message to print to the console.
          */
-        self.info = ( !console || !console.info ) 
+        self.info = ( !window.console || !window.console.info ) 
                 ? self.message : console.info.bind(console);
         
         /**
@@ -186,7 +186,7 @@
          * Prints a stack trace to the console. If console.trace does not
          * exist, this method does nothing.
          */
-        self.trace = ( !console || !console.trace )
+        self.trace = ( !window.console || !window.console.trace )
                 ? function() {} : console.trace;
         
         /**
