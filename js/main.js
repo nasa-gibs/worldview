@@ -129,7 +129,7 @@ $(function() {// Initialize "static" vars
                 config.palettes["__DEBUG"] = debugPalette;
                 config.paletteOrder.unshift("__DEBUG");
             }
-            Worldview.config = Object.freeze(config);
+            Worldview.config = config;
             init(Worldview.config);
         } catch ( error ) {
             Worldview.error("Unable to start Worldview", error);
