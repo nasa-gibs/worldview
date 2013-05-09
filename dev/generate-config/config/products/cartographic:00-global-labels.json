@@ -1,6 +1,6 @@
 {
-    "description": "SEDAC / Coastlines v3",
-    "name": "Coastlines",
+    "description": "SEDAC / Global Labels",
+    "name": "Global Labels",
     "parameters": {
         "format": "image/png",
         "layers": "cartographic:00-global-labels",

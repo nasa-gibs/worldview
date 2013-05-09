@@ -1,5 +1,5 @@
 {
-    "description": "SEDAC Global Flood Hazard Frequency and Distribution, v1 (1980\u20132000)",
+    "description": "SEDAC Global Flood Hazard Frequency and Distribution, v1 (1980-2000)",
     "name": "Flood Hazard: Frequency and Distribution",
     "parameters": {
         "format": "image/png",
