@@ -48,7 +48,7 @@ $(function(ns) {
                     logPosition.debug(Math.round(mouseLonLat.lon) + "," + 
                                       Math.round(mouseLonLat.lat));  
                 }                          
-                return "EPSG:3995 coords: " + 
+                return "" + 
                         Math.round(mouseLonLat.lon) + "m, " + 
                         Math.round(mouseLonLat.lat) + "m";          
             }
@@ -59,7 +59,7 @@ $(function(ns) {
                     logPosition.debug(Math.round(mouseLonLat.lon) + "," + 
                                       Math.round(mouseLonLat.lat));  
                 }                           
-                return "EPSG:3031 coords: " + 
+                return "" + 
                         Math.round(mouseLonLat.lon) + "m, " + 
                         Math.round(mouseLonLat.lat) + "m";                  
             },
