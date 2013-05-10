@@ -48308,31 +48308,6 @@
             },
             "type": "wmts"
         },
-        "polarview:graticuleN_WMS": {
-            "description": "Polarview / Graticule (EPSG:3995)",
-            "name": "Latitude-Longitude Lines",
-            "parameters": {
-                "format": "image/png",
-                "layers": "polarview:graticuleN",
-                "transitionEffect": "none",
-                "transparent": "true"
-            },
-            "product": "static",
-            "projections": {
-                "arctic": {}
-            },
-            "properties": {
-                "opacity": 0.75,
-                "tileSize": [
-                    512,
-                    512
-                ]
-            },
-            "type": "wms",
-            "url": [
-                "http://geos.polarview.aq/geoserver/wms?"
-            ]
-        },
         "sedac_bound": {
             "description": "SEDAC / National Boundaries",
             "name": "National Boundaries",
