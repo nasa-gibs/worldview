@@ -106,12 +106,17 @@
 		        "type" => "multi", "category" => "overlays"
 		        
 			),
+            array(
+                "label"=> "Latitude-Longitude Lines",
+                "sublabel"=> "Polarview / Graticule",
+                "value"=> "arctic_graticule_3413",
+                "type" => "multi", "category" => "overlays"
+            ),
 			array(
-		        "label"=> "Latitude-Longitude Lines",
+		        "label"=> "Latitude-Longitude Lines (EPSG:3995)",
 		        "sublabel"=> "Polarview / Graticule",
 		        "value"=> "polarview:graticuleN",
 		        "type" => "multi", "category" => "overlays"
-		        
 			)
 			
 		),

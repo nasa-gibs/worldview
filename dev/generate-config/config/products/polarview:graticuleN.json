@@ -1,5 +1,5 @@
 {
-    "description": "Polarview / Graticule",
+    "description": "Polarview / Graticule (EPSG:3995)",
     "name": "Latitude-Longitude Lines",
     "parameters": {
         "format": "image/png",

@@ -1,6 +1,6 @@
 {
-    "description": "Polarview / Coastlines (EPSG:3995)",
-    "name": "Coastlines",
+    "description": "Polarview / Graticule",
+    "name": "Latitude-Longitude Lines",
     "product": "static",
     "projections": {
         "arctic": {
@@ -29,7 +29,7 @@
     },
     "properties": {
         "format": "image/png",
-        "layer": "arctic_coastlines",    
+        "layer": "arctic_graticule_3413",    
         "tileSize": [
             512,
             512
