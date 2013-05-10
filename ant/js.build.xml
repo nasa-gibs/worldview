@@ -45,7 +45,8 @@
 		<file name="Worldview/Support.js"/>
         <file name="Worldview/Permalink.js"/>
         <file name="Worldview/Scheduler.js"/>
-               
+        <file name="Worldview/Timer.js"/>
+                       
         <file name="Worldview/Palette.js"/>
         <file name="Worldview/Palette/ColorBar.js"/>
         <file name="Worldview/Palette/Palette.js"/>
@@ -63,6 +64,7 @@
         <file name="Worldview/Widget/Map.js"/>
         <file name="Worldview/Widget/Palette.js"/>
         <file name="Worldview/Widget/WorldviewMap.js"/>
+        <file name="Worldview/Widget/ArcticProjectionChangeNotification.js"/>
 
         <file name="tour.js"/>
 		<file name="main.js"/>

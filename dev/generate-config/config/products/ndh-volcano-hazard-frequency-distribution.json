@@ -1,6 +1,6 @@
 {
-    "description": "SEDAC Global Volcano Hazard Frequency and Distribution, v1 (1980\u20132000)",
-    "name": "Volcano Hazard:Frequency and Distribution",
+    "description": "SEDAC Global Volcano Hazard Frequency and Distribution, v1 (1980-2000)",
+    "name": "Volcano Hazard: Frequency and Distribution",
     "parameters": {
         "format": "image/png",
         "layers": "ndh-volcano-hazard-frequency-distribution",

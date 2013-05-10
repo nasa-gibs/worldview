@@ -1,6 +1,6 @@
 {
     "description": "SEDAC Global Flood Mortality Risks and Distribution, v1 (2000)",
-    "name": "Flood Hazard:Mortality Risk",
+    "name": "Flood Hazard: Mortality Risk",
     "parameters": {
         "format": "image/png",
         "layers": "ndh-flood-mortality-risks-distribution",

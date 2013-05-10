@@ -2,7 +2,7 @@
     "description": "Aqua / AIRS",
     "max": "30",
     "min": "0",
-    "name": "Sulphur Dioxide (Night, Prata Algorithm)",
+    "name": "Sulfur Dioxide (Night, Prata Algorithm)",
     "product": "daily",
     "projections": {
         "geographic": {

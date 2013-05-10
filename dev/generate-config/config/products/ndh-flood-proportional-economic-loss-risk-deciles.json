@@ -1,6 +1,6 @@
 {
     "description": "SEDAC Global Flood Proportional Economic Loss Risk Deciles, v1 (2000)",
-    "name": "Flood Hazard:Economic Risk",
+    "name": "Flood Hazard: Economic Risk",
     "parameters": {
         "format": "image/png",
         "layers": "ndh-flood-proportional-economic-loss-risk-deciles",

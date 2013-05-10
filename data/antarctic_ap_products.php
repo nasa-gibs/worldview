@@ -20,6 +20,18 @@
 		        "value"=> "MODIS_Terra_CorrectedReflectance_Bands367",
 		        "type" => "single", "category" => "baselayers"
 			),
+            array(
+                "label"=> "Corrected Reflectance (7-2-1)",
+                "sublabel"=> "Terra / MODIS",
+                "value"=> "MODIS_Terra_CorrectedReflectance_Bands721",
+                "type" => "single", "category" => "baselayers"
+            ),
+            array(
+                "label"=> "Corrected Reflectance (7-2-1)",
+                "sublabel"=> "Aqua / MODIS",
+                "value"=> "MODIS_Aqua_CorrectedReflectance_Bands721",
+                "type" => "single", "category" => "baselayers"
+            ),
 			array(
 		        "label"=> "Empty",
 		        "sublabel"=> "",

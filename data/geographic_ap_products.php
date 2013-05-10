@@ -262,19 +262,19 @@
 	        "type" => "multi", "category" => "overlays"
 		),
         array(
-	        "label" =>  "Drought Hazard =>  Frequency and Distribution",
+	        "label" =>  "Drought Hazard: Frequency and Distribution",
 	        "sublabel" =>  "SEDAC Global Drought Hazard Frequency and Distribution, v1 (1980–2000)",
 	        "value" =>  "ndh-drought-hazard-frequency-distribution",
 	        "type" => "multi", "category" => "overlays"
 		),
         array(
-	        "label" =>  "Drought Hazard =>  Mortality Risk",
+	        "label" =>  "Drought Hazard: Mortality Risk",
 	        "sublabel" =>  "SEDAC Global Drought Mortality Risks and Distribution, v1 (2000)",
 	        "value" =>  "ndh-drought-mortality-risks-distribution",
 	        "type" => "multi", "category" => "overlays"
 		),
         array(
-	        "label" =>  "Drought Hazard =>  Economic Risk",
+	        "label" =>  "Drought Hazard: Economic Risk",
 	        "sublabel" =>  "SEDAC Global Drought Proportional Economic Loss Risk Deciles, v1 (2000)",
 	        "value" =>  "ndh-drought-proportional-economic-loss-risk-deciles",
 	        "type" => "multi", "category" => "overlays"
@@ -455,13 +455,13 @@
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
-	        "label" =>  "Sulphur Dioxide (Day, Prata Algorithm)",
+	        "label" =>  "Sulfur Dioxide (Day, Prata Algorithm)",
 	        "sublabel" =>  "Aqua / AIRS",
 	        "value" =>  "AIRS_Prata_SO2_Index_Day",
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
-	        "label" =>  "Sulphur Dioxide (Night, Prata Algorithm)",
+	        "label" =>  "Sulfur Dioxide (Night, Prata Algorithm)",
 	        "sublabel" =>  "Aqua / AIRS",
 	        "value" =>  "AIRS_Prata_SO2_Index_Night",
 	        "type" => "multi", "category" => "overlays"
@@ -491,19 +491,19 @@
 	        "type" => "multi", "category" => "overlays"
 		),
         array(
-             "label" =>  "Volcano Hazard =>  Frequency and Distribution",
+             "label" =>  "Volcano Hazard: Frequency and Distribution",
              "sublabel" =>  "SEDAC Global Volcano Hazard Frequency and Distribution, v1 (1979–2000)",
              "value" =>  "ndh-volcano-hazard-frequency-distribution",
              "type" => "multi", "category" => "overlays"
         ),
         array(
-             "label" =>  "Volcano Hazard =>  Mortality Risk",
+             "label" =>  "Volcano Hazard: Mortality Risk",
              "sublabel" =>  "SEDAC Global Volcano Mortality Risks and Distribution, v1 (2000)",
              "value" =>  "ndh-volcano-mortality-risks-distribution",
              "type" => "multi", "category" => "overlays"
         ),
         array(
-             "label" =>  "Volcano Hazard =>  Economic Risk",
+             "label" =>  "Volcano Hazard: Economic Risk",
              "sublabel" =>  "SEDAC Global Volcano Proportional Economic Loss Risk Deciles, v1 (2000)",
              "value" =>  "ndh-volcano-proportional-economic-loss-risk-deciles",
              "type" => "multi", "category" => "overlays"
@@ -691,13 +691,13 @@
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
-	        "label" =>  "Sulphur Dioxide (Day, Prata Algorithm)",
+	        "label" =>  "Sulfur Dioxide (Day, Prata Algorithm)",
 	        "sublabel" =>  "Aqua / AIRS",
 	        "value" =>  "AIRS_Prata_SO2_Index_Day",
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
-	        "label" =>  "Sulphur Dioxide (Night, Prata Algorithm)",
+	        "label" =>  "Sulfur Dioxide (Night, Prata Algorithm)",
 	        "sublabel" =>  "Aqua / AIRS",
 	        "value" =>  "AIRS_Prata_SO2_Index_Night",
 	        "type" => "multi", "category" => "overlays"
@@ -815,19 +815,19 @@
 	        "sublabel" =>  "Terra / MODIS",
 	        "value" =>  "MODIS_Terra_Cloud_Top_Pressure_Day",
 	        "type" => "multi", "category" => "overlays"
-		),
-		array(
-	        "label" =>  "Cloud Top Pressure (Day)",
-	        "sublabel" =>  "Aqua / MODIS",
-	        "value" =>  "MODIS_Aqua_Cloud_Top_Pressure_Day",
-	        "type" => "multi", "category" => "overlays"
-		),		
+		),	
 		array(
 	        "label" =>  "Cloud Top Pressure (Night)",
 	        "sublabel" =>  "Terra / MODIS",
 	        "value" =>  "MODIS_Terra_Cloud_Top_Pressure_Night",
 	        "type" => "multi", "category" => "overlays"
 		),
+        array(
+            "label" =>  "Cloud Top Pressure (Day)",
+            "sublabel" =>  "Aqua / MODIS",
+            "value" =>  "MODIS_Aqua_Cloud_Top_Pressure_Day",
+            "type" => "multi", "category" => "overlays"
+        ),  
 		array(
 	        "label" =>  "Cloud Top Pressure (Night)",
 	        "sublabel" =>  "Aqua / MODIS",
@@ -853,38 +853,38 @@
 	        "type" => "multi", "category" => "overlays"
 		),
         array(
-             "label" =>  "Cyclone Hazard:Frequency and Distribution",
+             "label" =>  "Cyclone Hazard: Frequency and Distribution",
              "sublabel" =>  "SEDAC Global Cyclone Hazard Frequency and Distribution, v1 (1980–2000)",
              "value" =>  "ndh-cyclone-hazard-frequency-distribution",
              "type" => "multi", "category" => "overlays"
         ),
         array(
-             "label" =>  "Cyclone Hazard:Mortality Risk",
+             "label" =>  "Cyclone Hazard: Mortality Risk",
              "sublabel" =>  "SEDAC Global Cyclone Mortality Risks and Distribution, v1 (2000)",
              "value" =>  "ndh-cyclone-mortality-risks-distribution",
              "type" => "multi", "category" => "overlays"
         ),
         array(
-             "label" =>  "Cyclone Hazard:Economic Risk",
+             "label" =>  "Cyclone Hazard: Economic Risk",
              "sublabel" =>  "SEDAC Global Cyclone Proportional Economic Loss Risk Deciles, v1 (2000)",
              "value" =>  "ndh-cyclone-proportional-economic-loss-risk-deciles",
              "type" => "multi", "category" => "overlays"
         ),
          
         array(
-             "label" =>  "Flood Hazard:Frequency and Distribution",
+             "label" =>  "Flood Hazard: Frequency and Distribution",
              "sublabel" =>  "SEDAC Global Flood Hazard Frequency and Distribution, v1 (1985–2003)",
              "value" =>  "ndh-flood-hazard-frequency-distribution",
              "type" => "multi", "category" => "overlays"
         ),
         array(
-             "label" =>  "Flood Hazard:Mortality Risk",
+             "label" =>  "Flood Hazard: Mortality Risk",
              "sublabel" =>  "SEDAC Global Flood Mortality Risks and Distribution, v1 (2000)",
              "value" =>  "ndh-flood-mortality-risks-distribution",
              "type" => "multi", "category" => "overlays"
         ),
         array(
-             "label" =>  "Flood Hazard:Economic Risk",
+             "label" =>  "Flood Hazard: Economic Risk",
              "sublabel" =>  "SEDAC Global Flood Proportional Economic Loss Risk Deciles, v1 (2000)",
              "value" =>  "ndh-flood-proportional-economic-loss-risk-deciles",
              "type" => "multi", "category" => "overlays"
@@ -948,19 +948,19 @@
             "type" => "multi", "category" => "overlays"
         ),		
         array(
-             "label" =>  "Flood Hazard:Frequency and Distribution",
+             "label" =>  "Flood Hazard: Frequency and Distribution",
              "sublabel" =>  "SEDAC Global Flood Hazard Frequency and Distribution, v1 (1985–2003)",
              "value" =>  "ndh-flood-hazard-frequency-distribution",
              "type" => "multi", "category" => "overlays"
         ),
         array(
-             "label" =>  "Flood Hazard:Mortality Risk",
+             "label" =>  "Flood Hazard: Mortality Risk",
              "sublabel" =>  "SEDAC Global Flood Mortality Risks and Distribution, v1 (2000)",
              "value" =>  "ndh-flood-mortality-risks-distribution",
              "type" => "multi", "category" => "overlays"
         ),
         array(
-             "label" =>  "Flood Hazard:Economic Risk",
+             "label" =>  "Flood Hazard: Economic Risk",
              "sublabel" =>  "SEDAC Global Flood Proportional Economic Loss Risk Deciles, v1 (2000)",
              "value" =>  "ndh-flood-proportional-economic-loss-risk-deciles",
              "type" => "multi", "category" => "overlays"
@@ -1258,13 +1258,13 @@
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
-	        "label" =>  "Sulphur Dioxide (Day, Prata Algorithm)",
+	        "label" =>  "Sulfur Dioxide (Day, Prata Algorithm)",
 	        "sublabel" =>  "Aqua / AIRS",
 	        "value" =>  "AIRS_Prata_SO2_Index_Day",
 	        "type" => "multi", "category" => "overlays"
 		),
 		array(
-	        "label" =>  "Sulphur Dioxide (Night, Prata Algorithm)",
+	        "label" =>  "Sulfur Dioxide (Night, Prata Algorithm)",
 	        "sublabel" =>  "Aqua / AIRS",
 	        "value" =>  "AIRS_Prata_SO2_Index_Night",
 	        "type" => "multi", "category" => "overlays"
@@ -1318,73 +1318,73 @@
 	        "type" => "multi", "category" => "overlays"
 		),
         array(
-             "label" =>  "Cyclone Hazard:Frequency and Distribution",
+             "label" =>  "Cyclone Hazard: Frequency and Distribution",
              "sublabel" =>  "SEDAC Global Cyclone Hazard Frequency and Distribution, v1 (1980–2000)",
              "value" =>  "ndh-cyclone-hazard-frequency-distribution",
              "type" => "multi", "category" => "overlays"
         ),
         array(
-             "label" =>  "Cyclone Hazard:Mortality Risk",
+             "label" =>  "Cyclone Hazard: Mortality Risk",
              "sublabel" =>  "SEDAC Global Cyclone Mortality Risks and Distribution, v1 (2000)",
              "value" =>  "ndh-cyclone-mortality-risks-distribution",
              "type" => "multi", "category" => "overlays"
         ),
         array(
-             "label" =>  "Cyclone Hazard:Economic Risk",
+             "label" =>  "Cyclone Hazard: Economic Risk",
              "sublabel" =>  "SEDAC Global Cyclone Proportional Economic Loss Risk Deciles, v1 (2000)",
              "value" =>  "ndh-cyclone-proportional-economic-loss-risk-deciles",
              "type" => "multi", "category" => "overlays"
         ),
         array(
-	        "label" =>  "Drought Hazard:Frequency and Distribution",
+	        "label" =>  "Drought Hazard: Frequency and Distribution",
 	        "sublabel" =>  "SEDAC Global Drought Hazard Frequency and Distribution, v1 (1980–2000)",
 	        "value" =>  "ndh-drought-hazard-frequency-distribution",
 	        "type" => "multi", "category" => "overlays"
 		),
         array(
-	        "label" =>  "Drought Hazard:Mortality Risk",
+	        "label" =>  "Drought Hazard: Mortality Risk",
 	        "sublabel" =>  "SEDAC Global Drought Mortality Risks and Distribution, v1 (2000)",
 	        "value" =>  "ndh-drought-mortality-risks-distribution",
 	        "type" => "multi", "category" => "overlays"
 		),
         array(
-	        "label" =>  "Drought Hazard:Economic Risk",
+	        "label" =>  "Drought Hazard: Economic Risk",
 	        "sublabel" =>  "SEDAC Global Drought Proportional Economic Loss Risk Deciles, v1 (2000)",
 	        "value" =>  "ndh-drought-proportional-economic-loss-risk-deciles",
 	        "type" => "multi", "category" => "overlays"
 		),
         array(
-             "label" =>  "Flood Hazard:Frequency and Distribution",
+             "label" =>  "Flood Hazard: Frequency and Distribution",
              "sublabel" =>  "SEDAC Global Flood Hazard Frequency and Distribution, v1 (1985–2003)",
              "value" =>  "ndh-flood-hazard-frequency-distribution",
              "type" => "multi", "category" => "overlays"
         ),
         array(
-             "label" =>  "Flood Hazard:Mortality Risk",
+             "label" =>  "Flood Hazard: Mortality Risk",
              "sublabel" =>  "SEDAC Global Flood Mortality Risks and Distribution, v1 (2000)",
              "value" =>  "ndh-flood-mortality-risks-distribution",
              "type" => "multi", "category" => "overlays"
         ),
         array(
-             "label" =>  "Flood Hazard:Economic Risk",
+             "label" =>  "Flood Hazard: Economic Risk",
              "sublabel" =>  "SEDAC Global Flood Proportional Economic Loss Risk Deciles, v1 (2000)",
              "value" =>  "ndh-flood-proportional-economic-loss-risk-deciles",
              "type" => "multi", "category" => "overlays"
         ),
         array(
-             "label" =>  "Volcano Hazard:Frequency and Distribution",
+             "label" =>  "Volcano Hazard: Frequency and Distribution",
              "sublabel" =>  "SEDAC Global Volcano Hazard Frequency and Distribution, v1 (1979–2000)",
              "value" =>  "ndh-volcano-hazard-frequency-distribution",
              "type" => "multi", "category" => "overlays"
         ),
         array(
-             "label" =>  "Volcano Hazard:Mortality Risk",
+             "label" =>  "Volcano Hazard: Mortality Risk",
              "sublabel" =>  "SEDAC Global Volcano Mortality Risks and Distribution, v1 (2000)",
              "value" =>  "ndh-volcano-mortality-risks-distribution",
              "type" => "multi", "category" => "overlays"
         ),
         array(
-             "label" =>  "Volcano Hazard:Economic Risk",
+             "label" =>  "Volcano Hazard: Economic Risk",
              "sublabel" =>  "SEDAC Global Volcano Proportional Economic Loss Risk Deciles, v1 (2000)",
              "value" =>  "ndh-volcano-proportional-economic-loss-risk-deciles",
              "type" => "multi", "category" => "overlays"

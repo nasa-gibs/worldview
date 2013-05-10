@@ -1,6 +1,6 @@
 {
     "description": "SEDAC Global Cyclone Mortality Risks and Distribution, v1 (2000)",
-    "name": "Cyclone Hazard:Mortality Risk",
+    "name": "Cyclone Hazard: Mortality Risk",
     "parameters": {
         "format": "image/png",
         "layers": "ndh-cyclone-mortality-risks-distribution",

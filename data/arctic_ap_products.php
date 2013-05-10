@@ -22,6 +22,20 @@
 		        "type" => "single", "category" => "baselayers"
 
 			),
+            array(
+                "label"=> "Corrected Reflectance (7-2-1)",
+                "sublabel"=> "Terra / MODIS",
+                "value"=> "MODIS_Terra_CorrectedReflectance_Bands721",
+                "type" => "single", "category" => "baselayers"
+
+            ),
+            array(
+                "label"=> "Corrected Reflectance (7-2-1)",
+                "sublabel"=> "Aqua / MODIS",
+                "value"=> "MODIS_Aqua_CorrectedReflectance_Bands721",
+                "type" => "single", "category" => "baselayers"
+
+            ),
 			array(
 		        "label"=> "Empty",
 		        "sublabel"=> "",
@@ -87,12 +101,18 @@
 		        "value"=> "grump-v1-population-count_2000",
 		        "type" => "multi", "category" => "overlays"
 			),
-			array(
-		        "label"=> "Coastlines",
-		        "sublabel"=> "Polarview / Coastlines",
-		        "value"=> "arctic_coastlines",
-		        "type" => "multi", "category" => "overlays"
-			),
+            array(
+                "label"=> "Coastlines",
+                "sublabel"=> "NSIDC / Coastlines",
+                "value"=> "arctic_coastlines_3413",
+                "type" => "multi", "category" => "overlays"
+            ),
+            array(
+                "label"=> "Coastlines (EPSG:3995)",
+                "sublabel"=> "Polarview / Coastlines",
+                "value"=> "arctic_coastlines",
+                "type" => "multi", "category" => "overlays"
+            ),            
 			array(
 		        "label"=> "Global Labels",
 		        "sublabel"=> "SEDAC / Global Labels",
@@ -100,12 +120,17 @@
 		        "type" => "multi", "category" => "overlays"
 		        
 			),
+            array(
+                "label"=> "Latitude-Longitude Lines",
+                "sublabel"=> "Polarview / Graticule",
+                "value"=> "arctic_graticule_3413",
+                "type" => "multi", "category" => "overlays"
+            ),
 			array(
-		        "label"=> "Latitude-Longitude Lines",
+		        "label"=> "Latitude-Longitude Lines (EPSG:3995)",
 		        "sublabel"=> "Polarview / Graticule",
 		        "value"=> "polarview:graticuleN",
 		        "type" => "multi", "category" => "overlays"
-		        
 			)
 			
 		),

@@ -43,12 +43,13 @@ $(function(ns) {
             }  
         }),
         "arctic": new OpenLayers.Control.MousePosition({
+            projection: "EPSG:3413",
             formatOutput: function(mouseLonLat) { 
                 if ( logPosition.isDebugEnabled() ) {
                     logPosition.debug(Math.round(mouseLonLat.lon) + "," + 
                                       Math.round(mouseLonLat.lat));  
                 }                          
-                return "EPSG:3995 coords: " + 
+                return this.projection + " " +  
                         Math.round(mouseLonLat.lon) + "m, " + 
                         Math.round(mouseLonLat.lat) + "m";          
             }
@@ -59,7 +60,7 @@ $(function(ns) {
                     logPosition.debug(Math.round(mouseLonLat.lon) + "," + 
                                       Math.round(mouseLonLat.lat));  
                 }                           
-                return "EPSG:3031 coords: " + 
+                return "EPSG:3031 " + 
                         Math.round(mouseLonLat.lon) + "m, " + 
                         Math.round(mouseLonLat.lat) + "m";                  
             },

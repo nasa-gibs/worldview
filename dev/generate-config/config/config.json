@@ -1,3 +1,4 @@
 {
-    "defaultProjection": "geographic"
+    "defaultProjection": "geographic",
+    "arcticProjectionChangeDate": "2012-06-14"
 }
