@@ -14,7 +14,7 @@ Worldview.namespace("Widget");
 Worldview.Widget.ArcticProjectionChangeNotification = function(config, bank) { 
     
     var log = Logging.getLogger("Worldview.ArcticProjectionChangeNotification");
-    Logging.debug("Worldview.ArcticProjectionChangeNotification");
+    //Logging.debug("Worldview.ArcticProjectionChangeNotification");
     
     var self = {};
 
