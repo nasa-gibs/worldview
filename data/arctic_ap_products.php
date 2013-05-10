@@ -87,12 +87,18 @@
 		        "value"=> "grump-v1-population-count_2000",
 		        "type" => "multi", "category" => "overlays"
 			),
-			array(
-		        "label"=> "Coastlines",
-		        "sublabel"=> "Polarview / Coastlines",
-		        "value"=> "arctic_coastlines",
-		        "type" => "multi", "category" => "overlays"
-			),
+            array(
+                "label"=> "Coastlines",
+                "sublabel"=> "NSIDC / Coastlines",
+                "value"=> "arctic_coastlines_3413",
+                "type" => "multi", "category" => "overlays"
+            ),
+            array(
+                "label"=> "Coastlines (EPSG:3995)",
+                "sublabel"=> "Polarview / Coastlines",
+                "value"=> "arctic_coastlines",
+                "type" => "multi", "category" => "overlays"
+            ),            
 			array(
 		        "label"=> "Global Labels",
 		        "sublabel"=> "SEDAC / Global Labels",
