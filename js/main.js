@@ -46,7 +46,7 @@ $(function() {// Initialize "static" vars
         var m = Worldview.Widget.WorldviewMap("map", config);
         var palettes = Worldview.Widget.Palette("palettes", config, {alignTo: "#products"});
         var ss = new SOTE.widget.Switch("switch",{dataSourceUrl:"a",selected:"geographic"});
-        var a = new SOTE.widget.Bank("products",{paletteWidget: palettes, dataSourceUrl:"ap_products.php",title:"My Layers",selected:{antarctic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,antarctic_coastlines", arctic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,arctic_coastlines",geographic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,sedac_bound"},categories:["Base Layers","Overlays"],callback:showSelector,selector:selector,config:config});
+        var a = new SOTE.widget.Bank("products",{paletteWidget: palettes, dataSourceUrl:"ap_products.php",title:"My Layers",selected:{antarctic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,antarctic_coastlines", arctic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,arctic_coastlines_3413",geographic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,sedac_bound"},categories:["Base Layers","Overlays"],callback:showSelector,selector:selector,config:config});
         var s = new SOTE.widget.Selector("selectorbox",{dataSourceUrl:"ap_products.php",categories:["Base Layers","Overlays"]});
         //var h = new SOTE.widget.MenuPicker("hazard",{dataSourceUrl:"data/mp_hazard.php"});
         //var tr = new SOTE.widget.MenuPicker("transition",{dataSourceUrl:"data/mp_transition.php"});
@@ -54,6 +54,7 @@ $(function() {// Initialize "static" vars
         //Image download variables
         rb = new SOTE.widget.RubberBand("camera",{icon:"images/camera.png",onicon:"images/cameraon.png",cropee:"map",paletteWidget:palettes,mapWidget:m});
         var id = new SOTE.widget.ImageDownload("imagedownload",{baseLayer:"MODIS_Terra_CorrectedReflectance_TrueColor",alignTo: rb, m:m});		
+        var apcn = new Worldview.Widget.ArcticProjectionChangeNotification(config, a);
         
         // Get rid of address bar on iphone/ipod
         var fixSize = function() {
@@ -69,9 +70,9 @@ $(function() {// Initialize "static" vars
         setTimeout(fixSize, 1500);
         	    
         REGISTRY.addEventListener("map","time","imagedownload");
-        REGISTRY.addEventListener("time","map","imagedownload");
-        REGISTRY.addEventListener("switch","map","products","selectorbox","time", "imagedownload", "camera");
-        REGISTRY.addEventListener("products","map","time","selectorbox","imagedownload","palettes");
+        REGISTRY.addEventListener("time","map","imagedownload", apcn.containerId);
+        REGISTRY.addEventListener("switch","map","products","selectorbox","time", "imagedownload", "camera", apcn.containerId);
+        REGISTRY.addEventListener("products","map","time","selectorbox","imagedownload","palettes", apcn.containerId);
         REGISTRY.addEventListener("selectorbox","products");
         REGISTRY.addEventListener("camera","imagedownload");
         REGISTRY.addEventListener("palettes","map","camera","products");
@@ -89,7 +90,8 @@ $(function() {// Initialize "static" vars
             a, // products
             map, // time
             m, // map
-            palettes
+            palettes,
+            apcn
         ];
         
         function testQS(){

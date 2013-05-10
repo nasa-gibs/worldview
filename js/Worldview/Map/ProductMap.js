@@ -454,7 +454,9 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
                                      config.projections[proj]);
         delete config.projections;  
                   
-        config.properties.projection = mapConfig.projections[proj].projection;
+        if ( !config.properties.projection ) {
+            config.properties.projection = mapConfig.projections[proj].projection;
+        }
         if ( config.parameters ) {
             config.parameters.projection = 
                 mapConfig.projections[proj].projection;

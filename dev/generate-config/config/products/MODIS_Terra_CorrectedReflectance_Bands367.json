@@ -2,10 +2,6 @@
     "description": "Terra / MODIS",
     "name": "Corrected Reflectance (3-6-7)",
     "product": "daily",
-    "parameters": {
-        "format": "image/jpeg",
-        "layers": "MODIS_Terra_CorrectedReflectance_Bands367"
-    },
     "projections": {
         "antarctic": {
             "matrixSet": "EPSG3031_250m",
@@ -24,15 +20,14 @@
                 512.0,
                 256.0
             ],
-            "type": "wms",
             "url": [
-                "http://map1a.vis.earthdata.nasa.gov/antarctic/wms.cgi",
-                "http://map1b.vis.earthdata.nasa.gov/antarctic/wms.cgi",
-                "http://map1c.vis.earthdata.nasa.gov/antarctic/wms.cgi"
+                "http://map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                "http://map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                "http://map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
             ]
         },
         "arctic": {
-            "matrixSet": "EPSG3995_250m",
+            "matrixSet": "EPSG3413_250m",
             "maxExtent": [
                 -4194304,
                 -4194304,
@@ -48,11 +43,10 @@
                 512.0,
                 256.0
             ],
-            "type": "wms",
             "url": [
-                "http://map1a.vis.earthdata.nasa.gov/arctic/wms.cgi",
-                "http://map1b.vis.earthdata.nasa.gov/arctic/wms.cgi",
-                "http://map1c.vis.earthdata.nasa.gov/arctic/wms.cgi"
+                "http://map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                "http://map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                "http://map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
             ]
         },
         "geographic": {

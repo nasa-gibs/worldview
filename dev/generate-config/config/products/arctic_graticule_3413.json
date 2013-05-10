@@ -1,10 +1,10 @@
 {
-    "description": "ADD SCAR / Coastlines",
-    "name": "Coastlines",
+    "description": "NSIDC / Graticule",
+    "name": "Latitude-Longitude Lines",
     "product": "static",
     "projections": {
-        "antarctic": {
-            "matrixSet": "EPSG3031_250m",
+        "arctic": {
+            "matrixSet": "EPSG3413_250m",
             "maxExtent": [
                 -4194304,
                 -4194304,
@@ -21,15 +21,15 @@
                 256.0
             ],
             "url": [
-                "http://map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                "http://map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                "http://map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
+                "http://map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                "http://map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                "http://map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
             ]
         }
     },
     "properties": {
         "format": "image/png",
-        "layer": "antarctic_coastlines",    
+        "layer": "arctic_graticule_3413",    
         "tileSize": [
             512,
             512
