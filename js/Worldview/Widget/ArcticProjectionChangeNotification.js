@@ -14,7 +14,7 @@ Worldview.namespace("Widget");
 Worldview.Widget.ArcticProjectionChangeNotification = function(config, bank) { 
     
     var log = Logging.getLogger("Worldview.ArcticProjectionChangeNotification");
-    //Logging.debug("Worldview.ArcticProjectionChangeNotification");
+    Logging.debug("Worldview.ArcticProjectionChangeNotification");
     
     var self = {};
 
@@ -90,12 +90,17 @@ Worldview.Widget.ArcticProjectionChangeNotification = function(config, bank) {
     
     self.updateComponent = function(queryString) {
         log.debug(self.containerId + ": queryString", queryString);
+        log.debug("LFQ: ", REGISTRY.isLoadingQuery);
         try {
             var query = Worldview.queryStringToObject(queryString);
             if ( query["switch"] === "arctic" ) {
                 var currentDay = Date.parseISOString(query.time);
                 if ( currentDay < self.changeDate ) {
                     log.debug(self.containerId + ": visit old");
+                    if ( REGISTRY.isLoadingQuery ) {
+                        log.debug("Reseting visit new");
+                        visitNew = false;
+                    }
                     visitOld = true;
                     if ( currentNew ) {
                         currentNew = false;
@@ -110,7 +115,7 @@ Worldview.Widget.ArcticProjectionChangeNotification = function(config, bank) {
                     }
                 }
                 if ( visitOld && visitNew && !notified ) {
-                    log.debug(self.conatinerId + ": notify");
+                    log.debug(self.containerId + ": notify");
                     Worldview.notify("On " + 
                         self.changeDate.toISOStringDate() +
                         " the arctic projection changed from EPSG:3995 to " + 
