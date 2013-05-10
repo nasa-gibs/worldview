@@ -24,6 +24,9 @@ Worldview.Widget.ArcticProjectionChangeNotification = function(config, bank) {
     var notified = false;
     var storageEngine;
     
+    var oldEPSG = "EPSG:3995";
+    var newEPSG = "EPSG:3413";
+    
     var oldCoastlinesRegEx = new RegExp("arctic_coastlines(?!_)");
     var newCoastlinesRegEx = new RegExp("arctic_coastlines_3413");
     var oldCoastlines = "arctic_coastlines";
@@ -67,9 +70,14 @@ Worldview.Widget.ArcticProjectionChangeNotification = function(config, bank) {
     var updateLayers = function(queryString) {
         var products = Worldview.extractFromQuery("products", queryString);
         if ( currentNew ) {
+            Worldview.Map.COORDINATE_CONTROLS["arctic"].projection = 
+                newEPSG;
             products = products.replace(oldCoastlinesRegEx, newCoastlines);
             products = products.replace(oldGraticulesRegEx, newGraticules);
+
         } else {
+            Worldview.Map.COORDINATE_CONTROLS["arctic"].projection = 
+                oldEPSG;
             products = products.replace(newCoastlinesRegEx, oldCoastlines);
             products = products.replace(newGraticulesRegEx, oldGraticules);
         }
