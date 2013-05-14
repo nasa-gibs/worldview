@@ -4,25 +4,51 @@ Release Notes
 http://earthdata.nasa.gov/labs/worldview/
 
 -------------------------------------------------------------------------------
+Release 0.4.3 
+-------------------------------------------------------------------------------
+* Updates
+  - The arctic projection has changed to NSIDC Sea Ice Polar Sterographic
+    North (from EPSG:3995 to EPSG:3413). The archive of near-real time data
+    has not been reprocessed to the new projection as this will be replaced
+    with science quality data in the future.
+  - Polar land boundaries now match the actual land.
+  - Terra and Aqua MODIS Corrected Reflectance for bands 7, 2, and 1 have 
+    been added to the polar projections.
+  - The tour is no longer displayed when starting Worldview from a 
+    permalink.
+  - When moving through different days quickly, data is no longer fetched 
+    from the server immediately.
+  - Sulphur renamed to Sulfer.
+  - The layer ordering for Cloud Top Temperature in the Severe Storms 
+    category is now consistent with other categories.
+  - A perceptually balanced rainbow palette has been added as "Rainbow 2".
+  - Worldview no longer crashes on startup when using Iceweasel or Epiphany
+    on Debian 6 (Squeeze) although these browsers are not officialy supported.
+
+* Known Issues
+  - Custom color palettes are not supported on Safari 5 or earlier.
+  - Custom color palettes can not be used in image download.
+  - On iOS, layers cannot be reordered 
+  - Worldview does not work with Internet Explorer version 10 and
+    below.
+  - WMS based layers (Population Density and Global Labels) can no longer be 
+    displayed properly in the older arctic projection (EPSG:3995).
+
+
+-------------------------------------------------------------------------------
 Release 0.4.2 - April 29, 2013
 -------------------------------------------------------------------------------
 * Updates
   - Fixed issue where image download was using the wrong day in certain time 
     zones.
 
-* Known Issues
-  - Custom color palettes are not supported on Safari 5 or earlier.
-  - Custom color palettes can not be used in image download.
-  - On iOS, layers cannot be reordered 
-  - Polar land boundaries don't match actual land  
-  - Worldview does not work with Internet Explorer version 10 and
-    below
 
 -------------------------------------------------------------------------------
 Release 0.4.1 - April 22, 2013
 -------------------------------------------------------------------------------
 * Updates
   - Fixed the file not found (404) error when using an unsupported browser.
+
   
 -------------------------------------------------------------------------------
 Release 0.4.0 - April 18, 2013
@@ -62,6 +88,7 @@ Release 0.4.0 - April 18, 2013
   - Worldview does not work with Internet Explorer version 10 and
     below
 
+
 -------------------------------------------------------------------------------
 Release 0.3.1 - February 26, 2013
 -------------------------------------------------------------------------------
@@ -71,6 +98,7 @@ Release 0.3.1 - February 26, 2013
 * Updates
   - Fixes issue where application can become unresponsive when going in and
     out of many category groups.
+
 
 -------------------------------------------------------------------------------
 Release 0.3.0 - February 7, 2013
@@ -84,6 +112,7 @@ Release 0.3.0 - February 7, 2013
 
 * Updates
   - A toolbar was created to hold certain user interface elements 
+
 
 -------------------------------------------------------------------------------
 Release 0.2.2
