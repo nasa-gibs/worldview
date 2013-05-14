@@ -21,7 +21,7 @@ Worldview.Widget.ArcticProjectionChangeNotification = function(config, bank) {
     var visitOld = false;
     var visitNew = false;
     var currentNew = true;
-    var notified = false;
+    var showNotice = true;
     var storageEngine;
     
     var oldEPSG = "EPSG:3995";
@@ -57,7 +57,7 @@ Worldview.Widget.ArcticProjectionChangeNotification = function(config, bank) {
         var changeDate = config.config.arcticProjectionChangeDate;
         if ( storageEngine && storageEngine.getItem(self.containerId) ) {
             log.debug(self.containerId + ": already notified");
-            notified = true;
+            showNotice = false;
         }
         if ( changeDate ) {
             self.changeDate = Date.parseISOString(changeDate);
@@ -114,16 +114,10 @@ Worldview.Widget.ArcticProjectionChangeNotification = function(config, bank) {
                         updateLayers(queryString);
                     }
                 }
-                if ( visitOld && visitNew && !notified ) {
+                if ( visitOld && visitNew && showNotice ) {
                     log.debug(self.containerId + ": notify");
-                    Worldview.notify("On " + 
-                        self.changeDate.toISOStringDate() +
-                        " the arctic projection changed from EPSG:3995 to " + 
-                        "EPSG:3413");
-                    notified = true;
-                    if ( storageEngine ) {
-                        storageEngine.setItem(self.containerId, true);
-                    }
+                    notify();
+                    showNotice = false;                   
                 }
             }
         } catch ( error ) {
@@ -131,6 +125,49 @@ Worldview.Widget.ArcticProjectionChangeNotification = function(config, bank) {
         }
     };
 
+    var notify = function() {
+        dialog = new YAHOO.widget.Panel("arcticChangeNotification", {
+            width: "300px",
+            zIndex: 1020,
+            visible: false,
+            modal: true
+        });
+        dialog.setHeader("Notice");
+        var body = [
+            "On " + self.changeDate.toISOStringDate() + ", " ,
+            "the arctic projection changed to NSIDC Sea Ice Polar ", 
+            "Stereographic North (from EPSG:3995 to EPSG:3413).",
+            "<br/><br/>",
+            
+            "The archive of near-real time data has not been reprocessed to ",
+            "the new projection as this will be replaced with science quality ",
+            "data in the future.",
+            "<br/><br/>",
+            
+            "The Population Density and Global Label layers can no longer ", 
+            "be displayed properly in the older projection.",
+            "<br/><br/>",
+            
+            "<input id='arcticChangeNoticeDontShowAgain' value='false' ", 
+                "type='checkbox'>Do not show again"
+        ].join("");
+        dialog.setBody(body);
+        dialog.render(document.body);
+        dialog.show();
+        dialog.center();
+        dialog.hideEvent.subscribe(function(i) {
+            setTimeout(function() { 
+                if ( $("#arcticChangeNoticeDontShowAgain").is(":checked") ) {
+                    log.debug(self.containerId + ": Don't show again");
+                    if ( storageEngine ) {
+                        storageEngine.setItem(self.containerId, true);
+                    }                    
+                }
+                dialog.destroy(); 
+            }, 25);
+        });
+    };
+    
     self.loadFromQuery = self.updateComponent;
             
     init();
