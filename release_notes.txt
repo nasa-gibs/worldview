@@ -7,18 +7,16 @@ http://earthdata.nasa.gov/labs/worldview/
 Release 0.4.3 
 -------------------------------------------------------------------------------
 * Updates
-  - The arctic projection has changed to NSIDC Sea Ice Polar Sterographic
-    North (from EPSG:3995 to EPSG:3413). The archive of near-real time data
-    has not been reprocessed to the new projection as this will be replaced
-    with science quality data in the future.
+  - The Arctic projection has changed from Arctic Polar Stereographic 
+    (EPSG:3995, "Greenwich down") to NSIDC Polar Stereographic North
+    (EPSG:3413, "Greenland down").  Imagery before this transition has not yet
+    been reprocessed to the new projection.
   - Polar land boundaries now match the actual land.
-  - Terra and Aqua MODIS Corrected Reflectance for bands 7, 2, and 1 have 
+  - Terra and Aqua MODIS Corrected Reflectance with 7-2-1 band combination have 
     been added to the polar projections.
   - The tour is no longer displayed when starting Worldview from a 
     permalink.
-  - When moving through different days quickly, data is no longer fetched 
-    from the server immediately.
-  - Sulphur renamed to Sulfer.
+  - Sulphur renamed to Sulfur.
   - The layer ordering for Cloud Top Temperature in the Severe Storms 
     category is now consistent with other categories.
   - A perceptually balanced rainbow palette has been added as "Rainbow 2".
