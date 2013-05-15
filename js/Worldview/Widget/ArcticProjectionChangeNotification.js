@@ -135,17 +135,19 @@ Worldview.Widget.ArcticProjectionChangeNotification = function(config, bank) {
         dialog.setHeader("Notice");
         var body = [
             "On " + self.changeDate.toISOStringDate() + ", " ,
-            "the arctic projection changed to NSIDC Sea Ice Polar ", 
-            "Stereographic North (from EPSG:3995 to EPSG:3413).",
+            "the Arctic projection changed from Arctic Polar Stereographic ",
+            "(EPSG:3995, \"Greenwich down\") to NSIDC Polar ", 
+            "Stereographic North (EPSG:3413, \"Greenland down\").",
+            "<br/><br/>", 
+
+            "Imagery before this date has not yet been reprocessed to the ", 
+            "new projection. In addition, the \"Population Density\" and ", 
+            "\"Global Label\" layers can no longer be displayed properly ", 
+            "in the older projection.",
             "<br/><br/>",
-            
-            "The archive of near-real time data has not been reprocessed to ",
-            "the new projection as this will be replaced with science quality ",
-            "data in the future.",
-            "<br/><br/>",
-            
-            "The Population Density and Global Label layers can no longer ", 
-            "be displayed properly in the older projection.",
+
+            "Thanks for your patience as we improve and expand our ", 
+            "imagery archive.",
             "<br/><br/>",
             
             "<input id='arcticChangeNoticeDontShowAgain' value='false' ", 
