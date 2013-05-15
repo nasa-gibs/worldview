@@ -1318,6 +1318,42 @@
 	        "type" => "multi", "category" => "overlays"
 		),
         array(
+            "label" =>  "Carbon Monoxide (215 hPA, Day)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_CO_215hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Carbon Monoxide (215 hPA, Night)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_CO_215hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Nitric Acid (46 hPA, Day)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_HNO3_46hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Nitric Acid (46 hPA, Night)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_HNO3_46hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Nitrous Oxide (46 hPA, Day)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_N2O_46hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Nitrous Oxide (46 hPA, Night)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_N2O_46hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
             "label" =>  "Ozone (46 hPA, Day)",
             "sublabel" =>  "Aura / MLS",
             "value" =>  "MLS_O3_46hPa_Day",
@@ -1327,6 +1363,42 @@
             "label" =>  "Ozone (46 hPA, Night)",
             "sublabel" =>  "Aura / MLS",
             "value" =>  "MLS_O3_46hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Sulfur Dioxide (147 hPA, Day)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_SO2_147hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Sulfur Dioxide (147 hPA, Night)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_SO2_147hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Temperature (46 hPA, Day)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_Temperature_46hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Temperature (46 hPA, Night)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_Temperature_46hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Water Vapor (46 hPA, Day)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_H2O_46hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Water Vapor (46 hPA, Night)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_H2O_46hPa_Night",
             "type" => "multi", "category" => "overlays"
         ),
         array(

@@ -1,8 +1,8 @@
 {
     "description": "Aura / MLS",
-    "max": "4.5",
-    "min": "0.5",
-    "name": "Ozone (46 hPA, Day)",
+    "max": "250",
+    "min": "0",
+    "name": "Carbon Monoxide (215 hPA, Day)",
     "product": "daily",
     "projections": {
         "geographic": {
@@ -31,7 +31,7 @@
     },
     "properties": {
         "format": "image/png",
-        "layer": "MLS_O3_46hPa_Day",
+        "layer": "MLS_CO_215hPa_Day",
         "tileSize": [
             512,
             512
@@ -40,5 +40,5 @@
     "rendered": "MLS_Rainbow",
     "startDate": "2012-04-07",
     "type": "wmts",
-    "units": "ppmv"
+    "units": "ppbv"
 }
