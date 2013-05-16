@@ -2,7 +2,7 @@
     "description": "Aura / MLS",
     "max": "240",
     "min": "190",
-    "name": "Temperature (46 hPA, Day)",
+    "name": "Temperature (46 hPa, Day)",
     "product": "daily",
     "projections": {
         "geographic": {

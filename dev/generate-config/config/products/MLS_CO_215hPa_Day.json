@@ -2,7 +2,7 @@
     "description": "Aura / MLS",
     "max": "250",
     "min": "0",
-    "name": "Carbon Monoxide (215 hPA, Day)",
+    "name": "Carbon Monoxide (215 hPa, Day)",
     "product": "daily",
     "projections": {
         "geographic": {

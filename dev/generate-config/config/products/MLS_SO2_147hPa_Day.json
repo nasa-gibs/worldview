@@ -2,7 +2,7 @@
     "description": "Aura / MLS",
     "max": "200",
     "min": "20",
-    "name": "Sulfur Dioxide (147 hPA, Day)",
+    "name": "Sulfur Dioxide (147 hPa, Day)",
     "product": "daily",
     "projections": {
         "geographic": {

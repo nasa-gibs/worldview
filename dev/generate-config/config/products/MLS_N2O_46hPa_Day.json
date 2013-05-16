@@ -2,7 +2,7 @@
     "description": "Aura / MLS",
     "max": "300",
     "min": "75",
-    "name": "Nitrous Oxide (46 hPA, Day)",
+    "name": "Nitrous Oxide (46 hPa, Day)",
     "product": "daily",
     "projections": {
         "geographic": {

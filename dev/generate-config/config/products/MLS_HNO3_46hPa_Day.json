@@ -2,7 +2,7 @@
     "description": "Aura / MLS",
     "max": "10",
     "min": "0",
-    "name": "Nitric Acid (46 hPA, Day)",
+    "name": "Nitric Acid (46 hPa, Day)",
     "product": "daily",
     "projections": {
         "geographic": {

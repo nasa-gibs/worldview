@@ -2,7 +2,7 @@
     "description": "Aura / MLS",
     "max": "10",
     "min": "0",
-    "name": "Nitric Acid (46 hPA, Night)",
+    "name": "Nitric Acid (46 hPa, Night)",
     "product": "daily",
     "projections": {
         "geographic": {
