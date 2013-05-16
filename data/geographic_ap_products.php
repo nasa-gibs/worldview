@@ -367,6 +367,18 @@
 	        "value" =>  "AIRS_CO_Total_Column_Night",
 	        "type" => "multi", "category" => "overlays"
 		),
+        array(
+            "label" =>  "Carbon Monoxide (215 hPA, Day)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_CO_215hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Carbon Monoxide (215 hPA, Night)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_CO_215hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),
 		array(
 	        "label" =>  "Aerosol Index",
 	        "sublabel" =>  "Aura / OMI",
@@ -490,6 +502,18 @@
 	        "value" =>  "OMI_SO2_Upper_Troposphere_and_Stratosphere",
 	        "type" => "multi", "category" => "overlays"
 		),
+        array(
+            "label" =>  "Sulfur Dioxide (147 hPA, Day)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_SO2_147hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Sulfur Dioxide (147 hPA, Night)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_SO2_147hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),
         array(
              "label" =>  "Volcano Hazard =>  Frequency and Distribution",
              "sublabel" =>  "SEDAC Global Volcano Hazard Frequency and Distribution, v1 (1979–2000)",
@@ -690,6 +714,18 @@
 	        "value" =>  "AIRS_CO_Total_Column_Night",
 	        "type" => "multi", "category" => "overlays"
 		),
+        array(
+            "label" =>  "Carbon Monoxide (215 hPA, Day)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_CO_215hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Carbon Monoxide (215 hPA, Night)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_CO_215hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),
 		array(
 	        "label" =>  "Sulphur Dioxide (Day, Prata Algorithm)",
 	        "sublabel" =>  "Aqua / AIRS",
@@ -702,6 +738,18 @@
 	        "value" =>  "AIRS_Prata_SO2_Index_Night",
 	        "type" => "multi", "category" => "overlays"
 		),
+        array(
+            "label" =>  "Sulfur Dioxide (147 hPA, Day)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_SO2_147hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Sulfur Dioxide (147 hPA, Night)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_SO2_147hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),
 		array(
 	        "label" =>  "Aerosol Index",
 	        "sublabel" =>  "Aura / OMI",

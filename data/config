@@ -46013,7 +46013,7 @@
             "description": "Aura / MLS",
             "max": "4.5",
             "min": "0.5",
-            "name": "Water Vapor (46 hPA, Night)",
+            "name": "Water Vapor (46 hPA, Day)",
             "product": "daily",
             "projections": {
                 "geographic": {
@@ -46042,7 +46042,7 @@
             },
             "properties": {
                 "format": "image/png",
-                "layer": "MLS_H2O_46hPa_Night",
+                "layer": "MLS_H2O_46hPa_Day",
                 "tileSize": [
                     512,
                     512
@@ -46314,7 +46314,7 @@
             "description": "Aura / MLS",
             "max": "4.5",
             "min": "0.5",
-            "name": "Water Vapor (46 hPA, Day)",
+            "name": "Water Vapor (46 hPA, Night)",
             "product": "daily",
             "projections": {
                 "geographic": {
@@ -46343,7 +46343,7 @@
             },
             "properties": {
                 "format": "image/png",
-                "layer": "MLS_H2O_46hPa_Day",
+                "layer": "MLS_H2O_46hPa_Night",
                 "tileSize": [
                     512,
                     512
