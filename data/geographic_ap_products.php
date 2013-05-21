@@ -367,6 +367,18 @@
 	        "value" =>  "AIRS_CO_Total_Column_Night",
 	        "type" => "multi", "category" => "overlays"
 		),
+        array(
+            "label" =>  "Carbon Monoxide (215 hPa, Day)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_CO_215hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Carbon Monoxide (215 hPa, Night)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_CO_215hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),
 		array(
 	        "label" =>  "Aerosol Index",
 	        "sublabel" =>  "Aura / OMI",
@@ -491,7 +503,19 @@
 	        "type" => "multi", "category" => "overlays"
 		),
         array(
-             "label" =>  "Volcano Hazard: Frequency and Distribution",
+            "label" =>  "Sulfur Dioxide (147 hPa, Day)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_SO2_147hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Sulfur Dioxide (147 hPa, Night)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_SO2_147hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+             "label" =>  "Volcano Hazard =>  Frequency and Distribution",
              "sublabel" =>  "SEDAC Global Volcano Hazard Frequency and Distribution, v1 (1979–2000)",
              "value" =>  "ndh-volcano-hazard-frequency-distribution",
              "type" => "multi", "category" => "overlays"
@@ -690,6 +714,18 @@
 	        "value" =>  "AIRS_CO_Total_Column_Night",
 	        "type" => "multi", "category" => "overlays"
 		),
+        array(
+            "label" =>  "Carbon Monoxide (215 hPa, Day)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_CO_215hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Carbon Monoxide (215 hPa, Night)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_CO_215hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),
 		array(
 	        "label" =>  "Sulfur Dioxide (Day, Prata Algorithm)",
 	        "sublabel" =>  "Aqua / AIRS",
@@ -702,6 +738,18 @@
 	        "value" =>  "AIRS_Prata_SO2_Index_Night",
 	        "type" => "multi", "category" => "overlays"
 		),
+        array(
+            "label" =>  "Sulfur Dioxide (147 hPa, Day)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_SO2_147hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Sulfur Dioxide (147 hPa, Night)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_SO2_147hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),
 		array(
 	        "label" =>  "Aerosol Index",
 	        "sublabel" =>  "Aura / OMI",
@@ -1318,7 +1366,91 @@
 	        "type" => "multi", "category" => "overlays"
 		),
         array(
-             "label" =>  "Cyclone Hazard: Frequency and Distribution",
+            "label" =>  "Carbon Monoxide (215 hPa, Day)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_CO_215hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Carbon Monoxide (215 hPa, Night)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_CO_215hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Nitric Acid (46 hPa, Day)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_HNO3_46hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Nitric Acid (46 hPa, Night)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_HNO3_46hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Nitrous Oxide (46 hPa, Day)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_N2O_46hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Nitrous Oxide (46 hPa, Night)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_N2O_46hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Ozone (46 hPa, Day)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_O3_46hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Ozone (46 hPa, Night)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_O3_46hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Sulfur Dioxide (147 hPa, Day)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_SO2_147hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Sulfur Dioxide (147 hPa, Night)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_SO2_147hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Temperature (46 hPa, Day)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_Temperature_46hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Temperature (46 hPa, Night)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_Temperature_46hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Water Vapor (46 hPa, Day)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_H2O_46hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Water Vapor (46 hPa, Night)",
+            "sublabel" =>  "Aura / MLS",
+            "value" =>  "MLS_H2O_46hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+             "label" =>  "Cyclone Hazard:Frequency and Distribution",
              "sublabel" =>  "SEDAC Global Cyclone Hazard Frequency and Distribution, v1 (1980–2000)",
              "value" =>  "ndh-cyclone-hazard-frequency-distribution",
              "type" => "multi", "category" => "overlays"
