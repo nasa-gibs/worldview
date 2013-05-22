@@ -55,6 +55,7 @@ $(function() {// Initialize "static" vars
         rb = new SOTE.widget.RubberBand("camera",{icon:"images/camera.png",onicon:"images/cameraon.png",cropee:"map",paletteWidget:palettes,mapWidget:m});
         var id = new SOTE.widget.ImageDownload("imagedownload",{baseLayer:"MODIS_Terra_CorrectedReflectance_TrueColor",alignTo: rb, m:m});		
         var apcn = new Worldview.Widget.ArcticProjectionChangeNotification(config, a);
+        var epsg = new Worldview.Widget.EPSG(config);
         
         // Get rid of address bar on iphone/ipod
         var fixSize = function() {
@@ -70,12 +71,13 @@ $(function() {// Initialize "static" vars
         setTimeout(fixSize, 1500);
         	    
         REGISTRY.addEventListener("map","time","imagedownload");
-        REGISTRY.addEventListener("time","map","imagedownload", apcn.containerId);
-        REGISTRY.addEventListener("switch","map","products","selectorbox","time", "imagedownload", "camera", apcn.containerId);
+        REGISTRY.addEventListener("time","map","imagedownload", apcn.containerId, epsg.containerId);
+        REGISTRY.addEventListener("switch","map","products","selectorbox","time", "imagedownload", "camera", apcn.containerId, epsg.containerId);
         REGISTRY.addEventListener("products","map","time","selectorbox","imagedownload","palettes", apcn.containerId);
         REGISTRY.addEventListener("selectorbox","products");
         REGISTRY.addEventListener("camera","imagedownload");
         REGISTRY.addEventListener("palettes","map","camera","products");
+        REGISTRY.addEventListener(epsg.containerId, "imagedownload");
         
         /*REGISTRY.addEventListener("map","time");
         REGISTRY.addEventListener("time","map");
@@ -84,14 +86,17 @@ $(function() {// Initialize "static" vars
         REGISTRY.addEventListener("selectorbox","products");
         //REGISTRY.addEventListener("hazard","products");*/
         
-        var queryString = Worldview.Permalink.decode(window.location.search.substring(1));
+        var queryString = 
+            Worldview.Permalink.decode(window.location.search.substring(1));
+        
         var initOrder = [
             ss, // projection
             a, // products
             map, // time
             m, // map
             palettes,
-            apcn
+            apcn,
+            epsg
         ];
         
         function testQS(){

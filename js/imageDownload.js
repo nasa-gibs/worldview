@@ -123,6 +123,9 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
     	var pixels = SOTE.util.extractFromQuery('camera', qs);
       	var s = SOTE.util.extractFromQuery('switch',qs);
       	var products = SOTE.util.extractFromQuery('products',qs);
+      	var epsg = SOTE.util.extractFromQuery('epsg', qs);
+      	console.log("EPSG: " + epsg);
+      	
      	var px = pixels.split(",");
     	var x1 = px[0]; var y1= px[1]; var x2 = px[2]; var y2=px[3]; 
       	var lonlat1 = this.m.productMap.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(Math.floor(x1), Math.floor(y2)));
