@@ -31,7 +31,8 @@ Release 0.4.1 - April 22, 2013
 -------------------------------------------------------------------------------
 * Updates
   - Fixed the file not found (404) error when using an unsupported browser.
-  
+
+
 -------------------------------------------------------------------------------
 Release 0.4.0 - April 18, 2013
 -------------------------------------------------------------------------------
@@ -61,6 +62,7 @@ Release 0.4.0 - April 18, 2013
   - Between 00:00 and 03:00 UTC, the previous day is shown to account
     for the near-real time processing delay.
   - In time slider, the "Dec" and "2013" labels no longer disappear.
+
   
 -------------------------------------------------------------------------------
 Release 0.3.1 - February 26, 2013
@@ -71,6 +73,7 @@ Release 0.3.1 - February 26, 2013
 * Updates
   - Fixes issue where application can become unresponsive when going in and
     out of many category groups.
+
 
 -------------------------------------------------------------------------------
 Release 0.3.0 - February 7, 2013
@@ -84,6 +87,7 @@ Release 0.3.0 - February 7, 2013
 
 * Updates
   - A toolbar was created to hold certain user interface elements 
+
 
 -------------------------------------------------------------------------------
 Release 0.2.2
