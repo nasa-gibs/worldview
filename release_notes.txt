@@ -4,7 +4,7 @@ Release Notes
 http://earthdata.nasa.gov/labs/worldview/
 
 -------------------------------------------------------------------------------
-Release 0.4.3 
+Release 0.4.4 
 -------------------------------------------------------------------------------
 * Updates
   - The Arctic projection has changed from Arctic Polar Stereographic 
@@ -31,6 +31,13 @@ Release 0.4.3
     below.
   - WMS based layers (Population Density and Global Labels) can no longer be 
     displayed properly in the older arctic projection (EPSG:3995).
+
+
+-------------------------------------------------------------------------------
+Release 0.4.3 - May 21, 2013
+-------------------------------------------------------------------------------
+* Updates
+  - Fixed alignment issues with the date slider in Firefox 21.0
 
 
 -------------------------------------------------------------------------------
