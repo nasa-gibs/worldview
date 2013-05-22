@@ -156,7 +156,7 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
       	dlURL += "&extent="+lonlat1.lon+","+lonlat1.lat+","+lonlat2.lon+","+lonlat2.lat;
       	 
       	//dlURL += "&switch="+s;
-      	dllURL += "&epsg="+epsg;
+      	dlURL += "&epsg="+epsg;
       	dlURL +="&layers=";
       	//Reverse the order of overlays to get the correct layer ordering.
       	if (products != ""){
