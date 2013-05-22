@@ -124,14 +124,14 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
       	var s = SOTE.util.extractFromQuery('switch',qs);
       	var products = SOTE.util.extractFromQuery('products',qs);
       	var epsg = SOTE.util.extractFromQuery('epsg', qs);
-      	console.log("EPSG: " + epsg);
+      	//console.log("EPSG: " + epsg);
       	
      	var px = pixels.split(",");
     	var x1 = px[0]; var y1= px[1]; var x2 = px[2]; var y2=px[3]; 
       	var lonlat1 = this.m.productMap.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(Math.floor(x1), Math.floor(y2)));
        	var lonlat2 = this.m.productMap.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(Math.floor(x2), Math.floor(y1)));
         
-        var dlURL  = "http://map2.vis.earthdata.nasa.gov/imagegen/?"; 
+        var dlURL  = "http://map2.vis.earthdata.nasa.gov/imagegen/index2.php?"; 
          
         var conversionFactor = 256;
         if (s=="geographic") {
@@ -155,8 +155,8 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
       	
       	dlURL += "&extent="+lonlat1.lon+","+lonlat1.lat+","+lonlat2.lon+","+lonlat2.lat;
       	 
-      	dlURL += "&switch="+s;
-      	
+      	//dlURL += "&switch="+s;
+      	dllURL += "&epsg="+epsg;
       	dlURL +="&layers=";
       	//Reverse the order of overlays to get the correct layer ordering.
       	if (products != ""){
