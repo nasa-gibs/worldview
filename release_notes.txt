@@ -4,11 +4,10 @@ Release Notes
 http://earthdata.nasa.gov/labs/worldview/
 
 -------------------------------------------------------------------------------
-Release 0.4.2 - April 29, 2013
+Release 0.4.3 - May 22, 2013
 -------------------------------------------------------------------------------
 * Updates
-  - Fixed issue where image download was using the wrong day in certain time 
-    zones.
+  - Fixed alignment issues with the date slider in Firefox 21.0
 
 * Known Issues
   - Custom color palettes are not supported on Safari 5 or earlier.
@@ -17,6 +16,15 @@ Release 0.4.2 - April 29, 2013
   - Polar land boundaries don't match actual land  
   - Worldview does not work with Internet Explorer version 10 and
     below
+
+
+-------------------------------------------------------------------------------
+Release 0.4.2 - April 29, 2013
+-------------------------------------------------------------------------------
+* Updates
+  - Fixed issue where image download was using the wrong day in certain time 
+    zones.
+
 
 -------------------------------------------------------------------------------
 Release 0.4.1 - April 22, 2013
