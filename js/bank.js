@@ -55,10 +55,12 @@ SOTE.widget.Bank = function(containerId, config){
 
        
     this.state = config.state;
+    console.log("state: " + this.state);
 	this.selected = config.selected;
     this.values = this.unserialize(this.selected[this.state]);
 	
     this.dataSourceUrl = config.dataSourceUrl;
+    console.log("dataSourceUrl: " + this.dataSourceUrl);
     this.title = config.title;
     this.callback = config.callback;
     this.selector = config.selector;
@@ -95,10 +97,19 @@ SOTE.widget.Bank.handleMetaSuccess = function(data,status,xhr,args){
 	for(var i in data){
 		if(i != "palettes") {
 			for(var j=0; j<data[i].length; j++){
+				//console.log("i = " + i);
+				//console.log("j = " + j);
+				//console.log("value = " + data[i][j].value);
+				//console.log("label = " + data[i][j].label);
 				self.meta[data[i][j].value] = {label:data[i][j].label,sublabel:data[i][j].sublabel};
 			}
 		}
 	}
+	
+	var key = data["Floods"][0].value;
+	console.log("Key = " + key);
+	console.log("Meta Label = " + self.meta[key].label);
+	console.log("Meta Sublabel = " + self.meta[key].sublabel);
 	$.each(self.meta, function(name, meta) {
 	   if ( name in self.config.products ) {
 	       var product = self.config.products[name];

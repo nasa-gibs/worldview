@@ -1,0 +1,15 @@
+.events{ display:inline-block; float:right; width: 210px; min-height:190px; padding-bottom:20px; /*box-shadow: 0 0 4px 1px #bbb;*/ background: rgba(38,43,49,0.65); font: 10px/12px "Gill Sans","helvetica",sans-serif; color: #141b4c; border-radius: 10px 0 0 10px; text-shadow:none;overflow:auto;}
+.events h1,h2,h3,h4 {margin:0px; padding:0px;}
+.events h2 {display:inline-block; float: left; color:#ffffff; font-size: 14px; font-weight:100; border:none; padding:6px 0;}
+.events h3 {display:inline-block; float: left; color:#333333; font-size: 12px; font-weight:100; border:none; text-decoration:none; }
+.events div,.events ul {display:block; overflow:auto; width:190px; margin:0 auto 0 auto; padding:5px; max-height:250px; }
+.events ul h3 {}
+.events li.item {padding:0; display:block; background:#fff; width:174px; border-width:3px; border-style:solid; border-color:transparent; border-radius:5px; padding:5px; margin-top:3px; }
+.events li.item a {float:right; position:relative; top:-8px; right:-8px;}
+.events li.item h4 {font-size:9px; font-weight:bold; }
+.events li.item span.palette {display:block; width:185px; overflow:hidden; margin-top:5px;}
+.events li.item ul.palette li {float:left;}
+.events li.sel {border-color:blue;}
+.events ul.entry { min-height:50px; background: rgba(255,255,255,.7); border-radius:5px; margin-top:10px; }
+.events ul.entry li h3 {display:block; clear:both; float:none;}
+.events img.thumb {float:left; width:10}

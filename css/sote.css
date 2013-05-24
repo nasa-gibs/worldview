@@ -51,6 +51,7 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
 .hidden {display:none;} 
 
 #products { z-index:200; display:block; float:left;  position:absolute; left:0; top:15%;}
+#events { z-index:200; display:block; float:right;  position:absolute; right:0; top:30%;}
 
 #banner {
 	display:block; z-index:291; float:left; position:relative; width:100%; height: 49px; background: transparent url("../images/toolbarbg.png");
