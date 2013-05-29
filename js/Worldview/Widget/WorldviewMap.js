@@ -68,6 +68,8 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
             state.products = splitProducts(state);
             state.palettesString = state.palettes;
             state.palettes = splitPalettes(state);
+            state.opacityString = state.opacity;
+            state.opacity = splitOpacity(state);
             
             log.debug(state);     
             
@@ -107,6 +109,11 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
             }           
             if ( state.palettesString !== last.palettesString ) {
                 self.productMap.setPalettes(state.palettes);
+            }
+            if ( state.opacityString !== last.opacityString) {
+                $.each(state.opacity, function(layerName, opacity) {
+                    self.productMap.setOpacity(layerName, opacity);    
+                });
             }
             last = state;
             last.queryString = queryString;
@@ -191,6 +198,21 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
         });
         return results;
     };
+    
+    var splitOpacity = function(state) {
+        var results = {}
+        if ( !state.opacity ) {
+            return results;
+        }
+        var definitions = state.opacity.split("~");
+        $.each(definitions, function(index, definition) {
+            var items = definition.split(",");
+            var layerName = items[0];
+            var opacity = parseFloat(items[1]);
+            results[layerName] = opacity;
+        });
+        return results;
+    }
     
     init();
     return self;

@@ -188,6 +188,20 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
         }
     };
     
+    self.setOpacity = function(layerName, opacity) {
+        $.each(self.map.products, function(name, product) {
+            if ( name == layerName ) {
+                var value = parseFloat(opacity);
+                if ( isNaN(value) ) {
+                    log.warn("Invalid opacity for layer " + layerName + ": " + 
+                            opacity);
+                } else {
+                    product.setOpacity(value);
+                }
+            }    
+        });
+    }
+    
     /**         
     * Method: set
     * Set the products that should be displayed on the map. 

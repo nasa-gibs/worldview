@@ -55,6 +55,7 @@ $(function() {// Initialize "static" vars
         rb = new SOTE.widget.RubberBand("camera",{icon:"images/camera.png",onicon:"images/cameraon.png",cropee:"map",paletteWidget:palettes,mapWidget:m});
         var id = new SOTE.widget.ImageDownload("imagedownload",{baseLayer:"MODIS_Terra_CorrectedReflectance_TrueColor",alignTo: rb, m:m});		
         var apcn = new Worldview.Widget.ArcticProjectionChangeNotification(config, a);
+        var opacity = new Worldview.Widget.Opacity(config);
         
         // Get rid of address bar on iphone/ipod
         var fixSize = function() {
@@ -76,6 +77,7 @@ $(function() {// Initialize "static" vars
         REGISTRY.addEventListener("selectorbox","products");
         REGISTRY.addEventListener("camera","imagedownload");
         REGISTRY.addEventListener("palettes","map","camera","products");
+        REGISTRY.addEventListener("opacity", "map");
         
         /*REGISTRY.addEventListener("map","time");
         REGISTRY.addEventListener("time","map");
@@ -84,6 +86,8 @@ $(function() {// Initialize "static" vars
         REGISTRY.addEventListener("selectorbox","products");
         //REGISTRY.addEventListener("hazard","products");*/
         
+        Worldview.opacity = opacity; 
+        
         var queryString = Worldview.Permalink.decode(window.location.search.substring(1));
         var initOrder = [
             ss, // projection
@@ -91,7 +95,8 @@ $(function() {// Initialize "static" vars
             map, // time
             m, // map
             palettes,
-            apcn
+            apcn,
+            opacity
         ];
         
         function testQS(){

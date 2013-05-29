@@ -55,6 +55,11 @@ Worldview.Map.StaticProduct = function(map, config) {
     self.setDay = function(d) {
     };
     
+    self.setOpacity = function(opacity) {
+        self.opacity = opacity;
+        layer.setOpacity(opacity);
+    };
+    
     /**
      * Method: setZIndex
      * Sets the z-index for the product's layer.
