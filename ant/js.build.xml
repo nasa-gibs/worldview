@@ -21,7 +21,7 @@
         <file name="ext/joyride-2.0.3/jquery.joyride-2.0.3.js"/>
         <file name="ext/joyride-2.0.3/modernizr.mq.js"/>
         
-		<file name="ext/openlayers-2.12/OpenLayers.js"/>
+		<file name="ext/openlayers-2.13-rc4/OpenLayers.js"/>
 		<file name="ext/jcrop-0.9.10-p1/jcrop.js"/>
 		<file name="ext/jquery.dd-3.3/jquery.dd.js"/>
 
