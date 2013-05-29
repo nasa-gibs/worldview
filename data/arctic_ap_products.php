@@ -103,7 +103,7 @@
 			),
             array(
                 "label"=> "Coastlines",
-                "sublabel"=> "NSIDC / Coastlines",
+                "sublabel"=> "OpenStreetMap / Coastlines",
                 "value"=> "arctic_coastlines_3413",
                 "type" => "multi", "category" => "overlays"
             ),
