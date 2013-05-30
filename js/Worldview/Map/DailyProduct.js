@@ -101,11 +101,11 @@ Worldview.Map.DailyProduct = function(map, config) {
         fetchLayer();
     };
 
-    self.setOpacity = function(opacity) {
+    self.setOpacity = function(opacity) {     
         self.opacity = opacity;
-        currentLayer.setOpacity(opacity);
+        Worldview.Map.setOpacity(currentLayer, opacity);
         $.each(cachedLayers, function(key, layer) {
-            layer.setOpacity(opacity);
+            Worldview.Map.setOpacity(layer, opacity);
         });
     };
     
