@@ -86,13 +86,14 @@ SOTE.util.Registry = function () {
 	  var recursive = "";
 	  for(var j=0;j<consumers.length;j++){
 	    //if(i==0){ alert("consumer "+j+": "+consumers[j]); }
-            if(consumers[j] == this.getComponentId(comp)){
+        if(consumers[j] == this.getComponentId(comp)){
 	      recursive = consumers[j];
+	      //delete consumers[j];
 	      break;
 	    }
 	  } 
 	  //alert("Registry: fire: producer: "+this.getComponentId(comp)+", evtObj: "+evtObjA[i].consumerId+", recursive: "+recursive+", no fire val: "+noFireVal);
-	  if(evtObjA[i].consumerId != noFireVal.split("=")[1]){
+	  if(evtObjA[i].consumerId != noFireVal.split("=")[1] && evtObjA[i].consumerId != recursive){
 	    /*if(recursive.length > 0){ 
               evtObjA[i].componentUpdate.fire(comp.getValue()+"&norecurse="+recursive);
 	    }else{*/

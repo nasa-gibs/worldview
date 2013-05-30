@@ -23,7 +23,7 @@
 	        "label" =>  "Land Surface Reflectance (True Color)",
 	        "sublabel" =>  "Aqua / MODIS",
 	        "value" =>  "MODIS_Aqua_SurfaceReflectance_Bands143",
-	        "type" => "single", "category" => "baselayers"
+	        "type" => "single", "category" => "baselayers", "tags" => "hello"
 		),
 		array(
 	        "label" =>  "Corrected Reflectance (7-2-1)",
@@ -979,7 +979,7 @@
 	        "label" =>  "Corrected Reflectance (True Color)",
 	        "sublabel" =>  "Terra / MODIS",
 	        "value" =>  "MODIS_Terra_CorrectedReflectance_TrueColor",
-	        "type" => "single", "category" => "baselayers"
+	        "type" => "single", "category" => "baselayers", "tags" => "hello"
 		),
 		array(
 	        "label" =>  "Corrected Reflectance (True Color)",
