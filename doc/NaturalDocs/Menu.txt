@@ -48,70 +48,70 @@ Timestamp: Updated mm/dd/yyyy
 
 Group: Development Notes  {
 
-   File: Welcome  (/Library/WebServer/Documents/worldview/doc/Topics/Welcome.txt)
-   File: Documentation  (/Library/WebServer/Documents/worldview/doc/Topics/Documentation.txt)
-   File: Release Procedure  (/Library/WebServer/Documents/worldview/doc/Topics/Release_Procedure.txt)
-   File: Testing  (/Library/WebServer/Documents/worldview/doc/Topics/Testing.txt)
+   File: Welcome  (/Users/jmcgann/Code/Aptana/worldview/doc/Topics/Welcome.txt)
+   File: Documentation  (/Users/jmcgann/Code/Aptana/worldview/doc/Topics/Documentation.txt)
+   File: Release Procedure  (/Users/jmcgann/Code/Aptana/worldview/doc/Topics/Release_Procedure.txt)
+   File: Testing  (/Users/jmcgann/Code/Aptana/worldview/doc/Topics/Testing.txt)
    }  # Group: Development Notes
 
 Group: Code Reference  {
 
-   File: Date  (/Library/WebServer/Documents/worldview/js/Date.js)
-   File: Logging  (/Library/WebServer/Documents/worldview/js/Logging.js)
-   File: SOTE.util  (/Library/WebServer/Documents/worldview/js/util.js)
-   File: TestSuite  (/Library/WebServer/Documents/worldview/test/lib/TestSuite.js)
-   File: Worldview  (/Library/WebServer/Documents/worldview/js/Worldview.js)
+   File: Date  (/Users/jmcgann/Code/Aptana/worldview/js/Date.js)
+   File: Logging  (/Users/jmcgann/Code/Aptana/worldview/js/Logging.js)
+   File: SOTE.util  (/Users/jmcgann/Code/Aptana/worldview/js/util.js)
+   File: TestSuite  (/Users/jmcgann/Code/Aptana/worldview/test/lib/TestSuite.js)
+   File: Worldview  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview.js)
 
    Group: Worldview  {
 
-      File: Map  (/Library/WebServer/Documents/worldview/js/Worldview/Map.js)
-      File: Palette  (/Library/WebServer/Documents/worldview/js/Worldview/Palette.js)
+      File: Map  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map.js)
+      File: Palette  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Palette.js)
 
       Group: JSON  {
 
-         File: MapConfig  (/Library/WebServer/Documents/worldview/doc/Topics/Worldview/JSON/MapConfig.txt)
+         File: MapConfig  (/Users/jmcgann/Code/Aptana/worldview/doc/Topics/Worldview/JSON/MapConfig.txt)
 
          Group: MapConfig  {
 
-            File: Product  (/Library/WebServer/Documents/worldview/doc/Topics/Worldview/JSON/MapConfig/Product.txt)
-            File: Projection  (no auto-title, /Library/WebServer/Documents/worldview/doc/Topics/Worldview/JSON/MapConfig/Projection.txt)
+            File: Product  (/Users/jmcgann/Code/Aptana/worldview/doc/Topics/Worldview/JSON/MapConfig/Product.txt)
+            File: Projection  (no auto-title, /Users/jmcgann/Code/Aptana/worldview/doc/Topics/Worldview/JSON/MapConfig/Projection.txt)
             }  # Group: MapConfig
 
          }  # Group: JSON
 
       Group: Map  {
 
-         File: CanvasTile  (/Library/WebServer/Documents/worldview/js/Worldview/Map/CanvasTile.js)
-         File: DailyProduct  (/Library/WebServer/Documents/worldview/js/Worldview/Map/DailyProduct.js)
-         File: TileWorker  (/Library/WebServer/Documents/worldview/js/Worldview/Map/TileWorker.js)
-         File: Product  (/Library/WebServer/Documents/worldview/js/Worldview/Map/Product.js)
-         File: ProductMap  (/Library/WebServer/Documents/worldview/js/Worldview/Map/ProductMap.js)
-         File: StaticProduct  (/Library/WebServer/Documents/worldview/js/Worldview/Map/StaticProduct.js)
-         File: GraticleLayer  (/Library/WebServer/Documents/worldview/js/Worldview/Map/GraticuleLayer.js)
+         File: CanvasTile  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/CanvasTile.js)
+         File: DailyProduct  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/DailyProduct.js)
+         File: TileWorker  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/TileWorker.js)
+         File: Product  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/Product.js)
+         File: ProductMap  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/ProductMap.js)
+         File: StaticProduct  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/StaticProduct.js)
+         File: GraticleLayer  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/GraticuleLayer.js)
          }  # Group: Map
 
       Group: Palette  {
 
-         File: ColorBar  (/Library/WebServer/Documents/worldview/js/Worldview/Palette/ColorBar.js)
-         File: Palette  (/Library/WebServer/Documents/worldview/js/Worldview/Palette/Palette.js)
-         File: PaletteSelector  (/Library/WebServer/Documents/worldview/js/Worldview/Palette/PaletteSelector.js)
+         File: ColorBar  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Palette/ColorBar.js)
+         File: Palette  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Palette/Palette.js)
+         File: PaletteSelector  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Palette/PaletteSelector.js)
          }  # Group: Palette
 
-      File: Permalink  (/Library/WebServer/Documents/worldview/js/Worldview/Permalink.js)
+      File: Permalink  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Permalink.js)
 
       Group: Widget  {
 
-         File: Map  (no auto-title, /Library/WebServer/Documents/worldview/js/Worldview/Widget/Map.js)
-         File: WorldviewMap  (no auto-title, /Library/WebServer/Documents/worldview/js/Worldview/Widget/WorldviewMap.js)
+         File: Map  (no auto-title, /Users/jmcgann/Code/Aptana/worldview/js/Worldview/Widget/Map.js)
+         File: WorldviewMap  (no auto-title, /Users/jmcgann/Code/Aptana/worldview/js/Worldview/Widget/WorldviewMap.js)
          }  # Group: Widget
 
-      File: Scheduler  (/Library/WebServer/Documents/worldview/js/Worldview/Scheduler.js)
+      File: Scheduler  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Scheduler.js)
       }  # Group: Worldview
 
    Group: TestSuite  {
 
-      File: Patcher  (no auto-title, /Library/WebServer/Documents/worldview/test/lib/TestSuite/Patcher.js)
-      File: Tests  (/Library/WebServer/Documents/worldview/test/lib/TestSuite/Tests.js)
+      File: Patcher  (no auto-title, /Users/jmcgann/Code/Aptana/worldview/test/lib/TestSuite/Patcher.js)
+      File: Tests  (/Users/jmcgann/Code/Aptana/worldview/test/lib/TestSuite/Tests.js)
       }  # Group: TestSuite
 
    }  # Group: Code Reference
@@ -128,6 +128,6 @@ Group: Index  {
 
 
 ##### Do not change or remove these lines. #####
-Data: 1(D333318YHpHQ3_GYrGH/GH3Bu9NEG\t637uHof/8G73l6)
-Data: 1(h333318YHpHQ3_GYrGH/GH3Bu9NEG\t637uHof/8G73fu93LuI896)
-Data: 1(T333318YHpHQ3_GYrGH/GH3Bu9NEG\t637uHof/8G73tG6t3o8Y)
+Data: 1(D3333a6GH63lE9`p\\30ufG3KItp\p37uHof/8G73l6)
+Data: 1(h3333a6GH63lE9`p\\30ufG3KItp\p37uHof/8G73fu93LuI896)
+Data: 1(T3333a6GH63lE9`p\\30ufG3KItp\p37uHof/8G73tG6t3o8Y)

@@ -24,7 +24,9 @@ a.ecbutton { display:block; width:24px; height:24px; float:left; position:relati
 a.collapse {background-image: url("../images/collapseDown.png"); background-repeat:no-repeat;}
 a.expand {background-image: url("../images/expandUp.png"); background-repeat:no-repeat;}
 .dateSpanSlider {display:none !important;}
-input.ui-slider-input {width:0px; margin:0px;}
+
+input.ui-slider-input {width:0px; margin:0px;} 
+
 div.slider {/*background: rgba(45,50,55,.75);*/ margin-bottom:0px; /*box-shadow: 0px 0px 4px 1px #bbb;*/ 
 
 background: -moz-linear-gradient(top,  rgba(35,40,45,0.65) 0%, rgba(0,5,10,0.65) 50%, rgba(35,40,45,0.65) 100%); /* FF3.6+ */

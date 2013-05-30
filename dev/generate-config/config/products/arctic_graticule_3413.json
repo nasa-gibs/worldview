@@ -1,0 +1,40 @@
+{
+    "description": "NSIDC / Graticule",
+    "name": "Latitude-Longitude Lines",
+    "product": "static",
+    "projections": {
+        "arctic": {
+            "matrixSet": "EPSG3413_250m",
+            "maxExtent": [
+                -4194304,
+                -4194304,
+                4194304,
+                4194304
+            ],
+            "maxResolution": 8192.0,
+            "serverResolutions": [
+                8192.0,
+                4096.0,
+                2048.0,
+                1024.0,
+                512.0,
+                256.0
+            ],
+            "url": [
+                "http://map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                "http://map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                "http://map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
+            ]
+        }
+    },
+    "properties": {
+        "format": "image/png",
+        "layer": "arctic_graticule_3413",    
+        "tileSize": [
+            512,
+            512
+        ],
+        "transitionEffect": "none"
+    },
+    "type": "wmts"
+}

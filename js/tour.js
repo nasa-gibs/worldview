@@ -2,6 +2,8 @@ Worldview.namespace("Tour");
 
 (function(ns) {
     
+    var log = Logging.getLogger("Worldview.Tour");
+    
     // ns = Worldview.Tour
     
     // Keep these around in a closure so we can dispose of them as needed
@@ -213,20 +215,20 @@ Worldview.namespace("Tour");
          * Restart the tour at the beginning.
          */
         var repeatTour = function(e) {
-            console.log("repeating tour");
+            log.debug("repeating tour");
             e.stopPropagation();
             $('#joyRideTipContent').joyride({adjustForPhone:false,
             								 bordered:true,
             								 template : {'link':'<a href="#" class="joyride-close-tip">X</a>'},
                                              postStepCallback : function (index, tip) {
                                                  if(index == 3) {
-                                                     console.log("finished tour");
+                                                     log.debug("finished tour");
                                                      conclusionPanel.show();
                                                      conclusionPanel.center();
                                                  }
                                              }});   
             conclusionPanel.hide();
-            console.log("exiting repeat");
+            log.debug("exiting repeat");
         }
         
         /*
@@ -234,9 +236,9 @@ Worldview.namespace("Tour");
          */
         var handleDone = function(e) {
             e.stopPropagation();
-            console.log("tour done");
+            log.debug("tour done");
             conclusionPanel.hide();
-            console.log("exiting tour done");
+            log.debug("exiting tour done");
         }
     
         /*
@@ -250,7 +252,7 @@ Worldview.namespace("Tour");
          * Close the splash and start the tour.
          */
         var handleTakeTour = function(e) {
-            console.log("handleTakeTour " + e.target.id);
+            log.debug("handleTakeTour " + e.target.id);
             e.stopPropagation();
             splashOverlay.hide();
             
@@ -259,7 +261,7 @@ Worldview.namespace("Tour");
             								 template : {'link':'<a href="#" class="joyride-close-tip">X</a>'},
                                              postStepCallback : function (index, tip) {
                                                  if(index == 3) {
-                                                     console.log("finished tour");
+                                                     log.debug("finished tour");
                                                      conclusionPanel.show();
                                                      conclusionPanel.center();
                                                  }
@@ -286,7 +288,7 @@ Worldview.namespace("Tour");
         YAHOO.util.Event.on('dontShowAgain', 'click', setDoNotShow);
         YAHOO.util.Event.on('repeat', 'click', repeatTour);
         YAHOO.util.Event.on('done', 'click', handleDone);
-        console.log("set all handlers");
+        log.debug("set all handlers");
         
         splashOverlay.render(document.body);
         conclusionPanel.render(document.body);

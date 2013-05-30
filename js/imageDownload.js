@@ -123,12 +123,15 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
     	var pixels = SOTE.util.extractFromQuery('camera', qs);
       	var s = SOTE.util.extractFromQuery('switch',qs);
       	var products = SOTE.util.extractFromQuery('products',qs);
+      	var epsg = SOTE.util.extractFromQuery('epsg', qs);
+      	//console.log("EPSG: " + epsg);
+      	
      	var px = pixels.split(",");
     	var x1 = px[0]; var y1= px[1]; var x2 = px[2]; var y2=px[3]; 
       	var lonlat1 = this.m.productMap.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(Math.floor(x1), Math.floor(y2)));
        	var lonlat2 = this.m.productMap.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(Math.floor(x2), Math.floor(y1)));
         
-        var dlURL  = "http://map2.vis.earthdata.nasa.gov/imagegen/?"; 
+        var dlURL  = "http://map2.vis.earthdata.nasa.gov/imagegen/index2.php?"; 
          
         var conversionFactor = 256;
         if (s=="geographic") {
@@ -144,15 +147,16 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
         }
       	 var dTime = Date.parseISOString(time).clearUTCTime();
       	 //Julian date, padded with two zeros (to ensure the julian date is always in DDD format).
-      	 var jDate = "00" + (1+Math.ceil((dTime - new Date(dTime.getUTCFullYear(),0,1)) / 86400000));
+      	 var jStart = Date.parseISOString(dTime.getUTCFullYear() + "-01-01");
+      	 var jDate = "00" + (1+Math.ceil((dTime.getTime() - jStart) / 86400000));
       	 dlURL += "TIME="+dTime.getUTCFullYear()+(jDate).substr((jDate.length)-3);
 
       	 
       	
       	dlURL += "&extent="+lonlat1.lon+","+lonlat1.lat+","+lonlat2.lon+","+lonlat2.lat;
       	 
-      	dlURL += "&switch="+s;
-      	
+      	//dlURL += "&switch="+s;
+      	dlURL += "&epsg="+epsg;
       	dlURL +="&layers=";
       	//Reverse the order of overlays to get the correct layer ordering.
       	if (products != ""){

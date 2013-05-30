@@ -4,14 +4,66 @@ Release Notes
 http://earthdata.nasa.gov/labs/worldview/
 
 -------------------------------------------------------------------------------
-Release 0.4.0
+Release 0.4.4 
+-------------------------------------------------------------------------------
+* Updates
+  - The Arctic projection has changed from Arctic Polar Stereographic 
+    (EPSG:3995, "Greenwich down") to NSIDC Polar Stereographic North
+    (EPSG:3413, "Greenland down").  Imagery before this transition has not yet
+    been reprocessed to the new projection.
+  - Polar land boundaries now match the actual land.
+  - Terra and Aqua MODIS Corrected Reflectance with 7-2-1 band combination have 
+    been added to the polar projections.
+  - The tour is no longer displayed when starting Worldview from a 
+    permalink.
+  - Sulphur renamed to Sulfur.
+  - The layer ordering for Cloud Top Temperature in the Severe Storms 
+    category is now consistent with other categories.
+  - A perceptually balanced rainbow palette has been added as "Rainbow 2".
+  - Worldview no longer crashes on startup when using Iceweasel or Epiphany
+    on Debian 6 (Squeeze) although these browsers are not officialy supported.
+
+* Known Issues
+  - Custom color palettes are not supported on Safari 5 or earlier.
+  - Custom color palettes can not be used in image download.
+  - On iOS, layers cannot be reordered 
+  - Worldview does not work with Internet Explorer version 10 and
+    below.
+  - WMS based layers (Population Density and Global Labels) can no longer be 
+    displayed properly in the older arctic projection (EPSG:3995).
+
+
+-------------------------------------------------------------------------------
+Release 0.4.3 - May 22, 2013
+-------------------------------------------------------------------------------
+* Updates
+  - Fixed alignment issues with the date slider in Firefox 21.0
+
+
+-------------------------------------------------------------------------------
+Release 0.4.2 - April 29, 2013
+-------------------------------------------------------------------------------
+* Updates
+  - Fixed issue where image download was using the wrong day in certain time 
+    zones.
+
+
+-------------------------------------------------------------------------------
+Release 0.4.1 - April 22, 2013
+-------------------------------------------------------------------------------
+* Updates
+  - Fixed the file not found (404) error when using an unsupported browser.
+
+  
+-------------------------------------------------------------------------------
+Release 0.4.0 - April 18, 2013
 -------------------------------------------------------------------------------
 * New Features
   - First-time users can take a tour that highlights the main features
     of Worldview.
   - Image download supported in polar projections.
   - KMZ format option added for image downloads in the geographic projection.
-  - Product color palettes can be changed by clicking on the colorlegend in 
+  - Product color palettes can be changed by clicking on the color legend in 
     My Layers.
   - New product: MODIS Combined Value-Added Aerosol Optical Depth
     (Terra and Aqua / MODIS)
@@ -41,8 +93,9 @@ Release 0.4.0
   - Worldview does not work with Internet Explorer version 10 and
     below
 
+
 -------------------------------------------------------------------------------
-Release 0.3.1
+Release 0.3.1 - February 26, 2013
 -------------------------------------------------------------------------------
 * New Features
   - Notification message can now be displayed on startup.
@@ -51,8 +104,9 @@ Release 0.3.1
   - Fixes issue where application can become unresponsive when going in and
     out of many category groups.
 
+
 -------------------------------------------------------------------------------
-Release 0.3.0
+Release 0.3.0 - February 7, 2013
 -------------------------------------------------------------------------------
 
 * New Features
@@ -63,6 +117,7 @@ Release 0.3.0
 
 * Updates
   - A toolbar was created to hold certain user interface elements 
+
 
 -------------------------------------------------------------------------------
 Release 0.2.2

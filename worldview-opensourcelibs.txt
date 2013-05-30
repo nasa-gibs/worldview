@@ -46,6 +46,14 @@ Copyright 2013 jQuery Foundation and other contributors
 
 -------------------------------------------------------------------------------
 
+Perceptually Balanced Rainbow Palette (cube YF) from MyCarta / Matteo Niccoli
+
+http://mycarta.wordpress.com/2013/02/21/perceptual-rainbow-palette-the-method/
+
+"Go ahead if you want to use my code, modify it, improve it, for non-commercial AND for commercial use."
+
+-------------------------------------------------------------------------------
+
 OpenLayers: Free Maps for the Web
 
 http://openlayers.org/

@@ -43,12 +43,13 @@ $(function(ns) {
             }  
         }),
         "arctic": new OpenLayers.Control.MousePosition({
+            projection: "EPSG:3413",
             formatOutput: function(mouseLonLat) { 
                 if ( logPosition.isDebugEnabled() ) {
                     logPosition.debug(Math.round(mouseLonLat.lon) + "," + 
                                       Math.round(mouseLonLat.lat));  
                 }                          
-                return "EPSG:3995 coords: " + 
+                return this.projection + " " +  
                         Math.round(mouseLonLat.lon) + "m, " + 
                         Math.round(mouseLonLat.lat) + "m";          
             }
@@ -59,7 +60,7 @@ $(function(ns) {
                     logPosition.debug(Math.round(mouseLonLat.lon) + "," + 
                                       Math.round(mouseLonLat.lat));  
                 }                           
-                return "EPSG:3031 coords: " + 
+                return "EPSG:3031 " + 
                         Math.round(mouseLonLat.lon) + "m, " + 
                         Math.round(mouseLonLat.lat) + "m";                  
             },
@@ -95,4 +96,25 @@ $(function(ns) {
      */
     ns.tileScheduler = null;
 
+    /**
+     * Function: setOpacity
+     * Sets the opacity of a layer. Since the backbuffer can interfere with
+     * tile layers that have transparency, the transition effect is set to 
+     * none if the opacity is not equal to one.
+     * 
+     * Parameters:
+     * layer - An OpenLayers.Layer object to set the opacity
+     * opacity - A value from 0 (transparent) to 1 (opaque).
+     */
+    ns.setOpacity = function(layer, opacity) { 
+        layer.setOpacity(opacity);
+        if ( opacity === 1 ) {
+            var effect = layer.originalTransitionEffect || "resize";
+            layer.transitionEffect = effect; 
+        } else {
+            layer.originalTransitionEffect = layer.transitionEffect;
+            layer.transitionEffect = "none";
+        }           
+    }
+    
 }(Worldview.Map));

@@ -10,7 +10,7 @@
 
 ;(function ($, window, undefined) {
   'use strict';
-
+  
   var defaults = {
       'version'              : '2.0.3',
       'tipLocation'          : 'bottom',  // 'top' or 'bottom' in relation to parent
@@ -356,7 +356,7 @@
 
           // skip non-existent targets
           } else if (settings.$li && settings.$target.length < 1) {
-			console.log("showNext2 nubposition = " + settings.tipSettings.nubPosition);
+			//console.log("showNext2 nubposition = " + settings.tipSettings.nubPosition);
             methods.show();
 
           } else {
@@ -479,7 +479,7 @@
       // detect phones with media queries if supported.
       is_phone : function () {
       	if(settings.adjustForPhone) {
-      		console.log("adjustForPhone");
+      		//console.log("adjustForPhone");
         	if (Modernizr) {
           	return Modernizr.mq('only screen and (max-width: 767px)');
         	}
@@ -487,7 +487,7 @@
         	return (settings.$window.width() < 767) ? true : false;
        	}
        	else {
-       		console.log("no adjustForPhone");
+            //console.log("no adjustForPhone");
        		return false;
        	}
       },
@@ -742,7 +742,7 @@
       },
       
       pos_phone : function (init) {
-      	console.log("pos_phone");
+      	//console.log("pos_phone");
         var tip_height = settings.$next_tip.outerHeight(),
             tip_offset = settings.$next_tip.offset(),
             target_height = settings.$target.outerHeight(),

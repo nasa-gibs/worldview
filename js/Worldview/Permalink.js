@@ -160,6 +160,10 @@ $(function() {
         var palettes = Worldview.extractFromQuery("palettes", qs);
         if ( palettes ) {
             link += "&palettes=" + palettes;
+        }
+        var opacity = Worldview.extractFromQuery("opacity", qs);
+        if ( opacity ) {
+            link += "&opacity=" + opacity;
         }    
         var url = window.location.href;
         var prefix = url.split("?")[0];

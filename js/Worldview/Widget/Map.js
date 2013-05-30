@@ -195,7 +195,7 @@ Worldview.Widget.Map = function(containerId, config) {
     var validateConfig = function(config) {
         var root = ["config", "projections", "products"];
         $.each(root, function(index, key) {
-            if ( !(key in config) ) {
+            if ( !config.hasOwnProperty(key) ) {
                 throw key + " is required in the map configuration";
             }
         });

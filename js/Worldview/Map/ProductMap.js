@@ -188,6 +188,20 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
         }
     };
     
+    self.setOpacity = function(layerName, opacity) {
+        $.each(self.map.products, function(name, product) {
+            if ( name == layerName ) {
+                var value = parseFloat(opacity);
+                if ( isNaN(value) ) {
+                    log.warn("Invalid opacity for layer " + layerName + ": " + 
+                            opacity);
+                } else {
+                    product.setOpacity(value);
+                }
+            }    
+        });
+    }
+    
     /**         
     * Method: set
     * Set the products that should be displayed on the map. 
@@ -454,7 +468,9 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
                                      config.projections[proj]);
         delete config.projections;  
                   
-        config.properties.projection = mapConfig.projections[proj].projection;
+        if ( !config.properties.projection ) {
+            config.properties.projection = mapConfig.projections[proj].projection;
+        }
         if ( config.parameters ) {
             config.parameters.projection = 
                 mapConfig.projections[proj].projection;

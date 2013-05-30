@@ -2,10 +2,6 @@
     "description": "ADD SCAR / Coastlines",
     "name": "Coastlines",
     "product": "static",
-    "parameters": {
-        "layers": "antarctic_coastlines",    
-        "format": "image/png"
-    },
     "projections": {
         "antarctic": {
             "matrixSet": "EPSG3031_250m",
@@ -25,18 +21,20 @@
                 256.0
             ],
             "url": [
-                "http://map1a.vis.earthdata.nasa.gov/antarctic/wms.cgi",
-                "http://map1b.vis.earthdata.nasa.gov/antarctic/wms.cgi",
-                "http://map1c.vis.earthdata.nasa.gov/antarctic/wms.cgi"
+                "http://map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                "http://map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                "http://map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
             ]
         }
     },
     "properties": {
+        "format": "image/png",
+        "layer": "antarctic_coastlines",    
         "tileSize": [
             512,
             512
         ],
         "transitionEffect": "none"
     },
-    "type": "wms"
+    "type": "wmts"
 }

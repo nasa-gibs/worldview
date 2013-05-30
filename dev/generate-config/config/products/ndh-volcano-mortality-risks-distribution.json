@@ -1,6 +1,6 @@
 {
     "description": "SEDAC Global Volcano Mortality Risks and Distribution, v1 (2000)",
-    "name": "Volcano Hazard:Mortality Risk",
+    "name": "Volcano Hazard: Mortality Risk",
     "parameters": {
         "format": "image/png",
         "layers": "ndh-volcano-mortality-risks-distribution",

@@ -52,12 +52,16 @@ $(function() {// Initialize "static" vars
         var p = new SOTE.widget.Products("productsHolder");
         //var a = new SOTE.widget.Bank("products",{paletteWidget: palettes, dataSourceUrl:"ap_products.php",title:"My Layers",selected:{antarctic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,antarctic_coastlines", arctic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,arctic_coastlines",geographic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,sedac_bound"},categories:["Base Layers","Overlays"],callback:showSelector,selector:selector,config:config});
         //var s = new SOTE.widget.Selector("selectorbox",{dataSourceUrl:"ap_products.php",categories:["Base Layers","Overlays"]});
+
         //var h = new SOTE.widget.MenuPicker("hazard",{dataSourceUrl:"data/mp_hazard.php"});
         //var tr = new SOTE.widget.MenuPicker("transition",{dataSourceUrl:"data/mp_transition.php"});
         var map = new SOTE.widget.DateSpan("time",{hasThumbnail:false});
         //Image download variables
         rb = new SOTE.widget.RubberBand("camera",{icon:"images/camera.png",onicon:"images/cameraon.png",cropee:"map",paletteWidget:palettes,mapWidget:m});
         var id = new SOTE.widget.ImageDownload("imagedownload",{baseLayer:"MODIS_Terra_CorrectedReflectance_TrueColor",alignTo: rb, m:m});		
+        var apcn = new Worldview.Widget.ArcticProjectionChangeNotification(config, a);
+        var opacity = new Worldview.Widget.Opacity(config);
+        var epsg = new Worldview.Widget.EPSG(config);
         
         // Get rid of address bar on iphone/ipod
         var fixSize = function() {
@@ -73,12 +77,14 @@ $(function() {// Initialize "static" vars
         setTimeout(fixSize, 1500);
         	    
         REGISTRY.addEventListener("map","time","imagedownload");
-        REGISTRY.addEventListener("time","map","imagedownload");
-        REGISTRY.addEventListener("switch","map","products","selectorbox","time", "imagedownload", "camera");
-        REGISTRY.addEventListener("products","map","time","selectorbox","imagedownload","palettes");
+        REGISTRY.addEventListener("time","map","imagedownload", apcn.containerId, epsg.containerId);
+        REGISTRY.addEventListener("switch","map","products","selectorbox","time", "imagedownload", "camera", apcn.containerId, epsg.containerId);
+        REGISTRY.addEventListener("products","map","time","selectorbox","imagedownload","palettes", apcn.containerId);
         REGISTRY.addEventListener("selectorbox","products");
         REGISTRY.addEventListener("camera","imagedownload");
         REGISTRY.addEventListener("palettes","map","camera","products");
+        REGISTRY.addEventListener("opacity", "map");
+        REGISTRY.addEventListener(epsg.containerId, "imagedownload");
         
         /*REGISTRY.addEventListener("map","time");
         REGISTRY.addEventListener("time","map");
@@ -87,13 +93,19 @@ $(function() {// Initialize "static" vars
         REGISTRY.addEventListener("selectorbox","products");
         //REGISTRY.addEventListener("hazard","products");*/
         
-        var queryString = Worldview.Permalink.decode(window.location.search.substring(1));
+        Worldview.opacity = opacity; 
+        var queryString = 
+            Worldview.Permalink.decode(window.location.search.substring(1));
+        
         var initOrder = [
             ss, // projection
             p.b, // products
             map, // time
             m, // map
-            palettes
+            palettes,
+            apcn,
+            opacity,
+            epsg
         ];
         
         function testQS(){
@@ -116,8 +128,10 @@ $(function() {// Initialize "static" vars
         if ( Worldview.isDevelopment() ) {
             log.warn("Development version");
         }	  
-                 
-        Worldview.Tour.start(false);   
+        // Do not start the tour if coming in via permalink         
+        if ( !queryString ) {         
+            Worldview.Tour.start(false);  
+        } 
     };
         
     var onConfigLoad = function(config) {
@@ -131,7 +145,7 @@ $(function() {// Initialize "static" vars
                 config.palettes["__DEBUG"] = debugPalette;
                 config.paletteOrder.unshift("__DEBUG");
             }
-            Worldview.config = Object.freeze(config);
+            Worldview.config = config;
             init(Worldview.config);
         } catch ( error ) {
             Worldview.error("Unable to start Worldview", error);

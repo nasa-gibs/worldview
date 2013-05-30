@@ -150,6 +150,9 @@
 		<copy todir="${build.web.dir}/images">
 			<fileset dir="images"/>
 		</copy>
+        <copy todir="${build.web.dir}/html">
+            <fileset dir="html"/>
+        </copy>
 		<copy todir="${build.web.dir}/js">
 			<fileset dir="js"/>
 		</copy>
@@ -286,20 +289,36 @@
         </exec>
     </target>
          
-	<target name="dist" depends="clean,web,doc,artifacts"
-	     description="Generates distribution artifacts"/>
+    <target name="dist" depends="clean,web,doc,artifacts"
+            description="Generates distribution artifacts"/>
 	
-	<target name="artifacts"
-         description="Generates distribution artifacts using existing build dir">	    
-		<tar destfile="${dist.dir}/worldview.tar.bz2"
-			 basedir="${build.dir}" includes="worldview/**" 
-			 compression="bzip2"/>
-		<tar destfile="${dist.dir}/worldview-debug.tar.bz2"
-			 basedir="${build.dir}" includes="worldview-debug/**"
-			 compression="bzip2"/>
-		<tar destfile="${dist.dir}/worldview-doc.tar.bz2"
-			 basedir="${build.dir}" includes="worldview-doc/**" 
-			 compression="bzip2"/>
-	</target>
+    <target name="artifacts"
+            description="Generates distribution artifacts using existing build dir">	    
+	<tar destfile="${dist.dir}/worldview.tar.bz2"
+             basedir="${build.dir}" includes="worldview/**" 
+	     compression="bzip2"/>
+	<tar destfile="${dist.dir}/worldview-debug.tar.bz2"
+	      basedir="${build.dir}" includes="worldview-debug/**"
+	      compression="bzip2"/>
+	<tar destfile="${dist.dir}/worldview-doc.tar.bz2"
+	      basedir="${build.dir}" includes="worldview-doc/**" 
+	      compression="bzip2"/>
+    </target>
+    
+    <target name="rpm" depends="dist">
+        <mkdir dir="${user.home}/rpmbuild/SOURCES"/>
+        <copy file="${dist.dir}/worldview.tar.bz2"
+	      todir="${user.home}/rpmbuild/SOURCES"/>
+        <copy file="${dist.dir}/worldview-debug.tar.bz2"
+	      todir="${user.home}/rpmbuild/SOURCES"/>
+	<copy file="deploy/httpd.worldview.conf"
+	      todir="${user.home}/rpmbuild/SOURCES"/>
+	<copy file="deploy/httpd.worldview-debug.conf"
+	      todir="${user.home}/rpmbuild/SOURCES"/>
+	<exec executable="rpmbuild">
+	    <arg value="-ba"/>
+            <arg value="deploy/worldview.spec"/>
+        </exec>
+    </target>
 
 </project>

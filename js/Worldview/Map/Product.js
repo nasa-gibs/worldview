@@ -25,6 +25,7 @@ Worldview.namespace("Map");
 Worldview.Map.Product = function(c) {
     
     var self = {};
+    self.opacity = 1;
     var config;
     
     var init = function() {
@@ -81,6 +82,11 @@ Worldview.Map.Product = function(c) {
                     additionalParameters);
         }  
         var layer;
+        if ( properties.opacity ) {
+            self.opacity = properties.opacity;
+        } else { 
+            properties.opacity = self.opacity;
+        }
         if ( config.type === "wms" ) {
             layer = new Worldview.Map.TWMSLayer(config.name, config.url, 
                     parameters, properties);
