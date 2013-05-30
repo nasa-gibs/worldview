@@ -102,7 +102,12 @@ Worldview.Widget.ArcticProjectionChangeNotification = function(config, bank) {
         try {
             var query = Worldview.queryStringToObject(queryString);
             if ( query["switch"] === "arctic" ) {
-                var currentDay = Date.parseISOString(query.time);
+                var currentDay;
+                if ( query.time ) {
+                    currentDay = Date.parseISOString(query.time);
+                } else {
+                    currentDay = Worldview.today();
+                }
                 if ( currentDay < self.changeDate ) {
                     log.debug(self.containerId + ": visit old");
                     if ( REGISTRY.isLoadingQuery ) {
