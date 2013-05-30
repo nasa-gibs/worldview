@@ -59,7 +59,7 @@ $(function() {// Initialize "static" vars
         //Image download variables
         rb = new SOTE.widget.RubberBand("camera",{icon:"images/camera.png",onicon:"images/cameraon.png",cropee:"map",paletteWidget:palettes,mapWidget:m});
         var id = new SOTE.widget.ImageDownload("imagedownload",{baseLayer:"MODIS_Terra_CorrectedReflectance_TrueColor",alignTo: rb, m:m});		
-        var apcn = new Worldview.Widget.ArcticProjectionChangeNotification(config, a);
+        var apcn = new Worldview.Widget.ArcticProjectionChangeNotification(config, p.b);
         var opacity = new Worldview.Widget.Opacity(config);
         var epsg = new Worldview.Widget.EPSG(config);
         
