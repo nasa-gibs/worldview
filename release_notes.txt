@@ -12,8 +12,8 @@ Release 0.4.4
     (EPSG:3413, "Greenland down").  Imagery before this transition has not yet
     been reprocessed to the new projection.
   - Polar land boundaries now match the actual land.
-  - Terra and Aqua MODIS Corrected Reflectance with 7-2-1 band combination have 
-    been added to the polar projections.
+  - Terra and Aqua MODIS Corrected Reflectance with 7-2-1 band combination 
+    have been added to the polar projections.
   - The tour is no longer displayed when starting Worldview from a 
     permalink.
   - Sulphur renamed to Sulfur.
