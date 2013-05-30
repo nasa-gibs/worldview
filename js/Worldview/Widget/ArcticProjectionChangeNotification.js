@@ -69,20 +69,28 @@ Worldview.Widget.ArcticProjectionChangeNotification = function(config, bank) {
     
     var updateLayers = function(queryString) {
         var products = Worldview.extractFromQuery("products", queryString);
+        var newProducts = products;
         if ( currentNew ) {
             Worldview.Map.COORDINATE_CONTROLS["arctic"].projection = 
                 newEPSG;
-            products = products.replace(oldCoastlinesRegEx, newCoastlines);
-            products = products.replace(oldGraticulesRegEx, newGraticules);
+            newProducts = 
+                    newProducts.replace(oldCoastlinesRegEx, newCoastlines);
+            newProducts = 
+                    newProducts.replace(oldGraticulesRegEx, newGraticules);
 
         } else {
             Worldview.Map.COORDINATE_CONTROLS["arctic"].projection = 
                 oldEPSG;
-            products = products.replace(newCoastlinesRegEx, oldCoastlines);
-            products = products.replace(newGraticulesRegEx, oldGraticules);
+            newProducts = 
+                    newProducts.replace(newCoastlinesRegEx, oldCoastlines);
+            newProducts = 
+                    newProducts.replace(newGraticulesRegEx, oldGraticules);
         }
-        log.debug(self.containerId + ": updateLayers", products); 
-        bank.setValue(products);  
+        
+        if ( products !== newProducts ) {
+            log.debug(self.containerId + ": updateLayers", newProducts); 
+            bank.setValue(newProducts);
+        }
     }
     
     self.setValue = function() {};
@@ -104,15 +112,15 @@ Worldview.Widget.ArcticProjectionChangeNotification = function(config, bank) {
                     visitOld = true;
                     if ( currentNew ) {
                         currentNew = false;
-                        updateLayers(queryString);
                     }
+                    updateLayers(queryString);
                 } else if ( currentDay >= self.changeDate ) {
                     log.debug(self.containerId + ": visit new");
                     visitNew = true;
                     if ( !currentNew ) {
                         currentNew = true;
-                        updateLayers(queryString);
                     }
+                    updateLayers(queryString);
                 }
                 if ( visitOld && visitNew && showNotice ) {
                     log.debug(self.containerId + ": notify");

@@ -65,6 +65,7 @@
         <file name="Worldview/Widget/WorldviewMap.js"/>
         <file name="Worldview/Widget/ArcticProjectionChangeNotification.js"/>
         <file name="Worldview/Widget/Opacity.js"/>
+        <file name="Worldview/Widget/EPSG.js"/>
 
         <file name="tour.js"/>
 		<file name="main.js"/>
