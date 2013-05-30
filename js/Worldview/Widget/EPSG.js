@@ -16,6 +16,7 @@ Worldview.Widget.EPSG = function(config) {
     var self = {};
     self.containerId = "epsg";
 
+    var log = Logging.getLogger("Worldview.Widget.EPSG");
     var projection = "4326";
     var changeDate = null;
 
@@ -43,7 +44,12 @@ Worldview.Widget.EPSG = function(config) {
             query = Worldview.queryStringToObject(queryString);
             var time;
             if ( query.time ) {
-                time = Date.parseISOString(query.time).clearUTCTime();
+                try {
+                    time = Date.parseISOString(query.time).clearUTCTime();
+                } catch ( error ) {
+                    log.warn("Invalid time: " + query.time);
+                    time = Worldview.today();
+                }
             } else { 
                 time = Worldview.today();
             }
