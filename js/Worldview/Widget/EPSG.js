@@ -41,7 +41,12 @@ Worldview.Widget.EPSG = function(config) {
                 return;
             }
             query = Worldview.queryStringToObject(queryString);
-            time = Date.parseISOString(query.time).clearUTCTime();
+            var time;
+            if ( query.time ) {
+                time = Date.parseISOString(query.time).clearUTCTime();
+            } else { 
+                time = Worldview.today();
+            }
             if ( query["switch"] === "geographic" ) {
                 projection = "4326";
                 REGISTRY.fire(self);
