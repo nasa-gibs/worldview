@@ -39,7 +39,7 @@
 {
     "id": "MLS_Rainbow",
     "filename": "rendered/MLS_color_table.xml",
-    "minIndex": 0,
+    "minIndex": 1,
     "maxIndex": 255,
     "products": [
         "MLS_CO_215hPa_Day",

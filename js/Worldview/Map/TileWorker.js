@@ -54,6 +54,12 @@ var execute = function(event) {
                      source[i + 2] + "," + 
                      source[i + 3];
         var color = lookupTable[lookup];
+        // Uncomment this to find colors that do not map
+        /*
+        if ( !color && lookup !== "0,0,0,0" ) { 
+            throw Error("Not found: " + lookup); 
+        }
+        */
         if ( color ) {
             destination[i + 0] = color.r
             destination[i + 1] = color.g
