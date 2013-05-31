@@ -1,5 +1,5 @@
 {
-    "description": "NSIDC / Coastlines",
+    "description": "OpenStreetMap / Coastlines",
     "name": "Coastlines",
     "product": "static",
     "projections": {

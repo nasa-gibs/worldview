@@ -104,8 +104,11 @@ Worldview.Palette.ColorBar = function(spec) {
 
             // The canavs dimensions does not equal the element dimensions! Make
             // them the same or scaling will occur.
-            canvas.width = $canvas.width();
-            canvas.height = $canvas.height();
+            
+            // tj, 5/16/13, edit: the element client width and height will be 0 in the new
+            // product picker design because the bank is not visible when colorbars are rendered
+            /*canvas.width = $canvas.width();
+            canvas.height = $canvas.height();*/
         } else {
             canvas = docuemnt.createElement("canvas");
             canvas.width = spec.width;

@@ -66,6 +66,7 @@ SOTE.widget.Bank = function(containerId, config){
     this.selector = config.selector;
     this.meta = new Object;
     this.buildMetaDone = false;
+    this.hidden = new Object;
     /*this.meta["MODIS_Terra_CorrectedReflectance_TrueColor"] = {label:"Corrected Reflectance (True Color)",sublabel:"Terra / MODIS"};
     this.meta["fires48"] = {label:"Fires (Past 48 Hours)",sublabel:"MODIS Fire and Thermal Anomalies"};
     this.meta["AIRS_Dust_Score"] = {label:"Dust Score",sublabel:"Aqua / AIRS"};
@@ -97,11 +98,9 @@ SOTE.widget.Bank.handleMetaSuccess = function(data,status,xhr,args){
 	for(var i in data){
 		if(i != "palettes") {
 			for(var j=0; j<data[i].length; j++){
-				//console.log("i = " + i);
-				//console.log("j = " + j);
-				//console.log("value = " + data[i][j].value);
-				//console.log("label = " + data[i][j].label);
-				self.meta[data[i][j].value] = {label:data[i][j].label,sublabel:data[i][j].sublabel};
+
+				self.meta[data[i][j].value] = {label:data[i][j].label,sublabel:data[i][j].sublabel,type:data[i][j].type};
+
 			}
 		}
 	}
@@ -172,26 +171,30 @@ SOTE.widget.Bank.prototype.init = function(){
 SOTE.widget.Bank.prototype.render = function(){
 
 	this.container.innerHTML = "";
-
-	//$('#'+this.id).addClass('bank');
+	
+/*	var tabs = document.createElement("ul");
+	tabs.innerHTML = "<li><a href='#bank' class='activetab'>Active</a></li><li><a class='addlayerstab' href='#selectorbox'>Add Layers</a></li>";
+	this.container.appendChild(tabs);
+	*/
 	var container = document.createElement("div");
+	container.setAttribute("id","bank");
 	container.setAttribute("class","bank");
 	
-	var titleContainer = document.createElement("div");
-	var title = document.createElement("h2");
-	title.innerHTML = this.title;
-	var ext = document.createElement("a");
+	//var titleContainer = document.createElement("div");
+	//titleContainer.setAttribute("class","tabContainer");
+	//var title = document.createElement("h2");
+	//title.innerHTML = "Active"; //this.title;
+	/*var ext = document.createElement("a");
 	ext.setAttribute("id","callSelectorLink");
 	ext.setAttribute("class","callSelectorLink");
 	ext.setAttribute("title","Show Product Listing");
+	*/
+	//titleContainer.appendChild(title);
+	//titleContainer.appendChild(ext);
 	
-	titleContainer.appendChild(title);
-	titleContainer.appendChild(ext);
+	//container.appendChild(titleContainer);
 	
-	container.appendChild(titleContainer);
-	
-	$('#'+this.id).delegate('.callSelectorLink','click',{selector:this.selector},this.callback);
-
+	//$('#'+this.id).delegate('.callSelectorLink','click',{selector:this.selector},this.callback);
 	
 	for(var i=0; i<this.categories.length; i++){
 		var formattedCategoryName = this.categories[i].replace(/\s/g, "");
@@ -203,18 +206,25 @@ SOTE.widget.Bank.prototype.render = function(){
 		categoryTitle.setAttribute("class","head");
 		categoryTitle.innerHTML = this.categories[i];
 		categoryTitleEl.appendChild(categoryTitle);
-		category.appendChild(categoryTitleEl);
+		container.appendChild(categoryTitleEl);
 				
 		if(this.values !== null && this.values[formattedCategoryName.toLowerCase()]){
 			for(var j=0; j<this.values[formattedCategoryName.toLowerCase()].length; j++){
+				var myVal = this.values[formattedCategoryName.toLowerCase()][j].value
 				var item = document.createElement("li");
-				item.setAttribute("id",formattedCategoryName.toLowerCase()+"-"+this.values[formattedCategoryName.toLowerCase()][j].value);
+				item.setAttribute("id",formattedCategoryName.toLowerCase()+"-"+myVal);
 				item.setAttribute("class",this.id+"item item");
-				item.innerHTML = "<a><img class='close' id='"+this.values[formattedCategoryName.toLowerCase()][j].value.replace(/:/g,"colon")+"' src='images/close.png' /></a>";
-				if(this.meta !== null && this.meta[this.values[formattedCategoryName.toLowerCase()][j].value]){
-					item.innerHTML += "<h4>"+this.meta[this.values[formattedCategoryName.toLowerCase()][j].value].label+"</h4>";
-					item.innerHTML += "<p>"+this.meta[this.values[formattedCategoryName.toLowerCase()][j].value].sublabel+"</p>";
-					var m = this.meta[this.values[formattedCategoryName.toLowerCase()][j].value];
+				item.innerHTML = "<a><img class='close' id='close"+myVal.replace(/:/g,"colon")+"' src='images/close.png' /></a>";				
+				if(this.meta !== null && this.meta[myVal]){
+					if(myVal in this.hidden){
+						item.innerHTML += "<a class='hdanchor'><img class='hide hideReg' id='hide"+myVal.replace(/:/g,"colon")+"' src='images/invisible.png' /></a>";	
+					}
+					else {
+						item.innerHTML += "<a class='hdanchor'><img class='hide hideReg' id='hide"+myVal.replace(/:/g,"colon")+"' src='images/visible.png' /></a>";
+					}
+					item.innerHTML += "<h4>"+this.meta[myVal].label+"</h4>";
+					item.innerHTML += "<p>"+this.meta[myVal].sublabel+"</p>";
+					var m = this.meta[myVal];
 					/*if(m.paletteString){
 						item.innerHTML += m.paletteString;
 					}
@@ -235,11 +245,11 @@ SOTE.widget.Bank.prototype.render = function(){
 						item.innerHTML += paletteString;
 					}*/
 					if(m.palette){
-						var paletteString = "<span class='palette'><span class='p-min' style='margin-right:10px;'>"+m.min+"</span>" +
+						var paletteString = "<div><span class='palette'><span class='p-min' style='margin-right:10px;'>"+m.min+"</span>" +
 							 "<canvas class='colorBar' id='canvas"+this.values[formattedCategoryName.toLowerCase()][j].value+"' width=100px height=14px'></canvas>" +
 							 "<span class='p-max' style='margin-left:10px;'>"+m.max+"</span>";
 						if(m.units && m.units != ""){
-							paletteString += "<span class='units' style='margin-left:3px;'>("+m.units+")</span></span>";
+							paletteString += "<span class='units' style='margin-left:3px;'>("+m.units+")</span></span></div>";
 						}
 						item.innerHTML += paletteString;
 					}
@@ -255,17 +265,38 @@ SOTE.widget.Bank.prototype.render = function(){
 		container.appendChild(category);
 	}
 	this.container.appendChild(container);
+	/*
+	var selectorbox = document.createElement("div");
+	selectorbox.setAttribute("id","selectorbox");
+	this.container.appendChild(selectorbox);*/
+	
 	this.renderCanvases();
-	var accordionToggler = document.createElement("a");
+	/*var accordionToggler = document.createElement("a");
 	accordionToggler.setAttribute("class","accordionToggler atcollapse");
 	accordionToggler.setAttribute("title","Hide Products");
 	this.isCollapsed = false;
 	this.container.appendChild(accordionToggler);
-	$('.accordionToggler').bind('click',{self:this},SOTE.widget.Bank.toggle);
+	$('.accordionToggler').bind('click',{self:this},SOTE.widget.Bank.toggle);*/
+	$("#"+this.id).undelegate(".close" ,'click');
+	$("#"+this.id).undelegate(".hideReg" ,'click');	
+	$("#"+this.id).undelegate(".hideSingle" ,'click');		
 	$("#"+this.id).delegate(".close" ,'click',{self:this},SOTE.widget.Bank.removeValue);
+	$("#"+this.id).delegate(".hideReg" ,'click',{self:this},SOTE.widget.Bank.toggleValue);	
+	$("#"+this.id).delegate(".hideSingle" ,'click',{self:this},SOTE.widget.Bank.toggleValue);	
 	$( "." + this.id + "category" ).sortable({items: "li:not(.head)"});	
+	$( "." + this.id + "category" ).mCustomScrollbar("destroy");
+	$( "." + this.id + "category" ).mCustomScrollbar({horizontalScroll:false, advanced:{
+        updateOnContentResize: true
+    }});
 	$( "." + this.id + "category li" ).disableSelection();	
 	$( "." + this.id + "category" ).bind('sortstop',{self:this},SOTE.widget.Bank.handleSort);
+
+	//this.hideAllRadioExceptTop();
+
+	/*$('#'+this.id).tabs();
+	//this.b = new SOTE.widget.Bank("products",{paletteWidget: window.palettes, dataSourceUrl:"ap_products.php",title:"My Layers",selected:{antarctic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,antarctic_coastlines", arctic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,arctic_coastlines",geographic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,sedac_bound"},categories:["Base Layers","Overlays"],config:config});
+    this.s = new SOTE.widget.Selector("selectorbox",{dataSourceUrl:"ap_products.php",categories:["Base Layers","Overlays"]});	*/
+	
 	// Mark the component as ready in the registry if called via init() 
 	if ((this.initRenderComplete === false) && REGISTRY) {
 		this.initRenderComplete = true;
@@ -356,6 +387,7 @@ SOTE.widget.Bank.handleSort = function(e,ui){
 SOTE.widget.Bank.removeValue = function(e){
 	var self = e.data.self;
 	var val = e.target.id.replace(/colon/g,":");
+	val = val.replace(/close/g,"");	
 	for(var i=0; i<self.categories.length; i++){
 		var formatted = self.categories[i].replace(/\s/g, "");
 		formatted = formatted.toLowerCase();
@@ -365,11 +397,105 @@ SOTE.widget.Bank.removeValue = function(e){
 			}	
 		}
 	}
-	var formattedVal = val.replace(/:/g,"colon");
+	var formattedVal = "close"+val.replace(/:/g,"colon");
 	//self.render();
 	$("#"+self.id+" #"+formattedVal).parent().parent().remove();
 	self.fire();
 };
+
+SOTE.widget.Bank.toggleValue = function(e){
+	var self = e.data.self;
+	var val = e.target.id.replace(/colon/g,":");
+	val = val.replace(/hide/g,"");
+	for(var i=0; i<self.categories.length; i++){
+		var formatted = self.categories[i].replace(/\s/g, "");
+		formatted = formatted.toLowerCase();
+		for(var j=0; j<self.values[formatted].length; j++){
+			if(self.values[formatted][j].value == val){
+				if(val in self.hidden){
+					delete self.hidden[val];
+					e.target.src = 'images/visible.png';
+				}
+				else {
+					self.hidden[val] = 1;
+					e.target.src = 'images/invisible.png';					
+				}
+				
+				
+			}	
+		}
+	}
+	//var formattedVal = val.replace(/:/g,"colon");
+	//self.render();
+	//$("#"+self.id+" #"+formattedVal).parent().parent().remove();
+	self.fire();
+};
+
+SOTE.widget.Bank.prototype.hideAllRadioExceptTop = function(){
+	for(var i=0; i<this.categories.length - 1; i++){
+		var formatted = this.categories[i].replace(/\s/g, "");
+		formatted = formatted.toLowerCase();
+		for(var j=1; j<this.values[formatted].length; j++){
+
+			this.hidden[this.values[formatted][j].value] = 1;
+			$('#hide'+this.values[formatted][j].value).attr("src",'images/invisible.png');
+				
+		}
+	}
+};
+
+SOTE.widget.Bank.radioToggleValue = function(e){
+	var self = e.data.self;
+	var val = e.target.id.replace(/colon/g,":");
+	var cat = -1;
+	var hidden = false;
+	val = val.replace(/hide/g,"");
+	
+	for(var i=0; i<self.categories.length; i++){
+		var formatted = self.categories[i].replace(/\s/g, "");
+		formatted = formatted.toLowerCase();
+		for(var j=0; j<self.values[formatted].length; j++){
+			if(self.values[formatted][j].value == val){
+				if(val in self.hidden){
+					delete self.hidden[val];
+					e.target.src = 'images/visible.png';
+					for(var k=0; k<self.values[formatted].length; k++){
+						if(self.values[formatted][k].value != val){
+							self.hidden[self.values[formatted][k].value] = 1;
+							$('#hide'+self.values[formatted][k].value).attr("src",'images/invisible.png');
+						}
+					}
+				}
+				else {
+					self.hidden[val] = 1;
+					e.target.src = 'images/invisible.png';
+					if(j+1 < self.values[formatted].length){
+						if(self.hidden[self.values[formatted][j+1].value]){
+							delete 	self.hidden[self.values[formatted][j+1].value];
+							$('#hide'+self.values[formatted][j+1].value).attr("src",'images/visible.png');
+						}
+					}
+					else {
+						if(self.hidden[self.values[formatted][0].value]){
+							delete 	self.hidden[self.values[formatted][0].value];
+							$('#hide'+self.values[formatted][0].value).attr("src",'images/visible.png');
+
+						}
+					}
+				}
+				
+			}	
+		}
+	}
+	
+	
+	//var formattedVal = val.replace(/:/g,"colon");
+	//self.render();
+	//$("#"+self.id+" #"+formattedVal).parent().parent().remove();
+	self.fire();
+};
+
+
 
 /**
   * Fires an event to the registry when the state of the component is changed
@@ -423,6 +549,12 @@ SOTE.widget.Bank.prototype.getValue = function(){
 	return this.id + "=" + value;
 };
 
+SOTE.widget.Bank.prototype.value = function(){
+		
+	var value = this.serialize(this.values);
+	return value;
+};
+
 SOTE.widget.Bank.prototype.serialize = function(values){
 	var serialized = "";
 	for(var i=0; i<this.categories.length; i++){
@@ -435,7 +567,11 @@ SOTE.widget.Bank.prototype.serialize = function(values){
 		serialized += formatted;
 		if(values[formatted]){
 			for(var j=0; j<values[formatted].length; j++){
-				serialized += "," + values[formatted][j].value;
+				if(!(values[formatted][j].value in this.hidden)){
+					serialized += "," + values[formatted][j].value;
+				}else {
+					serialized += "," + "!" + values[formatted][j].value;
+				}
 			}
 		}
 	}
@@ -444,15 +580,21 @@ SOTE.widget.Bank.prototype.serialize = function(values){
 
 SOTE.widget.Bank.prototype.unserialize = function(string){
 	var unserialized = new Object;
+	var hideIndicator = /^!/;
 	var categories = string.split("~");
 	for(var i=0; i<categories.length; i++){
 		var items = categories[i].split(/[\.,]/);
 		unserialized[items[0]] = new Array;
 		for(var j=1; j<items.length; j++){
-            if ( this.meta && !this.meta[items[j]] ) {
+            if ( this.meta && !this.meta[items[j]] && !hideIndicator.test(items[j]) ) {
                 this.log.warn("No such product: " + items[j]);
             } else {
+            	if(hideIndicator.test(items[j])){
+					items[j] = items[j].replace(/!/g, "");  	
+			    	this.hidden[items[j]] = 1;
+			    }
 			    unserialized[items[0]].push({"value":items[j]});
+
 			}
 		}
 		

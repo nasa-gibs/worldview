@@ -2,7 +2,7 @@ var rb;
 
 function showSelector(e){
 	
-	console.log("show selector");
+	//console.log("show selector");
 	var selector = e.data.selector;
 	selector.show();
 	var myid = "selector_c";
@@ -13,8 +13,8 @@ function showSelector(e){
 	var selWidth = parseInt(YAHOO.util.Dom.getStyle(myid, 'width'), 10);
 	var newX = (viewWidth - selWidth)/2;
 	YAHOO.util.Dom.setX(myid, newX);
-	console.log("selWidth = " + selWidth);
-	console.log("newX = " + newX);
+	//console.log("selWidth = " + selWidth);
+	//console.log("newX = " + newX);
 	
 	// get screen width
 	var devWidth = window.screen.availWidth;

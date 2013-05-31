@@ -34,21 +34,26 @@ $(function() {// Initialize "static" vars
                     Worldview.BUILD_TIMESTAMP, 
             max: 4
         });
-                    	            	    	            	    	            	    	    	    	            	    	    
-        selector = new YAHOO.widget.Panel("selector", { zIndex:1019, visible:false } );
+        
+        //$('#products').tabs();
+             	            	    	            	    	            	    	    	    	            	    	    
+        /*selector = new YAHOO.widget.Panel("selector", { zIndex:1019, visible:false } );
         selector.setBody("<div id='selectorbox'></div>");
         selector.render(document.body);
         var sel_id = selector.id;
         selector.beforeHideEvent.subscribe(function(e){ $("#"+sel_id).css("display","none");})
         //selector.beforeHideEvent.subscribe(closeSelector);
         selector.beforeShowEvent.subscribe(function(e){$("#"+sel_id).css("display","block");})
-        //this.selector.subscribe("beforeHide", closeSelector);
+        //this.selector.subscribe("beforeHide", closeSelector);*/
         // Create map 
         var m = Worldview.Widget.WorldviewMap("map", config);
-        var palettes = Worldview.Widget.Palette("palettes", config, {alignTo: "#products"});
+        window.config = config;
+	    window.palettes = Worldview.Widget.Palette("palettes", config, {alignTo: "#products"});	
         var ss = new SOTE.widget.Switch("switch",{dataSourceUrl:"a",selected:"geographic"});
-        var a = new SOTE.widget.Bank("products",{paletteWidget: palettes, dataSourceUrl:"ap_products.php",title:"My Layers",selected:{antarctic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,antarctic_coastlines", arctic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,arctic_coastlines_3413",geographic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,sedac_bound"},categories:["Base Layers","Overlays"],callback:showSelector,selector:selector,config:config});
-        var s = new SOTE.widget.Selector("selectorbox",{dataSourceUrl:"ap_products.php",categories:["Base Layers","Overlays"]});
+        var p = new SOTE.widget.Products("productsHolder");
+        //var a = new SOTE.widget.Bank("products",{paletteWidget: palettes, dataSourceUrl:"ap_products.php",title:"My Layers",selected:{antarctic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,antarctic_coastlines", arctic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,arctic_coastlines",geographic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,sedac_bound"},categories:["Base Layers","Overlays"],callback:showSelector,selector:selector,config:config});
+        //var s = new SOTE.widget.Selector("selectorbox",{dataSourceUrl:"ap_products.php",categories:["Base Layers","Overlays"]});
+
         //var h = new SOTE.widget.MenuPicker("hazard",{dataSourceUrl:"data/mp_hazard.php"});
         //var tr = new SOTE.widget.MenuPicker("transition",{dataSourceUrl:"data/mp_transition.php"});
         var map = new SOTE.widget.DateSpan("time",{hasThumbnail:false});
@@ -56,7 +61,9 @@ $(function() {// Initialize "static" vars
         //Image download variables
         rb = new SOTE.widget.RubberBand("camera",{icon:"images/camera.png",onicon:"images/cameraon.png",cropee:"map",paletteWidget:palettes,mapWidget:m});
         var id = new SOTE.widget.ImageDownload("imagedownload",{baseLayer:"MODIS_Terra_CorrectedReflectance_TrueColor",alignTo: rb, m:m});		
-        var apcn = new Worldview.Widget.ArcticProjectionChangeNotification(config, a);
+        var apcn = new Worldview.Widget.ArcticProjectionChangeNotification(config, p.b);
+        var opacity = new Worldview.Widget.Opacity(config);
+        var epsg = new Worldview.Widget.EPSG(config);
         
         var ev = new SOTE.widget.Events("events", {mapWidget:m, 
         										   paletteWidget:palettes,
@@ -80,12 +87,14 @@ $(function() {// Initialize "static" vars
         setTimeout(fixSize, 1500);
         	    
         REGISTRY.addEventListener("map","time","imagedownload");
-        REGISTRY.addEventListener("time","map","imagedownload", apcn.containerId);
-        REGISTRY.addEventListener("switch","map","products","selectorbox","time", "imagedownload", "camera", apcn.containerId);
+        REGISTRY.addEventListener("time","map","imagedownload", apcn.containerId, epsg.containerId);
+        REGISTRY.addEventListener("switch","map","products","selectorbox","time", "imagedownload", "camera", apcn.containerId, epsg.containerId);
         REGISTRY.addEventListener("products","map","time","selectorbox","imagedownload","palettes", apcn.containerId);
         REGISTRY.addEventListener("selectorbox","products");
         REGISTRY.addEventListener("camera","imagedownload");
         REGISTRY.addEventListener("palettes","map","camera","products");
+        REGISTRY.addEventListener("opacity", "map");
+        REGISTRY.addEventListener(epsg.containerId, "imagedownload");
         
         /*REGISTRY.addEventListener("map","time");
         REGISTRY.addEventListener("time","map");
@@ -94,15 +103,19 @@ $(function() {// Initialize "static" vars
         REGISTRY.addEventListener("selectorbox","products");
         //REGISTRY.addEventListener("hazard","products");*/
         
-        var queryString = Worldview.Permalink.decode(window.location.search.substring(1));
-        console.log("qs = " + queryString);
+        Worldview.opacity = opacity; 
+        var queryString = 
+            Worldview.Permalink.decode(window.location.search.substring(1));
+        
         var initOrder = [
             ss, // projection
-            a, // products
+            p.b, // products
             map, // time
             m, // map
             palettes,
-            apcn
+            apcn,
+            opacity,
+            epsg
         ];
         
         function testQS(){

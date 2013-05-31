@@ -41,9 +41,12 @@ SOTE.widget.Selector = function(containerId, config){
 	if(config.state === undefined){
 		config.state = "geographic";
 	}
-	       
-    this.values = new Object;
+
     this.state = config.state;
+
+    this.selected = config.selected;
+    this.values = this.unserialize(this.selected[this.state]);
+    
     this.meta = new Object;
     this.categories = config.categories;
 	this.initRenderComplete = false;
@@ -116,7 +119,7 @@ SOTE.widget.Selector.prototype.render = function(){
 	titleContainer.appendChild(title);
 	this.container.appendChild(titleContainer);
 	var count = 0;
-	for(var i in this.data){
+	/*for(var i in this.data){
 		count++;
 		if(i !== "All" && i !== "palettes"){
 			var catItem = document.createElement("li");
@@ -145,7 +148,9 @@ SOTE.widget.Selector.prototype.render = function(){
 	subFront.innerHTML = "<b>skip this step</b> to see all available layers >>";
 	this.container.appendChild(subFront);
     $("#"+this.id).undelegate("#" + "subfront",'click');
-	$("#"+this.id).delegate("#" + "subfront",'click',{self:this,category:"All"},SOTE.widget.Selector.loadCategory);
+	$("#"+this.id).delegate("#" + "subfront",'click',{self:this,category:"All"},SOTE.widget.Selector.loadCategory);*/
+	SOTE.widget.Selector.loadCategory({ data: {self:this,category:"All"}, back: false });
+	
 	
 	// Mark the component as ready in the registry if called via init() 
 	if ((this.initRenderComplete === false) && REGISTRY) {
@@ -177,32 +182,66 @@ SOTE.widget.Selector.loadCategory = function(e){
 	var self = e.data.self;
 	var cat = e.data.category;
 	self.openCat = cat;
-	var back = (e.back)? false:true;
+	var back = false;
 
 	
 	var categories = new Object;
 	//self.container.innerHTML = "";
     $("#"+self.id).empty();
 	
-	var titleContainer = document.createElement("div");
+	/*var titleContainer = document.createElement("div");
+	titleContainer.setAttribute("class","tabContainer");
 	var title = document.createElement("h2");
-	title.innerHTML = "Choose Your Layers: " + cat;
+	title.innerHTML = "Add Layers +";
 	titleContainer.appendChild(title);
-	self.container.appendChild(titleContainer);
+	self.container.appendChild(titleContainer);*/
 	
-	var form = document.createElement("form");
+	var form = document.createElement("div");
+	form.setAttribute("class","facetedSearch");
+	
+	var select = document.createElement("select");
+	select.setAttribute("id",self.id+"select");
+	select.setAttribute("class","select");
+	for (var c in self.data){
+		if(c != 'palettes'){
+			var opt = document.createElement("option");
+			opt.setAttribute("value",c);
+			opt.text = c;
+			select.add(opt);
+		}
+	}
+	
+	form.appendChild(select);
+	
+	
+	var search = document.createElement("input");
+	search.setAttribute("type","text");
+	search.setAttribute("name","search");
+	search.setAttribute("id",self.id+"search");
+	search.setAttribute("class","search");
+	search.setAttribute("placeholder","ex. modis, terra, fire");
+	search.setAttribute("autocomplete","off");
+	
+	form.appendChild(search);
+	
+	var content = document.createElement("div");
+	content.setAttribute("id",self.id+"content");
+	
+	var categoryTitles = [];
 	
 	for(var i=0; i<self.categories.length; i++){
 		var formattedCategoryName = self.categories[i].replace(/\s/g, "");
-		categories[formattedCategoryName.toLowerCase()] = document.createElement("ul");
-		categories[formattedCategoryName.toLowerCase()].setAttribute("id",self.id + formattedCategoryName.toLowerCase());
-		categories[formattedCategoryName.toLowerCase()].setAttribute("class","category");
-		var categoryTitleEl = document.createElement("li");
+		
+		
 		var categoryTitle = document.createElement("h3");
 		categoryTitle.setAttribute("class","head");
 		categoryTitle.innerHTML = self.categories[i];
-		categoryTitleEl.appendChild(categoryTitle);
-		categories[formattedCategoryName.toLowerCase()].appendChild(categoryTitleEl);
+		categoryTitles.push(categoryTitle);
+		
+		categories[formattedCategoryName.toLowerCase()] = document.createElement("ul");
+		categories[formattedCategoryName.toLowerCase()].setAttribute("id",self.id + formattedCategoryName.toLowerCase());
+		categories[formattedCategoryName.toLowerCase()].setAttribute("class","category");
+		
 	}
 		
 		
@@ -217,7 +256,7 @@ SOTE.widget.Selector.loadCategory = function(e){
 		itemP.innerHTML = item.sublabel;
 		var itemInput = document.createElement("input");
 		if(item.type === "single"){
-			itemInput.setAttribute("type","radio");
+			itemInput.setAttribute("type","checkbox");
 			itemInput.setAttribute("name",cat);
 		}
 		else {
@@ -254,10 +293,12 @@ SOTE.widget.Selector.loadCategory = function(e){
 	
 	for(var i=0; i<self.categories.length; i++){
 		var formattedCategoryName = self.categories[i].replace(/\s/g, "").toLowerCase();
-		form.appendChild(categories[formattedCategoryName]);
+		content.appendChild(categoryTitles[i]);
+		content.appendChild(categories[formattedCategoryName]);
 	}
 	
 	self.container.appendChild(form);
+	self.container.appendChild(content);
 	//self.renderCanvases(cat);	
 	if(back){
 		var subBack = document.createElement("a");
@@ -269,7 +310,108 @@ SOTE.widget.Selector.loadCategory = function(e){
         $("#"+self.id).undelegate("#" + "subback",'click');
 		$("#"+self.id).delegate("#" + "subback",'click',{self:self},SOTE.widget.Selector.callRender);
 	}
+	
+    //$("#"+self.id+"search").undelegate('keypress');
+    $("#"+self.id+"select").on('change',{self:self,select:true},SOTE.widget.Selector.selectCat);
+	$('#'+self.id+"select").val("All");
+
+    $("#"+self.id+"search").on('keyup',{self:self,select:false},SOTE.widget.Selector.search);
+	$("#"+self.id+"search").focus();
+	
+	$(".category" ).mCustomScrollbar({horizontalScroll:false, advanced:{
+        updateOnContentResize: true
+    }});
+	
 	self.adjustSelected();
+	
+};
+
+SOTE.widget.Selector.selectCat = function(e){
+	e.data.self.openCat = e.target.value;
+	$("#"+e.data.self.id+"search").keyup();
+};
+
+SOTE.widget.Selector.search = function(e){
+	var self = e.data.self;
+	var cat = self.openCat;
+	var val = e.target.value.toUpperCase();
+	var valArr = val.split(/\s/);
+	//var re = new RegExp(val);
+	var content = document.getElementById(self.id+"content");
+	content.innerHTML = "";
+
+	var categories = new Object;
+
+	var categoryTitles = [];
+	
+	for(var i=0; i<self.categories.length; i++){
+		var formattedCategoryName = self.categories[i].replace(/\s/g, "");
+		
+		
+		var categoryTitle = document.createElement("h3");
+		categoryTitle.setAttribute("class","head");
+		categoryTitle.innerHTML = self.categories[i];
+		categoryTitles.push(categoryTitle);
+		
+		categories[formattedCategoryName.toLowerCase()] = document.createElement("ul");
+		categories[formattedCategoryName.toLowerCase()].setAttribute("id",self.id + formattedCategoryName.toLowerCase());
+		categories[formattedCategoryName.toLowerCase()].setAttribute("class","category");
+		
+	}
+
+
+	for(var i=0; i< self.data[cat].length; i++){
+		var item = self.data[cat][i];
+		
+		//var matched = false;
+		var count = 0;
+		for(var j=0; j<valArr.length; ++j){
+			var myVal = new RegExp(valArr[j]);
+			if(item.label.toUpperCase().match(myVal) || item.sublabel.toUpperCase().match(myVal) || item.tags && item.tags.toUpperCase().match(myVal)) {
+					count++;	
+			}
+		}
+		
+		if(count == valArr.length) { //item.label.toUpperCase().match(val) || item.sublabel.toUpperCase().match(val)){
+		
+			var subItem = document.createElement("li");
+			subItem.setAttribute("class","selectorItem item");
+			var itemHead = document.createElement("h4");
+			var formatted = item.value.replace(/:/g,"colon");
+			itemHead.innerHTML = item.label;
+			var itemP = document.createElement("p");
+			itemP.innerHTML = item.sublabel;
+			var itemInput = document.createElement("input");
+			if(item.type === "single"){
+				itemInput.setAttribute("type","checkbox");
+				itemInput.setAttribute("name",cat);
+			}
+			else {
+				itemInput.setAttribute("type","checkbox");
+			}
+			itemInput.setAttribute("class","css-checkbox");
+			itemInput.setAttribute("id",formatted);
+			itemInput.setAttribute("value",item.value);
+			subItem.appendChild(itemInput);
+			subItem.appendChild(itemHead);
+			subItem.appendChild(itemP);
+			
+			categories[item.category].appendChild(subItem);
+			//ul.appendChild(subItem);
+			$("#"+self.id).delegate("#" + formatted,'click',{self:self},SOTE.widget.Selector.toggleValue);
+		}
+	}		
+	
+	for(var i=0; i<self.categories.length; i++){
+		var formattedCategoryName = self.categories[i].replace(/\s/g, "").toLowerCase();
+		content.appendChild(categoryTitles[i]);
+		content.appendChild(categories[formattedCategoryName]);
+	}
+	
+	$(".category" ).mCustomScrollbar({horizontalScroll:false, advanced:{
+        updateOnContentResize: true
+    }});
+	//content.appendChild(ul);
 	
 };
 
@@ -301,8 +443,9 @@ SOTE.widget.Selector.prototype.adjustSelected = function(){
 		if(this.values[formatted]){
 			for(var k=0; k < this.values[formatted].length; k++){
 				var val = this.values[formatted][k].value.replace(/:/g,"colon");
-				if(document.getElementById(val))
-					document.getElementById(val).checked = "checked";
+				var el = document.getElementById(val);
+				if(el)
+					el.checked = "checked";
 			}
 		}
 	}
@@ -311,14 +454,14 @@ SOTE.widget.Selector.prototype.adjustSelected = function(){
 SOTE.widget.Selector.toggleValue = function(e){
 	var self = e.data.self;
 	var targetEl = e.target;
-	var category = $("#"+targetEl.id).parent().parent().attr("id");
+	var category = $("#"+targetEl.id).parent().parent().parent().parent().attr("id");
 	category = category.replace(self.id,"");
 	var value = $("#"+targetEl.id).attr("value");
 	value = value.replace(/colon/,":");
 	var checked = $("#"+targetEl.id).attr("checked");
 	if($("#"+targetEl.id).attr("type") == "radio"){
 		self.values[category] = new Array();
-		self.values[category].push({"value":value});
+		self.values[category].unshift({"value":value});
 	}
 	else {
 		if(!self.values[category]){
@@ -326,7 +469,7 @@ SOTE.widget.Selector.toggleValue = function(e){
 		}
 		if(checked !== undefined && checked == "checked"){
 			self.removeItem(category,value); 
-			self.values[category].push({"value":value});	
+			self.values[category].unshift({"value":value});	
 		}
 		else{
 			self.removeItem(category,value);
@@ -415,11 +558,15 @@ SOTE.widget.Selector.prototype.serialize = function(values){
 
 SOTE.widget.Selector.prototype.unserialize = function(string){
 	var unserialized = new Object;
+	var hideIndicator = /^!/;
 	var categories = string.split("~");
 	for(var i=0; i<categories.length; i++){
 		var items = categories[i].split(/[\.,]/);
 		unserialized[items[0]] = new Array;
 		for(var j=1; j<items.length; j++){
+			if(hideIndicator.test(items[j])){
+				items[j] = items[j].replace(/!/g,"");
+			}
 			unserialized[items[0]].push({"value":items[j]});
 		}
 		

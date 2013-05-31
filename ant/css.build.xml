@@ -14,6 +14,7 @@
 
         <file name="ext/joyride-2.0.3/joyride-2.0.3.css"/>
         <file name="ext/jcrop-0.9.10-p1/jcrop.css"/>
+        <file name="ext/jquery.mCustomScrollbar/jquery.mCustomScrollbar.css"/>
                 
         <file name="palette.css"/>		
 		<file name="map.css"/>
@@ -24,6 +25,7 @@
 		<file name="selector.css"/>
 		<file name="sote.css"/>
 		<file name="splash.css"/>
+        <file name="products.css"/>
 	</filelist>
 	
 </project>

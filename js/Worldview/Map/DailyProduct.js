@@ -101,6 +101,14 @@ Worldview.Map.DailyProduct = function(map, config) {
         fetchLayer();
     };
 
+    self.setOpacity = function(opacity) {     
+        self.opacity = opacity;
+        Worldview.Map.setOpacity(currentLayer, opacity);
+        $.each(cachedLayers, function(key, layer) {
+            Worldview.Map.setOpacity(layer, opacity);
+        });
+    };
+    
     /**
      * Method: setLookup
      * Applies a lookup table to this product. If this product doesn't have
