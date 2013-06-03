@@ -50227,7 +50227,7 @@
             "type": "wmts"
         },
         "arctic_graticule": {
-            "description": "NSIDC / Graticule",
+            "description": "Polarview / Graticule",
             "name": "Latitude-Longitude Lines",
             "parameters": {
                 "format": "image/png",
