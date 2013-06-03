@@ -625,10 +625,12 @@
               methods.nub_position($nub, $border, settings.tipSettings.nubPosition, 'bottom');
 
             } else if (methods.right()) {
-			
+				console.log("methods.right");
+				console.log("settings.$target.outerWidth() = " + settings.$target.outerWidth());
+				console.log("settings.$target.offset().left = " + settings.$target.offset().left);
               settings.$next_tip.css({
                 top: settings.$target.offset().top,
-                left: (settings.$target.outerWidth() + settings.$target.offset().left)});
+                left: (settings.$target.outerWidth() + settings.$target.offset().left + 20)});
               methods.nub_position($nub, $border, settings.tipSettings.nubPosition, 'left');
 
             } else if (methods.left()) {
@@ -702,7 +704,7 @@
 
               settings.$prev_tip.css({
                 top: settings.$target.offset().top,
-                left: (settings.$target.outerWidth() + settings.$target.offset().left)});
+                left: (settings.$target.outerWidth() + settings.$target.offset().left + 20)});
               methods.nub_position($nub, $border, settings.tipSettings.nubPosition, 'left');
 
             } else if (methods.left()) {

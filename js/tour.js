@@ -111,10 +111,10 @@ Worldview.namespace("Tour");
         var productText = "<div>"+
                               "<h3>Product Picker</h3>"+
                               "</br>"+
-                              "<p class='tour'>A <span class='highlight'>Base Layer</span> is an opaque background image - you can show one at a time. An <span class='highlight'>Overlay</span> is a partially transparent layer to view on top of the background - you can stack overlays.</p>"+
-                              "<p class='tour'>By using the <img src=\"images/addLayers.png\" alt=\"Add Layers\" class=\"tour\"/> icon, you can browse all layers or choose an interest area.  After choosing your overlays, you can drag them up and down to reorder them.</p>"+
+                              "<p class='tour'>A <span class='highlight'>Base Layer</span> is an opaque background image - you can have multiple active base layers, but you can only show one at a time. An <span class='highlight'>Overlay</span> is a partially transparent layer to view on top of the background - you can view multiple overlays at once.  Use the eye icon to show and hide layers and the X icon to remove them.</p>"+
+                              "<p class='tour'>On the \"Add Layers\" tab, you can use the drop down list or the search bars to find layers.</p>"+
                               "<p class='tour'> <span class='tryIt'>Try It!</span></p>"+
-                              "<p class='tour'>Click the \"Add Layers\" icon, select the \"Fires\" interest area, and choose the following layers.</p>"+
+                              "<p class='tour'>Under the \"Add Layers\" tab, select the \"Fires\" category from the drop down list, and choose the following layers.</p>"+
                               "<p class='tour'>Base Layer: </p>"+
                               "<ul class='tour'>"+
                                   "<li>Corrected Reflectance (True Color) Aqua/MODIS</li>"+
