@@ -44,6 +44,8 @@ SOTE.widget.Switch = function(containerId, config){
 	this.dataSourceUrl = config.dataSourceUrl;
 	this.statusStr = "";
 	this.init();
+	
+	Worldview.State.register("projection", this);
 	//this.updateComponent(this.id+"=baselayers.MODIS_Terra_CorrectedReflectance_TrueColor-overlays.fires48.AIRS_Dust_Score.OMI_Aerosol_Index")
 
 };
@@ -278,4 +280,10 @@ SOTE.widget.Switch.prototype.setStatus = function(s){
 SOTE.widget.Switch.prototype.getStatus = function(){
 	return this.statusStr;
 };
+
+SOTE.widget.Switch.prototype.parse = function(queryString, object) {
+    var projection = Worldview.extractFromQuery("switch", queryString);
+    object.projection = projection;
+    return object;
+}
 

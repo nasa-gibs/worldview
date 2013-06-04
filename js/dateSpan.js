@@ -120,6 +120,7 @@ SOTE.widget.DateSpan = function(containerId, config){
 	this.statusStr = "";
 	this.init();
 	
+	Worldview.State.register("time", this);
 	$(window).bind("resize",{self:this},SOTE.widget.DateSpan.refreshSliders);
 	
 };
@@ -726,6 +727,21 @@ SOTE.widget.DateSpan.prototype.expand = function(){
 */
 SOTE.widget.DateSpan.prototype.collapse = function(){
   // Content
+};
+
+SOTE.widget.DateSpan.prototype.parse = function(queryString, object) {
+    var timeString = Worldview.extractFromQuery("time", queryString);
+    if ( !timeString ) {
+        object.time = Worldview.today();
+    } else {
+        try {
+            object.time = Date.parseISOString(timeString).clearUTCTime();
+        } catch ( error ) {
+            this.log.warn("Invalid time: " + timeString + ", reason: " + 
+                error);
+            object.time = Worldview.today();
+        }
+    }
 };
 
 // Additional Functions

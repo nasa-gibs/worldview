@@ -109,6 +109,13 @@ Worldview.Map.DailyProduct = function(map, config) {
         });
     };
     
+    self.setVisibility = function(value) {
+        currentLayer.setVisibility(value);
+        $.each(cachedLayers, function(key, layer) {
+            layer.setVisibility(value);
+        });          
+    };
+    
     /**
      * Method: setLookup
      * Applies a lookup table to this product. If this product doesn't have

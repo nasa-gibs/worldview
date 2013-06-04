@@ -64,6 +64,7 @@ Worldview.Widget.Map = function(containerId, config) {
         });
                 
         REGISTRY.markComponentReady(containerId);
+        Worldview.State.register("view", self);
         log.debug("Map is ready");
     };  
 
