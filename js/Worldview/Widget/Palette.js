@@ -33,7 +33,6 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
             throw new Error("Cannot register paletteWidget, REGISTRY " + 
                     "not found");
         }
-        Worldview.State.register("palette", self);
         REGISTRY.markComponentReady(containerId);        
     };
     
@@ -88,7 +87,7 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         queryString = queryString || "";
         var changed = false;
         try {
-            var state = Worldview.State.parse(queryString);
+            var state = REGISTRY.getState(queryString);
             log.debug("Palette: updateComponent", state);
             $.each(self.active, function(product, palette) {
                 if ( $.inArray(product, state.products) < 0 ) {

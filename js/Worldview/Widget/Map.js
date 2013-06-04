@@ -47,12 +47,6 @@ Worldview.Widget.Map = function(containerId, config) {
     self.config = config;
     
     var init = function() {
-        if ( REGISTRY ) {
-            REGISTRY.register(containerId, self);
-        } else {
-            throw new Error("Cannot register Map, REGISTRY not found");
-        }
-        
         self.config = validateConfig(self.config);
         self.productMap = Worldview.Map.ProductMap(containerId, 
                 self.config, self);
@@ -62,10 +56,6 @@ Worldview.Widget.Map = function(containerId, config) {
                 self.productMap.append(name);
             }
         });
-                
-        REGISTRY.markComponentReady(containerId);
-        Worldview.State.register("view", self);
-        log.debug("Map is ready");
     };  
 
     /**

@@ -120,7 +120,6 @@ SOTE.widget.DateSpan = function(containerId, config){
 	this.statusStr = "";
 	this.init();
 	
-	Worldview.State.register("time", this);
 	$(window).bind("resize",{self:this},SOTE.widget.DateSpan.refreshSliders);
 	
 };

@@ -20,7 +20,6 @@ Worldview.Widget.Opacity = function(config) {
     self.containerId = "opacity";
     
     var init = function() {
-        Worldview.State.register("opacity", self);
         REGISTRY.register(self.containerId, self);
         REGISTRY.markComponentReady(self.containerId);        
     };

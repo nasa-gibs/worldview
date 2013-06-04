@@ -40,6 +40,15 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
     
     var init = function() {
         //Logging.debug("Worldview.Map");
+        if ( REGISTRY ) {
+            REGISTRY.register(containerId, self);
+        } else {
+            throw new Error("Cannot register Map, REGISTRY not found");
+        }
+                
+        REGISTRY.markComponentReady(containerId);
+        log.debug("Map is ready");
+        
         setExtentToLeading();
     };
     
@@ -63,7 +72,7 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
                 return;
             }
             log.debug("WorldviewMap: updateComponent", queryString);
-            var state = Worldview.State.parse(queryString);            
+            var state = REGISTRY.getState(queryString);            
             log.debug(state);     
             
             if ( state.projection !== undefined && 
