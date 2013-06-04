@@ -88,9 +88,8 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         queryString = queryString || "";
         var changed = false;
         try {
-            var state = Worldview.queryStringToObject(queryString);
+            var state = Worldview.State.parse(queryString);
             log.debug("Palette: updateComponent", state);
-            state.products = splitProducts(state);
             $.each(self.active, function(product, palette) {
                 if ( $.inArray(product, state.products) < 0 ) {
                     log.debug("Removing palette for " + product);
