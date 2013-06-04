@@ -37,13 +37,6 @@
 
             ),
 			array(
-		        "label"=> "Empty",
-		        "sublabel"=> "",
-		        "value"=> "NON_EXISTENT_LAYER",
-		        "type" => "single", "category" => "baselayers"
-
-			),
-			array(
 		        "label"=> "Sea Ice",
 		        "sublabel"=> "Terra / MODIS",
 		        "value"=> "MODIS_Terra_Sea_Ice",

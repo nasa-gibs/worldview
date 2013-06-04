@@ -226,10 +226,12 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
             } else {
                 newProducts.push(product);
             }
-            if ( $.inArray(product, hiddenProducts) >= 0 ) {
-                self.map.products[product].setVisibility(false);    
-            } else {
-                self.map.products[product].setVisibility(true);
+            if ( self.map.products[product] ) {
+                if ( $.inArray(product, hiddenProducts) >= 0 ) {
+                    self.map.products[product].setVisibility(false);    
+                } else {
+                    self.map.products[product].setVisibility(true);
+                }
             }
         });
         $.each(self.products, function(index, product) {

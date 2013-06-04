@@ -246,7 +246,7 @@ SOTE.widget.Bank.prototype.render = function(){
 						m.paletteString = paletteString;
 						item.innerHTML += paletteString;
 					}*/
-					if(m.palette){
+					if(m && m.palette){
 						var paletteString = "<div><span class='palette'><span class='p-min' style='margin-right:10px;'>"+m.min+"</span>" +
 							 "<canvas class='colorBar' id='canvas"+this.values[formattedCategoryName.toLowerCase()][j].value+"' width=100px height=14px'></canvas>" +
 							 "<span class='p-max' style='margin-left:10px;'>"+m.max+"</span>";
@@ -327,7 +327,7 @@ SOTE.widget.Bank.prototype.renderCanvases = function(){
 			for(var j=0; j<this.values[formattedCategoryName.toLowerCase()].length; j++){
 				var val = this.values[formattedCategoryName.toLowerCase()][j].value;
 				var m = this.meta[this.values[formattedCategoryName.toLowerCase()][j].value];
-				if(m.palette){
+				if(m && m.palette){
 					var width = 100/m.palette.length;
 					var canvas = document.getElementById("canvas"+val);
 					if ( m.palette.stops.length > 1 ) {

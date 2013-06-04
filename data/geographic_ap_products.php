@@ -1018,12 +1018,6 @@
 
 	"All" =>  array(
 		array(
-	        "label" =>  "Empty",
-	        "sublabel" =>  "",
-	        "value" =>  "NON_EXISTENT_LAYER",
-	        "type" => "single", "category" => "baselayers"
-		),
-		array(
 	        "label" =>  "Corrected Reflectance (True Color)",
 	        "sublabel" =>  "Terra / MODIS",
 	        "value" =>  "MODIS_Terra_CorrectedReflectance_TrueColor",
@@ -1614,12 +1608,6 @@
 	),
 
 	"Other" =>  array(
-		array(
-	        "label" =>  "Empty",
-	        "sublabel" =>  "",
-	        "value" =>  "NON_EXISTENT_LAYER",
-	        "type" => "single", "category" => "baselayers"
-		),
 		array(
 	        "label" =>  "Earth at Night 2012",
 	        "sublabel" =>  "Suomi NPP / VIIRS via NASA Earth Observatory",
