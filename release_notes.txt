@@ -4,7 +4,7 @@ Release Notes
 http://earthdata.nasa.gov/labs/worldview/
 
 -------------------------------------------------------------------------------
-Release 0.4.4 
+Release 0.4.4 - June 5, 2013
 -------------------------------------------------------------------------------
 * New Features
   - Added fourteen Microwave Limb Sounder (MLS) products.
