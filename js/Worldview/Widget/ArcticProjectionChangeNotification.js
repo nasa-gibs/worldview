@@ -32,9 +32,9 @@ Worldview.Widget.ArcticProjectionChangeNotification = function(config, bank) {
     var oldCoastlines = "arctic_coastlines";
     var newCoastlines = "arctic_coastlines_3413";
     
-    var newGraticulesRegEx = new RegExp("arctic_graticule");
+    var newGraticulesRegEx = new RegExp("arctic_graticule_3413");
     var oldGraticulesRegEx = new RegExp("polarview:graticuleN");
-    var newGraticules = "arctic_graticule";
+    var newGraticules = "arctic_graticule_3413";
     var oldGraticules = "polarview:graticuleN";
         
     self.containerId = "arcticProjectionChangeNotification";

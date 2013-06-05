@@ -116,7 +116,7 @@
             array(
                 "label"=> "Latitude-Longitude Lines",
                 "sublabel"=> "Polarview / Graticule",
-                "value"=> "arctic_graticule",
+                "value"=> "arctic_graticule_3413",
                 "type" => "multi", "category" => "overlays"
             ),
 			array(
