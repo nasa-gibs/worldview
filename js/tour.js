@@ -78,10 +78,10 @@ Worldview.namespace("Tour");
                            "</br></br>"+
                            "<table class=\"splash\">"+
                                "<tr>"+
-                                   "<td><img src=\"images/picker-mini.png\" alt=\"Product Picker\" width=\"100\" height=\"108\" class=\"splash\"/></td>"+
-                                   "<td><img src=\"images/date-mini.png\" alt=\"Date Slider\" width=\"100\" class=\"splash\"/></td>"+
-                                   "<td><img src=\"images/toolbar-mini.png\" alt=\"Toolbar\" width=\"100\" class=\"splash\"/></td>"+
-                                   "<td><img src=\"images/map-mini.png\" alt=\"Map\" width=\"100\" class=\"splash\"/></td>"+
+                                   "<td><img src=\"images/tour-picker.png\" alt=\"Product Picker\" width=\"100\" height=\"108\" class=\"splash\"/></td>"+
+                                   "<td><img src=\"images/tour-date.png\" alt=\"Date Slider\" width=\"100\" class=\"splash\"/></td>"+
+                                   "<td><img src=\"images/tour-toolbar.png\" alt=\"Toolbar\" width=\"100\" class=\"splash\"/></td>"+
+                                   "<td><img src=\"images/tour-map.png\" alt=\"Map\" width=\"100\" class=\"splash\"/></td>"+
                                "</tr>"+
                                "<tr>"+
                                    "<td><p class=\"splash\">Use the <span class=\"highlight\">Product Picker</span> on the left to choose the type of imagery to display on the map.</p></td>"+
@@ -176,7 +176,7 @@ Worldview.namespace("Tour");
                           "</br>"+
                           "<p class='tour'><span class='tryIt'>Try It!</span></p>"+
                           "<p class='tour\'>Move the map to North America and zoom in on northern California, USA.</p>"+
-                          "<img src=\"images/fire-location.png\" alt=\"Location\" width=\"200\" class=\"splash\"/>"+
+                          "<img src=\"images/tour-fire-location.png\" alt=\"Location\" width=\"200\" class=\"splash\"/>"+
                           "</br>"+
                       "</div>";
                       
