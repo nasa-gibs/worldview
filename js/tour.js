@@ -111,18 +111,16 @@ Worldview.namespace("Tour");
         var productText = "<div>"+
                               "<h3>Product Picker</h3>"+
                               "</br>"+
-                              "<p class='tour'>A <span class='highlight'>Base Layer</span> is an opaque background image - you can have multiple active base layers, but you can only show one at a time. An <span class='highlight'>Overlay</span> is a partially transparent layer to view on top of the background - you can view multiple overlays at once.  Use the eye icon to show and hide layers and the X icon to remove them.</p>"+
-                              "<p class='tour'>On the \"Add Layers\" tab, you can use the drop down list or the search bars to find layers.</p>"+
+                              "<p class='tour'>A <span class='highlight'>Base Layer</span> is an opaque background image - you can have multiple active base layers, but you can only show one at a time. An <span class='highlight'>Overlay</span> is a partially transparent layer to view on top of the background - you can view multiple overlays at once.  Use the <img src=\"images/visible.png\"/> icon to show and hide layers and the <img src=\"images/close.png\"/> icon to remove them.</p>"+
+                              "<p class='tour'>On the \"Add Layers\" tab, you can use the drop down list or the search bar to find layers.</p>"+
                               "<p class='tour'> <span class='tryIt'>Try It!</span></p>"+
-                              "<p class='tour'>Under the \"Add Layers\" tab, select the \"Fires\" category from the drop down list, and choose the following layers.</p>"+
-                              "<p class='tour'>Base Layer: </p>"+
+                              "<p class='tour'>Under the \"Add Layers\" tab:</p>"+
                               "<ul class='tour'>"+
-                                  "<li>Corrected Reflectance (True Color) Aqua/MODIS</li>"+
-                              "</ul>"+
-                              "<p class='tour'>Overlays: </p>"+
-                              "<ul class='tour'>"+
-                                  "<li>Fires (Day and Night) Aqua/MODIS Fire and Thermal Anomalies</li>"+
-                                  "<li>Carbon Monoxide (Total Column, Day) Aqua/AIRS</li>"+
+                                  "<li>Enter \"aqua\" in the search bar.</li>" +
+                                  "<li>Select the \"Corrected Reflectance (True Color) Aqua/MODIS\" base layer.</li>" +
+                                  "<li>Select the \"Fires\" category from the drop down list.</li>"+
+                                  "<li>Add the \"Fires (Day and Night) Aqua/MODIS Fire and Thermal Anomalies\" overlay.</li>"+
+                                  "<li>Add the \"Carbon Monoxide (Total Column, Day) Aqua/AIRS\" overlay.</li>"+
                               "</ul>"+
                               "</br>"+
                           "</div>";
@@ -143,19 +141,19 @@ Worldview.namespace("Tour");
                               "<p>The toolbar provides several additional utilities for interacting with Worldview.</p>"+
                               "<table class=\"tour\">"+
                                   "<tr>" +
-                                      "<td><img src=\"images/permalinkon.png\"</td>"+
+                                      "<td><img src=\"images/permalinkon.png\"/></td>"+
                                       "<td><p class=\"tour\">The permalink icon lets you create a permanent, shareable link to a particular view in Worldview.</p></td>"+
                                   "</tr>" + 
                                   "<tr>" +
-                                      "<td><img src=\"images/globe.png\"</td>"+
+                                      "<td><img src=\"images/globe.png\"/></td>"+
                                       "<td><p class=\"tour\">The globe icon lets you change between Arctic, geographic, and Antarctic projections of the world.</p></td>"+
                                   "</tr>" +
                                   "<tr>" +
-                                      "<td><img src=\"images/camera.png\"</td>"+
+                                      "<td><img src=\"images/camera.png\"/></td>"+
                                       "<td><p class=\"tour\">The camera icon lets you download an image of your current view in Worldview. User-selected palettes are not yet supported with this feature.</p></td>"+
                                   "</tr>" + 
                                   "<tr>" +
-                                      "<td><img src=\"images/informationon.png\"</td>"+
+                                      "<td><img src=\"images/informationon.png\"/></td>"+
                                       "<td><p class=\"tour\">The information icon provides you with more information on Worldview and its data sources.</p></td>"+
                                   "</tr>" +
                               "</table>" +
