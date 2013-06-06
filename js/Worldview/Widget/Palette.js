@@ -87,9 +87,8 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         queryString = queryString || "";
         var changed = false;
         try {
-            var state = Worldview.queryStringToObject(queryString);
+            var state = REGISTRY.getState(queryString);
             log.debug("Palette: updateComponent", state);
-            state.products = splitProducts(state);
             $.each(self.active, function(product, palette) {
                 if ( $.inArray(product, state.products) < 0 ) {
                     log.debug("Removing palette for " + product);
@@ -139,6 +138,24 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         }
     }
         
+    self.parse = function(queryString, object) {
+        object.palettes = {};
+        palettes = Worldview.extractFromQuery("palettes", queryString);
+        object.palettesString = palettes;
+               
+        if ( !palettes ) {
+            return object;
+        }
+        var definitions = palettes.split("~");
+        $.each(definitions, function(index, definition) {
+            var items = definition.split(",");
+            var product = items[0];
+            var palette = items[1];
+            object.palettes[product] = palette;
+        });
+        return object;        
+    };
+    
     var showSelector = function(product) {
         var productConfig = self.config.products[product];            
         var properties = {

@@ -279,3 +279,9 @@ SOTE.widget.Switch.prototype.getStatus = function(){
 	return this.statusStr;
 };
 
+SOTE.widget.Switch.prototype.parse = function(queryString, object) {
+    var projection = Worldview.extractFromQuery("switch", queryString);
+    object.projection = projection;
+    return object;
+}
+

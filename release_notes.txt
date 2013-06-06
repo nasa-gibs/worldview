@@ -4,8 +4,11 @@ Release Notes
 http://earthdata.nasa.gov/labs/worldview/
 
 -------------------------------------------------------------------------------
-Release 0.4.4 
+Release 0.4.4 - June 5, 2013
 -------------------------------------------------------------------------------
+* New Features
+  - Added fourteen Microwave Limb Sounder (MLS) products.
+  
 * Updates
   - The Arctic projection has changed from Arctic Polar Stereographic 
     (EPSG:3995, "Greenwich down") to NSIDC Polar Stereographic North

@@ -40,6 +40,15 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
     
     var init = function() {
         //Logging.debug("Worldview.Map");
+        if ( REGISTRY ) {
+            REGISTRY.register(containerId, self);
+        } else {
+            throw new Error("Cannot register Map, REGISTRY not found");
+        }
+                
+        REGISTRY.markComponentReady(containerId);
+        log.debug("Map is ready");
+        
         setExtentToLeading();
     };
     
@@ -63,19 +72,12 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
                 return;
             }
             log.debug("WorldviewMap: updateComponent", queryString);
-            var state = Worldview.queryStringToObject(queryString);
-            state.productsString = state.products;
-            state.products = splitProducts(state);
-            state.palettesString = state.palettes;
-            state.palettes = splitPalettes(state);
-            state.opacityString = state.opacity;
-            state.opacity = splitOpacity(state);
-            
+            var state = REGISTRY.getState(queryString);            
             log.debug(state);     
             
-            if ( state["switch"] !== undefined && 
-                    state["switch"] !== last["switch"] ) {
-                var projection = state["switch"];
+            if ( state.projection !== undefined && 
+                    state.projection !== last.projection ) {
+                var projection = state.projection;
                 if ( !(projection in self.productMap.mapConfig.projections) ) {
                     var defaultProjection = 
                         self.productMap.mapConfig.config.defaultProjection;
@@ -86,26 +88,13 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
                 self.productMap.setProjection(projection);
                 self.productMap.set(state.products);
             } else if ( state.productsString !== last.productsString ) {
-                self.productMap.set(state.products);
+                self.productMap.set(state.products, state.hiddenProducts);
                 // If the products changed, force setting the palettes
                 // again
                 last.palettesString = "";
             }
             if ( state.time !== last.time ) {
-                var today = Worldview.today();
-                if ( state.time === undefined ) {
-                    state.time = today.toISOStringDate();
-                }
-                var date;
-                try {
-                    date = Date.parseISOString(state.time);
-                } catch ( error ) {
-                    log.warn("Invalid time: " + state.time + ", reason: " + 
-                            error + "; using today: " + today.toISOStringDate());
-                    state.time = today.toISOStringDate();
-                    date = today;                   
-                }
-                self.productMap.setDay(date);
+                self.productMap.setDay(state.time);
             }           
             if ( state.palettesString !== last.palettesString ) {
                 self.productMap.setPalettes(state.palettes);
@@ -121,6 +110,44 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
         } catch ( cause ) {
             Worldview.error("Unable to update map", cause);
         }
+    };
+    
+    self.parse = function(queryString, object) {
+        parseProducts(queryString, object);        
+        return object;
+    };
+    
+    // TODO: This should be moved to the product picker
+    var parseProducts = function(queryString, object) {
+        object.products = [];
+        object.hiddenProducts = [];
+        
+        var products = Worldview.extractFromQuery("products", queryString);
+        object.productsString = products;
+        if ( !products ) {
+            return object;
+        }
+        var sets = products.split("~");
+        for ( var i = 0; i < sets.length; i++ ) {
+            var set = sets[i];
+            var items = set.split(",");
+            var values = [];
+            // First item is the type (e.g., baselayer or overlay). Ignore it.
+            for ( var j = 1; j < items.length; j++ ) {
+                var name = items[j];
+                if ( name.substring(0, 1) == "!" ) {
+                    name = name.substring(1);
+                    object.hiddenProducts.push(name);
+                };
+                values.push(name);
+            }
+            // Products are listed in the "opposite" order from what is 
+            // expected--the first layer is the layer to be drawn last. 
+            // Flip them.
+            values.reverse();
+            object.products = object.products.concat(values);
+        }
+        return object;
     };
     
     var setExtentToLeading = function() {

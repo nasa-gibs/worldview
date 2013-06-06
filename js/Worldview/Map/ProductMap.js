@@ -215,7 +215,7 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
     * Throws:
     * An exception if the product for the given name is not defined.
     */
-    self.set = function(requestedProducts) {
+    self.set = function(requestedProducts, hiddenProducts) {
         var newProducts = [];
         
         $.each(requestedProducts, function(index, product) {
@@ -225,6 +225,13 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
                 }
             } else {
                 newProducts.push(product);
+            }
+            if ( self.map.products[product] ) {
+                if ( $.inArray(product, hiddenProducts) >= 0 ) {
+                    self.map.products[product].setVisibility(false);    
+                } else {
+                    self.map.products[product].setVisibility(true);
+                }
             }
         });
         $.each(self.products, function(index, product) {

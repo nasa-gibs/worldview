@@ -88,6 +88,23 @@ Worldview.Widget.Opacity = function(config) {
         }
     };
     
+    self.parse = function(queryString, object) {
+        object.opacity = {};
+        var opacityString = Worldview.extractFromQuery("opacity", queryString);
+        object.opacityString = opacityString;
+        if ( !opacityString ) {
+            return object;
+        }
+        var definitions = opacityString.split("~");
+        $.each(definitions, function(index, definition) {
+            var items = definition.split(",");
+            var layerName = items[0];
+            var opacity = parseFloat(items[1]);
+            object.opacity[layerName] = opacity;
+        });
+        return object;            
+    };
+    
     init();
     return self;
 }

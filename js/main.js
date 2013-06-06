@@ -96,6 +96,8 @@ $(function() {// Initialize "static" vars
         //REGISTRY.addEventListener("hazard","products");*/
         
         Worldview.opacity = opacity; 
+        Worldview.view = m;
+        
         var queryString = 
             Worldview.Permalink.decode(window.location.search.substring(1));
         

@@ -1,6 +1,6 @@
 {
     "config": {
-        "arcticProjectionChangeDate": "2012-06-14",
+        "arcticProjectionChangeDate": "2013-06-06",
         "defaultProjection": "geographic"
     },
     "paletteOrder": [
@@ -50232,6 +50232,32 @@
             "parameters": {
                 "format": "image/png",
                 "layers": "arctic_graticule"
+            },
+            "product": "static",
+            "projections": {
+                "arctic": {
+                    "url": [
+                        "http://map2a.vis.earthdata.nasa.gov/wms/wms.php",
+                        "http://map2b.vis.earthdata.nasa.gov/wms/wms.php",
+                        "http://map2c.vis.earthdata.nasa.gov/wms/wms.php"
+                    ]
+                }
+            },
+            "properties": {
+                "tileSize": [
+                    512,
+                    512
+                ],
+                "transitionEffect": "none"
+            },
+            "type": "wms"
+        },
+        "arctic_graticule_3413": {
+            "description": "Polarview / Graticule",
+            "name": "Latitude-Longitude Lines",
+            "parameters": {
+                "format": "image/png",
+                "layers": "arctic_graticule_3413"
             },
             "product": "static",
             "projections": {
