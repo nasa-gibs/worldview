@@ -228,9 +228,9 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
             }
             if ( self.map.products[product] ) {
                 if ( $.inArray(product, hiddenProducts) >= 0 ) {
-                    self.map.products[product].setVisibility(false);    
+                    self.setVisibility(product, false);    
                 } else {
-                    self.map.products[product].setVisibility(true);
+                    self.setVisibility(product, true);
                 }
             }
         });
@@ -242,6 +242,10 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
         activeProducts[self.projection] = newProducts;
         self.products = activeProducts[self.projection];
         refreshZOrder();
+    };
+    
+    self.setVisibility = function(product, value) {
+        self.map.products[product].setVisibility(value);    
     };
     
     /**

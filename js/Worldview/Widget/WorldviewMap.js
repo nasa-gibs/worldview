@@ -92,6 +92,16 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
                 // If the products changed, force setting the palettes
                 // again
                 last.palettesString = "";
+                var topLayerSelected = false;
+                $.each(state.baselayers, function(index, product) {
+                    var alreadyHidden = 
+                        $.inArray(product, state.hiddenProducts) >= 0;
+                    var visible = !topLayerSelected && !alreadyHidden;
+                    if ( visible && !topLayerSelected ) {
+                        topLayerSelected = true;
+                    }
+                    self.productMap.setVisibility(product, visible);  
+                });
             }
             if ( state.time !== last.time ) {
                 self.productMap.setDay(state.time);
@@ -121,6 +131,8 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
     var parseProducts = function(queryString, object) {
         object.products = [];
         object.hiddenProducts = [];
+        object.baselayers = [];
+        object.overlays = [];
         
         var products = Worldview.extractFromQuery("products", queryString);
         object.productsString = products;
@@ -132,7 +144,8 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
             var set = sets[i];
             var items = set.split(",");
             var values = [];
-            // First item is the type (e.g., baselayer or overlay). Ignore it.
+            var type = items[0];
+            object[type] = [];
             for ( var j = 1; j < items.length; j++ ) {
                 var name = items[j];
                 if ( name.substring(0, 1) == "!" ) {
@@ -140,6 +153,7 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
                     object.hiddenProducts.push(name);
                 };
                 values.push(name);
+                object[type].push(name);
             }
             // Products are listed in the "opposite" order from what is 
             // expected--the first layer is the layer to be drawn last. 
