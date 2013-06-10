@@ -59,11 +59,11 @@ Worldview.Map.StaticProduct = function(map, config) {
         self.opacity = opacity;
         Worldview.Map.setOpacity(layer, opacity);
     };
-    
+
     self.setVisibility = function(value) {
         layer.setVisibility(value);
     };
-    
+
     /**
      * Method: setZIndex
      * Sets the z-index for the product's layer.
