@@ -64,6 +64,15 @@ $(function() {// Initialize "static" vars
         var apcn = new Worldview.Widget.ArcticProjectionChangeNotification(config, p.b);
         var opacity = new Worldview.Widget.Opacity(config);
         var epsg = new Worldview.Widget.EPSG(config);
+        
+		var ev = new SOTE.widget.Events("events", {mapWidget:m, 
+        										   paletteWidget:palettes,
+        										   switchWidget:ss,
+        										   bankWidget:p,
+        										   dateWidget:map,
+        										   apcmWidget:apcn,
+        										   wvOpacity:opacity,
+        										   wvEPSG:epsg});
 
         // Get rid of address bar on iphone/ipod
         var fixSize = function() {

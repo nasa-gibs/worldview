@@ -33,9 +33,10 @@ SOTE.widget.Events = function(containerId, config){
 	this.paletteWidget = config.paletteWidget;
 	this.switchWidget = config.switchWidget;
 	this.bankWidget = config.bankWidget;
-	this.selectorWidget = config.selectorWidget;
 	this.dateWidget = config.dateWidget;
 	this.apcmWidget = config.apcmWidget;
+	this.wvOpacity = config.wvOpacity;
+	this.wvEPSG = config.wvEPSG;
 	this.meta = new Object;
 	this.buildMetaDone = false;
 	this.initRenderComplete = false;
@@ -133,6 +134,7 @@ SOTE.widget.Events.prototype.render = function() {
 	var titleContainer = document.createElement("div");
 	var title = document.createElement("h2");
 	title.innerHTML = "Recent Events";
+	titleContainer.setAttribute("class", "header");
 	titleContainer.appendChild(title);
 	container.appendChild(titleContainer);
 	
@@ -143,6 +145,7 @@ SOTE.widget.Events.prototype.render = function() {
 	for(var i = 0; i < this.metaLength; i++) {
 		var item = document.createElement("li");
 		item.setAttribute("id", "ev" + i);
+		item.setAttribute("class", "productsitem item");
 		item.setAttribute("class", "item");
 		item.innerHTML = "<table>" + 
 		                       "<tr>" + 
@@ -154,15 +157,23 @@ SOTE.widget.Events.prototype.render = function() {
 		                       "</tr>"+
 		                   "</table>";
 		item.basicHTML = item.innerHTML;
-		//item.innerHTML += "<h4>" + this.meta[i].title +"</h4>";
-		//item.innerHTML += "<p><img class='thumb' width='30px' height='30px' src='" + this.meta[i].image +"'/>"+this.meta[i].date +"</p>";
-		/*var entryEl = document.createElement("li");
-		entryEl.setAttribute("class", "item");
-		var entryTitle = document.createElement("h3");
-		entryTitle.setAttribute("class", "head");
-		entryTitle.innerHTML = this.meta[i].title;
-		entryEl.appendChild(entryTitle);
-		entryList.appendChild(entryEl);*/
+		
+		item.detailHTML = "<table>" + 
+		                       "<tr>" + 
+		                           "<td rowspan='2'> <img class='thumb' width='32px' height='32px' src='" + this.meta[i].image +"'/></td>"+
+		                           "<td style='padding-left:5px'><h4>" + this.meta[i].title +"</h4></td>"+
+		                       "</tr>"+
+		                       "<tr>" +
+		                           "<td style='padding-left:5px'><p>" + this.meta[i].date +"</p></td>"+
+		                       "</tr>"+
+		                       "<tr>" +
+		                           "<td colspan='2' style='padding-left:5px'></br><p>" + this.meta[i].description +"</p></td>"+
+		                       "</tr>"+
+		                       "<tr>" +
+		                           "<td colspan='2' style='padding-left:5px; text-align'center'></br><a href=\"" + this.meta[i].link + "\" target=\"_blank\">See Full Story on Earth Observatory</a></td>"+
+		                       "</tr>"+
+		                   "</table>";
+
 		entryList.appendChild(item);
 	}
 
@@ -174,21 +185,29 @@ SOTE.widget.Events.prototype.render = function() {
 	var m = this.mapWidget;
 	var palettes = this.paletteWidget;
 	var ss = this.switchWidget;
-	var a = this.bankWidget;
-	var s = this.selectorWidget;
+	var p = this.bankWidget;
 	var map = this.dateWidget;
 	var apcn = this.apcmWidget;
+	var opacity = this.wvOpacity;
+	var epsg = this.wvEPSG;
 	
 	$('#eventList').delegate('li', 'click', function () {
 		
     	if($('#'+this.id).hasClass('sel')) {
     		// unselect the item
     		$('#'+this.id).removeClass('sel');
+    		this.innerHTML = this.basicHTML;
     	}
     	else {
     		// select the event
-    		$('.events .sel').removeClass('sel');
+    		var oldEl = $('.events .sel');
+    		if(oldEl[0] != null) {
+    			console.log(oldEl[0]);
+    			oldEl[0].innerHTML = oldEl[0].basicHTML;
+    			$('.events .sel').removeClass('sel');
+    		}
     		$('#'+this.id).addClass('sel');
+    		this.innerHTML = this.detailHTML;
     		
     		// get event index
     		var all = $('#eventList li');
@@ -198,16 +217,16 @@ SOTE.widget.Events.prototype.render = function() {
     		//TODO: var link = "map="+map+"&products="+products+"&time="+time+"&switch="+s;
     		var link = "time="+meta[ind].date;
    
-    		// set map to show event
     		var initOrder = [
-            ss, // projection
-            a, // products
-            map, // time
-            m, // map
-            palettes,
-            apcn // arctic projection change notification
-       		];
-        
+            	ss, // projection
+            	p.b, // products
+            	map, // time
+            	m, // map
+            	palettes,
+            	apcn,
+            	opacity,
+            	epsg
+        	];
         
             REGISTRY.isLoadingQuery = true;
             $.each(initOrder, function(index, component) {
@@ -235,7 +254,7 @@ SOTE.widget.Events.prototype.render = function() {
 SOTE.widget.Events.prototype.fire = function(){
 	console.log("events: fire");
 	if(REGISTRY){
-		REGISTRY.fire(this);
+		REGISTRY.fire(this, null);
 	}
 	else{
 		alert("No REGISTRY found! Cannot fire to REGISTRY from Bank!");
