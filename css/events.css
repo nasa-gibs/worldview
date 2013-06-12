@@ -1,14 +1,44 @@
-.events{ display:inline-block; float:right; width: 210px; min-height:190px; max-height:300px; padding-bottom:20px; /*box-shadow: 0 0 4px 1px #bbb;*/ background: rgba(38,43,49,0.65); font: 10px/12px "Gill Sans","helvetica",sans-serif; color: #141b4c; border-radius: 10px 0 0 10px; text-shadow:none;overflow:auto;}
-.events h1,h2,h3,h4 {margin:0px; padding:0px;}
-.events h2 {display:inline-block; float: left; color:#fffbe7; font-size: 14px; font-weight:100; border:none; padding:6px 0;}
-.events h3 {display:inline-block; float: left; color:#fffb27; font-size: 12px; font-weight:100; border:none; text-decoration:none; }
-.events div,.events ul {display:block; overflow:auto; width:100%; margin:0 auto; max-height:250px; }
+#eventsHolder { 
+	display:block; 
+	float:right; 
+	z-index:200; 
+	width:238px; 
+	height:300px; 
+	position:absolute; 
+	right:0; 
+	top:30%;
+	font: 10px/12px "Gill Sans","helvetica",sans-serif; 
+	text-shadow:none;
+	color: #141b4c;
+}
+
+#events {
+    display: block;
+    float: right;
+    right: 0;
+    position: relative;
+}
+
+.events { 
+	display:block; 
+	position:relative; 
+	float:right; 
+	width: 210px; 
+	min-height:275px; 
+	max-height:300px; 
+	background: none repeat scroll 0 0 rgba(38, 43, 49, 0.65); 
+	border-radius: 10px 0 0 10px;
+	overflow:hidden;
+}
+
+.events h1,h2,h3,h4 {margin:0px; padding:0px; position:relative;}
+.events h2 {display:block; float: left; color:#fffbe7; font-size: 14px; font-weight:100; border:none; padding:6px 0;}
+.events h3 {display:block; float: left; color:#fffb27; font-size: 12px; font-weight:100; border:none; text-decoration:none; }
+.events div,.events ul {display:block; overflow:hidden; width:100%; margin:0 auto;}
 .events ul h3 {}
 
-
-
 /* blue header bar */
-.events div.header {margin: auto; text-align: center;
+.events div.header {margin: auto; text-align: center; position:relative;
 	background: -moz-linear-gradient(top,  rgba(255,255,255,0.7) 0%, rgba(11,95,160,0.7) 23%, rgba(0,88,156,0.7) 24%, rgba(0,81,144,0.7) 99%, rgba(0,81,144,0.7) 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0.7)), color-stop(23%,rgba(11,95,160,0.7)), color-stop(24%,rgba(0,88,156,0.7)), color-stop(99%,rgba(0,81,144,0.7)), color-stop(100%,rgba(0,81,144,0.7))); /* Chrome,Safari4+ */
 	background: -webkit-linear-gradient(top,  rgba(255,255,255,0.7) 0%,rgba(11,95,160,0.7) 23%,rgba(0,88,156,0.7) 24%,rgba(0,81,144,0.7) 99%,rgba(0,81,144,0.7) 100%); /* Chrome10+,Safari5.1+ */
@@ -21,14 +51,16 @@
 .events div.header h2{margin: auto; text-align: center; float: none}
 
 /* entry list */
-.events ul.entry { min-height:50px;}
+.events ul {max-height:240px;}
+.events ul.entry { min-height:50px; }
 .events ul.entry li h3 {display:block; clear:both; float:none;}
 
 
 /* entry list items */
+/*border:solid; border-width:3px; border-color:transparent;*/
 .events li.item {
 	border:solid; border-width:3px; border-color:transparent;
-	padding:0; display:block; width:192px; max-width:192px; padding:8px 9px 8px 3px;
+	padding:0; display:block; width:188px; max-width:188px; padding:8px 9px 8px 3px;
 	background: -moz-linear-gradient(top,  rgba(0,0,0,0.54) 0%, rgba(2,2,2,0.54) 1%, rgba(78,78,78,0.54) 50%, rgba(0,0,0,0.54) 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.24)), color-stop(1%,rgba(2,2,2,0.24)), color-stop(50%,rgba(78,78,78,0.24)), color-stop(100%,rgba(0,0,0,0.24))); /* Chrome,Safari4+ */
 	background: -webkit-linear-gradient(top,  rgba(0,0,0,0.24) 0%,rgba(2,2,2,0.24) 1%,rgba(78,78,78,0.24) 50%,rgba(0,0,0,0.24) 100%); /* Chrome10+,Safari5.1+ */

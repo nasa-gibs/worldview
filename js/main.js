@@ -65,7 +65,7 @@ $(function() {// Initialize "static" vars
         var opacity = new Worldview.Widget.Opacity(config);
         var epsg = new Worldview.Widget.EPSG(config);
         
-		var ev = new SOTE.widget.Events("events", {mapWidget:m, 
+		var ev = new SOTE.widget.Events("eventsHolder", {mapWidget:m, 
         										   paletteWidget:palettes,
         										   switchWidget:ss,
         										   bankWidget:p,

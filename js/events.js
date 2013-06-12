@@ -79,6 +79,28 @@ SOTE.widget.Events.handleMetaSuccess = function(arg) {
 					instr:eInstr
 					};
 	
+	eTitle = "Dust Plumes off Argentina";
+	eLink = "http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=81120;src=nhrss";
+	eCategory = "Dust, Smoke, and Haze";
+	eImage = "http://eoimages.gsfc.nasa.gov/images/imagerecords/81000/81120/argentina_amo_2013132.jpg";
+	eDescription = "Dust plumes blew out of southern Argentina and over the Atlantic Ocean in early May 2013.";
+	eTime = "2013-05-12";
+	ePoint = "55.418 -161.892";
+	eGeoTiff = "http://eoimages.gsfc.nasa.gov/images/imagerecords/81000/81120/argentina_amo_2013132_geo.tif";
+	eSatellite = "Aqua";
+	eInstr = "MODIS";
+	self.meta[1] = {title:eTitle,
+					link:eLink,
+					category:eCategory,
+					image:eImage,
+					description:eDescription,
+					date:eTime,
+					point:ePoint,
+					geo:eGeoTiff,
+					sat:eSatellite,
+					instr:eInstr
+					};
+	
 	eTitle = "Burning Fields near the Angara River";
 	eLink = "http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=81115;src=nhrss";
 	eCategory = "Fires";
@@ -89,7 +111,7 @@ SOTE.widget.Events.handleMetaSuccess = function(arg) {
 	eGeoTiff = "http://eoimages.gsfc.nasa.gov/images/imagerecords/81000/81115/russia_amo_2013130_fires_geo.tif";
 	eSatellite = "Aqua";
 	eInstr = "MODIS";
-	self.meta[1] = {title:eTitle,
+	self.meta[2] = {title:eTitle,
 					link:eLink,
 					category:eCategory,
 					image:eImage,
@@ -111,7 +133,7 @@ SOTE.widget.Events.handleMetaSuccess = function(arg) {
 	eGeoTiff = "http://eoimages.gsfc.nasa.gov/images/imagerecords/81000/81092/sarabia_tmo_2013128_geo.tif";
 	eSatellite = "Terra";
 	eInstr = "MODIS";
-	self.meta[2] = {title:eTitle,
+	self.meta[3] = {title:eTitle,
 					link:eLink,
 					category:eCategory,
 					image:eImage,
@@ -133,7 +155,7 @@ SOTE.widget.Events.handleMetaSuccess = function(arg) {
 	eGeoTiff = "http://eoimages.gsfc.nasa.gov/images/imagerecords/81000/81049/california_tmo_2013122_fires_geo.tif";
 	eSatellite = "Terra";
 	eInstr = "MODIS";
-	self.meta[3] = {title:eTitle,
+	self.meta[4] = {title:eTitle,
 					link:eLink,
 					category:eCategory,
 					image:eImage,
@@ -145,7 +167,7 @@ SOTE.widget.Events.handleMetaSuccess = function(arg) {
 					instr:eInstr
 					};
 					
-	self.metaLength = 4;
+	self.metaLength = 5;
 	
 	self.render();
 	self.fire();
@@ -172,6 +194,7 @@ SOTE.widget.Events.prototype.render = function() {
 	this.container.innerHTML = "";
 	
 	var container = document.createElement("div");
+	container.setAttribute("id", "events");
 	container.setAttribute("class", "events");
 	
 	var titleContainer = document.createElement("div");
@@ -288,6 +311,10 @@ SOTE.widget.Events.prototype.render = function() {
     	}
 	});
 	
+	
+	$("#eventList").mCustomScrollbar({horizontalScroll:false, advanced:{
+        updateOnContentResize: true
+    }});
 	
 	// mark the component as ready in the registry if called via init()
 	if((this.initRenderComplete === false) && REGISTRY) {
