@@ -56,53 +56,96 @@ SOTE.widget.Events.handleMetaSuccess = function(arg) {
 	var self = arg;
 	
 	// TODO: replace with actual JSON data
-	// for now, hardcode 3 entries to play with
-	var eTitle = "New Landsat Finds Clouds Hiding in Plain Sight";
-	var eLink = "http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=81210&amp;src=nhrss";
-	var eCategory = "Crops and Drought/Unique Imagery";
-	var eImage = "http://eoimages.gsfc.nasa.gov/images/imagerecords/81000/81210/arasea_oli_2013083_tn.jpg";
-	var eDescription = "One of LDCM&rsquo's sensors can detect faint cirrus clouds that can slightly alter a scene.";
-	var eTime = "2013-03-24";
+	// for now, hardcode 4 entries to play with
+	var eTitle = "Tropical Cyclone Mahasen";
+	var eLink = "http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=81117&amp;src=nhrss";
+	var eCategory = "Severe Storms";
+	var eImage = "http://eoimages.gsfc.nasa.gov/images/imagerecords/81000/81117/mahasen_amo_2013133.jpg";
+	var eDescription = "Mahasen formed as a tropical storm over the northern Indian Ocean on May 10, 2013.";
+	var eTime = "2013-05-13";
 	var ePoint = "44.355 60.463";
+	var eGeoTiff = "http://eoimages.gsfc.nasa.gov/images/imagerecords/81000/81117/mahasen_amo_2013133_geo.tif";
+	var eSatellite = "Terra";
+	var eInstr = "MODIS";
 	self.meta[0] = {title:eTitle,
 					link:eLink,
 					category:eCategory,
 					image:eImage,
 					description:eDescription,
 					date:eTime,
-					point:ePoint};
+					point:ePoint,
+					geo:eGeoTiff,
+					sat:eSatellite,
+					instr:eInstr
+					};
 	
-	eTitle = "Pavlof Volcano, Alaska Peninsula";
-	eLink = "http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=81205&amp;src=nhrss";
-	eCategory = "Volcanoes and Earthquakes";
-	eImage = "http://eoimages.gsfc.nasa.gov/images/imagerecords/81000/81205/ISS036-E-002105_tn.jpg";
-	eDescription = "Three striking photographs of Pavlof Volcano reveal the three-dimensional structure of the eruption plume.";
-	eTime = "2013-05-18";
+	eTitle = "Burning Fields near the Angara River";
+	eLink = "http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=81115;src=nhrss";
+	eCategory = "Fires";
+	eImage = "http://eoimages.gsfc.nasa.gov/images/imagerecords/81000/81115/Russia_amo_2013130.0555.jpg";
+	eDescription = "Numerous fires were burning when the Moderate Resolution Imaging Spectroradiometer (MODIS) instrument on NASA’s Aqua satellite passed over the Irkutsk region on May 10, 2013.";
+	eTime = "2013-05-10";
 	ePoint = "55.418 -161.892";
+	eGeoTiff = "http://eoimages.gsfc.nasa.gov/images/imagerecords/81000/81115/russia_amo_2013130_fires_geo.tif";
+	eSatellite = "Aqua";
+	eInstr = "MODIS";
 	self.meta[1] = {title:eTitle,
 					link:eLink,
 					category:eCategory,
 					image:eImage,
 					description:eDescription,
 					date:eTime,
-					point:ePoint};
+					point:ePoint,
+					geo:eGeoTiff,
+					sat:eSatellite,
+					instr:eInstr
+					};
 	
-	eTitle = "Thunderstorms Spawn Tornado in Oklahoma";
-	eLink = "http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=81200&amp;src=nhrss";
-	eCategory = "Severe Storms";
-	eImage = "http://eoimages.gsfc.nasa.gov/images/imagerecords/81000/81200/moore_goe_2013140_tn.jpg";
-	eDescription = "Evolution of deadly storms over Oklahoma, viewed by GOES-East.";
-	eTime = "2013-05-20";
+	eTitle = "Dust Storm on the Arabian Peninsula";
+	eLink = "http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=81092&amp;src=nhrss";
+	eCategory = "Dust, Smoke, and Haze";
+	eImage = "http://eoimages.gsfc.nasa.gov/images/imagerecords/81000/81092/sarabia_tmo_2013128.jpg";
+	eDescription = "A dust storm blew across the Arabian Peninsula in early May 2013. ";
+	eTime = "2013-05-08";
 	ePoint = "35.326 -97.482";
+	eGeoTiff = "http://eoimages.gsfc.nasa.gov/images/imagerecords/81000/81092/sarabia_tmo_2013128_geo.tif";
+	eSatellite = "Terra";
+	eInstr = "MODIS";
 	self.meta[2] = {title:eTitle,
 					link:eLink,
 					category:eCategory,
 					image:eImage,
 					description:eDescription,
 					date:eTime,
-					point:ePoint};
+					point:ePoint,
+					geo:eGeoTiff,
+					sat:eSatellite,
+					instr:eInstr
+					};
+	
+	eTitle = "Springs Fire, California";
+	eLink = "http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=81049&amp;src=nhrss";
+	eCategory = "Fires";
+	eImage = "http://eoimages.gsfc.nasa.gov/images/imagerecords/81000/81049/California_tmo_2013122.jpg";
+	eDescription = "Fueled by hot, dry Santa Ana winds, several wildfires started in southern California in early May 2013.";
+	eTime = "2013-05-02";
+	ePoint = "35.326 -97.482";
+	eGeoTiff = "http://eoimages.gsfc.nasa.gov/images/imagerecords/81000/81049/california_tmo_2013122_fires_geo.tif";
+	eSatellite = "Terra";
+	eInstr = "MODIS";
+	self.meta[3] = {title:eTitle,
+					link:eLink,
+					category:eCategory,
+					image:eImage,
+					description:eDescription,
+					date:eTime,
+					point:ePoint,
+					geo:eGeoTiff,
+					sat:eSatellite,
+					instr:eInstr
+					};
 					
-	self.metaLength = 3;
+	self.metaLength = 4;
 	
 	self.render();
 	self.fire();
@@ -191,12 +234,14 @@ SOTE.widget.Events.prototype.render = function() {
 	var opacity = this.wvOpacity;
 	var epsg = this.wvEPSG;
 	
-	$('#eventList').delegate('li', 'click', function () {
+	$('#eventList').delegate('li', 'click', function (e) {
 		
     	if($('#'+this.id).hasClass('sel')) {
-    		// unselect the item
-    		$('#'+this.id).removeClass('sel');
-    		this.innerHTML = this.basicHTML;
+    		// unselect the item if something other than the link was clicked
+    		if(e.target.tagName != "A") {
+    			$('#'+this.id).removeClass('sel');
+    			this.innerHTML = this.basicHTML;
+    		}
     	}
     	else {
     		// select the event
@@ -215,7 +260,14 @@ SOTE.widget.Events.prototype.render = function() {
     	
     		// generate permalink
     		//TODO: var link = "map="+map+"&products="+products+"&time="+time+"&switch="+s;
-    		var link = "time="+meta[ind].date;
+    		var link = "";
+    		if(meta[ind].sat === "Terra") {
+    			link = "products=baselayers,MODIS_Terra_CorrectedReflectance_TrueColor";
+    		}
+    		else if(meta[ind].sat === "Aqua") {
+    			link = "products=baselayers,MODIS_Aqua_CorrectedReflectance_TrueColor";
+    		}
+    		link += "&time="+meta[ind].date;
    
     		var initOrder = [
             	ss, // projection

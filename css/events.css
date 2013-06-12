@@ -1,4 +1,4 @@
-.events{ display:inline-block; float:right; width: 210px; min-height:190px; padding-bottom:20px; /*box-shadow: 0 0 4px 1px #bbb;*/ background: rgba(38,43,49,0.65); font: 10px/12px "Gill Sans","helvetica",sans-serif; color: #141b4c; border-radius: 10px 0 0 10px; text-shadow:none;overflow:auto;}
+.events{ display:inline-block; float:right; width: 210px; min-height:190px; max-height:300px; padding-bottom:20px; /*box-shadow: 0 0 4px 1px #bbb;*/ background: rgba(38,43,49,0.65); font: 10px/12px "Gill Sans","helvetica",sans-serif; color: #141b4c; border-radius: 10px 0 0 10px; text-shadow:none;overflow:auto;}
 .events h1,h2,h3,h4 {margin:0px; padding:0px;}
 .events h2 {display:inline-block; float: left; color:#fffbe7; font-size: 14px; font-weight:100; border:none; padding:6px 0;}
 .events h3 {display:inline-block; float: left; color:#fffb27; font-size: 12px; font-weight:100; border:none; text-decoration:none; }
@@ -28,7 +28,7 @@
 /* entry list items */
 .events li.item {
 	border:solid; border-width:3px; border-color:transparent;
-	padding:0; display:block; width:192px; padding:8px 9px 8px 3px;
+	padding:0; display:block; width:192px; max-width:192px; padding:8px 9px 8px 3px;
 	background: -moz-linear-gradient(top,  rgba(0,0,0,0.54) 0%, rgba(2,2,2,0.54) 1%, rgba(78,78,78,0.54) 50%, rgba(0,0,0,0.54) 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.24)), color-stop(1%,rgba(2,2,2,0.24)), color-stop(50%,rgba(78,78,78,0.24)), color-stop(100%,rgba(0,0,0,0.24))); /* Chrome,Safari4+ */
 	background: -webkit-linear-gradient(top,  rgba(0,0,0,0.24) 0%,rgba(2,2,2,0.24) 1%,rgba(78,78,78,0.24) 50%,rgba(0,0,0,0.24) 100%); /* Chrome10+,Safari5.1+ */
