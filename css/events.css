@@ -1,3 +1,18 @@
+/* primary containers */
+#eventsContainer { 
+	display:block; 
+	float:right; 
+	z-index:200; 
+	width:238px; 
+	height:300px; 
+	position:absolute; 
+	right:0; 
+	top:30%;
+	font: 10px/12px "Gill Sans","helvetica",sans-serif; 
+	text-shadow:none;
+	color: #141b4c;
+}
+
 #eventsHolder { 
 	display:block; 
 	float:right; 
@@ -31,6 +46,34 @@
 	overflow:hidden;
 }
 
+/* toggling */
+a.evaccordionToggler { 
+	float:right; 
+	display:inline-block; 
+	width:28px; 
+	height:36px; 
+	border-radius: 10px 0 0 10px; 
+	-moz-border-radius: 10px 0 0 10px; 
+	-webkit-border-radius: 10px 0 0 10px; 
+	text-decoration:none; 
+	background: none no-repeat scroll center rgba(45,50,55,0.65); 
+	color:#fff; 
+	position:relative; 
+	top:30px; 
+	letter-spacing:2px; 
+	font-family:"Gill Sans","Helvetica",sans-serif;
+}
+
+a.evcollapse {
+	display:inline-block; 
+	background-image:url("../images/expandOut.png"); 
+}
+
+a.evexpand {
+	display:inline-block; 
+	background-image: url("../images/expandIn.png");
+}
+
 .events h1,h2,h3,h4 {margin:0px; padding:0px; position:relative;}
 .events h2 {display:block; float: left; color:#fffbe7; font-size: 14px; font-weight:100; border:none; padding:6px 0;}
 .events h3 {display:block; float: left; color:#fffb27; font-size: 12px; font-weight:100; border:none; text-decoration:none; }
@@ -57,7 +100,6 @@
 
 
 /* entry list items */
-/*border:solid; border-width:3px; border-color:transparent;*/
 .events li.item {
 	border:solid; border-width:3px; border-color:transparent;
 	padding:0; display:block; width:188px; max-width:188px; padding:8px 9px 8px 3px;

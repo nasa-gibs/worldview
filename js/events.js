@@ -80,7 +80,7 @@ SOTE.widget.Events.handleMetaSuccess = function(arg) {
 					};
 	
 	eTitle = "Dust Plumes off Argentina";
-	eLink = "http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=81120;src=nhrss";
+	eLink = "http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=81120&amp;src=nhrss";
 	eCategory = "Dust, Smoke, and Haze";
 	eImage = "http://eoimages.gsfc.nasa.gov/images/imagerecords/81000/81120/argentina_amo_2013132.jpg";
 	eDescription = "Dust plumes blew out of southern Argentina and over the Atlantic Ocean in early May 2013.";
@@ -102,7 +102,7 @@ SOTE.widget.Events.handleMetaSuccess = function(arg) {
 					};
 	
 	eTitle = "Burning Fields near the Angara River";
-	eLink = "http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=81115;src=nhrss";
+	eLink = "http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=81115&amp;src=nhrss";
 	eCategory = "Fires";
 	eImage = "http://eoimages.gsfc.nasa.gov/images/imagerecords/81000/81115/Russia_amo_2013130.0555.jpg";
 	eDescription = "Numerous fires were burning when the Moderate Resolution Imaging Spectroradiometer (MODIS) instrument on NASA’s Aqua satellite passed over the Irkutsk region on May 10, 2013.";
@@ -188,10 +188,11 @@ SOTE.widget.Events.prototype.init = function() {
 };
 
 SOTE.widget.Events.prototype.render = function() {
-	console.log("events: render");
-	console.log("meta[0].title = " + this.meta[0].title);
-	console.log("metaLength = " + this.metaLength);
+
 	this.container.innerHTML = "";
+	
+	//var holder = document.createElement("div");
+	//holder.setAttribute("id", "eventsHolder");
 	
 	var container = document.createElement("div");
 	container.setAttribute("id", "events");
@@ -244,7 +245,7 @@ SOTE.widget.Events.prototype.render = function() {
 	}
 
 	container.appendChild(entryList);
-	
+	//holder.appendChild(container);
 	this.container.appendChild(container);
 	
 	var meta = this.meta;
@@ -311,7 +312,15 @@ SOTE.widget.Events.prototype.render = function() {
     	}
 	});
 	
+	// set up toggler
+	var accordionToggler = document.createElement("a");
+	accordionToggler.setAttribute("class","evaccordionToggler evcollapse");
+	accordionToggler.setAttribute("title","Hide Events");
+	this.isCollapsed = false;
+	this.container.appendChild(accordionToggler);
+	$('.evaccordionToggler').bind('click',{self:this},SOTE.widget.Events.toggle);
 	
+	// set up scroll bar
 	$("#eventList").mCustomScrollbar({horizontalScroll:false, advanced:{
         updateOnContentResize: true
     }});
@@ -339,6 +348,25 @@ SOTE.widget.Events.prototype.fire = function(){
 		alert("No REGISTRY found! Cannot fire to REGISTRY from Bank!");
 	}
 
+};
+
+/**
+ * Collapses and expands the events feature 
+ */
+SOTE.widget.Events.toggle = function(e,ui){
+	var self = e.data.self;
+	if(self.isCollapsed){
+		$('.evaccordionToggler').removeClass('evexpand').addClass('evcollapse');
+		$('.evaccordionToggler').attr("title","Hide Events");
+		$('.events').css('display','block');
+		self.isCollapsed = false;
+	}
+	else{
+		$('.evaccordionToggler').removeClass('evcollapse').addClass('evexpand');
+		$('.evaccordionToggler').attr("title","Show Events");
+		$('.events').css('display','none');
+		self.isCollapsed = true;
+	} 	
 };
 
 /**
