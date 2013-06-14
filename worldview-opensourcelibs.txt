@@ -19,6 +19,16 @@ Copyright (c) 2008-2012 Tapmodo Interactive LLC,
 
 -------------------------------------------------------------------------------
 
+jScrollPane: cross browser styleable scrollbars with jQuery and CSS
+
+http://jscrollpane.kelvinluck.com/
+https://github.com/vitch/jScrollPane
+
+"jScrollPane is a personal project that is open source for anybody to use as they want to."
+
+
+-------------------------------------------------------------------------------
+
 JoyRide: Create jQuery Feature Tours in a Breeze
 
 http://www.zurb.com/playground/jquery-joyride-feature-tour-plugin
