@@ -36,6 +36,12 @@
                 "type" => "single", "category" => "baselayers"
 
             ),
+            array(
+		        "label"=> "Land / Water Map",
+		        "sublabel"=> "OpenStreetMap / Coastlines",
+		        "value"=> "land_water_map",
+		        "type" => "single", "category" => "baselayers"
+			),
 			array(
 		        "label"=> "Sea Ice",
 		        "sublabel"=> "Terra / MODIS",
@@ -105,7 +111,13 @@
                 "sublabel"=> "Polarview / Coastlines",
                 "value"=> "arctic_coastlines",
                 "type" => "multi", "category" => "overlays"
-            ),            
+            ),
+            array(
+		        "label"=> "Land Mask",
+		        "sublabel"=> "OpenSteetMap / Coastlines",
+		        "value"=> "land_mask",
+		        "type" => "multi", "category" => "overlays"		        
+			),	            
 			array(
 		        "label"=> "Global Labels",
 		        "sublabel"=> "SEDAC / Global Labels",

@@ -48,7 +48,13 @@
 	        "sublabel" =>  "Aqua / MODIS",
 	        "value" =>  "MODIS_Aqua_SurfaceReflectance_Bands721",
 	        "type" => "single", "category" => "baselayers"
-		),	
+		),
+		 array(
+		        "label"=> "Land / Water Map",
+		        "sublabel"=> "OpenStreetMap / Coastlines",
+		        "value"=> "land_water_map",
+		        "type" => "single", "category" => "baselayers"
+			),	
 		array(
 	        "label" =>  "Aerosol Optical Depth",
 	        "sublabel" =>  "Terra / MODIS",
@@ -119,6 +125,12 @@
 	        "value" =>  "MODIS_Aqua_SurfaceReflectance_Bands721",
 	        "type" => "single", "category" => "baselayers"
 		),	
+		 array(
+		        "label"=> "Land / Water Map",
+		        "sublabel"=> "OpenStreetMap / Coastlines",
+		        "value"=> "land_water_map",
+		        "type" => "single", "category" => "baselayers"
+			),
 		array(
 	        "label" =>  "Fires (Day and Night)",
 	        "sublabel" =>  "Terra/ and Aqua/MODIS Fire and Thermal Anomalies",
@@ -238,6 +250,12 @@
 	        "type" => "single", "category" => "baselayers"
 		),
 		array(
+		        "label"=> "Land / Water Map",
+		        "sublabel"=> "OpenStreetMap / Coastlines",
+		        "value"=> "land_water_map",
+		        "type" => "single", "category" => "baselayers"
+			),
+		array(
 	        "label" =>  "Snow Cover",
 	        "sublabel" =>  "Terra / MODIS",
 	        "value" =>  "MODIS_Terra_Snow_Cover",
@@ -261,6 +279,12 @@
 	        "value" =>  "AIRS_Precipitation_Night",
 	        "type" => "multi", "category" => "overlays"
 		),
+		array(
+		        "label"=> "Land Mask",
+		        "sublabel"=> "OpenSteetMap / Coastlines",
+		        "value"=> "land_mask",
+		        "type" => "multi", "category" => "overlays"		        
+			),
         array(
 	        "label" =>  "Drought Hazard: Frequency and Distribution",
 	        "sublabel" =>  "SEDAC Global Drought Hazard Frequency and Distribution, v1 (1980–2000)",
@@ -336,7 +360,13 @@
 	        "sublabel" =>  "Aqua / MODIS",
 	        "value" =>  "MODIS_Aqua_SurfaceReflectance_Bands721",
 	        "type" => "single", "category" => "baselayers"
-		),	
+		),
+		array(
+		        "label"=> "Land / Water Map",
+		        "sublabel"=> "OpenStreetMap / Coastlines",
+		        "value"=> "land_water_map",
+		        "type" => "single", "category" => "baselayers"
+			),	
 		array(
 	        "label" =>  "Aerosol Optical Depth",
 	        "sublabel" =>  "Terra / MODIS",
@@ -396,7 +426,13 @@
 	        "sublabel" =>  "Aura / OMI",
 	        "value" =>  "OMI_Absorbing_Aerosol_Optical_Depth",
 	        "type" => "multi", "category" => "overlays"
-		)
+		),
+		array(
+		        "label"=> "Land Mask",
+		        "sublabel"=> "OpenSteetMap / Coastlines",
+		        "value"=> "land_mask",
+		        "type" => "multi", "category" => "overlays"		        
+			)
 	),
 
 	"Ash Plumes" =>  array(
@@ -447,7 +483,13 @@
 	        "sublabel" =>  "Aqua / MODIS",
 	        "value" =>  "MODIS_Aqua_SurfaceReflectance_Bands721",
 	        "type" => "single", "category" => "baselayers"
-		),	
+		),
+		array(
+		        "label"=> "Land / Water Map",
+		        "sublabel"=> "OpenStreetMap / Coastlines",
+		        "value"=> "land_water_map",
+		        "type" => "single", "category" => "baselayers"
+			),	
 		array(
 	        "label" =>  "Aerosol Optical Depth",
 	        "sublabel" =>  "Terra / MODIS",
@@ -515,6 +557,12 @@
             "type" => "multi", "category" => "overlays"
         ),
         array(
+		        "label"=> "Land Mask",
+		        "sublabel"=> "OpenSteetMap / Coastlines",
+		        "value"=> "land_mask",
+		        "type" => "multi", "category" => "overlays"		        
+			),
+        array(
              "label" =>  "Volcano Hazard =>  Frequency and Distribution",
              "sublabel" =>  "SEDAC Global Volcano Hazard Frequency and Distribution, v1 (1979–2000)",
              "value" =>  "ndh-volcano-hazard-frequency-distribution",
@@ -562,6 +610,12 @@
 	        "type" => "single", "category" => "baselayers"
 		),
 		array(
+		        "label"=> "Land / Water Map",
+		        "sublabel"=> "OpenStreetMap / Coastlines",
+		        "value"=> "land_water_map",
+		        "type" => "single", "category" => "baselayers"
+			),
+		array(
 	        "label" =>  "Snow Cover",
 	        "sublabel" =>  "Terra / MODIS",
 	        "value" =>  "MODIS_Terra_Snow_Cover",
@@ -596,6 +650,12 @@
 	        "sublabel" =>  "Aqua / MODIS",
 	        "value" =>  "MODIS_Aqua_Land_Surface_Temp_Night",
 	        "type" => "multi", "category" => "overlays"
+		),
+		array(
+		        "label"=> "Land Mask",
+		        "sublabel"=> "OpenSteetMap / Coastlines",
+		        "value"=> "land_mask",
+		        "type" => "multi", "category" => "overlays"		        
 		)
 	
 	),
@@ -632,6 +692,12 @@
 	        "value" =>  "MODIS_Terra_CorrectedReflectance_Bands367",
 	        "type" => "single", "category" => "baselayers"
 		),
+	    array(
+		        "label"=> "Land / Water Map",
+		        "sublabel"=> "OpenStreetMap / Coastlines",
+		        "value"=> "land_water_map",
+		        "type" => "single", "category" => "baselayers"
+			),
 		array(
 	        "label" =>  "Sea Ice",
 	        "sublabel" =>  "Terra / MODIS",
@@ -667,6 +733,12 @@
 	        "sublabel" =>  "Aqua / MODIS",
 	        "value" =>  "MODIS_Aqua_Brightness_Temp_Band31_Night",
 	        "type" => "multi", "category" => "overlays"
+		),
+		 array(
+		        "label"=> "Land Mask",
+		        "sublabel"=> "OpenSteetMap / Coastlines",
+		        "value"=> "land_mask",
+		        "type" => "multi", "category" => "overlays"		        
 		)
 	),
 
@@ -684,6 +756,12 @@
 	        "value" =>  "MODIS_Aqua_CorrectedReflectance_TrueColor",
 	        "type" => "single", "category" => "baselayers"
 		),
+		array(
+		        "label"=> "Land / Water Map",
+		        "sublabel"=> "OpenStreetMap / Coastlines",
+		        "value"=> "land_water_map",
+		        "type" => "single", "category" => "baselayers"
+			),
 		array(
 	        "label" =>  "Aerosol Optical Depth",
 	        "sublabel" =>  "Terra / MODIS",
@@ -791,6 +869,12 @@
 	        "sublabel" =>  "Aura / OMI",
 	        "value" =>  "OMI_SO2_Upper_Troposphere_and_Stratosphere",
 	        "type" => "multi", "category" => "overlays"
+		),
+		array(
+		        "label"=> "Land Mask",
+		        "sublabel"=> "OpenSteetMap / Coastlines",
+		        "value"=> "land_mask",
+		        "type" => "multi", "category" => "overlays"		        
 		)
 		
 	),
@@ -810,6 +894,12 @@
 	        "value" =>  "MODIS_Aqua_CorrectedReflectance_TrueColor",
 	        "type" => "single", "category" => "baselayers"
 		),
+		array(
+		        "label"=> "Land / Water Map",
+		        "sublabel"=> "OpenStreetMap / Coastlines",
+		        "value"=> "land_water_map",
+		        "type" => "single", "category" => "baselayers"
+			),
 		array(
 	        "label" =>  "Water Vapor (Day)",
 	        "sublabel" =>  "Terra / MODIS",
@@ -900,6 +990,12 @@
 	        "value" =>  "OMI_Cloud_Pressure",
 	        "type" => "multi", "category" => "overlays"
 		),
+		array(
+		        "label"=> "Land Mask",
+		        "sublabel"=> "OpenSteetMap / Coastlines",
+		        "value"=> "land_mask",
+		        "type" => "multi", "category" => "overlays"		        
+		),
         array(
              "label" =>  "Cyclone Hazard: Frequency and Distribution",
              "sublabel" =>  "SEDAC Global Cyclone Hazard Frequency and Distribution, v1 (1980–2000)",
@@ -978,6 +1074,12 @@
 	        "type" => "single", "category" => "baselayers"
 		),
 		array(
+		        "label"=> "Land / Water Map",
+		        "sublabel"=> "OpenStreetMap / Coastlines",
+		        "value"=> "land_water_map",
+		        "type" => "single", "category" => "baselayers"
+			),
+		array(
 	        "label" =>  "Precipitation Estimate (Day)",
 	        "sublabel" =>  "Aqua / AIRS",
 	        "value" =>  "AIRS_Precipitation_Day",
@@ -994,7 +1096,13 @@
             "sublabel" => "Terra / MODIS, SRTM",
             "value" => "MODIS_Water_Mask",
             "type" => "multi", "category" => "overlays"
-        ),		
+        ),
+        array(
+		        "label"=> "Land Mask",
+		        "sublabel"=> "OpenSteetMap / Coastlines",
+		        "value"=> "land_mask",
+		        "type" => "multi", "category" => "overlays"		        
+		),		
         array(
              "label" =>  "Flood Hazard: Frequency and Distribution",
              "sublabel" =>  "SEDAC Global Flood Hazard Frequency and Distribution, v1 (1985–2003)",
@@ -1089,6 +1197,12 @@
 	        "value" =>  "VIIRS_CityLights_2012",
 	        "type" => "single", "category" => "baselayers"
 		),
+		array(
+		        "label"=> "Land / Water Map",
+		        "sublabel"=> "OpenStreetMap / Coastlines",
+		        "value"=> "land_water_map",
+		        "type" => "single", "category" => "baselayers"
+			),
 		array(
 	        "label" =>  "Aerosol Optical Depth",
 	        "sublabel" =>  "Terra / MODIS",
@@ -1443,6 +1557,12 @@
             "value" =>  "MLS_H2O_46hPa_Night",
             "type" => "multi", "category" => "overlays"
         ),
+        array(
+		        "label"=> "Land Mask",
+		        "sublabel"=> "OpenSteetMap / Coastlines",
+		        "value"=> "land_mask",
+		        "type" => "multi", "category" => "overlays"		        
+			),
         array(
              "label" =>  "Cyclone Hazard:Frequency and Distribution",
              "sublabel" =>  "SEDAC Global Cyclone Hazard Frequency and Distribution, v1 (1980–2000)",
