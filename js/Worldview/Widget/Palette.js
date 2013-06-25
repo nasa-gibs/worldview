@@ -163,7 +163,8 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
             height: "265px",
             visible: false,
             autofillheight: "body",
-            constraintoviewport: true              
+            constraintoviewport: true ,
+            zindex: 210             
         };
         if ( self.alignTo ) {
             var $element = $(self.alignTo);
