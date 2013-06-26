@@ -26,6 +26,7 @@ Worldview.Map.Product = function(c) {
     
     var self = {};
     self.opacity = 1;
+    self.visible = true;
     var config;
     
     var init = function() {
@@ -87,6 +88,7 @@ Worldview.Map.Product = function(c) {
         } else { 
             properties.opacity = self.opacity;
         }
+        properties.visiblity = false;
         if ( config.type === "wms" ) {
             layer = new Worldview.Map.TWMSLayer(config.name, config.url, 
                     parameters, properties);
@@ -101,6 +103,7 @@ Worldview.Map.Product = function(c) {
         } else {
             throw new Error("Unsupported layer type: " + config.type);
         }
+                
         return layer;
     };
     

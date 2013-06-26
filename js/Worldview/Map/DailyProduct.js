@@ -54,9 +54,6 @@ Worldview.Map.DailyProduct = function(map, config) {
     // The day of the data displayed on the map
     var currentDay;
     
-    // Is this product visible on the map?
-    var visible = true;
-    
     // Active lookup table for all layers in the product, null if no table
     // is active
     var lookupTable = null;
@@ -64,8 +61,8 @@ Worldview.Map.DailyProduct = function(map, config) {
     // Timeout identifier for the reaper that cleans out stale layers.
     var reaperId = null;
     
-    // Time, in seconds, to wait before reaping stale layers.
-    var reapDelay = 2000;
+    // Time, in milliseconds, to wait before reaping stale layers.
+    var reapDelay = 500;
     
     //-------------------------------------------------------------------------
     // Public
@@ -74,8 +71,9 @@ Worldview.Map.DailyProduct = function(map, config) {
     var init = function() {
         self.setDay(Worldview.today());
         
-        map.events.register("movestart", self, onMoveStart);
-        map.events.register("zoomend", self, onZoomEnd);
+        map.events.register("movestart", self, clearCache);
+        map.events.register("zoomend", self, clearCache);
+        $(window).resize(clearCache);
     };
         
     /**
@@ -106,18 +104,12 @@ Worldview.Map.DailyProduct = function(map, config) {
 
     self.setOpacity = function(opacity) {     
         self.opacity = opacity;
-        Worldview.Map.setOpacity(currentLayer, opacity);
-        $.each(cachedLayers, function(key, layer) {
-            Worldview.Map.setOpacity(layer, opacity);
-        });
+        Worldview.Map.setVisiblity(currentLayer, self.visible, self.opacity);
     };
     
-    self.setVisibility = function(value) {
-        visible = value;
-        currentLayer.setVisibility(value);
-        $.each(cachedLayers, function(key, layer) {
-            layer.setVisibility(value);
-        });          
+    self.setVisibility = function(visible) {
+        self.visible = visible;
+        Worldview.Map.setVisibility(currentLayer, self.visible, self.opacity);        
     };
     
     /**
@@ -178,8 +170,9 @@ Worldview.Map.DailyProduct = function(map, config) {
         if ( reaperId !== null ) {
             clearTimeout(reaperId);
         }
-        map.events.unregister("movestart", self, onMoveStart);
-        map.events.unregister("zoomend", self, onZoomEnd);        
+        map.events.unregister("movestart", self, clearCache);
+        map.events.unregister("zoomend", self, clearCache);
+        $(window).unbind("resize", clearCache);      
     };
         
     //-------------------------------------------------------------------------
@@ -189,13 +182,14 @@ Worldview.Map.DailyProduct = function(map, config) {
     var fetchLayer = function() {
         var previousLayer = currentLayer;
 
-        // If a layer was visible, hide it.
-        if ( previousLayer ) { 
-            previousLayer.div.style.opacity = 0;
-        }
-        
+        if ( previousLayer ) {
+            Worldview.Map.setVisibility(previousLayer, false, 0);
+        } 
+                        
         if ( currentDay in cachedLayers ) {
             currentLayer = cachedLayers[currentDay];
+            Worldview.Map.setVisibility(currentLayer, self.visible, 
+                    self.opacity);
             delete cachedLayers[currentDay];
         } else {
             var additionalOptions = {};
@@ -207,23 +201,15 @@ Worldview.Map.DailyProduct = function(map, config) {
             });
             if ( lookupTable !== null ) {
                 currentLayer.lookupTable = lookupTable;
-            }
-            currentLayer.div.style.opacity = 0;
-            
-            // If this layer is not visible, set that now to prevent tiles
-            // from loading
-            currentLayer.setVisibility(visible);
+            }            
             map.addLayer(currentLayer);   
         }
-        
-        // The visible layer is one level higher than all the other layers
+
         if ( previousLayer ) {
             previousLayer.setZIndex(zIndex);
         }        
         currentLayer.setZIndex(zIndex + 1);
-        
-        currentLayer.div.style.opacity = currentLayer.opacity;
-        currentLayer.setVisibility(visible);     
+        Worldview.Map.setVisibility(currentLayer, self.visible, self.opacity);
     };
     
     /*
@@ -264,6 +250,10 @@ Worldview.Map.DailyProduct = function(map, config) {
      * to the stale set. Restart the reaper to remove those layers.
      */
     var clearCache = function() {
+        if ( $.isEmptyObject(cachedLayers) ) {
+            return;
+        }
+        console.log("clear cache");
         $.each(cachedLayers, function(day, layer) {
             staleLayers.push(layer);    
         });
@@ -289,15 +279,7 @@ Worldview.Map.DailyProduct = function(map, config) {
         refreshZOrder();
         reaperId = null;
     };
-    
-    var onMoveStart = function() {
-        clearCache();    
-    };
         
-    var onZoomEnd = function() {
-        clearCache();
-    };
-    
     init();
     return self;
 }

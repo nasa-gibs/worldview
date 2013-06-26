@@ -117,4 +117,9 @@ $(function(ns) {
         }           
     }
     
+    ns.setVisibility = function(layer, visible, opacity) {
+        var actualOpacity = ( visible ) ? opacity : 0;
+        layer.div.style.opacity = actualOpacity;    
+    }
+    
 }(Worldview.Map));
