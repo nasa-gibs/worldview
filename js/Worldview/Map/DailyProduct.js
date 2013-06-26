@@ -54,6 +54,9 @@ Worldview.Map.DailyProduct = function(map, config) {
     // The day of the data displayed on the map
     var currentDay;
     
+    // Is this product visible on the map?
+    var visible = true;
+    
     // Active lookup table for all layers in the product, null if no table
     // is active
     var lookupTable = null;
@@ -110,6 +113,7 @@ Worldview.Map.DailyProduct = function(map, config) {
     };
     
     self.setVisibility = function(value) {
+        visible = value;
         currentLayer.setVisibility(value);
         $.each(cachedLayers, function(key, layer) {
             layer.setVisibility(value);
@@ -205,6 +209,10 @@ Worldview.Map.DailyProduct = function(map, config) {
                 currentLayer.lookupTable = lookupTable;
             }
             currentLayer.div.style.opacity = 0;
+            
+            // If this layer is not visible, set that now to prevent tiles
+            // from loading
+            currentLayer.setVisibility(visible);
             map.addLayer(currentLayer);   
         }
         
@@ -214,11 +222,8 @@ Worldview.Map.DailyProduct = function(map, config) {
         }        
         currentLayer.setZIndex(zIndex + 1);
         
-        // Make sure the layer is visible. 
         currentLayer.div.style.opacity = currentLayer.opacity;
-        if ( currentLayer.getVisibility() === false ) {
-            currentLayer.setVisibility(true);
-        }     
+        currentLayer.setVisibility(visible);     
     };
     
     /*
