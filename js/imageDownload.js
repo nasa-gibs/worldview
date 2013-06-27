@@ -161,16 +161,22 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
       	//Reverse the order of overlays to get the correct layer ordering.
       	if (products != ""){
     		var a = products.split("~");
-    		var base = a[0].split(",");
     		
+    		var base = a[0].split(",");
+    		base.reverse(); base.pop();
+            for(var i=0; i<base.length; i++){
+            	if(base[i].charAt(0)!="!") {
+            		dlURL += base[i]+",";
+    			}
+    		}    		
 
     		var overlays = a[1].split(/[\.,]/);
   		    overlays.reverse(); overlays.pop();
-    		for(var i=1; i<base.length; ++i){
-    			dlURL += base[i]+",";
-    		}
+    		
     		for(var i=0; i<overlays.length; i++){
-    			dlURL+= overlays[i]+",";
+    			if(overlays[i].charAt(0)!="!") {
+    				dlURL+= overlays[i]+",";
+    			}
     		}
     		
     	//remove the extra ","
