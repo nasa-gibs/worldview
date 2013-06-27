@@ -56,11 +56,17 @@ Worldview.Map.StaticProduct = function(map, config) {
     };
     
     self.setOpacity = function(opacity) {
+        if ( self.opacity === opacity ) {
+            return;
+        }
         self.opacity = opacity;
         Worldview.Map.setVisibility(layer, self.visible, self.opacity);
     };
     
     self.setVisibility = function(visible) {
+        if ( self.visible === visible ) {
+            return;
+        }    
         self.visible = visible;
         Worldview.Map.setVisibility(layer, self.visible, self.opacity);
     };

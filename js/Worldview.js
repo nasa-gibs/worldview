@@ -372,7 +372,11 @@
      */
     ns.clampIndex = function(array, index) {
         return ns.clamp(0, array.length - 1, index);
-    }
+    };
+    
+    ns.arrayEquals = function(arr1, arr2) {
+        return $(arr1).not(arr2).length == 0 && $(arr2).not(arr1).length == 0;
+    };
             
 })(window.Worldview = window.Worldview || {});
 

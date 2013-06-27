@@ -90,7 +90,7 @@ Worldview.Map.DailyProduct = function(map, config) {
             return;
         }
         var ds = d.toISOStringDate();
-        if ( currentLayer && ds === currentDay ) {
+        if ( ds === currentDay ) {
             return;
         }
         
@@ -99,17 +99,37 @@ Worldview.Map.DailyProduct = function(map, config) {
             cachedLayers[currentDay] = currentLayer;
         }
         currentDay = ds;
-        fetchLayer();
+        
+        // If the layer is hidden, don't fetch anything
+        if ( self.visible ) {
+            fetchLayer();
+        } else {
+            currentLayer = null;
+        }
     };
 
-    self.setOpacity = function(opacity) {     
+    self.setOpacity = function(opacity) {    
+        if ( self.opacity === opacity ) {
+            return;
+        } 
         self.opacity = opacity;
-        Worldview.Map.setVisiblity(currentLayer, self.visible, self.opacity);
+        if ( currentLayer ) {
+            Worldview.Map.setVisiblity(currentLayer, self.visible, self.opacity);
+        }
     };
     
     self.setVisibility = function(visible) {
+        if ( self.visible === visible ) {
+            return;
+        }
         self.visible = visible;
-        Worldview.Map.setVisibility(currentLayer, self.visible, self.opacity);        
+        if ( visible && !currentLayer ) {
+            fetchLayer();
+        }
+        if ( currentLayer ) {
+            Worldview.Map.setVisibility(currentLayer, self.visible, 
+                    self.opacity);  
+        }      
     };
     
     /**
@@ -124,13 +144,15 @@ Worldview.Map.DailyProduct = function(map, config) {
     self.setLookup = function(lookup) {
         var resetRequired = (lookupTable === null);
         lookupTable = lookup;
-        if ( resetRequired ) { 
-            reset();
-            fetchLayer();
-        } else {
-            clearCache();
-            currentLayer.lookupTable = lookup;
-            applyLookup(currentLayer); 
+        if ( currentLayer ) {
+            if ( resetRequired ) { 
+                reset();
+                fetchLayer();
+            } else {
+                clearCache();
+                currentLayer.lookupTable = lookup;
+                applyLookup(currentLayer); 
+            }
         }
     };
     
@@ -143,9 +165,11 @@ Worldview.Map.DailyProduct = function(map, config) {
     self.clearLookup = function() {
         if ( lookupTable !== null ) {
             lookupTable = null;
-            reset();
-            fetchLayer();
-        }    
+            if ( currentLayer ) {
+                reset();
+                fetchLayer();
+            }    
+        }
     };
     
     /**
@@ -181,10 +205,6 @@ Worldview.Map.DailyProduct = function(map, config) {
     
     var fetchLayer = function() {
         var previousLayer = currentLayer;
-
-        if ( previousLayer ) {
-            Worldview.Map.setVisibility(previousLayer, false, 0);
-        } 
                         
         if ( currentDay in cachedLayers ) {
             currentLayer = cachedLayers[currentDay];
@@ -210,6 +230,10 @@ Worldview.Map.DailyProduct = function(map, config) {
         }        
         currentLayer.setZIndex(zIndex + 1);
         Worldview.Map.setVisibility(currentLayer, self.visible, self.opacity);
+        
+        if ( previousLayer ) {
+            Worldview.Map.setVisibility(previousLayer, false, 0);
+        } 
     };
     
     /*
@@ -241,7 +265,9 @@ Worldview.Map.DailyProduct = function(map, config) {
      */
     var reset = function() {
         clearCache();
-        map.removeLayer(currentLayer);
+        if ( currentLayer ) {
+            map.removeLayer(currentLayer);
+        }
         currentLayer = null;
     }
     

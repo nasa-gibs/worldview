@@ -91,7 +91,9 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
                 self.productMap.set(state.products, state.hiddenProducts);
                 // If the products changed, force setting the palettes
                 // again
-                last.palettesString = "";
+                if ( !Worldview.arrayEquals(state.products, last.products) ) { 
+                    last.palettesString = "";
+                }
                 var topLayerSelected = false;
                 $.each(state.baselayers, function(index, product) {
                     var alreadyHidden = 
