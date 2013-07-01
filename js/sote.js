@@ -40,7 +40,7 @@ function showSelector(e){
  *//*
 function closeSelector(e){
 	
-	console.log("close selector");
+	//console.log("close selector");
 	var selector = e.data.selector;
 	
 	// force center
@@ -49,8 +49,8 @@ function closeSelector(e){
 	var selWidth = parseInt(YAHOO.util.Dom.getStyle(myid, 'width'), 10);
 	var newX = (viewWidth - selWidth)/2;
 	YAHOO.util.Dom.setX(myid, newX);
-	console.log("selWidth = " + selWidth);
-	console.log("newX = " + 0);
+	//console.log("selWidth = " + selWidth);
+	//console.log("newX = " + 0);
 }*/
 
 function showOverlay(){

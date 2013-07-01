@@ -16,7 +16,7 @@ $(function() {// Initialize "static" vars
 	};
     
     var entryPoint = function() {  
-    	console.log("entryPoint");
+    	//console.log("entryPoint");
         Worldview.Support.quirks();
         
         var query = Worldview.queryStringToObject(location.search);
@@ -42,7 +42,7 @@ $(function() {// Initialize "static" vars
     var init = function(config) {  	
         
         checkMobile();
-        console.log("init");
+        //console.log("init");
         Worldview.Map.tileScheduler = Worldview.Scheduler({
             script: "js/Worldview/Map/TileWorker.js?v=" + 
                     Worldview.BUILD_TIMESTAMP, 

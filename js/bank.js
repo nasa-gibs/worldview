@@ -55,12 +55,12 @@ SOTE.widget.Bank = function(containerId, config){
 
        
     this.state = config.state;
-    console.log("state: " + this.state);
+    //console.log("state: " + this.state);
 	this.selected = config.selected;
     this.values = this.unserialize(this.selected[this.state]);
 	
     this.dataSourceUrl = config.dataSourceUrl;
-    console.log("dataSourceUrl: " + this.dataSourceUrl);
+    //console.log("dataSourceUrl: " + this.dataSourceUrl);
     this.title = config.title;
     this.callback = config.callback;
     this.selector = config.selector;
@@ -108,9 +108,9 @@ SOTE.widget.Bank.handleMetaSuccess = function(data,status,xhr,args){
 	
 	/* TODO: This breaks when switching to polar projections
 	var key = data["Floods"][0].value;
-	console.log("Key = " + key);
-	console.log("Meta Label = " + self.meta[key].label);
-	console.log("Meta Sublabel = " + self.meta[key].sublabel);
+	//console.log("Key = " + key);
+	//console.log("Meta Label = " + self.meta[key].label);
+	//console.log("Meta Sublabel = " + self.meta[key].sublabel);
 	*/
 	$.each(self.meta, function(name, meta) {
 	   if ( name in self.config.products ) {
