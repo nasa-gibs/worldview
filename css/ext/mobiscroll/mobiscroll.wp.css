@@ -1,0 +1,404 @@
+.wp .dw {
+    background: #1f1f1f;
+    border-radius: 0;
+    -webkit-border-radius: 0;
+}
+.wp .dwwr {
+    padding: 10px;
+}
+.wp .dwv {
+    display: none;
+}
+.wp .dwc {
+    padding: 30px 0 0 0;
+    vertical-align: middle;
+}
+.wp .dwhl {
+    padding: 0;
+}
+.wp .dwwc {
+    padding: 3px;
+    background: none;
+}
+.wp .dwwl {
+    margin: 0;
+    padding: 0 2px;
+    background: none;
+}
+.wp .dwl {
+    color: #fff;
+}
+.wp .dw .dwwl .dww {
+    background: none;
+    border: 0;
+    color: #fff;
+}
+.wp .dw-li {
+    position: relative;
+    padding: 0;
+    font-size: 26px;
+    letter-spacing: -1px;
+    text-align: left;
+    text-shadow: none;
+    opacity: 0;
+    box-sizing: border-box;
+    filter: Alpha(Opacity=0);
+    /*transition: opacity .3s linear;*/
+    -webkit-box-sizing: border-box;
+    /*-webkit-transition: opacity .3s linear;*/
+    -moz-box-sizing: border-box;
+    /*-moz-transition: opacity .3s linear;*/
+}
+.wp .dw-i {
+    position: relative;
+    top: 4%;
+    height: 92%;
+    padding: 0 5px;
+    border: 1px solid #4c4c4c;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    filter: inherit;
+}
+.wp .wpa .dw-li, .wp .dwa .dw-li {
+    opacity: .3;
+    filter: Alpha(Opacity=30);
+}
+.wp .wpa .dw-v, .wp .dwa .dw-v, .wp .wpam .dw-v {
+    opacity: 1;
+    filter: Alpha(Opacity=100);
+}
+.wp .dw-day, .wp .dw-mon {
+    display: block;
+    color: #a9a9a9;
+    line-height: 18px;
+    font-size: 11px;
+    letter-spacing: normal;
+    position: absolute;
+    bottom: 0;
+    filter: inherit;
+}
+.wp .dw-sel {
+    opacity: 1;
+    filter: Alpha(Opacity=100);
+}
+.wp .dw .dw-sel .dw-i {
+    color: #fff;
+    background: #4c4c4c;
+    /*transition: all .1s linear;
+    -webkit-transition: all .1s linear;
+    -moz-transition: all .1s linear;*/
+}
+.wp .dw-sel .dw-day, .wp .dw-sel .dw-mon {
+    color: #fff;
+}
+.wp .dw-hl {
+    background: none;
+}
+.wp .dw-hl .dw-i {
+    background: #4c4c4c;
+}
+.wp .dwa .dww .dw-sel .dw-i {
+    border: 1px solid #4c4c4c;
+    background-color: transparent;
+}
+.wp .dwa .dw-day, .wp .dwa .dw-month {
+    color: #a9a9a9;
+}
+.wp .dwwo {
+    display: none;
+}
+.wp .dwwol {
+    display: none;
+}
+.wp .dwbc {
+    padding: 0;
+}
+.wp .dwbw {
+    float: none;
+    width: auto;
+}
+.wp .dw .dwb {
+    position: relative;
+    top: 0;
+    min-width: 32px;
+    display: inline-block;
+    height: 20px;
+    padding: 29px 5px 0 5px;
+    background: none;
+    box-shadow: none;
+    line-height: 20px;
+    font-size: 11px;
+    font-weight: normal;
+    text-transform: lowercase;
+    text-shadow: none;
+    transition: top .1s linear;
+    -webkit-box-shadow: none;
+    -webkit-transition: top .1s linear;
+    -moz-transition: top .1s linear;
+}
+.wp .dwb:after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 50%;
+    width: 26px;
+    height: 26px;
+    margin: 0 -13px;
+    background: url(wp_icons.png) center center no-repeat;
+}
+.wp .dwb-s .dwb:after {
+    background-position: 0 0;
+}
+.wp .dwb-c .dwb:after {
+    background-position: -26px 0;
+}
+.wp .dwb-n .dwb:after {
+    background-position: -52px 0;
+}
+.wp .dwb-s .dwb-a:after {
+    background-position: 0 -26px;
+}
+.wp .dwb-c .dwb-a:after {
+    background-position: -26px -26px;
+}
+.wp .dwb-n .dwb-a:after {
+    background-position: -52px -26px;
+}
+.wp .dwb.dwb-a {
+    top: -3px;
+}
+/* +/- buttons */
+.wp .dw .dwwl .dwb-a {
+    background: #1f1f1f;
+}
+.wp .dw .dwpm .dwwl {
+    border: 0;
+}
+.wp .dw .dwwb {
+    background: #1f1f1f;
+    border-radius: 0;
+    box-shadow: none;
+    box-sizing: border-box;
+    color: #a9a9a9;
+    -webkit-box-shadow: none;
+    -webkit-border-radius: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+.wp .dwwb span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 26px;
+    height: 0;
+    padding-top: 26px;
+    overflow: hidden;
+    margin: -13px;
+    display: block;
+    background: url(wp_icons.png) center center no-repeat;
+}
+.wp .dwwbp span {
+    background-position: -78px 0;
+}
+.wp .dwwbp.dwb-a span {
+    background-position: -78px -26px;
+}
+.wp .dwwbm span {
+    background-position: -104px 0;
+}
+.wp .dwwbm.dwb-a span {
+    background-position: -104px -26px;
+}
+/* Bubble positioning */
+.wp .dw-bubble-bottom .dw-arr {
+    border-color: transparent transparent #1f1f1f transparent;
+}
+.wp .dw-bubble-top .dw-arr {
+    border-color: #1f1f1f transparent transparent transparent;
+}
+/* Multiple select */
+.wp .dwwms .dw-li {
+    opacity: .3;
+    filter: Alpha(Opacity=30);
+    padding: 0 0 0 30px;
+}
+.wp .dwwms .dw-v {
+    opacity: 1;
+    filter: Alpha(Opacity=100);
+}
+.wp .dwc .dwwms .dw-i,
+.wp .dwc .dwwms .dw-sel .dw-i,
+.wp .dwc .dwwms .dw-hl .dw-i,
+.wp .dwc .dwwms.dwa .dw-sel .dw-i {
+    border: 0;
+    background: none;
+}
+.wp .dwwms .dw-li:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    width: 20px;
+    height: 20px;
+    margin-top: -10px;
+    font-size: 18px;
+    line-height: 20px;
+    background: #4c4c4c;
+    color: #fff;
+}
+.wp .dwwms .dw-msel:after {
+    content: '✔';
+}
+/* Light version */
+.wp.light .dw {
+    background: #dedede;
+}
+.wp.light .dwv,
+.wp.light .dwl,
+.wp.light .dwb {
+    color: #000;
+}
+.wp.light .dw-li {
+    color: #6b6b6b;
+}
+.wp.light .dw-i {
+    border-color: #b5b5b5;
+}
+.wp.light .dw-sel .dw-i {
+    background: #b5b5b5;
+}
+.wp.light .dw-hl .dw-i {
+    color: #fff;
+    background: #b5b5b5;
+}
+.wp.light .dw-day, .wp.light .dw-mon {
+    color: #6b6b6b;
+}
+.wp.light .dw-sel .dw-day, .wp.light .dw-sel .dw-mon {
+    color: #fff;
+}
+.wp.light .dw .dwa .dw-sel .dw-i {
+    color: #6b6b6b;
+    border: 1px solid #b5b5b5;
+    background-color: transparent;
+}
+.wp.light .dw .dwc .dwa .dw-day, .wp.light .dw .dwc .dwa .dw-mon {
+    color: #6b6b6b;
+}
+.wp.light .dwb:after {
+    background-image: url(wp_icons_light.png);
+}
+.wp.light .dw .dwwb {
+    background: #dedede;
+}
+.wp.light .dwwb span {
+    background-image: url(wp_icons_light.png);
+}
+/* Bubble positioning */
+.wp.light .dw-bubble-bottom .dw-arr {
+    border-color: transparent transparent #dedede transparent;
+}
+.wp.light .dw-bubble-top .dw-arr {
+    border-color: #dedede transparent transparent transparent;
+}
+/* Multiple select */
+.wp.light .dwc .dwwms .dw-i,
+.wp.light .dwwms.dwa .dw-sel .dw-i {
+    border: 0;
+    background: none;
+    color: #000;
+}
+.wp.light .dwwms .dw-li:after {
+    background: #b5b5b5;
+}
+.wp.light .wp-none .dwwms .dw-li:after {
+    color: #000;
+}
+/* Accents */
+.wp.light .wp-none .dw-sel .dw-i, .wp.light .wp-none .dw-hl .dw-i {
+    color: #000;
+}
+.wp.light .wp-none .dw-day, .wp.light .wp-none .dw-mon {
+    color: #6b6b6b;
+}
+.wp .wp-lime .dw-sel .dw-i, .wp .wp-lime .dw-hl .dw-i, .wp .wp-lime .dwwms .dw-li:after {
+    background: #a4c400;
+    border-color: #a4c400;
+}
+.wp .wp-green .dw-sel .dw-i, .wp .wp-green .dw-hl .dw-i, .wp .wp-green .dwwms .dw-li:after {
+    background: #60a917;
+    border-color: #60a917;
+}
+.wp .wp-emerald .dw-sel .dw-i, .wp .wp-emerald .dw-hl .dw-i, .wp .wp-emerald .dwwms .dw-li:after {
+    background: #008a00;
+    border-color: #008a00;
+}
+.wp .wp-teal .dw-sel .dw-i, .wp .wp-teal .dw-hl .dw-i, .wp .wp-teal .dwwms .dw-li:after {
+    background: #00aba9;
+    border-color: #00aba9;
+}
+.wp .wp-cyan .dw-sel .dw-i, .wp .wp-cyan .dw-hl .dw-i, .wp .wp-cyan .dwwms .dw-li:after {
+    background: #1ba1e2;
+    border-color: #1ba1e2;
+}
+.wp .wp-cobalt .dw-sel .dw-i, .wp .wp-cobalt .dw-hl .dw-i, .wp .wp-cobalt .dwwms .dw-li:after {
+    background: #0050ef;
+    border-color: #0050ef;
+}
+.wp .wp-indigo .dw-sel .dw-i, .wp .wp-indigo .dw-hl .dw-i, .wp .wp-indigo .dwwms .dw-li:after {
+    background: #6a00ff;
+    border-color: #6a00ff;
+}
+.wp .wp-violet .dw-sel .dw-i, .wp .wp-violet .dw-hl .dw-i, .wp .wp-violet .dwwms .dw-li:after {
+    background: #aa00ff;
+    border-color: #aa00ff;
+}
+.wp .wp-pink .dw-sel .dw-i, .wp .wp-pink .dw-hl .dw-i, .wp .wp-pink .dwwms .dw-li:after {
+    background: #f472d0;
+    border-color: #f472d0;
+}
+.wp .wp-magenta .dw-sel .dw-i, .wp .wp-magenta .dw-hl .dw-i, .wp .wp-magenta .dwwms .dw-li:after {
+    background: #d80073;
+    border-color: #d80073;
+}
+.wp .wp-crimson .dw-sel .dw-i, .wp .wp-crimson .dw-hl .dw-i, .wp .wp-crimson .dwwms .dw-li:after {
+    background: #a20025;
+    border-color: #a20025;
+}
+.wp .wp-red .dw-sel .dw-i, .wp .wp-red .dw-hl .dw-i, .wp .wp-red .dwwms .dw-li:after {
+    background: #e51400;
+    border-color: #e51400;
+}
+.wp .wp-orange .dw-sel .dw-i, .wp .wp-orange .dw-hl .dw-i, .wp .wp-orange .dwwms .dw-li:after {
+    background: #fa6800;
+    border-color: #fa6800;
+}
+.wp .wp-amber .dw-sel .dw-i, .wp .wp-amber .dw-hl .dw-i, .wp .wp-amber .dwwms .dw-li:after {
+    background: #f0a30a;
+    border-color: #f0a30a;
+}
+.wp .wp-yellow .dw-sel .dw-i, .wp .wp-yellow .dw-hl .dw-i, .wp .wp-yellow .dwwms .dw-li:after {
+    background: #d8c100;
+    border-color: #d8c100;
+}
+.wp .wp-brown .dw-sel .dw-i, .wp .wp-brown .dw-hl .dw-i, .wp .wp-brown .dwwms .dw-li:after {
+    background: #825a2c;
+    border-color: #825a2c;
+}
+.wp .wp-olive .dw-sel .dw-i, .wp .wp-olive .dw-hl .dw-i, .wp .wp-olive .dwwms .dw-li:after {
+    background: #6d8764;
+    border-color: #6d8764;
+}
+.wp .wp-steel .dw-sel .dw-i, .wp .wp-steel .dw-hl .dw-i, .wp .wp-steel .dwwms .dw-li:after {
+    background: #647687;
+    border-color: #647687;
+}
+.wp .wp-mauve .dw-sel .dw-i, .wp .wp-mauve .dw-hl .dw-i, .wp .wp-mauve .dwwms .dw-li:after {
+    background: #76608a;
+    border-color: #76608a;
+}
+.wp .wp-sienna .dw-sel .dw-i, .wp .wp-sienna .dw-hl .dw-i, .wp .wp-sienna .dwwms .dw-li:after {
+    background: #7a3b3f;
+    border-color: #7a3b3f;
+}

@@ -43,7 +43,7 @@ SOTE.util.Registry = function () {
 	//alert("Registry: storing: producer: "+producerId+", event object name: "+evtObj.name+", consumer: "+arguments[i]);
         this.storeEvent(producerId,evtObj);
 
-	this.consumers.push(new ConsumerProducerPair(arguments[i],producerId));
+		this.consumers.push(new ConsumerProducerPair(arguments[i],producerId));
       }
     }
   }
@@ -73,7 +73,7 @@ SOTE.util.Registry = function () {
   // fire an event
   this.fire = function fire(comp,noFireVal){
     if(noFireVal == null){
-      noFireVal = "norecurse=xxx";
+      noFireVal = "xxx";
     }
     if(comp != null){ 
       var evtObjA = this.getEvents(this.getComponentId(comp));
@@ -92,13 +92,12 @@ SOTE.util.Registry = function () {
 	      break;
 	    }
 	  } 
-	  //alert("Registry: fire: producer: "+this.getComponentId(comp)+", evtObj: "+evtObjA[i].consumerId+", recursive: "+recursive+", no fire val: "+noFireVal);
-	  if(evtObjA[i].consumerId != noFireVal.split("=")[1] && evtObjA[i].consumerId != recursive){
-	    /*if(recursive.length > 0){ 
+	  if(evtObjA[i].consumerId != noFireVal && evtObjA[i].consumerId != recursive){
+	    if(recursive.length > 0){ 
               evtObjA[i].componentUpdate.fire(comp.getValue()+"&norecurse="+recursive);
-	    }else{*/
+	    }else{
               evtObjA[i].componentUpdate.fire(comp.getValue());
-	    //}
+	    }
 	  }
         }
       }

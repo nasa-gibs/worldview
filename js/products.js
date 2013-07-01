@@ -96,44 +96,63 @@ SOTE.widget.Products.prototype.init = function(){
 SOTE.widget.Products.prototype.render = function(){
 
 	this.container.innerHTML = "";
-	var productContainer = document.createElement("div");
-	productContainer.setAttribute("id",this.id+"prods");
-	productContainer.setAttribute("class","products");
+	//var productContainer = document.createElement("div");
+	//this.container.setAttribute("id",this.id+"prods");
+	this.container.setAttribute("class","products");
 
 	var tabs = document.createElement("ul");
+	tabs.setAttribute("id",this.id+"tabs");
 	tabs.innerHTML = "<li class='first'><a href='#products' class='activetab tab'>Active</a></li><li class='second'><a class='addlayerstab tab' href='#selectorbox'>Add Layers +</a></li>";
-	productContainer.appendChild(tabs);
+	this.container.appendChild(tabs);
 	//$('#'+this.id).addClass('products');
-	var container = document.createElement("div");
-	container.setAttribute("id","products");
-	productContainer.appendChild(container);
-
-	var selectorbox = document.createElement("div");
-	selectorbox.setAttribute("id","selectorbox");
-	productContainer.appendChild(selectorbox);
-
-
-
-	this.container.appendChild(productContainer);
-	$('#'+this.id+"prods").tabs({show: SOTE.widget.Products.change});
-	this.b = new SOTE.widget.Bank("products",{paletteWidget: window.palettes, dataSourceUrl:"ap_products.php",title:"My Layers",selected:{antarctic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,antarctic_coastlines", arctic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,arctic_coastlines",geographic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,sedac_bound"},categories:["Base Layers","Overlays"],config:window.config});
-    this.s = new SOTE.widget.Selector("selectorbox",{dataSourceUrl:"ap_products.php",categories:["Base Layers","Overlays"],selected:{antarctic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,antarctic_coastlines", arctic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,arctic_coastlines",geographic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,sedac_bound"}});	
-    
-    //$('#'+this.id+"prods").on("tabsshow",SOTE.widget.Products.change);
-    
+	var toggleButtonHolder = document.createElement("div");
+	toggleButtonHolder.setAttribute("id",this.id+"toggleButtonHolder");
+	toggleButtonHolder.setAttribute("class","toggleButtonHolder");
 	var accordionToggler = document.createElement("a");
 	accordionToggler.setAttribute("class","accordionToggler atcollapse");
 	accordionToggler.setAttribute("title","Hide Products");
 	this.isCollapsed = false;
-	this.container.appendChild(accordionToggler);
-	$('.accordionToggler').bind('click',{self:this},SOTE.widget.Products.toggle);
+	toggleButtonHolder.appendChild(accordionToggler);
+	this.container.appendChild(toggleButtonHolder);
+
+	var container = document.createElement("div");
+	container.setAttribute("id","products");
+	this.container.appendChild(container);
+
+	var selectorbox = document.createElement("div");
+	selectorbox.setAttribute("id","selectorbox");
+	this.container.appendChild(selectorbox);
+
+
+
+	//this.container.appendChild(productContainer);
+	$('#'+this.id).tabs({show: SOTE.widget.Products.change});
+	this.b = new SOTE.widget.Bank("products",{paletteWidget: window.palettes, dataSourceUrl:"ap_products.php",title:"My Layers",selected:{antarctic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,antarctic_coastlines", arctic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,arctic_coastlines",geographic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,sedac_bound"},categories:["Base Layers","Overlays"],config:window.config});
+    this.s = new SOTE.widget.Selector("selectorbox",{dataSourceUrl:"ap_products.php",categories:["Base Layers","Overlays"],selected:{antarctic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,antarctic_coastlines", arctic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,arctic_coastlines",geographic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,sedac_bound"}});	
+    
+    //$('#'+this.id+"prods").on("tabsshow",SOTE.widget.Products.change);
+   	$('.accordionToggler').bind('click',{self:this},SOTE.widget.Products.toggle);
+
+
+	//setTimeout(SOTE.forceResize();
 
 	// Mark the component as ready in the registry if called via init() 
 	if ((this.initRenderComplete === false) && REGISTRY) {
 		this.initRenderComplete = true;
 		REGISTRY.markComponentReady(this.id);
 	}
-	
+	var self = this;
+	$(window).resize(function(){
+		self.b.render();
+		self.s.render();
+	});
+};
+
+SOTE.widget.Products.forceResize = function(self){
+	var outerHeight = $("#"+self.id).outerHeight();
+	var tabHeight = $("#"+self.id+"tabs").outerHeight();
+	self.b.setHeight(outerHeight - tabHeight);
+	self.s.setHeight(outerHeight - tabHeight);
 };
 
 SOTE.widget.Products.stopLink = function(e){
@@ -147,6 +166,7 @@ SOTE.widget.Products.change = function(e,ui){
 	else {
 		$('.ui-tabs-nav').addClass('firstselected').removeClass('secondselected');
 	}
+
 	return false;
 };
 
@@ -155,14 +175,24 @@ SOTE.widget.Products.toggle = function(e,ui){
 	if(self.isCollapsed){
 		$('.accordionToggler').removeClass('atexpand').addClass('atcollapse');
 		$('.accordionToggler').attr("title","Hide Products");
-		$('.products').css('display','block');
+		$('.accordionToggler').css("float","right");
+		$('.products').css("position","relative");
+		//$('.products').css("left","0");
+		$('.products').animate({left:'0'}, 200);
 		self.isCollapsed = false;
+		$('.accordionToggler').appendTo("#"+self.id+"toggleButtonHolder");
 	}
 	else{
 		$('.accordionToggler').removeClass('atcollapse').addClass('atexpand');
 		$('.accordionToggler').attr("title","Show Products");
-		$('.products').css('display','none');
+		$('.accordionToggler').css("float","left");
+		
+		//$('.products').css("left","-999em");
+		$('.products').animate({left:'-100em'}, 300, function(){
+				$('.products').css("position","absolute");
+		});
 		self.isCollapsed = true;
+		$("#"+self.id).after($('.accordionToggler'));
 	} 	
 };
 

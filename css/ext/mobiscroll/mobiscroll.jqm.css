@@ -1,0 +1,88 @@
+/* jQuery Mobile Theme */
+.jqm .dwo {
+    background: none;
+}
+.jqm .dw {
+    padding: 6px;
+    z-index: 1003;
+}
+.jqm .dwv {
+    position: static;
+    width: auto;
+    padding: .7em 15px .7em 15px;
+    border: 0;
+}
+.jqm .dwwr {
+    border: 0;
+    padding: 0;
+}
+.jqm .dwpm .dwwo {
+    background: none;
+}
+.jqm .dwc {
+    padding: 30px 5px 5px 5px;
+ }
+.jqm .dwhl {
+    padding: 5px;
+}
+.jqm .dwwb {
+    margin: 0;
+    border: 0;
+}
+.jqm .dwwb span {
+    padding: 0;
+}
+.jqm .dwwbp .ui-btn-inner {
+    font-size: 40px;
+    border-radius: 3px 3px 0 0;
+    -webkit-border-radius: 3px 3px 0 0;
+    -moz-border-radius: 3px 3px 0 0;
+}
+.jqm .dwwbm .ui-btn-inner {
+    font-size: 32px;
+    border-radius: 0 0 3px 3px;
+    -webkit-border-radius: 0 0 3px 3px;
+    -moz-border-radius: 0 0 3px 3px;
+}
+.jqm .dwwbp span {
+    font-weight: normal;
+}
+.jqm .dwbc {
+    padding: 0;
+}
+.jqm .dwbc .ui-btn {
+    margin: .5em 5px;
+}
+.jqm .dwbc .ui-btn-inner {
+    font-size: 12px;
+}
+.jqm .dwpm .dwl {
+    border: 0;
+    background: none;
+}
+/* Bubble positioning */
+.jqm .dw-bubble-bottom .dw-arr
+{
+    border-color: transparent transparent #444 transparent;
+}
+.jqm .dw-bubble-top .dw-arr
+{
+    border-color: #222 transparent transparent transparent;
+}
+/* Docked */
+.jqm.dw-bottom .dw, .jqm.dw-top .dw {
+    padding: 0;
+    border-radius: 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+}
+.jqm.dw-top .dw {
+    border-right: 0;
+    border-top: 0;
+    border-left: 0;
+}
+.jqm.dw-bottom .dw {
+    border-bottom: 0;
+    border-right: 0;
+    border-left: 0;
+}

@@ -1,6 +1,6 @@
-a.accordionToggler { float:left; display:block; width:28px; height:36px;  border-radius: 0 10px 10px 0; -moz-border-radius: 0 10px 10px 0; -webkit-border-radius: 0 10px 10px 0; text-decoration:none; background: none no-repeat scroll center rgba(0, 0, 0, 0.88); color:#fff; position:relative; top:30px; letter-spacing:2px; font-family:"Gill Sans","Helvetica",sans-serif;}
+/*a.accordionToggler { float:left; display:block; width:28px; height:36px;  border-radius: 0 10px 10px 0; -moz-border-radius: 0 10px 10px 0; -webkit-border-radius: 0 10px 10px 0; text-decoration:none; background: none no-repeat scroll center rgba(0, 0, 0, 0.88); color:#fff; position:relative; top:30px; letter-spacing:2px; font-family:"Gill Sans","Helvetica",sans-serif;}
 a.atcollapse {background-image: url("../images/expandIn.png"); }
-a.atexpand {background-image: url("../images/expandOut.png");}
+a.atexpand {background-image: url("../images/expandOut.png");}*/
 .accordion {position:relative;}
 .ui-accordion { float:left; display:block; width:230px; /* background:rgba(50,50,60,0.89); */color:#fff; font: 1.05em "Gill Sans",sans-serif; text-shadow:none; font-weight:120;}
 .ui-accordion{ border-radius: 0 20px 20px 0; -moz-border-radius: 0 20px 20px 0; -webkit-border-radius: 0 20px 20px 0; background: none repeat scroll 0 0 rgba(0,0,0,0.8); border:rgba(0,0,0,0.35) 10px solid; border-width:10px 10px 10px 0;}

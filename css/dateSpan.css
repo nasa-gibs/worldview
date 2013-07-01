@@ -1,3 +1,5 @@
+#timeds, #timemds {position:absolute;}
+
 .datespan ul, menu, dir{
 	-webkit-margin-before: 0em;
 	-webkit-margin-after: 0em;
@@ -39,7 +41,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bf2d2d2d', e
 height:23px;
 
 }
-ul.sliderLabel {text-shadow: none; color:#fff; margin:-20px 0 0 0; background:none; height:20px; overflow:hidden; font-size:12px !important; font-weight:bold; line-height:20px !important;}
+ul.sliderLabel {text-shadow: none; color:#fff; margin:-20px 0 0 0; background:none; height:20px; overflow:hidden; font-size:12px !important; font-weight:100; line-height:20px !important;}
 ul.sliderLabel li {float:left; background:none; margin:0px; text-align:center; overflow:hidden;}
 div.sliderDivYear {clear:both;}
 div.sliderDivMonth {background: rgba(45,50,55,0.5);}
@@ -53,7 +55,7 @@ div.ui-slider {border:none; background:transparent; /*width:100%;*/ margin:0px; 
 .sliderDivMonth a.ui-slider-handle {width:54px; margin-left:-30px !important;}
 .sliderDivYear a.ui-slider-handle {width:54px; margin-left:-30px !important;}*/
 
-.dateHolder {display:inline-block; float:left; width:10%; /*background: rgba(45,50,55,.75);*/ margin-bottom:10px; margin-top:3px;text-shadow:none; color:#fff; font-weight:bold; font-size:12px; text-align:center; padding:5px 0px; padding-right:28px;
+.dateHolder,#linkmode {display:inline-block; float:left; width:6em; /*background: rgba(45,50,55,.75);*/ margin-bottom:10px; margin-top:3px;text-shadow:none; color:#fff; font-weight:bold; font-size:12px; text-align:center; padding:5px 0px; padding-right:28px;
 		border-radius: 0 5px 5px 0; 
 		
 background: -moz-linear-gradient(top,  rgba(35,40,45,0.65) 0%, rgba(0,5,10,0.65) 50%, rgba(35,40,45,0.65) 100%); /* FF3.6+ */
@@ -67,7 +69,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bf2d2d2d', e
     -webkit-box-shadow: 0 -1px 15px #fff;*/
     /*box-shadow: 0 0px 4px 1px #bbb;*/}
     
-
+#linkmode {border:none; text-shadow:none;}
 /*a.ui-slider-handle{height:130px; display:block; width:14%; background:rgba(228,108,10,.2); border:#E46C0A 2px solid; z-index:1004; position:relative; top:-142px; margin: 10px 0 0 -7% !important; padding: 5px 0 5px 0; }*/
 /*span.sliderText {font: 14px/14px "Gill Sans", sans-serif, serif; font-weight:500; color:#fff; text-shadow:none; z-index:1005;}*/
 a.ui-btn {margin:0;} 

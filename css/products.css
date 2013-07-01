@@ -1,16 +1,14 @@
-#productsHolder {display:block; float:left; z-index:200; width:238px; height:300px; position:relative; top:10%;}
-
-.products {display:block; float:left; width:210px; min-height:275px; max-height:300px; position:relative; overflow:hidden;
+.products {display:block; float:left; z-index:292; min-width:238px; top:2%; width:25%; height:65%;  position:relative; overflow:hidden;
 background: rgba(38,43,49,0.65); border-radius:0 10px 10px 0; 
 }
 
-.ui-tabs-nav {clear:both; display:block; overflow:hidden; width:100%; border-radius:0; border-bottom: 3px #00457b solid;}
-.ui-tabs-nav li a {/*border-radius: 10px 10px 0 0;*/ font:14px "gill sans", sans-serif; display:inline-block; float: left; color:#ffffff; font-size: 14px; font-weight:400; border:none; padding:6px 0px 6px 0px; width:50%;
-
+.ui-tabs-nav {clear:both; display:inline-block; overflow:hidden; width:90%; border-radius:0; border-bottom: 3px #00457b solid; }
+.ui-tabs-nav li {height:100%; display:inline-block; float:left; width:50%;}
+.ui-tabs-nav li a {/*border-radius: 10px 10px 0 0;*/ color: #fff; font-size:1.1em; font-weight: 400; display:block; border:none; padding:0.5em 0; width:100%;
 text-align:center; text-decoration:none; text-shadow:none; 
 }
 
-.ui-tabs-nav li.first.ui-state-active a {background: -moz-linear-gradient(top,  rgba(255,255,255,0.7) 0%, rgba(11,95,160,0.7) 23%, rgba(0,88,156,0.7) 24%, rgba(0,81,144,0.7) 99%, rgba(0,81,144,0.7) 100%); /* FF3.6+ */
+.ui-tabs-nav li.first.ui-state-active a { background: -moz-linear-gradient(top,  rgba(255,255,255,0.7) 0%, rgba(11,95,160,0.7) 23%, rgba(0,88,156,0.7) 24%, rgba(0,81,144,0.7) 99%, rgba(0,81,144,0.7) 100%); /* FF3.6+ */
 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0.7)), color-stop(23%,rgba(11,95,160,0.7)), color-stop(24%,rgba(0,88,156,0.7)), color-stop(99%,rgba(0,81,144,0.7)), color-stop(100%,rgba(0,81,144,0.7))); /* Chrome,Safari4+ */
 background: -webkit-linear-gradient(top,  rgba(255,255,255,0.7) 0%,rgba(11,95,160,0.7) 23%,rgba(0,88,156,0.7) 24%,rgba(0,81,144,0.7) 99%,rgba(0,81,144,0.7) 100%); /* Chrome10+,Safari5.1+ */
 background: -o-linear-gradient(top,  rgba(255,255,255,0.7) 0%,rgba(11,95,160,0.7) 23%,rgba(0,88,156,0.7) 24%,rgba(0,81,144,0.7) 99%,rgba(0,81,144,0.7) 100%); /* Opera 11.10+ */
@@ -36,4 +34,17 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3ffffff', e
 	border-bottom: 3px #906a00 solid;
 	
 }
+
+.toggleButtonHolder { display:inline; overflow:hidden;}
+
+@media screen and (max-width: 720px) and (orientation: portrait){
+	.products {display:block; float:left; min-width:238px; width:100%; height:100%; position:absolute !important; overflow:hidden;
+				background: rgba(38,43,49,0.95); border-radius:0 10px 10px 0; top:0;} 
+	.bank { height:96%;/*box-shadow: 0 0 4px 1px #bbb;*/ }
+	#selectorboxcontent { max-height:97%;}		
+	.bank li.item a {float:right; color:#fff; margin-right:1.6em;}
+	img.bank-item-img { display:block; height: 1.6em; width:auto;}
+	
+}
+
 

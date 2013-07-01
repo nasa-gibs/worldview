@@ -270,6 +270,8 @@ SOTE.widget.DateSpan.prototype.createSlider = function(type){
   *
 */
 SOTE.widget.DateSpan.prototype.fire = function(){
+	$("#"+this.id).trigger("fire",this.value);
+
 
 	if(REGISTRY){
 		REGISTRY.fire(this);
@@ -529,6 +531,10 @@ SOTE.widget.DateSpan.prototype.setValue = function(value){
 	}
 };
 
+SOTE.widget.DateSpan.prototype.set = function(value){
+	this.value = value;
+};
+
 SOTE.widget.DateSpan.prototype.setVisualDate = function(){
 	var dateString = this.value.toISOStringDate();
 	$('#'+this.id+'dateHolder').html(dateString);
@@ -545,6 +551,11 @@ SOTE.widget.DateSpan.prototype.setVisualDate = function(){
 SOTE.widget.DateSpan.prototype.getValue = function(){
     var datestring = this.value.toISOStringDate();
 	return ""+this.id +"="+datestring;
+};
+
+SOTE.widget.DateSpan.prototype.get = function(){
+    var datestring = this.value.toISOStringDate();
+	return datestring;
 };
 
 /**
@@ -695,7 +706,7 @@ SOTE.widget.DateSpan.prototype.getStatus = function(){
   *
 */
 SOTE.widget.DateSpan.prototype.hide = function(){
-  // Content
+	$("#"+this.id).css("left","-999em");
 };
 
 /**
@@ -705,7 +716,7 @@ SOTE.widget.DateSpan.prototype.hide = function(){
   *
 */
 SOTE.widget.DateSpan.prototype.show = function(){
-  // Content
+	$("#"+this.id).css("left","0");
 };
 
 /**

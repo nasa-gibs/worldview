@@ -30,12 +30,14 @@ div.olControlScaleLineCustom {
    margin-top:-2px;
    text-align: center;
    background-color:rgba(38,38,38,0.4);
+   font-size: 0.9em;
 }
 .olControlScaleLineCustomTop {
    border: solid 2px black;
    border-top: none;
    text-align: center;
    background-color:rgba(38,38,38,0.4);
+   font-size: 0.9em;
 }
 
 

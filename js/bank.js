@@ -76,6 +76,7 @@ SOTE.widget.Bank = function(containerId, config){
 	this.config = config.config;
 	this.paletteWidget = config.paletteWidget;
 	this.queryString = "";
+	this.noFireVal = null;
 	this.init();
 	//this.updateComponent(this.id+"=baselayers.MODIS_Terra_CorrectedReflectance_TrueColor-overlays.fires48.AIRS_Dust_Score.OMI_Aerosol_Index")
 
@@ -167,9 +168,11 @@ SOTE.widget.Bank.prototype.render = function(){
 	tabs.innerHTML = "<li><a href='#bank' class='activetab'>Active</a></li><li><a class='addlayerstab' href='#selectorbox'>Add Layers</a></li>";
 	this.container.appendChild(tabs);
 	*/
-	var container = document.createElement("div");
+	var tabs_height = $(".ui-tabs-nav").outerHeight(true);
+	$('#'+this.id).addClass('bank');
+	$('#'+this.id).height($('#'+this.id).parent().outerHeight() - tabs_height);	/*var container = document.createElement("div");
 	container.setAttribute("id","bank");
-	container.setAttribute("class","bank");
+	container.setAttribute("class","bank");*/
 	
 	//var titleContainer = document.createElement("div");
 	//titleContainer.setAttribute("class","tabContainer");
@@ -192,12 +195,17 @@ SOTE.widget.Bank.prototype.render = function(){
 		var category = document.createElement("ul");
 		category.setAttribute("id",formattedCategoryName.toLowerCase());
 		category.setAttribute("class",this.id+"category category");
-		var categoryTitleEl = document.createElement("li");
+		
+		var categoryContainer = document.createElement("div");
+		categoryContainer.setAttribute("id",this.id + formattedCategoryName);
+		categoryContainer.setAttribute("class","categoryContainer");
+		
 		var categoryTitle = document.createElement("h3");
 		categoryTitle.setAttribute("class","head");
 		categoryTitle.innerHTML = this.categories[i];
-		categoryTitleEl.appendChild(categoryTitle);
-		container.appendChild(categoryTitleEl);
+		
+		categoryContainer.appendChild(categoryTitle);		
+		
 				
 		if(this.values !== null && this.values[formattedCategoryName.toLowerCase()]){
 			for(var j=0; j<this.values[formattedCategoryName.toLowerCase()].length; j++){
@@ -205,13 +213,13 @@ SOTE.widget.Bank.prototype.render = function(){
 				var item = document.createElement("li");
 				item.setAttribute("id",formattedCategoryName.toLowerCase()+"-"+myVal);
 				item.setAttribute("class",this.id+"item item");
-				item.innerHTML = "<a><img class='close' id='close"+myVal.replace(/:/g,"colon")+"' src='images/close.png' /></a>";				
+				item.innerHTML = "<a><img class='close bank-item-img' id='close"+myVal.replace(/:/g,"colon")+"' title='Remove Layer' src='images/close.png' /></a>";				
 				if(this.meta !== null && this.meta[myVal]){
 					if(myVal in this.hidden){
-						item.innerHTML += "<a class='hdanchor'><img class='hide hideReg' id='hide"+myVal.replace(/:/g,"colon")+"' src='images/invisible.png' /></a>";	
+						item.innerHTML += "<a class='hdanchor'><img class='hide hideReg bank-item-img' title='Show Layer' id='hide"+myVal.replace(/:/g,"colon")+"' src='images/invisible.png' /></a>";	
 					}
 					else {
-						item.innerHTML += "<a class='hdanchor'><img class='hide hideReg' id='hide"+myVal.replace(/:/g,"colon")+"' src='images/visible.png' /></a>";
+						item.innerHTML += "<a class='hdanchor'><img class='hide hideReg bank-item-img' title='Hide Layer' id='hide"+myVal.replace(/:/g,"colon")+"' src='images/visible.png' /></a>";
 					}
 					item.innerHTML += "<h4>"+this.meta[myVal].label+"</h4>";
 					item.innerHTML += "<p>"+this.meta[myVal].sublabel+"</p>";
@@ -253,9 +261,10 @@ SOTE.widget.Bank.prototype.render = function(){
 			}
 		}
 		
-		container.appendChild(category);
+		categoryContainer.appendChild(category);
+		this.container.appendChild(categoryContainer);
+
 	}
-	this.container.appendChild(container);
 	/*
 	var selectorbox = document.createElement("div");
 	selectorbox.setAttribute("id","selectorbox");
@@ -274,13 +283,19 @@ SOTE.widget.Bank.prototype.render = function(){
 	$("#"+this.id).delegate(".close" ,'click',{self:this},SOTE.widget.Bank.removeValue);
 	$("#"+this.id).delegate(".hideReg" ,'click',{self:this},SOTE.widget.Bank.toggleValue);	
 	$("#"+this.id).delegate(".hideSingle" ,'click',{self:this},SOTE.widget.Bank.toggleValue);	
-	$( "." + this.id + "category" ).sortable({items: "li:not(.head)"});	
-	$( "." + this.id + "category" ).mCustomScrollbar("destroy");
-	$( "." + this.id + "category" ).mCustomScrollbar({horizontalScroll:false, advanced:{
-        updateOnContentResize: true
-    }});
+	$( "." + this.id + "category" ).sortable({items: "li:not(.head)"});
+	if($(window).width() > 720)
+	{
+		if(this.jsp){
+			var api = this.jsp.data('jsp');
+			api.destroy();
+		}	
+		this.jsp = $( "." + this.id + "category" ).jScrollPane({autoReinitialise: true});
+	}
 	$( "." + this.id + "category li" ).disableSelection();	
 	$( "." + this.id + "category" ).bind('sortstop',{self:this},SOTE.widget.Bank.handleSort);
+
+	setTimeout(SOTE.widget.Bank.adjustCategoryHeights,1000,{self:this});
 
 	//this.hideAllRadioExceptTop();
 
@@ -293,6 +308,43 @@ SOTE.widget.Bank.prototype.render = function(){
 		this.initRenderComplete = true;
 		REGISTRY.markComponentReady(this.id);
 	}
+	
+};
+
+SOTE.widget.Bank.adjustCategoryHeights = function(args){
+	var self = args.self;
+	var heights = new Array;
+	var container_height = $("#"+self.id).outerHeight();
+	var labelHeight = 0;
+	$('#'+self.id+' .head').each(function(){
+		labelHeight += $(this).outerHeight(true);
+	});
+	container_height -= labelHeight;
+	//console.log("This.id: " + container_height);
+	for(var i=0; i<self.categories.length; i++){
+		var formattedCategoryName = self.categories[i].replace(/\s/g, "");
+		var actual_height = 0;
+		var count = 0;
+		$('#' + formattedCategoryName.toLowerCase() + ' li').each(function(){
+			actual_height += $(this).outerHeight();
+			count++;
+		});
+
+		heights.push({name:formattedCategoryName.toLowerCase(),height:actual_height,count:count});
+	}
+	
+	if(heights[0].height + heights[1].height > container_height){
+		if(heights[0].height > container_height/2) { 
+			heights[0].height = container_height/2;
+		}
+
+		heights[1].height = container_height - heights[0].height;
+
+	}
+	
+	$("#" + heights[0].name).css("height",heights[0].height+"px");
+	$("#" + heights[1].name).css("height",heights[1].height+"px");
+	
 	
 };
 
@@ -406,10 +458,12 @@ SOTE.widget.Bank.toggleValue = function(e){
 				if(val in self.hidden){
 					delete self.hidden[val];
 					e.target.src = 'images/visible.png';
+					$("#"+e.target.id).attr("title","Hide Layer");
 				}
 				else {
 					self.hidden[val] = 1;
-					e.target.src = 'images/invisible.png';					
+					e.target.src = 'images/invisible.png';
+					$("#"+e.target.id).attr("title","Show Layer");					
 				}
 				
 				
@@ -495,9 +549,11 @@ SOTE.widget.Bank.radioToggleValue = function(e){
   *
 */
 SOTE.widget.Bank.prototype.fire = function(){
+	setTimeout(SOTE.widget.Bank.adjustCategoryHeights,1,{self:this});
 
 	if(REGISTRY){
-		REGISTRY.fire(this);
+		REGISTRY.fire(this,this.noFireVal);
+		this.noFireVal = null;
 	}
 	else{
 		alert("No REGISTRY found! Cannot fire to REGISTRY from Bank!");
@@ -624,6 +680,7 @@ SOTE.widget.Bank.handleUpdateSuccess = function(self,qs){
 	data.expanded = (expanded !== undefined && expanded !== "" && expanded !== null)? expanded:data.expanded;
 	data.selected = (data.selected === undefined || data.selected === "")? SOTE.util.extractFromQuery(args.self.id,args.self.getValue()):data.selected;*/
 	var projection = SOTE.util.extractFromQuery("switch", qs);
+	self.noFireVal = (SOTE.util.extractFromQuery("norecurse",qs) === "")? null: SOTE.util.extractFromQuery("norecurse",qs);
 	if (projection === "") {
 	    projection = self.VALID_PROJECTIONS[0];
 	} else if ($.inArray(projection, self.VALID_PROJECTIONS) < 0) {
@@ -708,6 +765,11 @@ SOTE.widget.Bank.prototype.validate = function(){
 	var isValid = true;
     return isValid;
 
+};
+
+SOTE.widget.Bank.prototype.setHeight = function(height){
+	$("#"+this.id).css("height",height+"px");
+	SOTE.widget.Bank.adjustCategoryHeights({self:this});
 };
 
 /**
