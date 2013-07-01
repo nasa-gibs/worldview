@@ -14,8 +14,18 @@
 
         <file name="ext/joyride-2.0.3/joyride-2.0.3.css"/>
         <file name="ext/jcrop-0.9.10-p1/jcrop.css"/>
-        <file name="ext/jquery.mCustomScrollbar/jquery.mCustomScrollbar.css"/>
-                
+        <file name="ext/jscrollpane-2.0.14/jquery.jscrollpane.css"/> 
+
+        <file name="ext/mobiscroll-2.6.0/mobiscroll.core.css"/> 
+        <file name="ext/mobiscroll-2.6.0/mobiscroll.jqm.css"/> 
+        <file name="ext/mobiscroll-2.6.0/mobiscroll.android.css"/> 
+        <file name="ext/mobiscroll-2.6.0/mobiscroll.android-ics.css"/> 
+        <file name="ext/mobiscroll-2.6.0/mobiscroll.ios.css"/> 
+        <file name="ext/mobiscroll-2.6.0/mobiscroll.sense-ui.css"/> 
+        <file name="ext/mobiscroll-2.6.0/mobiscroll.wp.css"/> 
+
+        <file name="ext/mobiscroll-2.6.0/mobiscroll.animation.css"/> 
+           
         <file name="palette.css"/>		
 		<file name="map.css"/>
 		<file name="dateSpan.css"/>
