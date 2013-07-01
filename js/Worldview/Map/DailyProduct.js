@@ -279,7 +279,6 @@ Worldview.Map.DailyProduct = function(map, config) {
         if ( $.isEmptyObject(cachedLayers) ) {
             return;
         }
-        console.log("clear cache");
         $.each(cachedLayers, function(day, layer) {
             staleLayers.push(layer);    
         });
