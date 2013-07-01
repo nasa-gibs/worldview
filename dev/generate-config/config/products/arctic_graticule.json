@@ -4,7 +4,7 @@
     "product": "static",
     "parameters": {
         "format": "image/png",
-        "layers": "arctic_graticule_3413"    
+        "layers": "arctic_graticule"    
     },
     "projections": {
         "arctic": {

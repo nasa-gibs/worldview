@@ -16,6 +16,7 @@ $(function() {// Initialize "static" vars
 	};
     
     var entryPoint = function() {  
+    	console.log("entryPoint");
         Worldview.Support.quirks();
         
         var query = Worldview.queryStringToObject(location.search);
@@ -41,7 +42,7 @@ $(function() {// Initialize "static" vars
     var init = function(config) {  	
         
         checkMobile();
-        
+        console.log("init");
         Worldview.Map.tileScheduler = Worldview.Scheduler({
             script: "js/Worldview/Map/TileWorker.js?v=" + 
                     Worldview.BUILD_TIMESTAMP, 
@@ -71,13 +72,14 @@ $(function() {// Initialize "static" vars
         //var h = new SOTE.widget.MenuPicker("hazard",{dataSourceUrl:"data/mp_hazard.php"});
         //var tr = new SOTE.widget.MenuPicker("transition",{dataSourceUrl:"data/mp_transition.php"});
         var map = new SOTE.widget.DatePicker("time",{hasThumbnail:false});
+
         //Image download variables
         rb = new SOTE.widget.RubberBand("camera",{icon:"images/camera.png",onicon:"images/cameraon.png",cropee:"map",paletteWidget:palettes,mapWidget:m});
         var id = new SOTE.widget.ImageDownload("imagedownload",{baseLayer:"MODIS_Terra_CorrectedReflectance_TrueColor",alignTo: rb, m:m});		
         var apcn = new Worldview.Widget.ArcticProjectionChangeNotification(config, p.b);
         var opacity = new Worldview.Widget.Opacity(config);
         var epsg = new Worldview.Widget.EPSG(config);
-        
+
         // Get rid of address bar on iphone/ipod
         var fixSize = function() {
             window.scrollTo(0,0);
@@ -109,6 +111,8 @@ $(function() {// Initialize "static" vars
         //REGISTRY.addEventListener("hazard","products");*/
         
         Worldview.opacity = opacity; 
+        Worldview.view = m;
+        
         var queryString = 
             Worldview.Permalink.decode(window.location.search.substring(1));
         

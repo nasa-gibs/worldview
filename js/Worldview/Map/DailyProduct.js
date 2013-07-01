@@ -61,8 +61,8 @@ Worldview.Map.DailyProduct = function(map, config) {
     // Timeout identifier for the reaper that cleans out stale layers.
     var reaperId = null;
     
-    // Time, in seconds, to wait before reaping stale layers.
-    var reapDelay = 2000;
+    // Time, in milliseconds, to wait before reaping stale layers.
+    var reapDelay = 500;
     
     //-------------------------------------------------------------------------
     // Public
@@ -71,8 +71,9 @@ Worldview.Map.DailyProduct = function(map, config) {
     var init = function() {
         self.setDay(Worldview.today());
         
-        map.events.register("movestart", self, onMoveStart);
-        map.events.register("zoomend", self, onZoomEnd);
+        map.events.register("movestart", self, clearCache);
+        map.events.register("zoomend", self, clearCache);
+        $(window).resize(clearCache);
     };
         
     /**
@@ -89,7 +90,7 @@ Worldview.Map.DailyProduct = function(map, config) {
             return;
         }
         var ds = d.toISOStringDate();
-        if ( currentLayer && ds === currentDay ) {
+        if ( ds === currentDay ) {
             return;
         }
         
@@ -98,15 +99,37 @@ Worldview.Map.DailyProduct = function(map, config) {
             cachedLayers[currentDay] = currentLayer;
         }
         currentDay = ds;
-        fetchLayer();
+        
+        // If the layer is hidden, don't fetch anything
+        if ( self.visible ) {
+            fetchLayer();
+        } else {
+            currentLayer = null;
+        }
     };
 
-    self.setOpacity = function(opacity) {     
+    self.setOpacity = function(opacity) {    
+        if ( self.opacity === opacity ) {
+            return;
+        } 
         self.opacity = opacity;
-        Worldview.Map.setOpacity(currentLayer, opacity);
-        $.each(cachedLayers, function(key, layer) {
-            Worldview.Map.setOpacity(layer, opacity);
-        });
+        if ( currentLayer ) {
+            Worldview.Map.setVisiblity(currentLayer, self.visible, self.opacity);
+        }
+    };
+    
+    self.setVisibility = function(visible) {
+        if ( self.visible === visible ) {
+            return;
+        }
+        self.visible = visible;
+        if ( visible && !currentLayer ) {
+            fetchLayer();
+        }
+        if ( currentLayer ) {
+            Worldview.Map.setVisibility(currentLayer, self.visible, 
+                    self.opacity);  
+        }      
     };
     
     /**
@@ -121,13 +144,15 @@ Worldview.Map.DailyProduct = function(map, config) {
     self.setLookup = function(lookup) {
         var resetRequired = (lookupTable === null);
         lookupTable = lookup;
-        if ( resetRequired ) { 
-            reset();
-            fetchLayer();
-        } else {
-            clearCache();
-            currentLayer.lookupTable = lookup;
-            applyLookup(currentLayer); 
+        if ( currentLayer ) {
+            if ( resetRequired ) { 
+                reset();
+                fetchLayer();
+            } else {
+                clearCache();
+                currentLayer.lookupTable = lookup;
+                applyLookup(currentLayer); 
+            }
         }
     };
     
@@ -140,9 +165,11 @@ Worldview.Map.DailyProduct = function(map, config) {
     self.clearLookup = function() {
         if ( lookupTable !== null ) {
             lookupTable = null;
-            reset();
-            fetchLayer();
-        }    
+            if ( currentLayer ) {
+                reset();
+                fetchLayer();
+            }    
+        }
     };
     
     /**
@@ -167,8 +194,9 @@ Worldview.Map.DailyProduct = function(map, config) {
         if ( reaperId !== null ) {
             clearTimeout(reaperId);
         }
-        map.events.unregister("movestart", self, onMoveStart);
-        map.events.unregister("zoomend", self, onZoomEnd);        
+        map.events.unregister("movestart", self, clearCache);
+        map.events.unregister("zoomend", self, clearCache);
+        $(window).unbind("resize", clearCache);      
     };
         
     //-------------------------------------------------------------------------
@@ -177,14 +205,11 @@ Worldview.Map.DailyProduct = function(map, config) {
     
     var fetchLayer = function() {
         var previousLayer = currentLayer;
-
-        // If a layer was visible, hide it.
-        if ( previousLayer ) { 
-            previousLayer.div.style.opacity = 0;
-        }
-        
+                        
         if ( currentDay in cachedLayers ) {
             currentLayer = cachedLayers[currentDay];
+            Worldview.Map.setVisibility(currentLayer, self.visible, 
+                    self.opacity);
             delete cachedLayers[currentDay];
         } else {
             var additionalOptions = {};
@@ -196,22 +221,19 @@ Worldview.Map.DailyProduct = function(map, config) {
             });
             if ( lookupTable !== null ) {
                 currentLayer.lookupTable = lookupTable;
-            }
-            currentLayer.div.style.opacity = 0;
+            }            
             map.addLayer(currentLayer);   
         }
-        
-        // The visible layer is one level higher than all the other layers
+
         if ( previousLayer ) {
             previousLayer.setZIndex(zIndex);
         }        
         currentLayer.setZIndex(zIndex + 1);
+        Worldview.Map.setVisibility(currentLayer, self.visible, self.opacity);
         
-        // Make sure the layer is visible. 
-        currentLayer.div.style.opacity = currentLayer.opacity;
-        if ( currentLayer.getVisibility() === false ) {
-            currentLayer.setVisibility(true);
-        }     
+        if ( previousLayer ) {
+            Worldview.Map.setVisibility(previousLayer, false, 0);
+        } 
     };
     
     /*
@@ -243,7 +265,9 @@ Worldview.Map.DailyProduct = function(map, config) {
      */
     var reset = function() {
         clearCache();
-        map.removeLayer(currentLayer);
+        if ( currentLayer ) {
+            map.removeLayer(currentLayer);
+        }
         currentLayer = null;
     }
     
@@ -252,6 +276,10 @@ Worldview.Map.DailyProduct = function(map, config) {
      * to the stale set. Restart the reaper to remove those layers.
      */
     var clearCache = function() {
+        if ( $.isEmptyObject(cachedLayers) ) {
+            return;
+        }
+        console.log("clear cache");
         $.each(cachedLayers, function(day, layer) {
             staleLayers.push(layer);    
         });
@@ -277,15 +305,7 @@ Worldview.Map.DailyProduct = function(map, config) {
         refreshZOrder();
         reaperId = null;
     };
-    
-    var onMoveStart = function() {
-        clearCache();    
-    };
         
-    var onZoomEnd = function() {
-        clearCache();
-    };
-    
     init();
     return self;
 }

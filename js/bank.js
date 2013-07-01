@@ -55,10 +55,12 @@ SOTE.widget.Bank = function(containerId, config){
 
        
     this.state = config.state;
+    console.log("state: " + this.state);
 	this.selected = config.selected;
     this.values = this.unserialize(this.selected[this.state]);
 	
     this.dataSourceUrl = config.dataSourceUrl;
+    console.log("dataSourceUrl: " + this.dataSourceUrl);
     this.title = config.title;
     this.callback = config.callback;
     this.selector = config.selector;
@@ -97,10 +99,19 @@ SOTE.widget.Bank.handleMetaSuccess = function(data,status,xhr,args){
 	for(var i in data){
 		if(i != "palettes") {
 			for(var j=0; j<data[i].length; j++){
+
 				self.meta[data[i][j].value] = {label:data[i][j].label,sublabel:data[i][j].sublabel,type:data[i][j].type};
+
 			}
 		}
 	}
+	
+	/* TODO: This breaks when switching to polar projections
+	var key = data["Floods"][0].value;
+	console.log("Key = " + key);
+	console.log("Meta Label = " + self.meta[key].label);
+	console.log("Meta Sublabel = " + self.meta[key].sublabel);
+	*/
 	$.each(self.meta, function(name, meta) {
 	   if ( name in self.config.products ) {
 	       var product = self.config.products[name];
@@ -243,7 +254,7 @@ SOTE.widget.Bank.prototype.render = function(){
 						m.paletteString = paletteString;
 						item.innerHTML += paletteString;
 					}*/
-					if(m.palette){
+					if(m && m.palette){
 						var paletteString = "<div><span class='palette'><span class='p-min' style='margin-right:10px;'>"+m.min+"</span>" +
 							 "<canvas class='colorBar' id='canvas"+this.values[formattedCategoryName.toLowerCase()][j].value+"' width=100px height=14px'></canvas>" +
 							 "<span class='p-max' style='margin-left:10px;'>"+m.max+"</span>";
@@ -368,7 +379,7 @@ SOTE.widget.Bank.prototype.renderCanvases = function(){
 			for(var j=0; j<this.values[formattedCategoryName.toLowerCase()].length; j++){
 				var val = this.values[formattedCategoryName.toLowerCase()][j].value;
 				var m = this.meta[this.values[formattedCategoryName.toLowerCase()][j].value];
-				if(m.palette){
+				if(m && m.palette){
 					var width = 100/m.palette.length;
 					var canvas = document.getElementById("canvas"+val);
 					if ( m.palette.stops.length > 1 ) {

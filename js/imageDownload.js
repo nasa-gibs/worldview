@@ -65,7 +65,7 @@ SOTE.widget.ImageDownload.prototype.init = function(){
 		alert("No REGISTRY found!  Cannot register Download!");
 	}
 
-	var htmlElements = "<div>Resolution:<select id='selImgResolution'><option value='1'>250m</option><option value='2'>500m</option><option value='4'>1km</option><option value='20'>5km</option><option value='40'>10km</option></select>";
+	var htmlElements = "<div>Resolution (per pixel): <select id='selImgResolution'><option value='1'>250m</option><option value='2'>500m</option><option value='4'>1km</option><option value='20'>5km</option><option value='40'>10km</option></select>";
     htmlElements +="<br />Format: <select id='selImgFormat'><option value='image/jpeg'>JPEG</option><option value='image/png'>PNG</option><option value='image/geotiff'>GeoTIFF</option></select>";
     htmlElements +="<br />Raw Image Size: ~ <span id='imgFileSize'> </span> MB <br />(<span id='imgWidth''></span> x <span id='imgHeight'></span> pixels)";
     htmlElements += "<br /><span style='font-size:10px; color:#aaa; font-style:italic;'>(Max Size: 250 MB)</span> ";//(<span id='imgWidth''></span> x <span id='imgHeight'></span> pixels) 
@@ -131,7 +131,7 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
       	var lonlat1 = this.m.productMap.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(Math.floor(x1), Math.floor(y2)));
        	var lonlat2 = this.m.productMap.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(Math.floor(x2), Math.floor(y1)));
         
-        var dlURL  = "http://map2.vis.earthdata.nasa.gov/imagegen/index2.php?"; 
+        var dlURL  = "http://map2.vis.earthdata.nasa.gov/imagegen/index.php?"; 
          
         var conversionFactor = 256;
         if (s=="geographic") {

@@ -127,6 +127,9 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
             newMap.events.register("removelayer", self, onRemoveLayer);
             newMap.events.register("moveend", self, fireEvent);
             newMap.events.register("zoomend", self, onZoomEnd);
+            
+            // Keep track of center point on projection switch
+            newMap.previousCenter = newMap.getCenter();
         });
         productConfigs = mapConfig.products;
         
@@ -160,10 +163,21 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
         $(".map-projection").css("display", "none");
         $(".map-" + projection).css("display", "block");
         
+        // Keep track of center point on projection switch        
+        if ( self.map ) {
+            self.map.previousCenter = self.map.getCenter();
+        }
+        
         // Update convenience variables
         self.map = activeMaps[projection];
         self.products = activeProducts[projection];
         self.projection = projection;
+
+        // If the browser was resized, the inactive map was not notified of
+        // the event. Force the update no matter what and reposition the center
+        // using the previous value.        
+        self.map.updateSize();
+        self.map.setCenter(self.map.previousCenter);
         
         // Ensure the current layers are using the current day if this was
         // changed in the last projection
@@ -215,7 +229,7 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
     * Throws:
     * An exception if the product for the given name is not defined.
     */
-    self.set = function(requestedProducts) {
+    self.set = function(requestedProducts, hiddenProducts) {
         var newProducts = [];
         
         $.each(requestedProducts, function(index, product) {
@@ -226,6 +240,13 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
             } else {
                 newProducts.push(product);
             }
+            if ( self.map.products[product] ) {
+                if ( $.inArray(product, hiddenProducts) >= 0 ) {
+                    self.setVisibility(product, false);    
+                } else {
+                    self.setVisibility(product, true);
+                }
+            }
         });
         $.each(self.products, function(index, product) {
             if ( $.inArray(product, requestedProducts) < 0 ) {
@@ -235,6 +256,10 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
         activeProducts[self.projection] = newProducts;
         self.products = activeProducts[self.projection];
         refreshZOrder();
+    };
+    
+    self.setVisibility = function(product, value) {
+        self.map.products[product].setVisibility(value);    
     };
     
     /**

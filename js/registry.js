@@ -15,10 +15,16 @@ SOTE.util.Registry = function () {
   // HACK: Components can check this value to ignore bogus state on startup
   this.isLoadingQuery = false;
   
+  // Components that have a function to parse query string state.
+  this.parsableComponents = {};
+  
   // register a component
   this.register = function register(id,component){
     var compObj = new ComponentObj(id,component);
     this.storeComponent( id, compObj );
+    if ( typeof component.parse === "function" ) {
+        this.parsableComponents[id] = component;    
+    }
   }
 
   // registry component object - this is what is actually held in compRegistry
@@ -338,6 +344,27 @@ SOTE.util.Registry = function () {
     return consumers;
   }
 
+    this.getState = function(queryString) {
+        if ( !queryString ) {
+            var queryParts = [];
+            $.each(this.getComponents(), function(index, component) {
+                var part = component.obj.getValue();
+                if ( part ) {
+                    queryParts.push(part);
+                }
+            });
+            queryString = queryParts.join("&");
+        }
+        
+        var state = {
+            components: {}
+        };
+        $.each(this.parsableComponents, function(name, component) {
+            state.components[name] = component;
+            component.parse(queryString, state);
+        });
+        return state; 
+    };
 
 };
 
