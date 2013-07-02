@@ -107,7 +107,8 @@ SOTE.widget.MobileDateSpan.prototype.init = function(){
 									  },
 									  onClose: function(){
 									  		$("#linkmode").css("display","block");
-									  }
+									  },
+									  dateFormat: 'yyyy-mm-dd'
 									  
 	});
 	$("#linkmode").mobiscroll('setDate',this.value,true);
@@ -290,7 +291,7 @@ SOTE.widget.MobileDateSpan.prototype.getStatus = function(){
   *
 */
 SOTE.widget.MobileDateSpan.prototype.hide = function(){
-	$("#"+this.id).css("left","-999em");
+	$("#"+this.id).css("display","none");
 };
 
 /**
@@ -300,7 +301,7 @@ SOTE.widget.MobileDateSpan.prototype.hide = function(){
   *
 */
 SOTE.widget.MobileDateSpan.prototype.show = function(){
-	$("#"+this.id).css("left","0");
+	$("#"+this.id).css("display","block");
 };
 
 /**

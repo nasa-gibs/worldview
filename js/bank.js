@@ -299,7 +299,7 @@ SOTE.widget.Bank.prototype.render = function(){
 	{
 		if(this.jsp){
 			var api = this.jsp.data('jsp');
-			api.destroy();
+			if(api) api.destroy();
 		}	
 		this.jsp = $( "." + this.id + "category" ).jScrollPane({autoReinitialise: true});
 	}

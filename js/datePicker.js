@@ -39,9 +39,9 @@ SOTE.widget.DatePicker = function(containerId, config){
 
 	this.config = config;
 	this.current = null;
+	this.resizing = false;
 	
 	this.init();
-	
 	$(window).bind("resize",{self:this},SOTE.widget.DatePicker.resize);
 		
 };
@@ -71,6 +71,8 @@ SOTE.widget.DatePicker.prototype.init = function(){
 	this.ds = new SOTE.widget.DateSpan(this.ds_id, this.config);
 	this.mds = new SOTE.widget.MobileDateSpan(this.mds_id, this.config);
 	
+	this.current = this.ds;
+	
 	$("#"+this.ds_id).bind("fire", {self:this}, SOTE.widget.DatePicker.handleFire);
 	$("#"+this.mds_id).bind("fire", {self:this}, SOTE.widget.DatePicker.handleFire)
 	
@@ -83,28 +85,37 @@ SOTE.widget.DatePicker.prototype.init = function(){
 	else{
 		alert("No REGISTRY found!  Cannot register DatePicker!");
 	}
+	//this.fire();	
+
 
 };
 
 SOTE.widget.DatePicker.handleFire = function(e,value){
 	var self = e.data.self;
-	if(self.current.id = self.ds_id) self.mds.set(value); else self.ds.set(value);
+	if(self.current.id == self.ds_id) self.mds.set(value); else self.ds.set(value);
 	self.fire(); 
 };
 
 SOTE.widget.DatePicker.resize = function(e){
+	
 	var self = e.data.self;
 	
-	if($(window).width() > 720){
-		self.current = self.ds;
-		self.ds.show();
-		self.mds.hide();
+	if(!self.resizing){
+		setTimeout(function(){
+			if($(window).width() > 720){
+				self.current = self.ds;
+				self.ds.show();
+				self.mds.hide();
+			}
+			else {
+				self.current = self.mds;
+				self.ds.hide();
+				self.mds.show();
+			}
+			self.resizing = false;
+		}, 1000);
 	}
-	else {
-		self.current = self.mds;
-		self.ds.hide();
-		self.mds.show();
-	} 
+	self.resizing = true; 
 };
 
 /**
