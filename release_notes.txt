@@ -18,7 +18,6 @@ Release 0.5.0 - July 8, 2013
   - New layers: Land / Water Map, Land Mask.
 
 * Updates
-  - Layers can now be reordered on iOS.
   - An invalid map extent can no longer be forced by resizing the browser
     window and switching projections.
   - The empty layer has been removed. All layers in the active list can now
@@ -28,6 +27,7 @@ Release 0.5.0 - July 8, 2013
 * Known Issues
   - Custom color palettes are not supported on Safari 5 or earlier.
   - Custom color palettes can not be used in image download.
+  - On iOS, layers cannot be reordered 
   - Worldview does not work with Internet Explorer version 10 and
     below.
   - WMS based layers (Population Density and Global Labels) can no longer be 
