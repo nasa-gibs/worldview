@@ -95,8 +95,8 @@ $(function() {// Initialize "static" vars
         	    
         //REGISTRY.addEventListener("map","time","imagedownload");
         REGISTRY.addEventListener("time","map","imagedownload", apcn.containerId, epsg.containerId);
-        REGISTRY.addEventListener("switch","map","products","selectorbox","time", "imagedownload", "camera", apcn.containerId, epsg.containerId);
-        REGISTRY.addEventListener("products","map","time","selectorbox","imagedownload","palettes", apcn.containerId);
+        REGISTRY.addEventListener("switch","map","products","selectorbox", "imagedownload", "camera", apcn.containerId, epsg.containerId);
+        REGISTRY.addEventListener("products","map","selectorbox","imagedownload","palettes", apcn.containerId);
         REGISTRY.addEventListener("selectorbox","products");
         REGISTRY.addEventListener("camera","imagedownload");
         REGISTRY.addEventListener("palettes","map","camera","products");

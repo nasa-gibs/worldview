@@ -331,7 +331,7 @@ SOTE.widget.Selector.loadCategory = function(e){
 			var api = self.jsp.data('jsp');
 			if(api) {api.destroy()};
 		}	
-		self.jsp = $( ".category" ).jScrollPane({autoReinitialise: true});
+		self.jsp = $( ".category" ).jScrollPane({autoReinitialise: true, verticalGutter:0});
 	}
 	setTimeout(SOTE.widget.Selector.adjustCategoryHeights,1,{self:self});
 	
@@ -431,7 +431,7 @@ SOTE.widget.Selector.search = function(e){
 			var api = self.jsp.data('jsp');
 			api.destroy();
 		}	
-		self.jsp = $( ".category" ).jScrollPane({autoReinitialise: true});
+		self.jsp = $( ".category" ).jScrollPane({autoReinitialise: true, verticalGutter:0});
 	}
 	setTimeout(SOTE.widget.Selector.adjustCategoryHeights,1,{self:self});
 

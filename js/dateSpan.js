@@ -456,13 +456,15 @@ SOTE.widget.DateSpan.prototype.hideSliders = function(){
 	for(var i in this.sliders){
 		$("#"+this.id+"sliderDiv"+i).css('display','none');
 	}
-}
+	$('.sliderLabel').css("display","none");
+};
 
 SOTE.widget.DateSpan.prototype.showSliders = function(){
 	for(var i in this.sliders){
 		$("#"+this.id+"sliderDiv"+i).css('display','block');
 	}
-}
+	$('.sliderLabel').css("display","block");
+};
 
 /**
   * Sets the selected date in the dateSpan from the passed in date string (ISO8601 format), if valid
@@ -706,7 +708,7 @@ SOTE.widget.DateSpan.prototype.getStatus = function(){
   *
 */
 SOTE.widget.DateSpan.prototype.hide = function(){
-	$("#"+this.id).css("left","-999em");
+	$("#"+this.id).css("display","none");
 };
 
 /**
@@ -716,7 +718,7 @@ SOTE.widget.DateSpan.prototype.hide = function(){
   *
 */
 SOTE.widget.DateSpan.prototype.show = function(){
-	$("#"+this.id).css("left","0");
+	$("#"+this.id).css("display","block");
 };
 
 /**

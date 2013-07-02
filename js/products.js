@@ -109,7 +109,7 @@ SOTE.widget.Products.prototype.render = function(){
 	toggleButtonHolder.setAttribute("id",this.id+"toggleButtonHolder");
 	toggleButtonHolder.setAttribute("class","toggleButtonHolder");
 	var accordionToggler = document.createElement("a");
-	accordionToggler.setAttribute("class","accordionToggler atcollapse");
+	accordionToggler.setAttribute("class","accordionToggler atcollapse arrow");
 	accordionToggler.setAttribute("title","Hide Products");
 	this.isCollapsed = false;
 	toggleButtonHolder.appendChild(accordionToggler);
@@ -132,6 +132,10 @@ SOTE.widget.Products.prototype.render = function(){
     
     //$('#'+this.id+"prods").on("tabsshow",SOTE.widget.Products.change);
    	$('.accordionToggler').bind('click',{self:this},SOTE.widget.Products.toggle);
+	
+	if($(window).width() < 720){
+		SOTE.widget.Products.toggle({data: {self:this}});
+	}
 
 
 	//setTimeout(SOTE.forceResize();
@@ -145,7 +149,15 @@ SOTE.widget.Products.prototype.render = function(){
 	$(window).resize(function(){
 		self.b.render();
 		self.s.render();
+		self.adjustAlignment();
 	});
+};
+
+SOTE.widget.Products.prototype.adjustAlignment = function(){
+	if($(window).width() < 720 && this.isCollapsed){
+		var w = $('.products').outerWidth();	
+		$('.products').css("left", "-"+w+"px");
+	}
 };
 
 SOTE.widget.Products.forceResize = function(self){
@@ -173,24 +185,19 @@ SOTE.widget.Products.change = function(e,ui){
 SOTE.widget.Products.toggle = function(e,ui){
 	var self = e.data.self;
 	if(self.isCollapsed){
-		$('.accordionToggler').removeClass('atexpand').addClass('atcollapse');
+		$('.accordionToggler').removeClass('atexpand').addClass('atcollapse').removeClass('staticLayers').addClass('arrow');
 		$('.accordionToggler').attr("title","Hide Products");
-		$('.accordionToggler').css("float","right");
-		$('.products').css("position","relative");
 		//$('.products').css("left","0");
-		$('.products').animate({left:'0'}, 200);
+		$('.products').animate({left:'0'}, 300);
 		self.isCollapsed = false;
 		$('.accordionToggler').appendTo("#"+self.id+"toggleButtonHolder");
 	}
 	else{
-		$('.accordionToggler').removeClass('atcollapse').addClass('atexpand');
+		$('.accordionToggler').removeClass('atcollapse').addClass('atexpand').removeClass('arrow').addClass('staticLayers');
 		$('.accordionToggler').attr("title","Show Products");
-		$('.accordionToggler').css("float","left");
-		
-		//$('.products').css("left","-999em");
-		$('.products').animate({left:'-100em'}, 300, function(){
-				$('.products').css("position","absolute");
-		});
+
+		var w = $('.products').outerWidth();
+		$('.products').animate({left:'-'+w+"px"}, 300);
 		self.isCollapsed = true;
 		$("#"+self.id).after($('.accordionToggler'));
 	} 	
