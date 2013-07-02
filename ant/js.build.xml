@@ -4,7 +4,21 @@
         <file name="ext/jquery-1.6.4/jquery.js"/>
         <file name="ext/jqueryui-1.8.16/jquery-ui.min.js"/>
         <file name="ext/jquery.mobile-1.0rc2/jquery.mobile.js"/>
-        <file name="ext/jquery.mCustomScrollbar-2.8.2/jquery.mCustomScrollbar.js"/>
+
+        <file name="ext/jscrollpane-2.0.14/jquery.mousewheel.js"/>
+        <file name="ext/jscrollpane-2.0.14/mwheelIntent.js"/>
+        <file name="ext/jscrollpane-2.0.14/jquery.jscrollpane.min.js"/>
+
+        <file name="ext/mobiscroll-2.6.0/mobiscroll.core.js"/>
+
+        <file name="ext/mobiscroll-2.6.0/mobiscroll.datetime.js"/>
+        <file name="ext/mobiscroll-2.6.0/mobiscroll.select.js"/>
+
+        <file name="ext/mobiscroll-2.6.0/mobiscroll.jqm.js"/>
+        <file name="ext/mobiscroll-2.6.0/mobiscroll.ios.js"/>
+        <file name="ext/mobiscroll-2.6.0/mobiscroll.android.js"/>
+        <file name="ext/mobiscroll-2.6.0/mobiscroll.android-ics.js"/>
+        <file name="ext/mobiscroll-2.6.0/mobiscroll.wp.js"/>
         
 		<file name="ext/yui-2.9.0/yahoo/yahoo.js"/>
         <file name="ext/yui-2.9.0/event/event.js"/>
@@ -30,6 +44,8 @@
 		<file name="registry.js"/>
 		<file name="util.js"/>
 		<file name="dateSpan.js"/>
+        <file name="mobileDateSpan.js"/>
+        <file name="datePicker.js"/>
 		<file name="rubberBand.js"/>
 		<file name="imageDownload.js"/>
 		<file name="menuPicker.js"/>
@@ -43,6 +59,7 @@
 		<file name="Logging.js"/>
 		<file name="Date.js"/>
 		<file name="Worldview.js"/>
+        <file name="Worldview/About.js"/>
         <file name="Worldview/Support.js"/>
 		<file name="Worldview/Support.js"/>
         <file name="Worldview/Permalink.js"/>

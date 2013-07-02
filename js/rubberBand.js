@@ -21,6 +21,8 @@ SOTE.widget.RubberBand = function (containerId, config){
         
 	this.container=document.getElementById(containerId);	
 	this.coords = null;
+	this.previousCoords = null;
+	
 	if (this.container==null){
 		this.setStatus("Error: element '"+containerId+"' not found!",true);
 		return;
@@ -131,9 +133,9 @@ SOTE.widget.RubberBand.toggle = function(o){
   * 
 */
 SOTE.widget.RubberBand.prototype.setValue = function(c) {
-	 
+	this.previousCoords = this.coords; 
 	this.coords = c;
-	 this.fire();   
+	this.fire();   
 };
 
 /**
@@ -245,16 +247,21 @@ SOTE.widget.RubberBand.prototype.draw =  function() {
     $("#"+this.cropee).Jcrop({          
             bgColor:     'black',
             bgOpacity:   0.3,
-            onSelect:  function(c){SOTE.widget.RubberBand.handleChange(c, self);},
+            onSelect:  function(c){self.previousCoords=self.coords;SOTE.widget.RubberBand.handleChange(c, self);},
             onChange: function(c){SOTE.widget.RubberBand.handleChange(c, self);},
-            onRelease: function(c){SOTE.widget.RubberBand.toggle({data: {self:self} }); },
+            onRelease: function(c){ self.coords=self.previousCoords; SOTE.widget.RubberBand.toggle({data: {self:self} }); },
             fullScreen: true
             }); 
     
     this.jcropAPI = $('#'+this.cropee).data('Jcrop');
-            
-    this.jcropAPI.setSelect([($(window).width()/2)-100,($(window).height()/2)-100,($(window).width()/2)+100,($(window).height()/2)+100]);         
-
+    
+    if(this.coords) { 
+    	this.jcropAPI.setSelect([this.coords.x, this.coords.y,this.coords.x2,this.coords.y2]); 
+    }
+	else { 
+		this.jcropAPI.setSelect([($(window).width()/2)-100,($(window).height()/2)-100,($(window).width()/2)+100,($(window).height()/2)+100]);         
+	}	
+	
 };
 
 

@@ -150,6 +150,7 @@
 		<copy todir="${build.web.dir}">
 			<fileset dir="${basedir}">
 				<include name="index.html"/>
+                <include name="about.html"/>
 				<include name=".htaccess"/>
 				<include name="worldview-opensourcelibs.txt"/>
 				<include name="release_notes.txt"/>
@@ -159,10 +160,11 @@
 		<replace file="${build.web.dir}/js/Worldview.js"
 		         token="@BUILD_TIMESTAMP@"
 		         value="${build.timestamp}"/>
-        <replace file="${build.web.dir}/index.html"
-                 token="@BUILD_NONCE@"
-                 value="${build.nonce}"/>
-		         
+        <replace token="@BUILD_NONCE@"
+                 value="${build.nonce}">
+            <fileset dir="${build.web.dir}" includes="*.html"/>
+        </replace>
+        		         
 		<!-- Debug version that is not minified -->
 		<delete dir="${build.web-debug.dir}"/>		
 		<mkdir dir="${build.web-debug.dir}"/>
@@ -212,27 +214,32 @@
 		<!-- Uncomment the references to the minified versions in 
 		     the index.html file -->
 		<replaceregexp 
-			file="${build.web.dir}/index.html"
 			match=".!--(.*worldview-min.css.*)--."
-			replace="\1"/>
+			replace="\1">
+		    <fileset dir="${build.web.dir}" includes="*.html"/>
+	    </replaceregexp>
+	    
 		<replaceregexp 
-			file="${build.web.dir}/index.html"
 			match=".!--(.*worldview-min.js.*)--."
-			replace="\1"/>
-	
+			replace="\1">
+            <fileset dir="${build.web.dir}" includes="*.html"/>
+        </replaceregexp>
+        	
 		<!-- Remove references to the non-minified versions. Those lines 
 		     should contain the text "js.dev" or "css.dev" -->
 		<replaceregexp 
-			file="${build.web.dir}/index.html"
 			match="^.*css.dev.*$"
 			replace=""
-			byline="true"/>
+			byline="true">
+            <fileset dir="${build.web.dir}" includes="*.html"/>
+        </replaceregexp>
 		<replaceregexp 
-			file="${build.web.dir}/index.html"
 			match="^.*js.dev.*$"
 			replace=""
-			byline="true"/>
-		
+			byline="true">
+            <fileset dir="${build.web.dir}" includes="*.html"/>
+        </replaceregexp>
+        		
 		<!-- Move the images to locations where it can be found in the minified 
 		     form since the URLs in the CSS are relative and the location of
 		     the css has changed -->

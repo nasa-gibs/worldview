@@ -1,0 +1,59 @@
+.about {
+    text-align: center;
+}
+
+.about-title {
+    font-size: 10pt;
+    font-weight: bold;
+}
+
+.about-version {
+    font-size: 10pt;
+}
+
+.about-build {
+    font-size: 8pt;
+}
+
+.about a:link {
+    font-weight: bold;
+}
+
+.about a:visited {
+    font-weight: bold;
+}
+
+#about-page {
+    background-color: #000000;
+    color: #FFFBE7;
+}
+
+#about-page .content {
+    background-color: rgba(38, 43, 49, 0.65);
+    margin: 10px auto;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 5px;
+    max-width: 600px;
+    
+}
+
+#about-page a:link {
+    color: #82cdfa;
+}
+
+#about-page a:visited {
+    color: #82cdfa;
+}
+
+#about-page h3 {
+    margin-top: 20px;
+    font-size: 10pt;
+    font-weight: bold;
+}
+
+#about-page p {
+    margin-bottom: 10px;
+}

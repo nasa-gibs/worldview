@@ -6,12 +6,12 @@ SOTE.widget.Events.prototype = new SOTE.widget.Component;
  * Instantiate the Events widget. 
  */
 SOTE.widget.Events = function(containerId, config){
-	console.log("instantiating events");
+	//console.log("instantiating events");
 	
 	this.container = document.getElementById(containerId);
 	if(this.container == null){
 		this.setStatus("Error: element '" + containerId + "' not found!", true);
-		console.log("Error: element '" + containerId + "' not found!");
+		//console.log("Error: element '" + containerId + "' not found!");
 		return;
 	}
 	
@@ -44,14 +44,14 @@ SOTE.widget.Events = function(containerId, config){
 }
 
 SOTE.widget.Events.prototype.buildMeta = function() {
-	console.log("events: buildMeta");
+	//console.log("events: buildMeta");
 	this.buildMetaDone = false;
 	// TODO: get JSON
 	SOTE.widget.Events.handleMetaSuccess(this);
 };
 
 SOTE.widget.Events.handleMetaSuccess = function(arg) {
-	console.log("events: handleMetaSuccess");
+	//console.log("events: handleMetaSuccess");
 	var self = arg;
 	
 	// TODO: replace with actual JSON data
@@ -109,7 +109,7 @@ SOTE.widget.Events.handleMetaSuccess = function(arg) {
 };
 
 SOTE.widget.Events.prototype.init = function() {
-	console.log("events: init");
+	//console.log("events: init");
 	this.buildMeta();
 	
 	if(REGISTRY) {
@@ -122,9 +122,9 @@ SOTE.widget.Events.prototype.init = function() {
 };
 
 SOTE.widget.Events.prototype.render = function() {
-	console.log("events: render");
-	console.log("meta[0].title = " + this.meta[0].title);
-	console.log("metaLength = " + this.metaLength);
+	//console.log("events: render");
+	//console.log("meta[0].title = " + this.meta[0].title);
+	//console.log("metaLength = " + this.metaLength);
 	this.container.innerHTML = "";
 	
 	var container = document.createElement("div");
@@ -233,7 +233,7 @@ SOTE.widget.Events.prototype.render = function() {
   *
 */
 SOTE.widget.Events.prototype.fire = function(){
-	console.log("events: fire");
+	//console.log("events: fire");
 	if(REGISTRY){
 		REGISTRY.fire(this);
 	}
@@ -251,7 +251,7 @@ SOTE.widget.Events.prototype.fire = function(){
   *
 */
 SOTE.widget.Events.prototype.setStatus = function(s){
-	console.log("events: setStatus");
+	//console.log("events: setStatus");
 	this.statusStr = s;
 };
 
@@ -263,6 +263,6 @@ SOTE.widget.Events.prototype.setStatus = function(s){
   *
 */
 SOTE.widget.Events.prototype.getStatus = function(){
-	console.log("events: getStatus");
+	//console.log("events: getStatus");
 	return this.statusStr;
 };
