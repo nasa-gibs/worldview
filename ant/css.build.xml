@@ -36,6 +36,8 @@
 		<file name="sote.css"/>
 		<file name="splash.css"/>
         <file name="products.css"/>
+        <file name="about.css"/>      
+
 	</filelist>
 	
 </project>

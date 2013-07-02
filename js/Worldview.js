@@ -126,9 +126,7 @@
      * title   - Title for the dialog box (optional). If not specified, the
      * title will be "Notice".
      */    
-    ns.notify = function(message, title) {
-        Logging.getLogger().info(message);
-        
+    ns.notify = function(message, title) {        
         if ( window.YAHOO && window.YAHOO.widget && 
                 window.YAHOO.widget.Panel ) {
             o = new YAHOO.widget.Panel("WVerror", {

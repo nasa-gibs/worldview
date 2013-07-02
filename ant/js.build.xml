@@ -59,6 +59,7 @@
 		<file name="Logging.js"/>
 		<file name="Date.js"/>
 		<file name="Worldview.js"/>
+        <file name="Worldview/About.js"/>
         <file name="Worldview/Support.js"/>
 		<file name="Worldview/Support.js"/>
         <file name="Worldview/Permalink.js"/>
