@@ -118,7 +118,7 @@ SOTE.widget.DatePicker.resize = function(e){
 				self.ds.hide();
 				self.mds.show();
 				if(val)
-					self.ds.setValue(val);
+					self.mds.setValue(val);
 			}
 			self.changed = false;
 			self.resizing = false;

@@ -2,6 +2,7 @@ $(function() {// Initialize "static" vars
 
     var log = Logging.getLogger();
     var selector;
+    var mobileSafari = false;
     
     var hideURLbar = function() {
 		window.scrollTo(0, 1);
@@ -9,10 +10,32 @@ $(function() {// Initialize "static" vars
 
 	var checkMobile = function() {
 		if (navigator.userAgent.indexOf('iPhone') != -1 || navigator.userAgent.indexOf('Android') != -1) {
+			// In Safari, the true version is after "Safari" 
+			if (navigator.userAgent.indexOf('Safari')!=-1) {
+		  		// Set a variable to use later
+		  		mobileSafari = true;
+			}
 		    addEventListener("load", function() {
 		            setTimeout(hideURLbar, 0);
 		    }, false);
+		    addEventListener("orientationchange", function() {
+		            setTimeout(hideURLbar, 0);
+		    }, false);
 		}
+		
+	    // Set the div height
+	    function setHeight($body) {
+	        var new_height = $(window).height();
+	        // if mobileSafari add +60px
+	        if (mobileSafari){ new_height += 60; };
+	        $body.css('min-height', 0 );
+	        $body.css('height', new_height );
+	    }
+	 
+	    setHeight( $('#mappage') );
+	    $(window).resize(function() {
+	        setHeight($('#mappage'));
+	    });
 	};
     
     var entryPoint = function() {  
