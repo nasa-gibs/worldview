@@ -4,6 +4,37 @@ Release Notes
 http://earthdata.nasa.gov/labs/worldview/
 
 -------------------------------------------------------------------------------
+Release 0.5.0 - July 8, 2013
+-------------------------------------------------------------------------------
+* New Features
+  - Interface redesigned to support mobile devices.
+  - The process for adding new layers has been streamlined and embedded into
+    the active layers control. 
+  - The list of available layers can now be filtered by entering in search
+    terms.
+  - Layers can now be hidden on the map by clicking on the "eye" button next
+    to the product name.
+  - Image download now retains the screen location of the selection box. 
+  - New layers: Land / Water Map, Land Mask.
+
+* Updates
+  - An invalid map extent can no longer be forced by resizing the browser
+    window and switching projections.
+  - The empty layer has been removed. All layers in the active list can now
+    be removed or hidden.
+  - Resolution units added to the image download panel.
+
+* Known Issues
+  - Custom color palettes are not supported on Safari 5 or earlier.
+  - Custom color palettes can not be used in image download.
+  - On iOS, layers cannot be reordered 
+  - Worldview does not work with Internet Explorer version 10 and
+    below.
+  - WMS based layers (Population Density and Global Labels) can no longer be 
+    displayed properly in the older arctic projection (EPSG:3995).
+    
+    
+-------------------------------------------------------------------------------
 Release 0.4.4 - June 5, 2013
 -------------------------------------------------------------------------------
 * New Features
@@ -25,15 +56,6 @@ Release 0.4.4 - June 5, 2013
   - A perceptually balanced rainbow palette has been added as "Rainbow 2".
   - Worldview no longer crashes on startup when using Iceweasel or Epiphany
     on Debian 6 (Squeeze) although these browsers are not officialy supported.
-
-* Known Issues
-  - Custom color palettes are not supported on Safari 5 or earlier.
-  - Custom color palettes can not be used in image download.
-  - On iOS, layers cannot be reordered 
-  - Worldview does not work with Internet Explorer version 10 and
-    below.
-  - WMS based layers (Population Density and Global Labels) can no longer be 
-    displayed properly in the older arctic projection (EPSG:3995).
 
 
 -------------------------------------------------------------------------------
