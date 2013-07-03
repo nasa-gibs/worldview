@@ -92,26 +92,35 @@ SOTE.widget.DatePicker.prototype.init = function(){
 
 SOTE.widget.DatePicker.handleFire = function(e,value){
 	var self = e.data.self;
-	if(self.current.id == self.ds_id) self.mds.set(value); else self.ds.set(value);
+	self.changed = true;
+	//if(self.current.id == self.ds_id) self.mds.set(value); else self.ds.set(value);
 	self.fire(); 
 };
 
 SOTE.widget.DatePicker.resize = function(e){
 	
 	var self = e.data.self;
+	var val = null;
 	
 	if(!self.resizing){
 		setTimeout(function(){
 			if($(window).width() > 720){
 				self.current = self.ds;
-				self.ds.show();
+				val = self.mds.get();
 				self.mds.hide();
+				self.ds.show();
+				if(val)
+					self.ds.setValue(val);
 			}
 			else {
 				self.current = self.mds;
+				val = self.ds.get();
 				self.ds.hide();
 				self.mds.show();
+				if(val)
+					self.ds.setValue(val);
 			}
+			self.changed = false;
 			self.resizing = false;
 		}, 1000);
 	}
@@ -144,8 +153,8 @@ SOTE.widget.DatePicker.prototype.fire = function(){
   *
 */
 SOTE.widget.DatePicker.prototype.setValue = function(value){
-	this.ds.setValue(value);
-	this.mds.setValue(value);
+	this.current.setValue(value);
+	this.changed = true;
 };
 
 /**
@@ -181,8 +190,8 @@ SOTE.widget.DatePicker.prototype.updateComponent = function(qs){
   *
 */
 SOTE.widget.DatePicker.prototype.loadFromQuery = function(qs){
-	this.ds.loadFromQuery(qs);
-	this.mds.loadFromQuery(qs);
+	this.current.loadFromQuery(qs);
+	this.changed = true;
 };
 
 /**

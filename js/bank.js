@@ -301,7 +301,7 @@ SOTE.widget.Bank.prototype.render = function(){
 			var api = this.jsp.data('jsp');
 			if(api) api.destroy();
 		}	
-		this.jsp = $( "." + this.id + "category" ).jScrollPane({autoReinitialise: true});
+		this.jsp = $( "." + this.id + "category" ).jScrollPane({autoReinitialise: true, verticalGutter:0});
 	}
 	$( "." + this.id + "category li" ).disableSelection();	
 	$( "." + this.id + "category" ).bind('sortstop',{self:this},SOTE.widget.Bank.handleSort);

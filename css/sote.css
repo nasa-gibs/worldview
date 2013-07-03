@@ -65,11 +65,15 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
 #products {display:block; float:left;  position:relative; left:0; }
 
 #banner {
-	display:block; z-index:291; float:left; position:relative; width:100%; height: 49px; background: transparent url("../images/toolbarbg.png");
+	display:block; z-index:291; float:left; position:relative; width:100%; background: transparent url("../images/toolbarbg.png");
 }
+
+#wvlogo {background: transparent url('../images/logo.png') no-repeat center; width:154px; height:27px; padding:8px 5px; display:inline-block;}
 #banner img.logo {padding:11px 5px;}
-#banner ul {float:right;}
-#banner ul li {display:block; float:right; margin:3px 3px;}
+#banner ul {float:right; }
+#banner ul li {display:block; float:right; margin:3px 3px; line-height:0; }
+#banner ul li div {line-height:0;}
+#banner .toolbar-link {display:inline-block; line-height:0; }
 
 #hazard, #transition {z-index:1007; clear:both; float:left; display:block; position:relative; }
 
@@ -202,6 +206,10 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
 
 #transition ul li:hover {
 	border-color: yellow;
+}
+
+@media screen and (max-width: 360px) and (orientation: portrait){
+	#wvlogo { width:32px; background-position: 6px center;}
 }
 
 

@@ -533,10 +533,6 @@ SOTE.widget.DateSpan.prototype.setValue = function(value){
 	}
 };
 
-SOTE.widget.DateSpan.prototype.set = function(value){
-	this.value = value;
-};
-
 SOTE.widget.DateSpan.prototype.setVisualDate = function(){
 	var dateString = this.value.toISOStringDate();
 	$('#'+this.id+'dateHolder').html(dateString);

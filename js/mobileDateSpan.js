@@ -36,6 +36,7 @@ SOTE.widget.MobileDateSpan = function(containerId, config){
 	this.id = containerId;
 	//Store the container's ID
 	this.containerId=containerId;	
+	this.MSEC_TO_MIN = 1000*60;
 
 	//Define an object for holding configuration 
 	if (config===undefined){
@@ -72,7 +73,7 @@ SOTE.widget.MobileDateSpan = function(containerId, config){
     this.startDate = config.startDate;
 	this.endDate = config.endDate;
 	this.isCollapsed = config.isCollapsed;
-	this.value = config.selected; 
+	this.value = config.selected;
 	this.dataSourceUrl = config.dataSourceUrl;
 	this.statusStr = "";
 	this.init();
@@ -99,7 +100,7 @@ SOTE.widget.MobileDateSpan.prototype.init = function(){
 	$("#linkmode").mobiscroll().date({display:"bottom",
 									  onChange: function(valueText){
 									  		var d = new Date(valueText);
-											self.setValue(d.toISOStringDate());
+											self.setValue(d.toISOStringDate(),true);
 											self.fire();
 									  },
 									  onShow: function(){
@@ -108,10 +109,13 @@ SOTE.widget.MobileDateSpan.prototype.init = function(){
 									  onClose: function(){
 									  		$("#linkmode").css("display","block");
 									  },
-									  dateFormat: 'yyyy-mm-dd'
+									  dateFormat: 'yyyy-mm-dd',
+									  minDate: self.UTCToLocal(self.startDate),
+									  maxDate: self.UTCToLocal(self.endDate),
+									  setText: 'OK'
 									  
 	});
-	$("#linkmode").mobiscroll('setDate',this.value,true);
+	$("#linkmode").mobiscroll('setDate',this.UTCToLocal(this.value),true);
 	
 	$("#linkmode").bind("onselect",function(){
 		alert("fire");
@@ -126,6 +130,15 @@ SOTE.widget.MobileDateSpan.prototype.init = function(){
 		alert("No REGISTRY found!  Cannot register MobileDateSpan!");
 	}
 
+};
+
+/* This function is adjusts the UTC time to local for interaction with the mobiscroll widget
+ * The mobiscroll widget shows the mobile slider and only supports local time
+ */
+SOTE.widget.MobileDateSpan.prototype.UTCToLocal = function(d){
+	var timezoneOffset = d.getTimezoneOffset()*this.MSEC_TO_MIN;
+	
+	return new Date(d.getTime() + timezoneOffset);
 };
 
 SOTE.widget.MobileDateSpan.prototype.getToday = function() {
@@ -168,24 +181,23 @@ SOTE.widget.MobileDateSpan.prototype.fire = function(){
   * @returns {boolean} true or false depending on if the passed in date validates
   *
 */
-SOTE.widget.MobileDateSpan.prototype.setValue = function(value){
+SOTE.widget.MobileDateSpan.prototype.setValue = function(value, noRender){
     var d;
     try {
         var d = value ? Date.parseISOString(value) 
                       : this.getToday();
+        var changed = false;
+		if ( this.value.compareTo(d) !== 0 )
+    		changed = true;              
     } catch ( error ) {
         this.log.warn("Invalid time: " + value + ", reason: " + error + 
                        "; using today");    
         d = Worldview.today(); 
     }
     this.value = d;
-	$("#linkmode").mobiscroll('setDate',this.value,true);
-
-};
-
-SOTE.widget.MobileDateSpan.prototype.set = function(value){
-	this.value = value;
-	$("#linkmode").mobiscroll('setDate',this.value,true);
+    if(!noRender && changed){
+		$("#linkmode").mobiscroll('setDate',this.UTCToLocal(this.value),true);
+	}
 
 };
 
@@ -292,6 +304,7 @@ SOTE.widget.MobileDateSpan.prototype.getStatus = function(){
 */
 SOTE.widget.MobileDateSpan.prototype.hide = function(){
 	$("#"+this.id).css("display","none");
+	$("#linkmode").mobiscroll('hide',true);
 };
 
 /**

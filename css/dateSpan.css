@@ -2,6 +2,8 @@
 #timemds {display:none;}
 
 div.dwv, div.dwl, div.dw-i { font-weight:700; }
+.dwbw {width: 40%;}
+.dwb-c {display:none;}
 
 .datespan ul, menu, dir{
 	-webkit-margin-before: 0em;
