@@ -148,7 +148,7 @@ SOTE.widget.Products.prototype.render = function(){
 	var self = this;
 	$(window).resize(function(){
 		self.b.render();
-		self.s.render();
+		self.s.resize();
 		self.adjustAlignment();
 	});
 };

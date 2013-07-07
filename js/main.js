@@ -5,6 +5,9 @@ $(function() {// Initialize "static" vars
     var mobileSafari = false;
     
     var hideURLbar = function() {
+	  	/*if(document.documentElement.scrollHeight<window.outerHeight/window.devicePixelRatio)
+	    	document.documentElement.style.height=(window.outerHeight/window.devicePixelRatio)+'px';
+	  	setTimeout(window.scrollTo(1,1),0);*/
 		window.scrollTo(0, 1);
 	};
 
@@ -25,13 +28,14 @@ $(function() {// Initialize "static" vars
 		
 	    // Set the div height
 	    function setHeight($body) {
-	        var new_height = $(window).height();
-	        // if mobileSafari add +60px
-	        if (mobileSafari){ 
+	    	if (navigator.userAgent.indexOf('iPhone') != -1 && navigator.userAgent.indexOf('Safari')!=-1) {
+		        var new_height = $(window).height();
+		        // if mobileSafari add +60px
 	        	new_height += 60; 
 	        	$body.css('min-height', 0 );
 	        	$body.css('height', new_height );
-	        };
+	        
+		    }
 	        
 	    }
 	 

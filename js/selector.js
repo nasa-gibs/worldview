@@ -165,6 +165,12 @@ SOTE.widget.Selector.prototype.render = function(){
 	
 };
 
+SOTE.widget.Selector.prototype.resize = function (){
+	var tabs_height = $(".ui-tabs-nav").outerHeight(true);
+	$('#'+this.id).height($('#'+this.id).parent().outerHeight() - tabs_height);	
+	setTimeout(SOTE.widget.Selector.adjustCategoryHeights,1,{self:this});
+};
+
 SOTE.widget.Selector.callRender = function (e){
 	e.data.self.openCat = null;
 	e.data.self.render();

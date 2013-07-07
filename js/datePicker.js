@@ -1,4 +1,4 @@
-SOTE.namespace("SOTE.widget.MobileDatePicker");
+SOTE.namespace("SOTE.widget.DatePicker");
 
 
 /**
@@ -105,20 +105,24 @@ SOTE.widget.DatePicker.resize = function(e){
 	if(!self.resizing){
 		setTimeout(function(){
 			if($(window).width() > 720){
-				self.current = self.ds;
-				val = self.mds.get();
-				self.mds.hide();
-				self.ds.show();
-				if(val)
-					self.ds.setValue(val);
+				if(self.current != self.ds){	
+					self.current = self.ds;
+					val = self.mds.get();
+					self.mds.hide();
+					self.ds.show();
+					if(val)
+						self.ds.setValue(val);
+				}
 			}
 			else {
-				self.current = self.mds;
-				val = self.ds.get();
-				self.ds.hide();
-				self.mds.show();
-				if(val)
-					self.mds.setValue(val);
+				if(self.current != self.mds){
+					self.current = self.mds;
+					val = self.ds.get();
+					self.ds.hide();
+					self.mds.show();
+					if(val)
+						self.mds.setValue(val);
+				}
 			}
 			self.changed = false;
 			self.resizing = false;
@@ -190,7 +194,7 @@ SOTE.widget.DatePicker.prototype.updateComponent = function(qs){
   *
 */
 SOTE.widget.DatePicker.prototype.loadFromQuery = function(qs){
-	this.current.loadFromQuery(qs);
+	this.current.setValue(SOTE.util.extractFromQuery(this.id,qs));
 	this.changed = true;
 };
 
