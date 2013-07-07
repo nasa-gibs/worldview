@@ -27,9 +27,12 @@ $(function() {// Initialize "static" vars
 	    function setHeight($body) {
 	        var new_height = $(window).height();
 	        // if mobileSafari add +60px
-	        if (mobileSafari){ new_height += 60; };
-	        $body.css('min-height', 0 );
-	        $body.css('height', new_height );
+	        if (mobileSafari){ 
+	        	new_height += 60; 
+	        	$body.css('min-height', 0 );
+	        	$body.css('height', new_height );
+	        };
+	        
 	    }
 	 
 	    setHeight( $('#mappage') );
