@@ -579,9 +579,11 @@ SOTE.widget.Bank.prototype.setValue = function(valString){
 
 SOTE.widget.Bank.prototype.getCount = function(string){
 	var categories = string.split("~");
-	var c1 = categories[0].split(",");
-	var c2 = categories[1].split(",");
-	return c1.length-1 + c2.length-1;
+	var count = 0;
+	for(var i=0; i<categories.length; ++i){
+		count += categories[i].split(",").length - 1;
+	}
+	return count;
 };
 
 SOTE.widget.Bank.prototype.currCount = function(){
