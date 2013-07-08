@@ -58,6 +58,7 @@ SOTE.widget.Bank = function(containerId, config){
     //console.log("state: " + this.state);
 	this.selected = config.selected;
     this.values = this.unserialize(this.selected[this.state]);
+    this.count = this.getCount(this.selected[this.state]);
 	
     this.dataSourceUrl = config.dataSourceUrl;
     //console.log("dataSourceUrl: " + this.dataSourceUrl);
@@ -235,25 +236,7 @@ SOTE.widget.Bank.prototype.render = function(){
 					item.innerHTML += "<h4>"+this.meta[myVal].label+"</h4>";
 					item.innerHTML += "<p>"+this.meta[myVal].sublabel+"</p>";
 					var m = this.meta[myVal];
-					/*if(m.paletteString){
-						item.innerHTML += m.paletteString;
-					}
-					else if(m.palette){
-						var paletteString = "<ul class='palette'>";
-						paletteString += "<li class='p-min' style='margin-right:10px;'>"+m.min+"</li>";
-						var width = 100/m.palette.length;
-						for(var k=0; k<m.palette.length; ++k){
-							paletteString += "<li class='p-color' style='display:block; height:14px; width:"+width+"px; background:rgba(" +
-								+ m.palette[k]["r"] + "," + m.palette[k]["g"] + "," + m.palette[k]["b"] + "," + m.palette[k]["a"] + ");'></li>";
-						}
-						paletteString += "<li class='p-max' style='margin-left:10px;'>"+this.meta[this.values[formattedCategoryName.toLowerCase()][j].value].max+"</li>";
-						if(m.units && m.units != ""){
-							paletteString += "<li class='units' style='margin-left:3px;'>("+m.units+")</li>";
-						} 
-						paletteString += "</ul>";
-						m.paletteString = paletteString;
-						item.innerHTML += paletteString;
-					}*/
+
 					if(m && m.palette){
 						var paletteString = "<div><span class='palette'><span class='p-min' style='margin-right:10px;'>"+m.min+"</span>" +
 							 "<canvas class='colorBar' id='canvas"+this.values[formattedCategoryName.toLowerCase()][j].value+"' width=100px height=14px'></canvas>" +
@@ -584,6 +567,7 @@ SOTE.widget.Bank.prototype.fire = function(){
 */
 SOTE.widget.Bank.prototype.setValue = function(valString){
 
+	this.count = this.getCount(valString);
 	this.values = this.unserialize(valString);
 	var valid = true;
     var self = this;
@@ -591,6 +575,17 @@ SOTE.widget.Bank.prototype.setValue = function(valString){
 	this.render();
 	this.fire();
 	
+};
+
+SOTE.widget.Bank.prototype.getCount = function(string){
+	var categories = string.split("~");
+	var c1 = categories[0].split(",");
+	var c2 = categories[1].split(",");
+	return c1.length-1 + c2.length-1;
+};
+
+SOTE.widget.Bank.prototype.currCount = function(){
+	return this.count;
 };
 
 /**
@@ -701,9 +696,7 @@ SOTE.widget.Bank.handleUpdateSuccess = function(self,qs){
 	}
 	if(projection == self.state){
 		var vals = SOTE.util.extractFromQuery("selectorbox",qs)
-		self.values = self.unserialize(vals);
-		self.render();
-		self.fire();
+		self.setValue(vals);
 	}
 	else {
 		self.state = projection;

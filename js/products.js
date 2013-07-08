@@ -185,16 +185,18 @@ SOTE.widget.Products.change = function(e,ui){
 SOTE.widget.Products.toggle = function(e,ui){
 	var self = e.data.self;
 	if(self.isCollapsed){
-		$('.accordionToggler').removeClass('atexpand').addClass('atcollapse').removeClass('staticLayers').addClass('arrow');
+		$('.accordionToggler').removeClass('atexpand').addClass('atcollapse').removeClass('staticLayers dateHolder').addClass('arrow');
 		$('.accordionToggler').attr("title","Hide Products");
+		$('.accordionToggler').empty();
 		//$('.products').css("left","0");
 		$('.products').animate({left:'0'}, 300);
 		self.isCollapsed = false;
 		$('.accordionToggler').appendTo("#"+self.id+"toggleButtonHolder");
 	}
 	else{
-		$('.accordionToggler').removeClass('atcollapse').addClass('atexpand').removeClass('arrow').addClass('staticLayers');
+		$('.accordionToggler').removeClass('atcollapse').addClass('dateHolder').removeClass('arrow').addClass('staticLayers');
 		$('.accordionToggler').attr("title","Show Products");
+		$('.accordionToggler').html("Active ("+ self.b.currCount()+")");
 
 		var w = $('.products').outerWidth();
 		$('.products').animate({left:'-'+w+"px"}, 300);
