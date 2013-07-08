@@ -360,6 +360,8 @@ SOTE.widget.DateSpan.toggle = function(e,ui){
 	if(self.isCollapsed){
 		$('.ecbutton').removeClass('expand').addClass('collapse');
 		$('.ecbutton').attr("title","Hide Date Slider");
+		$(".horizontalContainer").css("width","100%");
+
 		//$('a.ui-slider-handle').css('top','-142px');
 		self.isCollapsed = false;
 		self.showSliders();
@@ -367,6 +369,7 @@ SOTE.widget.DateSpan.toggle = function(e,ui){
 	else{
 		$('.ecbutton').removeClass('collapse').addClass('expand');
 		$('.ecbutton').attr("title","Show Date Slider");
+		$(".horizontalContainer").css("width","auto");
 		//$('a.ui-slider-handle').css('top','-25px');
 		self.isCollapsed = true;
 		self.hideSliders();
@@ -705,6 +708,7 @@ SOTE.widget.DateSpan.prototype.getStatus = function(){
 */
 SOTE.widget.DateSpan.prototype.hide = function(){
 	$("#"+this.id).css("display","none");
+	$(".horizontalContainer").css("width","auto");
 };
 
 /**
@@ -715,6 +719,7 @@ SOTE.widget.DateSpan.prototype.hide = function(){
 */
 SOTE.widget.DateSpan.prototype.show = function(){
 	$("#"+this.id).css("display","block");
+	$(".horizontalContainer").css("width","100%");
 };
 
 /**
