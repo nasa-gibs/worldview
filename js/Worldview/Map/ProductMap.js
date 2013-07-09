@@ -258,8 +258,8 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
         refreshZOrder();
     };
     
-    self.setVisibility = function(product, value) {
-        self.map.products[product].setVisibility(value);    
+    self.setVisibility = function(product, value, options) {
+        self.map.products[product].setVisibility(value, options);    
     };
     
     /**

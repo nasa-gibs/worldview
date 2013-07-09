@@ -26,7 +26,7 @@ Worldview.Map.Product = function(c) {
     
     var self = {};
     self.opacity = 1;
-    self.visible = true;
+    self.visible = false;
     var config;
     
     var init = function() {

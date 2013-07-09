@@ -117,7 +117,6 @@ Worldview.Map.StaticProduct = function(map, config) {
     };
     
     var invalidate = function() {
-        console.log("invalidate", layer.div.style.opacity);
         if ( layer ) {
             var opacity = layer.div.style.opacity;
             if ( opacity !== "" && opacity < 0.001 ) {
