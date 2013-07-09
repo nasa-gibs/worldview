@@ -280,6 +280,7 @@ Worldview.Map.DailyProduct = function(map, config) {
             return;
         }
         $.each(cachedLayers, function(day, layer) {
+            layer.setVisibility(false);
             staleLayers.push(layer);    
         });
         cachedLayers = {};
