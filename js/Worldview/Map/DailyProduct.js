@@ -277,7 +277,8 @@ Worldview.Map.DailyProduct = function(map, config) {
      */
     var invalidate = function() {
         if ( currentLayer ) {
-            if ( currentLayer.div.style.opacity < 0.001 ) {
+            var opacity = currentLayer.div.style.opacity;
+            if ( opacity !== "" && opacity < 0.001 ) {
                 currentLayer.setVisibility(false);
             }
         }

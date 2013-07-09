@@ -44,8 +44,8 @@ Worldview.Map.StaticProduct = function(map, config) {
         map.addLayer(layer);
         layer.setZIndex(zIndex);
         
-        map.events.register("movestart", self, refreshZOrder);
-        map.events.register("zoomend", self, refreshZOrder);        
+        map.events.register("movestart", self, invalidate);
+        map.events.register("zoomend", self, invalidate);        
     };
     
     /**
@@ -80,7 +80,7 @@ Worldview.Map.StaticProduct = function(map, config) {
      */
     self.setZIndex = function(index) {
         zIndex = index;
-        refreshZOrder();
+        setZOrder();
     };
 
     /**
@@ -89,8 +89,8 @@ Worldview.Map.StaticProduct = function(map, config) {
      */
     self.dispose = function() {
         map.removeLayer(layer);
-        map.events.unregister("movestart", self, refreshZOrder);
-        map.events.unregister("zoomend", self, refreshZOrder);    
+        map.events.unregister("movestart", self, invalidate);
+        map.events.unregister("zoomend", self, invalidate);    
     };
     
     /**
@@ -112,8 +112,19 @@ Worldview.Map.StaticProduct = function(map, config) {
     //-------------------------------------------------------------------------
     // Private
     //-------------------------------------------------------------------------    
-    var refreshZOrder = function() {
+    var setZOrder = function() {
         layer.setZIndex(zIndex);
+    };
+    
+    var invalidate = function() {
+        console.log("invalidate", layer.div.style.opacity);
+        if ( layer ) {
+            var opacity = layer.div.style.opacity;
+            if ( opacity !== "" && opacity < 0.001 ) {
+                layer.setVisibility(false);
+            }
+        }        
+        setZOrder();
     };
     
     init();
