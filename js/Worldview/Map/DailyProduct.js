@@ -277,9 +277,7 @@ Worldview.Map.DailyProduct = function(map, config) {
      */
     var invalidate = function() {
         if ( currentLayer ) {
-            console.log("move", currentLayer, currentLayer.div.style.opacity);
             if ( currentLayer.div.style.opacity < 0.001 ) {
-                console.log("hiding", currentLayer);
                 currentLayer.setVisibility(false);
             }
         }
