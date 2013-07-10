@@ -122,36 +122,7 @@ SOTE.widget.Selector.prototype.render = function(){
 	titleContainer.appendChild(title);
 	this.container.appendChild(titleContainer);
 	var count = 0;
-	/*for(var i in this.data){
-		count++;
-		if(i !== "All" && i !== "palettes"){
-			var catItem = document.createElement("li");
-			var formatted = i.replace(/\s/g, "");
-			itemLink = document.createElement("a");
-			itemLink.setAttribute("id",formatted);
-			itemLink.innerHTML = "<img src='images/"+formatted.toLowerCase()+".png' /><p>"+i+"</p>";
-			catItem.appendChild(itemLink);
-			catList.appendChild(catItem);
-			$("#"+this.id).delegate("#" + formatted,'click',{self:this,category:i},SOTE.widget.Selector.loadCategory);
-		}
-		
-	}
-	
-	if(count <= 2){
-		SOTE.widget.Selector.loadCategory({ data: {self:this,category:"All"}, back: true });
-		return;
-	}
-	
-	this.container.appendChild(catList);	
-	
-	var subFront = document.createElement("a");
-	subFront.setAttribute("id","subfront");
-	subFront.setAttribute("class","flowbutton");
-	subFront.setAttribute("href","javascript:void(0);");
-	subFront.innerHTML = "<b>skip this step</b> to see all available layers >>";
-	this.container.appendChild(subFront);
-    $("#"+this.id).undelegate("#" + "subfront",'click');
-	$("#"+this.id).delegate("#" + "subfront",'click',{self:this,category:"All"},SOTE.widget.Selector.loadCategory);*/
+
 	SOTE.widget.Selector.loadCategory({ data: {self:this,category:"All"}, back: false });
 	
 	
@@ -186,8 +157,6 @@ SOTE.widget.Selector.prototype.reloadCategory = function(){
 
 SOTE.widget.Selector.loadCategory = function(e){
 	
-	//<div id="selectorbox"><h1>Choose Your Layers: Dust Storms</h1><ul class='base'><li><a>Base 1</a></li></ul><ul class='overlays'><li><a>Overlay 1</a></li></ul><a>Previous step</a></div>
-
 	var self = e.data.self;
 	var cat = e.data.category;
 	self.openCat = cat;
@@ -197,13 +166,6 @@ SOTE.widget.Selector.loadCategory = function(e){
 	var categories = new Object;
 	//self.container.innerHTML = "";
     $("#"+self.id).empty();
-	
-	/*var titleContainer = document.createElement("div");
-	titleContainer.setAttribute("class","tabContainer");
-	var title = document.createElement("h2");
-	title.innerHTML = "Add Layers +";
-	titleContainer.appendChild(title);
-	self.container.appendChild(titleContainer);*/
 	
 	var form = document.createElement("div");
 	form.setAttribute("class","facetedSearch");
@@ -277,25 +239,6 @@ SOTE.widget.Selector.loadCategory = function(e){
 		subItem.appendChild(itemInput);
 		subItem.appendChild(itemHead);
 		subItem.appendChild(itemP);
-		
-		// Uncomment this line and the "self.renderCanvases" line below to add color bars
-		
-		/*if(self.data.palettes[item.value]){
-			var p = self.data.palettes[item.value];
-			var palette = document.createElement("span");
-			palette.setAttribute("class","palette");
-			palette.style.marginTop = "10px";
-			palette.style.overflow = "hidden";
-			palette.style.display = "block";
-			var paletteString = "<span class='p-min' style='margin-right:10px;'>"+p.min+"</span>" +
-				 "<canvas id='canvas"+self.id+item.value+"' width=100px height=14px'></canvas>" +
-				 "<span class='p-max' style='margin-left:10px;'>"+p.max+"</span>";
-			if(p.units && p.units != ""){
-				paletteString += "<span class='units' style='margin-left:3px;'>("+p.units+")</span>";
-			}
-			palette.innerHTML = paletteString;
-			subItem.appendChild(palette);
-		}*/
 		
 		categories[item.category].appendChild(subItem);
 		$("#"+self.id).delegate("#" + formatted,'click',{self:self},SOTE.widget.Selector.toggleValue);
@@ -435,7 +378,7 @@ SOTE.widget.Selector.search = function(e){
 	if($(window).width() > 720){
 		if(self.jsp){
 			var api = self.jsp.data('jsp');
-			api.destroy();
+			if(api) api.destroy();
 		}	
 		self.jsp = $( ".category" ).jScrollPane({autoReinitialise: true, verticalGutter:0});
 	}

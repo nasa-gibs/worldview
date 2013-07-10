@@ -54,7 +54,7 @@ ul.sliderLabel {text-shadow: none; color:#fff; margin:-20px 0 0 0; background:no
 ul.sliderLabel li {float:left; background:none; margin:0px; text-align:center; overflow:hidden; font-weight: 700; font-size: 0.9em; padding: 0.1em 0;}
 div.sliderDivYear {clear:both;}
 div.sliderDivMonth {background: rgba(25,30,35,0.5);}
-div.sliderDivDay { margin-bottom:4px;}
+div.sliderDivDay { }
 #timesliderLabelDay {margin:-24px 0 0;}
 .disabledItem {color:rgba(125,125,125,0.9) !important;}
 a.ui-slider-handle {position:relative;  height:80%; top:-3%; background: rgba(31,143,237,.26); border: #1f8fed 2px solid; }

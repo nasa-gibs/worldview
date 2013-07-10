@@ -39,7 +39,7 @@ h1, h2, h3, h4, h5, h6 { font-weight:400; }
 #switch ul li div.hidden a.sw_antarctic:hover {background-image:url("../images/antarcticon.png");}
 #switch ul li div.hidden a.sw_geographic:hover {background-image:url("../images/geographicon.png");}
 
-#switch ul li:hover div.hidden {display:block; background: rgba(38, 43, 49, 0.45); border-radius:0 0 5px 5px; position:relative; top:-1px;}
+#switch ul li:hover div.hidden { z-index:299; display:block; background: rgba(38, 43, 49, 0.45); border-radius:0 0 5px 5px; position:relative; top:-1px;}
 /*#switch ul li:hover div.hidden a:hover img {border: #fff 1px solid; }*/
 #switchcurrent {border:transparent 1px solid;}
 /*#switch ul li div.hidden a:hover img {border:#155678 2px solid; }*/
@@ -65,7 +65,7 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
 #products {display:block; float:left;  position:relative; left:0; }
 
 #banner {
-	display:block; z-index:291; float:left; position:relative; width:100%; height:47px; background: transparent url("../images/toolbarbg.png");
+	display:block; z-index:294; float:left; position:relative; width:100%; height:47px; background: transparent url("../images/toolbarbg.png");
 }
 
 #wvlogo {background: transparent url('../images/logo.png') no-repeat center; width:154px; height:27px; padding:8px 5px; display:inline-block;}
