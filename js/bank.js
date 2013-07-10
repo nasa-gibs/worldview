@@ -136,6 +136,7 @@ SOTE.widget.Bank.handleMetaSuccess = function(data,status,xhr,args){
 	else{
 		self.values = null;
 		self.values = self.unserialize(self.selected[self.state]);
+		self.count = self.getCount(self.selected[self.state]);
 		self.render();
 		self.fire();
 	}
@@ -437,6 +438,7 @@ SOTE.widget.Bank.removeValue = function(e){
 	var formattedVal = "close"+val.replace(/:/g,"colon");
 	//self.render();
 	$("#"+self.id+" #"+formattedVal).parent().parent().remove();
+	self.count--;
 	self.fire();
 };
 
@@ -544,6 +546,7 @@ SOTE.widget.Bank.radioToggleValue = function(e){
 */
 SOTE.widget.Bank.prototype.fire = function(){
 	setTimeout(SOTE.widget.Bank.adjustCategoryHeights,1,{self:this});
+	$("#"+this.id).trigger("fire");
 
 	if(REGISTRY){
 		REGISTRY.fire(this,this.noFireVal);

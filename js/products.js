@@ -151,6 +151,16 @@ SOTE.widget.Products.prototype.render = function(){
 		self.s.resize();
 		self.adjustAlignment();
 	});
+	
+	$("#products").bind("fire", {self:this}, SOTE.widget.Products.handleFire);
+
+};
+
+SOTE.widget.Products.handleFire = function(e){
+	var self = e.data.self;
+	if(self.isCollapsed){
+		$('.accordionToggler').html("Active ("+ self.b.currCount()+")");
+	}
 };
 
 SOTE.widget.Products.prototype.adjustAlignment = function(){
