@@ -384,6 +384,8 @@ SOTE.widget.Selector.search = function(e){
 	}
 	setTimeout(SOTE.widget.Selector.adjustCategoryHeights,1,{self:self});
 
+	self.adjustSelected();
+
 	//content.appendChild(ul);
 	
 };
