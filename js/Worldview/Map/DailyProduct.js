@@ -71,9 +71,9 @@ Worldview.Map.DailyProduct = function(map, config) {
     var init = function() {
         self.setDay(Worldview.today());
         
-        map.events.register("movestart", self, clearCache);
-        map.events.register("zoomend", self, clearCache);
-        $(window).resize(clearCache);
+        map.events.register("movestart", self, invalidate);
+        map.events.register("zoomend", self, invalidate);
+        $(window).resize(invalidate);
     };
         
     /**
@@ -149,7 +149,7 @@ Worldview.Map.DailyProduct = function(map, config) {
                 reset();
                 fetchLayer();
             } else {
-                clearCache();
+                invalidate();
                 currentLayer.lookupTable = lookup;
                 applyLookup(currentLayer); 
             }
@@ -194,9 +194,9 @@ Worldview.Map.DailyProduct = function(map, config) {
         if ( reaperId !== null ) {
             clearTimeout(reaperId);
         }
-        map.events.unregister("movestart", self, clearCache);
-        map.events.unregister("zoomend", self, clearCache);
-        $(window).unbind("resize", clearCache);      
+        map.events.unregister("movestart", self, invalidate);
+        map.events.unregister("zoomend", self, invalidate);
+        $(window).unbind("resize", invalidate);      
     };
         
     //-------------------------------------------------------------------------
@@ -264,7 +264,7 @@ Worldview.Map.DailyProduct = function(map, config) {
      * between a lookup and non-lookup based layer. 
      */
     var reset = function() {
-        clearCache();
+        invalidate();
         if ( currentLayer ) {
             map.removeLayer(currentLayer);
         }
@@ -275,11 +275,18 @@ Worldview.Map.DailyProduct = function(map, config) {
      * Hide all layers that are not currently being displayed and move them
      * to the stale set. Restart the reaper to remove those layers.
      */
-    var clearCache = function() {
+    var invalidate = function() {
+        if ( currentLayer ) {
+            var opacity = currentLayer.div.style.opacity;
+            if ( opacity !== "" && opacity < 0.001 ) {
+                currentLayer.setVisibility(false);
+            }
+        }
         if ( $.isEmptyObject(cachedLayers) ) {
             return;
         }
         $.each(cachedLayers, function(day, layer) {
+            layer.setVisibility(false);
             staleLayers.push(layer);    
         });
         cachedLayers = {};

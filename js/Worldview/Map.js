@@ -120,6 +120,9 @@ $(function(ns) {
     ns.setVisibility = function(layer, visible, opacity) {
         var actualOpacity = ( visible ) ? opacity : 0;
         layer.div.style.opacity = actualOpacity;    
+        if ( visible && opacity > 0 && !layer.getVisibility() ) {
+            layer.setVisibility(true);
+        }
     }
     
 }(Worldview.Map));

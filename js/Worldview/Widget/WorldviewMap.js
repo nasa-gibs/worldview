@@ -73,7 +73,8 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
             }
             log.debug("WorldviewMap: updateComponent", queryString);
             var state = REGISTRY.getState(queryString);            
-            log.debug(state);     
+            log.debug("State", state);     
+            log.debug("Last State", last);
             
             if ( state.projection !== undefined && 
                     state.projection !== last.projection ) {
@@ -86,8 +87,10 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
                     projection = defaultProjection;
                 }
                 self.productMap.setProjection(projection);
-                self.productMap.set(state.products);
+                self.productMap.set(state.products, state.hiddenProducts);
             } else if ( state.productsString !== last.productsString ) {
+                log.debug("Visible products", state.products);
+                log.debug("Hidden prodcuts", state.hiddenProducts);
                 self.productMap.set(state.products, state.hiddenProducts);
                 // If the products changed, force setting the palettes
                 // again
