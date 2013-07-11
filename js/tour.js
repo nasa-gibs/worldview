@@ -111,16 +111,15 @@ Worldview.namespace("Tour");
         var productText = "<div>"+
                               "<h3>Product Picker</h3>"+
                               "</br>"+
-                              "<p class='tour'>A <span class='highlight'>Base Layer</span> is an opaque background image - you can have multiple active base layers, but you can only show one at a time. An <span class='highlight'>Overlay</span> is a partially transparent layer to view on top of the background - you can view multiple overlays at once.  Use the <img src=\"images/visible.png\"/> icon to show and hide layers and the <img src=\"images/close.png\"/> icon to remove them.</p>"+
+                              "<p class='tour'>A <span class='highlight'>Base Layer</span> is an opaque background image - you can have multiple active base layers, but you can only show one at a time. An <span class='highlight'>Overlay</span> is a partially transparent layer to view on top of the background - you can view multiple overlays at once.  Use the <img style='height: 14px' src=\"images/visible.png\"/> icon to show and hide layers and the <img style='height: 14px' src=\"images/close.png\"/> icon to remove them.</p>"+
                               "<p class='tour'>On the \"Add Layers\" tab, you can use the drop down list or the search bar to find layers.</p>"+
                               "<p class='tour'> <span class='tryIt'>Try It!</span></p>"+
-                              "<p class='tour'>Under the \"Add Layers\" tab:</p>"+
                               "<ul class='tour'>"+
-                                  "<li>Enter \"aqua\" in the search bar.</li>" +
-                                  "<li>Select the \"Corrected Reflectance (True Color) Aqua/MODIS\" base layer.</li>" +
+                                  "<li>Click on the <img style='height: 14px' src='images/visible.png'/> for Corrected Reflectance (True Color) Aqua / MODIS under Base Layers</li>" +
+                                  "<li>Click on the \"Add Layers\" tab</li>"+
                                   "<li>Select the \"Fires\" category from the drop down list.</li>"+
                                   "<li>Add the \"Fires (Day and Night) Aqua/MODIS Fire and Thermal Anomalies\" overlay.</li>"+
-                                  "<li>Add the \"Carbon Monoxide (Total Column, Day) Aqua/AIRS\" overlay.</li>"+
+                                  "<li>Type \"Carbon\" in the search box and Add the \"Carbon Monoxide (Total Column, Day) Aqua/AIRS\" overlay.</li>"+
                               "</ul>"+
                               "</br>"+
                           "</div>";
