@@ -584,7 +584,7 @@ SOTE.widget.Bank.prototype.getCount = function(string){
 	var categories = string.split("~");
 	var count = 0;
 	for(var i=0; i<categories.length; ++i){
-		count += categories[i].split(",").length - 1;
+		count += categories[i].split(/[\.,]/).length - 1;
 	}
 	return count;
 };
@@ -650,6 +650,9 @@ SOTE.widget.Bank.prototype.unserialize = function(string){
             	if(hideIndicator.test(items[j])){
 					items[j] = items[j].replace(/!/g, "");  	
 			    	this.hidden[items[j]] = 1;
+			    }
+			    else {
+			    	delete this.hidden[items[j]];
 			    }
 			    unserialized[items[0]].push({"value":items[j]});
 
