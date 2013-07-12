@@ -298,6 +298,7 @@ SOTE.widget.Selector.search = function(e){
 	var self = e.data.self;
 	var cat = self.openCat;
 	var val = e.target.value.toUpperCase();
+	val = val.replace(/[\(\)\"\'!\$\%\&\?\+\*\\\@\=]/g,"");
 	var valArr = val.split(/\s/);
 	//var re = new RegExp(val);
 	var content = document.getElementById(self.id+"content");
