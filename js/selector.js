@@ -241,6 +241,7 @@ SOTE.widget.Selector.loadCategory = function(e){
 		subItem.appendChild(itemP);
 		
 		categories[item.category].appendChild(subItem);
+		$("#"+self.id).undelegate("#" + formatted,'click');
 		$("#"+self.id).delegate("#" + formatted,'click',{self:self},SOTE.widget.Selector.toggleValue);
 	}
 	
@@ -362,6 +363,7 @@ SOTE.widget.Selector.search = function(e){
 			
 			categories[item.category].appendChild(subItem);
 			//ul.appendChild(subItem);
+			$("#"+self.id).undelegate("#" + formatted,'click');
 			$("#"+self.id).delegate("#" + formatted,'click',{self:self},SOTE.widget.Selector.toggleValue);
 		}
 	}		
@@ -505,8 +507,6 @@ SOTE.widget.Selector.prototype.removeItem = function(cat,val){
   *
 */
 SOTE.widget.Selector.prototype.fire = function(){
-	setTimeout(SOTE.widget.Selector.adjustCategoryHeights,1,{self:this});
-
 	if(REGISTRY){
 		REGISTRY.fire(this);
 	}
