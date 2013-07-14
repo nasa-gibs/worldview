@@ -99,7 +99,7 @@ SOTE.widget.MobileDateSpan.prototype.init = function(){
 	
 	$("#linkmode").mobiscroll().date({display:"bottom",
 									  onChange: function(valueText){
-									  		var d = new Date(valueText);
+									  		var d = Date.parseISOString(valueText);
 											self.setValue(d.toISOStringDate(),true);
 											self.fire();
 									  },
