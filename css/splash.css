@@ -221,3 +221,7 @@ ul.tour li{
     z-index: 293;
 }
 
+.joyride-tip-guide[data-index="0"] {
+    z-index: 296;
+}
+
