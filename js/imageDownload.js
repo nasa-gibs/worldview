@@ -158,18 +158,19 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
       	//dlURL += "&switch="+s;
       	dlURL += "&epsg="+epsg;
       	dlURL +="&layers=";
-      	//Reverse the order of overlays to get the correct layer ordering.
       	if (products != ""){
     		var a = products.split("~");
     		
+    		//Add the first (top most) visible baselayer.
     		var base = a[0].split(",");
-    		base.reverse(); base.pop();
-            for(var i=0; i<base.length; i++){
+    		//base.reverse(); base.pop();
+            for(var i=1; i<base.length; i++){
             	if(base[i].charAt(0)!="!") {
             		dlURL += base[i]+",";
+            		break;
     			}
     		}    		
-
+			
     		var overlays = a[1].split(/[\.,]/);
   		    overlays.reverse(); overlays.pop();
     		
