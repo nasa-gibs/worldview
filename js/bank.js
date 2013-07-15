@@ -59,7 +59,6 @@ SOTE.widget.Bank = function(containerId, config){
     //console.log("state: " + this.state);
 	this.selected = config.selected;
     this.values = this.unserialize(this.selected[this.state]);
-    this.count = this.getCount(this.selected[this.state]);
 	
     this.dataSourceUrl = config.dataSourceUrl;
     //console.log("dataSourceUrl: " + this.dataSourceUrl);
@@ -136,7 +135,6 @@ SOTE.widget.Bank.handleMetaSuccess = function(data,status,xhr,args){
 	else{
 		self.values = null;
 		self.values = self.unserialize(self.selected[self.state]);
-		self.count = self.getCount(self.selected[self.state]);
 		self.render();
 		self.fire();
 	}
@@ -570,7 +568,6 @@ SOTE.widget.Bank.prototype.fire = function(){
 */
 SOTE.widget.Bank.prototype.setValue = function(valString){
 
-	this.count = this.getCount(valString);
 	this.values = this.unserialize(valString);
 	var valid = true;
     var self = this;
@@ -578,15 +575,6 @@ SOTE.widget.Bank.prototype.setValue = function(valString){
 	this.render();
 	this.fire();
 	
-};
-
-SOTE.widget.Bank.prototype.getCount = function(string){
-	var categories = string.split("~");
-	var count = 0;
-	for(var i=0; i<categories.length; ++i){
-		count += categories[i].split(/[\.,]/).length - 1;
-	}
-	return count;
 };
 
 SOTE.widget.Bank.prototype.currCount = function(){
@@ -640,6 +628,8 @@ SOTE.widget.Bank.prototype.unserialize = function(string){
 	var unserialized = new Object;
 	var hideIndicator = /^!/;
 	var categories = string.split("~");
+	var values = [];
+	this.count = 0;
 	for(var i=0; i<categories.length; i++){
 		var items = categories[i].split(/[\.,]/);
 		unserialized[items[0]] = new Array;
@@ -651,15 +641,21 @@ SOTE.widget.Bank.prototype.unserialize = function(string){
 					items[j] = items[j].replace(/!/g, "");  	
 			    	this.hidden[items[j]] = 1;
 			    }
-			    else {
-			    	delete this.hidden[items[j]];
-			    }
-			    unserialized[items[0]].push({"value":items[j]});
 
+			    unserialized[items[0]].push({"value":items[j]});
+			    values.push(items[j]);
+				this.count++;
 			}
 		}
 		
 	}
+	
+	for(var key in this.hidden){
+		if( values.indexOf(key) < 0 ){
+			delete this.hidden[key];
+		}
+	}
+	
 	return unserialized;
 };
 
