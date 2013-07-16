@@ -4,7 +4,7 @@ Release Notes
 http://earthdata.nasa.gov/labs/worldview/
 
 -------------------------------------------------------------------------------
-Release 0.5.0 - July 8, 2013
+Release 0.5.0 - July 16, 2013
 -------------------------------------------------------------------------------
 * New Features
   - Interface redesigned to support mobile devices.
