@@ -15,7 +15,7 @@ h1, h2, h3, h4, h5, h6 { font-weight:400; }
 .yui-skin-sam .yui-panel-container .bd a {color: #48a8ff; }
 #splash_c.yui-overlay-hidden, #conclusionPanel_c.yui-overlay-hidden {display:none;}
 
-.jspVerticalBar {width:4px !important; background:transparent;}
+.jspVerticalBar {width:6px !important; background:transparent;}
 .jspTrack {
     background: #555555;
 } /* or just remove the background property*/

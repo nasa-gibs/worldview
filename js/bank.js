@@ -283,12 +283,12 @@ SOTE.widget.Bank.prototype.render = function(){
 			var api = this.jsp.data('jsp');
 			if(api) api.destroy();
 		}	
-		this.jsp = $( "." + this.id + "category" ).jScrollPane({autoReinitialise: true, verticalGutter:0});
+		this.jsp = $( "." + this.id + "category" ).jScrollPane({autoReinitialise: false, verticalGutter:0});
 	}
 	$( "." + this.id + "category li" ).disableSelection();	
 	$( "." + this.id + "category" ).bind('sortstop',{self:this},SOTE.widget.Bank.handleSort);
 
-	setTimeout(SOTE.widget.Bank.adjustCategoryHeights,1000,{self:this});
+	setTimeout(SOTE.widget.Bank.adjustCategoryHeights,1,{self:this});
 
 	//this.hideAllRadioExceptTop();
 
@@ -338,7 +338,14 @@ SOTE.widget.Bank.adjustCategoryHeights = function(args){
 	$("#" + heights[0].name).css("height",heights[0].height+"px");
 	$("#" + heights[1].name).css("height",heights[1].height+"px");
 	
-	
+	SOTE.widget.Bank.reinitializeScrollbars({self:self});
+};
+
+SOTE.widget.Bank.reinitializeScrollbars = function(o) {
+	var pane = $("." + o.self.id + "category").each(function(){
+    	var api = $(this).data('jsp');
+    	api.reinitialise();
+	});  
 };
 
 SOTE.widget.Bank.prototype.renderCanvases = function(){
@@ -447,21 +454,23 @@ SOTE.widget.Bank.toggleValue = function(e){
 	for(var i=0; i<self.categories.length; i++){
 		var formatted = self.categories[i].replace(/\s/g, "");
 		formatted = formatted.toLowerCase();
-		for(var j=0; j<self.values[formatted].length; j++){
-			if(self.values[formatted][j].value == val){
-				if(val in self.hidden){
-					delete self.hidden[val];
-					e.target.src = 'images/visible.png';
-					$("#"+e.target.id).attr("title","Hide Layer");
-				}
-				else {
-					self.hidden[val] = 1;
-					e.target.src = 'images/invisible.png';
-					$("#"+e.target.id).attr("title","Show Layer");					
-				}
-				
-				
-			}	
+		if(self.values[formatted]){
+			for(var j=0; j<self.values[formatted].length; j++){
+				if(self.values[formatted][j].value == val){
+					if(val in self.hidden){
+						delete self.hidden[val];
+						e.target.src = 'images/visible.png';
+						$("#"+e.target.id).attr("title","Hide Layer");
+					}
+					else {
+						self.hidden[val] = 1;
+						e.target.src = 'images/invisible.png';
+						$("#"+e.target.id).attr("title","Show Layer");					
+					}
+					
+					
+				}	
+			}
 		}
 	}
 	//var formattedVal = val.replace(/:/g,"colon");
@@ -493,37 +502,39 @@ SOTE.widget.Bank.radioToggleValue = function(e){
 	for(var i=0; i<self.categories.length; i++){
 		var formatted = self.categories[i].replace(/\s/g, "");
 		formatted = formatted.toLowerCase();
-		for(var j=0; j<self.values[formatted].length; j++){
-			if(self.values[formatted][j].value == val){
-				if(val in self.hidden){
-					delete self.hidden[val];
-					e.target.src = 'images/visible.png';
-					for(var k=0; k<self.values[formatted].length; k++){
-						if(self.values[formatted][k].value != val){
-							self.hidden[self.values[formatted][k].value] = 1;
-							$('#hide'+self.values[formatted][k].value).attr("src",'images/invisible.png');
-						}
-					}
-				}
-				else {
-					self.hidden[val] = 1;
-					e.target.src = 'images/invisible.png';
-					if(j+1 < self.values[formatted].length){
-						if(self.hidden[self.values[formatted][j+1].value]){
-							delete 	self.hidden[self.values[formatted][j+1].value];
-							$('#hide'+self.values[formatted][j+1].value).attr("src",'images/visible.png');
+		if(self.values[formatted]){
+			for(var j=0; j<self.values[formatted].length; j++){
+				if(self.values[formatted][j].value == val){
+					if(val in self.hidden){
+						delete self.hidden[val];
+						e.target.src = 'images/visible.png';
+						for(var k=0; k<self.values[formatted].length; k++){
+							if(self.values[formatted][k].value != val){
+								self.hidden[self.values[formatted][k].value] = 1;
+								$('#hide'+self.values[formatted][k].value).attr("src",'images/invisible.png');
+							}
 						}
 					}
 					else {
-						if(self.hidden[self.values[formatted][0].value]){
-							delete 	self.hidden[self.values[formatted][0].value];
-							$('#hide'+self.values[formatted][0].value).attr("src",'images/visible.png');
-
+						self.hidden[val] = 1;
+						e.target.src = 'images/invisible.png';
+						if(j+1 < self.values[formatted].length){
+							if(self.hidden[self.values[formatted][j+1].value]){
+								delete 	self.hidden[self.values[formatted][j+1].value];
+								$('#hide'+self.values[formatted][j+1].value).attr("src",'images/visible.png');
+							}
+						}
+						else {
+							if(self.hidden[self.values[formatted][0].value]){
+								delete 	self.hidden[self.values[formatted][0].value];
+								$('#hide'+self.values[formatted][0].value).attr("src",'images/visible.png');
+	
+							}
 						}
 					}
-				}
-				
-			}	
+					
+				}	
+			}
 		}
 	}
 	
@@ -566,9 +577,9 @@ SOTE.widget.Bank.prototype.fire = function(){
   * @returns {boolean} true or false depending on if the new value(s) validates
   *
 */
-SOTE.widget.Bank.prototype.setValue = function(valString){
+SOTE.widget.Bank.prototype.setValue = function(valString, selector){
 
-	this.values = this.unserialize(valString);
+	this.values = this.unserialize(valString, selector);
 	var valid = true;
     var self = this;
     
@@ -624,7 +635,7 @@ SOTE.widget.Bank.prototype.serialize = function(values){
 	return serialized;
 };
 
-SOTE.widget.Bank.prototype.unserialize = function(string){
+SOTE.widget.Bank.prototype.unserialize = function(string, selector){
 	var unserialized = new Object;
 	var hideIndicator = /^!/;
 	var categories = string.split("~");
@@ -640,6 +651,11 @@ SOTE.widget.Bank.prototype.unserialize = function(string){
             	if(hideIndicator.test(items[j])){
 					items[j] = items[j].replace(/!/g, "");  	
 			    	this.hidden[items[j]] = 1;
+			    }
+			    else {
+			    	if(!selector){
+			    		delete this.hidden[items[j]];
+			    	}
 			    }
 
 			    unserialized[items[0]].push({"value":items[j]});
@@ -700,7 +716,7 @@ SOTE.widget.Bank.handleUpdateSuccess = function(self,qs){
 	}
 	if(projection == self.state){
 		var vals = SOTE.util.extractFromQuery("selectorbox",qs)
-		self.setValue(vals);
+		self.setValue(vals, "selector");
 	}
 	else {
 		self.state = projection;

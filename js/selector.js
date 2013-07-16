@@ -281,13 +281,20 @@ SOTE.widget.Selector.loadCategory = function(e){
 			var api = self.jsp.data('jsp');
 			if(api) {api.destroy()};
 		}	
-		self.jsp = $( ".category" ).jScrollPane({autoReinitialise: true, verticalGutter:0});
+		self.jsp = $( ".category" ).jScrollPane({autoReinitialise: false, verticalGutter:0});
 	}
 	setTimeout(SOTE.widget.Selector.adjustCategoryHeights,1,{self:self});
 	
 	self.adjustSelected();
 	
 	
+};
+
+SOTE.widget.Selector.reinitializeScrollbars = function(o) {
+	var pane = $(".category").each(function(){
+    	var api = $(this).data('jsp');
+    	api.reinitialise();
+	});  
 };
 
 SOTE.widget.Selector.selectCat = function(e){
@@ -383,7 +390,7 @@ SOTE.widget.Selector.search = function(e){
 			var api = self.jsp.data('jsp');
 			if(api) api.destroy();
 		}	
-		self.jsp = $( ".category" ).jScrollPane({autoReinitialise: true, verticalGutter:0});
+		self.jsp = $( ".category" ).jScrollPane({autoReinitialise: false, verticalGutter:0});
 	}
 	setTimeout(SOTE.widget.Selector.adjustCategoryHeights,1,{self:self});
 
@@ -447,6 +454,7 @@ SOTE.widget.Selector.adjustCategoryHeights = function(args){
 	$("#" + heights[0].name).css("height",heights[0].height+"px");
 	$("#" + heights[1].name).css("height",heights[1].height+"px");
 	
+	SOTE.widget.Selector.reinitializeScrollbars({self:self});
 	
 };
 
