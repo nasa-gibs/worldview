@@ -344,7 +344,7 @@ SOTE.widget.Bank.adjustCategoryHeights = function(args){
 SOTE.widget.Bank.reinitializeScrollbars = function(o) {
 	var pane = $("." + o.self.id + "category").each(function(){
     	var api = $(this).data('jsp');
-    	api.reinitialise();
+    	if(api) api.reinitialise();
 	});  
 };
 
