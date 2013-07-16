@@ -293,7 +293,7 @@ SOTE.widget.Selector.loadCategory = function(e){
 SOTE.widget.Selector.reinitializeScrollbars = function(o) {
 	var pane = $(".category").each(function(){
     	var api = $(this).data('jsp');
-    	api.reinitialise();
+    	if(api) api.reinitialise();
 	});  
 };
 
