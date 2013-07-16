@@ -111,7 +111,7 @@ Worldview.namespace("Tour");
         var productText = "<div>"+
                               "<h3>Product Picker</h3>"+
                               "</br>"+
-                              "<p class='tour'>A <span class='highlight'>Base Layer</span> is an opaque background image - you can have multiple active base layers, but you can only show one at a time. An <span class='highlight'>Overlay</span> is a partially transparent layer to view on top of the background - you can view multiple overlays at once.  Use the <img style='height: 14px' src=\"images/visible.png\"/> icon to show and hide layers and the <img style='height: 14px' src=\"images/close.png\"/> icon to remove them.</p>"+
+                              "<p class='tour'>A <span class='highlight'>Base Layer</span> is an opaque background image - you can have multiple active base layers, but you can only show one at a time. An <span class='highlight'>Overlay</span> is a partially transparent layer to view on top of the background - you can view multiple overlays at once.  Use the <img style='height: 14px' src=\"images/visible.png\"/> icon to show and hide layers and the <img style='height: 14px' src=\"images/close-red-x.png\"/> icon to remove them.</p>"+
                               "<p class='tour'>On the \"Add Layers\" tab, you can use the drop down list or the search bar to find layers.</p>"+
                               "<p class='tour'> <span class='tryIt'>Try It!</span></p>"+
                               "<ul class='tour'>"+

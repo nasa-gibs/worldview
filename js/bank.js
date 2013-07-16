@@ -224,7 +224,7 @@ SOTE.widget.Bank.prototype.render = function(){
 				var item = document.createElement("li");
 				item.setAttribute("id",formattedCategoryName.toLowerCase()+"-"+myVal);
 				item.setAttribute("class",this.id+"item item");
-				item.innerHTML = "<a><img class='close bank-item-img' id='close"+myVal.replace(/:/g,"colon")+"' title='Remove Layer' src='images/close.png' /></a>";				
+				item.innerHTML = "<a><img class='close bank-item-img' id='close"+myVal.replace(/:/g,"colon")+"' title='Remove Layer' src='images/close-red-x.png' /></a>";				
 				if(this.meta !== null && this.meta[myVal]){
 					if(myVal in this.hidden){
 						item.innerHTML += "<a class='hdanchor'><img class='hide hideReg bank-item-img' title='Show Layer' id='hide"+myVal.replace(/:/g,"colon")+"' src='images/invisible.png' /></a>";	
