@@ -5,6 +5,17 @@ http://earthdata.nasa.gov/labs/worldview/
 
 
 -------------------------------------------------------------------------------
+
+MobiScroll: the date scroller on mobile
+
+http://mobiscroll.com
+
+Licensed under MIT license
+
+Copyright (c) 2013 Acid Media
+
+"The Date & Time Scroller, Select, Image & Text and Treelist Scrollers are under the MIT License and are free to use."
+
 -------------------------------------------------------------------------------
 
 Jcrop: the jQuery Image Cropping Plugin
