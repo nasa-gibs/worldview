@@ -38,11 +38,11 @@ $(function() {
                         "<br /><h3>Imagery Use</h3>"+
                         "<p>NASA supports an <a href='http://science.nasa.gov/earth-science/earth-science-data/data-information-policy/' target='_blank'>open data policy</a> and we encourage publication of imagery from Worldview;  when doing so, please cite it as \"NASA Worldview\" and also consider including a permalink (such as <a href='http://earthdata.nasa.gov/labs/worldview/?map=-126.87670898439,36.417480468755,-117.44604492189,42.771972656255&products=baselayers.MODIS_Aqua_CorrectedReflectance_TrueColor~overlays.sedac_bound&time=2012-08-23T12:00:00&switch=geographic' target='_blank'>this one</a>) to allow others to explore the imagery.</p>"+
                         "<br /><h3>Acknowledgements</h3>"+
-                        "<p>Near-real time data is courtesy of LANCE data providers: <a href='http://lance.nasa.gov/home/about/amsr-e-sips/' target='_blank'>AMSR-E SIPS</a>, <a href='http://lance.nasa.gov/home/about/ges-disc/' target='_blank'>GES DISC</a>, <a href='http://lance.nasa.gov/home/about/modaps/' target='_blank'>MODAPS</a>, <a href='http://lance.nasa.gov/home/about/omi-sips/' target='_blank'>OMI SIPS</a>, and <a href='http://earthdata.nasa.gov/data/near-real-time-data/firms' target='_blank'>FIRMS</a>.  Socioeconomic data supplied by <a href='http://sedac.ciesin.org/' target='_blank'>SEDAC</a>.  User-selectable color palettes are primarily derived from <a href='http://neo.sci.gsfc.nasa.gov/' target='_blank'>NEO</a>. The imagery ingest and serving system (GIBS) is built by NASA/JPL and operated by NASA/GSFC.  Worldview is built by the NASA/GSFC Earth Science Data Information System (<a href='http://earthdata.nasa.gov/esdis' target='_blank'>ESDIS</a>) Project and is grateful for the use of many <a href='worldview-opensourcelibs.txt' target='_blank'>open source projects</a>.</p>"+
+                        "<p>Near-real time data is courtesy of LANCE data providers: <a href='http://lance.nasa.gov/home/about/amsr-e-sips/' target='_blank'>AMSR-E SIPS</a>, <a href='http://lance.nasa.gov/home/about/ges-disc/' target='_blank'>GES DISC</a>, <a href='http://lance.nasa.gov/home/about/modaps/' target='_blank'>MODAPS</a>, <a href='http://lance.nasa.gov/home/about/omi-sips/' target='_blank'>OMI SIPS</a>, and <a href='http://earthdata.nasa.gov/data/near-real-time-data/firms' target='_blank'>FIRMS</a>.  Socioeconomic data supplied by <a href='http://sedac.ciesin.org/' target='_blank'>SEDAC</a>.  User-selectable color palettes are primarily derived from <a href='http://neo.sci.gsfc.nasa.gov/' target='_blank'>NEO</a>. The imagery ingest and serving system (GIBS) is built by NASA/JPL and operated by NASA/GSFC.  Worldview is built by the NASA/GSFC Earth Science Data Information System (<a href='http://earthdata.nasa.gov/esdis' target='_blank'>ESDIS</a>) Project and is grateful for the use of many <a href='pages/worldview-opensourcelibs.html' target='_blank'>open source projects</a>.</p>"+
                         "<br /><h3>Disclaimer</h3>"+
                         "<p>The LANCE, GIBS, and FIRMS systems are operated by the NASA/GSFC ESDIS Project. The information presented through these interfaces are provided “as is” and users bear all responsibility and liability for their use of data, and for any loss of business or profits, or for any indirect, incidental or consequential damages arising out of any use of, or inability to use, the data, even if NASA or ESDIS were previously advised of the possibility of such damages, or for any other claim by you or any other person. Please read the full disclaimer <a href='http://earthdata.nasa.gov/data/nrt-data/disclaimer' target='_blank'>here</a>.</p>"+
                         "<br /><p>"+
-                                "Version: " + Worldview.VERSION + " - " + Worldview.BUILD_TIMESTAMP + " (<a href='release_notes.txt' target='_blank'>release notes</a>)<br />"+
+                                "Version: " + Worldview.VERSION + " - " + Worldview.BUILD_TIMESTAMP + " (<a href='pages/release_notes.html' target='_blank'>release notes</a>)<br />"+
                                 "Front-End Lead/Architect: <a href='mailto:tilak.joshi@nasa.gov'>Tilak Joshi</a><br />"+ 
                                 "Responsible NASA Official:  <a href='mailto:ryan.a.boller@nasa.gov'>Ryan Boller</a><br />"+
                         "</p>"+         
@@ -70,19 +70,19 @@ $(function() {
             "<div class='about about-build'>" + Worldview.BUILD_TIMESTAMP + "</div>",
             "<br/>",
             "<div class='about'>",
-                "<a href='about.html' target='_blank'>Welcome to Worldview</a>",
+                "<a href='pages/about.html' target='_blank'>Welcome to Worldview</a>",
             "</div>",
             "<div class='about'>",
-                "<a href='about.html#imagery-use' target='_blank'>Imagery Use</a>",
+                "<a href='pages/about.html#imagery-use' target='_blank'>Imagery Use</a>",
             "</div>",
             "<div class='about'>",
-                "<a href='about.html#acknowledgements' target='_blank'>Acknowledgements</a>",
+                "<a href='pages/about.html#acknowledgements' target='_blank'>Acknowledgements</a>",
             "</div>",
             "<div class='about'>",
-                "<a href='about.html#disclaimer' target='_blank'>Disclaimer</a>",
+                "<a href='pages/about.html#disclaimer' target='_blank'>Disclaimer</a>",
             "</div>",
             "<div class='about'>",
-                "<a href='release_notes.txt' target='_blank'>Release Notes</a>",
+                "<a href='pages/release_notes.html' target='_blank'>Release Notes</a>",
             "</div>",
         ].join("\n");
         Worldview.notify(html, "&nbsp;");     
