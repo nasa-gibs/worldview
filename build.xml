@@ -166,11 +166,23 @@
 
 		<!-- Build in a separate directory. Non-minified versions need to be
 		     deleted, so do that first before copying in the minified files -->
+        <exec executable="java">
+            <arg value="-jar"/>
+            <arg value="${closure-compiler.jar.path}"/>
+            <arg value="--warning_level"/>
+            <arg value="QUIET"/>
+            <arg value="--language_in"/>
+            <arg value="ECMASCRIPT5"/>
+            <arg value="--js"/>
+            <arg value="${build.dir}/minify/worldview.js"/>
+            <arg value="--js_output_file"/>
+            <arg value="${build.dir}/minify/worldview-min.js"/>
+        </exec>
+
 		<yui-compressor warn="false" charset="UTF-8" 
 			fromdir="${build.dir}/minify" 
 			todir="${build.dir}/minify">
 			<include name="worldview.css"/>
-			<include name="worldview.js"/>
 		</yui-compressor>
 		
 		<delete>

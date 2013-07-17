@@ -35,7 +35,7 @@
         <file name="ext/joyride/jquery.joyride.js"/>
         <file name="ext/joyride/modernizr.mq.js"/>
         
-		<file name="ext/openlayers/OpenLayers.js"/>
+		<file name="ext/openlayers/OpenLayers.debug.js"/>
 		<file name="ext/jcrop/jcrop.js"/>
 		<file name="ext/jquery.dd/jquery.dd.js"/>
 
