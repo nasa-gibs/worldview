@@ -408,6 +408,9 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
     var createMap = function($div, id, projection, spec) {
         
         var config = $.extend(true, {}, spec);
+        // Zooming feature is not as fluid as advertised
+        config.zoomMethod = null;
+
         var controls = [];
         
         $("<div></div>")
