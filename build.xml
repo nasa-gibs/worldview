@@ -4,7 +4,7 @@
 	Worldview build script
 	</description>
 	
-	<property file="build.properties"/>
+	<property file="${basedir}/etc/build.properties"/>
 	<property file="${src.ant.dir}/depend.properties"/>
 		
 	<include>
@@ -86,23 +86,23 @@
         <mkdir dir="${build.dir}/config/"/>
             
         <copy todir="${build.dir}/config" includeEmptyDirs="true">
-            <fileset dir="${basedir}/dev/generate-config/config"/>
+            <fileset dir="${basedir}/etc/config/config"/>
         </copy>
             
         <exec executable="python" failonerror="true">
-            <arg value="${basedir}/dev/generate-config/act2json.py"/>
+            <arg value="${basedir}/etc/config/act2json.py"/>
             <arg value="${build.dir}/config/palettes"/>
         </exec>
         
         <exec executable="python" failonerror="true">
-             <arg value="${basedir}/dev/generate-config/vrt2json.py"/>
+             <arg value="${basedir}/etc/config/vrt2json.py"/>
              <arg value="--products-dir"/>
              <arg value="${build.dir}/config/products"/>
              <arg value="${build.dir}/config/palettes"/>
         </exec>
         
         <exec executable="python" failonerror="true">
-            <arg value="${basedir}/dev/generate-config/generate-config.py"/>
+            <arg value="${basedir}/etc/config/generate-config.py"/>
             <arg value="--config-dir"/>
             <arg value="${build.dir}/config"/>
             <arg value="--output"/>
@@ -110,7 +110,7 @@
         </exec>
         
         <exec executable="python">
-            <arg value="${basedir}/dev/generate-config/generate-config.py"/>
+            <arg value="${basedir}/etc/config/generate-config.py"/>
             <arg value="--config-dir"/>
             <arg value="${build.dir}/config"/>
             <arg value="--minify"/>
@@ -129,32 +129,8 @@
 		<delete dir="${build.dir}/minify"/>
 		<mkdir dir="${build.dir}/minify"/>
 
-		<!-- Create a copy of all web resources. 
-			 TODO: This would be easier if all files were contained under a 
-			 'src' directory -->
-		<copy todir="${build.web.dir}/css">
-			<fileset dir="css"/>
-		</copy>
-		<copy todir="${build.web.dir}/data">
-			<fileset dir="data"/>
-		</copy>
-		<copy todir="${build.web.dir}/images">
-			<fileset dir="images"/>
-		</copy>
-        <copy todir="${build.web.dir}/html">
-            <fileset dir="html"/>
-        </copy>
-		<copy todir="${build.web.dir}/js">
-			<fileset dir="js"/>
-		</copy>
 		<copy todir="${build.web.dir}">
-			<fileset dir="${basedir}">
-				<include name="index.html"/>
-                <include name="about.html"/>
-				<include name=".htaccess"/>
-				<include name="worldview-opensourcelibs.txt"/>
-				<include name="release_notes.txt"/>
-			</fileset>
+			<fileset dir="${src.dir}"/>
 		</copy>
 		
 		<replace file="${build.web.dir}/js/Worldview.js"
@@ -198,18 +174,18 @@
 		</yui-compressor>
 		
 		<delete>
-			<fileset dir="${build.web.css.dir}">
+			<fileset dir="${build.web.dir}">
+			    <include name="**/version-*"/>
 				<include name="**/*.css"/>
-			</fileset>
-			<fileset dir="${build.web.js.dir}">
-				<include name="**/*.js"/>
-				<!-- Place any JavaScript concatenation exceptions here -->
-				<exclude name="**/TileWorker.js"/>
+                <include name="**/*.js"/>
+                <!-- Place any concatenation exceptions here -->
+                <exclude name="ext/openlayers/theme/default/style.css"/>
+                <exclude name="**/TileWorker.js"/>
 			</fileset>
 		</delete>
 		
-		<move file="${build.dir}/minify/worldview-min.css" todir="${build.web.css.dir}"/>
-		<move file="${build.dir}/minify/worldview-min.js" todir="${build.web.js.dir}"/>
+		<move file="${build.dir}/minify/worldview-min.css" todir="${build.web.dir}/css"/>
+		<move file="${build.dir}/minify/worldview-min.js" todir="${build.web.dir}/js"/>
 		
 		<!-- Uncomment the references to the minified versions in 
 		     the index.html file -->
@@ -240,19 +216,22 @@
             <fileset dir="${build.web.dir}" includes="*.html"/>
         </replaceregexp>
         		
+		<!-- OpenLayers wants to automatically use a style sheet based on the
+		     script location. Copy this here to make it happy -->
+		<move todir="${build.web.dir}" file="${build.web.dir}/ext/openlayers/theme"/>
+		
 		<!-- Move the images to locations where it can be found in the minified 
 		     form since the URLs in the CSS are relative and the location of
 		     the css has changed -->
-		<mkdir dir="${build.web.css.dir}/images"/>
-		<move todir="${build.web.dir}/images">
-		  <fileset dir="${build.web.css.dir}/ext/jquery.mobile-1.0rc2/images">
-		      <include name="*"/>
+		<move todir="${build.web.dir}/css" includeEmptyDirs="false">
+		  <fileset dir="${build.web.dir}/ext">
+		      <include name="*/**"/>
+		      <exclude name="*"/>
 		  </fileset>
+		  <regexpmapper from="^[^/]*/(.*)$$" to="\1" handledirsep="true"/>
 		</move>
-		<move todir="${build.web.css.dir}/images/jquery.dd-3.3">
-          <fileset dir="${build.web.css.dir}/ext/jquery.dd-3.3/images/jquery.dd-3.3"/>
-        </move>
-        <move todir="${build.web.css.dir}" file="${build.web.css.dir}/ext/jcrop-0.9.10-p1/Jcrop.gif"/>
+		
+	
 	</target>
     
     <target name="start-test-server" depends="deps">
