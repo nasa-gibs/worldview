@@ -139,6 +139,7 @@
         <replace token="@BUILD_NONCE@"
                  value="${build.nonce}">
             <fileset dir="${build.web.dir}" includes="*.html"/>
+            <fileset dir="${build.web.dir}/pages" includes="*.html"/>
         </replace>
         		         
 		<!-- Debug version that is not minified -->
@@ -191,6 +192,7 @@
 				<include name="**/*.css"/>
                 <include name="**/*.js"/>
                 <!-- Place any concatenation exceptions here -->
+                <exclude name="css/pages.css"/>
                 <exclude name="ext/openlayers/theme/default/style.css"/>
                 <exclude name="**/TileWorker.js"/>
 			</fileset>
@@ -202,30 +204,21 @@
 		<!-- Uncomment the references to the minified versions in 
 		     the index.html file -->
 		<replaceregexp 
-			match=".!--(.*worldview-min.css.*)--."
-			replace="\1">
+			match=".*link.prod.*!--(.*)--.*"
+			replace="\1"
+			byline="true">
 		    <fileset dir="${build.web.dir}" includes="*.html"/>
+            <fileset dir="${build.web.dir}/pages" includes="*.html"/>
 	    </replaceregexp>
-	    
-		<replaceregexp 
-			match=".!--(.*worldview-min.js.*)--."
-			replace="\1">
-            <fileset dir="${build.web.dir}" includes="*.html"/>
-        </replaceregexp>
-        	
+               	
 		<!-- Remove references to the non-minified versions. Those lines 
-		     should contain the text "js.dev" or "css.dev" -->
+		     should contain the text "link.dev" -->
 		<replaceregexp 
-			match="^.*css.dev.*$"
+			match="^.*link.dev.*$"
 			replace=""
 			byline="true">
             <fileset dir="${build.web.dir}" includes="*.html"/>
-        </replaceregexp>
-		<replaceregexp 
-			match="^.*js.dev.*$"
-			replace=""
-			byline="true">
-            <fileset dir="${build.web.dir}" includes="*.html"/>
+            <fileset dir="${build.web.dir}/pages" includes="*.html"/>
         </replaceregexp>
         		
 		<!-- OpenLayers wants to automatically use a style sheet based on the
