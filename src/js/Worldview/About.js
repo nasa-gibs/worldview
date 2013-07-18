@@ -13,6 +13,11 @@
  * Namespace: Worldview.Palette
  * Visualization of science data.
  */
+
+//=============================================================================
+// NOTE: pages/about.html MUST also be updated!
+//=============================================================================
+
 Worldview.namespace("About");
 
 $(function() {
