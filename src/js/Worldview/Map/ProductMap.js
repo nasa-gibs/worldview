@@ -412,7 +412,10 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
         var config = $.extend(true, {}, spec);
         // Zooming feature is not as fluid as advertised
         config.zoomMethod = null;
-
+        // Don't let OpenLayers fetch the stylesheet -- that is included
+        // manually.
+        config.theme = null;
+        
         var controls = [];
         
         $("<div></div>")
