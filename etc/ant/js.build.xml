@@ -1,6 +1,8 @@
 <project name="js" basedir=".">
 
 	<filelist id="js.files" dir="${build.web.dir}">
+	    <file name="ext/preloadjs/preloadjs.min.js"/>
+	    
         <file name="ext/jquery/jquery.js"/>
         <file name="ext/jquery-ui/jquery-ui.min.js"/>
         <file name="ext/jquery.mobile/jquery.mobile.js"/>
@@ -63,6 +65,7 @@
 		<file name="js/Worldview/Support.js"/>
         <file name="js/Worldview/Permalink.js"/>
         <file name="js/Worldview/Scheduler.js"/>
+        <file name="js/Worldview/Preloader.js"/>
                
         <file name="js/Worldview/Palette.js"/>
         <file name="js/Worldview/Palette/ColorBar.js"/>

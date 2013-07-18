@@ -64,9 +64,8 @@ $(function() {// Initialize "static" vars
             var html = message.replace(/\n/g, "<br/>");
             Worldview.notify(html);
         });
-        	            	
-        $.getJSON("data/config", onConfigLoad)
-                .error(Worldview.ajaxError(onConfigLoadError));
+        
+        Worldview.Preloader.init(onLoad);	            	
     };
   
     var init = function(config) {  	
@@ -183,8 +182,9 @@ $(function() {// Initialize "static" vars
         } 
     };
         
-    var onConfigLoad = function(config) {
+    var onLoad = function(queue) {
         try {
+            var config = queue.getResult("config");
             if ( Worldview.isDevelopment() ) {
                 var debugPalette = Worldview.Palette.Palette({
                     id: "__DEBUG",
@@ -200,12 +200,6 @@ $(function() {// Initialize "static" vars
             Worldview.error("Unable to start Worldview", error);
         }
     };
-    
-    var onConfigLoadError = function(message) {
-        Worldview.error("Unable to load configuration from server", message);
-    };
-    
-
         
     try {
         entryPoint();	

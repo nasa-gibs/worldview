@@ -212,4 +212,7 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
 	#wvlogo { width:32px; background-position: 6px center;}
 }
 
-
+.toolbar-icon {
+    width: 40px;
+    height: 40px;
+}

@@ -60,7 +60,9 @@
 
 	<!-- JavaScript resources ============================================= -->
 	<!-- link.prod --> <!-- <script type="text/javascript" src="js/worldview-min.js?v=@BUILD_NONCE@&mobile"></script> -->
-		
+
+    <!-- link.dev --> <script type="text/javascript" src="ext/preloadjs/preloadjs.min.js"></script>
+    		
     <!-- JQuery mobile load should be after SOTE-specific JS but didn't work at first;  need to retry -->
     <!-- link.dev --> <script type="text/javascript" src="ext/jquery/jquery.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="ext/jquery-ui/jquery-ui.min.js" ></script>
@@ -123,6 +125,7 @@
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Support.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Scheduler.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Permalink.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Preloader.js"></script>
     
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Palette.js"></script>    
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Palette/ColorBar.js"></script>    
@@ -159,8 +162,7 @@
 					<li class='toolbar-icon'><div id='camera'></div></li>
 					<li class='toolbar-icon'><div id="switch"></div></li>
 					<li class='toolbar-icon'><a id='perma_link' class='toolbar-link' title='Permalink' href='javascript:Worldview.Permalink.show();'><img src='images/permalink.png' /></a></li>
-				</ul>
-				
+				</ul>			
 			</div>
 			
 			<div id="hazard"></div>
