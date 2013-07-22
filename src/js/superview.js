@@ -1,10 +1,11 @@
 SOTE.widget.Superview.prototype = new SOTE.widget.Component;
 
 /**
-  * Instantiate the superview  
+  * A series of dateSpans each with the same min/max bounds, range, and start date.  Allows
+  *    visual selection of date and data product  
   *
-  * @class A series of dateSpans each with the same min/max bounds, range, and start date.  Allows
-  *    visual selection of date and data product
+  * @module SOTE.widget
+  * @class Superview
   * @constructor
   * @this {superview}
   * @param {String} containerId is the container id of the div in which to render the object 

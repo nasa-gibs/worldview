@@ -2,8 +2,8 @@ if (typeof SOTE=="undefined") {
 
   /**
     *
-    * @namespace Takes out all SOTE components, widgets, and utilities out of the global namespace.
-    * @description Takes out all SOTE components, widgets, and utilities out of the global namespace.
+    * #namespace Takes out all SOTE components, widgets, and utilities out of the global namespace.
+    * #description Takes out all SOTE components, widgets, and utilities out of the global namespace.
     *
   */
   var SOTE = new Object();
@@ -29,10 +29,11 @@ SOTE.namespace = function()
 SOTE.namespace("widget");
 
 /**
-  * Instantiate the component  
+  * An abstract class to define common methods across all SOTE components
+  * @constructor 
   *
-  * @class An abstract class to define common methods across all SOTE components
-  * @constructor
+  * @module SOTE.widget
+  * @class Component
   * @this {component}
   * @param {String} containerId is the container id of the div in which to render the object 
   * @param {Object} [config] is a hash allowing configuration of this component

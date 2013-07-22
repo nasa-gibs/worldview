@@ -66,6 +66,7 @@
         <file name="js/Worldview/Permalink.js"/>
         <file name="js/Worldview/Scheduler.js"/>
         <file name="js/Worldview/Preloader.js"/>
+        <file name="js/Worldview/Events.js"/>
                
         <file name="js/Worldview/Palette.js"/>
         <file name="js/Worldview/Palette/ColorBar.js"/>

@@ -1,0 +1,7 @@
+{
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-yuidoc": "~0.4.0",
+    "yuidocjs": "0.3.x"
+  }
+}

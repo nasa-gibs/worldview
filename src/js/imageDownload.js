@@ -1,10 +1,11 @@
 SOTE.namespace("SOTE.widget.ImageDownload");
 
 /**
-  * Instantiate the imageDownload object
-  *
-  * @class The ImageDownload object that provides a UI to users for image download.
+  * The ImageDownload object that provides a UI to users for image download.
   *        Provides a list of available resolutions, image formats, along with calculated image dimensions and size per users' area selection.
+  *
+  * @module SOTE.widget
+  * @class ImageDownload
   * @constructor
   * @this {imageDownload}
   * @param {String} containerId is the container id of the div in which to render the object 

@@ -2,9 +2,10 @@ SOTE.namespace("SOTE.widget.RubberBand");
 
 
 /**
-  * Instantiate the rubberBand
+  * A "rubberband" tool class. Uses the JCrop library.
   *
-  * @class A "rubberband" tool class. Uses the JCrop library.
+  * @module SOTE
+  * @class RubberBand
   * @constructor
   * @this {RBand}
   * @param {String} containerId is the container id of the div in which to render the object 

@@ -1,5 +1,6 @@
 /**
- * Namespace: Worldview
+ * @module Worldview
+ * @main
  */
 (function(ns) { 
      

@@ -2,10 +2,11 @@ SOTE.namespace("SOTE.widget.DatePicker");
 
 
 /**
-  * Instantiate the dateSpan  
+  * A date selection object for a configurable period of days, containing thumnails of a sample data 
+  *     product image for each day 
   *
-  * @class A date selection object for a configurable period of days, containing thumnails of a sample data 
-  *     product image for each day
+  * @moudle SOTE.widget
+  * @class DatePicker
   * @constructor
   * @this {dateSpan}
   * @param {String} containerId is the container id of the div in which to render the object 

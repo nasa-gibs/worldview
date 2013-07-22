@@ -65,7 +65,8 @@ TestCase("Map.ProductMap", TestSuite.Tests({
             return { 
                 setDay: mockFunction(),
                 setZIndex: mockFunction(),
-                dispose: mockFunction()
+                dispose: mockFunction(),
+                setVisibility: mockFunction()
             };
         });
         patcher.apply("OpenLayers.Layer.WMTS", function() {});

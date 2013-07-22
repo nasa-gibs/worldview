@@ -3,10 +3,11 @@ SOTE.namespace("SOTE.widget.MenuPicker");
 SOTE.widget.MenuPicker.prototype = new SOTE.widget.Component;
 
 /**
-  * Instantiate the menuPicker  
+  * A selection device with similar functionality to a drop-down selection list, but built with HTML
+  *     elements for maximum styling and flexibility.  
   *
-  * @class A selection device with similar functionality to a drop-down selection list, but built with HTML
-  *     elements for maximum styling and flexibility.
+  * @module SOTE.widget
+  * @class MenuPicker
   * @constructor
   * @this {menuPicker}
   * @param {String} containerId is the container id of the div in which to render the object 

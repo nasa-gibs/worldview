@@ -3,11 +3,12 @@ SOTE.namespace("SOTE.widget.Switch");
 SOTE.widget.Switch.prototype = new SOTE.widget.Component;
 
 /**
-  * Instantiate the Switch  
-  *
-  * @class A selection device classifying radio buttons/checkboxes into categories that are displayed in Accordion form.
+  * A selection device classifying radio buttons/checkboxes into categories that are displayed in Accordion form.
   *     Radio buttons allow single selection accross categories.  Checkboxes allow multiple selections accross categories.
-  * 	Radio selections cannot span multiple categories.
+  *     Radio selections cannot span multiple categories. 
+  *
+  * @module SOTE.widget
+  * @class Switch
   * @constructor
   * @this {Switch}
   * @param {String} containerId is the container id of the div in which to render the object 
