@@ -81,6 +81,8 @@
         <file name="js/Worldview/Map/DailyProduct.js"/>
         <file name="js/Worldview/Map/GraticuleLayer.js"/>
         <file name="js/Worldview/Map/TWMSLayer.js"/>
+
+        <file name="js/Worldview/DataDownload/Model.js"/>
         
         <file name="js/Worldview/Widget/Map.js"/>
         <file name="js/Worldview/Widget/Palette.js"/>
@@ -88,6 +90,7 @@
         <file name="js/Worldview/Widget/ArcticProjectionChangeNotification.js"/>
         <file name="js/Worldview/Widget/Opacity.js"/>
         <file name="js/Worldview/Widget/EPSG.js"/>
+        <file name="js/Worldview/Widget/DataDownload.js"/>
 
         <file name="js/tour.js"/>
 		<file name="js/main.js"/>
