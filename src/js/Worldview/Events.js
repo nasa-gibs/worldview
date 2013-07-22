@@ -25,7 +25,6 @@
  *      
  *      events.fire("answerReceived", 42);
  * 
- * @module Worldview
  * @class Events
  */
 Worldview.Events = function() {
@@ -45,6 +44,9 @@ Worldview.Events = function() {
      * function.
      */
     self.on = function(event, callback) {
+        if ( !event ) {
+            throw new Error("No event type specified");
+        }
         var listeners = types[event];
         if ( !listeners ) {
             listeners = [];

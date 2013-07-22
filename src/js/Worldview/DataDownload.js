@@ -12,6 +12,5 @@
 /**
  * Browse and select available granules for download.
  * 
- * @module Worldview.DataDownload
- * @main
+ * @namespace Worldview.DataDownload
  */

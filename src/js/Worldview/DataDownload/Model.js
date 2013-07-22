@@ -14,15 +14,33 @@ Worldview.namespace("DataDownload");
 /**
  * Data download model.
  * 
- * @module Worldview.DataDownload
+ * @namespace DataDownload
  * @class Model
+ * @constructor
+ * @param config config
  */
 Worldview.DataDownload.Model = function(config) {
     
     var self = {};
     
     /**
-     * Indicates if data download mode is enabled.
+     * Fired when the data download mode is activated.
+     * 
+     * @event ACTIVATE
+     * @final
+     */
+    self.ACTIVATE = "activate";
+    
+    /**
+     * Fired when the data download mode is deactivated.
+     * 
+     * @event DEACTIVATE
+     * @final
+     */
+    self.DEACTIVATE = "deactivate";
+    
+    /**
+     * Indicates if data download mode is active.
      * 
      * @property active
      * @type boolean
@@ -31,32 +49,53 @@ Worldview.DataDownload.Model = function(config) {
      */
     self.active = false;
     
-
     /**
-     * Enables data download mode. If the mode is already enabled, this method
-     * does nothing.
+     * Handler for events fired by this class.
      * 
-     * @method enable
-     */    
-    self.enable = function() {
-        if ( !active ) {
-            console.log("Starting");
-            active = true;
-        }
-    }
+     * @property events
+     * @type Events
+     */
+    self.events = Worldview.Events();
     
     /**
-     * Disables data download mode. If the mode is not already enabled, this 
+     * Activates data download mode. If the mode is already active, this method
+     * does nothing.
+     * 
+     * @method activate
+     */    
+    self.activate = function() {
+        if ( !self.active ) {
+            self.active = true;
+            self.events.fire(self.ACTIVATE);
+        }
+    };
+    
+    /**
+     * Deactivates data download mode. If the mode is not already active, this 
      * method does nothing.
      * 
-     * @method disable
+     * @method deactivate
      */
-    self.disable = function() {
-        if ( active ) {
-            console.log("Stopping");
-            active = false;
+    self.deactivate = function() {
+        if ( self.active ) {
+            self.active = false;
+            self.events.fire(self.DEACTIVATE);
         }
-    }
+    };
+    
+    /**
+     * Toggles the current mode of data download. Deactivates if already
+     * active. Activates if already inactive.
+     * 
+     * @method toggleMode
+     */
+    self.toggleMode = function() {
+        if ( self.active ) {
+            self.deactivate();
+        } else {
+            self.activate();
+        }
+    };
     
     return self;   
 }

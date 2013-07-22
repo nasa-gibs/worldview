@@ -109,6 +109,12 @@ $(function() {// Initialize "static" vars
         var opacity = new Worldview.Widget.Opacity(config);
         var epsg = new Worldview.Widget.EPSG(config);
 
+        var dataDownloadModel = Worldview.DataDownload.Model();
+        var dataDownloadWidget = 
+                Worldview.Widget.DataDownload(dataDownloadModel, config, {
+                    selector: ".DataDownload_ModeButton"
+                });
+                 
         // Get rid of address bar on iphone/ipod
         var fixSize = function() {
             window.scrollTo(0,0);
