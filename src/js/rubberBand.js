@@ -4,7 +4,7 @@ SOTE.namespace("SOTE.widget.RubberBand");
 /**
   * A "rubberband" tool class. Uses the JCrop library.
   *
-  * @module SOTE
+  * @module SOTE.widget
   * @class RubberBand
   * @constructor
   * @this {RBand}

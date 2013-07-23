@@ -1,53 +1,79 @@
 /**
+ * Constants and utility functions.
+ * 
  * @module Worldview
- * @main
+ * @class Worldview
+ * @static
  */
 (function(ns) { 
      
     /**
-     * Constant: NAME
      * Official name of this application.
+     * 
+     * @property NAME {string}
+     * @final
+     * @static
      */
     ns.NAME = "EOSDIS Worldview";
     
     /**
-     * Constant: VERSION
      * Release version string.
+     * 
+     * @property VERSION {string}
+     * @final
+     * @static
      */   
     ns.VERSION = "0.6.0";
     
     /**
-     * Constant: BUILD_TIMESTAMP
      * Date and time Worldview was built. This value is changed during the
      * build process.
+     * 
+     * @property BUILD_TIMESTAMP {string}
+     * @final
+     * @static
      */
     ns.BUILD_TIMESTAMP = "@BUILD_TIMESTAMP@";
     
+    /**
+     * Delay, in hours, from aquisition until data is available in GIBS.
+     * 
+     * @property GIBS_HOUR_DELAY {integer}
+     * @final
+     * @static
+     */
     ns.GIBS_HOUR_DELAY = 3;
     
+    /**
+     * Determines if Worldview is being run in development mode.
+     * 
+     * @method isDevelopment
+     * @static
+     * 
+     * @return {boolean} Returns true if being run from the source directory,
+     * otherwise returns false if deployed to a web directory.
+     */
     ns.isDevelopment = function() {
         return ns.BUILD_TIMESTAMP.indexOf("BUILD_TIMESTAMP") >= 0;
     };
     
     /**
-     * Function: namespace
      * Defines a namespace under Worldview. Each argument is an object path
      * delimited by periods. For each path item, an empty object is created if 
      * one does not yet exist. For example:
      * 
-     * (begin code)
-     * Worldview.namespace("foo.bar");
-     * (end code)
+     *      Worldview.namespace("foo.bar");
      * 
      * If Worldview.foo does not exist, it wil be created with an empty object. 
      * If Worldview.foo.bar does not exist, it will be created with an empty
      * object.
      * 
-     * Parameters:
-     * (varargs) - Object path as a string, delimited by periods
+     * @method namespace
+     * @static
      * 
-     * Returns:
-     * The newly created namespace object.
+     * @param [arguments]* {String} Object path, delimited by periods
+     * 
+     * @return {Object} The newly created namespace object.
      */
     ns.namespace = function() {
         var obj;
@@ -62,14 +88,42 @@
         return obj;
     };
     
+    /**
+     * Gets the current time or the value set by overrideNow. Use this
+     * instead of the Date methods to allow debugging alternate "now" times.
+     * 
+     * @method now
+     * @static
+     * 
+     * @return {Date} The current time or the value set by overrideNow.
+     */
     ns.now = function() {
         return new Date();    
     }
     
+    /**
+     * Gets the current day or the value set by overrideNow. Use this
+     * instead of the Date methods to allow debugging alternate "now" times.
+     * 
+     * @method today
+     * @static
+     * 
+     * @return {Date} The current time, or the vlaue set by overrideNow, with 
+     * the UTC hours, minutes, and seconds fields set to zero. 
+     */
     ns.today = function() {
         return new Date().clearUTCTime();
     }
-        
+    
+    /**
+     * Overrides the times returned by now() and today().
+     * 
+     * @method overrideNow
+     * @static
+     * 
+     * @param {Date} Return this date object of now() and today() instead
+     * of the current time.
+     */    
     ns.overrideNow = function(date) {
         var overrideToday = date.clone().clearUTCTime();
         ns.now = function() {
@@ -81,16 +135,17 @@
     };
     
     /**
-     * Function: error
      * Worldview general error handler. The error is reported to the browser
      * console and, if the JavaScript library with YAHOO.widget.Panel is
      * found, opens a notification panel for the end user.
      * 
-     * Parameters:
-     * message - Error message to display to the user.
-     * cause   - Description of the error that does not need to be shown to
-     *           the user, usually the message of the exception that was 
-     *           caught.
+     * @method error
+     * @static
+     * 
+     * @param message {string} Error message to display to the user.
+     * 
+     * @param cause {exception|string} Description of the error that does not 
+     * need to be shown to the user, usually the exception that was caught.
      */
     ns.error = function(message, cause) {
         var log = Logging.getLogger();
@@ -119,13 +174,14 @@
     };
     
     /**
-     * Function: notify
      * Displays a message to the end user in a dialog box.
      * 
-     * Parameters:
-     * message - The message to display to the user.
-     * title   - Title for the dialog box (optional). If not specified, the
-     * title will be "Notice".
+     * @method notify
+     * @static
+     * 
+     * @param {string} The message to display to the user.
+     * 
+     * @param [title="Notice"] {string} Title for the dialog box. 
      */    
     ns.notify = function(message, title) {        
         if ( window.YAHOO && window.YAHOO.widget && 
@@ -148,23 +204,27 @@
     };
     
     /**
-     * Function: ask
      * Asks the end user a yes or no question in a dialog box.
      * 
-     * Parameters:
-     * spec.header       - Header text to be displayed in the dialog box. If not
-     *                     specified, "Notice" will be used.
-     * spec.message      - Message text to be displayed in the dialog box. If 
-     *                     not specified, "Are you sure?" will be used.
-     * spec.okButton     - Text to be used in the no button. If not specified, 
-     *                     "OK" will be used.
-     * spec.cancelButton - Text to be used in the yes button. If not specified,
-     *                     "Cancel" will be used.
-     * spec.onOk         - Function to execute when the OK button is pressed. 
-     *                     If not specified, the dialog box simply closes.
-     * spec.onCancel     - Function to execute when the Cancel button is 
-     *                     pressed. If not specified, the dialog box simply 
-     *                     closes. 
+     * @method ask
+     * @static
+     * 
+     * @param [spec.header="Notice"] {string} Header text to be displayed in 
+     * the dialog box. 
+     * 
+     * @param [spec.message="Are you sure?"] {string} Message text to be 
+     * displayed in the dialog box.
+     *  
+     * @param [spec.okButton="OK"] {string} Text to be used in the no button. 
+     * 
+     * @param [spec.cancelButton="Cancel"] {string} Text to be used in the yes 
+     * button.
+     * 
+     * @param [spec.onOk] {function} Function to execute when the OK button is 
+     * pressed. If not specified, the dialog box simply closes.
+     * 
+     * @parma [spec.onCancel] {function} Function to execute when the Cancel 
+     * button is pressed. If not specified, the dialog box simply closes. 
      */
     ns.ask = function(spec) {
         var dialog = new YAHOO.widget.SimpleDialog("dialog", {
@@ -214,15 +274,15 @@
     }
     
     /**
-     * Function: size
-     * Gets the number of properties in an object. This only includes 
-     * properties where hasOwnProperty returns true.
+     * Gets the number of properties in an object. 
      * 
-     * Parameters:
-     * size - Object to count the number of properties
+     * @method size
+     * @static
      * 
-     * Returns:
-     * Number of properties
+     * @param size {object} Object to count the number of properties
+     * 
+     * @return {integer} The number of properites where hasOwnPropery returns
+     * true.
      */
     ns.size = function(object) {
         var size = 0;
@@ -235,24 +295,15 @@
     };
     
     /**
-     * Function: getObjectByPath
      * Returns the object specified by a string path.
      * 
-     * Parameters:
-     * path - The path to the object as a string, delimited by periods.
+     * @method getObjectByPath
+     * @static
      * 
-     * Returns:
-     * The object
+     * @param path {string} The path to the object, delimited by periods.
      * 
-     * Throws:
-     * An exception if any object leading up to the leaf object is undefined.
-     * 
-     * Example:
-     * (begin code)
-     * > Foo.Bar.baz = "hello";
-     * > Worldview.getObjectByPath("Foo.Bar.baz");
-     * "hello"
-     * (end code)
+     * @return {object} The object or undefined. Throws an exception 
+     * if any object leading up the leaf object is undefined.
      */
     ns.getObjectByPath = function(path) {
         var nodes = path.split(".");
@@ -267,15 +318,15 @@
     };    
     
     /**
-     * Function: queryStringToObject
      * Converts a query string into an object.
      * 
-     * Parameters:
-     * queryString - The query string to convert
+     * @method queryStringToObject
+     * @static
      * 
-     * Return:
-     * An object where each property is one of the parameters found in the
-     * query string.
+     * @param queryString {string} The query string to convert
+     * 
+     * @return An object where each property is one of the parameters found in 
+     * the query string.
      */
     ns.queryStringToObject = function(queryString) {
         if ( !queryString ) {
@@ -294,15 +345,16 @@
     };
     
     /**
-     * Function: extractFromQuery
      * Extracts the value of the given key from the querystring.
      * 
-     * Parameters:
-     * key - Item to be extracted
-     * qa  - Query string to extract from
+     * @method extractFromQuery
+     * @static
      * 
-     * Returns:
-     * The value associated with the given key in the querystring
+     * @param key {string} Item to be extracted
+     * @param qs {string} Query string to extract from
+     * 
+     * @return {object} The value associated with the given key in the 
+     * querystring, or an empty string if not found.
      */
     ns.extractFromQuery = function(key, qs) {
         var regex = new RegExp("[\\?&#]*"+key+"=([^&#]*)");
@@ -314,16 +366,16 @@
     };
     
     /**
-     * Function: ajaxError
      * Wrapper for handling AJAX errors when the XHR and status code is not
      * necessary.
      * 
-     * Parameters:
-     * handler - Callback to be invoked on error that accepts one argument, 
-     * the error that was thrown.
+     * @method ajaxError
+     * @static
      * 
-     * Returns:
-     * The function wrapper.
+     * @param hanadler {function} Callback to be invoked on error that accepts 
+     * one argument, the error that was thrown.
+     * 
+     * @return {function} The function wrapper.
      */    
     ns.ajaxError = function(handler) {
         return function(jqXHR, textStatus, errorThrown) {
@@ -331,21 +383,19 @@
         };
     };
         
-    /**
-     * Function: clamp
-     * 
+    /**      
      * Ensures a value is between an minimum and a maximum.
      * 
-     * Parameters:
-     * min - Lower bound of the clamp range
-     * max - Upper bound of the clamp range
+     * @method clamp
+     * @static
      * 
-     * Returns:
-     * min if the value is below min, max if the value is above max,             
-     * othewise returns value
+     * @param min {number} Lower bound of the clamp range
+     * @param max {number} Upper bound of the clamp range
+     * @param value {number} The value to check.
      * 
-     * Throws:      
-     * If min is greater than max
+     * @return {number} min if the value is below min, max if the value is 
+     * above max, othewise returns value. Throws an exception if min is
+     * greater than max.
      */
      ns.clamp = function(min, max, value) {
         if ( min > max ) {
@@ -356,23 +406,36 @@
         return value;
     }
     
-    /**
-     * Function: clampIndex
-     * 
+    /** 
      * Clamps a value to a valid array index.
      * 
-     * Parameters:
-     * array - Clamp the index to this array
-     * index - Index value
+     * @method clampIndex
+     * @static
      * 
-     * Returns:
-     * Zero if the index is below zero, array.length - 1 if the index is greater 
-     * than the maximum array index, otherwise returns index.
+     * @param array {Array} Clamp the index to this array
+     * @param index {integer} Index value
+     * 
+     * @return {number} Zero if the index is below zero, array.length - 1 if 
+     * the index is greater than the maximum array index, otherwise returns 
+     * index.
      */
     ns.clampIndex = function(array, index) {
         return ns.clamp(0, array.length - 1, index);
     };
     
+    /**
+     * Determines if the values of an array are equal to those of another 
+     * array. This was copied from Stack Overflow.
+     * 
+     * @method arrayEquals
+     * @static
+     * 
+     * @param {Object} arr1 Array to compare
+     * @param {Object} arr2 Array to compare
+     * 
+     * @return {boolean} true if arr1 and arr2 have the same length, and all
+     * values in arr1 are equal to those in arr2, otherwise returns false.
+     */
     ns.arrayEquals = function(arr1, arr2) {
         return $(arr1).not(arr2).length == 0 && $(arr2).not(arr1).length == 0;
     };

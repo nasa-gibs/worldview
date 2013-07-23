@@ -25,6 +25,7 @@
  *      
  *      events.fire("answerReceived", 42);
  * 
+ * @module Worldview
  * @class Events
  */
 Worldview.Events = function() {

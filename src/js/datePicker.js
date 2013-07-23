@@ -4,8 +4,8 @@ SOTE.namespace("SOTE.widget.DatePicker");
 /**
   * A date selection object for a configurable period of days, containing thumnails of a sample data 
   *     product image for each day 
-  *
-  * @moudle SOTE.widget
+  * 
+  * @module SOTE.widget
   * @class DatePicker
   * @constructor
   * @this {dateSpan}

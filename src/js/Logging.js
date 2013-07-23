@@ -10,34 +10,31 @@
  */
 
 /**
- * Namespace: Logging
  * Simple logging utility. 
  * 
- * (begin code)
- * var log = Logging.getLogger()
- * log.message("This is a message");
- * (end code)
+ * Example:
+ *   
+ *      var log = Logging.getLogger()
+ *      log.message("This is a message");
  * 
- * Debug messages can be turned on or off
- * (begin code)
- * var log = Logger.getLogger()
- * log.debug("This is not printed");
+ * Debug messages can be turned on or off:
  * 
- * Logging.debug();
- * log.debug("This is printed");
+ *      var log = Logger.getLogger()
+ *      log.debug("This is not printed");
  * 
- * Logging.undebug();
- * log.debug("This is not printed");
- * (end code)
+ *      Logging.debug();
+ *      log.debug("This is printed");
  * 
- * Assign names to loggers
- * (begin code)
- * var logA = Logger.getLogger("A");
- * var logB = Logger.getLogger("B");
- * Logging.debug("B");
- * logA.debug("This is not printed");
- * logB.debug("This is printed");
- * (end code)
+ *      Logging.undebug();
+ *      log.debug("This is not printed");
+ * 
+ * Assign names to loggers:
+ * 
+ *      var logA = Logger.getLogger("A");
+ *      var logB = Logger.getLogger("B");
+ *      Logging.debug("B");
+ *      logA.debug("This is not printed");
+ *      logB.debug("This is printed");
  * 
  * There is no hierarchy of loggers as in log4j. Turning on debug logging
  * for a given name only enables loggers that exactly match that name.
@@ -45,6 +42,10 @@
  * This delgates to the corresponding console methods if available, otherwise
  * it delgates to console.log. If console is not defined, nothing is
  * printed out.
+ * 
+ * @module Logging
+ * @class Logging
+ * @static
  */
 (function(ns) {
     
@@ -52,16 +53,16 @@
     var debugAll = false;
     
     /**
-     * Function: getLogger
      * Gets the logger with the specified name. If a logger with that name
      * does not exist, one is created.
      * 
-     * Parameters:
-     * name - Name of the logger to get. If not specified, the unnamed logger
-     * is returned. 
+     * @method getLogger
+     * @static
      * 
-     * Returns:
-     * The <Logger> for the given name.
+     * @param name {String} Name of the logger to get. If not specified, the 
+     * unnamed loggeris returned. 
+     * 
+     * @return {Logger} The Logger for the given name.
      */
     ns.getLogger = function(name) {
         var logger = null;
@@ -79,13 +80,14 @@
     }
     
     /**
-     * Function: debug
      * Turns on logging of debug messages.
      * 
-     * Parameters:
-     * name - If specified, this enables debug logging for the <Logges> 
-     * with the given name. If not specified, this enables debug logging
-     * for all <Loggers>.
+     * @method debug
+     * @static
+     * 
+     * @param name {String} If specified, this enables debug logging for the 
+     * Logger with the given name. If not specified, this enables debug 
+     * logging for all Loggers.
      */
     ns.debug = function(name) {
         if ( name ) {
@@ -99,13 +101,14 @@
     };
     
     /**
-     * Function: undebug
      * Turns off logging of debug messages.
      * 
-     * Parameters:
-     * namespace - If specified, this disables logging for the <Logger>
+     * @method undebug
+     * @static
+     * 
+     * @param name {string} If specified, this disables logging for the Logger
      * with the given name. If not specified, this disables debug logging
-     * for all <Loggers>.
+     * for all Loggers.
      */
     ns.undebug = function(name) {
         if ( name ) {
@@ -126,8 +129,10 @@
     }
     
     /**
-     * Class: Logging.Logger
      * Logging methods.
+     * 
+     * @class Logger
+     * @for Logging
      */    
      var Logger = function() {
 
@@ -135,79 +140,86 @@
         var debugEnabled = false;
         
         /**
-         * Method: message
          * Prints an error message to the console. Uses console.log or does
          * nothing if console does not exist.
          * 
-         * Parameters:
-         * message - The message to print to the console.
+         * @method message
+         * @for Logger
+         * 
+         * @param [message]* {object} The message to print to the console.
          */
         self.message = ( !window.console || !window.console.log ) 
                 ? function() {} : console.log.bind(console);
         
         /**
-         * Method: error
          * Prints an error message to the console. Uses console.error if
          * it exists, otherwise uses console.log. Does nothing if console
          * does not exist.
          * 
-         * Parameters:
-         * message - The message to print to the console.
+         * @method error
+         * @for Logger
+         * 
+         * @param [message]* {object} The message to print to the console.
          */
         self.error = ( !window.console || !window.console.error ) 
                 ? self.message: console.error.bind(console);
 
         /**
-         * Method: warn
          * Prints an warning message to the console. Uses console.warn if
          * it exists, otherwise uses console.log. Does nothing if console
          * does not exist.
          * 
-         * Parameters:
-         * message - The message to print to the console.
+         * @method warn
+         * @for Logger
+         * 
+         * @param [message]* {object} The message to print to the console.
          */
         self.warn = ( !window.console || !window.console.warn ) 
                 ? self.message : console.warn.bind(console);
         
         /**
-         * Method: info
          * Prints an information message to the console. Uses console.info if
          * it exists, otherwise uses console.log. Does nothing if console
          * does not exist.
          * 
-         * Parameters:
-         * message - The message to print to the console.
+         * @method info
+         * @for Logger
+         * 
+         * @param [message]* {object} The message to print to the console.
          */
         self.info = ( !window.console || !window.console.info ) 
                 ? self.message : console.info.bind(console);
         
         /**
-         * Method: trace
          * Prints a stack trace to the console. If console.trace does not
          * exist, this method does nothing.
+         * 
+         * @method trace
+         * @for Logger
          */
         self.trace = ( !window.console || !window.console.trace )
                 ? function() {} : console.trace;
         
         /**
-         * Method: debug
          * Prints a debug message to the console if debugging is enabled.
          * Debugging can be enabled by calling Logging.debug with the name
          * of this logger, by calling Logging.debug with no parameters, 
          * or by calling setDebugEnabled on this logger. If the console object 
          * does not exist, this method does nothing.
          * 
-         * Parameters:
-         * message - The message to print to the console.
+         * @method debug
+         * @for Logger
+         *
+         * @param [message]* {object} The message to print to the console.
          */
         self.debug = function() {};
         
         /**
-         * Method: setDebugEnabled
          * Enables or disables logging of debug messages.
          * 
-         * Parameters:
-         * enabled - if true, enables debug messages.
+         * @method setDebugEnabled
+         * 
+         * @param enabled {boolean} If true, enables debug messages.
          */
         self.setDebugEnabled = function(enabled) {
             if ( enabled ) {
@@ -219,11 +231,12 @@
         };
         
         /**
-         * Method: isDebugEnabled
+         * Indicates if logging messages are enabled.
          * 
-         * Returns:
-         * true if debug messages will be printed to the console, otherwise
-         * returns false.
+         * @method isDebugEnabled
+         * 
+         * @return {boolean} True if debug messages will be printed to the 
+         * console, otherwise returns false.
          */
         self.isDebugEnabled = function() {
             return debugEnabled;

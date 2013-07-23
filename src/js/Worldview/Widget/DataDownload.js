@@ -17,9 +17,12 @@ Worldview.namespace("Widget");
  * @module Worldview.Widget
  * @class DataDownload
  * @constructor
+ * 
  * @param model {Worldview.DataDownload.Model} model for which this widget
  * will be a view for.
+ * 
  * @param config Worldview config
+ * 
  * @param spec.selector {string} jQuery selector for where the mode activation
  * button should be rendered.
  */

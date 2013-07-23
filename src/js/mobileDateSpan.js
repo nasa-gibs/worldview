@@ -4,7 +4,7 @@ SOTE.namespace("SOTE.widget.MobileMobileDateSpan");
 /**
   * A date selection object for a configurable period of days, containing thumnails of a sample data 
   *     product image for each day  
-  *
+  * 
   * @module SOTE.widget
   * @class MobileDateSpan
   * @constructor

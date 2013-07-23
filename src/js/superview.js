@@ -3,7 +3,7 @@ SOTE.widget.Superview.prototype = new SOTE.widget.Component;
 /**
   * A series of dateSpans each with the same min/max bounds, range, and start date.  Allows
   *    visual selection of date and data product  
-  *
+  * 
   * @module SOTE.widget
   * @class Superview
   * @constructor

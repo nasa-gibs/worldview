@@ -6,7 +6,7 @@ SOTE.widget.Products.prototype = new SOTE.widget.Component;
   * A selection device classifying radio buttons/checkboxes into categories that are displayed in Accordion form.
   *     Radio buttons allow single selection accross categories.  Checkboxes allow multiple selections accross categories.
   *     Radio selections cannot span multiple categories.  
-  *
+  * 
   * @module SOTE.widget
   * @class Products
   * @constructor

@@ -10,7 +10,8 @@
  */
 
 /**
- * Browse and select available granules for download.
+ * Browsing and selecting data granules for download.
  * 
- * @namespace Worldview.DataDownload
+ * @module Worldview.DataDownload
+ * @main Worldview.DataDownload 
  */

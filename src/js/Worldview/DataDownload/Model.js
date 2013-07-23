@@ -14,7 +14,7 @@ Worldview.namespace("DataDownload");
 /**
  * Data download model.
  * 
- * @namespace DataDownload
+ * @module Worldview.DataDownload
  * @class Model
  * @constructor
  * @param config config
@@ -42,8 +42,7 @@ Worldview.DataDownload.Model = function(config) {
     /**
      * Indicates if data download mode is active.
      * 
-     * @property active
-     * @type boolean
+     * @attribute active {boolean}
      * @default false
      * @readOnly
      */
@@ -52,7 +51,8 @@ Worldview.DataDownload.Model = function(config) {
     /**
      * Handler for events fired by this class.
      * 
-     * @property events
+     * @attribute events {Events}
+     * @readOnly
      * @type Events
      */
     self.events = Worldview.Events();

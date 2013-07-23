@@ -10,8 +10,9 @@
  */
 
 /**
- * Namespace: Date
  * Date handling utilities.
+ *
+ * @class Date
  */
 (function() {
     
@@ -21,19 +22,17 @@
     };
     
     /**
-     * Function: parseISOString
-     * Parses a UTC ISO 8601 date. 
+     * Parses a UTC ISO 8601 date.
      * 
-     * Parameters:
-     * dateAsString - The string must be in the form of yyyy-MM-ddThh:mm:ssZ. 
-     * Only the year, month, and day are required and the remaining string can 
-     * be shortened. The Z to denote UTC is optional.
+     * @method parseISOString
+     * @static
+     * 
+     * @param dateAsString {string} The string must be in the form of 
+     * yyyy-MM-ddThh:mm:ssZ. Only the year, month, and day are required and the 
+     * remaining string can be shortened. The Z to denote UTC is optional.
      *
-     * Returns:
-     * A Date object.
-     * 
-     * Throws:
-     * An exception if the string is invalid.
+     * @return {Date} converted string as a date object, throws an exception if 
+     * the string is invalid
      */
     Date.parseISOString = function(dateAsString) {
         var dateTimeArr = dateAsString.split(/T/);
@@ -62,25 +61,22 @@
         }
         return date;
     };
-    
+        
     /**
-     * Class: Date
-     */
-    
-    /**
-     * Function: compareTo
      * Compares this instance to a Date object and return an number indication 
      * of their relative values.
      * 
      * This method copied from datejs:
      * http://code.google.com/p/datejs/
      *   
-     * Parameters:
-     * date - Date object to compare [Required]
+     * @method compareTo
      * 
-     * Returns:
-     * 1 = this is greaterthan date. -1 = this is lessthan date. 
-     * 0 = values are equal
+     * @param date {Date} Date object to compare.
+     * 
+     * @returns {integer}
+     * * 1 = this is greaterthan date. 
+     * * -1 = this is lessthan date. 
+     * * 0 = values are equal
      */
     Date.prototype.compareTo = function(date) {
         if (isNaN(this)) { 
@@ -94,11 +90,10 @@
     };
     
     /**
-     * Function: clearUTCTime
      * Sets UTC hours, minutes, seconds, and milliseconds to zero.
      * 
-     * Returns:
-     * The date object.
+     * @method clearUTCTime
+     * @return {Date} same instance of this object.
      */
     Date.prototype.clearUTCTime = function() {
         this.setUTCHours(0);
@@ -109,44 +104,29 @@
     };
     
     /**
-     * Function: clone
      * Creates a copy of this date object.
      * 
-     * Returns:
-     * New instance of the object.
+     * @metohd clone
+     * @return {Date} new instance of this object.
      */
     Date.prototype.clone = function() {
         return new Date(this.getTime());
     };
     
     /**
-     * Function: toISOString
      * Converts to an ISO 8601 formatted string in UTC. 
      * 
      * This function provided by OpenLayers.
      * 
-     * Example;
-     * (begin code)
-     * > new Date().toISOString()
-     * "2013-03-29T14:33:38.692Z"
-     * (end code)
-     * 
-     * Returns:
-     * String in the form of yyyy-MM-ddThh:mm:ss.sssZ.
+     * @method toISOString
+     * @return {String} In the form of yyyy-MM-ddThh:mm:ss.sssZ.
      */
     
     /**
-     * Function: toISOStringDate
      * Converts to an ISO 8601 formatted string in UTC without the time values.
      * 
-     * Example:
-     * (begin code)
-     * > new Date().toISOStringDate()
-     * "2013-03-29"
-     * (end code)
-     * 
-     * Returns:
-     * String in the form of yyyy-MM-dd.
+     * @method toISOStringDate
+     * @return {String} In the form of yyyy-MM-dd.
      */
     Date.prototype.toISOStringDate = function() {
         return this.toISOString().split("T")[0];
