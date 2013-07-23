@@ -10,6 +10,10 @@
  */
 
 /**
+ * @module Date
+ */
+
+/**
  * Date handling utilities.
  *
  * @class Date

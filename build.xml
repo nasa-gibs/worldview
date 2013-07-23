@@ -140,6 +140,7 @@
                  value="${build.nonce}">
             <fileset dir="${build.web.dir}" includes="*.html"/>
             <fileset dir="${build.web.dir}/pages" includes="*.html"/>
+            <fileset dir="${build.web.dir}/js" includes="**/*.js"/>
         </replace>
         		         
 		<!-- Debug version that is not minified -->

@@ -10,6 +10,10 @@
  */
 
 /**
+ * @module Worldview
+ */
+
+/**
  * General event pump.
  * 
  * * Register listeners with on
@@ -25,7 +29,6 @@
  *      
  *      events.fire("answerReceived", 42);
  * 
- * @module Worldview
  * @class Events
  */
 Worldview.Events = function() {

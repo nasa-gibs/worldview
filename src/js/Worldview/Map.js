@@ -10,26 +10,36 @@
  */
  
 /**
- * Namespace: Worldview.Map
- * Worldview specific code when using OpenLayers.
+ * @module Worldview
  */
 Worldview.namespace("Map");
+
+/**
+ * Utilities for OpenLayers
+ * 
+ * @class Map
+ * @static
+ */
 
 $(function(ns) {
     
     var logPosition = Logging.getLogger("Worldview.Map.Position");
     
+    // Used to reference the TileWorker
+    var BUILD_NONCE = "@BUILD_NONCE@";
+    
     /**
-     * Constant: COORDINATE_CONTROLS
-     * An object that contains OpenLayers.Contorl.MousePosition objects
+     * An object that contains OpenLayers.Control.MousePosition objects
      * that update the current latitude/longitude values on the map as the
      * mouse moves. Keyed by projection name, either "geographic", "arctic",
      * or "antarctic".
      * 
      * Example:
-     * (begin code)
-     * var contorl = Worldview.Map.COORDINATE_CONTROLS["geographic"];
-     * (end code)
+     *      
+     *      var control = Worldview.Map.COORDINATE_CONTROLS["geographic"];
+     * 
+     * @attribute COORDINATE_CONTROLS
+     * @final
      */
     ns.COORDINATE_CONTROLS = {
         "geographic": new OpenLayers.Control.MousePosition({
@@ -68,14 +78,15 @@ $(function(ns) {
     };
     
     /**
-     * Function: isExtentValid
      * Determines if an exent object contains valid values.
      * 
-     * Parameters:
-     * extent - An OpenLayers.Bound ojbect
+     * @method isExtentValid
+     * @static 
      * 
-     * Returns:
-     * False if any of the values is NaN, otherwise returns true.
+     * @param extent {OpenLayers.Bound} The extent to check.
+     * 
+     * @return {boolean} False if any of the values is NaN, otherwise returns 
+     * true.
      */
     ns.isExtentValid = function(extent) {
         if ( extent === undefined ) {
@@ -91,10 +102,16 @@ $(function(ns) {
     };
     
     /**
-     * Property: tileScheduler
-     * Scheduler used to render canvas tiles. Must be initialized on startup.
+     * Scheduler used to render canvas tiles.
+     * 
+     * @attribute tileScheduler {Scheduler}
+     * @static
+     * @readOnly
      */
-    ns.tileScheduler = null;
+    ns.tileScheduler = Worldview.Scheduler({
+        script: "js/Worldview/Map/TileWorker.js?v=" + BUILD_NONCE, 
+        max: 4
+    });
 
     /**
      * Function: setOpacity

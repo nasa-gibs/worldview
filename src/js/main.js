@@ -89,11 +89,6 @@ $(function() {// Initialize "static" vars
         
         checkMobile();
         //console.log("init");
-        Worldview.Map.tileScheduler = Worldview.Scheduler({
-            script: "js/Worldview/Map/TileWorker.js?v=" + 
-                    Worldview.BUILD_TIMESTAMP, 
-            max: 4
-        });
         
         //$('#products').tabs();
              	            	    	            	    	            	    	    	    	            	    	    
