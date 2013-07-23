@@ -104,11 +104,11 @@ $(function(ns) {
     /**
      * Scheduler used to render canvas tiles.
      * 
-     * @attribute tileScheduler {Scheduler}
+     * @attribute TILE_SCHEDULER {Scheduler}
      * @static
      * @readOnly
      */
-    ns.tileScheduler = Worldview.Scheduler({
+    ns.TILE_SCHEDULER = Worldview.Scheduler({
         script: "js/Worldview/Map/TileWorker.js?v=" + BUILD_NONCE, 
         max: 4
     });
