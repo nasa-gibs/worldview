@@ -15,7 +15,7 @@
 Worldview.namespace("Map");
 
 /**
- * Utilities for OpenLayers
+ * Utilities for OpenLayers.
  * 
  * @class Map
  * @static
@@ -114,14 +114,15 @@ $(function(ns) {
     });
 
     /**
-     * Function: setOpacity
      * Sets the opacity of a layer. Since the backbuffer can interfere with
      * tile layers that have transparency, the transition effect is set to 
      * none if the opacity is not equal to one.
      * 
-     * Parameters:
-     * layer - An OpenLayers.Layer object to set the opacity
-     * opacity - A value from 0 (transparent) to 1 (opaque).
+     * @method setOpacity
+     * @static
+     * 
+     * @param layer {OpenLayers.Layer} The layer to set the opacity
+     * @param opacity {float} A value from 0 (transparent) to 1 (opaque).
      */
     ns.setOpacity = function(layer, opacity) { 
         layer.setOpacity(opacity);
@@ -134,6 +135,22 @@ $(function(ns) {
         }           
     }
     
+    /**
+     * Sets the visiblity of a layer. If the layer is supposed to be not 
+     * visible, this actually sets the opacity to zero. This allows the 
+     * quick transition effects between days.
+     * 
+     * @method setVisibility
+     * @static
+     * 
+     * @param layer {OpenLayers.Layer} The layer to set the visiblity.
+     * 
+     * @param visible {boolean} True if the layer should be visible, otherwise
+     * false.
+     * 
+     * @param opacity {float} The opacity that this layer should be if it
+     * is visible. A value from 0 (transparent) to 1 (opaque).
+     */
     ns.setVisibility = function(layer, visible, opacity) {
         var actualOpacity = ( visible ) ? opacity : 0;
         layer.div.style.opacity = actualOpacity;    
