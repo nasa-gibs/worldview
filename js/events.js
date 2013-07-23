@@ -227,11 +227,11 @@ SOTE.widget.Events.prototype.render = function() {
 		
 		item.detailHTML = "<table>" + 
 		                       "<tr>" + 
-		                           "<td rowspan='2'> <img class='thumb' width='32px' height='32px' src='" + this.meta[i].image +"'/></td>"+
-		                           "<td style='padding-left:5px'><h4>" + this.meta[i].title +"</h4></td>"+
+		                           "<td rowspan='2'> <img class='thumb' width='45px' height='45px' src='" + this.meta[i].image +"'/></td>"+
+		                           "<td><h4>" + this.meta[i].title +"</h4></td>"+
 		                       "</tr>"+
 		                       "<tr>" +
-		                           "<td style='padding-left:5px'><p>" + this.meta[i].date +"</p></td>"+
+		                           "<td><p>" + this.meta[i].date +"</p></td>"+
 		                       "</tr>"+
 		                       "<tr>" +
 		                           "<td colspan='2' style='padding-left:5px'></br><p>" + this.meta[i].description +"</p></td>"+
