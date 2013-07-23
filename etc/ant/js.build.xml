@@ -1,0 +1,100 @@
+<project name="js" basedir=".">
+
+	<filelist id="js.files" dir="${build.web.dir}">
+	    <file name="ext/preloadjs/preloadjs.min.js"/>
+	    
+        <file name="ext/jquery/jquery.js"/>
+        <file name="ext/jquery-ui/jquery-ui.min.js"/>
+        <file name="ext/jquery.mobile/jquery.mobile.js"/>
+
+        <file name="ext/jscrollpane/jquery.mousewheel.js"/>
+        <file name="ext/jscrollpane/mwheelIntent.js"/>
+        <file name="ext/jscrollpane/jquery.jscrollpane.min.js"/>
+
+        <file name="ext/mobiscroll/mobiscroll.core.js"/>
+        <file name="ext/mobiscroll/mobiscroll.datetime.js"/>
+        <file name="ext/mobiscroll/mobiscroll.select.js"/>
+
+        <file name="ext/mobiscroll/mobiscroll.jqm.js"/>
+        <file name="ext/mobiscroll/mobiscroll.ios.js"/>
+        <file name="ext/mobiscroll/mobiscroll.android.js"/>
+        <file name="ext/mobiscroll/mobiscroll.android-ics.js"/>
+        <file name="ext/mobiscroll/mobiscroll.wp.js"/>
+        
+		<file name="ext/yui/yahoo/yahoo.js"/>
+        <file name="ext/yui/event/event.js"/>
+        <file name="ext/yui/dom/dom.js"/>
+        <file name="ext/yui/dragdrop/dragdrop.js"/>
+        <file name="ext/yui/yahoo-dom-event/yahoo-dom-event.js"/>
+        <file name="ext/yui/animation/animation.js"/>
+        <file name="ext/yui/connection/connection.js"/>
+        <file name="ext/yui/element/element.js"/>
+        <file name="ext/yui/button/button.js"/>
+        <file name="ext/yui/container/container.js"/>
+        <file name="ext/yui/storage/storage.js"/>
+
+        <file name="ext/joyride/jquery.cookie.js"/>
+        <file name="ext/joyride/jquery.joyride.js"/>
+        <file name="ext/joyride/modernizr.mq.js"/>
+        
+		<file name="ext/openlayers/OpenLayers.debug.js"/>
+		<file name="ext/jcrop/jcrop.js"/>
+		<file name="ext/jquery.dd/jquery.dd.js"/>
+
+		<file name="js/component.js"/>
+		<file name="js/registry.js"/>
+		<file name="js/util.js"/>
+		<file name="js/dateSpan.js"/>
+        <file name="js/mobileDateSpan.js"/>
+        <file name="js/datePicker.js"/>
+		<file name="js/rubberBand.js"/>
+		<file name="js/imageDownload.js"/>
+		<file name="js/menuPicker.js"/>
+		<file name="js/accordionPicker.js"/>
+		<file name="js/bank.js"/>
+		<file name="js/switch.js"/>
+		<file name="js/selector.js"/>
+        <file name="js/products.js"/>
+		<file name="js/sote.js"/>
+	    	
+		<file name="js/Logging.js"/>
+		<file name="js/Date.js"/>
+		<file name="js/Worldview.js"/>
+        <file name="js/Worldview/About.js"/>
+        <file name="js/Worldview/Support.js"/>
+		<file name="js/Worldview/Support.js"/>
+        <file name="js/Worldview/Permalink.js"/>
+        <file name="js/Worldview/Scheduler.js"/>
+        <file name="js/Worldview/Preloader.js"/>
+        <file name="js/Worldview/Events.js"/>
+        <file name="js/Worldview/Indicator.js"/>
+               
+        <file name="js/Worldview/Palette.js"/>
+        <file name="js/Worldview/Palette/ColorBar.js"/>
+        <file name="js/Worldview/Palette/Palette.js"/>
+        <file name="js/Worldview/Palette/PaletteSelector.js"/>
+        
+		<file name="js/Worldview/Map.js"/>
+        <file name="js/Worldview/Map/CanvasTile.js"/>
+		<file name="js/Worldview/Map/ProductMap.js"/>
+        <file name="js/Worldview/Map/Product.js"/>
+        <file name="js/Worldview/Map/StaticProduct.js"/>
+        <file name="js/Worldview/Map/DailyProduct.js"/>
+        <file name="js/Worldview/Map/GraticuleLayer.js"/>
+        <file name="js/Worldview/Map/TWMSLayer.js"/>
+
+        <file name="js/Worldview/DataDownload/Model.js"/>
+        
+        <file name="js/Worldview/Widget/Map.js"/>
+        <file name="js/Worldview/Widget/Palette.js"/>
+        <file name="js/Worldview/Widget/WorldviewMap.js"/>
+        <file name="js/Worldview/Widget/ArcticProjectionChangeNotification.js"/>
+        <file name="js/Worldview/Widget/Opacity.js"/>
+        <file name="js/Worldview/Widget/EPSG.js"/>
+        <file name="js/Worldview/Widget/DataDownload.js"/>
+
+        <file name="js/tour.js"/>
+		<file name="js/main.js"/>
+	</filelist>
+	
+</project>

@@ -1,0 +1,70 @@
+body {
+    margin: 0px;
+    background-color: #000000;
+    color: #FFFBE7;
+}
+
+#banner {
+    margin: 0px;
+    background: url("../images/toolbarbg.png") repeat scroll 0 0 transparent;
+    display: block;
+    height: 47px;
+    width: 100%;
+}
+
+#banner .logo {
+    margin-top: 11px;
+    margin-left: 5px;
+}
+
+#page {
+    background-color: rgba(38, 43, 49, 0.65);
+    margin: 10px auto;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 5px;
+    max-width: 600px;
+    font: 100 12.8px/16px "helvetica",sans-serif;
+}
+
+.title {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    margin-top: 0px;
+}
+
+a:link {
+    color: #82cdfa;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+a:visited {
+    color: #82cdfa;
+    text-decoration: none;
+}
+
+hr {
+    display: block; 
+    height: 1px;
+    border: 0; 
+    border-top: 1px solid #404040;
+    margin: 1em 0; 
+    padding: 0;
+}
+
+h1 {  
+    font-size: 18px;
+}
+
+h2 {
+    font-size: 15px;
+}

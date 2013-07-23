@@ -1,11 +1,17 @@
 /build
 /dist
 /lib
+/tools
 /doc/NaturalDocs/Data
 /doc/NaturalDocs/LastCrash.txt
 /doc/NaturalDocs/Menu_Backup.txt
+/doc/NaturalDocs/Menu.txt
+/node_modules
+/doc/yuidoc
 
 # Ignore the Eclipse files for now
 /.project
 /.settings
 /.pydevproject
+wv.tar
+wv.tar
