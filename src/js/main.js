@@ -65,7 +65,24 @@ $(function() {// Initialize "static" vars
             Worldview.notify(html);
         });
         
-        Worldview.Preloader.init(onLoad);	            	
+        Worldview.Preloader([
+            { id: "config", src: "data/config", type:"json" },
+            "images/logo.png",
+            "images/permalink.png",
+            "images/geographic.png",
+            "images/arctic.png",
+            "images/antarctic.png",
+            "images/camera.png",
+            "images/cameraon.png",
+            "images/information.png",
+            "images/expandIn.png",
+            "images/expandOut.png",
+            "images/visible.png",
+            "images/invisible.png",
+            "images/close-red-x.png",
+            "images/collapseDown.png",
+            "images/expandUp.png"       
+        ]).execute(onLoad);
     };
   
     var init = function(config) {  	
@@ -112,7 +129,7 @@ $(function() {// Initialize "static" vars
         var dataDownloadModel = Worldview.DataDownload.Model();
         var dataDownloadWidget = 
                 Worldview.Widget.DataDownload(dataDownloadModel, config, {
-                    selector: ".DataDownload_ModeButton"
+                    selector: ".dataDownload-modeButton"
                 });
                  
         // Get rid of address bar on iphone/ipod

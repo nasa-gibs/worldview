@@ -33,6 +33,10 @@ Worldview.Widget.DataDownload = function(model, config, spec) {
     var HTML_WIDGET_INACTIVE = "<img src='images/camera.png'></img>";
     var HTML_WIDGET_ACTIVE = "<img src='images/cameraon.png'></img>";
     
+    var preloader = Worldview.Preloader([
+        "images/activity.gif"    
+    ]);
+    
     var init = function() {        
         model.events.on("activate", onActivate);
         model.events.on("deactivate", onDeactivate);
@@ -45,15 +49,19 @@ Worldview.Widget.DataDownload = function(model, config, spec) {
     }    
     
     var onActivate = function() {
-        $(spec.selector).html(HTML_WIDGET_ACTIVE);       
+        $(spec.selector).html(HTML_WIDGET_ACTIVE);
+        preloader.execute(function() {
+            Worldview.Indicator.searching();
+        });       
     };
     
     var onDeactivate = function() {
         $(spec.selector).html(HTML_WIDGET_INACTIVE);
-    }
+        Worldview.Indicator.hide();
+    };
     
     init();
     return self;
     
 };
- 
+
