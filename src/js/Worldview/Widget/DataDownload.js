@@ -34,7 +34,8 @@ Worldview.Widget.DataDownload = function(model, config, spec) {
     var HTML_WIDGET_ACTIVE = "<img src='images/cameraon.png'></img>";
     
     var preloader = Worldview.Preloader([
-        "images/activity.gif"    
+        "images/activity.gif",
+        "images/cameraon.png"    
     ]);
     
     var init = function() {        
