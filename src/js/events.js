@@ -42,140 +42,56 @@ SOTE.widget.Events = function(containerId, config){
 	this.initRenderComplete = false;
 	this.statusStr = "";
 	this.init();
-}
+} 
 
+/**
+ * Get the JSON events data 
+ */
 SOTE.widget.Events.prototype.buildMeta = function() {
-	//console.log("events: buildMeta");
 	this.buildMetaDone = false;
-	// TODO: get JSON
-	SOTE.widget.Events.handleMetaSuccess(this);
+	var metaData;
+	self = this;
+
+	$.getJSON("data/events_data.json", function(data) {
+		metaData = data;
+	}).success(function(){
+		SOTE.widget.Events.handleMetaSuccess(self, metaData);
+	});
 };
 
-SOTE.widget.Events.handleMetaSuccess = function(arg) {
-	//console.log("events: handleMetaSuccess");
+/**
+ * Parse the JSON data 
+ */
+SOTE.widget.Events.handleMetaSuccess = function(arg, data) {
 	var self = arg;
-	
-	// TODO: replace with actual JSON data
-	// for now, hardcode 4 entries to play with
-	var eTitle = "Tropical Cyclone Mahasen";
-	var eLink = "http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=81117&amp;src=nhrss";
-	var eCategory = "Severe Storms";
-	var eImage = "http://eoimages.gsfc.nasa.gov/images/imagerecords/81000/81117/mahasen_amo_2013133.jpg";
-	var eDescription = "Mahasen formed as a tropical storm over the northern Indian Ocean on May 10, 2013.";
-	var eTime = "2013-05-13";
-	var ePoint = "44.355 60.463";
-	var eGeoTiff = "http://eoimages.gsfc.nasa.gov/images/imagerecords/81000/81117/mahasen_amo_2013133_geo.tif";
-	var eSatellite = "Terra";
-	var eInstr = "MODIS";
-	self.meta[0] = {title:eTitle,
-					link:eLink,
-					category:eCategory,
-					image:eImage,
-					description:eDescription,
-					date:eTime,
-					point:ePoint,
-					geo:eGeoTiff,
-					sat:eSatellite,
-					instr:eInstr
-					};
-	
-	eTitle = "Dust Plumes off Argentina";
-	eLink = "http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=81120&amp;src=nhrss";
-	eCategory = "Dust, Smoke, and Haze";
-	eImage = "http://eoimages.gsfc.nasa.gov/images/imagerecords/81000/81120/argentina_amo_2013132.jpg";
-	eDescription = "Dust plumes blew out of southern Argentina and over the Atlantic Ocean in early May 2013.";
-	eTime = "2013-05-12";
-	ePoint = "55.418 -161.892";
-	eGeoTiff = "http://eoimages.gsfc.nasa.gov/images/imagerecords/81000/81120/argentina_amo_2013132_geo.tif";
-	eSatellite = "Aqua";
-	eInstr = "MODIS";
-	self.meta[1] = {title:eTitle,
-					link:eLink,
-					category:eCategory,
-					image:eImage,
-					description:eDescription,
-					date:eTime,
-					point:ePoint,
-					geo:eGeoTiff,
-					sat:eSatellite,
-					instr:eInstr
-					};
-	
-	eTitle = "Burning Fields near the Angara River";
-	eLink = "http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=81115&amp;src=nhrss";
-	eCategory = "Fires";
-	eImage = "http://eoimages.gsfc.nasa.gov/images/imagerecords/81000/81115/Russia_amo_2013130.0555.jpg";
-	eDescription = "Numerous fires were burning when the Moderate Resolution Imaging Spectroradiometer (MODIS) instrument on NASA’s Aqua satellite passed over the Irkutsk region on May 10, 2013.";
-	eTime = "2013-05-10";
-	ePoint = "55.418 -161.892";
-	eGeoTiff = "http://eoimages.gsfc.nasa.gov/images/imagerecords/81000/81115/russia_amo_2013130_fires_geo.tif";
-	eSatellite = "Aqua";
-	eInstr = "MODIS";
-	self.meta[2] = {title:eTitle,
-					link:eLink,
-					category:eCategory,
-					image:eImage,
-					description:eDescription,
-					date:eTime,
-					point:ePoint,
-					geo:eGeoTiff,
-					sat:eSatellite,
-					instr:eInstr
-					};
-	
-	eTitle = "Dust Storm on the Arabian Peninsula";
-	eLink = "http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=81092&amp;src=nhrss";
-	eCategory = "Dust, Smoke, and Haze";
-	eImage = "http://eoimages.gsfc.nasa.gov/images/imagerecords/81000/81092/sarabia_tmo_2013128.jpg";
-	eDescription = "A dust storm blew across the Arabian Peninsula in early May 2013. ";
-	eTime = "2013-05-08";
-	ePoint = "35.326 -97.482";
-	eGeoTiff = "http://eoimages.gsfc.nasa.gov/images/imagerecords/81000/81092/sarabia_tmo_2013128_geo.tif";
-	eSatellite = "Terra";
-	eInstr = "MODIS";
-	self.meta[3] = {title:eTitle,
-					link:eLink,
-					category:eCategory,
-					image:eImage,
-					description:eDescription,
-					date:eTime,
-					point:ePoint,
-					geo:eGeoTiff,
-					sat:eSatellite,
-					instr:eInstr
-					};
-	
-	eTitle = "Springs Fire, California";
-	eLink = "http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=81049&amp;src=nhrss";
-	eCategory = "Fires";
-	eImage = "http://eoimages.gsfc.nasa.gov/images/imagerecords/81000/81049/California_tmo_2013122.jpg";
-	eDescription = "Fueled by hot, dry Santa Ana winds, several wildfires started in southern California in early May 2013.";
-	eTime = "2013-05-02";
-	ePoint = "35.326 -97.482";
-	eGeoTiff = "http://eoimages.gsfc.nasa.gov/images/imagerecords/81000/81049/california_tmo_2013122_fires_geo.tif";
-	eSatellite = "Terra";
-	eInstr = "MODIS";
-	self.meta[4] = {title:eTitle,
-					link:eLink,
-					category:eCategory,
-					image:eImage,
-					description:eDescription,
-					date:eTime,
-					point:ePoint,
-					geo:eGeoTiff,
-					sat:eSatellite,
-					instr:eInstr
-					};
-					
-	self.metaLength = 5;
+	self.metaLength = data.length;
+	for(var i = 0; i < self.metaLength; i++) {
+		var item = data[i];
+		self.meta[i] = {title:item.title,
+					    link:item.link,
+					    category:item.category,
+					    image:item.thumbnail,
+					    description:item.description,
+					    date:item.date,
+					    sat:item.satellite,
+					    instr:item.instrument,
+					    north:item.north,
+					    south:item.south,
+					    east:item.east,
+					    west:item.west,
+					    keyword:item.keyword
+					   };
+	}
 	
 	self.render();
 	self.fire();
-	this.buildMetaDone = true;
+	self.buildMetaDone = true;
 };
 
+/**
+ * Initialize the Events widget 
+ */
 SOTE.widget.Events.prototype.init = function() {
-	//console.log("events: init");
 	this.buildMeta();
 	
 	if(REGISTRY) {
@@ -184,18 +100,17 @@ SOTE.widget.Events.prototype.init = function() {
 	else {
 		alert("No REGISTRY found!  Cannot register Events!");
 	}
-	
 };
 
+/**
+ * Render the Events widget 
+ */
 SOTE.widget.Events.prototype.render = function() {
 	this.container.innerHTML = "";
-	
-	//var holder = document.createElement("div");
-	//holder.setAttribute("id", "eventsHolder");
-	
+
 	var container = document.createElement("div");
 	container.setAttribute("id", "events");
-	container.setAttribute("class", "events");
+	container.setAttribute("class", "events categoryContainer");
 	
 	var titleContainer = document.createElement("div");
 	var title = document.createElement("h2");
@@ -206,8 +121,9 @@ SOTE.widget.Events.prototype.render = function() {
 	
 	var entryList = document.createElement("ul");
 	entryList.setAttribute("id", "eventList");
-	entryList.setAttribute("class", "entry");
+	entryList.setAttribute("class",this.id+"category entry category");
 	
+	// assign a basic and detail description to each element
 	for(var i = 0; i < this.metaLength; i++) {
 		var item = document.createElement("li");
 		item.setAttribute("id", "ev" + i);
@@ -244,7 +160,6 @@ SOTE.widget.Events.prototype.render = function() {
 	}
 
 	container.appendChild(entryList);
-	//holder.appendChild(container);
 	this.container.appendChild(container);
 	
 	var meta = this.meta;
@@ -257,59 +172,7 @@ SOTE.widget.Events.prototype.render = function() {
 	var opacity = this.wvOpacity;
 	var epsg = this.wvEPSG;
 	
-	$('#eventList').delegate('li', 'click', function (e) {
-		
-    	if($('#'+this.id).hasClass('sel')) {
-    		// unselect the item if something other than the link was clicked
-    		if(e.target.tagName != "A") {
-    			$('#'+this.id).removeClass('sel');
-    			this.innerHTML = this.basicHTML;
-    		}
-    	}
-    	else {
-    		// select the event
-    		var oldEl = $('.events .sel');
-    		if(oldEl[0] != null) {
-    			console.log(oldEl[0]);
-    			oldEl[0].innerHTML = oldEl[0].basicHTML;
-    			$('.events .sel').removeClass('sel');
-    		}
-    		$('#'+this.id).addClass('sel');
-    		this.innerHTML = this.detailHTML;
-    		
-    		// get event index
-    		var all = $('#eventList li');
-    		var ind = all.index(this);
-    	
-    		// generate permalink
-    		//TODO: var link = "map="+map+"&products="+products+"&time="+time+"&switch="+s;
-    		var link = "";
-    		if(meta[ind].sat === "Terra") {
-    			link = "products=baselayers,MODIS_Terra_CorrectedReflectance_TrueColor";
-    		}
-    		else if(meta[ind].sat === "Aqua") {
-    			link = "products=baselayers,MODIS_Aqua_CorrectedReflectance_TrueColor";
-    		}
-    		link += "&time="+meta[ind].date;
-   
-    		var initOrder = [
-            	ss, // projection
-            	p.b, // products
-            	map, // time
-            	m, // map
-            	palettes,
-            	apcn,
-            	opacity,
-            	epsg
-        	];
-        
-            REGISTRY.isLoadingQuery = true;
-            $.each(initOrder, function(index, component) {
-                component.loadFromQuery(link);    
-            });
-            REGISTRY.isLoadingQuery = false;
-    	}
-	});
+	$('#eventList').delegate('li', 'click', {self:this}, SOTE.widget.Events.toggleDescription);
 	
 	// set up toggler
 	var accordionToggler = document.createElement("a");
@@ -320,9 +183,14 @@ SOTE.widget.Events.prototype.render = function() {
 	$('.evaccordionToggler').bind('click',{self:this},SOTE.widget.Events.toggle);
 	
 	// set up scroll bar
-	$("#eventList").mCustomScrollbar({horizontalScroll:false, advanced:{
-        updateOnContentResize: true
-    }});
+    if($(window).width() > 720)
+	{
+		if(this.jsp){
+			var api = this.jsp.data('jsp');
+			if(api) api.destroy();
+		}	
+		this.jsp = $( "." + this.id + "category" ).jScrollPane({autoReinitialise: false, verticalGutter:0});
+	}
 	
 	// mark the component as ready in the registry if called via init()
 	if((this.initRenderComplete === false) && REGISTRY) {
@@ -331,7 +199,6 @@ SOTE.widget.Events.prototype.render = function() {
 	}
 }
 
-
 /**
   * Fires an event to the registry when the state of the component is changed
   *
@@ -339,15 +206,38 @@ SOTE.widget.Events.prototype.render = function() {
   *
 */
 SOTE.widget.Events.prototype.fire = function(){
-	//console.log("events: fire");
+	setTimeout(SOTE.widget.Events.reinitializeScrollbars,1,{self:this});
+	$("#"+this.id).trigger("fire");
+
 	if(REGISTRY){
-		REGISTRY.fire(this, null);
+		REGISTRY.fire(this,this.noFireVal);
+		this.noFireVal = null;
 	}
 	else{
 		alert("No REGISTRY found! Cannot fire to REGISTRY from Bank!");
-	}
-
+	} 
 };
+
+/**
+ * Adjusts the scrollbar when an entry is expanded or collapsed
+ */
+SOTE.widget.Events.reinitializeScrollbars = function(o) {
+	var pane = $("." + o.self.id + "category").each(function(){
+    	var api = $(this).data('jsp');
+    	if(api) api.reinitialise();
+	});  
+};
+
+SOTE.widget.Events.repositionScrollbars = function(o, target) {
+	var pane = $("." + o.id + "category").each(function(){
+    	var api = $(this).data('jsp');
+    	if(api) {
+			var p = document.getElementById(target.id);
+			api.reinitialise();
+    		api.scrollToY(p.offsetTop, false);
+    	}
+	}); 
+}
 
 /**
  * Collapses and expands the events feature 
@@ -369,6 +259,87 @@ SOTE.widget.Events.toggle = function(e,ui){
 };
 
 /**
+ * Toggles the detail description of a story 
+ */
+SOTE.widget.Events.toggleDescription = function(e) {
+	var self = e.data.self;
+	if($('#'+this.id).hasClass('sel')) {
+    	// unselect the item if something other than the link was clicked
+    	if(e.target.tagName != "A") {
+    		$('#'+this.id).removeClass('sel');
+    		this.innerHTML = this.basicHTML;
+    	}
+    }
+    else {
+    	var meta = self.meta;
+		var m = self.mapWidget;
+		var palettes = self.paletteWidget;
+		var ss = self.switchWidget;
+		var p = self.bankWidget;
+		var map = self.dateWidget;
+		var apcn = self.apcmWidget;
+		var opacity = self.wvOpacity;
+		var epsg = self.wvEPSG;
+	
+    	// select the event
+    	var oldEl = $('.events .sel');
+    	if(oldEl[0] != null) {
+    		console.log(oldEl[0]);
+    		oldEl[0].innerHTML = oldEl[0].basicHTML;
+    		$('.events .sel').removeClass('sel');
+    	}
+    	$('#'+this.id).addClass('sel');
+    	this.innerHTML = this.detailHTML;
+    		
+    	// get event index
+    	var all = $('#eventList li');
+    	var ind = all.index(this);
+    	
+    	// generate permalink
+    	var link = "?map=" + meta[ind].west + "," + meta[ind].south + "," + meta[ind].east + "," + meta[ind].north;
+    	if(meta[ind].category === "floods") {
+    		//TODO false color provisions
+    	}
+    	else {
+    		if(meta[ind].sat === "Terra") {
+    			link += "&products=baselayers,MODIS_Terra_CorrectedReflectance_TrueColor";
+    		}
+    		else if(meta[ind].sat === "Aqua") {
+    			link += "&products=baselayers,MODIS_Aqua_CorrectedReflectance_TrueColor";
+    		}
+    	}
+    	if(meta[ind].keyword === "outlines") {
+    		if(meta[ind].sat === "Terra") {
+    			link += "~overlays,MODIS_Fires_Terra";
+    		}
+    		else if(meta[ind].sat === "Aqua") {
+    			link += "~overlays,MODIS_Fires_Aqua";
+    		}
+    	}
+    	link += ",sedac_bound&time="+meta[ind].date;
+   
+    	var initOrder = [
+           	ss, // projection
+           	p.b, // products
+           	map, // time
+           	m, // map
+           	palettes,
+           	apcn,
+           	opacity,
+           	epsg
+        ];
+        
+        REGISTRY.isLoadingQuery = true;
+        $.each(initOrder, function(index, component) {
+            component.loadFromQuery(link);    
+        });
+        REGISTRY.isLoadingQuery = false;
+    }
+    self.fire();
+    SOTE.widget.Events.repositionScrollbars(self, this);
+}
+
+/**
   * Sets the status of the component
   *
   * @this {Events}
@@ -376,7 +347,6 @@ SOTE.widget.Events.toggle = function(e,ui){
   *
 */
 SOTE.widget.Events.prototype.setStatus = function(s){
-	//console.log("events: setStatus");
 	this.statusStr = s;
 };
 
@@ -388,6 +358,5 @@ SOTE.widget.Events.prototype.setStatus = function(s){
   *
 */
 SOTE.widget.Events.prototype.getStatus = function(){
-	//console.log("events: getStatus");
 	return this.statusStr;
 };

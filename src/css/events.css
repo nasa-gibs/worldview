@@ -46,6 +46,10 @@
 	overflow:hidden;
 }
 
+.events .jspContainer {
+	height:240px;
+}
+
 /* toggling */
 a.evaccordionToggler { 
 	float:right; 
@@ -94,7 +98,7 @@ a.evexpand {
 .events div.header h2{margin: auto; text-align: center; float: none}
 
 /* entry list */
-.events ul {max-height:240px;}
+.events ul {max-height:240px; height:240px;}
 .events ul.entry { min-height:50px; }
 .events ul.entry li h3 {display:block; clear:both; float:none;}
 
@@ -112,11 +116,20 @@ a.evexpand {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3d000000', endColorstr='#3d000000',GradientType=0 ); /* IE6-9 */
 }
 
-.events li.item p {color:#fffbe7;}
+
+.events li.item a {float:none; position:relative; top:-8px; right:-8px;color:#fff; font-size:0.78em;}
+.events li.item a.hdanchor {display:inline-block;  overflow:hidden;}
+.events li.item h4 {font-size:0.85em; padding:0 3px;}
+.events li.item p {padding:0 3px; color:#fff; font-size:0.78em;}
+.events li.item span.palette {display:block; overflow:hidden; margin-top:5px; margin-left:5px;}
+.events li.item ul.palette li {float:left;}
+.events ul.category {  overflow:auto; }
+.events ul.category li h3 {display:block; clear:both; float:none;}
+/*.events li.item p {color:#fffbe7;}
 .events li.item a {float:none; position:relative; top:-8px; right:-8px;}
 .events li.item h4 {font-size:9px; font-weight:bold; }
 .events li.item span.palette {display:block; width:185px; overflow:hidden; margin-top:5px;}
-.events li.item ul.palette li {float:left;}
+.events li.item ul.palette li {float:left;}*/
 .events li.sel {border-color:rgba(0,81,144,0.7);}
 .events img.thumb {float:left; width:10}
-
+ 
