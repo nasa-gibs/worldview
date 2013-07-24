@@ -124,7 +124,7 @@ Worldview.namespace("Tour");
                                   "<li>Click on the \"Add Layers\" tab.</li>"+
                                   "<li>Select the \"Fires\" category from the drop down list.</li>"+
                                   "<li>Add the \"Fires (Day and Night) Aqua/MODIS Fire and Thermal Anomalies\" overlay.</li>"+
-                                  "<li>Type \"Carbon\" in the search box and Add the \"Carbon Monoxide (Total Column, Day) Aqua/AIRS\" overlay.</li>"+
+                                  "<li>Type \"Aerosol\" in the search box and add the \"Aerosol Optical Depth Terra/MODIS\" overlay.</li>"+
                                   "<li>Click on the Active tab to see the layers that have been added.</li>"
                               "</ul>"+
                               "</br>"+
