@@ -1,9 +1,8 @@
 {
-    "description": "Aqua / MODIS",
-    "max": "0.70",
-    "min": "0.27",
     "name": "Aerosol Optical Depth",
+    "description": "Aqua / MODIS",
     "product": "daily",
+    "startDate": "2012-04-07",
     "projections": {
         "geographic": {
             "matrixSet": "EPSG4326_2km",
@@ -37,9 +36,15 @@
             512
         ]
     },
-    "rendered": "MODIS_Aerosol",
-    "recommendedPalettes": [ "orange_1" ],    
-    "startDate": "2012-04-07",
     "type": "wmts",
-    "units": ""
+    "max": "0.70",
+    "min": "0.27",
+    "units": "",
+    "rendered": "MODIS_Aerosol",
+    "recommendedPalettes": [ "orange_1" ],
+    "echo": {
+        "name": "MODIS/Aqua Aerosol 5-Min L2 Swath 10km",
+        "shortName": "MYD04_L2",
+        "dataCenterId": ["LAADS", "LANCEMODIS"]
+    }
 }

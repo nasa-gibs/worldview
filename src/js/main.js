@@ -121,7 +121,7 @@ $(function() {// Initialize "static" vars
         var opacity = new Worldview.Widget.Opacity(config);
         var epsg = new Worldview.Widget.EPSG(config);
 
-        var dataDownloadModel = Worldview.DataDownload.Model();
+        var dataDownloadModel = Worldview.DataDownload.Model(config);
         var dataDownloadWidget = 
                 Worldview.Widget.DataDownload(dataDownloadModel, config, {
                     selector: ".dataDownload-modeButton"
@@ -140,25 +140,24 @@ $(function() {// Initialize "static" vars
         setTimeout(fixSize, 700);
         setTimeout(fixSize, 1500);
         	    
-        //REGISTRY.addEventListener("map","time","imagedownload");
-        REGISTRY.addEventListener("time","map","imagedownload", apcn.containerId, epsg.containerId);
-        REGISTRY.addEventListener("switch","map","products","selectorbox", "imagedownload", "camera", apcn.containerId, epsg.containerId);
-        REGISTRY.addEventListener("products","map","selectorbox","imagedownload","palettes", apcn.containerId);
+        REGISTRY.addEventListener("time", "map", "imagedownload", 
+                apcn.containerId, epsg.containerId, 
+                dataDownloadWidget.containerId);
+        REGISTRY.addEventListener("switch", "map", "products", "selectorbox", 
+                "imagedownload", "camera", apcn.containerId, epsg.containerId,
+                dataDownloadWidget.containerId);
+        REGISTRY.addEventListener("products", "map", "selectorbox", 
+                "imagedownload", "palettes", apcn.containerId,
+                dataDownloadWidget.containerId);
         REGISTRY.addEventListener("selectorbox","products");
         REGISTRY.addEventListener("camera","imagedownload");
         REGISTRY.addEventListener("palettes","map","camera","products");
         REGISTRY.addEventListener("opacity", "map");
         REGISTRY.addEventListener(epsg.containerId, "imagedownload");
-        
-        /*REGISTRY.addEventListener("map","time");
-        REGISTRY.addEventListener("time","map");
-        REGISTRY.addEventListener("switch","map","products","selectorbox","time");
-        REGISTRY.addEventListener("products","map","time","selectorbox");
-        REGISTRY.addEventListener("selectorbox","products");
-        //REGISTRY.addEventListener("hazard","products");*/
-        
+                
         Worldview.opacity = opacity; 
         Worldview.view = m;
+        Worldview.ddm = dataDownloadModel;
         
         var queryString = 
             Worldview.Permalink.decode(window.location.search.substring(1));

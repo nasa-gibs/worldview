@@ -28,8 +28,8 @@ Worldview.namespace("Widget");
  */
 Worldview.Widget.DataDownload = function(model, config, spec) {
 
-    var self = {};
-
+    var log = Logging.getLogger("Widget.DataDownload");
+            
     var HTML_WIDGET_INACTIVE = "<img src='images/camera.png'></img>";
     var HTML_WIDGET_ACTIVE = "<img src='images/cameraon.png'></img>";
     
@@ -37,28 +37,51 @@ Worldview.Widget.DataDownload = function(model, config, spec) {
         "images/activity.gif",
         "images/cameraon.png"    
     ]);
-    
+
+    var self = {};
+    self.containerId = "dataDownload";
+        
     var init = function() {        
         model.events.on("activate", onActivate);
         model.events.on("deactivate", onDeactivate);
+        model.events.on("layerSelect", onLayerSelect);
         
-        $(spec.selector).on("click", function() {
-            model.toggleMode();
-        });
+        $(spec.selector).on("click", function() { toggleMode(); } );
         
         onDeactivate();
-    }    
+        
+        REGISTRY.register(self.containerId, self);
+        REGISTRY.markComponentReady(self.containerId);        
+    };    
+    
+    self.updateComponent = function(queryString) {
+        try {
+            model.update(REGISTRY.getState());
+        } catch ( error ) {
+            Worldview.error("Internal error", error);
+        }
+    };
+    
+    self.getValue = function() {};
+    
+    var toggleMode = function() {
+        preloader.execute(function() {
+            model.toggleMode();
+        });              
+    }
     
     var onActivate = function() {
+        log.debug("activate");
         $(spec.selector).html(HTML_WIDGET_ACTIVE);
-        preloader.execute(function() {
-            Worldview.Indicator.searching();
-        });       
     };
     
     var onDeactivate = function() {
+        log.debug("deactivate");
         $(spec.selector).html(HTML_WIDGET_INACTIVE);
-        Worldview.Indicator.hide();
+    };
+    
+    var onLayerSelect = function(layerName) {
+        log.debug("selectLayer", layerName);
     };
     
     init();

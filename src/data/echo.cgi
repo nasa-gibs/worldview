@@ -19,8 +19,9 @@ import shutil
 import sys
 from urllib2 import Request, urlopen, HTTPError
 
-endpoint = "https://api.echo.nasa.gov/catalog-rest/echo_catalog/" \
-           "granules/search.json?page_size=300"
+endpoint = "".join(
+  ["https://api.echo.nasa.gov/catalog-rest/echo_catalog/",
+   "granules/search.json?client_id=worldview"])
 
 class RequestError(Exception):
   """
@@ -186,17 +187,24 @@ def query_echo(options, xml):
   - xml: AQL document to submit to ECHO
   """
   
-  url = endpoint
+  url = endpoint + "&page_size=%s" % options.page_size
+  
   headers = {
     "Content-type": "application/xml"
   }
   request = Request(url=url, headers=headers, data=xml)
   
-  with urlopen(request) as fp:
+  fp = None
+  try:
+    fp = urlopen(request)
     print "Content-type: application/json"
     print ""
     shutil.copyfileobj(fp, sys.stdout)
-
+    fp.close()
+    fp = None
+  finally:
+    if fp:
+      fp.close()
     
 def process_request(options):    
   """
@@ -244,6 +252,8 @@ def parse_options():
     help="Print all debugging information")
   parser.add_option("-e", "--error", action="store_true", 
     help="Print detailed error information")
+  parser.add_option("-p", "--page-size", default=300,
+    help="Change the maximum number of results")
   parser.add_option("-n", "--no-query", action="store_true", 
     help="Do not execute ECHO query")
   parser.add_option("-x", "--xml", action="store_true", 

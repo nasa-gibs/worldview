@@ -46047,6 +46047,14 @@
         "MODIS_Aqua_Aerosol": {
             "bins": 10,
             "description": "Aqua / MODIS",
+            "echo": {
+                "dataCenterId": [
+                    "LAADS",
+                    "LANCEMODIS"
+                ],
+                "name": "MODIS/Aqua Aerosol 5-Min L2 Swath 10km",
+                "shortName": "MYD04_L2"
+            },
             "max": "0.70",
             "min": "0.27",
             "name": "Aerosol Optical Depth",
