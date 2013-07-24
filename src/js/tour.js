@@ -62,21 +62,25 @@ Worldview.namespace("Tour");
         /* --- Set Up --- */
     
         var padding = 15; // padding - used for all of the tour windows
-        var pos, width, height, xval, yval; // helpful calulation vars
+        var pos, width, height, xval, yval; // helpful calculation vars
         
         // splash screen overlay
         if(splashOverlay){
             splashOverlay.destroy();
         }
         splashOverlay = new YAHOO.widget.Panel("splash", { zIndex:1020, visible:false, modal:true, draggable:false,  } );
-    
+
+		var finalRow = "";
+        if(!noDisable) {
+        	finalRow = "<td><p id='dontShowP' class=\"splash\"><input id='dontShowAgain' type='checkbox'>Do not show again</p></td>";
+        }
         var item = "<div class=\"splash\">"+
                        "<h3>Welcome to Worldview!</h3>"+
                        "</br>"+
                        "<center>"+
                            "<p class=\"splash\">This tool from NASA's <a href='http://earthdata.nasa.gov/about-eosdis' target='_blank'>EOSDIS</a> allows users to interactively browse satellite imagery in near real-time, generally within 3 hours of observation.  Use the tools described below to change the imagery on the map and compare it to past observations.</p>"+  
                            "</br></br>"+
-                           "<table class=\"splash\">"+
+                           "<table id=\"splashTable\" class=\"splash\">"+
                                "<tr>"+
                                    "<td><img src=\"images/tour-picker.png\" alt=\"Product Picker\" width=\"100\" height=\"108\" class=\"splash\"/></td>"+
                                    "<td><img src=\"images/tour-date.png\" alt=\"Date Slider\" width=\"100\" class=\"splash\"/></td>"+
@@ -98,7 +102,7 @@ Worldview.namespace("Tour");
                                "</tr>"+
                                "<tr></tr>"+
                                "<tr>"+
-                                   "<td><p class=\"splash\"><input id='dontShowAgain' value=\"false\" type='checkbox'>Do not show again</p></td>"+
+                                   finalRow +
                                "</tr>"+ 
                            "</table>"+
                        "</center>"+
@@ -106,6 +110,7 @@ Worldview.namespace("Tour");
         
         splashOverlay.setBody(item);
         splashOverlay.show();
+
         
         /* set up all of the callout panels */
         var productText = "<div>"+
