@@ -298,7 +298,24 @@ SOTE.widget.Events.toggleDescription = function(e) {
     	// generate permalink
     	var link = "?map=" + meta[ind].west + "," + meta[ind].south + "," + meta[ind].east + "," + meta[ind].north;
     	if(meta[ind].category === "floods") {
-    		//TODO false color provisions
+    		// if specified, use natural color
+    		if(meta[ind].keyword === "natural-color") {
+    			if(meta[ind].sat === "Terra") {
+    				link += "&products=baselayers,MODIS_Terra_CorrectedReflectance_TrueColor";
+    			}
+    			else if(meta[ind].sat === "Aqua") {
+    				link += "&products=baselayers,MODIS_Aqua_CorrectedReflectance_TrueColor";
+    			}
+    		}
+    		// otherwise, default to false color
+    		else {
+				if(meta[ind].sat === "Terra") {
+    				link += "&products=baselayers,MODIS_Terra_CorrectedReflectance_Bands721";
+    			}
+    			else if(meta[ind].sat === "Aqua") {
+    				link += "&products=baselayers,MODIS_Aqua_CorrectedReflectance_Bands721";
+    			}
+    		}
     	}
     	else {
     		if(meta[ind].sat === "Terra") {
