@@ -81,13 +81,13 @@ Worldview.Events = function() {
     /**
      * Notifies all listeners of an event. 
      * 
-     * @method fire
+     * @method trigger
      * @param {string} event Type of event to fire. If no listeners are 
      * registered for this event, this method does nothing.
      * @param {Object} [arguments]* Additional arguments to pass back to the
      * function of each listener.
      */
-    self.fire = function(event) {
+    self.trigger = function(event) {
         var listeners = types[event];
         if ( !listeners ) {
             return;

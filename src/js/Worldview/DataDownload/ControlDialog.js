@@ -43,7 +43,7 @@ Worldview.DataDownload.ControlDialog = function(model) {
         dialog.hideEvent.subscribe(function() {
             setTimeout(function() {
                 dialog.destroy();
-                self.events.fire("close");    
+                self.events.trigger("close");    
             }, 5)
         });
         

@@ -74,7 +74,7 @@ Worldview.DataDownload.Model = function(config) {
     self.activate = function() {
         if ( !self.active ) {
             self.active = true;
-            self.events.fire(self.ACTIVATE);
+            self.events.trigger(self.ACTIVATE);
             if ( !self.selectedLayer ) {
                 self.selectLayer(findAvailableLayer());
             }
@@ -90,7 +90,7 @@ Worldview.DataDownload.Model = function(config) {
     self.deactivate = function() {
         if ( self.active ) {
             self.active = false;
-            self.events.fire(self.DEACTIVATE);
+            self.events.trigger(self.DEACTIVATE);
         }
     };
     
@@ -116,7 +116,7 @@ Worldview.DataDownload.Model = function(config) {
             throw new Error("Layer not in active list: " + layerName);
         }
         self.selectedLayer = layerName;
-        self.events.fire(self.LAYER_SELECT, self.selectedLayer);    
+        self.events.trigger(self.LAYER_SELECT, self.selectedLayer);    
     };
     
     self.update = function(newState) {
@@ -146,7 +146,7 @@ Worldview.DataDownload.Model = function(config) {
                 product: productName
             });    
         });  
-        self.events.fire(self.LAYER_UPDATE);  
+        self.events.trigger(self.LAYER_UPDATE);  
     };
     
     var findAvailableLayer = function() {
