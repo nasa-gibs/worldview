@@ -24,9 +24,7 @@ Worldview.DataDownload.Model = function(config) {
     var state = {};
 
     var self = {};    
-    self.selectedLayer = null;
-    self.layers = [];
-    
+
     /**
      * Fired when the data download mode is activated.
      * 
@@ -44,6 +42,7 @@ Worldview.DataDownload.Model = function(config) {
     self.DEACTIVATE = "deactivate";
     
     self.LAYER_SELECT = "layerSelect";
+    self.LAYER_UPDATE = "layerUpdate";
     
     /**
      * Indicates if data download mode is active.
@@ -63,6 +62,9 @@ Worldview.DataDownload.Model = function(config) {
      */
     self.events = Worldview.Events();
     
+    self.selectedLayer = null;
+    self.layers = [];
+        
     /**
      * Activates data download mode. If the mode is already active, this method
      * does nothing.
@@ -73,7 +75,7 @@ Worldview.DataDownload.Model = function(config) {
         if ( !self.active ) {
             self.active = true;
             self.events.fire(self.ACTIVATE);
-            if ( !selectedLayer ) {
+            if ( !self.selectedLayer ) {
                 self.selectLayer(findAvailableLayer());
             }
         }
@@ -107,14 +109,14 @@ Worldview.DataDownload.Model = function(config) {
     };
     
     self.selectLayer = function(layerName) {
-        if ( selectedLayer === layerName ) {
+        if ( self.selectedLayer === layerName ) {
             return;
         }
         if ( $.inArray(layerName, state.products) < 0 ) {
             throw new Error("Layer not in active list: " + layerName);
         }
-        selectedLayer = layerName;
-        self.events.fire(self.LAYER_SELECT, selectedLayer);    
+        self.selectedLayer = layerName;
+        self.events.fire(self.LAYER_SELECT, self.selectedLayer);    
     };
     
     self.update = function(newState) {
@@ -127,18 +129,24 @@ Worldview.DataDownload.Model = function(config) {
     var updateLayers = function(newState) {
         self.layers = [];
         $.each(newState.products, function(index, layer) {
+            if ( $.inArray(layer, newState.hiddenProducts) >= 0 ) {
+                return;
+            }
             var id = layer;
             var layerName = config.products[layer].name;
+            var description = config.products[layer].description;
             var productName = null;
             if ( config.products[layer].echo ) {
                 productName = config.products[layer].echo.name;
             }
             self.layers.push({
                 id: id,
-                layerName: layerName,
-                productName: productName
+                name: layerName,
+                description: description,
+                product: productName
             });    
-        });    
+        });  
+        self.events.fire(self.LAYER_UPDATE);  
     };
     
     var findAvailableLayer = function() {

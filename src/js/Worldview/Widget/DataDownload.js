@@ -37,7 +37,8 @@ Worldview.Widget.DataDownload = function(model, config, spec) {
         "images/activity.gif",
         "images/cameraon.png"    
     ]);
-
+    var controlDialog = null;
+    
     var self = {};
     self.containerId = "dataDownload";
         
@@ -73,6 +74,10 @@ Worldview.Widget.DataDownload = function(model, config, spec) {
     var onActivate = function() {
         log.debug("activate");
         $(spec.selector).html(HTML_WIDGET_ACTIVE);
+        controlDialog = Worldview.DataDownload.ControlDialog(model);
+        controlDialog.events.on("close", function() {
+            model.deactivate();
+        });
     };
     
     var onDeactivate = function() {
