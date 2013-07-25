@@ -26,23 +26,23 @@ Worldview.DataDownload.Model = function(config) {
     var self = {};    
 
     /**
-     * Fired when the data download mode is activated.
+     * Fired when the data download mode is EVENT_ACTIVATEd.
      * 
-     * @event ACTIVATE
+     * @event EVENT_ACTIVATE
      * @final
      */
-    self.ACTIVATE = "activate";
+    self.EVENT_ACTIVATE = "activate";
     
     /**
-     * Fired when the data download mode is deactivated.
+     * Fired when the data download mode is deEVENT_ACTIVATEd.
      * 
-     * @event DEACTIVATE
+     * @event DEEVENT_ACTIVATE
      * @final
      */
-    self.DEACTIVATE = "deactivate";
+    self.EVENT_DEACTIVATE = "deactivate";
     
-    self.LAYER_SELECT = "layerSelect";
-    self.LAYER_UPDATE = "layerUpdate";
+    self.EVENT_LAYER_SELECT = "layerSelect";
+    self.EVENT_LAYER_UPDATE = "layerUpdate";
     
     /**
      * Indicates if data download mode is active.
@@ -66,15 +66,15 @@ Worldview.DataDownload.Model = function(config) {
     self.layers = [];
         
     /**
-     * Activates data download mode. If the mode is already active, this method
+     * EVENT_ACTIVATEs data download mode. If the mode is already active, this method
      * does nothing.
      * 
-     * @method activate
+     * @method EVENT_ACTIVATE
      */    
     self.activate = function() {
         if ( !self.active ) {
             self.active = true;
-            self.events.trigger(self.ACTIVATE);
+            self.events.trigger(self.EVENT_ACTIVATE);
             if ( !self.selectedLayer ) {
                 self.selectLayer(findAvailableLayer());
             }
@@ -82,21 +82,21 @@ Worldview.DataDownload.Model = function(config) {
     };
     
     /**
-     * Deactivates data download mode. If the mode is not already active, this 
+     * DeEVENT_ACTIVATEs data download mode. If the mode is not already active, this 
      * method does nothing.
      * 
-     * @method deactivate
+     * @method deEVENT_ACTIVATE
      */
     self.deactivate = function() {
         if ( self.active ) {
             self.active = false;
-            self.events.trigger(self.DEACTIVATE);
+            self.events.trigger(self.EVENT_DEACTIVATE);
         }
     };
     
     /**
-     * Toggles the current mode of data download. Deactivates if already
-     * active. Activates if already inactive.
+     * Toggles the current mode of data download. DeEVENT_ACTIVATEs if already
+     * active. EVENT_ACTIVATEs if already inactive.
      * 
      * @method toggleMode
      */
@@ -116,7 +116,7 @@ Worldview.DataDownload.Model = function(config) {
             throw new Error("Layer not in active list: " + layerName);
         }
         self.selectedLayer = layerName;
-        self.events.trigger(self.LAYER_SELECT, self.selectedLayer);    
+        self.events.trigger(self.EVENT_LAYER_SELECT, self.selectedLayer);    
     };
     
     self.update = function(newState) {
@@ -146,7 +146,7 @@ Worldview.DataDownload.Model = function(config) {
                 product: productName
             });    
         });  
-        self.events.trigger(self.LAYER_UPDATE);  
+        self.events.trigger(self.EVENT_LAYER_UPDATE);  
     };
     
     var findAvailableLayer = function() {
