@@ -1,0 +1,133 @@
+Format: 1.52
+
+
+Title: Worldview
+
+# You can also add a sub-title to your menu like this:
+# SubTitle: [subtitle]
+
+# You can add a footer to your documentation like this:
+# Footer: [text]
+# If you want to add a copyright notice, this would be the place to do it.
+Timestamp: Updated mm/dd/yyyy
+#   m     - One or two digit month.  January is "1"
+#   mm    - Always two digit month.  January is "01"
+#   mon   - Short month word.  January is "Jan"
+#   month - Long month word.  January is "January"
+#   d     - One or two digit day.  1 is "1"
+#   dd    - Always two digit day.  1 is "01"
+#   day   - Day with letter extension.  1 is "1st"
+#   yy    - Two digit year.  2006 is "06"
+#   yyyy  - Four digit year.  2006 is "2006"
+#   year  - Four digit year.  2006 is "2006"
+
+
+# --------------------------------------------------------------------------
+# 
+# Cut and paste the lines below to change the order in which your files
+# appear on the menu.  Don't worry about adding or removing files, Natural
+# Docs will take care of that.
+# 
+# You can further organize the menu by grouping the entries.  Add a
+# "Group: [name] {" line to start a group, and add a "}" to end it.
+# 
+# You can add text and web links to the menu by adding "Text: [text]" and
+# "Link: [name] ([URL])" lines, respectively.
+# 
+# The formatting and comments are auto-generated, so don't worry about
+# neatness when editing the file.  Natural Docs will clean it up the next
+# time it is run.  When working with groups, just deal with the braces and
+# forget about the indentation and comments.
+# 
+# You can use this file on other computers even if they use different
+# directories.  As long as the command line points to the same source files,
+# Natural Docs will be able to correct the locations automatically.
+# 
+# --------------------------------------------------------------------------
+
+
+Group: Development Notes  {
+
+   File: Welcome  (/Users/jmcgann/Code/Aptana/worldview/doc/Topics/Welcome.txt)
+   File: Documentation  (/Users/jmcgann/Code/Aptana/worldview/doc/Topics/Documentation.txt)
+   File: Release Procedure  (/Users/jmcgann/Code/Aptana/worldview/doc/Topics/Release_Procedure.txt)
+   File: Testing  (/Users/jmcgann/Code/Aptana/worldview/doc/Topics/Testing.txt)
+   }  # Group: Development Notes
+
+Group: Code Reference  {
+
+   File: Date  (/Users/jmcgann/Code/Aptana/worldview/js/Date.js)
+   File: Logging  (/Users/jmcgann/Code/Aptana/worldview/js/Logging.js)
+   File: SOTE.util  (/Users/jmcgann/Code/Aptana/worldview/js/util.js)
+   File: TestSuite  (/Users/jmcgann/Code/Aptana/worldview/test/lib/TestSuite.js)
+   File: Worldview  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview.js)
+
+   Group: Worldview  {
+
+      File: Map  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map.js)
+      File: Palette  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Palette.js)
+
+      Group: JSON  {
+
+         File: MapConfig  (/Users/jmcgann/Code/Aptana/worldview/doc/Topics/Worldview/JSON/MapConfig.txt)
+
+         Group: MapConfig  {
+
+            File: Product  (/Users/jmcgann/Code/Aptana/worldview/doc/Topics/Worldview/JSON/MapConfig/Product.txt)
+            File: Projection  (no auto-title, /Users/jmcgann/Code/Aptana/worldview/doc/Topics/Worldview/JSON/MapConfig/Projection.txt)
+            }  # Group: MapConfig
+
+         }  # Group: JSON
+
+      Group: Map  {
+
+         File: CanvasTile  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/CanvasTile.js)
+         File: DailyProduct  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/DailyProduct.js)
+         File: TileWorker  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/TileWorker.js)
+         File: Product  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/Product.js)
+         File: ProductMap  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/ProductMap.js)
+         File: StaticProduct  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/StaticProduct.js)
+         File: GraticleLayer  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Map/GraticuleLayer.js)
+         }  # Group: Map
+
+      Group: Palette  {
+
+         File: ColorBar  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Palette/ColorBar.js)
+         File: Palette  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Palette/Palette.js)
+         File: PaletteSelector  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Palette/PaletteSelector.js)
+         }  # Group: Palette
+
+      File: Permalink  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Permalink.js)
+
+      Group: Widget  {
+
+         File: Map  (no auto-title, /Users/jmcgann/Code/Aptana/worldview/js/Worldview/Widget/Map.js)
+         File: WorldviewMap  (no auto-title, /Users/jmcgann/Code/Aptana/worldview/js/Worldview/Widget/WorldviewMap.js)
+         }  # Group: Widget
+
+      File: Scheduler  (/Users/jmcgann/Code/Aptana/worldview/js/Worldview/Scheduler.js)
+      }  # Group: Worldview
+
+   Group: TestSuite  {
+
+      File: Patcher  (no auto-title, /Users/jmcgann/Code/Aptana/worldview/test/lib/TestSuite/Patcher.js)
+      File: Tests  (/Users/jmcgann/Code/Aptana/worldview/test/lib/TestSuite/Tests.js)
+      }  # Group: TestSuite
+
+   }  # Group: Code Reference
+
+Group: Index  {
+
+   Index: Everything
+   Class Index: Classes
+   Function Index: Functions
+   Property Index: Properties
+   Constant Index: Constants
+   }  # Group: Index
+
+
+
+##### Do not change or remove these lines. #####
+Data: 1(D3333a6GH63lE9`p\\30ufG3KItp\p37uHof/8G73l6)
+Data: 1(h3333a6GH63lE9`p\\30ufG3KItp\p37uHof/8G73fu93LuI896)
+Data: 1(T3333a6GH63lE9`p\\30ufG3KItp\p37uHof/8G73tG6t3o8Y)

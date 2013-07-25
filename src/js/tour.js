@@ -62,21 +62,25 @@ Worldview.namespace("Tour");
         /* --- Set Up --- */
     
         var padding = 15; // padding - used for all of the tour windows
-        var pos, width, height, xval, yval; // helpful calulation vars
+        var pos, width, height, xval, yval; // helpful calculation vars
         
         // splash screen overlay
         if(splashOverlay){
             splashOverlay.destroy();
         }
         splashOverlay = new YAHOO.widget.Panel("splash", { zIndex:1020, visible:false, modal:true, draggable:false,  } );
-    
+
+		var finalRow = "";
+        if(!noDisable) {
+        	finalRow = "<td><p id='dontShowP' class=\"splash\"><input id='dontShowAgain' type='checkbox'>Do not show again</p></td>";
+        }
         var item = "<div class=\"splash\">"+
                        "<h3>Welcome to Worldview!</h3>"+
-                       "</br>"+
+                       "</br></br>"+
                        "<center>"+
                            "<p class=\"splash\">This tool from NASA's <a href='http://earthdata.nasa.gov/about-eosdis' target='_blank'>EOSDIS</a> allows users to interactively browse satellite imagery in near real-time, generally within 3 hours of observation.  Use the tools described below to change the imagery on the map and compare it to past observations.</p>"+  
                            "</br></br>"+
-                           "<table class=\"splash\">"+
+                           "<table id=\"splashTable\" class=\"splash\">"+
                                "<tr>"+
                                    "<td><img src=\"images/tour-picker.png\" alt=\"Product Picker\" width=\"100\" height=\"108\" class=\"splash\"/></td>"+
                                    "<td><img src=\"images/tour-date.png\" alt=\"Date Slider\" width=\"100\" class=\"splash\"/></td>"+
@@ -98,7 +102,7 @@ Worldview.namespace("Tour");
                                "</tr>"+
                                "<tr></tr>"+
                                "<tr>"+
-                                   "<td><p class=\"splash\"><input id='dontShowAgain' value=\"false\" type='checkbox'>Do not show again</p></td>"+
+                                   finalRow +
                                "</tr>"+ 
                            "</table>"+
                        "</center>"+
@@ -106,20 +110,21 @@ Worldview.namespace("Tour");
         
         splashOverlay.setBody(item);
         splashOverlay.show();
+
         
         /* set up all of the callout panels */
         var productText = "<div>"+
                               "<h3>Product Picker</h3>"+
-                              "</br>"+
+                              "</br></br>"+
                               "<p class='tour'>A <span class='highlight'>Base Layer</span> is an opaque background image - you can have multiple active base layers, but you can only show one at a time. An <span class='highlight'>Overlay</span> is a partially transparent layer to view on top of the background - you can view multiple overlays at once.  Use the <img style='height: 14px' src=\"images/visible.png\"/> icon to show and hide layers and the <img style='height: 14px' src=\"images/close-red-x.png\"/> icon to remove them.</p>"+
                               "<p class='tour'>On the \"Add Layers\" tab, you can use the drop down list or the search bar to find layers.</p>"+
                               "<p class='tour'> <span class='tryIt'>Try It!</span></p>"+
                               "<ul class='tour'>"+
-                                  "<li>Click on the <img style='height: 14px' src='images/visible.png'/> for Corrected Reflectance (True Color) Aqua / MODIS under Base Layers</li>" +
-                                  "<li>Click on the \"Add Layers\" tab</li>"+
+                                  "<li>Click on the <img style='height: 14px' src='images/visible.png'/> for Corrected Reflectance (True Color) Aqua / MODIS under Base Layers.</li>" +
+                                  "<li>Click on the \"Add Layers\" tab.</li>"+
                                   "<li>Select the \"Fires\" category from the drop down list.</li>"+
                                   "<li>Add the \"Fires (Day and Night) Aqua/MODIS Fire and Thermal Anomalies\" overlay.</li>"+
-                                  "<li>Type \"Carbon\" in the search box and Add the \"Carbon Monoxide (Total Column, Day) Aqua/AIRS\" overlay.</li>"+
+                                  "<li>Type \"Aerosol\" in the search box and add the \"Aerosol Optical Depth Terra/MODIS\" overlay.</li>"+
                                   "<li>Click on the Active tab to see the layers that have been added.</li>"
                               "</ul>"+
                               "</br>"+
@@ -128,7 +133,7 @@ Worldview.namespace("Tour");
          
         var dateText = "<div class=\"tour\">"+
                            "<h3>Date Slider</h3>"+
-                           "</br>"+
+                           "</br></br>"+
                            "<p class='tour'>The <span class='highlight'>Date Slider</span> is used to show imagery that was observed on a specific date.  You can click the slider to choose a date or drag the slider to view changes over time.</p>"+
                            "<p class='tour'><span class='tryIt'>Try It!</span></p>"+
                            "<p class='tour'>Use the date slider to change the date to 2012 Aug 23.</p>"+
@@ -137,7 +142,7 @@ Worldview.namespace("Tour");
         
         var toolbarText = "<div>"+
                               "<h3>Toolbar</h3>"+
-                              "</br>"+
+                              "</br></br>"+
                               "<p>The toolbar provides several additional utilities for interacting with Worldview.</p>"+
                               "<table class=\"tour\">"+
                                   "<tr>" +
@@ -163,7 +168,7 @@ Worldview.namespace("Tour");
         
         var mapText = "<div>"+
                           "<h3>Map</h3>"+
-                          "</br>"+
+                          "</br></br>"+
                           "<p class='tour\'>There are several ways you can interact with the map to pan or zoom.</p>"+
                           "<p class='tour\'>To pan, drag the map.</p>"+
                           "<p class='tour\'>To zoom:</p>"+
@@ -181,6 +186,16 @@ Worldview.namespace("Tour");
                       "</div>";
                       
         document.getElementById("mapPanel").innerHTML = mapText;   
+        
+        var mapAnchor = document.getElementById("mapPanelTourAnchor");
+        if(!mapAnchor) {
+        	console.log("creating mapanchor");
+        	var owner = document.getElementById("map");
+        	mapAnchor = document.createElement("div");
+        	mapAnchor.setAttribute("id", "mapPanelTourAnchor");
+        	mapAnchor.setAttribute("style", "float:right; height:68px; right:14px; top:90px; width:36px; position:relative;");
+        	owner.appendChild(mapAnchor);
+        }
     
     
         /* conclusion screen after completing the tour */
@@ -194,7 +209,7 @@ Worldview.namespace("Tour");
         var conclusionText = "<div class=\"splash\">"+
                                  "<center>"+
                                      "<h3>Finished!</h3>"+
-                                     "</br>"+
+                                     "</br></br>"+
                                      "<p class='tour'>You have now completed a tour of Worldview!  If you followed the “Try It” steps, you’re now looking at fires in northern California as they were observed by satellites on August 23, 2012.   You can use the tools in any order.  We hope you continue exploring!  <p>"+
                                      "</br>"+
                                      "<table class='tour'>"+

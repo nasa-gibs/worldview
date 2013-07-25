@@ -64,6 +64,8 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
 
 #products {display:block; float:left;  position:relative; left:0; }
 
+
+
 #banner {
 	display:block; z-index:294; float:left; position:relative; width:100%; height:47px; background: transparent url("../images/toolbarbg.png");
 }

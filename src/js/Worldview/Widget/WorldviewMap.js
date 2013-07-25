@@ -72,9 +72,12 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
                 return;
             }
             log.debug("WorldviewMap: updateComponent", queryString);
+            
             var state = REGISTRY.getState(queryString);            
+
             log.debug("State", state);     
             log.debug("Last State", last);
+
             
             if ( state.projection !== undefined && 
                     state.projection !== last.projection ) {
