@@ -179,6 +179,8 @@
             <arg value="${build.dir}/minify/worldview.js"/>
             <arg value="--js_output_file"/>
             <arg value="${build.dir}/minify/worldview-min.js"/>
+            <arg value="--create_source_map"/>
+            <arg value="${build.dir}/minify/worldview-min.js.map"/>
         </exec>
 
 		<yui-compressor warn="false" charset="UTF-8" 

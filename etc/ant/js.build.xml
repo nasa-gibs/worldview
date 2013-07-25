@@ -41,6 +41,9 @@
 		<file name="ext/jcrop/jcrop.js"/>
 		<file name="ext/jquery.dd/jquery.dd.js"/>
 
+        <file name="js/Date.js"/>
+        <file name="js/Logging.js"/>
+
 		<file name="js/component.js"/>
 		<file name="js/registry.js"/>
 		<file name="js/util.js"/>
@@ -56,9 +59,8 @@
 		<file name="js/selector.js"/>
         <file name="js/products.js"/>
 		<file name="js/sote.js"/>
+        <file name="js/events.js"/>
 	    	
-		<file name="js/Logging.js"/>
-		<file name="js/Date.js"/>
 		<file name="js/Worldview.js"/>
         <file name="js/Worldview/About.js"/>
         <file name="js/Worldview/Support.js"/>
