@@ -40,7 +40,8 @@
 		<file name="ext/openlayers/OpenLayers.debug.js"/>
 		<file name="ext/jcrop/jcrop.js"/>
 		<file name="ext/jquery.dd/jquery.dd.js"/>
-
+        <file name="ext/jscache/cache.js"/>
+        
         <file name="js/Date.js"/>
         <file name="js/Logging.js"/>
 

@@ -41,11 +41,7 @@ Worldview.DataDownload.ControlDialog = function(model) {
         ].join("\n"));
         
         dialog.hideEvent.subscribe(function() {
-            setTimeout(function() {
-                dialog.destroy();
-                dialog == null;
-                self.events.trigger("close");    
-            }, 5);
+            self.events.trigger("hide");
         });
         
         dialog.render(document.body);
@@ -53,13 +49,14 @@ Worldview.DataDownload.ControlDialog = function(model) {
         Worldview.DataDownload.ProductSelector(model,
                 "#dataDownload_controlDialog .productSelector");
                 
-        dialog.show();       
     };
 
-    self.close = function() {
-        if ( dialog ) {
-            dialog.hide();
-        }
+    self.show = function() {
+        dialog.show();
+    };
+    
+    self.hide = function() {
+        dialog.hide();
     };
     
     init();

@@ -74,6 +74,12 @@ Worldview.Widget.EPSG = function(config) {
     
     self.loadFromQuery = self.updateComponent;
     
+    self.parse = function(queryString, object) {
+        var epsg = Worldview.extractFromQuery("epsg", queryString);
+        object.epsg = epsg;
+        return object;
+    };
+
     init();
     return self;
 }

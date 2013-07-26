@@ -18,15 +18,14 @@ Worldview.namespace("Widget");
  * @class DataDownload
  * @constructor
  * 
- * @param model {Worldview.DataDownload.Model} model for which this widget
- * will be a view for.
+ * @param model {Worldview.DataDownload.Model} FIXME
  * 
  * @param config Worldview config
  * 
  * @param spec.selector {string} jQuery selector for where the mode activation
  * button should be rendered.
  */
-Worldview.Widget.DataDownload = function(model, config, spec) {
+Worldview.Widget.DataDownload = function(spec) {
 
     var log = Logging.getLogger("Widget.DataDownload");
     Logging.debug("Widget.DataDownload");
@@ -36,19 +35,27 @@ Worldview.Widget.DataDownload = function(model, config, spec) {
     
     var preloader = Worldview.Preloader([
         "images/activity.gif",
-        "images/cameraon.png"    
+        "images/cameraon.png",
+        "images/red-x.svg"    
     ]);
+    var model = spec.model;
     var controlDialog = null;
+    var mapView = null;
     
     var self = {};
     self.containerId = "dataDownload";
         
     var init = function() {        
-        model.events.on("activate", onActivate);
-        model.events.on("deactivate", onDeactivate);
-        model.events.on("layerSelect", onLayerSelect);
+        model.events
+            .on("activate", onActivate)
+            .on("deactivate", onDeactivate)
+            .on("layerSelect", onLayerSelect)
+            .on("query", onQuery)
+            .on("queryResults", onQueryResults)
+            .on("queryCancel", onQueryCancel)
+            .on("queryError", onQueryError);
         
-        $(spec.selector).on("click", function() { toggleMode(); } );        
+        $(spec.selector).on("click", toggleMode);        
         $(spec.selector).html(HTML_WIDGET_INACTIVE);
 
         REGISTRY.register(self.containerId, self);
@@ -67,27 +74,70 @@ Worldview.Widget.DataDownload = function(model, config, spec) {
     
     var toggleMode = function() {
         preloader.execute(function() {
-            model.toggleMode();
+            try {
+                model.toggleMode();
+            } catch ( error ) {
+                Worldview.error("Internal error", error);
+            }
         });              
     }
     
     var onActivate = function() {
         log.debug("activate");
         $(spec.selector).html(HTML_WIDGET_ACTIVE);
-        controlDialog = Worldview.DataDownload.ControlDialog(model);
-        controlDialog.events.on("close", function() {
-            model.deactivate();
-        });
+        
+        if ( !controlDialog ) {
+            controlDialog = Worldview.DataDownload.ControlDialog(model);
+            controlDialog.events.on("hide", function() {
+                try {
+                    model.deactivate();
+                } catch ( error ) { 
+                    Worldview.error("Internal error", error); 
+                }
+            });
+        }
+        controlDialog.show();
+        
+        if ( !mapView ) {
+            mapView = Worldview.DataDownload.MapView(model, spec.maps);
+        }
+        
     };
     
     var onDeactivate = function() {
         log.debug("deactivate");
         $(spec.selector).html(HTML_WIDGET_INACTIVE);
-        controlDialog && controlDialog.close();
+        controlDialog.hide();
+        Worldview.Indicator.hide();
     };
     
     var onLayerSelect = function(layerName) {
         log.debug("selectLayer", layerName);
+    };
+    
+    var onQuery = function() {
+        log.debug("query");
+        Worldview.Indicator.searching();
+    };
+    
+    var onQueryResults = function(results) {
+        log.debug("queryResults", results);
+        Worldview.Indicator.hide();
+        if ( results.length === 0 ) {
+            Worldview.Indicator.noData();
+        }
+    };
+    
+    var onQueryCancel = function() {
+        log.debug("queryCancel");
+        Worldview.Indicator.hide();
+    };
+    
+    var onQueryError = function(status, error, parameters) {
+        log.debug("queryError", status, error, parameters);
+        Worldview.Indicator.hide();
+        Worldview.notify("Unable to query at this time. Please try again later",
+                error);
     };
     
     init();

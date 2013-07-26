@@ -15,42 +15,76 @@
 Worldview.namespace("DataDownload");
 
 Worldview.DataDownload.ECHOClient = function(spec) {
-    
+
+    // Hold a maximum of ten results
+    var CACHE_SIZE = 10;
+    // Hold results for a maximum of ten minutes
+    var CACHE_TIME = 10 * 60;
+        
     var log = Logging.getLogger("ECHOClient");
     var endpoint = "data/echo.cgi";
     var errorHandler;
-    
+    var cache;
+    var active = false;
+        
     var self = {};
+    
+    self.events = Worldview.Events();
+    
+    self.EVENT_QUERY = "query";
+    self.EVENT_RESULTS = "results";
+    self.EVENT_CANCEL = "cancel";
+    self.EVENT_ERROR = "error";
     
     var init = function() {
         spec = spec || {};
-        errorHandler = spec.errorHandler || defaultErrorHandler;    
+        cache = new Cache(CACHE_SIZE);
     };
     
-    self.query = function(parameters, callback) {
-        request = $.ajax({
-            url: endpoint,
-            data: parameters,
-            dataType: "json",
-            success: onSuccess,
-            error: onError
-        });            
+    self.query = function(parameters) {
+        if ( active ) {
+            throw new Error("Another query is already executing");
+        }
+        
+        var key = $.param(parameters, true);
+        var results = cache.getItem(key);
+        if ( results ) {
+            onSuccess(results, parameters);
+        } else {
+            active = true;      
+            request = $.ajax({
+                url: endpoint,
+                data: parameters,
+                traditional: true,
+                dataType: "json",
+                success: function(results) {
+                    onSuccess(results, parameters);
+                },
+                error: function(jqXHR, status, error) {
+                    onError(jqXHR, status, error, parameters);
+                }
+            });
+            self.events.trigger(self.EVENT_QUERY);
+        }            
     };    
     
-    var onSuccess = function(results) {
-        console.log(results);    
+    var onSuccess = function(results, parameters) {
+        active = false;
+        
+        var key = $.param(parameters, true);
+        cache.setItem(key, results);
+        
+        self.events.trigger(self.EVENT_RESULTS, results.feed.entry);
     };
     
-    var onError = function(jqXHR, status, error) {
+    var onError = function(jqXHR, status, error, parameters) {
+        active = false;
         // It is not an error if the query was aborted
         if ( status === "abort" ) {
+            self.events.trigger(self.EVENT_CANCEL);
             return;    
         }
-        errorHandler(status, error);
-    };
-    
-    var defaultErrorHandler = function(status, error) {
-        log.error("[" + status + "] Unable to query ECHO: " + error);
+        self.events.trigger(self.EVENT_ERROR, status, error, parameters);     
     };
     
     init();

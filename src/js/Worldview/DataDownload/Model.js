@@ -22,7 +22,8 @@ Worldview.namespace("DataDownload");
 Worldview.DataDownload.Model = function(config) {
     
     var state = {};
-
+    var client = Worldview.DataDownload.ECHOClient();
+    
     var self = {};    
 
     /**
@@ -36,13 +37,18 @@ Worldview.DataDownload.Model = function(config) {
     /**
      * Fired when the data download mode is deEVENT_ACTIVATEd.
      * 
-     * @event DEEVENT_ACTIVATE
+     * @event EVENT_ACTIVATE
      * @final
      */
     self.EVENT_DEACTIVATE = "deactivate";
     
     self.EVENT_LAYER_SELECT = "layerSelect";
     self.EVENT_LAYER_UPDATE = "layerUpdate";
+    self.EVENT_QUERY = "query";
+    self.EVENT_QUERY_RESULTS = "queryResults";
+    self.EVENT_QUERY_CANCEL = "queryCancel";
+    self.EVENT_QUERY_ERROR = "queryError";
+    self.EVENT_PROJECTION_UPDATE = "projectionUpdate";
     
     /**
      * Indicates if data download mode is active.
@@ -64,12 +70,34 @@ Worldview.DataDownload.Model = function(config) {
     
     self.selectedLayer = null;
     self.layers = [];
-        
+    
+    self.granules = [];
+    self.projection = null;
+    self.epsg = null;
+    
+    var init = function() {
+        client.events
+            .on("query", function() { 
+                self.events.trigger(self.EVENT_QUERY);
+            })
+            .on("results", function(results, parameters) {
+                self.events.trigger(self.EVENT_QUERY_RESULTS, results, 
+                        parameters);
+            })
+            .on("cancel", function() {
+                self.events.trigger(self.EVENT_QUERY_CANCEL);
+            })
+            .on("error", function(status, error, parameters) {
+                self.events.trigger(self.EVENT_QUERY_ERROR, status, error,
+                        parameters);
+            });    
+    };
+     
     /**
-     * EVENT_ACTIVATEs data download mode. If the mode is already active, this method
+     * Activates data download mode. If the mode is already active, this method
      * does nothing.
      * 
-     * @method EVENT_ACTIVATE
+     * @method activate
      */    
     self.activate = function() {
         if ( !self.active ) {
@@ -82,10 +110,10 @@ Worldview.DataDownload.Model = function(config) {
     };
     
     /**
-     * DeEVENT_ACTIVATEs data download mode. If the mode is not already active, this 
+     * Deactivates data download mode. If the mode is not already active, this 
      * method does nothing.
      * 
-     * @method deEVENT_ACTIVATE
+     * @method deactivate
      */
     self.deactivate = function() {
         if ( self.active ) {
@@ -117,13 +145,33 @@ Worldview.DataDownload.Model = function(config) {
         }
         self.selectedLayer = layerName;
         self.events.trigger(self.EVENT_LAYER_SELECT, self.selectedLayer);    
+        query();
     };
     
     self.update = function(newState) {
         if ( newState.productsString !== state.productsString ) {
             updateLayers(newState);
         }
+        if ( newState.projection !== state.projection  ||
+                newState.epsg !== state.epsg ) {
+            updateProjection(newState);
+        }
         state = newState;    
+    };
+    
+    var query = function() {
+        var layerConfig = config.products[self.selectedLayer];
+        if ( !layerConfig.echo ) {
+            self.events.trigger(self.EVENT_QUERY_RESULTS, []);
+            return;
+        }
+        
+        var parameters = {
+            shortName: layerConfig.echo.shortName,
+            dataCenterId: layerConfig.echo.dataCenterId,
+            day: state.time.toISOStringDate()
+        }
+        client.query(parameters);
     };
     
     var updateLayers = function(newState) {
@@ -146,6 +194,13 @@ Worldview.DataDownload.Model = function(config) {
         self.events.trigger(self.EVENT_LAYER_UPDATE);  
     };
     
+    var updateProjection = function(newState) {
+        self.projection = newState.projection;
+        self.epsg = newState.epsg;
+        self.events.trigger(self.EVENT_PROJECTION_UPDATE, self.projection,
+                self.epsg);
+    };
+    
     var findAvailableLayer = function() {
         // Find the top most layer that has a product entry in ECHO
         for ( var i = state.products.length - 1; i >= 0; i-- ) {
@@ -161,5 +216,6 @@ Worldview.DataDownload.Model = function(config) {
         }
     }
     
+    init();
     return self;   
 }

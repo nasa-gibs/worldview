@@ -131,10 +131,12 @@ $(function() {// Initialize "static" vars
         										   wvEPSG:epsg});
 
         var dataDownloadModel = Worldview.DataDownload.Model(config);
-        var dataDownloadWidget = 
-                Worldview.Widget.DataDownload(dataDownloadModel, config, {
-                    selector: ".dataDownload-modeButton"
-                });
+        var dataDownloadWidget = Worldview.Widget.DataDownload({
+            selector: ".dataDownload-modeButton",
+            model: dataDownloadModel, 
+            config: config,
+            maps: m.productMap 
+        });
                  
         // Get rid of address bar on iphone/ipod
         var fixSize = function() {

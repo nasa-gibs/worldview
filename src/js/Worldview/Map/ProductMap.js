@@ -31,10 +31,7 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
     
     var log = Logging.getLogger("Worldview.Map");
     var self = {};
-    
-    // Map objects, one for each supported projection
-    var activeMaps = {};
-    
+       
     // Configurations for each available product
     var productConfigs = {};
     
@@ -58,6 +55,9 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
      * The <Wordlview.JSON.MapConfig> used in configuration (read only).
      */
     self.mapConfig = mapConfig;
+
+    // Map objects, one for each supported projection    
+    self.projections = {};
     
     /**
      * Property: map
@@ -120,7 +120,7 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
             }
             
             newMap.products = {};
-            activeMaps[projection] = newMap;
+            self.projections[projection] = newMap;
             activeProducts[projection] = [];
             
             newMap.events.register("addlayer", self, onAddLayer);
@@ -155,7 +155,7 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
      * An exception if the specified projection is not supported.
      */
     self.setProjection = function(projection) { 
-        if ( !(projection in activeMaps) ) {
+        if ( !(projection in self.projections) ) {
             throw new Error("Unsupported projection: " + projection);
         }
         log.debug("Switch projection: " + projection);
@@ -171,7 +171,7 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
         }
         
         // Update convenience variables
-        self.map = activeMaps[projection];
+        self.map = self.projections[projection];
         self.products = activeProducts[projection];
         self.projection = projection;
 
@@ -292,7 +292,7 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
      * and palette names as values.
      */
     self.setPalettes = function(activePalettes) {
-        $.each(activeMaps, function(projection, map) {
+        $.each(self.projections, function(projection, map) {
             $.each(map.products, function(productName, product) {
                 var paletteName = activePalettes[productName];
                 if ( paletteName ) {
