@@ -129,9 +129,6 @@ Worldview.DataDownload.Model = function(config) {
     var updateLayers = function(newState) {
         self.layers = [];
         $.each(newState.products, function(index, layer) {
-            if ( $.inArray(layer, newState.hiddenProducts) >= 0 ) {
-                return;
-            }
             var id = layer;
             var layerName = config.products[layer].name;
             var description = config.products[layer].description;
@@ -153,7 +150,6 @@ Worldview.DataDownload.Model = function(config) {
         // Find the top most layer that has a product entry in ECHO
         for ( var i = state.products.length - 1; i >= 0; i-- ) {
             var productName = state.products[i];
-            console.log(config.products[productName]);
             if ( config.products[productName].echo ) {
                 return productName;
             }

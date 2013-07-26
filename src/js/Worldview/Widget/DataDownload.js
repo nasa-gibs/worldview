@@ -29,6 +29,7 @@ Worldview.namespace("Widget");
 Worldview.Widget.DataDownload = function(model, config, spec) {
 
     var log = Logging.getLogger("Widget.DataDownload");
+    Logging.debug("Widget.DataDownload");
             
     var HTML_WIDGET_INACTIVE = "<img src='images/camera.png'></img>";
     var HTML_WIDGET_ACTIVE = "<img src='images/cameraon.png'></img>";
@@ -47,10 +48,9 @@ Worldview.Widget.DataDownload = function(model, config, spec) {
         model.events.on("deactivate", onDeactivate);
         model.events.on("layerSelect", onLayerSelect);
         
-        $(spec.selector).on("click", function() { toggleMode(); } );
-        
-        onDeactivate();
-        
+        $(spec.selector).on("click", function() { toggleMode(); } );        
+        $(spec.selector).html(HTML_WIDGET_INACTIVE);
+
         REGISTRY.register(self.containerId, self);
         REGISTRY.markComponentReady(self.containerId);        
     };    
@@ -83,6 +83,7 @@ Worldview.Widget.DataDownload = function(model, config, spec) {
     var onDeactivate = function() {
         log.debug("deactivate");
         $(spec.selector).html(HTML_WIDGET_INACTIVE);
+        controlDialog && controlDialog.close();
     };
     
     var onLayerSelect = function(layerName) {
