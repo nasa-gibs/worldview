@@ -158,6 +158,9 @@
         <copy file="${build.dir}/config.json"
               tofile="${build.web-debug.dir}/data/config"/>
               	          
+        <!-- Executable bits -->
+        <chmod file="${build.web.dir}/data/echo.cgi" perm="755"/>
+        
 		<!-- Combine all css and js files into one file -->
 		<concat destfile="${build.dir}/minify/worldview.css" force="no">
 			<filelist refid="css.files"/>
