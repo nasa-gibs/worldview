@@ -282,15 +282,29 @@
 	
     <target name="artifacts"
             description="Generates distribution artifacts using existing build dir">	    
-	<tar destfile="${dist.dir}/worldview.tar.bz2"
-             basedir="${build.dir}" includes="worldview/**" 
-	     compression="bzip2"/>
-	<tar destfile="${dist.dir}/worldview-debug.tar.bz2"
-	      basedir="${build.dir}" includes="worldview-debug/**"
-	      compression="bzip2"/>
-	<tar destfile="${dist.dir}/worldview-doc.tar.bz2"
-	      basedir="${build.dir}" includes="worldview-doc/**" 
-	      compression="bzip2"/>
+    	<tar destfile="${dist.dir}/worldview.tar.bz2" compression="bzip2">
+    	   <tarfileset dir="${build.dir}/worldview" prefix="worldview">
+    	       <exclude name="**/data/echo.cgi"/>
+    	   </tarfileset>
+    	   <tarfileset dir="${build.dir}/worldview/data"
+    	               prefix="worldview/data" filemode="755">
+               <include name="echo.cgi"/>
+           </tarfileset>
+        </tar>
+
+        <tar destfile="${dist.dir}/worldview-debug.tar.bz2" compression="bzip2">
+           <tarfileset dir="${build.dir}/worldview-debug" prefix="worldview-debug">
+               <exclude name="**/data/echo.cgi"/>
+           </tarfileset>
+           <tarfileset dir="${build.dir}/worldview-debug/data"
+                       prefix="worldview-debug/data" filemode="755">
+               <include name="echo.cgi"/>
+           </tarfileset>
+        </tar>
+        
+    	<tar destfile="${dist.dir}/worldview-doc.tar.bz2"
+    	      basedir="${build.dir}" includes="worldview-doc/**" 
+    	      compression="bzip2"/>
     </target>
     
     <target name="rpm" depends="dist">
