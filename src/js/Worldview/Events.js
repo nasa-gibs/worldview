@@ -102,16 +102,24 @@ Worldview.Events = function() {
      * @return {Events} this object useful for chaining.
      */
     self.trigger = function(event) {
-        var listeners = types[event];
-        if ( !listeners ) {
-            return;
-        }
-        var eventArguments = Array.prototype.slice.call(arguments, 1);
-        $.each(types[event], function(index, listener) {
-            listener.apply(self, eventArguments);    
-        });    
+        try {
+            var listeners = types[event];
+            if ( !listeners ) {
+                return;
+            }
+            var eventArguments = Array.prototype.slice.call(arguments, 1);
+            $.each(types[event], function(index, listener) {
+                listener.apply(self, eventArguments);    
+            });
+        } catch ( error ) {
+            Worldview.Events.errorHandler(error);
+        }        
         return self;
     };
     
     return self;
-}
+};
+
+Worldview.Events.errorHandler = function(error) {
+    Logging.getLogger("Worldview.Events").error("Error in listener", error);    
+};

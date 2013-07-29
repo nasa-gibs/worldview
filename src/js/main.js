@@ -46,6 +46,10 @@ $(function() {// Initialize "static" vars
 	};
     
     var entryPoint = function() {  
+        Worldview.Events.errorHandler = function(error) {
+            Worldview.error("Internal error", error);
+        };
+        
     	//console.log("entryPoint");
         Worldview.Support.quirks();
         

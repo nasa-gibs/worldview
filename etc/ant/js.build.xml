@@ -41,7 +41,14 @@
 		<file name="ext/jcrop/jcrop.js"/>
 		<file name="ext/jquery.dd/jquery.dd.js"/>
         <file name="ext/jscache/cache.js"/>
-        
+
+        <file name="ext/proj4js/proj4js.js"/>
+        <file name="ext/proj4js/merc.js"/>
+        <file name="ext/proj4js/stere.js"/>
+        <file name="ext/proj4js/EPSG_3031.js"/>
+        <file name="ext/proj4js/EPSG_3413.js"/>
+        <file name="ext/proj4js/EPSG_3995.js"/>
+            
         <file name="js/Date.js"/>
         <file name="js/Logging.js"/>
 

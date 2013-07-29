@@ -40,6 +40,7 @@ Worldview.DataDownload.MapView = function(model, maps, config) {
         });
         
         model.events
+            .on("query", clear)
             .on("queryResults", onQueryResults)
             .on("projectionUpdate", onProjectionUpdate)
             .on("deactivate", onDeactivate)    
@@ -67,13 +68,14 @@ Worldview.DataDownload.MapView = function(model, maps, config) {
                 result.geometry = {};
             }
             if ( !result.geometry[model.epsg] ) {
-                g = Worldview.DataDownload.ECHOGeometry(result).toOpenLayers();
+                g = Worldview.DataDownload.ECHOGeometry(result)
+                        .toOpenLayers("EPSG:4326", "EPSG:" + model.epsg);
                 result.geometry[model.epsg] = g;
             }
             var geometry = result.geometry[model.epsg];
             var extent = bounds[model.projection];
             var geoBounds = geometry.getBounds();
-            if ( extent.containsBounds(geoBounds) ) {
+            if ( extent.intersectsBounds(geoBounds) ) {
                 var feature = new OpenLayers.Feature.Vector(
                         geometry.getCentroid(), 
                         { result: result }
@@ -120,6 +122,7 @@ Worldview.DataDownload.MapView = function(model, maps, config) {
     
     var onProjectionUpdate = function() {
         console.log("projection", model.projection, model.epsg);
+        updateGranules();
     };
     
     var onDeactivate = function() {
@@ -153,6 +156,17 @@ Worldview.DataDownload.MapView = function(model, maps, config) {
     var onHoverOut = function(event) {
         var hoverLayer = maps.map.getLayersByName(HOVER_LAYER_NAME)[0];
         hoverLayer.removeAllFeatures();
+    };
+    
+    var clear = function() {
+        var hoverLayer = maps.map.getLayersByName(HOVER_LAYER_NAME)[0];
+        if ( hoverLayer ) {
+            hoverLayer.removeAllFeatures();
+        }
+        var buttonLayer = maps.map.getLayersByName(BUTTON_LAYER_NAME)[0];
+        if ( buttonLayer ) {
+            buttonLayer.removeAllFeatures();
+        }
     };
     
     init();

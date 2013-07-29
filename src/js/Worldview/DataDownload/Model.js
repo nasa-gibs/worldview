@@ -21,7 +21,13 @@ Worldview.namespace("DataDownload");
  */
 Worldview.DataDownload.Model = function(config) {
     
-    var state = {};
+    var state = {
+        productsString: null,
+        projection: null,
+        epsg: null,
+        time: null
+    };
+    
     var client = Worldview.DataDownload.ECHOClient();
     
     var self = {};    
@@ -149,17 +155,24 @@ Worldview.DataDownload.Model = function(config) {
     };
     
     self.update = function(newState) {
-        if ( newState.productsString !== state.productsString ) {
-            updateLayers(newState);
+        var oldState = state;
+        state = newState;
+        if ( oldState.productsString !== state.productsString ) {
+            updateLayers();
         }
-        if ( newState.projection !== state.projection  ||
-                newState.epsg !== state.epsg ) {
-            updateProjection(newState);
+        if ( oldState.projection !== state.projection  ||
+                oldState.epsg !== state.epsg ) {
+            updateProjection();
         }
-        state = newState;    
+        if ( oldState.time !== state.time ) {
+            query();
+        }
     };
     
     var query = function() {
+        if ( !self.active ) {
+            return;
+        }
         var layerConfig = config.products[self.selectedLayer];
         if ( !layerConfig.echo ) {
             self.events.trigger(self.EVENT_QUERY_RESULTS, []);
@@ -174,9 +187,12 @@ Worldview.DataDownload.Model = function(config) {
         client.query(parameters);
     };
     
-    var updateLayers = function(newState) {
+    var updateLayers = function() {
+        if ( !state.products ) {
+            return;
+        }
         self.layers = [];
-        $.each(newState.products, function(index, layer) {
+        $.each(state.products, function(index, layer) {
             var id = layer;
             var layerName = config.products[layer].name;
             var description = config.products[layer].description;
@@ -194,9 +210,12 @@ Worldview.DataDownload.Model = function(config) {
         self.events.trigger(self.EVENT_LAYER_UPDATE);  
     };
     
-    var updateProjection = function(newState) {
-        self.projection = newState.projection;
-        self.epsg = newState.epsg;
+    var updateProjection = function() {
+        if ( !state.projection || !state.epsg ) {
+            return;
+        }
+        self.projection = state.projection;
+        self.epsg = state.epsg;
         self.events.trigger(self.EVENT_PROJECTION_UPDATE, self.projection,
                 self.epsg);
     };

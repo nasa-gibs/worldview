@@ -13,7 +13,7 @@ Worldview.namespace("DataDownload");
 Worldview.DataDownload.ControlDialog = function(model) {
     
     var WIDTH = 345;
-    var HEIGHT = 265;
+    var HEIGHT = 65;
     var X_OFFSET = 50;
     var Y_OFFSET = 75;
     var dialog;

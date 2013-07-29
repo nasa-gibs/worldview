@@ -27,14 +27,15 @@ Worldview.DataDownload.ECHOGeometry = function(result) {
         }
     };
     
-    self.toOpenLayers = function() {
+    self.toOpenLayers = function(sourceProjection, targetProjection) {
         olPolygons = [];
         $.each(self.polygons, function(index, polygon) {
             var olRings = [];
             $.each(polygon, function(index, ring) {
                 var olPoints = [];
                 $.each(ring, function(index, point) {
-                    var p = new OpenLayers.Geometry.Point(point.x, point.y);
+                    var p = createPoint(point, sourceProjection, 
+                            targetProjection);
                     olPoints.push(p);    
                 });
                 olRings.push(new OpenLayers.Geometry.LinearRing(olPoints));
@@ -42,6 +43,16 @@ Worldview.DataDownload.ECHOGeometry = function(result) {
             olPolygons.push(new OpenLayers.Geometry.Polygon(olRings));
         });
         return new OpenLayers.Geometry.MultiPolygon(olPolygons);    
+    };
+    
+    var createPoint = function(point, sourceProjection, targetProjection) {
+        var p = new OpenLayers.Geometry.Point(point.x, point.y);
+        if ( sourceProjection ) {
+            if ( sourceProjection !== targetProjection ) {
+                p = p.transform(sourceProjection, targetProjection);
+            }
+        }
+        return p;    
     };
     
     var initFromPolygons = function(echoPolygons) {
