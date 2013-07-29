@@ -85,6 +85,7 @@
         <file name="js/Worldview/Map/DailyProduct.js"/>
         <file name="js/Worldview/Map/GraticuleLayer.js"/>
         <file name="js/Worldview/Map/TWMSLayer.js"/>
+        <file name="js/Worldview/Map/HoverControl.js"/>
 
         <file name="js/Worldview/DataDownload/Model.js"/>
         <file name="js/Worldview/DataDownload/ECHOClient.js"/>

@@ -136,8 +136,10 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
         self.setProjection(mapConfig.defaultProjection || "geographic");
         
         $(document.body).mousemove(function(event) {
-            newEvent = {
-                xy: {x: event.clientX, y: event.clientY }
+            newEvent = $.extend({}, event);
+            newEvent.xy = {
+                x: event.clientX,
+                y: event.clientY
             };
             self.map.events.triggerEvent("mousemove", newEvent);
         });

@@ -50975,6 +50975,14 @@
     },
     "projections": {
         "antarctic": {
+            "echo": {
+                "extent": [
+                    -4194304,
+                    -4194304,
+                    4194304,
+                    4194304
+                ]
+            },
             "fractionalZoom": false,
             "maxExtent": [
                 -4194304,
@@ -51007,6 +51015,14 @@
             "units": "m"
         },
         "arctic": {
+            "echo": {
+                "extent": [
+                    -4194304,
+                    -4194304,
+                    4194304,
+                    4194304
+                ]
+            },
             "maxExtent": [
                 -4194304,
                 -4194304,
@@ -51038,6 +51054,14 @@
             "units": "m"
         },
         "geographic": {
+            "echo": {
+                "extent": [
+                    -180,
+                    -70,
+                    180,
+                    70
+                ]
+            },
             "maxExtent": [
                 -180,
                 -90,

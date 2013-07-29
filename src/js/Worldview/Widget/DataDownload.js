@@ -99,7 +99,7 @@ Worldview.Widget.DataDownload = function(spec) {
         controlDialog.show();
         
         if ( !mapView ) {
-            mapView = Worldview.DataDownload.MapView(model, spec.maps);
+            mapView = Worldview.DataDownload.MapView(model, spec.maps, config);
         }
         
     };

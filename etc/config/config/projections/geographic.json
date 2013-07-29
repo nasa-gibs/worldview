@@ -29,5 +29,8 @@
         0,
         0
     ],
-    "startZoom": 1
+    "startZoom": 1,
+    "echo": {
+        "extent": [-180, -70, 180, 70]
+    }
 }
