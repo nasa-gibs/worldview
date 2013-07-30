@@ -12,15 +12,14 @@ Worldview.namespace("DataDownload");
 
 Worldview.DataDownload.MapView = function(model, maps, config) {
     
+    var ns = Worldview.DataDownload;
     var self = {};
     var results = null;
     
-    var BUTTON_LAYER_NAME = "DataDownload_Button";
     var HOVER_LAYER_NAME = "DataDownload_Hover";
     
-    var IMAGE_BUTTON_SELECT = "images/data-download-plus-button-cyan.svg";
-    var IMAGE_BUTTON_UNSELECT = "images/data-download-minus-button-blue.svg";
-
+    var buttonLayers = ns.ButtonLayers(model, maps, config);
+    
     var STYLE_HOVER_UNSELECTED = {
         strokeColor: "#00ffff",
         fillColor: "#00ffff",
@@ -29,6 +28,10 @@ Worldview.DataDownload.MapView = function(model, maps, config) {
         fontWeight: "bold",
         labelOutlineColor: "black",
         labelOutlineWidth: 3
+    };
+    
+    var STYLE_CONNECTOR = {
+        strokeColor: "#ff0000",
     };
     
     var bounds = {};
@@ -44,74 +47,44 @@ Worldview.DataDownload.MapView = function(model, maps, config) {
             .on("queryResults", onQueryResults)
             .on("projectionUpdate", onProjectionUpdate)
             .on("deactivate", onDeactivate)    
-            .on("activate", updateGranules);  
+            .on("activate", update);  
     };
     
     var onQueryResults = function(r) {
         results = r;
-        updateGranules();
+        update();
     };
     
-    var updateGranules = function() {
+    var update = function() {
         if ( !results ) {
             return;
         }
         
-        createHoverLayer();
-        
-        var buttonLayer = createButtonLayer();
-        buttonLayer.removeAllFeatures();
-        
-        features = [];
         $.each(results, function(index, result) {
             if ( !result.geometry ) {
                 result.geometry = {};
+            }  
+            if ( !result.centroid ) {
+                result.centroid = {};
             }
             if ( !result.geometry[model.epsg] ) {
-                g = Worldview.DataDownload.ECHOGeometry(result)
+                var geom = Worldview.DataDownload.ECHOGeometry(result)
                         .toOpenLayers("EPSG:4326", "EPSG:" + model.epsg);
-                result.geometry[model.epsg] = g;
-            }
-            var geometry = result.geometry[model.epsg];
-            var extent = bounds[model.projection];
-            var geoBounds = geometry.getBounds();
-            if ( extent.intersectsBounds(geoBounds) ) {
-                var feature = new OpenLayers.Feature.Vector(
-                        geometry.getCentroid(), 
-                        { result: result }
-                );
-                features.push(feature);
-            }
+                // Only add the geometry if it is in the extents
+                var extent = bounds[model.projection];
+                var mbr = geom.getBounds();
+                if ( extent.intersectsBounds(mbr) ) {
+                    result.geometry[model.epsg] = geom;
+                    result.centroid[model.epsg] = geom.getCentroid();
+                }                
+            }         
         });
-        buttonLayer.addFeatures(features);        
-    }
-    
-    var createButtonLayer = function() {
-        var buttonLayer = maps.map.getLayersByName(BUTTON_LAYER_NAME)[0];
-        if ( !buttonLayer ) {
-            size = {w: 20, h: 20};
-            buttonLayer = new OpenLayers.Layer.Vector(BUTTON_LAYER_NAME, {
-                styleMap: new OpenLayers.StyleMap({
-                    externalGraphic: IMAGE_BUTTON_SELECT,
-                    graphicWidth: size.w,
-                    graphicHeight: size.h
-                })                
-            });
-            maps.map.addLayer(buttonLayer);
-            
-            var hoverControl = new Worldview.Map.HoverControl(buttonLayer);
-            hoverControl.events.on({
-                "hoverover": onHoverOver,
-                "hoverout": onHoverOut
-            });
-            maps.map.addControl(hoverControl);
-            hoverControl.activate();
-            buttonLayer.hoverControl = hoverControl;
-        }
         
-        return buttonLayer;        
-    };
-    
+        createHoverLayer();
+        buttonLayers.update(results);
+        
+    }
+        
     var createHoverLayer = function() {
         var hoverLayer = maps.map.getLayersByName(HOVER_LAYER_NAME)[0];
         if ( !hoverLayer ) {
@@ -122,19 +95,12 @@ Worldview.DataDownload.MapView = function(model, maps, config) {
     
     var onProjectionUpdate = function() {
         console.log("projection", model.projection, model.epsg);
-        updateGranules();
+        update();
     };
     
     var onDeactivate = function() {
+        buttonLayers.dispose();
         $.each(maps.projections, function(index, map) {
-            var buttonLayer = map.getLayersByName(BUTTON_LAYER_NAME)[0];
-            if ( buttonLayer ) {
-                map.removeLayer(buttonLayer);
-                if ( buttonLayer.hoverControl ) {
-                    map.removeControl(buttonLayer.hoverControl);
-                }
-            }
-            
             var hoverLayer = map.getLayersByName(HOVER_LAYER_NAME)[0];
             if ( hoverLayer ) {
                 map.removeLayer(hoverLayer);
@@ -163,10 +129,7 @@ Worldview.DataDownload.MapView = function(model, maps, config) {
         if ( hoverLayer ) {
             hoverLayer.removeAllFeatures();
         }
-        var buttonLayer = maps.map.getLayersByName(BUTTON_LAYER_NAME)[0];
-        if ( buttonLayer ) {
-            buttonLayer.removeAllFeatures();
-        }
+        buttonLayers.clear();
     };
     
     init();

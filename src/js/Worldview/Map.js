@@ -133,7 +133,7 @@ $(function(ns) {
             layer.originalTransitionEffect = layer.transitionEffect;
             layer.transitionEffect = "none";
         }           
-    }
+    };
     
     /**
      * Sets the visiblity of a layer. If the layer is supposed to be not 
@@ -156,6 +156,16 @@ $(function(ns) {
         layer.div.style.opacity = actualOpacity;    
         if ( visible && opacity > 0 && !layer.getVisibility() ) {
             layer.setVisibility(true);
+        }
+    };
+    
+    ns.getLayerByName = function(map, name) {
+        var layers = map.getLayersByName(name);
+        if ( layers && layers.length > 1 ) {
+            throw new Error("Multiple layers found for: " + name);    
+        }
+        if ( layers ) {
+            return layers[0];
         }
     }
     
