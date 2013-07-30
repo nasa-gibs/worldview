@@ -99,6 +99,7 @@
         <file name="js/Worldview/DataDownload/ECHOGeometry.js"/>
         <file name="js/Worldview/DataDownload/ProductSelector.js"/>
         <file name="js/Worldview/DataDownload/ControlDialog.js"/>
+        <file name="js/Worldview/DataDownload/ButtonLayers.js"/>
         <file name="js/Worldview/DataDownload/MapView.js"/>
         
         <file name="js/Worldview/Widget/Map.js"/>
