@@ -136,5 +136,11 @@
         return this.toISOString().split("T")[0];
     };
     
+    Date.prototype.toISOStringTimeHM = function() {
+        var time = this.toISOString().split("T")[1];
+        var parts = time.split(".")[0].split(":");
+        return parts[0] + ":" + parts[1];        
+    };
+    
 })();
 

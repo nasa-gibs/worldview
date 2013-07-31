@@ -89,11 +89,7 @@ Worldview.Widget.DataDownload = function(spec) {
         if ( !controlDialog ) {
             controlDialog = Worldview.DataDownload.ControlDialog(model);
             controlDialog.events.on("hide", function() {
-                try {
-                    model.deactivate();
-                } catch ( error ) { 
-                    Worldview.error("Internal error", error); 
-                }
+                model.deactivate();
             });
         }
         controlDialog.show();

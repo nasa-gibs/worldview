@@ -28,10 +28,15 @@ Worldview.DataDownload.HoverLayers = function(model, maps, config) {
     
     self.hoverOver = function(buttonFeature) {
         var layer = getLayer();
+        
+        var style = $.extend(true, {}, STYLE_HOVER_UNSELECTED);
+        style.label = getLabel(buttonFeature);
+        style.labelYOffset = getLabelOffset(buttonFeature);
+        
         var hoverFeature = new OpenLayers.Feature.Vector(
             buttonFeature.attributes.result.geometry[model.epsg],
             buttonFeature.attributes,
-            STYLE_HOVER_UNSELECTED
+            style
         );
         layer.addFeatures([hoverFeature]);
     };
@@ -66,6 +71,23 @@ Worldview.DataDownload.HoverLayers = function(model, maps, config) {
             layer = createLayer();
         }
         return layer;
+    };
+    
+    var getLabel = function(feature) {
+        var result = feature.attributes.result;
+        var timeStart = Date.parseISOString(result.time_start);
+        var timeEnd = Date.parseISOString(result.time_end);
+        
+        var displayStart = timeStart.toISOStringTimeHM();
+        var displayEnd = timeEnd.toISOStringTimeHM();
+        
+        return displayStart + " - " + displayEnd;
+    };
+    
+    var getLabelOffset = function(feature) {
+        var style = feature.layer.styleMap.styles["default"].defaultStyle;
+        var buttonHeight = style.graphicHeight;
+        return ( buttonHeight / 2.0 ) + 10;
     };
     
     return self;

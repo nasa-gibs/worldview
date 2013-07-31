@@ -24,6 +24,12 @@ Worldview.DataDownload.ButtonLayers = function(model, maps, config) {
     
     self.events = Worldview.Events();
     
+    var init = function() {
+        $.each(maps.projections, function(index, map) {
+            map.events.register("zoomend", self, resize);
+        });
+    };
+    
     self.update = function(results) {
         var layer = getLayer();
         layer.removeAllFeatures();
@@ -52,13 +58,13 @@ Worldview.DataDownload.ButtonLayers = function(model, maps, config) {
     };
     
     var createLayer = function() {
-        size = {w: 20, h: 20};
+        size = getSize();
+        var styleMap = {
+            externalGraphic: IMAGE_SELECT
+        };
+        
         layer = new OpenLayers.Layer.Vector(LAYER_NAME, {
-            styleMap: new OpenLayers.StyleMap({
-                externalGraphic: IMAGE_SELECT,
-                graphicWidth: size.w,
-                graphicHeight: size.h
-            })                
+            styleMap: getStyle()
         });
         maps.map.addLayer(layer);
         
@@ -87,6 +93,33 @@ Worldview.DataDownload.ButtonLayers = function(model, maps, config) {
         return layer;
     };
     
+    var getSize = function() {
+        var zoom = maps.map.getZoom();
+        // Minimum size of the button is 15 pixels
+        var base = 15;
+        // Double the size for each zoom level
+        var add = Math.pow(2, zoom);
+        // But 32 pixels is the maximum size
+        var size = Math.min(base + add, base + 32);
+        return new OpenLayers.Size(size, size);
+    };
+    
+    var getStyle = function() {
+        var size = getSize();
+        var styleMap = new OpenLayers.StyleMap({
+            externalGraphic: IMAGE_SELECT,
+            graphicWidth: size.w,
+            graphicHeight: size.h
+        });
+        return styleMap;
+    }
+    
+    var resize = function() {
+        getLayer().styleMap = getStyle();
+        layer.redraw();
+    };
+    
+    init();
     return self;
       
 };
