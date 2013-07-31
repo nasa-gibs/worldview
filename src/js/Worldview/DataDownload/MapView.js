@@ -15,25 +15,10 @@ Worldview.DataDownload.MapView = function(model, maps, config) {
     var ns = Worldview.DataDownload;
     var self = {};
     var results = null;
-    
-    var HOVER_LAYER_NAME = "DataDownload_Hover";
-    
+        
     var buttonLayers = ns.ButtonLayers(model, maps, config);
-    
-    var STYLE_HOVER_UNSELECTED = {
-        strokeColor: "#00ffff",
-        fillColor: "#00ffff",
-        fillOpacity: 0.25,
-        fontColor: "#ffffff",
-        fontWeight: "bold",
-        labelOutlineColor: "black",
-        labelOutlineWidth: 3
-    };
-    
-    var STYLE_CONNECTOR = {
-        strokeColor: "#ff0000",
-    };
-    
+    var hoverLayers = ns.HoverLayers(model, maps, config);
+        
     var bounds = {};
     
     var init = function() {
@@ -48,6 +33,14 @@ Worldview.DataDownload.MapView = function(model, maps, config) {
             .on("projectionUpdate", onProjectionUpdate)
             .on("deactivate", onDeactivate)    
             .on("activate", update);  
+            
+        buttonLayers.events
+            .on("hoverover", function(event) {
+                hoverLayers.hoverOver(event.feature);
+            })
+            .on("hoverout", function() {
+                hoverLayers.hoverOut();
+            });
     };
     
     var onQueryResults = function(r) {
@@ -78,57 +71,22 @@ Worldview.DataDownload.MapView = function(model, maps, config) {
                     result.centroid[model.epsg] = geom.getCentroid();
                 }                
             }         
-        });
-        
-        createHoverLayer();
+        });        
         buttonLayers.update(results);
         
     }
-        
-    var createHoverLayer = function() {
-        var hoverLayer = maps.map.getLayersByName(HOVER_LAYER_NAME)[0];
-        if ( !hoverLayer ) {
-            hoverLayer = new OpenLayers.Layer.Vector(HOVER_LAYER_NAME);
-            maps.map.addLayer(hoverLayer);
-        }
-    };
-    
+            
     var onProjectionUpdate = function() {
-        console.log("projection", model.projection, model.epsg);
         update();
     };
     
     var onDeactivate = function() {
+        hoverLayers.dispose();
         buttonLayers.dispose();
-        $.each(maps.projections, function(index, map) {
-            var hoverLayer = map.getLayersByName(HOVER_LAYER_NAME)[0];
-            if ( hoverLayer ) {
-                map.removeLayer(hoverLayer);
-            }
-        });
     };
-    
-    var onHoverOver = function(event) {
-        var hoverLayer = maps.map.getLayersByName(HOVER_LAYER_NAME)[0];
-        var feature = event.feature;
-        var hoverFeature = new OpenLayers.Feature.Vector(
-            feature.attributes.result.geometry[model.epsg], 
-            feature.attributes,
-            STYLE_HOVER_UNSELECTED
-        );
-        hoverLayer.addFeatures([hoverFeature]);
-    };
-    
-    var onHoverOut = function(event) {
-        var hoverLayer = maps.map.getLayersByName(HOVER_LAYER_NAME)[0];
-        hoverLayer.removeAllFeatures();
-    };
-    
+        
     var clear = function() {
-        var hoverLayer = maps.map.getLayersByName(HOVER_LAYER_NAME)[0];
-        if ( hoverLayer ) {
-            hoverLayer.removeAllFeatures();
-        }
+        hoverLayers.clear();
         buttonLayers.clear();
     };
     

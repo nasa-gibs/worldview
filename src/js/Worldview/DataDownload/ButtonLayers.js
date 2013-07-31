@@ -26,10 +26,6 @@ Worldview.DataDownload.ButtonLayers = function(model, maps, config) {
     
     self.update = function(results) {
         var layer = getLayer();
-        if ( !layer ) {
-            layer = createLayer();
-        };
-        
         layer.removeAllFeatures();
         var features = [];
         $.each(results, function(index, result) {
@@ -44,22 +40,14 @@ Worldview.DataDownload.ButtonLayers = function(model, maps, config) {
     };
     
     self.clear = function() {
-        var layer = getLayer();
-        if ( layer ) {
-            layer.removeAllFeatures();
-        };
+        getLayer().removeAllFeatures();
     };
     
     self.dispose = function() {
         $.each(maps.projections, function(index, map) {
             var layer = getLayer(map);
-            if ( layer ) {
-                if ( layer.hoverControl ) {
-                    map.rmeoveControl(hoverControl);
-                    layer.hoverControl = null;
-                }
-                map.removeLayer(layer);     
-            }  
+            map.removeControl(layer.hoverControl);
+            map.removeLayer(layer);     
         });     
     };
     
@@ -74,7 +62,7 @@ Worldview.DataDownload.ButtonLayers = function(model, maps, config) {
         });
         maps.map.addLayer(layer);
         
-        var hoverControl = new Worldview.Map.HoverControl(buttonLayer);
+        var hoverControl = new Worldview.Map.HoverControl(layer);
         hoverControl.events.on({
             "hoverover": function(event) {
                 self.events.trigger(self.EVENT_HOVER_OVER, event);
@@ -92,7 +80,11 @@ Worldview.DataDownload.ButtonLayers = function(model, maps, config) {
     
     var getLayer = function(map) {
         map = map || maps.map;
-        Worldview.Map.getLayerByName(map, LAYER_NAME);
+        var layer = Worldview.Map.getLayerByName(map, LAYER_NAME);
+        if ( !layer ) {
+            layer = createLayer();
+        }
+        return layer;
     };
     
     return self;
