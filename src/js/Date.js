@@ -142,5 +142,9 @@
         return parts[0] + ":" + parts[1];        
     };
     
+    Date.prototype.toTimestampUTC = function() {
+        return this.toISOString().replace(/[-:TZ\.]/g, "");    
+    }
+    
 })();
 

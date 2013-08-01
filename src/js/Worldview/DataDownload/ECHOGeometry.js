@@ -42,7 +42,7 @@ Worldview.DataDownload.ECHOGeometry = function(result) {
             });
             olPolygons.push(new OpenLayers.Geometry.Polygon(olRings));
         });
-        return new OpenLayers.Geometry.MultiPolygon(olPolygons);    
+        return olPolygons[0];    
     };
     
     var createPoint = function(point, sourceProjection, targetProjection) {

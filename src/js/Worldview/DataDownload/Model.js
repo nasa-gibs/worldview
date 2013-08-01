@@ -179,10 +179,27 @@ Worldview.DataDownload.Model = function(config) {
             return;
         }
         
+        var t = state.time;
+        startTime = new Date(Date.UTC(
+            t.getUTCFullYear(), t.getUTCMonth(), t.getUTCDate(), 0, 0, 0));
+        endTime = new Date(Date.UTC(
+            t.getUTCFullYear(), t.getUTCMonth(), t.getUTCDate(), 23, 59, 59));
+                             
+        var method = config.products[self.selectedLayer].echo.method;
+        var options = config.echo[method].query || {};
+        if ( options.timeWindow ) {
+            startDelta = options.timeWindow[0];
+            endDelta = options.timeWindow[1];
+            
+            startTime.setUTCMinutes(startTime.getUTCMinutes() + startDelta);
+            endTime.setUTCMinutes(endTime.getUTCMinutes() + endDelta);
+        }    
+         
         var parameters = {
             shortName: layerConfig.echo.shortName,
             dataCenterId: layerConfig.echo.dataCenterId,
-            day: state.time.toISOStringDate()
+            startTime: startTime.toTimestampUTC(),
+            endTime: endTime.toTimestampUTC()
         }
         client.query(parameters);
     };

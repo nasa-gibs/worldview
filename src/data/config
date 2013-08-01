@@ -3,6 +3,41 @@
         "arcticProjectionChangeDate": "2013-06-06",
         "defaultProjection": "geographic"
     },
+    "echo": {
+        "eos": {
+            "filters": [
+                "extent",
+                "time"
+            ],
+            "options": {
+                "extent": {
+                    "4326": [
+                        -180,
+                        -60,
+                        180,
+                        60
+                    ]
+                },
+                "time": {
+                    "eastMixZone": [
+                        -180,
+                        180
+                    ],
+                    "meridian": 720,
+                    "westMixZone": [
+                        1260,
+                        1620
+                    ]
+                }
+            },
+            "query": {
+                "timeWindow": [
+                    -180,
+                    180
+                ]
+            }
+        }
+    },
     "paletteOrder": [
         "orange_1",
         "red_1",
@@ -46052,6 +46087,7 @@
                     "LAADS",
                     "LANCEMODIS"
                 ],
+                "method": "eos",
                 "name": "MODIS/Aqua Aerosol 5-Min L2 Swath 10km",
                 "shortName": "MYD04_L2"
             },
@@ -51054,14 +51090,6 @@
             "units": "m"
         },
         "geographic": {
-            "echo": {
-                "extent": [
-                    -180,
-                    -70,
-                    180,
-                    70
-                ]
-            },
             "maxExtent": [
                 -180,
                 -90,

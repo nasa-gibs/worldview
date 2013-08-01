@@ -167,6 +167,45 @@ $(function(ns) {
         if ( layers ) {
             return layers[0];
         }
+    };
+    
+    ns.isPolygonValid = function(polygon, maxDistance) {
+        var outerRing = polygon.components[0];
+        for ( var i = 0; i < outerRing.components.length - 1; i++ ) {
+            var p1 = outerRing.components[i];
+            var p2 = outerRing.components[i + 1];
+            if ( Math.abs(p2.x - p1.x) > maxDistance ) {
+                return false;
+            }
+        } 
+        return true;
+    };
+    
+    ns.splitAntiMeridian = function(polygon, maxDistance) {
+        var outerRing = polygon.components[0];
+        var points = outerRing.components.slice();
+        var adjustSign = ( points[0].x < 0 ) ? -1 : 1; 
+        for ( var i = 0 ; i < points.length - 1; i++ ) {
+            var p1 = points[i];
+            var p2 = points[i+1];
+            var distance = Math.abs(p2.x - p1.x);
+            if ( distance > maxDistance ) {
+                points[i+1] = new OpenLayers.Geometry.Point(
+                        p2.x + (360 * adjustSign), p2.y);
+            }
+        }
+        var poly1 = new OpenLayers.Geometry.Polygon(
+            [new OpenLayers.Geometry.LinearRing(points)]
+        );
+        adjustSign *= -1;
+        for ( var j = 0; j < points.length; j++ ) {
+            points[j] = new OpenLayers.Geometry.Point(
+                points[j].x + (360 * adjustSign), points[j].y);
+        }
+        var poly2 = new OpenLayers.Geometry.Polygon(
+            [new OpenLayers.Geometry.LinearRing(points)]
+        );
+        return new OpenLayers.Geometry.MultiPolygon([poly1, poly2]);
     }
     
 }(Worldview.Map));

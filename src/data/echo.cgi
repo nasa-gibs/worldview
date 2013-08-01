@@ -160,13 +160,14 @@ def create_xml(fields):
   xml += ["</collectionShortName>", "</granuleCondition>"]
   
   try:
-    day = datetime.strptime(fields["day"].value, "%Y-%m-%d")
+    start_time = datetime.strptime(fields["startTime"].value, "%Y%m%d%H%M%S%f")
   except ValueError:
-    raise RequestError("Invalid day: " + fields["day"].value)
-    
-  start_time = datetime(day.year, day.month, day.day, 0, 0, 0)
-  end_time = datetime(day.year, day.month, day.day, 23, 59, 0)
-  
+    raise RequestError("Invalid startTime: " + fields["startTime"].value)
+  try:
+    end_time = datetime.strptime(fields["endTime"].value, "%Y%m%d%H%M%S%f")
+  except ValueError:
+    raise RequestError("Invalid endTime: " + fields["endTime"].value)
+       
   xml += ["<granuleCondition>", "<temporal>"]
   xml += ["<startDate>", aql_date(start_time), "</startDate>"]
   xml += ["<stopDate>", aql_date(end_time), "</stopDate>"]
@@ -226,7 +227,7 @@ def process_request(options):
   if len(fields) == 0:
     raise RequestError("No parameters")
     
-  required_fields = ["day", "shortName", "dataCenterId"]
+  required_fields = ["startTime", "endTime", "shortName", "dataCenterId"]
   for required_field in required_fields:
     if required_field not in fields:
       raise RequestError("Missing parameter: %s" % required_field)

@@ -27,17 +27,12 @@ Worldview.namespace("Widget");
  */
 Worldview.Widget.DataDownload = function(spec) {
 
-    var log = Logging.getLogger("Widget.DataDownload");
-    Logging.debug("Widget.DataDownload");
+    var log = Logging.getLogger("Worldview.DataDownload");
+    Logging.debug("Worldview.DataDownload");
             
     var HTML_WIDGET_INACTIVE = "<img src='images/camera.png'></img>";
     var HTML_WIDGET_ACTIVE = "<img src='images/cameraon.png'></img>";
     
-    var preloader = Worldview.Preloader([
-        "images/activity.gif",
-        "images/cameraon.png",
-        "images/red-x.svg"    
-    ]);
     var model = spec.model;
     var controlDialog = null;
     var mapView = null;
@@ -73,14 +68,8 @@ Worldview.Widget.DataDownload = function(spec) {
     self.getValue = function() {};
     
     var toggleMode = function() {
-        preloader.execute(function() {
-            try {
-                model.toggleMode();
-            } catch ( error ) {
-                Worldview.error("Internal error", error);
-            }
-        });              
-    }
+        model.toggleMode();           
+    };
     
     var onActivate = function() {
         log.debug("activate");
@@ -117,7 +106,7 @@ Worldview.Widget.DataDownload = function(spec) {
     };
     
     var onQueryResults = function(results) {
-        log.debug("queryResults", results);
+        log.debug("queryResults", results.length);
         Worldview.Indicator.hide();
         if ( results.length === 0 ) {
             Worldview.Indicator.noData();

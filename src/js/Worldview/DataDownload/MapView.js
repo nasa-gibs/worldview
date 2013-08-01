@@ -13,20 +13,20 @@ Worldview.namespace("DataDownload");
 Worldview.DataDownload.MapView = function(model, maps, config) {
     
     var ns = Worldview.DataDownload;
+    var log = Logging.getLogger("Worldview.DataDownload");
+    
     var self = {};
-    var results = null;
+    var results = [];
         
     var buttonLayers = ns.ButtonLayers(model, maps, config);
     var hoverLayers = ns.HoverLayers(model, maps, config);
-        
-    var bounds = {};
+            
+    var filterMap = {
+        extent: ns.ExtentFilter,
+        time: ns.TimeFilter
+    };
     
-    var init = function() {
-        $.each(config.projections, function(projection, projectionConfig) {
-            bounds[projection] = 
-                new OpenLayers.Bounds(projectionConfig.echo.extent);
-        });
-        
+    var init = function() {        
         model.events
             .on("query", clear)
             .on("queryResults", onQueryResults)
@@ -43,39 +43,72 @@ Worldview.DataDownload.MapView = function(model, maps, config) {
             });
     };
     
-    var onQueryResults = function(r) {
-        results = r;
-        update();
+    var onQueryResults = function(newResults) {
+        update(newResults);
     };
     
-    var update = function() {
-        if ( !results ) {
-            return;
+    var update = function(newResults) {
+        if ( newResults ) {
+            results = filter(newResults);
         }
+        buttonLayers.update(results);    
+    }
+    
+    var filter = function(newResults) {
+        var filters = createFilters();
+        var filteredResults = [];
         
-        $.each(results, function(index, result) {
+        $.each(newResults, function(index, result) {
             if ( !result.geometry ) {
                 result.geometry = {};
             }  
             if ( !result.centroid ) {
                 result.centroid = {};
             }
-            if ( !result.geometry[model.epsg] ) {
+            if ( !result.geometry["4326"] ) {
                 var geom = Worldview.DataDownload.ECHOGeometry(result)
                         .toOpenLayers("EPSG:4326", "EPSG:" + model.epsg);
-                // Only add the geometry if it is in the extents
-                var extent = bounds[model.projection];
-                var mbr = geom.getBounds();
-                if ( extent.intersectsBounds(mbr) ) {
-                    result.geometry[model.epsg] = geom;
-                    result.centroid[model.epsg] = geom.getCentroid();
-                }                
-            }         
-        });        
-        buttonLayers.update(results);
-        
-    }
-            
+                var centroid = geom.getCentroid();
+                result.geometry["4326"] = geom;
+                result.centroid["4326"] = centroid;
+            }
+            if ( model.epsg !== "4326" && !result.geometry[model.epsg] ) {
+                var geom = Worldview.DataDownload.ECHOGeometry(result)
+                        .toOpenLayers("EPSG:4326", "EPSG:" + model.epsg);
+                var centroid = geom.getCentroid();
+                result.geometry[model.epsg] = geom;
+                result.geometry[model.epsg] = centroid;
+            }
+            $.each(filters, function(index, filter) {
+                if ( result ) {
+                    result = filter.filter(result);
+                }
+            });
+            if ( result ) {
+                filteredResults.push(result);
+            }    
+        });  
+        log.debug("filteredResults", filteredResults.length);
+        return filteredResults;        
+    };
+
+    var createFilters = function() {
+        var layer = model.selectedLayer;
+        var method = config.products[layer].echo.method
+        var filterNames = config.echo[method].filters;
+        var filters = [];
+        $.each(filterNames, function(index, name) {
+            var options = config.echo[method].options[name] || {};
+            var func = filterMap[name];
+            if ( !func ) {
+                throw new Error("No such filter: " + name);
+            }
+            var filter = func(config, options, model);
+            filters.push(filter);  
+        }); 
+        return filters;       
+    };
+                
     var onProjectionUpdate = function() {
         update();
     };
