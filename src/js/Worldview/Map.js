@@ -28,6 +28,9 @@ $(function(ns) {
     // Used to reference the TileWorker
     var BUILD_NONCE = "@BUILD_NONCE@";
     
+    ns.EPSG_GCS_WGS_84 = "4326";
+    ns.EPSG_GEOGRAPHIC = ns.EPSG_GCS_WGS_84;
+    
     /**
      * An object that contains OpenLayers.Control.MousePosition objects
      * that update the current latitude/longitude values on the map as the
@@ -184,9 +187,7 @@ $(function(ns) {
     ns.adjustAntiMeridian = function(polygon, adjustSign) {
         var outerRing = polygon.components[0];
         var points = outerRing.components.slice();
-        if ( adjustSign === 1 ) {
-            console.log("adjust", polygon);
-        }
+
         for ( var i = 0 ; i < points.length; i++ ) {
             if ( adjustSign > 0 && points[i].x < 0 ) {
                 points[i] = new OpenLayers.Geometry.Point(

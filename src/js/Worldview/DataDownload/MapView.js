@@ -68,19 +68,19 @@ Worldview.DataDownload.MapView = function(model, maps, config) {
             if ( !result.centroid ) {
                 result.centroid = {};
             }
+            var echoGeom = Worldview.DataDownload.ECHOGeometry(result);
             if ( !result.geometry["4326"] ) {
-                var geom = Worldview.DataDownload.ECHOGeometry(result)
-                        .toOpenLayers("EPSG:4326", "EPSG:" + model.epsg);
+                var geom = echoGeom.toOpenLayers();
                 var centroid = geom.getCentroid();
                 result.geometry["4326"] = geom;
                 result.centroid["4326"] = centroid;
-            }
-            if ( model.epsg !== "4326" && !result.geometry[model.epsg] ) {
-                var geom = Worldview.DataDownload.ECHOGeometry(result)
-                        .toOpenLayers("EPSG:4326", "EPSG:" + model.epsg);
-                var centroid = geom.getCentroid();
-                result.geometry[model.epsg] = geom;
-                result.geometry[model.epsg] = centroid;
+            }          
+            if ( !result.geometry[model.epsg] ) {
+                var projGeom = echoGeom.toOpenLayers("EPSG:4326", 
+                        "EPSG:" + model.epsg);
+                var projCentroid = projGeom.getCentroid();
+                result.geometry[model.epsg] = projGeom;
+                result.geometry[model.epsg] = projCentroid;
             }
             $.each(filters, function(index, filter) {
                 if ( result ) {

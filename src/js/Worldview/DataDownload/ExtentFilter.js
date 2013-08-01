@@ -18,11 +18,14 @@ Worldview.DataDownload.ExtentFilter = function(config, options, model) {
     
     var self = {};
     var extents = {};
+    var maxExtents = {};
     
     var init = function() {
         $.each(options, function(epsg, extentArray) {
-            var extent = new OpenLayers.Bounds(extentArray);
-            extents[epsg] = extent;    
+            extents[epsg] = new OpenLayers.Bounds(extentArray);
+        });
+        $.each(config.projections, function(projectionName, projection) {
+            maxExtents[projectionName] = projection.maxExtent;
         });
     };
     
@@ -32,8 +35,7 @@ Worldview.DataDownload.ExtentFilter = function(config, options, model) {
             return result;
         }
         
-        var extent = 
-                extents[model.epsg] || config.projections[model.projection];
+        var extent = extents[model.epsg] || maxExtents[model.projection];
         var mbr = geom.getBounds();
         if ( extent.intersectsBounds(mbr) ) {
             result.geometry[model.epsg] = geom;
