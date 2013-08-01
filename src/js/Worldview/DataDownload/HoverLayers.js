@@ -12,6 +12,8 @@ Worldview.namespace("DataDownload");
 
 Worldview.DataDownload.HoverLayers = function(model, maps, config) {
     
+    var log = Logging.getLogger("Worldview.DataDownload");
+    
     var LAYER_NAME = "DataDownload_Hover";
     
     var STYLE_HOVER_UNSELECTED = {
@@ -39,6 +41,7 @@ Worldview.DataDownload.HoverLayers = function(model, maps, config) {
             style
         );
         layer.addFeatures([hoverFeature]);
+        log.debug(hoverFeature.attributes.result);
     };
     
     self.hoverOut = function() {
@@ -78,10 +81,22 @@ Worldview.DataDownload.HoverLayers = function(model, maps, config) {
         var timeStart = Date.parseISOString(result.time_start);
         var timeEnd = Date.parseISOString(result.time_end);
         
+        var diff = Math.floor(
+            (timeStart.getTime() - model.time.getTime()) / (1000 * 60 * 60 * 24)
+        );
+                   
+        var suffix = "";
+        if ( diff !== 0 ) {
+            if ( diff < 0 ) { 
+                suffix = " (" + diff + " day)";
+            } else {
+                suffix = " (+" + diff + " day)";
+            }    
+        }
         var displayStart = timeStart.toISOStringTimeHM();
         var displayEnd = timeEnd.toISOStringTimeHM();
         
-        return displayStart + " - " + displayEnd;
+        return displayStart + " - " + displayEnd + suffix;
     };
     
     var getLabelOffset = function(feature) {

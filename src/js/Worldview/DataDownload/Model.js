@@ -80,6 +80,7 @@ Worldview.DataDownload.Model = function(config) {
     self.granules = [];
     self.projection = null;
     self.epsg = null;
+    self.time = null;
     
     var init = function() {
         client.events
@@ -165,6 +166,7 @@ Worldview.DataDownload.Model = function(config) {
             updateProjection();
         }
         if ( oldState.time !== state.time ) {
+            self.time = state.time;
             query();
         }
     };

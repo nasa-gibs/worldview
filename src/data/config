@@ -19,15 +19,9 @@
                     ]
                 },
                 "time": {
-                    "eastMixZone": [
-                        -180,
-                        180
-                    ],
-                    "meridian": 720,
-                    "westMixZone": [
-                        1260,
-                        1620
-                    ]
+                    "eastZone": 180,
+                    "maxDistance": 270,
+                    "westZone": 1260
                 }
             },
             "query": {

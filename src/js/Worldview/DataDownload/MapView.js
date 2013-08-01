@@ -55,6 +55,9 @@ Worldview.DataDownload.MapView = function(model, maps, config) {
     }
     
     var filter = function(newResults) {
+        if ( newResults.length === 0 ) {
+            return [];
+        }
         var filters = createFilters();
         var filteredResults = [];
         

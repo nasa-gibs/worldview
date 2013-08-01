@@ -12,9 +12,9 @@
                 "4326": [-180, -60, 180, 60]
             },
             "time": {
-                "meridian": 720,
-                "eastMixZone": [-180, 180],
-                "westMixZone": [1260, 1620]
+                "maxDistance": 270,
+                "eastZone": 180,
+                "westZone": 1260
             }
         }
     }

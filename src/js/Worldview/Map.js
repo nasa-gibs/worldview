@@ -181,31 +181,25 @@ $(function(ns) {
         return true;
     };
     
-    ns.splitAntiMeridian = function(polygon, maxDistance) {
+    ns.adjustAntiMeridian = function(polygon, adjustSign) {
         var outerRing = polygon.components[0];
         var points = outerRing.components.slice();
-        var adjustSign = ( points[0].x < 0 ) ? -1 : 1; 
-        for ( var i = 0 ; i < points.length - 1; i++ ) {
-            var p1 = points[i];
-            var p2 = points[i+1];
-            var distance = Math.abs(p2.x - p1.x);
-            if ( distance > maxDistance ) {
-                points[i+1] = new OpenLayers.Geometry.Point(
-                        p2.x + (360 * adjustSign), p2.y);
+        if ( adjustSign === 1 ) {
+            console.log("adjust", polygon);
+        }
+        for ( var i = 0 ; i < points.length; i++ ) {
+            if ( adjustSign > 0 && points[i].x < 0 ) {
+                points[i] = new OpenLayers.Geometry.Point(
+                    points[i].x + 360, points[i].y);
             }
+            if ( adjustSign < 0 && points[i].x > 0 ) {
+                points[i] = new OpenLayers.Geometry.Point( 
+                    points[i].x - 360, points[i].y);
+            }    
         }
-        var poly1 = new OpenLayers.Geometry.Polygon(
+        return new OpenLayers.Geometry.Polygon(
             [new OpenLayers.Geometry.LinearRing(points)]
         );
-        adjustSign *= -1;
-        for ( var j = 0; j < points.length; j++ ) {
-            points[j] = new OpenLayers.Geometry.Point(
-                points[j].x + (360 * adjustSign), points[j].y);
-        }
-        var poly2 = new OpenLayers.Geometry.Polygon(
-            [new OpenLayers.Geometry.LinearRing(points)]
-        );
-        return new OpenLayers.Geometry.MultiPolygon([poly1, poly2]);
-    }
+    };
     
 }(Worldview.Map));
