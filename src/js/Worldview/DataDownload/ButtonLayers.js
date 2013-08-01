@@ -51,9 +51,11 @@ Worldview.DataDownload.ButtonLayers = function(model, maps, config) {
     
     self.dispose = function() {
         $.each(maps.projections, function(index, map) {
-            var layer = getLayer(map);
-            map.removeControl(layer.hoverControl);
-            map.removeLayer(layer);     
+            var layer = getLayer(map, true);
+            if ( layer ) {
+                map.removeControl(layer.hoverControl);
+                map.removeLayer(layer);   
+            }  
         });     
     };
     
@@ -84,10 +86,10 @@ Worldview.DataDownload.ButtonLayers = function(model, maps, config) {
         return layer;       
     };
     
-    var getLayer = function(map) {
+    var getLayer = function(map, noCreate) {
         map = map || maps.map;
         var layer = Worldview.Map.getLayerByName(map, LAYER_NAME);
-        if ( !layer ) {
+        if ( !layer && !noCreate ) {
             layer = createLayer();
         }
         return layer;

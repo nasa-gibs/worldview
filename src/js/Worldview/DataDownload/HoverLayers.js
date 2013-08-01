@@ -54,7 +54,7 @@ Worldview.DataDownload.HoverLayers = function(model, maps, config) {
     
     self.dispose = function() {
         $.each(maps.projections, function(index, map) {
-            var layer = getLayer(map);
+            var layer = getLayer(map, true);
             if ( layer ) {
                 map.removeLayer(layer);
             }
@@ -67,10 +67,10 @@ Worldview.DataDownload.HoverLayers = function(model, maps, config) {
         return layer;
     };
     
-    var getLayer = function(map) {
+    var getLayer = function(map, noCreate) {
         map = map || maps.map;
         var layer = Worldview.Map.getLayerByName(map, LAYER_NAME);
-        if ( !layer ) {
+        if ( !layer && !noCreate ) {
             layer = createLayer();
         }
         return layer;
