@@ -80,7 +80,7 @@ Worldview.DataDownload.MapView = function(model, maps, config) {
                         "EPSG:" + model.epsg);
                 var projCentroid = projGeom.getCentroid();
                 result.geometry[model.epsg] = projGeom;
-                result.geometry[model.epsg] = projCentroid;
+                result.centroid[model.epsg] = projCentroid;
             }
             $.each(filters, function(index, filter) {
                 if ( result ) {
