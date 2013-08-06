@@ -21,15 +21,9 @@ Worldview.DataDownload.HoverLayers = function(model, maps, config) {
         fillColor: "#00ffff",
         fillOpacity: 0.25
     };
-        
-    var popup = null;
-    
+            
     var self = {};
-    
-    self.update = function() {
-        createLayer();
-    };
-    
+        
     self.hoverOver = function(buttonFeature) {
         var layer = getLayer();        
         var hoverFeature = new OpenLayers.Feature.Vector(
@@ -42,12 +36,10 @@ Worldview.DataDownload.HoverLayers = function(model, maps, config) {
     };
         
     self.hoverOut = function() {
-        removePopup();
         self.clear();
     };
     
     self.clear = function() {
-        removePopup();
         var layer = Worldview.Map.getLayerByName(maps.map, LAYER_NAME);
         if ( layer ) {
             layer.removeAllFeatures();
@@ -79,15 +71,7 @@ Worldview.DataDownload.HoverLayers = function(model, maps, config) {
         }
         return layer;
     };
-    
-    var removePopup = function(map) {
-        map = map || maps.map;
-        if ( popup ) {
-            maps.map.removePopup(popup);
-            popup = null;
-        }        
-    };
-    
+        
     return self;
 
 };

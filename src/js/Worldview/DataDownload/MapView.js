@@ -51,7 +51,6 @@ Worldview.DataDownload.MapView = function(model, maps, config) {
         if ( newResults ) {
             results = filter(newResults);
         }
-        hoverLayers.update();
         buttonLayers.update(results);  
     }
     
