@@ -85,7 +85,8 @@ $(function() {// Initialize "static" vars
             "images/invisible.png",
             "images/close-red-x.png",
             "images/collapseDown.png",
-            "images/expandUp.png"       
+            "images/expandUp.png",
+            "images/activity.gif"   
         ]).execute(onLoad);
     };
   
@@ -173,6 +174,7 @@ $(function() {// Initialize "static" vars
         Worldview.opacity = opacity; 
         Worldview.view = m;
         Worldview.ddm = dataDownloadModel;
+        Worldview.maps = m.productMap;
         
         var queryString = 
             Worldview.Permalink.decode(window.location.search.substring(1));

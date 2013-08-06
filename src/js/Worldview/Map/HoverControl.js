@@ -20,18 +20,21 @@ Worldview.Map.HoverControl = OpenLayers.Class(OpenLayers.Control, {
         pixelTolerance: 1,
         stopMove: false
     },
-        
+    
+    featureHandler: null,
+    
     initialize: function(layer, options) {
         this.layer = layer;
         this.handlerOptions = OpenLayers.Util.extend({}, 
                 this.defaultHandlerOptions);
         OpenLayers.Control.prototype.initialize.apply(this, arguments);   
         
+        this.featureHandler = new OpenLayers.Handler.Feature(this, this.layer, {
+            over: this.over,
+            out: this.out
+        }, {});
         this.handlers = {
-             feature: new OpenLayers.Handler.Feature(this, this.layer, {
-                 over: this.over,
-                 out: this.out
-             }, {})
+             feature: this.featureHandler
          };
     },
     

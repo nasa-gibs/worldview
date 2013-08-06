@@ -17,10 +17,10 @@ Worldview.DataDownload.MapView = function(model, maps, config) {
     
     var self = {};
     var results = [];
-        
+
+    var hoverLayers = ns.HoverLayers(model, maps, config);        
     var buttonLayers = ns.ButtonLayers(model, maps, config);
-    var hoverLayers = ns.HoverLayers(model, maps, config);
-            
+               
     var filterMap = {
         extent: ns.ExtentFilter,
         time: ns.TimeFilter
@@ -51,7 +51,8 @@ Worldview.DataDownload.MapView = function(model, maps, config) {
         if ( newResults ) {
             results = filter(newResults);
         }
-        buttonLayers.update(results);    
+        hoverLayers.update();
+        buttonLayers.update(results);  
     }
     
     var filter = function(newResults) {

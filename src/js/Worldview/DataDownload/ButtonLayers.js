@@ -37,8 +37,10 @@ Worldview.DataDownload.ButtonLayers = function(model, maps, config) {
         $.each(results, function(index, result) {
             var centroid = result.centroid[model.epsg];
             if ( centroid ) {
-                var feature = new OpenLayers.Feature.Vector(centroid, 
-                        {result: result});
+                var feature = new OpenLayers.Feature.Vector(centroid, {
+                    result: result,
+                    label: getLabel(result)
+                });
                 features.push(feature);    
             }
         });
@@ -46,12 +48,15 @@ Worldview.DataDownload.ButtonLayers = function(model, maps, config) {
     };
     
     self.clear = function() {
-        getLayer().removeAllFeatures();
+        var layer = Worldview.Map.getLayerByName(maps.map, LAYER_NAME);
+        if ( layer ) {
+            layer.removeAllFeatures();
+        }
     };
     
     self.dispose = function() {
         $.each(maps.projections, function(index, map) {
-            var layer = getLayer(map, true);
+            var layer = Worldview.Map.getLayerByName(map, LAYER_NAME);
             if ( layer ) {
                 map.removeControl(layer.hoverControl);
                 map.removeLayer(layer);   
@@ -66,17 +71,20 @@ Worldview.DataDownload.ButtonLayers = function(model, maps, config) {
         };
         
         layer = new OpenLayers.Layer.Vector(LAYER_NAME, {
-            styleMap: getStyle()
+            styleMap: new OpenLayers.StyleMap(getStyle())
         });
+        layer.div.setAttribute("data-layer-name", LAYER_NAME);
         maps.map.addLayer(layer);
         
         var hoverControl = new Worldview.Map.HoverControl(layer);
         hoverControl.events.on({
             "hoverover": function(event) {
                 self.events.trigger(self.EVENT_HOVER_OVER, event);
+                onHoverOver(event);
             },
             "hoverout": function(event) {
                 self.events.trigger(self.EVENT_HOVER_OUT, event);
+                onHoverOut(event);
             }
         });
         maps.map.addControl(hoverControl);
@@ -89,7 +97,7 @@ Worldview.DataDownload.ButtonLayers = function(model, maps, config) {
     var getLayer = function(map, noCreate) {
         map = map || maps.map;
         var layer = Worldview.Map.getLayerByName(map, LAYER_NAME);
-        if ( !layer && !noCreate ) {
+        if ( !layer ) {
             layer = createLayer();
         }
         return layer;
@@ -106,19 +114,65 @@ Worldview.DataDownload.ButtonLayers = function(model, maps, config) {
         return new OpenLayers.Size(size, size);
     };
     
-    var getStyle = function() {
+    var getStyle = function(withLabel) {
         var size = getSize();
-        var styleMap = new OpenLayers.StyleMap({
+        var symbolizer = {
             externalGraphic: IMAGE_SELECT,
             graphicWidth: size.w,
-            graphicHeight: size.h
-        });
-        return styleMap;
-    }
+            graphicHeight: size.h,
+            fontColor: "#ffffff",
+            fontWeight: "bold"
+        };
+        if ( withLabel ) {
+            symbolizer.labelOutlineColor = "black";
+            symbolizer.labelOutlineWidth = 3;
+            symbolizer.labelYOffset = getLabelOffset();
+        }
+        return symbolizer;
+    };
     
     var resize = function() {
-        getLayer().styleMap = getStyle();
+        getLayer().styleMap = new OpenLayers.StyleMap(getStyle());
         layer.redraw();
+    };
+    
+    var onHoverOver = function(event) {
+        var style = getStyle(true);
+        style.label = getLabel(event.feature.attributes.result);
+        event.feature.style = style;
+        getLayer().drawFeature(event.feature);    
+    };
+    
+    var onHoverOut = function(event) {
+        event.feature.style = undefined;
+        getLayer().drawFeature(event.feature);
+    };
+    
+    var getLabel = function(result) {
+        var timeStart = Date.parseISOString(result.time_start);
+        var timeEnd = Date.parseISOString(result.time_end);
+        
+        var diff = Math.floor(
+            (timeStart.getTime() - model.time.getTime()) / (1000 * 60 * 60 * 24)
+        );
+                   
+        var suffix = "";
+        if ( diff !== 0 ) {
+            if ( diff < 0 ) { 
+                suffix = " (" + diff + " day)";
+            } else {
+                suffix = " (+" + diff + " day)";
+            }    
+        }
+        var displayStart = timeStart.toISOStringTimeHM();
+        var displayEnd = timeEnd.toISOStringTimeHM();
+        
+        return displayStart + " - " + displayEnd + suffix;
+    };
+    
+    var getLabelOffset = function() {
+        var buttonHeight = getSize().h;
+        return ( buttonHeight / 2.0 ) + 10;
     };
     
     init();

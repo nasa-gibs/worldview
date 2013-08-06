@@ -13,8 +13,8 @@
             },
             "time": {
                 "maxDistance": 270,
-                "eastZone": 180,
-                "westZone": 1260
+                "eastZone": 120,
+                "westZone": 1200
             }
         }
     }

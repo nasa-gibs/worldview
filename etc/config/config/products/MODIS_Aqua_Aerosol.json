@@ -3,6 +3,7 @@
     "description": "Aqua / MODIS",
     "product": "daily",
     "startDate": "2012-04-07",
+    "type": "wmts",
     "projections": {
         "geographic": {
             "matrixSet": "EPSG4326_2km",
@@ -36,9 +37,8 @@
             512
         ]
     },
-    "type": "wmts",
-    "max": "0.70",
     "min": "0.27",
+    "max": "0.70",
     "units": "",
     "rendered": "MODIS_Aerosol",
     "recommendedPalettes": [ "orange_1" ],

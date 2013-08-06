@@ -19,9 +19,9 @@
                     ]
                 },
                 "time": {
-                    "eastZone": 180,
+                    "eastZone": 120,
                     "maxDistance": 270,
-                    "westZone": 1260
+                    "westZone": 1200
                 }
             },
             "query": {
@@ -47873,6 +47873,15 @@
         "MODIS_Terra_Aerosol": {
             "bins": 10,
             "description": "Terra / MODIS",
+            "echo": {
+                "dataCenterId": [
+                    "LAADS",
+                    "LANCEMODIS"
+                ],
+                "method": "eos",
+                "name": "MODIS/Terra Aerosol 5-Min L2 Swath 10km",
+                "shortName": "MOD04_L2"
+            },
             "max": "0.70",
             "min": "0.27",
             "name": "Aerosol Optical Depth",

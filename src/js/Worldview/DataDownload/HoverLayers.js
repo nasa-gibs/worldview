@@ -19,42 +19,45 @@ Worldview.DataDownload.HoverLayers = function(model, maps, config) {
     var STYLE_HOVER_UNSELECTED = {
         strokeColor: "#00ffff",
         fillColor: "#00ffff",
-        fillOpacity: 0.25,
-        fontColor: "#ffffff",
-        fontWeight: "bold",
-        labelOutlineColor: "black",
-        labelOutlineWidth: 3
+        fillOpacity: 0.25
     };
         
+    var popup = null;
+    
     var self = {};
     
+    self.update = function() {
+        createLayer();
+    };
+    
     self.hoverOver = function(buttonFeature) {
-        var layer = getLayer();
-        
-        var style = $.extend(true, {}, STYLE_HOVER_UNSELECTED);
-        style.label = getLabel(buttonFeature);
-        style.labelYOffset = getLabelOffset(buttonFeature);
-        
+        var layer = getLayer();        
         var hoverFeature = new OpenLayers.Feature.Vector(
             buttonFeature.attributes.result.geometry[model.epsg],
             buttonFeature.attributes,
-            style
+            STYLE_HOVER_UNSELECTED
         );
         layer.addFeatures([hoverFeature]);
         log.debug(hoverFeature.attributes.result);
     };
-    
+        
     self.hoverOut = function() {
+        removePopup();
         self.clear();
     };
     
     self.clear = function() {
-        getLayer().removeAllFeatures();
+        removePopup();
+        var layer = Worldview.Map.getLayerByName(maps.map, LAYER_NAME);
+        if ( layer ) {
+            layer.removeAllFeatures();
+        }
     }
     
     self.dispose = function() {
         $.each(maps.projections, function(index, map) {
-            var layer = getLayer(map, true);
+            removePopup(map);
+            var layer = Worldview.Map.getLayerByName(map, LAYER_NAME);
             if ( layer ) {
                 map.removeLayer(layer);
             }
@@ -63,46 +66,26 @@ Worldview.DataDownload.HoverLayers = function(model, maps, config) {
         
     var createLayer = function() {
         var layer = new OpenLayers.Layer.Vector(LAYER_NAME);
+        layer.div.setAttribute("data-layer-name", LAYER_NAME);
         maps.map.addLayer(layer);
         return layer;
     };
     
-    var getLayer = function(map, noCreate) {
+    var getLayer = function(map) {
         map = map || maps.map;
         var layer = Worldview.Map.getLayerByName(map, LAYER_NAME);
-        if ( !layer && !noCreate ) {
+        if ( !layer ) {
             layer = createLayer();
         }
         return layer;
     };
     
-    var getLabel = function(feature) {
-        var result = feature.attributes.result;
-        var timeStart = Date.parseISOString(result.time_start);
-        var timeEnd = Date.parseISOString(result.time_end);
-        
-        var diff = Math.floor(
-            (timeStart.getTime() - model.time.getTime()) / (1000 * 60 * 60 * 24)
-        );
-                   
-        var suffix = "";
-        if ( diff !== 0 ) {
-            if ( diff < 0 ) { 
-                suffix = " (" + diff + " day)";
-            } else {
-                suffix = " (+" + diff + " day)";
-            }    
-        }
-        var displayStart = timeStart.toISOStringTimeHM();
-        var displayEnd = timeEnd.toISOStringTimeHM();
-        
-        return displayStart + " - " + displayEnd + suffix;
-    };
-    
-    var getLabelOffset = function(feature) {
-        var style = feature.layer.styleMap.styles["default"].defaultStyle;
-        var buttonHeight = style.graphicHeight;
-        return ( buttonHeight / 2.0 ) + 10;
+    var removePopup = function(map) {
+        map = map || maps.map;
+        if ( popup ) {
+            maps.map.removePopup(popup);
+            popup = null;
+        }        
     };
     
     return self;
