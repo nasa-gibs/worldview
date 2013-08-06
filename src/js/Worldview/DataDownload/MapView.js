@@ -18,6 +18,7 @@ Worldview.DataDownload.MapView = function(model, maps, config) {
     var self = {};
     var results = [];
 
+    var swathLayers = ns.SwathLayers(model, maps, config);
     var hoverLayers = ns.HoverLayers(model, maps, config);        
     var buttonLayers = ns.ButtonLayers(model, maps, config);
                
@@ -51,6 +52,7 @@ Worldview.DataDownload.MapView = function(model, maps, config) {
         if ( newResults ) {
             results = filter(newResults);
         }
+        swathLayers.update(results);
         buttonLayers.update(results);  
     }
     
@@ -117,11 +119,13 @@ Worldview.DataDownload.MapView = function(model, maps, config) {
     };
     
     var onDeactivate = function() {
+        swathLayers.dispose();
         hoverLayers.dispose();
         buttonLayers.dispose();
     };
         
     var clear = function() {
+        swathLayers.clear();
         hoverLayers.clear();
         buttonLayers.clear();
     };

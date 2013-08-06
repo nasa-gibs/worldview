@@ -101,6 +101,7 @@
         <file name="js/Worldview/DataDownload/ControlDialog.js"/>
         <file name="js/Worldview/DataDownload/ButtonLayers.js"/>
         <file name="js/Worldview/DataDownload/HoverLayers.js"/>
+        <file name="js/Worldview/DataDownload/SwathLayers.js"/>
         <file name="js/Worldview/DataDownload/ExtentFilter.js"/>
         <file name="js/Worldview/DataDownload/TimeFilter.js"/>
         <file name="js/Worldview/DataDownload/MapView.js"/>

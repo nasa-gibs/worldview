@@ -94,7 +94,7 @@ Worldview.DataDownload.ButtonLayers = function(model, maps, config) {
         return layer;       
     };
     
-    var getLayer = function(map, noCreate) {
+    var getLayer = function(map) {
         map = map || maps.map;
         var layer = Worldview.Map.getLayerByName(map, LAYER_NAME);
         if ( !layer ) {
