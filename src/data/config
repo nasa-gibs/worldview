@@ -4,7 +4,7 @@
         "defaultProjection": "geographic"
     },
     "echo": {
-        "eos": {
+        "aqua": {
             "filters": [
                 "extent",
                 "time"
@@ -19,9 +19,36 @@
                     ]
                 },
                 "time": {
-                    "eastZone": 120,
+                    "eastZone": 300,
                     "maxDistance": 270,
-                    "westZone": 1200
+                    "westZone": 1380
+                }
+            },
+            "query": {
+                "timeWindow": [
+                    -180,
+                    180
+                ]
+            }
+        },
+        "terra": {
+            "filters": [
+                "extent",
+                "time"
+            ],
+            "options": {
+                "extent": {
+                    "4326": [
+                        -180,
+                        -60,
+                        180,
+                        60
+                    ]
+                },
+                "time": {
+                    "eastZone": 180,
+                    "maxDistance": 270,
+                    "westZone": 1260
                 }
             },
             "query": {
@@ -46081,7 +46108,7 @@
                     "LAADS",
                     "LANCEMODIS"
                 ],
-                "method": "eos",
+                "method": "aqua",
                 "name": "MODIS/Aqua Aerosol 5-Min L2 Swath 10km",
                 "shortName": "MYD04_L2"
             },
@@ -47878,7 +47905,7 @@
                     "LAADS",
                     "LANCEMODIS"
                 ],
-                "method": "eos",
+                "method": "terra",
                 "name": "MODIS/Terra Aerosol 5-Min L2 Swath 10km",
                 "shortName": "MOD04_L2"
             },
