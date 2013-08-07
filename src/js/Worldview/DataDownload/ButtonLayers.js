@@ -18,11 +18,11 @@ Worldview.DataDownload.ButtonLayers = function(model, maps, config) {
     var IMAGE_UNSELECT = "images/data-download-minus-button-blue.svg";  
     
     var LABEL_STYLE = {
-        fontFamily: '"helvetica", ​sans-serif',
+        fontFamily: "helvetica, sans-serif",
         fontColor: "#ffffff",
         fontWeight: "bold",
         labelOutlineColor: "black",
-        labelOutlineWidth: 3,
+        labelOutlineWidth: 2,
         labelOutlineOpacity: 0.7,    
     };
     
