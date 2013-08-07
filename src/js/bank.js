@@ -107,19 +107,19 @@ SOTE.widget.Bank.handleMetaSuccess = function(data,status,xhr,args){
 	}
 	
 	$.each(self.meta, function(name, meta) {
-	   if ( name in self.config.products ) {
-	       var product = self.config.products[name];
-	       if ( "rendered" in product ) {
-	           meta.units = product.units;
-	           meta.min = ( product.min === undefined ) 
+	   if ( name in self.config.layers ) {
+	       var layer = self.config.layers[name];
+	       if ( "rendered" in layer ) {
+	           meta.units = layer.units;
+	           meta.min = ( layer.min === undefined ) 
 	                   ? "&nbsp;&nbsp;&nbsp;&nbsp" 
-	                   : product.min;
-	           meta.max = ( product.max === undefined ) 
+	                   : layer.min;
+	           meta.max = ( layer.max === undefined ) 
 	                   ? "&nbsp;&nbsp;&nbsp;" 
-                       : product.max;
-	           meta.bins = product.bins;
-	           meta.stops = product.stops;
-	           meta.palette = self.config.palettes[product.rendered];    
+                       : layer.max;
+	           meta.bins = layer.bins;
+	           meta.stops = layer.stops;
+	           meta.palette = self.config.palettes[layer.rendered];    
 	       }    
 	   }    
 	});

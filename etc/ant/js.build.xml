@@ -86,10 +86,10 @@
         
 		<file name="js/Worldview/Map.js"/>
         <file name="js/Worldview/Map/CanvasTile.js"/>
-		<file name="js/Worldview/Map/ProductMap.js"/>
-        <file name="js/Worldview/Map/Product.js"/>
-        <file name="js/Worldview/Map/StaticProduct.js"/>
-        <file name="js/Worldview/Map/DailyProduct.js"/>
+		<file name="js/Worldview/Map/MapSet.js"/>
+        <file name="js/Worldview/Map/LayerSet.js"/>
+        <file name="js/Worldview/Map/StaticLayerSet.js"/>
+        <file name="js/Worldview/Map/DailyLayerSet.js"/>
         <file name="js/Worldview/Map/GraticuleLayer.js"/>
         <file name="js/Worldview/Map/TWMSLayer.js"/>
         <file name="js/Worldview/Map/HoverControl.js"/>

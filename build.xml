@@ -96,8 +96,8 @@
         
         <exec executable="python" failonerror="true">
              <arg value="${basedir}/etc/config/vrt2json.py"/>
-             <arg value="--products-dir"/>
-             <arg value="${build.dir}/config/products"/>
+             <arg value="--layers-dir"/>
+             <arg value="${build.dir}/config/layers"/>
              <arg value="${build.dir}/config/palettes"/>
         </exec>
         

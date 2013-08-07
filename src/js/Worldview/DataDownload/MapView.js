@@ -107,7 +107,7 @@ Worldview.DataDownload.MapView = function(model, maps, config) {
 
     var createFilters = function() {
         var layer = model.selectedLayer;
-        var method = config.products[layer].echo.method
+        var method = config.layers[layer].echo.method
         var filterNames = config.echo[method].filters;
         var filters = [];
         $.each(filterNames, function(index, name) {

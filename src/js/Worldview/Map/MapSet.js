@@ -12,10 +12,10 @@
 Worldview.namespace("Map");
 
 /**
- * Class: Worldview.Map.ProductMap
+ * Class: Worldview.Map.MapSet
  * Map object that handles GIBS products. 
  * 
- * Constructor: ProductMap
+ * Constructor: MapSet
  * Creates a new instance
  * 
  * Parameters: 
@@ -27,7 +27,7 @@ Worldview.namespace("Map");
  * Throws:
  * An exception if no DOM element exists with the provided containerId.
  */
-Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
+Worldview.Map.MapSet = function(containerId, mapConfig, component) {
     
     var log = Logging.getLogger("Worldview.Map");
     var self = {};
@@ -35,11 +35,11 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
     // Configurations for each available product
     var productConfigs = {};
     
-    // Current set of products that have been added to the map, one set
+    // Current set of layers that have been added to the map, one set
     // for each supported projection.
-    var activeProducts = {};
+    var activeLayers = {};
     
-    // Display products on the map for this day
+    // Display layers on the map for this day
     var currentDay = Worldview.today();
     
     // The number of layers in the processing of loading. This is used
@@ -67,11 +67,11 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
     self.map = null;
     
     /**
-     * Property: products
-     * Array containing the name of each prodcut that is visible on the map for 
+     * Property: layers
+     * Array containing the name of each layer that is visible on the map for 
      * the currently selected projection (read only).
      */
-    self.products = null;
+    self.layers = null;
     
     /**
      * Property: projection
@@ -82,7 +82,7 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
     var init = function() {        
         var $container = $("#" + containerId);
         if ( $container.length === 0 ) {
-            throw new Error("No container for ProductMap: " + containerId);
+            throw new Error("No container for MapSet: " + containerId);
         }
         
         // Create map objects, one for each projection.     
@@ -119,9 +119,9 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
                 newMap.zoomToMaxExtent();
             }
             
-            newMap.products = {};
+            newMap.layerSets = {};
             self.projections[projection] = newMap;
-            activeProducts[projection] = [];
+            activeLayers[projection] = [];
             
             newMap.events.register("addlayer", self, onAddLayer);
             newMap.events.register("removelayer", self, onRemoveLayer);
@@ -131,7 +131,7 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
             // Keep track of center point on projection switch
             newMap.previousCenter = newMap.getCenter();
         });
-        productConfigs = mapConfig.products;
+        layerConfigs = mapConfig.layers;
         
         self.setProjection(mapConfig.defaultProjection || "geographic");
         
@@ -174,7 +174,7 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
         
         // Update convenience variables
         self.map = self.projections[projection];
-        self.products = activeProducts[projection];
+        self.layers = activeLayers[projection];
         self.projection = projection;
 
         // If the browser was resized, the inactive map was not notified of
@@ -199,22 +199,22 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
     self.setDay = function(day) {
         if ( day ) {
             currentDay = day;
-            $.each(self.map.products, function(name, product) {
-                product.setDay(day); 
+            $.each(self.map.layerSets, function(name, layer) {
+                layer.setDay(day); 
             });
             refreshZOrder();
         }
     };
     
     self.setOpacity = function(layerName, opacity) {
-        $.each(self.map.products, function(name, product) {
+        $.each(self.map.layerSets, function(name, layer) {
             if ( name == layerName ) {
                 var value = parseFloat(opacity);
                 if ( isNaN(value) ) {
                     log.warn("Invalid opacity for layer " + layerName + ": " + 
                             opacity);
                 } else {
-                    product.setOpacity(value);
+                    layer.setOpacity(value);
                 }
             }    
         });
@@ -222,10 +222,10 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
     
     /**         
     * Method: set
-    * Set the products that should be displayed on the map. 
+    * Set the layers that should be displayed on the map. 
     * 
     * Parameters: 
-    * requestedProducts - Array of product names to show on the map. If a
+    * requestedLayers - Array of product names to show on the map. If a
     *   product is currently displayed, but is not in the array, it will be
     *   removed from the map. If a product is not currently displayed, but it
     *   is in the array, it will be added to the map.
@@ -233,37 +233,37 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
     * Throws:
     * An exception if the product for the given name is not defined.
     */
-    self.set = function(requestedProducts, hiddenProducts) {
-        var newProducts = [];
+    self.set = function(requestedLayers, hiddenLayers) {
+        var newLayers = [];
         
-        $.each(requestedProducts, function(index, product) {
-            if ( $.inArray(product, self.products) < 0 ) {
-                if ( add(product) ) {
-                    newProducts.push(product);
+        $.each(requestedLayers, function(index, layer) {
+            if ( $.inArray(layer, self.layers) < 0 ) {
+                if ( add(layer) ) {
+                    newLayers.push(layer);
                 }
             } else {
-                newProducts.push(product);
+                newLayers.push(layer);
             }
-            if ( self.map.products[product] ) {
-                if ( $.inArray(product, hiddenProducts) >= 0 ) {
-                    self.setVisibility(product, false);    
+            if ( self.map.layerSets[layer] ) {
+                if ( $.inArray(layer, hiddenLayers) >= 0 ) {
+                    self.setVisibility(layer, false);    
                 } else {
-                    self.setVisibility(product, true);
+                    self.setVisibility(layer, true);
                 }
             }
         });
-        $.each(self.products, function(index, product) {
-            if ( $.inArray(product, requestedProducts) < 0 ) {
-                remove(product);
+        $.each(self.layers, function(index, layer) {
+            if ( $.inArray(layer, requestedLayers) < 0 ) {
+                remove(layer);
             } 
         });
-        activeProducts[self.projection] = newProducts;
-        self.products = activeProducts[self.projection];
+        activeLayers[self.projection] = newLayers;
+        self.layers = activeLayers[self.projection];
         refreshZOrder();
     };
     
-    self.setVisibility = function(product, value, options) {
-        self.map.products[product].setVisibility(value, options);    
+    self.setVisibility = function(layer, value, options) {
+        self.map.layerSets[layer].setVisibility(value, options);    
     };
     
     /**
@@ -274,14 +274,14 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
      * product - Name of the product to append to the map. If the product
      *           already exsits, this method does nothing.
      */
-    self.append = function(product) {
-        if ( $.inArray(product, self.products) >= 0 ) {
-            log.warn("Product already exists: " + product);
+    self.append = function(layer) {
+        if ( $.inArray(layer, self.layers) >= 0 ) {
+            log.warn("Layer already exists: " + product);
             return;
         }
-        var newProducts = $.extend([], self.products);
-        newProducts.push(product);
-        self.set(newProducts); 
+        var newLayers = $.extend([], self.layers);
+        newLayers.push(layer);
+        self.set(newLayers); 
         refreshZOrder();   
     };
     
@@ -295,12 +295,12 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
      */
     self.setPalettes = function(activePalettes) {
         $.each(self.projections, function(projection, map) {
-            $.each(map.products, function(productName, product) {
-                var paletteName = activePalettes[productName];
+            $.each(map.layerSets, function(layerName, layer) {
+                var paletteName = activePalettes[layerName];
                 if ( paletteName ) {
                     // Find the rendered palette for this product
-                    var productConfig = self.mapConfig.products[productName];
-                    var renderedName = productConfig.rendered;
+                    var layerConfig = self.mapConfig.layers[layerName];
+                    var renderedName = layerConfig.rendered;
                     var renderedPalette = self.mapConfig.palettes[renderedName];
                     
                     if ( !renderedPalette ) {
@@ -317,14 +317,14 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
                     // Create a lookup table and map it to the color
                     // values found in the rendered palette
                     var indexed = Worldview.Palette.toIndexedLookup(
-                        productConfig.bins, palette, productConfig.stops);
+                        layerConfig.bins, palette, layerConfig.stops);
                     var lookup = Worldview.Palette.toColorLookup(
                         indexed, renderedPalette.stops);
                         
                     // Apply     
-                    product.setLookup(lookup);
+                    layer.setLookup(lookup);
                 } else {
-                    product.clearLookup();
+                    layer.clearLookup();
                 }
             });
         });
@@ -348,23 +348,23 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
             return;
         }
         
-        var productConfig = productConfigs[name];
-        if ( !productConfig ) {
-            log.warn("No such product: " + name);
+        var layerConfig = layerConfigs[name];
+        if ( !layerConfig ) {
+            log.warn("No such layer: " + name);
             return false;
         }
-        if ( $.inArray(name, self.products) >= 0 ) {
-            log.warn("Product already added: " + name);
+        if ( $.inArray(name, self.layers) >= 0 ) {
+            log.warn("Layer already added: " + name);
             return true;
         }
         
         var supported = false;
-        if ( self.projection in productConfig.projections ) {
-            log.debug("Adding product: " + name);
-            var product = createProduct(self.map, self.projection, 
-                    productConfigs[name]);
-            product.setDay(currentDay);
-            self.map.products[name] = product;
+        if ( self.projection in layerConfig.projections ) {
+            log.debug("Adding layer: " + name);
+            var layer = createLayer(self.map, self.projection, 
+                    layerConfigs[name]);
+            layer.setDay(currentDay);
+            self.map.layerSets[name] = layer;
             supported = true;
         } else {
             log.warn(name + " does not support " + self.projection);
@@ -377,17 +377,17 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
      * Removes the given product from the map.
      */
     var remove = function(name) {        
-        if ( $.inArray(name, self.products) < 0 ) {
-            log.warn("Product has not been added: " + name);
+        if ( $.inArray(name, self.layers) < 0 ) {
+            log.warn("Layer has not been added: " + name);
             return;
         }   
-        var product = self.map.products[name];
-        if ( product ) {
-            log.debug("Removing product: " + name);
-            product.dispose();
-            delete self.map.products[name]; 
+        var layer = self.map.layerSets[name];
+        if ( layer ) {
+            log.debug("Removing layer: " + name);
+            layer.dispose();
+            delete self.map.layerSets[name]; 
         } else {
-            log.warn("Product does not exist: " + name);
+            log.warn("Layer does not exist: " + name);
         }       
     };
         
@@ -398,10 +398,10 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
      * its positition in the products array. 
      */    
     var refreshZOrder = function() {
-        $.each(self.products, function(index, name) { 
-            var product = self.map.products[name];
-            if ( product ) {
-                product.setZIndex(index * 2);
+        $.each(self.layers, function(index, name) { 
+            var layer = self.map.layerSets[name];
+            if ( layer ) {
+                layer.setZIndex(index * 2);
             }
         });
     };
@@ -491,7 +491,7 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
     /*
      * Merges in any projection specific properties.
      */    
-    var createProduct = function(map, proj, config) {
+    var createLayer = function(map, proj, config) {
         config = $.extend(true, {}, config);
         
         if ( config.properties === undefined ) {
@@ -511,9 +511,9 @@ Worldview.Map.ProductMap = function(containerId, mapConfig, component) {
                 mapConfig.projections[proj].projection;
         }
         if ( config.product === "daily" ) {
-            return Worldview.Map.DailyProduct(map, config);
+            return Worldview.Map.DailyLayerSet(map, config);
         } else if ( config.product === "static" ) {
-            return Worldview.Map.StaticProduct(map, config);
+            return Worldview.Map.StaticLayerSet(map, config);
         }
         throw new Error("Unsupported product type: " + config.product);
     };

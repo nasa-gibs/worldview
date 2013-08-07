@@ -139,7 +139,7 @@ $(function() {// Initialize "static" vars
             selector: ".dataDownload-modeButton",
             model: dataDownloadModel, 
             config: config,
-            maps: m.productMap 
+            maps: m.maps
         });
                  
         // Get rid of address bar on iphone/ipod
@@ -173,7 +173,7 @@ $(function() {// Initialize "static" vars
         Worldview.opacity = opacity; 
         Worldview.view = m;
         Worldview.ddm = dataDownloadModel;
-        Worldview.maps = m.productMap;
+        Worldview.maps = m.maps;
         
         var queryString = 
             Worldview.Permalink.decode(window.location.search.substring(1));

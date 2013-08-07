@@ -27,7 +27,7 @@ the number of color bins and bin stops as needed.
 
 default_index = os.path.join(basedir, "vrt", "index.json")
 default_vrt_dir = os.path.join(basedir, "vrt")
-default_products_dir = os.path.join(basedir, "config", "products")
+default_layers_dir = os.path.join(basedir, "config", "layers")
  
 parser = OptionParser(usage="Usage: %s [options] <output_dir>" % prog,
                       version="%s version %s" % (prog, version),
@@ -35,9 +35,9 @@ parser = OptionParser(usage="Usage: %s [options] <output_dir>" % prog,
 parser.add_option("-i", "--index", default=default_index,
                   help="use this as the index file instead of %s" % 
                   default_index)
-parser.add_option("-p", "--products-dir", default=default_products_dir,
-                  help="use this as the products directory instead of %s" %
-                  default_products_dir)
+parser.add_option("-l", "--layers-dir", default=default_layers_dir,
+                  help="use this as the layers directory instead of %s" %
+                  default_layers_dir)
 parser.add_option("-v", "--verbose", action="store_true",
                   help="print tasks that are being performed")
 parser.add_option("--vrt-dir", default=default_vrt_dir,
@@ -122,13 +122,13 @@ def main():
         fatal("Index file %s does not exist" % options.index)
     if not os.path.exists(output_dir):
         fatal("Output directory %s does not exist" % output_dir)
-    if not os.path.exists(options.products_dir):
-        fatal("Products directory %s does not exist" % options.products_dir)
+    if not os.path.exists(options.layers_dir):
+        fatal("Layers directory %s does not exist" % options.layers_dir)
 
     notify("Index file: %s" % options.index)
     notify("VRT base directory: %s" % options.vrt_dir)
     notify("Output directory: %s" % output_dir)
-    notify("Products directory: %s" % options.products_dir)
+    notify("Layers directory: %s" % options.layers_dir)
 
     with open(options.index) as fp:
         index = json.load(fp)
@@ -189,34 +189,34 @@ def main():
 
         # Product configurations needs to be updated to include the
         # the number of bins, bin stops if necessary, and the name
-        # of the color palette it is rendered in.
-        for product_id in vrt_meta["products"]:
-            product_file_name = os.path.join(options.products_dir,
-                                             "%s.json" % product_id)
-            if not os.path.exists(product_file_name):
-                error("No such product configuration: %s" % product_file_name)
+        # of the color palette it is rendered in.        
+        for layer_id in vrt_meta["layers"]:
+            layer_file_name = os.path.join(options.layers_dir,
+                                             "%s.json" % layer_id)
+            if not os.path.exists(layer_file_name):
+                error("No such layer configuration: %s" % layer_file_name)
                 continue
 
-            notify("Modifying product %s" % product_file_name)
+            notify("Modifying layer %s" % layer_file_name)
             try:
-                with open(product_file_name) as fp:
-                    product = json.load(fp)
+                with open(layer_file_name) as fp:
+                    layer = json.load(fp)
             except Exception as e:
                 sys.stderr.write("%s: Unable to load %s\n%s" %
-                                 (prog, product_file_name, str(e)))
+                                 (prog, layer_file_name, str(e)))
                 return_code = 1
                 
-            product["bins"] = len(bin_stops)
-            product["rendered"] = vrt_meta["id"]
+            layer["bins"] = len(bin_stops)
+            layer["rendered"] = vrt_meta["id"]
             if use_bin_stops:
-                product["stops"] = bin_stops
+                layer["stops"] = bin_stops
             else:
                 # Delete any existing definitions just in case
-                if "stops" in product:
-                    del product["stops"]
+                if "stops" in layer:
+                    del layer["stops"]
 
-            with open(product_file_name, "w") as fp:
-                json.dump(product, fp, sort_keys=True, indent=4,
+            with open(layer_file_name, "w") as fp:
+                json.dump(layer, fp, sort_keys=True, indent=4,
                           separators=(',', ': '))
     sys.exit(return_code)
 #end main

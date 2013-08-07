@@ -24,7 +24,7 @@ Worldview.DataDownload.Model = function(config) {
     var log = Logging.getLogger("Worldview.DataDownload");
     
     var state = {
-        productsString: null,
+        layersString: null,
         projection: null,
         epsg: null,
         time: null
@@ -155,7 +155,7 @@ Worldview.DataDownload.Model = function(config) {
         if ( self.selectedLayer === layerName ) {
             return;
         }
-        if ( $.inArray(layerName, state.products) < 0 ) {
+        if ( $.inArray(layerName, state.layers) < 0 ) {
             throw new Error("Layer not in active list: " + layerName);
         }
         self.selectedLayer = layerName;
@@ -166,7 +166,7 @@ Worldview.DataDownload.Model = function(config) {
     self.update = function(newState) {
         var oldState = state;
         state = newState;
-        if ( oldState.productsString !== state.productsString ) {
+        if ( oldState.layersString !== state.layersString ) {
             updateLayers();
         }
         if ( oldState.projection !== state.projection  ||
@@ -183,7 +183,7 @@ Worldview.DataDownload.Model = function(config) {
         if ( !self.active ) {
             return;
         }
-        var layerConfig = config.products[self.selectedLayer];
+        var layerConfig = config.layers[self.selectedLayer];
         if ( !layerConfig.echo ) {
             self.events.trigger(self.EVENT_QUERY_RESULTS, []);
             return;
@@ -195,7 +195,7 @@ Worldview.DataDownload.Model = function(config) {
         endTime = new Date(Date.UTC(
             t.getUTCFullYear(), t.getUTCMonth(), t.getUTCDate(), 23, 59, 59));
                              
-        var method = config.products[self.selectedLayer].echo.method;
+        var method = config.layers[self.selectedLayer].echo.method;
         var options = config.echo[method].query || {};
         if ( options.timeWindow ) {
             startDelta = options.timeWindow[0];
@@ -215,17 +215,17 @@ Worldview.DataDownload.Model = function(config) {
     };
     
     var updateLayers = function() {
-        if ( !state.products ) {
+        if ( !state.layers ) {
             return;
         }
         self.layers = [];
-        $.each(state.products, function(index, layer) {
+        $.each(state.layers, function(index, layer) {
             var id = layer;
-            var layerName = config.products[layer].name;
-            var description = config.products[layer].description;
+            var layerName = config.layers[layer].name;
+            var description = config.layers[layer].description;
             var productName = null;
-            if ( config.products[layer].echo ) {
-                productName = config.products[layer].echo.name;
+            if ( config.layers[layer].echo ) {
+                productName = config.layers[layer].echo.name;
             }
             self.layers.push({
                 id: id,
@@ -249,16 +249,16 @@ Worldview.DataDownload.Model = function(config) {
     
     var findAvailableLayer = function() {
         // Find the top most layer that has a product entry in ECHO
-        for ( var i = state.products.length - 1; i >= 0; i-- ) {
-            var productName = state.products[i];
-            if ( config.products[productName].echo ) {
-                return productName;
+        for ( var i = state.layers.length - 1; i >= 0; i-- ) {
+            var layerName = state.layers[i];
+            if ( config.layers[layerName].echo ) {
+                return layerName;
             }
         }
         
         // If no products found, select the bottom most layer
-        if ( state.products[0] ) {
-            return state.products[0];
+        if ( state.layers[0] ) {
+            return state.layers[0];
         }
     }
     

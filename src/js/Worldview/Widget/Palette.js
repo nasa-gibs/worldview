@@ -36,10 +36,10 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         REGISTRY.markComponentReady(containerId);        
     };
     
-    self.getPalette = function(product) {
-        var name = self.active[product];
+    self.getPalette = function(layer) {
+        var name = self.active[layer];
         if ( !name || !config.palettes[name] ) {
-            name = config.products[product].rendered;
+            name = config.layers[layer].rendered;
         }
         if ( !name ) {
             return null;
@@ -90,23 +90,23 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
             var state = REGISTRY.getState(queryString);
             log.debug("Palette: updateComponent", state);
             $.each(self.active, function(product, palette) {
-                if ( $.inArray(product, state.products) < 0 ) {
-                    log.debug("Removing palette for " + product);
-                    delete self.active[product];
+                if ( $.inArray(layer, state.layers) < 0 ) {
+                    log.debug("Removing palette for " + layer);
+                    delete self.active[layer];
                     changed = true;
                 }    
             });
-            $.each(self.inactive, function(product, palette) {
+            $.each(self.inactive, function(layer, palette) {
                 if ( !self.noRestore && 
-                        $.inArray(product, state.products) >= 0 && 
-                        !self.active[product] ) {
-                    log.debug("Restoring palette for " + product);
-                    self.active[product] = self.inactive[product];
+                        $.inArray(layer, state.layers) >= 0 && 
+                        !self.active[layer] ) {
+                    log.debug("Restoring palette for " + layer);
+                    self.active[layer] = self.inactive[layer];
                     changed = true;
                 }
             });
             if ( dialogForProduct && 
-                    $.inArray(dialogForProduct, state.products) < 0 ) {
+                    $.inArray(dialogForProduct, state.layers) < 0 ) {
                 dialog.hide();
             }        
             if ( changed ) {
@@ -127,14 +127,14 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         }    
     };
         
-    self.displaySelector = function(product) { 
+    self.displaySelector = function(layer) { 
         if ( dialog ) {
             dialog.hide();
             setTimeout(function() {
-                showSelector(product);
+                showSelector(layer);
             }, 6);
         } else {
-            showSelector(product);
+            showSelector(layer);
         }
     }
         
@@ -149,15 +149,15 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         var definitions = palettes.split("~");
         $.each(definitions, function(index, definition) {
             var items = definition.split(",");
-            var product = items[0];
+            var layer = items[0];
             var palette = items[1];
-            object.palettes[product] = palette;
+            object.palettes[layer] = palette;
         });
         return object;        
     };
     
-    var showSelector = function(product) {
-        var productConfig = self.config.products[product];            
+    var showSelector = function(layer) {
+        var layerConfig = self.config.layers[layer];            
         var properties = {
             width: "245px", 
             height: "265px",
@@ -175,12 +175,12 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         
         dialog = new YAHOO.widget.Panel("palette-selector-dialog", 
                 properties);
-        dialogForProduct = product;
+        dialogForLayer = layer;
         dialog.setHeader("Select palette");
         dialog.setBody([
-            "<div class='product-name'>" + productConfig.name + "</div>",
+            "<div class='product-name'>" + layerConfig.name + "</div>",
             "<div class='product-description'>" +
-                productConfig.description +
+                layerConfig.description +
             "</div>" +
             "<div id='palette-selector'></div>"
         ].join("\n"));  
@@ -188,7 +188,7 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
             setTimeout(function() { 
                 dialog.destroy(); 
                 dialog = null; 
-                dialogForProduct = null
+                dialogForLayer = null
             }, 5);
         });       
         dialog.render(document.body);  
@@ -198,33 +198,33 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         canvas.width = 100;
         canvas.height = 14;
         
-        // The default palette the product is rendered in
-        var renderedName = productConfig.rendered;
+        // The default palette the layer is rendered in
+        var renderedName = layerConfig.rendered;
         
         var renderedPalette = $.extend(true, {}, 
                 config.palettes[renderedName]);
         var renderedColorBar = Worldview.Palette.ColorBar({
             canvas: canvas,
             palette: renderedPalette,
-            bins: productConfig.bins,
-            stops: productConfig.stops
+            bins: layerConfig.bins,
+            stops: layerConfig.stops
         });
         renderedPalette.name = "Default";
         renderedPalette.image = renderedColorBar.toImage();
         palettes.push(renderedPalette);
                 
-        var activePalette = self.active[product];
+        var activePalette = self.active[layer];
         var selected = null;
                  
         // Palettes for the drop down, place the recommended ones first
-        if ( productConfig.recommendedPalettes ) {
-            $.each(productConfig.recommendedPalettes, function(index, name) {
+        if ( layerConfig.recommendedPalettes ) {
+            $.each(layerConfig.recommendedPalettes, function(index, name) {
                 var palette = config.palettes[name];
                 var colorBar = Worldview.Palette.ColorBar({
                     canvas: canvas,
                     palette: palette,
-                    bins: productConfig.bins,
-                    stops: productConfig.stops
+                    bins: layerConfig.bins,
+                    stops: layerConfig.stops
                 });
                 palette.image = colorBar.toImage();
                 palettes.push(palette);    
@@ -232,13 +232,13 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         }
                  
         $.each(self.config.paletteOrder, function(index, name) {
-            if ( $.inArray(name, productConfig.recommendedPalettes) >= 0 ) {
+            if ( $.inArray(name, layerConfig.recommendedPalettes) >= 0 ) {
                 return;
             }
             var p = self.config.palettes[name];
             
             // Skip this palette if configuration says to exclude
-            if ( $.inArray(name, productConfig.excludePalettes) >= 0 ) {
+            if ( $.inArray(name, layerConfig.excludePalettes) >= 0 ) {
                 return;
             }
             if ( !p ) {
@@ -250,8 +250,8 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
                 var colorBar = Worldview.Palette.ColorBar({
                     canvas: canvas, 
                     palette: palette, 
-                    bins: productConfig.bins,
-                    stops: productConfig.stops
+                    bins: layerConfig.bins,
+                    stops: layerConfig.stops
                 });
                 palette.image = colorBar.toImage();
                 palettes.push(palette);
@@ -275,12 +275,12 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         paletteSelector.addSelectionListener(function(palette) {
             var log = Logging.getLogger("Worldview.PaletteSelection");
             if ( palette.source === "rendered" ) {
-                delete self.active[product];
-                delete self.inactive[product];
+                delete self.active[layer];
+                delete self.inactive[layer];
                 log.debug("Palette: default");
             } else {
-                self.active[product] = palette.id;
-                self.inactive[product] = palette.id;
+                self.active[layer] = palette.id;
+                self.inactive[layer] = palette.id;
                 log.debug("Palette: " + palette.id); 
             }
             REGISTRY.fire(self);
@@ -288,34 +288,6 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         
         dialog.show(); 
     };
-
-    /**
-     * Converts the product listed in the query string into an array.
-     */    
-    var splitProducts = function(state) {
-        var results = [];
-        if ( !state.products ) {
-            return results;
-        }
-        var sets = state.products.split("~");
-        for ( var i = 0; i < sets.length; i++ ) {
-            var set = sets[i];
-            var items = set.split(",");
-            var values = [];
-            // First item is the type (e.g., baselayer or overlay). Ignore it.
-            for ( var j = 1; j < items.length; j++ ) {
-                values.push(items[j]);
-            }
-            // Products are listed in the "opposite" order from what is 
-            // expected--the first layer is the layer to be drawn last. 
-            // Flip them.
-            values.reverse();
-            results = results.concat(values);
-        }
-        return results;
-    };
-    
-
     
     init();
     return self;
