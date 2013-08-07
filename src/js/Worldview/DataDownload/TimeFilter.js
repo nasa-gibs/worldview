@@ -28,6 +28,9 @@ Worldview.DataDownload.TimeFilter = function(config, options, model) {
         maxDistance = options.maxDistance;
     };
     
+    self.prepare = function() {
+    };
+    
     self.filter = function(result) {
         var geom = result.geometry["4326"];
         var resultTime = Date.parseISOString(result.time_start);

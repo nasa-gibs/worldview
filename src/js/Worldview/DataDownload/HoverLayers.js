@@ -48,7 +48,6 @@ Worldview.DataDownload.HoverLayers = function(model, maps, config) {
     
     self.dispose = function() {
         $.each(maps.projections, function(index, map) {
-            removePopup(map);
             var layer = Worldview.Map.getLayerByName(map, LAYER_NAME);
             if ( layer ) {
                 map.removeLayer(layer);

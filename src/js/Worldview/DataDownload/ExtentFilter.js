@@ -29,6 +29,9 @@ Worldview.DataDownload.ExtentFilter = function(config, options, model) {
         });
     };
     
+    self.prepare = function(result) {
+    };
+    
     self.filter = function(result) {
         var geom = result.geometry[model.epsg];
         if ( !geom ) {

@@ -21,6 +21,8 @@ Worldview.namespace("DataDownload");
  */
 Worldview.DataDownload.Model = function(config) {
     
+    var log = Logging.getLogger("Worldview.DataDownload");
+    
     var state = {
         productsString: null,
         projection: null,
@@ -28,7 +30,7 @@ Worldview.DataDownload.Model = function(config) {
         time: null
     };
     
-    var client = Worldview.DataDownload.ECHOClient();
+    var client = null;
     
     var self = {};    
 
@@ -83,6 +85,12 @@ Worldview.DataDownload.Model = function(config) {
     self.time = null;
     
     var init = function() {
+        if ( config.parameters.mockECHO ) {
+            log.warn("Using mock ECHO client");
+            client = Worldview.DataDownload.ECHOClientMock();
+        } else {
+            client = Worldview.DataDownload.ECHOClient();
+        }
         client.events
             .on("query", function() { 
                 self.events.trigger(self.EVENT_QUERY);

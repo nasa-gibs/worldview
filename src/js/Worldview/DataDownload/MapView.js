@@ -24,7 +24,8 @@ Worldview.DataDownload.MapView = function(model, maps, config) {
                
     var filterMap = {
         extent: ns.ExtentFilter,
-        time: ns.TimeFilter
+        time: ns.TimeFilter,
+        nrt: ns.NRTFilter
     };
     
     var init = function() {        
@@ -84,6 +85,13 @@ Worldview.DataDownload.MapView = function(model, maps, config) {
                 result.geometry[model.epsg] = projGeom;
                 result.centroid[model.epsg] = projCentroid;
             }
+        
+            $.each(filters, function(index, filter) {
+                filter.prepare(result);
+            });
+        });
+        
+        $.each(newResults, function(index, result) {
             $.each(filters, function(index, filter) {
                 if ( result ) {
                     result = filter.filter(result);

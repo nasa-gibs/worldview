@@ -17,6 +17,15 @@ Worldview.DataDownload.ButtonLayers = function(model, maps, config) {
     var IMAGE_SELECT = "images/data-download-plus-button-cyan.svg";
     var IMAGE_UNSELECT = "images/data-download-minus-button-blue.svg";  
     
+    var LABEL_STYLE = {
+        fontFamily: '"helvetica", ​sans-serif',
+        fontColor: "#ffffff",
+        fontWeight: "bold",
+        labelOutlineColor: "black",
+        labelOutlineWidth: 3,
+        labelOutlineOpacity: 0.7,    
+    };
+    
     var self = {};
     
     self.EVENT_HOVER_OVER = "hoverover";
@@ -120,12 +129,9 @@ Worldview.DataDownload.ButtonLayers = function(model, maps, config) {
             externalGraphic: IMAGE_SELECT,
             graphicWidth: size.w,
             graphicHeight: size.h,
-            fontColor: "#ffffff",
-            fontWeight: "bold"
         };
         if ( withLabel ) {
-            symbolizer.labelOutlineColor = "black";
-            symbolizer.labelOutlineWidth = 3;
+            $.extend(true, symbolizer, LABEL_STYLE);
             symbolizer.labelYOffset = getLabelOffset();
         }
         return symbolizer;

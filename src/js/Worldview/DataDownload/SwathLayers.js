@@ -12,6 +12,8 @@ Worldview.namespace("DataDownload");
 
 Worldview.DataDownload.SwathLayers = function(model, maps, config) {
 
+    var log = Logging.getLogger("Worldview.DataDownload");
+    
     var LAYER_NAME = "DataDownload_Swaths";
     var STYLE = {
         strokeColor: "#00ffff",
@@ -21,11 +23,57 @@ Worldview.DataDownload.SwathLayers = function(model, maps, config) {
     
     var self = {};
     
+    var combineSwath = function(startTimes, endTimes, swath) {
+        var combined = false;
+        
+        // Can this swath be added to the end of other swath?
+        var otherSwath = endTimes[swath[0].time_start];
+        if ( otherSwath ) {
+            // Remove entries for this swath
+            delete startTimes[swath[0].time_start];
+            delete endTimes[swath[swath.length - 1].time_end];
+            
+            // Remove entries for other swath
+            delete startTimes[otherSwath[0].time_start];
+            delete endTimes[otherSwath[otherSwath.length - 1].time_end];
+                        
+            // Combine swaths
+            var newSwath = otherSwath.concat(swath);
+            
+            startTimes[newSwath[0].time_start] = newSwath;
+            endTimes[newSwath[newSwath.length - 1].time_end] = newSwath;
+            combined = true;
+            swath = newSwath;
+        }
+        
+        var otherSwath = startTimes[swath[0].time_end];
+        if ( otherSwath ) {
+            // Remove entries for this swath
+            delete startTimes[swath[0].time_start];
+            delete endTimes[swath[swath.length - 1].time_end];
+            
+            // Remove entries for other swath
+            delete startTimes[otherSwath[0].time_start];
+            delete endTimes[otherSwath[otherSwath.length - 1].time_end];
+                        
+            // Combine swaths
+            var newSwath = swath.concat(otherSwath);
+            
+            startTimes[newSwath[0].time_start] = newSwath;
+            endTimes[newSwath[newSwath.length - 1].time_end] = newSwath;
+            combined = true;
+            swath = newSwath;
+        }        
+
+        if ( combined ) {
+            combineSwath(startTimes, endTimes, swath);
+        }
+    };
+    
     self.update = function(results) {
         self.clear();
         var layer = getLayer();
         
-        var swaths = [];
         var startTimes = {};
         var endTimes = {};
         
@@ -33,31 +81,25 @@ Worldview.DataDownload.SwathLayers = function(model, maps, config) {
             if ( !result.centroid[model.epsg] ) {
                 return;
             }
-            var swath = startTimes[result.time_end];
-            var added = false;
-            if ( swath ) {
-                swath.unshift(result);
-                delete startTimes[result.time_end];
-                startTimes[result.time_start] = swath;
-                added = true;
+            if ( startTimes[result.time_start] ) {
+                log.warn("Discarding duplicate start time", result.time_start,
+                        result, startTimes[result.time_start]);
+                return;
             }
-            swath = endTimes[result.time_start];
-            if ( swath ) {
-                swath.push(result);
-                delete endTimes[result.time_start];
-                endTimes[result.time_end] = swath;
-                added = true;
+            if ( endTimes[result.time_end] ) {
+                log.warn("Discarding duplicate end time", result.time_end,
+                        result, endTimes[result.time_end]);
+                return; 
             }
-            if ( !added ) {
-                swath = [result];
-                swaths.push(swath);
-                startTimes[result.time_start] = swath;
-                endTimes[result.time_end] = swath;
-            }
+            var swath = [result];
+            startTimes[result.time_start] = swath;
+            endTimes[result.time_end] = swath;
+            
+            combineSwath(startTimes, endTimes, swath);
         });
         
         var features = [];
-        $.each(swaths, function(index, swath) {
+        $.each(startTimes, function(key, swath) {
             if ( swath.length <= 1 ) {
                 return;
             }

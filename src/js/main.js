@@ -50,7 +50,6 @@ $(function() {// Initialize "static" vars
             Worldview.error("Internal error", error);
         };
         
-    	//console.log("entryPoint");
         Worldview.Support.quirks();
         
         var query = Worldview.queryStringToObject(location.search);
@@ -228,6 +227,7 @@ $(function() {// Initialize "static" vars
                 config.palettes["__DEBUG"] = debugPalette;
                 config.paletteOrder.unshift("__DEBUG");
             }
+            config.parameters = Worldview.queryStringToObject(location.search);
             Worldview.config = config;
             init(Worldview.config);
         } catch ( error ) {

@@ -7,7 +7,8 @@
         "aqua": {
             "filters": [
                 "extent",
-                "time"
+                "time",
+                "nrt"
             ],
             "options": {
                 "extent": {
@@ -17,6 +18,10 @@
                         180,
                         60
                     ]
+                },
+                "nrt": {
+                    "method": "dataCenter",
+                    "value": "LANCEMODIS"
                 },
                 "time": {
                     "eastZone": 300,
@@ -34,7 +39,8 @@
         "terra": {
             "filters": [
                 "extent",
-                "time"
+                "time",
+                "nrt"
             ],
             "options": {
                 "extent": {
@@ -44,6 +50,10 @@
                         180,
                         60
                     ]
+                },
+                "nrt": {
+                    "method": "dataCenter",
+                    "value": "LANCEMODIS"
                 },
                 "time": {
                     "eastZone": 180,
