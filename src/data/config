@@ -1,7 +1,6 @@
 {
-    "config": {
-        "arcticProjectionChangeDate": "2013-06-06",
-        "defaultProjection": "geographic"
+    "defaults": {
+        "projection": "geographic"
     },
     "echo": {
         "aqua": {
@@ -18,10 +17,6 @@
                         180,
                         60
                     ]
-                },
-                "nrt": {
-                    "method": "dataCenter",
-                    "value": "LANCEMODIS"
                 },
                 "time": {
                     "eastZone": 300,
@@ -50,10 +45,6 @@
                         180,
                         60
                     ]
-                },
-                "nrt": {
-                    "method": "dataCenter",
-                    "value": "LANCEMODIS"
                 },
                 "time": {
                     "eastZone": 180,
@@ -51047,6 +51038,42 @@
                     "r": 255
                 }
             ]
+        }
+    },
+    "products": {
+        "MOD04_L2": {
+            "echo": {
+                "dataCenterId": [
+                    "LAADS",
+                    "LANCEMODIS"
+                ],
+                "filter-options": {
+                    "nrt": {
+                        "method": "dataCenter",
+                        "value": "LANCEMODIS"
+                    }
+                },
+                "method": "terra",
+                "shortName": "MOD04_L2"
+            },
+            "name": "MODIS/Terra Aerosol 5-Min L2 Swath 10km"
+        },
+        "MYD04_L2": {
+            "echo": {
+                "dataCenterId": [
+                    "LAADS",
+                    "LANCEMODIS"
+                ],
+                "filter-options": {
+                    "nrt": {
+                        "method": "dataCenter",
+                        "value": "LANCEMODIS"
+                    }
+                },
+                "method": "aqua",
+                "shortName": "MYD04_L2"
+            },
+            "name": "MODIS/Aqua Aerosol 5-Min L2 Swath 10km"
         }
     },
     "projections": {

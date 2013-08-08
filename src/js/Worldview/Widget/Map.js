@@ -184,16 +184,16 @@ Worldview.Widget.Map = function(containerId, config) {
      * configuration.
      */
     var validateConfig = function(config) {
-        var root = ["config", "projections", "layers"];
+        var root = ["defaults", "projections", "layers"];
         $.each(root, function(index, key) {
             if ( !config.hasOwnProperty(key) ) {
                 throw key + " is required in the map configuration";
             }
         });
-        var _config = ["defaultProjection"];
+        var _config = ["projection"];
         $.each(_config, function(index, key) {
-            if ( !(key in config.config) ) {
-                throw new Error("config." + key + " is required in the " + 
+            if ( !(key in config.defaults ) ) {
+                throw new Error("defaults." + key + " is required for the " + 
                         "map configuraiton");
             }
         });

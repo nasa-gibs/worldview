@@ -21,13 +21,9 @@ Worldview.Widget.EPSG = function(config) {
     var changeDate = null;
 
     var init = function() {
-        var changeDateString = config.config.arcticProjectionChangeDate;
-        if ( changeDateString ) {
-            changeDate = Date.parseISOString(changeDateString).clearUTCTime();
-        }
+        changeDate = Worldview.ARCTIC_PROJECTION_CHANGE_DATE;
         REGISTRY.register(self.containerId, self);
         REGISTRY.markComponentReady(self.containerId);  
-                  
     };
     
     self.getValue = function() {

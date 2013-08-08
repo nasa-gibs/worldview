@@ -16,11 +16,7 @@
                 "maxDistance": 270,
                 "eastZone": 300,
                 "westZone": 1380
-            },
-            "nrt": {
-                "method": "dataCenter",
-                "value": "LANCEMODIS"
-            }           
+            }       
         }
     },
     "terra": {
@@ -40,11 +36,7 @@
                 "maxDistance": 270,
                 "eastZone": 180,
                 "westZone": 1260
-            },
-            "nrt": {
-                "method": "dataCenter",
-                "value": "LANCEMODIS"
-            } 
+            }
         }
     }
 }
