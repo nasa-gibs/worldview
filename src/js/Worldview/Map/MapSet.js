@@ -136,12 +136,14 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
         self.setProjection(mapConfig.defaultProjection || "geographic");
         
         $(document.body).mousemove(function(event) {
-            newEvent = $.extend({}, event);
+            /* FIXME: This code breaks other components, see WV-150
+            newEvent = $.extend(true, {}, event);
             newEvent.xy = {
                 x: event.clientX,
                 y: event.clientY
             };
             self.map.events.triggerEvent("mousemove", newEvent);
+            */
         });
     };
     
