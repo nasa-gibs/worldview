@@ -3,17 +3,25 @@ $(function() {// Initialize "static" vars
     var log = Logging.getLogger();
     
     var entryPoint = function() {  
+        
+        // Error handlers
         Worldview.Events.errorHandler = function(error) {
             Worldview.error("Internal error", error);
         };
         
+        // Place any quirky browser related items in the function called 
+        // below.
         Worldview.Support.quirks();
-                            
+        
+        // A message can be displayed to the user (for example, notification
+        // of a pending outage) by adding a notice.txt file in the web root                     
         $.get("notice.txt", function(message) {
             var html = message.replace(/\n/g, "<br/>");
             Worldview.notify(html);
         });
         
+        // Place any resources that should be completely loaded before 
+        // starting up the UI
         Worldview.Preloader([
             { id: "config", src: "data/config", type:"json" },
             "images/logo.png",
@@ -44,10 +52,16 @@ $(function() {// Initialize "static" vars
         }
     };
       
-    var init = function(config) {  	       
+    var init = function(config) {  	
+        // Convert all parameters found in the query string to an object, 
+        // keyed by parameter name       
         config.parameters = Worldview.queryStringToObject(location.search);
+        
+        // Features that are important for debugging but are not necessary
+        // for Worldview to opeerate properly
         debuggingFeatures(config);
         
+        // Models
         var dataDownloadModel = Worldview.DataDownload.Model(config);
 
         // Create widgets 
@@ -126,6 +140,7 @@ $(function() {// Initialize "static" vars
         Worldview.ddm = dataDownloadModel;
         Worldview.maps = map.maps;
         
+        // Initialize widgets
         var queryString = 
             Worldview.Permalink.decode(window.location.search.substring(1));
         
@@ -152,6 +167,7 @@ $(function() {// Initialize "static" vars
             REGISTRY.addAllReadyCallback(testQS);
         }
         
+        // Console notifications
         var banner = Worldview.NAME + " - Version " + Worldview.VERSION;
         if ( !Worldview.isDevelopment() ) {
             banner += " - " + Worldview.BUILD_TIMESTAMP;
@@ -159,7 +175,8 @@ $(function() {// Initialize "static" vars
         log.info(banner);
         if ( Worldview.isDevelopment() ) {
             log.warn("Development version");
-        }	  
+        }
+        	  
         // Do not start the tour if coming in via permalink         
         if ( !queryString ) {         
             Worldview.Tour.start(false);  
