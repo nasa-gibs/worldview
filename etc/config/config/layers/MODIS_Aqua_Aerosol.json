@@ -43,9 +43,6 @@
     "rendered": "MODIS_Aerosol",
     "recommendedPalettes": [ "orange_1" ],
     "echo": {
-        "name": "MODIS/Aqua Aerosol 5-Min L2 Swath 10km",
-        "shortName": "MYD04_L2",
-        "dataCenterId": ["LAADS", "LANCEMODIS"],
-        "method": "aqua"
+        "product": "MYD04_L2"
     }
 }

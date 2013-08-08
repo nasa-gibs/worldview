@@ -1531,13 +1531,7 @@
             "bins": 10,
             "description": "Aqua / MODIS",
             "echo": {
-                "dataCenterId": [
-                    "LAADS",
-                    "LANCEMODIS"
-                ],
-                "method": "aqua",
-                "name": "MODIS/Aqua Aerosol 5-Min L2 Swath 10km",
-                "shortName": "MYD04_L2"
+                "product": "MYD04_L2"
             },
             "max": "0.70",
             "min": "0.27",
@@ -3328,13 +3322,7 @@
             "bins": 10,
             "description": "Terra / MODIS",
             "echo": {
-                "dataCenterId": [
-                    "LAADS",
-                    "LANCEMODIS"
-                ],
-                "method": "terra",
-                "name": "MODIS/Terra Aerosol 5-Min L2 Swath 10km",
-                "shortName": "MOD04_L2"
+                "product": "MOD04_L2"
             },
             "max": "0.70",
             "min": "0.27",
@@ -51047,7 +51035,7 @@
                     "LAADS",
                     "LANCEMODIS"
                 ],
-                "filter-options": {
+                "filterOptions": {
                     "nrt": {
                         "method": "dataCenter",
                         "value": "LANCEMODIS"

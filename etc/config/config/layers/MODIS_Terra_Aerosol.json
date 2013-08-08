@@ -43,9 +43,6 @@
     "rendered": "MODIS_Aerosol",
     "recommendedPalettes": [ "orange_1" ],
     "echo": {
-        "name": "MODIS/Terra Aerosol 5-Min L2 Swath 10km",
-        "shortName": "MOD04_L2",
-        "dataCenterId": ["LAADS", "LANCEMODIS"],
-        "method": "terra"        
+        "product": "MOD04_L2"  
     }
 }

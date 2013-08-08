@@ -106,12 +106,22 @@ Worldview.DataDownload.MapView = function(model, maps, config) {
     };
 
     var createFilters = function() {
-        var layer = model.selectedLayer;
-        var method = config.layers[layer].echo.method
+        var product = model.selectedProduct;
+        var method = config.products[product].echo.method
         var filterNames = config.echo[method].filters;
         var filters = [];
         $.each(filterNames, function(index, name) {
+          
+            // Global options defined in echo.json
             var options = config.echo[method].options[name] || {};
+          
+            // Specific options defined for each product
+            var productConfig = config.products[model.selectedProduct];
+            if ( productConfig.echo.filterOptions ) {
+                var productOptions = productConfig.echo.filterOptions[name];
+                options = $.extend(true, options, productOptions);
+            }
+            
             var func = filterMap[name];
             if ( !func ) {
                 throw new Error("No such filter: " + name);

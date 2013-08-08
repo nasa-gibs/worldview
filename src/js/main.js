@@ -107,10 +107,9 @@ $(function() {// Initialize "static" vars
 		    wvOpacity: opacity,
 		    wvEPSG: epsg
 	    });
-        var dataDownload = Worldview.Widget.DataDownload({
+        var dataDownload = Worldview.Widget.DataDownload(config, {
             selector: ".dataDownload-modeButton",
             model: dataDownloadModel, 
-            config: config,
             maps: map.maps
         });
                  

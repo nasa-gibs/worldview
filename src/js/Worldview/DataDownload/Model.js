@@ -77,6 +77,7 @@ Worldview.DataDownload.Model = function(config) {
     self.events = Worldview.Events();
     
     self.selectedLayer = null;
+    self.selectedProduct = null;
     self.layers = [];
     
     self.granules = [];
@@ -159,6 +160,11 @@ Worldview.DataDownload.Model = function(config) {
             throw new Error("Layer not in active list: " + layerName);
         }
         self.selectedLayer = layerName;
+        if ( config.layers[layerName].echo ) {
+            self.selectedProduct = config.layers[layerName].echo.product;
+        } else {
+            self.selectedProduct = null;
+        }
         self.events.trigger(self.EVENT_LAYER_SELECT, self.selectedLayer);    
         query();
     };
@@ -183,11 +189,12 @@ Worldview.DataDownload.Model = function(config) {
         if ( !self.active ) {
             return;
         }
-        var layerConfig = config.layers[self.selectedLayer];
-        if ( !layerConfig.echo ) {
+        if ( !self.selectedProduct ) {
             self.events.trigger(self.EVENT_QUERY_RESULTS, []);
             return;
         }
+
+        var productConfig = config.products[self.selectedProduct];
         
         var t = state.time;
         startTime = new Date(Date.UTC(
@@ -195,7 +202,7 @@ Worldview.DataDownload.Model = function(config) {
         endTime = new Date(Date.UTC(
             t.getUTCFullYear(), t.getUTCMonth(), t.getUTCDate(), 23, 59, 59));
                              
-        var method = config.layers[self.selectedLayer].echo.method;
+        var method = productConfig.echo.method;
         var options = config.echo[method].query || {};
         if ( options.timeWindow ) {
             startDelta = options.timeWindow[0];
@@ -206,8 +213,8 @@ Worldview.DataDownload.Model = function(config) {
         }    
          
         var parameters = {
-            shortName: layerConfig.echo.shortName,
-            dataCenterId: layerConfig.echo.dataCenterId,
+            shortName: productConfig.echo.shortName,
+            dataCenterId: productConfig.echo.dataCenterId,
             startTime: startTime.toTimestampUTC(),
             endTime: endTime.toTimestampUTC()
         }

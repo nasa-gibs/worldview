@@ -25,18 +25,18 @@ Worldview.namespace("Widget");
  * @param spec.selector {string} jQuery selector for where the mode activation
  * button should be rendered.
  */
-Worldview.Widget.DataDownload = function(spec) {
+Worldview.Widget.DataDownload = function(config, spec) {
 
     var log = Logging.getLogger("Worldview.DataDownload");
     Logging.debug("Worldview.DataDownload");
             
     var HTML_WIDGET_INACTIVE = "<img src='images/camera.png'></img>";
     var HTML_WIDGET_ACTIVE = "<img src='images/cameraon.png'></img>";
-    
-    var model = spec.model;
+   
+    var model = spec.model; 
     var controlDialog = null;
     var mapView = null;
-    
+   
     var self = {};
     self.containerId = "dataDownload";
         
