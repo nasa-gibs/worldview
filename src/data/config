@@ -4893,6 +4893,9 @@
         },
         "MODIS_Terra_SurfaceReflectance_Bands143": {
             "description": "Terra / MODIS",
+            "echo": {
+                "product": "MOD09CMG"
+            },
             "name": "Land Surface Reflectance (True Color)",
             "product": "daily",
             "projections": {
@@ -51045,6 +51048,20 @@
                 "shortName": "MOD04_L2"
             },
             "name": "MODIS/Terra Aerosol 5-Min L2 Swath 10km"
+        },
+        "MOD09CMG": {
+            "echo": {
+                "dataCenterId": "LPDAAC_ECS",
+                "filterOptions": {
+                    "nrt": {
+                        "method": "dataCenter",
+                        "value": "FOO"
+                    }
+                },
+                "method": "terra",
+                "shortName": "MOD09GA"
+            },
+            "name": "MODIS/Terra Surface Reflectance Daily"
         },
         "MYD04_L2": {
             "echo": {

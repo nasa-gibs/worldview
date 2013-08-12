@@ -150,7 +150,10 @@ def create_xml(fields):
   xml += ["<query>", "<for value='granules'/>"]
   
   xml += ["<dataCenterId>"] 
-  xml += aql_list(fields.getlist("dataCenterId"))
+  if "dataCenterId" in fields:
+    xml += aql_list(fields.getlist("dataCenterId"))
+  else:
+    xml += ["<all/>"]
   xml += ["</dataCenterId>"]
   
   xml += ["<where>"]
@@ -227,7 +230,7 @@ def process_request(options):
   if len(fields) == 0:
     raise RequestError("No parameters")
     
-  required_fields = ["startTime", "endTime", "shortName", "dataCenterId"]
+  required_fields = ["startTime", "endTime", "shortName"]
   for required_field in required_fields:
     if required_field not in fields:
       raise RequestError("Missing parameter: %s" % required_field)
