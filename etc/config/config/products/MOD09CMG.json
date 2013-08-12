@@ -1,0 +1,14 @@
+{
+    "name": "MODIS/Terra Surface Reflectance Daily",
+    "echo": {
+        "shortName": "MOD09GA",
+        "dataCenterId": "LPDAAC_ECS",
+        "method": "terra",
+        "filterOptions": {
+            "nrt": {
+                "method": "dataCenter",
+                "value": "FOO"               
+            }
+        }     
+    }
+}
