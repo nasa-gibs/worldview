@@ -4,6 +4,23 @@ Release Notes
 http://earthdata.nasa.gov/labs/worldview/
 
 -------------------------------------------------------------------------------
+Release 0.5.1 
+-------------------------------------------------------------------------------
+* New Features
+  - Added twenty AIRS (Atmospheric Infrared Sounder) products for temerature
+    and relative humidity.
+
+* Known Issues
+  - Custom color palettes are not supported on Safari 5 or earlier.
+  - Custom color palettes can not be used in image download.
+  - On iOS, layers cannot be reordered 
+  - Worldview does not work with Internet Explorer version 10 and
+    below.
+  - WMS based layers (Population Density and Global Labels) can no longer be 
+    displayed properly in the older arctic projection (EPSG:3995).
+    
+    
+-------------------------------------------------------------------------------
 Release 0.5.0 - July 17, 2013
 -------------------------------------------------------------------------------
 * New Features
@@ -23,15 +40,6 @@ Release 0.5.0 - July 17, 2013
   - The empty layer has been removed. All layers in the active list can now
     be removed or hidden.
   - Resolution units added to the image download panel.
-
-* Known Issues
-  - Custom color palettes are not supported on Safari 5 or earlier.
-  - Custom color palettes can not be used in image download.
-  - On iOS, layers cannot be reordered 
-  - Worldview does not work with Internet Explorer version 10 and
-    below.
-  - WMS based layers (Population Density and Global Labels) can no longer be 
-    displayed properly in the older arctic projection (EPSG:3995).
     
     
 -------------------------------------------------------------------------------
