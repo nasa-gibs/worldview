@@ -18,10 +18,10 @@ import xml.parsers.expat
 
 prog = os.path.basename(__file__)
 basedir = os.path.dirname(__file__)
-version = "1.0.1"
+version = "1.0.2"
 help_description = """\
 Given an index file of VRT color tables, converts them into JSON palettes
-suitable for Worldview. Also updates existing product JSON files to include 
+suitable for Worldview. Also updates existing layer JSON files to include 
 the number of color bins and bin stops as needed.
 """
 
@@ -35,7 +35,7 @@ parser = OptionParser(usage="Usage: %s [options] <output_dir>" % prog,
 parser.add_option("-i", "--index", default=default_index,
                   help="use this as the index file instead of %s" % 
                   default_index)
-parser.add_option("-l", "--layers-dir", default=default_layers_dir,
+parser.add_option("-p", "--layers-dir", default=default_layers_dir,
                   help="use this as the layers directory instead of %s" %
                   default_layers_dir)
 parser.add_option("-v", "--verbose", action="store_true",
@@ -81,7 +81,7 @@ def readColorTableValuesFromVrt(vrtFilename):
     if len(ctEntries) != 256:
         error(vrtFilename + 
               " does not contain 256 palette entries; skipping. "
-              "(It contains " + len(ctEntries) + " entries)")
+              "(It contains " + str(len(ctEntries)) + " entries)")
         return []
 
 
@@ -116,7 +116,7 @@ def readColorTableValuesFromVrt(vrtFilename):
 
 def main():
     # Parse input args
-    productList = []
+    layerList = []
 
     if not os.path.exists(options.index):
         fatal("Index file %s does not exist" % options.index)
@@ -136,7 +136,7 @@ def main():
     return_code = 0
     
     for vrt_meta in index:
-        # Retrieve product info for current iteration
+        # Retrieve layer info for current iteration
         vrt_filename = os.path.join(options.vrt_dir, vrt_meta["filename"])
 
         # Construct full path to VRT and verify that it exists
@@ -171,7 +171,7 @@ def main():
             else:
                 # If the bins are likely to not be evenly spaced out 
                 # (e.g., previous color repeats), color stop definitions
-                # will need to be added to the product config
+                # will need to be added to the layer config
                 use_bin_stops = True
 
         palette_file_name = os.path.join(output_dir, 
@@ -187,9 +187,9 @@ def main():
             json.dump(palette, fp, sort_keys=True, indent=4,
                       separators=(',', ': '))
 
-        # Product configurations needs to be updated to include the
+        # Layer configurations needs to be updated to include the
         # the number of bins, bin stops if necessary, and the name
-        # of the color palette it is rendered in.        
+        # of the color palette it is rendered in.
         for layer_id in vrt_meta["layers"]:
             layer_file_name = os.path.join(options.layers_dir,
                                              "%s.json" % layer_id)
