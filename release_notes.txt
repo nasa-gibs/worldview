@@ -4,7 +4,7 @@ Release Notes
 http://earthdata.nasa.gov/labs/worldview/
 
 -------------------------------------------------------------------------------
-Release 0.5.1 
+Release 0.5.1 - August 14, 2013
 -------------------------------------------------------------------------------
 * New Features
   - Added twenty AIRS (Atmospheric Infrared Sounder) products for temerature
