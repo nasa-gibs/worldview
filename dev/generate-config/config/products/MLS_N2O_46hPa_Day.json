@@ -1,4 +1,5 @@
 {
+    "bins": 255,
     "description": "Aura / MLS",
     "max": "300",
     "min": "75",

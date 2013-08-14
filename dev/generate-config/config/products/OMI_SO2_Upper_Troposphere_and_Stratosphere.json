@@ -1,4 +1,5 @@
 {
+    "bins": 157,
     "description": "Aura / OMI",
     "max": "2.0",
     "min": "0.4",
@@ -37,8 +38,11 @@
             512
         ]
     },
-    "recommendedPalettes": [ "orange_1", "red_1" ],
-    "rendered": "OMI_SO2_Upper_Troposphere_and_Stratosphere",
+    "recommendedPalettes": [
+        "orange_1",
+        "red_1"
+    ],
+    "rendered": "OMI_SO2_Middle_Troposphere_to_Stratosphere",
     "startDate": "2012-04-07",
     "type": "wmts",
     "units": "DU"

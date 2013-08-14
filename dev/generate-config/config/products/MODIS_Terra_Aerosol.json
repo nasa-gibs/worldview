@@ -1,4 +1,5 @@
 {
+    "bins": 10,
     "description": "Terra / MODIS",
     "max": "0.70",
     "min": "0.27",
@@ -37,7 +38,9 @@
             512
         ]
     },
-    "recommendedPalettes": [ "orange_1" ],
+    "recommendedPalettes": [
+        "orange_1"
+    ],
     "rendered": "MODIS_Aerosol",
     "startDate": "2012-04-07",
     "type": "wmts",

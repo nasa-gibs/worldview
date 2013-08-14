@@ -984,6 +984,126 @@
 	        "value" =>  "AIRS_Precipitation_Night",
 	        "type" => "multi", "category" => "overlays"
 		),
+        array(
+            "label" =>  "Relative Humidity (400 hPa, Day)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_RelativeHumidity_400hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ),      
+        array(
+            "label" =>  "Relative Humidity (400 hPa, Night)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_RelativeHumidity_400hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),      
+        array(
+            "label" =>  "Relative Humidity (500 hPa, Day)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_RelativeHumidity_500hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ),      
+        array(
+            "label" =>  "Relative Humidity (500 hPa, Night)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_RelativeHumidity_500hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ), 
+        array(
+            "label" =>  "Relative Humidity (600 hPa, Day)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_RelativeHumidity_600hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ),      
+        array(
+            "label" =>  "Relative Humidity (600 hPa, Night)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_RelativeHumidity_600hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ), 
+        array(
+            "label" =>  "Relative Humidity (700 hPa, Day)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_RelativeHumidity_700hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ),      
+        array(
+            "label" =>  "Relative Humidity (700 hPa, Night)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_RelativeHumidity_700hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Relative Humidity (850 hPa, Day)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_RelativeHumidity_850hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ),      
+        array(
+            "label" =>  "Relative Humidity (850 hPa, Night)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_RelativeHumidity_850hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),  
+        array(
+            "label" =>  "Temperature (400 hPa, Day)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_Temperature_400hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ), 
+        array(
+            "label" =>  "Temperature (400 hPa, Night)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_Temperature_400hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ), 
+        array(
+            "label" =>  "Temperature (500 hPa, Day)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_Temperature_500hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ), 
+        array(
+            "label" =>  "Temperature (500 hPa, Night)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_Temperature_500hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Temperature (600 hPa, Day)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_Temperature_600hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ), 
+        array(
+            "label" =>  "Temperature (600 hPa, Night)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_Temperature_600hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Temperature (700 hPa, Day)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_Temperature_700hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ), 
+        array(
+            "label" =>  "Temperature (700 hPa, Night)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_Temperature_700hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Temperature (850 hPa, Day)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_Temperature_850hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ), 
+        array(
+            "label" =>  "Temperature (850 hPa, Night)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_Temperature_850hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),
 		array(
 	        "label" =>  "Cloud Pressure",
 	        "sublabel" =>  "Aura / OMI",
@@ -1275,18 +1395,18 @@
 	        "value" =>  "MODIS_Terra_Cloud_Top_Temp_Day",
 	        "type" => "multi", "category" => "overlays"
 		),
+        array(
+            "label" =>  "Cloud Top Temperature (Night)",
+            "sublabel" =>  "Terra / MODIS",
+            "value" =>  "MODIS_Terra_Cloud_Top_Temp_Night",
+            "type" => "multi", "category" => "overlays"
+        ),
 		array(
 	        "label" =>  "Cloud Top Temperature (Day)",
 	        "sublabel" =>  "Aqua / MODIS",
 	        "value" =>  "MODIS_Aqua_Cloud_Top_Temp_Day",
 	        "type" => "multi", "category" => "overlays"
 		),		
-		array(
-	        "label" =>  "Cloud Top Temperature (Night)",
-	        "sublabel" =>  "Terra / MODIS",
-	        "value" =>  "MODIS_Terra_Cloud_Top_Temp_Night",
-	        "type" => "multi", "category" => "overlays"
-		),
 		array(
 	        "label" =>  "Cloud Top Temperature (Night)",
 	        "sublabel" =>  "Aqua / MODIS",
@@ -1425,7 +1545,127 @@
 	        "value" =>  "AIRS_Prata_SO2_Index_Night",
 	        "type" => "multi", "category" => "overlays", "tags" => "so2"
 		),
-		array(
+        array(
+            "label" =>  "Relative Humidity (400 hPa, Day)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_RelativeHumidity_400hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ),		
+        array(
+            "label" =>  "Relative Humidity (400 hPa, Night)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_RelativeHumidity_400hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),      
+        array(
+            "label" =>  "Relative Humidity (500 hPa, Day)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_RelativeHumidity_500hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ),      
+        array(
+            "label" =>  "Relative Humidity (500 hPa, Night)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_RelativeHumidity_500hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ), 
+        array(
+            "label" =>  "Relative Humidity (600 hPa, Day)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_RelativeHumidity_600hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ),      
+        array(
+            "label" =>  "Relative Humidity (600 hPa, Night)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_RelativeHumidity_600hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ), 
+        array(
+            "label" =>  "Relative Humidity (700 hPa, Day)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_RelativeHumidity_700hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ),      
+        array(
+            "label" =>  "Relative Humidity (700 hPa, Night)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_RelativeHumidity_700hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Relative Humidity (850 hPa, Day)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_RelativeHumidity_850hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ),      
+        array(
+            "label" =>  "Relative Humidity (850 hPa, Night)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_RelativeHumidity_850hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),  
+        array(
+            "label" =>  "Temperature (400 hPa, Day)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_Temperature_400hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ), 
+        array(
+            "label" =>  "Temperature (400 hPa, Night)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_Temperature_400hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ), 
+        array(
+            "label" =>  "Temperature (500 hPa, Day)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_Temperature_500hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ), 
+        array(
+            "label" =>  "Temperature (500 hPa, Night)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_Temperature_500hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Temperature (600 hPa, Day)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_Temperature_600hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ), 
+        array(
+            "label" =>  "Temperature (600 hPa, Night)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_Temperature_600hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Temperature (700 hPa, Day)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_Temperature_700hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ), 
+        array(
+            "label" =>  "Temperature (700 hPa, Night)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_Temperature_700hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
+            "label" =>  "Temperature (850 hPa, Day)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_Temperature_850hPa_Day",
+            "type" => "multi", "category" => "overlays"
+        ), 
+        array(
+            "label" =>  "Temperature (850 hPa, Night)",
+            "sublabel" =>  "Aqua / AIRS",
+            "value" =>  "AIRS_Temperature_850hPa_Night",
+            "type" => "multi", "category" => "overlays"
+        ),
+        array(
 	        "label" =>  "Absorbing Aerosol Optical Depth",
 	        "sublabel" =>  "Aura / OMI",
 	        "value" =>  "OMI_Absorbing_Aerosol_Optical_Depth",
