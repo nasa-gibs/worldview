@@ -13,7 +13,7 @@
      * Constant: VERSION
      * Release version string.
      */   
-    ns.VERSION = "0.5.0";
+    ns.VERSION = "0.5.1";
     
     /**
      * Constant: BUILD_TIMESTAMP
