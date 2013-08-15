@@ -45,7 +45,7 @@
     ns.GIBS_HOUR_DELAY = 3;
     
     // June 6, 2013
-    ns.ARCTIC_PROJECTION_CHANGE_DATE = new Date(Date.UTC(05, 06, 2013)); 
+    ns.ARCTIC_PROJECTION_CHANGE_DATE = new Date(Date.UTC(2013, 05, 06)); 
     
     /**
      * Determines if Worldview is being run in development mode.
