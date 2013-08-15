@@ -7,7 +7,7 @@
     ],
     "name": "geographic",
     "numZoomLevels": 9,
-    "projection": "EPSG:4326",
+    "crs": "EPSG:4326",
     "resolutions": [
         0.5625,
         0.28125,
@@ -29,5 +29,6 @@
         0,
         0
     ],
-    "startZoom": 1
+    "startZoom": 1,
+    "queryExtent": [-180, -60, 180, 60]
 }

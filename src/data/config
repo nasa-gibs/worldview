@@ -51033,21 +51033,22 @@
     },
     "products": {
         "MOD04_L2": {
-            "echo": {
-                "dataCenterId": [
-                    "LAADS",
-                    "LANCEMODIS"
-                ],
-                "filterOptions": {
-                    "nrt": {
-                        "method": "dataCenter",
-                        "value": "LANCEMODIS"
-                    }
-                },
-                "method": "terra",
-                "shortName": "MOD04_L2"
+            "handler": "TerraSwath5",
+            "name": "MODIS/Terra Aerosol 5-Min L2 Swath 10km",
+            "nrt": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             },
-            "name": "MODIS/Terra Aerosol 5-Min L2 Swath 10km"
+            "query": {
+                "data": {
+                    "dataCenterId": [
+                        "LAADS",
+                        "LANCEMODIS"
+                    ],
+                    "shortName": "MOD04_L2"
+                }
+            }
         },
         "MOD09CMG": {
             "echo": {
@@ -51083,14 +51084,7 @@
     },
     "projections": {
         "antarctic": {
-            "echo": {
-                "extent": [
-                    -4194304,
-                    -4194304,
-                    4194304,
-                    4194304
-                ]
-            },
+            "crs": "EPSG:3031",
             "fractionalZoom": false,
             "maxExtent": [
                 -4194304,
@@ -51100,7 +51094,6 @@
             ],
             "name": "antarctic",
             "numZoomLevels": 6,
-            "projection": "EPSG:3031",
             "resolutions": [
                 8192.0,
                 4096.0,
@@ -51123,14 +51116,7 @@
             "units": "m"
         },
         "arctic": {
-            "echo": {
-                "extent": [
-                    -4194304,
-                    -4194304,
-                    4194304,
-                    4194304
-                ]
-            },
+            "crs": "EPSG:3413",
             "maxExtent": [
                 -4194304,
                 -4194304,
@@ -51139,7 +51125,6 @@
             ],
             "name": "arctic",
             "numZoomLevels": 6,
-            "projection": "EPSG:3413",
             "resolutions": [
                 8192.0,
                 4096.0,
@@ -51161,7 +51146,13 @@
             "startZoom": 0,
             "units": "m"
         },
+        "arctic3995": {
+            "crs": "EPSG:3995",
+            "name": "arctic",
+            "virtual": "true"
+        },
         "geographic": {
+            "crs": "EPSG:4326",
             "maxExtent": [
                 -180,
                 -90,
@@ -51170,7 +51161,12 @@
             ],
             "name": "geographic",
             "numZoomLevels": 9,
-            "projection": "EPSG:4326",
+            "queryExtent": [
+                -180,
+                -60,
+                180,
+                60
+            ],
             "resolutions": [
                 0.5625,
                 0.28125,

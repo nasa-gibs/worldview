@@ -35,7 +35,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
    
     var model = spec.model; 
     var controlDialog = null;
-    var mapView = null;
+    var mapController = null;
    
     var self = {};
     self.containerId = "dataDownload";
@@ -83,8 +83,9 @@ Worldview.Widget.DataDownload = function(config, spec) {
         }
         controlDialog.show();
         
-        if ( !mapView ) {
-            mapView = Worldview.DataDownload.MapView(model, spec.maps, config);
+        if ( !mapController ) {
+            mapController = 
+                Worldview.DataDownload.MapController(model, spec.maps, config);
         }
         
     };
@@ -106,7 +107,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
     };
     
     var onQueryResults = function(results) {
-        log.debug("queryResults", results.length);
+        log.debug("queryResults", results);
         Worldview.Indicator.hide();
         if ( results.length === 0 ) {
             Worldview.Indicator.noData();
@@ -118,11 +119,10 @@ Worldview.Widget.DataDownload = function(config, spec) {
         Worldview.Indicator.hide();
     };
     
-    var onQueryError = function(status, error, parameters) {
-        log.debug("queryError", status, error, parameters);
+    var onQueryError = function(status, error) {
+        log.debug("queryError", status, error);
         Worldview.Indicator.hide();
-        Worldview.notify("Unable to query at this time. Please try again later",
-                error);
+        Worldview.notify("Unable to query at this time. Please try again later");
     };
     
     init();

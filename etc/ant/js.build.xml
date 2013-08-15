@@ -78,6 +78,8 @@
         <file name="js/Worldview/Preloader.js"/>
         <file name="js/Worldview/Events.js"/>
         <file name="js/Worldview/Indicator.js"/>
+        <file name="js/Worldview/AjaxCache.js"/>
+        <file name="js/Worldview/AjaxJoin.js"/>
                
         <file name="js/Worldview/Palette.js"/>
         <file name="js/Worldview/Palette/ColorBar.js"/>
@@ -94,25 +96,39 @@
         <file name="js/Worldview/Map/TWMSLayer.js"/>
         <file name="js/Worldview/Map/HoverControl.js"/>
 
+        <file name="js/Worldview/DataDownload/ECHO/Client.js"/>
+        <file name="js/Worldview/DataDownload/ECHO/Geometry.js"/>
+        <file name="js/Worldview/DataDownload/ECHO/MockClient.js"/>
+        
+        <file name="js/Worldview/DataDownload/Handler/Base.js"/>
+        <file name="js/Worldview/DataDownload/Handler/MODISSwath5.js"/>
+        <file name="js/Worldview/DataDownload/Handler/TerraSwath5.js"/>
+        
+        <file name="js/Worldview/DataDownload/Layers/Button.js"/>
+        <file name="js/Worldview/DataDownload/Layers/Hover.js"/>
+        <file name="js/Worldview/DataDownload/Layers/Swath.js"/>
+        
+        <file name="js/Worldview/DataDownload/Results/Chain.js"/>
+        <file name="js/Worldview/DataDownload/Results/CollectPreferred.js"/>
+        <file name="js/Worldview/DataDownload/Results/ConnectSwaths.js"/>
+        <file name="js/Worldview/DataDownload/Results/ExtentFilter.js"/>
+        <file name="js/Worldview/DataDownload/Results/GeometryFromECHO.js"/>
+        <file name="js/Worldview/DataDownload/Results/PreferredFilter.js"/>
+        <file name="js/Worldview/DataDownload/Results/TagNRT.js"/>
+        <file name="js/Worldview/DataDownload/Results/TimeFilter.js"/>
+        <file name="js/Worldview/DataDownload/Results/TimeLabel.js"/>
+
         <file name="js/Worldview/DataDownload/Model.js"/>
-        <file name="js/Worldview/DataDownload/ECHOClient.js"/>
-        <file name="js/Worldview/DataDownload/ECHOGeometry.js"/>
         <file name="js/Worldview/DataDownload/ProductSelector.js"/>
         <file name="js/Worldview/DataDownload/ControlDialog.js"/>
-        <file name="js/Worldview/DataDownload/ButtonLayers.js"/>
-        <file name="js/Worldview/DataDownload/HoverLayers.js"/>
-        <file name="js/Worldview/DataDownload/SwathLayers.js"/>
-        <file name="js/Worldview/DataDownload/ExtentFilter.js"/>
-        <file name="js/Worldview/DataDownload/TimeFilter.js"/>
-        <file name="js/Worldview/DataDownload/NRTFilter.js"/>
-        <file name="js/Worldview/DataDownload/MapView.js"/>
+        <file name="js/Worldview/DataDownload/MapController.js"/>
         
         <file name="js/Worldview/Widget/Map.js"/>
         <file name="js/Worldview/Widget/Palette.js"/>
         <file name="js/Worldview/Widget/WorldviewMap.js"/>
         <file name="js/Worldview/Widget/ArcticProjectionChangeNotification.js"/>
         <file name="js/Worldview/Widget/Opacity.js"/>
-        <file name="js/Worldview/Widget/EPSG.js"/>
+        <file name="js/Worldview/Widget/CRS.js"/>
         <file name="js/Worldview/Widget/DataDownload.js"/>
 
         <file name="js/tour.js"/>
