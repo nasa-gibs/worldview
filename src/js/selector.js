@@ -275,7 +275,6 @@ SOTE.widget.Selector.loadCategory = function(e){
 	$('#'+self.id+"select").val("All");
 
     $("#"+self.id+"search").on('keyup',{self:self,select:false},SOTE.widget.Selector.search);
-	$("#"+self.id+"search").focus();
 	
 	if($(window).width() > 720){
 		if(self.jsp){
