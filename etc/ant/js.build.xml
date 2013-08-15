@@ -107,6 +107,7 @@
         <file name="js/Worldview/DataDownload/Handler/MODISGrid.js"/>
         
         <file name="js/Worldview/DataDownload/Layers/Button.js"/>
+        <file name="js/Worldview/DataDownload/Layers/Grid.js"/>
         <file name="js/Worldview/DataDownload/Layers/Hover.js"/>
         <file name="js/Worldview/DataDownload/Layers/Swath.js"/>
         
