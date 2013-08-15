@@ -56,7 +56,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3ffffff', e
 }
 
 @media screen and (max-device-height: 720px) and (orientation: landscape){
-		div.olControlZoomPanelCustom {display:none !important;}
+		div.olControlMousePosition, div.olControlScaleLineCustom {display:none !important;}
 }
 
 
