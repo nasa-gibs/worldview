@@ -59723,21 +59723,22 @@
             "name": "MODIS/Terra Surface Reflectance Daily"
         },
         "MYD04_L2": {
-            "echo": {
-                "dataCenterId": [
-                    "LAADS",
-                    "LANCEMODIS"
-                ],
-                "filter-options": {
-                    "nrt": {
-                        "method": "dataCenter",
-                        "value": "LANCEMODIS"
-                    }
-                },
-                "method": "aqua",
-                "shortName": "MYD04_L2"
+            "handler": "AquaSwath5",
+            "name": "MODIS/Aqua Aerosol 5-Min L2 Swath 10km",
+            "nrt": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             },
-            "name": "MODIS/Aqua Aerosol 5-Min L2 Swath 10km"
+            "query": {
+                "data": {
+                    "dataCenterId": [
+                        "LAADS",
+                        "LANCEMODIS"
+                    ],
+                    "shortName": "MYD04_L2"
+                }
+            }
         }
     },
     "projections": {

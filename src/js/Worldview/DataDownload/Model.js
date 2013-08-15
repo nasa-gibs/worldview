@@ -31,6 +31,7 @@ Worldview.DataDownload.Model = function(config) {
     };
     
     var handlers = {
+        AquaSwath5: Worldview.DataDownload.Handler.AquaSwath5,
         TerraSwath5: Worldview.DataDownload.Handler.TerraSwath5
     };
     
