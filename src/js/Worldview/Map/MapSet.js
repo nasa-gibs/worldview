@@ -417,6 +417,10 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
     var createMap = function($div, id, projection, spec) {
         
         var config = $.extend(true, {}, spec);
+        // OpenLayers uses "projection" for the map object. We use "crs" 
+        // instead
+        config.projection = config.crs; 
+        
         // Zooming feature is not as fluid as advertised
         config.zoomMethod = null;
         // Don't let OpenLayers fetch the stylesheet -- that is included
