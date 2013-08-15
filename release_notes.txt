@@ -13,7 +13,8 @@ Release 0.5.1 - August 15, 2013
 * Known Issues
   - Custom color palettes are not supported on Safari 5 or earlier.
   - Custom color palettes can not be used in image download.
-  - On iOS, layers cannot be reordered 
+  - On iOS, layers cannot be reordered
+  - On newer versions of Android Chrome, the map can be unresponsive. 
   - Worldview does not work with Internet Explorer version 10 and
     below.
   - WMS based layers (Population Density and Global Labels) can no longer be 
