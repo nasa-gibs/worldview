@@ -1,8 +1,8 @@
 {
     "bins": 251,
     "description": "Aqua / AIRS",
-    "max": "270",
-    "min": "240",
+    "max": "300",
+    "min": "270",
     "name": "Temperature (850 hPa, Day)",
     "product": "daily",
     "projections": {

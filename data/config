@@ -53840,8 +53840,8 @@
         "AIRS_Temperature_700hPa_Night": {
             "bins": 251,
             "description": "Aqua / AIRS",
-            "max": "270",
-            "min": "240",
+            "max": "300",
+            "min": "270",
             "name": "Temperature (700 hPa, Night)",
             "product": "daily",
             "projections": {
@@ -53885,8 +53885,8 @@
         "AIRS_Temperature_850hPa_Day": {
             "bins": 251,
             "description": "Aqua / AIRS",
-            "max": "270",
-            "min": "240",
+            "max": "300",
+            "min": "270",
             "name": "Temperature (850 hPa, Day)",
             "product": "daily",
             "projections": {
@@ -53930,8 +53930,8 @@
         "AIRS_Temperature_850hPa_Night": {
             "bins": 251,
             "description": "Aqua / AIRS",
-            "max": "270",
-            "min": "240",
+            "max": "300",
+            "min": "270",
             "name": "Temperature (850 hPa, Night)",
             "product": "daily",
             "projections": {
