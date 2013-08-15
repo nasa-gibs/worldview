@@ -88,6 +88,9 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
         // Create map objects, one for each projection.     
         $.each(mapConfig.projections, function(projection, config) {
             config = validateMapConfig(config);
+            if ( config.virtual ) {
+                return;
+            }
             var id = "map-" + projection;
             
             var newMap = createMap($container, id, projection, config);

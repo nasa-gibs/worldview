@@ -96,7 +96,7 @@ $(function() {// Initialize "static" vars
             config, products.b
         );
         var opacity = new Worldview.Widget.Opacity(config);
-        var epsg = new Worldview.Widget.EPSG(config);
+        var crs = new Worldview.Widget.CRS(config);
 		var events = new SOTE.widget.Events("eventsHolder", {
 		    mapWidget: map, 
   		    paletteWidget: palettes,
@@ -105,7 +105,7 @@ $(function() {// Initialize "static" vars
 		    dateWidget: date,
 		    apcmWidget: apcn,
 		    wvOpacity: opacity,
-		    wvEPSG: epsg
+		    wvEPSG: crs
 	    });
         var dataDownload = Worldview.Widget.DataDownload(config, {
             selector: ".dataDownload-modeButton",
@@ -115,11 +115,11 @@ $(function() {// Initialize "static" vars
                  
 	    // Register event listeners
         REGISTRY.addEventListener("time", 
-                "map", "imagedownload", apcn.containerId, epsg.containerId, 
+                "map", "imagedownload", apcn.containerId, crs.containerId, 
                 dataDownload.containerId);
         REGISTRY.addEventListener("switch", 
                 "map", "products", "selectorbox", "imagedownload", "camera", 
-                apcn.containerId, epsg.containerId, dataDownload.containerId);
+                apcn.containerId, crs.containerId, dataDownload.containerId);
         REGISTRY.addEventListener("products", 
                 "map", "selectorbox", "imagedownload", "palettes", 
                 apcn.containerId, dataDownload.containerId);
@@ -127,7 +127,7 @@ $(function() {// Initialize "static" vars
         REGISTRY.addEventListener("camera","imagedownload");
         REGISTRY.addEventListener("palettes","map","camera","products");
         REGISTRY.addEventListener("opacity", "map");
-        REGISTRY.addEventListener(epsg.containerId, "imagedownload");
+        REGISTRY.addEventListener(crs.containerId, "imagedownload");
 
         // These are only convienence handles to important objects used
         // for console debugging. Code should NOT reference these as they
@@ -151,7 +151,7 @@ $(function() {// Initialize "static" vars
             palettes,
             apcn,
             opacity,
-            epsg
+            crs
         ];
         
         function testQS(){

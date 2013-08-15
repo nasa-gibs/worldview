@@ -8,9 +8,9 @@
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
-Worldview.namespace("DataDownload");
+Worldview.namespace("DataDownload.Layers");
 
-Worldview.DataDownload.ButtonLayers = function(model, maps, config) {
+Worldview.DataDownload.Layers.Button = function(model, maps, config) {
 
     var LAYER_NAME = "DataDownload_Button";
 
@@ -43,12 +43,12 @@ Worldview.DataDownload.ButtonLayers = function(model, maps, config) {
         var layer = getLayer();
         layer.removeAllFeatures();
         var features = [];
-        $.each(results, function(index, result) {
-            var centroid = result.centroid[model.epsg];
+        $.each(results.granules, function(index, granule) {
+            var centroid = granule.centroid[model.crs];
             if ( centroid ) {
                 var feature = new OpenLayers.Feature.Vector(centroid, {
-                    result: result,
-                    label: getLabel(result)
+                    granule: granule,
+                    label: granule.label
                 });
                 features.push(feature);    
             }
@@ -144,7 +144,7 @@ Worldview.DataDownload.ButtonLayers = function(model, maps, config) {
     
     var onHoverOver = function(event) {
         var style = getStyle(true);
-        style.label = getLabel(event.feature.attributes.result);
+        style.label = event.feature.attributes.granule.label;
         event.feature.style = style;
         getLayer().drawFeature(event.feature);    
     };
@@ -153,29 +153,7 @@ Worldview.DataDownload.ButtonLayers = function(model, maps, config) {
         event.feature.style = undefined;
         getLayer().drawFeature(event.feature);
     };
-    
-    var getLabel = function(result) {
-        var timeStart = Date.parseISOString(result.time_start);
-        var timeEnd = Date.parseISOString(result.time_end);
         
-        var diff = Math.floor(
-            (timeStart.getTime() - model.time.getTime()) / (1000 * 60 * 60 * 24)
-        );
-                   
-        var suffix = "";
-        if ( diff !== 0 ) {
-            if ( diff < 0 ) { 
-                suffix = " (" + diff + " day)";
-            } else {
-                suffix = " (+" + diff + " day)";
-            }    
-        }
-        var displayStart = timeStart.toISOStringTimeHM();
-        var displayEnd = timeEnd.toISOStringTimeHM();
-        
-        return displayStart + " - " + displayEnd + suffix;
-    };
-    
     var getLabelOffset = function() {
         var buttonHeight = getSize().h;
         return ( buttonHeight / 2.0 ) + 10;

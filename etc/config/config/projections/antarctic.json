@@ -8,7 +8,7 @@
     ],
     "name": "antarctic",
     "numZoomLevels": 6,
-    "projection": "EPSG:3031",
+    "crs": "EPSG:3031",
     "resolutions": [
         8192.0,
         4096.0,
@@ -28,8 +28,5 @@
         0
     ],
     "startZoom": 0,
-    "units": "m",
-    "echo": {
-        "extent": [-4194304, -4194304, 4194304, 4194304]
-    }
+    "units": "m"
 }

@@ -30,7 +30,9 @@ Worldview.DataDownload.Model = function(config) {
         time: null
     };
     
-    var client = null;
+    var handlers = {
+        TerraSwath5: Worldview.DataDownload.Handler.TerraSwath5
+    };
     
     var self = {};    
 
@@ -56,7 +58,6 @@ Worldview.DataDownload.Model = function(config) {
     self.EVENT_QUERY_RESULTS = "queryResults";
     self.EVENT_QUERY_CANCEL = "queryCancel";
     self.EVENT_QUERY_ERROR = "queryError";
-    self.EVENT_PROJECTION_UPDATE = "projectionUpdate";
     
     /**
      * Indicates if data download mode is active.
@@ -79,34 +80,14 @@ Worldview.DataDownload.Model = function(config) {
     self.selectedLayer = null;
     self.selectedProduct = null;
     self.layers = [];
+    self.prefer = "science";
     
     self.granules = [];
     self.projection = null;
-    self.epsg = null;
+    self.crs = null;
     self.time = null;
     
     var init = function() {
-        if ( config.parameters.mockECHO ) {
-            log.warn("Using mock ECHO client");
-            client = Worldview.DataDownload.ECHOClientMock();
-        } else {
-            client = Worldview.DataDownload.ECHOClient();
-        }
-        client.events
-            .on("query", function() { 
-                self.events.trigger(self.EVENT_QUERY);
-            })
-            .on("results", function(results, parameters) {
-                self.events.trigger(self.EVENT_QUERY_RESULTS, results, 
-                        parameters);
-            })
-            .on("cancel", function() {
-                self.events.trigger(self.EVENT_QUERY_CANCEL);
-            })
-            .on("error", function(status, error, parameters) {
-                self.events.trigger(self.EVENT_QUERY_ERROR, status, error,
-                        parameters);
-            });    
     };
      
     /**
@@ -175,11 +156,11 @@ Worldview.DataDownload.Model = function(config) {
         if ( oldState.layersString !== state.layersString ) {
             updateLayers();
         }
-        if ( oldState.projection !== state.projection  ||
-                oldState.epsg !== state.epsg ) {
+        if ( oldState.crs !== state.crs ) {
             updateProjection();
         }
-        if ( oldState.time !== state.time ) {
+        if ( !oldState.time || 
+                oldState.time.getTime() !== state.time.getTime() ) {
             self.time = state.time;
             query();
         }
@@ -195,30 +176,20 @@ Worldview.DataDownload.Model = function(config) {
         }
 
         var productConfig = config.products[self.selectedProduct];
-        
-        var t = state.time;
-        startTime = new Date(Date.UTC(
-            t.getUTCFullYear(), t.getUTCMonth(), t.getUTCDate(), 0, 0, 0));
-        endTime = new Date(Date.UTC(
-            t.getUTCFullYear(), t.getUTCMonth(), t.getUTCDate(), 23, 59, 59));
-                             
-        var method = productConfig.echo.method;
-        var options = config.echo[method].query || {};
-        if ( options.timeWindow ) {
-            startDelta = options.timeWindow[0];
-            endDelta = options.timeWindow[1];
-            
-            startTime.setUTCMinutes(startTime.getUTCMinutes() + startDelta);
-            endTime.setUTCMinutes(endTime.getUTCMinutes() + endDelta);
-        }    
-         
-        var parameters = {
-            shortName: productConfig.echo.shortName,
-            dataCenterId: productConfig.echo.dataCenterId,
-            startTime: startTime.toTimestampUTC(),
-            endTime: endTime.toTimestampUTC()
+        var handlerFactory = handlers[productConfig.handler];
+        if ( !handlerFactory ) {
+            throw new Error("Unknown handler: " + productConfig.handler);
         }
-        client.query(parameters);
+        
+        var handler = handlerFactory(config, self);
+        handler.events.on("query", function() {
+            self.events.trigger(self.EVENT_QUERY);
+        }).on("results", function(results) {
+            self.events.trigger(self.EVENT_QUERY_RESULTS, results);
+        }).on("error", function(textStatus, errorThrown) {
+            self.events.trigger(self.EVENT_QUERY_ERROR, textStatus, errorThrown);
+        });
+        handler.submit();
     };
     
     var updateLayers = function() {
@@ -245,13 +216,12 @@ Worldview.DataDownload.Model = function(config) {
     };
     
     var updateProjection = function() {
-        if ( !state.projection || !state.epsg ) {
+        if ( !state.crs ) {
             return;
         }
         self.projection = state.projection;
-        self.epsg = state.epsg;
-        self.events.trigger(self.EVENT_PROJECTION_UPDATE, self.projection,
-                self.epsg);
+        self.crs = state.crs;
+        query();
     };
     
     var findAvailableLayer = function() {

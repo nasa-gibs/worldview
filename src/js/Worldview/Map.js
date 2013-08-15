@@ -28,8 +28,7 @@ $(function(ns) {
     // Used to reference the TileWorker
     var BUILD_NONCE = "@BUILD_NONCE@";
     
-    ns.EPSG_GCS_WGS_84 = "4326";
-    ns.EPSG_GEOGRAPHIC = ns.EPSG_GCS_WGS_84;
+    ns.CRS_WGS_84 = "EPSG:4326";
     
     /**
      * An object that contains OpenLayers.Control.MousePosition objects

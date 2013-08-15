@@ -14,7 +14,7 @@
  */
 Worldview.namespace("DataDownload");
 
-Worldview.DataDownload.ECHOGeometry = function(result) {
+Worldview.DataDownload.ECHO.Geometry = function(result) {
     
     var self = {};
     self.polygons = [];

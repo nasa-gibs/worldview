@@ -14,31 +14,42 @@
  */
 Worldview.namespace("DataDownload");
 
-Worldview.DataDownload.ECHOClientMock = function(spec) {
+Worldview.DataDownload.ECHO.MockClient = function(spec) {
     
-    var self = {};
+    var log = Logging.getLogger("Worldview.DataDownload");
     var endpoint = "mock/echo.cgi";
-    
-    self.events = Worldview.Events();
-    
-    self.query = function(parameters) {
-        self.events.trigger("query");
-        $.getJSON(endpoint, function(results) {
-            results = adjustResults(parameters, results);
-            self.events.trigger("results", results.feed.entry);
-        })
-        .fail(function() {
-            self.events.trigger("error");
-        });
+    var results;
+            
+    var self = {};
+        
+    self.submit = function(parameters) {
+        log.warn("Mocking ECHO query");
+        var deferred = $.Deferred();
+        if ( !results ) {
+            $.getJSON(endpoint, function(data) {
+                try {
+                    results = adjustResults(parameters, data);
+                    deferred.resolve(results.feed.entry);
+                } catch ( error ) {
+                    Worldview.error("Internal error", error);
+                }
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                deferred.reject(jqXHR, textStatus, errorThrown);
+            });
+        } else {
+            deferred.resolve(results.feed.entry);
+        }
+        return deferred.promise();
     };
     
-    var adjustResults = function(parameters, results) {
+    var adjustResults = function(parameters, data) {
         var day = REGISTRY.getState().time;
         // Mock data was retrieved for Aug 6, 2013
         var resultsDay = new Date(Date.UTC(2013, 7, 6));
         var diffDays = (day - resultsDay) / (1000 * 60 * 60 * 24);
         
-        $.each(results.feed.entry, function(index, entry) {
+        $.each(data.feed.entry, function(index, entry) {
             var timeStart = Date.parseISOString(entry.time_start);
             timeStart.setUTCDate(timeStart.getUTCDate() + diffDays);
             entry.time_start = timeStart.toISOString();
@@ -48,7 +59,7 @@ Worldview.DataDownload.ECHOClientMock = function(spec) {
             entry.time_end = timeEnd.toISOString();
         });    
         
-        return results;
+        return data;
     };
     
     return self;

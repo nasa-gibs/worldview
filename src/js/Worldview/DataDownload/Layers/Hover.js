@@ -8,9 +8,9 @@
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
-Worldview.namespace("DataDownload");
+Worldview.namespace("DataDownload.Hover");
 
-Worldview.DataDownload.HoverLayers = function(model, maps, config) {
+Worldview.DataDownload.Layers.Hover = function(model, maps, config) {
     
     var log = Logging.getLogger("Worldview.DataDownload");
     
@@ -27,12 +27,12 @@ Worldview.DataDownload.HoverLayers = function(model, maps, config) {
     self.hoverOver = function(buttonFeature) {
         var layer = getLayer();        
         var hoverFeature = new OpenLayers.Feature.Vector(
-            buttonFeature.attributes.result.geometry[model.epsg],
+            buttonFeature.attributes.granule.geometry[model.crs],
             buttonFeature.attributes,
             STYLE_HOVER_UNSELECTED
         );
         layer.addFeatures([hoverFeature]);
-        log.debug(hoverFeature.attributes.result);
+        log.debug(hoverFeature.attributes.granule);
     };
         
     self.hoverOut = function() {

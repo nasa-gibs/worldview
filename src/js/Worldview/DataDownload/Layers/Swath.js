@@ -8,9 +8,9 @@
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
-Worldview.namespace("DataDownload");
+Worldview.namespace("DataDownload.Layers");
 
-Worldview.DataDownload.SwathLayers = function(model, maps, config) {
+Worldview.DataDownload.Layers.Swath = function(model, maps, config) {
 
     var log = Logging.getLogger("Worldview.DataDownload");
     
@@ -72,40 +72,17 @@ Worldview.DataDownload.SwathLayers = function(model, maps, config) {
     
     self.update = function(results) {
         self.clear();
+        var swaths = results.meta.swaths;
+        if ( !swaths ) {
+            return;
+        }
         var layer = getLayer();
-        
-        var startTimes = {};
-        var endTimes = {};
-        
-        $.each(results, function(index, result) {
-            if ( !result.centroid[model.epsg] ) {
-                return;
-            }
-            if ( startTimes[result.time_start] ) {
-                log.warn("Discarding duplicate start time", result.time_start,
-                        result, startTimes[result.time_start]);
-                return;
-            }
-            if ( endTimes[result.time_end] ) {
-                log.warn("Discarding duplicate end time", result.time_end,
-                        result, endTimes[result.time_end]);
-                return; 
-            }
-            var swath = [result];
-            startTimes[result.time_start] = swath;
-            endTimes[result.time_end] = swath;
-            
-            combineSwath(startTimes, endTimes, swath);
-        });
-        
+                
         var features = [];
-        $.each(startTimes, function(key, swath) {
-            if ( swath.length <= 1 ) {
-                return;
-            }
+        $.each(swaths, function(index, swath) {
             var points = [];
-            $.each(swath, function(index, result) {
-                points.push(result.centroid[model.epsg].clone());    
+            $.each(swath, function(index, granule) {
+                points.push(granule.centroid[model.crs].clone());    
             });
             var line = new OpenLayers.Feature.Vector(
                 new OpenLayers.Geometry.LineString(points)

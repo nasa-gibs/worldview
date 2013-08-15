@@ -11,12 +11,12 @@
 
 Worldview.namespace("Widget");
 
-Worldview.Widget.EPSG = function(config) {
+Worldview.Widget.CRS = function(config) {
     
     var self = {};
-    self.containerId = "epsg";
+    self.containerId = "crs";
 
-    var log = Logging.getLogger("Worldview.Widget.EPSG");
+    var log = Logging.getLogger("Worldview.Widget.CRS");
     var projection = "4326";
     var changeDate = null;
 
@@ -73,6 +73,7 @@ Worldview.Widget.EPSG = function(config) {
     self.parse = function(queryString, object) {
         var epsg = Worldview.extractFromQuery("epsg", queryString);
         object.epsg = epsg;
+        object.crs = "EPSG:" + epsg;
         return object;
     };
 
