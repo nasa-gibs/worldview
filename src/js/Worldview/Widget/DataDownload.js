@@ -109,7 +109,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
     var onQueryResults = function(results) {
         log.debug("queryResults", results);
         Worldview.Indicator.hide();
-        if ( results.length === 0 ) {
+        if ( results.granules.length === 0 ) {
             Worldview.Indicator.noData();
         }
     };

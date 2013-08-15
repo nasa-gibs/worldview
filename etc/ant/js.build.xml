@@ -104,6 +104,7 @@
         <file name="js/Worldview/DataDownload/Handler/MODISSwath5.js"/>
         <file name="js/Worldview/DataDownload/Handler/AquaSwath5.js"/>
         <file name="js/Worldview/DataDownload/Handler/TerraSwath5.js"/>
+        <file name="js/Worldview/DataDownload/Handler/MODISGrid.js"/>
         
         <file name="js/Worldview/DataDownload/Layers/Button.js"/>
         <file name="js/Worldview/DataDownload/Layers/Hover.js"/>
@@ -114,6 +115,9 @@
         <file name="js/Worldview/DataDownload/Results/ConnectSwaths.js"/>
         <file name="js/Worldview/DataDownload/Results/ExtentFilter.js"/>
         <file name="js/Worldview/DataDownload/Results/GeometryFromECHO.js"/>
+        <file name="js/Worldview/DataDownload/Results/GeometryFromMODISGrid.js"/>
+        <file name="js/Worldview/DataDownload/Results/MODISGridIndex.js"/>
+        <file name="js/Worldview/DataDownload/Results/MODISGridLabel.js"/>
         <file name="js/Worldview/DataDownload/Results/PreferredFilter.js"/>
         <file name="js/Worldview/DataDownload/Results/TagNRT.js"/>
         <file name="js/Worldview/DataDownload/Results/TimeFilter.js"/>

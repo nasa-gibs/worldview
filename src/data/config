@@ -5794,7 +5794,7 @@
         "MODIS_Terra_SurfaceReflectance_Bands143": {
             "description": "Terra / MODIS",
             "echo": {
-                "product": "MOD09CMG"
+                "product": "MOD09GA"
             },
             "name": "Land Surface Reflectance (True Color)",
             "product": "daily",
@@ -59708,19 +59708,15 @@
                 }
             }
         },
-        "MOD09CMG": {
-            "echo": {
-                "dataCenterId": "LPDAAC_ECS",
-                "filterOptions": {
-                    "nrt": {
-                        "method": "dataCenter",
-                        "value": "FOO"
-                    }
-                },
-                "method": "terra",
-                "shortName": "MOD09GA"
-            },
-            "name": "MODIS/Terra Surface Reflectance Daily"
+        "MOD09GA": {
+            "handler": "MODISGrid",
+            "name": "MODIS/Terra Surface Reflectance Daily",
+            "query": {
+                "data": {
+                    "dataCenterId": "LPDAAC_ECS",
+                    "shortName": "MOD09GA"
+                }
+            }
         },
         "MYD04_L2": {
             "handler": "AquaSwath5",

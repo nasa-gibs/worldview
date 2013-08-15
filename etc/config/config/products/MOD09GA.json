@@ -1,0 +1,10 @@
+{
+    "name": "MODIS/Terra Surface Reflectance Daily",
+    "handler": "MODISGrid",
+    "query": {
+        "data": {
+            "shortName": "MOD09GA",
+            "dataCenterId": "LPDAAC_ECS"
+        }   
+    }
+}

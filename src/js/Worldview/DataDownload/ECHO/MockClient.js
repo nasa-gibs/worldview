@@ -14,16 +14,23 @@
  */
 Worldview.namespace("DataDownload");
 
-Worldview.DataDownload.ECHO.MockClient = function(spec) {
+Worldview.DataDownload.ECHO.MockClient = function(suffix) {
     
     var log = Logging.getLogger("Worldview.DataDownload");
-    var endpoint = "mock/echo.cgi";
+    var endpoint;
     var results;
             
     var self = {};
         
+    var init = function() {
+        if ( !suffix ) {
+            throw new Error("No mock ECHO suffix specified");
+        }
+        endpoint = "mock/echo.cgi-" + suffix;
+    }
+    
     self.submit = function(parameters) {
-        log.warn("Mocking ECHO query");
+        log.warn("Mocking ECHO query", endpoint);
         var deferred = $.Deferred();
         if ( !results ) {
             $.getJSON(endpoint, function(data) {
@@ -61,6 +68,8 @@ Worldview.DataDownload.ECHO.MockClient = function(spec) {
         
         return data;
     };
+    
+    init();
     
     return self;
 };

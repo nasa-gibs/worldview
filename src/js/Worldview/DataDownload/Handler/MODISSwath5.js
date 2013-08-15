@@ -20,10 +20,8 @@ Worldview.DataDownload.Handler.MODISSwath5 = function(config, model, spec) {
     var endTimeDelta = spec.endTimeDelta || 0;
     
     var self = Worldview.DataDownload.Handler.Base(config);
-    
-    self.events = Worldview.Events();
-    
-    self._submit = function() {
+        
+    self._submit = function() {        
         var queryOptions = $.extend(true, {
             time: model.time,
             startTimeDelta: startTimeDelta,

@@ -130,7 +130,10 @@
 		<mkdir dir="${build.dir}/minify"/>
 
 		<copy todir="${build.web.dir}">
+		    <!-- Keep mock in for now
 			<fileset dir="${src.dir}" excludes="**/mock/**"/>
+			-->
+            <fileset dir="${src.dir}"/>
 		</copy>
 		
 		<replace file="${build.web.dir}/js/Worldview.js"

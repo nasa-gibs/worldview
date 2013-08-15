@@ -1,0 +1,62 @@
+/*
+ * NASA Worldview
+ * 
+ * This code was originally developed at NASA/Goddard Space Flight Center for
+ * the Earth Science Data and Information System (ESDIS) project. 
+ *
+ * Copyright (C) 2013 United States Government as represented by the 
+ * Administrator of the National Aeronautics and Space Administration.
+ * All Rights Reserved.
+ */
+
+/**
+ * @module Worldview.DataDownload.Handler
+ */
+Worldview.namespace("DataDownload.Handler");
+
+Worldview.DataDownload.Handler.MODISGrid = function(config, model, spec) {
+
+    var self = Worldview.DataDownload.Handler.Base(config);
+    
+    self._submit = function() {
+        var crs = model.crs.replace(/:/, "_");
+
+        var queryOptions = $.extend(true, {
+            time: model.time    
+        }, config.products[model.selectedProduct].query);
+
+        var science = self.echo.submit(queryOptions);
+        var grid = self.ajax.submit({
+            url: "data/MODIS_Grid." + crs + ".json",
+            dataType: "json"
+        });
+        
+        return Worldview.AjaxJoin([
+            { item: "science", promise: science }, 
+            { item: "grid",    promise: grid }
+        ]);                
+    };
+    
+    self._processResults = function(data) {
+        var results = {
+            meta: {
+                gridFetched: data.grid
+            },
+            granules: data.science
+        };
+        
+        var ns = Worldview.DataDownload;
+        var chain = ns.Results.Chain();
+        chain.processes = [
+            ns.Results.MODISGridIndex(),
+            ns.Results.GeometryFromMODISGrid(model.crs),
+            ns.Results.ExtentFilter(model.crs, self.extents[model.crs]),
+            ns.Results.MODISGridLabel()
+        ];
+        return chain.process(results);
+    };
+    
+    return self;
+    
+};
+

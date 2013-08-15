@@ -15,6 +15,7 @@
 
 Worldview.AjaxCache = function(spec) {
     
+    spec = spec || {};
     var size = spec.size || null;
     var options = spec.options || {};
     var cache = new Cache(size);

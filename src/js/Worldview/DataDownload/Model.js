@@ -29,16 +29,19 @@ Worldview.DataDownload.Model = function(config) {
         epsg: null,
         time: null
     };
-    
+
+    var ns = Worldview.DataDownload;
+        
     var handlers = {
-        AquaSwath5: Worldview.DataDownload.Handler.AquaSwath5,
-        TerraSwath5: Worldview.DataDownload.Handler.TerraSwath5
+        AquaSwath5: ns.Handler.AquaSwath5,
+        TerraSwath5: ns.Handler.TerraSwath5,
+        MODISGrid: ns.Handler.MODISGrid
     };
     
     var self = {};    
 
     /**
-     * Fired when the data download mode is EVENT_ACTIVATEd.
+     * Fired when the data download mode is activated.
      * 
      * @event EVENT_ACTIVATE
      * @final
@@ -46,7 +49,7 @@ Worldview.DataDownload.Model = function(config) {
     self.EVENT_ACTIVATE = "activate";
     
     /**
-     * Fired when the data download mode is deEVENT_ACTIVATEd.
+     * Fired when the data download mode is deactivated.
      * 
      * @event EVENT_ACTIVATE
      * @final
@@ -172,7 +175,10 @@ Worldview.DataDownload.Model = function(config) {
             return;
         }
         if ( !self.selectedProduct ) {
-            self.events.trigger(self.EVENT_QUERY_RESULTS, []);
+            self.events.trigger(self.EVENT_QUERY_RESULTS, {
+                meta: {},
+                granules: []
+            });
             return;
         }
 

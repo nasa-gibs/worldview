@@ -20,18 +20,25 @@ Worldview.DataDownload.Handler.Base = function(config) {
     
     self.events = Worldview.Events();
     self.echo = null;
+    self.ajax = null;
     
     var init = function() {
         var ns = Worldview.DataDownload.Handler.Base;
         
         if ( !ns.echo ) {
             if ( config.parameters.mockECHO ) {
-                ns.echo = Worldview.DataDownload.ECHO.MockClient();
+                ns.echo = Worldview.DataDownload.ECHO.MockClient(
+                        config.parameters.mockECHO);
             } else {
                 ns.echo = Worldview.DataDownload.ECHO.Client();
             }
         }
         self.echo = ns.echo;
+        
+        if ( !ns.ajax ) {
+            ns.ajax = Worldview.AjaxCache();
+        }
+        self.ajax = ns.ajax; 
         
         self.extents = {};
         $.each(config.projections, function(key, projection) {
