@@ -99,12 +99,14 @@
         <file name="js/Worldview/DataDownload/ECHO/Client.js"/>
         <file name="js/Worldview/DataDownload/ECHO/Geometry.js"/>
         <file name="js/Worldview/DataDownload/ECHO/MockClient.js"/>
-        
+
+        <file name="js/Worldview/DataDownload/Handler.js"/>        
         <file name="js/Worldview/DataDownload/Handler/Base.js"/>
         <file name="js/Worldview/DataDownload/Handler/MODISSwath5.js"/>
         <file name="js/Worldview/DataDownload/Handler/AquaSwath5.js"/>
         <file name="js/Worldview/DataDownload/Handler/TerraSwath5.js"/>
         <file name="js/Worldview/DataDownload/Handler/MODISGrid.js"/>
+        <file name="js/Worldview/DataDownload/Handler/MODISMix.js"/>
         
         <file name="js/Worldview/DataDownload/Layers/Button.js"/>
         <file name="js/Worldview/DataDownload/Layers/Grid.js"/>
