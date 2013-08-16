@@ -21,19 +21,20 @@ Worldview.DataDownload.Handler.MODISGrid = function(config, model, spec) {
     self._submit = function() {
         var crs = model.crs.replace(/:/, "_");
 
-        var queryOptions = $.extend(true, {
-            time: model.time    
-        }, config.products[model.selectedProduct].query);
+        var queryOptions = {
+            time: model.time,
+            data: config.products[model.selectedProduct].query
+        };
 
-        var science = self.echo.submit(queryOptions);
+        var granules = self.echo.submit(queryOptions);
         var grid = self.ajax.submit({
             url: "data/MODIS_Grid." + crs + ".json",
             dataType: "json"
         });
         
         return Worldview.AjaxJoin([
-            { item: "science", promise: science }, 
-            { item: "grid",    promise: grid }
+            { item: "granules", promise: granules }, 
+            { item: "grid",     promise: grid }
         ]);                
     };
     
@@ -42,7 +43,7 @@ Worldview.DataDownload.Handler.MODISGrid = function(config, model, spec) {
             meta: {
                 gridFetched: data.grid
             },
-            granules: data.science
+            granules: data.granules
         };
         
         var ns = Worldview.DataDownload;

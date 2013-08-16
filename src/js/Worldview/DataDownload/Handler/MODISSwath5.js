@@ -22,11 +22,12 @@ Worldview.DataDownload.Handler.MODISSwath5 = function(config, model, spec) {
     var self = Worldview.DataDownload.Handler.Base(config);
         
     self._submit = function() {        
-        var queryOptions = $.extend(true, {
+        var queryOptions = {
             time: model.time,
             startTimeDelta: startTimeDelta,
-            endTimeDelta: endTimeDelta
-        }, config.products[model.selectedProduct].query);
+            endTimeDelta: endTimeDelta,
+            data: config.products[model.selectedProduct].query
+        };
         
         return self.echo.submit(queryOptions);
     };

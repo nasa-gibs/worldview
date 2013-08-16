@@ -59699,24 +59699,32 @@
                 "value": "LANCEMODIS"
             },
             "query": {
-                "data": {
-                    "dataCenterId": [
-                        "LAADS",
-                        "LANCEMODIS"
-                    ],
-                    "shortName": "MOD04_L2"
-                }
+                "dataCenterId": [
+                    "LAADS",
+                    "LANCEMODIS"
+                ],
+                "shortName": "MOD04_L2"
             }
         },
         "MOD09GA": {
-            "handler": "MODISGrid",
+            "handler": "MODISMix",
             "name": "MODIS/Terra Surface Reflectance Daily",
+            "nrt": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
+            },
             "query": {
-                "data": {
+                "nrt": {
+                    "dataCenterId": "LANCEMODIS",
+                    "shortName": "MOD09"
+                },
+                "science": {
                     "dataCenterId": "LPDAAC_ECS",
                     "shortName": "MOD09GA"
                 }
-            }
+            },
+            "swathHandler": "TerraSwath5"
         },
         "MYD04_L2": {
             "handler": "AquaSwath5",
@@ -59727,13 +59735,11 @@
                 "value": "LANCEMODIS"
             },
             "query": {
-                "data": {
-                    "dataCenterId": [
-                        "LAADS",
-                        "LANCEMODIS"
-                    ],
-                    "shortName": "MYD04_L2"
-                }
+                "dataCenterId": [
+                    "LAADS",
+                    "LANCEMODIS"
+                ],
+                "shortName": "MYD04_L2"
             }
         }
     },

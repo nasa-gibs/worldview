@@ -2,10 +2,8 @@
     "name": "MODIS/Aqua Aerosol 5-Min L2 Swath 10km",
     "handler": "AquaSwath5",
     "query": {
-        "data": {
-            "shortName": "MYD04_L2",
-            "dataCenterId": ["LAADS", "LANCEMODIS"]
-        }
+        "shortName": "MYD04_L2",
+        "dataCenterId": ["LAADS", "LANCEMODIS"]
     },
     "nrt": {
         "by": "value",

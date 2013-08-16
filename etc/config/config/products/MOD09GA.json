@@ -1,10 +1,20 @@
 {
     "name": "MODIS/Terra Surface Reflectance Daily",
-    "handler": "MODISGrid",
+    "handler": "MODISMix",
+    "swathHandler": "TerraSwath5",
     "query": {
-        "data": {
+        "science": {
             "shortName": "MOD09GA",
             "dataCenterId": "LPDAAC_ECS"
-        }   
+        }, 
+        "nrt": {
+            "shortName": "MOD09",
+            "dataCenterId": "LANCEMODIS"
+        }
+    },
+    "nrt": {
+        "by": "value",
+        "field": "data_center",
+        "value": "LANCEMODIS"
     }
 }

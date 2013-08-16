@@ -31,13 +31,7 @@ Worldview.DataDownload.Model = function(config) {
     };
 
     var ns = Worldview.DataDownload;
-        
-    var handlers = {
-        AquaSwath5: ns.Handler.AquaSwath5,
-        TerraSwath5: ns.Handler.TerraSwath5,
-        MODISGrid: ns.Handler.MODISGrid
-    };
-    
+            
     var self = {};    
 
     /**
@@ -183,10 +177,8 @@ Worldview.DataDownload.Model = function(config) {
         }
 
         var productConfig = config.products[self.selectedProduct];
-        var handlerFactory = handlers[productConfig.handler];
-        if ( !handlerFactory ) {
-            throw new Error("Unknown handler: " + productConfig.handler);
-        }
+        var handlerFactory = 
+                Worldview.DataDownload.Handler.getByName(productConfig.handler);
         
         var handler = handlerFactory(config, self);
         handler.events.on("query", function() {

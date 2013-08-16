@@ -24,6 +24,6 @@ Worldview.DataDownload.Handler.AquaSwath5 = function(config, model) {
         westZone: 1380
     };
     
-    return Worldview.DataDownload.Handler.MODISSwath5(config, model, spec);
-    
+    var self = Worldview.DataDownload.Handler.MODISSwath5(config, model, spec);
+    return $.extend(true, self, spec);
 };
