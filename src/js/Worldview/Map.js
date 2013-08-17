@@ -154,10 +154,14 @@ $(function(ns) {
      * is visible. A value from 0 (transparent) to 1 (opaque).
      */
     ns.setVisibility = function(layer, visible, opacity) {
-        var actualOpacity = ( visible ) ? opacity : 0;
-        layer.div.style.opacity = actualOpacity;    
-        if ( visible && opacity > 0 && !layer.getVisibility() ) {
-            layer.setVisibility(true);
+        if ( layer.isControl ) {
+            layer.setVisibility(visible);
+        } else {
+            var actualOpacity = ( visible ) ? opacity : 0;
+            layer.div.style.opacity = actualOpacity;    
+            if ( visible && opacity > 0 && !layer.getVisibility() ) {
+                layer.setVisibility(true);
+            }
         }
     };
     
