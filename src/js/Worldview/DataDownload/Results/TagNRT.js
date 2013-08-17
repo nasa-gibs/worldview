@@ -20,18 +20,21 @@ Worldview.DataDownload.Results.TagNRT = function(spec) {
     
     self.name = "TagNRT";
     
-    self.process = function(meta, result) {
+    self.process = function(meta, granule) {
         var isNRT;
         if ( spec.by === "value" ) {
-            isNRT = result[spec.field] === spec.value;
+            isNRT = granule[spec.field] === spec.value;
+        } else if ( spec.by === "regex" ) {
+            var re = new RegExp(spec.value);
+            isNRT = re.test(granule[spec.field]);
         } else {
             throw new Error("Unknown TagNRT method: " + spec.by);
         }
         if ( isNRT ) {
-            result.nrt = true;
+            granule.nrt = true;
             meta.nrt = true;
         }
-        return result;
+        return granule;
     };
     
     return self;

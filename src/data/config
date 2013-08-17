@@ -64,6 +64,12 @@
         "AIRS_CO_Total_Column_Day": {
             "bins": 7,
             "description": "Aqua / AIRS",
+            "echo": {
+                "product": "AIRX2RET",
+                "query": {
+                    "dayNightFlag": "DAY"
+                }
+            },
             "max": "120",
             "min": "98.8",
             "name": "Carbon Monoxide (Total Column, Day)",
@@ -121,6 +127,12 @@
         "AIRS_CO_Total_Column_Night": {
             "bins": 7,
             "description": "Aqua / AIRS",
+            "echo": {
+                "product": "AIRX2RET",
+                "query": {
+                    "dayNightFlag": "NIGHT"
+                }
+            },
             "max": "120",
             "min": "98.8",
             "name": "Carbon Monoxide (Total Column, Night)",
@@ -59690,6 +59702,22 @@
         }
     },
     "products": {
+        "AIRX2RET": {
+            "handler": "AquaSwath5",
+            "name": "AIRS/Aqua Level 2 Standard physical retrieval (AIRS+AMSU)",
+            "nrt": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "\\(NRT\\)"
+            },
+            "query": {
+                "dataCenterId": "GSFCS4PA",
+                "shortName": [
+                    "AIRX2RET",
+                    "AIRX2RET_NRT"
+                ]
+            }
+        },
         "MOD04_L2": {
             "handler": "TerraSwath5",
             "name": "MODIS/Terra Aerosol 5-Min L2 Swath 10km",

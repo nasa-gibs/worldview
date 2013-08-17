@@ -28,11 +28,13 @@ Worldview.DataDownload.Results.TimeFilter = function(spec) {
         westZone = spec.time.clone().setUTCMinutes(spec.westZone);
         eastZone = spec.time.clone().setUTCMinutes(spec.eastZone);
         maxDistance = spec.maxDistance;
+        timeOffset = spec.timeOffset || 0;
     };
     
     self.process = function(meta, granule) {
         var geom = granule.geometry[Worldview.Map.CRS_WGS_84];
         var time = Date.parseISOString(granule.time_start);
+        time.setUTCMinutes(time.getUTCMinutes() + timeOffset);
         if ( !Worldview.Map.isPolygonValid(geom, maxDistance) ) {
             var adjustSign = ( time < eastZone ) ? 1 : -1;
             geom = 

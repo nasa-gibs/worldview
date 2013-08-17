@@ -21,12 +21,18 @@ Worldview.DataDownload.Handler.MODISSwath5 = function(config, model, spec) {
     
     var self = Worldview.DataDownload.Handler.Base(config);
         
-    self._submit = function() {        
+    self._submit = function() {
+        productParameters = config.products[model.selectedProduct].query;
+        layerParameters = {};
+        if ( config.layers[model.selectedLayer].echo.query ) {
+            layerParameters = config.layers[model.selectedLayer].echo.query        
+        }
+        data = $.extend(true, {}, productParameters, layerParameters)
         var queryOptions = {
             time: model.time,
             startTimeDelta: startTimeDelta,
             endTimeDelta: endTimeDelta,
-            data: config.products[model.selectedProduct].query
+            data: data
         };
         
         return self.echo.submit(queryOptions);

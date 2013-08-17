@@ -41,5 +41,11 @@
     "rendered": "AIRS_CO_Total_Column",
     "startDate": "2012-04-07",
     "type": "wmts",
-    "units": "ppb"
+    "units": "ppb",
+    "echo": {
+        "product": "AIRX2RET",
+        "query": {
+            "dayNightFlag": "DAY"
+        }
+    }
 }

@@ -22,6 +22,8 @@ Worldview.DataDownload.ECHO.Geometry = function(result) {
     var init = function() {
         if ( result.polygons ) {
             initFromPolygons(result.polygons);
+        } else if ( result.boxes ) {
+            initFromBoxes(result.boxes);
         } else {
             throw new Error("Unable to find spatial field");
         }
@@ -70,6 +72,24 @@ Worldview.DataDownload.ECHO.Geometry = function(result) {
             });
             self.polygons.push(rings);
         });
+    };
+    
+    var initFromBoxes = function(echoBoxes) {
+        $.each(echoBoxes, function(index, echoBox) {
+            var ring = [];
+            var fields = echoBox.split(" ");
+            var ymin = parseFloat(fields[0]);
+            var xmin = parseFloat(fields[1]);
+            var ymax = parseFloat(fields[2]);
+            var xmax = parseFloat(fields[3]);
+            ring.push({x: xmin, y: ymin});
+            ring.push({x: xmax, y: ymin});
+            ring.push({x: xmax, y: ymax});
+            ring.push({x: xmin, y: ymax});
+            ring.push({x: xmin, y: ymin});
+           
+            self.polygons.push([ring]);
+        });    
     };
     
     init();
