@@ -87,5 +87,11 @@
     "rendered": "MODIS_Snow_Cover",
     "startDate": "2012-04-07",
     "type": "wmts",
-    "units": "%"
+    "units": "%",
+    "echo": {
+        "product": "MYD10_L2",
+        "query": {
+            "dayNightFlag": "DAY"
+        }
+    }
 }

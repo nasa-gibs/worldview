@@ -41,5 +41,11 @@
     "rendered": "MODIS_Cloud_Top_Pressure",
     "startDate": "2012-04-07",
     "type": "wmts",
-    "units": "hPa"
+    "units": "hPa",
+    "echo": {
+        "product": "MYD06_L2",
+        "query": {
+            "dayNightFlag": "NIGHT"
+        }
+    }
 }

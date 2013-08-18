@@ -23,8 +23,10 @@ Worldview.AjaxCache = function(spec) {
     var self = {};
     
     self.submit = function(parameters) {
-        var key = "url=" + parameters.url + 
-                  "&query=" + $.param(parameters.data, true);
+        var key = "url=" + parameters.url;
+        if ( parameters.data ) {
+            key += "&query=" + $.param(parameters.data, true);
+        }
         var results = cache.getItem(key);
         
         if ( results ) {

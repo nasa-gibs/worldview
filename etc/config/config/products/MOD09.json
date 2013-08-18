@@ -4,7 +4,7 @@
     "swathHandler": "TerraSwath5",
     "query": {
         "science": {
-            "shortName": "MOD09GA",
+            "shortName": "MOD09GQ",
             "dataCenterId": "LPDAAC_ECS"
         }, 
         "nrt": {

@@ -41,6 +41,6 @@
     "startDate": "2012-04-07",
     "type": "wmts",
     "echo": {
-        "product": "MOD09GA"
+        "product": "MOD09"
     }
 }

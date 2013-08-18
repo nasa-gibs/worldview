@@ -41,5 +41,11 @@
     "recommendedPalettes": [ "blue_1" ],
     "startDate": "2012-04-07",
     "type": "wmts",
-    "units": "cm"
+    "units": "cm",
+    "echo": {
+        "product": "MYD05_L2",
+        "query": {
+            "dayNightFlag": "NIGHT"
+        }
+    }
 }
