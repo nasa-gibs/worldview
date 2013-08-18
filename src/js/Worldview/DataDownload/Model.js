@@ -135,11 +135,11 @@ Worldview.DataDownload.Model = function(config) {
         if ( self.selectedLayer === layerName ) {
             return;
         }
-        if ( $.inArray(layerName, state.layers) < 0 ) {
+        if ( layerName && $.inArray(layerName, state.layers) < 0 ) {
             throw new Error("Layer not in active list: " + layerName);
         }
         self.selectedLayer = layerName;
-        if ( config.layers[layerName].echo ) {
+        if ( layerName && config.layers[layerName].echo ) {
             self.selectedProduct = config.layers[layerName].echo.product;
         } else {
             self.selectedProduct = null;
@@ -196,6 +196,7 @@ Worldview.DataDownload.Model = function(config) {
             return;
         }
         self.layers = [];
+        var foundSelected = false;
         $.each(state.layers, function(index, layer) {
             var id = layer;
             var layerName = config.layers[layer].name;
@@ -209,9 +210,18 @@ Worldview.DataDownload.Model = function(config) {
                 name: layerName,
                 description: description,
                 product: productName
-            });    
+            });
+            if ( id === self.selectedLayer ) {
+                foundSelected = true;
+            }    
         });  
-        self.events.trigger(self.EVENT_LAYER_UPDATE);  
+        if ( self.active && !foundSelected ) {
+            self.selectLayer(null);
+        }
+        self.events.trigger(self.EVENT_LAYER_UPDATE);
+        if ( self.active && !foundSelected ) {
+            self.selectLayer(findAvailableLayer());
+        }  
     };
     
     var updateProjection = function() {
