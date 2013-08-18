@@ -23,7 +23,8 @@ Worldview.DataDownload.Handler = function() {
             "AquaSwath5":   Worldview.DataDownload.Handler.AquaSwath5,
             "MODISGrid":    Worldview.DataDownload.Handler.MODISGrid,
             "MODISMix":     Worldview.DataDownload.Handler.MODISMix,
-            "TerraSwath5":  Worldview.DataDownload.Handler.TerraSwath5
+            "TerraSwath5":  Worldview.DataDownload.Handler.TerraSwath5,
+            "Aura":         Worldview.DataDownload.Handler.Aura        
         };
         var handler = map[name];
         if ( !handler ) {

@@ -190,6 +190,12 @@
         "AIRS_Dust_Score": {
             "bins": 14,
             "description": "Aqua / AIRS",
+            "echo": {
+                "product": "AIRIBQAP",
+                "query": {
+                    "dayNightFlag": "DAY"
+                }
+            },
             "excludePalettes": [
                 "orange_1"
             ],
@@ -254,6 +260,12 @@
         "AIRS_Prata_SO2_Index_Day": {
             "bins": 251,
             "description": "Aqua / AIRS",
+            "echo": {
+                "product": "AIRIBRAD",
+                "query": {
+                    "dayNightFlag": "DAY"
+                }
+            },
             "max": "30",
             "min": "0",
             "name": "Sulfur Dioxide (Day, Prata Algorithm)",
@@ -303,6 +315,12 @@
         "AIRS_Prata_SO2_Index_Night": {
             "bins": 251,
             "description": "Aqua / AIRS",
+            "echo": {
+                "product": "AIRIBRAD",
+                "query": {
+                    "dayNightFlag": "NIGHT"
+                }
+            },
             "max": "30",
             "min": "0",
             "name": "Sulfur Dioxide (Night, Prata Algorithm)",
@@ -352,6 +370,12 @@
         "AIRS_Precipitation_Day": {
             "bins": 179,
             "description": "Aqua / AIRS",
+            "echo": {
+                "product": "AIRX2SUP",
+                "query": {
+                    "dayNightFlag": "DAY"
+                }
+            },
             "max": "30",
             "min": "7.2",
             "name": "Precipitation Estimate (Day)",
@@ -582,6 +606,12 @@
         "AIRS_Precipitation_Night": {
             "bins": 179,
             "description": "Aqua / AIRS",
+            "echo": {
+                "product": "AIRX2SUP",
+                "query": {
+                    "dayNightFlag": "NIGHT"
+                }
+            },
             "max": "30",
             "min": "7.2",
             "name": "Precipitation Estimate (Night)",
@@ -1812,6 +1842,9 @@
         "MLS_CO_215hPa_Day": {
             "bins": 255,
             "description": "Aura / MLS",
+            "echo": {
+                "product": "ML2CO"
+            },
             "max": "250",
             "min": "0",
             "name": "Carbon Monoxide (215 hPa, Day)",
@@ -1857,6 +1890,9 @@
         "MLS_CO_215hPa_Night": {
             "bins": 255,
             "description": "Aura / MLS",
+            "echo": {
+                "product": "ML2CO"
+            },
             "max": "250",
             "min": "0",
             "name": "Carbon Monoxide (215 hPa, Night)",
@@ -1902,6 +1938,9 @@
         "MLS_H2O_46hPa_Day": {
             "bins": 255,
             "description": "Aura / MLS",
+            "echo": {
+                "product": "ML2H2O"
+            },
             "max": "4.5",
             "min": "0.5",
             "name": "Water Vapor (46 hPa, Day)",
@@ -1947,6 +1986,9 @@
         "MLS_H2O_46hPa_Night": {
             "bins": 255,
             "description": "Aura / MLS",
+            "echo": {
+                "product": "ML2H2O"
+            },
             "max": "4.5",
             "min": "0.5",
             "name": "Water Vapor (46 hPa, Night)",
@@ -1992,6 +2034,9 @@
         "MLS_HNO3_46hPa_Day": {
             "bins": 255,
             "description": "Aura / MLS",
+            "echo": {
+                "product": "ML2HNO3"
+            },
             "max": "10",
             "min": "0",
             "name": "Nitric Acid (46 hPa, Day)",
@@ -2037,6 +2082,9 @@
         "MLS_HNO3_46hPa_Night": {
             "bins": 255,
             "description": "Aura / MLS",
+            "echo": {
+                "product": "ML2HNO3"
+            },
             "max": "10",
             "min": "0",
             "name": "Nitric Acid (46 hPa, Night)",
@@ -2082,6 +2130,9 @@
         "MLS_N2O_46hPa_Day": {
             "bins": 255,
             "description": "Aura / MLS",
+            "echo": {
+                "product": "ML2N2O"
+            },
             "max": "300",
             "min": "75",
             "name": "Nitrous Oxide (46 hPa, Day)",
@@ -2127,6 +2178,9 @@
         "MLS_N2O_46hPa_Night": {
             "bins": 255,
             "description": "Aura / MLS",
+            "echo": {
+                "product": "ML2N2O"
+            },
             "max": "300",
             "min": "75",
             "name": "Nitrous Oxide (46 hPa, Night)",
@@ -2172,6 +2226,9 @@
         "MLS_O3_46hPa_Day": {
             "bins": 255,
             "description": "Aura / MLS",
+            "echo": {
+                "product": "ML2O3"
+            },
             "max": "4.5",
             "min": "0.5",
             "name": "Ozone (46 hPa, Day)",
@@ -2217,6 +2274,9 @@
         "MLS_O3_46hPa_Night": {
             "bins": 255,
             "description": "Aura / MLS",
+            "echo": {
+                "product": "ML2O3"
+            },
             "max": "4.5",
             "min": "0.5",
             "name": "Ozone (46 hPa, Night)",
@@ -2262,6 +2322,9 @@
         "MLS_SO2_147hPa_Day": {
             "bins": 255,
             "description": "Aura / MLS",
+            "echo": {
+                "product": "ML2SO2"
+            },
             "max": "200",
             "min": "20",
             "name": "Sulfur Dioxide (147 hPa, Day)",
@@ -2307,6 +2370,9 @@
         "MLS_SO2_147hPa_Night": {
             "bins": 255,
             "description": "Aura / MLS",
+            "echo": {
+                "product": "ML2SO2"
+            },
             "max": "200",
             "min": "20",
             "name": "Sulfur Dioxide (147 hPa, Night)",
@@ -2352,6 +2418,9 @@
         "MLS_Temperature_46hPa_Day": {
             "bins": 255,
             "description": "Aura / MLS",
+            "echo": {
+                "product": "ML2T"
+            },
             "max": "240",
             "min": "190",
             "name": "Temperature (46 hPa, Day)",
@@ -2397,6 +2466,9 @@
         "MLS_Temperature_46hPa_Night": {
             "bins": 255,
             "description": "Aura / MLS",
+            "echo": {
+                "product": "ML2T"
+            },
             "max": "240",
             "min": "190",
             "name": "Temperature (46 hPa, Night)",
@@ -59714,6 +59786,38 @@
         }
     },
     "products": {
+        "AIRIBQAP": {
+            "handler": "AquaSwath5",
+            "name": "AIRS/Aqua Level 2 Standard physical retrieval (AIRS+AMSU)",
+            "nrt": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "\\(NRT\\)"
+            },
+            "query": {
+                "dataCenterId": "GSFCS4PA",
+                "shortName": [
+                    "AIRIBQAP",
+                    "AIRIBQAP_NRT"
+                ]
+            }
+        },
+        "AIRIBRAD": {
+            "handler": "AquaSwath5",
+            "name": "AIRS/Aqua Level 1B Infrared (IR) geolocated and calibrated radiances",
+            "nrt": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "\\(NRT\\)"
+            },
+            "query": {
+                "dataCenterId": "GSFCS4PA",
+                "shortName": [
+                    "AIRIBRAD",
+                    "AIRIBRAD_NRT"
+                ]
+            }
+        },
         "AIRX2RET": {
             "handler": "AquaSwath5",
             "name": "AIRS/Aqua Level 2 Standard physical retrieval (AIRS+AMSU)",
@@ -59727,6 +59831,134 @@
                 "shortName": [
                     "AIRX2RET",
                     "AIRX2RET_NRT"
+                ]
+            }
+        },
+        "AIRX2SUP": {
+            "handler": "AquaSwath5",
+            "name": "AIRS/Aqua Level 2 Support retrieval (AIRS+AMSU)",
+            "nrt": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "\\(NRT\\)"
+            },
+            "query": {
+                "dataCenterId": "GSFCS4PA",
+                "shortName": [
+                    "AIRX2SUP",
+                    "AIRX2SUP_NRT"
+                ]
+            }
+        },
+        "ML2CO": {
+            "handler": "Aura",
+            "name": "MLS/Aura L2 Carbon Monoxide (CO) Mixing Ratio",
+            "nrt": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "Near-Real-Time"
+            },
+            "query": {
+                "dataCenterId": "GSFCS4PA",
+                "shortName": [
+                    "ML2CO",
+                    "ML2CO_NRT"
+                ]
+            }
+        },
+        "ML2H2O": {
+            "handler": "Aura",
+            "name": "MLS/Aura L2 Water Vapor (H2O) Mixing Ratio",
+            "nrt": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "Near-Real-Time"
+            },
+            "query": {
+                "dataCenterId": "GSFCS4PA",
+                "shortName": [
+                    "ML2H2O",
+                    "ML2H2O_NRT"
+                ]
+            }
+        },
+        "ML2HNO3": {
+            "handler": "Aura",
+            "name": "MLS/Aura L2 Nitric Acid (HNO3) Mixing Ratio",
+            "nrt": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "Near-Real-Time"
+            },
+            "query": {
+                "dataCenterId": "GSFCS4PA",
+                "shortName": [
+                    "ML2HNO3",
+                    "ML2HNO3_NRT"
+                ]
+            }
+        },
+        "ML2N2O": {
+            "handler": "Aura",
+            "name": "MLS/Aura L2 Nitrous Oxide (N2O) Mixing Ratio",
+            "nrt": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "Near-Real-Time"
+            },
+            "query": {
+                "dataCenterId": "GSFCS4PA",
+                "shortName": [
+                    "ML2N2O",
+                    "ML2N2O_NRT"
+                ]
+            }
+        },
+        "ML2O3": {
+            "handler": "Aura",
+            "name": "MLS/Aura L2 Ozone (O3) Mixing Ratio",
+            "nrt": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "Near-Real-Time"
+            },
+            "query": {
+                "dataCenterId": "GSFCS4PA",
+                "shortName": [
+                    "ML2O3",
+                    "ML2O3_NRT"
+                ]
+            }
+        },
+        "ML2SO2": {
+            "handler": "Aura",
+            "name": "MLS/Aura L2 Sulfur Dioxide (SO2) Mixing Ratio",
+            "nrt": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "Near-Real-Time"
+            },
+            "query": {
+                "dataCenterId": "GSFCS4PA",
+                "shortName": [
+                    "ML2SO2",
+                    "ML2SO2_NRT"
+                ]
+            }
+        },
+        "ML2T": {
+            "handler": "Aura",
+            "name": "MLS/Aura L2 Temperature",
+            "nrt": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "Near-Real-Time"
+            },
+            "query": {
+                "dataCenterId": "GSFCS4PA",
+                "shortName": [
+                    "ML2T",
+                    "ML2T_NRT"
                 ]
             }
         },

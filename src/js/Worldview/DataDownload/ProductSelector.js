@@ -29,8 +29,12 @@ Worldview.DataDownload.ProductSelector = function(model, selector) {
     var onLayerUpdate = function() {
         var options = [];
         $.each(model.layers, function(index, layer) {
-            var option = "<option value='" + layer.id + "'>" + layer.name + 
-                "; " + layer.description + "</option>";
+            var selected = "";
+            if ( layer.id === model.selectedLayer ) {
+                selected = " selected";
+            }
+            var option = "<option value='" + layer.id + "'" + selected + ">" + 
+                layer.name + "; " + layer.description + "</option>";
             options.push(option);
         })
         $(selector + " select").html(options.join("\n"));   
