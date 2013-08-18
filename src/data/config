@@ -3691,6 +3691,12 @@
         "MODIS_Aqua_Sea_Ice": {
             "bins": 1,
             "description": "Aqua / MODIS",
+            "echo": {
+                "product": "MYD29",
+                "query": {
+                    "dayNightFlag": "DAY"
+                }
+            },
             "max": "1",
             "min": "0",
             "name": "Sea Ice",
@@ -5569,6 +5575,12 @@
         "MODIS_Terra_Sea_Ice": {
             "bins": 1,
             "description": "Terra / MODIS",
+            "echo": {
+                "product": "MOD29",
+                "query": {
+                    "dayNightFlag": "DAY"
+                }
+            },
             "max": "1",
             "min": "0",
             "name": "Sea Ice",
@@ -59754,6 +59766,22 @@
             },
             "swathHandler": "TerraSwath5"
         },
+        "MOD29": {
+            "handler": "TerraSwath5",
+            "name": "MODIS/Terra Sea Ice Extent 5-Min L2 Swath 1km",
+            "nrt": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
+            },
+            "query": {
+                "dataCenterId": [
+                    "NSIDC_ECS",
+                    "LANCEMODIS"
+                ],
+                "shortName": "MOD29"
+            }
+        },
         "MYD04_L2": {
             "handler": "AquaSwath5",
             "name": "MODIS/Aqua Aerosol 5-Min L2 Swath 10km",
@@ -59768,6 +59796,22 @@
                     "LANCEMODIS"
                 ],
                 "shortName": "MYD04_L2"
+            }
+        },
+        "MYD29": {
+            "handler": "AquaSwath5",
+            "name": "MODIS/Aqua Sea Ice Extent 5-Min L2 Swath 1km",
+            "nrt": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
+            },
+            "query": {
+                "dataCenterId": [
+                    "NSIDC_ECS",
+                    "LANCEMODIS"
+                ],
+                "shortName": "MYD29"
             }
         }
     },
