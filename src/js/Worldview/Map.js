@@ -206,4 +206,19 @@ $(function(ns) {
         );
     };
     
+    ns.distance2D = function(p1, p2) {
+        return Math.sqrt(Math.pow(p1.x - p2.x, 2) + 
+                        (Math.pow(p1.y - p2.y, 2)));
+    };
+    
+    ns.interpolate2D = function(p1, p2, amount) {
+        var distX = p2.x - p1.x;
+        var distY = p2.y - p1.y;
+        
+        var interpX = p1.x + (distX * amount);
+        var interpY = p1.y + (distY * amount);
+        
+        return new OpenLayers.Geometry.Point(interpX, interpY);
+    };
+      
 }(Worldview.Map));

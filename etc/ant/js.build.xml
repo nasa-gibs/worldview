@@ -125,6 +125,7 @@
         <file name="js/Worldview/DataDownload/Results/TagNRT.js"/>
         <file name="js/Worldview/DataDownload/Results/TimeFilter.js"/>
         <file name="js/Worldview/DataDownload/Results/TimeLabel.js"/>
+        <file name="js/Worldview/DataDownload/Results/Transform.js"/>
 
         <file name="js/Worldview/DataDownload/Model.js"/>
         <file name="js/Worldview/DataDownload/ProductSelector.js"/>

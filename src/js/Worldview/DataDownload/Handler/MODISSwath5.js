@@ -52,7 +52,7 @@ Worldview.DataDownload.Handler.MODISSwath5 = function(config, model, spec) {
             ns.Results.CollectPreferred(model.prefer),
             ns.Results.PreferredFilter(model.prefer), 
             ns.Results.GeometryFromECHO(Worldview.Map.CRS_WGS_84),
-            ns.Results.GeometryFromECHO(model.crs),
+            ns.Results.Transform(model.crs),
             ns.Results.ExtentFilter(model.crs, self.extents[model.crs]),
             ns.Results.TimeFilter({
                 time: model.time,

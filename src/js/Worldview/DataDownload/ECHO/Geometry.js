@@ -15,6 +15,8 @@
 Worldview.namespace("DataDownload");
 
 Worldview.DataDownload.ECHO.Geometry = function(result) {
+
+    var MAX_DISTANCE = 5;
     
     var self = {};
     self.polygons = [];
@@ -29,15 +31,14 @@ Worldview.DataDownload.ECHO.Geometry = function(result) {
         }
     };
     
-    self.toOpenLayers = function(sourceProjection, targetProjection) {
+    self.toOpenLayers = function() {
         olPolygons = [];
         $.each(self.polygons, function(index, polygon) {
             var olRings = [];
             $.each(polygon, function(index, ring) {
                 var olPoints = [];
                 $.each(ring, function(index, point) {
-                    var p = createPoint(point, sourceProjection, 
-                            targetProjection);
+                    var p = new OpenLayers.Geometry.Point(point.x, point.y);
                     olPoints.push(p);    
                 });
                 olRings.push(new OpenLayers.Geometry.LinearRing(olPoints));
@@ -46,17 +47,7 @@ Worldview.DataDownload.ECHO.Geometry = function(result) {
         });
         return olPolygons[0];    
     };
-    
-    var createPoint = function(point, sourceProjection, targetProjection) {
-        var p = new OpenLayers.Geometry.Point(point.x, point.y);
-        if ( sourceProjection ) {
-            if ( sourceProjection !== targetProjection ) {
-                p = p.transform(sourceProjection, targetProjection);
-            }
-        }
-        return p;    
-    };
-    
+        
     var initFromPolygons = function(echoPolygons) {
         $.each(echoPolygons, function(index, echoPolygon) {
             var rings = [];
@@ -88,8 +79,27 @@ Worldview.DataDownload.ECHO.Geometry = function(result) {
             ring.push({x: xmin, y: ymax});
             ring.push({x: xmin, y: ymin});
            
-            self.polygons.push([ring]);
+            self.polygons.push([densify(ring)]);
         });    
+    };
+    
+    var densify = function(ring) {
+        var points = [];
+        for ( var i = 0; i < ring.length - 2; i++ ) {
+            var start = ring[i];
+            var end = ring[i + 1];
+            var distance = Worldview.Map.distance2D(start, end);
+            var numPoints = Math.floor(distance / MAX_DISTANCE);
+            points.push(start);
+            for ( var j = 1; j < numPoints - 1; j++ ) {
+                var d = j / numPoints;
+                // This is what REVERB does, so we will do the same
+                var p = Worldview.Map.interpolate2D(start, end, d);
+                points.push(p);
+            }
+        }
+        points.push(end);
+        return points;      
     };
     
     init();
