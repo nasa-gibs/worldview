@@ -100,6 +100,11 @@ Worldview.DataDownload.Model = function(config) {
             self.events.trigger(self.EVENT_ACTIVATE);
             if ( !self.selectedLayer ) {
                 self.selectLayer(findAvailableLayer());
+            } else {
+                // FIXME: Hack, Force a requery.
+                var layer = self.selectedLayer;
+                self.selectedLayer = null;
+                self.selectLayer(layer);
             }
         }
     };

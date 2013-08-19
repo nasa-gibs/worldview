@@ -24,6 +24,13 @@ $(function() {// Initialize "static" vars
         // starting up the UI
         Worldview.Preloader([
             { id: "config", src: "data/config", type:"json" },
+            // FIXME: Projection cache HACK
+            { id: "geographic", src: "data/geographic_ap_products.php", 
+              type: "json" },
+            { id: "arctic", src: "data/arctic_ap_products.php", 
+              type: "json" },            
+            { id: "antarctic", src: "data/antarctic_ap_products.php", 
+              type: "json" },
             "images/logo.png",
             "images/permalink.png",
             "images/geographic.png",
@@ -46,6 +53,12 @@ $(function() {// Initialize "static" vars
     var onLoad = function(queue) {
         try {
             var config = queue.getResult("config");
+            // FIXME: Projection cache HACK
+            config.ap_products = {
+                geographic: queue.getResult("geographic"),
+                arctic: queue.getResult("arctic"),
+                antarctic: queue.getResult("antarctic")
+            };
             init(config);
         } catch ( error ) {
             Worldview.error("Unable to start Worldview", error);
@@ -65,14 +78,13 @@ $(function() {// Initialize "static" vars
         var dataDownloadModel = Worldview.DataDownload.Model(config);
 
         // Create widgets 
-        var map = Worldview.Widget.WorldviewMap("map", config);
-	    var palettes = Worldview.Widget.Palette("palettes", config, {
-	        alignTo: "#products"
-        });	
         var projection = new SOTE.widget.Switch("switch", {
             dataSourceUrl:"a",
             selected:"geographic"
         });
+        var palettes = Worldview.Widget.Palette("palettes", config, {
+            alignTo: "#products"
+        }); 
         var products = new SOTE.widget.Products("productsHolder", {
             paletteWidget: palettes,
             config: config
@@ -80,6 +92,7 @@ $(function() {// Initialize "static" vars
         var date = new SOTE.widget.DatePicker("time", {
             hasThumbnail: false
         });
+        var map = Worldview.Widget.WorldviewMap("map", config);
         var rubberBand = new SOTE.widget.RubberBand("camera", {
             icon: "images/camera.png",
             onicon: "images/cameraon.png",
@@ -151,7 +164,8 @@ $(function() {// Initialize "static" vars
             palettes,
             apcn,
             opacity,
-            crs
+            crs,
+            dataDownload
         ];
         
         function testQS(){

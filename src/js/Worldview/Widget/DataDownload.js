@@ -54,7 +54,8 @@ Worldview.Widget.DataDownload = function(config, spec) {
         $(spec.selector).html(HTML_WIDGET_INACTIVE);
 
         REGISTRY.register(self.containerId, self);
-        REGISTRY.markComponentReady(self.containerId);        
+        REGISTRY.markComponentReady(self.containerId);   
+        self.updateComponent();     
     };    
     
     self.updateComponent = function(queryString) {
@@ -65,7 +66,27 @@ Worldview.Widget.DataDownload = function(config, spec) {
         }
     };
     
-    self.getValue = function() {};
+    self.getValue = function() {
+        if ( model.active ) {
+            return "dataDownload=" + model.selectedLayer;
+        } else {
+            return "";
+        }
+    };
+    
+    self.setValue = function(value) {
+        throw new Error("Unsupported: setValue");
+    };
+    
+    self.loadFromQuery = function(queryString) {
+        var query = Worldview.queryStringToObject(queryString);
+        if ( query.dataDownload ) {
+            model.selectLayer(query.dataDownload);
+            if ( model.selectedLayer ) {
+                model.activate();
+            }
+        }    
+    };
     
     var toggleMode = function() {
         model.toggleMode();           

@@ -86,12 +86,20 @@ SOTE.widget.Bank = function(containerId, config){
 
 SOTE.widget.Bank.prototype.buildMeta = function(cb,val){
     this.buildMetaDone = false;
+    var data = this.config.ap_products[this.state];
+    SOTE.widget.Bank.handleMetaSuccess(data, null, null, {
+        self: this,
+        callback: cb, 
+        val: val
+    });
+    /*
 	SOTE.util.getJSON(
 		"data/" + this.state + "_" + this.dataSourceUrl,
 		{self:this,callback:cb,val:val},
 		SOTE.widget.Bank.handleMetaSuccess,
 		SOTE.widget.Bank.handleUpdateFailure
 	);
+	*/
 };
 
 SOTE.widget.Bank.handleMetaSuccess = function(data,status,xhr,args){
@@ -749,7 +757,11 @@ SOTE.widget.Bank.prototype.loadFromQuery = function(qs){
 		this.updateComponent(qs);
 	}
 	else {
-	   this.sleep(SOTE.util.extractFromQuery(this.id,qs));
+	   //this.sleep(SOTE.util.extractFromQuery(this.id,qs));
+	   SOTE.widget.Bank.loadValue({
+	       self: this, 
+	       val: SOTE.util.extractFromQuery(this.id, qs)
+       });
 	}
 };
 
