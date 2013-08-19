@@ -687,12 +687,6 @@ SOTE.widget.Bank.prototype.unserialize = function(string, selector){
 */
 SOTE.widget.Bank.prototype.updateComponent = function(querystring){
 	var qs = (querystring === undefined)? "":querystring;
-	/*SOTE.util.getJSON(
-		this.dataSourceUrl+"?"+querystring,
-		{self:this,qs:querystring},
-		SOTE.widget.Bank.handleUpdateSuccess,
-		SOTE.widget.Bank.handleUpdateFailure
-	);*/
 	SOTE.widget.Bank.handleUpdateSuccess(this,qs);
 };
 
@@ -757,7 +751,6 @@ SOTE.widget.Bank.prototype.loadFromQuery = function(qs){
 		this.updateComponent(qs);
 	}
 	else {
-	   //this.sleep(SOTE.util.extractFromQuery(this.id,qs));
 	   SOTE.widget.Bank.loadValue({
 	       self: this, 
 	       val: SOTE.util.extractFromQuery(this.id, qs)

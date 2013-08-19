@@ -87,14 +87,6 @@ SOTE.widget.Selector.prototype.loadData = function(){
     SOTE.widget.Selector.handleLoadSuccess(data, null, null, {
         self: this
     });
-    /*
-	SOTE.util.getJSON(
-		"data/" + this.state + "_" + this.dataSourceUrl,
-		{self:this},
-		SOTE.widget.Selector.handleLoadSuccess,
-		SOTE.widget.Selector.handleUpdateFailure
-	);
-	*/
 };
 
 SOTE.widget.Selector.handleLoadSuccess = function(data,status,xhr,args){
