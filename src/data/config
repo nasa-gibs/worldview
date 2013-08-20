@@ -60124,7 +60124,7 @@
             }
         },
         "MOD05_L2_NIGHT": {
-            "handler": "MODISSwathNight",
+            "handler": "MODISSwath",
             "name": "MODIS/Terra Total Precipitable Water Vapor 5-Min L2 Swath 1km and 5km",
             "nrt": {
                 "by": "value",
@@ -60156,7 +60156,7 @@
             }
         },
         "MOD06_L2_NIGHT": {
-            "handler": "MODISSwathNight",
+            "handler": "MODISSwath",
             "name": "MODIS/Terra Clouds 5-Min L2 Swath 1km and 5km",
             "nrt": {
                 "by": "value",
@@ -60227,7 +60227,7 @@
             }
         },
         "MOD11_L2_NIGHT": {
-            "handler": "MODISSwathNight",
+            "handler": "MODISSwath",
             "name": "MODIS/Terra Land Surface Temperature/Emissivity 5-Min L2 Swath 1km",
             "nrt": {
                 "by": "value",
@@ -60307,7 +60307,7 @@
             }
         },
         "MYD05_L2_NIGHT": {
-            "handler": "MODISSwathNight",
+            "handler": "MODISSwath",
             "name": "MODIS/Aqua Total Precipitable Water Vapor 5-Min L2 Swath 1km and 5km",
             "nrt": {
                 "by": "value",
@@ -60339,7 +60339,7 @@
             }
         },
         "MYD06_L2_NIGHT": {
-            "handler": "MODISSwathNight",
+            "handler": "MODISSwath",
             "name": "MODIS/Aqua Clouds 5-Min L2 Swath 1km and 5km",
             "nrt": {
                 "by": "value",
@@ -60410,7 +60410,7 @@
             }
         },
         "MYD11_L2_NIGHT": {
-            "handler": "MODISSwathNight",
+            "handler": "MODISSwath",
             "name": "MODIS/Aqua Land Surface Temperature/Emissivity 5-Min L2 Swath 1km",
             "nrt": {
                 "by": "value",

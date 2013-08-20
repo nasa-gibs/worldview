@@ -24,7 +24,7 @@ Worldview.DataDownload.Handler = function() {
             "AquaSwathMultiDay":    Worldview.DataDownload.Handler.AquaSwathMultiDay,
             "MODISGrid":            Worldview.DataDownload.Handler.MODISGrid,
             "MODISMix":             Worldview.DataDownload.Handler.MODISMix,
-            "MODISSwathNight":      Worldview.DataDownload.Handler.MODISSwathNight,
+            "MODISSwath":           Worldview.DataDownload.Handler.MODISSwath,
             "TerraSwathMultiDay":   Worldview.DataDownload.Handler.TerraSwathMultiDay,
             "Aura":                 Worldview.DataDownload.Handler.Aura        
         };

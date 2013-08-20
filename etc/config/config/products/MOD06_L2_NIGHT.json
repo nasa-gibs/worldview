@@ -1,6 +1,6 @@
 {
     "name": "MODIS/Terra Clouds 5-Min L2 Swath 1km and 5km",
-    "handler": "MODISSwathNight",
+    "handler": "MODISSwath",
     "query": {
         "shortName": "MOD06_L2",
         "dataCenterId": ["LAADS", "LANCEMODIS"]

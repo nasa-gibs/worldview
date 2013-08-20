@@ -14,7 +14,7 @@
  */
 Worldview.namespace("DataDownload.Handler");
 
-Worldview.DataDownload.Handler.MODISSwathNight = function(config, model, spec) {
+Worldview.DataDownload.Handler.MODISSwath = function(config, model, spec) {
     
     var MAX_DISTANCE = 270;    
     var self = Worldview.DataDownload.Handler.Base(config, model);

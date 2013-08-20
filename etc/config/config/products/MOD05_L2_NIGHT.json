@@ -1,6 +1,6 @@
 {
     "name": "MODIS/Terra Total Precipitable Water Vapor 5-Min L2 Swath 1km and 5km",
-    "handler": "MODISSwathNight",
+    "handler": "MODISSwath",
     "query": {
         "shortName": "MOD05_L2",
         "dataCenterId": ["LAADS", "LANCEMODIS"]

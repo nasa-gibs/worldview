@@ -1,6 +1,6 @@
 {
     "name": "MODIS/Terra Land Surface Temperature/Emissivity 5-Min L2 Swath 1km",
-    "handler": "MODISSwathNight",
+    "handler": "MODISSwath",
     "query": {
         "shortName": "MOD11_L2",
         "dataCenterId": ["LPDAAC_ECS", "LANCEMODIS"]
