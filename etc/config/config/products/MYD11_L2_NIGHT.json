@@ -1,0 +1,13 @@
+{
+    "name": "MODIS/Aqua Land Surface Temperature/Emissivity 5-Min L2 Swath 1km",
+    "handler": "MODISSwathNight",
+    "query": {
+        "shortName": "MYD11_L2",
+        "dataCenterId": ["LPDAAC_ECS", "LANCEMODIS"]
+    },
+    "nrt": {
+        "by": "value",
+        "field": "data_center",
+        "value": "LANCEMODIS"
+    }
+}

@@ -15,7 +15,7 @@ h1, h2, h3, h4, h5, h6 { font-weight:400; }
 .yui-skin-sam .yui-panel-container .bd a {color: #48a8ff; }
 #splash_c.yui-overlay-hidden, #conclusionPanel_c.yui-overlay-hidden {display:none;}
 
-.jspVerticalBar {width:6px !important; background:transparent;}
+.jspVerticalBar {width:8px !important; background:transparent;}
 .jspTrack {
     background: #555555;
 } /* or just remove the background property*/
@@ -55,8 +55,6 @@ h1, h2, h3, h4, h5, h6 { font-weight:400; }
 #permpanel input[type='text']{width:280px;}
 
 div.horizontalContainer {width:100%; display:block; float:left;  position:absolute; bottom:10px; overflow:hidden; z-index:200; padding: 0;}
-
-
 
 #permalink_content {margin-top:10px;}
 

@@ -96,8 +96,8 @@
         
         <exec executable="python" failonerror="true">
              <arg value="${basedir}/etc/config/vrt2json.py"/>
-             <arg value="--products-dir"/>
-             <arg value="${build.dir}/config/products"/>
+             <arg value="--layers-dir"/>
+             <arg value="${build.dir}/config/layers"/>
              <arg value="${build.dir}/config/palettes"/>
         </exec>
         
@@ -130,7 +130,10 @@
 		<mkdir dir="${build.dir}/minify"/>
 
 		<copy todir="${build.web.dir}">
-			<fileset dir="${src.dir}"/>
+		    <!-- Keep mock in for now
+			<fileset dir="${src.dir}" excludes="**/mock/**"/>
+			-->
+            <fileset dir="${src.dir}"/>
 		</copy>
 		
 		<replace file="${build.web.dir}/js/Worldview.js"
@@ -140,6 +143,7 @@
                  value="${build.nonce}">
             <fileset dir="${build.web.dir}" includes="*.html"/>
             <fileset dir="${build.web.dir}/pages" includes="*.html"/>
+            <fileset dir="${build.web.dir}/js" includes="**/*.js"/>
         </replace>
         		         
 		<!-- Debug version that is not minified -->
@@ -157,6 +161,9 @@
         <copy file="${build.dir}/config.json"
               tofile="${build.web-debug.dir}/data/config"/>
               	          
+        <!-- Executable bits -->
+        <chmod file="${build.web.dir}/data/echo.cgi" perm="755"/>
+        
 		<!-- Combine all css and js files into one file -->
 		<concat destfile="${build.dir}/minify/worldview.css" force="no">
 			<filelist refid="css.files"/>
@@ -178,6 +185,8 @@
             <arg value="${build.dir}/minify/worldview.js"/>
             <arg value="--js_output_file"/>
             <arg value="${build.dir}/minify/worldview-min.js"/>
+            <arg value="--create_source_map"/>
+            <arg value="${build.dir}/minify/worldview-min.js.map"/>
         </exec>
 
 		<yui-compressor warn="false" charset="UTF-8" 
@@ -276,15 +285,29 @@
 	
     <target name="artifacts"
             description="Generates distribution artifacts using existing build dir">	    
-	<tar destfile="${dist.dir}/worldview.tar.bz2"
-             basedir="${build.dir}" includes="worldview/**" 
-	     compression="bzip2"/>
-	<tar destfile="${dist.dir}/worldview-debug.tar.bz2"
-	      basedir="${build.dir}" includes="worldview-debug/**"
-	      compression="bzip2"/>
-	<tar destfile="${dist.dir}/worldview-doc.tar.bz2"
-	      basedir="${build.dir}" includes="worldview-doc/**" 
-	      compression="bzip2"/>
+    	<tar destfile="${dist.dir}/worldview.tar.bz2" compression="bzip2">
+    	   <tarfileset dir="${build.dir}/worldview" prefix="worldview">
+    	       <exclude name="**/data/echo.cgi"/>
+    	   </tarfileset>
+    	   <tarfileset dir="${build.dir}/worldview/data"
+    	               prefix="worldview/data" filemode="755">
+               <include name="echo.cgi"/>
+           </tarfileset>
+        </tar>
+
+        <tar destfile="${dist.dir}/worldview-debug.tar.bz2" compression="bzip2">
+           <tarfileset dir="${build.dir}/worldview-debug" prefix="worldview-debug">
+               <exclude name="**/data/echo.cgi"/>
+           </tarfileset>
+           <tarfileset dir="${build.dir}/worldview-debug/data"
+                       prefix="worldview-debug/data" filemode="755">
+               <include name="echo.cgi"/>
+           </tarfileset>
+        </tar>
+        
+    	<tar destfile="${dist.dir}/worldview-doc.tar.bz2"
+    	      basedir="${build.dir}" includes="worldview-doc/**" 
+    	      compression="bzip2"/>
     </target>
     
     <target name="rpm" depends="dist">

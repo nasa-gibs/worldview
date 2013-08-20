@@ -54,13 +54,12 @@ Worldview.Widget.ArcticProjectionChangeNotification = function(config, bank) {
             log.error("Storage engine not available");
         }
                 
-        var changeDate = config.config.arcticProjectionChangeDate;
+        self.changeDate = Worldview.ARCTIC_PROJECTION_CHANGE_DATE;
         if ( storageEngine && storageEngine.getItem(self.containerId) ) {
             log.debug(self.containerId + ": already notified");
             showNotice = false;
         }
-        if ( changeDate ) {
-            self.changeDate = Date.parseISOString(changeDate);
+        if ( self.changeDate ) {
             REGISTRY.register(self.containerId, self);
             REGISTRY.markComponentReady(self.containerId);
             log.debug(self.containerId + ": watching");

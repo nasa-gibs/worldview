@@ -1,0 +1,28 @@
+{
+    "description": "Aqua/MODIS Fire and Thermal Anomalies",
+    "name": "Fires (Day and Night)",
+    "parameters": {
+        "format": "image/png",
+        "layers": "MODIS_Fires_Aqua"
+    },
+    "product": "daily",
+    "projections": {
+        "geographic": {}
+    },
+    "properties": {
+        "tileSize": [
+            512,
+            512
+        ]
+    },
+    "startDate": "2012-04-07",
+    "type": "wms",
+    "url": [
+        "http://map2a.vis.earthdata.nasa.gov/wms/wms.php",
+        "http://map2b.vis.earthdata.nasa.gov/wms/wms.php",
+        "http://map2c.vis.earthdata.nasa.gov/wms/wms.php"
+    ],
+    "echo": {
+        "product": "MYD14"
+    }
+}

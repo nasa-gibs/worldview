@@ -4,7 +4,7 @@
     "filename": "rendered/AIRS_CO_template.vrt",
     "minIndex": 198,
     "maxIndex": 251,
-    "products": [
+    "layers": [
         "AIRS_CO_Total_Column_Day",
         "AIRS_CO_Total_Column_Night"
     ]
@@ -14,14 +14,14 @@
     "filename": "rendered/AIRS_Dust_template.vrt",
     "minIndex": 1,
     "maxIndex": 251,
-    "products": ["AIRS_Dust_Score"]
+    "layers": ["AIRS_Dust_Score"]
 },
 {
     "id": "AIRS_Prata_SO2_Index",
     "filename": "rendered/AIRS_Prata_SO2_template.vrt",
     "minIndex": 1,
     "maxIndex": 251,
-    "products": [
+    "layers": [
         "AIRS_Prata_SO2_Index_Day",
         "AIRS_Prata_SO2_Index_Night"
     ]
@@ -31,9 +31,69 @@
     "filename": "rendered/AIRS_Precip_template.vrt",
     "minIndex": 61,
     "maxIndex": 251,
-    "products": [
+    "layers": [
         "AIRS_Precipitation_Day",
         "AIRS_Precipitation_Night"
+    ]
+},
+{
+    "id": "AIRS_RelativeHumidity",
+    "filename": "rendered/AIRS_RelativeHumidity.vrt",
+    "minIndex": 1,
+    "maxIndex": 100,
+    "layers": [
+        "AIRS_RelativeHumidity_400hPa_Day",
+        "AIRS_RelativeHumidity_400hPa_Night",
+        "AIRS_RelativeHumidity_500hPa_Day",
+        "AIRS_RelativeHumidity_500hPa_Night",
+        "AIRS_RelativeHumidity_600hPa_Day",
+        "AIRS_RelativeHumidity_600hPa_Night",
+        "AIRS_RelativeHumidity_700hPa_Day",
+        "AIRS_RelativeHumidity_700hPa_Night",
+        "AIRS_RelativeHumidity_850hPa_Day",
+        "AIRS_RelativeHumidity_850hPa_Night"
+    ]
+},
+{
+    "id": "AIRS_Temperature_400hPa",
+    "filename": "rendered/AIRS_Temperature_400hPa.vrt",
+    "minIndex": 1,
+    "maxIndex": 251,
+    "layers": [
+        "AIRS_Temperature_400hPa_Day",
+        "AIRS_Temperature_400hPa_Night"
+    ]
+},
+{
+    "id": "AIRS_Temperature_500hPa",
+    "filename": "rendered/AIRS_Temperature_500hPa.vrt",
+    "minIndex": 1,
+    "maxIndex": 251,
+    "layers": [
+        "AIRS_Temperature_500hPa_Day",
+        "AIRS_Temperature_500hPa_Night"
+    ]
+},
+{
+    "id": "AIRS_Temperature_600hPa",
+    "filename": "rendered/AIRS_Temperature_600hPa.vrt",
+    "minIndex": 1,
+    "maxIndex": 251,
+    "layers": [
+        "AIRS_Temperature_600hPa_Day",
+        "AIRS_Temperature_600hPa_Night"
+    ]
+},
+{
+    "id": "AIRS_Temperature_700hPa",
+    "filename": "rendered/AIRS_Temperature_700hPa.vrt",
+    "minIndex": 1,
+    "maxIndex": 251,
+    "layers": [
+        "AIRS_Temperature_700hPa_Day",
+        "AIRS_Temperature_700hPa_Night",
+        "AIRS_Temperature_850hPa_Day",
+        "AIRS_Temperature_850hPa_Night"
     ]
 },
 {
@@ -41,7 +101,7 @@
     "filename": "rendered/MLS_color_table.xml",
     "minIndex": 1,
     "maxIndex": 255,
-    "products": [
+    "layers": [
         "MLS_CO_215hPa_Day",
         "MLS_CO_215hPa_Night",
         "MLS_H2O_46hPa_Day",
@@ -63,7 +123,7 @@
     "filename": "rendered/MOR4ODLO_template.vrt",
     "minIndex": 12,
     "maxIndex": 21,
-    "products": [
+    "layers": [
         "MODIS_Terra_Aerosol",
         "MODIS_Aqua_Aerosol",
         "MODIS_Combined_Value_Added_AOD"
@@ -74,7 +134,7 @@
     "filename": "rendered/MOR2B31_colortable.vrt",
     "minIndex": 1,
     "maxIndex": 254,
-    "products": [
+    "layers": [
         "MODIS_Terra_Brightness_Temp_Band31_Day",
         "MODIS_Terra_Brightness_Temp_Band31_Night",
         "MODIS_Aqua_Brightness_Temp_Band31_Day",
@@ -86,7 +146,7 @@
     "filename": "rendered/MOR6CTP_template.vrt",
     "minIndex": 5,
     "maxIndex": 20,
-    "products": [
+    "layers": [
         "MODIS_Terra_Cloud_Top_Pressure_Day",
         "MODIS_Terra_Cloud_Top_Pressure_Night",
         "MODIS_Aqua_Cloud_Top_Pressure_Day",
@@ -98,7 +158,7 @@
     "filename": "rendered/MOR6CTT_template.vrt",
     "minIndex": 5,
     "maxIndex": 20,
-    "products": [
+    "layers": [
         "MODIS_Terra_Cloud_Top_Temp_Day",
         "MODIS_Terra_Cloud_Top_Temp_Night",
         "MODIS_Aqua_Cloud_Top_Temp_Day",
@@ -110,7 +170,7 @@
     "filename": "rendered/MOR11LST_colortable.vrt",
     "minIndex": 1,
     "maxIndex": 251,
-    "products": [
+    "layers": [
         "MODIS_Terra_Land_Surface_Temp_Day",
         "MODIS_Terra_Land_Surface_Temp_Night",
         "MODIS_Aqua_Land_Surface_Temp_Day",
@@ -122,7 +182,7 @@
     "filename": "rendered/MOR29SIR_colortable.vrt",
     "minIndex": 0,
     "maxIndex": 0,
-    "products": [
+    "layers": [
         "MODIS_Terra_Sea_Ice",
         "MODIS_Aqua_Sea_Ice"
     ]
@@ -132,7 +192,7 @@
     "filename": "rendered/MOR10FSC_colortable.vrt",
     "minIndex": 1,
     "maxIndex": 100,
-    "products": [
+    "layers": [
         "MODIS_Terra_Snow_Cover",
         "MODIS_Aqua_Snow_Cover"
     ]
@@ -142,7 +202,7 @@
     "filename": "rendered/MOR5WVIR_template.vrt",
     "minIndex": 5,
     "maxIndex": 131,
-    "products": [
+    "layers": [
         "MODIS_Terra_Water_Vapor_5km_Day",
         "MODIS_Terra_Water_Vapor_5km_Night",
         "MODIS_Aqua_Water_Vapor_5km_Day",
@@ -154,7 +214,7 @@
     "filename": "rendered/OMI_Aerosol_template.vrt",
     "minIndex": 128,
     "maxIndex": 217,
-    "products": [
+    "layers": [
         "OMI_Absorbing_Aerosol_Optical_Depth",
         "OMI_Aerosol_Index",
         "OMI_Aerosol_Optical_Depth"
@@ -165,21 +225,21 @@
     "filename": "rendered/OMI_CloudPressure_template.vrt",
     "minIndex": 17,
     "maxIndex": 217,
-    "products": [ "OMI_Cloud_Pressure" ]
+    "layers": [ "OMI_Cloud_Pressure" ]
 },
 {
     "id": "OMI_SO2_Lower_Troposphere",
     "filename": "rendered/OMI_SO2_TRL_template.vrt",
     "minIndex": 99,
     "maxIndex": 217,
-    "products": [ "OMI_SO2_Lower_Troposphere" ]
+    "layers": [ "OMI_SO2_Lower_Troposphere" ]
 },
 {
     "id": "OMI_SO2_Middle_Troposphere_to_Stratosphere",
     "filename": "rendered/OMI_SO2_ASTL_TRM_template.vrt",
     "minIndex": 61,
     "maxIndex": 217,
-    "products": [
+    "layers": [
         "OMI_SO2_Middle_Troposphere",
         "OMI_SO2_Upper_Troposphere_and_Stratosphere"
     ]
@@ -189,7 +249,7 @@
     "filename": "rendered/OMI_SO2_PBL_template.vrt",
     "minIndex": 139,
     "maxIndex": 217,
-    "products": [ "OMI_SO2_Planetary_Boundary_Layer" ]
+    "layers": [ "OMI_SO2_Planetary_Boundary_Layer" ]
 }
 ]
 

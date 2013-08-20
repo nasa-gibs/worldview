@@ -61,6 +61,8 @@ SOTE.widget.Products = function(containerId, config){
     this.dataSourceUrl = config.dataSourceUrl;
     this.categories = config.categories;
 	this.initRenderComplete = false;
+	this.paletteWidget = config.paletteWidget;
+	this.config = config.config;
 	this.init();
 
 }
@@ -128,8 +130,28 @@ SOTE.widget.Products.prototype.render = function(){
 
 	//this.container.appendChild(productContainer);
 	$('#'+this.id).tabs({show: SOTE.widget.Products.change});
-	this.b = new SOTE.widget.Bank("products",{paletteWidget: window.palettes, dataSourceUrl:"ap_products.php",title:"My Layers",selected:{antarctic:"baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,antarctic_coastlines", arctic:"baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,arctic_coastlines",geographic:"baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,sedac_bound"},categories:["Base Layers","Overlays"],config:window.config});
-    this.s = new SOTE.widget.Selector("selectorbox",{dataSourceUrl:"ap_products.php",categories:["Base Layers","Overlays"],selected:{antarctic:"baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,antarctic_coastlines", arctic:"baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,arctic_coastlines",geographic:"baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,sedac_bound"}});	
+	this.b = new SOTE.widget.Bank("products", {
+	    paletteWidget: this.paletteWidget, 
+	    dataSourceUrl: "ap_products.php",
+	    title: "My Layers",
+	    selected: {
+	        antarctic: "baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,antarctic_coastlines", 
+	        arctic:"baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,arctic_coastlines",
+	        geographic:"baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,sedac_bound"
+        },
+        categories:["Base Layers","Overlays"],
+        config: this.config
+    });
+    this.s = new SOTE.widget.Selector("selectorbox", {
+        dataSourceUrl: "ap_products.php",
+        categories: ["Base Layers","Overlays"], 
+        selected: {
+            antarctic: "baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,antarctic_coastlines", 
+            arctic:"baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,arctic_coastlines",
+            geographic:"baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,sedac_bound"
+        },
+        config: this.config
+    });	
     
     //$('#'+this.id+"prods").on("tabsshow",SOTE.widget.Products.change);
    	$('.accordionToggler').bind('click',{self:this},SOTE.widget.Products.toggle);

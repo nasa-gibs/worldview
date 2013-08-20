@@ -129,8 +129,8 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
       	
      	var px = pixels.split(",");
     	var x1 = px[0]; var y1= px[1]; var x2 = px[2]; var y2=px[3]; 
-      	var lonlat1 = this.m.productMap.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(Math.floor(x1), Math.floor(y2)));
-       	var lonlat2 = this.m.productMap.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(Math.floor(x2), Math.floor(y1)));
+      	var lonlat1 = this.m.maps.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(Math.floor(x1), Math.floor(y2)));
+       	var lonlat2 = this.m.maps.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(Math.floor(x2), Math.floor(y1)));
 
         var dlURL  = "http://map2.vis.earthdata.nasa.gov/imagegen/index.php?"; 
 

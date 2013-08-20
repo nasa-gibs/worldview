@@ -33,11 +33,11 @@ Worldview.Widget.Map = function(containerId, config) {
     var self = {};
     
     /**
-     * Property: productMap
-     * The <Worldview.Map.ProductMap> that contains the map objects, one for 
+     * Property: maps
+     * The <Worldview.Map.maps> that contains the map objects, one for 
      * each projection.
      */
-    self.productMap = null;
+    self.maps = null;
     
     /**
      * Property: config
@@ -48,12 +48,12 @@ Worldview.Widget.Map = function(containerId, config) {
     
     var init = function() {
         self.config = validateConfig(self.config);
-        self.productMap = Worldview.Map.ProductMap(containerId, 
+        self.maps = Worldview.Map.MapSet(containerId, 
                 self.config, self);
         
-        $.each(self.config.products, function(name, config) {
+        $.each(self.config.layers, function(name, config) {
             if ( config.defaultLayer === "true" ) {
-                self.productMap.append(name);
+                self.maps.append(name);
             }
         });
     };  
@@ -74,7 +74,7 @@ Worldview.Widget.Map = function(containerId, config) {
         
         log.debug("setValue: " + value);
         var extent = OpenLayers.Bounds.fromString(value);
-        var map = self.productMap.map;
+        var map = self.maps.map;
      
         // Verify that the viewport extent overlaps the valid extent, if
         // invalid, just zoom out the max extent
@@ -85,7 +85,7 @@ Worldview.Widget.Map = function(containerId, config) {
             log.info("Max extent: " + map.getMaxExtent());
             extent = map.getExtent();
         }
-        self.productMap.map.zoomToExtent(extent, true);
+        self.maps.map.zoomToExtent(extent, true);
     };
     
     /**
@@ -99,7 +99,7 @@ Worldview.Widget.Map = function(containerId, config) {
      */
     self.getValue = function() {
         var queryString = containerId + "=" + 
-                    self.productMap.map.getExtent().toBBOX();
+                    self.maps.map.getExtent().toBBOX();
         log.debug("getValue: " + queryString);
         return queryString;
     };
@@ -126,7 +126,7 @@ Worldview.Widget.Map = function(containerId, config) {
                 var x = parseFloat(coordinate[0]);
                 var y = parseFloat(coordinate[1]);
                 center = [x, y];
-                self.productMap.map.setCenter(center, parseInt(query.zoom));
+                self.maps.map.setCenter(center, parseInt(query.zoom));
             } catch ( error ) {
                 log.warn("Unable to set center and zoom: " + error);
             }            
@@ -184,16 +184,16 @@ Worldview.Widget.Map = function(containerId, config) {
      * configuration.
      */
     var validateConfig = function(config) {
-        var root = ["config", "projections", "products"];
+        var root = ["defaults", "projections", "layers"];
         $.each(root, function(index, key) {
             if ( !config.hasOwnProperty(key) ) {
                 throw key + " is required in the map configuration";
             }
         });
-        var _config = ["defaultProjection"];
+        var _config = ["projection"];
         $.each(_config, function(index, key) {
-            if ( !(key in config.config) ) {
-                throw new Error("config." + key + " is required in the " + 
+            if ( !(key in config.defaults ) ) {
+                throw new Error("defaults." + key + " is required for the " + 
                         "map configuraiton");
             }
         });

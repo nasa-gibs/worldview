@@ -39,7 +39,6 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
     var last = null;
     
     var init = function() {
-        //Logging.debug("Worldview.Map");
         if ( REGISTRY ) {
             REGISTRY.register(containerId, self);
         } else {
@@ -50,6 +49,7 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
         log.debug("Map is ready");
         
         setExtentToLeading();
+        self.updateComponent(Worldview.Permalink.fromRegistry());
     };
     
     /**
@@ -63,10 +63,10 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
      */    
     self.updateComponent = function(queryString) { 
         try {
-            if ( !(self.productMap.projection in lastState) ) {
-                lastState[self.productMap.projection] = {};
+            if ( !(self.maps.projection in lastState) ) {
+                lastState[self.maps.projection] = {};
             }
-            last = lastState[self.productMap.projection];
+            last = lastState[self.maps.projection];
             
             if ( last.queryString === queryString ) {
                 return;
@@ -82,49 +82,49 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
             if ( state.projection !== undefined && 
                     state.projection !== last.projection ) {
                 var projection = state.projection;
-                if ( !(projection in self.productMap.mapConfig.projections) ) {
+                if ( !(projection in self.maps.mapConfig.projections) ) {
                     var defaultProjection = 
-                        self.productMap.mapConfig.config.defaultProjection;
+                        self.maps.mapConfig.defaults.projection;
                     log.warn("Invalid projection: " + projection + ", using: " + 
                             defaultProjection);
                     projection = defaultProjection;
                 }
-                self.productMap.setProjection(projection);
-                self.productMap.set(state.products, state.hiddenProducts);
-            } else if ( state.productsString !== last.productsString ) {
-                log.debug("Visible products", state.products);
-                log.debug("Hidden prodcuts", state.hiddenProducts);
-                self.productMap.set(state.products, state.hiddenProducts);
-                // If the products changed, force setting the palettes
+                self.maps.setProjection(projection);
+                self.maps.set(state.layers, state.hiddenLayers);
+            } else if ( state.layersString !== last.layersString ) {
+                log.debug("Visible layers", state.visibleLayers);
+                log.debug("Hidden layers", state.hiddenLayers);
+                self.maps.set(state.layers, state.hiddenLayers);
+                // If the layers changed, force setting the palettes
                 // again
-                if ( !Worldview.arrayEquals(state.products, last.products) ) { 
+                if ( !Worldview.arrayEquals(state.layers, last.layers) ) { 
                     last.palettesString = "";
                 }
                 var topLayerSelected = false;
-                $.each(state.baselayers, function(index, product) {
+                $.each(state.baselayers, function(index, layer) {
                     var alreadyHidden = 
-                        $.inArray(product, state.hiddenProducts) >= 0;
+                        $.inArray(layer, state.hiddenLayers) >= 0;
                     var visible = !topLayerSelected && !alreadyHidden;
                     if ( visible && !topLayerSelected ) {
                         topLayerSelected = true;
                     }
-                    self.productMap.setVisibility(product, visible);  
+                    self.maps.setVisibility(layer, visible);  
                 });
             }
             if ( state.time !== last.time ) {
-                self.productMap.setDay(state.time);
+                self.maps.setDay(state.time);
             }           
             if ( state.palettesString !== last.palettesString ) {
-                self.productMap.setPalettes(state.palettes);
+                self.maps.setPalettes(state.palettes);
             }
             if ( state.opacityString !== last.opacityString) {
                 $.each(state.opacity, function(layerName, opacity) {
-                    self.productMap.setOpacity(layerName, opacity);    
+                    self.maps.setOpacity(layerName, opacity);    
                 });
             }
             last = state;
             last.queryString = queryString;
-            lastState[self.productMap.projection] = last;
+            lastState[self.maps.projection] = last;
         } catch ( cause ) {
             Worldview.error("Unable to update map", cause);
         }
@@ -137,13 +137,14 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
     
     // TODO: This should be moved to the product picker
     var parseProducts = function(queryString, object) {
-        object.products = [];
-        object.hiddenProducts = [];
+        object.layers = [];
+        object.visibleLayers = [];
+        object.hiddenLayers = [];
         object.baselayers = [];
         object.overlays = [];
         
         var products = Worldview.extractFromQuery("products", queryString);
-        object.productsString = products;
+        object.layersString = products;
         if ( !products ) {
             return object;
         }
@@ -158,8 +159,10 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
                 var name = items[j];
                 if ( name.substring(0, 1) == "!" ) {
                     name = name.substring(1);
-                    object.hiddenProducts.push(name);
-                };
+                    object.hiddenLayers.push(name);
+                } else {
+                    object.visibleLayers.push(name);
+                }
                 values.push(name);
                 object[type].push(name);
             }
@@ -167,18 +170,18 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
             // expected--the first layer is the layer to be drawn last. 
             // Flip them.
             values.reverse();
-            object.products = object.products.concat(values);
+            object.layers = object.layers.concat(values);
         }
         return object;
     };
     
     var setExtentToLeading = function() {
         // Polar projections don't need to be positioned
-        if ( self.productMap.projection !== "geographic" ) {
+        if ( self.maps.projection !== "geographic" ) {
             return;
         }
 
-        var map = self.productMap.map;
+        var map = self.maps.map;
     
         // Set default extent according to time of day:  
         //   at 00:00 UTC, start at far eastern edge of map: "20.6015625,-46.546875,179.9296875,53.015625"
@@ -206,63 +209,7 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
                 
         map.setCenter(new OpenLayers.LonLat(lon, lat), zoomLevel);
     };   
-    
-    /**
-     * Converts the product listed in the query string into an array.
-     */    
-    var splitProducts = function(state) {
-        var results = [];
-        if ( !state.products ) {
-            return results;
-        }
-        var sets = state.products.split("~");
-        for ( var i = 0; i < sets.length; i++ ) {
-            var set = sets[i];
-            var items = set.split(",");
-            var values = [];
-            // First item is the type (e.g., baselayer or overlay). Ignore it.
-            for ( var j = 1; j < items.length; j++ ) {
-                values.push(items[j]);
-            }
-            // Products are listed in the "opposite" order from what is 
-            // expected--the first layer is the layer to be drawn last. 
-            // Flip them.
-            values.reverse();
-            results = results.concat(values);
-        }
-        return results;
-    };
-    
-    var splitPalettes = function(state) {
-        var results = {};
-        if ( !state.palettes ) {
-            return results;
-        }
-        var definitions = state.palettes.split("~");
-        $.each(definitions, function(index, definition) {
-            var items = definition.split(",");
-            var product = items[0];
-            var palette = items[1];
-            results[product] = palette;
-        });
-        return results;
-    };
-    
-    var splitOpacity = function(state) {
-        var results = {}
-        if ( !state.opacity ) {
-            return results;
-        }
-        var definitions = state.opacity.split("~");
-        $.each(definitions, function(index, definition) {
-            var items = definition.split(",");
-            var layerName = items[0];
-            var opacity = parseFloat(items[1]);
-            results[layerName] = opacity;
-        });
-        return results;
-    }
-    
+        
     init();
     return self;
 }

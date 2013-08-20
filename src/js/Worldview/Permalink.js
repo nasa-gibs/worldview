@@ -165,6 +165,10 @@ $(function() {
         if ( opacity ) {
             link += "&opacity=" + opacity;
         }    
+        var dataDownload = Worldview.extractFromQuery("dataDownload", qs);
+        if ( dataDownload ) {
+            link += "&dataDownload=" + dataDownload;
+        }
         var url = window.location.href;
         var prefix = url.split("?")[0];
         prefix = (prefix !== null && prefix !== undefined) ? prefix: url;

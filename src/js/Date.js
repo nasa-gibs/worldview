@@ -10,6 +10,10 @@
  */
 
 /**
+ * @module Date
+ */
+
+/**
  * Date handling utilities.
  *
  * @class Date
@@ -130,6 +134,28 @@
      */
     Date.prototype.toISOStringDate = function() {
         return this.toISOString().split("T")[0];
+    };
+    
+    Date.prototype.toISOStringTimeHM = function() {
+        var time = this.toISOString().split("T")[1];
+        var parts = time.split(".")[0].split(":");
+        return parts[0] + ":" + parts[1];        
+    };
+    
+    Date.prototype.toTimestampUTC = function() {
+        return this.toISOString().replace(/[-:TZ\.]/g, "");    
+    };
+    
+    Date.parseTimestampUTC = function(str) {
+        var v = str.match(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})(\d{3})/);
+        return new Date(Date.UTC(
+            parseInt(v[1], 10), 
+            parseInt(v[2] - 1, 10), 
+            parseInt(v[3], 10), 
+            parseInt(v[4], 10), 
+            parseInt(v[5], 10), 
+            parseInt(v[6], 10), 
+            parseInt(v[7], 10)));
     };
     
 })();

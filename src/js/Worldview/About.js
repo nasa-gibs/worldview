@@ -10,21 +10,29 @@
  */
 
 /**
- * Namespace: Worldview.Palette
- * Visualization of science data.
+ * @module Worldview
  */
-
-//=============================================================================
-// NOTE: pages/about.html MUST also be updated!
-//=============================================================================
-
 Worldview.namespace("About");
 
+/**
+ * Displays the Worldview about box. If this is a desktop device, a full
+ * dialog box is shown with all the relevant information. If this is a mobile
+ * device, a small dialog box is shown with links to a page that contains
+ * the full information.
+ * 
+ * @class About
+ * @static
+ */
 $(function() {
     
     var ns = Worldview.About;
     var overlay;
     
+    /**
+     * Show the about dialog box.
+     * 
+     * @method show
+     */
     ns.show = function() {
         if ( $(window).width() < 750 ) {
             showMobile();
@@ -35,8 +43,15 @@ $(function() {
     
     var showDesktop = function() {
          if ( !overlay ) { 
-                overlay = new YAHOO.widget.Panel("panel1", { zIndex:1020, visible:false } );
-                var item =      "<div >"+
+                overlay = new YAHOO.widget.Panel("panel1", { 
+                    zIndex:1020, 
+                    visible:false 
+                });
+                
+                //=============================================================
+                // NOTE: pages/about.html MUST also be updated!
+                //=============================================================
+                var item = "<div >"+
                         "<h3>Welcome to Worldview</h3>"+
                         "<p>This tool from NASA's <a href='http://earthdata.nasa.gov/about-eosdis' target='_blank'>EOSDIS</a> provides the capability to interactively browse full-resolution, global, near real-time satellite imagery from 50+ data products from <a href='http://lance.nasa.gov/' target='_blank'>LANCE</a>.  In essence, this shows the entire Earth as it looks \"right now\" - or at least as it has looked within the past few hours.  This supports time-critical application areas such as wildfire management, air quality measurements, and weather forecasting. The data is generally available within three hours of observation and can be compared to observations since May 2012 - just click or drag the blue time sliders at the bottom of the screen to change the currently-displayed date.  Arctic and Antarctic projections of several products are also available for a \"full globe\" perspective.  Browsing on tablet devices is currently supported (iPad 2+ recommended) for mobile access. Please note, however, that this is an alpha (preview) release and many features are still under development.</p>"+
                         "<br /><p>Worldview uses the newly-developed <a href='http://earthdata.nasa.gov/gibs' target='_blank'>Global Image Browse Services (GIBS)</a> to rapidly retrieve its full-resolution imagery to provide an interactive browsing experience.  While Worldview uses <a href='http://openlayers.org/' target='_blank'>OpenLayers</a> as its mapping library, GIBS also supports Google Earth, NASA World Wind, and several other clients.  We encourage interested developers to build their own clients or integrate NASA imagery into their existing ones using these services.</p>"+

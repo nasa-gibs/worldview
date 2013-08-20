@@ -86,7 +86,7 @@ SOTE.widget.RubberBand.toggle = function(o){
     // elements in the map to do its background effect and if the map isn't
     // ready yet, it will copy blank images. 
     var disablePalettes = function() {
-        var map = self.mapWidget.productMap.map;
+        var map = self.mapWidget.maps.map;
         var handler = function() {
             map.events.unregister("maploadend", map, handler);
             toggleOn();

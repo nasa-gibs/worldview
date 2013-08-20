@@ -1,0 +1,42 @@
+{
+    "aqua": {
+        "query": {
+            "timeWindow": [-180, 180]    
+        },
+        "filters": [
+            "extent",
+            "time",
+            "nrt"
+        ],
+        "options": {
+            "extent": {
+                "4326": [-180, -60, 180, 60]
+            },
+            "time": {
+                "maxDistance": 270,
+                "eastZone": 300,
+                "westZone": 1380
+            }       
+        }
+    },
+    "terra": {
+        "query": {
+            "timeWindow": [-180, 180]    
+        },
+        "filters": [
+            "extent",
+            "time",
+            "nrt"
+        ],
+        "options": {
+            "extent": {
+                "4326": [-180, -60, 180, 60]
+            },
+            "time": {
+                "maxDistance": 270,
+                "eastZone": 180,
+                "westZone": 1260
+            }
+        }
+    }
+}

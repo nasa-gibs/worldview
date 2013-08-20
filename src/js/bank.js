@@ -86,12 +86,20 @@ SOTE.widget.Bank = function(containerId, config){
 
 SOTE.widget.Bank.prototype.buildMeta = function(cb,val){
     this.buildMetaDone = false;
+    var data = this.config.ap_products[this.state];
+    SOTE.widget.Bank.handleMetaSuccess(data, null, null, {
+        self: this,
+        callback: cb, 
+        val: val
+    });
+    /*
 	SOTE.util.getJSON(
 		"data/" + this.state + "_" + this.dataSourceUrl,
 		{self:this,callback:cb,val:val},
 		SOTE.widget.Bank.handleMetaSuccess,
 		SOTE.widget.Bank.handleUpdateFailure
 	);
+	*/
 };
 
 SOTE.widget.Bank.handleMetaSuccess = function(data,status,xhr,args){
@@ -107,19 +115,19 @@ SOTE.widget.Bank.handleMetaSuccess = function(data,status,xhr,args){
 	}
 	
 	$.each(self.meta, function(name, meta) {
-	   if ( name in self.config.products ) {
-	       var product = self.config.products[name];
-	       if ( "rendered" in product ) {
-	           meta.units = product.units;
-	           meta.min = ( product.min === undefined ) 
+	   if ( name in self.config.layers ) {
+	       var layer = self.config.layers[name];
+	       if ( "rendered" in layer ) {
+	           meta.units = layer.units;
+	           meta.min = ( layer.min === undefined ) 
 	                   ? "&nbsp;&nbsp;&nbsp;&nbsp" 
-	                   : product.min;
-	           meta.max = ( product.max === undefined ) 
+	                   : layer.min;
+	           meta.max = ( layer.max === undefined ) 
 	                   ? "&nbsp;&nbsp;&nbsp;" 
-                       : product.max;
-	           meta.bins = product.bins;
-	           meta.stops = product.stops;
-	           meta.palette = self.config.palettes[product.rendered];    
+                       : layer.max;
+	           meta.bins = layer.bins;
+	           meta.stops = layer.stops;
+	           meta.palette = self.config.palettes[layer.rendered];    
 	       }    
 	   }    
 	});
@@ -679,12 +687,6 @@ SOTE.widget.Bank.prototype.unserialize = function(string, selector){
 */
 SOTE.widget.Bank.prototype.updateComponent = function(querystring){
 	var qs = (querystring === undefined)? "":querystring;
-	/*SOTE.util.getJSON(
-		this.dataSourceUrl+"?"+querystring,
-		{self:this,qs:querystring},
-		SOTE.widget.Bank.handleUpdateSuccess,
-		SOTE.widget.Bank.handleUpdateFailure
-	);*/
 	SOTE.widget.Bank.handleUpdateSuccess(this,qs);
 };
 
@@ -749,7 +751,10 @@ SOTE.widget.Bank.prototype.loadFromQuery = function(qs){
 		this.updateComponent(qs);
 	}
 	else {
-	   this.sleep(SOTE.util.extractFromQuery(this.id,qs));
+	   SOTE.widget.Bank.loadValue({
+	       self: this, 
+	       val: SOTE.util.extractFromQuery(this.id, qs)
+       });
 	}
 };
 

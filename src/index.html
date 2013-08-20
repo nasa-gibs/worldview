@@ -99,10 +99,20 @@
 	<!-- link.dev --> <script type="text/javascript" src="ext/joyride/jquery.joyride.js"></script>
 	<!-- link.dev --> <script type="text/javascript" src="ext/joyride/modernizr.mq.js"></script>
 	
+	<!-- link.dev --> <script type="text/javascript" src="ext/proj4js/proj4js.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="ext/proj4js/merc.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="ext/proj4js/stere.js"></script>
+	<!-- link.dev --> <script type="text/javascript" src="ext/proj4js/EPSG_3031.js"></script>
+	<!-- link.dev --> <script type="text/javascript" src="ext/proj4js/EPSG_3413.js"></script>
+	<!-- link.dev --> <script type="text/javascript" src="ext/proj4js/EPSG_3995.js"></script>
+	
 	<!-- link.dev --> <script type="text/javascript" src="ext/openlayers/OpenLayers.debug.js?mobile"></script>
 	<!-- link.dev --> <script type="text/javascript" src="ext/jcrop/jcrop.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="ext/jquery.dd/jquery.dd.js"></script>  
+    <!-- link.dev --> <script type="text/javascript" src="ext/jscache/cache.js"></script>  
   
+    <!-- link.dev --> <script type="text/javascript" src="js/Logging.js"></script> 
+    <!-- link.dev --> <script type="text/javascript" src="js/Date.js"></script>
         
 	<!-- link.dev --> <script type="text/javascript" src="js/component.js"></script>
 	<!-- link.dev --> <script type="text/javascript" src="js/registry.js"></script> 
@@ -119,8 +129,6 @@
 	<!-- link.dev --> <script type="text/javascript" src="js/selector.js"></script>
 	<!-- link.dev --> <script type="text/javascript" src="js/products.js"></script>
 	<!-- link.dev --> <script type="text/javascript" src="js/sote.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/Logging.js"></script> 
-    <!-- link.dev --> <script type="text/javascript" src="js/Date.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/events.js"></script>
     
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview.js"></script>
@@ -131,6 +139,8 @@
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Preloader.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Events.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Indicator.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/AjaxCache.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/AjaxJoin.js"></script>
     
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Palette.js"></script>    
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Palette/ColorBar.js"></script>    
@@ -139,22 +149,59 @@
     
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Map.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Map/CanvasTile.js"></script>
-	<!-- link.dev --> <script type="text/javascript" src="js/Worldview/Map/ProductMap.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Map/Product.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Map/StaticProduct.js"></script>
-	<!-- link.dev --> <script type="text/javascript" src="js/Worldview/Map/DailyProduct.js"></script>
+	<!-- link.dev --> <script type="text/javascript" src="js/Worldview/Map/MapSet.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Map/LayerSet.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Map/StaticLayerSet.js"></script>
+	<!-- link.dev --> <script type="text/javascript" src="js/Worldview/Map/DailyLayerSet.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Map/GraticuleLayer.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Map/TWMSLayer.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Map/HoverControl.js"></script>
+    
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/ECHO/Client.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/ECHO/Geometry.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/ECHO/MockClient.js"></script>
+
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/Handler.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/Handler/Base.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/Handler/MODISSwathMultiDay.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/Handler/AquaSwathMultiDay.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/Handler/TerraSwathMultiDay.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/Handler/MODISSwathNight.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/Handler/MODISGrid.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/Handler/MODISMix.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/Handler/Aura.js"></script>
+
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/Layers/Button.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/Layers/Grid.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/Layers/Hover.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/Layers/Swath.js"></script>
+
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/Results/AntiMeridianMulti.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/Results/Chain.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/Results/CollectPreferred.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/Results/ConnectSwaths.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/Results/ExtentFilter.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/Results/GeometryFromECHO.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/Results/GeometryFromMODISGrid.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/Results/MODISGridIndex.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/Results/MODISGridLabel.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/Results/PreferredFilter.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/Results/TagNRT.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/Results/TimeFilter.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/Results/TimeLabel.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/Results/Transform.js"></script>
 
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/Model.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/ECHOClient.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/ProductSelector.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/ControlDialog.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/MapController.js"></script>
 	
 	<!-- link.dev --> <script type="text/javascript" src="js/Worldview/Widget/Map.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Widget/Palette.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Widget/WorldviewMap.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Widget/ArcticProjectionChangeNotification.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Widget/Opacity.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Widget/EPSG.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Widget/CRS.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Widget/DataDownload.js"></script>
 
     	
@@ -195,15 +242,6 @@
       	<li id="mapPanel" data-id="mapPanelTourAnchor" data-button="Next" data-options="tipLocation:left;nubPosition:left;prevButton:true;bordered:true"></li>
       	<li id="toolbarPanel" class="toolbarTip" data-id="toolbarlist" data-button="Finish" data-options="tipLocation:bottom;nubPosition:top;tipAnimation:fade;prevButton:true;bordered:true;class:toolbar"></li>
     </ol> 
-
-	<!-- Crazy Egg Metrics -->
-	<script type="text/javascript">
-		setTimeout(function(){var a=document.createElement("script");
-		var b=document.getElementsByTagName("script")[0];
-		a.src=document.location.protocol+"//dnn506yrbagrg.cloudfront.net/pages/scripts/0013/2090.js?"+Math.floor(new Date().getTime()/3600000);
-		a.async=true;a.type="text/javascript";b.parentNode.insertBefore(a,b)}, 1);
-	</script>
-	<!-- End Crazy Egg Metrics -->
 
 	<!-- BEGIN: Unica Page Tag -->
 	<!-- Copyright 2004-2010 Unica Corporation.  All rights reserved. -->

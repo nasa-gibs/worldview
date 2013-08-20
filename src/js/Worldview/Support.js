@@ -14,6 +14,7 @@ Worldview.namespace("Support");
 (function(ns) {
     
     var log = Logging.getLogger();
+    var mobileSafari = false;
     
     ns.BROWSER = null;
     ns.VERSION = [];
@@ -50,6 +51,8 @@ Worldview.namespace("Support");
     ns.quirks = function() {
         jQueryLayerFix();
         shimConsole();
+        checkMobile();
+        fixSize();
     };
     
     var init = function() {
@@ -94,6 +97,59 @@ Worldview.namespace("Support");
         }
     };
     
+    // Get rid of address bar on iphone/ipod
+    var fixSize = function() {
+        var execute = function() {
+            window.scrollTo(0,0);
+            document.body.style.height = '100%';
+            if (!(/(iphone|ipod)/.test(navigator.userAgent.toLowerCase()))) {
+                if (document.body.parentNode) {
+                    document.body.parentNode.style.height = '100%';
+                }
+            }
+        }
+        setTimeout(execute, 700);
+        setTimeout(execute, 1500);            
+    };
+
+    var hideURLbar = function() {
+        window.scrollTo(0, 1);
+    };
+    
+    var checkMobile = function() {
+        if (navigator.userAgent.indexOf('iPhone') != -1 || navigator.userAgent.indexOf('Android') != -1) {
+            // In Safari, the true version is after "Safari" 
+            if (navigator.userAgent.indexOf('Safari')!=-1) {
+                // Set a variable to use later
+                mobileSafari = true;
+            }
+            addEventListener("load", function() {
+                    setTimeout(hideURLbar, 0);
+            }, false);
+            addEventListener("orientationchange", function() {
+                    setTimeout(hideURLbar, 0);
+            }, false);
+        }
+        
+        // Set the div height
+        function setHeight($body) {
+            if (navigator.userAgent.indexOf('iPhone') != -1 && navigator.userAgent.indexOf('Safari')!=-1) {
+                var new_height = $(window).height();
+                // if mobileSafari add +60px
+                new_height += 60; 
+                $body.css('min-height', 0 );
+                $body.css('height', new_height );
+            
+            }
+            
+        }
+     
+        setHeight( $('#mappage') );
+        $(window).resize(function() {
+            setHeight($('#mappage'));
+        });
+    };
+            
     init();
     
 })(Worldview.Support);

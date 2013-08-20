@@ -409,3 +409,7 @@ SOTE.widget.Events.prototype.setStatus = function(s){
 SOTE.widget.Events.prototype.getStatus = function(){
 	return this.statusStr;
 };
+
+SOTE.widget.Events.prototype.getValue = function() {};
+
+

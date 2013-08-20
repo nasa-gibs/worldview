@@ -1,0 +1,51 @@
+{
+    "description": "Aqua / MODIS",
+    "max": "950",
+    "min": "250",
+    "name": "Cloud Top Pressure (Day)",
+    "product": "daily",
+    "projections": {
+        "geographic": {
+            "matrixSet": "EPSG4326_2km",
+            "maxExtent": [
+                -180,
+                -90,
+                180,
+                90
+            ],
+            "maxResolution": 0.5625,
+            "serverResolutions": [
+                0.5625,
+                0.28125,
+                0.140625,
+                0.0703125,
+                0.03515625,
+                0.017578125
+            ],
+            "url": [
+                "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+            ]
+        }
+    },
+    "properties": {
+        "format": "image/png",
+        "layer": "MODIS_Aqua_Cloud_Top_Pressure_Day",
+        "tileSize": [
+            512,
+            512
+        ]
+    },
+    "recommendedPalettes": [ "blue_4" ],
+    "rendered": "MODIS_Cloud_Top_Pressure",
+    "startDate": "2012-04-07",
+    "type": "wmts",
+    "units": "hPa",
+    "echo": {
+        "product": "MYD06_L2_DAY",
+        "query": {
+            "dayNightFlag": "DAY"
+        }
+    }
+}

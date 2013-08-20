@@ -25,7 +25,7 @@ Worldview.Widget.Opacity = function(config) {
     };
     
     var getConfigOpacity = function(layerName) {
-        var layer = config.products[layerName];
+        var layer = config.layers[layerName];
         if ( layer && layer.properties ) {
             if ( layer.properties.opacity === 0 || layer.properties.opacity ) {
                 return layer.properties.opacity;

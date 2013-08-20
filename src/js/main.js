@@ -1,72 +1,36 @@
 $(function() {// Initialize "static" vars
 
     var log = Logging.getLogger();
-    var selector;
-    var mobileSafari = false;
-    
-    var hideURLbar = function() {
-	  	/*if(document.documentElement.scrollHeight<window.outerHeight/window.devicePixelRatio)
-	    	document.documentElement.style.height=(window.outerHeight/window.devicePixelRatio)+'px';
-	  	setTimeout(window.scrollTo(1,1),0);*/
-		window.scrollTo(0, 1);
-	};
-
-	var checkMobile = function() {
-		if (navigator.userAgent.indexOf('iPhone') != -1 || navigator.userAgent.indexOf('Android') != -1) {
-			// In Safari, the true version is after "Safari" 
-			if (navigator.userAgent.indexOf('Safari')!=-1) {
-		  		// Set a variable to use later
-		  		mobileSafari = true;
-			}
-		    addEventListener("load", function() {
-		            setTimeout(hideURLbar, 0);
-		    }, false);
-		    addEventListener("orientationchange", function() {
-		            setTimeout(hideURLbar, 0);
-		    }, false);
-		}
-		
-	    // Set the div height
-	    function setHeight($body) {
-	    	if (navigator.userAgent.indexOf('iPhone') != -1 && navigator.userAgent.indexOf('Safari')!=-1) {
-		        var new_height = $(window).height();
-		        // if mobileSafari add +60px
-	        	new_height += 60; 
-	        	$body.css('min-height', 0 );
-	        	$body.css('height', new_height );
-	        
-		    }
-	        
-	    }
-	 
-	    setHeight( $('#mappage') );
-	    $(window).resize(function() {
-	        setHeight($('#mappage'));
-	    });
-	};
     
     var entryPoint = function() {  
-    	//console.log("entryPoint");
+        
+        // Error handlers
+        Worldview.Events.errorHandler = function(error) {
+            Worldview.error("Internal error", error);
+        };
+        
+        // Place any quirky browser related items in the function called 
+        // below.
         Worldview.Support.quirks();
         
-        var query = Worldview.queryStringToObject(location.search);
-        if ( query.now ) {
-            try {
-                var now = Date.parseISOString(query.now);
-                Worldview.overrideNow(now);
-                log.warn("Overriding now: " + now.toISOString());   
-            } catch ( error ) {
-                log.error("Invalid now: " + query.now, error);
-            } 
-        }
-                    
+        // A message can be displayed to the user (for example, notification
+        // of a pending outage) by adding a notice.txt file in the web root                     
         $.get("notice.txt", function(message) {
             var html = message.replace(/\n/g, "<br/>");
             Worldview.notify(html);
         });
         
+        // Place any resources that should be completely loaded before 
+        // starting up the UI
         Worldview.Preloader([
             { id: "config", src: "data/config", type:"json" },
+            // FIXME: Projection cache HACK
+            { id: "geographic", src: "data/geographic_ap_products.php", 
+              type: "json" },
+            { id: "arctic", src: "data/arctic_ap_products.php", 
+              type: "json" },            
+            { id: "antarctic", src: "data/antarctic_ap_products.php", 
+              type: "json" },
             "images/logo.png",
             "images/permalink.png",
             "images/geographic.png",
@@ -81,111 +45,127 @@ $(function() {// Initialize "static" vars
             "images/invisible.png",
             "images/close-red-x.png",
             "images/collapseDown.png",
-            "images/expandUp.png"       
+            "images/expandUp.png",
+            "images/activity.gif"   
         ]).execute(onLoad);
     };
-  
+
+    var onLoad = function(queue) {
+        try {
+            var config = queue.getResult("config");
+            // FIXME: Projection cache HACK
+            config.ap_products = {
+                geographic: queue.getResult("geographic"),
+                arctic: queue.getResult("arctic"),
+                antarctic: queue.getResult("antarctic")
+            };
+            init(config);
+        } catch ( error ) {
+            Worldview.error("Unable to start Worldview", error);
+        }
+    };
+      
     var init = function(config) {  	
+        // Convert all parameters found in the query string to an object, 
+        // keyed by parameter name       
+        config.parameters = Worldview.queryStringToObject(location.search);
         
-        checkMobile();
-        //console.log("init");
-        Worldview.Map.tileScheduler = Worldview.Scheduler({
-            script: "js/Worldview/Map/TileWorker.js?v=" + 
-                    Worldview.BUILD_TIMESTAMP, 
-            max: 4
+        // Features that are important for debugging but are not necessary
+        // for Worldview to opeerate properly
+        debuggingFeatures(config);
+        
+        // Models
+        var dataDownloadModel = Worldview.DataDownload.Model(config);
+
+        // Create widgets 
+        var projection = new SOTE.widget.Switch("switch", {
+            dataSourceUrl:"a",
+            selected:"geographic"
         });
-        
-        //$('#products').tabs();
-             	            	    	            	    	            	    	    	    	            	    	    
-        /*selector = new YAHOO.widget.Panel("selector", { zIndex:1019, visible:false } );
-        selector.setBody("<div id='selectorbox'></div>");
-        selector.render(document.body);
-        var sel_id = selector.id;
-        selector.beforeHideEvent.subscribe(function(e){ $("#"+sel_id).css("display","none");})
-        //selector.beforeHideEvent.subscribe(closeSelector);
-        selector.beforeShowEvent.subscribe(function(e){$("#"+sel_id).css("display","block");})
-        //this.selector.subscribe("beforeHide", closeSelector);*/
-        // Create map 
-        var m = Worldview.Widget.WorldviewMap("map", config);
-        window.config = config;
-	    window.palettes = Worldview.Widget.Palette("palettes", config, {alignTo: "#products"});	
-        var ss = new SOTE.widget.Switch("switch",{dataSourceUrl:"a",selected:"geographic"});
-        var p = new SOTE.widget.Products("productsHolder");
-        window.p = p;
-        //var a = new SOTE.widget.Bank("products",{paletteWidget: palettes, dataSourceUrl:"ap_products.php",title:"My Layers",selected:{antarctic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,antarctic_coastlines", arctic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,arctic_coastlines",geographic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,sedac_bound"},categories:["Base Layers","Overlays"],callback:showSelector,selector:selector,config:config});
-        //var s = new SOTE.widget.Selector("selectorbox",{dataSourceUrl:"ap_products.php",categories:["Base Layers","Overlays"]});
-
-        //var h = new SOTE.widget.MenuPicker("hazard",{dataSourceUrl:"data/mp_hazard.php"});
-        //var tr = new SOTE.widget.MenuPicker("transition",{dataSourceUrl:"data/mp_transition.php"});
-        var map = new SOTE.widget.DatePicker("time",{hasThumbnail:false});
-
-        //Image download variables
-        rb = new SOTE.widget.RubberBand("camera",{icon:"images/camera.png",onicon:"images/cameraon.png",cropee:"map",paletteWidget:palettes,mapWidget:m});
-        var id = new SOTE.widget.ImageDownload("imagedownload",{baseLayer:"MODIS_Terra_CorrectedReflectance_TrueColor",alignTo: rb, m:m});		
-        var apcn = new Worldview.Widget.ArcticProjectionChangeNotification(config, p.b);
+        var palettes = Worldview.Widget.Palette("palettes", config, {
+            alignTo: "#products"
+        }); 
+        var products = new SOTE.widget.Products("productsHolder", {
+            paletteWidget: palettes,
+            config: config
+        });
+        var date = new SOTE.widget.DatePicker("time", {
+            hasThumbnail: false
+        });
+        var map = Worldview.Widget.WorldviewMap("map", config);
+        var rubberBand = new SOTE.widget.RubberBand("camera", {
+            icon: "images/camera.png",
+            onicon: "images/cameraon.png",
+            cropee: "map",
+            paletteWidget: palettes,
+            mapWidget: map
+        });
+        var imageDownload = new SOTE.widget.ImageDownload("imagedownload", {
+            baseLayer: "MODIS_Terra_CorrectedReflectance_TrueColor",
+            alignTo: rubberBand, 
+            m: map
+        });		
+        var apcn = new Worldview.Widget.ArcticProjectionChangeNotification(
+            config, products.b
+        );
         var opacity = new Worldview.Widget.Opacity(config);
-        var epsg = new Worldview.Widget.EPSG(config);
-        
-		var ev = new SOTE.widget.Events("eventsHolder", {mapWidget:m, 
-        										   paletteWidget:palettes,
-        										   switchWidget:ss,
-        										   bankWidget:p,
-        										   dateWidget:map,
-        										   apcmWidget:apcn,
-        										   wvOpacity:opacity,
-        										   wvEPSG:epsg});
-
-        var dataDownloadModel = Worldview.DataDownload.Model();
-        var dataDownloadWidget = 
-                Worldview.Widget.DataDownload(dataDownloadModel, config, {
-                    selector: ".dataDownload-modeButton"
-                });
+        var crs = new Worldview.Widget.CRS(config);
+		var events = new SOTE.widget.Events("eventsHolder", {
+		    mapWidget: map, 
+  		    paletteWidget: palettes,
+            switchWidget: projection,
+		    bankWidget: products,
+		    dateWidget: date,
+		    apcmWidget: apcn,
+		    wvOpacity: opacity,
+		    wvEPSG: crs
+	    });
+        var dataDownload = Worldview.Widget.DataDownload(config, {
+            selector: ".dataDownload-modeButton",
+            model: dataDownloadModel, 
+            maps: map.maps
+        });
                  
-        // Get rid of address bar on iphone/ipod
-        var fixSize = function() {
-            window.scrollTo(0,0);
-            document.body.style.height = '100%';
-            if (!(/(iphone|ipod)/.test(navigator.userAgent.toLowerCase()))) {
-                if (document.body.parentNode) {
-                    document.body.parentNode.style.height = '100%';
-                }
-            }
-        };
-        setTimeout(fixSize, 700);
-        setTimeout(fixSize, 1500);
-        	    
-        //REGISTRY.addEventListener("map","time","imagedownload");
-        REGISTRY.addEventListener("time","map","imagedownload", apcn.containerId, epsg.containerId);
-        REGISTRY.addEventListener("switch","map","products","selectorbox", "imagedownload", "camera", apcn.containerId, epsg.containerId);
-        REGISTRY.addEventListener("products","map","selectorbox","imagedownload","palettes", apcn.containerId);
+	    // Register event listeners
+        REGISTRY.addEventListener("time", 
+                "map", "imagedownload", apcn.containerId, crs.containerId, 
+                dataDownload.containerId);
+        REGISTRY.addEventListener("switch", 
+                "map", "products", "selectorbox", "imagedownload", "camera", 
+                apcn.containerId, crs.containerId, dataDownload.containerId);
+        REGISTRY.addEventListener("products", 
+                "map", "selectorbox", "imagedownload", "palettes", 
+                apcn.containerId, dataDownload.containerId);
         REGISTRY.addEventListener("selectorbox","products");
         REGISTRY.addEventListener("camera","imagedownload");
         REGISTRY.addEventListener("palettes","map","camera","products");
         REGISTRY.addEventListener("opacity", "map");
-        REGISTRY.addEventListener(epsg.containerId, "imagedownload");
+        REGISTRY.addEventListener(crs.containerId, "imagedownload");
+
+        // These are only convienence handles to important objects used
+        // for console debugging. Code should NOT reference these as they
+        // are subject to change or removal.
+        Worldview.config = config;                
+        Worldview.opacity = opacity;
+        Worldview.palettes = palettes; 
+        Worldview.view = map;
+        Worldview.ddm = dataDownloadModel;
+        Worldview.maps = map.maps;
         
-        /*REGISTRY.addEventListener("map","time");
-        REGISTRY.addEventListener("time","map");
-        REGISTRY.addEventListener("switch","map","products","selectorbox","time");
-        REGISTRY.addEventListener("products","map","time","selectorbox");
-        REGISTRY.addEventListener("selectorbox","products");
-        //REGISTRY.addEventListener("hazard","products");*/
-        
-        Worldview.opacity = opacity; 
-        Worldview.view = m;
-        
+        // Initialize widgets
         var queryString = 
             Worldview.Permalink.decode(window.location.search.substring(1));
         
         var initOrder = [
-            ss, // projection
-            p.b, // products
-            map, // time
-            m, // map
+            projection, 
+            products.b, // bank
+            date, 
+            map, 
             palettes,
             apcn,
             opacity,
-            epsg
+            crs,
+            dataDownload
         ];
         
         function testQS(){
@@ -200,6 +180,7 @@ $(function() {// Initialize "static" vars
             REGISTRY.addAllReadyCallback(testQS);
         }
         
+        // Console notifications
         var banner = Worldview.NAME + " - Version " + Worldview.VERSION;
         if ( !Worldview.isDevelopment() ) {
             banner += " - " + Worldview.BUILD_TIMESTAMP;
@@ -207,30 +188,37 @@ $(function() {// Initialize "static" vars
         log.info(banner);
         if ( Worldview.isDevelopment() ) {
             log.warn("Development version");
-        }	  
+        }
+        	  
         // Do not start the tour if coming in via permalink         
         if ( !queryString ) {         
             Worldview.Tour.start(false);  
         } 
     };
         
-    var onLoad = function(queue) {
-        try {
-            var config = queue.getResult("config");
-            if ( Worldview.isDevelopment() ) {
-                var debugPalette = Worldview.Palette.Palette({
-                    id: "__DEBUG",
-                    name: "Debug",
-                    stops: [{at: 0, r: 0, g: 0, b: 0, a: 0}]
-                });
-                config.palettes["__DEBUG"] = debugPalette;
-                config.paletteOrder.unshift("__DEBUG");
-            }
-            Worldview.config = config;
-            init(Worldview.config);
-        } catch ( error ) {
-            Worldview.error("Unable to start Worldview", error);
+    var debuggingFeatures = function(config) {
+        // Allow the current day to be overridden
+        if ( config.parameters.now ) {
+            try {
+                var now = Date.parseISOString(config.parameters.now);
+                Worldview.overrideNow(now);
+                log.warn("Overriding now: " + now.toISOString());   
+            } catch ( error ) {
+                log.error("Invalid now: " + query.now, error);
+            } 
         }
+        
+        // Install a black palette which can be used to find "holes" in 
+        // LUT mappings.
+        if ( Worldview.isDevelopment() ) {
+            var debugPalette = Worldview.Palette.Palette({
+                id: "__DEBUG",
+                name: "Debug",
+                stops: [{at: 0, r: 0, g: 0, b: 0, a: 0}]
+            });
+            config.palettes["__DEBUG"] = debugPalette;
+            config.paletteOrder.unshift("__DEBUG");
+        }        
     };
         
     try {
@@ -238,5 +226,5 @@ $(function() {// Initialize "static" vars
     } catch ( cause ) {
         Worldview.error("Failed to start Worldview", cause);
     }  
-		
+    
 });

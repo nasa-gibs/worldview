@@ -7,7 +7,7 @@
     ],
     "name": "arctic",
     "numZoomLevels": 6,
-    "projection": "EPSG:3413",
+    "crs": "EPSG:3413",
     "resolutions": [
         8192.0,
         4096.0,
