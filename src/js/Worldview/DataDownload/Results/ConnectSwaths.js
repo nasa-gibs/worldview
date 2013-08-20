@@ -17,7 +17,7 @@ Worldview.namespace("DataDownload.Results");
 Worldview.DataDownload.Results.ConnectSwaths = function(projection) {
     
     var log = Logging.getLogger("Worldview.DataDownload");
-    var MAX_DISTANCE = 270;
+    var MAX_DISTANCE_GEO = 270;
     var startTimes = {};
     var endTimes = {};
     
@@ -58,11 +58,13 @@ Worldview.DataDownload.Results.ConnectSwaths = function(projection) {
     var combineSwath = function(swath) {
         var combined = false;
         
+        var maxDistance = ( projection === Worldview.Map.CRS_WGS_84 ) 
+                ? MAX_DISTANCE_GEO : Number.POSITIVE_INFINITY; 
         // Can this swath be added to the end of other swath?
         var otherSwath = endTimes[swath[0].time_start];
         if ( otherSwath ) {
             var otherGranule = otherSwath[otherSwath.length - 1];
-            if ( distance(swath[0], otherGranule) < MAX_DISTANCE ) {
+            if ( distance(swath[0], otherGranule) < maxDistance ) {
                 // Remove entries for this swath
                 delete startTimes[swath[0].time_start];
                 delete endTimes[swath[swath.length - 1].time_end];
