@@ -83,8 +83,5 @@
     "rendered": "MODIS_Brightness_Temp_Band31",
     "startDate": "2012-04-07",
     "type": "wmts",
-    "units": "K",
-    "echo": {
-        "product": "MYD09"
-    }
+    "units": "K"
 }
