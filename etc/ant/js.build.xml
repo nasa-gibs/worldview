@@ -109,6 +109,7 @@
         <file name="js/Worldview/DataDownload/Handler/MODISGrid.js"/>
         <file name="js/Worldview/DataDownload/Handler/MODISMix.js"/>
         <file name="js/Worldview/DataDownload/Handler/Aura.js"/>
+        <file name="js/Worldview/DataDownload/Handler/MLS.js"/>
         
         <file name="js/Worldview/DataDownload/Layers/Button.js"/>
         <file name="js/Worldview/DataDownload/Layers/Grid.js"/>
