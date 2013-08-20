@@ -105,7 +105,7 @@
         <file name="js/Worldview/DataDownload/Handler/MODISSwathMultiDay.js"/>
         <file name="js/Worldview/DataDownload/Handler/AquaSwathMultiDay.js"/>
         <file name="js/Worldview/DataDownload/Handler/TerraSwathMultiDay.js"/>
-        <file name="js/Worldview/DataDownload/Handler/MODISSwathNight.js"/>
+        <file name="js/Worldview/DataDownload/Handler/MODISSwath.js"/>
         <file name="js/Worldview/DataDownload/Handler/MODISGrid.js"/>
         <file name="js/Worldview/DataDownload/Handler/MODISMix.js"/>
         <file name="js/Worldview/DataDownload/Handler/Aura.js"/>
