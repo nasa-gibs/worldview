@@ -60100,7 +60100,7 @@
             }
         },
         "ML2CO": {
-            "handler": "Aura",
+            "handler": "MLS",
             "name": "MLS/Aura L2 Carbon Monoxide (CO) Mixing Ratio",
             "nrt": {
                 "by": "regex",

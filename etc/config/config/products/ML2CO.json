@@ -1,6 +1,6 @@
 {
     "name": "MLS/Aura L2 Carbon Monoxide (CO) Mixing Ratio",
-    "handler": "Aura",
+    "handler": "MLS",
     "query": {
         "shortName": ["ML2CO", "ML2CO_NRT"],
         "dataCenterId": "GSFCS4PA"

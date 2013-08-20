@@ -14,7 +14,7 @@
  */
 Worldview.namespace("DataDownload.Handler");
 
-Worldview.DataDownload.Handler.MODISSwath = function(config, model, spec) {
+Worldview.DataDownload.Handler.MLS = function(config, model, spec) {
     
     var MAX_DISTANCE = 270;    
     var self = Worldview.DataDownload.Handler.Base(config, model);
@@ -49,7 +49,7 @@ Worldview.DataDownload.Handler.MODISSwath = function(config, model, spec) {
             ns.Results.TagNRT(productConfig.nrt),
             ns.Results.CollectPreferred(model.prefer),
             ns.Results.PreferredFilter(model.prefer), 
-            ns.Results.GeometryFromECHO(),
+            ns.Results.GeometryFromECHO(false),
             ns.Results.AntiMeridianMulti(MAX_DISTANCE),
             ns.Results.Transform(model.crs),
             ns.Results.ExtentFilter(model.crs, self.extents[model.crs]),
@@ -61,4 +61,4 @@ Worldview.DataDownload.Handler.MODISSwath = function(config, model, spec) {
     
     init();
     return self;
-}
+};

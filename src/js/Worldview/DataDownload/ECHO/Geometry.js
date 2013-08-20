@@ -14,9 +14,10 @@
  */
 Worldview.namespace("DataDownload");
 
-Worldview.DataDownload.ECHO.Geometry = function(result) {
+Worldview.DataDownload.ECHO.Geometry = function(result, allowDensify) {
 
     var MAX_DISTANCE = 5;
+    var allowDensify = ( allowDensify === undefined ) ? true : allowDensify;
     
     var self = {};
     self.polygons = [];
@@ -78,8 +79,12 @@ Worldview.DataDownload.ECHO.Geometry = function(result) {
             ring.push({x: xmax, y: ymax});
             ring.push({x: xmin, y: ymax});
             ring.push({x: xmin, y: ymin});
+            
+            if ( allowDensify ) {
+                ring = densify(ring);
+            }
            
-            self.polygons.push([densify(ring)]);
+            self.polygons.push([ring]);
         });    
     };
     

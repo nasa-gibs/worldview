@@ -53,7 +53,7 @@ Worldview.DataDownload.Handler.MODISSwathMultiDay = function(config, model, spec
             ns.Results.TagNRT(productConfig.nrt),
             ns.Results.CollectPreferred(model.prefer),
             ns.Results.PreferredFilter(model.prefer), 
-            ns.Results.GeometryFromECHO(Worldview.Map.CRS_WGS_84),
+            ns.Results.GeometryFromECHO(),
             ns.Results.Transform(model.crs),
             ns.Results.ExtentFilter(model.crs, self.extents[model.crs]),
             ns.Results.TimeFilter({
