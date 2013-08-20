@@ -30,6 +30,8 @@ Worldview.namespace("Map");
 Worldview.Map.MapSet = function(containerId, mapConfig, component) {
     
     var log = Logging.getLogger("Worldview.Map");
+    var logLoad = Logging.getLogger("Worldview.Map.LoadEvents");
+    
     var self = {};
        
     // Configurations for each available product
@@ -562,18 +564,18 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
         var layer = event.layer;
         
         var onLoadStart = function() {
-            console.log("loadstart");
+            logLoad.debug("Layer load start");
             if ( layersLoading === 0 ) {
-                console.log("maploadstart");
+                logLoad.debug("Map load start");
                 self.map.events.triggerEvent("maploadstart");
             }
             layersLoading++;           
         };
         
         var onLoadEnd = function() {
-            console.log("loadend");
+            logLoad.debug("Layer load end");
             if ( layersLoading === 1 ) {
-                console.log("maploadend");
+                logLoad.debug("Map load end");
                 self.map.events.triggerEvent("maploadend");
             }  
             if ( layersLoading > 0 ) {
