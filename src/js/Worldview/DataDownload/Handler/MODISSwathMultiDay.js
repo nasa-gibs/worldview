@@ -21,6 +21,14 @@ Worldview.DataDownload.Handler.MODISSwathMultiDay = function(config, model, spec
     
     var self = Worldview.DataDownload.Handler.Base(config, model);
         
+    var init = function() {
+        var productConfig = config.products[model.selectedProduct];
+        if ( !productConfig.mbr ) { 
+            self.extents[Worldview.Map.CRS_WGS_84] = 
+                   new OpenLayers.Bounds(-180, -60, 180, 60);
+        }
+    };
+    
     self._submit = function(queryData) {
         var queryOptions = {
             time: model.time,
@@ -60,5 +68,6 @@ Worldview.DataDownload.Handler.MODISSwathMultiDay = function(config, model, spec
         return chain.process(results);
     };
     
+    init();
     return self;
 }

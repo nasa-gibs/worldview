@@ -1,6 +1,6 @@
 {
     "name": "AIRS/Aqua Level 2 Standard physical retrieval (AIRS+AMSU)",
-    "handler": "AquaSwath5",
+    "handler": "MODISSwath",
     "query": {
         "shortName": ["AIRIBQAP", "AIRIBQAP_NRT"],
         "dataCenterId": "GSFCS4PA"
@@ -9,5 +9,6 @@
         "by": "regex",
         "field": "dataset_id",
         "value": "\\(NRT\\)"
-    }
+    },
+    "mbr": "true"
 }

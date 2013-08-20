@@ -41,5 +41,11 @@
     "rendered": "AIRS_RelativeHumidity",
     "startDate": "2012-04-07",
     "type": "wmts",
-    "units": "%"
+    "units": "%",
+    "echo": {
+        "product": "AIRX2RET",
+        "query": {
+            "dayNightFlag": "DAY"
+        }
+    }
 }

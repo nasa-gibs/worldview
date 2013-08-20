@@ -842,6 +842,12 @@
         "AIRS_RelativeHumidity_400hPa_Day": {
             "bins": 100,
             "description": "Aqua / AIRS",
+            "echo": {
+                "product": "AIRX2RET",
+                "query": {
+                    "dayNightFlag": "DAY"
+                }
+            },
             "max": "100",
             "min": "0",
             "name": "Relative Humidity (400 hPa, Day)",
@@ -887,6 +893,12 @@
         "AIRS_RelativeHumidity_400hPa_Night": {
             "bins": 100,
             "description": "Aqua / AIRS",
+            "echo": {
+                "product": "AIRX2RET",
+                "query": {
+                    "dayNightFlag": "NIGHT"
+                }
+            },
             "max": "100",
             "min": "0",
             "name": "Relative Humidity (400 hPa, Night)",
@@ -932,6 +944,12 @@
         "AIRS_RelativeHumidity_500hPa_Day": {
             "bins": 100,
             "description": "Aqua / AIRS",
+            "echo": {
+                "product": "AIRX2RET",
+                "query": {
+                    "dayNightFlag": "DAY"
+                }
+            },
             "max": "100",
             "min": "0",
             "name": "Relative Humidity (500 hPa, Day)",
@@ -977,6 +995,12 @@
         "AIRS_RelativeHumidity_500hPa_Night": {
             "bins": 100,
             "description": "Aqua / AIRS",
+            "echo": {
+                "product": "AIRX2RET",
+                "query": {
+                    "dayNightFlag": "NIGHT"
+                }
+            },
             "max": "100",
             "min": "0",
             "name": "Relative Humidity (500 hPa, Night)",
@@ -1022,6 +1046,12 @@
         "AIRS_RelativeHumidity_600hPa_Day": {
             "bins": 100,
             "description": "Aqua / AIRS",
+            "echo": {
+                "product": "AIRX2RET",
+                "query": {
+                    "dayNightFlag": "DAY"
+                }
+            },
             "max": "100",
             "min": "0",
             "name": "Relative Humidity (600 hPa, Day)",
@@ -1067,6 +1097,12 @@
         "AIRS_RelativeHumidity_600hPa_Night": {
             "bins": 100,
             "description": "Aqua / AIRS",
+            "echo": {
+                "product": "AIRX2RET",
+                "query": {
+                    "dayNightFlag": "NIGHT"
+                }
+            },
             "max": "100",
             "min": "0",
             "name": "Relative Humidity (600 hPa, Night)",
@@ -1112,6 +1148,12 @@
         "AIRS_RelativeHumidity_700hPa_Day": {
             "bins": 100,
             "description": "Aqua / AIRS",
+            "echo": {
+                "product": "AIRX2RET",
+                "query": {
+                    "dayNightFlag": "DAY"
+                }
+            },
             "max": "100",
             "min": "0",
             "name": "Relative Humidity (700 hPa, Day)",
@@ -1157,6 +1199,12 @@
         "AIRS_RelativeHumidity_700hPa_Night": {
             "bins": 100,
             "description": "Aqua / AIRS",
+            "echo": {
+                "product": "AIRX2RET",
+                "query": {
+                    "dayNightFlag": "NIGHT"
+                }
+            },
             "max": "100",
             "min": "0",
             "name": "Relative Humidity (700 hPa, Night)",
@@ -1202,6 +1250,12 @@
         "AIRS_RelativeHumidity_850hPa_Day": {
             "bins": 100,
             "description": "Aqua / AIRS",
+            "echo": {
+                "product": "AIRX2RET",
+                "query": {
+                    "dayNightFlag": "DAY"
+                }
+            },
             "max": "100",
             "min": "0",
             "name": "Relative Humidity (850 hPa, Day)",
@@ -1247,6 +1301,12 @@
         "AIRS_RelativeHumidity_850hPa_Night": {
             "bins": 100,
             "description": "Aqua / AIRS",
+            "echo": {
+                "product": "AIRX2RET",
+                "query": {
+                    "dayNightFlag": "NIGHT"
+                }
+            },
             "max": "100",
             "min": "0",
             "name": "Relative Humidity (850 hPa, Night)",
@@ -1292,6 +1352,12 @@
         "AIRS_Temperature_400hPa_Day": {
             "bins": 251,
             "description": "Aqua / AIRS",
+            "echo": {
+                "product": "AIRX2RET",
+                "query": {
+                    "dayNightFlag": "DAY"
+                }
+            },
             "max": "270",
             "min": "240",
             "name": "Temperature (400 hPa, Day)",
@@ -1337,6 +1403,12 @@
         "AIRS_Temperature_400hPa_Night": {
             "bins": 251,
             "description": "Aqua / AIRS",
+            "echo": {
+                "product": "AIRX2RET",
+                "query": {
+                    "dayNightFlag": "NIGHT"
+                }
+            },
             "max": "270",
             "min": "240",
             "name": "Temperature (400 hPa, Night)",
@@ -1382,6 +1454,12 @@
         "AIRS_Temperature_500hPa_Day": {
             "bins": 251,
             "description": "Aqua / AIRS",
+            "echo": {
+                "product": "AIRX2RET",
+                "query": {
+                    "dayNightFlag": "DAY"
+                }
+            },
             "max": "282",
             "min": "252",
             "name": "Temperature (500 hPa, Day)",
@@ -1427,6 +1505,12 @@
         "AIRS_Temperature_500hPa_Night": {
             "bins": 251,
             "description": "Aqua / AIRS",
+            "echo": {
+                "product": "AIRX2RET",
+                "query": {
+                    "dayNightFlag": "NIGHT"
+                }
+            },
             "max": "282",
             "min": "252",
             "name": "Temperature (500 hPa, Night)",
@@ -1472,6 +1556,12 @@
         "AIRS_Temperature_600hPa_Day": {
             "bins": 251,
             "description": "Aqua / AIRS",
+            "echo": {
+                "product": "AIRX2RET",
+                "query": {
+                    "dayNightFlag": "DAY"
+                }
+            },
             "max": "290",
             "min": "260",
             "name": "Temperature (600 hPa, Day)",
@@ -1517,6 +1607,12 @@
         "AIRS_Temperature_600hPa_Night": {
             "bins": 251,
             "description": "Aqua / AIRS",
+            "echo": {
+                "product": "AIRX2RET",
+                "query": {
+                    "dayNightFlag": "NIGHT"
+                }
+            },
             "max": "290",
             "min": "260",
             "name": "Temperature (600 hPa, Night)",
@@ -1562,6 +1658,12 @@
         "AIRS_Temperature_700hPa_Day": {
             "bins": 251,
             "description": "Aqua / AIRS",
+            "echo": {
+                "product": "AIRX2RET",
+                "query": {
+                    "dayNightFlag": "DAY"
+                }
+            },
             "max": "300",
             "min": "270",
             "name": "Temperature (700 hPa, Day)",
@@ -1607,6 +1709,12 @@
         "AIRS_Temperature_700hPa_Night": {
             "bins": 251,
             "description": "Aqua / AIRS",
+            "echo": {
+                "product": "AIRX2RET",
+                "query": {
+                    "dayNightFlag": "NIGHT"
+                }
+            },
             "max": "270",
             "min": "240",
             "name": "Temperature (700 hPa, Night)",
@@ -1652,6 +1760,12 @@
         "AIRS_Temperature_850hPa_Day": {
             "bins": 251,
             "description": "Aqua / AIRS",
+            "echo": {
+                "product": "AIRX2RET",
+                "query": {
+                    "dayNightFlag": "DAY"
+                }
+            },
             "max": "270",
             "min": "240",
             "name": "Temperature (850 hPa, Day)",
@@ -1697,6 +1811,12 @@
         "AIRS_Temperature_850hPa_Night": {
             "bins": 251,
             "description": "Aqua / AIRS",
+            "echo": {
+                "product": "AIRX2RET",
+                "query": {
+                    "dayNightFlag": "NIGHT"
+                }
+            },
             "max": "270",
             "min": "240",
             "name": "Temperature (850 hPa, Night)",
@@ -59916,7 +60036,8 @@
     },
     "products": {
         "AIRIBQAP": {
-            "handler": "AquaSwath5",
+            "handler": "MODISSwath",
+            "mbr": "true",
             "name": "AIRS/Aqua Level 2 Standard physical retrieval (AIRS+AMSU)",
             "nrt": {
                 "by": "regex",
@@ -59932,7 +60053,8 @@
             }
         },
         "AIRIBRAD": {
-            "handler": "AquaSwath5",
+            "handler": "MODISSwath",
+            "mbr": "true",
             "name": "AIRS/Aqua Level 1B Infrared (IR) geolocated and calibrated radiances",
             "nrt": {
                 "by": "regex",
@@ -59948,7 +60070,8 @@
             }
         },
         "AIRX2RET": {
-            "handler": "AquaSwath5",
+            "handler": "MODISSwath",
+            "mbr": "true",
             "name": "AIRS/Aqua Level 2 Standard physical retrieval (AIRS+AMSU)",
             "nrt": {
                 "by": "regex",
@@ -59964,7 +60087,8 @@
             }
         },
         "AIRX2SUP": {
-            "handler": "AquaSwath5",
+            "handler": "MODISSwath",
+            "mbr": "true",
             "name": "AIRS/Aqua Level 2 Support retrieval (AIRS+AMSU)",
             "nrt": {
                 "by": "regex",
@@ -60537,12 +60661,6 @@
             ],
             "name": "geographic",
             "numZoomLevels": 9,
-            "queryExtent": [
-                -180,
-                -60,
-                180,
-                60
-            ],
             "resolutions": [
                 0.5625,
                 0.28125,

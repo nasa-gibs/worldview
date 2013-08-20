@@ -29,6 +29,5 @@
         0,
         0
     ],
-    "startZoom": 1,
-    "queryExtent": [-180, -60, 180, 60]
+    "startZoom": 1
 }
