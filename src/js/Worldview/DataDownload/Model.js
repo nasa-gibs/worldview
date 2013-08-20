@@ -94,18 +94,15 @@ Worldview.DataDownload.Model = function(config) {
      * 
      * @method activate
      */    
-    self.activate = function() {
+    self.activate = function(layerName) {
         if ( !self.active ) {
             self.active = true;
             self.events.trigger(self.EVENT_ACTIVATE);
-            if ( !self.selectedLayer ) {
+            if ( layerName ) {
+                self.selectLayer(layerName);
+            } else if ( !self.selectedLayer ) {
                 self.selectLayer(findAvailableLayer());
-            } else {
-                // FIXME: Hack, Force a requery.
-                var layer = self.selectedLayer;
-                self.selectedLayer = null;
-                self.selectLayer(layer);
-            }
+            } 
         }
     };
     
@@ -137,7 +134,7 @@ Worldview.DataDownload.Model = function(config) {
     };
     
     self.selectLayer = function(layerName) {
-        if ( self.selectedLayer === layerName ) {
+        if ( !self.active || self.selectedLayer === layerName ) {
             return;
         }
         if ( layerName && $.inArray(layerName, state.layers) < 0 ) {
@@ -220,7 +217,7 @@ Worldview.DataDownload.Model = function(config) {
                 foundSelected = true;
             }    
         });  
-        if ( self.active && !foundSelected ) {
+        if ( !foundSelected ) {
             self.selectLayer(null);
         }
         self.events.trigger(self.EVENT_LAYER_UPDATE);
@@ -239,18 +236,21 @@ Worldview.DataDownload.Model = function(config) {
     };
     
     var findAvailableLayer = function() {
+        var foundLayer = null;
+        
         // Find the top most layer that has a product entry in ECHO
         for ( var i = state.layers.length - 1; i >= 0; i-- ) {
             var layerName = state.layers[i];
             if ( config.layers[layerName].echo ) {
-                return layerName;
+                foundLayer = layerName;
             }
         }
         
         // If no products found, select the bottom most layer
-        if ( state.layers[0] ) {
-            return state.layers[0];
+        if ( !foundLayer && state.layers[0] ) {
+            foundLayer = state.layers[0];
         }
+        return foundLayer;
     }
     
     init();

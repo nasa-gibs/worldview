@@ -35,7 +35,7 @@ Worldview.DataDownload.Results.GeometryFromECHO = function GeometryFromECHO() {
             granule.geometry[Worldview.Map.CRS_WGS_84] = geom;
             granule.centroid[Worldview.Map.CRS_WGS_84] = centroid;   
         }        
-        return result;    
+        return granule;    
     };
     
     return self;

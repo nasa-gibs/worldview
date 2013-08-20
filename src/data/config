@@ -2685,6 +2685,9 @@
         "MODIS_Aqua_Brightness_Temp_Band31_Day": {
             "bins": 249,
             "description": "Aqua / MODIS",
+            "echo": {
+                "product": "MYD09"
+            },
             "max": "340",
             "min": "190",
             "name": "Brightness Temperature (Band 31-Day)",
@@ -3024,6 +3027,9 @@
         "MODIS_Aqua_Brightness_Temp_Band31_Night": {
             "bins": 249,
             "description": "Aqua / MODIS",
+            "echo": {
+                "product": "MYD09"
+            },
             "max": "340",
             "min": "190",
             "name": "Brightness Temperature (Band 31-Night)",
@@ -3580,6 +3586,9 @@
         },
         "MODIS_Aqua_CorrectedReflectance_Bands721": {
             "description": "Aqua / MODIS",
+            "echo": {
+                "product": "MYD09"
+            },
             "name": "Corrected Reflectance (7-2-1)",
             "product": "daily",
             "projections": {
@@ -3670,6 +3679,9 @@
         },
         "MODIS_Aqua_CorrectedReflectance_TrueColor": {
             "description": "Aqua / MODIS",
+            "echo": {
+                "product": "MYD09"
+            },
             "name": "Corrected Reflectance (True Color)",
             "product": "daily",
             "projections": {
@@ -4551,6 +4563,9 @@
         "MODIS_Terra_Brightness_Temp_Band31_Day": {
             "bins": 249,
             "description": "Terra / MODIS",
+            "echo": {
+                "product": "MOD09"
+            },
             "max": "340",
             "min": "190",
             "name": "Brightness Temperature (Band 31-Day)",
@@ -4890,6 +4905,9 @@
         "MODIS_Terra_Brightness_Temp_Band31_Night": {
             "bins": 249,
             "description": "Terra / MODIS",
+            "echo": {
+                "product": "MOD09"
+            },
             "max": "340",
             "min": "190",
             "name": "Brightness Temperature (Band 31-Night)",
@@ -5446,6 +5464,9 @@
         },
         "MODIS_Terra_CorrectedReflectance_Bands367": {
             "description": "Terra / MODIS",
+            "echo": {
+                "product": "MOD09"
+            },
             "name": "Corrected Reflectance (3-6-7)",
             "product": "daily",
             "projections": {
@@ -5536,6 +5557,9 @@
         },
         "MODIS_Terra_CorrectedReflectance_Bands721": {
             "description": "Terra / MODIS",
+            "echo": {
+                "product": "MOD09"
+            },
             "name": "Corrected Reflectance (7-2-1)",
             "product": "daily",
             "projections": {
@@ -5626,6 +5650,9 @@
         },
         "MODIS_Terra_CorrectedReflectance_TrueColor": {
             "description": "Terra / MODIS",
+            "echo": {
+                "product": "MOD09"
+            },
             "name": "Corrected Reflectance (True Color)",
             "product": "daily",
             "projections": {
