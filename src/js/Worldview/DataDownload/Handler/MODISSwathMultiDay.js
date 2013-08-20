@@ -22,11 +22,8 @@ Worldview.DataDownload.Handler.MODISSwathMultiDay = function(config, model, spec
     var self = Worldview.DataDownload.Handler.Base(config, model);
         
     var init = function() {
-        var productConfig = config.products[model.selectedProduct];
-        if ( !productConfig.mbr ) { 
-            self.extents[Worldview.Map.CRS_WGS_84] = 
-                   new OpenLayers.Bounds(-180, -60, 180, 60);
-        }
+        self.extents[Worldview.Map.CRS_WGS_84] = 
+               Worldview.Map.CRS_WGS_84_QUERY_EXTENT;
     };
     
     self._submit = function(queryData) {
@@ -45,6 +42,9 @@ Worldview.DataDownload.Handler.MODISSwathMultiDay = function(config, model, spec
             meta: {},
             granules: data
         };
+        if ( model.crs === Worldview.Map.CRS_WGS_84 ) {
+            results.meta.queryMask = Worldview.Map.CRS_WGS_84_QUERY_MASK;
+        }
         
         var ns = Worldview.DataDownload;
         var productConfig = config.products[model.selectedProduct];

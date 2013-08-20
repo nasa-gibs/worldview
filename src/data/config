@@ -60037,7 +60037,6 @@
     "products": {
         "AIRIBQAP": {
             "handler": "MODISSwath",
-            "mbr": "true",
             "name": "AIRS/Aqua Level 2 Standard physical retrieval (AIRS+AMSU)",
             "nrt": {
                 "by": "regex",
@@ -60054,7 +60053,6 @@
         },
         "AIRIBRAD": {
             "handler": "MODISSwath",
-            "mbr": "true",
             "name": "AIRS/Aqua Level 1B Infrared (IR) geolocated and calibrated radiances",
             "nrt": {
                 "by": "regex",
@@ -60071,7 +60069,6 @@
         },
         "AIRX2RET": {
             "handler": "MODISSwath",
-            "mbr": "true",
             "name": "AIRS/Aqua Level 2 Standard physical retrieval (AIRS+AMSU)",
             "nrt": {
                 "by": "regex",
@@ -60088,7 +60085,6 @@
         },
         "AIRX2SUP": {
             "handler": "MODISSwath",
-            "mbr": "true",
             "name": "AIRS/Aqua Level 2 Support retrieval (AIRS+AMSU)",
             "nrt": {
                 "by": "regex",

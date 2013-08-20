@@ -30,6 +30,14 @@ $(function(ns) {
     
     ns.CRS_WGS_84 = "EPSG:4326";
     
+    ns.CRS_WGS_84_QUERY_EXTENT = new OpenLayers.Bounds(-180, -60, 180, 60);
+        
+    ns.CRS_WGS_84_QUERY_MASK = 
+        new OpenLayers.Geometry.MultiPolygon([
+            new OpenLayers.Bounds(-180, -90, 180, -60).toGeometry(),
+            new OpenLayers.Bounds(-180, 60, 180, 90).toGeometry()
+        ]);
+        
     /**
      * An object that contains OpenLayers.Control.MousePosition objects
      * that update the current latitude/longitude values on the map as the

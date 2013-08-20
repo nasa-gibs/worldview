@@ -114,6 +114,7 @@
         <file name="js/Worldview/DataDownload/Layers/Grid.js"/>
         <file name="js/Worldview/DataDownload/Layers/Hover.js"/>
         <file name="js/Worldview/DataDownload/Layers/Swath.js"/>
+        <file name="js/Worldview/DataDownload/Layers/QueryMask.js"/>
  
         <file name="js/Worldview/DataDownload/Results/AntiMeridianMulti.js"/>               
         <file name="js/Worldview/DataDownload/Results/Chain.js"/>
