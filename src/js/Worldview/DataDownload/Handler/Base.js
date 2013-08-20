@@ -42,12 +42,7 @@ Worldview.DataDownload.Handler.Base = function(config, model) {
         
         self.extents = {};
         $.each(config.projections, function(key, projection) {
-            if ( projection.queryExtent ) {
-                self.extents[projection.crs] = 
-                        new OpenLayers.Bounds(projection.queryExtent);
-            } else {
-                self.extents[projection.crs] = projection.maxExtent;
-            }
+            self.extents[projection.crs] = projection.maxExtent;
         });
     };
     
