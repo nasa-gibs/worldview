@@ -14,25 +14,15 @@
  */
 Worldview.namespace("DataDownload.Handler");
 
-Worldview.DataDownload.Handler.MODISSwath5 = function(config, model, spec) {
+Worldview.DataDownload.Handler.MODISSwathNight = function(config, model, spec) {
     
-    var startTimeDelta = spec.startTimeDelta || 0;
-    var endTimeDelta = spec.endTimeDelta || 0;
-    
-    var self = Worldview.DataDownload.Handler.Base(config);
-        
-    self._submit = function() {
-        productParameters = config.products[model.selectedProduct].query;
-        layerParameters = {};
-        if ( config.layers[model.selectedLayer].echo.query ) {
-            layerParameters = config.layers[model.selectedLayer].echo.query        
-        }
-        data = $.extend(true, {}, productParameters, layerParameters)
+    var MAX_DISTANCE = 270;    
+    var self = Worldview.DataDownload.Handler.Base(config, model);
+      
+    self._submit = function(queryData) {
         var queryOptions = {
             time: model.time,
-            startTimeDelta: startTimeDelta,
-            endTimeDelta: endTimeDelta,
-            data: data
+            data: queryData
         };
         
         return self.echo.submit(queryOptions);
@@ -52,14 +42,9 @@ Worldview.DataDownload.Handler.MODISSwath5 = function(config, model, spec) {
             ns.Results.CollectPreferred(model.prefer),
             ns.Results.PreferredFilter(model.prefer), 
             ns.Results.GeometryFromECHO(Worldview.Map.CRS_WGS_84),
+            ns.Results.AntiMeridianMulti(MAX_DISTANCE),
             ns.Results.Transform(model.crs),
             ns.Results.ExtentFilter(model.crs, self.extents[model.crs]),
-            ns.Results.TimeFilter({
-                time: model.time,
-                eastZone: spec.eastZone,
-                westZone: spec.westZone,
-                maxDistance: spec.maxDistance
-            }),
             ns.Results.TimeLabel(model.time),
             ns.Results.ConnectSwaths(model.crs)
         ];

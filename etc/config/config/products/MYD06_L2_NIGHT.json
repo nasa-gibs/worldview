@@ -1,6 +1,6 @@
 {
     "name": "MODIS/Aqua Clouds 5-Min L2 Swath 1km and 5km",
-    "handler": "AquaSwath5",
+    "handler": "MODISSwathNight",
     "query": {
         "shortName": "MYD06_L2",
         "dataCenterId": ["LAADS", "LANCEMODIS"]

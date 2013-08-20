@@ -1,8 +1,8 @@
 {
-    "name": "MODIS/Terra Aerosol 5-Min L2 Swath 10km",
-    "handler": "TerraSwathMultiDay",
+    "name": "MODIS/Aqua Total Precipitable Water Vapor 5-Min L2 Swath 1km and 5km",
+    "handler": "MODISSwathNight",
     "query": {
-        "shortName": "MOD04_L2",
+        "shortName": "MYD05_L2",
         "dataCenterId": ["LAADS", "LANCEMODIS"]
     },
     "nrt": {

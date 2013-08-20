@@ -14,7 +14,7 @@
  */
 Worldview.namespace("DataDownload.Handler");
 
-Worldview.DataDownload.Handler.Base = function(config) {
+Worldview.DataDownload.Handler.Base = function(config, model) {
 
     var self = {};
     
@@ -52,7 +52,13 @@ Worldview.DataDownload.Handler.Base = function(config) {
     };
     
     self.submit = function() {
-        var promise = self._submit();
+        var productConfig = config.products[model.selectedProduct].query;
+        var layerConfig = {};
+        if ( config.layers[model.selectedLayer].echo.query ) {
+            layerConfig = config.layers[model.selectedLayer].echo.query;
+        }
+        var queryData = $.extend(true, {}, productConfig, layerConfig);
+        var promise = self._submit(queryData);
 
         promise.done(function(data) {
             try {

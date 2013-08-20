@@ -43,7 +43,7 @@
     "type": "wmts",
     "units": "K",
     "echo": {
-        "product": "MYD06_L2",
+        "product": "MYD06_L2_NIGHT",
         "query": {
             "dayNightFlag": "NIGHT"
         }

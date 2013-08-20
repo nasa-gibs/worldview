@@ -1,6 +1,6 @@
 {
     "name": "MODIS/Aqua Sea Ice Extent 5-Min L2 Swath 1km",
-    "handler": "AquaSwath5",
+    "handler": "AquaSwathMultiDay",
     "query": {
         "shortName": "MYD29",
         "dataCenterId": ["NSIDC_ECS", "LANCEMODIS"]

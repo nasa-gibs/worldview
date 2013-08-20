@@ -1,7 +1,6 @@
 {
     "name": "MODIS/Terra Surface Reflectance Daily",
     "handler": "MODISMix",
-    "swathHandler": "TerraSwath5",
     "query": {
         "science": {
             "shortName": "MOD09GQ",
@@ -13,8 +12,12 @@
         }
     },
     "nrt": {
+        "handler": "TerraSwathMultiDay",
         "by": "value",
         "field": "data_center",
         "value": "LANCEMODIS"
-    }
+    },
+    "science": {
+        "handler": "MODISGrid"
+    } 
 }

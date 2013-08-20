@@ -43,7 +43,7 @@
     "type": "wmts",
     "units": "hPa",
     "echo": {
-        "product": "MYD06_L2",
+        "product": "MYD06_L2_DAY",
         "query": {
             "dayNightFlag": "DAY"
         }

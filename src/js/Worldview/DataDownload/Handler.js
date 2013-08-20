@@ -18,13 +18,15 @@ Worldview.DataDownload.Handler = function() {
         
     var ns = {};
         
+    // FIXME: Make these static
     ns.getByName = function(name) {
         var map = {
-            "AquaSwath5":   Worldview.DataDownload.Handler.AquaSwath5,
-            "MODISGrid":    Worldview.DataDownload.Handler.MODISGrid,
-            "MODISMix":     Worldview.DataDownload.Handler.MODISMix,
-            "TerraSwath5":  Worldview.DataDownload.Handler.TerraSwath5,
-            "Aura":         Worldview.DataDownload.Handler.Aura        
+            "AquaSwathMultiDay":    Worldview.DataDownload.Handler.AquaSwathMultiDay,
+            "MODISGrid":            Worldview.DataDownload.Handler.MODISGrid,
+            "MODISMix":             Worldview.DataDownload.Handler.MODISMix,
+            "MODISSwathNight":      Worldview.DataDownload.Handler.MODISSwathNight,
+            "TerraSwathMultiDay":   Worldview.DataDownload.Handler.TerraSwathMultiDay,
+            "Aura":                 Worldview.DataDownload.Handler.Aura        
         };
         var handler = map[name];
         if ( !handler ) {

@@ -1,11 +1,10 @@
 {
     "name": "MODIS/Aqua Surface Reflectance Daily",
     "handler": "MODISMix",
-    "swathHandler": "AquaSwath5",
     "query": {
         "science": {
             "shortName": "MYD09GQ",
-            "dataCenterId": "LPDAAC_ECS"
+            "dataCenterId": "LPDAAC_ECS"            
         },
         "nrt": {
             "shortName": "MYD09",
@@ -13,8 +12,12 @@
         }
     },
     "nrt": {
+        "handler": "AquaSwathMultiDay",
         "by": "value",
         "field": "data_center",
         "value": "LANCEMODIS"
+    }, 
+    "science": {
+        "handler": "MODISGrid"
     }
 }

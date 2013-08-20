@@ -44,7 +44,7 @@
     "type": "wmts",
     "units": "K",
     "echo": {
-        "product": "MYD11_L2",
+        "product": "MYD11_L2_NIGHT",
         "query": {
             "dayNightFlag": "NIGHT"
         }

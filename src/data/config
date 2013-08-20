@@ -3244,7 +3244,7 @@
             "bins": 16,
             "description": "Aqua / MODIS",
             "echo": {
-                "product": "MYD06_L2",
+                "product": "MYD06_L2_DAY",
                 "query": {
                     "dayNightFlag": "DAY"
                 }
@@ -3298,7 +3298,7 @@
             "bins": 16,
             "description": "Aqua / MODIS",
             "echo": {
-                "product": "MYD06_L2",
+                "product": "MYD06_L2_NIGHT",
                 "query": {
                     "dayNightFlag": "NIGHT"
                 }
@@ -3352,7 +3352,7 @@
             "bins": 16,
             "description": "Aqua / MODIS",
             "echo": {
-                "product": "MYD06_L2",
+                "product": "MYD06_L2_DAY",
                 "query": {
                     "dayNightFlag": "DAY"
                 }
@@ -3407,7 +3407,7 @@
             "bins": 16,
             "description": "Aqua / MODIS",
             "echo": {
-                "product": "MYD06_L2",
+                "product": "MYD06_L2_NIGHT",
                 "query": {
                     "dayNightFlag": "NIGHT"
                 }
@@ -3685,7 +3685,7 @@
             "bins": 251,
             "description": "Aqua / MODIS",
             "echo": {
-                "product": "MYD11_L2",
+                "product": "MYD11_L2_DAY",
                 "query": {
                     "dayNightFlag": "DAY"
                 }
@@ -3744,7 +3744,7 @@
             "bins": 251,
             "description": "Aqua / MODIS",
             "echo": {
-                "product": "MYD11_L2",
+                "product": "MYD11_L2_NIGHT",
                 "query": {
                     "dayNightFlag": "NIGHT"
                 }
@@ -4144,7 +4144,7 @@
             "bins": 127,
             "description": "Aqua / MODIS",
             "echo": {
-                "product": "MYD05_L2",
+                "product": "MYD05_L2_DAY",
                 "query": {
                     "dayNightFlag": "DAY"
                 }
@@ -4198,7 +4198,7 @@
             "bins": 127,
             "description": "Aqua / MODIS",
             "echo": {
-                "product": "MYD05_L2",
+                "product": "MYD05_L2_NIGHT",
                 "query": {
                     "dayNightFlag": "NIGHT"
                 }
@@ -5109,6 +5109,12 @@
         "MODIS_Terra_Cloud_Top_Pressure_Day": {
             "bins": 16,
             "description": "Terra / MODIS",
+            "echo": {
+                "product": "MOD06_L2_DAY",
+                "query": {
+                    "dayNightFlag": "DAY"
+                }
+            },
             "max": "950",
             "min": "250",
             "name": "Cloud Top Pressure (Day)",
@@ -5157,6 +5163,12 @@
         "MODIS_Terra_Cloud_Top_Pressure_Night": {
             "bins": 16,
             "description": "Terra / MODIS",
+            "echo": {
+                "product": "MOD06_L2_NIGHT",
+                "query": {
+                    "dayNightFlag": "NIGHT"
+                }
+            },
             "max": "950",
             "min": "250",
             "name": "Cloud Top Pressure (Night)",
@@ -5205,6 +5217,12 @@
         "MODIS_Terra_Cloud_Top_Temp_Day": {
             "bins": 16,
             "description": "Terra / MODIS",
+            "echo": {
+                "product": "MOD06_L2_DAY",
+                "query": {
+                    "dayNightFlag": "DAY"
+                }
+            },
             "max": "290",
             "min": "220",
             "name": "Cloud Top Temperature (Day)",
@@ -5254,6 +5272,12 @@
         "MODIS_Terra_Cloud_Top_Temp_Night": {
             "bins": 16,
             "description": "Terra / MODIS",
+            "echo": {
+                "product": "MOD06_L2_NIGHT",
+                "query": {
+                    "dayNightFlag": "NIGHT"
+                }
+            },
             "max": "290",
             "min": "220",
             "name": "Cloud Top Temperature (Night)",
@@ -5616,6 +5640,12 @@
         "MODIS_Terra_Land_Surface_Temp_Day": {
             "bins": 251,
             "description": "Terra / MODIS",
+            "echo": {
+                "product": "MOD11_L2_DAY",
+                "query": {
+                    "dayNightFlag": "DAY"
+                }
+            },
             "max": "340",
             "min": "240",
             "name": "Land Surface Temperature (Day)",
@@ -5666,6 +5696,12 @@
         "MODIS_Terra_Land_Surface_Temp_Night": {
             "bins": 251,
             "description": "Terra / MODIS",
+            "echo": {
+                "product": "MOD11_L2_NIGHT",
+                "query": {
+                    "dayNightFlag": "NIGHT"
+                }
+            },
             "max": "340",
             "min": "240",
             "name": "Land Surface Temperature (Night)",
@@ -5810,6 +5846,12 @@
         "MODIS_Terra_Snow_Cover": {
             "bins": 9,
             "description": "Terra / MODIS",
+            "echo": {
+                "product": "MOD10_L2",
+                "query": {
+                    "dayNightFlag": "DAY"
+                }
+            },
             "max": "100",
             "min": "1",
             "name": "Snow Cover",
@@ -6054,6 +6096,12 @@
         "MODIS_Terra_Water_Vapor_5km_Day": {
             "bins": 127,
             "description": "Terra / MODIS",
+            "echo": {
+                "product": "MOD05_L2_DAY",
+                "query": {
+                    "dayNightFlag": "DAY"
+                }
+            },
             "max": "9.6411",
             "min": "0.1",
             "name": "Water Vapor (Day)",
@@ -6102,6 +6150,12 @@
         "MODIS_Terra_Water_Vapor_5km_Night": {
             "bins": 127,
             "description": "Terra / MODIS",
+            "echo": {
+                "product": "MOD05_L2_NIGHT",
+                "query": {
+                    "dayNightFlag": "NIGHT"
+                }
+            },
             "max": "9.6411",
             "min": "0.1",
             "name": "Water Vapor (Night)",
@@ -60038,7 +60092,7 @@
             }
         },
         "MOD04_L2": {
-            "handler": "TerraSwath5",
+            "handler": "TerraSwathMultiDay",
             "name": "MODIS/Terra Aerosol 5-Min L2 Swath 10km",
             "nrt": {
                 "by": "value",
@@ -60053,12 +60107,77 @@
                 "shortName": "MOD04_L2"
             }
         },
+        "MOD05_L2_DAY": {
+            "handler": "TerraSwathMultiDay",
+            "name": "MODIS/Terra Total Precipitable Water Vapor 5-Min L2 Swath 1km and 5km",
+            "nrt": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
+            },
+            "query": {
+                "dataCenterId": [
+                    "LAADS",
+                    "LANCEMODIS"
+                ],
+                "shortName": "MOD05_L2"
+            }
+        },
+        "MOD05_L2_NIGHT": {
+            "handler": "MODISSwathNight",
+            "name": "MODIS/Terra Total Precipitable Water Vapor 5-Min L2 Swath 1km and 5km",
+            "nrt": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
+            },
+            "query": {
+                "dataCenterId": [
+                    "LAADS",
+                    "LANCEMODIS"
+                ],
+                "shortName": "MOD05_L2"
+            }
+        },
+        "MOD06_L2_DAY": {
+            "handler": "TerraSwathMultiDay",
+            "name": "MODIS/Terra Clouds 5-Min L2 Swath 1km and 5km",
+            "nrt": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
+            },
+            "query": {
+                "dataCenterId": [
+                    "LAADS",
+                    "LANCEMODIS"
+                ],
+                "shortName": "MOD06_L2"
+            }
+        },
+        "MOD06_L2_NIGHT": {
+            "handler": "MODISSwathNight",
+            "name": "MODIS/Terra Clouds 5-Min L2 Swath 1km and 5km",
+            "nrt": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
+            },
+            "query": {
+                "dataCenterId": [
+                    "LAADS",
+                    "LANCEMODIS"
+                ],
+                "shortName": "MOD06_L2"
+            }
+        },
         "MOD09": {
             "handler": "MODISMix",
             "name": "MODIS/Terra Surface Reflectance Daily",
             "nrt": {
                 "by": "value",
                 "field": "data_center",
+                "handler": "TerraSwathMultiDay",
                 "value": "LANCEMODIS"
             },
             "query": {
@@ -60071,7 +60190,57 @@
                     "shortName": "MOD09GQ"
                 }
             },
-            "swathHandler": "TerraSwath5"
+            "science": {
+                "handler": "MODISGrid"
+            }
+        },
+        "MOD10_L2": {
+            "handler": "TerraSwathMultiDay",
+            "name": "MODIS/Terra Snow Cover 5-Min L2 Swath 500m",
+            "nrt": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
+            },
+            "query": {
+                "dataCenterId": [
+                    "NSIDC_ECS",
+                    "LANCEMODIS"
+                ],
+                "shortName": "MOD10_L2"
+            }
+        },
+        "MOD11_L2_DAY": {
+            "handler": "TerraSwathMultiDay",
+            "name": "MODIS/Terra Land Surface Temperature/Emissivity 5-Min L2 Swath 1km",
+            "nrt": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
+            },
+            "query": {
+                "dataCenterId": [
+                    "LPDAAC_ECS",
+                    "LANCEMODIS"
+                ],
+                "shortName": "MOD11_L2"
+            }
+        },
+        "MOD11_L2_NIGHT": {
+            "handler": "MODISSwathNight",
+            "name": "MODIS/Terra Land Surface Temperature/Emissivity 5-Min L2 Swath 1km",
+            "nrt": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
+            },
+            "query": {
+                "dataCenterId": [
+                    "LPDAAC_ECS",
+                    "LANCEMODIS"
+                ],
+                "shortName": "MOD11_L2"
+            }
         },
         "MOD14": {
             "handler": "TerraSwath5",
@@ -60090,7 +60259,7 @@
             }
         },
         "MOD29": {
-            "handler": "TerraSwath5",
+            "handler": "TerraSwathMultiDay",
             "name": "MODIS/Terra Sea Ice Extent 5-Min L2 Swath 1km",
             "nrt": {
                 "by": "value",
@@ -60106,7 +60275,7 @@
             }
         },
         "MYD04_L2": {
-            "handler": "AquaSwath5",
+            "handler": "AquaSwathMultiDay",
             "name": "MODIS/Aqua Aerosol 5-Min L2 Swath 10km",
             "nrt": {
                 "by": "value",
@@ -60121,8 +60290,8 @@
                 "shortName": "MYD04_L2"
             }
         },
-        "MYD05_L2": {
-            "handler": "AquaSwath5",
+        "MYD05_L2_DAY": {
+            "handler": "AquaSwathMultiDay",
             "name": "MODIS/Aqua Total Precipitable Water Vapor 5-Min L2 Swath 1km and 5km",
             "nrt": {
                 "by": "value",
@@ -60137,8 +60306,40 @@
                 "shortName": "MYD05_L2"
             }
         },
-        "MYD06_L2": {
-            "handler": "AquaSwath5",
+        "MYD05_L2_NIGHT": {
+            "handler": "MODISSwathNight",
+            "name": "MODIS/Aqua Total Precipitable Water Vapor 5-Min L2 Swath 1km and 5km",
+            "nrt": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
+            },
+            "query": {
+                "dataCenterId": [
+                    "LAADS",
+                    "LANCEMODIS"
+                ],
+                "shortName": "MYD05_L2"
+            }
+        },
+        "MYD06_L2_DAY": {
+            "handler": "AquaSwathMultiDay",
+            "name": "MODIS/Aqua Clouds 5-Min L2 Swath 1km and 5km",
+            "nrt": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
+            },
+            "query": {
+                "dataCenterId": [
+                    "LAADS",
+                    "LANCEMODIS"
+                ],
+                "shortName": "MYD06_L2"
+            }
+        },
+        "MYD06_L2_NIGHT": {
+            "handler": "MODISSwathNight",
             "name": "MODIS/Aqua Clouds 5-Min L2 Swath 1km and 5km",
             "nrt": {
                 "by": "value",
@@ -60159,6 +60360,7 @@
             "nrt": {
                 "by": "value",
                 "field": "data_center",
+                "handler": "AquaSwathMultiDay",
                 "value": "LANCEMODIS"
             },
             "query": {
@@ -60171,10 +60373,12 @@
                     "shortName": "MYD09GQ"
                 }
             },
-            "swathHandler": "AquaSwath5"
+            "science": {
+                "handler": "MODISGrid"
+            }
         },
         "MYD10_L2": {
-            "handler": "AquaSwath5",
+            "handler": "AquaSwathMultiDay",
             "name": "MODIS/Aqua Snow Cover 5-Min L2 Swath 500m",
             "nrt": {
                 "by": "value",
@@ -60189,8 +60393,24 @@
                 "shortName": "MYD10_L2"
             }
         },
-        "MYD11_L2": {
-            "handler": "AquaSwath5",
+        "MYD11_L2_DAY": {
+            "handler": "AquaSwathMultiDay",
+            "name": "MODIS/Aqua Land Surface Temperature/Emissivity 5-Min L2 Swath 1km",
+            "nrt": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
+            },
+            "query": {
+                "dataCenterId": [
+                    "LPDAAC_ECS",
+                    "LANCEMODIS"
+                ],
+                "shortName": "MYD11_L2"
+            }
+        },
+        "MYD11_L2_NIGHT": {
+            "handler": "MODISSwathNight",
             "name": "MODIS/Aqua Land Surface Temperature/Emissivity 5-Min L2 Swath 1km",
             "nrt": {
                 "by": "value",
@@ -60222,7 +60442,7 @@
             }
         },
         "MYD29": {
-            "handler": "AquaSwath5",
+            "handler": "AquaSwathMultiDay",
             "name": "MODIS/Aqua Sea Ice Extent 5-Min L2 Swath 1km",
             "nrt": {
                 "by": "value",

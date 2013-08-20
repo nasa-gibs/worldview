@@ -14,7 +14,9 @@
  */
 Worldview.namespace("DataDownload.Handler");
 
-Worldview.DataDownload.Handler.TerraSwath5 = function(config, model) {
+Worldview.DataDownload.Handler.TerraSwathMultiDay = function(config, model) {
+    
+    var ns = Worldview.DataDownload;
     
     var spec = {
         startTimeDelta: -180,
@@ -24,7 +26,7 @@ Worldview.DataDownload.Handler.TerraSwath5 = function(config, model) {
         westZone: 1260
     };
     
-    var self = Worldview.DataDownload.Handler.MODISSwath5(config, model, spec);
+    var self = ns.Handler.MODISSwathMultiDay(config, model, spec);
     return $.extend(true, self, spec);
 
 };

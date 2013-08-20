@@ -16,16 +16,22 @@ Worldview.namespace("DataDownload.Handler");
 
 Worldview.DataDownload.Handler.MODISMix = function(config, model, spec) {
     
-    var self = Worldview.DataDownload.Handler.Base(config);
-    var gridHandler = Worldview.DataDownload.Handler.MODISGrid(config, model);
-    var swathHandler;
+    var self = Worldview.DataDownload.Handler.Base(config, model);
+    var nrtHandler;
+    var scienceHandler;
     
     var init = function() {
         var productConfig = config.products[model.selectedProduct];
-        var swathHandlerName = productConfig.swathHandler;
-        swathHandlerFactory = 
-                Worldview.DataDownload.Handler.getByName(swathHandlerName);
-        swathHandler = swathHandlerFactory(config, model, spec);
+        
+        var nrtHandlerName = productConfig.nrt.handler;
+        var nrtHandlerFactory = 
+                Worldview.DataDownload.Handler.getByName(nrtHandlerName);
+        nrtHandler = nrtHandlerFactory(config, model, spec);
+        
+        var scienceHandlerName = productConfig.science.handler;
+        var scienceHandlerFactory =
+                Worldview.DataDownload.Handler.getByName(scienceHandlerName);
+        scienceHandler = scienceHandlerFactory(config, model, spec);
     };
   
     self._submit = function() {
@@ -33,8 +39,8 @@ Worldview.DataDownload.Handler.MODISMix = function(config, model, spec) {
         
         var nrtQueryOptions = {
             time: model.time,
-            startTimeDelta: swathHandler.startTimeDelta,
-            endTimeDelta: swathHandler.endTimeDelta,
+            startTimeDelta: nrtHandler.startTimeDelta,
+            endTimeDelta: nrtHandler.endTimeDelta,
             data: config.products[model.selectedProduct].query.nrt            
         };
         var nrt = self.echo.submit(nrtQueryOptions);
@@ -66,9 +72,9 @@ Worldview.DataDownload.Handler.MODISMix = function(config, model, spec) {
         } 
         
         if ( useNRT ) {
-            return swathHandler._processResults(data.nrt);
+            return nrtHandler._processResults(data.nrt);
         } else {
-            return gridHandler._processResults({
+            return scienceHandler._processResults({
                 granules: data.science,
                 grid: data.grid
             });

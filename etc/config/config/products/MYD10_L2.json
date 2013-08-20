@@ -1,6 +1,6 @@
 {
     "name": "MODIS/Aqua Snow Cover 5-Min L2 Swath 500m",
-    "handler": "AquaSwath5",
+    "handler": "AquaSwathMultiDay",
     "query": {
         "shortName": "MYD10_L2",
         "dataCenterId": ["NSIDC_ECS", "LANCEMODIS"]

@@ -1,9 +1,9 @@
 {
-    "name": "MODIS/Terra Aerosol 5-Min L2 Swath 10km",
+    "name": "MODIS/Terra Snow Cover 5-Min L2 Swath 500m",
     "handler": "TerraSwathMultiDay",
     "query": {
-        "shortName": "MOD04_L2",
-        "dataCenterId": ["LAADS", "LANCEMODIS"]
+        "shortName": "MOD10_L2",
+        "dataCenterId": ["NSIDC_ECS", "LANCEMODIS"]
     },
     "nrt": {
         "by": "value",
@@ -11,3 +11,5 @@
         "value": "LANCEMODIS"
     }
 }
+
+
