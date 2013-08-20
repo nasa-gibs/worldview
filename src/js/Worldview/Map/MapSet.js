@@ -560,18 +560,31 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
       
     var onAddLayer = function(event) {
         var layer = event.layer;
-        layer.events.register("loadstart", layer, function() {
+        
+        var onLoadStart = function() {
+            console.log("loadstart");
             if ( layersLoading === 0 ) {
+                console.log("maploadstart");
                 self.map.events.triggerEvent("maploadstart");
             }
-            layersLoading++;
-        });
-        layer.events.register("loadend", layer, function() {
-            layersLoading--;
-            if ( layersLoading === 0 ) {
+            layersLoading++;           
+        };
+        
+        var onLoadEnd = function() {
+            console.log("loadend");
+            if ( layersLoading === 1 ) {
+                console.log("maploadend");
                 self.map.events.triggerEvent("maploadend");
-            }   
-        });
+            }  
+            if ( layersLoading > 0 ) {
+                layersLoading--;
+            }
+        };
+                   
+        layer.events.register("loadstart", layer, onLoadStart);
+        layer.events.register("loadend", layer, onLoadEnd);
+        onLoadStart();
+
         refreshZOrder();
     };
     
