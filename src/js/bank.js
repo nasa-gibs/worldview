@@ -288,6 +288,7 @@ SOTE.widget.Bank.prototype.render = function(){
 		this.jsp = $( "." + this.id + "category" ).jScrollPane({autoReinitialise: false, verticalGutter:0});
 	}
 	$( "." + this.id + "category li" ).disableSelection();	
+	$( "." + this.id + "category" ).bind('sortstart',{self:this},SOTE.widget.Bank.initiateSort);
 	$( "." + this.id + "category" ).bind('sortstop',{self:this},SOTE.widget.Bank.handleSort);
 
 	setTimeout(SOTE.widget.Bank.adjustCategoryHeights,1,{self:this});
@@ -309,7 +310,7 @@ SOTE.widget.Bank.prototype.render = function(){
 SOTE.widget.Bank.adjustCategoryHeights = function(args){
 	var self = args.self;
 	var heights = new Array;
-	var container_height = $("#"+self.id).outerHeight();
+	var container_height = $("#"+self.id).outerHeight(true);
 	var labelHeight = 0;
 	$('#'+self.id+' .head').each(function(){
 		labelHeight += $(this).outerHeight(true);
@@ -321,7 +322,7 @@ SOTE.widget.Bank.adjustCategoryHeights = function(args){
 		var actual_height = 0;
 		var count = 0;
 		$('#' + formattedCategoryName.toLowerCase() + ' li').each(function(){
-			actual_height += $(this).outerHeight();
+			actual_height += $(this).outerHeight(true);
 			count++;
 		});
 
@@ -409,9 +410,21 @@ SOTE.widget.Bank.toggle = function(e,ui){
 	} 	
 };
 
+SOTE.widget.Bank.initiateSort = function(e,ui){
+	$(ui.item).css({
+		'background-color':'rgba(255,245,218,0.85)',
+		'border':'1px #000 dashed'	
+	});
+	
+};
+
 SOTE.widget.Bank.handleSort = function(e,ui){
 	var self = e.data.self;
 	self.values = new Object;
+	$(ui.item).css({
+		'background-color':'',
+		'border':'none'	
+	});
 	for(var i=0; i<self.categories.length; i++){
 		var formatted = self.categories[i].replace(/\s/g, "");
 		formatted = formatted.toLowerCase();
