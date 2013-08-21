@@ -15,6 +15,7 @@
 
 Worldview.AjaxCache = function(spec) {
     
+    spec = spec || {};
     var size = spec.size || null;
     var options = spec.options || {};
     var cache = new Cache(size);
@@ -22,7 +23,10 @@ Worldview.AjaxCache = function(spec) {
     var self = {};
     
     self.submit = function(parameters) {
-        var key = $.param(parameters, true);
+        var key = "url=" + parameters.url;
+        if ( parameters.data ) {
+            key += "&query=" + $.param(parameters.data, true);
+        }
         var results = cache.getItem(key);
         
         if ( results ) {

@@ -83,5 +83,11 @@
     "rendered": "MODIS_Sea_Ice",
     "startDate": "2012-04-07",
     "type": "wmts",
-    "units": ""
+    "units": "",
+    "echo": {
+        "product": "MYD29",
+        "query": {
+            "dayNightFlag": "DAY"
+        }
+    }
 }

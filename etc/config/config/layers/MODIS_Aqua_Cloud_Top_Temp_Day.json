@@ -41,5 +41,11 @@
     "rendered": "MODIS_Cloud_Top_Temp",
     "startDate": "2012-04-07",
     "type": "wmts",
-    "units": "K"
+    "units": "K",
+    "echo": {
+        "product": "MYD06_L2_DAY",
+        "query": {
+            "dayNightFlag": "DAY"
+        }
+    }
 }

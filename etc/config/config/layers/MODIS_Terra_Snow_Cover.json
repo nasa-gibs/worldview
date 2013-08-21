@@ -98,5 +98,11 @@
         0.898989898989899
     ],
     "type": "wmts",
-    "units": "%"
+    "units": "%",
+    "echo": {
+        "product": "MOD10_L2",
+        "query": {
+            "dayNightFlag": "DAY"
+        }
+    }
 }

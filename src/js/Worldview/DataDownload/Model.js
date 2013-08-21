@@ -29,16 +29,13 @@ Worldview.DataDownload.Model = function(config) {
         epsg: null,
         time: null
     };
-    
-    var handlers = {
-        AquaSwath5: Worldview.DataDownload.Handler.AquaSwath5,
-        TerraSwath5: Worldview.DataDownload.Handler.TerraSwath5
-    };
-    
+
+    var ns = Worldview.DataDownload;
+            
     var self = {};    
 
     /**
-     * Fired when the data download mode is EVENT_ACTIVATEd.
+     * Fired when the data download mode is activated.
      * 
      * @event EVENT_ACTIVATE
      * @final
@@ -46,7 +43,7 @@ Worldview.DataDownload.Model = function(config) {
     self.EVENT_ACTIVATE = "activate";
     
     /**
-     * Fired when the data download mode is deEVENT_ACTIVATEd.
+     * Fired when the data download mode is deactivated.
      * 
      * @event EVENT_ACTIVATE
      * @final
@@ -97,13 +94,15 @@ Worldview.DataDownload.Model = function(config) {
      * 
      * @method activate
      */    
-    self.activate = function() {
+    self.activate = function(layerName) {
         if ( !self.active ) {
             self.active = true;
             self.events.trigger(self.EVENT_ACTIVATE);
-            if ( !self.selectedLayer ) {
+            if ( layerName ) {
+                self.selectLayer(layerName);
+            } else if ( !self.selectedLayer ) {
                 self.selectLayer(findAvailableLayer());
-            }
+            } 
         }
     };
     
@@ -135,14 +134,14 @@ Worldview.DataDownload.Model = function(config) {
     };
     
     self.selectLayer = function(layerName) {
-        if ( self.selectedLayer === layerName ) {
+        if ( !self.active || self.selectedLayer === layerName ) {
             return;
         }
-        if ( $.inArray(layerName, state.layers) < 0 ) {
+        if ( layerName && $.inArray(layerName, state.layers) < 0 ) {
             throw new Error("Layer not in active list: " + layerName);
         }
         self.selectedLayer = layerName;
-        if ( config.layers[layerName].echo ) {
+        if ( layerName && config.layers[layerName].echo ) {
             self.selectedProduct = config.layers[layerName].echo.product;
         } else {
             self.selectedProduct = null;
@@ -172,15 +171,16 @@ Worldview.DataDownload.Model = function(config) {
             return;
         }
         if ( !self.selectedProduct ) {
-            self.events.trigger(self.EVENT_QUERY_RESULTS, []);
+            self.events.trigger(self.EVENT_QUERY_RESULTS, {
+                meta: {},
+                granules: []
+            });
             return;
         }
 
         var productConfig = config.products[self.selectedProduct];
-        var handlerFactory = handlers[productConfig.handler];
-        if ( !handlerFactory ) {
-            throw new Error("Unknown handler: " + productConfig.handler);
-        }
+        var handlerFactory = 
+                Worldview.DataDownload.Handler.getByName(productConfig.handler);
         
         var handler = handlerFactory(config, self);
         handler.events.on("query", function() {
@@ -198,6 +198,7 @@ Worldview.DataDownload.Model = function(config) {
             return;
         }
         self.layers = [];
+        var foundSelected = false;
         $.each(state.layers, function(index, layer) {
             var id = layer;
             var layerName = config.layers[layer].name;
@@ -211,9 +212,18 @@ Worldview.DataDownload.Model = function(config) {
                 name: layerName,
                 description: description,
                 product: productName
-            });    
+            });
+            if ( id === self.selectedLayer ) {
+                foundSelected = true;
+            }    
         });  
-        self.events.trigger(self.EVENT_LAYER_UPDATE);  
+        if ( !foundSelected ) {
+            self.selectLayer(null);
+        }
+        self.events.trigger(self.EVENT_LAYER_UPDATE);
+        if ( self.active && !foundSelected ) {
+            self.selectLayer(findAvailableLayer());
+        }  
     };
     
     var updateProjection = function() {
@@ -226,18 +236,21 @@ Worldview.DataDownload.Model = function(config) {
     };
     
     var findAvailableLayer = function() {
+        var foundLayer = null;
+        
         // Find the top most layer that has a product entry in ECHO
         for ( var i = state.layers.length - 1; i >= 0; i-- ) {
             var layerName = state.layers[i];
             if ( config.layers[layerName].echo ) {
-                return layerName;
+                foundLayer = layerName;
             }
         }
         
         // If no products found, select the bottom most layer
-        if ( state.layers[0] ) {
-            return state.layers[0];
+        if ( !foundLayer && state.layers[0] ) {
+            foundLayer = state.layers[0];
         }
+        return foundLayer;
     }
     
     init();

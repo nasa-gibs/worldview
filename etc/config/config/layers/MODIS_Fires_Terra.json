@@ -21,5 +21,8 @@
         "http://map2a.vis.earthdata.nasa.gov/wms/wms.php",
         "http://map2b.vis.earthdata.nasa.gov/wms/wms.php",
         "http://map2c.vis.earthdata.nasa.gov/wms/wms.php"
-    ]
+    ],
+    "echo": {
+        "product": "MOD14"
+    }
 }

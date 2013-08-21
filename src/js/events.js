@@ -296,44 +296,46 @@ SOTE.widget.Events.toggleDescription = function(e) {
     	var ind = all.index(this);
     	
     	// generate permalink
-    	var link = "?map=" + meta[ind].west + "," + meta[ind].south + "," + meta[ind].east + "," + meta[ind].north;
+    	var extent = meta[ind].west + "," + meta[ind].south + "," + meta[ind].east + "," + meta[ind].north;
+    	var prods = "";
     	if(meta[ind].category === "floods") {
     		// if specified, use natural color
     		if(meta[ind].keyword === "natural-color") {
     			if(meta[ind].sat === "Terra") {
-    				link += "&products=baselayers,MODIS_Terra_CorrectedReflectance_TrueColor";
+    				prods += "baselayers,MODIS_Terra_CorrectedReflectance_TrueColor";
     			}
     			else if(meta[ind].sat === "Aqua") {
-    				link += "&products=baselayers,MODIS_Aqua_CorrectedReflectance_TrueColor";
+    				prods += "baselayers,MODIS_Aqua_CorrectedReflectance_TrueColor";
     			}
     		}
     		// otherwise, default to false color
     		else {
 				if(meta[ind].sat === "Terra") {
-    				link += "&products=baselayers,MODIS_Terra_CorrectedReflectance_Bands721";
+    				prods += "baselayers,MODIS_Terra_CorrectedReflectance_Bands721";
     			}
     			else if(meta[ind].sat === "Aqua") {
-    				link += "&products=baselayers,MODIS_Aqua_CorrectedReflectance_Bands721";
+    				prods += "&baselayers,MODIS_Aqua_CorrectedReflectance_Bands721";
     			}
     		}
     	}
     	else {
     		if(meta[ind].sat === "Terra") {
-    			link += "&products=baselayers,MODIS_Terra_CorrectedReflectance_TrueColor";
+    			prods += "baselayers,MODIS_Terra_CorrectedReflectance_TrueColor";
     		}
     		else if(meta[ind].sat === "Aqua") {
-    			link += "&products=baselayers,MODIS_Aqua_CorrectedReflectance_TrueColor";
+    			prods += "baselayers,MODIS_Aqua_CorrectedReflectance_TrueColor";
     		}
     	}
+    	prods += "~overlays";
     	if(meta[ind].keyword === "outlines") {
     		if(meta[ind].sat === "Terra") {
-    			link += "~overlays,MODIS_Fires_Terra";
+    			prods += ",MODIS_Fires_Terra";
     		}
     		else if(meta[ind].sat === "Aqua") {
-    			link += "~overlays,MODIS_Fires_Aqua";
+    			prods += ",MODIS_Fires_Aqua";
     		}
     	}
-    	link += ",sedac_bound&time="+meta[ind].date;
+    	prods += ",sedac_bound";
    
     	var initOrder = [
            	ss, // projection
@@ -346,11 +348,41 @@ SOTE.widget.Events.toggleDescription = function(e) {
            	epsg
         ];
         
-        REGISTRY.isLoadingQuery = true;
-        $.each(initOrder, function(index, component) {
-            component.loadFromQuery(link);    
-        });
-        REGISTRY.isLoadingQuery = false;
+       
+       
+      // map.setValue(meta[ind].date);
+       //p.b.setValue(prods);
+      // setTimeout(showevextent, 1000);
+      // m.panTo(extent);
+       
+      var centerlon = parseInt(meta[ind].west) + ((parseInt(meta[ind].east) - parseInt(meta[ind].west)) / 2);
+      var centerlat = parseInt(meta[ind].south) + ((parseInt(meta[ind].north) - parseInt(meta[ind].south)) / 2);
+      console.log("centerlon = " + centerlon);
+      console.log("centerlat = " + centerlat);
+      var center = [centerlon, centerlat];
+      
+      // zoom out to re-orient the user
+      /*if(m.productMap.map.getZoom() != 2) {
+          m.productMap.map.zoomTo(2);
+          setTimeout(function(){m.eventZoom(extent, center); p.b.setValue(prods);}, 1500);
+      }
+      else {
+      	  m.eventZoom(extent, center);
+      	  p.b.setValue(prods);
+      }*/
+     console.log("Beth's latest version");
+     p.b.setValue(prods);
+     var currentMap = m.productMap.map;
+     
+	currentMap.events.register("maploadend", currentMap, function() {
+    	console.log("Map has finished loading");
+	});
+
+      
+      //m.panTo(center);
+      //setTimeout(function(){m.zoomToExtent(extent);}, 3000);
+      
+      //m.setValue(extent);
     }
     self.fire();
     SOTE.widget.Events.repositionScrollbars(self, this);

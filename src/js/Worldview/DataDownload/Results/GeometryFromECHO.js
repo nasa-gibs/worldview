@@ -14,7 +14,7 @@
  */
 Worldview.namespace("DataDownload.Results");
 
-Worldview.DataDownload.Results.GeometryFromECHO = function GeometryFromECHO(projection) {
+Worldview.DataDownload.Results.GeometryFromECHO = function GeometryFromECHO(densify) {
 
     var self = {};
     
@@ -28,15 +28,14 @@ Worldview.DataDownload.Results.GeometryFromECHO = function GeometryFromECHO(proj
             granule.centroid = {};    
         }
         
-        if ( !granule.geometry[projection] ) {
-            var echoGeom = Worldview.DataDownload.ECHO.Geometry(granule);
-            var geom = echoGeom.toOpenLayers(Worldview.Map.CRS_WGS_84, 
-                    projection);
+        if ( !granule.geometry[Worldview.Map.CRS_WGS_84] ) {
+            var echoGeom = Worldview.DataDownload.ECHO.Geometry(granule, densify);
+            var geom = echoGeom.toOpenLayers();
             var centroid = geom.getCentroid();
-            granule.geometry[projection] = geom;
-            granule.centroid[projection] = centroid;   
+            granule.geometry[Worldview.Map.CRS_WGS_84] = geom;
+            granule.centroid[Worldview.Map.CRS_WGS_84] = centroid;   
         }        
-        return result;    
+        return granule;    
     };
     
     return self;

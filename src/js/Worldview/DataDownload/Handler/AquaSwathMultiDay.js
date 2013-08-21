@@ -14,8 +14,10 @@
  */
 Worldview.namespace("DataDownload.Handler");
 
-Worldview.DataDownload.Handler.AquaSwath5 = function(config, model) {
+Worldview.DataDownload.Handler.AquaSwathMultiDay = function(config, model) {
     
+    var ns = Worldview.DataDownload;
+
     var spec = {
         startTimeDelta: -180,
         endTimeDelta: 180,
@@ -23,7 +25,7 @@ Worldview.DataDownload.Handler.AquaSwath5 = function(config, model) {
         eastZone: 300,
         westZone: 1380
     };
-    
-    return Worldview.DataDownload.Handler.MODISSwath5(config, model, spec);
-    
+        
+    var self = ns.Handler.MODISSwathMultiDay(config, model, spec);
+    return $.extend(true, self, spec);
 };

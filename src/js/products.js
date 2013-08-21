@@ -149,7 +149,8 @@ SOTE.widget.Products.prototype.render = function(){
             antarctic: "baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,antarctic_coastlines", 
             arctic:"baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,arctic_coastlines",
             geographic:"baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,sedac_bound"
-        }
+        },
+        config: this.config
     });	
     
     //$('#'+this.id+"prods").on("tabsshow",SOTE.widget.Products.change);

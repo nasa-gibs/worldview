@@ -30,6 +30,14 @@ $(function(ns) {
     
     ns.CRS_WGS_84 = "EPSG:4326";
     
+    ns.CRS_WGS_84_QUERY_EXTENT = new OpenLayers.Bounds(-180, -60, 180, 60);
+        
+    ns.CRS_WGS_84_QUERY_MASK = 
+        new OpenLayers.Geometry.MultiPolygon([
+            new OpenLayers.Bounds(-180, -90, 180, -60).toGeometry(),
+            new OpenLayers.Bounds(-180, 60, 180, 90).toGeometry()
+        ]);
+        
     /**
      * An object that contains OpenLayers.Control.MousePosition objects
      * that update the current latitude/longitude values on the map as the
@@ -154,10 +162,14 @@ $(function(ns) {
      * is visible. A value from 0 (transparent) to 1 (opaque).
      */
     ns.setVisibility = function(layer, visible, opacity) {
-        var actualOpacity = ( visible ) ? opacity : 0;
-        layer.div.style.opacity = actualOpacity;    
-        if ( visible && opacity > 0 && !layer.getVisibility() ) {
-            layer.setVisibility(true);
+        if ( layer.isControl ) {
+            layer.setVisibility(visible);
+        } else {
+            var actualOpacity = ( visible ) ? opacity : 0;
+            layer.div.style.opacity = actualOpacity;    
+            if ( visible && opacity > 0 && !layer.getVisibility() ) {
+                layer.setVisibility(true);
+            }
         }
     };
     
@@ -202,4 +214,19 @@ $(function(ns) {
         );
     };
     
+    ns.distance2D = function(p1, p2) {
+        return Math.sqrt(Math.pow(p1.x - p2.x, 2) + 
+                        (Math.pow(p1.y - p2.y, 2)));
+    };
+    
+    ns.interpolate2D = function(p1, p2, amount) {
+        var distX = p2.x - p1.x;
+        var distY = p2.y - p1.y;
+        
+        var interpX = p1.x + (distX * amount);
+        var interpY = p1.y + (distY * amount);
+        
+        return new OpenLayers.Geometry.Point(interpX, interpY);
+    };
+      
 }(Worldview.Map));

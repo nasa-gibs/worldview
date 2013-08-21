@@ -17,6 +17,7 @@ Worldview.namespace("DataDownload.Results");
 Worldview.DataDownload.Results.ConnectSwaths = function(projection) {
     
     var log = Logging.getLogger("Worldview.DataDownload");
+    var MAX_DISTANCE_GEO = 270;
     var startTimes = {};
     var endTimes = {};
     
@@ -57,28 +58,34 @@ Worldview.DataDownload.Results.ConnectSwaths = function(projection) {
     var combineSwath = function(swath) {
         var combined = false;
         
+        var maxDistance = ( projection === Worldview.Map.CRS_WGS_84 ) 
+                ? MAX_DISTANCE_GEO : Number.POSITIVE_INFINITY; 
         // Can this swath be added to the end of other swath?
         var otherSwath = endTimes[swath[0].time_start];
         if ( otherSwath ) {
-            // Remove entries for this swath
-            delete startTimes[swath[0].time_start];
-            delete endTimes[swath[swath.length - 1].time_end];
-            
-            // Remove entries for other swath
-            delete startTimes[otherSwath[0].time_start];
-            delete endTimes[otherSwath[otherSwath.length - 1].time_end];
-                        
-            // Combine swaths
-            var newSwath = otherSwath.concat(swath);
-            
-            startTimes[newSwath[0].time_start] = newSwath;
-            endTimes[newSwath[newSwath.length - 1].time_end] = newSwath;
-            combined = true;
-            swath = newSwath;
+            var otherGranule = otherSwath[otherSwath.length - 1];
+            if ( distance(swath[0], otherGranule) < maxDistance ) {
+                // Remove entries for this swath
+                delete startTimes[swath[0].time_start];
+                delete endTimes[swath[swath.length - 1].time_end];
+                
+                // Remove entries for other swath
+                delete startTimes[otherSwath[0].time_start];
+                delete endTimes[otherSwath[otherSwath.length - 1].time_end];
+                            
+                // Combine swaths
+                var newSwath = otherSwath.concat(swath);
+                
+                startTimes[newSwath[0].time_start] = newSwath;
+                endTimes[newSwath[newSwath.length - 1].time_end] = newSwath;
+                combined = true;
+                swath = newSwath;
+            }
         }
         
+        /*
         var otherSwath = startTimes[swath[0].time_end];
-        if ( otherSwath ) {
+        if ( otherSwath && distance(swath[0], otherSwath) < MAX_DISTANCE ) {
             // Remove entries for this swath
             delete startTimes[swath[0].time_start];
             delete endTimes[swath[swath.length - 1].time_end];
@@ -95,10 +102,17 @@ Worldview.DataDownload.Results.ConnectSwaths = function(projection) {
             combined = true;
             swath = newSwath;
         }        
-
+        */
+       
         if ( combined ) {
             combineSwath(swath);
         }
+    };
+    
+    var distance = function(g1, g2) {
+        var x1 = g1.centroid[projection].x;
+        var x2 = g2.centroid[projection].x;
+        return Math.abs(x2 - x1);    
     };
     
     return self;

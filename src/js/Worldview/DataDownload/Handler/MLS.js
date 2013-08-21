@@ -14,21 +14,21 @@
  */
 Worldview.namespace("DataDownload.Handler");
 
-Worldview.DataDownload.Handler.MODISSwath5 = function(config, model, spec) {
+Worldview.DataDownload.Handler.MLS = function(config, model, spec) {
     
-    var startTimeDelta = spec.startTimeDelta || 0;
-    var endTimeDelta = spec.endTimeDelta || 0;
+    var MAX_DISTANCE = 270;    
+    var self = Worldview.DataDownload.Handler.Base(config, model);
     
-    var self = Worldview.DataDownload.Handler.Base(config);
+    var init = function() {
+        self.extents[Worldview.Map.CRS_WGS_84] = 
+               Worldview.Map.CRS_WGS_84_QUERY_EXTENT;
+    };
     
-    self.events = Worldview.Events();
-    
-    self._submit = function() {
-        var queryOptions = $.extend(true, {
+    self._submit = function(queryData) {
+        var queryOptions = {
             time: model.time,
-            startTimeDelta: startTimeDelta,
-            endTimeDelta: endTimeDelta
-        }, config.products[model.selectedProduct].query);
+            data: queryData
+        };
         
         return self.echo.submit(queryOptions);
     };
@@ -38,7 +38,10 @@ Worldview.DataDownload.Handler.MODISSwath5 = function(config, model, spec) {
             meta: {},
             granules: data
         };
-        
+        if ( model.crs === Worldview.Map.CRS_WGS_84 ) {
+            results.meta.queryMask = Worldview.Map.CRS_WGS_84_QUERY_MASK;
+        }
+                
         var ns = Worldview.DataDownload;
         var productConfig = config.products[model.selectedProduct];
         var chain = ns.Results.Chain();
@@ -46,20 +49,15 @@ Worldview.DataDownload.Handler.MODISSwath5 = function(config, model, spec) {
             ns.Results.TagNRT(productConfig.nrt),
             ns.Results.CollectPreferred(model.prefer),
             ns.Results.PreferredFilter(model.prefer), 
-            ns.Results.GeometryFromECHO(Worldview.Map.CRS_WGS_84),
-            ns.Results.GeometryFromECHO(model.crs),
+            ns.Results.GeometryFromECHO(false),
+            ns.Results.Transform(model.crs),
             ns.Results.ExtentFilter(model.crs, self.extents[model.crs]),
-            ns.Results.TimeFilter({
-                time: model.time,
-                eastZone: spec.eastZone,
-                westZone: spec.westZone,
-                maxDistance: spec.maxDistance
-            }),
             ns.Results.TimeLabel(model.time),
             ns.Results.ConnectSwaths(model.crs)
         ];
         return chain.process(results);
     };
     
+    init();
     return self;
-}
+};

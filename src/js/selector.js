@@ -52,6 +52,7 @@ SOTE.widget.Selector = function(containerId, config){
     this.categories = config.categories;
 	this.initRenderComplete = false;
 	this.dataSourceUrl = config.dataSourceUrl;
+	this.config = config.config;
 	this.statusStr = "";
 	this.init();
 	//this.updateComponent(this.id+"=baselayers.MODIS_Terra_CorrectedReflectance_TrueColor-overlays.fires48.AIRS_Dust_Score.OMI_Aerosol_Index")
@@ -82,12 +83,10 @@ SOTE.widget.Selector.prototype.init = function(){
 };
 
 SOTE.widget.Selector.prototype.loadData = function(){
-	SOTE.util.getJSON(
-		"data/" + this.state + "_" + this.dataSourceUrl,
-		{self:this},
-		SOTE.widget.Selector.handleLoadSuccess,
-		SOTE.widget.Selector.handleUpdateFailure
-	);
+    var data = this.config.ap_products[this.state];
+    SOTE.widget.Selector.handleLoadSuccess(data, null, null, {
+        self: this
+    });
 };
 
 SOTE.widget.Selector.handleLoadSuccess = function(data,status,xhr,args){

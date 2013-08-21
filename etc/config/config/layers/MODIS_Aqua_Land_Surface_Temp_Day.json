@@ -43,5 +43,11 @@
     "recommendPalettes": [ "NEO_Land_Temperature" ],
     "startDate": "2012-04-07",
     "type": "wmts",
-    "units": "K"
+    "units": "K",
+    "echo": {
+        "product": "MYD11_L2_DAY",
+        "query": {
+            "dayNightFlag": "DAY"
+        }
+    }
 }

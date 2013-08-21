@@ -20,11 +20,12 @@ Worldview.Map.GraticuleLayer = OpenLayers.Class(OpenLayers.Layer, {
     graticuleLineStyle: null,
     graticuleLabelStyle: null,
     graticule: null,
-   
+    isControl: true,
+    
     initialize: function(name, options) {
         OpenLayers.Layer.prototype.initialize.apply(this, arguments);
         
-        graticuleLineStyle = new OpenLayers.Symbolizer.Line({
+        this.graticuleLineStyle = new OpenLayers.Symbolizer.Line({
             strokeColor: '#AAAAAA',
             strokeOpacity: 0.95,
             strokeWidth: 1.35,
@@ -32,7 +33,7 @@ Worldview.Map.GraticuleLayer = OpenLayers.Class(OpenLayers.Layer, {
             strokeDashstyle: 'dot'
         });
         
-        graticuleLabelStyle = new OpenLayers.Symbolizer.Text({
+        this.graticuleLabelStyle = new OpenLayers.Symbolizer.Text({
             fontFamily: 'Gill Sans',
             fontSize: '16',
             fontWeight: '550',
@@ -47,15 +48,15 @@ Worldview.Map.GraticuleLayer = OpenLayers.Class(OpenLayers.Layer, {
     setMap: function(map) {
         OpenLayers.Layer.prototype.setMap.apply(this, arguments); 
         
-        graticule = new OpenLayers.Control.Graticule({
+        this.graticule = new OpenLayers.Control.Graticule({
             layerName: 'ol_graticule_control',
             numPoints: 2, 
             labelled: true,
-            lineSymbolizer: graticuleLineStyle,
-            labelSymbolizer: graticuleLabelStyle
+            lineSymbolizer: this.graticuleLineStyle,
+            labelSymbolizer: this.graticuleLabelStyle
         });
         
-        map.addControl(graticule);       
+        map.addControl(this.graticule); 
     },
     
     /*
@@ -63,9 +64,17 @@ Worldview.Map.GraticuleLayer = OpenLayers.Class(OpenLayers.Layer, {
      */
     removeMap: function(map) {
         OpenLayers.Layer.prototype.removeMap.apply(this, arguments); 
-        map.removeControl(graticule);   
-        graticule.destroy();
-        graticule = null;
+        map.removeControl(this.graticule);   
+        this.graticule.destroy();
+        this.graticule = null;
+    },
+    
+    setVisibility: function(value) {
+        if ( value ) {
+            this.graticule.activate();
+        } else {
+            this.graticule.deactivate();
+        }
     },
     
     /*

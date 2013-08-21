@@ -175,7 +175,12 @@ def create_xml(fields):
   xml += ["<startDate>", aql_date(start_time), "</startDate>"]
   xml += ["<stopDate>", aql_date(end_time), "</stopDate>"]
   xml += ["</temporal>", "</granuleCondition>"]
-     
+  
+  if "dayNightFlag" in fields:
+    xml += ["<granuleCondition>"]
+    xml += ["<dayNightFlag value='%s'/>" % fields["dayNightFlag"].value]
+    xml += ["</granuleCondition>"]
+    
   xml += ["</where>"]
   xml += ["</query>"]
   

@@ -19,8 +19,10 @@ Worldview.DataDownload.MapController = function(model, maps, config) {
     var results = [];
 
     var swathLayers = ns.Layers.Swath(model, maps, config);
+    var gridLayers = ns.Layers.Grid(model, maps, config);
     var hoverLayers = ns.Layers.Hover(model, maps, config);        
     var buttonLayers = ns.Layers.Button(model, maps, config);
+    var maskLayers = ns.Layers.QueryMask(model, maps, config);
                    
     var init = function() {        
         model.events
@@ -48,7 +50,9 @@ Worldview.DataDownload.MapController = function(model, maps, config) {
             results = newResults;
         }
         swathLayers.update(results);
+        gridLayers.update(results);
         buttonLayers.update(results);  
+        maskLayers.update(results);
     }
                 
     var onProjectionUpdate = function() {
@@ -57,14 +61,18 @@ Worldview.DataDownload.MapController = function(model, maps, config) {
     
     var onDeactivate = function() {
         swathLayers.dispose();
+        gridLayers.dispose();
         hoverLayers.dispose();
         buttonLayers.dispose();
+        maskLayers.dispose();
     };
         
     var clear = function() {
         swathLayers.clear();
+        gridLayers.clear();
         hoverLayers.clear();
         buttonLayers.clear();
+        maskLayers.clear();
     };
     
     init();

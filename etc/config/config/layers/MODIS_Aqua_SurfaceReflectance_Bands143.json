@@ -39,5 +39,8 @@
         ]
     },
     "startDate": "2012-04-07",
-    "type": "wmts"
+    "type": "wmts",
+    "echo": {
+        "product": "MYD09"
+    }
 }

@@ -14,38 +14,46 @@
  */
 Worldview.namespace("DataDownload.Handler");
 
-Worldview.DataDownload.Handler.Base = function(config) {
+Worldview.DataDownload.Handler.Base = function(config, model) {
 
     var self = {};
     
     self.events = Worldview.Events();
     self.echo = null;
+    self.ajax = null;
     
     var init = function() {
         var ns = Worldview.DataDownload.Handler.Base;
         
         if ( !ns.echo ) {
             if ( config.parameters.mockECHO ) {
-                ns.echo = Worldview.DataDownload.ECHO.MockClient();
+                ns.echo = Worldview.DataDownload.ECHO.MockClient(
+                        config.parameters.mockECHO);
             } else {
                 ns.echo = Worldview.DataDownload.ECHO.Client();
             }
         }
         self.echo = ns.echo;
         
+        if ( !ns.ajax ) {
+            ns.ajax = Worldview.AjaxCache();
+        }
+        self.ajax = ns.ajax; 
+        
         self.extents = {};
         $.each(config.projections, function(key, projection) {
-            if ( projection.queryExtent ) {
-                self.extents[projection.crs] = 
-                        new OpenLayers.Bounds(projection.queryExtent);
-            } else {
-                self.extents[projection.crs] = projection.maxExtent;
-            }
+            self.extents[projection.crs] = projection.maxExtent;
         });
     };
     
     self.submit = function() {
-        var promise = self._submit();
+        var productConfig = config.products[model.selectedProduct].query;
+        var layerConfig = {};
+        if ( config.layers[model.selectedLayer].echo.query ) {
+            layerConfig = config.layers[model.selectedLayer].echo.query;
+        }
+        var queryData = $.extend(true, {}, productConfig, layerConfig);
+        var promise = self._submit(queryData);
 
         promise.done(function(data) {
             try {

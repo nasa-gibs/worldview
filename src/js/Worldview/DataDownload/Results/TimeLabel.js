@@ -45,4 +45,4 @@ Worldview.DataDownload.Results.TimeLabel = function(time) {
 
     return self;
     
-}
+};

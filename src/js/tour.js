@@ -78,7 +78,7 @@ Worldview.namespace("Tour");
                        "<h3>Welcome to Worldview!</h3>"+
                        "</br></br>"+
                        "<center>"+
-                           "<p class=\"splash\">This tool from NASA's <a href='http://earthdata.nasa.gov/about-eosdis' target='_blank'>EOSDIS</a> allows users to interactively browse satellite imagery in near real-time, generally within 3 hours of observation.  Use the tools described below to change the imagery on the map and compare it to past observations.</p>"+  
+                           "<p class=\"splash\" style='font-size:14px;'>This tool from NASA's <a href='http://earthdata.nasa.gov/about-eosdis' target='_blank'>EOSDIS</a> allows users to interactively browse satellite imagery in near real-time, generally within 3 hours of observation.  Use the tools described below to change the imagery on the map and compare it to past observations.</p>"+  
                            "</br></br>"+
                            "<table id=\"splashTable\" class=\"splash\">"+
                                "<tr>"+
@@ -114,22 +114,41 @@ Worldview.namespace("Tour");
         
         /* set up all of the callout panels */
         var productText = "<div>"+
-                              "<h3>Product Picker</h3>"+
+                              "<h3>Layer Picker - Base Layers</h3>"+
                               "</br></br>"+
-                              "<p class='tour'>A <span class='highlight'>Base Layer</span> is an opaque background image - you can have multiple active base layers, but you can only show one at a time. An <span class='highlight'>Overlay</span> is a partially transparent layer to view on top of the background - you can view multiple overlays at once.  Use the <img style='height: 14px' src=\"images/visible.png\"/> icon to show and hide layers and the <img style='height: 14px' src=\"images/close-red-x.png\"/> icon to remove them.</p>"+
-                              "<p class='tour'>On the \"Add Layers\" tab, you can use the drop down list or the search bar to find layers.</p>"+
+                              "<p class='tour'>A <span class='highlight'>Base Layer</span> is an opaque background image - you can have multiple active base layers, but you can only show one at a time.</p>"+
+                              "<p class='tour'>There are several ways to interact with the layers: </p>" +
+                              "<ul class='tour'>"+
+                                  "<li>Use the <img style='height: 14px' src=\"images/visible.png\"/> icon to show and hide layers.</li>" +
+                                  "<li>Use the <img style='height: 14px' src=\"images/close-red-x.png\"/> icon to remove layers.</li>"+
+                                  "<li>Drag the layers to rearrange them.</li>" +
+                              "</ul>"+
                               "<p class='tour'> <span class='tryIt'>Try It!</span></p>"+
                               "<ul class='tour'>"+
-                                  "<li>Click on the <img style='height: 14px' src='images/visible.png'/> for Corrected Reflectance (True Color) Aqua / MODIS under Base Layers.</li>" +
-                                  "<li>Click on the \"Add Layers\" tab.</li>"+
-                                  "<li>Select the \"Fires\" category from the drop down list.</li>"+
-                                  "<li>Add the \"Fires (Day and Night) Aqua/MODIS Fire and Thermal Anomalies\" overlay.</li>"+
-                                  "<li>Type \"Aerosol\" in the search box and add the \"Aerosol Optical Depth Terra/MODIS\" overlay.</li>"+
-                                  "<li>Click on the Active tab to see the layers that have been added.</li>"
+                                  "<li>Click on the <img style='height: 14px' src='images/visible.png'/> for \"Corrected Reflectance (True Color) Aqua / MODIS\" under Base Layers.</li>" +
+                                  "<li>Drag \"Corrected Reflectance (True Color) Aqua / MODIS\" to the bottom of the list.  Notice how the map changes.</li>" +
+                                  "<li>Drag \"Corrected Reflectance (True Color) Aqua / MODIS\" back to the top of the list.</li>" +
                               "</ul>"+
                               "</br>"+
                           "</div>";
-        document.getElementById("productPanel").innerHTML = productText;
+        document.getElementById("productBasePanel").innerHTML = productText;
+        
+        var overlayText = "<div>"+
+                              "<h3>Layer Picker - Overlays</h3>"+
+                              "</br></br>"+
+                              "<p class='tour'>An <span class='highlight'>Overlay</span> is a partially transparent layer to view on top of the background - you can view multiple overlays at once.  If an overlay has a color bar, you can click the color bar and select a new color palette."+
+                              "<p class='tour'>On the \"Add Layers\" tab, you can use the drop down list or the search bar to find layers.</p>"+
+                              "<p class='tour'> <span class='tryIt'>Try It!</span></p>"+
+                              "<ul class='tour'>"+
+                                  "<li>Click on the \"Add Layers\" tab.</li>"+
+                                  "<li>Select \"Fires\" from the drop down list.</li>"+
+                                  "<li>Type \"aqua\" in the search box.</li>"+
+                                  "<li>Add the \"Fires (Day and Night) Aqua/MODIS Fire and Thermal Anomalies\" overlay.</li>"+
+                                  "<li>Click on the Active tab to see the layers that have been added.</li>"+
+                              "</ul>"+
+                              "</br>"+
+                          "</div>";
+        document.getElementById("productOverlayPanel").innerHTML = overlayText;
          
         var dateText = "<div class=\"tour\">"+
                            "<h3>Date Slider</h3>"+
@@ -210,7 +229,7 @@ Worldview.namespace("Tour");
                                  "<center>"+
                                      "<h3>Finished!</h3>"+
                                      "</br></br>"+
-                                     "<p class='tour'>You have now completed a tour of Worldview!  If you followed the “Try It” steps, you’re now looking at fires in northern California as they were observed by satellites on August 23, 2012.   You can use the tools in any order.  We hope you continue exploring!  <p>"+
+                                     "<p class='tour' style='font-size:14px;'>You have now completed a tour of Worldview!  If you followed the “Try It” steps, you’re now looking at fires in northern California as they were observed by satellites on August 23, 2012.   You can use the tools in any order.  We hope you continue exploring!  <p>"+
                                      "</br>"+
                                      "<table class='tour'>"+
                                          "<tr>"+
@@ -234,7 +253,7 @@ Worldview.namespace("Tour");
             								 bordered:true,
             								 template : {'link':'<a href="#" class="joyride-close-tip">X</a>'},
                                              postStepCallback : function (index, tip) {
-                                                 if(index == 3) {
+                                                 if(index == 4) {
                                                      log.debug("finished tour");
                                                      conclusionPanel.show();
                                                      conclusionPanel.center();
@@ -273,7 +292,7 @@ Worldview.namespace("Tour");
             								 bordered:true,
             								 template : {'link':'<a href="#" class="joyride-close-tip">X</a>'},
                                              postStepCallback : function (index, tip) {
-                                                 if(index == 3) {
+                                                 if(index == 4) {
                                                      log.debug("finished tour");
                                                      conclusionPanel.show();
                                                      conclusionPanel.center();

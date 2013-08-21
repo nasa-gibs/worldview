@@ -41,5 +41,11 @@
     "rendered": "MODIS_Water_Vapor_5km",
     "startDate": "2012-04-07",
     "type": "wmts",
-    "units": "cm"
+    "units": "cm",
+    "echo": {
+        "product": "MOD05_L2_DAY",
+        "query": {
+            "dayNightFlag": "DAY"
+        }
+    }
 }
