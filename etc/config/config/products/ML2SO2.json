@@ -1,6 +1,6 @@
 {
     "name": "MLS/Aura L2 Sulfur Dioxide (SO2) Mixing Ratio",
-    "handler": "Aura",
+    "handler": "MLS",
     "query": {
         "shortName": ["ML2SO2", "ML2SO2_NRT"],
         "dataCenterId": "GSFCS4PA"

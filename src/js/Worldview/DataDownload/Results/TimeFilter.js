@@ -50,7 +50,7 @@ Worldview.DataDownload.Results.TimeFilter = function(spec) {
         if ( time > westZone && x > 0 ) {
             return;
         }
-        return result;
+        return granule;
     };
     
     init();

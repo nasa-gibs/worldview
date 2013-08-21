@@ -60037,7 +60037,6 @@
     "products": {
         "AIRIBQAP": {
             "handler": "MODISSwath",
-            "mbr": "true",
             "name": "AIRS/Aqua Level 2 Standard physical retrieval (AIRS+AMSU)",
             "nrt": {
                 "by": "regex",
@@ -60054,7 +60053,6 @@
         },
         "AIRIBRAD": {
             "handler": "MODISSwath",
-            "mbr": "true",
             "name": "AIRS/Aqua Level 1B Infrared (IR) geolocated and calibrated radiances",
             "nrt": {
                 "by": "regex",
@@ -60071,7 +60069,6 @@
         },
         "AIRX2RET": {
             "handler": "MODISSwath",
-            "mbr": "true",
             "name": "AIRS/Aqua Level 2 Standard physical retrieval (AIRS+AMSU)",
             "nrt": {
                 "by": "regex",
@@ -60088,7 +60085,6 @@
         },
         "AIRX2SUP": {
             "handler": "MODISSwath",
-            "mbr": "true",
             "name": "AIRS/Aqua Level 2 Support retrieval (AIRS+AMSU)",
             "nrt": {
                 "by": "regex",
@@ -60104,7 +60100,7 @@
             }
         },
         "ML2CO": {
-            "handler": "Aura",
+            "handler": "MLS",
             "name": "MLS/Aura L2 Carbon Monoxide (CO) Mixing Ratio",
             "nrt": {
                 "by": "regex",
@@ -60120,7 +60116,7 @@
             }
         },
         "ML2H2O": {
-            "handler": "Aura",
+            "handler": "MLS",
             "name": "MLS/Aura L2 Water Vapor (H2O) Mixing Ratio",
             "nrt": {
                 "by": "regex",
@@ -60136,7 +60132,7 @@
             }
         },
         "ML2HNO3": {
-            "handler": "Aura",
+            "handler": "MLS",
             "name": "MLS/Aura L2 Nitric Acid (HNO3) Mixing Ratio",
             "nrt": {
                 "by": "regex",
@@ -60152,7 +60148,7 @@
             }
         },
         "ML2N2O": {
-            "handler": "Aura",
+            "handler": "MLS",
             "name": "MLS/Aura L2 Nitrous Oxide (N2O) Mixing Ratio",
             "nrt": {
                 "by": "regex",
@@ -60168,7 +60164,7 @@
             }
         },
         "ML2O3": {
-            "handler": "Aura",
+            "handler": "MLS",
             "name": "MLS/Aura L2 Ozone (O3) Mixing Ratio",
             "nrt": {
                 "by": "regex",
@@ -60184,7 +60180,7 @@
             }
         },
         "ML2SO2": {
-            "handler": "Aura",
+            "handler": "MLS",
             "name": "MLS/Aura L2 Sulfur Dioxide (SO2) Mixing Ratio",
             "nrt": {
                 "by": "regex",
@@ -60200,7 +60196,7 @@
             }
         },
         "ML2T": {
-            "handler": "Aura",
+            "handler": "MLS",
             "name": "MLS/Aura L2 Temperature",
             "nrt": {
                 "by": "regex",

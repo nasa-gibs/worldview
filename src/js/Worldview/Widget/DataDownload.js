@@ -81,10 +81,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
     self.loadFromQuery = function(queryString) {
         var query = Worldview.queryStringToObject(queryString);
         if ( query.dataDownload ) {
-            model.selectLayer(query.dataDownload);
-            if ( model.selectedLayer ) {
-                model.activate();
-            }
+            model.activate(query.dataDownload);
         }    
     };
     

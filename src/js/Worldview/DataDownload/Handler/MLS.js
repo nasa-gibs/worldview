@@ -14,20 +14,20 @@
  */
 Worldview.namespace("DataDownload.Handler");
 
-Worldview.DataDownload.Handler.Aura = function(config, model, spec) {
-        
-    var self = Worldview.DataDownload.Handler.Base(config);
-        
-    self._submit = function() {
-        productParameters = config.products[model.selectedProduct].query;
-        layerParameters = {};
-        if ( config.layers[model.selectedLayer].echo.query ) {
-            layerParameters = config.layers[model.selectedLayer].echo.query        
-        }
-        data = $.extend(true, {}, productParameters, layerParameters)
+Worldview.DataDownload.Handler.MLS = function(config, model, spec) {
+    
+    var MAX_DISTANCE = 270;    
+    var self = Worldview.DataDownload.Handler.Base(config, model);
+    
+    var init = function() {
+        self.extents[Worldview.Map.CRS_WGS_84] = 
+               Worldview.Map.CRS_WGS_84_QUERY_EXTENT;
+    };
+    
+    self._submit = function(queryData) {
         var queryOptions = {
             time: model.time,
-            data: data
+            data: queryData
         };
         
         return self.echo.submit(queryOptions);
@@ -38,7 +38,10 @@ Worldview.DataDownload.Handler.Aura = function(config, model, spec) {
             meta: {},
             granules: data
         };
-        
+        if ( model.crs === Worldview.Map.CRS_WGS_84 ) {
+            results.meta.queryMask = Worldview.Map.CRS_WGS_84_QUERY_MASK;
+        }
+                
         var ns = Worldview.DataDownload;
         var productConfig = config.products[model.selectedProduct];
         var chain = ns.Results.Chain();
@@ -46,12 +49,15 @@ Worldview.DataDownload.Handler.Aura = function(config, model, spec) {
             ns.Results.TagNRT(productConfig.nrt),
             ns.Results.CollectPreferred(model.prefer),
             ns.Results.PreferredFilter(model.prefer), 
-            ns.Results.GeometryFromECHO(Worldview.Map.CRS_WGS_84),
+            ns.Results.GeometryFromECHO(false),
             ns.Results.Transform(model.crs),
-            ns.Results.TimeLabel(model.time)
+            ns.Results.ExtentFilter(model.crs, self.extents[model.crs]),
+            ns.Results.TimeLabel(model.time),
+            ns.Results.ConnectSwaths(model.crs)
         ];
         return chain.process(results);
     };
     
+    init();
     return self;
-}
+};

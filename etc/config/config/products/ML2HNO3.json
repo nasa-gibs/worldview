@@ -1,6 +1,6 @@
 {
     "name": "MLS/Aura L2 Nitric Acid (HNO3) Mixing Ratio",
-    "handler": "Aura",
+    "handler": "MLS",
     "query": {
         "shortName": ["ML2HNO3", "ML2HNO3_NRT"],
         "dataCenterId": "GSFCS4PA"
