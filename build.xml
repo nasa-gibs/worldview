@@ -124,6 +124,9 @@
 	        description="Builds minified web site">
 		<delete dir="${build.web.dir}"/>
 		<mkdir dir="${build.web.dir}"/>
+
+		<delete dir="${build.bin.dir}"/>
+		<mkdir dir="${build.bin.dir}"/>
 		
 		<!-- Construct temporary output of the minification here -->
 		<delete dir="${build.dir}/minify"/>
@@ -145,12 +148,20 @@
             <fileset dir="${build.web.dir}/pages" includes="*.html"/>
             <fileset dir="${build.web.dir}/js" includes="**/*.js"/>
         </replace>
-        		         
+        		        
+	<copy todir="${build.bin.dir}">
+	  <fileset dir="bin"/>
+	</copy>
 		<!-- Debug version that is not minified -->
 		<delete dir="${build.web-debug.dir}"/>		
 		<mkdir dir="${build.web-debug.dir}"/>
+		<delete dir="${build.bin-debug.dir}"/>		
+		<mkdir dir="${build.bin-debug.dir}"/>
 		<copy todir="${build.web-debug.dir}">
 			<fileset dir="${build.web.dir}"/>
+		</copy>
+		<copy todir="${build.bin-debug.dir}">
+			<fileset dir="${build.bin.dir}"/>
 		</copy>
 	
 	    <!-- Configuration file -->
@@ -288,20 +299,30 @@
     	<tar destfile="${dist.dir}/worldview.tar.bz2" compression="bzip2">
     	   <tarfileset dir="${build.dir}/worldview" prefix="worldview">
     	       <exclude name="**/data/echo.cgi"/>
+    	       <exclude name="**/bin/eventsGeoRssParser.py"/>
     	   </tarfileset>
-    	   <tarfileset dir="${build.dir}/worldview/data"
-    	               prefix="worldview/data" filemode="755">
+    	   <tarfileset dir="${build.web.dir}/data"
+    	               prefix="worldview/web/data" filemode="755">
                <include name="echo.cgi"/>
+           </tarfileset>
+    	   <tarfileset dir="${build.bin.dir}"
+    	               prefix="worldview/bin" filemode="755">
+               <include name="eventsGeoRssParser.py"/>
            </tarfileset>
         </tar>
 
         <tar destfile="${dist.dir}/worldview-debug.tar.bz2" compression="bzip2">
            <tarfileset dir="${build.dir}/worldview-debug" prefix="worldview-debug">
                <exclude name="**/data/echo.cgi"/>
+    	       <exclude name="**/bin/eventsGeoRssParser.py"/>
            </tarfileset>
-           <tarfileset dir="${build.dir}/worldview-debug/data"
-                       prefix="worldview-debug/data" filemode="755">
+           <tarfileset dir="${build.web-debug.dir}/data"
+                       prefix="worldview-debug/web/data" filemode="755">
                <include name="echo.cgi"/>
+           </tarfileset>
+           <tarfileset dir="${build.bin-debug.dir}"
+                       prefix="worldview-debug/bin" filemode="755">
+               <include name="eventsGeoRssParser.py"/>
            </tarfileset>
         </tar>
         
@@ -310,19 +331,25 @@
     	      compression="bzip2"/>
     </target>
     
-    <target name="rpm" depends="dist">
+    <target name="rpm" depends="dist,rpm-build"/>
+
+    <target name="rpm-build">
         <mkdir dir="${user.home}/rpmbuild/SOURCES"/>
         <copy file="${dist.dir}/worldview.tar.bz2"
 	      todir="${user.home}/rpmbuild/SOURCES"/>
         <copy file="${dist.dir}/worldview-debug.tar.bz2"
 	      todir="${user.home}/rpmbuild/SOURCES"/>
-	<copy file="deploy/httpd.worldview.conf"
+	<copy file="etc/deploy/httpd.worldview.conf"
 	      todir="${user.home}/rpmbuild/SOURCES"/>
-	<copy file="deploy/httpd.worldview-debug.conf"
+	<copy file="etc/deploy/httpd.worldview-debug.conf"
+	      todir="${user.home}/rpmbuild/SOURCES"/>
+	<copy file="etc/deploy/events_log.conf"
+	      todir="${user.home}/rpmbuild/SOURCES"/>
+	<copy file="etc/deploy/cron.worldview"
 	      todir="${user.home}/rpmbuild/SOURCES"/>
 	<exec executable="rpmbuild">
 	    <arg value="-ba"/>
-            <arg value="deploy/worldview.spec"/>
+            <arg value="etc/deploy/worldview.spec"/>
         </exec>
     </target>
 

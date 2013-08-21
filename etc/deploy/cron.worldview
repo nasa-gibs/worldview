@@ -1,0 +1,1 @@
+0 * * * * apache /usr/share/worldview/bin/eventsGeoRssParser.py 2>&1 >/dev/null

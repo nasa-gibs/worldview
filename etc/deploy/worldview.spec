@@ -2,8 +2,8 @@
 # package has already been made.
 
 Name:		worldview
-Version:	0.4.5
-Release:	1%{?dist}
+Version:	0.6.0
+Release:	0.1%{?dist}
 Summary:	Browse full-resolution, near real-time satellite imagery.
 
 License:	Copyright NASA
@@ -12,13 +12,19 @@ Source0:	worldview.tar.bz2
 Source1:	worldview-debug.tar.bz2
 Source2:	httpd.worldview.conf
 Source3:	httpd.worldview-debug.conf
+Source4:	events_log.conf
+Source5:	cron.worldview
 
 BuildArch:	noarch
 Requires:	httpd
 Requires:	php
+Requires:	python-feedparser
+Requires:	python-beautifulsoup4
+Requires:	gdal
+Requires:	gdal-python
 
 %description
-In essence, Worldview* shows the entire Earth as it looks "right now",
+In essence, Worldview shows the entire Earth as it looks "right now",
 or at least as it has looked within the past few hours. Worldview
 supports time-critical application areas such as wildfire management,
 air quality measurements, and weather forecasting.
@@ -33,8 +39,8 @@ several products are also available for a "full globe" perspective.
 
 %package debug
 Summary:	Non-minified version of Worldview for debugging
-Requires:	httpd
-Requires:	php
+Requires:	%{name} = %{version}-%{release}
+
 
 %description debug
 Non-minified version of	Worldview for debugging
@@ -43,10 +49,13 @@ Non-minified version of	Worldview for debugging
 %global httpdconfdir %{_sysconfdir}/httpd/conf.d
 
 %prep
+%setup -c -T
 tar xf %{SOURCE0}
 tar xf %{SOURCE1}
 cp %{SOURCE2} .
 cp %{SOURCE3} .
+cp %{SOURCE4} .
+cp %{SOURCE5} .
 
 
 %build
@@ -67,6 +76,19 @@ cp -r worldview/* %{buildroot}/%{_datadir}/worldview
 install -m 755 -d %{buildroot}/%{_datadir}/worldview-debug
 cp -r worldview/* %{buildroot}/%{_datadir}/worldview-debug
 
+install -m 755 -d %{buildroot}/%{_sysconfdir}/worldview
+install -m 644 events_log.conf \
+	%{buildroot}/%{_sysconfdir}/worldview/events_log.conf
+
+install -m 755 -d %{buildroot}/%{_sharedstatedir}/worldview
+touch %{buildroot}/%{_sharedstatedir}/worldview/events_data.json
+install -m 755 -d %{buildroot}/%{_localstatedir}/log/worldview
+touch %{buildroot}/%{_localstatedir}/log/worldview/events_access.log
+touch %{buildroot}/%{_localstatedir}/log/worldview/events_errors.log
+touch %{buildroot}/%{_localstatedir}/log/worldview/events_debug.log
+
+install -m 755 -d %{buildroot}/%{_sysconfdir}/cron.d
+install -m 600 cron.worldview %{buildroot}/%{_sysconfdir}/cron.d/worldview
 
 %clean
 rm -rf %{buildroot}
@@ -75,7 +97,18 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root,-)
 %{_datadir}/worldview
-%config %{httpdconfdir}/worldview.conf
+%config(noreplace) %{httpdconfdir}/worldview.conf
+%dir %{_sysconfdir}/worldview
+%config(noreplace) %{_sysconfdir}/worldview/events_log.conf
+%{_sysconfdir}/cron.d/worldview
+
+%defattr(600,apache,apache,700)
+%dir %{_sharedstatedir}/worldview
+%ghost %{_sharedstatedir}/worldview/events_data.json
+%dir %{_localstatedir}/log/worldview
+%ghost %{_localstatedir}/log/worldview/events_access.log
+%ghost %{_localstatedir}/log/worldview/events_errors.log
+%ghost %{_localstatedir}/log/worldview/events_debug.log
 
 
 %files debug
@@ -83,27 +116,9 @@ rm -rf %{buildroot}
 %config %{httpdconfdir}/worldview-debug.conf
 
 
-%post
-if [ "$1" == 1 ] ; then
-   service httpd reload
-fi
-
-%post debug
-if [ "$1" == 1 ] ; then
-   service httpd reload
-fi
-
-%postun
-if [ "$1" == 0 ] ; then
-   service httpd reload
-fi
-
-%postun debug
-if [ "$1" == 0 ] ; then
-   service httpd reload
-fi
-
-
 %changelog
-* Thu May 9 2012 Mike McGann <mike.mcgann@nasa.gov> - 0.4.5-1 
+* Wed Aug 21 2013 Mike McGann <mike.mcgann@nasa.gov> - 0.6.0-0.1
+- Restructured for events
+
+* Thu May 9 2013 Mike McGann <mike.mcgann@nasa.gov> - 0.4.5-1 
 - Initial package
