@@ -1,6 +1,6 @@
 {
     "name": "MLS/Aura L2 Nitrous Oxide (N2O) Mixing Ratio",
-    "handler": "Aura",
+    "handler": "MLS",
     "query": {
         "shortName": ["ML2N2O", "ML2N2O_NRT"],
         "dataCenterId": "GSFCS4PA"

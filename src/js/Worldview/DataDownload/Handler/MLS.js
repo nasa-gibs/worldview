@@ -50,7 +50,6 @@ Worldview.DataDownload.Handler.MLS = function(config, model, spec) {
             ns.Results.CollectPreferred(model.prefer),
             ns.Results.PreferredFilter(model.prefer), 
             ns.Results.GeometryFromECHO(false),
-            ns.Results.AntiMeridianMulti(MAX_DISTANCE),
             ns.Results.Transform(model.crs),
             ns.Results.ExtentFilter(model.crs, self.extents[model.crs]),
             ns.Results.TimeLabel(model.time),
