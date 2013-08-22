@@ -764,10 +764,13 @@ SOTE.widget.Bank.prototype.loadFromQuery = function(qs){
 		this.updateComponent(qs);
 	}
 	else {
-	   SOTE.widget.Bank.loadValue({
-	       self: this, 
-	       val: SOTE.util.extractFromQuery(this.id, qs)
-       });
+	   var layers = SOTE.util.extractFromQuery(this.id, qs);
+	   if ( layers ) {
+    	   SOTE.widget.Bank.loadValue({
+    	       self: this, 
+    	       val: SOTE.util.extractFromQuery(this.id, qs)
+           });
+       }
 	}
 };
 

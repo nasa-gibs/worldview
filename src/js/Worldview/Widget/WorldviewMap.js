@@ -39,6 +39,7 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
     var last = null;
     
     var init = function() {
+        Logging.debug("Worldview.Map");
         if ( REGISTRY ) {
             REGISTRY.register(containerId, self);
         } else {
@@ -73,7 +74,7 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
             }
             log.debug("WorldviewMap: updateComponent", queryString);
             
-            var state = REGISTRY.getState(queryString);            
+            var state = REGISTRY.getState();            
 
             log.debug("State", state);     
             log.debug("Last State", last);
