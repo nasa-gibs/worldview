@@ -111,6 +111,7 @@ $(function() {// Initialize "static" vars
         var opacity = new Worldview.Widget.Opacity(config);
         var crs = new Worldview.Widget.CRS(config);
 		var events = new SOTE.widget.Events("eventsHolder", {
+		    config: config,
 		    mapWidget: map, 
   		    paletteWidget: palettes,
             switchWidget: projection,

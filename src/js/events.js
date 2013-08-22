@@ -41,6 +41,7 @@ SOTE.widget.Events = function(containerId, config){
 	this.buildMetaDone = false;
 	this.initRenderComplete = false;
 	this.statusStr = "";
+	this.config = config.config;
 	this.init();
 } 
 
@@ -52,7 +53,11 @@ SOTE.widget.Events.prototype.buildMeta = function() {
 	var metaData;
 	self = this;
 
-	$.getJSON("data/events_data.json", function(data) {
+    var endpoint = "var/events_data.json";
+    if ( this.config.parameters.mockEvents ) {
+        endpoint = "mock/events_data.json";
+    }
+	$.getJSON(endpoint, function(data) {
 		metaData = data;
 	}).success(function(){
 		SOTE.widget.Events.handleMetaSuccess(self, metaData);
