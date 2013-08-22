@@ -253,6 +253,15 @@
           <fileset dir="${build.web.css.dir}/ext/jquery.dd-3.3/images/jquery.dd-3.3"/>
         </move>
         <move todir="${build.web.css.dir}" file="${build.web.css.dir}/ext/jcrop-0.9.10-p1/Jcrop.gif"/>
+	<delete includeemptydirs="true">
+	  <fileset dir="${build.web.dir}"  >
+	    <and>
+	      <size value="0"/>
+	      <type type="dir"/>
+	    </and>
+	  </fileset>
+	</delete>
+	
 	</target>
     
     <target name="start-test-server" depends="deps">
@@ -303,20 +312,32 @@
 	      compression="bzip2"/>
     </target>
     
-    <target name="rpm" depends="dist">
-        <mkdir dir="${user.home}/rpmbuild/SOURCES"/>
+    <target name="rpm" depends="dist,rpm-build"/>
+
+    <target name="rpm-build">
+        <delete dir="${build.dir}/rpm"/>
+	<mkdir dir="${build.dir}/rpm"/>
+        <mkdir dir="${build.dir}/rpm/SOURCES"/>
         <copy file="${dist.dir}/worldview.tar.bz2"
-	      todir="${user.home}/rpmbuild/SOURCES"/>
+	      todir="${build.dir}/rpm/SOURCES"/>
         <copy file="${dist.dir}/worldview-debug.tar.bz2"
-	      todir="${user.home}/rpmbuild/SOURCES"/>
+	      todir="${build.dir}/rpm/SOURCES"/>
 	<copy file="deploy/httpd.worldview.conf"
-	      todir="${user.home}/rpmbuild/SOURCES"/>
+	      todir="${build.dir}/rpm/SOURCES"/>
 	<copy file="deploy/httpd.worldview-debug.conf"
-	      todir="${user.home}/rpmbuild/SOURCES"/>
+	      todir="${build.dir}/rpm/SOURCES"/>
 	<exec executable="rpmbuild">
+	    <arg value="--define"/>
+	    <arg value="_topdir ${basedir}/build/rpm"/>
 	    <arg value="-ba"/>
             <arg value="deploy/worldview.spec"/>
         </exec>
+	<move todir="${dist.dir}">
+	  <fileset dir="${build.dir}/rpm/RPMS/noarch"/>
+	</move>
+	<move todir="${dist.dir}">
+	  <fileset dir="${build.dir}/rpm/SRPMS"/>
+	</move>
     </target>
 
 </project>
