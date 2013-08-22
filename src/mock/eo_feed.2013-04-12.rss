@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+ <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:georss="http://www.georss.org/georss" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:media="http://search.yahoo.com/mrss/">
+
+  <channel>
+    <atom10:link xmlns:atom10="http://www.w3.org/2005/Atom" rel="self" href="" type="application/rss+xml" />
+     <title>NASA Earth Observatory Natural Hazards</title>
+     <link>http://earthobservatory.nasa.gov/NaturalHazards/</link>
+     <description>Your source for monitoring regional and global changes on our planet through images and stories.</description>
+     <language>en-us</language>
+     <rating>(PICS-1.1 "http://www.rsac.org/ratingsv01.html"
+		l gen true comment "RSACi North America Server" 
+		for "http://earthobservatory.nasa.gov/" on "2000.09.27T15:55-0800" 
+		r (n 0 s 0 v 0 l 0))</rating>
+     <pubDate>Fri, 12 Apr 2013 19:07:01 -0400</pubDate>
+     <lastBuildDate>Fri, 12 Apr 2013 19:07:01 -0400</lastBuildDate>
+     <webMaster>paul.d.przyborski@nasa.gov (Paul Przyborski)</webMaster>
+
+     <image>
+       <title>NASA Earth Observatory Natural Hazards</title>
+       <url>http://eoimages.gsfc.nasa.gov/images/feeds/eo_feed_logo.gif</url>
+       <link>http://earthobservatory.nasa.gov/NaturalHazards/</link>
+       <width>144</width>
+       <height>46</height>
+       <description>Your source for monitoring regional and global changes on our planet through images and stories.</description>
+    </image>
+    <item>
+       <title>Volcanic Quartet </title>
+       <link>http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=80899&amp;src=nhrss</link>        
+       <category>Volcanoes and Earthquakes</category>        
+
+       <media:thumbnail url="http://eoimages.gsfc.nasa.gov/images/imagerecords/80000/80899/shiveluch_tmo_2013100_tn.jpg"></media:thumbnail>    
+       <description>Four of the volcanoes erupting on Russia’s Kamchatka Peninsula are visible in one satellite image.</description>	    
+       <content:encoded><![CDATA[
+	<p><a href="http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=80899&amp;src=nhrss"><img src="http://eoimages.gsfc.nasa.gov/images/imagerecords/80000/80899/shiveluch_tmo_2013100_tn.jpg" border="0" alt="Volcanic Quartet "/></a><br/>Four of the volcanoes erupting on Russia’s Kamchatka Peninsula are visible in one satellite image.</p>
+       ]]></content:encoded>	
+       <pubDate>Thu, 11 Apr 2013 15:22:38 -0400</pubDate>
+       <guid>http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=80899&amp;src=nhrss</guid>        
+       <dc:date>2013-04-10T00:00:00-04:00</dc:date>		
+       <georss:point>55.9 160.8</georss:point>	
+    </item>
+    <item>
+       <title>Smoldering Shiveluch</title>
+       <link>http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=80890&amp;src=nhrss</link>        
+       <category>Volcanoes and Earthquakes</category>        
+       <category domain="http://visibleearth.nasa.gov/view_cat.php?scheme=SENSOR">Terra/MODIS</category>
+       <media:thumbnail url="http://eoimages.gsfc.nasa.gov/images/imagerecords/80000/80890/shiveluch_ali_2013099_tn.jpg"></media:thumbnail>  
+       <description>Volcanic vapors above the Russian peak’s lava dome indicate continuing growth.</description>	    
+       <content:encoded><![CDATA[
+	<p><a href="http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=80890&amp;src=nhrss"><img src="http://eoimages.gsfc.nasa.gov/images/imagerecords/80000/80890/shiveluch_ali_2013099_tn.jpg" border="0" alt="Smoldering Shiveluch"/></a><br/>Volcanic vapors above the Russian peak’s lava dome indicate continuing growth.</p>
+       ]]></content:encoded>	
+       <pubDate>Thu, 11 Apr 2013 14:22:19 -0400</pubDate>
+       <guid>http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=80890&amp;src=nhrss</guid>        
+       <dc:date>2013-04-09T00:00:00-04:00</dc:date>		
+       <georss:point>56.616 161.285</georss:point>	
+    </item>
+    <item>
+       <title>Best and Worst Time to Start a Fire </title>
+       <link>http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=80882&amp;src=nhrss</link>        
+       <category>Fires</category>        
+       <media:thumbnail url="http://eoimages.gsfc.nasa.gov/images/imagerecords/80000/80882/Australia_amo_2013100_tn.jpg"></media:thumbnail>    
+       <description>Land managers in the Kimberley region of Australia set low-intensity, controlled fires early in the dry season to protect from destructive blazes later in the year. </description>	    
+       <content:encoded><![CDATA[
+	<p><a href="http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=80882&amp;src=nhrss"><img src="http://eoimages.gsfc.nasa.gov/images/imagerecords/80000/80882/Australia_amo_2013100_tn.jpg" border="0" alt="Best and Worst Time to Start a Fire "/></a><br/>Land managers in the Kimberley region of Australia set low-intensity, controlled fires early in the dry season to protect from destructive blazes later in the year. </p>
+       ]]></content:encoded>	
+       <pubDate>Wed, 10 Apr 2013 16:22:12 -0400</pubDate>
+       <guid>http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=80882&amp;src=nhrss</guid>        
+       <dc:date>2013-04-10T00:00:00-04:00</dc:date>		
+       <georss:point>-17.414856462216 124.97360229492</georss:point>	
+    </item>
+    <item>
+       <title>Dust over the Arabian Sea</title>
+       <link>http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=80878&amp;src=nhrss</link>        
+       <category>Dust, Smoke, and Haze</category>        
+       <media:thumbnail url="http://eoimages.gsfc.nasa.gov/images/imagerecords/80000/80878/arabiansea_tmo_2013097_tn.jpg"></media:thumbnail>    
+       <description>Acquired April 7, 2013, this image shows a dust plume spanning hundreds of kilometers along the southern Arabian Peninsula.</description>	    
+       <content:encoded><![CDATA[
+	<p><a href="http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=80878&amp;src=nhrss"><img src="http://eoimages.gsfc.nasa.gov/images/imagerecords/80000/80878/arabiansea_tmo_2013097_tn.jpg" border="0" alt="Dust over the Arabian Sea"/></a><br/>Acquired April 7, 2013, this image shows a dust plume spanning hundreds of kilometers along the southern Arabian Peninsula.</p>
+       ]]></content:encoded>	
+       <pubDate>Tue, 09 Apr 2013 15:42:46 -0400</pubDate>
+       <guid>http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=80878&amp;src=nhrss</guid>        
+       <dc:date>2013-04-07T00:00:00-04:00</dc:date>		
+       <georss:point>15.284185114076 53.0859375</georss:point>	
+    </item>
+    <item>
+       <title>Flooding in La Plata</title>
+       <link>http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=80875&amp;src=nhrss</link>        
+       <category>Floods</category>        
+       <media:thumbnail url="http://eoimages.gsfc.nasa.gov/images/imagerecords/80000/80875/laplata_ast_2013094_tn.jpg"></media:thumbnail>    
+       <description>Acquired April 4, 2013, this image shows lingering flood water after torrential rains struck La Plata.</description>	    
+       <content:encoded><![CDATA[
+	<p><a href="http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=80875&amp;src=nhrss"><img src="http://eoimages.gsfc.nasa.gov/images/imagerecords/80000/80875/laplata_ast_2013094_tn.jpg" border="0" alt="Flooding in La Plata"/></a><br/>Acquired April 4, 2013, this image shows lingering flood water after torrential rains struck La Plata.</p>
+       ]]></content:encoded>	
+       <pubDate>Tue, 09 Apr 2013 12:38:23 -0400</pubDate>
+       <guid>http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=80875&amp;src=nhrss</guid>        
+       <dc:date>2013-04-04T00:00:00-04:00</dc:date>		
+       <georss:point>-34.93998515156 -57.9638671875</georss:point>	
+    </item>
+    <item>
+       <title>Tropical Storm Imelda</title>
+       <link>http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=80870&amp;src=nhrss</link>        
+       <category>Severe Storms</category>        
+       <media:thumbnail url="http://eoimages.gsfc.nasa.gov/images/imagerecords/80000/80870/imelda_tmo_2013098_tn.jpg"></media:thumbnail>    
+       <description>Acquired April 8, 2013, this image shows Tropical Storm Imelda over the Indian Ocean.</description>	    
+       <content:encoded><![CDATA[
+	<p><a href="http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=80870&amp;src=nhrss"><img src="http://eoimages.gsfc.nasa.gov/images/imagerecords/80000/80870/imelda_tmo_2013098_tn.jpg" border="0" alt="Tropical Storm Imelda"/></a><br/>Acquired April 8, 2013, this image shows Tropical Storm Imelda over the Indian Ocean.</p>
+       ]]></content:encoded>	
+       <pubDate>Mon, 08 Apr 2013 16:54:24 -0400</pubDate>
+       <guid>http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=80870&amp;src=nhrss</guid>        
+       <dc:date>2013-04-08T00:00:00-04:00</dc:date>		
+       <georss:point>-10 63.4</georss:point>	
+    </item>
+    <item>
+       <title>Dust Plumes over the Mediterranean Sea</title>
+       <link>http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=80865&amp;src=nhrss</link>        
+       <category>Dust, Smoke, and Haze</category>        
+       <media:thumbnail url="http://eoimages.gsfc.nasa.gov/images/imagerecords/80000/80865/emedsea_amo_2013098_tn.jpg"></media:thumbnail>    
+       <description>Acquired April 7 and 8, 2013, these images show dust plumes over the Mediterranean Sea.</description>	    
+       <content:encoded><![CDATA[
+	<p><a href="http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=80865&amp;src=nhrss"><img src="http://eoimages.gsfc.nasa.gov/images/imagerecords/80000/80865/emedsea_amo_2013098_tn.jpg" border="0" alt="Dust Plumes over the Mediterranean Sea"/></a><br/>Acquired April 7 and 8, 2013, these images show dust plumes over the Mediterranean Sea.</p>
+       ]]></content:encoded>	
+       <pubDate>Mon, 08 Apr 2013 15:14:19 -0400</pubDate>
+       <guid>http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=80865&amp;src=nhrss</guid>        
+       <dc:date>2013-04-08T00:00:00-04:00</dc:date>		
+       <georss:point>32.546813173515 29.53125</georss:point>	
+    </item>
+    <item>
+       <title>Activity at Tolbachik Volcano</title>
+       <link>http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=80861&amp;src=nhrss</link>        
+       <category>Volcanoes and Earthquakes</category>        
+       <media:thumbnail url="http://eoimages.gsfc.nasa.gov/images/imagerecords/80000/80861/tolbachik_ali_2013095_tn.jpg"></media:thumbnail>    
+       <description>Tolbachik Volcano is not a single peak, but a complex of volcanic features superimposed on one another. </description>	    
+       <content:encoded><![CDATA[
+	<p><a href="http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=80861&amp;src=nhrss"><img src="http://eoimages.gsfc.nasa.gov/images/imagerecords/80000/80861/tolbachik_ali_2013095_tn.jpg" border="0" alt="Activity at Tolbachik Volcano"/></a><br/>Tolbachik Volcano is not a single peak, but a complex of volcanic features superimposed on one another. </p>
+       ]]></content:encoded>	
+       <pubDate>Mon, 08 Apr 2013 13:53:22 -0400</pubDate>
+       <guid>http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=80861&amp;src=nhrss</guid>        
+       <dc:date>2013-04-05T00:00:00-04:00</dc:date>		
+       <georss:point>55.77 160.207</georss:point>	
+    </item>
+    <item>
+       <title>Bezymianny Volcano</title>
+       <link>http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=80858&amp;src=nhrss</link>        
+       <category>Volcanoes and Earthquakes</category>        
+       <media:thumbnail url="http://eoimages.gsfc.nasa.gov/images/imagerecords/80000/80858/bezymianny_ali_2013095_tn.jpg"></media:thumbnail>    
+       <description>A NASA satellite captured an image of a volcanic plume rising above the Russian volcano.</description>	    
+       <content:encoded><![CDATA[
+	<p><a href="http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=80858&amp;src=nhrss"><img src="http://eoimages.gsfc.nasa.gov/images/imagerecords/80000/80858/bezymianny_ali_2013095_tn.jpg" border="0" alt="Bezymianny Volcano"/></a><br/>A NASA satellite captured an image of a volcanic plume rising above the Russian volcano.</p>
+       ]]></content:encoded>	
+       <pubDate>Mon, 08 Apr 2013 12:00:18 -0400</pubDate>
+       <guid>http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=80858&amp;src=nhrss</guid>        
+       <dc:date>2013-04-05T00:00:00-04:00</dc:date>		
+       <georss:point>55.967 160.589</georss:point>	
+    </item>
+
+
+   </channel>
+ </rss>

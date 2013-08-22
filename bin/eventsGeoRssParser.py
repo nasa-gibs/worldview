@@ -2,6 +2,8 @@
 
 import feedparser, logging, logging.config
 import urllib2, shutil, urlparse, os, zipfile, os.path, re, json
+# CentOS uses 2.6, argparse starts with 2.7
+from optparse import OptionParser
 import sys
 from zipfile import ZipFile as zip
 from zipfile import BadZipfile
@@ -10,7 +12,19 @@ from osgeo import gdal
 
 baseDir = os.path.join(os.path.dirname(__file__), '..')
 
-if len(sys.argv) > 1 and sys.argv[1] == '-d':
+parser = OptionParser()
+parser.add_option("-d", "--development", action="store_true",
+                  help="Use the source tree instead of the system directories")
+parser.add_option("-f", "--feed", 
+                  help="Use file as feed instead of Earth Observatory")
+(options, args) = parser.parse_args()
+    
+feed = None              
+if options.feed:
+    # Read in the entire feed before changing directories
+    with open(options.feed) as fp:
+        feed = fp.read()
+if options.development:
     print 'Development mode'
     # Log configuration assume working from this directory
     os.chdir(baseDir)
@@ -246,7 +260,10 @@ def processEntry(entry):
 
 # Driver
 def main():
-    entries = pullRss("http://www.earthobservatory.nasa.gov/Feeds/rss/nh.rss")
+    if not feed:
+        entries = pullRss("http://www.earthobservatory.nasa.gov/Feeds/rss/nh.rss")
+    else:
+        entries = pullRss(feed)
     num = 0
     recent_titles = []
     data = []
@@ -276,9 +293,8 @@ def main():
 
     for e in entries:
         obj = processEntry(e)
-
         if obj:
-            if not obj.title in recent_titles:
+            if not obj["title"] in recent_titles:
                 data.append(obj)
                 num = num + 1
     
