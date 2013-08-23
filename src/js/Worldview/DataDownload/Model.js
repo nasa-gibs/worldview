@@ -56,6 +56,8 @@ Worldview.DataDownload.Model = function(config) {
     self.EVENT_QUERY_RESULTS = "queryResults";
     self.EVENT_QUERY_CANCEL = "queryCancel";
     self.EVENT_QUERY_ERROR = "queryError";
+    self.EVENT_GRANULE_SELECT = "granuleSelect";
+    self.EVENT_GRANULE_UNSELECT = "granuleUnselect";
     
     /**
      * Indicates if data download mode is active.
@@ -77,6 +79,7 @@ Worldview.DataDownload.Model = function(config) {
     
     self.selectedLayer = null;
     self.selectedProduct = null;
+    self.selectedGranules = {};
     self.layers = [];
     self.prefer = "science";
     
@@ -164,6 +167,16 @@ Worldview.DataDownload.Model = function(config) {
             self.time = state.time;
             query();
         }
+    };
+    
+    self.selectGranule = function(granule) {
+        self.selectedGranules[granule.id] = granule;
+        self.events.trigger(self.EVENT_GRANULE_SELECT, granule);    
+    };
+    
+    self.unselectGranule = function(granule) {
+        delete self.selectedGranules[granule.id];
+        self.events.trigger(self.EVENT_GRANULE_UNSELECT, granule); 
     };
     
     var query = function() {

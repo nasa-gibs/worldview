@@ -17,15 +17,30 @@ Worldview.DataDownload.Layers.Button = function(model, maps, config) {
     var IMAGE_SELECT = "images/data-download-plus-button-cyan.svg";
     var IMAGE_UNSELECT = "images/data-download-minus-button-blue.svg";  
     
-    var LABEL_STYLE = {
-        fontFamily: "helvetica, sans-serif",
-        fontColor: "#ffffff",
-        fontWeight: "bold",
-        labelOutlineColor: "black",
-        labelOutlineWidth: 2,
-        labelOutlineOpacity: 0.7,    
+    var STYLE = {
+        "default": {
+            externalGraphic: IMAGE_SELECT,
+            fontFamily: "helvetica, sans-serif",
+            fontColor: "#ffffff",
+            fontWeight: "bold",
+            labelOutlineColor: "black",
+            labelOutlineWidth: 2,
+            labelOutlineOpacity: 0.7,
+            label: "${label}"
+        }, 
+        "select": {
+            externalGraphic: IMAGE_UNSELECT,
+            fontFamily: "helvetica, sans-serif",
+            fontColor: "#ffffff",
+            fontWeight: "bold",
+            labelOutlineColor: "black",
+            labelOutlineWidth: 2,
+            labelOutlineOpacity: 0.7,
+            label: "${label}"            
+        }
     };
     
+    var features = {};
     var self = {};
     
     self.EVENT_HOVER_OVER = "hoverover";
@@ -42,23 +57,33 @@ Worldview.DataDownload.Layers.Button = function(model, maps, config) {
     self.update = function(results) {
         var layer = getLayer();
         layer.removeAllFeatures();
-        var features = [];
+        var featureList = [];
+        var selectedFeatures = [];
         $.each(results.granules, function(index, granule) {
             var centroid = granule.centroid[model.crs];
             if ( centroid ) {
                 var feature = new OpenLayers.Feature.Vector(centroid, {
                     granule: granule,
-                    label: granule.label
+                    label: ""
                 });
-                features.push(feature);    
+                featureList.push(feature);   
+                features[granule.id] = feature; 
+                if ( model.selectedGranules[granule.id] ) {
+                    selectedFeatures.push(feature);
+                }
             }
         });
-        layer.addFeatures(features);
+        layer.addFeatures(featureList);
+        var selectionControl = layer.selectionControl;
+        $.each(selectedFeatures, function(index, selectedFeature) {
+            selectionControl.select(selectedFeature);
+        });
     };
     
     self.clear = function() {
         var layer = Worldview.Map.getLayerByName(maps.map, LAYER_NAME);
         if ( layer ) {
+            features = {};
             layer.removeAllFeatures();
         }
     };
@@ -68,22 +93,31 @@ Worldview.DataDownload.Layers.Button = function(model, maps, config) {
             var layer = Worldview.Map.getLayerByName(map, LAYER_NAME);
             if ( layer ) {
                 map.removeControl(layer.hoverControl);
+                map.removeControl(layer.selectionControl);
                 map.removeLayer(layer);   
-            }  
+            }
+            map.events.unregister("zoomend", self, resize);  
         });     
     };
     
     var createLayer = function() {
         size = getSize();
-        var styleMap = {
-            externalGraphic: IMAGE_SELECT
-        };
         
         layer = new OpenLayers.Layer.Vector(LAYER_NAME, {
             styleMap: new OpenLayers.StyleMap(getStyle())
         });
+        
         layer.div.setAttribute("data-layer-name", LAYER_NAME);
         maps.map.addLayer(layer);
+        
+        layer.events.on({
+            'featureselected': function(event) {
+                model.selectGranule(event.feature.attributes.granule);        
+            },
+            'featureunselected': function(event) {
+                model.unselectGranule(event.feature.attributes.granule);
+            }
+        });
         
         var hoverControl = new Worldview.Map.HoverControl(layer);
         hoverControl.events.on({
@@ -99,7 +133,16 @@ Worldview.DataDownload.Layers.Button = function(model, maps, config) {
         maps.map.addControl(hoverControl);
         hoverControl.activate();
         layer.hoverControl = hoverControl;
-       
+
+        var selectionControl = new OpenLayers.Control.SelectFeature(layer, {
+            autoActivate: true,
+            toggle: true,
+            multiple: true,
+            clickout: false            
+        });
+        maps.map.addControl(selectionControl);
+        layer.selectionControl = selectionControl;
+              
         return layer;       
     };
     
@@ -123,18 +166,23 @@ Worldview.DataDownload.Layers.Button = function(model, maps, config) {
         return new OpenLayers.Size(size, size);
     };
     
-    var getStyle = function(withLabel) {
+    var getStyle = function(intent) {
         var size = getSize();
-        var symbolizer = {
-            externalGraphic: IMAGE_SELECT,
-            graphicWidth: size.w,
-            graphicHeight: size.h,
-        };
-        if ( withLabel ) {
-            $.extend(true, symbolizer, LABEL_STYLE);
-            symbolizer.labelYOffset = getLabelOffset();
+        var newStyle = $.extend(true, {}, STYLE);
+        
+        newStyle["default"].graphicWidth = size.w;
+        newStyle["default"].graphicHeight = size.h;
+        newStyle["default"].labelYOffset = getLabelOffset();
+        
+        newStyle.select.graphicWidth = size.w;
+        newStyle.select.graphicHeight = size.h;
+        newStyle.select.labelYOffset = getLabelOffset();
+        
+        if ( intent ) {
+            return newStyle[intent];
+        } else {
+            return newStyle;
         }
-        return symbolizer;
     };
     
     var resize = function() {
@@ -143,17 +191,18 @@ Worldview.DataDownload.Layers.Button = function(model, maps, config) {
     };
     
     var onHoverOver = function(event) {
-        var style = getStyle(true);
-        style.label = event.feature.attributes.granule.label;
-        event.feature.style = style;
-        getLayer().drawFeature(event.feature);    
+        var feature = event.feature;
+        var granule = feature.attributes.granule;
+        feature.attributes.label = granule.label;
+        getLayer().drawFeature(feature);
     };
     
     var onHoverOut = function(event) {
-        event.feature.style = undefined;
-        getLayer().drawFeature(event.feature);
+        var feature = event.feature;
+        feature.attributes.label = "";
+        getLayer().drawFeature(feature);
     };
-        
+           
     var getLabelOffset = function() {
         var buttonHeight = getSize().h;
         return ( buttonHeight / 2.0 ) + 10;

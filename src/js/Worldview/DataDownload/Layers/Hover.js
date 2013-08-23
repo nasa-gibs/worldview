@@ -22,16 +22,27 @@ Worldview.DataDownload.Layers.Hover = function(model, maps, config) {
         fillOpacity: 0.25
     };
             
+    var STYLE_HOVER_SELECTED = {
+        strokeColor: "#0000ff",
+        fillColor: "#0000ff",
+        fillOpacity: 0.25,
+    };
+
     var self = {};
+    
+    var init = function() {
+        model.events
+            .on("granuleSelect", refresh)
+            .on("granuleUnselect", refresh);
+    };
         
     self.hoverOver = function(buttonFeature) {
-        var layer = getLayer();        
         var hoverFeature = new OpenLayers.Feature.Vector(
             buttonFeature.attributes.granule.geometry[model.crs],
-            buttonFeature.attributes,
-            STYLE_HOVER_UNSELECTED
+            buttonFeature.attributes
         );
-        layer.addFeatures([hoverFeature]);
+        applyStyle(hoverFeature);
+        getLayer().addFeatures([hoverFeature]);
         log.debug(hoverFeature.attributes.granule);
     };
         
@@ -54,7 +65,27 @@ Worldview.DataDownload.Layers.Hover = function(model, maps, config) {
             }
         });
     };    
-        
+    
+    var refresh = function(granule) {
+        var layer = getLayer();
+        if ( layer.features.length === 0 ) {
+            return;
+        }
+        var feature = layer.features[0];
+        var hoverGranule = feature.attributes.granule;
+        if ( hoverGranule.id === granule.id ) {
+            applyStyle(feature);
+            layer.drawFeature(feature);
+        }        
+    };
+    
+    var applyStyle = function(feature) {
+        var granule = feature.attributes.granule;
+        var selected = model.selectedGranules[granule.id];
+        var style = ( selected ) ? STYLE_HOVER_SELECTED: STYLE_HOVER_UNSELECTED; 
+        feature.style = style;         
+    };
+     
     var createLayer = function() {
         var layer = new OpenLayers.Layer.Vector(LAYER_NAME);
         layer.div.setAttribute("data-layer-name", LAYER_NAME);
@@ -71,6 +102,7 @@ Worldview.DataDownload.Layers.Hover = function(model, maps, config) {
         return layer;
     };
         
+    init();
     return self;
 
 };
