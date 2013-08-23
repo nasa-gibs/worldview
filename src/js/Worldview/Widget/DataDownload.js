@@ -48,7 +48,8 @@ Worldview.Widget.DataDownload = function(config, spec) {
             .on("query", onQuery)
             .on("queryResults", onQueryResults)
             .on("queryCancel", onQueryCancel)
-            .on("queryError", onQueryError);
+            .on("queryError", onQueryError)
+            .on("queryTimeout", onQueryTimeout);
         
         $(spec.selector).on("click", toggleMode);        
         $(spec.selector).html(HTML_WIDGET_INACTIVE);
@@ -140,7 +141,16 @@ Worldview.Widget.DataDownload = function(config, spec) {
     var onQueryError = function(status, error) {
         log.debug("queryError", status, error);
         Worldview.Indicator.hide();
-        Worldview.notify("Unable to query at this time. Please try again later");
+        Worldview.notify("Unable to search at this time. Please try again later");
+    };
+    
+    var onQueryTimeout = function() {
+        log.debug("queryTimeout");
+        Worldview.Indicator.hide();
+        Worldview.notify(
+            "No results received yet. This may be due to a " +
+            "connectivity issue. Please try again later."
+        );
     };
     
     init();

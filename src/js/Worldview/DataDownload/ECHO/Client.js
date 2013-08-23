@@ -22,12 +22,16 @@ Worldview.DataDownload.ECHO.Client = function(spec) {
     // Hold results for a maximum of ten minutes
     var CACHE_TIME = 10 * 60;
     
+    // Abort query after 30 seconds
+    var QUERY_TIMEOUT = 30 * 1000; 
+    
     var ns = Worldview.DataDownload.ECHO.Client;
         
     var ajaxOptions = {
         url: "data/echo.cgi",
         traditional: true,
-        dataType: "json"
+        dataType: "json",
+        timeout: QUERY_TIMEOUT
     };
     
     var self = {};

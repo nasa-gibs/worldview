@@ -63,8 +63,12 @@ Worldview.DataDownload.Handler.Base = function(config, model) {
                 self.events.trigger("error", "exception", error);
             }
         }).fail(function(jqXHR, textStatus, errorThrown) {
-            console.log("ERROR", textStatus, errorThrown);
-            self.events.trigger("error", textStatus, errorThrown);
+            if ( textStatus === "timeout" ) {
+                self.events.trigger("timeout");
+            } else {
+                console.log("ERROR", textStatus, errorThrown);
+                self.events.trigger("error", textStatus, errorThrown);
+            }
         });
         // FIXME: Deprecated API use
         if ( !promise.isResolved() && !promise.isRejected() ) {

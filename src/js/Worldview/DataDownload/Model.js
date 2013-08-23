@@ -56,6 +56,7 @@ Worldview.DataDownload.Model = function(config) {
     self.EVENT_QUERY_RESULTS = "queryResults";
     self.EVENT_QUERY_CANCEL = "queryCancel";
     self.EVENT_QUERY_ERROR = "queryError";
+    self.EVENT_QUERY_TIMEOUT = "queryTimeout";
     self.EVENT_GRANULE_SELECT = "granuleSelect";
     self.EVENT_GRANULE_UNSELECT = "granuleUnselect";
     
@@ -202,6 +203,8 @@ Worldview.DataDownload.Model = function(config) {
             self.events.trigger(self.EVENT_QUERY_RESULTS, results);
         }).on("error", function(textStatus, errorThrown) {
             self.events.trigger(self.EVENT_QUERY_ERROR, textStatus, errorThrown);
+        }).on("timeout", function() {
+            self.events.trigger(self.EVENT_QUERY_TIMEOUT);
         });
         handler.submit();
     };
