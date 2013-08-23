@@ -14,6 +14,7 @@ Source2:	httpd.worldview.conf
 Source3:	httpd.worldview-debug.conf
 Source4:	events_log.conf
 Source5:	cron.worldview
+Source6:	logrotate.worldview
 
 BuildArch:	noarch
 Requires:	httpd
@@ -56,6 +57,7 @@ cp %{SOURCE2} .
 cp %{SOURCE3} .
 cp %{SOURCE4} .
 cp %{SOURCE5} .
+cp %{SOURCE6} .
 
 
 %build
@@ -81,14 +83,15 @@ install -m 644 events_log.conf \
 	%{buildroot}/%{_sysconfdir}/worldview/events_log.conf
 
 install -m 755 -d %{buildroot}/%{_sharedstatedir}/worldview
-touch %{buildroot}/%{_sharedstatedir}/worldview/events_data.json
 install -m 755 -d %{buildroot}/%{_localstatedir}/log/worldview
-touch %{buildroot}/%{_localstatedir}/log/worldview/events_access.log
-touch %{buildroot}/%{_localstatedir}/log/worldview/events_errors.log
-touch %{buildroot}/%{_localstatedir}/log/worldview/events_debug.log
 
 install -m 755 -d %{buildroot}/%{_sysconfdir}/cron.d
 install -m 600 cron.worldview %{buildroot}/%{_sysconfdir}/cron.d/worldview
+
+install -m 755 -d %{buildroot}/%{_sysconfdir}/logrotate.d
+install -m 600 logrotate.worldview \
+	%{buildroot}/%{_sysconfdir}/logrotate.d/worldview
+
 
 %clean
 rm -rf %{buildroot}
@@ -100,15 +103,12 @@ rm -rf %{buildroot}
 %config(noreplace) %{httpdconfdir}/worldview.conf
 %dir %{_sysconfdir}/worldview
 %config(noreplace) %{_sysconfdir}/worldview/events_log.conf
-%{_sysconfdir}/cron.d/worldview
+%config(noreplace) %{_sysconfdir}/cron.d/worldview
+%config(noreplace) %{_sysconfdir}/logrotate.d/worldview
 
 %defattr(600,apache,apache,700)
 %dir %{_sharedstatedir}/worldview
-%ghost %{_sharedstatedir}/worldview/events_data.json
 %dir %{_localstatedir}/log/worldview
-%ghost %{_localstatedir}/log/worldview/events_access.log
-%ghost %{_localstatedir}/log/worldview/events_errors.log
-%ghost %{_localstatedir}/log/worldview/events_debug.log
 
 
 %files debug

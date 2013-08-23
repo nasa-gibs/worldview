@@ -33,6 +33,7 @@ if options.development:
 else:
     confDir = '/etc/worldview'
     libDir = '/var/lib/worldview'
+    os.chdir('/tmp')
 
 # ===================================================================
 # Log Configuration
@@ -311,4 +312,7 @@ def main():
     outfile.truncate()
     outfile.close()
 
-main()
+try:
+    main()
+except Exception as e:
+    errorLog.error("Unhandled exception: %s" % str(e))

@@ -256,7 +256,15 @@
 		  <regexpmapper from="^[^/]*/(.*)$$" to="\1" handledirsep="true"/>
 		</move>
 		
-	
+		<delete includeemptydirs="true">
+		  <fileset dir="${build.web.dir}"  >
+		    <and>
+		      <size value="0"/>
+		      <type type="dir"/>
+		    </and>
+		  </fileset>
+		</delete>
+
 	</target>
     
     <target name="start-test-server" depends="deps">
@@ -334,23 +342,33 @@
     <target name="rpm" depends="dist,rpm-build"/>
 
     <target name="rpm-build">
-        <mkdir dir="${user.home}/rpmbuild/SOURCES"/>
+        <mkdir dir="${build.dir}/rpm/SOURCES"/>
         <copy file="${dist.dir}/worldview.tar.bz2"
-	      todir="${user.home}/rpmbuild/SOURCES"/>
+	            todir="${build.dir}/rpm/SOURCES"/>
         <copy file="${dist.dir}/worldview-debug.tar.bz2"
-	      todir="${user.home}/rpmbuild/SOURCES"/>
+	            todir="${build.dir}/rpm/SOURCES"/>
 	<copy file="etc/deploy/httpd.worldview.conf"
-	      todir="${user.home}/rpmbuild/SOURCES"/>
+	            todir="${build.dir}/rpm/SOURCES"/>
 	<copy file="etc/deploy/httpd.worldview-debug.conf"
-	      todir="${user.home}/rpmbuild/SOURCES"/>
+	            todir="${build.dir}/rpm/SOURCES"/>
 	<copy file="etc/deploy/events_log.conf"
-	      todir="${user.home}/rpmbuild/SOURCES"/>
+	      todir="${build.dir}/rpm/SOURCES"/>
 	<copy file="etc/deploy/cron.worldview"
-	      todir="${user.home}/rpmbuild/SOURCES"/>
+	      todir="${build.dir}/rpm/SOURCES"/>
+	<copy file="etc/deploy/logrotate.worldview"
+	      todir="${build.dir}/rpm/SOURCES"/>
 	<exec executable="rpmbuild">
-	    <arg value="-ba"/>
-            <arg value="etc/deploy/worldview.spec"/>
+	      <arg value="--define"/>
+	      <arg value="_topdir ${basedir}/build/rpm"/>
+	      <arg value="-ba"/>
+              <arg value="etc/deploy/worldview.spec"/>
         </exec>
+	<move todir="${dist.dir}">
+	  <fileset dir="${build.dir}/rpm/RPMS/noarch"/>
+	</move>
+	<move todir="${dist.dir}">
+	  <fileset dir="${build.dir}/rpm/SRPMS"/>
+	</move>
     </target>
 
 </project>
