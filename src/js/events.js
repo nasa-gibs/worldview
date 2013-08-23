@@ -56,6 +56,9 @@ SOTE.widget.Events.prototype.buildMeta = function() {
     var endpoint = "var/events_data.json";
     if ( this.config.parameters.mockEvents ) {
         endpoint = "mock/events_data.json";
+        if ( this.config.parameters.mockEvents !== "true" ) {
+            endpoint = endpoint + "-" + this.config.parameters.mockEvents;
+        }
     }
 	$.getJSON(endpoint, function(data) {
 		metaData = data;
