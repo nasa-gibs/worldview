@@ -15,7 +15,7 @@ $(function() {// Initialize "static" vars
         
         // A message can be displayed to the user (for example, notification
         // of a pending outage) by adding a notice.txt file in the web root                     
-        $.get("notice.txt", function(message) {
+        $.get("var/notice.txt", function(message) {
             var html = message.replace(/\n/g, "<br/>");
             Worldview.notify(html);
         });
