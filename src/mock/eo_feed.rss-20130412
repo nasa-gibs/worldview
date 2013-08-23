@@ -28,7 +28,7 @@
        <title>Volcanic Quartet </title>
        <link>http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=80899&amp;src=nhrss</link>        
        <category>Volcanoes and Earthquakes</category>        
-
+       <category domain="http://visibleearth.nasa.gov/view_cat.php?scheme=SENSOR">Terra/MODIS</category>
        <media:thumbnail url="http://eoimages.gsfc.nasa.gov/images/imagerecords/80000/80899/shiveluch_tmo_2013100_tn.jpg"></media:thumbnail>    
        <description>Four of the volcanoes erupting on Russia’s Kamchatka Peninsula are visible in one satellite image.</description>	    
        <content:encoded><![CDATA[
@@ -43,7 +43,6 @@
        <title>Smoldering Shiveluch</title>
        <link>http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=80890&amp;src=nhrss</link>        
        <category>Volcanoes and Earthquakes</category>        
-       <category domain="http://visibleearth.nasa.gov/view_cat.php?scheme=SENSOR">Terra/MODIS</category>
        <media:thumbnail url="http://eoimages.gsfc.nasa.gov/images/imagerecords/80000/80890/shiveluch_ali_2013099_tn.jpg"></media:thumbnail>  
        <description>Volcanic vapors above the Russian peak’s lava dome indicate continuing growth.</description>	    
        <content:encoded><![CDATA[
@@ -58,6 +57,7 @@
        <title>Best and Worst Time to Start a Fire </title>
        <link>http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=80882&amp;src=nhrss</link>        
        <category>Fires</category>        
+       <category domain="http://visibleearth.nasa.gov/view_cat.php?scheme=SENSOR">Terra/MODIS</category>
        <media:thumbnail url="http://eoimages.gsfc.nasa.gov/images/imagerecords/80000/80882/Australia_amo_2013100_tn.jpg"></media:thumbnail>    
        <description>Land managers in the Kimberley region of Australia set low-intensity, controlled fires early in the dry season to protect from destructive blazes later in the year. </description>	    
        <content:encoded><![CDATA[
@@ -72,6 +72,7 @@
        <title>Dust over the Arabian Sea</title>
        <link>http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=80878&amp;src=nhrss</link>        
        <category>Dust, Smoke, and Haze</category>        
+       <category domain="http://visibleearth.nasa.gov/view_cat.php?scheme=SENSOR">Terra/MODIS</category>
        <media:thumbnail url="http://eoimages.gsfc.nasa.gov/images/imagerecords/80000/80878/arabiansea_tmo_2013097_tn.jpg"></media:thumbnail>    
        <description>Acquired April 7, 2013, this image shows a dust plume spanning hundreds of kilometers along the southern Arabian Peninsula.</description>	    
        <content:encoded><![CDATA[
@@ -100,6 +101,7 @@
        <title>Tropical Storm Imelda</title>
        <link>http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=80870&amp;src=nhrss</link>        
        <category>Severe Storms</category>        
+       <category domain="http://visibleearth.nasa.gov/view_cat.php?scheme=SENSOR">Terra/MODIS</category>
        <media:thumbnail url="http://eoimages.gsfc.nasa.gov/images/imagerecords/80000/80870/imelda_tmo_2013098_tn.jpg"></media:thumbnail>    
        <description>Acquired April 8, 2013, this image shows Tropical Storm Imelda over the Indian Ocean.</description>	    
        <content:encoded><![CDATA[
@@ -114,6 +116,7 @@
        <title>Dust Plumes over the Mediterranean Sea</title>
        <link>http://earthobservatory.nasa.gov/NaturalHazards/view.php?id=80865&amp;src=nhrss</link>        
        <category>Dust, Smoke, and Haze</category>        
+       <category domain="http://visibleearth.nasa.gov/view_cat.php?scheme=SENSOR">Terra/MODIS</category>
        <media:thumbnail url="http://eoimages.gsfc.nasa.gov/images/imagerecords/80000/80865/emedsea_amo_2013098_tn.jpg"></media:thumbnail>    
        <description>Acquired April 7 and 8, 2013, these images show dust plumes over the Mediterranean Sea.</description>	    
        <content:encoded><![CDATA[

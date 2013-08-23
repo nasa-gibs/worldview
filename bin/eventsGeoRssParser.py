@@ -29,7 +29,7 @@ if options.development:
     # Log configuration assume working from this directory
     os.chdir(baseDir)
     confDir = 'etc/config'
-    libDir = 'src/var/lib/worldview'
+    libDir = 'src/var'
 else:
     confDir = '/etc/worldview'
     libDir = '/var/lib/worldview'
@@ -139,6 +139,8 @@ def download(url, fileName=None):
 # @return - a JSON description of the GeoRss entry
 def processEntry(entry):
 
+    title = entry["title"]
+
     # check satellite/instrument - if not MODIS, skip
     if not any("tags" in n for n in entry):
         debugLog.debug('skipping because no tags')
@@ -146,7 +148,7 @@ def processEntry(entry):
 
     tags = entry["tags"]
     if len(tags) < 2:
-        debugLog.debug('skipping because too few tags')
+        debugLog.debug('skipping because too few tags: %s' % title)
         return None
 
     parts = tags[1].term.split("/")
@@ -295,8 +297,11 @@ def main():
         obj = processEntry(e)
         if obj:
             if not obj["title"] in recent_titles:
+                debugLog.debug("selected: %s" % obj["title"])
                 data.append(obj)
                 num = num + 1
+            else:
+                debugLog.debug("already seen: %s" % obj["title"])
     
     outfile.seek(0)
     if len(data) < 100:
