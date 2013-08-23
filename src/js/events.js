@@ -354,12 +354,13 @@ SOTE.widget.Events.toggleDescription = function(e) {
         ];
         
        
-       
-      // map.setValue(meta[ind].date);
-       //p.b.setValue(prods);
-      // setTimeout(showevextent, 1000);
-      // m.panTo(extent);
-       
+      // Putting old version back in for now for integration testing
+      map.setValue(meta[ind].date);
+      p.b.setValue(prods);
+      //setTimeout(showevextent, 1000);
+      m.setValue(extent);
+      // END
+      
       var centerlon = parseInt(meta[ind].west) + ((parseInt(meta[ind].east) - parseInt(meta[ind].west)) / 2);
       var centerlat = parseInt(meta[ind].south) + ((parseInt(meta[ind].north) - parseInt(meta[ind].south)) / 2);
       console.log("centerlon = " + centerlon);
@@ -375,6 +376,9 @@ SOTE.widget.Events.toggleDescription = function(e) {
       	  m.eventZoom(extent, center);
       	  p.b.setValue(prods);
       }*/
+     
+    
+    /*
      console.log("Beth's latest version");
      p.b.setValue(prods);
      var currentMap = m.productMap.map;
@@ -382,7 +386,7 @@ SOTE.widget.Events.toggleDescription = function(e) {
 	currentMap.events.register("maploadend", currentMap, function() {
     	console.log("Map has finished loading");
 	});
-
+    */
       
       //m.panTo(center);
       //setTimeout(function(){m.zoomToExtent(extent);}, 3000);

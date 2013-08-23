@@ -81,6 +81,7 @@ a.evexpand {
 .events h1, .events h2, .events h3, .events h4 {margin:0px; padding:0px; position:relative; }
 .events h2 {display:block; color:#fffbe7; font-size: 14px; font-weight:100; border:none; padding:6px 0;}
 .events h3 {display:block; color:#fffb27; font-size: 12px; font-weight:100; border:none; text-decoration:none; }
+.events h4 { color: #ffffff; }
 .events div,.events ul {display:block; overflow:hidden; width:100%; margin:0 auto;}
 .events ul h3 {}
 

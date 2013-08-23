@@ -39,7 +39,7 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
     var last = null;
     
     var init = function() {
-        Logging.debug("Worldview.Map");
+        //Logging.debug("Worldview.Map");
         if ( REGISTRY ) {
             REGISTRY.register(containerId, self);
         } else {
