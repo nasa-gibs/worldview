@@ -39,7 +39,6 @@ Worldview.Widget.DataDownload = function(config, spec) {
    
     var self = {};
     self.containerId = "dataDownload";
-    self.startPressed = false;
     
     var init = function() {        
         model.events
@@ -50,11 +49,10 @@ Worldview.Widget.DataDownload = function(config, spec) {
             .on("queryResults", onQueryResults)
             .on("queryCancel", onQueryCancel)
             .on("queryError", onQueryError)
-            .on("queryTimeout", onQueryTimeout);
+            .on("queryTimeout", onQueryTimeout)
+            .on("granuleSelect", updateButton)
+            .on("granuleUnselect", updateButton)
         
-        //$(spec.selector).on("click", toggleMode);        
-        //$(spec.selector).html(HTML_WIDGET_INACTIVE);
-
         REGISTRY.register(self.containerId, self);
         REGISTRY.markComponentReady(self.containerId);   
         self.updateComponent();     
@@ -91,11 +89,9 @@ Worldview.Widget.DataDownload = function(config, spec) {
         var tabsHeight = $(".ui-tabs-nav").outerHeight(true);
         $(spec.selector)
             .height($(spec.selector).parent().outerHeight() - tabsHeight)
-            .html(
-                "<input type='button' value='Start'>"
-            ).trigger("create");
+            .html("<input type='button' class='ui-disabled' value=''>")
+            .trigger("create");
         $(spec.selector + " input[type='button']").click(function() {
-            self.startPressed = true;
             model.activate();
         });  
     };
@@ -119,10 +115,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
             mapController = 
                 Worldview.DataDownload.MapController(model, spec.maps, config);
         }
-        
-        $(spec.selector + " input[type='button']").button("disable");
-        $(spec.selector + " .ui-btn .ui-btn-text").html("Download (0)");
-        
+        updateButton();
     };
     
     var onDeactivate = function() {
@@ -167,6 +160,17 @@ Worldview.Widget.DataDownload = function(config, spec) {
             "connectivity issue. Please try again later."
         );
     };
+    
+    var updateButton = function() {
+        var selected = Worldview.size(model.selectedGranules);
+        if ( selected > 0 ) {
+            $(spec.selector + " input[type='button']").button("enable");
+        } else {
+            $(spec.selector + " input[type='button']").button("disable");            
+        }
+        $(spec.selector + " .ui-btn .ui-btn-text")
+            .html("Download (" + selected + ")");        
+    }
     
     init();
     return self;

@@ -131,9 +131,7 @@ $(function() {// Initialize "static" vars
         // Wirings
         products.events
             .on("dataDownloadSelect", function() {
-                if ( dataDownload.startPressed ) {
-                    dataDownloadModel.activate();
-                }    
+                dataDownloadModel.activate();
             })
             .on("dataDownloadUnselect", function() {
                 dataDownloadModel.deactivate();
