@@ -63,10 +63,33 @@ SOTE.widget.Products = function(containerId, config){
 	this.initRenderComplete = false;
 	this.paletteWidget = config.paletteWidget;
 	this.config = config.config;
+	this.events = Worldview.Events();
+	
 	this.init();
 
 }
 
+SOTE.widget.Products.HTML_TAB_ACTIVE_SELECTED = 
+    "<img class='productsIcon selected' src='images/missing-icon.svg'>" +
+    "Active"
+    
+SOTE.widget.Products.HTML_TAB_ACTIVE_UNSELECTED = 
+    "<img class='productsIcon' src='images/missing-icon.svg' title='Activce Layers'>";
+
+SOTE.widget.Products.HTML_TAB_ADD_SELECTED = 
+    "<img class='productsIcon selected' src='images/missing-icon.svg'>" +
+    "Add Layers"
+    
+SOTE.widget.Products.HTML_TAB_ADD_UNSELECTED = 
+    "<img class='productsIcon' src='images/missing-icon.svg' title='Add Layers'>";
+    
+SOTE.widget.Products.HTML_TAB_DOWNLOAD_SELECTED = 
+    "<img class='productsIcon selected' src='images/missing-icon.svg'>" +
+    "Download"
+    
+SOTE.widget.Products.HTML_TAB_DOWNLOAD_UNSELECTED = 
+    "<img class='productsIcon' src='images/missing-icon.svg' title='Download'>";
+    
 /**
   * Displays all options in HTML in an Accordion format (see JQuery UI Accordion) with the selected states being indicated
   * by radio button and checkbox selection.  All callbacks should be set.  The component UI should be rendered 
@@ -107,15 +130,17 @@ SOTE.widget.Products.prototype.render = function(){
 	tabs.setAttribute("id",this.id+"tabs");
 	tabs.innerHTML =
             "<li class='layerPicker first'>" + 
-	           "<a href='#products' class='activetab tab'>Act</a>" + 
+	           "<a href='#products' class='activetab tab'></a>" + 
             "</li>" + 
             "<li class='layerPicker second'>" + 
-                "<a class='addlayerstab tab' href='#selectorbox'>Add</a>" + 
+                "<a class='addlayerstab tab' href='#selectorbox'></a>" + 
             "</li>" + 
             "<li class='layerPicker third'>" + 
-                "<a class='addlayerstab tab' href='#selectorbox'>DL</a>" + 
+                "<a class='tab' href='#dataDownload'></a>" + 
             "</li>";
 	this.container.appendChild(tabs);
+	SOTE.widget.Products.change({data: {self: this}}, {index: 0});
+	
 	//$('#'+this.id).addClass('products');
 	var toggleButtonHolder = document.createElement("div");
 	toggleButtonHolder.setAttribute("id",this.id+"toggleButtonHolder");
@@ -135,10 +160,16 @@ SOTE.widget.Products.prototype.render = function(){
 	selectorbox.setAttribute("id","selectorbox");
 	this.container.appendChild(selectorbox);
 
-
+    var downloadBox = document.createElement("div");
+    downloadBox.setAttribute("id", "dataDownload");
+    this.container.appendChild(downloadBox);
 
 	//this.container.appendChild(productContainer);
-	$('#'+this.id).tabs({show: SOTE.widget.Products.change});
+	var self = this;
+	$('#'+this.id).tabs({show: function(e, ui) {
+	    e.data = { self: self };
+	    SOTE.widget.Products.change(e, ui)
+    }});
 	this.b = new SOTE.widget.Bank("products", {
 	    paletteWidget: this.paletteWidget, 
 	    dataSourceUrl: "ap_products.php",
@@ -214,6 +245,7 @@ SOTE.widget.Products.stopLink = function(e){
 };
 
 SOTE.widget.Products.change = function(e,ui) {	
+    var self = e.data.self;
     if ( ui.index === 0 ) {
     	$('.ui-tabs-nav')
     	      .addClass('firstselected')
@@ -234,9 +266,21 @@ SOTE.widget.Products.change = function(e,ui) {
         throw new Error("Invalid tab index: " + ui.index);
     }
 
-    var tab1 = ( ui.index === 0 ) ? "Active" : "Act";
-    var tab2 = ( ui.index === 1 ) ? "Add Layers +" : "Add";
-    var tab3 = ( ui.index === 2 ) ? "Download" : "DL";
+    var tab1 = ( ui.index === 0 ) 
+        ? SOTE.widget.Products.HTML_TAB_ACTIVE_SELECTED 
+        : SOTE.widget.Products.HTML_TAB_ACTIVE_UNSELECTED;
+    var tab2 = ( ui.index === 1 ) 
+        ? SOTE.widget.Products.HTML_TAB_ADD_SELECTED 
+        : SOTE.widget.Products.HTML_TAB_ADD_UNSELECTED;
+    var tab3 = ( ui.index === 2 ) 
+        ? SOTE.widget.Products.HTML_TAB_DOWNLOAD_SELECTED 
+        : SOTE.widget.Products.HTML_TAB_DOWNLOAD_UNSELECTED;
+    
+    if ( ui.index === 2 ) {
+        self.events.trigger("dataDownloadSelect");
+    } else {
+        self.events.trigger("dataDownloadUnselect");
+    }
     
     $('.ui-tabs-nav li.first a').html(tab1);
     $('.ui-tabs-nav li.second a').html(tab2);

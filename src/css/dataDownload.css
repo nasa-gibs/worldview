@@ -1,0 +1,15 @@
+#dataDownload {
+    padding-top: 10px;
+    display: inline-block; 
+    float: left;  
+    width: 100%; 
+    height: 100%; 
+    font-size: 1em; 
+    color: #222; 
+    text-shadow: none; 
+}
+
+#dataDownload div.ui-button {
+    margin-left: 20px;
+    margin-right: 20px;
+}

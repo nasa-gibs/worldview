@@ -39,7 +39,8 @@ Worldview.Widget.DataDownload = function(config, spec) {
    
     var self = {};
     self.containerId = "dataDownload";
-        
+    self.startPressed = false;
+    
     var init = function() {        
         model.events
             .on("activate", onActivate)
@@ -51,8 +52,8 @@ Worldview.Widget.DataDownload = function(config, spec) {
             .on("queryError", onQueryError)
             .on("queryTimeout", onQueryTimeout);
         
-        $(spec.selector).on("click", toggleMode);        
-        $(spec.selector).html(HTML_WIDGET_INACTIVE);
+        //$(spec.selector).on("click", toggleMode);        
+        //$(spec.selector).html(HTML_WIDGET_INACTIVE);
 
         REGISTRY.register(self.containerId, self);
         REGISTRY.markComponentReady(self.containerId);   
@@ -86,13 +87,25 @@ Worldview.Widget.DataDownload = function(config, spec) {
         }    
     };
     
+    self.render = function() {
+        var tabsHeight = $(".ui-tabs-nav").outerHeight(true);
+        $(spec.selector)
+            .height($(spec.selector).parent().outerHeight() - tabsHeight)
+            .html(
+                "<input type='button' value='Start'>"
+            ).trigger("create");
+        $(spec.selector + " input[type='button']").click(function() {
+            self.startPressed = true;
+            model.activate();
+        });  
+    };
+    
     var toggleMode = function() {
         model.toggleMode();           
     };
     
     var onActivate = function() {
         log.debug("activate");
-        $(spec.selector).html(HTML_WIDGET_ACTIVE);
         
         if ( !controlDialog ) {
             controlDialog = Worldview.DataDownload.ControlDialog(model);
@@ -107,11 +120,13 @@ Worldview.Widget.DataDownload = function(config, spec) {
                 Worldview.DataDownload.MapController(model, spec.maps, config);
         }
         
+        $(spec.selector + " input[type='button']").button("disable");
+        $(spec.selector + " .ui-btn .ui-btn-text").html("Download (0)");
+        
     };
     
     var onDeactivate = function() {
         log.debug("deactivate");
-        $(spec.selector).html(HTML_WIDGET_INACTIVE);
         controlDialog.hide();
         Worldview.Indicator.hide();
     };

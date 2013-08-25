@@ -122,11 +122,24 @@ $(function() {// Initialize "static" vars
 		    wvEPSG: crs
 	    });
         var dataDownload = Worldview.Widget.DataDownload(config, {
-            selector: ".dataDownload-modeButton",
+            selector: "#dataDownload",
             model: dataDownloadModel, 
             maps: map.maps
         });
-                 
+        dataDownload.render();
+        
+        // Wirings
+        products.events
+            .on("dataDownloadSelect", function() {
+                if ( dataDownload.startPressed ) {
+                    dataDownloadModel.activate();
+                }    
+            })
+            .on("dataDownloadUnselect", function() {
+                dataDownloadModel.deactivate();
+            });
+                                
+        
 	    // Register event listeners
         REGISTRY.addEventListener("time", 
                 "map", "imagedownload", apcn.containerId, crs.containerId, 
