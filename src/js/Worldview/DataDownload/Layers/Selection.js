@@ -28,24 +28,7 @@ Worldview.DataDownload.Layers.Selection = function(model, maps, config) {
             .on("granuleSelect", onGranuleSelect)
             .on("granuleUnselect", onGranuleUnselect);    
     };
-    
-    self.update = function(results) {
-        var layer = getLayer();
-        layer.removeAllFeatures();
-        var featureList = [];
-        var extent = 
-                config.projections[model.projection].maxExtent.toGeometry();
-        $.each(model.selectedGranules, function(key, granule) {
-            var geom = granule.geometry[model.crs];
-            if ( geom && extent.intersects(geom) ) {
-                var feature = new OpenLayers.Feature.Vector(geom.clone());
-                featureList.push(feature);
-                features[granule.id] = feature;
-            }
-        });
-        layer.addFeatures(featureList);        
-    };
-    
+        
     self.clear = function() {
         var layer = Worldview.Map.getLayerByName(maps.map, LAYER_NAME);
         if ( layer ) {
@@ -64,10 +47,15 @@ Worldview.DataDownload.Layers.Selection = function(model, maps, config) {
     
     var onGranuleSelect = function(granule) {
         var geom = granule.geometry[model.crs];
-        var feature = new OpenLayers.Feature.Vector(geom.clone());
-        features[granule.id] = feature;
-        getLayer().addFeatures([feature]);
+        var extent = 
+                config.projections[model.projection].maxExtent.toGeometry();
+        if ( geom && extent.intersects(geom) ) {
+            var feature = new OpenLayers.Feature.Vector(geom.clone());
+            features[granule.id] = feature;
+            getLayer().addFeatures([feature]);
+        }
     };
+    
     
     var onGranuleUnselect = function(granule) {
         var feature = features[granule.id];

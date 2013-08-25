@@ -50,7 +50,6 @@ Worldview.DataDownload.MapController = function(model, maps, config) {
         if ( newResults ) {
             results = newResults;
         }
-        selectionLayers.update(results);
         swathLayers.update(results);
         gridLayers.update(results);
         buttonLayers.update(results);  
