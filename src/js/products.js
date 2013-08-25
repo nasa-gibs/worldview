@@ -105,7 +105,16 @@ SOTE.widget.Products.prototype.render = function(){
 
 	var tabs = document.createElement("ul");
 	tabs.setAttribute("id",this.id+"tabs");
-	tabs.innerHTML = "<li class='first'><a href='#products' class='activetab tab'>Active</a></li><li class='second'><a class='addlayerstab tab' href='#selectorbox'>Add Layers +</a></li>";
+	tabs.innerHTML =
+            "<li class='layerPicker first'>" + 
+	           "<a href='#products' class='activetab tab'>Act</a>" + 
+            "</li>" + 
+            "<li class='layerPicker second'>" + 
+                "<a class='addlayerstab tab' href='#selectorbox'>Add</a>" + 
+            "</li>" + 
+            "<li class='layerPicker third'>" + 
+                "<a class='addlayerstab tab' href='#selectorbox'>DL</a>" + 
+            "</li>";
 	this.container.appendChild(tabs);
 	//$('#'+this.id).addClass('products');
 	var toggleButtonHolder = document.createElement("div");
@@ -204,14 +213,35 @@ SOTE.widget.Products.stopLink = function(e){
 	//e.stopPropagation();
 };
 
-SOTE.widget.Products.change = function(e,ui){	
-	if(ui.index){
-		$('.ui-tabs-nav').addClass('secondselected').removeClass('firstselected');
-	}
-	else {
-		$('.ui-tabs-nav').addClass('firstselected').removeClass('secondselected');
-	}
+SOTE.widget.Products.change = function(e,ui) {	
+    if ( ui.index === 0 ) {
+    	$('.ui-tabs-nav')
+    	      .addClass('firstselected')
+    	      .removeClass('secondselected')
+    	      .removeClass('thirdselected');
+    }
+    else if ( ui.index === 1 ) {
+        $('.ui-tabs-nav')
+              .removeClass('firstselected')
+              .addClass('secondselected')
+              .removeClass('thirdselected'); 
+    } else if ( ui.index === 2 ) {
+        $('.ui-tabs-nav')
+              .removeClass('firstselected')
+              .removeClass('secondselected')
+              .addClass('thirdselected');         
+    } else {
+        throw new Error("Invalid tab index: " + ui.index);
+    }
 
+    var tab1 = ( ui.index === 0 ) ? "Active" : "Act";
+    var tab2 = ( ui.index === 1 ) ? "Add Layers +" : "Add";
+    var tab3 = ( ui.index === 2 ) ? "Download" : "DL";
+    
+    $('.ui-tabs-nav li.first a').html(tab1);
+    $('.ui-tabs-nav li.second a').html(tab2);
+    $('.ui-tabs-nav li.third a').html(tab3);
+    	
 	return false;
 };
 

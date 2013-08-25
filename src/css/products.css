@@ -3,7 +3,9 @@ background: rgba(38,43,49,0.65); border-radius:0 10px 10px 0; top:20px;
 }
 
 .ui-tabs-nav {clear:both; display:inline-block; overflow:hidden; width:90%; border-radius:0; border-bottom: 3px #00457b solid; float:left;}
-.ui-tabs-nav li {height:100%; display:inline-block; float:left; width:50%;}
+.ui-tabs-nav li.layerPicker {height:100%; display:inline-block; float:left; width:25%;}
+.ui-tabs-nav li.layerPicker.ui-state-active { width: 50%; }
+
 .ui-tabs-nav li a {/*border-radius: 10px 10px 0 0;*/ color: #fff; font-size:1.1em; font-weight: 400; display:block; border:none; padding:0.5em 0; width:100%;
 text-align:center; text-decoration:none; text-shadow:none; 
 }
@@ -26,13 +28,20 @@ background: linear-gradient(to bottom,  rgba(255,255,255,0.7) 0%,rgba(160,121,11
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3ffffff', endColorstr='#b3906a00',GradientType=0 ); /* IE6-9 */
 }
 
+.ui-tabs-nav li.third.ui-state-active a { 
+	background: linear-gradient(to bottom,  rgba(255,255,255,0.7) 0%,rgba(160,27,11,0.7) 23%,rgba(156,24,0,0.7) 24%,rgba(144,20,0,0.7) 99%,rgba(144,20,0,0.7) 100%); /* W3C */
+}
+
 .firstselected {
 	border-bottom: 3px #00457b solid;
 }
 
 .secondselected {
 	border-bottom: 3px #906a00 solid;
-	
+}
+
+.thirdselected {
+	border-bottom: 3px rgb(144,20,0) solid;
 }
 
 .toggleButtonHolder { display:inline; overflow:hidden;}

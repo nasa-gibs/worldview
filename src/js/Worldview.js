@@ -206,10 +206,6 @@
         }    
     };
     
-    ns.notify2 = function(message, title) {
-            
-    };
-    
     /**
      * Asks the end user a yes or no question in a dialog box.
      * 
