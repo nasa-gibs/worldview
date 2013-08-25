@@ -1,2 +1,3 @@
 *
 !.gitignore
+!events_data.json
