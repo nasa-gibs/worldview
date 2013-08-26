@@ -18,7 +18,7 @@
  * 
  * * Register listeners with on
  * * Unregister listeners with off
- * * Fire events with fire
+ * * Fire events with trigger
  * 
  * Example:
  * 
@@ -27,7 +27,7 @@
  *          console.log("The answer is", answer);
  *      });
  *      
- *      events.fire("answerReceived", 42);
+ *      events.trigger("answerReceived", 42);
  * 
  * @class Events
  */
