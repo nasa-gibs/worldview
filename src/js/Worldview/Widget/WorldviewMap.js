@@ -201,17 +201,17 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
         var minLon = 20.6015625 + curHour * (-200.53125/23.0);
         var maxLon = minLon + 159.328125;
         
-        var minLat = -46.546875
-        var maxLat = 53.015625
+        var minLat = -46.546875;
+        var maxLat = 53.015625;
         
         var lat = minLat + (Math.abs(maxLat - minLat) / 2.0);
         var lon = minLon + (Math.abs(maxLon - minLon) / 2.0);
-        var zoomLevel = 2
+        var zoomLevel = 2;
                 
         map.setCenter(new OpenLayers.LonLat(lon, lat), zoomLevel);
     };   
         
     init();
     return self;
-}
+};
         

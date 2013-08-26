@@ -102,7 +102,7 @@
      */
     ns.now = function() {
         return new Date();    
-    }
+    };
     
     /**
      * Gets the current day or the value set by overrideNow. Use this
@@ -116,7 +116,7 @@
      */
     ns.today = function() {
         return new Date().clearUTCTime();
-    }
+    };
     
     /**
      * Overrides the times returned by now() and today().
@@ -131,10 +131,10 @@
         var overrideToday = date.clone().clearUTCTime();
         ns.now = function() {
             return new Date(date.getTime());
-        }
+        };
         ns.today = function() {
             return new Date(overrideToday.getTime());
-        }
+        };
     };
     
     /**
@@ -274,7 +274,7 @@
         dialog.cfg.queueProperty("buttons", buttons); 
         dialog.render(document.body);    
         dialog.show();          
-    }
+    };
     
     /**
      * Gets the number of properties in an object. 
@@ -407,7 +407,7 @@
         if ( value < min ) { return min; }
         if ( value > max ) { return max; }
         return value;
-    }
+    };
     
     /** 
      * Clamps a value to a valid array index.
@@ -441,6 +441,17 @@
      */
     ns.arrayEquals = function(arr1, arr2) {
         return $(arr1).not(arr2).length == 0 && $(arr2).not(arr1).length == 0;
+    };
+    
+    ns.abbreviate = function(size, text) {
+        if ( text.length <= size ) {
+            return text;    
+        }
+        // Remove elipsis size
+        var s = size - 3;
+        var left = Math.ceil(s / 2);
+        var right = -Math.floor(s / 2);
+        return text.slice(0, left) + "..." + text.slice(right);
     };
             
 })(window.Worldview = window.Worldview || {});

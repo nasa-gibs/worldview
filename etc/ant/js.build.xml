@@ -134,7 +134,6 @@
 
         <file name="js/Worldview/DataDownload/Model.js"/>
         <file name="js/Worldview/DataDownload/ProductSelector.js"/>
-        <file name="js/Worldview/DataDownload/ControlDialog.js"/>
         <file name="js/Worldview/DataDownload/MapController.js"/>
         
         <file name="js/Worldview/Widget/Map.js"/>

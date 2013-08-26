@@ -34,7 +34,6 @@ Worldview.Widget.DataDownload = function(config, spec) {
     var HTML_WIDGET_ACTIVE = "<img src='images/cameraon.png'></img>";
    
     var model = spec.model; 
-    var controlDialog = null;
     var mapController = null;
    
     var self = {};
@@ -51,7 +50,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
             .on("queryError", onQueryError)
             .on("queryTimeout", onQueryTimeout)
             .on("granuleSelect", updateButton)
-            .on("granuleUnselect", updateButton)
+            .on("granuleUnselect", updateButton);
         
         REGISTRY.register(self.containerId, self);
         REGISTRY.markComponentReady(self.containerId);   
@@ -89,8 +88,14 @@ Worldview.Widget.DataDownload = function(config, spec) {
         var tabsHeight = $(".ui-tabs-nav").outerHeight(true);
         $(spec.selector)
             .height($(spec.selector).parent().outerHeight() - tabsHeight)
-            .html("<input type='button' class='ui-disabled' value=''>")
+            .html(
+                "<div id='DataDownload_Button'>" + 
+                    "<input id='DataDownload_Button' type='button'" +  
+                        "class='ui-disabled' value=''>" + 
+                "</div>" + 
+                "<div id='productSelector'></div>")
             .trigger("create");
+        Worldview.DataDownload.ProductSelector(model,"#productSelector");       
         $(spec.selector + " input[type='button']").click(function() {
             model.activate();
         });  
@@ -103,14 +108,6 @@ Worldview.Widget.DataDownload = function(config, spec) {
     var onActivate = function() {
         log.debug("activate");
         
-        if ( !controlDialog ) {
-            controlDialog = Worldview.DataDownload.ControlDialog(model);
-            controlDialog.events.on("hide", function() {
-                model.deactivate();
-            });
-        }
-        controlDialog.show();
-        
         if ( !mapController ) {
             mapController = 
                 Worldview.DataDownload.MapController(model, spec.maps, config);
@@ -120,7 +117,6 @@ Worldview.Widget.DataDownload = function(config, spec) {
     
     var onDeactivate = function() {
         log.debug("deactivate");
-        controlDialog.hide();
         Worldview.Indicator.hide();
     };
     
@@ -164,13 +160,13 @@ Worldview.Widget.DataDownload = function(config, spec) {
     var updateButton = function() {
         var selected = Worldview.size(model.selectedGranules);
         if ( selected > 0 ) {
-            $(spec.selector + " input[type='button']").button("enable");
+            $("#DataDownload_Button input[type='button']").button("enable");
         } else {
-            $(spec.selector + " input[type='button']").button("disable");            
+            $("#DataDownload_Button input[type='button']").button("disable");            
         }
-        $(spec.selector + " .ui-btn .ui-btn-text")
+        $("#DataDownload_Button .ui-btn .ui-btn-text")
             .html("Download (" + selected + ")");        
-    }
+    };
     
     init();
     return self;
