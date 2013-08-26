@@ -36,6 +36,17 @@
     ns.BUILD_TIMESTAMP = "@BUILD_TIMESTAMP@";
     
     /**
+     * The value of the timestamp in numeric form that can be used as 
+     * a URL nonce "invalidte" cache entries. This value is changed during
+     * the build process
+     *
+     * @property BUILD_NONCE (string)
+     * @final
+     * @static
+     */
+    ns.BUILD_NONCE = "@BUILD_NONCE@";
+    
+    /**
      * Delay, in hours, from aquisition until data is available in GIBS.
      * 
      * @property GIBS_HOUR_DELAY {integer}

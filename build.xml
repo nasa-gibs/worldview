@@ -112,7 +112,7 @@
             <arg value="--output"/>
             <arg value="${build.dir}/config-min.json"/>
         </exec>
-
+                
     </target>
     <target name="web" depends="init,deps,generate-config"
             description="Builds minified web site">

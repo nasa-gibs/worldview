@@ -23,14 +23,15 @@ $(function() {// Initialize "static" vars
         // Place any resources that should be completely loaded before 
         // starting up the UI
         Worldview.Preloader([
-            { id: "config", src: "data/config", type:"json" },
+            { id: "config", type:"json",
+              src: "data/config.json?v=" + Worldview.BUILD_NONCE },
             // FIXME: Projection cache HACK
-            { id: "geographic", src: "data/geographic_ap_products.php", 
-              type: "json" },
-            { id: "arctic", src: "data/arctic_ap_products.php", 
-              type: "json" },            
-            { id: "antarctic", src: "data/antarctic_ap_products.php", 
-              type: "json" },
+            { id: "geographic", type: "json", 
+              src: "data/geographic_ap_products.json?v=" + Worldview.BUILD_NONCE }, 
+            { id: "arctic", type: "json", 
+              src: "data/arctic_ap_products.json?v=" + Worldview.BUILD_NONCE }, 
+            { id: "antarctic", type: "json", 
+              src: "data/antarctic_ap_products.json?v=" + Worldview.BUILD_NONCE },
             "images/logo.png",
             "images/permalink.png",
             "images/geographic.png",

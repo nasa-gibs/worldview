@@ -25,9 +25,6 @@ $(function(ns) {
     
     var logPosition = Logging.getLogger("Worldview.Map.Position");
     
-    // Used to reference the TileWorker
-    var BUILD_NONCE = "@BUILD_NONCE@";
-    
     ns.CRS_WGS_84 = "EPSG:4326";
     
     ns.CRS_WGS_84_QUERY_EXTENT = new OpenLayers.Bounds(-180, -60, 180, 60);
@@ -119,7 +116,7 @@ $(function(ns) {
      * @readOnly
      */
     ns.TILE_SCHEDULER = Worldview.Scheduler({
-        script: "js/Worldview/Map/TileWorker.js?v=" + BUILD_NONCE, 
+        script: "js/Worldview/Map/TileWorker.js?v=" + Worldview.BUILD_NONCE, 
         max: 4
     });
 
