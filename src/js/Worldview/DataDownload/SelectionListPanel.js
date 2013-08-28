@@ -15,7 +15,20 @@ Worldview.DataDownload.SelectionListPanel = function(config, model) {
     var REL_DATA = "http://esipfed.org/ns/fedsearch/1.1/data#";
     var REL_BROWSE = "http://esipfed.org/ns/fedsearch/1.1/browse#";
     
+    var NOTICE = 
+        "<div id='DataDownload_Notice'>" +
+            "<img class='icon' src='images/info-icon-blue.svg'>" + 
+            "<p class='text'>" + 
+                "An account with the EOSDIS User Registration System (URS) " + 
+                "is necessary to download data. It is simple and " + 
+                "free to sign up! Click to " + 
+                "<a href='https://earthdata.nasa.gov/urs/register' target='urs'>" + 
+                "register for an account.</a>" +
+            "</p>" +
+        "</div>";
+        
     var panel;
+    var selection;
     var self = {};
     
     self.show = function() {
@@ -29,13 +42,16 @@ Worldview.DataDownload.SelectionListPanel = function(config, model) {
             visible: false
         });
         panel.setHeader("Download Links");
-        panel.setBody(bodyText());
+        selection = reformatSelection();
+        panel.setBody(bodyText(selection));
         panel.render(document.body);
         panel.show();
         panel.center();
         panel.hideEvent.subscribe(function() {
             setTimeout(function() { panel.destroy(); }, 25);
         });
+        
+        $("#DataDownload_SelectionListPanel a.wget").click(showTextURLs);
     };
     
     self.hide = function() {
@@ -108,6 +124,7 @@ Worldview.DataDownload.SelectionListPanel = function(config, model) {
             });        
         });
         
+        console.log(selection);
         return selection; 
     };
     
@@ -163,13 +180,39 @@ Worldview.DataDownload.SelectionListPanel = function(config, model) {
     };
     
     var bodyText = function() {
-        var selection = reformatSelection();
-        var elements = [];
+        var elements = [
+            NOTICE,
+            "<div class='wget'>", 
+                "<a class='wget' href='#'>Text URLs (wget)</a>", 
+            "</div>"
+        ];
         $.each(selection, function(key, product) {
             elements.push(productText(product));  
         });
         var text = elements.join("\n<br/>\n") + "<br/>";
         return text;
+    };
+    
+    var showTextURLs = function() {
+        var text = window.open('');
+        text.document.write("<html><body><ul>");
+        $.each(selection, function(key, product) { 
+            $.each(product.list, function(index, item) { 
+                $.each(item.links, function(index, link) {
+                    writeLink(text.document, link);
+                });
+            });    
+        });
+        text.document.write("</ul></body></html>");
+        text.document.close();
+    };
+    
+    var writeLink = function(doc, link) {
+        doc.write(
+            "<li>" +
+                "<a href='" + link.href + "'>" + link.href + "</a>" +
+            "</li>"
+        );
     };
     
     return self;
