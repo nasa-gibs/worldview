@@ -1,5 +1,5 @@
 #!/bin/bash
-#
+
 # NASA Worldview
 # 
 # This code was originally developed at NASA/Goddard Space Flight Center for
@@ -8,11 +8,6 @@
 # Copyright (C) 2013 United States Government as represented by the 
 # Administrator of the National Aeronautics and Space Administration.
 # All Rights Reserved.
-#
-exec publish-worldview preview latest
 
-
-
-
-
-
+BASE_DIR="$(dirname $0)"
+exec "$BASE_DIR/publish-worldview" preview latest
