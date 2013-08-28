@@ -40,6 +40,10 @@ Worldview.DataDownload.Results.TimeLabel = function(time) {
         var displayEnd = timeEnd.toISOStringTimeHM();
         
         granule.label = displayStart + " - " + displayEnd + suffix; 
+        
+        granule.downloadLabel = timeStart.toISOStringDate() + ": " + 
+            displayStart + " - " + displayEnd;
+            
         return granule;  
     };
 

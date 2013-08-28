@@ -10,7 +10,10 @@
  */
 Worldview.namespace("DataDownload");
 
-Worldview.DataDownload.SelectionListPanel = function(model) {
+Worldview.DataDownload.SelectionListPanel = function(config, model) {
+    
+    var REL_DATA = "http://esipfed.org/ns/fedsearch/1.1/data#";
+    var REL_BROWSE = "http://esipfed.org/ns/fedsearch/1.1/browse#";
     
     var panel;
     var self = {};
@@ -39,34 +42,133 @@ Worldview.DataDownload.SelectionListPanel = function(model) {
         panel.hide();
     };
     
-    var linkText = function(granule) {
-        var elements = ["<ul>"];
-        $.each(granule.links, function(index, link) {
-            var title = ( link.title ) ? link.title : granule.producer_granule_id;
+    var reformatSelection = function() {
+        var selection = {};
+        
+        $.each(model.selectedGranules, function(key, granule) {
+            if ( !selection[granule.product] ) {
+                selection[granule.product] = {
+                    name: config.products[granule.product].name,
+                    granules: [granule],
+                    counts: {}
+                };
+            } else {
+                selection[granule.product].granules.push(granule);
+            }
+            
+            var product = selection[granule.product];
+            var id = granule.product;
+            
+            // For each link that looks like metadata, see if that link is
+            // repeated in all granules for that product. If so, we want to 
+            // bump that up to product level instead of at the granule level.
+            $.each(granule.links, function(index, link) {
+                if ( link.rel !== REL_DATA && link.rel !== REL_BROWSE ) {
+                    if ( !product.counts[link.href]  ) {
+                        product.counts[link.href] = 1;    
+                    } else {
+                        product.counts[link.href]++;
+                    }
+                }    
+            });    
+        });
+        
+        $.each(selection, function(key, product) {
+            product.links = [];
+            product.list = [];
+            
+            // Check the first granule, and populate product level links
+            // where the count equals the number of granules
+            var granule = product.granules[0];
+            $.each(granule.links, function(index, link) {
+                var count = product.counts[link.href];
+                if ( count === product.granules.length ) {
+                    product.links.push(reformatLink(link));
+                }
+            });
+            
+            $.each(product.granules, function(index, granule) {
+                var item = {
+                    label: granule.downloadLabel || granule.label,
+                    links: []
+                };
+                $.each(granule.links, function(index, link) {
+                    // Skip this link if now at the product level
+                    var count = product.counts[link.href];
+                    if ( count === product.granules.length ) {
+                        return;
+                    }
+                    // Skip browse images per Kevin's request
+                    if ( link.rel === REL_BROWSE ) {
+                        return;
+                    }
+                    item.links.push(reformatLink(link));                           
+                });
+                product.list.push(item);                    
+            });        
+        });
+        
+        return selection; 
+    };
+    
+    var reformatLink = function(link) { 
+        // For title, take it if found, otherwise, use the basename of the
+        // URI
+        return {
+            href: link.href,
+            title: ( link.title ) ? link.title : link.href.split("/").slice(-1)
+        };
+    };
+    
+    var linksText = function(links) {
+        var elements = [];
+        elements.push("<ul>");
+        $.each(links, function(index, link) {
             elements.push(
                 "<li>" + 
-                    "<a target='_blank' href='" + link.href + "'>" + title + "</a>" +
-                "</li>"
-            );
-        });    
-        elements.push["</ul>"];
+                    "<a href='" + link.href + "' target='_blank'>" + 
+                    link.title + "</a>" +
+                "</li>");
+        });
+        elements.push("</ul>");
         return elements.join("\n");
     };
     
     var granuleText = function(granule) {
-        var text = "<li>" + granule.producer_granule_id + 
-            linkText(granule) + "</li>";  
-        return text;      
+        var elements = [
+            "<ul>",
+                "<li class='granuleTitle'>" + granule.label,
+                    linksText(granule.links),
+                "</li>",
+            "</ul>"
+        ];
+        return elements.join("\n");  
+    };
+    
+    var productText = function(product) {
+        var elements = [
+            "<h3>" + product.name + "</h3>"
+        ];
+        
+        if ( product.links && product.links.length > 0 ) {
+            elements.push("<h5>Data Collection Information</h5>");
+            elements.push(linksText(product.links));
+        }
+        
+        elements.push("<h5>Selected Data</h5>");
+        $.each(product.list, function(index, item) {
+            elements.push(granuleText(item));
+        });
+        return elements.join("\n");
     };
     
     var bodyText = function() {
-        var elements = ["<ul>"];
-        $.each(model.selectedGranules, function(key, granule) {
-            elements.push(granuleText(granule));            
+        var selection = reformatSelection();
+        var elements = [];
+        $.each(selection, function(key, product) {
+            elements.push(productText(product));  
         });
-        elements.push("</ul>");
-        var text = elements.join("\n");
-        console.log(text);
+        var text = elements.join("\n<hr/>\n") + "<br/>";
         return text;
     };
     

@@ -172,7 +172,8 @@ Worldview.Widget.DataDownload = function(config, spec) {
     };
     
     var showSelectionList = function() {
-        selectionListPanel = Worldview.DataDownload.SelectionListPanel(model);
+        selectionListPanel = 
+                Worldview.DataDownload.SelectionListPanel(config, model);
         selectionListPanel.show(); 
     };
     

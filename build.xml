@@ -166,7 +166,7 @@
               tofile="${build.web-debug.dir}/data/config"/>
 
         <!-- Executable bits -->
-        <chmod file="${build.web.dir}/data/echo.cgi" perm="755"/>
+        <chmod file="${build.web.dir}/service/echo.cgi" perm="755"/>
 
         <!-- Combine all css and js files into one file -->
         <concat destfile="${build.dir}/minify/worldview.css" force="no">
@@ -310,11 +310,11 @@
         </tar>
         <tar destfile="${dist.dir}/worldview-debug.tar.bz2" compression="bzip2">
             <tarfileset dir="${build.dir}/worldview-debug" prefix="worldview-debug">
-                <exclude name="**/data/echo.cgi"/>
+                <exclude name="**/service/echo.cgi"/>
                 <exclude name="**/bin/eventsGeoRssParser.py"/>
             </tarfileset>
-            <tarfileset dir="${build.web-debug.dir}/data"
-                        prefix="worldview-debug/web/data" filemode="755">
+            <tarfileset dir="${build.web-debug.dir}/service"
+                        prefix="worldview-debug/web/service" filemode="755">
                 <include name="echo.cgi"/>
             </tarfileset>
             <tarfileset dir="${build.bin-debug.dir}"
