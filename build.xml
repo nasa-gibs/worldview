@@ -296,11 +296,11 @@
             
         <tar destfile="${dist.dir}/worldview.tar.bz2" compression="bzip2">
             <tarfileset dir="${build.dir}/worldview" prefix="worldview">
-                <exclude name="**/data/echo.cgi"/>
+                <exclude name="**/service/echo.cgi"/>
                 <exclude name="**/bin/eventsGeoRssParser.py"/>
             </tarfileset>
-            <tarfileset dir="${build.web.dir}/data"
-                        prefix="worldview/web/data" filemode="755">
+            <tarfileset dir="${build.web.dir}/service"
+                        prefix="worldview/web/service" filemode="755">
                 <include name="echo.cgi"/>
             </tarfileset>
             <tarfileset dir="${build.bin.dir}"
