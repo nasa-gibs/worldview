@@ -13,3 +13,19 @@
     margin-left: 20px;
     margin-right: 20px;
 }
+
+#DataDownload_SelectionListPanel .bd {
+    overflow: auto;
+    padding: 10px; 
+}
+
+#DataDownload_SelectionListPanel ul {
+    display: block; 
+    margin: 0 1.12em;
+}
+
+#DataDownload_SelectionListPanel li {
+    display: list-item;  
+}
+
+

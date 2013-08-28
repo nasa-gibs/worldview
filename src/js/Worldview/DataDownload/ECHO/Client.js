@@ -28,7 +28,7 @@ Worldview.DataDownload.ECHO.Client = function(spec) {
     var ns = Worldview.DataDownload.ECHO.Client;
         
     var ajaxOptions = {
-        url: "data/echo.cgi",
+        url: "service/echo.cgi",
         traditional: true,
         dataType: "json",
         timeout: QUERY_TIMEOUT

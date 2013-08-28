@@ -35,7 +35,8 @@ Worldview.Widget.DataDownload = function(config, spec) {
    
     var model = spec.model; 
     var mapController = null;
-   
+    var selectionListPanel = null;
+    
     var self = {};
     self.containerId = "dataDownload";
     
@@ -99,6 +100,8 @@ Worldview.Widget.DataDownload = function(config, spec) {
         $(spec.selector + " input[type='button']").click(function() {
             model.activate();
         });  
+        
+        $("#DataDownload_Button .ui-btn").click(showSelectionList);
     };
     
     var toggleMode = function() {
@@ -166,6 +169,11 @@ Worldview.Widget.DataDownload = function(config, spec) {
         }
         $("#DataDownload_Button .ui-btn .ui-btn-text")
             .html("Download (" + selected + ")");        
+    };
+    
+    var showSelectionList = function() {
+        selectionListPanel = Worldview.DataDownload.SelectionListPanel(model);
+        selectionListPanel.show(); 
     };
     
     init();
