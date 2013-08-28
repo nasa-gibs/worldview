@@ -125,10 +125,8 @@ Worldview.DataDownload.SelectionListPanel = function(config, model) {
         elements.push("<ul>");
         $.each(links, function(index, link) {
             elements.push(
-                "<li>" + 
-                    "<a href='" + link.href + "' target='_blank'>" + 
-                    link.title + "</a>" +
-                "</li>");
+                "<a href='" + link.href + "' target='_blank'>" + 
+                link.title + "</a><br/>");
         });
         elements.push("</ul>");
         return elements.join("\n");
@@ -136,11 +134,10 @@ Worldview.DataDownload.SelectionListPanel = function(config, model) {
     
     var granuleText = function(granule) {
         var elements = [
-            "<ul>",
-                "<li class='granuleTitle'>" + granule.label,
-                    linksText(granule.links),
-                "</li>",
-            "</ul>"
+            "<tr>",
+                "<td>" + granule.label + "</td>",
+                "<td>" + linksText(granule.links) + "</td>",
+            "</tr>"
         ];
         return elements.join("\n");  
     };
@@ -156,9 +153,12 @@ Worldview.DataDownload.SelectionListPanel = function(config, model) {
         }
         
         elements.push("<h5>Selected Data</h5>");
+        elements.push("<table>");
+
         $.each(product.list, function(index, item) {
             elements.push(granuleText(item));
         });
+        elements.push("</table>");
         return elements.join("\n");
     };
     
@@ -168,7 +168,7 @@ Worldview.DataDownload.SelectionListPanel = function(config, model) {
         $.each(selection, function(key, product) {
             elements.push(productText(product));  
         });
-        var text = elements.join("\n<hr/>\n") + "<br/>";
+        var text = elements.join("\n<br/>\n") + "<br/>";
         return text;
     };
     
