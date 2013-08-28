@@ -42,7 +42,7 @@ Worldview.DataDownload.Results.TimeLabel = function(time) {
         granule.label = displayStart + " - " + displayEnd + suffix; 
         
         granule.downloadLabel = timeStart.toISOStringDate() + ": " + 
-            displayStart + " - " + displayEnd;
+            displayStart + "-" + displayEnd;
             
         return granule;  
     };
