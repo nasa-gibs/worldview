@@ -12,6 +12,8 @@ Worldview.namespace("DataDownload");
 
 Worldview.DataDownload.SelectionListPanel = function(config, model) {
     
+    var log = Logging.getLogger("Worldview.DataDownload");
+    
     var echo = Worldview.DataDownload.ECHO;
    
     var NOTICE = 
@@ -26,37 +28,44 @@ Worldview.DataDownload.SelectionListPanel = function(config, model) {
             "</p>" +
         "</div>";
         
-    var panel;
+    var panel = null;
     var selection;
     var self = {};
     
     self.show = function() {
-        if ( panel ) {
-            return;
-        }
-        panel = new YAHOO.widget.Panel("DataDownload_SelectionListPanel", {
-            width: "600px",
-            height: "400px",
-            zIndex: 1020,
-            visible: false
-        });
-        panel.setHeader("Download Links");
         selection = reformatSelection();
+        var newPanel = false;
+        if ( !panel ) {
+            newPanel = true;
+            panel = new YAHOO.widget.Panel("DataDownload_SelectionListPanel", {
+                width: "600px",
+                height: "400px",
+                zIndex: 1020,
+                visible: false
+            });
+            panel.setHeader("Download Links");
+        }
         panel.setBody(bodyText(selection));
-        panel.render(document.body);
-        panel.show();
-        panel.center();
-        panel.hideEvent.subscribe(function() {
-            setTimeout(function() { panel.destroy(); }, 25);
-        });
+        if ( newPanel ) {
+            panel.render(document.body);
+            panel.show();
+            panel.center();
+            panel.hideEvent.subscribe(function() {
+                setTimeout(function() { panel.destroy(); panel = null; }, 25);
+            });
         
-        $("#DataDownload_SelectionListPanel a.wget").click(function() {
-            Worldview.DataDownload.LinkPage.show(selection);
-        });
+            $("#DataDownload_SelectionListPanel a.wget").click(function() {
+                Worldview.DataDownload.LinkPage.show(selection);
+            });
+        }
     };
     
     self.hide = function() {
         panel.hide();
+    };
+    
+    self.visible = function() {
+        return panel !== null;
     };
     
     var reformatSelection = function() {
@@ -125,7 +134,7 @@ Worldview.DataDownload.SelectionListPanel = function(config, model) {
             });        
         });
         
-        console.log(selection);
+        log.debug(selection);
         return selection; 
     };
     

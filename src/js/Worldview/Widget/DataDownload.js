@@ -50,8 +50,8 @@ Worldview.Widget.DataDownload = function(config, spec) {
             .on("queryCancel", onQueryCancel)
             .on("queryError", onQueryError)
             .on("queryTimeout", onQueryTimeout)
-            .on("granuleSelect", updateButton)
-            .on("granuleUnselect", updateButton);
+            .on("granuleSelect", updateSelection)
+            .on("granuleUnselect", updateSelection);
         
         REGISTRY.register(self.containerId, self);
         REGISTRY.markComponentReady(self.containerId);   
@@ -115,7 +115,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
             mapController = 
                 Worldview.DataDownload.MapController(model, spec.maps, config);
         }
-        updateButton();
+        updateSelection();
     };
     
     var onDeactivate = function() {
@@ -160,7 +160,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
         );
     };
     
-    var updateButton = function() {
+    var updateSelection = function() {
         var selected = Worldview.size(model.selectedGranules);
         if ( selected > 0 ) {
             $("#DataDownload_Button input[type='button']").button("enable");
@@ -168,12 +168,18 @@ Worldview.Widget.DataDownload = function(config, spec) {
             $("#DataDownload_Button input[type='button']").button("disable");            
         }
         $("#DataDownload_Button .ui-btn .ui-btn-text")
-            .html("Download (" + selected + ")");        
+            .html("Download (" + selected + ")");   
+            
+        if ( selectionListPanel && selectionListPanel.visible() ) {
+            selectionListPanel.show();
+        }     
     };
     
     var showSelectionList = function() {
-        selectionListPanel = 
-                Worldview.DataDownload.SelectionListPanel(config, model);
+        if ( !selectionListPanel ) {
+            selectionListPanel = 
+                    Worldview.DataDownload.SelectionListPanel(config, model);
+        }
         selectionListPanel.show(); 
     };
     
