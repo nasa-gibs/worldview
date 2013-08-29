@@ -22,6 +22,12 @@ Worldview.DataDownload.Results.MODISGridLabel = function() {
     
     self.process = function(meta, granule) {
         granule.label = "h" + granule.h + " - " + "v" + granule.v;
+        
+        var timeStart = Date.parseISOString(granule.time_start);
+        var date = timeStart.toISOStringDate();
+        
+        granule.downloadLabel = date + ": h" + granule.h + "-" + granule.v;
+        
         return granule;
     };
     

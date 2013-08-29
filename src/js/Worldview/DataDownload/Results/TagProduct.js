@@ -14,30 +14,17 @@
  */
 Worldview.namespace("DataDownload");
 
-Worldview.DataDownload.Results.TagNRT = function(spec) {
+Worldview.DataDownload.Results.TagProduct = function(product) {
     
     var self = {};
     
-    self.name = "TagNRT";
+    self.name = "TagProduct";
     
     self.process = function(meta, granule) {
-        var isNRT;
-        if ( spec.by === "value" ) {
-            isNRT = granule[spec.field] === spec.value;
-        } else if ( spec.by === "regex" ) {
-            var re = new RegExp(spec.value);
-            isNRT = re.test(granule[spec.field]);
-        } else {
-            throw new Error("Unknown TagNRT method: " + spec.by);
-        }
-        if ( isNRT ) {
-            granule.nrt = true;
-            meta.nrt = true;
-        }
+        granule.product = product;
         return granule;
     };
     
     return self;
 
 };
-

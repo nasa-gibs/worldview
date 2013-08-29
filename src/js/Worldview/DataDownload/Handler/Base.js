@@ -57,7 +57,6 @@ Worldview.DataDownload.Handler.Base = function(config, model) {
 
         promise.done(function(data) {
             try {
-                markProduct(data);
                 var results = self._processResults(data);
                 self.events.trigger("results", results);
             } catch ( error ) {
@@ -76,15 +75,7 @@ Worldview.DataDownload.Handler.Base = function(config, model) {
             self.events.trigger("query");
         }              
     };
-    
-    // Results from ECHO do not have any identifier linking it back to the
-    // collection, put in the identifier that Worldview uses.
-    var markProduct = function(data) {
-        $.each(data, function(index, data) {
-            data.product = model.selectedProduct;
-        });
-    };
-    
+        
     init();
     return self;
 };

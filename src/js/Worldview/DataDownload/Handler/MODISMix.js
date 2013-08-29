@@ -79,7 +79,7 @@ Worldview.DataDownload.Handler.MODISMix = function(config, model, spec) {
                 grid: data.grid
             });
         }
-    }
+    };
     
     init();
     return self;
