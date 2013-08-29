@@ -131,6 +131,15 @@ Worldview.DataDownload.SelectionListPanel = function(config, model) {
                     item.links.push(reformatLink(link));                           
                 });
                 product.list.push(item);                    
+            });
+            product.list.sort(function(a, b) {
+                if ( a.label > b.label ) { 
+                    return 1;
+                }
+                if ( a.label < b.label ) {
+                    return -1;
+                }
+                return 0;
             });        
         });
         
