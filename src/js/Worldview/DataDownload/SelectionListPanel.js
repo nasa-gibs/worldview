@@ -12,9 +12,8 @@ Worldview.namespace("DataDownload");
 
 Worldview.DataDownload.SelectionListPanel = function(config, model) {
     
-    var REL_DATA = "http://esipfed.org/ns/fedsearch/1.1/data#";
-    var REL_BROWSE = "http://esipfed.org/ns/fedsearch/1.1/browse#";
-    
+    var echo = Worldview.DataDownload.ECHO;
+   
     var NOTICE = 
         "<div id='DataDownload_Notice'>" +
             "<img class='icon' src='images/info-icon-blue.svg'>" + 
@@ -51,7 +50,9 @@ Worldview.DataDownload.SelectionListPanel = function(config, model) {
             setTimeout(function() { panel.destroy(); }, 25);
         });
         
-        $("#DataDownload_SelectionListPanel a.wget").click(showTextURLs);
+        $("#DataDownload_SelectionListPanel a.wget").click(function() {
+            Worldview.DataDownload.LinkPage.show(selection);
+        });
     };
     
     self.hide = function() {
@@ -79,7 +80,7 @@ Worldview.DataDownload.SelectionListPanel = function(config, model) {
             // repeated in all granules for that product. If so, we want to 
             // bump that up to product level instead of at the granule level.
             $.each(granule.links, function(index, link) {
-                if ( link.rel !== REL_DATA && link.rel !== REL_BROWSE ) {
+                if ( link.rel !== echo.REL_DATA && link.rel !== echo.REL_BROWSE ) {
                     if ( !product.counts[link.href]  ) {
                         product.counts[link.href] = 1;    
                     } else {
@@ -115,7 +116,7 @@ Worldview.DataDownload.SelectionListPanel = function(config, model) {
                         return;
                     }
                     // Skip browse images per Kevin's request
-                    if ( link.rel === REL_BROWSE ) {
+                    if ( link.rel === echo.REL_BROWSE ) {
                         return;
                     }
                     item.links.push(reformatLink(link));                           
@@ -183,7 +184,7 @@ Worldview.DataDownload.SelectionListPanel = function(config, model) {
         var elements = [
             NOTICE,
             "<div class='wget'>", 
-                "<a class='wget' href='#'>Text URLs (wget)</a>", 
+                "<a class='wget' href='#'>URL list (wget)</a>", 
             "</div>"
         ];
         $.each(selection, function(key, product) {
@@ -192,29 +193,7 @@ Worldview.DataDownload.SelectionListPanel = function(config, model) {
         var text = elements.join("\n<br/>\n") + "<br/>";
         return text;
     };
-    
-    var showTextURLs = function() {
-        var text = window.open('');
-        text.document.write("<html><body><ul>");
-        $.each(selection, function(key, product) { 
-            $.each(product.list, function(index, item) { 
-                $.each(item.links, function(index, link) {
-                    writeLink(text.document, link);
-                });
-            });    
-        });
-        text.document.write("</ul></body></html>");
-        text.document.close();
-    };
-    
-    var writeLink = function(doc, link) {
-        doc.write(
-            "<li>" +
-                "<a href='" + link.href + "'>" + link.href + "</a>" +
-            "</li>"
-        );
-    };
-    
+            
     return self;
 
 };
