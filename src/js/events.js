@@ -256,12 +256,16 @@ SOTE.widget.Events.toggle = function(e,ui){
 		$('.evaccordionToggler').removeClass('evexpand').addClass('evcollapse');
 		$('.evaccordionToggler').attr("title","Hide Events");
 		$('.events').css('display','block');
+		$("#eventsHolder").css("width","238px");
+		$("#eventsHolder").css("height","300px");
 		self.isCollapsed = false;
 	}
 	else{
 		$('.evaccordionToggler').removeClass('evcollapse').addClass('evexpand');
 		$('.evaccordionToggler').attr("title","Show Events");
 		$('.events').css('display','none');
+		$("#eventsHolder").css("width","auto");
+		$("#eventsHolder").css("height","0px");
 		self.isCollapsed = true;
 	} 	
 };
