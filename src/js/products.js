@@ -67,25 +67,25 @@ SOTE.widget.Products = function(containerId, config){
 	
 	this.init();
 
-}
+};
 
 SOTE.widget.Products.HTML_TAB_ACTIVE_SELECTED = 
     "<img class='productsIcon selected' src='images/missing-icon.svg'>" +
-    "Active"
+    "Active";
     
 SOTE.widget.Products.HTML_TAB_ACTIVE_UNSELECTED = 
     "<img class='productsIcon' src='images/missing-icon.svg' title='Activce Layers'>";
 
 SOTE.widget.Products.HTML_TAB_ADD_SELECTED = 
     "<img class='productsIcon selected' src='images/missing-icon.svg'>" +
-    "Add Layers"
+    "Add Layers";
     
 SOTE.widget.Products.HTML_TAB_ADD_UNSELECTED = 
     "<img class='productsIcon' src='images/missing-icon.svg' title='Add Layers'>";
     
 SOTE.widget.Products.HTML_TAB_DOWNLOAD_SELECTED = 
     "<img class='productsIcon selected' src='images/missing-icon.svg'>" +
-    "Download"
+    "Download";
     
 SOTE.widget.Products.HTML_TAB_DOWNLOAD_UNSELECTED = 
     "<img class='productsIcon' src='images/missing-icon.svg' title='Download'>";
@@ -168,7 +168,7 @@ SOTE.widget.Products.prototype.render = function(){
 	var self = this;
 	$('#'+this.id).tabs({show: function(e, ui) {
 	    e.data = { self: self };
-	    SOTE.widget.Products.change(e, ui)
+	    SOTE.widget.Products.change(e, ui);
     }});
 	this.b = new SOTE.widget.Bank("products", {
 	    paletteWidget: this.paletteWidget, 
@@ -310,6 +310,17 @@ SOTE.widget.Products.toggle = function(e,ui){
 		self.isCollapsed = true;
 		$("#"+self.id).after($('.accordionToggler'));
 	} 	
+};
+
+SOTE.widget.Products.prototype.selectTab = function(tabName) {
+    var selectedTab = $("#" + this.id).tabs("option", "selected");
+    if ( tabName === "download" ) {
+        if ( selectedTab !== 2 ) {
+            $("#" + this.id).tabs("select", 2);
+        }        
+    } else {
+        throw new Error("Invalid tab: " + tabName);
+    }
 };
 
 /**

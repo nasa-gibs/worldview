@@ -137,6 +137,10 @@ $(function() {// Initialize "static" vars
             .on("dataDownloadUnselect", function() {
                 dataDownloadModel.deactivate();
             });
+        dataDownloadModel.events
+            .on("activate", function() {
+                products.selectTab("download");
+            });
                                 
         
 	    // Register event listeners

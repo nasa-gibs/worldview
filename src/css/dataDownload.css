@@ -23,7 +23,7 @@
 
 #DataDownload_SelectionListPanel ul {
     display: block; 
-    margin: 0 1.12em;
+    margin: 0 5px;
 }
 
 #DataDownload_SelectionListPanel li {
@@ -66,4 +66,38 @@
     padding: 0;
 }
 
-   
+#DataDownload_SelectionListPanel td {
+    border-bottom: 1px solid #303030;
+    padding: 5px;
+    vertical-align: top;
+}
+
+#DataDownload_Notice {
+    width: 80%;
+    margin: 0 auto;
+    border: 1px solid #ccccff;
+    border-radius: 5px;
+    background-color: #ddddff;
+    padding: 5px;
+}
+
+#DataDownload_Notice .icon {
+    width: 32px;
+    height: 32px;
+    float: left;
+}
+
+#DataDownload_Notice .text {
+    padding-left: 42px;
+    color: #000000;
+}
+
+#DataDownload_Notice .text a {
+    color: #202070;
+}
+
+#DataDownload_SelectionListPanel div.wget {
+    float: right;
+}
+
+  
