@@ -129,6 +129,7 @@
         <file name="js/Worldview/DataDownload/Results/MODISGridLabel.js"/>
         <file name="js/Worldview/DataDownload/Results/PreferredFilter.js"/>
         <file name="js/Worldview/DataDownload/Results/TagNRT.js"/>
+        <file name="js/Worldview/DataDownload/Results/TagProduct.js"/>
         <file name="js/Worldview/DataDownload/Results/TimeFilter.js"/>
         <file name="js/Worldview/DataDownload/Results/TimeLabel.js"/>
         <file name="js/Worldview/DataDownload/Results/Transform.js"/>
