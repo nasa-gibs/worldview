@@ -78,7 +78,7 @@ Worldview.namespace("Tour");
                        "<h3>Welcome to Worldview!</h3>"+
                        "</br></br>"+
                        "<center>"+
-                           "<p class=\"splash\" style='font-size:14px;'>This tool from NASA's <a href='http://earthdata.nasa.gov/about-eosdis' target='_blank'>EOSDIS</a> allows users to interactively browse satellite imagery in near real-time, generally within 3 hours of observation.  Use the tools described below to change the imagery on the map and compare it to past observations.</p>"+  
+                           "<p class=\"splashwelcome\">This tool from NASA's <a href='http://earthdata.nasa.gov/about-eosdis' target='_blank'>EOSDIS</a> allows users to interactively browse satellite imagery in near real-time, generally within 3 hours of observation.  Use the tools described below to change the imagery on the map and compare it to past observations.</p>"+  
                            "</br></br>"+
                            "<table id=\"splashTable\" class=\"splash\">"+
                                "<tr>"+
@@ -229,7 +229,7 @@ Worldview.namespace("Tour");
                                  "<center>"+
                                      "<h3>Finished!</h3>"+
                                      "</br></br>"+
-                                     "<p class='tour' style='font-size:14px;'>You have now completed a tour of Worldview!  If you followed the “Try It” steps, you’re now looking at fires in northern California as they were observed by satellites on August 23, 2012.   You can use the tools in any order.  We hope you continue exploring!  <p>"+
+                                     "<p class='splashwelcome'>You have now completed a tour of Worldview!  If you followed the “Try It” steps, you’re now looking at fires in northern California as they were observed by satellites on August 23, 2012.   You can use the tools in any order.  We hope you continue exploring!  <p>"+
                                      "</br>"+
                                      "<table class='tour'>"+
                                          "<tr>"+
@@ -251,6 +251,7 @@ Worldview.namespace("Tour");
             e.stopPropagation();
             $('#joyRideTipContent').joyride({adjustForPhone:false,
             								 bordered:true,
+            								 includepage:true,
             								 template : {'link':'<a href="#" class="joyride-close-tip">X</a>'},
                                              postStepCallback : function (index, tip) {
                                                  if(index == 4) {
@@ -290,8 +291,10 @@ Worldview.namespace("Tour");
             
             $('#joyRideTipContent').joyride({adjustForPhone:false,
             								 bordered:true,
+            								 includepage:true,
             								 template : {'link':'<a href="#" class="joyride-close-tip">X</a>'},
                                              postStepCallback : function (index, tip) {
+                                             	console.log("index = " + index);
                                                  if(index == 4) {
                                                      log.debug("finished tour");
                                                      conclusionPanel.show();

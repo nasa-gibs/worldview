@@ -31,6 +31,7 @@
       'postRideCallback'     : $.noop,    // A method to call once the tour closes (canceled or complete)
       'postStepCallback'     : $.noop,    // A method to call after each step
       'bordered'             : false,     // true or false to control whether a border is shown
+      'includepage'          : false,     // true or false to control whether a page number is shown under the next button
       'adjustForPhone'       : true,      // change window position for phones (if false, windows show in default position)
       'template' : { // HTML segments for tip layout
         'link'       : '<a href="#close" class="joyride-close-tip">X</a>',
@@ -99,7 +100,7 @@
             }
 
             settings.$document.on('click', '.joyride-next-tip, .joyride-modal-bg', function (e) {
-              if(e.target.text === "Next") {
+              if(e.target.text === "Next" || e.target.text === "Finish") {
               	e.preventDefault();
               	e.stopImmediatePropagation();
               	if (settings.$li.next().length < 1) {
@@ -170,7 +171,7 @@
         var opts_len = opts_arr.length;
 		var ii, p;
 		var isBordered = settings.bordered;
-		
+		var usePage = settings.includepage;
 
         opts.tip_class = opts.tip_class || '';
         if(isBordered) {
@@ -182,6 +183,12 @@
           methods.button_text(opts.button_text, opts.li) +
           settings.template.link +
           methods.timer_instance(opts.index);
+        if(usePage) {
+        	var numpages = settings.$content_el[0].children.length;
+			var page = opts.index + 1;
+			var pagestr = "<p style='text-align:right'>(page " + page + " of " + numpages + ")</p>"
+			content += pagestr;
+        }
         if(isBordered) {
         	$blank.append($(settings.template.tipborder));
         }
