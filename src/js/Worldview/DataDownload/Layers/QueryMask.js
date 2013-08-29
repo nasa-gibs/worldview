@@ -10,6 +10,7 @@
  */
 Worldview.namespace("DataDownload.Layers");
 
+// TODO: Remove this if not actually used!
 Worldview.DataDownload.Layers.QueryMask = function(model, maps, config) {
 
     var LAYER_NAME = "DataDownload_QueryMask";
