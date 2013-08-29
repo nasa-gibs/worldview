@@ -22,8 +22,8 @@ Worldview.DataDownload.ECHO.Client = function(spec) {
     // Hold results for a maximum of ten minutes
     var CACHE_TIME = 10 * 60;
     
-    // Abort query after 30 seconds
-    var QUERY_TIMEOUT = 30 * 1000; 
+    // Abort query after 45 seconds
+    var QUERY_TIMEOUT = 45 * 1000; 
     
     var ns = Worldview.DataDownload.ECHO.Client;
         
