@@ -28,7 +28,7 @@ Worldview.DataDownload.Handler.MODISGrid = function(config, model, spec) {
 
         var granules = self.echo.submit(queryOptions);
         var grid = self.ajax.submit({
-            url: "data/MODIS_Grid." + crs + ".json",
+            url: "data/MODIS_Grid." + crs + ".json?v=" + Worldview.BUILD_NONCE,
             dataType: "json"
         });
         

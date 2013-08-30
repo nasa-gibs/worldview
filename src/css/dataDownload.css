@@ -14,50 +14,50 @@
     margin-right: 20px;
 }
 
-#DataDownload_SelectionListPanel .bd {
+#DataDownload_DownloadListPanel .bd {
     background-color: rgb(25, 28, 32);
     overflow: auto;
     padding: 10px; 
     color: #FFFBE7;
 }
 
-#DataDownload_SelectionListPanel ul {
-    display: block; 
+#DataDownload_DownloadListPanel ul {
+    display: list; 
     margin: 0 5px;
 }
 
-#DataDownload_SelectionListPanel li {
+#DataDownload_DownloadListPanel li {
     margin-top: 3px;
     display: list-item;
     list-style-type: none;  
 }
 
-#DataDownload_SelectionListPanel h3 {
+#DataDownload_DownloadListPanel h3 {
     font-size: 12pt;
     font-weight: bold;
     color: #FFFBE7;
 }
 
-#DataDownload_SelectionListPanel h5 {
+#DataDownload_DownloadListPanel h5 {
     font-size: 10pt;
     margin-top: 10px;
     margin-bottom: 5px;
     color: #FFFBE7;
 }
 
-#DataDownload_SelectionListPanel a {
+#DataDownload_DownloadListPanel a {
     text-decoration: none;
 }
 
-#DataDownload_SelectionListPanel a:link {
+#DataDownload_DownloadListPanel a:link {
     color: #82cdfa;
 }
 
-#DataDownload_SelectionListPanel a:visited {
+#DataDownload_DownloadListPanel a:visited {
     color: #82cdfa;
 }
 
-#DataDownload_SelectionListPanel hr {
+#DataDownload_DownloadListPanel hr {
     display: block; 
     height: 1px;
     border: 0; 
@@ -66,7 +66,7 @@
     padding: 0;
 }
 
-#DataDownload_SelectionListPanel td {
+#DataDownload_DownloadListPanel td {
     border-bottom: 1px solid #303030;
     padding: 5px;
     vertical-align: top;
@@ -96,8 +96,13 @@
     color: #202070;
 }
 
-#DataDownload_SelectionListPanel div.wget {
+#DataDownload_DownloadListPanel div.wget {
     float: right;
 }
 
-  
+#DataDownload_SelectionListPanel .bd {
+    background-color: rgb(25, 28, 32);
+    overflow: auto;
+    padding: 10px; 
+    color: #FFFBE7;
+}

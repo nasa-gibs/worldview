@@ -14,15 +14,9 @@
  */
 Worldview.namespace("DataDownload.Handler");
 
-Worldview.DataDownload.Handler.MLS = function(config, model, spec) {
+Worldview.DataDownload.Handler.List = function(config, model, spec) {
     
-    var MAX_DISTANCE = 270;    
     var self = Worldview.DataDownload.Handler.Base(config, model);
-    
-    var init = function() {
-        self.extents[Worldview.Map.CRS_WGS_84] = 
-               Worldview.Map.CRS_WGS_84_QUERY_EXTENT;
-    };
     
     self._submit = function(queryData) {
         var queryOptions = {
@@ -38,27 +32,20 @@ Worldview.DataDownload.Handler.MLS = function(config, model, spec) {
             meta: {},
             granules: data
         };
-        if ( model.crs === Worldview.Map.CRS_WGS_84 ) {
-            results.meta.queryMask = Worldview.Map.CRS_WGS_84_QUERY_MASK;
-        }
                 
         var ns = Worldview.DataDownload;
         var productConfig = config.products[model.selectedProduct];
         var chain = ns.Results.Chain();
         chain.processes = [
+            ns.Results.TagList(),
             ns.Results.TagProduct(model.selectedProduct),
             ns.Results.TagNRT(productConfig.nrt),
             ns.Results.CollectPreferred(model.prefer),
-            ns.Results.PreferredFilter(model.prefer), 
-            ns.Results.GeometryFromECHO(false),
-            ns.Results.Transform(model.crs),
-            ns.Results.ExtentFilter(model.crs, self.extents[model.crs]),
-            ns.Results.TimeLabel(model.time),
-            ns.Results.ConnectSwaths(model.crs)
+            ns.Results.PreferredFilter(model.prefer),
+            ns.Results.DateTimeLabel(model.time)
         ];
         return chain.process(results);
     };
     
-    init();
     return self;
 };

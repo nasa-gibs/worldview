@@ -35,7 +35,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
    
     var model = spec.model; 
     var mapController = null;
-    var selectionListPanel = null;
+    var downloadListPanel = null;
     
     var self = {};
     self.containerId = "dataDownload";
@@ -108,7 +108,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
             model.activate();
         });  
         
-        $("#DataDownload_Button .ui-btn").click(showSelectionList);
+        $("#DataDownload_Button .ui-btn").click(showDownloadList);
         $("#DataDownload_Prefer").on("change", updatePreference);
     };
     
@@ -178,17 +178,17 @@ Worldview.Widget.DataDownload = function(config, spec) {
         $("#DataDownload_Button .ui-btn .ui-btn-text")
             .html("Download (" + selected + ")");   
             
-        if ( selectionListPanel && selectionListPanel.visible() ) {
-            selectionListPanel.show();
+        if ( downloadListPanel && downloadListPanel.visible() ) {
+            downloadListPanel.show();
         }     
     };
     
-    var showSelectionList = function() {
-        if ( !selectionListPanel ) {
-            selectionListPanel = 
-                    Worldview.DataDownload.SelectionListPanel(config, model);
+    var showDownloadList = function() {
+        if ( !downloadListPanel ) {
+            downloadListPanel = 
+                    Worldview.DataDownload.DownloadListPanel(config, model);
         }
-        selectionListPanel.show(); 
+        downloadListPanel.show(); 
     };
     
     var updatePreference = function(event, ui) {

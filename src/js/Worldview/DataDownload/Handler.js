@@ -22,7 +22,7 @@ Worldview.DataDownload.Handler = function() {
     ns.getByName = function(name) {
         var map = {
             "AquaSwathMultiDay":    Worldview.DataDownload.Handler.AquaSwathMultiDay,
-            "MLS":                  Worldview.DataDownload.Handler.MLS,
+            "List":                 Worldview.DataDownload.Handler.List,
             "MODISGrid":            Worldview.DataDownload.Handler.MODISGrid,
             "MODISMix":             Worldview.DataDownload.Handler.MODISMix,
             "MODISSwath":           Worldview.DataDownload.Handler.MODISSwath,
@@ -34,7 +34,7 @@ Worldview.DataDownload.Handler = function() {
             throw new Error("No such handler: " + name);
         }    
         return handler;
-    }
+    };
     
     return ns;    
 }();

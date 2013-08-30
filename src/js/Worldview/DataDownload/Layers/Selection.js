@@ -46,6 +46,9 @@ Worldview.DataDownload.Layers.Selection = function(model, maps, config) {
     };
     
     var onGranuleSelect = function(granule) {
+        if ( !granule.geometry ) {
+            return;
+        }
         var geom = granule.geometry[model.crs];
         var extent = 
                 config.projections[model.projection].maxExtent.toGeometry();
@@ -58,6 +61,9 @@ Worldview.DataDownload.Layers.Selection = function(model, maps, config) {
     
     
     var onGranuleUnselect = function(granule) {
+        if ( !granule.geometry ) {
+            return;
+        }
         var feature = features[granule.id];
         getLayer().removeFeatures([feature]);    
     };

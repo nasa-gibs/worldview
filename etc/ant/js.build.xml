@@ -109,7 +109,7 @@
         <file name="js/Worldview/DataDownload/Handler/MODISSwath.js"/>
         <file name="js/Worldview/DataDownload/Handler/MODISGrid.js"/>
         <file name="js/Worldview/DataDownload/Handler/MODISMix.js"/>
-        <file name="js/Worldview/DataDownload/Handler/MLS.js"/>
+        <file name="js/Worldview/DataDownload/Handler/List.js"/>
         
         <file name="js/Worldview/DataDownload/Layers/Button.js"/>
         <file name="js/Worldview/DataDownload/Layers/Grid.js"/>
@@ -122,6 +122,7 @@
         <file name="js/Worldview/DataDownload/Results/Chain.js"/>
         <file name="js/Worldview/DataDownload/Results/CollectPreferred.js"/>
         <file name="js/Worldview/DataDownload/Results/ConnectSwaths.js"/>
+        <file name="js/Worldview/DataDownload/Results/DateTimeLabel.js"/>
         <file name="js/Worldview/DataDownload/Results/ExtentFilter.js"/>
         <file name="js/Worldview/DataDownload/Results/GeometryFromECHO.js"/>
         <file name="js/Worldview/DataDownload/Results/GeometryFromMODISGrid.js"/>
@@ -130,6 +131,7 @@
         <file name="js/Worldview/DataDownload/Results/PreferredFilter.js"/>
         <file name="js/Worldview/DataDownload/Results/TagNRT.js"/>
         <file name="js/Worldview/DataDownload/Results/TagProduct.js"/>
+        <file name="js/Worldview/DataDownload/Results/TagList.js"/>
         <file name="js/Worldview/DataDownload/Results/TimeFilter.js"/>
         <file name="js/Worldview/DataDownload/Results/TimeLabel.js"/>
         <file name="js/Worldview/DataDownload/Results/Transform.js"/>
@@ -138,7 +140,8 @@
         <file name="js/Worldview/DataDownload/ProductSelector.js"/>
         <file name="js/Worldview/DataDownload/MapController.js"/>
         <file name="js/Worldview/DataDownload/SelectionListPanel.js"/>
-        <file name="js/Worldview/DataDownload/LinkPage.js"/>
+        <file name="js/Worldview/DataDownload/DownloadListPanel.js"/>
+        <file name="js/Worldview/DataDownload/WgetPage.js"/>
         
         <file name="js/Worldview/Widget/Map.js"/>
         <file name="js/Worldview/Widget/Palette.js"/>

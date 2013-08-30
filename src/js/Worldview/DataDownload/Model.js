@@ -138,7 +138,7 @@ Worldview.DataDownload.Model = function(config) {
     };
     
     self.selectLayer = function(layerName) {
-        if ( !self.active || self.selectedLayer === layerName ) {
+        if ( self.selectedLayer === layerName ) {
             return;
         }
         if ( layerName && $.inArray(layerName, state.layers) < 0 ) {
@@ -150,8 +150,11 @@ Worldview.DataDownload.Model = function(config) {
         } else {
             self.selectedProduct = null;
         }
-        self.events.trigger(self.EVENT_LAYER_SELECT, self.selectedLayer);    
-        query();
+        
+        if ( self.active ) {
+            self.events.trigger(self.EVENT_LAYER_SELECT, self.selectedLayer);    
+            query();
+        }
     };
     
     self.update = function(newState) {

@@ -51,7 +51,7 @@ Worldview.DataDownload.Results.Chain = function() {
                 }
                 filteredGranules[granule.filteredBy].push(granule);
             }
-        })
+        });
 
         return {
             meta: results.meta,

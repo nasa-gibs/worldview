@@ -43,6 +43,7 @@ Worldview.DataDownload.ProductSelector = function(model, selector) {
         });
         $(selector + " select").html(options.join("\n"));
         $(selector).trigger("create");
+        $(selector + " select").selectmenu("refresh");
     };
     
     var onSelect = function() {

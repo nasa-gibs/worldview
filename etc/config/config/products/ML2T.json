@@ -1,6 +1,6 @@
 {
     "name": "MLS/Aura L2 Temperature",
-    "handler": "MLS",
+    "handler": "List",
     "query": {
         "shortName": ["ML2T", "ML2T_NRT"],
         "dataCenterId": "GSFCS4PA"
