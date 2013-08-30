@@ -180,6 +180,11 @@ Worldview.DataDownload.Model = function(config) {
         self.events.trigger(self.EVENT_GRANULE_UNSELECT, granule); 
     };
     
+    self.setPreference = function(preference) {
+        self.prefer = preference;
+        query();
+    };
+    
     var query = function() {
         if ( !self.active ) {
             return;
@@ -267,8 +272,8 @@ Worldview.DataDownload.Model = function(config) {
             foundLayer = state.layers[0];
         }
         return foundLayer;
-    }
+    };
     
     init();
     return self;   
-}
+};
