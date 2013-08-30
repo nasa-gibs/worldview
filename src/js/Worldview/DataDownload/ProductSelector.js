@@ -51,7 +51,9 @@ Worldview.DataDownload.ProductSelector = function(model, selector) {
     };
     
     var onSelectUpdate = function(selectedLayer) {
-        $(selector + " select").val(selectedLayer);        
+        $(selector + " select").val(selectedLayer);
+        $(selector + " select").selectmenu("refresh");
+        return;   
     };
     
     init();
