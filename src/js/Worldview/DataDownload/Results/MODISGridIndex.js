@@ -33,7 +33,7 @@ Worldview.DataDownload.Results.MODISGridIndex = function() {
         results.meta.grid = {};
         $.each(results.meta.gridFetched.features, function(index, feature) {
             var key = "h" + feature.properties.H + "v" + feature.properties.V;
-            results.meta.grid[key] = feature.geometry;   
+            results.meta.grid[key] = feature;   
         });
     };
     
