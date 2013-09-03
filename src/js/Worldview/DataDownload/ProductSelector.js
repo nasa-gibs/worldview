@@ -15,7 +15,7 @@ Worldview.DataDownload.ProductSelector = function(model, selector) {
     var self = {};
     
     var init = function() {
-        $(selector).html("<select size='1'></select>");
+        $(selector).html("<select size='1' data-native-menu='false'></select>");
         $(selector + " select").change(function() {
             onSelect();
         });
@@ -34,13 +34,16 @@ Worldview.DataDownload.ProductSelector = function(model, selector) {
                 selected = " selected";
             }
             // No more than 40 characters
-            var label = Worldview.abbreviate(40, 
-                    layer.name + "; " + layer.description);     
+            //var label = Worldview.abbreviate(40, 
+            //        layer.name + "; " + layer.description);     
+            var label = layer.name + "; " + layer.description;
             var option = "<option value='" + layer.id + "'" + selected + ">" + 
                 label + "</option>";
             options.push(option);
         });
         $(selector + " select").html(options.join("\n"));
+        $(selector).trigger("create");
+        $(selector + " select").selectmenu("refresh");
     };
     
     var onSelect = function() {
@@ -49,7 +52,9 @@ Worldview.DataDownload.ProductSelector = function(model, selector) {
     };
     
     var onSelectUpdate = function(selectedLayer) {
-        $(selector + " select").val(selectedLayer);        
+        $(selector + " select").val(selectedLayer);
+        $(selector + " select").selectmenu("refresh");
+        return;   
     };
     
     init();

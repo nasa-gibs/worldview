@@ -28,7 +28,7 @@ Worldview.DataDownload.Handler.MODISGrid = function(config, model, spec) {
 
         var granules = self.echo.submit(queryOptions);
         var grid = self.ajax.submit({
-            url: "data/MODIS_Grid." + crs + ".json",
+            url: "data/MODIS_Grid." + crs + ".json?v=" + Worldview.BUILD_NONCE,
             dataType: "json"
         });
         
@@ -49,6 +49,7 @@ Worldview.DataDownload.Handler.MODISGrid = function(config, model, spec) {
         var ns = Worldview.DataDownload;
         var chain = ns.Results.Chain();
         chain.processes = [
+            ns.Results.TagProduct(model.selectedProduct),
             ns.Results.MODISGridIndex(),
             ns.Results.GeometryFromMODISGrid(model.crs),
             ns.Results.ExtentFilter(model.crs, self.extents[model.crs]),

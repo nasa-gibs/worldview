@@ -60100,7 +60100,7 @@
             }
         },
         "ML2CO": {
-            "handler": "MLS",
+            "handler": "List",
             "name": "MLS/Aura L2 Carbon Monoxide (CO) Mixing Ratio",
             "nrt": {
                 "by": "regex",
@@ -60116,7 +60116,7 @@
             }
         },
         "ML2H2O": {
-            "handler": "MLS",
+            "handler": "List",
             "name": "MLS/Aura L2 Water Vapor (H2O) Mixing Ratio",
             "nrt": {
                 "by": "regex",
@@ -60132,7 +60132,7 @@
             }
         },
         "ML2HNO3": {
-            "handler": "MLS",
+            "handler": "List",
             "name": "MLS/Aura L2 Nitric Acid (HNO3) Mixing Ratio",
             "nrt": {
                 "by": "regex",
@@ -60148,7 +60148,7 @@
             }
         },
         "ML2N2O": {
-            "handler": "MLS",
+            "handler": "List",
             "name": "MLS/Aura L2 Nitrous Oxide (N2O) Mixing Ratio",
             "nrt": {
                 "by": "regex",
@@ -60164,7 +60164,7 @@
             }
         },
         "ML2O3": {
-            "handler": "MLS",
+            "handler": "List",
             "name": "MLS/Aura L2 Ozone (O3) Mixing Ratio",
             "nrt": {
                 "by": "regex",
@@ -60180,7 +60180,7 @@
             }
         },
         "ML2SO2": {
-            "handler": "MLS",
+            "handler": "List",
             "name": "MLS/Aura L2 Sulfur Dioxide (SO2) Mixing Ratio",
             "nrt": {
                 "by": "regex",
@@ -60196,7 +60196,7 @@
             }
         },
         "ML2T": {
-            "handler": "MLS",
+            "handler": "List",
             "name": "MLS/Aura L2 Temperature",
             "nrt": {
                 "by": "regex",

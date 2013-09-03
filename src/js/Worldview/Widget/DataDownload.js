@@ -35,7 +35,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
    
     var model = spec.model; 
     var mapController = null;
-    var selectionListPanel = null;
+    var downloadListPanel = null;
     
     var self = {};
     self.containerId = "dataDownload";
@@ -94,14 +94,22 @@ Worldview.Widget.DataDownload = function(config, spec) {
                     "<input id='DataDownload_Button' type='button'" +  
                         "class='ui-disabled' value=''>" + 
                 "</div>" + 
-                "<div id='productSelector'></div>")
+                "<div id='productSelector'></div>" + 
+                "<div data-role='fieldcontain'>" +
+                    "<fieldset id='DataDownload_Prefer' data-role='controlgroup'>" +
+                    "<input type='radio' id='DataDownload_BestAvailable' name='prefer' value='science' checked='checked'/>" + 
+                    "<label for='DataDownload_BestAvailable'>Best Available</label>" +
+                    "<input type='radio' id='DataDownload_PreferNRT' name='prefer' value='nrt'/>" + 
+                    "<label for='DataDownload_PreferNRT'>Prefer Near Real Time</label>" +                
+                "</fieldset></div>")
             .trigger("create");
         Worldview.DataDownload.ProductSelector(model,"#productSelector");       
         $(spec.selector + " input[type='button']").click(function() {
             model.activate();
         });  
         
-        $("#DataDownload_Button .ui-btn").click(showSelectionList);
+        $("#DataDownload_Button .ui-btn").click(showDownloadList);
+        $("#DataDownload_Prefer").on("change", updatePreference);
     };
     
     var toggleMode = function() {
@@ -170,17 +178,21 @@ Worldview.Widget.DataDownload = function(config, spec) {
         $("#DataDownload_Button .ui-btn .ui-btn-text")
             .html("Download (" + selected + ")");   
             
-        if ( selectionListPanel && selectionListPanel.visible() ) {
-            selectionListPanel.show();
+        if ( downloadListPanel && downloadListPanel.visible() ) {
+            downloadListPanel.show();
         }     
     };
     
-    var showSelectionList = function() {
-        if ( !selectionListPanel ) {
-            selectionListPanel = 
-                    Worldview.DataDownload.SelectionListPanel(config, model);
+    var showDownloadList = function() {
+        if ( !downloadListPanel ) {
+            downloadListPanel = 
+                    Worldview.DataDownload.DownloadListPanel(config, model);
         }
-        selectionListPanel.show(); 
+        downloadListPanel.show(); 
+    };
+    
+    var updatePreference = function(event, ui) {
+        model.setPreference(event.target.value);
     };
     
     init();

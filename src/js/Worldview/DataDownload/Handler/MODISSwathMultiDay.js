@@ -50,6 +50,7 @@ Worldview.DataDownload.Handler.MODISSwathMultiDay = function(config, model, spec
         var productConfig = config.products[model.selectedProduct];
         var chain = ns.Results.Chain();
         chain.processes = [
+            ns.Results.TagProduct(model.selectedProduct),
             ns.Results.TagNRT(productConfig.nrt),
             ns.Results.CollectPreferred(model.prefer),
             ns.Results.PreferredFilter(model.prefer), 
@@ -70,4 +71,4 @@ Worldview.DataDownload.Handler.MODISSwathMultiDay = function(config, model, spec
     
     init();
     return self;
-}
+};

@@ -112,6 +112,8 @@
             <arg value="--output"/>
             <arg value="${build.dir}/config-min.json"/>
         </exec>
+        
+        <copy file="${build.dir}/config.json" tofile="${src.dir}/data/config.json"/>
                 
     </target>
     <target name="web" depends="init,deps,generate-config"

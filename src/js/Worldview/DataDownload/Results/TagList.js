@@ -14,29 +14,20 @@
  */
 Worldview.namespace("DataDownload");
 
-Worldview.DataDownload.Results.MODISGridIndex = function() {
+Worldview.DataDownload.Results.TagList = function(spec) {
     
     var self = {};
     
-    self.name = "MODISGridIndex";
+    self.name = "TagList";
     
     self.process = function(meta, granule) {
-        var id = granule.producer_granule_id;
-        var matches = id.match(/\.h(\d+)v(\d+)\./);
-        granule.h = parseInt(matches[1], 10);
-        granule.v = parseInt(matches[2], 10);
-        granule.hv = "h" + granule.h + "v" + granule.v;
         return granule;
     };
     
     self.after = function(results) {
-        results.meta.grid = {};
-        $.each(results.meta.gridFetched.features, function(index, feature) {
-            var key = "h" + feature.properties.H + "v" + feature.properties.V;
-            results.meta.grid[key] = feature;   
-        });
+        results.meta.showList = true;
     };
     
     return self;
+
 };
-    

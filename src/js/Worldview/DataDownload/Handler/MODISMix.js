@@ -52,7 +52,7 @@ Worldview.DataDownload.Handler.MODISMix = function(config, model, spec) {
         var science = self.echo.submit(scienceQueryOptions);
         
         var grid = self.ajax.submit({
-            url: "data/MODIS_Grid." + crs + ".json",
+            url: "data/MODIS_Grid." + crs + ".json?v=" + Worldview.BUILD_NONCE,
             dataType: "json"
         });
 
@@ -79,7 +79,7 @@ Worldview.DataDownload.Handler.MODISMix = function(config, model, spec) {
                 grid: data.grid
             });
         }
-    }
+    };
     
     init();
     return self;

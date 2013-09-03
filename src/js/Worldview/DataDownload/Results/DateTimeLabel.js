@@ -14,24 +14,22 @@
  */
 Worldview.namespace("DataDownload.Results");
 
-Worldview.DataDownload.Results.MODISGridLabel = function() {
+Worldview.DataDownload.Results.DateTimeLabel = function(time) {
 
     var self = {};
     
-    self.name = "MODISGridLabel";
+    self.name = "DateTimeLabel";
     
     self.process = function(meta, granule) {
-        granule.label = "h" + granule.h + " - " + "v" + granule.v;
-        
         var timeStart = Date.parseISOString(granule.time_start);
-        var date = timeStart.toISOStringDate();
+        var timeEnd = Date.parseISOString(granule.time_end);
         
-        granule.downloadLabel = date + ": h" + granule.h + "-" + granule.v;
-        
-        return granule;
+        granule.label = timeStart.toISOStringDate() + ": " + 
+            timeStart.toISOStringTimeHM() + "-" + timeEnd.toISOStringTimeHM();
+            
+        return granule;  
     };
-    
+
     return self;
     
 };
-

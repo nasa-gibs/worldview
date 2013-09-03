@@ -10,12 +10,12 @@
  */
 Worldview.namespace("DataDownload");
 
-Worldview.DataDownload.LinkPage = (function() {
+Worldview.DataDownload.WgetPage = (function() {
     
     var ns = {};
     
     ns.show = function(selection) {
-        var text = window.open('');
+        var text = window.open('', 'Worldview_' + new Date());
         text.document.write("<html>");
         writeHeader(text.document);
         writePreamble(text.document);

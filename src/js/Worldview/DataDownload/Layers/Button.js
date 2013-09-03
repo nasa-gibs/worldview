@@ -60,6 +60,9 @@ Worldview.DataDownload.Layers.Button = function(model, maps, config) {
         var featureList = [];
         var selectedFeatures = [];
         $.each(results.granules, function(index, granule) {
+            if ( !granule.centroid ) {
+                return;
+            }
             var centroid = granule.centroid[model.crs];
             if ( centroid ) {
                 var feature = new OpenLayers.Feature.Vector(centroid, {

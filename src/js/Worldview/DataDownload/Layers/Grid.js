@@ -36,7 +36,7 @@ Worldview.DataDownload.Layers.Grid = function(model, maps, config) {
         
         var features = [];
         $.each(grid, function(index, cell) {
-            var geom = parser.read(cell, "Geometry"); 
+            var geom = parser.read(cell.geometry, "Geometry"); 
             var feature = new OpenLayers.Feature.Vector(geom);
             features.push(feature);  
         });
@@ -75,7 +75,7 @@ Worldview.DataDownload.Layers.Grid = function(model, maps, config) {
             layer = createLayer();
         }
         return layer;
-    }
+    };
     
     return self;
 
