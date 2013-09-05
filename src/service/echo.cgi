@@ -2,7 +2,7 @@
 
 #
 # NASA Worldview
-# 
+#  
 # This code was originally developed at NASA/Goddard Space Flight Center for
 # the Earth Science Data and Information System (ESDIS) project. 
 #
