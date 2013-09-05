@@ -16,10 +16,10 @@ Worldview.DataDownload.Layers.Grid = function(model, maps, config) {
     
     var LAYER_NAME = "DataDownload_Grid";
     var STYLE = {
-        strokeColor: "#00ffff",
-        strokeOpacity: 0.2,
+        strokeColor: "#bab498",
+        strokeOpacity: 0.6,
         fillOpacity: 0,
-        strokeWidth: 3
+        strokeWidth: 1.5
     };
     
     var parser = new OpenLayers.Format.GeoJSON();
