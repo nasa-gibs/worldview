@@ -5,7 +5,7 @@ SOTE.widget.Events.prototype = new SOTE.widget.Component;
 /**
  * Instantiate the Events widget. 
  */
-SOTE.widget.Events = function(containerId, config){
+SOTE.widget.Events = function(containerId, config) {
 	//console.log("instantiating events");
 	
 	this.container = document.getElementById(containerId);
@@ -43,7 +43,7 @@ SOTE.widget.Events = function(containerId, config){
 	this.statusStr = "";
 	this.config = config.config;
 	this.init();
-} 
+};
 
 /**
  * Get the JSON events data 
@@ -205,7 +205,7 @@ SOTE.widget.Events.prototype.render = function() {
 		this.initRenderComplete = true;
 		REGISTRY.markComponentReady(this.id);
 	}
-}
+};
 
 /**
   * Fires an event to the registry when the state of the component is changed
@@ -245,7 +245,7 @@ SOTE.widget.Events.repositionScrollbars = function(o, target) {
     		api.scrollToY(p.offsetTop, false);
     	}
 	}); 
-}
+};
 
 /**
  * Collapses and expands the events feature 
@@ -360,49 +360,93 @@ SOTE.widget.Events.toggleDescription = function(e) {
            	epsg
         ];
         
-       
-      // Putting old version back in for now for integration testing
-      map.setValue(meta[ind].date);
-      p.b.setValue(prods);
-      //setTimeout(showevextent, 1000);
-      m.setValue(extent);
-      // END
       
-      var centerlon = parseInt(meta[ind].west) + ((parseInt(meta[ind].east) - parseInt(meta[ind].west)) / 2);
-      var centerlat = parseInt(meta[ind].south) + ((parseInt(meta[ind].north) - parseInt(meta[ind].south)) / 2);
-      console.log("centerlon = " + centerlon);
-      console.log("centerlat = " + centerlat);
-      var center = [centerlon, centerlat];
-      
-      // zoom out to re-orient the user
-      /*if(m.productMap.map.getZoom() != 2) {
-          m.productMap.map.zoomTo(2);
-          setTimeout(function(){m.eventZoom(extent, center); p.b.setValue(prods);}, 1500);
-      }
-      else {
-      	  m.eventZoom(extent, center);
-      	  p.b.setValue(prods);
-      }*/
-     
-    
-    /*
-     console.log("Beth's latest version");
-     p.b.setValue(prods);
-     var currentMap = m.productMap.map;
-     
-	currentMap.events.register("maploadend", currentMap, function() {
-    	console.log("Map has finished loading");
-	});
-    */
-      
-      //m.panTo(center);
-      //setTimeout(function(){m.zoomToExtent(extent);}, 3000);
-      
-      //m.setValue(extent);
+    var centerlon = parseInt(meta[ind].west) + ((parseInt(meta[ind].east) - parseInt(meta[ind].west)) / 2);
+    var centerlat = parseInt(meta[ind].south) + ((parseInt(meta[ind].north) - parseInt(meta[ind].south)) / 2);
+    var lonlat = OpenLayers.LonLat.fromArray([centerlon, centerlat]);
+
+	var currentMap = m.maps.map;
+    var rawextent = OpenLayers.Bounds.fromString(extent);
+ 	var targetZoom = currentMap.getZoomForExtent(rawextent, true);
+ 	 
+ 	var zoomToEventExtent = function() {
+ 		console.log("zooming to extent");
+      	currentMap.events.unregister("maploadend", currentMap, zoomToEventExtent);
+      	
+		if(targetZoom != currentMap.getZoom()) {
+			currentMap.zoomIn();
+			currentMap.events.register("maploadend", currentMap, zoomToEventExtent);
+			currentMap.panTo(lonlat);
+		}
+ 	};
+ 	
+ 	var panToEventCenter = function() {
+ 		currentMap.events.unregister("maploadend", currentMap, panToEventCenter);
+ 		
+ 		//if something needs to be loaded, wait for it.  else, move on.
+      	if(lonlat !== currentMap.center) {
+      		console.log("need to wait");
+      		currentMap.events.register("maploadend", currentMap, zoomToEventExtent);
+      		currentMap.panTo(lonlat);
+      	}
+      	else {
+      		console.log("not waiting");
+      		zoomToEventExtent();
+      	}
+ 	};
+ 	 	
+ 	var setEventProducts = function() {
+
+      	currentMap.events.unregister("maploadend", currentMap, setEventProducts);
+      	var currentProds = p.b.getValue().replace("baselayers,", "").replace("~overlays", "").replace("products=", "").split(",");
+      	var newProds = prods.replace("baselayers,", "").replace("~overlays", "").split(",");
+		console.log("currentProds = " + currentProds);
+		console.log("newProds = " + newProds);
+		// determine whether anything new will need to load
+      	var matches = 0;
+      	for(var i = 0; i < newProds.length; i++) {
+      		if(currentProds.indexOf(newProds[i]) !== -1) {
+      			matches++;
+      		}
+      	}
+		console.log("matches = " + matches);
+		//if something needs to be loaded, wait for it.  else, move on.
+      	if(matches != newProds.length) {
+      		currentMap.events.register("maploadend", currentMap, panToEventCenter);
+      		p.b.setValue(prods);
+      	}
+      	else {
+      		p.b.setValue(prods);
+      		panToEventCenter();
+      	}
+    };
+
+ 	var setEventDate = function() {
+ 		console.log("setting event date");
+      	currentMap.events.unregister("maploadend", currentMap, setEventDate);
+      	var curDate = map.getValue();
+      	
+      	// if something needs to be loaded, wait for it.  else, move on.
+      	if(curDate.indexOf(meta[ind].date, curDate.length - meta[ind].date.length) === -1) {
+      		currentMap.events.register("maploadend", currentMap, setEventProducts);
+      		map.setValue(meta[ind].date);
+      	}
+		else {
+			setEventProducts();
+		}
+ 	};
+
+ 	if(currentMap.getZoom() != 2) {
+ 		currentMap.events.register("maploadend", currentMap, setEventDate);
+  		currentMap.zoomTo(2);
+    }
+	else {
+		setEventDate();
+	}
     }
     self.fire();
     SOTE.widget.Events.repositionScrollbars(self, this);
-}
+};
 
 /**
   * Sets the status of the component
@@ -413,7 +457,7 @@ SOTE.widget.Events.toggleDescription = function(e) {
 */
 SOTE.widget.Events.prototype.setStatus = function(s){
 	this.statusStr = s;
-};
+}; 
 
 /**
   * Gets the status of the component
