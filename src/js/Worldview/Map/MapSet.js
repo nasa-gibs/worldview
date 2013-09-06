@@ -225,7 +225,7 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
                 }
             }    
         });
-    }
+    };
     
     /**         
     * Method: set
@@ -485,7 +485,7 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
         navControl.handlers.wheel.cumulative = false;
         
         return m;        
-    }
+    };
     
     /*
      * Validates the configuraiton for the OpenLayers.Map object, provides
@@ -596,4 +596,4 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
            
     init();
     return self;
-}
+};
