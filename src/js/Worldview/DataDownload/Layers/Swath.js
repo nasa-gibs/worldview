@@ -16,9 +16,9 @@ Worldview.DataDownload.Layers.Swath = function(model, maps, config) {
     
     var LAYER_NAME = "DataDownload_Swaths";
     var STYLE = {
-        strokeColor: "#00ffff",
-        strokeOpacity: 0.2,
-        strokeWidth: 3
+        strokeColor: "#bab498",
+        strokeOpacity: 0.70,
+        strokeWidth: 2
     };
     
     var self = {};
