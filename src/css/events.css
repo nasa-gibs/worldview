@@ -99,7 +99,7 @@ a.evexpand {
 .events div.header h2{margin: auto; text-align: center; float: none}
 
 /* entry list */
-.events ul {max-height:240px; height:240px;}
+.events ul {max-height:240px; height:240px; width:300px}
 .events ul.entry { min-height:50px; }
 .events ul.entry li h3 {display:block; clear:both; float:none;}
 
@@ -115,6 +115,7 @@ a.evexpand {
 	background: -ms-linear-gradient(top,  rgba(0,0,0,0.24) 0%,rgba(2,2,2,0.24) 1%,rgba(78,78,78,0.24) 50%,rgba(0,0,0,0.24) 100%); /* IE10+ */
 	background: linear-gradient(to bottom,  rgba(0,0,0,0.24) 0%,rgba(2,2,2,0.24) 1%,rgba(78,78,78,0.24) 50%,rgba(0,0,0,0.24) 100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3d000000', endColorstr='#3d000000',GradientType=0 ); /* IE6-9 */
+	cursor:pointer;
 }
 
 
