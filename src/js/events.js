@@ -42,7 +42,15 @@ SOTE.widget.Events = function(containerId, config) {
 	this.initRenderComplete = false;
 	this.statusStr = "";
 	this.config = config.config;
+	this.isCollapsed = false;
+	this.initCollapsed = config.shouldCollapse;
 	this.init();
+	
+	
+	//console.log("render complete = " + this.initRenderComplete);
+	//if(config.shouldCollapse){
+	//	this.collapse();
+	//}
 };
 
 /**
@@ -200,11 +208,16 @@ SOTE.widget.Events.prototype.render = function() {
 		this.jsp = $( "." + this.id + "category" ).jScrollPane({autoReinitialise: false, verticalGutter:0});
 	}
 	
+	if(this.initCollapsed) {
+		this.toggle();
+	}
+	
 	// mark the component as ready in the registry if called via init()
 	if((this.initRenderComplete === false) && REGISTRY) {
 		this.initRenderComplete = true;
 		REGISTRY.markComponentReady(this.id);
 	}
+
 };
 
 /**
@@ -252,7 +265,8 @@ SOTE.widget.Events.repositionScrollbars = function(o, target) {
  */
 SOTE.widget.Events.toggle = function(e,ui){
 	var self = e.data.self;
-	if(self.isCollapsed){
+	self.toggle();
+	/*if(self.isCollapsed){
 		$('.evaccordionToggler').removeClass('evexpand').addClass('evcollapse');
 		$('.evaccordionToggler').attr("title","Hide Events");
 		$('.events').css('display','block');
@@ -267,14 +281,37 @@ SOTE.widget.Events.toggle = function(e,ui){
 		$("#eventsHolder").css("width","auto");
 		$("#eventsHolder").css("height","0px");
 		self.isCollapsed = true;
+	} 	*/
+};
+
+SOTE.widget.Events.prototype.toggle = function() {
+	console.log("prototype toggle - starting " + this.isCollapsed);
+	if(this.isCollapsed){
+		$('.evaccordionToggler').removeClass('evexpand').addClass('evcollapse');
+		$('.evaccordionToggler').attr("title","Hide Events");
+		$('.events').css('display','block');
+		$("#eventsHolder").css("width","238px");
+		$("#eventsHolder").css("height","300px");
+		this.isCollapsed = false;
+	}
+	else{
+		$('.evaccordionToggler').removeClass('evcollapse').addClass('evexpand');
+		$('.evaccordionToggler').attr("title","Show Events");
+		$('.events').css('display','none');
+		$("#eventsHolder").css("width","auto");
+		$("#eventsHolder").css("height","0px");
+		this.isCollapsed = true;
 	} 	
 };
 
-/**
- * Returns the collapsed status of the widget (false if expanded, true if collapsed). 
- */
-SOTE.widget.Events.isCollapsed = function(e) {
-	return self.isCollapsed;
+SOTE.widget.Events.prototype.collapse = function() {
+	console.log("inside collapse");
+	$('.evaccordionToggler').removeClass('evcollapse').addClass('evexpand');
+		$('.evaccordionToggler').attr("title","Show Events");
+		$('.events').css('display','none');
+		$("#eventsHolder").css("width","auto");
+		$("#eventsHolder").css("height","0px");
+		this.isCollapsed = true;
 };
 
 /**
@@ -380,11 +417,18 @@ SOTE.widget.Events.toggleDescription = function(e) {
  		console.log("zooming to extent");
       	currentMap.events.unregister("maploadend", currentMap, zoomToEventExtent);
       	
-		if(targetZoom != currentMap.getZoom()) {
-			currentMap.zoomIn();
-			currentMap.events.register("maploadend", currentMap, zoomToEventExtent);
-			currentMap.panTo(lonlat);
-		}
+		//if(targetZoom != currentMap.getZoom()) {
+		//while(targetZoom != currentMap.getZoom()) {
+			//currentMap.zoomIn();
+			//currentMap.events.register("maploadend", currentMap, zoomToEventExtent);
+			currentMap.zoomToExtent(rawextent, true);
+			//currentMap.panTo(lonlat);
+		//}
+		//if(targetZoom != currentMap.getZoom()) {
+		//	currentMap.zoomIn();
+		//	currentMap.panTo(lonlat);
+		//	setTimeout(zoomToEventExtent, 500);
+		//}
  	};
  	
  	var panToEventCenter = function() {
