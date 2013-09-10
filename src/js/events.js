@@ -248,7 +248,7 @@ SOTE.widget.Events.repositionScrollbars = function(o, target) {
 };
 
 /**
- * Collapses and expands the events feature 
+ * Collapses and expands the events feature.
  */
 SOTE.widget.Events.toggle = function(e,ui){
 	var self = e.data.self;
@@ -268,6 +268,13 @@ SOTE.widget.Events.toggle = function(e,ui){
 		$("#eventsHolder").css("height","0px");
 		self.isCollapsed = true;
 	} 	
+};
+
+/**
+ * Returns the collapsed status of the widget (false if expanded, true if collapsed). 
+ */
+SOTE.widget.Events.isCollapsed = function(e) {
+	return self.isCollapsed;
 };
 
 /**
@@ -347,7 +354,7 @@ SOTE.widget.Events.toggleDescription = function(e) {
     			prods += ",MODIS_Fires_Aqua";
     		}
     	}
-    	prods += ",sedac_bound";
+    	prods += ",!sedac_bound";
    
     	var initOrder = [
            	ss, // projection
@@ -381,13 +388,17 @@ SOTE.widget.Events.toggleDescription = function(e) {
  	};
  	
  	var panToEventCenter = function() {
+ 		console.log("panning to event center");
  		currentMap.events.unregister("maploadend", currentMap, panToEventCenter);
  		
  		//if something needs to be loaded, wait for it.  else, move on.
+ 		console.log("lonlat = " + lonlat);
+ 		console.log("center = " + currentMap.center);
       	if(lonlat !== currentMap.center) {
       		console.log("need to wait");
-      		currentMap.events.register("maploadend", currentMap, zoomToEventExtent);
+      		//currentMap.events.register("maploadend", currentMap, zoomToEventExtent);
       		currentMap.panTo(lonlat);
+      		setTimeout(zoomToEventExtent, 1500);
       	}
       	else {
       		console.log("not waiting");
@@ -396,10 +407,10 @@ SOTE.widget.Events.toggleDescription = function(e) {
  	};
  	 	
  	var setEventProducts = function() {
-
+		console.log("setting event products");
       	currentMap.events.unregister("maploadend", currentMap, setEventProducts);
-      	var currentProds = p.b.getValue().replace("baselayers,", "").replace("~overlays", "").replace("products=", "").split(",");
-      	var newProds = prods.replace("baselayers,", "").replace("~overlays", "").split(",");
+      	var currentProds = p.b.getValue().replace("baselayers,", "").replace("~overlays", "").replace("products=", "").replace("!","").split(",");
+      	var newProds = prods.replace("baselayers,", "").replace("!","").replace("~overlays", "").split(",");
 		console.log("currentProds = " + currentProds);
 		console.log("newProds = " + newProds);
 		// determine whether anything new will need to load
@@ -409,7 +420,7 @@ SOTE.widget.Events.toggleDescription = function(e) {
       			matches++;
       		}
       	}
-		console.log("matches = " + matches);
+		
 		//if something needs to be loaded, wait for it.  else, move on.
       	if(matches != newProds.length) {
       		currentMap.events.register("maploadend", currentMap, panToEventCenter);
@@ -436,9 +447,9 @@ SOTE.widget.Events.toggleDescription = function(e) {
 		}
  	};
 
- 	if(currentMap.getZoom() != 2) {
+ 	if(currentMap.getZoom() != 1) {
  		currentMap.events.register("maploadend", currentMap, setEventDate);
-  		currentMap.zoomTo(2);
+  		currentMap.zoomTo(1);
     }
 	else {
 		setEventDate();
