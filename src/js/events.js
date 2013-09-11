@@ -44,6 +44,7 @@ SOTE.widget.Events = function(containerId, config) {
 	this.config = config.config;
 	this.isCollapsed = false;
 	this.initCollapsed = config.shouldCollapse;
+	this.lastVisit = config.lastVisit;
 	this.init();
 	
 	
@@ -80,9 +81,22 @@ SOTE.widget.Events.prototype.buildMeta = function() {
  */
 SOTE.widget.Events.handleMetaSuccess = function(arg, data) {
 	var self = arg;
+	var lastVisit = self.lastVisit;
 	self.metaLength = data.length;
+	self.numNew = 0;
 	for(var i = 0; i < self.metaLength; i++) {
 		var item = data[i];
+		
+		// if the last visit came before the event, mark the event as new
+		var dateStr = item.date + "T00:00:00-04:00";
+		var dateObj = new Date(dateStr);
+		var isNew = false;
+		
+		if(lastVisit < dateObj) {
+			isNew = true;
+			self.numNew++;
+		}
+		
 		self.meta[i] = {title:item.title,
 					    link:item.link,
 					    category:item.category,
@@ -95,10 +109,11 @@ SOTE.widget.Events.handleMetaSuccess = function(arg, data) {
 					    south:item.south,
 					    east:item.east,
 					    west:item.west,
-					    keyword:item.keyword
+					    keyword:item.keyword,
+					    isNew:isNew
 					   };
 	}
-	
+	console.log("orig num new = " + self.numNew);
 	self.render();
 	self.fire();
 	self.buildMetaDone = true;
@@ -122,6 +137,7 @@ SOTE.widget.Events.prototype.init = function() {
  * Render the Events widget 
  */
 SOTE.widget.Events.prototype.render = function() {
+	
 	this.container.innerHTML = "";
 
 	var container = document.createElement("div");
@@ -143,8 +159,12 @@ SOTE.widget.Events.prototype.render = function() {
 	for(var i = 0; i < this.metaLength; i++) {
 		var item = document.createElement("li");
 		item.setAttribute("id", "ev" + i);
-		item.setAttribute("class", "productsitem item");
 		item.setAttribute("class", "item");
+		
+		if(this.meta[i].isNew) {
+			item.setAttribute("class", "item newevent");
+		}
+		
 		item.innerHTML = "<table>" + 
 		                       "<tr>" + 
 		                           "<td rowspan='2'> <img class='thumb' width='32px' height='32px' src='" + this.meta[i].image +"'/></td>"+
@@ -194,10 +214,11 @@ SOTE.widget.Events.prototype.render = function() {
 	var accordionToggler = document.createElement("a");
 	accordionToggler.setAttribute("class","evaccordionToggler evcollapse");
 	accordionToggler.setAttribute("title","Hide Events");
+
 	this.isCollapsed = false;
 	this.container.appendChild(accordionToggler);
 	$('.evaccordionToggler').bind('click',{self:this},SOTE.widget.Events.toggle);
-	
+	console.log(this.top);
 	// set up scroll bar
     if($(window).width() > 720)
 	{
@@ -209,7 +230,7 @@ SOTE.widget.Events.prototype.render = function() {
 	}
 	
 	if(this.initCollapsed) {
-		this.toggle();
+		this.toggle(this.numNew);
 	}
 	
 	// mark the component as ready in the registry if called via init()
@@ -264,54 +285,30 @@ SOTE.widget.Events.repositionScrollbars = function(o, target) {
  * Collapses and expands the events feature.
  */
 SOTE.widget.Events.toggle = function(e,ui){
+	console.log("object toggle");
 	var self = e.data.self;
-	self.toggle();
-	/*if(self.isCollapsed){
-		$('.evaccordionToggler').removeClass('evexpand').addClass('evcollapse');
-		$('.evaccordionToggler').attr("title","Hide Events");
-		$('.events').css('display','block');
-		$("#eventsHolder").css("width","238px");
-		$("#eventsHolder").css("height","300px");
-		self.isCollapsed = false;
-	}
-	else{
-		$('.evaccordionToggler').removeClass('evcollapse').addClass('evexpand');
-		$('.evaccordionToggler').attr("title","Show Events");
-		$('.events').css('display','none');
-		$("#eventsHolder").css("width","auto");
-		$("#eventsHolder").css("height","0px");
-		self.isCollapsed = true;
-	} 	*/
+	self.toggle(self.numNew);
 };
 
-SOTE.widget.Events.prototype.toggle = function() {
+SOTE.widget.Events.prototype.toggle = function(numNew) {
 	console.log("prototype toggle - starting " + this.isCollapsed);
 	if(this.isCollapsed){
 		$('.evaccordionToggler').removeClass('evexpand').addClass('evcollapse');
 		$('.evaccordionToggler').attr("title","Hide Events");
-		$('.events').css('display','block');
-		$("#eventsHolder").css("width","238px");
-		$("#eventsHolder").css("height","300px");
+		$('.evaccordionToggler').html("");
+		$('#eventsHolder').animate({right:'0'}, 300);
 		this.isCollapsed = false;
+		$('.evaccordionToggler').appendTo("#eventsHolder");
 	}
 	else{
 		$('.evaccordionToggler').removeClass('evcollapse').addClass('evexpand');
 		$('.evaccordionToggler').attr("title","Show Events");
-		$('.events').css('display','none');
-		$("#eventsHolder").css("width","auto");
-		$("#eventsHolder").css("height","0px");
+		$('.evaccordionToggler').html("New("+ numNew +")");
+		$('#eventsHolder').animate({right:'-210px'}, 300);
 		this.isCollapsed = true;
+		$("#eventsHolder").after($('.evaccordionToggler'));
 	} 	
-};
 
-SOTE.widget.Events.prototype.collapse = function() {
-	console.log("inside collapse");
-	$('.evaccordionToggler').removeClass('evcollapse').addClass('evexpand');
-		$('.evaccordionToggler').attr("title","Show Events");
-		$('.events').css('display','none');
-		$("#eventsHolder").css("width","auto");
-		$("#eventsHolder").css("height","0px");
-		this.isCollapsed = true;
 };
 
 /**
@@ -351,6 +348,14 @@ SOTE.widget.Events.toggleDescription = function(e) {
     	var all = $('#eventList li');
     	var ind = all.index(this);
     	
+    	// if event was new, make it not new anymore
+    	if(meta[ind].isNew) {
+    		meta[ind].isNew = false;
+    		$('#' + this.id).removeClass('newevent');
+    		self.numNew--;
+    	}
+    	
+
     	// generate permalink
     	var extent = meta[ind].west + "," + meta[ind].south + "," + meta[ind].east + "," + meta[ind].north;
     	var prods = "";

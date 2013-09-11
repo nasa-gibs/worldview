@@ -97,8 +97,8 @@ $(function() {// Initialize "static" vars
             }
             storageEngine.setItem('lastVisit', Date.now());
         }
-        var lastVisitObj = new Date(lastVisit);
-        
+        //var lastVisitObj = new Date(lastVisit);
+        var lastVisitObj = new Date("2013-04-07T00:00:00-04:00"); // FIXME
         // get query string
         var queryString = 
             Worldview.Permalink.decode(window.location.search.substring(1));
