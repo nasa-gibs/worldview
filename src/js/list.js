@@ -44,13 +44,51 @@ SOTE.widget.List = function(containerId, config){
 	if(config.data === undefined){
 	    SOTE.util.throwError("List data is not defined.");
 	}
+	
+	if(config.search == undefined){
+		config.search = false;
+		config.selectedCategory = 'All';
+	}
+	
+	if(config.search && config.category == undefined){
+		config.selectedCategory = 'All';
+	}
+	
+	if(config.filter == undefined){
+		config.filter = false;
+	}
+	
+	if(config.customClasses == undefined){
+		config.customClasses = '';
+	}
+	
+	if(config.sortable == undefined){
+		config.sortable = false;
+	}
+	
 
+	this.customClasses = config.customClasses;
     this.hidden = new Object;
     this.values = new Object;
+    this.keyword = '';
+    this.search = config.search;
+    this.filter = config.filter;
+    this.hide = config.hide;
+    this.close = config.close;
+    this.checkbox = config.checkbox;
+    this.selectedCategory = config.defaultCategory;
+    this.selectableCategories = config.selectableCategories;
+    this.action = config.action;
+    this.categories = config.categories;
+    this.sortable = config.sortable;
+    this.callback = config.onchange;
+    this.args = config.args;
+       
        
     this.data = config.data;
-    this.selected = this.unserialize(config.selected);
-    this.selected = this.selected[1];
+    
+   	this.selected = this.unserialize(config.selected);
+   	this.selected = this.selected[1];
 
 	this.init();
 
@@ -72,7 +110,8 @@ SOTE.widget.List.prototype.init = function(){
 };
 
 SOTE.widget.List.prototype.trigger = function(){
-	$("#"+this.id).trigger("listchange");	
+	//$("#"+this.id).trigger("listchange");
+	this.callback(this.args);	
 };
 
 /**
@@ -89,15 +128,88 @@ SOTE.widget.List.prototype.render = function(){
 	
 	// setNotification: id,txt
 
-	$(this.container).empty().addClass('list');
+
+
+	// Clear div
+
+	$(this.container).empty().addClass(this.id+'list');
+	
+	// If action is enabled, render an action button
+	
+	if(this.action){
+		var $actionButton = $("<input type='button' class='action' value='"+this.action.text+"' id='"+this.id+"action' />");
+		$(this.container).append($actionButton);
+		$("#"+this.id+"action").on('click',{self:this},SOTE.widget.List.act);
+	}
+
+	// If search is enabled, render the search box and category box
+
+	if(this.search){
+		var $facetedSearch = $("<div class='facetedSearch' id='"+this.id+"facetedSearch'></div>");
+		var $select = $("<select class='select' id='"+this.id+"select'></select");
+	
+		for (var c in this.categories){
+			if(c != 'palettes'){
+				$select.append($("<option value='"+c+"'>"+c+"</option>"));
+			}
+		}
+		
+		$facetedSearch.append($select);	
+		$facetedSearch.append($("<input type='text' name='search' class='search' autocomplete='off' placeholder='ex. modis, terra, fire' id='"+this.id+"search'/>"));
+		
+		$(this.container).append($facetedSearch);
+		
+		// Set events to capture data from search and category fields
+		
+		$("#"+this.id+"select").on('change',{self:this,select:true},SOTE.widget.List.setCategory);
+		$('#'+this.id+"select").val("All");
+	    $("#"+this.id+"search").on('keyup',{self:this,select:false},SOTE.widget.List.search);
+	}
+	
+	// Creating main content block
+	
+	$(this.container).append($("<div id='"+this.id+"content' class='content "+this.customClasses+"'></div>"));
+	this.update();
+	
+	
+};
+
+SOTE.widget.List.prototype.update = function(){
+
+	$content = $("#" + this.id + "content").empty();
+
+	// If search is enabled and a keyword exists, break keyword down into words array
+
+	keywords = [];
+	if(this.search){
+		this.keyword = this.keyword.replace(/[\(\)\"\'!\$\%\&\?\+\*\\\@\=]/g,"");
+		var keywords = this.keyword.split(/\s/);
+	}
+	
+	// Traverse data by category (i.e. baselayers, overlays)
 	
 	for(var key in this.data){
-		var title = this.data[key].title;
-				
-		$(this.container).append($("<h3 class='head'></h3>").html(title));
-		$category = $("<ul id='"+key+"'></ul>").addClass('category');
 		
+		// Category header (i.e. "Base Layers")
+		
+		var title = this.data[key].title;
+		var $header = $("<h3 class='head'></h3>").html(title);
+		
+
+		if(this.selectableCategories){
+			$header.append($("<div id='"+key+"dynamictext' class='dynamic'>"+this.selectableCategories.defaultText+"</div>"));
+			$header.append($("<input type='radio' name='cats' class='cats "+this.id+"cats' value='"+key+"' />"));	
+			$("#"+this.id).undelegate("."+this.id+"cats" ,'click');	
+			$("#"+this.id).delegate("."+this.id+"cats" ,'click',{self:this},SOTE.widget.List.handleCategorySelection);
+		}
+
+		$content.append($header);
+
+		$category = $("<ul id='"+this.id+key+"'></ul>").addClass(this.id+'category');
+
 		this.values[key] = new Object;		
+		
+		// For all items in category (i.e. for all items in baselayers)
 		
 		for(var i=0; i<this.data[key].items.length; ++i){
 			
@@ -105,34 +217,80 @@ SOTE.widget.List.prototype.render = function(){
 			var label = item.label;
 			var fLabel = item.label.replace(" ","-").toLowerCase();
 			
-			if(item.value in this.selected) {
-				
+			if(item.value in this.selected){
 				this.values[key][item.value] = 1;
-				
-				$item = $("<li id='"+key+"-"+item.value+"' class='item'></li>");
-				$item.append("<a><img class='close bank-item-img' id='close"+key+"-"+item.value.replace(/:/g,"colon")+"' title='Remove Layer' src='images/close-red-x.png' /></a>");
-				if (item.value in this.hidden){
-					$item.append("<a class='hdanchor'><img class='hide bank-item-img' title='Show Layer' id='hide"+key+"-"+item.value.replace(/:/g,"colon")+"' src='images/invisible.png' /></a>");
+			}
+			// If only showing a subset of items (i.e. only show items that are in selected)
+			
+			if(!this.filter || item.value in this.selected) {
+								
+				// Do keyword search if the keyword is not empty				
+								
+				if(this.search && !this.keyword.match(/^\s*$/)){
+					var count = 0;
+					for(var j=0; j<keywords.length; ++j){
+						var myVal = new RegExp(keywords[j]);
+						if(item.label.toUpperCase().match(myVal) || item.sublabel.toUpperCase().match(myVal) || item.tags && item.tags.toUpperCase().match(myVal)) {
+								count++;	
+						}
+					}
 				}
 				else {
-					$item.append("<a class='hdanchor'><img class='hide bank-item-img' title='Hide Layer' id='hide"+key+"-"+item.value.replace(/:/g,"colon")+"' src='images/visible.png' /></a>");
+					count = keywords.length;
 				}
-				$item.append("<h4>"+label+"</h4>");
-				$item.append("<p>"+item.sublabel+"</p>");
+
+				// If the the item is not in the selected category, regardless of a keyword match, don't show it
+
+				if(item.categories && !(this.selectedCategory in item.categories)){
+					count = -1;
+				}
 				
-				$category.append($item);		
-			
+				// If search is selected, see if the item matched all words in the keywords list, if so, display
+				// If search is not selected, display all items
+				
+				if(!this.search || (keywords && count == keywords.length)){
+					
+					$item = $("<li id='"+key+"-"+item.value+"' class='item'></li>");
+					
+					if(this.close){
+						$item.append("<a><img class='close bank-item-img' id='close"+key+"-"+item.value.replace(/:/g,"colon")+"' title='Remove Layer' src='images/close-red-x.png' /></a>");
+					}
+					
+					if(this.hide){
+						if (item.value in this.hidden){
+							$item.append("<a class='hdanchor'><img class='hide bank-item-img' title='Show Layer' id='hide"+key+"-"+item.value.replace(/:/g,"colon")+"' src='images/invisible.png' /></a>");
+						}
+						else {
+							$item.append("<a class='hdanchor'><img class='hide bank-item-img' title='Hide Layer' id='hide"+key+"-"+item.value.replace(/:/g,"colon")+"' src='images/visible.png' /></a>");
+						}
+					}
+					
+					if(this.checkbox){
+						var checked = (item.value in this.selected)? "checked":"";
+						$item.append("<input type='checkbox' class='check' id='"+item.value.replace(/:/g,"colon")+"' value='"+item.value+"' "+checked+"/>");
+					}
+					$item.append("<h4>"+label+"</h4>");
+					$item.append("<p>"+item.sublabel+"</p>");
+					
+					$category.append($item);		
+				}
 			}	
 		}
 		
-		$(this.container).append($category);
+		// Append the category (heading + items) to the content div
+		
+		$content.append($category);
 	}
+	
+	// Append show/hide/checkbox events if this.hide = true / this.close = true / this.checkbox = true
 
 	$("#"+this.id).undelegate(".close" ,'click');
 	$("#"+this.id).undelegate(".hide" ,'click');	
+	$("#"+this.id).undelegate(".check" ,'click');	
 	$("#"+this.id).delegate(".close" ,'click',{self:this},SOTE.widget.List.removeItem);
 	$("#"+this.id).delegate(".hide" ,'click',{self:this},SOTE.widget.List.hideItem);	
-	$( ".category" ).sortable({items: "li:not(.head)"});
+	$("#"+this.id).delegate(".check" ,'click',{self:this},SOTE.widget.List.toggleValue);
+		
 	
 	if($(window).width() > 720)
 	{
@@ -140,55 +298,119 @@ SOTE.widget.List.prototype.render = function(){
 			var api = this.jsp.data('jsp');
 			if(api) api.destroy();
 		}	
-		this.jsp = $( "." + this.id + "category" ).jScrollPane({autoReinitialise: false, verticalGutter:0});
+		this.jsp = $( "."+this.id+"category" ).jScrollPane({autoReinitialise: false, verticalGutter:0});
 	}
 	
-	$( "." + this.id + "category li" ).disableSelection();	
-	$( ".category" ).bind('sortstart',{self:this},SOTE.widget.List.initiateSort);
-	$( ".category" ).bind('sortstop',{self:this},SOTE.widget.List.handleSort);
+	if(this.sortable){
+		$( "."+this.id+"category" ).sortable({items: "li:not(.head)"});
+		$( "."+this.id+"category" ).bind('sortstart',{self:this},SOTE.widget.List.initiateSort);
+		$( "."+this.id+"category" ).bind('sortstop',{self:this},SOTE.widget.List.handleSort);
+	}
 
-	setTimeout(SOTE.widget.List.adjustCategoryHeights,1,{self:this});
-	
+	setTimeout(SOTE.widget.List.adjustCategoryHeights,1,{self:this});	
 };
+
+SOTE.widget.List.act = function(e){
+	var self = e.data.self;
+	self.action.callback(self.args);
+};
+
+SOTE.widget.List.handleCategorySelection = function(e){
+	var self = e.data.self;
+	self.selectableCategories.callback(e.target.value,self);
+};
+
+SOTE.widget.List.setCategory = function(e){
+	e.data.self.selectedCategory = e.target.value;
+	$("#"+e.data.self.id+"search").keyup();
+};
+
+SOTE.widget.List.search = function(e){
+	var self = e.data.self;
+	var val = e.target.value.toUpperCase();	
+	self.keyword = val;
+	self.update();
+};
+
+SOTE.widget.List.toggleValue = function(e){
+	var self = e.data.self;
+	var targetEl = e.target;
+	var category = $(e.target).parents('.'+self.id+'category').attr("id");
+	category = category.replace(self.id,"");
+	var value = $(e.target).attr("value");
+	value = value.replace(/colon/,":");
+	var checked = (targetEl.checked);
+
+	if(!self.values[category]){
+			self.values[category] = new Object();
+	}
+	if(checked !== undefined && checked){
+			self.values[category][value] = 1;	
+	}
+	else{
+			delete self.values[category][value];
+	}
+			
+	self.trigger();
+};
+
+SOTE.widget.List.prototype.setActionText = function(newText){
+	$("#"+this.id+"action").value = newText;
+};
+
+SOTE.widget.List.prototype.setCategoryText = function(category,newText){
+	$("#"+category+"dynamictext").html = newText;
+};
+
 
 SOTE.widget.List.adjustCategoryHeights = function(args){
 	var self = args.self;
 	var heights = new Array;
-	var container_height = $("#"+self.id).outerHeight(true);
+	var facets_height = (self.search)? $("#"+self.id+"facetedSearch").outerHeight(true): 0;
+	var actions_height = (self.action)? $("#"+self.id+"action").outerHeight(true): 0;
+
+	var container_height = $("#"+self.id).outerHeight(true) - facets_height - actions_height;
+	$('#'+self.id+"content").height(container_height);
 	var labelHeight = 0;
-	$('#'+self.id+' .head').each(function(){
+	$('#'+self.id+'content .head').each(function(){
 		labelHeight += $(this).outerHeight(true);
 	});
 	container_height -= labelHeight;
 
-	for(var key in self.values){
+	for(var key in self.data){
 		var actual_height = 0;
 		var count = 0;
-		$('#' + key + ' li').each(function(){
+		$('#' + self.id + key + ' li').each(function(){
 			actual_height += $(this).outerHeight(true);
 			count++;
 		});
 
-		heights.push({name:key,height:actual_height,count:count});
+		heights.push({name:self.id+key,height:actual_height,count:count});
 	}
 	
-	if(heights[0].height + heights[1].height > container_height){
-		if(heights[0].height > container_height/2) { 
-			heights[0].height = container_height/2;
+	if(heights.length > 1){
+		if(heights[0].height + heights[1].height > container_height){
+			if(heights[0].height > container_height/2) { 
+				heights[0].height = container_height/2;
+			}
+	
+			heights[1].height = container_height - heights[0].height;
+	
 		}
-
-		heights[1].height = container_height - heights[0].height;
-
+		
+		$("#" + heights[0].name).css("height",heights[0].height+"px");
+		$("#" + heights[1].name).css("height",heights[1].height+"px");
+		
 	}
-	
-	$("#" + heights[0].name).css("height",heights[0].height+"px");
-	$("#" + heights[1].name).css("height",heights[1].height+"px");
-	
+	else {
+		heights[0].height = container_height;
+		$("#" + heights[0].name).css("height",heights[0].height+"px");
+	}
 	SOTE.widget.List.reinitializeScrollbars(self);
 };
 
 SOTE.widget.List.reinitializeScrollbars = function(self) {
-	var pane = $(".category").each(function(){
+	var pane = $("."+self.id+"category").each(function(){
     	var api = $(this).data('jsp');
     	if(api) api.reinitialise();
 	});  
@@ -210,7 +432,8 @@ SOTE.widget.List.handleSort = function(e,ui){
         	var vals = id.split("-");
         	var val = vals.splice(0,1);
         	val = vals.join("-");
-        	self.values[key][val] = 1;
+			if(!self.filter || val in self.selected)
+	        	self.values[key][val] = 1;
     	});
 	}	
 	self.trigger();
@@ -291,7 +514,8 @@ SOTE.widget.List.prototype.getValue = function(){
 
 SOTE.widget.List.prototype.serialize = function(values){
 	var categories = [];
-	
+	if(!values)
+		return "";
 	for(var category in values){
 		var catStr = [category];  
 		for(var item in values[category]){
@@ -316,7 +540,7 @@ SOTE.widget.List.prototype.unserialize = function(string, selector){
 	
 	for(var i=0; i<categories.length; i++){
 		var items = categories[i].split(/[\.,]/);
-		unserialized[items[0]] = new Array;
+		unserialized[items[0]] = new Object;
 		for(var j=1; j<items.length; j++){
 	    	if(hideIndicator.test(items[j])){
 				items[j] = items[j].replace(/!/g, "");  	
@@ -328,7 +552,7 @@ SOTE.widget.List.prototype.unserialize = function(string, selector){
 		    	}
 		    }
 
-		    unserialized[items[0]].push(items[j]);
+		    unserialized[items[0]][items[j]] = 1;
 		    values[items[j]] = 1;
 			this.count++;
 		}

@@ -74,6 +74,40 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3ffffff', e
 	
 }
 
+.dynamic {
+	display:inline !important;
+	font-size:inherit;
+	border-radius:5px;
+	background: #1BA1E2;
+	padding: 2px;
+	text-align: center;
+	margin-left:5px !important;
+}
+
+.cats {
+	float: right;
+	margin-right:20px;
+}
+
+.action {
+	display:block;
+	width: 98%;
+	height: 44px;
+	margin: 5px auto;
+	border: none;
+	color: #fff;
+	font-size:14px;
+	background: #83c783; /* Old browsers */
+	background: -moz-linear-gradient(top,  #83c783 0%, #52b152 33%, #00a81c 83%, #149600 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#83c783), color-stop(33%,#52b152), color-stop(83%,#00a81c), color-stop(100%,#149600)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #83c783 0%,#52b152 33%,#00a81c 83%,#149600 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #83c783 0%,#52b152 33%,#00a81c 83%,#149600 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #83c783 0%,#52b152 33%,#00a81c 83%,#149600 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #83c783 0%,#52b152 33%,#00a81c 83%,#149600 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#83c783', endColorstr='#149600',GradientType=0 ); /* IE6-9 */
+
+}
+
 .productsIcon {
     width: 20px;
     height: 20px;
@@ -82,6 +116,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3ffffff', e
 
 .productsIcon.selected {
     margin-right: 10px;
+}
+
+.content {
+	height:100%;
 }
 
 @media screen and (max-device-height: 720px) and (orientation: landscape){

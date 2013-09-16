@@ -19,12 +19,12 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3ffffff', e
 
 .selector h3 {display:inline-block; float: left; color:#333333; font-size: 0.9em;  border:none; text-decoration:none; }
 .selector div,.selector ul {display:block; overflow:hidden;margin:0 auto; width:100%;}
-.selector li.selectorItem {padding:6px 0px; width:96%; margin: 5px 2% 0 2%; display:block; float:left; overflow:hidden;
+.selector li.item {padding:6px 0px; width:96%; margin: 5px 2% 0 2%; display:block; float:left; overflow:hidden;
 color:#000; background: rgba(238,238,238,0.85);}
-.selector li.selectorItem input {float:right;}
-.selector li.selectorItem h4 {font-size:0.85em; color:#000;padding: 0 3px;}
-.selector li.selectorItem p {padding: 0 3px; font-size:0.78em; color: #222;}
-.selector ul.category {  outline:none !important; float:left; overflow:auto;}
+.selector li.item input {float:right;}
+.selector li.item h4 {font-size:0.85em; color:#000;padding: 0 3px;}
+.selector li.item p {padding: 0 3px; font-size:0.78em; color: #222;}
+.selector ul.selectorboxcategory {  outline:none !important; float:left; overflow:auto;}
 .selector h3.head {display:block; float: left; color:#fff; width:100%;  border:none; text-decoration:none; background: none;  padding: 1px 3px; margin:10px 0 0 2%; }
 .selector a.flowbutton {text-decoration:none; display:inline-block; float: left; color:#ffffff; font-size: 1.4em; border:none; padding:6px 0; margin-top:20px; margin-left:5px;}
 .selector ul li div {padding:0 !important;}
