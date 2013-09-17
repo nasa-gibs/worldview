@@ -62,6 +62,7 @@
 		<file name="js/imageDownload.js"/>
 		<file name="js/menuPicker.js"/>
 		<file name="js/accordionPicker.js"/>
+        <file name="js/list.js"/>
 		<file name="js/bank.js"/>
 		<file name="js/switch.js"/>
 		<file name="js/selector.js"/>
