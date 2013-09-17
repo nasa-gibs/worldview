@@ -105,7 +105,12 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3ffffff', e
 	background: -ms-linear-gradient(top,  #83c783 0%,#52b152 33%,#00a81c 83%,#149600 100%); /* IE10+ */
 	background: linear-gradient(to bottom,  #83c783 0%,#52b152 33%,#00a81c 83%,#149600 100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#83c783', endColorstr='#149600',GradientType=0 ); /* IE6-9 */
+}
 
+.action[disabled='disabled'] {
+    border: 1px solid #808080;
+    background: black;
+    color: #808080;
 }
 
 .productsIcon {

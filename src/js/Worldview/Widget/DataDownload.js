@@ -45,7 +45,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
         model.events
             .on("activate", onActivate)
             .on("deactivate", onDeactivate)
-            .on("layerSelect", onLayerSelect)
+            .on("productSelect", onProductSelect)
             .on("layerUpdate", onLayerUpdate)
             .on("query", onQuery)
             .on("queryResults", onQueryResults)
@@ -98,8 +98,14 @@ Worldview.Widget.DataDownload = function(config, spec) {
             close: true,
             filter: true,
             search: false,
-            action: {text: "Download (~0GB)", callback: SOTE.widget.Download.handleAction},
-            selectableCategories: {callback: SOTE.widget.Download.handleCategoryChange, defaultText: "0 selected"},
+            action: {
+                text: "Download (~0GB)", 
+                callback: function() { showDownloadList(); }
+            },
+            selectableCategories: {
+                callback: function(product) { model.selectProduct(product); },
+                defaultText: "0 selected"
+            },
             onchange: function() { console.log("onchange", arguments); },
             args: self
         });
@@ -125,8 +131,9 @@ Worldview.Widget.DataDownload = function(config, spec) {
         Worldview.Indicator.hide();
     };
     
-    var onLayerSelect = function(layerName) {
-        log.debug("selectLayer", layerName);
+    var onProductSelect = function(product) {
+        log.debug("selectProduct", product);
+        list.selectCategory(product);
     };
     
     var onLayerUpdate = function() {
@@ -135,6 +142,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
         }
         console.log(model.groupByProducts());
         list.data = model.groupByProducts();
+        list.selected = list.unserialize(model.getProductsString())[1];
         list.update();
     };
     
@@ -174,13 +182,10 @@ Worldview.Widget.DataDownload = function(config, spec) {
     var updateSelection = function() {
         var selected = Worldview.size(model.selectedGranules);
         if ( selected > 0 ) {
-            $("#DataDownload_Button input[type='button']").button("enable");
+            list.setButtonEnabled(true);
         } else {
-            $("#DataDownload_Button input[type='button']").button("disable");            
-        }
-        $("#DataDownload_Button .ui-btn .ui-btn-text")
-            .html("Download (" + selected + ")");   
-            
+            list.setButtonEnabled(false);
+        }            
         if ( downloadListPanel && downloadListPanel.visible() ) {
             downloadListPanel.show();
         }     

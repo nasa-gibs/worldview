@@ -195,8 +195,7 @@ SOTE.widget.List.prototype.update = function(){
 		var title = this.data[key].title;
 		var $header = $("<h3 class='head'></h3>").html(title);
 		
-
-		if(this.selectableCategories){
+		if(this.selectableCategories && !this.data[key].notSelectable){
 			$header.append($("<div id='"+key+"dynamictext' class='dynamic'>"+this.selectableCategories.defaultText+"</div>"));
 			$header.append($("<input type='radio' name='cats' class='cats "+this.id+"cats' value='"+key+"' />"));	
 			$("#"+this.id).undelegate("."+this.id+"cats" ,'click');	
@@ -310,6 +309,14 @@ SOTE.widget.List.prototype.update = function(){
 	setTimeout(SOTE.widget.List.adjustCategoryHeights,1,{self:this});	
 };
 
+SOTE.widget.List.prototype.setButtonEnabled = function(enabled) {
+    if ( enabled ) {
+        $("#" + this.id + "action").removeAttr("disabled");        
+    } else {
+        $("#" + this.id + "action").attr("disabled", "disabled");
+    }
+};
+
 SOTE.widget.List.act = function(e){
 	var self = e.data.self;
 	self.action.callback(self.args);
@@ -323,6 +330,10 @@ SOTE.widget.List.handleCategorySelection = function(e){
 SOTE.widget.List.setCategory = function(e){
 	e.data.self.selectedCategory = e.target.value;
 	$("#"+e.data.self.id+"search").keyup();
+};
+
+SOTE.widget.List.prototype.selectCategory = function(id) {
+    $("#" + this.id + " input[value='" + id + "']").prop("checked", "true");
 };
 
 SOTE.widget.List.search = function(e){

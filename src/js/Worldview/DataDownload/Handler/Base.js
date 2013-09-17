@@ -48,11 +48,7 @@ Worldview.DataDownload.Handler.Base = function(config, model) {
     
     self.submit = function() {
         var productConfig = config.products[model.selectedProduct].query;
-        var layerConfig = {};
-        if ( config.layers[model.selectedLayer].echo.query ) {
-            layerConfig = config.layers[model.selectedLayer].echo.query;
-        }
-        var queryData = $.extend(true, {}, productConfig, layerConfig);
+        var queryData = $.extend(true, {}, productConfig);
         var promise = self._submit(queryData);
 
         promise.done(function(data) {

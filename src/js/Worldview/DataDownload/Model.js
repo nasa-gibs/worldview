@@ -23,15 +23,17 @@ Worldview.DataDownload.Model = function(config) {
     
     var log = Logging.getLogger("Worldview.DataDownload");
     
+    var NO_PRODUCT_ID = "__NO_PRODUCT";
+    var NO_PRODUCT = {
+        name: "Not available",
+        notSelectable: true
+    };
+
     var state = {
         layersString: null,
         projection: null,
         epsg: null,
         time: null
-    };
-
-    var noProduct = {
-        name: "Not available"    
     };
     
     var ns = Worldview.DataDownload;
@@ -54,7 +56,7 @@ Worldview.DataDownload.Model = function(config) {
      */
     self.EVENT_DEACTIVATE = "deactivate";
     
-    self.EVENT_LAYER_SELECT = "layerSelect";
+    self.EVENT_PRODUCT_SELECT = "productSelect";
     self.EVENT_LAYER_UPDATE = "layerUpdate";
     self.EVENT_QUERY = "query";
     self.EVENT_QUERY_RESULTS = "queryResults";
@@ -82,7 +84,6 @@ Worldview.DataDownload.Model = function(config) {
      */
     self.events = Worldview.Events();
     
-    self.selectedLayer = null;
     self.selectedProduct = null;
     self.selectedGranules = {};
     self.layers = [];
@@ -102,14 +103,14 @@ Worldview.DataDownload.Model = function(config) {
      * 
      * @method activate
      */    
-    self.activate = function(layerName) {
+    self.activate = function(productName) {
         if ( !self.active ) {
             self.active = true;
             self.events.trigger(self.EVENT_ACTIVATE);
-            if ( layerName ) {
-                self.selectLayer(layerName);
-            } else if ( !self.selectedLayer ) {
-                self.selectLayer(findAvailableLayer());
+            if ( productName ) {
+                self.selectProduct(productName);
+            } else if ( !self.selectedProduct ) {
+                self.selectProduct(findAvailableProduct());
             } 
         }
     };
@@ -144,12 +145,13 @@ Worldview.DataDownload.Model = function(config) {
     self.groupByProducts = function() {
         var products = {};
         $.each(self.layers, function(index, layer) {
-            var productId = layer.product || "__NO_PRODUCT";
-            var product = config.products[productId] || noProduct;
+            var productId = layer.product || NO_PRODUCT_ID;
+            var product = config.products[productId] || NO_PRODUCT;
             if ( !products[productId] ) {
                 products[productId] = {
                     title: product.name,
-                    items: []
+                    items: [],
+                    notSelectable: product.notSelectable
                 };
             }
             products[productId].items.push({
@@ -159,25 +161,38 @@ Worldview.DataDownload.Model = function(config) {
                 categories: { All: 1 }
             });
         });
+        
+        // Add not available to the end if it exists by removing it and
+        // re-adding
+        if ( products["__NO_PRODUCT"] ) {
+            var x = products["__NO_PRODUCT"];
+            delete products["__NO_PRODUCT"];
+            products["__NO_PRODUCT"] = x;
+        }
         return products;
     };
     
-    self.selectLayer = function(layerName) {
-        if ( self.selectedLayer === layerName ) {
+    self.getProductsString = function() {
+        var parts = [];
+        var products = self.groupByProducts();
+        $.each(products, function(key, product) {
+            var layers = []; 
+            $.each(product.items, function(index, item) {
+                layers.push(item.value);    
+            });
+            parts.push(key + "," + layers.join(","));
+        });
+        return parts.join("~");    
+    };
+    
+    self.selectProduct = function(productName) {
+        if ( self.selectedProduct === productName ) {
             return;
         }
-        if ( layerName && $.inArray(layerName, state.layers) < 0 ) {
-            throw new Error("Layer not in active list: " + layerName);
-        }
-        self.selectedLayer = layerName;
-        if ( layerName && config.layers[layerName].echo ) {
-            self.selectedProduct = config.layers[layerName].echo.product;
-        } else {
-            self.selectedProduct = null;
-        }
-        
+        self.selectedProduct = productName;
+                
         if ( self.active ) {
-            self.events.trigger(self.EVENT_LAYER_SELECT, self.selectedLayer);    
+            self.events.trigger(self.EVENT_PRODUCT_SELECT, self.selectedProduct);    
             query();
         }
     };
@@ -262,16 +277,16 @@ Worldview.DataDownload.Model = function(config) {
                 description: description,
                 product: productName
             });
-            if ( id === self.selectedLayer ) {
+            if ( productName === self.selectedProduct ) {
                 foundSelected = true;
             }    
         });  
         if ( !foundSelected ) {
-            self.selectLayer(null);
+            self.selectProduct(null);
         }
         self.events.trigger(self.EVENT_LAYER_UPDATE);
         if ( self.active && !foundSelected ) {
-            self.selectLayer(findAvailableLayer());
+            self.selectProduct(findAvailableProduct());
         }  
     };
     
@@ -284,22 +299,17 @@ Worldview.DataDownload.Model = function(config) {
         query();
     };
     
-    var findAvailableLayer = function() {
-        var foundLayer = null;
+    var findAvailableProduct = function() {
+        var foundProduct = null;
         
         // Find the top most layer that has a product entry in ECHO
         for ( var i = state.layers.length - 1; i >= 0; i-- ) {
             var layerName = state.layers[i];
             if ( config.layers[layerName].echo ) {
-                foundLayer = layerName;
+                foundProduct = config.layers[layerName].echo.product;
             }
         }
-        
-        // If no products found, select the bottom most layer
-        if ( !foundLayer && state.layers[0] ) {
-            foundLayer = state.layers[0];
-        }
-        return foundLayer;
+        return foundProduct;
     };
     
     init();
