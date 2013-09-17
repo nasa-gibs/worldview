@@ -85,10 +85,10 @@ SOTE.widget.Products.HTML_TAB_ADD_UNSELECTED =
     
 SOTE.widget.Products.HTML_TAB_DOWNLOAD_SELECTED = 
     "<img class='productsIcon selected' src='images/missing-icon.svg'>" +
-    "Download";
+    "Data";
     
 SOTE.widget.Products.HTML_TAB_DOWNLOAD_UNSELECTED = 
-    "<img class='productsIcon' src='images/missing-icon.svg' title='Download'>";
+    "<img class='productsIcon' src='images/missing-icon.svg' title='Data'>";
     
 /**
   * Displays all options in HTML in an Accordion format (see JQuery UI Accordion) with the selected states being indicated
