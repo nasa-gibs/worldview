@@ -13,7 +13,7 @@ Worldview.namespace("Tour");
     /**
      * Create the splash screen and tour panels and control iteration over them.
      */        
-    ns.start = function(noDisable) {
+    ns.start = function(storageEngine, hideSplash, noDisable) {
                     
         // determine screen size - don't show if too small
         var devWidth = window.screen.availWidth;
@@ -31,28 +31,28 @@ Worldview.namespace("Tour");
         
         
         // set up storage and decide whether to show the splash
-        var storageEngine;
-        try {
-            storageEngine = YAHOO.util.StorageManager.get(
-                YAHOO.util.StorageEngineHTML5.ENGINE_NAME,
-                YAHOO.util.StorageManager.LOCATION_LOCAL,
-                {
-                    force: false,
-                    order: [
-                        YAHOO.util.StorageEngineHTML5
-                    ]
-                });
-        } catch(e) {
-            alert("No supported storage mechanism present");
-            storageEngine = false;
-        }
+//        var storageEngine;
+//        try {
+//            storageEngine = YAHOO.util.StorageManager.get(
+//                YAHOO.util.StorageEngineHTML5.ENGINE_NAME,
+//                YAHOO.util.StorageManager.LOCATION_LOCAL,
+//                {
+//                    force: false,
+//                    order: [
+//                        YAHOO.util.StorageEngineHTML5
+//                    ]
+//                });
+//        } catch(e) {
+//            alert("No supported storage mechanism present");
+//            storageEngine = false;
+//        }
         
-        var hideSplash;
-        if(storageEngine) {
-            storageEngine.subscribe(storageEngine.CE_READY, function() {
-                hideSplash = storageEngine.getItem('hideSplash');
-            });
-        }
+//        var hideSplash;
+//        if(storageEngine) {
+//            storageEngine.subscribe(storageEngine.CE_READY, function() {
+//                hideSplash = storageEngine.getItem('hideSplash');
+//            });
+//        }
         
         // return if the user has disabled the splash
         if(hideSplash && !noDisable) {   
@@ -78,7 +78,7 @@ Worldview.namespace("Tour");
                        "<h3>Welcome to Worldview!</h3>"+
                        "</br></br>"+
                        "<center>"+
-                           "<p class=\"splash\" style='font-size:14px;'>This tool from NASA's <a href='http://earthdata.nasa.gov/about-eosdis' target='_blank'>EOSDIS</a> allows users to interactively browse satellite imagery in near real-time, generally within 3 hours of observation.  Use the tools described below to change the imagery on the map and compare it to past observations.</p>"+  
+                           "<p class=\"splashwelcome\">This tool from NASA's <a href='http://earthdata.nasa.gov/about-eosdis' target='_blank'>EOSDIS</a> allows users to interactively browse satellite imagery in near real-time, generally within 3 hours of observation.  Use the tools described below to change the imagery on the map and compare it to past observations.</p>"+  
                            "</br></br>"+
                            "<table id=\"splashTable\" class=\"splash\">"+
                                "<tr>"+
@@ -229,7 +229,7 @@ Worldview.namespace("Tour");
                                  "<center>"+
                                      "<h3>Finished!</h3>"+
                                      "</br></br>"+
-                                     "<p class='tour' style='font-size:14px;'>You have now completed a tour of Worldview!  If you followed the “Try It” steps, you’re now looking at fires in northern California as they were observed by satellites on August 23, 2012.   You can use the tools in any order.  We hope you continue exploring!  <p>"+
+                                     "<p class='splashwelcome'>You have now completed a tour of Worldview!  If you followed the “Try It” steps, you’re now looking at fires in northern California as they were observed by satellites on August 23, 2012.   You can use the tools in any order.  We hope you continue exploring!  <p>"+
                                      "</br>"+
                                      "<table class='tour'>"+
                                          "<tr>"+
@@ -251,6 +251,7 @@ Worldview.namespace("Tour");
             e.stopPropagation();
             $('#joyRideTipContent').joyride({adjustForPhone:false,
             								 bordered:true,
+            								 includepage:true,
             								 template : {'link':'<a href="#" class="joyride-close-tip">X</a>'},
                                              postStepCallback : function (index, tip) {
                                                  if(index == 4) {
@@ -261,7 +262,7 @@ Worldview.namespace("Tour");
                                              }});   
             conclusionPanel.hide();
             log.debug("exiting repeat");
-        }
+        };
         
         /*
          * Hide the tour.
@@ -271,7 +272,7 @@ Worldview.namespace("Tour");
             log.debug("tour done");
             conclusionPanel.hide();
             log.debug("exiting tour done");
-        }
+        };
     
         /*
          * Close the splash and go straight to worldview.
@@ -290,15 +291,17 @@ Worldview.namespace("Tour");
             
             $('#joyRideTipContent').joyride({adjustForPhone:false,
             								 bordered:true,
+            								 includepage:true,
             								 template : {'link':'<a href="#" class="joyride-close-tip">X</a>'},
                                              postStepCallback : function (index, tip) {
+                                             	console.log("index = " + index);
                                                  if(index == 4) {
                                                      log.debug("finished tour");
                                                      conclusionPanel.show();
                                                      conclusionPanel.center();
                                                  }
                                              }});   
-        }
+        };
          
         /* 
          * Toggle the value of the "hideSplash" flag.
@@ -326,7 +329,7 @@ Worldview.namespace("Tour");
         conclusionPanel.render(document.body);
         splashOverlay.show();
         splashOverlay.center();
-    }
+    };
         
 })(Worldview.Tour);
 

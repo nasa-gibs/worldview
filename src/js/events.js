@@ -5,7 +5,7 @@ SOTE.widget.Events.prototype = new SOTE.widget.Component;
 /**
  * Instantiate the Events widget. 
  */
-SOTE.widget.Events = function(containerId, config){
+SOTE.widget.Events = function(containerId, config) {
 	//console.log("instantiating events");
 	
 	this.container = document.getElementById(containerId);
@@ -42,8 +42,17 @@ SOTE.widget.Events = function(containerId, config){
 	this.initRenderComplete = false;
 	this.statusStr = "";
 	this.config = config.config;
+	this.isCollapsed = false;
+	this.initCollapsed = config.shouldCollapse;
+	this.lastVisit = config.lastVisit;
 	this.init();
-} 
+	
+	
+	//console.log("render complete = " + this.initRenderComplete);
+	//if(config.shouldCollapse){
+	//	this.collapse();
+	//}
+};
 
 /**
  * Get the JSON events data 
@@ -72,9 +81,22 @@ SOTE.widget.Events.prototype.buildMeta = function() {
  */
 SOTE.widget.Events.handleMetaSuccess = function(arg, data) {
 	var self = arg;
+	var lastVisit = self.lastVisit;
 	self.metaLength = data.length;
+	self.numNew = 0;
 	for(var i = 0; i < self.metaLength; i++) {
 		var item = data[i];
+		
+		// if the last visit came before the event, mark the event as new
+		var dateStr = item.date + "T00:00:00-04:00";
+		var dateObj = new Date(dateStr);
+		var isNew = false;
+		
+		if(lastVisit < dateObj) {
+			isNew = true;
+			self.numNew++;
+		}
+		
 		self.meta[i] = {title:item.title,
 					    link:item.link,
 					    category:item.category,
@@ -87,10 +109,11 @@ SOTE.widget.Events.handleMetaSuccess = function(arg, data) {
 					    south:item.south,
 					    east:item.east,
 					    west:item.west,
-					    keyword:item.keyword
+					    keyword:item.keyword,
+					    isNew:isNew
 					   };
 	}
-	
+	console.log("orig num new = " + self.numNew);
 	self.render();
 	self.fire();
 	self.buildMetaDone = true;
@@ -114,6 +137,7 @@ SOTE.widget.Events.prototype.init = function() {
  * Render the Events widget 
  */
 SOTE.widget.Events.prototype.render = function() {
+	
 	this.container.innerHTML = "";
 
 	var container = document.createElement("div");
@@ -135,8 +159,12 @@ SOTE.widget.Events.prototype.render = function() {
 	for(var i = 0; i < this.metaLength; i++) {
 		var item = document.createElement("li");
 		item.setAttribute("id", "ev" + i);
-		item.setAttribute("class", "productsitem item");
 		item.setAttribute("class", "item");
+		
+		if(this.meta[i].isNew) {
+			item.setAttribute("class", "item newevent");
+		}
+		
 		item.innerHTML = "<table>" + 
 		                       "<tr>" + 
 		                           "<td rowspan='2'> <img class='thumb' width='32px' height='32px' src='" + this.meta[i].image +"'/></td>"+
@@ -186,10 +214,11 @@ SOTE.widget.Events.prototype.render = function() {
 	var accordionToggler = document.createElement("a");
 	accordionToggler.setAttribute("class","evaccordionToggler evcollapse");
 	accordionToggler.setAttribute("title","Hide Events");
+
 	this.isCollapsed = false;
 	this.container.appendChild(accordionToggler);
 	$('.evaccordionToggler').bind('click',{self:this},SOTE.widget.Events.toggle);
-	
+	console.log(this.top);
 	// set up scroll bar
     if($(window).width() > 720)
 	{
@@ -200,12 +229,17 @@ SOTE.widget.Events.prototype.render = function() {
 		this.jsp = $( "." + this.id + "category" ).jScrollPane({autoReinitialise: false, verticalGutter:0});
 	}
 	
+	if(this.initCollapsed) {
+		this.toggle(this.numNew);
+	}
+	
 	// mark the component as ready in the registry if called via init()
 	if((this.initRenderComplete === false) && REGISTRY) {
 		this.initRenderComplete = true;
 		REGISTRY.markComponentReady(this.id);
 	}
-}
+
+};
 
 /**
   * Fires an event to the registry when the state of the component is changed
@@ -245,25 +279,36 @@ SOTE.widget.Events.repositionScrollbars = function(o, target) {
     		api.scrollToY(p.offsetTop, false);
     	}
 	}); 
-}
+};
 
 /**
- * Collapses and expands the events feature 
+ * Collapses and expands the events feature.
  */
 SOTE.widget.Events.toggle = function(e,ui){
+	console.log("object toggle");
 	var self = e.data.self;
-	if(self.isCollapsed){
+	self.toggle(self.numNew);
+};
+
+SOTE.widget.Events.prototype.toggle = function(numNew) {
+	console.log("prototype toggle - starting " + this.isCollapsed);
+	if(this.isCollapsed){
 		$('.evaccordionToggler').removeClass('evexpand').addClass('evcollapse');
 		$('.evaccordionToggler').attr("title","Hide Events");
-		$('.events').css('display','block');
-		self.isCollapsed = false;
+		$('.evaccordionToggler').html("");
+		$('#eventsHolder').animate({right:'0'}, 300);
+		this.isCollapsed = false;
+		$('.evaccordionToggler').appendTo("#eventsHolder");
 	}
 	else{
 		$('.evaccordionToggler').removeClass('evcollapse').addClass('evexpand');
 		$('.evaccordionToggler').attr("title","Show Events");
-		$('.events').css('display','none');
-		self.isCollapsed = true;
+		$('.evaccordionToggler').html("New("+ numNew +")");
+		$('#eventsHolder').animate({right:'-210px'}, 300);
+		this.isCollapsed = true;
+		$("#eventsHolder").after($('.evaccordionToggler'));
 	} 	
+
 };
 
 /**
@@ -303,6 +348,14 @@ SOTE.widget.Events.toggleDescription = function(e) {
     	var all = $('#eventList li');
     	var ind = all.index(this);
     	
+    	// if event was new, make it not new anymore
+    	if(meta[ind].isNew) {
+    		meta[ind].isNew = false;
+    		$('#' + this.id).removeClass('newevent');
+    		self.numNew--;
+    	}
+    	
+
     	// generate permalink
     	var extent = meta[ind].west + "," + meta[ind].south + "," + meta[ind].east + "," + meta[ind].north;
     	var prods = "";
@@ -343,7 +396,7 @@ SOTE.widget.Events.toggleDescription = function(e) {
     			prods += ",MODIS_Fires_Aqua";
     		}
     	}
-    	prods += ",sedac_bound";
+    	prods += ",!sedac_bound";
    
     	var initOrder = [
            	ss, // projection
@@ -356,49 +409,104 @@ SOTE.widget.Events.toggleDescription = function(e) {
            	epsg
         ];
         
-       
-      // Putting old version back in for now for integration testing
-      map.setValue(meta[ind].date);
-      p.b.setValue(prods);
-      //setTimeout(showevextent, 1000);
-      m.setValue(extent);
-      // END
       
-      var centerlon = parseInt(meta[ind].west) + ((parseInt(meta[ind].east) - parseInt(meta[ind].west)) / 2);
-      var centerlat = parseInt(meta[ind].south) + ((parseInt(meta[ind].north) - parseInt(meta[ind].south)) / 2);
-      console.log("centerlon = " + centerlon);
-      console.log("centerlat = " + centerlat);
-      var center = [centerlon, centerlat];
-      
-      // zoom out to re-orient the user
-      /*if(m.productMap.map.getZoom() != 2) {
-          m.productMap.map.zoomTo(2);
-          setTimeout(function(){m.eventZoom(extent, center); p.b.setValue(prods);}, 1500);
-      }
-      else {
-      	  m.eventZoom(extent, center);
-      	  p.b.setValue(prods);
-      }*/
-     
-    
-    /*
-     console.log("Beth's latest version");
-     p.b.setValue(prods);
-     var currentMap = m.productMap.map;
-     
-	currentMap.events.register("maploadend", currentMap, function() {
-    	console.log("Map has finished loading");
-	});
-    */
-      
-      //m.panTo(center);
-      //setTimeout(function(){m.zoomToExtent(extent);}, 3000);
-      
-      //m.setValue(extent);
+    var centerlon = parseInt(meta[ind].west) + ((parseInt(meta[ind].east) - parseInt(meta[ind].west)) / 2);
+    var centerlat = parseInt(meta[ind].south) + ((parseInt(meta[ind].north) - parseInt(meta[ind].south)) / 2);
+    var lonlat = OpenLayers.LonLat.fromArray([centerlon, centerlat]);
+
+	var currentMap = m.maps.map;
+    var rawextent = OpenLayers.Bounds.fromString(extent);
+ 	var targetZoom = currentMap.getZoomForExtent(rawextent, true);
+ 	 
+ 	var zoomToEventExtent = function() {
+ 		console.log("zooming to extent");
+      	currentMap.events.unregister("maploadend", currentMap, zoomToEventExtent);
+      	
+		//if(targetZoom != currentMap.getZoom()) {
+		//while(targetZoom != currentMap.getZoom()) {
+			//currentMap.zoomIn();
+			//currentMap.events.register("maploadend", currentMap, zoomToEventExtent);
+			currentMap.zoomToExtent(rawextent, true);
+			//currentMap.panTo(lonlat);
+		//}
+		//if(targetZoom != currentMap.getZoom()) {
+		//	currentMap.zoomIn();
+		//	currentMap.panTo(lonlat);
+		//	setTimeout(zoomToEventExtent, 500);
+		//}
+ 	};
+ 	
+ 	var panToEventCenter = function() {
+ 		console.log("panning to event center");
+ 		currentMap.events.unregister("maploadend", currentMap, panToEventCenter);
+ 		
+ 		//if something needs to be loaded, wait for it.  else, move on.
+ 		console.log("lonlat = " + lonlat);
+ 		console.log("center = " + currentMap.center);
+      	if(lonlat !== currentMap.center) {
+      		console.log("need to wait");
+      		//currentMap.events.register("maploadend", currentMap, zoomToEventExtent);
+      		currentMap.panTo(lonlat);
+      		setTimeout(zoomToEventExtent, 1500);
+      	}
+      	else {
+      		console.log("not waiting");
+      		zoomToEventExtent();
+      	}
+ 	};
+ 	 	
+ 	var setEventProducts = function() {
+		console.log("setting event products");
+      	currentMap.events.unregister("maploadend", currentMap, setEventProducts);
+      	var currentProds = p.b.getValue().replace("baselayers,", "").replace("~overlays", "").replace("products=", "").replace("!","").split(",");
+      	var newProds = prods.replace("baselayers,", "").replace("!","").replace("~overlays", "").split(",");
+		console.log("currentProds = " + currentProds);
+		console.log("newProds = " + newProds);
+		// determine whether anything new will need to load
+      	var matches = 0;
+      	for(var i = 0; i < newProds.length; i++) {
+      		if(currentProds.indexOf(newProds[i]) !== -1) {
+      			matches++;
+      		}
+      	}
+		
+		//if something needs to be loaded, wait for it.  else, move on.
+      	if(matches != newProds.length) {
+      		currentMap.events.register("maploadend", currentMap, panToEventCenter);
+      		p.b.setValue(prods);
+      	}
+      	else {
+      		p.b.setValue(prods);
+      		panToEventCenter();
+      	}
+    };
+
+ 	var setEventDate = function() {
+ 		console.log("setting event date");
+      	currentMap.events.unregister("maploadend", currentMap, setEventDate);
+      	var curDate = map.getValue();
+      	
+      	// if something needs to be loaded, wait for it.  else, move on.
+      	if(curDate.indexOf(meta[ind].date, curDate.length - meta[ind].date.length) === -1) {
+      		currentMap.events.register("maploadend", currentMap, setEventProducts);
+      		map.setValue(meta[ind].date);
+      	}
+		else {
+			setEventProducts();
+		}
+ 	};
+
+ 	if(currentMap.getZoom() != 1) {
+ 		currentMap.events.register("maploadend", currentMap, setEventDate);
+  		currentMap.zoomTo(1);
+    }
+	else {
+		setEventDate();
+	}
     }
     self.fire();
     SOTE.widget.Events.repositionScrollbars(self, this);
-}
+};
 
 /**
   * Sets the status of the component
@@ -409,7 +517,7 @@ SOTE.widget.Events.toggleDescription = function(e) {
 */
 SOTE.widget.Events.prototype.setStatus = function(s){
 	this.statusStr = s;
-};
+}; 
 
 /**
   * Gets the status of the component

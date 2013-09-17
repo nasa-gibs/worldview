@@ -65,8 +65,44 @@ $(function() {// Initialize "static" vars
             Worldview.error("Unable to start Worldview", error);
         }
     };
-      
-    var init = function(config) {  	
+    var storageEngine;  
+    var init = function(config) {  
+    	
+    	// set up storage and decide what to show
+        try {
+            storageEngine = YAHOO.util.StorageManager.get(
+                YAHOO.util.StorageEngineHTML5.ENGINE_NAME,
+                YAHOO.util.StorageManager.LOCATION_LOCAL,
+                {
+                    force: false,
+                    order: [
+                        YAHOO.util.StorageEngineHTML5
+                    ]
+                });
+        } catch(e) {
+            alert("No supported storage mechanism present");
+            storageEngine = false;
+        }
+        
+        var hideSplash, eventsCollapsed, lastVisit;
+        if(storageEngine) {
+            storageEngine.subscribe(storageEngine.CE_READY, function() {
+                hideSplash = storageEngine.getItem('hideSplash');
+                eventsCollapsed = storageEngine.getItem('eventsCollapsed');
+                lastVisit = storageEngine.getItem('lastVisit');
+            });
+            
+            if(!lastVisit) {
+            	lastVisit = Date.now();
+            }
+            storageEngine.setItem('lastVisit', Date.now());
+        }
+        //var lastVisitObj = new Date(lastVisit);
+        var lastVisitObj = new Date("2013-04-07T00:00:00-04:00"); // FIXME
+        // get query string
+        var queryString = 
+            Worldview.Permalink.decode(window.location.search.substring(1));
+         	
         // Convert all parameters found in the query string to an object, 
         // keyed by parameter name       
         config.parameters = Worldview.queryStringToObject(location.search);
@@ -111,6 +147,11 @@ $(function() {// Initialize "static" vars
         );
         var opacity = new Worldview.Widget.Opacity(config);
         var crs = new Worldview.Widget.CRS(config);
+        
+        // collapse events if worldview is being loaded via permalink
+        if(queryString) {
+        	eventsCollapsed = true;
+        }
 		var events = new SOTE.widget.Events("eventsHolder", {
 		    config: config,
 		    mapWidget: map, 
@@ -120,8 +161,12 @@ $(function() {// Initialize "static" vars
 		    dateWidget: date,
 		    apcmWidget: apcn,
 		    wvOpacity: opacity,
-		    wvEPSG: crs
+		    wvEPSG: crs,
+		    shouldCollapse: eventsCollapsed,
+		    lastVisit: lastVisitObj
 	    });
+	    
+
         var dataDownload = Worldview.Widget.DataDownload(config, {
             selector: "#DataDownload",
             model: dataDownloadModel, 
@@ -170,8 +215,6 @@ $(function() {// Initialize "static" vars
         Worldview.maps = map.maps;
         
         // Initialize widgets
-        var queryString = 
-            Worldview.Permalink.decode(window.location.search.substring(1));
         
         var initOrder = [
             projection, 
@@ -209,8 +252,12 @@ $(function() {// Initialize "static" vars
         	  
         // Do not start the tour if coming in via permalink         
         if ( !queryString ) {         
-            Worldview.Tour.start(false);  
+            Worldview.Tour.start(storageEngine, hideSplash, false);  
         } 
+        
+        window.onbeforeunload = function(){
+    		storageEngine.setItem('eventsCollapsed', events.isCollapsed);
+  		};
     };
         
     var debuggingFeatures = function(config) {
@@ -245,3 +292,4 @@ $(function() {// Initialize "static" vars
     }  
     
 });
+

@@ -60363,7 +60363,7 @@
             }
         },
         "MOD14": {
-            "handler": "TerraSwath5",
+            "handler": "MODISSwath",
             "name": "MODIS/Terra Thermal Anomalies/Fire 5-Min L2 Swath 1km",
             "nrt": {
                 "by": "value",
@@ -60546,7 +60546,7 @@
             }
         },
         "MYD14": {
-            "handler": "AquaSwath5",
+            "handler": "MODISSwath",
             "name": "MODIS/Aqua Thermal Anomalies/Fire 5-Min L2 Swath 1km",
             "nrt": {
                 "by": "value",

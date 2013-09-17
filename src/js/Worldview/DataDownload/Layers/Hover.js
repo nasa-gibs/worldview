@@ -17,14 +17,14 @@ Worldview.DataDownload.Layers.Hover = function(model, maps, config) {
     var LAYER_NAME = "DataDownload_Hover";
     
     var STYLE_HOVER_UNSELECTED = {
-        strokeColor: "#00ffff",
-        fillColor: "#00ffff",
+        strokeColor: "#fbe26d",
+        fillColor: "#b59e32",
         fillOpacity: 0.25
     };
             
     var STYLE_HOVER_SELECTED = {
-        strokeColor: "#0000ff",
-        fillColor: "#0000ff",
+        strokeColor: "#ff0600",
+        fillColor: "#f20c0c",
         fillOpacity: 0.25,
     };
 

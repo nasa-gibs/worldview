@@ -17,6 +17,11 @@ table.splash td{
 
 p.splash{ 
   color:rgb(38, 43, 49);  }
+  
+p.splashwelcome{ 
+  color:rgb(38, 43, 49);  
+  text-align:left;
+  font-size:14px; }
 
 p.splash span.highlight{ 
   font-weight:bold; }
