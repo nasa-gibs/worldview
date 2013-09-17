@@ -33,18 +33,20 @@ Worldview.Widget.DataDownload = function(config, spec) {
     var HTML_WIDGET_INACTIVE = "<img src='images/camera.png'></img>";
     var HTML_WIDGET_ACTIVE = "<img src='images/cameraon.png'></img>";
    
+    var list = null;
     var model = spec.model; 
     var mapController = null;
     var downloadListPanel = null;
     
     var self = {};
-    self.containerId = "dataDownload";
+    self.containerId = "DataDownload";
     
     var init = function() {        
         model.events
             .on("activate", onActivate)
             .on("deactivate", onDeactivate)
             .on("layerSelect", onLayerSelect)
+            .on("layerUpdate", onLayerUpdate)
             .on("query", onQuery)
             .on("queryResults", onQueryResults)
             .on("queryCancel", onQueryCancel)
@@ -86,30 +88,21 @@ Worldview.Widget.DataDownload = function(config, spec) {
     };
     
     self.render = function() {
-        var tabsHeight = $(".ui-tabs-nav").outerHeight(true);
-        $(spec.selector)
-            .height($(spec.selector).parent().outerHeight() - tabsHeight)
-            .html(
-                "<div id='DataDownload_Button'>" + 
-                    "<input id='DataDownload_Button' type='button'" +  
-                        "class='ui-disabled' value=''>" + 
-                "</div>" + 
-                "<div id='productSelector'></div>" + 
-                "<div data-role='fieldcontain'>" +
-                    "<fieldset id='DataDownload_Prefer' data-role='controlgroup'>" +
-                    "<input type='radio' id='DataDownload_BestAvailable' name='prefer' value='science' checked='checked'/>" + 
-                    "<label for='DataDownload_BestAvailable'>Best Available</label>" +
-                    "<input type='radio' id='DataDownload_PreferNRT' name='prefer' value='nrt'/>" + 
-                    "<label for='DataDownload_PreferNRT'>Prefer Near Real Time</label>" +                
-                "</fieldset></div>")
-            .trigger("create");
-        Worldview.DataDownload.ProductSelector(model,"#productSelector");       
-        $(spec.selector + " input[type='button']").click(function() {
-            model.activate();
-        });  
+        var tabs_height = $(".ui-tabs-nav").outerHeight(true);
+        $(spec.selector).addClass('bank');
+        $(spec.selector).height($(spec.selector).parent().outerHeight() - tabs_height); 
         
-        $("#DataDownload_Button .ui-btn").click(showDownloadList);
-        $("#DataDownload_Prefer").on("change", updatePreference);
+        list = new SOTE.widget.List(self.containerId, {
+            data: [],
+            selected: "~",
+            close: true,
+            filter: true,
+            search: false,
+            action: {text: "Download (~0GB)", callback: SOTE.widget.Download.handleAction},
+            selectableCategories: {callback: SOTE.widget.Download.handleCategoryChange, defaultText: "0 selected"},
+            onchange: function() { console.log("onchange", arguments); },
+            args: self
+        });
     };
     
     var toggleMode = function() {
@@ -124,6 +117,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
                 Worldview.DataDownload.MapController(model, spec.maps, config);
         }
         updateSelection();
+        onLayerUpdate();
     };
     
     var onDeactivate = function() {
@@ -133,6 +127,15 @@ Worldview.Widget.DataDownload = function(config, spec) {
     
     var onLayerSelect = function(layerName) {
         log.debug("selectLayer", layerName);
+    };
+    
+    var onLayerUpdate = function() {
+        if ( !model.active ) {
+            return;
+        }
+        console.log(model.groupByProducts());
+        list.data = model.groupByProducts();
+        list.update();
     };
     
     var onQuery = function() {

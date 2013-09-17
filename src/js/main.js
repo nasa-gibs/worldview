@@ -123,7 +123,7 @@ $(function() {// Initialize "static" vars
 		    wvEPSG: crs
 	    });
         var dataDownload = Worldview.Widget.DataDownload(config, {
-            selector: "#dataDownload",
+            selector: "#DataDownload",
             model: dataDownloadModel, 
             maps: map.maps
         });

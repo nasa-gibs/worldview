@@ -21,8 +21,6 @@ SOTE.widget.Download.prototype = new SOTE.widget.Component;
 */
 SOTE.widget.Download = function(containerId, config){
     this.log = Logging.getLogger("Worldview.Widget.Download");
-    this.VALID_PROJECTIONS = ["geographic", "arctic", "antarctic"];
-    this.hidden = {};
     
 	//Get the ID of the container element
 	this.container=document.getElementById(containerId);
@@ -93,7 +91,7 @@ SOTE.widget.Download.handleMetaSuccess = function(data,status,xhr,args){
 	var self = args.self;
 	var dupes = new Object;
 	var count = 0;
-	
+		
 	for(var i in data){
 		if(i != "palettes") {
 			
@@ -113,6 +111,8 @@ SOTE.widget.Download.handleMetaSuccess = function(data,status,xhr,args){
 			}
 		}
 	}
+
+    self.data = [];
 	
 	if(args.callback){
 		args.callback({self:self,val:args.val});
@@ -122,6 +122,7 @@ SOTE.widget.Download.handleMetaSuccess = function(data,status,xhr,args){
 		self.fire();
 	}
 	self.buildMetaDone = true;
+	console.log(self.data);
 };
 
 /**

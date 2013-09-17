@@ -402,7 +402,7 @@ SOTE.widget.List.adjustCategoryHeights = function(args){
 		$("#" + heights[1].name).css("height",heights[1].height+"px");
 		
 	}
-	else {
+	else if ( heights.length === 1 ) {
 		heights[0].height = container_height;
 		$("#" + heights[0].name).css("height",heights[0].height+"px");
 	}

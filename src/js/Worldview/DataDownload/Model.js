@@ -30,6 +30,10 @@ Worldview.DataDownload.Model = function(config) {
         time: null
     };
 
+    var noProduct = {
+        name: "Not available"    
+    };
+    
     var ns = Worldview.DataDownload;
             
     var self = {};    
@@ -137,6 +141,27 @@ Worldview.DataDownload.Model = function(config) {
         }
     };
     
+    self.groupByProducts = function() {
+        var products = {};
+        $.each(self.layers, function(index, layer) {
+            var productId = layer.product || "__NO_PRODUCT";
+            var product = config.products[productId] || noProduct;
+            if ( !products[productId] ) {
+                products[productId] = {
+                    title: product.name,
+                    items: []
+                };
+            }
+            products[productId].items.push({
+                label: layer.name,
+                sublabel: layer.description,
+                value: layer.id,
+                categories: { All: 1 }
+            });
+        });
+        return products;
+    };
+    
     self.selectLayer = function(layerName) {
         if ( self.selectedLayer === layerName ) {
             return;
@@ -229,7 +254,7 @@ Worldview.DataDownload.Model = function(config) {
             var description = config.layers[layer].description;
             var productName = null;
             if ( config.layers[layer].echo ) {
-                productName = config.layers[layer].echo.name;
+                productName = config.layers[layer].echo.product;
             }
             self.layers.push({
                 id: id,

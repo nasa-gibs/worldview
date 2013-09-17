@@ -136,7 +136,7 @@ SOTE.widget.Products.prototype.render = function(){
                 "<a class='addlayerstab tab' href='#selectorbox'></a>" + 
             "</li>" + 
             "<li class='layerPicker third'>" + 
-                "<a class='tab' href='#ddownload'></a>" + 
+                "<a class='tab' href='#DataDownload'></a>" + 
             "</li>";
 	this.container.appendChild(tabs);
 	SOTE.widget.Products.change({data: {self: this}}, {index: 0});
@@ -161,7 +161,7 @@ SOTE.widget.Products.prototype.render = function(){
 	this.container.appendChild(selectorbox);
 
     var downloadBox = document.createElement("div");
-    downloadBox.setAttribute("id", "ddownload");
+    downloadBox.setAttribute("id", "DataDownload");
     this.container.appendChild(downloadBox);
 
 	//this.container.appendChild(productContainer);
@@ -192,6 +192,7 @@ SOTE.widget.Products.prototype.render = function(){
         },
         config: this.config
     });	
+    /* FIXME: Remove
     this.d = new SOTE.widget.Download("ddownload", {
         dataSourceUrl: "ap_products.php",
         categories: ["Base Layers","Overlays"], 
@@ -202,6 +203,7 @@ SOTE.widget.Products.prototype.render = function(){
         },
         config: this.config    	
     });
+    */
     
     //$('#'+this.id+"prods").on("tabsshow",SOTE.widget.Products.change);
    	$('.accordionToggler').bind('click',{self:this},SOTE.widget.Products.toggle);
