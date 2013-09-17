@@ -140,7 +140,6 @@ Worldview.Widget.DataDownload = function(config, spec) {
         if ( !model.active ) {
             return;
         }
-        console.log(model.groupByProducts());
         list.data = model.groupByProducts();
         list.selected = list.unserialize(model.getProductsString())[1];
         list.update();

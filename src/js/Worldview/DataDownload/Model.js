@@ -111,7 +111,11 @@ Worldview.DataDownload.Model = function(config) {
                 self.selectProduct(productName);
             } else if ( !self.selectedProduct ) {
                 self.selectProduct(findAvailableProduct());
-            } 
+            } else {
+                self.events.trigger(self.EVENT_PRODUCT_SELECT, 
+                        self.selectedProduct);    
+                query();
+            }
         }
     };
     
