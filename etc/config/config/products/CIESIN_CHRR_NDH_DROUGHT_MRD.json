@@ -1,0 +1,9 @@
+{
+    "name": "Global Drought Mortality Risks and Distribution",
+    "handler": "CollectionList",
+    "query": {
+        "collection": "true",
+        "shortName": "CIESIN_CHRR_NDH_DROUGHT_MRD",
+        "dataCenterId": "SEDAC"
+    }
+}

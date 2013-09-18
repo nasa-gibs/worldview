@@ -95,7 +95,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
         list = new SOTE.widget.List(self.containerId, {
             data: [],
             selected: "~",
-            close: true,
+            close: false,
             filter: true,
             search: false,
             action: {

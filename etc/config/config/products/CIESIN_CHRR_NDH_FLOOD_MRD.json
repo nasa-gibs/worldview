@@ -1,0 +1,9 @@
+{
+    "name": "Global Flood Mortality Risks and Distribution",
+    "handler": "CollectionList",
+    "query": {
+        "collection": "true",
+        "shortName": "CIESIN_CHRR_NDH_FLOOD_MRD",
+        "dataCenterId": "SEDAC"
+    }
+}

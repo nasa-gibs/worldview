@@ -111,6 +111,7 @@
         <file name="js/Worldview/DataDownload/Handler/MODISGrid.js"/>
         <file name="js/Worldview/DataDownload/Handler/MODISMix.js"/>
         <file name="js/Worldview/DataDownload/Handler/List.js"/>
+        <file name="js/Worldview/DataDownload/Handler/CollectionList.js"/>
         
         <file name="js/Worldview/DataDownload/Layers/Button.js"/>
         <file name="js/Worldview/DataDownload/Layers/Grid.js"/>
@@ -130,6 +131,7 @@
         <file name="js/Worldview/DataDownload/Results/MODISGridIndex.js"/>
         <file name="js/Worldview/DataDownload/Results/MODISGridLabel.js"/>
         <file name="js/Worldview/DataDownload/Results/PreferredFilter.js"/>
+        <file name="js/Worldview/DataDownload/Results/ProductLabel.js"/>
         <file name="js/Worldview/DataDownload/Results/TagNRT.js"/>
         <file name="js/Worldview/DataDownload/Results/TagProduct.js"/>
         <file name="js/Worldview/DataDownload/Results/TagList.js"/>

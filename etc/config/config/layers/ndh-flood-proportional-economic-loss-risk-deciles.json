@@ -21,5 +21,6 @@
     "type": "wms",
     "url": [
         "http://sedac.ciesin.columbia.edu/geoserver/ows"
-    ]
+    ],
+    "product": "CIESIN_CHRR_NDH_FLOOD_PELRD"
 }

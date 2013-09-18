@@ -7036,6 +7036,7 @@
                 "transparent": "true"
             },
             "period": "static",
+            "product": "CIESIN_CHRR_NDH_CYCLONE_HFD",
             "projections": {
                 "geographic": {}
             },
@@ -7061,6 +7062,7 @@
                 "transparent": "true"
             },
             "period": "static",
+            "product": "CIESIN_CHRR_NDH_CYCLONE_MRD",
             "projections": {
                 "geographic": {}
             },
@@ -7086,6 +7088,7 @@
                 "transparent": "true"
             },
             "period": "static",
+            "product": "CIESIN_CHRR_NDH_CYCLONE_PELRD",
             "projections": {
                 "geographic": {}
             },
@@ -7111,6 +7114,7 @@
                 "transparent": "true"
             },
             "period": "static",
+            "product": "CIESIN_CHRR_NDH_DROUGHT_HFD",
             "projections": {
                 "geographic": {}
             },
@@ -7136,6 +7140,7 @@
                 "transparent": "true"
             },
             "period": "static",
+            "product": "CIESIN_CHRR_NDH_DROUGHT_MRD",
             "projections": {
                 "geographic": {}
             },
@@ -7161,6 +7166,7 @@
                 "transparent": "true"
             },
             "period": "static",
+            "product": "CIESIN_CHRR_NDH_DROUGHT_PELRD",
             "projections": {
                 "geographic": {}
             },
@@ -7186,6 +7192,7 @@
                 "transparent": "true"
             },
             "period": "static",
+            "product": "CIESIN_CHRR_NDH_FLOOD_HFD",
             "projections": {
                 "geographic": {}
             },
@@ -7211,6 +7218,7 @@
                 "transparent": "true"
             },
             "period": "static",
+            "product": "CIESIN_CHRR_NDH_FLOOD_MRD",
             "projections": {
                 "geographic": {}
             },
@@ -7236,6 +7244,7 @@
                 "transparent": "true"
             },
             "period": "static",
+            "product": "CIESIN_CHRR_NDH_FLOOD_PELRD",
             "projections": {
                 "geographic": {}
             },
@@ -7261,6 +7270,7 @@
                 "transparent": "true"
             },
             "period": "static",
+            "product": "CIESIN_CHRR_NDH_VOLCANO_HFD",
             "projections": {
                 "geographic": {}
             },
@@ -7286,6 +7296,7 @@
                 "transparent": "true"
             },
             "period": "static",
+            "product": "CIESIN_CHRR_NDH_VOLCANO_MRD",
             "projections": {
                 "geographic": {}
             },
@@ -7311,6 +7322,7 @@
                 "transparent": "true"
             },
             "period": "static",
+            "product": "CIESIN_CHRR_NDH_VOLCANO_PELRD",
             "projections": {
                 "geographic": {}
             },
@@ -59897,6 +59909,114 @@
                     "AIRX2SUP",
                     "AIRX2SUP_NRT"
                 ]
+            }
+        },
+        "CIESIN_CHRR_NDH_CYCLONE_HFD": {
+            "handler": "CollectionList",
+            "name": "Global Cyclone Hazard Frequency and Distribution",
+            "query": {
+                "collection": "true",
+                "dataCenterId": "SEDAC",
+                "shortName": "CIESIN_CHRR_NDH_CYCLONE_HFD"
+            }
+        },
+        "CIESIN_CHRR_NDH_CYCLONE_MRD": {
+            "handler": "CollectionList",
+            "name": "Global Cyclone Mortality Risks and Distribution",
+            "query": {
+                "collection": "true",
+                "dataCenterId": "SEDAC",
+                "shortName": "CIESIN_CHRR_NDH_CYCLONE_MRD"
+            }
+        },
+        "CIESIN_CHRR_NDH_CYCLONE_PELRD": {
+            "handler": "CollectionList",
+            "name": "Global Cyclone Proportional Economic Loss Risk Deciles",
+            "query": {
+                "collection": "true",
+                "dataCenterId": "SEDAC",
+                "shortName": "CIESIN_CHRR_NDH_CYCLONE_PELRD"
+            }
+        },
+        "CIESIN_CHRR_NDH_DROUGHT_HFD": {
+            "handler": "CollectionList",
+            "name": "Global Drought Hazard Frequency and Distribution",
+            "query": {
+                "collection": "true",
+                "dataCenterId": "SEDAC",
+                "shortName": "CIESIN_CHRR_NDH_DROUGHT_HFD"
+            }
+        },
+        "CIESIN_CHRR_NDH_DROUGHT_MRD": {
+            "handler": "CollectionList",
+            "name": "Global Drought Mortality Risks and Distribution",
+            "query": {
+                "collection": "true",
+                "dataCenterId": "SEDAC",
+                "shortName": "CIESIN_CHRR_NDH_DROUGHT_MRD"
+            }
+        },
+        "CIESIN_CHRR_NDH_DROUGHT_PELRD": {
+            "handler": "CollectionList",
+            "name": "Global Drought Proportional Economic Loss Risk Deciles",
+            "query": {
+                "collection": "true",
+                "dataCenterId": "SEDAC",
+                "shortName": "CIESIN_CHRR_NDH_DROUGHT_PELRD"
+            }
+        },
+        "CIESIN_CHRR_NDH_FLOOD_HFD": {
+            "handler": "CollectionList",
+            "name": "Global Flood Hazard Frequency and Distribution",
+            "query": {
+                "collection": "true",
+                "dataCenterId": "SEDAC",
+                "shortName": "CIESIN_CHRR_NDH_FLOOD_HFD"
+            }
+        },
+        "CIESIN_CHRR_NDH_FLOOD_MRD": {
+            "handler": "CollectionList",
+            "name": "Global Flood Mortality Risks and Distribution",
+            "query": {
+                "collection": "true",
+                "dataCenterId": "SEDAC",
+                "shortName": "CIESIN_CHRR_NDH_FLOOD_MRD"
+            }
+        },
+        "CIESIN_CHRR_NDH_FLOOD_PELRD": {
+            "handler": "CollectionList",
+            "name": "Global Flood Proportional Economic Loss Risk Deciles",
+            "query": {
+                "collection": "true",
+                "dataCenterId": "SEDAC",
+                "shortName": "CIESIN_CHRR_NDH_FLOOD_PELRD"
+            }
+        },
+        "CIESIN_CHRR_NDH_VOLCANO_HFD": {
+            "handler": "CollectionList",
+            "name": "Global Volcano Hazard Frequency and Distribution",
+            "query": {
+                "collection": "true",
+                "dataCenterId": "SEDAC",
+                "shortName": "CIESIN_CHRR_NDH_VOLCANO_HFD"
+            }
+        },
+        "CIESIN_CHRR_NDH_VOLCANO_MRD": {
+            "handler": "CollectionList",
+            "name": "Global Volcano Mortality Risks and Distribution",
+            "query": {
+                "collection": "true",
+                "dataCenterId": "SEDAC",
+                "shortName": "CIESIN_CHRR_NDH_VOLCANO_MRD"
+            }
+        },
+        "CIESIN_CHRR_NDH_VOLCANO_PELRD": {
+            "handler": "CollectionList",
+            "name": "Global Volcano Proportional Economic Loss Risk Deciles",
+            "query": {
+                "collection": "true",
+                "dataCenterId": "SEDAC",
+                "shortName": "CIESIN_CHRR_NDH_VOLCANO_PELRD"
             }
         },
         "ML2CO": {

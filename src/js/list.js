@@ -84,7 +84,6 @@ SOTE.widget.List = function(containerId, config){
     this.callback = config.onchange;
     this.args = config.args;
        
-       
     this.data = config.data;
     
    	this.selected = this.unserialize(config.selected);

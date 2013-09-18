@@ -19,10 +19,13 @@ import shutil
 import sys
 from urllib2 import Request, urlopen, HTTPError
 
-endpoint = "".join(
+granule_endpoint = "".join(
   ["https://api.echo.nasa.gov/catalog-rest/echo_catalog/",
    "granules/search.json?client_id=worldview"])
-
+collection_endpoint = "".join(
+  ["https://api.echo.nasa.gov/catalog-rest/echo_catalog/",
+   "datasets.json?"])
+   
 class RequestError(Exception):
   """
   Exception raised when a missing or an invalid parameter is provided
@@ -131,6 +134,10 @@ def aql_date(t):
   )
   
   
+def create_query_string(fields):
+  return "short_name=" + fields["shortName"].value
+  
+  
 def create_xml(fields):
   """
   Creates an XML document given the provided CGI fields
@@ -187,7 +194,7 @@ def create_xml(fields):
   return "\n".join(xml)
   
 
-def query_echo(options, xml):
+def query_echo(url, options, xml):
   """
   Submit an AQL document to ECHO and proxy the results to standard out.
   
@@ -196,11 +203,13 @@ def query_echo(options, xml):
   - xml: AQL document to submit to ECHO
   """
   
-  url = endpoint + "&page_size=%s" % options.page_size
+  url = url + "&page_size=%s" % options.page_size
   
-  headers = {
-    "Content-type": "application/xml"
-  }
+  headers = {}
+  if xml: 
+    headers = {
+      "Content-type": "application/xml"
+    }
   request = Request(url=url, headers=headers, data=xml)
   
   fp = None
@@ -234,19 +243,29 @@ def process_request(options):
   
   if len(fields) == 0:
     raise RequestError("No parameters")
-    
-  required_fields = ["startTime", "endTime", "shortName"]
+  
+  if "collection" in fields:
+    required_fields = ["shortName"]  
+  else:
+    required_fields = ["startTime", "endTime", "shortName"]
   for required_field in required_fields:
     if required_field not in fields:
       raise RequestError("Missing parameter: %s" % required_field)
   
-  xml = create_xml(fields)
+  xml = None
+  if "collections" in fields:
+    xml = create_xml(fields)
+    
+    if options.xml:
+      print xml
+    query_url = granule_endpoint
+  else:
+    query_url = collection_endpoint + create_query_string(fields)
   
-  if options.xml:
-    print xml
-  
+  if options.url:
+    print query_url
   if not options.no_query:
-    query_echo(options, xml)
+    query_echo(query_url, options, xml)
 
     
 def parse_options():  
@@ -265,6 +284,8 @@ def parse_options():
     help="Change the maximum number of results")
   parser.add_option("-n", "--no-query", action="store_true", 
     help="Do not execute ECHO query")
+  parser.add_option("-u", "--url" ,action="store_true",
+    help="Print URL used to access ECHO")
   parser.add_option("-x", "--xml", action="store_true", 
     help="Print XML to be sent to ECHO")
   (options, args) = parser.parse_args()
@@ -272,6 +293,7 @@ def parse_options():
   if options.all:
     options.error = True
     options.xml = True
+    options.url = True
     
   return options
     

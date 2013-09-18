@@ -25,7 +25,7 @@ Worldview.DataDownload.Model = function(config) {
     
     var NO_PRODUCT_ID = "__NO_PRODUCT";
     var NO_PRODUCT = {
-        name: "Not available",
+        name: "Not available for download",
         notSelectable: true
     };
 

@@ -22,6 +22,7 @@ Worldview.DataDownload.Handler = function() {
     ns.getByName = function(name) {
         var map = {
             "AquaSwathMultiDay":    Worldview.DataDownload.Handler.AquaSwathMultiDay,
+            "CollectionList":       Worldview.DataDownload.Handler.CollectionList,
             "List":                 Worldview.DataDownload.Handler.List,
             "MODISGrid":            Worldview.DataDownload.Handler.MODISGrid,
             "MODISMix":             Worldview.DataDownload.Handler.MODISMix,
