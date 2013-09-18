@@ -222,7 +222,8 @@ SOTE.widget.Products.prototype.render = function(){
 	}
 	var self = this;
 	$(window).resize(function(){
-		self.b.render();
+		//self.b.render();
+		self.b.resize(); self.b.adjustCategoryHeights({self: b});
 		self.s.resize();
 		self.adjustAlignment();
 	});
