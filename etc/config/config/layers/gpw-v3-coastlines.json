@@ -4,7 +4,6 @@
     "parameters": {
         "format": "image/png",
         "layers": "gpw-v3-coastlines",
-        "transitionEffect": "none",
         "transparent": "true"
     },
     "period": "static",
@@ -16,7 +15,8 @@
         "tileSize": [
             512,
             512
-        ]
+        ],
+        "transitionEffect": "none"
     },
     "type": "wms",
     "url": [

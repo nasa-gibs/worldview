@@ -42,7 +42,5 @@
     "units": "",
     "rendered": "MODIS_Aerosol",
     "recommendedPalettes": [ "orange_1" ],
-    "echo": {
-        "product": "MOD04_L2"  
-    }
+    "product": "MOD04_L2"
 }

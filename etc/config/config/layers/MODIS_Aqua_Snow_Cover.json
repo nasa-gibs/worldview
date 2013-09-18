@@ -88,10 +88,5 @@
     "startDate": "2012-04-07",
     "type": "wmts",
     "units": "%",
-    "echo": {
-        "product": "MYD10_L2",
-        "query": {
-            "dayNightFlag": "DAY"
-        }
-    }
+    "product": "MYD10_L2"
 }

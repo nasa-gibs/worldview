@@ -42,10 +42,5 @@
     "startDate": "2012-04-07",
     "type": "wmts",
     "units": "K",
-    "echo": {
-        "product": "MOD06_L2_NIGHT",
-        "query": {
-            "dayNightFlag": "NIGHT"
-        }
-    }
+    "product": "MOD06_L2_NIGHT"
 }

@@ -1,10 +1,10 @@
 {
-    "name": "AIRS/Aqua Level 2 Standard physical retrieval (AIRS+AMSU)",
+    "name": "AIRS/Aqua Level 1B Infrared (IR) geolocated and calibrated radiances, Night",
     "handler": "MODISSwath",
     "query": {
-        "shortName": ["AIRIBQAP", "AIRIBQAP_NRT"],
+        "shortName": ["AIRIBRAD", "AIRIBRAD_NRT"],
         "dataCenterId": "GSFCS4PA",
-        "dayNightFlag": "DAY"
+        "dayNightFlag": "NIGHT"
     },
     "nrt": {
         "by": "regex",

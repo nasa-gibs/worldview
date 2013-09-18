@@ -109,4 +109,4 @@ Worldview.Map.LayerSet = function(c) {
     
     init();
     return self;
-}
+};

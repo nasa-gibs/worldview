@@ -3,7 +3,8 @@
     "handler": "TerraSwathMultiDay",
     "query": {
         "shortName": "MOD29",
-        "dataCenterId": ["NSIDC_ECS", "LANCEMODIS"]
+        "dataCenterId": ["NSIDC_ECS", "LANCEMODIS"],
+        "dayNightFlag": "DAY"
     },
     "nrt": {
         "by": "value",

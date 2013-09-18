@@ -1,9 +1,10 @@
 {
-    "name": "AIRS/Aqua Level 2 Support retrieval (AIRS+AMSU)",
+    "name": "AIRS/Aqua Level 2 Support retrieval (AIRS+AMSU), Night",
     "handler": "MODISSwath",
     "query": {
         "shortName": ["AIRX2SUP", "AIRX2SUP_NRT"],
-        "dataCenterId": "GSFCS4PA"
+        "dataCenterId": "GSFCS4PA",
+        "dayNightFlag": "NIGHT"
     },
     "nrt": {
         "by": "regex",

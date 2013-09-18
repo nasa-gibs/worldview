@@ -42,10 +42,5 @@
     "startDate": "2012-04-07",
     "type": "wmts",
     "units": "DU",
-    "echo": {
-        "product": "AIRIBRAD",
-        "query": {
-            "dayNightFlag": "NIGHT"
-        }
-    }
+    "product": "AIRIBRAD_NIGHT"
 }

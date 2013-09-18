@@ -1,8 +1,8 @@
 {
-    "name": "AIRS/Aqua Level 2 Standard physical retrieval (AIRS+AMSU)",
+    "name": "AIRS/Aqua Level 2 Support retrieval (AIRS+AMSU), Day",
     "handler": "MODISSwath",
     "query": {
-        "shortName": ["AIRIBQAP", "AIRIBQAP_NRT"],
+        "shortName": ["AIRX2SUP", "AIRX2SUP_NRT"],
         "dataCenterId": "GSFCS4PA",
         "dayNightFlag": "DAY"
     },
@@ -10,5 +10,5 @@
         "by": "regex",
         "field": "dataset_id",
         "value": "\\(NRT\\)"
-    }
+    } 
 }

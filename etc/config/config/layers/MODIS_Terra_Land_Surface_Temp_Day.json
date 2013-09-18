@@ -43,10 +43,5 @@
     "startDate": "2012-04-07",
     "type": "wmts",
     "units": "K",
-    "echo": {
-        "product": "MOD11_L2_DAY",
-        "query": {
-            "dayNightFlag": "DAY"
-        }
-    }
+    "product": "MOD11_L2_DAY"
 }

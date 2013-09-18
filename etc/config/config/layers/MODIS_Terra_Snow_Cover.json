@@ -99,10 +99,5 @@
     ],
     "type": "wmts",
     "units": "%",
-    "echo": {
-        "product": "MOD10_L2",
-        "query": {
-            "dayNightFlag": "DAY"
-        }
-    }
+    "product": "MOD10_L2"
 }

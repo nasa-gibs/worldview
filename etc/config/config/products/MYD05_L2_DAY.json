@@ -1,9 +1,10 @@
 {
-    "name": "MODIS/Aqua Total Precipitable Water Vapor 5-Min L2 Swath 1km and 5km",
+    "name": "MODIS/Aqua Total Precipitable Water Vapor 5-Min L2 Swath 1km and 5km, Day",
     "handler": "AquaSwathMultiDay",
     "query": {
         "shortName": "MYD05_L2",
-        "dataCenterId": ["LAADS", "LANCEMODIS"]
+        "dataCenterId": ["LAADS", "LANCEMODIS"],
+        "dayNightFlag": "DAY"
     },
     "nrt": {
         "by": "value",

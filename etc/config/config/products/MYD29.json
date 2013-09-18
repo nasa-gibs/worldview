@@ -3,7 +3,8 @@
     "handler": "AquaSwathMultiDay",
     "query": {
         "shortName": "MYD29",
-        "dataCenterId": ["NSIDC_ECS", "LANCEMODIS"]
+        "dataCenterId": ["NSIDC_ECS", "LANCEMODIS"],
+        "dayNightFlag": "DAY"
     },
     "nrt": {
         "by": "value",

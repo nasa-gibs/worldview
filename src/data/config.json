@@ -180,12 +180,6 @@
         "AIRS_Dust_Score": {
             "bins": 14,
             "description": "Aqua / AIRS",
-            "echo": {
-                "product": "AIRIBQAP",
-                "query": {
-                    "dayNightFlag": "DAY"
-                }
-            },
             "excludePalettes": [
                 "orange_1"
             ],
@@ -193,6 +187,7 @@
             "min": "360",
             "name": "Dust Score",
             "period": "daily",
+            "product": "AIRIBQAP",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -250,16 +245,11 @@
         "AIRS_Prata_SO2_Index_Day": {
             "bins": 251,
             "description": "Aqua / AIRS",
-            "echo": {
-                "product": "AIRIBRAD",
-                "query": {
-                    "dayNightFlag": "DAY"
-                }
-            },
             "max": "30",
             "min": "0",
             "name": "Sulfur Dioxide (Day, Prata Algorithm)",
             "period": "daily",
+            "product": "AIRIBRAD_DAY",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -305,16 +295,11 @@
         "AIRS_Prata_SO2_Index_Night": {
             "bins": 251,
             "description": "Aqua / AIRS",
-            "echo": {
-                "product": "AIRIBRAD",
-                "query": {
-                    "dayNightFlag": "NIGHT"
-                }
-            },
             "max": "30",
             "min": "0",
             "name": "Sulfur Dioxide (Night, Prata Algorithm)",
             "period": "daily",
+            "product": "AIRIBRAD_NIGHT",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -360,16 +345,11 @@
         "AIRS_Precipitation_Day": {
             "bins": 179,
             "description": "Aqua / AIRS",
-            "echo": {
-                "product": "AIRX2SUP",
-                "query": {
-                    "dayNightFlag": "DAY"
-                }
-            },
             "max": "30",
             "min": "7.2",
             "name": "Precipitation Estimate (Day)",
             "period": "daily",
+            "product": "AIRX2SUP_DAY",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -596,16 +576,11 @@
         "AIRS_Precipitation_Night": {
             "bins": 179,
             "description": "Aqua / AIRS",
-            "echo": {
-                "product": "AIRX2SUP",
-                "query": {
-                    "dayNightFlag": "NIGHT"
-                }
-            },
             "max": "30",
             "min": "7.2",
             "name": "Precipitation Estimate (Night)",
             "period": "daily",
+            "product": "AIRX2SUP_NIGHT",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -832,16 +807,11 @@
         "AIRS_RelativeHumidity_400hPa_Day": {
             "bins": 100,
             "description": "Aqua / AIRS",
-            "echo": {
-                "product": "AIRX2RET",
-                "query": {
-                    "dayNightFlag": "DAY"
-                }
-            },
             "max": "100",
             "min": "0",
             "name": "Relative Humidity (400 hPa, Day)",
             "period": "daily",
+            "product": "AIRX2RET_DAY",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -883,16 +853,11 @@
         "AIRS_RelativeHumidity_400hPa_Night": {
             "bins": 100,
             "description": "Aqua / AIRS",
-            "echo": {
-                "product": "AIRX2RET",
-                "query": {
-                    "dayNightFlag": "NIGHT"
-                }
-            },
             "max": "100",
             "min": "0",
             "name": "Relative Humidity (400 hPa, Night)",
             "period": "daily",
+            "product": "AIRX2RET_NIGHT",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -934,16 +899,11 @@
         "AIRS_RelativeHumidity_500hPa_Day": {
             "bins": 100,
             "description": "Aqua / AIRS",
-            "echo": {
-                "product": "AIRX2RET",
-                "query": {
-                    "dayNightFlag": "DAY"
-                }
-            },
             "max": "100",
             "min": "0",
             "name": "Relative Humidity (500 hPa, Day)",
             "period": "daily",
+            "product": "AIRX2RET_DAY",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -985,16 +945,11 @@
         "AIRS_RelativeHumidity_500hPa_Night": {
             "bins": 100,
             "description": "Aqua / AIRS",
-            "echo": {
-                "product": "AIRX2RET",
-                "query": {
-                    "dayNightFlag": "NIGHT"
-                }
-            },
             "max": "100",
             "min": "0",
             "name": "Relative Humidity (500 hPa, Night)",
             "period": "daily",
+            "product": "AIRX2RET_NIGHT",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -1036,16 +991,11 @@
         "AIRS_RelativeHumidity_600hPa_Day": {
             "bins": 100,
             "description": "Aqua / AIRS",
-            "echo": {
-                "product": "AIRX2RET",
-                "query": {
-                    "dayNightFlag": "DAY"
-                }
-            },
             "max": "100",
             "min": "0",
             "name": "Relative Humidity (600 hPa, Day)",
             "period": "daily",
+            "product": "AIRX2RET_DAY",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -1087,16 +1037,11 @@
         "AIRS_RelativeHumidity_600hPa_Night": {
             "bins": 100,
             "description": "Aqua / AIRS",
-            "echo": {
-                "product": "AIRX2RET",
-                "query": {
-                    "dayNightFlag": "NIGHT"
-                }
-            },
             "max": "100",
             "min": "0",
             "name": "Relative Humidity (600 hPa, Night)",
             "period": "daily",
+            "product": "AIRX2RET_NIGHT",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -1138,16 +1083,11 @@
         "AIRS_RelativeHumidity_700hPa_Day": {
             "bins": 100,
             "description": "Aqua / AIRS",
-            "echo": {
-                "product": "AIRX2RET",
-                "query": {
-                    "dayNightFlag": "DAY"
-                }
-            },
             "max": "100",
             "min": "0",
             "name": "Relative Humidity (700 hPa, Day)",
             "period": "daily",
+            "product": "AIRX2RET_DAY",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -1189,16 +1129,11 @@
         "AIRS_RelativeHumidity_700hPa_Night": {
             "bins": 100,
             "description": "Aqua / AIRS",
-            "echo": {
-                "product": "AIRX2RET",
-                "query": {
-                    "dayNightFlag": "NIGHT"
-                }
-            },
             "max": "100",
             "min": "0",
             "name": "Relative Humidity (700 hPa, Night)",
             "period": "daily",
+            "product": "AIRX2RET_NIGHT",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -1240,16 +1175,11 @@
         "AIRS_RelativeHumidity_850hPa_Day": {
             "bins": 100,
             "description": "Aqua / AIRS",
-            "echo": {
-                "product": "AIRX2RET",
-                "query": {
-                    "dayNightFlag": "DAY"
-                }
-            },
             "max": "100",
             "min": "0",
             "name": "Relative Humidity (850 hPa, Day)",
             "period": "daily",
+            "product": "AIRX2RET_DAY",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -1291,16 +1221,11 @@
         "AIRS_RelativeHumidity_850hPa_Night": {
             "bins": 100,
             "description": "Aqua / AIRS",
-            "echo": {
-                "product": "AIRX2RET",
-                "query": {
-                    "dayNightFlag": "NIGHT"
-                }
-            },
             "max": "100",
             "min": "0",
             "name": "Relative Humidity (850 hPa, Night)",
             "period": "daily",
+            "product": "AIRX2RET_NIGHT",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -1342,16 +1267,11 @@
         "AIRS_Temperature_400hPa_Day": {
             "bins": 251,
             "description": "Aqua / AIRS",
-            "echo": {
-                "product": "AIRX2RET",
-                "query": {
-                    "dayNightFlag": "DAY"
-                }
-            },
             "max": "270",
             "min": "240",
             "name": "Temperature (400 hPa, Day)",
             "period": "daily",
+            "product": "AIRX2RET_DAY",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -1393,16 +1313,11 @@
         "AIRS_Temperature_400hPa_Night": {
             "bins": 251,
             "description": "Aqua / AIRS",
-            "echo": {
-                "product": "AIRX2RET",
-                "query": {
-                    "dayNightFlag": "NIGHT"
-                }
-            },
             "max": "270",
             "min": "240",
             "name": "Temperature (400 hPa, Night)",
             "period": "daily",
+            "product": "AIRX2RET_NIGHT",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -1444,16 +1359,11 @@
         "AIRS_Temperature_500hPa_Day": {
             "bins": 251,
             "description": "Aqua / AIRS",
-            "echo": {
-                "product": "AIRX2RET",
-                "query": {
-                    "dayNightFlag": "DAY"
-                }
-            },
             "max": "282",
             "min": "252",
             "name": "Temperature (500 hPa, Day)",
             "period": "daily",
+            "product": "AIRX2RET_DAY",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -1495,16 +1405,11 @@
         "AIRS_Temperature_500hPa_Night": {
             "bins": 251,
             "description": "Aqua / AIRS",
-            "echo": {
-                "product": "AIRX2RET",
-                "query": {
-                    "dayNightFlag": "NIGHT"
-                }
-            },
             "max": "282",
             "min": "252",
             "name": "Temperature (500 hPa, Night)",
             "period": "daily",
+            "product": "AIRX2RET_NIGHT",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -1546,16 +1451,11 @@
         "AIRS_Temperature_600hPa_Day": {
             "bins": 251,
             "description": "Aqua / AIRS",
-            "echo": {
-                "product": "AIRX2RET",
-                "query": {
-                    "dayNightFlag": "DAY"
-                }
-            },
             "max": "290",
             "min": "260",
             "name": "Temperature (600 hPa, Day)",
             "period": "daily",
+            "product": "AIRX2RET_DAY",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -1597,16 +1497,11 @@
         "AIRS_Temperature_600hPa_Night": {
             "bins": 251,
             "description": "Aqua / AIRS",
-            "echo": {
-                "product": "AIRX2RET",
-                "query": {
-                    "dayNightFlag": "NIGHT"
-                }
-            },
             "max": "290",
             "min": "260",
             "name": "Temperature (600 hPa, Night)",
             "period": "daily",
+            "product": "AIRX2RET_NIGHT",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -1648,16 +1543,11 @@
         "AIRS_Temperature_700hPa_Day": {
             "bins": 251,
             "description": "Aqua / AIRS",
-            "echo": {
-                "product": "AIRX2RET",
-                "query": {
-                    "dayNightFlag": "DAY"
-                }
-            },
             "max": "300",
             "min": "270",
             "name": "Temperature (700 hPa, Day)",
             "period": "daily",
+            "product": "AIRX2RET_DAY",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -1699,16 +1589,11 @@
         "AIRS_Temperature_700hPa_Night": {
             "bins": 251,
             "description": "Aqua / AIRS",
-            "echo": {
-                "product": "AIRX2RET",
-                "query": {
-                    "dayNightFlag": "NIGHT"
-                }
-            },
             "max": "270",
             "min": "240",
             "name": "Temperature (700 hPa, Night)",
             "period": "daily",
+            "product": "AIRX2RET_NIGHT",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -1750,16 +1635,11 @@
         "AIRS_Temperature_850hPa_Day": {
             "bins": 251,
             "description": "Aqua / AIRS",
-            "echo": {
-                "product": "AIRX2RET",
-                "query": {
-                    "dayNightFlag": "DAY"
-                }
-            },
             "max": "270",
             "min": "240",
             "name": "Temperature (850 hPa, Day)",
             "period": "daily",
+            "product": "AIRX2RET_DAY",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -1801,16 +1681,11 @@
         "AIRS_Temperature_850hPa_Night": {
             "bins": 251,
             "description": "Aqua / AIRS",
-            "echo": {
-                "product": "AIRX2RET",
-                "query": {
-                    "dayNightFlag": "NIGHT"
-                }
-            },
             "max": "270",
             "min": "240",
             "name": "Temperature (850 hPa, Night)",
             "period": "daily",
+            "product": "AIRX2RET_NIGHT",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -1865,7 +1740,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -1890,7 +1766,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -1915,7 +1792,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -1940,7 +1818,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -1952,13 +1831,11 @@
         "MLS_CO_215hPa_Day": {
             "bins": 255,
             "description": "Aura / MLS",
-            "echo": {
-                "product": "ML2CO"
-            },
             "max": "250",
             "min": "0",
             "name": "Carbon Monoxide (215 hPa, Day)",
             "period": "daily",
+            "product": "ML2CO",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -2000,13 +1877,11 @@
         "MLS_CO_215hPa_Night": {
             "bins": 255,
             "description": "Aura / MLS",
-            "echo": {
-                "product": "ML2CO"
-            },
             "max": "250",
             "min": "0",
             "name": "Carbon Monoxide (215 hPa, Night)",
             "period": "daily",
+            "product": "ML2CO",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -2048,13 +1923,11 @@
         "MLS_H2O_46hPa_Day": {
             "bins": 255,
             "description": "Aura / MLS",
-            "echo": {
-                "product": "ML2H2O"
-            },
             "max": "4.5",
             "min": "0.5",
             "name": "Water Vapor (46 hPa, Day)",
             "period": "daily",
+            "product": "ML2H2O",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -2096,13 +1969,11 @@
         "MLS_H2O_46hPa_Night": {
             "bins": 255,
             "description": "Aura / MLS",
-            "echo": {
-                "product": "ML2H2O"
-            },
             "max": "4.5",
             "min": "0.5",
             "name": "Water Vapor (46 hPa, Night)",
             "period": "daily",
+            "product": "ML2H2O",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -2144,13 +2015,11 @@
         "MLS_HNO3_46hPa_Day": {
             "bins": 255,
             "description": "Aura / MLS",
-            "echo": {
-                "product": "ML2HNO3"
-            },
             "max": "10",
             "min": "0",
             "name": "Nitric Acid (46 hPa, Day)",
             "period": "daily",
+            "product": "ML2HNO3",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -2192,13 +2061,11 @@
         "MLS_HNO3_46hPa_Night": {
             "bins": 255,
             "description": "Aura / MLS",
-            "echo": {
-                "product": "ML2HNO3"
-            },
             "max": "10",
             "min": "0",
             "name": "Nitric Acid (46 hPa, Night)",
             "period": "daily",
+            "product": "ML2HNO3",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -2240,13 +2107,11 @@
         "MLS_N2O_46hPa_Day": {
             "bins": 255,
             "description": "Aura / MLS",
-            "echo": {
-                "product": "ML2N2O"
-            },
             "max": "300",
             "min": "75",
             "name": "Nitrous Oxide (46 hPa, Day)",
             "period": "daily",
+            "product": "ML2N2O",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -2288,13 +2153,11 @@
         "MLS_N2O_46hPa_Night": {
             "bins": 255,
             "description": "Aura / MLS",
-            "echo": {
-                "product": "ML2N2O"
-            },
             "max": "300",
             "min": "75",
             "name": "Nitrous Oxide (46 hPa, Night)",
             "period": "daily",
+            "product": "ML2N2O",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -2336,13 +2199,11 @@
         "MLS_O3_46hPa_Day": {
             "bins": 255,
             "description": "Aura / MLS",
-            "echo": {
-                "product": "ML2O3"
-            },
             "max": "4.5",
             "min": "0.5",
             "name": "Ozone (46 hPa, Day)",
             "period": "daily",
+            "product": "ML2O3",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -2384,13 +2245,11 @@
         "MLS_O3_46hPa_Night": {
             "bins": 255,
             "description": "Aura / MLS",
-            "echo": {
-                "product": "ML2O3"
-            },
             "max": "4.5",
             "min": "0.5",
             "name": "Ozone (46 hPa, Night)",
             "period": "daily",
+            "product": "ML2O3",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -2432,13 +2291,11 @@
         "MLS_SO2_147hPa_Day": {
             "bins": 255,
             "description": "Aura / MLS",
-            "echo": {
-                "product": "ML2SO2"
-            },
             "max": "200",
             "min": "20",
             "name": "Sulfur Dioxide (147 hPa, Day)",
             "period": "daily",
+            "product": "ML2SO2",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -2480,13 +2337,11 @@
         "MLS_SO2_147hPa_Night": {
             "bins": 255,
             "description": "Aura / MLS",
-            "echo": {
-                "product": "ML2SO2"
-            },
             "max": "200",
             "min": "20",
             "name": "Sulfur Dioxide (147 hPa, Night)",
             "period": "daily",
+            "product": "ML2SO2",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -2528,13 +2383,11 @@
         "MLS_Temperature_46hPa_Day": {
             "bins": 255,
             "description": "Aura / MLS",
-            "echo": {
-                "product": "ML2T"
-            },
             "max": "240",
             "min": "190",
             "name": "Temperature (46 hPa, Day)",
             "period": "daily",
+            "product": "ML2T",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -2576,13 +2429,11 @@
         "MLS_Temperature_46hPa_Night": {
             "bins": 255,
             "description": "Aura / MLS",
-            "echo": {
-                "product": "ML2T"
-            },
             "max": "240",
             "min": "190",
             "name": "Temperature (46 hPa, Night)",
             "period": "daily",
+            "product": "ML2T",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -2624,13 +2475,11 @@
         "MODIS_Aqua_Aerosol": {
             "bins": 10,
             "description": "Aqua / MODIS",
-            "echo": {
-                "product": "MYD04_L2"
-            },
             "max": "0.70",
             "min": "0.27",
             "name": "Aerosol Optical Depth",
             "period": "daily",
+            "product": "MYD04_L2",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -3353,16 +3202,11 @@
         "MODIS_Aqua_Cloud_Top_Pressure_Day": {
             "bins": 16,
             "description": "Aqua / MODIS",
-            "echo": {
-                "product": "MYD06_L2_DAY",
-                "query": {
-                    "dayNightFlag": "DAY"
-                }
-            },
             "max": "950",
             "min": "250",
             "name": "Cloud Top Pressure (Day)",
             "period": "daily",
+            "product": "MYD06_L2_DAY",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -3407,16 +3251,11 @@
         "MODIS_Aqua_Cloud_Top_Pressure_Night": {
             "bins": 16,
             "description": "Aqua / MODIS",
-            "echo": {
-                "product": "MYD06_L2_NIGHT",
-                "query": {
-                    "dayNightFlag": "NIGHT"
-                }
-            },
             "max": "950",
             "min": "250",
             "name": "Cloud Top Pressure (Night)",
             "period": "daily",
+            "product": "MYD06_L2_NIGHT",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -3461,16 +3300,11 @@
         "MODIS_Aqua_Cloud_Top_Temp_Day": {
             "bins": 16,
             "description": "Aqua / MODIS",
-            "echo": {
-                "product": "MYD06_L2_DAY",
-                "query": {
-                    "dayNightFlag": "DAY"
-                }
-            },
             "max": "290",
             "min": "220",
             "name": "Cloud Top Temperature (Day)",
             "period": "daily",
+            "product": "MYD06_L2_DAY",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -3516,16 +3350,11 @@
         "MODIS_Aqua_Cloud_Top_Temp_Night": {
             "bins": 16,
             "description": "Aqua / MODIS",
-            "echo": {
-                "product": "MYD06_L2_NIGHT",
-                "query": {
-                    "dayNightFlag": "NIGHT"
-                }
-            },
             "max": "290",
             "min": "220",
             "name": "Cloud Top Temperature (Night)",
             "period": "daily",
+            "product": "MYD06_L2_NIGHT",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -3794,16 +3623,11 @@
         "MODIS_Aqua_Land_Surface_Temp_Day": {
             "bins": 251,
             "description": "Aqua / MODIS",
-            "echo": {
-                "product": "MYD11_L2_DAY",
-                "query": {
-                    "dayNightFlag": "DAY"
-                }
-            },
             "max": "340",
             "min": "240",
             "name": "Land Surface Temperature (Day)",
             "period": "daily",
+            "product": "MYD11_L2_DAY",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_1km",
@@ -3852,13 +3676,8 @@
         },
         "MODIS_Aqua_Land_Surface_Temp_Night": {
             "bins": 251,
+            "dayNightFlag": "NIGHT",
             "description": "Aqua / MODIS",
-            "echo": {
-                "product": "MYD11_L2_NIGHT",
-                "query": {
-                    "dayNightFlag": "NIGHT"
-                }
-            },
             "max": "340",
             "min": "240",
             "name": "Land Surface Temperature (Night)",
@@ -3909,16 +3728,11 @@
         "MODIS_Aqua_Sea_Ice": {
             "bins": 1,
             "description": "Aqua / MODIS",
-            "echo": {
-                "product": "MYD29",
-                "query": {
-                    "dayNightFlag": "DAY"
-                }
-            },
             "max": "1",
             "min": "0",
             "name": "Sea Ice",
             "period": "daily",
+            "product": "MYD29",
             "projections": {
                 "antarctic": {
                     "matrixSet": "EPSG3031_1km",
@@ -4003,16 +3817,11 @@
         "MODIS_Aqua_Snow_Cover": {
             "bins": 9,
             "description": "Aqua / MODIS",
-            "echo": {
-                "product": "MYD10_L2",
-                "query": {
-                    "dayNightFlag": "DAY"
-                }
-            },
             "max": "100",
             "min": "1",
             "name": "Snow Cover",
             "period": "daily",
+            "product": "MYD10_L2",
             "projections": {
                 "antarctic": {
                     "matrixSet": "EPSG3031_500m",
@@ -4253,16 +4062,11 @@
         "MODIS_Aqua_Water_Vapor_5km_Day": {
             "bins": 127,
             "description": "Aqua / MODIS",
-            "echo": {
-                "product": "MYD05_L2_DAY",
-                "query": {
-                    "dayNightFlag": "DAY"
-                }
-            },
             "max": "9.6411",
             "min": "0.1",
             "name": "Water Vapor (Day)",
             "period": "daily",
+            "product": "MYD05_L2_DAY",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -4307,16 +4111,11 @@
         "MODIS_Aqua_Water_Vapor_5km_Night": {
             "bins": 127,
             "description": "Aqua / MODIS",
-            "echo": {
-                "product": "MYD05_L2_NIGHT",
-                "query": {
-                    "dayNightFlag": "NIGHT"
-                }
-            },
             "max": "9.6411",
             "min": "0.1",
             "name": "Water Vapor (Night)",
             "period": "daily",
+            "product": "MYD05_L2_NIGHT",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -4433,15 +4232,13 @@
         },
         "MODIS_Fires_Aqua": {
             "description": "Aqua/MODIS Fire and Thermal Anomalies",
-            "echo": {
-                "product": "MYD14"
-            },
             "name": "Fires (Day and Night)",
             "parameters": {
                 "format": "image/png",
                 "layers": "MODIS_Fires_Aqua"
             },
             "period": "daily",
+            "product": "MYD14",
             "projections": {
                 "geographic": {}
             },
@@ -4461,15 +4258,13 @@
         },
         "MODIS_Fires_Terra": {
             "description": "Terra/MODIS Fire and Thermal Anomalies",
-            "echo": {
-                "product": "MOD14"
-            },
             "name": "Fires (Day and Night)",
             "parameters": {
                 "format": "image/png",
                 "layers": "MODIS_Fires_Terra"
             },
             "period": "daily",
+            "product": "MOD14",
             "projections": {
                 "geographic": {}
             },
@@ -4490,13 +4285,11 @@
         "MODIS_Terra_Aerosol": {
             "bins": 10,
             "description": "Terra / MODIS",
-            "echo": {
-                "product": "MOD04_L2"
-            },
             "max": "0.70",
             "min": "0.27",
             "name": "Aerosol Optical Depth",
             "period": "daily",
+            "product": "MOD04_L2",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -5219,16 +5012,11 @@
         "MODIS_Terra_Cloud_Top_Pressure_Day": {
             "bins": 16,
             "description": "Terra / MODIS",
-            "echo": {
-                "product": "MOD06_L2_DAY",
-                "query": {
-                    "dayNightFlag": "DAY"
-                }
-            },
             "max": "950",
             "min": "250",
             "name": "Cloud Top Pressure (Day)",
             "period": "daily",
+            "product": "MOD06_L2_DAY",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -5273,16 +5061,11 @@
         "MODIS_Terra_Cloud_Top_Pressure_Night": {
             "bins": 16,
             "description": "Terra / MODIS",
-            "echo": {
-                "product": "MOD06_L2_NIGHT",
-                "query": {
-                    "dayNightFlag": "NIGHT"
-                }
-            },
             "max": "950",
             "min": "250",
             "name": "Cloud Top Pressure (Night)",
             "period": "daily",
+            "product": "MOD06_L2_NIGHT",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -5327,16 +5110,11 @@
         "MODIS_Terra_Cloud_Top_Temp_Day": {
             "bins": 16,
             "description": "Terra / MODIS",
-            "echo": {
-                "product": "MOD06_L2_DAY",
-                "query": {
-                    "dayNightFlag": "DAY"
-                }
-            },
             "max": "290",
             "min": "220",
             "name": "Cloud Top Temperature (Day)",
             "period": "daily",
+            "product": "MOD06_L2_DAY",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -5382,16 +5160,11 @@
         "MODIS_Terra_Cloud_Top_Temp_Night": {
             "bins": 16,
             "description": "Terra / MODIS",
-            "echo": {
-                "product": "MOD06_L2_NIGHT",
-                "query": {
-                    "dayNightFlag": "NIGHT"
-                }
-            },
             "max": "290",
             "min": "220",
             "name": "Cloud Top Temperature (Night)",
             "period": "daily",
+            "product": "MOD06_L2_NIGHT",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -5750,16 +5523,11 @@
         "MODIS_Terra_Land_Surface_Temp_Day": {
             "bins": 251,
             "description": "Terra / MODIS",
-            "echo": {
-                "product": "MOD11_L2_DAY",
-                "query": {
-                    "dayNightFlag": "DAY"
-                }
-            },
             "max": "340",
             "min": "240",
             "name": "Land Surface Temperature (Day)",
             "period": "daily",
+            "product": "MOD11_L2_DAY",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_1km",
@@ -5806,16 +5574,11 @@
         "MODIS_Terra_Land_Surface_Temp_Night": {
             "bins": 251,
             "description": "Terra / MODIS",
-            "echo": {
-                "product": "MOD11_L2_NIGHT",
-                "query": {
-                    "dayNightFlag": "NIGHT"
-                }
-            },
             "max": "340",
             "min": "240",
             "name": "Land Surface Temperature (Night)",
             "period": "daily",
+            "product": "MOD11_L2_NIGHT",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_1km",
@@ -5862,16 +5625,11 @@
         "MODIS_Terra_Sea_Ice": {
             "bins": 1,
             "description": "Terra / MODIS",
-            "echo": {
-                "product": "MOD29",
-                "query": {
-                    "dayNightFlag": "DAY"
-                }
-            },
             "max": "1",
             "min": "0",
             "name": "Sea Ice",
             "period": "daily",
+            "product": "MOD29",
             "projections": {
                 "antarctic": {
                     "matrixSet": "EPSG3031_1km",
@@ -5956,16 +5714,11 @@
         "MODIS_Terra_Snow_Cover": {
             "bins": 9,
             "description": "Terra / MODIS",
-            "echo": {
-                "product": "MOD10_L2",
-                "query": {
-                    "dayNightFlag": "DAY"
-                }
-            },
             "max": "100",
             "min": "1",
             "name": "Snow Cover",
             "period": "daily",
+            "product": "MOD10_L2",
             "projections": {
                 "antarctic": {
                     "matrixSet": "EPSG3031_500m",
@@ -6113,11 +5866,9 @@
         },
         "MODIS_Terra_SurfaceReflectance_Bands143": {
             "description": "Terra / MODIS",
-            "echo": {
-                "product": "MOD09"
-            },
             "name": "Land Surface Reflectance (True Color)",
             "period": "daily",
+            "product": "MOD09",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_500m",
@@ -6159,11 +5910,9 @@
         },
         "MODIS_Terra_SurfaceReflectance_Bands721": {
             "description": "Terra / MODIS",
-            "echo": {
-                "product": "MOD09"
-            },
             "name": "Land Surface Reflectance (7-2-1)",
             "period": "daily",
+            "product": "MOD09",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_500m",
@@ -6206,16 +5955,11 @@
         "MODIS_Terra_Water_Vapor_5km_Day": {
             "bins": 127,
             "description": "Terra / MODIS",
-            "echo": {
-                "product": "MOD05_L2_DAY",
-                "query": {
-                    "dayNightFlag": "DAY"
-                }
-            },
             "max": "9.6411",
             "min": "0.1",
             "name": "Water Vapor (Day)",
             "period": "daily",
+            "product": "MOD05_L2_DAY",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -6260,16 +6004,11 @@
         "MODIS_Terra_Water_Vapor_5km_Night": {
             "bins": 127,
             "description": "Terra / MODIS",
-            "echo": {
-                "product": "MOD05_L2_NIGHT",
-                "query": {
-                    "dayNightFlag": "NIGHT"
-                }
-            },
             "max": "9.6411",
             "min": "0.1",
             "name": "Water Vapor (Night)",
             "period": "daily",
+            "product": "MOD05_L2_NIGHT",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -6757,7 +6496,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -6782,7 +6522,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -7024,7 +6765,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -7062,7 +6804,6 @@
             "parameters": {
                 "format": "image/png",
                 "layers": "gpw-v3-coastlines",
-                "transitionEffect": "none",
                 "transparent": "true"
             },
             "period": "static",
@@ -7074,7 +6815,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -7099,7 +6841,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -7301,7 +7044,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -7325,7 +7069,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -7349,7 +7094,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -7373,7 +7119,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -7397,7 +7144,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -7421,7 +7169,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -7445,7 +7194,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -7469,7 +7219,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -7493,7 +7244,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -7517,7 +7269,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -7541,7 +7294,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -7565,7 +7319,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -60035,15 +59790,16 @@
             },
             "query": {
                 "dataCenterId": "GSFCS4PA",
+                "dayNightFlag": "DAY",
                 "shortName": [
                     "AIRIBQAP",
                     "AIRIBQAP_NRT"
                 ]
             }
         },
-        "AIRIBRAD": {
+        "AIRIBRAD_DAY": {
             "handler": "MODISSwath",
-            "name": "AIRS/Aqua Level 1B Infrared (IR) geolocated and calibrated radiances",
+            "name": "AIRS/Aqua Level 1B Infrared (IR) geolocated and calibrated radiances, Day",
             "nrt": {
                 "by": "regex",
                 "field": "dataset_id",
@@ -60051,6 +59807,24 @@
             },
             "query": {
                 "dataCenterId": "GSFCS4PA",
+                "dayNightFlag": "DAY",
+                "shortName": [
+                    "AIRIBRAD",
+                    "AIRIBRAD_NRT"
+                ]
+            }
+        },
+        "AIRIBRAD_NIGHT": {
+            "handler": "MODISSwath",
+            "name": "AIRS/Aqua Level 1B Infrared (IR) geolocated and calibrated radiances, Night",
+            "nrt": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "\\(NRT\\)"
+            },
+            "query": {
+                "dataCenterId": "GSFCS4PA",
+                "dayNightFlag": "NIGHT",
                 "shortName": [
                     "AIRIBRAD",
                     "AIRIBRAD_NRT"
@@ -60091,9 +59865,9 @@
                 ]
             }
         },
-        "AIRX2SUP": {
+        "AIRX2SUP_DAY": {
             "handler": "MODISSwath",
-            "name": "AIRS/Aqua Level 2 Support retrieval (AIRS+AMSU)",
+            "name": "AIRS/Aqua Level 2 Support retrieval (AIRS+AMSU), Day",
             "nrt": {
                 "by": "regex",
                 "field": "dataset_id",
@@ -60101,6 +59875,24 @@
             },
             "query": {
                 "dataCenterId": "GSFCS4PA",
+                "dayNightFlag": "DAY",
+                "shortName": [
+                    "AIRX2SUP",
+                    "AIRX2SUP_NRT"
+                ]
+            }
+        },
+        "AIRX2SUP_NIGHT": {
+            "handler": "MODISSwath",
+            "name": "AIRS/Aqua Level 2 Support retrieval (AIRS+AMSU), Night",
+            "nrt": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "\\(NRT\\)"
+            },
+            "query": {
+                "dataCenterId": "GSFCS4PA",
+                "dayNightFlag": "NIGHT",
                 "shortName": [
                     "AIRX2SUP",
                     "AIRX2SUP_NRT"
@@ -60237,7 +60029,7 @@
         },
         "MOD05_L2_DAY": {
             "handler": "TerraSwathMultiDay",
-            "name": "MODIS/Terra Total Precipitable Water Vapor 5-Min L2 Swath 1km and 5km",
+            "name": "MODIS/Terra Total Precipitable Water Vapor 5-Min L2 Swath 1km and 5km, Day",
             "nrt": {
                 "by": "value",
                 "field": "data_center",
@@ -60248,12 +60040,13 @@
                     "LAADS",
                     "LANCEMODIS"
                 ],
+                "dayNightFlag": "DAY",
                 "shortName": "MOD05_L2"
             }
         },
         "MOD05_L2_NIGHT": {
             "handler": "MODISSwath",
-            "name": "MODIS/Terra Total Precipitable Water Vapor 5-Min L2 Swath 1km and 5km",
+            "name": "MODIS/Terra Total Precipitable Water Vapor 5-Min L2 Swath 1km and 5km, Night",
             "nrt": {
                 "by": "value",
                 "field": "data_center",
@@ -60264,12 +60057,13 @@
                     "LAADS",
                     "LANCEMODIS"
                 ],
+                "dayNightFlag": "NIGHT",
                 "shortName": "MOD05_L2"
             }
         },
         "MOD06_L2_DAY": {
             "handler": "TerraSwathMultiDay",
-            "name": "MODIS/Terra Clouds 5-Min L2 Swath 1km and 5km",
+            "name": "MODIS/Terra Clouds 5-Min L2 Swath 1km and 5km, Day",
             "nrt": {
                 "by": "value",
                 "field": "data_center",
@@ -60280,12 +60074,13 @@
                     "LAADS",
                     "LANCEMODIS"
                 ],
+                "dayNightFlag": "DAY",
                 "shortName": "MOD06_L2"
             }
         },
         "MOD06_L2_NIGHT": {
             "handler": "MODISSwath",
-            "name": "MODIS/Terra Clouds 5-Min L2 Swath 1km and 5km",
+            "name": "MODIS/Terra Clouds 5-Min L2 Swath 1km and 5km, Night",
             "nrt": {
                 "by": "value",
                 "field": "data_center",
@@ -60296,6 +60091,7 @@
                     "LAADS",
                     "LANCEMODIS"
                 ],
+                "dayNightFlag": "DAY",
                 "shortName": "MOD06_L2"
             }
         },
@@ -60335,12 +60131,13 @@
                     "NSIDC_ECS",
                     "LANCEMODIS"
                 ],
+                "dayNightFlag": "DAY",
                 "shortName": "MOD10_L2"
             }
         },
         "MOD11_L2_DAY": {
             "handler": "TerraSwathMultiDay",
-            "name": "MODIS/Terra Land Surface Temperature/Emissivity 5-Min L2 Swath 1km",
+            "name": "MODIS/Terra Land Surface Temperature/Emissivity 5-Min L2 Swath 1km, Day",
             "nrt": {
                 "by": "value",
                 "field": "data_center",
@@ -60351,12 +60148,13 @@
                     "LPDAAC_ECS",
                     "LANCEMODIS"
                 ],
+                "dayNightFlag": "DAY",
                 "shortName": "MOD11_L2"
             }
         },
         "MOD11_L2_NIGHT": {
             "handler": "MODISSwath",
-            "name": "MODIS/Terra Land Surface Temperature/Emissivity 5-Min L2 Swath 1km",
+            "name": "MODIS/Terra Land Surface Temperature/Emissivity 5-Min L2 Swath 1km, Night",
             "nrt": {
                 "by": "value",
                 "field": "data_center",
@@ -60367,6 +60165,7 @@
                     "LPDAAC_ECS",
                     "LANCEMODIS"
                 ],
+                "dayNightFlag": "NIGHT",
                 "shortName": "MOD11_L2"
             }
         },
@@ -60399,6 +60198,7 @@
                     "NSIDC_ECS",
                     "LANCEMODIS"
                 ],
+                "dayNightFlag": "DAY",
                 "shortName": "MOD29"
             }
         },
@@ -60420,7 +60220,7 @@
         },
         "MYD05_L2_DAY": {
             "handler": "AquaSwathMultiDay",
-            "name": "MODIS/Aqua Total Precipitable Water Vapor 5-Min L2 Swath 1km and 5km",
+            "name": "MODIS/Aqua Total Precipitable Water Vapor 5-Min L2 Swath 1km and 5km, Day",
             "nrt": {
                 "by": "value",
                 "field": "data_center",
@@ -60431,12 +60231,13 @@
                     "LAADS",
                     "LANCEMODIS"
                 ],
+                "dayNightFlag": "DAY",
                 "shortName": "MYD05_L2"
             }
         },
         "MYD05_L2_NIGHT": {
             "handler": "MODISSwath",
-            "name": "MODIS/Aqua Total Precipitable Water Vapor 5-Min L2 Swath 1km and 5km",
+            "name": "MODIS/Aqua Total Precipitable Water Vapor 5-Min L2 Swath 1km and 5km, Night",
             "nrt": {
                 "by": "value",
                 "field": "data_center",
@@ -60447,12 +60248,13 @@
                     "LAADS",
                     "LANCEMODIS"
                 ],
+                "dayNightFlag": "NIGHT",
                 "shortName": "MYD05_L2"
             }
         },
         "MYD06_L2_DAY": {
             "handler": "AquaSwathMultiDay",
-            "name": "MODIS/Aqua Clouds 5-Min L2 Swath 1km and 5km",
+            "name": "MODIS/Aqua Clouds 5-Min L2 Swath 1km and 5km, Day",
             "nrt": {
                 "by": "value",
                 "field": "data_center",
@@ -60463,12 +60265,13 @@
                     "LAADS",
                     "LANCEMODIS"
                 ],
+                "dayNightFlag": "DAY",
                 "shortName": "MYD06_L2"
             }
         },
         "MYD06_L2_NIGHT": {
             "handler": "MODISSwath",
-            "name": "MODIS/Aqua Clouds 5-Min L2 Swath 1km and 5km",
+            "name": "MODIS/Aqua Clouds 5-Min L2 Swath 1km and 5km, Night",
             "nrt": {
                 "by": "value",
                 "field": "data_center",
@@ -60479,6 +60282,7 @@
                     "LAADS",
                     "LANCEMODIS"
                 ],
+                "dayNightFlag": "NIGHT",
                 "shortName": "MYD06_L2"
             }
         },
@@ -60518,12 +60322,13 @@
                     "NSIDC_ECS",
                     "LANCEMODIS"
                 ],
+                "dayNightFlag": "DAY",
                 "shortName": "MYD10_L2"
             }
         },
         "MYD11_L2_DAY": {
             "handler": "AquaSwathMultiDay",
-            "name": "MODIS/Aqua Land Surface Temperature/Emissivity 5-Min L2 Swath 1km",
+            "name": "MODIS/Aqua Land Surface Temperature/Emissivity 5-Min L2 Swath 1km, Day",
             "nrt": {
                 "by": "value",
                 "field": "data_center",
@@ -60534,12 +60339,13 @@
                     "LPDAAC_ECS",
                     "LANCEMODIS"
                 ],
+                "dayNightFlag": "DAY",
                 "shortName": "MYD11_L2"
             }
         },
         "MYD11_L2_NIGHT": {
             "handler": "MODISSwath",
-            "name": "MODIS/Aqua Land Surface Temperature/Emissivity 5-Min L2 Swath 1km",
+            "name": "MODIS/Aqua Land Surface Temperature/Emissivity 5-Min L2 Swath 1km, Night",
             "nrt": {
                 "by": "value",
                 "field": "data_center",
@@ -60550,6 +60356,7 @@
                     "LPDAAC_ECS",
                     "LANCEMODIS"
                 ],
+                "dayNightFlag": "NIGHT",
                 "shortName": "MYD11_L2"
             }
         },
@@ -60582,6 +60389,7 @@
                     "NSIDC_ECS",
                     "LANCEMODIS"
                 ],
+                "dayNightFlag": "DAY",
                 "shortName": "MYD29"
             }
         }

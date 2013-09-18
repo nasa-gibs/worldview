@@ -43,10 +43,5 @@
     "startDate": "2012-04-07",
     "type": "wmts",
     "units": "score",
-    "echo": {
-        "product": "AIRIBQAP",
-        "query": {
-            "dayNightFlag": "DAY"
-        }
-    }
+    "product": "AIRIBQAP"
 }

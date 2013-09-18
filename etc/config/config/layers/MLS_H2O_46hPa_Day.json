@@ -41,7 +41,5 @@
     "startDate": "2012-04-07",
     "type": "wmts",
     "units": "ppmv",
-    "echo": {
-        "product": "ML2H2O"
-    }
+    "product": "ML2H2O"
 }

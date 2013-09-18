@@ -41,7 +41,5 @@
     "startDate": "2012-04-07",
     "type": "wmts",
     "units": "ppbv",
-    "echo": {
-        "product": "ML2CO"
-    }
+    "product": "ML2CO"
 }
