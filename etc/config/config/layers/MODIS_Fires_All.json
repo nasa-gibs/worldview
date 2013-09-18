@@ -5,7 +5,7 @@
         "format": "image/png",
         "layers": "MODIS_Fires_All"
     },
-    "product": "daily",
+    "period": "daily",
     "projections": {
         "geographic": {}
     },

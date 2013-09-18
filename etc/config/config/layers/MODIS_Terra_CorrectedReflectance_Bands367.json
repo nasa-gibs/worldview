@@ -1,7 +1,7 @@
 {
     "description": "Terra / MODIS",
     "name": "Corrected Reflectance (3-6-7)",
-    "product": "daily",
+    "period": "daily",
     "projections": {
         "antarctic": {
             "matrixSet": "EPSG3031_250m",

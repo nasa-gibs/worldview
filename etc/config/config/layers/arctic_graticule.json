@@ -1,7 +1,7 @@
 {
     "description": "Polarview / Graticule",
     "name": "Latitude-Longitude Lines",
-    "product": "static",
+    "period": "static",
     "parameters": {
         "format": "image/png",
         "layers": "arctic_graticule"    

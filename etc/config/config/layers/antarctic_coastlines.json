@@ -1,7 +1,7 @@
 {
     "description": "ADD SCAR / Coastlines",
     "name": "Coastlines",
-    "product": "static",
+    "period": "static",
     "projections": {
         "antarctic": {
             "matrixSet": "EPSG3031_250m",

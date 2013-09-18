@@ -1,7 +1,7 @@
 {
     "description": "OpenStreetMap / Coastlines",
     "name": "Land / Water Map",
-    "product": "static",
+    "period": "static",
     "projections": {
         "antarctic": {
             "matrixSet": "EPSG3031_250m",

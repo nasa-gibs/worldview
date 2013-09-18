@@ -6,7 +6,7 @@
         "layers": "Aqua_Orbit_Dsc",
         "transparent": "true"
     },
-    "product": "daily",
+    "period": "daily",
     "projections": {
         "geographic": {}
     },

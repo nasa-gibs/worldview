@@ -4,7 +4,7 @@
     "max": "290",
     "min": "260",
     "name": "Temperature (600 hPa, Day)",
-    "product": "daily",
+    "period": "daily",
     "projections": {
         "geographic": {
             "matrixSet": "EPSG4326_2km",

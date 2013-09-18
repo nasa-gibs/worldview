@@ -3,7 +3,7 @@
     "max": "300",
     "min": "75",
     "name": "Nitrous Oxide (46 hPa, Day)",
-    "product": "daily",
+    "period": "daily",
     "projections": {
         "geographic": {
             "matrixSet": "EPSG4326_2km",

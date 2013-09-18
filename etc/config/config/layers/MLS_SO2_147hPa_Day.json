@@ -3,7 +3,7 @@
     "max": "200",
     "min": "20",
     "name": "Sulfur Dioxide (147 hPa, Day)",
-    "product": "daily",
+    "period": "daily",
     "projections": {
         "geographic": {
             "matrixSet": "EPSG4326_2km",

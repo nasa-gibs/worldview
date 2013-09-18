@@ -1,7 +1,7 @@
 {
     "description": "Aqua / MODIS",
     "name": "Land Surface Reflectance (True Color)",
-    "product": "daily",
+    "period": "daily",
     "projections": {
         "geographic": {
             "matrixSet": "EPSG4326_500m",

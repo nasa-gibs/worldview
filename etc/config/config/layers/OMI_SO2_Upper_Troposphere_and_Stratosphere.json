@@ -3,7 +3,7 @@
     "max": "2.0",
     "min": "0.4",
     "name": "Sulfur Dioxide (Upper Troposphere and Stratosphere)",
-    "product": "daily",
+    "period": "daily",
     "projections": {
         "geographic": {
             "matrixSet": "EPSG4326_2km",

@@ -3,7 +3,7 @@
     "max": "30",
     "min": "7.2",
     "name": "Precipitation Estimate (Night)",
-    "product": "daily",
+    "period": "daily",
     "projections": {
         "geographic": {
             "matrixSet": "EPSG4326_2km",

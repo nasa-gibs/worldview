@@ -3,7 +3,7 @@
     "max": "340",
     "min": "240",
     "name": "Land Surface Temperature (Day)",
-    "product": "daily",
+    "period": "daily",
     "projections": {
         "geographic": {
             "matrixSet": "EPSG4326_1km",

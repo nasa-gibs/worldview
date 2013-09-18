@@ -3,7 +3,7 @@
     "max": "2.0",
     "min": "1.2",
     "name": "Sulfur Dioxide (Planetary Boundary Layer)",
-    "product": "daily",
+    "period": "daily",
     "projections": {
         "geographic": {
             "matrixSet": "EPSG4326_2km",

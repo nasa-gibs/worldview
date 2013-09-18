@@ -7,7 +7,7 @@
         "transitionEffect": "none",
         "transparent": "true"
     },
-    "product": "static",
+    "period": "static",
     "projections": {
         "arctic": {},
         "geographic": {}

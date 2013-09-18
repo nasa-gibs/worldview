@@ -3,7 +3,7 @@
     "max": "290",
     "min": "220",
     "name": "Cloud Top Temperature (Day)",
-    "product": "daily",
+    "period": "daily",
     "projections": {
         "geographic": {
             "matrixSet": "EPSG4326_2km",

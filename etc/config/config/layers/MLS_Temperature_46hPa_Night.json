@@ -3,7 +3,7 @@
     "max": "240",
     "min": "190",
     "name": "Temperature (46 hPa, Night)",
-    "product": "daily",
+    "period": "daily",
     "projections": {
         "geographic": {
             "matrixSet": "EPSG4326_2km",

@@ -3,7 +3,7 @@
     "max": "9.6411",
     "min": "0.1",
     "name": "Water Vapor (Day)",
-    "product": "daily",
+    "period": "daily",
     "projections": {
         "geographic": {
             "matrixSet": "EPSG4326_2km",

@@ -1,7 +1,7 @@
 {
     "description": "OpenStreetMap / Coastlines",
     "name": "Coastlines",
-    "product": "static",
+    "period": "static",
     "projections": {
         "arctic": {
             "matrixSet": "EPSG3413_250m",

@@ -3,7 +3,7 @@
     "max": "30",
     "min": "0",
     "name": "Sulfur Dioxide (Day, Prata Algorithm)",
-    "product": "daily",
+    "period": "daily",
     "projections": {
         "geographic": {
             "matrixSet": "EPSG4326_2km",

@@ -4,7 +4,7 @@
     "max": "282",
     "min": "252",
     "name": "Temperature (500 hPa, Night)",
-    "product": "daily",
+    "period": "daily",
     "projections": {
         "geographic": {
             "matrixSet": "EPSG4326_2km",

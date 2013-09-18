@@ -192,7 +192,7 @@
             "max": "520",
             "min": "360",
             "name": "Dust Score",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -259,7 +259,7 @@
             "max": "30",
             "min": "0",
             "name": "Sulfur Dioxide (Day, Prata Algorithm)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -314,7 +314,7 @@
             "max": "30",
             "min": "0",
             "name": "Sulfur Dioxide (Night, Prata Algorithm)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -369,7 +369,7 @@
             "max": "30",
             "min": "7.2",
             "name": "Precipitation Estimate (Day)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -605,7 +605,7 @@
             "max": "30",
             "min": "7.2",
             "name": "Precipitation Estimate (Night)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -841,7 +841,7 @@
             "max": "100",
             "min": "0",
             "name": "Relative Humidity (400 hPa, Day)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -892,7 +892,7 @@
             "max": "100",
             "min": "0",
             "name": "Relative Humidity (400 hPa, Night)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -943,7 +943,7 @@
             "max": "100",
             "min": "0",
             "name": "Relative Humidity (500 hPa, Day)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -994,7 +994,7 @@
             "max": "100",
             "min": "0",
             "name": "Relative Humidity (500 hPa, Night)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -1045,7 +1045,7 @@
             "max": "100",
             "min": "0",
             "name": "Relative Humidity (600 hPa, Day)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -1096,7 +1096,7 @@
             "max": "100",
             "min": "0",
             "name": "Relative Humidity (600 hPa, Night)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -1147,7 +1147,7 @@
             "max": "100",
             "min": "0",
             "name": "Relative Humidity (700 hPa, Day)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -1198,7 +1198,7 @@
             "max": "100",
             "min": "0",
             "name": "Relative Humidity (700 hPa, Night)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -1249,7 +1249,7 @@
             "max": "100",
             "min": "0",
             "name": "Relative Humidity (850 hPa, Day)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -1300,7 +1300,7 @@
             "max": "100",
             "min": "0",
             "name": "Relative Humidity (850 hPa, Night)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -1351,7 +1351,7 @@
             "max": "270",
             "min": "240",
             "name": "Temperature (400 hPa, Day)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -1402,7 +1402,7 @@
             "max": "270",
             "min": "240",
             "name": "Temperature (400 hPa, Night)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -1453,7 +1453,7 @@
             "max": "282",
             "min": "252",
             "name": "Temperature (500 hPa, Day)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -1504,7 +1504,7 @@
             "max": "282",
             "min": "252",
             "name": "Temperature (500 hPa, Night)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -1555,7 +1555,7 @@
             "max": "290",
             "min": "260",
             "name": "Temperature (600 hPa, Day)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -1606,7 +1606,7 @@
             "max": "290",
             "min": "260",
             "name": "Temperature (600 hPa, Night)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -1657,7 +1657,7 @@
             "max": "300",
             "min": "270",
             "name": "Temperature (700 hPa, Day)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -1708,7 +1708,7 @@
             "max": "270",
             "min": "240",
             "name": "Temperature (700 hPa, Night)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -1759,7 +1759,7 @@
             "max": "270",
             "min": "240",
             "name": "Temperature (850 hPa, Day)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -1810,7 +1810,7 @@
             "max": "270",
             "min": "240",
             "name": "Temperature (850 hPa, Night)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -1857,7 +1857,7 @@
                 "layers": "Aqua_Orbit_Asc",
                 "transparent": "true"
             },
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {}
             },
@@ -1882,7 +1882,7 @@
                 "layers": "Aqua_Orbit_Dsc",
                 "transparent": "true"
             },
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {}
             },
@@ -1907,7 +1907,7 @@
                 "layers": "Aura_Orbit_Asc",
                 "transparent": "true"
             },
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {}
             },
@@ -1932,7 +1932,7 @@
                 "layers": "Aura_Orbit_Dsc",
                 "transparent": "true"
             },
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {}
             },
@@ -1958,7 +1958,7 @@
             "max": "250",
             "min": "0",
             "name": "Carbon Monoxide (215 hPa, Day)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -2006,7 +2006,7 @@
             "max": "250",
             "min": "0",
             "name": "Carbon Monoxide (215 hPa, Night)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -2054,7 +2054,7 @@
             "max": "4.5",
             "min": "0.5",
             "name": "Water Vapor (46 hPa, Day)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -2102,7 +2102,7 @@
             "max": "4.5",
             "min": "0.5",
             "name": "Water Vapor (46 hPa, Night)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -2150,7 +2150,7 @@
             "max": "10",
             "min": "0",
             "name": "Nitric Acid (46 hPa, Day)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -2198,7 +2198,7 @@
             "max": "10",
             "min": "0",
             "name": "Nitric Acid (46 hPa, Night)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -2246,7 +2246,7 @@
             "max": "300",
             "min": "75",
             "name": "Nitrous Oxide (46 hPa, Day)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -2294,7 +2294,7 @@
             "max": "300",
             "min": "75",
             "name": "Nitrous Oxide (46 hPa, Night)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -2342,7 +2342,7 @@
             "max": "4.5",
             "min": "0.5",
             "name": "Ozone (46 hPa, Day)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -2390,7 +2390,7 @@
             "max": "4.5",
             "min": "0.5",
             "name": "Ozone (46 hPa, Night)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -2438,7 +2438,7 @@
             "max": "200",
             "min": "20",
             "name": "Sulfur Dioxide (147 hPa, Day)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -2486,7 +2486,7 @@
             "max": "200",
             "min": "20",
             "name": "Sulfur Dioxide (147 hPa, Night)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -2534,7 +2534,7 @@
             "max": "240",
             "min": "190",
             "name": "Temperature (46 hPa, Day)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -2582,7 +2582,7 @@
             "max": "240",
             "min": "190",
             "name": "Temperature (46 hPa, Night)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -2630,7 +2630,7 @@
             "max": "0.70",
             "min": "0.27",
             "name": "Aerosol Optical Depth",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -2678,7 +2678,7 @@
             "max": "340",
             "min": "190",
             "name": "Brightness Temperature (Band 31-Day)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "antarctic": {
                     "matrixSet": "EPSG3031_1km",
@@ -3017,7 +3017,7 @@
             "max": "340",
             "min": "190",
             "name": "Brightness Temperature (Band 31-Night)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "antarctic": {
                     "matrixSet": "EPSG3031_1km",
@@ -3362,7 +3362,7 @@
             "max": "950",
             "min": "250",
             "name": "Cloud Top Pressure (Day)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -3416,7 +3416,7 @@
             "max": "950",
             "min": "250",
             "name": "Cloud Top Pressure (Night)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -3470,7 +3470,7 @@
             "max": "290",
             "min": "220",
             "name": "Cloud Top Temperature (Day)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -3525,7 +3525,7 @@
             "max": "290",
             "min": "220",
             "name": "Cloud Top Temperature (Night)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -3571,7 +3571,7 @@
         "MODIS_Aqua_CorrectedReflectance_Bands721": {
             "description": "Aqua / MODIS",
             "name": "Corrected Reflectance (7-2-1)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "antarctic": {
                     "matrixSet": "EPSG3031_250m",
@@ -3751,7 +3751,7 @@
         "MODIS_Aqua_Data_No_Data": {
             "description": "Aqua / MODIS",
             "name": "Areas of No Data (mask)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_250m",
@@ -3803,7 +3803,7 @@
             "max": "340",
             "min": "240",
             "name": "Land Surface Temperature (Day)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_1km",
@@ -3862,7 +3862,7 @@
             "max": "340",
             "min": "240",
             "name": "Land Surface Temperature (Night)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_1km",
@@ -3918,7 +3918,7 @@
             "max": "1",
             "min": "0",
             "name": "Sea Ice",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "antarctic": {
                     "matrixSet": "EPSG3031_1km",
@@ -4012,7 +4012,7 @@
             "max": "100",
             "min": "1",
             "name": "Snow Cover",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "antarctic": {
                     "matrixSet": "EPSG3031_500m",
@@ -4117,7 +4117,7 @@
                 "product": "MYD09"
             },
             "name": "Land Surface Reflectance (1-2-1)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_250m",
@@ -4164,7 +4164,7 @@
                 "product": "MYD09"
             },
             "name": "Land Surface Reflectance (True Color)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_500m",
@@ -4210,7 +4210,7 @@
                 "product": "MYD09"
             },
             "name": "Land Surface Reflectance (7-2-1)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_500m",
@@ -4262,7 +4262,7 @@
             "max": "9.6411",
             "min": "0.1",
             "name": "Water Vapor (Day)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -4316,7 +4316,7 @@
             "max": "9.6411",
             "min": "0.1",
             "name": "Water Vapor (Night)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -4364,7 +4364,7 @@
             "max": "0.70",
             "min": "0.27",
             "name": "MODIS Combined Value-Added Aerosol Optical Depth",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -4413,7 +4413,7 @@
                 "format": "image/png",
                 "layers": "MODIS_Fires_All"
             },
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {}
             },
@@ -4441,7 +4441,7 @@
                 "format": "image/png",
                 "layers": "MODIS_Fires_Aqua"
             },
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {}
             },
@@ -4469,7 +4469,7 @@
                 "format": "image/png",
                 "layers": "MODIS_Fires_Terra"
             },
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {}
             },
@@ -4496,7 +4496,7 @@
             "max": "0.70",
             "min": "0.27",
             "name": "Aerosol Optical Depth",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -4544,7 +4544,7 @@
             "max": "340",
             "min": "190",
             "name": "Brightness Temperature (Band 31-Day)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "antarctic": {
                     "matrixSet": "EPSG3031_1km",
@@ -4883,7 +4883,7 @@
             "max": "340",
             "min": "190",
             "name": "Brightness Temperature (Band 31-Night)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "antarctic": {
                     "matrixSet": "EPSG3031_1km",
@@ -5228,7 +5228,7 @@
             "max": "950",
             "min": "250",
             "name": "Cloud Top Pressure (Day)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -5282,7 +5282,7 @@
             "max": "950",
             "min": "250",
             "name": "Cloud Top Pressure (Night)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -5336,7 +5336,7 @@
             "max": "290",
             "min": "220",
             "name": "Cloud Top Temperature (Day)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -5391,7 +5391,7 @@
             "max": "290",
             "min": "220",
             "name": "Cloud Top Temperature (Night)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -5437,7 +5437,7 @@
         "MODIS_Terra_CorrectedReflectance_Bands367": {
             "description": "Terra / MODIS",
             "name": "Corrected Reflectance (3-6-7)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "antarctic": {
                     "matrixSet": "EPSG3031_250m",
@@ -5527,7 +5527,7 @@
         "MODIS_Terra_CorrectedReflectance_Bands721": {
             "description": "Terra / MODIS",
             "name": "Corrected Reflectance (7-2-1)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "antarctic": {
                     "matrixSet": "EPSG3031_250m",
@@ -5707,7 +5707,7 @@
         "MODIS_Terra_Data_No_Data": {
             "description": "Terra / MODIS",
             "name": "Areas of No Data (mask)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_250m",
@@ -5759,7 +5759,7 @@
             "max": "340",
             "min": "240",
             "name": "Land Surface Temperature (Day)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_1km",
@@ -5815,7 +5815,7 @@
             "max": "340",
             "min": "240",
             "name": "Land Surface Temperature (Night)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_1km",
@@ -5871,7 +5871,7 @@
             "max": "1",
             "min": "0",
             "name": "Sea Ice",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "antarctic": {
                     "matrixSet": "EPSG3031_1km",
@@ -5965,7 +5965,7 @@
             "max": "100",
             "min": "1",
             "name": "Snow Cover",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "antarctic": {
                     "matrixSet": "EPSG3031_500m",
@@ -6070,7 +6070,7 @@
                 "product": "MOD09"
             },
             "name": "Land Surface Reflectance (1-2-1)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_250m",
@@ -6117,7 +6117,7 @@
                 "product": "MOD09"
             },
             "name": "Land Surface Reflectance (True Color)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_500m",
@@ -6163,7 +6163,7 @@
                 "product": "MOD09"
             },
             "name": "Land Surface Reflectance (7-2-1)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_500m",
@@ -6215,7 +6215,7 @@
             "max": "9.6411",
             "min": "0.1",
             "name": "Water Vapor (Day)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -6269,7 +6269,7 @@
             "max": "9.6411",
             "min": "0.1",
             "name": "Water Vapor (Night)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -6315,7 +6315,7 @@
             "bins": 1,
             "description": "Terra / MODIS, SRTM",
             "name": "Global 250m Water Map",
-            "product": "static",
+            "period": "static",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_250m",
@@ -6359,7 +6359,7 @@
             "max": "0.5",
             "min": "0.27",
             "name": "Absorbing Aerosol Optical Depth",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -6407,7 +6407,7 @@
             "max": "2.0",
             "min": "1.1",
             "name": "Aerosol Index",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -6455,7 +6455,7 @@
             "max": "2.0",
             "min": "1.1",
             "name": "Aerosol Optical Depth",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -6503,7 +6503,7 @@
             "max": "1100",
             "min": "0",
             "name": "Cloud Pressure",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -6551,7 +6551,7 @@
             "max": "2.0",
             "min": "0.8",
             "name": "Sulfur Dioxide (Lower Troposphere)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -6600,7 +6600,7 @@
             "max": "2.0",
             "min": "0.4",
             "name": "Sulfur Dioxide (Middle Troposphere)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -6649,7 +6649,7 @@
             "max": "2.0",
             "min": "1.2",
             "name": "Sulfur Dioxide (Planetary Boundary Layer)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -6698,7 +6698,7 @@
             "max": "2.0",
             "min": "0.4",
             "name": "Sulfur Dioxide (Upper Troposphere and Stratosphere)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -6749,7 +6749,7 @@
                 "layers": "Terra_Orbit_Asc",
                 "transparent": "true"
             },
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {}
             },
@@ -6774,7 +6774,7 @@
                 "layers": "Terra_Orbit_Dsc",
                 "transparent": "true"
             },
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "geographic": {}
             },
@@ -6794,7 +6794,7 @@
         "VIIRS_CityLights_2012": {
             "description": "Suomi NPP / VIIRS via NASA Earth Observatory",
             "name": "Earth at Night 2012",
-            "product": "static",
+            "period": "static",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_500m",
@@ -6836,7 +6836,7 @@
         "antarctic_coastlines": {
             "description": "ADD SCAR / Coastlines",
             "name": "Coastlines",
-            "product": "static",
+            "period": "static",
             "projections": {
                 "antarctic": {
                     "matrixSet": "EPSG3031_250m",
@@ -6876,7 +6876,7 @@
         "arctic_coastlines": {
             "description": "Polarview / Coastlines (EPSG:3995)",
             "name": "Coastlines",
-            "product": "static",
+            "period": "static",
             "projections": {
                 "arctic": {
                     "matrixSet": "EPSG3413_250m",
@@ -6916,7 +6916,7 @@
         "arctic_coastlines_3413": {
             "description": "OpenStreetMap / Coastlines",
             "name": "Coastlines",
-            "product": "static",
+            "period": "static",
             "projections": {
                 "arctic": {
                     "matrixSet": "EPSG3413_250m",
@@ -6960,7 +6960,7 @@
                 "format": "image/png",
                 "layers": "arctic_graticule"
             },
-            "product": "static",
+            "period": "static",
             "projections": {
                 "arctic": {
                     "url": [
@@ -6986,7 +6986,7 @@
                 "format": "image/png",
                 "layers": "arctic_graticule_3413"
             },
-            "product": "static",
+            "period": "static",
             "projections": {
                 "arctic": {
                     "url": [
@@ -7014,7 +7014,7 @@
                 "transitionEffect": "none",
                 "transparent": "true"
             },
-            "product": "static",
+            "period": "static",
             "projections": {
                 "arctic": {},
                 "geographic": {}
@@ -7039,7 +7039,7 @@
                 "layers": "cartographic:esri-administrative-boundaries_level-1",
                 "transparent": "true"
             },
-            "product": "static",
+            "period": "static",
             "projections": {
                 "geographic": {}
             },
@@ -7065,7 +7065,7 @@
                 "transitionEffect": "none",
                 "transparent": "true"
             },
-            "product": "static",
+            "period": "static",
             "projections": {
                 "geographic": {}
             },
@@ -7089,7 +7089,7 @@
                 "layers": "grump-v1-population-count_2000",
                 "transparent": "true"
             },
-            "product": "static",
+            "period": "static",
             "projections": {
                 "arctic": {},
                 "geographic": {}
@@ -7109,7 +7109,7 @@
         "land_mask": {
             "description": "OpenStreetMap / Coastlines",
             "name": "Land / Water Map",
-            "product": "static",
+            "period": "static",
             "projections": {
                 "antarctic": {
                     "matrixSet": "EPSG3031_250m",
@@ -7198,7 +7198,7 @@
         "land_water_map": {
             "description": "OpenStreetMap / Coastlines",
             "name": "Land / Water Map",
-            "product": "static",
+            "period": "static",
             "projections": {
                 "antarctic": {
                     "matrixSet": "EPSG3031_250m",
@@ -7292,7 +7292,7 @@
                 "layers": "ndh-cyclone-hazard-frequency-distribution",
                 "transparent": "true"
             },
-            "product": "static",
+            "period": "static",
             "projections": {
                 "geographic": {}
             },
@@ -7316,7 +7316,7 @@
                 "layers": "ndh-cyclone-mortality-risks-distribution",
                 "transparent": "true"
             },
-            "product": "static",
+            "period": "static",
             "projections": {
                 "geographic": {}
             },
@@ -7340,7 +7340,7 @@
                 "layers": "ndh-cyclone-proportional-economic-loss-risk-deciles",
                 "transparent": "true"
             },
-            "product": "static",
+            "period": "static",
             "projections": {
                 "geographic": {}
             },
@@ -7364,7 +7364,7 @@
                 "layers": "ndh-drought-hazard-frequency-distribution",
                 "transparent": "true"
             },
-            "product": "static",
+            "period": "static",
             "projections": {
                 "geographic": {}
             },
@@ -7388,7 +7388,7 @@
                 "layers": "ndh-drought-mortality-risks-distribution",
                 "transparent": "true"
             },
-            "product": "static",
+            "period": "static",
             "projections": {
                 "geographic": {}
             },
@@ -7412,7 +7412,7 @@
                 "layers": "ndh-drought-proportional-economic-loss-risk-deciles",
                 "transparent": "true"
             },
-            "product": "static",
+            "period": "static",
             "projections": {
                 "geographic": {}
             },
@@ -7436,7 +7436,7 @@
                 "layers": "ndh-flood-hazard-frequency-distribution",
                 "transparent": "true"
             },
-            "product": "static",
+            "period": "static",
             "projections": {
                 "geographic": {}
             },
@@ -7460,7 +7460,7 @@
                 "layers": "ndh-flood-mortality-risks-distribution",
                 "transparent": "true"
             },
-            "product": "static",
+            "period": "static",
             "projections": {
                 "geographic": {}
             },
@@ -7484,7 +7484,7 @@
                 "layers": "ndh-flood-proportional-economic-loss-risk-deciles",
                 "transparent": "true"
             },
-            "product": "static",
+            "period": "static",
             "projections": {
                 "geographic": {}
             },
@@ -7508,7 +7508,7 @@
                 "layers": "ndh-volcano-hazard-frequency-distribution",
                 "transparent": "true"
             },
-            "product": "static",
+            "period": "static",
             "projections": {
                 "geographic": {}
             },
@@ -7532,7 +7532,7 @@
                 "layers": "ndh-volcano-mortality-risks-distribution",
                 "transparent": "true"
             },
-            "product": "static",
+            "period": "static",
             "projections": {
                 "geographic": {}
             },
@@ -7556,7 +7556,7 @@
                 "layers": "ndh-volcano-proportional-economic-loss-risk-deciles",
                 "transparent": "true"
             },
-            "product": "static",
+            "period": "static",
             "projections": {
                 "geographic": {}
             },
@@ -7575,7 +7575,7 @@
         "ol_graticule": {
             "description": "OpenLayers / Graticule Control",
             "name": "Latitude-Longitude Lines",
-            "product": "static",
+            "period": "static",
             "projections": {
                 "geographic": {}
             },
@@ -7589,7 +7589,7 @@
                 "layers": "polarview:graticule3031_10x30",
                 "transparent": "true"
             },
-            "product": "static",
+            "period": "static",
             "projections": {
                 "antarctic": {}
             },
@@ -7609,7 +7609,7 @@
         "polarview:graticuleN": {
             "description": "Polarview / Graticule (EPSG:3995)",
             "name": "Latitude-Longitude Lines",
-            "product": "static",
+            "period": "static",
             "projections": {
                 "arctic": {
                     "matrixSet": "EPSG3413_250m",

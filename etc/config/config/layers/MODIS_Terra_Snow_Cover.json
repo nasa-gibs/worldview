@@ -3,7 +3,7 @@
     "max": "100",
     "min": "1",
     "name": "Snow Cover",
-    "product": "daily",
+    "period": "daily",
     "projections": {
         "antarctic": {
             "matrixSet": "EPSG3031_500m",

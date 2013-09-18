@@ -6,7 +6,7 @@
         "layers": "grump-v1-population-count_2000",
         "transparent": "true"
     },
-    "product": "static",
+    "period": "static",
     "projections": {
         "arctic": {},
         "geographic": {}

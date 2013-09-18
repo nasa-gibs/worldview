@@ -3,7 +3,7 @@
     "max": "1100",
     "min": "0",
     "name": "Cloud Pressure",
-    "product": "daily",
+    "period": "daily",
     "projections": {
         "geographic": {
             "matrixSet": "EPSG4326_2km",

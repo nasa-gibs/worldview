@@ -6,7 +6,7 @@
         "layers": "ndh-flood-mortality-risks-distribution",
         "transparent": "true"
     },
-    "product": "static",
+    "period": "static",
     "projections": {
         "geographic": {}
     },

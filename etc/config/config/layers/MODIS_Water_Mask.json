@@ -2,7 +2,7 @@
     "bins": 1,
     "description": "Terra / MODIS, SRTM",
     "name": "Global 250m Water Map",
-    "product": "static",
+    "period": "static",
     "projections": { 
         "geographic": {
             "matrixSet": "EPSG4326_250m",

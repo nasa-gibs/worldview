@@ -3,7 +3,7 @@
     "max": "250",
     "min": "0",
     "name": "Carbon Monoxide (215 hPa, Day)",
-    "product": "daily",
+    "period": "daily",
     "projections": {
         "geographic": {
             "matrixSet": "EPSG4326_2km",

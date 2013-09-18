@@ -1,7 +1,7 @@
 {
     "description": "Terra / MODIS",
     "name": "Land Surface Reflectance (1-2-1)",
-    "product": "daily",
+    "period": "daily",
     "projections": {
         "geographic": {
             "matrixSet": "EPSG4326_250m",

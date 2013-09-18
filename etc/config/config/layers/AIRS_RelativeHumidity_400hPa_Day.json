@@ -4,7 +4,7 @@
     "max": "100",
     "min": "0",
     "name": "Relative Humidity (400 hPa, Day)",
-    "product": "daily",
+    "period": "daily",
     "projections": {
         "geographic": {
             "matrixSet": "EPSG4326_2km",

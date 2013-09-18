@@ -1,7 +1,7 @@
 {
     "description": "Aqua / MODIS",
     "name": "Corrected Reflectance (7-2-1)",
-    "product": "daily",
+    "period": "daily",
     "projections": {
         "antarctic": {
             "matrixSet": "EPSG3031_250m",

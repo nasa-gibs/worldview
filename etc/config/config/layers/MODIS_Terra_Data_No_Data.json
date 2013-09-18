@@ -1,7 +1,7 @@
 {
     "description": "Terra / MODIS",
     "name": "Areas of No Data (mask)",
-    "product": "daily",
+    "period": "daily",
     "projections": {
         "geographic": {
             "matrixSet": "EPSG4326_250m",

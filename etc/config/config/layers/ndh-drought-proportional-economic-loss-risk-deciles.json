@@ -6,7 +6,7 @@
         "layers": "ndh-drought-proportional-economic-loss-risk-deciles",
         "transparent": "true"
     },
-    "product": "static",
+    "period": "static",
     "projections": {
         "geographic": {}
     },

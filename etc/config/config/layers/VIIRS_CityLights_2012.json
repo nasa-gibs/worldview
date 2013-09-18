@@ -1,7 +1,7 @@
 {
     "description": "Suomi NPP / VIIRS via NASA Earth Observatory",
     "name": "Earth at Night 2012",
-    "product": "static",
+    "period": "static",
     "projections": {
         "geographic": {
             "matrixSet": "EPSG4326_500m",

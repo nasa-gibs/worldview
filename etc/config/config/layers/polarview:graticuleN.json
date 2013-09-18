@@ -1,7 +1,7 @@
 {
     "description": "Polarview / Graticule (EPSG:3995)",
     "name": "Latitude-Longitude Lines",
-    "product": "static",
+    "period": "static",
     "projections": {
         "arctic": {
             "matrixSet": "EPSG3413_250m",

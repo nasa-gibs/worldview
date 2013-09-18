@@ -6,7 +6,7 @@
         "layers": "polarview:graticule3031_10x30",
         "transparent": "true"
     },
-    "product": "static",
+    "period": "static",
     "projections": {
         "antarctic": {}
     },

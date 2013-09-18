@@ -3,7 +3,7 @@
     "max": "340",
     "min": "190",
     "name": "Brightness Temperature (Band 31-Day)",
-    "product": "daily",
+    "period": "daily",
     "projections": {
         "antarctic": {
             "matrixSet": "EPSG3031_1km",

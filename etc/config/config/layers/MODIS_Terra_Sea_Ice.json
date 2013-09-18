@@ -3,7 +3,7 @@
     "max": "1",
     "min": "0",
     "name": "Sea Ice",
-    "product": "daily",
+    "period": "daily",
     "projections": {
         "antarctic": {
             "matrixSet": "EPSG3031_1km",

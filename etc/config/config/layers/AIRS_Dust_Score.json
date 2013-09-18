@@ -5,7 +5,7 @@
     "max": "520",
     "min": "360",
     "name": "Dust Score",
-    "product": "daily",
+    "period": "daily",
     "projections": {
         "geographic": {
             "matrixSet": "EPSG4326_2km",

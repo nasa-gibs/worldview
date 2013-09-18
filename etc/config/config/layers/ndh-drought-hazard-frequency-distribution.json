@@ -6,7 +6,7 @@
         "layers": "ndh-drought-hazard-frequency-distribution",
         "transparent": "true"
     },
-    "product": "static",
+    "period": "static",
     "projections": {
         "geographic": {}
     },

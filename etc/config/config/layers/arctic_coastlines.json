@@ -1,7 +1,7 @@
 {
     "description": "Polarview / Coastlines (EPSG:3995)",
     "name": "Coastlines",
-    "product": "static",
+    "period": "static",
     "projections": {
         "arctic": {
             "matrixSet": "EPSG3413_250m",

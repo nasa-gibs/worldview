@@ -3,7 +3,7 @@
     "max": "950",
     "min": "250",
     "name": "Cloud Top Pressure (Day)",
-    "product": "daily",
+    "period": "daily",
     "projections": {
         "geographic": {
             "matrixSet": "EPSG4326_2km",

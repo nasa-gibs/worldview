@@ -3,7 +3,7 @@
     "max": "0.70",
     "min": "0.27",
     "name": "MODIS Combined Value-Added Aerosol Optical Depth",
-    "product": "daily",
+    "period": "daily",
     "projections": {
         "geographic": {
             "matrixSet": "EPSG4326_2km",

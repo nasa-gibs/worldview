@@ -6,7 +6,7 @@
         "layers": "cartographic:esri-administrative-boundaries_level-1",
         "transparent": "true"
     },
-    "product": "static",
+    "period": "static",
     "projections": {
         "geographic": {}
     },

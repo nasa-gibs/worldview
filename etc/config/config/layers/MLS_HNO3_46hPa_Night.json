@@ -3,7 +3,7 @@
     "max": "10",
     "min": "0",
     "name": "Nitric Acid (46 hPa, Night)",
-    "product": "daily",
+    "period": "daily",
     "projections": {
         "geographic": {
             "matrixSet": "EPSG4326_2km",

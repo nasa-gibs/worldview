@@ -3,7 +3,7 @@
     "max": "4.5",
     "min": "0.5",
     "name": "Ozone (46 hPa, Night)",
-    "product": "daily",
+    "period": "daily",
     "projections": {
         "geographic": {
             "matrixSet": "EPSG4326_2km",
