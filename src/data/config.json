@@ -64,16 +64,11 @@
         "AIRS_CO_Total_Column_Day": {
             "bins": 7,
             "description": "Aqua / AIRS",
-            "echo": {
-                "product": "AIRX2RET",
-                "query": {
-                    "dayNightFlag": "DAY"
-                }
-            },
             "max": "120",
             "min": "98.8",
             "name": "Carbon Monoxide (Total Column, Day)",
-            "product": "daily",
+            "period": "daily",
+            "product": "AIRX2RET_DAY",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -127,16 +122,11 @@
         "AIRS_CO_Total_Column_Night": {
             "bins": 7,
             "description": "Aqua / AIRS",
-            "echo": {
-                "product": "AIRX2RET",
-                "query": {
-                    "dayNightFlag": "NIGHT"
-                }
-            },
             "max": "120",
             "min": "98.8",
             "name": "Carbon Monoxide (Total Column, Night)",
-            "product": "daily",
+            "period": "daily",
+            "product": "AIRX2RET_NIGHT",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -3671,7 +3661,7 @@
         "MODIS_Aqua_CorrectedReflectance_TrueColor": {
             "description": "Aqua / MODIS",
             "name": "Corrected Reflectance (True Color)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "antarctic": {
                     "matrixSet": "EPSG3031_250m",
@@ -5627,7 +5617,7 @@
         "MODIS_Terra_CorrectedReflectance_TrueColor": {
             "description": "Terra / MODIS",
             "name": "Corrected Reflectance (True Color)",
-            "product": "daily",
+            "period": "daily",
             "projections": {
                 "antarctic": {
                     "matrixSet": "EPSG3031_250m",
@@ -7659,7 +7649,7 @@
         "sedac_bound": {
             "description": "SEDAC / National Boundaries",
             "name": "National Boundaries",
-            "product": "static",
+            "period": "static",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_250m",
@@ -60067,9 +60057,9 @@
                 ]
             }
         },
-        "AIRX2RET": {
+        "AIRX2RET_DAY": {
             "handler": "MODISSwath",
-            "name": "AIRS/Aqua Level 2 Standard physical retrieval (AIRS+AMSU)",
+            "name": "AIRS/Aqua Level 2 Standard physical retrieval (AIRS+AMSU), Day",
             "nrt": {
                 "by": "regex",
                 "field": "dataset_id",
@@ -60077,6 +60067,24 @@
             },
             "query": {
                 "dataCenterId": "GSFCS4PA",
+                "dayNightFlag": "DAY",
+                "shortName": [
+                    "AIRX2RET",
+                    "AIRX2RET_NRT"
+                ]
+            }
+        },
+        "AIRX2RET_NIGHT": {
+            "handler": "MODISSwath",
+            "name": "AIRS/Aqua Level 2 Standard physical retrieval (AIRS+AMSU), Night",
+            "nrt": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "\\(NRT\\)"
+            },
+            "query": {
+                "dataCenterId": "GSFCS4PA",
+                "dayNightFlag": "NIGHT",
                 "shortName": [
                     "AIRX2RET",
                     "AIRX2RET_NRT"

@@ -271,10 +271,7 @@ Worldview.DataDownload.Model = function(config) {
             var id = layer;
             var layerName = config.layers[layer].name;
             var description = config.layers[layer].description;
-            var productName = null;
-            if ( config.layers[layer].echo ) {
-                productName = config.layers[layer].echo.product;
-            }
+            var productName = config.layers[layer].product;
             self.layers.push({
                 id: id,
                 name: layerName,
@@ -309,8 +306,8 @@ Worldview.DataDownload.Model = function(config) {
         // Find the top most layer that has a product entry in ECHO
         for ( var i = state.layers.length - 1; i >= 0; i-- ) {
             var layerName = state.layers[i];
-            if ( config.layers[layerName].echo ) {
-                foundProduct = config.layers[layerName].echo.product;
+            if ( config.layers[layerName].product) {
+                foundProduct = config.layers[layerName].product;
             }
         }
         return foundProduct;

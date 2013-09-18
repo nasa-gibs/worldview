@@ -521,12 +521,12 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
             config.parameters.projection = 
                 mapConfig.projections[proj].projection;
         }
-        if ( config.product === "daily" ) {
+        if ( config.period === "daily" ) {
             return Worldview.Map.DailyLayerSet(map, config);
-        } else if ( config.product === "static" ) {
+        } else if ( config.period === "static" ) {
             return Worldview.Map.StaticLayerSet(map, config);
         }
-        throw new Error("Unsupported product type: " + config.product);
+        throw new Error("Unsupported product type: " + config.period);
     };
     
     var onZoomEnd = function(evt) {

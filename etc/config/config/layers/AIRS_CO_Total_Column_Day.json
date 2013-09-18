@@ -3,7 +3,7 @@
     "max": "120",
     "min": "98.8",
     "name": "Carbon Monoxide (Total Column, Day)",
-    "product": "daily",
+    "period": "daily",
     "projections": {
         "geographic": {
             "matrixSet": "EPSG4326_2km",
@@ -42,10 +42,5 @@
     "startDate": "2012-04-07",
     "type": "wmts",
     "units": "ppb",
-    "echo": {
-        "product": "AIRX2RET",
-        "query": {
-            "dayNightFlag": "DAY"
-        }
-    }
+    "product": "AIRX2RET_DAY"
 }
