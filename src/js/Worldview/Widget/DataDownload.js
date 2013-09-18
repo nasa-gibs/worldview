@@ -99,7 +99,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
             filter: true,
             search: false,
             action: {
-                text: "Download (~0GB)", 
+                text: "Download", 
                 callback: function() { showDownloadList(); }
             },
             selectableCategories: {
@@ -182,12 +182,26 @@ Worldview.Widget.DataDownload = function(config, spec) {
         var selected = Worldview.size(model.selectedGranules);
         if ( selected > 0 ) {
             list.setButtonEnabled(true);
+            var totalSize = model.getSelectionSize();
+            if ( totalSize ) {
+                var formattedSize = Math.round(totalSize * 100) / 100;
+                list.setActionButtonText("Download (" + formattedSize + " MB)");
+            } else {
+                list.setActionButtonText("Download");
+            }
         } else {
             list.setButtonEnabled(false);
-        }            
+            list.setActionButtonText("Download");
+        }
+        
+        var counts = model.getSelectionCounts();
+        $.each(counts, function(productId, count) {
+            list.setCategoryDynamicText(productId, "" + count + " selected");    
+        });            
         if ( downloadListPanel && downloadListPanel.visible() ) {
             downloadListPanel.show();
         }     
+
     };
     
     var showDownloadList = function() {

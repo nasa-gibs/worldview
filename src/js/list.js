@@ -317,6 +317,14 @@ SOTE.widget.List.prototype.setButtonEnabled = function(enabled) {
     }
 };
 
+SOTE.widget.List.prototype.setActionButtonText = function(text) {
+    $("#" + this.id + "action").attr("value", text);    
+};
+
+SOTE.widget.List.prototype.setCategoryDynamicText = function(id, text) {
+    $("#" + id + "dynamictext").html(text);    
+};
+
 SOTE.widget.List.act = function(e){
 	var self = e.data.self;
 	self.action.callback(self.args);

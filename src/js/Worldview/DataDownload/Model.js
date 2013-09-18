@@ -227,6 +227,34 @@ Worldview.DataDownload.Model = function(config) {
         self.events.trigger(self.EVENT_GRANULE_UNSELECT, granule); 
     };
     
+    self.getSelectionSize = function() {
+        var totalSize = 0;
+        var sizeValid = true;
+        $.each(self.selectedGranules, function(index, granule) {
+            if ( sizeValid && granule.granule_size ) {
+                totalSize += parseFloat(granule.granule_size);    
+            } else {
+                sizeValid = false;
+            }
+        });
+        if ( sizeValid ) {
+            return totalSize;
+        }           
+    };
+    
+    self.getSelectionCounts = function() {
+        counts = {};
+        $.each(self.layers, function(index, layer) {
+            if ( layer.product ) {
+                counts[layer.product] = 0;    
+            }
+        });
+        $.each(self.selectedGranules, function(index, granule) {
+            counts[granule.product] ++;
+        });
+        return counts;    
+    };
+    
     self.setPreference = function(preference) {
         self.prefer = preference;
         query();
