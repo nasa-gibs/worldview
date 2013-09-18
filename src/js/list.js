@@ -196,7 +196,7 @@ SOTE.widget.List.prototype.update = function(){
 		var $header = $("<h3 class='head'></h3>").html(title);
 		
 		if(this.selectableCategories && !this.data[key].notSelectable){
-			$header.append($("<div id='"+key+"dynamictext' class='dynamic'>"+this.selectableCategories.defaultText+"</div>"));
+			$header.append($("<nobr><div id='"+key+"dynamictext' class='dynamic'>"+this.selectableCategories.defaultText+"</div></nobr>"));
 			$header.append($("<input type='radio' name='cats' class='cats "+this.id+"cats' value='"+key+"' />"));	
 			$("#"+this.id).undelegate("."+this.id+"cats" ,'click');	
 			$("#"+this.id).delegate("."+this.id+"cats" ,'click',{self:this},SOTE.widget.List.handleCategorySelection);
