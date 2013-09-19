@@ -170,7 +170,8 @@ $(function() {// Initialize "static" vars
         var dataDownload = Worldview.Widget.DataDownload(config, {
             selector: "#DataDownload",
             model: dataDownloadModel, 
-            maps: map.maps
+            maps: map.maps,
+            paletteWidget: palettes
         });
         dataDownload.render();
         

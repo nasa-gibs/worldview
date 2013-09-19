@@ -19,7 +19,7 @@ SOTE.widget.Products.prototype = new SOTE.widget.Component;
   * @augments SOTE.widget.Component
   * 
 */
-SOTE.widget.Products = function(containerId, config){
+SOTE.widget.Products = function(containerId, spec){
     this.log = Logging.getLogger("Worldview.Widget.Products");
     //this.VALID_PROJECTIONS = ["geographic", "arctic", "antarctic"];
     
@@ -34,35 +34,35 @@ SOTE.widget.Products = function(containerId, config){
 	this.containerId=containerId;	
 
 	//Define an object for holding configuration 
-	if (config===undefined){
-		config={};
+	if (spec===undefined){
+		spec={};
 	}
 
-	if(config.title === undefined){
-	    config.title = "My Products";
+	if(spec.title === undefined){
+	    spec.title = "My Products";
 	}
 
-	if(config.categories === undefined){
-	    config.categories = ["Category 1","Category 2"]; 
+	if(spec.categories === undefined){
+	    spec.categories = ["Category 1","Category 2"]; 
 	}
 
-	if(config.callback === undefined){
-	    config.callback = null; 
+	if(spec.callback === undefined){
+	    spec.callback = null; 
 	}
 
-	if(config.state === undefined || config.state === ""){
-		config.state = "geographic";
+	if(spec.state === undefined || spec.state === ""){
+		spec.state = "geographic";
 	}
 
        
-    this.state = config.state;
-	this.selected = config.selected;
+    this.state = spec.state;
+	this.selected = spec.selected;
 	this.isCollapsed = false;
-    this.dataSourceUrl = config.dataSourceUrl;
-    this.categories = config.categories;
+    this.dataSourceUrl = spec.dataSourceUrl;
+    this.categories = spec.categories;
 	this.initRenderComplete = false;
-	this.paletteWidget = config.paletteWidget;
-	this.config = config.config;
+	this.paletteWidget = spec.paletteWidget;
+	this.config = spec.config;
 	this.events = Worldview.Events();
 	
 	this.init();
@@ -171,7 +171,6 @@ SOTE.widget.Products.prototype.render = function(){
 	    SOTE.widget.Products.change(e, ui);
     }});
 	this.b = new SOTE.widget.Bank("products", {
-	    paletteWidget: this.paletteWidget, 
 	    dataSourceUrl: "ap_products.php",
 	    title: "My Layers",
 	    selected: {
@@ -180,7 +179,8 @@ SOTE.widget.Products.prototype.render = function(){
 	        geographic:"baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,sedac_bound"
         },
         categories:["Base Layers","Overlays"],
-        config: this.config
+        config: this.config,
+        paletteWidget: this.paletteWidget
     });
     this.s = new SOTE.widget.Selector("selectorbox", {
         dataSourceUrl: "ap_products.php",
@@ -192,18 +192,6 @@ SOTE.widget.Products.prototype.render = function(){
         },
         config: this.config
     });	
-    /* FIXME: Remove
-    this.d = new SOTE.widget.Download("ddownload", {
-        dataSourceUrl: "ap_products.php",
-        categories: ["Base Layers","Overlays"], 
-        selected: {
-            antarctic: "baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,antarctic_coastlines", 
-            arctic:"baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,arctic_coastlines",
-            geographic:"baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,sedac_bound"
-        },
-        config: this.config    	
-    });
-    */
     
     //$('#'+this.id+"prods").on("tabsshow",SOTE.widget.Products.change);
    	$('.accordionToggler').bind('click',{self:this},SOTE.widget.Products.toggle);

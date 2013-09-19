@@ -19,7 +19,7 @@ SOTE.widget.List.prototype = new SOTE.widget.Component;
   * @augments SOTE.widget.Component
   * 
 */
-SOTE.widget.List = function(containerId, config){
+SOTE.widget.List = function(containerId, spec){
     this.log = Logging.getLogger("Worldview.Widget.List");
     
 	//Get the ID of the container element
@@ -33,60 +33,61 @@ SOTE.widget.List = function(containerId, config){
 	this.containerId=containerId;	
 
 	//Define an object for holding configuration 
-	if (config===undefined){
-		config={};
+	if (spec===undefined){
+		spec={};
 	}
 
-	if(config.title === undefined){
-	    config.title = "My List";
+	if(spec.title === undefined){
+	    spec.title = "My List";
 	}
 
-	if(config.data === undefined){
+	if(spec.data === undefined){
 	    SOTE.util.throwError("List data is not defined.");
 	}
 	
-	if(config.search == undefined){
-		config.search = false;
-		config.selectedCategory = 'All';
+	if(spec.search == undefined){
+		spec.search = false;
+		spec.selectedCategory = 'All';
 	}
 	
-	if(config.search && config.category == undefined){
-		config.selectedCategory = 'All';
+	if(spec.search && spec.category == undefined){
+		spec.selectedCategory = 'All';
 	}
 	
-	if(config.filter == undefined){
-		config.filter = false;
+	if(spec.filter == undefined){
+		spec.filter = false;
 	}
 	
-	if(config.customClasses == undefined){
-		config.customClasses = '';
+	if(spec.customClasses == undefined){
+		spec.customClasses = '';
 	}
 	
-	if(config.sortable == undefined){
-		config.sortable = false;
+	if(spec.sortable == undefined){
+		spec.sortable = false;
 	}
 	
 
-	this.customClasses = config.customClasses;
+	this.customClasses = spec.customClasses;
     this.hidden = new Object;
     this.values = new Object;
     this.keyword = '';
-    this.search = config.search;
-    this.filter = config.filter;
-    this.hide = config.hide;
-    this.close = config.close;
-    this.checkbox = config.checkbox;
-    this.selectedCategory = config.defaultCategory;
-    this.selectableCategories = config.selectableCategories;
-    this.action = config.action;
-    this.categories = config.categories;
-    this.sortable = config.sortable;
-    this.callback = config.onchange;
-    this.args = config.args;
-       
-    this.data = config.data;
+    this.search = spec.search;
+    this.filter = spec.filter;
+    this.hide = spec.hide;
+    this.close = spec.close;
+    this.checkbox = spec.checkbox;
+    this.selectedCategory = spec.defaultCategory;
+    this.selectableCategories = spec.selectableCategories;
+    this.action = spec.action;
+    this.categories = spec.categories;
+    this.sortable = spec.sortable;
+    this.callback = spec.onchange;
+    this.args = spec.args;
+    this.config = spec.config;
+    this.data = spec.data;
+    this.paletteWidget = spec.paletteWidget;
     
-   	this.selected = this.unserialize(config.selected);
+   	this.selected = this.unserialize(spec.selected);
    	this.selected = this.selected[1];
 
 	this.init();
@@ -173,8 +174,26 @@ SOTE.widget.List.prototype.render = function(){
 	
 };
 
-SOTE.widget.List.prototype.update = function(){
+SOTE.widget.List.prototype.update = function() {
+    try {
+        this._update();
+    } catch ( error ) {
+        Worldview.error("Internal error", error);
+    }
+};
 
+SOTE.widget.List.prototype._update = function(){
+
+    var openPaletteSelector = function(name) {
+        return function() {
+            if ( !Worldview.Support.allowCustomPalettes() ) {
+                Worldview.Support.showUnsupportedMessage();
+            } else {
+               self.paletteWidget.displaySelector(name);
+            }
+        };        
+    };
+    
 	$content = $("#" + this.id + "content").empty();
 
 	// If search is enabled and a keyword exists, break keyword down into words array
@@ -213,6 +232,7 @@ SOTE.widget.List.prototype.update = function(){
 			
 			var item = this.data[key].items[i];
 			var label = item.label;
+			var itemKey = item.value.replace(/:/g,"colon");
 			var fLabel = item.label.replace(" ","-").toLowerCase();
 			
 			if(item.value in this.selected){
@@ -248,7 +268,7 @@ SOTE.widget.List.prototype.update = function(){
 				
 				if(!this.search || (keywords && count == keywords.length)){
 					
-					$item = $("<li id='"+key+"-"+item.value+"' class='item'></li>");
+					$item = $("<li id='"+ this.id + key + itemKey + "' class='item'></li>");
 					
 					if(this.close){
 						$item.append("<a><img class='close bank-item-img' id='close"+key+"-"+item.value.replace(/:/g,"colon")+"' title='Remove Layer' src='images/close-red-x.png' /></a>");
@@ -269,8 +289,27 @@ SOTE.widget.List.prototype.update = function(){
 					}
 					$item.append("<h4>"+label+"</h4>");
 					$item.append("<p>"+item.sublabel+"</p>");
-					
-					$category.append($item);		
+
+                    var paletteInfo = this.getPaletteInfo(item.value);					
+					if ( paletteInfo ) {
+    					if ( paletteInfo ) {
+    					   var units = "";
+    					   if ( paletteInfo.units ) {
+    					       units = "<span class='units'>(" + paletteInfo.units+")</span>";
+    					   }
+    					   $item.append(
+    					       "<div>" +
+    					           "<span class='palette'>" +
+    					               "<span class='p-min'>" + paletteInfo.min + "</span>" +
+    					               "<canvas class='colorBar' id='canvas_" + this.id + itemKey + "'></canvas>" +
+    					               "<span class='p-max'>" + paletteInfo.max + "</span>" + 
+    					               units + 
+    				               "</span>" +
+    			               "</div>"
+    					   );
+    					}
+					}
+                    $category.append($item);      
 				}
 			}	
 		}
@@ -278,6 +317,26 @@ SOTE.widget.List.prototype.update = function(){
 		// Append the category (heading + items) to the content div
 		
 		$content.append($category);
+		
+        for(var i=0; i<this.data[key].items.length; ++i){
+            var item = this.data[key].items[i];
+            var label = item.label;
+            var itemKey = item.value.replace(/:/g,"colon");
+            if((!this.filter || item.value in this.selected) && (!this.search || (keywords && count == keywords.length))){
+                var paletteInfo = this.getPaletteInfo(item.value);                  
+                if ( paletteInfo ) {
+                    Worldview.Palette.ColorBar({
+                        selector: "#canvas_" + this.id + itemKey,
+                        bins: paletteInfo.bins,
+                        stops: paletteInfo.stops,
+                        palette: paletteInfo.palette
+                    });
+                    $("#canvas_" + this.id + itemKey)
+                        .click(openPaletteSelector(item.value))
+                        .css("cursor", "pointer");
+                }
+            }
+        } 
 	}
 	
 	// Append show/hide/checkbox events if this.hide = true / this.close = true / this.checkbox = true
@@ -306,6 +365,31 @@ SOTE.widget.List.prototype.update = function(){
 	}
 
 	setTimeout(SOTE.widget.List.adjustCategoryHeights,1,{self:this});	
+};
+
+SOTE.widget.List.prototype.getPaletteInfo = function(layerName) {
+    // Exit now if showing palettes is not desired
+    if ( !this.paletteWidget ) {
+        return;
+    }
+    var layerConfig = this.config.layers[layerName];
+    var renderedPalette  = layerConfig.rendered;
+    // Exit now if layer does not have a palette
+    if ( !renderedPalette ) {
+        return;
+    }
+    return {
+        units: layerConfig.units,
+        min: ( layerConfig.min === undefined ) 
+            ? "&nbsp;&nbsp;&nbsp;&nbsp" 
+            : layerConfig.min,
+        max: ( layerConfig.max === undefined )
+            ?  "&nbsp;&nbsp;&nbsp;&nbsp" 
+            : layerConfig.max,
+        bins: layerConfig.bins,
+        stops: layerConfig.stops,
+        palette: this.paletteWidget.getPalette(layerName)
+    };
 };
 
 SOTE.widget.List.prototype.setButtonEnabled = function(enabled) {

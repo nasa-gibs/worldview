@@ -108,5 +108,5 @@ Worldview.Palette.Palette = function(spec) {
         stops: spec.stops || [],
     };
     
-}
+};
 

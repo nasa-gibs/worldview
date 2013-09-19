@@ -19,7 +19,7 @@ SOTE.widget.Selector.prototype = new SOTE.widget.Component;
   * @augments SOTE.widget.Component
   * 
 */
-SOTE.widget.Selector = function(containerId, config){
+SOTE.widget.Selector = function(containerId, spec){
 	//Get the ID of the container element
 	this.container=document.getElementById(containerId);
 	if (this.container==null){
@@ -31,30 +31,31 @@ SOTE.widget.Selector = function(containerId, config){
 	this.containerId=containerId;	
 
 	//Define an object for holding configuration 
-	if (config===undefined){
-		config={};
+	if (spec===undefined){
+		spec={};
 	}
 	
-	if(config.categories === undefined){
-	    config.categories = ["Category 1","Category 2"]; 
+	if(spec.categories === undefined){
+	    spec.categories = ["Category 1","Category 2"]; 
 	}
 
-	if(config.state === undefined){
-		config.state = "geographic";
+	if(spec.state === undefined){
+		spec.state = "geographic";
 	}
 
-    this.state = config.state;
+    this.state = spec.state;
 
-    this.selected = config.selected;
+    this.selected = spec.selected;
     //this.values = this.unserialize(this.selected[this.state]);
     
     this.meta = new Object;
     this.data = new Object;
-    this.categories = config.categories;
+    this.categories = spec.categories;
     this.cats = new Object;
 	this.initRenderComplete = false;
-	this.dataSourceUrl = config.dataSourceUrl;
-	this.config = config.config;
+	this.dataSourceUrl = spec.dataSourceUrl;
+	this.config = spec.config;
+	this.paletteWidget = spec.paletteWidget;
 	this.statusStr = "";
 	this.init();
 	//this.updateComponent(this.id+"=baselayers.MODIS_Terra_CorrectedReflectance_TrueColor-overlays.fires48.AIRS_Dust_Score.OMI_Aerosol_Index")
@@ -153,7 +154,9 @@ SOTE.widget.Selector.prototype.render = function(){
 		defaultCategory: "All",
 		categories: this.cats,
 		onchange: SOTE.widget.Selector.handleFire,
-		args: this
+		args: this,
+		paletteWidget: this.paletteWidget,
+		config: this.config
 	});
 	
 	//$("#"+this.id).bind("listchange", {self:this}, SOTE.widget.Selector.handleFire);

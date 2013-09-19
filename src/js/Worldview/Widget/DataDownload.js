@@ -93,6 +93,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
         $(spec.selector).height($(spec.selector).parent().outerHeight() - tabs_height); 
         
         list = new SOTE.widget.List(self.containerId, {
+            config: config,
             data: [],
             selected: "~",
             close: false,

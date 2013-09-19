@@ -19,7 +19,7 @@ SOTE.widget.Bank.prototype = new SOTE.widget.Component;
   * @augments SOTE.widget.Component
   * 
 */
-SOTE.widget.Bank = function(containerId, config){
+SOTE.widget.Bank = function(containerId, spec){
     this.log = Logging.getLogger("Worldview.Widget.Bank");
     this.VALID_PROJECTIONS = ["geographic", "arctic", "antarctic"];
     this.hidden = {};
@@ -35,43 +35,43 @@ SOTE.widget.Bank = function(containerId, config){
 	this.containerId=containerId;	
 
 	//Define an object for holding configuration 
-	if (config===undefined){
-		config={};
+	if (spec===undefined){
+		spec={};
 	}
 
-	if(config.title === undefined){
-	    config.title = "My Bank";
+	if(spec.title === undefined){
+	    spec.title = "My Bank";
 	}
 
-	if(config.categories === undefined){
-	    config.categories = ["Category 1","Category 2"]; 
+	if(spec.categories === undefined){
+	    spec.categories = ["Category 1","Category 2"]; 
 	}
 
-	if(config.callback === undefined){
-	    config.callback = null; 
+	if(spec.callback === undefined){
+	    spec.callback = null; 
 	}
 
-	if(config.state === undefined || config.state === ""){
-		config.state = "geographic";
+	if(spec.state === undefined || spec.state === ""){
+		spec.state = "geographic";
 	}
 
        
-    this.state = config.state;
-	this.selected = config.selected;
+    this.state = spec.state;
+	this.selected = spec.selected;
 	
-    this.dataSourceUrl = config.dataSourceUrl;
+    this.dataSourceUrl = spec.dataSourceUrl;
 
-    this.title = config.title;
-    this.callback = config.callback;
-    this.selector = config.selector;
+    this.title = spec.title;
+    this.callback = spec.callback;
+    this.selector = spec.selector;
     this.data = new Object;
     this.buildMetaDone = false;
-    this.categories = config.categories;
+    this.categories = spec.categories;
 	this.initRenderComplete = false;
-	this.dataSourceUrl = config.dataSourceUrl;
+	this.dataSourceUrl = spec.dataSourceUrl;
 	this.statusStr = "";
-	this.config = config.config;
-	this.paletteWidget = config.paletteWidget;
+	this.config = spec.config;
+	this.paletteWidget = spec.paletteWidget;
 	this.queryString = "";
 	this.noFireVal = null;
 	this.init();
@@ -180,6 +180,7 @@ SOTE.widget.Bank.prototype.render = function(){
 	$('#'+this.id).height($('#'+this.id).parent().outerHeight() - tabs_height);	
 	
 	this.list = new SOTE.widget.List(this.id,{
+	    config: this.config,
 		data: this.data,
 		selected: this.selected[this.state],
 		hide: true,
@@ -188,7 +189,8 @@ SOTE.widget.Bank.prototype.render = function(){
 		search: false,
 		sortable: true,
 		onchange: SOTE.widget.Bank.handleFire,
-		args: this
+		args: this,
+		paletteWidget: this.paletteWidget
 	});
 	
 	//$("#"+this.id).bind("listchange", {self:this}, SOTE.widget.Bank.handleFire);
