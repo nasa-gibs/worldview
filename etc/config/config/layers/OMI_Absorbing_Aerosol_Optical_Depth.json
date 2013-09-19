@@ -41,5 +41,6 @@
     "rendered": "OMI_Aerosol",
     "startDate": "2012-04-07",
     "type": "wmts",
-    "units": ""
+    "units": "",
+    "product": "OMAERUV"
 }

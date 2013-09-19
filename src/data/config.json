@@ -6099,6 +6099,7 @@
             "min": "0.27",
             "name": "Absorbing Aerosol Optical Depth",
             "period": "daily",
+            "product": "OMAERUV",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -6147,6 +6148,7 @@
             "min": "1.1",
             "name": "Aerosol Index",
             "period": "daily",
+            "product": "OMAERUV",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -6195,6 +6197,7 @@
             "min": "1.1",
             "name": "Aerosol Optical Depth",
             "period": "daily",
+            "product": "OMAERUV",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -6243,6 +6246,7 @@
             "min": "0",
             "name": "Cloud Pressure",
             "period": "daily",
+            "product": "OMCLDRR",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -6291,6 +6295,7 @@
             "min": "0.8",
             "name": "Sulfur Dioxide (Lower Troposphere)",
             "period": "daily",
+            "product": "OMSO2",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -6340,6 +6345,7 @@
             "min": "0.4",
             "name": "Sulfur Dioxide (Middle Troposphere)",
             "period": "daily",
+            "product": "OMSO2",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -6389,6 +6395,7 @@
             "min": "1.2",
             "name": "Sulfur Dioxide (Planetary Boundary Layer)",
             "period": "daily",
+            "product": "OMSO2",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -6438,6 +6445,7 @@
             "min": "0.4",
             "name": "Sulfur Dioxide (Upper Troposphere and Stratosphere)",
             "period": "daily",
+            "product": "OMSO2",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -6832,6 +6840,7 @@
                 "transparent": "true"
             },
             "period": "static",
+            "product": "CIESIN_SEDAC_GRUMPv1_POPCOUNT",
             "projections": {
                 "arctic": {},
                 "geographic": {}
@@ -60019,6 +60028,15 @@
                 "shortName": "CIESIN_CHRR_NDH_VOLCANO_PELRD"
             }
         },
+        "CIESIN_SEDAC_GRUMPv1_POPCOUNT": {
+            "handler": "CollectionList",
+            "name": "Global Rural-Urban Mapping Project, Version 1 (GRUMPv1): Population Count Grid",
+            "query": {
+                "collection": "true",
+                "dataCenterId": "SEDAC",
+                "shortName": "CIESIN_SEDAC_GRUMPv1_POPCOUNT"
+            }
+        },
         "ML2CO": {
             "handler": "List",
             "name": "MLS/Aura L2 Carbon Monoxide (CO) Mixing Ratio",
@@ -60511,6 +60529,32 @@
                 ],
                 "dayNightFlag": "DAY",
                 "shortName": "MYD29"
+            }
+        },
+        "OMAERUV": {
+            "handler": "List",
+            "name": "OMI/Aura Near UV Aerosol Optical Depth and Single Scattering Albedo 1-orbit L2 Swath 13x24 km",
+            "query": {
+                "dataCenterId": "GSFCS4PA",
+                "shortName": "OMAERUV"
+            }
+        },
+        "OMCLDRR": {
+            "handler": "List",
+            "name": "OMI/Aura Cloud Pressure and Fraction (Raman Scattering) 1-Orbit L2 Swath 13x24 km",
+            "query": {
+                "dataCenterId": "GSFCS4PA",
+                "shortName": "OMCLDRR"
+            }
+        },
+        "OMSO2": {
+            "handler": "List",
+            "name": "OMI/Aura Sulphur Dioxide (SO2) Total Column 1-orbit L2 Swath 13x24 km",
+            "query": {
+                "shortName": [
+                    "OMSO2",
+                    "OMSO2NRTb"
+                ]
             }
         }
     },
