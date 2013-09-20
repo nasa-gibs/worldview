@@ -2,8 +2,8 @@
 # package has already been made.
 
 Name:		worldview
-Version:	0.5.1
-Release:	1%{?dist}
+Version:	0.5.2
+Release:	0.1%{?dist}
 Summary:	Browse full-resolution, near real-time satellite imagery.
 
 License:	Copyright NASA
