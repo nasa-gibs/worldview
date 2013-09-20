@@ -159,11 +159,17 @@ def processEntry(entry):
         debugLog.debug('skipping because of instrument')
         return None
 
+    coords = True
+
     # check for KMZ or GeoTiff - if not present, skip
     story = entry["link"]
     page = urllib2.urlopen(story)
     content = BeautifulSoup(page)
-    
+    north = ""
+    south = ""
+    east = ""
+    west = ""
+        
     # check for KMZ
     kmzLink = findKmz(content)
     kmzSuccess = True
@@ -221,14 +227,15 @@ def processEntry(entry):
                 errorLog.error('(processEntry) %s: %s', e.strerror, e.filename)
 
         else:
-            debugLog.debug('skipping because lacking image')
-            return None
+            coords = False
     
     # if the entry is kept, parse the rest of the fields
     date = entry["date"].split("T")[0]
     title = entry["title"]
     description = entry["summary_detail"].value
     thumbnail = entry["media_thumbnail"][0].get("url")
+    pubData = entry["published"]
+    point = entry["georss_point"]
     keyword = ''
 
     # if the category is a fire or flood, look for keywords
@@ -257,7 +264,10 @@ def processEntry(entry):
             'south':south, 
             'east':east, 
             'west':west, 
-            'keyword':keyword}
+            'keyword':keyword,
+            'pubDate':pubData,
+            'point':point,
+            'coords':coords}
 
     return retobj
 
