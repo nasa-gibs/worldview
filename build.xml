@@ -252,6 +252,9 @@
 		<move todir="${build.web.css.dir}/images/jquery.dd-3.3">
           <fileset dir="${build.web.css.dir}/ext/jquery.dd-3.3/images/jquery.dd-3.3"/>
         </move>
+        <move todir="${build.web.css.dir}/images/yui-2.9.0">
+          <fileset dir="${build.web.css.dir}/ext/yui-2.9.0/images/yui-2.9.0"/>
+        </move>
         <move todir="${build.web.css.dir}" file="${build.web.css.dir}/ext/jcrop-0.9.10-p1/Jcrop.gif"/>
 	<delete includeemptydirs="true">
 	  <fileset dir="${build.web.dir}"  >

@@ -24,9 +24,9 @@
                 0.017578125
             ],
             "url": [
-                "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
             ]
         }
     },
