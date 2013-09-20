@@ -3,12 +3,11 @@ SOTE.namespace("SOTE.widget.Products");
 SOTE.widget.Products.prototype = new SOTE.widget.Component;
 
 /**
-  * A selection device classifying radio buttons/checkboxes into categories that are displayed in Accordion form.
+  * Instantiate the Products  
+  *
+  * @class A selection device classifying radio buttons/checkboxes into categories that are displayed in Accordion form.
   *     Radio buttons allow single selection accross categories.  Checkboxes allow multiple selections accross categories.
-  *     Radio selections cannot span multiple categories.  
-  * 
-  * @module SOTE.widget
-  * @class Products
+  * 	Radio selections cannot span multiple categories.
   * @constructor
   * @this {Products}
   * @param {String} containerId is the container id of the div in which to render the object 
@@ -19,7 +18,7 @@ SOTE.widget.Products.prototype = new SOTE.widget.Component;
   * @augments SOTE.widget.Component
   * 
 */
-SOTE.widget.Products = function(containerId, spec){
+SOTE.widget.Products = function(containerId, config){
     this.log = Logging.getLogger("Worldview.Widget.Products");
     //this.VALID_PROJECTIONS = ["geographic", "arctic", "antarctic"];
     
@@ -34,37 +33,36 @@ SOTE.widget.Products = function(containerId, spec){
 	this.containerId=containerId;	
 
 	//Define an object for holding configuration 
-	if (spec===undefined){
-		spec={};
+	if (config===undefined){
+		config={};
 	}
 
-	if(spec.title === undefined){
-	    spec.title = "My Products";
+	if(config.title === undefined){
+	    config.title = "My Products";
 	}
 
-	if(spec.categories === undefined){
-	    spec.categories = ["Category 1","Category 2"]; 
+	if(config.categories === undefined){
+	    config.categories = ["Category 1","Category 2"]; 
 	}
 
-	if(spec.callback === undefined){
-	    spec.callback = null; 
+	if(config.callback === undefined){
+	    config.callback = null; 
 	}
 
-	if(spec.state === undefined || spec.state === ""){
-		spec.state = "geographic";
+	if(config.state === undefined || config.state === ""){
+		config.state = "geographic";
 	}
 
        
-    this.state = spec.state;
-	this.selected = spec.selected;
+    this.state = config.state;
+	this.selected = config.selected;
 	this.isCollapsed = false;
-    this.dataSourceUrl = spec.dataSourceUrl;
-    this.categories = spec.categories;
+    this.dataSourceUrl = config.dataSourceUrl;
+    this.categories = config.categories;
+    this.config = config.config;
+    this.paletteWidget = config.paletteWidget;
+    this.events = Worldview.Events();
 	this.initRenderComplete = false;
-	this.paletteWidget = spec.paletteWidget;
-	this.config = spec.config;
-	this.events = Worldview.Events();
-	
 	this.init();
 
 };
@@ -89,7 +87,7 @@ SOTE.widget.Products.HTML_TAB_DOWNLOAD_SELECTED =
     
 SOTE.widget.Products.HTML_TAB_DOWNLOAD_UNSELECTED = 
     "<img class='productsIcon' src='images/missing-icon.svg' title='Download'>";
-    
+
 /**
   * Displays all options in HTML in an Accordion format (see JQuery UI Accordion) with the selected states being indicated
   * by radio button and checkbox selection.  All callbacks should be set.  The component UI should be rendered 
@@ -128,9 +126,9 @@ SOTE.widget.Products.prototype.render = function(){
 
 	var tabs = document.createElement("ul");
 	tabs.setAttribute("id",this.id+"tabs");
-	tabs.innerHTML =
+    tabs.innerHTML =
             "<li class='layerPicker first'>" + 
-	           "<a href='#products' class='activetab tab'></a>" + 
+               "<a href='#products' class='activetab tab'></a>" + 
             "</li>" + 
             "<li class='layerPicker second'>" + 
                 "<a class='addlayerstab tab' href='#selectorbox'></a>" + 
@@ -139,8 +137,6 @@ SOTE.widget.Products.prototype.render = function(){
                 "<a class='tab' href='#DataDownload'></a>" + 
             "</li>";
 	this.container.appendChild(tabs);
-	SOTE.widget.Products.change({data: {self: this}}, {index: 0});
-	
 	//$('#'+this.id).addClass('products');
 	var toggleButtonHolder = document.createElement("div");
 	toggleButtonHolder.setAttribute("id",this.id+"toggleButtonHolder");
@@ -165,32 +161,32 @@ SOTE.widget.Products.prototype.render = function(){
     this.container.appendChild(downloadBox);
 
 	//this.container.appendChild(productContainer);
-	var self = this;
-	$('#'+this.id).tabs({show: function(e, ui) {
-	    e.data = { self: self };
-	    SOTE.widget.Products.change(e, ui);
+    var self = this;
+    $('#'+this.id).tabs({show: function(e, ui) {
+        e.data = { self: self };
+        SOTE.widget.Products.change(e, ui);
     }});
 	this.b = new SOTE.widget.Bank("products", {
+	    paletteWidget: this.palettes, 
 	    dataSourceUrl: "ap_products.php",
 	    title: "My Layers",
 	    selected: {
 	        antarctic: "baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,antarctic_coastlines", 
-	        arctic:"baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,arctic_coastlines",
-	        geographic:"baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,sedac_bound"
+	        arctic: "baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,arctic_coastlines",
+	        geographic: "baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,sedac_bound"
         },
-        categories:["Base Layers","Overlays"],
-        config: this.config,
-        paletteWidget: this.paletteWidget
+        categories: ["Base Layers","Overlays"],
+        config:this.config
     });
     this.s = new SOTE.widget.Selector("selectorbox", {
         dataSourceUrl: "ap_products.php",
-        categories: ["Base Layers","Overlays"], 
+        categories: ["Base Layers","Overlays"],
         selected: {
-            antarctic: "baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,antarctic_coastlines", 
+            antarctic:"baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,antarctic_coastlines", 
             arctic:"baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,arctic_coastlines",
             geographic:"baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,sedac_bound"
         },
-        config: this.config
+        config:this.config
     });	
     
     //$('#'+this.id+"prods").on("tabsshow",SOTE.widget.Products.change);
@@ -210,8 +206,7 @@ SOTE.widget.Products.prototype.render = function(){
 	}
 	var self = this;
 	$(window).resize(function(){
-		//self.b.render();
-		self.b.resize(); self.b.adjustCategoryHeights({self: b});
+		self.b.render();
 		self.s.resize();
 		self.adjustAlignment();
 	});
@@ -245,13 +240,14 @@ SOTE.widget.Products.stopLink = function(e){
 	//e.stopPropagation();
 };
 
-SOTE.widget.Products.change = function(e,ui) {	
+SOTE.widget.Products.change = function(e,ui){	
+    console.log(e);
     var self = e.data.self;
     if ( ui.index === 0 ) {
-    	$('.ui-tabs-nav')
-    	      .addClass('firstselected')
-    	      .removeClass('secondselected')
-    	      .removeClass('thirdselected');
+        $('.ui-tabs-nav')
+              .addClass('firstselected')
+              .removeClass('secondselected')
+              .removeClass('thirdselected');
     }
     else if ( ui.index === 1 ) {
         $('.ui-tabs-nav')
@@ -286,8 +282,8 @@ SOTE.widget.Products.change = function(e,ui) {
     $('.ui-tabs-nav li.first a').html(tab1);
     $('.ui-tabs-nav li.second a').html(tab2);
     $('.ui-tabs-nav li.third a').html(tab3);
-    	
-	return false;
+        
+    return false;
 };
 
 SOTE.widget.Products.toggle = function(e,ui){
