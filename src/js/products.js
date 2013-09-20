@@ -167,7 +167,7 @@ SOTE.widget.Products.prototype.render = function(){
         SOTE.widget.Products.change(e, ui);
     }});
 	this.b = new SOTE.widget.Bank("products", {
-	    paletteWidget: this.palettes, 
+	    paletteWidget: this.paletteWidget, 
 	    dataSourceUrl: "ap_products.php",
 	    title: "My Layers",
 	    selected: {

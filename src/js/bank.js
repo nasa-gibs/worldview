@@ -113,19 +113,19 @@ SOTE.widget.Bank.handleMetaSuccess = function(data,status,xhr,args){
 	//console.log("Meta Sublabel = " + self.meta[key].sublabel);
 	*/
 	$.each(self.meta, function(name, meta) {
-	   if ( name in self.config.products ) {
-	       var product = self.config.products[name];
-	       if ( "rendered" in product ) {
-	           meta.units = product.units;
-	           meta.min = ( product.min === undefined ) 
+	   if ( name in self.config.layers) {
+	       var layer = self.config.layers[name];
+	       if ( "rendered" in layer ) {
+	           meta.units = layer.units;
+	           meta.min = ( layer.min === undefined ) 
 	                   ? "&nbsp;&nbsp;&nbsp;&nbsp" 
-	                   : product.min;
-	           meta.max = ( product.max === undefined ) 
+	                   : layer.min;
+	           meta.max = ( layer.max === undefined ) 
 	                   ? "&nbsp;&nbsp;&nbsp;" 
-                       : product.max;
-	           meta.bins = product.bins;
-	           meta.stops = product.stops;
-	           meta.palette = self.config.palettes[product.rendered];    
+                       : layer.max;
+	           meta.bins = layer.bins;
+	           meta.stops = layer.stops;
+	           meta.palette = self.config.palettes[layer.rendered];    
 	       }    
 	   }    
 	});
@@ -220,7 +220,7 @@ SOTE.widget.Bank.prototype.render = function(){
 				
 		if(this.values !== null && this.values[formattedCategoryName.toLowerCase()]){
 			for(var j=0; j<this.values[formattedCategoryName.toLowerCase()].length; j++){
-				var myVal = this.values[formattedCategoryName.toLowerCase()][j].value
+				var myVal = this.values[formattedCategoryName.toLowerCase()][j].value;
 				var item = document.createElement("li");
 				item.setAttribute("id",formattedCategoryName.toLowerCase()+"-"+myVal);
 				item.setAttribute("class",this.id+"item item");
