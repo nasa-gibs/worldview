@@ -43,7 +43,7 @@ $(function() {
                         "<p>The LANCE, GIBS, and FIRMS systems are operated by the NASA/GSFC ESDIS Project. The information presented through these interfaces are provided “as is” and users bear all responsibility and liability for their use of data, and for any loss of business or profits, or for any indirect, incidental or consequential damages arising out of any use of, or inability to use, the data, even if NASA or ESDIS were previously advised of the possibility of such damages, or for any other claim by you or any other person. Please read the full disclaimer <a href='http://earthdata.nasa.gov/data/nrt-data/disclaimer' target='_blank'>here</a>.</p>"+
                         "<br /><p>"+
                                 "Version: " + Worldview.VERSION + " - " + Worldview.BUILD_TIMESTAMP + " (<a href='release_notes.txt' target='_blank'>release notes</a>)<br />"+
-                                "Front-End Lead/Architect: <a href='mailto:tilak.joshi@nasa.gov'>Tilak Joshi</a><br />"+ 
+                                "Release Manager: <a href='mailto:mike.mcgann@nasa.gov'>Mike McGann</a><br />"+ 
                                 "Responsible NASA Official:  <a href='mailto:ryan.a.boller@nasa.gov'>Ryan Boller</a><br />"+
                         "</p>"+         
                 "</div>";

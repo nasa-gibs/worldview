@@ -4,12 +4,12 @@ Release Notes
 http://earthdata.nasa.gov/labs/worldview/
 
 -------------------------------------------------------------------------------
-Release 0.5.1 - August 15, 2013
+Release 0.5.2
 -------------------------------------------------------------------------------
-* New Features
-  - Added twenty AIRS (Atmospheric Infrared Sounder) products for temerature
-    and relative humidity.
-
+* Updates
+  - Map tiles from GIBS are now retrieved using https and the browser no longer 
+    reports a mixed content warning 
+    
 * Known Issues
   - Custom color palettes are not supported on Safari 5 or earlier.
   - Custom color palettes can not be used in image download.
@@ -19,8 +19,17 @@ Release 0.5.1 - August 15, 2013
     below.
   - WMS based layers (Population Density and Global Labels) can no longer be 
     displayed properly in the older arctic projection (EPSG:3995).
+  - A mixed content warning may be displayed when using layers from external
+    servers not using https.
     
-    
+-------------------------------------------------------------------------------
+Release 0.5.1 - August 15, 2013
+-------------------------------------------------------------------------------
+* New Features
+  - Added twenty AIRS (Atmospheric Infrared Sounder) products for temperature
+    and relative humidity.
+
+
 -------------------------------------------------------------------------------
 Release 0.5.0 - July 17, 2013
 -------------------------------------------------------------------------------
