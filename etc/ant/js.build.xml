@@ -140,7 +140,6 @@
         <file name="js/Worldview/DataDownload/Results/Transform.js"/>
 
         <file name="js/Worldview/DataDownload/Model.js"/>
-        <file name="js/Worldview/DataDownload/ProductSelector.js"/>
         <file name="js/Worldview/DataDownload/MapController.js"/>
         <file name="js/Worldview/DataDownload/SelectionListPanel.js"/>
         <file name="js/Worldview/DataDownload/DownloadListPanel.js"/>
