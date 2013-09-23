@@ -97,6 +97,8 @@
         <file name="js/Worldview/Map/TWMSLayer.js"/>
         <file name="js/Worldview/Map/HoverControl.js"/>
 
+        <file name="js/Worldview/DataDownload.js"/>
+
         <file name="js/Worldview/DataDownload/ECHO.js"/>
         <file name="js/Worldview/DataDownload/ECHO/Client.js"/>
         <file name="js/Worldview/DataDownload/ECHO/Geometry.js"/>

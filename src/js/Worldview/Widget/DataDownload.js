@@ -36,6 +36,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
     var list = null;
     var model = spec.model; 
     var mapController = null;
+    var selectionListPanel = null;
     var downloadListPanel = null;
     
     var self = {};
@@ -155,6 +156,12 @@ Worldview.Widget.DataDownload = function(config, spec) {
     var onQuery = function() {
         log.debug("query");
         Worldview.Indicator.searching();
+        if ( selectionListPanel ) { 
+            selectionListPanel.hide(); 
+        }
+        if ( downloadListPanel ) {
+            downloadListPanel.hide();
+        }
     };
     
     var onQueryResults = function(results) {
