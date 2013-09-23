@@ -198,7 +198,7 @@ Worldview.Widget.Map = function(containerId, config) {
             }
         });
         return config;
-    }
+    };
     init();
     return self;
 };

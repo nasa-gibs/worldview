@@ -465,7 +465,8 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
         // While these aren't controls, per se, they are extra decorations
         controls.push(new OpenLayers.Control.Attribution());
         controls.push(new OpenLayers.Control.ScaleLine({
-            displayClass: mapClass + "olControlScaleLineCustom"
+            displayClass: mapClass + "olControlScaleLineCustom",
+            maxWidth: 200,
         }));        
         
         var coordinateControl = 

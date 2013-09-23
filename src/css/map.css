@@ -1,43 +1,57 @@
 
 div.olControlMousePosition {
-	position: absolute;
-	right: 12px; 
-	bottom: 98px;
-	z-index: 2000;
-	padding: 1px 8px;
-
-	display: block;
-   	font-size: xx-small;
-   	color: #EEEEEE;
-   	background-color:rgba(38,38,38,0.4);
+    position: absolute;
+    right: 12px; 
+    bottom: 98px;
+    z-index: 2000;
+    padding: 1px 8px;
+    display: block;
+    font-size: 1.3em;
+    color: #EEEEEE;
+    background-color:rgba(38,38,38,0.4);
+    text-shadow:
+      -1px -1px 0 #000,
+      1px -1px 0 #000,
+      -1px 1px 0 #000,
+      1px 1px 0 #000;
 }
 
 
 div.olControlScaleLineCustom {
-	position: absolute;
-	right: 12px;
-	bottom: 118px;
-	z-index: 2000;
-	
-	display: block;
-   	font-size: xx-small;
-   	color: #EEEEEE;
+    position: absolute;
+    right: 12px;
+    bottom: 118px;
+    z-index: 2000;
+    display: block;
+    color: #EEEEEE;
+    text-shadow:
+      -1px -1px 0 #000,
+      1px -1px 0 #000,
+      -1px 1px 0 #000,
+      1px 1px 0 #000;
 }
 
 .olControlScaleLineCustomBottom {
    border: solid 2px black;
    border-bottom: none;
+   float:right;
+   clear:both;
+   box-sizing:border-box;
    margin-top:-2px;
-   text-align: center;
+   text-align: right;
+   padding:5px 10px;
    background-color:rgba(38,38,38,0.4);
-   font-size: 0.9em;
+   font-size: 1.3em;
 }
 .olControlScaleLineCustomTop {
    border: solid 2px black;
    border-top: none;
-   text-align: center;
+   box-sizing:border-box;
+   float:right;
+   text-align: right;
    background-color:rgba(38,38,38,0.4);
-   font-size: 0.9em;
+   padding:5px 10px;
+   font-size: 1.3em;
 }
 
 
@@ -71,14 +85,14 @@ div.olMap {
 
 /*  Zoom panel controls */
 div.olControlZoomPanelCustom {
-	top: 125px;
+    top: 125px;
     left: 14px;
-	height: 68px;
-	width: 36px;
-	position: relative !important;
-	float:right;
-	margin:0 20px 0 0;
-	cursor: pointer;
+    height: 68px;
+    width: 36px;
+    position: relative !important;
+    float:right;
+    margin:0 20px 0 0;
+    cursor: pointer;
 }
 
 div.olControlZoomPanelCustom div {
@@ -93,14 +107,14 @@ div.olControlZoomPanelCustom .olControlZoomOutCustomItemInactive {
 }
 div.olControlZoomPanelCustom .olControlZoomInCustomItemInactive {
     background: rgba(45,50,55,0.5);
-	top: 0;
+    top: 0;
     background-position: 0 0;
     border-radius: 5px 5px 0 0;
 }
 div.olControlZoomPanelCustom .olControlZoomOutCustomItemInactive {
     background: rgba(45,50,55,0.5);
     top: 72px;
-    background-position: 0 -72px;	
+    background-position: 0 -72px;
     border-radius: 0 0 5px 5px ;
     top: 35px;
 }
