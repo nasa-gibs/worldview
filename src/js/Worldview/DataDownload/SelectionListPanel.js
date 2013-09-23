@@ -13,21 +13,18 @@ Worldview.namespace("DataDownload");
 Worldview.DataDownload.SelectionListPanel = function(model, results) {
     
     var log = Logging.getLogger("Worldview.DataDownload");
-       
-    var NOTICE = 
-            "These results cannot be displayed on the map. Select from the " +
-            "list below.";
-        
+               
     var panel = null;
     var self = {};
     var granules = {};
     
     self.show = function() {
         panel = new YAHOO.widget.Panel("DataDownload_SelectionListPanel", {
-            width: "600px",
+            width: "400px",
             height: "400px",
             zIndex: 1020,
-            visible: false
+            visible: false,
+            close: false
         });
         panel.setHeader("Select data");
         
@@ -36,15 +33,16 @@ Worldview.DataDownload.SelectionListPanel = function(model, results) {
         panel.show();
         panel.center();
         panel.hideEvent.subscribe(function() {
-            setTimeout(function() { panel.destroy(); panel = null; }, 25);
+            setTimeout(dispose, 25);
         });
         
         $.each(results.granules, function(index, granule) {
             granules[granule.id] = granule;    
         });
         
-        $("#DataDownload_GranuleList").trigger("create");
-        $("#DataDownload_GranuleList").on("change", updateSelection);
+        $("#DataDownload_GranuleList img.button").on("click", toggleSelection);
+        model.events.on("granuleSelect", onGranuleSelect);
+        model.events.on("granuleUnselect", onGranuleUnselect);
     };
     
     self.hide = function() {
@@ -56,12 +54,42 @@ Worldview.DataDownload.SelectionListPanel = function(model, results) {
     self.visible = function() {
         return panel !== null;
     };
+    
+    self.setVisible = function(value) {
+        if ( !value ) {
+            $("#DataDownload_SelectionListPanel").hide();
+        } else {
+            $("#DataDownload_SelectionListPanel").show();
+        }
+    };
 
+    var dispose = function() {
+        panel.destroy(); 
+        panel = null;
+        $("#DataDownload_GranuleList img.button").off("click", toggleSelection);   
+        model.events.off("granuleSelect", onGranuleSelect);
+        model.events.off("granuleUnselect", onGranuleUnselect);             
+    };
+    
     var resultsText = function() {
         var elements = [];
         $.each(results.granules, function(index, granule) {
-            elements.push("<input type='checkbox' name='granule-list' id='" + granule.id + "' class='custom'/>");
-            elements.push("<label for='" + granule.id + "'>" + granule.label + "</label>");      
+            var selected = model.isSelected(granule);
+            var button = ( selected ) 
+                ? Worldview.DataDownload.IMAGE_UNSELECT
+                : Worldview.DataDownload.IMAGE_SELECT;
+            elements.push(
+                "<tr>" + 
+                "<td>" + 
+                "<img " + 
+                    "id='" + granule.id + "' " + 
+                    "src='" + button + "' " + 
+                    "data-selected='" + selected + "'" + 
+                    "class='button'>" +
+                "</td>" + 
+                "<td class='label'>" + granule.label + "</td>" + 
+                "</tr>"
+            ); 
         });
         var text = elements.join("\n");
         return text;    
@@ -69,27 +97,40 @@ Worldview.DataDownload.SelectionListPanel = function(model, results) {
     
     var bodyText = function() {
         var elements = [
-            NOTICE,
-            "<div id='DataDownload_GranuleList' data-role='fieldcontain'>",
-            "<fieldset data-role='controlgroup'>",
+            "<div id='DataDownload_GranuleList'>",
+            "<table>",
             resultsText(),
-            "</fieldset>",
+            "</table>",
             "</div>"
         ];
-        var text = elements.join("\n<br/>\n") + "<br/>";
+        var text = elements.join("\n") + "<br/>";
         return text;
     };
          
-    var updateSelection = function(event, ui) {
+    var toggleSelection = function(event, ui) {
         var granule = granules[event.target.id];
-        if ( event.target.checked ) {
-            log.debug(granule);
-            model.selectGranule(granule);
-        } else {
+        var selected = $(this).attr("data-selected") === "true";
+        if ( selected ) {
             model.unselectGranule(granule);
+        } else {
+            model.selectGranule(granule);
         }
     };
        
+    var onGranuleSelect = function(granule) {
+        log.debug(granule);
+        $("#" + granule.id)
+            .attr("src", Worldview.DataDownload.IMAGE_UNSELECT)
+            .attr("data-selected", "true");
+    };
+    
+    var onGranuleUnselect = function(granule) {
+        log.debug(granule);
+        $("#" + granule.id)
+            .attr("src", Worldview.DataDownload.IMAGE_SELECT)
+            .attr("data-selected", "false");
+    };
+        
     return self;
 
 };

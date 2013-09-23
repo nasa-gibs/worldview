@@ -227,6 +227,16 @@ Worldview.DataDownload.Model = function(config) {
         self.events.trigger(self.EVENT_GRANULE_UNSELECT, granule); 
     };
     
+    self.isSelected = function(granule) {
+        var selected = false;
+        $.each(self.selectedGranules, function(index, selection) {
+            if ( granule.id === selection.id ) {
+                selected = true;
+            }    
+        });
+        return selected;  
+    };
+    
     self.getSelectionSize = function() {
         var totalSize = 0;
         var sizeValid = true;

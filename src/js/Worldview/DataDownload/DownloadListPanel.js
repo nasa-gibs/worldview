@@ -31,6 +31,7 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
     var panel = null;
     var selection;
     var self = {};
+    self.events = Worldview.Events();
     
     self.show = function() {
         selection = reformatSelection();
@@ -51,21 +52,28 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
             panel.show();
             panel.center();
             panel.hideEvent.subscribe(function() {
-                setTimeout(function() { panel.destroy(); panel = null; }, 25);
+                setTimeout(dispose, 25);
             });
         
-            $("#DataDownload_DownloadListPanel a.wget").click(function() {
-                Worldview.DataDownload.WgetPage.show(selection);
-            });
+            $("#DataDownload_DownloadListPanel a.wget").click(showWgetPage);
         }
     };
     
     self.hide = function() {
-        panel.hide();
+        if ( panel ) {
+            panel.hide();
+        }
     };
     
     self.visible = function() {
         return panel !== null;
+    };
+    
+    var dispose = function() {
+        self.events.trigger("close");
+        panel.destroy(); 
+        panel = null;       
+        $("#DataDownload_DownloadListPanel a.wget").off("click", showWgetPage);  
     };
     
     var reformatSelection = function() {
@@ -236,6 +244,10 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
         return text;
     };
             
+    var showWgetPage = function() {
+        Worldview.DataDownload.WgetPage.show(selection);        
+    };
+    
     return self;
 
 };

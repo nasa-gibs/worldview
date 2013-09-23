@@ -106,3 +106,12 @@
     padding: 10px; 
     color: #FFFBE7;
 }
+
+#DataDownload_GranuleList .button {
+    width: 16px;
+    height: 16px;
+}
+
+#DataDownload_GranuleList td {
+    padding: 3px;
+}
