@@ -167,7 +167,10 @@ Worldview.Widget.DataDownload = function(config, spec) {
     var onQueryError = function(status, error) {
         log.debug("queryError", status, error);
         Worldview.Indicator.hide();
-        Worldview.notify("Unable to search at this time. Please try again later");
+        if ( status !== "abort" ) {
+            Worldview.notify("Unable to search at this time. Please try " + 
+                    "again later");
+        }
     };
     
     var onQueryTimeout = function() {

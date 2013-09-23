@@ -280,11 +280,18 @@ Worldview.DataDownload.Model = function(config) {
         handler.events.on("query", function() {
             self.events.trigger(self.EVENT_QUERY);
         }).on("results", function(results) {
-            self.events.trigger(self.EVENT_QUERY_RESULTS, results);
+            if ( self.active ) {
+                self.events.trigger(self.EVENT_QUERY_RESULTS, results);
+            }
         }).on("error", function(textStatus, errorThrown) {
-            self.events.trigger(self.EVENT_QUERY_ERROR, textStatus, errorThrown);
+            if ( self.active ) {
+                self.events.trigger(self.EVENT_QUERY_ERROR, textStatus, 
+                        errorThrown);
+            }
         }).on("timeout", function() {
-            self.events.trigger(self.EVENT_QUERY_TIMEOUT);
+            if ( self.active ) {
+                self.events.trigger(self.EVENT_QUERY_TIMEOUT);
+            }
         });
         handler.submit();
     };
