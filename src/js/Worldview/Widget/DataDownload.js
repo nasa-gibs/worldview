@@ -33,11 +33,13 @@ Worldview.Widget.DataDownload = function(config, spec) {
     var HTML_WIDGET_INACTIVE = "<img src='images/camera.png'></img>";
     var HTML_WIDGET_ACTIVE = "<img src='images/cameraon.png'></img>";
    
+    var queryActive = false;
     var list = null;
     var model = spec.model; 
     var mapController = null;
     var selectionListPanel = null;
     var downloadListPanel = null;
+    var lastResults = null;
     
     var self = {};
     self.containerId = "DataDownload";
@@ -71,7 +73,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
     
     self.getValue = function() {
         if ( model.active ) {
-            return "dataDownload=" + model.selectedLayer;
+            return "dataDownload=" + model.selectedProduct;
         } else {
             return "";
         }
@@ -111,6 +113,34 @@ Worldview.Widget.DataDownload = function(config, spec) {
             onchange: function() { console.log("onchange", arguments); },
             args: self
         });
+    };
+    
+    self.onViewChange = function(map) {
+        if ( !model.active || queryActive || !lastResults ) {
+            return;
+        }
+        if ( lastResults.length === 0 ) {
+            return;
+        }
+        var hasCentroids = false;
+        var inView = false;
+        var extent = map.getExtent().toGeometry();
+        log.debug("view changed", extent);
+        $.each(lastResults.granules, function(index, granule) {
+            if ( granule.centroid ) {
+                hasCentroids = true;
+                if ( extent.intersects(granule.centroid[map.projection]) ) {
+                    inView = true;
+                    return true;
+                }
+            } 
+        });
+        log.debug("hasCentroids", hasCentroids, "inView", inView);
+        if ( hasCentroids && !inView ) {
+            Worldview.Indicator.show("Zoom out or move map");
+        } else {
+            Worldview.Indicator.hide();
+        }
     };
     
     var toggleMode = function() {
@@ -154,6 +184,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
     };
     
     var onQuery = function() {
+        queryActive = true;
         log.debug("query");
         Worldview.Indicator.searching();
         if ( selectionListPanel ) { 
@@ -165,6 +196,8 @@ Worldview.Widget.DataDownload = function(config, spec) {
     };
     
     var onQueryResults = function(results) {
+        queryActive = false;
+        lastResults = results;
         log.debug("queryResults", results);
         Worldview.Indicator.hide();
         if ( results.granules.length === 0 ) {
@@ -184,11 +217,13 @@ Worldview.Widget.DataDownload = function(config, spec) {
     };
     
     var onQueryCancel = function() {
+        queryActive = false;
         log.debug("queryCancel");
         Worldview.Indicator.hide();
     };
     
     var onQueryError = function(status, error) {
+        queryActive = false;
         log.debug("queryError", status, error);
         Worldview.Indicator.hide();
         if ( status !== "abort" ) {
@@ -198,6 +233,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
     };
     
     var onQueryTimeout = function() {
+        queryActive = false;
         log.debug("queryTimeout");
         Worldview.Indicator.hide();
         Worldview.notify(

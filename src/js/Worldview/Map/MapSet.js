@@ -81,6 +81,11 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
      */
     self.projection = null;    
     
+    self.EVENT_ZOOM_END = "zoomEnd";
+    self.EVENT_MOVE_END = "zoomEnd";
+    
+    self.events = Worldview.Events();
+    
     var init = function() {        
         var $container = $("#" + containerId);
         if ( $container.length === 0 ) {
@@ -131,7 +136,13 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
             newMap.events.register("addlayer", self, onAddLayer);
             newMap.events.register("removelayer", self, onRemoveLayer);
             newMap.events.register("moveend", self, fireEvent);
+            newMap.events.register("moveend", self, function() {
+                self.events.trigger(self.EVENT_MOVE_END, newMap);
+            });
             newMap.events.register("zoomend", self, onZoomEnd);
+            newMap.events.register("zoomend", self, function() {
+                self.events.trigger(self.EVENT_ZOOM_END, newMap);
+            });
             
             // Keep track of center point on projection switch
             newMap.previousCenter = newMap.getCenter();
