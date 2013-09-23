@@ -30,7 +30,7 @@ Worldview.DataDownload.WgetPage = (function() {
     var writeHeader = function(doc) {
         doc.write(
             "<header>" + 
-            "<title>Worldview URL Download List</title>" +
+            "<title>wget.html</title>" +
             
             "<style>" + 
                 "body { " + 
@@ -68,24 +68,27 @@ Worldview.DataDownload.WgetPage = (function() {
             "<body>" + 
             "<div id='page'>" +
             "<div id='instructions'>" + 
-                "<h3>Using wget</h3>" + 
-                "Save this HTML page as <code>wget.html</code> to your " + 
-                "local computer. To download: " + 
+                "<h3>Using <code>wget</code> to Bulk Download Your Data</h3>" + 
+                "1) Save this HTML page as <code>wget.html</code> to your " + 
+                "local computer.<br>" + 
+                "2) Execute the following command to download all of your " +
+                "requested files:" + 
                 "<pre>" + 
                     "wget --input-file=wget.html --force-html" + 
-                "</pre>" +
-                "If User Registration System (URS) credentials are required, " + 
-                "create a file, only readable by you, called " + 
+                "</pre><br>" +
+                "<b>Note</b>: if User Registration System (URS) credentials are required, " +
+                "create a file (only readable by you) called " + 
                 "<code>urs.credentials</code> with the following:" +
                 "<pre>" + 
                     "user=<i>urs_user</i>\n" +
                     "password=<i>urs_password</i>" +
                 "</pre>" +
                 "where <i>urs_user</i> is your URS user name and " +
-                "<i>urs_password</i> is your URS password. To download: " +
+                "<i>urs_password</i> is your URS password. To download, "+
+                "use the following command instead of step 2 above:" +
                 "<pre>" +
                      "wget --input-file=wget.html --force-html --config=urs.credentials" +
-                 "</pre>" +  
+                 "</pre><br>" +  
             "</div>" 
         );    
     };
