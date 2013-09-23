@@ -119,7 +119,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
         if ( !model.active || queryActive || !lastResults ) {
             return;
         }
-        if ( lastResults.length === 0 ) {
+        if ( lastResults.granules.length === 0 ) {
             return;
         }
         var hasCentroids = false;
