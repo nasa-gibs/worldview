@@ -17,7 +17,6 @@ Worldview.DataDownload.MapController = function(model, maps, config) {
     
     var self = {};
     var results = [];
-    var selectionListPanel = null;
     
     var selectionLayers = ns.Layers.Selection(model, maps, config);
     var swathLayers = ns.Layers.Swath(model, maps, config);
@@ -54,17 +53,7 @@ Worldview.DataDownload.MapController = function(model, maps, config) {
         swathLayers.update(results);
         gridLayers.update(results);
         buttonLayers.update(results);
-        
-        if ( newResults.meta.showList ) {
-            selectionListPanel = 
-                    Worldview.DataDownload.SelectionListPanel(model, results);    
-            selectionListPanel.show();
-        } else {
-            if ( selectionListPanel ) {
-                selectionListPanel.hide();
-            }
-        }
-        
+                
         // TODO: Remove if not used
         //maskLayers.update(results);
     };
@@ -79,9 +68,6 @@ Worldview.DataDownload.MapController = function(model, maps, config) {
         gridLayers.dispose();
         hoverLayers.dispose();
         buttonLayers.dispose();
-        if ( selectionListPanel ) {
-            selectionListPanel.hide();
-        }
         // TODO: Remove if not used
         //maskLayers.dispose();
     };
@@ -92,9 +78,6 @@ Worldview.DataDownload.MapController = function(model, maps, config) {
         gridLayers.clear();
         hoverLayers.clear();
         buttonLayers.clear();
-        if ( selectionListPanel ) {
-            selectionListPanel.hide();
-        }
         // TODO: Remove if not used 
         //maskLayers.clear();
     };

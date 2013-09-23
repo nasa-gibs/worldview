@@ -14,8 +14,8 @@ Worldview.DataDownload.Layers.Button = function(model, maps, config) {
 
     var LAYER_NAME = "DataDownload_Button";
 
-    var IMAGE_SELECT = "images/data-download-plus-button-orange.svg";
-    var IMAGE_UNSELECT = "images/data-download-minus-button-red.svg";  
+    var IMAGE_SELECT = Worldview.DataDownload.IMAGE_SELECT;
+    var IMAGE_UNSELECT = Worldview.DataDownload.IMAGE_UNSELECT;
     
     var STYLE = {
         "default": {

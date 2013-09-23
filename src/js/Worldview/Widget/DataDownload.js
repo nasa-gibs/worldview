@@ -36,6 +36,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
     var list = null;
     var model = spec.model; 
     var mapController = null;
+    var selectionListPanel = null;
     var downloadListPanel = null;
     
     var self = {};
@@ -130,6 +131,12 @@ Worldview.Widget.DataDownload = function(config, spec) {
     var onDeactivate = function() {
         log.debug("deactivate");
         Worldview.Indicator.hide();
+        if ( selectionListPanel ) {
+            selectionListPanel.hide();
+        }
+        if ( downloadListPanel ) {
+            downloadListPanel.hide();
+        }
     };
     
     var onProductSelect = function(product) {
@@ -149,6 +156,12 @@ Worldview.Widget.DataDownload = function(config, spec) {
     var onQuery = function() {
         log.debug("query");
         Worldview.Indicator.searching();
+        if ( selectionListPanel ) { 
+            selectionListPanel.hide(); 
+        }
+        if ( downloadListPanel ) {
+            downloadListPanel.hide();
+        }
     };
     
     var onQueryResults = function(results) {
@@ -156,6 +169,17 @@ Worldview.Widget.DataDownload = function(config, spec) {
         Worldview.Indicator.hide();
         if ( results.granules.length === 0 ) {
             Worldview.Indicator.noData();
+        } else {
+            if ( results.meta.showList ) {
+                selectionListPanel = 
+                        Worldview.DataDownload.SelectionListPanel(model, results);    
+                selectionListPanel.show();
+            } else {
+                if ( selectionListPanel ) {
+                    selectionListPanel.hide();
+                }
+                selectionListPanel = null;
+            }
         }
     };
     
@@ -209,9 +233,17 @@ Worldview.Widget.DataDownload = function(config, spec) {
     };
     
     var showDownloadList = function() {
+        if ( selectionListPanel ) {
+            selectionListPanel.setVisible(false);
+        }
         if ( !downloadListPanel ) {
             downloadListPanel = 
                     Worldview.DataDownload.DownloadListPanel(config, model);
+            downloadListPanel.events.on("close", function() {
+                if ( selectionListPanel ) {
+                    selectionListPanel.setVisible(true);
+                }    
+            });
         }
         downloadListPanel.show(); 
     };
