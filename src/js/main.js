@@ -188,8 +188,17 @@ $(function() {// Initialize "static" vars
             .on("activate", function() {
                 products.selectTab("download");
             });
-                                
-        
+        map.maps.events
+            .on("moveEnd", function(map) {
+                dataDownload.onViewChange(map);
+            })                    
+            .on("zoomEnd", function(map) {
+                dataDownload.onViewChange(map);
+            });    
+        dataDownloadModel.events
+            .on("queryResults", function() {
+                dataDownload.onViewChange(map.maps.map);    
+            });
 	    // Register event listeners
         REGISTRY.addEventListener("time", 
                 "map", "imagedownload", apcn.containerId, crs.containerId, 

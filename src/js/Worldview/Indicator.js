@@ -42,12 +42,20 @@ $(function() {
      */
     ns.show = function(message, icon) {
         ns.hide();
-        $("body").append([
-            "<div id='indicator'>",
-                "<img src='" + icon + "'></img>",
-                "<span>" + message + "</span>",
-            "</div>"
-        ].join("\n"));
+        if ( icon ) {
+            $("body").append([
+                "<div id='indicator'>",
+                 "<img src='" + icon + "'></img>",
+                    "<span>" + message + "</span>",
+                "</div>"
+            ].join("\n"));
+        } else {
+            $("body").append([
+                "<div id='indicator' class='message'>",
+                message,
+                "</div>"
+            ].join("\n"));            
+        }
     };
     
     /**
