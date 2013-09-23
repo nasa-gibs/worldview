@@ -32,6 +32,11 @@
     list-style-type: none;  
 }
 
+#DataDownload_DownloadListPanel div.product li {
+    list-style-type: disc; 
+    margin-left: 10px; 
+}
+
 #DataDownload_DownloadListPanel h3 {
     font-size: 12pt;
     font-weight: bold;

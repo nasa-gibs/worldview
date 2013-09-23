@@ -181,8 +181,8 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
         elements.push("<ul>");
         $.each(links, function(index, link) {
             elements.push(
-                "<a href='" + link.href + "' target='_blank'>" + 
-                link.title + "</a><br/>");
+                "<li><a href='" + link.href + "' target='_blank'>" + 
+                link.title + "</a></li>");
         });
         elements.push("</ul>");
         return elements.join("\n");
@@ -213,7 +213,9 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
         
         if ( product.links && product.links.length > 0 ) {
             elements.push("<h5>Data Collection Information</h5>");
+            elements.push("<div class='product'>");
             elements.push(linksText(product.links));
+            elements.push("</div>");
         }
         
         elements.push("<h5>Selected Data</h5>");
