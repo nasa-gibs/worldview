@@ -424,7 +424,8 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
         config.projection = config.crs; 
         
         // Zooming feature is not as fluid as advertised
-        //config.zoomMethod = null;
+        config.zoomMethod = null;
+        
         // Don't let OpenLayers fetch the stylesheet -- that is included
         // manually.
         config.theme = null;

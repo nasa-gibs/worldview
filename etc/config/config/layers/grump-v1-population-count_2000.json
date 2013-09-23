@@ -22,5 +22,6 @@
     "type": "wms",
     "url": [
         "http://sedac.ciesin.columbia.edu/geoserver/ows"
-    ]
+    ],
+    "product": "CIESIN_SEDAC_GRUMPv1_POPCOUNT"
 }

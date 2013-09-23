@@ -89,7 +89,7 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         try {
             var state = REGISTRY.getState(queryString);
             log.debug("Palette: updateComponent", state);
-            $.each(self.active, function(product, palette) {
+            $.each(self.active, function(layer, palette) {
                 if ( $.inArray(layer, state.layers) < 0 ) {
                     log.debug("Removing palette for " + layer);
                     delete self.active[layer];
@@ -291,4 +291,4 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
     
     init();
     return self;
-}
+};

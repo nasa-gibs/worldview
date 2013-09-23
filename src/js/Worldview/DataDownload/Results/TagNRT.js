@@ -21,6 +21,10 @@ Worldview.DataDownload.Results.TagNRT = function(spec) {
     self.name = "TagNRT";
     
     self.process = function(meta, granule) {
+        // Exit now if this product doesn't have information about NRT
+        if ( !spec ) {
+            return granule;
+        }
         var isNRT;
         if ( spec.by === "value" ) {
             isNRT = granule[spec.field] === spec.value;

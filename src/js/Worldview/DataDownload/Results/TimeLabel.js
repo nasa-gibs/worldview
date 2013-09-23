@@ -22,7 +22,12 @@ Worldview.DataDownload.Results.TimeLabel = function(time) {
     
     self.process = function(meta, granule) {
         var timeStart = Date.parseISOString(granule.time_start);
-        var timeEnd = Date.parseISOString(granule.time_end);
+        
+        // Sometimes an end time is not provided by ECHO
+        var timeEnd;
+        if ( granule.time_end ) {
+            timeEnd = Date.parseISOString(granule.time_end);
+        }
         
         var diff = Math.floor(
             (timeStart.getTime() - time.getTime()) / (1000 * 60 * 60 * 24)
@@ -37,8 +42,12 @@ Worldview.DataDownload.Results.TimeLabel = function(time) {
             }    
         }
         var displayStart = timeStart.toISOStringTimeHM();
-        var displayEnd = timeEnd.toISOStringTimeHM();
-        
+        var displayEnd = null;
+        if ( timeEnd ) {
+            displayEnd = timeEnd.toISOStringTimeHM();
+        } else {
+            displayEnd = "?";
+        }
         granule.label = displayStart + " - " + displayEnd + suffix; 
         
         granule.downloadLabel = timeStart.toISOStringDate() + ": " + 

@@ -22,10 +22,17 @@ Worldview.DataDownload.Results.DateTimeLabel = function(time) {
     
     self.process = function(meta, granule) {
         var timeStart = Date.parseISOString(granule.time_start);
-        var timeEnd = Date.parseISOString(granule.time_end);
         
-        granule.label = timeStart.toISOStringDate() + ": " + 
-            timeStart.toISOStringTimeHM() + "-" + timeEnd.toISOStringTimeHM();
+        // Some granules may not have an end time
+        if ( granule.time_end ) {
+            var timeEnd = Date.parseISOString(granule.time_end);            
+            granule.label = timeStart.toISOStringDate() + ": " + 
+                timeStart.toISOStringTimeHM() + "-" + 
+                timeEnd.toISOStringTimeHM();
+        } else {
+            granule.label = timeStart.toISOStringDate() + ": " + 
+                timeStart.toISOStringTimeHM();
+        }
             
         return granule;  
     };

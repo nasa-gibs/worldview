@@ -48,17 +48,19 @@ Worldview.DataDownload.ECHO.Client = function(spec) {
         var endTimeDelta = parameters.endTimeDelta || 0;
         
         var t = parameters.time;
-        var startTime = new Date(Date.UTC(
-            t.getUTCFullYear(), t.getUTCMonth(), t.getUTCDate(), 
-            0, 0 + startTimeDelta, 0
-        ));
-        var endTime = new Date(Date.UTC(
-            t.getUTCFullYear(), t.getUTCMonth(), t.getUTCDate(), 
-            23, 59 + endTimeDelta, 59
-        ));
-        
-        queryParameters.data.startTime = startTime.toTimestampUTC();
-        queryParameters.data.endTime = endTime.toTimestampUTC();
+        if ( t ) {
+            var startTime = new Date(Date.UTC(
+                t.getUTCFullYear(), t.getUTCMonth(), t.getUTCDate(), 
+                0, 0 + startTimeDelta, 0
+            ));
+            var endTime = new Date(Date.UTC(
+                t.getUTCFullYear(), t.getUTCMonth(), t.getUTCDate(), 
+                23, 59 + endTimeDelta, 59
+            ));
+            
+            queryParameters.data.startTime = startTime.toTimestampUTC();
+            queryParameters.data.endTime = endTime.toTimestampUTC();
+        }
         
         var deferred = $.Deferred();
         ns.ajax.submit(queryParameters).done(function(data) {

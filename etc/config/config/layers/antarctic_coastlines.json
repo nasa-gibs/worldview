@@ -21,9 +21,9 @@
                 256.0
             ],
             "url": [
-                "http://map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                "http://map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                "http://map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
+                "//map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                "//map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                "//map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
             ]
         }
     },

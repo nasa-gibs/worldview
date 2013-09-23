@@ -88,9 +88,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -146,9 +146,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -207,9 +207,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -269,9 +269,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -319,9 +319,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -369,9 +369,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -600,9 +600,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -831,9 +831,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -877,9 +877,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -923,9 +923,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -969,9 +969,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -1015,9 +1015,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -1061,9 +1061,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -1107,9 +1107,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -1153,9 +1153,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -1199,9 +1199,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -1245,9 +1245,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -1291,9 +1291,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -1337,9 +1337,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -1383,9 +1383,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -1429,9 +1429,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -1475,9 +1475,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -1521,9 +1521,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -1567,9 +1567,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -1613,9 +1613,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -1659,9 +1659,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -1705,9 +1705,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -1855,9 +1855,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -1901,9 +1901,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -1947,9 +1947,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -1993,9 +1993,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -2039,9 +2039,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -2085,9 +2085,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -2131,9 +2131,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -2177,9 +2177,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -2223,9 +2223,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -2269,9 +2269,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -2315,9 +2315,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -2361,9 +2361,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -2407,9 +2407,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -2453,9 +2453,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -2499,9 +2499,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -2545,9 +2545,9 @@
                         1024.0
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
                     ]
                 },
                 "arctic": {
@@ -2566,9 +2566,9 @@
                         1024.0
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
                     ]
                 },
                 "geographic": {
@@ -2590,9 +2590,9 @@
                         0.0087890625
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -2884,9 +2884,9 @@
                         1024.0
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
                     ]
                 },
                 "arctic": {
@@ -2905,9 +2905,9 @@
                         1024.0
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
                     ]
                 },
                 "geographic": {
@@ -2929,9 +2929,9 @@
                         0.0087890625
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -3226,9 +3226,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -3275,9 +3275,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -3324,9 +3324,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -3374,9 +3374,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -3420,9 +3420,9 @@
                         256.0
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
                     ]
                 },
                 "arctic": {
@@ -3443,9 +3443,9 @@
                         256.0
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
                     ]
                 },
                 "geographic": {
@@ -3469,9 +3469,9 @@
                         0.002197265625
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -3510,9 +3510,9 @@
                         256.0
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
                     ]
                 },
                 "arctic": {
@@ -3533,9 +3533,9 @@
                         256.0
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
                     ]
                 },
                 "geographic": {
@@ -3559,9 +3559,9 @@
                         0.002197265625
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -3603,9 +3603,9 @@
                         0.002197265625
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -3648,9 +3648,9 @@
                         0.0087890625
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -3702,9 +3702,9 @@
                         0.0087890625
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -3750,9 +3750,9 @@
                         1024.0
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
                     ]
                 },
                 "arctic": {
@@ -3771,9 +3771,9 @@
                         1024.0
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
                     ]
                 },
                 "geographic": {
@@ -3795,9 +3795,9 @@
                         0.0087890625
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -3840,9 +3840,9 @@
                         512.0
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
                     ]
                 },
                 "arctic": {
@@ -3862,9 +3862,9 @@
                         512.0
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
                     ]
                 },
                 "geographic": {
@@ -3887,9 +3887,9 @@
                         0.00439453125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -3949,9 +3949,9 @@
                         0.002197265625
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -3995,9 +3995,9 @@
                         0.00439453125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -4041,9 +4041,9 @@
                         0.00439453125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -4086,9 +4086,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -4135,9 +4135,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -4183,9 +4183,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -4309,9 +4309,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -4355,9 +4355,9 @@
                         1024.0
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
                     ]
                 },
                 "arctic": {
@@ -4376,9 +4376,9 @@
                         1024.0
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
                     ]
                 },
                 "geographic": {
@@ -4400,9 +4400,9 @@
                         0.0087890625
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -4694,9 +4694,9 @@
                         1024.0
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
                     ]
                 },
                 "arctic": {
@@ -4715,9 +4715,9 @@
                         1024.0
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
                     ]
                 },
                 "geographic": {
@@ -4739,9 +4739,9 @@
                         0.0087890625
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -5036,9 +5036,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -5085,9 +5085,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -5134,9 +5134,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -5184,9 +5184,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -5230,9 +5230,9 @@
                         256.0
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
                     ]
                 },
                 "arctic": {
@@ -5253,9 +5253,9 @@
                         256.0
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
                     ]
                 },
                 "geographic": {
@@ -5279,9 +5279,9 @@
                         0.002197265625
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -5320,9 +5320,9 @@
                         256.0
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
                     ]
                 },
                 "arctic": {
@@ -5343,9 +5343,9 @@
                         256.0
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
                     ]
                 },
                 "geographic": {
@@ -5369,9 +5369,9 @@
                         0.002197265625
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -5410,9 +5410,9 @@
                         256.0
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
                     ]
                 },
                 "arctic": {
@@ -5433,9 +5433,9 @@
                         256.0
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
                     ]
                 },
                 "geographic": {
@@ -5459,9 +5459,9 @@
                         0.002197265625
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -5503,9 +5503,9 @@
                         0.002197265625
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -5548,9 +5548,9 @@
                         0.0087890625
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -5599,9 +5599,9 @@
                         0.0087890625
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -5647,9 +5647,9 @@
                         1024.0
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
                     ]
                 },
                 "arctic": {
@@ -5668,9 +5668,9 @@
                         1024.0
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
                     ]
                 },
                 "geographic": {
@@ -5692,9 +5692,9 @@
                         0.0087890625
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -5737,9 +5737,9 @@
                         512.0
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
                     ]
                 },
                 "arctic": {
@@ -5759,9 +5759,9 @@
                         512.0
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
                     ]
                 },
                 "geographic": {
@@ -5784,9 +5784,9 @@
                         0.00439453125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -5846,9 +5846,9 @@
                         0.002197265625
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -5890,9 +5890,9 @@
                         0.00439453125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -5934,9 +5934,9 @@
                         0.00439453125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -5979,9 +5979,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -6028,9 +6028,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -6075,9 +6075,9 @@
                         0.0087890625
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -6099,6 +6099,7 @@
             "min": "0.27",
             "name": "Absorbing Aerosol Optical Depth",
             "period": "daily",
+            "product": "OMAERUV",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -6118,9 +6119,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -6147,6 +6148,7 @@
             "min": "1.1",
             "name": "Aerosol Index",
             "period": "daily",
+            "product": "OMAERUV",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -6166,9 +6168,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -6195,6 +6197,7 @@
             "min": "1.1",
             "name": "Aerosol Optical Depth",
             "period": "daily",
+            "product": "OMAERUV",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -6214,9 +6217,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -6243,6 +6246,7 @@
             "min": "0",
             "name": "Cloud Pressure",
             "period": "daily",
+            "product": "OMCLDRR",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -6262,9 +6266,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -6291,6 +6295,7 @@
             "min": "0.8",
             "name": "Sulfur Dioxide (Lower Troposphere)",
             "period": "daily",
+            "product": "OMSO2",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -6310,9 +6315,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -6340,6 +6345,7 @@
             "min": "0.4",
             "name": "Sulfur Dioxide (Middle Troposphere)",
             "period": "daily",
+            "product": "OMSO2",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -6359,9 +6365,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -6389,6 +6395,7 @@
             "min": "1.2",
             "name": "Sulfur Dioxide (Planetary Boundary Layer)",
             "period": "daily",
+            "product": "OMSO2",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -6408,9 +6415,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -6438,6 +6445,7 @@
             "min": "0.4",
             "name": "Sulfur Dioxide (Upper Troposphere and Stratosphere)",
             "period": "daily",
+            "product": "OMSO2",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_2km",
@@ -6457,9 +6465,9 @@
                         0.017578125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -6557,9 +6565,9 @@
                         0.00439453125
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -6597,9 +6605,9 @@
                         256.0
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
                     ]
                 }
             },
@@ -6637,9 +6645,9 @@
                         256.0
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
                     ]
                 }
             },
@@ -6677,9 +6685,9 @@
                         256.0
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
                     ]
                 }
             },
@@ -6832,6 +6840,7 @@
                 "transparent": "true"
             },
             "period": "static",
+            "product": "CIESIN_SEDAC_GRUMPv1_POPCOUNT",
             "projections": {
                 "arctic": {},
                 "geographic": {}
@@ -6872,9 +6881,9 @@
                         256.0
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
                     ]
                 },
                 "arctic": {
@@ -6895,9 +6904,9 @@
                         256.0
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
                     ]
                 },
                 "geographic": {
@@ -6921,9 +6930,9 @@
                         0.002197265625
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -6961,9 +6970,9 @@
                         256.0
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
                     ]
                 },
                 "arctic": {
@@ -6984,9 +6993,9 @@
                         256.0
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
                     ]
                 },
                 "geographic": {
@@ -7010,9 +7019,9 @@
                         0.002197265625
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -7036,6 +7045,7 @@
                 "transparent": "true"
             },
             "period": "static",
+            "product": "CIESIN_CHRR_NDH_CYCLONE_HFD",
             "projections": {
                 "geographic": {}
             },
@@ -7061,6 +7071,7 @@
                 "transparent": "true"
             },
             "period": "static",
+            "product": "CIESIN_CHRR_NDH_CYCLONE_MRD",
             "projections": {
                 "geographic": {}
             },
@@ -7086,6 +7097,7 @@
                 "transparent": "true"
             },
             "period": "static",
+            "product": "CIESIN_CHRR_NDH_CYCLONE_PELRD",
             "projections": {
                 "geographic": {}
             },
@@ -7111,6 +7123,7 @@
                 "transparent": "true"
             },
             "period": "static",
+            "product": "CIESIN_CHRR_NDH_DROUGHT_HFD",
             "projections": {
                 "geographic": {}
             },
@@ -7136,6 +7149,7 @@
                 "transparent": "true"
             },
             "period": "static",
+            "product": "CIESIN_CHRR_NDH_DROUGHT_MRD",
             "projections": {
                 "geographic": {}
             },
@@ -7161,6 +7175,7 @@
                 "transparent": "true"
             },
             "period": "static",
+            "product": "CIESIN_CHRR_NDH_DROUGHT_PELRD",
             "projections": {
                 "geographic": {}
             },
@@ -7186,6 +7201,7 @@
                 "transparent": "true"
             },
             "period": "static",
+            "product": "CIESIN_CHRR_NDH_FLOOD_HFD",
             "projections": {
                 "geographic": {}
             },
@@ -7211,6 +7227,7 @@
                 "transparent": "true"
             },
             "period": "static",
+            "product": "CIESIN_CHRR_NDH_FLOOD_MRD",
             "projections": {
                 "geographic": {}
             },
@@ -7236,6 +7253,7 @@
                 "transparent": "true"
             },
             "period": "static",
+            "product": "CIESIN_CHRR_NDH_FLOOD_PELRD",
             "projections": {
                 "geographic": {}
             },
@@ -7261,6 +7279,7 @@
                 "transparent": "true"
             },
             "period": "static",
+            "product": "CIESIN_CHRR_NDH_VOLCANO_HFD",
             "projections": {
                 "geographic": {}
             },
@@ -7286,6 +7305,7 @@
                 "transparent": "true"
             },
             "period": "static",
+            "product": "CIESIN_CHRR_NDH_VOLCANO_MRD",
             "projections": {
                 "geographic": {}
             },
@@ -7311,6 +7331,7 @@
                 "transparent": "true"
             },
             "period": "static",
+            "product": "CIESIN_CHRR_NDH_VOLCANO_PELRD",
             "projections": {
                 "geographic": {}
             },
@@ -7384,9 +7405,9 @@
                         256.0
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
                     ]
                 }
             },
@@ -7427,9 +7448,9 @@
                         0.002197265625
                     ],
                     "url": [
-                        "http://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                        "http://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
                     ]
                 }
             },
@@ -59899,6 +59920,136 @@
                 ]
             }
         },
+        "CIESIN_CHRR_NDH_CYCLONE_HFD": {
+            "handler": "CollectionList",
+            "name": "Global Cyclone Hazard Frequency and Distribution",
+            "noBulkDownload": true,
+            "query": {
+                "collection": "true",
+                "dataCenterId": "SEDAC",
+                "shortName": "CIESIN_CHRR_NDH_CYCLONE_HFD"
+            }
+        },
+        "CIESIN_CHRR_NDH_CYCLONE_MRD": {
+            "handler": "CollectionList",
+            "name": "Global Cyclone Mortality Risks and Distribution",
+            "noBulkDownload": true,
+            "query": {
+                "collection": "true",
+                "dataCenterId": "SEDAC",
+                "shortName": "CIESIN_CHRR_NDH_CYCLONE_MRD"
+            }
+        },
+        "CIESIN_CHRR_NDH_CYCLONE_PELRD": {
+            "handler": "CollectionList",
+            "name": "Global Cyclone Proportional Economic Loss Risk Deciles",
+            "noBulkDownload": true,
+            "query": {
+                "collection": "true",
+                "dataCenterId": "SEDAC",
+                "shortName": "CIESIN_CHRR_NDH_CYCLONE_PELRD"
+            }
+        },
+        "CIESIN_CHRR_NDH_DROUGHT_HFD": {
+            "handler": "CollectionList",
+            "name": "Global Drought Hazard Frequency and Distribution",
+            "noBulkDownload": true,
+            "query": {
+                "collection": "true",
+                "dataCenterId": "SEDAC",
+                "shortName": "CIESIN_CHRR_NDH_DROUGHT_HFD"
+            }
+        },
+        "CIESIN_CHRR_NDH_DROUGHT_MRD": {
+            "handler": "CollectionList",
+            "name": "Global Drought Mortality Risks and Distribution",
+            "noBulkDownload": true,
+            "query": {
+                "collection": "true",
+                "dataCenterId": "SEDAC",
+                "shortName": "CIESIN_CHRR_NDH_DROUGHT_MRD"
+            }
+        },
+        "CIESIN_CHRR_NDH_DROUGHT_PELRD": {
+            "handler": "CollectionList",
+            "name": "Global Drought Proportional Economic Loss Risk Deciles",
+            "noBulkDownload": true,
+            "query": {
+                "collection": "true",
+                "dataCenterId": "SEDAC",
+                "shortName": "CIESIN_CHRR_NDH_DROUGHT_PELRD"
+            }
+        },
+        "CIESIN_CHRR_NDH_FLOOD_HFD": {
+            "handler": "CollectionList",
+            "name": "Global Flood Hazard Frequency and Distribution",
+            "noBulkDownload": true,
+            "query": {
+                "collection": "true",
+                "dataCenterId": "SEDAC",
+                "shortName": "CIESIN_CHRR_NDH_FLOOD_HFD"
+            }
+        },
+        "CIESIN_CHRR_NDH_FLOOD_MRD": {
+            "handler": "CollectionList",
+            "name": "Global Flood Mortality Risks and Distribution",
+            "noBulkDownload": true,
+            "query": {
+                "collection": "true",
+                "dataCenterId": "SEDAC",
+                "shortName": "CIESIN_CHRR_NDH_FLOOD_MRD"
+            }
+        },
+        "CIESIN_CHRR_NDH_FLOOD_PELRD": {
+            "handler": "CollectionList",
+            "name": "Global Flood Proportional Economic Loss Risk Deciles",
+            "noBulkDownload": true,
+            "query": {
+                "collection": "true",
+                "dataCenterId": "SEDAC",
+                "shortName": "CIESIN_CHRR_NDH_FLOOD_PELRD"
+            }
+        },
+        "CIESIN_CHRR_NDH_VOLCANO_HFD": {
+            "handler": "CollectionList",
+            "name": "Global Volcano Hazard Frequency and Distribution",
+            "noBulkDownload": true,
+            "query": {
+                "collection": "true",
+                "dataCenterId": "SEDAC",
+                "shortName": "CIESIN_CHRR_NDH_VOLCANO_HFD"
+            }
+        },
+        "CIESIN_CHRR_NDH_VOLCANO_MRD": {
+            "handler": "CollectionList",
+            "name": "Global Volcano Mortality Risks and Distribution",
+            "noBulkDownload": true,
+            "query": {
+                "collection": "true",
+                "dataCenterId": "SEDAC",
+                "shortName": "CIESIN_CHRR_NDH_VOLCANO_MRD"
+            }
+        },
+        "CIESIN_CHRR_NDH_VOLCANO_PELRD": {
+            "handler": "CollectionList",
+            "name": "Global Volcano Proportional Economic Loss Risk Deciles",
+            "noBulkDownload": true,
+            "query": {
+                "collection": "true",
+                "dataCenterId": "SEDAC",
+                "shortName": "CIESIN_CHRR_NDH_VOLCANO_PELRD"
+            }
+        },
+        "CIESIN_SEDAC_GRUMPv1_POPCOUNT": {
+            "handler": "CollectionList",
+            "name": "Global Rural-Urban Mapping Project, Version 1 (GRUMPv1): Population Count Grid",
+            "noBulkDownload": true,
+            "query": {
+                "collection": "true",
+                "dataCenterId": "SEDAC",
+                "shortName": "CIESIN_SEDAC_GRUMPv1_POPCOUNT"
+            }
+        },
         "ML2CO": {
             "handler": "List",
             "name": "MLS/Aura L2 Carbon Monoxide (CO) Mixing Ratio",
@@ -60391,6 +60542,32 @@
                 ],
                 "dayNightFlag": "DAY",
                 "shortName": "MYD29"
+            }
+        },
+        "OMAERUV": {
+            "handler": "List",
+            "name": "OMI/Aura Near UV Aerosol Optical Depth and Single Scattering Albedo 1-orbit L2 Swath 13x24 km",
+            "query": {
+                "dataCenterId": "GSFCS4PA",
+                "shortName": "OMAERUV"
+            }
+        },
+        "OMCLDRR": {
+            "handler": "List",
+            "name": "OMI/Aura Cloud Pressure and Fraction (Raman Scattering) 1-Orbit L2 Swath 13x24 km",
+            "query": {
+                "dataCenterId": "GSFCS4PA",
+                "shortName": "OMCLDRR"
+            }
+        },
+        "OMSO2": {
+            "handler": "List",
+            "name": "OMI/Aura Sulphur Dioxide (SO2) Total Column 1-orbit L2 Swath 13x24 km",
+            "query": {
+                "shortName": [
+                    "OMSO2",
+                    "OMSO2NRTb"
+                ]
             }
         }
     },

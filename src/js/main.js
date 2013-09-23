@@ -152,25 +152,27 @@ $(function() {// Initialize "static" vars
         if(queryString) {
         	eventsCollapsed = true;
         }
-		var events = new SOTE.widget.Events("eventsHolder", {
-		    config: config,
-		    mapWidget: map, 
-  		    paletteWidget: palettes,
-            switchWidget: projection,
-		    bankWidget: products,
-		    dateWidget: date,
-		    apcmWidget: apcn,
-		    wvOpacity: opacity,
-		    wvEPSG: crs,
-		    shouldCollapse: eventsCollapsed,
-		    lastVisit: lastVisitObj
-	    });
+        if ( config.parameters.events ) {
+    		var events = new SOTE.widget.Events("eventsHolder", {
+    		    config: config,
+    		    mapWidget: map, 
+      		    paletteWidget: palettes,
+                switchWidget: projection,
+    		    bankWidget: products,
+    		    dateWidget: date,
+    		    apcmWidget: apcn,
+    		    wvOpacity: opacity,
+    		    wvEPSG: crs,
+    		    shouldCollapse: eventsCollapsed,
+    		    lastVisit: lastVisitObj
+    	    });
+	    }
 	    
-
         var dataDownload = Worldview.Widget.DataDownload(config, {
             selector: "#DataDownload",
             model: dataDownloadModel, 
-            maps: map.maps
+            maps: map.maps,
+            paletteWidget: palettes
         });
         dataDownload.render();
         
