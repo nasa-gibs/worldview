@@ -91,15 +91,33 @@ Worldview.DataDownload.WgetPage = (function() {
     };
     
     var writeProduct = function(doc, product) {
+        console.log(product);
         doc.write("<h4>" + product.name + "</h4>");
+        if ( product.noBulkDownload ) {
+            doc.write("<p>" +
+                      "These granules are not available for bulk download. " + 
+                      "Please visit each link and download manually." + 
+                      "</p>");
+        }
         $.each(product.list, function(index, item) { 
-            doc.write("<div class='label'>" + item.label + "</div>");
+            // Don't print twice if the item and product names are the same.
+            if ( item.label !== product.name ) {
+                doc.write("<div class='label'>" + item.label + "</div>");
+            }
             $.each(item.links, function(index, link) {
-                doc.write(
-                    "<div>" +
-                    "<a href='" + link.href + "'>" + link.href + "</a>" +
-                    "</div>"
-                );
+                if ( !product.noBulkDownload ) {
+                    doc.write(
+                        "<div>" +
+                        "<a href='" + link.href + "'>" + link.href + "</a>" +
+                        "</div>"
+                    );
+                } else {
+                    doc.write(
+                        "<div class='label'>" + 
+                        link.href +
+                        "</div>"
+                    );
+                }
             });
         });                
     };

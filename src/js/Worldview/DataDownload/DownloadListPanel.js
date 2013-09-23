@@ -73,10 +73,12 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
         
         $.each(model.selectedGranules, function(key, granule) {
             if ( !selection[granule.product] ) {
+                productConfig = config.products[granule.product];
                 selection[granule.product] = {
-                    name: config.products[granule.product].name,
+                    name: productConfig.name,
                     granules: [granule],
-                    counts: {}
+                    counts: {},
+                    noBulkDownload: productConfig.noBulkDownload || false,
                 };
             } else {
                 selection[granule.product].granules.push(granule);
@@ -147,6 +149,16 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
         return selection; 
     };
     
+    var isBulkDownloadable = function() {
+        var result = false;
+        $.each(selection, function(index, product) {
+            if ( !product.noBulkDownload ) {
+                result = true;
+            }
+        });
+        return result;
+    };
+    
     var reformatLink = function(link) { 
         // For title, take it if found, otherwise, use the basename of the
         // URI
@@ -168,13 +180,21 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
         return elements.join("\n");
     };
     
-    var granuleText = function(granule) {
-        var elements = [
-            "<tr>",
-                "<td>" + granule.label + "</td>",
-                "<td>" + linksText(granule.links) + "</td>",
-            "</tr>"
-        ];
+    var granuleText = function(product, granule) {
+        if ( product.name !== granule.label ) {
+            var elements = [
+                "<tr>",
+                    "<td>" + granule.label + "</td>",
+                    "<td>" + linksText(granule.links) + "</td>",
+                "</tr>"
+            ];
+        } else { 
+            var elements = [
+                "<tr>",
+                    "<td colspan='2'>" + linksText(granule.links) + "</td>",
+                "</tr>"
+            ];
+        }
         return elements.join("\n");  
     };
     
@@ -192,18 +212,22 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
         elements.push("<table>");
 
         $.each(product.list, function(index, item) {
-            elements.push(granuleText(item));
+            elements.push(granuleText(product, item));
         });
         elements.push("</table>");
         return elements.join("\n");
     };
     
     var bodyText = function() {
+        var bulk = "";
+        if ( isBulkDownloadable() ) {
+            bulk = "<div class='wget'>" + 
+                   "<a class='wget' href='#'>Bulk Download (wget)</a>" +
+                   "</div>";          
+        }
         var elements = [
             NOTICE,
-            "<div class='wget'>", 
-                "<a class='wget' href='#'>Bulk Download (wget)</a>", 
-            "</div>"
+            bulk,
         ];
         $.each(selection, function(key, product) {
             elements.push(productText(product));  

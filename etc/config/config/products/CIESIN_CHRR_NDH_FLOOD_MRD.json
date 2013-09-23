@@ -5,5 +5,6 @@
         "collection": "true",
         "shortName": "CIESIN_CHRR_NDH_FLOOD_MRD",
         "dataCenterId": "SEDAC"
-    }
+    },
+    "noBulkDownload": true
 }

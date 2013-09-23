@@ -5,5 +5,6 @@
         "collection": "true",
         "shortName": "CIESIN_CHRR_NDH_CYCLONE_HFD",
         "dataCenterId": "SEDAC"
-    }
+    },
+    "noBulkDownload": true
 }

@@ -253,7 +253,7 @@ def process_request(options):
       raise RequestError("Missing parameter: %s" % required_field)
   
   xml = None
-  if "collections" not in fields:
+  if "collection" not in fields:
     xml = create_xml(fields)
     
     if options.xml:

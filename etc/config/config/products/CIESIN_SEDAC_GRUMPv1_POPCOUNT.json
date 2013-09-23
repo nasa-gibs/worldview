@@ -5,5 +5,6 @@
         "collection": "true",
         "shortName": "CIESIN_SEDAC_GRUMPv1_POPCOUNT",
         "dataCenterId": "SEDAC"
-    }
+    },
+    "noBulkDownload": true
 }
