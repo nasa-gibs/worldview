@@ -1,57 +1,45 @@
-
-div.olControlMousePosition {
-    position: absolute;
-    right: 12px; 
-    bottom: 98px;
-    z-index: 2000;
-    padding: 1px 8px;
-    display: block;
-    font-size: 1.3em;
+.ui-body-c {
+    text-shadow:none;
+}
+div.olControlMousePosition, div.olControlScaleLineCustom {
+    position:absolute;
+    right:12px;
+    z-index:2000;
+    display:block;
+}
+div.olControlMousePosition, div.olControlScaleLineCustomBottom,div.olControlScaleLineCustomTop {
     color: #EEEEEE;
+    text-shadow:
+      -1px -1px 0 #000,
+      1px -1px 0 #000,
+      -1px 1px 0 #000,
+      1px 1px 0 #000;
+    font-size: 1.1em;
+    font-weight:bold;
+}
+div.olControlScaleLineCustomBottom, div.olControlScaleLineCustomTop{
     background-color:rgba(38,38,38,0.4);
-    text-shadow:
-      -1px -1px 0 #000,
-      1px -1px 0 #000,
-      -1px 1px 0 #000,
-      1px 1px 0 #000;
+    float:right;
+    text-align:right;
+    padding:3px 10px;
+    box-sizing:border-box;
 }
-
-
+div.olControlMousePosition {
+    bottom: 95px;
+    padding: 1px 8px;
+}
 div.olControlScaleLineCustom {
-    position: absolute;
-    right: 12px;
     bottom: 118px;
-    z-index: 2000;
-    display: block;
-    color: #EEEEEE;
-    text-shadow:
-      -1px -1px 0 #000,
-      1px -1px 0 #000,
-      -1px 1px 0 #000,
-      1px 1px 0 #000;
 }
-
 .olControlScaleLineCustomBottom {
    border: solid 2px black;
    border-bottom: none;
-   float:right;
    clear:both;
-   box-sizing:border-box;
    margin-top:-2px;
-   text-align: right;
-   padding:5px 10px;
-   background-color:rgba(38,38,38,0.4);
-   font-size: 1.3em;
 }
 .olControlScaleLineCustomTop {
    border: solid 2px black;
    border-top: none;
-   box-sizing:border-box;
-   float:right;
-   text-align: right;
-   background-color:rgba(38,38,38,0.4);
-   padding:5px 10px;
-   font-size: 1.3em;
 }
 
 
