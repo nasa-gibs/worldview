@@ -40,9 +40,7 @@ Worldview.DataDownload.SelectionListPanel = function(model, results) {
             granules[granule.id] = granule;    
         });
         
-        $("#DataDownload_GranuleList img.button").on("click", toggleSelection);
-        model.events.on("granuleSelect", onGranuleSelect);
-        model.events.on("granuleUnselect", onGranuleUnselect);
+        $("#DataDownload_GranuleList input").on("click", toggleSelection);
     };
     
     self.hide = function() {
@@ -66,26 +64,18 @@ Worldview.DataDownload.SelectionListPanel = function(model, results) {
     var dispose = function() {
         panel.destroy(); 
         panel = null;
-        $("#DataDownload_GranuleList img.button").off("click", toggleSelection);   
-        model.events.off("granuleSelect", onGranuleSelect);
-        model.events.off("granuleUnselect", onGranuleUnselect);             
+        $("#DataDownload_GranuleList input").off("click", toggleSelection);  
     };
     
     var resultsText = function() {
         var elements = [];
         $.each(results.granules, function(index, granule) {
-            var selected = model.isSelected(granule);
-            var button = ( selected ) 
-                ? Worldview.DataDownload.IMAGE_UNSELECT
-                : Worldview.DataDownload.IMAGE_SELECT;
+            var selected = model.isSelected(granule) ? "checked='true'" : "";
             elements.push(
                 "<tr>" + 
                 "<td>" + 
-                "<img " + 
-                    "id='" + granule.id + "' " + 
-                    "src='" + button + "' " + 
-                    "data-selected='" + selected + "'" + 
-                    "class='button'>" +
+                "<input type='checkbox' value='" + granule.id + "' " + 
+                selected + ">" + 
                 "</td>" + 
                 "<td class='label'>" + granule.label + "</td>" + 
                 "</tr>"
@@ -108,29 +98,15 @@ Worldview.DataDownload.SelectionListPanel = function(model, results) {
     };
          
     var toggleSelection = function(event, ui) {
-        var granule = granules[event.target.id];
-        var selected = $(this).attr("data-selected") === "true";
+        var granule = granules[$(this).attr("value")];
+        var selected = $(this).prop("checked");
         if ( selected ) {
-            model.unselectGranule(granule);
-        } else {
             model.selectGranule(granule);
+        } else {
+            model.unselectGranule(granule);
         }
     };
        
-    var onGranuleSelect = function(granule) {
-        log.debug(granule);
-        $("#" + granule.id)
-            .attr("src", Worldview.DataDownload.IMAGE_UNSELECT)
-            .attr("data-selected", "true");
-    };
-    
-    var onGranuleUnselect = function(granule) {
-        log.debug(granule);
-        $("#" + granule.id)
-            .attr("src", Worldview.DataDownload.IMAGE_SELECT)
-            .attr("data-selected", "false");
-    };
-        
     return self;
 
 };

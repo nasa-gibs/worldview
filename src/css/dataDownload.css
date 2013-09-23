@@ -112,6 +112,14 @@
     height: 16px;
 }
 
+#DataDownload_GranuleList table {
+    width: 100%;
+}
+
 #DataDownload_GranuleList td {
     padding: 3px;
+}
+
+#DataDownload_GranuleList tr:nth-child(even) {
+    background-color: rgb(45, 48, 52);
 }
