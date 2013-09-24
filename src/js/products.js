@@ -72,7 +72,7 @@ SOTE.widget.Products.HTML_TAB_ACTIVE_SELECTED =
     "Active";
     
 SOTE.widget.Products.HTML_TAB_ACTIVE_UNSELECTED = 
-    "<img class='productsIcon' src='images/missing-icon.svg' title='Activce Layers'>";
+    "<img class='productsIcon' src='images/missing-icon.svg' title='Active'>";
 
 SOTE.widget.Products.HTML_TAB_ADD_SELECTED = 
     "<img class='productsIcon selected' src='images/missing-icon.svg'>" +
@@ -143,7 +143,7 @@ SOTE.widget.Products.prototype.render = function(){
 	toggleButtonHolder.setAttribute("class","toggleButtonHolder");
 	var accordionToggler = document.createElement("a");
 	accordionToggler.setAttribute("class","accordionToggler atcollapse arrow");
-	accordionToggler.setAttribute("title","Hide Products");
+	accordionToggler.setAttribute("title","Hide Layer Selector");
 	this.isCollapsed = false;
 	toggleButtonHolder.appendChild(accordionToggler);
 	this.container.appendChild(toggleButtonHolder);
@@ -218,7 +218,7 @@ SOTE.widget.Products.prototype.render = function(){
 SOTE.widget.Products.handleFire = function(e){
 	var self = e.data.self;
 	if(self.isCollapsed){
-		$('.accordionToggler').html("Active ("+ self.b.currCount()+")");
+		$('.accordionToggler').html("Layers ("+ self.b.currCount()+")");
 	}
 };
 
@@ -290,7 +290,7 @@ SOTE.widget.Products.toggle = function(e,ui){
 	var self = e.data.self;
 	if(self.isCollapsed){
 		$('.accordionToggler').removeClass('atexpand').addClass('atcollapse').removeClass('staticLayers dateHolder').addClass('arrow');
-		$('.accordionToggler').attr("title","Hide Products");
+		$('.accordionToggler').attr("title","Hide Layer Selector");
 		$('.accordionToggler').empty();
 		//$('.products').css("left","0");
 		$('.products').animate({left:'0'}, 300);
@@ -299,8 +299,8 @@ SOTE.widget.Products.toggle = function(e,ui){
 	}
 	else{
 		$('.accordionToggler').removeClass('atcollapse').addClass('dateHolder').removeClass('arrow').addClass('staticLayers');
-		$('.accordionToggler').attr("title","Show Products");
-		$('.accordionToggler').html("Active ("+ self.b.currCount()+")");
+		$('.accordionToggler').attr("title","Show Layer Selector");
+		$('.accordionToggler').html("Layers ("+ self.b.currCount()+")");
 
 		var w = $('.products').outerWidth();
 		$('.products').animate({left:'-'+w+"px"}, 300);
