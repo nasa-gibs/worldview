@@ -17,7 +17,9 @@
     background: #262b31;
     color: #ffffff;
     width: 200px;
+    box-sizing:border-box;
     height: 52px;
+    line-height:52px;
     left: 50%;
     top: 150px;
     margin: -75px 0 0 -75px;
@@ -29,8 +31,4 @@
     width: 32px;
     height: 32px;
     vertical-align: middle;
-}
-
-#indicator .message {
-   
 }

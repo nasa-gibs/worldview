@@ -478,7 +478,7 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
         controls.push(new OpenLayers.Control.Attribution());
         controls.push(new OpenLayers.Control.ScaleLine({
             displayClass: mapClass + "olControlScaleLineCustom",
-            maxWidth: 200,
+            maxWidth: 175,
         }));        
         
         var coordinateControl = 
