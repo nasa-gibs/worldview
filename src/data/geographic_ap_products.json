@@ -1,181 +1,4 @@
 {
-    "Air Quality": [
-        {
-            "category": "baselayers", 
-            "label": "Corrected Reflectance (True Color)", 
-            "sublabel": "Terra / MODIS", 
-            "tags": "natural color, cr", 
-            "type": "single", 
-            "value": "MODIS_Terra_CorrectedReflectance_TrueColor"
-        }, 
-        {
-            "category": "baselayers", 
-            "label": "Corrected Reflectance (True Color)", 
-            "sublabel": "Aqua / MODIS", 
-            "tags": "natural color, cr", 
-            "type": "single", 
-            "value": "MODIS_Aqua_CorrectedReflectance_TrueColor"
-        }, 
-        {
-            "category": "baselayers", 
-            "label": "Land / Water Map", 
-            "sublabel": "OpenStreetMap / Coastlines", 
-            "tags": "borders", 
-            "type": "single", 
-            "value": "land_water_map"
-        }, 
-        {
-            "category": "overlays", 
-            "label": "Aerosol Optical Depth", 
-            "sublabel": "Terra / MODIS", 
-            "tags": "aod", 
-            "type": "multi", 
-            "value": "MODIS_Terra_Aerosol"
-        }, 
-        {
-            "category": "overlays", 
-            "label": "Aerosol Optical Depth", 
-            "sublabel": "Aqua / MODIS", 
-            "tags": "aod", 
-            "type": "multi", 
-            "value": "MODIS_Aqua_Aerosol"
-        }, 
-        {
-            "category": "overlays", 
-            "label": "MODIS Combined Value-Added Aerosol Optical Depth", 
-            "sublabel": "Terra and Aqua / MODIS", 
-            "tags": "aod", 
-            "type": "multi", 
-            "value": "MODIS_Combined_Value_Added_AOD"
-        }, 
-        {
-            "category": "overlays", 
-            "label": "Carbon Monoxide (Total Column, Day)", 
-            "sublabel": "Aqua / AIRS", 
-            "tags": "co", 
-            "type": "multi", 
-            "value": "AIRS_CO_Total_Column_Day"
-        }, 
-        {
-            "category": "overlays", 
-            "label": "Carbon Monoxide (Total Column, Night)", 
-            "sublabel": "Aqua / AIRS", 
-            "tags": "co", 
-            "type": "multi", 
-            "value": "AIRS_CO_Total_Column_Night"
-        }, 
-        {
-            "category": "overlays", 
-            "label": "Carbon Monoxide (215 hPa, Day)", 
-            "sublabel": "Aura / MLS", 
-            "tags": "co", 
-            "type": "multi", 
-            "value": "MLS_CO_215hPa_Day"
-        }, 
-        {
-            "category": "overlays", 
-            "label": "Carbon Monoxide (215 hPa, Night)", 
-            "sublabel": "Aura / MLS", 
-            "tags": "co", 
-            "type": "multi", 
-            "value": "MLS_CO_215hPa_Night"
-        }, 
-        {
-            "category": "overlays", 
-            "label": "Sulfur Dioxide (Day, Prata Algorithm)", 
-            "sublabel": "Aqua / AIRS", 
-            "tags": "so2", 
-            "type": "multi", 
-            "value": "AIRS_Prata_SO2_Index_Day"
-        }, 
-        {
-            "category": "overlays", 
-            "label": "Sulfur Dioxide (Night, Prata Algorithm)", 
-            "sublabel": "Aqua / AIRS", 
-            "tags": "so2", 
-            "type": "multi", 
-            "value": "AIRS_Prata_SO2_Index_Night"
-        }, 
-        {
-            "category": "overlays", 
-            "label": "Sulfur Dioxide (147 hPa, Day)", 
-            "sublabel": "Aura / MLS", 
-            "tags": "so2", 
-            "type": "multi", 
-            "value": "MLS_SO2_147hPa_Day"
-        }, 
-        {
-            "category": "overlays", 
-            "label": "Sulfur Dioxide (147 hPa, Night)", 
-            "sublabel": "Aura / MLS", 
-            "tags": "so2", 
-            "type": "multi", 
-            "value": "MLS_SO2_147hPa_Night"
-        }, 
-        {
-            "category": "overlays", 
-            "label": "Aerosol Index", 
-            "sublabel": "Aura / OMI", 
-            "type": "multi", 
-            "value": "OMI_Aerosol_Index"
-        }, 
-        {
-            "category": "overlays", 
-            "label": "Aerosol Optical Depth", 
-            "sublabel": "Aura / OMI", 
-            "tags": "aod", 
-            "type": "multi", 
-            "value": "OMI_Aerosol_Optical_Depth"
-        }, 
-        {
-            "category": "overlays", 
-            "label": "Absorbing Aerosol Optical Depth", 
-            "sublabel": "Aura / OMI", 
-            "tags": "aod", 
-            "type": "multi", 
-            "value": "OMI_Absorbing_Aerosol_Optical_Depth"
-        }, 
-        {
-            "category": "overlays", 
-            "label": "Sulfur Dioxide (Planetary Boundary Layer)", 
-            "sublabel": "Aura / OMI", 
-            "tags": "so2", 
-            "type": "multi", 
-            "value": "OMI_SO2_Planetary_Boundary_Layer"
-        }, 
-        {
-            "category": "overlays", 
-            "label": "Sulfur Dioxide (Lower Troposphere)", 
-            "sublabel": "Aura / OMI", 
-            "tags": "so2", 
-            "type": "multi", 
-            "value": "OMI_SO2_Lower_Troposphere"
-        }, 
-        {
-            "category": "overlays", 
-            "label": "Sulfur Dioxide (Middle Troposphere)", 
-            "sublabel": "Aura / OMI", 
-            "tags": "so2", 
-            "type": "multi", 
-            "value": "OMI_SO2_Middle_Troposphere"
-        }, 
-        {
-            "category": "overlays", 
-            "label": "Sulfur Dioxide (Upper Troposphere and Stratosphere)", 
-            "sublabel": "Aura / OMI", 
-            "tags": "so2", 
-            "type": "multi", 
-            "value": "OMI_SO2_Upper_Troposphere_and_Stratosphere"
-        }, 
-        {
-            "category": "overlays", 
-            "label": "Land Mask", 
-            "sublabel": "OpenSteetMap / Coastlines", 
-            "tags": "borders, mask", 
-            "type": "multi", 
-            "value": "land_mask"
-        }
-    ], 
     "All": [
         {
             "category": "baselayers", 
@@ -1061,6 +884,305 @@
             "sublabel": "Space-Track.org / Aura", 
             "type": "multi", 
             "value": "Aura_Orbit_Dsc"
+        }
+    ], 
+    "Highlighted": [
+        {
+            "category": "baselayers", 
+            "label": "Corrected Reflectance (True Color)", 
+            "sublabel": "Terra / MODIS", 
+            "tags": "natural color, cr", 
+            "type": "single", 
+            "value": "MODIS_Terra_CorrectedReflectance_TrueColor"
+        }, 
+        {
+            "category": "baselayers", 
+            "label": "Corrected Reflectance (True Color)", 
+            "sublabel": "Aqua / MODIS", 
+            "tags": "natural color, cr", 
+            "type": "single", 
+            "value": "MODIS_Aqua_CorrectedReflectance_TrueColor"
+        }, 
+        {
+            "category": "baselayers", 
+            "label": "Earth at Night 2012", 
+            "sublabel": "Suomi NPP / VIIRS via NASA Earth Observatory", 
+            "tags": "night lights, city lights, snpp", 
+            "type": "single", 
+            "value": "VIIRS_CityLights_2012"
+        }, 
+        {
+            "category": "baselayers", 
+            "label": "Land / Water Map", 
+            "sublabel": "OpenStreetMap / Coastlines", 
+            "tags": "borders", 
+            "type": "single", 
+            "value": "land_water_map"
+        }, 
+        {
+            "category": "overlays", 
+            "label": "Land Surface Temperature (Day)", 
+            "sublabel": "Terra / MODIS", 
+            "type": "multi", 
+            "value": "MODIS_Terra_Land_Surface_Temp_Day"
+        }, 
+        {
+            "category": "overlays", 
+            "label": "Land Surface Temperature (Night)", 
+            "sublabel": "Terra / MODIS", 
+            "type": "multi", 
+            "value": "MODIS_Terra_Land_Surface_Temp_Night"
+        }, 
+        {
+            "category": "overlays", 
+            "label": "Fires (Day and Night)", 
+            "sublabel": "Terra/ and Aqua/MODIS Fire and Thermal Anomalies", 
+            "tags": "hotspot", 
+            "type": "multi", 
+            "value": "MODIS_Fires_All"
+        }, 
+        {
+            "category": "overlays", 
+            "label": "Aerosol Optical Depth", 
+            "sublabel": "Terra / MODIS", 
+            "tags": "aod", 
+            "type": "multi", 
+            "value": "MODIS_Terra_Aerosol"
+        }, 
+        {
+            "category": "overlays", 
+            "label": "Dust Score", 
+            "sublabel": "Aqua / AIRS", 
+            "type": "multi", 
+            "value": "AIRS_Dust_Score"
+        }, 
+        {
+            "category": "overlays", 
+            "label": "Snow Cover", 
+            "sublabel": "Terra / MODIS", 
+            "type": "multi", 
+            "value": "MODIS_Terra_Snow_Cover"
+        }, 
+        {
+            "category": "overlays", 
+            "label": "Sea Ice", 
+            "sublabel": "Terra / MODIS", 
+            "type": "multi", 
+            "value": "MODIS_Terra_Sea_Ice"
+        }, 
+        {
+            "category": "overlays", 
+            "label": "Orbital Track (Ascending)", 
+            "sublabel": "Space-Track.org / Terra", 
+            "type": "multi", 
+            "value": "Terra_Orbit_Asc"
+        }, 
+        {
+            "category": "overlays", 
+            "label": "Orbital Track (Descending)", 
+            "sublabel": "Space-Track.org / Terra", 
+            "type": "multi", 
+            "value": "Terra_Orbit_Dsc"
+        }, 
+        {
+            "category": "overlays", 
+            "label": "National Boundaries", 
+            "sublabel": "SEDAC / National Boundaries", 
+            "tags": "borders, countries", 
+            "type": "multi", 
+            "value": "sedac_bound"
+        }, 
+        {
+            "category": "overlays", 
+            "label": "Administrative Boundaries", 
+            "sublabel": "SEDAC / L1 Admin Boundaries", 
+            "tags": "state, borders", 
+            "type": "multi", 
+            "value": "cartographic:esri-administrative-boundaries_level-1"
+        },
+        {
+            "category": "overlays", 
+            "label": "Population Density", 
+            "sublabel": "SEDAC GRUMP v1 Population Count 2000", 
+            "type": "multi", 
+            "value": "grump-v1-population-count_2000"
+        }
+    ],
+    "Air Quality": [
+        {
+            "category": "baselayers", 
+            "label": "Corrected Reflectance (True Color)", 
+            "sublabel": "Terra / MODIS", 
+            "tags": "natural color, cr", 
+            "type": "single", 
+            "value": "MODIS_Terra_CorrectedReflectance_TrueColor"
+        }, 
+        {
+            "category": "baselayers", 
+            "label": "Corrected Reflectance (True Color)", 
+            "sublabel": "Aqua / MODIS", 
+            "tags": "natural color, cr", 
+            "type": "single", 
+            "value": "MODIS_Aqua_CorrectedReflectance_TrueColor"
+        }, 
+        {
+            "category": "baselayers", 
+            "label": "Land / Water Map", 
+            "sublabel": "OpenStreetMap / Coastlines", 
+            "tags": "borders", 
+            "type": "single", 
+            "value": "land_water_map"
+        }, 
+        {
+            "category": "overlays", 
+            "label": "Aerosol Optical Depth", 
+            "sublabel": "Terra / MODIS", 
+            "tags": "aod", 
+            "type": "multi", 
+            "value": "MODIS_Terra_Aerosol"
+        }, 
+        {
+            "category": "overlays", 
+            "label": "Aerosol Optical Depth", 
+            "sublabel": "Aqua / MODIS", 
+            "tags": "aod", 
+            "type": "multi", 
+            "value": "MODIS_Aqua_Aerosol"
+        }, 
+        {
+            "category": "overlays", 
+            "label": "MODIS Combined Value-Added Aerosol Optical Depth", 
+            "sublabel": "Terra and Aqua / MODIS", 
+            "tags": "aod", 
+            "type": "multi", 
+            "value": "MODIS_Combined_Value_Added_AOD"
+        }, 
+        {
+            "category": "overlays", 
+            "label": "Carbon Monoxide (Total Column, Day)", 
+            "sublabel": "Aqua / AIRS", 
+            "tags": "co", 
+            "type": "multi", 
+            "value": "AIRS_CO_Total_Column_Day"
+        }, 
+        {
+            "category": "overlays", 
+            "label": "Carbon Monoxide (Total Column, Night)", 
+            "sublabel": "Aqua / AIRS", 
+            "tags": "co", 
+            "type": "multi", 
+            "value": "AIRS_CO_Total_Column_Night"
+        }, 
+        {
+            "category": "overlays", 
+            "label": "Carbon Monoxide (215 hPa, Day)", 
+            "sublabel": "Aura / MLS", 
+            "tags": "co", 
+            "type": "multi", 
+            "value": "MLS_CO_215hPa_Day"
+        }, 
+        {
+            "category": "overlays", 
+            "label": "Carbon Monoxide (215 hPa, Night)", 
+            "sublabel": "Aura / MLS", 
+            "tags": "co", 
+            "type": "multi", 
+            "value": "MLS_CO_215hPa_Night"
+        }, 
+        {
+            "category": "overlays", 
+            "label": "Sulfur Dioxide (Day, Prata Algorithm)", 
+            "sublabel": "Aqua / AIRS", 
+            "tags": "so2", 
+            "type": "multi", 
+            "value": "AIRS_Prata_SO2_Index_Day"
+        }, 
+        {
+            "category": "overlays", 
+            "label": "Sulfur Dioxide (Night, Prata Algorithm)", 
+            "sublabel": "Aqua / AIRS", 
+            "tags": "so2", 
+            "type": "multi", 
+            "value": "AIRS_Prata_SO2_Index_Night"
+        }, 
+        {
+            "category": "overlays", 
+            "label": "Sulfur Dioxide (147 hPa, Day)", 
+            "sublabel": "Aura / MLS", 
+            "tags": "so2", 
+            "type": "multi", 
+            "value": "MLS_SO2_147hPa_Day"
+        }, 
+        {
+            "category": "overlays", 
+            "label": "Sulfur Dioxide (147 hPa, Night)", 
+            "sublabel": "Aura / MLS", 
+            "tags": "so2", 
+            "type": "multi", 
+            "value": "MLS_SO2_147hPa_Night"
+        }, 
+        {
+            "category": "overlays", 
+            "label": "Aerosol Index", 
+            "sublabel": "Aura / OMI", 
+            "type": "multi", 
+            "value": "OMI_Aerosol_Index"
+        }, 
+        {
+            "category": "overlays", 
+            "label": "Aerosol Optical Depth", 
+            "sublabel": "Aura / OMI", 
+            "tags": "aod", 
+            "type": "multi", 
+            "value": "OMI_Aerosol_Optical_Depth"
+        }, 
+        {
+            "category": "overlays", 
+            "label": "Absorbing Aerosol Optical Depth", 
+            "sublabel": "Aura / OMI", 
+            "tags": "aod", 
+            "type": "multi", 
+            "value": "OMI_Absorbing_Aerosol_Optical_Depth"
+        }, 
+        {
+            "category": "overlays", 
+            "label": "Sulfur Dioxide (Planetary Boundary Layer)", 
+            "sublabel": "Aura / OMI", 
+            "tags": "so2", 
+            "type": "multi", 
+            "value": "OMI_SO2_Planetary_Boundary_Layer"
+        }, 
+        {
+            "category": "overlays", 
+            "label": "Sulfur Dioxide (Lower Troposphere)", 
+            "sublabel": "Aura / OMI", 
+            "tags": "so2", 
+            "type": "multi", 
+            "value": "OMI_SO2_Lower_Troposphere"
+        }, 
+        {
+            "category": "overlays", 
+            "label": "Sulfur Dioxide (Middle Troposphere)", 
+            "sublabel": "Aura / OMI", 
+            "tags": "so2", 
+            "type": "multi", 
+            "value": "OMI_SO2_Middle_Troposphere"
+        }, 
+        {
+            "category": "overlays", 
+            "label": "Sulfur Dioxide (Upper Troposphere and Stratosphere)", 
+            "sublabel": "Aura / OMI", 
+            "tags": "so2", 
+            "type": "multi", 
+            "value": "OMI_SO2_Upper_Troposphere_and_Stratosphere"
+        }, 
+        {
+            "category": "overlays", 
+            "label": "Land Mask", 
+            "sublabel": "OpenSteetMap / Coastlines", 
+            "tags": "borders, mask", 
+            "type": "multi", 
+            "value": "land_mask"
         }
     ], 
     "Ash Plumes": [
