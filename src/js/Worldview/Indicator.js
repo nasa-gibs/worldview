@@ -91,7 +91,7 @@ $(function() {
      * @static
      */
     ns.noData = function() {
-        ns.show("No data avaialble", "images/red-x.svg");
+        ns.show("No Data Avaialble", "images/red-x.svg");
     };        
     
 });
