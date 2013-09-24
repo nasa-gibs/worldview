@@ -333,7 +333,16 @@ Worldview.DataDownload.Model = function(config) {
         self.events.trigger(self.EVENT_LAYER_UPDATE);
         if ( self.active && !foundSelected ) {
             self.selectProduct(findAvailableProduct());
-        }  
+        }
+        
+        // If a layer was removed and the product no longer exists, 
+        // remove any selected items in that product
+        var products = self.groupByProducts();
+        $.each(self.selectedGranules, function(index, selected) {
+            if ( !products[selected.product] ) {
+                self.unselectGranule(selected);
+            }    
+        });  
     };
     
     var updateProjection = function() {
