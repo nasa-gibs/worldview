@@ -266,9 +266,11 @@ $(function() {// Initialize "static" vars
             Worldview.Tour.start(storageEngine, hideSplash, false);  
         } 
         
-        window.onbeforeunload = function(){
-    		storageEngine.setItem('eventsCollapsed', events.isCollapsed);
-  		};
+        if ( events ) {
+            window.onbeforeunload = function(){
+        		storageEngine.setItem('eventsCollapsed', events.isCollapsed);
+      		};
+  		}
     };
         
     var debuggingFeatures = function(config) {

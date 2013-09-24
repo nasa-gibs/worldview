@@ -28,19 +28,22 @@ Worldview.DataDownload.Results.ConnectSwaths = function(projection) {
         if ( !granule.centroid[projection] ) {
             return;
         }
-        if ( startTimes[granule.time_start] ) {
-            log.warn("Discarding duplicate start time", granule.time_start,
-                    granule, startTimes[granule.time_start]);
+        var timeStart = roundTime(granule.time_start);
+        var timeEnd = roundTime(granule.time_end);
+        
+        if ( startTimes[timeStart] ) {
+            log.warn("Discarding duplicate start time", timeStart,
+                    granule, startTimes[timeStart]);
             return;
         }
-        if ( endTimes[granule.time_end] ) {
-            log.warn("Discarding duplicate end time", granule.time_end,
-                    granule, endTimes[granule.time_end]);
+        if ( endTimes[timeEnd] ) {
+            log.warn("Discarding duplicate end time", timeEnd,
+                    granule, endTimes[timeEnd]);
             return; 
         }
         var swath = [granule];
-        startTimes[granule.time_start] = swath;
-        endTimes[granule.time_end] = swath;
+        startTimes[timeStart] = swath;
+        endTimes[timeEnd] = swath;
         
         combineSwath(swath);
         return granule;
@@ -60,59 +63,73 @@ Worldview.DataDownload.Results.ConnectSwaths = function(projection) {
         
         var maxDistance = ( projection === Worldview.Map.CRS_WGS_84 ) 
                 ? MAX_DISTANCE_GEO : Number.POSITIVE_INFINITY; 
+        var thisTimeStart = roundTime(swath[0].time_start);
+        var thisTimeEnd = roundTime(swath[swath.length - 1].time_end);
+        var otherSwath = endTimes[thisTimeStart];
+
         // Can this swath be added to the end of other swath?
-        var otherSwath = endTimes[swath[0].time_start];
         if ( otherSwath ) {
             var otherGranule = otherSwath[otherSwath.length - 1];
-            if ( distance(swath[0], otherGranule) < maxDistance ) {
+            var otherTimeStart = roundTime(otherSwath[0].time_start);
+            var otherTimeEnd = 
+                    roundTime(otherSwath[otherSwath.length - 1].time_end);
+            
+            if ( connectionAllowed(swath[0], otherGranule, maxDistance) ) {
                 // Remove entries for this swath
-                delete startTimes[swath[0].time_start];
-                delete endTimes[swath[swath.length - 1].time_end];
+                delete startTimes[thisTimeStart];
+                delete endTimes[thisTimeEnd];
                 
                 // Remove entries for other swath
-                delete startTimes[otherSwath[0].time_start];
-                delete endTimes[otherSwath[otherSwath.length - 1].time_end];
+                delete startTimes[otherTimeStart];
+                delete endTimes[otherTimeEnd];
                             
                 // Combine swaths
                 var newSwath = otherSwath.concat(swath);
                 
-                startTimes[newSwath[0].time_start] = newSwath;
-                endTimes[newSwath[newSwath.length - 1].time_end] = newSwath;
+                var newTimeStart = roundTime(newSwath[0].time_start);
+                var newTimeEnd = 
+                    roundTime(newSwath[newSwath.length - 1].time_end);
+                
+                startTimes[newTimeStart] = newSwath;
+                endTimes[newTimeEnd] = newSwath;
                 combined = true;
                 swath = newSwath;
             }
         }
-        
-        /*
-        var otherSwath = startTimes[swath[0].time_end];
-        if ( otherSwath && distance(swath[0], otherSwath) < MAX_DISTANCE ) {
-            // Remove entries for this swath
-            delete startTimes[swath[0].time_start];
-            delete endTimes[swath[swath.length - 1].time_end];
-            
-            // Remove entries for other swath
-            delete startTimes[otherSwath[0].time_start];
-            delete endTimes[otherSwath[otherSwath.length - 1].time_end];
-                        
-            // Combine swaths
-            var newSwath = swath.concat(otherSwath);
-            
-            startTimes[newSwath[0].time_start] = newSwath;
-            endTimes[newSwath[newSwath.length - 1].time_end] = newSwath;
-            combined = true;
-            swath = newSwath;
-        }        
-        */
-       
+               
         if ( combined ) {
             combineSwath(swath);
         }
     };
     
-    var distance = function(g1, g2) {
-        var x1 = g1.centroid[projection].x;
-        var x2 = g2.centroid[projection].x;
-        return Math.abs(x2 - x1);    
+    // Connection is allowed as long as there is at least one path between
+    // centroids that is less than the max distance
+    var connectionAllowed = function(g1, g2, maxDistance) {
+        var polys1 = Worldview.Map.toPolys(g1.geometry[projection]);
+        var polys2 = Worldview.Map.toPolys(g2.geometry[projection]);
+        var allowed = false;
+        
+        $.each(polys1, function(index, poly1) {
+            $.each(polys2, function(index, poly2) {
+                var x1 = poly1.getCentroid().x;
+                var x2 = poly2.getCentroid().x;
+                if ( Math.abs(x2 - x1) < maxDistance ) {
+                    allowed = true;
+                    return false;     
+                }    
+            });
+        });        
+        return allowed;   
+    };
+    
+
+    var roundTime = function(timeString) {
+        var time = Date.parseISOString(timeString);
+        if ( time.getUTCMilliseconds() >= 500 ) {
+            time.setUTCSeconds(time.getUTCSeconds() + 1);    
+        }
+        time.setUTCMilliseconds(0);
+        return time.toISOString();    
     };
     
     return self;

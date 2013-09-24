@@ -20,56 +20,10 @@ Worldview.DataDownload.Layers.Swath = function(model, maps, config) {
         strokeOpacity: 0.75,
         strokeWidth: 2
     };
+    var MAX_DISTANCE_GEO = 270;
     
     var self = {};
-    
-    var combineSwath = function(startTimes, endTimes, swath) {
-        var combined = false;
-        
-        // Can this swath be added to the end of other swath?
-        var otherSwath = endTimes[swath[0].time_start];
-        if ( otherSwath ) {
-            // Remove entries for this swath
-            delete startTimes[swath[0].time_start];
-            delete endTimes[swath[swath.length - 1].time_end];
-            
-            // Remove entries for other swath
-            delete startTimes[otherSwath[0].time_start];
-            delete endTimes[otherSwath[otherSwath.length - 1].time_end];
-                        
-            // Combine swaths
-            var newSwath = otherSwath.concat(swath);
-            
-            startTimes[newSwath[0].time_start] = newSwath;
-            endTimes[newSwath[newSwath.length - 1].time_end] = newSwath;
-            combined = true;
-            swath = newSwath;
-        }
-        
-        var otherSwath = startTimes[swath[0].time_end];
-        if ( otherSwath ) {
-            // Remove entries for this swath
-            delete startTimes[swath[0].time_start];
-            delete endTimes[swath[swath.length - 1].time_end];
-            
-            // Remove entries for other swath
-            delete startTimes[otherSwath[0].time_start];
-            delete endTimes[otherSwath[otherSwath.length - 1].time_end];
-                        
-            // Combine swaths
-            var newSwath = swath.concat(otherSwath);
-            
-            startTimes[newSwath[0].time_start] = newSwath;
-            endTimes[newSwath[newSwath.length - 1].time_end] = newSwath;
-            combined = true;
-            swath = newSwath;
-        }        
-
-        if ( combined ) {
-            combineSwath(startTimes, endTimes, swath);
-        }
-    };
-    
+      
     self.update = function(results) {
         self.clear();
         var swaths = results.meta.swaths;
@@ -77,17 +31,36 @@ Worldview.DataDownload.Layers.Swath = function(model, maps, config) {
             return;
         }
         var layer = getLayer();
-                
+
+        var maxDistance = ( model.crs === Worldview.Map.CRS_WGS_84 ) 
+                ? MAX_DISTANCE_GEO : Number.POSITIVE_INFINITY; 
+                                
         var features = [];
         $.each(swaths, function(index, swath) {
-            var points = [];
+            var lastGranule = null;
+            // Main granules or west side granuels
             $.each(swath, function(index, granule) {
-                points.push(granule.centroid[model.crs].clone());    
+                if ( !lastGranule ) {
+                    lastGranule = granule;
+                    return;
+                }
+                var polys1 = Worldview.Map.toPolys(lastGranule.geometry[model.crs]); 
+                var polys2 = Worldview.Map.toPolys(granule.geometry[model.crs]);
+                $.each(polys1, function(index1, poly1) {
+                    $.each(polys2, function(index2, poly2) {
+                        var c1 = poly1.getCentroid();
+                        var c2 = poly2.getCentroid();
+                        var distanceX = Worldview.Map.distanceX(c1, c2);
+                        if ( distanceX < maxDistance ) {
+                            features.push(new OpenLayers.Feature.Vector(
+                                new OpenLayers.Geometry.LineString([c1, c2])
+                            ));    
+                        } 
+                    });    
+                });
+                lastGranule = granule;
             });
-            var line = new OpenLayers.Feature.Vector(
-                new OpenLayers.Geometry.LineString(points)
-            );
-            features.push(line);           
+      
         });
         layer.addFeatures(features);
     };
