@@ -1726,7 +1726,7 @@
         },
         "Aqua_Orbit_Asc": {
             "description": "Space-Track.org / Aqua",
-            "name": "Orbital Track (Ascending/Day)",
+            "name": "Orbital Track (Ascending)",
             "parameters": {
                 "format": "image/png",
                 "layers": "Aqua_Orbit_Asc",
@@ -1752,7 +1752,7 @@
         },
         "Aqua_Orbit_Dsc": {
             "description": "Space-Track.org / Aqua",
-            "name": "Orbital Track (Descending/Night)",
+            "name": "Orbital Track (Descending)",
             "parameters": {
                 "format": "image/png",
                 "layers": "Aqua_Orbit_Dsc",
@@ -1778,7 +1778,7 @@
         },
         "Aura_Orbit_Asc": {
             "description": "Space-Track.org / Aura",
-            "name": "Orbital Track (Ascending/Day)",
+            "name": "Orbital Track (Ascending)",
             "parameters": {
                 "format": "image/png",
                 "layers": "Aura_Orbit_Asc",
@@ -1804,7 +1804,7 @@
         },
         "Aura_Orbit_Dsc": {
             "description": "Space-Track.org / Aura",
-            "name": "Orbital Track (Descending/Night)",
+            "name": "Orbital Track (Descending)",
             "parameters": {
                 "format": "image/png",
                 "layers": "Aura_Orbit_Dsc",
@@ -3924,7 +3924,7 @@
             "description": "Aqua / MODIS",
             "name": "Land Surface Reflectance (1-2-1)",
             "period": "daily",
-            "product": "MYD09",
+            "product": "MYD09GQ",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_250m",
@@ -3969,7 +3969,7 @@
             "description": "Aqua / MODIS",
             "name": "Land Surface Reflectance (True Color)",
             "period": "daily",
-            "product": "MYD09",
+            "product": "MYD09GA",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_500m",
@@ -4013,7 +4013,7 @@
             "description": "Aqua / MODIS",
             "name": "Land Surface Reflectance (7-2-1)",
             "period": "daily",
-            "product": "MYD09",
+            "product": "MYD09GA",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_500m",
@@ -5815,7 +5815,7 @@
             "description": "Terra / MODIS",
             "name": "Land Surface Reflectance (1-2-1)",
             "period": "daily",
-            "product": "MOD09",
+            "product": "MOD09GQ",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_250m",
@@ -5860,7 +5860,7 @@
             "description": "Terra / MODIS",
             "name": "Land Surface Reflectance (True Color)",
             "period": "daily",
-            "product": "MOD09",
+            "product": "MOD09GA",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_500m",
@@ -5904,7 +5904,7 @@
             "description": "Terra / MODIS",
             "name": "Land Surface Reflectance (7-2-1)",
             "period": "daily",
-            "product": "MOD09",
+            "product": "MOD09GA",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_500m",
@@ -6482,7 +6482,7 @@
         },
         "Terra_Orbit_Asc": {
             "description": "Space-Track.org / Terra",
-            "name": "Orbital Track (Ascending/Night)",
+            "name": "Orbital Track (Ascending)",
             "parameters": {
                 "format": "image/png",
                 "layers": "Terra_Orbit_Asc",
@@ -6508,7 +6508,7 @@
         },
         "Terra_Orbit_Dsc": {
             "description": "Space-Track.org / Terra",
-            "name": "Orbital Track (Descending/Day)",
+            "name": "Orbital Track (Descending)",
             "parameters": {
                 "format": "image/png",
                 "layers": "Terra_Orbit_Dsc",
@@ -60238,9 +60238,32 @@
                 "shortName": "MOD06_L2"
             }
         },
-        "MOD09": {
+        "MOD09GA": {
             "handler": "MODISMix",
-            "name": "MODIS/Terra Surface Reflectance Daily",
+            "name": "MODIS/Terra Surface Reflectance Daily (500m)",
+            "nrt": {
+                "by": "value",
+                "field": "data_center",
+                "handler": "TerraSwathMultiDay",
+                "value": "LANCEMODIS"
+            },
+            "query": {
+                "nrt": {
+                    "dataCenterId": "LANCEMODIS",
+                    "shortName": "MOD09"
+                },
+                "science": {
+                    "dataCenterId": "LPDAAC_ECS",
+                    "shortName": "MOD09GA"
+                }
+            },
+            "science": {
+                "handler": "MODISGrid"
+            }
+        },
+        "MOD09GQ": {
+            "handler": "MODISMix",
+            "name": "MODIS/Terra Surface Reflectance Daily (250m)",
             "nrt": {
                 "by": "value",
                 "field": "data_center",
@@ -60429,9 +60452,32 @@
                 "shortName": "MYD06_L2"
             }
         },
-        "MYD09": {
+        "MYD09GA": {
             "handler": "MODISMix",
-            "name": "MODIS/Aqua Surface Reflectance Daily",
+            "name": "MODIS/Aqua Surface Reflectance Daily (500m)",
+            "nrt": {
+                "by": "value",
+                "field": "data_center",
+                "handler": "AquaSwathMultiDay",
+                "value": "LANCEMODIS"
+            },
+            "query": {
+                "nrt": {
+                    "dataCenterId": "LANCEMODIS",
+                    "shortName": "MYD09"
+                },
+                "science": {
+                    "dataCenterId": "LPDAAC_ECS",
+                    "shortName": "MYD09GA"
+                }
+            },
+            "science": {
+                "handler": "MODISGrid"
+            }
+        },
+        "MYD09GQ": {
+            "handler": "MODISMix",
+            "name": "MODIS/Aqua Surface Reflectance Daily (250m)",
             "nrt": {
                 "by": "value",
                 "field": "data_center",

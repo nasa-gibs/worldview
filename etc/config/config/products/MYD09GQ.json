@@ -1,5 +1,5 @@
 {
-    "name": "MODIS/Aqua Surface Reflectance Daily",
+    "name": "MODIS/Aqua Surface Reflectance Daily (250m)",
     "handler": "MODISMix",
     "query": {
         "science": {
