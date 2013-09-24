@@ -192,6 +192,6 @@ $(function() {
             encoded = encoded.replace(exception.match, exception.replace);  
         });
         return encoded;
-    }
+    };
         
 });

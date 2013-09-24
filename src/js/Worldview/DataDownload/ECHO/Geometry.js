@@ -14,10 +14,7 @@
  */
 Worldview.namespace("DataDownload");
 
-Worldview.DataDownload.ECHO.Geometry = function(result, allowDensify) {
-
-    var MAX_DISTANCE = 5;
-    var allowDensify = ( allowDensify === undefined ) ? true : allowDensify;
+Worldview.DataDownload.ECHO.Geometry = function(result) {
     
     var self = {};
     self.polygons = [];
@@ -79,34 +76,11 @@ Worldview.DataDownload.ECHO.Geometry = function(result, allowDensify) {
             ring.push({x: xmax, y: ymax});
             ring.push({x: xmin, y: ymax});
             ring.push({x: xmin, y: ymin});
-            
-            if ( allowDensify ) {
-                ring = densify(ring);
-            }
-           
+                       
             self.polygons.push([ring]);
         });    
     };
-    
-    var densify = function(ring) {
-        var points = [];
-        for ( var i = 0; i < ring.length - 2; i++ ) {
-            var start = ring[i];
-            var end = ring[i + 1];
-            var distance = Worldview.Map.distance2D(start, end);
-            var numPoints = Math.floor(distance / MAX_DISTANCE);
-            points.push(start);
-            for ( var j = 1; j < numPoints - 1; j++ ) {
-                var d = j / numPoints;
-                // This is what REVERB does, so we will do the same
-                var p = Worldview.Map.interpolate2D(start, end, d);
-                points.push(p);
-            }
-        }
-        points.push(end);
-        return points;      
-    };
-    
+        
     init();
     return self;
-}
+};

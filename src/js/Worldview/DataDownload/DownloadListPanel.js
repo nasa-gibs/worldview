@@ -118,7 +118,7 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
             var granule = product.granules[0];
             $.each(granule.links, function(index, link) {
                 var count = product.counts[link.href];
-                if ( count === product.granules.length ) {
+                if ( count % product.granules.length === 0 ) {
                     product.links.push(reformatLink(link));
                 }
             });
@@ -131,7 +131,7 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
                 $.each(granule.links, function(index, link) {
                     // Skip this link if now at the product level
                     var count = product.counts[link.href];
-                    if ( count === product.granules.length ) {
+                    if ( count % product.granules.length === 0 ) {
                         return;
                     }
                     // Skip browse images per Kevin's request
