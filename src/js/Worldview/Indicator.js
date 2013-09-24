@@ -78,7 +78,7 @@ $(function() {
      * @static
      */
     ns.searching = function() {
-        ns.show("Searching", "images/activity.gif");
+        ns.show("Searching ECHO for Data", "images/activity.gif");
     };
 
     /**
