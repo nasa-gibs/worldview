@@ -35,6 +35,8 @@ Worldview.DataDownload.Model = function(config) {
         epsg: null,
         time: null
     };
+    var queryExecuting = false;
+    var nextQuery = null;
     
     var ns = Worldview.DataDownload;
             
@@ -290,20 +292,41 @@ Worldview.DataDownload.Model = function(config) {
         handler.events.on("query", function() {
             self.events.trigger(self.EVENT_QUERY);
         }).on("results", function(results) {
-            if ( self.active ) {
+            queryExecuting = false;
+            if ( self.active && !nextQuery ) {
                 self.events.trigger(self.EVENT_QUERY_RESULTS, results);
             }
+            if ( nextQuery ) {
+                executeQuery(nextQuery);
+                nextQuery = null;
+            }
         }).on("error", function(textStatus, errorThrown) {
+            queryExecuting = false;
             if ( self.active ) {
                 self.events.trigger(self.EVENT_QUERY_ERROR, textStatus, 
                         errorThrown);
             }
         }).on("timeout", function() {
+            queryExecuting = false;
             if ( self.active ) {
                 self.events.trigger(self.EVENT_QUERY_TIMEOUT);
             }
         });
-        handler.submit();
+        executeQuery(handler);
+    };
+    
+    var executeQuery = function(handler) {
+        if ( !queryExecuting ) {
+            try {
+                queryExecuting = true;
+                handler.submit();
+            } catch ( error ) {
+                queryExecuting = false;
+                throw error;
+            }
+        } else {
+            nextQuery = handler;
+        }        
     };
     
     var updateLayers = function() {
