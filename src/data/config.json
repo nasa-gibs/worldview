@@ -6794,7 +6794,7 @@
                 "geographic": {}
             },
             "properties": {
-                "opacity": 0.55,
+                "opacity": 0.75,
                 "tileSize": [
                     512,
                     512
@@ -6846,7 +6846,7 @@
                 "geographic": {}
             },
             "properties": {
-                "opacity": 0.55,
+                "opacity": 0.85,
                 "tileSize": [
                     512,
                     512
@@ -7458,7 +7458,7 @@
                 "defaultLayer": "true",
                 "format": "image/png",
                 "layer": "sedac_bound",
-                "opacity": 0.95,
+                "opacity": 1.0,
                 "tileSize": [
                     512,
                     512
