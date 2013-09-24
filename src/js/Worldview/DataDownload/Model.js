@@ -285,6 +285,10 @@ Worldview.DataDownload.Model = function(config) {
         }
 
         var productConfig = config.products[self.selectedProduct];
+        if ( !productConfig ) {
+            throw Error("Product not defined: " + self.selectedProduct);
+        }
+        
         var handlerFactory = 
                 Worldview.DataDownload.Handler.getByName(productConfig.handler);
         

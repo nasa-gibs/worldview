@@ -124,12 +124,7 @@ Worldview.DataDownload.Results.ConnectSwaths = function(projection) {
     
 
     var roundTime = function(timeString) {
-        var time = Date.parseISOString(timeString);
-        if ( time.getUTCMilliseconds() >= 500 ) {
-            time.setUTCSeconds(time.getUTCSeconds() + 1);    
-        }
-        time.setUTCMilliseconds(0);
-        return time.toISOString();    
+        return Worldview.DataDownload.ECHO.roundTime(timeString); 
     };
     
     return self;

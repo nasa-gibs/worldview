@@ -17,11 +17,13 @@ Worldview.namespace("DataDownload");
 Worldview.DataDownload.Results.PreferredFilter = function(prefer) {
     
     var self = {};
+    var ns = Worldview.DataDownload;
     
     self.name = "PreferredFilter";
     
     self.process = function(meta, granule) {
-        if ( meta.preferred[granule.time_start] ) {
+        var timeStart = ns.ECHO.roundTime(granule.time_start);
+        if ( meta.preferred[timeStart] ) {
             if ( prefer === "nrt" && !granule.nrt ) {
                 return;
             }

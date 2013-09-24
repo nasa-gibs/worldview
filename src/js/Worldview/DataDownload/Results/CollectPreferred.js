@@ -17,6 +17,7 @@ Worldview.namespace("DataDownload");
 Worldview.DataDownload.Results.CollectPreferred = function(prefer) {
     
     var self = {};
+    var ns = Worldview.DataDownload;
     
     self.name = "CollectPreferred";
     
@@ -28,7 +29,8 @@ Worldview.DataDownload.Results.CollectPreferred = function(prefer) {
                 (prefer === "nrt" && granule.nrt) ||
                 (prefer === "science" && !granule.nrt);
         if ( preferred ) {
-            meta.preferred[granule.time_start] = granule;
+            var timeStart = ns.ECHO.roundTime(granule.time_start);
+            meta.preferred[timeStart] = granule;
         }
         return granule;
     };
