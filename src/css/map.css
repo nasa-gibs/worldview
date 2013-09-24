@@ -14,14 +14,14 @@ div.olControlMousePosition, div.olControlScaleLineCustomBottom,div.olControlScal
       1px -1px 0 #000,
       -1px 1px 0 #000,
       1px 1px 0 #000;
-    font-size: 1.1em;
+    font-size: 0.9em;
     font-weight:bold;
 }
 div.olControlScaleLineCustomBottom, div.olControlScaleLineCustomTop{
     background-color:rgba(38,38,38,0.4);
     float:right;
     text-align:right;
-    padding:3px 10px;
+    padding:3px 10px 3px 0;
     box-sizing:border-box;
 }
 div.olControlMousePosition {
