@@ -26,7 +26,8 @@ Worldview.DataDownload.Layers.Button = function(model, maps, config) {
             labelOutlineColor: "black",
             labelOutlineWidth: 2,
             labelOutlineOpacity: 0.7,
-            label: "${label}"
+            label: "${label}",
+            cursor: "pointer"
         }, 
         "select": {
             externalGraphic: IMAGE_UNSELECT,
@@ -36,7 +37,8 @@ Worldview.DataDownload.Layers.Button = function(model, maps, config) {
             labelOutlineColor: "black",
             labelOutlineWidth: 2,
             labelOutlineOpacity: 0.7,
-            label: "${label}"            
+            label: "${label}",
+            cursor: "pointer"          
         }
     };
     

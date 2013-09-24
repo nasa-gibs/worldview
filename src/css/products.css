@@ -39,7 +39,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3ffffff', e
 }
 
 .ui-tabs-nav li.third.ui-state-active a { 
-	background: linear-gradient(to bottom,  rgba(255,255,255,0.7) 0%,rgba(160,27,11,0.7) 23%,rgba(156,24,0,0.7) 24%,rgba(144,20,0,0.7) 99%,rgba(144,20,0,0.7) 100%); /* W3C */
+	background: linear-gradient(to bottom,  rgba(255,255,255,0.7) 0%,rgba(130,27,11,0.7) 23%,rgba(107,58,49,0.7) 24%,rgba(99,53,45,0.7) 99%,rgba(99,53,45,0.7) 100%); /* W3C */
 }
 
 .firstselected {
@@ -51,7 +51,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3ffffff', e
 }
 
 .thirdselected {
-	border-bottom: 3px rgb(144,20,0) solid;
+	border-bottom: 3px rgb(99,53,45) solid;
 }
 
 .toggleButtonHolder { display:inline; overflow:hidden;}
@@ -91,12 +91,13 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3ffffff', e
 
 .action {
 	display:block;
-	width: 98%;
+	width: 90%;
 	height: 44px;
 	margin: 5px auto;
 	border: none;
 	color: #fff;
 	font-size:14px;
+	cursor: pointer;
 	background: #83c783; /* Old browsers */
 	background: -moz-linear-gradient(top,  #83c783 0%, #52b152 33%, #00a81c 83%, #149600 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#83c783), color-stop(33%,#52b152), color-stop(83%,#00a81c), color-stop(100%,#149600)); /* Chrome,Safari4+ */
@@ -111,6 +112,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3ffffff', e
     border: 1px solid #808080;
     background: black;
     color: #808080;
+    cursor: auto;
 }
 
 .productsIcon {

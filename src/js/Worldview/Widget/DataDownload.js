@@ -119,7 +119,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
         if ( !model.active || queryActive || !lastResults ) {
             return;
         }
-        if ( lastResults.length === 0 ) {
+        if ( lastResults.granules.length === 0 ) {
             return;
         }
         var hasCentroids = false;
@@ -249,13 +249,13 @@ Worldview.Widget.DataDownload = function(config, spec) {
             var totalSize = model.getSelectionSize();
             if ( totalSize ) {
                 var formattedSize = Math.round(totalSize * 100) / 100;
-                list.setActionButtonText("Download (" + formattedSize + " MB)");
+                list.setActionButtonText("Download Data (" + formattedSize + " MB)...");
             } else {
-                list.setActionButtonText("Download");
+                list.setActionButtonText("Download Selected Data...");
             }
         } else {
             list.setButtonEnabled(false);
-            list.setActionButtonText("Download");
+            list.setActionButtonText("No Data Selected");
         }
         
         var counts = model.getSelectionCounts();
