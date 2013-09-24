@@ -1726,7 +1726,7 @@
         },
         "Aqua_Orbit_Asc": {
             "description": "Space-Track.org / Aqua",
-            "name": "Orbital Track (Ascending)",
+            "name": "Orbital Track (Ascending/Day)",
             "parameters": {
                 "format": "image/png",
                 "layers": "Aqua_Orbit_Asc",
@@ -1752,7 +1752,7 @@
         },
         "Aqua_Orbit_Dsc": {
             "description": "Space-Track.org / Aqua",
-            "name": "Orbital Track (Descending)",
+            "name": "Orbital Track (Descending/Night)",
             "parameters": {
                 "format": "image/png",
                 "layers": "Aqua_Orbit_Dsc",
@@ -1778,7 +1778,7 @@
         },
         "Aura_Orbit_Asc": {
             "description": "Space-Track.org / Aura",
-            "name": "Orbital Track (Ascending)",
+            "name": "Orbital Track (Ascending/Day)",
             "parameters": {
                 "format": "image/png",
                 "layers": "Aura_Orbit_Asc",
@@ -1804,7 +1804,7 @@
         },
         "Aura_Orbit_Dsc": {
             "description": "Space-Track.org / Aura",
-            "name": "Orbital Track (Descending)",
+            "name": "Orbital Track (Descending/Night)",
             "parameters": {
                 "format": "image/png",
                 "layers": "Aura_Orbit_Dsc",
@@ -6490,7 +6490,7 @@
         },
         "Terra_Orbit_Asc": {
             "description": "Space-Track.org / Terra",
-            "name": "Orbital Track (Ascending)",
+            "name": "Orbital Track (Ascending/Night)",
             "parameters": {
                 "format": "image/png",
                 "layers": "Terra_Orbit_Asc",
@@ -6516,7 +6516,7 @@
         },
         "Terra_Orbit_Dsc": {
             "description": "Space-Track.org / Terra",
-            "name": "Orbital Track (Descending)",
+            "name": "Orbital Track (Descending/Day)",
             "parameters": {
                 "format": "image/png",
                 "layers": "Terra_Orbit_Dsc",
