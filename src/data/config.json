@@ -3922,11 +3922,9 @@
         },
         "MODIS_Aqua_SurfaceReflectance_Bands121": {
             "description": "Aqua / MODIS",
-            "echo": {
-                "product": "MYD09"
-            },
             "name": "Land Surface Reflectance (1-2-1)",
             "period": "daily",
+            "product": "MYD09",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_250m",
@@ -3969,11 +3967,9 @@
         },
         "MODIS_Aqua_SurfaceReflectance_Bands143": {
             "description": "Aqua / MODIS",
-            "echo": {
-                "product": "MYD09"
-            },
             "name": "Land Surface Reflectance (True Color)",
             "period": "daily",
+            "product": "MYD09",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_500m",
@@ -4015,11 +4011,9 @@
         },
         "MODIS_Aqua_SurfaceReflectance_Bands721": {
             "description": "Aqua / MODIS",
-            "echo": {
-                "product": "MYD09"
-            },
             "name": "Land Surface Reflectance (7-2-1)",
             "period": "daily",
+            "product": "MYD09",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_500m",
@@ -5819,11 +5813,9 @@
         },
         "MODIS_Terra_SurfaceReflectance_Bands121": {
             "description": "Terra / MODIS",
-            "echo": {
-                "product": "MOD09"
-            },
             "name": "Land Surface Reflectance (1-2-1)",
             "period": "daily",
+            "product": "MOD09",
             "projections": {
                 "geographic": {
                     "matrixSet": "EPSG4326_250m",
@@ -6794,7 +6786,7 @@
                 "geographic": {}
             },
             "properties": {
-                "opacity": 0.75,
+                "opacity": 0.55,
                 "tileSize": [
                     512,
                     512
@@ -6846,7 +6838,7 @@
                 "geographic": {}
             },
             "properties": {
-                "opacity": 0.85,
+                "opacity": 0.55,
                 "tileSize": [
                     512,
                     512
@@ -7458,7 +7450,7 @@
                 "defaultLayer": "true",
                 "format": "image/png",
                 "layer": "sedac_bound",
-                "opacity": 1.0,
+                "opacity": 0.95,
                 "tileSize": [
                     512,
                     512
