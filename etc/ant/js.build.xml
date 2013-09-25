@@ -123,6 +123,7 @@
         <file name="js/Worldview/DataDownload/Results/AntiMeridianMulti.js"/>               
         <file name="js/Worldview/DataDownload/Results/Chain.js"/>
         <file name="js/Worldview/DataDownload/Results/CollectPreferred.js"/>
+        <file name="js/Worldview/DataDownload/Results/CollectVersions.js"/>
         <file name="js/Worldview/DataDownload/Results/ConnectSwaths.js"/>
         <file name="js/Worldview/DataDownload/Results/Densify.js"/>
         <file name="js/Worldview/DataDownload/Results/DateTimeLabel.js"/>
@@ -136,9 +137,11 @@
         <file name="js/Worldview/DataDownload/Results/TagNRT.js"/>
         <file name="js/Worldview/DataDownload/Results/TagProduct.js"/>
         <file name="js/Worldview/DataDownload/Results/TagList.js"/>
+        <file name="js/Worldview/DataDownload/Results/TagVersion.js"/>
         <file name="js/Worldview/DataDownload/Results/TimeFilter.js"/>
         <file name="js/Worldview/DataDownload/Results/TimeLabel.js"/>
         <file name="js/Worldview/DataDownload/Results/Transform.js"/>
+        <file name="js/Worldview/DataDownload/Results/VersionFilter.js"/>
 
         <file name="js/Worldview/DataDownload/Model.js"/>
         <file name="js/Worldview/DataDownload/MapController.js"/>
