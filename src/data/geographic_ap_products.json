@@ -158,6 +158,20 @@
         }, 
         {
             "category": "overlays", 
+            "label": "Chlorophyll A", 
+            "sublabel": "Terra / MODIS", 
+            "type": "multi", 
+            "value": "MODIS_Terra_Chlorophyll_A"
+        },
+        {
+            "category": "overlays", 
+            "label": "Chlorophyll A", 
+            "sublabel": "Aqua / MODIS", 
+            "type": "multi", 
+            "value": "MODIS_Aqua_Chlorophyll_A"
+        },
+        {
+            "category": "overlays", 
             "label": "Cloud Top Pressure (Day)", 
             "sublabel": "Terra / MODIS", 
             "type": "multi", 
@@ -884,13 +898,6 @@
             "sublabel": "Space-Track.org / Aura", 
             "type": "multi", 
             "value": "Aura_Orbit_Dsc"
-        },
-        {
-            "category": "overlays", 
-            "label": "Chlorophyll A", 
-            "sublabel": "Terra / MODIS", 
-            "type": "multi", 
-            "value": "MODIS_Terra_Chlorophyll_A"
         }
     ], 
     "Highlighted": [

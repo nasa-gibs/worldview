@@ -241,7 +241,7 @@ SOTE.widget.Bank.prototype.render = function(){
 							 "<canvas class='colorBar' id='canvas"+this.values[formattedCategoryName.toLowerCase()][j].value+"' width=100px height=14px'></canvas>" +
 							 "<span class='p-max' style='margin-left:10px;'>"+m.max+"</span>";
 						if(m.units && m.units != ""){
-							paletteString += "<span class='units' style='margin-left:3px;'>"+m.units+"</span></span></div>";
+							paletteString += "<span class='p-units' style='margin-left:3px;'>"+m.units+"</span></span></div>";
 						}
 						item.innerHTML += paletteString;
 					}

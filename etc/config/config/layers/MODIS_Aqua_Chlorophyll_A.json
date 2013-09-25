@@ -1,6 +1,6 @@
 {
     "bins": 21,
-    "description": "Terra / MODIS",
+    "description": "Aqua / MODIS",
     "max": "20",
     "min": "0.01",
     "name": "Chlorophyll A",
@@ -75,7 +75,7 @@
     },
     "properties": {
         "format": "image/png",
-        "layer": "MODIS_Terra_Chlorophyll_A",
+        "layer": "MODIS_Aqua_Chlorophyll_A",
         "tileSize": [
             512,
             512
