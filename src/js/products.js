@@ -68,25 +68,25 @@ SOTE.widget.Products = function(containerId, config){
 };
 
 SOTE.widget.Products.HTML_TAB_ACTIVE_SELECTED = 
-    "<img class='productsIcon selected' src='images/missing-icon.svg'>" +
+    "<i class='productsIcon selected icon-layers'></i>" +
     "Active";
     
 SOTE.widget.Products.HTML_TAB_ACTIVE_UNSELECTED = 
-    "<img class='productsIcon' src='images/missing-icon.svg' title='Active'>";
+    "<i class='productsIcon selected icon-layers' title='Active'></i>";
 
 SOTE.widget.Products.HTML_TAB_ADD_SELECTED = 
-    "<img class='productsIcon selected' src='images/missing-icon.svg'>" +
+    "<i class='productsIcon selected icon-add'></i>" +
     "Add Layers";
     
 SOTE.widget.Products.HTML_TAB_ADD_UNSELECTED = 
-    "<img class='productsIcon' src='images/missing-icon.svg' title='Add Layers'>";
+    "<i class='productsIcon selected icon-add' title='Add Layers'></i>";
     
 SOTE.widget.Products.HTML_TAB_DOWNLOAD_SELECTED = 
-    "<img class='productsIcon selected' src='images/missing-icon.svg'>" +
+    "<i class='productsIcon selected icon-download'></i>" +
     "Download";
     
 SOTE.widget.Products.HTML_TAB_DOWNLOAD_UNSELECTED = 
-    "<img class='productsIcon' src='images/missing-icon.svg' title='Download'>";
+    "<i class='productsIcon selected icon-download' title='Download'></i>";
 
 /**
   * Displays all options in HTML in an Accordion format (see JQuery UI Accordion) with the selected states being indicated

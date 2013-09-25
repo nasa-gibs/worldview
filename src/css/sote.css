@@ -65,10 +65,23 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
 
 
 #banner {
-	display:block; z-index:294; float:left; position:relative; width:100%; height:47px; background: transparent url("../images/toolbarbg.png");
+    display:block; 
+    z-index:294; 
+    float:left; 
+    position:relative; 
+    width:100%; 
+    height:47px; 
+    background: rgba(65,65,65,0.5);
+    border-bottom: 1px solid #000;
 }
 
-#wvlogo {background: transparent url('../images/logo.png') no-repeat center; width:154px; height:27px; padding:8px 5px; display:inline-block;}
+#wvlogo {
+    background:url('../images/wv-logo.svg') no-repeat center;
+    width:247px;
+    height:45px;
+    display:inline-block;
+}
+
 #banner img.logo {padding:11px 5px;}
 #banner ul {float:right; }
 #banner ul li {display:block; float:right; margin:3px 3px; line-height:0; }
