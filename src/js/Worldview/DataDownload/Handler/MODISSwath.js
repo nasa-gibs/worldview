@@ -52,6 +52,7 @@ Worldview.DataDownload.Handler.MODISSwath = function(config, model, spec) {
             ns.Results.PreferredFilter(model.prefer), 
             ns.Results.GeometryFromECHO(),
             ns.Results.AntiMeridianMulti(MAX_DISTANCE),
+            ns.Results.Densify(),
             ns.Results.Transform(model.crs),
             ns.Results.ExtentFilter(model.crs, self.extents[model.crs]),
             ns.Results.TimeLabel(model.time),

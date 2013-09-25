@@ -249,9 +249,9 @@ Worldview.Widget.DataDownload = function(config, spec) {
             var totalSize = model.getSelectionSize();
             if ( totalSize ) {
                 var formattedSize = Math.round(totalSize * 100) / 100;
-                list.setActionButtonText("Download Data (" + formattedSize + " MB)...");
+                list.setActionButtonText("Download Data (" + formattedSize + " MB)");
             } else {
-                list.setActionButtonText("Download Selected Data...");
+                list.setActionButtonText("Download Selected Data");
             }
         } else {
             list.setButtonEnabled(false);

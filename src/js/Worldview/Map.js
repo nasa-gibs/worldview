@@ -216,6 +216,10 @@ $(function(ns) {
                         (Math.pow(p1.y - p2.y, 2)));
     };
     
+    ns.distanceX = function(p1, p2) {
+        return Math.abs(p2.x - p1.x);
+    };
+    
     ns.interpolate2D = function(p1, p2, amount) {
         var distX = p2.x - p1.x;
         var distY = p2.y - p1.y;
@@ -225,5 +229,18 @@ $(function(ns) {
         
         return new OpenLayers.Geometry.Point(interpX, interpY);
     };
+    
+    // If multipolygon, return a list of the polygons. If polygon, return
+    // the single item in a list
+    ns.toPolys = function(geom) {
+        var polys = [];
+        if ( geom.CLASS_NAME === "OpenLayers.Geometry.MultiPolygon" ) {
+            polys = geom.components;    
+        } else {
+            polys = [geom];
+        }
+        return polys;        
+    };
+    
       
 }(Worldview.Map));

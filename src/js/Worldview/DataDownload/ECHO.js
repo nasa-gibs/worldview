@@ -18,6 +18,15 @@ Worldview.DataDownload.ECHO = function() {
     ns.REL_DATA = "http://esipfed.org/ns/fedsearch/1.1/data#";
     ns.REL_BROWSE = "http://esipfed.org/ns/fedsearch/1.1/browse#";
   
+    ns.roundTime = function(timeString) {
+        var time = Date.parseISOString(timeString);
+        if ( time.getUTCMilliseconds() >= 500 ) {
+            time.setUTCSeconds(time.getUTCSeconds() + 1);    
+        }
+        time.setUTCMilliseconds(0);
+        return time.toISOString();   
+    };
+    
     return ns;
     
 }();

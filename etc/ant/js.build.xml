@@ -124,6 +124,7 @@
         <file name="js/Worldview/DataDownload/Results/Chain.js"/>
         <file name="js/Worldview/DataDownload/Results/CollectPreferred.js"/>
         <file name="js/Worldview/DataDownload/Results/ConnectSwaths.js"/>
+        <file name="js/Worldview/DataDownload/Results/Densify.js"/>
         <file name="js/Worldview/DataDownload/Results/DateTimeLabel.js"/>
         <file name="js/Worldview/DataDownload/Results/ExtentFilter.js"/>
         <file name="js/Worldview/DataDownload/Results/GeometryFromECHO.js"/>

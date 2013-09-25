@@ -32,8 +32,8 @@
      * @static
      * 
      * @param dateAsString {string} The string must be in the form of 
-     * yyyy-MM-ddThh:mm:ssZ. Only the year, month, and day are required and the 
-     * remaining string can be shortened. The Z to denote UTC is optional.
+     * yyyy-MM-ddThh:mm:ss.sssZ. Only the year, month, and day are required and 
+     * the remaining string can be shortened. The Z to denote UTC is optional.
      *
      * @return {Date} converted string as a date object, throws an exception if 
      * the string is invalid
@@ -51,15 +51,18 @@
         var hour = 0;
         var minute = 0;
         var second = 0;
+        var millisecond = 0;
         
         // Use default of midnight if time is not specified 
         if ( dateTimeArr.length > 1 ) {
-            var hhmmss = dateTimeArr[1].split(/[:Z]/);
+            var hhmmss = dateTimeArr[1].split(/[:\.Z]/);
             var hour = hhmmss[0] || 0;
             var minute = hhmmss[1] || 0;
             var second = hhmmss[2] || 0;
+            var millisecond = hhmmss[3] || 0;
         }
-        var date = new Date(Date.UTC(year, month, day, hour, minute, second));
+        var date = new Date(Date.UTC(year, month, day, hour, minute, second, 
+                millisecond));
         if ( isNaN(date.getTime()) ) {
             throw new Error("Invalid date: " + dateAsString);
         }
