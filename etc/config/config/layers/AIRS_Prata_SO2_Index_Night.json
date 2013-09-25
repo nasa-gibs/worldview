@@ -1,9 +1,11 @@
 {
+    "bins": 251,
     "description": "Aqua / AIRS",
     "max": "30",
     "min": "0",
     "name": "Sulfur Dioxide (Night, Prata Algorithm)",
     "period": "daily",
+    "product": "AIRIBRAD_NIGHT",
     "projections": {
         "geographic": {
             "matrixSet": "EPSG4326_2km",
@@ -37,10 +39,12 @@
             512
         ]
     },
-    "recommendedPalettes": [ "orange_1", "red_1" ],
+    "recommendedPalettes": [
+        "orange_1",
+        "red_1"
+    ],
     "rendered": "AIRS_Prata_SO2_Index",
     "startDate": "2012-04-07",
     "type": "wmts",
-    "units": "DU",
-    "product": "AIRIBRAD_NIGHT"
+    "units": "DU"
 }

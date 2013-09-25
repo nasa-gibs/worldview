@@ -5,6 +5,7 @@
     "min": "240",
     "name": "Temperature (400 hPa, Night)",
     "period": "daily",
+    "product": "AIRX2RET_NIGHT",
     "projections": {
         "geographic": {
             "matrixSet": "EPSG4326_2km",
@@ -41,6 +42,5 @@
     "rendered": "AIRS_Temperature_400hPa",
     "startDate": "2012-04-07",
     "type": "wmts",
-    "units": "K",
-    "product": "AIRX2RET_NIGHT"
+    "units": "K"
 }

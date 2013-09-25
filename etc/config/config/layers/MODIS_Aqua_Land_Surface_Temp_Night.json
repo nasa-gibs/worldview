@@ -1,4 +1,6 @@
 {
+    "bins": 251,
+    "dayNightFlag": "NIGHT",
     "description": "Aqua / MODIS",
     "max": "340",
     "min": "240",
@@ -38,10 +40,12 @@
             512
         ]
     },
-    "recommendedPalettes": [ "rainbow_1", "purple_2" ],
+    "recommendedPalettes": [
+        "rainbow_1",
+        "purple_2"
+    ],
     "rendered": "MODIS_Land_Surface_Temp",
     "startDate": "2012-04-07",
     "type": "wmts",
-    "units": "K",
-    "dayNightFlag": "NIGHT"
+    "units": "K"
 }

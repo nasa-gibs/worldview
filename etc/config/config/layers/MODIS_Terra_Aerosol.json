@@ -1,9 +1,11 @@
 {
-    "name": "Aerosol Optical Depth",
+    "bins": 10,
     "description": "Terra / MODIS",
+    "max": "0.70",
+    "min": "0.27",
+    "name": "Aerosol Optical Depth",
     "period": "daily",
-    "startDate": "2012-04-07",
-    "type": "wmts",
+    "product": "MOD04_L2",
     "projections": {
         "geographic": {
             "matrixSet": "EPSG4326_2km",
@@ -37,10 +39,11 @@
             512
         ]
     },
-    "min": "0.27",
-    "max": "0.70",
-    "units": "",
+    "recommendedPalettes": [
+        "orange_1"
+    ],
     "rendered": "MODIS_Aerosol",
-    "recommendedPalettes": [ "orange_1" ],
-    "product": "MOD04_L2"
+    "startDate": "2012-04-07",
+    "type": "wmts",
+    "units": ""
 }
