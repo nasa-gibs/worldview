@@ -420,7 +420,7 @@ SOTE.widget.Selector.adjustCategoryHeights = function(args){
 	var self = args.self;
 	var heights = new Array;
 	var facets_height = $("#"+self.id+"facetedSearch").outerHeight(true);
-	var container_height = $("#"+self.id).outerHeight() - facets_height;
+	var container_height = $("#"+self.id).outerHeight(true) - facets_height;
 	$('#'+self.id+"content").height(container_height);
 	var labelHeight = 0;
 	$('#'+self.id+'content .head').each(function(){
@@ -434,11 +434,15 @@ SOTE.widget.Selector.adjustCategoryHeights = function(args){
 		var count = 0;
 		$('#' + self.id + formattedCategoryName.toLowerCase() + ' li').each(function(){
 			//console.log(document.getElementById(", " + $(this).outerHeight()));
-			actual_height += $(this).outerHeight();
+			actual_height += $(this).outerHeight(true);
 			count++;
 		});
 
-		heights.push({name:self.id + formattedCategoryName.toLowerCase(),height:actual_height,count:count});
+		heights.push({
+		    name: self.id + formattedCategoryName.toLowerCase(),
+		    height: actual_height,
+		    count: count
+	    });
 	}
 	
 	if(heights[0].height + heights[1].height > container_height){
