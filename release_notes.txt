@@ -4,7 +4,7 @@ Release Notes
 http://earthdata.nasa.gov/labs/worldview/
 
 -------------------------------------------------------------------------------
-Release 0.5.2
+Release 0.5.2 - September 25, 2013
 -------------------------------------------------------------------------------
 * Updates
   - Map tiles from GIBS are now retrieved using https and the browser no longer 
