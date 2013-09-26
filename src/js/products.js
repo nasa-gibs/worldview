@@ -7,7 +7,7 @@ SOTE.widget.Products.prototype = new SOTE.widget.Component;
   *
   * @class A selection device classifying radio buttons/checkboxes into categories that are displayed in Accordion form.
   *     Radio buttons allow single selection accross categories.  Checkboxes allow multiple selections accross categories.
-  * 	Radio selections cannot span multiple categories.
+  *     Radio selections cannot span multiple categories.
   * @constructor
   * @this {Products}
   * @param {String} containerId is the container id of the div in which to render the object 
@@ -22,48 +22,48 @@ SOTE.widget.Products = function(containerId, config){
     this.log = Logging.getLogger("Worldview.Widget.Products");
     //this.VALID_PROJECTIONS = ["geographic", "arctic", "antarctic"];
     
-	//Get the ID of the container element
-	this.container=document.getElementById(containerId);
-	if (this.container==null){
-		this.setStatus("Error: element '"+containerId+"' not found!",true);
-		return;
-	}
-	this.id = containerId;
-	//Store the container's ID
-	this.containerId=containerId;	
+    //Get the ID of the container element
+    this.container=document.getElementById(containerId);
+    if (this.container==null){
+        this.setStatus("Error: element '"+containerId+"' not found!",true);
+        return;
+    }
+    this.id = containerId;
+    //Store the container's ID
+    this.containerId=containerId;    
 
-	//Define an object for holding configuration 
-	if (config===undefined){
-		config={};
-	}
+    //Define an object for holding configuration 
+    if (config===undefined){
+        config={};
+    }
 
-	if(config.title === undefined){
-	    config.title = "My Products";
-	}
+    if(config.title === undefined){
+        config.title = "My Products";
+    }
 
-	if(config.categories === undefined){
-	    config.categories = ["Category 1","Category 2"]; 
-	}
+    if(config.categories === undefined){
+        config.categories = ["Category 1","Category 2"]; 
+    }
 
-	if(config.callback === undefined){
-	    config.callback = null; 
-	}
+    if(config.callback === undefined){
+        config.callback = null; 
+    }
 
-	if(config.state === undefined || config.state === ""){
-		config.state = "geographic";
-	}
+    if(config.state === undefined || config.state === ""){
+        config.state = "geographic";
+    }
 
        
     this.state = config.state;
-	this.selected = config.selected;
-	this.isCollapsed = false;
+    this.selected = config.selected;
+    this.isCollapsed = false;
     this.dataSourceUrl = config.dataSourceUrl;
     this.categories = config.categories;
     this.config = config.config;
     this.paletteWidget = config.paletteWidget;
     this.events = Worldview.Events();
-	this.initRenderComplete = false;
-	this.init();
+    this.initRenderComplete = false;
+    this.init();
 
 };
 
@@ -98,16 +98,16 @@ SOTE.widget.Products.HTML_TAB_DOWNLOAD_UNSELECTED =
   * 
 */
 SOTE.widget.Products.prototype.init = function(){
-	
-	this.render();
+    
+    this.render();
     if(REGISTRY){
- 		REGISTRY.register(this.id,this);
-	}
-	else{
-		alert("No REGISTRY found!  Cannot register Products!");
-	}
-	
-	
+         REGISTRY.register(this.id,this);
+    }
+    else{
+        alert("No REGISTRY found!  Cannot register Products!");
+    }
+    
+    
 };
 
 /**
@@ -119,13 +119,13 @@ SOTE.widget.Products.prototype.init = function(){
 */
 SOTE.widget.Products.prototype.render = function(){
 
-	this.container.innerHTML = "";
-	//var productContainer = document.createElement("div");
-	//this.container.setAttribute("id",this.id+"prods");
-	this.container.setAttribute("class","products");
+    this.container.innerHTML = "";
+    //var productContainer = document.createElement("div");
+    //this.container.setAttribute("id",this.id+"prods");
+    this.container.setAttribute("class","products");
 
-	var tabs = document.createElement("ul");
-	tabs.setAttribute("id",this.id+"tabs");
+    var tabs = document.createElement("ul");
+    tabs.setAttribute("id",this.id+"tabs");
     tabs.innerHTML =
             "<li class='layerPicker first'>" + 
                "<a href='#products' class='activetab tab'></a>" + 
@@ -136,44 +136,44 @@ SOTE.widget.Products.prototype.render = function(){
             "<li class='layerPicker third'>" + 
                 "<a class='tab' href='#DataDownload'></a>" + 
             "</li>";
-	this.container.appendChild(tabs);
-	//$('#'+this.id).addClass('products');
-	var toggleButtonHolder = document.createElement("div");
-	toggleButtonHolder.setAttribute("id",this.id+"toggleButtonHolder");
-	toggleButtonHolder.setAttribute("class","toggleButtonHolder");
-	var accordionToggler = document.createElement("a");
-	accordionToggler.setAttribute("class","accordionToggler atcollapse arrow");
-	accordionToggler.setAttribute("title","Hide Layer Selector");
-	this.isCollapsed = false;
-	toggleButtonHolder.appendChild(accordionToggler);
-	this.container.appendChild(toggleButtonHolder);
+    this.container.appendChild(tabs);
+    //$('#'+this.id).addClass('products');
+    var toggleButtonHolder = document.createElement("div");
+    toggleButtonHolder.setAttribute("id",this.id+"toggleButtonHolder");
+    toggleButtonHolder.setAttribute("class","toggleButtonHolder");
+    var accordionToggler = document.createElement("a");
+    accordionToggler.setAttribute("class","accordionToggler atcollapse arrow");
+    accordionToggler.setAttribute("title","Hide Layer Selector");
+    this.isCollapsed = false;
+    toggleButtonHolder.appendChild(accordionToggler);
+    this.container.appendChild(toggleButtonHolder);
 
-	var container = document.createElement("div");
-	container.setAttribute("id","products");
-	this.container.appendChild(container);
+    var container = document.createElement("div");
+    container.setAttribute("id","products");
+    this.container.appendChild(container);
 
-	var selectorbox = document.createElement("div");
-	selectorbox.setAttribute("id","selectorbox");
-	this.container.appendChild(selectorbox);
+    var selectorbox = document.createElement("div");
+    selectorbox.setAttribute("id","selectorbox");
+    this.container.appendChild(selectorbox);
 
     var downloadBox = document.createElement("div");
     downloadBox.setAttribute("id", "DataDownload");
     this.container.appendChild(downloadBox);
 
-	//this.container.appendChild(productContainer);
+    //this.container.appendChild(productContainer);
     var self = this;
     $('#'+this.id).tabs({show: function(e, ui) {
         e.data = { self: self };
         SOTE.widget.Products.change(e, ui);
     }});
-	this.b = new SOTE.widget.Bank("products", {
-	    paletteWidget: this.paletteWidget, 
-	    dataSourceUrl: "ap_products.php",
-	    title: "My Layers",
-	    selected: {
-	        antarctic: "baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,antarctic_coastlines", 
-	        arctic: "baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,arctic_coastlines",
-	        geographic: "baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,sedac_bound"
+    this.b = new SOTE.widget.Bank("products", {
+        paletteWidget: this.paletteWidget, 
+        dataSourceUrl: "ap_products.php",
+        title: "My Layers",
+        selected: {
+            antarctic: "baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,antarctic_coastlines", 
+            arctic: "baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,arctic_coastlines",
+            geographic: "baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,sedac_bound"
         },
         categories: ["Base Layers","Overlays"],
         config:this.config
@@ -187,60 +187,60 @@ SOTE.widget.Products.prototype.render = function(){
             geographic:"baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,sedac_bound"
         },
         config:this.config
-    });	
+    });    
     
     //$('#'+this.id+"prods").on("tabsshow",SOTE.widget.Products.change);
-   	$('.accordionToggler').bind('click',{self:this},SOTE.widget.Products.toggle);
-	
-	if($(window).width() < 720){
-		SOTE.widget.Products.toggle({data: {self:this}});
-	}
+       $('.accordionToggler').bind('click',{self:this},SOTE.widget.Products.toggle);
+    
+    if($(window).width() < 720){
+        SOTE.widget.Products.toggle({data: {self:this}});
+    }
 
 
-	//setTimeout(SOTE.forceResize();
+    //setTimeout(SOTE.forceResize();
 
-	// Mark the component as ready in the registry if called via init() 
-	if ((this.initRenderComplete === false) && REGISTRY) {
-		this.initRenderComplete = true;
-		REGISTRY.markComponentReady(this.id);
-	}
-	var self = this;
-	$(window).resize(function(){
-		self.b.render();
-		self.s.resize();
-		self.adjustAlignment();
-	});
-	
-	$("#products").bind("fire", {self:this}, SOTE.widget.Products.handleFire);
+    // Mark the component as ready in the registry if called via init() 
+    if ((this.initRenderComplete === false) && REGISTRY) {
+        this.initRenderComplete = true;
+        REGISTRY.markComponentReady(this.id);
+    }
+    var self = this;
+    $(window).resize(function(){
+        self.b.render();
+        self.s.resize();
+        self.adjustAlignment();
+    });
+    
+    $("#products").bind("fire", {self:this}, SOTE.widget.Products.handleFire);
 
 };
 
 SOTE.widget.Products.handleFire = function(e){
-	var self = e.data.self;
-	if(self.isCollapsed){
-		$('.accordionToggler').html("Layers ("+ self.b.currCount()+")");
-	}
+    var self = e.data.self;
+    if(self.isCollapsed){
+        $('.accordionToggler').html("Layers ("+ self.b.currCount()+")");
+    }
 };
 
 SOTE.widget.Products.prototype.adjustAlignment = function(){
-	if($(window).width() < 720 && this.isCollapsed){
-		var w = $('.products').outerWidth();	
-		$('.products').css("left", "-"+w+"px");
-	}
+    if($(window).width() < 720 && this.isCollapsed){
+        var w = $('.products').outerWidth();    
+        $('.products').css("left", "-"+w+"px");
+    }
 };
 
 SOTE.widget.Products.forceResize = function(self){
-	var outerHeight = $("#"+self.id).outerHeight();
-	var tabHeight = $("#"+self.id+"tabs").outerHeight();
-	self.b.setHeight(outerHeight - tabHeight);
-	self.s.setHeight(outerHeight - tabHeight);
+    var outerHeight = $("#"+self.id).outerHeight();
+    var tabHeight = $("#"+self.id+"tabs").outerHeight();
+    self.b.setHeight(outerHeight - tabHeight);
+    self.s.setHeight(outerHeight - tabHeight);
 };
 
 SOTE.widget.Products.stopLink = function(e){
-	//e.stopPropagation();
+    //e.stopPropagation();
 };
 
-SOTE.widget.Products.change = function(e,ui){	
+SOTE.widget.Products.change = function(e,ui){    
     console.log(e);
     var self = e.data.self;
     if ( ui.index === 0 ) {
@@ -287,26 +287,26 @@ SOTE.widget.Products.change = function(e,ui){
 };
 
 SOTE.widget.Products.toggle = function(e,ui){
-	var self = e.data.self;
-	if(self.isCollapsed){
-		$('.accordionToggler').removeClass('atexpand').addClass('atcollapse').removeClass('staticLayers dateHolder').addClass('arrow');
-		$('.accordionToggler').attr("title","Hide Layer Selector");
-		$('.accordionToggler').empty();
-		//$('.products').css("left","0");
-		$('.products').animate({left:'0'}, 300);
-		self.isCollapsed = false;
-		$('.accordionToggler').appendTo("#"+self.id+"toggleButtonHolder");
-	}
-	else{
-		$('.accordionToggler').removeClass('atcollapse').addClass('dateHolder').removeClass('arrow').addClass('staticLayers');
-		$('.accordionToggler').attr("title","Show Layer Selector");
-		$('.accordionToggler').html("Layers ("+ self.b.currCount()+")");
+    var self = e.data.self;
+    if(self.isCollapsed){
+        $('.accordionToggler').removeClass('atexpand').addClass('atcollapse').removeClass('staticLayers dateHolder').addClass('arrow');
+        $('.accordionToggler').attr("title","Hide Layer Selector");
+        $('.accordionToggler').empty();
+        //$('.products').css("left","0");
+        $('.products').animate({left:'0'}, 300);
+        self.isCollapsed = false;
+        $('.accordionToggler').appendTo("#"+self.id+"toggleButtonHolder");
+    }
+    else{
+        $('.accordionToggler').removeClass('atcollapse').addClass('dateHolder').removeClass('arrow').addClass('staticLayers');
+        $('.accordionToggler').attr("title","Show Layer Selector");
+        $('.accordionToggler').html("Layers ("+ self.b.currCount()+")");
 
-		var w = $('.products').outerWidth();
-		$('.products').animate({left:'-'+w+"px"}, 300);
-		self.isCollapsed = true;
-		$("#"+self.id).after($('.accordionToggler'));
-	} 	
+        var w = $('.products').outerWidth();
+        $('.products').animate({left:'-'+w+"px"}, 300);
+        self.isCollapsed = true;
+        $("#"+self.id).after($('.accordionToggler'));
+    }     
 };
 
 SOTE.widget.Products.prototype.selectTab = function(tabName) {
@@ -328,12 +328,12 @@ SOTE.widget.Products.prototype.selectTab = function(tabName) {
 */
 SOTE.widget.Products.prototype.fire = function(){
 
-	if(REGISTRY){
-		REGISTRY.fire(this);
-	}
-	else{
-		alert("No REGISTRY found! Cannot fire to REGISTRY from Products!");
-	}
+    if(REGISTRY){
+        REGISTRY.fire(this);
+    }
+    else{
+        alert("No REGISTRY found! Cannot fire to REGISTRY from Products!");
+    }
 
 };
 
@@ -346,7 +346,7 @@ SOTE.widget.Products.prototype.fire = function(){
   *
 */
 SOTE.widget.Products.prototype.getValue = function(){
-	return this.id + "=" + this.b.value();
+    return this.id + "=" + this.b.value();
 };
 
 /**
@@ -358,6 +358,7 @@ SOTE.widget.Products.prototype.getValue = function(){
   * 
 */
 SOTE.widget.Products.prototype.updateComponent = function(querystring){
-	var qs = (querystring === undefined)? "":querystring;
-	this.fire();
+    var qs = (querystring === undefined)? "":querystring;
+    this.fire();
 };
+

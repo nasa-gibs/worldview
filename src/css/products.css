@@ -67,21 +67,24 @@
 
 .toggleButtonHolder { display:inline; overflow:hidden;}
 
-@media screen and (max-width: 720px) and (orientation: portrait){
+@media only screen and (max-width: 720px) and (orientation: portrait), only screen and (device-aspect-ratio: 2/3), only screen and (device-aspect-ratio:40/71){
     .products {display:block; float:left; min-width:238px; width:100%; height:100%; position:absolute !important; overflow:hidden;
                 background: rgba(38,43,49,0.95); border-radius:0 10px 10px 0; top:0; z-index:295;} 
-    .bank { height:96%;/*box-shadow: 0 0 4px 1px #bbb;*/ }
+    .bank { height:96%; }
     #selectorboxcontent { max-height:97%;}        
     .bank li.item a {float:right; color:#fff; margin-right:1.6em;}
     img.bank-item-img { display:block; height: 1.6em; width:auto;}
     a.staticLayers { 
-        background: -moz-linear-gradient(top,  rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.7) 100%); /* FF3.6+ */
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.5)), color-stop(50%,rgba(0,0,0,0.6)), color-stop(100%,rgba(0,0,0,0.7))); /* Chrome,Safari4+ */
-        background: -webkit-linear-gradient(top,  rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.6) 50%,rgba(0,0,0,0.7) 100%); /* Chrome10+,Safari5.1+ */
-        background: -o-linear-gradient(top,  rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.6) 50%,rgba(0,0,0,0.7) 100%); /* Opera 11.10+ */
-        background: -ms-linear-gradient(top,  rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.6) 50%,rgba(0,0,0,0.7) 100%); /* IE10+ */
-        background: linear-gradient(to bottom,  rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.6) 50%,rgba(0,0,0,0.7) 100%); /* W3C */
-    }            
+        background: -moz-linear-gradient(top,  rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.7) 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.5)), color-stop(50%,rgba(0,0,0,0.6)), color-stop(100%,rgba(0,0,0,0.7)));
+        background: -webkit-linear-gradient(top,  rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.6) 50%,rgba(0,0,0,0.7) 100%);
+        background: -o-linear-gradient(top,  rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.6) 50%,rgba(0,0,0,0.7) 100%);
+        background: -ms-linear-gradient(top,  rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.6) 50%,rgba(0,0,0,0.7) 100%);
+        background: linear-gradient(to bottom,  rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.6) 50%,rgba(0,0,0,0.7) 100%);
+    }
+    #productsHolder li.third {
+        display:none;
+    }
     
 }
 

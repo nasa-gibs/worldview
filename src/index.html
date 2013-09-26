@@ -1,35 +1,35 @@
 <!doctype html>
 <html>
 <head>
-	<title>EOSDIS Worldview (Alpha)</title>
-	
-	<script type="text/javascript">
+    <title>EOSDIS Worldview (Alpha)</title>
+    
+    <script type="text/javascript">
         if ( /MSIE (\d+\.\d+);/.test(navigator.userAgent) && ! /unsupported/.test(location.search) ) {
              document.location.replace("pages/unsupported_browser.html" + location.search);       
         }
-	</script>
-	
-	<!-- meta defines -->
-	<meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-	<meta name="apple-mobile-web-app-capable" content="yes" />	
-	<meta name="keywords" content="nasa, worldview, nasa worldview, eosdis worldview, satellite imagery, remote sensing, natural hazards, natural disasters, near real-time, nrt, lance, wildfire management, air quality, weather forecasting, agriculture, dust storms, smoke plumes, vegetation, severe storms, shipping, fisheries, floods, drought, oil spills"/>
-	<meta name="description" content="Interactive interface for browsing full-resolution, global, near real-time satellite imagery.  Supports time-critical application areas such as wildfire management, air quality measurements, and weather forecasting.  Data is generally available within three hours of observation." />
-	<meta http-equiv="Cache-control" content="no-cache">
-	<meta http-equiv="Cache-control" content="no-store">
-	<meta http-equiv="Pragma" content="no-cache">
+    </script>
+    
+    <!-- meta defines -->
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />    
+    <meta name="keywords" content="nasa, worldview, nasa worldview, eosdis worldview, satellite imagery, remote sensing, natural hazards, natural disasters, near real-time, nrt, lance, wildfire management, air quality, weather forecasting, agriculture, dust storms, smoke plumes, vegetation, severe storms, shipping, fisheries, floods, drought, oil spills"/>
+    <meta name="description" content="Interactive interface for browsing full-resolution, global, near real-time satellite imagery.  Supports time-critical application areas such as wildfire management, air quality measurements, and weather forecasting.  Data is generally available within three hours of observation." />
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-store">
+    <meta http-equiv="Pragma" content="no-cache">
 
-	<!-- CSS resources ==================================================== -->
-	<!-- link.prod --> <!-- <link type="text/css" href="css/worldview-min.css?v=@BUILD_NONCE@" rel="Stylesheet" /> -->	
-		
-	<!-- link.dev --> <link type="text/css" rel="Stylesheet" href="ext/jquery.mobile/jquery.mobile.css" />
-	
-	<!-- link.dev --> <link type="text/css" rel="Stylesheet" href="ext/yui/combo-container-min.css" />
-	
-	<!-- link.dev --> <link type="text/css" rel="StyleSheet" href="ext/openlayers/theme/default/style.css" />
-	<!-- link.dev --> <link type="text/css" rel="StyleSheet" href="ext/openlayers/openlayers.example.style.css" />
-	<!-- link.dev --> <link type="text/css" rel="StyleSheet" href="ext/openlayers/openlayers.style.mobile-jq.css" />
-	
+    <!-- CSS resources ==================================================== -->
+    <!-- link.prod --> <!-- <link type="text/css" href="css/worldview-min.css?v=@BUILD_NONCE@" rel="Stylesheet" /> -->    
+        
+    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="ext/jquery.mobile/jquery.mobile.css" />
+    
+    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="ext/yui/combo-container-min.css" />
+    
+    <!-- link.dev --> <link type="text/css" rel="StyleSheet" href="ext/openlayers/theme/default/style.css" />
+    <!-- link.dev --> <link type="text/css" rel="StyleSheet" href="ext/openlayers/openlayers.example.style.css" />
+    <!-- link.dev --> <link type="text/css" rel="StyleSheet" href="ext/openlayers/openlayers.style.mobile-jq.css" />
+    
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="ext/jquery.dd/dd.css" />
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="ext/jquery.dd/skin2.css" />
 
@@ -46,26 +46,26 @@
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="ext/mobiscroll/mobiscroll.wp.css" />
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="ext/mobiscroll/mobiscroll.animation.css" />
 
-	<!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/sote.css" />          	
-	<!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/map.css" /> 
-	<!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/dateSpan.css" /> 
-	<!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/menuPicker.css" /> 
-	<!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/accordionPicker.css" /> 
-	<!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/bank.css" /> 
-	<!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/selector.css" /> 
+    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/sote.css" />              
+    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/map.css" /> 
+    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/dateSpan.css" /> 
+    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/menuPicker.css" /> 
+    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/accordionPicker.css" /> 
+    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/bank.css" /> 
+    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/selector.css" /> 
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/palette.css" />
-	<!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/splash.css" />	
-	<!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/products.css" />	
+    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/splash.css" />    
+    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/products.css" />    
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/about.css" />  
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/indicator.css" />  
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/events.css" />
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/dataDownload.css" />
 
-	<!-- JavaScript resources ============================================= -->
-	<!-- link.prod --> <!-- <script type="text/javascript" src="js/worldview-min.js?v=@BUILD_NONCE@&mobile"></script> -->
+    <!-- JavaScript resources ============================================= -->
+    <!-- link.prod --> <!-- <script type="text/javascript" src="js/worldview-min.js?v=@BUILD_NONCE@&mobile"></script> -->
 
     <!-- link.dev --> <script type="text/javascript" src="ext/preloadjs/preloadjs.min.js"></script>
-    		
+            
     <!-- JQuery mobile load should be after SOTE-specific JS but didn't work at first;  need to retry -->
     <!-- link.dev --> <script type="text/javascript" src="ext/jquery/jquery.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="ext/jquery-ui/jquery-ui.min.js" ></script>
@@ -75,7 +75,7 @@
     <!-- link.dev --> <script type="text/javascript" src="ext/jscrollpane/mwheelIntent.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="ext/jscrollpane/jquery.jscrollpane.min.js"></script>
     
- 	<!-- link.dev --> <script type="text/javascript" src="ext/mobiscroll/mobiscroll.core.js"></script>
+     <!-- link.dev --> <script type="text/javascript" src="ext/mobiscroll/mobiscroll.core.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="ext/mobiscroll/mobiscroll.datetime.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="ext/mobiscroll/mobiscroll.select.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="ext/mobiscroll/mobiscroll.jqm.js"></script>
@@ -85,52 +85,52 @@
     <!-- link.dev --> <script type="text/javascript" src="ext/mobiscroll/mobiscroll.wp.js" ></script>
     
     <!-- link.dev --> <script type="text/javascript" src="ext/yui/yahoo/yahoo.js"></script>
-	<!-- link.dev --> <script type="text/javascript" src="ext/yui/event/event.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="ext/yui/event/event.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="ext/yui/dom/dom.js"></script>
-	<!-- link.dev --> <script type="text/javascript" src="ext/yui/dragdrop/dragdrop.js"></script>
-	<!-- link.dev --> <script type="text/javascript" src="ext/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
-	<!-- link.dev --> <script type="text/javascript" src="ext/yui/animation/animation.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="ext/yui/dragdrop/dragdrop.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="ext/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="ext/yui/animation/animation.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="ext/yui/connection/connection.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="ext/yui/element/element.js"></script>    
     <!-- link.dev --> <script type="text/javascript" src="ext/yui/button/button.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="ext/yui/container/container.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="ext/yui/storage/storage.js"></script>            
 
-	<!-- link.dev --> <script type="text/javascript" src="ext/joyride/jquery.cookie.js"></script>
-	<!-- link.dev --> <script type="text/javascript" src="ext/joyride/jquery.joyride.js"></script>
-	<!-- link.dev --> <script type="text/javascript" src="ext/joyride/modernizr.mq.js"></script>
-	
-	<!-- link.dev --> <script type="text/javascript" src="ext/proj4js/proj4js.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="ext/joyride/jquery.cookie.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="ext/joyride/jquery.joyride.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="ext/joyride/modernizr.mq.js"></script>
+    
+    <!-- link.dev --> <script type="text/javascript" src="ext/proj4js/proj4js.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="ext/proj4js/merc.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="ext/proj4js/stere.js"></script>
-	<!-- link.dev --> <script type="text/javascript" src="ext/proj4js/EPSG_3031.js"></script>
-	<!-- link.dev --> <script type="text/javascript" src="ext/proj4js/EPSG_3413.js"></script>
-	<!-- link.dev --> <script type="text/javascript" src="ext/proj4js/EPSG_3995.js"></script>
-	
-	<!-- link.dev --> <script type="text/javascript" src="ext/openlayers/OpenLayers.debug.js?mobile"></script>
-	<!-- link.dev --> <script type="text/javascript" src="ext/jcrop/jcrop.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="ext/proj4js/EPSG_3031.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="ext/proj4js/EPSG_3413.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="ext/proj4js/EPSG_3995.js"></script>
+    
+    <!-- link.dev --> <script type="text/javascript" src="ext/openlayers/OpenLayers.debug.js?mobile"></script>
+    <!-- link.dev --> <script type="text/javascript" src="ext/jcrop/jcrop.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="ext/jquery.dd/jquery.dd.js"></script>  
     <!-- link.dev --> <script type="text/javascript" src="ext/jscache/cache.js"></script>  
   
     <!-- link.dev --> <script type="text/javascript" src="js/Logging.js"></script> 
     <!-- link.dev --> <script type="text/javascript" src="js/Date.js"></script>
         
-	<!-- link.dev --> <script type="text/javascript" src="js/component.js"></script>
-	<!-- link.dev --> <script type="text/javascript" src="js/registry.js"></script> 
-	<!-- link.dev --> <script type="text/javascript" src="js/util.js"></script>
-	<!-- link.dev --> <script type="text/javascript" src="js/dateSpan.js"></script>
-	<!-- link.dev --> <script type="text/javascript" src="js/mobileDateSpan.js"></script>
-	<!-- link.dev --> <script type="text/javascript" src="js/datePicker.js"></script>
-	<!-- link.dev --> <script type="text/javascript" src="js/rubberBand.js"></script> 
-	<!-- link.dev --> <script type="text/javascript" src="js/imageDownload.js"></script>
-	<!-- link.dev --> <script type="text/javascript" src="js/menuPicker.js"></script>
-	<!-- link.dev --> <script type="text/javascript" src="js/accordionPicker.js"></script>
-	<!-- link.dev --> <script type="text/javascript" src="js/list.js"></script>
-	<!-- link.dev --> <script type="text/javascript" src="js/bank.js"></script>
-	<!-- link.dev --> <script type="text/javascript" src="js/switch.js"></script>
-	<!-- link.dev --> <script type="text/javascript" src="js/selector.js"></script>
-	<!-- link.dev --> <script type="text/javascript" src="js/products.js"></script>
-	<!-- link.dev --> <script type="text/javascript" src="js/sote.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/component.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/registry.js"></script> 
+    <!-- link.dev --> <script type="text/javascript" src="js/util.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/dateSpan.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/mobileDateSpan.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/datePicker.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/rubberBand.js"></script> 
+    <!-- link.dev --> <script type="text/javascript" src="js/imageDownload.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/menuPicker.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/accordionPicker.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/list.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/bank.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/switch.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/selector.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/products.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/sote.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/events.js"></script>
     
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview.js"></script>
@@ -151,10 +151,10 @@
     
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Map.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Map/CanvasTile.js"></script>
-	<!-- link.dev --> <script type="text/javascript" src="js/Worldview/Map/MapSet.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Map/MapSet.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Map/LayerSet.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Map/StaticLayerSet.js"></script>
-	<!-- link.dev --> <script type="text/javascript" src="js/Worldview/Map/DailyLayerSet.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Map/DailyLayerSet.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Map/GraticuleLayer.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Map/TWMSLayer.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Map/HoverControl.js"></script>
@@ -207,8 +207,8 @@
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/SelectionListPanel.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/DownloadListPanel.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/DataDownload/WgetPage.js"></script>
-	
-	<!-- link.dev --> <script type="text/javascript" src="js/Worldview/Widget/Map.js"></script>
+    
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Widget/Map.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Widget/Palette.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Widget/WorldviewMap.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Widget/ArcticProjectionChangeNotification.js"></script>
@@ -216,48 +216,49 @@
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Widget/CRS.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Widget/DataDownload.js"></script>
 
-    	
-    <!-- link.dev --> <script type="text/javascript" src="js/tour.js"></script>    	
-	<!-- link.dev --> <script type="text/javascript" src="js/main.js"></script>
+        
+    <!-- link.dev --> <script type="text/javascript" src="js/tour.js"></script>        
+    <!-- link.dev --> <script type="text/javascript" src="js/main.js"></script>
 </head>
 
 <body class="yui-skin-sam">
-	<div data-role="page" id="mappage">	
-		<div data-role="content">
-			<div id="banner"><div id='wvlogo'></div>
-				<ul id="toolbarlist">
-					<li class='toolbar-icon'><div id='info_drop'><div id='info' title='Information'><img src='images/information.png' /></div><div class='hidden'><a href="mailto:support@earthdata.nasa.gov?subject=Feedback for EOSDIS Worldview tool" target="_blank" title='Feedback'>Feedback</a><a href='javascript:Worldview.Tour.start(true);' title='Start Tour'>Start Tour</a><a href='javascript:Worldview.About.show();' title='About Worldview'>About</a></div></div></li>
-					<li class='toolbar-icon'><div id='camera'></div></li>
-					<li class='toolbar-icon'><div id="switch"></div></li>
-					<li class='toolbar-icon'><a id='perma_link' class='toolbar-link' title='Permalink' href='javascript:Worldview.Permalink.show();'><img src='images/permalink.png' /></a></li>
-				</ul>			
-			</div>
-			
-			<div id="hazard"></div>
-			<div id="productsHolder"></div>
-			<div id="map"></div>
-			<div id="eventsHolder"></div>
-			<div id="imagedownload"></div>
-			<div id="dlMap"></div>
-						
-			<div class="horizontalContainer">
-				<div id="time"></div>
-			</div>
-			
-		</div>
-	</div>
-	<ol id="joyRideTipContent">
-		<li id="datePanel" data-id="timedsecbutton" data-button="Next" data-options="tipLocation:top;tipAnimation:fade;nubPosition:bottom;bordered:true"></li>
-      	<li id="productBasePanel" data-id="productsBaseLayers" data-button="Next" data-options="tipLocation:right;nubPosition:left;tipAnimation:fade;prevButton:true;bordered:true"></li>
-      	<li id="productOverlayPanel" data-id="productsOverlays" data-button="Next" data-options="tipLocation:right;nubPosition:left;tipAnimation:fade;prevButton:true;bordered:true"></li>
-      	<li id="mapPanel" data-id="mapPanelTourAnchor" data-button="Next" data-options="tipLocation:left;nubPosition:left;prevButton:true;bordered:true"></li>
-      	<li id="toolbarPanel" class="toolbarTip" data-id="toolbarlist" data-button="Finish" data-options="tipLocation:bottom;nubPosition:top;tipAnimation:fade;prevButton:true;bordered:true;class:toolbar"></li>
+    <div data-role="page" id="mappage">    
+        <div data-role="content">
+            <div id="banner"><div id='wvlogo'></div>
+                <ul id="toolbarlist">
+                    <li class='toolbar-icon'><div id='info_drop'><div id='info' title='Information'><img src='images/information.png' /></div><div class='hidden'><a href="mailto:support@earthdata.nasa.gov?subject=Feedback for EOSDIS Worldview tool" target="_blank" title='Feedback'>Feedback</a><a href='javascript:Worldview.Tour.start(true);' title='Start Tour'>Start Tour</a><a href='javascript:Worldview.About.show();' title='About Worldview'>About</a></div></div></li>
+                    <li class='toolbar-icon'><div id='camera'></div></li>
+                    <li class='toolbar-icon'><div id="switch"></div></li>
+                    <li class='toolbar-icon'><a id='perma_link' class='toolbar-link' title='Permalink' href='javascript:Worldview.Permalink.show();'><img src='images/permalink.png' /></a></li>
+                </ul>            
+            </div>
+            
+            <div id="hazard"></div>
+            <div id="productsHolder"></div>
+            <div id="map"></div>
+            <div id="eventsHolder"></div>
+            <div id="imagedownload"></div>
+            <div id="dlMap"></div>
+                        
+            <div class="horizontalContainer">
+                <div id="time"></div>
+            </div>
+            
+        </div>
+    </div>
+    <ol id="joyRideTipContent">
+        <li id="datePanel" data-id="timedsecbutton" data-button="Next" data-options="tipLocation:top;tipAnimation:fade;nubPosition:bottom;bordered:true"></li>
+          <li id="productBasePanel" data-id="productsBaseLayers" data-button="Next" data-options="tipLocation:right;nubPosition:left;tipAnimation:fade;prevButton:true;bordered:true"></li>
+          <li id="productOverlayPanel" data-id="productsOverlays" data-button="Next" data-options="tipLocation:right;nubPosition:left;tipAnimation:fade;prevButton:true;bordered:true"></li>
+          <li id="mapPanel" data-id="mapPanelTourAnchor" data-button="Next" data-options="tipLocation:left;nubPosition:left;prevButton:true;bordered:true"></li>
+          <li id="toolbarPanel" class="toolbarTip" data-id="toolbarlist" data-button="Finish" data-options="tipLocation:bottom;nubPosition:top;tipAnimation:fade;prevButton:true;bordered:true;class:toolbar"></li>
     </ol> 
-
-	<!-- BEGIN: Unica Page Tag -->
-	<!-- Copyright 2004-2010 Unica Corporation.  All rights reserved. -->
-	<script type="text/javascript" language="JavaScript" src="/sites/all/themes/earthdata/js/ntpagetag.js"></script>
-	<!-- END: Unica Page Tag -->
+<script>
+</script>
+    <!-- BEGIN: Unica Page Tag -->
+    <!-- Copyright 2004-2010 Unica Corporation.  All rights reserved. -->
+    <script type="text/javascript" language="JavaScript" src="/sites/all/themes/earthdata/js/ntpagetag.js"></script>
+    <!-- END: Unica Page Tag -->
 </body>
 
 </html>

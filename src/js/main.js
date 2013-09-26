@@ -175,7 +175,11 @@ $(function() {// Initialize "static" vars
             paletteWidget: palettes
         });
         dataDownload.render();
-        
+        $(window).resize(function() {
+          if ($(window).width() < 720) {
+            $('#productsHoldertabs li.first a').trigger('click');
+          }
+        });
         // Wirings
         products.events
             .on("dataDownloadSelect", function() {

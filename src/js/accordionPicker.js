@@ -20,44 +20,44 @@ SOTE.widget.AccordionPicker.prototype = new SOTE.widget.Component;
   * 
 */
 SOTE.widget.AccordionPicker = function(containerId, config){
-	//Get the ID of the container element
-	this.container=document.getElementById(containerId);
-	if (this.container==null){
-		this.setStatus("Error: element '"+containerId+"' not found!",true);
-		return;
-	}
-	this.id = containerId;
-	//Store the container's ID
-	this.containerId=containerId;	
+    //Get the ID of the container element
+    this.container=document.getElementById(containerId);
+    if (this.container==null){
+        this.setStatus("Error: element '"+containerId+"' not found!",true);
+        return;
+    }
+    this.id = containerId;
+    //Store the container's ID
+    this.containerId=containerId;    
 
-	//Define an object for holding configuration 
-	if (config===undefined){
-		config={};
-	}
+    //Define an object for holding configuration 
+    if (config===undefined){
+        config={};
+    }
 
-	if(config.dataSourceUrl === undefined){
-	    config.dataSourceUrl = null;
-	}
+    if(config.dataSourceUrl === undefined){
+        config.dataSourceUrl = null;
+    }
 
-	if(config.items === undefined){
-	    config.items = null; 
-	}
+    if(config.items === undefined){
+        config.items = null; 
+    }
 
- 	if(config.selected === undefined){
-	    config.selected = null;
-	}	
+     if(config.selected === undefined){
+        config.selected = null;
+    }    
        
     this.value = "";
-	//this.items = config.items;
-	this.selected = config.selected;
-	this.expanded = null;
-	this.initRenderComplete = false;
-	this.dataSourceUrl = config.dataSourceUrl;
-	this.statusStr = "";
-	this.init();
-	this.updateComponent("");
+    //this.items = config.items;
+    this.selected = config.selected;
+    this.expanded = null;
+    this.initRenderComplete = false;
+    this.dataSourceUrl = config.dataSourceUrl;
+    this.statusStr = "";
+    this.init();
+    this.updateComponent("");
 
-}
+};
 
 /**
   * Displays all options in HTML in an Accordion format (see JQuery UI Accordion) with the selected states being indicated
@@ -69,17 +69,17 @@ SOTE.widget.AccordionPicker = function(containerId, config){
   * 
 */
 SOTE.widget.AccordionPicker.prototype.init = function(){
-	
-	this.render();
-	
+    
+    this.render();
+    
     if(REGISTRY){
- 		REGISTRY.register(this.id,this);
-	}
-	else{
-		alert("No REGISTRY found!  Cannot register AccordionPicker!");
-	}
-	
-	
+         REGISTRY.register(this.id,this);
+    }
+    else{
+        alert("No REGISTRY found!  Cannot register AccordionPicker!");
+    }
+    
+    
 };
 
 /**
@@ -90,146 +90,146 @@ SOTE.widget.AccordionPicker.prototype.init = function(){
   * 
 */
 SOTE.widget.AccordionPicker.prototype.render = function(){
-	if(this.items === undefined){return false;}
-	this.container.innerHTML = "";
-	var htmlExpanded;
-	var selected;
-	var defaultSelection = null; 
-	var accordion = document.createElement("form");
-	accordion.setAttribute("class","accordion");
-	accordion.setAttribute("id",this.id+"accordion");
-	for(var category in this.items){
-		if(category === "expanded"){
-			if(this.items[category] !== undefined && this.items[category] !== ""){
-				htmlExpanded = this.items[category].replace(" ","");
-			}
-			continue;
-		}
-		if(category === "selected"){
-			selected = this.items[category];
-			continue;
-		}
-		var htmlCategory = category.replace(" ","");
-		var catHeader = document.createElement("a");
-		catHeader.setAttribute("href","#");
-		catHeader.setAttribute("id",this.id+htmlCategory );
-		catHeader.innerHTML = "<span>"+category+"</span>";
-		accordion.appendChild(catHeader);
-		var catList = document.createElement("ul");
-		for(var i=0; i < this.items[category].length; i++){
-			var item = this.items[category][i];
-			var catListItem = document.createElement("li");
-			if(item.type !== "single" && item.type !== "multi"){
-				alert("Invalid list item!");
-			}
-			else {
-				var id = this.id + htmlCategory + "Item" + i;
-				var disabled = (item.disabled !== undefined && item.disabled === true)? "disabled":""; 
-				var type = (item.type === "single")? "radio":"checkbox"; 
-				catListItem.innerHTML = "<input value='"+item.value+"' class='accordionFormItem' name='"+this.id+item.type+"' id='"+id+"' type='"+type+"'"+" "+disabled+"/>";
-				catListItem.innerHTML += "<label for='"+id+"'><span class='accordionLabel'>"+item.label+"</span><span class='accordionSub'>"+item.sublabel+"</span></label>";
-				catList.appendChild(catListItem);				
-			} 
-		}
-		accordion.appendChild(catList);
-	}
-	this.container.appendChild(accordion);
-	var accordionToggler = document.createElement("a");
-	accordionToggler.setAttribute("class","accordionToggler atcollapse");
-	this.isCollapsed = false;
-	var e = new Object();
-	e.data = new Object();
-	e.data.self = this;
-	//SOTE.widget.AccordionPicker.toggle(e,null);
-	this.container.appendChild(accordionToggler);
-	$('.accordionToggler').bind('click',{self:this},SOTE.widget.AccordionPicker.toggle);
-	$('.accordion').accordion();
-	$('.accordion').bind('accordionchange',{self:this},SOTE.widget.AccordionPicker.handleCategorySwitch);
-	//$('.accordion').accordion("option","collapsible",true);
-	$('.accordionFormItem').bind('click',{self:this},SOTE.widget.AccordionPicker.handleSelection);
+    if(this.items === undefined){return false;}
+    this.container.innerHTML = "";
+    var htmlExpanded;
+    var selected;
+    var defaultSelection = null; 
+    var accordion = document.createElement("form");
+    accordion.setAttribute("class","accordion");
+    accordion.setAttribute("id",this.id+"accordion");
+    for(var category in this.items){
+        if(category === "expanded"){
+            if(this.items[category] !== undefined && this.items[category] !== ""){
+                htmlExpanded = this.items[category].replace(" ","");
+            }
+            continue;
+        }
+        if(category === "selected"){
+            selected = this.items[category];
+            continue;
+        }
+        var htmlCategory = category.replace(" ","");
+        var catHeader = document.createElement("a");
+        catHeader.setAttribute("href","#");
+        catHeader.setAttribute("id",this.id+htmlCategory );
+        catHeader.innerHTML = "<span>"+category+"</span>";
+        accordion.appendChild(catHeader);
+        var catList = document.createElement("ul");
+        for(var i=0; i < this.items[category].length; i++){
+            var item = this.items[category][i];
+            var catListItem = document.createElement("li");
+            if(item.type !== "single" && item.type !== "multi"){
+                alert("Invalid list item!");
+            }
+            else {
+                var id = this.id + htmlCategory + "Item" + i;
+                var disabled = (item.disabled !== undefined && item.disabled === true)? "disabled":""; 
+                var type = (item.type === "single")? "radio":"checkbox"; 
+                catListItem.innerHTML = "<input value='"+item.value+"' class='accordionFormItem' name='"+this.id+item.type+"' id='"+id+"' type='"+type+"'"+" "+disabled+"/>";
+                catListItem.innerHTML += "<label for='"+id+"'><span class='accordionLabel'>"+item.label+"</span><span class='accordionSub'>"+item.sublabel+"</span></label>";
+                catList.appendChild(catListItem);                
+            } 
+        }
+        accordion.appendChild(catList);
+    }
+    this.container.appendChild(accordion);
+    var accordionToggler = document.createElement("a");
+    accordionToggler.setAttribute("class","accordionToggler atcollapse");
+    this.isCollapsed = false;
+    var e = new Object();
+    e.data = new Object();
+    e.data.self = this;
+    //SOTE.widget.AccordionPicker.toggle(e,null);
+    this.container.appendChild(accordionToggler);
+    $('.accordionToggler').bind('click',{self:this},SOTE.widget.AccordionPicker.toggle);
+    $('.accordion').accordion();
+    $('.accordion').bind('accordionchange',{self:this},SOTE.widget.AccordionPicker.handleCategorySwitch);
+    //$('.accordion').accordion("option","collapsible",true);
+    $('.accordionFormItem').bind('click',{self:this},SOTE.widget.AccordionPicker.handleSelection);
 
-	if(selected !== undefined && selected !== ""){
-		this.setValue(htmlExpanded + "." + selected);
-	}
+    if(selected !== undefined && selected !== ""){
+        this.setValue(htmlExpanded + "." + selected);
+    }
 
-	/*if(htmlExpanded !== undefined){
-		$('.accordion').accordion("activate","#"+this.id+htmlExpanded);
-		this.expanded = this.id + htmlExpanded;
-		var activeBox = document.getElementById(this.id+htmlExpanded+"Item"+"0");
-		if(activeBox !== null) activeBox.checked = true;
-		this.fire();
-	}*/ 
+    /*if(htmlExpanded !== undefined){
+        $('.accordion').accordion("activate","#"+this.id+htmlExpanded);
+        this.expanded = this.id + htmlExpanded;
+        var activeBox = document.getElementById(this.id+htmlExpanded+"Item"+"0");
+        if(activeBox !== null) activeBox.checked = true;
+        this.fire();
+    }*/ 
 
-/*	else {
-		this.setValue(defaultSelection);
-	}*/
+/*    else {
+        this.setValue(defaultSelection);
+    }*/
 
-		// Mark the component as ready in the registry if called via init() 
-	if ((this.initRenderComplete === false) && REGISTRY) {
-		this.initRenderComplete = true;
-		REGISTRY.markComponentReady(this.id);
-	}
-	
-	
-	
+        // Mark the component as ready in the registry if called via init() 
+    if ((this.initRenderComplete === false) && REGISTRY) {
+        this.initRenderComplete = true;
+        REGISTRY.markComponentReady(this.id);
+    }
+    
+    
+    
 };
 
 SOTE.widget.AccordionPicker.handleSelection = function(e){
-	var self = e.data.self;
-	self.syncCheckboxes(e.target);
+    var self = e.data.self;
+    self.syncCheckboxes(e.target);
     self.value = SOTE.util.extractFromQuery(self.id,self.getValue());
-	self.fire();
+    self.fire();
 };
 
 SOTE.widget.AccordionPicker.toggle = function(e,ui){
-	var self = e.data.self;
-	if(self.isCollapsed){
-		$('.accordionToggler').removeClass('atexpand').addClass('atcollapse');
-		$('.accordionToggler').attr("title","Hide Products");
-		$('.accordion').css('display','block');
-		self.isCollapsed = false;
-	}
-	else{
-		$('.accordionToggler').removeClass('atcollapse').addClass('atexpand');
-		$('.accordionToggler').attr("title","Show Products");
-		$('.accordion').css('display','none');
-		self.isCollapsed = true;
-	} 	
+    var self = e.data.self;
+    if(self.isCollapsed){
+        $('.accordionToggler').removeClass('atexpand').addClass('atcollapse');
+        $('.accordionToggler').attr("title","Hide Products");
+        $('.accordion').css('display','block');
+        self.isCollapsed = false;
+    }
+    else{
+        $('.accordionToggler').removeClass('atcollapse').addClass('atexpand');
+        $('.accordionToggler').attr("title","Show Products");
+        $('.accordion').css('display','none');
+        self.isCollapsed = true;
+    }     
 };
 
 SOTE.widget.AccordionPicker.handleCategorySwitch = function(e,ui){
-	var self = e.data.self;
-	var oldCategory = (ui.oldHeader[0].id);
-	var newCategory = (ui.newHeader[0].id);
-	var checkedRadio = null;
-	var anyChecked = false;
-	
-	if(self.expanded !== newCategory){
-		self.expanded = newCategory;
-		var radioButtons = document.getElementsByName(self.id+"single");
-		for(var i=0; i<radioButtons.length; ++i){
-			if(radioButtons[i].disabled === false && radioButtons[i].id.indexOf(oldCategory) != -1 && radioButtons[i].checked === true){
-				checkedRadio = radioButtons[i].value;
-			}
-		}
-		if(checkedRadio !== null){
-			for(var i=0; i<radioButtons.length; ++i){
-				if(radioButtons[i].disabled === false && radioButtons[i].id.indexOf(newCategory) != -1 && radioButtons[i].value === checkedRadio){
-					radioButtons[i].checked = true;
-					anyChecked = true;
-				}
-			}
-		}
-		
-		/*if(!anyChecked){
-			var activeBox = document.getElementById(newCategory+"Item"+"0");
-			var radioString = new String(self.id+"single");
-			if(activeBox !== null && activeBox.name == radioString) self.setValue(self.expanded + "." + activeBox.value);
-		}*/
-		
-		var categoryTest;
-	}
-	$('.accordion').blur();
+    var self = e.data.self;
+    var oldCategory = (ui.oldHeader[0].id);
+    var newCategory = (ui.newHeader[0].id);
+    var checkedRadio = null;
+    var anyChecked = false;
+    
+    if(self.expanded !== newCategory){
+        self.expanded = newCategory;
+        var radioButtons = document.getElementsByName(self.id+"single");
+        for(var i=0; i<radioButtons.length; ++i){
+            if(radioButtons[i].disabled === false && radioButtons[i].id.indexOf(oldCategory) != -1 && radioButtons[i].checked === true){
+                checkedRadio = radioButtons[i].value;
+            }
+        }
+        if(checkedRadio !== null){
+            for(var i=0; i<radioButtons.length; ++i){
+                if(radioButtons[i].disabled === false && radioButtons[i].id.indexOf(newCategory) != -1 && radioButtons[i].value === checkedRadio){
+                    radioButtons[i].checked = true;
+                    anyChecked = true;
+                }
+            }
+        }
+        
+        /*if(!anyChecked){
+            var activeBox = document.getElementById(newCategory+"Item"+"0");
+            var radioString = new String(self.id+"single");
+            if(activeBox !== null && activeBox.name == radioString) self.setValue(self.expanded + "." + activeBox.value);
+        }*/
+        
+        var categoryTest;
+    }
+    $('.accordion').blur();
 
 };
 
@@ -242,12 +242,12 @@ SOTE.widget.AccordionPicker.handleCategorySwitch = function(e,ui){
 */
 SOTE.widget.AccordionPicker.prototype.fire = function(){
 
-	if(REGISTRY){
-		REGISTRY.fire(this);
-	}
-	else{
-		alert("No REGISTRY found! Cannot fire to REGISTRY from AccordionPicker!");
-	}
+    if(REGISTRY){
+        REGISTRY.fire(this);
+    }
+    else{
+        alert("No REGISTRY found! Cannot fire to REGISTRY from AccordionPicker!");
+    }
 
 };
 
@@ -262,54 +262,54 @@ SOTE.widget.AccordionPicker.prototype.fire = function(){
   *
 */
 SOTE.widget.AccordionPicker.prototype.setValue = function(values){
-	var selectedItems = values.split(".");
-	var expanded = selectedItems[0];
-	var base = selectedItems[1];
-	var radioButtons = document.getElementsByName(this.id+"single");
-	var found = false;
-	
-	var expandedName = expanded;
-	var reg = new RegExp(this.id+"(.+)");
-	if(reg.test(expanded) == false){
-		expandedName = this.id + expanded;
-	}
-	if(this.expanded === null || this.expanded !== expandedName) {
-		$('.accordion').accordion("activate","#"+expandedName);
-		this.expanded = expandedName;
-	}
-	
-	for(var i=0; i < radioButtons.length; ++i){
-		if(radioButtons[i].value === base && radioButtons[i].disabled === false && radioButtons[i].id.indexOf(expanded) != -1 ){
-			radioButtons[i].checked = true;
-			found = true;
-			break;
-		}
-	}
-	
-	if(!found){
-		for(var i=0; i < radioButtons.length; ++i){
-			if(radioButtons[i].value === base && radioButtons[i].disabled === false){
-				radioButtons[i].checked = true;
-			}
-		}
-	}
-	
-	
-	var checkboxes = document.getElementsByName(this.id+"multi");
-	
-	for(var i=0; i < checkboxes.length; ++i){
-		for(var j=1; j < selectedItems.length; ++j){
-			if(checkboxes[i].value === selectedItems[j] && checkboxes[i].disabled === false){
-				checkboxes[i].checked = true;
-			}
-		}
-	}
-	
-	this.value = values;
-	this.fire();
-	$('.accordion').blur();
-	return this.validate();
-	
+    var selectedItems = values.split(".");
+    var expanded = selectedItems[0];
+    var base = selectedItems[1];
+    var radioButtons = document.getElementsByName(this.id+"single");
+    var found = false;
+    
+    var expandedName = expanded;
+    var reg = new RegExp(this.id+"(.+)");
+    if(reg.test(expanded) == false){
+        expandedName = this.id + expanded;
+    }
+    if(this.expanded === null || this.expanded !== expandedName) {
+        $('.accordion').accordion("activate","#"+expandedName);
+        this.expanded = expandedName;
+    }
+    
+    for(var i=0; i < radioButtons.length; ++i){
+        if(radioButtons[i].value === base && radioButtons[i].disabled === false && radioButtons[i].id.indexOf(expanded) != -1 ){
+            radioButtons[i].checked = true;
+            found = true;
+            break;
+        }
+    }
+    
+    if(!found){
+        for(var i=0; i < radioButtons.length; ++i){
+            if(radioButtons[i].value === base && radioButtons[i].disabled === false){
+                radioButtons[i].checked = true;
+            }
+        }
+    }
+    
+    
+    var checkboxes = document.getElementsByName(this.id+"multi");
+    
+    for(var i=0; i < checkboxes.length; ++i){
+        for(var j=1; j < selectedItems.length; ++j){
+            if(checkboxes[i].value === selectedItems[j] && checkboxes[i].disabled === false){
+                checkboxes[i].checked = true;
+            }
+        }
+    }
+    
+    this.value = values;
+    this.fire();
+    $('.accordion').blur();
+    return this.validate();
+    
 };
 
 /**
@@ -322,18 +322,18 @@ SOTE.widget.AccordionPicker.prototype.setValue = function(values){
   * @returns {boolean} true or false depending on if the new value(s) validates
   *
 */
-SOTE.widget.AccordionPicker.prototype.syncCheckboxes = function(targetEl){	
-	var targetState = targetEl.checked;
-	var checkboxes = document.getElementsByName(this.id+"multi");
-	
-	for(var i=0; i < checkboxes.length; ++i){
-			if(checkboxes[i].value === targetEl.value && checkboxes[i].disabled === false){
-				checkboxes[i].checked = targetState;
-			}
-	}
-	
-	return;
-	
+SOTE.widget.AccordionPicker.prototype.syncCheckboxes = function(targetEl){    
+    var targetState = targetEl.checked;
+    var checkboxes = document.getElementsByName(this.id+"multi");
+    
+    for(var i=0; i < checkboxes.length; ++i){
+            if(checkboxes[i].value === targetEl.value && checkboxes[i].disabled === false){
+                checkboxes[i].checked = targetState;
+            }
+    }
+    
+    return;
+    
 };
 
 /**
@@ -345,36 +345,36 @@ SOTE.widget.AccordionPicker.prototype.syncCheckboxes = function(targetEl){
   *
 */
 SOTE.widget.AccordionPicker.prototype.getValue = function(){
-	var selected = new Array();
-	var added = new Object();
-	var radioButtons = document.getElementsByName(this.id+"single");
-	
-	for(var i=0; i < radioButtons.length; ++i){
-		if(radioButtons[i].checked === true){
-			selected.push(radioButtons[i].value);
-			break;
-		}
-	}
-	
-	if(selected.length === 0){ selected.push(""); };
-	
-	var checkboxes = document.getElementsByName(this.id+"multi");
-	
-	for(var i=0; i < checkboxes.length; ++i){
-		if(checkboxes[i].checked === true){
-			if(! (checkboxes[i].value in added) ){
-				selected.push(checkboxes[i].value);
-				added[checkboxes[i].value] = 1;
-			}
-		}
-	}
-	
-	var reg = new RegExp(this.id+"(.+)");
-	
-	var expanded = reg.exec(this.expanded);
-	
-	var value = expanded[1] + "." + selected.join(".");
-	return this.id + "=" + value;
+    var selected = new Array();
+    var added = new Object();
+    var radioButtons = document.getElementsByName(this.id+"single");
+    
+    for(var i=0; i < radioButtons.length; ++i){
+        if(radioButtons[i].checked === true){
+            selected.push(radioButtons[i].value);
+            break;
+        }
+    }
+    
+    if(selected.length === 0){ selected.push(""); };
+    
+    var checkboxes = document.getElementsByName(this.id+"multi");
+    
+    for(var i=0; i < checkboxes.length; ++i){
+        if(checkboxes[i].checked === true){
+            if(! (checkboxes[i].value in added) ){
+                selected.push(checkboxes[i].value);
+                added[checkboxes[i].value] = 1;
+            }
+        }
+    }
+    
+    var reg = new RegExp(this.id+"(.+)");
+    
+    var expanded = reg.exec(this.expanded);
+    
+    var value = expanded[1] + "." + selected.join(".");
+    return this.id + "=" + value;
 };
 
 /**
@@ -386,13 +386,13 @@ SOTE.widget.AccordionPicker.prototype.getValue = function(){
   * 
 */
 SOTE.widget.AccordionPicker.prototype.updateComponent = function(querystring){
-	var qs = (querystring === undefined)? "":querystring;
-	SOTE.util.getJSON(
-		this.dataSourceUrl+"?"+querystring,
-		{self:this,qs:querystring},
-		SOTE.widget.AccordionPicker.handleUpdateSuccess,
-		SOTE.widget.AccordionPicker.handleUpdateFailure
-	);
+    var qs = (querystring === undefined)? "":querystring;
+    SOTE.util.getJSON(
+        this.dataSourceUrl+"?"+querystring,
+        {self:this,qs:querystring},
+        SOTE.widget.AccordionPicker.handleUpdateSuccess,
+        SOTE.widget.AccordionPicker.handleUpdateFailure
+    );
 };
 
 /**
@@ -403,11 +403,11 @@ SOTE.widget.AccordionPicker.prototype.updateComponent = function(querystring){
   * 
 */
 SOTE.widget.AccordionPicker.handleUpdateSuccess = function(data,status,xhr,args){
-	var expanded = SOTE.util.extractFromQuery("hazard",args.qs);
-	data.expanded = (expanded !== undefined && expanded !== "" && expanded !== null)? expanded:data.expanded;
-	data.selected = (data.selected === undefined || data.selected === "")? SOTE.util.extractFromQuery(args.self.id,args.self.getValue()):data.selected;
-	args.self.items = data;
-	args.self.render();
+    var expanded = SOTE.util.extractFromQuery("hazard",args.qs);
+    data.expanded = (expanded !== undefined && expanded !== "" && expanded !== null)? expanded:data.expanded;
+    data.selected = (data.selected === undefined || data.selected === "")? SOTE.util.extractFromQuery(args.self.id,args.self.getValue()):data.selected;
+    args.self.items = data;
+    args.self.render();
 };
  
 /**
@@ -418,7 +418,7 @@ SOTE.widget.AccordionPicker.handleUpdateSuccess = function(data,status,xhr,args)
   * 
 */
 SOTE.widget.AccordionPicker.handleUpdateFailure = function(xhr,status,error,args){
-	alert("Failed to load data accessor: " + error);
+    alert("Failed to load data accessor: " + error);
 };
 
 
@@ -431,7 +431,7 @@ SOTE.widget.AccordionPicker.handleUpdateFailure = function(xhr,status,error,args
   *
 */
 SOTE.widget.AccordionPicker.prototype.loadFromQuery = function(qs){
-	return this.setValue(SOTE.util.extractFromQuery(this.id,qs));
+    return this.setValue(SOTE.util.extractFromQuery(this.id,qs));
 };
 
 /**
@@ -442,25 +442,25 @@ SOTE.widget.AccordionPicker.prototype.loadFromQuery = function(qs){
   * @returns {boolean} true or false depending on whether the selected option(s) meet the validation criteria
 */
 SOTE.widget.AccordionPicker.prototype.validate = function(){
-	var isValid = true;
-	var radioCount = 0;
-	var radioButtons = document.getElementsByName(this.id+"single");
-	
-	for(var i=0; i < radioButtons.length; ++i){
-		if(radioButtons[i].checked === true){
-			++radioCount;
-		}
-		if(radioButtons[i].disabled === true && radioButtons[i].checked === true){
-			this.setStatus("Disabled items cannot be selected!");
-			isValid = false;
-		}
-	}
-	
-	if(radioCount > 1){
-		isValid = false;
-		this.setStatus("Multiple single-select items selected!");
-	}
-	
+    var isValid = true;
+    var radioCount = 0;
+    var radioButtons = document.getElementsByName(this.id+"single");
+    
+    for(var i=0; i < radioButtons.length; ++i){
+        if(radioButtons[i].checked === true){
+            ++radioCount;
+        }
+        if(radioButtons[i].disabled === true && radioButtons[i].checked === true){
+            this.setStatus("Disabled items cannot be selected!");
+            isValid = false;
+        }
+    }
+    
+    if(radioCount > 1){
+        isValid = false;
+        this.setStatus("Multiple single-select items selected!");
+    }
+    
     return isValid;
 
 };
@@ -473,7 +473,7 @@ SOTE.widget.AccordionPicker.prototype.validate = function(){
   *
 */
 SOTE.widget.AccordionPicker.prototype.setDataSourceUrl = function(dataSourceUrl){
-	this.dataSourceUrl = dataSourceUrl;
+    this.dataSourceUrl = dataSourceUrl;
 };
 
 /**
@@ -484,7 +484,7 @@ SOTE.widget.AccordionPicker.prototype.setDataSourceUrl = function(dataSourceUrl)
   *
 */
 SOTE.widget.AccordionPicker.prototype.getDataSourceUrl = function(){
-	return this.dataSourceUrl;
+    return this.dataSourceUrl;
 };
 
 /**
@@ -495,7 +495,7 @@ SOTE.widget.AccordionPicker.prototype.getDataSourceUrl = function(){
   *
 */
 SOTE.widget.AccordionPicker.prototype.setStatus = function(s){
-	this.statusStr = s;
+    this.statusStr = s;
 };
 
 /**
@@ -506,7 +506,7 @@ SOTE.widget.AccordionPicker.prototype.setStatus = function(s){
   *
 */
 SOTE.widget.AccordionPicker.prototype.getStatus = function(){
-	return this.statusStr;
+    return this.statusStr;
 };
 
 
