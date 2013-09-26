@@ -132,7 +132,7 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
       	var lonlat1 = this.m.maps.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(Math.floor(x1), Math.floor(y2)));
        	var lonlat2 = this.m.maps.map.getLonLatFromViewPortPx(new OpenLayers.Pixel(Math.floor(x2), Math.floor(y1)));
 
-        var dlURL  = "http://map2.vis.earthdata.nasa.gov/imagegen/index.php?"; 
+        var dlURL  = "http://map2.vis.earthdata.nasa.gov/imagegen/index-saveas.php?"; 
 
         var conversionFactor = 256;
         if (s=="geographic") {
@@ -206,8 +206,8 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
          
          
           $("#btnImgDownload").unbind('click').click(function(){
-          	 window.open(dlURL+"&format="+$("#selImgFormat option:selected").val()+"&width="+$("#imgWidth").text()+"&height="+$("#imgHeight").text(),"_blank");
-             //console.log(dlURL+"&format="+$("#selImgFormat option:selected").val()+"&size="+$("#imgWidth").text()+"+"+$("#imgHeight").text());
+           	 ntptEventTag('lc='+encodeURIComponent(dlURL+"&format="+$("#selImgFormat option:selected").val()+"&width="+$("#imgWidth").text()+"&height="+$("#imgHeight").text() ) );
+			 window.open(dlURL+"&format="+$("#selImgFormat option:selected").val()+"&width="+$("#imgWidth").text()+"&height="+$("#imgHeight").text(),"_blank");
           });
          
          this.setValue(dlURL);
