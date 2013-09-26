@@ -5,6 +5,7 @@
     "min": "0",
     "name": "Relative Humidity (400 hPa, Day)",
     "period": "daily",
+    "product": "AIRX2RET_DAY",
     "projections": {
         "geographic": {
             "matrixSet": "EPSG4326_2km",
@@ -41,6 +42,5 @@
     "rendered": "AIRS_RelativeHumidity",
     "startDate": "2012-04-07",
     "type": "wmts",
-    "units": "%",
-    "product": "AIRX2RET_DAY"
+    "units": "%"
 }

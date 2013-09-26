@@ -240,8 +240,7 @@ SOTE.widget.Products.stopLink = function(e){
     //e.stopPropagation();
 };
 
-SOTE.widget.Products.change = function(e,ui){    
-    console.log(e);
+SOTE.widget.Products.change = function(e,ui){	
     var self = e.data.self;
     if ( ui.index === 0 ) {
         $('.ui-tabs-nav')

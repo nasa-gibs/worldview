@@ -760,8 +760,8 @@ SOTE.widget.Bank.prototype.loadFromQuery = function(qs){
 };
 
 SOTE.widget.Bank.prototype.sleep = function(v){
-    setTimeout(SOTE.widget.Bank.loadValue,100,{self:this,val:v});
-}
+    SOTE.widget.Bank.loadValue({self:this,val:v});
+};
 
 SOTE.widget.Bank.loadValue = function(args){
     if(args.self.buildMetaDone == true) {

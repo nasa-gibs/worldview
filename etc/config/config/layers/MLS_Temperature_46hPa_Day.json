@@ -1,9 +1,11 @@
 {
+    "bins": 255,
     "description": "Aura / MLS",
     "max": "240",
     "min": "190",
     "name": "Temperature (46 hPa, Day)",
     "period": "daily",
+    "product": "ML2T",
     "projections": {
         "geographic": {
             "matrixSet": "EPSG4326_2km",
@@ -40,6 +42,5 @@
     "rendered": "MLS_Rainbow",
     "startDate": "2012-04-07",
     "type": "wmts",
-    "units": "K",
-    "product": "ML2T"
+    "units": "K"
 }

@@ -55,7 +55,7 @@ Worldview.DataDownload.Layers.Hover = function(model, maps, config) {
         if ( layer ) {
             layer.removeAllFeatures();
         }
-    }
+    };
     
     self.dispose = function() {
         $.each(maps.projections, function(index, map) {

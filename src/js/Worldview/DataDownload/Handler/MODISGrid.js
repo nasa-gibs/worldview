@@ -50,6 +50,9 @@ Worldview.DataDownload.Handler.MODISGrid = function(config, model, spec) {
         var chain = ns.Results.Chain();
         chain.processes = [
             ns.Results.TagProduct(model.selectedProduct),
+            ns.Results.TagVersion(),
+            ns.Results.CollectVersions(),
+            ns.Results.VersionFilter(),
             ns.Results.MODISGridIndex(),
             ns.Results.GeometryFromMODISGrid(model.crs),
             ns.Results.ExtentFilter(model.crs, self.extents[model.crs]),

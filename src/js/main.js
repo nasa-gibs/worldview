@@ -47,7 +47,9 @@ $(function() {// Initialize "static" vars
             "images/close-red-x.png",
             "images/collapseDown.png",
             "images/expandUp.png",
-            "images/activity.gif"   
+            "images/activity.gif",
+            "images/wv-icons.svg",
+            "images/wv-logo.svg"   
         ]).execute(onLoad);
     };
 
@@ -243,7 +245,8 @@ $(function() {// Initialize "static" vars
             dataDownload
         ];
         
-        function testQS(){
+        // Init
+        if (queryString.length > 0) {
             REGISTRY.isLoadingQuery = true;
             $.each(initOrder, function(index, component) {
                 component.loadFromQuery(queryString);    
@@ -251,10 +254,6 @@ $(function() {// Initialize "static" vars
             REGISTRY.isLoadingQuery = false;
         }
                 
-        if (queryString.length > 0) {
-            REGISTRY.addAllReadyCallback(testQS);
-        }
-        
         // Console notifications
         var banner = Worldview.NAME + " - Version " + Worldview.VERSION;
         if ( !Worldview.isDevelopment() ) {

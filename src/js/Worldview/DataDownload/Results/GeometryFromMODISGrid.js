@@ -33,7 +33,6 @@ Worldview.DataDownload.Results.GeometryFromMODISGrid = function(projection) {
             if ( !json ) {
                 return;
             }
-            console.log(meta.grid[granule.hv]);
             var grid = meta.grid[granule.hv];
             var geom = parser.read(meta.grid[granule.hv].geometry, "Geometry");
             var centroid = new OpenLayers.Geometry.Point(

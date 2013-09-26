@@ -128,4 +128,4 @@ Worldview.Map.StaticLayerSet = function(map, config) {
     
     init();
     return self;
-}
+};

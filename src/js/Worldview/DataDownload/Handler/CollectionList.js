@@ -38,6 +38,9 @@ Worldview.DataDownload.Handler.CollectionList = function(config, model, spec) {
         chain.processes = [
             ns.Results.TagList(),
             ns.Results.TagProduct(model.selectedProduct),
+            ns.Results.TagVersion(),
+            ns.Results.CollectVersions(),
+            ns.Results.VersionFilter(),
             ns.Results.ProductLabel(config.products[model.selectedProduct].name)
         ];
         return chain.process(results);

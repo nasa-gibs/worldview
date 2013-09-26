@@ -42,6 +42,9 @@ Worldview.DataDownload.Handler.List = function(config, model, spec) {
             ns.Results.TagNRT(productConfig.nrt),
             ns.Results.CollectPreferred(model.prefer),
             ns.Results.PreferredFilter(model.prefer),
+            ns.Results.TagVersion(),
+            ns.Results.CollectVersions(),
+            ns.Results.VersionFilter(),
             ns.Results.DateTimeLabel(model.time)
         ];
         return chain.process(results);

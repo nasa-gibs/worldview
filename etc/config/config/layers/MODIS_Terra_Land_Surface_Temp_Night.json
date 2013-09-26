@@ -1,9 +1,11 @@
 {
+    "bins": 251,
     "description": "Terra / MODIS",
     "max": "340",
     "min": "240",
     "name": "Land Surface Temperature (Night)",
     "period": "daily",
+    "product": "MOD11_L2_NIGHT",
     "projections": {
         "geographic": {
             "matrixSet": "EPSG4326_1km",
@@ -38,10 +40,12 @@
             512
         ]
     },
-    "recommendedPalettes": [ "rainbow_1", "purple_2" ],
+    "recommendedPalettes": [
+        "rainbow_1",
+        "purple_2"
+    ],
     "rendered": "MODIS_Land_Surface_Temp",
     "startDate": "2012-04-07",
     "type": "wmts",
-    "units": "K",
-    "product": "MOD11_L2_NIGHT"
+    "units": "K"
 }
