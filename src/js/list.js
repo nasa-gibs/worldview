@@ -311,9 +311,27 @@ SOTE.widget.List.prototype._update = function(){
 					}
                     $category.append($item);      
 				}
-			}	
+			}
+				
 		}
-		
+		$('#DataDownload #DataDownloadcontent h3 span').click(function(e){
+		    var o;
+		    bodyMsg = 'Some layers in Worldview do not have corresponding source data products available for download. The MODIS "Corrected Reflectance" products are prime examples of this. If you wish to download similar-looking products, please use the MODIS "Land Surface Reflectance" ones available in Worldview. If you wish to generate MODIS Corrected Reflectance images yourself, please see the following document: <a href="https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf" target="_blank">https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf</a>';
+            o = new YAHOO.widget.Panel("WVerror", {
+                width: "600px", 
+                zIndex: 1020, 
+                visible: false 
+            });
+            title = title || "Notice";
+            o.setHeader('<b>Why are these layers not available for downloading?</b>');
+            o.setBody(bodyMsg);
+            o.render(document.body);
+            o.show();
+            o.center();
+            o.hideEvent.subscribe(function(i) {
+                setTimeout(function() {o.destroy();}, 25);
+            });
+        });
 		// Append the category (heading + items) to the content div
 		
 		$content.append($category);

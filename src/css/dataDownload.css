@@ -128,3 +128,14 @@
 #DataDownload_GranuleList tr:nth-child(even) {
     background-color: rgb(45, 48, 52);
 }
+#DataDownload #DataDownloadcontent h3 span{
+     font-weight:bold;
+     color:#00457b;
+     cursor:pointer;
+     font-size:130%;
+     
+}
+#DataDownload #DataDownloadcontent h3 span:hover{
+    color:#000;
+    background-color:#ccc;
+}
