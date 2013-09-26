@@ -1,9 +1,11 @@
 {
+    "bins": 16,
     "description": "Terra / MODIS",
     "max": "290",
     "min": "220",
     "name": "Cloud Top Temperature (Day)",
     "period": "daily",
+    "product": "MOD06_L2_DAY",
     "projections": {
         "geographic": {
             "matrixSet": "EPSG4326_2km",
@@ -37,10 +39,12 @@
             512
         ]
     },
-    "recommendedPalettes": [ "purple_2", "rainbow_1" ],    
+    "recommendedPalettes": [
+        "purple_2",
+        "rainbow_1"
+    ],
     "rendered": "MODIS_Cloud_Top_Temp",
     "startDate": "2012-04-07",
     "type": "wmts",
-    "units": "K",
-    "product": "MOD06_L2_DAY"
+    "units": "K"
 }

@@ -142,6 +142,16 @@
     ]
 },
 {
+    "id": "MODIS_Chlorophyll_A",
+    "filename": "rendered/MOD_CHR_LL_DY2013262.vrt",
+    "minIndex": 1,
+    "maxIndex": 254,
+    "layers": [
+        "MODIS_Aqua_Chlorophyll_A",
+        "MODIS_Terra_Chlorophyll_A"
+    ]
+},
+{
     "id": "MODIS_Cloud_Top_Pressure",
     "filename": "rendered/MOR6CTP_template.vrt",
     "minIndex": 5,

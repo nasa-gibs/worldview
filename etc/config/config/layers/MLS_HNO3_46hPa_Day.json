@@ -1,9 +1,11 @@
 {
+    "bins": 255,
     "description": "Aura / MLS",
     "max": "10",
     "min": "0",
     "name": "Nitric Acid (46 hPa, Day)",
     "period": "daily",
+    "product": "ML2HNO3",
     "projections": {
         "geographic": {
             "matrixSet": "EPSG4326_2km",
@@ -40,6 +42,5 @@
     "rendered": "MLS_Rainbow",
     "startDate": "2012-04-07",
     "type": "wmts",
-    "units": "ppbv",
-    "product": "ML2HNO3"
+    "units": "ppbv"
 }

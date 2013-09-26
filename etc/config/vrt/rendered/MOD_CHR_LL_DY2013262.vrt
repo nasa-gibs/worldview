@@ -1,0 +1,1441 @@
+<VRTDataset rasterXSize="40960" rasterYSize="20480">
+  <SRS>GEOGCS[&quot;WGS 84&quot;,DATUM[&quot;WGS_1984&quot;,SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],PRIMEM[&quot;Greenwich&quot;,0],UNIT[&quot;degree&quot;,0.0174532925199433],AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]</SRS>
+  <GeoTransform> -1.8000000000000000e+02,  8.7890629999999997e-03,  0.0000000000000000e+00,  9.0000000000000000e+01,  0.0000000000000000e+00, -8.7890629999999997e-03</GeoTransform>
+  <VRTRasterBand dataType="Byte" band="1">
+    <ColorInterp>Palette</ColorInterp>
+    <ColorTable>
+      <Entry c1="0" c2="0" c3="0" c4="0" />
+      <Entry c1="144" c2="0" c3="111" c4="255" />
+      <Entry c1="141" c2="0" c3="114" c4="255" />
+      <Entry c1="138" c2="0" c3="117" c4="255" />
+      <Entry c1="135" c2="0" c3="120" c4="255" />
+      <Entry c1="132" c2="0" c3="123" c4="255" />
+      <Entry c1="129" c2="0" c3="126" c4="255" />
+      <Entry c1="126" c2="0" c3="129" c4="255" />
+      <Entry c1="123" c2="0" c3="132" c4="255" />
+      <Entry c1="120" c2="0" c3="135" c4="255" />
+      <Entry c1="117" c2="0" c3="138" c4="255" />
+      <Entry c1="114" c2="0" c3="141" c4="255" />
+      <Entry c1="111" c2="0" c3="144" c4="255" />
+      <Entry c1="108" c2="0" c3="147" c4="255" />
+      <Entry c1="105" c2="0" c3="150" c4="255" />
+      <Entry c1="102" c2="0" c3="153" c4="255" />
+      <Entry c1="99" c2="0" c3="156" c4="255" />
+      <Entry c1="96" c2="0" c3="159" c4="255" />
+      <Entry c1="93" c2="0" c3="162" c4="255" />
+      <Entry c1="90" c2="0" c3="165" c4="255" />
+      <Entry c1="87" c2="0" c3="168" c4="255" />
+      <Entry c1="84" c2="0" c3="171" c4="255" />
+      <Entry c1="81" c2="0" c3="174" c4="255" />
+      <Entry c1="78" c2="0" c3="177" c4="255" />
+      <Entry c1="75" c2="0" c3="180" c4="255" />
+      <Entry c1="72" c2="0" c3="183" c4="255" />
+      <Entry c1="69" c2="0" c3="186" c4="255" />
+      <Entry c1="66" c2="0" c3="189" c4="255" />
+      <Entry c1="63" c2="0" c3="192" c4="255" />
+      <Entry c1="60" c2="0" c3="195" c4="255" />
+      <Entry c1="57" c2="0" c3="198" c4="255" />
+      <Entry c1="54" c2="0" c3="201" c4="255" />
+      <Entry c1="51" c2="0" c3="204" c4="255" />
+      <Entry c1="48" c2="0" c3="207" c4="255" />
+      <Entry c1="45" c2="0" c3="210" c4="255" />
+      <Entry c1="42" c2="0" c3="213" c4="255" />
+      <Entry c1="39" c2="0" c3="216" c4="255" />
+      <Entry c1="36" c2="0" c3="219" c4="255" />
+      <Entry c1="33" c2="0" c3="222" c4="255" />
+      <Entry c1="30" c2="0" c3="225" c4="255" />
+      <Entry c1="27" c2="0" c3="228" c4="255" />
+      <Entry c1="24" c2="0" c3="231" c4="255" />
+      <Entry c1="21" c2="0" c3="234" c4="255" />
+      <Entry c1="18" c2="0" c3="237" c4="255" />
+      <Entry c1="15" c2="0" c3="240" c4="255" />
+      <Entry c1="12" c2="0" c3="243" c4="255" />
+      <Entry c1="9" c2="0" c3="246" c4="255" />
+      <Entry c1="6" c2="0" c3="249" c4="255" />
+      <Entry c1="0" c2="0" c3="252" c4="255" />
+      <Entry c1="0" c2="0" c3="255" c4="255" />
+      <Entry c1="0" c2="5" c3="255" c4="255" />
+      <Entry c1="0" c2="10" c3="255" c4="255" />
+      <Entry c1="0" c2="16" c3="255" c4="255" />
+      <Entry c1="0" c2="21" c3="255" c4="255" />
+      <Entry c1="0" c2="26" c3="255" c4="255" />
+      <Entry c1="0" c2="32" c3="255" c4="255" />
+      <Entry c1="0" c2="37" c3="255" c4="255" />
+      <Entry c1="0" c2="42" c3="255" c4="255" />
+      <Entry c1="0" c2="48" c3="255" c4="255" />
+      <Entry c1="0" c2="53" c3="255" c4="255" />
+      <Entry c1="0" c2="58" c3="255" c4="255" />
+      <Entry c1="0" c2="64" c3="255" c4="255" />
+      <Entry c1="0" c2="69" c3="255" c4="255" />
+      <Entry c1="0" c2="74" c3="255" c4="255" />
+      <Entry c1="0" c2="80" c3="255" c4="255" />
+      <Entry c1="0" c2="85" c3="255" c4="255" />
+      <Entry c1="0" c2="90" c3="255" c4="255" />
+      <Entry c1="0" c2="96" c3="255" c4="255" />
+      <Entry c1="0" c2="101" c3="255" c4="255" />
+      <Entry c1="0" c2="106" c3="255" c4="255" />
+      <Entry c1="0" c2="112" c3="255" c4="255" />
+      <Entry c1="0" c2="117" c3="255" c4="255" />
+      <Entry c1="0" c2="122" c3="255" c4="255" />
+      <Entry c1="0" c2="128" c3="255" c4="255" />
+      <Entry c1="0" c2="133" c3="255" c4="255" />
+      <Entry c1="0" c2="138" c3="255" c4="255" />
+      <Entry c1="0" c2="144" c3="255" c4="255" />
+      <Entry c1="0" c2="149" c3="255" c4="255" />
+      <Entry c1="0" c2="154" c3="255" c4="255" />
+      <Entry c1="0" c2="160" c3="255" c4="255" />
+      <Entry c1="0" c2="165" c3="255" c4="255" />
+      <Entry c1="0" c2="170" c3="255" c4="255" />
+      <Entry c1="0" c2="176" c3="255" c4="255" />
+      <Entry c1="0" c2="181" c3="255" c4="255" />
+      <Entry c1="0" c2="186" c3="255" c4="255" />
+      <Entry c1="0" c2="192" c3="255" c4="255" />
+      <Entry c1="0" c2="197" c3="255" c4="255" />
+      <Entry c1="0" c2="202" c3="255" c4="255" />
+      <Entry c1="0" c2="208" c3="255" c4="255" />
+      <Entry c1="0" c2="213" c3="255" c4="255" />
+      <Entry c1="0" c2="218" c3="255" c4="255" />
+      <Entry c1="0" c2="224" c3="255" c4="255" />
+      <Entry c1="0" c2="229" c3="255" c4="255" />
+      <Entry c1="0" c2="234" c3="255" c4="255" />
+      <Entry c1="0" c2="240" c3="255" c4="255" />
+      <Entry c1="0" c2="245" c3="255" c4="255" />
+      <Entry c1="0" c2="250" c3="255" c4="255" />
+      <Entry c1="0" c2="255" c3="255" c4="255" />
+      <Entry c1="0" c2="255" c3="247" c4="255" />
+      <Entry c1="0" c2="255" c3="239" c4="255" />
+      <Entry c1="0" c2="255" c3="231" c4="255" />
+      <Entry c1="0" c2="255" c3="223" c4="255" />
+      <Entry c1="0" c2="255" c3="215" c4="255" />
+      <Entry c1="0" c2="255" c3="207" c4="255" />
+      <Entry c1="0" c2="255" c3="199" c4="255" />
+      <Entry c1="0" c2="255" c3="191" c4="255" />
+      <Entry c1="0" c2="255" c3="183" c4="255" />
+      <Entry c1="0" c2="255" c3="175" c4="255" />
+      <Entry c1="0" c2="255" c3="167" c4="255" />
+      <Entry c1="0" c2="255" c3="159" c4="255" />
+      <Entry c1="0" c2="255" c3="151" c4="255" />
+      <Entry c1="0" c2="255" c3="143" c4="255" />
+      <Entry c1="0" c2="255" c3="135" c4="255" />
+      <Entry c1="0" c2="255" c3="127" c4="255" />
+      <Entry c1="0" c2="255" c3="119" c4="255" />
+      <Entry c1="0" c2="255" c3="111" c4="255" />
+      <Entry c1="0" c2="255" c3="103" c4="255" />
+      <Entry c1="0" c2="255" c3="95" c4="255" />
+      <Entry c1="0" c2="255" c3="87" c4="255" />
+      <Entry c1="0" c2="255" c3="79" c4="255" />
+      <Entry c1="0" c2="255" c3="71" c4="255" />
+      <Entry c1="0" c2="255" c3="63" c4="255" />
+      <Entry c1="0" c2="255" c3="55" c4="255" />
+      <Entry c1="0" c2="255" c3="47" c4="255" />
+      <Entry c1="0" c2="255" c3="39" c4="255" />
+      <Entry c1="0" c2="255" c3="31" c4="255" />
+      <Entry c1="0" c2="255" c3="23" c4="255" />
+      <Entry c1="0" c2="255" c3="15" c4="255" />
+      <Entry c1="0" c2="255" c3="0" c4="255" />
+      <Entry c1="8" c2="255" c3="0" c4="255" />
+      <Entry c1="16" c2="255" c3="0" c4="255" />
+      <Entry c1="24" c2="255" c3="0" c4="255" />
+      <Entry c1="32" c2="255" c3="0" c4="255" />
+      <Entry c1="40" c2="255" c3="0" c4="255" />
+      <Entry c1="48" c2="255" c3="0" c4="255" />
+      <Entry c1="56" c2="255" c3="0" c4="255" />
+      <Entry c1="64" c2="255" c3="0" c4="255" />
+      <Entry c1="72" c2="255" c3="0" c4="255" />
+      <Entry c1="80" c2="255" c3="0" c4="255" />
+      <Entry c1="88" c2="255" c3="0" c4="255" />
+      <Entry c1="96" c2="255" c3="0" c4="255" />
+      <Entry c1="104" c2="255" c3="0" c4="255" />
+      <Entry c1="112" c2="255" c3="0" c4="255" />
+      <Entry c1="120" c2="255" c3="0" c4="255" />
+      <Entry c1="128" c2="255" c3="0" c4="255" />
+      <Entry c1="136" c2="255" c3="0" c4="255" />
+      <Entry c1="144" c2="255" c3="0" c4="255" />
+      <Entry c1="152" c2="255" c3="0" c4="255" />
+      <Entry c1="160" c2="255" c3="0" c4="255" />
+      <Entry c1="168" c2="255" c3="0" c4="255" />
+      <Entry c1="176" c2="255" c3="0" c4="255" />
+      <Entry c1="184" c2="255" c3="0" c4="255" />
+      <Entry c1="192" c2="255" c3="0" c4="255" />
+      <Entry c1="200" c2="255" c3="0" c4="255" />
+      <Entry c1="208" c2="255" c3="0" c4="255" />
+      <Entry c1="216" c2="255" c3="0" c4="255" />
+      <Entry c1="224" c2="255" c3="0" c4="255" />
+      <Entry c1="232" c2="255" c3="0" c4="255" />
+      <Entry c1="240" c2="255" c3="0" c4="255" />
+      <Entry c1="248" c2="255" c3="0" c4="255" />
+      <Entry c1="255" c2="255" c3="0" c4="255" />
+      <Entry c1="255" c2="251" c3="0" c4="255" />
+      <Entry c1="255" c2="247" c3="0" c4="255" />
+      <Entry c1="255" c2="243" c3="0" c4="255" />
+      <Entry c1="255" c2="239" c3="0" c4="255" />
+      <Entry c1="255" c2="235" c3="0" c4="255" />
+      <Entry c1="255" c2="231" c3="0" c4="255" />
+      <Entry c1="255" c2="227" c3="0" c4="255" />
+      <Entry c1="255" c2="223" c3="0" c4="255" />
+      <Entry c1="255" c2="219" c3="0" c4="255" />
+      <Entry c1="255" c2="215" c3="0" c4="255" />
+      <Entry c1="255" c2="211" c3="0" c4="255" />
+      <Entry c1="255" c2="207" c3="0" c4="255" />
+      <Entry c1="255" c2="203" c3="0" c4="255" />
+      <Entry c1="255" c2="199" c3="0" c4="255" />
+      <Entry c1="255" c2="195" c3="0" c4="255" />
+      <Entry c1="255" c2="191" c3="0" c4="255" />
+      <Entry c1="255" c2="187" c3="0" c4="255" />
+      <Entry c1="255" c2="183" c3="0" c4="255" />
+      <Entry c1="255" c2="179" c3="0" c4="255" />
+      <Entry c1="255" c2="175" c3="0" c4="255" />
+      <Entry c1="255" c2="171" c3="0" c4="255" />
+      <Entry c1="255" c2="167" c3="0" c4="255" />
+      <Entry c1="255" c2="163" c3="0" c4="255" />
+      <Entry c1="255" c2="159" c3="0" c4="255" />
+      <Entry c1="255" c2="155" c3="0" c4="255" />
+      <Entry c1="255" c2="151" c3="0" c4="255" />
+      <Entry c1="255" c2="147" c3="0" c4="255" />
+      <Entry c1="255" c2="143" c3="0" c4="255" />
+      <Entry c1="255" c2="139" c3="0" c4="255" />
+      <Entry c1="255" c2="135" c3="0" c4="255" />
+      <Entry c1="255" c2="131" c3="0" c4="255" />
+      <Entry c1="255" c2="127" c3="0" c4="255" />
+      <Entry c1="255" c2="123" c3="0" c4="255" />
+      <Entry c1="255" c2="119" c3="0" c4="255" />
+      <Entry c1="255" c2="115" c3="0" c4="255" />
+      <Entry c1="255" c2="111" c3="0" c4="255" />
+      <Entry c1="255" c2="107" c3="0" c4="255" />
+      <Entry c1="255" c2="103" c3="0" c4="255" />
+      <Entry c1="255" c2="99" c3="0" c4="255" />
+      <Entry c1="255" c2="95" c3="0" c4="255" />
+      <Entry c1="255" c2="91" c3="0" c4="255" />
+      <Entry c1="255" c2="87" c3="0" c4="255" />
+      <Entry c1="255" c2="83" c3="0" c4="255" />
+      <Entry c1="255" c2="79" c3="0" c4="255" />
+      <Entry c1="255" c2="75" c3="0" c4="255" />
+      <Entry c1="255" c2="71" c3="0" c4="255" />
+      <Entry c1="255" c2="67" c3="0" c4="255" />
+      <Entry c1="255" c2="63" c3="0" c4="255" />
+      <Entry c1="255" c2="59" c3="0" c4="255" />
+      <Entry c1="255" c2="55" c3="0" c4="255" />
+      <Entry c1="255" c2="51" c3="0" c4="255" />
+      <Entry c1="255" c2="47" c3="0" c4="255" />
+      <Entry c1="255" c2="43" c3="0" c4="255" />
+      <Entry c1="255" c2="39" c3="0" c4="255" />
+      <Entry c1="255" c2="35" c3="0" c4="255" />
+      <Entry c1="255" c2="31" c3="0" c4="255" />
+      <Entry c1="255" c2="27" c3="0" c4="255" />
+      <Entry c1="255" c2="23" c3="0" c4="255" />
+      <Entry c1="255" c2="19" c3="0" c4="255" />
+      <Entry c1="255" c2="15" c3="0" c4="255" />
+      <Entry c1="255" c2="11" c3="0" c4="255" />
+      <Entry c1="255" c2="7" c3="0" c4="255" />
+      <Entry c1="255" c2="3" c3="0" c4="255" />
+      <Entry c1="255" c2="0" c3="0" c4="255" />
+      <Entry c1="250" c2="0" c3="0" c4="255" />
+      <Entry c1="245" c2="0" c3="0" c4="255" />
+      <Entry c1="240" c2="0" c3="0" c4="255" />
+      <Entry c1="235" c2="0" c3="0" c4="255" />
+      <Entry c1="230" c2="0" c3="0" c4="255" />
+      <Entry c1="225" c2="0" c3="0" c4="255" />
+      <Entry c1="220" c2="0" c3="0" c4="255" />
+      <Entry c1="215" c2="0" c3="0" c4="255" />
+      <Entry c1="210" c2="0" c3="0" c4="255" />
+      <Entry c1="205" c2="0" c3="0" c4="255" />
+      <Entry c1="200" c2="0" c3="0" c4="255" />
+      <Entry c1="195" c2="0" c3="0" c4="255" />
+      <Entry c1="190" c2="0" c3="0" c4="255" />
+      <Entry c1="185" c2="0" c3="0" c4="255" />
+      <Entry c1="180" c2="0" c3="0" c4="255" />
+      <Entry c1="175" c2="0" c3="0" c4="255" />
+      <Entry c1="170" c2="0" c3="0" c4="255" />
+      <Entry c1="165" c2="0" c3="0" c4="255" />
+      <Entry c1="160" c2="0" c3="0" c4="255" />
+      <Entry c1="155" c2="0" c3="0" c4="255" />
+      <Entry c1="150" c2="0" c3="0" c4="255" />
+      <Entry c1="145" c2="0" c3="0" c4="255" />
+      <Entry c1="140" c2="0" c3="0" c4="255" />
+      <Entry c1="135" c2="0" c3="0" c4="255" />
+      <Entry c1="130" c2="0" c3="0" c4="255" />
+      <Entry c1="125" c2="0" c3="0" c4="255" />
+      <Entry c1="120" c2="0" c3="0" c4="255" />
+      <Entry c1="115" c2="0" c3="0" c4="255" />
+      <Entry c1="110" c2="0" c3="0" c4="255" />
+      <Entry c1="105" c2="0" c3="0" c4="255" />
+      <Entry c1="0" c2="0" c3="0" c4="255" />
+    </ColorTable>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262001000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="730" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="730" />
+      <DstRect xOff="9567" yOff="784" xSize="10237" ySize="2767" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262001500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="363" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="363" />
+      <DstRect xOff="28657" yOff="0" xSize="-22553" ySize="2475" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262002000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="879" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="879" />
+      <DstRect xOff="36292" yOff="1250" xSize="-32691" ySize="2693" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262002500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1476" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1476" />
+      <DstRect xOff="36775" yOff="3289" xSize="-36391" ySize="2497" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262003000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1935" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1935" />
+      <DstRect xOff="36520" yOff="5326" xSize="3379" ySize="2422" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262003500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2227" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2227" />
+      <DstRect xOff="36169" yOff="7368" xSize="2912" ySize="2402" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262004000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2284" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2284" />
+      <DstRect xOff="35711" yOff="9417" xSize="2819" ySize="2385" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262004500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2123" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2123" />
+      <DstRect xOff="35077" yOff="11441" xSize="3051" ySize="2399" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262005000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1764" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1764" />
+      <DstRect xOff="34087" yOff="13432" xSize="3737" ySize="2441" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262005500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1263" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1263" />
+      <DstRect xOff="32212" yOff="15351" xSize="5453" ySize="2551" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262010000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="638" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="638" />
+      <DstRect xOff="27949" yOff="17095" xSize="12013" ySize="2837" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262010500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="348" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="348" />
+      <DstRect xOff="5890" yOff="17853" xSize="20378" ySize="2626" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262015000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="556" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="556" />
+      <DstRect xOff="5398" yOff="327" xSize="13927" ySize="2867" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262015500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="402" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="402" />
+      <DstRect xOff="25948" yOff="1" xSize="-22546" ySize="2739" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262020000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1019" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1019" />
+      <DstRect xOff="33790" yOff="1707" xSize="6970" ySize="2631" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262020500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1590" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1590" />
+      <DstRect xOff="33914" yOff="3746" xSize="4201" ySize="2473" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262021000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2016" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2016" />
+      <DstRect xOff="33637" yOff="5783" xSize="3231" ySize="2412" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262021500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2254" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2254" />
+      <DstRect xOff="33267" yOff="7825" xSize="2862" ySize="2389" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262022000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2268" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2268" />
+      <DstRect xOff="32778" yOff="9862" xSize="2841" ySize="2386" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262022500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2066" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2066" />
+      <DstRect xOff="32084" yOff="11881" xSize="3157" ySize="2415" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262023000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1662" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1662" />
+      <DstRect xOff="30965" yOff="13870" xSize="3992" ySize="2457" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262023500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1125" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1125" />
+      <DstRect xOff="28728" yOff="15764" xSize="6223" ySize="2593" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262024000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="435" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="435" />
+      <DstRect xOff="23756" yOff="17433" xSize="-22628" ySize="2954" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262024500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="385" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="385" />
+      <DstRect xOff="3053" yOff="17570" xSize="20407" ySize="2908" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262033000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="193" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="193" />
+      <DstRect xOff="23015" yOff="1" xSize="-761" ySize="2867" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262033500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="453" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="453" />
+      <DstRect xOff="24708" yOff="125" xSize="-23536" ySize="2926" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262034000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1161" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1161" />
+      <DstRect xOff="31133" yOff="2164" xSize="6007" ySize="2582" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262034500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1698" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1698" />
+      <DstRect xOff="31047" yOff="4202" xSize="3903" ySize="2455" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262035000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2087" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2087" />
+      <DstRect xOff="30749" yOff="6240" xSize="3111" ySize="2404" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262035500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2276" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2276" />
+      <DstRect xOff="30357" yOff="8281" xSize="2831" ySize="2386" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262040000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2239" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2239" />
+      <DstRect xOff="29833" yOff="10316" xSize="2880" ySize="2388" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262040500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1985" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1985" />
+      <DstRect xOff="29075" yOff="12328" xSize="3281" ySize="2413" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262041000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1560" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1560" />
+      <DstRect xOff="27791" yOff="14294" xSize="4305" ySize="2487" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262041500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="988" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="988" />
+      <DstRect xOff="25099" yOff="16166" xSize="7228" ySize="2645" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262042000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="363" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="363" />
+      <DstRect xOff="234" yOff="17734" xSize="20414" ySize="2744" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262051000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="340" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="340" />
+      <DstRect xOff="19205" yOff="1" xSize="20507" ySize="2581" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262051500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="662" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="662" />
+      <DstRect xOff="26442" yOff="581" xSize="11473" ySize="2814" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262052000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1302" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1302" />
+      <DstRect xOff="28393" yOff="2620" xSize="5274" ySize="2542" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262052500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1800" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1800" />
+      <DstRect xOff="28176" yOff="4657" xSize="3659" ySize="2439" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262053000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2148" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2148" />
+      <DstRect xOff="27858" yOff="6697" xSize="3015" ySize="2398" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262053500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2287" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2287" />
+      <DstRect xOff="27441" yOff="8738" xSize="2815" ySize="2385" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262054000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2200" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2200" />
+      <DstRect xOff="26877" yOff="10769" xSize="2935" ySize="2392" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262054500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1902" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1902" />
+      <DstRect xOff="26039" yOff="12773" xSize="3439" ySize="2422" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262055000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1444" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1444" />
+      <DstRect xOff="24564" yOff="14723" xSize="4677" ySize="2502" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262055500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="855" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="855" />
+      <DstRect xOff="21296" yOff="16546" xSize="8587" ySize="2718" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262060000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="362" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="362" />
+      <DstRect xOff="39286" yOff="17988" xSize="-22360" ySize="2490" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262065000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="313" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="313" />
+      <DstRect xOff="16442" yOff="1" xSize="20450" ySize="2372" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262065500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="813" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="813" />
+      <DstRect xOff="24785" yOff="1037" xSize="9052" ySize="2727" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262070000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1421" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1421" />
+      <DstRect xOff="25543" yOff="3076" xSize="4770" ySize="2510" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262070500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1893" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1893" />
+      <DstRect xOff="25300" yOff="5113" xSize="3461" ySize="2427" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262071000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2198" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2198" />
+      <DstRect xOff="24961" yOff="7154" xSize="2940" ySize="2394" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262071500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2287" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2287" />
+      <DstRect xOff="24517" yOff="9193" xSize="2815" ySize="2385" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262072000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2150" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2150" />
+      <DstRect xOff="23908" yOff="11220" xSize="3009" ySize="2396" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262072500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1811" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1811" />
+      <DstRect xOff="22973" yOff="13215" xSize="3630" ySize="2434" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262073000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1329" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1329" />
+      <DstRect xOff="21246" yOff="15146" xSize="5145" ySize="2533" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262073500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="715" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="715" />
+      <DstRect xOff="17337" yOff="16919" xSize="10538" ySize="2789" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262074000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="366" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="366" />
+      <DstRect xOff="36556" yOff="17968" xSize="-22455" ySize="2510" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262082500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="649" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="649" />
+      <DstRect xOff="35788" yOff="550" xSize="-29239" ySize="2815" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262083000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="346" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="346" />
+      <DstRect xOff="13733" yOff="1" xSize="20332" ySize="2609" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262083500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="954" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="954" />
+      <DstRect xOff="22422" yOff="1494" xSize="7526" ySize="2659" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262084000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1537" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1537" />
+      <DstRect xOff="22685" yOff="3533" xSize="4364" ySize="2484" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262084500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1979" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1979" />
+      <DstRect xOff="22419" yOff="5570" xSize="3297" ySize="2416" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262085000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2238" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2238" />
+      <DstRect xOff="22059" yOff="7611" xSize="2884" ySize="2390" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262085500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2276" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2276" />
+      <DstRect xOff="21586" yOff="9649" xSize="2830" ySize="2386" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262090000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2090" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2090" />
+      <DstRect xOff="20923" yOff="11670" xSize="3102" ySize="2402" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262090500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1712" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1712" />
+      <DstRect xOff="19871" yOff="13655" xSize="3862" ySize="2449" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262091000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1193" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1193" />
+      <DstRect xOff="17823" yOff="15562" xSize="5821" ySize="2571" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262091500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="543" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="543" />
+      <DstRect xOff="13194" yOff="17270" xSize="14374" ySize="2893" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262092000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="402" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="402" />
+      <DstRect xOff="33635" yOff="17715" xSize="-22421" ySize="2763" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262100500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="436" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="436" />
+      <DstRect xOff="31562" yOff="93" xSize="-22803" ySize="2930" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262101000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="382" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="382" />
+      <DstRect xOff="10796" yOff="1" xSize="20474" ySize="2893" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262101500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1095" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1095" />
+      <DstRect xOff="19819" yOff="1941" xSize="6445" ySize="2614" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262102000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1648" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1648" />
+      <DstRect xOff="19822" yOff="3989" xSize="4035" ySize="2463" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262102500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2054" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2054" />
+      <DstRect xOff="19534" yOff="6027" xSize="3165" ySize="2408" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262103000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2266" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2266" />
+      <DstRect xOff="19152" yOff="8068" xSize="2844" ySize="2387" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262103500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2253" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2253" />
+      <DstRect xOff="18645" yOff="10103" xSize="2861" ySize="2387" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262104000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2021" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2021" />
+      <DstRect xOff="17920" yOff="12119" xSize="3219" ySize="2409" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262104500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1607" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1607" />
+      <DstRect xOff="16724" yOff="14091" xSize="4144" ySize="2467" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262105000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1055" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1055" />
+      <DstRect xOff="14268" yOff="15970" xSize="6699" ySize="2618" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262105500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="194" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="194" />
+      <DstRect xOff="30920" yOff="17591" xSize="-837" ySize="2887" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262114500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="359" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="359" />
+      <DstRect xOff="8008" yOff="0" xSize="20447" ySize="2715" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262115000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="572" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="572" />
+      <DstRect xOff="13816" yOff="358" xSize="13522" ySize="2865" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262115500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1233" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1233" />
+      <DstRect xOff="17117" yOff="2397" xSize="5606" ySize="2561" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262120000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1751" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1751" />
+      <DstRect xOff="16954" yOff="4435" xSize="3773" ySize="2447" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262120500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2121" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2121" />
+      <DstRect xOff="16644" yOff="6484" xSize="3057" ySize="2401" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262121000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2284" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2284" />
+      <DstRect xOff="16239" yOff="8525" xSize="2821" ySize="2386" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262121500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2220" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2220" />
+      <DstRect xOff="15695" yOff="10558" xSize="2907" ySize="2390" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262122000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1942" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1942" />
+      <DstRect xOff="14896" yOff="12566" xSize="3361" ySize="2418" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262122500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1497" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1497" />
+      <DstRect xOff="13519" yOff="14523" xSize="4489" ySize="2490" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262123000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="919" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="919" />
+      <DstRect xOff="10551" yOff="16367" xSize="7866" ySize="2676" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262123500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="377" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="377" />
+      <DstRect xOff="28008" yOff="17871" xSize="-22297" ySize="2607" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262132500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="325" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="325" />
+      <DstRect xOff="5209" yOff="0" xSize="20431" ySize="2456" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262133000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="743" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="743" />
+      <DstRect xOff="13125" yOff="815" xSize="10055" ySize="2767" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262133500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1363" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1363" />
+      <DstRect xOff="14312" yOff="2854" xSize="5001" ySize="2525" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262134000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1849" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1849" />
+      <DstRect xOff="14081" yOff="4891" xSize="3552" ySize="2433" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262134500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2176" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2176" />
+      <DstRect xOff="13752" yOff="6931" xSize="2973" ySize="2396" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262135000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2289" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2289" />
+      <DstRect xOff="13319" yOff="8982" xSize="2813" ySize="2385" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262135500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2175" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2175" />
+      <DstRect xOff="12732" yOff="11011" xSize="2972" ySize="2394" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262140000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1855" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1855" />
+      <DstRect xOff="11844" yOff="13011" xSize="3536" ySize="2429" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262140500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1383" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1383" />
+      <DstRect xOff="10241" yOff="14950" xSize="4915" ySize="2518" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262141000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="781" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="781" />
+      <DstRect xOff="6651" yOff="16749" xSize="9501" ySize="2749" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262141500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="351" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="351" />
+      <DstRect xOff="25298" yOff="18073" xSize="-22446" ySize="2405" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262150000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="723" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="723" />
+      <DstRect xOff="25153" yOff="762" xSize="10354" ySize="2771" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262150500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="329" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="329" />
+      <DstRect xOff="2449" yOff="1" xSize="20371" ySize="2486" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262151000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="886" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="886" />
+      <DstRect xOff="10995" yOff="1272" xSize="8201" ySize="2690" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262151500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1481" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1481" />
+      <DstRect xOff="11458" yOff="3310" xSize="4550" ySize="2496" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262152000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1939" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1939" />
+      <DstRect xOff="11202" yOff="5347" xSize="3372" ySize="2421" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262152500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2220" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2220" />
+      <DstRect xOff="10853" yOff="7388" xSize="2908" ySize="2391" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262153000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2283" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2283" />
+      <DstRect xOff="10394" yOff="9427" xSize="2820" ySize="2385" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262153500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2120" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2120" />
+      <DstRect xOff="9755" yOff="11462" xSize="3056" ySize="2399" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262154000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1759" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1759" />
+      <DstRect xOff="8760" yOff="13452" xSize="3748" ySize="2442" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262154500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1256" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1256" />
+      <DstRect xOff="6871" yOff="15370" xSize="5484" ySize="2552" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262155000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="630" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="630" />
+      <DstRect xOff="2576" yOff="17111" xSize="12177" ySize="2841" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262155500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="387" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="387" />
+      <DstRect xOff="22569" yOff="17842" xSize="-22543" ySize="2637" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262164000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="546" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="546" />
+      <DstRect xOff="20981" yOff="306" xSize="14202" ySize="2873" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262164500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="389" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="389" />
+      <DstRect xOff="40914" yOff="1" xSize="-21868" ySize="2751" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262165000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1025" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1025" />
+      <DstRect xOff="8483" yOff="1727" xSize="6924" ySize="2629" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262165500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1594" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1594" />
+      <DstRect xOff="8596" yOff="3766" xSize="4187" ySize="2472" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262170000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2019" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2019" />
+      <DstRect xOff="8319" yOff="5803" xSize="3226" ySize="2412" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262170500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2254" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2254" />
+      <DstRect xOff="7948" yOff="7845" xSize="2861" ySize="2388" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262171000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2266" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2266" />
+      <DstRect xOff="7459" yOff="9881" xSize="2843" ySize="2386" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262171500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2056" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2056" />
+      <DstRect xOff="6765" yOff="11900" xSize="3158" ySize="2405" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262172000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1657" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1657" />
+      <DstRect xOff="5636" yOff="13888" xSize="4004" ySize="2458" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262172500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1119" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1119" />
+      <DstRect xOff="3383" yOff="15781" xSize="6261" ySize="2595" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262173000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="426" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="426" />
+      <DstRect xOff="39342" yOff="17446" xSize="-22190" ySize="2960" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262173500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="389" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="389" />
+      <DstRect xOff="18803" yOff="17557" xSize="20286" ySize="2921" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262182000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="193" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="193" />
+      <DstRect xOff="38647" yOff="1" xSize="-941" ySize="2854" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262182500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="464" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="464" />
+      <DstRect xOff="40718" yOff="144" xSize="-23961" ySize="2920" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262183000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1167" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1167" />
+      <DstRect xOff="5823" yOff="2183" xSize="5972" ySize="2580" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262183500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1702" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1702" />
+      <DstRect xOff="5730" yOff="4221" xSize="3892" ySize="2454" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262184000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2090" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2090" />
+      <DstRect xOff="5432" yOff="6260" xSize="3106" ySize="2404" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262184500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2277" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2277" />
+      <DstRect xOff="5038" yOff="8301" xSize="2830" ySize="2386" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262185000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2238" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2238" />
+      <DstRect xOff="4513" yOff="10335" xSize="2882" ySize="2389" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262185500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1982" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1982" />
+      <DstRect xOff="3752" yOff="12347" xSize="3287" ySize="2413" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262190000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1552" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1552" />
+      <DstRect xOff="2469" yOff="14312" xSize="4310" ySize="2478" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262190500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="985" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="985" />
+      <DstRect xOff="40706" yOff="16174" xSize="-33682" ySize="2656" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262191000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="361" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="361" />
+      <DstRect xOff="15865" yOff="17746" xSize="20430" ySize="2732" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262200000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="376" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="376" />
+      <DstRect xOff="35934" yOff="1" xSize="-22508" ySize="2570" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262200500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="669" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="669" />
+      <DstRect xOff="1210" yOff="601" xSize="11333" ySize="2810" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262201000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1307" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1307" />
+      <DstRect xOff="3078" yOff="2640" xSize="5250" ySize="2541" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262201500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1804" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1804" />
+      <DstRect xOff="2859" yOff="4677" xSize="3650" ySize="2439" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262202000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2151" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2151" />
+      <DstRect xOff="2540" yOff="6717" xSize="3011" ySize="2398" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262202500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2288" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2288" />
+      <DstRect xOff="2122" yOff="8757" xSize="2815" ySize="2385" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262203000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2198" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2198" />
+      <DstRect xOff="1556" yOff="10788" xSize="2938" ySize="2392" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262203500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1899" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1899" />
+      <DstRect xOff="714" yOff="12793" xSize="3446" ySize="2423" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262204000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1440" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1440" />
+      <DstRect xOff="40189" yOff="14741" xSize="-36265" ySize="2503" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262204500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="849" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="849" />
+      <DstRect xOff="36917" yOff="16563" xSize="-32339" ySize="2711" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262205000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="329" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="329" />
+      <DstRect xOff="13075" yOff="17993" xSize="20404" ySize="2485" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262214000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="344" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="344" />
+      <DstRect xOff="33003" yOff="1" xSize="-22311" ySize="2377" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262214500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="820" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="820" />
+      <DstRect xOff="40461" yOff="1057" xSize="-31989" ySize="2724" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262215000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1426" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1426" />
+      <DstRect xOff="228" yOff="3096" xSize="4749" ySize="2509" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262215500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1898" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1898" />
+      <DstRect xOff="40943" yOff="5133" xSize="-37508" ySize="2426" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262220000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2201" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2201" />
+      <DstRect xOff="40603" yOff="7174" xSize="-38023" ySize="2393" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262220500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2288" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2288" />
+      <DstRect xOff="40158" yOff="9214" xSize="-38144" ySize="2385" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262221000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2148" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2148" />
+      <DstRect xOff="39546" yOff="11241" xSize="-37947" ySize="2396" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262221500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1807" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1807" />
+      <DstRect xOff="38607" yOff="13236" xSize="-37321" ySize="2435" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262222000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1324" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1324" />
+      <DstRect xOff="36866" yOff="15165" xSize="-35790" ySize="2534" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262222500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="708" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="708" />
+      <DstRect xOff="32923" yOff="16936" xSize="-30305" ySize="2794" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262223000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="332" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="332" />
+      <DstRect xOff="10234" yOff="17962" xSize="20436" ySize="2516" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262231500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="641" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="641" />
+      <DstRect xOff="10412" yOff="530" xSize="11876" ySize="2820" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262232000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="384" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="384" />
+      <DstRect xOff="30303" yOff="1" xSize="-22564" ySize="2615" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262232500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="957" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="957" />
+      <DstRect xOff="38076" yOff="1505" xSize="-33466" ySize="2657" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262233000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1543" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1543" />
+      <DstRect xOff="38330" yOff="3553" xSize="-36613" ySize="2483" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262233500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1983" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1983" />
+      <DstRect xOff="38062" yOff="5591" xSize="-37670" ySize="2416" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262234000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2241" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2241" />
+      <DstRect xOff="37701" yOff="7632" xSize="2880" ySize="2390" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262234500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2276" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2276" />
+      <DstRect xOff="37226" yOff="9670" xSize="2830" ySize="2386" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262235000.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="2088" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="2088" />
+      <DstRect xOff="36561" yOff="11692" xSize="3106" ySize="2402" />
+    </SimpleSource>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="0">2013262/MOD_CHR_LL_DY/T2013262235500.L2_LAC_OC_CHLOR_A_FRBRS.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="2700" RasterYSize="1708" DataType="Byte" BlockXSize="2700" BlockYSize="3" />
+      <SrcRect xOff="0" yOff="0" xSize="2700" ySize="1708" />
+      <DstRect xOff="35502" yOff="13676" xSize="3873" ySize="2450" />
+    </SimpleSource>
+  </VRTRasterBand>
+</VRTDataset>

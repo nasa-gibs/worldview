@@ -1,9 +1,11 @@
 {
+    "bins": 1,
     "description": "Terra / MODIS",
     "max": "1",
     "min": "0",
     "name": "Sea Ice",
     "period": "daily",
+    "product": "MOD29",
     "projections": {
         "antarctic": {
             "matrixSet": "EPSG3031_1km",
@@ -83,6 +85,5 @@
     "rendered": "MODIS_Sea_Ice",
     "startDate": "2012-04-07",
     "type": "wmts",
-    "units": "",
-    "product": "MOD29"
+    "units": ""
 }

@@ -268,7 +268,7 @@ SOTE.widget.List.prototype._update = function(){
 				
 				if(!this.search || (keywords && count == keywords.length)){
 					
-					$item = $("<li id='"+ this.id + key + itemKey + "' class='item'></li>");
+					$item = $("<li id='"+ this.id + key + itemKey + "' class='item item-static'></li>");
 					
 					if(this.close){
 						$item.append("<a><img class='close bank-item-img' id='close"+key+"-"+item.value.replace(/:/g,"colon")+"' title='Remove Layer' src='images/close-red-x.png' /></a>");

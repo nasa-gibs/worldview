@@ -134,18 +134,21 @@
     /*background:url(../images/wv-icons.svg) transparent 0 -40px;*/  /*Grey icons*/
     margin:0;
 }
-ul#productsHoldertabs .tab:hover i.productsIcon{
-    background-position-y:20px;
-}
-ul#productsHoldertabs li.ui-state-active .tab:hover i.productsIcon{
-    background-position-y:-10px;
-}
+/*ul#productsHoldertabs li.ui-state-active .tab:hover i.productsIcon{
+    background-position:0 -10px;
+}*/
 /***********************************Icons***********************************/
-.icon-layers      { background-position-x:0; }
-.icon-download    { background-position-x:-30px; }
-.icon-download-alt{ background-position-x:-60px; }
-.icon-add         { background-position-x:-90px; }
-.icon-add-alt     { background-position-x:-120px; }
+.icon-layers      { background-position:0 -10px; }
+ul#productsHoldertabs .tab:hover i.icon-layers {background-position:0 20px;}
+ul#productsHoldertabs li.ui-state-active .tab:hover i.icon-layers {background-position: 0 -10px;}
+.icon-download    { background-position:-30px -10px; }
+ul#productsHoldertabs .tab:hover i.icon-download    { background-position:-30px 20px; }
+ul#productsHoldertabs li.ui-state-active .tab:hover i.icon-download {background-position:-30px -10px;}
+.icon-download-alt{ background-position:-60px -10px; }
+.icon-add         { background-position:-90px -10px; }
+ul#productsHoldertabs .tab:hover i.icon-add    { background-position:-90px 20px; }
+ul#productsHoldertabs li.ui-state-active .tab:hover i.icon-add {background-position:-90px -10px;}
+.icon-add-alt     { background-position:-120px -10px; }
 
 /***********************************End Icons***********************************/
 ul#productsHoldertabs li.ui-state-active i.productsIcon {

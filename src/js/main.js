@@ -47,7 +47,9 @@ $(function() {// Initialize "static" vars
             "images/close-red-x.png",
             "images/collapseDown.png",
             "images/expandUp.png",
-            "images/activity.gif"   
+            "images/activity.gif",
+            "images/wv-icons.svg",
+            "images/wv-logo.svg"   
         ]).execute(onLoad);
     };
 

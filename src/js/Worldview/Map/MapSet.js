@@ -86,7 +86,7 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
     
     self.events = Worldview.Events();
     
-    var init = function() {        
+    var init = function() {    
         var $container = $("#" + containerId);
         if ( $container.length === 0 ) {
             throw new Error("No container for MapSet: " + containerId);
@@ -516,6 +516,10 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
      * Merges in any projection specific properties.
      */    
     var createLayer = function(map, proj, config) {
+        if ( self.mapConfig.parameters.mockMap ) {
+            return Worldview.Map.MockLayerSet();
+        }
+        
         config = $.extend(true, {}, config);
         
         if ( config.properties === undefined ) {
