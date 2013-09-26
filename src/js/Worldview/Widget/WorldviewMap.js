@@ -1,10 +1,10 @@
 /*
  * NASA Worldview
- * 
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project. 
  *
- * Copyright (C) 2013 United States Government as represented by the 
+ * This code was originally developed at NASA/Goddard Space Flight Center for
+ * the Earth Science Data and Information System (ESDIS) project.
+ *
+ * Copyright (C) 2013 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
@@ -14,30 +14,30 @@ Worldview.namespace("Widget");
 /**
  * Class: Worldview.Widget.WorldviewMap
  * Map features that are specific to Worldview.
- * 
+ *
  * Delegates to:
  * <Worldview.Widget.Map>
- * 
+ *
  * Constructor: Worldview.Widget.WorldviewMap
  * Creates a new instance.
- * 
+ *
  * Parameters:
  * containerId - The id of the div element to place the map into
  * spec.dataSourceUrl - The endpoint where configuration information should
  *                      be obtained from.
- * spec.onReady - function to be invoked once the map has read in the 
- *                configuration and is ready to be used. 
+ * spec.onReady - function to be invoked once the map has read in the
+ *                configuration and is ready to be used.
  */
-Worldview.Widget.WorldviewMap = function(containerId, config) { 
+Worldview.Widget.WorldviewMap = function(containerId, config) {
 
     var ns = Worldview.Widget;
-    
+
     var self = ns.Map(containerId, config);
-    
+
     var log = Logging.getLogger("Worldview.Map");
     var lastState = {};
     var last = null;
-    
+
     var init = function() {
         //Logging.debug("Worldview.Map");
         if ( REGISTRY ) {
@@ -45,48 +45,48 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
         } else {
             throw new Error("Cannot register Map, REGISTRY not found");
         }
-                
+
         REGISTRY.markComponentReady(containerId);
         log.debug("Map is ready");
-        
+
         setExtentToLeading();
         self.updateComponent(Worldview.Permalink.fromRegistry());
     };
-    
+
     /**
      * Method: updateComponent
      * Updates the map when the state of the application changes.
-     * 
+     *
      * Parameters:
-     * queryString - If products=X is defined, ensure that only the layers for 
+     * queryString - If products=X is defined, ensure that only the layers for
      * X are visible. If switch=Y is defined, changes the projection of the
-     * map to Y if necessary. 
-     */    
-    self.updateComponent = function(queryString) { 
+     * map to Y if necessary.
+     */
+    self.updateComponent = function(queryString) {
         try {
             if ( !(self.maps.projection in lastState) ) {
                 lastState[self.maps.projection] = {};
             }
             last = lastState[self.maps.projection];
-            
+
             if ( last.queryString === queryString ) {
                 return;
             }
             log.debug("WorldviewMap: updateComponent", queryString);
-            
-            var state = REGISTRY.getState();            
 
-            log.debug("State", state);     
+            var state = REGISTRY.getState();
+
+            log.debug("State", state);
             log.debug("Last State", last);
 
-            
-            if ( state.projection !== undefined && 
+
+            if ( state.projection !== undefined &&
                     state.projection !== last.projection ) {
                 var projection = state.projection;
                 if ( !(projection in self.maps.mapConfig.projections) ) {
-                    var defaultProjection = 
+                    var defaultProjection =
                         self.maps.mapConfig.defaults.projection;
-                    log.warn("Invalid projection: " + projection + ", using: " + 
+                    log.warn("Invalid projection: " + projection + ", using: " +
                             defaultProjection);
                     projection = defaultProjection;
                 }
@@ -98,29 +98,29 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
                 self.maps.set(state.layers, state.hiddenLayers);
                 // If the layers changed, force setting the palettes
                 // again
-                if ( !Worldview.arrayEquals(state.layers, last.layers) ) { 
+                if ( !Worldview.arrayEquals(state.layers, last.layers) ) {
                     last.palettesString = "";
                 }
                 var topLayerSelected = false;
                 $.each(state.baselayers, function(index, layer) {
-                    var alreadyHidden = 
+                    var alreadyHidden =
                         $.inArray(layer, state.hiddenLayers) >= 0;
                     var visible = !topLayerSelected && !alreadyHidden;
                     if ( visible && !topLayerSelected ) {
                         topLayerSelected = true;
                     }
-                    self.maps.setVisibility(layer, visible);  
+                    self.maps.setVisibility(layer, visible);
                 });
             }
             if ( state.time !== last.time ) {
                 self.maps.setDay(state.time);
-            }           
+            }
             if ( state.palettesString !== last.palettesString ) {
                 self.maps.setPalettes(state.palettes);
             }
             if ( state.opacityString !== last.opacityString) {
                 $.each(state.opacity, function(layerName, opacity) {
-                    self.maps.setOpacity(layerName, opacity);    
+                    self.maps.setOpacity(layerName, opacity);
                 });
             }
             last = state;
@@ -130,12 +130,12 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
             Worldview.error("Unable to update map", cause);
         }
     };
-    
+
     self.parse = function(queryString, object) {
-        parseProducts(queryString, object);        
+        parseProducts(queryString, object);
         return object;
     };
-    
+
     // TODO: This should be moved to the product picker
     var parseProducts = function(queryString, object) {
         object.layers = [];
@@ -143,7 +143,7 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
         object.hiddenLayers = [];
         object.baselayers = [];
         object.overlays = [];
-        
+
         var products = Worldview.extractFromQuery("products", queryString);
         object.layersString = products;
         if ( !products ) {
@@ -167,15 +167,15 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
                 values.push(name);
                 object[type].push(name);
             }
-            // Products are listed in the "opposite" order from what is 
-            // expected--the first layer is the layer to be drawn last. 
+            // Products are listed in the "opposite" order from what is
+            // expected--the first layer is the layer to be drawn last.
             // Flip them.
             values.reverse();
             object.layers = object.layers.concat(values);
         }
         return object;
     };
-    
+
     var setExtentToLeading = function() {
         // Polar projections don't need to be positioned
         if ( self.maps.projection !== "geographic" ) {
@@ -183,8 +183,8 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
         }
 
         var map = self.maps.map;
-    
-        // Set default extent according to time of day:  
+
+        // Set default extent according to time of day:
         //   at 00:00 UTC, start at far eastern edge of map: "20.6015625,-46.546875,179.9296875,53.015625"
         //   at 23:00 UTC, start at far western edge of map: "-179.9296875,-46.546875,-20.6015625,53.015625"
         var curHour = Worldview.now().getUTCHours();
@@ -200,18 +200,17 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
         // Compute east/west bounds
         var minLon = 20.6015625 + curHour * (-200.53125/23.0);
         var maxLon = minLon + 159.328125;
-        
+
         var minLat = -46.546875;
         var maxLat = 53.015625;
-        
+
         var lat = minLat + (Math.abs(maxLat - minLat) / 2.0);
         var lon = minLon + (Math.abs(maxLon - minLon) / 2.0);
         var zoomLevel = 2;
-                
+
         map.setCenter(new OpenLayers.LonLat(lon, lat), zoomLevel);
-    };   
-        
+    };
+
     init();
     return self;
 };
-        
