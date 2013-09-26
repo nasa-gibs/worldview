@@ -32,7 +32,6 @@ $(function() {// Initialize "static" vars
               src: "data/arctic_ap_products.json?v=" + Worldview.BUILD_NONCE },
             { id: "antarctic", type: "json",
               src: "data/antarctic_ap_products.json?v=" + Worldview.BUILD_NONCE },
-            "images/logo.png",
             "images/permalink.png",
             "images/geographic.png",
             "images/arctic.png",
