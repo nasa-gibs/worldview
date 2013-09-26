@@ -86,8 +86,9 @@ Worldview.Widget.DataDownload = function(config, spec) {
     self.loadFromQuery = function(queryString) {
         var query = Worldview.queryStringToObject(queryString);
         if ( query.dataDownload ) {
+            var state = REGISTRY.getState(queryString);
             model.activate(query.dataDownload);
-        }    
+        } 
     };
     
     self.render = function() {
