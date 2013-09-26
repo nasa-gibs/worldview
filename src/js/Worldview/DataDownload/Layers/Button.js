@@ -43,6 +43,7 @@ Worldview.DataDownload.Layers.Button = function(model, maps, config) {
     };
     
     var features = {};
+    var splitFeature = null;
     var self = {};
     
     self.EVENT_HOVER_OVER = "hoverover";
@@ -200,14 +201,33 @@ Worldview.DataDownload.Layers.Button = function(model, maps, config) {
         var granule = feature.attributes.granule;
         feature.attributes.label = granule.label;
         getLayer().drawFeature(feature);
+        console.log(event);
+        if ( feature.geometry.CLASS_NAME === 
+                "OpenLayers.Geometry.MultiPoint" ) {
+            var newStyle = $.extend(true, {}, getStyle("default"));
+            delete newStyle.externalGraphic;
+            newStyle.strokeOpacity = 1;
+            newStyle.fillOpacity = 1;
+            newStyle.label = granule.label;
+            splitFeature = new OpenLayers.Feature.Vector(
+                feature.geometry.components[1].clone(), 
+                feature.attributes,
+                newStyle
+            );
+            getLayer().addFeatures([splitFeature]);            
+        }
     };
     
     var onHoverOut = function(event) {
         var feature = event.feature;
         feature.attributes.label = "";
         getLayer().drawFeature(feature);
+        if ( splitFeature ) {
+            getLayer().removeFeatures([splitFeature]);    
+            splitFeature = null;
+        }
     };
-           
+    
     var getLabelOffset = function() {
         var buttonHeight = getSize().h;
         return ( buttonHeight / 2.0 ) + 10;
