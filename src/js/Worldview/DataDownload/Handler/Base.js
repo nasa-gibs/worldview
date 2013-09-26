@@ -62,7 +62,6 @@ Worldview.DataDownload.Handler.Base = function(config, model) {
             if ( textStatus === "timeout" ) {
                 self.events.trigger("timeout");
             } else {
-                console.log("ERROR", textStatus, errorThrown);
                 self.events.trigger("error", textStatus, errorThrown);
             }
         });

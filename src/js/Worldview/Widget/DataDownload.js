@@ -28,7 +28,7 @@ Worldview.namespace("Widget");
 Worldview.Widget.DataDownload = function(config, spec) {
 
     var log = Logging.getLogger("Worldview.DataDownload");
-    Logging.debug("Worldview.DataDownload");
+    //Logging.debug("Worldview.DataDownload");
             
     var HTML_WIDGET_INACTIVE = "<img src='images/camera.png'></img>";
     var HTML_WIDGET_ACTIVE = "<img src='images/cameraon.png'></img>";
@@ -110,7 +110,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
                 callback: function(product) { model.selectProduct(product); },
                 defaultText: "0 selected"
             },
-            onchange: function() { console.log("onchange", arguments); },
+            onchange: function() {},
             args: self
         });
     };

@@ -241,7 +241,6 @@ SOTE.widget.Products.stopLink = function(e){
 };
 
 SOTE.widget.Products.change = function(e,ui){	
-    console.log(e);
     var self = e.data.self;
     if ( ui.index === 0 ) {
         $('.ui-tabs-nav')

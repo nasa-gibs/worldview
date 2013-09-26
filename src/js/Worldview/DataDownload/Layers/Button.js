@@ -201,7 +201,6 @@ Worldview.DataDownload.Layers.Button = function(model, maps, config) {
         var granule = feature.attributes.granule;
         feature.attributes.label = granule.label;
         getLayer().drawFeature(feature);
-        console.log(event);
         if ( feature.geometry.CLASS_NAME === 
                 "OpenLayers.Geometry.MultiPoint" ) {
             var newStyle = $.extend(true, {}, getStyle("default"));
