@@ -1,9 +1,9 @@
 {
-    "description": "Space-Track.org / Aqua",
-    "name": "Orbital Track (Ascending/Day)",
+    "description": "Space-Track.org / Calipso",
+    "name": "Orbital Track (Descending/Night)",
     "parameters": {
         "format": "image/png",
-        "layers": "Aqua_Orbit_Asc",
+        "layers": "Calipso_Orbit_Asc",
         "transparent": "true"
     },
     "period": "daily",

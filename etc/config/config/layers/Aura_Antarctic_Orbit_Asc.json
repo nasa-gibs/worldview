@@ -1,14 +1,14 @@
 {
-    "description": "Space-Track.org / Aqua",
+    "description": "Space-Track.org / Aura",
     "name": "Orbital Track (Ascending/Day)",
     "parameters": {
         "format": "image/png",
-        "layers": "Aqua_Orbit_Asc",
+        "layers": "Aura_Orbit_Asc",
         "transparent": "true"
     },
     "period": "daily",
     "projections": {
-        "geographic": {}
+        "antarctic": {}
     },
     "properties": {
         "tileSize": [
