@@ -3,7 +3,7 @@
     "name": "Orbital Track (Descending/Night)",
     "parameters": {
         "format": "image/png",
-        "layers": "Calipso_Orbit_Asc",
+        "layers": "Calipso_Orbit_Dsc",
         "transparent": "true"
     },
     "period": "daily",

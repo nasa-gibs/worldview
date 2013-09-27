@@ -3,7 +3,7 @@
     "name": "Orbital Track (Ascending/Day)",
     "parameters": {
         "format": "image/png",
-        "layers": "Calipso_Orbit_Dsc",
+        "layers": "Calipso_Orbit_Asc",
         "transparent": "true"
     },
     "period": "daily",

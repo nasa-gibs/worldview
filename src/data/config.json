@@ -2029,7 +2029,7 @@
             "name": "Orbital Track (Ascending/Day)",
             "parameters": {
                 "format": "image/png",
-                "layers": "Calipso_Orbit_Dsc",
+                "layers": "Calipso_Orbit_Asc",
                 "transparent": "true"
             },
             "period": "daily",
@@ -2054,7 +2054,7 @@
             "name": "Orbital Track (Descending/Night)",
             "parameters": {
                 "format": "image/png",
-                "layers": "Calipso_Orbit_Asc",
+                "layers": "Calipso_Orbit_Dsc",
                 "transparent": "true"
             },
             "period": "daily",
