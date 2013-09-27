@@ -70,7 +70,7 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
     float:left; 
     position:relative; 
     width:100%; 
-    height:47px; 
+    height:45px; 
     background: rgba(65,65,65,0.5);
     border-bottom: 1px solid #000;
 }
