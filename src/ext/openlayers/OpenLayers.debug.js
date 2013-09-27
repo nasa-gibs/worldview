@@ -35029,6 +35029,15 @@ OpenLayers.Layer.Grid = OpenLayers.Class(OpenLayers.Layer.HTTPRequest, {
             this.className = this.singleTile ? 'olLayerGridSingleTile' :
                                                'olLayerGrid';
         }
+
+        if (!OpenLayers.Animation.isNative) {
+            this.deferMoveGriddedTiles = OpenLayers.Function.bind(function() {
+                this.moveGriddedTiles(true);
+                this.moveTimerId = null;
+            }, this);
+        }
+        
+        this.rowSign = this.tileOriginCorner.substr(0, 1) === "t" ? 1 : -1;
     },
 
     /**
@@ -35608,7 +35617,7 @@ OpenLayers.Layer.Grid = OpenLayers.Class(OpenLayers.Layer.HTTPRequest, {
         
         var offsetlon = bounds.left - origin.lon;
         var tilecol = Math.floor(offsetlon/tilelon) - this.buffer;
-        var rowSign = this.tileOriginCorner.substr(0, 1) === "t" ? 1 : -1;
+        var rowSign = this.rowSign;
 
         var offsetlat = rowSign * (origin.lat - bounds.top + tilelat);  
         var tilerow = Math[~rowSign ? 'floor' : 'ceil'](offsetlat/tilelat) - this.buffer * rowSign;
@@ -35663,7 +35672,7 @@ OpenLayers.Layer.Grid = OpenLayers.Class(OpenLayers.Layer.HTTPRequest, {
         var tilelat = tileLayout.tilelat;
         var startcol = tileLayout.startcol;
         var startrow = tileLayout.startrow;
-        var rowSign = this.tileOriginCorner.substr(0, 1) === "t" ? 1 : -1;
+        var rowSign = this.rowSign;
         return new OpenLayers.Bounds(
             origin.lon + (startcol + col) * tilelon,
             origin.lat - (startrow + row * rowSign) * tilelat * rowSign,
@@ -35950,7 +35959,7 @@ OpenLayers.Layer.Grid = OpenLayers.Class(OpenLayers.Layer.HTTPRequest, {
         var rowIndex = prepend ? 0 : (grid.length - 1);
         var sign = prepend ? -1 : 1;
 
-        var rowSign = this.tileOriginCorner.substr(0, 1) === "t" ? 1 : -1;
+        var rowSign = this.rowSign;
         var tileLayout = this.gridLayout;
         tileLayout.startrow += sign * rowSign;
 
