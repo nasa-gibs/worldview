@@ -5,7 +5,10 @@
 
     <script type="text/javascript">
         if ( /MSIE (\d+\.\d+);/.test(navigator.userAgent) && ! /unsupported/.test(location.search) ) {
-             document.location.replace("pages/unsupported_browser.html" + location.search);
+            var version = parseFloat(navigator.appVersion.split("MSIE")[1]);
+            if ( version < 10 ) {
+                document.location.replace("pages/unsupported_browser.html" + location.search);
+            }
         }
     </script>
 
