@@ -149,42 +149,42 @@
         },
         {
             "category": "overlays",
-            "label": "Orbital Track (Ascending)",
+            "label": "Orbital Track (Ascending/Night)",
             "sublabel": "Space-Track.org / Terra",
             "type": "multi",
             "value": "Terra_Arctic_Orbit_Asc"
         },
         {
             "category": "overlays",
-            "label": "Orbital Track (Descending)",
+            "label": "Orbital Track (Descending/Day)",
             "sublabel": "Space-Track.org / Terra",
             "type": "multi",
             "value": "Terra_Arctic_Orbit_Dsc"
         },
         {
             "category": "overlays",
-            "label": "Orbital Track (Ascending)",
+            "label": "Orbital Track (Ascending/Day)",
             "sublabel": "Space-Track.org / Aqua",
             "type": "multi",
             "value": "Aqua_Arctic_Orbit_Asc"
         },
         {
             "category": "overlays",
-            "label": "Orbital Track (Descending)",
+            "label": "Orbital Track (Descending/Night)",
             "sublabel": "Space-Track.org / Aqua",
             "type": "multi",
             "value": "Aqua_Arctic_Orbit_Dsc"
         },
         {
             "category": "overlays",
-            "label": "Orbital Track (Ascending)",
+            "label": "Orbital Track (Ascending/Day)",
             "sublabel": "Space-Track.org / Aura",
             "type": "multi",
             "value": "Aura_Arctic_Orbit_Asc"
         },
         {
             "category": "overlays",
-            "label": "Orbital Track (Descending)",
+            "label": "Orbital Track (Descending/Night)",
             "sublabel": "Space-Track.org / Aura",
             "type": "multi",
             "value": "Aura_Arctic_Orbit_Dsc"
