@@ -68,7 +68,7 @@ var OpenLayers = {
     /**
      * Constant: VERSION_NUMBER
      */
-    VERSION_NUMBER: "Release 2.13.1",
+    VERSION_NUMBER: "Release 2.13.1-wv1",
 
     /**
      * Constant: singleFile
