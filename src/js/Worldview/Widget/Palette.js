@@ -1,10 +1,10 @@
 /*
  * NASA Worldview
- * 
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project. 
  *
- * Copyright (C) 2013 United States Government as represented by the 
+ * This code was originally developed at NASA/Goddard Space Flight Center for
+ * the Earth Science Data and Information System (ESDIS) project.
+ *
+ * Copyright (C) 2013 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
@@ -12,30 +12,30 @@
 Worldview.namespace("Widget");
 
 Worldview.Widget.Palette = function(containerId, config, spec) {
-    
+
     var self = {};
     var log = Logging.getLogger("Worldview.Widget.Palette");
     var value = "";
     var dialog = null;
-    var dialogForProduct = null;
-        
+    var dialogForLayer = null;
+
     self.config = config;
     self.active = {};
     self.inactive = {};
     self.alignTo = spec.alignTo;
     self.noRestore = false;
-    
+
     var init = function() {
-        //Logging.debug("Worldview.Widget.Palette");        
+        //Logging.debug("Worldview.Widget.Palette");
         if ( REGISTRY ) {
             REGISTRY.register(containerId, self);
         } else {
-            throw new Error("Cannot register paletteWidget, REGISTRY " + 
+            throw new Error("Cannot register paletteWidget, REGISTRY " +
                     "not found");
         }
-        REGISTRY.markComponentReady(containerId);        
+        REGISTRY.markComponentReady(containerId);
     };
-    
+
     self.getPalette = function(layer) {
         var name = self.active[layer];
         if ( !name || !config.palettes[name] ) {
@@ -44,9 +44,9 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         if ( !name ) {
             return null;
         }
-        return config.palettes[name];    
-    }
-    
+        return config.palettes[name];
+    };
+
     self.setValue = function(v) {
         if ( v === undefined ) {
             return;
@@ -56,12 +56,12 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         var parts = v.split("~");
         $.each(parts, function(index, part) {
             var segments = part.split(",");
-            self.active[segments[0]] = segments[1];    
+            self.active[segments[0]] = segments[1];
             self.inactive[segments[0]] = segments[1];
         });
         REGISTRY.fire(self);
     };
-    
+
     self.getValue = function() {
         try {
             var parts = [];
@@ -79,7 +79,7 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
             Worldview.error("Unable to update", error);
         }
     };
-    
+
     self.updateComponent = function(queryString) {
         if ( REGISTRY.isLoadingQuery ) {
             return;
@@ -94,21 +94,21 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
                     log.debug("Removing palette for " + layer);
                     delete self.active[layer];
                     changed = true;
-                }    
+                }
             });
             $.each(self.inactive, function(layer, palette) {
-                if ( !self.noRestore && 
-                        $.inArray(layer, state.layers) >= 0 && 
+                if ( !self.noRestore &&
+                        $.inArray(layer, state.layers) >= 0 &&
                         !self.active[layer] ) {
                     log.debug("Restoring palette for " + layer);
                     self.active[layer] = self.inactive[layer];
                     changed = true;
                 }
             });
-            if ( dialogForProduct && 
-                    $.inArray(dialogForProduct, state.layers) < 0 ) {
+            if ( dialogForLayer &&
+                    $.inArray(dialogForLayer, state.layers) < 0 ) {
                 dialog.hide();
-            }        
+            }
             if ( changed ) {
                 REGISTRY.fire(self);
             }
@@ -116,7 +116,7 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
             Worldview.error("Unable to update state", error);
         }
     };
-    
+
     self.loadFromQuery = function(queryString) {
         var query = Worldview.queryStringToObject(queryString);
         log.debug("Palette: loadFromQuery", query);
@@ -124,10 +124,10 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
             Worldview.Support.showUnsupportedMessage("custom palette");
         } else {
             self.setValue(query.palettes);
-        }    
+        }
     };
-        
-    self.displaySelector = function(layer) { 
+
+    self.displaySelector = function(layer) {
         if ( dialog ) {
             dialog.hide();
             setTimeout(function() {
@@ -136,13 +136,13 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         } else {
             showSelector(layer);
         }
-    }
-        
+    };
+
     self.parse = function(queryString, object) {
         object.palettes = {};
         palettes = Worldview.extractFromQuery("palettes", queryString);
         object.palettesString = palettes;
-               
+
         if ( !palettes ) {
             return object;
         }
@@ -153,27 +153,27 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
             var palette = items[1];
             object.palettes[layer] = palette;
         });
-        return object;        
+        return object;
     };
-    
+
     var showSelector = function(layer) {
-        var layerConfig = self.config.layers[layer];            
+        var layerConfig = self.config.layers[layer];
         var properties = {
-            width: "245px", 
+            width: "245px",
             height: "265px",
             visible: false,
             autofillheight: "body",
             constraintoviewport: true ,
-            zindex: 210             
+            zindex: 210
         };
         if ( self.alignTo ) {
             var $element = $(self.alignTo);
-            properties.x = Math.ceil($element.offset().left + 
+            properties.x = Math.ceil($element.offset().left +
                     $element.width() + 20);
             properties.y = Math.ceil($element.offset().top);
         }
-        
-        dialog = new YAHOO.widget.Panel("palette-selector-dialog", 
+
+        dialog = new YAHOO.widget.Panel("palette-selector-dialog",
                 properties);
         dialogForLayer = layer;
         dialog.setHeader("Select palette");
@@ -183,25 +183,25 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
                 layerConfig.description +
             "</div>" +
             "<div id='palette-selector'></div>"
-        ].join("\n"));  
+        ].join("\n"));
         dialog.hideEvent.subscribe(function(i) {
-            setTimeout(function() { 
-                dialog.destroy(); 
-                dialog = null; 
+            setTimeout(function() {
+                dialog.destroy();
+                dialog = null;
                 dialogForLayer = null
             }, 5);
-        });       
-        dialog.render(document.body);  
-                
+        });
+        dialog.render(document.body);
+
         var palettes = [];
         var canvas = document.createElement("canvas");
         canvas.width = 100;
         canvas.height = 14;
-        
+
         // The default palette the layer is rendered in
         var renderedName = layerConfig.rendered;
-        
-        var renderedPalette = $.extend(true, {}, 
+
+        var renderedPalette = $.extend(true, {},
                 config.palettes[renderedName]);
         var renderedColorBar = Worldview.Palette.ColorBar({
             canvas: canvas,
@@ -212,10 +212,10 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         renderedPalette.name = "Default";
         renderedPalette.image = renderedColorBar.toImage();
         palettes.push(renderedPalette);
-                
+
         var activePalette = self.active[layer];
         var selected = null;
-                 
+
         // Palettes for the drop down, place the recommended ones first
         if ( layerConfig.recommendedPalettes ) {
             $.each(layerConfig.recommendedPalettes, function(index, name) {
@@ -227,16 +227,16 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
                     stops: layerConfig.stops
                 });
                 palette.image = colorBar.toImage();
-                palettes.push(palette);    
+                palettes.push(palette);
             });
         }
-                 
+
         $.each(self.config.paletteOrder, function(index, name) {
             if ( $.inArray(name, layerConfig.recommendedPalettes) >= 0 ) {
                 return;
             }
             var p = self.config.palettes[name];
-            
+
             // Skip this palette if configuration says to exclude
             if ( $.inArray(name, layerConfig.excludePalettes) >= 0 ) {
                 return;
@@ -248,22 +248,22 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
             if ( p.source === "stock" ) {
                 var palette = $.extend(true, {}, p);
                 var colorBar = Worldview.Palette.ColorBar({
-                    canvas: canvas, 
-                    palette: palette, 
+                    canvas: canvas,
+                    palette: palette,
                     bins: layerConfig.bins,
                     stops: layerConfig.stops
                 });
                 palette.image = colorBar.toImage();
                 palettes.push(palette);
-            }       
+            }
         });
-        
+
         $.each(palettes, function(index, palette) {
             if ( palette.id === activePalette ) {
                 selected = index;
-            }    
+            }
         });
-        
+
         var paletteSelector = Worldview.Palette.PaletteSelector({
             selector: "#palette-selector",
             palettes: palettes
@@ -271,7 +271,7 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
         if ( selected !== null ) {
             paletteSelector.select(selected);
         }
-                     
+
         paletteSelector.addSelectionListener(function(palette) {
             var log = Logging.getLogger("Worldview.PaletteSelection");
             if ( palette.source === "rendered" ) {
@@ -281,14 +281,14 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
             } else {
                 self.active[layer] = palette.id;
                 self.inactive[layer] = palette.id;
-                log.debug("Palette: " + palette.id); 
+                log.debug("Palette: " + palette.id);
             }
             REGISTRY.fire(self);
-        });     
-        
-        dialog.show(); 
+        });
+
+        dialog.show();
     };
-    
+
     init();
     return self;
 };
