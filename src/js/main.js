@@ -59,23 +59,36 @@ $(function() {// Initialize "static" vars
     };
 
     var onLoad = function(queue) {
-        loaded = true;
-        Worldview.Indicator.hide();
         try {
             var config = queue.getResult("config");
+            // Convert all parameters found in the query string to an object,
+            // keyed by parameter name
+            config.parameters = Worldview.queryStringToObject(location.search);
+
             // FIXME: Projection cache HACK
             config.ap_products = {
                 geographic: queue.getResult("geographic"),
                 arctic: queue.getResult("arctic"),
                 antarctic: queue.getResult("antarctic")
             };
-            init(config);
+
+            if ( config.parameters.loadDelay ) {
+                var delay = parseInt(config.parameters.loadDelay);
+                log.warn("Delaying load for " + delay + " ms");
+                setTimeout(function() {
+                    init(config);
+                }, parseInt(config.parameters.loadDelay));
+            } else {
+                init(config);
+            }
         } catch ( error ) {
             Worldview.error("Unable to start Worldview", error);
         }
     };
     var storageEngine;
     var init = function(config) {
+        loaded = true;
+        Worldview.Indicator.hide();
 
     	// set up storage and decide what to show
         try {
@@ -111,10 +124,6 @@ $(function() {// Initialize "static" vars
         // get query string
         var queryString =
             Worldview.Permalink.decode(window.location.search.substring(1));
-
-        // Convert all parameters found in the query string to an object,
-        // keyed by parameter name
-        config.parameters = Worldview.queryStringToObject(location.search);
 
         // Features that are important for debugging but are not necessary
         // for Worldview to opeerate properly
