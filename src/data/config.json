@@ -1740,7 +1740,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -1765,7 +1766,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -1790,7 +1792,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -1815,7 +1818,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -1840,7 +1844,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -1865,7 +1870,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -1890,7 +1896,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -1915,7 +1922,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -1940,7 +1948,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -1965,7 +1974,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -1990,7 +2000,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -2015,7 +2026,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -2040,7 +2052,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -2065,7 +2078,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -6918,7 +6932,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -6943,7 +6958,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -6968,7 +6984,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -6993,7 +7010,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -7018,7 +7036,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
@@ -7043,7 +7062,8 @@
                 "tileSize": [
                     512,
                     512
-                ]
+                ],
+                "transitionEffect": "none"
             },
             "type": "wms",
             "url": [
