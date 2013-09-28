@@ -1,6 +1,7 @@
 $(function() {// Initialize "static" vars
 
     var log = Logging.getLogger();
+    var loaded = false;
 
     var entryPoint = function() {
 
@@ -23,6 +24,7 @@ $(function() {// Initialize "static" vars
         // Place any resources that should be completely loaded before
         // starting up the UI
         Worldview.Preloader([
+            "images/activity.gif",
             { id: "config", type:"json",
               src: "data/config.json?v=" + Worldview.BUILD_NONCE },
             // FIXME: Projection cache HACK
@@ -46,13 +48,19 @@ $(function() {// Initialize "static" vars
             "images/close-red-x.png",
             "images/collapseDown.png",
             "images/expandUp.png",
-            "images/activity.gif",
             "images/wv-icons.svg",
             "images/wv-logo.svg"
         ]).execute(onLoad);
+        setTimeout(function() {
+            if ( !loaded ) {
+                Worldview.Indicator.loading();
+            }
+        }, 2000);
     };
 
     var onLoad = function(queue) {
+        loaded = true;
+        Worldview.Indicator.hide();
         try {
             var config = queue.getResult("config");
             // FIXME: Projection cache HACK
