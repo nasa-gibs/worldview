@@ -581,7 +581,7 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
         var layer = event.layer;
 
         var onLoadStart = function() {
-            logLoad.debug("Layer load start");
+            logLoad.debug("Layer load start", layersLoading);
             if ( layersLoading === 0 ) {
                 logLoad.debug("Map load start");
                 self.map.events.triggerEvent("maploadstart");
@@ -590,7 +590,7 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
         };
 
         var onLoadEnd = function() {
-            logLoad.debug("Layer load end");
+            logLoad.debug("Layer load end", layersLoading);
             if ( layersLoading === 1 ) {
                 logLoad.debug("Map load end");
                 self.map.events.triggerEvent("maploadend");
@@ -602,7 +602,7 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
 
         layer.events.register("loadstart", layer, onLoadStart);
         layer.events.register("loadend", layer, onLoadEnd);
-        onLoadStart();
+        //onLoadStart();
 
         refreshZOrder();
     };
