@@ -15,6 +15,9 @@ Worldview.namespace("Tour");
      */
     ns.start = function(storageEngine, hideSplash, noDisable) {
 
+        // FIXME: Hacking it for now
+        storageEngine = storageEngine || Worldview.storageEngine;
+
         // determine screen size - don't show if too small
         var devWidth = window.screen.availWidth;
         var devHeight = window.screen.availHeight;

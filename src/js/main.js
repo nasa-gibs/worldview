@@ -118,6 +118,8 @@ $(function() {// Initialize "static" vars
             	lastVisit = Date.now();
             }
             storageEngine.setItem('lastVisit', Date.now());
+            // FIXME: Hacking in for now
+            Worldview.storageEngine = storageEngine;
         }
         //var lastVisitObj = new Date(lastVisit);
         var lastVisitObj = new Date("2013-04-07T00:00:00-04:00"); // FIXME
