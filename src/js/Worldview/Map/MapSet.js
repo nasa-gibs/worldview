@@ -1,108 +1,108 @@
 /*
  * NASA Worldview
- * 
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project. 
  *
- * Copyright (C) 2013 United States Government as represented by the 
+ * This code was originally developed at NASA/Goddard Space Flight Center for
+ * the Earth Science Data and Information System (ESDIS) project.
+ *
+ * Copyright (C) 2013 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
- 
+
 Worldview.namespace("Map");
 
 /**
  * Class: Worldview.Map.MapSet
- * Map object that handles GIBS products. 
- * 
+ * Map object that handles GIBS products.
+ *
  * Constructor: MapSet
  * Creates a new instance
- * 
- * Parameters: 
+ *
+ * Parameters:
  * containerId - The identifier of the HTML DOM element to add the map objects
  *               to.
- * mapConfig   - Configuration for the maps and products of type 
+ * mapConfig   - Configuration for the maps and products of type
  *               <MapConfig>.
- * 
+ *
  * Throws:
  * An exception if no DOM element exists with the provided containerId.
  */
 Worldview.Map.MapSet = function(containerId, mapConfig, component) {
-    
+
     var log = Logging.getLogger("Worldview.Map");
     var logLoad = Logging.getLogger("Worldview.Map.LoadEvents");
-    
+
     var self = {};
-       
+
     // Configurations for each available product
     var productConfigs = {};
-    
+
     // Current set of layers that have been added to the map, one set
     // for each supported projection.
     var activeLayers = {};
-    
+
     // Display layers on the map for this day
     var currentDay = Worldview.today();
-    
+
     // The number of layers in the processing of loading. This is used
     // to fire maploadstart and maploadend events.
-    var layersLoading = 0;   
-      
+    var layersLoading = 0;
+
     //-------------------------------------------------------------------------
     // Public
     //-------------------------------------------------------------------------
-    
+
     /**
      * Property: mapConfig
      * The <Wordlview.JSON.MapConfig> used in configuration (read only).
      */
     self.mapConfig = mapConfig;
 
-    // Map objects, one for each supported projection    
+    // Map objects, one for each supported projection
     self.projections = {};
-    
+
     /**
      * Property: map
      * OpenLayers.Map object used for the currently selected projection
      * (read only).
      */
     self.map = null;
-    
+
     /**
      * Property: layers
-     * Array containing the name of each layer that is visible on the map for 
+     * Array containing the name of each layer that is visible on the map for
      * the currently selected projection (read only).
      */
     self.layers = null;
-    
+
     /**
      * Property: projection
      * Current map projection (read only). Set via <setProjection>.
      */
-    self.projection = null;    
-    
+    self.projection = null;
+
     self.EVENT_ZOOM_END = "zoomEnd";
     self.EVENT_MOVE_END = "zoomEnd";
-    
+
     self.events = Worldview.Events();
-    
-    var init = function() {    
+
+    var init = function() {
         var $container = $("#" + containerId);
         if ( $container.length === 0 ) {
             throw new Error("No container for MapSet: " + containerId);
         }
-        
-        // Create map objects, one for each projection.     
+
+        // Create map objects, one for each projection.
         $.each(mapConfig.projections, function(projection, config) {
             config = validateMapConfig(config);
             if ( config.virtual ) {
                 return;
             }
             var id = "map-" + projection;
-            
+
             var newMap = createMap($container, id, projection, config);
             log.debug("newMap projection: " + newMap.projection);
-            
+
             // Put in a bogus layer to act as the base layer to make the
             // map happy for setting up the starting location
             var options = {
@@ -114,13 +114,13 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
             };
             var blankLayer = new OpenLayers.Layer("Blank", options);
             newMap.addLayer(blankLayer);
-            
+
             // If a starting location is provided, go there otherwise
             // zoom to max extent
             if ( config.startCenter || config.startZoom ) {
                 var startCenter = config.startCenter || [0, 0];
                 var startZoom = config.startZoom || 0;
-                log.debug(projection + " start: " + startCenter + ", " + 
+                log.debug(projection + " start: " + startCenter + ", " +
                         startZoom);
                 newMap.setCenter(startCenter, startZoom);
                 log.debug("Center is: " + newMap.getCenter() + ", " + newMap.getZoom());
@@ -128,11 +128,11 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
                 log.debug(projection + " start: maxExtent");
                 newMap.zoomToMaxExtent();
             }
-            
+
             newMap.layerSets = {};
             self.projections[projection] = newMap;
             activeLayers[projection] = [];
-            
+
             newMap.events.register("addlayer", self, onAddLayer);
             newMap.events.register("removelayer", self, onRemoveLayer);
             newMap.events.register("moveend", self, fireEvent);
@@ -143,14 +143,14 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
             newMap.events.register("zoomend", self, function() {
                 self.events.trigger(self.EVENT_ZOOM_END, newMap);
             });
-            
+
             // Keep track of center point on projection switch
             newMap.previousCenter = newMap.getCenter();
         });
         layerConfigs = mapConfig.layers;
-        
+
         self.setProjection(mapConfig.defaultProjection || "geographic");
-        
+
         $(document.body).mousemove(function(event) {
             /* FIXME: This code breaks other components, see WV-150
             newEvent = $.extend(true, {}, event);
@@ -162,34 +162,34 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
             */
         });
     };
-    
+
     /**
      * Method: setProjection
      * Changes the projection of the map.
-     * 
+     *
      * Parameters:
-     * projection - The name of the projection to use (e.g., "geographic", 
-     *              "arctic", "antarctic"). 
-     * 
+     * projection - The name of the projection to use (e.g., "geographic",
+     *              "arctic", "antarctic").
+     *
      * Throws:
      * An exception if the specified projection is not supported.
      */
-    self.setProjection = function(projection) { 
+    self.setProjection = function(projection) {
         if ( !(projection in self.projections) ) {
             throw new Error("Unsupported projection: " + projection);
         }
         log.debug("Switch projection: " + projection);
-        
+
         // Hide all map elements and then display only the ones for this
         // projection
         $(".map-projection").css("display", "none");
         $(".map-" + projection).css("display", "block");
-        
-        // Keep track of center point on projection switch        
+
+        // Keep track of center point on projection switch
         if ( self.map ) {
             self.map.previousCenter = self.map.getCenter();
         }
-        
+
         // Update convenience variables
         self.map = self.projections[projection];
         self.layers = activeLayers[projection];
@@ -197,19 +197,19 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
 
         // If the browser was resized, the inactive map was not notified of
         // the event. Force the update no matter what and reposition the center
-        // using the previous value.        
+        // using the previous value.
         self.map.updateSize();
         self.map.setCenter(self.map.previousCenter);
-        
+
         // Ensure the current layers are using the current day if this was
         // changed in the last projection
         self.setDay(currentDay);
     };
-    
+
     /**
      * Method: setDay
      * Display product data for the specified ay.
-     * 
+     *
      * Parameters:
      * day - Day to display as a Date object. If this is undefined or null,
      * this method does nothing.
@@ -218,42 +218,42 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
         if ( day ) {
             currentDay = day;
             $.each(self.map.layerSets, function(name, layer) {
-                layer.setDay(day); 
+                layer.setDay(day);
             });
             refreshZOrder();
         }
     };
-    
+
     self.setOpacity = function(layerName, opacity) {
         $.each(self.map.layerSets, function(name, layer) {
             if ( name == layerName ) {
                 var value = parseFloat(opacity);
                 if ( isNaN(value) ) {
-                    log.warn("Invalid opacity for layer " + layerName + ": " + 
+                    log.warn("Invalid opacity for layer " + layerName + ": " +
                             opacity);
                 } else {
                     layer.setOpacity(value);
                 }
-            }    
+            }
         });
     };
-    
-    /**         
+
+    /**
     * Method: set
-    * Set the layers that should be displayed on the map. 
-    * 
-    * Parameters: 
+    * Set the layers that should be displayed on the map.
+    *
+    * Parameters:
     * requestedLayers - Array of product names to show on the map. If a
     *   product is currently displayed, but is not in the array, it will be
     *   removed from the map. If a product is not currently displayed, but it
     *   is in the array, it will be added to the map.
-    * 
+    *
     * Throws:
     * An exception if the product for the given name is not defined.
     */
     self.set = function(requestedLayers, hiddenLayers) {
         var newLayers = [];
-        
+
         $.each(requestedLayers, function(index, layer) {
             if ( $.inArray(layer, self.layers) < 0 ) {
                 if ( add(layer) ) {
@@ -264,7 +264,7 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
             }
             if ( self.map.layerSets[layer] ) {
                 if ( $.inArray(layer, hiddenLayers) >= 0 ) {
-                    self.setVisibility(layer, false);    
+                    self.setVisibility(layer, false);
                 } else {
                     self.setVisibility(layer, true);
                 }
@@ -273,21 +273,21 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
         $.each(self.layers, function(index, layer) {
             if ( $.inArray(layer, requestedLayers) < 0 ) {
                 remove(layer);
-            } 
+            }
         });
         activeLayers[self.projection] = newLayers;
         self.layers = activeLayers[self.projection];
         refreshZOrder();
     };
-    
+
     self.setVisibility = function(layer, value, options) {
-        self.map.layerSets[layer].setVisibility(value, options);    
+        self.map.layerSets[layer].setVisibility(value, options);
     };
-    
+
     /**
      * Method: append
      * Appends a layer to the map which is displayed on top.
-     * 
+     *
      * Parameters:
      * product - Name of the product to append to the map. If the product
      *           already exsits, this method does nothing.
@@ -299,14 +299,14 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
         }
         var newLayers = $.extend([], self.layers);
         newLayers.push(layer);
-        self.set(newLayers); 
-        refreshZOrder();   
+        self.set(newLayers);
+        refreshZOrder();
     };
-    
+
     /**
      * Method: setPalettes
      * Sets which products should have custom palettes applied.
-     * 
+     *
      * Parameters:
      * activePalettes - An object which has product names as properties
      * and palette names as values.
@@ -320,14 +320,14 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
                     var layerConfig = self.mapConfig.layers[layerName];
                     var renderedName = layerConfig.rendered;
                     var renderedPalette = self.mapConfig.palettes[renderedName];
-                    
+
                     if ( !renderedPalette ) {
-                        log.warn(productName + " does not support palettes");
+                        log.warn(layerName + " does not support palettes");
                         return;
                     }
                     // Find the palette that should be used instead
                     var palette = self.mapConfig.palettes[paletteName];
-                    
+
                     if ( !palette ) {
                         log.warn("No such palette: " + paletteName);
                         return;
@@ -338,8 +338,8 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
                         layerConfig.bins, palette, layerConfig.stops);
                     var lookup = Worldview.Palette.toColorLookup(
                         indexed, renderedPalette.stops);
-                        
-                    // Apply     
+
+                    // Apply
                     layer.setLookup(lookup);
                 } else {
                     layer.clearLookup();
@@ -347,25 +347,25 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
             });
         });
     };
-        
+
     //-------------------------------------------------------------------------
     // Private
     //-------------------------------------------------------------------------
-    
+
     var fireEvent = function() {
         REGISTRY.fire(component);
     };
-    
-    /* 
+
+    /*
      * Adds a product of the given name to map. Returns true if the product
      * was added or already exists, false if the product is not supported
      * by the projection.
-     */    
+     */
     var add = function(name) {
         if ( name === "NON_EXISTENT_LAYER" ) {
             return;
         }
-        
+
         var layerConfig = layerConfigs[name];
         if ( !layerConfig ) {
             log.warn("No such layer: " + name);
@@ -375,11 +375,11 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
             log.warn("Layer already added: " + name);
             return true;
         }
-        
+
         var supported = false;
         if ( self.projection in layerConfig.projections ) {
             log.debug("Adding layer: " + name);
-            var layer = createLayer(self.map, self.projection, 
+            var layer = createLayer(self.map, self.projection,
                     layerConfigs[name]);
             layer.setDay(currentDay);
             self.map.layerSets[name] = layer;
@@ -390,72 +390,72 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
         }
         return supported;
     };
-        
+
     /*
      * Removes the given product from the map.
      */
-    var remove = function(name) {        
+    var remove = function(name) {
         if ( $.inArray(name, self.layers) < 0 ) {
             log.warn("Layer has not been added: " + name);
             return;
-        }   
+        }
         var layer = self.map.layerSets[name];
         if ( layer ) {
             log.debug("Removing layer: " + name);
             layer.dispose();
-            delete self.map.layerSets[name]; 
+            delete self.map.layerSets[name];
         } else {
             log.warn("Layer does not exist: " + name);
-        }       
+        }
     };
-        
+
     /*
      * The order of the layers in the OpenLayers.Map object is not used
      * to determine the z-index but is done manually instead since this
-     * is much easier. Change the z-index for for each product based on 
-     * its positition in the products array. 
-     */    
+     * is much easier. Change the z-index for for each product based on
+     * its positition in the products array.
+     */
     var refreshZOrder = function() {
-        $.each(self.layers, function(index, name) { 
+        $.each(self.layers, function(index, name) {
             var layer = self.map.layerSets[name];
             if ( layer ) {
                 layer.setZIndex(index * 2);
             }
         });
     };
-    
+
     /*
      * Creates the OpenLayers.Map object and all associated controls.
      */
     var createMap = function($div, id, projection, spec) {
-        
+
         var config = $.extend(true, {}, spec);
-        // OpenLayers uses "projection" for the map object. We use "crs" 
+        // OpenLayers uses "projection" for the map object. We use "crs"
         // instead
-        config.projection = config.crs; 
-        
+        config.projection = config.crs;
+
         // Zooming feature is not as fluid as advertised
         config.zoomMethod = null;
-        
+
         // Don't let OpenLayers fetch the stylesheet -- that is included
         // manually.
         config.theme = null;
-        
+
         var controls = [];
-        
+
         $("<div></div>")
             .appendTo($div)
             .attr("id", id)
             .addClass("map-projection")
             .addClass(id);
-        
+
         var mapClass = "map-projection " + id + " ";
-        
-        // Create zoom in/out controls                
+
+        // Create zoom in/out controls
         var zoomInControl = new OpenLayers.Control.ZoomIn();
         zoomInControl.title = "zoom in";
         zoomInControl.displayClass = mapClass + "olControlZoomInCustom";
-        
+
         var zoomOutControl = new OpenLayers.Control.ZoomOut();
         zoomOutControl.title = "zoom out";
         zoomOutControl.displayClass = mapClass + "olControlZoomOutCustom";
@@ -466,40 +466,40 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
         zoomPanel.addControls(zoomInControl);
         zoomPanel.addControls(zoomOutControl);
         controls.push(zoomPanel);
-       
+
         // Add navigation controls
         controls.push(new OpenLayers.Control.Navigation({
             dragPanOptions: {
                 enableKinetic: true
             }
         }));
-       
+
         // While these aren't controls, per se, they are extra decorations
         controls.push(new OpenLayers.Control.Attribution());
         controls.push(new OpenLayers.Control.ScaleLine({
             displayClass: mapClass + "olControlScaleLineCustom",
             maxWidth: 175,
-        }));        
-        
-        var coordinateControl = 
-                Worldview.Map.COORDINATE_CONTROLS[projection];     
+        }));
+
+        var coordinateControl =
+                Worldview.Map.COORDINATE_CONTROLS[projection];
         if ( coordinateControl ) {
             controls.push(coordinateControl);
         } else {
             log.warn("No coordinate control for projection " + projection);
         }
-        
+
         config.controls = controls;
         var m = new OpenLayers.Map(id, config);
 
-        var navControl = 
+        var navControl =
                 m.getControlsByClass("OpenLayers.Control.Navigation")[0];
         navControl.handlers.wheel.interval = 100;
         navControl.handlers.wheel.cumulative = false;
-        
-        return m;        
+
+        return m;
     };
-    
+
     /*
      * Validates the configuraiton for the OpenLayers.Map object, provides
      * any missing defaults, and does any object conversions as needed.
@@ -514,28 +514,28 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
 
     /*
      * Merges in any projection specific properties.
-     */    
+     */
     var createLayer = function(map, proj, config) {
         if ( self.mapConfig.parameters.mockMap ) {
             return Worldview.Map.MockLayerSet();
         }
-        
+
         config = $.extend(true, {}, config);
-        
+
         if ( config.properties === undefined ) {
-            config.properties = {};    
+            config.properties = {};
         }
-        
+
         // Merge in any projection specific properties
-        config.properties = $.extend(true, config.properties, 
+        config.properties = $.extend(true, config.properties,
                                      config.projections[proj]);
-        delete config.projections;  
-                  
+        delete config.projections;
+
         if ( !config.properties.projection ) {
             config.properties.projection = mapConfig.projections[proj].projection;
         }
         if ( config.parameters ) {
-            config.parameters.projection = 
+            config.parameters.projection =
                 mapConfig.projections[proj].projection;
         }
         if ( config.period === "daily" ) {
@@ -545,7 +545,7 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
         }
         throw new Error("Unsupported product type: " + config.period);
     };
-    
+
     var onZoomEnd = function(evt) {
         // "Disable" zoom in icon if zoomed to highest level
         // TODO: fix "color" updates since they don't currently have an effect
@@ -561,7 +561,7 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
             $('.olControlZoomInCustomItemInactive', '.map-' + self.projection)
                 .css("color", "#FFFFFF");
         }
-    
+
         // "Disable" zoom out icon if zoomed to lowest level
         if ( self.map.zoom === 0 ) {
             $('.olControlZoomOutCustomItemInactive', '.map-' + self.projection)
@@ -574,43 +574,43 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
                 .css("background-color", "rgba(45,50,55,0.70)");
             $('.olControlZoomOutCustomItemInactive', '.map-' + self.projection)
                 .css("color", "#FFFFFF");
-        }           
+        }
     };
-      
+
     var onAddLayer = function(event) {
         var layer = event.layer;
-        
+
         var onLoadStart = function() {
             logLoad.debug("Layer load start");
             if ( layersLoading === 0 ) {
                 logLoad.debug("Map load start");
                 self.map.events.triggerEvent("maploadstart");
             }
-            layersLoading++;           
+            layersLoading++;
         };
-        
+
         var onLoadEnd = function() {
             logLoad.debug("Layer load end");
             if ( layersLoading === 1 ) {
                 logLoad.debug("Map load end");
                 self.map.events.triggerEvent("maploadend");
-            }  
+            }
             if ( layersLoading > 0 ) {
                 layersLoading--;
             }
         };
-                   
+
         layer.events.register("loadstart", layer, onLoadStart);
         layer.events.register("loadend", layer, onLoadEnd);
         onLoadStart();
 
         refreshZOrder();
     };
-    
+
     var onRemoveLayer = function(event) {
         refreshZOrder();
     };
-           
+
     init();
     return self;
 };
