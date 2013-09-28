@@ -1,35 +1,35 @@
 Worldview.namespace("Tour");
 
 (function(ns) {
-    
+
     var log = Logging.getLogger("Worldview.Tour");
-    
+
     // ns = Worldview.Tour
-    
+
     // Keep these around in a closure so we can dispose of them as needed
     var conclusionPanel = null;
     var splashOverlay = null;
 
     /**
      * Create the splash screen and tour panels and control iteration over them.
-     */        
+     */
     ns.start = function(storageEngine, hideSplash, noDisable) {
-                    
+
         // determine screen size - don't show if too small
         var devWidth = window.screen.availWidth;
         var devHeight = window.screen.availHeight;
-        
+
         var viewWidth = $(window).width();
         var viewHeight = $(window).height();
-        
+
         if(viewWidth < 768 || viewHeight < 600) {
             if(noDisable) {
                 Worldview.notify("Unfortunately the Worldview tour can only be viewed in larger web browser windows.");
             }
             return;
         }
-        
-        
+
+
         // set up storage and decide whether to show the splash
 //        var storageEngine;
 //        try {
@@ -46,24 +46,24 @@ Worldview.namespace("Tour");
 //            alert("No supported storage mechanism present");
 //            storageEngine = false;
 //        }
-        
+
 //        var hideSplash;
 //        if(storageEngine) {
 //            storageEngine.subscribe(storageEngine.CE_READY, function() {
 //                hideSplash = storageEngine.getItem('hideSplash');
 //            });
 //        }
-        
+
         // return if the user has disabled the splash
-        if(hideSplash && !noDisable) {   
+        if(hideSplash && !noDisable) {
             return;
         }
-        
+
         /* --- Set Up --- */
-    
+
         var padding = 15; // padding - used for all of the tour windows
         var pos, width, height, xval, yval; // helpful calculation vars
-        
+
         // splash screen overlay
         if(splashOverlay){
             splashOverlay.destroy();
@@ -78,11 +78,11 @@ Worldview.namespace("Tour");
                        "<h3>Welcome to Worldview!</h3>"+
                        "</br></br>"+
                        "<center>"+
-                           "<p class=\"splashwelcome\">This tool from NASA's <a href='http://earthdata.nasa.gov/about-eosdis' target='_blank'>EOSDIS</a> allows users to interactively browse satellite imagery in near real-time, generally within 3 hours of observation.  Use the tools described below to change the imagery on the map and compare it to past observations.</p>"+  
+                           "<p class=\"splashwelcome\">This tool from NASA's <a href='http://earthdata.nasa.gov/about-eosdis' target='_blank'>EOSDIS</a> allows users to interactively browse satellite imagery in near real-time, generally within 3 hours of observation.  Use the tools described below to change the imagery on the map and compare it to past observations.</p>"+
                            "</br></br>"+
                            "<table id=\"splashTable\" class=\"splash\">"+
                                "<tr>"+
-                                   "<td><img src=\"images/tour-picker.png\" alt=\"Product Picker\" width=\"100\" height=\"108\" class=\"splash\"/></td>"+
+                                   "<td><img src=\"images/tour-picker-0.6.png\" alt=\"Product Picker\" width=\"100\" height=\"85\" class=\"splash\"/></td>"+
                                    "<td><img src=\"images/tour-date.png\" alt=\"Date Slider\" width=\"100\" class=\"splash\"/></td>"+
                                    "<td><img src=\"images/tour-toolbar.png\" alt=\"Toolbar\" width=\"100\" class=\"splash\"/></td>"+
                                    "<td><img src=\"images/tour-map.png\" alt=\"Map\" width=\"100\" class=\"splash\"/></td>"+
@@ -103,15 +103,15 @@ Worldview.namespace("Tour");
                                "<tr></tr>"+
                                "<tr>"+
                                    finalRow +
-                               "</tr>"+ 
+                               "</tr>"+
                            "</table>"+
                        "</center>"+
                    "</div>";
-        
+
         splashOverlay.setBody(item);
         splashOverlay.show();
 
-        
+
         /* set up all of the callout panels */
         var productText = "<div>"+
                               "<h3>Layer Picker - Base Layers</h3>"+
@@ -132,7 +132,7 @@ Worldview.namespace("Tour");
                               "</br>"+
                           "</div>";
         document.getElementById("productBasePanel").innerHTML = productText;
-        
+
         var overlayText = "<div>"+
                               "<h3>Layer Picker - Overlays</h3>"+
                               "</br></br>"+
@@ -149,7 +149,7 @@ Worldview.namespace("Tour");
                               "</br>"+
                           "</div>";
         document.getElementById("productOverlayPanel").innerHTML = overlayText;
-         
+
         var dateText = "<div class=\"tour\">"+
                            "<h3>Date Slider</h3>"+
                            "</br></br>"+
@@ -158,7 +158,7 @@ Worldview.namespace("Tour");
                            "<p class='tour'>Use the date slider to change the date to 2012 Aug 23.</p>"+
                        "</div>";
         document.getElementById("datePanel").innerHTML = dateText;
-        
+
         var toolbarText = "<div>"+
                               "<h3>Toolbar</h3>"+
                               "</br></br>"+
@@ -167,7 +167,7 @@ Worldview.namespace("Tour");
                                   "<tr>" +
                                       "<td><img src=\"images/permalinkon.png\"/></td>"+
                                       "<td><p class=\"tour\">The permalink icon lets you create a permanent, shareable link to a particular view in Worldview.</p></td>"+
-                                  "</tr>" + 
+                                  "</tr>" +
                                   "<tr>" +
                                       "<td><img src=\"images/globe.png\"/></td>"+
                                       "<td><p class=\"tour\">The globe icon lets you change between Arctic, geographic, and Antarctic projections of the world.</p></td>"+
@@ -175,7 +175,7 @@ Worldview.namespace("Tour");
                                   "<tr>" +
                                       "<td><img src=\"images/camera.png\"/></td>"+
                                       "<td><p class=\"tour\">The camera icon lets you download an image of your current view in Worldview. User-selected palettes are not yet supported with this feature.</p></td>"+
-                                  "</tr>" + 
+                                  "</tr>" +
                                   "<tr>" +
                                       "<td><img src=\"images/informationon.png\"/></td>"+
                                       "<td><p class=\"tour\">The information icon provides you with more information on Worldview and its data sources.</p></td>"+
@@ -184,7 +184,7 @@ Worldview.namespace("Tour");
                               "</br>"+
                           "</div>";
         document.getElementById("toolbarPanel").innerHTML = toolbarText;
-        
+
         var mapText = "<div>"+
                           "<h3>Map</h3>"+
                           "</br></br>"+
@@ -203,9 +203,9 @@ Worldview.namespace("Tour");
                           "<img src=\"images/tour-fire-location.png\" alt=\"Location\" width=\"200\" class=\"splash\"/>"+
                           "</br>"+
                       "</div>";
-                      
-        document.getElementById("mapPanel").innerHTML = mapText;   
-        
+
+        document.getElementById("mapPanel").innerHTML = mapText;
+
         var mapAnchor = document.getElementById("mapPanelTourAnchor");
         if(!mapAnchor) {
         	console.log("creating mapanchor");
@@ -215,14 +215,14 @@ Worldview.namespace("Tour");
         	mapAnchor.setAttribute("style", "float:right; height:68px; right:14px; top:90px; width:36px; position:relative; z-index:-1");
         	owner.appendChild(mapAnchor);
         }
-    
-    
+
+
         /* conclusion screen after completing the tour */
         if(conclusionPanel){
             conclusionPanel.destroy();
         }
-        conclusionPanel = new YAHOO.widget.Panel("conclusionPanel", { zIndex:1020, 
-                                                                      visible:false, 
+        conclusionPanel = new YAHOO.widget.Panel("conclusionPanel", { zIndex:1020,
+                                                                      visible:false,
                                                                       modal:true,
                                                                       draggable:false});
         var conclusionText = "<div class=\"splash\">"+
@@ -239,10 +239,10 @@ Worldview.namespace("Tour");
                                      "</table>"+
                                  "</center>"+
                              "</div>";
-                      
-        conclusionPanel.setBody(conclusionText);    
-    
-    
+
+        conclusionPanel.setBody(conclusionText);
+
+
         /*
          * Restart the tour at the beginning.
          */
@@ -259,11 +259,11 @@ Worldview.namespace("Tour");
                                                      conclusionPanel.show();
                                                      conclusionPanel.center();
                                                  }
-                                             }});   
+                                             }});
             conclusionPanel.hide();
             log.debug("exiting repeat");
         };
-        
+
         /*
          * Hide the tour.
          */
@@ -273,14 +273,14 @@ Worldview.namespace("Tour");
             conclusionPanel.hide();
             log.debug("exiting tour done");
         };
-    
+
         /*
          * Close the splash and go straight to worldview.
          */
         var handleSkipTour = function() {
             splashOverlay.hide();
         };
-        
+
         /*
          * Close the splash and start the tour.
          */
@@ -288,7 +288,7 @@ Worldview.namespace("Tour");
             log.debug("handleTakeTour " + e.target.id);
             e.stopPropagation();
             splashOverlay.hide();
-            
+
             $('#joyRideTipContent').joyride({adjustForPhone:false,
             								 bordered:true,
             								 includepage:true,
@@ -300,23 +300,23 @@ Worldview.namespace("Tour");
                                                      conclusionPanel.show();
                                                      conclusionPanel.center();
                                                  }
-                                             }});   
+                                             }});
         };
-         
-        /* 
+
+        /*
          * Toggle the value of the "hideSplash" flag.
          */
         var setDoNotShow = function() {
             hideSplash = storageEngine.getItem('hideSplash');
             storageEngine.setItem('hideSplash', !hideSplash);
         };
-            
-            
+
+
         $(window).resize(function() {
         	 splashOverlay.center();
         	 conclusionPanel.center();
         });
-        
+
         // assign events and start
         YAHOO.util.Event.on('takeTour', 'click', handleTakeTour);
         YAHOO.util.Event.on('skipTour', 'click', handleSkipTour);
@@ -324,14 +324,14 @@ Worldview.namespace("Tour");
         YAHOO.util.Event.on('repeat', 'click', repeatTour);
         YAHOO.util.Event.on('done', 'click', handleDone);
         log.debug("set all handlers");
-        
+
         splashOverlay.render(document.body);
         conclusionPanel.render(document.body);
         splashOverlay.show();
         splashOverlay.center();
     };
-        
+
 })(Worldview.Tour);
 
-	
+
 

@@ -108,6 +108,9 @@ Worldview.DataDownload.Model = function(config) {
     self.activate = function(productName) {
         if ( !self.active ) {
             try {
+                if ( productName ) {
+                    validateProduct(productName);
+                }
                 self.active = true;
                 self.events.trigger(self.EVENT_ACTIVATE);
                 if ( productName ) {
@@ -398,6 +401,20 @@ Worldview.DataDownload.Model = function(config) {
             }
         }
         return foundProduct;
+    };
+
+    var validateProduct = function(productName) {
+        var found = false;
+        $.each(self.layers, function(index, layer) {
+            var layerProduct = layer.product;
+            if ( layerProduct === productName ) {
+                found = true;
+                return false;
+            }
+        });
+        if ( !found ) {
+            throw Error("No layer displayed for product: " + productName);
+        }
     };
 
     init();
