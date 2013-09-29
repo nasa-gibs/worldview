@@ -223,7 +223,11 @@ SOTE.widget.Selector.loadCategory = function(e){
 		var itemHead = document.createElement("h4");
 		if ( self.config.parameters.markPalettes ) {
 		    if ( self.config.layers[item.value].rendered ) {
-		        itemHead.setAttribute("class", "palette");
+		        itemHead.setAttribute("class", "mark");
+		    }
+		} else if ( self.config.parameters.markDownloads ) {
+		    if ( self.config.layers[item.value].product ) {
+		      itemHead.setAttribute("class", "mark");
 		    }
 		}
 		var formatted = item.value.replace(/:/g,"colon");

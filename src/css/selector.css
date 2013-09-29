@@ -44,7 +44,7 @@ color:#000; background: rgba(238,238,238,0.85);}
 div.facetedSearch {display:block; background:#fff; width:96%; margin: .5em auto; border-radius: 5px; }
 #selectorboxcontent { height:100%;}
 
-.selector li.item h4.palette {
+.selector li.item h4.mark {
     font-weight: bold;
     color: red;
 }
