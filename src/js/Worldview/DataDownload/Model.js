@@ -208,7 +208,9 @@ Worldview.DataDownload.Model = function(config) {
 
         if ( self.active ) {
             self.events.trigger(self.EVENT_PRODUCT_SELECT, self.selectedProduct);
-            query();
+            if ( productName ) {
+                query();
+            }
         }
     };
 
@@ -387,7 +389,8 @@ Worldview.DataDownload.Model = function(config) {
         }
         self.projection = state.projection;
         self.crs = state.crs;
-        query();
+        //query();
+        self.selectProduct(null);
     };
 
     var findAvailableProduct = function() {
