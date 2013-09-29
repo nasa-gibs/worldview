@@ -1,10 +1,10 @@
 /*
  * NASA Worldview
- * 
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project. 
  *
- * Copyright (C) 2013 United States Government as represented by the 
+ * This code was originally developed at NASA/Goddard Space Flight Center for
+ * the Earth Science Data and Information System (ESDIS) project.
+ *
+ * Copyright (C) 2013 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
@@ -17,35 +17,37 @@ Worldview.namespace("DataDownload.Handler");
 Worldview.DataDownload.Handler.Base = function(config, model) {
 
     var self = {};
-    
+
     self.events = Worldview.Events();
     self.echo = null;
     self.ajax = null;
-    
+
     var init = function() {
         var ns = Worldview.DataDownload.Handler.Base;
-        
+
         if ( !ns.echo ) {
             if ( config.parameters.mockECHO ) {
                 ns.echo = Worldview.DataDownload.ECHO.MockClient(
                         config.parameters.mockECHO);
             } else {
-                ns.echo = Worldview.DataDownload.ECHO.Client();
+                ns.echo = Worldview.DataDownload.ECHO.Client({
+                    timeout: config.parameters.timeoutECHO
+                });
             }
         }
         self.echo = ns.echo;
-        
+
         if ( !ns.ajax ) {
             ns.ajax = Worldview.AjaxCache();
         }
-        self.ajax = ns.ajax; 
-        
+        self.ajax = ns.ajax;
+
         self.extents = {};
         $.each(config.projections, function(key, projection) {
             self.extents[projection.crs] = projection.maxExtent;
         });
     };
-    
+
     self.submit = function() {
         var productConfig = config.products[model.selectedProduct].query;
         var queryData = $.extend(true, {}, productConfig);
@@ -68,9 +70,9 @@ Worldview.DataDownload.Handler.Base = function(config, model) {
         // FIXME: Deprecated API use
         if ( !promise.isResolved() && !promise.isRejected() ) {
             self.events.trigger("query");
-        }              
+        }
     };
-        
+
     init();
     return self;
 };
