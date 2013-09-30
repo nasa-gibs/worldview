@@ -16,9 +16,6 @@ Worldview.namespace("Tour");
     ns.start = function(storageEngine, hideSplash, noDisable) {
                     
         // determine screen size - don't show if too small
-        var devWidth = window.screen.availWidth;
-        var devHeight = window.screen.availHeight;
-        
         var viewWidth = $(window).width();
         var viewHeight = $(window).height();
         
@@ -28,31 +25,6 @@ Worldview.namespace("Tour");
             }
             return;
         }
-        
-        
-        // set up storage and decide whether to show the splash
-//        var storageEngine;
-//        try {
-//            storageEngine = YAHOO.util.StorageManager.get(
-//                YAHOO.util.StorageEngineHTML5.ENGINE_NAME,
-//                YAHOO.util.StorageManager.LOCATION_LOCAL,
-//                {
-//                    force: false,
-//                    order: [
-//                        YAHOO.util.StorageEngineHTML5
-//                    ]
-//                });
-//        } catch(e) {
-//            alert("No supported storage mechanism present");
-//            storageEngine = false;
-//        }
-        
-//        var hideSplash;
-//        if(storageEngine) {
-//            storageEngine.subscribe(storageEngine.CE_READY, function() {
-//                hideSplash = storageEngine.getItem('hideSplash');
-//            });
-//        }
         
         // return if the user has disabled the splash
         if(hideSplash && !noDisable) {   
@@ -86,23 +58,24 @@ Worldview.namespace("Tour");
                                    "<td><img src=\"images/tour-date.png\" alt=\"Date Slider\" width=\"100\" class=\"splash\"/></td>"+
                                    "<td><img src=\"images/tour-toolbar.png\" alt=\"Toolbar\" width=\"100\" class=\"splash\"/></td>"+
                                    "<td><img src=\"images/tour-map.png\" alt=\"Map\" width=\"100\" class=\"splash\"/></td>"+
+                                   "<td><img src=\"images/tour-events.png\" alt=\"Events\" width=\"100\" class=\"splash\"/></td>" +
                                "</tr>"+
                                "<tr>"+
-                                   "<td><p class=\"splash\">Use the <span class=\"highlight\">Product Picker</span> on the left to choose the type of imagery to display on the map.</p></td>"+
+                                   "<td><p class=\"splash\">Use the <span class=\"highlight\">Layer Picker</span> on the left to choose the type of imagery to display on the map.</p></td>"+
                                    "<td><p class=\"splash\">Use the <span class=\"highlight\">Date Slider</span> on the bottom to choose the date of the observations.</p></td>"+
                                    "<td><p class=\"splash\">Use the <span class=\"highlight\">Tool Bar</span> at the top to see other tools for changing and saving the view.</p></td>"+
                                    "<td><p class=\"splash\">Use the <span class=\"highlight\">Map</span> itself to pan or zoom in on an area.</p></td>"+
+                                   "<td><p class=\"splash\">Use the <span class=\"highlight\">Recent Events</span> feature to look at recent natural events taking place around the world.</p></td>"+
                                "</tr>"+
                                "<tr>"+
                                "<td><p></p></td>"+
                                "</tr>"+
                                "<tr>"+
-                                   "<td rowspan=\"2\" colspan=\"2\"><button id='takeTour' type='button' class=\"takeTour\"; background-image:url('../images/splash-button.png')\">Take Tour</button></td>"+
-                                   "<td rowspan=\"2\" colspan=\"2\"><button id='skipTour' type='button' class=\"skipTour\">Skip Tour</button></td>"+
+                                   "<td rowspan=\"2\" colspan=\"5\" ><p style=\"text-align:center\"><button id='takeTour' type='button' class=\"takeTour\"; background-image:url('../images/splash-button.png')\">Take Tour</button><button id='skipTour' type='button' class=\"skipTour\">Skip Tour</button></div></p></td>"+
                                "</tr>"+
                                "<tr></tr>"+
                                "<tr>"+
-                                   finalRow +
+                                   //finalRow +
                                "</tr>"+ 
                            "</table>"+
                        "</center>"+
@@ -216,6 +189,20 @@ Worldview.namespace("Tour");
         	owner.appendChild(mapAnchor);
         }
     
+    	var eventsText = "<div>"+
+                          "<h3>Recent Events</h3>"+
+                          "</br></br>"+
+                          "<p class='tour'>The Recent Events feature shows natural hazard events that are taking place around the world.  You can click on an event to: </p>"+
+                          "<ul class='tour'>"+
+                              "<li>See a description of the event</li>"+
+                              "<li>View the event in Worldview</li>"+
+                              "<li>Get a link to the Earth Observatory story about the event</li>"+
+                          "</ul>"+
+                          "</br>"+
+                          "<p class='tour'>When the feature is collapsed, it will show you how many new events have been added since your last visit.  When you expand the feature, the new events will be highlighted.</p>" +
+                      "</div>";
+    
+    	document.getElementById("eventsPanel").innerHTML = eventsText; 
     
         /* conclusion screen after completing the tour */
         if(conclusionPanel){
@@ -231,12 +218,8 @@ Worldview.namespace("Tour");
                                      "</br></br>"+
                                      "<p class='splashwelcome'>You have now completed a tour of Worldview!  If you followed the “Try It” steps, you’re now looking at fires in northern California as they were observed by satellites on August 23, 2012.   You can use the tools in any order.  We hope you continue exploring!  <p>"+
                                      "</br>"+
-                                     "<table class='tour'>"+
-                                         "<tr>"+
-                                             "<td rowspan=\"2\" colspan=\"2\"><button id='repeat' type='button' class='repeatTour'>Repeat Tour</button></td>"+
-                                             "<td rowspan=\"2\" colspan=\"2\"><button id='done' type='button' class='done'>Done!</button></td>"+
-                                         "</tr>"+
-                                     "</table>"+
+                                     "<p style=\"text-align:center\"><button id='repeat' type='button' class='repeatTour'>Repeat Tour</button><button id='done' type='button' class='done'>Done!</button></p>"+
+                                     "</br>" +
                                  "</center>"+
                              "</div>";
                       
@@ -254,7 +237,7 @@ Worldview.namespace("Tour");
             								 includepage:true,
             								 template : {'link':'<a href="#" class="joyride-close-tip">X</a>'},
                                              postStepCallback : function (index, tip) {
-                                                 if(index == 4) {
+                                                 if(index == 5) {
                                                      log.debug("finished tour");
                                                      conclusionPanel.show();
                                                      conclusionPanel.center();
@@ -295,7 +278,7 @@ Worldview.namespace("Tour");
             								 template : {'link':'<a href="#" class="joyride-close-tip">X</a>'},
                                              postStepCallback : function (index, tip) {
                                              	console.log("index = " + index);
-                                                 if(index == 4) {
+                                                 if(index == 5) {
                                                      log.debug("finished tour");
                                                      conclusionPanel.show();
                                                      conclusionPanel.center();
