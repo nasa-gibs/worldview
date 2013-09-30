@@ -133,7 +133,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
         var extent = map.getExtent().toGeometry();
         log.debug("view changed", extent);
         $.each(lastResults.granules, function(index, granule) {
-            if ( granule.centroid ) {
+            if ( granule.centroid && granule.centroid[map.projection] ) {
                 hasCentroids = true;
                 if ( extent.intersects(granule.centroid[map.projection]) ) {
                     inView = true;
