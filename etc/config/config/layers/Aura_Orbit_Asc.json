@@ -1,6 +1,6 @@
 {
     "description": "Space-Track.org / Aura",
-    "name": "Orbital Track (Ascending)",
+    "name": "Orbital Track (Ascending/Day)",
     "parameters": {
         "format": "image/png",
         "layers": "Aura_Orbit_Asc",

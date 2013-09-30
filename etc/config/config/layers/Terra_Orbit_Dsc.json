@@ -1,6 +1,6 @@
 {
     "description": "Space-Track.org / Terra",
-    "name": "Orbital Track (Descending)",
+    "name": "Orbital Track (Descending/Day)",
     "parameters": {
         "format": "image/png",
         "layers": "Terra_Orbit_Dsc",

@@ -1,10 +1,10 @@
 /*
  * NASA Worldview
- * 
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project. 
  *
- * Copyright (C) 2013 United States Government as represented by the 
+ * This code was originally developed at NASA/Goddard Space Flight Center for
+ * the Earth Science Data and Information System (ESDIS) project.
+ *
+ * Copyright (C) 2013 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
@@ -13,15 +13,15 @@ Worldview.namespace("Widget");
 
 /**
  * Handles UI interactions with the Data Download model.
- * 
+ *
  * @module Worldview.Widget
  * @class DataDownload
  * @constructor
- * 
+ *
  * @param model {Worldview.DataDownload.Model} FIXME
- * 
+ *
  * @param config Worldview config
- * 
+ *
  * @param spec.selector {string} jQuery selector for where the mode activation
  * button should be rendered.
  */
@@ -29,22 +29,22 @@ Worldview.Widget.DataDownload = function(config, spec) {
 
     var log = Logging.getLogger("Worldview.DataDownload");
     //Logging.debug("Worldview.DataDownload");
-            
+
     var HTML_WIDGET_INACTIVE = "<img src='images/camera.png'></img>";
     var HTML_WIDGET_ACTIVE = "<img src='images/cameraon.png'></img>";
-   
+
     var queryActive = false;
     var list = null;
-    var model = spec.model; 
+    var model = spec.model;
     var mapController = null;
     var selectionListPanel = null;
     var downloadListPanel = null;
     var lastResults = null;
-    
+
     var self = {};
     self.containerId = "DataDownload";
-    
-    var init = function() {        
+
+    var init = function() {
         model.events
             .on("activate", onActivate)
             .on("deactivate", onDeactivate)
@@ -57,12 +57,12 @@ Worldview.Widget.DataDownload = function(config, spec) {
             .on("queryTimeout", onQueryTimeout)
             .on("granuleSelect", updateSelection)
             .on("granuleUnselect", updateSelection);
-        
+
         REGISTRY.register(self.containerId, self);
-        REGISTRY.markComponentReady(self.containerId);   
-        self.updateComponent();     
-    };    
-    
+        REGISTRY.markComponentReady(self.containerId);
+        self.updateComponent();
+    };
+
     self.updateComponent = function(queryString) {
         try {
             model.update(REGISTRY.getState());
@@ -70,7 +70,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
             Worldview.error("Internal error", error);
         }
     };
-    
+
     self.getValue = function() {
         if ( model.active ) {
             return "dataDownload=" + model.selectedProduct;
@@ -78,24 +78,29 @@ Worldview.Widget.DataDownload = function(config, spec) {
             return "";
         }
     };
-    
+
     self.setValue = function(value) {
         throw new Error("Unsupported: setValue");
     };
-    
+
     self.loadFromQuery = function(queryString) {
         var query = Worldview.queryStringToObject(queryString);
         if ( query.dataDownload ) {
-            var state = REGISTRY.getState(queryString);
-            model.activate(query.dataDownload);
-        } 
+            try {
+                var state = REGISTRY.getState(queryString);
+                model.activate(query.dataDownload);
+            } catch ( error ) {
+                log.warn("Invalid data download parameter: " + error);
+                model.activate();
+            }
+        }
     };
-    
+
     self.render = function() {
         var tabs_height = $(".ui-tabs-nav").outerHeight(true);
         $(spec.selector).addClass('bank');
-        $(spec.selector).height($(spec.selector).parent().outerHeight() - tabs_height); 
-        
+        $(spec.selector).height($(spec.selector).parent().outerHeight() - tabs_height);
+
         list = new SOTE.widget.List(self.containerId, {
             config: config,
             data: [],
@@ -104,7 +109,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
             filter: true,
             search: false,
             action: {
-                text: "Download", 
+                text: "Download",
                 callback: function() { showDownloadList(); }
             },
             selectableCategories: {
@@ -115,7 +120,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
             args: self
         });
     };
-    
+
     self.onViewChange = function(map) {
         if ( !model.active || queryActive || !lastResults ) {
             return;
@@ -128,13 +133,13 @@ Worldview.Widget.DataDownload = function(config, spec) {
         var extent = map.getExtent().toGeometry();
         log.debug("view changed", extent);
         $.each(lastResults.granules, function(index, granule) {
-            if ( granule.centroid ) {
+            if ( granule.centroid && granule.centroid[map.projection] ) {
                 hasCentroids = true;
                 if ( extent.intersects(granule.centroid[map.projection]) ) {
                     inView = true;
                     return true;
                 }
-            } 
+            }
         });
         log.debug("hasCentroids", hasCentroids, "inView", inView);
         if ( hasCentroids && !inView ) {
@@ -143,22 +148,22 @@ Worldview.Widget.DataDownload = function(config, spec) {
             Worldview.Indicator.hide();
         }
     };
-    
+
     var toggleMode = function() {
-        model.toggleMode();           
+        model.toggleMode();
     };
-    
+
     var onActivate = function() {
         log.debug("activate");
-        
+
         if ( !mapController ) {
-            mapController = 
+            mapController =
                 Worldview.DataDownload.MapController(model, spec.maps, config);
         }
         updateSelection();
         onLayerUpdate();
     };
-    
+
     var onDeactivate = function() {
         log.debug("deactivate");
         Worldview.Indicator.hide();
@@ -169,12 +174,12 @@ Worldview.Widget.DataDownload = function(config, spec) {
             downloadListPanel.hide();
         }
     };
-    
+
     var onProductSelect = function(product) {
         log.debug("selectProduct", product);
         list.selectCategory(product);
     };
-    
+
     var onLayerUpdate = function() {
         if ( !model.active ) {
             return;
@@ -183,19 +188,19 @@ Worldview.Widget.DataDownload = function(config, spec) {
         list.selected = list.unserialize(model.getProductsString())[1];
         list.update();
     };
-    
+
     var onQuery = function() {
         queryActive = true;
         log.debug("query");
         Worldview.Indicator.searching();
-        if ( selectionListPanel ) { 
-            selectionListPanel.hide(); 
+        if ( selectionListPanel ) {
+            selectionListPanel.hide();
         }
         if ( downloadListPanel ) {
             downloadListPanel.hide();
         }
     };
-    
+
     var onQueryResults = function(results) {
         queryActive = false;
         lastResults = results;
@@ -205,8 +210,8 @@ Worldview.Widget.DataDownload = function(config, spec) {
             Worldview.Indicator.noData();
         } else {
             if ( results.meta.showList ) {
-                selectionListPanel = 
-                        Worldview.DataDownload.SelectionListPanel(model, results);    
+                selectionListPanel =
+                        Worldview.DataDownload.SelectionListPanel(model, results);
                 selectionListPanel.show();
             } else {
                 if ( selectionListPanel ) {
@@ -216,23 +221,23 @@ Worldview.Widget.DataDownload = function(config, spec) {
             }
         }
     };
-    
+
     var onQueryCancel = function() {
         queryActive = false;
         log.debug("queryCancel");
         Worldview.Indicator.hide();
     };
-    
+
     var onQueryError = function(status, error) {
         queryActive = false;
         log.debug("queryError", status, error);
         Worldview.Indicator.hide();
         if ( status !== "abort" ) {
-            Worldview.notify("Unable to search at this time. Please try " + 
+            Worldview.notify("Unable to search at this time. Please try " +
                     "again later");
         }
     };
-    
+
     var onQueryTimeout = function() {
         queryActive = false;
         log.debug("queryTimeout");
@@ -242,7 +247,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
             "connectivity issue. Please try again later."
         );
     };
-    
+
     var updateSelection = function() {
         var selected = Worldview.size(model.selectedGranules);
         if ( selected > 0 ) {
@@ -258,39 +263,39 @@ Worldview.Widget.DataDownload = function(config, spec) {
             list.setButtonEnabled(false);
             list.setActionButtonText("No Data Selected");
         }
-        
+
         var counts = model.getSelectionCounts();
         $.each(counts, function(productId, count) {
-            list.setCategoryDynamicText(productId, "" + count + " selected");    
-        });            
+            list.setCategoryDynamicText(productId, "" + count + " selected");
+        });
         if ( downloadListPanel && downloadListPanel.visible() ) {
             downloadListPanel.show();
-        }     
+        }
 
     };
-    
+
     var showDownloadList = function() {
         if ( selectionListPanel ) {
             selectionListPanel.setVisible(false);
         }
         if ( !downloadListPanel ) {
-            downloadListPanel = 
+            downloadListPanel =
                     Worldview.DataDownload.DownloadListPanel(config, model);
             downloadListPanel.events.on("close", function() {
                 if ( selectionListPanel ) {
                     selectionListPanel.setVisible(true);
-                }    
+                }
             });
         }
-        downloadListPanel.show(); 
+        downloadListPanel.show();
     };
-    
+
     var updatePreference = function(event, ui) {
         model.setPreference(event.target.value);
     };
-    
+
     init();
     return self;
-    
+
 };
 

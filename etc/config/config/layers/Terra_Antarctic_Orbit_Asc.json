@@ -8,7 +8,7 @@
     },
     "period": "daily",
     "projections": {
-        "geographic": {}
+        "antarctic": {}
     },
     "properties": {
         "tileSize": [

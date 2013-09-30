@@ -1,6 +1,6 @@
 {
     "description": "Space-Track.org / Aqua",
-    "name": "Orbital Track (Ascending)",
+    "name": "Orbital Track (Ascending/Day)",
     "parameters": {
         "format": "image/png",
         "layers": "Aqua_Orbit_Asc",

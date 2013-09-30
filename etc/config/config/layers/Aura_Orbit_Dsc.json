@@ -1,6 +1,6 @@
 {
     "description": "Space-Track.org / Aura",
-    "name": "Orbital Track (Descending)",
+    "name": "Orbital Track (Descending/Night)",
     "parameters": {
         "format": "image/png",
         "layers": "Aura_Orbit_Dsc",

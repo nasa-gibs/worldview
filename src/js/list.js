@@ -316,7 +316,7 @@ SOTE.widget.List.prototype._update = function(){
 		}
 		$('#DataDownload #DataDownloadcontent h3 span').click(function(e){
 		    var o;
-		    bodyMsg = 'Some layers in Worldview do not have corresponding source data products available for download. The MODIS "Corrected Reflectance" products are prime examples of this. If you wish to download similar-looking products, please use the MODIS "Land Surface Reflectance" ones available in Worldview. If you wish to generate MODIS Corrected Reflectance images yourself, please see the following document: <a href="https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf" target="_blank">https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf</a>';
+		    bodyMsg = 'Some layers in Worldview do not have corresponding source data products available for download.  These include National Boundaries, Orbit Tracks, Earth at Night, and MODIS Corrected Reflectance products.<br><br>For a downloadable product similar to MODIS Corrected Reflectance, please try the MODIS Land Surface Reflectance layers available in Worldview.  If you would like to generate MODIS Corrected Reflectance imagery yourself, please see the following document: <a href="https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf" target="_blank">https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf</a><br><br>If you would like to download only an image, please use the "camera" icon in the upper right.';
             o = new YAHOO.widget.Panel("WVerror", {
                 width: "600px", 
                 zIndex: 1020, 
