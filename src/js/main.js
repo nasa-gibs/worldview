@@ -1,6 +1,7 @@
 $(function() {// Initialize "static" vars
 
     var log = Logging.getLogger();
+    var loaded = false;
 
     var entryPoint = function() {
 
@@ -23,6 +24,7 @@ $(function() {// Initialize "static" vars
         // Place any resources that should be completely loaded before
         // starting up the UI
         Worldview.Preloader([
+            "images/activity.gif",
             { id: "config", type:"json",
               src: "data/config.json?v=" + Worldview.BUILD_NONCE },
             // FIXME: Projection cache HACK
@@ -46,28 +48,47 @@ $(function() {// Initialize "static" vars
             "images/close-red-x.png",
             "images/collapseDown.png",
             "images/expandUp.png",
-            "images/activity.gif",
             "images/wv-icons.svg",
             "images/wv-logo.svg"
         ]).execute(onLoad);
+        setTimeout(function() {
+            if ( !loaded ) {
+                Worldview.Indicator.loading();
+            }
+        }, 2000);
     };
 
     var onLoad = function(queue) {
         try {
             var config = queue.getResult("config");
+            // Convert all parameters found in the query string to an object,
+            // keyed by parameter name
+            config.parameters = Worldview.queryStringToObject(location.search);
+
             // FIXME: Projection cache HACK
             config.ap_products = {
                 geographic: queue.getResult("geographic"),
                 arctic: queue.getResult("arctic"),
                 antarctic: queue.getResult("antarctic")
             };
-            init(config);
+
+            if ( config.parameters.loadDelay ) {
+                var delay = parseInt(config.parameters.loadDelay);
+                log.warn("Delaying load for " + delay + " ms");
+                setTimeout(function() {
+                    init(config);
+                }, parseInt(config.parameters.loadDelay));
+            } else {
+                init(config);
+            }
         } catch ( error ) {
             Worldview.error("Unable to start Worldview", error);
         }
     };
     var storageEngine;
     var init = function(config) {
+        loaded = true;
+        Worldview.Indicator.hide();
 
     	// set up storage and decide what to show
         try {
@@ -97,16 +118,14 @@ $(function() {// Initialize "static" vars
             	lastVisit = Date.now();
             }
             storageEngine.setItem('lastVisit', Date.now());
+            // FIXME: Hacking in for now
+            Worldview.storageEngine = storageEngine;
         }
         //var lastVisitObj = new Date(lastVisit);
         var lastVisitObj = new Date("2013-04-07T00:00:00-04:00"); // FIXME
         // get query string
         var queryString =
             Worldview.Permalink.decode(window.location.search.substring(1));
-
-        // Convert all parameters found in the query string to an object,
-        // keyed by parameter name
-        config.parameters = Worldview.queryStringToObject(location.search);
 
         // Features that are important for debugging but are not necessary
         // for Worldview to opeerate properly

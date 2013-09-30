@@ -11,12 +11,12 @@ body {
     display: block;
     height: 45px;
     width: 100%;
-    
+
 }
 
 #banner .logo {
-    margin-top: 11px;
-    margin-left: 5px;
+    height: 45px;
+    width: 247px;
 }
 
 #page {
@@ -55,15 +55,15 @@ a:visited {
 }
 
 hr {
-    display: block; 
+    display: block;
     height: 1px;
-    border: 0; 
+    border: 0;
     border-top: 1px solid #404040;
-    margin: 1em 0; 
+    margin: 1em 0;
     padding: 0;
 }
 
-h1 {  
+h1 {
     font-size: 18px;
 }
 

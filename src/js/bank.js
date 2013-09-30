@@ -1,28 +1,28 @@
-SOTE.namespace("SOTE.widget.Bank"); 
+SOTE.namespace("SOTE.widget.Bank");
 
 SOTE.widget.Bank.prototype = new SOTE.widget.Component;
 
 /**
-  * Instantiate the Bank  
+  * Instantiate the Bank
   *
   * @class A selection device classifying radio buttons/checkboxes into categories that are displayed in Accordion form.
   *     Radio buttons allow single selection accross categories.  Checkboxes allow multiple selections accross categories.
   *     Radio selections cannot span multiple categories.
   * @constructor
   * @this {Bank}
-  * @param {String} containerId is the container id of the div in which to render the object 
+  * @param {String} containerId is the container id of the div in which to render the object
   * @param {Object} [config] is a hash allowing configuration of this component
-  * @config {Object[]} [items] a JS Array of JS Objects: items.category[i..n].key, items.category[i..n].value 
+  * @config {Object[]} [items] a JS Array of JS Objects: items.category[i..n].key, items.category[i..n].value
   *     , items.category[i..n].action, items.type[i..n] representing the available options
   * @config {String} [selected] the key of the initially selected option(s)
   * @augments SOTE.widget.Component
-  * 
+  *
 */
 SOTE.widget.Bank = function(containerId, config){
     this.log = Logging.getLogger("Worldview.Widget.Bank");
     this.VALID_PROJECTIONS = ["geographic", "arctic", "antarctic"];
     this.hidden = {};
-    
+
     //Get the ID of the container element
     this.container=document.getElementById(containerId);
     if (this.container==null){
@@ -31,9 +31,9 @@ SOTE.widget.Bank = function(containerId, config){
     }
     this.id = containerId;
     //Store the container's ID
-    this.containerId=containerId;    
+    this.containerId=containerId;
 
-    //Define an object for holding configuration 
+    //Define an object for holding configuration
     if (config===undefined){
         config={};
     }
@@ -43,23 +43,23 @@ SOTE.widget.Bank = function(containerId, config){
     }
 
     if(config.categories === undefined){
-        config.categories = ["Category 1","Category 2"]; 
+        config.categories = ["Category 1","Category 2"];
     }
 
     if(config.callback === undefined){
-        config.callback = null; 
+        config.callback = null;
     }
 
     if(config.state === undefined || config.state === ""){
         config.state = "geographic";
     }
 
-       
+
     this.state = config.state;
     //console.log("state: " + this.state);
     this.selected = config.selected;
     this.values = this.unserialize(this.selected[this.state]);
-    
+
     this.dataSourceUrl = config.dataSourceUrl;
     //console.log("dataSourceUrl: " + this.dataSourceUrl);
     this.title = config.title;
@@ -89,7 +89,7 @@ SOTE.widget.Bank.prototype.buildMeta = function(cb,val){
     var data = this.config.ap_products[this.state];
     SOTE.widget.Bank.handleMetaSuccess(data, null, null, {
         self: this,
-        callback: cb, 
+        callback: cb,
         val: val
     });
 };
@@ -105,7 +105,7 @@ SOTE.widget.Bank.handleMetaSuccess = function(data,status,xhr,args){
             }
         }
     }
-    
+
     /* TODO: This breaks when switching to polar projections
     var key = data["Floods"][0].value;
     //console.log("Key = " + key);
@@ -117,17 +117,17 @@ SOTE.widget.Bank.handleMetaSuccess = function(data,status,xhr,args){
            var layer = self.config.layers[name];
            if ( "rendered" in layer ) {
                meta.units = layer.units;
-               meta.min = ( layer.min === undefined ) 
-                       ? "&nbsp;&nbsp;&nbsp;&nbsp" 
+               meta.min = ( layer.min === undefined )
+                       ? "&nbsp;&nbsp;&nbsp;&nbsp"
                        : layer.min;
-               meta.max = ( layer.max === undefined ) 
-                       ? "&nbsp;&nbsp;&nbsp;" 
+               meta.max = ( layer.max === undefined )
+                       ? "&nbsp;&nbsp;&nbsp;"
                        : layer.max;
                meta.bins = layer.bins;
                meta.stops = layer.stops;
-               meta.palette = self.config.palettes[layer.rendered];    
-           }    
-       }    
+               meta.palette = self.config.palettes[layer.rendered];
+           }
+       }
     });
     if(args.callback){
         args.callback({self:self,val:args.val});
@@ -143,38 +143,38 @@ SOTE.widget.Bank.handleMetaSuccess = function(data,status,xhr,args){
 
 /**
   * Displays all options in HTML in an Accordion format (see JQuery UI Accordion) with the selected states being indicated
-  * by radio button and checkbox selection.  All callbacks should be set.  The component UI should be rendered 
+  * by radio button and checkbox selection.  All callbacks should be set.  The component UI should be rendered
   * with controllers to call the events.
   *
-  *  
+  *
   * @this {Bank}
-  * 
+  *
 */
 SOTE.widget.Bank.prototype.init = function(){
-    
+
     this.buildMeta();
-    
+
     if(REGISTRY){
          REGISTRY.register(this.id,this);
     }
     else{
         alert("No REGISTRY found!  Cannot register Bank!");
     }
-    
-    
+
+
 };
 
 /**
   * Renders the UI accordion from this.items
   *
-  *  
+  *
   * @this {Bank}
-  * 
+  *
 */
 SOTE.widget.Bank.prototype.render = function(){
 
     this.container.innerHTML = "";
-    
+
 /*    var tabs = document.createElement("ul");
     tabs.innerHTML = "<li><a href='#bank' class='activetab'>Active</a></li><li><a class='addlayerstab' href='#selectorbox'>Add Layers</a></li>";
     this.container.appendChild(tabs);
@@ -184,7 +184,7 @@ SOTE.widget.Bank.prototype.render = function(){
     $('#'+this.id).height($('#'+this.id).parent().outerHeight() - tabs_height);    /*var container = document.createElement("div");
     container.setAttribute("id","bank");
     container.setAttribute("class","bank");*/
-    
+
     //var titleContainer = document.createElement("div");
     //titleContainer.setAttribute("class","tabContainer");
     //var title = document.createElement("h2");
@@ -196,38 +196,38 @@ SOTE.widget.Bank.prototype.render = function(){
     */
     //titleContainer.appendChild(title);
     //titleContainer.appendChild(ext);
-    
+
     //container.appendChild(titleContainer);
-    
+
     //$('#'+this.id).delegate('.callSelectorLink','click',{selector:this.selector},this.callback);
-    
+
     for(var i=0; i<this.categories.length; i++){
         var formattedCategoryName = this.categories[i].replace(/\s/g, "");
         var category = document.createElement("ul");
         category.setAttribute("id",formattedCategoryName.toLowerCase());
         category.setAttribute("class",this.id+"category category");
-        
+
         var categoryContainer = document.createElement("div");
         categoryContainer.setAttribute("id",this.id + formattedCategoryName);
         categoryContainer.setAttribute("class","categoryContainer");
-        
+
         var categoryTitle = document.createElement("h3");
         categoryTitle.setAttribute("class","head");
         categoryTitle.innerHTML = this.categories[i];
-        
-        categoryContainer.appendChild(categoryTitle);        
-        
-                
+
+        categoryContainer.appendChild(categoryTitle);
+
+
         if(this.values !== null && this.values[formattedCategoryName.toLowerCase()]){
             for(var j=0; j<this.values[formattedCategoryName.toLowerCase()].length; j++){
                 var myVal = this.values[formattedCategoryName.toLowerCase()][j].value;
                 var item = document.createElement("li");
                 item.setAttribute("id",formattedCategoryName.toLowerCase()+"-"+myVal);
                 item.setAttribute("class",this.id+"item item");
-                item.innerHTML = "<a><img class='close bank-item-img' id='close"+myVal.replace(/:/g,"colon")+"' title='Remove Layer' src='images/close-red-x.png' /></a>";                
+                item.innerHTML = "<a><img class='close bank-item-img' id='close"+myVal.replace(/:/g,"colon")+"' title='Remove Layer' src='images/close-red-x.png' /></a>";
                 if(this.meta !== null && this.meta[myVal]){
                     if(myVal in this.hidden){
-                        item.innerHTML += "<a class='hdanchor'><img class='hide hideReg bank-item-img' title='Show Layer' id='hide"+myVal.replace(/:/g,"colon")+"' src='images/invisible.png' /></a>";    
+                        item.innerHTML += "<a class='hdanchor'><img class='hide hideReg bank-item-img' title='Show Layer' id='hide"+myVal.replace(/:/g,"colon")+"' src='images/invisible.png' /></a>";
                     }
                     else {
                         item.innerHTML += "<a class='hdanchor'><img class='hide hideReg bank-item-img' title='Hide Layer' id='hide"+myVal.replace(/:/g,"colon")+"' src='images/visible.png' /></a>";
@@ -241,11 +241,11 @@ SOTE.widget.Bank.prototype.render = function(){
                              "<canvas class='colorBar' id='canvas"+this.values[formattedCategoryName.toLowerCase()][j].value+"' width=100px height=14px'></canvas>" +
                              "<span class='p-max' style='margin-left:10px;'>"+m.max+"</span>";
                         if(m.units && m.units != ""){
-                            paletteString += "<span class='units' style='margin-left:3px;'>("+m.units+")</span></span></div>";
+                            paletteString += "<span class='p-units' style='margin-left:3px;'>"+m.units+"</span></span></div>";
                         }
                         item.innerHTML += paletteString;
                     }
-                    
+
                 }
                 else{
                     item.innerHTML += "<h4>"+this.values[formattedCategoryName.toLowerCase()][j].value+"</h4>";
@@ -253,7 +253,7 @@ SOTE.widget.Bank.prototype.render = function(){
                 category.appendChild(item);
             }
         }
-        
+
         categoryContainer.appendChild(category);
         this.container.appendChild(categoryContainer);
 
@@ -262,7 +262,7 @@ SOTE.widget.Bank.prototype.render = function(){
     var selectorbox = document.createElement("div");
     selectorbox.setAttribute("id","selectorbox");
     this.container.appendChild(selectorbox);*/
-    
+
     this.renderCanvases();
     /*var accordionToggler = document.createElement("a");
     accordionToggler.setAttribute("class","accordionToggler atcollapse");
@@ -271,21 +271,21 @@ SOTE.widget.Bank.prototype.render = function(){
     this.container.appendChild(accordionToggler);
     $('.accordionToggler').bind('click',{self:this},SOTE.widget.Bank.toggle);*/
     $("#"+this.id).undelegate(".close" ,'click');
-    $("#"+this.id).undelegate(".hideReg" ,'click');    
-    $("#"+this.id).undelegate(".hideSingle" ,'click');        
+    $("#"+this.id).undelegate(".hideReg" ,'click');
+    $("#"+this.id).undelegate(".hideSingle" ,'click');
     $("#"+this.id).delegate(".close" ,'click',{self:this},SOTE.widget.Bank.removeValue);
-    $("#"+this.id).delegate(".hideReg" ,'click',{self:this},SOTE.widget.Bank.toggleValue);    
-    $("#"+this.id).delegate(".hideSingle" ,'click',{self:this},SOTE.widget.Bank.toggleValue);    
+    $("#"+this.id).delegate(".hideReg" ,'click',{self:this},SOTE.widget.Bank.toggleValue);
+    $("#"+this.id).delegate(".hideSingle" ,'click',{self:this},SOTE.widget.Bank.toggleValue);
     $( "." + this.id + "category" ).sortable({items: "li:not(.head)"});
     if($(window).width() > 720)
     {
         if(this.jsp){
             var api = this.jsp.data('jsp');
             if(api) api.destroy();
-        }    
+        }
         this.jsp = $( "." + this.id + "category" ).jScrollPane({autoReinitialise: false, verticalGutter:0});
     }
-    $( "." + this.id + "category li" ).disableSelection();    
+    $( "." + this.id + "category li" ).disableSelection();
     $( "." + this.id + "category" ).bind('sortstop',{self:this},SOTE.widget.Bank.handleSort);
 
     setTimeout(SOTE.widget.Bank.adjustCategoryHeights,1,{self:this});
@@ -295,13 +295,13 @@ SOTE.widget.Bank.prototype.render = function(){
     /*$('#'+this.id).tabs();
     //this.b = new SOTE.widget.Bank("products",{paletteWidget: window.palettes, dataSourceUrl:"ap_products.php",title:"My Layers",selected:{antarctic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,antarctic_coastlines", arctic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,arctic_coastlines",geographic:"baselayers,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,sedac_bound"},categories:["Base Layers","Overlays"],config:config});
     this.s = new SOTE.widget.Selector("selectorbox",{dataSourceUrl:"ap_products.php",categories:["Base Layers","Overlays"]});    */
-    
-    // Mark the component as ready in the registry if called via init() 
+
+    // Mark the component as ready in the registry if called via init()
     if ((this.initRenderComplete === false) && REGISTRY) {
         this.initRenderComplete = true;
         REGISTRY.markComponentReady(this.id);
     }
-    
+
 };
 
 SOTE.widget.Bank.adjustCategoryHeights = function(args){
@@ -325,19 +325,19 @@ SOTE.widget.Bank.adjustCategoryHeights = function(args){
 
         heights.push({name:formattedCategoryName.toLowerCase(),height:actual_height,count:count});
     }
-    
+
     if(heights[0].height + heights[1].height > container_height){
-        if(heights[0].height > container_height/2) { 
+        if(heights[0].height > container_height/2) {
             heights[0].height = container_height/2;
         }
 
         heights[1].height = container_height - heights[0].height;
 
     }
-    
+
     $("#" + heights[0].name).css("height",heights[0].height+"px");
     $("#" + heights[1].name).css("height",heights[1].height+"px");
-    
+
     SOTE.widget.Bank.reinitializeScrollbars({self:self});
 };
 
@@ -345,23 +345,23 @@ SOTE.widget.Bank.reinitializeScrollbars = function(o) {
     var pane = $("." + o.self.id + "category").each(function(){
         var api = $(this).data('jsp');
         if(api) api.reinitialise();
-    });  
+    });
 };
 
 SOTE.widget.Bank.prototype.renderCanvases = function(){
-    
+
     var openPaletteSelector = function(name) {
         return function() {
             if ( !Worldview.Support.allowCustomPalettes() ) {
                 Worldview.Support.showUnsupportedMessage();
             } else {
                self.paletteWidget.displaySelector(name);
-            }            
+            }
         };
     };
 
     var self = this;
-    
+
     for(var i=0; i<this.categories.length; i++){
         var formattedCategoryName = this.categories[i].replace(/\s/g, "");
         if(this.values !== null && this.values[formattedCategoryName.toLowerCase()]){
@@ -404,7 +404,7 @@ SOTE.widget.Bank.toggle = function(e,ui){
         $('.accordionToggler').attr("title","Show Products");
         $('.bank').css('display','none');
         self.isCollapsed = true;
-    }     
+    }
 };
 
 SOTE.widget.Bank.handleSort = function(e,ui){
@@ -424,20 +424,20 @@ SOTE.widget.Bank.handleSort = function(e,ui){
         });
     }
     self.fire();
-    
+
 };
 
 SOTE.widget.Bank.removeValue = function(e){
     var self = e.data.self;
     var val = e.target.id.replace(/colon/g,":");
-    val = val.replace(/close/g,"");    
+    val = val.replace(/close/g,"");
     for(var i=0; i<self.categories.length; i++){
         var formatted = self.categories[i].replace(/\s/g, "");
         formatted = formatted.toLowerCase();
         for(var j=0; j<self.values[formatted].length; j++){
             if(self.values[formatted][j].value == val){
                 self.values[formatted].splice(j,1);
-            }    
+            }
         }
     }
     var formattedVal = "close"+val.replace(/:/g,"colon");
@@ -465,11 +465,11 @@ SOTE.widget.Bank.toggleValue = function(e){
                     else {
                         self.hidden[val] = 1;
                         e.target.src = 'images/invisible.png';
-                        $("#"+e.target.id).attr("title","Show Layer");                    
+                        $("#"+e.target.id).attr("title","Show Layer");
                     }
-                    
-                    
-                }    
+
+
+                }
             }
         }
     }
@@ -487,7 +487,7 @@ SOTE.widget.Bank.prototype.hideAllRadioExceptTop = function(){
 
             this.hidden[this.values[formatted][j].value] = 1;
             $('#hide'+this.values[formatted][j].value).attr("src",'images/invisible.png');
-                
+
         }
     }
 };
@@ -498,7 +498,7 @@ SOTE.widget.Bank.radioToggleValue = function(e){
     var cat = -1;
     var hidden = false;
     val = val.replace(/hide/g,"");
-    
+
     for(var i=0; i<self.categories.length; i++){
         var formatted = self.categories[i].replace(/\s/g, "");
         formatted = formatted.toLowerCase();
@@ -528,17 +528,17 @@ SOTE.widget.Bank.radioToggleValue = function(e){
                             if(self.hidden[self.values[formatted][0].value]){
                                 delete     self.hidden[self.values[formatted][0].value];
                                 $('#hide'+self.values[formatted][0].value).attr("src",'images/visible.png');
-    
+
                             }
                         }
                     }
-                    
-                }    
+
+                }
             }
         }
     }
-    
-    
+
+
     //var formattedVal = val.replace(/:/g,"colon");
     //self.render();
     //$("#"+self.id+" #"+formattedVal).parent().parent().remove();
@@ -568,7 +568,7 @@ SOTE.widget.Bank.prototype.fire = function(){
 };
 
 /**
-  * Sets the selected option(s) in the Bank from the passed in value(s), if valid 
+  * Sets the selected option(s) in the Bank from the passed in value(s), if valid
   *     [containerId]=[options] (options is a dot delimited string with the first item containing
   *     a single select item, and the remaining items containing the multi-select items).
   *
@@ -582,10 +582,10 @@ SOTE.widget.Bank.prototype.setValue = function(valString, selector){
     this.values = this.unserialize(valString, selector);
     var valid = true;
     var self = this;
-    
+
     this.render();
     this.fire();
-    
+
 };
 
 SOTE.widget.Bank.prototype.currCount = function(){
@@ -596,18 +596,18 @@ SOTE.widget.Bank.prototype.currCount = function(){
   * Gets the currently selected option(s) [containerId]=[options]
   *
   * @this {Bank}
-  * @returns {String} [container]=[options], options being a dot delimited string 
+  * @returns {String} [container]=[options], options being a dot delimited string
   *     representing the key(s) of the currently selected option(s)
   *
 */
 SOTE.widget.Bank.prototype.getValue = function(){
-        
+
     var value = this.serialize(this.values);
     return this.id + "=" + value;
 };
 
 SOTE.widget.Bank.prototype.value = function(){
-        
+
     var value = this.serialize(this.values);
     return value;
 };
@@ -649,7 +649,7 @@ SOTE.widget.Bank.prototype.unserialize = function(string, selector){
                 this.log.warn("No such product: " + items[j]);
             } else {
                 if(hideIndicator.test(items[j])){
-                    items[j] = items[j].replace(/!/g, "");      
+                    items[j] = items[j].replace(/!/g, "");
                     this.hidden[items[j]] = 1;
                 }
                 else {
@@ -663,25 +663,25 @@ SOTE.widget.Bank.prototype.unserialize = function(string, selector){
                 this.count++;
             }
         }
-        
+
     }
-    
+
     for(var key in this.hidden){
         if( values.indexOf(key) < 0 ){
             delete this.hidden[key];
         }
     }
-    
+
     return unserialized;
 };
 
 /**
   * Change the component based on dependencies (i.e. Available Options, Selected)
-  * 
+  *
   * @this {Bank}
   * @param {String} querystring contains all values of dependencies (from registry)
   * @returns {boolean} true or false depending on if the selected value still validats with criteria change
-  * 
+  *
 */
 SOTE.widget.Bank.prototype.updateComponent = function(querystring){
     var qs = (querystring === undefined)? "":querystring;
@@ -696,10 +696,10 @@ SOTE.widget.Bank.prototype.updateComponent = function(querystring){
 
 /**
   * Static function to handle a successful retrieval from the data accessor
-  * 
+  *
   * @this {Bank}
   * @param {Object,String,Object,Object} data is the data passed back from the call, status is the response status, xhr is the applicable xmlhttprequest object, args are the custom arguments passed
-  * 
+  *
 */
 SOTE.widget.Bank.handleUpdateSuccess = function(self,qs){
     /*var expanded = SOTE.util.extractFromQuery("hazard",args.qs);
@@ -710,7 +710,7 @@ SOTE.widget.Bank.handleUpdateSuccess = function(self,qs){
     if (projection === "") {
         projection = self.VALID_PROJECTIONS[0];
     } else if ($.inArray(projection, self.VALID_PROJECTIONS) < 0) {
-        self.log.warn("Invalid projection: " + projection + ", using: " + 
+        self.log.warn("Invalid projection: " + projection + ", using: " +
                self.VALID_PROJECTIONS[0]);
         projection = self.VALID_PROJECTIONS[0];
     }
@@ -723,13 +723,13 @@ SOTE.widget.Bank.handleUpdateSuccess = function(self,qs){
         self.buildMeta();
     }
 };
- 
+
 /**
   * Static function to handle a failed retrieval from the data accessor
-  * 
+  *
   * @this {Bank}
   * @param {Object,String,String,Object} xhr is the applicable xmlhttprequest object, status is the response status, error is the thrown error, args are the custom arguments passed
-  * 
+  *
 */
 SOTE.widget.Bank.handleUpdateFailure = function(xhr,status,error,args){
     alert("Failed to load data accessor: " + error);
@@ -738,7 +738,7 @@ SOTE.widget.Bank.handleUpdateFailure = function(xhr,status,error,args){
 
 /**
   * Sets the selected option(s) from the query string [containerId]=[options]
-  * 
+  *
   * @this {Bank}
   * @param {String} qs contains the querystring
   * @returns {boolean} true or false depending on whether the new option validates
@@ -746,7 +746,7 @@ SOTE.widget.Bank.handleUpdateFailure = function(xhr,status,error,args){
 */
 SOTE.widget.Bank.prototype.loadFromQuery = function(qs){
     var newState = SOTE.util.extractFromQuery("switch",qs);
-    
+
     if (newState === "" ) {
         newState = "geographic";
     }
@@ -780,7 +780,7 @@ SOTE.widget.Bank.loadValue = function(args){
 /**
   * Validates that the selected option(s) is not null, only one radio button is selected cross category
   * and all options are within the scope of available options
-  * 
+  *
   * @this {Bank}
   * @returns {boolean} true or false depending on whether the selected option(s) meet the validation criteria
 */
@@ -800,7 +800,7 @@ SOTE.widget.Bank.prototype.setHeight = function(height){
   * Sets the data accessor that provides state change instructions given dependencies
   *
   * @this {Bank}
-  * @param {String} datasourceurl is the relative location of the data accessor 
+  * @param {String} datasourceurl is the relative location of the data accessor
   *
 */
 SOTE.widget.Bank.prototype.setDataSourceUrl = function(dataSourceUrl){
@@ -809,7 +809,7 @@ SOTE.widget.Bank.prototype.setDataSourceUrl = function(dataSourceUrl){
 
 /**
   * Gets the data accessor
-  * 
+  *
   * @this {Bank}
   * @returns {String} the relative location of the accessor
   *
