@@ -1,14 +1,14 @@
 <!doctype html>
 <html>
     <head>
-        <title>wget.html</title>    
+        <title>wget.html</title>
         <style>
             body {
                 background-color: rgb(25, 28, 32);
             }
             h3 {
                 margin-top: 0;
-            }         
+            }
             h4 {
                 margin-bottom: 0
             }
@@ -36,8 +36,8 @@ var productText = function(product) {
     html.push("<h4>" + product.name + "</h4>");
     if ( product.noBulkDownload ) {
         html.push("<p>" +
-                  "These granules are not available for bulk download. " + 
-                  "Please visit each link and download manually." + 
+                  "These granules are not available for bulk download. " +
+                  "Please visit each link and download manually." +
                   "</p>");
     }
     for ( var i = 0; i < product.list.length; i++ ) {
@@ -56,16 +56,16 @@ var productText = function(product) {
                 );
             } else {
                 html.push(
-                    "<div class='label'>" + 
+                    "<div class='label'>" +
                     link.href +
                     "</div>"
                 );
             }
         }
     }
-    return html.join("\n");                
+    return html.join("\n");
 };
-    
+
 window.onload = function() {
     var div = document.getElementById("list");
     if ( div.innerHTML !== "" ) {
@@ -81,29 +81,31 @@ window.onload = function() {
         html.push(productText(selection[product]));
     }
     div.innerHTML = html.join("\n");
-};    
+};
 </script>
 
-    </head>    
+    </head>
     <body>
         <div id='page'>
             <div id='instructions'>
                 <h3>Using <code>wget</code> to Bulk Download Your Data</h3>
-                1) Save this HTML page as <code>wget.html</code> to your    
-                local computer <b>using your browser's "Web Page, Complete" 
+                1) Save this HTML page as <code>wget.html</code> to your
+                local computer <b>using your browser's "Web Page, Complete"
                 format</b>.<br/>
                 2) Execute the following command to download all of your
                 requested files:
                 <pre>
-wget --input-file=wget.html --force-html</pre><br/>
+wget --input-file=wget.html --force-html</pre>
+                Due to the way Safari saves web pages, this feature is not
+                supported in that web browser.<br/><br/>
                 <b>Note:</b> If User Registration System (URS) credentials are required,
-                create a file (only readable by you) called 
+                create a file (only readable by you) called
                 <code>urs.credentials</code> with the following:
                 <pre>
 user=<i>urs_user</i>
 password=<i>urs_password</i></pre>
-                where <i>urs_user</i> is your URS user name and 
-                <i>urs_password</i> is your URS password. To download, 
+                where <i>urs_user</i> is your URS user name and
+                <i>urs_password</i> is your URS password. To download,
                 use the following command instead of step 2 above:
                 <pre>
 wget --input-file=wget.html --force-html --config=urs.credentials</pre><br/>
