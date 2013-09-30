@@ -276,7 +276,7 @@ SOTE.widget.Bank.prototype.render = function(){
     $("#"+this.id).delegate(".close" ,'click',{self:this},SOTE.widget.Bank.removeValue);
     $("#"+this.id).delegate(".hideReg" ,'click',{self:this},SOTE.widget.Bank.toggleValue);
     $("#"+this.id).delegate(".hideSingle" ,'click',{self:this},SOTE.widget.Bank.toggleValue);
-    $( "." + this.id + "category" ).sortable({items: "li:not(.head)", axis: "y", containment: "parent"});
+    $( "." + this.id + "category" ).sortable({items: "li:not(.head)", axis: "y", containment: "parent", tolerance: "pointer"});
     if($(window).width() > 720)
     {
         if(this.jsp){
