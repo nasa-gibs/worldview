@@ -137,7 +137,7 @@ Worldview.namespace("Tour");
         document.getElementById("productBasePanel").innerHTML = productText;
 
         var overlayText = "<div>"+
-                              "<h3>Layer Picker - Overlays</h3>"+
+                              "<h3>Layer Picker - Continued</h3>"+
                               "</br></br>"+
                               "<p class='tour'>An <span class='highlight'>Overlay</span> is a partially transparent layer to view on top of the background - you can view multiple overlays at once.  If an overlay has a color bar, you can click the color bar and select a new color palette."+
                               "<p>On the <i class=\"productsIcon selected icon-add\"></i> tab, you can use the drop down list or the search bar to find and add layers.</p> "+
