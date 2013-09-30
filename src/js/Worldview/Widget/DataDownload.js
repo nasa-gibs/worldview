@@ -1,3 +1,4 @@
+
 /*
  * NASA Worldview
  *
@@ -160,8 +161,8 @@ Worldview.Widget.DataDownload = function(config, spec) {
             mapController =
                 Worldview.DataDownload.MapController(model, spec.maps, config);
         }
-        updateSelection();
         onLayerUpdate();
+        updateSelection();
     };
 
     var onDeactivate = function() {
