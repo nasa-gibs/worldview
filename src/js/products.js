@@ -72,7 +72,7 @@ SOTE.widget.Products.HTML_TAB_ACTIVE_SELECTED =
     "Active";
     
 SOTE.widget.Products.HTML_TAB_ACTIVE_UNSELECTED = 
-    "<i class='productsIcon selected icon-layers' title='Active'></i>";
+    "<i class='productsIcon selected icon-layers' title='Active Layers'></i>";
 
 SOTE.widget.Products.HTML_TAB_ADD_SELECTED = 
     "<i class='productsIcon selected icon-add'></i>" +
@@ -86,7 +86,7 @@ SOTE.widget.Products.HTML_TAB_DOWNLOAD_SELECTED =
     "Download";
     
 SOTE.widget.Products.HTML_TAB_DOWNLOAD_UNSELECTED = 
-    "<i class='productsIcon selected icon-download' title='Download'></i>";
+    "<i class='productsIcon selected icon-download' title='Download Data'></i>";
 
 /**
   * Displays all options in HTML in an Accordion format (see JQuery UI Accordion) with the selected states being indicated
