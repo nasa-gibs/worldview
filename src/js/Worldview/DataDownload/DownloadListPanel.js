@@ -253,6 +253,4 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
     return self;
 
 };
-$('#DataDownload #DataDownloadcontent h3 span').click(function(e){
-            console.log("TEST####");
-        });
+        
