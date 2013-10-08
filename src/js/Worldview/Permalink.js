@@ -20,6 +20,7 @@ $(function() {
     // This namespace
     var ns = Worldview.Permalink;
     var log = Logging.getLogger("Worldview.Permalink");
+    var DEBUG_SHORTEN_URL = "https://earthdata.nasa.gov/labs/worldview";
 
     var ALLOWED_PARAMETERS = {
         map: true,
@@ -105,7 +106,8 @@ $(function() {
     ns.shorten = function() {
         var link = ns.get();
         if ( /localhost/.test(link) ) {
-            throw Error("Cannot shorten URL with localhost");
+            log.warn("Cannot shorten localhost. Using " + DEBUG_SHORTEN_URL);
+            link = DEBUG_SHORTEN_URL;
         };
         return $.getJSON("service/shorten.cgi?url=" + link);
     };
