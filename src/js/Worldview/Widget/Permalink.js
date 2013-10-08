@@ -43,12 +43,8 @@ Worldview.Widget.Permalink = (function() {
             permOverlay.render(document.body);
         }
 
-        var qs = Worldview.Permalink.fromRegistry();
-        var url = window.location.href;
-        var prefix = url.split("?")[0];
-        prefix = (prefix !== null && prefix !== undefined) ? prefix: url;
-
-        $('#permalink_content').val(prefix + qs);
+        var link = Worldview.Permalink.get();
+        $('#permalink_content').val(link);
 
         permOverlay.show();
         permOverlay.center();
