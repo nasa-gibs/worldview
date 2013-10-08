@@ -309,7 +309,7 @@ $(function() {// Initialize "static" vars
 
         // Install a black palette which can be used to find "holes" in
         // LUT mappings.
-        if ( Worldview.isDevelopment() ) {
+        if ( config.parameters.debugPalette ) {
             var debugPalette = Worldview.Palette.Palette({
                 id: "__DEBUG",
                 name: "Debug",

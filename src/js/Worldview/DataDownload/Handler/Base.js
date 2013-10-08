@@ -53,8 +53,13 @@ Worldview.DataDownload.Handler.Base = function(config, model) {
         var queryData = $.extend(true, {}, productConfig);
         var promise = self._submit(queryData);
 
+        var queriedProduct = model.selectedProduct;
         promise.done(function(data) {
             try {
+                if ( model.selectedProduct !== queriedProduct ) {
+                    self.events.trigger("results", {granules: [], meta: {}});
+                    return;
+                }
                 var results = self._processResults(data);
                 self.events.trigger("results", results);
             } catch ( error ) {

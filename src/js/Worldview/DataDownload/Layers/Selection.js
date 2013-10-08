@@ -46,6 +46,11 @@ Worldview.DataDownload.Layers.Selection = function(model, maps, config) {
                 map.removeLayer(layer);
             }
         });
+        features = {};
+    };
+
+    self.select = function(granule) {
+        onGranuleSelect(granule);
     };
 
     var onGranuleSelect = function(granule) {
@@ -73,6 +78,9 @@ Worldview.DataDownload.Layers.Selection = function(model, maps, config) {
             return;
         }
         var feature = features[granule.id];
+        if ( !feature ) {
+            return;
+        }
         getLayer().removeFeatures([feature]);
         getLayer().redraw();
         delete features[granule.id];

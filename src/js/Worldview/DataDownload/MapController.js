@@ -31,6 +31,7 @@ Worldview.DataDownload.MapController = function(model, maps, config) {
             .on("query", clear)
             .on("queryResults", onQueryResults)
             .on("projectionUpdate", onProjectionUpdate)
+            .on("activate", onActivate)
             .on("deactivate", onDeactivate);
 
         buttonLayers.events
@@ -70,6 +71,14 @@ Worldview.DataDownload.MapController = function(model, maps, config) {
         buttonLayers.dispose();
         // TODO: Remove if not used
         //maskLayers.dispose();
+    };
+
+    var onActivate = function() {
+        // FIXME: This is a major hack. "Reselect" all the granules again
+        // if necessary.
+        $.each(model.selectedGranules, function(index, granule) {
+            selectionLayers.select(granule);
+        });
     };
 
     var clear = function() {

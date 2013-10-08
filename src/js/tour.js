@@ -100,8 +100,8 @@ Worldview.namespace("Tour");
                                "<td><p></p></td>"+
                                "</tr>"+
                                "<tr>"+
-                                   "<td rowspan=\"2\" colspan=\"2\"><button id='takeTour' type='button' class=\"takeTour\"; background-image:url('../images/splash-button.png')\">Take Tour</button></td>"+
-                                   "<td rowspan=\"2\" colspan=\"2\"><button id='skipTour' type='button' class=\"skipTour\">Skip Tour</button></td>"+
+                                   "<td rowspan=\"2\" colspan=\"4\"><p style='text-align:center;'><button id='takeTour' type='button' class=\"takeTour\"; background-image:url('../images/splash-button.png')\">Take Tour</button><button id='skipTour' type='button' class=\"skipTour\">Skip Tour</button></p></td>"+
+                                   //"<td rowspan=\"2\" colspan=\"2\"><button id='skipTour' type='button' class=\"skipTour\">Skip Tour</button></td>"+
                                "</tr>"+
                                "<tr></tr>"+
                                "<tr>"+
@@ -137,17 +137,19 @@ Worldview.namespace("Tour");
         document.getElementById("productBasePanel").innerHTML = productText;
 
         var overlayText = "<div>"+
-                              "<h3>Layer Picker - Overlays</h3>"+
+                              "<h3>Layer Picker - Continued</h3>"+
                               "</br></br>"+
                               "<p class='tour'>An <span class='highlight'>Overlay</span> is a partially transparent layer to view on top of the background - you can view multiple overlays at once.  If an overlay has a color bar, you can click the color bar and select a new color palette."+
-                              "<p class='tour'>On the \"Add Layers\" tab, you can use the drop down list or the search bar to find layers.</p>"+
+                              "<p>On the <i class=\"productsIcon selected icon-add\"></i> tab, you can use the drop down list or the search bar to find and add layers.</p> "+
+                              "<p>On the <i class=\"productsIcon selected icon-download\"></i> tab, you can download data for layers you are currently viewing.</p> "+
                               "<p class='tour'> <span class='tryIt'>Try It!</span></p>"+
                               "<ul class='tour'>"+
-                                  "<li>Click on the \"Add Layers\" tab.</li>"+
+                                  "<li>Click on the <i class=\"productsIcon selected icon-add\"></i> tab.</li>"+
                                   "<li>Select \"Fires\" from the drop down list.</li>"+
                                   "<li>Type \"aqua\" in the search box.</li>"+
                                   "<li>Add the \"Fires (Day and Night) Aqua/MODIS Fire and Thermal Anomalies\" overlay.</li>"+
-                                  "<li>Click on the Active tab to see the layers that have been added.</li>"+
+                                  "<li>Click on the <i class=\"productsIcon selected icon-download\"></i> tab to see what data can be downloaded.</li>"+
+                                  "<li>Click on the <i class=\"productsIcon selected icon-active\"></i> tab to see the layers that have been added.</li>"+
                               "</ul>"+
                               "</br>"+
                           "</div>";
