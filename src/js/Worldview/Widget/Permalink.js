@@ -30,7 +30,8 @@ Worldview.Widget.Permalink = (function() {
             permOverlay = new YAHOO.widget.Panel("panel_perm", {
                 width: "300px",
                 zIndex: 1020,
-                visible: false
+                visible: false,
+                constraintoviewport: true
             });
             var item =  "<div id='permpanel' >" +
                 "<!-- <h3>Permalink:</h3> -->"+

@@ -24,7 +24,8 @@ Worldview.DataDownload.SelectionListPanel = function(model, results) {
             height: "400px",
             zIndex: 1020,
             visible: false,
-            close: false
+            close: false,
+            constraintoviewport: true
         });
         panel.setHeader("Select data");
         

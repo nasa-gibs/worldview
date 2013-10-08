@@ -42,7 +42,8 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
                 width: "600px",
                 height: "400px",
                 zIndex: 1020,
-                visible: false
+                visible: false,
+                constraintoviewport: true
             });
             panel.setHeader("Download Links");
         }
