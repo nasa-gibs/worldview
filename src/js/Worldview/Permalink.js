@@ -19,6 +19,7 @@ $(function() {
 
     // This namespace
     var ns = Worldview.Permalink;
+    var log = Logging.getLogger("Worldview.Permalink");
 
     var ALLOWED_PARAMETERS = {
         map: true,
@@ -72,13 +73,13 @@ $(function() {
     };
 
     /**
-     * Function: fromRegistry
+     * Function: get
      * Returns a query string that is the concatenated value of all components.
      *
      * Returns:
      * The query string to use as a permalink with special characters escaped.
      */
-    ns.fromRegistry = function() {
+    ns.get = function() {
         var comps = REGISTRY.getComponents();
         var parameters = {};
         for ( var i = 0; i < comps.length; i++ ) {
@@ -94,7 +95,19 @@ $(function() {
                 }
             }
         }
-        return ns.fromObject(parameters);
+        var qs = ns.fromObject(parameters);
+        var url = window.location.href;
+        var prefix = url.split("?")[0];
+        prefix = (prefix !== null && prefix !== undefined) ? prefix: url;
+        return prefix + qs;
+    };
+
+    ns.shorten = function() {
+        var link = ns.get();
+        if ( /localhost/.test(link) ) {
+            throw Error("Cannot shorten URL with localhost");
+        };
+        return $.getJSON("service/shorten.cgi?url=" + link);
     };
 
     /**
