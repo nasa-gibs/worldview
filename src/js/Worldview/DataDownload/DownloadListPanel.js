@@ -60,6 +60,7 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
             });
 
             $("#DataDownload_DownloadListPanel a.wget").click(showWgetPage);
+            $("#DataDownload_DownloadListPanel a.curl").click(showCurlPage);
         }
     };
 
@@ -78,6 +79,7 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
         panel.destroy();
         panel = null;
         $("#DataDownload_DownloadListPanel a.wget").off("click", showWgetPage);
+        $("#DataDownload_DownloadListPanel a.curl").off("click", showCurlPage);
     };
 
     var reformatSelection = function() {
@@ -134,7 +136,8 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
             $.each(product.granules, function(index, granule) {
                 var item = {
                     label: granule.downloadLabel || granule.label,
-                    links: []
+                    links: [],
+                    urs: granule.urs
                 };
                 $.each(granule.links, function(index, link) {
                     // Skip this link if now at the product level
@@ -180,7 +183,8 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
         // URI
         return {
             href: link.href,
-            title: ( link.title ) ? link.title : link.href.split("/").slice(-1)
+            title: ( link.title ) ? link.title : link.href.split("/").slice(-1),
+            data: ( link.rel === echo.REL_DATA )
         };
     };
 
@@ -238,20 +242,27 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
     };
 
     var bodyText = function() {
-        var bulk = "";
-        if ( isBulkDownloadable() ) {
-            bulk = "<div class='wget'>" +
-                   "<a class='wget' href='#'>Bulk Download (wget)</a>" +
-                   "</div>";
-        }
         var elements =[];
         if ( urs ) {
             elements.push(NOTICE);
         }
-        elements.push(bulk);
         $.each(selection, function(key, product) {
             elements.push(productText(product));
         });
+
+        if ( isBulkDownloadable() ) {
+            var bulk =
+                "<h4>Bulk Download</h4>" +
+                "<ul class='BulkDownload'>" +
+                "<li><a class='wget' href='#'>Link List:</a> " +
+                    "For wget or download managers that accept a list of " +
+                    "URLs</li>" +
+                "<li><a class='curl' href='#'>cURL Commands:</a> " +
+                    "List of commands that can be copied and pasted to " +
+                    "a terminal window to download using cURL.</li>" +
+                "</ul>";
+            elements.push(bulk);
+        }
         var text = elements.join("\n<br/>\n") + "<br/>";
         return text;
     };
@@ -260,9 +271,11 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
         Worldview.DataDownload.WgetPage.show(selection);
     };
 
+    var showCurlPage = function() {
+        Worldview.DataDownload.CurlPage.show(selection);
+    };
+
     return self;
 
 };
-$('#DataDownload #DataDownloadcontent h3 span').click(function(e){
-            console.log("TEST####");
-        });
+

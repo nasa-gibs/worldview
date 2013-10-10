@@ -209,6 +209,7 @@
                 <include name="**/*.js"/>
                 <!-- Place any concatenation exceptions here -->
                 <exclude name="css/pages.css"/>
+                <exclude name="css/bulkDownload.css"/>
                 <exclude name="ext/openlayers/theme/default/style.css"/>
                 <exclude name="**/TileWorker.js"/>
             </fileset>

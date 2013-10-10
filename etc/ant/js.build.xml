@@ -150,6 +150,7 @@
         <file name="js/Worldview/DataDownload/SelectionListPanel.js"/>
         <file name="js/Worldview/DataDownload/DownloadListPanel.js"/>
         <file name="js/Worldview/DataDownload/WgetPage.js"/>
+        <file name="js/Worldview/DataDownload/CurlPage.js"/>
 
         <file name="js/Worldview/Widget/Map.js"/>
         <file name="js/Worldview/Widget/Palette.js"/>
