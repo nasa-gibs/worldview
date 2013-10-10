@@ -128,6 +128,14 @@
         loggers = {};
     };
 
+    // If bind not defined on the console function (IE9), return the
+    // the actual function, i.e., console.log
+    // If bind is defined, set the consoleObject this context to itself,
+    // i.e., console.log.bind(console);
+    var consoleFor = function(consoleObject, method) {
+        return ( consoleObject.bind ) ? method.bind(consoleObject) : method;
+    };
+
     /**
      * Logging methods.
      *
@@ -149,7 +157,7 @@
          * @param [message]* {object} The message to print to the console.
          */
         self.message = ( !window.console || !window.console.log )
-                ? function() {} : console.log.bind(console);
+                ? function() {} : consoleFor(console, console.log);
 
         /**
          * Prints an error message to the console. Uses console.error if
@@ -162,7 +170,7 @@
          * @param [message]* {object} The message to print to the console.
          */
         self.error = ( !window.console || !window.console.error )
-                ? self.message: console.error.bind(console);
+                ? self.message: consoleFor(console, console.error);
 
         /**
          * Prints an warning message to the console. Uses console.warn if
@@ -175,7 +183,7 @@
          * @param [message]* {object} The message to print to the console.
          */
         self.warn = ( !window.console || !window.console.warn )
-                ? self.message : console.warn.bind(console);
+                ? self.message : consoleFor(console, console.warn);
 
         /**
          * Prints an information message to the console. Uses console.info if
@@ -188,7 +196,7 @@
          * @param [message]* {object} The message to print to the console.
          */
         self.info = ( !window.console || !window.console.info )
-                ? self.message : console.info.bind(console);
+                ? self.message : consoleFor(console, console.info);
 
         /**
          * Prints a stack trace to the console. If console.trace does not
@@ -198,7 +206,7 @@
          * @for Logger
          */
         self.trace = ( !window.console || !window.console.trace )
-                ? function() {} : console.trace;
+                ? function() {} : consoleFor(console, console.trace);
 
         /**
          * Prints a debug message to the console if debugging is enabled.
