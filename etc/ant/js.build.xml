@@ -136,6 +136,7 @@
         <file name="js/Worldview/DataDownload/Results/PreferredFilter.js"/>
         <file name="js/Worldview/DataDownload/Results/ProductLabel.js"/>
         <file name="js/Worldview/DataDownload/Results/TagNRT.js"/>
+        <file name="js/Worldview/DataDownload/Results/TagURS.js"/>
         <file name="js/Worldview/DataDownload/Results/TagProduct.js"/>
         <file name="js/Worldview/DataDownload/Results/TagList.js"/>
         <file name="js/Worldview/DataDownload/Results/TagVersion.js"/>

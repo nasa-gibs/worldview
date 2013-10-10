@@ -20,9 +20,9 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
         "<div id='DataDownload_Notice'>" +
             "<img class='icon' src='images/info-icon-blue.svg'>" +
             "<p class='text'>" +
-                "An account with the EOSDIS User Registration System (URS) " +
-                "may be necessary to download data. It is simple and " +
-                "free to sign up! " +
+                "Some items you have selected require an account with the " +
+                "EOSDIS User Registration System (URS) to download. " +
+                "It is simple and free to sign up! " +
                 "<a href='https://earthdata.nasa.gov/urs/register' target='urs'>" +
                 "Click to register for an account.</a>" +
             "</p>" +
@@ -31,10 +31,13 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
     var panel = null;
     var selection;
     var self = {};
+    var urs = false;
+
     self.events = Worldview.Events();
 
     self.show = function() {
         selection = reformatSelection();
+        log.debug("selection", selection);
         var newPanel = false;
         if ( !panel ) {
             newPanel = true;
@@ -80,7 +83,11 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
     var reformatSelection = function() {
         var selection = {};
 
+        urs = false;
         $.each(model.selectedGranules, function(key, granule) {
+            if ( granule.urs ) {
+                urs = true;
+            }
             if ( !selection[granule.product] ) {
                 productConfig = config.products[granule.product];
                 selection[granule.product] = {
@@ -237,10 +244,11 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
                    "<a class='wget' href='#'>Bulk Download (wget)</a>" +
                    "</div>";
         }
-        var elements = [
-            NOTICE,
-            bulk,
-        ];
+        var elements =[];
+        if ( urs ) {
+            elements.push(NOTICE);
+        }
+        elements.push(bulk);
         $.each(selection, function(key, product) {
             elements.push(productText(product));
         });

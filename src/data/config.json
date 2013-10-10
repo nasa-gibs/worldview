@@ -62492,6 +62492,11 @@
                     "LANCEMODIS"
                 ],
                 "shortName": "MOD04_L2"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MOD05_L2_DAY": {
@@ -62509,6 +62514,11 @@
                 ],
                 "dayNightFlag": "DAY",
                 "shortName": "MOD05_L2"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MOD05_L2_NIGHT": {
@@ -62526,6 +62536,11 @@
                 ],
                 "dayNightFlag": "NIGHT",
                 "shortName": "MOD05_L2"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MOD06_L2_DAY": {
@@ -62543,6 +62558,11 @@
                 ],
                 "dayNightFlag": "DAY",
                 "shortName": "MOD06_L2"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MOD06_L2_NIGHT": {
@@ -62560,6 +62580,11 @@
                 ],
                 "dayNightFlag": "DAY",
                 "shortName": "MOD06_L2"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MOD09GA": {
@@ -62583,6 +62608,11 @@
             },
             "science": {
                 "handler": "MODISGrid"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MOD09GQ": {
@@ -62606,6 +62636,11 @@
             },
             "science": {
                 "handler": "MODISGrid"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MOD10_L2": {
@@ -62623,6 +62658,11 @@
                 ],
                 "dayNightFlag": "DAY",
                 "shortName": "MOD10_L2"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MOD11_L2_DAY": {
@@ -62640,6 +62680,11 @@
                 ],
                 "dayNightFlag": "DAY",
                 "shortName": "MOD11_L2"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MOD11_L2_NIGHT": {
@@ -62657,6 +62702,11 @@
                 ],
                 "dayNightFlag": "NIGHT",
                 "shortName": "MOD11_L2"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MOD14": {
@@ -62673,6 +62723,11 @@
                     "LANCEMODIS"
                 ],
                 "shortName": "MOD14"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MOD29": {
@@ -62690,6 +62745,11 @@
                 ],
                 "dayNightFlag": "DAY",
                 "shortName": "MOD29"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MYD04_L2": {
@@ -62706,6 +62766,11 @@
                     "LANCEMODIS"
                 ],
                 "shortName": "MYD04_L2"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MYD05_L2_DAY": {
@@ -62723,6 +62788,11 @@
                 ],
                 "dayNightFlag": "DAY",
                 "shortName": "MYD05_L2"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MYD05_L2_NIGHT": {
@@ -62740,6 +62810,11 @@
                 ],
                 "dayNightFlag": "NIGHT",
                 "shortName": "MYD05_L2"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MYD06_L2_DAY": {
@@ -62757,6 +62832,11 @@
                 ],
                 "dayNightFlag": "DAY",
                 "shortName": "MYD06_L2"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MYD06_L2_NIGHT": {
@@ -62774,6 +62854,11 @@
                 ],
                 "dayNightFlag": "NIGHT",
                 "shortName": "MYD06_L2"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MYD09GA": {
@@ -62797,6 +62882,11 @@
             },
             "science": {
                 "handler": "MODISGrid"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MYD09GQ": {
@@ -62820,6 +62910,11 @@
             },
             "science": {
                 "handler": "MODISGrid"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MYD10_L2": {
@@ -62837,6 +62932,11 @@
                 ],
                 "dayNightFlag": "DAY",
                 "shortName": "MYD10_L2"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MYD11_L2_DAY": {
@@ -62854,6 +62954,11 @@
                 ],
                 "dayNightFlag": "DAY",
                 "shortName": "MYD11_L2"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MYD11_L2_NIGHT": {
@@ -62871,6 +62976,11 @@
                 ],
                 "dayNightFlag": "NIGHT",
                 "shortName": "MYD11_L2"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MYD14": {
@@ -62887,6 +62997,11 @@
                     "LANCEMODIS"
                 ],
                 "shortName": "MYD14"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MYD29": {
@@ -62904,6 +63019,11 @@
                 ],
                 "dayNightFlag": "DAY",
                 "shortName": "MYD29"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "OMAERUV": {
