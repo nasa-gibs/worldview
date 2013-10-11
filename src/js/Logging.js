@@ -133,7 +133,7 @@
     // If bind is defined, set the consoleObject this context to itself,
     // i.e., console.log.bind(console);
     var consoleFor = function(consoleObject, method) {
-        return ( consoleObject.bind ) ? method.bind(consoleObject) : method;
+        return ( method.bind ) ? method.bind(consoleObject) : method;
     };
 
     /**
