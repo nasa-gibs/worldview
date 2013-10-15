@@ -16,7 +16,7 @@ import json
 
 prog = os.path.basename(__file__)
 basedir = os.path.dirname(__file__)
-version = "1.2.1"
+version = "1.2.2"
 help_description = """\
 Concatenates all configuration items a directory into one configuration file. 
 """
@@ -53,13 +53,23 @@ def fatal(message):
     sys.exit(1)
 
 config = {}
-                  
+           
 for root, dirs, files in os.walk(options.config_dir):
-    this_dir = os.path.basename(root)
-    if this_dir == "config":
+    relative = root.replace(options.config_dir, "")
+    if relative.startswith("/"):
+        relative = relative[1:]
+    path = relative.split("/")
+
+    this_dir = options.config_dir
+    notify("Directory: %s\n" % this_dir)
+    if path[0] == "":
         current = config
     else:
-        current = config[this_dir]
+        current = config
+        for element in path:
+            if element not in current:
+                current[element] = {}
+            current = current[element]
 
     for dir in dirs:
         current[dir] = {}
