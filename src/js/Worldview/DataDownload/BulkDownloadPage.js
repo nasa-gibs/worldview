@@ -10,19 +10,24 @@
  */
 Worldview.namespace("DataDownload");
 
-Worldview.DataDownload.CurlPage = (function() {
+Worldview.DataDownload.BulkDownloadPage = (function() {
 
     var ns = {};
 
-    ns.show = function(selection) {
-        var page = window.open('pages/curl.html', 'Worldview_' + new Date());
+    var pages = {
+        wget: "pages/wget.html",
+        curl: "pages/curl.html"
+    };
+
+    ns.show = function(selection, type) {
+        var page = window.open(pages[type], 'Worldview_' + new Date());
         page.onload = function() {
-            fillPage(page, selection);
+            fillPage(page, selection, type);
         };
     };
 
-    var fillPage = function(page, selection) {
-        var commands = [];
+    var fillPage = function(page, selection, type) {
+        var downloadLinks = [];
         var hosts = {};
         var indirectLinks = [];
         $.each(selection, function(index, product) {
@@ -40,7 +45,12 @@ Worldview.DataDownload.CurlPage = (function() {
                             link.href + "</a></li>");
                         return;
                     }
-                    commands.push("curl --remote-name " + netrc + link.href);
+                    if ( type === "curl" ) {
+                        downloadLinks.push("curl --remote-name " + netrc +
+                                link.href);
+                    } else {
+                        downloadLinks.push(link.href);
+                    }
                     if ( granule.urs ) {
                         // Get the hostname from the URL, the text between
                         // the double slash and the first slash after that
@@ -52,8 +62,8 @@ Worldview.DataDownload.CurlPage = (function() {
                 });
             });
         });
-        page.document.getElementById("commands").innerHTML =
-            "<pre>" + commands.join("\n") + "</pre>";
+        page.document.getElementById("links").innerHTML =
+            "<pre>" + downloadLinks.join("\n") + "</pre>";
 
         var netrcEntries = [];
         $.each(hosts, function(host, value) {

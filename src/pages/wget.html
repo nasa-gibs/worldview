@@ -1,117 +1,54 @@
 <!doctype html>
-<html>
+<html id="BulkDownload">
     <head>
-        <title>wget.html</title>
-        <style>
-            body {
-                background-color: rgb(25, 28, 32);
-            }
-            h3 {
-                margin-top: 0;
-            }
-            h4 {
-                margin-bottom: 0
-            }
-            #page {
-                background-color: #ffffff;
-                margin: 20px;
-                padding: 20px;
-                border-radius: 5px;
-            }
-            pre {
-                background-color: #eeeeee;
-                padding: 5px;
-                border: 1px dashed #dddddd;
-            }
-            .label {
-                margin-top: 10px;
-                font-style: italic;
-                color: #808080;
-            }
-        </style>
-
-<script>
-var productText = function(product) {
-    var html = [];
-    html.push("<h4>" + product.name + "</h4>");
-    if ( product.noBulkDownload ) {
-        html.push("<p>" +
-                  "These granules are not available for bulk download. " +
-                  "Please visit each link and download manually." +
-                  "</p>");
-    }
-    for ( var i = 0; i < product.list.length; i++ ) {
-        var item = product.list[i];
-        // Don't print twice if the item and product names are the same.
-        if ( item.label !== product.name ) {
-            html.push("<div class='label'>" + item.label + "</div>");
-        }
-        for ( var j = 0; j < item.links.length; j++ ) {
-            var link = item.links[j];
-            if ( !product.noBulkDownload ) {
-                html.push(
-                    "<div>" +
-                    "<a href='" + link.href + "'>" + link.href + "</a>" +
-                    "</div>"
-                );
-            } else {
-                html.push(
-                    "<div class='label'>" +
-                    link.href +
-                    "</div>"
-                );
-            }
-        }
-    }
-    return html.join("\n");
-};
-
-window.onload = function() {
-    var div = document.getElementById("list");
-    if ( div.innerHTML !== "" ) {
-        return;
-    }
-    var html = [];
-    var storage = localStorage.wget;
-    if ( !storage ) {
-        return;
-    }
-    var selection = JSON.parse(storage);
-    for ( var product in selection ) {
-        html.push(productText(selection[product]));
-    }
-    div.innerHTML = html.join("\n");
-};
-</script>
-
+        <title>EOSDIS Worldview - Download Links</title>
+        <link type="text/css" href="../css/bulkDownload.css" rel="Stylesheet" />
     </head>
+
     <body>
         <div id='page'>
-            <div id='instructions'>
-                <h3>Using <code>wget</code> to Bulk Download Your Data</h3>
-                1) Save this HTML page as <code>wget.html</code> to your
-                local computer <b>using your browser's "Web Page, Complete"
-                format</b>.<br/>
-                2) Execute the following command to download all of your
-                requested files:
-                <pre>
-wget --input-file=wget.html --force-html</pre>
-                Due to the way Safari saves web pages, this feature is not
-                supported in that web browser.<br/><br/>
-                <b>Note:</b> If User Registration System (URS) credentials are required,
-                create a file (only readable by you) called
-                <code>urs.credentials</code> with the following:
-                <pre>
-user=<i>urs_user</i>
-password=<i>urs_password</i></pre>
-                where <i>urs_user</i> is your URS user name and
-                <i>urs_password</i> is your URS password. To download,
-                use the following command instead of step 2 above:
-                <pre>
-wget --input-file=wget.html --force-html --config=urs.credentials</pre><br/>
+            <h3>Download Links</h3>
+            <div id="links"></div>
+            <div id="netrc-header">
+            Some download links require a URS account. Use the following
+            netrc entries and follow the instructions below.
             </div>
-            <div id='list'></div>
+            <div id="netrc"></div>
+            <h3>Using <code>wget</code> to Bulk Download Your Data</h3>
+            <div id="netrc-instructions">
+            <p>
+            Add the netrc entries listed above to the following file:
+            <ul>
+                <li>Windows: <code>_netrc</code> file found in your home
+                    folder.
+                </li>
+                <li>
+                    Mac or Linux: <code>.netrc</code> file found in your
+                    home directory.
+                </li>
+            </ul>
+            Replace <code>URS_USER</code> with your URS user name and
+            <code>URS_PASSWORD</code> with your URS password. If this file does
+            not exist, create a new one. Ensure that your are the only
+            one that can read this file.
+            </p>
+            </div>
+
+            <p>
+                1) Copy the links above and paste into a text document
+                   save it as "links.txt"<br/>
+                2) Execute the following command to download all of your
+                   requested files:
+                <pre>
+wget --input-file=links.txt</pre>
+            </p>
+            <div id="indirect-instructions">
+            Some items that you have selected do not directly link to a
+            data file. Visit the following links and manually download each
+            data file:
+            </div>
+            <div id="indirect">
+            </div>
         </div>
     </body>
 </html>
-

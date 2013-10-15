@@ -268,11 +268,11 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
     };
 
     var showWgetPage = function() {
-        Worldview.DataDownload.WgetPage.show(selection);
+        Worldview.DataDownload.BulkDownloadPage.show(selection, "wget");
     };
 
     var showCurlPage = function() {
-        Worldview.DataDownload.CurlPage.show(selection);
+        Worldview.DataDownload.BulkDownloadPage.show(selection, "curl");
     };
 
     return self;
