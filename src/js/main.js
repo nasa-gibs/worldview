@@ -27,13 +27,6 @@ $(function() {// Initialize "static" vars
             "images/activity.gif",
             { id: "config", type:"json",
               src: "data/config.json?v=" + Worldview.BUILD_NONCE },
-            // FIXME: Projection cache HACK
-            { id: "geographic", type: "json",
-              src: "data/geographic_ap_products.json?v=" + Worldview.BUILD_NONCE },
-            { id: "arctic", type: "json",
-              src: "data/arctic_ap_products.json?v=" + Worldview.BUILD_NONCE },
-            { id: "antarctic", type: "json",
-              src: "data/antarctic_ap_products.json?v=" + Worldview.BUILD_NONCE },
             "images/permalink.png",
             "images/geographic.png",
             "images/arctic.png",
@@ -64,13 +57,6 @@ $(function() {// Initialize "static" vars
             // Convert all parameters found in the query string to an object,
             // keyed by parameter name
             config.parameters = Worldview.queryStringToObject(location.search);
-
-            // FIXME: Projection cache HACK
-            config.ap_products = {
-                geographic: queue.getResult("geographic"),
-                arctic: queue.getResult("arctic"),
-                antarctic: queue.getResult("antarctic")
-            };
 
             if ( config.parameters.loadDelay ) {
                 var delay = parseInt(config.parameters.loadDelay);
@@ -132,20 +118,40 @@ $(function() {// Initialize "static" vars
         debuggingFeatures(config);
 
         // Models
+        var projectionModel = Worldview.Models.Projection(config);
+        var layersModel = Worldview.Models.Layers(config, projectionModel);
         var dataDownloadModel = Worldview.DataDownload.Model(config);
+        // These are only convienence handles to important objects used
+        // for console debugging. Code should NOT reference these as they
+        // are subject to change or removal.
+        Worldview.config = config;
+        Worldview.models = {
+            projection: projectionModel,
+            layers: layersModel,
+            dataDownload: dataDownloadModel
+        };
 
         // Create widgets
+        var projection = Worldview.Widget.Projection(projectionModel);
+        /*
         var projection = new SOTE.widget.Switch("switch", {
             dataSourceUrl:"a",
             selected:"geographic"
         });
+        */
         var palettes = Worldview.Widget.Palette("palettes", config, {
             alignTo: "#products"
         });
+        var layerSideBar = Worldview.Widget.LayerSideBar();
+        var activeLayers = Worldview.Widget.ActiveLayers(config, layersModel,
+                projectionModel);
+
+        /*
         var products = new SOTE.widget.Products("productsHolder", {
             paletteWidget: palettes,
             config: config
         });
+        */
         var date = new SOTE.widget.DatePicker("time", {
             hasThumbnail: false
         });
@@ -163,9 +169,11 @@ $(function() {// Initialize "static" vars
             m: map,
             config: config
         });
+        /*
         var apcn = new Worldview.Widget.ArcticProjectionChangeNotification(
             config, products.b
         );
+        */
         var opacity = new Worldview.Widget.Opacity(config);
         var crs = new Worldview.Widget.CRS(config);
 
@@ -202,6 +210,7 @@ $(function() {// Initialize "static" vars
           }
         });
         // Wirings
+        /*
         products.events
             .on("dataDownloadSelect", function() {
                 dataDownloadModel.activate();
@@ -209,6 +218,7 @@ $(function() {// Initialize "static" vars
             .on("dataDownloadUnselect", function() {
                 dataDownloadModel.deactivate();
             });
+        */
         dataDownloadModel.events
             .on("activate", function() {
                 products.selectTab("download");
@@ -224,41 +234,44 @@ $(function() {// Initialize "static" vars
             .on("queryResults", function() {
                 dataDownload.onViewChange(map.maps.map);
             });
+
 	    // Register event listeners
         REGISTRY.addEventListener("time",
-                "map", "imagedownload", apcn.containerId, crs.containerId,
+                "map", "imagedownload", /*apcn.containerId,*/ crs.containerId,
                 dataDownload.containerId);
         REGISTRY.addEventListener("switch",
                 "map", "products", "selectorbox", "imagedownload", "camera",
-                apcn.containerId, crs.containerId, dataDownload.containerId);
+                /*apcn.containerId,*/ crs.containerId, dataDownload.containerId);
         REGISTRY.addEventListener("products",
                 "map", "selectorbox", "imagedownload", "palettes",
-                apcn.containerId, dataDownload.containerId);
+                /*apcn.containerId,*/ dataDownload.containerId);
         REGISTRY.addEventListener("selectorbox","products");
         REGISTRY.addEventListener("camera","imagedownload");
         REGISTRY.addEventListener("palettes","map","camera","products");
         REGISTRY.addEventListener("opacity", "map");
         REGISTRY.addEventListener(crs.containerId, "imagedownload");
 
+        // Legacy REGISTRY based widgets
+        var legacySwitch = Worldview.Legacy.Switch(projectionModel);
+        var legacyBank = Worldview.Legacy.Bank(layersModel);
+
         // These are only convienence handles to important objects used
         // for console debugging. Code should NOT reference these as they
         // are subject to change or removal.
-        Worldview.config = config;
         Worldview.opacity = opacity;
         Worldview.palettes = palettes;
         Worldview.view = map;
-        Worldview.ddm = dataDownloadModel;
         Worldview.maps = map.maps;
 
         // Initialize widgets
 
         var initOrder = [
-            projection,
-            products.b, // bank
+            legacySwitch,
+            legacyBank, // bank
             date,
             map,
             palettes,
-            apcn,
+            //apcn,
             opacity,
             crs,
             dataDownload

@@ -30,7 +30,6 @@
         }
     },
     "properties": {
-        "defaultLayer": "true",
         "format": "image/jpeg",
         "layer": "VIIRS_CityLights_2012",
         "tileSize": [

@@ -31,7 +31,6 @@
         }
     },
     "properties": {
-        "defaultLayer": "true",
         "format": "image/jpeg",
         "layer": "MODIS_Aqua_SurfaceReflectance_Bands121",
         "tileSize": [

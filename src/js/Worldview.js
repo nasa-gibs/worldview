@@ -58,6 +58,9 @@
     // June 6, 2013
     ns.ARCTIC_PROJECTION_CHANGE_DATE = new Date(Date.UTC(2013, 05, 06));
 
+    // Width boundary in pixels where desktop mode switches to mobile.
+    ns.TRANSITION_WIDTH = 720;
+
     /**
      * Determines if Worldview is being run in development mode.
      *

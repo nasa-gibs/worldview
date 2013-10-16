@@ -1,27 +1,27 @@
-SOTE.namespace("SOTE.widget.Products"); 
+SOTE.namespace("SOTE.widget.Products");
 
 SOTE.widget.Products.prototype = new SOTE.widget.Component;
 
 /**
-  * Instantiate the Products  
+  * Instantiate the Products
   *
   * @class A selection device classifying radio buttons/checkboxes into categories that are displayed in Accordion form.
   *     Radio buttons allow single selection accross categories.  Checkboxes allow multiple selections accross categories.
   *     Radio selections cannot span multiple categories.
   * @constructor
   * @this {Products}
-  * @param {String} containerId is the container id of the div in which to render the object 
+  * @param {String} containerId is the container id of the div in which to render the object
   * @param {Object} [config] is a hash allowing configuration of this component
-  * @config {Object[]} [items] a JS Array of JS Objects: items.category[i..n].key, items.category[i..n].value 
+  * @config {Object[]} [items] a JS Array of JS Objects: items.category[i..n].key, items.category[i..n].value
   *     , items.category[i..n].action, items.type[i..n] representing the available options
   * @config {String} [selected] the key of the initially selected option(s)
   * @augments SOTE.widget.Component
-  * 
+  *
 */
 SOTE.widget.Products = function(containerId, config){
     this.log = Logging.getLogger("Worldview.Widget.Products");
     //this.VALID_PROJECTIONS = ["geographic", "arctic", "antarctic"];
-    
+
     //Get the ID of the container element
     this.container=document.getElementById(containerId);
     if (this.container==null){
@@ -30,9 +30,9 @@ SOTE.widget.Products = function(containerId, config){
     }
     this.id = containerId;
     //Store the container's ID
-    this.containerId=containerId;    
+    this.containerId=containerId;
 
-    //Define an object for holding configuration 
+    //Define an object for holding configuration
     if (config===undefined){
         config={};
     }
@@ -42,18 +42,18 @@ SOTE.widget.Products = function(containerId, config){
     }
 
     if(config.categories === undefined){
-        config.categories = ["Category 1","Category 2"]; 
+        config.categories = ["Category 1","Category 2"];
     }
 
     if(config.callback === undefined){
-        config.callback = null; 
+        config.callback = null;
     }
 
     if(config.state === undefined || config.state === ""){
         config.state = "geographic";
     }
 
-       
+
     this.state = config.state;
     this.selected = config.selected;
     this.isCollapsed = false;
@@ -67,38 +67,38 @@ SOTE.widget.Products = function(containerId, config){
 
 };
 
-SOTE.widget.Products.HTML_TAB_ACTIVE_SELECTED = 
+SOTE.widget.Products.HTML_TAB_ACTIVE_SELECTED =
     "<i class='productsIcon selected icon-layers'></i>" +
     "Active";
-    
-SOTE.widget.Products.HTML_TAB_ACTIVE_UNSELECTED = 
+
+SOTE.widget.Products.HTML_TAB_ACTIVE_UNSELECTED =
     "<i class='productsIcon selected icon-layers' title='Active'></i>";
 
-SOTE.widget.Products.HTML_TAB_ADD_SELECTED = 
+SOTE.widget.Products.HTML_TAB_ADD_SELECTED =
     "<i class='productsIcon selected icon-add'></i>" +
     "Add Layers";
-    
-SOTE.widget.Products.HTML_TAB_ADD_UNSELECTED = 
+
+SOTE.widget.Products.HTML_TAB_ADD_UNSELECTED =
     "<i class='productsIcon selected icon-add' title='Add Layers'></i>";
-    
-SOTE.widget.Products.HTML_TAB_DOWNLOAD_SELECTED = 
+
+SOTE.widget.Products.HTML_TAB_DOWNLOAD_SELECTED =
     "<i class='productsIcon selected icon-download'></i>" +
     "Download";
-    
-SOTE.widget.Products.HTML_TAB_DOWNLOAD_UNSELECTED = 
+
+SOTE.widget.Products.HTML_TAB_DOWNLOAD_UNSELECTED =
     "<i class='productsIcon selected icon-download' title='Download'></i>";
 
 /**
   * Displays all options in HTML in an Accordion format (see JQuery UI Accordion) with the selected states being indicated
-  * by radio button and checkbox selection.  All callbacks should be set.  The component UI should be rendered 
+  * by radio button and checkbox selection.  All callbacks should be set.  The component UI should be rendered
   * with controllers to call the events.
   *
-  *  
+  *
   * @this {Products}
-  * 
+  *
 */
 SOTE.widget.Products.prototype.init = function(){
-    
+
     this.render();
     if(REGISTRY){
          REGISTRY.register(this.id,this);
@@ -106,16 +106,16 @@ SOTE.widget.Products.prototype.init = function(){
     else{
         alert("No REGISTRY found!  Cannot register Products!");
     }
-    
-    
+
+
 };
 
 /**
   * Renders the UI accordion from this.items
   *
-  *  
+  *
   * @this {Products}
-  * 
+  *
 */
 SOTE.widget.Products.prototype.render = function(){
 
@@ -127,14 +127,14 @@ SOTE.widget.Products.prototype.render = function(){
     var tabs = document.createElement("ul");
     tabs.setAttribute("id",this.id+"tabs");
     tabs.innerHTML =
-            "<li class='layerPicker first'>" + 
-               "<a href='#products' class='activetab tab'></a>" + 
-            "</li>" + 
-            "<li class='layerPicker second'>" + 
-                "<a class='addlayerstab tab' href='#selectorbox'></a>" + 
-            "</li>" + 
-            "<li class='layerPicker third'>" + 
-                "<a class='tab' href='#DataDownload'></a>" + 
+            "<li class='layerPicker first'>" +
+               "<a href='#products' class='activetab tab'></a>" +
+            "</li>" +
+            "<li class='layerPicker second'>" +
+                "<a class='addlayerstab tab' href='#selectorbox'></a>" +
+            "</li>" +
+            "<li class='layerPicker third'>" +
+                "<a class='tab' href='#DataDownload'></a>" +
             "</li>";
     this.container.appendChild(tabs);
     //$('#'+this.id).addClass('products');
@@ -166,32 +166,36 @@ SOTE.widget.Products.prototype.render = function(){
         e.data = { self: self };
         SOTE.widget.Products.change(e, ui);
     }});
+    /*
     this.b = new SOTE.widget.Bank("products", {
-        paletteWidget: this.paletteWidget, 
+        paletteWidget: this.paletteWidget,
         dataSourceUrl: "ap_products.php",
         title: "My Layers",
         selected: {
-            antarctic: "baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,antarctic_coastlines", 
+            antarctic: "baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,antarctic_coastlines",
             arctic: "baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,arctic_coastlines",
             geographic: "baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,sedac_bound"
         },
         categories: ["Base Layers","Overlays"],
         config:this.config
-    });
+    });*/
+    this.b = Worldview.Widget.ActiveLayers(this.config);
+    /*
     this.s = new SOTE.widget.Selector("selectorbox", {
         dataSourceUrl: "ap_products.php",
         categories: ["Base Layers","Overlays"],
         selected: {
-            antarctic:"baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,antarctic_coastlines", 
+            antarctic:"baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,antarctic_coastlines",
             arctic:"baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,arctic_coastlines",
             geographic:"baselayers,!MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor~overlays,sedac_bound"
         },
         config:this.config
-    });    
-    
+    });
+    */
+
     //$('#'+this.id+"prods").on("tabsshow",SOTE.widget.Products.change);
        $('.accordionToggler').bind('click',{self:this},SOTE.widget.Products.toggle);
-    
+
     if($(window).width() < 720){
         SOTE.widget.Products.toggle({data: {self:this}});
     }
@@ -199,7 +203,7 @@ SOTE.widget.Products.prototype.render = function(){
 
     //setTimeout(SOTE.forceResize();
 
-    // Mark the component as ready in the registry if called via init() 
+    // Mark the component as ready in the registry if called via init()
     if ((this.initRenderComplete === false) && REGISTRY) {
         this.initRenderComplete = true;
         REGISTRY.markComponentReady(this.id);
@@ -210,7 +214,7 @@ SOTE.widget.Products.prototype.render = function(){
         self.s.resize();
         self.adjustAlignment();
     });
-    
+
     $("#products").bind("fire", {self:this}, SOTE.widget.Products.handleFire);
 
 };
@@ -224,7 +228,7 @@ SOTE.widget.Products.handleFire = function(e){
 
 SOTE.widget.Products.prototype.adjustAlignment = function(){
     if($(window).width() < 720 && this.isCollapsed){
-        var w = $('.products').outerWidth();    
+        var w = $('.products').outerWidth();
         $('.products').css("left", "-"+w+"px");
     }
 };
@@ -240,7 +244,7 @@ SOTE.widget.Products.stopLink = function(e){
     //e.stopPropagation();
 };
 
-SOTE.widget.Products.change = function(e,ui){	
+SOTE.widget.Products.change = function(e,ui){
     var self = e.data.self;
     if ( ui.index === 0 ) {
         $('.ui-tabs-nav')
@@ -252,36 +256,36 @@ SOTE.widget.Products.change = function(e,ui){
         $('.ui-tabs-nav')
               .removeClass('firstselected')
               .addClass('secondselected')
-              .removeClass('thirdselected'); 
+              .removeClass('thirdselected');
     } else if ( ui.index === 2 ) {
         $('.ui-tabs-nav')
               .removeClass('firstselected')
               .removeClass('secondselected')
-              .addClass('thirdselected');         
+              .addClass('thirdselected');
     } else {
         throw new Error("Invalid tab index: " + ui.index);
     }
 
-    var tab1 = ( ui.index === 0 ) 
-        ? SOTE.widget.Products.HTML_TAB_ACTIVE_SELECTED 
+    var tab1 = ( ui.index === 0 )
+        ? SOTE.widget.Products.HTML_TAB_ACTIVE_SELECTED
         : SOTE.widget.Products.HTML_TAB_ACTIVE_UNSELECTED;
-    var tab2 = ( ui.index === 1 ) 
-        ? SOTE.widget.Products.HTML_TAB_ADD_SELECTED 
+    var tab2 = ( ui.index === 1 )
+        ? SOTE.widget.Products.HTML_TAB_ADD_SELECTED
         : SOTE.widget.Products.HTML_TAB_ADD_UNSELECTED;
-    var tab3 = ( ui.index === 2 ) 
-        ? SOTE.widget.Products.HTML_TAB_DOWNLOAD_SELECTED 
+    var tab3 = ( ui.index === 2 )
+        ? SOTE.widget.Products.HTML_TAB_DOWNLOAD_SELECTED
         : SOTE.widget.Products.HTML_TAB_DOWNLOAD_UNSELECTED;
-    
+
     if ( ui.index === 2 ) {
         self.events.trigger("dataDownloadSelect");
     } else {
         self.events.trigger("dataDownloadUnselect");
     }
-    
+
     $('.ui-tabs-nav li.first a').html(tab1);
     $('.ui-tabs-nav li.second a').html(tab2);
     $('.ui-tabs-nav li.third a').html(tab3);
-        
+
     return false;
 };
 
@@ -305,7 +309,7 @@ SOTE.widget.Products.toggle = function(e,ui){
         $('.products').animate({left:'-'+w+"px"}, 300);
         self.isCollapsed = true;
         $("#"+self.id).after($('.accordionToggler'));
-    }     
+    }
 };
 
 SOTE.widget.Products.prototype.selectTab = function(tabName) {
@@ -313,7 +317,7 @@ SOTE.widget.Products.prototype.selectTab = function(tabName) {
     if ( tabName === "download" ) {
         if ( selectedTab !== 2 ) {
             $("#" + this.id).tabs("select", 2);
-        }        
+        }
     } else {
         throw new Error("Invalid tab: " + tabName);
     }
@@ -340,7 +344,7 @@ SOTE.widget.Products.prototype.fire = function(){
   * Gets the currently selected option(s) [containerId]=[options]
   *
   * @this {Products}
-  * @returns {String} [container]=[options], options being a dot delimited string 
+  * @returns {String} [container]=[options], options being a dot delimited string
   *     representing the key(s) of the currently selected option(s)
   *
 */
@@ -350,11 +354,11 @@ SOTE.widget.Products.prototype.getValue = function(){
 
 /**
   * Change the component based on dependencies (i.e. Available Options, Selected)
-  * 
+  *
   * @this {Bank}
   * @param {String} querystring contains all values of dependencies (from registry)
   * @returns {boolean} true or false depending on if the selected value still validats with criteria change
-  * 
+  *
 */
 SOTE.widget.Products.prototype.updateComponent = function(querystring){
     var qs = (querystring === undefined)? "":querystring;

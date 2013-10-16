@@ -39,7 +39,7 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
     var last = null;
 
     var init = function() {
-        //Logging.debug("Worldview.Map");
+        Logging.debug("Worldview.Map");
         if ( REGISTRY ) {
             REGISTRY.register(containerId, self);
         } else {
@@ -80,9 +80,11 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
             log.debug("Last State", last);
 
 
+            console.log("----- projection", state.projection, "last", last.projection);
             if ( state.projection !== undefined &&
                     state.projection !== last.projection ) {
                 var projection = state.projection;
+                console.log("******* SETTING PROJECTION");
                 if ( !(projection in self.maps.mapConfig.projections) ) {
                     var defaultProjection =
                         self.maps.mapConfig.defaults.projection;
