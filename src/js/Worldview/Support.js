@@ -57,6 +57,7 @@ Worldview.namespace("Support");
         checkMobile();
         fixSize();
         modernSetTimeout();
+        shimStringContains();
     };
 
     var init = function() {
@@ -179,6 +180,15 @@ Worldview.namespace("Support");
               } : vCallback, nDelay);
             };
         }
+    };
+
+    var shimStringContains = function(){
+        if ( ! ('contains' in String.prototype) ) {
+            String.prototype.contains = function(str, startIndex) {
+                return -1 !== String.prototype.indexOf.call(this, str,
+                        startIndex);
+            }
+        };
     };
 
     init();
