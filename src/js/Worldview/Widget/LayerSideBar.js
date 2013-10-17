@@ -11,7 +11,7 @@
 
 Worldview.namespace("Widget");
 
-Worldview.Widget.LayerSideBar = function() {
+Worldview.Widget.LayerSideBar = function(layersModel) {
 
     var HTML_TAB_ACTIVE_SELECTED =
         "<i class='productsIcon selected icon-layers'></i>" +
@@ -34,7 +34,10 @@ Worldview.Widget.LayerSideBar = function() {
     var HTML_TAB_DOWNLOAD_UNSELECTED =
         "<i class='productsIcon selected icon-download' title='Download'></i>";
 
+    var collapsed = false;
+
     var self = {};
+
     self.id = "productsHolder";
     self.selector = "#productsHolder";
     self.events = Worldview.Events();
@@ -65,62 +68,29 @@ Worldview.Widget.LayerSideBar = function() {
                     "</a>" +
                 "</li>" +
             "</ul>" +
+
+            "<div id='" + self.id + "toggleButtonHolder'" +
+                "class='toggleButtonHolder'>" +
+                "<a class='accordionToggler atcollapse arrow' " +
+                    "title='Hide'></a>" +
+                "</a>" +
+            "</div>" +
+
             "<div id='products'></div>" +
             "<div id='selectorbox'></div>" +
             "<div id='DataDownload'></div>";
+
         $container.html(html);
 
         $container.tabs({
             show: onTabChange
         });
 
-        /*
-        var toggleButtonHolder = document.createElement("div");
-        toggleButtonHolder.setAttribute("id",this.id+"toggleButtonHolder");
-        toggleButtonHolder.setAttribute("class","toggleButtonHolder");
-        var accordionToggler = document.createElement("a");
-        accordionToggler.setAttribute("class","accordionToggler atcollapse arrow");
-        accordionToggler.setAttribute("title","Hide Layer Selector");
-        this.isCollapsed = false;
-        toggleButtonHolder.appendChild(accordionToggler);
-        this.container.appendChild(toggleButtonHolder);
-        */
-
-        /*
-        //this.container.appendChild(productContainer);
-        var self = this;
-        $('#'+this.id).tabs({show: function(e, ui) {
-            e.data = { self: self };
-            SOTE.widget.Products.change(e, ui);
-        }});
-
-        this.b = Worldview.Widget.ActiveLayers(this.config);
-
-
-        //$('#'+this.id+"prods").on("tabsshow",SOTE.widget.Products.change);
-           $('.accordionToggler').bind('click',{self:this},SOTE.widget.Products.toggle);
-
-        if($(window).width() < 720){
-            SOTE.widget.Products.toggle({data: {self:this}});
+        if ( $(window).width() < Worldview.TRANSITION_WIDTH ) {
+            slide();
         }
-
-
-        //setTimeout(SOTE.forceResize();
-
-        // Mark the component as ready in the registry if called via init()
-        if ((this.initRenderComplete === false) && REGISTRY) {
-            this.initRenderComplete = true;
-            REGISTRY.markComponentReady(this.id);
-        }
-        var self = this;
-        $(window).resize(function(){
-            self.b.render();
-            self.s.resize();
-            self.adjustAlignment();
-        });
-
-        $("#products").bind("fire", {self:this}, SOTE.widget.Products.handleFire);
-        */
+        $('.accordionToggler').bind('click', slide);
+        $(window).resize(adjustAlignment);
     };
 
     var onTabChange = function(e, ui) {
@@ -165,6 +135,42 @@ Worldview.Widget.LayerSideBar = function() {
         $('.ui-tabs-nav li.third a').html(tab3);
 
         return false;
+    };
+
+    var slide = function(e, ui) {
+        if ( collapsed ) {
+            $('.accordionToggler')
+                .removeClass('atexpand')
+                .addClass('atcollapse')
+                .removeClass('staticLayers dateHolder')
+                .addClass('arrow');
+            $('.accordionToggler').attr("title","Hide Layer Selector");
+            $('.accordionToggler').empty();
+            $('.products').animate({left:'0'}, 300);
+            collapsed = false;
+            $('.accordionToggler').appendTo("#"+self.id+"toggleButtonHolder");
+        }
+        else {
+            $('.accordionToggler')
+                .removeClass('atcollapse')
+                .addClass('dateHolder')
+                .removeClass('arrow')
+                .addClass('staticLayers');
+            $('.accordionToggler').attr("title","Show Layer Selector");
+            $('.accordionToggler').html("Layers (" + layersModel.total() + ")");
+
+            var w = $('.products').outerWidth();
+            $('.products').animate({left:'-'+w+"px"}, 300);
+            collapsed = true;
+            $("#" + self.id).after($('.accordionToggler'));
+        }
+    };
+
+    var adjustAlignment = function() {
+        if ( $(window).width() < Worldview.TRANSITION_WITH && collapsed ) {
+            var w = $('.products').outerWidth();
+            $('.products').css("left", "-"+w+"px");
+        }
     };
 
     init();

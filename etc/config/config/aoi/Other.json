@@ -1,4 +1,5 @@
 {
+    "projections": [ "geographic" ],
     "baselayers": [
         "VIIRS_CityLights_2012"
     ],

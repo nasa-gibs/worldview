@@ -61,6 +61,19 @@
     // Width boundary in pixels where desktop mode switches to mobile.
     ns.TRANSITION_WIDTH = 720;
 
+    ns.LAYER_TYPES = {
+        baselayers: {
+            id: "baselayers",
+            camel: "BaseLayers",
+            description: "Base Layers"
+        },
+        overlays: {
+            id: "overlays",
+            camel: "Overlays",
+            description: "Overlays"
+        }
+    };
+
     /**
      * Determines if Worldview is being run in development mode.
      *
@@ -459,15 +472,8 @@
         return $(arr1).not(arr2).length == 0 && $(arr2).not(arr1).length == 0;
     };
 
-    ns.abbreviate = function(size, text) {
-        if ( text.length <= size ) {
-            return text;
-        }
-        // Remove elipsis size
-        var s = size - 3;
-        var left = Math.ceil(s / 2);
-        var right = -Math.floor(s / 2);
-        return text.slice(0, left) + "..." + text.slice(right);
+    ns.id = function(value) {
+        return value.replace(/:/g,"colon");
     };
 
 })(window.Worldview = window.Worldview || {});

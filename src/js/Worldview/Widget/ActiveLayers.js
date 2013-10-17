@@ -15,11 +15,11 @@ Worldview.Widget.ActiveLayers = function(config, model, projectionModel) {
 
     var log = Logging.getLogger("Widget.ActiveLayers");
     var aoi = config.aoi;
-    var types = [
-        {id: "baselayers", camel: "BaseLayers", description: "Base Layers"},
-        {id: "overlays",   camel: "Overlays",   description: "Overlays"}
-    ];
+    var types = Worldview.LAYER_TYPES;
     var jsp;
+
+    var ICON_VISIBLE = "images/visible.png";
+    var ICON_HIDDEN = "images/invisible.png";
 
     var self = {};
     self.id = "products";
@@ -28,10 +28,12 @@ Worldview.Widget.ActiveLayers = function(config, model, projectionModel) {
     var init = function() {
         render();
         model.events
+            .on("add", onLayerAdded)
             .on("remove", onLayerRemoved)
             .on("visibility", onLayerVisibility);
         projectionModel.events
             .on("change", render);
+        $(window).resize(resize);
     };
 
     var render = function() {
@@ -39,16 +41,14 @@ Worldview.Widget.ActiveLayers = function(config, model, projectionModel) {
         $container.empty();
 
         var tabs_height = $(".ui-tabs-nav").outerHeight(true);
-        $(self.selector).addClass('bank');
-        $(self.selector).height(
+        $container.addClass('bank');
+        $container.height(
             $(self.selector).parent().outerHeight() - tabs_height
         );
 
-        var html = [];
         $.each(types, function(index, type) {
-            html.push(renderType(type));
+            renderType($container, type);
         });
-        $(self.selector).html(html.join("\n"));
 
         //this.renderCanvases();
 
@@ -64,67 +64,92 @@ Worldview.Widget.ActiveLayers = function(config, model, projectionModel) {
             containment: "parent",
             tolerance: "pointer"
         });
-        if ( $(window).width() > Worldview.TRANSITION_WIDTH ) {
-            if ( jsp ) {
-                var api = jsp.data('jsp');
-                if ( api ) {
-                    api.destroy();
-                }
-            }
-            this.jsp = $("." + self.id + "category")
-                .jScrollPane({autoReinitialise: false, verticalGutter:0});
-        }
 
         $("." + self.id + "category li").disableSelection();
-        //$("." + this.id + "category").bind('sortstop',{self:this},SOTE.widget.Bank.handleSort);
+        $("." + self.id + "category").bind('sortstop', reorder);
 
-        //setTimeout(SOTE.widget.Bank.adjustCategoryHeights,1,{self:this});
-
-        /* MCG
-        // Mark the component as ready in the registry if called via init()
-        if ((this.initRenderComplete === false) && REGISTRY) {
-            this.initRenderComplete = true;
-            REGISTRY.markComponentReady(this.id);
-        }
-        END MCG */
+        setTimeout(resize, 1);
     };
 
-    var renderType = function(type) {
-        var html = [];
-        html.push(
-            "<div id='" + self.id + type.camel + "' class='categoryContainer'>" +
-            "<h3 class='head'>" + type.description + "</h3>" +
-            "<ul id='" + type.id + "' class='" + self.id +
-                "category category'>");
+    var renderType = function($parent, type) {
+        var $container = $("<div></div>")
+            .attr("id", self.id + type.camel)
+            .addClass("categoryContainer");
+
+        var $header = $("<h3></h3>")
+            .addClass("head")
+            .html(type.description);
+
+        var $layers = $("<ul></ul>")
+            .attr("id", type.id)
+            .addClass(self.id + "category")
+            .addClass("category");
 
         $.each(model.forProjection()[type.id], function(index, layer) {
-            html.push(
-                "<li id='" + type.id + "-" + id(layer.id) + "' class='" +
-                    self.id + "item item'>" +
-                "<a>" +
-                    "<img class='close bank-item-img' id='close|" +
-                        type.id + "|" + id(layer.id) +
-                        "' title='Remove Layer' " +
-                        "src='images/close-red-x.png'/>" +
-                "</a>"
-            );
-            if ( !model.visible[layer.id] ) {
-                html.push("<a class='hdanchor'>" +
-                    "<img class='hide hideReg bank-item-img' " +
-                    "title='Show Layer' id='hide" + id(layer.id) + "'" +
-                    "data-action='show' data-layer='" + layer.id + "'" +
-                    "src='images/invisible.png' /></a>");
-            } else {
-                html.push("<a class='hdanchor'>" +
-                    "<img class='hide hideReg bank-item-img' " +
-                    "title='Hide Layer' id='hide" + id(layer.id) + "'" +
-                    "data-action='hide' data-layer='" + layer.id + "'" +
-                    "src='images/visible.png' /></a>");
+            renderLayer($layers, type, layer);
+        });
 
-            }
-            html.push("<h4>" + layer.name + "</h4>");
-            html.push("<p>" + layer.description + "</p>");
+        $container.append($header);
+        $container.append($layers);
 
+        $parent.append($container);
+    };
+
+    var renderLayer = function($parent, type, layer) {
+        var $layer = $("<li></li>")
+            .attr("id", type.id + "-" + Worldview.id(layer.id))
+            .addClass(self.id + "item")
+            .addClass("item");
+
+        var $removeButton = $("<a></a>");
+        var $removeImage = $("<img></img>")
+            .attr("id", "close" + type.id + Worldview.id(layer.id))
+            .addClass("close")
+            .addClass("bank-item-img")
+            .attr("data-layer", layer.id)
+            .attr("data-layer-type", type.id)
+            .attr("title", "Remove Layer")
+            .attr("src", "images/close-red-x.png");
+        $removeButton.append($removeImage);
+        $layer.append($removeButton);
+
+        var $visibleButton = $("<a></a>")
+            .addClass("hdanchor");
+        var $visibleImage = $("<img></img>")
+            .attr("id", "hide" + Worldview.id(layer.id))
+            .attr("data-layer", layer.id)
+            .addClass("hide")
+            .addClass("hideReg")
+            .addClass("bank-item-img");
+        if ( !model.visible[layer.id] ) {
+            $visibleImage
+                .attr("title", "Show Layer")
+                .attr("data-action", "show")
+                .attr("src", ICON_HIDDEN);
+        } else {
+            $visibleImage
+                .attr("title", "Hide Layer")
+                .attr("data-action", "hide")
+                .attr("src", ICON_VISIBLE);
+        }
+        $visibleButton.append($visibleImage);
+        $layer.append($visibleButton);
+
+        $layer.append($("<h4></h4>").html(layer.name));
+        $layer.append($("<p></p>").html(layer.description));
+
+        if ( layer.rendered ) {
+            renderLegend($layer, type, layer);
+        }
+        $parent.append($layer);
+    };
+
+    var renderLegend = function($parent, type, layer) {
+        var $container = $("<div></div>");
+
+        $container.append($("<span>X</span>").addClass("palette"));
+
+            /*
             // Has a rendered palette?
             if ( layer.rendered ) {
                 html.push(
@@ -148,32 +173,123 @@ Worldview.Widget.ActiveLayers = function(config, model, projectionModel) {
             }
             html.push("</li>");
         });
-        html.push("</ul>");
-        html.push("</div>");
-        return html.join("\n");
+        */
+    };
+
+    var adjustCategoryHeights = function() {
+        var heights = [];
+        var container_height = $(self.selector).outerHeight(true);
+        var labelHeight = 0;
+        $(self.selector + ' .head').each(function(){
+            labelHeight += $(this).outerHeight(true);
+        });
+        container_height -= labelHeight;
+        var types = ["baselayers", "overlays"];
+        $.each(types, function(i, type) {
+            var actual_height = 0;
+            var count = 0;
+            $('#' + type + ' li').each(function() {
+                actual_height += $(this).outerHeight(true);
+                count++;
+            });
+
+            heights.push({
+                name: type,
+                height: actual_height,
+                count: count
+            });
+        });
+
+        if ( heights[0].height + heights[1].height > container_height ) {
+            if ( heights[0].height > container_height / 2 ) {
+                heights[0].height = container_height / 2;
+            }
+            heights[1].height = container_height - heights[0].height;
+        }
+
+        $("#" + heights[0].name).css("height",heights[0].height+"px");
+        $("#" + heights[1].name).css("height",heights[1].height+"px");
+
+        reinitializeScrollbars();
+    };
+
+    var reinitializeScrollbars = function() {
+        $("." + self.id + "category").each(function() {
+            var api = $(this).data('jsp');
+            if ( api ) {
+                api.reinitialise();
+            }
+        });
+    };
+
+    var resize = function() {
+        // If on a mobile device, use the native scroll bars
+        if ( $(window).width() > Worldview.TRANSITION_WIDTH ) {
+            if ( jsp ) {
+                var api = jsp.data('jsp');
+                if ( api ) {
+                    api.destroy();
+                }
+            }
+            this.jsp = $("." + self.id + "category")
+                .jScrollPane({autoReinitialise: false, verticalGutter:0});
+        }
+        adjustCategoryHeights();
     };
 
     var removeLayer = function(event) {
-        var items = event.target.id.split("|");
-        var type = items[1];
-        var id = unescapeId(items[2].replace(/close/, ""));
-        model.remove(type, id);
+        var $target = $(event.target);
+        model.remove($target.attr("data-layer-type"),
+                     $target.attr("data-layer"));
     };
 
     var onLayerRemoved = function(layer, type) {
-        var layerSelector = "#" + type + "-" + id(layer.id);
+        var layerSelector = "#" + type + "-" + Worldview.id(layer.id);
         $(layerSelector).remove();
+        adjustCategoryHeights();
+    };
+
+    var onLayerAdded = function(layer, type) {
+        var $container = $("#" + type);
+        var api = $container.data("jsp");
+        if ( api ) {
+            $container = api.getContentPane();
+        }
+        renderLayer($container, types[type], layer);
+        adjustCategoryHeights();
     };
 
     var toggleVisibility = function(event) {
-        var $element = $("#" + event.target.id);
-        var action = $element.attr("data-action");
+        var $target = $(event.target);
+        var action = $target.attr("data-action");
         var layer = $element.attr("data-layer");
-        if ( action === "show" ) {
-            model.setVisibility(layer, true);
+        if ( $target.attr("data-action") === "show" ) {
+            model.setVisibility($target.attr("data-layer"), true);
         } else {
-            model.setVisibility(layer, false);
+            model.setVisibility($target.attr("data-layer"), false);
         }
+    };
+
+    var reorder = function(a, b, c) {
+        console.log("reorder", a, b, c);
+        console.log($(this).index());
+        /*
+        self.values = {};
+        for(var i=0; i<self.categories.length; i++){
+            var formatted = self.categories[i].replace(/\s/g, "");
+            formatted = formatted.toLowerCase();
+            self.values[formatted] = new Array();
+            jQuery('li[id|="'+formatted+'"]').each(function() {
+                var item = jQuery( this );
+                var id = item.attr("id");
+                var vals = id.split("-");
+                var val = vals.splice(0,1);
+                val = vals.join("-");
+                self.values[formatted].push({value:val});
+            });
+        }
+        self.fire();
+        */
     };
 
     var onLayerVisibility = function(layer, visible) {
@@ -185,14 +301,6 @@ Worldview.Widget.ActiveLayers = function(config, model, projectionModel) {
             $element.attr("data-action", "show");
             $element.attr("src", "images/invisible.png");
         }
-    };
-
-    var id = function(value) {
-        return value.replace(/:/g, "colon");
-    };
-
-    var unescapeId = function(value) {
-        return value.replace("colon", /:/g);
     };
 
     init();

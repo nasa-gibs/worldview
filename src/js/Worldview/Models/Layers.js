@@ -52,6 +52,17 @@ Worldview.Models.Layers = function(config, projectionModel) {
         return results;
     };
 
+    self.count = function(type, projection) {
+        projection = projection || projectionModel.selected;
+        var layers = self.forProjection(projection);
+        return layers[type].length;
+    };
+
+    self.total = function(projection) {
+        return self.count("baselayers", projection) +
+               self.count("overlays", projection);
+    };
+
     self.add = function(type, id, hidden) {
         var layer = getLayer(id);
         if ( $.inArray(layer, self.active[type]) >= 0 ) {
@@ -79,6 +90,17 @@ Worldview.Models.Layers = function(config, projectionModel) {
             self.visible[id] = visible;
             self.events.trigger("visibility", layer, visible);
         }
+    };
+
+    self.isActive = function(type, id) {
+        var answer = false;
+        $.each(self.active[type], function(index, layer) {
+            if ( id === layer.id ) {
+                answer = true;
+                return false;
+            }
+        });
+        return answer;
     };
 
     self.toPermalink = function() {

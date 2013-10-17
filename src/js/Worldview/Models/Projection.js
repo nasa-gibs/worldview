@@ -17,12 +17,6 @@ Worldview.Models.Projection = function(config) {
 
     var self = {};
 
-    var projections = {
-        geographic: { epsg: 4326, crs: "EPSG:4326" },
-        arctic:     { epsg: 3413, crs: "EPSG:3413" },
-        antarctic:  { epsg: 3031, crs: "EPSG:3031 "}
-    };
-
     self.selected = null;
     self.epsg = null;
     self.crs = null;
@@ -33,14 +27,14 @@ Worldview.Models.Projection = function(config) {
     };
 
     self.set = function(projection) {
-        var p = projections[projection];
-        if ( !p ) {
+        var p = config.projections[projection];
+        if ( !p || p.virtual ) {
             throw new Error("Invalid projection: " + projection);
         }
-        if ( self.projection === projection ) {
+        if ( self.selected === projection ) {
             return;
         }
-        self.selected = projection;
+        self.selected = p.name;
         self.epsg = p.epsg;
         self.crs = p.crs;
         self.events.trigger("change", self.selected, {

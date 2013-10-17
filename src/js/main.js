@@ -142,8 +142,10 @@ $(function() {// Initialize "static" vars
         var palettes = Worldview.Widget.Palette("palettes", config, {
             alignTo: "#products"
         });
-        var layerSideBar = Worldview.Widget.LayerSideBar();
+        var layerSideBar = Worldview.Widget.LayerSideBar(layersModel);
         var activeLayers = Worldview.Widget.ActiveLayers(config, layersModel,
+                projectionModel);
+        var addLayers = Worldview.Widget.AddLayers(config, layersModel,
                 projectionModel);
 
         /*
@@ -258,10 +260,9 @@ $(function() {// Initialize "static" vars
         // These are only convienence handles to important objects used
         // for console debugging. Code should NOT reference these as they
         // are subject to change or removal.
-        Worldview.opacity = opacity;
-        Worldview.palettes = palettes;
-        Worldview.view = map;
-        Worldview.maps = map.maps;
+        Worldview.widgets = {
+            addLayers: addLayers
+        };
 
         // Initialize widgets
 
