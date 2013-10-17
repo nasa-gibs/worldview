@@ -84,6 +84,17 @@ Worldview.Models.Layers = function(config, projectionModel) {
         }
     };
 
+    self.clear = function() {
+        $.each(self.active, function(type, layers) {
+            $.each(layers, function(i, layer) {
+                // FIXME: This shouldn't be needed
+                if ( layer ) {
+                    self.remove(type, layer.id);
+                }
+            });
+        });
+    };
+
     self.pushToBottom = function(type, id) {
         var layer = getLayer(id);
         var oldIndex = $.inArray(layer, self.active[type]);
@@ -147,19 +158,25 @@ Worldview.Models.Layers = function(config, projectionModel) {
         var query = Worldview.queryStringToObject(queryString);
         var layers = query.layers || query.products;
         if ( layers ) {
-            var sections = layers.split("~");
-            var type = null;
-            $.each(sections, function(index, item) {
-                if ( index === 0 ) {
-                    type = item;
-                } else {
-                    try {
-                        model.add(type, item);
-                    } catch ( error ) {
-                        log.error("Unable to add layer [" + type + "]" +
-                            item, error);
+            self.clear();
+            var sections = [
+                layers.split("~")[0].split(/[,\.]/),
+                layers.split("~")[1].split(/[,\.]/)
+            ];
+            $.each(sections, function(i, section) {
+                var type = null;
+                $.each(section, function(index, item) {
+                    if ( index === 0 ) {
+                        type = item;
+                    } else {
+                        try {
+                            self.add(type, item);
+                        } catch ( error ) {
+                            log.error("Unable to add layer [" + type + "]" +
+                                item, error);
+                        }
                     }
-                }
+                });
             });
         }
     };

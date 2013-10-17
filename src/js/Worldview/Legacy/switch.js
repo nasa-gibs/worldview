@@ -36,7 +36,7 @@ Worldview.Legacy.Switch = function(model) {
     self.updateComponent = function() {};
 
     self.loadFromQuery = function(queryString) {
-        model.fromPeramlink(queryString);
+        model.fromPermalink(queryString);
         fire();
     };
 

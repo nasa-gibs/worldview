@@ -53,10 +53,10 @@ Worldview.Models.Projection = function(config) {
         var query = Worldview.queryStringToObject(queryString);
         var projection = query.projection || query["switch"];
         if ( projection ) {
-            if ( !projections[projection] ) {
+            if ( !config.projections[projection] ) {
                 log.warn("Unsupported projection: " + projection);
             } else {
-                self.setProjection(projection);
+                self.set(projection);
             }
         }
     };
