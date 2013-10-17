@@ -23,6 +23,7 @@ Worldview.Legacy.Bank = function(model) {
 
         model.events.on("add", fire);
         model.events.on("remove", fire);
+        model.events.on("move", fire);
         model.events.on("visibility", fire);
         fire();
     };

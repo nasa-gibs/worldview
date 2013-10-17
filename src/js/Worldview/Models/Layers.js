@@ -68,7 +68,7 @@ Worldview.Models.Layers = function(config, projectionModel) {
         if ( $.inArray(layer, self.active[type]) >= 0 ) {
             return;
         }
-        self.active[type].push(layer);
+        self.active[type].unshift(layer);
         hidden = hidden || false;
         self.visible[id] = !hidden;
         self.events.trigger("add", layer, type);
@@ -82,6 +82,33 @@ Worldview.Models.Layers = function(config, projectionModel) {
             delete self.visible[id];
             self.events.trigger("remove", layer, type);
         }
+    };
+
+    self.pushToBottom = function(type, id) {
+        var layer = getLayer(id);
+        var oldIndex = $.inArray(layer, self.active[type]);
+        if ( oldIndex < 0 ) {
+            throw new Error("Layer is not active: " + id);
+        }
+        self.active[type].splice(oldIndex, 1);
+        self.active[type].push(layer);
+        self.events.trigger("move", type, layer, self.active[type].length - 1);
+    };
+
+    self.moveBefore = function(type, source, target) {
+        var sourceLayer = getLayer(source);
+        var targetLayer = getLayer(target);
+        var sourceIndex = $.inArray(sourceLayer, self.active[type]);
+        if ( sourceIndex < 0 ) {
+            throw new Error("Layer is not active: " + source);
+        }
+        var targetIndex = $.inArray(targetLayer, self.active[type]);
+        if ( targetIndex < 0 ) {
+            throw new Error("Layer is not active: " + target);
+        }
+        self.active[type][targetIndex] = sourceLayer;
+        self.active[type][sourceIndex] = targetLayer;
+        self.events.trigger("move", type, sourceLayer, targetIndex);
     };
 
     self.setVisibility = function(id, visible) {

@@ -143,8 +143,10 @@ $(function() {// Initialize "static" vars
             alignTo: "#products"
         });
         var layerSideBar = Worldview.Widget.LayerSideBar(layersModel);
-        var activeLayers = Worldview.Widget.ActiveLayers(config, layersModel,
-                projectionModel);
+        var activeLayers = Worldview.Widget.ActiveLayers(config, layersModel, {
+                projectionModel: projectionModel,
+                paletteWidget: palettes
+        });
         var addLayers = Worldview.Widget.AddLayers(config, layersModel,
                 projectionModel);
 

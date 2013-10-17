@@ -11,10 +11,12 @@
 
 Worldview.namespace("Widget");
 
-Worldview.Widget.ActiveLayers = function(config, model, projectionModel) {
+Worldview.Widget.ActiveLayers = function(config, model, spec) {
 
     var log = Logging.getLogger("Widget.ActiveLayers");
     var aoi = config.aoi;
+    var projectionModel = spec.projectionModel;
+    var paletteWidget = spec.paletteWidget;
     var types = Worldview.LAYER_TYPES;
     var jsp;
 
@@ -30,6 +32,7 @@ Worldview.Widget.ActiveLayers = function(config, model, projectionModel) {
         model.events
             .on("add", onLayerAdded)
             .on("remove", onLayerRemoved)
+            .on("move", onLayerMoved)
             .on("visibility", onLayerVisibility);
         projectionModel.events
             .on("change", render);
@@ -66,7 +69,7 @@ Worldview.Widget.ActiveLayers = function(config, model, projectionModel) {
         });
 
         $("." + self.id + "category li").disableSelection();
-        $("." + self.id + "category").bind('sortstop', reorder);
+        $("." + self.id + "category").bind('sortstop', moveLayer);
 
         setTimeout(resize, 1);
     };
@@ -95,11 +98,13 @@ Worldview.Widget.ActiveLayers = function(config, model, projectionModel) {
         $parent.append($container);
     };
 
-    var renderLayer = function($parent, type, layer) {
+    var renderLayer = function($parent, type, layer, top) {
         var $layer = $("<li></li>")
             .attr("id", type.id + "-" + Worldview.id(layer.id))
             .addClass(self.id + "item")
-            .addClass("item");
+            .addClass("item")
+            .attr("data-layer", layer.id)
+            .attr("data-layer-type", type.id);
 
         var $removeButton = $("<a></a>");
         var $removeImage = $("<img></img>")
@@ -141,39 +146,57 @@ Worldview.Widget.ActiveLayers = function(config, model, projectionModel) {
         if ( layer.rendered ) {
             renderLegend($layer, type, layer);
         }
-        $parent.append($layer);
+        if ( top ) {
+            $parent.prepend($layer);
+        } else {
+            $parent.append($layer);
+        }
     };
 
     var renderLegend = function($parent, type, layer) {
-        var $container = $("<div></div>");
+        var $div = $("<div></div>");
+        var $container = $("<span></span>")
+            .addClass("palette");
 
-        $container.append($("<span>X</span>").addClass("palette"));
+        var $min = $("<span></span>")
+            .addClass("p-min")
+            .html(layer.min);
+        $container.append($min);
 
-            /*
-            // Has a rendered palette?
-            if ( layer.rendered ) {
-                html.push(
-                    "<div>" +
-                    "<span class='palette'>" +
-                    "<span class='p-min' style='margin-right:10px;'>" +
-                        layer.min + "</span>" +
-                    "<canvas class='colorBar' id='canvas" + id(layer.id) +
-                        "' width=100px height=14px'></canvas>" +
-                     "<span class='p-max' style='margin-left:10px;'>" +
-                        layer.max + "</span>"
-                );
+        var $canvas = $("<canvas></canvas>")
+            .attr("id", "canvas" + Worldview.id(layer.id))
+            .addClass("colorBar")
+            .attr("data-layer", layer.id);
+        var palette = paletteWidget.getPalette(layer.id);
+        if ( palette.stops.length > 1 ) {
+            $canvas.click(openPaletteSelector)
+                .css("cursor", "pointer");
+        }
+        $container.append($canvas);
 
-                if ( layer.units ) {
-                    html.push(
-                        "<span class='p-units' style='margin-left:3px;'>" +
-                            m.units + "</span>"
-                    );
-                }
-                html.push("</span></div>");
-            }
-            html.push("</li>");
+        var $max = $("<span></span>")
+            .addClass("p-max")
+            .html(layer.max);
+        $container.append($max);
+
+        if ( layer.units ) {
+            var $units = $("<span></span>")
+                .addClass("p-units")
+                .html(layer.units);
+        }
+
+        $div.append($container);
+        $parent.append($div);
+    };
+
+    var renderLegendCanvas = function(layer) {
+        var palette = paletteWidget.getPalette(Worldview.id(layer.id));
+        Worldview.Palette.ColorBar({
+            selector: "#canvas" + Worldview.id(layer.id),
+            bins: layer.bins,
+            stops: layer.stops,
+            palette: palette
         });
-        */
     };
 
     var adjustCategoryHeights = function() {
@@ -255,14 +278,15 @@ Worldview.Widget.ActiveLayers = function(config, model, projectionModel) {
         if ( api ) {
             $container = api.getContentPane();
         }
-        renderLayer($container, types[type], layer);
+        renderLayer($container, types[type], layer, "top");
+        if ( layer.rendered ) {
+            renderLegendCanvas(layer);
+        }
         adjustCategoryHeights();
     };
 
     var toggleVisibility = function(event) {
         var $target = $(event.target);
-        var action = $target.attr("data-action");
-        var layer = $element.attr("data-layer");
         if ( $target.attr("data-action") === "show" ) {
             model.setVisibility($target.attr("data-layer"), true);
         } else {
@@ -270,26 +294,26 @@ Worldview.Widget.ActiveLayers = function(config, model, projectionModel) {
         }
     };
 
-    var reorder = function(a, b, c) {
-        console.log("reorder", a, b, c);
-        console.log($(this).index());
-        /*
-        self.values = {};
-        for(var i=0; i<self.categories.length; i++){
-            var formatted = self.categories[i].replace(/\s/g, "");
-            formatted = formatted.toLowerCase();
-            self.values[formatted] = new Array();
-            jQuery('li[id|="'+formatted+'"]').each(function() {
-                var item = jQuery( this );
-                var id = item.attr("id");
-                var vals = id.split("-");
-                var val = vals.splice(0,1);
-                val = vals.join("-");
-                self.values[formatted].push({value:val});
-            });
+    var moveLayer = function(event, ui) {
+        var $target = ui.item;
+        var $next = $target.next();
+        if ( $next.length ) {
+            model.moveBefore($target.attr("data-layer-type"),
+                    $target.attr("data-layer"), $next.attr("data-layer"));
+        } else {
+            model.pushToBottom($target.attr("data-layer-type"),
+                    $target.attr("data-layer"));
         }
-        self.fire();
-        */
+    };
+
+    var onLayerMoved = function(type, layer, newIndex) {
+        var $target = $("#" + type + "-" + Worldview.id(layer.id));
+        // Find which layer is at the new index
+        var $old = $target.parent().children().eq(newIndex);
+        // Has the move alreay happened?
+        if ( $target.index() !== $old.index() ) {
+            render();
+        }
     };
 
     var onLayerVisibility = function(layer, visible) {
@@ -300,6 +324,15 @@ Worldview.Widget.ActiveLayers = function(config, model, projectionModel) {
         } else {
             $element.attr("data-action", "show");
             $element.attr("src", "images/invisible.png");
+        }
+    };
+
+    var openPaletteSelector = function(event) {
+        var $target = $(event.target);
+        if ( !Worldview.Support.allowCustomPalettes() ) {
+            Worldview.Support.showUnsupportedMessage();
+        } else {
+            paletteWidget.displaySelector($target.attr("data-layer"));
         }
     };
 

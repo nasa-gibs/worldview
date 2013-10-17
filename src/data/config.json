@@ -348,11 +348,11 @@
         "startingLayers": {
             "baselayers": [
                 {
-                    "hidden": "true",
-                    "id": "MODIS_Aqua_CorrectedReflectance_TrueColor"
+                    "id": "MODIS_Terra_CorrectedReflectance_TrueColor"
                 },
                 {
-                    "id": "MODIS_Terra_CorrectedReflectance_TrueColor"
+                    "hidden": "true",
+                    "id": "MODIS_Aqua_CorrectedReflectance_TrueColor"
                 }
             ],
             "overlays": [
@@ -63557,6 +63557,7 @@
     "projections": {
         "antarctic": {
             "crs": "EPSG:3031",
+            "epsg": 3031,
             "fractionalZoom": false,
             "maxExtent": [
                 -4194304,
@@ -63589,6 +63590,7 @@
         },
         "arctic": {
             "crs": "EPSG:3413",
+            "epsg": 3413,
             "maxExtent": [
                 -4194304,
                 -4194304,
@@ -63620,11 +63622,13 @@
         },
         "arctic3995": {
             "crs": "EPSG:3995",
+            "epsg": 3995,
             "name": "arctic",
             "virtual": "true"
         },
         "geographic": {
             "crs": "EPSG:4326",
+            "epsg": 4326,
             "maxExtent": [
                 -180,
                 -90,
