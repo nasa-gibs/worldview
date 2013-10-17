@@ -121,6 +121,7 @@ $(function() {// Initialize "static" vars
         var projectionModel = Worldview.Models.Projection(config);
         var layersModel = Worldview.Models.Layers(config, projectionModel);
         var dataDownloadModel = Worldview.DataDownload.Model(config);
+
         // These are only convienence handles to important objects used
         // for console debugging. Code should NOT reference these as they
         // are subject to change or removal.
@@ -131,14 +132,12 @@ $(function() {// Initialize "static" vars
             dataDownload: dataDownloadModel
         };
 
+        // Legacy REGISTRY based widgets
+        var legacySwitch = Worldview.Legacy.Switch(projectionModel);
+        var legacyBank = Worldview.Legacy.Bank(layersModel);
+
         // Create widgets
         var projection = Worldview.Widget.Projection(projectionModel);
-        /*
-        var projection = new SOTE.widget.Switch("switch", {
-            dataSourceUrl:"a",
-            selected:"geographic"
-        });
-        */
         var palettes = Worldview.Widget.Palette("palettes", config, {
             alignTo: "#products"
         });
@@ -149,13 +148,6 @@ $(function() {// Initialize "static" vars
         });
         var addLayers = Worldview.Widget.AddLayers(config, layersModel,
                 projectionModel);
-
-        /*
-        var products = new SOTE.widget.Products("productsHolder", {
-            paletteWidget: palettes,
-            config: config
-        });
-        */
         var date = new SOTE.widget.DatePicker("time", {
             hasThumbnail: false
         });
@@ -173,11 +165,9 @@ $(function() {// Initialize "static" vars
             m: map,
             config: config
         });
-        /*
         var apcn = new Worldview.Widget.ArcticProjectionChangeNotification(
-            config, products.b
+            config, legacyBank
         );
-        */
         var opacity = new Worldview.Widget.Opacity(config);
         var crs = new Worldview.Widget.CRS(config);
 
@@ -208,24 +198,23 @@ $(function() {// Initialize "static" vars
             paletteWidget: palettes
         });
         dataDownload.render();
+
         $(window).resize(function() {
           if ($(window).width() < 720) {
             $('#productsHoldertabs li.first a').trigger('click');
           }
         });
         // Wirings
-        /*
-        products.events
+        layerSideBar.events
             .on("dataDownloadSelect", function() {
                 dataDownloadModel.activate();
             })
             .on("dataDownloadUnselect", function() {
                 dataDownloadModel.deactivate();
             });
-        */
         dataDownloadModel.events
             .on("activate", function() {
-                products.selectTab("download");
+                layerSideBar.selectTab("download");
             });
         map.maps.events
             .on("moveEnd", function(map) {
@@ -241,23 +230,19 @@ $(function() {// Initialize "static" vars
 
 	    // Register event listeners
         REGISTRY.addEventListener("time",
-                "map", "imagedownload", /*apcn.containerId,*/ crs.containerId,
+                "map", "imagedownload", apcn.containerId, crs.containerId,
                 dataDownload.containerId);
         REGISTRY.addEventListener("switch",
                 "map", "products", "selectorbox", "imagedownload", "camera",
-                /*apcn.containerId,*/ crs.containerId, dataDownload.containerId);
+                apcn.containerId, crs.containerId, dataDownload.containerId);
         REGISTRY.addEventListener("products",
                 "map", "selectorbox", "imagedownload", "palettes",
-                /*apcn.containerId,*/ dataDownload.containerId);
+                apcn.containerId, dataDownload.containerId);
         REGISTRY.addEventListener("selectorbox","products");
         REGISTRY.addEventListener("camera","imagedownload");
         REGISTRY.addEventListener("palettes","map","camera","products");
         REGISTRY.addEventListener("opacity", "map");
         REGISTRY.addEventListener(crs.containerId, "imagedownload");
-
-        // Legacy REGISTRY based widgets
-        var legacySwitch = Worldview.Legacy.Switch(projectionModel);
-        var legacyBank = Worldview.Legacy.Bank(layersModel);
 
         // These are only convienence handles to important objects used
         // for console debugging. Code should NOT reference these as they
@@ -270,11 +255,11 @@ $(function() {// Initialize "static" vars
 
         var initOrder = [
             legacySwitch,
-            legacyBank, // bank
+            legacyBank,
             date,
             map,
             palettes,
-            //apcn,
+            apcn,
             opacity,
             crs,
             dataDownload

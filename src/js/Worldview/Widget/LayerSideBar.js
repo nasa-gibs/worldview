@@ -44,6 +44,21 @@ Worldview.Widget.LayerSideBar = function(layersModel) {
 
     var init = function() {
         render();
+        if ( $(window).width() < Worldview.TRANSITION_WIDTH ) {
+            slide();
+        }
+        $(window).resize(adjustAlignment);
+    };
+
+    self.selectTab = function(tabName) {
+        var selectedTab = $("#" + this.id).tabs("option", "selected");
+        if ( tabName === "download" ) {
+            if ( selectedTab !== 2 ) {
+                $("#" + this.id).tabs("select", 2);
+            }
+        } else {
+            throw new Error("Invalid tab: " + tabName);
+        }
     };
 
     var render = function() {
@@ -86,11 +101,8 @@ Worldview.Widget.LayerSideBar = function(layersModel) {
             show: onTabChange
         });
 
-        if ( $(window).width() < Worldview.TRANSITION_WIDTH ) {
-            slide();
-        }
+
         $('.accordionToggler').bind('click', slide);
-        $(window).resize(adjustAlignment);
     };
 
     var onTabChange = function(e, ui) {
@@ -169,7 +181,7 @@ Worldview.Widget.LayerSideBar = function(layersModel) {
     var adjustAlignment = function() {
         if ( $(window).width() < Worldview.TRANSITION_WITH && collapsed ) {
             var w = $('.products').outerWidth();
-            $('.products').css("left", "-"+w+"px");
+            $('.products').css("left", "-" + w + "px");
         }
     };
 

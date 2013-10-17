@@ -144,7 +144,7 @@ Worldview.Models.Layers = function(config, projectionModel) {
     };
 
     self.fromPermalink = function(queryString) {
-        var query = Worldvie.queryStringToObject(queryString);
+        var query = Worldview.queryStringToObject(queryString);
         var layers = query.layers || query.products;
         if ( layers ) {
             var sections = layers.split("~");

@@ -27,7 +27,7 @@ Worldview.Widget.AddLayers = function(config, model, projectionModel) {
         model.events
             .on("add", onLayerAdded)
             .on("remove", onLayerRemoved);
-        projectionModel.events.on("change", filter);
+        projectionModel.events.on("change", onProjectionChange);
     };
 
     var render = function() {
@@ -71,23 +71,8 @@ Worldview.Widget.AddLayers = function(config, model, projectionModel) {
         $(self.selector + "search").on('keyup', filter);
         $(self.selector + "search").focus();
 
-        //resize();
-
-        if ( $(window).width() > Worldview.TRANSITION_WIDTH ) {
-            if ( jsp ) {
-                var api = jsp.data('jsp');
-                if ( api ) {
-                    api.destroy();
-                }
-            }
-            jsp = $("." + self.id + "category").jScrollPane({
-                autoReinitialise: false,
-                verticalGutter: 0
-            });
-        }
-
         updateAreasOfInterest();
-        setTimeout(adjustCategoryHeights, 1);
+        setTimeout(resize, 1);
     };
 
     var renderType = function($parent, type, header, camelCase) {
@@ -211,7 +196,20 @@ Worldview.Widget.AddLayers = function(config, model, projectionModel) {
         $(self.selector)
             .height($(self.selector).parent().outerHeight() - tabs_height);
 
-        setTimeout(adjustCategoryHeights, 1);
+        if ( $(window).width() > Worldview.TRANSITION_WIDTH ) {
+            if ( jsp ) {
+                var api = jsp.data('jsp');
+                if ( api ) {
+                    api.destroy();
+                }
+            }
+            jsp = $("." + self.id + "category").jScrollPane({
+                autoReinitialise: false,
+                verticalGutter: 0
+            });
+        }
+        //setTimeout(adjustCategoryHeights, 1);
+        adjustCategoryHeights();
     };
 
     var toggleLayer = function(event) {
@@ -235,22 +233,41 @@ Worldview.Widget.AddLayers = function(config, model, projectionModel) {
         $element.removeAttr("checked");
     };
 
+    var onProjectionChange = function() {
+        updateAreasOfInterest();
+        filter();
+    };
+
     var updateAreasOfInterest = function() {
         $select = $("#" + self.id + "select");
+        var previous = $(self.selector + "select").val();
+
         $select.empty();
         var $option = $("<option></option>")
             .attr("value", "All")
             .html("All");
         $select.append($option);
 
+        var aois = [];
         $.each(config.aoi, function(name, info) {
-            if ( $.inArray(projectionModel.selected,
+             if ( $.inArray(projectionModel.selected,
                     info.projections ) >= 0 ) {
-                var $option = $("<option></option>")
-                    .attr("value", name)
-                    .html(name);
-                $select.append($option);
+                if ( info.index === 0 || info.index ) {
+                    aois.splice(info.index, 0, name);
+                } else {
+                    aois.push(name);
+                }
             }
+        });
+
+        $.each(aois, function(index, name) {
+            var $option = $("<option></option>")
+                .attr("value", name)
+                .html(name);
+            if ( previous === name ) {
+                $option.attr("selected", "selected");
+            }
+            $select.append($option);
         });
         filter();
     };
@@ -274,8 +291,9 @@ Worldview.Widget.AddLayers = function(config, model, projectionModel) {
             return false;
         }
         search = search.toLowerCase();
-        return !layer.name.toLowerCase().contains(search) &&
+        var filtered = !layer.name.toLowerCase().contains(search) &&
                !layer.description.toLowerCase().contains(search);
+        return filtered;
     };
 
     var filter = function() {
@@ -285,7 +303,7 @@ Worldview.Widget.AddLayers = function(config, model, projectionModel) {
                 filterProjection(layer) ||
                 filterSearch(layer);
             var display = filtered ? "none": "block";
-            $("#" + layerId).parent().css("display", display);
+            $("#" + Worldview.id(layerId)).parent().css("display", display);
         });
         adjustCategoryHeights();
     };

@@ -118,6 +118,7 @@
                 "VIIRS_CityLights_2012",
                 "land_water_map"
             ],
+            "index": 0,
             "overlays": [
                 "MODIS_Terra_Land_Surface_Temp_Day",
                 "MODIS_Terra_Land_Surface_Temp_Night",
@@ -133,7 +134,9 @@
                 "grump-v1-population-count_2000"
             ],
             "projections": [
-                "geographic"
+                "geographic",
+                "arctic",
+                "antarctic"
             ]
         },
         "Fires": {
@@ -360,7 +363,7 @@
                     "id": "sedac_bound"
                 },
                 {
-                    "id": "arctic_coastlines"
+                    "id": "arctic_coastlines_3413"
                 },
                 {
                     "id": "antarctic_coastlines"

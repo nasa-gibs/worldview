@@ -71,6 +71,12 @@ Worldview.Widget.ActiveLayers = function(config, model, spec) {
         $("." + self.id + "category li").disableSelection();
         $("." + self.id + "category").bind('sortstop', moveLayer);
 
+        $.each(model.forProjection().overlays, function(index, layer) {
+            if ( layer.rendered ) {
+                renderLegendCanvas(layer);
+            }
+        });
+
         setTimeout(resize, 1);
     };
 

@@ -7,7 +7,7 @@
         ],
         "overlays": [
             {"id": "sedac_bound" },
-            {"id": "arctic_coastlines" },
+            {"id": "arctic_coastlines_3413" },
             {"id": "antarctic_coastlines" }
         ]
     }
