@@ -65,42 +65,59 @@ Worldview.Widget.LayerSideBar = function(layersModel) {
         var $container = $(self.selector);
         $container.empty().addClass("products");
 
-        var html =
-            "<ul id='" + self.id + "tabs'>" +
-                "<li class='layerPicker first'>" +
-                    "<a href='#products' class='activetab tab'>" +
-                        HTML_TAB_ACTIVE_SELECTED +
-                    "</a>" +
-                "</li>" +
-                "<li class='layerPicker second'>" +
-                    "<a href='#selectorbox' class='addlayerstab tab'>" +
-                        HTML_TAB_ADD_UNSELECTED +
-                    "</a>" +
-                "</li>" +
-                "<li class='layerPicker third'>" +
-                    "<a href='#DataDownload' class='tab'>" +
-                        HTML_TAB_DOWNLOAD_UNSELECTED +
-                    "</a>" +
-                "</li>" +
-            "</ul>" +
+        var $tabs = $("<ul></ul>")
+            .attr("id", self.id + "tabs");
 
-            "<div id='" + self.id + "toggleButtonHolder'" +
-                "class='toggleButtonHolder'>" +
-                "<a class='accordionToggler atcollapse arrow' " +
-                    "title='Hide'></a>" +
-                "</a>" +
-            "</div>" +
+        var $activeTab = $("<li></li>")
+            .addClass("layerPicker")
+            .addClass("first");
+        var $activeLink = $("<a></a>")
+            .attr("href", "#products")
+            .addClass("activetab")
+            .addClass("tab")
+            .html(HTML_TAB_ACTIVE_SELECTED);
+        $activeTab.append($activeLink);
+        $tabs.append($activeTab);
 
-            "<div id='products'></div>" +
-            "<div id='selectorbox'></div>" +
-            "<div id='DataDownload'></div>";
+        var $addTab = $("<li></li>")
+            .addClass("layerPicker")
+            .addClass("second");
+        var $addLink = $("<a></a>")
+            .attr("href", "#selectorbox")
+            .addClass("tab")
+            .html(HTML_TAB_ADD_UNSELECTED);
+        $addTab.append($addLink);
+        $tabs.append($addTab);
 
-        $container.html(html);
+        var $downloadTab = $("<li></li>")
+            .addClass("layerPicker")
+            .addClass("third");
+        var $downloadLink = $("<a></a>")
+            .attr("href", "#DataDownload")
+            .addClass("tab")
+            .html(HTML_TAB_DOWNLOAD_UNSELECTED);
+        $downloadTab.append($downloadLink);
+        $tabs.append($downloadTab);
+        $container.append($tabs);
+
+        var $collapseContainer = $("<div></div>")
+            .attr("id", self.id + "toggleButtonHolder")
+            .addClass("toggleButtonHolder");
+        var $collapseButton = $("<a></a>")
+            .addClass("accordionToggler")
+            .addClass("atcollapse")
+            .addClass("arrow")
+            .attr("title", "Hide");
+        $collapseContainer.append($collapseButton);
+        $container.append($collapseContainer);
+
+        $container.append($("<div id='products'></div>"))
+                  .append($("<div id='selectorbox'></div>"))
+                  .append($("<div id='DataDownload'></div>"));
 
         $container.tabs({
             show: onTabChange
         });
-
 
         $('.accordionToggler').bind('click', slide);
     };

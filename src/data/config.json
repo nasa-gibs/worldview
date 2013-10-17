@@ -134,9 +134,7 @@
                 "grump-v1-population-count_2000"
             ],
             "projections": [
-                "geographic",
-                "arctic",
-                "antarctic"
+                "geographic"
             ]
         },
         "Fires": {
