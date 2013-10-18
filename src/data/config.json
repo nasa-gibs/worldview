@@ -1745,9 +1745,9 @@
             },
             "type": "wms",
             "url": [
-                "http://map2a.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2b.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2c.vis.earthdata.nasa.gov/wms/wms.php"
+                "//map2a.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2b.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2c.vis.earthdata.nasa.gov/wms/wms.php"
             ]
         },
         "Aqua_Antarctic_Orbit_Dsc": {
@@ -1771,9 +1771,9 @@
             },
             "type": "wms",
             "url": [
-                "http://map2a.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2b.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2c.vis.earthdata.nasa.gov/wms/wms.php"
+                "//map2a.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2b.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2c.vis.earthdata.nasa.gov/wms/wms.php"
             ]
         },
         "Aqua_Arctic_Orbit_Asc": {
@@ -1797,9 +1797,9 @@
             },
             "type": "wms",
             "url": [
-                "http://map2a.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2b.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2c.vis.earthdata.nasa.gov/wms/wms.php"
+                "//map2a.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2b.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2c.vis.earthdata.nasa.gov/wms/wms.php"
             ]
         },
         "Aqua_Arctic_Orbit_Dsc": {
@@ -1823,9 +1823,9 @@
             },
             "type": "wms",
             "url": [
-                "http://map2a.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2b.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2c.vis.earthdata.nasa.gov/wms/wms.php"
+                "//map2a.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2b.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2c.vis.earthdata.nasa.gov/wms/wms.php"
             ]
         },
         "Aqua_Orbit_Asc": {
@@ -1849,9 +1849,9 @@
             },
             "type": "wms",
             "url": [
-                "http://map2a.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2b.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2c.vis.earthdata.nasa.gov/wms/wms.php"
+                "//map2a.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2b.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2c.vis.earthdata.nasa.gov/wms/wms.php"
             ]
         },
         "Aqua_Orbit_Dsc": {
@@ -1875,9 +1875,9 @@
             },
             "type": "wms",
             "url": [
-                "http://map2a.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2b.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2c.vis.earthdata.nasa.gov/wms/wms.php"
+                "//map2a.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2b.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2c.vis.earthdata.nasa.gov/wms/wms.php"
             ]
         },
         "Aura_Antarctic_Orbit_Asc": {
@@ -1901,9 +1901,9 @@
             },
             "type": "wms",
             "url": [
-                "http://map2a.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2b.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2c.vis.earthdata.nasa.gov/wms/wms.php"
+                "//map2a.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2b.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2c.vis.earthdata.nasa.gov/wms/wms.php"
             ]
         },
         "Aura_Antarctic_Orbit_Dsc": {
@@ -1927,9 +1927,9 @@
             },
             "type": "wms",
             "url": [
-                "http://map2a.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2b.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2c.vis.earthdata.nasa.gov/wms/wms.php"
+                "//map2a.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2b.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2c.vis.earthdata.nasa.gov/wms/wms.php"
             ]
         },
         "Aura_Arctic_Orbit_Asc": {
@@ -1953,9 +1953,9 @@
             },
             "type": "wms",
             "url": [
-                "http://map2a.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2b.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2c.vis.earthdata.nasa.gov/wms/wms.php"
+                "//map2a.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2b.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2c.vis.earthdata.nasa.gov/wms/wms.php"
             ]
         },
         "Aura_Arctic_Orbit_Dsc": {
@@ -1979,9 +1979,9 @@
             },
             "type": "wms",
             "url": [
-                "http://map2a.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2b.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2c.vis.earthdata.nasa.gov/wms/wms.php"
+                "//map2a.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2b.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2c.vis.earthdata.nasa.gov/wms/wms.php"
             ]
         },
         "Aura_Orbit_Asc": {
@@ -2005,9 +2005,9 @@
             },
             "type": "wms",
             "url": [
-                "http://map2a.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2b.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2c.vis.earthdata.nasa.gov/wms/wms.php"
+                "//map2a.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2b.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2c.vis.earthdata.nasa.gov/wms/wms.php"
             ]
         },
         "Aura_Orbit_Dsc": {
@@ -2031,9 +2031,9 @@
             },
             "type": "wms",
             "url": [
-                "http://map2a.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2b.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2c.vis.earthdata.nasa.gov/wms/wms.php"
+                "//map2a.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2b.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2c.vis.earthdata.nasa.gov/wms/wms.php"
             ]
         },
         "Calipso_Orbit_Asc": {
@@ -2057,9 +2057,9 @@
             },
             "type": "wms",
             "url": [
-                "http://map2a.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2b.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2c.vis.earthdata.nasa.gov/wms/wms.php"
+                "//map2a.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2b.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2c.vis.earthdata.nasa.gov/wms/wms.php"
             ]
         },
         "Calipso_Orbit_Dsc": {
@@ -2083,9 +2083,9 @@
             },
             "type": "wms",
             "url": [
-                "http://map2a.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2b.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2c.vis.earthdata.nasa.gov/wms/wms.php"
+                "//map2a.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2b.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2c.vis.earthdata.nasa.gov/wms/wms.php"
             ]
         },
         "MLS_CO_215hPa_Day": {
@@ -4567,9 +4567,9 @@
             "startDate": "2012-04-07",
             "type": "wms",
             "url": [
-                "http://map2a.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2b.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2c.vis.earthdata.nasa.gov/wms/wms.php"
+                "//map2a.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2b.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2c.vis.earthdata.nasa.gov/wms/wms.php"
             ]
         },
         "MODIS_Fires_Aqua": {
@@ -4593,9 +4593,9 @@
             "startDate": "2012-04-07",
             "type": "wms",
             "url": [
-                "http://map2a.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2b.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2c.vis.earthdata.nasa.gov/wms/wms.php"
+                "//map2a.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2b.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2c.vis.earthdata.nasa.gov/wms/wms.php"
             ]
         },
         "MODIS_Fires_Terra": {
@@ -4619,9 +4619,9 @@
             "startDate": "2012-04-07",
             "type": "wms",
             "url": [
-                "http://map2a.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2b.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2c.vis.earthdata.nasa.gov/wms/wms.php"
+                "//map2a.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2b.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2c.vis.earthdata.nasa.gov/wms/wms.php"
             ]
         },
         "MODIS_Terra_Aerosol": {
@@ -6937,9 +6937,9 @@
             },
             "type": "wms",
             "url": [
-                "http://map2a.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2b.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2c.vis.earthdata.nasa.gov/wms/wms.php"
+                "//map2a.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2b.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2c.vis.earthdata.nasa.gov/wms/wms.php"
             ]
         },
         "Terra_Antarctic_Orbit_Dsc": {
@@ -6963,9 +6963,9 @@
             },
             "type": "wms",
             "url": [
-                "http://map2a.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2b.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2c.vis.earthdata.nasa.gov/wms/wms.php"
+                "//map2a.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2b.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2c.vis.earthdata.nasa.gov/wms/wms.php"
             ]
         },
         "Terra_Arctic_Orbit_Asc": {
@@ -6989,9 +6989,9 @@
             },
             "type": "wms",
             "url": [
-                "http://map2a.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2b.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2c.vis.earthdata.nasa.gov/wms/wms.php"
+                "//map2a.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2b.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2c.vis.earthdata.nasa.gov/wms/wms.php"
             ]
         },
         "Terra_Arctic_Orbit_Dsc": {
@@ -7015,9 +7015,9 @@
             },
             "type": "wms",
             "url": [
-                "http://map2a.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2b.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2c.vis.earthdata.nasa.gov/wms/wms.php"
+                "//map2a.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2b.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2c.vis.earthdata.nasa.gov/wms/wms.php"
             ]
         },
         "Terra_Orbit_Asc": {
@@ -7041,9 +7041,9 @@
             },
             "type": "wms",
             "url": [
-                "http://map2a.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2b.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2c.vis.earthdata.nasa.gov/wms/wms.php"
+                "//map2a.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2b.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2c.vis.earthdata.nasa.gov/wms/wms.php"
             ]
         },
         "Terra_Orbit_Dsc": {
@@ -7067,9 +7067,9 @@
             },
             "type": "wms",
             "url": [
-                "http://map2a.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2b.vis.earthdata.nasa.gov/wms/wms.php",
-                "http://map2c.vis.earthdata.nasa.gov/wms/wms.php"
+                "//map2a.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2b.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2c.vis.earthdata.nasa.gov/wms/wms.php"
             ]
         },
         "VIIRS_CityLights_2012": {
@@ -7245,9 +7245,9 @@
             "projections": {
                 "arctic": {
                     "url": [
-                        "http://map2a.vis.earthdata.nasa.gov/wms/wms.php",
-                        "http://map2b.vis.earthdata.nasa.gov/wms/wms.php",
-                        "http://map2c.vis.earthdata.nasa.gov/wms/wms.php"
+                        "//map2a.vis.earthdata.nasa.gov/wms/wms.php",
+                        "//map2b.vis.earthdata.nasa.gov/wms/wms.php",
+                        "//map2c.vis.earthdata.nasa.gov/wms/wms.php"
                     ]
                 }
             },
@@ -7271,9 +7271,9 @@
             "projections": {
                 "arctic": {
                     "url": [
-                        "http://map2a.vis.earthdata.nasa.gov/wms/wms.php",
-                        "http://map2b.vis.earthdata.nasa.gov/wms/wms.php",
-                        "http://map2c.vis.earthdata.nasa.gov/wms/wms.php"
+                        "//map2a.vis.earthdata.nasa.gov/wms/wms.php",
+                        "//map2b.vis.earthdata.nasa.gov/wms/wms.php",
+                        "//map2c.vis.earthdata.nasa.gov/wms/wms.php"
                     ]
                 }
             },
@@ -62492,6 +62492,11 @@
                     "LANCEMODIS"
                 ],
                 "shortName": "MOD04_L2"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MOD05_L2_DAY": {
@@ -62509,6 +62514,11 @@
                 ],
                 "dayNightFlag": "DAY",
                 "shortName": "MOD05_L2"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MOD05_L2_NIGHT": {
@@ -62526,6 +62536,11 @@
                 ],
                 "dayNightFlag": "NIGHT",
                 "shortName": "MOD05_L2"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MOD06_L2_DAY": {
@@ -62543,6 +62558,11 @@
                 ],
                 "dayNightFlag": "DAY",
                 "shortName": "MOD06_L2"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MOD06_L2_NIGHT": {
@@ -62560,6 +62580,11 @@
                 ],
                 "dayNightFlag": "DAY",
                 "shortName": "MOD06_L2"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MOD09GA": {
@@ -62583,6 +62608,11 @@
             },
             "science": {
                 "handler": "MODISGrid"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MOD09GQ": {
@@ -62606,6 +62636,11 @@
             },
             "science": {
                 "handler": "MODISGrid"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MOD10_L2": {
@@ -62623,6 +62658,11 @@
                 ],
                 "dayNightFlag": "DAY",
                 "shortName": "MOD10_L2"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MOD11_L2_DAY": {
@@ -62640,6 +62680,11 @@
                 ],
                 "dayNightFlag": "DAY",
                 "shortName": "MOD11_L2"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MOD11_L2_NIGHT": {
@@ -62657,6 +62702,11 @@
                 ],
                 "dayNightFlag": "NIGHT",
                 "shortName": "MOD11_L2"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MOD14": {
@@ -62673,6 +62723,11 @@
                     "LANCEMODIS"
                 ],
                 "shortName": "MOD14"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MOD29": {
@@ -62690,6 +62745,11 @@
                 ],
                 "dayNightFlag": "DAY",
                 "shortName": "MOD29"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MYD04_L2": {
@@ -62706,6 +62766,11 @@
                     "LANCEMODIS"
                 ],
                 "shortName": "MYD04_L2"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MYD05_L2_DAY": {
@@ -62723,6 +62788,11 @@
                 ],
                 "dayNightFlag": "DAY",
                 "shortName": "MYD05_L2"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MYD05_L2_NIGHT": {
@@ -62740,6 +62810,11 @@
                 ],
                 "dayNightFlag": "NIGHT",
                 "shortName": "MYD05_L2"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MYD06_L2_DAY": {
@@ -62757,6 +62832,11 @@
                 ],
                 "dayNightFlag": "DAY",
                 "shortName": "MYD06_L2"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MYD06_L2_NIGHT": {
@@ -62774,6 +62854,11 @@
                 ],
                 "dayNightFlag": "NIGHT",
                 "shortName": "MYD06_L2"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MYD09GA": {
@@ -62797,6 +62882,11 @@
             },
             "science": {
                 "handler": "MODISGrid"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MYD09GQ": {
@@ -62820,6 +62910,11 @@
             },
             "science": {
                 "handler": "MODISGrid"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MYD10_L2": {
@@ -62837,6 +62932,11 @@
                 ],
                 "dayNightFlag": "DAY",
                 "shortName": "MYD10_L2"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MYD11_L2_DAY": {
@@ -62854,6 +62954,11 @@
                 ],
                 "dayNightFlag": "DAY",
                 "shortName": "MYD11_L2"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MYD11_L2_NIGHT": {
@@ -62871,6 +62976,11 @@
                 ],
                 "dayNightFlag": "NIGHT",
                 "shortName": "MYD11_L2"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MYD14": {
@@ -62887,6 +62997,11 @@
                     "LANCEMODIS"
                 ],
                 "shortName": "MYD14"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "MYD29": {
@@ -62904,6 +63019,11 @@
                 ],
                 "dayNightFlag": "DAY",
                 "shortName": "MYD29"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
             }
         },
         "OMAERUV": {

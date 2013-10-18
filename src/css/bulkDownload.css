@@ -1,0 +1,38 @@
+#BulkDownload body {
+    background-color: rgb(25, 28, 32);
+}
+
+#BulkDownload h4 {
+    margin-bottom: 0
+}
+
+#BulkDownload #page {
+    background-color: #ffffff;
+    margin: 20px;
+    padding: 5px 20px 20px 20px;
+    border-radius: 5px;
+}
+
+#BulkDownload pre {
+    background-color: #eeeeee;
+    padding: 5px;
+    border: 1px dashed #dddddd;
+}
+
+#BulkDownload .label {
+    margin-top: 10px;
+    font-style: italic;
+    color: #808080;
+}
+
+#BulkDownload #netrc-header {
+    display: none;
+}
+
+#BulkDownload #netrc-instructions {
+    display: none;
+}
+
+#BulkDownload #indirect-instructions {
+    display: none;
+}

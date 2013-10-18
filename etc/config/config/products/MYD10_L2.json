@@ -10,6 +10,11 @@
         "by": "value",
         "field": "data_center",
         "value": "LANCEMODIS"
+    },
+    "urs": {
+        "by": "value",
+        "field": "data_center",
+        "value": "LANCEMODIS"
     }
 }
 

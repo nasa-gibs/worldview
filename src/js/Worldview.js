@@ -174,7 +174,8 @@
             o = new YAHOO.widget.Panel("WVerror", {
                 width: "300px",
                 zIndex: 1020,
-                visible: false
+                visible: false,
+                constraintoviewport: true
             });
             o.setHeader('Warning');
             o.setBody("An unexpected error has occurred.<br/><br/>" + message);
@@ -203,7 +204,8 @@
             o = new YAHOO.widget.Panel("WVerror", {
                 width: "300px",
                 zIndex: 1020,
-                visible: false
+                visible: false,
+                constraintoviewport: true
             });
             title = title || "Notice";
             o.setHeader(title);
