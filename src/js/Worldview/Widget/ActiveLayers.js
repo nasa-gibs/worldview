@@ -13,7 +13,7 @@ Worldview.namespace("Widget");
 
 Worldview.Widget.ActiveLayers = function(config, model, spec) {
 
-    var log = Logging.getLogger("Widget.ActiveLayers");
+    var log = Logging.getLogger("Worldview.Widget.ActiveLayers");
     var aoi = config.aoi;
     var projectionModel = spec.projectionModel;
     var paletteWidget = spec.paletteWidget;
@@ -40,6 +40,8 @@ Worldview.Widget.ActiveLayers = function(config, model, spec) {
     };
 
     var render = function() {
+        log.debug("ActiveLayers: render");
+
         var $container = $(self.selector);
         $container.empty();
 
@@ -276,12 +278,14 @@ Worldview.Widget.ActiveLayers = function(config, model, spec) {
     };
 
     var onLayerRemoved = function(layer, type) {
+        log.debug("ActiveLayers: onLayerRemoved", type, layer.id);
         var layerSelector = "#" + type + "-" + Worldview.id(layer.id);
         $(layerSelector).remove();
         adjustCategoryHeights();
     };
 
     var onLayerAdded = function(layer, type) {
+        log.debug("ActiveLayers: onLayerAdded", type, layer.id);
         var $container = $("#" + type);
         var api = $container.data("jsp");
         if ( api ) {

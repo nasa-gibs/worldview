@@ -1,6 +1,16 @@
 $(function() {// Initialize "static" vars
 
     var log = Logging.getLogger();
+
+    // Place all logging needed on startup here. This should be emptied before
+    // release
+    var DEBUG_LOGGERS = [
+    ];
+    $.each(DEBUG_LOGGERS, function(index, name) {
+        log.warn("Enabling logger:", name);
+        Logging.debug(name);
+    });
+
     var loaded = false;
 
     var entryPoint = function() {

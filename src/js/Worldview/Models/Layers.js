@@ -66,8 +66,10 @@ Worldview.Models.Layers = function(config, projectionModel) {
     self.add = function(type, id, hidden) {
         var layer = getLayer(id);
         if ( $.inArray(layer, self.active[type]) >= 0 ) {
+            log.debug("layers: add already active", type, layer.id);
             return;
         }
+        log.debug("layers: add", type, id, hidden);
         self.active[type].unshift(layer);
         hidden = hidden || false;
         self.visible[id] = !hidden;
@@ -78,17 +80,21 @@ Worldview.Models.Layers = function(config, projectionModel) {
         var layer = getLayer(id);
         var index = $.inArray(layer, self.active[type]);
         if ( index >= 0 ) {
+            log.debug("layers: remove", type, id);
             self.active[type].splice(index, 1);
             delete self.visible[id];
             self.events.trigger("remove", layer, type);
+        } else {
+            log.debug("layers: remove not active", type, layer.id);
         }
     };
 
-    self.clear = function() {
+    self.clear = function(projection) {
+        log.debug("layers: clearing", projection, self.active);
         $.each(self.active, function(type, layers) {
-            $.each(layers, function(i, layer) {
-                // FIXME: This shouldn't be needed
-                if ( layer ) {
+            var layersClone = layers.slice(0);
+            $.each(layersClone, function(i, layer) {
+                if ( projection && layer.projections[projection] ) {
                     self.remove(type, layer.id);
                 }
             });
@@ -103,6 +109,7 @@ Worldview.Models.Layers = function(config, projectionModel) {
         }
         self.active[type].splice(oldIndex, 1);
         self.active[type].push(layer);
+        log.debug("layers: move", type, layer. self.active[type].length - 1);
         self.events.trigger("move", type, layer, self.active[type].length - 1);
     };
 
@@ -119,6 +126,7 @@ Worldview.Models.Layers = function(config, projectionModel) {
         }
         self.active[type][targetIndex] = sourceLayer;
         self.active[type][sourceIndex] = targetLayer;
+        log.debug("layers: move", type, sourceLayer, targetIndex1);
         self.events.trigger("move", type, sourceLayer, targetIndex);
     };
 
@@ -156,11 +164,11 @@ Worldview.Models.Layers = function(config, projectionModel) {
 
     self.fromPermalink = function(queryString) {
         var query = Worldview.queryStringToObject(queryString);
-        var active = query.layers || query.products;
-        if ( active ) {
-            self.clear();
+        var values = query.layers || query.products;
+        if ( values ) {
+            self.clear(projectionModel.selected);
             // Base layers / overlays
-            var sections = active.split("~");
+            var sections = values.split("~");
             $.each(sections, function(i, section) {
                 var type = null;
                 $.each(sections, function(i, section) {
