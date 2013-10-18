@@ -35,7 +35,7 @@ Worldview.Widget.ActiveLayers = function(config, model, spec) {
             .on("move", onLayerMoved)
             .on("visibility", onLayerVisibility);
         projectionModel.events
-            .on("change", render);
+            .on("change", onProjectionChanged);
         $(window).resize(resize);
     };
 
@@ -322,7 +322,8 @@ Worldview.Widget.ActiveLayers = function(config, model, spec) {
     var onLayerMoved = function(type, layer, newIndex) {
         // Scroll pane can be kind of glitchy, so just show what the
         // current state is.
-        render();
+        // Timeout prevents redraw artifacts
+        setTimeout(render, 1);
     };
 
     var onLayerVisibility = function(layer, visible) {
@@ -334,6 +335,11 @@ Worldview.Widget.ActiveLayers = function(config, model, spec) {
             $element.attr("data-action", "show");
             $element.attr("src", "images/invisible.png");
         }
+    };
+
+    var onProjectionChanged = function() {
+        // Timeout prevents redraw artifacts
+        setTimeout(render, 1);
     };
 
     var openPaletteSelector = function(event) {
