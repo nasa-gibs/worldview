@@ -2,7 +2,7 @@
 
 	<filelist id="js.files" dir="${build.web.dir}">
 	    <file name="ext/preloadjs/preloadjs.min.js"/>
-	    
+
         <file name="ext/jquery/jquery.js"/>
         <file name="ext/jquery-ui/jquery-ui.min.js"/>
         <file name="ext/jquery.mobile/jquery.mobile.js"/>
@@ -20,7 +20,7 @@
         <file name="ext/mobiscroll/mobiscroll.android.js"/>
         <file name="ext/mobiscroll/mobiscroll.android-ics.js"/>
         <file name="ext/mobiscroll/mobiscroll.wp.js"/>
-        
+
 		<file name="ext/yui/yahoo/yahoo.js"/>
         <file name="ext/yui/event/event.js"/>
         <file name="ext/yui/dom/dom.js"/>
@@ -36,7 +36,7 @@
         <file name="ext/joyride/jquery.cookie.js"/>
         <file name="ext/joyride/jquery.joyride.js"/>
         <file name="ext/joyride/modernizr.mq.js"/>
-        
+
 		<file name="ext/openlayers/OpenLayers.debug.js"/>
 		<file name="ext/jcrop/jcrop.js"/>
 		<file name="ext/jquery.dd/jquery.dd.js"/>
@@ -48,7 +48,7 @@
         <file name="ext/proj4js/EPSG_3031.js"/>
         <file name="ext/proj4js/EPSG_3413.js"/>
         <file name="ext/proj4js/EPSG_3995.js"/>
-            
+
         <file name="js/Date.js"/>
         <file name="js/Logging.js"/>
 
@@ -69,7 +69,7 @@
         <file name="js/products.js"/>
 		<file name="js/sote.js"/>
         <file name="js/events.js"/>
-	    	
+
 		<file name="js/Worldview.js"/>
         <file name="js/Worldview/About.js"/>
         <file name="js/Worldview/Support.js"/>
@@ -81,12 +81,12 @@
         <file name="js/Worldview/Indicator.js"/>
         <file name="js/Worldview/AjaxCache.js"/>
         <file name="js/Worldview/AjaxJoin.js"/>
-               
+
         <file name="js/Worldview/Palette.js"/>
         <file name="js/Worldview/Palette/ColorBar.js"/>
         <file name="js/Worldview/Palette/Palette.js"/>
         <file name="js/Worldview/Palette/PaletteSelector.js"/>
-        
+
 		<file name="js/Worldview/Map.js"/>
         <file name="js/Worldview/Map/CanvasTile.js"/>
 		<file name="js/Worldview/Map/MapSet.js"/>
@@ -103,7 +103,7 @@
         <file name="js/Worldview/DataDownload/ECHO/Geometry.js"/>
         <file name="js/Worldview/DataDownload/ECHO/MockClient.js"/>
 
-        <file name="js/Worldview/DataDownload/Handler.js"/>        
+        <file name="js/Worldview/DataDownload/Handler.js"/>
         <file name="js/Worldview/DataDownload/Handler/Base.js"/>
         <file name="js/Worldview/DataDownload/Handler/MODISSwathMultiDay.js"/>
         <file name="js/Worldview/DataDownload/Handler/AquaSwathMultiDay.js"/>
@@ -113,15 +113,15 @@
         <file name="js/Worldview/DataDownload/Handler/MODISMix.js"/>
         <file name="js/Worldview/DataDownload/Handler/List.js"/>
         <file name="js/Worldview/DataDownload/Handler/CollectionList.js"/>
-        
+
         <file name="js/Worldview/DataDownload/Layers/Button.js"/>
         <file name="js/Worldview/DataDownload/Layers/Grid.js"/>
         <file name="js/Worldview/DataDownload/Layers/Hover.js"/>
         <file name="js/Worldview/DataDownload/Layers/QueryMask.js"/>
         <file name="js/Worldview/DataDownload/Layers/Selection.js"/>
         <file name="js/Worldview/DataDownload/Layers/Swath.js"/>
- 
-        <file name="js/Worldview/DataDownload/Results/AntiMeridianMulti.js"/>               
+
+        <file name="js/Worldview/DataDownload/Results/AntiMeridianMulti.js"/>
         <file name="js/Worldview/DataDownload/Results/Chain.js"/>
         <file name="js/Worldview/DataDownload/Results/CollectPreferred.js"/>
         <file name="js/Worldview/DataDownload/Results/CollectVersions.js"/>
@@ -136,6 +136,7 @@
         <file name="js/Worldview/DataDownload/Results/PreferredFilter.js"/>
         <file name="js/Worldview/DataDownload/Results/ProductLabel.js"/>
         <file name="js/Worldview/DataDownload/Results/TagNRT.js"/>
+        <file name="js/Worldview/DataDownload/Results/TagURS.js"/>
         <file name="js/Worldview/DataDownload/Results/TagProduct.js"/>
         <file name="js/Worldview/DataDownload/Results/TagList.js"/>
         <file name="js/Worldview/DataDownload/Results/TagVersion.js"/>
@@ -148,8 +149,8 @@
         <file name="js/Worldview/DataDownload/MapController.js"/>
         <file name="js/Worldview/DataDownload/SelectionListPanel.js"/>
         <file name="js/Worldview/DataDownload/DownloadListPanel.js"/>
-        <file name="js/Worldview/DataDownload/WgetPage.js"/>
-        
+        <file name="js/Worldview/DataDownload/BulkDownloadPage.js"/>
+
         <file name="js/Worldview/Widget/Map.js"/>
         <file name="js/Worldview/Widget/Palette.js"/>
         <file name="js/Worldview/Widget/WorldviewMap.js"/>
@@ -157,9 +158,10 @@
         <file name="js/Worldview/Widget/Opacity.js"/>
         <file name="js/Worldview/Widget/CRS.js"/>
         <file name="js/Worldview/Widget/DataDownload.js"/>
+        <file name="js/Worldview/Widget/Permalink.js"/>
 
         <file name="js/tour.js"/>
 		<file name="js/main.js"/>
 	</filelist>
-	
+
 </project>

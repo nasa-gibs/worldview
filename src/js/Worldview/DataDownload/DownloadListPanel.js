@@ -20,9 +20,9 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
         "<div id='DataDownload_Notice'>" +
             "<img class='icon' src='images/info-icon-blue.svg'>" +
             "<p class='text'>" +
-                "An account with the EOSDIS User Registration System (URS) " +
-                "may be necessary to download data. It is simple and " +
-                "free to sign up! " +
+                "Some items you have selected require an account with the " +
+                "EOSDIS User Registration System (URS) to download. " +
+                "It is simple and free to sign up! " +
                 "<a href='https://earthdata.nasa.gov/urs/register' target='urs'>" +
                 "Click to register for an account.</a>" +
             "</p>" +
@@ -31,10 +31,13 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
     var panel = null;
     var selection;
     var self = {};
+    var urs = false;
+
     self.events = Worldview.Events();
 
     self.show = function() {
         selection = reformatSelection();
+        log.debug("selection", selection);
         var newPanel = false;
         if ( !panel ) {
             newPanel = true;
@@ -42,7 +45,8 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
                 width: "600px",
                 height: "400px",
                 zIndex: 1020,
-                visible: false
+                visible: false,
+                constraintoviewport: true
             });
             panel.setHeader("Download Links");
         }
@@ -56,6 +60,7 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
             });
 
             $("#DataDownload_DownloadListPanel a.wget").click(showWgetPage);
+            $("#DataDownload_DownloadListPanel a.curl").click(showCurlPage);
         }
     };
 
@@ -74,12 +79,17 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
         panel.destroy();
         panel = null;
         $("#DataDownload_DownloadListPanel a.wget").off("click", showWgetPage);
+        $("#DataDownload_DownloadListPanel a.curl").off("click", showCurlPage);
     };
 
     var reformatSelection = function() {
         var selection = {};
 
+        urs = false;
         $.each(model.selectedGranules, function(key, granule) {
+            if ( granule.urs ) {
+                urs = true;
+            }
             if ( !selection[granule.product] ) {
                 productConfig = config.products[granule.product];
                 selection[granule.product] = {
@@ -126,7 +136,8 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
             $.each(product.granules, function(index, granule) {
                 var item = {
                     label: granule.downloadLabel || granule.label,
-                    links: []
+                    links: [],
+                    urs: granule.urs
                 };
                 $.each(granule.links, function(index, link) {
                     // Skip this link if now at the product level
@@ -172,7 +183,8 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
         // URI
         return {
             href: link.href,
-            title: ( link.title ) ? link.title : link.href.split("/").slice(-1)
+            title: ( link.title ) ? link.title : link.href.split("/").slice(-1),
+            data: ( link.rel === echo.REL_DATA )
         };
     };
 
@@ -230,30 +242,40 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
     };
 
     var bodyText = function() {
-        var bulk = "";
-        if ( isBulkDownloadable() ) {
-            bulk = "<div class='wget'>" +
-                   "<a class='wget' href='#'>Bulk Download (wget)</a>" +
-                   "</div>";
+        var elements =[];
+        if ( urs ) {
+            elements.push(NOTICE);
         }
-        var elements = [
-            NOTICE,
-            bulk,
-        ];
         $.each(selection, function(key, product) {
             elements.push("\n<br/>\n" + productText(product));
         });
+
+        if ( isBulkDownloadable() ) {
+            var bulk =
+                "<h4>Bulk Download</h4>" +
+                "<ul class='BulkDownload'>" +
+                "<li><a class='wget' href='#'>Link List:</a> " +
+                    "For wget or download managers that accept a list of " +
+                    "URLs</li>" +
+                "<li><a class='curl' href='#'>cURL Commands:</a> " +
+                    "List of commands that can be copied and pasted to " +
+                    "a terminal window to download using cURL.</li>" +
+                "</ul>";
+            elements.push(bulk);
+        }
         var text = elements.join("\n<br/>\n") + "<br/>";
         return text;
     };
 
     var showWgetPage = function() {
-        Worldview.DataDownload.WgetPage.show(selection);
+        Worldview.DataDownload.BulkDownloadPage.show(selection, "wget");
+    };
+
+    var showCurlPage = function() {
+        Worldview.DataDownload.BulkDownloadPage.show(selection, "curl");
     };
 
     return self;
 
 };
-$('#DataDownload #DataDownloadcontent h3 span').click(function(e){
-            console.log("TEST####");
-        });
+

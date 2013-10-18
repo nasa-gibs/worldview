@@ -147,7 +147,8 @@ Worldview.Widget.ArcticProjectionChangeNotification = function(config, bank) {
             width: "300px",
             zIndex: 1020,
             visible: false,
-            modal: true
+            modal: true,
+            constraintoviewport: true
         });
         dialog.setHeader("Notice");
         var body = [

@@ -15,6 +15,17 @@ Worldview.namespace("Tour");
      */
     ns.start = function(storageEngine, hideSplash, noDisable) {
 
+        var browser = Worldview.Support.BROWSER;
+        var version = Worldview.Support.VERSION;
+        if (browser === "IE" && version <= 9) {
+            if (noDisable) {
+                Worldview.notify("The Worldivew tour is not supported in " +
+                    "this browser version. Upgrade or try again in a " +
+                    "different browser.");
+            }
+            return;
+        }
+
         // FIXME: Hacking it for now
         storageEngine = storageEngine || Worldview.storageEngine;
 
@@ -31,7 +42,6 @@ Worldview.namespace("Tour");
             }
             return;
         }
-
 
         // set up storage and decide whether to show the splash
 //        var storageEngine;

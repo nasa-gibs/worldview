@@ -50,7 +50,7 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
         log.debug("Map is ready");
 
         setExtentToLeading();
-        self.updateComponent(Worldview.Permalink.fromRegistry());
+        self.updateComponent(Worldview.Permalink.get());
     };
 
     /**

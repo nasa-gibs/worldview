@@ -45,7 +45,8 @@ $(function() {
          if ( !overlay ) { 
                 overlay = new YAHOO.widget.Panel("panel1", { 
                     zIndex:1020, 
-                    visible:false 
+                    visible:false, 
+                    constraintoviewport: true
                 });
                 
                 //=============================================================

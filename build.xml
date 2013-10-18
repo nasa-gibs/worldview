@@ -1,17 +1,17 @@
 <project name="Worldview" default="web" basedir=".">
 
     <description>Worldview build script</description>
-    
+
     <property file="${basedir}/etc/build.properties"/>
     <property file="${src.ant.dir}/depend.properties"/>
-    
+
     <include>
         <fileset dir="${src.depend.dir}" includes="${build.depends}"/>
     </include>
-    
+
     <include file="${src.ant.dir}/css.build.xml"/>
     <include file="${src.ant.dir}/js.build.xml"/>
-    
+
     <target name="init">
         <tstamp>
             <format property="build.timestamp"
@@ -26,19 +26,19 @@
         <mkdir dir="${lib.artifacts.dir}"/>
         <mkdir dir="${lib.packages.dir}"/>
     </target>
-    
+
     <target name="clean" description="Removes the build and dist directories">
         <delete dir="${build.dir}"/>
         <delete dir="${dist.dir}"/>
         <delete dir="${basedir}/doc/NaturalDocs/Data"/>
         <delete file="${basedir}/doc/NaturalDocs/Menu.txt"/>
     </target>
-    
+
     <target name="distclean" depends="clean"
             description="Cleans and also removes the lib directory">
         <delete dir="${lib.dir}"/>
     </target>
-    
+
     <target name="deps" depends="init">
         <subant target="resolve" inheritall="true" failonerror="true">
             <fileset dir="${src.depend.dir}" includes="${build.depends}"/>
@@ -79,23 +79,23 @@
     <target name="generate-config" description="Builds configuration file">
         <delete dir="${build.dir}/config"/>
         <mkdir dir="${build.dir}/config/"/>
-        
+
         <copy todir="${build.dir}/config" includeEmptyDirs="true">
             <fileset dir="${basedir}/etc/config/config"/>
         </copy>
-        
+
         <exec executable="python" failonerror="true">
             <arg value="${basedir}/etc/config/act2json.py"/>
             <arg value="${build.dir}/config/palettes"/>
         </exec>
-        
+
         <exec executable="python" failonerror="true">
             <arg value="${basedir}/etc/config/vrt2json.py"/>
             <arg value="--layers-dir"/>
             <arg value="${build.dir}/config/layers"/>
             <arg value="${build.dir}/config/palettes"/>
         </exec>
-        
+
         <exec executable="python" failonerror="true">
             <arg value="${basedir}/etc/config/generate-config.py"/>
             <arg value="--config-dir"/>
@@ -103,7 +103,7 @@
             <arg value="--output"/>
             <arg value="${build.dir}/config.json"/>
         </exec>
-        
+
         <exec executable="python">
             <arg value="${basedir}/etc/config/generate-config.py"/>
             <arg value="--config-dir"/>
@@ -112,9 +112,9 @@
             <arg value="--output"/>
             <arg value="${build.dir}/config-min.json"/>
         </exec>
-        
+
         <copy file="${build.dir}/config.json" tofile="${src.dir}/data/config.json"/>
-                
+
     </target>
     <target name="web" depends="init,deps,generate-config"
             description="Builds minified web site">
@@ -132,7 +132,7 @@
             -->
             <fileset dir="${src.dir}"/>
         </copy>
-        
+
         <replace file="${build.web.dir}/js/Worldview.js"
                  token="@BUILD_TIMESTAMP@"
                  value="${build.timestamp}"/>
@@ -142,11 +142,11 @@
             <fileset dir="${build.web.dir}/pages" includes="*.html"/>
             <fileset dir="${build.web.dir}/js" includes="**/*.js"/>
         </replace>
-        
+
         <copy todir="${build.bin.dir}">
             <fileset dir="bin"/>
         </copy>
-        
+
         <!-- Debug version that is not minified -->
         <delete dir="${build.web-debug.dir}"/>
         <mkdir dir="${build.web-debug.dir}"/>
@@ -169,6 +169,7 @@
 
         <!-- Executable bits -->
         <chmod file="${build.web.dir}/service/echo.cgi" perm="755"/>
+        <chmod file="${build.web.dir}/service/shorten.cgi" perm="755"/>
 
         <!-- Combine all css and js files into one file -->
         <concat destfile="${build.dir}/minify/worldview.css" force="no">
@@ -194,13 +195,13 @@
             <arg value="--create_source_map"/>
             <arg value="${build.dir}/minify/worldview-min.js.map"/>
         </exec>
-        
+
         <yui-compressor warn="false" charset="UTF-8"
                         fromdir="${build.dir}/minify"
                         todir="${build.dir}/minify">
             <include name="worldview.css"/>
         </yui-compressor>
-        
+
         <delete>
             <fileset dir="${build.web.dir}">
                 <include name="**/version-*"/>
@@ -208,11 +209,12 @@
                 <include name="**/*.js"/>
                 <!-- Place any concatenation exceptions here -->
                 <exclude name="css/pages.css"/>
+                <exclude name="css/bulkDownload.css"/>
                 <exclude name="ext/openlayers/theme/default/style.css"/>
                 <exclude name="**/TileWorker.js"/>
             </fileset>
         </delete>
-        
+
         <move file="${build.dir}/minify/worldview-min.css" todir="${build.web.dir}/css"/>
         <move file="${build.dir}/minify/worldview-min.js" todir="${build.web.dir}/js"/>
 
@@ -246,7 +248,7 @@
             </fileset>
             <regexpmapper from="^[^/]*/(.*)$$" to="\1" handledirsep="true"/>
         </move>
-        
+
         <!-- Remove all empty directories left over -->
         <delete includeemptydirs="true">
             <fileset dir="${build.web.dir}">
@@ -267,7 +269,7 @@
         </exec>
         <echo message="Capture browser at http://localhost:${js-test-driver.port}/capture"/>
     </target>
-    
+
     <target name="test">
         <exec executable="java">
             <arg value="-jar"/>
@@ -278,7 +280,7 @@
             <arg value="test/jsTestDriver.conf"/>
         </exec>
     </target>
-    
+
     <target name="test-one">
         <exec executable="java">
             <arg value="-jar"/>
@@ -289,21 +291,23 @@
             <arg value="test/jsTestDriver.conf"/>
         </exec>
     </target>
-    
+
     <target name="dist" depends="clean,web,doc,artifacts"
             description="Generates distribution artifacts"/>
-            
+
     <target name="artifacts"
             description="Generates distribution artifacts using existing build dir">
-            
+
         <tar destfile="${dist.dir}/worldview.tar.bz2" compression="bzip2">
             <tarfileset dir="${build.dir}/worldview" prefix="worldview">
                 <exclude name="**/service/echo.cgi"/>
+                <exclude name="**/service/shorten.cgi"/>
                 <exclude name="**/bin/eventsGeoRssParser.py"/>
             </tarfileset>
             <tarfileset dir="${build.web.dir}/service"
                         prefix="worldview/web/service" filemode="755">
                 <include name="echo.cgi"/>
+                <include name="shorten.cgi"/>
             </tarfileset>
             <tarfileset dir="${build.bin.dir}"
                         prefix="worldview/bin" filemode="755">
@@ -313,11 +317,13 @@
         <tar destfile="${dist.dir}/worldview-debug.tar.bz2" compression="bzip2">
             <tarfileset dir="${build.dir}/worldview-debug" prefix="worldview-debug">
                 <exclude name="**/service/echo.cgi"/>
+                <exclude name="**/service/shorten.cgi"/>
                 <exclude name="**/bin/eventsGeoRssParser.py"/>
             </tarfileset>
             <tarfileset dir="${build.web-debug.dir}/service"
                         prefix="worldview-debug/web/service" filemode="755">
                 <include name="echo.cgi"/>
+                <include name="shorten.cgi"/>
             </tarfileset>
             <tarfileset dir="${build.bin-debug.dir}"
                         prefix="worldview-debug/bin" filemode="755">
@@ -328,9 +334,9 @@
              basedir="${build.dir}" includes="worldview-doc/**"
              compression="bzip2"/>
     </target>
-    
+
     <target name="rpm" depends="dist,rpm-build"/>
-    
+
     <target name="rpm-build">
         <mkdir dir="${build.dir}/rpm/SOURCES"/>
         <copy file="${dist.dir}/worldview.tar.bz2"

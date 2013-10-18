@@ -78,6 +78,9 @@ Worldview.DataDownload.Layers.Selection = function(model, maps, config) {
             return;
         }
         var feature = features[granule.id];
+        if ( !feature ) {
+            return;
+        }
         getLayer().removeFeatures([feature]);
         getLayer().redraw();
         delete features[granule.id];

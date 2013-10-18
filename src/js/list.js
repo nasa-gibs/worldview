@@ -320,7 +320,8 @@ SOTE.widget.List.prototype._update = function(){
             o = new YAHOO.widget.Panel("WVerror", {
                 width: "600px", 
                 zIndex: 1020, 
-                visible: false 
+                visible: false,
+                constraintoviewport: true 
             });
             title = title || "Notice";
             o.setHeader('<b>Why are these layers not available for downloading?</b>');

@@ -4,7 +4,7 @@
     "query": {
         "science": {
             "shortName": "MYD09GA",
-            "dataCenterId": "LPDAAC_ECS"            
+            "dataCenterId": "LPDAAC_ECS"
         },
         "nrt": {
             "shortName": "MYD09",
@@ -16,8 +16,13 @@
         "by": "value",
         "field": "data_center",
         "value": "LANCEMODIS"
-    }, 
+    },
     "science": {
         "handler": "MODISGrid"
+    },
+    "urs": {
+        "by": "value",
+        "field": "data_center",
+        "value": "LANCEMODIS"
     }
 }
