@@ -57,7 +57,8 @@ Worldview.namespace("Support");
         checkMobile();
         fixSize();
         modernSetTimeout();
-        shimStringContains();
+        polyfillStringContains();
+        polyfillStringStartsWith();
     };
 
     var init = function() {
@@ -182,7 +183,7 @@ Worldview.namespace("Support");
         }
     };
 
-    var shimStringContains = function(){
+    var polyfillStringContains = function(){
         if ( ! ('contains' in String.prototype) ) {
             String.prototype.contains = function(str, startIndex) {
                 return -1 !== String.prototype.indexOf.call(this, str,
@@ -190,6 +191,21 @@ Worldview.namespace("Support");
             };
         };
     };
+
+    var polyfillStringStartsWith = function() {
+        if (!String.prototype.startsWith) {
+            Object.defineProperty(String.prototype, 'startsWith', {
+                enumerable: false,
+                configurable: false,
+                writable: false,
+                value: function (searchString, position) {
+                    position = position || 0;
+                    return this.indexOf(searchString, position) === position;
+                }
+            });
+        }
+    };
+
 
     init();
 

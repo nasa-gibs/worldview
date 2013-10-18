@@ -156,26 +156,39 @@ Worldview.Models.Layers = function(config, projectionModel) {
 
     self.fromPermalink = function(queryString) {
         var query = Worldview.queryStringToObject(queryString);
-        var layers = query.layers || query.products;
-        if ( layers ) {
+        var active = query.layers || query.products;
+        if ( active ) {
             self.clear();
-            var sections = [
-                layers.split("~")[0].split(/[,\.]/),
-                layers.split("~")[1].split(/[,\.]/)
-            ];
+            // Base layers / overlays
+            var sections = active.split("~");
             $.each(sections, function(i, section) {
                 var type = null;
-                $.each(section, function(index, item) {
-                    if ( index === 0 ) {
-                        type = item;
-                    } else {
-                        try {
-                            self.add(type, item);
-                        } catch ( error ) {
-                            log.error("Unable to add layer [" + type + "]" +
-                                item, error);
+                $.each(sections, function(i, section) {
+                    var items = section.split(/[,\.]/);
+                    var layers = [];
+                    $.each(items, function(index, item) {
+                        if ( index === 0 ) {
+                            type = item;
+                            if ( !Worldview.LAYER_TYPES[type] ) {
+                                log.warn("Invalid layer type: " + type);
+                                return false;
+                            }
+                        } else {
+                            var hidden = item.startsWith("!");
+                            if ( hidden ) {
+                                item = item.substring(1);
+                            }
+                            // Layers have to be added in reverse
+                            layers.unshift({name: item, hidden: hidden});
                         }
-                    }
+                    });
+                    $.each(layers, function(index, layer) {
+                        try {
+                            self.add(type, layer.name, layer.hidden);
+                        } catch ( error ) {
+                            log.warn("Invalid layer: " + layer);
+                        }
+                    });
                 });
             });
         }

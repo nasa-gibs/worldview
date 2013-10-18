@@ -53,8 +53,6 @@ Worldview.Widget.ActiveLayers = function(config, model, spec) {
             renderType($container, type);
         });
 
-        //this.renderCanvases();
-
         $(self.selector).undelegate(".close" ,'click');
         $(self.selector).undelegate(".hideReg" ,'click');
 
@@ -263,6 +261,11 @@ Worldview.Widget.ActiveLayers = function(config, model, spec) {
             this.jsp = $("." + self.id + "category")
                 .jScrollPane({autoReinitialise: false, verticalGutter:0});
         }
+
+        var tabs_height = $(".ui-tabs-nav").outerHeight(true);
+        $(self.selector).height(
+            $(self.selector).parent().outerHeight() - tabs_height
+        );
         adjustCategoryHeights();
     };
 
@@ -302,6 +305,7 @@ Worldview.Widget.ActiveLayers = function(config, model, spec) {
 
     var moveLayer = function(event, ui) {
         var $target = ui.item;
+        console.log($target.attr("data-layer"), $target.index());
         var $next = $target.next();
         if ( $next.length ) {
             model.moveBefore($target.attr("data-layer-type"),
@@ -313,13 +317,9 @@ Worldview.Widget.ActiveLayers = function(config, model, spec) {
     };
 
     var onLayerMoved = function(type, layer, newIndex) {
-        var $target = $("#" + type + "-" + Worldview.id(layer.id));
-        // Find which layer is at the new index
-        var $old = $target.parent().children().eq(newIndex);
-        // Has the move alreay happened?
-        if ( $target.index() !== $old.index() ) {
-            render();
-        }
+        // Scroll pane can be kind of glitchy, so just show what the
+        // current state is.
+        render();
     };
 
     var onLayerVisibility = function(layer, visible) {

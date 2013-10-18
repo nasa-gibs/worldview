@@ -248,6 +248,7 @@ $(function() {// Initialize "static" vars
         // for console debugging. Code should NOT reference these as they
         // are subject to change or removal.
         Worldview.widgets = {
+            activeLayers: activeLayers,
             addLayers: addLayers
         };
 
