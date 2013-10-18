@@ -109,7 +109,7 @@ Worldview.Models.Layers = function(config, projectionModel) {
         }
         self.active[type].splice(oldIndex, 1);
         self.active[type].push(layer);
-        log.debug("layers: move", type, layer. self.active[type].length - 1);
+        log.debug("layers: move", type, layer, self.active[type].length - 1);
         self.events.trigger("move", type, layer, self.active[type].length - 1);
     };
 
@@ -126,7 +126,7 @@ Worldview.Models.Layers = function(config, projectionModel) {
         }
         self.active[type][targetIndex] = sourceLayer;
         self.active[type][sourceIndex] = targetLayer;
-        log.debug("layers: move", type, sourceLayer, targetIndex1);
+        log.debug("layers: move", type, sourceLayer, targetIndex);
         self.events.trigger("move", type, sourceLayer, targetIndex);
     };
 

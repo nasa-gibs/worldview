@@ -309,7 +309,6 @@ Worldview.Widget.ActiveLayers = function(config, model, spec) {
 
     var moveLayer = function(event, ui) {
         var $target = ui.item;
-        console.log($target.attr("data-layer"), $target.index());
         var $next = $target.next();
         if ( $next.length ) {
             model.moveBefore($target.attr("data-layer-type"),
