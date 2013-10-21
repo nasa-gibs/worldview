@@ -39,6 +39,8 @@ Worldview.Widget.ActiveLayers = function(config, model, spec) {
         $(window).resize(resize);
     };
 
+    self.render = function() { render(); }
+
     var render = function() {
         log.debug("ActiveLayers: render");
 
@@ -310,6 +312,7 @@ Worldview.Widget.ActiveLayers = function(config, model, spec) {
     var moveLayer = function(event, ui) {
         var $target = ui.item;
         var $next = $target.next();
+        console.log("MOVE TO: " + $target.index(), "next", $next);
         if ( $next.length ) {
             model.moveBefore($target.attr("data-layer-type"),
                     $target.attr("data-layer"), $next.attr("data-layer"));

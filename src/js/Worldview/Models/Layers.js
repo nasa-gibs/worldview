@@ -124,8 +124,13 @@ Worldview.Models.Layers = function(config, projectionModel) {
         if ( targetIndex < 0 ) {
             throw new Error("Layer is not active: " + target);
         }
-        self.active[type][targetIndex] = sourceLayer;
-        self.active[type][sourceIndex] = targetLayer;
+
+        self.active[type].splice(targetIndex, 0, sourceLayer);
+        if ( sourceIndex > targetIndex ) {
+            sourceIndex++;
+        }
+        self.active[type].splice(sourceIndex, 1);
+
         log.debug("layers: move", type, sourceLayer, targetIndex);
         self.events.trigger("move", type, sourceLayer, targetIndex);
     };
