@@ -155,11 +155,11 @@ Worldview.Widget.ArcticProjectionChangeNotification = function(config, bank) {
             "On " + self.changeDate.toISOStringDate() + " the polar ",
             "projections changed as follows:" ,
             "<br/><br/>",
-            "The Arctic projection changed from Arctic Polar ",
+            "The <b>Arctic projection</b> changed from Arctic Polar ",
             "Stereographic (EPSG:3995, \"Greenwich down\") to NSIDC Polar ",
             "Stereographic North (EPSG:3413, \"Greenland down\").",
             "<br/><br/>" +
-            "The Antarctic projection changed from being projected onto ",
+            "The <b>Antarctic projection</b> changed from being projected onto ",
             "a sphere with radius of 6371007.181 meters to being projected ",
             "onto the WGS84 ellipsoid. The projection is now the correct ",
             "Antarctic Polar Stereographic (EPSG:3031). This change results ",
