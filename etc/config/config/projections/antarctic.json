@@ -8,6 +8,7 @@
     ],
     "name": "antarctic",
     "numZoomLevels": 6,
+    "epsg": 3031,
     "crs": "EPSG:3031",
     "resolutions": [
         8192.0,

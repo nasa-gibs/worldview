@@ -3,8 +3,8 @@ body {min-width:320px; width:100%;}
 div {display:block;}
 h1, h2, h3, h4, h5, h6 { font-weight:400; }
 
-.yui-skin-sam .yui-panel {background: transparent; width:700px; 	font: 13px "Gill Sans", sans-serif; font-weight:100;}  
-#selector_c .yui-panel {background: transparent; width:210px; font: 13px "Gill Sans", sans-serif; font-weight:100;}  
+.yui-skin-sam .yui-panel {background: transparent; width:700px; 	font: 13px "Gill Sans", sans-serif; font-weight:100;}
+#selector_c .yui-panel {background: transparent; width:210px; font: 13px "Gill Sans", sans-serif; font-weight:100;}
 #selector_c .yui-panel .bd {padding:0 !important;}
 
 .yui-skin-sam .yui-panel-container .hd{ background:rgba(38, 43, 49, 0.65); color:#ffffff; border-bottom: none; padding:0; padding-left: 10px;}
@@ -25,24 +25,7 @@ h1, h2, h3, h4, h5, h6 { font-weight:400; }
     padding:2px 0;
 }
 
-#switch {  overflow:hidden; z-index:1000; }
-#switch div{display:block; }
-#switch a,div.sw_current {display:block !important; width:40px; height:40px;}
-#switch div.sw_current {background-image:url("../images/geographic.png");}
-#switch div.sw_current:hover {background-image:url("../images/geographicon.png");}
-#switch ul li {margin:0px !important;}
-#switch ul li div.hidden {display:none; margin-top:2px; }
-#switch ul li div.hidden a.sw_arctic { background-image:url("../images/arctic.png");}
-#switch ul li div.hidden a.sw_antarctic {background-image:url("../images/antarctic.png");}
-#switch ul li div.hidden a.sw_geographic {background-image:url("../images/geographic.png");}
-#switch ul li div.hidden a.sw_arctic:hover { background-image:url("../images/arcticon.png");}
-#switch ul li div.hidden a.sw_antarctic:hover {background-image:url("../images/antarcticon.png");}
-#switch ul li div.hidden a.sw_geographic:hover {background-image:url("../images/geographicon.png");}
 
-#switch ul li:hover div.hidden { z-index:299; display:block; background: rgba(38, 43, 49, 0.45); border-radius:0 0 5px 5px; position:relative; top:-1px;}
-/*#switch ul li:hover div.hidden a:hover img {border: #fff 1px solid; }*/
-#switchcurrent {border:transparent 1px solid;}
-/*#switch ul li div.hidden a:hover img {border:#155678 2px solid; }*/
 
 #info_drop { border:none; margin:0px;}
 #info_drop div.hidden a {display:block; color:#fff; font-weight:100; line-height:1em; font-size: 11px; width:70px; padding: 2px 5px; text-align:right; text-decoration:none;}
@@ -58,19 +41,19 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
 
 #permalink_content {margin-top:10px;}
 
-.hidden {display:none;} 
+.hidden {display:none;}
 
 #products {display:block; float:left;  position:relative; left:0; }
 
 
 
 #banner {
-    display:block; 
-    z-index:294; 
-    float:left; 
-    position:relative; 
-    width:100%; 
-    height:45px; 
+    display:block;
+    z-index:294;
+    float:left;
+    position:relative;
+    width:100%;
+    height:45px;
     background: rgba(65,65,65,0.5);
     border-bottom: 1px solid #000;
 }
@@ -81,7 +64,7 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
     height:45px;
     display:inline-block;
 }
-@media 
+@media
 #banner img.logo {padding:11px 5px;}
 #banner ul {float:right; }
 #banner ul li {display:block; float:right; margin:3px 3px; line-height:0; }
@@ -105,7 +88,7 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
 
 #hazard ul {
 	padding: 0;
-	margin-left: 0; 
+	margin-left: 0;
 	font: 13px "Gill Sans", sans-serif;
 	text-align: center;
 	text-shadow:none;

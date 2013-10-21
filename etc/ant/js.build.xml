@@ -9,7 +9,7 @@
 
         <file name="ext/jscrollpane/jquery.mousewheel.js"/>
         <file name="ext/jscrollpane/mwheelIntent.js"/>
-        <file name="ext/jscrollpane/jquery.jscrollpane.min.js"/>
+        <file name="ext/jscrollpane/jquery.jscrollpane.js"/>
 
         <file name="ext/mobiscroll/mobiscroll.core.js"/>
         <file name="ext/mobiscroll/mobiscroll.datetime.js"/>
@@ -60,13 +60,7 @@
         <file name="js/datePicker.js"/>
 		<file name="js/rubberBand.js"/>
 		<file name="js/imageDownload.js"/>
-		<file name="js/menuPicker.js"/>
-		<file name="js/accordionPicker.js"/>
         <file name="js/list.js"/>
-		<file name="js/bank.js"/>
-		<file name="js/switch.js"/>
-		<file name="js/selector.js"/>
-        <file name="js/products.js"/>
 		<file name="js/sote.js"/>
         <file name="js/events.js"/>
 
@@ -81,6 +75,12 @@
         <file name="js/Worldview/Indicator.js"/>
         <file name="js/Worldview/AjaxCache.js"/>
         <file name="js/Worldview/AjaxJoin.js"/>
+
+        <file name="js/Worldview/Models/Layers.js"/>
+        <file name="js/Worldview/Models/Projection.js"/>
+
+        <file name="js/Worldview/Legacy/switch.js"/>
+        <file name="js/Worldview/Legacy/bank.js"/>
 
         <file name="js/Worldview/Palette.js"/>
         <file name="js/Worldview/Palette/ColorBar.js"/>
@@ -151,6 +151,10 @@
         <file name="js/Worldview/DataDownload/DownloadListPanel.js"/>
         <file name="js/Worldview/DataDownload/BulkDownloadPage.js"/>
 
+        <file name="js/Worldview/Widget/Projection.js"/>
+        <file name="js/Worldview/Widget/LayerSideBar.js"/>
+        <file name="js/Worldview/Widget/ActiveLayers.js"/>
+        <file name="js/Worldview/Widget/AddLayers.js"/>
         <file name="js/Worldview/Widget/Map.js"/>
         <file name="js/Worldview/Widget/Palette.js"/>
         <file name="js/Worldview/Widget/WorldviewMap.js"/>

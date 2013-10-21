@@ -31,7 +31,6 @@
         }
     },
     "properties": {
-        "defaultLayer": "true",
         "format": "image/png",
         "layer": "sedac_bound",
         "opacity": 0.95,
