@@ -100,7 +100,7 @@ Worldview.Widget.ArcticProjectionChangeNotification = function(config, bank) {
         log.debug("LFQ: ", REGISTRY.isLoadingQuery);
         try {
             var query = Worldview.queryStringToObject(queryString);
-            if ( query["switch"] === "arctic" ) {
+            if ( query["switch"] === "arctic" || query["switch"] === "antarctic" ) {
                 var currentDay;
                 if ( query.time ) {
                     try {
@@ -133,7 +133,7 @@ Worldview.Widget.ArcticProjectionChangeNotification = function(config, bank) {
                 }
                 if ( visitOld && visitNew && showNotice ) {
                     log.debug(self.containerId + ": notify");
-                    notify();
+                    setTimeout(notify, 100);
                     showNotice = false;
                 }
             }
@@ -144,7 +144,7 @@ Worldview.Widget.ArcticProjectionChangeNotification = function(config, bank) {
 
     var notify = function() {
         dialog = new YAHOO.widget.Panel("arcticChangeNotification", {
-            width: "300px",
+            width: "400px",
             zIndex: 1020,
             visible: false,
             modal: true,
@@ -152,10 +152,19 @@ Worldview.Widget.ArcticProjectionChangeNotification = function(config, bank) {
         });
         dialog.setHeader("Notice");
         var body = [
-            "On " + self.changeDate.toISOStringDate() + ", " ,
-            "the Arctic projection changed from Arctic Polar Stereographic ",
-            "(EPSG:3995, \"Greenwich down\") to NSIDC Polar ",
+            "On " + self.changeDate.toISOStringDate() + " the polar ",
+            "projections changed as follows:" ,
+            "<br/><br/>",
+            "The Arctic projection changed from Arctic Polar ",
+            "Stereographic (EPSG:3995, \"Greenwich down\") to NSIDC Polar ",
             "Stereographic North (EPSG:3413, \"Greenland down\").",
+            "<br/><br/>" +
+            "The Antarctic projection changed from being projected onto ",
+            "a sphere with radius of 6371007.181 meters to being projected ",
+            "onto the WGS84 ellipsoid. The projection is now the correct ",
+            "Antarctic Polar Stereographic (EPSG:3031). This change results ",
+            "in a shift of the imagery that ranges up to tens of kilometers, ",
+            "depending on the location.",
             "<br/><br/>",
 
             "Imagery before this date has not yet been reprocessed to the ",
