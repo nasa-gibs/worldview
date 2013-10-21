@@ -1,6 +1,7 @@
 {
     "description": "SEDAC / Coastlines v3",
     "name": "Coastlines",
+    "tags": "borders",
     "parameters": {
         "format": "image/png",
         "layers": "gpw-v3-coastlines",

@@ -1,6 +1,7 @@
 {
     "bins": 255,
     "description": "Aura / MLS",
+    "tags": "co",
     "max": "250",
     "min": "0",
     "name": "Carbon Monoxide (215 hPa, Night)",

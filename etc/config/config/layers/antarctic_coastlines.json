@@ -2,6 +2,7 @@
     "description": "ADD SCAR / Coastlines",
     "name": "Coastlines",
     "period": "static",
+    "tag": "borders",
     "projections": {
         "antarctic": {
             "matrixSet": "EPSG3031_250m",
@@ -29,7 +30,7 @@
     },
     "properties": {
         "format": "image/png",
-        "layer": "antarctic_coastlines",    
+        "layer": "antarctic_coastlines",
         "tileSize": [
             512,
             512

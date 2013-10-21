@@ -291,8 +291,11 @@ Worldview.Widget.AddLayers = function(config, model, projectionModel) {
             return false;
         }
         search = search.toLowerCase();
+        var tags = ( layer.tags ) ? layer.tags.toLowerCase() : "";
         var filtered = !layer.name.toLowerCase().contains(search) &&
-               !layer.description.toLowerCase().contains(search);
+               !layer.description.toLowerCase().contains(search) &&
+               !tags.contains(search);
+
         return filtered;
     };
 

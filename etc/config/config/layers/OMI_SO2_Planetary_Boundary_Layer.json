@@ -1,6 +1,7 @@
 {
     "bins": 79,
     "description": "Aura / OMI",
+    "tags": "so2",
     "max": "2.0",
     "min": "1.2",
     "name": "Sulfur Dioxide (Planetary Boundary Layer)",

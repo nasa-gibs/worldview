@@ -1,6 +1,7 @@
 {
     "bins": 255,
     "description": "Aura / MLS",
+    "tags": "so2",
     "max": "200",
     "min": "20",
     "name": "Sulfur Dioxide (147 hPa, Night)",

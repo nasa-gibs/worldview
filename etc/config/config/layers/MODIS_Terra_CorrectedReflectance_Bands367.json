@@ -1,6 +1,7 @@
 {
     "description": "Terra / MODIS",
     "name": "Corrected Reflectance (3-6-7)",
+    "tags": "cr",
     "period": "daily",
     "projections": {
         "antarctic": {

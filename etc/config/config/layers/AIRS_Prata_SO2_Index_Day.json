@@ -1,6 +1,7 @@
 {
     "bins": 251,
     "description": "Aqua / AIRS",
+    "tags": "so2",
     "max": "30",
     "min": "0",
     "name": "Sulfur Dioxide (Day, Prata Algorithm)",

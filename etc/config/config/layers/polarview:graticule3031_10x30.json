@@ -1,6 +1,7 @@
 {
     "description": "Polarview / Graticule",
     "name": "Latitude-Longitude Lines",
+    "tags": "lat lon lat-lon",
     "parameters": {
         "format": "image/png",
         "layers": "polarview:graticule3031_10x30",

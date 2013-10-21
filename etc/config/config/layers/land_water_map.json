@@ -1,6 +1,7 @@
 {
     "description": "OpenStreetMap / Coastlines",
     "name": "Land / Water Map",
+    "tags": "borders",
     "period": "static",
     "projections": {
         "antarctic": {

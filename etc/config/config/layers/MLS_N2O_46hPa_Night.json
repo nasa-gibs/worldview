@@ -1,6 +1,7 @@
 {
     "bins": 255,
     "description": "Aura / MLS",
+    "tags": "n2o",
     "max": "300",
     "min": "75",
     "name": "Nitrous Oxide (46 hPa, Night)",

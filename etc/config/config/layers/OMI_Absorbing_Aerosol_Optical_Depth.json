@@ -1,6 +1,7 @@
 {
     "bins": 90,
     "description": "Aura / OMI",
+    "tags": "aod",
     "max": "0.5",
     "min": "0.27",
     "name": "Absorbing Aerosol Optical Depth",

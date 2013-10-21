@@ -1,6 +1,7 @@
 {
     "bins": 7,
     "description": "Aqua / AIRS",
+    "tags": "co",
     "max": "120",
     "min": "98.8",
     "name": "Carbon Monoxide (Total Column, Night)",

@@ -1,6 +1,7 @@
 {
     "bins": 157,
     "description": "Aura / OMI",
+    "tags": "so2",
     "max": "2.0",
     "min": "0.4",
     "name": "Sulfur Dioxide (Middle Troposphere)",

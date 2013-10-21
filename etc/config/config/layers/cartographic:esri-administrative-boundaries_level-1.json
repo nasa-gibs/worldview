@@ -1,6 +1,7 @@
 {
     "description": "SEDAC / L1 Admin Boundaries",
     "name": "Administrative Boundaries",
+    "tags": "state borders",
     "parameters": {
         "format": "image/png",
         "layers": "cartographic:esri-administrative-boundaries_level-1",

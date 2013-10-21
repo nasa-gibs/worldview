@@ -1,6 +1,7 @@
 {
     "description": "Aqua / MODIS",
     "name": "Corrected Reflectance (True Color)",
+    "tags": "natural color cr",
     "period": "daily",
     "projections": {
         "antarctic": {

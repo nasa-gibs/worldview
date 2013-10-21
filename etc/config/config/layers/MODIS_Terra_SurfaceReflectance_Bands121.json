@@ -1,6 +1,7 @@
 {
     "description": "Terra / MODIS",
     "name": "Land Surface Reflectance (1-2-1)",
+    "tags": "lsr",
     "period": "daily",
     "projections": {
         "geographic": {
