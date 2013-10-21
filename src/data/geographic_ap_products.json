@@ -391,6 +391,7 @@
             "category": "overlays",
             "label": "Relative Humidity (400 hPa, Day)",
             "sublabel": "Aqua / AIRS",
+            "tags": "rh",
             "type": "multi",
             "value": "AIRS_RelativeHumidity_400hPa_Day"
         },
@@ -398,6 +399,7 @@
             "category": "overlays",
             "label": "Relative Humidity (400 hPa, Night)",
             "sublabel": "Aqua / AIRS",
+            "tags": "rh",
             "type": "multi",
             "value": "AIRS_RelativeHumidity_400hPa_Night"
         },
@@ -405,6 +407,7 @@
             "category": "overlays",
             "label": "Relative Humidity (500 hPa, Day)",
             "sublabel": "Aqua / AIRS",
+            "tags": "rh",
             "type": "multi",
             "value": "AIRS_RelativeHumidity_500hPa_Day"
         },
@@ -412,12 +415,14 @@
             "category": "overlays",
             "label": "Relative Humidity (500 hPa, Night)",
             "sublabel": "Aqua / AIRS",
+            "tags": "rh",
             "type": "multi",
             "value": "AIRS_RelativeHumidity_500hPa_Night"
         },
         {
             "category": "overlays",
             "label": "Relative Humidity (600 hPa, Day)",
+            "tags": "rh",
             "sublabel": "Aqua / AIRS",
             "type": "multi",
             "value": "AIRS_RelativeHumidity_600hPa_Day"
@@ -426,6 +431,7 @@
             "category": "overlays",
             "label": "Relative Humidity (600 hPa, Night)",
             "sublabel": "Aqua / AIRS",
+            "tags": "rh",
             "type": "multi",
             "value": "AIRS_RelativeHumidity_600hPa_Night"
         },
@@ -433,6 +439,7 @@
             "category": "overlays",
             "label": "Relative Humidity (700 hPa, Day)",
             "sublabel": "Aqua / AIRS",
+            "tags": "rh",
             "type": "multi",
             "value": "AIRS_RelativeHumidity_700hPa_Day"
         },
@@ -440,6 +447,7 @@
             "category": "overlays",
             "label": "Relative Humidity (700 hPa, Night)",
             "sublabel": "Aqua / AIRS",
+            "tags": "rh",
             "type": "multi",
             "value": "AIRS_RelativeHumidity_700hPa_Night"
         },
@@ -447,6 +455,7 @@
             "category": "overlays",
             "label": "Relative Humidity (850 hPa, Day)",
             "sublabel": "Aqua / AIRS",
+            "tags": "rh",
             "type": "multi",
             "value": "AIRS_RelativeHumidity_850hPa_Day"
         },
@@ -454,6 +463,7 @@
             "category": "overlays",
             "label": "Relative Humidity (850 hPa, Night)",
             "sublabel": "Aqua / AIRS",
+            "tags": "rh",
             "type": "multi",
             "value": "AIRS_RelativeHumidity_850hPa_Night"
         },
@@ -2159,6 +2169,7 @@
             "category": "overlays",
             "label": "Relative Humidity (400 hPa, Day)",
             "sublabel": "Aqua / AIRS",
+            "tags": "rh",
             "type": "multi",
             "value": "AIRS_RelativeHumidity_400hPa_Day"
         },
@@ -2166,6 +2177,7 @@
             "category": "overlays",
             "label": "Relative Humidity (400 hPa, Night)",
             "sublabel": "Aqua / AIRS",
+            "tags": "rh",
             "type": "multi",
             "value": "AIRS_RelativeHumidity_400hPa_Night"
         },
@@ -2173,6 +2185,7 @@
             "category": "overlays",
             "label": "Relative Humidity (500 hPa, Day)",
             "sublabel": "Aqua / AIRS",
+            "tags": "rh",
             "type": "multi",
             "value": "AIRS_RelativeHumidity_500hPa_Day"
         },
@@ -2180,6 +2193,7 @@
             "category": "overlays",
             "label": "Relative Humidity (500 hPa, Night)",
             "sublabel": "Aqua / AIRS",
+            "tags": "rh",
             "type": "multi",
             "value": "AIRS_RelativeHumidity_500hPa_Night"
         },
@@ -2187,6 +2201,7 @@
             "category": "overlays",
             "label": "Relative Humidity (600 hPa, Day)",
             "sublabel": "Aqua / AIRS",
+            "tags": "rh",
             "type": "multi",
             "value": "AIRS_RelativeHumidity_600hPa_Day"
         },
@@ -2194,6 +2209,7 @@
             "category": "overlays",
             "label": "Relative Humidity (600 hPa, Night)",
             "sublabel": "Aqua / AIRS",
+            "tags": "rh",
             "type": "multi",
             "value": "AIRS_RelativeHumidity_600hPa_Night"
         },
@@ -2201,6 +2217,7 @@
             "category": "overlays",
             "label": "Relative Humidity (700 hPa, Day)",
             "sublabel": "Aqua / AIRS",
+            "tags": "rh",
             "type": "multi",
             "value": "AIRS_RelativeHumidity_700hPa_Day"
         },
@@ -2208,6 +2225,7 @@
             "category": "overlays",
             "label": "Relative Humidity (700 hPa, Night)",
             "sublabel": "Aqua / AIRS",
+            "tags": "rh",
             "type": "multi",
             "value": "AIRS_RelativeHumidity_700hPa_Night"
         },
@@ -2215,6 +2233,7 @@
             "category": "overlays",
             "label": "Relative Humidity (850 hPa, Day)",
             "sublabel": "Aqua / AIRS",
+            "tags": "rh",
             "type": "multi",
             "value": "AIRS_RelativeHumidity_850hPa_Day"
         },
@@ -2222,6 +2241,7 @@
             "category": "overlays",
             "label": "Relative Humidity (850 hPa, Night)",
             "sublabel": "Aqua / AIRS",
+            "tags": "rh",
             "type": "multi",
             "value": "AIRS_RelativeHumidity_850hPa_Night"
         },
