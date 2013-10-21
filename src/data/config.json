@@ -62132,6 +62132,11 @@
                     "AIRIBQAP",
                     "AIRIBQAP_NRT"
                 ]
+            },
+            "urs": {
+                "by": "value",
+                "field": "dataset_id",
+                "value": "\\(NRT\\)"
             }
         },
         "AIRIBRAD_DAY": {
@@ -62149,6 +62154,11 @@
                     "AIRIBRAD",
                     "AIRIBRAD_NRT"
                 ]
+            },
+            "urs": {
+                "by": "value",
+                "field": "dataset_id",
+                "value": "\\(NRT\\)"
             }
         },
         "AIRIBRAD_NIGHT": {
@@ -62166,6 +62176,11 @@
                     "AIRIBRAD",
                     "AIRIBRAD_NRT"
                 ]
+            },
+            "urs": {
+                "by": "value",
+                "field": "dataset_id",
+                "value": "\\(NRT\\)"
             }
         },
         "AIRX2RET_DAY": {
@@ -62183,6 +62198,11 @@
                     "AIRX2RET",
                     "AIRX2RET_NRT"
                 ]
+            },
+            "urs": {
+                "by": "value",
+                "field": "dataset_id",
+                "value": "\\(NRT\\)"
             }
         },
         "AIRX2RET_NIGHT": {
@@ -62200,6 +62220,11 @@
                     "AIRX2RET",
                     "AIRX2RET_NRT"
                 ]
+            },
+            "urs": {
+                "by": "value",
+                "field": "dataset_id",
+                "value": "\\(NRT\\)"
             }
         },
         "AIRX2SUP_DAY": {
@@ -62217,6 +62242,11 @@
                     "AIRX2SUP",
                     "AIRX2SUP_NRT"
                 ]
+            },
+            "urs": {
+                "by": "value",
+                "field": "dataset_id",
+                "value": "\\(NRT\\)"
             }
         },
         "AIRX2SUP_NIGHT": {
@@ -62234,6 +62264,11 @@
                     "AIRX2SUP",
                     "AIRX2SUP_NRT"
                 ]
+            },
+            "urs": {
+                "by": "value",
+                "field": "dataset_id",
+                "value": "\\(NRT\\)"
             }
         },
         "CIESIN_CHRR_NDH_CYCLONE_HFD": {
@@ -62380,6 +62415,11 @@
                     "ML2CO",
                     "ML2CO_NRT"
                 ]
+            },
+            "urs": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "Near-Real-Time"
             }
         },
         "ML2H2O": {
@@ -62396,6 +62436,11 @@
                     "ML2H2O",
                     "ML2H2O_NRT"
                 ]
+            },
+            "urs": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "Near-Real-Time"
             }
         },
         "ML2HNO3": {
@@ -62412,6 +62457,11 @@
                     "ML2HNO3",
                     "ML2HNO3_NRT"
                 ]
+            },
+            "urs": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "Near-Real-Time"
             }
         },
         "ML2N2O": {
@@ -62428,6 +62478,11 @@
                     "ML2N2O",
                     "ML2N2O_NRT"
                 ]
+            },
+            "urs": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "Near-Real-Time"
             }
         },
         "ML2O3": {
@@ -62444,6 +62499,11 @@
                     "ML2O3",
                     "ML2O3_NRT"
                 ]
+            },
+            "urs": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "Near-Real-Time"
             }
         },
         "ML2SO2": {
@@ -62460,6 +62520,11 @@
                     "ML2SO2",
                     "ML2SO2_NRT"
                 ]
+            },
+            "urs": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "Near-Real-Time"
             }
         },
         "ML2T": {
@@ -62476,6 +62541,11 @@
                     "ML2T",
                     "ML2T_NRT"
                 ]
+            },
+            "urs": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "Near-Real-Time"
             }
         },
         "MOD04_L2": {
