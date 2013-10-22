@@ -207,7 +207,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
         lastResults = results;
         log.debug("queryResults", results);
         Worldview.Indicator.hide();
-        if ( results.granules.length === 0 ) {
+        if ( model.selectedProduct !== null && results.granules.length === 0 ) {
             Worldview.Indicator.noData();
         } else {
             if ( results.meta.showList ) {
