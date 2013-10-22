@@ -8,7 +8,9 @@
     color: #222;
     text-shadow: none;
 }
-
+#DataDownload .jspPane {
+    left: 0 !important;
+}
 #dataDownload div.ui-button {
     margin-left: 20px;
     margin-right: 20px;

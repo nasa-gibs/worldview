@@ -1,27 +1,27 @@
-SOTE.namespace("SOTE.widget.List"); 
+SOTE.namespace("SOTE.widget.List");
 
 SOTE.widget.List.prototype = new SOTE.widget.Component;
 
 /**
   * A selection device classifying radio buttons/checkboxes into categories that are displayed in Accordion form.
   *     Radio buttons allow single selection accross categories.  Checkboxes allow multiple selections accross categories.
-  *     Radio selections cannot span multiple categories. 
+  *     Radio selections cannot span multiple categories.
   *
   * @module SOTE.widget
   * @class List
   * @constructor
   * @this {List}
-  * @param {String} containerId is the container id of the div in which to render the object 
+  * @param {String} containerId is the container id of the div in which to render the object
   * @param {Object} [config] is a hash allowing configuration of this component
-  * @config {Object[]} [items] a JS Array of JS Objects: items.category[i..n].key, items.category[i..n].value 
+  * @config {Object[]} [items] a JS Array of JS Objects: items.category[i..n].key, items.category[i..n].value
   *     , items.category[i..n].action, items.type[i..n] representing the available options
   * @config {String} [selected] the key of the initially selected option(s)
   * @augments SOTE.widget.Component
-  * 
+  *
 */
 SOTE.widget.List = function(containerId, spec){
     this.log = Logging.getLogger("Worldview.Widget.List");
-    
+
 	//Get the ID of the container element
 	this.container=document.getElementById(containerId);
 	if (this.container==null){
@@ -30,9 +30,9 @@ SOTE.widget.List = function(containerId, spec){
 	}
 	this.id = containerId;
 	//Store the container's ID
-	this.containerId=containerId;	
+	this.containerId=containerId;
 
-	//Define an object for holding configuration 
+	//Define an object for holding configuration
 	if (spec===undefined){
 		spec={};
 	}
@@ -44,28 +44,28 @@ SOTE.widget.List = function(containerId, spec){
 	if(spec.data === undefined){
 	    SOTE.util.throwError("List data is not defined.");
 	}
-	
+
 	if(spec.search == undefined){
 		spec.search = false;
 		spec.selectedCategory = 'All';
 	}
-	
+
 	if(spec.search && spec.category == undefined){
 		spec.selectedCategory = 'All';
 	}
-	
+
 	if(spec.filter == undefined){
 		spec.filter = false;
 	}
-	
+
 	if(spec.customClasses == undefined){
 		spec.customClasses = '';
 	}
-	
+
 	if(spec.sortable == undefined){
 		spec.sortable = false;
 	}
-	
+
 
 	this.customClasses = spec.customClasses;
     this.hidden = new Object;
@@ -86,7 +86,7 @@ SOTE.widget.List = function(containerId, spec){
     this.config = spec.config;
     this.data = spec.data;
     this.paletteWidget = spec.paletteWidget;
-    
+
    	this.selected = this.unserialize(spec.selected);
    	this.selected = this.selected[1];
 
@@ -96,36 +96,36 @@ SOTE.widget.List = function(containerId, spec){
 
 /**
   * Displays all options in HTML in an Accordion format (see JQuery UI Accordion) with the selected states being indicated
-  * by radio button and checkbox selection.  All callbacks should be set.  The component UI should be rendered 
+  * by radio button and checkbox selection.  All callbacks should be set.  The component UI should be rendered
   * with controllers to call the events.
   *
-  *  
+  *
   * @this {List}
-  * 
+  *
 */
 SOTE.widget.List.prototype.init = function(){
-	
+
 	this.render();
-	this.trigger();	
+	this.trigger();
 };
 
 SOTE.widget.List.prototype.trigger = function(){
 	//$("#"+this.id).trigger("listchange");
-	this.callback(this.args);	
+	this.callback(this.args);
 };
 
 /**
   * Renders the UI accordion from this.items
   *
-  *  
+  *
   * @this {List}
-  * 
+  *
 */
 SOTE.widget.List.prototype.render = function(){
 
-	// options: category (id: txt, title:txt, notification:txt, checkbox:bool), 
+	// options: category (id: txt, title:txt, notification:txt, checkbox:bool),
 	//			item (id: txt, label:txt, value: txt, hide:bool, remove:bool, checkbox:bool)
-	
+
 	// setNotification: id,txt
 
 
@@ -133,9 +133,9 @@ SOTE.widget.List.prototype.render = function(){
 	// Clear div
 
 	$(this.container).empty().addClass(this.id+'list');
-	
+
 	// If action is enabled, render an action button
-	
+
 	if(this.action){
 		var $actionButton = $("<input type='button' class='action' value='"+this.action.text+"' id='"+this.id+"action' />");
 		$(this.container).append($actionButton);
@@ -147,31 +147,31 @@ SOTE.widget.List.prototype.render = function(){
 	if(this.search){
 		var $facetedSearch = $("<div class='facetedSearch' id='"+this.id+"facetedSearch'></div>");
 		var $select = $("<select class='select' id='"+this.id+"select'></select");
-	
+
 		for (var c in this.categories){
 			if(c != 'palettes'){
 				$select.append($("<option value='"+c+"'>"+c+"</option>"));
 			}
 		}
-		
-		$facetedSearch.append($select);	
+
+		$facetedSearch.append($select);
 		$facetedSearch.append($("<input type='text' name='search' class='search' autocomplete='off' placeholder='ex. modis, terra, fire' id='"+this.id+"search'/>"));
-		
+
 		$(this.container).append($facetedSearch);
-		
+
 		// Set events to capture data from search and category fields
-		
+
 		$("#"+this.id+"select").on('change',{self:this,select:true},SOTE.widget.List.setCategory);
 		$('#'+this.id+"select").val("All");
 	    $("#"+this.id+"search").on('keyup',{self:this,select:false},SOTE.widget.List.search);
 	}
-	
+
 	// Creating main content block
-	
+
 	$(this.container).append($("<div id='"+this.id+"content' class='content "+this.customClasses+"'></div>"));
 	this.update();
-	
-	
+
+
 };
 
 SOTE.widget.List.prototype.update = function() {
@@ -191,9 +191,9 @@ SOTE.widget.List.prototype._update = function(){
             } else {
                self.paletteWidget.displaySelector(name);
             }
-        };        
+        };
     };
-    
+
 	$content = $("#" + this.id + "content").empty();
 
 	// If search is enabled and a keyword exists, break keyword down into words array
@@ -203,20 +203,20 @@ SOTE.widget.List.prototype._update = function(){
 		this.keyword = this.keyword.replace(/[\(\)\"\'!\$\%\&\?\+\*\\\@\=]/g,"");
 		var keywords = this.keyword.split(/\s/);
 	}
-	
+
 	// Traverse data by category (i.e. baselayers, overlays)
-	
+
 	for(var key in this.data){
-		
+
 		// Category header (i.e. "Base Layers")
-		
+
 		var title = this.data[key].title;
 		var $header = $("<h3 class='head'></h3>").html(title);
-		
+
 		if(this.selectableCategories && !this.data[key].notSelectable){
 			$header.append($("<nobr><div id='"+key+"dynamictext' class='dynamic'>"+this.selectableCategories.defaultText+"</div></nobr>"));
-			$header.append($("<input type='radio' name='cats' class='cats "+this.id+"cats' value='"+key+"' />"));	
-			$("#"+this.id).undelegate("."+this.id+"cats" ,'click');	
+			$header.append($("<input type='radio' name='cats' class='cats "+this.id+"cats' value='"+key+"' />"));
+			$("#"+this.id).undelegate("."+this.id+"cats" ,'click');
 			$("#"+this.id).delegate("."+this.id+"cats" ,'click',{self:this},SOTE.widget.List.handleCategorySelection);
 		}
 
@@ -224,32 +224,32 @@ SOTE.widget.List.prototype._update = function(){
 
 		$category = $("<ul id='"+this.id+key+"'></ul>").addClass(this.id+'category');
 
-		this.values[key] = new Object;		
-		
+		this.values[key] = new Object;
+
 		// For all items in category (i.e. for all items in baselayers)
-		
+
 		for(var i=0; i<this.data[key].items.length; ++i){
-			
+
 			var item = this.data[key].items[i];
 			var label = item.label;
 			var itemKey = item.value.replace(/:/g,"colon");
 			var fLabel = item.label.replace(" ","-").toLowerCase();
-			
+
 			if(item.value in this.selected){
 				this.values[key][item.value] = 1;
 			}
 			// If only showing a subset of items (i.e. only show items that are in selected)
-			
+
 			if(!this.filter || item.value in this.selected) {
-								
-				// Do keyword search if the keyword is not empty				
-								
+
+				// Do keyword search if the keyword is not empty
+
 				if(this.search && !this.keyword.match(/^\s*$/)){
 					var count = 0;
 					for(var j=0; j<keywords.length; ++j){
 						var myVal = new RegExp(keywords[j]);
 						if(item.label.toUpperCase().match(myVal) || item.sublabel.toUpperCase().match(myVal) || item.tags && item.tags.toUpperCase().match(myVal)) {
-								count++;	
+								count++;
 						}
 					}
 				}
@@ -262,18 +262,18 @@ SOTE.widget.List.prototype._update = function(){
 				if(item.categories && !(this.selectedCategory in item.categories)){
 					count = -1;
 				}
-				
+
 				// If search is selected, see if the item matched all words in the keywords list, if so, display
 				// If search is not selected, display all items
-				
+
 				if(!this.search || (keywords && count == keywords.length)){
-					
+
 					$item = $("<li id='"+ this.id + key + itemKey + "' class='item item-static'></li>");
-					
+
 					if(this.close){
 						$item.append("<a><img class='close bank-item-img' id='close"+key+"-"+item.value.replace(/:/g,"colon")+"' title='Remove Layer' src='images/close-red-x.png' /></a>");
 					}
-					
+
 					if(this.hide){
 						if (item.value in this.hidden){
 							$item.append("<a class='hdanchor'><img class='hide bank-item-img' title='Show Layer' id='hide"+key+"-"+item.value.replace(/:/g,"colon")+"' src='images/invisible.png' /></a>");
@@ -282,7 +282,7 @@ SOTE.widget.List.prototype._update = function(){
 							$item.append("<a class='hdanchor'><img class='hide bank-item-img' title='Hide Layer' id='hide"+key+"-"+item.value.replace(/:/g,"colon")+"' src='images/visible.png' /></a>");
 						}
 					}
-					
+
 					if(this.checkbox){
 						var checked = (item.value in this.selected)? "checked":"";
 						$item.append("<input type='checkbox' class='check' id='"+item.value.replace(/:/g,"colon")+"' value='"+item.value+"' "+checked+"/>");
@@ -290,7 +290,7 @@ SOTE.widget.List.prototype._update = function(){
 					$item.append("<h4>"+label+"</h4>");
 					$item.append("<p>"+item.sublabel+"</p>");
 
-                    var paletteInfo = this.getPaletteInfo(item.value);					
+                    var paletteInfo = this.getPaletteInfo(item.value);
 					if ( paletteInfo ) {
     					if ( paletteInfo ) {
     					   var units = "";
@@ -302,28 +302,28 @@ SOTE.widget.List.prototype._update = function(){
     					           "<span class='palette'>" +
     					               "<span class='p-min'>" + paletteInfo.min + "</span>" +
     					               "<canvas class='colorBar' id='canvas_" + this.id + itemKey + "'></canvas>" +
-    					               "<span class='p-max'>" + paletteInfo.max + "</span>" + 
-    					               units + 
+    					               "<span class='p-max'>" + paletteInfo.max + "</span>" +
+    					               units +
     				               "</span>" +
     			               "</div>"
     					   );
     					}
 					}
-                    $category.append($item);      
+                    $category.append($item);
 				}
 			}
-				
+
 		}
 		$('#DataDownload #DataDownloadcontent h3 span').click(function(e){
 		    var o;
 		    bodyMsg = 'Some layers in Worldview do not have corresponding source data products available for download.  These include National Boundaries, Orbit Tracks, Earth at Night, and MODIS Corrected Reflectance products.<br><br>For a downloadable product similar to MODIS Corrected Reflectance, please try the MODIS Land Surface Reflectance layers available in Worldview.  If you would like to generate MODIS Corrected Reflectance imagery yourself, please see the following document: <a href="https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf" target="_blank">https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf</a><br><br>If you would like to download only an image, please use the "camera" icon in the upper right.';
             o = new YAHOO.widget.Panel("WVerror", {
-                width: "600px", 
-                zIndex: 1020, 
+                width: "600px",
+                zIndex: 1020,
                 visible: false,
-                constraintoviewport: true 
+                constraintoviewport: true
             });
-            title = title || "Notice";
+            title = "Notice";
             o.setHeader('<b>Why are these layers not available for downloading?</b>');
             o.setBody(bodyMsg);
             o.render(document.body);
@@ -334,15 +334,15 @@ SOTE.widget.List.prototype._update = function(){
             });
         });
 		// Append the category (heading + items) to the content div
-		
+
 		$content.append($category);
-		
+
         for(var i=0; i<this.data[key].items.length; ++i){
             var item = this.data[key].items[i];
             var label = item.label;
             var itemKey = item.value.replace(/:/g,"colon");
             if((!this.filter || item.value in this.selected) && (!this.search || (keywords && count == keywords.length))){
-                var paletteInfo = this.getPaletteInfo(item.value);                  
+                var paletteInfo = this.getPaletteInfo(item.value);
                 if ( paletteInfo ) {
                     Worldview.Palette.ColorBar({
                         selector: "#canvas_" + this.id + itemKey,
@@ -355,35 +355,35 @@ SOTE.widget.List.prototype._update = function(){
                         .css("cursor", "pointer");
                 }
             }
-        } 
+        }
 	}
-	
+
 	// Append show/hide/checkbox events if this.hide = true / this.close = true / this.checkbox = true
 
 	$("#"+this.id).undelegate(".close" ,'click');
-	$("#"+this.id).undelegate(".hide" ,'click');	
-	$("#"+this.id).undelegate(".check" ,'click');	
+	$("#"+this.id).undelegate(".hide" ,'click');
+	$("#"+this.id).undelegate(".check" ,'click');
 	$("#"+this.id).delegate(".close" ,'click',{self:this},SOTE.widget.List.removeItem);
-	$("#"+this.id).delegate(".hide" ,'click',{self:this},SOTE.widget.List.hideItem);	
+	$("#"+this.id).delegate(".hide" ,'click',{self:this},SOTE.widget.List.hideItem);
 	$("#"+this.id).delegate(".check" ,'click',{self:this},SOTE.widget.List.toggleValue);
-		
-	
+
+
 	if($(window).width() > 720)
 	{
 		if(this.jsp){
 			var api = this.jsp.data('jsp');
 			if(api) api.destroy();
-		}	
+		}
 		this.jsp = $( "."+this.id+"category" ).jScrollPane({autoReinitialise: false, verticalGutter:0});
 	}
-	
+
 	if(this.sortable){
 		$( "."+this.id+"category" ).sortable({items: "li:not(.head)"});
 		$( "."+this.id+"category" ).bind('sortstart',{self:this},SOTE.widget.List.initiateSort);
 		$( "."+this.id+"category" ).bind('sortstop',{self:this},SOTE.widget.List.handleSort);
 	}
 
-	setTimeout(SOTE.widget.List.adjustCategoryHeights,1,{self:this});	
+	setTimeout(SOTE.widget.List.adjustCategoryHeights,1,{self:this});
 };
 
 SOTE.widget.List.prototype.getPaletteInfo = function(layerName) {
@@ -399,11 +399,11 @@ SOTE.widget.List.prototype.getPaletteInfo = function(layerName) {
     }
     return {
         units: layerConfig.units,
-        min: ( layerConfig.min === undefined ) 
-            ? "&nbsp;&nbsp;&nbsp;&nbsp" 
+        min: ( layerConfig.min === undefined )
+            ? "&nbsp;&nbsp;&nbsp;&nbsp"
             : layerConfig.min,
         max: ( layerConfig.max === undefined )
-            ?  "&nbsp;&nbsp;&nbsp;&nbsp" 
+            ?  "&nbsp;&nbsp;&nbsp;&nbsp"
             : layerConfig.max,
         bins: layerConfig.bins,
         stops: layerConfig.stops,
@@ -413,18 +413,18 @@ SOTE.widget.List.prototype.getPaletteInfo = function(layerName) {
 
 SOTE.widget.List.prototype.setButtonEnabled = function(enabled) {
     if ( enabled ) {
-        $("#" + this.id + "action").removeAttr("disabled");        
+        $("#" + this.id + "action").removeAttr("disabled");
     } else {
         $("#" + this.id + "action").attr("disabled", "disabled");
     }
 };
 
 SOTE.widget.List.prototype.setActionButtonText = function(text) {
-    $("#" + this.id + "action").attr("value", text);    
+    $("#" + this.id + "action").attr("value", text);
 };
 
 SOTE.widget.List.prototype.setCategoryDynamicText = function(id, text) {
-    $("#" + id + "dynamictext").html(text);    
+    $("#" + id + "dynamictext").html(text);
 };
 
 SOTE.widget.List.act = function(e){
@@ -448,7 +448,7 @@ SOTE.widget.List.prototype.selectCategory = function(id) {
 
 SOTE.widget.List.search = function(e){
 	var self = e.data.self;
-	var val = e.target.value.toUpperCase();	
+	var val = e.target.value.toUpperCase();
 	self.keyword = val;
 	self.update();
 };
@@ -466,12 +466,12 @@ SOTE.widget.List.toggleValue = function(e){
 			self.values[category] = new Object();
 	}
 	if(checked !== undefined && checked){
-			self.values[category][value] = 1;	
+			self.values[category][value] = 1;
 	}
 	else{
 			delete self.values[category][value];
 	}
-			
+
 	self.trigger();
 };
 
@@ -508,20 +508,20 @@ SOTE.widget.List.adjustCategoryHeights = function(args){
 
 		heights.push({name:self.id+key,height:actual_height,count:count});
 	}
-	
+
 	if(heights.length > 1){
 		if(heights[0].height + heights[1].height > container_height){
-			if(heights[0].height > container_height/2) { 
+			if(heights[0].height > container_height/2) {
 				heights[0].height = container_height/2;
 			}
-	
+
 			heights[1].height = container_height - heights[0].height;
-	
+
 		}
-		
+
 		$("#" + heights[0].name).css("height",heights[0].height+"px");
 		$("#" + heights[1].name).css("height",heights[1].height+"px");
-		
+
 	}
 	else if ( heights.length === 1 ) {
 		heights[0].height = container_height;
@@ -534,7 +534,7 @@ SOTE.widget.List.reinitializeScrollbars = function(self) {
 	var pane = $("."+self.id+"category").each(function(){
     	var api = $(this).data('jsp');
     	if(api) api.reinitialise();
-	});  
+	});
 };
 
 SOTE.widget.List.initiateSort = function(e,ui){
@@ -556,7 +556,7 @@ SOTE.widget.List.handleSort = function(e,ui){
 			if(!self.filter || val in self.selected)
 	        	self.values[key][val] = 1;
     	});
-	}	
+	}
 	self.trigger();
 };
 
@@ -568,7 +568,7 @@ SOTE.widget.List.removeItem = function(e){
 	var val = t[1];
 
 	delete self.values[category][val];
-		
+
 	var formattedVal = "close"+val.replace(/:/g,"colon");
 	$("#"+self.id+" #"+e.target.id).parent().parent().remove();
 
@@ -592,13 +592,13 @@ SOTE.widget.List.hideItem = function(e){
 	else {
 		self.hidden[val] = 1;
 		e.target.src = 'images/invisible.png';
-		$("#"+e.target.id).attr("title","Show Layer");					
+		$("#"+e.target.id).attr("title","Show Layer");
 	}
 	self.trigger();
 };
 
 /**
-  * Sets the selected option(s) in the List from the passed in value(s), if valid 
+  * Sets the selected option(s) in the List from the passed in value(s), if valid
   *     [containerId]=[options] (options is a dot delimited string with the first item containing
   *     a single select item, and the remaining items containing the multi-select items).
   *
@@ -610,8 +610,8 @@ SOTE.widget.List.hideItem = function(e){
 SOTE.widget.List.prototype.setValue = function(valString, selector){
 
 	this.selected = this.unserialize(valString, selector)[1];
-    
-	this.render();	
+
+	this.render();
 	this.trigger();
 };
 
@@ -623,12 +623,12 @@ SOTE.widget.List.prototype.currCount = function(){
   * Gets the currently selected option(s) [containerId]=[options]
   *
   * @this {List}
-  * @returns {String} [container]=[options], options being a dot delimited string 
+  * @returns {String} [container]=[options], options being a dot delimited string
   *     representing the key(s) of the currently selected option(s)
   *
 */
 SOTE.widget.List.prototype.getValue = function(){
-		
+
 	var value = this.serialize(this.values);
 	return value;
 };
@@ -638,7 +638,7 @@ SOTE.widget.List.prototype.serialize = function(values){
 	if(!values)
 		return "";
 	for(var category in values){
-		var catStr = [category];  
+		var catStr = [category];
 		for(var item in values[category]){
 			if(item in this.hidden)
 				catStr.push("!" + item);
@@ -647,7 +647,7 @@ SOTE.widget.List.prototype.serialize = function(values){
 		}
 		categories.push(catStr.join(","));
 	}
-	
+
 	return categories.join("~");
 };
 
@@ -657,14 +657,14 @@ SOTE.widget.List.prototype.unserialize = function(string, selector){
 	var categories = string.split("~");
 	var values = new Object;
 	this.count = 0;
-	
-	
+
+
 	for(var i=0; i<categories.length; i++){
 		var items = categories[i].split(/[\.,]/);
 		unserialized[items[0]] = new Object;
 		for(var j=1; j<items.length; j++){
 	    	if(hideIndicator.test(items[j])){
-				items[j] = items[j].replace(/!/g, "");  	
+				items[j] = items[j].replace(/!/g, "");
 		    	this.hidden[items[j]] = 1;
 		    }
 		    else {
@@ -677,15 +677,15 @@ SOTE.widget.List.prototype.unserialize = function(string, selector){
 		    values[items[j]] = 1;
 			this.count++;
 		}
-		
+
 	}
-	
+
 	for(var key in this.hidden){
 		if( !key in values ){
 			delete this.hidden[key];
 		}
 	}
-	
+
 	return [unserialized,values];
 };
 
@@ -698,7 +698,7 @@ SOTE.widget.List.prototype.setHeight = function(height){
   * Sets the data accessor that provides state change instructions given dependencies
   *
   * @this {List}
-  * @param {String} datasourceurl is the relative location of the data accessor 
+  * @param {String} datasourceurl is the relative location of the data accessor
   *
 */
 SOTE.widget.List.prototype.setDataSourceUrl = function(dataSourceUrl){
@@ -707,7 +707,7 @@ SOTE.widget.List.prototype.setDataSourceUrl = function(dataSourceUrl){
 
 /**
   * Gets the data accessor
-  * 
+  *
   * @this {List}
   * @returns {String} the relative location of the accessor
   *
