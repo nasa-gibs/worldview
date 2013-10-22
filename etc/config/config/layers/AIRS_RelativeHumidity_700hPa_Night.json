@@ -1,6 +1,7 @@
 {
     "bins": 100,
     "description": "Aqua / AIRS",
+    "tags": "rh",
     "max": "100",
     "min": "0",
     "name": "Relative Humidity (700 hPa, Night)",

@@ -247,7 +247,7 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
             elements.push(NOTICE);
         }
         $.each(selection, function(key, product) {
-            elements.push(productText(product));
+            elements.push("\n<br/>\n" + productText(product));
         });
 
         if ( isBulkDownloadable() ) {

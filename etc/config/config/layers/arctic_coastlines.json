@@ -2,6 +2,7 @@
     "description": "Polarview / Coastlines (EPSG:3995)",
     "name": "Coastlines",
     "period": "static",
+    "tag": "borders",
     "projections": {
         "arctic": {
             "matrixSet": "EPSG3413_250m",
@@ -29,7 +30,7 @@
     },
     "properties": {
         "format": "image/png",
-        "layer": "arctic_coastlines",    
+        "layer": "arctic_coastlines",
         "tileSize": [
             512,
             512

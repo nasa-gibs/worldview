@@ -68,7 +68,7 @@ $(function() {
             if ( qs.length > 0 ) {
                 qs += "&";
             }
-            qs += encode(key) + "=" + encode(values[key]);
+            qs += ns.encode(key) + "=" + ns.encode(values[key]);
         }
         return "?" + qs;
     };
@@ -153,7 +153,7 @@ $(function() {
      * Encode the URI component but convert exceptions back to their original
      * values.
      */
-    var encode = function(value) {
+    ns.encode = function(value) {
         var encoded = encodeURIComponent(value);
         $.each(ns.ENCODING_EXCEPTIONS, function(index, exception) {
             encoded = encoded.replace(exception.match, exception.replace);

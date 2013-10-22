@@ -2,6 +2,7 @@
     "description": "Aqua / MODIS",
     "name": "Corrected Reflectance (7-2-1)",
     "period": "daily",
+    "tags": "cr",
     "projections": {
         "antarctic": {
             "matrixSet": "EPSG3031_250m",
@@ -77,7 +78,6 @@
         }
     },
     "properties": {
-        "defaultLayer": "true",
         "format": "image/jpeg",
         "layer": "MODIS_Aqua_CorrectedReflectance_Bands721",
         "tileSize": [

@@ -1,6 +1,7 @@
 {
     "bins": 255,
     "description": "Aura / MLS",
+    "tags": "hno3",
     "max": "10",
     "min": "0",
     "name": "Nitric Acid (46 hPa, Day)",

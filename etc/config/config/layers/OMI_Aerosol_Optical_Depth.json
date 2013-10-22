@@ -1,6 +1,7 @@
 {
     "bins": 90,
     "description": "Aura / OMI",
+    "tags": "aod",
     "max": "2.0",
     "min": "1.1",
     "name": "Aerosol Optical Depth",

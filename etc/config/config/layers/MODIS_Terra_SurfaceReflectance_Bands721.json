@@ -1,6 +1,7 @@
 {
     "description": "Terra / MODIS",
     "name": "Land Surface Reflectance (7-2-1)",
+    "tags": "lsr",
     "period": "daily",
     "projections": {
         "geographic": {
@@ -30,7 +31,6 @@
         }
     },
     "properties": {
-        "defaultLayer": "true",
         "format": "image/jpeg",
         "layer": "MODIS_Terra_SurfaceReflectance_Bands721",
         "tileSize": [

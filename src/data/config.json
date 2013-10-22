@@ -1,6 +1,373 @@
 {
+    "aoi": {
+        "Air Quality": {
+            "baselayers": [
+                "MODIS_Terra_CorrectedReflectance_TrueColor",
+                "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                "land_water_map"
+            ],
+            "overlays": [
+                "MODIS_Terra_Aerosol",
+                "MODIS_Aqua_Aerosol",
+                "MODIS_Combined_Value_Added_AOD",
+                "AIRS_CO_Total_Column_Day",
+                "AIRS_CO_Total_Column_Night",
+                "MLS_CO_215hPa_Day",
+                "MLS_CO_215hPa_Night",
+                "AIRS_Prata_SO2_Index_Day",
+                "AIRS_Prata_SO2_Index_Night",
+                "MLS_SO2_147hPa_Day",
+                "MLS_SO2_147hPa_Night",
+                "OMI_Aerosol_Index",
+                "OMI_Aerosol_Optical_Depth",
+                "OMI_Absorbing_Aerosol_Optical_Depth",
+                "OMI_SO2_Planetary_Boundary_Layer",
+                "OMI_SO2_Lower_Troposphere",
+                "OMI_SO2_Middle_Troposphere",
+                "OMI_SO2_Upper_Troposphere_and_Stratosphere",
+                "land_mask"
+            ],
+            "projections": [
+                "geographic"
+            ]
+        },
+        "Ash Plumes": {
+            "baselayers": [
+                "MODIS_Terra_CorrectedReflectance_TrueColor",
+                "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                "MODIS_Terra_SurfaceReflectance_Bands143",
+                "MODIS_Aqua_SurfaceReflectance_Bands143",
+                "MODIS_Terra_CorrectedReflectance_Bands721",
+                "MODIS_Aqua_CorrectedReflectance_Bands721",
+                "MODIS_Terra_SurfaceReflectance_Bands721",
+                "MODIS_Aqua_SurfaceReflectance_Bands721",
+                "land_water_map"
+            ],
+            "overlays": [
+                "MODIS_Terra_Aerosol",
+                "MODIS_Aqua_Aerosol",
+                "MODIS_Combined_Value_Added_AOD",
+                "AIRS_Prata_SO2_Index_Day",
+                "AIRS_Prata_SO2_Index_Night",
+                "OMI_SO2_Planetary_Boundary_Layer",
+                "OMI_SO2_Lower_Troposphere",
+                "OMI_SO2_Middle_Troposphere",
+                "OMI_SO2_Upper_Troposphere_and_Stratosphere",
+                "MLS_SO2_147hPa_Day",
+                "MLS_SO2_147hPa_Night",
+                "land_mask",
+                "ndh-volcano-hazard-frequency-distribution",
+                "ndh-volcano-mortality-risks-distribution",
+                "ndh-volcano-proportional-economic-loss-risk-deciles"
+            ],
+            "projections": [
+                "geographic"
+            ]
+        },
+        "Drought": {
+            "baselayers": [
+                "MODIS_Terra_CorrectedReflectance_TrueColor",
+                "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                "MODIS_Terra_SurfaceReflectance_Bands121",
+                "MODIS_Aqua_SurfaceReflectance_Bands121",
+                "land_water_map"
+            ],
+            "overlays": [
+                "MODIS_Terra_Snow_Cover",
+                "MODIS_Aqua_Snow_Cover",
+                "AIRS_Precipitation_Day",
+                "AIRS_Precipitation_Night",
+                "land_mask",
+                "ndh-drought-hazard-frequency-distribution",
+                "ndh-drought-mortality-risks-distribution",
+                "ndh-drought-proportional-economic-loss-risk-deciles"
+            ],
+            "projections": [
+                "geographic"
+            ]
+        },
+        "Dust Storms": {
+            "baselayers": [
+                "MODIS_Terra_CorrectedReflectance_TrueColor",
+                "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                "MODIS_Terra_SurfaceReflectance_Bands143",
+                "MODIS_Aqua_SurfaceReflectance_Bands143",
+                "MODIS_Terra_CorrectedReflectance_Bands721",
+                "MODIS_Aqua_CorrectedReflectance_Bands721",
+                "MODIS_Terra_SurfaceReflectance_Bands721",
+                "MODIS_Aqua_SurfaceReflectance_Bands721",
+                "land_water_map"
+            ],
+            "overlays": [
+                "MODIS_Terra_Aerosol",
+                "MODIS_Aqua_Aerosol",
+                "MODIS_Combined_Value_Added_AOD",
+                "AIRS_Dust_Score",
+                "OMI_Aerosol_Index",
+                "OMI_Aerosol_Optical_Depth",
+                "OMI_Absorbing_Aerosol_Optical_Depth"
+            ],
+            "projections": [
+                "geographic"
+            ]
+        },
+        "Featured": {
+            "baselayers": [
+                "MODIS_Terra_CorrectedReflectance_TrueColor",
+                "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                "VIIRS_CityLights_2012",
+                "land_water_map"
+            ],
+            "index": 0,
+            "overlays": [
+                "MODIS_Terra_Land_Surface_Temp_Day",
+                "MODIS_Terra_Land_Surface_Temp_Night",
+                "MODIS_Fires_All",
+                "MODIS_Terra_Aerosol",
+                "AIRS_Dust_Score",
+                "MODIS_Terra_Snow_Cover",
+                "MODIS_Terra_Sea_Ice",
+                "Terra_Orbit_Asc",
+                "Terra_Orbit_Dsc",
+                "sedac_bound",
+                "cartographic:esri-administrative-boundaries_level-1",
+                "grump-v1-population-count_2000"
+            ],
+            "projections": [
+                "geographic"
+            ]
+        },
+        "Fires": {
+            "baselayers": [
+                "MODIS_Terra_CorrectedReflectance_TrueColor",
+                "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                "MODIS_Terra_SurfaceReflectance_Bands721",
+                "MODIS_Aqua_SurfaceReflectance_Bands721",
+                "land_water_map"
+            ],
+            "overlays": [
+                "MODIS_Fires_All",
+                "MODIS_Fires_Terra",
+                "MODIS_Fires_Aqua",
+                "MODIS_Terra_Aerosol",
+                "MODIS_Aqua_Aerosol",
+                "MODIS_Combined_Value_Added_AOD",
+                "MODIS_Terra_Land_Surface_Temp_Day",
+                "MODIS_Terra_Land_Surface_Temp_Night",
+                "MODIS_Aqua_Land_Surface_Temp_Day",
+                "MODIS_Aqua_Land_Surface_Temp_Night",
+                "AIRS_CO_Total_Column_Day",
+                "AIRS_CO_Total_Column_Night",
+                "OMI_Aerosol_Index",
+                "OMI_Aerosol_Optical_Depth",
+                "OMI_Absorbing_Aerosol_Optical_Depth"
+            ],
+            "projections": [
+                "geographic"
+            ]
+        },
+        "Floods": {
+            "baselayers": [
+                "MODIS_Terra_CorrectedReflectance_TrueColor",
+                "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                "MODIS_Terra_SurfaceReflectance_Bands121",
+                "MODIS_Aqua_SurfaceReflectance_Bands121",
+                "MODIS_Terra_CorrectedReflectance_Bands721",
+                "MODIS_Aqua_CorrectedReflectance_Bands721",
+                "land_water_map"
+            ],
+            "overlays": [
+                "AIRS_Precipitation_Day",
+                "AIRS_Precipitation_Night",
+                "MODIS_Water_Mask",
+                "land_mask",
+                "ndh-flood-hazard-frequency-distribution",
+                "ndh-flood-mortality-risks-distribution",
+                "ndh-flood-proportional-economic-loss-risk-deciles"
+            ],
+            "projections": [
+                "geographic"
+            ]
+        },
+        "Other": {
+            "baselayers": [
+                "VIIRS_CityLights_2012"
+            ],
+            "overlays": [
+                "grump-v1-population-count_2000",
+                "cartographic:esri-administrative-boundaries_level-1",
+                "sedac_bound",
+                "gpw-v3-coastlines",
+                "cartographic:00-global-labels",
+                "ol_graticule",
+                "MODIS_Water_Mask",
+                "MODIS_Terra_Data_No_Data",
+                "MODIS_Aqua_Data_No_Data",
+                "Terra_Orbit_Asc",
+                "Terra_Orbit_Dsc",
+                "Aqua_Orbit_Asc",
+                "Aqua_Orbit_Dsc",
+                "Aura_Orbit_Asc",
+                "Aura_Orbit_Dsc",
+                "Calipso_Orbit_Asc",
+                "Calipso_Orbit_Dsc"
+            ],
+            "projections": [
+                "geographic"
+            ]
+        },
+        "Severe Storms": {
+            "baselayers": [
+                "MODIS_Terra_CorrectedReflectance_TrueColor",
+                "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                "land_water_map"
+            ],
+            "overlays": [
+                "MODIS_Terra_Water_Vapor_5km_Day",
+                "MODIS_Terra_Water_Vapor_5km_Night",
+                "MODIS_Aqua_Water_Vapor_5km_Day",
+                "MODIS_Aqua_Water_Vapor_5km_Night",
+                "MODIS_Terra_Cloud_Top_Temp_Day",
+                "MODIS_Terra_Cloud_Top_Temp_Night",
+                "MODIS_Aqua_Cloud_Top_Temp_Day",
+                "MODIS_Aqua_Cloud_Top_Temp_Night",
+                "MODIS_Terra_Cloud_Top_Pressure_Day",
+                "MODIS_Terra_Cloud_Top_Pressure_Night",
+                "MODIS_Aqua_Cloud_Top_Pressure_Day",
+                "MODIS_Aqua_Cloud_Top_Pressure_Night",
+                "AIRS_Precipitation_Day",
+                "AIRS_Precipitation_Night",
+                "AIRS_RelativeHumidity_400hPa_Day",
+                "AIRS_RelativeHumidity_400hPa_Night",
+                "AIRS_RelativeHumidity_500hPa_Day",
+                "AIRS_RelativeHumidity_500hPa_Night",
+                "AIRS_RelativeHumidity_600hPa_Day",
+                "AIRS_RelativeHumidity_600hPa_Night",
+                "AIRS_RelativeHumidity_700hPa_Day",
+                "AIRS_RelativeHumidity_700hPa_Night",
+                "AIRS_RelativeHumidity_850hPa_Day",
+                "AIRS_RelativeHumidity_850hPa_Night",
+                "AIRS_Temperature_400hPa_Day",
+                "AIRS_Temperature_400hPa_Night",
+                "AIRS_Temperature_500hPa_Day",
+                "AIRS_Temperature_500hPa_Night",
+                "AIRS_Temperature_600hPa_Day",
+                "AIRS_Temperature_600hPa_Night",
+                "AIRS_Temperature_700hPa_Day",
+                "AIRS_Temperature_700hPa_Night",
+                "AIRS_Temperature_850hPa_Day",
+                "AIRS_Temperature_850hPa_Night",
+                "OMI_Cloud_Pressure",
+                "land_mask",
+                "ndh-cyclone-hazard-frequency-distribution",
+                "ndh-cyclone-mortality-risks-distribution",
+                "ndh-cyclone-proportional-economic-loss-risk-deciles",
+                "ndh-flood-hazard-frequency-distribution",
+                "ndh-flood-mortality-risks-distribution",
+                "ndh-flood-proportional-economic-loss-risk-deciles"
+            ],
+            "projections": [
+                "geographic"
+            ]
+        },
+        "Shipping": {
+            "baselayers": [
+                "MODIS_Terra_CorrectedReflectance_TrueColor",
+                "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                "MODIS_Terra_SurfaceReflectance_Bands143",
+                "MODIS_Aqua_SurfaceReflectance_Bands143",
+                "MODIS_Terra_CorrectedReflectance_Bands367",
+                "land_water_map"
+            ],
+            "overlays": [
+                "MODIS_Terra_Sea_Ice",
+                "MODIS_Aqua_Sea_Ice",
+                "MODIS_Terra_Brightness_Temp_Band31_Day",
+                "MODIS_Terra_Brightness_Temp_Band31_Night",
+                "MODIS_Aqua_Brightness_Temp_Band31_Day",
+                "MODIS_Aqua_Brightness_Temp_Band31_Night",
+                "land_mask"
+            ],
+            "projections": [
+                "geographic"
+            ]
+        },
+        "Smoke Plumes": {
+            "baselayers": [
+                "MODIS_Terra_CorrectedReflectance_TrueColor",
+                "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                "MODIS_Terra_SurfaceReflectance_Bands143",
+                "MODIS_Aqua_SurfaceReflectance_Bands143",
+                "MODIS_Terra_CorrectedReflectance_Bands367",
+                "MODIS_Terra_CorrectedReflectance_Bands721",
+                "MODIS_Aqua_CorrectedReflectance_Bands721",
+                "MODIS_Terra_SurfaceReflectance_Bands721",
+                "MODIS_Aqua_SurfaceReflectance_Bands721",
+                "land_water_map"
+            ],
+            "overlays": [
+                "MODIS_Terra_Aerosol",
+                "MODIS_Aqua_Aerosol",
+                "MODIS_Combined_Value_Added_AOD",
+                "AIRS_CO_Total_Column_Day",
+                "AIRS_CO_Total_Column_Night",
+                "MLS_CO_215hPa_Day",
+                "MLS_CO_215hPa_Night",
+                "OMI_Aerosol_Index",
+                "OMI_Aerosol_Optical_Depth",
+                "OMI_Absorbing_Aerosol_Optical_Depth",
+                "land_mask"
+            ],
+            "projections": [
+                "geographic"
+            ]
+        },
+        "Vegetation": {
+            "baselayers": [
+                "MODIS_Terra_CorrectedReflectance_TrueColor",
+                "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                "MODIS_Terra_SurfaceReflectance_Bands121",
+                "MODIS_Aqua_SurfaceReflectance_Bands121",
+                "land_water_map"
+            ],
+            "overlays": [
+                "MODIS_Terra_Snow_Cover",
+                "MODIS_Aqua_Snow_Cover",
+                "MODIS_Terra_Land_Surface_Temp_Day",
+                "MODIS_Terra_Land_Surface_Temp_Night",
+                "MODIS_Aqua_Land_Surface_Temp_Day",
+                "MODIS_Aqua_Land_Surface_Temp_Night",
+                "land_mask"
+            ],
+            "projections": [
+                "geographic"
+            ]
+        }
+    },
     "defaults": {
-        "projection": "geographic"
+        "projection": "geographic",
+        "startingLayers": {
+            "baselayers": [
+                {
+                    "id": "MODIS_Terra_CorrectedReflectance_TrueColor"
+                },
+                {
+                    "hidden": "true",
+                    "id": "MODIS_Aqua_CorrectedReflectance_TrueColor"
+                }
+            ],
+            "overlays": [
+                {
+                    "id": "sedac_bound"
+                },
+                {
+                    "id": "arctic_coastlines_3413"
+                },
+                {
+                    "id": "antarctic_coastlines"
+                }
+            ]
+        }
     },
     "echo": {
         "aqua": {
@@ -60,6 +427,154 @@
             }
         }
     },
+    "layerOrder": {
+        "baselayers": [
+            "MODIS_Terra_CorrectedReflectance_TrueColor",
+            "MODIS_Aqua_CorrectedReflectance_TrueColor",
+            "MODIS_Terra_SurfaceReflectance_Bands143",
+            "MODIS_Aqua_SurfaceReflectance_Bands143",
+            "MODIS_Terra_SurfaceReflectance_Bands121",
+            "MODIS_Aqua_SurfaceReflectance_Bands121",
+            "MODIS_Terra_CorrectedReflectance_Bands367",
+            "MODIS_Terra_CorrectedReflectance_Bands721",
+            "MODIS_Aqua_CorrectedReflectance_Bands721",
+            "MODIS_Terra_SurfaceReflectance_Bands721",
+            "MODIS_Aqua_SurfaceReflectance_Bands721",
+            "VIIRS_CityLights_2012",
+            "land_water_map"
+        ],
+        "overlays": [
+            "MODIS_Terra_Aerosol",
+            "MODIS_Aqua_Aerosol",
+            "MODIS_Combined_Value_Added_AOD",
+            "MODIS_Terra_Brightness_Temp_Band31_Day",
+            "MODIS_Terra_Brightness_Temp_Band31_Night",
+            "MODIS_Aqua_Brightness_Temp_Band31_Day",
+            "MODIS_Aqua_Brightness_Temp_Band31_Night",
+            "MODIS_Terra_Chlorophyll_A",
+            "MODIS_Aqua_Chlorophyll_A",
+            "MODIS_Terra_Cloud_Top_Pressure_Day",
+            "MODIS_Terra_Cloud_Top_Pressure_Night",
+            "MODIS_Aqua_Cloud_Top_Pressure_Day",
+            "MODIS_Aqua_Cloud_Top_Pressure_Night",
+            "MODIS_Terra_Cloud_Top_Temp_Day",
+            "MODIS_Terra_Cloud_Top_Temp_Night",
+            "MODIS_Aqua_Cloud_Top_Temp_Day",
+            "MODIS_Aqua_Cloud_Top_Temp_Night",
+            "MODIS_Fires_All",
+            "MODIS_Fires_Terra",
+            "MODIS_Fires_Aqua",
+            "MODIS_Terra_Land_Surface_Temp_Day",
+            "MODIS_Terra_Land_Surface_Temp_Night",
+            "MODIS_Aqua_Land_Surface_Temp_Day",
+            "MODIS_Aqua_Land_Surface_Temp_Night",
+            "MODIS_Terra_Sea_Ice",
+            "MODIS_Aqua_Sea_Ice",
+            "MODIS_Terra_Snow_Cover",
+            "MODIS_Aqua_Snow_Cover",
+            "MODIS_Terra_Water_Vapor_5km_Day",
+            "MODIS_Terra_Water_Vapor_5km_Night",
+            "MODIS_Aqua_Water_Vapor_5km_Day",
+            "MODIS_Aqua_Water_Vapor_5km_Night",
+            "AIRS_CO_Total_Column_Day",
+            "AIRS_CO_Total_Column_Night",
+            "AIRS_Dust_Score",
+            "AIRS_Precipitation_Day",
+            "AIRS_Precipitation_Night",
+            "AIRS_Prata_SO2_Index_Day",
+            "AIRS_Prata_SO2_Index_Night",
+            "AIRS_RelativeHumidity_400hPa_Day",
+            "AIRS_RelativeHumidity_400hPa_Night",
+            "AIRS_RelativeHumidity_500hPa_Day",
+            "AIRS_RelativeHumidity_500hPa_Night",
+            "AIRS_RelativeHumidity_600hPa_Day",
+            "AIRS_RelativeHumidity_600hPa_Night",
+            "AIRS_RelativeHumidity_700hPa_Day",
+            "AIRS_RelativeHumidity_700hPa_Night",
+            "AIRS_RelativeHumidity_850hPa_Day",
+            "AIRS_RelativeHumidity_850hPa_Night",
+            "AIRS_Temperature_400hPa_Day",
+            "AIRS_Temperature_400hPa_Night",
+            "AIRS_Temperature_500hPa_Day",
+            "AIRS_Temperature_500hPa_Night",
+            "AIRS_Temperature_600hPa_Day",
+            "AIRS_Temperature_600hPa_Night",
+            "AIRS_Temperature_700hPa_Day",
+            "AIRS_Temperature_700hPa_Night",
+            "AIRS_Temperature_850hPa_Day",
+            "AIRS_Temperature_850hPa_Night",
+            "OMI_Absorbing_Aerosol_Optical_Depth",
+            "OMI_Aerosol_Index",
+            "OMI_Aerosol_Optical_Depth",
+            "OMI_Cloud_Pressure",
+            "OMI_SO2_Planetary_Boundary_Layer",
+            "OMI_SO2_Lower_Troposphere",
+            "OMI_SO2_Middle_Troposphere",
+            "OMI_SO2_Upper_Troposphere_and_Stratosphere",
+            "MLS_CO_215hPa_Day",
+            "MLS_CO_215hPa_Night",
+            "MLS_HNO3_46hPa_Day",
+            "MLS_HNO3_46hPa_Night",
+            "MLS_N2O_46hPa_Day",
+            "MLS_N2O_46hPa_Night",
+            "MLS_O3_46hPa_Day",
+            "MLS_O3_46hPa_Night",
+            "MLS_SO2_147hPa_Day",
+            "MLS_SO2_147hPa_Night",
+            "MLS_Temperature_46hPa_Day",
+            "MLS_Temperature_46hPa_Night",
+            "MLS_H2O_46hPa_Day",
+            "MLS_H2O_46hPa_Night",
+            "land_mask",
+            "ndh-cyclone-hazard-frequency-distribution",
+            "ndh-cyclone-mortality-risks-distribution",
+            "ndh-cyclone-proportional-economic-loss-risk-deciles",
+            "ndh-drought-hazard-frequency-distribution",
+            "ndh-drought-mortality-risks-distribution",
+            "ndh-drought-proportional-economic-loss-risk-deciles",
+            "ndh-flood-hazard-frequency-distribution",
+            "ndh-flood-mortality-risks-distribution",
+            "ndh-flood-proportional-economic-loss-risk-deciles",
+            "ndh-volcano-hazard-frequency-distribution",
+            "ndh-volcano-mortality-risks-distribution",
+            "ndh-volcano-proportional-economic-loss-risk-deciles",
+            "cartographic:esri-administrative-boundaries_level-1",
+            "gpw-v3-coastlines",
+            "cartographic:00-global-labels",
+            "sedac_bound",
+            "antarctic_coastlines",
+            "arctic_coastlines_3413",
+            "arctic_coastlines",
+            "grump-v1-population-count_2000",
+            "polarview:graticule3031_10x30",
+            "ol_graticule",
+            "arctic_graticule_3413",
+            "polarview:graticuleN",
+            "MODIS_Water_Mask",
+            "MODIS_Terra_Data_No_Data",
+            "MODIS_Aqua_Data_No_Data",
+            "Terra_Orbit_Asc",
+            "Terra_Orbit_Dsc",
+            "Terra_Antarctic_Orbit_Asc",
+            "Terra_Antarctic_Orbit_Dsc",
+            "Terra_Arctic_Orbit_Asc",
+            "Terra_Arctic_Orbit_Dsc",
+            "Aqua_Orbit_Asc",
+            "Aqua_Orbit_Dsc",
+            "Aqua_Antarctic_Orbit_Asc",
+            "Aqua_Antarctic_Orbit_Dsc",
+            "Aqua_Arctic_Orbit_Asc",
+            "Aqua_Arctic_Orbit_Dsc",
+            "Aura_Orbit_Asc",
+            "Aura_Orbit_Dsc",
+            "Aura_Antarctic_Orbit_Asc",
+            "Aura_Antarctic_Orbit_Dsc",
+            "Aura_Arctic_Orbit_Asc",
+            "Aura_Arctic_Orbit_Dsc",
+            "Calipso_Orbit_Asc",
+            "Calipso_Orbit_Dsc"
+        ]
+    },
     "layers": {
         "AIRS_CO_Total_Column_Day": {
             "bins": 7,
@@ -116,6 +631,7 @@
                 0.9629629629629629,
                 0.9814814814814815
             ],
+            "tags": "co",
             "type": "wmts",
             "units": "ppb"
         },
@@ -174,6 +690,7 @@
                 0.9629629629629629,
                 0.9814814814814815
             ],
+            "tags": "co",
             "type": "wmts",
             "units": "ppb"
         },
@@ -289,6 +806,7 @@
             ],
             "rendered": "AIRS_Prata_SO2_Index",
             "startDate": "2012-04-07",
+            "tags": "so2",
             "type": "wmts",
             "units": "DU"
         },
@@ -339,6 +857,7 @@
             ],
             "rendered": "AIRS_Prata_SO2_Index",
             "startDate": "2012-04-07",
+            "tags": "so2",
             "type": "wmts",
             "units": "DU"
         },
@@ -847,6 +1366,7 @@
             },
             "rendered": "AIRS_RelativeHumidity",
             "startDate": "2012-04-07",
+            "tags": "rh",
             "type": "wmts",
             "units": "%"
         },
@@ -893,6 +1413,7 @@
             },
             "rendered": "AIRS_RelativeHumidity",
             "startDate": "2012-04-07",
+            "tags": "rh",
             "type": "wmts",
             "units": "%"
         },
@@ -939,6 +1460,7 @@
             },
             "rendered": "AIRS_RelativeHumidity",
             "startDate": "2012-04-07",
+            "tags": "rh",
             "type": "wmts",
             "units": "%"
         },
@@ -985,6 +1507,7 @@
             },
             "rendered": "AIRS_RelativeHumidity",
             "startDate": "2012-04-07",
+            "tags": "rh",
             "type": "wmts",
             "units": "%"
         },
@@ -1031,6 +1554,7 @@
             },
             "rendered": "AIRS_RelativeHumidity",
             "startDate": "2012-04-07",
+            "tags": "rh",
             "type": "wmts",
             "units": "%"
         },
@@ -1077,6 +1601,7 @@
             },
             "rendered": "AIRS_RelativeHumidity",
             "startDate": "2012-04-07",
+            "tags": "rh",
             "type": "wmts",
             "units": "%"
         },
@@ -1123,6 +1648,7 @@
             },
             "rendered": "AIRS_RelativeHumidity",
             "startDate": "2012-04-07",
+            "tags": "rh",
             "type": "wmts",
             "units": "%"
         },
@@ -1169,6 +1695,7 @@
             },
             "rendered": "AIRS_RelativeHumidity",
             "startDate": "2012-04-07",
+            "tags": "rh",
             "type": "wmts",
             "units": "%"
         },
@@ -1215,6 +1742,7 @@
             },
             "rendered": "AIRS_RelativeHumidity",
             "startDate": "2012-04-07",
+            "tags": "rh",
             "type": "wmts",
             "units": "%"
         },
@@ -1261,6 +1789,7 @@
             },
             "rendered": "AIRS_RelativeHumidity",
             "startDate": "2012-04-07",
+            "tags": "rh",
             "type": "wmts",
             "units": "%"
         },
@@ -2131,6 +2660,7 @@
             },
             "rendered": "MLS_Rainbow",
             "startDate": "2012-04-07",
+            "tags": "co",
             "type": "wmts",
             "units": "ppbv"
         },
@@ -2177,6 +2707,7 @@
             },
             "rendered": "MLS_Rainbow",
             "startDate": "2012-04-07",
+            "tags": "co",
             "type": "wmts",
             "units": "ppbv"
         },
@@ -2223,6 +2754,7 @@
             },
             "rendered": "MLS_Rainbow",
             "startDate": "2012-04-07",
+            "tags": "h2o",
             "type": "wmts",
             "units": "ppmv"
         },
@@ -2269,6 +2801,7 @@
             },
             "rendered": "MLS_Rainbow",
             "startDate": "2012-04-07",
+            "tags": "h2o",
             "type": "wmts",
             "units": "ppmv"
         },
@@ -2315,6 +2848,7 @@
             },
             "rendered": "MLS_Rainbow",
             "startDate": "2012-04-07",
+            "tags": "hno3",
             "type": "wmts",
             "units": "ppbv"
         },
@@ -2361,6 +2895,7 @@
             },
             "rendered": "MLS_Rainbow",
             "startDate": "2012-04-07",
+            "tags": "hno3",
             "type": "wmts",
             "units": "ppbv"
         },
@@ -2407,6 +2942,7 @@
             },
             "rendered": "MLS_Rainbow",
             "startDate": "2012-04-07",
+            "tags": "n2o",
             "type": "wmts",
             "units": "ppbv"
         },
@@ -2453,6 +2989,7 @@
             },
             "rendered": "MLS_Rainbow",
             "startDate": "2012-04-07",
+            "tags": "n2o",
             "type": "wmts",
             "units": "ppbv"
         },
@@ -2499,6 +3036,7 @@
             },
             "rendered": "MLS_Rainbow",
             "startDate": "2012-04-07",
+            "tags": "o3",
             "type": "wmts",
             "units": "ppmv"
         },
@@ -2545,6 +3083,7 @@
             },
             "rendered": "MLS_Rainbow",
             "startDate": "2012-04-07",
+            "tags": "o3",
             "type": "wmts",
             "units": "ppmv"
         },
@@ -2591,6 +3130,7 @@
             },
             "rendered": "MLS_Rainbow",
             "startDate": "2012-04-07",
+            "tags": "so2",
             "type": "wmts",
             "units": "ppbv"
         },
@@ -2637,6 +3177,7 @@
             },
             "rendered": "MLS_Rainbow",
             "startDate": "2012-04-07",
+            "tags": "so2",
             "type": "wmts",
             "units": "ppbv"
         },
@@ -2778,6 +3319,7 @@
             ],
             "rendered": "MODIS_Aerosol",
             "startDate": "2012-04-07",
+            "tags": "aod",
             "type": "wmts",
             "units": ""
         },
@@ -3824,7 +4366,6 @@
                 }
             },
             "properties": {
-                "defaultLayer": "true",
                 "format": "image/jpeg",
                 "layer": "MODIS_Aqua_CorrectedReflectance_Bands721",
                 "tileSize": [
@@ -3833,6 +4374,7 @@
                 ]
             },
             "startDate": "2012-04-07",
+            "tags": "cr",
             "type": "wmts"
         },
         "MODIS_Aqua_CorrectedReflectance_TrueColor": {
@@ -3914,7 +4456,6 @@
                 }
             },
             "properties": {
-                "defaultLayer": "true",
                 "format": "image/jpeg",
                 "layer": "MODIS_Aqua_CorrectedReflectance_TrueColor",
                 "tileSize": [
@@ -3923,6 +4464,7 @@
                 ]
             },
             "startDate": "2012-04-07",
+            "tags": "natural color cr",
             "type": "wmts"
         },
         "MODIS_Aqua_Data_No_Data": {
@@ -4302,7 +4844,6 @@
                 }
             },
             "properties": {
-                "defaultLayer": "true",
                 "format": "image/jpeg",
                 "layer": "MODIS_Aqua_SurfaceReflectance_Bands121",
                 "tileSize": [
@@ -4311,6 +4852,7 @@
                 ]
             },
             "startDate": "2012-04-07",
+            "tags": "lsr",
             "type": "wmts"
         },
         "MODIS_Aqua_SurfaceReflectance_Bands143": {
@@ -4346,7 +4888,6 @@
                 }
             },
             "properties": {
-                "defaultLayer": "true",
                 "format": "image/jpeg",
                 "layer": "MODIS_Aqua_SurfaceReflectance_Bands143",
                 "tileSize": [
@@ -4355,6 +4896,7 @@
                 ]
             },
             "startDate": "2012-04-07",
+            "tags": "natural color lsr",
             "type": "wmts"
         },
         "MODIS_Aqua_SurfaceReflectance_Bands721": {
@@ -4390,7 +4932,6 @@
                 }
             },
             "properties": {
-                "defaultLayer": "true",
                 "format": "image/jpeg",
                 "layer": "MODIS_Aqua_SurfaceReflectance_Bands721",
                 "tileSize": [
@@ -4399,6 +4940,7 @@
                 ]
             },
             "startDate": "2012-04-07",
+            "tags": "lsr",
             "type": "wmts"
         },
         "MODIS_Aqua_Water_Vapor_5km_Day": {
@@ -4544,6 +5086,7 @@
             ],
             "rendered": "MODIS_Aerosol",
             "startDate": "2012-04-07",
+            "tags": "aod",
             "type": "wmts",
             "units": ""
         },
@@ -4565,6 +5108,7 @@
                 ]
             },
             "startDate": "2012-04-07",
+            "tags": "hotspot",
             "type": "wms",
             "url": [
                 "//map2a.vis.earthdata.nasa.gov/wms/wms.php",
@@ -4591,6 +5135,7 @@
                 ]
             },
             "startDate": "2012-04-07",
+            "tags": "hotspot",
             "type": "wms",
             "url": [
                 "//map2a.vis.earthdata.nasa.gov/wms/wms.php",
@@ -4617,6 +5162,7 @@
                 ]
             },
             "startDate": "2012-04-07",
+            "tags": "hotspot",
             "type": "wms",
             "url": [
                 "//map2a.vis.earthdata.nasa.gov/wms/wms.php",
@@ -4670,6 +5216,7 @@
             ],
             "rendered": "MODIS_Aerosol",
             "startDate": "2012-04-07",
+            "tags": "aod",
             "type": "wmts",
             "units": ""
         },
@@ -5716,7 +6263,6 @@
                 }
             },
             "properties": {
-                "defaultLayer": "true",
                 "format": "image/jpeg",
                 "layer": "MODIS_Terra_CorrectedReflectance_Bands367",
                 "tileSize": [
@@ -5725,6 +6271,7 @@
                 ]
             },
             "startDate": "2012-04-07",
+            "tags": "cr",
             "type": "wmts"
         },
         "MODIS_Terra_CorrectedReflectance_Bands721": {
@@ -5806,7 +6353,6 @@
                 }
             },
             "properties": {
-                "defaultLayer": "true",
                 "format": "image/jpeg",
                 "layer": "MODIS_Terra_CorrectedReflectance_Bands721",
                 "tileSize": [
@@ -5815,6 +6361,7 @@
                 ]
             },
             "startDate": "2012-04-07",
+            "tags": "cr",
             "type": "wmts"
         },
         "MODIS_Terra_CorrectedReflectance_TrueColor": {
@@ -5896,7 +6443,6 @@
                 }
             },
             "properties": {
-                "defaultLayer": "true",
                 "format": "image/jpeg",
                 "layer": "MODIS_Terra_CorrectedReflectance_TrueColor",
                 "tileSize": [
@@ -5905,6 +6451,7 @@
                 ]
             },
             "startDate": "2012-04-07",
+            "tags": "natural color cr",
             "type": "wmts"
         },
         "MODIS_Terra_Data_No_Data": {
@@ -6281,7 +6828,6 @@
                 }
             },
             "properties": {
-                "defaultLayer": "true",
                 "format": "image/jpeg",
                 "layer": "MODIS_Terra_SurfaceReflectance_Bands121",
                 "tileSize": [
@@ -6290,6 +6836,7 @@
                 ]
             },
             "startDate": "2012-04-07",
+            "tags": "lsr",
             "type": "wmts"
         },
         "MODIS_Terra_SurfaceReflectance_Bands143": {
@@ -6325,7 +6872,6 @@
                 }
             },
             "properties": {
-                "defaultLayer": "true",
                 "format": "image/jpeg",
                 "layer": "MODIS_Terra_SurfaceReflectance_Bands143",
                 "tileSize": [
@@ -6334,6 +6880,7 @@
                 ]
             },
             "startDate": "2012-04-07",
+            "tags": "natural color lsr",
             "type": "wmts"
         },
         "MODIS_Terra_SurfaceReflectance_Bands721": {
@@ -6369,7 +6916,6 @@
                 }
             },
             "properties": {
-                "defaultLayer": "true",
                 "format": "image/jpeg",
                 "layer": "MODIS_Terra_SurfaceReflectance_Bands721",
                 "tileSize": [
@@ -6378,6 +6924,7 @@
                 ]
             },
             "startDate": "2012-04-07",
+            "tags": "lsr",
             "type": "wmts"
         },
         "MODIS_Terra_Water_Vapor_5km_Day": {
@@ -6518,6 +7065,7 @@
                 ]
             },
             "rendered": "MODIS_Water_Mask",
+            "tags": "mask",
             "type": "wmts"
         },
         "OMI_Absorbing_Aerosol_Optical_Depth": {
@@ -6566,6 +7114,7 @@
             ],
             "rendered": "OMI_Aerosol",
             "startDate": "2012-04-07",
+            "tags": "aod",
             "type": "wmts",
             "units": ""
         },
@@ -6615,6 +7164,7 @@
             ],
             "rendered": "OMI_Aerosol",
             "startDate": "2012-04-07",
+            "tags": "aod",
             "type": "wmts",
             "units": ""
         },
@@ -6664,6 +7214,7 @@
             ],
             "rendered": "OMI_Aerosol",
             "startDate": "2012-04-07",
+            "tags": "aod",
             "type": "wmts",
             "units": ""
         },
@@ -6763,6 +7314,7 @@
             ],
             "rendered": "OMI_SO2_Lower_Troposphere",
             "startDate": "2012-04-07",
+            "tags": "so2",
             "type": "wmts",
             "units": "DU"
         },
@@ -6813,6 +7365,7 @@
             ],
             "rendered": "OMI_SO2_Middle_Troposphere_to_Stratosphere",
             "startDate": "2012-04-07",
+            "tags": "so2",
             "type": "wmts",
             "units": "DU"
         },
@@ -6863,6 +7416,7 @@
             ],
             "rendered": "OMI_SO2_Planetary_Boundary_Layer",
             "startDate": "2012-04-07",
+            "tags": "so2",
             "type": "wmts",
             "units": "DU"
         },
@@ -6913,6 +7467,7 @@
             ],
             "rendered": "OMI_SO2_Middle_Troposphere_to_Stratosphere",
             "startDate": "2012-04-07",
+            "tags": "so2",
             "type": "wmts",
             "units": "DU"
         },
@@ -7104,7 +7659,6 @@
                 }
             },
             "properties": {
-                "defaultLayer": "true",
                 "format": "image/jpeg",
                 "layer": "VIIRS_CityLights_2012",
                 "tileSize": [
@@ -7112,6 +7666,7 @@
                     512
                 ]
             },
+            "tags": "night lights city lights snpp",
             "type": "wmts"
         },
         "antarctic_coastlines": {
@@ -7152,6 +7707,7 @@
                 ],
                 "transitionEffect": "none"
             },
+            "tag": "borders",
             "type": "wmts"
         },
         "arctic_coastlines": {
@@ -7192,6 +7748,7 @@
                 ],
                 "transitionEffect": "none"
             },
+            "tag": "borders",
             "type": "wmts"
         },
         "arctic_coastlines_3413": {
@@ -7232,6 +7789,7 @@
                 ],
                 "transitionEffect": "none"
             },
+            "tag": "borders",
             "type": "wmts"
         },
         "arctic_graticule": {
@@ -7258,6 +7816,7 @@
                 ],
                 "transitionEffect": "none"
             },
+            "tags": "lat lon lat-lon",
             "type": "wms"
         },
         "arctic_graticule_3413": {
@@ -7284,6 +7843,7 @@
                 ],
                 "transitionEffect": "none"
             },
+            "tags": "lat lon lat-lon",
             "type": "wms"
         },
         "cartographic:00-global-labels": {
@@ -7308,6 +7868,7 @@
                 ],
                 "transitionEffect": "none"
             },
+            "tags": "names",
             "type": "wms",
             "url": [
                 "http://sedac.ciesin.columbia.edu/geoserver/ows"
@@ -7333,6 +7894,7 @@
                 ],
                 "transitionEffect": "none"
             },
+            "tags": "state borders",
             "type": "wms",
             "url": [
                 "http://sedac.ciesin.columbia.edu/geoserver/ows"
@@ -7358,6 +7920,7 @@
                 ],
                 "transitionEffect": "none"
             },
+            "tags": "borders",
             "type": "wms",
             "url": [
                 "http://sedac.ciesin.columbia.edu/geoserver/ows"
@@ -7477,6 +8040,7 @@
                 ]
             },
             "startDate": "2012-04-07",
+            "tags": "borders mask",
             "type": "wmts"
         },
         "land_water_map": {
@@ -7566,6 +8130,7 @@
                 ]
             },
             "startDate": "2012-04-07",
+            "tags": "borders",
             "type": "wmts"
         },
         "ndh-cyclone-hazard-frequency-distribution": {
@@ -7887,6 +8452,7 @@
             "projections": {
                 "geographic": {}
             },
+            "tags": "lat lon lat-lon",
             "type": "graticule"
         },
         "polarview:graticule3031_10x30": {
@@ -7909,6 +8475,7 @@
                 ],
                 "transitionEffect": "none"
             },
+            "tags": "lat lon lat-lon",
             "type": "wms",
             "url": [
                 "http://geos.polarview.aq/geoserver/wms?"
@@ -7952,6 +8519,7 @@
                 ],
                 "transitionEffect": "none"
             },
+            "tags": "lat lon lat-lon",
             "type": "wmts"
         },
         "sedac_bound": {
@@ -7987,7 +8555,6 @@
                 }
             },
             "properties": {
-                "defaultLayer": "true",
                 "format": "image/png",
                 "layer": "sedac_bound",
                 "opacity": 0.95,
@@ -7997,6 +8564,7 @@
                 ],
                 "transitionEffect": "none"
             },
+            "tags": "borders countries country",
             "type": "wmts"
         }
     },
@@ -62132,6 +62700,11 @@
                     "AIRIBQAP",
                     "AIRIBQAP_NRT"
                 ]
+            },
+            "urs": {
+                "by": "value",
+                "field": "dataset_id",
+                "value": "\\(NRT\\)"
             }
         },
         "AIRIBRAD_DAY": {
@@ -62149,6 +62722,11 @@
                     "AIRIBRAD",
                     "AIRIBRAD_NRT"
                 ]
+            },
+            "urs": {
+                "by": "value",
+                "field": "dataset_id",
+                "value": "\\(NRT\\)"
             }
         },
         "AIRIBRAD_NIGHT": {
@@ -62166,6 +62744,11 @@
                     "AIRIBRAD",
                     "AIRIBRAD_NRT"
                 ]
+            },
+            "urs": {
+                "by": "value",
+                "field": "dataset_id",
+                "value": "\\(NRT\\)"
             }
         },
         "AIRX2RET_DAY": {
@@ -62183,6 +62766,11 @@
                     "AIRX2RET",
                     "AIRX2RET_NRT"
                 ]
+            },
+            "urs": {
+                "by": "value",
+                "field": "dataset_id",
+                "value": "\\(NRT\\)"
             }
         },
         "AIRX2RET_NIGHT": {
@@ -62200,6 +62788,11 @@
                     "AIRX2RET",
                     "AIRX2RET_NRT"
                 ]
+            },
+            "urs": {
+                "by": "value",
+                "field": "dataset_id",
+                "value": "\\(NRT\\)"
             }
         },
         "AIRX2SUP_DAY": {
@@ -62217,6 +62810,11 @@
                     "AIRX2SUP",
                     "AIRX2SUP_NRT"
                 ]
+            },
+            "urs": {
+                "by": "value",
+                "field": "dataset_id",
+                "value": "\\(NRT\\)"
             }
         },
         "AIRX2SUP_NIGHT": {
@@ -62234,6 +62832,11 @@
                     "AIRX2SUP",
                     "AIRX2SUP_NRT"
                 ]
+            },
+            "urs": {
+                "by": "value",
+                "field": "dataset_id",
+                "value": "\\(NRT\\)"
             }
         },
         "CIESIN_CHRR_NDH_CYCLONE_HFD": {
@@ -62380,6 +62983,11 @@
                     "ML2CO",
                     "ML2CO_NRT"
                 ]
+            },
+            "urs": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "Near-Real-Time"
             }
         },
         "ML2H2O": {
@@ -62396,6 +63004,11 @@
                     "ML2H2O",
                     "ML2H2O_NRT"
                 ]
+            },
+            "urs": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "Near-Real-Time"
             }
         },
         "ML2HNO3": {
@@ -62412,6 +63025,11 @@
                     "ML2HNO3",
                     "ML2HNO3_NRT"
                 ]
+            },
+            "urs": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "Near-Real-Time"
             }
         },
         "ML2N2O": {
@@ -62428,6 +63046,11 @@
                     "ML2N2O",
                     "ML2N2O_NRT"
                 ]
+            },
+            "urs": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "Near-Real-Time"
             }
         },
         "ML2O3": {
@@ -62444,6 +63067,11 @@
                     "ML2O3",
                     "ML2O3_NRT"
                 ]
+            },
+            "urs": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "Near-Real-Time"
             }
         },
         "ML2SO2": {
@@ -62460,6 +63088,11 @@
                     "ML2SO2",
                     "ML2SO2_NRT"
                 ]
+            },
+            "urs": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "Near-Real-Time"
             }
         },
         "ML2T": {
@@ -62476,6 +63109,11 @@
                     "ML2T",
                     "ML2T_NRT"
                 ]
+            },
+            "urs": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "Near-Real-Time"
             }
         },
         "MOD04_L2": {
@@ -63056,6 +63694,7 @@
     "projections": {
         "antarctic": {
             "crs": "EPSG:3031",
+            "epsg": 3031,
             "fractionalZoom": false,
             "maxExtent": [
                 -4194304,
@@ -63088,6 +63727,7 @@
         },
         "arctic": {
             "crs": "EPSG:3413",
+            "epsg": 3413,
             "maxExtent": [
                 -4194304,
                 -4194304,
@@ -63119,11 +63759,13 @@
         },
         "arctic3995": {
             "crs": "EPSG:3995",
+            "epsg": 3995,
             "name": "arctic",
             "virtual": "true"
         },
         "geographic": {
             "crs": "EPSG:4326",
+            "epsg": 4326,
             "maxExtent": [
                 -180,
                 -90,

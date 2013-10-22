@@ -1,6 +1,7 @@
 {
     "description": "OpenLayers / Graticule Control",
     "name": "Latitude-Longitude Lines",
+    "tags": "lat lon lat-lon",
     "period": "static",
     "projections": {
         "geographic": {}

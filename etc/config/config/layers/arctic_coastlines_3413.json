@@ -2,6 +2,7 @@
     "description": "OpenStreetMap / Coastlines",
     "name": "Coastlines",
     "period": "static",
+    "tag": "borders",
     "projections": {
         "arctic": {
             "matrixSet": "EPSG3413_250m",
@@ -29,7 +30,7 @@
     },
     "properties": {
         "format": "image/png",
-        "layer": "arctic_coastlines_3413",    
+        "layer": "arctic_coastlines_3413",
         "tileSize": [
             512,
             512

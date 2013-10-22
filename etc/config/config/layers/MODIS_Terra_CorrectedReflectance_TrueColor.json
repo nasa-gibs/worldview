@@ -1,6 +1,7 @@
 {
     "description": "Terra / MODIS",
     "name": "Corrected Reflectance (True Color)",
+    "tags": "natural color cr",
     "period": "daily",
     "projections": {
         "antarctic": {
@@ -77,7 +78,6 @@
         }
     },
     "properties": {
-        "defaultLayer": "true",
         "format": "image/jpeg",
         "layer": "MODIS_Terra_CorrectedReflectance_TrueColor",
         "tileSize": [

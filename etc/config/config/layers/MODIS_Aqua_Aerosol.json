@@ -1,6 +1,7 @@
 {
     "bins": 10,
     "description": "Aqua / MODIS",
+    "tags": "aod",
     "max": "0.70",
     "min": "0.27",
     "name": "Aerosol Optical Depth",

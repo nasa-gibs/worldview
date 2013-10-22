@@ -1,6 +1,7 @@
 {
     "description": "Suomi NPP / VIIRS via NASA Earth Observatory",
     "name": "Earth at Night 2012",
+    "tags": "night lights city lights snpp",
     "period": "static",
     "projections": {
         "geographic": {
@@ -30,7 +31,6 @@
         }
     },
     "properties": {
-        "defaultLayer": "true",
         "format": "image/jpeg",
         "layer": "VIIRS_CityLights_2012",
         "tileSize": [

@@ -1,6 +1,7 @@
 {
     "description": "Aqua / MODIS",
     "name": "Land Surface Reflectance (1-2-1)",
+    "tags": "lsr",
     "period": "daily",
     "projections": {
         "geographic": {
@@ -31,7 +32,6 @@
         }
     },
     "properties": {
-        "defaultLayer": "true",
         "format": "image/jpeg",
         "layer": "MODIS_Aqua_SurfaceReflectance_Bands121",
         "tileSize": [

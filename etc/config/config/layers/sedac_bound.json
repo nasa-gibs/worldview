@@ -1,6 +1,7 @@
 {
     "description": "SEDAC / National Boundaries",
     "name": "National Boundaries",
+    "tags": "borders countries country",
     "period": "static",
     "projections": {
         "geographic": {
@@ -31,7 +32,6 @@
         }
     },
     "properties": {
-        "defaultLayer": "true",
         "format": "image/png",
         "layer": "sedac_bound",
         "opacity": 0.95,

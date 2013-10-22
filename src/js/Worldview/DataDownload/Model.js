@@ -389,8 +389,8 @@ Worldview.DataDownload.Model = function(config) {
         }
         self.projection = state.projection;
         self.crs = state.crs;
-        //query();
-        self.selectProduct(null);
+        query();
+        //self.selectProduct(null);
     };
 
     var findAvailableProduct = function() {

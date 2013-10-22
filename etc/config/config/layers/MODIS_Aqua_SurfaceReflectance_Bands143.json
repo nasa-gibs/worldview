@@ -1,6 +1,7 @@
 {
     "description": "Aqua / MODIS",
     "name": "Land Surface Reflectance (True Color)",
+    "tags": "natural color lsr",
     "period": "daily",
     "projections": {
         "geographic": {
@@ -30,7 +31,6 @@
         }
     },
     "properties": {
-        "defaultLayer": "true",
         "format": "image/jpeg",
         "layer": "MODIS_Aqua_SurfaceReflectance_Bands143",
         "tileSize": [

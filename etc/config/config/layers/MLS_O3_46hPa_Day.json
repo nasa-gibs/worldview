@@ -1,6 +1,7 @@
 {
     "bins": 255,
     "description": "Aura / MLS",
+    "tags": "o3",
     "max": "4.5",
     "min": "0.5",
     "name": "Ozone (46 hPa, Day)",

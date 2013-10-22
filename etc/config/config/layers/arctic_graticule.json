@@ -2,9 +2,10 @@
     "description": "Polarview / Graticule",
     "name": "Latitude-Longitude Lines",
     "period": "static",
+    "tags": "lat lon lat-lon",
     "parameters": {
         "format": "image/png",
-        "layers": "arctic_graticule"    
+        "layers": "arctic_graticule"
     },
     "projections": {
         "arctic": {
