@@ -29,7 +29,7 @@ $(function() {
         "switch": true,
         palettes: true,
         opacity: true,
-        dataDowload: true
+        dataDownload: true
     };
 
     /**
