@@ -44,12 +44,13 @@ background: -webkit-linear-gradient(top,  rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.7) 50%
 background: -o-linear-gradient(top,  rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.7) 50%,rgba(0,0,0,0.8) 100%); /* Opera 11.10+ */
 background: -ms-linear-gradient(top,  rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.7) 50%,rgba(0,0,0,0.8) 100%); /* IE10+ */
 background: linear-gradient(to bottom,  rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.7) 50%,rgba(0,0,0,0.8) 100%); /* W3C */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#99000000', endColorstr='#cc000000',GradientType=0 ); /* IE6-9 */
 
 
 height:23px;
 
 }
+:root ul.sliderLabel { filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#99000000', endColorstr='#cc000000',GradientType=0 ) \0/IE9; }  /* IE9 */
+
 ul.sliderLabel {text-shadow: none; color:#fff; margin:-20px 0 0 0; background:none;  overflow:hidden;  }
 ul.sliderLabel li {float:left; background:none; margin:0px; text-align:center; overflow:hidden; font-weight: 700; font-size: 0.9em; padding: 0.1em 0;}
 div.sliderDivYear {clear:both;}

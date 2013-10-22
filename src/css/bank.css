@@ -2,13 +2,24 @@ canvas {float:left;}
 
 a.accordionToggler {display:block; width:10%; overflow:hidden; z-index:292;  height:2.1em; background: none no-repeat scroll left; }
 a.arrow { float:right; border-radius: 0 10px 10px 0; -moz-border-radius: 0 10px 10px 0; -webkit-border-radius: 0 10px 10px 0; text-decoration:none;  color:#fff; position:relative; letter-spacing:2px; font-family:"Gill Sans","Helvetica",sans-serif;}
-a.staticLayers { float:left; left:0; position:absolute; top:69px; background-position:right; background-repeat: no-repeat; height:auto; width:6em; 
-background: no-repeat right url("../images/expandOut.png"),-moz-linear-gradient(top,  rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.7) 100%); /* FF3.6+ */
-background: no-repeat right  url("../images/expandOut.png"), -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.5)), color-stop(50%,rgba(0,0,0,0.6)), color-stop(100%,rgba(0,0,0,0.7))); /* Chrome,Safari4+ */
-background: no-repeat right  url("../images/expandOut.png"), -webkit-linear-gradient(top,  rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.6) 50%,rgba(0,0,0,0.7) 100%); /* Chrome10+,Safari5.1+ */
-background: no-repeat right  url("../images/expandOut.png"), -o-linear-gradient(top,  rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.6) 50%,rgba(0,0,0,0.7) 100%); /* Opera 11.10+ */
-background: no-repeat right  url("../images/expandOut.png"), -ms-linear-gradient(top,  rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.6) 50%,rgba(0,0,0,0.7) 100%); /* IE10+ */
-background: no-repeat right url("../images/expandOut.png"), linear-gradient(to bottom,  rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.6) 50%,rgba(0,0,0,0.7) 100%); /* W3C */}
+a.staticLayers { 
+  float:left; 
+  left:0; 
+  position:absolute; 
+  top:69px; 
+  background-position:right; 
+  background-repeat: no-repeat; 
+  height:auto; 
+  width:6em;
+  background-image: url(../images/expandOut.png);
+  background: no-repeat right url("../images/expandOut.png"),-moz-linear-gradient(top,  rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.7) 100%); /* FF3.6+ */
+  background: no-repeat right url("../images/expandOut.png"), -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.5)), color-stop(50%,rgba(0,0,0,0.6)), color-stop(100%,rgba(0,0,0,0.7))); /* Chrome,Safari4+ */
+  background: no-repeat right url("../images/expandOut.png"), -webkit-linear-gradient(top,  rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.6) 50%,rgba(0,0,0,0.7) 100%); /* Chrome10+,Safari5.1+ */
+  background: no-repeat right url("../images/expandOut.png"), -o-linear-gradient(top,  rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.6) 50%,rgba(0,0,0,0.7) 100%); /* Opera 11.10+ */
+  background: no-repeat right url("../images/expandOut.png"), -ms-linear-gradient(top,  rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.6) 50%,rgba(0,0,0,0.7) 100%); /* IE10+ */
+  background: no-repeat right url("../images/expandOut.png"), linear-gradient(to bottom,  rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.6) 50%,rgba(0,0,0,0.7) 100%); /* W3C */
+
+}
 
 a.atcollapse {background-image: url("../images/expandIn.png"); }
 a.atexpand {background-image: url("../images/expandOut.png");}
