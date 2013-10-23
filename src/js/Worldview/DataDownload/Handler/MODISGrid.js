@@ -39,6 +39,7 @@ Worldview.DataDownload.Handler.MODISGrid = function(config, model, spec) {
     };
 
     self._processResults = function(data) {
+        var productConfig = config.products[model.selectedProduct];
         var results = {
             meta: {
                 gridFetched: data.grid
