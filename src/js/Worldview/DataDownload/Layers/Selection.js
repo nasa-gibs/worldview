@@ -87,6 +87,14 @@ Worldview.DataDownload.Layers.Selection = function(model, maps, config) {
         log.debug("unselect", getLayer().features.length, granule, feature);
     };
 
+    self.refresh = function() {
+        self.clear();
+        features = {};
+        $.each(model.selectedGranules, function(index, granule) {
+            self.select(granule);
+        });
+    };
+
     var createLayer = function() {
         layer = new OpenLayers.Layer.Vector(LAYER_NAME, {
             styleMap: new OpenLayers.StyleMap(STYLE)

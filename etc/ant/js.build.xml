@@ -116,7 +116,6 @@
         <file name="js/Worldview/DataDownload/Layers/Button.js"/>
         <file name="js/Worldview/DataDownload/Layers/Grid.js"/>
         <file name="js/Worldview/DataDownload/Layers/Hover.js"/>
-        <file name="js/Worldview/DataDownload/Layers/QueryMask.js"/>
         <file name="js/Worldview/DataDownload/Layers/Selection.js"/>
         <file name="js/Worldview/DataDownload/Layers/Swath.js"/>
 

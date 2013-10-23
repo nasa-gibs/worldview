@@ -390,6 +390,7 @@ Worldview.DataDownload.Model = function(config) {
         }
         self.projection = state.projection;
         self.crs = state.crs;
+        self.events.trigger("projectionUpdate");
         query();
         //self.selectProduct(null);
     };
