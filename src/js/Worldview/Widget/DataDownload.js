@@ -183,7 +183,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
             .addClass("item")
             .addClass("item-static");
         $item.append("<h4>" + layer.label + "</h4>");
-        $item.append("<p>" + layer.sublablel + "</p>");
+        $item.append("<p>" + layer.sublabel + "</p>");
         $container.append($item);
     };
 
