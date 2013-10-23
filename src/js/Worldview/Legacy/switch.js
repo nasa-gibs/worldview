@@ -30,7 +30,7 @@ Worldview.Legacy.Switch = function(model) {
     };
 
     self.getValue = function() {
-        return model.toPermalink();
+        return decodeURIComponent(model.toPermalink());
     };
 
     self.updateComponent = function() {};
