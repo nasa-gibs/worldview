@@ -112,7 +112,7 @@ Worldview.Widget.AddLayers = function(config, model, projectionModel) {
                 $name.addClass("mark");
             }
         }
-        if ( config.parameters.markDownoads ) {
+        if ( config.parameters.markDownloads ) {
             if ( layer.product ) {
                 $name.addClass("mark");
             }
