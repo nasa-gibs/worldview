@@ -94,7 +94,7 @@
     display:inline !important;
     font-size:inherit;
     border-radius:5px;
-    background: #1BA1E2;
+    background: #8CC3DE;
     padding: 2px;
     text-align: center;
     margin-left:5px !important;
@@ -116,21 +116,16 @@
     color: #fff;
     font-size:14px;
     cursor: pointer;
-    background: #83c783; /* Old browsers */
-    background: -moz-linear-gradient(top,  #83c783 0%, #52b152 33%, #00a81c 83%, #149600 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#83c783), color-stop(33%,#52b152), color-stop(83%,#00a81c), color-stop(100%,#149600)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  #83c783 0%,#52b152 33%,#00a81c 83%,#149600 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top,  #83c783 0%,#52b152 33%,#00a81c 83%,#149600 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  #83c783 0%,#52b152 33%,#00a81c 83%,#149600 100%); /* IE10+ */
-    background: linear-gradient(to bottom,  #83c783 0%,#52b152 33%,#00a81c 83%,#149600 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#83c783', endColorstr='#149600',GradientType=0 ); /* IE6-9 */
+    background: #508050;
+    border-radius: 5px;
 }
 
 .action[disabled='disabled'] {
-    border: 1px solid #808080;
+    border: 1px solid #404040;
     background: black;
     color: #808080;
     cursor: auto;
+    border-radius: 5px;
 }
 .productsIcon {
     display:inline-block;
