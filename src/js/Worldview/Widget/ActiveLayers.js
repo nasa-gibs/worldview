@@ -330,11 +330,13 @@ Worldview.Widget.ActiveLayers = function(config, model, spec) {
     var onLayerVisibility = function(layer, visible) {
         var $element = $(".hideReg[data-layer='" + layer.id + "']");
         if ( visible ) {
-            $element.attr("data-action", "hide");
-            $element.attr("src", "images/visible.png");
+            $element.attr("data-action", "hide")
+                .attr("src", "images/visible.png")
+                .attr("title", 'Hide Layer');
         } else {
-            $element.attr("data-action", "show");
-            $element.attr("src", "images/invisible.png");
+            $element.attr("data-action", "show")
+                .attr("src", "images/invisible.png")
+                .attr("title", "Show Layer");
         }
     };
 
