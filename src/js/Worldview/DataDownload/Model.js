@@ -312,8 +312,9 @@ Worldview.DataDownload.Model = function(config) {
                 self.events.trigger(self.EVENT_QUERY_RESULTS, results);
             }
             if ( nextQuery ) {
-                executeQuery(nextQuery);
+                var q = nextQuery;
                 nextQuery = null;
+                executeQuery(q);
             }
         }).on("error", function(textStatus, errorThrown) {
             queryExecuting = false;
