@@ -352,7 +352,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
 
         var counts = model.getSelectionCounts();
         $.each(counts, function(productId, count) {
-            $("#" + productId).html("" + count + " selected");
+            $("#" + productId + "dynamictext").html("" + count + " selected");
         });
         if ( downloadListPanel && downloadListPanel.visible() ) {
             downloadListPanel.show();
