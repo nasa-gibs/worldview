@@ -38,7 +38,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3ffffff', e
 }
 
 .bank .tabContainer {border-bottom: 2px #005190 solid; }
-.bank h3 {display:block; color:#ffffff; font-size: 1em; border:none; text-decoration:none; width:100%;}
+.bank h3 {display:block; color:#ffffff; font-size: 1em; border:none; text-decoration:none; width:98%;}
 #callSelectorLink {display: inline-block; width:32px; height:32px; background: transparent url("../images/addLayers.png"); margin-left: 50px;float:right;}
 .bank div,.bank ul {display:block;width:100%; margin:0 auto;}
 .bank .category {overflow:hidden;}
