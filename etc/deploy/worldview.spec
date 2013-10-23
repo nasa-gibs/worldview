@@ -3,7 +3,7 @@
 
 Name:		worldview
 Version:	0.6.0
-Release:	0.4%{?dist}
+Release:	0.5%{?dist}
 Summary:	Browse full-resolution, near real-time satellite imagery.
 
 License:	Copyright NASA
