@@ -29,7 +29,7 @@ Worldview.Legacy.Bank = function(model) {
     };
 
     self.setValue = function(value) {
-        model.fromPermalink(self.id = "=" + value);
+        model.fromPermalink(self.id + "=" + value);
     };
 
     self.getValue = function() {

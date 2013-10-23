@@ -122,14 +122,18 @@ Worldview.Widget.ArcticProjectionChangeNotification = function(config, bank) {
                     if ( currentNew ) {
                         currentNew = false;
                     }
-                    updateLayers(queryString);
+                    if ( query["switch"] === "arctic" ) {
+                        updateLayers(queryString);
+                    }
                 } else if ( currentDay >= self.changeDate ) {
                     log.debug(self.containerId + ": visit new");
                     visitNew = true;
                     if ( !currentNew ) {
                         currentNew = true;
                     }
-                    updateLayers(queryString);
+                    if ( query["switch"] === "arctic" ) {
+                        updateLayers(queryString);
+                    }
                 }
                 if ( visitOld && visitNew && showNotice ) {
                     log.debug(self.containerId + ": notify");
