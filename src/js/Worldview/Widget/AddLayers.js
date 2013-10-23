@@ -272,6 +272,12 @@ Worldview.Widget.AddLayers = function(config, model, projectionModel) {
         filter();
     };
 
+    var searchTerms = function() {
+        var search = $(self.selector + "search").val().toLowerCase();
+        var terms = search.split(/ +/);
+        return terms;
+    };
+
     var filterAreaOfInterest = function(layerId) {
         var aoi = $(self.selector + "select").val();
         if ( aoi === "All" ) {
@@ -285,26 +291,32 @@ Worldview.Widget.AddLayers = function(config, model, projectionModel) {
         return !layer.projections[projectionModel.selected];
     };
 
-    var filterSearch = function(layer) {
+    var filterSearch = function(layer, terms) {
         var search = $(self.selector + "search").val();
         if ( search === "" ) {
             return false;
         }
-        search = search.toLowerCase();
-        var tags = ( layer.tags ) ? layer.tags.toLowerCase() : "";
-        var filtered = !layer.name.toLowerCase().contains(search) &&
-               !layer.description.toLowerCase().contains(search) &&
-               !tags.contains(search);
+        var tags = ( layer.tags ) ? layer.tags : "";
+        var filtered = false;
+        $.each(terms, function(index, term) {
+            filtered = !layer.name.toLowerCase().contains(term) &&
+                       !layer.description.toLowerCase().contains(term) &&
+                       !tags.toLowerCase().contains(term);
+            if ( filtered ) {
+                return false;
+            }
+        });
 
         return filtered;
     };
 
     var filter = function() {
+        var search = searchTerms();
         $.each(config.layers, function(layerId, layer) {
             var filtered =
                 filterAreaOfInterest(layerId) ||
                 filterProjection(layer) ||
-                filterSearch(layer);
+                filterSearch(layer, search);
             var display = filtered ? "none": "block";
             $("#" + Worldview.id(layerId)).parent().css("display", display);
         });
