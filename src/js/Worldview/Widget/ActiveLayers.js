@@ -358,12 +358,14 @@ Worldview.Widget.ActiveLayers = function(config, model, spec) {
 
     var onPaletteChanged = function(palette, layerId) {
         var layer = config.layers[layerId];
-        Worldview.Palette.ColorBar({
-            selector: "#canvas" + Worldview.id(layer.id),
-            bins: layer.bins,
-            stops: layer.stops,
-            palette: palette
-        });
+        if ( layer.rendered ) {
+            Worldview.Palette.ColorBar({
+                selector: "#canvas" + Worldview.id(layer.id),
+                bins: layer.bins,
+                stops: layer.stops,
+                palette: palette
+            });
+        }
     };
 
     init();
