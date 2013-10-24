@@ -53,17 +53,25 @@ Worldview.Widget.Palette = function(config, model, spec) {
             return;
         }
         log.debug("setValue: " + v);
+        var wasActive = self.active;
         self.active = {};
-        var parts = v.split("~");
-        $.each(parts, function(index, part) {
-            var segments = part.split(",");
-            var layerName = segments[0];
-            var paletteName = segments[1];
-            self.active[layerName] = paletteName;
-            self.inactive[layerName] = paletteName;
-            model.events.trigger("palette", self.getPalette(layerName),
-                    layerName);
-        });
+        if ( v !== "" ) {
+            var parts = v.split("~");
+            $.each(parts, function(index, part) {
+                var segments = part.split(",");
+                var layerName = segments[0];
+                var paletteName = segments[1];
+                self.active[layerName] = paletteName;
+                self.inactive[layerName] = paletteName;
+                model.events.trigger("palette", self.getPalette(layerName),
+                        layerName);
+            });
+        } else {
+            $.each(wasActive, function(layerName) {
+                 model.events.trigger("palette", self.getPalette(layerName),
+                        layerName);
+            });
+        }
         REGISTRY.fire(self);
     };
 
