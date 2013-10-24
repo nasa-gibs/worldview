@@ -19,7 +19,7 @@ Worldview.namespace("DataDownload");
  * @constructor
  * @param config config
  */
-Worldview.DataDownload.Model = function(config) {
+Worldview.DataDownload.Model = function(config, spec) {
 
     var log = Logging.getLogger("Worldview.DataDownload");
 
@@ -35,6 +35,7 @@ Worldview.DataDownload.Model = function(config) {
         epsg: null,
         time: null
     };
+    var layersModel = spec.layersModel;
     var queryExecuting = false;
     var nextQuery = null;
 
@@ -376,12 +377,28 @@ Worldview.DataDownload.Model = function(config) {
 
         // If a layer was removed and the product no longer exists,
         // remove any selected items in that product
+        // FIXME: This is a hack for now and should be cleaned up when
+        // everything changes to models.
         var products = self.groupByProducts();
         $.each(self.selectedGranules, function(index, selected) {
-            if ( !products[selected.product] ) {
+            if ( !products[selected.product] &&
+                    !productActive(selected.product)) {
                 self.unselectGranule(selected);
             }
         });
+    };
+
+    var productActive = function(product) {
+        var active = false;
+        $.each(["baselayers", "overlays"], function(i, type) {
+            $.each(layersModel.active[type], function(j, layer) {
+                if ( layer.product === product ) {
+                    active = true;
+                    return false;
+                }
+            });
+        });
+        return active;
     };
 
     var updateProjection = function() {

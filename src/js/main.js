@@ -130,7 +130,9 @@ $(function() {// Initialize "static" vars
         // Models
         var projectionModel = Worldview.Models.Projection(config);
         var layersModel = Worldview.Models.Layers(config, projectionModel);
-        var dataDownloadModel = Worldview.DataDownload.Model(config);
+        var dataDownloadModel = Worldview.DataDownload.Model(config, {
+            layersModel: layersModel
+        });
 
         // These are only convienence handles to important objects used
         // for console debugging. Code should NOT reference these as they
