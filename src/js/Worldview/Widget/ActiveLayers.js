@@ -358,7 +358,7 @@ Worldview.Widget.ActiveLayers = function(config, model, spec) {
 
     var onPaletteChanged = function(palette, layerId) {
         var layer = config.layers[layerId];
-        if ( layer && layer.rendered ) {
+        if ( layer && layer.rendered && $("#canvas" + Worldview.id(layer.id)).length > 0 ) {
             Worldview.Palette.ColorBar({
                 selector: "#canvas" + Worldview.id(layer.id),
                 bins: layer.bins,
