@@ -17,6 +17,7 @@ Worldview.Widget.ActiveLayers = function(config, model, spec) {
     var aoi = config.aoi;
     var projectionModel = spec.projectionModel;
     var paletteWidget = spec.paletteWidget;
+    var palettesModel = spec.palettesModel;
     var types = Worldview.LAYER_TYPES;
     var jsp;
 
@@ -36,6 +37,8 @@ Worldview.Widget.ActiveLayers = function(config, model, spec) {
             .on("visibility", onLayerVisibility);
         projectionModel.events
             .on("change", onProjectionChanged);
+        palettesModel.events
+            .on("palette", onPaletteChanged);
         $(window).resize(resize);
     };
 
@@ -310,7 +313,6 @@ Worldview.Widget.ActiveLayers = function(config, model, spec) {
     var moveLayer = function(event, ui) {
         var $target = ui.item;
         var $next = $target.next();
-        console.log("MOVE TO: " + $target.index(), "next", $next);
         if ( $next.length ) {
             model.moveBefore($target.attr("data-layer-type"),
                     $target.attr("data-layer"), $next.attr("data-layer"));
@@ -352,6 +354,16 @@ Worldview.Widget.ActiveLayers = function(config, model, spec) {
         } else {
             paletteWidget.displaySelector($target.attr("data-layer"));
         }
+    };
+
+    var onPaletteChanged = function(palette, layerId) {
+        var layer = config.layers[layerId];
+        Worldview.Palette.ColorBar({
+            selector: "#canvas" + Worldview.id(layer.id),
+            bins: layer.bins,
+            stops: layer.stops,
+            palette: palette
+        });
     };
 
     init();

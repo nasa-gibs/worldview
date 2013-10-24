@@ -128,6 +128,7 @@ $(function() {// Initialize "static" vars
         debuggingFeatures(config);
 
         // Models
+        var palettesModel = Worldview.Models.Palettes();
         var projectionModel = Worldview.Models.Projection(config);
         var layersModel = Worldview.Models.Layers(config, projectionModel);
         var dataDownloadModel = Worldview.DataDownload.Model(config, {
@@ -150,13 +151,14 @@ $(function() {// Initialize "static" vars
 
         // Create widgets
         var projection = Worldview.Widget.Projection(projectionModel);
-        var palettes = Worldview.Widget.Palette("palettes", config, {
+        var palettes = Worldview.Widget.Palette(config, palettesModel, {
             alignTo: "#products"
         });
         var layerSideBar = Worldview.Widget.LayerSideBar(layersModel);
         var activeLayers = Worldview.Widget.ActiveLayers(config, layersModel, {
                 projectionModel: projectionModel,
-                paletteWidget: palettes
+                paletteWidget: palettes,
+                palettesModel: palettesModel
         });
         var addLayers = Worldview.Widget.AddLayers(config, layersModel,
                 projectionModel);
