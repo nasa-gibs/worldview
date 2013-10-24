@@ -204,7 +204,7 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
         if ( product.name !== granule.label ) {
             var elements = [
                 "<tr>",
-                    "<td><ul><li>" + granule.label + "</li></ul></td>",
+                    "<td><nobr><ul><li>" + granule.label + "</li></ul></nobr></td>",
                     "<td>" + linksText(granule.links) + "</td>",
                 "</tr>"
             ];
