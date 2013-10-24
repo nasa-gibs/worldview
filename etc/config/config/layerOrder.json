@@ -39,6 +39,8 @@
         "MODIS_Terra_Land_Surface_Temp_Night",
         "MODIS_Aqua_Land_Surface_Temp_Day",
         "MODIS_Aqua_Land_Surface_Temp_Night",
+        "Sea_Surface_Temp_Infrared",
+        "Sea_Surface_Temp_Blended",
         "MODIS_Terra_Sea_Ice",
         "MODIS_Aqua_Sea_Ice",
         "MODIS_Terra_Snow_Cover",

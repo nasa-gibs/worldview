@@ -260,6 +260,16 @@
     "minIndex": 139,
     "maxIndex": 217,
     "layers": [ "OMI_SO2_Planetary_Boundary_Layer" ]
+},
+{
+    "id": "PODAAC_SST",
+    "filename": "rendered/PODAAC_SST_color.vrt",
+    "minIndex": 1,
+    "maxIndex": 198,
+    "layers": [
+        "Sea_Surface_Temp_Infrared",
+        "Sea_Surface_Temp_Blended"
+    ]
 }
 ]
 
