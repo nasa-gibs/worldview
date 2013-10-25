@@ -7634,6 +7634,7 @@
                 0.9848484848484849,
                 0.98989898989899
             ],
+            "tags": "sst",
             "type": "wmts",
             "units": "C"
         },
@@ -7883,6 +7884,7 @@
                 0.9848484848484849,
                 0.98989898989899
             ],
+            "tags": "sst",
             "type": "wmts",
             "units": "C"
         },
@@ -8370,7 +8372,7 @@
         },
         "land_mask": {
             "description": "OpenStreetMap / Coastlines",
-            "name": "Land / Water Map",
+            "name": "Land Mask",
             "period": "static",
             "projections": {
                 "antarctic": {

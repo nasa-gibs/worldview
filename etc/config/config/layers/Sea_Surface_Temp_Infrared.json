@@ -3,6 +3,7 @@
     "max": "32",
     "min": "2",
     "name": "Sea Surface Temperature (Infrared)",
+    "tags": "sst",
     "period": "daily",
     "projections": {
         "geographic": {
