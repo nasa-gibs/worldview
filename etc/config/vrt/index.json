@@ -267,8 +267,7 @@
     "minIndex": 1,
     "maxIndex": 198,
     "layers": [
-        "Sea_Surface_Temp_Infrared",
-        "Sea_Surface_Temp_Blended"
+        "Sea_Surface_Temp_Infrared"
     ]
 }
 ]
