@@ -37,6 +37,7 @@ $(function() {// Initialize "static" vars
             "images/activity.gif",
             { id: "config", type:"json",
               src: "data/config.json?v=" + Worldview.BUILD_NONCE },
+              /*
             "images/permalink.png",
             "images/geographic.png",
             "images/arctic.png",
@@ -53,6 +54,7 @@ $(function() {// Initialize "static" vars
             "images/expandUp.png",
             "images/wv-icons.svg",
             "images/wv-logo.svg"
+            */
         ]).execute(onLoad);
         setTimeout(function() {
             if ( !loaded ) {
