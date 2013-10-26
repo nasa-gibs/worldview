@@ -51,9 +51,8 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
             panel.setHeader("Download Links");
         }
         panel.setBody(bodyText(selection));
-        if ( isBulkDownloadable() ) {
-            panel.setFooter(bulkDownloadText());
-        }
+        panel.setFooter(bulkDownloadText());
+
         if ( newPanel ) {
             panel.render(document.body);
             panel.show();
