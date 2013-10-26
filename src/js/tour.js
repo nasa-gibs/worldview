@@ -91,7 +91,7 @@ Worldview.namespace("Tour");
                        "<h3>Welcome to Worldview!</h3>"+
                        "</br></br>"+
                        "<center>"+
-                           "<p class=\"splashwelcome\">This tool from NASA's <a href='http://earthdata.nasa.gov/about-eosdis' target='_blank'>EOSDIS</a> allows users to interactively browse satellite imagery in near real-time, generally within 3 hours of observation.  Use the tools described below to change the imagery on the map and compare it to past observations.</p>"+
+                           "<p class=\"splashwelcome\">This tool from NASA's <a href='http://earthdata.nasa.gov/about-eosdis' target='_blank'>EOSDIS</a> allows you to interactively browse global satellite imagery within hours of it being acquired. Use the features described below to find interesting imagery, then save and share what you find.</p>"+
                            "</br></br>"+
                            "<table id=\"splashTable\" class=\"splash\">"+
                                "<tr>"+
