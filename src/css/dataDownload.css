@@ -152,3 +152,7 @@
     color:#000;
     background-color:#ccc;
 }
+
+#DataDownload_DownloadListPanel .ft {
+    padding: 10px;
+}
