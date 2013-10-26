@@ -22,7 +22,7 @@ Worldview.DataDownload.BulkDownloadPage = (function() {
     ns.show = function(selection, type) {
         var nonce = Date.now();
         var page = window.open(pages[type] + "?v=" + nonce,
-                'Worldview_' + new Date());
+                'Worldview_' + nonce);
 
         page.onload = function() {
             fillPage(page, selection, type);
