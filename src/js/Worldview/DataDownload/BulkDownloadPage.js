@@ -20,10 +20,16 @@ Worldview.DataDownload.BulkDownloadPage = (function() {
     };
 
     ns.show = function(selection, type) {
-        var page = window.open(pages[type], 'Worldview_' + new Date());
+        var nonce = Date.now();
+        var page = window.open(pages[type] + "?v=" + nonce,
+                'Worldview_' + nonce);
+
         page.onload = function() {
             fillPage(page, selection, type);
         };
+        setTimeout(function() {
+            fillPage(page, selection, type);
+        }, 10);
     };
 
     var fillPage = function(page, selection, type) {
