@@ -9,15 +9,16 @@
         <div id='page'>
             <h3>Download Commands</h3>
             <div id="links"></div>
-            <div id="netrc-header">
-            Some download links require a URS account. Use the following
-            netrc entries and follow the instructions below.
+            <div id="bulk-password-notice">
+            <b>Note</b>: some of your download links are password-protected and require a free
+            <a href='https://earthdata.nasa.gov/urs/register' target='_blank'>EOSDIS User Registration System (URS) account</a>.<br/><br/>
             </div>
-            <div id="netrc"></div>
 			<h3>Using <code><a href='http://en.wikipedia.org/wiki/CURL' target='_blank'>cURL</a></code> to Bulk Download Your Data</h3>
             <div id="netrc-instructions">
             <p>
-            Add the netrc entries listed above to the following file:
+            Since some of your download links are password-protected, you will need to add the netrc entries:
+            <div id="netrc"></div>
+            to the following file:
             </p>
             <ul>
                 <li>Windows: <code>_netrc</code> file found in your home
@@ -29,16 +30,17 @@
                 </li>
             </ul>
             <p>
-            Replace <code>URS_USER</code> with your URS user name and
+            Replace <code>URS_USER</code> with your URS username and
             <code>URS_PASSWORD</code> with your URS password. If this file does
             not exist, create a new one. Ensure that you are the only
-            one that can read this file.
+            one that can read this file, then follow the steps below.
             </p>
+            <br/>
             </div>
             <p>
-            Open a terminal or command prompt, navigate to the directory
-            or folder where you want to save the data, and cut and paste
-            the Download Commands above.
+            1) Open a terminal or command prompt<br/>
+            2) Navigate to the directory or folder where you want to save the data<br/>
+            3) Cut and paste the Download Commands above
             </p>
             <div id="indirect-instructions">
             Some items that you have selected do not directly link to a
@@ -47,6 +49,8 @@
             </div>
             <div id="indirect">
             </div>
+            <div id="fdm"></div>
+            <div id="fdm-password-instructions"></div>
         </div>
     </body>
 </html>
