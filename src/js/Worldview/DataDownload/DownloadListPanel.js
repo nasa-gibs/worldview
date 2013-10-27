@@ -260,11 +260,11 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
         var bulk =
             "<h4>Bulk Download</h4>" +
             "<ul class='BulkDownload'>" +
-            "<li><a class='wget' href='#'>Link List:</a> " +
-                "For wget or download managers that accept a list of " +
+            "<li><a class='wget' href='#'>List of Links:</a> " +
+                "for wget or download managers that accept a list of " +
                 "URLs</li>" +
-            "<li><a class='curl' href='#'>cURL Commands:</a> " +
-                "List of commands that can be copied and pasted to " +
+            "<li><a class='curl' href='#'>List of cURL Commands:</a> " +
+                "can be copied and pasted to " +
                 "a terminal window to download using cURL.</li>" +
             "</ul>";
         return bulk;
