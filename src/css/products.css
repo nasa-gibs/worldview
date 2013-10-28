@@ -90,18 +90,6 @@
     }
 }
 
-.dynamic {
-    display:inline !important;
-    font-size:inherit;
-    border-radius:5px;
-    background: #8CC3DE;
-    padding: 2px;
-    text-align: center;
-    margin-left:5px !important;
-    color: #000000;
-    font-weight: bold;
-}
-
 .cats {
     float: right;
     margin-right:20px;

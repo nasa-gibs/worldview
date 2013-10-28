@@ -101,11 +101,7 @@ img.bank-item-img { display:block; height: 14px; width:auto;}
     background:none;
     cursor:default;
 }
-.dl-group i.dynamic{
-    background:none;
-    font-weight:bold;
-    color:#fff;
-}
+
 
 span.p-min {
     float: left;

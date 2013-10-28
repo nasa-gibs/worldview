@@ -157,3 +157,41 @@
     background-color: rgb(25, 28, 32);
     padding: 10px;
 }
+
+.dl-group{
+    cursor:pointer;
+}
+.dl-group ul {
+    padding-bottom:5px;
+}
+.dl-group ul, .dl-group li.item-static {
+    cursor:pointer;
+}
+.dl-group:hover{
+    background:rgba(100,100,100,0.6)
+}
+.dl-group[value="__NO_PRODUCT"] ul li {
+    background:#999;
+}
+.dl-group[value="__NO_PRODUCT"] ul li:hover {
+    background:#999;
+}
+.dl-group[value="__NO_PRODUCT"] ul, .dl-group[value="__NO_PRODUCT"] li{
+    cursor:default;
+}
+.dl-group[value="__NO_PRODUCT"]:hover{
+    background:none;
+    cursor:default;
+}
+.dynamic {
+    font-size:inherit;
+    border-radius:5px;
+    background: none;
+    padding: 2px;
+    text-align: center;
+    color: #fff;
+    font-weight: bold;
+    display:block;
+    text-align:right;
+    margin-right:10px;
+}

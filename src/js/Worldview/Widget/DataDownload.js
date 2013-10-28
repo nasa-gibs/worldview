@@ -150,15 +150,22 @@ Worldview.Widget.DataDownload = function(config, spec) {
                 .addClass("dynamic")
                 .html("0 selected");
             $header.append($selectedCount);
-            var $productSelector = $("<input type='radio'></input>");
+            var $productSelector = $("<input type='radio'></input>")
+                .attr("value", key)
+                .attr("data-product", key);
             
             $header.prepend($productSelector);
         }
+        if ( model.selectedProduct === key ) {
+                $productSelector.each(function(){
+                    this.checked = true;
+                });
+            }
         var $contentDlGroup = $("<div class='dl-group'></div>")
             .attr("value", key)
             .attr("data-product", key)
             .click(function() {
-                model.selectProduct($(this).attr("data-product"));
+                model.selectProduct($(this).find("input").attr("data-product"));
                 $(".dl-group").removeClass("dl-group-selected");
                 $(this).addClass('dl-group-selected');
                 $(".dl-group input").each(function(){
@@ -169,9 +176,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
                 });
             })
             .append($header);
-        if ( model.selectedProduct === key ) {
-                $productSelector.attr('checked', true);
-            }
+        
         $content.append($contentDlGroup);
 
         var $products = $("<ul></ul>")
