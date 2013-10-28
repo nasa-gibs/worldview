@@ -37,6 +37,8 @@ $(function() {// Initialize "static" vars
             "images/activity.gif",
             { id: "config", type:"json",
               src: "data/config.json?v=" + Worldview.BUILD_NONCE },
+              // FIXME: Preloading of images doesn't work since most of
+              // these are set via css
               /*
             "images/permalink.png",
             "images/geographic.png",
@@ -156,7 +158,8 @@ $(function() {// Initialize "static" vars
         var palettes = Worldview.Widget.Palette(config, palettesModel, {
             alignTo: "#products"
         });
-        var layerSideBar = Worldview.Widget.LayerSideBar(layersModel);
+        var layerSideBar = Worldview.Widget.LayerSideBar(layersModel,
+                projectionModel);
         var activeLayers = Worldview.Widget.ActiveLayers(config, layersModel, {
                 projectionModel: projectionModel,
                 paletteWidget: palettes,
