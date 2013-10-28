@@ -132,7 +132,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
             refreshProduct($content, key, value);
         });
 
-        $('#DataDownload #DataDownloadcontent h3 span').click(function(e){
+        $('.dl-group[value="__NO_PRODUCT"] h3 span').click(function(e){
             showUnavailableReason();
         });
         resize();
@@ -145,27 +145,34 @@ Worldview.Widget.DataDownload = function(config, spec) {
             .html(title);
 
         if ( !value.notSelectable ) {
-            var $selectedCount = $("<div></div>")
+            var $selectedCount = $("<i></i>")
                 .attr("id", key + "dynamictext")
                 .addClass("dynamic")
                 .html("0 selected");
-            $header.append($("<nobr></nobr>").append($selectedCount));
-            var $productSelector = $("<input></input>")
-                .attr("type", "radio")
-                .attr("name", "cats")
-                .addClass("cats")
-                .addClass(self.id + "cats")
-                .attr("value", key)
-                .attr("data-product", key)
-                .click(function() {
-                    model.selectProduct($(this).attr("data-product"));
-                });
-            if ( model.selectedProduct === key ) {
-                $productSelector.attr("checked", "checked");
-            }
-            $header.append($productSelector);
+            $header.append($selectedCount);
+            var $productSelector = $("<input type='radio'></input>");
+            
+            $header.prepend($productSelector);
         }
-        $content.append($header);
+        var $contentDlGroup = $("<div class='dl-group'></div>")
+            .attr("value", key)
+            .attr("data-product", key)
+            .click(function() {
+                model.selectProduct($(this).attr("data-product"));
+                $(".dl-group").removeClass("dl-group-selected");
+                $(this).addClass('dl-group-selected');
+                $(".dl-group input").each(function(){
+                    this.checked = false;
+                });
+                $(this).find("input").each(function(){
+                    this.checked = true;
+                });
+            })
+            .append($header);
+        if ( model.selectedProduct === key ) {
+                $productSelector.attr('checked', true);
+            }
+        $content.append($contentDlGroup);
 
         var $products = $("<ul></ul>")
             .attr("id", self.id + key)
@@ -174,7 +181,8 @@ Worldview.Widget.DataDownload = function(config, spec) {
         $.each(value.items, function(index, item) {
             refreshLayers($products, key, value, item);
         });
-        $content.append($products);
+        $contentDlGroup.append($products)
+        .append($selectedCount);
     };
 
     var refreshLayers = function($container, key, value, layer) {
@@ -189,8 +197,9 @@ Worldview.Widget.DataDownload = function(config, spec) {
 
    var resize = function() {
         var tabs_height = $(".ui-tabs-nav").outerHeight(true);
+        var button_height = $(self.selector + "_Button").outerHeight(true);
         $(self.selector).height(
-            $(self.selector).parent().outerHeight() - tabs_height
+            $(self.selector).parent().outerHeight() - tabs_height - button_height
         );
 
         var $pane = $(self.selector + "content");
@@ -199,7 +208,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
             if ( api ) {
                 api.reinitialise();
             } else {
-                $pane.jScrollPane({verticalGutter:0});
+                $pane.jScrollPane({verticalGutter:0, contentWidth:238, autoReinitialise:false});
             }
         } else {
             if ( api ) {

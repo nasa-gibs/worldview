@@ -75,7 +75,7 @@ SOTE.widget.DatePicker.prototype.init = function(){
 	this.current = this.ds;
 	
 	$("#"+this.ds_id).bind("fire", {self:this}, SOTE.widget.DatePicker.handleFire);
-	$("#"+this.mds_id).bind("fire", {self:this}, SOTE.widget.DatePicker.handleFire)
+	$("#"+this.mds_id).bind("fire", {self:this}, SOTE.widget.DatePicker.handleFire);
 	
 	SOTE.widget.DatePicker.resize({data: {self:this}});
 	

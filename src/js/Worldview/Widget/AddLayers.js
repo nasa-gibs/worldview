@@ -65,8 +65,7 @@ Worldview.Widget.AddLayers = function(config, model, projectionModel) {
         renderType($content, "baselayers", "Base Layers", "BaseLayers");
         renderType($content, "overlays", "Overlays", "Overlays");
         $(self.selector).append($content);
-
-        $(self.selector + " .selectorItem input").on("click", toggleLayer);
+        $(self.selector + " .selectorItem, " + self.selector + " .selectorItem input").on('click', toggleLayer);
         $(self.selector + "select").on('change', filter);
         $(self.selector + "search").on('keyup', filter);
         $(self.selector + "search").focus();
@@ -132,7 +131,7 @@ Worldview.Widget.AddLayers = function(config, model, projectionModel) {
         if ( model.isActive(type, layer.id) ) {
             $checkbox.attr("checked", "checked");
         };
-
+        
         $element.append($checkbox);
         $element.append($name);
         $element.append($description);
@@ -213,14 +212,22 @@ Worldview.Widget.AddLayers = function(config, model, projectionModel) {
     };
 
     var toggleLayer = function(event) {
-        var $target = $(event.target);
-        if ( event.target.checked ) {
+        if ($(this).is(':checkbox')){
+            var $target = $(this);
+        }
+        else{
+            var $target = $(this).find('input:checkbox');
+        }
+        if ( $target.is(':checked') ) {
+            
+            $target.attr('checked', false);
+            model.remove($target.attr("data-layer-type"),
+                         $target.attr("data-layer"));
+        } else {
+            $target.attr('checked', true);
             model.add($target.attr("data-layer-type"),
                       $target.attr("data-layer"));
-        } else {
-            model.remove($target.attr("data-layer-type"),
-                        $target.attr("data-layer"));
-        }
+            }
     };
 
     var onLayerAdded = function(layer) {

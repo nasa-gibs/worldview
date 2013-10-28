@@ -342,7 +342,7 @@ SOTE.widget.DateSpan.handleSlide = function(e,ui){
 	}
 	self.validate();
 	if ( oldDate.compareTo(self.value) !== 0 ) {
-	   self.fire()
+	   self.fire();
        self.setVisualDate();
     }
 
@@ -535,7 +535,7 @@ SOTE.widget.DateSpan.prototype.setValue = function(value){
 	           */
 	    } else if ( d.getTime() >= this.endDate.getTime() )  {
 	        SOTE.util.throwError("Data is not available for " + thisDay +
-	           " yet. Try again later. The date has been adjusted to today.")
+	           " yet. Try again later. The date has been adjusted to today.");
 	    }
 	}
 };

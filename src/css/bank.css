@@ -52,6 +52,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3ffffff', e
     cursor:move;
     margin:5px 2% 0 2%;
 }
+
 .bank li.item-static {
     cursor: default;
     width: 94%;
@@ -77,6 +78,35 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3ffffff', e
 .bank ul.category {  overflow:auto; }
 .bank ul.category li h3 {display:block; clear:both; float:none;}
 img.bank-item-img { display:block; height: 14px; width:auto;}
+.dl-group{
+    cursor:pointer;
+
+}
+.dl-group ul, .dl-group li.item-static {
+    cursor:pointer;
+}
+.dl-group:hover{
+    background:rgba(100,100,100,0.6)
+}
+.dl-group[value="__NO_PRODUCT"] ul li {
+    background:#999;
+}
+.dl-group[value="__NO_PRODUCT"] ul li:hover {
+    background:#999;
+}
+.dl-group[value="__NO_PRODUCT"] ul, .dl-group[value="__NO_PRODUCT"] li{
+    cursor:default;
+}
+.dl-group[value="__NO_PRODUCT"]:hover{
+    background:none;
+    cursor:default;
+}
+.dl-group i.dynamic{
+    background:none;
+    font-weight:bold;
+    color:#fff;
+}
+
 span.p-min {
     float: left;
     font-size:0.8em;
