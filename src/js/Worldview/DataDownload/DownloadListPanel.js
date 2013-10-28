@@ -43,7 +43,7 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
             newPanel = true;
             panel = new YAHOO.widget.Panel("DataDownload_DownloadListPanel", {
                 width: "600px",
-                height: "400px",
+                height: "500px",
                 zIndex: 1020,
                 visible: false,
                 constraintoviewport: true
@@ -51,6 +51,8 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
             panel.setHeader("Download Links");
         }
         panel.setBody(bodyText(selection));
+        panel.setFooter(bulkDownloadText());
+
         if ( newPanel ) {
             panel.render(document.body);
             panel.show();
@@ -250,21 +252,22 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
             elements.push("\n<br/>\n" + productText(product));
         });
 
-        if ( isBulkDownloadable() ) {
-            var bulk =
-                "<h4>Bulk Download</h4>" +
-                "<ul class='BulkDownload'>" +
-                "<li><a class='wget' href='#'>Link List:</a> " +
-                    "For wget or download managers that accept a list of " +
-                    "URLs</li>" +
-                "<li><a class='curl' href='#'>cURL Commands:</a> " +
-                    "List of commands that can be copied and pasted to " +
-                    "a terminal window to download using cURL.</li>" +
-                "</ul>";
-            elements.push(bulk);
-        }
         var text = elements.join("\n<br/>\n") + "<br/>";
         return text;
+    };
+
+    var bulkDownloadText = function() {
+        var bulk =
+            "<h4>Bulk Download</h4>" +
+            "<ul class='BulkDownload'>" +
+            "<li><a class='wget' href='#'>List of Links:</a> " +
+                "for wget or download managers that accept a list of " +
+                "URLs</li>" +
+            "<li><a class='curl' href='#'>List of cURL Commands:</a> " +
+                "can be copied and pasted to " +
+                "a terminal window to download using cURL.</li>" +
+            "</ul>";
+        return bulk;
     };
 
     var showWgetPage = function() {

@@ -11,7 +11,7 @@
 
 Worldview.namespace("Widget");
 
-Worldview.Widget.LayerSideBar = function(layersModel) {
+Worldview.Widget.LayerSideBar = function(layersModel, projectionModel) {
 
     var HTML_TAB_ACTIVE_SELECTED =
         "<i class='productsIcon selected icon-layers'></i>" +
@@ -48,6 +48,7 @@ Worldview.Widget.LayerSideBar = function(layersModel) {
             slide();
         }
         $(window).resize(adjustAlignment);
+        projectionModel.events.on("change", onProjectionChange);
     };
 
     self.selectTab = function(tabName) {
@@ -199,6 +200,12 @@ Worldview.Widget.LayerSideBar = function(layersModel) {
         if ( $(window).width() < Worldview.TRANSITION_WITH && collapsed ) {
             var w = $('.products').outerWidth();
             $('.products').css("left", "-" + w + "px");
+        }
+    };
+
+    var onProjectionChange = function() {
+        if ( collapsed ) {
+            $('.accordionToggler').html("Layers (" + layersModel.total() + ")");
         }
     };
 

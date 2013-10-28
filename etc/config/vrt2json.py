@@ -18,7 +18,7 @@ import xml.parsers.expat
 
 prog = os.path.basename(__file__)
 basedir = os.path.dirname(__file__)
-version = "1.0.3"
+version = "1.0.4"
 help_description = """\
 Given an index file of VRT color tables, converts them into JSON palettes
 suitable for Worldview. Also updates existing layer JSON files to include 
@@ -103,7 +103,7 @@ def readColorTableValuesFromVrt(vrtFilename):
         redVal = int(ctEntries[i].attributes["c1"].value)
         greenVal = int(ctEntries[i].attributes["c2"].value)
         blueVal = int(ctEntries[i].attributes["c3"].value)
-        alphaVal = int(ctEntries[i].attributes["c4"].value)
+        alphaVal = 255
         paletteEntries[idx] = {
             "r": redVal,
             "g": greenVal,

@@ -20,10 +20,16 @@ Worldview.DataDownload.BulkDownloadPage = (function() {
     };
 
     ns.show = function(selection, type) {
-        var page = window.open(pages[type], 'Worldview_' + new Date());
+        var nonce = Date.now();
+        var page = window.open(pages[type] + "?v=" + nonce,
+                'Worldview_' + nonce);
+
         page.onload = function() {
             fillPage(page, selection, type);
         };
+        setTimeout(function() {
+            fillPage(page, selection, type);
+        }, 10);
     };
 
     var fillPage = function(page, selection, type) {
@@ -66,17 +72,23 @@ Worldview.DataDownload.BulkDownloadPage = (function() {
             "<pre>" + downloadLinks.join("\n") + "</pre>";
 
         var netrcEntries = [];
+        var hostnames = [];
         $.each(hosts, function(host, value) {
             netrcEntries.push("machine " + host + " login URS_USER " +
                 "password URS_PASSWORD");
+            hostnames.push(host);
         });
         if ( netrcEntries.length > 0 ) {
             page.document.getElementById("netrc").innerHTML =
                 "<pre>" + netrcEntries.join("\n") + "</pre>";
-            page.document.getElementById("netrc-header")
+            page.document.getElementById("bulk-password-notice")
                 .style.display = "block";
             page.document.getElementById("netrc-instructions")
                 .style.display = "block";
+            page.document.getElementById("fdm-password-instructions")
+                .style.display = "block";
+            page.document.getElementById("fdm-machine-names").innerHTML =
+                "<pre>" + hostnames.join("\n") + "</pre>";
         }
         if ( indirectLinks.length > 0 ) {
             page.document.getElementById("indirect-instructions")

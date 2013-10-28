@@ -1,6 +1,6 @@
 {
     "description": "OpenStreetMap / Coastlines",
-    "name": "Land / Water Map",
+    "name": "Land Mask",
     "tags": "borders mask",
     "period": "static",
     "projections": {

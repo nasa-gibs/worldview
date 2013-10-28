@@ -25,11 +25,15 @@
     color: #808080;
 }
 
-#BulkDownload #netrc-header {
-    display: none;
+#BulkDownload #bulk-password-notice {
+	display: none;
 }
 
 #BulkDownload #netrc-instructions {
+    display: none;
+}
+
+#BulkDownload #fdm-password-instructions {
     display: none;
 }
 

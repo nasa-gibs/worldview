@@ -11,9 +11,10 @@
 
 Worldview.namespace("Widget");
 
-Worldview.Widget.Palette = function(containerId, config, spec) {
+Worldview.Widget.Palette = function(config, model, spec) {
 
     var self = {};
+    var containerId = "palettes";
     var log = Logging.getLogger("Worldview.Widget.Palette");
     var value = "";
     var dialog = null;
@@ -52,13 +53,25 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
             return;
         }
         log.debug("setValue: " + v);
+        var wasActive = self.active;
         self.active = {};
-        var parts = v.split("~");
-        $.each(parts, function(index, part) {
-            var segments = part.split(",");
-            self.active[segments[0]] = segments[1];
-            self.inactive[segments[0]] = segments[1];
-        });
+        if ( v !== "" ) {
+            var parts = v.split("~");
+            $.each(parts, function(index, part) {
+                var segments = part.split(",");
+                var layerName = segments[0];
+                var paletteName = segments[1];
+                self.active[layerName] = paletteName;
+                self.inactive[layerName] = paletteName;
+                model.events.trigger("palette", self.getPalette(layerName),
+                        layerName);
+            });
+        } else {
+            $.each(wasActive, function(layerName) {
+                 model.events.trigger("palette", self.getPalette(layerName),
+                        layerName);
+            });
+        }
         REGISTRY.fire(self);
     };
 
@@ -188,7 +201,7 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
             setTimeout(function() {
                 dialog.destroy();
                 dialog = null;
-                dialogForLayer = null
+                dialogForLayer = null;
             }, 5);
         });
         dialog.render(document.body);
@@ -283,6 +296,7 @@ Worldview.Widget.Palette = function(containerId, config, spec) {
                 self.inactive[layer] = palette.id;
                 log.debug("Palette: " + palette.id);
             }
+            model.events.trigger("palette", palette, layer);
             REGISTRY.fire(self);
         });
 
