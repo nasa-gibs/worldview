@@ -39,6 +39,8 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
         $("#DataDownload_DownloadListPanel .remove").off("click", removeGranule);
         $("#DataDownload_DownloadListPanel a.wget").off("click", showWgetPage);
         $("#DataDownload_DownloadListPanel a.curl").off("click", showCurlPage);
+        $("#DataDownload_DownloadListPanel tr").off("mouseenter", onHoverOver);
+        $("#DataDownload_DownloadListPanel tr").off("mouseleave", onHoverOut);
 
         selection = reformatSelection();
         log.debug("selection", selection);
@@ -69,6 +71,8 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
         $("#DataDownload_DownloadListPanel a.wget").click(showWgetPage);
         $("#DataDownload_DownloadListPanel a.curl").click(showCurlPage);
         $("#DataDownload_DownloadListPanel .remove").click(removeGranule);
+        $("#DataDownload_DownloadListPanel tr").on("mouseenter", onHoverOver);
+        $("#DataDownload_DownloadListPanel tr").on("mouseleave", onHoverOut);
 
         var bulkVisible = isBulkDownloadable() &&
                 Worldview.size(model.selectedGranules) !== 0;
@@ -92,11 +96,15 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
     };
 
     var dispose = function() {
+        $("#DataDownload_DownloadListPanel .remove").off("click", removeGranule);
+        $("#DataDownload_DownloadListPanel a.wget").off("click", showWgetPage);
+        $("#DataDownload_DownloadListPanel a.curl").off("click", showCurlPage);
+        $("#DataDownload_DownloadListPanel tr").off("mouseenter", onHoverOver);
+        $("#DataDownload_DownloadListPanel tr").off("mouseleave", onHoverOut);
+
         self.events.trigger("close");
         panel.destroy();
         panel = null;
-        $("#DataDownload_DownloadListPanel a.wget").off("click", showWgetPage);
-        $("#DataDownload_DownloadListPanel a.curl").off("click", showCurlPage);
     };
 
     var reformatSelection = function() {
@@ -221,7 +229,7 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
     var granuleText = function(product, granule) {
         if ( product.name !== granule.label ) {
             var elements = [
-                "<tr>",
+                "<tr data-granule='" + granule.id + "'>",
                     "<td><input type='button' class='remove' " +
                         "data-granule='" + granule.id + "' " +
                         "value='X'></input></td>",
@@ -231,7 +239,7 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
             ];
         } else {
             var elements = [
-                "<tr>",
+                "<tr data-granule='" + granule.id + "'>",
                     "<td><input type='button' class='remove' " +
                         "data-granule='" + granule.id + "' " +
                         "value='X'></input></td>",
@@ -308,6 +316,17 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
     var removeGranule = function() {
         var id = $(this).attr("data-granule");
         model.unselectGranule(model.selectedGranules[id]);
+        onHoverOut.apply(this);
+    };
+
+    var onHoverOver = function() {
+        model.events.trigger("hoverOver",
+                model.selectedGranules[$(this).attr("data-granule")]);
+    };
+
+    var onHoverOut = function() {
+        model.events.trigger("hoverOut",
+                model.selectedGranules[$(this).attr("data-granule")]);
     };
 
     return self;
