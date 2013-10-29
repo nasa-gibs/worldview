@@ -115,6 +115,15 @@
     cursor: auto;
     border-radius: 5px;
 }
+
+.action:hover {
+    background: #609060;
+}
+
+.action:active {
+    background: #407040;
+}
+
 .productsIcon {
     display:inline-block;
     width: 20px;
