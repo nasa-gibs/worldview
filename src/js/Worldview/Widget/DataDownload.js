@@ -175,7 +175,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
                     this.checked = true;
                 });
             })
-            .append($header);
+            .append($selectedCount).append($header);
         
         $content.append($contentDlGroup);
 
@@ -186,8 +186,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
         $.each(value.items, function(index, item) {
             refreshLayers($products, key, value, item);
         });
-        $contentDlGroup.append($products)
-        .append($selectedCount);
+        $contentDlGroup.append($products);
     };
 
     var refreshLayers = function($container, key, value, layer) {

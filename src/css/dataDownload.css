@@ -186,12 +186,13 @@
 .dynamic {
     font-size:inherit;
     border-radius:5px;
-    background: none;
+    background: #8CC3DE;
     padding: 2px;
     text-align: center;
-    color: #fff;
+    color: #000;
     font-weight: bold;
     display:block;
     text-align:right;
-    margin-right:10px;
+    float:right;
+    margin:5px 10px 0 0;
 }
