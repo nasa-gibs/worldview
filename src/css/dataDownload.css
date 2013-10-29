@@ -90,6 +90,27 @@
     vertical-align: top;
 }
 
+#DataDownload_DownloadListPanel .remove {
+    display: block;
+    padding: 3px;
+    border: 1px solid #707070;
+    background: #191C20;
+    color: #c0c0c0;
+    border-radius: 5px;
+}
+
+#DataDownload_DownloadListPanel .remove:hover {
+    background: #ffaaaa;
+    border-color: #ffaaaa;
+    color: #000000;
+}
+
+#DataDownload_DownloadListPanel .remove:active {
+    background: #df8a8a;
+    border-color: #df8a8a;
+    color: #000000;
+}
+
 #DataDownload_Notice {
     width: 80%;
     margin: 0 auto;

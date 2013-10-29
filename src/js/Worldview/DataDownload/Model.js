@@ -237,8 +237,10 @@ Worldview.DataDownload.Model = function(config, spec) {
     };
 
     self.unselectGranule = function(granule) {
-        delete self.selectedGranules[granule.id];
-        self.events.trigger(self.EVENT_GRANULE_UNSELECT, granule);
+        if ( self.selectedGranules[granule.id] ) {
+            delete self.selectedGranules[granule.id];
+            self.events.trigger(self.EVENT_GRANULE_UNSELECT, granule);
+        }
     };
 
     self.isSelected = function(granule) {
