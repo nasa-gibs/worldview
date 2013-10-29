@@ -111,6 +111,10 @@
     color: #000000;
 }
 
+#DataDownload_DownloadListPanel tr:hover {
+    background-color: rgb(55, 58, 62);
+}
+
 #DataDownload_Notice {
     width: 80%;
     margin: 0 auto;
@@ -162,6 +166,7 @@
 #DataDownload_GranuleList tr:nth-child(even) {
     background-color: rgb(45, 48, 52);
 }
+
 #DataDownload #DataDownloadcontent h3 span{
      font-weight:bold;
      color:#8f939f;

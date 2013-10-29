@@ -30,11 +30,15 @@ Worldview.DataDownload.MapController = function(model, maps, config) {
             .on("queryResults", onQueryResults)
             .on("projectionUpdate", onProjectionUpdate)
             .on("activate", onActivate)
-            .on("deactivate", onDeactivate);
+            .on("deactivate", onDeactivate)
+            .on("hoverOver", function(granule) {
+                hoverLayers.hoverOver(granule);
+            })
+            .on("hoverOut", hoverLayers.hoverOut);
 
         buttonLayers.events
             .on("hoverover", function(event) {
-                hoverLayers.hoverOver(event.feature);
+                hoverLayers.hoverOver(event.feature.attributes.granule);
             })
             .on("hoverout", function() {
                 hoverLayers.hoverOut();
