@@ -143,18 +143,16 @@ Worldview.Widget.DataDownload = function(config, spec) {
         var $header = $("<h3></h3>")
             .addClass("head")
             .html(title);
-
         if ( !value.notSelectable ) {
             var $selectedCount = $("<i></i>")
                 .attr("id", key + "dynamictext")
                 .addClass("dynamic")
                 .html("0 selected");
-            $header.append($selectedCount);
             var $productSelector = $("<input type='radio'></input>")
                 .attr("value", key)
                 .attr("data-product", key);
             
-            $header.prepend($productSelector);
+            $header.prepend($productSelector).append($selectedCount);
         }
         if ( model.selectedProduct === key ) {
                 $productSelector.each(function(){
@@ -175,7 +173,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
                     this.checked = true;
                 });
             })
-            .append($selectedCount).append($header);
+            .append($header);
         
         $content.append($contentDlGroup);
 

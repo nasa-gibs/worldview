@@ -212,8 +212,6 @@
     text-align: center;
     color: #000;
     font-weight: bold;
-    display:block;
-    text-align:right;
-    float:right;
-    margin:5px 10px 0 0;
+    display:inline-block;
+    margin:0 10px  0 5px;
 }
