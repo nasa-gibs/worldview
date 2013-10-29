@@ -55,11 +55,13 @@ Worldview.DataDownload.Layers.Button = function(model, maps, config) {
         $.each(maps.projections, function(index, map) {
             map.events.register("zoomend", self, resize);
         });
+        model.events.on("granuleUnselect", onUnselect);
     };
 
     self.update = function(results) {
         var layer = getLayer();
         layer.removeAllFeatures();
+        features = {};
         var featureList = [];
         var selectedFeatures = [];
         $.each(results.granules, function(index, granule) {
@@ -197,6 +199,13 @@ Worldview.DataDownload.Layers.Button = function(model, maps, config) {
         var styleMap = new OpenLayers.StyleMap(getStyle());
         getLayer().styleMap = styleMap;
         layer.redraw();
+    };
+
+    var onUnselect = function(granule) {
+        var feature = features[granule.id];
+        if ( feature ) {
+            getLayer().selectionControl.unselect(feature);
+        }
     };
 
     var onHoverOver = function(event) {
