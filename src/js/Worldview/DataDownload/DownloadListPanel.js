@@ -37,6 +37,8 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
 
     self.show = function() {
         $("#DataDownload_DownloadListPanel .remove").off("click", removeGranule);
+        $("#DataDownload_DownloadListPanel a.wget").off("click", showWgetPage);
+        $("#DataDownload_DownloadListPanel a.curl").off("click", showCurlPage);
 
         selection = reformatSelection();
         log.debug("selection", selection);
@@ -62,11 +64,10 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
             panel.hideEvent.subscribe(function() {
                 setTimeout(dispose, 25);
             });
-
-            $("#DataDownload_DownloadListPanel a.wget").click(showWgetPage);
-            $("#DataDownload_DownloadListPanel a.curl").click(showCurlPage);
         }
 
+        $("#DataDownload_DownloadListPanel a.wget").click(showWgetPage);
+        $("#DataDownload_DownloadListPanel a.curl").click(showCurlPage);
         $("#DataDownload_DownloadListPanel .remove").click(removeGranule);
 
         var bulkVisible = isBulkDownloadable() &&
