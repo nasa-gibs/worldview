@@ -51,7 +51,7 @@ $(function() {// Initialize "static" vars
             "images/expandOut.png",
             "images/visible.png",
             "images/invisible.png",
-            "images/close-red-x.png",
+            "images/close-x.png",
             "images/collapseDown.png",
             "images/expandUp.png",
             "images/wv-icons.svg",

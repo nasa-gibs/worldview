@@ -123,7 +123,7 @@ Worldview.Widget.ActiveLayers = function(config, model, spec) {
             .attr("data-layer", layer.id)
             .attr("data-layer-type", type.id)
             .attr("title", "Remove Layer")
-            .attr("src", "images/close-red-x.png");
+            .attr("src", "images/close-x.png");
         $removeButton.append($removeImage);
         $layer.append($removeButton);
 

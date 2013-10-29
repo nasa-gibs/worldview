@@ -133,7 +133,7 @@ Worldview.namespace("Tour");
                               "<p class='tour'>There are several ways to interact with the layers: </p>" +
                               "<ul class='tour'>"+
                                   "<li>Use the <img style='height: 14px' src=\"images/visible.png\"/> icon to show and hide layers.</li>" +
-                                  "<li>Use the <img style='height: 14px' src=\"images/close-red-x.png\"/> icon to remove layers.</li>"+
+                                  "<li>Use the <img style='height: 14px' src=\"images/close-x.png\"/> icon to remove layers.</li>"+
                                   "<li>Drag the layers to rearrange them.</li>" +
                               "</ul>"+
                               "<p class='tour'> <span class='tryIt'>Try It!</span></p>"+
