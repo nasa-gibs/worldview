@@ -171,12 +171,14 @@
         var opts_len = opts_arr.length;
 		var ii, p;
 		var isBordered = settings.bordered;
+		var isShifted = settings.shiftedArrow;
 		var usePage = settings.includepage;
 
         opts.tip_class = opts.tip_class || '';
         if(isBordered) {
         	opts.tip_class += " bordered";
         }
+
         $blank = $(settings.template.tip).addClass(opts.tip_class);
 
         content = $.trim($(opts.li).html()) +
@@ -632,9 +634,6 @@
               methods.nub_position($nub, $border, settings.tipSettings.nubPosition, 'bottom');
 
             } else if (methods.right()) {
-				console.log("methods.right");
-				console.log("settings.$target.outerWidth() = " + settings.$target.outerWidth());
-				console.log("settings.$target.offset().left = " + settings.$target.offset().left);
               settings.$next_tip.css({
                 top: settings.$target.offset().top,
                 left: (settings.$target.outerWidth() + settings.$target.offset().left + 20)});

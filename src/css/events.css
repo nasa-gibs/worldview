@@ -21,7 +21,7 @@
 	height:300px; 
 	position:absolute; 
 	right:0; 
-	top:350px; /* to prevent conflict with zoom controls */
+	top:250px; /* to prevent conflict with zoom controls */
 	text-shadow:none;
 }
 

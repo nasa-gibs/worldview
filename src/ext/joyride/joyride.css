@@ -12,7 +12,7 @@ body {
   background: rgba(175, 181, 196, 1);
   display: none;
   color: rgb(38, 43, 49);
-  width: 300px;
+  width: 350px;
   z-index: 1050;
   top: 0; /* keeps the page from scrolling when calculating position */
   left: 0;
@@ -29,6 +29,10 @@ body {
 
 .bordered {
   border: #808080 solid 1px;
+}
+
+.wide {
+	width:450px;
 }
 
 /* Mobile */

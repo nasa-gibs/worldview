@@ -30,13 +30,11 @@ Worldview.namespace("Tour");
         storageEngine = storageEngine || Worldview.storageEngine;
 
         // determine screen size - don't show if too small
-        var devWidth = window.screen.availWidth;
-        var devHeight = window.screen.availHeight;
-
         var viewWidth = $(window).width();
         var viewHeight = $(window).height();
+        console.log(viewWidth + " x " + viewHeight);
 
-        if(viewWidth < 768 || viewHeight < 600) {
+        if(viewWidth < 768 || viewHeight < 680) {
             if(noDisable) {
                 Worldview.notify("Unfortunately the Worldview tour can only be viewed in larger web browser windows.");
             }
@@ -162,7 +160,7 @@ Worldview.namespace("Tour");
                                   "<li>Click on the <i class=\"productsIcon selected icon-active\"></i> tab to see the layers that have been added.</li>"+
                               "</ul>"+
                               "</br>"+
-                          "</div>";
+                          "</div>"; 
         document.getElementById("productOverlayPanel").innerHTML = overlayText;
 
         var dateText = "<div class=\"tour\">"+
@@ -223,7 +221,7 @@ Worldview.namespace("Tour");
 
         var mapAnchor = document.getElementById("mapPanelTourAnchor");
         if(!mapAnchor) {
-        	console.log("creating mapanchor");
+        	//console.log("creating mapanchor");
         	var owner = document.getElementById("map");
         	mapAnchor = document.createElement("div");
         	mapAnchor.setAttribute("id", "mapPanelTourAnchor");
@@ -309,7 +307,7 @@ Worldview.namespace("Tour");
             								 includepage:true,
             								 template : {'link':'<a href="#" class="joyride-close-tip">X</a>'},
                                              postStepCallback : function (index, tip) {
-                                             	console.log("index = " + index);
+                                             	//console.log("index = " + index);
                                                  if(index == 4) {
                                                      log.debug("finished tour");
                                                      conclusionPanel.show();
