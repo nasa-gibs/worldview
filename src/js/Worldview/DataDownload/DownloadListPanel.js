@@ -36,6 +36,12 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
     self.events = Worldview.Events();
 
     self.show = function() {
+        $("#DataDownload_DownloadListPanel .remove").off("click", removeGranule);
+        $("#DataDownload_DownloadListPanel a.wget").off("click", showWgetPage);
+        $("#DataDownload_DownloadListPanel a.curl").off("click", showCurlPage);
+        $("#DataDownload_DownloadListPanel tr").off("mouseenter", onHoverOver);
+        $("#DataDownload_DownloadListPanel tr").off("mouseleave", onHoverOut);
+
         selection = reformatSelection();
         log.debug("selection", selection);
         var newPanel = false;
@@ -60,9 +66,22 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
             panel.hideEvent.subscribe(function() {
                 setTimeout(dispose, 25);
             });
+        }
 
-            $("#DataDownload_DownloadListPanel a.wget").click(showWgetPage);
-            $("#DataDownload_DownloadListPanel a.curl").click(showCurlPage);
+        $("#DataDownload_DownloadListPanel a.wget").click(showWgetPage);
+        $("#DataDownload_DownloadListPanel a.curl").click(showCurlPage);
+        $("#DataDownload_DownloadListPanel .remove").click(removeGranule);
+        $("#DataDownload_DownloadListPanel tr").on("mouseenter", onHoverOver);
+        $("#DataDownload_DownloadListPanel tr").on("mouseleave", onHoverOut);
+
+        var bulkVisible = isBulkDownloadable() &&
+                Worldview.size(model.selectedGranules) !== 0;
+        if ( bulkVisible ) {
+            $("#DataDownload_DownloadListPanel .ft .bulk")
+                    .css("visibility", "visible");
+        } else {
+            $("#DataDownload_DownloadListPanel .ft .bulk")
+                    .css("visibility", "hidden");
         }
     };
 
@@ -77,11 +96,15 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
     };
 
     var dispose = function() {
+        $("#DataDownload_DownloadListPanel .remove").off("click", removeGranule);
+        $("#DataDownload_DownloadListPanel a.wget").off("click", showWgetPage);
+        $("#DataDownload_DownloadListPanel a.curl").off("click", showCurlPage);
+        $("#DataDownload_DownloadListPanel tr").off("mouseenter", onHoverOver);
+        $("#DataDownload_DownloadListPanel tr").off("mouseleave", onHoverOut);
+
         self.events.trigger("close");
         panel.destroy();
         panel = null;
-        $("#DataDownload_DownloadListPanel a.wget").off("click", showWgetPage);
-        $("#DataDownload_DownloadListPanel a.curl").off("click", showCurlPage);
     };
 
     var reformatSelection = function() {
@@ -137,6 +160,7 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
 
             $.each(product.granules, function(index, granule) {
                 var item = {
+                    id: granule.id,
                     label: granule.downloadLabel || granule.label,
                     links: [],
                     urs: granule.urs
@@ -205,14 +229,20 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
     var granuleText = function(product, granule) {
         if ( product.name !== granule.label ) {
             var elements = [
-                "<tr>",
+                "<tr data-granule='" + granule.id + "'>",
+                    "<td><input type='button' class='remove' " +
+                        "data-granule='" + granule.id + "' " +
+                        "value='X'></input></td>",
                     "<td><nobr><ul><li>" + granule.label + "</li></ul></nobr></td>",
                     "<td>" + linksText(granule.links) + "</td>",
                 "</tr>"
             ];
         } else {
             var elements = [
-                "<tr>",
+                "<tr data-granule='" + granule.id + "'>",
+                    "<td><input type='button' class='remove' " +
+                        "data-granule='" + granule.id + "' " +
+                        "value='X'></input></td>",
                     "<td colspan='2'>" + linksText(granule.links) + "</td>",
                 "</tr>"
             ];
@@ -244,7 +274,10 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
     };
 
     var bodyText = function() {
-        var elements =[];
+        if ( Worldview.size(model.selectedGranules) === 0 ) {
+            return "<br/><h3>Selection Empty</h3>";
+        }
+        var elements = [];
         if ( urs ) {
             elements.push(NOTICE);
         }
@@ -258,6 +291,7 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
 
     var bulkDownloadText = function() {
         var bulk =
+            "<div class='bulk'>" +
             "<h4>Bulk Download</h4>" +
             "<ul class='BulkDownload'>" +
             "<li><a class='wget' href='#'>List of Links:</a> " +
@@ -266,7 +300,8 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
             "<li><a class='curl' href='#'>List of cURL Commands:</a> " +
                 "can be copied and pasted to " +
                 "a terminal window to download using cURL.</li>" +
-            "</ul>";
+            "</ul>" +
+            "</div>";
         return bulk;
     };
 
@@ -276,6 +311,22 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
 
     var showCurlPage = function() {
         Worldview.DataDownload.BulkDownloadPage.show(selection, "curl");
+    };
+
+    var removeGranule = function() {
+        var id = $(this).attr("data-granule");
+        model.unselectGranule(model.selectedGranules[id]);
+        onHoverOut.apply(this);
+    };
+
+    var onHoverOver = function() {
+        model.events.trigger("hoverOver",
+                model.selectedGranules[$(this).attr("data-granule")]);
+    };
+
+    var onHoverOut = function() {
+        model.events.trigger("hoverOut",
+                model.selectedGranules[$(this).attr("data-granule")]);
     };
 
     return self;

@@ -90,6 +90,31 @@
     vertical-align: top;
 }
 
+#DataDownload_DownloadListPanel .remove {
+    display: block;
+    padding: 3px;
+    border: 1px solid #707070;
+    background: #191C20;
+    color: #c0c0c0;
+    border-radius: 5px;
+}
+
+#DataDownload_DownloadListPanel .remove:hover {
+    background: #ffaaaa;
+    border-color: #ffaaaa;
+    color: #000000;
+}
+
+#DataDownload_DownloadListPanel .remove:active {
+    background: #df8a8a;
+    border-color: #df8a8a;
+    color: #000000;
+}
+
+#DataDownload_DownloadListPanel tr:hover {
+    background-color: rgb(55, 58, 62);
+}
+
 #DataDownload_Notice {
     width: 80%;
     margin: 0 auto;
@@ -141,6 +166,7 @@
 #DataDownload_GranuleList tr:nth-child(even) {
     background-color: rgb(45, 48, 52);
 }
+
 #DataDownload #DataDownloadcontent h3 span{
      font-weight:bold;
      color:#8f939f;
@@ -186,12 +212,11 @@
 .dynamic {
     font-size:inherit;
     border-radius:5px;
-    background: none;
+    background: #8CC3DE;
     padding: 2px;
     text-align: center;
-    color: #fff;
+    color: #000;
     font-weight: bold;
-    display:block;
-    text-align:right;
-    margin-right:10px;
+    display:inline-block;
+    margin:0 10px  0 5px;
 }
