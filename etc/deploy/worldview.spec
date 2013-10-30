@@ -3,7 +3,7 @@
 
 Name:		worldview
 Version:	0.6.0
-Release:	0.5%{?dist}
+Release:	1%{?dist}
 Summary:	Browse full-resolution, near real-time satellite imagery.
 
 License:	Copyright NASA
@@ -119,7 +119,7 @@ rm -rf %{buildroot}
 
 
 %changelog
-* Wed Aug 21 2013 Mike McGann <mike.mcgann@nasa.gov> - 0.6.0-1
+* Wed Oct 30 2013 Mike McGann <mike.mcgann@nasa.gov> - 0.6.0-1
 - Worldview 0.6.0 release
 
 * Thu May 9 2013 Mike McGann <mike.mcgann@nasa.gov> - 0.4.5-1 
