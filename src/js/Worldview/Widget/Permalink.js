@@ -37,6 +37,7 @@ Worldview.Widget.Permalink = (function() {
                 "<!-- <h3>Permalink:</h3> -->"+
                 "<span style='font-weight:400; font-size:12px; line-spacing:24px;'>Copy and paste the following link to share this view:</span>" +
                 "<input type='text' value='' name='permalink_content' id='permalink_content' />" +
+                "<div id='shortened'><label>Shorten this link</label><input type='checkbox' value='' name='permalink_shorten' id='permalink_shorten' /></div>" +
             "</div>";
             permOverlay.setHeader("Permalink");
             permOverlay.setBody(item);
@@ -45,7 +46,12 @@ Worldview.Widget.Permalink = (function() {
 
         var link = Worldview.Permalink.get();
         $('#permalink_content').val(link);
-
+        $('#shortened').toggle(function(){
+            var shorten = Worldview.Permalink.shorten();
+            $('#permalink_content').val(shorten);
+        }, function(){
+            $('#permalink_content').val(link);
+        });
         permOverlay.show();
         permOverlay.center();
 
