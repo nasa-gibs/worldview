@@ -32,7 +32,7 @@ Worldview.namespace("Tour");
         // determine screen size - don't show if too small
         var viewWidth = $(window).width();
         var viewHeight = $(window).height();
-        console.log(viewWidth + " x " + viewHeight);
+        //console.log(viewWidth + " x " + viewHeight);
 
         if(viewWidth < 768 || viewHeight < 680) {
             if(noDisable) {
@@ -160,7 +160,7 @@ Worldview.namespace("Tour");
                                   "<li>Click on the <i class=\"productsIcon selected icon-active\"></i> tab to see the layers that have been added.</li>"+
                               "</ul>"+
                               "</br>"+
-                          "</div>"; 
+                          "</div>";
         document.getElementById("productOverlayPanel").innerHTML = overlayText;
 
         var dateText = "<div class=\"tour\">"+
