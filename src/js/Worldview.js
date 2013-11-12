@@ -23,7 +23,7 @@
      * @final
      * @static
      */
-    ns.VERSION = "0.6.0";
+    ns.VERSION = "0.6.1";
 
     /**
      * Date and time Worldview was built. This value is changed during the
