@@ -16,3 +16,6 @@
      ExpiresDefault A86400
   </FilesMatch>
 </IfModule>
+
+Header set Cache-Control "no-cache, no-store, must-revalidate"
+Header set Pragma "no-cache"
