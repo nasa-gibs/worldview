@@ -192,6 +192,7 @@ Worldview.Widget.ActiveLayers = function(config, model, spec) {
             var $units = $("<span></span>")
                 .addClass("p-units")
                 .html(layer.units);
+            $container.append($units);
         }
 
         $div.append($container);
