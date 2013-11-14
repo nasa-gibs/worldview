@@ -160,12 +160,9 @@
         </copy>
 
         <!-- Configuration file -->
-        <delete file="${build.web.dir}/data/config"/>
+        <delete file="${build.web.dir}/data/config.json"/>
         <copy file="${build.dir}/config-min.json"
-              tofile="${build.web.dir}/data/config"/>
-        <delete file="${build.web-debug.dir}/data/config"/>
-        <copy file="${build.dir}/config.json"
-              tofile="${build.web-debug.dir}/data/config"/>
+              tofile="${build.web.dir}/data/config.json"/>
 
         <!-- Executable bits -->
         <chmod file="${build.web.dir}/service/echo.cgi" perm="755"/>
