@@ -6,6 +6,7 @@ $(function() {// Initialize "static" vars
     // release
     var DEBUG_LOGGERS = [
     ];
+
     $.each(DEBUG_LOGGERS, function(index, name) {
         log.warn("Enabling logger:", name);
         Logging.debug(name);
