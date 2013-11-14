@@ -441,6 +441,9 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
         // manually.
         config.theme = null;
 
+        // Let events propagate up
+        config.fallThrough = true;
+
         var controls = [];
 
         $("<div></div>")
