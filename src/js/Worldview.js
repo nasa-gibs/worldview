@@ -194,7 +194,11 @@
                 constraintoviewport: true
             });
             o.setHeader('Warning');
-            o.setBody("An unexpected error has occurred.<br/><br/>" + message);
+            o.setBody("An unexpected error has occurred.<br/><br/>" + message +
+                "<br/><br/>Please reload the page and try again. If you " +
+                "continue to have problems, contact us at " +
+                "<a href='mailto:support@earthdata.nasa.gov'>" +
+                "support@earthdata.nasa.gov</a>");
             o.render(document.body);
             o.show();
             o.center();

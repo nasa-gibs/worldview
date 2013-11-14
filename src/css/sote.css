@@ -8,11 +8,11 @@ h1, h2, h3, h4, h5, h6 { font-weight:400; }
 #selector_c .yui-panel .bd {padding:0 !important;}
 
 .yui-skin-sam .yui-panel-container .hd{ background:rgba(38, 43, 49, 0.65); color:#ffffff; border-bottom: none; padding:0; padding-left: 10px;}
-.yui-skin-sam .yui-panel-container .bd{ background:rgba(18, 18, 18, 0.75); color:#d7d7d7;}
+.yui-skin-sam .yui-panel-container .bd{ background:rgb(25, 28, 32); color:#d7d7d7;}
 .yui-skin-sam .yui-panel-container .ft{ background:rgba(18, 18, 18, 0.75); color:#d7d7d7;}
 .yui-skin-sam .yui-panel-container .bd h3{ color:#FFFFFF; font: 18px "Gill Sans", sans-serif; font-weight:400; text-decoration:none; }
 .yui-skin-sam .yui-panel-container .bd h4{ color:#000000; font: 18px "Gill Sans", sans-serif; font-weight:400; text-decoration:none; }
-.yui-skin-sam .yui-panel-container .bd a {color: #48a8ff; }
+.yui-skin-sam .yui-panel-container .bd a {color: #82CDFA; }
 #splash_c.yui-overlay-hidden, #conclusionPanel_c.yui-overlay-hidden {display:none;}
 
 .jspVerticalBar {width:5px !important; background:transparent;}
