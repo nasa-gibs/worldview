@@ -131,7 +131,7 @@ Worldview.Widget.AddLayers = function(config, model, projectionModel) {
         if ( model.isActive(type, layer.id) ) {
             $checkbox.attr("checked", "checked");
         };
-        
+
         $element.append($checkbox);
         $element.append($name);
         $element.append($description);
@@ -203,6 +203,7 @@ Worldview.Widget.AddLayers = function(config, model, projectionModel) {
                 }
             }
             jsp = $("." + self.id + "category").jScrollPane({
+                verticalDragMinHeight: 20,
                 autoReinitialise: false,
                 verticalGutter: 0
             });
@@ -219,7 +220,7 @@ Worldview.Widget.AddLayers = function(config, model, projectionModel) {
             var $target = $(this).find('input:checkbox');
         }
         if ( $target.is(':checked') ) {
-            
+
             $target.attr('checked', false);
             model.remove($target.attr("data-layer-type"),
                          $target.attr("data-layer"));
