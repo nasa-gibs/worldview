@@ -13,6 +13,7 @@ Worldview.namespace("DataDownload");
 Worldview.DataDownload.BulkDownloadPage = (function() {
 
     var ns = {};
+    var log = Logging.getLogger("Worldview.DataDownload.BulkDownloadPage");
 
     var pages = {
         wget: "pages/wget.html",
@@ -24,12 +25,37 @@ Worldview.DataDownload.BulkDownloadPage = (function() {
         var page = window.open(pages[type] + "?v=" + nonce,
                 'Worldview_' + nonce);
 
+        var loaded = false;
         page.onload = function() {
-            fillPage(page, selection, type);
+            log.debug("Page loaded");
+            if ( !loaded ) {
+                log.debug("Filling page");
+                fillPage(page, selection, type);
+                loaded = true;
+            }
         };
-        setTimeout(function() {
-            fillPage(page, selection, type);
-        }, 10);
+        var checkCount = 0;
+        var timer = setInterval(function() {
+            checkCount++;
+            log.debug("Brute force ", checkCount);
+            if ( loaded ) {
+                clearInterval(timer);
+                log.debug("Already loaded");
+                return;
+            }
+            if ( checkCount > 20 ) {
+                clearInterval(timer);
+                log.debug("Giving up");
+                return;
+            }
+            if ( fillPage(page, selection, type) ) {
+                log.debug("Page filled");
+                loaded = true;
+                clearInterval(timer);
+            } else {
+                log.debug("Page is not ready");
+            }
+        }, 100);
     };
 
     var fillPage = function(page, selection, type) {
@@ -68,8 +94,12 @@ Worldview.DataDownload.BulkDownloadPage = (function() {
                 });
             });
         });
-        page.document.getElementById("links").innerHTML =
-            "<pre>" + downloadLinks.join("\n") + "</pre>";
+        var links = page.document.getElementById("links");
+        if ( !links ) {
+            // Page is not ready
+            return false;
+        }
+        links.innerHTML = "<pre>" + downloadLinks.join("\n") + "</pre>";
 
         var netrcEntries = [];
         var hostnames = [];
@@ -85,10 +115,17 @@ Worldview.DataDownload.BulkDownloadPage = (function() {
                 .style.display = "block";
             page.document.getElementById("netrc-instructions")
                 .style.display = "block";
-            page.document.getElementById("fdm-password-instructions")
-                .style.display = "block";
-            page.document.getElementById("fdm-machine-names").innerHTML =
-                "<pre>" + hostnames.join("\n") + "</pre>";
+            var instructions =
+                page.document.getElementById("fdm-password-instructions");
+            if ( instructions ) {
+                instructions.style.display = "block";
+            }
+            var machineNames =
+                page.document.getElementById("fdm-machine-names");
+            if ( machineNames ) {
+                machineNames.innerHTML = "<pre>" + hostnames.join("\n") +
+                    "</pre>";
+            }
         }
         if ( indirectLinks.length > 0 ) {
             page.document.getElementById("indirect-instructions")
@@ -96,6 +133,7 @@ Worldview.DataDownload.BulkDownloadPage = (function() {
             page.document.getElementById("indirect").innerHTML =
                 "<ul>" + indirectLinks.join("\n") + "</ul>";
         }
+        return true;
     };
 
     return ns;
