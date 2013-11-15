@@ -340,6 +340,11 @@ $(function() {// Initialize "static" vars
             config.palettes["__DEBUG"] = debugPalette;
             config.paletteOrder.unshift("__DEBUG");
         }
+
+        // Test error dialog
+        if ( config.parameters.showError ) {
+            Worldview.error("No error -- this is a test");
+        }
     };
 
     try {
