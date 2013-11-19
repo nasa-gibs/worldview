@@ -444,6 +444,9 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
         // Let events propagate up
         config.fallThrough = true;
 
+        // Force OL to get the latest tiles without caching
+        config.tileManager = null;
+
         var controls = [];
 
         $("<div></div>")
