@@ -133,26 +133,29 @@ $(function() {// Initialize "static" vars
         debuggingFeatures(config);
 
         // Models
+        var models = {};
+        models.date = Worldview.Models.Date(config);
         var palettesModel = Worldview.Models.Palettes();
+        models.palette = palettesModel;
         var projectionModel = Worldview.Models.Projection(config);
+        models.projection = projectionModel;
         var layersModel = Worldview.Models.Layers(config, projectionModel);
+        models.layers = layersModel;
         var dataDownloadModel = Worldview.DataDownload.Model(config, {
             layersModel: layersModel
         });
+        models.dataDownload = dataDownloadModel;
 
         // These are only convienence handles to important objects used
         // for console debugging. Code should NOT reference these as they
         // are subject to change or removal.
         Worldview.config = config;
-        Worldview.models = {
-            projection: projectionModel,
-            layers: layersModel,
-            dataDownload: dataDownloadModel
-        };
+        Worldview.models = models;
 
         // Legacy REGISTRY based widgets
         var legacySwitch = Worldview.Legacy.Switch(projectionModel);
         var legacyBank = Worldview.Legacy.Bank(layersModel);
+        var legacyDate = Worldview.Legacy.Date(models.date);
 
         // Create widgets
         var projection = Worldview.Widget.Projection(projectionModel);
@@ -168,9 +171,8 @@ $(function() {// Initialize "static" vars
         });
         var addLayers = Worldview.Widget.AddLayers(config, layersModel,
                 projectionModel);
-        var date = new SOTE.widget.DatePicker("time", {
-            hasThumbnail: false
-        });
+        var dateSlider = new Worldview.Widget.DateSlider(models, config);
+        var dateWheels = new Worldview.Widget.DateWheels(models, config);
         var map = Worldview.Widget.WorldviewMap("map", config);
         var rubberBand = new SOTE.widget.RubberBand("camera", {
             icon: "images/camera.png",
@@ -195,19 +197,13 @@ $(function() {// Initialize "static" vars
         if(queryString) {
         	eventsCollapsed = true;
         }
-	var events = new SOTE.widget.Events("eventsHolder", {
-		config: config,
-		mapWidget: map,
-		paletteWidget: palettes,
-                switchWidget: projection,
-		bankWidget: products,
-		dateWidget: date,
-		apcmWidget: apcn,
-		wvOpacity: opacity,
-		wvEPSG: crs,
-		shouldCollapse: eventsCollapsed,
-		lastVisit: lastVisitObj
- 	});
+    	var events = new SOTE.widget.Events("eventsHolder", {
+    		config: config,
+    		models: models,
+    		maps: map.maps,
+    		shouldCollapse: eventsCollapsed,
+    		lastVisit: lastVisitObj
+     	});
 
         var dataDownload = Worldview.Widget.DataDownload(config, {
             selector: "#DataDownload",
@@ -275,7 +271,7 @@ $(function() {// Initialize "static" vars
         var initOrder = [
             legacySwitch,
             legacyBank,
-            date,
+            legacyDate,
             map,
             palettes,
             apcn,

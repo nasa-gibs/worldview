@@ -3,40 +3,34 @@ SOTE.namespace("SOTE.widget.Events");
 SOTE.widget.Events.prototype = new SOTE.widget.Component;
 
 /**
- * Instantiate the Events widget. 
+ * Instantiate the Events widget.
  */
 SOTE.widget.Events = function(containerId, config) {
 	//console.log("instantiating events");
-	
+
 	this.container = document.getElementById(containerId);
 	if(this.container == null){
 		this.setStatus("Error: element '" + containerId + "' not found!", true);
 		//console.log("Error: element '" + containerId + "' not found!");
 		return;
 	}
-	
+
 	// store the container's ID
 	this.id = containerId;
 	this.containerId = containerId;
-	
+
 	// define an object for holding configuration
 	if (config === undefined){
 		config = {};
 	}
-	
+
 	if (config.title === undefined){
 		config.title = "Events";
 	}
-	
+
 	this.title = config.title;
-	this.mapWidget = config.mapWidget;
-	this.paletteWidget = config.paletteWidget;
-	this.switchWidget = config.switchWidget;
-	this.bankWidget = config.bankWidget;
-	this.dateWidget = config.dateWidget;
-	this.apcmWidget = config.apcmWidget;
-	this.wvOpacity = config.wvOpacity;
-	this.wvEPSG = config.wvEPSG;
+	this.models = config.models;
+	this.maps = config.maps;
 	this.meta = new Object;
 	this.buildMetaDone = false;
 	this.initRenderComplete = false;
@@ -46,8 +40,8 @@ SOTE.widget.Events = function(containerId, config) {
 	this.initCollapsed = config.shouldCollapse;
 	this.lastVisit = config.lastVisit;
 	this.init();
-	
-	
+
+
 	//console.log("render complete = " + this.initRenderComplete);
 	//if(config.shouldCollapse){
 	//	this.collapse();
@@ -55,7 +49,7 @@ SOTE.widget.Events = function(containerId, config) {
 };
 
 /**
- * Get the JSON events data 
+ * Get the JSON events data
  */
 SOTE.widget.Events.prototype.buildMeta = function() {
 	this.buildMetaDone = false;
@@ -77,7 +71,7 @@ SOTE.widget.Events.prototype.buildMeta = function() {
 };
 
 /**
- * Parse the JSON data 
+ * Parse the JSON data
  */
 SOTE.widget.Events.handleMetaSuccess = function(arg, data) {
 	var self = arg;
@@ -86,17 +80,17 @@ SOTE.widget.Events.handleMetaSuccess = function(arg, data) {
 	self.numNew = 0;
 	for(var i = 0; i < self.metaLength; i++) {
 		var item = data[i];
-		
+
 		// if the last visit came before the event, mark the event as new
 		var dateStr = item.date + "T00:00:00-04:00";
 		var dateObj = new Date(dateStr);
 		var isNew = false;
-		
+
 		if(lastVisit < dateObj) {
 			isNew = true;
 			self.numNew++;
 		}
-		
+
 		self.meta[i] = {title:item.title,
 					    link:item.link,
 					    category:item.category,
@@ -120,11 +114,11 @@ SOTE.widget.Events.handleMetaSuccess = function(arg, data) {
 };
 
 /**
- * Initialize the Events widget 
+ * Initialize the Events widget
  */
 SOTE.widget.Events.prototype.init = function() {
 	this.buildMeta();
-	
+
 	if(REGISTRY) {
 		REGISTRY.register(this.id, this);
 	}
@@ -134,39 +128,39 @@ SOTE.widget.Events.prototype.init = function() {
 };
 
 /**
- * Render the Events widget 
+ * Render the Events widget
  */
 SOTE.widget.Events.prototype.render = function() {
-	
+
 	this.container.innerHTML = "";
 
 	var container = document.createElement("div");
 	container.setAttribute("id", "events");
 	container.setAttribute("class", "events categoryContainer");
-	
+
 	var titleContainer = document.createElement("div");
 	var title = document.createElement("h2");
 	title.innerHTML = "Recent Events";
 	titleContainer.setAttribute("class", "header");
 	titleContainer.appendChild(title);
 	container.appendChild(titleContainer);
-	
+
 	var entryList = document.createElement("ul");
 	entryList.setAttribute("id", "eventList");
 	entryList.setAttribute("class",this.id+"category entry category");
-	
+
 	// assign a basic and detail description to each element
 	for(var i = 0; i < this.metaLength; i++) {
 		var item = document.createElement("li");
 		item.setAttribute("id", "ev" + i);
 		item.setAttribute("class", "item");
-		
+
 		if(this.meta[i].isNew) {
 			item.setAttribute("class", "item newevent");
 		}
-		
-		item.innerHTML = "<table>" + 
-		                       "<tr>" + 
+
+		item.innerHTML = "<table>" +
+		                       "<tr>" +
 		                           "<td rowspan='2'> <img class='thumb' width='32px' height='32px' src='" + this.meta[i].image +"'/></td>"+
 		                           "<td style='padding-left:5px'><h4>" + this.meta[i].title +"</h4></td>"+
 		                       "</tr>"+
@@ -175,9 +169,9 @@ SOTE.widget.Events.prototype.render = function() {
 		                       "</tr>"+
 		                   "</table>";
 		item.basicHTML = item.innerHTML;
-		
-		item.detailHTML = "<table>" + 
-		                       "<tr>" + 
+
+		item.detailHTML = "<table>" +
+		                       "<tr>" +
 		                           "<td rowspan='2'> <img class='thumb' width='45px' height='45px' src='" + this.meta[i].image +"'/></td>"+
 		                           "<td><h4>" + this.meta[i].title +"</h4></td>"+
 		                       "</tr>"+
@@ -197,19 +191,18 @@ SOTE.widget.Events.prototype.render = function() {
 
 	container.appendChild(entryList);
 	this.container.appendChild(container);
-	
+
 	var meta = this.meta;
 	var m = this.mapWidget;
-	var palettes = this.paletteWidget;
 	var ss = this.switchWidget;
 	var p = this.bankWidget;
 	var map = this.dateWidget;
 	var apcn = this.apcmWidget;
 	var opacity = this.wvOpacity;
 	var epsg = this.wvEPSG;
-	
+
 	$('#eventList').delegate('li', 'click', {self:this}, SOTE.widget.Events.toggleDescription);
-	
+
 	// set up toggler
 	var accordionToggler = document.createElement("a");
 	accordionToggler.setAttribute("class","evaccordionToggler evcollapse");
@@ -225,14 +218,14 @@ SOTE.widget.Events.prototype.render = function() {
 		if(this.jsp){
 			var api = this.jsp.data('jsp');
 			if(api) api.destroy();
-		}	
+		}
 		this.jsp = $( "." + this.id + "category" ).jScrollPane({autoReinitialise: false, verticalGutter:0});
 	}
-	
+
 	if(this.initCollapsed) {
 		this.toggle(this.numNew);
 	}
-	
+
 	// mark the component as ready in the registry if called via init()
 	if((this.initRenderComplete === false) && REGISTRY) {
 		this.initRenderComplete = true;
@@ -257,7 +250,7 @@ SOTE.widget.Events.prototype.fire = function(){
 	}
 	else{
 		alert("No REGISTRY found! Cannot fire to REGISTRY from Bank!");
-	} 
+	}
 };
 
 /**
@@ -267,7 +260,7 @@ SOTE.widget.Events.reinitializeScrollbars = function(o) {
 	var pane = $("." + o.self.id + "category").each(function(){
     	var api = $(this).data('jsp');
     	if(api) api.reinitialise();
-	});  
+	});
 };
 
 SOTE.widget.Events.repositionScrollbars = function(o, target) {
@@ -278,7 +271,7 @@ SOTE.widget.Events.repositionScrollbars = function(o, target) {
 			api.reinitialise();
     		api.scrollToY(p.offsetTop, false);
     	}
-	}); 
+	});
 };
 
 /**
@@ -307,12 +300,12 @@ SOTE.widget.Events.prototype.toggle = function(numNew) {
 		$('#eventsHolder').animate({right:'-210px'}, 300);
 		this.isCollapsed = true;
 		$("#eventsHolder").after($('.evaccordionToggler'));
-	} 	
+	}
 
 };
 
 /**
- * Toggles the detail description of a story 
+ * Toggles the detail description of a story
  */
 SOTE.widget.Events.toggleDescription = function(e) {
 	var self = e.data.self;
@@ -325,15 +318,7 @@ SOTE.widget.Events.toggleDescription = function(e) {
     }
     else {
     	var meta = self.meta;
-		var m = self.mapWidget;
-		var palettes = self.paletteWidget;
-		var ss = self.switchWidget;
-		var p = self.bankWidget;
-		var map = self.dateWidget;
-		var apcn = self.apcmWidget;
-		var opacity = self.wvOpacity;
-		var epsg = self.wvEPSG;
-	
+
     	// select the event
     	var oldEl = $('.events .sel');
     	if(oldEl[0] != null) {
@@ -343,18 +328,18 @@ SOTE.widget.Events.toggleDescription = function(e) {
     	}
     	$('#'+this.id).addClass('sel');
     	this.innerHTML = this.detailHTML;
-    		
+
     	// get event index
     	var all = $('#eventList li');
     	var ind = all.index(this);
-    	
+
     	// if event was new, make it not new anymore
     	if(meta[ind].isNew) {
     		meta[ind].isNew = false;
     		$('#' + this.id).removeClass('newevent');
     		self.numNew--;
     	}
-    	
+
 
     	// generate permalink
     	var extent = meta[ind].west + "," + meta[ind].south + "," + meta[ind].east + "," + meta[ind].north;
@@ -397,31 +382,20 @@ SOTE.widget.Events.toggleDescription = function(e) {
     		}
     	}
     	prods += ",!sedac_bound";
-   
-    	var initOrder = [
-           	ss, // projection
-           	p.b, // products
-           	map, // time
-           	m, // map
-           	palettes,
-           	apcn,
-           	opacity,
-           	epsg
-        ];
-        
-      
+
+
     var centerlon = parseInt(meta[ind].west) + ((parseInt(meta[ind].east) - parseInt(meta[ind].west)) / 2);
     var centerlat = parseInt(meta[ind].south) + ((parseInt(meta[ind].north) - parseInt(meta[ind].south)) / 2);
     var lonlat = OpenLayers.LonLat.fromArray([centerlon, centerlat]);
 
-	var currentMap = m.maps.map;
+	var currentMap = self.maps.map;
     var rawextent = OpenLayers.Bounds.fromString(extent);
  	var targetZoom = currentMap.getZoomForExtent(rawextent, true);
- 	 
+
  	var zoomToEventExtent = function() {
  		console.log("zooming to extent");
       	currentMap.events.unregister("maploadend", currentMap, zoomToEventExtent);
-      	
+
 		//if(targetZoom != currentMap.getZoom()) {
 		//while(targetZoom != currentMap.getZoom()) {
 			//currentMap.zoomIn();
@@ -435,11 +409,11 @@ SOTE.widget.Events.toggleDescription = function(e) {
 		//	setTimeout(zoomToEventExtent, 500);
 		//}
  	};
- 	
+
  	var panToEventCenter = function() {
  		console.log("panning to event center");
  		currentMap.events.unregister("maploadend", currentMap, panToEventCenter);
- 		
+
  		//if something needs to be loaded, wait for it.  else, move on.
  		console.log("lonlat = " + lonlat);
  		console.log("center = " + currentMap.center);
@@ -454,7 +428,7 @@ SOTE.widget.Events.toggleDescription = function(e) {
       		zoomToEventExtent();
       	}
  	};
- 	 	
+
  	var setEventProducts = function() {
 		console.log("setting event products");
       	currentMap.events.unregister("maploadend", currentMap, setEventProducts);
@@ -469,7 +443,7 @@ SOTE.widget.Events.toggleDescription = function(e) {
       			matches++;
       		}
       	}
-		
+
 		//if something needs to be loaded, wait for it.  else, move on.
       	if(matches != newProds.length) {
       		currentMap.events.register("maploadend", currentMap, panToEventCenter);
@@ -484,8 +458,8 @@ SOTE.widget.Events.toggleDescription = function(e) {
  	var setEventDate = function() {
  		console.log("setting event date");
       	currentMap.events.unregister("maploadend", currentMap, setEventDate);
-      	var curDate = map.getValue();
-      	
+      	var curDate = self.models.date.selected;
+
       	// if something needs to be loaded, wait for it.  else, move on.
       	if(curDate.indexOf(meta[ind].date, curDate.length - meta[ind].date.length) === -1) {
       		currentMap.events.register("maploadend", currentMap, setEventProducts);
@@ -517,7 +491,7 @@ SOTE.widget.Events.toggleDescription = function(e) {
 */
 SOTE.widget.Events.prototype.setStatus = function(s){
 	this.statusStr = s;
-}; 
+};
 
 /**
   * Gets the status of the component

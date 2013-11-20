@@ -55,9 +55,6 @@
 		<file name="js/component.js"/>
 		<file name="js/registry.js"/>
 		<file name="js/util.js"/>
-		<file name="js/dateSpan.js"/>
-        <file name="js/mobileDateSpan.js"/>
-        <file name="js/datePicker.js"/>
 		<file name="js/rubberBand.js"/>
 		<file name="js/imageDownload.js"/>
 		<file name="js/sote.js"/>
@@ -75,10 +72,12 @@
         <file name="js/Worldview/AjaxCache.js"/>
         <file name="js/Worldview/AjaxJoin.js"/>
 
+        <file name="js/Worldview/Models/Date.js"/>
         <file name="js/Worldview/Models/Layers.js"/>
         <file name="js/Worldview/Models/Projection.js"/>
         <file name="js/Worldview/Models/Palettes.js"/>
 
+        <file name="js/Worldview/Legacy/date.js"/>
         <file name="js/Worldview/Legacy/switch.js"/>
         <file name="js/Worldview/Legacy/bank.js"/>
 
@@ -154,6 +153,8 @@
         <file name="js/Worldview/Widget/LayerSideBar.js"/>
         <file name="js/Worldview/Widget/ActiveLayers.js"/>
         <file name="js/Worldview/Widget/AddLayers.js"/>
+        <file name="js/Worldview/Widget/DateSlider.js"/>
+        <file name="js/Worldview/Widget/DateWheels.js"/>
         <file name="js/Worldview/Widget/Map.js"/>
         <file name="js/Worldview/Widget/Palette.js"/>
         <file name="js/Worldview/Widget/WorldviewMap.js"/>

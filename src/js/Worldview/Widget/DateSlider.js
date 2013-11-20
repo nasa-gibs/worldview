@@ -1,11 +1,8 @@
-SOTE.namespace("SOTE.widget.DateSpan");
-
-
 /**
   * A date selection object for a configurable period of days, containing thumnails of a sample data
   * product image for each day
   *
-  * @module SOTE.widget
+  * @module Worldview.Widget
   * @class DateSpan
   * @constructor
   * @this {dateSpan}
@@ -23,11 +20,15 @@ SOTE.namespace("SOTE.widget.DateSpan");
   * @config {String} [anchorId] an HTML Element Id of the object to anchor the dateSpan with
   * @config {boolean} [slideToSelect] whether the selection slider is visible or not
   * @config {boolean} [isExpanded] whether the dateSpan thumbnails should be visible or not
-  * @augments SOTE.widget.Component
+  * @augments Worldview.Widget.Component
   *
 */
-SOTE.widget.DateSpan = function(containerId, config){
-    this.log = Logging.getLogger("Worldview.Widget.DateSpan");
+var Worldview = Worldview || {};
+Worldview.Widget = Worldview.Widget || {};
+
+Worldview.Widget.DateSlider = Worldview.Widget.DateSlider || function(models, config) {
+    var containerId = "timeds";
+    this.log = Logging.getLogger("Worldview.Widget.Date");
 	this.SLIDER_WIDTH = 1000;
     this.DAY_IN_MS = 24*60*60*1000;
     this.sliders = new Object();
@@ -92,10 +93,6 @@ SOTE.widget.DateSpan = function(containerId, config){
 		config.range = 7*this.DAY_IN_MS;
 	}
 
-	if(config.selected === undefined){
-	    config.selected = this.getToday();
-	}
-
 	if(config.slideToSelect === undefined){
 		config.slideToSelect = true;
 	}
@@ -104,10 +101,12 @@ SOTE.widget.DateSpan = function(containerId, config){
 		config.isCollapsed = false;//(config.thumbSource === null || config.hasThumbnail === false)? true: false;
 	}
 
-	if(config.hasThumbnail === undefined){
-		config.hasThumbnail = true;
-	}
-
+    var self = this;
+    this.model = models.date;
+    this.model.events.on("change", function(date) {
+        self.value = date;
+        self.update();
+    });
 
     this.maps = [];
     this.startDate = config.startDate;
@@ -119,16 +118,16 @@ SOTE.widget.DateSpan = function(containerId, config){
 	this.hasThumbnail = config.hasThumbnail;
 	this.extent = config.extent;
 	this.product = config.product;
-	this.value = config.selected;
+	this.value = this.model.selected;
 	this.dataSourceUrl = config.dataSourceUrl;
 	this.statusStr = "";
 	this.init();
 
-	$(window).bind("resize",{self:this},SOTE.widget.DateSpan.refreshSliders);
-
+	$(window).bind("resize",{self:this},Worldview.Widget.DateSlider.refreshSliders);
+	this.update();
 };
 
-SOTE.widget.DateSpan.prototype = new SOTE.widget.Component;
+Worldview.Widget.DateSlider.prototype = new SOTE.widget.Component;
 
 /**
   * Displays the selectable dateSpan in HTML containing a thumbnail for each day in the span.  If the date range contains
@@ -136,9 +135,9 @@ SOTE.widget.DateSpan.prototype = new SOTE.widget.Component;
   * component UI should be rendered with controllers to call the events.
   *
   * @this {dateSpan}
-  * @requires SOTE.widget.Map
+  * @requires Worldview.Widget.Map
 */
-SOTE.widget.DateSpan.prototype.init = function(){
+Worldview.Widget.DateSlider.prototype.init = function(){
 
 	// inherit styles into the user-specified div
 	this.container.setAttribute("class","datespan");
@@ -162,7 +161,7 @@ SOTE.widget.DateSpan.prototype.init = function(){
 
 	this.setValue(this.value.toISOString());
 
-	$('#'+this.id+'ecbutton').bind("click",{self:this},SOTE.widget.DateSpan.toggle);
+	$('#'+this.id+'ecbutton').bind("click",{self:this},Worldview.Widget.DateSlider.toggle);
 
     if(REGISTRY){
  		REGISTRY.register(this.id,this);
@@ -174,7 +173,7 @@ SOTE.widget.DateSpan.prototype.init = function(){
 
 };
 
-SOTE.widget.DateSpan.prototype.getToday = function() {
+Worldview.Widget.DateSlider.prototype.getToday = function() {
     // If at the beginning of the day, wait on the previous day until GIBS
     // catches up.
     var today = Worldview.today();
@@ -187,17 +186,22 @@ SOTE.widget.DateSpan.prototype.getToday = function() {
     }
 };
 
-SOTE.widget.DateSpan.refreshSliders = function(e){
+Worldview.Widget.DateSlider.refreshSliders = function(e){
 	var self = e.data.self;
-	setTimeout(function() {
-		self.refreshSlider("Year");
-		self.refreshSlider("Month");
-		self.refreshSlider("Day");
-	},100);
+	if ( $(window).width() < Worldview.TRANSITION_WIDTH ) {
+	    $("#" + self.containerId).hide();
+	} else {
+        $("#" + self.containerId).show();
+    	setTimeout(function() {
+    		self.refreshSlider("Year");
+    		self.refreshSlider("Month");
+    		self.refreshSlider("Day");
+    	},100);
+	}
 
 };
 
-SOTE.widget.DateSpan.prototype.refreshSlider = function(type){
+Worldview.Widget.DateSlider.prototype.refreshSlider = function(type){
 	var labels = this.sliders[type];
 	var wwidth = $(window).width() - 10;
 
@@ -219,7 +223,7 @@ SOTE.widget.DateSpan.prototype.refreshSlider = function(type){
 
 };
 
-SOTE.widget.DateSpan.prototype.createSlider = function(type){
+Worldview.Widget.DateSlider.prototype.createSlider = function(type){
 	var slider = document.createElement('div');
 	slider.setAttribute('id',this.id+'sliderDiv'+type);
 	slider.setAttribute('class','sliderDiv'+type+' slider');
@@ -259,9 +263,9 @@ SOTE.widget.DateSpan.prototype.createSlider = function(type){
 	var labelslength = labels.length;
 
 	$('#'+this.id+'slider'+type).slider();
-	$('#'+this.id+'slider'+type).bind("change",{self:this,type:type},SOTE.widget.DateSpan.handleSlide);
+	$('#'+this.id+'slider'+type).bind("change",{self:this,type:type},Worldview.Widget.DateSlider.handleSlide);
 	$('#'+this.id+'slider'+type).siblings('.ui-slider').css('width',eval(finalwidth*labels.length)+"px");
-	$('#'+this.id+'slider'+type).siblings('.ui-slider').bind("vmouseup",{self:this,type:type},SOTE.widget.DateSpan.snap);
+	$('#'+this.id+'slider'+type).siblings('.ui-slider').bind("vmouseup",{self:this,type:type},Worldview.Widget.DateSlider.snap);
 	if(width!=0){$('.sliderDiv'+type+' a.ui-slider-handle').css('width',eval(width*1.1).toFixed(1)+"%");}
 	//this.widths[type] = width;
 
@@ -273,7 +277,7 @@ SOTE.widget.DateSpan.prototype.createSlider = function(type){
   * @this {DateSpan}
   *
 */
-SOTE.widget.DateSpan.prototype.fire = function(){
+Worldview.Widget.DateSlider.prototype.fire = function(){
 	$("#"+this.id).trigger("fire",this.value);
 
 
@@ -287,7 +291,7 @@ SOTE.widget.DateSpan.prototype.fire = function(){
 };
 
 
-SOTE.widget.DateSpan.handleSlide = function(e,ui){
+Worldview.Widget.DateSlider.handleSlide = function(e,ui){
 	var value = e.target.value;
 	var type = e.data.type;
 	var self = e.data.self;
@@ -342,6 +346,7 @@ SOTE.widget.DateSpan.handleSlide = function(e,ui){
 	}
 	self.validate();
 	if ( oldDate.compareTo(self.value) !== 0 ) {
+        self.setValue(self.value.toISOStringDate());
 	   self.fire();
        self.setVisualDate();
     }
@@ -359,7 +364,7 @@ SOTE.widget.DateSpan.handleSlide = function(e,ui){
 
 };
 
-SOTE.widget.DateSpan.toggle = function(e,ui){
+Worldview.Widget.DateSlider.toggle = function(e,ui){
 	var self = e.data.self;
 	if(self.isCollapsed){
 		$('.ecbutton').removeClass('expand').addClass('collapse');
@@ -380,7 +385,7 @@ SOTE.widget.DateSpan.toggle = function(e,ui){
 	}
 };
 
-SOTE.widget.DateSpan.snap = function(e,ui){
+Worldview.Widget.DateSlider.snap = function(e,ui){
 	var self = e.data.self;
 	var type = e.data.type;
 	var numitems = self.sliders[type].length;
@@ -442,6 +447,8 @@ SOTE.widget.DateSpan.snap = function(e,ui){
 	}
 	self.validate();
 	self.setVisualDate();
+
+	self.setValue(self.value.toISOStringDate());
 	/*var x = (self.range - (24*60*60*1000)) * (100-value)/100;
 	var time = new Date(self.endDate.getTime() - x);
 	time.setHours(12);
@@ -451,7 +458,7 @@ SOTE.widget.DateSpan.snap = function(e,ui){
 	self.setValue(SOTE.util.ISO8601StringFromDate(time));*/
 };
 
-SOTE.widget.DateSpan.snapToTime = function(e,ui){
+Worldview.Widget.DateSlider.snapToTime = function(e,ui){
 	var self = e.data.self;
 	var time = e.data.time;
 	//time = new Date(time.getTime() - time.getTimezoneOffset()*60000);
@@ -459,14 +466,14 @@ SOTE.widget.DateSpan.snapToTime = function(e,ui){
 	//self.setValue(SOTE.util.ISO8601StringFromDate(time));
 };
 
-SOTE.widget.DateSpan.prototype.hideSliders = function(){
+Worldview.Widget.DateSlider.prototype.hideSliders = function(){
 	for(var i in this.sliders){
 		$("#"+this.id+"sliderDiv"+i).css('display','none');
 	}
 	$('.sliderLabel').css("display","none");
 };
 
-SOTE.widget.DateSpan.prototype.showSliders = function(){
+Worldview.Widget.DateSlider.prototype.showSliders = function(){
 	for(var i in this.sliders){
 		$("#"+this.id+"sliderDiv"+i).css('display','block');
 	}
@@ -481,17 +488,12 @@ SOTE.widget.DateSpan.prototype.showSliders = function(){
   * @returns {boolean} true or false depending on if the passed in date validates
   *
 */
-SOTE.widget.DateSpan.prototype.setValue = function(value){
-    var d;
-    try {
-        var d = value ? Date.parseISOString(value)
-                      : this.getToday();
-    } catch ( error ) {
-        this.log.warn("Invalid time: " + value + ", reason: " + error +
-                       "; using today");
-        d = Worldview.today();
-    }
+Worldview.Widget.DateSlider.prototype.setValue = function(value){
+    this.model.set(Date.parseISOString(value));
+};
 
+Worldview.Widget.DateSlider.prototype.update = function() {
+    var d = this.model.selected;
 	if(d.getTime() < this.startDate.getTime()) {
 	    d = this.startDate;
 	}
@@ -540,7 +542,7 @@ SOTE.widget.DateSpan.prototype.setValue = function(value){
 	}
 };
 
-SOTE.widget.DateSpan.prototype.setVisualDate = function(){
+Worldview.Widget.DateSlider.prototype.setVisualDate = function(){
 	var dateString = this.value.toISOStringDate();
 	$('#'+this.id+'dateHolder').html(dateString);
 	//$("a.ui-slider-handle").html("<span class='sliderText'>"+dateString+"</span>");
@@ -553,12 +555,12 @@ SOTE.widget.DateSpan.prototype.setVisualDate = function(){
   * @returns {String} a string representing the currently selected date in ISO8601 format ([containerId]=[selectedDate])
   *
 */
-SOTE.widget.DateSpan.prototype.getValue = function(){
+Worldview.Widget.DateSlider.prototype.getValue = function(){
     var datestring = this.value.toISOStringDate();
 	return ""+this.id +"="+datestring;
 };
 
-SOTE.widget.DateSpan.prototype.get = function(){
+Worldview.Widget.DateSlider.prototype.get = function(){
     var datestring = this.value.toISOStringDate();
 	return datestring;
 };
@@ -571,7 +573,7 @@ SOTE.widget.DateSpan.prototype.get = function(){
   * @returns {boolean} true or false depending on if the selected date validates against the updated criteria
   *
 */
-SOTE.widget.DateSpan.prototype.updateComponent = function(qs){
+Worldview.Widget.DateSlider.prototype.updateComponent = function(qs){
 /*	var bbox = SOTE.util.extractFromQuery('map',qs);
 	var products = SOTE.util.extractFromQuery('products',qs);
 	var a = products.split("~");
@@ -610,7 +612,7 @@ SOTE.widget.DateSpan.prototype.updateComponent = function(qs){
   * @returns {boolean} true or false depending on if the extracted date validates
   *
 */
-SOTE.widget.DateSpan.prototype.loadFromQuery = function(qs){
+Worldview.Widget.DateSlider.prototype.loadFromQuery = function(qs){
 	return this.setValue(SOTE.util.extractFromQuery(this.id,qs));
 };
 
@@ -620,7 +622,7 @@ SOTE.widget.DateSpan.prototype.loadFromQuery = function(qs){
   * @this {dateSpan}
   * @returns {boolean} true or false depending on whether the date is not null and within bounds
 */
-SOTE.widget.DateSpan.prototype.validate = function(){
+Worldview.Widget.DateSlider.prototype.validate = function(){
 	var curr = this.value.clone();
 	var startYear = this.startDate.getUTCFullYear();
 	var startMonth = this.startDate.getUTCMonth();
@@ -667,7 +669,7 @@ SOTE.widget.DateSpan.prototype.validate = function(){
   * @param {String} datasourceurl is the relative location of the data accessor
   *
 */
-SOTE.widget.DateSpan.prototype.setDataSourceUrl = function(datasourceurl){
+Worldview.Widget.DateSlider.prototype.setDataSourceUrl = function(datasourceurl){
   // Content
 };
 
@@ -678,7 +680,7 @@ SOTE.widget.DateSpan.prototype.setDataSourceUrl = function(datasourceurl){
   * @returns {String} the relative location of the accessor
   *
 */
-SOTE.widget.DateSpan.prototype.getDataSourceUrl = function(){
+Worldview.Widget.DateSlider.prototype.getDataSourceUrl = function(){
   // Content
 };
 
@@ -689,7 +691,7 @@ SOTE.widget.DateSpan.prototype.getDataSourceUrl = function(){
   * @param {String} s the current status of the component (user prompts, error messages)
   *
 */
-SOTE.widget.DateSpan.prototype.setStatus = function(s){
+Worldview.Widget.DateSlider.prototype.setStatus = function(s){
   // Content
 };
 
@@ -700,7 +702,7 @@ SOTE.widget.DateSpan.prototype.setStatus = function(s){
   * @returns {String} the current status of the component (user prompts, error messages)
   *
 */
-SOTE.widget.DateSpan.prototype.getStatus = function(){
+Worldview.Widget.DateSlider.prototype.getStatus = function(){
   // Content
 };
 
@@ -710,7 +712,7 @@ SOTE.widget.DateSpan.prototype.getStatus = function(){
   * @this {dateSpan}
   *
 */
-SOTE.widget.DateSpan.prototype.hide = function(){
+Worldview.Widget.DateSlider.prototype.hide = function(){
 	$("#"+this.id).css("display","none");
 	$(".horizontalContainer").css("width","auto");
 };
@@ -721,7 +723,7 @@ SOTE.widget.DateSpan.prototype.hide = function(){
   * @this {dateSpan}
   *
 */
-SOTE.widget.DateSpan.prototype.show = function(){
+Worldview.Widget.DateSlider.prototype.show = function(){
 	$("#"+this.id).css("display","block");
 	$(".horizontalContainer").css("width","100%");
 };
@@ -732,7 +734,7 @@ SOTE.widget.DateSpan.prototype.show = function(){
   * @this {dateSpan}
   *
 */
-SOTE.widget.DateSpan.prototype.expand = function(){
+Worldview.Widget.DateSlider.prototype.expand = function(){
   // Content
 };
 
@@ -742,11 +744,11 @@ SOTE.widget.DateSpan.prototype.expand = function(){
   * @this {dateSpan}
   *
 */
-SOTE.widget.DateSpan.prototype.collapse = function(){
+Worldview.Widget.DateSlider.prototype.collapse = function(){
   // Content
 };
 
-SOTE.widget.DateSpan.prototype.parse = function(queryString, object) {
+Worldview.Widget.DateSlider.prototype.parse = function(queryString, object) {
     var timeString = Worldview.extractFromQuery("time", queryString);
     if ( !timeString ) {
         object.time = Worldview.today();

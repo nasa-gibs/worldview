@@ -167,7 +167,9 @@ def processEntry(entry):
     # check for KMZ or GeoTiff - if not present, skip
     story = entry["link"]
     page = urllib2.urlopen(story)
-    content = BeautifulSoup(page)
+    # Use external parser because the default one doesn't seem to work
+    # with Python on OS X.
+    content = BeautifulSoup(page, "lxml")
     north = ""
     south = ""
     east = ""

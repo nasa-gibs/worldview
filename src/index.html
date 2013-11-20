@@ -123,9 +123,6 @@
     <!-- link.dev --> <script type="text/javascript" src="js/component.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/registry.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/util.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/dateSpan.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/mobileDateSpan.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/datePicker.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/rubberBand.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/imageDownload.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/sote.js"></script>
@@ -142,6 +139,7 @@
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/AjaxCache.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/AjaxJoin.js"></script>
 
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Models/Date.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Models/Projection.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Models/Layers.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Models/Palettes.js"></script>
@@ -218,6 +216,8 @@
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Widget/LayerSideBar.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Widget/ActiveLayers.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Widget/AddLayers.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Widget/DateSlider.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Widget/DateWheels.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Widget/Map.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Widget/Palette.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Widget/WorldviewMap.js"></script>
@@ -229,6 +229,7 @@
 
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Legacy/switch.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Legacy/bank.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Legacy/date.js"></script>
 
     <!-- link.dev --> <script type="text/javascript" src="js/tour.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/main.js"></script>
@@ -254,7 +255,10 @@
             <div id="dlMap"></div>
 
             <div class="horizontalContainer">
-                <div id="time"></div>
+                <div id="time">
+                    <div id="timeds"></div>
+                    <div id="timemds"></div>
+                </div>
             </div>
 
         </div>
