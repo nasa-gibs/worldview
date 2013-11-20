@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import feedparser, logging, logging.config
-import urllib2, shutil, urlparse, os, zipfile, os.path, re, json
+import urllib2, urllib, shutil, urlparse, os, zipfile, os.path, re, json
 # CentOS uses 2.6, argparse starts with 2.7
 from optparse import OptionParser
 import sys
@@ -19,20 +19,23 @@ parser.add_option("-f", "--feed",
                   help="Use file as feed instead of Earth Observatory")
 (options, args) = parser.parse_args()
     
-feed = None              
+mockFeed = None              
+imgURI = "var/images"
 if options.feed:
     # Read in the entire feed before changing directories
     with open(options.feed) as fp:
-        feed = fp.read()
+        mockFeed = fp.read()
 if options.development:
     print 'Development mode'
     # Log configuration assume working from this directory
     os.chdir(baseDir)
     confDir = 'etc/config'
     libDir = 'src/var'
+    imgDir = 'src/var/images'
 else:
     confDir = '/etc/worldview'
     libDir = '/var/lib/worldview'
+    imgDir = '/var/lib/worldview/images'
     os.chdir('/tmp')
 
 # ===================================================================
@@ -233,7 +236,16 @@ def processEntry(entry):
     date = entry["date"].split("T")[0]
     title = entry["title"]
     description = entry["summary_detail"].value
-    thumbnail = entry["media_thumbnail"][0].get("url")
+
+    # save the thumbnail
+    thumbnailLink = entry["media_thumbnail"][0].get("url")
+    thumbnailName = thumbnailLink.split('/')[-1]
+    if not os.path.exists(imgDir):
+        os.mkdir(imgDir)
+    thumbnail = os.path.join(imgDir, thumbnailName)
+    worldviewThumbnailURI = os.path.join(imgURI, thumbnailName)
+    urllib.urlretrieve(thumbnailLink, thumbnail)
+
     pubData = entry["published"]
     point = entry["georss_point"]
     keyword = ''
@@ -258,7 +270,7 @@ def processEntry(entry):
             'category':category, 
             'satellite':sat, 
             'instrument':instrument, 
-            'thumbnail':thumbnail, 
+            'thumbnail':worldviewThumbnailURI, 
             'link':story, 
             'north':north, 
             'south':south, 
@@ -273,10 +285,10 @@ def processEntry(entry):
 
 # Driver
 def main():
-    if not feed:
+    if not mockFeed:
         entries = pullRss("http://www.earthobservatory.nasa.gov/Feeds/rss/nh.rss")
     else:
-        entries = pullRss(feed)
+        entries = pullRss(mockFeed)
     num = 0
     recent_titles = []
     data = []
@@ -302,7 +314,6 @@ def main():
 
     else:
         outfile = open(outFileName, 'w+');
-
 
     for e in entries:
         obj = processEntry(e)
