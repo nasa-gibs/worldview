@@ -343,45 +343,76 @@ SOTE.widget.Events.toggleDescription = function(e) {
 
     	// generate permalink
     	var extent = meta[ind].west + "," + meta[ind].south + "," + meta[ind].east + "," + meta[ind].north;
-    	var prods = "";
+    	var prods = [];
     	if(meta[ind].category === "floods") {
     		// if specified, use natural color
     		if(meta[ind].keyword === "natural-color") {
     			if(meta[ind].sat === "Terra") {
-    				prods += "baselayers,MODIS_Terra_CorrectedReflectance_TrueColor";
+    				prods.push({
+    				    type: "baselayers",
+    				    layer: "MODIS_Terra_CorrectedReflectance_TrueColor"
+    				});
     			}
     			else if(meta[ind].sat === "Aqua") {
-    				prods += "baselayers,MODIS_Aqua_CorrectedReflectance_TrueColor";
+    			    prods.push({
+    			        type: "baselayers",
+    			        layer: "MODIS_Aqua_CorrectedReflectance_TrueColor"
+    			    });
     			}
     		}
     		// otherwise, default to false color
     		else {
 				if(meta[ind].sat === "Terra") {
-    				prods += "baselayers,MODIS_Terra_CorrectedReflectance_Bands721";
+				    prods.push({
+				        type: "baselayers",
+				        layer: "MODIS_Terra_CorrectedReflectance_Bands721"
+				    });
     			}
     			else if(meta[ind].sat === "Aqua") {
-    				prods += "&baselayers,MODIS_Aqua_CorrectedReflectance_Bands721";
+    			    prods.push({
+    			        type: "baselayers",
+    			        layer: "MODIS_Aqua_CorrectedReflectance_Bands721"
+    			    });
     			}
     		}
     	}
     	else {
     		if(meta[ind].sat === "Terra") {
-    			prods += "baselayers,MODIS_Terra_CorrectedReflectance_TrueColor";
+    		    prods.push({
+    		      type: "baselayers",
+    		      layer: "MODIS_Terra_CorrectedReflectance_TrueColor"
+    		    });
     		}
     		else if(meta[ind].sat === "Aqua") {
-    			prods += "baselayers,MODIS_Aqua_CorrectedReflectance_TrueColor";
+    		    prods.push({
+    		        type: "baselayers",
+    		        layer: "MODIS_Aqua_CorrectedReflectance_TrueColor"
+    		    });
     		}
     	}
-    	prods += "~overlays";
     	if(meta[ind].keyword === "outlines") {
     		if(meta[ind].sat === "Terra") {
-    			prods += ",MODIS_Fires_Terra";
+    		    prods.push({
+    		        type: "overlays",
+    		        layer: "MODIS_Fires_Terra"
+    		    });
     		}
     		else if(meta[ind].sat === "Aqua") {
-    			prods += ",MODIS_Fires_Aqua";
+    		    prods.push({
+    		        type: "overlays",
+    		        layer: "MODIS_Fires_Aqua"
+    		    });
+    			prods.push({
+    			    type: "overlays",
+    			    layer: "MODIS_Fires_Aqua"
+			    });
     		}
     	}
-    	prods += ",!sedac_bound";
+    	prods.push({
+    	    type: "overlays",
+    	    layer: "sedac_bound",
+    	    hidden: true
+    	});
 
 
     var centerlon = parseInt(meta[ind].west) + ((parseInt(meta[ind].east) - parseInt(meta[ind].west)) / 2);
@@ -430,12 +461,24 @@ SOTE.widget.Events.toggleDescription = function(e) {
  	};
 
  	var setEventProducts = function() {
+ 	    var model = self.models.layers;
 		console.log("setting event products");
       	currentMap.events.unregister("maploadend", currentMap, setEventProducts);
-      	var currentProds = p.b.getValue().replace("baselayers,", "").replace("~overlays", "").replace("products=", "").replace("!","").split(",");
-      	var newProds = prods.replace("baselayers,", "").replace("!","").replace("~overlays", "").split(",");
-		console.log("currentProds = " + currentProds);
-		console.log("newProds = " + newProds);
+		console.log("currentProds", self.models.layers.active);
+		console.log("newProds", prods);
+
+		model.clear();
+		$.each(prods, function(index, product) {
+		  model.add(product.type, product.layer, product.hidden);
+		});
+
+        if ( currentMap.layersLoading ) {
+            currentMap.events.register("maploadend", currentMap, panToEventCenter);
+        } else {
+            panToEventCenter();
+        }
+
+        /*
 		// determine whether anything new will need to load
       	var matches = 0;
       	for(var i = 0; i < newProds.length; i++) {
@@ -453,17 +496,22 @@ SOTE.widget.Events.toggleDescription = function(e) {
       		p.b.setValue(prods);
       		panToEventCenter();
       	}
+      	*/
     };
 
  	var setEventDate = function() {
  		console.log("setting event date");
       	currentMap.events.unregister("maploadend", currentMap, setEventDate);
-      	var curDate = self.models.date.selected;
+      	var curDate = self.models.date.selected.toISOString();
 
       	// if something needs to be loaded, wait for it.  else, move on.
       	if(curDate.indexOf(meta[ind].date, curDate.length - meta[ind].date.length) === -1) {
-      		currentMap.events.register("maploadend", currentMap, setEventProducts);
-      		map.setValue(meta[ind].date);
+      		self.models.date.set(Date.parseISOString(meta[ind].date));
+            if ( currentMap.layersLoading ) {
+                currentMap.events.register("maploadend", currentMap, setEventProducts);
+            } else {
+                setEventProducts();
+            }
       	}
 		else {
 			setEventProducts();

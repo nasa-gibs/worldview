@@ -46,7 +46,7 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
 
     // The number of layers in the processing of loading. This is used
     // to fire maploadstart and maploadend events.
-    var layersLoading = 0;
+    self.layersLoading = 0;
 
     //-------------------------------------------------------------------------
     // Public
@@ -587,22 +587,22 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
         var layer = event.layer;
 
         var onLoadStart = function() {
-            logLoad.debug("Layer load start", layersLoading);
-            if ( layersLoading === 0 ) {
+            logLoad.debug("Layer load start", self.layersLoading);
+            if ( self.layersLoading === 0 ) {
                 logLoad.debug("Map load start");
                 self.map.events.triggerEvent("maploadstart");
             }
-            layersLoading++;
+            self.layersLoading++;
         };
 
         var onLoadEnd = function() {
-            logLoad.debug("Layer load end", layersLoading);
-            if ( layersLoading === 1 ) {
+            logLoad.debug("Layer load end", self.layersLoading);
+            if ( self.layersLoading === 1 ) {
                 logLoad.debug("Map load end");
                 self.map.events.triggerEvent("maploadend");
             }
-            if ( layersLoading > 0 ) {
-                layersLoading--;
+            if ( self.layersLoading > 0 ) {
+                self.layersLoading--;
             }
         };
 

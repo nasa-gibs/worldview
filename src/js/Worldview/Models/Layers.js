@@ -90,6 +90,7 @@ Worldview.Models.Layers = function(config, projectionModel) {
     };
 
     self.clear = function(projection) {
+        projection = projection || projectionModel.selected;
         log.debug("layers: clearing", projection, self.active);
         $.each(self.active, function(type, layers) {
             var layersClone = layers.slice(0);
