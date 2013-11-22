@@ -548,7 +548,7 @@
             "arctic_coastlines_3413",
             "arctic_coastlines",
             "grump-v1-population-count_2000",
-            "polarview:graticule3031_10x30",
+            "antarctic_graticule",
             "ol_graticule",
             "arctic_graticule_3413",
             "polarview:graticuleN",
@@ -7878,6 +7878,47 @@
             "tag": "borders",
             "type": "wmts"
         },
+        "antarctic_graticule": {
+            "description": "Polarview / Graticule",
+            "name": "Latitude-Longitude Lines",
+            "period": "static",
+            "projections": {
+                "antarctic": {
+                    "matrixSet": "EPSG3031_250m",
+                    "maxExtent": [
+                        -4194304,
+                        -4194304,
+                        4194304,
+                        4194304
+                    ],
+                    "maxResolution": 8192.0,
+                    "serverResolutions": [
+                        8192.0,
+                        4096.0,
+                        2048.0,
+                        1024.0,
+                        512.0,
+                        256.0
+                    ],
+                    "url": [
+                        "//map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
+                    ]
+                }
+            },
+            "properties": {
+                "format": "image/png",
+                "layer": "antarctic_graticule",
+                "tileSize": [
+                    512,
+                    512
+                ],
+                "transitionEffect": "none"
+            },
+            "tag": "lat lon lat-lon",
+            "type": "wmts"
+        },
         "arctic_coastlines": {
             "description": "Polarview / Coastlines (EPSG:3995)",
             "name": "Coastlines",
@@ -7962,57 +8003,85 @@
         },
         "arctic_graticule": {
             "description": "Polarview / Graticule",
-            "name": "Latitude-Longitude Lines",
-            "parameters": {
-                "format": "image/png",
-                "layers": "arctic_graticule"
-            },
+            "name": "Latitude-Longitude Lines (EPSG:3995)",
             "period": "static",
             "projections": {
                 "arctic": {
+                    "matrixSet": "EPSG3413_250m",
+                    "maxExtent": [
+                        -4194304,
+                        -4194304,
+                        4194304,
+                        4194304
+                    ],
+                    "maxResolution": 8192.0,
+                    "serverResolutions": [
+                        8192.0,
+                        4096.0,
+                        2048.0,
+                        1024.0,
+                        512.0,
+                        256.0
+                    ],
                     "url": [
-                        "//map2a.vis.earthdata.nasa.gov/wms/wms.php",
-                        "//map2b.vis.earthdata.nasa.gov/wms/wms.php",
-                        "//map2c.vis.earthdata.nasa.gov/wms/wms.php"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
                     ]
                 }
             },
             "properties": {
+                "format": "image/png",
+                "layer": "arctic_graticule",
                 "tileSize": [
                     512,
                     512
                 ],
                 "transitionEffect": "none"
             },
-            "tags": "lat lon lat-lon",
-            "type": "wms"
+            "tag": "lat lon lat-lon",
+            "type": "wmts"
         },
         "arctic_graticule_3413": {
             "description": "Polarview / Graticule",
             "name": "Latitude-Longitude Lines",
-            "parameters": {
-                "format": "image/png",
-                "layers": "arctic_graticule_3413"
-            },
             "period": "static",
             "projections": {
                 "arctic": {
+                    "matrixSet": "EPSG3413_250m",
+                    "maxExtent": [
+                        -4194304,
+                        -4194304,
+                        4194304,
+                        4194304
+                    ],
+                    "maxResolution": 8192.0,
+                    "serverResolutions": [
+                        8192.0,
+                        4096.0,
+                        2048.0,
+                        1024.0,
+                        512.0,
+                        256.0
+                    ],
                     "url": [
-                        "//map2a.vis.earthdata.nasa.gov/wms/wms.php",
-                        "//map2b.vis.earthdata.nasa.gov/wms/wms.php",
-                        "//map2c.vis.earthdata.nasa.gov/wms/wms.php"
+                        "//map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                        "//map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
                     ]
                 }
             },
             "properties": {
+                "format": "image/png",
+                "layer": "arctic_graticule_3413",
                 "tileSize": [
                     512,
                     512
                 ],
                 "transitionEffect": "none"
             },
-            "tags": "lat lon lat-lon",
-            "type": "wms"
+            "tag": "lat lon lat-lon",
+            "type": "wmts"
         },
         "cartographic:00-global-labels": {
             "description": "SEDAC / Global Labels",
@@ -8622,73 +8691,6 @@
             },
             "tags": "lat lon lat-lon",
             "type": "graticule"
-        },
-        "polarview:graticule3031_10x30": {
-            "description": "Polarview / Graticule",
-            "name": "Latitude-Longitude Lines",
-            "parameters": {
-                "format": "image/png",
-                "layers": "polarview:graticule3031_10x30",
-                "transparent": "true"
-            },
-            "period": "static",
-            "projections": {
-                "antarctic": {}
-            },
-            "properties": {
-                "opacity": 0.75,
-                "tileSize": [
-                    512,
-                    512
-                ],
-                "transitionEffect": "none"
-            },
-            "tags": "lat lon lat-lon",
-            "type": "wms",
-            "url": [
-                "http://geos.polarview.aq/geoserver/wms?"
-            ]
-        },
-        "polarview:graticuleN": {
-            "description": "Polarview / Graticule (EPSG:3995)",
-            "name": "Latitude-Longitude Lines",
-            "period": "static",
-            "projections": {
-                "arctic": {
-                    "matrixSet": "EPSG3413_250m",
-                    "maxExtent": [
-                        -4194304,
-                        -4194304,
-                        4194304,
-                        4194304
-                    ],
-                    "maxResolution": 8192.0,
-                    "serverResolutions": [
-                        8192.0,
-                        4096.0,
-                        2048.0,
-                        1024.0,
-                        512.0,
-                        256.0
-                    ],
-                    "url": [
-                        "//map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "//map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                        "//map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
-                    ]
-                }
-            },
-            "properties": {
-                "format": "image/png",
-                "layer": "arctic_graticule",
-                "tileSize": [
-                    512,
-                    512
-                ],
-                "transitionEffect": "none"
-            },
-            "tags": "lat lon lat-lon",
-            "type": "wmts"
         },
         "sedac_bound": {
             "description": "SEDAC / National Boundaries",
@@ -65349,6 +65351,12 @@
                 0
             ],
             "startZoom": 1
+        }
+    },
+    "redirects": {
+        "layers": {
+            "polarview:graticule3031_10x30": "antarctic_graticule",
+            "polarview:graticuleN": "arctic_graticule"
         }
     }
 }
