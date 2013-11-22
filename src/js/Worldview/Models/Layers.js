@@ -196,6 +196,10 @@ Worldview.Models.Layers = function(config, projectionModel) {
                         }
                     });
                     $.each(layers, function(index, layer) {
+                        var redirect = config.redirects.layers[layer.name];
+                        if ( redirect ) {
+                            layer.name = redirect;
+                        }
                         try {
                             self.add(type, layer.name, layer.hidden);
                         } catch ( error ) {
