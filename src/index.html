@@ -30,8 +30,6 @@
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="ext/yui/combo-container-min.css" />
 
     <!-- link.dev --> <link type="text/css" rel="StyleSheet" href="ext/openlayers/theme/default/style.css" />
-    <!-- link.dev --> <link type="text/css" rel="StyleSheet" href="ext/openlayers/openlayers.example.style.css" />
-    <!-- link.dev --> <link type="text/css" rel="StyleSheet" href="ext/openlayers/openlayers.style.mobile-jq.css" />
 
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="ext/jquery.dd/dd.css" />
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="ext/jquery.dd/skin2.css" />
@@ -53,6 +51,7 @@
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/projection.css" />
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/pages.css" />
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/map.css" />
+    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/map-ol2.css" />
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/dateSpan.css" />
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/menuPicker.css" />
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/accordionPicker.css" />
@@ -65,6 +64,7 @@
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/indicator.css" />
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/events.css" />
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/dataDownload.css" />
+    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.css"/>
 
     <!-- JavaScript resources ============================================= -->
     <!-- link.prod --> <!-- <script type="text/javascript" src="js/worldview-min.js?v=@BUILD_NONCE@&mobile"></script> -->
@@ -236,7 +236,7 @@
 </head>
 
 <body class="yui-skin-sam">
-    <div data-role="page" id="mappage">
+    <div data-role="page" id="app">
         <div data-role="content">
             <div id="banner"><div id='wvlogo'></div>
                 <ul id="toolbarlist">
