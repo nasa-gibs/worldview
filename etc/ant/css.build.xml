@@ -27,6 +27,7 @@
 
         <file name="css/palette.css"/>
 		<file name="css/map.css"/>
+        <file name="css/map-ol2.css"/>
 		<file name="css/dateSpan.css"/>
 		<file name="css/menuPicker.css"/>
 		<file name="css/accordionPicker.css"/>
@@ -41,6 +42,7 @@
         <file name="css/indicator.css"/>
         <file name="css/events.css"/>
         <file name="css/dataDownload.css"/>
+        <file name="css/wv.css"/>
 
 	</filelist>
 
