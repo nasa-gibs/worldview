@@ -1,10 +1,10 @@
-body {
+body#pages {
     margin: 0px;
     background-color: #000000;
     color: #FFFBE7;
 }
 
-#banner {
+#pages #banner {
     margin: 0px;
     background: rgba(65,65,65,0.5);
     border-bottom: 1px solid #000;
@@ -14,12 +14,12 @@ body {
 
 }
 
-#banner .logo {
+#pages #banner .logo {
     height: 45px;
     width: 247px;
 }
 
-#page {
+#pages #page {
     background-color: rgba(38, 43, 49, 0.65);
     margin: 10px auto;
     padding-top: 10px;
@@ -31,30 +31,30 @@ body {
     font: 100 12.8px/16px "helvetica",sans-serif;
 }
 
-.title {
+#pages .title {
     margin-top: 5px;
     margin-bottom: 5px;
 }
 
-.subtitle {
+#pages .subtitle {
     margin-top: 0px;
 }
 
-a:link {
+#pages a:link {
     color: #82cdfa;
     text-decoration: none;
 }
 
-a:hover {
+#pages a:hover {
     text-decoration: underline;
 }
 
-a:visited {
+#pages a:visited {
     color: #82cdfa;
     text-decoration: none;
 }
 
-hr {
+#pages hr {
     display: block;
     height: 1px;
     border: 0;
@@ -63,10 +63,10 @@ hr {
     padding: 0;
 }
 
-h1 {
+#pages h1 {
     font-size: 18px;
 }
 
-h2 {
+#pages h2 {
     font-size: 15px;
 }
