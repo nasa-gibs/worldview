@@ -23,7 +23,7 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
                 "Some items you have selected require an account with the " +
                 "EOSDIS User Registration System (URS) to download. " +
                 "It is simple and free to sign up! " +
-                "<a href='https://earthdata.nasa.gov/urs/register' target='urs'>" +
+                "<a href='https://urs.eosdis.nasa.gov/users/new' target='urs'>" +
                 "Click to register for an account.</a>" +
             "</p>" +
         "</div>";
