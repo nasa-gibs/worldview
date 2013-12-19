@@ -114,7 +114,7 @@ module.exports = function(grunt) {
 
         replace: {
             timestamp: {
-                src: ["build/worldview-debug/web/js/Worldview.js"],
+                src: ["build/worldview-debug/web/js/**/*.js"],
                 overwrite: true,
                 replacements: [{
                     from: "@BUILD_TIMESTAMP@",
@@ -122,7 +122,7 @@ module.exports = function(grunt) {
                 }]
             },
             version: {
-                src: ["build/worldview-debug/web/js/Worldview.js"],
+                src: ["build/worldview-debug/web/js/**/*.js"],
                 overwrite: true,
                 replacements: [{
                     from: "@BUILD_VERSION@",
@@ -323,14 +323,14 @@ module.exports = function(grunt) {
         "clean",
         "copy:web",
         "copy:bin",
-        "replace:timestamp",
-        "replace:nonce",
-        "replace:version",
         "copy:config",
         "exec:act",
         "exec:vrt",
         "exec:config",
         "concat",
+        "replace:timestamp",
+        "replace:nonce",
+        "replace:version",
         "replace:links",
         "copy:ext",
         "remove:source",
