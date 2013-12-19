@@ -1,0 +1,20 @@
+[
+    "src/css/palette.css",
+    "src/css/map.css",
+    "src/css/map-ol2.css",
+    "src/css/dateSpan.css",
+    "src/css/menuPicker.css",
+    "src/css/accordionPicker.css",
+    "src/css/bank.css",
+    "src/css/selector.css",
+    "src/css/sote.css",
+    "src/css/splash.css",
+    "src/css/products.css",
+    "src/css/projection.css",
+    "src/css/pages.css",
+    "src/css/about.css",
+    "src/css/indicator.css",
+    "src/css/events.css",
+    "src/css/dataDownload.css",
+    "src/css/global.css"
+]

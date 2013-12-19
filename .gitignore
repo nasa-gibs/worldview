@@ -2,6 +2,7 @@
 /dist
 /lib
 /tools
+/src/data/config.json
 /doc/NaturalDocs/Data
 /doc/NaturalDocs/LastCrash.txt
 /doc/NaturalDocs/Menu_Backup.txt

@@ -1,7 +1,26 @@
 {
-  "devDependencies": {
-    "grunt": "~0.4.1",
-    "grunt-contrib-yuidoc": "~0.4.0",
-    "yuidocjs": "0.3.x"
-  }
+    "name": "worldview-preview",
+    "version": "0.7.0",
+    "author": "Worldview Team <support@earthdata.nasa.gov>",
+    "description": "Browse full-resolution, near real-time satellite imagery",
+    "repository": {
+        "type": "git",
+        "url": "https://git.earthdata.nasa.gov/scm/wor/worldview.git"
+    },
+    "devDependencies": {
+        "grunt": "0.4.x",
+        "grunt-contrib-clean": "0.5.x",
+        "grunt-contrib-concat": "0.3.x",
+        "grunt-contrib-compress": "0.5.x",
+        "grunt-contrib-copy": "0.4.x",
+        "grunt-contrib-cssmin": "0.7.x",
+        "grunt-contrib-uglify": "0.2.x",
+        "grunt-contrib-yuidoc": "0.4.x",
+        "grunt-exec": "0.4.x",
+        "grunt-git-rev-parse": "0.1.x",
+        "grunt-line-remover": "0.0.x",
+        "grunt-text-replace": "0.3.x",
+        "moment": "2.4.x",
+        "yuidocjs": "0.3.x"
+    }
 }
