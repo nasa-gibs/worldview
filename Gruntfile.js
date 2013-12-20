@@ -106,6 +106,25 @@ module.exports = function(grunt) {
                     { expand: true, cwd: "build/worldview-debug/web/ext/jcrop",
                       src: ["*.gif"], dest: "build/worldview-debug/web/ext" },
                 ]
+            },
+
+            rpm_sources: {
+                files: [
+                    { expand: true, cwd: "etc/deploy/sources",
+                      src: ["**"], dest: "build/rpmbuild/SOURCES" },
+                    { expand: true, cwd: "etc/deploy", 
+                      src: ["worldview.spec"], dest: "build/rpmbuild/SPECS" },
+                    { expand: true, cwd: "dist",
+                      src: ["worldview.tar.gz", "worldview-debug.tar.gz"],
+                      dest: "build/rpmbuild/SOURCES" }
+	        ]
+            },
+
+            rpm: {
+                files: [
+                    { expand: true, flatten: true, cwd: "build/rpmbuild",
+                      src: ["**/*.rpm"], dest: "dist" }
+                ]
             }
         },
 
@@ -148,6 +167,10 @@ module.exports = function(grunt) {
             // Remove all of them.
             empty: {
                 command: "find build -type d -empty -delete"
+            },
+            rpmbuild: {
+                command: 'rpmbuild --define "_topdir $PWD/build/rpmbuild" ' + 
+                            '-ba build/rpmbuild/SPECS/worldview.spec'
             }
         },
 
@@ -194,6 +217,27 @@ module.exports = function(grunt) {
                 }, {
                     from: /.*link.prod.*!--(.*)--.*/g,
                     to: "$1"
+                }]
+            },
+	    rpm_sources: {
+	        src: [
+                    "build/rpmbuild/SOURCES/*", 
+                    "build/rpmbuild/SPECS/*",
+                    "!**/*.tar.gz"
+                ],
+                overwrite: true,
+                replacements: [{
+                    from: "@WORLDVIEW@",
+                    to: "<%= pkg.name %>"
+                },{
+		    from: "@BUILD_VERSION@",
+                    to: "<%= pkg.version %>"
+		},{
+                    from: "@BUILD_RELEASE@",
+                    to: "<%= pkg.release %>"
+                },{
+                    from: "@GIT_REVISION@", 
+                    to: ".git<%= grunt.config.get('git-revision') %>"
                 }]
             }
         },
@@ -287,11 +331,13 @@ module.exports = function(grunt) {
             // git revision.
             debug_versioned: {
                 options: {
+                    mode: "tgz",
                     archive: "dist/" +
                              "<%= pkg.name %>" +
                              "-debug" +
                              "-<%= pkg.version %>" +
-                             "-git<%= grunt.config.get('git-revision') %>" +
+                             "-<%= pkg.release %>" + 
+                             ".git<%= grunt.config.get('git-revision') %>" +
                              ".tar.gz"
                 },
                 files: [{
@@ -303,6 +349,7 @@ module.exports = function(grunt) {
             // information.
             debug: {
                 options: {
+                    mode: "tgz",
                     archive: "dist/worldview-debug.tar.gz"
                 },
                 files: [{
@@ -314,10 +361,12 @@ module.exports = function(grunt) {
             // git revision.
             release_versioned: {
                 options: {
+                    mode: "tgz",
                     archive: "dist/" +
                              "<%= pkg.name %>" +
                              "-<%= pkg.version %>" +
-                             "-git<%= grunt.config.get('git-revision') %>" +
+                             "-<%= pkg.release %>" +
+                             ".git<%= grunt.config.get('git-revision') %>" +
                              ".tar.gz"
                 },
                 files: [{
@@ -329,6 +378,7 @@ module.exports = function(grunt) {
             // information.
             release: {
                 options: {
+                    mode: "tgz",
                     archive: "dist/worldview.tar.gz"
                 },
                 files: [{
@@ -356,12 +406,13 @@ module.exports = function(grunt) {
                 "!build/worldview-debug/web/css/bulkDownload.css",
                 "!build/worldview-debug/web/js/Worldview/Map/TileWorker.js"
             ],
-            dist_tar: ["dist/*.tar.gz"]
+	    dist_tar: ["dist/*.tar.gz"],
+	    rpmbuild: ["build/rpmbuild"]
         }
 
     });
 
-    grunt.file.mkdir("build");
+    grunt.file.mkdir("build/rpmbuild");
     grunt.file.mkdir("dist");
 
     grunt.loadNpmTasks("grunt-contrib-clean");
@@ -410,6 +461,15 @@ module.exports = function(grunt) {
         "compress"
     ]);
 
+    grunt.registerTask("rpm_only", [
+        "remove:rpmbuild",
+        "copy:rpm_sources",
+        "replace:rpm_sources",
+        "exec:rpmbuild",
+        "copy:rpm"
+    ]);
+
+    grunt.registerTask("rpm", ["build", "rpm_only"]);
     grunt.registerTask("clean", "remove:build");
     grunt.registerTask("distclean", ["remove:build", "remove:dist"]);
 

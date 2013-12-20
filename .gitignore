@@ -3,6 +3,7 @@ dist
 node_modules
 .project
 .settings
-.pydevproject
+.pydevprioject
 .DS_Store
 *~
+*.swp
