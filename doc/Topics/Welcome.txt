@@ -1,4 +1,0 @@
-Title: Welcome
-
-Welcome to the documentation for Worldview.
-
