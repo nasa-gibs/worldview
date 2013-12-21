@@ -8,20 +8,29 @@
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
-var moment = require("./node_modules/moment/moment");
+var moment = require("moment");
 
+// Build date shown in the About box
 var buildTimestamp = moment.utc().format("MMMM DD, YYYY [-] HH:mm [UTC]");
+
+// Append to all URI references for cache busting
 var buildNonce = moment.utc().format("YYYYMMDDHHmmssSSS");
 
-var buildNumber = ( process.env.BUILD_NUMBER ) 
+// If being built with Jenkins, include the build number in artifacts
+var buildNumber = ( process.env.BUILD_NUMBER )
     ? "." + process.env.BUILD_NUMBER : "";
 
 module.exports = function(grunt) {
 
+    // Lists of JavaScript and CSS files to include and in the correct
+    // roder
     var wvJs = grunt.file.readJSON("etc/deploy/wv.js.json");
     var wvCss = grunt.file.readJSON("etc/deploy/wv.css.json");
     var extJs = grunt.file.readJSON("etc/deploy/ext.js.json");
     var extCss = grunt.file.readJSON("etc/deploy/ext.css.json");
+
+    // Copyright notice to place at the top of the minified JavaScript and
+    // CSS files
     var banner = grunt.file.read("etc/deploy/banner.txt");
 
     grunt.initConfig({
@@ -46,6 +55,7 @@ module.exports = function(grunt) {
                       src: "config/**", dest: "build" }
                 ]
             },
+
             // Copies the web root from the source directory to the build
             // directory
             web: {
@@ -63,6 +73,7 @@ module.exports = function(grunt) {
                       src: "**", dest: "build/worldview-debug/bin" }
                 ]
             },
+
             // Copies the concatenated JavaScript and CSS files to the
             // final location in the release web root being built.
             concat: {
@@ -73,6 +84,7 @@ module.exports = function(grunt) {
                       dest: "build/worldview-debug/web" }
                 ]
             },
+
             // Copies the finished version of the debugging web root to
             // create a release web root. JavaScript and CSS files are omitted
             // since the concatenated version is used instead. Files that
@@ -92,6 +104,7 @@ module.exports = function(grunt) {
                       dest: "build/worldview/web" }
                 ]
             },
+
             // Since the location of the CSS changes when using the
             // concatenated file. "hoist" up all the dependencies found
             // in the ext directory by one directory.
@@ -111,18 +124,22 @@ module.exports = function(grunt) {
                 ]
             },
 
+            // Copies the built tarballs, auxillary files, and spec file
+            // to the build directory
             rpm_sources: {
                 files: [
                     { expand: true, cwd: "etc/deploy/sources",
                       src: ["**"], dest: "build/rpmbuild/SOURCES" },
-                    { expand: true, cwd: "etc/deploy", 
+                    { expand: true, cwd: "etc/deploy",
                       src: ["worldview.spec"], dest: "build/rpmbuild/SPECS" },
                     { expand: true, cwd: "dist",
                       src: ["worldview.tar.gz", "worldview-debug.tar.gz"],
                       dest: "build/rpmbuild/SOURCES" }
-	        ]
+	            ]
             },
 
+            // Copies the built RPMs in the build directory to the dist
+            // directory
             rpm: {
                 files: [
                     { expand: true, flatten: true, cwd: "build/rpmbuild",
@@ -137,6 +154,7 @@ module.exports = function(grunt) {
             act: {
                 command: "python etc/config/act2json.py build/config/palettes"
             },
+
             // Create Worldview color palettes from VRT files provided by
             // the GIBS team
             vrt: {
@@ -144,12 +162,14 @@ module.exports = function(grunt) {
                             "--layers-dir build/config/layers " +
                             "build/config/palettes"
             },
+
             // Combine all configuration json files into one.
             config: {
                 command: "python etc/config/generate-config.py " +
                             "--config-dir build/config " +
                             "--output build/worldview-debug/web/data/config.json"
             },
+
             // Create a minified verison of the configuration file for
             // the release web root.
             config_min: {
@@ -158,6 +178,7 @@ module.exports = function(grunt) {
                             "--minify " +
                             "--output build/config.min.json"
             },
+
             // Creates a combined configuration file for use in the source
             // tree
             config_src: {
@@ -165,16 +186,63 @@ module.exports = function(grunt) {
                             "--config-dir build/config " +
                             "--output src/data/config.json"
             },
+
             // After removing JavaScript and CSS files that are no longer
             // need in a release build, there are a lot of empty directories.
             // Remove all of them.
             empty: {
                 command: "find build -type d -empty -delete"
             },
+
+            // Enable executable bits for all CGI programs
+            service: {
+                command: "chmod 755 build/worldview*/web/service/*.cgi"
+            },
+
+            // Create a tarball of the debug build with a version number and
+            // git revision.
+            tar_debug_versioned: {
+                command: "tar czCf build dist/" +
+                            "<%= pkg.name %>" +
+                            "-debug" +
+                            "-<%= pkg.version %>" +
+                            "-<%= pkg.release %>" +
+                            buildNumber +
+                            ".git<%= grunt.config.get('git-revision') %>" +
+                            ".tar.gz worldview-debug"
+            },
+
+            // Create a tarball of the debug build without versioning
+            // information
+            tar_debug: {
+                command: "tar czCf build dist/worldview-debug.tar.gz " +
+                            "worldview-debug"
+            },
+
+            // Create a tarball of the release build with a version number and
+            // git revision
+            tar_release_versioned: {
+                command: "tar czCf build dist/" +
+                            "<%= pkg.name %>" +
+                            "-<%= pkg.version %>" +
+                            "-<%= pkg.release %>" +
+                            buildNumber +
+                            ".git<%= grunt.config.get('git-revision') %>" +
+                            ".tar.gz worldview"
+            },
+
+            // Create a tarball of the release build without versioning
+            // information
+            tar_release: {
+                command: "tar czCf build dist/worldview.tar.gz " +
+                            "worldview"
+            },
+
+            // Builds the RPM
             rpmbuild: {
-                command: 'rpmbuild --define "_topdir $PWD/build/rpmbuild" ' + 
+                command: 'rpmbuild --define "_topdir $PWD/build/rpmbuild" ' +
                             '--define "build_num ' + buildNumber +'" ' +
-			    '-ba build/rpmbuild/SPECS/worldview.spec'
+			                '-ba build/rpmbuild/SPECS/worldview.spec'
             }
         },
 
@@ -223,9 +291,12 @@ module.exports = function(grunt) {
                     to: "$1"
                 }]
             },
-	    rpm_sources: {
-	        src: [
-                    "build/rpmbuild/SOURCES/*", 
+
+            // Adds RPM package name, version, release, and git revision
+            // to the RPM spec file in the build directory
+            rpm_sources: {
+                src: [
+                    "build/rpmbuild/SOURCES/*",
                     "build/rpmbuild/SPECS/*",
                     "!**/*.tar.gz"
                 ],
@@ -233,14 +304,14 @@ module.exports = function(grunt) {
                 replacements: [{
                     from: "@WORLDVIEW@",
                     to: "<%= pkg.name %>"
-                },{
-		    from: "@BUILD_VERSION@",
+                }, {
+                    from: "@BUILD_VERSION@",
                     to: "<%= pkg.version %>"
-		},{
+                },{
                     from: "@BUILD_RELEASE@",
                     to: "<%= pkg.release %>"
                 },{
-                    from: "@GIT_REVISION@", 
+                    from: "@GIT_REVISION@",
                     to: ".git<%= grunt.config.get('git-revision') %>"
                 }]
             }
@@ -330,70 +401,6 @@ module.exports = function(grunt) {
             }
         },
 
-        compress: {
-            // Create a tarball of the debug build with a version number and
-            // git revision.
-            debug_versioned: {
-                options: {
-                    mode: "tgz",
-                    archive: "dist/" +
-                             "<%= pkg.name %>" +
-                             "-debug" +
-                             "-<%= pkg.version %>" +
-                             "-<%= pkg.release %>" + 
-			    buildNumber +
-                             ".git<%= grunt.config.get('git-revision') %>" +
-                             ".tar.gz"
-                },
-                files: [{
-                    expand: true, cwd: "build/worldview-debug/", src: ["**"],
-                    dest: "worldview-debug"
-                }]
-            },
-            // Create a tarball of the debug build without versioning
-            // information.
-            debug: {
-                options: {
-                    mode: "tgz",
-                    archive: "dist/worldview-debug.tar.gz"
-                },
-                files: [{
-                    expand: true, cwd: "build/worldview-debug/", src: ["**"],
-                    dest: "worldview-debug"
-                }]
-            },
-            // Create a tarball of the release build with a version number and
-            // git revision.
-            release_versioned: {
-                options: {
-                    mode: "tgz",
-                    archive: "dist/" +
-                             "<%= pkg.name %>" +
-                             "-<%= pkg.version %>" +
-                             "-<%= pkg.release %>" +
-                             buildNumber + 
-                             ".git<%= grunt.config.get('git-revision') %>" +
-                             ".tar.gz"
-                },
-                files: [{
-                    expand: true, cwd: "build/worldview/", src: ["**"],
-                    dest: "worldview"
-                }]
-            },
-            // Create a tarball of the release build without versioning
-            // information.
-            release: {
-                options: {
-                    mode: "tgz",
-                    archive: "dist/worldview.tar.gz"
-                },
-                files: [{
-                    expand: true, cwd: "build/worldview/", src: ["**"],
-                    dest: "worldview"
-                }]
-            },
-        },
-
         remove: {
             build: ["build"],
             dist: ["dist"],
@@ -412,8 +419,9 @@ module.exports = function(grunt) {
                 "!build/worldview-debug/web/css/bulkDownload.css",
                 "!build/worldview-debug/web/js/Worldview/Map/TileWorker.js"
             ],
-	    dist_tar: ["dist/*.tar.gz"],
-	    rpmbuild: ["build/rpmbuild"]
+            dist_tar: ["dist/*.tar.gz"],
+            dist_rpm: ["dist/*.rpm"],
+            rpmbuild: ["build/rpmbuild"]
         }
 
     });
@@ -463,14 +471,19 @@ module.exports = function(grunt) {
         "cssmin",
         "lineremover",
         "exec:empty",
+        "exec:service",
         "remove:dist_tar",
-        "compress"
+        "exec:tar_debug_versioned",
+        "exec:tar_debug",
+        "exec:tar_release_versioned",
+        "exec:tar_release"
     ]);
 
     grunt.registerTask("rpm_only", [
         "remove:rpmbuild",
         "copy:rpm_sources",
         "replace:rpm_sources",
+        "remove:dist_rpm",
         "exec:rpmbuild",
         "copy:rpm"
     ]);
