@@ -341,6 +341,7 @@ module.exports = function(grunt) {
                              "-debug" +
                              "-<%= pkg.version %>" +
                              "-<%= pkg.release %>" + 
+			    buildNumber +
                              ".git<%= grunt.config.get('git-revision') %>" +
                              ".tar.gz"
                 },
@@ -370,6 +371,7 @@ module.exports = function(grunt) {
                              "<%= pkg.name %>" +
                              "-<%= pkg.version %>" +
                              "-<%= pkg.release %>" +
+                             buildNumber + 
                              ".git<%= grunt.config.get('git-revision') %>" +
                              ".tar.gz"
                 },
