@@ -135,6 +135,18 @@ rm -rf %{buildroot}
 #%dir %{_sharedstatedir}/@WORLDVIEW@-debug
 #%dir %{_localstatedir}/log/@WORLDVIEW@-debug
 
+
+%post
+if [ $1 -gt 1 ] ; then
+   service httpd reload
+fi
+
+%postun
+if [ $1 -eq 0 ] ; then
+   serivce httpd reload
+fi
+
+
 %changelog
 * Wed Oct 30 2013 Mike McGann <mike.mcgann@nasa.gov> - 0.6.0-1
 - Worldview 0.6.0 release
