@@ -141,7 +141,17 @@ if [ $1 -gt 1 ] ; then
    service httpd reload
 fi
 
+%post debug
+if [ $1 -gt 1 ] ; then
+   service httpd reload
+fi
+
 %postun
+if [ $1 -eq 0 ] ; then
+   serivce httpd reload
+fi
+
+%postun debug
 if [ $1 -eq 0 ] ; then
    serivce httpd reload
 fi
