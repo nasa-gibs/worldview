@@ -13,6 +13,9 @@ var moment = require("./node_modules/moment/moment");
 var buildTimestamp = moment.utc().format("MMMM DD, YYYY [-] HH:mm [UTC]");
 var buildNonce = moment.utc().format("YYYYMMDDHHmmssSSS");
 
+var buildNumber = ( process.env.BUILD_NUMBER ) 
+    ? "." + process.env.BUILD_NUMBER : "";
+
 module.exports = function(grunt) {
 
     var wvJs = grunt.file.readJSON("etc/deploy/wv.js.json");
@@ -170,7 +173,8 @@ module.exports = function(grunt) {
             },
             rpmbuild: {
                 command: 'rpmbuild --define "_topdir $PWD/build/rpmbuild" ' + 
-                            '-ba build/rpmbuild/SPECS/worldview.spec'
+                            '--define "build_num ' + buildNumber +'" ' +
+			    '-ba build/rpmbuild/SPECS/worldview.spec'
             }
         },
 
