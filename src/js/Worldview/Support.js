@@ -121,7 +121,7 @@ Worldview.namespace("Support");
     };
 
     var hideURLbar = function() {
-        window.scrollTo(0, 1);
+        window.scrollTo(0, 0);
     };
 
     var checkMobile = function() {
@@ -132,30 +132,32 @@ Worldview.namespace("Support");
                 mobileSafari = true;
             }
             addEventListener("load", function() {
-                    setTimeout(hideURLbar, 0);
+                setTimeout(hideURLbar, 0); 
             }, false);
             addEventListener("orientationchange", function() {
-                    setTimeout(hideURLbar, 0);
+                setTimeout(hideURLbar, 0);
             }, false);
         }
 
         // Set the div height
         function setHeight($body) {
-            if (navigator.userAgent.indexOf('iPhone') != -1 && navigator.userAgent.indexOf('Safari')!=-1) {
+            if (navigator.userAgent.match(/(iPad|iPhone|iPod touch);.*CPU.*OS 7_\d/i)){
+                $("div#app.ui-page.ui-body-c.ui-page-active").css("min-height", 0);
+            }
+            else {
                 var new_height = $(window).height();
                 // if mobileSafari add +60px
                 new_height += 60;
                 $body.css('min-height', 0 );
                 $body.css('height', new_height );
-
             }
-
         }
-
-        setHeight( $('#mappage') );
+        
+        setHeight( $('#app') );
         $(window).resize(function() {
-            setHeight($('#mappage'));
+            setHeight($('#app'));
         });
+        
     };
 
     var modernSetTimeout = function() {

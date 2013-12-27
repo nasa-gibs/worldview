@@ -141,8 +141,12 @@ SOTE.widget.DateSpan.prototype = new SOTE.widget.Component;
 SOTE.widget.DateSpan.prototype.init = function(){
 
 	// inherit styles into the user-specified div
+	if ($(window).width() < 720) { //this is not the best way to do this
+            $("#timeds").css("display","none");
+            $("#timemds").css("display","block");
+          }
 	this.container.setAttribute("class","datespan");
-
+    
 	var dateHolder = document.createElement('div');
 	dateHolder.setAttribute('id',this.id+'dateHolder');
 	dateHolder.setAttribute('class','dateHolder');

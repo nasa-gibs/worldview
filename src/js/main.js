@@ -224,6 +224,10 @@ $(function() {// Initialize "static" vars
             $('#productsHoldertabs li.first a').trigger('click');
           }
         });
+        
+        document.activeElement.blur();
+        $("input").blur();
+        $("#eventsHolder").hide();
         // Wirings
         layerSideBar.events
             .on("dataDownloadSelect", function() {
