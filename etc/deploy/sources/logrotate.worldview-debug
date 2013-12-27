@@ -1,4 +1,4 @@
-/var/log/worldview/*.log {
+/var/log/@WORLDVIEW@-debug/*.log {
     copytruncate
     weekly
     rotate 4
