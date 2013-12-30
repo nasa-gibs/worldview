@@ -93,7 +93,7 @@ module.exports = function(grunt) {
             release: {
                 files: [
                     { expand: true, cwd: "build/worldview-debug",
-                      src: ["**", "!**/*.js", "!**/*.css"],
+                      src: ["**"],
                       dest: "build/worldview" },
                     { expand: true, cwd: "build/worldview-debug/web",
                       src: [
