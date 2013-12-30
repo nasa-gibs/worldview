@@ -131,8 +131,7 @@
     width: 20px;
     height: 20px;
     vertical-align: middle;
-    background:url(../images/wv-icons.svg) transparent 0 -10px;      /*White icons*/
-    /*background:url(../images/wv-icons.svg) transparent 0 -40px;*/  /*Grey icons*/
+    background:url(../images/wv-icons.svg) transparent 0 -10px;
     margin:0;
 }
 /*ul#productsHoldertabs li.ui-state-active .tab:hover i.productsIcon{

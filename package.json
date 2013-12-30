@@ -9,7 +9,9 @@
         "url": "https://git.earthdata.nasa.gov/scm/wor/worldview.git"
     },
     "devDependencies": {
+        "buster": "0.7.x",
         "grunt": "0.4.x",
+        "grunt-buster": "0.3.x",
         "grunt-contrib-clean": "0.5.x",
         "grunt-contrib-concat": "0.3.x",
         "grunt-contrib-compress": "0.5.x",
@@ -21,6 +23,8 @@
         "grunt-git-rev-parse": "0.1.x",
         "grunt-line-remover": "0.0.x",
         "grunt-text-replace": "0.3.x",
+        "phantomjs": "1.9.x",
+        "jshint": "2.3.x",
         "moment": "2.4.x",
         "yuidocjs": "0.3.x"
     }

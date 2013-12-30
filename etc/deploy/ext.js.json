@@ -1,7 +1,6 @@
 [
     "src/ext/preloadjs/preloadjs.min.js",
 
-    "src/ext/jquery/jquery.js",
     "src/ext/jquery-ui/jquery-ui.min.js",
     "src/ext/jquery.mobile/jquery.mobile.js",
 
@@ -38,7 +37,6 @@
     "src/ext/openlayers/OpenLayers.debug.js",
     "src/ext/jcrop/jcrop.js",
     "src/ext/jquery.dd/jquery.dd.js",
-    "src/ext/jscache/cache.js",
 
     "src/ext/proj4js/proj4js.js",
     "src/ext/proj4js/merc.js",

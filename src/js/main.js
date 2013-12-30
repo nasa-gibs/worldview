@@ -124,9 +124,6 @@ $(function() {// Initialize "static" vars
         }
         //var lastVisitObj = new Date(lastVisit);
         var lastVisitObj = new Date("2013-04-07T00:00:00-04:00"); // FIXME
-        // get query string
-        var queryString =
-            Worldview.Permalink.decode(window.location.search.substring(1));
 
         // Features that are important for debugging but are not necessary
         // for Worldview to opeerate properly
@@ -145,6 +142,8 @@ $(function() {// Initialize "static" vars
             layersModel: layersModel
         });
         models.dataDownload = dataDownloadModel;
+        models.link = wv.link.model(config);
+        wv.models = models;
 
         // These are only convienence handles to important objects used
         // for console debugging. Code should NOT reference these as they
@@ -158,6 +157,7 @@ $(function() {// Initialize "static" vars
         var legacyDate = Worldview.Legacy.Date(models.date);
 
         // Create widgets
+        var ui = {};
         var projection = Worldview.Widget.Projection(projectionModel);
         var palettes = Worldview.Widget.Palette(config, palettesModel, {
             alignTo: "#products"
@@ -194,7 +194,7 @@ $(function() {// Initialize "static" vars
         var crs = new Worldview.Widget.CRS(config);
 
         // collapse events if worldview is being loaded via permalink
-        if(queryString) {
+        if(window.location.search) {
         	eventsCollapsed = true;
         }
     	var events = new SOTE.widget.Events("eventsHolder", {
@@ -213,12 +213,14 @@ $(function() {// Initialize "static" vars
         });
         dataDownload.render();
 
+        ui.link = wv.link.ui(models);
+
         $(window).resize(function() {
           if ($(window).width() < 720) {
             $('#productsHoldertabs li.first a').trigger('click');
           }
         });
-        
+
         document.activeElement.blur();
         $("input").blur();
         $("#eventsHolder").hide();
@@ -285,8 +287,14 @@ $(function() {// Initialize "static" vars
         ];
 
         // Init
-        if (queryString.length > 0) {
+        if (window.location.search.length > 0) {
             REGISTRY.isLoadingQuery = true;
+            var qo = wv.util.fromQueryString(window.location.search);
+            var parts = [];
+            _.each(qo, function(value, key) {
+                parts.push(key + "=" + value);
+            });
+            var queryString = parts.join("&");
             $.each(initOrder, function(index, component) {
                 component.loadFromQuery(queryString);
             });
@@ -304,7 +312,7 @@ $(function() {// Initialize "static" vars
         }
 
         // Do not start the tour if coming in via permalink
-        if ( !queryString ) {
+        if ( !window.location.search ) {
             Worldview.Tour.start(storageEngine, hideSplash, false);
         }
 

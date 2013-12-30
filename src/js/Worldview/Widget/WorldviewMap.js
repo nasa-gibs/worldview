@@ -50,7 +50,8 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
         log.debug("Map is ready");
 
         setExtentToLeading();
-        self.updateComponent(Worldview.Permalink.get());
+        // FIXME: It should not be getting this value from global
+        self.updateComponent(wv.models.link.get());
     };
 
     /**

@@ -58,12 +58,7 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
     border-bottom: 1px solid #000;
 }
 
-#wvlogo {
-    background:url('../images/wv-logo.svg') no-repeat center;
-    width:247px;
-    height:45px;
-    display:inline-block;
-}
+
 @media
 #banner img.logo {padding:11px 5px;}
 #banner ul {float:right; }

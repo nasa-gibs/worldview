@@ -165,7 +165,7 @@ Worldview.Models.Layers = function(config, projectionModel) {
             });
             types.push(type.join(","));
         });
-        return "products=" + Worldview.Permalink.encode(types.join("~"));
+        return "products=" + types.join("~");
     };
 
     self.fromPermalink = function(queryString) {

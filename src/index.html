@@ -48,6 +48,9 @@
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="ext/mobiscroll/mobiscroll.wp.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="ext/mobiscroll/mobiscroll.animation.css">
 
+    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.main.css">
+    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.link.css">
+
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/sote.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/projection.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/pages.css">
@@ -67,14 +70,21 @@
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/dataDownload.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/global.css">
 
-    <!-- JavaScript resources ============================================= -->
+    <!-- External libraries =============================================== -->
+    <!-- link.dev  -->      <script type="text/javascript" src="ext/wv.main/lodash-2.4.1/lodash.js"></script>
+    <!-- link.prod --> <!-- <script type="text/javascript" src="ext/wv.main/lodash-2.4.1/lodash.min.js"></script> -->
+
+    <!-- link.dev  -->      <script type="text/javascript" src="ext/wv.main/jquery-1.6.4/jquery.js"></script>
+    <!-- link.prod --> <!-- <script type="text/javascript" src="ext/wv.main/jquery-1.6.4/jquery.min.js"></script> -->
+
+    <!-- link.dev  -->      <script type="text/javascript" src="ext/wv.main/jscache-gitba01cdc/cache.js"></script>
+    <!-- link.prod --> <!-- <script type="text/javascript" src="ext/wv.main/jscache-gitba01cdc/cache.min.js"></script> -->
+
     <!-- link.prod --> <!-- <script type="text/javascript" src="ext/ext.js?v=20131218215115174&mobile"></script> -->
     <!-- link.prod --> <!-- <script type="text/javascript" src="js/wv.js?v=20131218215115174&mobile"></script> -->
 
     <!-- link.dev --> <script type="text/javascript" src="ext/preloadjs/preloadjs.min.js"></script>
 
-    <!-- JQuery mobile load should be after SOTE-specific JS but didn't work at first;  need to retry -->
-    <!-- link.dev --> <script type="text/javascript" src="ext/jquery/jquery.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="ext/jquery-ui/jquery-ui.min.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="ext/jquery.mobile/jquery.mobile.js"></script>
 
@@ -117,7 +127,7 @@
     <!-- link.dev --> <script type="text/javascript" src="ext/openlayers/OpenLayers.debug.js?mobile"></script>
     <!-- link.dev --> <script type="text/javascript" src="ext/jcrop/jcrop.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="ext/jquery.dd/jquery.dd.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="ext/jscache/cache.js"></script>
+
 
     <!-- link.dev --> <script type="text/javascript" src="js/Logging.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Date.js"></script>
@@ -130,11 +140,13 @@
     <!-- link.dev --> <script type="text/javascript" src="js/sote.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/events.js"></script>
 
+    <!-- link.dev --> <script type="text/javascript" src="js/wv.util.js"></script>
+
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/About.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Support.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Scheduler.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Permalink.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/link/wv.link.model.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Preloader.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Events.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Indicator.js"></script>
@@ -227,7 +239,7 @@
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Widget/Opacity.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Widget/CRS.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Widget/DataDownload.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Widget/Permalink.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/link/wv.link.ui.js"></script>
 
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Legacy/switch.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/Worldview/Legacy/bank.js"></script>
@@ -240,12 +252,12 @@
 <body class="yui-skin-sam">
     <div data-role="page" id="app">
         <div data-role="content">
-            <div id="banner"><div id="wvlogo"></div>
+            <div id="banner"><div id="wv-logo"></div>
                 <ul id="toolbarlist">
                     <li class="toolbar-icon"><div id="info_drop"><div id="info" title="Information"><img src="images/information.png"></div><div class="hidden"><a href="mailto:support@earthdata.nasa.gov?subject=Feedback for EOSDIS Worldview tool" target="_blank" title="Feedback">Feedback</a><a href="javascript:Worldview.Tour.start(null, false, true);" title="Start Tour">Start Tour</a><a href="javascript:Worldview.About.show();" title="About Worldview">About</a></div></div></li>
                     <li class="toolbar-icon"><div id="camera"></div></li>
                     <li class="toolbar-icon"><div id="projection"></div></li>
-                    <li class="toolbar-icon"><a id="perma_link" class="toolbar-link" title="Permalink" href="javascript:Worldview.Widget.Permalink.show();"><img src="images/permalink.png"></a></li>
+                    <li id="wv-link" class="toolbar-icon"></li>
                 </ul>
             </div>
 

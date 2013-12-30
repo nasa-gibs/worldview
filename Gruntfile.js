@@ -24,9 +24,9 @@ module.exports = function(grunt) {
 
     // Lists of JavaScript and CSS files to include and in the correct
     // roder
-    var wvJs = grunt.file.readJSON("etc/deploy/wv.js.json");
-    var wvCss = grunt.file.readJSON("etc/deploy/wv.css.json");
-    var extJs = grunt.file.readJSON("etc/deploy/ext.js.json");
+    var wvJs   = grunt.file.readJSON("etc/deploy/wv.js.json");
+    var wvCss  = grunt.file.readJSON("etc/deploy/wv.css.json");
+    var extJs  = grunt.file.readJSON("etc/deploy/ext.js.json");
     var extCss = grunt.file.readJSON("etc/deploy/ext.css.json");
 
     // Copyright notice to place at the top of the minified JavaScript and
@@ -195,8 +195,12 @@ module.exports = function(grunt) {
             },
 
             // Enable executable bits for all CGI programs
-            service: {
-                command: "chmod 755 build/worldview*/web/service/*.cgi"
+            cgi_echo: {
+                command: "chmod 755 build/worldview*/web/service/echo.cgi"
+            },
+
+            cgi_shorten: {
+                command: "chmod 755 build/worldview*/web/service/wv.link/shorten.cgi"
             },
 
             // Create a tarball of the debug build with a version number and
@@ -281,14 +285,17 @@ module.exports = function(grunt) {
             // Remove all development links <!-- link.dev --> and uncomment
             // all the release links <1-- link.prod -->
             links: {
-                src: ["build/worldview-debug/web/**/*.html"],
+                src: [
+                   "build/worldview-debug/web/**/*.html",
+                    "build/worldview-debug/web/**/*.css"
+                ],
                 overwrite: true,
                 replacements: [{
                     from: /.*link.dev.*/g,
                     to: ""
                 }, {
-                    from: /.*link.prod.*!--(.*)--.*/g,
-                    to: "$1"
+                    from: /.*link.prod.*(!--|\/\*)(.*)(--|\*\/).*/g,
+                    to: "$2"
                 }]
             },
 
@@ -401,6 +408,27 @@ module.exports = function(grunt) {
             }
         },
 
+        yuidoc: {
+            main: {
+                name: "Worldview",
+                description: "Interactive satellite imagery browser",
+                version: "<%= pkg.version %>",
+                url: "https://earthdata.nasa.gov/worldview",
+                options: {
+                    paths: ["src/wv"],
+                    outdir: "build/doc"
+                }
+            }
+        },
+
+        jshint: {
+            main: [
+                "src/js/wv/**/*.js",
+                "src/js/wv.*.js",
+                "test/**/*.js",
+            ]
+        },
+
         remove: {
             build: ["build"],
             dist: ["dist"],
@@ -417,7 +445,8 @@ module.exports = function(grunt) {
                 "!build/worldview-debug/web/ext/ext.js",
                 "!build/worldview-debug/web/css/pages.css",
                 "!build/worldview-debug/web/css/bulkDownload.css",
-                "!build/worldview-debug/web/js/Worldview/Map/TileWorker.js"
+                "!build/worldview-debug/web/js/Worldview/Map/TileWorker.js",
+                "!build/worldview-debug/web/ext/wv.main/**"
             ],
             dist_tar: ["dist/*.tar.gz"],
             dist_rpm: ["dist/*.rpm"],
@@ -429,12 +458,15 @@ module.exports = function(grunt) {
     grunt.file.mkdir("build/rpmbuild");
     grunt.file.mkdir("dist");
 
+    grunt.loadNpmTasks("grunt-buster");
     grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-contrib-concat");
     grunt.loadNpmTasks("grunt-contrib-compress");
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-contrib-cssmin");
+    grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-contrib-uglify");
+    grunt.loadNpmTasks("grunt-contrib-yuidoc");
     grunt.loadNpmTasks("grunt-line-remover");
     grunt.loadNpmTasks("grunt-exec");
     grunt.loadNpmTasks("grunt-git-rev-parse");
@@ -471,7 +503,9 @@ module.exports = function(grunt) {
         "cssmin",
         "lineremover",
         "exec:empty",
-        "exec:service",
+        "exec:cgi_echo",
+        "exec:cgi_shorten",
+        "doc",
         "remove:dist_tar",
         "exec:tar_debug_versioned",
         "exec:tar_debug",
@@ -488,10 +522,12 @@ module.exports = function(grunt) {
         "copy:rpm"
     ]);
 
+    grunt.registerTask("doc", ["yuidoc"]);
+    grunt.registerTask("lint", ["jshint"]);
     grunt.registerTask("rpm", ["build", "rpm_only"]);
     grunt.registerTask("clean", "remove:build");
     grunt.registerTask("distclean", ["remove:build", "remove:dist"]);
 
-    grunt.registerTask("default", "build");
+    grunt.registerTask("default", ["build", "lint"]);
 
 };
