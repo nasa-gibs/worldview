@@ -67,7 +67,7 @@ wv.link.ui = wv.link.ui || function(models) {
             console.warn("Unable to shorten URL");
             console.warn.apply(console, arguments);
             Worldview.notify("Unable to shorten the permalink at this time. " +
-                    "Try again later.");
+                    "Please try again later.");
         };
 
         var update = function() {
