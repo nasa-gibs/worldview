@@ -25,13 +25,6 @@ $(function() {// Initialize "static" vars
         // below.
         Worldview.Support.quirks();
 
-        // A message can be displayed to the user (for example, notification
-        // of a pending outage) by adding a notice.txt file in the web root
-        $.get("var/notice.txt", function(message) {
-            var html = message.replace(/\n/g, "<br/>");
-            Worldview.notify(html);
-        });
-
         // Place any resources that should be completely loaded before
         // starting up the UI
         Worldview.Preloader([
