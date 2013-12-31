@@ -3,7 +3,8 @@ dist
 node_modules
 .project
 .settings
-.pydevprioject
+.pydevproject
 .DS_Store
+bitly_config.py*
 *~
 *.swp

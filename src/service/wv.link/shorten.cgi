@@ -19,8 +19,6 @@ import sys
 from urllib2 import Request, urlopen, HTTPError, quote
 
 endpoint = "http://api.bit.ly/v3/shorten"
-login = "mikemcgann"
-api_key = "R_ec77065b0261e49752dcd6ca2f3ee1a2"
 
 
 class RequestError(Exception):
@@ -96,8 +94,8 @@ def service_unavailable(options, info=None):
   - info: Additional information to display to the user if options.error
       is True
   """
+  print options
   handle_error(503, "Service Unavailable", options, info)
-
 
 def process_request(options):
   fields = cgi.FieldStorage()
@@ -112,8 +110,8 @@ def process_request(options):
 
 
   url = "".join([endpoint,
-    "?login=" + login,
-    "&apiKey=" + api_key,
+    "?login=" + bitly_config.login,
+    "&apiKey=" + bitly_config.api_key,
     "&format=json",
     "&longUrl=" + quote(fields["url"].value)])
 
@@ -161,7 +159,12 @@ if __name__ == '__main__':
   """
   options = parse_options()
   try:
+    sys.path.append(os.path.join("..", "..", "..", "conf"))
+    import bitly_config
     process_request(options)
+  except ImportError:
+    options.error = True
+    service_unavailable(options, "No API key")
   except RequestError as re:
     bad_request(options, re)
   except HTTPError as he:
