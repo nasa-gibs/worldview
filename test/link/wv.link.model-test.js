@@ -21,7 +21,7 @@ buster.testCase("wv.link.model", {
         }));
         var promise = link.shorten("foo");
         promise.done(function(result) {
-            buster.assert.calledWith(call, "wv/link/shorten.cgi?url=foo");
+            buster.assert.calledWith(call, "service/wv.link/shorten.cgi?url=foo");
             buster.assert.equals(result.data.url, "shorten");
             done();
         });

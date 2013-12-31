@@ -16,7 +16,7 @@ from optparse import OptionParser
 import os
 import shutil
 import sys
-from urllib2 import Request, urlopen, HTTPError
+from urllib2 import Request, urlopen, HTTPError, quote
 
 endpoint = "http://api.bit.ly/v3/shorten"
 login = "mikemcgann"
@@ -115,7 +115,7 @@ def process_request(options):
     "?login=" + login,
     "&apiKey=" + api_key,
     "&format=json",
-    "&longUrl=" + fields["url"].value])
+    "&longUrl=" + quote(fields["url"].value)])
 
   if options.url:
     print url

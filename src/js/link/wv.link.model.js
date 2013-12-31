@@ -26,14 +26,9 @@ wv.link = wv.link || {};
 wv.link.model = wv.link.model || function(config) {
 
     var self = {};
+    var DEBUG_SHORTEN_LINK = "https://earthdata.nasa.gov/worldview?a=1&b=2";
     var shortenCache = new Cache(10);
     var mock = "";
-
-    /**
-     * URLs for localhost cannot be shorted via bit.ly. If localhost is
-     * being used, use the following URL instead of the actual permalink.
-     */
-    var DEBUG_SHORTEN_URL = "https://earthdata.nasa.gov/labs/worldview";
 
     /**
      * The "permalink" from the registry returns values from components
@@ -58,19 +53,11 @@ wv.link.model = wv.link.model || function(config) {
 
     var init = function() {
         if ( config && config.parameters && config.parameters.shorten ) {
-            mock = config.parameters.shorten + "-";
+            mock = "-" + config.parameters.shorten;
         }
     };
 
-    /**
-     * Returns a query string that is the concatenated value of all components.
-     *
-     * @method get
-     * @static
-     * @return {string} The query string to use as a permalink with special
-     * characters escaped.
-     */
-    self.get = function() {
+    self.queryString = function() {
         var comps = REGISTRY.getComponents();
         var parameters = {};
         for ( var i = 0; i < comps.length; i++ ) {
@@ -86,8 +73,19 @@ wv.link.model = wv.link.model || function(config) {
                 }
             }
         }
-        var queryString = wv.util.toQueryString(parameters,
-                ENCODING_EXCEPTIONS);
+        return wv.util.toQueryString(parameters, ENCODING_EXCEPTIONS);
+    };
+
+    /**
+     * Returns a query string that is the concatenated value of all components.
+     *
+     * @method get
+     * @static
+     * @return {string} The query string to use as a permalink with special
+     * characters escaped.
+     */
+    self.get = function() {
+        var queryString = self.queryString();
         var url = window.location.href;
         var prefix = url.split("?")[0];
         prefix = (prefix !== null && prefix !== undefined) ? prefix: url;
@@ -107,18 +105,17 @@ wv.link.model = wv.link.model || function(config) {
         if ( !link ) {
             link = self.get();
         }
-        if ( shortenCache.link ) {
-            return $.Deferred().resolve(shortenCache.link);
+        if ( shortenCache[link] ) {
+            return $.Deferred().resolve(shortenCache[link]);
         }
         if ( /localhost/.test(link) ) {
-            console.warn("Cannot shorten localhost. Using " +
-                    DEBUG_SHORTEN_URL);
-            link = DEBUG_SHORTEN_URL;
+            link = DEBUG_SHORTEN_LINK;
+            console.warn("Cannot shorten localhost, using", link);
         }
-        var promise = $.getJSON("service/wv.link/" + mock + "shorten.cgi" +
-                "?url=" + link);
+        var promise = $.getJSON("service/wv.link/shorten.cgi" + mock +
+                "?url=" +  encodeURIComponent(link));
         promise.done(function(result) {
-            shortenCache.link = result;
+            shortenCache[link] = result;
         });
         return promise;
     };

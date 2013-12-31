@@ -415,7 +415,7 @@ module.exports = function(grunt) {
                 version: "<%= pkg.version %>",
                 url: "https://earthdata.nasa.gov/worldview",
                 options: {
-                    paths: ["src/wv"],
+                    paths: ["src/js"],
                     outdir: "build/doc"
                 }
             }
@@ -427,6 +427,10 @@ module.exports = function(grunt) {
                 "src/js/wv.*.js",
                 "test/**/*.js",
             ]
+        },
+
+        buster: {
+            all: {}
         },
 
         remove: {
@@ -524,6 +528,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask("doc", ["yuidoc"]);
     grunt.registerTask("lint", ["jshint"]);
+    grunt.registerTask("test", ["buster"]);
     grunt.registerTask("rpm", ["build", "rpm_only"]);
     grunt.registerTask("clean", "remove:build");
     grunt.registerTask("distclean", ["remove:build", "remove:dist"]);
