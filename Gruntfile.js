@@ -56,21 +56,16 @@ module.exports = function(grunt) {
                 ]
             },
 
-            // Copies the web root from the source directory to the build
-            // directory
-            web: {
+            // Copies the source files to the build directory
+            source: {
                 files: [
                     { expand: true, cwd: "src",
-                      src: "**", dest: "build/worldview-debug/web" }
-                ]
-            },
-
-            // Copies the auxillary binary files and/or scripts from the
-            // source directory to the build directory.
-            bin: {
-                files: [
+		      src: ["**", "**/.htaccess"], 
+                      dest: "build/worldview-debug/web" },
                     { expand: true, cwd: "bin",
-                      src: "**", dest: "build/worldview-debug/bin" }
+		      src: "**", dest: "build/worldview-debug/bin" },
+                    { expand: true, cwd: "conf",
+                      src: "**", dest: "build/worldview-debug/conf" }
                 ]
             },
 
@@ -93,7 +88,7 @@ module.exports = function(grunt) {
             release: {
                 files: [
                     { expand: true, cwd: "build/worldview-debug",
-                      src: ["**"],
+		      src: ["**", "**/.htaccess"],
                       dest: "build/worldview" },
                     { expand: true, cwd: "build/worldview-debug/web",
                       src: [
@@ -489,8 +484,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask("build", [
         "clean",
-        "copy:web",
-        "copy:bin",
+        "copy:source",
         "copy:config",
         "exec:act",
         "exec:vrt",

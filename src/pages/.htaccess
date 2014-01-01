@@ -1,6 +1,6 @@
 # Don't cache the index.html file
 ExpiresActive On
-<FilesMatch index.html>
+<FilesMatch ".*\.html$">
    ExpiresDefault A0
    Header set Cache-Control "no-cache, no-store, must-revalidate"
    Header set Pragma "no-cache"
