@@ -133,7 +133,7 @@ module.exports = function(grunt) {
                     { expand: true, cwd: "etc/deploy",
                       src: ["worldview.spec"], dest: "build/rpmbuild/SPECS" },
                     { expand: true, cwd: "dist",
-                      src: ["worldview.tar.gz", "worldview-debug.tar.gz"],
+                      src: ["worldview.tar.bz2", "worldview-debug.tar.bz2"],
                       dest: "build/rpmbuild/SOURCES" }
 	            ]
             },
@@ -206,39 +206,39 @@ module.exports = function(grunt) {
             // Create a tarball of the debug build with a version number and
             // git revision.
             tar_debug_versioned: {
-                command: "tar czCf build dist/" +
+                command: "tar cjCf build dist/" +
                             "<%= pkg.name %>" +
                             "-debug" +
                             "-<%= pkg.version %>" +
                             "-<%= pkg.release %>" +
                             buildNumber +
                             ".git<%= grunt.config.get('git-revision') %>" +
-                            ".tar.gz worldview-debug"
+                            ".tar.bz2 worldview-debug"
             },
 
             // Create a tarball of the debug build without versioning
             // information
             tar_debug: {
-                command: "tar czCf build dist/worldview-debug.tar.gz " +
+                command: "tar cjCf build dist/worldview-debug.tar.bz2 " +
                             "worldview-debug"
             },
 
             // Create a tarball of the release build with a version number and
             // git revision
             tar_release_versioned: {
-                command: "tar czCf build dist/" +
+                command: "tar cjCf build dist/" +
                             "<%= pkg.name %>" +
                             "-<%= pkg.version %>" +
                             "-<%= pkg.release %>" +
                             buildNumber +
                             ".git<%= grunt.config.get('git-revision') %>" +
-                            ".tar.gz worldview"
+                            ".tar.bz2 worldview"
             },
 
             // Create a tarball of the release build without versioning
             // information
             tar_release: {
-                command: "tar czCf build dist/worldview.tar.gz " +
+                command: "tar cjCf build dist/worldview.tar.bz2 " +
                             "worldview"
             },
 
@@ -246,7 +246,7 @@ module.exports = function(grunt) {
             rpmbuild: {
                 command: 'rpmbuild --define "_topdir $PWD/build/rpmbuild" ' +
                             '--define "build_num ' + buildNumber +'" ' +
-			                '-ba build/rpmbuild/SPECS/worldview.spec'
+			    '-ba build/rpmbuild/SPECS/worldview.spec'
             }
         },
 
@@ -305,7 +305,7 @@ module.exports = function(grunt) {
                 src: [
                     "build/rpmbuild/SOURCES/*",
                     "build/rpmbuild/SPECS/*",
-                    "!**/*.tar.gz"
+                    "!**/*.tar.bz2"
                 ],
                 overwrite: true,
                 replacements: [{
@@ -452,7 +452,7 @@ module.exports = function(grunt) {
                 "!build/worldview-debug/web/js/Worldview/Map/TileWorker.js",
                 "!build/worldview-debug/web/ext/wv.main/**"
             ],
-            dist_tar: ["dist/*.tar.gz"],
+            dist_tar: ["dist/*.tar.bz2"],
             dist_rpm: ["dist/*.rpm"],
             rpmbuild: ["build/rpmbuild"]
         }

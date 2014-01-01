@@ -8,8 +8,8 @@ Summary:	Browse full-resolution, near real-time satellite imagery.
 
 License:	Copyright NASA
 URL:		http://earthdata.nasa.gov
-Source0:	worldview.tar.gz
-Source1:	worldview-debug.tar.gz
+Source0:	worldview.tar.bz2
+Source1:	worldview-debug.tar.bz2
 Source2:	httpd.worldview.conf
 Source3:	httpd.worldview-debug.conf
 #Source4:	events_log.conf
@@ -59,9 +59,9 @@ cp %{SOURCE2} .
 cp %{SOURCE3} .
 #cp %{SOURCE4} .
 #cp %{SOURCE5} .
-#p %{SOURCE6} .
-#p %{SOURCE7} .
-#p %{SOURCE8} .
+#cp %{SOURCE6} .
+#cp %{SOURCE7} .
+#cp %{SOURCE8} .
 
 
 %build
@@ -69,18 +69,31 @@ cp %{SOURCE3} .
 
 %install
 rm -rf %{buildroot}
+
+# Apache configuration for release
 install -m 755 -d %{buildroot}/%{httpdconfdir}
 install -m 644 httpd.worldview.conf \
 	%{buildroot}/%{httpdconfdir}/@WORLDVIEW@.conf
 rm httpd.worldview.conf
+
+# Apache configuration for debug
 install -m 644 httpd.worldview-debug.conf \
 	%{buildroot}/%{httpdconfdir}/@WORLDVIEW@-debug.conf
 rm httpd.worldview-debug.conf 
 
+# Release application
 install -m 755 -d %{buildroot}/%{_datadir}/@WORLDVIEW@
 cp -r worldview/* %{buildroot}/%{_datadir}/@WORLDVIEW@
+
+# Debug application
 install -m 755 -d %{buildroot}/%{_datadir}/@WORLDVIEW@-debug
 cp -r worldview-debug/* %{buildroot}/%{_datadir}/@WORLDVIEW@-debug
+
+# Release configuration directory
+install -m 755 -d %{buildroot}/%{_sysconfdir}/@WORLDVIEW@
+
+# Debug configuration directory
+install -m 755 -d %{buildroot}/%{_sysconfdir}/@WORLDVIEW@-debug
 
 #install -m 755 -d %{buildroot}/%{_sysconfdir}/@WORLDVIEW@
 #install -m 644 events_log.conf \
@@ -104,6 +117,15 @@ cp -r worldview-debug/* %{buildroot}/%{_datadir}/@WORLDVIEW@-debug
 #install -m 600 logrotate.worldview-debug \
 #	%{buildroot}/%{_sysconfdir}/logrotate.d/@WORLDVIEW@-debug
 
+# Allow Worldview to find configuration from its application root
+# Release
+install -m 755 -d %{buildroot}/%{_datadir}/@WORLDVIEW@
+ln -s %{_sysconfdir}/@WORLDVIEW@ %{buildroot}/%{_datadir}/@WORLDVIEW@/conf
+
+# Debug
+install -m 755 -d %{buildroot}/%{_datadir}/@WORLDVIEW@-debug
+ln -s %{_sysconfdir}/@WORLDVIEW@-debug \
+   %{buildroot}/%{_datadir}/@WORLDVIEW@-debug/conf
 
 %clean
 rm -rf %{buildroot}
@@ -113,7 +135,7 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %{_datadir}/@WORLDVIEW@
 %config(noreplace) %{httpdconfdir}/@WORLDVIEW@.conf
-#%dir %{_sysconfdir}/worldview
+%dir %{_sysconfdir}/@WORLDVIEW@
 #%config(noreplace) %{_sysconfdir}/@WORLDVIEW@/events_log.conf
 #%config(noreplace) %{_sysconfdir}/cron.d/@WORLDVIEW@
 #%config(noreplace) %{_sysconfdir}/logrotate.d/@WORLDVIEW@
@@ -126,7 +148,7 @@ rm -rf %{buildroot}
 %files debug
 %{_datadir}/@WORLDVIEW@-debug
 %config(noreplace) %{httpdconfdir}/@WORLDVIEW@-debug.conf
-#%dir %{_sysconfdir}/@WORLDVIEW@-debug
+%dir %{_sysconfdir}/@WORLDVIEW@-debug
 #%config(noreplace) %{_sysconfdir}/@WORLDVIEW@-debug/events_log-debug.conf
 #%config(noreplace) %{_sysconfdir}/cron.d/@WORLDVIEW@-debug
 #%config(noreplace) %{_sysconfdir}/logrotate.d/@WORLDVIEW@-debug
@@ -137,23 +159,31 @@ rm -rf %{buildroot}
 
 
 %post
-if [ $1 -gt 1 ] ; then
-   service httpd reload
+if [ $1 -gt 0 ] ; then
+   if /sbin/service httpd status >/dev/null ; then
+      /sbin/service httpd reload
+   fi	    
 fi
 
 %post debug
-if [ $1 -gt 1 ] ; then
-   service httpd reload
+if [ $1 -gt 0 ] ; then
+   if /sbin/service httpd status >/dev/null ; then
+       /sbin/service httpd reload
+   fi
 fi
 
 %postun
 if [ $1 -eq 0 ] ; then
-   serivce httpd reload
+   if /sbin/service httpd status >/dev/null ; then
+       /sbin/service httpd reload
+   fi
 fi
 
 %postun debug
 if [ $1 -eq 0 ] ; then
-   serivce httpd reload
+   if /sbin/service httpd status >/dev/null ; then
+       /sbin/service httpd reload
+   fi
 fi
 
 
