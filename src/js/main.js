@@ -287,10 +287,12 @@ $(function() {// Initialize "static" vars
         if ( !window.location.search ) {
             Worldview.Tour.start(storageEngine, hideSplash, false);
         }
-
+	
+	/*
         window.onbeforeunload = function() {
    	    storageEngine.setItem('eventsCollapsed', events.isCollapsed);
       	};
+	*/
     };
 
     var debuggingFeatures = function(config) {
