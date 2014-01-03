@@ -222,6 +222,7 @@ $(function() {// Initialize "static" vars
             });
 
 	    // Register event listeners
+	    REGISTRY.addEventListener("map", "imagedownload");
         REGISTRY.addEventListener("time",
                 "map", "imagedownload", apcn.containerId, crs.containerId,
                 dataDownload.containerId);

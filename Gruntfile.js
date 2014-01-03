@@ -23,11 +23,9 @@ var buildNumber = ( process.env.BUILD_NUMBER )
 module.exports = function(grunt) {
 
     // Lists of JavaScript and CSS files to include and in the correct
-    // roder
+    // order
     var wvJs   = grunt.file.readJSON("etc/deploy/wv.js.json");
     var wvCss  = grunt.file.readJSON("etc/deploy/wv.css.json");
-    var extJs  = grunt.file.readJSON("etc/deploy/ext.js.json");
-    var extCss = grunt.file.readJSON("etc/deploy/ext.css.json");
 
     // Copyright notice to place at the top of the minified JavaScript and
     // CSS files
@@ -60,7 +58,7 @@ module.exports = function(grunt) {
             source: {
                 files: [
                     { expand: true, cwd: "src",
-		      src: ["**", "**/.htaccess"], 
+		      src: ["**", "**/.htaccess"],
                       dest: "build/worldview-debug/web" },
                     { expand: true, cwd: "bin",
 		      src: "**", dest: "build/worldview-debug/bin" },
@@ -97,25 +95,6 @@ module.exports = function(grunt) {
                         "js/Worldview/Map/TileWorker.js"
                       ],
                       dest: "build/worldview/web" }
-                ]
-            },
-
-            // Since the location of the CSS changes when using the
-            // concatenated file. "hoist" up all the dependencies found
-            // in the ext directory by one directory.
-            ext: {
-                files: [
-                    { expand: true,
-                      cwd: "build/worldview-debug/web/ext/jquery.dd",
-                      src: ["**"], dest: "build/worldview-debug/web/ext" },
-                    { expand: true,
-                      cwd: "build/worldview-debug/web/ext/jquery.mobile",
-                      src: ["**"], dest: "build/worldview-debug/web/ext" },
-                    { expand: true,
-                      cwd: "build/worldview-debug/web/ext/yui",
-                      src: ["**"], dest: "build/worldview-debug/web/ext" },
-                    { expand: true, cwd: "build/worldview-debug/web/ext/jcrop",
-                      src: ["*.gif"], dest: "build/worldview-debug/web/ext" },
                 ]
             },
 
@@ -329,16 +308,6 @@ module.exports = function(grunt) {
             wv_css: {
                 src: wvCss,
                 dest: "build/worldview-debug/web/css/wv.css"
-            },
-            // Combine all the external library JavaScript files into one file.
-            ext_js: {
-                src: extJs,
-                dest: "build/worldview-debug/web/ext/ext.js"
-            },
-            // Combine all the external library CSS files into one file.
-            ext_css: {
-                src: extCss,
-                dest: "build/worldview-debug/web/ext/ext.css"
             }
         },
 
@@ -353,16 +322,7 @@ module.exports = function(grunt) {
                         "build/worldview-debug/web/js/wv.js"
                     ]
                 }
-            },
-            // Minifiy the concatenated external libraries JavaScript file.
-            ext_js: {
-                files: {
-                    "build/worldview/web/ext/ext.js": [
-                        "build/worldview-debug/web/ext/ext.js"
-                    ]
-                }
             }
-
         },
 
         cssmin: {
@@ -377,19 +337,7 @@ module.exports = function(grunt) {
                         "build/worldview-debug/web/css/wv.css"
                     ]
                 }
-            },
-            // Minifiy the concatenated external libraries CSS file.
-            ext_css: {
-                options: {
-                    banner: banner,
-                    keepSpecialComments: false
-                },
-                files: {
-                    "build/worldview/web/ext/ext.css": [
-                        "build/worldview-debug/web/ext/ext.css"
-                    ]
-                }
-            },
+            }
         },
 
         lineremover: {
@@ -424,6 +372,12 @@ module.exports = function(grunt) {
             ]
         },
 
+        csslint: {
+            main: [
+                "src/css/wv.*.css"
+            ]
+        },
+
         buster: {
             all: {}
         },
@@ -437,15 +391,12 @@ module.exports = function(grunt) {
             source: [
                 "build/worldview-debug/web/**/*.css",
                 "build/worldview-debug/web/**/*.js",
-                "build/worldview-debug/web/ext/**/version*",
                 "!build/worldview-debug/web/css/wv.css",
                 "!build/worldview-debug/web/js/wv.js",
-                "!build/worldview-debug/web/ext/ext.css",
-                "!build/worldview-debug/web/ext/ext.js",
                 "!build/worldview-debug/web/css/pages.css",
                 "!build/worldview-debug/web/css/bulkDownload.css",
                 "!build/worldview-debug/web/js/Worldview/Map/TileWorker.js",
-                "!build/worldview-debug/web/ext/wv.main/**"
+                "!build/worldview-debug/web/ext/**/*"
             ],
             dist_tar: ["dist/*.tar.bz2"],
             dist_rpm: ["dist/*.rpm"],
@@ -462,6 +413,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-contrib-concat");
     grunt.loadNpmTasks("grunt-contrib-compress");
     grunt.loadNpmTasks("grunt-contrib-copy");
+    grunt.loadNpmTasks("grunt-contrib-csslint");
     grunt.loadNpmTasks("grunt-contrib-cssmin");
     grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-contrib-uglify");
@@ -494,7 +446,6 @@ module.exports = function(grunt) {
         "replace:nonce",
         "replace:version",
         "replace:links",
-        "copy:ext",
         "remove:source",
         "copy:release",
         "uglify",
@@ -521,7 +472,7 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask("doc", ["yuidoc"]);
-    grunt.registerTask("lint", ["jshint"]);
+    grunt.registerTask("lint", ["csslint", "jshint"]);
     grunt.registerTask("test", ["buster"]);
     grunt.registerTask("rpm", ["build", "rpm_only"]);
     grunt.registerTask("clean", "remove:build");
