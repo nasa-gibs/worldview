@@ -21,7 +21,6 @@ wv.link = wv.link || {};
  * Note: Most of this will change in version 0.7.0.
  *
  * @class wv.link.model
- * @static
  */
 wv.link.model = wv.link.model || function(config) {
 
@@ -57,6 +56,13 @@ wv.link.model = wv.link.model || function(config) {
         }
     };
 
+    /**
+     * Returns a query string that is the concatenated value of all components.
+     *
+     * @method queryString
+     * @return {string} The query string to use as a permalink with special
+     * characters escaped.
+     */
     self.queryString = function() {
         var comps = REGISTRY.getComponents();
         var parameters = {};
@@ -77,12 +83,10 @@ wv.link.model = wv.link.model || function(config) {
     };
 
     /**
-     * Returns a query string that is the concatenated value of all components.
+     * Returns a permalink that is the concatenated value of all components.
      *
      * @method get
-     * @static
-     * @return {string} The query string to use as a permalink with special
-     * characters escaped.
+     * @return {string} The permalink with special characters escaped.
      */
     self.get = function() {
         var queryString = self.queryString();

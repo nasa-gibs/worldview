@@ -15,6 +15,11 @@
 var wv = wv || {};
 wv.link = wv.link || {};
 
+/**
+ * Undocumented.
+ *
+ * @class wv.link.ui
+ */
 wv.link.ui = wv.link.ui || function(models) {
 
     var self = {};
@@ -29,8 +34,7 @@ wv.link.ui = wv.link.ui || function(models) {
     };
 
     /**
-     * Function: show
-     * Display a dialog box to the user showing the current permalink.
+     * @method show
      */
     self.show = function() {
         var link = models.link.get();
@@ -96,8 +100,6 @@ wv.link.ui = wv.link.ui || function(models) {
         permOverlay.center();
         update();
     };
-
-
 
     init();
     return self;
