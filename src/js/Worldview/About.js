@@ -1,10 +1,10 @@
 /*
  * NASA Worldview
- * 
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project. 
  *
- * Copyright (C) 2013 United States Government as represented by the 
+ * This code was originally developed at NASA/Goddard Space Flight Center for
+ * the Earth Science Data and Information System (ESDIS) project.
+ *
+ * Copyright (C) 2013 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
@@ -19,18 +19,18 @@ Worldview.namespace("About");
  * dialog box is shown with all the relevant information. If this is a mobile
  * device, a small dialog box is shown with links to a page that contains
  * the full information.
- * 
+ *
  * @class About
  * @static
  */
 $(function() {
-    
+
     var ns = Worldview.About;
     var overlay;
-    
+
     /**
      * Show the about dialog box.
-     * 
+     *
      * @method show
      */
     ns.show = function() {
@@ -40,15 +40,15 @@ $(function() {
             showDesktop();
         }
     };
-    
+
     var showDesktop = function() {
-         if ( !overlay ) { 
-                overlay = new YAHOO.widget.Panel("panel1", { 
-                    zIndex:1020, 
-                    visible:false, 
+         if ( !overlay ) {
+                overlay = new YAHOO.widget.Panel("panel1", {
+                    zIndex:1020,
+                    visible:false,
                     constraintoviewport: true
                 });
-                
+
                 //=============================================================
                 // NOTE: pages/about.html MUST also be updated!
                 //=============================================================
@@ -56,7 +56,7 @@ $(function() {
                         "<h3>Welcome to Worldview</h3>"+
                         "<p>This tool from NASA's <a href='https://earthdata.nasa.gov/about-eosdis' target='_blank'>EOSDIS</a> provides the capability to interactively browse global, full-resolution satellite imagery and then download the underlying data.  Most of the 100+ available products are updated within three hours of observation, essentially showing the entire Earth as it looks \"right now\".  This supports time-critical application areas such as wildfire management, air quality measurements, and flood monitoring.  Arctic and Antarctic views of several products are also available for a \"full globe\" perspective.  Browsing on tablet and smartphone devices is generally supported for mobile access to the imagery.</p>"+
                         "<br /><p>Worldview uses the <a href='https://earthdata.nasa.gov/gibs' target='_blank'>Global Imagery Browse Services (GIBS)</a> to rapidly retrieve its imagery for an interactive browsing experience.  While Worldview uses <a href='http://openlayers.org/' target='_blank'>OpenLayers</a> as its mapping library, GIBS imagery can also be accessed from Google Earth, NASA World Wind, and several other clients.  We encourage interested developers to build their own clients or integrate NASA imagery into their existing ones using these services.</p>"+
-                        
+
                         "<br /><h3>Imagery Use</h3>"+
                         "<p>NASA supports an <a href='http://science.nasa.gov/earth-science/earth-science-data/data-information-policy/' target='_blank'>open data policy</a> and we encourage publication of imagery from Worldview;  when doing so, please cite it as \"NASA Worldview\" and also consider including a permalink (such as <a href='https://earthdata.nasa.gov/labs/worldview/?map=-126.907471,36.373535,-117.415283,42.815918&products=baselayers,MODIS_Aqua_CorrectedReflectance_TrueColor~overlays,MODIS_Fires_All,sedac_bound&time=2012-08-23&switch=geographic' target='_blank'>this one</a>) to allow others to explore the imagery.</p>"+
                         "<br /><h3>Acknowledgements</h3>"+
@@ -64,32 +64,32 @@ $(function() {
                         "<br /><h3>Disclaimer</h3>"+
                         "<p>The information presented through this interface is provided \"as is\" and users bear all responsibility and liability for their use of the data.  Please read the <a href='https://earthdata.nasa.gov/data/nrt-data/disclaimer' target='_blank'>full disclaimer</a>.</p>"+
                         "<br /><p>"+
-                                "Version: " + Worldview.VERSION + " - " + Worldview.BUILD_TIMESTAMP + " (<a href='pages/release_notes.html' target='_blank'>release notes</a>)<br />"+
+                                "Version: " + wv.brand.VERSION + " - " + wv.brand.BUILD_TIMESTAMP + " (<a href='pages/release_notes.html' target='_blank'>release notes</a>)<br />"+
                                 "Release Manager: <a href='mailto:mike.mcgann@nasa.gov'>Mike McGann</a><br />"+
                                 "Responsible NASA Official:  <a href='mailto:ryan.a.boller@nasa.gov'>Ryan Boller</a><br />"+
-                        "</p>"+         
+                        "</p>"+
                 "</div>";
-                
+
                 overlay.setBody(item);
                 overlay.render(document.body);
-        
+
             overlay.show();
             overlay.center();
             overlay.hideEvent.subscribe(function() {
-                setTimeout(function() { 
-                    overlay.destroy(); 
+                setTimeout(function() {
+                    overlay.destroy();
                     overlay = null;
                 }, 25);
             });
         }
     };
-    
-        
-    var showMobile = function() {        
+
+
+    var showMobile = function() {
         html = [
-            "<div class='about about-title'>" + Worldview.NAME + "</div>",
-            "<div class='about about-version'>Version " + Worldview.VERSION + "</div>",
-            "<div class='about about-build'>" + Worldview.BUILD_TIMESTAMP + "</div>",
+            "<div class='about about-title'>" + wv.brand.NAME + "</div>",
+            "<div class='about about-version'>Version " + wv.brand.VERSION + "</div>",
+            "<div class='about about-build'>" + wv.brand.BUILD_TIMESTAMP + "</div>",
             "<br/>",
             "<div class='about'>",
                 "<a href='pages/about.html' target='_blank'>Welcome to Worldview</a>",
@@ -107,7 +107,7 @@ $(function() {
                 "<a href='pages/release_notes.html' target='_blank'>Release Notes</a>",
             "</div>",
         ].join("\n");
-        Worldview.notify(html, "&nbsp;");     
+        Worldview.notify(html, "&nbsp;");
     };
 });
 

@@ -1,6 +1,4 @@
 [
-    "src/ext/preloadjs/preloadjs.min.js",
-
     "src/ext/jquery-ui/jquery-ui.min.js",
     "src/ext/jquery.mobile/jquery.mobile.js",
 

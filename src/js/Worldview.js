@@ -8,45 +8,6 @@
 (function(ns) {
 
     /**
-     * Official name of this application.
-     *
-     * @property NAME {string}
-     * @final
-     * @static
-     */
-    ns.NAME = "EOSDIS Worldview";
-
-    /**
-     * Release version string.
-     *
-     * @property VERSION {string}
-     * @final
-     * @static
-     */
-    ns.VERSION = "@BUILD_VERSION@";
-
-    /**
-     * Date and time Worldview was built. This value is changed during the
-     * build process.
-     *
-     * @property BUILD_TIMESTAMP {string}
-     * @final
-     * @static
-     */
-    ns.BUILD_TIMESTAMP = "@BUILD_TIMESTAMP@";
-
-    /**
-     * The value of the timestamp in numeric form that can be used as
-     * a URL nonce "invalidte" cache entries. This value is changed during
-     * the build process
-     *
-     * @property BUILD_NONCE (string)
-     * @final
-     * @static
-     */
-    ns.BUILD_NONCE = "@BUILD_NONCE@";
-
-    /**
      * Delay, in hours, from aquisition until data is available in GIBS.
      *
      * @property GIBS_HOUR_DELAY {integer}
@@ -72,19 +33,6 @@
             camel: "Overlays",
             description: "Overlays"
         }
-    };
-
-    /**
-     * Determines if Worldview is being run in development mode.
-     *
-     * @method isDevelopment
-     * @static
-     *
-     * @return {boolean} Returns true if being run from the source directory,
-     * otherwise returns false if deployed to a web directory.
-     */
-    ns.isDevelopment = function() {
-        return ns.BUILD_TIMESTAMP.indexOf("BUILD_TIMESTAMP") >= 0;
     };
 
     /**

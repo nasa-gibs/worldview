@@ -117,7 +117,7 @@ $(function(ns) {
      */
     ns.TILE_SCHEDULER = Worldview.Scheduler.isSupported()
         ? Worldview.Scheduler({
-            script: "js/Worldview/Map/TileWorker.js?v=" + Worldview.BUILD_NONCE,
+            script: "js/Worldview/Map/TileWorker.js?v=" + wv.brand.BUILD_NONCE,
             max: 4
         })
         : null;

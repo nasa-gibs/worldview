@@ -27,31 +27,12 @@ $(function() {// Initialize "static" vars
 
         // Place any resources that should be completely loaded before
         // starting up the UI
-        Worldview.Preloader([
-            "images/activity.gif",
-            { id: "config", type:"json",
-              src: "data/config.json?v=" + Worldview.BUILD_NONCE },
-              // FIXME: Preloading of images doesn't work since most of
-              // these are set via css
-              /*
-            "images/permalink.png",
-            "images/geographic.png",
-            "images/arctic.png",
-            "images/antarctic.png",
-            "images/camera.png",
-            "images/cameraon.png",
-            "images/information.png",
-            "images/expandIn.png",
-            "images/expandOut.png",
-            "images/visible.png",
-            "images/invisible.png",
-            "images/close-x.png",
-            "images/collapseDown.png",
-            "images/expandUp.png",
-            "images/wv-icons.svg",
-            "images/wv-logo.svg"
-            */
-        ]).execute(onLoad);
+        var configURI = "data/config.json?v=" + wv.brand.BUILD_NONCE;
+        $.getJSON(configURI, function(config) {
+            onLoad(config);
+        }).error(function() {
+            wv.util.error("Unable to load configuration");
+        });
         setTimeout(function() {
             if ( !loaded ) {
                 Worldview.Indicator.loading();
@@ -59,9 +40,8 @@ $(function() {// Initialize "static" vars
         }, 2000);
     };
 
-    var onLoad = function(queue) {
+    var onLoad = function(config) {
         try {
-            var config = queue.getResult("config");
             // Convert all parameters found in the query string to an object,
             // keyed by parameter name
             config.parameters = Worldview.queryStringToObject(location.search);
@@ -295,12 +275,10 @@ $(function() {// Initialize "static" vars
         }
 
         // Console notifications
-        var banner = Worldview.NAME + " - Version " + Worldview.VERSION;
-        if ( !Worldview.isDevelopment() ) {
-            banner += " - " + Worldview.BUILD_TIMESTAMP;
-        }
-        log.info(banner);
-        if ( Worldview.isDevelopment() ) {
+        if ( wv.brand.release() ) {
+            console.info(wv.brand.NAME + " - Version " + wv.brand.VERSION +
+                " - " + wv.brand.BUILD_TIMESTAMP);
+        } else {
             log.warn("Development version");
         }
 
