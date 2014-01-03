@@ -11,6 +11,7 @@
     "src/js/events.js",
 
     "src/js/wv.util.js",
+    "src/js/wv.ui.js",
     "src/js/Worldview.js",
     "src/js/Worldview/About.js",
     "src/js/Worldview/Support.js",
@@ -18,6 +19,7 @@
     "src/js/link/wv.link.model.js",
     "src/js/Worldview/Scheduler.js",
     "src/js/Worldview/Preloader.js",
+    "src/js/wv.events.js",
     "src/js/Worldview/Events.js",
     "src/js/Worldview/Indicator.js",
     "src/js/Worldview/AjaxCache.js",

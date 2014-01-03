@@ -15,7 +15,7 @@
 var wv = wv || {};
 
 /**
- * General utilities.
+ * General utilities
  *
  * @class wv.util
  * @static
@@ -25,35 +25,38 @@ wv.util = wv.util || (function() {
     var self = {};
 
     /**
-     * Converts a query string into an object representation. For example,
-     * the following query string:
+     * Creates an object representation of a query string.
      *
-     *     foo=a&format=image%2Fpng
+     * For example, for the given query string, ``"?foo=a&bar=b"``, the
+     * following object is returned:
      *
-     * converts to the following object:
+     *     {
+     *         foo: "a",
+     *         bar: "b"
+     *     }
      *
-     *     { foo: "a", format: "image/png" }
+     * Escaped values in the query string are decoded. For example ``%2f``
+     * becomes ``/``.
      *
      * @method fromQueryString
      * @static
-     * @param {String} queryString the string to convert to an object
-     * @return {Object} keys and values from the query string. Values are
-     * decoded as needed. If the query string is falsy, an empty object
-     * is returned.
+     * @param {string} queryString the query string to convert to an
+     * object.
+     * @return {object} object representation of the query string.
      */
     self.fromQueryString = function(queryString) {
         if ( !queryString ) {
             return {};
         }
-        if ( queryString.substring(0, 1) === "?" ) {
+        if ( queryString[0] === "?" ) {
             queryString = queryString.substring(1);
         }
-        var result = {};
-        var kvps = queryString.split("&");
-        _.each(kvps, function(kvp) {
-            kv = kvp.split("=");
-            result[kv[0]] = decodeURIComponent(kv[1]);
-        });
+        var parameters = queryString.split("&");
+        result = {};
+        for ( var i = 0; i < parameters.length; i++ ) {
+            var fields = parameters[i].split("=");
+            result[fields[0]] = decodeURIComponent(fields[1]);
+        }
         return result;
     };
 
@@ -95,6 +98,93 @@ wv.util = wv.util || (function() {
         }
         return "?" + parts.join("&");
     };
+
+    /**
+     * Parses a UTC ISO 8601 date.
+     *
+     * @method parseDateISO
+     * @static
+     * @param str {string} Date to parse in the form of ``YYYY-MM-DD``.
+     * @return {Date} converted string as a date object, throws an exception if
+     * the string is invalid
+     */
+    self.parseDateUTC = function(str) {
+        var d = new Date(Date.parse(str + "T00:00Z"));
+        if ( _.isNaN(d.getTime()) ) {
+            throw new Error("Invalid date: " + str);
+        }
+        return d;
+    };
+
+    /**
+     * Sets a date to UTC midnight.
+     *
+     * @method clearTimeUTC
+     * @static
+     * @param date {Date} date to set the UTC hours, minutes, and seconds
+     * to zero.
+     * @return {Date} the date object
+     */
+    self.clearTimeUTC = function(date) {
+        date.setUTCHours(0);
+        date.setUTCMinutes(0);
+        date.setUTCSeconds(0);
+        date.setUTCMilliseconds(0);
+        return date;
+    };
+
+    /**
+     * Gets the current time. Use this instead of the Date methods to allow
+     * debugging alternate "now" times.
+     *
+     * @method now
+     * @static
+     * @return {Date} The current time or an overriden value.
+     */
+    self.now = function() {
+        return new Date();
+    };
+
+    /**
+     * Gets the current day. Use this instead of the Date methods to allow
+     * debugging alternate "now" times.
+     *
+     * @method today
+     * @static
+     * @return {Date} The current time with the UTC hours, minutes, and seconds
+     * fields set to zero or an overriden value.
+     */
+    self.today = function() {
+        return self.clearTimeUTC(new Date());
+    };
+
+    /**
+     * General error handler.
+     *
+     * This function delegates to
+     * {{#crossLink "wv.ui/error:method"}}wv.ui.error{{/crossLink}}. For
+     * custom error handling, replace this function.
+     *
+     * @method error
+     * @static
+     * @param {string} message Message to display to the end user.
+     * @param {exception} cause The exception object that caused the error
+     */
+    self.error = function(message, cause) {
+        wv.ui.error(message, cause);
+    };
+
+    /**
+     * General warning handler.
+     *
+     * Prints the messages to the console.
+     *
+     * @method warn
+     * @static
+     * @param {object*} messages Messages to display to the end user.
+     */
+    self.warn = ( console && console.warn && console.warn.bind ) ?
+        console.warn.bind(console) : function () {};
 
     return self;
 
