@@ -472,7 +472,7 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask("doc", ["yuidoc"]);
-    grunt.registerTask("lint", ["csslint", "jshint"]);
+    grunt.registerTask("lint", ["jshint"]);
     grunt.registerTask("test", ["buster"]);
     grunt.registerTask("rpm", ["build", "rpm_only"]);
     grunt.registerTask("clean", "remove:build");
