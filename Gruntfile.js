@@ -260,8 +260,8 @@ module.exports = function(grunt) {
             // all the release links <1-- link.prod -->
             links: {
                 src: [
-                   "build/worldview-debug/web/**/*.html",
-                    "build/worldview-debug/web/**/*.css"
+                   "build/worldview-debug/web/index.html",
+                   "build/worldview-debug/web/pages/*.html",
                 ],
                 overwrite: true,
                 replacements: [{
