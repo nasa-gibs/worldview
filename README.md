@@ -121,13 +121,6 @@ The build script needs to know which files to minify and the correct order used
 to concatenate. Anytime a CSS or JavaScript file is added. renamed, or removed,
 the following files must be updated:
 
-For external libraries:
-
-* ``etc/deploy/ext.css.json``
-* ``etc/deploy/ext.js.json``
-
-For Worldview code:
-
 * ``etc/deploy/wv.css.json``
 * ``etc/deploy/wv.js.json``
 
