@@ -89,10 +89,10 @@ Worldview must be accessed via a web server to properly work.
 
 Create the following file:
 
-* Mac OS X: /private/etc/apache2/other/worldview-dev.conf
-* RHEL/CentOS: /etc/httpd/conf.d/worldview-dev.conf
+* Mac OS X: ``/private/etc/apache2/other/worldview-dev.conf``
+* RHEL/CentOS: ``/etc/httpd/conf.d/worldview-dev.conf``
 
-With the following contents. Replace ``$WORLDVIEW_HOME`` with the path to
+with the following contents. Replace ``$WORLDVIEW_HOME`` with the path to
 the Worldview repository:
 
     Alias /worldview         $WORLDVIEW_HOME/src
