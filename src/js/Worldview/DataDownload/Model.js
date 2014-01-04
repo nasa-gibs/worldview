@@ -85,7 +85,7 @@ Worldview.DataDownload.Model = function(config, spec) {
      * @readOnly
      * @type Events
      */
-    self.events = Worldview.Events();
+    self.events = wv.util.events();
 
     self.selectedProduct = null;
     self.selectedGranules = {};

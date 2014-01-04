@@ -84,7 +84,7 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
     self.EVENT_ZOOM_END = "zoomEnd";
     self.EVENT_MOVE_END = "zoomEnd";
 
-    self.events = Worldview.Events();
+    self.events = wv.util.events();
 
     var init = function() {
         var $container = $("#" + containerId);

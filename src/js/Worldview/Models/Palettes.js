@@ -15,7 +15,7 @@ Worldview.namespace("Models");
 Worldview.Models.Palettes = function() {
 
     var self = {};
-    self.events = Worldview.Events();
+    self.events = wv.util.events();
 
     return self;
 

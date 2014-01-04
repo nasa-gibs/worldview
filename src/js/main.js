@@ -16,11 +16,6 @@ $(function() {// Initialize "static" vars
 
     var entryPoint = function() {
 
-        // Error handlers
-        Worldview.Events.errorHandler = function(error) {
-            Worldview.error("Internal error", error);
-        };
-
         // Place any quirky browser related items in the function called
         // below.
         Worldview.Support.quirks();

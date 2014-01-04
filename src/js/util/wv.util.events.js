@@ -10,9 +10,10 @@
  */
 
 /**
- * @module wv
+ * @module wv.util
  */
 var wv = wv || {};
+wv.util = wv.util || {};
 
 /**
  * General event pump.
@@ -23,16 +24,16 @@ var wv = wv || {};
  *
  * Example:
  *
- *      var events = wv.events();
+ *      var events = wv.util.events();
  *      events.on("answerReceived", function(answer) {
  *          console.log("The answer is", answer);
  *      });
  *
  *      events.trigger("answerReceived", 42);
  *
- * @class wv.events
+ * @class wv.util.events
  */
-wv.events = wv.events || function() {
+wv.util.events = wv.util.events || function() {
 
     var self = {};
 
@@ -50,7 +51,7 @@ wv.events = wv.events || function() {
      * type is fired. Arguments to the fire method are passed to the callback
      * function.
      *
-     * @return {wv.events} this object useful for chaining.
+     * @return {wv.util.events} this object useful for chaining.
      */
     self.on = function(event, callback) {
         var listeners = events[event];
@@ -73,7 +74,7 @@ wv.events = wv.events || function() {
      * this type of event. If this function has not been registered, this
      * method does nothing.
      *
-     * @return {wv.events} this object useful for chaining.
+     * @return {wv.util.events} this object useful for chaining.
      */
     self.off = function(event, callback) {
         var listeners = events[event];
@@ -94,7 +95,7 @@ wv.events = wv.events || function() {
      * @param {any} [arguments]* Additional arguments to pass back to the
      * function of each listener.
      *
-     * @return {wv.events} this object useful for chaining.
+     * @return {wv.util.events} this object useful for chaining.
      */
     self.trigger = function(event) {
         var listeners = events[event];

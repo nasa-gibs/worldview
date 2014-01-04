@@ -44,9 +44,9 @@ wv.date.model = wv.date.model || function(config) {
      * Use this to register listeners for when the date changes.
      *
      * @attribute events
-     * @type {wv.events}
+     * @type {wv.util.events}
      */
-    self.events = wv.events();
+    self.events = wv.util.events();
 
     /**
      * Selected day.

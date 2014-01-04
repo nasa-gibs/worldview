@@ -20,7 +20,7 @@ Worldview.Models.Projection = function(config) {
     self.selected = null;
     self.epsg = null;
     self.crs = null;
-    self.events = Worldview.Events();
+    self.events = wv.util.events();
 
     var init = function() {
         self.set(config.defaults.projection);

@@ -17,7 +17,7 @@ Worldview.Models.Layers = function(config, projectionModel) {
 
     var self = {};
 
-    self.events = Worldview.Events();
+    self.events = wv.util.events();
 
     self.active = {
         baselayers: [],

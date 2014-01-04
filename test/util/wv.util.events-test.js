@@ -9,12 +9,12 @@
  * All Rights Reserved.
  */
 
-buster.testCase("wv.events", {
+buster.testCase("wv.util.events", {
 
     events: null,
 
     setUp: function() {
-        this.events = wv.events();
+        this.events = wv.util.events();
     },
 
     "Triggers an event": function() {

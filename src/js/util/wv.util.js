@@ -10,7 +10,7 @@
  */
 
 /**
- * @module wv
+ * @module wv.util
  */
 var wv = wv || {};
 
@@ -20,9 +20,7 @@ var wv = wv || {};
  * @class wv.util
  * @static
  */
-wv.util = wv.util || (function() {
-
-    var self = {};
+wv.util = (function(self) {
 
     /**
      * Creates an object representation of a query string.
@@ -162,7 +160,7 @@ wv.util = wv.util || (function() {
      * General error handler.
      *
      * This function delegates to
-     * {{#crossLink "wv.ui.util/error:method"}}wv.ui.util.error{{/crossLink}}.
+     * {{#crossLink "wv.ui/error:method"}}wv.ui.error{{/crossLink}}.
      * For custom error handling, replace this function.
      *
      * @method error
@@ -171,7 +169,7 @@ wv.util = wv.util || (function() {
      * @param {exception} cause The exception object that caused the error
      */
     self.error = function(message, cause) {
-        wv.ui.util.error(message, cause);
+        wv.ui.error(message, cause);
     };
 
     /**
@@ -188,4 +186,4 @@ wv.util = wv.util || (function() {
 
     return self;
 
-})();
+})(wv.util || {});

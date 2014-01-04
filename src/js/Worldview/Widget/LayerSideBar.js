@@ -40,7 +40,7 @@ Worldview.Widget.LayerSideBar = function(layersModel, projectionModel) {
 
     self.id = "productsHolder";
     self.selector = "#productsHolder";
-    self.events = Worldview.Events();
+    self.events = wv.util.events();
 
     var init = function() {
         render();

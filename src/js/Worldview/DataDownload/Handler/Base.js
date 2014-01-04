@@ -18,7 +18,7 @@ Worldview.DataDownload.Handler.Base = function(config, model) {
 
     var self = {};
 
-    self.events = Worldview.Events();
+    self.events = wv.util.events();
     self.echo = null;
     self.ajax = null;
 

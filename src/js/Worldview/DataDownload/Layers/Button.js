@@ -49,7 +49,7 @@ Worldview.DataDownload.Layers.Button = function(model, maps, config) {
     self.EVENT_HOVER_OVER = "hoverover";
     self.EVENT_HOVER_OUT = "hoverout";
 
-    self.events = Worldview.Events();
+    self.events = wv.util.events();
 
     var init = function() {
         $.each(maps.projections, function(index, map) {

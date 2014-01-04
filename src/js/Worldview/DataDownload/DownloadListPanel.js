@@ -33,7 +33,7 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
     var self = {};
     var urs = false;
 
-    self.events = Worldview.Events();
+    self.events = wv.util.events();
 
     self.show = function() {
         $("#DataDownload_DownloadListPanel .remove").off("click", removeGranule);

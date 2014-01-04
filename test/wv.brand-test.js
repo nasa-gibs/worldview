@@ -9,7 +9,7 @@
  * All Rights Reserved.
  */
 
-buster.testCase("wv.events", {
+buster.testCase("wv.brand", {
 
     "Is development build": function() {
         buster.refute(wv.brand.release());

@@ -13,17 +13,14 @@
  * @module wv.ui
  */
 var wv = wv || {};
-wv.ui = wv.ui || {};
 
 /**
  * UI utilities
  *
- * @class wv.ui.util
+ * @class wv.ui
  * @static
  */
-wv.ui = wv.ui || (function() {
-
-    var self = {};
+wv.ui = (function(self) {
 
     /**
      * General error handler.
@@ -69,4 +66,4 @@ wv.ui = wv.ui || (function() {
 
     return self;
 
-})();
+})(wv.ui || {});
