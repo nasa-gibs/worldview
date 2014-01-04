@@ -216,6 +216,26 @@ module.exports = function(grunt) {
                             "worldview"
             },
 
+            // Create a tarball of the documentation with a version number and
+            // git revision
+            tar_doc_versioned: {
+                command: "tar cjCf build dist/" +
+                            "<%= pkg.name %>" +
+                            "-doc" +
+                            "-<%= pkg.version %>" +
+                            "-<%= pkg.release %>" +
+                            buildNumber +
+                            ".git<%= grunt.config.get('git-revision') %>" +
+                            ".tar.bz2 worldview-doc"
+            },
+
+            // Create a tarball of the documentation without versioning
+            // information
+            tar_doc: {
+                command: "tar cjCf build dist/worldview-doc.tar.bz2 " +
+                            "worldview-doc"
+            },
+
             // Builds the RPM
             rpmbuild: {
                 command: 'rpmbuild --define "_topdir $PWD/build/rpmbuild" ' +
@@ -359,7 +379,7 @@ module.exports = function(grunt) {
                 url: "https://earthdata.nasa.gov/worldview",
                 options: {
                     paths: ["src/js"],
-                    outdir: "build/doc"
+                    outdir: "build/worldview-doc"
                 }
             }
         },
@@ -373,9 +393,12 @@ module.exports = function(grunt) {
         },
 
         csslint: {
-            main: [
-                "src/css/wv.*.css"
-            ]
+            main: {
+                options: {
+                    ids: false
+                },
+                src: ["src/css/wv.*.css"]
+            }
         },
 
         buster: {
@@ -459,7 +482,9 @@ module.exports = function(grunt) {
         "exec:tar_debug_versioned",
         "exec:tar_debug",
         "exec:tar_release_versioned",
-        "exec:tar_release"
+        "exec:tar_release",
+        "exec:tar_doc_versioned",
+        "exec:tar_doc"
     ]);
 
     grunt.registerTask("rpm_only", [
@@ -472,7 +497,7 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask("doc", ["yuidoc"]);
-    grunt.registerTask("lint", ["jshint"]);
+    grunt.registerTask("lint", ["csslint", "jshint"]);
     grunt.registerTask("test", ["buster"]);
     grunt.registerTask("rpm", ["build", "rpm_only"]);
     grunt.registerTask("clean", "remove:build");
