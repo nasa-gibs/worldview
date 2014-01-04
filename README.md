@@ -102,7 +102,7 @@ to ``worldview`` while the production build will be mapped to
 Create an apache configuration file  replacing ``$WORLDVIEW_HOME`` with the
 location to the Worldview repository:
 
-    sudo cat > /private/etc/apache2/other/worldview.conf <<EOF
+    sudo cat > /private/etc/apache2/other/worldview-dev.conf <<EOF
         <Directory $WORLDVIEW_HOME>
             AllowOverride All
         </Directory>
