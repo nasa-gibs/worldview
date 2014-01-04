@@ -104,7 +104,7 @@ $(function() {// Initialize "static" vars
 
         // Models
         var models = {};
-        models.date = Worldview.Models.Date(config);
+        models.date = wv.date.model(config);
         var palettesModel = Worldview.Models.Palettes();
         models.palette = palettesModel;
         var projectionModel = Worldview.Models.Projection(config);
@@ -287,7 +287,7 @@ $(function() {// Initialize "static" vars
         if ( !window.location.search ) {
             Worldview.Tour.start(storageEngine, hideSplash, false);
         }
-	
+
 	/*
         window.onbeforeunload = function() {
    	    storageEngine.setItem('eventsCollapsed', events.isCollapsed);

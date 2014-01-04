@@ -25,7 +25,7 @@
     "src/js/Worldview/AjaxCache.js",
     "src/js/Worldview/AjaxJoin.js",
 
-    "src/js/Worldview/Models/Date.js",
+    "src/js/date/wv.date.model.js",
     "src/js/Worldview/Models/Layers.js",
     "src/js/Worldview/Models/Projection.js",
     "src/js/Worldview/Models/Palettes.js",

@@ -82,7 +82,7 @@ Worldview.Widget.DateWheels = function(models, config){
 	this.init();
 
     var self = this;
-	this.model.events.on("change", function() {
+	this.model.events.on("select", function() {
 	    self.value = self.model.selected;
         $("#linkmode").mobiscroll('setDate',self.UTCToLocal(self.model.selected),true);
 	});
@@ -210,7 +210,7 @@ Worldview.Widget.DateWheels.prototype.setValue = function(value, noRender){
                        "; using today");
         d = Worldview.today();
     }
-    this.model.set(d);
+    this.model.select(d);
     //this.value = d;
     /*
     if(!noRender && changed){

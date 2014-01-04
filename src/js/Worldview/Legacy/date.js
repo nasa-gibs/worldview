@@ -21,7 +21,7 @@ Worldview.Legacy.Date = function(model) {
         REGISTRY.register(self.id, self);
         REGISTRY.markComponentReady(self.id);
 
-        model.events.on("change", fire);
+        model.events.on("select", fire);
         fire();
     };
 

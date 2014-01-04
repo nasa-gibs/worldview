@@ -103,7 +103,7 @@ Worldview.Widget.DateSlider = Worldview.Widget.DateSlider || function(models, co
 
     var self = this;
     this.model = models.date;
-    this.model.events.on("change", function(date) {
+    this.model.events.on("select", function(date) {
         self.value = date;
         self.update();
     });
@@ -145,7 +145,7 @@ Worldview.Widget.DateSlider.prototype.init = function(){
             $("#timemds").css("display","block");
           }
 	this.container.setAttribute("class","datespan");
-    
+
 	var dateHolder = document.createElement('div');
 	dateHolder.setAttribute('id',this.id+'dateHolder');
 	dateHolder.setAttribute('class','dateHolder');
@@ -493,7 +493,7 @@ Worldview.Widget.DateSlider.prototype.showSliders = function(){
   *
 */
 Worldview.Widget.DateSlider.prototype.setValue = function(value){
-    this.model.set(Date.parseISOString(value));
+    this.model.select(Date.parseISOString(value));
 };
 
 Worldview.Widget.DateSlider.prototype.update = function() {
