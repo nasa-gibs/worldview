@@ -83,34 +83,34 @@ command to increase the size of the buffer used:
 
 Worldview must be accessed via a web server to properly work.
 
-#### Via Apache on Mac OS X
+#### Via Apache
 
-In System Preferences under Sharing, check the Web Sharing item.
+* Mac OS X: In System Preferences under Sharing, check the Web Sharing item.
 
-Create symlinks in ``/Library/WebServer/Documents`` to the appropriate
-locations in the source tree. Replace ``$WORLDVIEW_HOME`` with the location of
-the Worldview repository. In this example, the actual source files will mapped
-to ``worldview`` while the production build will be mapped to
-``worldview-release``:
+Create the following file:
 
-    sudo ln -s $WORLDVIEW_HOME/src /Library/WebServer/Documents/worldview
-    sudo ln -s $WORLDVIEW_HOME/build/worldview/web /Library/WebServer/Documents/worldview-release
-    sudo ln -s $WORLDVIEW_HOME/build/worldview-debug/web /Library/WebServer/Documents/worldview-debug
-    sudo ln -s $WORLDVIEW_HOME/build/worldview-doc /Library/WebServer/Documents/worldview-doc
+* Mac OS X: /private/etc/apache2/other/worldview-dev.conf
+* RHEL/CentOS: /etc/httpd/conf.d/worldview-dev.conf
 
-``.htaccess`` files are sprinked in the code base to assist with development.
-Create an apache configuration file  replacing ``$WORLDVIEW_HOME`` with the
-location to the Worldview repository:
+With the following contents. Replace ``$WORLDVIEW_HOME`` with the path to
+the Worldview repository:
 
-    sudo cat > /private/etc/apache2/other/worldview-dev.conf <<EOF
-        <Directory $WORLDVIEW_HOME>
-            AllowOverride All
-        </Directory>
-    EOF
+    Alias /worldview         $WORLDVIEW_HOME/src
+    Alias /worldview-release $WORLDVIEW_HOME/build/worldview/web
+    Alias /worldview-debug   $WORLDVIEW_HOME/build/worldview-debug/web
+    Alias /worldview-doc     $WORLDVIEW_HOME/build/worldview-doc
+
+    <Directory $WORLDVIEW_HOME>
+        Options Indexes FollowSymLinks ExecCGI
+        AllowOverride All
+        Order allow,deny
+        Allow from all
+    </Directory>
 
 Restart Apache:
 
-    sudo apachectl restart
+* Mac OS X: ``sudo apachectl restart``
+* RHEL/CentOS: ``sudo service httpd restart``
 
 Worldview should now be available at the following:
 
