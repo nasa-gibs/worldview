@@ -8,6 +8,7 @@ ExpiresActive On
 AddOutputFilterByType DEFLATE text/html
 AddOutputFilterByType DEFLATE text/css
 AddOutputFilterByType DEFLATE text/javascript
+AddOutputFilterByType DEFLATE application/javascript
 AddOutputFilterByType DEFLATE application/json
 
 

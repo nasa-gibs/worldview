@@ -10,14 +10,15 @@
  */
 
 /**
- * @module wv
+ * @module wv.ui
  */
 var wv = wv || {};
+wv.ui = wv.ui || {};
 
 /**
  * UI utilities
  *
- * @class wv.ui
+ * @class wv.ui.util
  * @static
  */
 wv.ui = wv.ui || (function() {

@@ -12,7 +12,7 @@
 
     "src/js/wv.brand.js",
     "src/js/wv.util.js",
-    "src/js/wv.ui.js",
+    "src/js/ui/wv.ui.util.js",
     "src/js/Worldview.js",
     "src/js/Worldview/About.js",
     "src/js/Worldview/Support.js",

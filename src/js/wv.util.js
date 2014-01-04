@@ -162,8 +162,8 @@ wv.util = wv.util || (function() {
      * General error handler.
      *
      * This function delegates to
-     * {{#crossLink "wv.ui/error:method"}}wv.ui.error{{/crossLink}}. For
-     * custom error handling, replace this function.
+     * {{#crossLink "wv.ui.util/error:method"}}wv.ui.util.error{{/crossLink}}.
+     * For custom error handling, replace this function.
      *
      * @method error
      * @static
@@ -171,7 +171,7 @@ wv.util = wv.util || (function() {
      * @param {exception} cause The exception object that caused the error
      */
     self.error = function(message, cause) {
-        wv.ui.error(message, cause);
+        wv.ui.util.error(message, cause);
     };
 
     /**
