@@ -99,7 +99,15 @@ $(function() {// Initialize "static" vars
 
         // Models
         var models = {};
-        models.date = wv.date.model(config);
+
+        // If at the beginning of the day, wait on the previous day until GIBS
+        // catches up (about three hours)
+        var initialDate = wv.util.today();
+        if ( initialDate.getUTCHours() < 3 ) {
+            initialDate.setUTCDate(initialDate.getUTCDate() - 1);
+        }
+        models.date = wv.date.model(config, { initial: initialDate });
+
         var palettesModel = Worldview.Models.Palettes();
         models.palette = palettesModel;
         var projectionModel = Worldview.Models.Projection(config);
@@ -140,7 +148,8 @@ $(function() {// Initialize "static" vars
         var addLayers = Worldview.Widget.AddLayers(config, layersModel,
                 projectionModel);
         ui.dateSliders = wv.date.sliders(models, config);
-        var dateWheels = new Worldview.Widget.DateWheels(models, config);
+        ui.dateLabel = wv.date.label(models);
+        ui.dateWheels = wv.date.wheels(models, config);
         var map = Worldview.Widget.WorldviewMap("map", config);
         var rubberBand = new SOTE.widget.RubberBand("camera", {
             icon: "images/camera.png",

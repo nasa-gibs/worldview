@@ -25,11 +25,15 @@ wv.date = wv.date || {};
  * @constructor
  * @param {String} config.defaults.archiveStartDate the earliest day in
  * the archive that has data in the form of ``YYYY-MM-DD``.
+ * @param {Date} [spec.initial] initial date. If not specified,
+ * UTC today is used.
  */
 
-wv.date.model = wv.date.model || function(config) {
+wv.date.model = wv.date.model || function(config, spec) {
 
-    var config = config || {};
+    config = config || {};
+    spec = spec || {};
+
     var self = {};
 
     /**
@@ -62,7 +66,8 @@ wv.date.model = wv.date.model || function(config) {
         if ( start ) {
             self.archiveStartDate = wv.util.parseDateUTC(start);
         }
-        self.select(wv.util.today());
+        var initial = spec.initial || wv.util.today();
+        self.select(initial);
     };
 
     /**

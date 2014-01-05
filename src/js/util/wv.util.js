@@ -100,7 +100,7 @@ wv.util = (function(self) {
     /**
      * Parses a UTC ISO 8601 date.
      *
-     * @method parseDateISO
+     * @method parseDateUTC
      * @static
      * @param str {string} Date to parse in the form of ``YYYY-MM-DD``.
      * @return {Date} converted string as a date object, throws an exception if

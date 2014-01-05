@@ -40,12 +40,12 @@ wv.date.sliders = wv.date.sliders || function(models, config) {
     self.isCollapsed = false;
 
     var init = function() {
-        sliders["Year"] = [];
+        sliders.Year = [];
         var currentYear = wv.util.now().getUTCFullYear();
-        sliders["Year"] = _.range(2000, currentYear + 1);
-        sliders["Month"] = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug',
+        sliders.Year = _.range(2000, currentYear + 1);
+        sliders.Month = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug',
                             'Sep','Oct','Nov','Dec'];
-        sliders["Day"] = _.range(1, 31 + 1);
+        sliders.Day = _.range(1, 31 + 1);
 
         $container = $(selector);
         render();
@@ -62,11 +62,6 @@ wv.date.sliders = wv.date.sliders || function(models, config) {
             $("#timeds").css("display","none");
         }
         $container.addClass("datespan");
-
-        var $dateHolder = $("<div></div>")
-                .attr("id", id + "dateHolder")
-                .addClass("dateHolder");
-        $container.append($dateHolder);
 
         var $ecbutton = $("<a></a>")
                 .addClass("ecbutton")
@@ -103,31 +98,29 @@ wv.date.sliders = wv.date.sliders || function(models, config) {
         var wwidth = $(window).width() - 10;
         var labels = sliders[type];
 
-        if ( labels != undefined ) {
-            width = 50/labels.length;
-            width = width.toFixed(1);
-            var pwidth = width/100;
-            var pwwidth = Math.floor(pwidth*wwidth);
-            var spacer = 50/labels.length;
-            spacer = spacer.toFixed(1);
-            var pspacer = spacer/100;
-            var pwspacer = Math.floor(wwidth*pspacer/2);
-            var finalwidth = (pwwidth+pwspacer+pwspacer);
+        width = 50/labels.length;
+        width = width.toFixed(1);
+        var pwidth = width/100;
+        var pwwidth = Math.floor(pwidth*wwidth);
+        var spacer = 50/labels.length;
+        spacer = spacer.toFixed(1);
+        var pspacer = spacer/100;
+        var pwspacer = Math.floor(wwidth*pspacer/2);
+        var finalwidth = (pwwidth+pwspacer+pwspacer);
 
-            var $label = $("<ul></ul>")
-                    .addClass("sliderLabel")
-                    .attr("id", id + "sliderLabel" + type);
-            for ( var i = 0; i < labels.length; ++i ) {
-                var $item = $("<li></li>")
-                        .attr("id", id + type + "sliderItem" + i)
-                        .html(labels[i])
-                        .css("width", Math.floor(wwidth*pwidth) + "px")
-                        .css("margin-left", Math.floor(wwidth*pspacer/2) + "px")
-                        .css("margin-right", Math.floor(wwidth*pspacer/2) + "px");
-                $label.append($item);
-            }
-            $container.append($label);
+        var $label = $("<ul></ul>")
+                .addClass("sliderLabel")
+                .attr("id", id + "sliderLabel" + type);
+        for ( var i = 0; i < labels.length; ++i ) {
+            var $item = $("<li></li>")
+                    .attr("id", id + type + "sliderItem" + i)
+                    .html(labels[i])
+                    .css("width", Math.floor(wwidth*pwidth) + "px")
+                    .css("margin-left", Math.floor(wwidth*pspacer/2) + "px")
+                    .css("margin-right", Math.floor(wwidth*pspacer/2) + "px");
+            $label.append($item);
         }
+        $container.append($label);
 
         var labelslength = labels.length;
         $('#' + id + 'slider' + type)
@@ -140,7 +133,7 @@ wv.date.sliders = wv.date.sliders || function(models, config) {
         $('#' + id + 'slider' + type)
                 .siblings('.ui-slider')
                 .bind("vmouseup", { type:type }, snap);
-        if ( width != 0 ) {
+        if ( width !== 0 ) {
             var handleWidth = (width * 1.1).toFixed(1);
             $('.sliderDiv'+type+' a.ui-slider-handle')
                     .css('width', handleWidth + "%");
@@ -151,30 +144,28 @@ wv.date.sliders = wv.date.sliders || function(models, config) {
         var labels = sliders[type];
         var wwidth = $(window).width() - 10;
 
-        if ( labels != undefined ) {
-            var width = 50/labels.length;
-            width = width.toFixed(1);
-            var pwidth = width/100;
-            var pwwidth = Math.floor(pwidth*wwidth);
-            var spacer = 50/labels.length;
-            spacer = spacer.toFixed(1);
-            var pspacer = spacer/100;
-            var pwspacer = Math.floor(wwidth*pspacer/2);
-            var finalwidth = (pwwidth+pwspacer+pwspacer);
-            $('#' + id + 'sliderLabel' + type)
-                .children()
-                .css('width', Math.floor(wwidth*pwidth) + "px");
-            $('#' + id + 'sliderLabel' + type)
-                .children()
-                .css('margin-left', Math.floor(wwidth*pspacer/2) + "px");
-            $('#' + id + 'sliderLabel' + type)
-                .children()
-                .css('margin-right', Math.floor(wwidth*pspacer/2) + "px");
-            var handleWidth = finalwidth*labels.length;
-            $('#' + id + 'slider' + type)
-                .siblings('.ui-slider')
-                .css('width', handleWidth + "px");
-        }
+        var width = 50/labels.length;
+        width = width.toFixed(1);
+        var pwidth = width/100;
+        var pwwidth = Math.floor(pwidth*wwidth);
+        var spacer = 50/labels.length;
+        spacer = spacer.toFixed(1);
+        var pspacer = spacer/100;
+        var pwspacer = Math.floor(wwidth*pspacer/2);
+        var finalwidth = (pwwidth+pwspacer+pwspacer);
+        $('#' + id + 'sliderLabel' + type)
+            .children()
+            .css('width', Math.floor(wwidth*pwidth) + "px");
+        $('#' + id + 'sliderLabel' + type)
+            .children()
+            .css('margin-left', Math.floor(wwidth*pspacer/2) + "px");
+        $('#' + id + 'sliderLabel' + type)
+            .children()
+            .css('margin-right', Math.floor(wwidth*pspacer/2) + "px");
+        var handleWidth = finalwidth*labels.length;
+        $('#' + id + 'slider' + type)
+            .siblings('.ui-slider')
+            .css('width', handleWidth + "px");
     };
 
     var handleSlide = function(e, ui) {
@@ -242,31 +233,25 @@ wv.date.sliders = wv.date.sliders || function(models, config) {
         validate();
         var value = model.selected;
         var values = {};
-        values["Year"] = sliders["Year"].indexOf(value.getUTCFullYear());
-        values["Month"] = value.getUTCMonth();
-        values["Day"] = sliders["Day"].indexOf(value.getUTCDate());
+        values.Year = sliders.Year.indexOf(value.getUTCFullYear());
+        values.Month = value.getUTCMonth();
+        values.Day = sliders.Day.indexOf(value.getUTCDate());
 
         _.each(values, function(x, type) {
             var numitems = sliders[type].length;
             var displacement = values[type];
             var width = SLIDER_WIDTH / numitems;
-            var move = displacement * width + (width / 4) - (width * .05);
+            var move = displacement * width + (width / 4) - (width * 0.05);
             move = move.toFixed(1);
             $("#" + id + "slider" + type).val(move).slider("refresh");
         });
-        setVisualDate();
-    };
-
-    var setVisualDate = function() {
-        var dateString = model.selected.toISOString().split("T")[0];
-        $('#' + id + 'dateHolder').html(dateString);
     };
 
     var refreshSliders = function() {
         if ( wv.ui.mobile() ) {
-            $("#" + self.containerId).hide();
+            $container.hide();
         } else {
-            $("#" + self.containerId).show();
+            $container.show();
             setTimeout(function() {
                 refreshSlider("Year");
                 refreshSlider("Month");

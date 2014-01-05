@@ -386,8 +386,7 @@ module.exports = function(grunt) {
 
         jshint: {
             main: [
-                "src/js/wv/**/*.js",
-                "src/js/wv.*.js",
+                "src/js/**/wv.*.js",
                 "test/**/*.js",
             ]
         },

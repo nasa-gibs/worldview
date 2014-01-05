@@ -32,6 +32,12 @@ buster.testCase("wv.date.model", {
         buster.assert.equals(date.selected.getUTCDate(), 15);
     },
 
+    "Initializes with a specified date": function() {
+        var initial = new Date(Date.UTC(2013, 0, 5));
+        var date = wv.date.model(this.config, { initial: initial });
+        buster.assert.equals(date.selected, initial);
+    },
+
     "Initializes with archive start date": function() {
         var date = wv.date.model(this.config);
         buster.assert.equals(date.archiveStartDate.getUTCFullYear(), 2013);
