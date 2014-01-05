@@ -4,7 +4,7 @@
     "src/css/palette.css",
     "src/css/map.css",
     "src/css/map-ol2.css",
-    "src/css/dateSpan.css",
+    "src/css/wv.date.css",
     "src/css/menuPicker.css",
     "src/css/accordionPicker.css",
     "src/css/bank.css",

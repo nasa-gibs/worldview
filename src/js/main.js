@@ -139,7 +139,7 @@ $(function() {// Initialize "static" vars
         });
         var addLayers = Worldview.Widget.AddLayers(config, layersModel,
                 projectionModel);
-        var dateSlider = new Worldview.Widget.DateSlider(models, config);
+        ui.dateSliders = wv.date.sliders(models, config);
         var dateWheels = new Worldview.Widget.DateWheels(models, config);
         var map = Worldview.Widget.WorldviewMap("map", config);
         var rubberBand = new SOTE.widget.RubberBand("camera", {

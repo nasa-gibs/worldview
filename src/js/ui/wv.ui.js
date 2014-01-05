@@ -23,6 +23,18 @@ var wv = wv || {};
 wv.ui = (function(self) {
 
     /**
+     * Determines if the UI should use a compact mobile layout.
+     *
+     * @method mobile
+     * @static
+     * @return {Boolean} true if the window width is less than 720 pixels,
+     * otherwise returns false.
+     */
+    self.mobile = function() {
+        return $(window).width() < 720;
+    };
+
+    /**
      * General error handler.
      *
      * Displays a dialog box with the error message. If an exception object

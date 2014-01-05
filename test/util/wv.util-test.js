@@ -72,6 +72,11 @@ buster.testCase("wv.util", {
         });
     },
 
+    "toISOStringDate: Converts date": function() {
+        var d = new Date(Date.UTC(2013, 0, 15));
+        buster.assert.equals(wv.util.toISOStringDate(d), "2013-01-15");
+    },
+
     "clearTimeUTC: Time set to UTC midnight": function() {
         var d = new Date(2013, 02, 15, 12, 34, 56, 789);
         wv.util.clearTimeUTC(d);

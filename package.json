@@ -1,6 +1,6 @@
 {
     "name": "worldview-master",
-    "version": "0.7.0",
+    "version": "0.6.3",
     "release": "1",
     "author": "Worldview Team <support@earthdata.nasa.gov>",
     "description": "Browse full-resolution, near real-time satellite imagery",

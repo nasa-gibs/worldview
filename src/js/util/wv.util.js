@@ -115,6 +115,18 @@ wv.util = (function(self) {
     };
 
     /**
+     * Converts a date into an ISO string with only the date portion.
+     *
+     * @method toISOStringDate
+     * @static
+     * @param date {Date} the date to convert
+     * @return {string} ISO string in the form of ``YYYY-MM-DD``.
+     */
+    self.toISOStringDate = function(date) {
+        return date.toISOString().split("T")[0];
+    };
+
+    /**
      * Sets a date to UTC midnight.
      *
      * @method clearTimeUTC
@@ -153,7 +165,7 @@ wv.util = (function(self) {
      * fields set to zero or an overriden value.
      */
     self.today = function() {
-        return self.clearTimeUTC(new Date());
+        return self.clearTimeUTC(self.now());
     };
 
     /**

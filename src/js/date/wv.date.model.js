@@ -73,6 +73,7 @@ wv.date.model = wv.date.model || function(config) {
      * @param {Date} date The day to display. If the day is before the
      * archive start date, it is set to the archive start date. If the day
      * is after UTC today, it is set to UTC today.
+     * @return {Boolean} true if the date was updated, otherwise false.
      */
     self.select = function(date) {
         if ( date < self.archiveStartDate ) {
@@ -81,10 +82,13 @@ wv.date.model = wv.date.model || function(config) {
             date = wv.util.today();
         }
 
+        var updated = false;
         if ( !self.selected || date.getTime() !== self.selected.getTime() ) {
             self.selected = date;
             self.events.trigger("select", date);
+            updated = true;
         }
+        return updated;
     };
 
     /**
@@ -94,7 +98,7 @@ wv.date.model = wv.date.model || function(config) {
      * @return {String} current day in the form of ``time=YYYY-MM-DD``
      */
     self.toPermalink = function() {
-        return "time=" + self.selected.toISOString();
+        return "time=" + self.selected.toISOString().split("T")[0];
     };
 
     /**
@@ -111,8 +115,8 @@ wv.date.model = wv.date.model || function(config) {
         var query = wv.util.fromQueryString(queryString);
         if ( query.time ) {
             try {
-                var value = Date.parseDateUTC(query.time);
-                self.set(value);
+                var value = wv.util.parseDateUTC(query.time);
+                self.select(value);
             } catch ( error ) {
                 wv.util.warn("Invalid date: " + query.time + ": " + error);
             }

@@ -12,6 +12,7 @@
 buster.testCase("wv.date.model", {
 
     config: null,
+    now: null,
 
     setUp: function() {
         this.config = {
@@ -19,9 +20,9 @@ buster.testCase("wv.date.model", {
                 archiveStartDate: "2013-01-01"
             }
         };
-        this.stub(wv.util, "today", function() {
-            return new Date(2013, 0, 15, 0, 0, 0);
-        });
+        var now = new Date(Date.UTC(2013, 0, 15));
+        this.now = now;
+        this.stub(wv.util, "now").returns(now);
     },
 
     "Initializes to today": function() {
@@ -50,13 +51,41 @@ buster.testCase("wv.date.model", {
     },
 
     "Select new date": function() {
-        var d = new Date(2013, 0, 5, 0, 0, 0);
+        var d = new Date(Date.UTC(2013, 0, 5));
         var listener = this.stub();
         var date = wv.date.model(this.config);
         date.events.on("select", listener);
         date.select(d);
         buster.assert.equals(date.selected, d);
         buster.assert.calledWith(listener, d);
+    },
+
+    "To permalink": function() {
+        var d = new Date(Date.UTC(2013, 0, 5));
+        var date = wv.date.model(this.config);
+        date.select(d);
+        buster.assert.equals(date.toPermalink(), "time=2013-01-05");
+    },
+
+    "From valid permalink": function() {
+        var d = new Date(Date.UTC(2013, 0, 5));
+        var date = wv.date.model(this.config);
+        date.fromPermalink("time=2013-01-05");
+        buster.assert.equals(date.selected, d);
+    },
+
+    "Not selected when time is not in permalink": function() {
+        var date = wv.date.model(this.config);
+        date.fromPermalink("foo=2013-01-05");
+        buster.assert.equals(date.selected, this.now);
+    },
+
+    "Warning emitted when time is invalid": function() {
+        var date = wv.date.model(this.config);
+        this.stub(wv.util, "warn");
+        date.fromPermalink("time=X");
+        buster.assert.equals(date.selected, this.now);
+        buster.assert.calledOnce(wv.util.warn);
     }
 
 });
