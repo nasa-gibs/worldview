@@ -9,24 +9,33 @@
  * All Rights Reserved.
  */
 
-Worldview.namespace("Legacy");
+/**
+ * @module wv.legacy
+ */
+var wv = wv || {};
+wv.legacy = wv.legacy || {};
 
-Worldview.Legacy.Switch = function(model) {
+/**
+ * Undocumented.
+ *
+ * @class wv.legacy.date
+ */
+wv.legacy.date = wv.legacy.date || function(model) {
 
     var self = {};
 
-    self.id = "switch";
+    self.id = "time";
 
     var init = function() {
         REGISTRY.register(self.id, self);
         REGISTRY.markComponentReady(self.id);
 
-        model.events.on("change", fire);
+        model.events.on("select", fire);
         fire();
     };
 
     self.setValue = function(value) {
-        model.set(self.id + "=" + model);
+        model.set(self.id + "=" + model.selected.toISOString().split("T")[0]);
     };
 
     self.getValue = function() {
@@ -38,6 +47,21 @@ Worldview.Legacy.Switch = function(model) {
     self.loadFromQuery = function(queryString) {
         model.fromPermalink(queryString);
         fire();
+    };
+
+    self.parse = function(queryString, object) {
+        var timeString = Worldview.extractFromQuery("time", queryString);
+        if ( !timeString ) {
+            object.time = Worldview.today();
+        } else {
+            try {
+                object.time = Date.parseISOString(timeString).clearUTCTime();
+            } catch ( error ) {
+                this.log.warn("Invalid time: " + timeString + ", reason: " +
+                    error);
+                object.time = Worldview.today();
+            }
+        }
     };
 
     var fire = function() {

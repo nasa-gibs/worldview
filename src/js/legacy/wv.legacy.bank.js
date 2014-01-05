@@ -9,24 +9,36 @@
  * All Rights Reserved.
  */
 
-Worldview.namespace("Legacy");
+/**
+ * @module wv.legacy
+ */
+var wv = wv || {};
+wv.legacy = wv.legacy || {};
 
-Worldview.Legacy.Date = function(model) {
+/**
+ * Undocumented.
+ *
+ * @class wv.legacy.bank
+ */
+wv.legacy.bank = wv.legacy.bank || function(model) {
 
     var self = {};
 
-    self.id = "time";
+    self.id = "products";
 
     var init = function() {
         REGISTRY.register(self.id, self);
         REGISTRY.markComponentReady(self.id);
 
-        model.events.on("select", fire);
+        model.events.on("add", fire);
+        model.events.on("remove", fire);
+        model.events.on("move", fire);
+        model.events.on("visibility", fire);
         fire();
     };
 
     self.setValue = function(value) {
-        model.set(self.id + "=" + model.selected.toISOString().split("T")[0]);
+        model.fromPermalink(self.id + "=" + value);
     };
 
     self.getValue = function() {
@@ -41,18 +53,9 @@ Worldview.Legacy.Date = function(model) {
     };
 
     self.parse = function(queryString, object) {
-        var timeString = Worldview.extractFromQuery("time", queryString);
-        if ( !timeString ) {
-            object.time = Worldview.today();
-        } else {
-            try {
-                object.time = Date.parseISOString(timeString).clearUTCTime();
-            } catch ( error ) {
-                this.log.warn("Invalid time: " + timeString + ", reason: " +
-                    error);
-                object.time = Worldview.today();
-            }
-        }
+        var projection = Worldview.extractFromQuery("switch", queryString);
+        object.projection = projection;
+        return object;
     };
 
     var fire = function() {

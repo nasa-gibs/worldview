@@ -9,27 +9,33 @@
  * All Rights Reserved.
  */
 
-Worldview.namespace("Legacy");
+/**
+ * @module wv.legacy
+ */
+var wv = wv || {};
+wv.legacy = wv.legacy || {};
 
-Worldview.Legacy.Bank = function(model) {
+/**
+ * Undocumented.
+ *
+ * @class wv.legacy.switch
+ */
+wv.legacy.switch_ = wv.legacy.switch_ || function(model) {
 
     var self = {};
 
-    self.id = "products";
+    self.id = "switch";
 
     var init = function() {
         REGISTRY.register(self.id, self);
         REGISTRY.markComponentReady(self.id);
 
-        model.events.on("add", fire);
-        model.events.on("remove", fire);
-        model.events.on("move", fire);
-        model.events.on("visibility", fire);
+        model.events.on("change", fire);
         fire();
     };
 
     self.setValue = function(value) {
-        model.fromPermalink(self.id + "=" + value);
+        model.set(self.id + "=" + model);
     };
 
     self.getValue = function() {
@@ -41,12 +47,6 @@ Worldview.Legacy.Bank = function(model) {
     self.loadFromQuery = function(queryString) {
         model.fromPermalink(queryString);
         fire();
-    };
-
-    self.parse = function(queryString, object) {
-        var projection = Worldview.extractFromQuery("switch", queryString);
-        object.projection = projection;
-        return object;
     };
 
     var fire = function() {

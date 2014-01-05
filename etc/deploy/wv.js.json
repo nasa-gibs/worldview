@@ -31,10 +31,6 @@
     "src/js/Worldview/Models/Projection.js",
     "src/js/Worldview/Models/Palettes.js",
 
-    "src/js/Worldview/Legacy/date.js",
-    "src/js/Worldview/Legacy/switch.js",
-    "src/js/Worldview/Legacy/bank.js",
-
     "src/js/Worldview/Palette.js",
     "src/js/Worldview/Palette/ColorBar.js",
     "src/js/Worldview/Palette/Palette.js",
@@ -118,6 +114,10 @@
     "src/js/Worldview/Widget/CRS.js",
     "src/js/Worldview/Widget/DataDownload.js",
     "src/js/link/wv.link.ui.js",
+
+    "src/js/legacy/wv.legacy.switch_.js",
+    "src/js/legacy/wv.legacy.bank.js",
+    "src/js/legacy/wv.legacy.date.js",
 
     "src/js/tour.js",
     "src/js/main.js"

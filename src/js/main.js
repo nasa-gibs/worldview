@@ -128,9 +128,9 @@ $(function() {// Initialize "static" vars
         Worldview.models = models;
 
         // Legacy REGISTRY based widgets
-        var legacySwitch = Worldview.Legacy.Switch(projectionModel);
-        var legacyBank = Worldview.Legacy.Bank(layersModel);
-        var legacyDate = Worldview.Legacy.Date(models.date);
+        var legacySwitch = wv.legacy.switch_(projectionModel);
+        var legacyBank = wv.legacy.bank(layersModel);
+        var legacyDate = wv.legacy.date(models.date);
 
         // Create widgets
         var ui = {};
