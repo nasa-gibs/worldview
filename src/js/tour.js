@@ -19,7 +19,7 @@ Worldview.namespace("Tour");
         var version = Worldview.Support.VERSION;
         if (browser === "IE" && version <= 9) {
             if (noDisable) {
-                Worldview.notify("The Worldivew tour is not supported in " +
+                wv.ui.notify("The Worldivew tour is not supported in " +
                     "this browser version. Upgrade or try again in a " +
                     "different browser.");
             }
@@ -36,7 +36,7 @@ Worldview.namespace("Tour");
 
         if(viewWidth < 768 || viewHeight < 680) {
             if(noDisable) {
-                Worldview.notify("Unfortunately the Worldview tour can only be viewed in larger web browser windows.");
+                wv.ui.notify("Unfortunately the Worldview tour can only be viewed in larger web browser windows.");
             }
             return;
         }

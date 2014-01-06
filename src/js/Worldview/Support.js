@@ -47,7 +47,7 @@ Worldview.namespace("Support");
         } else {
             prefix = "The " + featureName + " feature";
         }
-        Worldview.notify(prefix + " is not supported with your web " +
+        wv.ui.notify(prefix + " is not supported with your web " +
                 "browser. Upgrade or try again in a different browser.");
     };
 
@@ -132,7 +132,7 @@ Worldview.namespace("Support");
                 mobileSafari = true;
             }
             addEventListener("load", function() {
-                setTimeout(hideURLbar, 0); 
+                setTimeout(hideURLbar, 0);
             }, false);
             addEventListener("orientationchange", function() {
                 setTimeout(hideURLbar, 0);
@@ -158,8 +158,8 @@ Worldview.namespace("Support");
                 setHeight($('#app'));
             });
             }
-        
-        
+
+
     };
 
     var modernSetTimeout = function() {

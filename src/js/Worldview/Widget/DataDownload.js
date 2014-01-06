@@ -151,7 +151,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
             var $productSelector = $("<input type='radio'></input>")
                 .attr("value", key)
                 .attr("data-product", key);
-            
+
             $header.prepend($productSelector).append($selectedCount);
         }
         if ( model.selectedProduct === key ) {
@@ -174,7 +174,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
                 });
             })
             .append($header);
-        
+
         $content.append($contentDlGroup);
 
         var $products = $("<ul></ul>")
@@ -330,7 +330,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
         log.debug("queryError", status, error);
         Worldview.Indicator.hide();
         if ( status !== "abort" ) {
-            Worldview.notify("Unable to search at this time. Please try " +
+            wv.ui.notify("Unable to search at this time. Please try " +
                     "again later");
         }
     };
@@ -339,7 +339,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
         queryActive = false;
         log.debug("queryTimeout");
         Worldview.Indicator.hide();
-        Worldview.notify(
+        wv.ui.notify(
             "No results received yet. This may be due to a " +
             "connectivity issue. Please try again later."
         );

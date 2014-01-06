@@ -76,6 +76,37 @@ wv.ui = (function(self) {
         }
     };
 
+    /**
+     * Displays a message to the end user in a dialog box.
+     *
+     * @method notify
+     * @static
+     *
+     * @param {string} The message to display to the user.
+     *
+     * @param [title="Notice"] {string} Title for the dialog box.
+     */
+    self.notify = function(message, title) {
+        if ( window.YAHOO && window.YAHOO.widget &&
+                window.YAHOO.widget.Panel ) {
+            o = new YAHOO.widget.Panel("WVerror", {
+                width: "300px",
+                zIndex: 1020,
+                visible: false,
+                constraintoviewport: true
+            });
+            title = title || "Notice";
+            o.setHeader(title);
+            o.setBody(message);
+            o.render(document.body);
+            o.show();
+            o.center();
+            o.hideEvent.subscribe(function(i) {
+                setTimeout(function() {o.destroy();}, 25);
+            });
+        }
+    };
+
     return self;
 
 })(wv.ui || {});

@@ -4,15 +4,16 @@
  * This code was originally developed at NASA/Goddard Space Flight Center for
  * the Earth Science Data and Information System (ESDIS) project.
  *
- * Copyright (C) 2013 United States Government as represented by the
+ * Copyright (C) 2013 - 2014 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
 
 /**
- * @module Worldview
+ * @module wv.ui
  */
-Worldview.namespace("About");
+var wv = wv || {};
+wv.ui = wv.ui || {};
 
 /**
  * Displays the Worldview about box. If this is a desktop device, a full
@@ -20,12 +21,12 @@ Worldview.namespace("About");
  * device, a small dialog box is shown with links to a page that contains
  * the full information.
  *
- * @class About
+ * @class wv.ui.about
  * @static
  */
-$(function() {
+wv.ui.about = wv.ui.about || (function() {
 
-    var ns = Worldview.About;
+    var self = {};
     var overlay;
 
     /**
@@ -33,8 +34,8 @@ $(function() {
      *
      * @method show
      */
-    ns.show = function() {
-        if ( $(window).width() < 750 ) {
+    self.show = function() {
+        if ( wv.ui.mobile() ) {
             showMobile();
         } else {
             showDesktop();
@@ -107,7 +108,10 @@ $(function() {
                 "<a href='pages/release_notes.html' target='_blank'>Release Notes</a>",
             "</div>",
         ].join("\n");
-        Worldview.notify(html, "&nbsp;");
+        wv.ui.notify(html, "&nbsp;");
     };
-});
+
+    return self;
+
+})();
 

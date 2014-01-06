@@ -70,7 +70,7 @@ wv.link.ui = wv.link.ui || function(models) {
             permOverlay.hide();
             console.warn("Unable to shorten URL");
             console.warn.apply(console, arguments);
-            Worldview.notify("Unable to shorten the permalink at this time. " +
+            wv.ui.notify("Unable to shorten the permalink at this time. " +
                     "Please try again later.");
         };
 
