@@ -6,10 +6,8 @@
 
     "src/js/component.js",
     "src/js/registry.js",
-    "src/js/util.js",
     "src/js/rubberBand.js",
     "src/js/imageDownload.js",
-    "src/js/sote.js",
     "src/js/events.js",
 
     "src/js/wv.brand.js",

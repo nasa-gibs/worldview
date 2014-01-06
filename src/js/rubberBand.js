@@ -164,8 +164,9 @@ SOTE.widget.RubberBand.prototype.getValue = function() {
   *
 */
 SOTE.widget.RubberBand.prototype.updateComponent = function(qs){
-		this.projectionSwitch =   SOTE.util.extractFromQuery("switch",qs);
-		this.currentPalettes = SOTE.util.extractFromQuery("palettes",qs);
+    var query = wv.util.fromQueryString(qs);
+    this.projectionSwitch = query["switch"];
+	this.currentPalettes = query.palettes || "";
 };
 
 /**
@@ -177,7 +178,6 @@ SOTE.widget.RubberBand.prototype.updateComponent = function(qs){
   *
 */
 SOTE.widget.RubberBand.prototype.loadFromQuery = function(qs){
-	return this.setValue(SOTE.util.extractFromQuery(this.id,qs));
 };
 
 /**

@@ -128,12 +128,14 @@ SOTE.widget.ImageDownload.prototype.getValue = function(){
 SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
 
 	try {
-    	var bbox = SOTE.util.extractFromQuery('map',qs);
-    	var time = SOTE.util.extractFromQuery('time',qs);
-    	var pixels = SOTE.util.extractFromQuery('camera', qs);
-      	var s = SOTE.util.extractFromQuery('switch',qs);
-      	var products = SOTE.util.extractFromQuery('products',qs);
-      	var epsg = SOTE.util.extractFromQuery('epsg', qs);
+	    var query = wv.util.fromQueryString(qs);
+	    var bbox = query.map || "";
+	    var time = query.time || "";
+	    var pixels = query.camera || "";
+	    var s = query["switch"] || "";
+	    var products = query.products || "";
+	    var epsg = query.epsg || "";
+
       	//console.log("EPSG: " + epsg);
 
      	var px = pixels.split(",");
@@ -242,7 +244,6 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
   *
 */
 SOTE.widget.ImageDownload.prototype.loadFromQuery = function(qs){
-	return this.setValue(SOTE.util.extractFromQuery(this.id,qs));
 };
 
 /**
