@@ -165,7 +165,8 @@ wv.util.browser = wv.util.browser || (function() {
 
     self.tests.localStorage = function() {
         if ( !self.tests.window("localStorage") ) { return false; }
-        try { localStorage.getItem("item"); } catch ( error ) { return false; }
+        try { localStorage.setItem("available", "true"); }
+                catch ( error ) { return false; }
         return true;
     };
 
