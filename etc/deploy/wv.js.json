@@ -27,9 +27,9 @@
     "src/js/Worldview/AjaxJoin.js",
 
     "src/js/date/wv.date.model.js",
-    "src/js/Worldview/Models/Layers.js",
-    "src/js/Worldview/Models/Projection.js",
-    "src/js/Worldview/Models/Palettes.js",
+    "src/js/layers/wv.layers.model.js",
+    "src/js/proj/wv.proj.model.js",
+    "src/js/palette/wv.palette.model.js",
 
     "src/js/Worldview/Palette.js",
     "src/js/Worldview/Palette/ColorBar.js",
@@ -99,10 +99,10 @@
     "src/js/Worldview/DataDownload/DownloadListPanel.js",
     "src/js/Worldview/DataDownload/BulkDownloadPage.js",
 
-    "src/js/Worldview/Widget/Projection.js",
-    "src/js/Worldview/Widget/LayerSideBar.js",
-    "src/js/Worldview/Widget/ActiveLayers.js",
-    "src/js/Worldview/Widget/AddLayers.js",
+    "src/js/proj/wv.proj.ui.js",
+    "src/js/layers/wv.layers.sidebar.js",
+    "src/js/layers/wv.layers.active.js",
+    "src/js/layers/wv.layers.add.js",
     "src/js/date/wv.date.sliders.js",
     "src/js/date/wv.date.label.js",
     "src/js/date/wv.date.wheels.js",

@@ -4,15 +4,24 @@
  * This code was originally developed at NASA/Goddard Space Flight Center for
  * the Earth Science Data and Information System (ESDIS) project.
  *
- * Copyright (C) 2013 United States Government as represented by the
+ * Copyright (C) 2013 - 2014 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
-Worldview.namespace("Widget.Projection");
 
-Worldview.Widget.Projection = function(model) {
+/**
+ * @module wv.proj
+ */
+var wv = wv || {};
+wv.proj = wv.proj || {};
 
-    var log = Logging.getLogger("Worldview.Widget.Projection");
+/**
+ * Undocumented.
+ *
+ * @class wv.proj.ui
+ */
+wv.proj.ui = wv.proj.ui || function(models) {
+
     var icons = {
         geographic: {
             highlighted: "images/geographicon.png",
@@ -27,6 +36,7 @@ Worldview.Widget.Projection = function(model) {
             normal:      "images/antarctic.png"
         }
     };
+    var model = models.proj;
 
     var self = {};
 
@@ -35,7 +45,7 @@ Worldview.Widget.Projection = function(model) {
 
     var init = function() {
         render();
-        model.events.on("change", onProjectionChanged);
+        model.events.on("select", onProjectionChanged);
         onProjectionChanged(model.selected);
     };
 
@@ -49,11 +59,11 @@ Worldview.Widget.Projection = function(model) {
             "</div>" +
             "<div class='hidden'>" +
                 "<a id='arctic' class='sw_arctic' title='Arctic' " +
-                    "data-view='arctic'></a>" +
+                    "data-id='arctic'></a>" +
                 "<a id='geographic' class='sw_geographic' " +
-                    "title='Geographic' data-view='geographic'></a>" +
+                    "title='Geographic' data-id='geographic'></a>" +
                 "<a id='antarctic' class='sw_antarctic' " +
-                    "title='Antarctic' data-view='antarctic'></a>" +
+                    "title='Antarctic' data-id='antarctic'></a>" +
             "</div>" +
             "</li>" +
             "</ul>"
@@ -66,27 +76,28 @@ Worldview.Widget.Projection = function(model) {
 
     var changeProjection = function(event) {
         var $element = $("#" + event.target.id);
-        model.set($element.attr("data-view"));
+        model.select($element.attr("data-id"));
     };
 
-    var onProjectionChanged = function(projection) {
+    var onProjectionChanged = function(proj) {
         $(self.selector + " .sw_current")
-            .css("background-image", "url(" + icons[projection].normal + ")")
-            .hover(function() { hoverOver($(this), projection); },
-                   function() { hoverOut($(this), projection); });
+            .css("background-image", "url(" + icons[proj.id].normal + ")")
+            .hover(function() { hoverOver($(this), proj.id); },
+                   function() { hoverOut($(this), proj.id); });
     };
 
-    var hoverOver = function($element, projection) {
+    var hoverOver = function($element, id) {
         $element.css("background-image",
-                "url(" + icons[projection].highlighted + ")");
+                "url(" + icons[id].highlighted + ")");
     };
 
-    var hoverOut = function($element, projection) {
+    var hoverOut = function($element, id) {
         $element.css("background-image",
-                "url(" + icons[projection].normal + ")");
+                "url(" + icons[id].normal + ")");
     };
 
     init();
     return self;
 
 };
+

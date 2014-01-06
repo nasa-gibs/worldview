@@ -4,16 +4,21 @@
  * This code was originally developed at NASA/Goddard Space Flight Center for
  * the Earth Science Data and Information System (ESDIS) project.
  *
- * Copyright (C) 2013 United States Government as represented by the
+ * Copyright (C) 2013 - 2014 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
 
-Worldview.namespace("Models");
+/**
+ * @module wv.layers
+ */
+var wv = wv || {};
+wv.layers = wv.layers || {};
 
-Worldview.Models.Layers = function(config, projectionModel) {
-
-    var log = Logging.getLogger("Worldview.Models.Layers");
+/**
+ * @class wv.layers.model
+ */
+wv.layers.model = wv.layers.model || function(models, config) {
 
     var self = {};
 
@@ -36,15 +41,15 @@ Worldview.Models.Layers = function(config, projectionModel) {
         });
     };
 
-    self.forProjection = function(projection) {
-        projection = projection || projectionModel.selected;
+    self.forProjection = function(proj) {
+        proj = proj || models.proj.selected.id;
         var results = {
             baselayers: [],
             overlays: []
         };
         $.each(self.active, function(type, layers) {
             $.each(layers, function(index, layer) {
-                if ( layer.projections[projection] ) {
+                if ( layer.projections[proj] ) {
                     results[type].push(layer);
                 }
             });
@@ -52,24 +57,22 @@ Worldview.Models.Layers = function(config, projectionModel) {
         return results;
     };
 
-    self.count = function(type, projection) {
-        projection = projection || projectionModel.selected;
-        var layers = self.forProjection(projection);
+    self.count = function(type, proj) {
+        proj = projection || models.proj.selected.id;
+        var layers = self.forProjection(proj);
         return layers[type].length;
     };
 
-    self.total = function(projection) {
-        return self.count("baselayers", projection) +
-               self.count("overlays", projection);
+    self.total = function(proj) {
+        return self.count("baselayers", proj) +
+               self.count("overlays", proj);
     };
 
     self.add = function(type, id, hidden) {
         var layer = getLayer(id);
         if ( $.inArray(layer, self.active[type]) >= 0 ) {
-            log.debug("layers: add already active", type, layer.id);
             return;
         }
-        log.debug("layers: add", type, id, hidden);
         self.active[type].unshift(layer);
         hidden = hidden || false;
         self.visible[id] = !hidden;
@@ -80,22 +83,18 @@ Worldview.Models.Layers = function(config, projectionModel) {
         var layer = getLayer(id);
         var index = $.inArray(layer, self.active[type]);
         if ( index >= 0 ) {
-            log.debug("layers: remove", type, id);
             self.active[type].splice(index, 1);
             delete self.visible[id];
             self.events.trigger("remove", layer, type);
-        } else {
-            log.debug("layers: remove not active", type, layer.id);
         }
     };
 
-    self.clear = function(projection) {
-        projection = projection || projectionModel.selected;
-        log.debug("layers: clearing", projection, self.active);
+    self.clear = function(proj) {
+        projection = proj|| models.proj.selected.id;
         $.each(self.active, function(type, layers) {
             var layersClone = layers.slice(0);
             $.each(layersClone, function(i, layer) {
-                if ( projection && layer.projections[projection] ) {
+                if ( proj && layer.projections[proj] ) {
                     self.remove(type, layer.id);
                 }
             });
@@ -110,7 +109,6 @@ Worldview.Models.Layers = function(config, projectionModel) {
         }
         self.active[type].splice(oldIndex, 1);
         self.active[type].push(layer);
-        log.debug("layers: move", type, layer, self.active[type].length - 1);
         self.events.trigger("move", type, layer, self.active[type].length - 1);
     };
 
@@ -131,8 +129,6 @@ Worldview.Models.Layers = function(config, projectionModel) {
             sourceIndex++;
         }
         self.active[type].splice(sourceIndex, 1);
-
-        log.debug("layers: move", type, sourceLayer, targetIndex);
         self.events.trigger("move", type, sourceLayer, targetIndex);
     };
 
@@ -158,7 +154,7 @@ Worldview.Models.Layers = function(config, projectionModel) {
     self.toPermalink = function() {
         var types = [];
         $.each(self.forProjection(), function(type, layers) {
-            var type = [type];
+            type = [type];
             $.each(layers, function(index, layer) {
                 prefix = ( !self.visible[layer.id] ) ? "!": "";
                 type.push(prefix + layer.id);
@@ -172,7 +168,7 @@ Worldview.Models.Layers = function(config, projectionModel) {
         var query = Worldview.queryStringToObject(queryString);
         var values = query.layers || query.products;
         if ( values ) {
-            self.clear(projectionModel.selected);
+            self.clear(models.proj.selected.id);
             // Base layers / overlays
             var sections = values.split("~");
             $.each(sections, function(i, section) {
@@ -184,7 +180,7 @@ Worldview.Models.Layers = function(config, projectionModel) {
                         if ( index === 0 ) {
                             type = item;
                             if ( !Worldview.LAYER_TYPES[type] ) {
-                                log.warn("Invalid layer type: " + type);
+                                wv.util.warn("Invalid layer type: " + type);
                                 return false;
                             }
                         } else {
@@ -204,7 +200,7 @@ Worldview.Models.Layers = function(config, projectionModel) {
                         try {
                             self.add(type, layer.name, layer.hidden);
                         } catch ( error ) {
-                            log.warn("Invalid layer: " + layer);
+                            wv.util.warn("Invalid layer: " + layer);
                         }
                     });
                 });

@@ -4,15 +4,21 @@
  * This code was originally developed at NASA/Goddard Space Flight Center for
  * the Earth Science Data and Information System (ESDIS) project.
  *
- * Copyright (C) 2013 United States Government as represented by the
+ * Copyright (C) 2013 - 2014 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
 
-Worldview.namespace("Models");
+/**
+ * @module wv.palette
+ */
+var wv = wv || {};
+wv.palette = wv.palette || {};
 
-// This is juat a shell for now
-Worldview.Models.Palettes = function() {
+/**
+ * @class wv.palette.model
+ */
+wv.palette.model = wv.palette.model || function() {
 
     var self = {};
     self.events = wv.util.events();
@@ -20,4 +26,3 @@ Worldview.Models.Palettes = function() {
     return self;
 
 };
-

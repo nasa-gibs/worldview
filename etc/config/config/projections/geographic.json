@@ -1,14 +1,19 @@
 {
+    "id": "geographic",
+    "epsg": 4326,
+    "crs": "EPSG:4326",
     "maxExtent": [
         -180,
         -90,
         180,
         90
     ],
-    "name": "geographic",
-    "numZoomLevels": 9,
-    "epsg": 4326,
-    "crs": "EPSG:4326",
+    "restrictedExtent": [
+        -230,
+        -120,
+        230,
+        120
+    ],
     "resolutions": [
         0.5625,
         0.28125,
@@ -20,12 +25,7 @@
         0.00439453125,
         0.002197265625
     ],
-    "restrictedExtent": [
-        -230,
-        -120,
-        230,
-        120
-    ],
+    "numZoomLevels": 9,
     "startCenter": [
         0,
         0

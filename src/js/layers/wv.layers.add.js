@@ -9,12 +9,20 @@
  * All Rights Reserved.
  */
 
-Worldview.namespace("Widget");
+/**
+ * @module wv.layers
+ */
+var wv = wv || {};
+wv.layers = wv.layers || {};
 
-Worldview.Widget.AddLayers = function(config, model, projectionModel) {
+/**
+ * @class wv.layers.add
+ */
+wv.layers.add = wv.layers.add || function(models, config) {
 
     var jsp = null;
 
+    var model = models.layers;
     var self = {};
 
     self.selector = "#selectorbox";
@@ -27,7 +35,7 @@ Worldview.Widget.AddLayers = function(config, model, projectionModel) {
         model.events
             .on("add", onLayerAdded)
             .on("remove", onLayerRemoved);
-        projectionModel.events.on("change", onProjectionChange);
+        models.proj.events.on("select", onProjectionChange);
     };
 
     var render = function() {
@@ -130,7 +138,7 @@ Worldview.Widget.AddLayers = function(config, model, projectionModel) {
         }
         if ( model.isActive(type, layer.id) ) {
             $checkbox.attr("checked", "checked");
-        };
+        }
 
         $element.append($checkbox);
         $element.append($name);
@@ -213,11 +221,11 @@ Worldview.Widget.AddLayers = function(config, model, projectionModel) {
     };
 
     var toggleLayer = function(event) {
-        if ($(this).is(':checkbox')){
-            var $target = $(this);
-        }
-        else{
-            var $target = $(this).find('input:checkbox');
+        var $target;
+        if ( $(this).is(':checkbox') ) {
+            $target = $(this);
+        } else {
+            $target = $(this).find('input:checkbox');
         }
         if ( $target.is(':checked') ) {
 
@@ -258,7 +266,7 @@ Worldview.Widget.AddLayers = function(config, model, projectionModel) {
 
         var aois = [];
         $.each(config.aoi, function(name, info) {
-             if ( $.inArray(projectionModel.selected,
+             if ( $.inArray(models.proj.selected.id,
                     info.projections ) >= 0 ) {
                 if ( info.index === 0 || info.index ) {
                     aois.splice(info.index, 0, name);
@@ -296,7 +304,7 @@ Worldview.Widget.AddLayers = function(config, model, projectionModel) {
     };
 
     var filterProjection = function(layer) {
-        return !layer.projections[projectionModel.selected];
+        return !layer.projections[models.proj.selected.id];
     };
 
     var filterSearch = function(layer, terms) {

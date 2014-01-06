@@ -107,15 +107,11 @@ $(function() {// Initialize "static" vars
             initialDate.setUTCDate(initialDate.getUTCDate() - 1);
         }
         models.date = wv.date.model(config, { initial: initialDate });
-
-        var palettesModel = Worldview.Models.Palettes();
-        models.palette = palettesModel;
-        var projectionModel = Worldview.Models.Projection(config);
-        models.projection = projectionModel;
-        var layersModel = Worldview.Models.Layers(config, projectionModel);
-        models.layers = layersModel;
+        models.palettes = wv.palette.model();
+        models.proj = wv.proj.model(config);
+        models.layers = wv.layers.model(models, config);
         var dataDownloadModel = Worldview.DataDownload.Model(config, {
-            layersModel: layersModel
+            layersModel: models.layers
         });
         models.dataDownload = dataDownloadModel;
         models.link = wv.link.model(config);
@@ -128,25 +124,21 @@ $(function() {// Initialize "static" vars
         Worldview.models = models;
 
         // Legacy REGISTRY based widgets
-        var legacySwitch = wv.legacy.switch_(projectionModel);
-        var legacyBank = wv.legacy.bank(layersModel);
+        var legacySwitch = wv.legacy.switch_(models.proj);
+        var legacyBank = wv.legacy.bank(models.layers);
         var legacyDate = wv.legacy.date(models.date);
 
         // Create widgets
         var ui = {};
-        var projection = Worldview.Widget.Projection(projectionModel);
-        var palettes = Worldview.Widget.Palette(config, palettesModel, {
+        ui.proj = wv.proj.ui(models);
+        var palettes = Worldview.Widget.Palette(config, models.palettes, {
             alignTo: "#products"
         });
-        var layerSideBar = Worldview.Widget.LayerSideBar(layersModel,
-                projectionModel);
-        var activeLayers = Worldview.Widget.ActiveLayers(config, layersModel, {
-                projectionModel: projectionModel,
-                paletteWidget: palettes,
-                palettesModel: palettesModel
+        ui.sidebar = wv.layers.sidebar(models);
+        ui.activeLayers = wv.layers.active(models, config, {
+            paletteWidget: palettes,
         });
-        var addLayers = Worldview.Widget.AddLayers(config, layersModel,
-                projectionModel);
+        ui.addLayers = wv.layers.add(models, config);
         ui.dateSliders = wv.date.sliders(models, config);
         ui.dateLabel = wv.date.label(models);
         ui.dateWheels = wv.date.wheels(models, config);
@@ -202,7 +194,7 @@ $(function() {// Initialize "static" vars
         $("input").blur();
         $("#eventsHolder").hide();
         // Wirings
-        layerSideBar.events
+        ui.sidebar.events
             .on("dataDownloadSelect", function() {
                 dataDownloadModel.activate();
             })
@@ -211,7 +203,7 @@ $(function() {// Initialize "static" vars
             });
         dataDownloadModel.events
             .on("activate", function() {
-                layerSideBar.selectTab("download");
+                ui.sidebar.selectTab("download");
             });
         map.maps.events
             .on("moveEnd", function(map) {
@@ -241,14 +233,6 @@ $(function() {// Initialize "static" vars
         REGISTRY.addEventListener("palettes","map","camera","products");
         REGISTRY.addEventListener("opacity", "map");
         REGISTRY.addEventListener(crs.containerId, "imagedownload");
-
-        // These are only convienence handles to important objects used
-        // for console debugging. Code should NOT reference these as they
-        // are subject to change or removal.
-        Worldview.widgets = {
-            activeLayers: activeLayers,
-            addLayers: addLayers
-        };
 
         // Initialize widgets
 
@@ -292,11 +276,9 @@ $(function() {// Initialize "static" vars
             Worldview.Tour.start(storageEngine, hideSplash, false);
         }
 
-	/*
         window.onbeforeunload = function() {
-   	    storageEngine.setItem('eventsCollapsed', events.isCollapsed);
+   	        storageEngine.setItem('eventsCollapsed', events.isCollapsed);
       	};
-	*/
     };
 
     var debuggingFeatures = function(config) {

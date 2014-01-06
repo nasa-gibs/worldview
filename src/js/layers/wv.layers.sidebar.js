@@ -9,9 +9,16 @@
  * All Rights Reserved.
  */
 
-Worldview.namespace("Widget");
+/**
+ * @module wv.layers
+ */
+var wv = wv || {};
+wv.layers = wv.layers || {};
 
-Worldview.Widget.LayerSideBar = function(layersModel, projectionModel) {
+/**
+ * @class wv.layers.sidebar
+ */
+wv.layers.sidebar = wv.layers.sidebar || function(models) {
 
     var HTML_TAB_ACTIVE_SELECTED =
         "<i class='productsIcon selected icon-layers'></i>" +
@@ -48,7 +55,7 @@ Worldview.Widget.LayerSideBar = function(layersModel, projectionModel) {
             slide();
         }
         $(window).resize(adjustAlignment);
-        projectionModel.events.on("change", onProjectionChange);
+        models.proj.events.on("change", onProjectionChange);
     };
 
     self.selectTab = function(tabName) {
@@ -144,15 +151,12 @@ Worldview.Widget.LayerSideBar = function(layersModel, projectionModel) {
             throw new Error("Invalid tab index: " + ui.index);
         }
 
-        var tab1 = ( ui.index === 0 )
-            ? HTML_TAB_ACTIVE_SELECTED
-            : HTML_TAB_ACTIVE_UNSELECTED;
-        var tab2 = ( ui.index === 1 )
-            ? HTML_TAB_ADD_SELECTED
-            : HTML_TAB_ADD_UNSELECTED;
-        var tab3 = ( ui.index === 2 )
-            ? HTML_TAB_DOWNLOAD_SELECTED
-            : HTML_TAB_DOWNLOAD_UNSELECTED;
+        var tab1 = ( ui.index === 0 ) ?
+            HTML_TAB_ACTIVE_SELECTED : HTML_TAB_ACTIVE_UNSELECTED;
+        var tab2 = ( ui.index === 1 ) ?
+            HTML_TAB_ADD_SELECTED : HTML_TAB_ADD_UNSELECTED;
+        var tab3 = ( ui.index === 2 ) ?
+            HTML_TAB_DOWNLOAD_SELECTED : HTML_TAB_DOWNLOAD_UNSELECTED;
 
         if ( ui.index === 2 ) {
             self.events.trigger("dataDownloadSelect");
@@ -187,7 +191,7 @@ Worldview.Widget.LayerSideBar = function(layersModel, projectionModel) {
                 .removeClass('arrow')
                 .addClass('staticLayers');
             $('.accordionToggler').attr("title","Show Layer Selector");
-            $('.accordionToggler').html("Layers (" + layersModel.total() + ")");
+            $('.accordionToggler').html("Layers (" + models.layers.total() + ")");
 
             var w = $('.products').outerWidth();
             $('.products').animate({left:'-'+w+"px"}, 300);
@@ -205,7 +209,7 @@ Worldview.Widget.LayerSideBar = function(layersModel, projectionModel) {
 
     var onProjectionChange = function() {
         if ( collapsed ) {
-            $('.accordionToggler').html("Layers (" + layersModel.total() + ")");
+            $('.accordionToggler').html("Layers (" + models.layers.total() + ")");
         }
     };
 

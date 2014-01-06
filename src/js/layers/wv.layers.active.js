@@ -4,20 +4,25 @@
  * This code was originally developed at NASA/Goddard Space Flight Center for
  * the Earth Science Data and Information System (ESDIS) project.
  *
- * Copyright (C) 2013 United States Government as represented by the
+ * Copyright (C) 2013 - 2014 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
 
-Worldview.namespace("Widget");
+/**
+ * @module wv.layers
+ */
+var wv = wv || {};
+wv.layers = wv.layers || {};
 
-Worldview.Widget.ActiveLayers = function(config, model, spec) {
+/**
+ * @class wv.layers.active
+ */
+wv.layers.active = wv.layers.active || function(models, config, spec) {
 
-    var log = Logging.getLogger("Worldview.Widget.ActiveLayers");
     var aoi = config.aoi;
-    var projectionModel = spec.projectionModel;
+    var model = models.layers;
     var paletteWidget = spec.paletteWidget;
-    var palettesModel = spec.palettesModel;
     var types = Worldview.LAYER_TYPES;
     var jsp;
 
@@ -35,16 +40,14 @@ Worldview.Widget.ActiveLayers = function(config, model, spec) {
             .on("remove", onLayerRemoved)
             .on("move", onLayerMoved)
             .on("visibility", onLayerVisibility);
-        projectionModel.events
-            .on("change", onProjectionChanged);
-        palettesModel.events
+        models.proj.events
+            .on("select", onProjectionChanged);
+        models.palettes.events
             .on("palette", onPaletteChanged);
         $(window).resize(resize);
     };
 
     var render = function() {
-        log.debug("ActiveLayers: render");
-
         var $container = $(self.selector);
         $container.empty();
 
@@ -282,14 +285,12 @@ Worldview.Widget.ActiveLayers = function(config, model, spec) {
     };
 
     var onLayerRemoved = function(layer, type) {
-        log.debug("ActiveLayers: onLayerRemoved", type, layer.id);
         var layerSelector = "#" + type + "-" + Worldview.id(layer.id);
         $(layerSelector).remove();
         adjustCategoryHeights();
     };
 
     var onLayerAdded = function(layer, type) {
-        log.debug("ActiveLayers: onLayerAdded", type, layer.id);
         var $container = $("#" + type);
         var api = $container.data("jsp");
         if ( api ) {
@@ -372,4 +373,3 @@ Worldview.Widget.ActiveLayers = function(config, model, spec) {
     init();
     return self;
 };
-

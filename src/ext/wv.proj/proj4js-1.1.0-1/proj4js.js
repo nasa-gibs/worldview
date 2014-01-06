@@ -2178,17 +2178,3 @@ Proj4js.Proj.stere = {
     }
   }
 }; 
-
-Proj4js.defs["EPSG:3031"] = "+title=WGS 84 / Antarctic Polar Stereographic +proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs";
-
-
-Proj4js.defs["EPSG:3413"] = "+title=WGS 84 / NSIDC Sea Ice Polar Stereographic North +proj=stere +lat_0=90 +lat_ts=70 +lon_0=-45 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs";
-
-
-
-
-Proj4js.defs["EPSG:3995"] = "+title=WGS 84 / Arctic Polar Stereographic +proj=stere +lat_0=90 +lat_ts=71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs";
-
-
-
-
