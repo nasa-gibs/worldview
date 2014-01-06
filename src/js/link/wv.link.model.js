@@ -28,6 +28,7 @@ wv.link.model = wv.link.model || function(config) {
     var DEBUG_SHORTEN_LINK = "https://earthdata.nasa.gov/worldview?a=1&b=2";
     var shortenCache = new Cache(10);
     var mock = "";
+    var components = [];
 
     /**
      * The "permalink" from the registry returns values from components
@@ -54,6 +55,10 @@ wv.link.model = wv.link.model || function(config) {
         if ( config && config.parameters && config.parameters.shorten ) {
             mock = "-" + config.parameters.shorten;
         }
+    };
+
+    self.register = function(component) {
+        components.push(component);
     };
 
     /**

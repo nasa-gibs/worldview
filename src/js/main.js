@@ -98,6 +98,7 @@ $(function() {// Initialize "static" vars
         });
         models.dataDownload = dataDownloadModel;
         models.link = wv.link.model(config);
+        models.proj.change = wv.proj.change(models);
         wv.models = models;
 
         // These are only convienence handles to important objects used
@@ -139,9 +140,6 @@ $(function() {// Initialize "static" vars
             m: map,
             config: config
         });
-        var apcn = new Worldview.Widget.ArcticProjectionChangeNotification(
-            config, legacyBank
-        );
         var crs = new Worldview.Widget.CRS(config);
 
         // collapse events if worldview is being loaded via permalink
@@ -202,14 +200,14 @@ $(function() {// Initialize "static" vars
 	    // Register event listeners
 	    REGISTRY.addEventListener("map", "imagedownload");
         REGISTRY.addEventListener("time",
-                "map", "imagedownload", apcn.containerId, crs.containerId,
+                "map", "imagedownload", crs.containerId,
                 dataDownload.containerId);
         REGISTRY.addEventListener("switch",
                 "map", "products", "selectorbox", "imagedownload", "camera",
-                apcn.containerId, crs.containerId, dataDownload.containerId);
+                crs.containerId, dataDownload.containerId);
         REGISTRY.addEventListener("products",
                 "map", "selectorbox", "imagedownload", "palettes",
-                apcn.containerId, dataDownload.containerId);
+                dataDownload.containerId);
         REGISTRY.addEventListener("selectorbox","products");
         REGISTRY.addEventListener("camera","imagedownload");
         REGISTRY.addEventListener("palettes","map","camera","products");
@@ -223,7 +221,6 @@ $(function() {// Initialize "static" vars
             legacyDate,
             map,
             palettes,
-            apcn,
             crs,
             dataDownload
         ];

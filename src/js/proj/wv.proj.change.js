@@ -21,6 +21,7 @@ wv.proj = wv.proj || {};
 wv.proj.change = wv.proj.change || function(models) {
 
     var PROJECTION_CHANGE_DATE = new Date(Date.UTC(2013, 05, 06));
+    var notified = false;
     var self = {};
 
     self.events = wv.util.events();
@@ -40,6 +41,7 @@ wv.proj.change = wv.proj.change || function(models) {
 
     var update = function() {
         var proj = models.proj.selected;
+        var previous = self.old;
         self.old = false;
         self.crs = proj.crs;
         self.epsg = proj.epsg;
@@ -55,6 +57,77 @@ wv.proj.change = wv.proj.change || function(models) {
             }
         }
         self.events.trigger("selected", self);
+        if ( previous !== self.old ) {
+            checkNotify();
+        }
+    };
+
+    var checkNotify = function() {
+        // If the flag cannot be stored in local storage, do not notify
+        // the user which will constantly annoy them.
+        if ( !wv.util.browser.localStorage ) {
+            return;
+        }
+        if ( localStorage.getItem("projection_change_no_show") === "true" ) {
+            return;
+        }
+        if ( notified ) {
+            return;
+        }
+        notified = true;
+        notify();
+    };
+
+    var notify = function() {
+        dialog = new YAHOO.widget.Panel("projectionChangeNotification", {
+            width: "400px",
+            zIndex: 1020,
+            visible: false,
+            modal: true,
+            constraintoviewport: true
+        });
+        dialog.setHeader("Notice");
+        var body = [
+            "On " + wv.util.toISOStringDate(PROJECTION_CHANGE_DATE) +
+            " the polar projections changed as follows:" ,
+            "<br/><br/>",
+            "The <b>Arctic projection</b> changed from Arctic Polar ",
+            "Stereographic (EPSG:3995, \"Greenwich down\") to NSIDC Polar ",
+            "Stereographic North (EPSG:3413, \"Greenland down\").",
+            "<br/><br/>" +
+            "The <b>Antarctic projection</b> changed from being projected onto ",
+            "a sphere with radius of 6371007.181 meters to being projected ",
+            "onto the WGS84 ellipsoid. The projection is now the correct ",
+            "Antarctic Polar Stereographic (EPSG:3031). This change results ",
+            "in a shift of the imagery that ranges up to tens of kilometers, ",
+            "depending on the location.",
+            "<br/><br/>",
+
+            "Imagery before this date has not yet been reprocessed to the ",
+            "new projection. In addition, the \"Population Density\" and ",
+            "\"Global Label\" layers can no longer be displayed properly ",
+            "in the older projection.",
+            "<br/><br/>",
+
+            "Thanks for your patience as we improve and expand our ",
+            "imagery archive.",
+            "<br/><br/>",
+
+            "<input id='arcticChangeNoticeDontShowAgain' value='false' ",
+                "type='checkbox'>Do not show again"
+        ].join("");
+        dialog.setBody(body);
+        dialog.render(document.body);
+        dialog.show();
+        dialog.center();
+        dialog.hideEvent.subscribe(function(i) {
+            setTimeout(function() {
+                if ( $("#arcticChangeNoticeDontShowAgain").is(":checked") ) {
+                    localStorage.setItem("projection_change_no_show", "true");
+                }
+                dialog.destroy();
+            }, 25);
+        });
     };
 
     init();
