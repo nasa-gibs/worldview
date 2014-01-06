@@ -57,7 +57,7 @@ wv.legacy.date = wv.legacy.date || function(model) {
             try {
                 object.time = Date.parseISOString(timeString).clearUTCTime();
             } catch ( error ) {
-                this.log.warn("Invalid time: " + timeString + ", reason: " +
+                console.warn("Invalid time: " + timeString + ", reason: " +
                     error);
                 object.time = Worldview.today();
             }

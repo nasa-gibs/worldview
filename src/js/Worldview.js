@@ -117,11 +117,10 @@
      * need to be shown to the user, usually the exception that was caught.
      */
     ns.error = function(message, cause) {
-        var log = Logging.getLogger();
         if ( cause ) {
-            log.error(cause);
+            console.error(cause);
         } else {
-            log.error(message);
+            console.error(message);
         }
 
         if ( window.YAHOO && window.YAHOO.widget &&

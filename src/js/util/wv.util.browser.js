@@ -127,7 +127,7 @@ wv.util.browser = wv.util.browser || (function() {
     self.tests.safari = function() {
         var navigator = self.tests.navigator();
         if ( / Chrome\//.test(navigator.userAgent) ) { return false; }
-        return / Safari\//.test(navigator.userAgent);
+        return (/ Safari\//).test(navigator.userAgent);
     };
 
     self.tests.safariVersion = function() {
@@ -140,7 +140,7 @@ wv.util.browser = wv.util.browser || (function() {
 
     self.tests.ie = function() {
         var navigator = self.tests.navigator();
-        return /\(MSIE /.test(navigator.userAgent);
+        return (/\(MSIE /).test(navigator.userAgent);
     };
 
     self.tests.ieVersion = function() {
@@ -272,7 +272,7 @@ if ( !window.console ) {
  */
 (function() {
     window.scrollTo(0, 0);
-});
+})();
 
 /*
  * setTimeout that properly sets this and allows arguments. The only case where

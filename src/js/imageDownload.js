@@ -15,7 +15,6 @@ SOTE.namespace("SOTE.widget.ImageDownload");
 */
 SOTE.widget.ImageDownload = function(containerId, config){
     this.BASE_URL = "http://map2.vis.earthdata.nasa.gov/imagegen/index";
-    this.log = Logging.getLogger("Worldview.ImageDownload");
 
 	this.container=document.getElementById(containerId);
 
@@ -42,7 +41,7 @@ SOTE.widget.ImageDownload = function(containerId, config){
 	this.value = "";
 
 	if ( this.config.parameters.imagegen ) {
-	    this.log.warn("Redirecting image download to: " + this.BASE_URL +
+	    console.warn("Redirecting image download to: " + this.BASE_URL +
 	           "-" + this.config.parameters.imagegen + ".php");
 	}
 	this.init();

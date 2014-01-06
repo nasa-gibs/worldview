@@ -88,7 +88,7 @@ buster.testCase("wv.util.browser", {
     },
 
     "Disabled local storage": function() {
-        this.stub(localStorage, "getItem").throws();
+        this.stub(localStorage, "setItem").throws();
         buster.refute(wv.util.browser.tests.localStorage());
     },
 

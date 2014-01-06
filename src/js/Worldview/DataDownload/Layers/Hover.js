@@ -12,8 +12,6 @@ Worldview.namespace("DataDownload.Hover");
 
 Worldview.DataDownload.Layers.Hover = function(model, maps, config) {
 
-    var log = Logging.getLogger("Worldview.DataDownload");
-
     var LAYER_NAME = "DataDownload_Hover";
 
     var STYLE_HOVER_UNSELECTED = {
@@ -48,7 +46,6 @@ Worldview.DataDownload.Layers.Hover = function(model, maps, config) {
             );
             applyStyle(hoverFeature);
             getLayer().addFeatures([hoverFeature]);
-            log.debug(hoverFeature.attributes.granule);
         }
     };
 

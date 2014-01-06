@@ -142,7 +142,6 @@ $(function() {// Initialize "static" vars
         var apcn = new Worldview.Widget.ArcticProjectionChangeNotification(
             config, legacyBank
         );
-        var opacity = new Worldview.Widget.Opacity(config);
         var crs = new Worldview.Widget.CRS(config);
 
         // collapse events if worldview is being loaded via permalink
@@ -214,7 +213,6 @@ $(function() {// Initialize "static" vars
         REGISTRY.addEventListener("selectorbox","products");
         REGISTRY.addEventListener("camera","imagedownload");
         REGISTRY.addEventListener("palettes","map","camera","products");
-        REGISTRY.addEventListener("opacity", "map");
         REGISTRY.addEventListener(crs.containerId, "imagedownload");
 
         // Initialize widgets
@@ -226,7 +224,6 @@ $(function() {// Initialize "static" vars
             map,
             palettes,
             apcn,
-            opacity,
             crs,
             dataDownload
         ];

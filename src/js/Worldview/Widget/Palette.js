@@ -15,7 +15,6 @@ Worldview.Widget.Palette = function(config, model, spec) {
 
     var self = {};
     var containerId = "palettes";
-    var log = Logging.getLogger("Worldview.Widget.Palette");
     var value = "";
     var dialog = null;
     var dialogForLayer = null;
@@ -52,7 +51,6 @@ Worldview.Widget.Palette = function(config, model, spec) {
         if ( v === undefined ) {
             return;
         }
-        log.debug("setValue: " + v);
         var wasActive = self.active;
         self.active = {};
         if ( v !== "" ) {
@@ -101,10 +99,8 @@ Worldview.Widget.Palette = function(config, model, spec) {
         var changed = false;
         try {
             var state = REGISTRY.getState(queryString);
-            log.debug("Palette: updateComponent", state);
             $.each(self.active, function(layer, palette) {
                 if ( $.inArray(layer, state.layers) < 0 ) {
-                    log.debug("Removing palette for " + layer);
                     delete self.active[layer];
                     changed = true;
                 }
@@ -113,7 +109,6 @@ Worldview.Widget.Palette = function(config, model, spec) {
                 if ( !self.noRestore &&
                         $.inArray(layer, state.layers) >= 0 &&
                         !self.active[layer] ) {
-                    log.debug("Restoring palette for " + layer);
                     self.active[layer] = self.inactive[layer];
                     changed = true;
                 }
@@ -132,7 +127,6 @@ Worldview.Widget.Palette = function(config, model, spec) {
 
     self.loadFromQuery = function(queryString) {
         var query = Worldview.queryStringToObject(queryString);
-        log.debug("Palette: loadFromQuery", query);
         if ( query.palettes && !wv.palette.supported ) {
             wv.ui.unsupported("custom palette");
         } else {
@@ -255,7 +249,7 @@ Worldview.Widget.Palette = function(config, model, spec) {
                 return;
             }
             if ( !p ) {
-                log.error("No such palette: " + name);
+                console.error("No such palette: " + name);
                 return;
             }
             if ( p.source === "stock" ) {
@@ -286,15 +280,12 @@ Worldview.Widget.Palette = function(config, model, spec) {
         }
 
         paletteSelector.addSelectionListener(function(palette) {
-            var log = Logging.getLogger("Worldview.PaletteSelection");
             if ( palette.source === "rendered" ) {
                 delete self.active[layer];
                 delete self.inactive[layer];
-                log.debug("Palette: default");
             } else {
                 self.active[layer] = palette.id;
                 self.inactive[layer] = palette.id;
-                log.debug("Palette: " + palette.id);
             }
             model.events.trigger("palette", palette, layer);
             REGISTRY.fire(self);

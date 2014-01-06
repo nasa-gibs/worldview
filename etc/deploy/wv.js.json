@@ -1,6 +1,5 @@
 [
     "src/js/Date.js",
-    "src/js/Logging.js",
 
     "src/js/component.js",
     "src/js/registry.js",
@@ -121,7 +120,6 @@
     "src/js/Worldview/Widget/Palette.js",
     "src/js/Worldview/Widget/WorldviewMap.js",
     "src/js/Worldview/Widget/ArcticProjectionChangeNotification.js",
-    "src/js/Worldview/Widget/Opacity.js",
     "src/js/Worldview/Widget/CRS.js",
     "src/js/Worldview/Widget/DataDownload.js",
 

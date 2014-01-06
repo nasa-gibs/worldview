@@ -13,7 +13,6 @@ Worldview.namespace("DataDownload");
 Worldview.DataDownload.MapController = function(model, maps, config) {
 
     var ns = Worldview.DataDownload;
-    var log = Logging.getLogger("Worldview.DataDownload");
 
     var self = {};
     var results = [];

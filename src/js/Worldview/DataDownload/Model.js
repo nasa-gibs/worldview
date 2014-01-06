@@ -21,8 +21,6 @@ Worldview.namespace("DataDownload");
  */
 Worldview.DataDownload.Model = function(config, spec) {
 
-    var log = Logging.getLogger("Worldview.DataDownload");
-
     var NO_PRODUCT_ID = "__NO_PRODUCT";
     var NO_PRODUCT = {
         name: "Not available for download &nbsp;&nbsp;<span>(?)</span>",

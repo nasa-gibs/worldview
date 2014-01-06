@@ -12,8 +12,6 @@ Worldview.namespace("DataDownload");
 
 Worldview.DataDownload.DownloadListPanel = function(config, model) {
 
-    var log = Logging.getLogger("Worldview.DataDownload");
-
     var echo = Worldview.DataDownload.ECHO;
 
     var NOTICE =
@@ -43,7 +41,6 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
         $("#DataDownload_DownloadListPanel tr").off("mouseleave", onHoverOut);
 
         selection = reformatSelection();
-        log.debug("selection", selection);
         var newPanel = false;
         if ( !panel ) {
             newPanel = true;
@@ -190,7 +187,6 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
             });
         });
 
-        log.debug(selection);
         return selection;
     };
 

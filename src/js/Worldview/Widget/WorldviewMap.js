@@ -33,8 +33,6 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
     var ns = Worldview.Widget;
 
     var self = ns.Map(containerId, config);
-
-    var log = Logging.getLogger("Worldview.Map");
     var lastState = {};
     var last = null;
 
@@ -47,7 +45,6 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
         }
 
         REGISTRY.markComponentReady(containerId);
-        log.debug("Map is ready");
 
         setExtentToLeading();
         // FIXME: It should not be getting this value from global
@@ -77,25 +74,19 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
 
             var state = REGISTRY.getState();
 
-            log.debug("State", state);
-            log.debug("Last State", last);
-
-
             if ( state.projection !== undefined &&
                     state.projection !== last.projection ) {
                 var projection = state.projection;
                 if ( !(projection in self.maps.mapConfig.projections) ) {
                     var defaultProjection =
                         self.maps.mapConfig.defaults.projection;
-                    log.warn("Invalid projection: " + projection + ", using: " +
+                    console.warn("Invalid projection: " + projection + ", using: " +
                             defaultProjection);
                     projection = defaultProjection;
                 }
                 self.maps.setProjection(projection);
                 self.maps.set(state.layers, state.hiddenLayers);
             } else if ( state.layersString !== last.layersString ) {
-                log.debug("Visible layers", state.visibleLayers);
-                log.debug("Hidden layers", state.hiddenLayers);
                 self.maps.set(state.layers, state.hiddenLayers);
                 // If the layers changed, force setting the palettes
                 // again
