@@ -7,15 +7,6 @@
  */
 (function(ns) {
 
-    /**
-     * Delay, in hours, from aquisition until data is available in GIBS.
-     *
-     * @property GIBS_HOUR_DELAY {integer}
-     * @final
-     * @static
-     */
-    ns.GIBS_HOUR_DELAY = 3;
-
     // June 6, 2013
     ns.ARCTIC_PROJECTION_CHANGE_DATE = new Date(Date.UTC(2013, 05, 06));
 

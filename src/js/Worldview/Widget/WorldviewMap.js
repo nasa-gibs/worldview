@@ -191,7 +191,7 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
         var curHour = Worldview.now().getUTCHours();
 
         // For earlier hours when data is still being filled in, force a far eastern perspective
-        if (curHour < Worldview.GIBS_HOUR_DELAY) {
+        if (curHour < 3) {
             curHour = 23;
         }
         else if (curHour < 9) {
