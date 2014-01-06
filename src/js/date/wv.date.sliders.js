@@ -58,7 +58,7 @@ wv.date.sliders = wv.date.sliders || function(models, config) {
     };
 
     var render = function() {
-        if ( wv.ui.mobile() ) {
+        if ( wv.util.browser.small ) {
             $("#timeds").css("display","none");
         }
         $container.addClass("datespan");
@@ -248,7 +248,7 @@ wv.date.sliders = wv.date.sliders || function(models, config) {
     };
 
     var refreshSliders = function() {
-        if ( wv.ui.mobile() ) {
+        if ( wv.util.browser.small ) {
             $container.hide();
         } else {
             $container.show();

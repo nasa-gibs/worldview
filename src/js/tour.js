@@ -14,14 +14,9 @@ Worldview.namespace("Tour");
      * Create the splash screen and tour panels and control iteration over them.
      */
     ns.start = function(storageEngine, hideSplash, noDisable) {
-
-        var browser = Worldview.Support.BROWSER;
-        var version = Worldview.Support.VERSION;
-        if (browser === "IE" && version <= 9) {
+        if ( wv.util.browser.ie && wv.util.browser.version <= 9) {
             if (noDisable) {
-                wv.ui.notify("The Worldivew tour is not supported in " +
-                    "this browser version. Upgrade or try again in a " +
-                    "different browser.");
+                wv.ui.unsupported("tour");
             }
             return;
         }

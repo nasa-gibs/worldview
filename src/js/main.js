@@ -1,25 +1,8 @@
 $(function() {// Initialize "static" vars
 
-    var log = Logging.getLogger();
-
-    // Place all logging needed on startup here. This should be emptied before
-    // release
-    var DEBUG_LOGGERS = [
-    ];
-
-    $.each(DEBUG_LOGGERS, function(index, name) {
-        log.warn("Enabling logger:", name);
-        Logging.debug(name);
-    });
-
     var loaded = false;
 
     var entryPoint = function() {
-
-        // Place any quirky browser related items in the function called
-        // below.
-        Worldview.Support.quirks();
-
         // Place any resources that should be completely loaded before
         // starting up the UI
         var configURI = "data/config.json?v=" + wv.brand.BUILD_NONCE;
@@ -43,7 +26,7 @@ $(function() {// Initialize "static" vars
 
             if ( config.parameters.loadDelay ) {
                 var delay = parseInt(config.parameters.loadDelay);
-                log.warn("Delaying load for " + delay + " ms");
+                console.warn("Delaying load for " + delay + " ms");
                 setTimeout(function() {
                     init(config);
                 }, parseInt(config.parameters.loadDelay));
@@ -268,7 +251,7 @@ $(function() {// Initialize "static" vars
             console.info(wv.brand.NAME + " - Version " + wv.brand.VERSION +
                 " - " + wv.brand.BUILD_TIMESTAMP);
         } else {
-            log.warn("Development version");
+            console.warn("Development version");
         }
 
         // Do not start the tour if coming in via permalink
@@ -287,9 +270,9 @@ $(function() {// Initialize "static" vars
             try {
                 var now = Date.parseISOString(config.parameters.now);
                 Worldview.overrideNow(now);
-                log.warn("Overriding now: " + now.toISOString());
+                console.warn("Overriding now: " + now.toISOString());
             } catch ( error ) {
-                log.error("Invalid now: " + query.now, error);
+                console.error("Invalid now: " + query.now, error);
             }
         }
 

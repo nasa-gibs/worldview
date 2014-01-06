@@ -71,7 +71,7 @@ wv.date.wheels = wv.date.wheels || function(models, config) {
     };
 
     var resize = function() {
-        if ( wv.ui.mobile() ) {
+        if ( wv.util.browser.small ) {
             $container.show();
         } else {
             $container.hide();

@@ -133,8 +133,8 @@ Worldview.Widget.Palette = function(config, model, spec) {
     self.loadFromQuery = function(queryString) {
         var query = Worldview.queryStringToObject(queryString);
         log.debug("Palette: loadFromQuery", query);
-        if ( query.palettes && !Worldview.Support.allowCustomPalettes() ) {
-            Worldview.Support.showUnsupportedMessage("custom palette");
+        if ( query.palettes && !wv.palette.supported ) {
+            wv.ui.unsupported("custom palette");
         } else {
             self.setValue(query.palettes);
         }

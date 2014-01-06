@@ -20,7 +20,13 @@ config["wv"] = {
         "src/ext/wv.main/jscache-gitba01cdc/cache.js",
     ],
     src: [
-        "src/js/**/wv.*.js"
+        "src/js/wv.*.js",
+        "src/js/util/wv.*.js",
+        "src/js/date/wv.*.js",
+        "src/js/layers/wv.*.js",
+        "src/js/link/wv.*.js",
+        "src/js/palette/wv.*.js",
+        "src/js/proj/wv.*.js",
     ],
     tests: [
         "test/**/*.js"

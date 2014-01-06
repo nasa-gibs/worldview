@@ -351,8 +351,8 @@ wv.layers.active = wv.layers.active || function(models, config, spec) {
 
     var openPaletteSelector = function(event) {
         var $target = $(event.target);
-        if ( !Worldview.Support.allowCustomPalettes() ) {
-            Worldview.Support.showUnsupportedMessage();
+        if ( !wv.palette.supported ) {
+            wv.ui.unsupported();
         } else {
             paletteWidget.displaySelector($target.attr("data-layer"));
         }
