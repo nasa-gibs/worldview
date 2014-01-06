@@ -179,7 +179,7 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
         // Set default extent according to time of day:
         //   at 00:00 UTC, start at far eastern edge of map: "20.6015625,-46.546875,179.9296875,53.015625"
         //   at 23:00 UTC, start at far western edge of map: "-179.9296875,-46.546875,-20.6015625,53.015625"
-        var curHour = Worldview.now().getUTCHours();
+        var curHour = wv.util.now().getUTCHours();
 
         // For earlier hours when data is still being filled in, force a far eastern perspective
         if (curHour < 3) {

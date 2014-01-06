@@ -1,10 +1,10 @@
 /*
  * NASA Worldview
- * 
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project. 
  *
- * Copyright (C) 2013 United States Government as represented by the 
+ * This code was originally developed at NASA/Goddard Space Flight Center for
+ * the Earth Science Data and Information System (ESDIS) project.
+ *
+ * Copyright (C) 2013 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
@@ -17,21 +17,21 @@ Worldview.namespace("DataDownload.Results");
 Worldview.DataDownload.Results.MODISGridLabel = function() {
 
     var self = {};
-    
+
     self.name = "MODISGridLabel";
-    
+
     self.process = function(meta, granule) {
         granule.label = "h" + granule.h + " - " + "v" + granule.v;
-        
-        var timeStart = Date.parseISOString(granule.time_start);
-        var date = timeStart.toISOStringDate();
-        
+
+        var timeStart = wv.util.parseTimestampUTC(granule.time_start);
+        var date = wv.util.toISOStringDate(timeStart);
+
         granule.downloadLabel = date + ": h" + granule.h + "-" + granule.v;
-        
+
         return granule;
     };
-    
+
     return self;
-    
+
 };
 

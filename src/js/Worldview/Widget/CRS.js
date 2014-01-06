@@ -40,13 +40,13 @@ Worldview.Widget.CRS = function(config) {
             var time;
             if ( query.time ) {
                 try {
-                    time = Date.parseISOString(query.time).clearUTCTime();
+                    time = wv.util.parseDateUTC(query.time);
                 } catch ( error ) {
                     console.warn("Invalid time: " + query.time);
-                    time = Worldview.today();
+                    time = wv.util.today();
                 }
             } else {
-                time = Worldview.today();
+                time = wv.util.today();
             }
             if ( query["switch"] === "geographic" ) {
                 projection = "4326";

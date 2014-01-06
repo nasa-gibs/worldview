@@ -52,14 +52,14 @@ wv.legacy.date = wv.legacy.date || function(model) {
     self.parse = function(queryString, object) {
         var timeString = Worldview.extractFromQuery("time", queryString);
         if ( !timeString ) {
-            object.time = Worldview.today();
+            object.time = wv.util.today();
         } else {
             try {
-                object.time = Date.parseISOString(timeString).clearUTCTime();
+                object.time = wv.util.parseDateUTC(timeString);
             } catch ( error ) {
                 console.warn("Invalid time: " + timeString + ", reason: " +
                     error);
-                object.time = Worldview.today();
+                object.time = wv.util.today();
             }
         }
     };

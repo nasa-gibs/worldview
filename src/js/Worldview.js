@@ -58,52 +58,6 @@
     };
 
     /**
-     * Gets the current time or the value set by overrideNow. Use this
-     * instead of the Date methods to allow debugging alternate "now" times.
-     *
-     * @method now
-     * @static
-     *
-     * @return {Date} The current time or the value set by overrideNow.
-     */
-    ns.now = function() {
-        return new Date();
-    };
-
-    /**
-     * Gets the current day or the value set by overrideNow. Use this
-     * instead of the Date methods to allow debugging alternate "now" times.
-     *
-     * @method today
-     * @static
-     *
-     * @return {Date} The current time, or the vlaue set by overrideNow, with
-     * the UTC hours, minutes, and seconds fields set to zero.
-     */
-    ns.today = function() {
-        return new Date().clearUTCTime();
-    };
-
-    /**
-     * Overrides the times returned by now() and today().
-     *
-     * @method overrideNow
-     * @static
-     *
-     * @param {Date} Return this date object of now() and today() instead
-     * of the current time.
-     */
-    ns.overrideNow = function(date) {
-        var overrideToday = date.clone().clearUTCTime();
-        ns.now = function() {
-            return new Date(date.getTime());
-        };
-        ns.today = function() {
-            return new Date(overrideToday.getTime());
-        };
-    };
-
-    /**
      * Worldview general error handler. The error is reported to the browser
      * console and, if the JavaScript library with YAHOO.widget.Panel is
      * found, opens a notification panel for the end user.

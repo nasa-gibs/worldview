@@ -56,11 +56,11 @@ Worldview.DataDownload.ECHO.MockClient = function(suffix) {
         var diffDays = (day - resultsDay) / (1000 * 60 * 60 * 24);
 
         $.each(data.feed.entry, function(index, entry) {
-            var timeStart = Date.parseISOString(entry.time_start);
+            var timeStart = wv.util.parseTimestampUTC(entry.time_start);
             timeStart.setUTCDate(timeStart.getUTCDate() + diffDays);
             entry.time_start = timeStart.toISOString();
 
-            var timeEnd = Date.parseISOString(entry.time_end);
+            var timeEnd = wv.util.parseTimestampUTC(entry.time_end);
             timeEnd.setUTCDate(timeEnd.getUTCDate() + diffDays);
             entry.time_end = timeEnd.toISOString();
         });

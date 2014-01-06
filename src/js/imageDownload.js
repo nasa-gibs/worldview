@@ -162,9 +162,9 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
         		$('#selImgFormat option[value=KMZ]').remove();
         	}
         }
-      	 var dTime = Date.parseISOString(time).clearUTCTime();
+      	 var dTime = wv.util.parseDateUTC(time);
       	 //Julian date, padded with two zeros (to ensure the julian date is always in DDD format).
-      	 var jStart = Date.parseISOString(dTime.getUTCFullYear() + "-01-01");
+      	 var jStart = wv.util.parseDateUTC(dTime.getUTCFullYear() + "-01-01");
       	 var jDate = "00" + (1+Math.ceil((dTime.getTime() - jStart) / 86400000));
       	 dlURL += "TIME="+dTime.getUTCFullYear()+(jDate).substr((jDate.length)-3);
 

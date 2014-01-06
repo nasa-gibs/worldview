@@ -96,13 +96,13 @@ Worldview.Widget.ArcticProjectionChangeNotification = function(config, bank) {
                 var currentDay;
                 if ( query.time ) {
                     try {
-                        currentDay = Date.parseISOString(query.time);
+                        currentDay = wv.util.parseDateUTC(query.time);
                     } catch ( error ) {
                         console.warn("Invalid time: " + query.time);
-                        currentDay = Worldview.today();
+                        currentDay = wv.util.today();
                     }
                 } else {
-                    currentDay = Worldview.today();
+                    currentDay = wv.util.today();
                 }
                 if ( currentDay < self.changeDate ) {
                     if ( REGISTRY.isLoadingQuery ) {
@@ -144,7 +144,7 @@ Worldview.Widget.ArcticProjectionChangeNotification = function(config, bank) {
         });
         dialog.setHeader("Notice");
         var body = [
-            "On " + self.changeDate.toISOStringDate() + " the polar ",
+            "On " + wv.util.toISOStringDate(self.changeDate) + " the polar ",
             "projections changed as follows:" ,
             "<br/><br/>",
             "The <b>Arctic projection</b> changed from Arctic Polar ",

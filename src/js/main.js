@@ -265,7 +265,7 @@ $(function() {// Initialize "static" vars
         // Allow the current day to be overridden
         if ( config.parameters.now ) {
             try {
-                var now = Date.parseISOString(config.parameters.now);
+                var now = Date.parseTimestampUTC(config.parameters.now);
                 Worldview.overrideNow(now);
                 console.warn("Overriding now: " + now.toISOString());
             } catch ( error ) {

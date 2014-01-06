@@ -39,7 +39,7 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
     var activeLayers = {};
 
     // Display layers on the map for this day
-    var currentDay = Worldview.today();
+    var currentDay = wv.util.today();
 
     // The number of layers in the processing of loading. This is used
     // to fire maploadstart and maploadend events.

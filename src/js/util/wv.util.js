@@ -98,6 +98,26 @@ wv.util = (function(self) {
     };
 
     /**
+     * Parses a UTC ISO 8601 timestamp.
+     *
+     * @method parseTimestampUTC
+     * @static
+     * @param str {String} Date to parse in the form of
+     * ``YYYY-MM-DDTHH:MM:SS.SSSZ``. Fractional seconds and the "Z"
+     * time zone desginator are optional.
+     * @return {Date} converted string as a datetime object, throws an
+     * exception if the string is invalid.
+     */
+    self.parseTimestampUTC = function(str) {
+        str = ( str.endsWith("Z") ) ? str : str + "Z";
+        var d = new Date(Date.parse(str));
+        if ( _.isNaN(d.getTime()) ) {
+            throw new Error("Invalid timestamp: " + str);
+        }
+        return d;
+    };
+
+    /**
      * Parses a UTC ISO 8601 date.
      *
      * @method parseDateUTC
@@ -127,6 +147,20 @@ wv.util = (function(self) {
     };
 
     /**
+     * Converts a time into an ISO string without seconds.
+     *
+     * @method toISOStringTimeHM
+     * @static
+     * @param date {Date} the date to convert
+     * @return {string} ISO string in the form of ``HH:MM``.
+     */
+    self.toISOStringTimeHM = function(date) {
+        var time = date.toISOString().split("T")[1];
+        var parts = time.split(".")[0].split(":");
+        return parts[0] + ":" + parts[1];
+    };
+
+    /**
      * Sets a date to UTC midnight.
      *
      * @method clearTimeUTC
@@ -141,6 +175,43 @@ wv.util = (function(self) {
         date.setUTCSeconds(0);
         date.setUTCMilliseconds(0);
         return date;
+    };
+
+    /**
+     * Converts a date into a compact string representation.
+     *
+     * @method toCompactTimestamp
+     * @static
+     * @param date {Date} the date to convert
+     * @return {String} string representation in the form of
+     * ``YYYYMMDDHHMMSSsss``
+     */
+    self.toCompactTimestamp = function(date) {
+        return date.toISOString().replace(/[-:TZ\.]/g, "");
+    };
+
+    /**
+     * Converts a compact timestamp into a date.
+     *
+     * @method fromCompactTimestamp
+     * @static
+     * @param str {String} the string to convert in the form of
+     * ``YYYYMMDDHHMMSSsss``.
+     * @return {Date} the converted date object.
+     */
+    self.fromCompactTimestamp = function(str) {
+        var v = str.match(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})(\d{3})/);
+        if ( _.isNull(v) ) {
+            throw new Error("Invalid timestamp:" + str);
+        }
+        return new Date(Date.UTC(
+            parseInt(v[1], 10),
+            parseInt(v[2] - 1, 10),
+            parseInt(v[3], 10),
+            parseInt(v[4], 10),
+            parseInt(v[5], 10),
+            parseInt(v[6], 10),
+            parseInt(v[7], 10)));
     };
 
     /**

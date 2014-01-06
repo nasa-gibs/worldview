@@ -58,8 +58,9 @@ Worldview.DataDownload.ECHO.Client = function(spec) {
                 23, 59 + endTimeDelta, 59
             ));
 
-            queryParameters.data.startTime = startTime.toTimestampUTC();
-            queryParameters.data.endTime = endTime.toTimestampUTC();
+            queryParameters.data.startTime =
+                    wv.util.toCompactTimestamp(startTime);
+            queryParameters.data.endTime = wv.util.toCompactTimestamp(endTime);
         }
 
         var deferred = $.Deferred();

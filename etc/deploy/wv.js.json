@@ -1,6 +1,4 @@
 [
-    "src/js/Date.js",
-
     "src/js/component.js",
     "src/js/registry.js",
     "src/js/rubberBand.js",

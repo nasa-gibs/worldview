@@ -69,7 +69,7 @@ Worldview.Map.DailyLayerSet = function(map, config) {
     //-------------------------------------------------------------------------
 
     var init = function() {
-        self.setDay(Worldview.today());
+        self.setDay(wv.util.today());
 
         map.events.register("movestart", self, invalidate);
         map.events.register("zoomend", self, invalidate);
@@ -89,7 +89,7 @@ Worldview.Map.DailyLayerSet = function(map, config) {
         if ( !d ) {
             return;
         }
-        var ds = d.toISOStringDate();
+        var ds = wv.util.toISOStringDate(d);
         if ( ds === currentDay ) {
             return;
         }
