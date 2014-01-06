@@ -30,7 +30,7 @@ $(function() {// Initialize "static" vars
         });
         setTimeout(function() {
             if ( !loaded ) {
-                Worldview.Indicator.loading();
+                wv.ui.indiactor.loading();
             }
         }, 2000);
     };
@@ -57,7 +57,7 @@ $(function() {// Initialize "static" vars
     var storageEngine;
     var init = function(config) {
         loaded = true;
-        Worldview.Indicator.hide();
+        wv.ui.indicator.hide();
 
     	// set up storage and decide what to show
         try {
