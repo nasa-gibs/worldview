@@ -53,7 +53,7 @@ Worldview.Widget.AddLayers = function(config, model, projectionModel) {
             .addClass("search")
             .attr("type", "text")
             .attr("name", "search")
-            .attr("placeholder", "ex. modis. terra, fire")
+            .attr("placeholder", 'Search ("aqua", "fire")')
             .attr("autocomplete", "off");
 
         $form.append($search);
