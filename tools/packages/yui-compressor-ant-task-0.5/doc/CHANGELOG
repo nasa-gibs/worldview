@@ -1,0 +1,13 @@
+February 18, 2008: version 0.3
+- upgrade to latest yuicompressor version (2.3.5)
+- new attribute: optimize [default is true]
+- imported vendor source into source tree
+- build now builds zip file with docs, libs and optionally source
+
+November 25, 2007: version 0.2-alpha1
+- added CSS file support
+
+November 24, 2007: version 0.1
+- initial release
+- bugfixes based on real world usage, like same infile-outfile fix
+- cleaned-up statistics

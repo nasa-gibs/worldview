@@ -152,7 +152,7 @@ Worldview.namespace("Support");
                 $body.css('height', new_height );
             }
         }
-        if (navigator.userAgent.match(/(iPad|iPhone|iPod touch);.*CPU.*OS 7_\d/i)){
+        if (navigator.userAgent.match(/(iPhone|iPod|iPad)/i)){
             setHeight( $('#app') );
             $(window).resize(function() {
                 setHeight($('#app'));

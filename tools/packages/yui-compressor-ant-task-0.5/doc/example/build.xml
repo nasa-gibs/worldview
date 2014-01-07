@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<project name="yui-compressor-ant-task-example" default="dist">
+	<description>Shows off usage of yui-compressor-ant-task.</description>
+
+  <property file="build.properties" />
+
+	<path id="task.classpath">
+		<pathelement location="${yuicompressor.jar}" />
+		<pathelement location="${yuicompressor-ant-task.jar}" />
+	</path>
+	
+	<target name="banner">
+		<echo message="***************************************" />
+		<echo message="********** Building Example ***********" />
+		<echo message="***************************************" />
+		<echo message="* build.version:      ${build.version}" />
+		<echo message="* Ant version:        ${ant.version}" />
+		<echo message="* Java version:       ${java.version}" />
+		<echo message="***************************************" />
+	</target>
+
+  <target name="check-task-jar-is-present" description="Checks if the required ant task jar exists in the expected dir">
+    <available file="${yuicompressor-ant-task.jar}" property="task.jar.present" />
+  </target>
+
+  <target name="define-ant-task" if="task.jar.present">
+    <taskdef name="yui-compressor" classname="net.noha.tools.ant.yuicompressor.tasks.YuiCompressorTask">
+      <classpath refid="task.classpath" />
+	  </taskdef>
+  </target>
+
+  <target name="fail-build" unless="task.jar.present">
+    <fail>Cannot find the required ant task jar file.
+    
+    Explanation:
+    =======================================================================================================
+    Cannot find yui-compressor-ant-task-${build.version}.jar file in ${parent.dist.dir}.
+    This is probably because you did not ran the ant task build. You can run the build with these commands:
+    
+    # cd ../../
+    # ant
+    
+    Alternatively, you can download a prebuilt jar from http://code.google.com/p/javaflight-code/ and put it
+    in the ${parent.dist.dir} directory.
+    =======================================================================================================
+    </fail>
+  </target>
+
+	<target name="init" depends="check-task-jar-is-present,define-ant-task,fail-build" description="Initializes directory layout and shows banner">
+		<mkdir dir="${dist.dir}" />
+		<mkdir dir="${build.dir}" />
+	</target>
+
+	<target name="dist" depends="banner,build,copy-and-minify-libs" description="Prepares files for distribution">
+	</target>
+
+	<target name="clean" depends="init" description="Removes all build artefacts">
+		<delete dir="${dist.dir}" />
+		<delete dir="${build.dir}" />
+	</target>
+
+	<target name="build" depends="init" description="Builds files to build dir">
+		<property name="result.file" location="${build.dir}/result.js" />
+
+		<echo message="Building ${result.file}" />
+		<concat destfile="${result.file}" force="no">
+			<!-- Order in which these files are concatenated _IS_ IMPORTANT! -->
+			<fileset dir="${src.dir}" includes="some-javascript.js" />
+			<fileset dir="${src.dir}" includes="another-javascript.js" />
+		</concat>
+  </target>
+
+	<target name="copy-and-minify-libs" depends="init" description="Minifies all JS files">
+		<yui-compressor warn="false" munge="true" jsSuffix=".js" cssSuffix=".css" preserveAllSemiColons="false" fromDir="${build.dir}" toDir="${dist.dir}">
+			<include name="*.js" />
+		</yui-compressor>
+	</target>
+
+</project>
