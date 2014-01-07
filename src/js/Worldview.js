@@ -1,10 +1,4 @@
-/**
- * Constants and utility functions.
- *
- * @module Worldview
- * @class Worldview
- * @static
- */
+
 (function(ns) {
 
     // June 6, 2013

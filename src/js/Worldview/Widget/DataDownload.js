@@ -12,20 +12,6 @@
 
 Worldview.namespace("Widget");
 
-/**
- * Handles UI interactions with the Data Download model.
- *
- * @module Worldview.Widget
- * @class DataDownload
- * @constructor
- *
- * @param model {Worldview.DataDownload.Model} FIXME
- *
- * @param config Worldview config
- *
- * @param spec.selector {string} jQuery selector for where the mode activation
- * button should be rendered.
- */
 Worldview.Widget.DataDownload = function(config, spec) {
 
     var HTML_WIDGET_INACTIVE = "<img src='images/camera.png'></img>";

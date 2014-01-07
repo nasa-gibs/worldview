@@ -11,14 +11,6 @@
 
 Worldview.namespace("DataDownload");
 
-/**
- * Data download model.
- *
- * @module Worldview.DataDownload
- * @class Model
- * @constructor
- * @param config config
- */
 Worldview.DataDownload.Model = function(config, spec) {
 
     var NO_PRODUCT_ID = "__NO_PRODUCT";

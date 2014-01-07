@@ -14,13 +14,6 @@
  */
 Worldview.namespace("Map");
 
-/**
- * Utilities for OpenLayers.
- *
- * @class Map
- * @static
- */
-
 $(function(ns) {
 
     ns.CRS_WGS_84 = "EPSG:4326";
