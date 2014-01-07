@@ -8,6 +8,7 @@
 /doc/NaturalDocs/Menu.txt
 /node_modules
 /doc/yuidoc
+/conf
 
 # Ignore the Eclipse files for now
 /.project
