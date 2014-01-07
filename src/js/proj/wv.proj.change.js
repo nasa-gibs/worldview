@@ -79,15 +79,7 @@ wv.proj.change = wv.proj.change || function(models) {
     };
 
     var notify = function() {
-        dialog = new YAHOO.widget.Panel("projectionChangeNotification", {
-            width: "400px",
-            zIndex: 1020,
-            visible: false,
-            modal: true,
-            constraintoviewport: true
-        });
-        dialog.setHeader("Notice");
-        var body = [
+        var message = [
             "On " + wv.util.toISOStringDate(PROJECTION_CHANGE_DATE) +
             " the polar projections changed as follows:" ,
             "<br/><br/>",
@@ -116,18 +108,7 @@ wv.proj.change = wv.proj.change || function(models) {
             "<input id='arcticChangeNoticeDontShowAgain' value='false' ",
                 "type='checkbox'>Do not show again"
         ].join("");
-        dialog.setBody(body);
-        dialog.render(document.body);
-        dialog.show();
-        dialog.center();
-        dialog.hideEvent.subscribe(function(i) {
-            setTimeout(function() {
-                if ( $("#arcticChangeNoticeDontShowAgain").is(":checked") ) {
-                    localStorage.setItem("projection_change_no_show", "true");
-                }
-                dialog.destroy();
-            }, 25);
-        });
+        wv.ui.notify(message);
     };
 
     init();

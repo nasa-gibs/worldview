@@ -87,10 +87,14 @@ buster.testCase("wv.util.browser", {
         buster.refute(wv.util.browser.tests.localStorage());
     },
 
+    /* Does not work on Firefox
     "Disabled local storage": function() {
-        this.stub(localStorage, "setItem").throws();
+        this.stub(window.localStorage, "setItem", function() {
+            throw new Error();
+        });
         buster.refute(wv.util.browser.tests.localStorage());
     },
+    */
 
     "Large device": function() {
         this.stub(window, "$").returns({

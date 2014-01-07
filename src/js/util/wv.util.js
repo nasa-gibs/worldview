@@ -267,6 +267,55 @@ wv.util = (function(self) {
     self.warn = ( console && console.warn && console.warn.bind ) ?
         console.warn.bind(console) : function () {};
 
+
+    /**
+     * Submits an AJAX request or retreives the result from the cache.
+     *
+     * @class wv.util.ajaxCache
+     * @constructor
+     * @param {Integer} [spec.size] maximum number of items to store in the
+     * cache.
+     * @param {Object} [spec.options] options to pass to jscache on setItem.
+     *
+     */
+    self.ajaxCache = function(spec) {
+        spec = spec || {};
+        var size = spec.size || null;
+        var options = spec.options || {};
+        var cache = new Cache(size);
+
+        return {
+            /**
+             * Submits an AJAX request using jQuery.ajax or retrieves the
+             * results from cache.
+             *
+             * @method submit
+             * @param {Object} parameters Parameters to pass to the jQuery.ajax
+             * call.
+             * @return {jQuery.Deferred} a deferred object that will resolve
+             * when the query returns, or resolves immedately if the results
+             * are cached.
+             */
+            submit: function(parameters) {
+                var key = "url=" + parameters.url;
+                if ( parameters.data ) {
+                    key += "&query=" + $.param(parameters.data, true);
+                }
+                var results = cache.getItem(key);
+
+                if ( results ) {
+                    return $.Deferred().resolve(results).promise();
+                } else {
+                    var promise = $.ajax(parameters);
+                    promise.done(function(results) {
+                        cache.setItem(key, results, options);
+                    });
+                    return promise;
+                }
+            }
+        };
+    };
+
     return self;
 
 })(wv.util || {});

@@ -43,7 +43,6 @@
     "src/js/Worldview/Support.js",
     "src/js/Worldview/Scheduler.js",
     "src/js/Worldview/Indicator.js",
-    "src/js/Worldview/AjaxCache.js",
     "src/js/Worldview/AjaxJoin.js",
 
     "src/js/Worldview/Palette.js",

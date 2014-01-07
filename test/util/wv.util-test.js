@@ -118,6 +118,18 @@ buster.testCase("wv.util", {
         buster.assert.equals(0, d.getUTCHours());
         buster.assert.equals(0, d.getUTCMinutes());
         buster.assert.equals(0, d.getUTCSeconds());
+    },
+
+    "ajaxCache: Non-cached request returned": function(done) {
+        this.stub(jQuery, "ajax").returns(jQuery.Deferred().resolve("answer"));
+        var cache = wv.util.ajaxCache();
+        var promise = cache.submit({
+            url: "url",
+            data: "foo=bar"
+        }).done(function(data) {
+            buster.assert.equals(data, "answer");
+            done();
+        });
     }
 
 });

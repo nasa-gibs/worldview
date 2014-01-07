@@ -44,8 +44,9 @@ buster.testCase("wv.proj.model", {
 
     "Throws exception witn an invalid default": function() {
         this.config.defaults.projection = "invalid";
+        var self = this;
         buster.assert.exception(function() {
-            wv.proj.model(this.config);
+            wv.proj.model(self.config);
         });
     },
 

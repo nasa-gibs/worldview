@@ -16,12 +16,6 @@ Worldview.namespace("DataDownload.ECHO");
 
 Worldview.DataDownload.ECHO.Client = function(spec) {
 
-    // Hold a maximum of ten results
-    var CACHE_SIZE = 10;
-
-    // Hold results for a maximum of ten minutes
-    var CACHE_TIME = 10 * 60;
-
     // Abort query after 45 seconds
     var QUERY_TIMEOUT = spec.timeout || 45 * 1000;
 
@@ -37,9 +31,7 @@ Worldview.DataDownload.ECHO.Client = function(spec) {
     var self = {};
 
     var init = function() {
-        ns.ajax = Worldview.AjaxCache(CACHE_SIZE, {
-            expirationAbsolute: CACHE_TIME
-        });
+        ns.ajax = wv.util.ajaxCache();
     };
 
     self.submit = function(parameters) {

@@ -75,10 +75,11 @@ wv.ui = (function(self) {
      * @param [title="Notice"] {string} Title for the dialog box.
      */
     self.notify = function(message, title) {
+        var width = ( message.length > 500 ) ? "400px": "300px";
         if ( window.YAHOO && window.YAHOO.widget &&
                 window.YAHOO.widget.Panel ) {
             o = new YAHOO.widget.Panel("WVerror", {
-                width: "300px",
+                width: width,
                 zIndex: 1020,
                 visible: false,
                 constraintoviewport: true
@@ -119,4 +120,4 @@ wv.ui = (function(self) {
 
     return self;
 
-})(wv.ui || {});
+})(wv.ui = wv.ui || {});
