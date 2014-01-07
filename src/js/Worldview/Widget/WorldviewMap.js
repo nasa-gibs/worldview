@@ -33,8 +33,6 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
     var ns = Worldview.Widget;
 
     var self = ns.Map(containerId, config);
-
-    var log = Logging.getLogger("Worldview.Map");
     var lastState = {};
     var last = null;
 
@@ -47,7 +45,6 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
         }
 
         REGISTRY.markComponentReady(containerId);
-        log.debug("Map is ready");
 
         setExtentToLeading();
         // FIXME: It should not be getting this value from global
@@ -77,25 +74,19 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
 
             var state = REGISTRY.getState();
 
-            log.debug("State", state);
-            log.debug("Last State", last);
-
-
             if ( state.projection !== undefined &&
                     state.projection !== last.projection ) {
                 var projection = state.projection;
                 if ( !(projection in self.maps.mapConfig.projections) ) {
                     var defaultProjection =
                         self.maps.mapConfig.defaults.projection;
-                    log.warn("Invalid projection: " + projection + ", using: " +
+                    console.warn("Invalid projection: " + projection + ", using: " +
                             defaultProjection);
                     projection = defaultProjection;
                 }
                 self.maps.setProjection(projection);
                 self.maps.set(state.layers, state.hiddenLayers);
             } else if ( state.layersString !== last.layersString ) {
-                log.debug("Visible layers", state.visibleLayers);
-                log.debug("Hidden layers", state.hiddenLayers);
                 self.maps.set(state.layers, state.hiddenLayers);
                 // If the layers changed, force setting the palettes
                 // again
@@ -188,10 +179,10 @@ Worldview.Widget.WorldviewMap = function(containerId, config) {
         // Set default extent according to time of day:
         //   at 00:00 UTC, start at far eastern edge of map: "20.6015625,-46.546875,179.9296875,53.015625"
         //   at 23:00 UTC, start at far western edge of map: "-179.9296875,-46.546875,-20.6015625,53.015625"
-        var curHour = Worldview.now().getUTCHours();
+        var curHour = wv.util.now().getUTCHours();
 
         // For earlier hours when data is still being filled in, force a far eastern perspective
-        if (curHour < Worldview.GIBS_HOUR_DELAY) {
+        if (curHour < 3) {
             curHour = 23;
         }
         else if (curHour < 9) {

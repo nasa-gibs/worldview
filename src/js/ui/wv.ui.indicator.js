@@ -9,7 +9,11 @@
  * All Rights Reserved.
  */
 
-Worldview.namespace("Indicator");
+/**
+ * @module wv.ui
+ */
+var wv = wv || {};
+wv.ui = wv.ui || {};
 
 /**
  * Displays an indicator on the screen.
@@ -17,18 +21,17 @@ Worldview.namespace("Indicator");
  * The indicator has an image and text associated with it. Use show to
  * display and hide to remove. Example:
  *
- *      Worldview.Indicator.show("Please Wait", "images/wait.png");
+ *      wv.ui.indicator.show("Please Wait", "images/wait.png");
  *
  * Only one indicator can be visibile at a time. If show is called while
  * another indicator is already active, it will be replaced.
  *
- * @module Worldview
- * @class Indicator
+ * @class wv.ui.indicator
  * @static
  */
-$(function() {
+wv.ui.indicator = wv.ui.indicator || (function() {
 
-    var ns = Worldview.Indicator;
+    var self = {};
 
     /**
      * Shows the indicator with a message and an icon. If another indicator
@@ -40,8 +43,8 @@ $(function() {
      * @param message {string} The message to display
      * @param icon {string} URL to the icon to display
      */
-    ns.show = function(message, icon) {
-        ns.hide();
+    self.show = function(message, icon) {
+        self.hide();
         if ( icon ) {
             $("body").append([
                 "<div id='indicator'>",
@@ -65,37 +68,47 @@ $(function() {
      * @method hide
      * @static
      */
-    ns.hide = function() {
+    self.hide = function() {
         $("#indicator").remove();
     };
 
     /**
      * Displays a "Searching" indicator. This is a convenience method for:
      *
-     *      Worldview.Indicator.show("Searching", "images/activity.gif")
+     *      wv.ui.indicator.show("Searching", "images/activity.gif")
      *
      * @method searching
      * @static
      */
-    ns.searching = function() {
-        ns.show("Searching ECHO for Data", "images/activity.gif");
+    self.searching = function() {
+        self.show("Searching ECHO for Data", "images/activity.gif");
     };
 
-    ns.loading = function() {
-        ns.show("Loading", "images/activity.gif");
+    /**
+     * Displays a "Loading" indicator. This is a convenience method for:
+     *
+     *      wv.ui.indicator.show("Loading", "images/activity.gif")
+     *
+     * @method searching
+     * @static
+     */
+    self.loading = function() {
+        self.show("Loading", "images/activity.gif");
     };
 
     /**
      * Displays a "No data available" indicator. This is a convenience method
      * for:
      *
-     *      Worldview.Indicator.show("No data available", "images/red-x.svg")
+     *      wv.ui.indicator.show("No data available", "images/red-x.svg")
      *
      * @method noData
      * @static
      */
-    ns.noData = function() {
-        ns.show("No Data Avaialble", "images/red-x.svg");
+    self.noData = function() {
+        self.show("No Data Avaialble", "images/red-x.svg");
     };
 
-});
+    return self;
+
+})();

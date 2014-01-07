@@ -27,9 +27,6 @@ Worldview.namespace("Widget");
  */
 Worldview.Widget.Map = function(containerId, config) {
 
-    var log = Logging.getLogger("Worldview.Map");
-    //Logging.debug("Worldview.Map");
-
     var self = {};
 
     /**
@@ -72,7 +69,6 @@ Worldview.Widget.Map = function(containerId, config) {
             return;
         }
 
-        log.debug("setValue: " + value);
         var extent = OpenLayers.Bounds.fromString(value);
         var map = self.maps.map;
 
@@ -80,9 +76,8 @@ Worldview.Widget.Map = function(containerId, config) {
         // invalid, just zoom out the max extent
         if ( !Worldview.Map.isExtentValid(extent) ||
                 !extent.intersectsBounds(map.getMaxExtent()) ) {
-            log.warn("Extent is invalid: " + extent + "; using " +
+            console.warn("Extent is invalid: " + extent + "; using " +
                     map.getExtent());
-            log.info("Max extent: " + map.getMaxExtent());
             extent = map.getExtent();
         }
         self.maps.map.zoomToExtent(extent, true);
@@ -100,7 +95,6 @@ Worldview.Widget.Map = function(containerId, config) {
     self.getValue = function() {
         var queryString = containerId + "=" +
                     self.maps.map.getExtent().toBBOX();
-        log.debug("getValue: " + queryString);
         return queryString;
     };
 
@@ -116,7 +110,6 @@ Worldview.Widget.Map = function(containerId, config) {
      * in <setValue>
      */
     self.loadFromQuery = function(queryString) {
-        log.debug("WorldviewMap.loadFromQuery: " + queryString);
         var query = Worldview.queryStringToObject(queryString);
         if ( query.map ) {
             self.setValue(query.map);
@@ -128,7 +121,7 @@ Worldview.Widget.Map = function(containerId, config) {
                 center = [x, y];
                 self.maps.map.setCenter(center, parseInt(query.zoom));
             } catch ( error ) {
-                log.warn("Unable to set center and zoom: " + error);
+                console.warn("Unable to set center and zoom: " + error);
             }
         }
         self.updateComponent(queryString);

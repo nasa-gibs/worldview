@@ -13,7 +13,6 @@ Worldview.namespace("DataDownload");
 Worldview.DataDownload.BulkDownloadPage = (function() {
 
     var ns = {};
-    var log = Logging.getLogger("Worldview.DataDownload.BulkDownloadPage");
 
     var pages = {
         wget: "pages/wget.html",
@@ -27,9 +26,7 @@ Worldview.DataDownload.BulkDownloadPage = (function() {
 
         var loaded = false;
         page.onload = function() {
-            log.debug("Page loaded");
             if ( !loaded ) {
-                log.debug("Filling page");
                 fillPage(page, selection, type);
                 loaded = true;
             }
@@ -37,23 +34,17 @@ Worldview.DataDownload.BulkDownloadPage = (function() {
         var checkCount = 0;
         var timer = setInterval(function() {
             checkCount++;
-            log.debug("Brute force ", checkCount);
             if ( loaded ) {
                 clearInterval(timer);
-                log.debug("Already loaded");
                 return;
             }
             if ( checkCount > 20 ) {
                 clearInterval(timer);
-                log.debug("Giving up");
                 return;
             }
             if ( fillPage(page, selection, type) ) {
-                log.debug("Page filled");
                 loaded = true;
                 clearInterval(timer);
-            } else {
-                log.debug("Page is not ready");
             }
         }, 100);
     };

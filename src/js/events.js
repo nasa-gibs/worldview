@@ -506,7 +506,7 @@ SOTE.widget.Events.toggleDescription = function(e) {
 
       	// if something needs to be loaded, wait for it.  else, move on.
       	if(curDate.indexOf(meta[ind].date, curDate.length - meta[ind].date.length) === -1) {
-      		self.models.date.set(Date.parseISOString(meta[ind].date));
+      		self.models.date.set(wv.util.parseDateUTC(meta[ind].date));
             if ( currentMap.layersLoading ) {
                 currentMap.events.register("maploadend", currentMap, setEventProducts);
             } else {

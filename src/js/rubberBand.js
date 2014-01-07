@@ -2,18 +2,8 @@ SOTE.namespace("SOTE.widget.RubberBand");
 
 
 /**
-  * A "rubberband" tool class. Uses the JCrop library.
-  *
-  * @module SOTE.widget
-  * @class RubberBand
-  * @constructor
-  * @this {RBand}
-  * @param {String} containerId is the container id of the div in which to render the object
-  * @param {String} config contains the id of the map div element.
-  *
-  *
-*/
-
+ * A "rubberband" tool class. Uses the JCrop library.
+ */
 
 SOTE.widget.RubberBand = function (containerId, config){
     this.PALETTE_WARNING =

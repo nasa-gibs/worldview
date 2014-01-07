@@ -12,8 +12,6 @@ Worldview.namespace("DataDownload");
 
 Worldview.DataDownload.SelectionListPanel = function(model, results) {
 
-    var log = Logging.getLogger("Worldview.DataDownload");
-
     var panel = null;
     var self = {};
     var granules = {};

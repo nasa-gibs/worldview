@@ -1,11 +1,5 @@
 if (typeof SOTE=="undefined") {
 
-  /**
-    *
-    * #namespace Takes out all SOTE components, widgets, and utilities out of the global namespace.
-    * #description Takes out all SOTE components, widgets, and utilities out of the global namespace.
-    *
-  */
   var SOTE = new Object();
 }
 
@@ -28,17 +22,6 @@ SOTE.namespace = function()
 
 SOTE.namespace("widget");
 
-/**
-  * An abstract class to define common methods across all SOTE components
-  * @constructor 
-  *
-  * @module SOTE.widget
-  * @class Component
-  * @this {component}
-  * @param {String} containerId is the container id of the div in which to render the object 
-  * @param {Object} [config] is a hash allowing configuration of this component
-  * 
-*/
 SOTE.widget.Component = function(containerId, config){
   // Content
 };
@@ -46,9 +29,9 @@ SOTE.widget.Component = function(containerId, config){
 /**
   * Initializes component user interface (View).  All callbacks should be set
   * The entire UI should be displayed with controllers to call the events
-  * 
+  *
   * @this {component}
-  * 
+  *
 */
 SOTE.widget.Component.prototype.init = function(){
   // Content
@@ -78,10 +61,10 @@ SOTE.widget.Component.prototype.getValue = function(){
 
 /**
   * Change the component based on dependencies
-  * 
+  *
   * @this {component}
   * @param {String} querystring contains all values of dependencies (from registry)
-  * 
+  *
 */
 SOTE.widget.Component.prototype.updateComponent = function(querystring){
   // Content
@@ -89,7 +72,7 @@ SOTE.widget.Component.prototype.updateComponent = function(querystring){
 
 /**
   * Sets the value from the querystring
-  * 
+  *
   * @this {component}
   * @param {String} qs contains the querystring
   *
@@ -100,7 +83,7 @@ SOTE.widget.Component.prototype.loadFromQuery = function(qs){
 
 /**
   * Validates the value of the component given the component constraints
-  * 
+  *
   * @this {component}
   * @returns {boolean} true or false depending on whether the value of the component is valid
 */
@@ -112,7 +95,7 @@ SOTE.widget.Component.prototype.validate = function(){
   * Sets the data accessor that provides state change instructions given dependencies
   *
   * @this {component}
-  * @param {String} datasourceurl is the relative location of the data accessor 
+  * @param {String} datasourceurl is the relative location of the data accessor
   *
 */
 SOTE.widget.Component.prototype.setDataSourceUrl = function(datasourceurl){
@@ -121,7 +104,7 @@ SOTE.widget.Component.prototype.setDataSourceUrl = function(datasourceurl){
 
 /**
   * Gets the data accessor
-  * 
+  *
   * @this {component}
   * @returns {String} the relative location of the accessor
   *

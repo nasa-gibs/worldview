@@ -18,9 +18,17 @@ config["wv"] = {
         "src/ext/wv.main/lodash-2.4.1/lodash.js",
         "src/ext/wv.main/jquery-1.6.4/jquery.js",
         "src/ext/wv.main/jscache-gitba01cdc/cache.js",
+        "src/ext/wv.ui/yui-2.9.0/yui.js"
     ],
     src: [
-        "src/js/**/wv.*.js"
+        "src/js/wv.*.js",
+        "src/js/util/wv.*.js",
+        "src/js/ui/wv.ui.js",
+        "src/js/date/wv.*.js",
+        "src/js/layers/wv.*.js",
+        "src/js/link/wv.*.js",
+        "src/js/palette/wv.*.js",
+        "src/js/proj/wv.*.js",
     ],
     tests: [
         "test/**/*.js"

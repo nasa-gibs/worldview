@@ -1,20 +1,5 @@
-/**
- * Constants and utility functions.
- *
- * @module Worldview
- * @class Worldview
- * @static
- */
-(function(ns) {
 
-    /**
-     * Delay, in hours, from aquisition until data is available in GIBS.
-     *
-     * @property GIBS_HOUR_DELAY {integer}
-     * @final
-     * @static
-     */
-    ns.GIBS_HOUR_DELAY = 3;
+(function(ns) {
 
     // June 6, 2013
     ns.ARCTIC_PROJECTION_CHANGE_DATE = new Date(Date.UTC(2013, 05, 06));
@@ -67,52 +52,6 @@
     };
 
     /**
-     * Gets the current time or the value set by overrideNow. Use this
-     * instead of the Date methods to allow debugging alternate "now" times.
-     *
-     * @method now
-     * @static
-     *
-     * @return {Date} The current time or the value set by overrideNow.
-     */
-    ns.now = function() {
-        return new Date();
-    };
-
-    /**
-     * Gets the current day or the value set by overrideNow. Use this
-     * instead of the Date methods to allow debugging alternate "now" times.
-     *
-     * @method today
-     * @static
-     *
-     * @return {Date} The current time, or the vlaue set by overrideNow, with
-     * the UTC hours, minutes, and seconds fields set to zero.
-     */
-    ns.today = function() {
-        return new Date().clearUTCTime();
-    };
-
-    /**
-     * Overrides the times returned by now() and today().
-     *
-     * @method overrideNow
-     * @static
-     *
-     * @param {Date} Return this date object of now() and today() instead
-     * of the current time.
-     */
-    ns.overrideNow = function(date) {
-        var overrideToday = date.clone().clearUTCTime();
-        ns.now = function() {
-            return new Date(date.getTime());
-        };
-        ns.today = function() {
-            return new Date(overrideToday.getTime());
-        };
-    };
-
-    /**
      * Worldview general error handler. The error is reported to the browser
      * console and, if the JavaScript library with YAHOO.widget.Panel is
      * found, opens a notification panel for the end user.
@@ -126,11 +65,10 @@
      * need to be shown to the user, usually the exception that was caught.
      */
     ns.error = function(message, cause) {
-        var log = Logging.getLogger();
         if ( cause ) {
-            log.error(cause);
+            console.error(cause);
         } else {
-            log.error(message);
+            console.error(message);
         }
 
         if ( window.YAHOO && window.YAHOO.widget &&

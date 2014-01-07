@@ -62,8 +62,6 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
     // out
     latestJobId: null,
 
-    log: Logging.getLogger("Worldview.Map.CanvasTile"),
-
 	initialize: function(layer, position, bounds, url, size, options) {
 	    // This is required or the browser will throw security exceptions
         this.crossOriginKeyword = "anonymous";
@@ -74,7 +72,6 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
      * Discards the canvas.
 	 */
 	destroy: function() {
-	    this.log.debug(this.id + ": destroy");
 		OpenLayers.Tile.Image.prototype.destroy.apply(this, arguments);
 		this.clear();
 		if ( this.canvas ) {
@@ -90,7 +87,6 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
 	 * set.
 	 */
 	clear: function() {
-	    this.log.debug(this.id + ": clear");
 		OpenLayers.Tile.Image.prototype.clear.apply(this, arguments);
 		if ( this.canvas ) {
 			this.canvas.style.visibility = "hidden";
@@ -147,7 +143,6 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
         // If the tile is being reloaded, hide the canvas so that stale
         // tiles are not visible
         if ( this.canvas ) {
-            this.log.debug(this.id + ": setImgSrc: " + arguments[0]);
             this.canvas.visibility = "hidden";
             this.canvas.opacity = 0;
             this.latestJobId = 0;
@@ -163,8 +158,6 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
      */
     onImageLoad: function() {
         OpenLayers.Event.stopObservingElement(this.imgDiv);
-
-        this.log.debug(this.id + ": tile loaded");
 
         // Draw the image that was loaded and save it for anytime a color
         // lookup needs to be applied
@@ -230,16 +223,13 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
         // for use in the back buffer) or this render is not the last tile
         // submitted, this data is now stale and can be thrown away.
         if ( !canvas || results.id !== self.latestJobId ) {
-            self.log.debug(self.id + ": Discarding stale tile");
-
+            // Nothing
         // If the operation was cancelled during execution, ignore the result.
         } else if ( results.status === "cancelled" ) {
-            self.log.debug(self.id + ": Cancelled");
-
+            // Nothing
         // If there was an error during processing, report it here
         } else if ( results.status === "error" ) {
-            self.log.error(self.id + ": Unable to render tile");
-
+            // Nothing
         // Draw the tile
         } else if ( results.status === "success" ){
             var imageData = results.message.destination;
@@ -247,7 +237,6 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
             canvas.style.visibility = "inherit";
             canvas.style.opacity = self.layer.opacity;
             self.canvasContext = null;
-            self.log.debug(self.id + ": rendered");
         } else {
             throw new Error("Invalid status during tile rendering: " +
                     results.status);
@@ -265,7 +254,6 @@ Worldview.Map.CanvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
         if ( !this.canvas || this.isLoading ) {
             return;
         }
-        this.log.debug(this.id + ": createBackBuffer");
         var backBuffer = this.canvas;
         this.canvas = null;
         return backBuffer;

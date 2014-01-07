@@ -6,5 +6,7 @@ node_modules
 .pydevproject
 .DS_Store
 bitly_config.py*
+doc
+tools
 *~
 *.swp

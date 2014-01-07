@@ -1,9 +1,4 @@
 [
-    "src/js/util/wv.util.polyfill.js",
-
-    "src/js/Date.js",
-    "src/js/Logging.js",
-
     "src/js/component.js",
     "src/js/registry.js",
     "src/js/rubberBand.js",
@@ -11,23 +6,44 @@
     "src/js/events.js",
 
     "src/js/wv.brand.js",
+
     "src/js/util/wv.util.js",
+    "src/js/util/wv.util.browser.js",
     "src/js/util/wv.util.events.js",
+
     "src/js/ui/wv.ui.js",
     "src/js/ui/wv.ui.about.js",
+    "src/js/ui/wv.ui.indicator.js",
+
+    "src/js/proj/wv.proj.model.js",
+    "src/js/proj/wv.proj.ui.js",
+
+    "src/js/date/wv.date.model.js",
+    "src/js/date/wv.date.sliders.js",
+    "src/js/date/wv.date.label.js",
+    "src/js/date/wv.date.wheels.js",
+
+    "src/js/layers/wv.layers.model.js",
+    "src/js/layers/wv.layers.sidebar.js",
+    "src/js/layers/wv.layers.active.js",
+    "src/js/layers/wv.layers.add.js",
+
+    "src/js/palette/wv.palette.js",
+    "src/js/palette/wv.palette.model.js",
+
+    "src/js/link/wv.link.model.js",
+    "src/js/link/wv.link.ui.js",
+
+    "src/js/legacy/wv.legacy.switch_.js",
+    "src/js/legacy/wv.legacy.bank.js",
+    "src/js/legacy/wv.legacy.date.js",
+
     "src/js/Worldview.js",
     "src/js/Worldview/Support.js",
     "src/js/Worldview/Support.js",
-    "src/js/link/wv.link.model.js",
     "src/js/Worldview/Scheduler.js",
     "src/js/Worldview/Indicator.js",
-    "src/js/Worldview/AjaxCache.js",
     "src/js/Worldview/AjaxJoin.js",
-
-    "src/js/date/wv.date.model.js",
-    "src/js/layers/wv.layers.model.js",
-    "src/js/proj/wv.proj.model.js",
-    "src/js/palette/wv.palette.model.js",
 
     "src/js/Worldview/Palette.js",
     "src/js/Worldview/Palette/ColorBar.js",
@@ -97,25 +113,12 @@
     "src/js/Worldview/DataDownload/DownloadListPanel.js",
     "src/js/Worldview/DataDownload/BulkDownloadPage.js",
 
-    "src/js/proj/wv.proj.ui.js",
-    "src/js/layers/wv.layers.sidebar.js",
-    "src/js/layers/wv.layers.active.js",
-    "src/js/layers/wv.layers.add.js",
-    "src/js/date/wv.date.sliders.js",
-    "src/js/date/wv.date.label.js",
-    "src/js/date/wv.date.wheels.js",
     "src/js/Worldview/Widget/Map.js",
     "src/js/Worldview/Widget/Palette.js",
     "src/js/Worldview/Widget/WorldviewMap.js",
     "src/js/Worldview/Widget/ArcticProjectionChangeNotification.js",
-    "src/js/Worldview/Widget/Opacity.js",
     "src/js/Worldview/Widget/CRS.js",
     "src/js/Worldview/Widget/DataDownload.js",
-    "src/js/link/wv.link.ui.js",
-
-    "src/js/legacy/wv.legacy.switch_.js",
-    "src/js/legacy/wv.legacy.bank.js",
-    "src/js/legacy/wv.legacy.date.js",
 
     "src/js/tour.js",
     "src/js/main.js"

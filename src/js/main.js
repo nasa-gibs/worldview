@@ -1,25 +1,8 @@
 $(function() {// Initialize "static" vars
 
-    var log = Logging.getLogger();
-
-    // Place all logging needed on startup here. This should be emptied before
-    // release
-    var DEBUG_LOGGERS = [
-    ];
-
-    $.each(DEBUG_LOGGERS, function(index, name) {
-        log.warn("Enabling logger:", name);
-        Logging.debug(name);
-    });
-
     var loaded = false;
 
     var entryPoint = function() {
-
-        // Place any quirky browser related items in the function called
-        // below.
-        Worldview.Support.quirks();
-
         // Place any resources that should be completely loaded before
         // starting up the UI
         var configURI = "data/config.json?v=" + wv.brand.BUILD_NONCE;
@@ -30,7 +13,7 @@ $(function() {// Initialize "static" vars
         });
         setTimeout(function() {
             if ( !loaded ) {
-                Worldview.Indicator.loading();
+                wv.ui.indiactor.loading();
             }
         }, 2000);
     };
@@ -43,7 +26,7 @@ $(function() {// Initialize "static" vars
 
             if ( config.parameters.loadDelay ) {
                 var delay = parseInt(config.parameters.loadDelay);
-                log.warn("Delaying load for " + delay + " ms");
+                console.warn("Delaying load for " + delay + " ms");
                 setTimeout(function() {
                     init(config);
                 }, parseInt(config.parameters.loadDelay));
@@ -57,7 +40,7 @@ $(function() {// Initialize "static" vars
     var storageEngine;
     var init = function(config) {
         loaded = true;
-        Worldview.Indicator.hide();
+        wv.ui.indicator.hide();
 
     	// set up storage and decide what to show
         try {
@@ -115,6 +98,7 @@ $(function() {// Initialize "static" vars
         });
         models.dataDownload = dataDownloadModel;
         models.link = wv.link.model(config);
+        models.proj.change = wv.proj.change(models);
         wv.models = models;
 
         // These are only convienence handles to important objects used
@@ -156,10 +140,6 @@ $(function() {// Initialize "static" vars
             m: map,
             config: config
         });
-        var apcn = new Worldview.Widget.ArcticProjectionChangeNotification(
-            config, legacyBank
-        );
-        var opacity = new Worldview.Widget.Opacity(config);
         var crs = new Worldview.Widget.CRS(config);
 
         // collapse events if worldview is being loaded via permalink
@@ -220,18 +200,17 @@ $(function() {// Initialize "static" vars
 	    // Register event listeners
 	    REGISTRY.addEventListener("map", "imagedownload");
         REGISTRY.addEventListener("time",
-                "map", "imagedownload", apcn.containerId, crs.containerId,
+                "map", "imagedownload", crs.containerId,
                 dataDownload.containerId);
         REGISTRY.addEventListener("switch",
                 "map", "products", "selectorbox", "imagedownload", "camera",
-                apcn.containerId, crs.containerId, dataDownload.containerId);
+                crs.containerId, dataDownload.containerId);
         REGISTRY.addEventListener("products",
                 "map", "selectorbox", "imagedownload", "palettes",
-                apcn.containerId, dataDownload.containerId);
+                dataDownload.containerId);
         REGISTRY.addEventListener("selectorbox","products");
         REGISTRY.addEventListener("camera","imagedownload");
         REGISTRY.addEventListener("palettes","map","camera","products");
-        REGISTRY.addEventListener("opacity", "map");
         REGISTRY.addEventListener(crs.containerId, "imagedownload");
 
         // Initialize widgets
@@ -242,8 +221,6 @@ $(function() {// Initialize "static" vars
             legacyDate,
             map,
             palettes,
-            apcn,
-            opacity,
             crs,
             dataDownload
         ];
@@ -268,7 +245,7 @@ $(function() {// Initialize "static" vars
             console.info(wv.brand.NAME + " - Version " + wv.brand.VERSION +
                 " - " + wv.brand.BUILD_TIMESTAMP);
         } else {
-            log.warn("Development version");
+            console.warn("Development version");
         }
 
         // Do not start the tour if coming in via permalink
@@ -285,11 +262,11 @@ $(function() {// Initialize "static" vars
         // Allow the current day to be overridden
         if ( config.parameters.now ) {
             try {
-                var now = Date.parseISOString(config.parameters.now);
+                var now = Date.parseTimestampUTC(config.parameters.now);
                 Worldview.overrideNow(now);
-                log.warn("Overriding now: " + now.toISOString());
+                console.warn("Overriding now: " + now.toISOString());
             } catch ( error ) {
-                log.error("Invalid now: " + query.now, error);
+                console.error("Invalid now: " + query.now, error);
             }
         }
 

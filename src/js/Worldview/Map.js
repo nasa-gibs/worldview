@@ -14,16 +14,7 @@
  */
 Worldview.namespace("Map");
 
-/**
- * Utilities for OpenLayers.
- *
- * @class Map
- * @static
- */
-
 $(function(ns) {
-
-    var logPosition = Logging.getLogger("Worldview.Map.Position");
 
     ns.CRS_WGS_84 = "EPSG:4326";
 
@@ -51,10 +42,6 @@ $(function(ns) {
     ns.COORDINATE_CONTROLS = {
         "geographic": new OpenLayers.Control.MousePosition({
             formatOutput: function(mouseLonLat) {
-                if ( logPosition.isDebugEnabled() ) {
-                    logPosition.debug(mouseLonLat.lon.toFixed(3) + "," +
-                                      mouseLonLat.lat.toFixed(3));
-                }
                 return mouseLonLat.lon.toFixed(3) + "&#176;, " +
                        mouseLonLat.lat.toFixed(3) + "&#176;";
             }
@@ -62,10 +49,6 @@ $(function(ns) {
         "arctic": new OpenLayers.Control.MousePosition({
             projection: "EPSG:3413",
             formatOutput: function(mouseLonLat) {
-                if ( logPosition.isDebugEnabled() ) {
-                    logPosition.debug(Math.round(mouseLonLat.lon) + "," +
-                                      Math.round(mouseLonLat.lat));
-                }
                 return this.projection + " " +
                         Math.round(mouseLonLat.lon) + "m, " +
                         Math.round(mouseLonLat.lat) + "m";
@@ -73,10 +56,6 @@ $(function(ns) {
         }),
         "antarctic": new OpenLayers.Control.MousePosition({
             formatOutput: function(mouseLonLat) {
-                if ( logPosition.isDebugEnabled() ) {
-                    logPosition.debug(Math.round(mouseLonLat.lon) + "," +
-                                      Math.round(mouseLonLat.lat));
-                }
                 return "EPSG:3031 " +
                         Math.round(mouseLonLat.lon) + "m, " +
                         Math.round(mouseLonLat.lat) + "m";

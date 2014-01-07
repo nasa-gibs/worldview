@@ -23,18 +23,6 @@ var wv = wv || {};
 wv.ui = (function(self) {
 
     /**
-     * Determines if the UI should use a compact mobile layout.
-     *
-     * @method mobile
-     * @static
-     * @return {Boolean} true if the window width is less than 720 pixels,
-     * otherwise returns false.
-     */
-    self.mobile = function() {
-        return $(window).width() < 720;
-    };
-
-    /**
      * General error handler.
      *
      * Displays a dialog box with the error message. If an exception object
@@ -87,10 +75,11 @@ wv.ui = (function(self) {
      * @param [title="Notice"] {string} Title for the dialog box.
      */
     self.notify = function(message, title) {
+        var width = ( message.length > 500 ) ? "400px": "300px";
         if ( window.YAHOO && window.YAHOO.widget &&
                 window.YAHOO.widget.Panel ) {
             o = new YAHOO.widget.Panel("WVerror", {
-                width: "300px",
+                width: width,
                 zIndex: 1020,
                 visible: false,
                 constraintoviewport: true
@@ -107,6 +96,28 @@ wv.ui = (function(self) {
         }
     };
 
+    /**
+     * Displays a message to the end user that the feature is not supported
+     * in this web browser.
+     *
+     * @method unsupported
+     * @static
+     *
+     * @param {String} [featureName] If specified, the message will state
+     * "The <featureName> feature is not supported...". Otherwise  it will
+     * state "This feature..."
+     */
+    self.unsupported = function(featureName) {
+        var prefix;
+        if ( !featureName ) {
+            prefix = "This feature";
+        } else {
+            prefix = "The " + featureName + " feature";
+        }
+        wv.ui.notify(prefix + " is not supported with your web " +
+                "browser. Upgrade or try again in a different browser.");
+    };
+
     return self;
 
-})(wv.ui || {});
+})(wv.ui = wv.ui || {});

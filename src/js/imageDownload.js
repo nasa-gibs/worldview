@@ -1,21 +1,12 @@
 SOTE.namespace("SOTE.widget.ImageDownload");
 
 /**
-  * The ImageDownload object that provides a UI to users for image download.
-  *        Provides a list of available resolutions, image formats, along with calculated image dimensions and size per users' area selection.
-  *
-  * @module SOTE.widget
-  * @class ImageDownload
-  * @constructor
-  * @this {imageDownload}
-  * @param {String} containerId is the container id of the div in which to render the object
-  * @param {Object} [config] is a hash allowing configuration of this component
-  * @augments SOTE.widget.Component
-  *
-*/
+ * The ImageDownload object that provides a UI to users for image download.
+ *        Provides a list of available resolutions, image formats, along with calculated image dimensions and size per users' area selection.
+ *
+ */
 SOTE.widget.ImageDownload = function(containerId, config){
     this.BASE_URL = "http://map2.vis.earthdata.nasa.gov/imagegen/index";
-    this.log = Logging.getLogger("Worldview.ImageDownload");
 
 	this.container=document.getElementById(containerId);
 
@@ -42,7 +33,7 @@ SOTE.widget.ImageDownload = function(containerId, config){
 	this.value = "";
 
 	if ( this.config.parameters.imagegen ) {
-	    this.log.warn("Redirecting image download to: " + this.BASE_URL +
+	    console.warn("Redirecting image download to: " + this.BASE_URL +
 	           "-" + this.config.parameters.imagegen + ".php");
 	}
 	this.init();
@@ -163,9 +154,9 @@ SOTE.widget.ImageDownload.prototype.updateComponent = function(qs){
         		$('#selImgFormat option[value=KMZ]').remove();
         	}
         }
-      	 var dTime = Date.parseISOString(time).clearUTCTime();
+      	 var dTime = wv.util.parseDateUTC(time);
       	 //Julian date, padded with two zeros (to ensure the julian date is always in DDD format).
-      	 var jStart = Date.parseISOString(dTime.getUTCFullYear() + "-01-01");
+      	 var jStart = wv.util.parseDateUTC(dTime.getUTCFullYear() + "-01-01");
       	 var jDate = "00" + (1+Math.ceil((dTime.getTime() - jStart) / 86400000));
       	 dlURL += "TIME="+dTime.getUTCFullYear()+(jDate).substr((jDate.length)-3);
 

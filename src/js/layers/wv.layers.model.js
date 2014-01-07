@@ -58,12 +58,13 @@ wv.layers.model = wv.layers.model || function(models, config) {
     };
 
     self.count = function(type, proj) {
-        proj = projection || models.proj.selected.id;
+        proj = proj || models.proj.selected.id;
         var layers = self.forProjection(proj);
         return layers[type].length;
     };
 
     self.total = function(proj) {
+        proj = proj || models.proj.selected.id;
         return self.count("baselayers", proj) +
                self.count("overlays", proj);
     };

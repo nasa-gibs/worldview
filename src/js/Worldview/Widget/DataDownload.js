@@ -12,23 +12,7 @@
 
 Worldview.namespace("Widget");
 
-/**
- * Handles UI interactions with the Data Download model.
- *
- * @module Worldview.Widget
- * @class DataDownload
- * @constructor
- *
- * @param model {Worldview.DataDownload.Model} FIXME
- *
- * @param config Worldview config
- *
- * @param spec.selector {string} jQuery selector for where the mode activation
- * button should be rendered.
- */
 Worldview.Widget.DataDownload = function(config, spec) {
-
-    var log = Logging.getLogger("Worldview.DataDownload");
 
     var HTML_WIDGET_INACTIVE = "<img src='images/camera.png'></img>";
     var HTML_WIDGET_ACTIVE = "<img src='images/cameraon.png'></img>";
@@ -93,7 +77,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
                 var state = REGISTRY.getState(queryString);
                 model.activate(query.dataDownload);
             } catch ( error ) {
-                log.warn("Invalid data download parameter: " + error);
+                console.warn("Invalid data download parameter: " + error);
                 model.activate();
             }
         }
@@ -229,7 +213,6 @@ Worldview.Widget.DataDownload = function(config, spec) {
         var hasCentroids = false;
         var inView = false;
         var extent = map.getExtent().toGeometry();
-        log.debug("view changed", extent);
         $.each(lastResults.granules, function(index, granule) {
             if ( granule.centroid && granule.centroid[map.projection] ) {
                 hasCentroids = true;
@@ -239,11 +222,10 @@ Worldview.Widget.DataDownload = function(config, spec) {
                 }
             }
         });
-        log.debug("hasCentroids", hasCentroids, "inView", inView);
         if ( hasCentroids && !inView ) {
-            Worldview.Indicator.show("Zoom out or move map");
+            wv.ui.indicator.show("Zoom out or move map");
         } else {
-            Worldview.Indicator.hide();
+            wv.ui.indicator.hide();
         }
     };
 
@@ -252,8 +234,6 @@ Worldview.Widget.DataDownload = function(config, spec) {
     };
 
     var onActivate = function() {
-        log.debug("activate");
-
         if ( !mapController ) {
             mapController =
                 Worldview.DataDownload.MapController(model, spec.maps, config);
@@ -263,8 +243,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
     };
 
     var onDeactivate = function() {
-        log.debug("deactivate");
-        Worldview.Indicator.hide();
+        wv.ui.indicator.hide();
         if ( selectionListPanel ) {
             selectionListPanel.hide();
         }
@@ -274,7 +253,6 @@ Worldview.Widget.DataDownload = function(config, spec) {
     };
 
     var onProductSelect = function(product) {
-        log.debug("selectProduct", product);
         $(self.selector + " input[value='" + product + "']")
             .prop("checked", "true");
     };
@@ -288,8 +266,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
 
     var onQuery = function() {
         queryActive = true;
-        log.debug("query");
-        Worldview.Indicator.searching();
+        wv.ui.indicator.searching();
         if ( selectionListPanel ) {
             selectionListPanel.hide();
         }
@@ -301,10 +278,9 @@ Worldview.Widget.DataDownload = function(config, spec) {
     var onQueryResults = function(results) {
         queryActive = false;
         lastResults = results;
-        log.debug("queryResults", results);
-        Worldview.Indicator.hide();
+        wv.ui.indicator.hide();
         if ( model.selectedProduct !== null && results.granules.length === 0 ) {
-            Worldview.Indicator.noData();
+            wv.ui.indicator.noData();
         } else {
             if ( results.meta.showList ) {
                 selectionListPanel =
@@ -321,14 +297,12 @@ Worldview.Widget.DataDownload = function(config, spec) {
 
     var onQueryCancel = function() {
         queryActive = false;
-        log.debug("queryCancel");
-        Worldview.Indicator.hide();
+        wv.ui.indicator.hide();
     };
 
     var onQueryError = function(status, error) {
         queryActive = false;
-        log.debug("queryError", status, error);
-        Worldview.Indicator.hide();
+        wv.ui.indicator.hide();
         if ( status !== "abort" ) {
             wv.ui.notify("Unable to search at this time. Please try " +
                     "again later");
@@ -337,8 +311,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
 
     var onQueryTimeout = function() {
         queryActive = false;
-        log.debug("queryTimeout");
-        Worldview.Indicator.hide();
+        wv.ui.indicator.hide();
         wv.ui.notify(
             "No results received yet. This may be due to a " +
             "connectivity issue. Please try again later."

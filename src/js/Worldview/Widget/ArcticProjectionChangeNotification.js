@@ -13,9 +13,6 @@ Worldview.namespace("Widget");
 
 Worldview.Widget.ArcticProjectionChangeNotification = function(config, bank) {
 
-    var log = Logging.getLogger("Worldview.ArcticProjectionChangeNotification");
-    //Logging.debug("Worldview.ArcticProjectionChangeNotification");
-
     var self = {};
 
     var visitOld = false;
@@ -51,18 +48,16 @@ Worldview.Widget.ArcticProjectionChangeNotification = function(config, bank) {
                     ]
                 });
         } catch (error) {
-            log.error("Storage engine not available");
+            console.error("Storage engine not available");
         }
 
         self.changeDate = Worldview.ARCTIC_PROJECTION_CHANGE_DATE;
         if ( storageEngine && storageEngine.getItem(self.containerId) ) {
-            log.debug(self.containerId + ": already notified");
             showNotice = false;
         }
         if ( self.changeDate ) {
             REGISTRY.register(self.containerId, self);
             REGISTRY.markComponentReady(self.containerId);
-            log.debug(self.containerId + ": watching");
         }
     };
 
@@ -87,7 +82,6 @@ Worldview.Widget.ArcticProjectionChangeNotification = function(config, bank) {
         }
 
         if ( products !== newProducts ) {
-            log.debug(self.containerId + ": updateLayers", newProducts);
             bank.setValue(newProducts);
         }
     };
@@ -96,26 +90,22 @@ Worldview.Widget.ArcticProjectionChangeNotification = function(config, bank) {
     self.getValue = function() {};
 
     self.updateComponent = function(queryString) {
-        log.debug(self.containerId + ": queryString", queryString);
-        log.debug("LFQ: ", REGISTRY.isLoadingQuery);
         try {
             var query = Worldview.queryStringToObject(queryString);
             if ( query["switch"] === "arctic" || query["switch"] === "antarctic" ) {
                 var currentDay;
                 if ( query.time ) {
                     try {
-                        currentDay = Date.parseISOString(query.time);
+                        currentDay = wv.util.parseDateUTC(query.time);
                     } catch ( error ) {
-                        log.warn("Invalid time: " + query.time);
-                        currentDay = Worldview.today();
+                        console.warn("Invalid time: " + query.time);
+                        currentDay = wv.util.today();
                     }
                 } else {
-                    currentDay = Worldview.today();
+                    currentDay = wv.util.today();
                 }
                 if ( currentDay < self.changeDate ) {
-                    log.debug(self.containerId + ": visit old");
                     if ( REGISTRY.isLoadingQuery ) {
-                        log.debug("Reseting visit new");
                         visitNew = false;
                     }
                     visitOld = true;
@@ -126,7 +116,6 @@ Worldview.Widget.ArcticProjectionChangeNotification = function(config, bank) {
                         updateLayers(queryString);
                     }
                 } else if ( currentDay >= self.changeDate ) {
-                    log.debug(self.containerId + ": visit new");
                     visitNew = true;
                     if ( !currentNew ) {
                         currentNew = true;
@@ -136,7 +125,6 @@ Worldview.Widget.ArcticProjectionChangeNotification = function(config, bank) {
                     }
                 }
                 if ( visitOld && visitNew && showNotice ) {
-                    log.debug(self.containerId + ": notify");
                     setTimeout(notify, 100);
                     showNotice = false;
                 }
@@ -156,7 +144,7 @@ Worldview.Widget.ArcticProjectionChangeNotification = function(config, bank) {
         });
         dialog.setHeader("Notice");
         var body = [
-            "On " + self.changeDate.toISOStringDate() + " the polar ",
+            "On " + wv.util.toISOStringDate(self.changeDate) + " the polar ",
             "projections changed as follows:" ,
             "<br/><br/>",
             "The <b>Arctic projection</b> changed from Arctic Polar ",
@@ -191,7 +179,6 @@ Worldview.Widget.ArcticProjectionChangeNotification = function(config, bank) {
         dialog.hideEvent.subscribe(function(i) {
             setTimeout(function() {
                 if ( $("#arcticChangeNoticeDontShowAgain").is(":checked") ) {
-                    log.debug(self.containerId + ": Don't show again");
                     if ( storageEngine ) {
                         storageEngine.setItem(self.containerId, true);
                     }

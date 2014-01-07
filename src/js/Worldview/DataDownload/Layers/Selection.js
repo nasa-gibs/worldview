@@ -13,7 +13,6 @@ Worldview.namespace("DataDownload.Layers");
 Worldview.DataDownload.Layers.Selection = function(model, maps, config) {
 
     var LAYER_NAME = "DataDownload_Selection";
-    var log = Logging.getLogger("Worldview.DataDownload");
 
     var OPACITY = 0.6;
     var STYLE = {
@@ -31,7 +30,6 @@ Worldview.DataDownload.Layers.Selection = function(model, maps, config) {
     };
 
     self.clear = function() {
-        log.debug("clear");
         var layer = Worldview.Map.getLayerByName(maps.map, LAYER_NAME);
         if ( layer ) {
             layer.removeAllFeatures();
@@ -39,7 +37,6 @@ Worldview.DataDownload.Layers.Selection = function(model, maps, config) {
     };
 
     self.dispose = function() {
-        log.debug("dispose");
         $.each(maps.projections, function(index, map) {
             var layer = Worldview.Map.getLayerByName(map, LAYER_NAME);
             if ( layer ) {
@@ -68,7 +65,6 @@ Worldview.DataDownload.Layers.Selection = function(model, maps, config) {
             var feature = new OpenLayers.Feature.Vector(geom.clone());
             features[granule.id] = feature;
             getLayer().addFeatures([feature]);
-            log.debug("select", getLayer().features.length, granule, feature);
         }
     };
 
@@ -84,7 +80,6 @@ Worldview.DataDownload.Layers.Selection = function(model, maps, config) {
         getLayer().removeFeatures([feature]);
         getLayer().redraw();
         delete features[granule.id];
-        log.debug("unselect", getLayer().features.length, granule, feature);
     };
 
     self.refresh = function() {
@@ -110,7 +105,6 @@ Worldview.DataDownload.Layers.Selection = function(model, maps, config) {
         map = map || maps.map;
         var layer = Worldview.Map.getLayerByName(map, LAYER_NAME);
         if ( !layer ) {
-            log.debug("createlayer");
             layer = createLayer();
         }
         return layer;

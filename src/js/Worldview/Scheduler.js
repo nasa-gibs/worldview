@@ -31,7 +31,6 @@
  */
 Worldview.Scheduler = function(config) {
 
-    var log = Logging.getLogger("Worldview.Scheduler");
     var self = {};
 
     // Array of web workers equal to the size of maxWorkers
@@ -143,7 +142,6 @@ Worldview.Scheduler = function(config) {
         }
         jobs[id] = job;
 
-        log.debug("Executing: " + executing);
         if ( executing < maxWorkers ) {
             execute(job);
         } else {
@@ -157,14 +155,8 @@ Worldview.Scheduler = function(config) {
      * Clears all jobs from the queue and messages all active works to stop.
      */
     self.cancel = function() {
-        if ( log.isDebugEnabled() ) {
-            $.each(job, function(index, queue) {
-                log.debug("Removed job " + job.id + " from queue");
-            });
-        }
         queue = [];
         $.each(worker, function(jobId, workers) {
-            log.debug("Cancelling job " + jobId);
             worker.postMessage({command: "cancel"});
         });
     };
@@ -178,8 +170,6 @@ Worldview.Scheduler = function(config) {
      */
     var onSuccess = function(event) {
         var results = event.data;
-        log.debug("Completed job " + results.id + ", backlog: " +
-                queue.length);
         notify(event, jobs[results.id]);
     };
 
@@ -197,8 +187,6 @@ Worldview.Scheduler = function(config) {
             status: "error",
         };
         event.data = results;
-        log.debug("Error on job " + results.id + ": " + event.message +
-                ", " + "backlog: " + queue.length);
         notify(event, jobs[results.id]);
     };
 
@@ -229,9 +217,6 @@ Worldview.Scheduler = function(config) {
      */
     var execute = function(job) {
         var workerId = executing++;
-        log.debug("Executing job " + job.id + ", worker " + workerId +
-                ", backlog: " + queue.length);
-
         if ( self.profile ) {
             job.postedTime = new Date();
         }
@@ -249,7 +234,6 @@ Worldview.Scheduler = function(config) {
      */
     var enqueue = function(job) {
         var queueLength = queue.length + 1;
-        log.debug("Queueing job " + job.id + ", backlog: " + queueLength);
         if ( self.profile ) {
             self.stats.queued++;
             job.queuedTime = new Date().getTime();
@@ -308,8 +292,6 @@ Worldview.Scheduler = function(config) {
             stats.maximumQueueTime =
                 Math.max(stats.maximumQueueTime, queueTime);
         }
-        log.debug("Job " + job.id + ": total " + totalTime + "ms, queue " +
-                  queueTime + "ms, execution " + executionTime + "ms");
     };
 
     init();

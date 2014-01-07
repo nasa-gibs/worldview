@@ -35,7 +35,7 @@ wv.ui.about = wv.ui.about || (function() {
      * @method show
      */
     self.show = function() {
-        if ( wv.ui.mobile() ) {
+        if ( wv.util.browser.small ) {
             showMobile();
         } else {
             showDesktop();

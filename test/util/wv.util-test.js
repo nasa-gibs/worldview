@@ -56,14 +56,22 @@ buster.testCase("wv.util", {
         buster.assert.equals(qs, "?format=/image/png/");
     },
 
+    "parseTimestampUTC: Parses valid timestamp": function() {
+        var answer = new Date(Date.UTC(2013, 02, 15, 11, 22, 33));
+        var result = wv.util.parseTimestampUTC("2013-03-15T11:22:33Z");
+        buster.assert.equals(result.getTime(), answer.getTime());
+    },
+
+    "parseTimestampUTC: Parses valid timestamp without Z": function() {
+        var answer = new Date(Date.UTC(2013, 02, 15, 11, 22, 33));
+        var result = wv.util.parseTimestampUTC("2013-03-15T11:22:33");
+        buster.assert.equals(result.getTime(), answer.getTime());
+    },
+
     "parseDateUTC: Parses valid date": function() {
-        var d = wv.util.parseDateUTC("2013-03-15");
-        buster.assert.equals(2013, d.getUTCFullYear());
-        buster.assert.equals(2, d.getUTCMonth());
-        buster.assert.equals(15, d.getUTCDate());
-        buster.assert.equals(0, d.getUTCHours());
-        buster.assert.equals(0, d.getUTCMinutes());
-        buster.assert.equals(0, d.getUTCSeconds());
+        var answer = new Date(Date.UTC(2013, 02, 15));
+        var result = wv.util.parseDateUTC("2013-03-15");
+        buster.assert.equals(result.getTime(), answer.getTime());
     },
 
     "parseDateUTC: Exception on invalid date": function() {
@@ -77,6 +85,30 @@ buster.testCase("wv.util", {
         buster.assert.equals(wv.util.toISOStringDate(d), "2013-01-15");
     },
 
+    "toISOStringTimeHM: Converts time": function() {
+        var d = new Date(Date.UTC(2013, 0, 15, 11, 22, 33));
+        buster.assert.equals(wv.util.toISOStringTimeHM(d), "11:22");
+    },
+
+    "toCompactTimestamp: Converts timestamp": function() {
+        var d = new Date(Date.UTC(2013, 0, 15, 11, 22, 33, 444));
+        buster.assert.equals(wv.util.toCompactTimestamp(d),
+            "20130115112233444");
+    },
+
+    "fromCompactTimestamp: Parses timestamp": function() {
+        var answer = new Date(Date.UTC(2013, 0, 15, 11, 22, 33, 444));
+        var result = wv.util.fromCompactTimestamp("20130115112233444");
+        buster.assert.equals(answer.getTime(), result.getTime());
+    },
+
+    "fromCompactTimestamp: Throws exception when invalid": function() {
+        var answer = new Date(Date.UTC(2013, 0, 15, 11, 22, 33, 444));
+        buster.assert.exception(function() {
+            wv.util.fromCompactTimestamp("x0130115112233444");
+        });
+    },
+
     "clearTimeUTC: Time set to UTC midnight": function() {
         var d = new Date(2013, 02, 15, 12, 34, 56, 789);
         wv.util.clearTimeUTC(d);
@@ -86,6 +118,18 @@ buster.testCase("wv.util", {
         buster.assert.equals(0, d.getUTCHours());
         buster.assert.equals(0, d.getUTCMinutes());
         buster.assert.equals(0, d.getUTCSeconds());
+    },
+
+    "ajaxCache: Non-cached request returned": function(done) {
+        this.stub(jQuery, "ajax").returns(jQuery.Deferred().resolve("answer"));
+        var cache = wv.util.ajaxCache();
+        var promise = cache.submit({
+            url: "url",
+            data: "foo=bar"
+        }).done(function(data) {
+            buster.assert.equals(data, "answer");
+            done();
+        });
     }
 
 });

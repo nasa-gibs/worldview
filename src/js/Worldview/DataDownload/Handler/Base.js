@@ -38,7 +38,7 @@ Worldview.DataDownload.Handler.Base = function(config, model) {
         self.echo = ns.echo;
 
         if ( !ns.ajax ) {
-            ns.ajax = Worldview.AjaxCache();
+            ns.ajax = wv.util.ajaxCache();
         }
         self.ajax = ns.ajax;
 

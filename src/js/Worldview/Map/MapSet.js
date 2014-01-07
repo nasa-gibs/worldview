@@ -29,9 +29,6 @@ Worldview.namespace("Map");
  */
 Worldview.Map.MapSet = function(containerId, mapConfig, component) {
 
-    var log = Logging.getLogger("Worldview.Map");
-    var logLoad = Logging.getLogger("Worldview.Map.LoadEvents");
-
     var self = {};
 
     // Configurations for each available product
@@ -42,7 +39,7 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
     var activeLayers = {};
 
     // Display layers on the map for this day
-    var currentDay = Worldview.today();
+    var currentDay = wv.util.today();
 
     // The number of layers in the processing of loading. This is used
     // to fire maploadstart and maploadend events.
@@ -101,7 +98,6 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
             var id = "map-" + projection;
 
             var newMap = createMap($container, id, projection, config);
-            log.debug("newMap projection: " + newMap.projection);
 
             // Put in a bogus layer to act as the base layer to make the
             // map happy for setting up the starting location
@@ -120,12 +116,8 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
             if ( config.startCenter || config.startZoom ) {
                 var startCenter = config.startCenter || [0, 0];
                 var startZoom = config.startZoom || 0;
-                log.debug(projection + " start: " + startCenter + ", " +
-                        startZoom);
                 newMap.setCenter(startCenter, startZoom);
-                log.debug("Center is: " + newMap.getCenter() + ", " + newMap.getZoom());
             } else {
-                log.debug(projection + " start: maxExtent");
                 newMap.zoomToMaxExtent();
             }
 
@@ -178,7 +170,6 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
         if ( !(projection in self.projections) ) {
             throw new Error("Unsupported projection: " + projection);
         }
-        log.debug("Switch projection: " + projection);
 
         // Hide all map elements and then display only the ones for this
         // projection
@@ -229,7 +220,7 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
             if ( name == layerName ) {
                 var value = parseFloat(opacity);
                 if ( isNaN(value) ) {
-                    log.warn("Invalid opacity for layer " + layerName + ": " +
+                    console.warn("Invalid opacity for layer " + layerName + ": " +
                             opacity);
                 } else {
                     layer.setOpacity(value);
@@ -294,7 +285,6 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
      */
     self.append = function(layer) {
         if ( $.inArray(layer, self.layers) >= 0 ) {
-            log.warn("Layer already exists: " + product);
             return;
         }
         var newLayers = $.extend([], self.layers);
@@ -322,14 +312,14 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
                     var renderedPalette = self.mapConfig.palettes[renderedName];
 
                     if ( !renderedPalette ) {
-                        log.warn(layerName + " does not support palettes");
+                        console.warn(layerName + " does not support palettes");
                         return;
                     }
                     // Find the palette that should be used instead
                     var palette = self.mapConfig.palettes[paletteName];
 
                     if ( !palette ) {
-                        log.warn("No such palette: " + paletteName);
+                        console.warn("No such palette: " + paletteName);
                         return;
                     }
                     // Create a lookup table and map it to the color
@@ -368,24 +358,23 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
 
         var layerConfig = layerConfigs[name];
         if ( !layerConfig ) {
-            log.warn("No such layer: " + name);
+            console.warn("No such layer: " + name);
             return false;
         }
         if ( $.inArray(name, self.layers) >= 0 ) {
-            log.warn("Layer already added: " + name);
+            console.warn("Layer already added: " + name);
             return true;
         }
 
         var supported = false;
         if ( self.projection in layerConfig.projections ) {
-            log.debug("Adding layer: " + name);
             var layer = createLayer(self.map, self.projection,
                     layerConfigs[name]);
             layer.setDay(currentDay);
             self.map.layerSets[name] = layer;
             supported = true;
         } else {
-            log.warn(name + " does not support " + self.projection);
+            console.warn(name + " does not support " + self.projection);
             supported = false;
         }
         return supported;
@@ -396,16 +385,15 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
      */
     var remove = function(name) {
         if ( $.inArray(name, self.layers) < 0 ) {
-            log.warn("Layer has not been added: " + name);
+            console.warn("Layer has not been added: " + name);
             return;
         }
         var layer = self.map.layerSets[name];
         if ( layer ) {
-            log.debug("Removing layer: " + name);
             layer.dispose();
             delete self.map.layerSets[name];
         } else {
-            log.warn("Layer does not exist: " + name);
+            console.warn("Layer does not exist: " + name);
         }
     };
 
@@ -492,7 +480,7 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
         if ( coordinateControl ) {
             controls.push(coordinateControl);
         } else {
-            log.warn("No coordinate control for projection " + projection);
+            console.warn("No coordinate control for projection " + projection);
         }
 
         config.controls = controls;
@@ -587,18 +575,14 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
         var layer = event.layer;
 
         var onLoadStart = function() {
-            logLoad.debug("Layer load start", self.layersLoading);
             if ( self.layersLoading === 0 ) {
-                logLoad.debug("Map load start");
                 self.map.events.triggerEvent("maploadstart");
             }
             self.layersLoading++;
         };
 
         var onLoadEnd = function() {
-            logLoad.debug("Layer load end", self.layersLoading);
             if ( self.layersLoading === 1 ) {
-                logLoad.debug("Map load end");
                 self.map.events.triggerEvent("maploadend");
             }
             if ( self.layersLoading > 0 ) {

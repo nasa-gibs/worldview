@@ -61,7 +61,7 @@ wv.proj.model = wv.proj.model || function(config) {
     };
 
     self.register = function(crs, def) {
-        if ( def && Proj4js && !Proj4js.defs[crs] ) {
+        if ( def && window.Proj4js && !Proj4js.defs[crs] ) {
             Proj4js.defs[crs] = def;
         }
     };
