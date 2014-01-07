@@ -61,7 +61,7 @@ wv.layers.add = wv.layers.add || function(models, config) {
             .addClass("search")
             .attr("type", "text")
             .attr("name", "search")
-            .attr("placeholder", "ex. modis. terra, fire")
+            .attr("placeholder", 'Search ("aqua", "fire")')
             .attr("autocomplete", "off");
 
         $form.append($search);
