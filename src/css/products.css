@@ -85,8 +85,10 @@
     #productsHolder li.third {
         display:none;
     }
-    #wvlogo {
 
+    #wv-logo {
+        background-position:0%;
+        width:54px;
     }
 }
 
