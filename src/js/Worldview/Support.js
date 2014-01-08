@@ -125,6 +125,19 @@ Worldview.namespace("Support");
     };
 
     var checkMobile = function() {
+        if( navigator.userAgent.match(/Android/i)
+         || navigator.userAgent.match(/webOS/i)
+         || navigator.userAgent.match(/iPhone/i)
+         || navigator.userAgent.match(/iPad/i)
+         || navigator.userAgent.match(/iPod/i)
+         || navigator.userAgent.match(/BlackBerry/i)
+         || navigator.userAgent.match(/Windows Phone/i)
+         ){
+            mobile = true;
+            if (!(window.orientation == 90 || window.orientation == -90)){
+                portrait = true;
+            }
+        }
         if (navigator.userAgent.indexOf('iPhone') != -1 || navigator.userAgent.indexOf('Android') != -1) {
             // In Safari, the true version is after "Safari"
             if (navigator.userAgent.indexOf('Safari')!=-1) {
@@ -132,31 +145,34 @@ Worldview.namespace("Support");
                 mobileSafari = true;
             }
             addEventListener("load", function() {
-                setTimeout(hideURLbar, 0); 
+                if (mobileSafari){
+                    setHeight();
+                }
+                if (mobile){
+                    $(".layerPicker a[href='#DataDownload']").hide();
+                    console.log("hey hey");
+                }
+                window.scrollTo(0, 1);
             }, false);
             addEventListener("orientationchange", function() {
-                setTimeout(hideURLbar, 0);
+                setHeight();
+                window.scrollTo(0, 1);
             }, false);
         }
 
         // Set the div height
         function setHeight($body) {
             if (navigator.userAgent.match(/(iPad|iPhone|iPod touch);.*CPU.*OS 7_\d/i)){
-                $("div#app.ui-page.ui-body-c.ui-page-active").css("min-height", 0);
+                $("div#mappage.ui-page.ui-body-c.ui-page-active").css("min-height", 0);
             }
             else {
                 var new_height = $(window).height();
                 // if mobileSafari add +60px
                 new_height += 60;
-                $body.css('min-height', 0 );
-                $body.css('height', new_height );
+                $('#mappage').css('min-height', 0 );
+                $('#mappage').css('height', new_height );
             }
         }
-        
-        setHeight( $('#app') );
-        $(window).resize(function() {
-            setHeight($('#app'));
-        });
         
     };
 

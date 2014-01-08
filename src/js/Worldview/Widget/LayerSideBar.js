@@ -188,8 +188,7 @@ Worldview.Widget.LayerSideBar = function(layersModel, projectionModel) {
                 .addClass('staticLayers');
             $('.accordionToggler').attr("title","Show Layer Selector");
             $('.accordionToggler').html("Layers (" + layersModel.total() + ")");
-
-            var w = $('.products').outerWidth();
+            var w = $('#mappage').outerWidth();
             $('.products').animate({left:'-'+w+"px"}, 300);
             collapsed = true;
             $("#" + self.id).after($('.accordionToggler'));
