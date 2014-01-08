@@ -21,7 +21,9 @@ wv.proj = wv.proj || {};
 wv.proj.change = wv.proj.change || function(models) {
 
     var PROJECTION_CHANGE_DATE = new Date(Date.UTC(2013, 05, 06));
+    var DO_NOT_SHOW_AGAIN = "arcticProjectionChangeNotification";
     var notified = false;
+    var polarVisited = false;
     var self = {};
 
     self.events = wv.util.events();
@@ -34,30 +36,37 @@ wv.proj.change = wv.proj.change || function(models) {
             "+title=WGS 84 / Arctic Polar Stereographic +proj=stere " +
             "lat_0=90 +lat_ts=71 +lon_0=0 +k=1 +x_0=0 +y_0=0 " +
             "+datum=WGS84 +units=m +no_def");
-        models.proj.events.on("select", update);
-        models.date.events.on("select", update);
+        models.proj.events.on("select", onChange);
+        models.date.events.on("select", onChange);
         update();
     };
 
     var update = function() {
         var proj = models.proj.selected;
-        var previous = self.old;
         self.old = false;
-        self.crs = proj.crs;
-        self.epsg = proj.epsg;
+
         if ( proj.id === "arctic" || proj.id === "antarctic" ) {
+            polarVisited = true;
             var day = models.date.selected.getTime();
             var change = PROJECTION_CHANGE_DATE.getTime();
-            if ( day < change ) {
-                self.old = true;
-                if ( proj.id === "arctic" ) {
-                    self.crs = "EPSG:3995";
-                    self.epsg = 3995;
-                }
-            }
+            self.old = day < change;
         }
-        self.events.trigger("selected", self);
-        if ( previous !== self.old ) {
+
+        if ( proj.id === "arctic" && self.old ) {
+            self.crs = "EPSG:3995";
+            self.epsg = 3995;
+        } else {
+            self.crs = proj.crs;
+            self.epsg = proj.epsg;
+        }
+    };
+
+    var onChange = function() {
+        var wasOld = self.old;
+        var wasVisited = self.polarVisited;
+        update();
+        self.events.trigger("select", self);
+        if ( !wasVisited && wasOld !== self.old ) {
             checkNotify();
         }
     };
@@ -68,17 +77,17 @@ wv.proj.change = wv.proj.change || function(models) {
         if ( !wv.util.browser.localStorage ) {
             return;
         }
-        if ( localStorage.getItem("projection_change_no_show") === "true" ) {
+        if ( wv.util.localStorage(DO_NOT_SHOW_AGAIN) === "true" ) {
             return;
         }
         if ( notified ) {
             return;
         }
-        notified = true;
         notify();
     };
 
     var notify = function() {
+        notified = true;
         var message = [
             "On " + wv.util.toISOStringDate(PROJECTION_CHANGE_DATE) +
             " the polar projections changed as follows:" ,
@@ -109,7 +118,14 @@ wv.proj.change = wv.proj.change || function(models) {
                 "type='checkbox'>Do not show again"
         ].join("");
         wv.ui.notify(message);
+        var $check = $("#arcticChangeNoticeDontShowAgain");
+        $check.on("click", function() {
+            if ( $check.is(":checked") ) {
+                wv.util.localStorage(DO_NOT_SHOW_AGAIN, "true");
+            }
+        });
     };
+
 
     init();
     return self;

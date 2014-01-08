@@ -98,7 +98,6 @@ $(function() {// Initialize "static" vars
         });
         models.dataDownload = dataDownloadModel;
         models.link = wv.link.model(config);
-        models.proj.change = wv.proj.change(models);
         wv.models = models;
 
         // These are only convienence handles to important objects used
@@ -213,32 +212,34 @@ $(function() {// Initialize "static" vars
         REGISTRY.addEventListener("palettes","map","camera","products");
         REGISTRY.addEventListener(crs.containerId, "imagedownload");
 
-        // Initialize widgets
+        var mapBridge = {
+            fromPermalink: function(queryString) {
+                map.loadFromQuery(queryString);
+            },
+            toPermalink: function() {
+                return map.getValue();
+            }
+        };
+        var palettesBridge = {
+            fromPermalink: function(queryString) {
+                palettes.loadFromQuery(queryString);
+            },
+            toPermalink: function() {
+                return palettes.getValue();
+            }
+        };
 
-        var initOrder = [
-            legacySwitch,
-            legacyBank,
-            legacyDate,
-            map,
-            palettes,
-            crs,
-            dataDownload
-        ];
+        models.link
+            .register(models.proj)
+            .register(models.layers)
+            .register(models.date)
+            .register(mapBridge)
+            .register(palettesBridge);
+            // CRS?
+            //.register(dataDownloadBridge);
 
-        // Init
-        if (window.location.search.length > 0) {
-            REGISTRY.isLoadingQuery = true;
-            var qo = wv.util.fromQueryString(window.location.search);
-            var parts = [];
-            _.each(qo, function(value, key) {
-                parts.push(key + "=" + value);
-            });
-            var queryString = parts.join("&");
-            $.each(initOrder, function(index, component) {
-                component.loadFromQuery(queryString);
-            });
-            REGISTRY.isLoadingQuery = false;
-        }
+        models.link.load();
+        models.proj.change = wv.proj.change(models);
 
         // Console notifications
         if ( wv.brand.release() ) {

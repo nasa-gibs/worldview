@@ -316,6 +316,14 @@ wv.util = (function(self) {
         };
     };
 
+    self.localStorage = function(property, value) {
+        if ( _.isUndefined(value) ) {
+            return localStorage.getItem(property);
+        } else {
+            localStorage.setItem(property, value);
+        }
+    };
+
     return self;
 
 })(wv.util || {});

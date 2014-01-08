@@ -383,7 +383,7 @@ if (!String.prototype.endsWith) {
             // if mobileSafari add +60px
             new_height += 60;
             $body.css('min-height', 0 );
-            $body.css('height', new_height );
+            $body.css('height', new_height);
         }
     }
     if (navigator.userAgent.match(/(iPad|iPhone|iPod touch);.*CPU.*OS 7_\d/i)){
