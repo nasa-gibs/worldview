@@ -15,6 +15,7 @@
     "src/js/ui/wv.ui.about.js",
     "src/js/ui/wv.ui.indicator.js",
 
+    "src/js/proj/wv.proj.change.js",
     "src/js/proj/wv.proj.model.js",
     "src/js/proj/wv.proj.ui.js",
 
@@ -116,7 +117,6 @@
     "src/js/Worldview/Widget/Map.js",
     "src/js/Worldview/Widget/Palette.js",
     "src/js/Worldview/Widget/WorldviewMap.js",
-    "src/js/Worldview/Widget/ArcticProjectionChangeNotification.js",
     "src/js/Worldview/Widget/CRS.js",
     "src/js/Worldview/Widget/DataDownload.js",
 
