@@ -359,6 +359,21 @@ if (!String.prototype.endsWith) {
  * Mobile device quirks.
  */
 (function() {
+    if( navigator.userAgent.match(/Android/i)
+     || navigator.userAgent.match(/webOS/i)
+     || navigator.userAgent.match(/iPhone/i)
+     || navigator.userAgent.match(/iPad/i)
+     || navigator.userAgent.match(/iPod/i)
+     || navigator.userAgent.match(/BlackBerry/i)
+     || navigator.userAgent.match(/Windows Phone/i)
+     ){
+        mobile = true;
+        if (!(window.orientation == 90 || window.orientation == -90)){
+            portrait = true;
+        }
+    }
+
+
     if (navigator.userAgent.indexOf('iPhone') != -1 || navigator.userAgent.indexOf('Android') != -1) {
         // In Safari, the true version is after "Safari"
         if (navigator.userAgent.indexOf('Safari')!=-1) {
@@ -366,10 +381,18 @@ if (!String.prototype.endsWith) {
             mobileSafari = true;
         }
         addEventListener("load", function() {
-            setTimeout(hideURLbar, 0);
+
+            if (mobileSafari){
+                setHeight();
+            }
+            if (mobile){
+                $(".layerPicker a[href='#DataDownload']").hide();
+            }
+            window.scrollTo(0, 1);
         }, false);
         addEventListener("orientationchange", function() {
-            setTimeout(hideURLbar, 0);
+            setHeight();
+            window.scrollTo(0, 1);
         }, false);
     }
 
@@ -382,14 +405,9 @@ if (!String.prototype.endsWith) {
             var new_height = $(window).height();
             // if mobileSafari add +60px
             new_height += 60;
-            $body.css('min-height', 0 );
-            $body.css('height', new_height);
+            $('#app').css('min-height', 0 );
+            $('#app').css('height', new_height );
         }
     }
-    if (navigator.userAgent.match(/(iPad|iPhone|iPod touch);.*CPU.*OS 7_\d/i)){
-        setHeight( $('#app') );
-        $(window).resize(function() {
-            setHeight($('#app'));
-        });
-    }
+
 })();

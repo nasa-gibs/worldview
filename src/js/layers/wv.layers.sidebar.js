@@ -42,7 +42,8 @@ wv.layers.sidebar = wv.layers.sidebar || function(models) {
         "<i class='productsIcon selected icon-download' title='Download Data'></i>";
 
     var collapsed = false;
-
+    var mobile = false;
+    var portrait = false;
     var self = {};
 
     self.id = "productsHolder";
@@ -126,7 +127,6 @@ wv.layers.sidebar = wv.layers.sidebar || function(models) {
         $container.tabs({
             show: onTabChange
         });
-
         $('.accordionToggler').bind('click', slide);
     };
 
@@ -170,7 +170,6 @@ wv.layers.sidebar = wv.layers.sidebar || function(models) {
 
         return false;
     };
-
     var slide = function(e, ui) {
         if ( collapsed ) {
             $('.accordionToggler')
@@ -192,9 +191,8 @@ wv.layers.sidebar = wv.layers.sidebar || function(models) {
                 .addClass('staticLayers');
             $('.accordionToggler').attr("title","Show Layer Selector");
             $('.accordionToggler').html("Layers (" + models.layers.total() + ")");
-
-            var w = $('.products').outerWidth();
-            $('.products').animate({left:'-'+w+"px"}, 300);
+            var w = $('#app').outerWidth();
+            $('.products').animate({left:'-'+w+"px"}, 100);
             collapsed = true;
             $("#" + self.id).after($('.accordionToggler'));
         }
