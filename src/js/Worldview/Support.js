@@ -163,7 +163,7 @@ Worldview.namespace("Support");
         // Set the div height
         function setHeight($body) {
             if (navigator.userAgent.match(/(iPad|iPhone|iPod touch);.*CPU.*OS 7_\d/i)){
-                $("div#mappage.ui-page.ui-body-c.ui-page-active").css("min-height", 0);
+                $("#mappage,.ui-mobile, .ui-mobile .ui-page").css("min-height", 0);
             }
             else {
                 var new_height = $(window).height();
