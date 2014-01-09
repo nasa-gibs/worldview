@@ -40,11 +40,14 @@ buster.testCase("wv.proj.change", {
         };
         this.models = {
             date: wv.date.model(),
-            proj: wv.proj.model(this.config)
+            proj: wv.proj.model(this.config),
+            layers: { replace: this.stub() }
         };
         this.stub(wv.ui, "notify");
-        this.stub(window, "jQuery").returns({
-            on: this.stub()
+        this.stub(window, "$", function() {
+            return {
+                on: function() {}
+            };
         });
     },
 
@@ -145,7 +148,7 @@ buster.testCase("wv.proj.change", {
 
     "Not notified if 'Dont show again' selected": function() {
         this.stub(wv.util, "localStorage")
-            .withArgs("projection_change_no_show")
+            .withArgs("arcticProjectionChangeNotification")
             .returns("true");
         this.models.date.select(new Date(Date.UTC(2013, 0, 1)));
         this.models.proj.select("arctic");
