@@ -32,7 +32,7 @@ wv.legacy.bank = wv.legacy.bank || function(model) {
 
         model.events.on("add", fire);
         model.events.on("remove", fire);
-        model.events.on("move", fire);
+        model.events.on("update", fire);
         model.events.on("visibility", fire);
         fire();
     };

@@ -38,7 +38,7 @@ wv.layers.active = wv.layers.active || function(models, config, spec) {
         model.events
             .on("add", onLayerAdded)
             .on("remove", onLayerRemoved)
-            .on("move", onLayerMoved)
+            .on("update", onLayerUpdate)
             .on("visibility", onLayerVisibility);
         models.proj.events
             .on("select", onProjectionChanged);
@@ -324,7 +324,7 @@ wv.layers.active = wv.layers.active || function(models, config, spec) {
         }
     };
 
-    var onLayerMoved = function(type, layer, newIndex) {
+    var onLayerUpdate = function(type, layer, newIndex) {
         // Scroll pane can be kind of glitchy, so just show what the
         // current state is.
         // Timeout prevents redraw artifacts

@@ -90,6 +90,19 @@ wv.layers.model = wv.layers.model || function(models, config) {
         }
     };
 
+    self.replace = function(type, idOld, idNew) {
+        var oldLayer = getLayer(idOld);
+        var index = $.inArray(oldLayer, self.active[type]);
+        if ( index < 0 ) {
+            return;
+        }
+        var newLayer = getLayer(idNew);
+        self.active[type][index] = newLayer;
+        delete self.visible[idOld];
+        self.visible[idNew] = true;
+        self.events.trigger("update");
+    };
+
     self.clear = function(proj) {
         projection = proj|| models.proj.selected.id;
         $.each(self.active, function(type, layers) {
