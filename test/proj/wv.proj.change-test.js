@@ -43,6 +43,9 @@ buster.testCase("wv.proj.change", {
             proj: wv.proj.model(this.config)
         };
         this.stub(wv.ui, "notify");
+        this.stub(window, "jQuery").returns({
+            on: this.stub();
+        });
     },
 
     "Initializes with new projection": function() {
