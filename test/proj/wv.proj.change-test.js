@@ -44,7 +44,7 @@ buster.testCase("wv.proj.change", {
         };
         this.stub(wv.ui, "notify");
         this.stub(window, "jQuery").returns({
-            on: this.stub();
+            on: this.stub()
         });
     },
 
