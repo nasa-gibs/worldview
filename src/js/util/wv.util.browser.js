@@ -389,6 +389,7 @@ if (!String.prototype.endsWith) {
                 $(".layerPicker a[href='#DataDownload']").hide();
             }
             window.scrollTo(0, 1);
+            $("#app, .ui-mobile, .ui-mobile .ui-page").css("min-height", 0);
         }, false);
         addEventListener("orientationchange", function() {
             setHeight();
@@ -399,7 +400,7 @@ if (!String.prototype.endsWith) {
     // Set the div height
     function setHeight($body) {
         if (navigator.userAgent.match(/(iPad|iPhone|iPod touch);.*CPU.*OS 7_\d/i)){
-            $("div#app.ui-page.ui-body-c.ui-page-active").css("min-height", 0);
+            $("#app, .ui-mobile, .ui-mobile .ui-page").css("min-height", 0);
         }
         else {
             var new_height = $(window).height();
