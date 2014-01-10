@@ -13,6 +13,7 @@ buster.testCase("wv.proj.change", {
 
     config: null,
     models: null,
+    replace: null,
 
     setUp: function() {
         this.config = {
@@ -38,11 +39,14 @@ buster.testCase("wv.proj.change", {
                 }
             }
         };
+        this.replace = this.stub();
         this.models = {
             date: wv.date.model(),
-            proj: wv.proj.model(this.config)
+            proj: wv.proj.model(this.config),
+            layers: { replace: this.replace }
         };
         this.stub(wv.ui, "notify");
+        this.stub(window, "$").returns({ on: this.stub() });
     },
 
     "Initializes with new projection": function() {
@@ -142,13 +146,34 @@ buster.testCase("wv.proj.change", {
 
     "Not notified if 'Dont show again' selected": function() {
         this.stub(wv.util, "localStorage")
-            .withArgs("projection_change_no_show")
+            .withArgs("arcticProjectionChangeNotification")
             .returns("true");
         this.models.date.select(new Date(Date.UTC(2013, 0, 1)));
         this.models.proj.select("arctic");
         var model = wv.proj.change(this.models);
         this.models.date.select(new Date(Date.UTC(2014, 0, 1)));
         buster.refute.called(wv.ui.notify);
+    },
+
+    "Change from new to old switches layers": function() {
+        var model = wv.proj.change(this.models);
+        this.models.proj.select("arctic");
+        this.models.date.select(new Date(Date.UTC(2013, 0, 1)));
+        buster.assert.calledWith(this.replace,
+            "overlays", "arctic_coastlines_3413", "arctic_coastlines");
+        buster.assert.calledWith(this.replace,
+            "overlays", "arctic_graticule_3413", "arctic_graticule");
+    },
+
+    "Change from old to new switches layers": function() {
+        this.models.proj.select("arctic");
+        this.models.date.select(new Date(Date.UTC(2013, 0, 1)));
+        var model = wv.proj.change(this.models);
+        this.models.date.select(new Date(Date.UTC(2014, 0, 1)));
+        buster.assert.calledWith(this.replace,
+            "overlays", "arctic_coastlines", "arctic_coastlines_3413");
+        buster.assert.calledWith(this.replace,
+            "overlays", "arctic_graticule", "arctic_graticule_3413");
     }
 
 });
