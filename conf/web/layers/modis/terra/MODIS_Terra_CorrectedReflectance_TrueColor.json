@@ -1,0 +1,31 @@
+{
+    "layers": {
+        "MODIS_Terra_CorrectedReflectance_TrueColor": {
+
+            "id":       "MODIS_Terra_CorrectedReflectance_TrueColor",
+            "title":    "Corrected Reflectance (True Color)",
+            "subtitle": "Terra / MODIS",
+            "tags":     "natural color cr",
+            "group":    "baselayers",
+            "period":   "daily",
+            "format":   "image/jpeg",
+            "type":     "wmts",
+            "tileSize": [ 512, 512 ],
+
+            "projections": {
+                "arctic": {
+                    "source":       "GIBS:arctic",
+                    "matrixSet":    "GIBS:EPSG3413_250m"
+                },
+                "antarctic": {
+                    "source":       "GIBS:antarctic",
+                    "matrixSet":    "GIBS:EPSG3031_250m"
+                },
+                "geographic": {
+                    "source":       "GIBS:geographic",
+                    "matrixSet":    "GIBS:EPSG4326_250m"
+                }
+            }
+        }
+    }
+}

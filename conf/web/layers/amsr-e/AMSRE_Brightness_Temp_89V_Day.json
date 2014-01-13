@@ -1,0 +1,30 @@
+{
+    "layers": {
+        "AMSRE_Brightness_Temp_89V_Day": {
+
+            "id":       "AMSRE_Brightness_Temp_89V_Day",
+            "title":    "Brightness Temperature (89V GHz B Scan, Day)",
+            "subtitle": "Aqua / AMSR-E",
+            "group":    "overlays",
+            "period":   "daily",
+            "format":   "image/png",
+            "type":     "wmts",
+            "tileSize": [ 512, 512 ],
+
+            "projections": {
+                "arctic": {
+                    "source":       "GIBS:arctic",
+                    "matrixSet":    "GIBS:EPSG3413_2km"
+                },
+                "antarctic": {
+                    "source":       "GIBS:antarctic",
+                    "matrixSet":    "GIBS:EPSG3031_2km"
+                },
+                "geographic": {
+                    "source":       "GIBS:geographic",
+                    "matrixSet":    "GIBS:EPSG4326_2km"
+                }
+            }
+        }
+    }
+}

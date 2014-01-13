@@ -1,0 +1,32 @@
+{
+    "aoi": {
+        "Smoke Plumes": {
+            "projections": [ "geographic" ],
+            "baselayers": [
+                "MODIS_Terra_CorrectedReflectance_TrueColor",
+                "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                "MODIS_Terra_SurfaceReflectance_Bands143",
+                "MODIS_Aqua_SurfaceReflectance_Bands143",
+                "MODIS_Terra_CorrectedReflectance_Bands367",
+                "MODIS_Terra_CorrectedReflectance_Bands721",
+                "MODIS_Aqua_CorrectedReflectance_Bands721",
+                "MODIS_Terra_SurfaceReflectance_Bands721",
+                "MODIS_Aqua_SurfaceReflectance_Bands721",
+                "land_water_map"
+            ],
+            "overlays": [
+                "MODIS_Terra_Aerosol",
+                "MODIS_Aqua_Aerosol",
+                "MODIS_Combined_Value_Added_AOD",
+                "AIRS_CO_Total_Column_Day",
+                "AIRS_CO_Total_Column_Night",
+                "MLS_CO_215hPa_Day",
+                "MLS_CO_215hPa_Night",
+                "OMI_Aerosol_Index",
+                "OMI_Aerosol_Optical_Depth",
+                "OMI_Absorbing_Aerosol_Optical_Depth",
+                "land_mask"
+            ]
+        }
+    }
+}

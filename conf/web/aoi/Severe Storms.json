@@ -1,0 +1,56 @@
+{
+    "aoi": {
+        "Severe Storms": {
+            "projections": [ "geographic" ],
+            "baselayers": [
+                "MODIS_Terra_CorrectedReflectance_TrueColor",
+                "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                "land_water_map"
+            ],
+            "overlays": [
+                "MODIS_Terra_Water_Vapor_5km_Day",
+                "MODIS_Terra_Water_Vapor_5km_Night",
+                "MODIS_Aqua_Water_Vapor_5km_Day",
+                "MODIS_Aqua_Water_Vapor_5km_Night",
+                "MODIS_Terra_Cloud_Top_Temp_Day",
+                "MODIS_Terra_Cloud_Top_Temp_Night",
+                "MODIS_Aqua_Cloud_Top_Temp_Day",
+                "MODIS_Aqua_Cloud_Top_Temp_Night",
+                "MODIS_Terra_Cloud_Top_Pressure_Day",
+                "MODIS_Terra_Cloud_Top_Pressure_Night",
+                "MODIS_Aqua_Cloud_Top_Pressure_Day",
+                "MODIS_Aqua_Cloud_Top_Pressure_Night",
+                "AIRS_Precipitation_Day",
+                "AIRS_Precipitation_Night",
+                "AIRS_RelativeHumidity_400hPa_Day",
+                "AIRS_RelativeHumidity_400hPa_Night",
+                "AIRS_RelativeHumidity_500hPa_Day",
+                "AIRS_RelativeHumidity_500hPa_Night",
+                "AIRS_RelativeHumidity_600hPa_Day",
+                "AIRS_RelativeHumidity_600hPa_Night",
+                "AIRS_RelativeHumidity_700hPa_Day",
+                "AIRS_RelativeHumidity_700hPa_Night",
+                "AIRS_RelativeHumidity_850hPa_Day",
+                "AIRS_RelativeHumidity_850hPa_Night",
+                "AIRS_Temperature_400hPa_Day",
+                "AIRS_Temperature_400hPa_Night",
+                "AIRS_Temperature_500hPa_Day",
+                "AIRS_Temperature_500hPa_Night",
+                "AIRS_Temperature_600hPa_Day",
+                "AIRS_Temperature_600hPa_Night",
+                "AIRS_Temperature_700hPa_Day",
+                "AIRS_Temperature_700hPa_Night",
+                "AIRS_Temperature_850hPa_Day",
+                "AIRS_Temperature_850hPa_Night",
+                "OMI_Cloud_Pressure",
+                "land_mask",
+                "ndh-cyclone-hazard-frequency-distribution",
+                "ndh-cyclone-mortality-risks-distribution",
+                "ndh-cyclone-proportional-economic-loss-risk-deciles",
+                "ndh-flood-hazard-frequency-distribution",
+                "ndh-flood-mortality-risks-distribution",
+                "ndh-flood-proportional-economic-loss-risk-deciles"
+            ]
+        }
+    }
+}

@@ -1,0 +1,22 @@
+{
+    "layers": {
+        "arctic_coastlines_3413": {
+
+            "id":       "arctic_coastlines_3413",
+            "title":    "Coastlines",
+            "subtitle": "OpenStreetMap / Coastlines",
+            "tags":     "borders",
+            "group":    "overlays",
+            "format":   "image/png",
+            "type":     "wmts",
+            "tileSize": [ 512, 512 ],
+
+            "projections": {
+                "arctic": {
+                    "source":       "GIBS:arctic",
+                    "matrixSet":    "GIBS:EPSG3413_250m"
+                }
+            }
+        }
+    }
+}

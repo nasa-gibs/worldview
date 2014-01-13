@@ -35,7 +35,7 @@ wv.date.sliders = wv.date.sliders || function(models, config) {
 
     var self = {};
 
-    self.startDate = new Date(Date.UTC(2012, 4, 8, 0, 0, 0));
+    self.startDate = new Date(Date.UTC(2000, 0, 1, 0, 0, 0));
     self.endDate = wv.util.today();
     self.isCollapsed = false;
 

@@ -1,0 +1,22 @@
+{
+    "layers": {
+        "antarctic_coastlines": {
+
+            "id":       "antarctic_coastlines",
+            "title":    "Coastlines",
+            "subtitle": "ADD SCAR / Coastlines",
+            "tags":     "borders",
+            "group":    "overlays",
+            "format":   "image/png",
+            "type":     "wmts",
+            "tileSize": [ 512, 512 ],
+
+            "projections": {
+                "arctic": {
+                    "source":       "GIBS:antarctic",
+                    "matrixSet":    "GIBS:EPSG3031_250m"
+                }
+            }
+        }
+    }
+}

@@ -108,12 +108,16 @@ wv.layers.add = wv.layers.add || function(models, config) {
 
     var renderLayer = function($parent, type, layerId) {
         var layer = config.layers[layerId];
+        if ( !layer ) {
+            console.warn("Skipping unknown layer", layerId);
+            return;
+        }
         var $element = $("<li></li>")
             .addClass("selectorItem")
             .addClass("item");
 
         var $name = $("<h4></h4>")
-            .html(layer.name);
+            .html(layer.title);
         if ( config.parameters.markPalettes ) {
             if ( layer.rendered ) {
                 $name.addClass("mark");
@@ -125,7 +129,7 @@ wv.layers.add = wv.layers.add || function(models, config) {
             }
         }
         var $description = $("<p></p>")
-            .html(layer.description);
+            .html(layer.subtitle);
 
         var $checkbox = $("<input></input>")
             .attr("id", Worldview.id(layer.id))
@@ -315,8 +319,8 @@ wv.layers.add = wv.layers.add || function(models, config) {
         var tags = ( layer.tags ) ? layer.tags : "";
         var filtered = false;
         $.each(terms, function(index, term) {
-            filtered = !layer.name.toLowerCase().contains(term) &&
-                       !layer.description.toLowerCase().contains(term) &&
+            filtered = !layer.title.toLowerCase().contains(term) &&
+                       !layer.subtitle.toLowerCase().contains(term) &&
                        !tags.toLowerCase().contains(term);
             if ( filtered ) {
                 return false;

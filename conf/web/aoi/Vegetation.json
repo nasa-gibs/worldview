@@ -1,0 +1,23 @@
+{
+    "aoi": {
+        "Vegetation": {
+            "projections": [ "geographic" ],
+            "baselayers": [
+                "MODIS_Terra_CorrectedReflectance_TrueColor",
+                "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                "MODIS_Terra_SurfaceReflectance_Bands121",
+                "MODIS_Aqua_SurfaceReflectance_Bands121",
+                "land_water_map"
+            ],
+            "overlays": [
+                "MODIS_Terra_Snow_Cover",
+                "MODIS_Aqua_Snow_Cover",
+                "MODIS_Terra_Land_Surface_Temp_Day",
+                "MODIS_Terra_Land_Surface_Temp_Night",
+                "MODIS_Aqua_Land_Surface_Temp_Day",
+                "MODIS_Aqua_Land_Surface_Temp_Night",
+                "land_mask"
+            ]
+        }
+    }
+}

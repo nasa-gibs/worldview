@@ -33,9 +33,9 @@ Worldview.namespace("Map");
  * config - Configuration for this layer as a <Worldview.JSON.MapConfig.Product>
  *          object.
  */
-Worldview.Map.DailyLayerSet = function(map, config) {
+Worldview.Map.DailyLayerSet = function(map, config, projId, layerId) {
 
-    var self = Worldview.Map.LayerSet(config);
+    var self = Worldview.Map.LayerSet(config, projId, layerId);
 
     // The current z-index for all layers.
     var zIndex = 0;
@@ -212,13 +212,13 @@ Worldview.Map.DailyLayerSet = function(map, config) {
                     self.opacity);
             delete cachedLayers[currentDay];
         } else {
-            var additionalOptions = {};
+            var additionalOptions = {
+                time: currentDay
+            };
             if ( lookupTable !== null ) {
                 additionalOptions.tileClass = Worldview.Map.CanvasTile;
             }
-            currentLayer = self.createLayer(additionalOptions, {
-                time: currentDay
-            });
+            currentLayer = self.createLayer(additionalOptions);
             if ( lookupTable !== null ) {
                 currentLayer.lookupTable = lookupTable;
             }

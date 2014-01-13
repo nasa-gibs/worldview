@@ -1,0 +1,17 @@
+{
+    "defaults": {
+        "projection": "geographic",
+        "startingLayers": {
+            "baselayers": [
+                { "id": "MODIS_Terra_CorrectedReflectance_TrueColor" },
+                { "id": "MODIS_Aqua_CorrectedReflectance_TrueColor", "hidden": "true" }
+            ],
+            "overlays": [
+                {"id": "sedac_bound" },
+                {"id": "arctic_coastlines_3413" },
+                {"id": "antarctic_coastlines" }
+            ]
+        },
+        "archiveStartDate": "2000-01-01"
+    }
+}

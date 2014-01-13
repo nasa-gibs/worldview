@@ -1,0 +1,38 @@
+{
+    "projections": {
+        "geographic": {
+            "id": "geographic",
+            "epsg": 4326,
+            "crs": "EPSG:4326",
+            "maxExtent": [
+                -180,
+                -90,
+                180,
+                90
+            ],
+            "restrictedExtent": [
+                -230,
+                -120,
+                230,
+                120
+            ],
+            "resolutions": [
+                0.5625,
+                0.28125,
+                0.140625,
+                0.0703125,
+                0.03515625,
+                0.017578125,
+                0.0087890625,
+                0.00439453125,
+                0.002197265625
+            ],
+            "numZoomLevels": 9,
+            "startCenter": [
+                0,
+                0
+            ],
+            "startZoom": 1
+        }
+    }
+}

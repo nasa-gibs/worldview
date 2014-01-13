@@ -1,0 +1,24 @@
+{
+    "aoi": {
+        "Shipping": {
+            "projections": [ "geographic" ],
+            "baselayers": [
+                "MODIS_Terra_CorrectedReflectance_TrueColor",
+                "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                "MODIS_Terra_SurfaceReflectance_Bands143",
+                "MODIS_Aqua_SurfaceReflectance_Bands143",
+                "MODIS_Terra_CorrectedReflectance_Bands367",
+                "land_water_map"
+            ],
+            "overlays": [
+                "MODIS_Terra_Sea_Ice",
+                "MODIS_Aqua_Sea_Ice",
+                "MODIS_Terra_Brightness_Temp_Band31_Day",
+                "MODIS_Terra_Brightness_Temp_Band31_Night",
+                "MODIS_Aqua_Brightness_Temp_Band31_Day",
+                "MODIS_Aqua_Brightness_Temp_Band31_Night",
+                "land_mask"
+            ]
+        }
+    }
+}

@@ -368,8 +368,7 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
 
         var supported = false;
         if ( self.projection in layerConfig.projections ) {
-            var layer = createLayer(self.map, self.projection,
-                    layerConfigs[name]);
+            var layer = createLayer(self.map, self.projection, name);
             layer.setDay(currentDay);
             self.map.layerSets[name] = layer;
             supported = true;
@@ -509,35 +508,16 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
     /*
      * Merges in any projection specific properties.
      */
-    var createLayer = function(map, proj, config) {
+    var createLayer = function(map, projId, layerId) {
         if ( self.mapConfig.parameters.mockMap ) {
             return Worldview.Map.MockLayerSet();
         }
-
-        config = $.extend(true, {}, config);
-
-        if ( config.properties === undefined ) {
-            config.properties = {};
+        config = $.extend(true, {}, mapConfig);
+        var period = config.layers[layerId].period;
+        if ( period === "daily" ) {
+            return Worldview.Map.DailyLayerSet(map, mapConfig, projId, layerId);
         }
-
-        // Merge in any projection specific properties
-        config.properties = $.extend(true, config.properties,
-                                     config.projections[proj]);
-        delete config.projections;
-
-        if ( !config.properties.projection ) {
-            config.properties.projection = mapConfig.projections[proj].projection;
-        }
-        if ( config.parameters ) {
-            config.parameters.projection =
-                mapConfig.projections[proj].projection;
-        }
-        if ( config.period === "daily" ) {
-            return Worldview.Map.DailyLayerSet(map, config);
-        } else if ( config.period === "static" ) {
-            return Worldview.Map.StaticLayerSet(map, config);
-        }
-        throw new Error("Unsupported product type: " + config.period);
+        return Worldview.Map.StaticLayerSet(map, mapConfig, projId, layerId);
     };
 
     var onZoomEnd = function(evt) {

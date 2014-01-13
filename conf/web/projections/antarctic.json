@@ -1,0 +1,38 @@
+{
+    "projections": {
+        "antarctic": {
+            "id": "antarctic",
+            "epsg": 3031,
+            "crs": "EPSG:3031",
+            "proj4": "+title=WGS 84 / Antarctic Polar Stereographic +proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs",
+            "units": "m",
+            "maxExtent": [
+                -4194304,
+                -4194304,
+                4194304,
+                4194304
+            ],
+            "restrictedExtent": [
+                -6500000,
+                -5000000,
+                6500000,
+                5000000
+            ],
+            "resolutions": [
+                8192.0,
+                4096.0,
+                2048.0,
+                1024.0,
+                512.0,
+                256.0
+            ],
+            "numZoomLevels": 6,
+            "fractionalZoom": false,
+            "startCenter": [
+                0,
+                0
+            ],
+            "startZoom": 0
+        }
+    }
+}

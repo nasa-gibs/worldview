@@ -152,8 +152,8 @@ wv.layers.active = wv.layers.active || function(models, config, spec) {
         $visibleButton.append($visibleImage);
         $layer.append($visibleButton);
 
-        $layer.append($("<h4></h4>").html(layer.name));
-        $layer.append($("<p></p>").html(layer.description));
+        $layer.append($("<h4></h4>").html(layer.title));
+        $layer.append($("<p></p>").html(layer.subtitle));
 
         if ( layer.rendered ) {
             renderLegend($layer, type, layer);

@@ -1,0 +1,29 @@
+{
+    "aoi": {
+        "Other": {
+            "projections": [ "geographic" ],
+            "baselayers": [
+                "VIIRS_CityLights_2012"
+            ],
+            "overlays": [
+                "grump-v1-population-count_2000",
+                "cartographic:esri-administrative-boundaries_level-1",
+                "sedac_bound",
+                "gpw-v3-coastlines",
+                "cartographic:00-global-labels",
+                "ol_graticule",
+                "MODIS_Water_Mask",
+                "MODIS_Terra_Data_No_Data",
+                "MODIS_Aqua_Data_No_Data",
+                "Terra_Orbit_Asc",
+                "Terra_Orbit_Dsc",
+                "Aqua_Orbit_Asc",
+                "Aqua_Orbit_Dsc",
+                "Aura_Orbit_Asc",
+                "Aura_Orbit_Dsc",
+                "Calipso_Orbit_Asc",
+                "Calipso_Orbit_Dsc"
+            ]
+        }
+    }
+}

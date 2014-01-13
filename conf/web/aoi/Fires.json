@@ -1,0 +1,31 @@
+{
+    "aoi": {
+        "Fires": {
+            "projections": [ "geographic" ],
+            "baselayers": [
+                "MODIS_Terra_CorrectedReflectance_TrueColor",
+                "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                "MODIS_Terra_SurfaceReflectance_Bands721",
+                "MODIS_Aqua_SurfaceReflectance_Bands721",
+                "land_water_map"
+            ],
+            "overlays": [
+                "MODIS_Fires_All",
+                "MODIS_Fires_Terra",
+                "MODIS_Fires_Aqua",
+                "MODIS_Terra_Aerosol",
+                "MODIS_Aqua_Aerosol",
+                "MODIS_Combined_Value_Added_AOD",
+                "MODIS_Terra_Land_Surface_Temp_Day",
+                "MODIS_Terra_Land_Surface_Temp_Night",
+                "MODIS_Aqua_Land_Surface_Temp_Day",
+                "MODIS_Aqua_Land_Surface_Temp_Night",
+                "AIRS_CO_Total_Column_Day",
+                "AIRS_CO_Total_Column_Night",
+                "OMI_Aerosol_Index",
+                "OMI_Aerosol_Optical_Depth",
+                "OMI_Absorbing_Aerosol_Optical_Depth"
+            ]
+        }
+    }
+}

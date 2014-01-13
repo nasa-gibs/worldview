@@ -22,14 +22,14 @@ Worldview.namespace("Map");
  * c - Configuration for this layer as a <Worldview.JSON.MapConfig.Product>
  *     object.
  */
-Worldview.Map.LayerSet = function(c) {
+Worldview.Map.LayerSet = function(config, projId, layerId) {
 
     var self = {};
     self.opacity = 1;
     self.visible = false;
-    var config;
 
     var init = function() {
+        /*
         config = $.extend(true, {}, c);
 
         var prop = config.properties || {};
@@ -58,6 +58,32 @@ Worldview.Map.LayerSet = function(c) {
         if ( config.type === "wms" && config.parameters ) {
             delete config.parameters.projection;
         }
+        */
+    };
+
+    var createWMTS = function(options) {
+        var proj = config.projections[projId];
+        var layer = config.layers[layerId];
+        var matrixSet = config.matrixSets[layer.projections[projId].matrixSet];
+        var source = config.sources[layer.projections[projId].source];
+        var param = {
+            url: source.url,
+            layer: layer.id,
+            style: "",
+            format: layer.format,
+            matrixSet: matrixSet.id,
+            maxResolution: matrixSet.maxResolution,
+            serverResolutions: matrixSet.serverResolutions,
+            maxExtent: proj.maxExtent,
+            tileSize: new OpenLayers.Size(layer.tileSize[0],
+                                          layer.tileSize[1]),
+            transitionEffect: "resize"
+        };
+        var layer = new OpenLayers.Layer.WMTS(param);
+        if ( options && options.time ) {
+            layer.mergeNewParams({"time": options.time});
+        }
+       return layer;
     };
 
     /**
@@ -71,7 +97,16 @@ Worldview.Map.LayerSet = function(c) {
      * Return:
      * An OpenLayers Layer.
      */
-    self.createLayer = function(additionalProperties, additionalParameters) {
+    self.createLayer = function(options) {
+        var type = config.layers[layerId].type;
+        if ( type === "wmts" ) {
+            return createWMTS(options);
+        } else if ( type === "wms" ) {
+            return createWMS(projId);
+        } else {
+            throw new Error("Invalid layer type", config.type);
+        }
+        /*
         var properties = config.properties;
         if ( additionalProperties ) {
             properties = $.extend(true, {}, config.properties,
@@ -105,6 +140,7 @@ Worldview.Map.LayerSet = function(c) {
         }
         layer.setVisibility(false);
         return layer;
+        */
     };
 
     init();

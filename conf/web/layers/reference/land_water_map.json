@@ -1,0 +1,30 @@
+{
+    "layers": {
+        "land_water_map": {
+
+            "id":       "land_water_map",
+            "title":    "Land / Water Map",
+            "subtitle": "OpenStreetMap / Coastlines",
+            "tags":     "borders",
+            "group":    "baselayers",
+            "format":   "image/png",
+            "type":     "wmts",
+            "tileSize": [ 512, 512 ],
+
+            "projections": {
+                "arctic": {
+                    "source":       "GIBS:arctic",
+                    "matrixSet":    "GIBS:EPSG3413_250m"
+                },
+                "antarctic": {
+                    "source":       "GIBS:antarctic",
+                    "matrixSet":    "GIBS:EPSG3031_250m"
+                },
+                "geographic": {
+                    "source":       "GIBS:geographic",
+                    "matrixSet":    "GIBS:EPSG4326_250m"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,48 @@
+#!/usr/bin/python
+
+from copy import deepcopy
+import os
+import sys
+import json
+
+# dict_merge from
+# http://blog.impressiver.com/post/31434674390/deep-merge-multiple-python-dicts
+def dict_merge(target, *args):
+  # Merge multiple dicts
+  if len(args) > 1:
+    for obj in args:
+      dict_merge(target, obj)
+    return target
+ 
+  # Recursively merge dicts and set non-dict values
+  obj = args[0]
+  if not isinstance(obj, dict):
+    return obj
+  for k, v in obj.iteritems():
+    if k in target and isinstance(target[k], dict):
+      dict_merge(target[k], v)
+    else:
+      target[k] = deepcopy(v)
+  return target
+
+  
+base_dir = os.path.join(os.path.dirname(__file__), "..")
+
+input_dir = os.path.join(base_dir, "conf", "web")
+conf = {}
+for root, dirs, files in os.walk(input_dir):
+    for file in files:
+        sys.stderr.write(os.path.join(root, file) + "\n")
+        with open(os.path.join(root, file)) as fp:
+            data = json.load(fp)
+        dict_merge(conf, data)
+                    
+json_options = {}
+json_options["indent"] = 4
+json_options["separators"] = (',', ': ')
+
+print json.dumps(conf, **json_options)
+
+
+
+

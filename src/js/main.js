@@ -13,7 +13,7 @@ $(function() {// Initialize "static" vars
         });
         setTimeout(function() {
             if ( !loaded ) {
-                wv.ui.indiactor.loading();
+                wv.ui.indicator.loading();
             }
         }, 2000);
     };
@@ -110,13 +110,43 @@ $(function() {// Initialize "static" vars
         var legacySwitch = wv.legacy.switch_(models.proj);
         var legacyBank = wv.legacy.bank(models.layers);
         var legacyDate = wv.legacy.date(models.date);
+        var map = Worldview.Widget.WorldviewMap("map", config);
+        var palettes = Worldview.Widget.Palette(config, models.palettes, {
+            alignTo: "#products"
+        });
+
+        var mapBridge = {
+            fromPermalink: function(queryString) {
+                map.loadFromQuery(queryString);
+            },
+            toPermalink: function() {
+                return map.getValue();
+            }
+        };
+        var palettesBridge = {
+            fromPermalink: function(queryString) {
+                palettes.loadFromQuery(queryString);
+            },
+            toPermalink: function() {
+                return palettes.getValue();
+            }
+        };
+        models.link
+            .register(models.proj)
+            .register(models.layers)
+            .register(models.date)
+            .register(mapBridge)
+            .register(palettesBridge);
+            // CRS?
+            //.register(dataDownloadBridge);
+
+        models.link.load();
+        models.proj.change = wv.proj.change(models);
 
         // Create widgets
         var ui = {};
         ui.proj = wv.proj.ui(models);
-        var palettes = Worldview.Widget.Palette(config, models.palettes, {
-            alignTo: "#products"
-        });
+
         ui.sidebar = wv.layers.sidebar(models);
         ui.activeLayers = wv.layers.active(models, config, {
             paletteWidget: palettes,
@@ -125,7 +155,6 @@ $(function() {// Initialize "static" vars
         ui.dateSliders = wv.date.sliders(models, config);
         ui.dateLabel = wv.date.label(models);
         ui.dateWheels = wv.date.wheels(models, config);
-        var map = Worldview.Widget.WorldviewMap("map", config);
         var rubberBand = new SOTE.widget.RubberBand("camera", {
             icon: "images/camera.png",
             onicon: "images/cameraon.png",
@@ -212,34 +241,7 @@ $(function() {// Initialize "static" vars
         REGISTRY.addEventListener("palettes","map","camera","products");
         REGISTRY.addEventListener(crs.containerId, "imagedownload");
 
-        var mapBridge = {
-            fromPermalink: function(queryString) {
-                map.loadFromQuery(queryString);
-            },
-            toPermalink: function() {
-                return map.getValue();
-            }
-        };
-        var palettesBridge = {
-            fromPermalink: function(queryString) {
-                palettes.loadFromQuery(queryString);
-            },
-            toPermalink: function() {
-                return palettes.getValue();
-            }
-        };
 
-        models.link
-            .register(models.proj)
-            .register(models.layers)
-            .register(models.date)
-            .register(mapBridge)
-            .register(palettesBridge);
-            // CRS?
-            //.register(dataDownloadBridge);
-
-        models.link.load();
-        models.proj.change = wv.proj.change(models);
 
         // Console notifications
         if ( wv.brand.release() ) {

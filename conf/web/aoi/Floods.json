@@ -1,0 +1,25 @@
+{
+    "aoi": {
+        "Floods": {
+            "projections": [ "geographic" ],
+            "baselayers": [
+                "MODIS_Terra_CorrectedReflectance_TrueColor",
+                "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                "MODIS_Terra_SurfaceReflectance_Bands121",
+                "MODIS_Aqua_SurfaceReflectance_Bands121",
+                "MODIS_Terra_CorrectedReflectance_Bands721",
+                "MODIS_Aqua_CorrectedReflectance_Bands721",
+                "land_water_map"
+            ],
+            "overlays": [
+                "AIRS_Precipitation_Day",
+                "AIRS_Precipitation_Night",
+                "MODIS_Water_Mask",
+                "land_mask",
+                "ndh-flood-hazard-frequency-distribution",
+                "ndh-flood-mortality-risks-distribution",
+                "ndh-flood-proportional-economic-loss-risk-deciles"
+            ]
+        }
+    }
+}
