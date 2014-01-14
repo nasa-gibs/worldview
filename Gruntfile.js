@@ -139,18 +139,16 @@ module.exports = function(grunt) {
 
             // Combine all configuration json files into one.
             config: {
-                command: "python etc/config/generate-config.py " +
-                            "--config-dir build/config " +
-                            "--output build/worldview-debug/web/data/config.json"
+                command: "bin/conf-cat > " +
+                            "build/worldview-debug/web/data/config.json"
             },
 
             // Create a minified verison of the configuration file for
             // the release web root.
             config_min: {
-                command: "python etc/config/generate-config.py " +
-                            "--config-dir build/config " +
+                command: "bin/conf-cat " +
                             "--minify " +
-                            "--output build/config.min.json"
+                            "> build/config.min.json"
             },
 
             // Creates a combined configuration file for use in the source

@@ -40,6 +40,7 @@ $(function() {// Initialize "static" vars
     var storageEngine;
     var init = function(config) {
         loaded = true;
+        wv.config = config;
         wv.ui.indicator.hide();
 
     	// set up storage and decide what to show

@@ -1,9 +1,17 @@
 #!/usr/bin/python
 
 from copy import deepcopy
+from optparse import OptionParser
 import os
 import sys
 import json
+
+prog = os.path.basename(__file__)
+base_dir = os.path.join(os.path.dirname(__file__), "..")
+version = "1.0.0"
+help_description = """\
+Concatenates all configuration items a directory into one configuration file. 
+"""
 
 # dict_merge from
 # http://blog.impressiver.com/post/31434674390/deep-merge-multiple-python-dicts
@@ -25,8 +33,14 @@ def dict_merge(target, *args):
       target[k] = deepcopy(v)
   return target
 
-  
-base_dir = os.path.join(os.path.dirname(__file__), "..")
+
+# MAIN
+parser = OptionParser(usage="Usage: %s [options]" % prog,
+                      version="%s version %s" % (prog, version),
+                      epilog=help_description)
+parser.add_option("-m", "--minify", action="store_true",
+                  help="minify the output instead of pretty printing")
+(options, args) = parser.parse_args()
 
 input_dir = os.path.join(base_dir, "conf", "web")
 conf = {}
@@ -38,8 +52,9 @@ for root, dirs, files in os.walk(input_dir):
         dict_merge(conf, data)
                     
 json_options = {}
-json_options["indent"] = 4
-json_options["separators"] = (',', ': ')
+if not options.minify:
+    json_options["indent"] = 4
+    json_options["separators"] = (',', ': ')
 
 print json.dumps(conf, **json_options)
 
