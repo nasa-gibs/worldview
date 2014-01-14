@@ -31,14 +31,21 @@ wv.layers.model = wv.layers.model || function(models, config) {
     self.visible = {};
 
     var init = function() {
-        $.each(config.defaults.startingLayers, function(type, layers) {
-            $.each(layers, function(index, layer) {
-                self.add(type, layer.id, layer.hidden);
+        // FIXME: Prune out incomplete layers for now
+        var layers = _.cloneDeep(config.layers);
+        _.each(layers, function(layer) {
+            if ( !layer.group ) {
+                delete config.layers[layer.id];
+            }
+        });
+
+        if ( config.defaults && config.defaults.startingLayers ) {
+            _.each(config.defaults.startingLayers, function(layers, type) {
+                _.each(layers, function(layer) {
+                    self.add(layer.id, layer.hidden);
+                });
             });
-        });
-        $.each(config.layers, function(id, layer) {
-            layer.id = id;
-        });
+        }
     };
 
     self.forProjection = function(proj) {
@@ -57,6 +64,33 @@ wv.layers.model = wv.layers.model || function(models, config) {
         return results;
     };
 
+    self.dateRange = function(proj) {
+        proj = proj || models.proj.selected.id;
+        var min = Number.MAX_VALUE;
+        var max = 0;
+        var range = false;
+        _.each(self.active, function(layers, type) {
+            _.each(layers, function(layer) {
+                if ( layer.startDate ) {
+                    range = true;
+                    var start = wv.util.parseDateUTC(layer.startDate).getTime();
+                    min = Math.min(min, start);
+                }
+                if ( layer.endDate ) {
+                    range = true;
+                    var end = wv.util.parseDateUTC(layer.endDate).getTime();
+                    max = Math.max(max, end);
+                }
+            });
+        });
+        if ( range ) {
+            return {
+                min: new Date(min),
+                max: new Date(max)
+            };
+        };
+    };
+
     self.count = function(type, proj) {
         proj = proj || models.proj.selected.id;
         var layers = self.forProjection(proj);
@@ -69,35 +103,36 @@ wv.layers.model = wv.layers.model || function(models, config) {
                self.count("overlays", proj);
     };
 
-    self.add = function(type, id, hidden) {
+    self.add = function(id, hidden) {
         var layer = getLayer(id);
-        if ( $.inArray(layer, self.active[type]) >= 0 ) {
+        if ( $.inArray(layer, self.active[layer.group]) >= 0 ) {
             return;
         }
-        self.active[type].unshift(layer);
+        self.active[layer.group].unshift(layer);
         hidden = hidden || false;
         self.visible[id] = !hidden;
-        self.events.trigger("add", layer, type);
+        self.events.trigger("add", layer);
     };
 
-    self.remove = function(type, id) {
+    self.remove = function(id) {
         var layer = getLayer(id);
-        var index = $.inArray(layer, self.active[type]);
+        var index = $.inArray(layer, self.active[layer.group]);
         if ( index >= 0 ) {
-            self.active[type].splice(index, 1);
+            self.active[layer.group].splice(index, 1);
             delete self.visible[id];
-            self.events.trigger("remove", layer, type);
+            self.events.trigger("remove", layer);
         }
     };
 
-    self.replace = function(type, idOld, idNew) {
+    self.replace = function(idOld, idNew) {
         var oldLayer = getLayer(idOld);
-        var index = $.inArray(oldLayer, self.active[type]);
+        var group = oldLayer.group;
+        var index = $.inArray(oldLayer, self.active[group]);
         if ( index < 0 ) {
             return;
         }
         var newLayer = getLayer(idNew);
-        self.active[type][index] = newLayer;
+        self.active[group][index] = newLayer;
         delete self.visible[idOld];
         self.visible[idNew] = true;
         self.events.trigger("update");
@@ -115,35 +150,36 @@ wv.layers.model = wv.layers.model || function(models, config) {
         });
     };
 
-    self.pushToBottom = function(type, id) {
+    self.pushToBottom = function(id) {
         var layer = getLayer(id);
-        var oldIndex = $.inArray(layer, self.active[type]);
+        var oldIndex = $.inArray(layer, self.active[layer.group]);
         if ( oldIndex < 0 ) {
             throw new Error("Layer is not active: " + id);
         }
         self.active[type].splice(oldIndex, 1);
         self.active[type].push(layer);
-        self.events.trigger("move", type, layer, self.active[type].length - 1);
+        self.events.trigger("update", layer, self.active[layer.group].length - 1);
     };
 
-    self.moveBefore = function(type, source, target) {
+    self.moveBefore = function(source, target) {
         var sourceLayer = getLayer(source);
         var targetLayer = getLayer(target);
-        var sourceIndex = $.inArray(sourceLayer, self.active[type]);
+        var group = sourceLayer.group;
+        var sourceIndex = $.inArray(sourceLayer, self.active[group]);
         if ( sourceIndex < 0 ) {
             throw new Error("Layer is not active: " + source);
         }
-        var targetIndex = $.inArray(targetLayer, self.active[type]);
+        var targetIndex = $.inArray(targetLayer, self.active[group]);
         if ( targetIndex < 0 ) {
             throw new Error("Layer is not active: " + target);
         }
 
-        self.active[type].splice(targetIndex, 0, sourceLayer);
+        self.active[group].splice(targetIndex, 0, sourceLayer);
         if ( sourceIndex > targetIndex ) {
             sourceIndex++;
         }
-        self.active[type].splice(sourceIndex, 1);
-        self.events.trigger("move", type, sourceLayer, targetIndex);
+        self.active[group].splice(sourceIndex, 1);
+        self.events.trigger("update", sourceLayer, targetIndex);
     };
 
     self.setVisibility = function(id, visible) {
@@ -154,10 +190,11 @@ wv.layers.model = wv.layers.model || function(models, config) {
         }
     };
 
-    self.isActive = function(type, id) {
+    self.isActive = function(id) {
         var answer = false;
-        $.each(self.active[type], function(index, layer) {
-            if ( id === layer.id ) {
+        var layer = getLayer(id);
+        $.each(self.active[layer.group], function(index, l) {
+            if ( id === l.id ) {
                 answer = true;
                 return false;
             }

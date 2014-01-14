@@ -7,18 +7,7 @@
     // Width boundary in pixels where desktop mode switches to mobile.
     ns.TRANSITION_WIDTH = 720;
 
-    ns.LAYER_TYPES = {
-        baselayers: {
-            id: "baselayers",
-            camel: "BaseLayers",
-            description: "Base Layers"
-        },
-        overlays: {
-            id: "overlays",
-            camel: "Overlays",
-            description: "Overlays"
-        }
-    };
+
 
     /**
      * Defines a namespace under Worldview. Each argument is an object path

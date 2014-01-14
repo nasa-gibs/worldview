@@ -47,6 +47,7 @@ for filename in args:
             wv_layers[id] = {}
         wv_layer = wv_layers[id]
 
+        wv_layer["id"] = id
         wv_layer["type"] = "wmts"
         wv_layer["tileSize"] = [512, 512]
         wv_layer["format"] = gc_layer["Format"]

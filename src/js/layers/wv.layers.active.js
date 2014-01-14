@@ -23,7 +23,7 @@ wv.layers.active = wv.layers.active || function(models, config, spec) {
     var aoi = config.aoi;
     var model = models.layers;
     var paletteWidget = spec.paletteWidget;
-    var types = Worldview.LAYER_TYPES;
+    var groups = wv.util.LAYER_GROUPS;
     var jsp;
 
     var ICON_VISIBLE = "images/visible.png";
@@ -57,8 +57,8 @@ wv.layers.active = wv.layers.active || function(models, config, spec) {
             $(self.selector).parent().outerHeight() - tabs_height
         );
 
-        $.each(types, function(index, type) {
-            renderType($container, type);
+        _.each(groups, function(group) {
+            renderType($container, group);
         });
 
         $(self.selector).undelegate(".close" ,'click');
@@ -86,22 +86,22 @@ wv.layers.active = wv.layers.active || function(models, config, spec) {
         setTimeout(resize, 1);
     };
 
-    var renderType = function($parent, type) {
+    var renderType = function($parent, group) {
         var $container = $("<div></div>")
-            .attr("id", self.id + type.camel)
+            .attr("id", self.id + group.camel)
             .addClass("categoryContainer");
 
         var $header = $("<h3></h3>")
             .addClass("head")
-            .html(type.description);
+            .html(group.description);
 
         var $layers = $("<ul></ul>")
-            .attr("id", type.id)
+            .attr("id", group.id)
             .addClass(self.id + "category")
             .addClass("category");
 
-        $.each(model.forProjection()[type.id], function(index, layer) {
-            renderLayer($layers, type, layer);
+        $.each(model.forProjection()[group.id], function(index, layer) {
+            renderLayer($layers, group, layer);
         });
 
         $container.append($header);
@@ -110,21 +110,19 @@ wv.layers.active = wv.layers.active || function(models, config, spec) {
         $parent.append($container);
     };
 
-    var renderLayer = function($parent, type, layer, top) {
+    var renderLayer = function($parent, group, layer, top) {
         var $layer = $("<li></li>")
-            .attr("id", type.id + "-" + Worldview.id(layer.id))
+            .attr("id", group.id + "-" + Worldview.id(layer.id))
             .addClass(self.id + "item")
             .addClass("item")
-            .attr("data-layer", layer.id)
-            .attr("data-layer-type", type.id);
+            .attr("data-layer", layer.id);
 
         var $removeButton = $("<a></a>");
         var $removeImage = $("<img></img>")
-            .attr("id", "close" + type.id + Worldview.id(layer.id))
+            .attr("id", "close" + group.id + Worldview.id(layer.id))
             .addClass("close")
             .addClass("bank-item-img")
             .attr("data-layer", layer.id)
-            .attr("data-layer-type", type.id)
             .attr("title", "Remove Layer")
             .attr("src", "images/close-x.png");
         $removeButton.append($removeImage);
@@ -156,7 +154,7 @@ wv.layers.active = wv.layers.active || function(models, config, spec) {
         $layer.append($("<p></p>").html(layer.subtitle));
 
         if ( layer.rendered ) {
-            renderLegend($layer, type, layer);
+            renderLegend($layer, group, layer);
         }
         if ( top ) {
             $parent.prepend($layer);
@@ -165,7 +163,7 @@ wv.layers.active = wv.layers.active || function(models, config, spec) {
         }
     };
 
-    var renderLegend = function($parent, type, layer) {
+    var renderLegend = function($parent, group, layer) {
         var $div = $("<div></div>");
         var $container = $("<span></span>")
             .addClass("palette");
@@ -220,17 +218,16 @@ wv.layers.active = wv.layers.active || function(models, config, spec) {
             labelHeight += $(this).outerHeight(true);
         });
         container_height -= labelHeight;
-        var types = ["baselayers", "overlays"];
-        $.each(types, function(i, type) {
+        $.each(["baselayers", "overlays"], function(i, group) {
             var actual_height = 0;
             var count = 0;
-            $('#' + type + ' li').each(function() {
+            $('#' + group + ' li').each(function() {
                 actual_height += $(this).outerHeight(true);
                 count++;
             });
 
             heights.push({
-                name: type,
+                name: group,
                 height: actual_height,
                 count: count
             });
@@ -280,23 +277,22 @@ wv.layers.active = wv.layers.active || function(models, config, spec) {
 
     var removeLayer = function(event) {
         var $target = $(event.target);
-        model.remove($target.attr("data-layer-type"),
-                     $target.attr("data-layer"));
+        model.remove($target.attr("data-layer"));
     };
 
-    var onLayerRemoved = function(layer, type) {
-        var layerSelector = "#" + type + "-" + Worldview.id(layer.id);
+    var onLayerRemoved = function(layer) {
+        var layerSelector = "#" + layer.group + "-" + Worldview.id(layer.id);
         $(layerSelector).remove();
         adjustCategoryHeights();
     };
 
-    var onLayerAdded = function(layer, type) {
-        var $container = $("#" + type);
+    var onLayerAdded = function(layer) {
+        var $container = $("#" + layer.group);
         var api = $container.data("jsp");
         if ( api ) {
             $container = api.getContentPane();
         }
-        renderLayer($container, types[type], layer, "top");
+        renderLayer($container, groups[layer.group], layer, "top");
         if ( layer.rendered ) {
             renderLegendCanvas(layer);
         }
@@ -316,15 +312,14 @@ wv.layers.active = wv.layers.active || function(models, config, spec) {
         var $target = ui.item;
         var $next = $target.next();
         if ( $next.length ) {
-            model.moveBefore($target.attr("data-layer-type"),
-                    $target.attr("data-layer"), $next.attr("data-layer"));
+            model.moveBefore($target.attr("data-layer"),
+                    $next.attr("data-layer"));
         } else {
-            model.pushToBottom($target.attr("data-layer-type"),
-                    $target.attr("data-layer"));
+            model.pushToBottom($target.attr("data-layer"));
         }
     };
 
-    var onLayerUpdate = function(type, layer, newIndex) {
+    var onLayerUpdate = function(group, layer, newIndex) {
         // Scroll pane can be kind of glitchy, so just show what the
         // current state is.
         // Timeout prevents redraw artifacts

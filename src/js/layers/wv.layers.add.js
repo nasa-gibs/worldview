@@ -82,7 +82,7 @@ wv.layers.add = wv.layers.add || function(models, config) {
         setTimeout(resize, 1);
     };
 
-    var renderType = function($parent, type, header, camelCase) {
+    var renderType = function($parent, group, header, camelCase) {
         var $container = $("<div></div>")
             .attr("id", self.id + camelCase)
             .addClass("categoryContainer");
@@ -92,13 +92,13 @@ wv.layers.add = wv.layers.add || function(models, config) {
             .html(header);
 
         var $element = $("<ul></ul>")
-            .attr("id", self.id + type)
+            .attr("id", self.id + group)
             .addClass(self.id + "category")
             .addClass("category")
             .addClass("scroll-pane");
 
-        $.each(config.layerOrder[type], function(index, layerId) {
-            renderLayer($element, type, layerId);
+        $.each(config.layerOrder[group], function(index, layerId) {
+            renderLayer($element, group, layerId);
         });
 
         $container.append($header);
@@ -106,7 +106,7 @@ wv.layers.add = wv.layers.add || function(models, config) {
         $parent.append($container);
     };
 
-    var renderLayer = function($parent, type, layerId) {
+    var renderLayer = function($parent, group, layerId) {
         var layer = config.layers[layerId];
         if ( !layer ) {
             console.warn("Skipping unknown layer", layerId);
@@ -135,12 +135,11 @@ wv.layers.add = wv.layers.add || function(models, config) {
             .attr("id", Worldview.id(layer.id))
             .attr("value", layer.id)
             .attr("type", "checkbox")
-            .attr("data-layer", layer.id)
-            .attr("data-layer-type", type);
-        if ( type === "baselayers" ) {
-            $checkbox.attr("name", type);
+            .attr("data-layer", layer.id);
+        if ( group === "baselayers" ) {
+            $checkbox.attr("name", group);
         }
-        if ( model.isActive(type, layer.id) ) {
+        if ( model.isActive(layer.id) ) {
             $checkbox.attr("checked", "checked");
         }
 
@@ -164,10 +163,10 @@ wv.layers.add = wv.layers.add || function(models, config) {
         });
         container_height -= labelHeight;
 
-        $.each(["baselayers", "overlays"], function(i, type) {
+        $.each(["baselayers", "overlays"], function(i, group) {
             var actual_height = 0;
             var count = 0;
-            $(self.selector + type + ' li').each(function() {
+            $(self.selector + group + ' li').each(function() {
                 if ( $(this).is(":visible") ) {
                     actual_height += $(this).outerHeight(true);
                     count++;
@@ -175,7 +174,7 @@ wv.layers.add = wv.layers.add || function(models, config) {
             });
 
             heights.push({
-                name: self.id + type,
+                name: self.id + group,
                 height: actual_height,
                 count: count
             });
@@ -234,13 +233,11 @@ wv.layers.add = wv.layers.add || function(models, config) {
         if ( $target.is(':checked') ) {
 
             $target.attr('checked', false);
-            model.remove($target.attr("data-layer-type"),
-                         $target.attr("data-layer"));
+            model.remove($target.attr("data-layer"));
         } else {
             $target.attr('checked', true);
-            model.add($target.attr("data-layer-type"),
-                      $target.attr("data-layer"));
-            }
+            model.add($target.attr("data-layer"));
+        }
     };
 
     var onLayerAdded = function(layer) {

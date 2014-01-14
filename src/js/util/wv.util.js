@@ -23,6 +23,24 @@ var wv = wv || {};
 wv.util = (function(self) {
 
     /**
+     * Layer groups: baselayers and overlays
+     *
+     * @attribute LAYER_GROUPS
+     */
+    self.LAYER_GROUPS = {
+        baselayers: {
+            id: "baselayers",
+            camel: "BaseLayers",
+            description: "Base Layers"
+        },
+        overlays: {
+            id: "overlays",
+            camel: "Overlays",
+            description: "Overlays"
+        }
+    };
+
+    /**
      * Creates an object representation of a query string.
      *
      * For example, for the given query string, ``"?foo=a&bar=b"``, the

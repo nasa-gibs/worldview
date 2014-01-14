@@ -25,7 +25,9 @@ wv.proj.model = wv.proj.model || function(config) {
     self.events = wv.util.events();
 
     var init = function() {
-        self.select(config.defaults.projection);
+        if ( config.defaults && config.defaults.projection ) {
+            self.select(config.defaults.projection);
+        }
         _.each(config.projections, function(proj) {
             self.register(proj.crs, proj.proj4);
         });

@@ -47,6 +47,15 @@ buster.testCase("wv.proj.change", {
         };
         this.stub(wv.ui, "notify");
         this.stub(window, "$").returns({ on: this.stub() });
+
+        // FIXME: Remove this once refactoring is complete
+        window.Worldview = {};
+        window.Worldview.Map = {};
+        window.Worldview.Map.COORDINATE_CONTROLS = {
+            arctic: {},
+            antarctic: {},
+            geographic: {}
+        };
     },
 
     "Initializes with new projection": function() {
