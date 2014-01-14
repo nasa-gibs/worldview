@@ -1,0 +1,26 @@
+#!/bin/bash
+#
+# NASA Worldview
+#
+# This code was originally developed at NASA/Goddard Space Flight Center for
+# the Earth Science Data and Information System (ESDIS) project.
+#
+# Copyright (C) 2013 - 2014 United States Government as represented by the
+# Administrator of the National Aeronautics and Space Administration.
+# All Rights Reserved.
+#
+
+BASEDIR=$(dirname "$0")
+DESTDIR="$BASEDIR"/../build/gc
+[ "$BASEURL" ] || BASEURL="http://map1.vis.earthdata.nasa.gov"
+
+mkdir -p $DESTDIR
+curl "$BASEURL"/wmts-geo/wmts.cgi?request=GetCapabilities \
+    > $DESTDIR/gibs-geographic.xml
+curl "$BASEURL"/wmts-arctic/wmts.cgi?request=GetCapabilities \
+    > $DESTDIR/gibs-arctic.xml
+curl "$BASEURL"/wmts-antarctic/wmts.cgi?request=GetCapabilities \
+    > $DESTDIR/gibs-antarctic.xml
+
+
+

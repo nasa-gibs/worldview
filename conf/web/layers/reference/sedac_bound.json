@@ -12,6 +12,7 @@
             "tileSize": [ 512, 512 ],
 
             "opacity":          0.95,
+            "noTransition":     "true",
 
             "projections": {
                 "geographic": {

@@ -1,5 +1,15 @@
-#!/usr/bin/python
-
+#!/usr/bin/env python
+#
+# NASA Worldview
+#
+# This code was originally developed at NASA/Goddard Space Flight Center for
+# the Earth Science Data and Information System (ESDIS) project.
+#
+# Copyright (C) 2013 - 2014 United States Government as represented by the
+# Administrator of the National Aeronautics and Space Administration.
+# All Rights Reserved.
+#
+ 
 from copy import deepcopy
 from optparse import OptionParser
 import os
@@ -35,21 +45,32 @@ def dict_merge(target, *args):
 
 
 # MAIN
+input_dir = os.path.join(base_dir, "conf", "web")
+
 parser = OptionParser(usage="Usage: %s [options]" % prog,
                       version="%s version %s" % (prog, version),
                       epilog=help_description)
+parser.add_option("-i", "--input-dir", default=input_dir,
+                  help="Use this as the input directory instead of " +
+                  input_dir)
 parser.add_option("-m", "--minify", action="store_true",
                   help="minify the output instead of pretty printing")
+
 (options, args) = parser.parse_args()
 
-input_dir = os.path.join(base_dir, "conf", "web")
+input_dir = options.input_dir
+
 conf = {}
 for root, dirs, files in os.walk(input_dir):
     for file in files:
-        sys.stderr.write(os.path.join(root, file) + "\n")
-        with open(os.path.join(root, file)) as fp:
-            data = json.load(fp)
-        dict_merge(conf, data)
+        try:
+            with open(os.path.join(root, file)) as fp:
+                data = json.load(fp)
+            dict_merge(conf, data)
+        except Exception as e:
+            sys.stderr.write("ERROR: %s: %s\n" % 
+                             (os.path.join(root, file), str(e)))   
+            sys.exit(1)      
                     
 json_options = {}
 if not options.minify:

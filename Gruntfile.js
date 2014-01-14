@@ -49,8 +49,8 @@ module.exports = function(grunt) {
             // keeps the originals pristine.
             config: {
                 files: [
-                    { expand: true, cwd: "etc/config/",
-                      src: "config/**", dest: "build" }
+                    { expand: true,
+                      src: "conf/**", dest: "build" }
                 ]
             },
 
@@ -123,30 +123,24 @@ module.exports = function(grunt) {
         },
 
         exec: {
-            // Create Worldview color palettes from ACT files provided by
-            // the Earth Observatory
-            act: {
-                command: "python etc/config/act2json.py build/config/palettes"
+            config_fetch: {
+                command: "bin/fetch-gibs"
             },
 
-            // Create Worldview color palettes from VRT files provided by
-            // the GIBS team
-            vrt: {
-                command: "python etc/config/vrt2json.py " +
-                            "--layers-dir build/config/layers " +
-                            "build/config/palettes"
+            config_gc: {
+                command: "bin/gibs2wv build/gc/* > build/conf/web/gc.json"
             },
 
             // Combine all configuration json files into one.
             config: {
-                command: "bin/conf-cat > " +
+                command: "bin/conf-cat --input-dir build/conf/web > " +
                             "build/worldview-debug/web/data/config.json"
             },
 
             // Create a minified verison of the configuration file for
             // the release web root.
             config_min: {
-                command: "bin/conf-cat " +
+                command: "bin/conf-cat --input-dir build/conf/web " +
                             "--minify " +
                             "> build/config.min.json"
             },
@@ -154,9 +148,8 @@ module.exports = function(grunt) {
             // Creates a combined configuration file for use in the source
             // tree
             config_src: {
-                command: "python etc/config/generate-config.py " +
-                            "--config-dir build/config " +
-                            "--output src/data/config.json"
+                command: "bin/conf-cat --input-dir build/conf/web " +
+                            "> src/data/config.json"
             },
 
             // After removing JavaScript and CSS files that are no longer
@@ -449,17 +442,17 @@ module.exports = function(grunt) {
     grunt.registerTask("config", [
         "clean",
         "copy:config",
-        "exec:act",
-        "exec:vrt",
-        "exec:config_src",
+        "exec:config_fetch",
+        "exec:config_gc",
+        "exec:config_src"
     ]);
 
     grunt.registerTask("build", [
         "clean",
         "copy:source",
         "copy:config",
-        "exec:act",
-        "exec:vrt",
+        "exec:config_fetch",
+        "exec:config_gc",
         "exec:config",
         "concat",
         "replace:timestamp",

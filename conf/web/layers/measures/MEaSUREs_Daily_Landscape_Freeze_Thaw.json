@@ -6,6 +6,10 @@
             "subtitle": "Aqua / AMSR-E / NSIDC",
             "group":    "overlays",
             "period":   "daily",
+
+            "startDate":    "2002-06-19",
+            "endDate":      "2011-09-27",
+
             "format":   "image/png",
             "type":     "wmts",
             "tileSize": [ 512, 512 ],

@@ -76,9 +76,13 @@ Worldview.Map.LayerSet = function(config, projId, layerId) {
             serverResolutions: matrixSet.serverResolutions,
             maxExtent: proj.maxExtent,
             tileSize: new OpenLayers.Size(layer.tileSize[0],
-                                          layer.tileSize[1]),
-            transitionEffect: "resize"
+                                          layer.tileSize[1])
         };
+        if ( layer.noTransition ) {
+            param.transitionEffect = "nonw";
+        } else {
+            param.transitionEffect = "resize";
+        }
         var layer = new OpenLayers.Layer.WMTS(param);
         if ( options && options.time ) {
             layer.mergeNewParams({"time": options.time});
