@@ -11,15 +11,9 @@
 
 buster.testCase("wv.date.model", {
 
-    config: null,
     now: null,
 
     setUp: function() {
-        this.config = {
-            defaults: {
-                archiveStartDate: "2013-01-01"
-            }
-        };
         var now = new Date(Date.UTC(2013, 0, 15));
         this.now = now;
         this.stub(wv.util, "now").returns(now);
@@ -34,26 +28,8 @@ buster.testCase("wv.date.model", {
 
     "Initializes with a specified date": function() {
         var initial = new Date(Date.UTC(2013, 0, 5));
-        var date = wv.date.model(this.config, { initial: initial });
+        var date = wv.date.model({ initial: initial });
         buster.assert.equals(date.selected, initial);
-    },
-
-    "Initializes with archive start date": function() {
-        var date = wv.date.model(this.config);
-        buster.assert.equals(date.archiveStartDate.getUTCFullYear(), 2013);
-        buster.assert.equals(date.archiveStartDate.getUTCMonth(), 0);
-        buster.assert.equals(date.archiveStartDate.getUTCDate(), 1);
-    },
-
-    "Exception thrown on invalid archive start date": function() {
-        var config = {
-            defaults: {
-                archiveStartDate: "foo"
-            }
-        };
-        buster.assert.exception(function() {
-            var date = wv.date.model(config);
-        });
     },
 
     "Select new date": function() {
@@ -64,6 +40,28 @@ buster.testCase("wv.date.model", {
         date.select(d);
         buster.assert.equals(date.selected, d);
         buster.assert.calledWith(listener, d);
+    },
+
+    "Date before start date selects start date": function() {
+        var model = wv.date.model(this.config);
+        model.range({
+            start: wv.util.parseDateUTC("2013-01-01"),
+            end: wv.util.parseDateUTC("2013-12-31")
+        });
+        model.select(wv.util.parseDateUTC("2012-03-15"));
+        buster.assert.equals(wv.util.toISOStringDate(model.selected),
+            "2013-01-01");
+    },
+
+    "Date after end date selects end date": function() {
+        var model = wv.date.model(this.config);
+        model.range({
+            start: wv.util.parseDateUTC("2013-01-01"),
+            end: wv.util.parseDateUTC("2013-12-31")
+        });
+        model.select(wv.util.parseDateUTC("2014-03-15"));
+        buster.assert.equals(wv.util.toISOStringDate(model.selected),
+            "2013-12-31");
     },
 
     "To permalink": function() {

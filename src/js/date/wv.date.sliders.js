@@ -34,9 +34,6 @@ wv.date.sliders = wv.date.sliders || function(models, config) {
     var model = models.date;
 
     var self = {};
-
-    self.startDate = new Date(Date.UTC(2000, 0, 1, 0, 0, 0));
-    self.endDate = wv.util.today();
     self.isCollapsed = false;
 
     var init = function() {
@@ -52,6 +49,9 @@ wv.date.sliders = wv.date.sliders || function(models, config) {
 
         model.events.on("select", function(date) {
             update();
+        });
+        model.events.on("range", function() {
+            validate();
         });
         $(window).on("resize", refreshSliders);
         update();
@@ -168,7 +168,15 @@ wv.date.sliders = wv.date.sliders || function(models, config) {
             .css('width', handleWidth + "px");
     };
 
+    var resetting = {
+        Year: false,
+        Month: false,
+        Day: false
+    };
     var handleSlide = function(e, ui) {
+        if ( !models.date.start || !models.date.end ) {
+            return;
+        }
         var value = e.target.value;
         var type = e.data.type;
         var oldDate = model.selected;
@@ -193,7 +201,11 @@ wv.date.sliders = wv.date.sliders || function(models, config) {
             }
             model.select(newDate);
         } else {
-            update();
+            if ( !resetting[type] ) {
+                resetting[type] = true;
+                update();
+                resetting[type] = false;
+            }
         }
         validate();
 
@@ -262,19 +274,25 @@ wv.date.sliders = wv.date.sliders || function(models, config) {
 
     var validate = function() {
         var curr = new Date(model.selected.getTime());
-        var startYear = self.startDate.getUTCFullYear();
-        var startMonth = self.startDate.getUTCMonth();
-        var startDay = self.startDate.getUTCDate();
-        var endYear = self.endDate.getUTCFullYear();
-        var endMonth = self.endDate.getUTCMonth();
-        var endDay = self.endDate.getUTCDate();
+        var disabled = false;
+        var startYear, startMonth, startDay, endYear, endMonth, endDay;
+        if ( !models.date.start || !models.date.end ) {
+            disabled = true;
+        } else {
+            startYear = models.date.start.getUTCFullYear();
+            startMonth = models.date.start.getUTCMonth();
+            startDay = models.date.start.getUTCDate();
+            endYear = models.date.end.getUTCFullYear();
+            endMonth = models.date.end.getUTCMonth();
+            endDay = models.date.end.getUTCDate();
+        }
         for ( var type in sliders ) {
             ranges[type] = { min: Number.MAX_VALUE, max: -Number.MAX_VALUE };
             for ( var i = 0; i < sliders[type].length; ++i ) {
                 var descriptor = id + type + "sliderItem" + i;
                 if ( type === "Year" ) {
                     var year = sliders[type][i];
-                    if ( year < startYear || year > endYear) {
+                    if ( disabled || year < startYear || year > endYear) {
                         $("#" + descriptor).addClass("disabledItem");
                     }
                     else {
@@ -284,7 +302,7 @@ wv.date.sliders = wv.date.sliders || function(models, config) {
                     }
                 }
                 if ( type === "Month"){
-                    if ( (curr.getUTCFullYear() == startYear && i < startMonth) || (curr.getUTCFullYear() == endYear && i > endMonth) ) {
+                    if ( disabled || (curr.getUTCFullYear() == startYear && i < startMonth) || (curr.getUTCFullYear() == endYear && i > endMonth) ) {
                         $("#" + descriptor).addClass("disabledItem");
                     }
                     else {
@@ -294,7 +312,7 @@ wv.date.sliders = wv.date.sliders || function(models, config) {
                     }
                 }
                 if ( type === "Day" ) {
-                    if( (sliders[type][i] > months[curr.getUTCMonth()]) || (curr.getUTCFullYear() == startYear && curr.getUTCMonth() == startMonth && sliders[type][i] < startDay) ||  (curr.getUTCFullYear() == endYear && curr.getUTCMonth() == endMonth && sliders[type][i] > endDay) ){
+                    if( disabled || (sliders[type][i] > months[curr.getUTCMonth()]) || (curr.getUTCFullYear() == startYear && curr.getUTCMonth() == startMonth && sliders[type][i] < startDay) ||  (curr.getUTCFullYear() == endYear && curr.getUTCMonth() == endMonth && sliders[type][i] > endDay) ){
                         $("#" + descriptor).addClass("disabledItem");
                     }
                     else {

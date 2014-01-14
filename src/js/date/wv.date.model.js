@@ -23,26 +23,15 @@ wv.date = wv.date || {};
  *
  * @class wv.date.model
  * @constructor
- * @param {String} config.defaults.archiveStartDate the earliest day in
- * the archive that has data in the form of ``YYYY-MM-DD``.
  * @param {Date} [spec.initial] initial date. If not specified,
  * UTC today is used.
  */
 
-wv.date.model = wv.date.model || function(config, spec) {
+wv.date.model = wv.date.model || function(spec) {
 
-    config = config || {};
     spec = spec || {};
 
     var self = {};
-
-    /**
-     * Earliest date which contains archived data.
-     *
-     * @attribute archiveStartDate
-     * @type {Date}
-     */
-    self.archiveStartDate = null;
 
     /**
      * Use this to register listeners for when the date changes.
@@ -60,12 +49,10 @@ wv.date.model = wv.date.model || function(config, spec) {
      */
     self.selected = null;
 
+    self.start = null;
+    self.end = null;
+
     var init = function() {
-        var start = ( config.defaults ) ? config.defaults.archiveStartDate :
-                null;
-        if ( start ) {
-            self.archiveStartDate = wv.util.parseDateUTC(start);
-        }
         var initial = spec.initial || wv.util.today();
         self.select(initial);
     };
@@ -81,10 +68,10 @@ wv.date.model = wv.date.model || function(config, spec) {
      * @return {Boolean} true if the date was updated, otherwise false.
      */
     self.select = function(date) {
-        if ( date < self.archiveStartDate ) {
-            date = self.archiveStartDate;
-        } else if ( date > wv.util.today() ) {
-            date = wv.util.today();
+        if ( self.start && date < self.start ) {
+            date = self.start;
+        } else if ( self.end && date > self.end ) {
+            date = self.end;
         }
 
         var updated = false;
@@ -126,6 +113,18 @@ wv.date.model = wv.date.model || function(config, spec) {
                 wv.util.warn("Invalid date: " + query.time + ": " + error);
             }
         }
+    };
+
+    self.range = function(range) {
+        if ( range ) {
+            self.start = range.start;
+            self.end = range.end;
+        } else {
+            self.start = null;
+            self.end = null;
+        }
+        self.select(self.selected);
+        self.events.trigger("range");
     };
 
     init();

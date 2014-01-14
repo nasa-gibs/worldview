@@ -25,19 +25,24 @@ buster.testCase("wv.layers.model", {
                 "geographic": {}
             },
             layers: {
-                "layer1": {
-                    id: "layer1",
+                "historical_1": {
+                    id: "historical_1",
                     startDate: "2000-01-01",
                     endDate: "2002-01-01",
                     group: "overlays"
                 },
-                "layer2": {
-                    id: "layer2",
+                "historical_2": {
+                    id: "historical_2",
                     startDate: "2001-01-01",
                     endDate: "2003-01-01",
                     group: "overlays"
                 },
-                "static: {
+                "active_1": {
+                    id: "active_1",
+                    startDate: "2005-01-01",
+                    group: "overlays"
+                },
+                "static": {
                     id: "static",
                     group: "overlays"
                 }
@@ -50,22 +55,32 @@ buster.testCase("wv.layers.model", {
     },
 
     "Date range with one layer": function() {
-        this.model.add("layer1");
+        this.model.add("historical_1");
         var range = this.model.dateRange();
-        buster.assert.equals(range.min.getTime(),
+        buster.assert.equals(range.start.getTime(),
             new Date(Date.UTC(2000, 0, 1)).getTime());
-        buster.assert.equals(range.max.getTime(),
+        buster.assert.equals(range.end.getTime(),
             new Date(Date.UTC(2002, 0, 1)).getTime());
     },
 
     "Date range with two layers": function() {
-        this.model.add("layer1");
-        this.model.add("layer2");
+        this.model.add("historical_1");
+        this.model.add("historical_2");
         var range = this.model.dateRange();
-        buster.assert.equals(range.min.getTime(),
+        buster.assert.equals(range.start.getTime(),
             new Date(Date.UTC(2000, 0, 1)).getTime());
-        buster.assert.equals(range.max.getTime(),
+        buster.assert.equals(range.end.getTime(),
             new Date(Date.UTC(2003, 0, 1)).getTime());
+    },
+
+    "End of date range is today if no end date": function() {
+        this.stub(wv.util, "today").returns(new Date(Date.UTC(2010, 0, 1)));
+        this.model.add("active_1");
+        var range = this.model.dateRange();
+        buster.assert.equals(range.start.getTime(),
+            new Date(Date.UTC(2005, 0, 1)).getTime());
+        buster.assert.equals(range.end.getTime(),
+            new Date(Date.UTC(2010, 0, 1)).getTime());
     },
 
     "No date range with static": function() {

@@ -81,12 +81,21 @@ wv.layers.model = wv.layers.model || function(models, config) {
                     var end = wv.util.parseDateUTC(layer.endDate).getTime();
                     max = Math.max(max, end);
                 }
+                // If there is a start date but no end date, this is a
+                // product that is currently being created each day, set
+                // the max day to today.
+                if ( layer.startDate && !layer.endDate ) {
+                    max = wv.util.today().getTime();
+                }
             });
         });
         if ( range ) {
+            if ( max === 0 ) {
+                max = wv.util.today().getTime();
+            }
             return {
-                min: new Date(min),
-                max: new Date(max)
+                start: new Date(min),
+                end: new Date(max)
             };
         };
     };

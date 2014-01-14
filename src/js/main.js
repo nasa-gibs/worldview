@@ -90,16 +90,26 @@ $(function() {// Initialize "static" vars
         if ( initialDate.getUTCHours() < 3 ) {
             initialDate.setUTCDate(initialDate.getUTCDate() - 1);
         }
-        models.date = wv.date.model(config, { initial: initialDate });
-        models.palettes = wv.palette.model();
         models.proj = wv.proj.model(config);
         models.layers = wv.layers.model(models, config);
+        models.date = wv.date.model({ initial: initialDate });
+        models.palettes = wv.palette.model();
         var dataDownloadModel = Worldview.DataDownload.Model(config, {
             layersModel: models.layers
         });
         models.dataDownload = dataDownloadModel;
         models.link = wv.link.model(config);
         wv.models = models;
+
+        // Wirings
+        var updateDateRange = function() {
+            models.date.range(models.layers.dateRange());
+        };
+        models.layers.events
+                .on("add", updateDateRange)
+                .on("remove", updateDateRange)
+                .on("update", updateDateRange);
+        updateDateRange();
 
         // These are only convienence handles to important objects used
         // for console debugging. Code should NOT reference these as they
