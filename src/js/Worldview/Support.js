@@ -150,7 +150,6 @@ Worldview.namespace("Support");
                 }
                 if (mobile){
                     $(".layerPicker a[href='#DataDownload']").hide();
-                    console.log("hey hey");
                 }
                 window.scrollTo(0, 1);
             }, false);
