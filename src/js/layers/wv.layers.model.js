@@ -97,7 +97,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
                 start: new Date(min),
                 end: new Date(max)
             };
-        };
+        }
     };
 
     self.count = function(type, proj) {
@@ -153,7 +153,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
             var layersClone = layers.slice(0);
             $.each(layersClone, function(i, layer) {
                 if ( proj && layer.projections[proj] ) {
-                    self.remove(type, layer.id);
+                    self.remove(layer.id);
                 }
             });
         });
@@ -232,15 +232,15 @@ wv.layers.model = wv.layers.model || function(models, config) {
             // Base layers / overlays
             var sections = values.split("~");
             $.each(sections, function(i, section) {
-                var type = null;
+                var group = null;
                 $.each(sections, function(i, section) {
                     var items = section.split(/[,\.]/);
                     var layers = [];
                     $.each(items, function(index, item) {
                         if ( index === 0 ) {
-                            type = item;
-                            if ( !Worldview.LAYER_TYPES[type] ) {
-                                wv.util.warn("Invalid layer type: " + type);
+                            group = item;
+                            if ( !wv.util.LAYER_GROUPS[group] ) {
+                                wv.util.warn("Invalid layer group: " + group);
                                 return false;
                             }
                         } else {
@@ -249,18 +249,18 @@ wv.layers.model = wv.layers.model || function(models, config) {
                                 item = item.substring(1);
                             }
                             // Layers have to be added in reverse
-                            layers.unshift({name: item, hidden: hidden});
+                            layers.unshift({id: item, hidden: hidden});
                         }
                     });
                     $.each(layers, function(index, layer) {
-                        var redirect = config.redirects.layers[layer.name];
+                        var redirect = config.redirects.layers[layer.id];
                         if ( redirect ) {
-                            layer.name = redirect;
+                            layer.id = redirect;
                         }
                         try {
-                            self.add(type, layer.name, layer.hidden);
+                            self.add(layer.id, layer.hidden);
                         } catch ( error ) {
-                            wv.util.warn("Invalid layer: " + layer);
+                            wv.util.warn("Invalid layer: " + layer.id);
                         }
                     });
                 });

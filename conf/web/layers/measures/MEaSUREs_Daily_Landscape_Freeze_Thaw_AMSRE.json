@@ -1,14 +1,14 @@
 {
     "layers": {
-        "MEaSUREs_Daily_Landscape_Freeze_Thaw": {
-            "id":       "MEaSUREs_Daily_Landscape_Freeze_Thaw",
+        "MEaSUREs_Daily_Landscape_Freeze_Thaw_AMSRE": {
+            "id":       "MEaSUREs_Daily_Landscape_Freeze_Thaw_AMSRE",
             "title":    "Freeze/Thaw (Daily Landscape)",
             "subtitle": "Aqua / AMSR-E / NSIDC",
             "group":    "overlays",
             "period":   "daily",
 
-            "startDate":    "2002-06-19",
-            "endDate":      "2011-09-27",
+            "startDate":    "2005-01-01",
+            "endDate":      "2005-01-07",
 
             "format":   "image/png",
             "type":     "wmts",
