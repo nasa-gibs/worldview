@@ -123,12 +123,8 @@ module.exports = function(grunt) {
         },
 
         exec: {
-            config_fetch: {
-                command: "bin/fetch-gibs"
-            },
-
             config_gc: {
-                command: "bin/gibs2wv build/gc/* > build/conf/web/gc.json"
+                command: "bin/gibs2wv build/conf/gc/*/* > build/conf/web/gc.json"
             },
 
             // Combine all configuration json files into one.
@@ -442,7 +438,6 @@ module.exports = function(grunt) {
     grunt.registerTask("config", [
         "clean",
         "copy:config",
-        "exec:config_fetch",
         "exec:config_gc",
         "exec:config_src"
     ]);
@@ -451,7 +446,6 @@ module.exports = function(grunt) {
         "clean",
         "copy:source",
         "copy:config",
-        "exec:config_fetch",
         "exec:config_gc",
         "exec:config",
         "concat",
