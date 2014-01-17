@@ -3,7 +3,7 @@
         "MEaSUREs_Daily_Landscape_Freeze_Thaw_AMSRE": {
             "id":       "MEaSUREs_Daily_Landscape_Freeze_Thaw_AMSRE",
             "title":    "Freeze/Thaw (Daily Landscape)",
-            "subtitle": "Aqua / AMSR-E / NSIDC",
+            "subtitle": "Aqua / AMSR-E",
             "group":    "overlays",
             "period":   "daily",
 

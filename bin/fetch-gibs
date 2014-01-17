@@ -17,10 +17,10 @@ DESTDIR="$BASEDIR"/../build/gc
 mkdir -p $DESTDIR
 curl "$BASEURL"/wmts-geo/wmts.cgi?request=GetCapabilities \
     > $DESTDIR/gibs-geographic.xml
-#curl "$BASEURL"/wmts-arctic/wmts.cgi?request=GetCapabilities \
-#    > $DESTDIR/gibs-arctic.xml
-#curl "$BASEURL"/wmts-antarctic/wmts.cgi?request=GetCapabilities \
-#    > $DESTDIR/gibs-antarctic.xml
+curl "$BASEURL"/wmts-arctic/wmts.cgi?request=GetCapabilities \
+    > $DESTDIR/gibs-arctic.xml
+curl "$BASEURL"/wmts-antarctic/wmts.cgi?request=GetCapabilities \
+    > $DESTDIR/gibs-antarctic.xml
 
 
 

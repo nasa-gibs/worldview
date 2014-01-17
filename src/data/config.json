@@ -143,9 +143,17 @@
             ],
             "period": "daily",
             "projections": {
+                "antarctic": {
+                    "source": "GIBS:antarctic",
+                    "matrixSet": "GIBS:EPSG3031_1km"
+                },
                 "geographic": {
                     "source": "GIBS:geographic",
                     "matrixSet": "GIBS:EPSG4326_1km"
+                },
+                "arctic": {
+                    "source": "GIBS:arctic",
+                    "matrixSet": "GIBS:EPSG3413_1km"
                 }
             },
             "type": "wmts",
@@ -349,9 +357,17 @@
             ],
             "period": "daily",
             "projections": {
+                "antarctic": {
+                    "source": "GIBS:antarctic",
+                    "matrixSet": "GIBS:EPSG3031_250m"
+                },
                 "geographic": {
                     "source": "GIBS:geographic",
                     "matrixSet": "GIBS:EPSG4326_250m"
+                },
+                "arctic": {
+                    "source": "GIBS:arctic",
+                    "matrixSet": "GIBS:EPSG3413_250m"
                 }
             },
             "type": "wmts",
@@ -415,9 +431,17 @@
             ],
             "period": "daily",
             "projections": {
+                "antarctic": {
+                    "source": "GIBS:antarctic",
+                    "matrixSet": "GIBS:EPSG3031_1km"
+                },
                 "geographic": {
                     "source": "GIBS:geographic",
                     "matrixSet": "GIBS:EPSG4326_1km"
+                },
+                "arctic": {
+                    "source": "GIBS:arctic",
+                    "matrixSet": "GIBS:EPSG3413_1km"
                 }
             },
             "type": "wmts",
@@ -483,9 +507,17 @@
             ],
             "period": "daily",
             "projections": {
+                "antarctic": {
+                    "source": "GIBS:antarctic",
+                    "matrixSet": "GIBS:EPSG3031_1km"
+                },
                 "geographic": {
                     "source": "GIBS:geographic",
                     "matrixSet": "GIBS:EPSG4326_1km"
+                },
+                "arctic": {
+                    "source": "GIBS:arctic",
+                    "matrixSet": "GIBS:EPSG3413_1km"
                 }
             },
             "type": "wmts",
@@ -601,6 +633,7 @@
         },
         "Sea_Surface_Temp_Microwave": {
             "startDate": "2013-04-13",
+            "endDate": "2014-01-16",
             "format": "image/png",
             "tileSize": [
                 512,
@@ -616,22 +649,24 @@
             "type": "wmts",
             "id": "Sea_Surface_Temp_Microwave"
         },
-        "MODIS_Terra_Cloud_Top_Temp_Night": {
-            "startDate": "2012-05-08",
-            "format": "image/png",
+        "antarctic_coastlines": {
+            "group": "overlays",
             "tileSize": [
                 512,
                 512
             ],
-            "period": "daily",
+            "format": "image/png",
+            "title": "Coastlines",
             "projections": {
-                "geographic": {
-                    "source": "GIBS:geographic",
-                    "matrixSet": "GIBS:EPSG4326_2km"
+                "arctic": {
+                    "source": "GIBS:antarctic",
+                    "matrixSet": "GIBS:EPSG3031_250m"
                 }
             },
+            "subtitle": "ADD SCAR / Coastlines",
             "type": "wmts",
-            "id": "MODIS_Terra_Cloud_Top_Temp_Night"
+            "id": "antarctic_coastlines",
+            "tags": "borders"
         },
         "AIRS_CO_Total_Column_Day": {
             "startDate": "2012-05-08",
@@ -676,9 +711,17 @@
             ],
             "period": "daily",
             "projections": {
+                "antarctic": {
+                    "source": "GIBS:antarctic",
+                    "matrixSet": "GIBS:EPSG3031_250m"
+                },
                 "geographic": {
                     "source": "GIBS:geographic",
                     "matrixSet": "GIBS:EPSG4326_250m"
+                },
+                "arctic": {
+                    "source": "GIBS:arctic",
+                    "matrixSet": "GIBS:EPSG3413_250m"
                 }
             },
             "type": "wmts",
@@ -703,6 +746,7 @@
         },
         "Sea_Surface_Temp_Infrared": {
             "startDate": "2013-04-13",
+            "endDate": "2014-01-16",
             "format": "image/png",
             "tileSize": [
                 512,
@@ -727,9 +771,17 @@
             ],
             "period": "daily",
             "projections": {
+                "antarctic": {
+                    "source": "GIBS:antarctic",
+                    "matrixSet": "GIBS:EPSG3031_500m"
+                },
                 "geographic": {
                     "source": "GIBS:geographic",
                     "matrixSet": "GIBS:EPSG4326_500m"
+                },
+                "arctic": {
+                    "source": "GIBS:arctic",
+                    "matrixSet": "GIBS:EPSG3413_500m"
                 }
             },
             "type": "wmts",
@@ -754,7 +806,7 @@
         },
         "Sea_Surface_Temp_Blended": {
             "startDate": "2013-04-13",
-            "endDate": "2014-01-13",
+            "endDate": "2014-01-15",
             "format": "image/png",
             "tileSize": [
                 512,
@@ -915,9 +967,17 @@
             ],
             "period": "daily",
             "projections": {
+                "antarctic": {
+                    "source": "GIBS:antarctic",
+                    "matrixSet": "GIBS:EPSG3031_1km"
+                },
                 "geographic": {
                     "source": "GIBS:geographic",
                     "matrixSet": "GIBS:EPSG4326_1km"
+                },
+                "arctic": {
+                    "source": "GIBS:arctic",
+                    "matrixSet": "GIBS:EPSG3413_1km"
                 }
             },
             "type": "wmts",
@@ -1041,9 +1101,17 @@
             ],
             "period": "daily",
             "projections": {
+                "antarctic": {
+                    "source": "GIBS:antarctic",
+                    "matrixSet": "GIBS:EPSG3031_500m"
+                },
                 "geographic": {
                     "source": "GIBS:geographic",
                     "matrixSet": "GIBS:EPSG4326_500m"
+                },
+                "arctic": {
+                    "source": "GIBS:arctic",
+                    "matrixSet": "GIBS:EPSG3413_500m"
                 }
             },
             "type": "wmts",
@@ -1092,9 +1160,17 @@
             ],
             "period": "daily",
             "projections": {
+                "antarctic": {
+                    "source": "GIBS:antarctic",
+                    "matrixSet": "GIBS:EPSG3031_1km"
+                },
                 "geographic": {
                     "source": "GIBS:geographic",
                     "matrixSet": "GIBS:EPSG4326_1km"
+                },
+                "arctic": {
+                    "source": "GIBS:arctic",
+                    "matrixSet": "GIBS:EPSG3413_1km"
                 }
             },
             "type": "wmts",
@@ -1162,9 +1238,17 @@
             ],
             "period": "daily",
             "projections": {
+                "antarctic": {
+                    "source": "GIBS:antarctic",
+                    "matrixSet": "GIBS:EPSG3031_250m"
+                },
                 "geographic": {
                     "source": "GIBS:geographic",
                     "matrixSet": "GIBS:EPSG4326_250m"
+                },
+                "arctic": {
+                    "source": "GIBS:arctic",
+                    "matrixSet": "GIBS:EPSG3413_250m"
                 }
             },
             "subtitle": "Aqua / MODIS",
@@ -1215,9 +1299,17 @@
             ],
             "period": "daily",
             "projections": {
+                "antarctic": {
+                    "source": "GIBS:antarctic",
+                    "matrixSet": "GIBS:EPSG3031_250m"
+                },
                 "geographic": {
                     "source": "GIBS:geographic",
                     "matrixSet": "GIBS:EPSG4326_250m"
+                },
+                "arctic": {
+                    "source": "GIBS:arctic",
+                    "matrixSet": "GIBS:EPSG3413_250m"
                 }
             },
             "type": "wmts",
@@ -1291,24 +1383,22 @@
             "type": "wmts",
             "id": "AIRS_Precipitation_Night"
         },
-        "antarctic_coastlines": {
-            "group": "overlays",
+        "MODIS_Terra_Cloud_Top_Temp_Night": {
+            "startDate": "2012-05-08",
+            "format": "image/png",
             "tileSize": [
                 512,
                 512
             ],
-            "format": "image/png",
-            "title": "Coastlines",
+            "period": "daily",
             "projections": {
-                "arctic": {
-                    "source": "GIBS:antarctic",
-                    "matrixSet": "GIBS:EPSG3031_250m"
+                "geographic": {
+                    "source": "GIBS:geographic",
+                    "matrixSet": "GIBS:EPSG4326_2km"
                 }
             },
-            "subtitle": "ADD SCAR / Coastlines",
             "type": "wmts",
-            "id": "antarctic_coastlines",
-            "tags": "borders"
+            "id": "MODIS_Terra_Cloud_Top_Temp_Night"
         },
         "MEaSUREs_Daily_Landscape_Freeze_Thaw_SSMI": {
             "startDate": "2005-01-01",
@@ -1359,9 +1449,17 @@
             ],
             "period": "daily",
             "projections": {
+                "antarctic": {
+                    "source": "GIBS:antarctic",
+                    "matrixSet": "GIBS:EPSG3031_250m"
+                },
                 "geographic": {
                     "source": "GIBS:geographic",
                     "matrixSet": "GIBS:EPSG4326_250m"
+                },
+                "arctic": {
+                    "source": "GIBS:arctic",
+                    "matrixSet": "GIBS:EPSG3413_250m"
                 }
             },
             "subtitle": "Terra / MODIS",
@@ -1446,9 +1544,17 @@
             ],
             "period": "daily",
             "projections": {
+                "antarctic": {
+                    "source": "GIBS:antarctic",
+                    "matrixSet": "GIBS:EPSG3031_1km"
+                },
                 "geographic": {
                     "source": "GIBS:geographic",
                     "matrixSet": "GIBS:EPSG4326_1km"
+                },
+                "arctic": {
+                    "source": "GIBS:arctic",
+                    "matrixSet": "GIBS:EPSG3413_1km"
                 }
             },
             "type": "wmts",

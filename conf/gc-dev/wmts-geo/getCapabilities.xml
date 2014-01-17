@@ -1,0 +1,2838 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Capabilities xmlns="http://www.opengis.net/wmts/1.0"
+          xmlns:ows="http://www.opengis.net/ows/1.1"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns:gml="http://www.opengis.net/gml"
+          xsi:schemaLocation="http://www.opengis.net/wmts/1.0
+                    http://schemas.opengis.net/wmts/1.0/wmtsGetCapabilities_response.xsd"
+          version="1.0.0">
+   <ows:ServiceIdentification>
+      <ows:Title>NASA Global Imagery Browse Services for EOSDIS</ows:Title>
+      <ows:Abstract>
+         Near real time imagery from multiple NASA instruments
+      </ows:Abstract>
+      <ows:Keywords>
+         <ows:Keyword>World</ows:Keyword>
+         <ows:Keyword>Global</ows:Keyword>
+      </ows:Keywords>
+      <ows:ServiceType>OGC WMTS</ows:ServiceType>
+      <ows:ServiceTypeVersion>1.0.0</ows:ServiceTypeVersion>
+      <ows:Fees>none</ows:Fees>
+      <ows:AccessConstraints>none</ows:AccessConstraints>
+   </ows:ServiceIdentification>
+   <ows:ServiceProvider>
+      <ows:ProviderName>National Aeronautics and Space Administration</ows:ProviderName>
+      <ows:ProviderSite xlink:href="http://earthdata.nasa.gov/"/>
+      <ows:ServiceContact>
+         <ows:IndividualName>Jeff Schmaltz</ows:IndividualName>
+         <ows:PositionName>Principal Support Scientist</ows:PositionName>
+         <ows:ContactInfo>
+            <ows:Address>
+               <ows:DeliveryPoint>Goddard Space Flight Center</ows:DeliveryPoint>
+               <ows:City>Greenbelt</ows:City>
+               <ows:AdministrativeArea>Maryland</ows:AdministrativeArea>
+               <ows:PostalCode>20771</ows:PostalCode>
+               <ows:Country>United States of America</ows:Country>
+               <ows:ElectronicMailAddress>support@earthdata.nasa.gov</ows:ElectronicMailAddress>
+            </ows:Address>
+         </ows:ContactInfo>
+      </ows:ServiceContact>
+   </ows:ServiceProvider>
+   <ows:OperationsMetadata>
+      <ows:Operation name="GetCapabilities">
+         <ows:DCP>
+            <ows:HTTP>
+               <ows:Get xlink:href="http://map1.vis.earthdata.nasa.gov/wmts-geo/1.0.0/WMTSCapabilities.xml">
+                  <ows:Constraint name="GetEncoding">
+                     <ows:AllowedValues>
+                        <ows:Value>RESTful</ows:Value>
+                     </ows:AllowedValues>
+                  </ows:Constraint>
+               </ows:Get>
+               <ows:Get xlink:href="http://map1.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi?">
+                  <ows:Constraint name="GetEncoding">
+                     <ows:AllowedValues>
+                        <ows:Value>KVP</ows:Value>
+                     </ows:AllowedValues>
+                  </ows:Constraint>
+               </ows:Get>
+            </ows:HTTP>
+         </ows:DCP>
+      </ows:Operation>
+      <ows:Operation name="GetTile">
+         <ows:DCP>
+            <ows:HTTP>
+               <ows:Get xlink:href="http://map1.vis.earthdata.nasa.gov/wmts-geo">
+                  <ows:Constraint name="GetEncoding">
+                     <ows:AllowedValues>
+                        <ows:Value>RESTful</ows:Value>
+                     </ows:AllowedValues>
+                  </ows:Constraint>
+               </ows:Get>
+               <ows:Get xlink:href="http://map1.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi?">
+                  <ows:Constraint name="GetEncoding">
+                     <ows:AllowedValues>
+                        <ows:Value>KVP</ows:Value>
+                     </ows:AllowedValues>
+                  </ows:Constraint>
+               </ows:Get>
+            </ows:HTTP>
+         </ows:DCP>
+      </ows:Operation>
+   </ows:OperationsMetadata>
+   <Contents>
+      <Layer>
+         <ows:Title>AMSRE_Brightness_Temp_89H_Day</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>AMSRE_Brightness_Temp_89H_Day</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2002-06-08</Default>
+           <Current>false</Current>
+           <Value>2002-06-01/2002-06-08/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/AMSRE_Brightness_Temp_89H_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>AMSRE_Brightness_Temp_89H_Night</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>AMSRE_Brightness_Temp_89H_Night</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2002-06-08</Default>
+           <Current>false</Current>
+           <Value>2002-06-01/2002-06-08/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/AMSRE_Brightness_Temp_89H_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>AMSRE_Brightness_Temp_89V_Day</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>AMSRE_Brightness_Temp_89V_Day</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2002-06-08</Default>
+           <Current>false</Current>
+           <Value>2002-06-01/2002-06-08/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/AMSRE_Brightness_Temp_89V_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>AMSRE_Brightness_Temp_89V_Night</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>AMSRE_Brightness_Temp_89V_Night</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2002-06-08</Default>
+           <Current>false</Current>
+           <Value>2002-06-01/2002-06-08/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/AMSRE_Brightness_Temp_89V_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>AIRS_CO_Total_Column_Day</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>AIRS_CO_Total_Column_Day</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/AIRS_CO_Total_Column_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>AIRS_CO_Total_Column_Night</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>AIRS_CO_Total_Column_Night</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/AIRS_CO_Total_Column_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>AIRS_Dust_Score</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>AIRS_Dust_Score</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/AIRS_Dust_Score/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>AIRS_Prata_SO2_Index_Day</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>AIRS_Prata_SO2_Index_Day</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/AIRS_Prata_SO2_Index_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>AIRS_Prata_SO2_Index_Night</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>AIRS_Prata_SO2_Index_Night</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/AIRS_Prata_SO2_Index_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>AIRS_Precipitation_Day</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>AIRS_Precipitation_Day</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/AIRS_Precipitation_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>AIRS_Precipitation_Night</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>AIRS_Precipitation_Night</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/AIRS_Precipitation_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>AIRS_RelativeHumidity_400hPa_Day</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>AIRS_RelativeHumidity_400hPa_Day</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-07-16/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/AIRS_RelativeHumidity_400hPa_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>AIRS_RelativeHumidity_400hPa_Night</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>AIRS_RelativeHumidity_400hPa_Night</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-07-16/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/AIRS_RelativeHumidity_400hPa_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>AIRS_RelativeHumidity_500hPa_Day</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>AIRS_RelativeHumidity_500hPa_Day</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-07-16/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/AIRS_RelativeHumidity_500hPa_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>AIRS_RelativeHumidity_500hPa_Night</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>AIRS_RelativeHumidity_500hPa_Night</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-07-16/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/AIRS_RelativeHumidity_500hPa_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>AIRS_RelativeHumidity_600hPa_Day</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>AIRS_RelativeHumidity_600hPa_Day</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-07-16/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/AIRS_RelativeHumidity_600hPa_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>AIRS_RelativeHumidity_600hPa_Night</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>AIRS_RelativeHumidity_600hPa_Night</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-07-16/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/AIRS_RelativeHumidity_600hPa_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>AIRS_RelativeHumidity_700hPa_Day</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>AIRS_RelativeHumidity_700hPa_Day</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-07-16/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/AIRS_RelativeHumidity_700hPa_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>AIRS_RelativeHumidity_700hPa_Night</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>AIRS_RelativeHumidity_700hPa_Night</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-07-16/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/AIRS_RelativeHumidity_700hPa_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>AIRS_RelativeHumidity_850hPa_Day</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>AIRS_RelativeHumidity_850hPa_Day</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-07-16/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/AIRS_RelativeHumidity_850hPa_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>AIRS_RelativeHumidity_850hPa_Night</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>AIRS_RelativeHumidity_850hPa_Night</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-07-16/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/AIRS_RelativeHumidity_850hPa_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>AIRS_Temperature_400hPa_Day</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>AIRS_Temperature_400hPa_Day</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-07-16/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/AIRS_Temperature_400hPa_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>AIRS_Temperature_400hPa_Night</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>AIRS_Temperature_400hPa_Night</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-07-16/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/AIRS_Temperature_400hPa_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>AIRS_Temperature_500hPa_Day</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>AIRS_Temperature_500hPa_Day</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-07-16/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/AIRS_Temperature_500hPa_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>AIRS_Temperature_500hPa_Night</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>AIRS_Temperature_500hPa_Night</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-07-16/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/AIRS_Temperature_500hPa_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>AIRS_Temperature_600hPa_Day</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>AIRS_Temperature_600hPa_Day</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-07-16/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/AIRS_Temperature_600hPa_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>AIRS_Temperature_600hPa_Night</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>AIRS_Temperature_600hPa_Night</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-07-16/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/AIRS_Temperature_600hPa_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>AIRS_Temperature_700hPa_Day</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>AIRS_Temperature_700hPa_Day</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-07-16/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/AIRS_Temperature_700hPa_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>AIRS_Temperature_700hPa_Night</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>AIRS_Temperature_700hPa_Night</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-07-16/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/AIRS_Temperature_700hPa_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>AIRS_Temperature_850hPa_Day</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>AIRS_Temperature_850hPa_Day</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-07-16/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/AIRS_Temperature_850hPa_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>AIRS_Temperature_850hPa_Night</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>AIRS_Temperature_850hPa_Night</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-07-16/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/AIRS_Temperature_850hPa_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Combined_Value_Added_AOD</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Combined_Value_Added_AOD</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-01-31/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Combined_Value_Added_AOD/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MEaSUREs_Daily_Landscape_Freeze_Thaw_AMSRE</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MEaSUREs_Daily_Landscape_Freeze_Thaw_AMSRE</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2005-01-07</Default>
+           <Current>false</Current>
+           <Value>2005-01-01/2005-01-07/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MEaSUREs_Daily_Landscape_Freeze_Thaw_AMSRE/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MEaSUREs_Daily_Landscape_Freeze_Thaw_SSMI</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MEaSUREs_Daily_Landscape_Freeze_Thaw_SSMI</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2005-01-07</Default>
+           <Current>false</Current>
+           <Value>2005-01-01/2005-01-07/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MEaSUREs_Daily_Landscape_Freeze_Thaw_SSMI/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MLS_CO_215hPa_Day</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MLS_CO_215hPa_Day</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-05-09/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MLS_CO_215hPa_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MLS_CO_215hPa_Night</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MLS_CO_215hPa_Night</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-05-09/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MLS_CO_215hPa_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MLS_H2O_46hPa_Day</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MLS_H2O_46hPa_Day</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-05-09/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MLS_H2O_46hPa_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MLS_H2O_46hPa_Night</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MLS_H2O_46hPa_Night</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-05-09/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MLS_H2O_46hPa_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MLS_HNO3_46hPa_Day</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MLS_HNO3_46hPa_Day</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-05-09/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MLS_HNO3_46hPa_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MLS_HNO3_46hPa_Night</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MLS_HNO3_46hPa_Night</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-05-09/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MLS_HNO3_46hPa_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MLS_N2O_46hPa_Day</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MLS_N2O_46hPa_Day</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-05-09/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MLS_N2O_46hPa_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MLS_N2O_46hPa_Night</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MLS_N2O_46hPa_Night</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-05-09/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MLS_N2O_46hPa_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MLS_O3_46hPa_Day</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MLS_O3_46hPa_Day</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-05-09/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MLS_O3_46hPa_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MLS_O3_46hPa_Night</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MLS_O3_46hPa_Night</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-05-09/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MLS_O3_46hPa_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MLS_SO2_147hPa_Day</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MLS_SO2_147hPa_Day</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-05-09/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MLS_SO2_147hPa_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MLS_SO2_147hPa_Night</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MLS_SO2_147hPa_Night</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-05-09/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MLS_SO2_147hPa_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MLS_Temperature_46hPa_Day</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MLS_Temperature_46hPa_Day</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-05-09/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MLS_Temperature_46hPa_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MLS_Temperature_46hPa_Night</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MLS_Temperature_46hPa_Night</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-05-09/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MLS_Temperature_46hPa_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Terra_Chlorophyll_A</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Terra_Chlorophyll_A</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-07-02/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_1km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Terra_Chlorophyll_A/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Water_Mask</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Water_Mask</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_250m</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Water_Mask/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Terra_Snow_Cover</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Terra_Snow_Cover</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_500m</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Terra_Snow_Cover/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Terra_Land_Surface_Temp_Day</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Terra_Land_Surface_Temp_Day</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_1km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Terra_Land_Surface_Temp_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Terra_Land_Surface_Temp_Night</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Terra_Land_Surface_Temp_Night</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_1km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Terra_Land_Surface_Temp_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Terra_Sea_Ice</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Terra_Sea_Ice</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_1km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Terra_Sea_Ice/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Terra_Brightness_Temp_Band31_Day</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Terra_Brightness_Temp_Band31_Day</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_1km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Terra_Brightness_Temp_Band31_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Terra_Brightness_Temp_Band31_Night</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Terra_Brightness_Temp_Band31_Night</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_1km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Terra_Brightness_Temp_Band31_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Terra_Aerosol</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Terra_Aerosol</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Terra_Aerosol/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Terra_Water_Vapor_5km_Day</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Terra_Water_Vapor_5km_Day</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Terra_Water_Vapor_5km_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Terra_Water_Vapor_5km_Night</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Terra_Water_Vapor_5km_Night</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Terra_Water_Vapor_5km_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Terra_Cloud_Top_Pressure_Day</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Terra_Cloud_Top_Pressure_Day</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Terra_Cloud_Top_Pressure_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Terra_Cloud_Top_Pressure_Night</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Terra_Cloud_Top_Pressure_Night</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Terra_Cloud_Top_Pressure_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Terra_Cloud_Top_Temp_Day</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Terra_Cloud_Top_Temp_Day</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Terra_Cloud_Top_Temp_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Terra_Cloud_Top_Temp_Night</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Terra_Cloud_Top_Temp_Night</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Terra_Cloud_Top_Temp_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Terra_SurfaceReflectance_Bands121</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Terra_SurfaceReflectance_Bands121</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/jpeg</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_250m</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/jpeg" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Terra_SurfaceReflectance_Bands121/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpg"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Terra_SurfaceReflectance_Bands143</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Terra_SurfaceReflectance_Bands143</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/jpeg</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_500m</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/jpeg" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Terra_SurfaceReflectance_Bands143/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpg"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Terra_SurfaceReflectance_Bands721</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Terra_SurfaceReflectance_Bands721</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/jpeg</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_500m</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/jpeg" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Terra_SurfaceReflectance_Bands721/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpg"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Terra_CorrectedReflectance_TrueColor</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Terra_CorrectedReflectance_TrueColor</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/jpeg</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_250m</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/jpeg" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Terra_CorrectedReflectance_TrueColor/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpg"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Terra_CorrectedReflectance_Bands367</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Terra_CorrectedReflectance_Bands367</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/jpeg</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_250m</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/jpeg" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Terra_CorrectedReflectance_Bands367/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpg"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Terra_CorrectedReflectance_Bands721</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Terra_CorrectedReflectance_Bands721</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/jpeg</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_250m</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/jpeg" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Terra_CorrectedReflectance_Bands721/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpg"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Terra_Data_No_Data</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Terra_Data_No_Data</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_250m</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Terra_Data_No_Data/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Aqua_Chlorophyll_A</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Aqua_Chlorophyll_A</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2013-07-02/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_1km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Aqua_Chlorophyll_A/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Aqua_Snow_Cover</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Aqua_Snow_Cover</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_500m</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Aqua_Snow_Cover/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Aqua_Land_Surface_Temp_Day</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Aqua_Land_Surface_Temp_Day</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_1km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Aqua_Land_Surface_Temp_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Aqua_Land_Surface_Temp_Night</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Aqua_Land_Surface_Temp_Night</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_1km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Aqua_Land_Surface_Temp_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Aqua_Sea_Ice</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Aqua_Sea_Ice</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_1km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Aqua_Sea_Ice/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Aqua_Brightness_Temp_Band31_Day</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Aqua_Brightness_Temp_Band31_Day</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_1km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Aqua_Brightness_Temp_Band31_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Aqua_Brightness_Temp_Band31_Night</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Aqua_Brightness_Temp_Band31_Night</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_1km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Aqua_Brightness_Temp_Band31_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Aqua_Aerosol</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Aqua_Aerosol</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Aqua_Aerosol/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Aqua_Water_Vapor_5km_Day</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Aqua_Water_Vapor_5km_Day</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Aqua_Water_Vapor_5km_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Aqua_Water_Vapor_5km_Night</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Aqua_Water_Vapor_5km_Night</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Aqua_Water_Vapor_5km_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Aqua_Cloud_Top_Pressure_Day</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Aqua_Cloud_Top_Pressure_Day</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Aqua_Cloud_Top_Pressure_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Aqua_Cloud_Top_Pressure_Night</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Aqua_Cloud_Top_Pressure_Night</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Aqua_Cloud_Top_Pressure_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Aqua_Cloud_Top_Temp_Day</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Aqua_Cloud_Top_Temp_Day</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Aqua_Cloud_Top_Temp_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Aqua_Cloud_Top_Temp_Night</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Aqua_Cloud_Top_Temp_Night</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Aqua_Cloud_Top_Temp_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Aqua_SurfaceReflectance_Bands121</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Aqua_SurfaceReflectance_Bands121</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/jpeg</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_250m</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/jpeg" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Aqua_SurfaceReflectance_Bands121/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpg"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Aqua_SurfaceReflectance_Bands143</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Aqua_SurfaceReflectance_Bands143</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/jpeg</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_500m</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/jpeg" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Aqua_SurfaceReflectance_Bands143/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpg"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Aqua_SurfaceReflectance_Bands721</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Aqua_SurfaceReflectance_Bands721</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/jpeg</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_500m</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/jpeg" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Aqua_SurfaceReflectance_Bands721/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpg"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Aqua_CorrectedReflectance_TrueColor</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Aqua_CorrectedReflectance_TrueColor</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/jpeg</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_250m</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/jpeg" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Aqua_CorrectedReflectance_TrueColor/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpg"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Aqua_CorrectedReflectance_Bands721</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Aqua_CorrectedReflectance_Bands721</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/jpeg</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_250m</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/jpeg" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Aqua_CorrectedReflectance_Bands721/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpg"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Aqua_Data_No_Data</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>MODIS_Aqua_Data_No_Data</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_250m</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/MODIS_Aqua_Data_No_Data/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>OMI_Absorbing_Aerosol_Optical_Depth</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>OMI_Absorbing_Aerosol_Optical_Depth</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/OMI_Absorbing_Aerosol_Optical_Depth/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>OMI_Aerosol_Index</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>OMI_Aerosol_Index</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/OMI_Aerosol_Index/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>OMI_Aerosol_Optical_Depth</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>OMI_Aerosol_Optical_Depth</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/OMI_Aerosol_Optical_Depth/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>OMI_Cloud_Pressure</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>OMI_Cloud_Pressure</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/OMI_Cloud_Pressure/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>OMI_SO2_Upper_Troposphere_and_Stratosphere</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>OMI_SO2_Upper_Troposphere_and_Stratosphere</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/OMI_SO2_Upper_Troposphere_and_Stratosphere/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>OMI_SO2_Planetary_Boundary_Layer</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>OMI_SO2_Planetary_Boundary_Layer</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/OMI_SO2_Planetary_Boundary_Layer/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>OMI_SO2_Lower_Troposphere</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>OMI_SO2_Lower_Troposphere</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/OMI_SO2_Lower_Troposphere/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>OMI_SO2_Middle_Troposphere</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>OMI_SO2_Middle_Troposphere</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-16</Default>
+           <Current>false</Current>
+           <Value>2012-05-08/2014-01-16/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_2km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/OMI_SO2_Middle_Troposphere/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>Sea_Surface_Temp_Blended</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>Sea_Surface_Temp_Blended</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-13</Default>
+           <Current>false</Current>
+           <Value>2013-04-13/2014-01-13/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_1km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/Sea_Surface_Temp_Blended/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>Sea_Surface_Temp_Infrared</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>Sea_Surface_Temp_Infrared</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-15</Default>
+           <Current>false</Current>
+           <Value>2013-04-13/2014-01-15/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_500m</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/Sea_Surface_Temp_Infrared/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>Sea_Surface_Temp_Microwave</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>Sea_Surface_Temp_Microwave</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-15</Default>
+           <Current>false</Current>
+           <Value>2013-04-13/2014-01-15/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_16km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/Sea_Surface_Temp_Microwave/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>VIIRS_EarthAtNight_2012</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 -90</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:Identifier>VIIRS_CityLights_2012</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/jpeg</Format>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG4326_500m</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/jpeg" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-geo/VIIRS_CityLights_2012/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpg"/>
+      </Layer>
+      <TileMatrixSet>
+         <ows:Identifier>EPSG4326_16km</ows:Identifier>
+         <ows:SupportedCRS>urn:ogc:def:crs:OGC:1.3:CRS84</ows:SupportedCRS>
+         <TileMatrix>
+            <ows:Identifier>0</ows:Identifier>
+            <ScaleDenominator>223632905.6114871</ScaleDenominator>
+            <TopLeftCorner>-180 90</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>2</MatrixWidth>
+            <MatrixHeight>1</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>1</ows:Identifier>
+            <ScaleDenominator>111816452.8057436</ScaleDenominator>
+            <TopLeftCorner>-180 90</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>3</MatrixWidth>
+            <MatrixHeight>2</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>2</ows:Identifier>
+            <ScaleDenominator>55908226.40287178</ScaleDenominator>
+            <TopLeftCorner>-180 90</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>5</MatrixWidth>
+            <MatrixHeight>3</MatrixHeight>
+         </TileMatrix>
+      </TileMatrixSet>
+      <TileMatrixSet>
+         <ows:Identifier>EPSG4326_2km</ows:Identifier>
+         <ows:SupportedCRS>urn:ogc:def:crs:OGC:1.3:CRS84</ows:SupportedCRS>
+         <TileMatrix>
+            <ows:Identifier>0</ows:Identifier>
+            <ScaleDenominator>223632905.6114871</ScaleDenominator>
+            <TopLeftCorner>-180 90</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>2</MatrixWidth>
+            <MatrixHeight>1</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>1</ows:Identifier>
+            <ScaleDenominator>111816452.8057436</ScaleDenominator>
+            <TopLeftCorner>-180 90</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>3</MatrixWidth>
+            <MatrixHeight>2</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>2</ows:Identifier>
+            <ScaleDenominator>55908226.40287178</ScaleDenominator>
+            <TopLeftCorner>-180 90</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>5</MatrixWidth>
+            <MatrixHeight>3</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>3</ows:Identifier>
+            <ScaleDenominator>27954113.20143589</ScaleDenominator>
+            <TopLeftCorner>-180 90</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>10</MatrixWidth>
+            <MatrixHeight>5</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>4</ows:Identifier>
+            <ScaleDenominator>13977056.60071795</ScaleDenominator>
+            <TopLeftCorner>-180 90</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>20</MatrixWidth>
+            <MatrixHeight>10</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>5</ows:Identifier>
+            <ScaleDenominator>6988528.300358973</ScaleDenominator>
+            <TopLeftCorner>-180 90</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>40</MatrixWidth>
+            <MatrixHeight>20</MatrixHeight>
+         </TileMatrix>
+      </TileMatrixSet>
+      <TileMatrixSet>
+         <ows:Identifier>EPSG4326_1km</ows:Identifier>
+         <ows:SupportedCRS>urn:ogc:def:crs:OGC:1.3:CRS84</ows:SupportedCRS>
+         <TileMatrix>
+            <ows:Identifier>0</ows:Identifier>
+            <ScaleDenominator>223632905.6114871</ScaleDenominator>
+            <TopLeftCorner>-180 90</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>2</MatrixWidth>
+            <MatrixHeight>1</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>1</ows:Identifier>
+            <ScaleDenominator>111816452.8057436</ScaleDenominator>
+            <TopLeftCorner>-180 90</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>3</MatrixWidth>
+            <MatrixHeight>2</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>2</ows:Identifier>
+            <ScaleDenominator>55908226.40287178</ScaleDenominator>
+            <TopLeftCorner>-180 90</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>5</MatrixWidth>
+            <MatrixHeight>3</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>3</ows:Identifier>
+            <ScaleDenominator>27954113.20143589</ScaleDenominator>
+            <TopLeftCorner>-180 90</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>10</MatrixWidth>
+            <MatrixHeight>5</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>4</ows:Identifier>
+            <ScaleDenominator>13977056.60071795</ScaleDenominator>
+            <TopLeftCorner>-180 90</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>20</MatrixWidth>
+            <MatrixHeight>10</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>5</ows:Identifier>
+            <ScaleDenominator>6988528.300358973</ScaleDenominator>
+            <TopLeftCorner>-180 90</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>40</MatrixWidth>
+            <MatrixHeight>20</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>6</ows:Identifier>
+            <ScaleDenominator>3494264.150179486</ScaleDenominator>
+            <TopLeftCorner>-180 90</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>80</MatrixWidth>
+            <MatrixHeight>40</MatrixHeight>
+         </TileMatrix>
+      </TileMatrixSet>
+      <TileMatrixSet>
+         <ows:Identifier>EPSG4326_500m</ows:Identifier>
+         <ows:SupportedCRS>urn:ogc:def:crs:OGC:1.3:CRS84</ows:SupportedCRS>
+         <TileMatrix>
+            <ows:Identifier>0</ows:Identifier>
+            <ScaleDenominator>223632905.6114871</ScaleDenominator>
+            <TopLeftCorner>-180 90</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>2</MatrixWidth>
+            <MatrixHeight>1</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>1</ows:Identifier>
+            <ScaleDenominator>111816452.8057436</ScaleDenominator>
+            <TopLeftCorner>-180 90</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>3</MatrixWidth>
+            <MatrixHeight>2</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>2</ows:Identifier>
+            <ScaleDenominator>55908226.40287178</ScaleDenominator>
+            <TopLeftCorner>-180 90</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>5</MatrixWidth>
+            <MatrixHeight>3</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>3</ows:Identifier>
+            <ScaleDenominator>27954113.20143589</ScaleDenominator>
+            <TopLeftCorner>-180 90</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>10</MatrixWidth>
+            <MatrixHeight>5</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>4</ows:Identifier>
+            <ScaleDenominator>13977056.60071795</ScaleDenominator>
+            <TopLeftCorner>-180 90</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>20</MatrixWidth>
+            <MatrixHeight>10</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>5</ows:Identifier>
+            <ScaleDenominator>6988528.300358973</ScaleDenominator>
+            <TopLeftCorner>-180 90</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>40</MatrixWidth>
+            <MatrixHeight>20</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>6</ows:Identifier>
+            <ScaleDenominator>3494264.150179486</ScaleDenominator>
+            <TopLeftCorner>-180 90</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>80</MatrixWidth>
+            <MatrixHeight>40</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>7</ows:Identifier>
+            <ScaleDenominator>1747132.075089743</ScaleDenominator>
+            <TopLeftCorner>-180 90</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>160</MatrixWidth>
+            <MatrixHeight>80</MatrixHeight>
+         </TileMatrix>
+      </TileMatrixSet>
+      <TileMatrixSet>
+         <ows:Identifier>EPSG4326_250m</ows:Identifier>
+         <ows:SupportedCRS>urn:ogc:def:crs:OGC:1.3:CRS84</ows:SupportedCRS>
+         <TileMatrix>
+            <ows:Identifier>0</ows:Identifier>
+            <ScaleDenominator>223632905.6114871</ScaleDenominator>
+            <TopLeftCorner>-180 90</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>2</MatrixWidth>
+            <MatrixHeight>1</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>1</ows:Identifier>
+            <ScaleDenominator>111816452.8057436</ScaleDenominator>
+            <TopLeftCorner>-180 90</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>3</MatrixWidth>
+            <MatrixHeight>2</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>2</ows:Identifier>
+            <ScaleDenominator>55908226.40287178</ScaleDenominator>
+            <TopLeftCorner>-180 90</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>5</MatrixWidth>
+            <MatrixHeight>3</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>3</ows:Identifier>
+            <ScaleDenominator>27954113.20143589</ScaleDenominator>
+            <TopLeftCorner>-180 90</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>10</MatrixWidth>
+            <MatrixHeight>5</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>4</ows:Identifier>
+            <ScaleDenominator>13977056.60071795</ScaleDenominator>
+            <TopLeftCorner>-180 90</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>20</MatrixWidth>
+            <MatrixHeight>10</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>5</ows:Identifier>
+            <ScaleDenominator>6988528.300358973</ScaleDenominator>
+            <TopLeftCorner>-180 90</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>40</MatrixWidth>
+            <MatrixHeight>20</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>6</ows:Identifier>
+            <ScaleDenominator>3494264.150179486</ScaleDenominator>
+            <TopLeftCorner>-180 90</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>80</MatrixWidth>
+            <MatrixHeight>40</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>7</ows:Identifier>
+            <ScaleDenominator>1747132.075089743</ScaleDenominator>
+            <TopLeftCorner>-180 90</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>160</MatrixWidth>
+            <MatrixHeight>80</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>8</ows:Identifier>
+            <ScaleDenominator>873566.0375448716</ScaleDenominator>
+            <TopLeftCorner>-180 90</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>320</MatrixWidth>
+            <MatrixHeight>160</MatrixHeight>
+         </TileMatrix>
+      </TileMatrixSet>
+   </Contents>
+   <ServiceMetadataURL xlink:href="http://map1.vis.earthdata.nasa.gov/wmts-geo/1.0.0/WMTSCapabilities.xml"/>
+</Capabilities>

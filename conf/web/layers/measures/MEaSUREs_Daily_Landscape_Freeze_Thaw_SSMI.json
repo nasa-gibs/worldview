@@ -3,7 +3,7 @@
         "MEaSUREs_Daily_Landscape_Freeze_Thaw_SSMI": {
             "id":       "MEaSUREs_Daily_Landscape_Freeze_Thaw_SSMI",
             "title":    "Freeze/Thaw (Daily Landscape)",
-            "subtitle": "Aqua / SSMI / NSIDC",
+            "subtitle": "DMSP / SSMI",
             "group":    "overlays",
             "period":   "daily",
 

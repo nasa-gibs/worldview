@@ -1,0 +1,599 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Capabilities xmlns="http://www.opengis.net/wmts/1.0"
+          xmlns:ows="http://www.opengis.net/ows/1.1"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns:gml="http://www.opengis.net/gml"
+          xsi:schemaLocation="http://www.opengis.net/wmts/1.0
+                    http://schemas.opengis.net/wmts/1.0/wmtsGetCapabilities_response.xsd"
+          version="1.0.0">
+   <ows:ServiceIdentification>
+      <ows:Title>NASA Global Imagery Browse Services for EOSDIS</ows:Title>
+      <ows:Abstract>
+         Near real time imagery from multiple NASA instruments
+      </ows:Abstract>
+      <ows:Keywords>
+         <ows:Keyword>Arctic</ows:Keyword>
+         <ows:Keyword>Greenland</ows:Keyword>
+         <ows:Keyword>North Pole</ows:Keyword>
+      </ows:Keywords>
+      <ows:ServiceType>OGC WMTS</ows:ServiceType>
+      <ows:ServiceTypeVersion>1.0.0</ows:ServiceTypeVersion>
+      <ows:Fees>none</ows:Fees>
+      <ows:AccessConstraints>none</ows:AccessConstraints>
+   </ows:ServiceIdentification>
+   <ows:ServiceProvider>
+      <ows:ProviderName>National Aeronautics and Space Administration</ows:ProviderName>
+      <ows:ProviderSite xlink:href="http://earthdata.nasa.gov/"/>
+      <ows:ServiceContact>
+         <ows:IndividualName>Jeff Schmaltz</ows:IndividualName>
+         <ows:PositionName>Principal Support Scientist</ows:PositionName>
+         <ows:ContactInfo>
+            <ows:Address>
+               <ows:DeliveryPoint>Goddard Space Flight Center</ows:DeliveryPoint>
+               <ows:City>Greenbelt</ows:City>
+               <ows:AdministrativeArea>Maryland</ows:AdministrativeArea>
+               <ows:PostalCode>20771</ows:PostalCode>
+               <ows:Country>United States of America</ows:Country>
+               <ows:ElectronicMailAddress>support@earthdata.nasa.gov</ows:ElectronicMailAddress>
+            </ows:Address>
+         </ows:ContactInfo>
+      </ows:ServiceContact>
+   </ows:ServiceProvider>
+   <ows:OperationsMetadata>
+      <ows:Operation name="GetCapabilities">
+         <ows:DCP>
+            <ows:HTTP>
+               <ows:Get xlink:href="http://map1.vis.earthdata.nasa.gov/wmts-arctic/1.0.0/WMTSCapabilities.xml">
+                  <ows:Constraint name="GetEncoding">
+                     <ows:AllowedValues>
+                        <ows:Value>RESTful</ows:Value>
+                     </ows:AllowedValues>
+                  </ows:Constraint>
+               </ows:Get>
+               <ows:Get xlink:href="http://map1.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi?">
+                  <ows:Constraint name="GetEncoding">
+                     <ows:AllowedValues>
+                        <ows:Value>KVP</ows:Value>
+                     </ows:AllowedValues>
+                  </ows:Constraint>
+               </ows:Get>
+            </ows:HTTP>
+         </ows:DCP>
+      </ows:Operation>
+      <ows:Operation name="GetTile">
+         <ows:DCP>
+            <ows:HTTP>
+               <ows:Get xlink:href="http://map1.vis.earthdata.nasa.gov/wmts-arctic">
+                  <ows:Constraint name="GetEncoding">
+                     <ows:AllowedValues>
+                        <ows:Value>RESTful</ows:Value>
+                     </ows:AllowedValues>
+                  </ows:Constraint>
+               </ows:Get>
+               <ows:Get xlink:href="http://map1.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi?">
+                  <ows:Constraint name="GetEncoding">
+                     <ows:AllowedValues>
+                        <ows:Value>KVP</ows:Value>
+                     </ows:AllowedValues>
+                  </ows:Constraint>
+               </ows:Get>
+            </ows:HTTP>
+         </ows:DCP>
+      </ows:Operation>
+   </ows:OperationsMetadata>
+   <Contents>
+      <Layer>
+         <ows:Title>MODIS_Terra_Snow_Cover</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 38.807151</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413">
+            <ows:LowerCorner>-4194304 -4194304</ows:LowerCorner>
+            <ows:UpperCorner>4194304 4194304</ows:UpperCorner>
+         </ows:BoundingBox>
+         <ows:Identifier>MODIS_Terra_Snow_Cover</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-17</Default>
+           <Current>false</Current>
+           <Value>2013-06-07/2014-01-17/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG3413_500m</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-arctic/MODIS_Terra_Snow_Cover/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Terra_Sea_Ice</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 38.807151</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413">
+            <ows:LowerCorner>-4194304 -4194304</ows:LowerCorner>
+            <ows:UpperCorner>4194304 4194304</ows:UpperCorner>
+         </ows:BoundingBox>
+         <ows:Identifier>MODIS_Terra_Sea_Ice</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-17</Default>
+           <Current>false</Current>
+           <Value>2013-06-07/2014-01-17/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG3413_1km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-arctic/MODIS_Terra_Sea_Ice/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Terra_Brightness_Temp_Band31_Day</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 38.807151</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413">
+            <ows:LowerCorner>-4194304 -4194304</ows:LowerCorner>
+            <ows:UpperCorner>4194304 4194304</ows:UpperCorner>
+         </ows:BoundingBox>
+         <ows:Identifier>MODIS_Terra_Brightness_Temp_Band31_Day</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-17</Default>
+           <Current>false</Current>
+           <Value>2013-06-06/2014-01-17/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG3413_1km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-arctic/MODIS_Terra_Brightness_Temp_Band31_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Terra_Brightness_Temp_Band31_Night</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 38.807151</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413">
+            <ows:LowerCorner>-4194304 -4194304</ows:LowerCorner>
+            <ows:UpperCorner>4194304 4194304</ows:UpperCorner>
+         </ows:BoundingBox>
+         <ows:Identifier>MODIS_Terra_Brightness_Temp_Band31_Night</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-17</Default>
+           <Current>false</Current>
+           <Value>2013-06-06/2014-01-17/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG3413_1km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-arctic/MODIS_Terra_Brightness_Temp_Band31_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Terra_CorrectedReflectance_TrueColor</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 38.807151</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413">
+            <ows:LowerCorner>-4194304 -4194304</ows:LowerCorner>
+            <ows:UpperCorner>4194304 4194304</ows:UpperCorner>
+         </ows:BoundingBox>
+         <ows:Identifier>MODIS_Terra_CorrectedReflectance_TrueColor</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/jpeg</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-17</Default>
+           <Current>false</Current>
+           <Value>2013-06-06/2014-01-17/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG3413_250m</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/jpeg" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-arctic/MODIS_Terra_CorrectedReflectance_TrueColor/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpg"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Terra_CorrectedReflectance_Bands367</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 38.807151</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413">
+            <ows:LowerCorner>-4194304 -4194304</ows:LowerCorner>
+            <ows:UpperCorner>4194304 4194304</ows:UpperCorner>
+         </ows:BoundingBox>
+         <ows:Identifier>MODIS_Terra_CorrectedReflectance_Bands367</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/jpeg</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-17</Default>
+           <Current>false</Current>
+           <Value>2013-06-06/2014-01-17/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG3413_250m</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/jpeg" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-arctic/MODIS_Terra_CorrectedReflectance_Bands367/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpg"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Terra_CorrectedReflectance_Bands721</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 38.807151</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413">
+            <ows:LowerCorner>-4194304 -4194304</ows:LowerCorner>
+            <ows:UpperCorner>4194304 4194304</ows:UpperCorner>
+         </ows:BoundingBox>
+         <ows:Identifier>MODIS_Terra_CorrectedReflectance_Bands721</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/jpeg</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-17</Default>
+           <Current>false</Current>
+           <Value>2013-06-06/2014-01-17/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG3413_250m</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/jpeg" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-arctic/MODIS_Terra_CorrectedReflectance_Bands721/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpg"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Aqua_Snow_Cover</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 38.807151</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413">
+            <ows:LowerCorner>-4194304 -4194304</ows:LowerCorner>
+            <ows:UpperCorner>4194304 4194304</ows:UpperCorner>
+         </ows:BoundingBox>
+         <ows:Identifier>MODIS_Aqua_Snow_Cover</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-17</Default>
+           <Current>false</Current>
+           <Value>2013-06-07/2014-01-17/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG3413_500m</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-arctic/MODIS_Aqua_Snow_Cover/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Aqua_Sea_Ice</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 38.807151</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413">
+            <ows:LowerCorner>-4194304 -4194304</ows:LowerCorner>
+            <ows:UpperCorner>4194304 4194304</ows:UpperCorner>
+         </ows:BoundingBox>
+         <ows:Identifier>MODIS_Aqua_Sea_Ice</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-17</Default>
+           <Current>false</Current>
+           <Value>2013-06-07/2014-01-17/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG3413_1km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-arctic/MODIS_Aqua_Sea_Ice/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Aqua_Brightness_Temp_Band31_Day</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 38.807151</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413">
+            <ows:LowerCorner>-4194304 -4194304</ows:LowerCorner>
+            <ows:UpperCorner>4194304 4194304</ows:UpperCorner>
+         </ows:BoundingBox>
+         <ows:Identifier>MODIS_Aqua_Brightness_Temp_Band31_Day</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-17</Default>
+           <Current>false</Current>
+           <Value>2013-06-06/2014-01-17/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG3413_1km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-arctic/MODIS_Aqua_Brightness_Temp_Band31_Day/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Aqua_Brightness_Temp_Band31_Night</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 38.807151</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413">
+            <ows:LowerCorner>-4194304 -4194304</ows:LowerCorner>
+            <ows:UpperCorner>4194304 4194304</ows:UpperCorner>
+         </ows:BoundingBox>
+         <ows:Identifier>MODIS_Aqua_Brightness_Temp_Band31_Night</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/png</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-17</Default>
+           <Current>false</Current>
+           <Value>2013-06-06/2014-01-17/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG3413_1km</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/png" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-arctic/MODIS_Aqua_Brightness_Temp_Band31_Night/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Aqua_CorrectedReflectance_TrueColor</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 38.807151</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413">
+            <ows:LowerCorner>-4194304 -4194304</ows:LowerCorner>
+            <ows:UpperCorner>4194304 4194304</ows:UpperCorner>
+         </ows:BoundingBox>
+         <ows:Identifier>MODIS_Aqua_CorrectedReflectance_TrueColor</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/jpeg</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-17</Default>
+           <Current>false</Current>
+           <Value>2013-06-06/2014-01-17/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG3413_250m</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/jpeg" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-arctic/MODIS_Aqua_CorrectedReflectance_TrueColor/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpg"/>
+      </Layer>
+      <Layer>
+         <ows:Title>MODIS_Aqua_CorrectedReflectance_Bands721</ows:Title>
+         <ows:WGS84BoundingBox crs="urn:ogc:def:crs:OGC:1.3:CRS84">
+            <ows:LowerCorner>-180 38.807151</ows:LowerCorner>
+            <ows:UpperCorner>180 90</ows:UpperCorner>
+         </ows:WGS84BoundingBox>
+         <ows:BoundingBox crs="urn:ogc:def:crs:EPSG::3413">
+            <ows:LowerCorner>-4194304 -4194304</ows:LowerCorner>
+            <ows:UpperCorner>4194304 4194304</ows:UpperCorner>
+         </ows:BoundingBox>
+         <ows:Identifier>MODIS_Aqua_CorrectedReflectance_Bands721</ows:Identifier>
+         <Style isDefault="true">
+            <ows:Title>default</ows:Title>
+            <ows:Identifier>default</ows:Identifier>
+         </Style>
+         <Format>image/jpeg</Format>
+         <Dimension>
+           <ows:Identifier>time</ows:Identifier>
+           <UOM>ISO8601</UOM>
+           <Default>2014-01-17</Default>
+           <Current>false</Current>
+           <Value>2013-06-06/2014-01-17/P1D</Value>
+         </Dimension>
+         <TileMatrixSetLink>
+            <TileMatrixSet>EPSG3413_250m</TileMatrixSet>
+         </TileMatrixSetLink>
+         <ResourceURL format="image/jpeg" resourceType="tile" template="http://map1.vis.earthdata.nasa.gov/wmts-arctic/MODIS_Aqua_CorrectedReflectance_Bands721/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpg"/>
+      </Layer>
+      <TileMatrixSet>
+         <ows:Identifier>EPSG3413_1km</ows:Identifier>
+         <ows:SupportedCRS>urn:ogc:def:crs:EPSG::3413</ows:SupportedCRS>
+         <TileMatrix>
+            <ows:Identifier>0</ows:Identifier>
+            <ScaleDenominator>29257142.85714286</ScaleDenominator>
+            <TopLeftCorner>-4194304 4194304</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>2</MatrixWidth>
+            <MatrixHeight>2</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>1</ows:Identifier>
+            <ScaleDenominator>14628571.42857143</ScaleDenominator>
+            <TopLeftCorner>-4194304 4194304</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>4</MatrixWidth>
+            <MatrixHeight>4</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>2</ows:Identifier>
+            <ScaleDenominator>7314285.714285715</ScaleDenominator>
+            <TopLeftCorner>-4194304 4194304</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>8</MatrixWidth>
+            <MatrixHeight>8</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>3</ows:Identifier>
+            <ScaleDenominator>3657142.857142857</ScaleDenominator>
+            <TopLeftCorner>-4194304 4194304</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>16</MatrixWidth>
+            <MatrixHeight>16</MatrixHeight>
+         </TileMatrix>
+      </TileMatrixSet>
+      <TileMatrixSet>
+         <ows:Identifier>EPSG3413_500m</ows:Identifier>
+         <ows:SupportedCRS>urn:ogc:def:crs:EPSG::3413</ows:SupportedCRS>
+         <TileMatrix>
+            <ows:Identifier>0</ows:Identifier>
+            <ScaleDenominator>29257142.85714286</ScaleDenominator>
+            <TopLeftCorner>-4194304 4194304</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>2</MatrixWidth>
+            <MatrixHeight>2</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>1</ows:Identifier>
+            <ScaleDenominator>14628571.42857143</ScaleDenominator>
+            <TopLeftCorner>-4194304 4194304</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>4</MatrixWidth>
+            <MatrixHeight>4</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>2</ows:Identifier>
+            <ScaleDenominator>7314285.714285715</ScaleDenominator>
+            <TopLeftCorner>-4194304 4194304</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>8</MatrixWidth>
+            <MatrixHeight>8</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>3</ows:Identifier>
+            <ScaleDenominator>3657142.857142857</ScaleDenominator>
+            <TopLeftCorner>-4194304 4194304</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>16</MatrixWidth>
+            <MatrixHeight>16</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>4</ows:Identifier>
+            <ScaleDenominator>1828571.428571429</ScaleDenominator>
+            <TopLeftCorner>-4194304 4194304</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>32</MatrixWidth>
+            <MatrixHeight>32</MatrixHeight>
+         </TileMatrix>
+      </TileMatrixSet>
+      <TileMatrixSet>
+         <ows:Identifier>EPSG3413_250m</ows:Identifier>
+         <ows:SupportedCRS>urn:ogc:def:crs:EPSG::3413</ows:SupportedCRS>
+         <TileMatrix>
+            <ows:Identifier>0</ows:Identifier>
+            <ScaleDenominator>29257142.85714286</ScaleDenominator>
+            <TopLeftCorner>-4194304 4194304</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>2</MatrixWidth>
+            <MatrixHeight>2</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>1</ows:Identifier>
+            <ScaleDenominator>14628571.42857143</ScaleDenominator>
+            <TopLeftCorner>-4194304 4194304</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>4</MatrixWidth>
+            <MatrixHeight>4</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>2</ows:Identifier>
+            <ScaleDenominator>7314285.714285715</ScaleDenominator>
+            <TopLeftCorner>-4194304 4194304</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>8</MatrixWidth>
+            <MatrixHeight>8</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>3</ows:Identifier>
+            <ScaleDenominator>3657142.857142857</ScaleDenominator>
+            <TopLeftCorner>-4194304 4194304</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>16</MatrixWidth>
+            <MatrixHeight>16</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>4</ows:Identifier>
+            <ScaleDenominator>1828571.428571429</ScaleDenominator>
+            <TopLeftCorner>-4194304 4194304</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>32</MatrixWidth>
+            <MatrixHeight>32</MatrixHeight>
+         </TileMatrix>
+         <TileMatrix>
+            <ows:Identifier>5</ows:Identifier>
+            <ScaleDenominator>914285.7142857143</ScaleDenominator>
+            <TopLeftCorner>-4194304 4194304</TopLeftCorner>
+            <TileWidth>512</TileWidth>
+            <TileHeight>512</TileHeight>
+            <MatrixWidth>64</MatrixWidth>
+            <MatrixHeight>64</MatrixHeight>
+         </TileMatrix>
+      </TileMatrixSet>
+   </Contents>
+   <ServiceMetadataURL xlink:href="http://map1.vis.earthdata.nasa.gov/wmts-arctic/1.0.0/WMTSCapabilities.xml"/>
+</Capabilities>
