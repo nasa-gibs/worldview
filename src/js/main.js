@@ -185,6 +185,7 @@ $(function() {// Initialize "static" vars
         if(window.location.search) {
         	eventsCollapsed = true;
         }
+        /*
     	var events = new SOTE.widget.Events("eventsHolder", {
     		config: config,
     		models: models,
@@ -192,7 +193,7 @@ $(function() {// Initialize "static" vars
     		shouldCollapse: eventsCollapsed,
     		lastVisit: lastVisitObj
      	});
-
+        */
         var dataDownload = Worldview.Widget.DataDownload(config, {
             selector: "#DataDownload",
             model: dataDownloadModel,
