@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StyledLayerDescriptor
+  xmlns="http://www.opengis.net/sld"
+  xmlns:ogc="http://www.opengis.net/ogc"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  version="1.0.0"
+  xsi:schemaLocation="http://www.opengis.net/sld/1.0.0 StyledLayerDescriptor.xsd">
+  <NamedLayer>
+    <Name>AERain_RR_LL_A</Name>
+    <UserStyle>
+      <Title>SLD Style</Title>
+      <FeatureTypeStyle>
+        <Rule>
+          <RasterSymbolizer>
+            <ColorMap>
+              <ColorMapEntry color="#111111" quantity="0" label="0 mm/hr" opacity="0.0"/>
+              <ColorMapEntry color="#800080" quantity="0.083682" label="0.083682 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#850085" quantity="0.167364" label="0.167364 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#8A008A" quantity="0.251046" label="0.251046 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#8F008F" quantity="0.334728" label="0.334728 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#950095" quantity="0.41841" label="0.41841 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#9A009A" quantity="0.502092" label="0.502092 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#9F009F" quantity="0.585774" label="0.585774 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#A400A4" quantity="0.669456" label="0.669456 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#AA00AA" quantity="0.753138" label="0.753138 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#AF00AF" quantity="0.83682" label="0.83682 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#B500B5" quantity="0.920502" label="0.920502 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#BA00BA" quantity="1.00418" label="1.00418 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#BF00BF" quantity="1.08787" label="1.08787 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#C400C4" quantity="1.17155" label="1.17155 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#CA00CA" quantity="1.25523" label="1.25523 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#CF00CF" quantity="1.33891" label="1.33891 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#D500D5" quantity="1.42259" label="1.42259 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#DA00DA" quantity="1.50628" label="1.50628 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#DF00DF" quantity="1.58996" label="1.58996 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#E400E4" quantity="1.67364" label="1.67364 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#EA00EA" quantity="1.75732" label="1.75732 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#EF00EF" quantity="1.841" label="1.841 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#F400F4" quantity="1.92469" label="1.92469 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF00FF" quantity="2.00837" label="2.00837 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#F800FF" quantity="2.09205" label="2.09205 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#F100FF" quantity="2.17573" label="2.17573 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#EA00FF" quantity="2.25941" label="2.25941 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#E300FF" quantity="2.3431" label="2.3431 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#DC00FF" quantity="2.42678" label="2.42678 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#D400FF" quantity="2.51046" label="2.51046 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#CD00FF" quantity="2.59414" label="2.59414 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#C600FF" quantity="2.67782" label="2.67782 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#BF00FF" quantity="2.76151" label="2.76151 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#B800FF" quantity="2.84519" label="2.84519 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#B100FF" quantity="2.92887" label="2.92887 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#AA00FF" quantity="3.01255" label="3.01255 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#A300FF" quantity="3.09623" label="3.09623 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#9C00FF" quantity="3.17992" label="3.17992 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#9500FF" quantity="3.2636" label="3.2636 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#8E00FF" quantity="3.34728" label="3.34728 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#8700FF" quantity="3.43096" label="3.43096 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#7F00FF" quantity="3.51464" label="3.51464 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#7800FF" quantity="3.59833" label="3.59833 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#7100FF" quantity="3.68201" label="3.68201 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#6A00FF" quantity="3.76569" label="3.76569 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#6300FF" quantity="3.84937" label="3.84937 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#5C00FF" quantity="3.93305" label="3.93305 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#5500FF" quantity="4.01674" label="4.01674 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#4E00FF" quantity="4.10042" label="4.10042 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#4700FF" quantity="4.1841" label="4.1841 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#4000FF" quantity="4.26778" label="4.26778 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#3900FF" quantity="4.35146" label="4.35146 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#3200FF" quantity="4.43515" label="4.43515 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#2A00FF" quantity="4.51883" label="4.51883 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#2300FF" quantity="4.60251" label="4.60251 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#1C00FF" quantity="4.68619" label="4.68619 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#1500FF" quantity="4.76987" label="4.76987 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#0E00FF" quantity="4.85356" label="4.85356 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#0700FF" quantity="4.93724" label="4.93724 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#0000FF" quantity="5.02092" label="5.02092 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#0007FF" quantity="5.1046" label="5.1046 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#000EFF" quantity="5.18828" label="5.18828 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#0015FF" quantity="5.27197" label="5.27197 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#001CFF" quantity="5.35565" label="5.35565 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#0023FF" quantity="5.43933" label="5.43933 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#002BFF" quantity="5.52301" label="5.52301 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#0032FF" quantity="5.60669" label="5.60669 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#0039FF" quantity="5.69038" label="5.69038 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#0040FF" quantity="5.77406" label="5.77406 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#0047FF" quantity="5.85774" label="5.85774 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#004EFF" quantity="5.94142" label="5.94142 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#0055FF" quantity="6.0251" label="6.0251 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#005CFF" quantity="6.10879" label="6.10879 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#0063FF" quantity="6.19247" label="6.19247 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#006AFF" quantity="6.27615" label="6.27615 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#0071FF" quantity="6.35983" label="6.35983 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#0078FF" quantity="6.44351" label="6.44351 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#0080FF" quantity="6.5272" label="6.5272 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#0087FF" quantity="6.61088" label="6.61088 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#008EFF" quantity="6.69456" label="6.69456 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#0095FF" quantity="6.77824" label="6.77824 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#009CFF" quantity="6.86192" label="6.86192 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00A3FF" quantity="6.94561" label="6.94561 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00AAFF" quantity="7.02929" label="7.02929 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00B1FF" quantity="7.11297" label="7.11297 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00B8FF" quantity="7.19665" label="7.19665 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00BFFF" quantity="7.28033" label="7.28033 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00C6FF" quantity="7.36402" label="7.36402 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00CDFF" quantity="7.4477" label="7.4477 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00D5FF" quantity="7.53138" label="7.53138 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00DCFF" quantity="7.61506" label="7.61506 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00E3FF" quantity="7.69874" label="7.69874 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00EAFF" quantity="7.78243" label="7.78243 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00F1FF" quantity="7.86611" label="7.86611 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00F8FF" quantity="7.94979" label="7.94979 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00FFFF" quantity="8.03347" label="8.03347 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00FDF8" quantity="8.11716" label="8.11716 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00FAF1" quantity="8.20084" label="8.20084 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00F8EA" quantity="8.28452" label="8.28452 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00F6E3" quantity="8.3682" label="8.3682 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00F3DC" quantity="8.45188" label="8.45188 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00F1D4" quantity="8.53556" label="8.53556 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00EECD" quantity="8.61925" label="8.61925 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00ECC6" quantity="8.70293" label="8.70293 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00EABF" quantity="8.78661" label="8.78661 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00E7B8" quantity="8.87029" label="8.87029 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00E5B1" quantity="8.95397" label="8.95397 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00E3AA" quantity="9.03766" label="9.03766 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00E0A3" quantity="9.12134" label="9.12134 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00DE9C" quantity="9.20502" label="9.20502 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00DC95" quantity="9.2887" label="9.2887 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00D98E" quantity="9.37239" label="9.37239 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00D787" quantity="9.45607" label="9.45607 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00D47F" quantity="9.53975" label="9.53975 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00D278" quantity="9.62343" label="9.62343 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00D071" quantity="9.70711" label="9.70711 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00CD6A" quantity="9.7908" label="9.7908 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00CB63" quantity="9.87448" label="9.87448 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00C95C" quantity="9.95816" label="9.95816 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00C655" quantity="10.0418" label="10.0418 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00C44E" quantity="10.1255" label="10.1255 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00C247" quantity="10.2092" label="10.2092 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00BF40" quantity="10.2929" label="10.2929 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00BD39" quantity="10.3766" label="10.3766 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00BB32" quantity="10.4603" label="10.4603 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00B82A" quantity="10.5439" label="10.5439 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00B623" quantity="10.6276" label="10.6276 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00B31C" quantity="10.7113" label="10.7113 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00B115" quantity="10.795" label="10.795 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00AF0E" quantity="10.8787" label="10.8787 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00AC07" quantity="10.9623" label="10.9623 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#00AA00" quantity="11.046" label="11.046 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#07AC00" quantity="11.1297" label="11.1297 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#0EAF00" quantity="11.2134" label="11.2134 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#15B100" quantity="11.2971" label="11.2971 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#1CB300" quantity="11.3808" label="11.3808 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#23B600" quantity="11.4644" label="11.4644 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#2BB800" quantity="11.5481" label="11.5481 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#32BB00" quantity="11.6318" label="11.6318 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#39BD00" quantity="11.7155" label="11.7155 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#40BF00" quantity="11.7992" label="11.7992 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#47C200" quantity="11.8828" label="11.8828 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#4EC400" quantity="11.9665" label="11.9665 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#55C600" quantity="12.0502" label="12.0502 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#5CC900" quantity="12.1339" label="12.1339 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#63CB00" quantity="12.2176" label="12.2176 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#6ACD00" quantity="12.3013" label="12.3013 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#71D000" quantity="12.3849" label="12.3849 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#78D200" quantity="12.4686" label="12.4686 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#80D500" quantity="12.5523" label="12.5523 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#87D700" quantity="12.636" label="12.636 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#8ED900" quantity="12.7197" label="12.7197 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#95DC00" quantity="12.8033" label="12.8033 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#9CDE00" quantity="12.887" label="12.887 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#A3E000" quantity="12.9707" label="12.9707 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#AAE300" quantity="13.0544" label="13.0544 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#B1E500" quantity="13.1381" label="13.1381 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#B8E700" quantity="13.2218" label="13.2218 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#BFEA00" quantity="13.3054" label="13.3054 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#C6EC00" quantity="13.3891" label="13.3891 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#CDEE00" quantity="13.4728" label="13.4728 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#D5F100" quantity="13.5565" label="13.5565 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#DCF300" quantity="13.6402" label="13.6402 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#E3F600" quantity="13.7238" label="13.7238 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#EAF800" quantity="13.8075" label="13.8075 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#F1FA00" quantity="13.8912" label="13.8912 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#F8FD00" quantity="13.9749" label="13.9749 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FFFF00" quantity="14.0586" label="14.0586 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FFF800" quantity="14.1423" label="14.1423 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FFF100" quantity="14.2259" label="14.2259 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FFEA00" quantity="14.3096" label="14.3096 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FFE300" quantity="14.3933" label="14.3933 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FFDC00" quantity="14.477" label="14.477 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FFD400" quantity="14.5607" label="14.5607 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FFCD00" quantity="14.6444" label="14.6444 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FFC600" quantity="14.728" label="14.728 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FFBF00" quantity="14.8117" label="14.8117 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FFB800" quantity="14.8954" label="14.8954 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FFB100" quantity="14.9791" label="14.9791 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FFAA00" quantity="15.0628" label="15.0628 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FFA300" quantity="15.1464" label="15.1464 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF9C00" quantity="15.2301" label="15.2301 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF9500" quantity="15.3138" label="15.3138 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF8E00" quantity="15.3975" label="15.3975 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF8700" quantity="15.4812" label="15.4812 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF7F00" quantity="15.5649" label="15.5649 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF7800" quantity="15.6485" label="15.6485 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF7100" quantity="15.7322" label="15.7322 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF6A00" quantity="15.8159" label="15.8159 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF6300" quantity="15.8996" label="15.8996 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF5C00" quantity="15.9833" label="15.9833 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF5500" quantity="16.0669" label="16.0669 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF4E00" quantity="16.1506" label="16.1506 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF4700" quantity="16.2343" label="16.2343 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF4000" quantity="16.318" label="16.318 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF3900" quantity="16.4017" label="16.4017 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF3200" quantity="16.4854" label="16.4854 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF2A00" quantity="16.569" label="16.569 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF2300" quantity="16.6527" label="16.6527 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF1C00" quantity="16.7364" label="16.7364 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF1500" quantity="16.8201" label="16.8201 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF0E00" quantity="16.9038" label="16.9038 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF0700" quantity="16.9874" label="16.9874 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF0000" quantity="17.0711" label="17.0711 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF0707" quantity="17.1548" label="17.1548 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF0F0F" quantity="17.2385" label="17.2385 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF1616" quantity="17.3222" label="17.3222 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF1D1D" quantity="17.4059" label="17.4059 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF2424" quantity="17.4895" label="17.4895 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF2C2C" quantity="17.5732" label="17.5732 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF3333" quantity="17.6569" label="17.6569 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF3A3A" quantity="17.7406" label="17.7406 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF4242" quantity="17.8243" label="17.8243 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF4949" quantity="17.9079" label="17.9079 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF5050" quantity="17.9916" label="17.9916 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF5757" quantity="18.0753" label="18.0753 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF5F5F" quantity="18.159" label="18.159 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF6666" quantity="18.2427" label="18.2427 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF6D6D" quantity="18.3264" label="18.3264 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF7575" quantity="18.41" label="18.41 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF7C7C" quantity="18.4937" label="18.4937 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF8383" quantity="18.5774" label="18.5774 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF8A8A" quantity="18.6611" label="18.6611 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF9292" quantity="18.7448" label="18.7448 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FF9999" quantity="18.8285" label="18.8285 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FFA0A0" quantity="18.9121" label="18.9121 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FFA8A8" quantity="18.9958" label="18.9958 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FFAFAF" quantity="19.0795" label="19.0795 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FFB6B6" quantity="19.1632" label="19.1632 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FFBDBD" quantity="19.2469" label="19.2469 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FFC5C5" quantity="19.3305" label="19.3305 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FFCCCC" quantity="19.4142" label="19.4142 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FFD3D3" quantity="19.4979" label="19.4979 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FFDBDB" quantity="19.5816" label="19.5816 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FFE2E2" quantity="19.6653" label="19.6653 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FFE9E9" quantity="19.749" label="19.749 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FFF0F0" quantity="19.8326" label="19.8326 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FFF8F8" quantity="19.9163" label="19.9163 mm/hr" opacity="1.0"/>
+              <ColorMapEntry color="#FFFFFF" quantity="20" label="20 mm/hr" opacity="1.0"/>
+            </ColorMap>
+          </RasterSymbolizer>
+          <RasterSymbolizer>
+            <Opacity>0.0</Opacity>
+            <ColorMap>
+              <ColorMapEntry color="#000000" label="Empty"/>
+            </ColorMap>
+          </RasterSymbolizer>
+        </Rule>
+      </FeatureTypeStyle>
+    </UserStyle>
+  </NamedLayer>
+</StyledLayerDescriptor>

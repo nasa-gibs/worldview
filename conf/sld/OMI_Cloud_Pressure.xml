@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<StyledLayerDescriptor version="1.0.0"
+    xsi:schemaLocation="http://www.opengis.net/sld StyledLayerDescriptor.xsd"
+    xmlns="http://www.opengis.net/sld"
+    xmlns:se="http://www.opengis.net/se"
+    xmlns:ogc="http://www.opengis.net/ogc"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <NamedLayer>
+    <se:Name>OMI_Cloud_Pressure</se:Name>
+    <UserStyle>
+      <se:Name>GIBS</se:Name>
+      <se:FeatureTypeStyle>
+        <se:Rule>
+          <se:RasterSymbolizer>
+            <se:ColorMap>
+              <ColorMapEntry color="#ffffff" quantity="0" label="0 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#fffdfd" quantity="6" label="6 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#fffcfc" quantity="11" label="11 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#fffbfb" quantity="16" label="16 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#fffafa" quantity="22" label="22 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#fff8f8" quantity="28" label="28 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#f7fffa" quantity="33" label="33 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#fff6f7" quantity="38" label="38 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#fff5f6" quantity="44" label="44 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#fff3f5" quantity="50" label="50 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#fff2f5" quantity="55" label="55 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#fff1f4" quantity="60" label="60 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ffeff3" quantity="66" label="66 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ffeef3" quantity="72" label="72 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ffedf3" quantity="77" label="77 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ffecf3" quantity="82" label="82 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ffeaf2" quantity="88" label="88 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ffe9f2" quantity="94" label="94 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ffe8f2" quantity="99" label="99 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ffe6f2" quantity="104" label="104 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ffe5f2" quantity="110" label="110 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ffe4f3" quantity="116" label="116 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ffe3f3" quantity="121" label="121 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ffe1f3" quantity="126" label="126 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ffe0f4" quantity="132" label="132 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ffdff4" quantity="138" label="138 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ffdef6" quantity="143" label="143 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ffdcf6" quantity="148" label="148 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ffdbf6" quantity="154" label="154 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ffdaf7" quantity="160" label="160 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ffd8f9" quantity="165" label="165 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ffd7f9" quantity="170" label="170 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ffd6fa" quantity="176" label="176 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ffd5fb" quantity="182" label="182 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ffd3fd" quantity="187" label="187 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#fed2ff" quantity="192" label="192 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#fdd1ff" quantity="198" label="198 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#fbcfff" quantity="204" label="204 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#faceff" quantity="209" label="209 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#f8cdff" quantity="214" label="214 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#f7ccff" quantity="220" label="220 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#f5caff" quantity="226" label="226 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#f3c9ff" quantity="231" label="231 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#f1c8ff" quantity="236" label="236 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#efc6ff" quantity="242" label="242 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#edc5ff" quantity="248" label="248 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ebc4ff" quantity="253" label="253 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#e9c3ff" quantity="258" label="258 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#e6c1ff" quantity="264" label="264 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#e5c0ff" quantity="270" label="270 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#e2bfff" quantity="275" label="275 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#e0beff" quantity="280" label="280 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ddbcff" quantity="286" label="286 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#dabbff" quantity="292" label="292 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#d8baff" quantity="297" label="297 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#d4b8ff" quantity="302" label="302 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#d2b7ff" quantity="308" label="308 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#cfb6ff" quantity="314" label="314 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ccb5ff" quantity="319" label="319 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#c9b3ff" quantity="324" label="324 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#c5b2ff" quantity="330" label="330 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#c2b1ff" quantity="336" label="336 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#bfafff" quantity="341" label="341 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#bcaeff" quantity="346" label="346 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#b9adff" quantity="352" label="352 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#b5acff" quantity="358" label="358 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#b1aaff" quantity="363" label="363 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ada9ff" quantity="368" label="368 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#aaa9ff" quantity="374" label="374 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#a7a9ff" quantity="380" label="380 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#a6aaff" quantity="385" label="385 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#a5abff" quantity="390" label="390 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#a4acff" quantity="396" label="396 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#a2aeff" quantity="402" label="402 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#a1b0ff" quantity="407" label="407 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#a0b1ff" quantity="412" label="412 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#9fb4ff" quantity="418" label="418 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#9db5ff" quantity="424" label="424 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#9cb7ff" quantity="429" label="429 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#9bb9ff" quantity="434" label="434 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#99bcff" quantity="440" label="440 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#98bdff" quantity="446" label="446 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#97c0ff" quantity="451" label="451 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#96c2ff" quantity="456" label="456 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#94c5ff" quantity="462" label="462 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#93c8ff" quantity="468" label="468 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#92caff" quantity="473" label="473 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#90cdff" quantity="478" label="478 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#8fcfff" quantity="484" label="484 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#8ed2ff" quantity="490" label="490 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#8dd5ff" quantity="495" label="495 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#8bd8ff" quantity="500" label="500 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#8adbff" quantity="506" label="506 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#89deff" quantity="512" label="512 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#87e2ff" quantity="517" label="517 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#86e4ff" quantity="522" label="522 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#85e8ff" quantity="528" label="528 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#84ebff" quantity="534" label="534 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#82efff" quantity="539" label="539 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#81f2ff" quantity="544" label="544 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#80f6ff" quantity="550" label="550 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#7ffaff" quantity="556" label="556 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#7dfeff" quantity="561" label="561 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#7cfffb" quantity="566" label="566 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#7bfff7" quantity="572" label="572 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#79fff3" quantity="578" label="578 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#78ffef" quantity="583" label="583 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#77ffea" quantity="588" label="588 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#76ffe7" quantity="594" label="594 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#74ffe2" quantity="600" label="600 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#73ffdd" quantity="605" label="605 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#72ffd9" quantity="610" label="610 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#70ffd4" quantity="616" label="616 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#6fffd0" quantity="622" label="622 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#6effcc" quantity="627" label="627 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#6dffc7" quantity="632" label="632 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#6bffc2" quantity="638" label="638 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#6affbd" quantity="644" label="644 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#69ffb7" quantity="649" label="649 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#67ffb2" quantity="654" label="654 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#66ffad" quantity="660" label="660 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#65ffa8" quantity="666" label="666 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#64ffa3" quantity="671" label="671 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#62ff9e" quantity="676" label="676 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#61ff98" quantity="682" label="682 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#60ff93" quantity="688" label="688 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#5fff8e" quantity="693" label="693 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#5dff87" quantity="698" label="698 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#5cff82" quantity="704" label="704 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#5bff7c" quantity="710" label="710 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#59ff76" quantity="715" label="715 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#58ff70" quantity="720" label="720 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#57ff6a" quantity="726" label="726 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#56ff64" quantity="732" label="732 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#55ff5d" quantity="737" label="737 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#54ff57" quantity="742" label="742 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#53ff53" quantity="748" label="748 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#58ff51" quantity="754" label="754 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#5cff50" quantity="759" label="759 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#5fff4f" quantity="764" label="764 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#63ff4e" quantity="770" label="770 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#67ff4c" quantity="776" label="776 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#6cff4b" quantity="781" label="781 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#71ff4a" quantity="786" label="786 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#75ff48" quantity="792" label="792 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#79ff47" quantity="798" label="798 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#7eff46" quantity="803" label="803 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#82ff45" quantity="808" label="808 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#87ff43" quantity="814" label="814 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#8cff42" quantity="820" label="820 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#91ff41" quantity="825" label="825 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#96ff40" quantity="830" label="830 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#9bff3e" quantity="836" label="836 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#a0ff3d" quantity="842" label="842 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#a5ff3c" quantity="847" label="847 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#aaff3a" quantity="852" label="852 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#afff39" quantity="858" label="858 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#b5ff38" quantity="864" label="864 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#baff37" quantity="869" label="869 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#c0ff35" quantity="874" label="874 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#c6ff34" quantity="880" label="880 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#cbff33" quantity="886" label="886 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#d1ff31" quantity="891" label="891 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#d7ff30" quantity="896" label="896 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ddff2f" quantity="902" label="902 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#e3ff2e" quantity="908" label="908 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#e9ff2c" quantity="913" label="913 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#efff2b" quantity="918" label="918 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#f5ff2a" quantity="924" label="924 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#fcff28" quantity="930" label="930 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#fffa27" quantity="935" label="935 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#fff426" quantity="940" label="940 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ffed25" quantity="946" label="946 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ffe723" quantity="952" label="952 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ffdf22" quantity="957" label="957 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ffd921" quantity="962" label="962 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ffd320" quantity="968" label="968 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ffcb1e" quantity="974" label="974 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ffc41d" quantity="979" label="979 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ffbd1c" quantity="984" label="984 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ffb61a" quantity="990" label="990 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ffaf19" quantity="996" label="996 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ffa718" quantity="1001" label="1001 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ffa017" quantity="1006" label="1006 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ff9915" quantity="1012" label="1012 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ff9114" quantity="1018" label="1018 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ff8a13" quantity="1023" label="1023 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ff8211" quantity="1028" label="1028 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ff7a10" quantity="1034" label="1034 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ff730f" quantity="1040" label="1040 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ff6b0e" quantity="1045" label="1045 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ff620c" quantity="1050" label="1050 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ff5b0b" quantity="1056" label="1056 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ff520c" quantity="1062" label="1062 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ff4a08" quantity="1067" label="1067 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ff4207" quantity="1072" label="1072 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ff3a06" quantity="1078" label="1078 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ff3105" quantity="1084" label="1084 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ff2903" quantity="1089" label="1089 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ff2002" quantity="1094" label="1094 hPa" opacity="1.0"/>
+              <ColorMapEntry color="#ff1d02" quantity="1100" label="1100 hPa" opacity="1.0"/>
+            </se:ColorMap>
+          </se:RasterSymbolizer>
+          <se:RasterSymbolizer>
+            <Opacity>0.0</Opacity>
+            <se:ColorMap>
+              <ColorMapEntry color="#000000" label="Empty"/>
+            </se:ColorMap>
+          </se:RasterSymbolizer>
+        </se:Rule>
+      </se:FeatureTypeStyle>
+    </UserStyle>
+  </NamedLayer>
+</StyledLayerDescriptor>

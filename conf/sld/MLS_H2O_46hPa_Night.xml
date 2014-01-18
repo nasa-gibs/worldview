@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<StyledLayerDescriptor version="1.0.0"
+    xsi:schemaLocation="http://www.opengis.net/sld StyledLayerDescriptor.xsd"
+    xmlns="http://www.opengis.net/sld"
+    xmlns:se="http://www.opengis.net/se"
+    xmlns:ogc="http://www.opengis.net/ogc"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <NamedLayer>
+    <se:Name>MLS_H2O_46hPa_Night</se:Name>
+    <UserStyle>
+      <se:Name>GIBS</se:Name>
+      <se:FeatureTypeStyle>
+        <se:Rule>
+          <se:RasterSymbolizer>
+            <se:ColorMap>
+              <ColorMapEntry color="#8000ff" quantity="0.5" label="0.5 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#7c00ff" quantity="0.52" label="0.52 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#7800ff" quantity="0.53" label="0.53 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#7300ff" quantity="0.55" label="0.55 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#6f00ff" quantity="0.56" label="0.56 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#6a00ff" quantity="0.58" label="0.58 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#6600ff" quantity="0.59" label="0.59 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#6100ff" quantity="0.61" label="0.61 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#5d00ff" quantity="0.63" label="0.63 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#5800ff" quantity="0.64" label="0.64 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#5400ff" quantity="0.66" label="0.66 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#4f00ff" quantity="0.67" label="0.67 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#4b00ff" quantity="0.69" label="0.69 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#4600ff" quantity="0.70" label="0.70 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#4200ff" quantity="0.72" label="0.72 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#3d00ff" quantity="0.74" label="0.74 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#3900ff" quantity="0.75" label="0.75 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#3400ff" quantity="0.77" label="0.77 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#3000ff" quantity="0.78" label="0.78 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#2b00ff" quantity="0.80" label="0.80 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#2700ff" quantity="0.81" label="0.81 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#2200ff" quantity="0.83" label="0.83 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#1e00ff" quantity="0.85" label="0.85 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#1900ff" quantity="0.86" label="0.86 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#1500ff" quantity="0.88" label="0.88 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#1000ff" quantity="0.89" label="0.89 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#0c00ff" quantity="0.91" label="0.91 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#0700ff" quantity="0.93" label="0.93 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#0300ff" quantity="0.94" label="0.94 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#0002ff" quantity="0.96" label="0.96 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#0006ff" quantity="0.97" label="0.97 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#000bff" quantity="0.99" label="0.99 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#000fff" quantity="1.00" label="1.00 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#0014ff" quantity="1.02" label="1.02 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#0018ff" quantity="1.04" label="1.04 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#001dff" quantity="1.05" label="1.05 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#0021ff" quantity="1.07" label="1.07 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#0026ff" quantity="1.08" label="1.08 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#002aff" quantity="1.10" label="1.10 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#002fff" quantity="1.11" label="1.11 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#0033ff" quantity="1.13" label="1.13 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#0038ff" quantity="1.15" label="1.15 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#003cff" quantity="1.16" label="1.16 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#0041ff" quantity="1.18" label="1.18 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#0045ff" quantity="1.19" label="1.19 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#004aff" quantity="1.21" label="1.21 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#004eff" quantity="1.22" label="1.22 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#0053ff" quantity="1.24" label="1.24 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#0057ff" quantity="1.26" label="1.26 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#005cff" quantity="1.27" label="1.27 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#0060ff" quantity="1.29" label="1.29 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#0065ff" quantity="1.30" label="1.30 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#0069ff" quantity="1.32" label="1.32 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#006eff" quantity="1.33" label="1.33 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#0072ff" quantity="1.35" label="1.35 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#0077ff" quantity="1.37" label="1.37 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#007bff" quantity="1.38" label="1.38 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#0080ff" quantity="1.40" label="1.40 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#0084ff" quantity="1.41" label="1.41 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#0089ff" quantity="1.43" label="1.43 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#008dff" quantity="1.44" label="1.44 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#0092ff" quantity="1.46" label="1.46 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#0096ff" quantity="1.48" label="1.48 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#009bff" quantity="1.49" label="1.49 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#009fff" quantity="1.51" label="1.51 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00a4ff" quantity="1.52" label="1.52 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00a8ff" quantity="1.54" label="1.54 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00adff" quantity="1.56" label="1.56 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00b1ff" quantity="1.57" label="1.57 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00b6ff" quantity="1.59" label="1.59 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00baff" quantity="1.60" label="1.60 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00bfff" quantity="1.62" label="1.62 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00c3ff" quantity="1.63" label="1.63 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00c8ff" quantity="1.65" label="1.65 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ccff" quantity="1.67" label="1.67 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00d1ff" quantity="1.68" label="1.68 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00d5ff" quantity="1.70" label="1.70 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00daff" quantity="1.71" label="1.71 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00deff" quantity="1.73" label="1.73 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00e3ff" quantity="1.74" label="1.74 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00e7ff" quantity="1.76" label="1.76 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ecff" quantity="1.78" label="1.78 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00f1ff" quantity="1.79" label="1.79 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00f5ff" quantity="1.81" label="1.81 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00faff" quantity="1.82" label="1.82 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00feff" quantity="1.84" label="1.84 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00fffb" quantity="1.85" label="1.85 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00fff7" quantity="1.87" label="1.87 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00fff2" quantity="1.89" label="1.89 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ffee" quantity="1.90" label="1.90 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ffe9" quantity="1.92" label="1.92 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ffe5" quantity="1.93" label="1.93 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ffe0" quantity="1.95" label="1.95 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ffdc" quantity="1.96" label="1.96 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ffd7" quantity="1.98" label="1.98 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ffd3" quantity="2.00" label="2.00 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ffce" quantity="2.01" label="2.01 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ffca" quantity="2.03" label="2.03 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ffc5" quantity="2.04" label="2.04 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ffc1" quantity="2.06" label="2.06 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ffbc" quantity="2.07" label="2.07 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ffb8" quantity="2.09" label="2.09 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ffb3" quantity="2.11" label="2.11 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ffaf" quantity="2.12" label="2.12 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ffaa" quantity="2.14" label="2.14 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ffa6" quantity="2.15" label="2.15 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ffa1" quantity="2.17" label="2.17 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ff9d" quantity="2.19" label="2.19 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ff98" quantity="2.20" label="2.20 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ff94" quantity="2.22" label="2.22 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ff8f" quantity="2.23" label="2.23 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ff8b" quantity="2.25" label="2.25 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ff86" quantity="2.26" label="2.26 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ff82" quantity="2.28" label="2.28 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ff7d" quantity="2.30" label="2.30 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ff79" quantity="2.31" label="2.31 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ff74" quantity="2.33" label="2.33 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ff70" quantity="2.34" label="2.34 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ff6b" quantity="2.36" label="2.36 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ff67" quantity="2.37" label="2.37 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ff62" quantity="2.39" label="2.39 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ff5e" quantity="2.41" label="2.41 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ff59" quantity="2.42" label="2.42 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ff55" quantity="2.44" label="2.44 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ff50" quantity="2.45" label="2.45 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ff4c" quantity="2.47" label="2.47 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ff47" quantity="2.48" label="2.48 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ff3e" quantity="2.50" label="2.50 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ff3a" quantity="2.52" label="2.52 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ff35" quantity="2.53" label="2.53 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ff31" quantity="2.55" label="2.55 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ff2c" quantity="2.56" label="2.56 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ff28" quantity="2.58" label="2.58 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ff23" quantity="2.59" label="2.59 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ff1f" quantity="2.61" label="2.61 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ff1a" quantity="2.63" label="2.63 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ff16" quantity="2.64" label="2.64 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ff11" quantity="2.66" label="2.66 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ff0d" quantity="2.67" label="2.67 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ff08" quantity="2.69" label="2.69 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#00ff04" quantity="2.70" label="2.70 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#01ff00" quantity="2.72" label="2.72 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#05ff00" quantity="2.74" label="2.74 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#0dff00" quantity="2.75" label="2.75 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#0eff00" quantity="2.77" label="2.77 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#13ff00" quantity="2.78" label="2.78 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#17ff00" quantity="2.80" label="2.80 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#1cff00" quantity="2.81" label="2.81 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#20ff00" quantity="2.83" label="2.83 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#25ff00" quantity="2.85" label="2.85 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#29ff00" quantity="2.86" label="2.86 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#2eff00" quantity="2.88" label="2.88 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#32ff00" quantity="2.89" label="2.89 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#37ff00" quantity="2.91" label="2.91 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#3bff00" quantity="2.93" label="2.93 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#40ff00" quantity="2.94" label="2.94 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#44ff00" quantity="2.96" label="2.96 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#49ff00" quantity="2.97" label="2.97 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#4dff00" quantity="2.99" label="2.99 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#52ff00" quantity="3.00" label="3.00 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#56ff00" quantity="3.02" label="3.02 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#5bff00" quantity="3.04" label="3.04 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#5fff00" quantity="3.05" label="3.05 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#64ff00" quantity="3.07" label="3.07 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#68ff00" quantity="3.08" label="3.08 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#6dff00" quantity="3.10" label="3.10 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#71ff00" quantity="3.11" label="3.11 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#76ff00" quantity="3.13" label="3.13 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#7bff00" quantity="3.15" label="3.15 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#7fff00" quantity="3.16" label="3.16 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#84ff00" quantity="3.18" label="3.18 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#88ff00" quantity="3.19" label="3.19 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#8dff00" quantity="3.21" label="3.21 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#91ff00" quantity="3.22" label="3.22 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#96ff00" quantity="3.24" label="3.24 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#9aff00" quantity="3.26" label="3.26 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#9fff00" quantity="3.27" label="3.27 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#a3ff00" quantity="3.29" label="3.29 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#a8ff00" quantity="3.30" label="3.30 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#acff00" quantity="3.32" label="3.32 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#b1ff00" quantity="3.33" label="3.33 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#b5ff00" quantity="3.35" label="3.35 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#baff00" quantity="3.37" label="3.37 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#beff00" quantity="3.38" label="3.38 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#c3ff00" quantity="3.40" label="3.40 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#c7ff00" quantity="3.41" label="3.41 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ccff00" quantity="3.43" label="3.43 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#d0ff00" quantity="3.44" label="3.44 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#d5ff00" quantity="3.46" label="3.46 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#d9ff00" quantity="3.48" label="3.48 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#deff00" quantity="3.49" label="3.49 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#e2ff00" quantity="3.51" label="3.51 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#e7ff00" quantity="3.52" label="3.52 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ebff00" quantity="3.54" label="3.54 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#f0ff00" quantity="3.56" label="3.56 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#f4ff00" quantity="3.57" label="3.57 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#f9ff00" quantity="3.59" label="3.59 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#fdff00" quantity="3.60" label="3.60 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#fffc00" quantity="3.62" label="3.62 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#fff800" quantity="3.63" label="3.63 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#fff300" quantity="3.65" label="3.65 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ffef00" quantity="3.67" label="3.67 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ffea00" quantity="3.68" label="3.68 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ffe600" quantity="3.70" label="3.70 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ffe100" quantity="3.71" label="3.71 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ffdd00" quantity="3.73" label="3.73 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ffd800" quantity="3.74" label="3.74 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ffd400" quantity="3.76" label="3.76 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ffcf00" quantity="3.78" label="3.78 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ffcb00" quantity="3.79" label="3.79 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ffc600" quantity="3.81" label="3.81 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ffc200" quantity="3.82" label="3.82 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ffbd00" quantity="3.84" label="3.84 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ffb900" quantity="3.85" label="3.85 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ffb400" quantity="3.87" label="3.87 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ffb000" quantity="3.89" label="3.89 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ffab00" quantity="3.90" label="3.90 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ffa700" quantity="3.92" label="3.92 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ffa200" quantity="3.93" label="3.93 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff9e00" quantity="3.95" label="3.95 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff9900" quantity="3.96" label="3.96 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff9500" quantity="3.98" label="3.98 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff9000" quantity="4.00" label="4.00 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff8c00" quantity="4.01" label="4.01 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff8700" quantity="4.03" label="4.03 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff8300" quantity="4.04" label="4.04 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff7e00" quantity="4.06" label="4.06 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff7a00" quantity="4.07" label="4.07 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff7500" quantity="4.09" label="4.09 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff7100" quantity="4.11" label="4.11 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff6c00" quantity="4.12" label="4.12 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff6800" quantity="4.14" label="4.14 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff6300" quantity="4.15" label="4.15 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff5f00" quantity="4.17" label="4.17 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff5a00" quantity="4.19" label="4.19 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff5600" quantity="4.20" label="4.20 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff5100" quantity="4.22" label="4.22 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff4d00" quantity="4.23" label="4.23 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff4800" quantity="4.25" label="4.25 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff4400" quantity="4.26" label="4.26 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff3f00" quantity="4.28" label="4.28 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff3b00" quantity="4.30" label="4.30 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff3600" quantity="4.31" label="4.31 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff3200" quantity="4.33" label="4.33 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff2d00" quantity="4.34" label="4.34 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff2900" quantity="4.36" label="4.36 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff2400" quantity="4.37" label="4.37 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff2000" quantity="4.39" label="4.39 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff1b00" quantity="4.41" label="4.41 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff1700" quantity="4.42" label="4.42 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff1200" quantity="4.44" label="4.44 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff0e00" quantity="4.45" label="4.45 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff0900" quantity="4.47" label="4.47 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff0500" quantity="4.48" label="4.48 ppmv" opacity="1.0"/>
+              <ColorMapEntry color="#ff0000" quantity="4.5" label="4.5 ppmv" opacity="1.0"/>
+            </se:ColorMap>
+          </se:RasterSymbolizer>
+          <se:RasterSymbolizer>
+            <Opacity>0.0</Opacity>
+            <se:ColorMap>
+              <ColorMapEntry color="#000000" label="Empty"/>
+            </se:ColorMap>
+          </se:RasterSymbolizer>
+        </se:Rule>
+      </se:FeatureTypeStyle>
+    </UserStyle>
+  </NamedLayer>
+</StyledLayerDescriptor>

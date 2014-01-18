@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<StyledLayerDescriptor version="1.0.0"
+    xsi:schemaLocation="http://www.opengis.net/sld StyledLayerDescriptor.xsd"
+    xmlns="http://www.opengis.net/sld"
+    xmlns:se="http://www.opengis.net/se"
+    xmlns:ogc="http://www.opengis.net/ogc"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <NamedLayer>
+    <se:Name>MODIS_Terra_Chlorophyll_A</se:Name>
+    <UserStyle>
+      <se:Name>GIBS</se:Name>
+      <se:FeatureTypeStyle>
+        <se:Rule>
+          <se:RasterSymbolizer>
+            <se:ColorMap>
+              <ColorMapEntry color="#90006f" quantity="0.01" label="0.01 mg/m3 (log)" opacity="1.0"/>
+              <ColorMapEntry color="#8d0072" opacity="1.0"/>
+              <ColorMapEntry color="#8a0075" opacity="1.0"/>
+              <ColorMapEntry color="#870078" opacity="1.0"/>
+              <ColorMapEntry color="#84007b" opacity="1.0"/>
+              <ColorMapEntry color="#81007e" opacity="1.0"/>
+              <ColorMapEntry color="#7e0081" opacity="1.0"/>
+              <ColorMapEntry color="#7b0084" opacity="1.0"/>
+              <ColorMapEntry color="#780087" opacity="1.0"/>
+              <ColorMapEntry color="#75008a" opacity="1.0"/>
+              <ColorMapEntry color="#72008d" opacity="1.0"/>
+              <ColorMapEntry color="#6f0090" opacity="1.0"/>
+              <ColorMapEntry color="#6c0093" opacity="1.0"/>
+              <ColorMapEntry color="#690096" opacity="1.0"/>
+              <ColorMapEntry color="#660099" opacity="1.0"/>
+              <ColorMapEntry color="#63009c" opacity="1.0"/>
+              <ColorMapEntry color="#60009f" opacity="1.0"/>
+              <ColorMapEntry color="#5d00a2" opacity="1.0"/>
+              <ColorMapEntry color="#5a00a5" opacity="1.0"/>
+              <ColorMapEntry color="#5700a8" opacity="1.0"/>
+              <ColorMapEntry color="#5400ab" opacity="1.0"/>
+              <ColorMapEntry color="#5100ae" opacity="1.0"/>
+              <ColorMapEntry color="#4e00b1" opacity="1.0"/>
+              <ColorMapEntry color="#4b00b4" opacity="1.0"/>
+              <ColorMapEntry color="#4800b7" opacity="1.0"/>
+              <ColorMapEntry color="#4500ba" opacity="1.0"/>
+              <ColorMapEntry color="#4200bd" opacity="1.0"/>
+              <ColorMapEntry color="#3f00c0" opacity="1.0"/>
+              <ColorMapEntry color="#3c00c3" opacity="1.0"/>
+              <ColorMapEntry color="#3900c6" opacity="1.0"/>
+              <ColorMapEntry color="#3600c9" opacity="1.0"/>
+              <ColorMapEntry color="#3300cc" opacity="1.0"/>
+              <ColorMapEntry color="#3000cf" opacity="1.0"/>
+              <ColorMapEntry color="#2d00d2" opacity="1.0"/>
+              <ColorMapEntry color="#2a00d5" opacity="1.0"/>
+              <ColorMapEntry color="#2700d8" opacity="1.0"/>
+              <ColorMapEntry color="#2400db" opacity="1.0"/>
+              <ColorMapEntry color="#2100de" opacity="1.0"/>
+              <ColorMapEntry color="#1e00e1" opacity="1.0"/>
+              <ColorMapEntry color="#1b00e4" opacity="1.0"/>
+              <ColorMapEntry color="#1800e7" opacity="1.0"/>
+              <ColorMapEntry color="#1500ea" opacity="1.0"/>
+              <ColorMapEntry color="#1200ed" opacity="1.0"/>
+              <ColorMapEntry color="#0f00f0" opacity="1.0"/>
+              <ColorMapEntry color="#0c00f3" opacity="1.0"/>
+              <ColorMapEntry color="#0900f6" opacity="1.0"/>
+              <ColorMapEntry color="#0600f9" opacity="1.0"/>
+              <ColorMapEntry color="#0000fc" opacity="1.0"/>
+              <ColorMapEntry color="#0000ff" opacity="1.0"/>
+              <ColorMapEntry color="#0005ff" opacity="1.0"/>
+              <ColorMapEntry color="#000aff" opacity="1.0"/>
+              <ColorMapEntry color="#0010ff" opacity="1.0"/>
+              <ColorMapEntry color="#0015ff" opacity="1.0"/>
+              <ColorMapEntry color="#001aff" opacity="1.0"/>
+              <ColorMapEntry color="#0020ff" opacity="1.0"/>
+              <ColorMapEntry color="#0025ff" opacity="1.0"/>
+              <ColorMapEntry color="#002aff" opacity="1.0"/>
+              <ColorMapEntry color="#0030ff" opacity="1.0"/>
+              <ColorMapEntry color="#0035ff" opacity="1.0"/>
+              <ColorMapEntry color="#003aff" opacity="1.0"/>
+              <ColorMapEntry color="#0040ff" opacity="1.0"/>
+              <ColorMapEntry color="#0045ff" opacity="1.0"/>
+              <ColorMapEntry color="#004aff" opacity="1.0"/>
+              <ColorMapEntry color="#0050ff" opacity="1.0"/>
+              <ColorMapEntry color="#0055ff" opacity="1.0"/>
+              <ColorMapEntry color="#005aff" opacity="1.0"/>
+              <ColorMapEntry color="#0060ff" opacity="1.0"/>
+              <ColorMapEntry color="#0065ff" opacity="1.0"/>
+              <ColorMapEntry color="#006aff" opacity="1.0"/>
+              <ColorMapEntry color="#0070ff" opacity="1.0"/>
+              <ColorMapEntry color="#0075ff" opacity="1.0"/>
+              <ColorMapEntry color="#007aff" opacity="1.0"/>
+              <ColorMapEntry color="#0080ff" opacity="1.0"/>
+              <ColorMapEntry color="#0085ff" opacity="1.0"/>
+              <ColorMapEntry color="#008aff" opacity="1.0"/>
+              <ColorMapEntry color="#0090ff" opacity="1.0"/>
+              <ColorMapEntry color="#0095ff" opacity="1.0"/>
+              <ColorMapEntry color="#009aff" opacity="1.0"/>
+              <ColorMapEntry color="#00a0ff" opacity="1.0"/>
+              <ColorMapEntry color="#00a5ff" opacity="1.0"/>
+              <ColorMapEntry color="#00aaff" opacity="1.0"/>
+              <ColorMapEntry color="#00b0ff" opacity="1.0"/>
+              <ColorMapEntry color="#00b5ff" opacity="1.0"/>
+              <ColorMapEntry color="#00baff" opacity="1.0"/>
+              <ColorMapEntry color="#00c0ff" opacity="1.0"/>
+              <ColorMapEntry color="#00c5ff" opacity="1.0"/>
+              <ColorMapEntry color="#00caff" opacity="1.0"/>
+              <ColorMapEntry color="#00d0ff" opacity="1.0"/>
+              <ColorMapEntry color="#00d5ff" opacity="1.0"/>
+              <ColorMapEntry color="#00daff" opacity="1.0"/>
+              <ColorMapEntry color="#00e0ff" opacity="1.0"/>
+              <ColorMapEntry color="#00e5ff" opacity="1.0"/>
+              <ColorMapEntry color="#00eaff" opacity="1.0"/>
+              <ColorMapEntry color="#00f0ff" opacity="1.0"/>
+              <ColorMapEntry color="#00f5ff" opacity="1.0"/>
+              <ColorMapEntry color="#00faff" opacity="1.0"/>
+              <ColorMapEntry color="#00ffff" opacity="1.0"/>
+              <ColorMapEntry color="#00fff7" opacity="1.0"/>
+              <ColorMapEntry color="#00ffef" opacity="1.0"/>
+              <ColorMapEntry color="#00ffe7" opacity="1.0"/>
+              <ColorMapEntry color="#00ffdf" opacity="1.0"/>
+              <ColorMapEntry color="#00ffd7" opacity="1.0"/>
+              <ColorMapEntry color="#00ffcf" opacity="1.0"/>
+              <ColorMapEntry color="#00ffc7" opacity="1.0"/>
+              <ColorMapEntry color="#00ffbf" opacity="1.0"/>
+              <ColorMapEntry color="#00ffb7" opacity="1.0"/>
+              <ColorMapEntry color="#00ffaf" opacity="1.0"/>
+              <ColorMapEntry color="#00ffa7" opacity="1.0"/>
+              <ColorMapEntry color="#00ff9f" opacity="1.0"/>
+              <ColorMapEntry color="#00ff97" opacity="1.0"/>
+              <ColorMapEntry color="#00ff8f" opacity="1.0"/>
+              <ColorMapEntry color="#00ff87" opacity="1.0"/>
+              <ColorMapEntry color="#00ff7f" opacity="1.0"/>
+              <ColorMapEntry color="#00ff77" opacity="1.0"/>
+              <ColorMapEntry color="#00ff6f" opacity="1.0"/>
+              <ColorMapEntry color="#00ff67" opacity="1.0"/>
+              <ColorMapEntry color="#00ff5f" opacity="1.0"/>
+              <ColorMapEntry color="#00ff57" opacity="1.0"/>
+              <ColorMapEntry color="#00ff4f" opacity="1.0"/>
+              <ColorMapEntry color="#00ff47" opacity="1.0"/>
+              <ColorMapEntry color="#00ff3f" opacity="1.0"/>
+              <ColorMapEntry color="#00ff37" opacity="1.0"/>
+              <ColorMapEntry color="#00ff2f" opacity="1.0"/>
+              <ColorMapEntry color="#00ff27" opacity="1.0"/>
+              <ColorMapEntry color="#00ff1f" opacity="1.0"/>
+              <ColorMapEntry color="#00ff17" opacity="1.0"/>
+              <ColorMapEntry color="#00ff0f" opacity="1.0"/>
+              <ColorMapEntry color="#00ff00" opacity="1.0"/>
+              <ColorMapEntry color="#08ff00" opacity="1.0"/>
+              <ColorMapEntry color="#10ff00" opacity="1.0"/>
+              <ColorMapEntry color="#18ff00" opacity="1.0"/>
+              <ColorMapEntry color="#20ff00" opacity="1.0"/>
+              <ColorMapEntry color="#28ff00" opacity="1.0"/>
+              <ColorMapEntry color="#30ff00" opacity="1.0"/>
+              <ColorMapEntry color="#38ff00" opacity="1.0"/>
+              <ColorMapEntry color="#40ff00" opacity="1.0"/>
+              <ColorMapEntry color="#48ff00" opacity="1.0"/>
+              <ColorMapEntry color="#50ff00" opacity="1.0"/>
+              <ColorMapEntry color="#58ff00" opacity="1.0"/>
+              <ColorMapEntry color="#60ff00" opacity="1.0"/>
+              <ColorMapEntry color="#68ff00" opacity="1.0"/>
+              <ColorMapEntry color="#70ff00" opacity="1.0"/>
+              <ColorMapEntry color="#78ff00" opacity="1.0"/>
+              <ColorMapEntry color="#80ff00" opacity="1.0"/>
+              <ColorMapEntry color="#88ff00" opacity="1.0"/>
+              <ColorMapEntry color="#90ff00" opacity="1.0"/>
+              <ColorMapEntry color="#98ff00" opacity="1.0"/>
+              <ColorMapEntry color="#a0ff00" opacity="1.0"/>
+              <ColorMapEntry color="#a8ff00" opacity="1.0"/>
+              <ColorMapEntry color="#b0ff00" opacity="1.0"/>
+              <ColorMapEntry color="#b8ff00" opacity="1.0"/>
+              <ColorMapEntry color="#c0ff00" opacity="1.0"/>
+              <ColorMapEntry color="#c8ff00" opacity="1.0"/>
+              <ColorMapEntry color="#d0ff00" opacity="1.0"/>
+              <ColorMapEntry color="#d8ff00" opacity="1.0"/>
+              <ColorMapEntry color="#e0ff00" opacity="1.0"/>
+              <ColorMapEntry color="#e8ff00" opacity="1.0"/>
+              <ColorMapEntry color="#f0ff00" opacity="1.0"/>
+              <ColorMapEntry color="#f8ff00" opacity="1.0"/>
+              <ColorMapEntry color="#ffff00" opacity="1.0"/>
+              <ColorMapEntry color="#fffb00" opacity="1.0"/>
+              <ColorMapEntry color="#fff700" opacity="1.0"/>
+              <ColorMapEntry color="#fff300" opacity="1.0"/>
+              <ColorMapEntry color="#ffef00" opacity="1.0"/>
+              <ColorMapEntry color="#ffeb00" opacity="1.0"/>
+              <ColorMapEntry color="#ffe700" opacity="1.0"/>
+              <ColorMapEntry color="#ffe300" opacity="1.0"/>
+              <ColorMapEntry color="#ffdf00" opacity="1.0"/>
+              <ColorMapEntry color="#ffdb00" opacity="1.0"/>
+              <ColorMapEntry color="#ffd700" opacity="1.0"/>
+              <ColorMapEntry color="#ffd300" opacity="1.0"/>
+              <ColorMapEntry color="#ffcf00" opacity="1.0"/>
+              <ColorMapEntry color="#ffcb00" opacity="1.0"/>
+              <ColorMapEntry color="#ffc700" opacity="1.0"/>
+              <ColorMapEntry color="#ffc300" opacity="1.0"/>
+              <ColorMapEntry color="#ffbf00" opacity="1.0"/>
+              <ColorMapEntry color="#ffbb00" opacity="1.0"/>
+              <ColorMapEntry color="#ffb700" opacity="1.0"/>
+              <ColorMapEntry color="#ffb300" opacity="1.0"/>
+              <ColorMapEntry color="#ffaf00" opacity="1.0"/>
+              <ColorMapEntry color="#ffab00" opacity="1.0"/>
+              <ColorMapEntry color="#ffa700" opacity="1.0"/>
+              <ColorMapEntry color="#ffa300" opacity="1.0"/>
+              <ColorMapEntry color="#ff9f00" opacity="1.0"/>
+              <ColorMapEntry color="#ff9b00" opacity="1.0"/>
+              <ColorMapEntry color="#ff9700" opacity="1.0"/>
+              <ColorMapEntry color="#ff9300" opacity="1.0"/>
+              <ColorMapEntry color="#ff8f00" opacity="1.0"/>
+              <ColorMapEntry color="#ff8b00" opacity="1.0"/>
+              <ColorMapEntry color="#ff8700" opacity="1.0"/>
+              <ColorMapEntry color="#ff8300" opacity="1.0"/>
+              <ColorMapEntry color="#ff7f00" opacity="1.0"/>
+              <ColorMapEntry color="#ff7b00" opacity="1.0"/>
+              <ColorMapEntry color="#ff7700" opacity="1.0"/>
+              <ColorMapEntry color="#ff7300" opacity="1.0"/>
+              <ColorMapEntry color="#ff6f00" opacity="1.0"/>
+              <ColorMapEntry color="#ff6b00" opacity="1.0"/>
+              <ColorMapEntry color="#ff6700" opacity="1.0"/>
+              <ColorMapEntry color="#ff6300" opacity="1.0"/>
+              <ColorMapEntry color="#ff5f00" opacity="1.0"/>
+              <ColorMapEntry color="#ff5b00" opacity="1.0"/>
+              <ColorMapEntry color="#ff5700" opacity="1.0"/>
+              <ColorMapEntry color="#ff5300" opacity="1.0"/>
+              <ColorMapEntry color="#ff4f00" opacity="1.0"/>
+              <ColorMapEntry color="#ff4b00" opacity="1.0"/>
+              <ColorMapEntry color="#ff4700" opacity="1.0"/>
+              <ColorMapEntry color="#ff4300" opacity="1.0"/>
+              <ColorMapEntry color="#ff3f00" opacity="1.0"/>
+              <ColorMapEntry color="#ff3b00" opacity="1.0"/>
+              <ColorMapEntry color="#ff3700" opacity="1.0"/>
+              <ColorMapEntry color="#ff3300" opacity="1.0"/>
+              <ColorMapEntry color="#ff2f00" opacity="1.0"/>
+              <ColorMapEntry color="#ff2b00" opacity="1.0"/>
+              <ColorMapEntry color="#ff2700" opacity="1.0"/>
+              <ColorMapEntry color="#ff2300" opacity="1.0"/>
+              <ColorMapEntry color="#ff1f00" opacity="1.0"/>
+              <ColorMapEntry color="#ff1b00" opacity="1.0"/>
+              <ColorMapEntry color="#ff1700" opacity="1.0"/>
+              <ColorMapEntry color="#ff1300" opacity="1.0"/>
+              <ColorMapEntry color="#ff0f00" opacity="1.0"/>
+              <ColorMapEntry color="#ff0b00" opacity="1.0"/>
+              <ColorMapEntry color="#ff0700" opacity="1.0"/>
+              <ColorMapEntry color="#ff0300" opacity="1.0"/>
+              <ColorMapEntry color="#ff0000" opacity="1.0"/>
+              <ColorMapEntry color="#fa0000" opacity="1.0"/>
+              <ColorMapEntry color="#f50000" opacity="1.0"/>
+              <ColorMapEntry color="#f00000" opacity="1.0"/>
+              <ColorMapEntry color="#eb0000" opacity="1.0"/>
+              <ColorMapEntry color="#e60000" opacity="1.0"/>
+              <ColorMapEntry color="#e10000" opacity="1.0"/>
+              <ColorMapEntry color="#dc0000" opacity="1.0"/>
+              <ColorMapEntry color="#d70000" opacity="1.0"/>
+              <ColorMapEntry color="#d20000" opacity="1.0"/>
+              <ColorMapEntry color="#cd0000" opacity="1.0"/>
+              <ColorMapEntry color="#c80000" opacity="1.0"/>
+              <ColorMapEntry color="#c30000" opacity="1.0"/>
+              <ColorMapEntry color="#be0000" opacity="1.0"/>
+              <ColorMapEntry color="#b90000" opacity="1.0"/>
+              <ColorMapEntry color="#b40000" opacity="1.0"/>
+              <ColorMapEntry color="#af0000" opacity="1.0"/>
+              <ColorMapEntry color="#aa0000" opacity="1.0"/>
+              <ColorMapEntry color="#a50000" opacity="1.0"/>
+              <ColorMapEntry color="#a00000" opacity="1.0"/>
+              <ColorMapEntry color="#9b0000" opacity="1.0"/>
+              <ColorMapEntry color="#960000" opacity="1.0"/>
+              <ColorMapEntry color="#910000" opacity="1.0"/>
+              <ColorMapEntry color="#8c0000" opacity="1.0"/>
+              <ColorMapEntry color="#870000" opacity="1.0"/>
+              <ColorMapEntry color="#820000" opacity="1.0"/>
+              <ColorMapEntry color="#7d0000" opacity="1.0"/>
+              <ColorMapEntry color="#780000" opacity="1.0"/>
+              <ColorMapEntry color="#730000" opacity="1.0"/>
+              <ColorMapEntry color="#6e0000" opacity="1.0"/>
+              <ColorMapEntry color="#690000" quantity="20" label="20 mg/m3 (log)" opacity="1.0"/>
+            </se:ColorMap>
+          </se:RasterSymbolizer>
+          <se:RasterSymbolizer>
+            <Opacity>0.0</Opacity>
+            <se:ColorMap>
+              <ColorMapEntry color="#000000" label="Empty"/>
+            </se:ColorMap>
+          </se:RasterSymbolizer>
+        </se:Rule>
+      </se:FeatureTypeStyle>
+    </UserStyle>
+  </NamedLayer>
+</StyledLayerDescriptor>

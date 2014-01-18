@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StyledLayerDescriptor
+  xmlns="http://www.opengis.net/sld"
+  xmlns:ogc="http://www.opengis.net/ogc"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  version="1.0.0"
+  xsi:schemaLocation="http://www.opengis.net/sld/1.0.0 StyledLayerDescriptor.xsd">
+  <NamedLayer>
+    <Name>AE5DSno_SWE_LL</Name>
+    <UserStyle>
+      <Title>SLD Style</Title>
+      <FeatureTypeStyle>
+        <Rule>
+          <RasterSymbolizer>
+            <ColorMap>
+              <ColorMapEntry color="#111111" quantity="0" label="0 mm" opacity="0.0"/>
+              <ColorMapEntry color="#070007" quantity="0.334728" label="0.334728 mm" opacity="1.0"/>
+              <ColorMapEntry color="#0E000E" quantity="0.669456" label="0.669456 mm" opacity="1.0"/>
+              <ColorMapEntry color="#150015" quantity="1.00418" label="1.00418 mm" opacity="1.0"/>
+              <ColorMapEntry color="#1C001C" quantity="1.33891" label="1.33891 mm" opacity="1.0"/>
+              <ColorMapEntry color="#230023" quantity="1.67364" label="1.67364 mm" opacity="1.0"/>
+              <ColorMapEntry color="#2B002B" quantity="2.00837" label="2.00837 mm" opacity="1.0"/>
+              <ColorMapEntry color="#320032" quantity="2.3431" label="2.3431 mm" opacity="1.0"/>
+              <ColorMapEntry color="#390039" quantity="2.67782" label="2.67782 mm" opacity="1.0"/>
+              <ColorMapEntry color="#400040" quantity="3.01255" label="3.01255 mm" opacity="1.0"/>
+              <ColorMapEntry color="#470047" quantity="3.34728" label="3.34728 mm" opacity="1.0"/>
+              <ColorMapEntry color="#4E004E" quantity="3.68201" label="3.68201 mm" opacity="1.0"/>
+              <ColorMapEntry color="#550055" quantity="4.01674" label="4.01674 mm" opacity="1.0"/>
+              <ColorMapEntry color="#5C005C" quantity="4.35146" label="4.35146 mm" opacity="1.0"/>
+              <ColorMapEntry color="#630063" quantity="4.68619" label="4.68619 mm" opacity="1.0"/>
+              <ColorMapEntry color="#6A006A" quantity="5.02092" label="5.02092 mm" opacity="1.0"/>
+              <ColorMapEntry color="#710071" quantity="5.35565" label="5.35565 mm" opacity="1.0"/>
+              <ColorMapEntry color="#780078" quantity="5.69038" label="5.69038 mm" opacity="1.0"/>
+              <ColorMapEntry color="#800080" quantity="6.0251" label="6.0251 mm" opacity="1.0"/>
+              <ColorMapEntry color="#870087" quantity="6.35983" label="6.35983 mm" opacity="1.0"/>
+              <ColorMapEntry color="#8E008E" quantity="6.69456" label="6.69456 mm" opacity="1.0"/>
+              <ColorMapEntry color="#950095" quantity="7.02929" label="7.02929 mm" opacity="1.0"/>
+              <ColorMapEntry color="#9C009C" quantity="7.36402" label="7.36402 mm" opacity="1.0"/>
+              <ColorMapEntry color="#A300A3" quantity="7.69874" label="7.69874 mm" opacity="1.0"/>
+              <ColorMapEntry color="#AA00AA" quantity="8.03347" label="8.03347 mm" opacity="1.0"/>
+              <ColorMapEntry color="#B100B1" quantity="8.3682" label="8.3682 mm" opacity="1.0"/>
+              <ColorMapEntry color="#B800B8" quantity="8.70293" label="8.70293 mm" opacity="1.0"/>
+              <ColorMapEntry color="#BF00BF" quantity="9.03766" label="9.03766 mm" opacity="1.0"/>
+              <ColorMapEntry color="#C600C6" quantity="9.37239" label="9.37239 mm" opacity="1.0"/>
+              <ColorMapEntry color="#CD00CD" quantity="9.70711" label="9.70711 mm" opacity="1.0"/>
+              <ColorMapEntry color="#D500D5" quantity="10.0418" label="10.0418 mm" opacity="1.0"/>
+              <ColorMapEntry color="#DC00DC" quantity="10.3766" label="10.3766 mm" opacity="1.0"/>
+              <ColorMapEntry color="#E300E3" quantity="10.7113" label="10.7113 mm" opacity="1.0"/>
+              <ColorMapEntry color="#EA00EA" quantity="11.046" label="11.046 mm" opacity="1.0"/>
+              <ColorMapEntry color="#F100F1" quantity="11.3808" label="11.3808 mm" opacity="1.0"/>
+              <ColorMapEntry color="#F800F8" quantity="11.7155" label="11.7155 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF00FF" quantity="12.0502" label="12.0502 mm" opacity="1.0"/>
+              <ColorMapEntry color="#F700FF" quantity="12.3849" label="12.3849 mm" opacity="1.0"/>
+              <ColorMapEntry color="#F000FF" quantity="12.7197" label="12.7197 mm" opacity="1.0"/>
+              <ColorMapEntry color="#E800FF" quantity="13.0544" label="13.0544 mm" opacity="1.0"/>
+              <ColorMapEntry color="#E100FF" quantity="13.3891" label="13.3891 mm" opacity="1.0"/>
+              <ColorMapEntry color="#D900FF" quantity="13.7238" label="13.7238 mm" opacity="1.0"/>
+              <ColorMapEntry color="#D200FF" quantity="14.0586" label="14.0586 mm" opacity="1.0"/>
+              <ColorMapEntry color="#CA00FF" quantity="14.3933" label="14.3933 mm" opacity="1.0"/>
+              <ColorMapEntry color="#C300FF" quantity="14.728" label="14.728 mm" opacity="1.0"/>
+              <ColorMapEntry color="#BB00FF" quantity="15.0628" label="15.0628 mm" opacity="1.0"/>
+              <ColorMapEntry color="#B400FF" quantity="15.3975" label="15.3975 mm" opacity="1.0"/>
+              <ColorMapEntry color="#AC00FF" quantity="15.7322" label="15.7322 mm" opacity="1.0"/>
+              <ColorMapEntry color="#A500FF" quantity="16.0669" label="16.0669 mm" opacity="1.0"/>
+              <ColorMapEntry color="#9D00FF" quantity="16.4017" label="16.4017 mm" opacity="1.0"/>
+              <ColorMapEntry color="#9600FF" quantity="16.7364" label="16.7364 mm" opacity="1.0"/>
+              <ColorMapEntry color="#8E00FF" quantity="17.0711" label="17.0711 mm" opacity="1.0"/>
+              <ColorMapEntry color="#8700FF" quantity="17.4059" label="17.4059 mm" opacity="1.0"/>
+              <ColorMapEntry color="#7F00FF" quantity="17.7406" label="17.7406 mm" opacity="1.0"/>
+              <ColorMapEntry color="#7800FF" quantity="18.0753" label="18.0753 mm" opacity="1.0"/>
+              <ColorMapEntry color="#7000FF" quantity="18.41" label="18.41 mm" opacity="1.0"/>
+              <ColorMapEntry color="#6900FF" quantity="18.7448" label="18.7448 mm" opacity="1.0"/>
+              <ColorMapEntry color="#6100FF" quantity="19.0795" label="19.0795 mm" opacity="1.0"/>
+              <ColorMapEntry color="#5A00FF" quantity="19.4142" label="19.4142 mm" opacity="1.0"/>
+              <ColorMapEntry color="#5200FF" quantity="19.749" label="19.749 mm" opacity="1.0"/>
+              <ColorMapEntry color="#4B00FF" quantity="20.0837" label="20.0837 mm" opacity="1.0"/>
+              <ColorMapEntry color="#4300FF" quantity="20.4184" label="20.4184 mm" opacity="1.0"/>
+              <ColorMapEntry color="#3C00FF" quantity="20.7531" label="20.7531 mm" opacity="1.0"/>
+              <ColorMapEntry color="#3400FF" quantity="21.0879" label="21.0879 mm" opacity="1.0"/>
+              <ColorMapEntry color="#2D00FF" quantity="21.4226" label="21.4226 mm" opacity="1.0"/>
+              <ColorMapEntry color="#2500FF" quantity="21.7573" label="21.7573 mm" opacity="1.0"/>
+              <ColorMapEntry color="#1E00FF" quantity="22.0921" label="22.0921 mm" opacity="1.0"/>
+              <ColorMapEntry color="#1600FF" quantity="22.4268" label="22.4268 mm" opacity="1.0"/>
+              <ColorMapEntry color="#0F00FF" quantity="22.7615" label="22.7615 mm" opacity="1.0"/>
+              <ColorMapEntry color="#0700FF" quantity="23.0962" label="23.0962 mm" opacity="1.0"/>
+              <ColorMapEntry color="#0000FF" quantity="23.431" label="23.431 mm" opacity="1.0"/>
+              <ColorMapEntry color="#0008FF" quantity="23.7657" label="23.7657 mm" opacity="1.0"/>
+              <ColorMapEntry color="#000FFF" quantity="24.1004" label="24.1004 mm" opacity="1.0"/>
+              <ColorMapEntry color="#0017FF" quantity="24.4351" label="24.4351 mm" opacity="1.0"/>
+              <ColorMapEntry color="#001EFF" quantity="24.7699" label="24.7699 mm" opacity="1.0"/>
+              <ColorMapEntry color="#0026FF" quantity="25.1046" label="25.1046 mm" opacity="1.0"/>
+              <ColorMapEntry color="#002DFF" quantity="25.4393" label="25.4393 mm" opacity="1.0"/>
+              <ColorMapEntry color="#0035FF" quantity="25.7741" label="25.7741 mm" opacity="1.0"/>
+              <ColorMapEntry color="#003CFF" quantity="26.1088" label="26.1088 mm" opacity="1.0"/>
+              <ColorMapEntry color="#0044FF" quantity="26.4435" label="26.4435 mm" opacity="1.0"/>
+              <ColorMapEntry color="#004BFF" quantity="26.7782" label="26.7782 mm" opacity="1.0"/>
+              <ColorMapEntry color="#0053FF" quantity="27.113" label="27.113 mm" opacity="1.0"/>
+              <ColorMapEntry color="#005AFF" quantity="27.4477" label="27.4477 mm" opacity="1.0"/>
+              <ColorMapEntry color="#0062FF" quantity="27.7824" label="27.7824 mm" opacity="1.0"/>
+              <ColorMapEntry color="#0069FF" quantity="28.1172" label="28.1172 mm" opacity="1.0"/>
+              <ColorMapEntry color="#0071FF" quantity="28.4519" label="28.4519 mm" opacity="1.0"/>
+              <ColorMapEntry color="#0078FF" quantity="28.7866" label="28.7866 mm" opacity="1.0"/>
+              <ColorMapEntry color="#0080FF" quantity="29.1213" label="29.1213 mm" opacity="1.0"/>
+              <ColorMapEntry color="#0087FF" quantity="29.4561" label="29.4561 mm" opacity="1.0"/>
+              <ColorMapEntry color="#008FFF" quantity="29.7908" label="29.7908 mm" opacity="1.0"/>
+              <ColorMapEntry color="#0096FF" quantity="30.1255" label="30.1255 mm" opacity="1.0"/>
+              <ColorMapEntry color="#009EFF" quantity="30.4603" label="30.4603 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00A5FF" quantity="30.795" label="30.795 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00ADFF" quantity="31.1297" label="31.1297 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00B4FF" quantity="31.4644" label="31.4644 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00BCFF" quantity="31.7992" label="31.7992 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00C3FF" quantity="32.1339" label="32.1339 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00CBFF" quantity="32.4686" label="32.4686 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00D2FF" quantity="32.8033" label="32.8033 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00DAFF" quantity="33.1381" label="33.1381 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00E1FF" quantity="33.4728" label="33.4728 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00E9FF" quantity="33.8075" label="33.8075 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00F0FF" quantity="34.1423" label="34.1423 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00F8FF" quantity="34.477" label="34.477 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00FFFF" quantity="34.8117" label="34.8117 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00FCF7" quantity="35.1464" label="35.1464 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00FAEF" quantity="35.4812" label="35.4812 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00F7E6" quantity="35.8159" label="35.8159 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00F4DE" quantity="36.1506" label="36.1506 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00F1D6" quantity="36.4854" label="36.4854 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00EFCE" quantity="36.8201" label="36.8201 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00ECC5" quantity="37.1548" label="37.1548 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00E9BD" quantity="37.4895" label="37.4895 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00E6B5" quantity="37.8243" label="37.8243 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00E4AD" quantity="38.159" label="38.159 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00E1A5" quantity="38.4937" label="38.4937 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00DE9C" quantity="38.8285" label="38.8285 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00DB94" quantity="39.1632" label="39.1632 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00D98C" quantity="39.4979" label="39.4979 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00D684" quantity="39.8326" label="39.8326 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00D37B" quantity="40.1674" label="40.1674 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00D073" quantity="40.5021" label="40.5021 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00CE6B" quantity="40.8368" label="40.8368 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00CB63" quantity="41.1715" label="41.1715 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00C85A" quantity="41.5063" label="41.5063 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00C552" quantity="41.841" label="41.841 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00C34A" quantity="42.1757" label="42.1757 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00C042" quantity="42.5105" label="42.5105 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00BD3A" quantity="42.8452" label="42.8452 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00BA31" quantity="43.1799" label="43.1799 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00B829" quantity="43.5146" label="43.5146 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00B521" quantity="43.8494" label="43.8494 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00B219" quantity="44.1841" label="44.1841 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00AF10" quantity="44.5188" label="44.5188 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00AD08" quantity="44.8536" label="44.8536 mm" opacity="1.0"/>
+              <ColorMapEntry color="#00AA00" quantity="45.1883" label="45.1883 mm" opacity="1.0"/>
+              <ColorMapEntry color="#07AC00" quantity="45.523" label="45.523 mm" opacity="1.0"/>
+              <ColorMapEntry color="#0EAF00" quantity="45.8577" label="45.8577 mm" opacity="1.0"/>
+              <ColorMapEntry color="#15B100" quantity="46.1925" label="46.1925 mm" opacity="1.0"/>
+              <ColorMapEntry color="#1CB300" quantity="46.5272" label="46.5272 mm" opacity="1.0"/>
+              <ColorMapEntry color="#23B600" quantity="46.8619" label="46.8619 mm" opacity="1.0"/>
+              <ColorMapEntry color="#2BB800" quantity="47.1967" label="47.1967 mm" opacity="1.0"/>
+              <ColorMapEntry color="#32BB00" quantity="47.5314" label="47.5314 mm" opacity="1.0"/>
+              <ColorMapEntry color="#39BD00" quantity="47.8661" label="47.8661 mm" opacity="1.0"/>
+              <ColorMapEntry color="#40BF00" quantity="48.2008" label="48.2008 mm" opacity="1.0"/>
+              <ColorMapEntry color="#47C200" quantity="48.5356" label="48.5356 mm" opacity="1.0"/>
+              <ColorMapEntry color="#4EC400" quantity="48.8703" label="48.8703 mm" opacity="1.0"/>
+              <ColorMapEntry color="#55C600" quantity="49.205" label="49.205 mm" opacity="1.0"/>
+              <ColorMapEntry color="#5CC900" quantity="49.5397" label="49.5397 mm" opacity="1.0"/>
+              <ColorMapEntry color="#63CB00" quantity="49.8745" label="49.8745 mm" opacity="1.0"/>
+              <ColorMapEntry color="#6ACD00" quantity="50.2092" label="50.2092 mm" opacity="1.0"/>
+              <ColorMapEntry color="#71D000" quantity="50.5439" label="50.5439 mm" opacity="1.0"/>
+              <ColorMapEntry color="#78D200" quantity="50.8787" label="50.8787 mm" opacity="1.0"/>
+              <ColorMapEntry color="#80D500" quantity="51.2134" label="51.2134 mm" opacity="1.0"/>
+              <ColorMapEntry color="#87D700" quantity="51.5481" label="51.5481 mm" opacity="1.0"/>
+              <ColorMapEntry color="#8ED900" quantity="51.8828" label="51.8828 mm" opacity="1.0"/>
+              <ColorMapEntry color="#95DC00" quantity="52.2176" label="52.2176 mm" opacity="1.0"/>
+              <ColorMapEntry color="#9CDE00" quantity="52.5523" label="52.5523 mm" opacity="1.0"/>
+              <ColorMapEntry color="#A3E000" quantity="52.887" label="52.887 mm" opacity="1.0"/>
+              <ColorMapEntry color="#AAE300" quantity="53.2218" label="53.2218 mm" opacity="1.0"/>
+              <ColorMapEntry color="#B1E500" quantity="53.5565" label="53.5565 mm" opacity="1.0"/>
+              <ColorMapEntry color="#B8E700" quantity="53.8912" label="53.8912 mm" opacity="1.0"/>
+              <ColorMapEntry color="#BFEA00" quantity="54.2259" label="54.2259 mm" opacity="1.0"/>
+              <ColorMapEntry color="#C6EC00" quantity="54.5607" label="54.5607 mm" opacity="1.0"/>
+              <ColorMapEntry color="#CDEE00" quantity="54.8954" label="54.8954 mm" opacity="1.0"/>
+              <ColorMapEntry color="#D5F100" quantity="55.2301" label="55.2301 mm" opacity="1.0"/>
+              <ColorMapEntry color="#DCF300" quantity="55.5649" label="55.5649 mm" opacity="1.0"/>
+              <ColorMapEntry color="#E3F600" quantity="55.8996" label="55.8996 mm" opacity="1.0"/>
+              <ColorMapEntry color="#EAF800" quantity="56.2343" label="56.2343 mm" opacity="1.0"/>
+              <ColorMapEntry color="#F1FA00" quantity="56.569" label="56.569 mm" opacity="1.0"/>
+              <ColorMapEntry color="#F8FD00" quantity="56.9038" label="56.9038 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FFFF00" quantity="57.2385" label="57.2385 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FFF900" quantity="57.5732" label="57.5732 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FFF300" quantity="57.908" label="57.908 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FFEC00" quantity="58.2427" label="58.2427 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FFE600" quantity="58.5774" label="58.5774 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FFE000" quantity="58.9121" label="58.9121 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FFDA00" quantity="59.2469" label="59.2469 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FFD300" quantity="59.5816" label="59.5816 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FFCD00" quantity="59.9163" label="59.9163 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FFC700" quantity="60.251" label="60.251 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FFC100" quantity="60.5858" label="60.5858 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FFBB00" quantity="60.9205" label="60.9205 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FFB400" quantity="61.2552" label="61.2552 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FFAE00" quantity="61.59" label="61.59 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FFA800" quantity="61.9247" label="61.9247 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FFA200" quantity="62.2594" label="62.2594 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF9B00" quantity="62.5941" label="62.5941 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF9500" quantity="62.9289" label="62.9289 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF8F00" quantity="63.2636" label="63.2636 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF8900" quantity="63.5983" label="63.5983 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF8300" quantity="63.9331" label="63.9331 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF7C00" quantity="64.2678" label="64.2678 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF7600" quantity="64.6025" label="64.6025 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF7000" quantity="64.9372" label="64.9372 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF6A00" quantity="65.272" label="65.272 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF6400" quantity="65.6067" label="65.6067 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF5D00" quantity="65.9414" label="65.9414 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF5700" quantity="66.2762" label="66.2762 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF5100" quantity="66.6109" label="66.6109 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF4B00" quantity="66.9456" label="66.9456 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF4400" quantity="67.2803" label="67.2803 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF3E00" quantity="67.6151" label="67.6151 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF3800" quantity="67.9498" label="67.9498 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF3200" quantity="68.2845" label="68.2845 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF2C00" quantity="68.6192" label="68.6192 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF2500" quantity="68.954" label="68.954 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF1F00" quantity="69.2887" label="69.2887 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF1900" quantity="69.6234" label="69.6234 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF1300" quantity="69.9582" label="69.9582 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF0C00" quantity="70.2929" label="70.2929 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF0600" quantity="70.6276" label="70.6276 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF0000" quantity="70.9623" label="70.9623 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF0909" quantity="71.2971" label="71.2971 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF1313" quantity="71.6318" label="71.6318 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF1C1C" quantity="71.9665" label="71.9665 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF2626" quantity="72.3013" label="72.3013 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF2F2F" quantity="72.636" label="72.636 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF3939" quantity="72.9707" label="72.9707 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF4242" quantity="73.3054" label="73.3054 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF4C4C" quantity="73.6402" label="73.6402 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF5555" quantity="73.9749" label="73.9749 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF5E5E" quantity="74.3096" label="74.3096 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF6868" quantity="74.6443" label="74.6443 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF7171" quantity="74.9791" label="74.9791 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF7B7B" quantity="75.3138" label="75.3138 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF8484" quantity="75.6485" label="75.6485 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF8E8E" quantity="75.9833" label="75.9833 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FF9797" quantity="76.318" label="76.318 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FFA1A1" quantity="76.6527" label="76.6527 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FFAAAA" quantity="76.9874" label="76.9874 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FFB3B3" quantity="77.3222" label="77.3222 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FFBDBD" quantity="77.6569" label="77.6569 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FFC6C6" quantity="77.9916" label="77.9916 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FFD0D0" quantity="78.3264" label="78.3264 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FFD9D9" quantity="78.6611" label="78.6611 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FFE3E3" quantity="78.9958" label="78.9958 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FFECEC" quantity="79.3305" label="79.3305 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FFF6F6" quantity="79.6653" label="79.6653 mm" opacity="1.0"/>
+              <ColorMapEntry color="#FFFFFF" quantity="80" label="80 mm" opacity="1.0"/>
+            </ColorMap>
+          </RasterSymbolizer>
+          <RasterSymbolizer>
+            <Opacity>0.0</Opacity>
+            <ColorMap>
+              <ColorMapEntry color="#000000" label="Empty"/>
+              <ColorMapEntry color="#929292" label="Land"/>
+              <ColorMapEntry color="#F0F0F0" label="Ice"/>
+              <ColorMapEntry color="#494949" label="Water"/>
+              <ColorMapEntry color="#DBDBDB" label="No data"/>
+            </ColorMap>
+          </RasterSymbolizer>
+        </Rule>
+      </FeatureTypeStyle>
+    </UserStyle>
+  </NamedLayer>
+</StyledLayerDescriptor>

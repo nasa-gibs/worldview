@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StyledLayerDescriptor
+  xmlns="http://www.opengis.net/sld"
+  xmlns:ogc="http://www.opengis.net/ogc"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  version="1.0.0"
+  xsi:schemaLocation="http://www.opengis.net/sld/1.0.0 StyledLayerDescriptor.xsd">
+  <NamedLayer>
+    <Name>AELand3_SM_C</Name>
+    <UserStyle>
+      <Title>SLD Style</Title>
+      <FeatureTypeStyle>
+        <Rule>
+          <RasterSymbolizer>
+            <ColorMap>
+              <ColorMapEntry color="#550000" quantity="0" label="0 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#570000" quantity="0.00209205" label="0.00209205 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#590000" quantity="0.0041841" label="0.0041841 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#5B0000" quantity="0.00627615" label="0.00627615 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#5E0000" quantity="0.0083682" label="0.0083682 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#600000" quantity="0.0104603" label="0.0104603 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#620000" quantity="0.0125523" label="0.0125523 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#640000" quantity="0.0146444" label="0.0146444 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#660000" quantity="0.0167364" label="0.0167364 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#680000" quantity="0.0188285" label="0.0188285 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#6A0000" quantity="0.0209205" label="0.0209205 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#6C0000" quantity="0.0230126" label="0.0230126 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#6F0000" quantity="0.0251046" label="0.0251046 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#710000" quantity="0.0271967" label="0.0271967 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#730000" quantity="0.0292887" label="0.0292887 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#750000" quantity="0.0313808" label="0.0313808 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#770000" quantity="0.0334728" label="0.0334728 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#790000" quantity="0.0355649" label="0.0355649 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#7B0000" quantity="0.0376569" label="0.0376569 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#7D0000" quantity="0.039749" label="0.039749 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#800000" quantity="0.041841" label="0.041841 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#820000" quantity="0.0439331" label="0.0439331 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#840000" quantity="0.0460251" label="0.0460251 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#860000" quantity="0.0481172" label="0.0481172 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#880000" quantity="0.0502092" label="0.0502092 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#8A0000" quantity="0.0523013" label="0.0523013 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#8C0000" quantity="0.0543933" label="0.0543933 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#8E0000" quantity="0.0564854" label="0.0564854 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#910000" quantity="0.0585774" label="0.0585774 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#930000" quantity="0.0606695" label="0.0606695 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#950000" quantity="0.0627615" label="0.0627615 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#970000" quantity="0.0648536" label="0.0648536 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#990000" quantity="0.0669456" label="0.0669456 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#9B0000" quantity="0.0690377" label="0.0690377 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#9D0000" quantity="0.0711297" label="0.0711297 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#9F0000" quantity="0.0732218" label="0.0732218 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#A20000" quantity="0.0753138" label="0.0753138 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#A40000" quantity="0.0774059" label="0.0774059 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#A60000" quantity="0.0794979" label="0.0794979 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#A80000" quantity="0.08159" label="0.08159 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA0000" quantity="0.083682" label="0.083682 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA0400" quantity="0.0857741" label="0.0857741 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA0900" quantity="0.0878661" label="0.0878661 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA0D00" quantity="0.0899582" label="0.0899582 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA1100" quantity="0.0920502" label="0.0920502 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA1500" quantity="0.0941423" label="0.0941423 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA1A00" quantity="0.0962343" label="0.0962343 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA1E00" quantity="0.0983264" label="0.0983264 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA2200" quantity="0.100418" label="0.100418 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA2600" quantity="0.10251" label="0.10251 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA2B00" quantity="0.104603" label="0.104603 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA2F00" quantity="0.106695" label="0.106695 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA3300" quantity="0.108787" label="0.108787 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA3700" quantity="0.110879" label="0.110879 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA3C00" quantity="0.112971" label="0.112971 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA4000" quantity="0.115063" label="0.115063 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA4400" quantity="0.117155" label="0.117155 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA4800" quantity="0.119247" label="0.119247 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA4D00" quantity="0.121339" label="0.121339 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA5100" quantity="0.123431" label="0.123431 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA5500" quantity="0.125523" label="0.125523 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA5900" quantity="0.127615" label="0.127615 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA5E00" quantity="0.129707" label="0.129707 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA6200" quantity="0.131799" label="0.131799 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA6600" quantity="0.133891" label="0.133891 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA6A00" quantity="0.135983" label="0.135983 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA6F00" quantity="0.138075" label="0.138075 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA7300" quantity="0.140167" label="0.140167 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA7700" quantity="0.142259" label="0.142259 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA7B00" quantity="0.144351" label="0.144351 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA8000" quantity="0.146444" label="0.146444 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA8400" quantity="0.148536" label="0.148536 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA8800" quantity="0.150628" label="0.150628 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA8C00" quantity="0.15272" label="0.15272 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA9100" quantity="0.154812" label="0.154812 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA9500" quantity="0.156904" label="0.156904 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA9900" quantity="0.158996" label="0.158996 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AA9D00" quantity="0.161088" label="0.161088 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AAA200" quantity="0.16318" label="0.16318 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AAA600" quantity="0.165272" label="0.165272 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AAAA00" quantity="0.167364" label="0.167364 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#ACAC00" quantity="0.169456" label="0.169456 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#AEAE00" quantity="0.171548" label="0.171548 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#B0B000" quantity="0.17364" label="0.17364 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#B3B300" quantity="0.175732" label="0.175732 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#B5B500" quantity="0.177824" label="0.177824 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#B7B700" quantity="0.179916" label="0.179916 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#B9B900" quantity="0.182008" label="0.182008 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#BBBB00" quantity="0.1841" label="0.1841 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#BDBD00" quantity="0.186192" label="0.186192 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#BFBF00" quantity="0.188285" label="0.188285 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#C1C100" quantity="0.190377" label="0.190377 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#C4C400" quantity="0.192469" label="0.192469 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#C6C600" quantity="0.194561" label="0.194561 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#C8C800" quantity="0.196653" label="0.196653 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#CACA00" quantity="0.198745" label="0.198745 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#CCCC00" quantity="0.200837" label="0.200837 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#CECE00" quantity="0.202929" label="0.202929 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#D0D000" quantity="0.205021" label="0.205021 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#D2D200" quantity="0.207113" label="0.207113 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#D5D500" quantity="0.209205" label="0.209205 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#D7D700" quantity="0.211297" label="0.211297 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#D9D900" quantity="0.213389" label="0.213389 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#DBDB00" quantity="0.215481" label="0.215481 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#DDDD00" quantity="0.217573" label="0.217573 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#DFDF00" quantity="0.219665" label="0.219665 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#E1E100" quantity="0.221757" label="0.221757 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#E3E300" quantity="0.223849" label="0.223849 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#E6E600" quantity="0.225941" label="0.225941 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#E8E800" quantity="0.228033" label="0.228033 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#EAEA00" quantity="0.230126" label="0.230126 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#ECEC00" quantity="0.232218" label="0.232218 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#EEEE00" quantity="0.23431" label="0.23431 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#F0F000" quantity="0.236402" label="0.236402 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#F2F200" quantity="0.238494" label="0.238494 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#F4F400" quantity="0.240586" label="0.240586 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#F7F700" quantity="0.242678" label="0.242678 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#F9F900" quantity="0.24477" label="0.24477 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#FBFB00" quantity="0.246862" label="0.246862 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#FDFD00" quantity="0.248954" label="0.248954 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#FFFF00" quantity="0.251046" label="0.251046 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#F9FD00" quantity="0.253138" label="0.253138 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#F2FB00" quantity="0.25523" label="0.25523 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#ECF900" quantity="0.257322" label="0.257322 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#E6F700" quantity="0.259414" label="0.259414 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#DFF400" quantity="0.261506" label="0.261506 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#D9F200" quantity="0.263598" label="0.263598 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#D2F000" quantity="0.26569" label="0.26569 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#CCEE00" quantity="0.267782" label="0.267782 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#C6EC00" quantity="0.269874" label="0.269874 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#BFEA00" quantity="0.271967" label="0.271967 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#B9E800" quantity="0.274059" label="0.274059 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#B3E600" quantity="0.276151" label="0.276151 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#ACE300" quantity="0.278243" label="0.278243 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#A6E100" quantity="0.280335" label="0.280335 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#9FDF00" quantity="0.282427" label="0.282427 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#99DD00" quantity="0.284519" label="0.284519 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#93DB00" quantity="0.286611" label="0.286611 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#8CD900" quantity="0.288703" label="0.288703 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#86D700" quantity="0.290795" label="0.290795 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#80D500" quantity="0.292887" label="0.292887 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#79D200" quantity="0.294979" label="0.294979 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#73D000" quantity="0.297071" label="0.297071 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#6CCE00" quantity="0.299163" label="0.299163 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#66CC00" quantity="0.301255" label="0.301255 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#60CA00" quantity="0.303347" label="0.303347 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#59C800" quantity="0.305439" label="0.305439 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#53C600" quantity="0.307531" label="0.307531 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#4DC400" quantity="0.309623" label="0.309623 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#46C100" quantity="0.311715" label="0.311715 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#40BF00" quantity="0.313808" label="0.313808 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#39BD00" quantity="0.3159" label="0.3159 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#33BB00" quantity="0.317992" label="0.317992 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#2DB900" quantity="0.320084" label="0.320084 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#26B700" quantity="0.322176" label="0.322176 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#20B500" quantity="0.324268" label="0.324268 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#1AB300" quantity="0.32636" label="0.32636 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#13B000" quantity="0.328452" label="0.328452 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#0DAE00" quantity="0.330544" label="0.330544 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#06AC00" quantity="0.332636" label="0.332636 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00AA00" quantity="0.334728" label="0.334728 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00AC00" quantity="0.33682" label="0.33682 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00AE00" quantity="0.338912" label="0.338912 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00B000" quantity="0.341004" label="0.341004 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00B300" quantity="0.343096" label="0.343096 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00B500" quantity="0.345188" label="0.345188 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00B700" quantity="0.34728" label="0.34728 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00B900" quantity="0.349372" label="0.349372 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00BB00" quantity="0.351464" label="0.351464 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00BD00" quantity="0.353556" label="0.353556 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00BF00" quantity="0.355649" label="0.355649 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00C100" quantity="0.357741" label="0.357741 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00C400" quantity="0.359833" label="0.359833 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00C600" quantity="0.361925" label="0.361925 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00C800" quantity="0.364017" label="0.364017 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00CA00" quantity="0.366109" label="0.366109 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00CC00" quantity="0.368201" label="0.368201 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00CE00" quantity="0.370293" label="0.370293 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00D000" quantity="0.372385" label="0.372385 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00D200" quantity="0.374477" label="0.374477 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00D500" quantity="0.376569" label="0.376569 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00D700" quantity="0.378661" label="0.378661 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00D900" quantity="0.380753" label="0.380753 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00DB00" quantity="0.382845" label="0.382845 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00DD00" quantity="0.384937" label="0.384937 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00DF00" quantity="0.387029" label="0.387029 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00E100" quantity="0.389121" label="0.389121 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00E300" quantity="0.391213" label="0.391213 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00E600" quantity="0.393305" label="0.393305 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00E800" quantity="0.395397" label="0.395397 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00EA00" quantity="0.39749" label="0.39749 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00EC00" quantity="0.399582" label="0.399582 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00EE00" quantity="0.401674" label="0.401674 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00F000" quantity="0.403766" label="0.403766 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00F200" quantity="0.405858" label="0.405858 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00F400" quantity="0.40795" label="0.40795 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00F700" quantity="0.410042" label="0.410042 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00F900" quantity="0.412134" label="0.412134 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00FB00" quantity="0.414226" label="0.414226 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00FD00" quantity="0.416318" label="0.416318 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00FF00" quantity="0.41841" label="0.41841 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00FD04" quantity="0.420502" label="0.420502 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00FB09" quantity="0.422594" label="0.422594 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00F90D" quantity="0.424686" label="0.424686 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00F711" quantity="0.426778" label="0.426778 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00F415" quantity="0.42887" label="0.42887 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00F21A" quantity="0.430962" label="0.430962 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00F01E" quantity="0.433054" label="0.433054 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00EE22" quantity="0.435146" label="0.435146 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00EC26" quantity="0.437238" label="0.437238 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00EA2B" quantity="0.439331" label="0.439331 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00E82F" quantity="0.441423" label="0.441423 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00E633" quantity="0.443515" label="0.443515 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00E337" quantity="0.445607" label="0.445607 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00E13C" quantity="0.447699" label="0.447699 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00DF40" quantity="0.449791" label="0.449791 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00DD44" quantity="0.451883" label="0.451883 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00DB48" quantity="0.453975" label="0.453975 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00D94D" quantity="0.456067" label="0.456067 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00D751" quantity="0.458159" label="0.458159 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00D555" quantity="0.460251" label="0.460251 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00D259" quantity="0.462343" label="0.462343 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00D05E" quantity="0.464435" label="0.464435 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00CE62" quantity="0.466527" label="0.466527 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00CC66" quantity="0.468619" label="0.468619 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00CA6A" quantity="0.470711" label="0.470711 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00C86F" quantity="0.472803" label="0.472803 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00C673" quantity="0.474895" label="0.474895 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00C477" quantity="0.476987" label="0.476987 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00C17B" quantity="0.479079" label="0.479079 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00BF80" quantity="0.481172" label="0.481172 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00BD84" quantity="0.483264" label="0.483264 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00BB88" quantity="0.485356" label="0.485356 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00B98C" quantity="0.487448" label="0.487448 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00B791" quantity="0.48954" label="0.48954 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00B595" quantity="0.491632" label="0.491632 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00B399" quantity="0.493724" label="0.493724 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00B09D" quantity="0.495816" label="0.495816 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00AEA2" quantity="0.497908" label="0.497908 g/cm^3" opacity="1.0"/>
+              <ColorMapEntry color="#00ACA6" quantity="0.5" label="0.5 g/cm^3" opacity="1.0"/>
+            </ColorMap>
+          </RasterSymbolizer>
+          <RasterSymbolizer>
+            <Opacity>0.0</Opacity>
+            <ColorMap>
+              <ColorMapEntry color="#000000" label="Empty"/>
+            </ColorMap>
+          </RasterSymbolizer>
+        </Rule>
+      </FeatureTypeStyle>
+    </UserStyle>
+  </NamedLayer>
+</StyledLayerDescriptor>

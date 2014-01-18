@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<StyledLayerDescriptor version="1.0.0"
+    xsi:schemaLocation="http://www.opengis.net/sld StyledLayerDescriptor.xsd"
+    xmlns="http://www.opengis.net/sld"
+    xmlns:se="http://www.opengis.net/se"
+    xmlns:ogc="http://www.opengis.net/ogc"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <NamedLayer>
+    <se:Name>OMI_Aerosol_Index</se:Name>
+    <UserStyle>
+      <se:Name>GIBS</se:Name>
+      <se:FeatureTypeStyle>
+        <se:Rule>
+          <se:RasterSymbolizer>
+            <se:ColorMap>
+              <ColorMapEntry color="#72ffd9" quantity="1.1" label="1.1" opacity="1.0"/>
+              <ColorMapEntry color="#70ffd4" quantity="1.11" label="1.11" opacity="1.0"/>
+              <ColorMapEntry color="#6fffd0" quantity="1.12" label="1.12" opacity="1.0"/>
+              <ColorMapEntry color="#6effcc" quantity="1.13" label="1.13" opacity="1.0"/>
+              <ColorMapEntry color="#6dffc7" quantity="1.14" label="1.14" opacity="1.0"/>
+              <ColorMapEntry color="#6bffc2" quantity="1.15" label="1.15" opacity="1.0"/>
+              <ColorMapEntry color="#6affbd" quantity="1.16" label="1.16" opacity="1.0"/>
+              <ColorMapEntry color="#69ffb7" quantity="1.17" label="1.17" opacity="1.0"/>
+              <ColorMapEntry color="#67ffb2" quantity="1.18" label="1.18" opacity="1.0"/>
+              <ColorMapEntry color="#66ffad" quantity="1.19" label="1.19" opacity="1.0"/>
+              <ColorMapEntry color="#65ffa8" quantity="1.20" label="1.20" opacity="1.0"/>
+              <ColorMapEntry color="#64ffa3" quantity="1.21" label="1.21" opacity="1.0"/>
+              <ColorMapEntry color="#62ff9e" quantity="1.22" label="1.22" opacity="1.0"/>
+              <ColorMapEntry color="#61ff98" quantity="1.23" label="1.23" opacity="1.0"/>
+              <ColorMapEntry color="#60ff93" quantity="1.24" label="1.24" opacity="1.0"/>
+              <ColorMapEntry color="#5fff8e" quantity="1.25" label="1.25" opacity="1.0"/>
+              <ColorMapEntry color="#5dff87" quantity="1.26" label="1.26" opacity="1.0"/>
+              <ColorMapEntry color="#5cff82" quantity="1.27" label="1.27" opacity="1.0"/>
+              <ColorMapEntry color="#5bff7c" quantity="1.28" label="1.28" opacity="1.0"/>
+              <ColorMapEntry color="#59ff76" quantity="1.29" label="1.29" opacity="1.0"/>
+              <ColorMapEntry color="#58ff70" quantity="1.30" label="1.30" opacity="1.0"/>
+              <ColorMapEntry color="#57ff6a" quantity="1.31" label="1.31" opacity="1.0"/>
+              <ColorMapEntry color="#56ff64" quantity="1.32" label="1.32" opacity="1.0"/>
+              <ColorMapEntry color="#55ff5d" quantity="1.33" label="1.33" opacity="1.0"/>
+              <ColorMapEntry color="#54ff57" quantity="1.34" label="1.34" opacity="1.0"/>
+              <ColorMapEntry color="#53ff53" quantity="1.35" label="1.35" opacity="1.0"/>
+              <ColorMapEntry color="#58ff51" quantity="1.36" label="1.36" opacity="1.0"/>
+              <ColorMapEntry color="#5cff50" quantity="1.37" label="1.37" opacity="1.0"/>
+              <ColorMapEntry color="#5fff4f" quantity="1.38" label="1.38" opacity="1.0"/>
+              <ColorMapEntry color="#63ff4e" quantity="1.39" label="1.39" opacity="1.0"/>
+              <ColorMapEntry color="#67ff4c" quantity="1.40" label="1.40" opacity="1.0"/>
+              <ColorMapEntry color="#6cff4b" quantity="1.41" label="1.41" opacity="1.0"/>
+              <ColorMapEntry color="#71ff4a" quantity="1.42" label="1.42" opacity="1.0"/>
+              <ColorMapEntry color="#75ff48" quantity="1.43" label="1.43" opacity="1.0"/>
+              <ColorMapEntry color="#79ff47" quantity="1.44" label="1.44" opacity="1.0"/>
+              <ColorMapEntry color="#7eff46" quantity="1.45" label="1.45" opacity="1.0"/>
+              <ColorMapEntry color="#82ff45" quantity="1.46" label="1.46" opacity="1.0"/>
+              <ColorMapEntry color="#87ff43" quantity="1.47" label="1.47" opacity="1.0"/>
+              <ColorMapEntry color="#8cff42" quantity="1.48" label="1.48" opacity="1.0"/>
+              <ColorMapEntry color="#91ff41" quantity="1.49" label="1.49" opacity="1.0"/>
+              <ColorMapEntry color="#96ff40" quantity="1.50" label="1.50" opacity="1.0"/>
+              <ColorMapEntry color="#9bff3e" quantity="1.51" label="1.51" opacity="1.0"/>
+              <ColorMapEntry color="#a0ff3d" quantity="1.52" label="1.52" opacity="1.0"/>
+              <ColorMapEntry color="#a5ff3c" quantity="1.53" label="1.53" opacity="1.0"/>
+              <ColorMapEntry color="#aaff3a" quantity="1.54" label="1.54" opacity="1.0"/>
+              <ColorMapEntry color="#afff39" quantity="1.56" label="1.56" opacity="1.0"/>
+              <ColorMapEntry color="#b5ff38" quantity="1.57" label="1.57" opacity="1.0"/>
+              <ColorMapEntry color="#baff37" quantity="1.58" label="1.58" opacity="1.0"/>
+              <ColorMapEntry color="#c0ff35" quantity="1.59" label="1.59" opacity="1.0"/>
+              <ColorMapEntry color="#c6ff34" quantity="1.60" label="1.60" opacity="1.0"/>
+              <ColorMapEntry color="#cbff33" quantity="1.61" label="1.61" opacity="1.0"/>
+              <ColorMapEntry color="#d1ff31" quantity="1.62" label="1.62" opacity="1.0"/>
+              <ColorMapEntry color="#d7ff30" quantity="1.63" label="1.63" opacity="1.0"/>
+              <ColorMapEntry color="#ddff2f" quantity="1.64" label="1.64" opacity="1.0"/>
+              <ColorMapEntry color="#e3ff2e" quantity="1.65" label="1.65" opacity="1.0"/>
+              <ColorMapEntry color="#e9ff2c" quantity="1.66" label="1.66" opacity="1.0"/>
+              <ColorMapEntry color="#efff2b" quantity="1.67" label="1.67" opacity="1.0"/>
+              <ColorMapEntry color="#f5ff2a" quantity="1.68" label="1.68" opacity="1.0"/>
+              <ColorMapEntry color="#fcff28" quantity="1.69" label="1.69" opacity="1.0"/>
+              <ColorMapEntry color="#fffa27" quantity="1.70" label="1.70" opacity="1.0"/>
+              <ColorMapEntry color="#fff426" quantity="1.71" label="1.71" opacity="1.0"/>
+              <ColorMapEntry color="#ffed25" quantity="1.72" label="1.72" opacity="1.0"/>
+              <ColorMapEntry color="#ffe723" quantity="1.73" label="1.73" opacity="1.0"/>
+              <ColorMapEntry color="#ffdf22" quantity="1.74" label="1.74" opacity="1.0"/>
+              <ColorMapEntry color="#ffd921" quantity="1.75" label="1.75" opacity="1.0"/>
+              <ColorMapEntry color="#ffd320" quantity="1.76" label="1.76" opacity="1.0"/>
+              <ColorMapEntry color="#ffcb1e" quantity="1.77" label="1.77" opacity="1.0"/>
+              <ColorMapEntry color="#ffc41d" quantity="1.78" label="1.78" opacity="1.0"/>
+              <ColorMapEntry color="#ffbd1c" quantity="1.79" label="1.79" opacity="1.0"/>
+              <ColorMapEntry color="#ffb61a" quantity="1.80" label="1.80" opacity="1.0"/>
+              <ColorMapEntry color="#ffaf19" quantity="1.81" label="1.81" opacity="1.0"/>
+              <ColorMapEntry color="#ffa718" quantity="1.82" label="1.82" opacity="1.0"/>
+              <ColorMapEntry color="#ffa017" quantity="1.83" label="1.83" opacity="1.0"/>
+              <ColorMapEntry color="#ff9915" quantity="1.84" label="1.84" opacity="1.0"/>
+              <ColorMapEntry color="#ff9114" quantity="1.85" label="1.85" opacity="1.0"/>
+              <ColorMapEntry color="#ff8a13" quantity="1.86" label="1.86" opacity="1.0"/>
+              <ColorMapEntry color="#ff8211" quantity="1.87" label="1.87" opacity="1.0"/>
+              <ColorMapEntry color="#ff7a10" quantity="1.88" label="1.88" opacity="1.0"/>
+              <ColorMapEntry color="#ff730f" quantity="1.89" label="1.89" opacity="1.0"/>
+              <ColorMapEntry color="#ff6b0e" quantity="1.90" label="1.90" opacity="1.0"/>
+              <ColorMapEntry color="#ff620c" quantity="1.91" label="1.91" opacity="1.0"/>
+              <ColorMapEntry color="#ff5b0b" quantity="1.92" label="1.92" opacity="1.0"/>
+              <ColorMapEntry color="#ff520c" quantity="1.93" label="1.93" opacity="1.0"/>
+              <ColorMapEntry color="#ff4a08" quantity="1.94" label="1.94" opacity="1.0"/>
+              <ColorMapEntry color="#ff4207" quantity="1.95" label="1.95" opacity="1.0"/>
+              <ColorMapEntry color="#ff3a06" quantity="1.96" label="1.96" opacity="1.0"/>
+              <ColorMapEntry color="#ff3105" quantity="1.97" label="1.97" opacity="1.0"/>
+              <ColorMapEntry color="#ff2903" quantity="1.98" label="1.98" opacity="1.0"/>
+              <ColorMapEntry color="#ff2002" quantity="1.99" label="1.99" opacity="1.0"/>
+              <ColorMapEntry color="#ff1d02" quantity="2.0" label="2.0" opacity="1.0"/>
+            </se:ColorMap>
+          </se:RasterSymbolizer>
+          <se:RasterSymbolizer>
+            <Opacity>0.0</Opacity>
+            <se:ColorMap>
+              <ColorMapEntry color="#000000" label="Empty"/>
+            </se:ColorMap>
+          </se:RasterSymbolizer>
+        </se:Rule>
+      </se:FeatureTypeStyle>
+    </UserStyle>
+  </NamedLayer>
+</StyledLayerDescriptor>
