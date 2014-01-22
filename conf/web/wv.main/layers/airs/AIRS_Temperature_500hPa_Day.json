@@ -1,14 +1,14 @@
 {
     "layers": {
-        "AIRS_Temperature_400hPa_Day": {
-            "id":       "AIRS_Temperature_400hPa_Day",
-            "title":    "Temperature (400 hPa, Day)",
+        "AIRS_Temperature_500hPa_Day": {
+            "id":       "AIRS_Temperature_500hPa_Day",
+            "title":    "Temperature (500 hPa, Day)",
             "subtitle": "Aqua / AIRS",
             "group":    "overlays",
             "product":  "AIRX2RET_DAY",
 
             "palette": {
-                "id":   "AIRS_T400_A"
+                "id":   "AIRS_T500_A"
             }
         }
     }

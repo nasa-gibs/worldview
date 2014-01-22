@@ -1,0 +1,15 @@
+{
+    "layers": {
+        "AIRS_Temperature_600hPa_Night": {
+            "id":       "AIRS_Temperature_600hPa_Night",
+            "title":    "Temperature (600 hPa, Night)",
+            "subtitle": "Aqua / AIRS",
+            "group":    "overlays",
+            "product":  "AIRX2RET_Night",
+
+            "palette": {
+                "id":   "AIRS_T600_D"
+            }
+        }
+    }
+}

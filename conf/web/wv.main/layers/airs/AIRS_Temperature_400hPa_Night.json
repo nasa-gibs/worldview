@@ -1,0 +1,15 @@
+{
+    "layers": {
+        "AIRS_Temperature_400hPa_Night": {
+            "id":       "AIRS_Temperature_400hPa_Night",
+            "title":    "Temperature (400 hPa, Night)",
+            "subtitle": "Aqua / AIRS",
+            "group":    "overlays",
+            "product":  "AIRX2RET_Night",
+
+            "palette": {
+                "id":   "AIRS_T400_D"
+            }
+        }
+    }
+}

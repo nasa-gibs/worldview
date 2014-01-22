@@ -1,0 +1,15 @@
+{
+    "layers": {
+        "AIRS_Temperature_500hPa_Night": {
+            "id":       "AIRS_Temperature_500hPa_Night",
+            "title":    "Temperature (500 hPa, Night)",
+            "subtitle": "Aqua / AIRS",
+            "group":    "overlays",
+            "product":  "AIRX2RET_Night",
+
+            "palette": {
+                "id":   "AIRS_T500_D"
+            }
+        }
+    }
+}
