@@ -1,0 +1,17 @@
+{
+    "layers": {
+        "AIRS_Dust_Score": {
+            "id":       "AIRS_Dust_Score",
+            "title":    "Dust Score",
+            "subtitle": "Aqua / AIRS",
+            "group":    "overlays",
+            "product":  "AIRIBQAP",
+
+            "palette": {
+                "id":       "AIRS_DustScore_A",
+                "exclude":  ["orange_1"]
+            }
+        }
+    }
+
+}

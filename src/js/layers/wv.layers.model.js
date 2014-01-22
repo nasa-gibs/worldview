@@ -35,6 +35,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
         var layers = _.cloneDeep(config.layers);
         _.each(layers, function(layer) {
             if ( !layer.group ) {
+                console.error("No group for layer: " + layer.id);
                 delete config.layers[layer.id];
             }
         });

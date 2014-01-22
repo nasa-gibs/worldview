@@ -1,0 +1,17 @@
+{
+    "layers": {
+        "AIRS_Prata_SO2_Index_Day": {
+            "id":       "AIRS_Prata_SO2_Index_Day",
+            "title":    "Sulfur Dioxide (Day, Prata Algorithm)",
+            "subtitle": "Aqua / AIRS",
+            "tags":     "so2",
+            "group":    "overlays",
+            "product":  "AIRIBRAD_DAY",
+
+            "palette": {
+                "id": "AIRS_Prata_SO2_A",
+                "recommended": ["orange_1", "red_1"]
+            }
+        }
+    }
+}

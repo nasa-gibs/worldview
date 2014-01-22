@@ -1,0 +1,17 @@
+{
+    "layers": {
+        "AIRS_CO_Total_Column_Day": {
+            "id":       "AIRS_CO_Total_Column_Day",
+            "title":    "Carbon Monoxide (Total Column, Day)",
+            "subtitle": "Aqua / AIRS",
+            "tags":     "co",
+            "group":    "overlays",
+            "product":  "AIRX2RET_DAY",
+
+            "palette": {
+                "id": "AIRS_COTotalColumn_A",
+                "recommended": ["red_1"]
+            }
+        }
+    }
+}

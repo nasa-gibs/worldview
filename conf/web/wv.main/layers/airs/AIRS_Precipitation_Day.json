@@ -1,0 +1,16 @@
+{
+    "layers": {
+        "AIRS_Precipitation_Day": {
+            "id":       "AIRS_Precipitation_Day",
+            "title":    "Precipitation Estimate (Day)",
+            "subtitle": "Aqua / AIRS",
+            "group":    "overlays",
+            "product":  "AIRX2SUP_DAY",
+
+            "palette": {
+                "id": "AIRS_Precipitation_A",
+                "recommended": ["blue_1", "blue_3"]
+            }
+        }
+    }
+}

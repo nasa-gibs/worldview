@@ -1,0 +1,16 @@
+{
+    "layers": {
+        "AIRS_RelativeHumidity_700hPa_Night": {
+            "id":       "AIRS_RelativeHumidity_700hPa_Night",
+            "title":    "Relative Humidity (700 hPa, Night)",
+            "subtitle": "Aqua / AIRS",
+            "tags":     "rh",
+            "group":    "overlays",
+            "product":  "AIRX2RET_NIGHT",
+
+            "palette": {
+                "id": "AIRS_RH700_D"
+            }
+        }
+    }
+}
