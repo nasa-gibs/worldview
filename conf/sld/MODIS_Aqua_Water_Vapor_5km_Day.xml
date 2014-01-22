@@ -2,18 +2,16 @@
 <StyledLayerDescriptor version="1.0.0"
     xsi:schemaLocation="http://www.opengis.net/sld StyledLayerDescriptor.xsd"
     xmlns="http://www.opengis.net/sld"
-    xmlns:se="http://www.opengis.net/se"
-    xmlns:ogc="http://www.opengis.net/ogc"
     xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <NamedLayer>
-    <se:Name>MODIS_Aqua_Water_Vapor_5km_Day</se:Name>
+    <Name>MODIS_Aqua_Water_Vapor_5km_Day</Name>
     <UserStyle>
-      <se:Name>GIBS</se:Name>
-      <se:FeatureTypeStyle>
-        <se:Rule>
-          <se:RasterSymbolizer>
-            <se:ColorMap>
+      <Name>GIBS</Name>
+      <FeatureTypeStyle>
+        <Rule>
+          <RasterSymbolizer>
+            <ColorMap>
               <ColorMapEntry color="#a900ab" quantity="0.1" label="0.1 cm" opacity="1.0"/>
               <ColorMapEntry color="#a200ae" quantity="0.1757" label="0.1757 cm" opacity="1.0"/>
               <ColorMapEntry color="#9b00b1" quantity="0.2514" label="0.2514 cm" opacity="1.0"/>
@@ -141,16 +139,16 @@
               <ColorMapEntry color="#c10500" quantity="9.4897" label="9.4897 cm" opacity="1.0"/>
               <ColorMapEntry color="#ba0000" quantity="9.5654" label="9.5654 cm" opacity="1.0"/>
               <ColorMapEntry color="#b40000" quantity="9.6411" label="9.6411 cm" opacity="1.0"/>
-            </se:ColorMap>
-          </se:RasterSymbolizer>
-          <se:RasterSymbolizer>
+            </ColorMap>
+          </RasterSymbolizer>
+          <RasterSymbolizer>
             <Opacity>0.0</Opacity>
-            <se:ColorMap>
+            <ColorMap>
               <ColorMapEntry color="#000000" label="Empty"/>
-            </se:ColorMap>
-          </se:RasterSymbolizer>
-        </se:Rule>
-      </se:FeatureTypeStyle>
+            </ColorMap>
+          </RasterSymbolizer>
+        </Rule>
+      </FeatureTypeStyle>
     </UserStyle>
   </NamedLayer>
 </StyledLayerDescriptor>

@@ -78,7 +78,7 @@ wv.layers.active = wv.layers.active || function(models, config, spec) {
         $("." + self.id + "category").bind('sortstop', moveLayer);
 
         $.each(model.forProjection().overlays, function(index, layer) {
-            if ( layer.rendered ) {
+            if ( layer.palette ) {
                 renderLegendCanvas(layer);
             }
         });
@@ -153,7 +153,7 @@ wv.layers.active = wv.layers.active || function(models, config, spec) {
         $layer.append($("<h4></h4>").html(layer.title));
         $layer.append($("<p></p>").html(layer.subtitle));
 
-        if ( layer.rendered ) {
+        if ( layer.palette ) {
             renderLegend($layer, group, layer);
         }
         if ( top ) {
@@ -164,49 +164,50 @@ wv.layers.active = wv.layers.active || function(models, config, spec) {
     };
 
     var renderLegend = function($parent, group, layer) {
-        var $div = $("<div></div>");
-        var $container = $("<span></span>")
-            .addClass("palette");
+        var $container = $("<table></table>")
+            .addClass("wv-palette")
+            .attr("data-layer", encodeURIComponent(layer.id));
+        var $row = $("<tr></tr>");
+        var $min = $("<td></td>")
+            .addClass("legend-small-min");
+        $row.append($min);
 
-        var $min = $("<span></span>")
-            .addClass("p-min")
-            .html(layer.min);
-        $container.append($min);
-
+        var $legend = $("<td></td>");
         var $canvas = $("<canvas></canvas>")
             .attr("id", "canvas" + Worldview.id(layer.id))
-            .addClass("colorBar")
-            .attr("data-layer", layer.id);
+            .addClass("legend-small");
+        /* FIXME: This needs to move
         var palette = paletteWidget.getPalette(layer.id);
         if ( palette.stops.length > 1 ) {
             $canvas.click(openPaletteSelector)
                 .css("cursor", "pointer");
         }
-        $container.append($canvas);
+        */
+        $legend.append($canvas);
+        $row.append($legend);
 
-        var $max = $("<span></span>")
-            .addClass("p-max")
-            .html(layer.max);
-        $container.append($max);
+        var $max = $("<td></td>")
+            .addClass("legend-small-max");
+        $row.append($max);
 
-        if ( layer.units ) {
-            var $units = $("<span></span>")
-                .addClass("p-units")
-                .html(layer.units);
-            $container.append($units);
-        }
-
-        $div.append($container);
-        $parent.append($div);
+        //$div.append($container);
+        //$parent.append($div);
+        $container.append($row);
+        $parent.append($container);
     };
 
     var renderLegendCanvas = function(layer) {
-        var palette = paletteWidget.getPalette(Worldview.id(layer.id));
-        Worldview.Palette.ColorBar({
-            selector: "#canvas" + Worldview.id(layer.id),
-            bins: layer.bins,
-            stops: layer.stops,
-            palette: palette
+        var selector = ".wv-palette[data-layer='" +
+                encodeURIComponent(layer.id) + "']";
+        var legend = wv.palette.legend(selector + " .legend-small");
+        models.palettes.load(layer.id).done(function(palette) {
+            legend.set(palette);
+            if ( palette.values && !layer.palette.classified ) {
+                var min = palette.values[0];
+                var max = palette.values[palette.values.length - 1];
+                $(selector + " .legend-small-min").html(min);
+                $(selector + " .legend-small-max").html(max);
+            }
         });
     };
 
@@ -293,7 +294,7 @@ wv.layers.active = wv.layers.active || function(models, config, spec) {
             $container = api.getContentPane();
         }
         renderLayer($container, groups[layer.group], layer, "top");
-        if ( layer.rendered ) {
+        if ( layer.palette ) {
             renderLegendCanvas(layer);
         }
         adjustCategoryHeights();

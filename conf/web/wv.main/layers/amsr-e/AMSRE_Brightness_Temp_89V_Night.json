@@ -1,0 +1,10 @@
+{
+    "layers": {
+        "AMSRE_Brightness_Temp_89V_Night": {
+            "id":       "AMSRE_Brightness_Temp_89V_Night",
+            "title":    "Brightness Temperature (89V GHz B Scan, Night)",
+            "subtitle": "Aqua / AMSR-E",
+            "group":    "overlays"
+        }
+    }
+}

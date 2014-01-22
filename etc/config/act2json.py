@@ -98,7 +98,6 @@ for act in index:
     palette = {
         "id": act["id"],
         "name": act["name"],
-        "source": "stock",
         "stops": stops
     }
     palette_file = os.path.join(output_dir, "%s.json" % act["id"])

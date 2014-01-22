@@ -2,18 +2,16 @@
 <StyledLayerDescriptor version="1.0.0"
     xsi:schemaLocation="http://www.opengis.net/sld StyledLayerDescriptor.xsd"
     xmlns="http://www.opengis.net/sld"
-    xmlns:se="http://www.opengis.net/se"
-    xmlns:ogc="http://www.opengis.net/ogc"
     xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <NamedLayer>
-    <se:Name>OMI_Cloud_Pressure</se:Name>
+    <Name>OMI_Cloud_Pressure</Name>
     <UserStyle>
-      <se:Name>GIBS</se:Name>
-      <se:FeatureTypeStyle>
-        <se:Rule>
-          <se:RasterSymbolizer>
-            <se:ColorMap>
+      <Name>GIBS</Name>
+      <FeatureTypeStyle>
+        <Rule>
+          <RasterSymbolizer>
+            <ColorMap>
               <ColorMapEntry color="#ffffff" quantity="0" label="0 hPa" opacity="1.0"/>
               <ColorMapEntry color="#fffdfd" quantity="6" label="6 hPa" opacity="1.0"/>
               <ColorMapEntry color="#fffcfc" quantity="11" label="11 hPa" opacity="1.0"/>
@@ -215,16 +213,16 @@
               <ColorMapEntry color="#ff2903" quantity="1089" label="1089 hPa" opacity="1.0"/>
               <ColorMapEntry color="#ff2002" quantity="1094" label="1094 hPa" opacity="1.0"/>
               <ColorMapEntry color="#ff1d02" quantity="1100" label="1100 hPa" opacity="1.0"/>
-            </se:ColorMap>
-          </se:RasterSymbolizer>
-          <se:RasterSymbolizer>
+            </ColorMap>
+          </RasterSymbolizer>
+          <RasterSymbolizer>
             <Opacity>0.0</Opacity>
-            <se:ColorMap>
+            <ColorMap>
               <ColorMapEntry color="#000000" label="Empty"/>
-            </se:ColorMap>
-          </se:RasterSymbolizer>
-        </se:Rule>
-      </se:FeatureTypeStyle>
+            </ColorMap>
+          </RasterSymbolizer>
+        </Rule>
+      </FeatureTypeStyle>
     </UserStyle>
   </NamedLayer>
 </StyledLayerDescriptor>

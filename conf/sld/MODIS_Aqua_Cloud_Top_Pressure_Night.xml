@@ -2,18 +2,16 @@
 <StyledLayerDescriptor version="1.0.0"
     xsi:schemaLocation="http://www.opengis.net/sld StyledLayerDescriptor.xsd"
     xmlns="http://www.opengis.net/sld"
-    xmlns:se="http://www.opengis.net/se"
-    xmlns:ogc="http://www.opengis.net/ogc"
     xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <NamedLayer>
-    <se:Name>MODIS_Aqua_Cloud_Top_Pressure_Night</se:Name>
+    <Name>MODIS_Aqua_Cloud_Top_Pressure_Night</Name>
     <UserStyle>
-      <se:Name>GIBS</se:Name>
-      <se:FeatureTypeStyle>
-        <se:Rule>
-          <se:RasterSymbolizer>
-            <se:ColorMap>
+      <Name>GIBS</Name>
+      <FeatureTypeStyle>
+        <Rule>
+          <RasterSymbolizer>
+            <ColorMap>
               <ColorMapEntry color="#660077" quantity="250" label="250 hPa" opacity="1.0"/>
               <ColorMapEntry color="#b70f8d" quantity="297" label="297 hPa" opacity="1.0"/>
               <ColorMapEntry color="#000064" quantity="343" label="343 hPa" opacity="1.0"/>
@@ -30,16 +28,16 @@
               <ColorMapEntry color="#6e0000" quantity="857" label="857 hPa" opacity="1.0"/>
               <ColorMapEntry color="#aa0000" quantity="903" label="903 hPa" opacity="1.0"/>
               <ColorMapEntry color="#ff0000" quantity="950" label="950 hPa" opacity="1.0"/>
-            </se:ColorMap>
-          </se:RasterSymbolizer>
-          <se:RasterSymbolizer>
+            </ColorMap>
+          </RasterSymbolizer>
+          <RasterSymbolizer>
             <Opacity>0.0</Opacity>
-            <se:ColorMap>
+            <ColorMap>
               <ColorMapEntry color="#000000" label="Empty"/>
-            </se:ColorMap>
-          </se:RasterSymbolizer>
-        </se:Rule>
-      </se:FeatureTypeStyle>
+            </ColorMap>
+          </RasterSymbolizer>
+        </Rule>
+      </FeatureTypeStyle>
     </UserStyle>
   </NamedLayer>
 </StyledLayerDescriptor>

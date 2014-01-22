@@ -1,7 +1,6 @@
 {
     "bins": 255,
     "description": "Aura / MLS",
-    "tags": "n2o",
     "max": "300",
     "min": "75",
     "name": "Nitrous Oxide (46 hPa, Day)",
@@ -42,6 +41,7 @@
     },
     "rendered": "MLS_Rainbow",
     "startDate": "2012-04-07",
+    "tags": "n2o",
     "type": "wmts",
     "units": "ppbv"
 }

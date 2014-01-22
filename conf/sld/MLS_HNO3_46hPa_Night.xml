@@ -2,18 +2,16 @@
 <StyledLayerDescriptor version="1.0.0"
     xsi:schemaLocation="http://www.opengis.net/sld StyledLayerDescriptor.xsd"
     xmlns="http://www.opengis.net/sld"
-    xmlns:se="http://www.opengis.net/se"
-    xmlns:ogc="http://www.opengis.net/ogc"
     xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <NamedLayer>
-    <se:Name>MLS_HNO3_46hPa_Night</se:Name>
+    <Name>MLS_HNO3_46hPa_Night</Name>
     <UserStyle>
-      <se:Name>GIBS</se:Name>
-      <se:FeatureTypeStyle>
-        <se:Rule>
-          <se:RasterSymbolizer>
-            <se:ColorMap>
+      <Name>GIBS</Name>
+      <FeatureTypeStyle>
+        <Rule>
+          <RasterSymbolizer>
+            <ColorMap>
               <ColorMapEntry color="#8000ff" quantity="0" label="0 ppbv" opacity="1.0"/>
               <ColorMapEntry color="#7c00ff" quantity="0.04" label="0.04 ppbv" opacity="1.0"/>
               <ColorMapEntry color="#7800ff" quantity="0.08" label="0.08 ppbv" opacity="1.0"/>
@@ -269,16 +267,16 @@
               <ColorMapEntry color="#ff0900" quantity="9.92" label="9.92 ppbv" opacity="1.0"/>
               <ColorMapEntry color="#ff0500" quantity="9.96" label="9.96 ppbv" opacity="1.0"/>
               <ColorMapEntry color="#ff0000" quantity="10" label="10 ppbv" opacity="1.0"/>
-            </se:ColorMap>
-          </se:RasterSymbolizer>
-          <se:RasterSymbolizer>
+            </ColorMap>
+          </RasterSymbolizer>
+          <RasterSymbolizer>
             <Opacity>0.0</Opacity>
-            <se:ColorMap>
+            <ColorMap>
               <ColorMapEntry color="#000000" label="Empty"/>
-            </se:ColorMap>
-          </se:RasterSymbolizer>
-        </se:Rule>
-      </se:FeatureTypeStyle>
+            </ColorMap>
+          </RasterSymbolizer>
+        </Rule>
+      </FeatureTypeStyle>
     </UserStyle>
   </NamedLayer>
 </StyledLayerDescriptor>

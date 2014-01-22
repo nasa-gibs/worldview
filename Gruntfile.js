@@ -44,16 +44,6 @@ module.exports = function(grunt) {
         },
 
         copy: {
-            // Copies all configuration files to the build directory.
-            // Generating the master file may change the source files and this
-            // keeps the originals pristine.
-            config: {
-                files: [
-                    { expand: true,
-                      src: "conf/**", dest: "build" }
-                ]
-            },
-
             // Copies the source files to the build directory
             source: {
                 files: [
@@ -123,29 +113,8 @@ module.exports = function(grunt) {
         },
 
         exec: {
-            config_gc: {
-                command: "bin/gibs2wv build/conf/gc/*/* > build/conf/web/gc.json"
-            },
-
-            // Combine all configuration json files into one.
             config: {
-                command: "bin/conf-cat --input-dir build/conf/web > " +
-                            "build/worldview-debug/web/data/config.json"
-            },
-
-            // Create a minified verison of the configuration file for
-            // the release web root.
-            config_min: {
-                command: "bin/conf-cat --input-dir build/conf/web " +
-                            "--minify " +
-                            "> build/config.min.json"
-            },
-
-            // Creates a combined configuration file for use in the source
-            // tree
-            config_src: {
-                command: "bin/conf-cat --input-dir build/conf/web " +
-                            "> src/data/config.json"
+                command: "bin/make-conf"
             },
 
             // After removing JavaScript and CSS files that are no longer
@@ -437,17 +406,12 @@ module.exports = function(grunt) {
 
     grunt.registerTask("config", [
         "clean",
-        "copy:config",
-        "exec:config_gc",
-        "exec:config_src"
+        "exec:config",
     ]);
 
     grunt.registerTask("build", [
-        "clean",
+        "config",
         "copy:source",
-        "copy:config",
-        "exec:config_gc",
-        "exec:config",
         "concat",
         "replace:timestamp",
         "replace:nonce",

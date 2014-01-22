@@ -161,12 +161,13 @@ wv.layers.model = wv.layers.model || function(models, config) {
 
     self.pushToBottom = function(id) {
         var layer = getLayer(id);
+        var group = layer.group;
         var oldIndex = $.inArray(layer, self.active[layer.group]);
         if ( oldIndex < 0 ) {
             throw new Error("Layer is not active: " + id);
         }
-        self.active[type].splice(oldIndex, 1);
-        self.active[type].push(layer);
+        self.active[group].splice(oldIndex, 1);
+        self.active[group].push(layer);
         self.events.trigger("update", layer, self.active[layer.group].length - 1);
     };
 

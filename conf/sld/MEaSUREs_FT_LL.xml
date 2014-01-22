@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
-<StyledLayerDescriptor xmlns="http://www.opengis.net/sld" xmlns:se="http://www.opengis.net/se" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.0.0/StyledLayerDescriptor.xsd">
+<StyledLayerDescriptor xmlns="http://www.opengis.net/sld" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.0.0/StyledLayerDescriptor.xsd">
   <NamedLayer>
-    <se:Name>freezethaw_amsre</se:Name>
+    <Name>freezethaw_amsre</Name>
     <UserStyle>
-      <se:Name>xxx</se:Name>
-      <se:FeatureTypeStyle>
-        <se:Rule>
-          <se:RasterSymbolizer>
-            <se:ColorMap type="values">
+      <Name>xxx</Name>
+      <FeatureTypeStyle>
+        <Rule>
+          <RasterSymbolizer>
+            <ColorMap>
               <ColorMapEntry color="#0000ff" quantity="0" opacity="1" label="Frozen"/>
               <ColorMapEntry color="#ff0000" quantity="1" opacity="1" label="Thawed"/>
               <ColorMapEntry color="#a5a500" quantity="2" opacity="1" label="Transitional"/>
@@ -16,20 +16,20 @@
               <ColorMapEntry color="#111111" quantity="252" opacity="0" label="Non-Cold Area"/>
               <ColorMapEntry color="#775533" quantity="254" opacity="0" label="Open Water"/>
               <ColorMapEntry color="#7799bb" quantity="255" opacity="0" label="Fill"/>
-            </se:ColorMap>
-          </se:RasterSymbolizer>
-        </se:Rule>
-      </se:FeatureTypeStyle>
+            </ColorMap>
+          </RasterSymbolizer>
+        </Rule>
+      </FeatureTypeStyle>
     </UserStyle>
   </NamedLayer>
   <NamedLayer>
-    <se:Name>freezethaw_ssmi</se:Name>
+    <Name>freezethaw_ssmi</Name>
     <UserStyle>
-      <se:Name>xxx</se:Name>
-      <se:FeatureTypeStyle>
-        <se:Rule>
-          <se:RasterSymbolizer>
-            <se:ColorMap type="values">
+      <Name>xxx</Name>
+      <FeatureTypeStyle>
+        <Rule>
+          <RasterSymbolizer>
+            <ColorMap>
               <ColorMapEntry color="#0000ff" quantity="0" opacity="1" label="Frozen"/>
               <ColorMapEntry color="#ff0000" quantity="1" opacity="1" label="Thawed"/>
               <ColorMapEntry color="#a5a500" quantity="2" opacity="1" label="Transitional"/>
@@ -38,10 +38,10 @@
               <ColorMapEntry color="#111111" quantity="252" opacity="0" label="Non-Cold Area"/>
               <ColorMapEntry color="#775533" quantity="254" opacity="0" label="Open Water"/>
               <ColorMapEntry color="#7799bb" quantity="255" opacity="0" label="Fill"/>
-            </se:ColorMap>
-          </se:RasterSymbolizer>
-        </se:Rule>
-      </se:FeatureTypeStyle>
+            </ColorMap>
+          </RasterSymbolizer>
+        </Rule>
+      </FeatureTypeStyle>
     </UserStyle>
   </NamedLayer>
 </StyledLayerDescriptor>

@@ -1,7 +1,6 @@
 {
     "bins": 255,
     "description": "Aura / MLS",
-    "tags": "h2o",
     "max": "4.5",
     "min": "0.5",
     "name": "Water Vapor (46 hPa, Day)",
@@ -42,6 +41,7 @@
     },
     "rendered": "MLS_Rainbow",
     "startDate": "2012-04-07",
+    "tags": "h2o",
     "type": "wmts",
     "units": "ppmv"
 }

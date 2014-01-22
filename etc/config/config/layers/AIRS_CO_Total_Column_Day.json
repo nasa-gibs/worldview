@@ -1,7 +1,6 @@
 {
     "bins": 7,
     "description": "Aqua / AIRS",
-    "tags": "co",
     "max": "120",
     "min": "98.8",
     "name": "Carbon Monoxide (Total Column, Day)",
@@ -54,6 +53,7 @@
         0.9629629629629629,
         0.9814814814814815
     ],
+    "tags": "co",
     "type": "wmts",
     "units": "ppb"
 }

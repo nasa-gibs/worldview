@@ -2,18 +2,16 @@
 <StyledLayerDescriptor version="1.0.0"
     xsi:schemaLocation="http://www.opengis.net/sld StyledLayerDescriptor.xsd"
     xmlns="http://www.opengis.net/sld"
-    xmlns:se="http://www.opengis.net/se"
-    xmlns:ogc="http://www.opengis.net/ogc"
     xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <NamedLayer>
-    <se:Name>MODIS_Aqua_Brightness_Temp_Band31_Night</se:Name>
+    <Name>MODIS_Aqua_Brightness_Temp_Band31_Night</Name>
     <UserStyle>
-      <se:Name>GIBS</se:Name>
-      <se:FeatureTypeStyle>
-        <se:Rule>
-          <se:RasterSymbolizer>
-            <se:ColorMap>
+      <Name>GIBS</Name>
+      <FeatureTypeStyle>
+        <Rule>
+          <RasterSymbolizer>
+            <ColorMap>
               <ColorMapEntry color="#01021b" quantity="190" label="190 K" opacity="1.0"/>
               <ColorMapEntry color="#030420" quantity="190.6" label="190.6 K" opacity="1.0"/>
               <ColorMapEntry color="#040726" quantity="191.2" label="191.2 K" opacity="1.0"/>
@@ -268,16 +266,16 @@
               <ColorMapEntry color="#fffffc" quantity="338.8" label="338.8 K" opacity="1.0"/>
               <ColorMapEntry color="#fffffd" quantity="339.4" label="339.4 K" opacity="1.0"/>
               <ColorMapEntry color="#fffffe" quantity="340" label="340 K" opacity="1.0"/>
-            </se:ColorMap>
-          </se:RasterSymbolizer>
-          <se:RasterSymbolizer>
+            </ColorMap>
+          </RasterSymbolizer>
+          <RasterSymbolizer>
             <Opacity>0.0</Opacity>
-            <se:ColorMap>
+            <ColorMap>
               <ColorMapEntry color="#000000" label="Empty"/>
-            </se:ColorMap>
-          </se:RasterSymbolizer>
-        </se:Rule>
-      </se:FeatureTypeStyle>
+            </ColorMap>
+          </RasterSymbolizer>
+        </Rule>
+      </FeatureTypeStyle>
     </UserStyle>
   </NamedLayer>
 </StyledLayerDescriptor>

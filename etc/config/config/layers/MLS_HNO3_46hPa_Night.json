@@ -1,7 +1,6 @@
 {
     "bins": 255,
     "description": "Aura / MLS",
-    "tags": "hno3",
     "max": "10",
     "min": "0",
     "name": "Nitric Acid (46 hPa, Night)",
@@ -42,6 +41,7 @@
     },
     "rendered": "MLS_Rainbow",
     "startDate": "2012-04-07",
+    "tags": "hno3",
     "type": "wmts",
     "units": "ppbv"
 }

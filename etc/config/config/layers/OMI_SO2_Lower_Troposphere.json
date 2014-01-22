@@ -1,7 +1,6 @@
 {
     "bins": 119,
     "description": "Aura / OMI",
-    "tags": "so2",
     "max": "2.0",
     "min": "0.8",
     "name": "Sulfur Dioxide (Lower Troposphere)",
@@ -46,6 +45,7 @@
     ],
     "rendered": "OMI_SO2_Lower_Troposphere",
     "startDate": "2012-04-07",
+    "tags": "so2",
     "type": "wmts",
     "units": "DU"
 }

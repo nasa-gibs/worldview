@@ -2,18 +2,16 @@
 <StyledLayerDescriptor version="1.0.0"
     xsi:schemaLocation="http://www.opengis.net/sld StyledLayerDescriptor.xsd"
     xmlns="http://www.opengis.net/sld"
-    xmlns:se="http://www.opengis.net/se"
-    xmlns:ogc="http://www.opengis.net/ogc"
     xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <NamedLayer>
-    <se:Name>OMI_SO2_Middle_Troposphere</se:Name>
+    <Name>OMI_SO2_Middle_Troposphere</Name>
     <UserStyle>
-      <se:Name>GIBS</se:Name>
-      <se:FeatureTypeStyle>
-        <se:Rule>
-          <se:RasterSymbolizer>
-            <se:ColorMap>
+      <Name>GIBS</Name>
+      <FeatureTypeStyle>
+        <Rule>
+          <RasterSymbolizer>
+            <ColorMap>
               <ColorMapEntry color="#efc6ff" quantity="0.4" label="0.4 DU" opacity="1.0"/>
               <ColorMapEntry color="#edc5ff" quantity="0.41" label="0.41 DU" opacity="1.0"/>
               <ColorMapEntry color="#ebc4ff" quantity="0.42" label="0.42 DU" opacity="1.0"/>
@@ -171,16 +169,16 @@
               <ColorMapEntry color="#ff2903" quantity="1.98" label="1.98 DU" opacity="1.0"/>
               <ColorMapEntry color="#ff2002" quantity="1.99" label="1.99 DU" opacity="1.0"/>
               <ColorMapEntry color="#ff1d02" quantity="2.0" label="2.0 DU" opacity="1.0"/>
-            </se:ColorMap>
-          </se:RasterSymbolizer>
-          <se:RasterSymbolizer>
+            </ColorMap>
+          </RasterSymbolizer>
+          <RasterSymbolizer>
             <Opacity>0.0</Opacity>
-            <se:ColorMap>
+            <ColorMap>
               <ColorMapEntry color="#000000" label="Empty"/>
-            </se:ColorMap>
-          </se:RasterSymbolizer>
-        </se:Rule>
-      </se:FeatureTypeStyle>
+            </ColorMap>
+          </RasterSymbolizer>
+        </Rule>
+      </FeatureTypeStyle>
     </UserStyle>
   </NamedLayer>
 </StyledLayerDescriptor>

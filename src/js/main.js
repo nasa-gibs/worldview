@@ -5,7 +5,7 @@ $(function() {// Initialize "static" vars
     var entryPoint = function() {
         // Place any resources that should be completely loaded before
         // starting up the UI
-        var configURI = "data/config.json?v=" + wv.brand.BUILD_NONCE;
+        var configURI = "conf/wv.json?v=" + wv.brand.BUILD_NONCE;
         $.getJSON(configURI, function(config) {
             onLoad(config);
         }).error(function() {
@@ -91,9 +91,9 @@ $(function() {// Initialize "static" vars
             initialDate.setUTCDate(initialDate.getUTCDate() - 1);
         }
         models.proj = wv.proj.model(config);
+        models.palettes = wv.palette.model(models, config);
         models.layers = wv.layers.model(models, config);
         models.date = wv.date.model({ initial: initialDate });
-        models.palettes = wv.palette.model();
         var dataDownloadModel = Worldview.DataDownload.Model(config, {
             layersModel: models.layers
         });

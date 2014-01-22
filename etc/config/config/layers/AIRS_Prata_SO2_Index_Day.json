@@ -1,7 +1,6 @@
 {
     "bins": 251,
     "description": "Aqua / AIRS",
-    "tags": "so2",
     "max": "30",
     "min": "0",
     "name": "Sulfur Dioxide (Day, Prata Algorithm)",
@@ -46,6 +45,7 @@
     ],
     "rendered": "AIRS_Prata_SO2_Index",
     "startDate": "2012-04-07",
+    "tags": "so2",
     "type": "wmts",
     "units": "DU"
 }

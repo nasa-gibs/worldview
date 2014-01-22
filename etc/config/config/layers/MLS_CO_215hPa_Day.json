@@ -1,7 +1,6 @@
 {
     "bins": 255,
     "description": "Aura / MLS",
-    "tags": "co",
     "max": "250",
     "min": "0",
     "name": "Carbon Monoxide (215 hPa, Day)",
@@ -42,6 +41,7 @@
     },
     "rendered": "MLS_Rainbow",
     "startDate": "2012-04-07",
+    "tags": "co",
     "type": "wmts",
     "units": "ppbv"
 }

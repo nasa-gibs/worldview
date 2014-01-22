@@ -10,4 +10,4 @@ doc
 tools
 *~
 *.swp
-src/data/config.json
+src/conf
