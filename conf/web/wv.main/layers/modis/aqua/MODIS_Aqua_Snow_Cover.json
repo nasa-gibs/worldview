@@ -1,0 +1,16 @@
+{
+    "layers": {
+        "MODIS_Aqua_Snow_Cover": {
+            "id":       "MODIS_Aqua_Snow_Cover",
+            "title":    "Snow Cover",
+            "subtitle": "Aqua / MODIS",
+            "group":    "overlays",
+            "product":  "MYD10_L2",
+
+            "palette": {
+                "id":           "MODIS_Aqua_Snow_Cover",
+                "recommended":  ["blue_4"]
+            }
+        }
+    }
+}

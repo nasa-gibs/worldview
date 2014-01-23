@@ -1,0 +1,16 @@
+{
+    "layers": {
+        "MODIS_Aqua_Land_Surface_Temp_Night": {
+            "id":       "MODIS_Aqua_Land_Surface_Temp_Night",
+            "title":    "Land Surface Temperature (Night)",
+            "subtitle": "Aqua / MODIS",
+            "group":    "overlays",
+            "product":  "MYD11_L2_NIGHT",
+
+            "palette": {
+                "id":   "MODIS_Aqua_Land_Surface_Temp_Night",
+                "recommended": ["rainbow_1", "purple_2"]
+            }
+        }
+    }
+}

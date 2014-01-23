@@ -1,0 +1,14 @@
+{
+    "layers": {
+        "MODIS_Aqua_Chlorophyll_A": {
+            "id":       "MODIS_Aqua_Chlorophyll_A",
+            "title":    "Chlorophyll A",
+            "subtitle": "Aqua / MODIS",
+            "group":    "overlays",
+
+            "palette": {
+                "id":   "MODIS_Aqua_Chlorophyll_A"
+            }
+        }
+    }
+}

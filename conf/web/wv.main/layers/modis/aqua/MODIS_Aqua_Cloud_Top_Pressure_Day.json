@@ -1,0 +1,15 @@
+{
+    "layers": {
+        "MODIS_Aqua_Cloud_Top_Pressure_Day": {
+            "id":       "MODIS_Aqua_Cloud_Top_Pressure_Day",
+            "title":    "Cloud Top Pressure (Day)",
+            "subtitle": "Aqua / MODIS",
+            "group":    "overlays",
+            "product":  "MYD06_L2_DAY",
+
+            "palette": {
+                "id":   "MODIS_Aqua_Cloud_Top_Pressure_Day"
+            }
+        }
+    }
+}

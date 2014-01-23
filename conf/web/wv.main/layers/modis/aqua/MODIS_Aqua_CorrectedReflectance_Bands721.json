@@ -1,0 +1,11 @@
+{
+    "layers": {
+        "MODIS_Aqua_CorrectedReflectance_Bands721": {
+            "id":       "MODIS_Aqua_CorrectedReflectance_Bands721",
+            "title":    "Corrected Reflectance (7-2-1)",
+            "subtitle": "Aqua / MODIS",
+            "tags":     "cr",
+            "group":    "baselayers"
+        }
+    }
+}

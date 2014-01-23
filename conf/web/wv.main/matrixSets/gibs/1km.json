@@ -1,0 +1,37 @@
+{
+    "matrixSets": {
+        "GIBS:EPSG3031_1km": {
+            "id": "EPSG3031_1km",
+            "maxResolution": 8192.0,
+            "serverResolutions": [
+                8192.0,
+                4096.0,
+                2048.0,
+                1024.0
+            ]
+        },
+        "GIBS:EPSG3413_1km": {
+            "id": "EPSG3413_1km",
+            "maxResolution": 8192.0,
+            "serverResolutions": [
+                8192.0,
+                4096.0,
+                2048.0,
+                1024.0
+            ]
+        },
+        "GIBS:EPSG4326_1km": {
+            "id": "EPSG4326_1km",
+            "maxResolution": 0.5625,
+            "serverResolutions": [
+                0.5625,
+                0.28125,
+                0.140625,
+                0.0703125,
+                0.03515625,
+                0.017578125,
+                0.0087890625
+            ]
+        }
+    }
+}
