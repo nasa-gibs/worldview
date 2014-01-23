@@ -1,10 +1,10 @@
 {
     "layers": {
-        "antarctic_coastlines": {
-            "id":       "antarctic_coastlines",
-            "title":    "Coastlines",
-            "subtitle": "ADD SCAR / Coastlines",
-            "tags":     "borders",
+        "antarctic_graticule": {
+            "id":       "antarctic_graticule",
+            "title":    "Latitude-Longitude Lines",
+            "subtitle": "Polarview / Graticule",
+            "tags":     "lat lon lat-lon",
             "group":    "overlays",
             "format":   "image/png",
             "type":     "wmts",

@@ -1,0 +1,16 @@
+{
+    "layers": {
+        "OMI_SO2_Lower_Troposphere": {
+            "id":       "OMI_SO2_Lower_Troposphere",
+            "title":    "Sulfur Dioxide (Lower Troposphere)",
+            "subtitle": "Aura / OMI",
+            "group":    "overlays",
+            "product":  "OMSO2",
+
+            "palette": {
+                "id":           "OMI_SO2_Lower_Troposphere",
+                "recommended":  ["orange_1", "red_1"]
+            }
+        }
+    }
+}

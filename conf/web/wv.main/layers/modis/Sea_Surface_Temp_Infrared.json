@@ -1,0 +1,16 @@
+{
+    "layers": {
+        "Sea_Surface_Temp_Infrared": {
+            "id":       "Sea_Surface_Temp_Infrared",
+            "title":    "Sea Surface Temperature (Infrared)",
+            "subtitle": "PODAAC / MODIS / Terra and Aqua / 5 day",
+            "tags":     "sst",
+            "group":    "overlays",
+
+            "palette": {
+                "id":           "Sea_Surface_Temp_Infrared",
+                "recommended":  ["purple_2"]
+            }
+        }
+    }
+}

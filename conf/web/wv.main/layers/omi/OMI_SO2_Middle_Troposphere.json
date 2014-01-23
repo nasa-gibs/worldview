@@ -1,0 +1,16 @@
+{
+    "layers": {
+        "OMI_SO2_Middle_Troposphere": {
+            "id":       "OMI_SO2_Middle_Troposphere",
+            "title":    "Sulfur Dioxide (Middle Troposphere)",
+            "subtitle": "Aura / OMI",
+            "group":    "overlays",
+            "product":  "OMSO2",
+
+            "palette": {
+                "id":           "OMI_SO2_Middle_Troposphere",
+                "recommended":  ["orange_1", "red_1"]
+            }
+        }
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "layers": {
+        "VIIRS_CityLights_2012": {
+            "id":       "VIIRS_CityLights_2012",
+            "title":    "Earth at Night 2012",
+            "subtitle": "Suomi NPP / VIIRS via NASA Earth Observatory",
+            "tags":     "night lights city lights snpp",
+            "group":    "baselayers"
+        }
+    }
+}

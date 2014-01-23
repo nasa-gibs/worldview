@@ -1,10 +1,10 @@
 {
     "layers": {
-        "arctic_coastlines_3413": {
-            "id":       "arctic_coastlines_3413",
-            "title":    "Coastlines",
-            "subtitle": "OpenStreetMap / Coastlines",
-            "tags":     "borders",
+        "arctic_graticule": {
+            "id":       "arctic_graticule",
+            "title":    "Latitude-Longitude Lines (EPSG:3995)",
+            "subtitle": "Polarview / Graticule",
+            "tags":     "lat lon lat-lon",
             "group":    "overlays",
             "format":   "image/png",
             "type":     "wmts",

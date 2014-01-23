@@ -1,9 +1,9 @@
 {
     "layers": {
-        "arctic_coastlines_3413": {
-            "id":       "arctic_coastlines_3413",
+        "arctic_coastlines": {
+            "id":       "arctic_coastlines",
             "title":    "Coastlines",
-            "subtitle": "OpenStreetMap / Coastlines",
+            "subtitle": "Polarview / Coastlines (EPSG:3995)",
             "tags":     "borders",
             "group":    "overlays",
             "format":   "image/png",

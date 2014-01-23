@@ -1,0 +1,26 @@
+{
+    "layers": {
+        "Terra_Orbit_Asc": {
+            "id":       "Terra_Orbit_Asc",
+            "title":    "Orbital Track (Ascending/Day)",
+            "subtitle": "Space-Track.org / Terra",
+            "group":    "overlays",
+            "format":   "image/png",
+            "type":     "wms",
+            "tileSize": [512, 512],
+            "period":   "daily",
+
+            "projections": {
+                "antarctic": {
+                    "source":   "GIBS:wms"
+                },
+                "arctic": {
+                    "source":   "GIBS:wms"
+                },
+                "geographic": {
+                    "source":   "GIBS:wms"
+                }
+            }
+        }
+    }
+}
