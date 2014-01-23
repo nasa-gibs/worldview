@@ -1,0 +1,20 @@
+{
+    "layers": {
+        "Calipso_Orbit_Dsc": {
+            "id":       "Calipso_Orbit_Dsc",
+            "title":    "Orbital Track (Descending/Night)",
+            "subtitle": "Space-Track.org / Calipso",
+            "group":    "overlays",
+            "format":   "image/png",
+            "type":     "wms",
+            "tileSize": [512, 512],
+            "period":   "daily",
+
+            "projections": {
+                "geographic": {
+                    "source":   "GIBS:wms"
+                }
+            }
+        }
+    }
+}

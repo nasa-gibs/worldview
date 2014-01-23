@@ -1,0 +1,16 @@
+{
+    "layers": {
+        "MLS_O3_46hPa_Night": {
+            "id":       "MLS_O3_46hPa_Night",
+            "title":    "Ozone (46 hPa, Night)",
+            "subtitle": "Aura / MLS",
+            "tags":     "o3",
+            "group":    "overlays",
+            "product":  "ML2O3",
+
+            "palette": {
+                "id":   "MLS_O3_46hPa_Night"
+            }
+        }
+    }
+}

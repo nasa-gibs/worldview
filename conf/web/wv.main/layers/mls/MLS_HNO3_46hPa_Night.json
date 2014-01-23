@@ -1,0 +1,16 @@
+{
+    "layers": {
+        "MLS_HNO3_46hPa_Night": {
+            "id":       "MLS_HNO3_46hPa_Night",
+            "title":    "Nitric Acid (46 hPa, Night)",
+            "subtitle": "Aura / MLS",
+            "tags":     "hno3",
+            "group":    "overlays",
+            "product":  "ML2HNO3",
+
+            "palette": {
+                "id":   "MLS_HNO3_46hPa_Night"
+            }
+        }
+    }
+}

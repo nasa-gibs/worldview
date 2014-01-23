@@ -1,0 +1,16 @@
+{
+    "layers": {
+        "MLS_CO_215hPa_Night": {
+            "id":       "MLS_CO_215hPa_Night",
+            "title":    "Carbon Monoxide (215 hPa, Night)",
+            "subtitle": "Aura / MLS",
+            "tags":     "co",
+            "group":    "overlays",
+            "product":  "ML2CO",
+
+            "palette": {
+                "id":   "MLS_CO_215hPa_Night"
+            }
+        }
+    }
+}

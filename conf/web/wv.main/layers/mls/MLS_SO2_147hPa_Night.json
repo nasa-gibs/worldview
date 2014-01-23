@@ -1,0 +1,16 @@
+{
+    "layers": {
+        "MLS_SO2_147hPa_Night": {
+            "id":       "MLS_SO2_147hPa_Night",
+            "title":    "Sulfur Dioxide (147 hPa, Night)",
+            "subtitle": "Aura / MLS",
+            "tags":     "so2",
+            "group":    "overlays",
+            "product":  "ML2SO2",
+
+            "palette": {
+                "id":   "MLS_SO2_147hPa_Night"
+            }
+        }
+    }
+}

@@ -1,0 +1,16 @@
+{
+    "layers": {
+        "MLS_SO2_147hPa_Day": {
+            "id":       "MLS_SO2_147hPa_Day",
+            "title":    "Sulfur Dioxide (147 hPa, Day)",
+            "subtitle": "Aura / MLS",
+            "tags":     "so2",
+            "group":    "overlays",
+            "product":  "ML2SO2",
+
+            "palette": {
+                "id":   "MLS_SO2_147hPa_Day"
+            }
+        }
+    }
+}
