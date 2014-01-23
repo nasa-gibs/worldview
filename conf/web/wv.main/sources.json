@@ -20,6 +20,13 @@
                 "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
                 "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
             ]
+        },
+        "GIBS:wms": {
+            "url": [
+                "//map2a.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2b.vis.earthdata.nasa.gov/wms/wms.php",
+                "//map2c.vis.earthdata.nasa.gov/wms/wms.php"
+            ]
         }
     }
 }

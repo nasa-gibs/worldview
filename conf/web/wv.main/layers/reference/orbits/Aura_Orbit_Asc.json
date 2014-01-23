@@ -1,0 +1,26 @@
+{
+    "layers": {
+        "Aura_Orbit_Asc": {
+            "id":       "Aura_Orbit_Asc",
+            "title":    "Orbital Track (Ascending/Day)",
+            "subtitle": "Space-Track.org / Aura",
+            "group":    "overlays",
+            "format":   "image/png",
+            "type":     "wms",
+            "tileSize": [512, 512],
+            "period":   "daily",
+
+            "projections": {
+                "antarctic": {
+                    "source":   "GIBS:wms"
+                },
+                "arctic": {
+                    "source":   "GIBS:wms"
+                },
+                "geographic": {
+                    "source":   "GIBS:wms"
+                }
+            }
+        }
+    }
+}

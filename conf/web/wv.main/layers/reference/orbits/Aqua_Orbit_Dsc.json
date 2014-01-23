@@ -1,0 +1,26 @@
+{
+    "layers": {
+        "Aqua_Orbit_Dsc": {
+            "id":       "Aqua_Orbit_Dsc",
+            "title":    "Orbital Track (Descending/Night)",
+            "subtitle": "Space-Track.org / Aqua",
+            "group":    "overlays",
+            "format":   "image/png",
+            "type":     "wms",
+            "tileSize": [512, 512],
+            "period":   "daily",
+
+            "projections": {
+                "antarctic": {
+                    "source":   "GIBS:wms"
+                },
+                "arctic": {
+                    "source":   "GIBS:wms"
+                },
+                "geographic": {
+                    "source":   "GIBS:wms"
+                }
+            }
+        }
+    }
+}

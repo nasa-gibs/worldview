@@ -79,15 +79,41 @@ Worldview.Map.LayerSet = function(config, projId, layerId) {
                                           layer.tileSize[1])
         };
         if ( layer.noTransition ) {
-            param.transitionEffect = "nonw";
+            param.transitionEffect = "none";
         } else {
             param.transitionEffect = "resize";
         }
-        var layer = new OpenLayers.Layer.WMTS(param);
+        var olLayer = new OpenLayers.Layer.WMTS(param);
         if ( options && options.time ) {
-            layer.mergeNewParams({"time": options.time});
+            olLayer.mergeNewParams({"time": options.time});
         }
-       return layer;
+       return olLayer;
+    };
+
+    var createWMS = function(options) {
+        var proj = config.projections[projId];
+        var layer = config.layers[layerId];
+        var source = config.sources[layer.projections[projId].source];
+        var layerParameter = layer.projections[projId].layer || layerId;
+
+        var transparent = ( layer.format === "image/png" );
+
+        var params = {
+            layers: layerParameter,
+            format: layer.format,
+            transparent: transparent
+        };
+        if ( layer.period === "daily" ) {
+            params.time = options.time;
+        };
+        var options = {
+            tileSize: new OpenLayers.Size(layer.tileSize[0],
+                                          layer.tileSize[1]),
+            transitionEffect: "none"
+        };
+        var olLayer = new OpenLayers.Layer.WMS(layer.title, source.url,
+                params, options);
+        return olLayer;
     };
 
     /**
@@ -106,7 +132,7 @@ Worldview.Map.LayerSet = function(config, projId, layerId) {
         if ( type === "wmts" ) {
             return createWMTS(options);
         } else if ( type === "wms" ) {
-            return createWMS(projId);
+            return createWMS(options);
         } else {
             throw new Error("Invalid layer type", config.type);
         }
