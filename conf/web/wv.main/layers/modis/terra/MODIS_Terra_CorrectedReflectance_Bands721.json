@@ -1,0 +1,11 @@
+{
+    "layers": {
+        "MODIS_Terra_CorrectedReflectance_Bands721": {
+            "id":       "MODIS_Terra_CorrectedReflectance_Bands721",
+            "title":    "Corrected Reflectance (7-2-1)",
+            "subtitle": "Terra / MODIS",
+            "tags":     "cr",
+            "group":    "baselayers"
+        }
+    }
+}

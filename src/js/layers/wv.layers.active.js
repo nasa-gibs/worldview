@@ -205,7 +205,9 @@ wv.layers.active = wv.layers.active || function(models, config, spec) {
             if ( palette.values && !layer.palette.classified ) {
                 var min = palette.values[0];
                 var max = palette.values[palette.values.length - 1];
-                $(selector + " .legend-small-min").html(min);
+                if ( !layer.palette.single ) {
+                    $(selector + " .legend-small-min").html(min);
+                }
                 $(selector + " .legend-small-max").html(max);
             }
         });

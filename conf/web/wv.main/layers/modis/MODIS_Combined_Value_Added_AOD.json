@@ -1,0 +1,17 @@
+{
+    "layers": {
+        "MODIS_Combined_Value_Added_AOD": {
+            "id":       "MODIS_Combined_Value_Added_AOD",
+            "title":    "MODIS Combined Value-Added Aerosol Optical Depth",
+            "subtitle": "Terra and Aqua / MODIS",
+            "tags":     "aod",
+            "group":    "overlays",
+            "product":  "MYD04_L2",
+
+            "palette": {
+                "id":           "MODIS_Combined_Value_Added_AOD",
+                "recommended":  ["orange_1"]
+            }
+        }
+    }
+}

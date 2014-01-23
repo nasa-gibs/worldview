@@ -1,0 +1,16 @@
+{
+    "layers": {
+        "MODIS_Terra_Land_Surface_Temp_Night": {
+            "id":       "MODIS_Terra_Land_Surface_Temp_Night",
+            "title":    "Land Surface Temperature (Night)",
+            "subtitle": "Terra / MODIS",
+            "group":    "overlays",
+            "product":  "MOD11_L2_NIGHT",
+
+            "palette": {
+                "id":   "MODIS_Terra_Land_Surface_Temp_Night",
+                "recommended": ["rainbow_1", "purple_2"]
+            }
+        }
+    }
+}

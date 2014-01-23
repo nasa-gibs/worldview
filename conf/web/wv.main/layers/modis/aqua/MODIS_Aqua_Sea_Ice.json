@@ -8,8 +8,8 @@
             "product":  "MYD29",
 
             "palette": {
-                "id":           "MODIS_Aqua_Sea_Ice",
-                "classified":   "true"
+                "id":       "MODIS_Aqua_Sea_Ice",
+                "single":   "true"
             }
         }
     }

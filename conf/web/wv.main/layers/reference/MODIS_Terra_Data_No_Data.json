@@ -1,0 +1,10 @@
+{
+    "layers": {
+        "MODIS_Terra_Data_No_Data": {
+            "id":       "MODIS_Terra_Data_No_Data",
+            "title":    "Areas of No Data (mask)",
+            "subtitle": "Terra / MODIS",
+            "group":    "overlays"
+        }
+    }
+}

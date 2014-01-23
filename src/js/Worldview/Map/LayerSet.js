@@ -108,9 +108,12 @@ Worldview.Map.LayerSet = function(config, projId, layerId) {
         };
         var options = {
             tileSize: new OpenLayers.Size(layer.tileSize[0],
-                                          layer.tileSize[1]),
-            transitionEffect: "none"
-        };
+                                          layer.tileSize[1]),        };
+        if ( layer.transition ) {
+            options.transitionEffect = "resize";
+        } else {
+            options.transitionEffect = "none";
+        }
         var olLayer = new OpenLayers.Layer.WMS(layer.title, source.url,
                 params, options);
         return olLayer;

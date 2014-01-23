@@ -1,0 +1,16 @@
+{
+    "layers": {
+        "MODIS_Terra_Snow_Cover": {
+            "id":       "MODIS_Terra_Snow_Cover",
+            "title":    "Snow Cover",
+            "subtitle": "Terra / MODIS",
+            "group":    "overlays",
+            "product":  "MOD10_L2",
+
+            "palette": {
+                "id":           "MODIS_Terra_Snow_Cover",
+                "recommended":  ["blue_4"]
+            }
+        }
+    }
+}

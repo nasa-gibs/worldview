@@ -1,0 +1,16 @@
+{
+    "layers": {
+        "MODIS_Water_Mask": {
+            "id":       "MODIS_Water_Mask",
+            "title":    "Global 250m Water Map",
+            "subtitle": "Terra / MODIS, SRTM",
+            "tags":     "mask",
+            "group":    "overlays",
+
+            "palette": {
+                "id":       "MODIS_Water_Mask",
+                "single":   "true"
+            }
+        }
+    }
+}

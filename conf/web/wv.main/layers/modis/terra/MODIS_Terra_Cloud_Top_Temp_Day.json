@@ -1,0 +1,16 @@
+{
+    "layers": {
+        "MODIS_Terra_Cloud_Top_Temp_Night": {
+            "id":       "MODIS_Terra_Cloud_Top_Temp_Night",
+            "title":    "Cloud Top Temperature (Night)",
+            "subtitle": "Terra / MODIS",
+            "group":    "overlays",
+            "product":  "MOD06_L2_NIGHT",
+
+            "palette": {
+                "id":           "MODIS_Terra_Cloud_Top_Temp_Night",
+                "recommended":  ["purple_2", "rainbow_1"]
+            }
+        }
+    }
+}

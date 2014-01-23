@@ -1,0 +1,16 @@
+{
+    "layers": {
+        "MODIS_Terra_Sea_Ice": {
+            "id":       "MODIS_Terra_Sea_Ice",
+            "title":    "Sea Ice",
+            "subtitle": "Terra / MODIS",
+            "group":    "overlays",
+            "product":  "MOD29",
+
+            "palette": {
+                "id":       "MODIS_Terra_Sea_Ice",
+                "single":   "true"
+            }
+        }
+    }
+}

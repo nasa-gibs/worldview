@@ -8,7 +8,8 @@
             "product":  "MYD06_L2_NIGHT",
 
             "palette": {
-                "id":   "MODIS_Aqua_Cloud_Top_Pressure_Night"
+                "id":           "MODIS_Aqua_Cloud_Top_Pressure_Night",
+                "recommended":  ["blue_4"]
             }
         }
     }

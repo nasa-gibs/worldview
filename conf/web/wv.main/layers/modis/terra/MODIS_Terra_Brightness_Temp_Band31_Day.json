@@ -1,0 +1,14 @@
+{
+    "layers": {
+        "MODIS_Terra_Brightness_Temp_Band31_Day": {
+            "id":       "MODIS_Terra_Brightness_Temp_Band31_Day",
+            "title":    "Brightness Temperature (Band 31-Day)",
+            "subtitle": "Terra / MODIS",
+            "group":    "overlays",
+
+            "palette": {
+                "id":   "MODIS_Terra_Brightness_Temp_Band31_Day"
+            }
+        }
+    }
+}

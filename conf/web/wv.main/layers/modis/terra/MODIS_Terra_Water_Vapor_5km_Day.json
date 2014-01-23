@@ -1,0 +1,16 @@
+{
+    "layers": {
+        "MODIS_Terra_Water_Vapor_5km_Day": {
+            "id":       "MODIS_Terra_Water_Vapor_5km_Day",
+            "title":    "Water Vapor (Day)",
+            "subtitle": "Terra / MODIS",
+            "group":    "overlays",
+            "product":  "MOD05_L2_DAY",
+
+            "palette": {
+                "id":           "MODIS_Terra_Water_Vapor_5km_Day",
+                "recommended":  ["blue_1"]
+            }
+        }
+    }
+}

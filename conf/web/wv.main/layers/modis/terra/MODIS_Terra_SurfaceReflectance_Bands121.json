@@ -1,0 +1,12 @@
+{
+    "layers": {
+        "MODIS_Terra_SurfaceReflectance_Bands121": {
+            "id":       "MODIS_Terra_SurfaceReflectance_Bands121",
+            "title":    "Land Surface Reflectance (1-2-1)",
+            "subtitle": "Terra / MODIS",
+            "tags":     "lsr",
+            "group":    "baselayers",
+            "product":  "MOD09GQ"
+        }
+    }
+}

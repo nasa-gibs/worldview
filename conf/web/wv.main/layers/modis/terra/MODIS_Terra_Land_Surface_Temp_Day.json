@@ -1,0 +1,16 @@
+{
+    "layers": {
+        "MODIS_Terra_Land_Surface_Temp_Day": {
+            "id":       "MODIS_Terra_Land_Surface_Temp_Day",
+            "title":    "Land Surface Temperature (Day)",
+            "subtitle": "Terra / MODIS",
+            "group":    "overlays",
+            "product":  "MOD11_L2_DAY",
+
+            "palette": {
+                "id":   "MODIS_Terra_Land_Surface_Temp_Day",
+                "recommended": ["rainbow_1", "purple_2"]
+            }
+        }
+    }
+}

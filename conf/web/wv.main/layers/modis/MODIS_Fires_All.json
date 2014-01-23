@@ -1,0 +1,29 @@
+{
+    "layers": {
+        "MODIS_Fires_All": {
+            "id":       "MODIS_Fires_All",
+            "title":    "Fires (Day and Night)",
+            "subtitle": "Terra/ and Aqua/MODIS Fire and Thermal Anomalies",
+            "tags":     "hotspot",
+            "group":    "overlays",
+            "format":   "image/png",
+            "period":   "daily",
+            "tileSize": [512, 512],
+            "type":     "wms",
+
+            "transition":   "true",
+            "startDate":    "2012-04-07",
+
+            "projections": {
+                "geographic": {
+                    "source": "GIBS:wms"
+                }
+            },
+
+            "palette": {
+                "id":       "MODIS_Fires_All",
+                "single":   "true"
+            }
+        }
+    }
+}

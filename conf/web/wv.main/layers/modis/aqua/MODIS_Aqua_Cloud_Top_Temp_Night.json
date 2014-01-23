@@ -1,0 +1,16 @@
+{
+    "layers": {
+        "MODIS_Aqua_Cloud_Top_Temp_Night": {
+            "id":       "MODIS_Aqua_Cloud_Top_Temp_Night",
+            "title":    "Cloud Top Temperature (Night)",
+            "subtitle": "Aqua / MODIS",
+            "group":    "overlays",
+            "product":  "MYD06_L2_NIGHT",
+
+            "palette": {
+                "id":           "MODIS_Aqua_Cloud_Top_Temp_Night",
+                "recommended":  ["purple_2", "rainbow_1"]
+            }
+        }
+    }
+}

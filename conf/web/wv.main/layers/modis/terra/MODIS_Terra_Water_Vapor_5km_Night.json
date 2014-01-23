@@ -1,0 +1,16 @@
+{
+    "layers": {
+        "MODIS_Terra_Water_Vapor_5km_Night": {
+            "id":       "MODIS_Terra_Water_Vapor_5km_Night",
+            "title":    "Water Vapor (Night)",
+            "subtitle": "Terra / MODIS",
+            "group":    "overlays",
+            "product":  "MOD05_L2_NIGHT",
+
+            "palette": {
+                "id":           "MODIS_Terra_Water_Vapor_5km_Night",
+                "recommended":  ["blue_1"]
+            }
+        }
+    }
+}
