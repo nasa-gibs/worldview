@@ -160,6 +160,12 @@ for building:
 
     npm install
 
+Some python libraries are required. Run the following script which will
+globally install virtualenv (requires root), and then installs the libraries
+in the python directory:
+
+    ./python_install
+
 To create a version that is ready to deployed to a web server, issue the
 following:
 

@@ -114,7 +114,7 @@ module.exports = function(grunt) {
 
         exec: {
             config: {
-                command: "bin/make-conf"
+                command: "PATH=python/bin:${PATH} bin/make-conf"
             },
 
             // After removing JavaScript and CSS files that are no longer
