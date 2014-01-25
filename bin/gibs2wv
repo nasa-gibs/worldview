@@ -49,7 +49,7 @@ for filename in args:
 
         id = gc_layer["ows:Identifier"]
         if id in SKIP_LAYERS:
-            sys.stderr.write("Skipping layer: {}".format(id))
+            sys.stderr.write("Skipping layer: {}\n".format(id))
             continue
         if id not in wv_layers:
             wv_layers[id] = {}

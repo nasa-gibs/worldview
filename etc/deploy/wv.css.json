@@ -1,7 +1,7 @@
 [
     "src/css/wv.main.css",
     "src/css/wv.link.css",
-    "src/css/palette.css",
+    "src/css/wv.palette.css",
     "src/css/map.css",
     "src/css/map-ol2.css",
     "src/css/wv.date.css",

@@ -164,53 +164,16 @@ wv.layers.active = wv.layers.active || function(models, config, spec) {
     };
 
     var renderLegend = function($parent, group, layer) {
-        var $container = $("<table></table>")
+        var $container = $("<div></div>")
             .addClass("wv-palette")
             .attr("data-layer", encodeURIComponent(layer.id));
-        var $row = $("<tr></tr>");
-        var $min = $("<td></td>")
-            .addClass("legend-small-min");
-        $row.append($min);
-
-        var $legend = $("<td></td>");
-        var $canvas = $("<canvas></canvas>")
-            .attr("id", "canvas" + Worldview.id(layer.id))
-            .addClass("legend-small");
-        /* FIXME: This needs to move
-        var palette = paletteWidget.getPalette(layer.id);
-        if ( palette.stops.length > 1 ) {
-            $canvas.click(openPaletteSelector)
-                .css("cursor", "pointer");
-        }
-        */
-        $legend.append($canvas);
-        $row.append($legend);
-
-        var $max = $("<td></td>")
-            .addClass("legend-small-max");
-        $row.append($max);
-
-        //$div.append($container);
-        //$parent.append($div);
-        $container.append($row);
         $parent.append($container);
     };
 
     var renderLegendCanvas = function(layer) {
         var selector = ".wv-palette[data-layer='" +
                 encodeURIComponent(layer.id) + "']";
-        var legend = wv.palette.legend(selector + " .legend-small");
-        models.palettes.load(layer.id).done(function(palette) {
-            legend.set(palette);
-            if ( palette.values && !layer.palette.classified ) {
-                var min = palette.values[0];
-                var max = palette.values[palette.values.length - 1];
-                if ( !layer.palette.single ) {
-                    $(selector + " .legend-small-min").html(min);
-                }
-                $(selector + " .legend-small-max").html(max);
-            }
-        });
+		wv.palette.legend(selector, models.palettes, layer);
     };
 
     var adjustCategoryHeights = function() {
