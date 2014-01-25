@@ -1,0 +1,20 @@
+{
+    "layers": {
+        "cartographic:esri-administrative-boundaries_level-1": {
+            "id":       "cartographic:esri-administrative-boundaries_level-1",
+            "title":    "Administrative Boundaries",
+            "subtitle": "SEDAC / L1 Admin Boundaries",
+            "tags":     "state borders",
+            "group":    "overlays",
+            "format":   "image/png",
+            "tileSize": [512, 512],
+            "type":     "wms",
+
+            "projections": {
+                "geographic": {
+                    "source": "SEDAC:wms"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,23 @@
+{
+    "layers": {
+        "cartographic:00-global-labels": {
+            "id":       "cartographic:00-global-labels",
+            "title":    "Global Labels",
+            "subtitle": "SEDAC / Global Labels",
+            "tags":     "names",
+            "group":    "overlays",
+            "format":   "image/png",
+            "tileSize": [512, 512],
+            "type":     "wms",
+
+            "projections": {
+                "arctic": {
+                    "source": "SEDAC:wms"
+                },
+                "geographic": {
+                    "source": "SEDAC:wms"
+                }
+            }
+        }
+    }
+}

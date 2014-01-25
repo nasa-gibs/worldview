@@ -27,6 +27,9 @@
                 "//map2b.vis.earthdata.nasa.gov/wms/wms.php",
                 "//map2c.vis.earthdata.nasa.gov/wms/wms.php"
             ]
+        },
+        "SEDAC:wms": {
+            "url": "http://sedac.ciesin.columbia.edu/geoserver/ows"
         }
     }
 }
