@@ -1,0 +1,26 @@
+{
+    "layers": {
+        "ndh-volcano-proportional-economic-loss-risk-deciles": {
+            "id":       "ndh-volcano-proportional-economic-loss-risk-deciles",
+            "title":    "Volcano Hazard: Economic Risk",
+            "subtitle": "SEDAC Global Volcano Proportional Economic Loss Risk Deciles, v1 (2000)",
+            "group":    "overlays",
+            "format":   "image/png",
+            "tileSize": [512, 512],
+            "type":     "wms",
+            "product":  "CIESIN_CHRR_NDH_VOLCANO_PELRD",
+            "opacity":  0.75,
+
+            "projections": {
+                "geographic": {
+                    "source": "SEDAC:wms"
+                }
+            },
+            
+            "palette": {
+            	"id":			"ndh-volcano-proportional-economic-loss-risk-deciles",
+            	"classified": 	"true"
+            }
+        }
+    }
+}

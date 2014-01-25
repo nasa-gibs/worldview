@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<StyledLayerDescriptor xmlns="http://www.opengis.net/sld" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.0.0/StyledLayerDescriptor.xsd">
+  <NamedLayer>
+    <Name>ndh-volcano-proportional-economic-loss-risk-deciles</Name>
+    <UserStyle>
+      <Name>SEDAC</Name>
+      <FeatureTypeStyle>
+        <Rule>
+          <RasterSymbolizer>
+            <ColorMap>
+	      <ColorMapEntry color="#000000" opacity="0" label="No Data"/>
+              <ColorMapEntry color="#ECE7F2" label="1st - 4th"/>
+	      <ColorMapEntry color="#A6BDDB" label="5th - 7th"/>
+	      <ColorMapEntry color="#2B8CBE" label="8th - 10th"/>
+            </ColorMap>
+          </RasterSymbolizer>
+        </Rule>
+      </FeatureTypeStyle>
+    </UserStyle>
+  </NamedLayer>
+</StyledLayerDescriptor>
+

@@ -1,0 +1,26 @@
+{
+    "layers": {
+        "ndh-volcano-mortality-risks-distribution": {
+            "id":       "ndh-volcano-mortality-risks-distribution",
+            "title":    "Volcano Hazard: Mortality Risk",
+            "subtitle": "SEDAC Global Volcano Mortality Risks and Distribution, v1 (2000)",
+            "group":    "overlays",
+            "format":   "image/png",
+            "tileSize": [512, 512],
+            "type":     "wms",
+            "product":  "CIESIN_CHRR_NDH_VOLCANO_MRD",
+            "opacity":  0.75,
+
+            "projections": {
+                "geographic": {
+                    "source": "SEDAC:wms"
+                }
+            },
+            
+            "palette": {
+            	"id":			"ndh-volcano-mortality-risks-distribution",
+            	"classified": 	"true"
+            }
+        }
+    }
+}

@@ -1,0 +1,26 @@
+{
+    "layers": {
+        "ndh-cyclone-proportional-economic-loss-risk-deciles": {
+            "id":       "ndh-cyclone-proportional-economic-loss-risk-deciles",
+            "title":    "Cyclone Hazard: Economic Risk",
+            "subtitle": "SEDAC Global Cyclone Proportional Economic Loss Risk Deciles, v1 (2000)",
+            "group":    "overlays",
+            "format":   "image/png",
+            "tileSize": [512, 512],
+            "type":     "wms",
+            "product":  "CIESIN_CHRR_NDH_CYCLONE_PELRD",
+            "opacity":  0.75,
+
+            "projections": {
+                "geographic": {
+                    "source": "SEDAC:wms"
+                }
+            },
+            
+            "palette": {
+            	"id":			"ndh-cyclone-proportional-economic-loss-risk-deciles",
+            	"classified": 	"true"
+            }
+        }
+    }
+}

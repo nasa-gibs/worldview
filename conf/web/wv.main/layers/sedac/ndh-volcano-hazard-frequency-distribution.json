@@ -1,0 +1,26 @@
+{
+    "layers": {
+        "ndh-volcano-hazard-frequency-distribution": {
+            "id":       "ndh-volcano-hazard-frequency-distribution",
+            "title":    "Volcano Hazard: Frequency and Distribution",
+            "subtitle": "SEDAC Global Volcano Hazard Frequency and Distribution, v1 (1980-2000)",
+            "group":    "overlays",
+            "format":   "image/png",
+            "tileSize": [512, 512],
+            "type":     "wms",
+            "product":  "CIESIN_CHRR_NDH_VOLCANO_HFD",
+            "opacity":  0.75,
+
+            "projections": {
+                "geographic": {
+                    "source": "SEDAC:wms"
+                }
+            },
+            
+            "palette": {
+            	"id":			"ndh-volcano-hazard-frequency-distribution",
+            	"classified": 	"true"
+            }
+        }
+    }
+}

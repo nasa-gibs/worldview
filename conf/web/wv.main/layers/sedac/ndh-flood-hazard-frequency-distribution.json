@@ -1,0 +1,26 @@
+{
+    "layers": {
+        "ndh-flood-hazard-frequency-distribution": {
+            "id":       "ndh-flood-hazard-frequency-distribution",
+            "title":    "Flood Hazard: Frequency and Distribution",
+            "subtitle": "SEDAC Global Flood Hazard Frequency and Distribution, v1 (1980-2000)",
+            "group":    "overlays",
+            "format":   "image/png",
+            "tileSize": [512, 512],
+            "type":     "wms",
+            "product":  "CIESIN_CHRR_NDH_FLOOD_HFD",
+            "opacity":  0.75,
+
+            "projections": {
+                "geographic": {
+                    "source": "SEDAC:wms"
+                }
+            },
+            
+            "palette": {
+            	"id":			"ndh-flood-hazard-frequency-distribution",
+            	"classified": 	"true"
+            }
+        }
+    }
+}

@@ -1,0 +1,26 @@
+{
+    "layers": {
+        "ndh-drought-proportional-economic-loss-risk-deciles": {
+            "id":       "ndh-drought-proportional-economic-loss-risk-deciles",
+            "title":    "Drought Hazard: Economic Risk",
+            "subtitle": "SEDAC Global Drought Proportional Economic Loss Risk Deciles, v1 (2000)",
+            "group":    "overlays",
+            "format":   "image/png",
+            "tileSize": [512, 512],
+            "type":     "wms",
+            "product":  "CIESIN_CHRR_NDH_DROUGHT_PELRD",
+            "opacity":  0.75,
+
+            "projections": {
+                "geographic": {
+                    "source": "SEDAC:wms"
+                }
+            },
+            
+            "palette": {
+            	"id":			"ndh-drought-proportional-economic-loss-risk-deciles",
+            	"classified": 	"true"
+            }
+        }
+    }
+}

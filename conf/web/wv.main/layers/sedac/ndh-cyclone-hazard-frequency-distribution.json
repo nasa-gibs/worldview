@@ -1,0 +1,26 @@
+{
+    "layers": {
+        "ndh-cyclone-hazard-frequency-distribution": {
+            "id":       "ndh-cyclone-hazard-frequency-distribution",
+            "title":    "Cyclone Hazard: Frequency and Distribution",
+            "subtitle": "SEDAC Global Cyclone Hazard Frequency and Distribution, v1 (1980-2000)",
+            "group":    "overlays",
+            "format":   "image/png",
+            "tileSize": [512, 512],
+            "type":     "wms",
+            "product":  "CIESIN_CHRR_NDH_CYCLONE_HFD",
+            "opacity":  0.75,
+
+            "projections": {
+                "geographic": {
+                    "source": "SEDAC:wms"
+                }
+            },
+            
+            "palette": {
+            	"id":			"ndh-cyclone-hazard-frequency-distribution",
+            	"classified": 	"true"
+            }
+        }
+    }
+}

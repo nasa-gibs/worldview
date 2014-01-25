@@ -1,0 +1,26 @@
+{
+    "layers": {
+        "ndh-flood-proportional-economic-loss-risk-deciles": {
+            "id":       "ndh-flood-proportional-economic-loss-risk-deciles",
+            "title":    "Flood Hazard: Economic Risk",
+            "subtitle": "SEDAC Global Flood Proportional Economic Loss Risk Deciles, v1 (2000)",
+            "group":    "overlays",
+            "format":   "image/png",
+            "tileSize": [512, 512],
+            "type":     "wms",
+            "product":  "CIESIN_CHRR_NDH_FLOOD_PELRD",
+            "opacity":  0.75,
+
+            "projections": {
+                "geographic": {
+                    "source": "SEDAC:wms"
+                }
+            },
+            
+            "palette": {
+            	"id":			"ndh-flood-proportional-economic-loss-risk-deciles",
+            	"classified": 	"true"
+            }
+        }
+    }
+}

@@ -140,8 +140,10 @@ Worldview.Map.LayerSet = function(config, projId, layerId) {
             return createWMTS(options);
         } else if ( type === "wms" ) {
             return createWMS(options);
-        } else {
-            throw new Error("Invalid layer type", config.type);
+        } else if ( type === "graticule" ) {
+        	return new Worldview.Map.GraticuleLayer("Graticule");
+		} else {
+            throw new Error("Invalid layer type: " + type);
         }
         /*
         var properties = config.properties;

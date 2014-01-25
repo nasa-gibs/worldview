@@ -17,32 +17,40 @@ import os
 import sys
 import xmltodict
 
+SKIP_LAYERS = [
+    "Sea_Surface_Temp_Microwave",
+    "Sea_Surface_Temp_Blended",
+]
+
 prog = os.path.basename(__file__)
 base_dir = os.path.join(os.path.dirname(__file__), "..")
 version = "1.0.0"
 help_description = """\
-Extracts configuration information from a GetCapabilities file. 
+Extracts configuration information from a GetCapabilities file.
 """
 
 parser = OptionParser(usage="Usage: %s [options] file [file...]" % prog,
                       version="%s version %s" % (prog, version),
                       epilog=help_description)
 (options, args) = parser.parse_args()
-    
+
 wv = {
-    "layers": {}      
+    "layers": {}
 }
 
 for filename in args:
     with open(filename) as fp:
         xml = fp.read()
     gc = xmltodict.parse(xml)
-    
+
     gc_contents = gc["Capabilities"]["Contents"]
     wv_layers = wv["layers"]
     for gc_layer in gc_contents["Layer"]:
-    
+
         id = gc_layer["ows:Identifier"]
+        if id in SKIP_LAYERS:
+            sys.stderr.write("Skipping layer: {}".format(id))
+            continue
         if id not in wv_layers:
             wv_layers[id] = {}
         wv_layer = wv_layers[id]
@@ -51,13 +59,13 @@ for filename in args:
         wv_layer["type"] = "wmts"
         wv_layer["tileSize"] = [512, 512]
         wv_layer["format"] = gc_layer["Format"]
-        
-        # Extract start and end dates   
-        if "Dimension" in gc_layer: 
+
+        # Extract start and end dates
+        if "Dimension" in gc_layer:
             dimension = gc_layer["Dimension"]
             if dimension["ows:Identifier"] == "time":
                 values = dimension["Value"].split("/")
-                
+
                 # Layer is still actively being produced if the end date
                 # greater than yesterday
                 end_date = datetime.strptime(values[1], "%Y-%m-%d")
@@ -65,7 +73,7 @@ for filename in args:
                 wv_layer["startDate"] = values[0]
                 if end_date < yesterday:
                     wv_layer["endDate"] = values[1]
-                wv_layer["period"] = "daily"      
+                wv_layer["period"] = "daily"
 
         # Extract matrix set
         matrixSet = gc_layer["TileMatrixSetLink"]["TileMatrixSet"]
@@ -86,10 +94,10 @@ for filename in args:
                  "source": "GIBS:antarctic",
                  "matrixSet": "GIBS:" + matrixSet
             }
-            
+
 json_options = {}
 json_options["indent"] = 4
 json_options["separators"] = (',', ': ')
 
 print json.dumps(wv, **json_options)
- 
+
