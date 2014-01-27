@@ -72,6 +72,7 @@ wv.date.sliders = wv.date.sliders || function(models, config) {
         var $ecbutton = $("<a></a>")
                 .addClass("ecbutton")
                 .addClass("collapse")
+                .attr("title","Hide Date Slider")
                 .attr("id", id + "ecbutton");
         $container.append($ecbutton);
 
