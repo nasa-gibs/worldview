@@ -376,6 +376,9 @@ module.exports = function(grunt) {
                 "!build/worldview-debug/web/js/Worldview/Map/TileWorker.js",
                 "!build/worldview-debug/web/ext/**/*"
             ],
+            conf_src: [
+                "src/conf/**/*"
+            ],
             dist_tar: ["dist/*.tar.bz2"],
             dist_rpm: ["dist/*.rpm"],
             rpmbuild: ["build/rpmbuild"]
@@ -406,6 +409,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask("config", [
         "clean",
+        "remove:conf_src",
         "exec:config",
     ]);
 

@@ -27,7 +27,7 @@ config["wv"] = {
         "src/js/date/wv.*.js",
         "src/js/layers/wv.*.js",
         "src/js/link/wv.*.js",
-        "src/js/palette/wv.*.js",
+        "src/js/palettes/wv.*.js",
         "src/js/proj/wv.*.js",
     ],
     tests: [

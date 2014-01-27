@@ -10,11 +10,11 @@
  */
 
 /**
- * @module wv.palette
+ * @module wv.palettes
  */
 var wv = wv || {};
 
-wv.palette = (function(self) {
+wv.palettes = (function(self) {
 
     self.supported = true;
 
@@ -50,4 +50,4 @@ wv.palette = (function(self) {
     init();
     return self;
 
-})(wv.palette || {});
+})(wv.palettes || {});

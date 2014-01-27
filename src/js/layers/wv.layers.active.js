@@ -173,7 +173,7 @@ wv.layers.active = wv.layers.active || function(models, config, spec) {
     var renderLegendCanvas = function(layer) {
         var selector = ".wv-palette[data-layer='" +
                 encodeURIComponent(layer.id) + "']";
-		wv.palette.legend(selector, models.palettes, layer);
+		wv.palettes.legend(selector, models.palettes, layer);
     };
 
     var adjustCategoryHeights = function() {
@@ -312,7 +312,7 @@ wv.layers.active = wv.layers.active || function(models, config, spec) {
 
     var openPaletteSelector = function(event) {
         var $target = $(event.target);
-        if ( !wv.palette.supported ) {
+        if ( !wv.palettes.supported ) {
             wv.ui.unsupported();
         } else {
             paletteWidget.displaySelector($target.attr("data-layer"));

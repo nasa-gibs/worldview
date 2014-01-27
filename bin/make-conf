@@ -25,11 +25,11 @@ cp -r $BASE_DIR/../conf/* $BUILD_DIR
     > "$BUILD_DIR"/web/wv.main/gc.json
 "$BASE_DIR"/conf-cat --input-dir "$BUILD_DIR"/web/wv.main \
     > "$DEBUG_DIR"/wv.json
-"$BASE_DIR"/conf-cat --input-dir "$BUILD_DIR"/web/wv.palette/custom \
-    > "$DEBUG_DIR"/wv.palette.json
-cp -r "$BUILD_DIR"/web/wv.palette/rendered \
-    "$DEBUG_DIR"/wv.palette
-"$BASE_DIR"/sld2wv --output-dir "$DEBUG_DIR"/wv.palette \
+"$BASE_DIR"/conf-cat --input-dir "$BUILD_DIR"/web/wv.palettes/custom \
+    > "$DEBUG_DIR"/wv.palettes.json
+cp -r "$BUILD_DIR"/web/wv.palettes/rendered \
+    "$DEBUG_DIR"/wv.palettes
+"$BASE_DIR"/sld2wv --output-dir "$DEBUG_DIR"/wv.palettes \
     "$BUILD_DIR"/sld/*.xml
 
 cp -r "$DEBUG_DIR" "$BASE_DIR"/../src 

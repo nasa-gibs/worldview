@@ -10,12 +10,12 @@
  */
 
 /**
- * @module wv.palette
+ * @module wv.palettes
  */
 var wv = wv || {};
-wv.palette = wv.palette || {};
+wv.palettes = wv.palettes || {};
 
-wv.palette.colorbar = wv.palette.colorbar || function(selector) {
+wv.palettes.colorbar = wv.palettes.colorbar || function(selector) {
 
     var $legend;
     var canvas;
@@ -51,7 +51,7 @@ wv.palette.colorbar = wv.palette.colorbar || function(selector) {
     };
 
     var drawCheckerboard = function() {
-        g.fillStyle = wv.palette.checkerboard;
+        g.fillStyle = wv.palettes.checkerboard;
         g.fillRect(0, 0, canvas.width, canvas.height);
     };
 

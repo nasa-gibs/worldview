@@ -29,10 +29,10 @@
     "src/js/layers/wv.layers.active.js",
     "src/js/layers/wv.layers.add.js",
 
-    "src/js/palette/wv.palette.js",
-    "src/js/palette/wv.palette.colorbar.js",
-    "src/js/palette/wv.palette.legend.js",
-    "src/js/palette/wv.palette.model.js",
+    "src/js/palettes/wv.palettes.js",
+    "src/js/palettes/wv.palettes.colorbar.js",
+    "src/js/palettes/wv.palettes.legend.js",
+    "src/js/palettes/wv.palettes.model.js",
 
     "src/js/link/wv.link.model.js",
     "src/js/link/wv.link.ui.js",
