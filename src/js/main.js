@@ -268,6 +268,10 @@ $(function() {// Initialize "static" vars
             Worldview.Tour.start(storageEngine, hideSplash, false);
         }
 
+        if ( config.parameters.debugGIBS ) {
+            wv.debug.gibs(ui, models, config);
+        };
+
         window.onbeforeunload = function() {
    	        storageEngine.setItem('eventsCollapsed', events.isCollapsed);
       	};

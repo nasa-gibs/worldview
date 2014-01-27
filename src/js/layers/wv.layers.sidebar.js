@@ -70,6 +70,11 @@ wv.layers.sidebar = wv.layers.sidebar || function(models) {
         }
     };
 
+    self.collapse = function() {
+        collpased = true;
+        slide();
+    };
+
     var render = function() {
         var $container = $(self.selector);
         $container.empty().addClass("products");
@@ -170,6 +175,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models) {
 
         return false;
     };
+
     var slide = function(e, ui) {
         if ( collapsed ) {
             $('.accordionToggler')

@@ -57,6 +57,12 @@ wv.date.sliders = wv.date.sliders || function(models, config) {
         update();
     };
 
+    self.collapse = function() {
+        // Do the "opposite" since the toggle will swap states
+        self.isCollapsed = false;
+        toggle();
+    };
+
     var render = function() {
         if ( wv.util.browser.small ) {
             $("#timeds").css("display","none");

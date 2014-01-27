@@ -149,10 +149,10 @@ wv.layers.model = wv.layers.model || function(models, config) {
     };
 
     self.clear = function(proj) {
-        projection = proj|| models.proj.selected.id;
-        $.each(self.active, function(type, layers) {
+        proj = proj || models.proj.selected.id;
+        _.each(self.active, function(layers) {
             var layersClone = layers.slice(0);
-            $.each(layersClone, function(i, layer) {
+            _.each(layersClone, function(layer) {
                 if ( proj && layer.projections[proj] ) {
                     self.remove(layer.id);
                 }

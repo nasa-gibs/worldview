@@ -41,6 +41,8 @@
     "src/js/legacy/wv.legacy.bank.js",
     "src/js/legacy/wv.legacy.date.js",
 
+    "src/js/debug/wv.debug.gibs.js",
+
     "src/js/Worldview.js",
     "src/js/Worldview/Support.js",
     "src/js/Worldview/Support.js",

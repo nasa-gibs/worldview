@@ -2,6 +2,7 @@
     "src/css/wv.main.css",
     "src/css/wv.link.css",
     "src/css/wv.palettes.css",
+    "src/css/wv.debug.css",
     "src/css/map.css",
     "src/css/map-ol2.css",
     "src/css/wv.date.css",
