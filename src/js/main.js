@@ -37,26 +37,30 @@ $(function() {// Initialize "static" vars
             Worldview.error("Unable to start Worldview", error);
         }
     };
+
     var storageEngine;
+
     var init = function(config) {
         loaded = true;
         wv.config = config;
         wv.ui.indicator.hide();
 
     	// set up storage and decide what to show
-        try {
-            storageEngine = YAHOO.util.StorageManager.get(
-                YAHOO.util.StorageEngineHTML5.ENGINE_NAME,
-                YAHOO.util.StorageManager.LOCATION_LOCAL,
-                {
-                    force: false,
-                    order: [
-                        YAHOO.util.StorageEngineHTML5
-                    ]
-                });
-        } catch(e) {
-            alert("No supported storage mechanism present");
-            storageEngine = false;
+    	if ( wv.util.browser.localStorage ) {
+            try {
+                storageEngine = YAHOO.util.StorageManager.get(
+                    YAHOO.util.StorageEngineHTML5.ENGINE_NAME,
+                    YAHOO.util.StorageManager.LOCATION_LOCAL,
+                    {
+                        force: false,
+                        order: [
+                            YAHOO.util.StorageEngineHTML5
+                        ]
+                    });
+            } catch(e) {
+                alert("No supported storage mechanism present");
+                storageEngine = false;
+            }
         }
 
         var hideSplash, eventsCollapsed, lastVisit;
@@ -261,8 +265,9 @@ $(function() {// Initialize "static" vars
             console.warn("Development version");
         }
 
-        // Do not start the tour if coming in via permalink
-        if ( !window.location.search ) {
+        // Do not start the tour if coming in via permalink or if local
+        // storage is not available
+        if ( !window.location.search && storageEngine ) {
             Worldview.Tour.start(storageEngine, hideSplash, false);
         }
 
@@ -271,7 +276,9 @@ $(function() {// Initialize "static" vars
         };
 
         window.onbeforeunload = function() {
-   	        storageEngine.setItem('eventsCollapsed', events.isCollapsed);
+            if ( storageEngine ) {
+   	            storageEngine.setItem('eventsCollapsed', events.isCollapsed);
+   	        }
       	};
     };
 
