@@ -100,8 +100,6 @@ $(function() {// Initialize "static" vars
         models.dataDownload = dataDownloadModel;
         models.link = wv.link.model(config);
         wv.models = models;
-
-        // Wirings
         var updateDateRange = function() {
             models.date.range(models.layers.dateRange());
         };

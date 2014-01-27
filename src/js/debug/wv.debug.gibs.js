@@ -47,19 +47,11 @@ wv.debug.gibs = wv.debug.gibs || function(ui, models, config) {
             "</div>");
         $("body").append($div);
 
+        initLayers();
         var $select = $(".wv-debug-gibs-layerlist");
-        var sortedLayers = _.sortBy(config.layers, ["title", "subtitle"]);
-        _.each(sortedLayers, function(layer) {
-            if ( layer.period === "daily" ) {
-                var option = $("<option></option>")
-                    .val(layer.id)
-                    .html(layer.title + "; " + layer.subtitle);
-                $select.append(option);
-            }
-        });
-
         $select.on("change", updateLayers);
         models.date.events.on("select", updateDate);
+        models.proj.events.on("select", initLayers);
 
         $(".wv-debug-gibs-next-layer").click(nextLayer);
         $(".wv-debug-gibs-previous-layer").click(previousLayer);
@@ -67,14 +59,41 @@ wv.debug.gibs = wv.debug.gibs || function(ui, models, config) {
         $(".wv-debug-gibs-next-date").click(nextDate);
         $(".wv-debug-gibs-previous-date").click(previousDate);
 
-        updateLayers.apply($select);
         updateDate();
+    };
+
+    var initLayers = function() {
+        var $select = $(".wv-debug-gibs-layerlist");
+        $select.empty();
+        var proj = models.proj.selected.id;
+        var sortedLayers = _.sortBy(config.layers, ["title", "subtitle"]);
+        _.each(sortedLayers, function(layer) {
+            if ( layer.period === "daily" && layer.type === "wmts" &&
+                    layer.projections[proj] ) {
+                var option = $("<option></option>")
+                    .val(layer.id)
+                    .html(layer.title + "; " + layer.subtitle);
+                $select.append(option);
+            }
+        });
+        updateLayers.apply($select);
     };
 
     var updateLayers = function() {
         var layerId = $(this).val();
         models.layers.clear();
         models.layers.add(layerId);
+
+        var endDate = null;
+        var hackCheck = new Date(Date.UTC(2014, 0, 1));
+        if ( config.layers[layerId].endDate ) {
+            endDate = wv.util.parseDateUTC(config.layers[layerId].endDate);
+        }
+        if ( endDate && endDate < hackCheck ) {
+            models.date.select(endDate);
+        } else {
+            models.date.select(wv.util.today());
+        }
     };
 
     var nextLayer = function() {
