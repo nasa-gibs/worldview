@@ -67,7 +67,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
 
     self.dateRange = function(proj) {
         proj = proj || models.proj.selected.id;
-        if ( config.parameters.debugGIBS ) {
+        if ( config.parameters && config.parameters.debugGIBS ) {
             return {
                 start: new Date(Date.UTC(1970, 0, 1)),
                 end: wv.util.today()
