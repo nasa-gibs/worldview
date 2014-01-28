@@ -83,17 +83,6 @@ wv.debug.gibs = wv.debug.gibs || function(ui, models, config) {
         var layerId = $(this).val();
         models.layers.clear();
         models.layers.add(layerId);
-
-        var endDate = null;
-        var hackCheck = new Date(Date.UTC(2014, 0, 1));
-        if ( config.layers[layerId].endDate ) {
-            endDate = wv.util.parseDateUTC(config.layers[layerId].endDate);
-        }
-        if ( endDate && endDate < hackCheck ) {
-            models.date.select(endDate);
-        } else {
-            models.date.select(wv.util.today());
-        }
     };
 
     var nextLayer = function() {
