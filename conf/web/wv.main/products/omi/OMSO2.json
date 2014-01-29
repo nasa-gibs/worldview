@@ -1,0 +1,11 @@
+{
+    "products": {
+        "OMSO2": {
+            "name": "OMI/Aura Sulphur Dioxide (SO2) Total Column 1-orbit L2 Swath 13x24 km",
+            "handler": "List",
+            "query": {
+                "shortName": ["OMSO2", "OMSO2NRTb"]
+            }
+        }
+    }
+}

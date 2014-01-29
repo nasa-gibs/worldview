@@ -1,0 +1,14 @@
+{
+    "products": {
+        "CIESIN_CHRR_NDH_DROUGHT_HFD": {
+            "name": "Global Drought Hazard Frequency and Distribution",
+            "handler": "CollectionList",
+            "query": {
+                "collection": "true",
+                "shortName": "CIESIN_CHRR_NDH_DROUGHT_HFD",
+                "dataCenterId": "SEDAC"
+            },
+            "noBulkDownload": "true"
+        }
+    }
+}

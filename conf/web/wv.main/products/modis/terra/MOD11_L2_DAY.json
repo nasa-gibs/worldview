@@ -1,0 +1,23 @@
+{
+    "products": {
+        "MOD11_L2_DAY": {
+            "name": "MODIS/Terra Land Surface Temperature/Emissivity 5-Min L2 Swath 1km, Day",
+            "handler": "TerraSwathMultiDay",
+            "query": {
+                "shortName": "MOD11_L2",
+                "dataCenterId": ["LPDAAC_ECS", "LANCEMODIS"],
+                "dayNightFlag": "DAY"
+            },
+            "nrt": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
+            }
+        }
+    }
+}

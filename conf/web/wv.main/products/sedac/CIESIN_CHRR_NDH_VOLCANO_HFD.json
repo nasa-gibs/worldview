@@ -1,0 +1,14 @@
+{
+    "products": {
+        "CIESIN_CHRR_NDH_VOLCANO_HFD": {
+            "name": "Global Volcano Hazard Frequency and Distribution",
+            "handler": "CollectionList",
+            "query": {
+                "collection": "true",
+                "shortName": "CIESIN_CHRR_NDH_VOLCANO_HFD",
+                "dataCenterId": "SEDAC"
+            },
+            "noBulkDownload": "true"
+        }
+    }
+}

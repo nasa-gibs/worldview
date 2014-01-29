@@ -1,0 +1,23 @@
+{
+    "products": {
+        "MYD06_L2_DAY": {
+            "name": "MODIS/Aqua Clouds 5-Min L2 Swath 1km and 5km, Day",
+            "handler": "AquaSwathMultiDay",
+            "query": {
+                "shortName": "MYD06_L2",
+                "dataCenterId": ["LAADS", "LANCEMODIS"],
+                "dayNightFlag": "DAY"
+            },
+            "nrt": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
+            }
+        }
+    }
+}

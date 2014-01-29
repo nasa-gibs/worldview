@@ -1,0 +1,23 @@
+{
+    "products": {
+        "AIRX2RET_NIGHT": {
+            "name": "AIRS/Aqua Level 2 Standard physical retrieval (AIRS+AMSU), Night",
+            "handler": "MODISSwath",
+            "query": {
+                "shortName": ["AIRX2RET", "AIRX2RET_NRT"],
+                "dataCenterId": "GSFCS4PA",
+                "dayNightFlag": "NIGHT"
+            },
+            "nrt": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "\\(NRT\\)"
+            },
+            "urs": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "\\(NRT\\)"
+            }
+        }
+    }
+}

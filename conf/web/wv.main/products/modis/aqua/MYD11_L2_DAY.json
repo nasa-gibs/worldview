@@ -1,0 +1,23 @@
+{
+    "products": {
+        "MYD11_L2_DAY": {
+            "name": "MODIS/Aqua Land Surface Temperature/Emissivity 5-Min L2 Swath 1km, Day",
+            "handler": "AquaSwathMultiDay",
+            "query": {
+                "shortName": "MYD11_L2",
+                "dataCenterId": ["LPDAAC_ECS", "LANCEMODIS"],
+                "dayNightFlag": "DAY"
+            },
+            "nrt": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
+            }
+        }
+    }
+}

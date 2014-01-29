@@ -1,0 +1,12 @@
+{
+    "products": {
+        "OMCLDRR": {
+            "name": "OMI/Aura Cloud Pressure and Fraction (Raman Scattering) 1-Orbit L2 Swath 13x24 km",
+            "handler": "List",
+            "query": {
+                "shortName": "OMCLDRR",
+                "dataCenterId": "GSFCS4PA"
+            }
+        }
+    }
+}

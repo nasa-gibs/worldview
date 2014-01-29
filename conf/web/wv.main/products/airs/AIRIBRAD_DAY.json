@@ -1,0 +1,23 @@
+{
+    "products": {
+        "AIRIBRAD_DAY": {
+            "name": "AIRS/Aqua Level 1B Infrared (IR) geolocated and calibrated radiances, Day",
+            "handler": "MODISSwath",
+            "query": {
+                "shortName": ["AIRIBRAD", "AIRIBRAD_NRT"],
+                "dataCenterId": "GSFCS4PA",
+                "dayNightFlag": "DAY"
+            },
+            "nrt": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "\\(NRT\\)"
+            },
+            "urs": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "\\(NRT\\)"
+            }
+        }
+    }
+}

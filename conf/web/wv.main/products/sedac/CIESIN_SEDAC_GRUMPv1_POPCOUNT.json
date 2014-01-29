@@ -1,0 +1,14 @@
+{
+    "products": {
+        "CIESIN_SEDAC_GRUMPv1_POPCOUNT": {
+            "name": "Global Rural-Urban Mapping Project, Version 1 (GRUMPv1): Population Count Grid",
+            "handler": "CollectionList",
+            "query": {
+                "collection": "true",
+                "shortName": "CIESIN_SEDAC_GRUMPv1_POPCOUNT",
+                "dataCenterId": "SEDAC"
+            },
+            "noBulkDownload": "true"
+        }
+    }
+}

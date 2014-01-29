@@ -1,0 +1,23 @@
+{
+    "products": {
+        "AIRX2SUP_DAY": {
+            "name": "AIRS/Aqua Level 2 Support retrieval (AIRS+AMSU), Day",
+            "handler": "MODISSwath",
+            "query": {
+                "shortName": ["AIRX2SUP", "AIRX2SUP_NRT"],
+                "dataCenterId": "GSFCS4PA",
+                "dayNightFlag": "DAY"
+            },
+            "nrt": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "\\(NRT\\)"
+            },
+            "urs": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "\\(NRT\\)"
+            }
+        }
+    }
+}

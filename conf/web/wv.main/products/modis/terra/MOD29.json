@@ -1,0 +1,23 @@
+{
+    "products": {
+        "MOD29": {
+            "name": "MODIS/Terra Sea Ice Extent 5-Min L2 Swath 1km",
+            "handler": "TerraSwathMultiDay",
+            "query": {
+                "shortName": "MOD29",
+                "dataCenterId": ["NSIDC_ECS", "LANCEMODIS"],
+                "dayNightFlag": "DAY"
+            },
+            "nrt": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
+            }
+        }
+    }
+}

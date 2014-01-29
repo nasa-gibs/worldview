@@ -1,0 +1,22 @@
+{
+    "products": {
+        "ML2H2O": {
+            "name": "MLS/Aura L2 Water Vapor (H2O) Mixing Ratio",
+            "handler": "List",
+            "query": {
+                "shortName": ["ML2H2O", "ML2H2O_NRT"],
+                "dataCenterId": "GSFCS4PA"
+            },
+            "nrt": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "Near-Real-Time"
+            },
+            "urs": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "Near-Real-Time"
+            }
+        }
+    }
+}

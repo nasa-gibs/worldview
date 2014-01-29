@@ -346,8 +346,8 @@ Worldview.DataDownload.Model = function(config, spec) {
         var foundSelected = false;
         $.each(state.layers, function(index, layer) {
             var id = layer;
-            var layerName = config.layers[layer].name;
-            var description = config.layers[layer].description;
+            var layerName = config.layers[layer].title;
+            var description = config.layers[layer].subtitle;
             var productName = config.layers[layer].product;
             self.layers.push({
                 id: id,

@@ -1,0 +1,22 @@
+{
+    "products": {
+        "MOD04_L2": {
+            "name": "MODIS/Terra Aerosol 5-Min L2 Swath 10km",
+            "handler": "TerraSwathMultiDay",
+            "query": {
+                "shortName": "MOD04_L2",
+                "dataCenterId": ["LAADS", "LANCEMODIS"]
+            },
+            "nrt": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
+            }
+        }
+    }
+}

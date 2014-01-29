@@ -68,7 +68,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         model.events
             .on("add", updateLegend)
             .on("remove", updateLegend);
-        wv.palettes.loadRendered(config, layer.palette.id).done(updateLegend);
+        wv.palettes.loadRendered(config, layer.id).done(updateLegend);
     };
 
     var updateLegend = function() {
@@ -93,6 +93,9 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
     };
 
     var showUnitHover = function(event) {
+        if ( !layer.palette.classified ) {
+            return;
+        }
         var palette = model.forLayer(layer.id);
         var x = event.pageX - $colorbar.offset().left;
         var width = $colorbar.width();

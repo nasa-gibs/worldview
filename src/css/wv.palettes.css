@@ -9,6 +9,10 @@
  * All Rights Reserved.
  */
 
+.bank div .wv-palette {
+    margin-top: 5px;
+}
+
 .wv-palettes-info {
 	margin-top:		-6px;
 	width:			100%;
@@ -34,8 +38,8 @@
 
 /* FIXME: Too specific */
 .bank div .wv-palettes-panel {
-	padding-left:	10px;
-	padding-right:	10px;
+	padding-left:	3px;
+	padding-right:	5px;
 	width: 			auto;
 }
 
@@ -49,7 +53,7 @@
 
 /* FIXME: Too specific */
 .bank div .wv-palettes-colorbar:hover {
-    border: 1px solid #eeeeee;
+    border: 1px solid #404040;
 }
 
 #palette-selector-dialog .product-description {

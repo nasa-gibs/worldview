@@ -1,0 +1,22 @@
+{
+    "products": {
+        "ML2HNO3": {
+            "name": "MLS/Aura L2 Nitric Acid (HNO3) Mixing Ratio",
+            "handler": "List",
+            "query": {
+                "shortName": ["ML2HNO3", "ML2HNO3_NRT"],
+                "dataCenterId": "GSFCS4PA"
+            },
+            "nrt": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "Near-Real-Time"
+            },
+            "urs": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "Near-Real-Time"
+            }
+        }
+    }
+}

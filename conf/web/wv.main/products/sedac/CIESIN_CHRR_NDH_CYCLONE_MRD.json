@@ -1,0 +1,14 @@
+{
+    "products": {
+        "CIESIN_CHRR_NDH_CYCLONE_MRD": {
+            "name": "Global Cyclone Mortality Risks and Distribution",
+            "handler": "CollectionList",
+            "query": {
+                "collection": "true",
+                "shortName": "CIESIN_CHRR_NDH_CYCLONE_MRD",
+                "dataCenterId": "SEDAC"
+            },
+            "noBulkDownload": "true"
+        }
+    }
+}

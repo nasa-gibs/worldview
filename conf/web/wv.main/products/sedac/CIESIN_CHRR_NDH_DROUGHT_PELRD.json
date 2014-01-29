@@ -1,0 +1,14 @@
+{
+    "products": {
+        "CIESIN_CHRR_NDH_DROUGHT_PELRD": {
+            "name": "Global Drought Proportional Economic Loss Risk Deciles",
+            "handler": "CollectionList",
+            "query": {
+                "collection": "true",
+                "shortName": "CIESIN_CHRR_NDH_DROUGHT_PELRD",
+                "dataCenterId": "SEDAC"
+            },
+            "noBulkDownload": "true"
+        }
+    }
+}

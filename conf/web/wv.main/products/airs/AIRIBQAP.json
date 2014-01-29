@@ -1,0 +1,23 @@
+{
+    "products": {
+        "AIRIBQAP": {
+            "name": "AIRS/Aqua Level 2 Standard physical retrieval (AIRS+AMSU)",
+            "handler": "MODISSwath",
+            "query": {
+                "shortName": ["AIRIBQAP", "AIRIBQAP_NRT"],
+                "dataCenterId": "GSFCS4PA",
+                "dayNightFlag": "DAY"
+            },
+            "nrt": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "\\(NRT\\)"
+            },
+            "urs": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "\\(NRT\\)"
+            }
+        }
+    }
+}

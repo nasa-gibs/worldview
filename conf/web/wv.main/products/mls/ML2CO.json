@@ -1,0 +1,22 @@
+{
+    "products": {
+        "ML2CO": {
+            "name": "MLS/Aura L2 Carbon Monoxide (CO) Mixing Ratio",
+            "handler": "List",
+            "query": {
+                "shortName": ["ML2CO", "ML2CO_NRT"],
+                "dataCenterId": "GSFCS4PA"
+            },
+            "nrt": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "Near-Real-Time"
+            },
+            "urs": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "Near-Real-Time"
+            }
+        }
+    }
+}

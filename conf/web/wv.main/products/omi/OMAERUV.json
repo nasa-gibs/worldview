@@ -1,0 +1,12 @@
+{
+    "products": {
+        "OMAERUV": {
+            "name": "OMI/Aura Near UV Aerosol Optical Depth and Single Scattering Albedo 1-orbit L2 Swath 13x24 km",
+            "handler": "List",
+            "query": {
+                "shortName": "OMAERUV",
+                "dataCenterId": "GSFCS4PA"
+            }
+        }
+    }
+}

@@ -1,0 +1,22 @@
+{
+    "products": {
+        "ML2SO2": {
+            "name": "MLS/Aura L2 Sulfur Dioxide (SO2) Mixing Ratio",
+            "handler": "List",
+            "query": {
+                "shortName": ["ML2SO2", "ML2SO2_NRT"],
+                "dataCenterId": "GSFCS4PA"
+            },
+            "nrt": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "Near-Real-Time"
+            },
+            "urs": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "Near-Real-Time"
+            }
+        }
+    }
+}

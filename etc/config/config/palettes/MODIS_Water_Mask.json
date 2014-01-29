@@ -1,7 +1,0 @@
-{
-    "id": "MODIS_Water_Mask",
-    "source": "rendered",
-    "stops": [
-        { "at": 0, "r": 168, "g": 248, "b": 255, "a": 255 }
-    ]
-}

@@ -1,0 +1,23 @@
+{
+    "products": {
+        "MOD05_L2_DAY": {
+            "name": "MODIS/Terra Total Precipitable Water Vapor 5-Min L2 Swath 1km and 5km, Day",
+            "handler": "TerraSwathMultiDay",
+            "query": {
+                "shortName": "MOD05_L2",
+                "dataCenterId": ["LAADS", "LANCEMODIS"],
+                "dayNightFlag": "DAY"
+            },
+            "nrt": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
+            }
+        }
+    }
+}

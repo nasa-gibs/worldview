@@ -1,0 +1,23 @@
+{
+    "products": {
+        "MYD29": {
+            "name": "MODIS/Aqua Sea Ice Extent 5-Min L2 Swath 1km",
+            "handler": "AquaSwathMultiDay",
+            "query": {
+                "shortName": "MYD29",
+                "dataCenterId": ["NSIDC_ECS", "LANCEMODIS"],
+                "dayNightFlag": "DAY"
+            },
+            "nrt": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
+            }
+        }
+    }
+}

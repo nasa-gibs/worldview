@@ -1,0 +1,14 @@
+{
+    "products": {
+        "CIESIN_CHRR_NDH_VOLCANO_PELRD": {
+            "name": "Global Volcano Proportional Economic Loss Risk Deciles",
+            "handler": "CollectionList",
+            "query": {
+                "collection": "true",
+                "shortName": "CIESIN_CHRR_NDH_VOLCANO_PELRD",
+                "dataCenterId": "SEDAC"
+            },
+            "noBulkDownload": "true"
+        }
+    }
+}

@@ -1,0 +1,32 @@
+{
+    "products": {
+        "MOD09GA": {
+            "name": "MODIS/Terra Surface Reflectance Daily (500m)",
+            "handler": "MODISMix",
+            "query": {
+                "science": {
+                    "shortName": "MOD09GA",
+                    "dataCenterId": "LPDAAC_ECS"
+                },
+                "nrt": {
+                    "shortName": "MOD09",
+                    "dataCenterId": "LANCEMODIS"
+                }
+            },
+            "nrt": {
+                "handler": "TerraSwathMultiDay",
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
+            },
+            "science": {
+                "handler": "MODISGrid"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
+            }
+        }
+    }
+}

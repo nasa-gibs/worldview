@@ -1,0 +1,32 @@
+{
+    "products": {
+        "MYD09GA": {
+            "name": "MODIS/Aqua Surface Reflectance Daily (500m)",
+            "handler": "MODISMix",
+            "query": {
+                "science": {
+                    "shortName": "MYD09GA",
+                    "dataCenterId": "LPDAAC_ECS"
+                },
+                "nrt": {
+                    "shortName": "MYD09",
+                    "dataCenterId": "LANCEMODIS"
+                }
+            },
+            "nrt": {
+                "handler": "AquaSwathMultiDay",
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
+            },
+            "science": {
+                "handler": "MODISGrid"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
+            }
+        }
+    }
+}

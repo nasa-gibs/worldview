@@ -1,0 +1,25 @@
+{
+    "products": {
+        "MOD10_L2": {
+            "name": "MODIS/Terra Snow Cover 5-Min L2 Swath 500m",
+            "handler": "TerraSwathMultiDay",
+            "query": {
+                "shortName": "MOD10_L2",
+                "dataCenterId": ["NSIDC_ECS", "LANCEMODIS"],
+                "dayNightFlag": "DAY"
+            },
+            "nrt": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
+            }
+        }
+    }
+}
+
+

@@ -1,0 +1,22 @@
+{
+    "products": {
+        "ML2T": {
+            "name": "MLS/Aura L2 Temperature",
+            "handler": "List",
+            "query": {
+                "shortName": ["ML2T", "ML2T_NRT"],
+                "dataCenterId": "GSFCS4PA"
+            },
+            "nrt": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "Near-Real-Time"
+            },
+            "urs": {
+                "by": "regex",
+                "field": "dataset_id",
+                "value": "Near-Real-Time"
+            }
+        }
+    }
+}
