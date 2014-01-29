@@ -1,7 +1,7 @@
 ExpiresActive On
-ExpiresDefault A0
-Header set Cache-Control "no-cache, must-revalidate, public"
-Header set Pragma "no-cache"
+ExpiresDefault A31104000
+Header set Cache-Control "max-age=31104000, publc"
+
 
 
 
