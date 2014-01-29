@@ -34,12 +34,8 @@ wv.ui = (function(self) {
      * @param {string} message Message to display to the end user.
      * @param {exception} cause The exception object that caused the error
      */
-    self.error = function(message, cause) {
-        if ( cause ) {
-            console.error(cause);
-        } else {
-            console.error(message);
-        }
+    self.error = function() {
+        console.error.apply(this, arguments);
 
         if ( window.YAHOO && window.YAHOO.widget &&
                 window.YAHOO.widget.Panel ) {
@@ -49,9 +45,9 @@ wv.ui = (function(self) {
                 visible: false,
                 constraintoviewport: true
             });
-            o.setHeader('Warning');
-            o.setBody("An unexpected error has occurred.<br/><br/>" + message +
-                "<br/><br/>Please reload the page and try again. If you " +
+            o.setHeader('Error');
+            o.setBody("An unexpected error has occurred.<br/><br/>" +
+                "Please reload the page and try again. If you " +
                 "continue to have problems, contact us at " +
                 "<a href='mailto:support@earthdata.nasa.gov'>" +
                 "support@earthdata.nasa.gov</a>");

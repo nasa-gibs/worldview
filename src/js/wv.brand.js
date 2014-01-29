@@ -74,6 +74,11 @@ wv.brand = wv.brand || (function() {
         return self.VERSION[0] !== "@";
     };
 
+    self.url = function(base) {
+        var joiner = ( _.indexOf(base, "?") < 0 ) ? "?" : "&";
+        return base + joiner + "v=" + self.BUILD_NONCE;
+    };
+
     return self;
 
 })();

@@ -1,49 +1,21 @@
 $(function() {// Initialize "static" vars
 
-    var loaded = false;
-
-    var entryPoint = function() {
-        // Place any resources that should be completely loaded before
-        // starting up the UI
+    var main = function() {
         var configURI = "conf/wv.json?v=" + wv.brand.BUILD_NONCE;
-        $.getJSON(configURI, function(config) {
-            onLoad(config);
-        }).error(function() {
-            wv.util.error("Unable to load configuration");
-        });
-        setTimeout(function() {
-            if ( !loaded ) {
-                wv.ui.indicator.loading();
-            }
-        }, 2000);
-    };
-
-    var onLoad = function(config) {
-        try {
-            // Convert all parameters found in the query string to an object,
-            // keyed by parameter name
-            config.parameters = Worldview.queryStringToObject(location.search);
-
-            if ( config.parameters.loadDelay ) {
-                var delay = parseInt(config.parameters.loadDelay);
-                console.warn("Delaying load for " + delay + " ms");
-                setTimeout(function() {
-                    init(config);
-                }, parseInt(config.parameters.loadDelay));
-            } else {
-                init(config);
-            }
-        } catch ( error ) {
-            Worldview.error("Unable to start Worldview", error);
-        }
+        var promise = $.getJSON(configURI)
+            .done(init)
+            .error(wv.util.error);
+        wv.ui.indicator.delayed(promise, 2000);
     };
 
     var storageEngine;
 
     var init = function(config) {
-        loaded = true;
         wv.config = config;
-        wv.ui.indicator.hide();
+
+        // Convert all parameters found in the query string to an object,
+        // keyed by parameter name
+        config.parameters = wv.util.fromQueryString(location.search);
 
     	// set up storage and decide what to show
     	if ( wv.util.browser.localStorage ) {
@@ -113,6 +85,9 @@ $(function() {// Initialize "static" vars
                 .on("update", updateDateRange);
         updateDateRange();
 
+        // Error handlers
+        models.palettes.events.on("error", error);
+
         // These are only convienence handles to important objects used
         // for console debugging. Code should NOT reference these as they
         // are subject to change or removal.
@@ -123,10 +98,8 @@ $(function() {// Initialize "static" vars
         var legacySwitch = wv.legacy.switch_(models.proj);
         var legacyBank = wv.legacy.bank(models.layers);
         var legacyDate = wv.legacy.date(models.date);
+        var legacyPalettes = wv.legacy.palettes(models.palettes);
         var map = Worldview.Widget.WorldviewMap("map", config);
-        var palettes = Worldview.Widget.Palette(config, models.palettes, {
-            alignTo: "#products"
-        });
 
         var mapBridge = {
             fromPermalink: function(queryString) {
@@ -136,20 +109,12 @@ $(function() {// Initialize "static" vars
                 return map.getValue();
             }
         };
-        var palettesBridge = {
-            fromPermalink: function(queryString) {
-                palettes.loadFromQuery(queryString);
-            },
-            toPermalink: function() {
-                return palettes.getValue();
-            }
-        };
         models.link
             .register(models.proj)
             .register(models.layers)
             .register(models.date)
             .register(mapBridge)
-            .register(palettesBridge);
+            .register(models.palettes);
             // CRS?
             //.register(dataDownloadBridge);
 
@@ -161,9 +126,7 @@ $(function() {// Initialize "static" vars
         ui.proj = wv.proj.ui(models);
 
         ui.sidebar = wv.layers.sidebar(models);
-        ui.activeLayers = wv.layers.active(models, config, {
-            paletteWidget: palettes,
-        });
+        ui.activeLayers = wv.layers.active(models, config);
         ui.addLayers = wv.layers.add(models, config);
         ui.dateSliders = wv.date.sliders(models, config);
         ui.dateLabel = wv.date.label(models);
@@ -172,7 +135,6 @@ $(function() {// Initialize "static" vars
             icon: "images/camera.png",
             onicon: "images/cameraon.png",
             cropee: "map",
-            paletteWidget: palettes,
             mapWidget: map
         });
         var imageDownload = new SOTE.widget.ImageDownload("imagedownload", {
@@ -200,7 +162,6 @@ $(function() {// Initialize "static" vars
             selector: "#DataDownload",
             model: dataDownloadModel,
             maps: map.maps,
-            paletteWidget: palettes
         });
         dataDownload.render();
 
@@ -256,7 +217,6 @@ $(function() {// Initialize "static" vars
         REGISTRY.addEventListener(crs.containerId, "imagedownload");
 
 
-
         // Console notifications
         if ( wv.brand.release() ) {
             console.info(wv.brand.NAME + " - Version " + wv.brand.VERSION +
@@ -276,7 +236,8 @@ $(function() {// Initialize "static" vars
         };
 
         window.onbeforeunload = function() {
-            if ( storageEngine ) {
+            var events = events || {};
+            if ( storageEngine && events ) {
    	            storageEngine.setItem('eventsCollapsed', events.isCollapsed);
    	        }
       	};
@@ -312,10 +273,14 @@ $(function() {// Initialize "static" vars
         }
     };
 
+    var error = function() {
+        wv.util.error.apply(null, arguments);
+    };
+
     try {
-        entryPoint();
+        main();
     } catch ( cause ) {
-        Worldview.error("Failed to start Worldview", cause);
+        wv.util.error(cause);
     }
 
 });

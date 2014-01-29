@@ -87,24 +87,18 @@ for act in index:
         return_code = 1
     stops = []
     for i in xrange(0, 255 * 3, 3):
-        entry = {
-            "at": str(i / 3.0 / 256.0),
-            "r": ord(data[i]),
-            "g": ord(data[i+1]),
-            "b": ord(data[i+2]),
-            "a": 255
-        }
+        entry = "{:02x}{:02x}{:02x}".format(
+            ord(data[i]), ord(data[i+1]), ord(data[i+2]));
         stops += [entry]
     palette = {
         "id": act["id"],
         "name": act["name"],
-        "stops": stops
+        "colors": stops
     }
     palette_file = os.path.join(output_dir, "%s.json" % act["id"])
     notify("Writing palette: %s" % palette_file)
     with open(palette_file, "w") as fp:
-        json.dump(palette, fp, sort_keys=True, indent=4, 
-                  separators=(',', ': '))
+        json.dump(palette, fp)
 
 
 sys.exit(return_code)

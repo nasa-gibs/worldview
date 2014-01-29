@@ -24,7 +24,7 @@ wv.legacy.palettes = wv.legacy.palettes || function(model) {
 
     var self = {};
 
-    self.id = "products";
+    self.id = "palettes";
 
     var init = function() {
         REGISTRY.register(self.id, self);
@@ -32,8 +32,6 @@ wv.legacy.palettes = wv.legacy.palettes || function(model) {
 
         model.events.on("add", fire);
         model.events.on("remove", fire);
-        model.events.on("update", fire);
-        model.events.on("visibility", fire);
         fire();
     };
 
@@ -53,8 +51,20 @@ wv.legacy.palettes = wv.legacy.palettes || function(model) {
     };
 
     self.parse = function(queryString, object) {
-        var projection = Worldview.extractFromQuery("switch", queryString);
-        object.projection = projection;
+        object.palettes = {};
+        palettes = Worldview.extractFromQuery("palettes", queryString);
+        object.palettesString = palettes;
+
+        if ( !palettes ) {
+            return object;
+        }
+        var definitions = palettes.split("~");
+        $.each(definitions, function(index, definition) {
+            var items = definition.split(",");
+            var layer = items[0];
+            var palette = items[1];
+            object.palettes[layer] = palette;
+        });
         return object;
     };
 

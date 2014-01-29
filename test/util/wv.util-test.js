@@ -130,6 +130,15 @@ buster.testCase("wv.util", {
             buster.assert.equals(data, "answer");
             done();
         });
+    },
+
+    "URL with build nonce": function() {
+        buster.assert.equals(wv.brand.url("foo"), "foo?v=@BUILD_NONCE@");
+    },
+
+    "URL build build nonce, existing query string": function() {
+        buster.assert.equals(wv.brand.url("foo?bar=1"),
+                "foo?bar=1&v=@BUILD_NONCE@");
     }
 
 });

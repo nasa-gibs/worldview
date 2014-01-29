@@ -18,11 +18,10 @@ wv.layers = wv.layers || {};
 /**
  * @class wv.layers.active
  */
-wv.layers.active = wv.layers.active || function(models, config, spec) {
+wv.layers.active = wv.layers.active || function(models, config) {
 
     var aoi = config.aoi;
     var model = models.layers;
-    var paletteWidget = spec.paletteWidget;
     var groups = wv.util.LAYER_GROUPS;
     var jsp;
 
@@ -42,8 +41,6 @@ wv.layers.active = wv.layers.active || function(models, config, spec) {
             .on("visibility", onLayerVisibility);
         models.proj.events
             .on("select", onProjectionChanged);
-        models.palettes.events
-            .on("palette", onPaletteChanged);
         $(window).resize(resize);
     };
 
@@ -173,7 +170,12 @@ wv.layers.active = wv.layers.active || function(models, config, spec) {
     var renderLegendCanvas = function(layer) {
         var selector = ".wv-palette[data-layer='" +
                 encodeURIComponent(layer.id) + "']";
-		wv.palettes.legend(selector, models.palettes, layer);
+		wv.palettes.legend({
+		    selector: selector,
+		    config: config,
+		    models: models,
+		    layer: layer
+	    });
     };
 
     var adjustCategoryHeights = function() {
@@ -308,27 +310,6 @@ wv.layers.active = wv.layers.active || function(models, config, spec) {
     var onProjectionChanged = function() {
         // Timeout prevents redraw artifacts
         setTimeout(render, 1);
-    };
-
-    var openPaletteSelector = function(event) {
-        var $target = $(event.target);
-        if ( !wv.palettes.supported ) {
-            wv.ui.unsupported();
-        } else {
-            paletteWidget.displaySelector($target.attr("data-layer"));
-        }
-    };
-
-    var onPaletteChanged = function(palette, layerId) {
-        var layer = config.layers[layerId];
-        if ( layer && layer.rendered && $("#canvas" + Worldview.id(layer.id)).length > 0 ) {
-            Worldview.Palette.ColorBar({
-                selector: "#canvas" + Worldview.id(layer.id),
-                bins: layer.bins,
-                stops: layer.stops,
-                palette: palette
-            });
-        }
     };
 
     init();

@@ -308,27 +308,22 @@ Worldview.Map.MapSet = function(containerId, mapConfig, component) {
                 if ( paletteName ) {
                     // Find the rendered palette for this product
                     var layerConfig = self.mapConfig.layers[layerName];
-                    var renderedName = layerConfig.rendered;
-                    var renderedPalette = self.mapConfig.palettes[renderedName];
+                    var renderedName = layerConfig.palette.id;
+                    var renderedPalette = self.mapConfig.palettes.rendered[renderedName];
 
                     if ( !renderedPalette ) {
                         console.warn(layerName + " does not support palettes");
                         return;
                     }
                     // Find the palette that should be used instead
-                    var palette = self.mapConfig.palettes[paletteName];
+                    var palette = wv.palettes.translate(renderedPalette,
+                            self.mapConfig.palettes.custom[paletteName]);
 
                     if ( !palette ) {
                         console.warn("No such palette: " + paletteName);
                         return;
                     }
-                    // Create a lookup table and map it to the color
-                    // values found in the rendered palette
-                    var indexed = Worldview.Palette.toIndexedLookup(
-                        layerConfig.bins, palette, layerConfig.stops);
-                    var lookup = Worldview.Palette.toColorLookup(
-                        indexed, renderedPalette.stops);
-
+                    var lookup = wv.palettes.lookup(renderedPalette, palette);
                     // Apply
                     layer.setLookup(lookup);
                 } else {

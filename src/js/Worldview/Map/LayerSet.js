@@ -83,6 +83,9 @@ Worldview.Map.LayerSet = function(config, projId, layerId) {
         } else {
             param.transitionEffect = "resize";
         }
+        if ( options.tileClass ) {
+            param.tileClass = options.tileClass;
+        }
         var olLayer = new OpenLayers.Layer.WMTS(param);
         if ( options && options.time ) {
             olLayer.mergeNewParams({"time": options.time});
@@ -108,7 +111,7 @@ Worldview.Map.LayerSet = function(config, projId, layerId) {
         };
         var options = {
             tileSize: new OpenLayers.Size(layer.tileSize[0],
-                                          layer.tileSize[1]),        
+                                          layer.tileSize[1]),
         };
         if ( layer.opacity ) {
         	options.opacity = layer.opacity;
@@ -135,6 +138,7 @@ Worldview.Map.LayerSet = function(config, projId, layerId) {
      * An OpenLayers Layer.
      */
     self.createLayer = function(options) {
+        options = options || {};
         var type = config.layers[layerId].type;
         if ( type === "wmts" ) {
             return createWMTS(options);

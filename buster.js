@@ -24,6 +24,7 @@ config["wv"] = {
         "src/js/wv.*.js",
         "src/js/util/wv.*.js",
         "src/js/ui/wv.ui.js",
+        "src/js/ui/wv.ui.indicator.js",
         "src/js/date/wv.*.js",
         "src/js/layers/wv.*.js",
         "src/js/link/wv.*.js",

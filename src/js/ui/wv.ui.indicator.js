@@ -109,6 +109,28 @@ wv.ui.indicator = wv.ui.indicator || (function() {
         self.show("No Data Avaialble", "images/red-x.svg");
     };
 
+    /**
+     * Displays a "Loading" indicator if the specified promise is not
+     * fulfilled in a certain amount of time. Once the promise is fulfilled,
+     * any active indicator is hidden.
+     *
+     * @method delayed
+     * @static
+     * @param {jQuery.Deferred} The active promise
+     * @param [int] Time, in milliseconds, to wait until showing the
+     * indicator. If not specified, a delay of one second is used.
+     */
+    self.delayed = function(promise, delay) {
+        delay = delay || 1000;
+        var timeout = setTimeout(function() {
+            self.loading();
+        }, delay);
+        promise.always(function() {
+            clearTimeout(timeout);
+            self.hide();
+        });
+    };
+
     return self;
 
 })();

@@ -342,6 +342,19 @@ wv.util = (function(self) {
         }
     };
 
+    self.load = function(root, attr, url) {
+        var promise = $.Deferred();
+        if ( root[attr] && _.size(root[attr]) > 0 ) {
+            promise.resolve(root[attr]);
+        } else {
+            promise = $.getJSON(url);
+            promise.done(function(result) {
+                root[attr] = result;
+            });
+        }
+        return promise;
+    };
+
     return self;
 
 })(wv.util || {});

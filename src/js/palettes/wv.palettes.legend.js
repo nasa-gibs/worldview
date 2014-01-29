@@ -15,10 +15,15 @@
 var wv = wv || {};
 wv.palettes = wv.palettes || {};
 
-wv.palettes.legend = wv.palettes.legend || function(selector, model, layer) {
+wv.palettes.legend = wv.palettes.legend || function(spec) {
+
+    var selector = spec.selector;
+    var config = spec.config;
+    var models = spec.models;
+    var model = spec.models.palettes;
+    var layer = spec.layer;
 
     var self = {};
-    var colorbar;
     var $colorbar;
     var palette;
 
@@ -53,15 +58,24 @@ wv.palettes.legend = wv.palettes.legend || function(selector, model, layer) {
         $infoPanel.append($info);
         $parent.append($infoPanel);
 
-        colorbar = wv.palettes.colorbar(selector + " .wv-palettes-colorbar");
         $colorbar.on("mousemove", function(event) {
             showUnitHover(event);
         }).on("mouseout", function() {
             showUnitRange();
+        }).on("click", function() {
+            showCustomSelector();
         });
+        wv.palettes.colorbar(selector + " .wv-palettes-colorbar");
+        updateLegend();
+        model.events
+            .on("add", updateLegend)
+            .on("remove", updateLegend);
+    };
+
+    var updateLegend = function() {
         model.forLayer(layer.id).done(function(p) {
             palette = p;
-            colorbar.set(palette);
+            wv.palettes.colorbar(selector + " .wv-palettes-colorbar", palette);
             showUnitRange();
         });
     };
@@ -81,6 +95,9 @@ wv.palettes.legend = wv.palettes.legend || function(selector, model, layer) {
     };
 
     var showUnitHover = function(event) {
+        if ( !palette ) {
+            return;
+        }
         var x = event.pageX - $colorbar.offset().left;
         var width = $colorbar.width();
         var percent = x / width;
@@ -92,6 +109,10 @@ wv.palettes.legend = wv.palettes.legend || function(selector, model, layer) {
         $(selector + " .wv-palettes-min").html("&nbsp;");
         $(selector + " .wv-palettes-max").html("&nbsp;");
         $(selector + " .wv-palettes-center").html(palette.values[index]);
+    };
+
+    var showCustomSelector = function(event) {
+        wv.palettes.custom(config, models, layer);
     };
 
     init();
