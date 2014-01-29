@@ -25,7 +25,6 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
 
     var self = {};
     var $colorbar;
-    var palette;
 
     var init = function() {
         var $parent = $(selector);
@@ -66,21 +65,20 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
             showCustomSelector();
         });
         wv.palettes.colorbar(selector + " .wv-palettes-colorbar");
-        updateLegend();
         model.events
             .on("add", updateLegend)
             .on("remove", updateLegend);
+        wv.palettes.loadRendered(config, layer.palette.id).done(updateLegend);
     };
 
     var updateLegend = function() {
-        model.forLayer(layer.id).done(function(p) {
-            palette = p;
-            wv.palettes.colorbar(selector + " .wv-palettes-colorbar", palette);
-            showUnitRange();
-        });
+        var palette = model.forLayer(layer.id);
+        wv.palettes.colorbar(selector + " .wv-palettes-colorbar", palette);
+        showUnitRange();
     };
 
     var showUnitRange = function() {
+        var palette = model.forLayer(layer.id);
         if (layer.palette.single) {
             $(selector + " .wv-palettes-center").html(palette.values[0]);
         } else if (layer.palette.classified) {
@@ -95,9 +93,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
     };
 
     var showUnitHover = function(event) {
-        if ( !palette ) {
-            return;
-        }
+        var palette = model.forLayer(layer.id);
         var x = event.pageX - $colorbar.offset().left;
         var width = $colorbar.width();
         var percent = x / width;

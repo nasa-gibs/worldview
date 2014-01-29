@@ -25,10 +25,7 @@ wv.palettes.custom = wv.palettes.custom || function(config, models, layer) {
         canvas = document.createElement("canvas");
         canvas.width = 100;
         canvas.height = 14;
-
-        var url = wv.brand.url("conf/wv.palettes.json");
-        var promise = wv.util.load(config.palettes, "custom", url);
-        promise.done(loaded).fail(wv.util.error);
+        var promise = wv.palettes.loadCustom(config).done(loaded);
         wv.ui.indicator.delayed(promise);
     };
 
@@ -41,6 +38,12 @@ wv.palettes.custom = wv.palettes.custom || function(config, models, layer) {
             constraintoviewport: true ,
             zindex: 210
         };
+
+        // FIXME: SUPER HACK
+        if ( wv.dialogs && wv.dialogs.customPalette ) {
+            wv.dialogs.customPalette.destroy();
+            wv.dialogs.customPalette = null;
+        }
 
         var $element = $(alignTo);
         properties.x = Math.ceil($element.offset().left +
@@ -58,17 +61,25 @@ wv.palettes.custom = wv.palettes.custom || function(config, models, layer) {
             "<div id='palette-selector'></div>"
         ].join("\n"));
         dialog.hideEvent.subscribe(function(i) {
+            if ( wv.dialogs.customPalette === dialog ) {
+                wv.dialogs.customPalette = null;
+            }
             setTimeout(function() {
                 dialog.destroy();
-                dialog = null;
             }, 5);
         });
         dialog.render(document.body);
 
         palettes = [];
         palettes.push(defaultPalette());
-        _.each(config.paletteOrder, function(id) {
+        var recommended = layer.palette.recommended || [];
+        _.each(recommended, function(id) {
             palettes.push(customPalette(id));
+        });
+        _.each(config.paletteOrder, function(id) {
+            if ( _.indexOf(recommended, id) < 0 ) {
+                palettes.push(customPalette(id));
+            }
         });
 
 
@@ -84,94 +95,15 @@ wv.palettes.custom = wv.palettes.custom || function(config, models, layer) {
 
         $dropDown.on("change", selectPalette);
 
-        /*
-        // The default palette the layer is rendered in
-        var renderedName = layerConfig.rendered;
-
-        var renderedPalette = $.extend(true, {},
-                config.palettes[renderedName]);
-        var renderedColorBar = Worldview.Palette.ColorBar({
-            canvas: canvas,
-            palette: renderedPalette,
-            bins: layerConfig.bins,
-            stops: layerConfig.stops
-        });
-        renderedPalette.name = "Default";
-        renderedPalette.image = renderedColorBar.toImage();
-        palettes.push(renderedPalette);
-
-        var activePalette = self.active[layer];
-        var selected = null;
-
-        // Palettes for the drop down, place the recommended ones first
-        if ( layerConfig.recommendedPalettes ) {
-            $.each(layerConfig.recommendedPalettes, function(index, name) {
-                var palette = config.palettes[name];
-                var colorBar = Worldview.Palette.ColorBar({
-                    canvas: canvas,
-                    palette: palette,
-                    bins: layerConfig.bins,
-                    stops: layerConfig.stops
-                });
-                palette.image = colorBar.toImage();
-                palettes.push(palette);
-            });
+        if ( models.palettes.active[layer.id] ) {
+            var paletteId = models.palettes.active[layer.id];
+            var index = _.findIndex(palettes, { id: paletteId });
+            $dropDown.set("selectedIndex", index);
         }
-
-        $.each(self.config.paletteOrder, function(index, name) {
-            if ( $.inArray(name, layerConfig.recommendedPalettes) >= 0 ) {
-                return;
-            }
-            var p = self.config.palettes[name];
-
-            // Skip this palette if configuration says to exclude
-            if ( $.inArray(name, layerConfig.excludePalettes) >= 0 ) {
-                return;
-            }
-            if ( !p ) {
-                console.error("No such palette: " + name);
-                return;
-            }
-            if ( p.source === "stock" ) {
-                var palette = $.extend(true, {}, p);
-                var colorBar = Worldview.Palette.ColorBar({
-                    canvas: canvas,
-                    palette: palette,
-                    bins: layerConfig.bins,
-                    stops: layerConfig.stops
-                });
-                palette.image = colorBar.toImage();
-                palettes.push(palette);
-            }
-        });
-
-        $.each(palettes, function(index, palette) {
-            if ( palette.id === activePalette ) {
-                selected = index;
-            }
-        });
-
-        var paletteSelector = Worldview.Palette.PaletteSelector({
-            selector: "#palette-selector",
-            palettes: palettes
-        });
-        if ( selected !== null ) {
-            paletteSelector.select(selected);
-        }
-
-        paletteSelector.addSelectionListener(function(palette) {
-            if ( palette.source === "rendered" ) {
-                delete self.active[layer];
-                delete self.inactive[layer];
-            } else {
-                self.active[layer] = palette.id;
-                self.inactive[layer] = palette.id;
-            }
-            model.events.trigger("palette", palette, layer);
-            REGISTRY.fire(self);
-        });
-        */
         dialog.show();
+        // FIXME: MAJOR HACK
+        wv.dialogs = wv.dialogs || {};
+        wv.dialogs.customPalette = dialog;
     };
 
     var defaultPalette = function() {

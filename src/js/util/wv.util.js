@@ -347,11 +347,12 @@ wv.util = (function(self) {
         if ( root[attr] && _.size(root[attr]) > 0 ) {
             promise.resolve(root[attr]);
         } else {
-            promise = $.getJSON(url);
+            promise = $.getJSON(wv.brand.url(url));
             promise.done(function(result) {
                 root[attr] = result;
             });
         }
+        promise.fail(wv.util.error);
         return promise;
     };
 

@@ -112,6 +112,34 @@ wv.palettes = (function(self) {
         return lookup;
     };
 
+    self.loadCustom = function(config) {
+        return wv.util.load(config.palettes, "custom", "conf/wv.palettes.json");
+    };
+
+    self.loadRendered = function(config, layerId) {
+        var layer = config.layers[layerId];
+        return wv.util.load(config.palettes.rendered, layer.palette.id,
+                "conf/wv.palettes/" + layer.palette.id + ".json");
+    };
+
+    self.startup = function(models, config) {
+        var promises = [];
+        if ( models.palettes.active ) {
+            promises.push(self.loadCustom(config));
+        }
+        _.each(models.layers.active.overlays, function(layer) {
+            if ( layer.palette ) {
+                promises.push(self.loadRendered(config, layer.id));
+            }
+        });
+        var loaded = {};
+        if ( promises.length > 0 ) {
+            loaded = $.Deferred();
+            $.when.apply(null, promises).then(loaded.resolve);
+        }
+        return loaded;
+    };
+
     init();
     return self;
 

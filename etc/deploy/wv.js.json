@@ -30,6 +30,7 @@
     "src/js/layers/wv.layers.add.js",
 
     "src/js/palettes/wv.palettes.js",
+    "src/js/palettes/wv.palettes.custom.js",
     "src/js/palettes/wv.palettes.legend.js",
     "src/js/palettes/wv.palettes.model.js",
 
@@ -39,6 +40,7 @@
     "src/js/legacy/wv.legacy.switch_.js",
     "src/js/legacy/wv.legacy.bank.js",
     "src/js/legacy/wv.legacy.date.js",
+    "src/js/legacy/wv.legacy.palettes.js",
 
     "src/js/debug/wv.debug.gibs.js",
 
@@ -48,11 +50,6 @@
     "src/js/Worldview/Scheduler.js",
     "src/js/Worldview/Indicator.js",
     "src/js/Worldview/AjaxJoin.js",
-
-    "src/js/Worldview/Palette.js",
-    "src/js/Worldview/Palette/ColorBar.js",
-    "src/js/Worldview/Palette/Palette.js",
-    "src/js/Worldview/Palette/PaletteSelector.js",
 
     "src/js/Worldview/Map.js",
     "src/js/Worldview/Map/CanvasTile.js",
@@ -118,7 +115,6 @@
     "src/js/Worldview/DataDownload/BulkDownloadPage.js",
 
     "src/js/Worldview/Widget/Map.js",
-    "src/js/Worldview/Widget/Palette.js",
     "src/js/Worldview/Widget/WorldviewMap.js",
     "src/js/Worldview/Widget/CRS.js",
     "src/js/Worldview/Widget/DataDownload.js",

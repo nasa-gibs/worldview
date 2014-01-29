@@ -10,7 +10,16 @@ $(function() {// Initialize "static" vars
 
     var storageEngine;
 
+    // FIXME: Make this more elegant
     var init = function(config) {
+        try {
+            _init(config);
+        } catch ( error ) {
+            wv.util.error(error);
+        }
+    };
+
+    var _init = function(config) {
         wv.config = config;
 
         // Convert all parameters found in the query string to an object,
@@ -121,126 +130,133 @@ $(function() {// Initialize "static" vars
         models.link.load();
         models.proj.change = wv.proj.change(models);
 
-        // Create widgets
-        var ui = {};
-        ui.proj = wv.proj.ui(models);
+        // FIXME: This is a hack for now. Will be cleaned up in 0.7
+        wv.palettes.startup(models, config).done(function() {
 
-        ui.sidebar = wv.layers.sidebar(models);
-        ui.activeLayers = wv.layers.active(models, config);
-        ui.addLayers = wv.layers.add(models, config);
-        ui.dateSliders = wv.date.sliders(models, config);
-        ui.dateLabel = wv.date.label(models);
-        ui.dateWheels = wv.date.wheels(models, config);
-        var rubberBand = new SOTE.widget.RubberBand("camera", {
-            icon: "images/camera.png",
-            onicon: "images/cameraon.png",
-            cropee: "map",
-            mapWidget: map
-        });
-        var imageDownload = new SOTE.widget.ImageDownload("imagedownload", {
-            baseLayer: "MODIS_Terra_CorrectedReflectance_TrueColor",
-            alignTo: rubberBand,
-            m: map,
-            config: config
-        });
-        var crs = new Worldview.Widget.CRS(config);
+            // FIXME: Hack to get the map to read palette info
+            map.updateComponent(models.link.toQueryString());
 
-        // collapse events if worldview is being loaded via permalink
-        if(window.location.search) {
-        	eventsCollapsed = true;
-        }
-        /*
-    	var events = new SOTE.widget.Events("eventsHolder", {
-    		config: config,
-    		models: models,
-    		maps: map.maps,
-    		shouldCollapse: eventsCollapsed,
-    		lastVisit: lastVisitObj
-     	});
-        */
-        var dataDownload = Worldview.Widget.DataDownload(config, {
-            selector: "#DataDownload",
-            model: dataDownloadModel,
-            maps: map.maps,
-        });
-        dataDownload.render();
+            // Create widgets
+            var ui = {};
+            ui.proj = wv.proj.ui(models);
 
-        ui.link = wv.link.ui(models);
-
-        $(window).resize(function() {
-          if ($(window).width() < 720) {
-            $('#productsHoldertabs li.first a').trigger('click');
-          }
-        });
-
-        document.activeElement.blur();
-        $("input").blur();
-        $("#eventsHolder").hide();
-        // Wirings
-        ui.sidebar.events
-            .on("dataDownloadSelect", function() {
-                dataDownloadModel.activate();
-            })
-            .on("dataDownloadUnselect", function() {
-                dataDownloadModel.deactivate();
+            ui.sidebar = wv.layers.sidebar(models);
+            ui.activeLayers = wv.layers.active(models, config);
+            ui.addLayers = wv.layers.add(models, config);
+            ui.dateSliders = wv.date.sliders(models, config);
+            ui.dateLabel = wv.date.label(models);
+            ui.dateWheels = wv.date.wheels(models, config);
+            var rubberBand = new SOTE.widget.RubberBand("camera", {
+                icon: "images/camera.png",
+                onicon: "images/cameraon.png",
+                cropee: "map",
+                mapWidget: map
             });
-        dataDownloadModel.events
-            .on("activate", function() {
-                ui.sidebar.selectTab("download");
+            var imageDownload = new SOTE.widget.ImageDownload("imagedownload", {
+                baseLayer: "MODIS_Terra_CorrectedReflectance_TrueColor",
+                alignTo: rubberBand,
+                m: map,
+                config: config
             });
-        map.maps.events
-            .on("moveEnd", function(map) {
-                dataDownload.onViewChange(map);
-            })
-            .on("zoomEnd", function(map) {
-                dataDownload.onViewChange(map);
+            var crs = new Worldview.Widget.CRS(config);
+
+            // collapse events if worldview is being loaded via permalink
+            if(window.location.search) {
+            	eventsCollapsed = true;
+            }
+            /*
+        	var events = new SOTE.widget.Events("eventsHolder", {
+        		config: config,
+        		models: models,
+        		maps: map.maps,
+        		shouldCollapse: eventsCollapsed,
+        		lastVisit: lastVisitObj
+         	});
+            */
+            var dataDownload = Worldview.Widget.DataDownload(config, {
+                selector: "#DataDownload",
+                model: dataDownloadModel,
+                maps: map.maps,
             });
-        dataDownloadModel.events
-            .on("queryResults", function() {
-                dataDownload.onViewChange(map.maps.map);
+            dataDownload.render();
+
+            ui.link = wv.link.ui(models);
+
+            $(window).resize(function() {
+              if ($(window).width() < 720) {
+                $('#productsHoldertabs li.first a').trigger('click');
+              }
             });
 
-	    // Register event listeners
-	    REGISTRY.addEventListener("map", "imagedownload");
-        REGISTRY.addEventListener("time",
-                "map", "imagedownload", crs.containerId,
-                dataDownload.containerId);
-        REGISTRY.addEventListener("switch",
-                "map", "products", "selectorbox", "imagedownload", "camera",
-                crs.containerId, dataDownload.containerId);
-        REGISTRY.addEventListener("products",
-                "map", "selectorbox", "imagedownload", "palettes",
-                dataDownload.containerId);
-        REGISTRY.addEventListener("selectorbox","products");
-        REGISTRY.addEventListener("camera","imagedownload");
-        REGISTRY.addEventListener("palettes","map","camera","products");
-        REGISTRY.addEventListener(crs.containerId, "imagedownload");
+            document.activeElement.blur();
+            $("input").blur();
+            $("#eventsHolder").hide();
+            // Wirings
+            ui.sidebar.events
+                .on("dataDownloadSelect", function() {
+                    dataDownloadModel.activate();
+                })
+                .on("dataDownloadUnselect", function() {
+                    dataDownloadModel.deactivate();
+                });
+            dataDownloadModel.events
+                .on("activate", function() {
+                    ui.sidebar.selectTab("download");
+                });
+            map.maps.events
+                .on("moveEnd", function(map) {
+                    dataDownload.onViewChange(map);
+                })
+                .on("zoomEnd", function(map) {
+                    dataDownload.onViewChange(map);
+                });
+            dataDownloadModel.events
+                .on("queryResults", function() {
+                    dataDownload.onViewChange(map.maps.map);
+                });
+
+    	    // Register event listeners
+    	    REGISTRY.addEventListener("map", "imagedownload");
+            REGISTRY.addEventListener("time",
+                    "map", "imagedownload", crs.containerId,
+                    dataDownload.containerId);
+            REGISTRY.addEventListener("switch",
+                    "map", "products", "selectorbox", "imagedownload", "camera",
+                    crs.containerId, dataDownload.containerId);
+            REGISTRY.addEventListener("products",
+                    "map", "selectorbox", "imagedownload", "palettes",
+                    dataDownload.containerId);
+            REGISTRY.addEventListener("selectorbox","products");
+            REGISTRY.addEventListener("camera","imagedownload");
+            REGISTRY.addEventListener("palettes","map","camera","products");
+            REGISTRY.addEventListener(crs.containerId, "imagedownload");
 
 
-        // Console notifications
-        if ( wv.brand.release() ) {
-            console.info(wv.brand.NAME + " - Version " + wv.brand.VERSION +
-                " - " + wv.brand.BUILD_TIMESTAMP);
-        } else {
-            console.warn("Development version");
-        }
+            // Console notifications
+            if ( wv.brand.release() ) {
+                console.info(wv.brand.NAME + " - Version " + wv.brand.VERSION +
+                    " - " + wv.brand.BUILD_TIMESTAMP);
+            } else {
+                console.warn("Development version");
+            }
 
-        // Do not start the tour if coming in via permalink or if local
-        // storage is not available
-        if ( !window.location.search && storageEngine ) {
-            Worldview.Tour.start(storageEngine, hideSplash, false);
-        }
+            // Do not start the tour if coming in via permalink or if local
+            // storage is not available
+            if ( !window.location.search && storageEngine ) {
+                Worldview.Tour.start(storageEngine, hideSplash, false);
+            }
 
-        if ( config.parameters.debugGIBS ) {
-            wv.debug.gibs(ui, models, config);
-        };
+            if ( config.parameters.debugGIBS ) {
+                wv.debug.gibs(ui, models, config);
+            };
 
-        window.onbeforeunload = function() {
-            var events = events || {};
-            if ( storageEngine && events ) {
-   	            storageEngine.setItem('eventsCollapsed', events.isCollapsed);
-   	        }
-      	};
+            window.onbeforeunload = function() {
+                var events = events || {};
+                if ( storageEngine && events ) {
+       	            storageEngine.setItem('eventsCollapsed', events.isCollapsed);
+       	        }
+          	};
+      	}).fail(wv.util.error);
     };
 
     var debuggingFeatures = function(config) {

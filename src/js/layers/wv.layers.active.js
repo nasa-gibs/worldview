@@ -171,11 +171,11 @@ wv.layers.active = wv.layers.active || function(models, config) {
         var selector = ".wv-palette[data-layer='" +
                 encodeURIComponent(layer.id) + "']";
 		wv.palettes.legend({
-		    selector: selector,
-		    config: config,
-		    models: models,
-		    layer: layer
-	    });
+            selector: selector,
+            config: config,
+            models: models,
+            layer: layer
+        });
     };
 
     var adjustCategoryHeights = function() {
