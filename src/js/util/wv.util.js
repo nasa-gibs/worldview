@@ -144,6 +144,7 @@ wv.util = (function(self) {
      * @return {Date} converted string as a date object, throws an exception if
      * the string is invalid
      */
+    // NOTE: Older Safari doesn't like Date.parse
     self.parseDateUTC = function(dateAsString) {
         var dateTimeArr = dateAsString.split(/T/);
 

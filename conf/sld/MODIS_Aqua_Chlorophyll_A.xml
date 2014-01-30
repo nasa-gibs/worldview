@@ -265,7 +265,7 @@
               <ColorMapEntry color="#780000" opacity="1.0"/>
               <ColorMapEntry color="#730000" opacity="1.0"/>
               <ColorMapEntry color="#6e0000" opacity="1.0"/>
-              <ColorMapEntry color="#690000" quantity="20" label="20 mg/m&#179;" opacity="1.0"/>
+              <ColorMapEntry color="#690000" quantity="20" label="20 mg/m&#179; (log)" opacity="1.0"/>
             </ColorMap>
           </RasterSymbolizer>
           <RasterSymbolizer>

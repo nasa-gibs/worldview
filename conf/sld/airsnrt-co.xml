@@ -15,7 +15,7 @@
           <RasterSymbolizer>
             <Opacity>1.0</Opacity>
             <ColorMap>
-             <ColorMapEntry color="#FBD1FB" quantity="40" label="40"/>
+             <ColorMapEntry color="#FBD1FB" quantity="40" label="40 ppb"/>
              <ColorMapEntry color="#A605B0" quantity="40.4" label="40.4"/>
              <ColorMapEntry color="#A605B0" quantity="40.8" label="40.8"/>
              <ColorMapEntry color="#A605B0" quantity="41.2" label="41.2"/>
@@ -266,7 +266,7 @@
              <ColorMapEntry color="#CF0500" quantity="139.2" label="139.2"/>
              <ColorMapEntry color="#CF0500" quantity="139.6" label="139.6"/>
              <ColorMapEntry color="#CF0500" quantity="140" label="140"/>
-             <ColorMapEntry color="#DCDCDC" quantity="500" label="500"/>
+             <ColorMapEntry color="#DCDCDC" quantity="500" label="> 140 ppb"/>
              </ColorMap>
            </RasterSymbolizer>
          </Rule>
@@ -282,7 +282,7 @@
           <RasterSymbolizer>
             <Opacity>1.0</Opacity>
             <ColorMap>
-             <ColorMapEntry color="#FBD1FB" quantity="40" label="40"/>
+             <ColorMapEntry color="#FBD1FB" quantity="40" label="40 ppb"/>
              <ColorMapEntry color="#A605B0" quantity="40.4" label="40.4"/>
              <ColorMapEntry color="#A605B0" quantity="40.8" label="40.8"/>
              <ColorMapEntry color="#A605B0" quantity="41.2" label="41.2"/>
@@ -533,7 +533,7 @@
              <ColorMapEntry color="#CF0500" quantity="139.2" label="139.2"/>
              <ColorMapEntry color="#CF0500" quantity="139.6" label="139.6"/>
              <ColorMapEntry color="#CF0500" quantity="140" label="140"/>
-             <ColorMapEntry color="#DCDCDC" quantity="500" label="500"/>
+             <ColorMapEntry color="#DCDCDC" quantity="500" label="> 140 ppb"/>
             </ColorMap>
            </RasterSymbolizer>
          </Rule>

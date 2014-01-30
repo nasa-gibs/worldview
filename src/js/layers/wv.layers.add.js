@@ -119,7 +119,7 @@ wv.layers.add = wv.layers.add || function(models, config) {
         var $name = $("<h4></h4>")
             .html(layer.title);
         if ( config.parameters.markPalettes ) {
-            if ( layer.rendered ) {
+            if ( layer.palette ) {
                 $name.addClass("mark");
             }
         }

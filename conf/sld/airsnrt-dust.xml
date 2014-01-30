@@ -264,7 +264,7 @@
              <ColorMapEntry color="#B64102" quantity="518.709677419355" label="518.709677419355"/>
              <ColorMapEntry color="#B64102" quantity="519.354838709677" label="519.354838709677"/>
              <ColorMapEntry color="#B64102" quantity="520" label="520"/>
-             <ColorMapEntry color="#943103" quantity="1000" label="1000"/>
+             <ColorMapEntry color="#943103" quantity="1000" label="> 500 score"/>
              </ColorMap>
            </RasterSymbolizer>
          </Rule>
@@ -529,7 +529,7 @@
              <ColorMapEntry color="#B64102" quantity="518.709677419355" label="518.709677419355"/>
              <ColorMapEntry color="#B64102" quantity="519.354838709677" label="519.354838709677"/>
              <ColorMapEntry color="#B64102" quantity="520" label="520"/>
-             <ColorMapEntry color="#943103" quantity="1000" label="1000"/>
+             <ColorMapEntry color="#943103" quantity="1000" label="> 500 score"/>
             </ColorMap>
            </RasterSymbolizer>
          </Rule>

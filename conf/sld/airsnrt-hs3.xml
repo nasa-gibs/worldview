@@ -15,7 +15,7 @@
           <RasterSymbolizer>
             <Opacity>1.0</Opacity>
             <ColorMap>
-<ColorMapEntry color="#0011FF" quantity="1" label="1"/>
+<ColorMapEntry color="#0011FF" quantity="1" label="1 %"/>
 <ColorMapEntry color="#0217FE" quantity="2" label="2"/>
 <ColorMapEntry color="#041EFE" quantity="3" label="3"/>
 <ColorMapEntry color="#0624FE" quantity="4" label="4"/>
@@ -114,7 +114,7 @@
 <ColorMapEntry color="#AA0002" quantity="97" label="97"/>
 <ColorMapEntry color="#A10003" quantity="98" label="98"/>
 <ColorMapEntry color="#970003" quantity="99" label="99"/>
-<ColorMapEntry color="#8E0003" quantity="100" label="100"/>
+<ColorMapEntry color="#8E0003" quantity="100" label="100 %"/>
              </ColorMap>
            </RasterSymbolizer>
          </Rule>
@@ -130,7 +130,7 @@
           <RasterSymbolizer>
             <Opacity>1.0</Opacity>
             <ColorMap>
-<ColorMapEntry color="#0011FF" quantity="1" label="1"/>
+<ColorMapEntry color="#0011FF" quantity="1" label="1 %"/>
 <ColorMapEntry color="#0217FE" quantity="2" label="2"/>
 <ColorMapEntry color="#041EFE" quantity="3" label="3"/>
 <ColorMapEntry color="#0624FE" quantity="4" label="4"/>
@@ -229,7 +229,7 @@
 <ColorMapEntry color="#AA0002" quantity="97" label="97"/>
 <ColorMapEntry color="#A10003" quantity="98" label="98"/>
 <ColorMapEntry color="#970003" quantity="99" label="99"/>
-<ColorMapEntry color="#8E0003" quantity="100" label="100"/>
+<ColorMapEntry color="#8E0003" quantity="100" label="100 %"/>
              </ColorMap>
            </RasterSymbolizer>
          </Rule>
@@ -246,7 +246,7 @@
           <RasterSymbolizer>
             <Opacity>1.0</Opacity>
             <ColorMap>
-<ColorMapEntry color="#0011FF" quantity="1" label="1"/>
+<ColorMapEntry color="#0011FF" quantity="1" label="1 %"/>
 <ColorMapEntry color="#0217FE" quantity="2" label="2"/>
 <ColorMapEntry color="#041EFE" quantity="3" label="3"/>
 <ColorMapEntry color="#0624FE" quantity="4" label="4"/>
@@ -345,7 +345,7 @@
 <ColorMapEntry color="#AA0002" quantity="97" label="97"/>
 <ColorMapEntry color="#A10003" quantity="98" label="98"/>
 <ColorMapEntry color="#970003" quantity="99" label="99"/>
-<ColorMapEntry color="#8E0003" quantity="100" label="100"/>
+<ColorMapEntry color="#8E0003" quantity="100" label="100 %"/>
              </ColorMap>
            </RasterSymbolizer>
          </Rule>
@@ -361,7 +361,7 @@
           <RasterSymbolizer>
             <Opacity>1.0</Opacity>
             <ColorMap>
-<ColorMapEntry color="#0011FF" quantity="1" label="1"/>
+<ColorMapEntry color="#0011FF" quantity="1" label="1 %"/>
 <ColorMapEntry color="#0217FE" quantity="2" label="2"/>
 <ColorMapEntry color="#041EFE" quantity="3" label="3"/>
 <ColorMapEntry color="#0624FE" quantity="4" label="4"/>
@@ -460,7 +460,7 @@
 <ColorMapEntry color="#AA0002" quantity="97" label="97"/>
 <ColorMapEntry color="#A10003" quantity="98" label="98"/>
 <ColorMapEntry color="#970003" quantity="99" label="99"/>
-<ColorMapEntry color="#8E0003" quantity="100" label="100"/>
+<ColorMapEntry color="#8E0003" quantity="100" label="100 %"/>
              </ColorMap>
            </RasterSymbolizer>
          </Rule>
@@ -478,7 +478,7 @@
           <RasterSymbolizer>
             <Opacity>1.0</Opacity>
             <ColorMap>
-<ColorMapEntry color="#0011FF" quantity="1" label="1"/>
+<ColorMapEntry color="#0011FF" quantity="1" label="1 %"/>
 <ColorMapEntry color="#0217FE" quantity="2" label="2"/>
 <ColorMapEntry color="#041EFE" quantity="3" label="3"/>
 <ColorMapEntry color="#0624FE" quantity="4" label="4"/>
@@ -577,7 +577,7 @@
 <ColorMapEntry color="#AA0002" quantity="97" label="97"/>
 <ColorMapEntry color="#A10003" quantity="98" label="98"/>
 <ColorMapEntry color="#970003" quantity="99" label="99"/>
-<ColorMapEntry color="#8E0003" quantity="100" label="100"/>
+<ColorMapEntry color="#8E0003" quantity="100" label="100 %"/>
              </ColorMap>
            </RasterSymbolizer>
          </Rule>
@@ -593,7 +593,7 @@
           <RasterSymbolizer>
             <Opacity>1.0</Opacity>
             <ColorMap>
-<ColorMapEntry color="#0011FF" quantity="1" label="1"/>
+<ColorMapEntry color="#0011FF" quantity="1" label="1 %"/>
 <ColorMapEntry color="#0217FE" quantity="2" label="2"/>
 <ColorMapEntry color="#041EFE" quantity="3" label="3"/>
 <ColorMapEntry color="#0624FE" quantity="4" label="4"/>
@@ -692,7 +692,7 @@
 <ColorMapEntry color="#AA0002" quantity="97" label="97"/>
 <ColorMapEntry color="#A10003" quantity="98" label="98"/>
 <ColorMapEntry color="#970003" quantity="99" label="99"/>
-<ColorMapEntry color="#8E0003" quantity="100" label="100"/>
+<ColorMapEntry color="#8E0003" quantity="100" label="100 %"/>
              </ColorMap>
            </RasterSymbolizer>
          </Rule>
@@ -709,7 +709,7 @@
           <RasterSymbolizer>
             <Opacity>1.0</Opacity>
             <ColorMap>
-<ColorMapEntry color="#0011FF" quantity="1" label="1"/>
+<ColorMapEntry color="#0011FF" quantity="1" label="1 %"/>
 <ColorMapEntry color="#0217FE" quantity="2" label="2"/>
 <ColorMapEntry color="#041EFE" quantity="3" label="3"/>
 <ColorMapEntry color="#0624FE" quantity="4" label="4"/>
@@ -808,7 +808,7 @@
 <ColorMapEntry color="#AA0002" quantity="97" label="97"/>
 <ColorMapEntry color="#A10003" quantity="98" label="98"/>
 <ColorMapEntry color="#970003" quantity="99" label="99"/>
-<ColorMapEntry color="#8E0003" quantity="100" label="100"/>
+<ColorMapEntry color="#8E0003" quantity="100" label="100 %"/>
              </ColorMap>
            </RasterSymbolizer>
          </Rule>
@@ -824,7 +824,7 @@
           <RasterSymbolizer>
             <Opacity>1.0</Opacity>
             <ColorMap>
-<ColorMapEntry color="#0011FF" quantity="1" label="1"/>
+<ColorMapEntry color="#0011FF" quantity="1" label="1 %"/>
 <ColorMapEntry color="#0217FE" quantity="2" label="2"/>
 <ColorMapEntry color="#041EFE" quantity="3" label="3"/>
 <ColorMapEntry color="#0624FE" quantity="4" label="4"/>
@@ -923,7 +923,7 @@
 <ColorMapEntry color="#AA0002" quantity="97" label="97"/>
 <ColorMapEntry color="#A10003" quantity="98" label="98"/>
 <ColorMapEntry color="#970003" quantity="99" label="99"/>
-<ColorMapEntry color="#8E0003" quantity="100" label="100"/>
+<ColorMapEntry color="#8E0003" quantity="100" label="100 %"/>
              </ColorMap>
            </RasterSymbolizer>
          </Rule>
@@ -940,7 +940,7 @@
           <RasterSymbolizer>
             <Opacity>1.0</Opacity>
             <ColorMap>
-<ColorMapEntry color="#0011FF" quantity="1" label="1"/>
+<ColorMapEntry color="#0011FF" quantity="1" label="1 %"/>
 <ColorMapEntry color="#0217FE" quantity="2" label="2"/>
 <ColorMapEntry color="#041EFE" quantity="3" label="3"/>
 <ColorMapEntry color="#0624FE" quantity="4" label="4"/>
@@ -1039,7 +1039,7 @@
 <ColorMapEntry color="#AA0002" quantity="97" label="97"/>
 <ColorMapEntry color="#A10003" quantity="98" label="98"/>
 <ColorMapEntry color="#970003" quantity="99" label="99"/>
-<ColorMapEntry color="#8E0003" quantity="100" label="100"/>
+<ColorMapEntry color="#8E0003" quantity="100" label="100 %"/>
              </ColorMap>
            </RasterSymbolizer>
          </Rule>
@@ -1055,7 +1055,7 @@
           <RasterSymbolizer>
             <Opacity>1.0</Opacity>
             <ColorMap>
-<ColorMapEntry color="#0011FF" quantity="1" label="1"/>
+<ColorMapEntry color="#0011FF" quantity="1" label="1 %"/>
 <ColorMapEntry color="#0217FE" quantity="2" label="2"/>
 <ColorMapEntry color="#041EFE" quantity="3" label="3"/>
 <ColorMapEntry color="#0624FE" quantity="4" label="4"/>
@@ -1154,7 +1154,7 @@
 <ColorMapEntry color="#AA0002" quantity="97" label="97"/>
 <ColorMapEntry color="#A10003" quantity="98" label="98"/>
 <ColorMapEntry color="#970003" quantity="99" label="99"/>
-<ColorMapEntry color="#8E0003" quantity="100" label="100"/>
+<ColorMapEntry color="#8E0003" quantity="100" label="100 %"/>
              </ColorMap>
            </RasterSymbolizer>
          </Rule>
@@ -1171,7 +1171,7 @@
           <RasterSymbolizer>
             <Opacity>1.0</Opacity>
             <ColorMap>
-<ColorMapEntry color="#0011FF" quantity="240" label="240"/>
+<ColorMapEntry color="#0011FF" quantity="240" label="240 K"/>
 <ColorMapEntry color="#0012FE" quantity="240.12" label="240.12"/>
 <ColorMapEntry color="#0013FE" quantity="240.24" label="240.24"/>
 <ColorMapEntry color="#0114FE" quantity="240.36" label="240.36"/>
@@ -1421,7 +1421,7 @@
 <ColorMapEntry color="#A6FF75" quantity="269.64" label="269.64"/>
 <ColorMapEntry color="#A7FF73" quantity="269.76" label="269.76"/>
 <ColorMapEntry color="#A8FF71" quantity="269.88" label="269.88"/>
-<ColorMapEntry color="#AAFF6F" quantity="270" label="270"/>
+<ColorMapEntry color="#AAFF6F" quantity="270" label="270 K"/>
             </ColorMap>
            </RasterSymbolizer>
          </Rule>
@@ -1437,7 +1437,7 @@
           <RasterSymbolizer>
             <Opacity>1.0</Opacity>
             <ColorMap>
-<ColorMapEntry color="#0011FF" quantity="240" label="240"/>
+<ColorMapEntry color="#0011FF" quantity="240" label="240 K"/>
 <ColorMapEntry color="#0012FE" quantity="240.12" label="240.12"/>
 <ColorMapEntry color="#0013FE" quantity="240.24" label="240.24"/>
 <ColorMapEntry color="#0114FE" quantity="240.36" label="240.36"/>
@@ -1687,7 +1687,7 @@
 <ColorMapEntry color="#A6FF75" quantity="269.64" label="269.64"/>
 <ColorMapEntry color="#A7FF73" quantity="269.76" label="269.76"/>
 <ColorMapEntry color="#A8FF71" quantity="269.88" label="269.88"/>
-<ColorMapEntry color="#AAFF6F" quantity="270" label="270"/>
+<ColorMapEntry color="#AAFF6F" quantity="270" label="270 K"/>
             </ColorMap>
            </RasterSymbolizer>
          </Rule>
@@ -1703,7 +1703,7 @@
           <RasterSymbolizer>
             <Opacity>1.0</Opacity>
             <ColorMap>
-<ColorMapEntry color="#2A92FD" quantity="252" label="252"/>
+<ColorMapEntry color="#2A92FD" quantity="252" label="252 K"/>
 <ColorMapEntry color="#2B93FD" quantity="252.12" label="252.12"/>
 <ColorMapEntry color="#2B94FD" quantity="252.24" label="252.24"/>
 <ColorMapEntry color="#2C96FD" quantity="252.36" label="252.36"/>
@@ -1953,7 +1953,7 @@
 <ColorMapEntry color="#F6AE00" quantity="281.64" label="281.64"/>
 <ColorMapEntry color="#F6AC00" quantity="281.76" label="281.76"/>
 <ColorMapEntry color="#F6AB00" quantity="281.88" label="281.88"/>
-<ColorMapEntry color="#F6A900" quantity="282" label="282"/>
+<ColorMapEntry color="#F6A900" quantity="282" label="282 K"/>
             </ColorMap>
            </RasterSymbolizer>
          </Rule>
@@ -1969,7 +1969,7 @@
           <RasterSymbolizer>
             <Opacity>1.0</Opacity>
             <ColorMap>
-<ColorMapEntry color="#2A92FD" quantity="252" label="252"/>
+<ColorMapEntry color="#2A92FD" quantity="252" label="252 K"/>
 <ColorMapEntry color="#2B93FD" quantity="252.12" label="252.12"/>
 <ColorMapEntry color="#2B94FD" quantity="252.24" label="252.24"/>
 <ColorMapEntry color="#2C96FD" quantity="252.36" label="252.36"/>
@@ -2219,7 +2219,7 @@
 <ColorMapEntry color="#F6AE00" quantity="281.64" label="281.64"/>
 <ColorMapEntry color="#F6AC00" quantity="281.76" label="281.76"/>
 <ColorMapEntry color="#F6AB00" quantity="281.88" label="281.88"/>
-<ColorMapEntry color="#F6A900" quantity="282" label="282"/>
+<ColorMapEntry color="#F6A900" quantity="282" label="282 K"/>
             </ColorMap>
            </RasterSymbolizer>
          </Rule>
@@ -2235,7 +2235,7 @@
           <RasterSymbolizer>
             <Opacity>1.0</Opacity>
             <ColorMap>
-<ColorMapEntry color="#47E9FC" quantity="260.04" label="260.04"/>
+<ColorMapEntry color="#47E9FC" quantity="260.04" label="260.04 K"/>
 <ColorMapEntry color="#48EAFC" quantity="260.16" label="260.16"/>
 <ColorMapEntry color="#48EBFC" quantity="260.28" label="260.28"/>
 <ColorMapEntry color="#48ECFC" quantity="260.4" label="260.4"/>
@@ -2485,7 +2485,7 @@
 <ColorMapEntry color="#FC3700" quantity="289.68" label="289.68"/>
 <ColorMapEntry color="#FC3500" quantity="289.8" label="289.8"/>
 <ColorMapEntry color="#FC3300" quantity="289.92" label="289.92"/>
-<ColorMapEntry color="#FC3100" quantity="290.04" label="290.04"/>
+<ColorMapEntry color="#FC3100" quantity="290.04" label="290.04 K"/>
             </ColorMap>
            </RasterSymbolizer>
          </Rule>
@@ -2501,7 +2501,7 @@
           <RasterSymbolizer>
             <Opacity>1.0</Opacity>
             <ColorMap>
-<ColorMapEntry color="#47E9FC" quantity="260.04" label="260.04"/>
+<ColorMapEntry color="#47E9FC" quantity="260.04" label="260.04 K"/>
 <ColorMapEntry color="#48EAFC" quantity="260.16" label="260.16"/>
 <ColorMapEntry color="#48EBFC" quantity="260.28" label="260.28"/>
 <ColorMapEntry color="#48ECFC" quantity="260.4" label="260.4"/>
@@ -2751,7 +2751,7 @@
 <ColorMapEntry color="#FC3700" quantity="289.68" label="289.68"/>
 <ColorMapEntry color="#FC3500" quantity="289.8" label="289.8"/>
 <ColorMapEntry color="#FC3300" quantity="289.92" label="289.92"/>
-<ColorMapEntry color="#FC3100" quantity="290.04" label="290.04"/>
+<ColorMapEntry color="#FC3100" quantity="290.04" label="290.04 K"/>
             </ColorMap>
            </RasterSymbolizer>
          </Rule>
@@ -2767,7 +2767,7 @@
           <RasterSymbolizer>
             <Opacity>1.0</Opacity>
             <ColorMap>
-<ColorMapEntry color="#AAFF6F" quantity="270" label="270"/>
+<ColorMapEntry color="#AAFF6F" quantity="270" label="270 K"/>
 <ColorMapEntry color="#ABFF6C" quantity="270.12" label="270.12"/>
 <ColorMapEntry color="#ACFF6A" quantity="270.24" label="270.24"/>
 <ColorMapEntry color="#AEFF68" quantity="270.36" label="270.36"/>
@@ -3017,7 +3017,7 @@
 <ColorMapEntry color="#900000" quantity="299.64" label="299.64"/>
 <ColorMapEntry color="#9D0003" quantity="299.76" label="299.76"/>
 <ColorMapEntry color="#9B0003" quantity="299.88" label="299.88"/>
-<ColorMapEntry color="#990003" quantity="300" label="300"/>
+<ColorMapEntry color="#990003" quantity="300" label="300 K"/>
             </ColorMap>
            </RasterSymbolizer>
          </Rule>
@@ -3033,7 +3033,7 @@
           <RasterSymbolizer>
             <Opacity>1.0</Opacity>
             <ColorMap>
-<ColorMapEntry color="#AAFF6F" quantity="270" label="270"/>
+<ColorMapEntry color="#AAFF6F" quantity="270" label="270 K"/>
 <ColorMapEntry color="#ABFF6C" quantity="270.12" label="270.12"/>
 <ColorMapEntry color="#ACFF6A" quantity="270.24" label="270.24"/>
 <ColorMapEntry color="#AEFF68" quantity="270.36" label="270.36"/>
@@ -3283,7 +3283,7 @@
 <ColorMapEntry color="#900000" quantity="299.64" label="299.64"/>
 <ColorMapEntry color="#9D0003" quantity="299.76" label="299.76"/>
 <ColorMapEntry color="#9B0003" quantity="299.88" label="299.88"/>
-<ColorMapEntry color="#990003" quantity="300" label="300"/>
+<ColorMapEntry color="#990003" quantity="300" label="300 K"/>
             </ColorMap>
            </RasterSymbolizer>
          </Rule>
@@ -3299,7 +3299,7 @@
           <RasterSymbolizer>
             <Opacity>1.0</Opacity>
             <ColorMap>
-<ColorMapEntry color="#AAFF6F" quantity="270" label="270"/>
+<ColorMapEntry color="#AAFF6F" quantity="270" label="270 K"/>
 <ColorMapEntry color="#ABFF6C" quantity="270.12" label="270.12"/>
 <ColorMapEntry color="#ACFF6A" quantity="270.24" label="270.24"/>
 <ColorMapEntry color="#AEFF68" quantity="270.36" label="270.36"/>
@@ -3549,7 +3549,7 @@
 <ColorMapEntry color="#900000" quantity="299.64" label="299.64"/>
 <ColorMapEntry color="#9D0003" quantity="299.76" label="299.76"/>
 <ColorMapEntry color="#9B0003" quantity="299.88" label="299.88"/>
-<ColorMapEntry color="#990003" quantity="300" label="300"/>
+<ColorMapEntry color="#990003" quantity="300" label="300 K"/>
             </ColorMap>
            </RasterSymbolizer>
          </Rule>
@@ -3565,7 +3565,7 @@
           <RasterSymbolizer>
             <Opacity>1.0</Opacity>
             <ColorMap>
-<ColorMapEntry color="#AAFF6F" quantity="270" label="270"/>
+<ColorMapEntry color="#AAFF6F" quantity="270" label="270 K"/>
 <ColorMapEntry color="#ABFF6C" quantity="270.12" label="270.12"/>
 <ColorMapEntry color="#ACFF6A" quantity="270.24" label="270.24"/>
 <ColorMapEntry color="#AEFF68" quantity="270.36" label="270.36"/>
@@ -3815,7 +3815,7 @@
 <ColorMapEntry color="#900000" quantity="299.64" label="299.64"/>
 <ColorMapEntry color="#9D0003" quantity="299.76" label="299.76"/>
 <ColorMapEntry color="#9B0003" quantity="299.88" label="299.88"/>
-<ColorMapEntry color="#990003" quantity="300" label="300"/>
+<ColorMapEntry color="#990003" quantity="300" label="300 K"/>
             </ColorMap>
            </RasterSymbolizer>
          </Rule>

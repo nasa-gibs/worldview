@@ -15,7 +15,7 @@
           <RasterSymbolizer>
             <Opacity>1.0</Opacity>
             <ColorMap>
-              <ColorMapEntry color="#DCE3F7" quantity="0" label="0"/>
+              <ColorMapEntry color="#DCE3F7" quantity="0" label="0 mm/day"/>
               <ColorMapEntry color="#B9BCF3" quantity="0.12" label="0.12"/>
               <ColorMapEntry color="#B8BDFD" quantity="0.24" label="0.24"/>
               <ColorMapEntry color="#AFB6FC" quantity="0.36" label="0.36"/>
@@ -266,7 +266,7 @@
               <ColorMapEntry color="#F9F9F9" quantity="29.76" label="29.76"/>
               <ColorMapEntry color="#FAFAFA" quantity="29.88" label="29.88"/>
               <ColorMapEntry color="#FBFBFB" quantity="30" label="30"/>
-              <ColorMapEntry color="#FFFFFF" quantity="100" label="100"/>
+              <ColorMapEntry color="#FFFFFF" quantity="100" label="> 30 mm/day"/>
              </ColorMap>
            </RasterSymbolizer>
          </Rule>
@@ -282,7 +282,7 @@
           <RasterSymbolizer>
             <Opacity>1.0</Opacity>
             <ColorMap>
-              <ColorMapEntry color="#DCE3F7" quantity="0" label="0"/>
+              <ColorMapEntry color="#DCE3F7" quantity="0" label="0 mm/day"/>
               <ColorMapEntry color="#B9BCF3" quantity="0.12" label="0.12"/>
               <ColorMapEntry color="#B8BDFD" quantity="0.24" label="0.24"/>
               <ColorMapEntry color="#AFB6FC" quantity="0.36" label="0.36"/>
@@ -533,7 +533,7 @@
               <ColorMapEntry color="#F9F9F9" quantity="29.76" label="29.76"/>
               <ColorMapEntry color="#FAFAFA" quantity="29.88" label="29.88"/>
               <ColorMapEntry color="#FBFBFB" quantity="30" label="30"/>
-              <ColorMapEntry color="#FFFFFF" quantity="100" label="100"/>
+              <ColorMapEntry color="#FFFFFF" quantity="100" label="> 30 mm/day"/>
             </ColorMap>
            </RasterSymbolizer>
          </Rule>
