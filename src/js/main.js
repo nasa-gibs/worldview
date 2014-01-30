@@ -73,7 +73,7 @@ $(function() {// Initialize "static" vars
 
         // If at the beginning of the day, wait on the previous day until GIBS
         // catches up (about three hours)
-        var initialDate = wv.util.today();
+        var initialDate = wv.util.now();
         if ( initialDate.getUTCHours() < 3 ) {
             initialDate.setUTCDate(initialDate.getUTCDate() - 1);
         }

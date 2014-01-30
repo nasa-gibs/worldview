@@ -117,6 +117,10 @@ module.exports = function(grunt) {
                 command: "PATH=python/bin:${PATH} bin/make-conf"
             },
 
+            update_gc: {
+                command: "DESTDIR='conf/gc' bin/fetch-gibs"
+            },
+
             // After removing JavaScript and CSS files that are no longer
             // need in a release build, there are a lot of empty directories.
             // Remove all of them.
@@ -411,6 +415,11 @@ module.exports = function(grunt) {
         "clean",
         "remove:conf_src",
         "exec:config",
+    ]);
+
+    grunt.registerTask("update-gc", [
+        "exec:update_gc",
+        "config"
     ]);
 
     grunt.registerTask("build", [

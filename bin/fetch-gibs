@@ -11,8 +11,8 @@
 #
 
 BASEDIR=$(dirname "$0")
-DESTDIR="$BASEDIR"/../build/gc
-[ "$BASEURL" ] || BASEURL="http://map1.vis.earthdata.nasa.gov"
+[ "DESTDIR" ]  || DESTDIR="$BASEDIR"/../build/gc
+[ "$BASEURL" ] || BASEURL="http://map2.vis.earthdata.nasa.gov"
 
 mkdir -p $DESTDIR
 curl "$BASEURL"/wmts-geo/wmts.cgi?request=GetCapabilities \

@@ -64,16 +64,19 @@ for filename in args:
         if "Dimension" in gc_layer:
             dimension = gc_layer["Dimension"]
             if dimension["ows:Identifier"] == "time":
-                values = dimension["Value"].split("/")
+                try:
+                    wv_layer["period"] = "daily"
+                    values = dimension["Value"].split("/")
 
-                # Layer is still actively being produced if the end date
-                # greater than yesterday
-                end_date = datetime.strptime(values[1], "%Y-%m-%d")
-                yesterday = datetime.now() - timedelta(days=1)
-                wv_layer["startDate"] = values[0]
-                if end_date < yesterday:
-                    wv_layer["endDate"] = values[1]
-                wv_layer["period"] = "daily"
+                    # Layer is still actively being produced if the end date
+                    # greater than yesterday
+                    end_date = datetime.strptime(values[1], "%Y-%m-%d")
+                    yesterday = datetime.now() - timedelta(days=1)
+                    wv_layer["startDate"] = values[0]
+                    if end_date < yesterday:
+                        wv_layer["endDate"] = values[1]
+                except ValueError:
+                    raise Exception("Invalid time: {0}".format(values))
 
         # Extract matrix set
         matrixSet = gc_layer["TileMatrixSetLink"]["TileMatrixSet"]
