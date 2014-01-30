@@ -162,10 +162,10 @@ wv.util = (function(self) {
         // Use default of midnight if time is not specified
         if ( dateTimeArr.length > 1 ) {
             var hhmmss = dateTimeArr[1].split(/[:\.Z]/);
-            var hour = hhmmss[0] || 0;
-            var minute = hhmmss[1] || 0;
-            var second = hhmmss[2] || 0;
-            var millisecond = hhmmss[3] || 0;
+            hour = hhmmss[0] || 0;
+            minute = hhmmss[1] || 0;
+            second = hhmmss[2] || 0;
+            millisecond = hhmmss[3] || 0;
         }
         var date = new Date(Date.UTC(year, month, day, hour, minute, second,
                 millisecond));
