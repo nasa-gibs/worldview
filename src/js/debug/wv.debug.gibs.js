@@ -20,15 +20,14 @@ wv.debug = wv.debug || {};
  */
 wv.debug.gibs = wv.debug.gibs || function(ui, models, config) {
 
-    var self = {};
-
     var init = function() {
-        ui.sidebar.collapse();
-        ui.dateSliders.collapse();
-        $(".olControlScaleLineCustom").hide();
-        $(".olControlMousePosition").hide();
-
-        render();
+        if ( config.parameters.debugGIBS ) {
+            ui.sidebar.collapse();
+            ui.dateSliders.collapse();
+            $(".olControlScaleLineCustom").hide();
+            $(".olControlMousePosition").hide();
+            render();
+        }
     };
 
     var render = function() {
@@ -115,6 +114,5 @@ wv.debug.gibs = wv.debug.gibs || function(ui, models, config) {
     };
 
     init();
-    return self;
 };
 

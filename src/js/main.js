@@ -26,6 +26,8 @@ $(function() {// Initialize "static" vars
         // keyed by parameter name
         config.parameters = wv.util.fromQueryString(location.search);
 
+        wv.debug.map(config);
+
     	// set up storage and decide what to show
     	if ( wv.util.browser.localStorage ) {
             try {
@@ -246,9 +248,7 @@ $(function() {// Initialize "static" vars
                 Worldview.Tour.start(storageEngine, hideSplash, false);
             }
 
-            if ( config.parameters.debugGIBS ) {
-                wv.debug.gibs(ui, models, config);
-            };
+            wv.debug.gibs(ui, models, config);
 
             window.onbeforeunload = function() {
                 var events = events || {};

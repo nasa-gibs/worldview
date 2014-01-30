@@ -43,6 +43,7 @@
     "src/js/legacy/wv.legacy.palettes.js",
 
     "src/js/debug/wv.debug.gibs.js",
+    "src/js/debug/wv.debug.map.js",
 
     "src/js/Worldview.js",
     "src/js/Worldview/Support.js",
