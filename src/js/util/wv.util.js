@@ -144,12 +144,35 @@ wv.util = (function(self) {
      * @return {Date} converted string as a date object, throws an exception if
      * the string is invalid
      */
-    self.parseDateUTC = function(str) {
-        var d = new Date(Date.parse(str + "T00:00Z"));
-        if ( _.isNaN(d.getTime()) ) {
-            throw new Error("Invalid date: " + str);
+    self.parseDateUTC = function(dateAsString) {
+        var dateTimeArr = dateAsString.split(/T/);
+
+        var yyyymmdd = dateTimeArr[0].split("-");
+
+        // Parse elements of date and time
+        var year = yyyymmdd[0];
+        var month = yyyymmdd[1] - 1;
+        var day = yyyymmdd[2];
+
+        var hour = 0;
+        var minute = 0;
+        var second = 0;
+        var millisecond = 0;
+
+        // Use default of midnight if time is not specified
+        if ( dateTimeArr.length > 1 ) {
+            var hhmmss = dateTimeArr[1].split(/[:\.Z]/);
+            var hour = hhmmss[0] || 0;
+            var minute = hhmmss[1] || 0;
+            var second = hhmmss[2] || 0;
+            var millisecond = hhmmss[3] || 0;
         }
-        return d;
+        var date = new Date(Date.UTC(year, month, day, hour, minute, second,
+                millisecond));
+        if ( isNaN(date.getTime()) ) {
+            throw new Error("Invalid date: " + dateAsString);
+        }
+        return date;
     };
 
     /**
