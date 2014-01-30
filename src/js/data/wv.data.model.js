@@ -4,14 +4,23 @@
  * This code was originally developed at NASA/Goddard Space Flight Center for
  * the Earth Science Data and Information System (ESDIS) project.
  *
- * Copyright (C) 2013 United States Government as represented by the
+ * Copyright (C) 2013 - 2014 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
 
-Worldview.namespace("DataDownload");
+/**
+ * @module wv.data
+ */
+var wv = wv || {};
+wv.data = wv.data || {};
 
-Worldview.DataDownload.Model = function(config, spec) {
+/**
+ * Undocumented.
+ *
+ * @class wv.data.model
+ */
+wv.data.model = wv.data.model || function(models, config) {
 
     var NO_PRODUCT_ID = "__NO_PRODUCT";
     var NO_PRODUCT = {
@@ -25,7 +34,7 @@ Worldview.DataDownload.Model = function(config, spec) {
         epsg: null,
         time: null
     };
-    var layersModel = spec.layersModel;
+    var layersModel = models.layers;
     var queryExecuting = false;
     var nextQuery = null;
 
@@ -79,15 +88,24 @@ Worldview.DataDownload.Model = function(config, spec) {
 
     self.selectedProduct = null;
     self.selectedGranules = {};
-    self.layers = [];
     self.prefer = "science";
 
     self.granules = [];
+
+    // FIXME: This is hackish at the moment, but bridges well from the older
+    // code to the newer stuff
+    self.layers = [];
     self.projection = null;
     self.crs = null;
     self.time = null;
 
     var init = function() {
+        models.layers.events.on("change", updateLayers);
+        models.proj.events.on("select", updateProjection);
+        models.date.events.on("select", updateDate);
+        updateLayers();
+        updateProjection();
+        updateDate();
     };
 
     /**
@@ -170,10 +188,10 @@ Worldview.DataDownload.Model = function(config, spec) {
 
         // Add not available to the end if it exists by removing it and
         // re-adding
-        if ( products["__NO_PRODUCT"] ) {
-            var x = products["__NO_PRODUCT"];
-            delete products["__NO_PRODUCT"];
-            products["__NO_PRODUCT"] = x;
+        if ( products.__NO_PRODUCT ) {
+            var x = products.__NO_PRODUCT;
+            delete products.__NO_PRODUCT;
+            products.__NO_PRODUCT = x;
         }
         return products;
     };
@@ -202,22 +220,6 @@ Worldview.DataDownload.Model = function(config, spec) {
             if ( productName ) {
                 query();
             }
-        }
-    };
-
-    self.update = function(newState) {
-        var oldState = state;
-        state = newState;
-        if ( oldState.layersString !== state.layersString ) {
-            updateLayers();
-        }
-        if ( oldState.crs !== state.crs ) {
-            updateProjection();
-        }
-        if ( !oldState.time ||
-                oldState.time.getTime() !== state.time.getTime() ) {
-            self.time = state.time;
-            query();
         }
     };
 
@@ -293,10 +295,9 @@ Worldview.DataDownload.Model = function(config, spec) {
             throw Error("Product not defined: " + self.selectedProduct);
         }
 
-        var handlerFactory =
-                Worldview.DataDownload.Handler.getByName(productConfig.handler);
-
+        var handlerFactory = wv.data.handler.getByName(productConfig.handler);
         var handler = handlerFactory(config, self);
+
         handler.events.on("query", function() {
             self.events.trigger(self.EVENT_QUERY);
         }).on("results", function(results) {
@@ -339,25 +340,24 @@ Worldview.DataDownload.Model = function(config, spec) {
     };
 
     var updateLayers = function() {
-        if ( !state.layers ) {
-            return;
-        }
         self.layers = [];
         var foundSelected = false;
-        $.each(state.layers, function(index, layer) {
-            var id = layer;
-            var layerName = config.layers[layer].title;
-            var description = config.layers[layer].subtitle;
-            var productName = config.layers[layer].product;
-            self.layers.push({
-                id: id,
-                name: layerName,
-                description: description,
-                product: productName
+        _.each(models.layers.forProjection(), function(type) {
+            _.each(type, function(layer) {
+                var id = layer.id;
+                var layerName = layer.title;
+                var description = layer.subtitle;
+                var productName = layer.product;
+                self.layers.push({
+                    id: id,
+                    name: layerName,
+                    description: description,
+                    product: productName
+                });
+                if ( productName === self.selectedProduct ) {
+                    foundSelected = true;
+                }
             });
-            if ( productName === self.selectedProduct ) {
-                foundSelected = true;
-            }
         });
         if ( !foundSelected ) {
             self.selectProduct(null);
@@ -394,24 +394,28 @@ Worldview.DataDownload.Model = function(config, spec) {
     };
 
     var updateProjection = function() {
-        if ( !state.crs ) {
-            return;
-        }
-        self.projection = state.projection;
-        self.crs = state.crs;
+        self.projection = models.proj.selected.id;
+        self.crs = models.proj.selected.crs;
         self.events.trigger("projectionUpdate");
         query();
         //self.selectProduct(null);
     };
 
+    var updateDate = function() {
+        self.time = models.date.selected;
+        query();
+    };
+
     var findAvailableProduct = function() {
         var foundProduct = null;
+        var list = models.layers.active.baselayers.concat(
+            models.layers.active.overlays
+        );
 
         // Find the top most layer that has a product entry in ECHO
-        for ( var i = state.layers.length - 1; i >= 0; i-- ) {
-            var layerName = state.layers[i];
-            if ( config.layers[layerName].product) {
-                foundProduct = config.layers[layerName].product;
+        for ( var i = list.length - 1; i >= 0; i-- ) {
+            if ( list[i].product ) {
+                foundProduct = list[i].product;
             }
         }
         return foundProduct;

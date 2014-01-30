@@ -169,9 +169,9 @@ buster.testCase("wv.proj.change", {
         this.models.proj.select("arctic");
         this.models.date.select(new Date(Date.UTC(2013, 0, 1)));
         buster.assert.calledWith(this.replace,
-            "overlays", "arctic_coastlines_3413", "arctic_coastlines");
+            "arctic_coastlines_3413", "arctic_coastlines");
         buster.assert.calledWith(this.replace,
-            "overlays", "arctic_graticule_3413", "arctic_graticule");
+            "arctic_graticule_3413", "arctic_graticule");
     },
 
     "Change from old to new switches layers": function() {
@@ -180,9 +180,9 @@ buster.testCase("wv.proj.change", {
         var model = wv.proj.change(this.models);
         this.models.date.select(new Date(Date.UTC(2014, 0, 1)));
         buster.assert.calledWith(this.replace,
-            "overlays", "arctic_coastlines", "arctic_coastlines_3413");
+            "arctic_coastlines", "arctic_coastlines_3413");
         buster.assert.calledWith(this.replace,
-            "overlays", "arctic_graticule", "arctic_graticule_3413");
+            "arctic_graticule", "arctic_graticule_3413");
     }
 
 });

@@ -132,13 +132,20 @@ buster.testCase("wv.util", {
         });
     },
 
-    "URL with build nonce": function() {
-        buster.assert.equals(wv.brand.url("foo"), "foo?v=@BUILD_NONCE@");
+    "wrap: Correclty invokes function": function() {
+        var func = this.stub().returns("answer");
+        var wrap = wv.util.wrap(func);
+        var answer = wrap(1, 2);
+        buster.assert.equals(answer, "answer");
+        buster.assert.calledWith(func, 1, 2);
     },
 
-    "URL build build nonce, existing query string": function() {
-        buster.assert.equals(wv.brand.url("foo?bar=1"),
-                "foo?bar=1&v=@BUILD_NONCE@");
+    "wrap: Invokes error handler on exception": function() {
+        var func = this.stub().throws();
+        this.stub(wv.util, "error");
+        var wrap = wv.util.wrap(func);
+        wrap();
+        buster.assert.called(wv.util.error);
     }
 
 });

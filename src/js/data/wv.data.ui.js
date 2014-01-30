@@ -1,25 +1,25 @@
-
 /*
  * NASA Worldview
  *
  * This code was originally developed at NASA/Goddard Space Flight Center for
  * the Earth Science Data and Information System (ESDIS) project.
  *
- * Copyright (C) 2013 United States Government as represented by the
+ * Copyright (C) 2013 - 2014 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
 
-Worldview.namespace("Widget");
+var wv = wv || {};
+wv.data = wv.data || {};
 
-Worldview.Widget.DataDownload = function(config, spec) {
+wv.data.ui = wv.data.ui || function(models, config, maps) {
 
     var HTML_WIDGET_INACTIVE = "<img src='images/camera.png'></img>";
     var HTML_WIDGET_ACTIVE = "<img src='images/cameraon.png'></img>";
 
     var queryActive = false;
     var list = null;
-    var model = spec.model;
+    var model = models.data;
     var mapController = null;
     var selectionListPanel = null;
     var downloadListPanel = null;
@@ -51,11 +51,13 @@ Worldview.Widget.DataDownload = function(config, spec) {
     };
 
     self.updateComponent = function(queryString) {
+        /*
         try {
             model.update(REGISTRY.getState());
         } catch ( error ) {
             Worldview.error("Internal error", error);
         }
+        */
     };
 
     self.getValue = function() {
@@ -71,6 +73,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
     };
 
     self.loadFromQuery = function(queryString) {
+        /*
         var query = Worldview.queryStringToObject(queryString);
         if ( query.dataDownload ) {
             try {
@@ -81,10 +84,11 @@ Worldview.Widget.DataDownload = function(config, spec) {
                 model.activate();
             }
         }
+        */
     };
 
     self.render = function() {
-        var $container = $(spec.selector).empty()
+        var $container = $(self.selector).empty()
             .addClass(self.id + "list")
             .addClass("bank");
         var $actionButton = $("<input></input>")
@@ -127,22 +131,25 @@ Worldview.Widget.DataDownload = function(config, spec) {
         var $header = $("<h3></h3>")
             .addClass("head")
             .html(title);
+
+        // FIXME: Why is this needed?
+        var $productSelector;
         if ( !value.notSelectable ) {
             var $selectedCount = $("<i></i>")
                 .attr("id", key + "dynamictext")
                 .addClass("dynamic")
                 .html("0 selected");
-            var $productSelector = $("<input type='radio'></input>")
+            $productSelector = $("<input type='radio'></input>")
                 .attr("value", key)
                 .attr("data-product", key);
 
             $header.prepend($productSelector).append($selectedCount);
         }
         if ( model.selectedProduct === key ) {
-                $productSelector.each(function(){
-                    this.checked = true;
-                });
-            }
+            $productSelector.each(function() {
+                this.checked = true;
+            });
+        }
         var $contentDlGroup = $("<div class='dl-group'></div>")
             .attr("value", key)
             .attr("data-product", key)
@@ -236,7 +243,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
     var onActivate = function() {
         if ( !mapController ) {
             mapController =
-                Worldview.DataDownload.MapController(model, spec.maps, config);
+                Worldview.DataDownload.MapController(model, maps, config);
         }
         onLayerUpdate();
         updateSelection();
@@ -304,6 +311,7 @@ Worldview.Widget.DataDownload = function(config, spec) {
         queryActive = false;
         wv.ui.indicator.hide();
         if ( status !== "abort" ) {
+            console.error("Unable to search", status, error);
             wv.ui.notify("Unable to search at this time. Please try " +
                     "again later");
         }

@@ -3,73 +3,23 @@ $(function() {// Initialize "static" vars
     var main = function() {
         var configURI = "conf/wv.json?v=" + wv.brand.BUILD_NONCE;
         var promise = $.getJSON(configURI)
-            .done(init)
+            .done(wv.util.wrap(init))
             .error(wv.util.error);
         wv.ui.indicator.delayed(promise, 2000);
     };
 
     var storageEngine;
 
-    // FIXME: Make this more elegant
     var init = function(config) {
-        try {
-            _init(config);
-        } catch ( error ) {
-            wv.util.error(error);
-        }
-    };
-
-    var _init = function(config) {
+        // Export for debugging
         wv.config = config;
 
         // Convert all parameters found in the query string to an object,
         // keyed by parameter name
         config.parameters = wv.util.fromQueryString(location.search);
 
+        // Switch to map2 for debugging if specified
         wv.debug.map(config);
-
-    	// set up storage and decide what to show
-    	if ( wv.util.browser.localStorage ) {
-            try {
-                storageEngine = YAHOO.util.StorageManager.get(
-                    YAHOO.util.StorageEngineHTML5.ENGINE_NAME,
-                    YAHOO.util.StorageManager.LOCATION_LOCAL,
-                    {
-                        force: false,
-                        order: [
-                            YAHOO.util.StorageEngineHTML5
-                        ]
-                    });
-            } catch(e) {
-                alert("No supported storage mechanism present");
-                storageEngine = false;
-            }
-        }
-
-        var hideSplash, eventsCollapsed, lastVisit;
-        if(storageEngine) {
-            storageEngine.subscribe(storageEngine.CE_READY, function() {
-                hideSplash = storageEngine.getItem('hideSplash');
-                eventsCollapsed = storageEngine.getItem('eventsCollapsed');
-                lastVisit = storageEngine.getItem('lastVisit');
-            });
-
-            if(!lastVisit) {
-            	lastVisit = Date.now();
-            }
-            storageEngine.setItem('lastVisit', Date.now());
-            // FIXME: Hacking in for now
-            Worldview.storageEngine = storageEngine;
-        }
-        //var lastVisitObj = new Date(lastVisit);
-        var lastVisitObj = new Date("2013-04-07T00:00:00-04:00"); // FIXME
-
-        // Features that are important for debugging but are not necessary
-        // for Worldview to opeerate properly
-        debuggingFeatures(config);
-
-        // Models
-        var models = {};
 
         // If at the beginning of the day, wait on the previous day until GIBS
         // catches up (about three hours)
@@ -77,16 +27,21 @@ $(function() {// Initialize "static" vars
         if ( initialDate.getUTCHours() < 3 ) {
             initialDate.setUTCDate(initialDate.getUTCDate() - 1);
         }
-        models.proj = wv.proj.model(config);
+
+        // Models
+        var models = {};
+
+        models.proj     = wv.proj.model(config);
         models.palettes = wv.palettes.model(models, config);
-        models.layers = wv.layers.model(models, config);
-        models.date = wv.date.model({ initial: initialDate });
-        var dataDownloadModel = Worldview.DataDownload.Model(config, {
-            layersModel: models.layers
-        });
-        models.dataDownload = dataDownloadModel;
-        models.link = wv.link.model(config);
+        models.layers   = wv.layers.model(models, config);
+        models.date     = wv.date.model({ initial: initialDate });
+        models.data     = wv.data.model(models, config);
+        models.link     = wv.link.model(config);
+
+        // Export for debugging
         wv.models = models;
+
+
         var updateDateRange = function() {
             models.date.range(models.layers.dateRange());
         };
@@ -96,20 +51,11 @@ $(function() {// Initialize "static" vars
                 .on("update", updateDateRange);
         updateDateRange();
 
-        // Error handlers
-        models.palettes.events.on("error", error);
-
-        // These are only convienence handles to important objects used
-        // for console debugging. Code should NOT reference these as they
-        // are subject to change or removal.
-        Worldview.config = config;
-        Worldview.models = models;
-
         // Legacy REGISTRY based widgets
-        var legacySwitch = wv.legacy.switch_(models.proj);
-        var legacyBank = wv.legacy.bank(models.layers);
-        var legacyDate = wv.legacy.date(models.date);
-        var legacyPalettes = wv.legacy.palettes(models.palettes);
+        var legacySwitch    = wv.legacy.switch_(models.proj);
+        var legacyBank      = wv.legacy.bank(models.layers);
+        var legacyDate      = wv.legacy.date(models.date);
+        var legacyPalettes  = wv.legacy.palettes(models.palettes);
         var map = Worldview.Widget.WorldviewMap("map", config);
 
         var mapBridge = {
@@ -160,7 +106,6 @@ $(function() {// Initialize "static" vars
                 m: map,
                 config: config
             });
-            var crs = new Worldview.Widget.CRS(config);
 
             // collapse events if worldview is being loaded via permalink
             if(window.location.search) {
@@ -175,12 +120,8 @@ $(function() {// Initialize "static" vars
         		lastVisit: lastVisitObj
          	});
             */
-            var dataDownload = Worldview.Widget.DataDownload(config, {
-                selector: "#DataDownload",
-                model: dataDownloadModel,
-                maps: map.maps,
-            });
-            dataDownload.render();
+            ui.data = wv.data.ui(models, config, map.maps);
+            ui.data.render();
 
             ui.link = wv.link.ui(models);
 
@@ -193,46 +134,41 @@ $(function() {// Initialize "static" vars
             document.activeElement.blur();
             $("input").blur();
             $("#eventsHolder").hide();
+
             // Wirings
             ui.sidebar.events
-                .on("dataDownloadSelect", function() {
-                    dataDownloadModel.activate();
-                })
-                .on("dataDownloadUnselect", function() {
-                    dataDownloadModel.deactivate();
-                });
-            dataDownloadModel.events
+                .on("dataDownloadSelect", models.data.activate)
+                .on("dataDownloadUnselect", models.data.deactivate);
+
+            models.data.events
                 .on("activate", function() {
                     ui.sidebar.selectTab("download");
+                })
+                .on("queryResults", function() {
+                    ui.data.onViewChange(map.maps.map);
                 });
             map.maps.events
                 .on("moveEnd", function(map) {
-                    dataDownload.onViewChange(map);
+                    ui.data.onViewChange(map);
                 })
                 .on("zoomEnd", function(map) {
-                    dataDownload.onViewChange(map);
-                });
-            dataDownloadModel.events
-                .on("queryResults", function() {
-                    dataDownload.onViewChange(map.maps.map);
+                    ui.data.onViewChange(map);
                 });
 
     	    // Register event listeners
     	    REGISTRY.addEventListener("map", "imagedownload");
             REGISTRY.addEventListener("time",
-                    "map", "imagedownload", crs.containerId,
-                    dataDownload.containerId);
+                    "map", "imagedownload",
+                    ui.data.containerId);
             REGISTRY.addEventListener("switch",
                     "map", "products", "selectorbox", "imagedownload", "camera",
-                    crs.containerId, dataDownload.containerId);
+                    ui.data.containerId);
             REGISTRY.addEventListener("products",
                     "map", "selectorbox", "imagedownload", "palettes",
-                    dataDownload.containerId);
+                    ui.data.containerId);
             REGISTRY.addEventListener("selectorbox","products");
             REGISTRY.addEventListener("camera","imagedownload");
             REGISTRY.addEventListener("palettes","map","camera","products");
-            REGISTRY.addEventListener(crs.containerId, "imagedownload");
-
 
             // Console notifications
             if ( wv.brand.release() ) {
@@ -241,36 +177,13 @@ $(function() {// Initialize "static" vars
             } else {
                 console.warn("Development version");
             }
-
-            // Do not start the tour if coming in via permalink or if local
-            // storage is not available
-            if ( !window.location.search && storageEngine ) {
-                Worldview.Tour.start(storageEngine, hideSplash, false);
-            }
-
             wv.debug.gibs(ui, models, config);
-
-            window.onbeforeunload = function() {
-                var events = events || {};
-                if ( storageEngine && events ) {
-       	            storageEngine.setItem('eventsCollapsed', events.isCollapsed);
-       	        }
-          	};
+            wv.tour.introduction();
       	}).fail(wv.util.error);
     };
 
+    /*
     var debuggingFeatures = function(config) {
-        // Allow the current day to be overridden
-        if ( config.parameters.now ) {
-            try {
-                var now = Date.parseTimestampUTC(config.parameters.now);
-                Worldview.overrideNow(now);
-                console.warn("Overriding now: " + now.toISOString());
-            } catch ( error ) {
-                console.error("Invalid now: " + query.now, error);
-            }
-        }
-
         // Install a black palette which can be used to find "holes" in
         // LUT mappings.
         if ( config.parameters.debugPalette ) {
@@ -288,16 +201,9 @@ $(function() {// Initialize "static" vars
             Worldview.error("No error -- this is a test");
         }
     };
+    */
 
-    var error = function() {
-        wv.util.error.apply(null, arguments);
-    };
-
-    try {
-        main();
-    } catch ( cause ) {
-        wv.util.error(cause);
-    }
+    wv.util.wrap(main)();
 
 });
 

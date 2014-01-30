@@ -127,12 +127,7 @@ wv.util = (function(self) {
      * exception if the string is invalid.
      */
     self.parseTimestampUTC = function(str) {
-        str = ( str.endsWith("Z") ) ? str : str + "Z";
-        var d = new Date(Date.parse(str));
-        if ( _.isNaN(d.getTime()) ) {
-            throw new Error("Invalid timestamp: " + str);
-        }
-        return d;
+        return self.parseDateUTC(str);
     };
 
     /**
@@ -378,6 +373,23 @@ wv.util = (function(self) {
         }
         promise.fail(wv.util.error);
         return promise;
+    };
+
+    /**
+     * Wraps a function in a try/catch block that invokes wv.util.error
+     * if an exception is thrown.
+     *
+     * @param {function} func the function to wrap
+     * @return the function wrapped in a try/catch block.
+     */
+    self.wrap = function(func) {
+        return function() {
+            try {
+                return func.apply(func, arguments);
+            } catch ( error ) {
+                wv.util.error(error);
+            }
+        };
     };
 
     return self;

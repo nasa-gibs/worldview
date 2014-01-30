@@ -113,12 +113,29 @@ wv.date.model = wv.date.model || function(spec) {
                 wv.util.warn("Invalid date: " + query.time + ": " + error);
             }
         }
+        if ( query.now ) {
+            try {
+                var now = wv.util.parseDateUTC(query.now);
+                wv.util.now = function() {
+                    return now;
+                };
+                wv.util.warn("Overriding now: " + now.toISOString());
+                self.range({ start: self.start, end: self.end });
+            } catch ( error ) {
+                console.error("Invalid now: " + query.now, error);
+            }
+        }
     };
 
     self.range = function(range) {
         if ( range ) {
             self.start = range.start;
             self.end = range.end;
+            if ( wv.util.clearTimeUTC(self.end) > wv.util.today() ) {
+                self.end = wv.util.today();
+            } else {
+                self.end = range.end;
+            }
         } else {
             self.start = null;
             self.end = null;

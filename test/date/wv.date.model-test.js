@@ -56,12 +56,12 @@ buster.testCase("wv.date.model", {
     "Date after end date selects end date": function() {
         var model = wv.date.model(this.config);
         model.range({
-            start: wv.util.parseDateUTC("2013-01-01"),
-            end: wv.util.parseDateUTC("2013-12-31")
+            start: wv.util.parseDateUTC("2012-01-01"),
+            end: wv.util.parseDateUTC("2012-01-31")
         });
-        model.select(wv.util.parseDateUTC("2014-03-15"));
+        model.select(wv.util.parseDateUTC("2012-02-01"));
         buster.assert.equals(wv.util.toISOStringDate(model.selected),
-            "2013-12-31");
+            "2012-01-31");
     },
 
     "To permalink": function() {
@@ -90,6 +90,22 @@ buster.testCase("wv.date.model", {
         date.fromPermalink("time=X");
         buster.assert.equals(date.selected, this.now);
         buster.assert.calledOnce(wv.util.warn);
+    },
+
+    "Start/End times set to null if range is null": function() {
+        var date = wv.date.model(this.config);
+        date.range(null);
+        buster.assert.equals(date.start, null);
+        buster.assert.equals(date.end, null);
+    },
+
+    "End date set to today if end range is later": function() {
+        var date = wv.date.model(this.config);
+        date.range({
+            start: wv.util.parseDateUTC("2012-01-01"),
+            end:   wv.util.parseDateUTC("2013-04-01")
+        });
+        buster.assert.equals(date.end, wv.util.parseDateUTC("2013-01-15"));
     }
 
 });

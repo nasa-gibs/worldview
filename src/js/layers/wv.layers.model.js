@@ -128,6 +128,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
         hidden = hidden || false;
         self.visible[id] = !hidden;
         self.events.trigger("add", layer);
+        self.events.trigger("change");
     };
 
     self.remove = function(id) {
@@ -137,6 +138,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
             self.active[layer.group].splice(index, 1);
             delete self.visible[id];
             self.events.trigger("remove", layer);
+            self.events.trigger("change");
         }
     };
 
@@ -152,6 +154,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
         delete self.visible[idOld];
         self.visible[idNew] = true;
         self.events.trigger("update");
+        self.events.trigger("change");
     };
 
     self.clear = function(proj) {
@@ -176,6 +179,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
         self.active[group].splice(oldIndex, 1);
         self.active[group].push(layer);
         self.events.trigger("update", layer, self.active[layer.group].length - 1);
+        self.events.trigger("change");
     };
 
     self.moveBefore = function(source, target) {
@@ -197,6 +201,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
         }
         self.active[group].splice(sourceIndex, 1);
         self.events.trigger("update", sourceLayer, targetIndex);
+        self.events.trigger("change");
     };
 
     self.setVisibility = function(id, visible) {

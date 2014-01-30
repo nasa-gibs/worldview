@@ -54,6 +54,9 @@ wv.util.events = wv.util.events || function() {
      * @return {wv.util.events} this object useful for chaining.
      */
     self.on = function(event, callback) {
+        if ( !callback ) {
+            throw new Error("No listener specified");
+        }
         var listeners = events[event];
         if ( !listeners ) {
             listeners = [];

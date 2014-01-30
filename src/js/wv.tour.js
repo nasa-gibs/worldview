@@ -1,65 +1,61 @@
-Worldview.namespace("Tour");
+/*
+ * NASA Worldview
+ *
+ * This code was originally developed at NASA/Goddard Space Flight Center for
+ * the Earth Science Data and Information System (ESDIS) project.
+ *
+ * Copyright (C) 2013 - 2014 United States Government as represented by the
+ * Administrator of the National Aeronautics and Space Administration.
+ * All Rights Reserved.
+ */
 
-(function(ns) {
+/**
+ * @module @wv
+ */
+var wv = wv || {};
 
-    // ns = Worldview.Tour
+$(function() {
+    $("#wv-tour").click(function() {
+        wv.tour.start();
+    });
+});
+
+(function(self) {
 
     // Keep these around in a closure so we can dispose of them as needed
     var conclusionPanel = null;
     var splashOverlay = null;
 
+    self.introduction = function() {
+        // Don't start tour if coming in via a permalink
+        if ( window.location.search ) { return; }
+
+        // Tour does not work on IE 9 or below
+        if ( wv.util.browser.ie && wv.util.browser.version <= 9 ) { return; }
+
+        // Don't annoy with the tour if they cannot opt out in the future
+        if ( !wv.util.browser.localStorage ) { return ; }
+
+        // Don't show tour if the user has opted out
+        if ( wv.util.localStorage("hideSplash") ) { return; }
+
+        // Don't show tour on small screens
+        if ( !validScreenSize() ) { return; }
+
+        self.start(true);
+    };
+
     /**
      * Create the splash screen and tour panels and control iteration over them.
      */
-    ns.start = function(storageEngine, hideSplash, noDisable) {
+    self.start = function(introduction) {
         if ( wv.util.browser.ie && wv.util.browser.version <= 9) {
-            if (noDisable) {
-                wv.ui.unsupported("tour");
-            }
+            wv.ui.unsupported("tour");
             return;
         }
 
-        // FIXME: Hacking it for now
-        storageEngine = storageEngine || Worldview.storageEngine;
-
-        // determine screen size - don't show if too small
-        var viewWidth = $(window).width();
-        var viewHeight = $(window).height();
-        //console.log(viewWidth + " x " + viewHeight);
-
-        if(viewWidth < 768 || viewHeight < 680) {
-            if(noDisable) {
-                wv.ui.notify("Unfortunately the Worldview tour can only be viewed in larger web browser windows.");
-            }
-            return;
-        }
-
-        // set up storage and decide whether to show the splash
-//        var storageEngine;
-//        try {
-//            storageEngine = YAHOO.util.StorageManager.get(
-//                YAHOO.util.StorageEngineHTML5.ENGINE_NAME,
-//                YAHOO.util.StorageManager.LOCATION_LOCAL,
-//                {
-//                    force: false,
-//                    order: [
-//                        YAHOO.util.StorageEngineHTML5
-//                    ]
-//                });
-//        } catch(e) {
-//            alert("No supported storage mechanism present");
-//            storageEngine = false;
-//        }
-
-//        var hideSplash;
-//        if(storageEngine) {
-//            storageEngine.subscribe(storageEngine.CE_READY, function() {
-//                hideSplash = storageEngine.getItem('hideSplash');
-//            });
-//        }
-
-        // return if the user has disabled the splash
-        if(hideSplash && !noDisable) {
+        if ( !validScreenSize() ) {
+            wv.ui.notify("Unfortunately the Worldview tour can only be viewed in larger web browser windows.");
             return;
         }
 
@@ -74,9 +70,9 @@ Worldview.namespace("Tour");
         }
         splashOverlay = new YAHOO.widget.Panel("splash", { zIndex:1020, visible:false, modal:true, draggable:false,  } );
 
-		var finalRow = "";
-        if(!noDisable) {
-        	finalRow = "<td><p id='dontShowP' class=\"splash\"><input id='dontShowAgain' type='checkbox'>Do not show again</p></td>";
+        var finalRow = "";
+        if(introduction) {
+            finalRow = "<td><p id='dontShowP' class=\"splash\"><input id='dontShowAgain' type='checkbox'>Do not show again</p></td>";
         }
         var item = "<div class=\"splash\">"+
                        "<h3>Welcome to Worldview!</h3>"+
@@ -214,12 +210,12 @@ Worldview.namespace("Tour");
 
         var mapAnchor = document.getElementById("mapPanelTourAnchor");
         if(!mapAnchor) {
-        	//console.log("creating mapanchor");
-        	var owner = document.getElementById("map");
-        	mapAnchor = document.createElement("div");
-        	mapAnchor.setAttribute("id", "mapPanelTourAnchor");
-        	mapAnchor.setAttribute("style", "float:right; height:68px; right:14px; top:90px; width:36px; position:relative; z-index:-1");
-        	owner.appendChild(mapAnchor);
+            //console.log("creating mapanchor");
+            var owner = document.getElementById("map");
+            mapAnchor = document.createElement("div");
+            mapAnchor.setAttribute("id", "mapPanelTourAnchor");
+            mapAnchor.setAttribute("style", "float:right; height:68px; right:14px; top:90px; width:36px; position:relative; z-index:-1");
+            owner.appendChild(mapAnchor);
         }
 
 
@@ -255,9 +251,9 @@ Worldview.namespace("Tour");
         var repeatTour = function(e) {
             e.stopPropagation();
             $('#joyRideTipContent').joyride({adjustForPhone:false,
-            								 bordered:true,
-            								 includepage:true,
-            								 template : {'link':'<a href="#" class="joyride-close-tip">X</a>'},
+                                             bordered:true,
+                                             includepage:true,
+                                             template : {'link':'<a href="#" class="joyride-close-tip">X</a>'},
                                              postStepCallback : function (index, tip) {
                                                  if(index == 4) {
                                                      conclusionPanel.show();
@@ -290,11 +286,11 @@ Worldview.namespace("Tour");
             splashOverlay.hide();
 
             $('#joyRideTipContent').joyride({adjustForPhone:false,
-            								 bordered:true,
-            								 includepage:true,
-            								 template : {'link':'<a href="#" class="joyride-close-tip">X</a>'},
+                                             bordered:true,
+                                             includepage:true,
+                                             template : {'link':'<a href="#" class="joyride-close-tip">X</a>'},
                                              postStepCallback : function (index, tip) {
-                                             	//console.log("index = " + index);
+                                                //console.log("index = " + index);
                                                  if(index == 4) {
                                                      conclusionPanel.show();
                                                      conclusionPanel.center();
@@ -306,14 +302,14 @@ Worldview.namespace("Tour");
          * Toggle the value of the "hideSplash" flag.
          */
         var setDoNotShow = function() {
-            hideSplash = storageEngine.getItem('hideSplash');
-            storageEngine.setItem('hideSplash', !hideSplash);
+            var hideSplash = wv.util.localStorage('hideSplash');
+            wv.util.localStorage('hideSplash', !hideSplash);
         };
 
 
         $(window).resize(function() {
-        	 splashOverlay.center();
-        	 conclusionPanel.center();
+             splashOverlay.center();
+             conclusionPanel.center();
         });
 
         // assign events and start
@@ -329,7 +325,11 @@ Worldview.namespace("Tour");
         splashOverlay.center();
     };
 
-})(Worldview.Tour);
+    var validScreenSize = function() {
+        var viewWidth = $(window).width();
+        var viewHeight = $(window).height();
 
+        return viewWidth >= 768 && viewHeight >= 680;
+    };
 
-
+})(wv.tour = wv.tour || {});
