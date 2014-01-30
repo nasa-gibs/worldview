@@ -39,7 +39,9 @@ wv.legacy.switch_ = wv.legacy.switch_ || function(model) {
     };
 
     self.getValue = function() {
-        return decodeURIComponent(model.toPermalink());
+        return decodeURIComponent(model.toPermalink()) +
+                "&epsg=" + model.selected.epsg +
+                "&crs=" + model.selected.crs;
     };
 
     self.updateComponent = function() {};
