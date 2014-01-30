@@ -93,7 +93,7 @@ wv.link.model = wv.link.model || function(config) {
             link = DEBUG_SHORTEN_LINK;
             console.warn("Cannot shorten localhost, using", link);
         }
-        var promise = $.getJSON("service/wv.link/shorten.cgi" + mock +
+        var promise = $.getJSON("service/link/shorten.cgi" + mock +
                 "?url=" +  encodeURIComponent(link));
         promise.done(function(result) {
             shortenCache[link] = result;

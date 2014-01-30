@@ -134,7 +134,7 @@ module.exports = function(grunt) {
             },
 
             cgi_shorten: {
-                command: "chmod 755 build/worldview*/web/service/wv.link/shorten.cgi"
+                command: "chmod 755 build/worldview*/web/service/link/shorten.cgi"
             },
 
             // Create a tarball of the debug build with a version number and
