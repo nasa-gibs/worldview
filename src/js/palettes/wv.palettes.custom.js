@@ -27,6 +27,8 @@ wv.palettes.custom = wv.palettes.custom || function(config, models, layer) {
         canvas.height = 14;
         var promise = wv.palettes.loadCustom(config).done(loaded);
         wv.ui.indicator.delayed(promise);
+
+        models.layers.events.on("remove", onLayerRemoved);
     };
 
     var loaded = function(custom) {
@@ -42,6 +44,7 @@ wv.palettes.custom = wv.palettes.custom || function(config, models, layer) {
         // FIXME: SUPER HACK
         if ( wv.dialogs && wv.dialogs.customPalette ) {
             wv.dialogs.customPalette.destroy();
+            model.layers.events.off("remove", onLayerRemoved);
             wv.dialogs.customPalette = null;
         }
 
@@ -61,6 +64,7 @@ wv.palettes.custom = wv.palettes.custom || function(config, models, layer) {
             "<div id='palette-selector'></div>"
         ].join("\n"));
         dialog.hideEvent.subscribe(function(i) {
+            models.layers.events.off("remove", onLayerRemoved);
             if ( wv.dialogs.customPalette === dialog ) {
                 wv.dialogs.customPalette = null;
             }
@@ -134,6 +138,11 @@ wv.palettes.custom = wv.palettes.custom || function(config, models, layer) {
         }
     };
 
+    var onLayerRemoved = function(removedLayer) {
+        if ( layer.id === removedLayer.id ) {
+            dialog.hide();
+        }
+    };
 
     init();
     return self;
