@@ -243,7 +243,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
     };
 
     self.fromPermalink = function(queryString) {
-        var query = Worldview.queryStringToObject(queryString);
+        var query = wv.util.fromQueryString(queryString);
         var values = query.layers || query.products;
         if ( values ) {
             self.clear(models.proj.selected.id);
