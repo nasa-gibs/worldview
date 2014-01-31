@@ -61,9 +61,11 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
             showUnitHover(event);
         }).on("mouseout", function() {
             showUnitRange();
-        }).on("click", function() {
-            showCustomSelector();
         });
+
+        if ( layer.type !== "wms" && !layer.palette.single ) {
+            $colorbar.on("click", showCustomSelector);
+        }
         wv.palettes.colorbar(selector + " .wv-palettes-colorbar");
         model.events
             .on("add", updateLegend)
