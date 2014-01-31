@@ -27,9 +27,6 @@ $(function() {
         // keyed by parameter name
         config.parameters = wv.util.fromQueryString(location.search);
 
-        // Switch to map2 for debugging if specified
-        wv.debug.map(config);
-
         // If at the beginning of the day, wait on the previous day until GIBS
         // catches up (about three hours)
         var initialDate = wv.util.now();

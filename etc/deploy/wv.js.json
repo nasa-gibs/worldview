@@ -47,9 +47,6 @@
     "src/js/legacy/wv.legacy.date.js",
     "src/js/legacy/wv.legacy.palettes.js",
 
-    "src/js/debug/wv.debug.gibs.js",
-    "src/js/debug/wv.debug.map.js",
-
     "src/js/Worldview.js",
     "src/js/Worldview/Support.js",
     "src/js/Worldview/Scheduler.js",
@@ -86,6 +83,7 @@
     "src/js/Worldview/Widget/Map.js",
     "src/js/Worldview/Widget/WorldviewMap.js",
 
+    "src/js/wv.debug.js",
     "src/js/wv.tour.js",
     "src/js/wv.main.js"
 ]
