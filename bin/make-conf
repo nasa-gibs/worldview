@@ -22,14 +22,14 @@ rm -rf $DEBUG_DIR ; mkdir -p $DEBUG_DIR
 cp -r $BASE_DIR/../conf/* $BUILD_DIR
 
 "$BASE_DIR"/gibs2wv "$BUILD_DIR"/gc/*.xml \
-    > "$BUILD_DIR"/web/wv.main/gc.json
-"$BASE_DIR"/conf-cat --input-dir "$BUILD_DIR"/web/wv.main \
+    > "$BUILD_DIR"/web/main/gc.json
+"$BASE_DIR"/conf-cat --input-dir "$BUILD_DIR"/web/main \
     > "$DEBUG_DIR"/wv.json
-"$BASE_DIR"/conf-cat --input-dir "$BUILD_DIR"/web/wv.palettes/custom \
-    > "$DEBUG_DIR"/wv.palettes.json
-cp -r "$BUILD_DIR"/web/wv.palettes/rendered \
-    "$DEBUG_DIR"/wv.palettes
-"$BASE_DIR"/sld2wv --output-dir "$DEBUG_DIR"/wv.palettes \
+"$BASE_DIR"/conf-cat --input-dir "$BUILD_DIR"/web/palettes/custom \
+    > "$DEBUG_DIR"/palettes.json
+cp -r "$BUILD_DIR"/web/palettes/rendered \
+    "$DEBUG_DIR"/palettes
+"$BASE_DIR"/sld2wv --output-dir "$DEBUG_DIR"/palettes \
     "$BUILD_DIR"/sld/*.xml
 
 cp -r "$DEBUG_DIR" "$BASE_DIR"/../src 

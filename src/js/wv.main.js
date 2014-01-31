@@ -1,14 +1,23 @@
-$(function() {// Initialize "static" vars
+/*
+ * NASA Worldview
+ *
+ * This code was originally developed at NASA/Goddard Space Flight Center for
+ * the Earth Science Data and Information System (ESDIS) project.
+ *
+ * Copyright (C) 2013 - 2014 United States Government as represented by the
+ * Administrator of the National Aeronautics and Space Administration.
+ * All Rights Reserved.
+ */
+
+$(function() {
 
     var main = function() {
-        var configURI = "conf/wv.json?v=" + wv.brand.BUILD_NONCE;
+        var configURI = wv.brand.url("conf/wv.json");
         var promise = $.getJSON(configURI)
             .done(wv.util.wrap(init))
             .error(wv.util.error);
         wv.ui.indicator.delayed(promise, 2000);
     };
-
-    var storageEngine;
 
     var init = function(config) {
         // Export for debugging

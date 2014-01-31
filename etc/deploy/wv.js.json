@@ -52,7 +52,6 @@
 
     "src/js/Worldview.js",
     "src/js/Worldview/Support.js",
-    "src/js/Worldview/Support.js",
     "src/js/Worldview/Scheduler.js",
     "src/js/Worldview/Indicator.js",
     "src/js/Worldview/AjaxJoin.js",
@@ -88,5 +87,5 @@
     "src/js/Worldview/Widget/WorldviewMap.js",
 
     "src/js/wv.tour.js",
-    "src/js/main.js"
+    "src/js/wv.main.js"
 ]
