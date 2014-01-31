@@ -1,6 +1,9 @@
 # Note: This does not do a "proper" build. It is assumed that the distribution
 # package has already been made.
 
+# Turn off the brp-python-bytecompile script
+%global __os_install_post %(echo '%{__os_install_post}' | sed -e 's!/usr/lib[^[:space:]]*/brp-python-bytecompile[[:space:]].*$!!g')
+
 Name:		@WORLDVIEW@
 Version:	@BUILD_VERSION@
 Release:	@BUILD_RELEASE@%{?build_num}@GIT_REVISION@%{?dist}
@@ -69,6 +72,9 @@ cp %{SOURCE3} .
 %install
 rm -rf %{buildroot}
 
+chmod 755 worldview/bin/*
+chmod 755 worldview-debug/bin/*
+
 # Apache configuration for release
 install -m 755 -d %{buildroot}/%{httpdconfdir}
 install -m 644 httpd.worldview.conf \
@@ -80,6 +86,15 @@ install -m 644 httpd.worldview-debug.conf \
 	%{buildroot}/%{httpdconfdir}/@WORLDVIEW@-debug.conf
 rm httpd.worldview-debug.conf 
 
+# Release configuration directory
+install -m 755 -d %{buildroot}/%{_sysconfdir}
+mv worldview/conf %{buildroot}/%{_sysconfdir}/@WORLDVIEW@
+ln -s %{_sysconfdir}/@WORLDVIEW@ worldview/conf
+
+# Debug configuration directory
+mv worldview-debug/conf %{buildroot}/%{_sysconfdir}/@WORLDVIEW@-debug
+ln -s %{_sysconfdir}/@WORLDVIEW@-debug worldview-debug/conf
+
 # Release application
 install -m 755 -d %{buildroot}/%{_datadir}/@WORLDVIEW@
 cp -r worldview/* %{buildroot}/%{_datadir}/@WORLDVIEW@
@@ -87,12 +102,6 @@ cp -r worldview/* %{buildroot}/%{_datadir}/@WORLDVIEW@
 # Debug application
 install -m 755 -d %{buildroot}/%{_datadir}/@WORLDVIEW@-debug
 cp -r worldview-debug/* %{buildroot}/%{_datadir}/@WORLDVIEW@-debug
-
-# Release configuration directory
-install -m 755 -d %{buildroot}/%{_sysconfdir}/@WORLDVIEW@
-
-# Debug configuration directory
-install -m 755 -d %{buildroot}/%{_sysconfdir}/@WORLDVIEW@-debug
 
 #install -m 755 -d %{buildroot}/%{_sysconfdir}/@WORLDVIEW@
 #install -m 644 events_log.conf \
@@ -116,15 +125,6 @@ install -m 755 -d %{buildroot}/%{_sysconfdir}/@WORLDVIEW@-debug
 #install -m 600 logrotate.worldview-debug \
 #	%{buildroot}/%{_sysconfdir}/logrotate.d/@WORLDVIEW@-debug
 
-# Allow Worldview to find configuration from its application root
-# Release
-install -m 755 -d %{buildroot}/%{_datadir}/@WORLDVIEW@
-ln -s %{_sysconfdir}/@WORLDVIEW@ %{buildroot}/%{_datadir}/@WORLDVIEW@/conf
-
-# Debug
-install -m 755 -d %{buildroot}/%{_datadir}/@WORLDVIEW@-debug
-ln -s %{_sysconfdir}/@WORLDVIEW@-debug \
-   %{buildroot}/%{_datadir}/@WORLDVIEW@-debug/conf
 
 %clean
 rm -rf %{buildroot}
@@ -134,7 +134,7 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %{_datadir}/@WORLDVIEW@
 %config(noreplace) %{httpdconfdir}/@WORLDVIEW@.conf
-%dir %{_sysconfdir}/@WORLDVIEW@
+%{_sysconfdir}/@WORLDVIEW@
 #%config(noreplace) %{_sysconfdir}/@WORLDVIEW@/events_log.conf
 #%config(noreplace) %{_sysconfdir}/cron.d/@WORLDVIEW@
 #%config(noreplace) %{_sysconfdir}/logrotate.d/@WORLDVIEW@
@@ -147,7 +147,7 @@ rm -rf %{buildroot}
 %files debug
 %{_datadir}/@WORLDVIEW@-debug
 %config(noreplace) %{httpdconfdir}/@WORLDVIEW@-debug.conf
-%dir %{_sysconfdir}/@WORLDVIEW@-debug
+%{_sysconfdir}/@WORLDVIEW@-debug
 #%config(noreplace) %{_sysconfdir}/@WORLDVIEW@-debug/events_log-debug.conf
 #%config(noreplace) %{_sysconfdir}/cron.d/@WORLDVIEW@-debug
 #%config(noreplace) %{_sysconfdir}/logrotate.d/@WORLDVIEW@-debug
