@@ -42,7 +42,6 @@ several products are also available for a "full globe" perspective.
 
 %package debug
 Summary:	Non-minified version of Worldview for debugging
-Requires:	%{name} = %{version}-%{release}
 
 
 %description debug
