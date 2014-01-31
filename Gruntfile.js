@@ -361,7 +361,12 @@ module.exports = function(grunt) {
         },
 
         buster: {
-            all: {}
+            console: {},
+            report: {
+                test: {
+                    reporter: "xml"
+                }
+            }
         },
 
         remove: {
@@ -459,7 +464,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask("doc", ["yuidoc"]);
     grunt.registerTask("lint", ["jshint"]);
-    grunt.registerTask("test", ["buster"]);
+    grunt.registerTask("test", ["buster:console"]);
     grunt.registerTask("rpm", ["build", "rpm_only"]);
     grunt.registerTask("clean", "remove:build");
     grunt.registerTask("distclean", ["remove:build", "remove:dist"]);
