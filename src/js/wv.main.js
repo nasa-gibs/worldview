@@ -118,16 +118,16 @@ $(function() {
 
             // collapse events if worldview is being loaded via permalink
             if(window.location.search) {
-            	eventsCollapsed = true;
+                eventsCollapsed = true;
             }
             /*
-        	var events = new SOTE.widget.Events("eventsHolder", {
-        		config: config,
-        		models: models,
-        		maps: map.maps,
-        		shouldCollapse: eventsCollapsed,
-        		lastVisit: lastVisitObj
-         	});
+            var events = new SOTE.widget.Events("eventsHolder", {
+                config: config,
+                models: models,
+                maps: map.maps,
+                shouldCollapse: eventsCollapsed,
+                lastVisit: lastVisitObj
+            });
             */
             ui.data = wv.data.ui(models, config, map.maps);
             ui.data.render();
@@ -164,8 +164,8 @@ $(function() {
                     ui.data.onViewChange(map);
                 });
 
-    	    // Register event listeners
-    	    REGISTRY.addEventListener("map", "imagedownload");
+            // Register event listeners
+            REGISTRY.addEventListener("map", "imagedownload");
             REGISTRY.addEventListener("time",
                     "map", "imagedownload",
                     ui.data.containerId);
@@ -188,7 +188,7 @@ $(function() {
             }
             wv.debug.gibs(ui, models, config);
             wv.tour.introduction();
-      	}).fail(wv.util.error);
+        }).fail(wv.util.error);
     };
 
     /*
