@@ -8,5 +8,5 @@ for line in sys.stdin:
         filtered = False
     if not filtered:
         sys.stdout.write(line)
-    if line.startswith("</testsuites>"):
+    if line.startswith("</testsuites>") or line.startswith("</checkstyle>"):
         filtered = True

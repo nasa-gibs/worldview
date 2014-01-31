@@ -345,10 +345,21 @@ module.exports = function(grunt) {
         },
 
         jshint: {
-            main: [
+            console: [
                 "src/js/**/wv.*.js",
                 "test/**/*.js",
-            ]
+            ],
+            report: {
+                options: {
+                    reporter: "checkstyle",
+                },
+                files: {
+                    src: [
+                        "src/js/**/wv.*.js",
+                        "test/**/*.js",
+                    ]
+                }
+            }
         },
 
         csslint: {
@@ -463,12 +474,12 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask("doc", ["yuidoc"]);
-    grunt.registerTask("lint", ["jshint"]);
+    grunt.registerTask("lint", ["jshint:console"]);
     grunt.registerTask("test", ["buster:console"]);
     grunt.registerTask("rpm", ["build", "rpm_only"]);
     grunt.registerTask("clean", "remove:build");
     grunt.registerTask("distclean", ["remove:build", "remove:dist"]);
 
-    grunt.registerTask("default", ["build", "lint"]);
+    grunt.registerTask("default", ["build"]);
 
 };
