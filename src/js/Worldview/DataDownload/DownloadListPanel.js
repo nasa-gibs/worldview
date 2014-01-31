@@ -45,7 +45,7 @@ Worldview.DataDownload.DownloadListPanel = function(config, model) {
         if ( !panel ) {
             newPanel = true;
             panel = new YAHOO.widget.Panel("DataDownload_DownloadListPanel", {
-                width: "600px",
+                width: "650px",
                 height: "500px",
                 zIndex: 1020,
                 visible: false,

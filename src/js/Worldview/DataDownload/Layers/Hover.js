@@ -35,6 +35,9 @@ Worldview.DataDownload.Layers.Hover = function(model, maps, config) {
     };
 
     self.hoverOver = function(granule) {
+        if ( !granule.geometry ) {
+            return;
+        }
         var geom = granule.geometry[model.crs];
         var extent =
                 config.projections[model.projection].maxExtent.toGeometry();
