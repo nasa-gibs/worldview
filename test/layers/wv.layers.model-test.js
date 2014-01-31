@@ -52,6 +52,7 @@ buster.testCase("wv.layers.model", {
         this.models.proj = wv.proj.model(this.config);
         this.models.layers = wv.layers.model(this.models, this.config);
         this.model = this.models.layers;
+        this.stub(wv.util, "today").returns(new Date(Date.UTC(2010, 0, 1)));
     },
 
     "Date range with one layer": function() {
@@ -60,7 +61,7 @@ buster.testCase("wv.layers.model", {
         buster.assert.equals(range.start.getTime(),
             new Date(Date.UTC(2000, 0, 1)).getTime());
         buster.assert.equals(range.end.getTime(),
-            new Date(Date.UTC(2002, 0, 1)).getTime());
+            new Date(Date.UTC(2010, 0, 1)).getTime());
     },
 
     "Date range with two layers": function() {
@@ -70,11 +71,10 @@ buster.testCase("wv.layers.model", {
         buster.assert.equals(range.start.getTime(),
             new Date(Date.UTC(2000, 0, 1)).getTime());
         buster.assert.equals(range.end.getTime(),
-            new Date(Date.UTC(2003, 0, 1)).getTime());
+            new Date(Date.UTC(2010, 0, 1)).getTime());
     },
 
     "End of date range is today if no end date": function() {
-        this.stub(wv.util, "today").returns(new Date(Date.UTC(2010, 0, 1)));
         this.model.add("active_1");
         var range = this.model.dateRange();
         buster.assert.equals(range.start.getTime(),
