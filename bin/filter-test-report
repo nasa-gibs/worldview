@@ -6,7 +6,7 @@ filtered = True
 for line in sys.stdin:
     if line.startswith("<?xml"):
         filtered = False
-    if line.startswith("</testsuites>"):
-        filtered = True
     if not filtered:
         sys.stdout.write(line)
+    if line.startswith("</testsuites>"):
+        filtered = True
