@@ -22,6 +22,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
     var models = spec.models;
     var model = spec.models.palettes;
     var layer = spec.layer;
+    var loaded = false;
 
     var self = {};
     var $colorbar;
@@ -70,7 +71,10 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         model.events
             .on("add", updateLegend)
             .on("remove", updateLegend);
-        wv.palettes.loadRendered(config, layer.id).done(updateLegend);
+        wv.palettes.loadRendered(config, layer.id).done(function() {
+            loaded = true;
+            updateLegend();
+        });
     };
 
     var updateLegend = function() {
@@ -80,6 +84,9 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
     };
 
     var showUnitRange = function() {
+        if ( !loaded ) {
+            return;
+        }
         var palette = model.forLayer(layer.id);
         if (layer.palette.single) {
             $(selector + " .wv-palettes-center").html(palette.values[0]);
@@ -95,7 +102,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
     };
 
     var showUnitHover = function(event) {
-        if ( !layer.palette.classified ) {
+        if ( !loaded || !layer.palette.classified ) {
             return;
         }
         var palette = model.forLayer(layer.id);

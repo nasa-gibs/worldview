@@ -35,7 +35,7 @@ wv.ui = (function(self) {
      * @param {exception} cause The exception object that caused the error
      */
     self.error = function() {
-        console.error.apply(this, arguments);
+        console.error.apply(console, arguments);
 
         if ( window.YAHOO && window.YAHOO.widget &&
                 window.YAHOO.widget.Panel ) {

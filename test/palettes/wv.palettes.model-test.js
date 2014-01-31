@@ -23,6 +23,9 @@ buster.testCase("wv.palettes.model", {
                     palette: {
                         id: "palette1"
                     }
+                },
+                "layer3": {
+                    id: "layer3"
                 }
             },
             palettes: {
@@ -103,6 +106,31 @@ buster.testCase("wv.palettes.model", {
         this.model.fromPermalink("palettes=layer1,custom1~layer2,custom2");
         buster.assert.calledWith(this.model.add, "layer1", "custom1");
         buster.assert.calledWith(this.model.add, "layer2", "custom2");
+    },
+
+    "From permalink, encoded ~": function() {
+        this.stub(this.model, "add");
+        this.model.fromPermalink("palettes=layer1,custom1%7Elayer2,custom2");
+        buster.assert.calledWith(this.model.add, "layer1", "custom1");
+        buster.assert.calledWith(this.model.add, "layer2", "custom2");
+    },
+
+    "Warning from permalink when layer doesn't support palettes": function() {
+        this.stub(wv.util, "warn");
+        this.model.fromPermalink("palettes=layer3,customx");
+        buster.assert.called(wv.util.warn);
+    },
+
+    "Warning from permalink when layer doesn't exist": function() {
+        this.config.palettes.custom = {
+            "custom1": {
+                id: "custom1",
+                colors: ["x1"]
+            }
+        };
+        this.stub(wv.util, "warn");
+        this.model.fromPermalink("palettes=layerx,custom1");
+        buster.assert.called(wv.util.warn);
     }
 
 });

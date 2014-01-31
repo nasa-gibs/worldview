@@ -31,6 +31,12 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
     self.active = {};
 
     self.add = function(layerId, paletteId) {
+        if ( !config.palettes.custom[paletteId] ) {
+            throw new Error("Invalid palette: " + paletteId);
+        }
+        if ( !config.layers[layerId] ) {
+            throw new Error("Invalid layer: "+ layerId);
+        }
         self.active[layerId] = paletteId;
         self.events.trigger("add", layerId, self.active[layerId]);
     };
@@ -68,7 +74,11 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
             var parts = query.palettes.split("~");
             _.each(parts, function(part) {
                 var items = part.split(",");
-                self.add(items[0], items[1]);
+                try {
+                    self.add(items[0], items[1]);
+                } catch ( error ) {
+                    wv.util.warn(error);
+                }
             });
         }
     };
