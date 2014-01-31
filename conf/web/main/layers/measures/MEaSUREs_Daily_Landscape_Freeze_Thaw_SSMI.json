@@ -5,6 +5,7 @@
             "title":    "Freeze/Thaw (Daily Landscape)",
             "subtitle": "DMSP / SSMI",
             "group":    "overlays",
+            "inactive": "true",
 
             "palette": {
                 "id": "freezethaw_ssmi",

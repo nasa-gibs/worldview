@@ -83,10 +83,15 @@ wv.layers.model = wv.layers.model || function(models, config) {
                     var start = wv.util.parseDateUTC(layer.startDate).getTime();
                     min = Math.min(min, start);
                 }
-                if ( layer.endDate ) {
+                // For now, we assume that any layer with an end date is
+                // an ongoing product unless it is marked as inactive.
+                if ( layer.inactive && layer.endDate ) {
                     range = true;
                     var end = wv.util.parseDateUTC(layer.endDate).getTime();
                     max = Math.max(max, end);
+                } else if ( layer.endDate ) {
+                    range = true;
+                    max = wv.util.today().getTime();
                 }
                 // If there is a start date but no end date, this is a
                 // product that is currently being created each day, set

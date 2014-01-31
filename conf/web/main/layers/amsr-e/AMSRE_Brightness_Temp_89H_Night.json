@@ -5,6 +5,7 @@
             "title":    "Brightness Temperature (89H GHz B Scan, Night)",
             "subtitle": "Aqua / AMSR-E",
             "group":    "overlays",
+            "inactive": "true",
 
             "palette":  {
                 "id": "AEL2A_89H_LL_D"

@@ -15,10 +15,10 @@ config["wv"] = {
     rootPath: "./",
     environment: "browser",
     libs: [
-        "src/ext/wv.main/lodash-2.4.1/lodash.js",
-        "src/ext/wv.main/jquery-1.6.4/jquery.js",
-        "src/ext/wv.main/jscache-gitba01cdc/cache.js",
-        "src/ext/wv.ui/yui-2.9.0/yui.js"
+        "src/ext/main/lodash-2.4.1/lodash.js",
+        "src/ext/main/jquery-1.6.4/jquery.js",
+        "src/ext/main/jscache-gitba01cdc/cache.js",
+        "src/ext/ui/yui-2.9.0/yui.js"
     ],
     src: [
         "src/js/wv.*.js",

@@ -15,7 +15,9 @@ PIP="$BASE_DIR"/python/bin/pip
 
 # virtualenv 1.11 is broken
 # http://stackoverflow.com/questions/20916712/cannot-create-virtualenv-instance-in-python-2-7-5-because-of-pip-installation-er
-sudo easy_install virtualenv==1.10.1
+if [ ! -e /usr/bin/virtualenv ] && [ ! -e /usr/local/bin/virtualenv ] ; then
+    sudo easy_install virtualenv==1.10.1
+fi
 virtualenv python
 $PIP install xmltodict
 
