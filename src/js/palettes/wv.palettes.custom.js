@@ -120,12 +120,15 @@ wv.palettes.custom = wv.palettes.custom || function(config, models, layer) {
     };
 
     var customPalette = function(id) {
-        var palette = config.palettes.custom[id];
-        wv.palettes.colorbar(canvas, palette);
+        var sourcePalette = config.palettes.rendered[layer.palette.id];
+        var targetPalette = config.palettes.custom[id];
+        var translatedPalette =
+                wv.palettes.translate(sourcePalette, targetPalette);
+        wv.palettes.colorbar(canvas, translatedPalette);
         return {
-            text: palette.name,
+            text: targetPalette.name,
             image: canvas.toDataURL("image/png"),
-            id: palette.id
+            id: targetPalette.id
         };
     };
 
