@@ -476,6 +476,7 @@ module.exports = function(grunt) {
     grunt.registerTask("doc", ["yuidoc"]);
     grunt.registerTask("lint", ["jshint:console"]);
     grunt.registerTask("test", ["buster:console"]);
+    grunt.registerTask("push", ["lint", "test"]);
     grunt.registerTask("rpm", ["build", "rpm_only"]);
     grunt.registerTask("clean", "remove:build");
     grunt.registerTask("distclean", ["remove:build", "remove:dist"]);

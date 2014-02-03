@@ -43,7 +43,11 @@ $(function() {
         }
 
         // Models
-        var models = {};
+        var models = {
+            wv: {
+                events: wv.util.events()
+            }
+        };
 
         models.proj     = wv.proj.model(config);
         models.palettes = wv.palettes.model(models, config);
@@ -85,10 +89,8 @@ $(function() {
             .register(models.layers)
             .register(models.date)
             .register(mapBridge)
-            .register(models.palettes);
-            // CRS?
-            //.register(dataDownloadBridge);
-
+            .register(models.palettes)
+            .register(models.data);
         models.link.load();
         models.proj.change = wv.proj.change(models);
 
@@ -187,6 +189,8 @@ $(function() {
         }
         wv.debug.gibs(ui, models, config);
         wv.tour.introduction();
+
+        models.wv.events.trigger("startup");
     };
 
     /*

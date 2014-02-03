@@ -38,8 +38,6 @@ wv.data.model = wv.data.model || function(models, config) {
     var queryExecuting = false;
     var nextQuery = null;
 
-    var ns = Worldview.DataDownload;
-
     var self = {};
 
     /**
@@ -276,6 +274,26 @@ wv.data.model = wv.data.model || function(models, config) {
     self.setPreference = function(preference) {
         self.prefer = preference;
         query();
+    };
+
+    self.toPermalink = function() {
+        if ( self.active ) {
+            return "dataDownload=" + encodeURIComponent(self.selectedProduct);
+        }
+    };
+
+    self.fromPermalink = function(queryString) {
+        var query = wv.util.fromQueryString(queryString);
+        var productId = query.dataDownload;
+        if ( productId ) {
+            if ( !config.products[productId] ) {
+                wv.util.warn("No such product: " + productId);
+            } else {
+                models.wv.events.on("startup", function() {
+                    self.activate(productId);
+                });
+            }
+        }
     };
 
     var query = function() {

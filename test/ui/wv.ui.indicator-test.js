@@ -32,7 +32,9 @@ buster.testCase("wv.ui.indicator", {
         setTimeout(function() {
             promise.resolve();
             buster.refute.called(wv.ui.indicator.loading);
+            buster.refute.called(wv.ui.indicator.hide);
             done();
         }, 20);
-    }
+    },
+
 });

@@ -122,12 +122,16 @@ wv.ui.indicator = wv.ui.indicator || (function() {
      */
     self.delayed = function(promise, delay) {
         delay = delay || 1000;
+        var shown = false;
         var timeout = setTimeout(function() {
+            shown = true;
             self.loading();
         }, delay);
         promise.always(function() {
             clearTimeout(timeout);
-            self.hide();
+            if ( shown ) {
+                self.hide();
+            }
         });
     };
 

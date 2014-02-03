@@ -31,6 +31,7 @@ config["wv"] = {
         "src/js/link/wv.*.js",
         "src/js/palettes/wv.*.js",
         "src/js/proj/wv.*.js",
+        "src/js/data/wv.*.js",
     ],
     tests: [
         "test/**/*.js"
