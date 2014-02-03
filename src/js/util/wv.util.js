@@ -392,6 +392,28 @@ wv.util = (function(self) {
         };
     };
 
+    // FIXME: Should be replaced with $.when
+    self.ajaxJoin = function(calls) {
+
+        var completed = 0;
+        var result = {};
+        var deferred = $.Deferred();
+
+        $.each(calls, function(index, call) {
+            call.promise.done(function(data) {
+                result[call.item] = data;
+                completed += 1;
+                if ( completed == calls.length ) {
+                    deferred.resolve(result);
+                }
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                deferred.reject(jqXHR, textStatus, errorThrown);
+            });
+        });
+
+        return deferred.promise();
+    };
+
     return self;
 
 })(wv.util || {});

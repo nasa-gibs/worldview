@@ -286,7 +286,8 @@ wv.data.handler.modisGrid = function(config, model, spec) {
             dataType: "json"
         });
 
-        return Worldview.AjaxJoin([
+        var promise = $.Deferred();
+        return wv.util.ajaxJoin([
             { item: "granules", promise: granules },
             { item: "grid",     promise: grid }
         ]);
@@ -332,12 +333,12 @@ wv.data.handler.modisMix = function(config, model, spec) {
 
         var nrtHandlerName = productConfig.nrt.handler;
         var nrtHandlerFactory =
-                Worldview.DataDownload.Handler.getByName(nrtHandlerName);
+                wv.data.handler.getByName(nrtHandlerName);
         nrtHandler = nrtHandlerFactory(config, model, spec);
 
         var scienceHandlerName = productConfig.science.handler;
         var scienceHandlerFactory =
-                Worldview.DataDownload.Handler.getByName(scienceHandlerName);
+                wv.data.handler.getByName(scienceHandlerName);
         scienceHandler = scienceHandlerFactory(config, model, spec);
     };
 
@@ -363,7 +364,7 @@ wv.data.handler.modisMix = function(config, model, spec) {
             dataType: "json"
         });
 
-        return Worldview.AjaxJoin([
+        return wv.util.ajaxJoin([
             { item: "nrt",      promise: nrt },
             { item: "science",  promise: science },
             { item: "grid",     promise: grid }
