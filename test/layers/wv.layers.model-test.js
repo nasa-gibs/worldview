@@ -21,31 +21,35 @@ buster.testCase("wv.layers.model", {
                 projection: "geographic"
             },
             projections: {
-                "arctic": {},
-                "geographic": {}
+                "arctic": { id: "arctic" },
+                "geographic": { id: "geographic" }
             },
             layers: {
                 "historical_1": {
                     id: "historical_1",
                     startDate: "2000-01-01",
                     endDate: "2002-01-01",
-                    group: "overlays"
+                    group: "baselayers",
+                    projections: { geographic: {} }
                 },
                 "historical_2": {
                     id: "historical_2",
                     startDate: "2001-01-01",
                     endDate: "2003-01-01",
-                    group: "overlays"
+                    group: "overlays",
+                    projections: { geographic: {} }
                 },
                 "active_1": {
                     id: "active_1",
                     startDate: "2005-01-01",
-                    group: "overlays"
+                    group: "overlays",
+                    projections: { geographic: {} }
                 },
                 "static": {
                     id: "static",
-                    group: "overlays"
-                }
+                    group: "overlays",
+                    projections: { geographic: {} }
+                },
             }
         };
         this.models = {};
@@ -86,6 +90,47 @@ buster.testCase("wv.layers.model", {
     "No date range with static": function() {
         this.model.add("static");
         buster.refute(this.model.dateRange());
+    },
+
+    "Saves state": function() {
+        this.model.add("historical_1");
+        this.model.add("historical_2");
+        var state = {};
+        this.model.save(state);
+        buster.assert.equals(state.products,
+                "baselayers,historical_1~overlays,historical_2");
+    },
+
+    "Saves state with hidden layer": function() {
+        this.model.add("historical_1");
+        delete this.model.visible.historical_1;
+        var state = {};
+        this.model.save(state);
+        buster.assert.equals(state.products, "baselayers,!historical_1");
+    },
+
+    "Loads state": function() {
+        var state = {
+            products: ["historical_1", "historical_2"]
+        };
+        var errors = [];
+        this.model.load(state, errors);
+        buster.assert.equals(this.model.active.baselayers[0].id, "historical_1");
+        buster.assert.equals(this.model.active.overlays[0].id, "historical_2");
+        buster.assert.equals(errors.length, 0);
+    },
+
+    "Loads state with hidden layer": function() {
+        var state = {
+            products: ["historical_1"],
+            hidden: {"historical_1": true}
+        };
+        var errors = [];
+        this.model.load(state, errors);
+        buster.assert.equals(this.model.active.baselayers[0].id, "historical_1");
+        buster.refute(this.model.visible.historical_1);
+        buster.assert.equals(errors.length, 0);
     }
+
 
 });

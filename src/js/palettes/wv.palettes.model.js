@@ -39,12 +39,14 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
         }
         self.active[layerId] = paletteId;
         self.events.trigger("add", layerId, self.active[layerId]);
+        self.events.trigger("change");
     };
 
     self.remove = function(layerId) {
         if ( self.active[layerId] ) {
             delete self.active[layerId];
             self.events.trigger("remove", layerId);
+            self.events.trigger("change");
         }
     };
 
@@ -60,24 +62,24 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
         }
     };
 
-    self.toPermalink = function() {
+    self.save = function(state) {
         var parts = [];
         _.each(self.active, function(paletteId, layerId) {
             parts.push(layerId + "," + paletteId);
         });
-        return ( parts.length > 0 ) ? "palettes=" + parts.join("~") : "";
+        if ( parts.length > 0 ) {
+            state.palettes = parts.join("~");
+        }
     };
 
-    self.fromPermalink = function(queryString) {
-        var query = wv.util.fromQueryString(queryString);
-        if ( query.palettes ) {
-            var parts = query.palettes.split("~");
-            _.each(parts, function(part) {
-                var items = part.split(",");
-                try {
-                    self.add(items[0], items[1]);
-                } catch ( error ) {
-                    wv.util.warn(error);
+    self.load = function(state, errors) {
+        if ( state.palettes ) {
+            _.each(state.palettes, function(paletteId, layerId) {
+                if ( !config.palettes.custom[paletteId] ) {
+                    errors.push({message: "Invalid palette for layer" +
+                        layerId + ": " + paletteId});
+                } else {
+                    self.add(layerId, paletteId);
                 }
             });
         }

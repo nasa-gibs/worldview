@@ -52,7 +52,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models) {
 
     var init = function() {
         render();
-        if ( $(window).width() < Worldview.TRANSITION_WIDTH ) {
+        if ( wv.util.browser.small ) {
             slide();
         }
         $(window).resize(adjustAlignment);
@@ -205,7 +205,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models) {
     };
 
     var adjustAlignment = function() {
-        if ( $(window).width() < Worldview.TRANSITION_WITH && collapsed ) {
+        if ( wv.util.browser.small && collapsed ) {
             var w = $('.products').outerWidth();
             $('.products').css("left", "-" + w + "px");
         }

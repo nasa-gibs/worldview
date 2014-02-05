@@ -12,32 +12,25 @@
 buster.testCase("wv.link.model", {
 
     "Query string from registered components": function() {
-        var c1 = { toPermalink: this.stub().returns("foo=1") };
-        var c2 = { toPermalink: this.stub().returns("bar=2") };
+        var c1 = { save: function(state) { state.foo = 1; } };
+        var c2 = { save: function(state) { state.bar = 2; } };
         var model = wv.link.model();
         model.register(c1).register(c2);
         buster.assert.equals(model.toQueryString(), "foo=1&bar=2");
     },
 
-    "Components without state are skipped": function() {
-        var c1 = { toPermalink: this.stub().returns("foo=1") };
-        var cx = { toPermalink: this.stub().returns("") };
-        var c2 = { toPermalink: this.stub().returns("bar=2") };
+    "Values encoded": function() {
+        var c1 = { save: function(state) { state.foo = "?"; } };
         var model = wv.link.model();
-        model.register(c1).register(cx).register(c2);
-        buster.assert.equals(model.toQueryString(), "foo=1&bar=2");
+        model.register(c1);
+        buster.assert.equals(model.toQueryString(), "foo=%3F");
     },
 
-    "Registered components called to parse query string": function() {
-        var fp1 = this.stub();
-        var fp2 = this.stub();
-        var c1 = { fromPermalink: fp1 };
-        var c2 = { fromPermalink: fp2 };
+    "Exceptions not encoded": function() {
+        var c1 = { save: function(state) { state.foo = ","; } };
         var model = wv.link.model();
-        model.register(c1).register(c2);
-        model.load("foo=1&bar=2");
-        buster.assert.calledWith(fp1, "foo=1&bar=2");
-        buster.assert.calledWith(fp2, "foo=1&bar=2");
+        model.register(c1);
+        buster.assert.equals(model.toQueryString(), "foo=,");
     },
 
     "Shorten calls cgi script": function(done) {
@@ -71,7 +64,6 @@ buster.testCase("wv.link.model", {
             buster.assert.calledOnce(call);
             done();
         });
-
     }
 
 });

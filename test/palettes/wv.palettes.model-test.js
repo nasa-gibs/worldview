@@ -88,49 +88,60 @@ buster.testCase("wv.palettes.model", {
         this.model.remove("layer1");
     },
 
-    "To permalink": function() {
+    "Saves state": function() {
         this.model.active = {
             "layer1": "custom1",
             "layer2": "custom2"
         };
-        buster.assert.equals(this.model.toPermalink(),
-            "palettes=layer1,custom1~layer2,custom2");
+        var state = {};
+        this.model.save(state);
+        buster.assert.equals(state.palettes, "layer1,custom1~layer2,custom2");
     },
 
-    "Empty permalink when no palettes are active": function() {
-        buster.assert.equals(this.model.toPermalink(), "");
+    "Empty state no palettes are active": function() {
+        var state = {};
+        this.model.save(state);
+        buster.refute(state.palettes);
     },
 
-    "From permalink": function() {
+    "Loads state": function() {
         this.stub(this.model, "add");
-        this.model.fromPermalink("palettes=layer1,custom1~layer2,custom2");
+        var state = {
+            palettes: {
+                layer1: "custom1",
+                layer3: "custom3"
+            }
+        };
+        this.config.palettes.custom = {
+            custom1: {},
+            custom3: {}
+        };
+        var errors = [];
+        this.model.load(state, errors);
         buster.assert.calledWith(this.model.add, "layer1", "custom1");
-        buster.assert.calledWith(this.model.add, "layer2", "custom2");
+        buster.assert.calledWith(this.model.add, "layer3", "custom3");
+        buster.assert.equals(errors.length, 0);
     },
 
+    /*
     "From permalink, encoded ~": function() {
         this.stub(this.model, "add");
         this.model.fromPermalink("palettes=layer1,custom1%7Elayer2,custom2");
         buster.assert.calledWith(this.model.add, "layer1", "custom1");
         buster.assert.calledWith(this.model.add, "layer2", "custom2");
     },
+    */
 
-    "Warning from permalink when layer doesn't support palettes": function() {
+    "Error during load when layer doesn't support palettes": function() {
         this.stub(wv.util, "warn");
-        this.model.fromPermalink("palettes=layer3,customx");
-        buster.assert.called(wv.util.warn);
-    },
-
-    "Warning from permalink when layer doesn't exist": function() {
-        this.config.palettes.custom = {
-            "custom1": {
-                id: "custom1",
-                colors: ["x1"]
+        var state = {
+            palettes: {
+                layer1: "customx"
             }
         };
-        this.stub(wv.util, "warn");
-        this.model.fromPermalink("palettes=layerx,custom1");
-        buster.assert.called(wv.util.warn);
+        var errors = [];
+        this.model.load(state, errors);
+        buster.assert.equals(errors.length, 1);
     }
 
 });

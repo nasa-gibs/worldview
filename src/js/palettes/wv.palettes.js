@@ -122,16 +122,50 @@ wv.palettes = (function(self) {
                 "conf/palettes/" + layer.palette.id + ".json");
     };
 
-    self.startup = function(config) {
+    self.parse = function(state, errors, config) {
+        if ( state.palettes ) {
+            var results = {};
+            var parts = state.palettes.split("~");
+            _.each(parts, function(part) {
+                var items = part.split(",");
+                var layerId = items[0];
+                var paletteId = items[1];
+                if ( !config.layers[layerId] ) {
+                    errors.push({message: "Invalid layer for palette " +
+                        paletteId + ": " + layerId});
+                } else {
+                    results[layerId] = paletteId;
+                }
+            });
+            if ( _.size(results) > 0 ) {
+                state.palettes = results;
+            } else {
+                delete state.palettes;
+            }
+        }
+    };
+
+    self.requirements = function(state, config) {
+        var promises = [];
         config.palettes = {
             rendered: {},
             custom: {}
         };
-        var promise = {};
         if ( config.parameters.palettes ) {
-            promise = self.loadCustom(config);
+            promises.push(self.loadCustom(config));
         }
-        return promise;
+        _.each(state.products, function(layerId) {
+            if ( config.layers[layerId].palette ) {
+                promises.push(self.loadRendered(config, layerId));
+            }
+        });
+        if ( promises.length > 0 ) {
+            var promise = $.Deferred();
+            $.when.apply(null, promises)
+                .then(promise.resolve)
+                .fail(promise.reject);
+            return promise;
+        }
     };
 
     init();

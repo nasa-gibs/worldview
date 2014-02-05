@@ -26,6 +26,10 @@ wv.link.model = wv.link.model || function(config) {
 
     var self = {};
     var DEBUG_SHORTEN_LINK = "https://earthdata.nasa.gov/worldview?a=1&b=2";
+    var ENCODING_EXCEPTIONS = [
+        { match: new RegExp("%2C", "g"), replace: "," }
+    ];
+
     var shortenCache = new Cache(10);
     var mock = "";
     var components = [];
@@ -49,14 +53,14 @@ wv.link.model = wv.link.model || function(config) {
      * characters escaped.
      */
     self.toQueryString = function() {
-        var parts = [];
+        var state = {};
         _.each(components, function(component) {
-            var value = component.toPermalink();
-            if ( value && value.length > 0 ) {
-                parts.push(component.toPermalink());
-            }
+            var value = component.save(state);
         });
-        return parts.join("&");
+        state = _.map(state, function(value, key) {
+            return key + "=" + encode(value);
+        });
+        return state.join("&");
     };
 
     /**
@@ -101,18 +105,19 @@ wv.link.model = wv.link.model || function(config) {
         return promise;
     };
 
-    /**
-     * Sets the state of all registered models from a query string.
-     *
-     * @method load
-     * @param {Object} [queryString] the query string to use, if not specified
-     * ``window.location.search`` is used.
-     */
-    self.load = function(queryString) {
-        queryString = queryString || window.location.search;
+    self.load = function(state, errors) {
+        errors = errors || [];
         _.each(components, function(component) {
-            component.fromPermalink(queryString);
+            component.load(state, errors);
         });
+    };
+
+    var encode = function(value) {
+        var encoded = encodeURIComponent(value);
+        _.each(ENCODING_EXCEPTIONS, function(exception) {
+            encoded = encoded.replace(exception.match, exception.replace);
+        });
+        return encoded;
     };
 
     init();

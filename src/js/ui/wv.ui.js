@@ -93,6 +93,76 @@ wv.ui = (function(self) {
     };
 
     /**
+     * Asks the end user a yes or no question in a dialog box.
+     *
+     * @method ask
+     * @static
+     *
+     * @param [spec.header="Notice"] {string} Header text to be displayed in
+     * the dialog box.
+     *
+     * @param [spec.message="Are you sure?"] {string} Message text to be
+     * displayed in the dialog box.
+     *
+     * @param [spec.okButton="OK"] {string} Text to be used in the no button.
+     *
+     * @param [spec.cancelButton="Cancel"] {string} Text to be used in the yes
+     * button.
+     *
+     * @param [spec.onOk] {function} Function to execute when the OK button is
+     * pressed. If not specified, the dialog box simply closes.
+     *
+     * @parma [spec.onCancel] {function} Function to execute when the Cancel
+     * button is pressed. If not specified, the dialog box simply closes.
+     */
+    self.ask = function(spec) {
+        var dialog = new YAHOO.widget.SimpleDialog("dialog", {
+            width: "20em",
+            effect: {
+                effect: YAHOO.widget.ContainerEffect.FADE,
+                duration: 0.25
+            },
+            fixedcenter: true,
+            modal: true,
+            visible: false,
+            draggable: false
+        });
+
+        var header = spec.header || "Notice";
+        dialog.setHeader(header);
+        dialog.setBody(spec.message || "Are you sure?");
+
+        var handleOk = function() {
+            try {
+                this.hide();
+                if ( spec.onOk) {
+                    spec.onOk();
+                }
+            } catch ( error ) {
+                wv.util.error(error);
+            }
+        };
+        var handleCancel = function() {
+            try {
+                this.hide();
+                if ( spec.onCancel ) {
+                    spec.onCancel();
+                }
+            } catch ( error ) {
+                wv.util.error(error);
+            }
+        };
+
+        var buttons = [
+            { text: spec.cancelButton || "Cancel", handler: handleCancel },
+            { text: spec.okButton || "OK", handler: handleOk }
+        ];
+        dialog.cfg.queueProperty("buttons", buttons);
+        dialog.render(document.body);
+        dialog.show();
+    };
+
+    /**
      * Displays a message to the end user that the feature is not supported
      * in this web browser.
      *

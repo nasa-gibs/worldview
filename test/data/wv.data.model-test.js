@@ -31,15 +31,19 @@ buster.testCase("wv.data.model", {
         this.model = wv.data.model(this.models, this.config);
     },
 
-    "No permalink when not active": function() {
-        buster.refute(this.model.toPermalink());
+    "Doesn't save state when not active": function() {
+        this.model.selectProduct("product1");
+        var state = {};
+        this.model.save(state);
+        buster.refute(state.dataDownload);
     },
 
-    "To permalink": function() {
+    "Saves state": function() {
         this.model.active = true;
         this.model.selectedProduct = "product1";
-        buster.assert.equals(this.model.toPermalink(),
-                "dataDownload=product1");
+        var state = {};
+        this.model.save(state);
+        buster.assert.equals(state.dataDownload, "product1");
     },
 
     "Subscribed for startup event when data download in permalink": function() {
@@ -48,7 +52,8 @@ buster.testCase("wv.data.model", {
                 on: this.stub()
             }
         };
-        this.model.fromPermalink("dataDownload=product1");
+        var state = { dataDownload: "product1" };
+        this.model.load(state);
         buster.assert.calledWith(this.models.wv.events.on, "startup");
     }
 

@@ -82,7 +82,7 @@ module.exports = function(grunt) {
                       src: [
                         "css/pages.css",
                         "css/bulkDownload.css",
-                        "js/Worldview/Map/TileWorker.js"
+                        "js/map/wv.map.tileworker.js"
                       ],
                       dest: "build/worldview/web" }
                 ]
@@ -393,7 +393,7 @@ module.exports = function(grunt) {
                 "!build/worldview-debug/web/js/wv.js",
                 "!build/worldview-debug/web/css/pages.css",
                 "!build/worldview-debug/web/css/bulkDownload.css",
-                "!build/worldview-debug/web/js/Worldview/Map/TileWorker.js",
+                "!build/worldview-debug/web/js/map/wv.map.tileworker.js",
                 "!build/worldview-debug/web/ext/**/*"
             ],
             conf_src: [

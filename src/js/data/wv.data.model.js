@@ -276,23 +276,18 @@ wv.data.model = wv.data.model || function(models, config) {
         query();
     };
 
-    self.toPermalink = function() {
+    self.save = function(state) {
         if ( self.active ) {
-            return "dataDownload=" + encodeURIComponent(self.selectedProduct);
+            state.dataDownload = self.selectedProduct;
         }
     };
 
-    self.fromPermalink = function(queryString) {
-        var query = wv.util.fromQueryString(queryString);
-        var productId = query.dataDownload;
+    self.load = function(state) {
+        var productId = state.dataDownload;
         if ( productId ) {
-            if ( !config.products[productId] ) {
-                wv.util.warn("No such product: " + productId);
-            } else {
-                models.wv.events.on("startup", function() {
-                    self.activate(productId);
-                });
-            }
+            models.wv.events.on("startup", function() {
+                self.activate(productId);
+            });
         }
     };
 

@@ -83,50 +83,6 @@ wv.date.model = wv.date.model || function(spec) {
         return updated;
     };
 
-    /**
-     * Representation of this model as a permalink.
-     *
-     * @method toPermalink
-     * @return {String} current day in the form of ``time=YYYY-MM-DD``
-     */
-    self.toPermalink = function() {
-        return "time=" + self.selected.toISOString().split("T")[0];
-    };
-
-    /**
-     * Selects a day based on a value from a permalink.
-     *
-     * @method fromPermalink
-     * @param {Object} queryString the query string used to select the day
-     * with a parameter in the form of ``time=YYYY-MM-DD``. If the parameter
-     * does not exist, this method does nothing. If the value of the day
-     * is invalid, the value is not changed and a warning is emitted to
-     * the console.
-     */
-    self.fromPermalink = function(queryString) {
-        var query = wv.util.fromQueryString(queryString);
-        if ( query.time ) {
-            try {
-                var value = wv.util.parseDateUTC(query.time);
-                self.select(value);
-            } catch ( error ) {
-                wv.util.warn("Invalid date: " + query.time + ": " + error);
-            }
-        }
-        if ( query.now ) {
-            try {
-                var now = wv.util.parseDateUTC(query.now);
-                wv.util.now = function() {
-                    return now;
-                };
-                wv.util.warn("Overriding now: " + now.toISOString());
-                self.range({ start: self.start, end: self.end });
-            } catch ( error ) {
-                console.error("Invalid now: " + query.now, error);
-            }
-        }
-    };
-
     self.range = function(range) {
         if ( range ) {
             self.start = range.start;
@@ -142,6 +98,23 @@ wv.date.model = wv.date.model || function(spec) {
         }
         self.select(self.selected);
         self.events.trigger("range");
+    };
+
+    self.save = function(state) {
+        state.time = self.selected.toISOString().split("T")[0];
+    };
+
+    self.load = function(state) {
+        if ( state.time ) {
+            self.select(state.time);
+        }
+        if ( state.now ) {
+            wv.util.now = function() {
+                return state.now;
+            };
+            wv.util.warn("Overriding now: " + now.toISOString());
+            self.range({ start: self.start, end: self.end });
+        }
     };
 
     init();

@@ -49,6 +49,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
         }
     };
 
+    // Deprecated
     self.forProjection = function(proj) {
         proj = proj || models.proj.selected.id;
         var results = {
@@ -63,6 +64,27 @@ wv.layers.model = wv.layers.model || function(models, config) {
             });
         });
         return results;
+    };
+
+    self.forGroup = function(group, spec) {
+        var results = [];
+        var groups = self.forProjection();
+        _.each(groups[group], function(layer) {
+            if ( spec.visibleOnly && !self.visible[layer.id] ) {
+                return;
+            }
+            results.push(layer);
+        });
+        if ( spec.reverse ) {
+            results = results.reverse();
+        }
+        return results;
+    };
+
+    self.get = function(spec) {
+        var baselayers = self.forGroup("baselayers", spec);
+        var overlays = self.forGroup("overlays", spec);
+        return Array.concat(baselayers, overlays);
     };
 
     self.dateRange = function(proj) {
@@ -214,6 +236,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
         if ( self.visible[id] !== visible ) {
             self.visible[id] = visible;
             self.events.trigger("visibility", layer, visible);
+            self.events.trigger("change");
         }
     };
 
@@ -229,59 +252,28 @@ wv.layers.model = wv.layers.model || function(models, config) {
         return answer;
     };
 
-    self.toPermalink = function() {
-        var types = [];
-        $.each(self.forProjection(), function(type, layers) {
-            type = [type];
-            $.each(layers, function(index, layer) {
+    self.save = function(state) {
+        var groups = [];
+        _.each(self.forProjection(), function(layers, group) {
+            group = [group];
+            _.each(layers, function(layer) {
                 prefix = ( !self.visible[layer.id] ) ? "!": "";
-                type.push(prefix + layer.id);
+                group.push(prefix + layer.id);
             });
-            types.push(type.join(","));
+            // Only list group if there are layers to save
+            if ( group.length > 1 ) {
+                groups.push(group.join(","));
+            }
         });
-        return "products=" + types.join("~");
+        state.products = groups.join("~");
     };
 
-    self.fromPermalink = function(queryString) {
-        var query = wv.util.fromQueryString(queryString);
-        var values = query.layers || query.products;
-        if ( values ) {
+    self.load = function(state) {
+        if ( state.products ) {
             self.clear(models.proj.selected.id);
-            // Base layers / overlays
-            var sections = values.split("~");
-            $.each(sections, function(i, section) {
-                var group = null;
-                $.each(sections, function(i, section) {
-                    var items = section.split(/[,\.]/);
-                    var layers = [];
-                    $.each(items, function(index, item) {
-                        if ( index === 0 ) {
-                            group = item;
-                            if ( !wv.util.LAYER_GROUPS[group] ) {
-                                wv.util.warn("Invalid layer group: " + group);
-                                return false;
-                            }
-                        } else {
-                            var hidden = item.startsWith("!");
-                            if ( hidden ) {
-                                item = item.substring(1);
-                            }
-                            // Layers have to be added in reverse
-                            layers.unshift({id: item, hidden: hidden});
-                        }
-                    });
-                    $.each(layers, function(index, layer) {
-                        var redirect = config.redirects.layers[layer.id];
-                        if ( redirect ) {
-                            layer.id = redirect;
-                        }
-                        try {
-                            self.add(layer.id, layer.hidden);
-                        } catch ( error ) {
-                            wv.util.warn("Invalid layer: " + layer.id);
-                        }
-                    });
-                });
+            _.each(state.products, function(layerId) {
+                var hidden = state.hidden && state.hidden[layerId];
+                self.add(layerId, hidden);
             });
         }
     };

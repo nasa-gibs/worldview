@@ -132,7 +132,7 @@ wv.layers.add = wv.layers.add || function(models, config) {
             .html(layer.subtitle);
 
         var $checkbox = $("<input></input>")
-            .attr("id", Worldview.id(layer.id))
+            .attr("id", encodeURIComponent(layer.id))
             .attr("value", layer.id)
             .attr("type", "checkbox")
             .attr("data-layer", layer.id);
@@ -206,7 +206,7 @@ wv.layers.add = wv.layers.add || function(models, config) {
         $(self.selector)
             .height($(self.selector).parent().outerHeight() - tabs_height);
 
-        if ( $(window).width() > Worldview.TRANSITION_WIDTH ) {
+        if ( !wv.util.browser.small ) {
             if ( jsp ) {
                 var api = jsp.data('jsp');
                 if ( api ) {
@@ -241,12 +241,12 @@ wv.layers.add = wv.layers.add || function(models, config) {
     };
 
     var onLayerAdded = function(layer) {
-        var $element = $("#" + Worldview.id(layer.id));
+        var $element = $("#" + encodeURIComponent(layer.id));
         $element.attr("checked", "checked");
     };
 
     var onLayerRemoved = function(layer) {
-        var $element = $("#" + Worldview.id(layer.id));
+        var $element = $("#" + encodeURIComponent(layer.id));
         $element.removeAttr("checked");
     };
 
@@ -335,7 +335,7 @@ wv.layers.add = wv.layers.add || function(models, config) {
                 filterProjection(layer) ||
                 filterSearch(layer, search);
             var display = filtered ? "none": "block";
-            $("#" + Worldview.id(layerId)).parent().css("display", display);
+            $("#" + encodeURIComponent(layerId)).parent().css("display", display);
         });
         adjustCategoryHeights();
     };

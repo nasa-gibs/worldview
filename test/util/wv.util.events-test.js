@@ -28,8 +28,9 @@ buster.testCase("wv.util.events", {
     },
 
     "Exception thrown when trying to register a null listener": function() {
+        var self = this;
         buster.assert.exception(function() {
-            this.events.on("foo");
+            self.events.on("foo");
         });
     },
 

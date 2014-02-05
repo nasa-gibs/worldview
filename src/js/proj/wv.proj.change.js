@@ -68,7 +68,7 @@ wv.proj.change = wv.proj.change || function(models) {
         self.events.trigger("select", self);
         if ( !wasVisited && wasOld !== self.old ) {
             checkNotify();
-            Worldview.Map.COORDINATE_CONTROLS.arctic.projection = self.crs;
+            wv.map.COORDINATE_CONTROLS.arctic.projection = self.crs;
         }
 
         if ( wasOld !== self.old && self.old ) {

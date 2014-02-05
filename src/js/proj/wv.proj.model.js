@@ -46,19 +46,14 @@ wv.proj.model = wv.proj.model || function(config) {
         return updated;
     };
 
-    self.toPermalink = function() {
-        return "switch=" + self.selected.id;
+    self.save = function(state) {
+        state["switch"] = self.selected.id;
     };
 
-    self.fromPermalink = function(queryString) {
-        var query = wv.util.fromQueryString(queryString);
-        var id = query.projection || query["switch"];
-        if ( id ) {
-            if ( !config.projections[id] ) {
-                wv.util.warn("Unsupported projection: " + id);
-            } else {
-                self.select(id);
-            }
+    self.load = function(state) {
+        var projId = state["switch"];
+        if ( projId ) {
+            self.select(projId);
         }
     };
 

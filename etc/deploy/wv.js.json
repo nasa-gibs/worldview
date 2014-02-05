@@ -1,10 +1,4 @@
 [
-    "src/js/component.js",
-    "src/js/registry.js",
-    "src/js/rubberBand.js",
-    "src/js/imageDownload.js",
-    "src/js/events.js",
-
     "src/js/wv.brand.js",
 
     "src/js/util/wv.util.js",
@@ -15,73 +9,48 @@
     "src/js/ui/wv.ui.about.js",
     "src/js/ui/wv.ui.indicator.js",
 
+    "src/js/proj/wv.proj.js",
     "src/js/proj/wv.proj.change.js",
     "src/js/proj/wv.proj.model.js",
     "src/js/proj/wv.proj.ui.js",
 
+    "src/js/date/wv.date.js",
     "src/js/date/wv.date.model.js",
     "src/js/date/wv.date.sliders.js",
     "src/js/date/wv.date.label.js",
     "src/js/date/wv.date.wheels.js",
 
+    "src/js/layers/wv.layers.js",
     "src/js/layers/wv.layers.model.js",
     "src/js/layers/wv.layers.sidebar.js",
     "src/js/layers/wv.layers.active.js",
     "src/js/layers/wv.layers.add.js",
+
+    "src/js/image/wv.image.rubberband.js",
+    "src/js/image/wv.image.panel.js",
 
     "src/js/palettes/wv.palettes.js",
     "src/js/palettes/wv.palettes.custom.js",
     "src/js/palettes/wv.palettes.legend.js",
     "src/js/palettes/wv.palettes.model.js",
 
-    "src/js/link/wv.link.model.js",
-    "src/js/link/wv.link.ui.js",
-
+    "src/js/data/wv.data.js",
+    "src/js/data/wv.data.echo.js",
     "src/js/data/wv.data.handler.js",
+    "src/js/data/wv.data.layers.js",
+    "src/js/data/wv.data.map.js",
     "src/js/data/wv.data.model.js",
     "src/js/data/wv.data.results.js",
     "src/js/data/wv.data.ui.js",
 
-    "src/js/legacy/wv.legacy.switch_.js",
-    "src/js/legacy/wv.legacy.bank.js",
-    "src/js/legacy/wv.legacy.date.js",
-    "src/js/legacy/wv.legacy.palettes.js",
+    "src/js/map/wv.map.js",
+    "src/js/map/wv.map.layers.js",
+    "src/js/map/wv.map.model.js",
+    "src/js/map/wv.map.set.js",
+    "src/js/map/wv.map.palette.js",
 
-    "src/js/Worldview.js",
-    "src/js/Worldview/Support.js",
-    "src/js/Worldview/Scheduler.js",
-    "src/js/Worldview/Indicator.js",
-    "src/js/Worldview/AjaxJoin.js",
-
-    "src/js/Worldview/Map.js",
-    "src/js/Worldview/Map/CanvasTile.js",
-    "src/js/Worldview/Map/MapSet.js",
-    "src/js/Worldview/Map/LayerSet.js",
-    "src/js/Worldview/Map/StaticLayerSet.js",
-    "src/js/Worldview/Map/DailyLayerSet.js",
-    "src/js/Worldview/Map/GraticuleLayer.js",
-    "src/js/Worldview/Map/TWMSLayer.js",
-    "src/js/Worldview/Map/HoverControl.js",
-    "src/js/Worldview/Map/MockLayerSet.js",
-
-    "src/js/Worldview/DataDownload/ECHO.js",
-    "src/js/Worldview/DataDownload/ECHO/Client.js",
-    "src/js/Worldview/DataDownload/ECHO/Geometry.js",
-    "src/js/Worldview/DataDownload/ECHO/MockClient.js",
-
-    "src/js/Worldview/DataDownload/Layers/Button.js",
-    "src/js/Worldview/DataDownload/Layers/Grid.js",
-    "src/js/Worldview/DataDownload/Layers/Hover.js",
-    "src/js/Worldview/DataDownload/Layers/Selection.js",
-    "src/js/Worldview/DataDownload/Layers/Swath.js",
-
-    "src/js/Worldview/DataDownload/MapController.js",
-    "src/js/Worldview/DataDownload/SelectionListPanel.js",
-    "src/js/Worldview/DataDownload/DownloadListPanel.js",
-    "src/js/Worldview/DataDownload/BulkDownloadPage.js",
-
-    "src/js/Worldview/Widget/Map.js",
-    "src/js/Worldview/Widget/WorldviewMap.js",
+    "src/js/link/wv.link.model.js",
+    "src/js/link/wv.link.ui.js",
 
     "src/js/wv.debug.js",
     "src/js/wv.tour.js",

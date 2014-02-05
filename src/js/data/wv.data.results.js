@@ -24,18 +24,18 @@ wv.data.results.antiMeridianMulti = function(maxDistance) {
     self.name = "AntiMeridianMulti";
 
     self.process = function(meta, granule) {
-        var geom = granule.geometry[Worldview.Map.CRS_WGS_84];
-        if ( !Worldview.Map.isPolygonValid(geom, maxDistance) ) {
-            var geomEast = Worldview.Map.adjustAntiMeridian(geom, 1);
-            var geomWest = Worldview.Map.adjustAntiMeridian(geom, -1);
+        var geom = granule.geometry[wv.map.CRS_WGS_84];
+        if ( !wv.util.map.isPolygonValid(geom, maxDistance) ) {
+            var geomEast = wv.util.map.adjustAntiMeridian(geom, 1);
+            var geomWest = wv.util.map.adjustAntiMeridian(geom, -1);
             var centroidEast = geomEast.getCentroid();
             var centroidWest = geomWest.getCentroid();
             var newGeom =
                 new OpenLayers.Geometry.MultiPolygon([geomEast, geomWest]);
             var newCentroid =
                 new OpenLayers.Geometry.MultiPoint([centroidEast, centroidWest]);
-            granule.geometry[Worldview.Map.CRS_WGS_84] = newGeom;
-            granule.centroid[Worldview.Map.CRS_WGS_84] = newCentroid;
+            granule.geometry[wv.map.CRS_WGS_84] = newGeom;
+            granule.centroid[wv.map.CRS_WGS_84] = newCentroid;
         }
         return granule;
     };
@@ -97,7 +97,6 @@ wv.data.results.chain = function() {
 wv.data.results.collectPreferred = function(prefer) {
 
     var self = {};
-    var ns = Worldview.DataDownload;
 
     self.name = "CollectPreferred";
 
@@ -109,7 +108,7 @@ wv.data.results.collectPreferred = function(prefer) {
                 (prefer === "nrt" && granule.nrt) ||
                 (prefer === "science" && !granule.nrt);
         if ( preferred ) {
-            var timeStart = ns.ECHO.roundTime(granule.time_start);
+            var timeStart = wv.data.echo.roundTime(granule.time_start);
             meta.preferred[timeStart] = granule;
         }
         return granule;
@@ -122,7 +121,6 @@ wv.data.results.collectPreferred = function(prefer) {
 wv.data.results.collectVersions = function() {
 
     var self = {};
-    var ns = Worldview.DataDownload;
 
     self.name = "CollectVersions";
 
@@ -131,7 +129,7 @@ wv.data.results.collectVersions = function() {
             meta.versions = {};
         }
         if ( granule.version ) {
-            var timeStart = ns.ECHO.roundTime(granule.time_start);
+            var timeStart = wv.data.echo.roundTime(granule.time_start);
             var previousVersion = meta.versions[timeStart] || 0;
             meta.versions[timeStart] = Math.max(previousVersion,
                     granule.version);
@@ -189,7 +187,7 @@ wv.data.results.connectSwaths = function(projection) {
     var combineSwath = function(swath) {
         var combined = false;
 
-        var maxDistance = ( projection === Worldview.Map.CRS_WGS_84 ) ?
+        var maxDistance = ( projection === wv.map.CRS_WGS_84 ) ?
                 MAX_DISTANCE_GEO : Number.POSITIVE_INFINITY;
         var thisTimeStart = roundTime(swath[0].time_start);
         var thisTimeEnd = roundTime(swath[swath.length - 1].time_end);
@@ -233,8 +231,8 @@ wv.data.results.connectSwaths = function(projection) {
     // Connection is allowed as long as there is at least one path between
     // centroids that is less than the max distance
     var connectionAllowed = function(g1, g2, maxDistance) {
-        var polys1 = Worldview.Map.toPolys(g1.geometry[projection]);
-        var polys2 = Worldview.Map.toPolys(g2.geometry[projection]);
+        var polys1 = wv.map.toPolys(g1.geometry[projection]);
+        var polys2 = wv.map.toPolys(g2.geometry[projection]);
         var allowed = false;
 
         $.each(polys1, function(index, poly1) {
@@ -252,7 +250,7 @@ wv.data.results.connectSwaths = function(projection) {
 
 
     var roundTime = function(timeString) {
-        return Worldview.DataDownload.ECHO.roundTime(timeString);
+        return wv.data.echo.roundTime(timeString);
     };
 
     return self;
@@ -296,7 +294,7 @@ wv.data.results.densify = function() {
     self.name = "Densify";
 
     self.process = function(meta, granule) {
-        var geom = granule.geometry[Worldview.Map.CRS_WGS_84];
+        var geom = granule.geometry[wv.map.CRS_WGS_84];
         var newGeom = null;
         if ( geom.CLASS_NAME === "OpenLayers.Geometry.Polygon" ) {
             newGeom = densifyPolygon(geom);
@@ -309,7 +307,7 @@ wv.data.results.densify = function() {
         } else {
             throw Error("Cannot handle geometry: " + geom.CLASS_NAME);
         }
-        granule.geometry[Worldview.Map.CRS_WGS_84] = newGeom;
+        granule.geometry[wv.map.CRS_WGS_84] = newGeom;
         return granule;
     };
 
@@ -321,13 +319,13 @@ wv.data.results.densify = function() {
         for ( var i = 0; i < ring.length - 2; i++ ) {
             var start = ring[i];
             end = ring[i + 1];
-            var distance = Worldview.Map.distance2D(start, end);
+            var distance = wv.map.distance2D(start, end);
             var numPoints = Math.floor(distance / MAX_DISTANCE);
             points.push(start);
             for ( var j = 1; j < numPoints - 1; j++ ) {
                 var d = j / numPoints;
                 // This is what REVERB does, so we will do the same
-                var p = Worldview.Map.interpolate2D(start, end, d);
+                var p = wv.map.interpolate2D(start, end, d);
                 points.push(p);
             }
         }
@@ -378,12 +376,12 @@ wv.data.results.geometryFromECHO = function(densify) {
             granule.centroid = {};
         }
 
-        if ( !granule.geometry[Worldview.Map.CRS_WGS_84] ) {
-            var echoGeom = Worldview.DataDownload.ECHO.Geometry(granule, densify);
+        if ( !granule.geometry[wv.map.CRS_WGS_84] ) {
+            var echoGeom = wv.data.echo.geometry(granule, densify);
             var geom = echoGeom.toOpenLayers();
             var centroid = geom.getCentroid();
-            granule.geometry[Worldview.Map.CRS_WGS_84] = geom;
-            granule.centroid[Worldview.Map.CRS_WGS_84] = centroid;
+            granule.geometry[wv.map.CRS_WGS_84] = geom;
+            granule.centroid[wv.map.CRS_WGS_84] = centroid;
         }
         return granule;
     };
@@ -479,12 +477,11 @@ wv.data.results.modisGridLabel = function() {
 wv.data.results.preferredFilter = function(prefer) {
 
     var self = {};
-    var ns = Worldview.DataDownload;
 
     self.name = "PreferredFilter";
 
     self.process = function(meta, granule) {
-        var timeStart = ns.ECHO.roundTime(granule.time_start);
+        var timeStart = wv.data.echo.roundTime(granule.time_start);
         if ( meta.preferred[timeStart] ) {
             if ( prefer === "nrt" && !granule.nrt ) {
                 return;
@@ -659,18 +656,18 @@ wv.data.results.timeFilter = function(spec) {
     };
 
     self.process = function(meta, granule) {
-        var geom = granule.geometry[Worldview.Map.CRS_WGS_84];
+        var geom = granule.geometry[wv.map.CRS_WGS_84];
         var time = wv.util.parseTimestampUTC(granule.time_start);
         time.setUTCMinutes(time.getUTCMinutes() + timeOffset);
-        if ( !Worldview.Map.isPolygonValid(geom, maxDistance) ) {
+        if ( !wv.map.isPolygonValid(geom, maxDistance) ) {
             var adjustSign = ( time < eastZone ) ? 1 : -1;
             geom =
-                Worldview.Map.adjustAntiMeridian(geom, adjustSign);
-            granule.geometry[Worldview.Map.CRS_WGS_84] = geom;
-            granule.centroid[Worldview.Map.CRS_WGS_84] = geom.getCentroid();
+                wv.map.adjustAntiMeridian(geom, adjustSign);
+            granule.geometry[wv.map.CRS_WGS_84] = geom;
+            granule.centroid[wv.map.CRS_WGS_84] = geom.getCentroid();
         }
 
-        var x = granule.centroid[Worldview.Map.CRS_WGS_84].x;
+        var x = granule.centroid[wv.map.CRS_WGS_84].x;
         if ( time < eastZone && x < 0 ) {
             return;
         }
@@ -741,9 +738,9 @@ wv.data.results.transform = function(projection) {
         if ( granule.geometry[projection] ) {
             return granule;
         }
-        var geom = granule.geometry[Worldview.Map.CRS_WGS_84];
+        var geom = granule.geometry[wv.map.CRS_WGS_84];
         var projGeom = geom.clone()
-                .transform(Worldview.Map.CRS_WGS_84, projection);
+                .transform(wv.map.CRS_WGS_84, projection);
         granule.geometry[projection] = projGeom;
         granule.centroid[projection] = projGeom.getCentroid();
         return granule;
@@ -756,13 +753,12 @@ wv.data.results.transform = function(projection) {
 wv.data.results.versionFilter = function() {
 
     var self = {};
-    var ns = Worldview.DataDownload;
 
     self.name = "VersionFilter";
 
     self.process = function(meta, granule) {
         if ( granule.version ) {
-            var timeStart = ns.ECHO.roundTime(granule.time_start);
+            var timeStart = wv.data.echo.roundTime(granule.time_start);
             if ( meta.versions[timeStart] ) {
                 if ( meta.versions[timeStart] !== granule.version ) {
                     return;

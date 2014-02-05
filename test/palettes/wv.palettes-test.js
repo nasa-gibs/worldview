@@ -11,6 +11,49 @@
 
 buster.testCase("wv.palettes", {
 
+    config: null,
+    errors: null,
+
+    setUp: function() {
+        this.config = {
+            layers: {
+                "layer1": {},
+                "layer2": {}
+            }
+        };
+        this.errors = [];
+    },
+
+    "Parses palette for valid layer": function() {
+        var state = { palettes: "layer1,palette1" };
+        wv.palettes.parse(state, this.errors, this.config);
+        buster.assert.equals(state.palettes.layer1, "palette1");
+        buster.assert.equals(this.errors.length, 0);
+    },
+
+    "Parses two palettes for valid layers": function() {
+        var state = { palettes: "layer1,palette1~layer2,palette2" };
+        wv.palettes.parse(state, this.errors, this.config);
+        buster.assert.equals(state.palettes.layer1, "palette1");
+        buster.assert.equals(state.palettes.layer2, "palette2");
+        buster.assert.equals(this.errors.length, 0);
+    },
+
+    "Rejects palette for invalid layer": function() {
+        var state = { palettes: "layerX,paletteX~layer2,palette2" };
+        wv.palettes.parse(state, this.errors, this.config);
+        buster.refute(state.palettes.layerX);
+        buster.assert.equals(state.palettes.layer2, "palette2");
+        buster.assert.equals(this.errors.length, 1);
+    },
+
+    "Rejects all palettes for invalid layers": function() {
+        var state = { palettes: "layerX,paletteX~layerY,paletteY" };
+        wv.palettes.parse(state, this.errors, this.config);
+        buster.refute(state.palettes);
+        buster.assert.equals(this.errors.length, 2);
+    },
+
     "Translate one to one with custom palette": function() {
         var source = {
             colors: ["a", "b", "c"]

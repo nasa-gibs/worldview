@@ -12,7 +12,7 @@
 var wv = wv || {};
 wv.data = wv.data || {};
 
-wv.data.ui = wv.data.ui || function(models, config, maps) {
+wv.data.ui = wv.data.ui || function(models, config) {
 
     var HTML_WIDGET_INACTIVE = "<img src='images/camera.png'></img>";
     var HTML_WIDGET_ACTIVE = "<img src='images/cameraon.png'></img>";
@@ -24,6 +24,7 @@ wv.data.ui = wv.data.ui || function(models, config, maps) {
     var selectionListPanel = null;
     var downloadListPanel = null;
     var lastResults = null;
+    var maps = models.map.maps;
 
     var self = {};
     self.selector = "#DataDownload";
@@ -42,49 +43,7 @@ wv.data.ui = wv.data.ui || function(models, config, maps) {
             .on("queryTimeout", onQueryTimeout)
             .on("granuleSelect", updateSelection)
             .on("granuleUnselect", updateSelection);
-
-        REGISTRY.register(self.id, self);
-        REGISTRY.markComponentReady(self.id);
-        self.updateComponent();
-
         $(window).resize(resize);
-    };
-
-    self.updateComponent = function(queryString) {
-        /*
-        try {
-            model.update(REGISTRY.getState());
-        } catch ( error ) {
-            Worldview.error("Internal error", error);
-        }
-        */
-    };
-
-    self.getValue = function() {
-        if ( model.active ) {
-            return "dataDownload=" + model.selectedProduct;
-        } else {
-            return "";
-        }
-    };
-
-    self.setValue = function(value) {
-        throw new Error("Unsupported: setValue");
-    };
-
-    self.loadFromQuery = function(queryString) {
-        /*
-        var query = Worldview.queryStringToObject(queryString);
-        if ( query.dataDownload ) {
-            try {
-                var state = REGISTRY.getState(queryString);
-                model.activate(query.dataDownload);
-            } catch ( error ) {
-                console.warn("Invalid data download parameter: " + error);
-                model.activate();
-            }
-        }
-        */
     };
 
     self.render = function() {
@@ -180,7 +139,7 @@ wv.data.ui = wv.data.ui || function(models, config, maps) {
 
     var refreshLayers = function($container, key, value, layer) {
         var $item = $("<li></li>")
-            .attr("id", self.id + key + Worldview.id(layer.value))
+            .attr("id", self.id + key + encodeURIComponent(layer.value))
             .addClass("item")
             .addClass("item-static");
         $item.append("<h4>" + layer.label + "</h4>");
@@ -197,7 +156,7 @@ wv.data.ui = wv.data.ui || function(models, config, maps) {
 
         var $pane = $(self.selector + "content");
         var api = $pane.data("jsp");
-        if ( $(window).width() > Worldview.TRANSITION_WIDTH ) {
+        if ( !wv.util.browser.small ) {
             if ( api ) {
                 api.reinitialise();
             } else {
@@ -242,8 +201,7 @@ wv.data.ui = wv.data.ui || function(models, config, maps) {
 
     var onActivate = function() {
         if ( !mapController ) {
-            mapController =
-                Worldview.DataDownload.MapController(model, maps, config);
+            mapController = wv.data.map(model, maps, config);
         }
         onLayerUpdate();
         updateSelection();
@@ -291,7 +249,7 @@ wv.data.ui = wv.data.ui || function(models, config, maps) {
         } else {
             if ( results.meta.showList ) {
                 selectionListPanel =
-                        Worldview.DataDownload.SelectionListPanel(model, results);
+                        wv.data.ui.selectionListPanel(model, results);
                 selectionListPanel.show();
             } else {
                 if ( selectionListPanel ) {
@@ -328,7 +286,7 @@ wv.data.ui = wv.data.ui || function(models, config, maps) {
 
     var updateSelection = function() {
         $button = $("#DataDownload_Button");
-        var selected = Worldview.size(model.selectedGranules);
+        var selected = _.size(model.selectedGranules);
         if ( selected > 0 ) {
             $button.removeAttr("disabled");
             var totalSize = model.getSelectionSize();
@@ -358,7 +316,7 @@ wv.data.ui = wv.data.ui || function(models, config, maps) {
         }
         if ( !downloadListPanel ) {
             downloadListPanel =
-                    Worldview.DataDownload.DownloadListPanel(config, model);
+                    wv.data.ui.downloadListPanel(config, model);
             downloadListPanel.events.on("close", function() {
                 if ( selectionListPanel ) {
                     selectionListPanel.setVisible(true);
@@ -396,4 +354,562 @@ wv.data.ui = wv.data.ui || function(models, config, maps) {
     return self;
 
 };
+
+
+wv.data.ui.bulkDownloadPage = wv.data.ui.bulkDownloadPage ||
+        (function() {
+
+    var ns = {};
+
+    var pages = {
+        wget: "pages/wget.html",
+        curl: "pages/curl.html"
+    };
+
+    ns.show = function(selection, type) {
+        var nonce = Date.now();
+        var page = window.open(pages[type] + "?v=" + nonce,
+                'Worldview_' + nonce);
+
+        var loaded = false;
+        page.onload = function() {
+            if ( !loaded ) {
+                fillPage(page, selection, type);
+                loaded = true;
+            }
+        };
+        var checkCount = 0;
+        var timer = setInterval(function() {
+            checkCount++;
+            if ( loaded ) {
+                clearInterval(timer);
+                return;
+            }
+            if ( checkCount > 20 ) {
+                clearInterval(timer);
+                return;
+            }
+            if ( fillPage(page, selection, type) ) {
+                loaded = true;
+                clearInterval(timer);
+            }
+        }, 100);
+    };
+
+    var fillPage = function(page, selection, type) {
+        var downloadLinks = [];
+        var hosts = {};
+        var indirectLinks = [];
+        $.each(selection, function(index, product) {
+            $.each(product.list, function(index2, granule) {
+                var netrc = "";
+                if ( granule.urs ) {
+                    netrc = "--netrc ";
+                }
+                $.each(granule.links, function(index2, link) {
+                    if ( !link.data ) {
+                        return;
+                    }
+                    if ( product.noBulkDownload ) {
+                        indirectLinks.push("<li><a href='" + link.href + "'>" +
+                            link.href + "</a></li>");
+                        return;
+                    }
+                    if ( type === "curl" ) {
+                        downloadLinks.push("curl --remote-name " + netrc +
+                                link.href);
+                    } else {
+                        downloadLinks.push(link.href);
+                    }
+                    if ( granule.urs ) {
+                        // Get the hostname from the URL, the text between
+                        // the double slash and the first slash after that
+                        var host = /\/\/([^\/]*)\//.exec(link.href);
+                        if ( host ) {
+                            hosts[host[1]] = true;
+                        }
+                    }
+                });
+            });
+        });
+        var links = page.document.getElementById("links");
+        if ( !links ) {
+            // Page is not ready
+            return false;
+        }
+        links.innerHTML = "<pre>" + downloadLinks.join("\n") + "</pre>";
+
+        var netrcEntries = [];
+        var hostnames = [];
+        $.each(hosts, function(host, value) {
+            netrcEntries.push("machine " + host + " login URS_USER " +
+                "password URS_PASSWORD");
+            hostnames.push(host);
+        });
+        if ( netrcEntries.length > 0 ) {
+            page.document.getElementById("netrc").innerHTML =
+                "<pre>" + netrcEntries.join("\n") + "</pre>";
+            page.document.getElementById("bulk-password-notice")
+                .style.display = "block";
+            page.document.getElementById("netrc-instructions")
+                .style.display = "block";
+            var instructions =
+                page.document.getElementById("fdm-password-instructions");
+            if ( instructions ) {
+                instructions.style.display = "block";
+            }
+            var machineNames =
+                page.document.getElementById("fdm-machine-names");
+            if ( machineNames ) {
+                machineNames.innerHTML = "<pre>" + hostnames.join("\n") +
+                    "</pre>";
+            }
+        }
+        if ( indirectLinks.length > 0 ) {
+            page.document.getElementById("indirect-instructions")
+                .style.display = "block";
+            page.document.getElementById("indirect").innerHTML =
+                "<ul>" + indirectLinks.join("\n") + "</ul>";
+        }
+        return true;
+    };
+
+    return ns;
+
+})();
+
+
+wv.data.ui.downloadListPanel = function(config, model) {
+
+    var echo = wv.data.echo;
+
+    var NOTICE =
+        "<div id='DataDownload_Notice'>" +
+            "<img class='icon' src='images/info-icon-blue.svg'>" +
+            "<p class='text'>" +
+                "Some items you have selected require an account with the " +
+                "EOSDIS User Registration System (URS) to download. " +
+                "It is simple and free to sign up! " +
+                "<a href='https://urs.eosdis.nasa.gov/users/new' target='urs'>" +
+                "Click to register for an account.</a>" +
+            "</p>" +
+        "</div>";
+
+    var panel = null;
+    var selection;
+    var self = {};
+    var urs = false;
+
+    self.events = wv.util.events();
+
+    self.show = function() {
+        $("#DataDownload_DownloadListPanel .remove").off("click", removeGranule);
+        $("#DataDownload_DownloadListPanel a.wget").off("click", showWgetPage);
+        $("#DataDownload_DownloadListPanel a.curl").off("click", showCurlPage);
+        $("#DataDownload_DownloadListPanel tr").off("mouseenter", onHoverOver);
+        $("#DataDownload_DownloadListPanel tr").off("mouseleave", onHoverOut);
+
+        selection = reformatSelection();
+        var newPanel = false;
+        if ( !panel ) {
+            newPanel = true;
+            panel = new YAHOO.widget.Panel("DataDownload_DownloadListPanel", {
+                width: "650px",
+                height: "500px",
+                zIndex: 1020,
+                visible: false,
+                constraintoviewport: true
+            });
+            panel.setHeader("Download Links");
+        }
+        panel.setBody(bodyText(selection));
+        panel.setFooter(bulkDownloadText());
+
+        if ( newPanel ) {
+            panel.render(document.body);
+            panel.show();
+            panel.center();
+            panel.hideEvent.subscribe(function() {
+                setTimeout(dispose, 25);
+            });
+        }
+
+        $("#DataDownload_DownloadListPanel a.wget").click(showWgetPage);
+        $("#DataDownload_DownloadListPanel a.curl").click(showCurlPage);
+        $("#DataDownload_DownloadListPanel .remove").click(removeGranule);
+        $("#DataDownload_DownloadListPanel tr").on("mouseenter", onHoverOver);
+        $("#DataDownload_DownloadListPanel tr").on("mouseleave", onHoverOut);
+
+        var bulkVisible = isBulkDownloadable() &&
+                _.size(model.selectedGranules) !== 0;
+        if ( bulkVisible ) {
+            $("#DataDownload_DownloadListPanel .ft .bulk")
+                    .css("visibility", "visible");
+        } else {
+            $("#DataDownload_DownloadListPanel .ft .bulk")
+                    .css("visibility", "hidden");
+        }
+    };
+
+    self.hide = function() {
+        if ( panel ) {
+            panel.hide();
+        }
+    };
+
+    self.visible = function() {
+        return panel !== null;
+    };
+
+    var dispose = function() {
+        $("#DataDownload_DownloadListPanel .remove").off("click", removeGranule);
+        $("#DataDownload_DownloadListPanel a.wget").off("click", showWgetPage);
+        $("#DataDownload_DownloadListPanel a.curl").off("click", showCurlPage);
+        $("#DataDownload_DownloadListPanel tr").off("mouseenter", onHoverOver);
+        $("#DataDownload_DownloadListPanel tr").off("mouseleave", onHoverOut);
+
+        self.events.trigger("close");
+        panel.destroy();
+        panel = null;
+    };
+
+    var reformatSelection = function() {
+        var selection = {};
+
+        urs = false;
+        $.each(model.selectedGranules, function(key, granule) {
+            if ( granule.urs ) {
+                urs = true;
+            }
+            if ( !selection[granule.product] ) {
+                productConfig = config.products[granule.product];
+                selection[granule.product] = {
+                    name: productConfig.name,
+                    granules: [granule],
+                    counts: {},
+                    noBulkDownload: productConfig.noBulkDownload || false,
+                };
+            } else {
+                selection[granule.product].granules.push(granule);
+            }
+
+            var product = selection[granule.product];
+            var id = granule.product;
+
+            // For each link that looks like metadata, see if that link is
+            // repeated in all granules for that product. If so, we want to
+            // bump that up to product level instead of at the granule level.
+            $.each(granule.links, function(index, link) {
+                if ( link.rel !== echo.REL_DATA && link.rel !== echo.REL_BROWSE ) {
+                    if ( !product.counts[link.href]  ) {
+                        product.counts[link.href] = 1;
+                    } else {
+                        product.counts[link.href]++;
+                    }
+                }
+            });
+        });
+
+        $.each(selection, function(key, product) {
+            product.links = [];
+            product.list = [];
+
+            // Check the first granule, and populate product level links
+            // where the count equals the number of granules
+            var granule = product.granules[0];
+            $.each(granule.links, function(index, link) {
+                var count = product.counts[link.href];
+                if ( count % product.granules.length === 0 ) {
+                    product.links.push(reformatLink(link));
+                }
+            });
+
+            $.each(product.granules, function(index, granule) {
+                var item = {
+                    id: granule.id,
+                    label: granule.downloadLabel || granule.label,
+                    links: [],
+                    urs: granule.urs
+                };
+                $.each(granule.links, function(index, link) {
+                    // Skip this link if now at the product level
+                    var count = product.counts[link.href];
+                    if ( count % product.granules.length === 0 ) {
+                        return;
+                    }
+                    // Skip browse images per Kevin's request
+                    if ( link.rel === echo.REL_BROWSE ) {
+                        return;
+                    }
+                    item.links.push(reformatLink(link));
+                });
+                product.list.push(item);
+            });
+            product.list.sort(function(a, b) {
+                if ( a.label > b.label ) {
+                    return 1;
+                }
+                if ( a.label < b.label ) {
+                    return -1;
+                }
+                return 0;
+            });
+        });
+
+        return selection;
+    };
+
+    var isBulkDownloadable = function() {
+        var result = false;
+        $.each(selection, function(index, product) {
+            if ( !product.noBulkDownload ) {
+                result = true;
+            }
+        });
+        return result;
+    };
+
+    var reformatLink = function(link) {
+        // For title, take it if found, otherwise, use the basename of the
+        // URI
+        return {
+            href: link.href,
+            title: ( link.title ) ? link.title : link.href.split("/").slice(-1),
+            data: ( link.rel === echo.REL_DATA )
+        };
+    };
+
+    var linksText = function(links) {
+        var elements = [];
+        elements.push("<ul>");
+        $.each(links, function(index, link) {
+            elements.push(
+                "<li><a href='" + link.href + "' target='_blank'>" +
+                link.title + "</a></li>");
+        });
+        elements.push("</ul>");
+        return elements.join("\n");
+    };
+
+    var granuleText = function(product, granule) {
+        var elements;
+        if ( product.name !== granule.label ) {
+            elements = [
+                "<tr data-granule='" + granule.id + "'>",
+                    "<td><input type='button' class='remove' " +
+                        "data-granule='" + granule.id + "' " +
+                        "value='X'></input></td>",
+                    "<td><nobr><ul><li>" + granule.label + "</li></ul></nobr></td>",
+                    "<td>" + linksText(granule.links) + "</td>",
+                "</tr>"
+            ];
+        } else {
+            elements = [
+                "<tr data-granule='" + granule.id + "'>",
+                    "<td><input type='button' class='remove' " +
+                        "data-granule='" + granule.id + "' " +
+                        "value='X'></input></td>",
+                    "<td colspan='2'>" + linksText(granule.links) + "</td>",
+                "</tr>"
+            ];
+        }
+        return elements.join("\n");
+    };
+
+    var productText = function(product) {
+        var elements = [
+            "<h3>" + product.name + "</h3>"
+        ];
+
+        elements.push("<h5>Selected Data</h5>");
+        elements.push("<table>");
+
+        $.each(product.list, function(index, item) {
+            elements.push(granuleText(product, item));
+        });
+        elements.push("</table>");
+
+        if ( product.links && product.links.length > 0 ) {
+            elements.push("<h5>Data Collection Information</h5>");
+            elements.push("<div class='product'>");
+            elements.push(linksText(product.links));
+            elements.push("</div>");
+        }
+
+        return elements.join("\n");
+    };
+
+    var bodyText = function() {
+        if ( _.size(model.selectedGranules) === 0 ) {
+            return "<br/><h3>Selection Empty</h3>";
+        }
+        var elements = [];
+        if ( urs ) {
+            elements.push(NOTICE);
+        }
+        $.each(selection, function(key, product) {
+            elements.push("\n<br/>\n" + productText(product));
+        });
+
+        var text = elements.join("\n<br/>\n") + "<br/>";
+        return text;
+    };
+
+    var bulkDownloadText = function() {
+        var bulk =
+            "<div class='bulk'>" +
+            "<h4>Bulk Download</h4>" +
+            "<ul class='BulkDownload'>" +
+            "<li><a class='wget' href='#'>List of Links:</a> " +
+                "for wget or download managers that accept a list of " +
+                "URLs</li>" +
+            "<li><a class='curl' href='#'>List of cURL Commands:</a> " +
+                "can be copied and pasted to " +
+                "a terminal window to download using cURL.</li>" +
+            "</ul>" +
+            "</div>";
+        return bulk;
+    };
+
+    var showWgetPage = function() {
+        wv.data.ui.bulkDownloadPage.show(selection, "wget");
+    };
+
+    var showCurlPage = function() {
+        wv.data.ui.bulkDownloadPage.show(selection, "curl");
+    };
+
+    var removeGranule = function() {
+        var id = $(this).attr("data-granule");
+        model.unselectGranule(model.selectedGranules[id]);
+        onHoverOut.apply(this);
+    };
+
+    var onHoverOver = function() {
+        model.events.trigger("hoverOver",
+                model.selectedGranules[$(this).attr("data-granule")]);
+    };
+
+    var onHoverOut = function() {
+        model.events.trigger("hoverOut",
+                model.selectedGranules[$(this).attr("data-granule")]);
+    };
+
+    return self;
+
+};
+
+
+wv.data.ui.selectionListPanel = function(model, results) {
+
+    var panel = null;
+    var self = {};
+    var granules = {};
+
+    var init = function() {
+        model.events.on("granuleUnselect", onGranuleUnselect);
+    };
+
+    self.show = function() {
+        panel = new YAHOO.widget.Panel("DataDownload_SelectionListPanel", {
+            width: "400px",
+            height: "400px",
+            zIndex: 1020,
+            visible: false,
+            close: false,
+            constraintoviewport: true
+        });
+        panel.setHeader("Select data");
+
+        panel.setBody(bodyText());
+        panel.render(document.body);
+        panel.show();
+        panel.center();
+        panel.hideEvent.subscribe(function() {
+            setTimeout(dispose, 25);
+        });
+
+        $.each(results.granules, function(index, granule) {
+            granules[granule.id] = granule;
+        });
+
+        $("#DataDownload_GranuleList input").on("click", toggleSelection);
+    };
+
+    self.hide = function() {
+        if ( panel ) {
+            panel.hide();
+        }
+    };
+
+    self.visible = function() {
+        return panel !== null;
+    };
+
+    self.setVisible = function(value) {
+        if ( !value ) {
+            $("#DataDownload_SelectionListPanel").hide();
+        } else {
+            $("#DataDownload_SelectionListPanel").show();
+        }
+    };
+
+    var dispose = function() {
+        panel.destroy();
+        panel = null;
+        $("#DataDownload_GranuleList input").off("click", toggleSelection);
+    };
+
+    var resultsText = function() {
+        var elements = [];
+        $.each(results.granules, function(index, granule) {
+            var selected = model.isSelected(granule) ? "checked='true'" : "";
+            elements.push(
+                "<tr>" +
+                "<td>" +
+                "<input type='checkbox' value='" + granule.id + "' " +
+                selected + ">" +
+                "</td>" +
+                "<td class='label'>" + granule.label + "</td>" +
+                "</tr>"
+            );
+        });
+        var text = elements.join("\n");
+        return text;
+    };
+
+    var bodyText = function() {
+        var elements = [
+            "<div id='DataDownload_GranuleList'>",
+            "<table>",
+            resultsText(),
+            "</table>",
+            "</div>"
+        ];
+        var text = elements.join("\n") + "<br/>";
+        return text;
+    };
+
+    var toggleSelection = function(event, ui) {
+        var granule = granules[$(this).attr("value")];
+        var selected = $(this).prop("checked");
+        if ( selected ) {
+            model.selectGranule(granule);
+        } else {
+            model.unselectGranule(granule);
+        }
+    };
+
+    var onGranuleUnselect = function(granule) {
+        $("#DataDownload_GranuleList input[value='" + granule.id + "']")
+                .removeAttr("checked");
+    };
+
+
+    init();
+    return self;
+
+};
+
+
 

@@ -109,14 +109,14 @@ wv.layers.active = wv.layers.active || function(models, config) {
 
     var renderLayer = function($parent, group, layer, top) {
         var $layer = $("<li></li>")
-            .attr("id", group.id + "-" + Worldview.id(layer.id))
+            .attr("id", group.id + "-" + encodeURIComponent(layer.id))
             .addClass(self.id + "item")
             .addClass("item")
             .attr("data-layer", layer.id);
 
         var $removeButton = $("<a></a>");
         var $removeImage = $("<img></img>")
-            .attr("id", "close" + group.id + Worldview.id(layer.id))
+            .attr("id", "close" + group.id + encodeURIComponent(layer.id))
             .addClass("close")
             .addClass("bank-item-img")
             .attr("data-layer", layer.id)
@@ -128,7 +128,7 @@ wv.layers.active = wv.layers.active || function(models, config) {
         var $visibleButton = $("<a></a>")
             .addClass("hdanchor");
         var $visibleImage = $("<img></img>")
-            .attr("id", "hide" + Worldview.id(layer.id))
+            .attr("id", "hide" + encodeURIComponent(layer.id))
             .attr("data-layer", layer.id)
             .addClass("hide")
             .addClass("hideReg")
@@ -225,7 +225,7 @@ wv.layers.active = wv.layers.active || function(models, config) {
 
     var resize = function() {
         // If on a mobile device, use the native scroll bars
-        if ( $(window).width() > Worldview.TRANSITION_WIDTH ) {
+        if ( !wv.util.browser.small ) {
             if ( jsp ) {
                 var api = jsp.data('jsp');
                 if ( api ) {
@@ -249,7 +249,7 @@ wv.layers.active = wv.layers.active || function(models, config) {
     };
 
     var onLayerRemoved = function(layer) {
-        var layerSelector = "#" + layer.group + "-" + Worldview.id(layer.id);
+        var layerSelector = "#" + layer.group + "-" + encodeURIComponent(layer.id);
         $(layerSelector).remove();
         adjustCategoryHeights();
     };

@@ -47,10 +47,10 @@ wv.data.handler.base = function(config, model) {
 
         if ( !ns.echo ) {
             if ( config.parameters.mockECHO ) {
-                ns.echo = Worldview.DataDownload.ECHO.MockClient(
+                ns.echo = wv.data.echo.mockClient(
                         config.parameters.mockECHO);
             } else {
-                ns.echo = Worldview.DataDownload.ECHO.Client({
+                ns.echo = wv.data.echo.client({
                     timeout: config.parameters.timeoutECHO
                 });
             }
@@ -110,8 +110,8 @@ wv.data.handler.modisSwathMultiDay = function(config, model, spec) {
     var self = wv.data.handler.base(config, model);
 
     var init = function() {
-        self.extents[Worldview.Map.CRS_WGS_84] =
-               Worldview.Map.CRS_WGS_84_QUERY_EXTENT;
+        self.extents[wv.map.CRS_WGS_84] =
+               wv.map.CRS_WGS_84_QUERY_EXTENT;
     };
 
     self._submit = function(queryData) {
@@ -130,8 +130,8 @@ wv.data.handler.modisSwathMultiDay = function(config, model, spec) {
             meta: {},
             granules: data
         };
-        if ( model.crs === Worldview.Map.CRS_WGS_84 ) {
-            results.meta.queryMask = Worldview.Map.CRS_WGS_84_QUERY_MASK;
+        if ( model.crs === wv.map.CRS_WGS_84 ) {
+            results.meta.queryMask = wv.map.CRS_WGS_84_QUERY_MASK;
         }
 
         var ns = wv.data.results;
@@ -400,8 +400,8 @@ wv.data.handler.modisSwath = function(config, model, spec) {
     var self = wv.data.handler.base(config, model);
 
     var init = function() {
-        self.extents[Worldview.Map.CRS_WGS_84] =
-               Worldview.Map.CRS_WGS_84_QUERY_EXTENT;
+        self.extents[wv.map.CRS_WGS_84] =
+               wv.map.CRS_WGS_84_QUERY_EXTENT;
     };
 
     self._submit = function(queryData) {
@@ -418,8 +418,8 @@ wv.data.handler.modisSwath = function(config, model, spec) {
             meta: {},
             granules: data
         };
-        if ( model.crs === Worldview.Map.CRS_WGS_84 ) {
-            results.meta.queryMask = Worldview.Map.CRS_WGS_84_QUERY_MASK;
+        if ( model.crs === wv.map.CRS_WGS_84 ) {
+            results.meta.queryMask = wv.map.CRS_WGS_84_QUERY_MASK;
         }
 
         var ns = wv.data.results;

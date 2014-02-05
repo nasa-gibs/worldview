@@ -64,32 +64,27 @@ buster.testCase("wv.date.model", {
             "2012-01-31");
     },
 
-    "To permalink": function() {
+    "Saves state": function() {
         var d = new Date(Date.UTC(2013, 0, 5));
         var date = wv.date.model(this.config);
         date.select(d);
-        buster.assert.equals(date.toPermalink(), "time=2013-01-05");
+        var state = {};
+        date.save(state);
+        buster.assert.equals(state.time, "2013-01-05");
     },
 
-    "From valid permalink": function() {
-        var d = new Date(Date.UTC(2013, 0, 5));
-        var date = wv.date.model(this.config);
-        date.fromPermalink("time=2013-01-05");
-        buster.assert.equals(date.selected, d);
+    "Loads state": function() {
+        var date = new Date(Date.UTC(2013, 0, 5));
+        var model = wv.date.model(this.config);
+        var state = { time: date };
+        model.load(state);
+        buster.assert.equals(model.selected, date);
     },
 
-    "Not selected when time is not in permalink": function() {
-        var date = wv.date.model(this.config);
-        date.fromPermalink("foo=2013-01-05");
-        buster.assert.equals(date.selected, this.now);
-    },
-
-    "Warning emitted when time is invalid": function() {
-        var date = wv.date.model(this.config);
-        this.stub(wv.util, "warn");
-        date.fromPermalink("time=X");
-        buster.assert.equals(date.selected, this.now);
-        buster.assert.calledOnce(wv.util.warn);
+    "Nothing selected when missing in state": function() {
+        var model = wv.date.model(this.config);
+        model.load({});
+        buster.assert.equals(model.selected, this.now);
     },
 
     "Start/End times set to null if range is null": function() {

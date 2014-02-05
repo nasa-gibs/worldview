@@ -74,29 +74,18 @@ buster.testCase("wv.proj.model", {
         buster.refute.called(listener);
     },
 
-    "To permalink": function() {
+    "Saves state": function() {
         var model = wv.proj.model(this.config);
-        buster.assert.equals(model.toPermalink(), "switch=geographic");
+        var state = {};
+        model.save(state);
+        buster.assert.equals(state["switch"], "geographic");
     },
 
-    "From permalink": function() {
+    "Loads state": function() {
         var model = wv.proj.model(this.config);
-        model.fromPermalink("switch=arctic");
+        var state = {"switch": "arctic"};
+        model.load(state);
         buster.assert.equals(model.selected.id, "arctic");
-    },
-
-    "Ignores query string without projection": function() {
-        var model = wv.proj.model(this.config);
-        model.fromPermalink("x=arctic");
-        buster.assert.equals(model.selected.id, "geographic");
-    },
-
-    "Emits warning on invalid projection in query string": function() {
-        this.stub(wv.util, "warn");
-        var model = wv.proj.model(this.config);
-        model.fromPermalink("switch=foo");
-        buster.assert.equals(model.selected.id, "geographic");
-        buster.assert.calledOnce(wv.util.warn);
     }
 
 });
