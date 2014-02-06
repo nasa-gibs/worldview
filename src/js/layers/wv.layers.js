@@ -18,7 +18,7 @@ wv.layers = (function(self) {
         if ( str ) {
             var layers = [];
             var hidden = {};
-            var ids = str.split(/[~,]/);
+            var ids = str.split(/[~,\.]/);
             _.each(ids, function(id) {
                 if ( id === "baselayers" || id == "overlays" ) {
                     return;

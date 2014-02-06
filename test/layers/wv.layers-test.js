@@ -49,6 +49,16 @@ buster.testCase("wv.layers", {
         buster.assert.equals(this.errors.length, 0);
     },
 
+    "Supports old style period delimiters": function() {
+        var state  = { products: "baselayers.layer1~overlays.layer2.layer3" };
+        wv.layers.parse(state, this.errors, this.config);
+        // Reverse order
+        buster.assert.equals(state.products[0], "layer3");
+        buster.assert.equals(state.products[1], "layer2");
+        buster.assert.equals(state.products[2], "layer1");
+        buster.assert.equals(this.errors.length, 0);
+    },
+
     "Skips invalid layers and records an error": function () {
         var state = { products: "baselayers,layer1~overlays,layerx,layer3" };
         wv.layers.parse(state, this.errors, this.config);
