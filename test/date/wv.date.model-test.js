@@ -81,6 +81,14 @@ buster.testCase("wv.date.model", {
         buster.assert.equals(model.selected, date);
     },
 
+    "Now overriden": function() {
+        var now = wv.util.parseDateUTC("2012-01-01");
+        var state = { now: now };
+        var model = wv.date.model(this.config);
+        model.load(state);
+        buster.assert.equals(wv.util.now(), now);
+    },
+
     "Nothing selected when missing in state": function() {
         var model = wv.date.model(this.config);
         model.load({});

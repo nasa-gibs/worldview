@@ -84,10 +84,10 @@ wv.date.model = wv.date.model || function(spec) {
     };
 
     self.range = function(range) {
-        if ( range ) {
+        if ( range) {
             self.start = range.start;
             self.end = range.end;
-            if ( wv.util.clearTimeUTC(self.end) > wv.util.today() ) {
+            if ( self.end && wv.util.clearTimeUTC(self.end) > wv.util.today() ) {
                 self.end = wv.util.today();
             } else {
                 self.end = range.end;
@@ -112,7 +112,7 @@ wv.date.model = wv.date.model || function(spec) {
             wv.util.now = function() {
                 return state.now;
             };
-            wv.util.warn("Overriding now: " + now.toISOString());
+            wv.util.warn("Overriding now: " + state.now.toISOString());
             self.range({ start: self.start, end: self.end });
         }
     };
