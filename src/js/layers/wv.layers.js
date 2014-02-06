@@ -41,14 +41,8 @@ wv.layers = (function(self) {
                     hidden[id] = true;
                 }
             });
-            if ( layers.length > 0 ) {
-                state.products = layers;
-                if ( _.size(hidden) > 0 ) {
-                    state.hidden = hidden;
-                }
-            } else {
-                delete state.products;
-            }
+            state.products = layers;
+            state.hidden = hidden;
         }
     };
 

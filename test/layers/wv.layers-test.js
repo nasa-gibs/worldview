@@ -49,6 +49,12 @@ buster.testCase("wv.layers", {
         buster.assert.equals(this.errors.length, 0);
     },
 
+    "Empty layer list": function() {
+        var state = { products: "baselayers~overlays"};
+        wv.layers.parse(state, this.errors, this.config);
+        buster.assert.equals(state.products.length, 0);
+    },
+
     "Supports old style period delimiters": function() {
         var state  = { products: "baselayers.layer1~overlays.layer2.layer3" };
         wv.layers.parse(state, this.errors, this.config);
@@ -69,9 +75,9 @@ buster.testCase("wv.layers", {
     },
 
     "No layers if all invalid": function() {
-        var state = { products: "layerx" };
+        var state = { products: "layerx,layery" };
         wv.layers.parse(state, this.errors, this.config);
-        buster.refute(state.products);
+        buster.assert.equals(state.products.length, 0);
     },
 
     "Hidden layers": function() {
