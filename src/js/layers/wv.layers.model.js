@@ -67,6 +67,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
     };
 
     self.forGroup = function(group, spec) {
+        spec = spec || {};
         var results = [];
         var groups = self.forProjection();
         _.each(groups[group], function(layer) {
@@ -82,6 +83,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
     };
 
     self.get = function(spec) {
+        spec = spec || {};
         var baselayers = self.forGroup("baselayers", spec);
         var overlays = self.forGroup("overlays", spec);
         return baselayers.concat(overlays);

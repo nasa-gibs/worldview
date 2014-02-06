@@ -14,11 +14,19 @@ buster.testCase("wv.data.model", {
     config: null,
     models: null,
     model: null,
+    errors: null,
 
     setUp: function() {
         this.config = {
             products: {
                 "product1": {}
+            },
+            layers: {
+                "layer1": {
+                    product: "product1",
+                    group: "overlays",
+                    projections: { geographic: {} }
+                }
             }
         };
         this.models = {};
@@ -28,7 +36,9 @@ buster.testCase("wv.data.model", {
         };
         this.models.date = wv.date.model();
         this.models.layers = wv.layers.model(this.models, this.config);
+        this.models.layers.add("layer1");
         this.model = wv.data.model(this.models, this.config);
+        this.errors = [];
     },
 
     "Doesn't save state when not active": function() {
@@ -46,16 +56,29 @@ buster.testCase("wv.data.model", {
         buster.assert.equals(state.dataDownload, "product1");
     },
 
-    "Subscribed for startup event when data download in permalink": function() {
+    "Subscribed for startup event when data download in load state": function() {
         this.models.wv = {
             events: {
                 on: this.stub()
             }
         };
         var state = { dataDownload: "product1" };
-        this.model.load(state);
+        this.model.load(state, this.errors);
+        buster.assert.equals(this.errors.length, 0);
         buster.assert.calledWith(this.models.wv.events.on, "startup");
-    }
+    },
 
+    "Error product is in state when no active layer is found": function() {
+        this.models.wv = {
+            events: {
+                on: this.stub()
+            }
+        };
+        this.models.layers.remove("layer1");
+        var state = { dataDownload: "product1" };
+        this.model.load(state, this.errors);
+        buster.assert.equals(this.errors.length, 1);
+        buster.refute.calledWith(this.models.wv.events.on, "startup");
+    }
 });
 

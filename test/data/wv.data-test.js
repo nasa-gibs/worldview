@@ -36,4 +36,5 @@ buster.testCase("wv.data", {
         buster.refute(state.dataDownload);
         buster.assert.equals(this.errors.length, 1);
     }
+
 });

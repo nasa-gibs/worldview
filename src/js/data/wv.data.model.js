@@ -282,12 +282,23 @@ wv.data.model = wv.data.model || function(models, config) {
         }
     };
 
-    self.load = function(state) {
+    self.load = function(state, errors) {
         var productId = state.dataDownload;
         if ( productId ) {
-            models.wv.events.on("startup", function() {
-                self.activate(productId);
+            var found = false;
+            _.each(models.layers.get(), function(layer) {
+                if ( layer.product === productId ) {
+                    found = true;
+                }
             });
+            if ( !found ) {
+                errors.push({message: "No active layers match product: " +
+                        productId});
+            } else {
+                models.wv.events.on("startup", function() {
+                    self.activate(productId);
+                });
+            }
         }
     };
 
