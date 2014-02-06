@@ -61,7 +61,7 @@ wv.map.model = wv.map.model || function(models, config) {
             // Verify that the viewport extent overlaps the valid extent, if
             // invalid, just zoom out the max extent
             var extent = state.map;
-            var intersects = extent.intersectsBounds(map.getExtent());
+            var intersects = extent.intersectsBounds(map.getMaxExtent());
             if ( !intersects ) {
                 errors.push({message: "Extent outside of range"});
                 extent = map.getExtent();
