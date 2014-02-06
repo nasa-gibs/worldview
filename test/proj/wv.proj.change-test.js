@@ -116,15 +116,15 @@ buster.testCase("wv.proj.change", {
 
     "No notification in first new arctic projection visit": function() {
         this.models.date.select(new Date(Date.UTC(2014, 0, 1)));
-        this.models.proj.select("arctic");
         var model = wv.proj.change(this.models);
+        this.models.proj.select("arctic");
         buster.refute.called(wv.ui.notify);
     },
 
     "No notification in first old arctic projection visit": function() {
         this.models.date.select(new Date(Date.UTC(2013, 0, 1)));
-        this.models.proj.select("arctic");
         var model = wv.proj.change(this.models);
+        this.models.proj.select("arctic");
         buster.refute.called(wv.ui.notify);
     },
 

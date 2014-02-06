@@ -23,7 +23,7 @@ wv.proj.change = wv.proj.change || function(models) {
     var PROJECTION_CHANGE_DATE = new Date(Date.UTC(2013, 05, 06));
     var DO_NOT_SHOW_AGAIN = "arcticProjectionChangeNotification";
     var notified = false;
-    var polarVisited = false;
+    var polarVisited = 0;
     var self = {};
 
     self.events = wv.util.events();
@@ -46,7 +46,7 @@ wv.proj.change = wv.proj.change || function(models) {
         self.old = false;
 
         if ( proj.id === "arctic" || proj.id === "antarctic" ) {
-            polarVisited = true;
+            polarVisited = polarVisited + 1;
             var day = models.date.selected.getTime();
             var change = PROJECTION_CHANGE_DATE.getTime();
             self.old = day < change;
@@ -63,10 +63,9 @@ wv.proj.change = wv.proj.change || function(models) {
 
     var onChange = function() {
         var wasOld = self.old;
-        var wasVisited = self.polarVisited;
         update();
         self.events.trigger("select", self);
-        if ( !wasVisited && wasOld !== self.old ) {
+        if ( polarVisited > 1 && wasOld !== self.old ) {
             checkNotify();
             wv.map.COORDINATE_CONTROLS.arctic.projection = self.crs;
         }
