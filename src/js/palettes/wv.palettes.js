@@ -133,6 +133,9 @@ wv.palettes = (function(self) {
                 if ( !config.layers[layerId] ) {
                     errors.push({message: "Invalid layer for palette " +
                         paletteId + ": " + layerId});
+                } else if ( !config.layers[layerId].palette ) {
+                    errors.push({message: "Layer " + layerId + " does not " +
+                        "support palettes"});
                 } else {
                     results[layerId] = paletteId;
                 }

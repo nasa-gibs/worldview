@@ -17,8 +17,9 @@ buster.testCase("wv.palettes", {
     setUp: function() {
         this.config = {
             layers: {
-                "layer1": {},
-                "layer2": {}
+                "layer1": { palette: {} },
+                "layer2": { palette: {} },
+                "layer3": {}
             }
         };
         this.errors = [];
@@ -40,10 +41,17 @@ buster.testCase("wv.palettes", {
     },
 
     "Rejects palette for invalid layer": function() {
-        var state = { palettes: "layerX,paletteX~layer2,palette2" };
+        var state = { palettes: "layerX,palette1~layer2,palette2" };
         wv.palettes.parse(state, this.errors, this.config);
         buster.refute(state.palettes.layerX);
         buster.assert.equals(state.palettes.layer2, "palette2");
+        buster.assert.equals(this.errors.length, 1);
+    },
+
+    "Rejects for layer that doesn't support palettes": function() {
+        var state = { palettes: "layer1,palette1~layer3,palette2" };
+        wv.palettes.parse(state, this.errors, this.config);
+        buster.refute(state.palettes.layer3);
         buster.assert.equals(this.errors.length, 1);
     },
 
