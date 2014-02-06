@@ -42,7 +42,6 @@ wv.map.model = wv.map.model || function(models, config) {
                 self.maps.append(name);
             }
         });
-        setExtentToLeading();
 
         models.proj.events.on("select", onProjectionSelect);
         models.layers.events.on("change", onLayersChange);
@@ -53,6 +52,8 @@ wv.map.model = wv.map.model || function(models, config) {
         onProjectionSelect();
         onLayersChange();
         onPalettesChange();
+
+        setExtentToLeading();
     };
 
     self.load = function(state, errors) {

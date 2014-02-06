@@ -110,7 +110,7 @@ wv.date.model = wv.date.model || function(spec) {
         }
         if ( state.now ) {
             wv.util.now = function() {
-                return state.now;
+                return new Date(state.now.getTime());
             };
             wv.util.warn("Overriding now: " + state.now.toISOString());
             self.range({ start: self.start, end: self.end });
