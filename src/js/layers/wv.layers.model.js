@@ -84,7 +84,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
     self.get = function(spec) {
         var baselayers = self.forGroup("baselayers", spec);
         var overlays = self.forGroup("overlays", spec);
-        return Array.concat(baselayers, overlays);
+        return baselayers.concat(overlays);
     };
 
     self.dateRange = function(proj) {
