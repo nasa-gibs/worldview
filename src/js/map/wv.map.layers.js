@@ -38,7 +38,8 @@ wv.map.layers.set = function(config, projId, layerId) {
             serverResolutions: matrixSet.serverResolutions,
             maxExtent: proj.maxExtent,
             tileSize: new OpenLayers.Size(layer.tileSize[0],
-                                          layer.tileSize[1])
+                                          layer.tileSize[1]),
+            visibility: false
         };
         if ( layer.noTransition ) {
             param.transitionEffect = "none";
@@ -74,6 +75,7 @@ wv.map.layers.set = function(config, projId, layerId) {
         var options = {
             tileSize: new OpenLayers.Size(layer.tileSize[0],
                                           layer.tileSize[1]),
+            visiblity: false
         };
         if ( layer.opacity ) {
             options.opacity = layer.opacity;
