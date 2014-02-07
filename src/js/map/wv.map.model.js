@@ -119,8 +119,9 @@ wv.map.model = wv.map.model || function(models, config) {
     var onLayersChange = function() {
         var active = models.layers.forProjection();
         var layers =
-            _.pluck(active.baselayers, "id")
-            .concat(_.pluck(active.overlays, "id"));
+            _.pluck(active.overlays, "id")
+            .concat(_.pluck(active.baselayers, "id"));
+        layers.reverse();
         var visible = models.layers.visible;
         self.maps.set(layers, visible);
     };

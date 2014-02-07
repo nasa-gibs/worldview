@@ -94,6 +94,7 @@ wv.map.set = wv.map.set || function(containerId, mapConfig, component) {
                 units: config.units || "dd"
             };
             var blankLayer = new OpenLayers.Layer("Blank", options);
+            blankLayer.wvid = "__BLANK";
             newMap.addLayer(blankLayer);
 
             // If a starting location is provided, go there otherwise
@@ -256,7 +257,7 @@ wv.map.set = wv.map.set || function(containerId, mapConfig, component) {
         self.layers = activeLayers[self.projection];
 
         var seenBaseLayer = false;
-        _.each(self.layers, function(layerId) {
+        _.eachRight(self.layers, function(layerId) {
             if ( !visibleLayers[layerId] ) {
                 return;
             }

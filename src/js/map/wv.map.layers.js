@@ -53,7 +53,8 @@ wv.map.layers.set = function(config, projId, layerId) {
         if ( options && options.time ) {
             olLayer.mergeNewParams({"time": options.time});
         }
-       return olLayer;
+        olLayer.wvid = layerId;
+        return olLayer;
     };
 
     var createWMS = function(add) {
@@ -87,6 +88,7 @@ wv.map.layers.set = function(config, projId, layerId) {
         }
         var olLayer = new OpenLayers.Layer.WMS(layer.title, source.url,
                 params, options);
+        olLayer.wvid = layerId;
         return olLayer;
     };
 
@@ -186,13 +188,15 @@ wv.map.layers.daily = function(map, config, projId, layerId) {
             cachedLayers[currentDay] = currentLayer;
         }
         currentDay = ds;
-
+        fetchLayer();
+        /*
         // If the layer is hidden, don't fetch anything
         if ( self.visible ) {
             fetchLayer();
         } else {
             currentLayer = null;
         }
+        */
     };
 
     self.setOpacity = function(opacity) {
