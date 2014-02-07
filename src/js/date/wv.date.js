@@ -19,6 +19,10 @@ wv.date = (function(self) {
         if ( state.now ) {
             try {
                 state.now = wv.util.parseDateUTC(state.now);
+                wv.util.now = function() {
+                    return new Date(state.now.getTime());
+                };
+                wv.util.warn("Overriding now: " + state.now.toISOString());
             } catch ( error ) {
                 delete state.now;
                 errors.push({

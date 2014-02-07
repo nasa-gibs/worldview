@@ -28,12 +28,12 @@ buster.testCase("wv.date", {
         buster.refute(state.time);
     },
 
-    "Parses valid now": function() {
+    "Overrides now": function() {
         var d = new Date(Date.UTC(2013, 0, 5));
         var state = { now: "2013-01-05" };
         var errors = [];
         wv.date.parse(state, errors);
-        buster.assert.equals(state.now, d);
+        buster.assert.equals(wv.util.now(), d);
         buster.assert.equals(errors.length, 0);
     },
 
