@@ -46,6 +46,41 @@ wv.layers = (function(self) {
         }
     };
 
+    self.validate = function(errors, config) {
+        var error = function(layerId, cause) {
+            errors.push({
+                message: "Invalid layer: " + layerId,
+                cause: cause,
+                notify: true
+            });
+            delete config.layers[layerId];
+            delete _.pull(config.layerOrder.baselayers, layerId);
+            delete _.pull(config.layerOrder.overlays, layerId);
+        };
+
+        var layers = _.cloneDeep(config.layers);
+        _.each(layers, function(layer) {
+            if ( !layer.group ) {
+                error(layer.id, "No group defined");
+                return;
+            }
+            if ( !layer.projections ) {
+                error(layer.id, "No projections defined");
+                return;
+            }
+        });
+
+        var orders =
+                _.cloneDeep(config.layerOrder.baselayers).concat(
+                _.cloneDeep(config.layerOrder.overlays));
+        _.each(orders, function(layerId) {
+            if ( !config.layers[layerId] ) {
+                error(layerId, "No configuration");
+                return;
+            };
+        });
+    };
+
     return self;
 
 })(wv.layers || {});

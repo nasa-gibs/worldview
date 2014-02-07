@@ -8,6 +8,17 @@
             "group":    "overlays",
             "product":  "AIRX2RET_NIGHT",
 
+            "format":   "image/png",
+            "type":     "wmts",
+            "tileSize": [ 512, 512 ],
+
+            "projections": {
+                "geographic": {
+                    "source":       "GIBS:geographic",
+                    "matrixSet":    "GIBS:EPSG4326_2km"
+                }
+            },
+
             "palette": {
                 "id": "AIRS_RH400_D"
             }

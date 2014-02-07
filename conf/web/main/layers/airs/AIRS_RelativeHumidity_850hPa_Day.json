@@ -8,6 +8,17 @@
             "group":    "overlays",
             "product":  "AIRX2RET_DAY",
 
+            "format":   "image/png",
+            "type":     "wmts",
+            "tileSize": [ 512, 512 ],
+
+            "projections": {
+                "geographic": {
+                    "source":       "GIBS:geographic",
+                    "matrixSet":    "GIBS:EPSG4326_2km"
+                }
+            },
+
             "palette": {
                 "id": "AIRS_RH850_A"
             }

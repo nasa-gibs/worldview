@@ -31,15 +31,6 @@ wv.layers.model = wv.layers.model || function(models, config) {
     self.visible = {};
 
     var init = function() {
-        // FIXME: Prune out incomplete layers for now
-        var layers = _.cloneDeep(config.layers);
-        _.each(layers, function(layer) {
-            if ( !layer.group ) {
-                console.error("No group for layer: " + layer.id);
-                delete config.layers[layer.id];
-            }
-        });
-
         if ( config.defaults && config.defaults.startingLayers ) {
             _.each(config.defaults.startingLayers, function(layers, type) {
                 _.each(layers, function(layer) {

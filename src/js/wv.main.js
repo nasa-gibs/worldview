@@ -31,6 +31,8 @@ $(function() {
         // Export for debugging
         wv.config = config;
 
+        wv.layers.validate(errors, config);
+
         parsers = [
             wv.proj.parse,
             wv.layers.parse,
@@ -158,11 +160,25 @@ $(function() {
         wv.debug.gibs(ui, models, config);
         wv.tour.introduction();
 
+        errorReport();
+
+        models.wv.events.trigger("startup");
+    };
+
+    var errorReport = function() {
+        var messages = [];
+
         _.each(errors, function(error) {
             var cause = ( error.cause ) ? ": " + error.cause : "";
             wv.util.warn(error.message + cause);
+            if ( error.notify ) {
+                messages.push(error.message);
+            }
         });
-        models.wv.events.trigger("startup");
+
+        if ( messages.length > 0 ) {
+            wv.ui.notify(messages.join("<br>"));
+        }
     };
 
     /*
