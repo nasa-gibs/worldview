@@ -2,23 +2,23 @@
     "sources": {
         "GIBS:arctic": {
             "url": [
-                "//map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                "//map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                "//map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
+                "//@GIBS_HOST@a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                "//@GIBS_HOST@b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+                "//@GIBS_HOST@c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
             ]
         },
         "GIBS:antarctic": {
             "url": [
-                "//map1a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                "//map1b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
-                "//map1c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
+                "//@GIBS_HOST@a.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                "//@GIBS_HOST@b.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi",
+                "//@GIBS_HOST@c.vis.earthdata.nasa.gov/wmts-antarctic/wmts.cgi"
             ]
         },
         "GIBS:geographic": {
             "url": [
-                "//map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                "//map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-                "//map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
+                "//@GIBS_HOST@a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                "//@GIBS_HOST@b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
+                "//@GIBS_HOST@c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
             ]
         },
         "GIBS:wms": {

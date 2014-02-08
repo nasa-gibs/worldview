@@ -51,7 +51,7 @@ wv.layers = (function(self) {
             errors.push({
                 message: "Invalid layer: " + layerId,
                 cause: cause,
-                notify: true
+                layerRemoved: true
             });
             delete config.layers[layerId];
             delete _.pull(config.layerOrder.baselayers, layerId);

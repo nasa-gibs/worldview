@@ -166,18 +166,23 @@ $(function() {
     };
 
     var errorReport = function() {
-        var messages = [];
+        var layersRemoved = 0;
 
         _.each(errors, function(error) {
             var cause = ( error.cause ) ? ": " + error.cause : "";
             wv.util.warn(error.message + cause);
-            if ( error.notify ) {
-                messages.push(error.message);
+            if ( error.layerRemoved  ) {
+                layersRemoved = layersRemoved + 1;
             }
         });
 
-        if ( messages.length > 0 ) {
-            wv.ui.notify(messages.join("<br>"));
+        if ( layersRemoved > 0 ) {
+            wv.ui.notify(
+                "Incomplete configuration<br><br>" +
+                layersRemoved + " layer(s) were removed<br><br>" +
+                "Contact us at " +
+                "<a href='mailto:support@earthdata.nasa.gov'>" +
+                "support@earthdata.nasa.gov</a>");
         }
     };
 

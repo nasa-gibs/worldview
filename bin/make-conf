@@ -21,7 +21,11 @@ rm -rf $DEBUG_DIR ; mkdir -p $DEBUG_DIR
 
 cp -r $BASE_DIR/../conf/* $BUILD_DIR
 
-"$BASE_DIR"/gibs2wv "$BUILD_DIR"/gc/*.xml \
+[ "$GIBS_HOST" ] || GIBS_HOST="map1"
+sed -i -e s/@GIBS_HOST@/${GIBS_HOST}/g "$BUILD_DIR"/web/main/sources.json
+rm "$BUILD_DIR"/web/main/sources.json-e
+
+"$BASE_DIR"/gibs2wv "$BUILD_DIR"/../gc/*.xml \
     > "$BUILD_DIR"/web/main/gc.json
 "$BASE_DIR"/conf-cat --input-dir "$BUILD_DIR"/web/main \
     > "$DEBUG_DIR"/wv.json
@@ -31,6 +35,7 @@ cp -r "$BUILD_DIR"/web/palettes/rendered \
     "$DEBUG_DIR"/palettes
 "$BASE_DIR"/sld2wv --output-dir "$DEBUG_DIR"/palettes \
     "$BUILD_DIR"/sld/*.xml
+
 
 cp -r "$DEBUG_DIR" "$BASE_DIR"/../src 
 

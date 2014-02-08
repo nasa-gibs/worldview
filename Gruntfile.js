@@ -20,6 +20,12 @@ var buildNonce = moment.utc().format("YYYYMMDDHHmmssSSS");
 var buildNumber = ( process.env.BUILD_NUMBER )
     ? "." + process.env.BUILD_NUMBER : "";
 
+var gibsHost = process.env.GIBS_HOST || "[" +
+    "\"map1a.vis.earthdata.nasa.gov\", " +
+    "\"map1b.vis.earthdata.nasa.gov\", " +
+    "\"map1c.vis.earthdata.nasa.gov\", " +
+"]";
+
 module.exports = function(grunt) {
 
     // Lists of JavaScript and CSS files to include and in the correct
@@ -118,7 +124,7 @@ module.exports = function(grunt) {
             },
 
             update_gc: {
-                command: "DESTDIR='conf/gc' bin/fetch-gibs"
+                command: "bin/fetch-gibs"
             },
 
             // After removing JavaScript and CSS files that are no longer
@@ -275,6 +281,15 @@ module.exports = function(grunt) {
                     from: "@GIT_REVISION@",
                     to: ".git<%= grunt.config.get('git-revision') %>"
                 }]
+            },
+
+            gibs_host: {
+                src: "build/conf/web/main/sources.json",
+                overwrite: true,
+                replacements: [{
+                    from: "@GIBS_HOST@",
+                    to: gibsHost
+                }]
             }
         },
 
@@ -430,12 +445,9 @@ module.exports = function(grunt) {
     grunt.registerTask("config", [
         "clean",
         "remove:conf_src",
-        "exec:config",
-    ]);
-
-    grunt.registerTask("update-gc", [
         "exec:update_gc",
-        "config"
+        "exec:config",
+        "replace:gibs_host"
     ]);
 
     grunt.registerTask("build", [

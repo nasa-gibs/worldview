@@ -38,7 +38,7 @@ def to_list(v):
     return v
 
 for input_file in args:
-    print input_file
+    #print input_file
     with open(input_file) as fp:
         xml = fp.read()
     sld = xmltodict.parse(xml)
