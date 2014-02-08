@@ -20,12 +20,6 @@ var buildNonce = moment.utc().format("YYYYMMDDHHmmssSSS");
 var buildNumber = ( process.env.BUILD_NUMBER )
     ? "." + process.env.BUILD_NUMBER : "";
 
-var gibsHost = process.env.GIBS_HOST || "[" +
-    "\"map1a.vis.earthdata.nasa.gov\", " +
-    "\"map1b.vis.earthdata.nasa.gov\", " +
-    "\"map1c.vis.earthdata.nasa.gov\", " +
-"]";
-
 module.exports = function(grunt) {
 
     // Lists of JavaScript and CSS files to include and in the correct
@@ -281,15 +275,6 @@ module.exports = function(grunt) {
                     from: "@GIT_REVISION@",
                     to: ".git<%= grunt.config.get('git-revision') %>"
                 }]
-            },
-
-            gibs_host: {
-                src: "build/conf/web/main/sources.json",
-                overwrite: true,
-                replacements: [{
-                    from: "@GIBS_HOST@",
-                    to: gibsHost
-                }]
             }
         },
 
@@ -446,8 +431,7 @@ module.exports = function(grunt) {
         "clean",
         "remove:conf_src",
         "exec:update_gc",
-        "exec:config",
-        "replace:gibs_host"
+        "exec:config"
     ]);
 
     grunt.registerTask("build", [

@@ -54,8 +54,12 @@ wv.layers = (function(self) {
                 layerRemoved: true
             });
             delete config.layers[layerId];
-            delete _.pull(config.layerOrder.baselayers, layerId);
-            delete _.pull(config.layerOrder.overlays, layerId);
+            _.remove(config.layerOrder.baselayers, function(e) {
+                return e === layerId;
+            });
+            _.remove(config.layerOrder.overlays, function(e) {
+                return e === layerId;
+            });
         };
 
         var layers = _.cloneDeep(config.layers);
@@ -77,7 +81,7 @@ wv.layers = (function(self) {
             if ( !config.layers[layerId] ) {
                 error(layerId, "No configuration");
                 return;
-            };
+            }
         });
     };
 

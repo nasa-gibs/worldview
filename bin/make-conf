@@ -23,7 +23,7 @@ cp -r $BASE_DIR/../conf/* $BUILD_DIR
 
 [ "$GIBS_HOST" ] || GIBS_HOST="map1"
 sed -i -e s/@GIBS_HOST@/${GIBS_HOST}/g "$BUILD_DIR"/web/main/sources.json
-rm "$BUILD_DIR"/web/main/sources.json-e
+rm -f "$BUILD_DIR"/web/main/sources.json-e
 
 "$BASE_DIR"/gibs2wv "$BUILD_DIR"/../gc/*.xml \
     > "$BUILD_DIR"/web/main/gc.json
