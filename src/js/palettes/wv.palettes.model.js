@@ -50,6 +50,11 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
         }
     };
 
+    self.clear = function() {
+        self.active = {};
+        self.events.trigger("change");
+    };
+
     self.forLayer = function(layerId) {
         var sourcePaletteId =  config.layers[layerId].palette.id;
         var sourcePalette = config.palettes.rendered[sourcePaletteId];

@@ -99,7 +99,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, config) {
                 // FIXME: What is this for?
                 //self.paletteWidget.noResture = false;
                 _.each(previousPalettes, function(paletteId, layerId) {
-                    model.palettes.add(layerId, paletteId);
+                    models.palettes.add(layerId, paletteId);
                 });
             }
         }
