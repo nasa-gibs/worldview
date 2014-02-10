@@ -330,12 +330,17 @@ wv.layers.add = wv.layers.add || function(models, config) {
     var filter = function() {
         var search = searchTerms();
         $.each(config.layers, function(layerId, layer) {
+            if ( layerId === "cartographic:esri-administrative-boundaries_level-1") {
+                console.log("here");
+            }
             var filtered =
                 filterAreaOfInterest(layerId) ||
                 filterProjection(layer) ||
                 filterSearch(layer, search);
             var display = filtered ? "none": "block";
-            $("#" + encodeURIComponent(layerId)).parent().css("display", display);
+            var selector =
+                    "#" + wv.util.jqueryEscape(encodeURIComponent(layerId));
+            $(selector).parent().css("display", display);
         });
         adjustCategoryHeights();
     };

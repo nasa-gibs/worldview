@@ -414,6 +414,11 @@ wv.util = (function(self) {
         return deferred.promise();
     };
 
+    // http://totaldev.com/content/escaping-characters-get-valid-jquery-id
+    self.jqueryEscape = function(str) {
+        return str.replace(/([;&,\.\+\*\~':"\!\^#$%@\[\]\(\)=>\|])/g, '\\$1');
+    };
+
     return self;
 
 })(wv.util || {});
