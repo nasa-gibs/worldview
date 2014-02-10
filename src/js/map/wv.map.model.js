@@ -124,6 +124,7 @@ wv.map.model = wv.map.model || function(models, config) {
         layers.reverse();
         var visible = models.layers.visible;
         self.maps.set(layers, visible);
+        self.maps.setPalettes(models.palettes.active);
     };
 
     var onDateSelect = function() {
