@@ -26,8 +26,8 @@ wv.data.results.antiMeridianMulti = function(maxDistance) {
     self.process = function(meta, granule) {
         var geom = granule.geometry[wv.map.CRS_WGS_84];
         if ( !wv.map.isPolygonValid(geom, maxDistance) ) {
-            var geomEast = wv.util.map.adjustAntiMeridian(geom, 1);
-            var geomWest = wv.util.map.adjustAntiMeridian(geom, -1);
+            var geomEast = wv.map.adjustAntiMeridian(geom, 1);
+            var geomWest = wv.map.adjustAntiMeridian(geom, -1);
             var centroidEast = geomEast.getCentroid();
             var centroidWest = geomWest.getCentroid();
             var newGeom =
