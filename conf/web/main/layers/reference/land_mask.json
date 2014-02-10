@@ -6,12 +6,14 @@
             "subtitle": "OpenStreetMap / Coastlines",
             "tags":     "borders mask",
             "group":    "overlays",
+            "format":   "image/png",
             "type":		"wmts",
-            
+            "tileSize": [ 512, 512 ],
+
             "projections": {
             	"antarctic": {
             		"source": 		"GIBS:antarctic",
-            		"matrixSet":	"GIBS:EPSG3031_250m"	
+            		"matrixSet":	"GIBS:EPSG3031_250m"
             	},
             	"arctic": {
             		"source": 		"GIBS:arctic",
@@ -19,7 +21,7 @@
             	},
             	"geographic": {
             		"source":		"GIBS:geographic",
-            		"matrixSet":	"GIBS:EPSG_4326_250m"
+            		"matrixSet":	"GIBS:EPSG4326_250m"
             	}
             }
         }

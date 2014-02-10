@@ -2,7 +2,7 @@
     "layers": {
         "MODIS_Aqua_SurfaceReflectance_Bands143": {
             "id":       "MODIS_Aqua_SurfaceReflectance_Bands143",
-            "title":    "Land Surface Reflectance (1-4-3)",
+            "title":    "Land Surface Reflectance (True Color)",
             "subtitle": "Aqua / MODIS",
             "tags":     "lsr",
             "group":    "baselayers",

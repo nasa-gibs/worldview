@@ -330,9 +330,6 @@ wv.layers.add = wv.layers.add || function(models, config) {
     var filter = function() {
         var search = searchTerms();
         $.each(config.layers, function(layerId, layer) {
-            if ( layerId === "cartographic:esri-administrative-boundaries_level-1") {
-                console.log("here");
-            }
             var filtered =
                 filterAreaOfInterest(layerId) ||
                 filterProjection(layer) ||
