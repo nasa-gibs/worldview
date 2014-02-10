@@ -77,7 +77,9 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
                 visibleOnly: true,
                 reverse: true
             });
-            var epsg = models.proj.selected.epsg;
+            // NOTE: This need to be changed back to the projection model
+            // when the backfill removes the old projection.
+            var epsg = models.proj.change.epsg;
 
             //console.log("EPSG: " + epsg);
 
