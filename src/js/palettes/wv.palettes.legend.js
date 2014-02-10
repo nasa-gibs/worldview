@@ -77,6 +77,11 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         });
     };
 
+    self.dispose = function() {
+        model.events.off("add", updateLegend);
+        model.events.off("remove", updateLegend);
+    };
+
     var updateLegend = function() {
         var palette = model.forLayer(layer.id);
         wv.palettes.colorbar(selector + " .wv-palettes-colorbar", palette);

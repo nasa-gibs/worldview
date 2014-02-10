@@ -143,7 +143,9 @@ wv.palettes.custom = wv.palettes.custom || function(config, models, layer) {
 
     var onLayerRemoved = function(removedLayer) {
         if ( layer.id === removedLayer.id ) {
-            dialog.hide();
+            if ( wv.dialogs.customPalette ) {
+                dialog.hide();
+            }
         }
     };
 

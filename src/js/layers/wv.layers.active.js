@@ -24,6 +24,7 @@ wv.layers.active = wv.layers.active || function(models, config) {
     var model = models.layers;
     var groups = wv.util.LAYER_GROUPS;
     var jsp;
+    var legends = {};
 
     var ICON_VISIBLE = "images/visible.png";
     var ICON_HIDDEN = "images/invisible.png";
@@ -170,7 +171,7 @@ wv.layers.active = wv.layers.active || function(models, config) {
     var renderLegendCanvas = function(layer) {
         var selector = ".wv-palette[data-layer='" +
                 encodeURIComponent(layer.id) + "']";
-		wv.palettes.legend({
+		legends[layer.id] = wv.palettes.legend({
             selector: selector,
             config: config,
             models: models,
@@ -251,6 +252,10 @@ wv.layers.active = wv.layers.active || function(models, config) {
     var onLayerRemoved = function(layer) {
         var layerSelector = "#" + layer.group + "-" + encodeURIComponent(layer.id);
         $(layerSelector).remove();
+        if ( legends[layer.id] ) {
+            legends[layer.id].dispose();
+            delete legends[layer.id];
+        }
         adjustCategoryHeights();
     };
 
