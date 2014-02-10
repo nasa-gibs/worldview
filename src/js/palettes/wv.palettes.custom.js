@@ -44,7 +44,7 @@ wv.palettes.custom = wv.palettes.custom || function(config, models, layer) {
         // FIXME: SUPER HACK
         if ( wv.dialogs && wv.dialogs.customPalette ) {
             wv.dialogs.customPalette.destroy();
-            model.layers.events.off("remove", onLayerRemoved);
+            models.layers.events.off("remove", onLayerRemoved);
             wv.dialogs.customPalette = null;
         }
 
