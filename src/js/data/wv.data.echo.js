@@ -180,7 +180,7 @@ wv.data.echo.mockClient = function(suffix) {
     };
 
     var adjustResults = function(parameters, data) {
-        var day = REGISTRY.getState().time;
+        var day = wv.models.date.selected;
         // Mock data was retrieved for Aug 6, 2013
         var resultsDay = new Date(Date.UTC(2013, 7, 6));
         var diffDays = (day - resultsDay) / (1000 * 60 * 60 * 24);
