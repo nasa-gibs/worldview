@@ -8,6 +8,21 @@
             "inactive": "true",
             "product":  "AE_L2A",
 
+            "period":   "daily",
+            "format":   "image/png",
+            "type":     "wmts",
+            "tileSize": [ 512, 512 ],
+
+            "startDate": "2002-06-01",
+            "endDate":   "2002-06-08",
+
+            "projections": {
+                "geographic": {
+                    "source":       "GIBS:geographic",
+                    "matrixSet":    "GIBS:EPSG4326_2km"
+                }
+            },
+
             "palette":  {
                 "id": "AEL2A_89H_LL_D"
             }
