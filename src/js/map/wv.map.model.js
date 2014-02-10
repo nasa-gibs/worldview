@@ -33,6 +33,8 @@ wv.map.model = wv.map.model || function(models, config) {
      */
     self.config = config;
 
+    self.events = wv.util.events();
+
     var init = function() {
         self.config = validateConfig(self.config);
         self.maps = wv.map.set(containerId, self.config, self);
@@ -125,6 +127,7 @@ wv.map.model = wv.map.model || function(models, config) {
         var visible = models.layers.visible;
         self.maps.set(layers, visible);
         self.maps.setPalettes(models.palettes.active);
+        self.events.trigger("projection");
     };
 
     var onDateSelect = function() {

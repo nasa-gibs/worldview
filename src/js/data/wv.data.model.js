@@ -99,7 +99,7 @@ wv.data.model = wv.data.model || function(models, config) {
 
     var init = function() {
         models.layers.events.on("change", updateLayers);
-        models.proj.events.on("select", updateProjection);
+        //models.proj.events.on("select", updateProjection);
         models.date.events.on("select", updateDate);
         updateLayers();
         updateProjection();
@@ -421,9 +421,11 @@ wv.data.model = wv.data.model || function(models, config) {
         self.projection = models.proj.selected.id;
         self.crs = models.proj.selected.crs;
         self.events.trigger("projectionUpdate");
+        updateLayers();
         query();
-        //self.selectProduct(null);
     };
+    // FIXME: This is a hack
+    self.updateProjection = updateProjection;
 
     var updateDate = function() {
         self.time = models.date.selected;
@@ -432,9 +434,7 @@ wv.data.model = wv.data.model || function(models, config) {
 
     var findAvailableProduct = function() {
         var foundProduct = null;
-        var list = models.layers.active.baselayers.concat(
-            models.layers.active.overlays
-        );
+        var list = models.layers.get({flat: true});
 
         // Find the top most layer that has a product entry in ECHO
         for ( var i = list.length - 1; i >= 0; i-- ) {

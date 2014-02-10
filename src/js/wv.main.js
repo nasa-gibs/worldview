@@ -117,6 +117,7 @@ $(function() {
         ui.rubberband = wv.image.rubberband(models, config);
         ui.image = wv.image.panel(models, ui, config);
         ui.data = wv.data.ui(models, config, map.maps);
+        // FIXME: Why is this here?
         ui.data.render();
         ui.link = wv.link.ui(models);
 
@@ -149,6 +150,8 @@ $(function() {
             .on("zoomEnd", function(map) {
                 ui.data.onViewChange(map);
             });
+        // FIXME: This is a hack
+        models.map.events.on("projection", models.data.updateProjection);
 
         // Console notifications
         if ( wv.brand.release() ) {
