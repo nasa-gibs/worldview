@@ -181,11 +181,15 @@ wv.date.sliders = wv.date.sliders || function(models, config) {
         Day: false
     };
     var handleSlide = function(e, ui) {
+        var type = e.data.type;
         if ( !models.date.start || !models.date.end ) {
-            return;
+            if ( !resetting[type] ) {
+                resetting[type] = true;
+                update();
+                resetting[type] = false;
+            }
         }
         var value = e.target.value;
-        var type = e.data.type;
         var oldDate = model.selected;
         var newDate = new Date(oldDate.getTime());
         var numitems = sliders[type].length;
