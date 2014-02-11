@@ -2,8 +2,8 @@
     "layers": {
         "arctic_coastlines": {
             "id":       "arctic_coastlines",
-            "title":    "Coastlines",
-            "subtitle": "Polarview / Coastlines (EPSG:3995)",
+            "title":    "Coastlines  (EPSG:3995)",
+            "subtitle": "Polarview / Coastlines",
             "tags":     "borders",
             "group":    "overlays",
             "format":   "image/png",
