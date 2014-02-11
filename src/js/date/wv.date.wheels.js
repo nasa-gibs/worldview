@@ -28,14 +28,16 @@ wv.date.wheels = wv.date.wheels || function(models, config) {
     var model = models.date;
 
     var self = {};
-    self.startDate = new Date(Date.UTC(2012, 4, 8));
-    self.endDate = wv.util.today();
+    self.startDate = null;
+    self.endDate = null;
     self.isCollapsed = false;
 
     var init = function() {
         render();
         model.events.on("select", update);
+        models.layers.events.on("change", updateRange);
         $(window).on("resize", resize);
+        updateRange();
         update();
         resize();
     };
@@ -58,8 +60,6 @@ wv.date.wheels = wv.date.wheels || function(models, config) {
                 $("#linkmode").css("display","block");
             },
             dateFormat: 'yyyy-mm-dd',
-            minDate: UTCToLocal(self.startDate),
-            maxDate: UTCToLocal(self.endDate),
             setText: 'OK'
         });
         $("#linkmode").mobiscroll('setDate', UTCToLocal(model.selected),true);
@@ -76,6 +76,21 @@ wv.date.wheels = wv.date.wheels || function(models, config) {
         } else {
             $container.hide();
         }
+    };
+
+    var updateRange = function() {
+        var range = models.layers.dateRange();
+        if ( !range ) {
+            self.startDate = null;
+            self.endDate = null;
+            $("#linkmode").mobiscroll("option", "disabled", true);
+            return;
+        }
+        self.startDate = range.start;
+        self.endDate = range.end;
+        $("#linkmode").mobiscroll("option", "disabled", false);
+        $("#linkmode").mobiscroll("option", "minDate", UTCToLocal(self.startDate));
+        $("#linkmode").mobiscroll("option", "maxDate", UTCToLocal(self.endDate));
     };
 
     var update = function() {
