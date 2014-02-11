@@ -48,7 +48,14 @@
 	width:		100%;
     height:     10px;
     border:     1px solid #404040;
-    cursor:		pointer;
+}
+
+.bank div .editable {
+    cursor:     pointer;
+}
+
+.bank div .wv-palettes-colorbar[data-type='single'] {
+    width: 10px;
 }
 
 /* FIXME: Too specific */
@@ -58,5 +65,10 @@
 
 #palette-selector-dialog .product-description {
     margin-bottom: 10px;
+}
+
+.wv-palettes-type {
+    font-size:      0.8em;
+    margin-left:    5px;
 }
 

@@ -34,29 +34,39 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
                 .addClass("wv-palettes-panel");
         $colorbar = $("<canvas></canvas>")
                 .addClass("wv-palettes-colorbar");
+
         $colorbarPanel.append($colorbar);
+        if ( layer.palette.single ) {
+            $colorbar.attr("data-type", "single");
+            var $type = $("<span></span>")
+                .addClass("wv-palettes-type");
+            $colorbarPanel.append($type);
+        }
+
         $parent.append($colorbarPanel);
 
-        var $info = $("<table></table>")
-                .addClass("wv-palettes-info");
-        var $row = $("<tr></tr>");
-        var $min = $("<td></td>")
-                .addClass("wv-palettes-min")
-                .html("&nbsp;");
-        var $center = $("<td></td>")
-                .addClass("wv-palettes-center")
-                .html("&nbsp;");
-        var $max = $("<td></td>")
-                .addClass("wv-palettes-max")
-                .html("&nbsp;");
+        if ( !layer.palette.single ) {
+            var $info = $("<table></table>")
+                    .addClass("wv-palettes-info");
+            var $row = $("<tr></tr>");
+            var $min = $("<td></td>")
+                    .addClass("wv-palettes-min")
+                    .html("&nbsp;");
+            var $center = $("<td></td>")
+                    .addClass("wv-palettes-center")
+                    .html("&nbsp;");
+            var $max = $("<td></td>")
+                    .addClass("wv-palettes-max")
+                    .html("&nbsp;");
 
-        $row.append($min).append($center).append($max);
-        $info.append($row);
+            $row.append($min).append($center).append($max);
+            $info.append($row);
 
-        var $infoPanel = $("<div></div>")
-                .addClass("wv-palettes-panel");
-        $infoPanel.append($info);
-        $parent.append($infoPanel);
+            var $infoPanel = $("<div></div>")
+                    .addClass("wv-palettes-panel");
+            $infoPanel.append($info);
+            $parent.append($infoPanel);
+        }
 
         $colorbar.on("mousemove", function(event) {
             showUnitHover(event);
@@ -65,7 +75,8 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         });
 
         if ( layer.type !== "wms" && !layer.palette.single ) {
-            $colorbar.on("click", showCustomSelector);
+            $colorbar.on("click", showCustomSelector)
+                .addClass("editable");
         }
         wv.palettes.colorbar(selector + " .wv-palettes-colorbar");
         model.events
@@ -94,7 +105,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         }
         var palette = model.forLayer(layer.id);
         if (layer.palette.single) {
-            $(selector + " .wv-palettes-center").html(palette.values[0]);
+            $(selector + " .wv-palettes-type").html(palette.values[0]);
         } else if (layer.palette.classified) {
             $(selector + " .wv-palettes-center").html("Classes");
         } else {
