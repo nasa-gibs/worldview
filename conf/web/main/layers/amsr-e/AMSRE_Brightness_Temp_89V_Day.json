@@ -1,0 +1,16 @@
+{
+    "layers": {
+        "AMSRE_Brightness_Temp_89V_Day": {
+            "id":       "AMSRE_Brightness_Temp_89V_Day",
+            "title":    "Brightness Temperature (89V GHz B Scan, Day)",
+            "subtitle": "Aqua / AMSR-E",
+            "group":    "overlays",
+            "inactive": "true",
+            "product":  "AE_L2A",
+
+            "palette":  {
+                "id": "AEL2A_89V_LL_A"
+            }
+        }
+    }
+}
