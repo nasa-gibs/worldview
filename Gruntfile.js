@@ -320,6 +320,17 @@ module.exports = function(grunt) {
             }
         },
 
+        minjson: {
+            main: {
+                files: {
+                    "build/worldview/web/conf/wv.json":
+                    "build/worldview/web/conf/wv.json",
+                    "build/worldview/web/conf/palettes.json":
+                    "build/worldview/web/conf/palettes.json"
+                }
+            }
+        },
+
         lineremover: {
             // After removing all the <!-- link.dev --> references, there
             // are a lot of blank lines in index.html. Remove them
@@ -422,6 +433,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-line-remover");
     grunt.loadNpmTasks("grunt-exec");
     grunt.loadNpmTasks("grunt-git-rev-parse");
+    grunt.loadNpmTasks("grunt-minjson");
     grunt.loadNpmTasks("grunt-text-replace");
 
     grunt.renameTask("clean", "remove");
@@ -446,6 +458,7 @@ module.exports = function(grunt) {
         "copy:release",
         "uglify",
         "cssmin",
+        "minjson",
         "lineremover",
         "exec:empty",
         "exec:cgi_echo",
