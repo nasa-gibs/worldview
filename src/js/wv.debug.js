@@ -13,7 +13,25 @@
  * @module wv.debug
  */
 var wv = wv || {};
-wv.debug = wv.debug || {};
+wv.debug = wv.debug || (function() {
+
+    var self = {};
+
+    self.loadDelay = function(configURI, parameters) {
+        var delay = parseInt(parameters.loadDelay);
+        promise = $.Deferred();
+        $.getJSON(configURI).done(function(data) {
+            setTimeout(function() {
+                promise.resolve(data);
+            }, delay);
+        });
+        return promise;
+    };
+
+    return self;
+
+})();
+
 
 /**
  * @class wv.debug.gibs

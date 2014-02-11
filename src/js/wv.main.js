@@ -18,9 +18,11 @@ $(function() {
 
     var main = function() {
         var configURI = wv.brand.url("conf/wv.json");
-        var promise = $.getJSON(configURI)
-            .done(wv.util.wrap(onConfigLoaded))
-            .error(wv.util.error);
+        var promise = ( parameters.loadDelay ) ?
+                wv.debug.loadDelay(configURI, parameters) :
+                $.getJSON(configURI);
+        promise.done(wv.util.wrap(onConfigLoaded))
+            .fail(wv.util.error);
         wv.ui.indicator.delayed(promise, 2000);
     };
 
