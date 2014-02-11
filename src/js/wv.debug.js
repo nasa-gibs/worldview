@@ -28,6 +28,12 @@ wv.debug = wv.debug || (function() {
         return promise;
     };
 
+    self.error = function(parameters) {
+        if ( parameters.showError ) {
+            wv.util.error();
+        }
+    };
+
     return self;
 
 })();

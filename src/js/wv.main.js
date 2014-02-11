@@ -166,7 +166,7 @@ $(function() {
         wv.tour.introduction();
 
         errorReport();
-
+        wv.debug.error();
         models.wv.events.trigger("startup");
     };
 
