@@ -95,8 +95,10 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
 
     var updateLegend = function() {
         var palette = model.forLayer(layer.id);
-        wv.palettes.colorbar(selector + " .wv-palettes-colorbar", palette);
-        showUnitRange();
+        if ( palette ) {
+            wv.palettes.colorbar(selector + " .wv-palettes-colorbar", palette);
+            showUnitRange();
+        }
     };
 
     var showUnitRange = function() {

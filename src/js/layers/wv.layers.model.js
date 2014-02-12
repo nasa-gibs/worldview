@@ -153,7 +153,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
 
     self.remove = function(id) {
         var layer = getLayer(id);
-        var index = $.inArray(layer, self.active[layer.group]);
+        var index = _.findIndex(self.active[layer.group], {id: id});
         if ( index >= 0 ) {
             self.active[layer.group].splice(index, 1);
             delete self.visible[id];

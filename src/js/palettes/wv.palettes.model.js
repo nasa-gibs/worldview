@@ -58,6 +58,9 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
     self.forLayer = function(layerId) {
         var sourcePaletteId =  config.layers[layerId].palette.id;
         var sourcePalette = config.palettes.rendered[sourcePaletteId];
+        if ( !sourcePalette ) {
+            return null;
+        }
         if ( self.active[layerId] ) {
             var targetPaletteId = self.active[layerId];
             var targetPalette = config.palettes.custom[targetPaletteId];

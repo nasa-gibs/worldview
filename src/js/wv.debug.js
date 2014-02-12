@@ -42,19 +42,30 @@ wv.debug = wv.debug || (function() {
 /**
  * @class wv.debug.gibs
  */
-wv.debug.gibs = wv.debug.gibs || function(ui, models, config) {
+wv.debug.layers = wv.debug.layers || function(ui, models, config) {
+
+    var type;
+    var selectedLayer;
 
     var init = function() {
+        type = config.parameters.debug;
         if ( config.parameters.debugGIBS ) {
+            type = "gibs";
+        }
+        if ( type === "gibs" ) {
             ui.sidebar.collapse();
             ui.dateSliders.collapse();
-            $(".olControlScaleLineCustom").hide();
-            $(".olControlMousePosition").hide();
-            render();
+        }
+        if ( type ) {
+            if ( type === "palettes" ) {
+                wv.palettes.loadCustom(config).done(render);
+            } else {
+                render();
+            }
         }
     };
 
-    var render = function() {
+    var render = function(type) {
         var $div = $(
             "<div id='wv-debug-gibs'>" +
                 "<div class='wv-debug-gibs-layer'>" +
@@ -85,27 +96,79 @@ wv.debug.gibs = wv.debug.gibs || function(ui, models, config) {
         updateDate();
     };
 
+    var acceptLayer = function(layer) {
+        var proj = models.proj.selected.id;
+        if ( !layer.projections[proj] ) {
+            return false;
+        }
+        if ( type === "gibs" && layer.period === "daily" && layer.type === "wmts" ) {
+            return true;
+        }
+        if ( type === "palettes" && layer.palette && !layer.palette.single &&
+                layer.type !== "wms" ) {
+            return true;
+        }
+        if ( type === "dataDownload" && layer.product ) {
+            return true;
+        }
+        if ( type === "layers" ) {
+            return true;
+        }
+        return false;
+    };
+
     var initLayers = function() {
         var $select = $(".wv-debug-gibs-layerlist");
         $select.empty();
         var proj = models.proj.selected.id;
         var sortedLayers = _.sortBy(config.layers, ["title", "subtitle"]);
         _.each(sortedLayers, function(layer) {
-            if ( layer.period === "daily" && layer.type === "wmts" &&
-                    layer.projections[proj] ) {
+            if ( acceptLayer(layer) ) {
+                var text = layer.title + "; " + layer.subtitle;
+                if ( text.length > 70 ) {
+                    text = text.substr(0, 70) + "...";
+                }
                 var option = $("<option></option>")
                     .val(layer.id)
-                    .html(layer.title + "; " + layer.subtitle);
+                    .html(text);
                 $select.append(option);
             }
         });
+        models.layers.clear();
+        if ( type !== "gibs" ) {
+            models.layers.add("land_water_map");
+        }
         updateLayers.apply($select);
+        if ( type === "dataDownload" ) {
+            models.data.activate();
+        }
     };
 
     var updateLayers = function() {
         var layerId = $(this).val();
-        models.layers.clear();
+        if ( selectedLayer ) {
+            models.layers.remove(selectedLayer);
+            models.palettes.remove(selectedLayer);
+        }
         models.layers.add(layerId);
+        if ( type !== "gibs" ) {
+            var range = models.layers.dateRange();
+            if ( range ) {
+                range.end.setUTCDate(range.end.getUTCDate() - 1);
+                models.date.select(range.end);
+            }
+        }
+        selectedLayer = layerId;
+        if ( type === "palettes" ) {
+            wv.palettes.loadRendered(config, layerId).done(function() {
+                var layer = config.layers[layerId];
+                if ( layer.palette.recommended ) {
+                    models.palettes.add(layerId, layer.palette.recommended[0]);
+                } else {
+                    models.palettes.add(layerId, "rainbow_2");
+                }
+            });
+        }
     };
 
     var nextLayer = function() {

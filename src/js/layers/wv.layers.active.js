@@ -250,7 +250,8 @@ wv.layers.active = wv.layers.active || function(models, config) {
     };
 
     var onLayerRemoved = function(layer) {
-        var layerSelector = "#" + layer.group + "-" + encodeURIComponent(layer.id);
+        var layerSelector = "#" + layer.group + "-" +
+                wv.util.jqueryEscape(encodeURIComponent(layer.id));
         $(layerSelector).remove();
         if ( legends[layer.id] ) {
             legends[layer.id].dispose();
