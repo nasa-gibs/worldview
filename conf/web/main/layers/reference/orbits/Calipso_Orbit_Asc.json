@@ -10,6 +10,8 @@
             "tileSize": [512, 512],
             "period":   "daily",
 
+            "startDate": "2013-09-19",
+
             "projections": {
                 "geographic": {
                     "source":   "GIBS:wms"

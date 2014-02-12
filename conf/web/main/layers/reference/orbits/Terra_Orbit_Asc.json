@@ -10,6 +10,8 @@
             "tileSize": [512, 512],
             "period":   "daily",
 
+            "startDate": "2012-05-08",
+
             "projections": {
                 "antarctic": {
                     "source":   "GIBS:wms"
