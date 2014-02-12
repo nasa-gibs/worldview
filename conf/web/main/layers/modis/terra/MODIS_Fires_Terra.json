@@ -8,6 +8,8 @@
             "group":    "overlays",
             "format":   "image/png",
             "period":   "daily",
+            "product":  "MOD14",
+
             "tileSize": [512, 512],
             "type":     "wms",
 
