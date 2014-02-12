@@ -101,6 +101,9 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
         if ( !layer.projections[proj] ) {
             return false;
         }
+        if ( layer.id === "land_water_map" || layer.id === "land_mask" ) {
+            return false;
+        }
         if ( type === "gibs" && layer.period === "daily" && layer.type === "wmts" ) {
             return true;
         }
