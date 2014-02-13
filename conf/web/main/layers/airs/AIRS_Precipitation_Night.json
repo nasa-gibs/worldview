@@ -5,7 +5,7 @@
             "title":    "Precipitation Estimate (Night)",
             "subtitle": "Aqua / AIRS",
             "group":    "overlays",
-            "product":  "AIRX2SUP_DAY",
+            "product":  "AIRX2SUP_NIGHT",
 
             "palette": {
                 "id": "AIRS_Precipitation_D",
