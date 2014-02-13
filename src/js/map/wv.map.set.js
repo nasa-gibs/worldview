@@ -28,7 +28,7 @@ wv.map.set = wv.map.set || function(containerId, mapConfig, component) {
 
     // The number of layers in the processing of loading. This is used
     // to fire maploadstart and maploadend events.
-    self.layersLoading = 0;
+    self.layersLoading = {};
 
     //-------------------------------------------------------------------------
     // Public
@@ -546,23 +546,22 @@ wv.map.set = wv.map.set || function(containerId, mapConfig, component) {
         }
     };
 
+    // This has gotten really awkward, but seems to work
     var onAddLayer = function(event) {
         var layer = event.layer;
 
         var onLoadStart = function() {
-            if ( self.layersLoading === 0 ) {
+            if ( _.size(self.layersLoading) === 0 ) {
                 self.map.events.triggerEvent("maploadstart");
             }
-            self.layersLoading++;
+            self.layersLoading[layer.wvid] = true;
         };
 
         var onLoadEnd = function() {
-            if ( self.layersLoading === 1 ) {
+            if ( _.size(self.layersLoading) === 1 && self.layersLoading[layer.wvid] ) {
                 self.map.events.triggerEvent("maploadend");
             }
-            if ( self.layersLoading > 0 ) {
-                self.layersLoading--;
-            }
+            delete self.layersLoading[layer.wvid];
         };
 
         layer.events.register("loadstart", layer, onLoadStart);
@@ -573,6 +572,7 @@ wv.map.set = wv.map.set || function(containerId, mapConfig, component) {
     };
 
     var onRemoveLayer = function(event) {
+        delete self.layersLoading[event.layer.wvid];
         refreshZOrder();
     };
 
