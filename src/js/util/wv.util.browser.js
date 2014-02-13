@@ -140,12 +140,12 @@ wv.util.browser = wv.util.browser || (function() {
 
     self.tests.ie = function() {
         var navigator = self.tests.navigator();
-        return (/\(MSIE /).test(navigator.userAgent);
+        return (/MSIE /).test(navigator.userAgent);
     };
 
     self.tests.ieVersion = function() {
         var navigator = self.tests.navigator();
-        var version = navigator.userAgent.match(/\(MSIE ([\d\.]+)/);
+        var version = navigator.userAgent.match(/MSIE ([\d\.]+)/);
         if ( version ) {
             return parseInt(version[1].split(".")[0]);
         }
