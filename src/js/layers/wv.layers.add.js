@@ -213,11 +213,21 @@ wv.layers.add = wv.layers.add || function(models, config) {
                     api.destroy();
                 }
             }
-            jsp = $("." + self.id + "category").jScrollPane({
-                verticalDragMinHeight: 20,
-                autoReinitialise: false,
-                verticalGutter: 0
-            });
+            if (wv.util.browser.ie){
+                jsp = $("." + self.id + "category").jScrollPane({
+                    verticalDragMinHeight: 20,
+                    autoReinitialise: false,
+                    verticalGutter: 0,
+                    mouseWheelSpeed: 60
+                });
+            }
+            else{
+                jsp = $("." + self.id + "category").jScrollPane({
+                    verticalDragMinHeight: 20,
+                    autoReinitialise: false,
+                    verticalGutter: 0
+                });
+            }
         }
         //setTimeout(adjustCategoryHeights, 1);
         adjustCategoryHeights();

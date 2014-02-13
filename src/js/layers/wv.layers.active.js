@@ -233,8 +233,14 @@ wv.layers.active = wv.layers.active || function(models, config) {
                     api.destroy();
                 }
             }
-            this.jsp = $("." + self.id + "category")
-                .jScrollPane({autoReinitialise: false, verticalGutter:0});
+            if (wv.util.browser.ie){
+                this.jsp = $("." + self.id + "category")
+                    .jScrollPane({autoReinitialise: false, verticalGutter:0, mouseWheelSpeed: 60});
+            }
+            else {
+                this.jsp = $("." + self.id + "category")
+                    .jScrollPane({autoReinitialise: false, verticalGutter:0});
+            }
         }
 
         var tabs_height = $(".ui-tabs-nav").outerHeight(true);
