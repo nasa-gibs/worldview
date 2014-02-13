@@ -99,7 +99,7 @@ wv.data.model = wv.data.model || function(models, config) {
 
     var init = function() {
         models.layers.events.on("change", updateLayers);
-        //models.proj.events.on("select", updateProjection);
+        models.proj.events.on("select", updateProjectionInfo);
         models.date.events.on("select", updateDate);
         updateLayers();
         updateProjection();
@@ -417,9 +417,13 @@ wv.data.model = wv.data.model || function(models, config) {
         return active;
     };
 
-    var updateProjection = function() {
+    var updateProjectionInfo = function() {
         self.projection = models.proj.selected.id;
         self.crs = models.proj.selected.crs;
+    };
+
+    var updateProjection = function() {
+        updateProjectionInfo();
         self.events.trigger("projectionUpdate");
         updateLayers();
         query();
