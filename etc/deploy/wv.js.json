@@ -1,8 +1,8 @@
 [
     "src/js/wv.brand.js",
 
-    "src/js/util/wv.util.js",
     "src/js/util/wv.util.browser.js",
+    "src/js/util/wv.util.js",
     "src/js/util/wv.util.events.js",
 
     "src/js/ui/wv.ui.js",
