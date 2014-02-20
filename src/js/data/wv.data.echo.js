@@ -24,7 +24,7 @@ wv.data.echo.client = wv.data.echo.client || function(spec) {
     var ns = wv.data.echo.client;
 
     var ajaxOptions = {
-        url: "service/echo.cgi",
+        url: wv.brand.url("service/echo.cgi"),
         traditional: true,
         dataType: "json",
         timeout: QUERY_TIMEOUT
