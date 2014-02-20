@@ -128,8 +128,8 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
         _.each(sortedLayers, function(layer) {
             if ( acceptLayer(layer) ) {
                 var text = layer.title + "; " + layer.subtitle;
-                if ( text.length > 70 ) {
-                    text = text.substr(0, 70) + "...";
+                if ( text.length > 65 ) {
+                    text = text.substr(0, 65) + "...";
                 }
                 var option = $("<option></option>")
                     .val(layer.id)
