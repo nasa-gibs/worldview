@@ -140,7 +140,15 @@ wv.util.browser = wv.util.browser || (function() {
 
     self.tests.ie = function() {
         var navigator = self.tests.navigator();
-        return (/MSIE /).test(navigator.userAgent);
+        if ( /MSIE /.test(navigator.userAgent) ) {
+            return true;
+        }
+        // IE 11
+        if ( navigator.appName === "Netscape"
+                && /Trident/.test(navigator.userAgent) ) {
+            return true;
+        }
+        return false;
     };
 
     self.tests.ieVersion = function() {
@@ -153,6 +161,9 @@ wv.util.browser = wv.util.browser || (function() {
 
     self.tests.cors = function() {
         if ( self.tests.safari() && self.tests.safariVersion() <= 6 ) {
+            return false;
+        }
+        if ( self.tests.ie() ) {
             return false;
         }
         return true;
