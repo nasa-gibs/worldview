@@ -6,6 +6,7 @@
             "subtitle": "Aura / OMI",
             "group":    "overlays",
             "product":  "OMSO2",
+            "tags":     "so2",
 
             "palette": {
                 "id":           "OMI_SO2_Lower_Troposphere",

@@ -6,6 +6,7 @@
             "subtitle": "Aura / OMI",
             "group":    "overlays",
             "product":  "OMAERUV",
+            "tags":     "aod",
 
             "palette": {
                 "id":           "OMI_Absorbing_Aerosol_Optical_Depth",
