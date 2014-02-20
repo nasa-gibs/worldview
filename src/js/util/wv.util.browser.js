@@ -144,8 +144,8 @@ wv.util.browser = wv.util.browser || (function() {
             return true;
         }
         // IE 11
-        if ( navigator.appName === "Netscape"
-                && /Trident/.test(navigator.userAgent) ) {
+        if ( navigator.appName === "Netscape" &&
+                /Trident/.test(navigator.userAgent) ) {
             return true;
         }
         return false;

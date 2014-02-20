@@ -134,7 +134,7 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
                 $("#imgWidth").text((imgWidth));
                 $("#imgHeight").text((imgHeight));
                 $("#imgFileSize").text(imgFilesize);
-                if(imgFilesize>250) { $("#imgFileSize").css("color", "#D99694");  $("#btnImgDownload").attr("disabled", "disabled"); }
+                if(imgFilesize>250 || imgHeight === 0 || imgWidth === 0) { $("#imgFileSize").css("color", "#D99694");  $("#btnImgDownload").attr("disabled", "disabled"); }
                 else { $("#imgFileSize").css("color", "white"); $("#btnImgDownload").removeAttr("disabled"); }
                 })
              .change();
