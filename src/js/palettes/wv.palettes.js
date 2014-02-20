@@ -124,6 +124,14 @@ wv.palettes = (function(self) {
 
     self.parse = function(state, errors, config) {
         if ( state.palettes ) {
+            if ( !wv.palettes.supported ) {
+                // FIXME: This should go in errors
+                delete state.palettes;
+                wv.ui.notify("The custom palette feature is not supported " +
+                        "with your web browser. Upgrade or try again in a " +
+                        "different browser");
+                return;
+            }
             var results = {};
             var parts = state.palettes.split("~");
             _.each(parts, function(part) {

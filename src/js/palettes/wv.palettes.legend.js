@@ -138,7 +138,12 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
     };
 
     var showCustomSelector = function(event) {
-        wv.palettes.custom(config, models, layer);
+        if ( wv.palettes.supported ) {
+            wv.palettes.custom(config, models, layer);
+        } else {
+            wv.ui.notify("This feature is not supported with your web " +
+                "browser. Upgrade or try again in a different browser");
+        }
     };
 
     init();
