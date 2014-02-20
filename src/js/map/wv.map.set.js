@@ -119,7 +119,6 @@ wv.map.set = wv.map.set || function(containerId, mapConfig, component) {
             });
             newMap.events.register("zoomend", self, onZoomEnd);
             newMap.events.register("zoomend", self, function() {
-                console.log("zoomend");
                 self.events.trigger(self.EVENT_ZOOM_END, newMap);
             });
 
