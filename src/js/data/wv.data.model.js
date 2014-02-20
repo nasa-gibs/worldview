@@ -184,14 +184,19 @@ wv.data.model = wv.data.model || function(models, config) {
             });
         });
 
-        // Add not available to the end if it exists by removing it and
-        // re-adding
-        if ( products.__NO_PRODUCT ) {
-            var x = products.__NO_PRODUCT;
-            delete products.__NO_PRODUCT;
-            products.__NO_PRODUCT = x;
+        // FIXME: This is a hack to force the not availables to the bottom
+        // especially for IE9. This whole function needs clean up.
+        var results = {};
+        var none = products.__NO_PRODUCT;
+        _.each(products, function(product, key) {
+            if ( key !== NO_PRODUCT_ID ) {
+                results[key] = product;
+            }
+        });
+        if ( none ) {
+            results[NO_PRODUCT_ID] = none;
         }
-        return products;
+        return results;
     };
 
     self.getProductsString = function() {
