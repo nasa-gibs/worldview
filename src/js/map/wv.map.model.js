@@ -49,13 +49,6 @@ wv.map.model = wv.map.model || function(models, config) {
         models.layers.events.on("change", onLayersChange);
         models.date.events.on("select", onDateSelect);
         models.palettes.events.on("change", onPalettesChange);
-
-        onDateSelect();
-        onProjectionSelect();
-        onLayersChange();
-        onPalettesChange();
-
-        setExtentToLeading();
     };
 
     self.load = function(state, errors) {
@@ -70,7 +63,16 @@ wv.map.model = wv.map.model || function(models, config) {
                 extent = map.getExtent();
             }
             self.maps.map.zoomToExtent(extent, true);
+        } else {
+            setExtentToLeading();
         }
+
+        // Initial state needs to be loaded here or the transition effect
+        // does not work when a palette is assigned via permalink
+        onDateSelect();
+        onProjectionSelect();
+        onLayersChange();
+        onPalettesChange();
     };
 
     self.save = function(state) {
