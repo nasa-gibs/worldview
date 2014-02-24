@@ -31,6 +31,11 @@ wv.layers.model = wv.layers.model || function(models, config) {
     self.visible = {};
 
     var init = function() {
+        self.reset();
+    };
+
+    self.reset = function() {
+        self.clear();
         if ( config.defaults && config.defaults.startingLayers ) {
             _.each(config.defaults.startingLayers, function(layers, type) {
                 _.each(layers, function(layer) {

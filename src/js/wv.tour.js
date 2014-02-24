@@ -14,17 +14,19 @@
  */
 var wv = wv || {};
 
-$(function() {
-    $("#wv-tour").click(function() {
-        wv.tour.start();
-    });
-});
+wv.tour = wv.tour || function(models, ui) {
 
-(function(self) {
+    var self = {};
 
-    // Keep these around in a closure so we can dispose of them as needed
     var conclusionPanel = null;
     var splashOverlay = null;
+
+    var init = function() {
+        $("#wv-tour").click(function() {
+            self.start();
+        });
+        self.introduction();
+    };
 
     self.introduction = function() {
         // Don't start tour if coming in via a permalink
@@ -59,6 +61,7 @@ $(function() {
             return;
         }
 
+        initTourState();
         /* --- Set Up --- */
 
         var padding = 15; // padding - used for all of the tour windows
@@ -278,6 +281,14 @@ $(function() {
             splashOverlay.hide();
         };
 
+        var onStop = function(index, tip) {
+            setTourState();
+            if(index == 4) {
+                conclusionPanel.show();
+                conclusionPanel.center();
+            }
+        };
+
         /*
          * Close the splash and start the tour.
          */
@@ -289,13 +300,7 @@ $(function() {
                                              bordered:true,
                                              includepage:true,
                                              template : {'link':'<a href="#" class="joyride-close-tip">X</a>'},
-                                             postStepCallback : function (index, tip) {
-                                                //console.log("index = " + index);
-                                                 if(index == 4) {
-                                                     conclusionPanel.show();
-                                                     conclusionPanel.center();
-                                                 }
-                                             }});
+                                             postStepCallback : onStop});
         };
 
         /*
@@ -325,6 +330,20 @@ $(function() {
         splashOverlay.center();
     };
 
+    var initTourState = function() {
+        models.date.select(wv.util.today());
+        models.layers.reset();
+        models.map.setExtentToLeading();
+        setTourState();
+    };
+
+    var setTourState = function() {
+        ui.sidebar.expandNow();
+        ui.sidebar.selectTab("active");
+        ui.dateSliders.expand();
+        models.proj.selectDefault();
+    };
+
     var validScreenSize = function() {
         var viewWidth = $(window).width();
         var viewHeight = $(window).height();
@@ -332,4 +351,6 @@ $(function() {
         return viewWidth >= 768 && viewHeight >= 680;
     };
 
-})(wv.tour = wv.tour || {});
+    init();
+    return self;
+};

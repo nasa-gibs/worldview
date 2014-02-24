@@ -64,7 +64,7 @@ wv.map.model = wv.map.model || function(models, config) {
             }
             self.maps.map.zoomToExtent(extent, true);
         } else {
-            setExtentToLeading();
+            self.setExtentToLeading();
         }
 
         // Initial state needs to be loaded here or the transition effect
@@ -79,7 +79,7 @@ wv.map.model = wv.map.model || function(models, config) {
         state.map = self.maps.map.getExtent().toBBOX();
     };
 
-    var setExtentToLeading = function() {
+    self.setExtentToLeading = function() {
         // Polar projections don't need to be positioned
         if ( self.maps.projection !== "geographic" ) {
             return;

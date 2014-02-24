@@ -65,6 +65,11 @@ wv.layers.sidebar = wv.layers.sidebar || function(models) {
             if ( selectedTab !== 2 ) {
                 $("#" + this.id).tabs("select", 2);
             }
+        } else if ( tabName === "active" ) {
+             if ( selectedTab !== 0) {
+                $("#" + this.id).tabs("select", 0);
+            }
+
         } else {
             throw new Error("Invalid tab: " + tabName);
         }
@@ -73,6 +78,18 @@ wv.layers.sidebar = wv.layers.sidebar || function(models) {
     self.collapse = function() {
         collpased = true;
         slide();
+    };
+
+    self.expand = function(now) {
+        if ( !collapsed ) {
+            return;
+        }
+        collapsed = true;
+        slide(null, null, now);
+    };
+
+    self.expandNow = function() {
+        self.expand(true);
     };
 
     var render = function() {
@@ -176,7 +193,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models) {
         return false;
     };
 
-    var slide = function(e, ui) {
+    var slide = function(e, ui, now) {
         if ( collapsed ) {
             $('.accordionToggler')
                 .removeClass('atexpand')
@@ -185,7 +202,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models) {
                 .addClass('arrow');
             $('.accordionToggler').attr("title","Hide Layer Selector");
             $('.accordionToggler').empty();
-            $('.products').animate({left:'0'}, 300);
+            $('.products').animate({left:'0'}, now ? 0 : 300);
             collapsed = false;
             $('.accordionToggler').appendTo("#"+self.id+"toggleButtonHolder");
         }

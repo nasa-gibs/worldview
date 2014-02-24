@@ -122,6 +122,9 @@ $(function() {
         // FIXME: Why is this here?
         ui.data.render();
         ui.link = wv.link.ui(models);
+        ui.tour = wv.tour(models, ui);
+
+        _.merge(wv.ui, ui);
 
         $(window).resize(function() {
           if ($(window).width() < 720) {
@@ -163,7 +166,6 @@ $(function() {
             console.warn("Development version");
         }
         wv.debug.layers(ui, models, config);
-        wv.tour.introduction();
 
         errorReport();
         wv.debug.error(parameters);
