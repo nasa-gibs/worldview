@@ -35,8 +35,16 @@ wv.layers.model = wv.layers.model || function(models, config) {
     };
 
     self.reset = function() {
-        self.clear();
         if ( config.defaults && config.defaults.startingLayers ) {
+            var from = _.pluck(self.active.baselayers, "id").reverse()
+                    .concat(_.pluck(self.active.overlays, "id").reverse());
+            var to = _.pluck(config.defaults.startingLayers.baselayers, "id")
+                    .concat(_.pluck(config.defaults.startingLayers.overlays, "id"));
+
+            if ( !_.isEqual(from, to) ) {
+                self.clear();
+            }
+
             _.each(config.defaults.startingLayers, function(layers, type) {
                 _.each(layers, function(layer) {
                     self.add(layer.id, layer.hidden);
