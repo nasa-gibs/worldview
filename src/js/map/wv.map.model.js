@@ -52,6 +52,7 @@ wv.map.model = wv.map.model || function(models, config) {
     };
 
     self.load = function(state, errors) {
+        onProjectionSelect();
         if ( state.map ) {
             var map = self.maps.map;
             // Verify that the viewport extent overlaps the valid extent, if
@@ -70,7 +71,6 @@ wv.map.model = wv.map.model || function(models, config) {
         // Initial state needs to be loaded here or the transition effect
         // does not work when a palette is assigned via permalink
         onDateSelect();
-        onProjectionSelect();
         onLayersChange();
         onPalettesChange();
     };

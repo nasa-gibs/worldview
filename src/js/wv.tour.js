@@ -61,7 +61,6 @@ wv.tour = wv.tour || function(models, ui) {
             return;
         }
 
-        initTourState();
         /* --- Set Up --- */
 
         var padding = 15; // padding - used for all of the tour windows
@@ -295,6 +294,7 @@ wv.tour = wv.tour || function(models, ui) {
         var handleTakeTour = function(e) {
             e.stopPropagation();
             splashOverlay.hide();
+            initTourState();
 
             $('#joyRideTipContent').joyride({adjustForPhone:false,
                                              bordered:true,
