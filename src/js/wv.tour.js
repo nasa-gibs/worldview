@@ -331,6 +331,7 @@ wv.tour = wv.tour || function(models, ui) {
     };
 
     var initTourState = function() {
+        models.proj.selectDefault();
         models.date.select(wv.util.today());
         models.layers.reset();
         models.map.setExtentToLeading();
