@@ -82,7 +82,7 @@
 
 ;(function ($, window, undefined) {
   'use strict';
-  
+
   var defaults = {
       'version'              : '2.0.3',
       'tipLocation'          : 'bottom',  // 'top' or 'bottom' in relation to parent
@@ -128,7 +128,7 @@
 
           if ($.isEmptyObject(settings)) {
             settings = $.extend(true, defaults, opts);
-			
+
             // non configurable settings
             settings.document = window.document;
             settings.$document = $(settings.document);
@@ -201,7 +201,8 @@
                	 	methods.showPrev();
                 	methods.startTimer();
               	} else {
-                	methods.hideNoCallback();
+                	//methods.hideNoCallback();
+                	methods.hide();
                 	methods.showPrev();
               }}
 
@@ -292,7 +293,7 @@
         var opts_len = opts_arr.length;
 		var ii, p;
 		var hasPrev, hasNext, prev;
-		
+
         // parse options
         for (ii = opts_len - 1; ii >= 0; ii--) {
         	p = opts_arr[ii].split(':');
@@ -314,9 +315,9 @@
             			hasNext = false;
             		}
             	}
-        	}        
+        	}
         }
-        
+
         // fill in defaults if buttons were not specified
       	if(hasPrev === undefined) {
       		hasPrev = settings.prevButton;
@@ -324,7 +325,7 @@
       	if(hasNext === undefined) {
       		hasNext = settings.nextButton;
       	}
-      	
+
       	// construct and return button string
       	if (hasPrev) {
       		prev = 'Prev';
@@ -387,7 +388,7 @@
             settings.tipSettings = $.extend({}, settings, opts);
 
             settings.tipSettings.tipLocationPattern = settings.tipLocationPatterns[settings.tipSettings.tipLocation];
-			
+
             // scroll if not modal
             if (!/body/i.test(settings.$target.selector)) {
               methods.scroll_to();
@@ -537,7 +538,7 @@
             }
 
             settings.$current_tip = settings.$prev_tip;
-			
+
           // skip non-existent targets
           } else if (settings.$li && settings.$target.length < 1) {
 
@@ -596,7 +597,7 @@
 
         methods.set_target();
       },
-      
+
       //BETH
       set_li_prev : function (init) {
         if (init) {
@@ -611,7 +612,7 @@
         methods.set_target();
       },
       //END BETH
-      
+
       set_next_tip : function () {
         settings.$next_tip = $('.joyride-tip-guide[data-index=' + settings.$li.index() + ']');
       },
@@ -625,7 +626,7 @@
       set_target : function () {
         var cl = settings.$li.attr('data-class'),
             id = settings.$li.attr('data-id'),
-            
+
             $sel = function () {
               if (id) {
                 return $(settings.document.getElementById(id));
@@ -680,9 +681,9 @@
             $border = $('.joyride-nub-border', settings.$next_tip),
             nub_height = Math.ceil($nub.outerHeight() / 2),
             toggle = init || false;
-		
+
 		settings.$next_tip.removeClass("mobile");
-		
+
         // tip must not be "display: none" to calculate position
         if (toggle) {
           settings.$next_tip.css('visibility', 'hidden');
@@ -692,14 +693,14 @@
         if (!/body/i.test(settings.$target.selector)) {
 
             if (methods.bottom()) {
-            
+
               settings.$next_tip.css({
                 top: (settings.$target.offset().top + nub_height + settings.$target.outerHeight()),
                 left: settings.$target.offset().left});
               methods.nub_position($nub, $border, settings.tipSettings.nubPosition, 'top');
 
             } else if (methods.top()) {
-			
+
               settings.$next_tip.css({
                 top: (settings.$target.offset().top - settings.$next_tip.outerHeight() - nub_height),
                 left: settings.$target.offset().left});
@@ -712,7 +713,7 @@
               methods.nub_position($nub, $border, settings.tipSettings.nubPosition, 'left');
 
             } else if (methods.left()) {
-			
+
               settings.$next_tip.css({
                 top: settings.$target.offset().top,
                 left: (settings.$target.offset().left - settings.$next_tip.outerWidth() - nub_height)});
@@ -725,7 +726,7 @@
                 .removeClass('top')
                 .removeClass('right')
                 .removeClass('left');
-			
+
               settings.tipSettings.tipLocation = settings.tipSettings.tipLocationPattern[settings.attempts];
 
               settings.attempts++;
@@ -754,9 +755,9 @@
             $border = $('.joyride-nub-border', settings.$prev_tip),
             nub_height = Math.ceil($nub.outerHeight() / 2),
             toggle = init || false;
-		
+
 		settings.$next_tip.addClass("mobile");
-		
+
         // tip must not be "display: none" to calculate position
         if (toggle) {
           settings.$prev_tip.css('visibility', 'hidden');
@@ -820,7 +821,7 @@
         }
 
       },
-      
+
       pos_phone : function (init) {
       	//console.log("pos_phone");
         var tip_height = settings.$next_tip.outerHeight(),
@@ -841,7 +842,7 @@
           settings.$next_tip.css('visibility', 'hidden');
           settings.$next_tip.show();
         }
-		
+
         if (!/body/i.test(settings.$target.selector)) {
 
           if (methods.top()) {
