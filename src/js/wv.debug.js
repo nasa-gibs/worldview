@@ -149,6 +149,7 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
 
     var updateLayers = function() {
         var layerId = $(this).val();
+        console.log(config.layers[layerId].title + "; " + config.layers[layerId].subtitle);
         if ( selectedLayer ) {
             models.layers.remove(selectedLayer);
             models.palettes.remove(selectedLayer);
