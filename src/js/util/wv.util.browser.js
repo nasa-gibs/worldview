@@ -410,7 +410,10 @@ if (!String.prototype.endsWith) {
 
     // Set the div height
     function setHeight($body) {
-        if (navigator.userAgent.match(/(iPad|iPhone|iPod touch);.*CPU.*OS 7_\d/i)){
+        var nua = navigator.userAgent;
+        if ((navigator.userAgent.match(/(iPad|iPhone|iPod touch);.*CPU.*OS 7_\d/i))
+        || (nua.indexOf('Mozilla/5.0') > -1 && nua.indexOf('Android ') > -1 &&     nua.indexOf('AppleWebKit') > -1) && !(nua.indexOf('Chrome') > -1)
+        ){
             $("#app, .ui-mobile, .ui-mobile .ui-page").css("min-height", 0);
         }
         else {
