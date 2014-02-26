@@ -411,17 +411,15 @@ if (!String.prototype.endsWith) {
     // Set the div height
     function setHeight($body) {
         var nua = navigator.userAgent;
-        if ((navigator.userAgent.match(/(iPad|iPhone|iPod touch);.*CPU.*OS 7_\d/i)) ||
-            (nua.indexOf('Mozilla/5.0') > -1 && nua.indexOf('Android ') > -1 &&     nua.indexOf('AppleWebKit') > -1) && (nua.indexOf('Chrome') <= -1)
-        ){
-            $("#app, .ui-mobile, .ui-mobile .ui-page").css("min-height", 0);
-        }
-        else {
+        if (navigator.userAgent.match(/(iPad|iPhone|iPod touch);.*CPU.*OS 6_\d/i)){
             var new_height = $(window).height();
-            // if mobileSafari add +60px
+            // if mobileSafari 6 add +60px
             new_height += 60;
             $('#app').css('min-height', 0 );
             $('#app').css('height', new_height );
+        }
+        else {
+            $("#app, .ui-mobile, .ui-mobile .ui-page").css("min-height", 0);
         }
     }
 
