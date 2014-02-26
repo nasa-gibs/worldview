@@ -367,7 +367,7 @@ if (!String.prototype.endsWith) {
 }
 
 /*
- * Mobile device quirks.
+ * Mobile device quirks.  This section is mostly overwriting things that jquery.mobile is adding
  */
 (function() {
     if( navigator.userAgent.match(/Android/i) ||
@@ -392,13 +392,10 @@ if (!String.prototype.endsWith) {
             mobileSafari = true;
         }
         addEventListener("load", function() {
-
-            if (mobileSafari){
-                setHeight();
-            }
             if (mobile){
                 $(".layerPicker a[href='#DataDownload']").hide();
             }
+            setHeight();
             window.scrollTo(0, 1);
             $("#app, .ui-mobile, .ui-mobile .ui-page").css("min-height", 0);
         }, false);
