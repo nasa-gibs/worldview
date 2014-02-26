@@ -403,8 +403,8 @@ if (!String.prototype.endsWith) {
             $("#app, .ui-mobile, .ui-mobile .ui-page").css("min-height", 0);
         }, false);
         addEventListener("orientationchange", function() {
-            setHeight();
             window.scrollTo(0, 1);
+            setHeight();
         }, false);
     }
 
