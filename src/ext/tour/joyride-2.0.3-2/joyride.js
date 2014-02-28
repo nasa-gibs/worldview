@@ -176,14 +176,14 @@
               	e.preventDefault();
               	e.stopImmediatePropagation();
               	if (settings.$li.next().length < 1) {
-               		methods.end();
+               		methods.end("next");
               	} else if (settings.timer > 0) {
                 	clearTimeout(settings.automate);
-                	methods.hide();
+                	methods.hide("next");
                 	methods.show();
                 	methods.startTimer();
               	} else {
-                	methods.hide();
+                	methods.hide("next");
                 	methods.show();
               	}}
             });
@@ -194,7 +194,7 @@
               	e.preventDefault();
               	e.stopImmediatePropagation();
               	if (settings.$li.prev().length < 1) {
-                	methods.end();
+                	methods.end("previous");
               	} else if (settings.timer > 0) {
                 	clearTimeout(settings.automate);
                 	methods.hideNoCallback();
@@ -202,7 +202,7 @@
                 	methods.startTimer();
               	} else {
                 	//methods.hideNoCallback();
-                	methods.hide();
+                	methods.hide("previous");
                 	methods.showPrev();
               }}
 
@@ -443,7 +443,7 @@
 
           } else {
 
-            methods.end();
+            methods.end("next");
 
           }
         } else {
@@ -546,7 +546,7 @@
 
           } else {
 
-            methods.end();
+            methods.end("previous");
 
           }
         } else {
@@ -574,8 +574,8 @@
        	}
       },
 
-      hide : function () {
-        settings.postStepCallback(settings.$li.index(), settings.$current_tip);
+      hide : function (button) {
+        settings.postStepCallback(settings.$li.index(), settings.$current_tip, button);
         $('.joyride-modal-bg').hide();
         settings.$current_tip.hide();
       },
@@ -669,7 +669,7 @@
       },
 
       restart : function () {
-        methods.hide();
+        methods.hide("restart");
         settings.$li = undefined;
         methods.show('init');
       },
@@ -947,7 +947,7 @@
       startTimer : function () {
         if (settings.$li.length) {
           settings.automate = setTimeout(function () {
-            methods.hide();
+            methods.hide("timer");
             methods.show();
             methods.startTimer();
           }, settings.timer);
@@ -956,7 +956,7 @@
         }
       },
 
-      end : function () {
+      end : function (button) {
         if (settings.cookieMonster) {
           $.cookie(settings.cookieName, 'ridden', { expires: 365, domain: settings.cookieDomain });
         }
@@ -967,8 +967,8 @@
 
         $('.joyride-modal-bg').hide();
         settings.$current_tip.hide();
-        settings.postStepCallback(settings.$li.index(), settings.$current_tip);
-        settings.postRideCallback(settings.$li.index(), settings.$current_tip);
+        settings.postStepCallback(settings.$li.index(), settings.$current_tip, button);
+        settings.postRideCallback(settings.$li.index(), settings.$current_tip, button);
         methods.destroy();
       },
 

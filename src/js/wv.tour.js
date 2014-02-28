@@ -280,9 +280,10 @@ wv.tour = wv.tour || function(models, ui) {
             splashOverlay.hide();
         };
 
-        var onStop = function(index, tip) {
+        var onStop = function(index, tip, button) {
+            console.log(index, tip, button);
             setTourState();
-            if(index == 4) {
+            if(index == 4 && button !== "previous") {
                 conclusionPanel.show();
                 conclusionPanel.center();
             }
