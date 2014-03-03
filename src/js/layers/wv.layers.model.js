@@ -78,6 +78,9 @@ wv.layers.model = wv.layers.model || function(models, config) {
             if ( spec.visibleOnly && !self.visible[layer.id] ) {
                 return;
             }
+            if ( spec.availableOnly && !self.available(layer.id) ) {
+                return;
+            }
             results.push(layer);
         });
         if ( spec.reverse ) {
@@ -91,6 +94,26 @@ wv.layers.model = wv.layers.model || function(models, config) {
         var baselayers = self.forGroup("baselayers", spec);
         var overlays = self.forGroup("overlays", spec);
         return baselayers.concat(overlays);
+    };
+
+    self.available = function(layerId) {
+        var layer = config.layers[layerId];
+        if ( layer.period !== "daily" ) {
+            return true;
+        }
+        if ( layer.startDate ) {
+            var start = wv.util.parseDateUTC(layer.startDate);
+            if ( models.date.selected < start ) {
+                return false;
+            }
+        }
+        if ( layer.endDate ) {
+            var end = wv.util.parseDateUTC(layer.endDate);
+            if ( models.date.selected > end ) {
+                return false;
+            }
+        }
+        return true;
     };
 
     self.dateRange = function(proj) {
