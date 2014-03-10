@@ -2,6 +2,8 @@
 <StyledLayerDescriptor version="1.0.0"
     xsi:schemaLocation="http://www.opengis.net/sld StyledLayerDescriptor.xsd"
     xmlns="http://www.opengis.net/sld"
+    xmlns:se="http://www.opengis.net/se"
+    xmlns:ogc="http://www.opengis.net/ogc"
     xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <NamedLayer>
@@ -12,13 +14,19 @@
         <Rule>
           <RasterSymbolizer>
             <ColorMap>
-              <ColorMapEntry color="#005000" quantity="0.27" label="0.27" opacity="1.0"/>
-              <ColorMapEntry color="#008800" quantity="0.32" label="0.32" opacity="1.0"/>
-              <ColorMapEntry color="#00dc00" quantity="0.37" label="0.37" opacity="1.0"/>
-              <ColorMapEntry color="#ffff00" quantity="0.41" label="0.41" opacity="1.0"/>
-              <ColorMapEntry color="#f0be40" quantity="0.46" label="0.46" opacity="1.0"/>
-              <ColorMapEntry color="#bb8800" quantity="0.51" label="0.51" opacity="1.0"/>
-              <ColorMapEntry color="#7a5a03" quantity="0.56" label="0.56" opacity="1.0"/>
+              <ColorMapEntry color="#660077" quantity="-0.05" label="-0.05" opacity="1.0"/>
+              <ColorMapEntry color="#670f8d" quantity="0.00" label="0.00" opacity="1.0"/>
+              <ColorMapEntry color="#000064" quantity="0.05" label="0.05" opacity="1.0"/>
+              <ColorMapEntry color="#0000aa" quantity="0.10" label="0.10" opacity="1.0"/>
+              <ColorMapEntry color="#0000ff" quantity="0.15" label="0.15" opacity="1.0"/>
+              <ColorMapEntry color="#0088ee" quantity="0.20" label="0.20" opacity="1.0"/>
+              <ColorMapEntry color="#005000" quantity="0.25" label="0.25" opacity="1.0"/>
+              <ColorMapEntry color="#008800" quantity="0.30" label="0.30" opacity="1.0"/>
+              <ColorMapEntry color="#00dc00" quantity="0.35" label="0.35" opacity="1.0"/>
+              <ColorMapEntry color="#ffff00" quantity="0.40" label="0.40" opacity="1.0"/>
+              <ColorMapEntry color="#f0be40" quantity="0.45" label="0.45" opacity="1.0"/>
+              <ColorMapEntry color="#bb8800" quantity="0.50" label="0.50" opacity="1.0"/>
+              <ColorMapEntry color="#7a5a03" quantity="0.55" label="0.55" opacity="1.0"/>
               <ColorMapEntry color="#6e0000" quantity="0.60" label="0.60" opacity="1.0"/>
               <ColorMapEntry color="#aa0000" quantity="0.65" label="0.65" opacity="1.0"/>
               <ColorMapEntry color="#ff0000" quantity="0.70" label="0.70" opacity="1.0"/>
