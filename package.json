@@ -1,6 +1,10 @@
 {
     "name": "worldview",
+<<<<<<< HEAD
     "version": "0.7.0",
+=======
+    "version": "0.6.4",
+>>>>>>> 7ca146c... Version bump, release notes
     "release": "1",
     "author": "Worldview Team <support@earthdata.nasa.gov>",
     "description": "Browse full-resolution, near real-time satellite imagery",
