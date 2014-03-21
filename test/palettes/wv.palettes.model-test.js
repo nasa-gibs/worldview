@@ -20,6 +20,10 @@ buster.testCase("wv.palettes.model", {
             layers: {
                 "layer1": {
                     id: "layer1",
+                    group: "overlays",
+                    projections: {
+                        geographic: {}
+                    },
                     palette: {
                         id: "palette1"
                     }
@@ -34,6 +38,10 @@ buster.testCase("wv.palettes.model", {
             }
         };
         this.models = {};
+        this.models.proj = {
+            selected: { id: "geographic" }
+        };
+        this.models.layers = wv.layers.model(this.models, this.config);
         this.models.palettes =  wv.palettes.model(this.models, this.config);
         this.model = this.models.palettes;
         this.stub($, "getJSON");
@@ -142,6 +150,19 @@ buster.testCase("wv.palettes.model", {
         var errors = [];
         this.model.load(state, errors);
         buster.assert.equals(errors.length, 1);
+    },
+
+    "Palettes in use when active layer has a selected palette": function() {
+        this.models.layers.add("layer1");
+        this.model.active.layer1 = "palette1";
+        buster.assert(this.model.inUse());
+    },
+
+    "Palettes are not in use when no active layers have a palette": function() {
+        this.models.layers.add("layer1");
+        this.model.active.layer1 = "palette1";
+        this.models.layers.remove("layer1");
+        buster.refute(this.model.inUse());
     }
 
 });

@@ -80,7 +80,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, config) {
         if(state == "off") {
             // Confirm with the user they want to continue, and if so, disable
             // the palettes before bringing up the crop box.
-            if (_.size(models.palettes.active) > 0) {
+            if ( models.palettes.inUse() ) {
                 wv.ui.ask({
                     header: "Notice",
                     message: PALETTE_WARNING,
