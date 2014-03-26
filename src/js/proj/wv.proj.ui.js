@@ -34,6 +34,10 @@ wv.proj.ui = wv.proj.ui || function(models) {
         antarctic: {
             highlighted: "images/antarcticon.png",
             normal:      "images/antarctic.png"
+        },
+        webmerc: {
+            highlighted: "images/geographicon.png",
+            normal:      "images/geographic.png"
         }
     };
     var model = models.proj;

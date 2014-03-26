@@ -37,8 +37,8 @@ wv.map.layers.set = function(config, projId, layerId) {
             maxResolution: matrixSet.maxResolution,
             serverResolutions: matrixSet.serverResolutions,
             maxExtent: proj.maxExtent,
-            tileSize: new OpenLayers.Size(layer.tileSize[0],
-                                          layer.tileSize[1]),
+            tileSize: new OpenLayers.Size(matrixSet.tileSize[0],
+                                          matrixSet.tileSize[1]),
             visibility: false
         };
         if ( layer.noTransition ) {
@@ -74,8 +74,7 @@ wv.map.layers.set = function(config, projId, layerId) {
             params.time = add.time;
         }
         var options = {
-            tileSize: new OpenLayers.Size(layer.tileSize[0],
-                                          layer.tileSize[1]),
+            tileSize: new OpenLayers.Size(512, 512),
             visiblity: false
         };
         if ( layer.opacity ) {
