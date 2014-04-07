@@ -81,7 +81,7 @@ wv.map.model = wv.map.model || function(models, config) {
 
     self.setExtentToLeading = function() {
         // Polar projections don't need to be positioned
-        if ( self.maps.projection !== "geographic" ) {
+        if ( self.maps.projection !== "geographic" || self.maps.projection !== "webmerc" ) {
             return;
         }
 
@@ -111,7 +111,12 @@ wv.map.model = wv.map.model || function(models, config) {
         var lon = minLon + (Math.abs(maxLon - minLon) / 2.0);
         var zoomLevel = 2;
 
-        map.setCenter(new OpenLayers.LonLat(lon, lat), zoomLevel);
+        var center = new OpenLayers.LonLat(lon, lat);
+        if ( self.maps.projection === "webmerc" ) {
+            center = center.transform("EPSG:4326", "EPSG:3857");
+            zoomLevel = 3;
+        }
+        map.setCenter(center, zoomLevel);
     };
 
     var onProjectionSelect = function() {

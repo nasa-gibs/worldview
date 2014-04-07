@@ -56,6 +56,13 @@ wv.map = (function(self) {
                         Math.round(mouseLonLat.lon) + "m, " +
                         Math.round(mouseLonLat.lat) + "m";
             },
+        }),
+        "webmerc": new OpenLayers.Control.MousePosition({
+            formatOutput: function(mouseXY) {
+                var mouseLonLat = mouseXY.transform("EPSG:3857", "EPSG:4326");
+                return mouseLonLat.lon.toFixed(3) + "&#176;, " +
+                       mouseLonLat.lat.toFixed(3) + "&#176;";
+            }
         })
     };
 

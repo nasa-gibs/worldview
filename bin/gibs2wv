@@ -59,7 +59,6 @@ for filename in args:
 
         wv_layer["id"] = id
         wv_layer["type"] = "wmts"
-        wv_layer["tileSize"] = [512, 512]
         wv_layer["format"] = gc_layer["Format"]
 
         # Extract start and end dates
@@ -98,6 +97,11 @@ for filename in args:
             wv_layer["projections"]["antarctic"] = {
                  "source": "GIBS:antarctic",
                  "matrixSet": "GIBS:" + matrixSet
+            }
+        if matrixSet.startswith("GoogleMaps"):
+            wv_layer["projections"]["webmerc"] = {
+                "source": "GIBS:webmerc",
+                "matrixSet": matrixSet
             }
 
 json_options = {}

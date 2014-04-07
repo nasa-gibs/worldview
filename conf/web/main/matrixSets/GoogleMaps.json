@@ -1,0 +1,62 @@
+{
+    "matrixSets": {
+        "GoogleMapsCompatible_Level9": {
+            "id": "GoogleMapsCompatible_Level9",
+            "maxResolution": 156543.03390625,
+            "serverResolutions": [
+                156543.03390625,
+                78271.516953125,
+                39135.7584765625,
+                19567.8792382812,
+                9783.9396191406,
+                4891.9698095703,
+                2445.9849047851,
+                1222.9924523925,
+                611.4962261962
+            ],
+            "tileSize": [256, 256]
+        },
+        "GoogleMapsCompatible_Level8": {
+            "id": "GoogleMapsCompatible_Level8",
+            "maxResolution": 156543.03390625,
+            "serverResolutions": [
+                156543.03390625,
+                78271.516953125,
+                39135.7584765625,
+                19567.8792382812,
+                9783.9396191406,
+                4891.9698095703,
+                2445.9849047851,
+                1222.9924523925
+            ],
+            "tileSize": [256, 256]
+        },
+        "GoogleMapsCompatible_Level7": {
+            "id": "GoogleMapsCompatible_Level7",
+            "maxResolution": 156543.03390625,
+            "serverResolutions": [
+                156543.03390625,
+                78271.516953125,
+                39135.7584765625,
+                19567.8792382812,
+                9783.9396191406,
+                4891.9698095703,
+                2445.9849047851
+            ],
+            "tileSize": [256, 256]
+        },
+        "GoogleMapsCompatible_Level6": {
+            "id": "GoogleMapsCompatible_Level6",
+            "maxResolution": 156543.03390625,
+            "serverResolutions": [
+                156543.03390625,
+                78271.516953125,
+                39135.7584765625,
+                19567.8792382812,
+                9783.9396191406,
+                4891.9698095703
+            ],
+            "tileSize": [256, 256]
+        }
+    }
+}
