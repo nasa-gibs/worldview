@@ -20,6 +20,8 @@ import xmltodict
 SKIP_LAYERS = [
     "Sea_Surface_Temp_Microwave",
     "Sea_Surface_Temp_Blended",
+    "arctic_graticule_3413_reverb",
+    "blue_marble_arctic",
 ]
 
 prog = os.path.basename(__file__)
