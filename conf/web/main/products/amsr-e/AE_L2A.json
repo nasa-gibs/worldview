@@ -1,0 +1,12 @@
+{
+    "products": {
+        "AE_L2A": {
+            "name": "AMSR-E/Aqua L2A Global Swath Spatially-Resampled Brightness Temperatures (Tb)",
+            "handler": "List",
+            "query": {
+                "shortName": "AE_L2A",
+                "dataCenterId": "NSIDC_ECS"
+            }
+        }
+    }
+}
