@@ -9,7 +9,7 @@
         "url": "https://git.earthdata.nasa.gov/scm/wor/worldview.git"
     },
     "devDependencies": {
-        "buster": "0.7.x",
+        "buster": "0.7.8",
         "grunt": "0.4.x",
         "grunt-buster": "0.3.x",
         "grunt-contrib-clean": "0.5.x",
