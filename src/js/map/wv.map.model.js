@@ -81,7 +81,7 @@ wv.map.model = wv.map.model || function(models, config) {
 
     self.setExtentToLeading = function() {
         // Polar projections don't need to be positioned
-        if ( self.maps.projection !== "geographic" || self.maps.projection !== "webmerc" ) {
+        if ( self.maps.projection !== "geographic" && self.maps.projection !== "webmerc" ) {
             return;
         }
 
