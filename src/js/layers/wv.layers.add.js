@@ -18,7 +18,7 @@ wv.layers = wv.layers || {};
 /**
  * @class wv.layers.add
  */
-wv.layers.add = wv.layers.add || function(models, config) {
+wv.layers.add = wv.layers.add || function(models, ui, config) {
 
     var jsp = null;
 
@@ -28,7 +28,13 @@ wv.layers.add = wv.layers.add || function(models, config) {
     self.selector = "#selectorbox";
     self.id = "selectorbox";
 
+    var visible = {};
+
     var init = function() {
+        _.each(config.layers, function(layer) {
+            visible[layer.id] = true;
+        });
+
         render();
         $(window).resize(resize);
 
@@ -36,6 +42,12 @@ wv.layers.add = wv.layers.add || function(models, config) {
             .on("add", onLayerAdded)
             .on("remove", onLayerRemoved);
         models.proj.events.on("select", onProjectionChange);
+        ui.sidebar.events.on("select", function(tab) {
+            if ( tab === "add" ) {
+                resize();
+            }
+        });
+       resize();
     };
 
     var render = function() {
@@ -114,6 +126,7 @@ wv.layers.add = wv.layers.add || function(models, config) {
         }
         var $element = $("<li></li>")
             .addClass("selectorItem")
+            .attr("data-layer", layerId)
             .addClass("item");
 
         var $name = $("<h4></h4>")
@@ -167,7 +180,8 @@ wv.layers.add = wv.layers.add || function(models, config) {
             var actual_height = 0;
             var count = 0;
             $(self.selector + group + ' li').each(function() {
-                if ( $(this).is(":visible") ) {
+                var layerId = $(this).attr("data-layer");
+                if ( visible[layerId] ) {
                     actual_height += $(this).outerHeight(true);
                     count++;
                 }
@@ -188,7 +202,6 @@ wv.layers.add = wv.layers.add || function(models, config) {
         }
         $("#" + heights[0].name).css("height", heights[0].height + "px");
         $("#" + heights[1].name).css("height", heights[1].height + "px");
-
         reinitializeScrollbars();
     };
 
@@ -348,6 +361,7 @@ wv.layers.add = wv.layers.add || function(models, config) {
             var selector =
                     "#" + wv.util.jqueryEscape(encodeURIComponent(layerId));
             $(selector).parent().css("display", display);
+            visible[layer.id] = !filtered;
         });
         adjustCategoryHeights();
     };

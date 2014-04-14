@@ -45,9 +45,6 @@ h1, h2, h3, h4, h5, h6 { font-weight:400; }
 #info {display:block; width:40px; height:40px; border:none;}
 
 
-#permpanel h3 {color:#FFFFFF; font: 12px "Gill Sans", sans-serif; font-weight:100; text-decoration:none;}
-#permpanel input[type='text']{width:280px;}
-
 div.horizontalContainer {width:100%; display:block; float:left;  position:absolute; bottom:10px; overflow:hidden; z-index:200; padding: 0;}
 
 #permalink_content {margin-top:10px;}
@@ -65,8 +62,8 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
     position:relative;
     width:100%;
     height:45px;
-    background: rgba(65,65,65,0.5);
-    border-bottom: 1px solid #000;
+    /*background: rgba(65,65,65,0.5);*/
+    /*border-bottom: 1px solid #000;*/
 }
 
 
@@ -215,8 +212,6 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
 }
 
 .toolbar-icon {
-    width: 40px;
-    height: 40px;
 }
 
 #wv-logo {
@@ -226,4 +221,85 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
     display:    inline-block;
 }
 
+.ui-button {
+    z-index: 1000;
+    border: 1px solid #aaa;
+    background: rgba(0, 0, 0, 0.5);
+    color: #eeeeee;
+}
+
+.ui-button:hover {
+    background: #eeeeee;
+    color: #404040;
+}
+
+.ui-button:active {
+    border: 1px solid #808080;
+    background: #808080;
+}
+
+.ui-menu { position: absolute; width: 100px; z-index: 1000; }
+
+/* Allow Font Awesome Icons in lieu of jQuery UI and only apply when using a FA icon */
+.ui-icon[class*=" fa-"] {
+    /* Remove the jQuery UI Icon */
+    background: none repeat scroll 0 0 transparent;
+    /* Remove the jQuery UI Text Indent */
+    text-indent: 0;
+    /* Bump it up - jQuery UI is -8px */
+    /*margin-top: -0.5em; */
+    margin-top: 3px;
+}
+
+/* Allow use of icon-large to be properly aligned */
+.ui-icon.icon-large {
+    /*margin-top: -0.75em;*/
+}
+
+.ui-button-icon-only .ui-icon[class*=" fa-"] {
+    /* Bump it - jQuery UI is -8px */
+    margin-left: -7px;
+}
+
+.ui-widget-content {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.ui-dialog .ui-dialog-content {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.ui-state-active {
+    background: #00457b;
+}
+
+.ui-tooltip {
+    background: #FFFBE7;
+}
+
+.ui-tooltip-content {
+    color: #000;
+}
+
+#wv-dialog a {
+    /*color: #82cdfa;*/
+}
+
+#wv-dialog a:hover {
+    color: #82cdfa;
+}
+
+#wv-dialog a:link {
+    /*font-weight: bold;*/
+}
+
+#wv-dialog a:visited {
+    /*font-weight: bold;*/
+}
+
+#wv-dialog h3 {
+    color: #f0f0f0;
+    font-weight: bold;
+    font-size: 12pt;
+}
 

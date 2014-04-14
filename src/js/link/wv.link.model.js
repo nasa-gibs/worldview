@@ -25,7 +25,7 @@ wv.link = wv.link || {};
 wv.link.model = wv.link.model || function(config) {
 
     var self = {};
-    var DEBUG_SHORTEN_LINK = "https://earthdata.nasa.gov/worldview?a=1&b=2";
+    var DEBUG_SHORTEN_LINK = "http://1.usa.gov/1iKIZ4j";
     var ENCODING_EXCEPTIONS = [
         { match: new RegExp("%2C", "g"), replace: "," }
     ];
@@ -94,8 +94,13 @@ wv.link.model = wv.link.model || function(config) {
             return $.Deferred().resolve(shortenCache[link]);
         }
         if ( /localhost/.test(link) ) {
-            link = DEBUG_SHORTEN_LINK;
-            console.warn("Cannot shorten localhost, using", link);
+            console.warn("Cannot shorten localhost, using", DEBUG_SHORTEN_LINK);
+            return $.Deferred().resolve({
+                status_code: 200,
+                data: {
+                    url: DEBUG_SHORTEN_LINK
+                }
+            });
         }
         var promise = $.getJSON("service/link/shorten.cgi" + mock +
                 "?url=" +  encodeURIComponent(link));

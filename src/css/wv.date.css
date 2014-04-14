@@ -182,7 +182,7 @@ div.ui-slider {
 .dateHolder, #linkmode {
     display: inline-block;
     float: left;
-    width: 6em; /*background: rgba(45,50,55,.75);*/
+    width: 7em; /*background: rgba(45,50,55,.75);*/
     margin-bottom: 10px;
     margin-top: 3px;
     text-shadow: none;

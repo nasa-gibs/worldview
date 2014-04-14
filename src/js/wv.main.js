@@ -111,14 +111,14 @@ $(function() {
 
         ui.proj = wv.proj.ui(models);
         ui.sidebar = wv.layers.sidebar(models);
-        ui.activeLayers = wv.layers.active(models, config);
-        ui.addLayers = wv.layers.add(models, config);
-        ui.dateSliders = wv.date.sliders(models, config);
-        ui.dateLabel = wv.date.label(models);
+        ui.activeLayers = wv.layers.active(models, ui, config);
+        ui.addLayers = wv.layers.add(models, ui, config);
+        //ui.dateSliders = wv.date.sliders(models, config);
+        //ui.dateLabel = wv.date.label(models);
         ui.dateWheels = wv.date.wheels(models, config);
         ui.rubberband = wv.image.rubberband(models, config);
         ui.image = wv.image.panel(models, ui, config);
-        ui.data = wv.data.ui(models, config, map.maps);
+        ui.data = wv.data.ui(models, ui, config);
         // FIXME: Why is this here?
         ui.data.render();
         ui.link = wv.link.ui(models);
@@ -137,10 +137,7 @@ $(function() {
         $("#eventsHolder").hide();
 
         // Wirings
-        ui.sidebar.events
-            .on("dataDownloadSelect", models.data.activate)
-            .on("dataDownloadUnselect", models.data.deactivate);
-
+        /*
         models.data.events
             .on("activate", function() {
                 ui.sidebar.selectTab("download");
@@ -155,6 +152,7 @@ $(function() {
             .on("zoomEnd", function(map) {
                 ui.data.onViewChange(map);
             });
+        */
         // FIXME: This is a hack
         models.map.events.on("projection", models.data.updateProjection);
 
@@ -169,6 +167,9 @@ $(function() {
 
         errorReport();
         wv.debug.error(parameters);
+
+        wv.ui.info();
+
         models.wv.events.trigger("startup");
     };
 

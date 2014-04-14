@@ -71,25 +71,12 @@ wv.ui = (function(self) {
      * @param [title="Notice"] {string} Title for the dialog box.
      */
     self.notify = function(message, title) {
-        var width = "300px";
-        if ( window.YAHOO && window.YAHOO.widget &&
-                window.YAHOO.widget.Panel ) {
-            o = new YAHOO.widget.Panel("WVerror", {
-                width: width,
-                zIndex: 1020,
-                visible: false,
-                constraintoviewport: true
-            });
-            title = title || "Notice";
-            o.setHeader(title);
-            o.setBody(message);
-            o.render(document.body);
-            o.show();
-            o.center();
-            o.hideEvent.subscribe(function(i) {
-                setTimeout(function() {o.destroy();}, 25);
-            });
-        }
+        var $dialog = self.getDialog();
+        $dialog.html(message).dialog({
+            title: title || "Notice",
+            show: { effect: "fade" },
+            hide: { effect: "fade" }
+        });
     };
 
     /**
@@ -182,6 +169,19 @@ wv.ui = (function(self) {
         }
         wv.ui.notify(prefix + " is not supported with your web " +
                 "browser. Upgrade or try again in a different browser.");
+    };
+
+    self.getDialog = function() {
+        var $dialog = $("#wv-dialog");
+        if ( $dialog.length !== 0 ) {
+            if ( $dialog.dialog ) {
+                $dialog.dialog("destroy");
+            }
+            $dialog.remove();
+        }
+        $dialog = $("<div></div>").attr("id", "wv-dialog");
+        $("body").append($dialog);
+        return $dialog;
     };
 
     return self;

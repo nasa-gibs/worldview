@@ -8,6 +8,7 @@
     "src/js/ui/wv.ui.js",
     "src/js/ui/wv.ui.about.js",
     "src/js/ui/wv.ui.indicator.js",
+    "src/js/ui/wv.ui.info.js",
 
     "src/js/proj/wv.proj.js",
     "src/js/proj/wv.proj.change.js",

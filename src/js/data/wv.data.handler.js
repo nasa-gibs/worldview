@@ -92,8 +92,7 @@ wv.data.handler.base = function(config, model) {
                 self.events.trigger("error", textStatus, errorThrown);
             }
         });
-        // FIXME: Deprecated API use
-        if ( !promise.isResolved() && !promise.isRejected() ) {
+        if ( promise.state() === "pending" ) {
             self.events.trigger("query");
         }
     };

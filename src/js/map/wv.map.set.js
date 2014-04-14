@@ -431,7 +431,7 @@ wv.map.set = wv.map.set || function(containerId, mapConfig, component) {
 
         var controls = [];
 
-        $("<div></div>")
+        var $map = $("<div></div>")
             .appendTo($div)
             .attr("id", id)
             .addClass("map-projection")
@@ -439,6 +439,41 @@ wv.map.set = wv.map.set || function(containerId, mapConfig, component) {
 
         var mapClass = "map-projection " + id + " ";
 
+        var $zoomOut = $("<button></button>")
+            .addClass("wv-map-zoom-out")
+            .addClass("wv-map-zoom");
+        var $icon = $("<i></i>")
+            .addClass("fa")
+            .addClass("fa-minus")
+            .addClass("fa-1x");
+        $zoomOut.append($icon);
+        $map.append($zoomOut);
+        $zoomOut.button({
+            text: false
+        });
+
+        var $zoomIn = $("<button></button>")
+            .addClass("wv-map-zoom-in")
+            .addClass("wv-map-zoom");
+        var $icon = $("<i></i>")
+            .addClass("fa")
+            .addClass("fa-plus")
+            .addClass("fa-1x");
+        $zoomIn.append($icon);
+        $map.append($zoomIn);
+        $zoomIn.button({
+            text: false
+        });
+
+        $zoomIn.click(function() {
+            self.map.zoomIn();
+        });
+
+        $zoomOut.click(function() {
+            self.map.zoomOut();
+        });
+
+        /*
         // Create zoom in/out controls
         var zoomInControl = new OpenLayers.Control.ZoomIn();
         zoomInControl.title = "zoom in";
@@ -454,6 +489,7 @@ wv.map.set = wv.map.set || function(containerId, mapConfig, component) {
         zoomPanel.addControls(zoomInControl);
         zoomPanel.addControls(zoomOutControl);
         controls.push(zoomPanel);
+        */
 
         // Add navigation controls
         controls.push(new OpenLayers.Control.Navigation({

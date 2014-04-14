@@ -3,7 +3,6 @@
     "src/css/wv.link.css",
     "src/css/wv.palettes.css",
     "src/css/wv.debug.css",
-    "src/css/map.css",
     "src/css/map-ol2.css",
     "src/css/wv.date.css",
     "src/css/menuPicker.css",
@@ -18,5 +17,6 @@
     "src/css/indicator.css",
     "src/css/events.css",
     "src/css/dataDownload.css",
-    "src/css/global.css"
+    "src/css/global.css",
+    "src/css/wv.sidebar.css"
 ]

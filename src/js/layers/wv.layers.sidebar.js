@@ -60,16 +60,12 @@ wv.layers.sidebar = wv.layers.sidebar || function(models) {
     };
 
     self.selectTab = function(tabName) {
-        var selectedTab = $("#" + this.id).tabs("option", "selected");
-        if ( tabName === "download" ) {
-            if ( selectedTab !== 2 ) {
-                $("#" + this.id).tabs("select", 2);
-            }
-        } else if ( tabName === "active" ) {
-             if ( selectedTab !== 0) {
-                $("#" + this.id).tabs("select", 0);
-            }
-
+        if ( tabName === "active" ) {
+            $(self.selector).tabs("option", "active", 0);
+        } else if ( tabName === "add" ) {
+            $(self.selector).tabs("option", "active", 1);
+        } else if ( tabName === "download" ) {
+            $(self.selector).tabs("option", "active", 2);
         } else {
             throw new Error("Invalid tab: " + tabName);
         }
@@ -101,7 +97,8 @@ wv.layers.sidebar = wv.layers.sidebar || function(models) {
 
         var $activeTab = $("<li></li>")
             .addClass("layerPicker")
-            .addClass("first");
+            .addClass("first")
+            .attr("data-tab", "active");
         var $activeLink = $("<a></a>")
             .attr("href", "#products")
             .addClass("activetab")
@@ -112,7 +109,8 @@ wv.layers.sidebar = wv.layers.sidebar || function(models) {
 
         var $addTab = $("<li></li>")
             .addClass("layerPicker")
-            .addClass("second");
+            .addClass("second")
+            .attr("data-tab", "add");
         var $addLink = $("<a></a>")
             .attr("href", "#selectorbox")
             .addClass("tab")
@@ -122,7 +120,8 @@ wv.layers.sidebar = wv.layers.sidebar || function(models) {
 
         var $downloadTab = $("<li></li>")
             .addClass("layerPicker")
-            .addClass("third");
+            .addClass("third")
+            .attr("data-tab", "download");
         var $downloadLink = $("<a></a>")
             .attr("href", "#DataDownload")
             .addClass("tab")
@@ -147,50 +146,68 @@ wv.layers.sidebar = wv.layers.sidebar || function(models) {
                   .append($("<div id='DataDownload'></div>"));
 
         $container.tabs({
-            show: onTabChange
+            hide: { effect: "fade", duration: 200 },
+            beforeActivate: onBeforeTabChange,
+            activate: onTabChange
         });
         $('.accordionToggler').bind('click', slide);
     };
 
     var onTabChange = function(e, ui) {
-        if ( ui.index === 0 ) {
+        self.events.trigger("select", ui.newTab.attr("data-tab"));
+    };
+
+    var onBeforeTabChange = function(e, ui) {
+        // FIXME: This code is very clunky.
+        var tab = ui.newTab.attr("data-tab");
+        if ( tab === "active" ) {
             $('.ui-tabs-nav')
                   .addClass('firstselected')
                   .removeClass('secondselected')
                   .removeClass('thirdselected');
-        }
-        else if ( ui.index === 1 ) {
+            $('.ui-tabs-nav li.first').addClass("ui-state-active");
+            $('.ui-tabs-nav li.second').removeClass("ui-state-active");
+            $('.ui-tabs-nav li.third').removeClass("ui-state-active");
+        } else if ( tab === "add" ) {
             $('.ui-tabs-nav')
                   .removeClass('firstselected')
                   .addClass('secondselected')
                   .removeClass('thirdselected');
-        } else if ( ui.index === 2 ) {
+            $('.ui-tabs-nav li.first').removeClass("ui-state-active");
+            $('.ui-tabs-nav li.second').addClass("ui-state-active");
+            $('.ui-tabs-nav li.third').removeClass("ui-state-active");
+        } else if ( tab === "download" ) {
             $('.ui-tabs-nav')
                   .removeClass('firstselected')
                   .removeClass('secondselected')
                   .addClass('thirdselected');
+            $('.ui-tabs-nav li.first').removeClass("ui-state-active");
+            $('.ui-tabs-nav li.second').removeClass("ui-state-active");
+            $('.ui-tabs-nav li.third').addClass("ui-state-active");
         } else {
             throw new Error("Invalid tab index: " + ui.index);
         }
 
-        var tab1 = ( ui.index === 0 ) ?
+        var tab1 = ( tab === "active" ) ?
             HTML_TAB_ACTIVE_SELECTED : HTML_TAB_ACTIVE_UNSELECTED;
-        var tab2 = ( ui.index === 1 ) ?
+        var tab2 = ( tab === "add" ) ?
             HTML_TAB_ADD_SELECTED : HTML_TAB_ADD_UNSELECTED;
-        var tab3 = ( ui.index === 2 ) ?
+        var tab3 = ( tab === "download" ) ?
             HTML_TAB_DOWNLOAD_SELECTED : HTML_TAB_DOWNLOAD_UNSELECTED;
 
-        if ( ui.index === 2 ) {
+        if ( ui.index === "download" ) {
             self.events.trigger("dataDownloadSelect");
         } else {
             self.events.trigger("dataDownloadUnselect");
         }
 
+        self.events.trigger("before-select", tab);
+
         $('.ui-tabs-nav li.first a').html(tab1);
         $('.ui-tabs-nav li.second a').html(tab2);
         $('.ui-tabs-nav li.third a').html(tab3);
 
-        return false;
+        return true;
     };
 
     var slide = function(e, ui, now) {

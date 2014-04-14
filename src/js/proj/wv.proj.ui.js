@@ -22,82 +22,68 @@ wv.proj = wv.proj || {};
  */
 wv.proj.ui = wv.proj.ui || function(models) {
 
-    var icons = {
-        geographic: {
-            highlighted: "images/geographicon.png",
-            normal:      "images/geographic.png"
-        },
-        arctic: {
-            highlighted: "images/arcticon.png",
-            normal:      "images/arctic.png"
-        },
-        antarctic: {
-            highlighted: "images/antarcticon.png",
-            normal:      "images/antarctic.png"
-        },
-        webmerc: {
-            highlighted: "images/geographicon.png",
-            normal:      "images/geographic.png"
-        }
-    };
     var model = models.proj;
 
     var self = {};
 
-    self.selector = "#projection";
-    self.id = "projection";
+    self.selector = "#wv-proj-button";
+    self.id = "wv-proj-button";
 
     var init = function() {
         render();
-        model.events.on("select", onProjectionChanged);
-        onProjectionChanged(model.selected);
     };
 
     var render = function() {
-        var $container = $(self.selector);
-        $container.empty().addClass("switch");
-        $container.html(
-            "<ul>" +
-            "<li>" +
-            "<div class='sw_current' title='Choose a projection'>" +
-            "</div>" +
-            "<div class='hidden'>" +
-                "<a id='arctic' class='sw_arctic' title='Arctic' " +
-                    "data-id='arctic'></a>" +
-                "<a id='geographic' class='sw_geographic' " +
-                    "title='Geographic' data-id='geographic'></a>" +
-                "<a id='antarctic' class='sw_antarctic' " +
-                    "title='Antarctic' data-id='antarctic'></a>" +
-            "</div>" +
-            "</li>" +
-            "</ul>"
-        );
+        var $button = $("<button></button>")
+            .attr("title", "Switch projection");
+        var $icon = $("<i></i>")
+            .addClass("fa")
+            .addClass("fa-globe")
+            .addClass("fa-2x");
+        $button.append($icon);
+        $(self.selector).append($button);
+        $button.button({
+            text: false
+        }).tooltip({
+            hide: {
+                duration: 0
+            }
+        });
 
-        $("#arctic").bind("click", changeProjection);
-        $("#geographic").bind("click", changeProjection);
-        $("#antarctic").bind("click", changeProjection);
-    };
+        var $menu = $("<div></div>").attr("id", "wv-proj-menu");
+        var $menuItems = $("<ul></ul>");
 
-    var changeProjection = function(event) {
-        var $element = $("#" + event.target.id);
-        model.select($element.attr("data-id"));
-    };
+        var $arctic = $("<li><a><i class='ui-icon icon-large fa fa-arrow-circle-up fa-fw'></i>Arctic</a></li>");
+        var $geographic = $("<li><a><i class='ui-icon icon-large fa fa-circle fa-fw'></i>Geographic</a></li>");
+        var $antarctic = $("<li><a><i class='ui-icon icon-large fa fa-arrow-circle-down fa-fw'></i>Antarctic</a></li>");
 
-    var onProjectionChanged = function(proj) {
-        $(self.selector + " .sw_current")
-            .css("background-image", "url(" + icons[proj.id].normal + ")")
-            .hover(function() { hoverOver($(this), proj.id); },
-                   function() { hoverOut($(this), proj.id); });
-    };
+        $menuItems.append($arctic);
+        $menuItems.append($geographic);
+        $menuItems.append($antarctic);
 
-    var hoverOver = function($element, id) {
-        $element.css("background-image",
-                "url(" + icons[id].highlighted + ")");
-    };
+        $arctic.click(function() { models.proj.select("arctic"); });
+        $geographic.click(function() { models.proj.select("geographic"); });
+        $antarctic.click(function() { models.proj.select("antarctic"); });
 
-    var hoverOut = function($element, id) {
-        $element.css("background-image",
-                "url(" + icons[id].normal + ")");
+        $menu.append($menuItems);
+        $("body").append($menu);
+
+        $menuItems.hide().menu();
+
+        $button.click(function() {
+            $(".ui-menu").hide();
+            $button.tooltip("close").tooltip("disable");
+            $menuItems.show().position({
+                my: "left top",
+                at: "left bottom+5",
+                of: $button
+            });
+            $(document).one("click", function() {
+                $menuItems.hide();
+                $button.tooltip("enable");
+            });
+            return false;
+        });
     };
 
     init();

@@ -34,7 +34,7 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
     */
     var init = function(){
 
-        alignTo = { id: "camera" };
+        alignTo = { id: "wv-image-button" };
         container=document.getElementById(containerId);
 
         if (container===null){

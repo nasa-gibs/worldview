@@ -12,7 +12,7 @@
 var wv = wv || {};
 wv.data = wv.data || {};
 
-wv.data.ui = wv.data.ui || function(models, config) {
+wv.data.ui = wv.data.ui || function(models, ui, config) {
 
     var HTML_WIDGET_INACTIVE = "<img src='images/camera.png'></img>";
     var HTML_WIDGET_ACTIVE = "<img src='images/cameraon.png'></img>";
@@ -44,13 +44,21 @@ wv.data.ui = wv.data.ui || function(models, config) {
             .on("granuleSelect", updateSelection)
             .on("granuleUnselect", updateSelection);
         $(window).resize(resize);
+        ui.sidebar.events.on("select", function(tab) {
+            if ( tab === "download" ) {
+                resize();
+                model.activate();
+            } else {
+                model.deactivate();
+            }
+        });
     };
 
     self.render = function() {
         var $container = $(self.selector).empty()
             .addClass(self.id + "list")
             .addClass("bank");
-        var $actionButton = $("<input></input>")
+        var $actionButton = $("<button></button>")
             .attr("id", "DataDownload_Button")
             .addClass("action")
             .attr("type", "button")
@@ -63,6 +71,7 @@ wv.data.ui = wv.data.ui || function(models, config) {
             .attr("id", self.id + "content")
             .addClass("content");
         $container.append($list);
+        $("#DataDownload_Button").button();
 
         self.refresh();
     };
@@ -200,6 +209,7 @@ wv.data.ui = wv.data.ui || function(models, config) {
     };
 
     var onActivate = function() {
+        ui.sidebar.selectTab("download");
         if ( !mapController ) {
             mapController = wv.data.map(model, maps, config);
         }
@@ -288,16 +298,17 @@ wv.data.ui = wv.data.ui || function(models, config) {
         $button = $("#DataDownload_Button");
         var selected = _.size(model.selectedGranules);
         if ( selected > 0 ) {
-            $button.removeAttr("disabled");
+            $button.button("enable");
             var totalSize = model.getSelectionSize();
             if ( totalSize ) {
                 var formattedSize = Math.round(totalSize * 100) / 100;
-                $button.val("Download Data (" + formattedSize + " MB)");
+                $button.find(".ui-button-text").html("Download Data (" + formattedSize + " MB)");
             } else {
-                $button.val("Download Selected Data");
+                $button.find(".ui-button-text").html("Download Selected Data");
             }
         } else {
-            $button.attr("disabled", "disabled").val("No Data Selected");
+            $button.button("disable");
+            $button.find(".ui-button-text").html("No Data Selected");
         }
 
         var counts = model.getSelectionCounts();

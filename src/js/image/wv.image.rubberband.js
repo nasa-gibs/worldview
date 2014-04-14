@@ -20,8 +20,9 @@ wv.image.rubberband = wv.image.rubberband || function(models, config) {
         "Image download does not yet support the custom palette(s) that you " +
         "have applied. Would you like to continue with the default color palette(s)?";
 
-    var containerId = "camera";
+    var containerId = "wv-image-button";
     var container;
+    var selector = "#" + containerId;
     var coords = null;
     var previousCoords = null;
     var icon = "images/camera.png";
@@ -32,6 +33,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, config) {
     var jcropAPI = null;
     var previousPalettes = "";
     var currentPalettes = "";
+    var $button;
     self.events = wv.util.events();
 
     /**
@@ -44,16 +46,32 @@ wv.image.rubberband = wv.image.rubberband || function(models, config) {
         if (container===null){
             throw new Error("Error: element '"+containerId+"' not found!");
         }
-        container.setAttribute("class","rubberband");
-
-        container.innerHTML = "<a id='"+id+"camera_link' class='toolbar-link' title='Take a snapshot'><img src='"+icon+"' /></a>";
-        $('#'+id+"camera_link").on('click', toggle);
+        $button = $("<input></input>")
+            .attr("type", "checkbox")
+            .attr("id", "wv-image-button-check")
+            .val("");
+        var $label = $("<label></label>")
+            .attr("for", "wv-image-button-check")
+            .attr("title", "Take a snapshot");
+        var $icon = $("<i></i>")
+            .addClass("fa")
+            .addClass("fa-camera")
+            .addClass("fa-2x");
+        $label.append($icon);
+        $(selector).append($label);
+        $(selector).append($button);
+        $button.button({
+            text: false
+        });
+        $button.on('click', toggle);
     };
 
     var toggle = function(){
+        var checked = $("#wv-image-button-check").prop("checked");
+
         var toggleOn = function() {
             state = "on";
-            $("#"+id+"camera_link img").attr("src",onicon);
+            //$("#"+id+"camera_link img").attr("src",onicon);
             $("#imagedownload").show('slide', {direction: 'up'}, 1000);
             draw();
         };
@@ -92,7 +110,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, config) {
         }
         else {
             state = "off";
-            $("#"+id+"camera_link img").attr("src",icon);
+            $button.prop("checked", false).button("refresh");
             jcropAPI.destroy();
             $("#imagedownload").hide('slide', {direction: 'up'}, 1000);
             if (previousPalettes) {

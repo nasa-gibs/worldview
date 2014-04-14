@@ -18,7 +18,7 @@ wv.layers = wv.layers || {};
 /**
  * @class wv.layers.active
  */
-wv.layers.active = wv.layers.active || function(models, config) {
+wv.layers.active = wv.layers.active || function(models, ui, config) {
 
     var aoi = config.aoi;
     var model = models.layers;
@@ -43,6 +43,11 @@ wv.layers.active = wv.layers.active || function(models, config) {
         models.proj.events
             .on("select", onProjectionChanged);
         $(window).resize(resize);
+        ui.sidebar.events.on("select", function(tab) {
+            if ( tab === "active" ) {
+                resize();
+            }
+        });
     };
 
     var render = function() {

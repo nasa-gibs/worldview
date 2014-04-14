@@ -8,13 +8,46 @@
     color: #222;
     text-shadow: none;
 }
+
 #DataDownload .jspPane {
     left: 0 !important;
 }
+
 #dataDownload div.ui-button {
     margin-left: 20px;
     margin-right: 20px;
 }
+
+.action {
+    display:block;
+    width: 90%;
+    height: 44px;
+    margin: 5px auto;
+    border: none;
+    color: #fff;
+    font-size:14px;
+    cursor: pointer;
+    background: #508050;
+    border-radius: 5px;
+}
+
+/*
+.action:hover {
+    background: #609060;
+}
+
+.action:active {
+    background: #407040;
+}
+
+.action[disabled='disabled'] {
+    border: 1px solid #404040;
+    background: black;
+    color: #808080;
+    cursor: auto;
+    border-radius: 5px;
+}
+*/
 
 #DataDownload_DownloadListPanel .bd {
     background-color: rgb(25, 28, 32);
