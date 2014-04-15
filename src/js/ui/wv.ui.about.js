@@ -65,6 +65,8 @@ wv.ui.about = wv.ui.about || (function() {
                         "Responsible NASA Official:  <a href='mailto:ryan.a.boller@nasa.gov'>Ryan Boller</a><br />"+
                 "</p>"+
         "</div>";
+
+        /*
         $dialog.html(item);
         $dialog.dialog({
             title: "About",
@@ -72,6 +74,14 @@ wv.ui.about = wv.ui.about || (function() {
             show: { effect: "fade" },
             hide: { effect: "fade" }
         });
+        */
+        $dialog.dialog({
+            title: "About",
+            width: 600,
+            height: 500,
+            show: { effect: "fade" },
+            hide: { effect: "fade" }
+        }).load("pages/about.html #page");
     };
 
 

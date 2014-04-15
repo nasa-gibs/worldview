@@ -207,7 +207,10 @@ module.exports = function(grunt) {
         replace: {
             // Add in the timestamp of the build as needed
             timestamp: {
-                src: ["build/worldview-debug/web/js/**/*.js"],
+                src: [
+                    "build/worldview-debug/web/js/**/*.js",
+                    "build/worldview-debug/web/pages/**/*.html"
+                ],
                 overwrite: true,
                 replacements: [{
                     from: "@BUILD_TIMESTAMP@",
@@ -217,7 +220,10 @@ module.exports = function(grunt) {
             // Add in the version of this build as needed. Update the version
             // in package.json
             version: {
-                src: ["build/worldview-debug/web/js/**/*.js"],
+                src: [
+                    "build/worldview-debug/web/js/**/*.js",
+                    "build/worldview-debug/web/pages/**/*.html"
+                ],
                 overwrite: true,
                 replacements: [{
                     from: "@BUILD_VERSION@",
@@ -398,11 +404,10 @@ module.exports = function(grunt) {
             // in a release build. Place exceptions for JavaScript and
             // CSS here.
             source: [
-                "build/worldview-debug/web/**/*.css",
+                "build/worldview-debug/web/css/**/*.css",
                 "build/worldview-debug/web/**/*.js",
                 "!build/worldview-debug/web/css/wv.css",
                 "!build/worldview-debug/web/js/wv.js",
-                "!build/worldview-debug/web/css/pages.css",
                 "!build/worldview-debug/web/css/bulkDownload.css",
                 "!build/worldview-debug/web/js/map/wv.map.tileworker.js",
                 "!build/worldview-debug/web/ext/**/*"
