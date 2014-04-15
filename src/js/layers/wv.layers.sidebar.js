@@ -143,7 +143,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models) {
 
         $container.append($("<div id='products'></div>"))
                   .append($("<div id='selectorbox'></div>"))
-                  .append($("<div id='DataDownload'></div>"));
+                  .append($("<div id='wv-data'></div>"));
 
         $container.tabs({
             hide: { effect: "fade", duration: 200 },

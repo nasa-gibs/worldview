@@ -1,4 +1,4 @@
-#dataDownload {
+#wv-data {
     padding-top: 10px;
     display: inline-block;
     float: left;
@@ -9,11 +9,11 @@
     text-shadow: none;
 }
 
-#DataDownload .jspPane {
+#wv-data .jspPane {
     left: 0 !important;
 }
 
-#dataDownload div.ui-button {
+#wv-data .ui-button {
     margin-left: 20px;
     margin-right: 20px;
 }
@@ -31,45 +31,26 @@
     border-radius: 5px;
 }
 
-/*
-.action:hover {
-    background: #609060;
-}
 
-.action:active {
-    background: #407040;
-}
-
-.action[disabled='disabled'] {
-    border: 1px solid #404040;
-    background: black;
-    color: #808080;
-    cursor: auto;
-    border-radius: 5px;
-}
-*/
-
-#DataDownload_DownloadListPanel .bd {
-    background-color: rgb(25, 28, 32);
-    overflow: auto;
-    padding: 10px;
-    color: #FFFBE7;
-}
-
-#DataDownload_DownloadListPanel ul {
+#wv-data-selection ul {
     display: list;
     margin: 0 5px;
 }
 
-#DataDownload_DownloadListPanel li {
+#wv-data-selection li {
     margin-top: 3px;
     display: list-item;
     list-style-type: none;
 }
 
-#DataDownload_DownloadListPanel div.product li {
+#wv-data-selection div.product li {
     list-style-type: disc;
     margin-left: 10px;
+}
+
+#wv-data-selection .link {
+    margin-left: 10px;
+    list-style-type: disc;
 }
 
 #DataDownload_DownloadListPanel .BulkDownload li {
@@ -77,38 +58,26 @@
     margin-left: 10px;
 }
 
-#DataDownload_DownloadListPanel h3 {
+#wv-data-selection h3 {
     font-size: 12pt;
     font-weight: bold;
     color: #FFFBE7;
 }
 
-#DataDownload_DownloadListPanel h4 {
+#wv-data-selection h4 {
     font-size: 11pt;
     font-weight: bold;
     color: #FFFBE7;
 }
 
-#DataDownload_DownloadListPanel h5 {
+#wv-data-selection h5 {
     font-size: 10pt;
     margin-top: 10px;
     margin-bottom: 5px;
     color: #FFFBE7;
 }
 
-#DataDownload_DownloadListPanel a {
-    text-decoration: none;
-}
-
-#DataDownload_DownloadListPanel a:link {
-    color: #82cdfa;
-}
-
-#DataDownload_DownloadListPanel a:visited {
-    color: #82cdfa;
-}
-
-#DataDownload_DownloadListPanel hr {
+#wv-data-selection hr {
     display: block;
     height: 1px;
     border: 0;
@@ -117,13 +86,13 @@
     padding: 0;
 }
 
-#DataDownload_DownloadListPanel td {
-    border-bottom: 1px solid #303030;
+#wv-data-selection td {
+    border-bottom: 1px solid #404040;
     padding: 5px;
     vertical-align: top;
 }
 
-#DataDownload_DownloadListPanel .remove {
+#wv-data-selection .remove {
     display: block;
     padding: 3px;
     border: 1px solid #707070;
@@ -132,71 +101,98 @@
     border-radius: 5px;
 }
 
-#DataDownload_DownloadListPanel .remove:hover {
-    background: #ffaaaa;
-    border-color: #ffaaaa;
-    color: #000000;
+#wv-data-selection .remove:hover {
+    background: #eee;
+    border-color: #444;
+    color: #444;
 }
 
-#DataDownload_DownloadListPanel .remove:active {
-    background: #df8a8a;
-    border-color: #df8a8a;
-    color: #000000;
+#wv-data-selection .remove:active {
+    background: #888;
+    border-color: #444;
+    color: #000;
 }
 
-#DataDownload_DownloadListPanel tr:hover {
+#wv-data-selection table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#wv-data-selection tr:hover {
     background-color: rgb(55, 58, 62);
 }
 
-#DataDownload_Notice {
+#wv-data-selection .collapse {
+    width: 100%;
+    border: 0;
+}
+
+#wv-data-selection .collapse .ui-accordion-header {
+    background: rgba(0, 0, 0, 0);
+    border: 0;
+    font-weight: normal;
+}
+
+#wv-data-selection .bulk h5 {
+    margin-top: 5px;
+}
+
+#wv-data-selection .collapse .ui-accordion-content {
+    border: 0;
+    padding: 0 0 0.5em 2.5em;
+}
+
+.wv-data-unavailable-header {
+    color: #eeeeee;
+    font-size: 12pt;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+#wv-data-selection-notice {
     width: 80%;
     margin: 0 auto;
-    border: 1px solid #ccccff;
     border-radius: 5px;
-    background-color: #ddddff;
+    background-color: #eee;
     padding: 5px;
 }
 
-#DataDownload_Notice .icon {
+#wv-data-selection-notice .icon {
+    color: #404040;
     width: 32px;
     height: 32px;
     float: left;
 }
 
-#DataDownload_Notice .text {
-    padding-left: 42px;
-    color: #000000;
+#wv-data-selection-notice .text {
+    margin-left: 47px;
+    color: #404040;
 }
 
-#DataDownload_Notice .text a {
-    color: #202070;
+#wv-data-selection-notice .text a {
+    color: #444;
 }
 
-#DataDownload_DownloadListPanel div.wget {
-    float: right;
+#wv-data-selection-notice .text a:hover {
+    color: #24d;
 }
 
-#DataDownload_SelectionListPanel .bd {
-    background-color: rgb(25, 28, 32);
-    overflow: auto;
-    padding: 10px;
-    color: #FFFBE7;
-}
-
+/*
 #DataDownload_GranuleList .button {
     width: 16px;
     height: 16px;
 }
+*/
 
-#DataDownload_GranuleList table {
+#wv-data-list table {
     width: 100%;
 }
 
-#DataDownload_GranuleList td {
+#wv-data-list td {
     padding: 3px;
 }
 
-#DataDownload_GranuleList tr:nth-child(even) {
+#wv-data-list tr:nth-child(even) {
     background-color: rgb(45, 48, 52);
 }
 

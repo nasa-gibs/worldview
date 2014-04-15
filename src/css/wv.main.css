@@ -228,12 +228,12 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
     color: #eeeeee;
 }
 
-.ui-button:hover {
+.ui-button:hover:enabled {
     background: #eeeeee;
     color: #404040;
 }
 
-.ui-button:active {
+.ui-button:active:enabled {
     border: 1px solid #808080;
     background: #808080;
 }
@@ -267,6 +267,7 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
 
 .ui-dialog .ui-dialog-content {
     background: rgba(0, 0, 0, 0.7);
+    padding-top: 15px;
 }
 
 .ui-state-active {
@@ -281,20 +282,25 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
     color: #000;
 }
 
-#wv-dialog a {
-    /*color: #82cdfa;*/
+a:hover {
+    color: #8cf;
 }
 
-#wv-dialog a:hover {
-    color: #82cdfa;
+.ui-accordion .ui-accordion-content {
+    background: rgba(0, 0, 0, 0);
 }
 
-#wv-dialog a:link {
-    /*font-weight: bold;*/
+.error-icon {
+    margin-right: 10px;
+    vertical-align: middle;
 }
 
-#wv-dialog a:visited {
-    /*font-weight: bold;*/
+.error-header {
+    margin-top: 5px;
+}
+
+.error-body {
+    margin-top: 10px;
 }
 
 #wv-dialog h3 {

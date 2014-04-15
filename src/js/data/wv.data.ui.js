@@ -14,9 +14,6 @@ wv.data = wv.data || {};
 
 wv.data.ui = wv.data.ui || function(models, ui, config) {
 
-    var HTML_WIDGET_INACTIVE = "<img src='images/camera.png'></img>";
-    var HTML_WIDGET_ACTIVE = "<img src='images/cameraon.png'></img>";
-
     var queryActive = false;
     var list = null;
     var model = models.data;
@@ -27,8 +24,8 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
     var maps = models.map.maps;
 
     var self = {};
-    self.selector = "#DataDownload";
-    self.id = "DataDownload";
+    self.selector = "#wv-data";
+    self.id = "wv-data";
 
     var init = function() {
         model.events
@@ -59,7 +56,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
             .addClass(self.id + "list")
             .addClass("bank");
         var $actionButton = $("<button></button>")
-            .attr("id", "DataDownload_Button")
+            .attr("id", "wv-data-download-button")
             .addClass("action")
             .attr("type", "button")
             .attr("value", "")
@@ -71,7 +68,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
             .attr("id", self.id + "content")
             .addClass("content");
         $container.append($list);
-        $("#DataDownload_Button").button();
+        $("#wv-data-download-button").button();
 
         self.refresh();
     };
@@ -280,8 +277,8 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
         wv.ui.indicator.hide();
         if ( status !== "abort" ) {
             console.error("Unable to search", status, error);
-            wv.ui.notify("Unable to search at this time. Please try " +
-                    "again later");
+            wv.ui.notify("Unable to search at this time.<br/><br/>Please try " +
+                    "again later.");
         }
     };
 
@@ -295,7 +292,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
     };
 
     var updateSelection = function() {
-        $button = $("#DataDownload_Button");
+        $button = $("#wv-data-download-button");
         var selected = _.size(model.selectedGranules);
         if ( selected > 0 ) {
             $button.button("enable");
@@ -342,22 +339,12 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
     };
 
     var showUnavailableReason = function() {
-        var o;
-        bodyMsg = 'Some layers in Worldview do not have corresponding source data products available for download.  These include National Boundaries, Orbit Tracks, Earth at Night, and MODIS Corrected Reflectance products.<br><br>For a downloadable product similar to MODIS Corrected Reflectance, please try the MODIS Land Surface Reflectance layers available in Worldview.  If you would like to generate MODIS Corrected Reflectance imagery yourself, please see the following document: <a href="https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf" target="_blank">https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf</a><br><br>If you would like to download only an image, please use the "camera" icon in the upper right.';
-        o = new YAHOO.widget.Panel("WVerror", {
-            width: "600px",
-            zIndex: 1020,
-            visible: false,
-            constraintoviewport: true
-        });
-        title = "Notice";
-        o.setHeader('<b>Why are these layers not available for downloading?</b>');
-        o.setBody(bodyMsg);
-        o.render(document.body);
-        o.show();
-        o.center();
-        o.hideEvent.subscribe(function(i) {
-            setTimeout(function() {o.destroy();}, 25);
+        var headerMsg = "<h3 class='wv-data-unavailable-header'>Why are these layers not available for downloading?</h3>";
+        var bodyMsg = 'Some layers in Worldview do not have corresponding source data products available for download.  These include National Boundaries, Orbit Tracks, Earth at Night, and MODIS Corrected Reflectance products.<br><br>For a downloadable product similar to MODIS Corrected Reflectance, please try the MODIS Land Surface Reflectance layers available in Worldview.  If you would like to generate MODIS Corrected Reflectance imagery yourself, please see the following document: <a href="https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf" target="_blank">https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf</a><br><br>If you would like to download only an image, please use the "camera" icon in the upper right.';
+
+        wv.ui.notify(headerMsg + bodyMsg, {
+            width: 600,
+            height: 275
         });
     };
 
@@ -495,8 +482,8 @@ wv.data.ui.downloadListPanel = function(config, model) {
     var echo = wv.data.echo;
 
     var NOTICE =
-        "<div id='DataDownload_Notice'>" +
-            "<img class='icon' src='images/info-icon-blue.svg'>" +
+        "<div id='wv-data-selection-notice'>" +
+            "<i class='icon fa fa-info-circle fa-3x'></i>" +
             "<p class='text'>" +
                 "Some items you have selected require an account with the " +
                 "EOSDIS User Registration System (URS) to download. " +
@@ -506,79 +493,67 @@ wv.data.ui.downloadListPanel = function(config, model) {
             "</p>" +
         "</div>";
 
-    var panel = null;
     var selection;
     var self = {};
     var urs = false;
+    var $dialog;
 
     self.events = wv.util.events();
 
     self.show = function() {
-        $("#DataDownload_DownloadListPanel .remove").off("click", removeGranule);
-        $("#DataDownload_DownloadListPanel a.wget").off("click", showWgetPage);
-        $("#DataDownload_DownloadListPanel a.curl").off("click", showCurlPage);
-        $("#DataDownload_DownloadListPanel tr").off("mouseenter", onHoverOver);
-        $("#DataDownload_DownloadListPanel tr").off("mouseleave", onHoverOut);
-
         selection = reformatSelection();
         var newPanel = false;
-        if ( !panel ) {
-            newPanel = true;
-            panel = new YAHOO.widget.Panel("DataDownload_DownloadListPanel", {
-                width: "650px",
-                height: "500px",
-                zIndex: 1020,
-                visible: false,
-                constraintoviewport: true
-            });
-            panel.setHeader("Download Links");
-        }
-        panel.setBody(bodyText(selection));
-        panel.setFooter(bulkDownloadText());
+        $dialog = wv.ui.getDialog()
+            .attr("id", "wv-data-selection")
+            .html(bodyText(selection));
+        $dialog.dialog({
+            title: "Download links",
+            width: 600,
+            height: 400
+        });
 
-        if ( newPanel ) {
-            panel.render(document.body);
-            panel.show();
-            panel.center();
-            panel.hideEvent.subscribe(function() {
-                setTimeout(dispose, 25);
-            });
-        }
-
-        $("#DataDownload_DownloadListPanel a.wget").click(showWgetPage);
-        $("#DataDownload_DownloadListPanel a.curl").click(showCurlPage);
-        $("#DataDownload_DownloadListPanel .remove").click(removeGranule);
-        $("#DataDownload_DownloadListPanel tr").on("mouseenter", onHoverOver);
-        $("#DataDownload_DownloadListPanel tr").on("mouseleave", onHoverOut);
+        $("#wv-data-selection a.wget").click(showWgetPage);
+        $("#wv-data-selection a.curl").click(showCurlPage);
+        $("#wv-data-selection .remove").click(removeGranule);
+        $("#wv-data-selection tr").on("mouseenter", onHoverOver);
+        $("#wv-data-selection tr").on("mouseleave", onHoverOut);
 
         var bulkVisible = isBulkDownloadable() &&
                 _.size(model.selectedGranules) !== 0;
         if ( bulkVisible ) {
-            $("#DataDownload_DownloadListPanel .ft .bulk")
+            $("#wv-data-selection .ft .bulk")
                     .css("visibility", "visible");
         } else {
-            $("#DataDownload_DownloadListPanel .ft .bulk")
+            $("#wv-data-selection .ft .bulk")
                     .css("visibility", "hidden");
         }
+
+        $dialog.find(".collapse").accordion({
+            collapsible: true,
+            active: false,
+            icons: {
+                header: "fa fa-caret-right fa-fw",
+                activeHeader: "fa fa-caret-down fa-fw"
+            }
+        });
     };
 
     self.hide = function() {
-        if ( panel ) {
-            panel.hide();
+        var $d = $(".ui-dialog");
+        if ( $d.length !== 0 ) {
+            $d.hide();
         }
     };
 
     self.visible = function() {
-        return panel !== null;
+        var $d = $(".ui-dialog");
+        if ( $d.length !== 0 ) {
+            return $d.is(":visible");
+        }
+        return false;
     };
 
     var dispose = function() {
-        $("#DataDownload_DownloadListPanel .remove").off("click", removeGranule);
-        $("#DataDownload_DownloadListPanel a.wget").off("click", showWgetPage);
-        $("#DataDownload_DownloadListPanel a.curl").off("click", showCurlPage);
-        $("#DataDownload_DownloadListPanel tr").off("mouseenter", onHoverOver);
-        $("#DataDownload_DownloadListPanel tr").off("mouseleave", onHoverOut);
-
         self.events.trigger("close");
         panel.destroy();
         panel = null;
@@ -695,7 +670,7 @@ wv.data.ui.downloadListPanel = function(config, model) {
         elements.push("<ul>");
         $.each(links, function(index, link) {
             elements.push(
-                "<li><a href='" + link.href + "' target='_blank'>" +
+                "<li class='link'><a href='" + link.href + "' target='_blank'>" +
                 link.title + "</a></li>");
         });
         elements.push("</ul>");
@@ -732,20 +707,22 @@ wv.data.ui.downloadListPanel = function(config, model) {
             "<h3>" + product.name + "</h3>"
         ];
 
-        elements.push("<h5>Selected Data</h5>");
+        if ( product.links && product.links.length > 0 ) {
+            elements.push("<div class='collapse'>");
+            elements.push("<h5>Data Collection Information</h5>");
+            elements.push("<div class='product'>");
+            elements.push(linksText(product.links));
+            elements.push("</div>");
+            elements.push("</div>");
+        }
+
+        //elements.push("<h5>Selected Data</h5>");
         elements.push("<table>");
 
         $.each(product.list, function(index, item) {
             elements.push(granuleText(product, item));
         });
         elements.push("</table>");
-
-        if ( product.links && product.links.length > 0 ) {
-            elements.push("<h5>Data Collection Information</h5>");
-            elements.push("<div class='product'>");
-            elements.push(linksText(product.links));
-            elements.push("</div>");
-        }
 
         return elements.join("\n");
     };
@@ -758,18 +735,22 @@ wv.data.ui.downloadListPanel = function(config, model) {
         if ( urs ) {
             elements.push(NOTICE);
         }
+        if ( isBulkDownloadable() ) {
+            elements.push(bulkDownloadText());
+        }
+        var products = [];
         $.each(selection, function(key, product) {
-            elements.push("\n<br/>\n" + productText(product));
+            products.push(productText(product));
         });
-
-        var text = elements.join("\n<br/>\n") + "<br/>";
+        elements.push(products.join("<br/>"));
+        var text = elements.join("");
         return text;
     };
 
     var bulkDownloadText = function() {
         var bulk =
-            "<div class='bulk'>" +
-            "<h4>Bulk Download</h4>" +
+            "<div class='bulk collapse'>" +
+            "<h5>Bulk Download</h5>" +
             "<ul class='BulkDownload'>" +
             "<li><a class='wget' href='#'>List of Links:</a> " +
                 "for wget or download managers that accept a list of " +
@@ -813,62 +794,58 @@ wv.data.ui.downloadListPanel = function(config, model) {
 
 wv.data.ui.selectionListPanel = function(model, results) {
 
-    var panel = null;
     var self = {};
     var granules = {};
+    var $dialog;
 
     var init = function() {
         model.events.on("granuleUnselect", onGranuleUnselect);
     };
 
     self.show = function() {
-        panel = new YAHOO.widget.Panel("DataDownload_SelectionListPanel", {
-            width: "400px",
-            height: "400px",
-            zIndex: 1020,
-            visible: false,
-            close: false,
-            constraintoviewport: true
-        });
-        panel.setHeader("Select data");
-
-        panel.setBody(bodyText());
-        panel.render(document.body);
-        panel.show();
-        panel.center();
-        panel.hideEvent.subscribe(function() {
-            setTimeout(dispose, 25);
-        });
-
+        $dialog = wv.ui.getDialog();
+        $dialog
+            .attr("id", "wv-data-list")
+            .html(bodyText())
+            .dialog({
+                title: "Select data",
+                width: 400,
+                height: 400
+            });
         $.each(results.granules, function(index, granule) {
             granules[granule.id] = granule;
         });
 
-        $("#DataDownload_GranuleList input").on("click", toggleSelection);
+        $("#wv-data-list input").on("click", toggleSelection);
     };
 
     self.hide = function() {
-        if ( panel ) {
-            panel.hide();
+        var $d = $(".ui-dialog");
+        if ( $d.length !== 0 ) {
+            $d.hide();
         }
     };
 
     self.visible = function() {
-        return panel !== null;
+        var $d = $(".ui-dialog");
+        if ( $d.length !== 0 ) {
+            return $d.is(":visible");
+        }
+        return false;
     };
 
     self.setVisible = function(value) {
         if ( !value ) {
-            $("#DataDownload_SelectionListPanel").hide();
+            self.hide();
         } else {
-            $("#DataDownload_SelectionListPanel").show();
+            self.show();
         }
     };
 
     var dispose = function() {
         panel.destroy();
         panel = null;
-        $("#DataDownload_GranuleList input").off("click", toggleSelection);
+        $("#wv-data-selection_GranuleList input").off("click", toggleSelection);
     };
 
     var resultsText = function() {
@@ -891,7 +868,7 @@ wv.data.ui.selectionListPanel = function(model, results) {
 
     var bodyText = function() {
         var elements = [
-            "<div id='DataDownload_GranuleList'>",
+            "<div'>",
             "<table>",
             resultsText(),
             "</table>",
@@ -912,7 +889,7 @@ wv.data.ui.selectionListPanel = function(model, results) {
     };
 
     var onGranuleUnselect = function(granule) {
-        $("#DataDownload_GranuleList input[value='" + granule.id + "']")
+        $("#wv-data-list input[value='" + granule.id + "']")
                 .removeAttr("checked");
     };
 

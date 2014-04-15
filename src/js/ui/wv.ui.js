@@ -37,27 +37,20 @@ wv.ui = (function(self) {
     self.error = function() {
         console.error.apply(console, arguments);
 
-        if ( window.YAHOO && window.YAHOO.widget &&
-                window.YAHOO.widget.Panel ) {
-            o = new YAHOO.widget.Panel("WVerror", {
-                width: "300px",
-                zIndex: 1020,
-                visible: false,
-                constraintoviewport: true
-            });
-            o.setHeader('Error');
-            o.setBody("An unexpected error has occurred.<br/><br/>" +
-                "Please reload the page and try again. If you " +
-                "continue to have problems, contact us at " +
-                "<a href='mailto:support@earthdata.nasa.gov'>" +
-                "support@earthdata.nasa.gov</a>");
-            o.render(document.body);
-            o.show();
-            o.center();
-            o.hideEvent.subscribe(function(i) {
-                setTimeout(function() {o.destroy();}, 25);
-            });
-        }
+        self.notify(
+            "<div class='error-header'>" +
+            "<i class='error-icon fa fa-exclamation-triangle fa-3x'></i>" +
+            "An unexpected error has occurred" +
+            "</div>" +
+            "<div class='error-body'>Please reload the page and try " +
+            "again. If you continue to have problems, contact us at " +
+            "<a href='mailto:support@earthdata.nasa.gov'>" +
+            "support@earthdata.nasa.gov</a>" +
+            "</div>", {
+                title: "Error",
+                height: 175
+            }
+        );
     };
 
     /**
@@ -70,12 +63,18 @@ wv.ui = (function(self) {
      *
      * @param [title="Notice"] {string} Title for the dialog box.
      */
-    self.notify = function(message, title) {
+    self.notify = function(message, options) {
         var $dialog = self.getDialog();
+        options = options || {};
+        var title = options.title || "Notice";
+        var width = options.width || 300;
+        var height = options.height || 150;
         $dialog.html(message).dialog({
-            title: title || "Notice",
+            title: title,
             show: { effect: "fade" },
-            hide: { effect: "fade" }
+            hide: { effect: "fade" },
+            width: width,
+            height: height
         });
     };
 
@@ -172,14 +171,14 @@ wv.ui = (function(self) {
     };
 
     self.getDialog = function() {
-        var $dialog = $("#wv-dialog");
+        var $dialog = $(".ui-dialog-content");
         if ( $dialog.length !== 0 ) {
             if ( $dialog.dialog ) {
                 $dialog.dialog("destroy");
             }
             $dialog.remove();
         }
-        $dialog = $("<div></div>").attr("id", "wv-dialog");
+        $dialog = $("<div data-boo='yeah'></div>");
         $("body").append($dialog);
         return $dialog;
     };
