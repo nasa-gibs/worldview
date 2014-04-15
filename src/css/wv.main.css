@@ -309,3 +309,7 @@ a:hover {
     font-size: 12pt;
 }
 
+.ui-state-focus:focus { outline: none !important }
+
+
+
