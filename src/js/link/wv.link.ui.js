@@ -58,8 +58,8 @@ wv.link.ui = wv.link.ui || function(models) {
             title: "Permalink",
             show: { effect: "fade" },
             hide: { effect: "fade" },
-            width: 325,
-            height: 150
+            width: 350,
+            height: 170
         });
         $("#wv-link-shorten-check").button();
         $("#wv-link-shorten-check").click(function() {

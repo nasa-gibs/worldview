@@ -115,7 +115,7 @@ wv.tour = wv.tour || function(models, ui) {
                 dialogClass: "tour",
                 modal: true,
                 width: 700,
-                height: 530,
+                height: 550,
                 draggable: false,
                 resizable: false
             });
