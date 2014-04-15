@@ -6,6 +6,7 @@
             "subtitle": "Aqua / AMSR-E",
             "group":    "overlays",
             "product":  "AE_L2A",
+            "inactive": true,
 
             "palette":  {
                 "id": "AEL2A_89H_LL_D"
