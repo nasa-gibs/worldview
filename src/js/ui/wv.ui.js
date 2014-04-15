@@ -178,7 +178,7 @@ wv.ui = (function(self) {
             }
             $dialog.remove();
         }
-        $dialog = $("<div data-boo='yeah'></div>");
+        $dialog = $("<div></div>");
         $("body").append($dialog);
         return $dialog;
     };

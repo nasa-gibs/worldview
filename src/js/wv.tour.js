@@ -20,6 +20,7 @@ wv.tour = wv.tour || function(models, ui) {
 
     var conclusionPanel = null;
     var splashOverlay = null;
+    var active = false;
 
     var init = function() {
         $("#wv-tour").click(function() {
@@ -62,15 +63,12 @@ wv.tour = wv.tour || function(models, ui) {
         }
 
         /* --- Set Up --- */
+        if ( active ) {
+            $('#joyRideTipContent').joyride("destroy");
+        }
 
         var padding = 15; // padding - used for all of the tour windows
         var pos, width, height, xval, yval; // helpful calculation vars
-
-        // splash screen overlay
-        if(splashOverlay){
-            splashOverlay.destroy();
-        }
-        splashOverlay = new YAHOO.widget.Panel("splash", { zIndex:1020, visible:false, modal:true, draggable:false,  } );
 
         var finalRow = "";
         if(introduction) {
@@ -110,9 +108,24 @@ wv.tour = wv.tour || function(models, ui) {
                        "</center>"+
                    "</div>";
 
+        var $startDialog = wv.ui.getDialog();
+        $startDialog
+            .html(item)
+            .dialog({
+                dialogClass: "tour",
+                modal: true,
+                width: 700,
+                height: 530,
+                draggable: false,
+                resizable: false
+            });
+        active = true;
+        /*
+        splashOverlay = new YAHOO.widget.Panel("splash", { zIndex:1020, visible:false, modal:true, draggable:false,  } );
+
         splashOverlay.setBody(item);
         splashOverlay.show();
-
+        */
 
         /* set up all of the callout panels */
         var productText = "<div>"+
@@ -220,16 +233,9 @@ wv.tour = wv.tour || function(models, ui) {
             owner.appendChild(mapAnchor);
         }
 
-
-        /* conclusion screen after completing the tour */
-        if(conclusionPanel){
-            conclusionPanel.destroy();
-        }
-        conclusionPanel = new YAHOO.widget.Panel("conclusionPanel", { zIndex:1020,
-                                                                      visible:false,
-                                                                      modal:true,
-                                                                      draggable:false});
-        var conclusionText = "<div class=\"splash\">"+
+        var endTour = function() {
+            var $dialog = wv.ui.getDialog();
+            var conclusionText = "<div class=\"splash\">"+
                                  "<center>"+
                                      "<h3>Finished!</h3>"+
                                      "</br></br>"+
@@ -241,28 +247,38 @@ wv.tour = wv.tour || function(models, ui) {
                                              "<td rowspan=\"2\" colspan=\"2\"><button id='done' type='button' class='done'>Done!</button></td>"+
                                          "</tr>"+
                                      "</table>"+
-                                 "</center>"+
-                             "</div>";
-
-        conclusionPanel.setBody(conclusionText);
-
+                                    "</center>"+
+                                "</div>";
+            $dialog
+                .html(conclusionText)
+                .dialog({
+                    dialogClass: "tour",
+                    modal: true,
+                    width: 600,
+                    height: 215,
+                    draggable: false,
+                    resizable: false
+                });
+            $("#repeat").click(repeatTour);
+            $("#done").click(handleDone);
+            active = false;
+        };
 
         /*
          * Restart the tour at the beginning.
          */
         var repeatTour = function(e) {
             e.stopPropagation();
+            $(".ui-dialog-content").dialog("close");
             $('#joyRideTipContent').joyride({adjustForPhone:false,
                                              bordered:true,
                                              includepage:true,
                                              template : {'link':'<a href="#" class="joyride-close-tip">X</a>'},
                                              postStepCallback : function (index, tip) {
                                                  if(index == 4) {
-                                                     conclusionPanel.show();
-                                                     conclusionPanel.center();
+                                                     endTour();
                                                  }
                                              }});
-            conclusionPanel.hide();
         };
 
         /*
@@ -270,22 +286,22 @@ wv.tour = wv.tour || function(models, ui) {
          */
         var handleDone = function(e) {
             e.stopPropagation();
-            conclusionPanel.hide();
+            $(".ui-dialog-content").dialog("close");
         };
 
         /*
          * Close the splash and go straight to worldview.
          */
         var handleSkipTour = function() {
-            splashOverlay.hide();
+            active = false;
+            $(".ui-dialog-content").dialog("close");
         };
 
         var onStop = function(index, tip, button) {
-            console.log(index, tip, button);
+            //console.log(index, tip, button);
             setTourState();
             if(index == 4 && button !== "previous") {
-                conclusionPanel.show();
-                conclusionPanel.center();
+                endTour();
             }
         };
 
@@ -294,7 +310,7 @@ wv.tour = wv.tour || function(models, ui) {
          */
         var handleTakeTour = function(e) {
             e.stopPropagation();
-            splashOverlay.hide();
+            $(".ui-dialog-content").dialog("close");
             initTourState();
 
             $('#joyRideTipContent').joyride({adjustForPhone:false,
@@ -319,16 +335,17 @@ wv.tour = wv.tour || function(models, ui) {
         });
 
         // assign events and start
+        $("#takeTour").click(handleTakeTour);
+        $("#skipTour").click(handleSkipTour);
+        $("#dontShowAgain").click(setDoNotShow);
+
+        /*
         YAHOO.util.Event.on('takeTour', 'click', handleTakeTour);
         YAHOO.util.Event.on('skipTour', 'click', handleSkipTour);
         YAHOO.util.Event.on('dontShowAgain', 'click', setDoNotShow);
         YAHOO.util.Event.on('repeat', 'click', repeatTour);
         YAHOO.util.Event.on('done', 'click', handleDone);
-
-        splashOverlay.render(document.body);
-        conclusionPanel.render(document.body);
-        splashOverlay.show();
-        splashOverlay.center();
+        */
     };
 
     var initTourState = function() {
@@ -342,7 +359,7 @@ wv.tour = wv.tour || function(models, ui) {
     var setTourState = function() {
         ui.sidebar.expandNow();
         ui.sidebar.selectTab("active");
-        ui.dateSliders.expand();
+        //ui.dateSliders.expand();
         models.proj.selectDefault();
     };
 

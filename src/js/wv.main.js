@@ -168,7 +168,7 @@ $(function() {
         errorReport();
         wv.debug.error(parameters);
 
-        wv.ui.info();
+        ui.info = wv.ui.info(ui);
 
         models.wv.events.trigger("startup");
     };

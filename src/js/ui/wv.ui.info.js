@@ -15,7 +15,7 @@
 var wv = wv || {};
 wv.ui = wv.ui || {};
 
-wv.ui.info = wv.ui.info || (function() {
+wv.ui.info = wv.ui.info || (function(ui) {
 
     var selector = "#wv-info-button";
     var $button = $("<button></button>")
@@ -56,6 +56,10 @@ wv.ui.info = wv.ui.info || (function() {
 
     $about.click(function() {
         wv.ui.about.show();
+    });
+
+    $tour.click(function() {
+        ui.tour.start();
     });
 
     $button.click(function() {
