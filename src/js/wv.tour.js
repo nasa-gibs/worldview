@@ -72,7 +72,7 @@ wv.tour = wv.tour || function(models, ui) {
 
         var finalRow = "";
         if(introduction) {
-            finalRow = "<td><p id='dontShowP' class=\"splash\"><input id='dontShowAgain' type='checkbox'>Do not show again</p></td>";
+            finalRow = "<td colspan='2'><p id='dontShowP' class=\"splash\"><input id='dontShowAgain' type='checkbox'>Do not show again (Access from <i class='fa fa-info-circle fa-fw'></i> menu)</p></td>";
         }
         var item = "<div class=\"splash\">"+
                        "<h3>Welcome to Worldview!</h3>"+
