@@ -442,11 +442,11 @@ wv.map.set = wv.map.set || function(containerId, mapConfig, component) {
         var $zoomOut = $("<button></button>")
             .addClass("wv-map-zoom-out")
             .addClass("wv-map-zoom");
-        var $icon = $("<i></i>")
+        var $outIcon = $("<i></i>")
             .addClass("fa")
             .addClass("fa-minus")
             .addClass("fa-1x");
-        $zoomOut.append($icon);
+        $zoomOut.append($outIcon);
         $map.append($zoomOut);
         $zoomOut.button({
             text: false
@@ -455,11 +455,11 @@ wv.map.set = wv.map.set || function(containerId, mapConfig, component) {
         var $zoomIn = $("<button></button>")
             .addClass("wv-map-zoom-in")
             .addClass("wv-map-zoom");
-        var $icon = $("<i></i>")
+        var $inIcon = $("<i></i>")
             .addClass("fa")
             .addClass("fa-plus")
             .addClass("fa-1x");
-        $zoomIn.append($icon);
+        $zoomIn.append($inIcon);
         $map.append($zoomIn);
         $zoomIn.button({
             text: false

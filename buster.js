@@ -16,9 +16,9 @@ config["wv"] = {
     environment: "browser",
     libs: [
         "src/ext/main/lodash-2.4.1/lodash.js",
-        "src/ext/main/jquery-1.6.4/jquery.js",
+        "src/ext/main/jquery-1.11.0/jquery.js",
+        "src/ext/main/jquery.migrate-1.2.1/jquery-migrate.min.js",
         "src/ext/main/jscache-gitba01cdc/cache.js",
-        "src/ext/ui/yui-2.9.0/yui.js",
         "src/ext/map/openlayers-2.13.1-wv1/OpenLayers.js"
     ],
     src: [
