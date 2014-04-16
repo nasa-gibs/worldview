@@ -29,7 +29,7 @@ wv.brand = wv.brand || (function() {
      * @type String
      * @static
      */
-    self.NAME = "EOSDIS Worldview";
+    self.NAME = "@LONG_NAME@";
 
     /**
      * Release version string. This value is filled in during the build

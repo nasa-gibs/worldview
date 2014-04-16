@@ -1,6 +1,13 @@
 
 .wv-document {
-    color: #eeeeee;
+    background-color: #222;
+    color: #eee;
+    font: 100 14px/20px "helvetica",sans-serif;
+    /*font: "Open Sans",sans-serif;
+    font-size: 14px;
+    line-height: 21px;
+    font-weight: 400;
+    */
 }
 
 .wv-document h1 {
@@ -48,10 +55,17 @@
     color: #8cf;
 }
 
-
 .wv-document .right {
     float: right;
     margin: 0em 1em 2em 1em;
+}
+
+.wv-document strong {
+    font-weight: bold;
+}
+
+.wv-document .underline {
+    text-decoration: underline;
 }
 
 .gibs-logo {

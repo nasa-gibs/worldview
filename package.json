@@ -1,5 +1,7 @@
 {
     "name": "worldview",
+    "longName": "EOSDIS Worldview (Alpha)",
+    "shortName": "Worldview",
     "version": "0.7.0",
     "release": "1",
     "author": "Worldview Team <support@earthdata.nasa.gov>",

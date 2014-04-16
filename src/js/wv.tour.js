@@ -58,7 +58,7 @@ wv.tour = wv.tour || function(models, ui) {
         }
 
         if ( !validScreenSize() ) {
-            wv.ui.notify("Unfortunately the Worldview tour can only be viewed in larger web browser windows.");
+            wv.ui.notify("Unfortunately the @NAME@ tour can only be viewed in larger web browser windows.");
             return;
         }
 
@@ -75,7 +75,7 @@ wv.tour = wv.tour || function(models, ui) {
             finalRow = "<td colspan='2'><p id='dontShowP' class=\"splash\"><input id='dontShowAgain' type='checkbox'>Do not show again (Access from <i class='fa fa-info-circle fa-fw'></i> menu)</p></td>";
         }
         var item = "<div class=\"splash\">"+
-                       "<h3>Welcome to Worldview!</h3>"+
+                       "<h3>Welcome to @NAME@!</h3>"+
                        "</br></br>"+
                        "<center>"+
                            "<p class=\"splashwelcome\">This tool from NASA's <a href='http://earthdata.nasa.gov/about-eosdis' target='_blank'>EOSDIS</a> allows you to interactively browse global satellite imagery within hours of it being acquired. Use the features described below to find interesting imagery, then save and share what you find.</p>"+
@@ -179,11 +179,11 @@ wv.tour = wv.tour || function(models, ui) {
         var toolbarText = "<div>"+
                               "<h3>Toolbar</h3>"+
                               "</br></br>"+
-                              "<p>The toolbar provides several additional utilities for interacting with Worldview.</p>"+
+                              "<p>The toolbar provides several additional utilities for interacting with @NAME@.</p>"+
                               "<table class=\"tour\">"+
                                   "<tr>" +
                                       "<td><img src=\"images/permalinkon.png\"/></td>"+
-                                      "<td><p class=\"tour\">The permalink icon lets you create a permanent, shareable link to a particular view in Worldview.</p></td>"+
+                                      "<td><p class=\"tour\">The permalink icon lets you create a permanent, shareable link to a particular view in @NAME@.</p></td>"+
                                   "</tr>" +
                                   "<tr>" +
                                       "<td><img src=\"images/globe.png\"/></td>"+
@@ -191,11 +191,11 @@ wv.tour = wv.tour || function(models, ui) {
                                   "</tr>" +
                                   "<tr>" +
                                       "<td><img src=\"images/camera.png\"/></td>"+
-                                      "<td><p class=\"tour\">The camera icon lets you download an image of your current view in Worldview. User-selected palettes are not yet supported with this feature.</p></td>"+
+                                      "<td><p class=\"tour\">The camera icon lets you download an image of your current view in @NAME@. User-selected palettes are not yet supported with this feature.</p></td>"+
                                   "</tr>" +
                                   "<tr>" +
                                       "<td><img src=\"images/informationon.png\"/></td>"+
-                                      "<td><p class=\"tour\">The information icon provides you with more information on Worldview and its data sources.</p></td>"+
+                                      "<td><p class=\"tour\">The information icon provides you with more information on @NAME@ and its data sources.</p></td>"+
                                   "</tr>" +
                               "</table>" +
                               "</br>"+
@@ -239,7 +239,7 @@ wv.tour = wv.tour || function(models, ui) {
                                  "<center>"+
                                      "<h3>Finished!</h3>"+
                                      "</br></br>"+
-                                     "<p class='splashwelcome'>You have now completed a tour of Worldview!  If you followed the “Try It” steps, you’re now looking at fires in northern California as they were observed by satellites on August 23, 2012.   You can use the tools in any order.  We hope you continue exploring!  <p>"+
+                                     "<p class='splashwelcome'>You have now completed a tour of @NAME@!  If you followed the “Try It” steps, you’re now looking at fires in northern California as they were observed by satellites on August 23, 2012.   You can use the tools in any order.  We hope you continue exploring!  <p>"+
                                      "</br>"+
                                      "<table class='tour'>"+
                                          "<tr>"+

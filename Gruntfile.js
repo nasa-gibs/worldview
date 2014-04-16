@@ -205,6 +205,22 @@ module.exports = function(grunt) {
         },
 
         replace: {
+            // Official name of the application
+            name: {
+                src: [
+                    "build/worldview-debug/web/*.html",
+                    "build/worldview-debug/web/js/**/*.js",
+                    "build/worldview-debug/web/pages/**/*.html"
+                ],
+                overwrite: true,
+                replacements: [{
+                    from: "@LONG_NAME@",
+                    to: "<%= pkg.longName %>"
+                },{
+                    from: "@NAME@",
+                    to: "<%= pkg.shortName %>"
+                }]
+            },
             // Add in the timestamp of the build as needed
             timestamp: {
                 src: [
@@ -455,6 +471,7 @@ module.exports = function(grunt) {
         "config",
         "copy:source",
         "concat",
+        "replace:name",
         "replace:timestamp",
         "replace:nonce",
         "replace:version",

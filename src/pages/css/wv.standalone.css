@@ -5,7 +5,7 @@ body {
 }
 
 #page {
-    background-color: rgba(38, 43, 49, 0.65);
+    /*background-color: rgba(38, 43, 49, 0.65);*/
     margin: 10px auto;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -13,7 +13,7 @@ body {
     padding-right: 20px;
     border-radius: 5px;
     max-width: 600px;
-    font: 100 12.8px/16px "helvetica",sans-serif;
+    /*font: 100 12.8px/16px "helvetica",sans-serif;*/
 }
 
 
