@@ -266,7 +266,7 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
 }
 
 .ui-dialog .ui-dialog-content {
-    background: rgba(0, 0, 0, 0.7);
+    background: #222222;
     padding-top: 15px;
     padding-bottom: 15px;
 }
