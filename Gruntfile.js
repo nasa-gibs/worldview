@@ -21,12 +21,16 @@ var buildNonce = moment.utc().format("YYYYMMDDHHmmssSSS");
 var buildNumber = ( process.env.BUILD_NUMBER )
     ? "." + process.env.BUILD_NUMBER : "";
 
+var files = {};
+
 module.exports = function(grunt) {
 
     // Lists of JavaScript and CSS files to include and in the correct
     // order
     var wvJs   = grunt.file.readJSON("etc/deploy/wv.js.json");
     var wvCss  = grunt.file.readJSON("etc/deploy/wv.css.json");
+
+    var brand = grunt.option("name") || "example";
 
     // Copyright notice to place at the top of the minified JavaScript and
     // CSS files
@@ -36,12 +40,12 @@ module.exports = function(grunt) {
     var opt = {};
 
     if ( fs.existsSync("options.json") ) {
-        opt = grunt.file.readJSON("etc/brand/options.json");
+        opt = grunt.file.readJSON("options.json");
 
         var bitly = fs.existsSync("conf/bitly_config.py");
-        var eosdis = fs.existsSync("conf/web/eosdis");
+        var brandConfig = fs.existsSync("conf/web/brand");
         var gibsOps = !process.env.GIBS_HOST;
-        var official = bitly && eosdis && gibsOps &&
+        var official = bitly && brandConfig && gibsOps &&
                 opt.email === "support@earthdata.nasa.gov";
 
         console.log();
@@ -49,12 +53,13 @@ module.exports = function(grunt) {
         console.log("[" + opt.packageName + "] " + opt.officialName +
                 ", Version " + opt.version + "-" + opt.release);
         console.log("");
-        console.log("Long name          : " + opt.officialName);
-        console.log("Short name         : " + opt.shortName);
-        console.log("GIBS public servers: " + gibsOps);
-        console.log("bit.ly support     : " + bitly);
-        console.log("EOSDIS options     : " + eosdis);
-        console.log("Support email      : " + opt.email);
+        console.log("Branding        : " + brand);
+        console.log("Long name       : " + opt.officialName);
+        console.log("Short name      : " + opt.shortName);
+        console.log("Public GIBS     : " + gibsOps);
+        console.log("bit.ly support  : " + bitly);
+        console.log("Branding config : " + brandConfig);
+        console.log("Support email   : " + opt.email);
 
         if ( !official ) {
             console.error();
@@ -65,6 +70,8 @@ module.exports = function(grunt) {
     }
 
     grunt.initConfig({
+        pkg: opt.packageName,
+
         "git-rev-parse": {
             build: {
                 options: {
@@ -77,7 +84,7 @@ module.exports = function(grunt) {
         copy: {
             brand: {
                 files: [
-                    { expand: true, cwd: "etc/brand",
+                    { expand: true, cwd: "etc/brand." + brand,
                       src: ["**"], dest: "." }
                 ]
             },
@@ -87,22 +94,11 @@ module.exports = function(grunt) {
                 files: [
                     { expand: true, cwd: "src",
 		              src: ["**", "**/.htaccess"],
-                      dest: "build/worldview-debug/web" },
+                      dest: "build/<%= pkg %>-debug/web" },
                     { expand: true, cwd: "bin",
-		              src: "**", dest: "build/worldview-debug/bin" },
+		              src: "**", dest: "build/<%= pkg %>-debug/bin" },
                     { expand: true, cwd: "conf",
-                      src: "**", dest: "build/worldview-debug/conf" }
-                ]
-            },
-
-            // Copies the concatenated JavaScript and CSS files to the
-            // final location in the release web root being built.
-            concat: {
-                files: [
-                    { expand: false, src: "build/worldview.js",
-                      dest: "build/worldview-debug/web" },
-                    { expand: false, src: "build/worldview.css",
-                      dest: "build/worldview-debug/web" }
+                      src: "**", dest: "build/<%= pkg %>-debug/conf" }
                 ]
             },
 
@@ -113,16 +109,16 @@ module.exports = function(grunt) {
             // over too
             release: {
                 files: [
-                    { expand: true, cwd: "build/worldview-debug",
+                    { expand: true, cwd: "build/<%=pkg%>-debug",
 		      src: ["**", "**/.htaccess"],
-                      dest: "build/worldview" },
-                    { expand: true, cwd: "build/worldview-debug/web",
+                      dest: "build/<%=pkg%>" },
+                    { expand: true, cwd: "build/<%=pkg%>-debug/web",
                       src: [
                         "css/pages.css",
                         "css/bulkDownload.css",
                         "js/map/wv.map.tileworker.js"
                       ],
-                      dest: "build/worldview/web" }
+                      dest: "build/<%=pkg%>/web" }
                 ]
             },
 
@@ -135,7 +131,7 @@ module.exports = function(grunt) {
                     { expand: true, cwd: "etc/deploy",
                       src: ["worldview.spec"], dest: "build/rpmbuild/SPECS" },
                     { expand: true, cwd: "dist",
-                      src: ["worldview.tar.bz2", "worldview-debug.tar.bz2"],
+                      src: ["<%=pkg%>.tar.bz2", "<%=pkg%>-debug.tar.bz2"],
                       dest: "build/rpmbuild/SOURCES" }
 	            ]
             },
@@ -147,6 +143,21 @@ module.exports = function(grunt) {
                     { expand: true, flatten: true, cwd: "build/rpmbuild",
                       src: ["**/*.rpm"], dest: "dist" }
                 ]
+            },
+
+            apache: {
+                files: [
+                    { expand: true, flatten: true, cwd: "etc/dev",
+                      src: ["worldview-dev.conf"], dest: "build" }
+                ]
+            },
+
+        },
+
+        rename: {
+            apache: {
+                src: "build/worldview-dev.conf",
+                dest: "dist/<%=pkg%>-dev.conf"
             }
         },
 
@@ -168,70 +179,71 @@ module.exports = function(grunt) {
 
             // Enable executable bits for all CGI programs
             cgi_echo: {
-                command: "chmod 755 build/worldview*/web/service/echo.cgi"
+                command: "chmod 755 build/<%=pkg%>*/web/service/echo.cgi"
             },
 
             cgi_shorten: {
-                command: "chmod 755 build/worldview*/web/service/link/shorten.cgi"
+                command: "chmod 755 build/<%=pkg%>*/web/service/link/shorten.cgi"
             },
 
             // Create a tarball of the debug build with a version number and
             // git revision.
             tar_debug_versioned: {
-                command: "tar cjCf build dist/" +
-                            "<%= pkg.name %>" +
+                command: "tar cjCf build dist/<%=pkg%>" +
                             "-debug" +
-                            "-<%= pkg.version %>" +
-                            "-<%= pkg.release %>" +
+                            "-" + opt.version +
+                            "-" + opt.release +
                             buildNumber +
                             ".git<%= grunt.config.get('git-revision') %>" +
-                            ".tar.bz2 worldview-debug"
+                            ".tar.bz2 " +
+                            "<%=pkg%>-debug"
             },
 
             // Create a tarball of the debug build without versioning
             // information
             tar_debug: {
-                command: "tar cjCf build dist/worldview-debug.tar.bz2 " +
-                            "worldview-debug"
+                command: "tar cjCf build dist/" +
+                            "<%=pkg%>-debug.tar.bz2 " +
+                            "<%=pkg%>-debug"
             },
 
             // Create a tarball of the release build with a version number and
             // git revision
             tar_release_versioned: {
-                command: "tar cjCf build dist/" +
-                            "<%= pkg.name %>" +
-                            "-<%= pkg.version %>" +
-                            "-<%= pkg.release %>" +
+                command: "tar cjCf build dist/<%=pkg%>" +
+                            "-" + opt.version +
+                            "-" + opt.release +
                             buildNumber +
                             ".git<%= grunt.config.get('git-revision') %>" +
-                            ".tar.bz2 worldview"
+                            ".tar.bz2 " +
+                            "<%=pkg%>"
             },
 
             // Create a tarball of the release build without versioning
             // information
             tar_release: {
-                command: "tar cjCf build dist/worldview.tar.bz2 " +
-                            "worldview"
+                command: "tar cjCf build dist/" +
+                            "<%=pkg%>.tar.bz2 " +
+                            "<%=pkg%>"
             },
 
             // Create a tarball of the documentation with a version number and
             // git revision
             tar_doc_versioned: {
-                command: "tar cjCf build dist/" +
-                            "<%= pkg.name %>" +
-                            "-doc" +
-                            "-<%= pkg.version %>" +
-                            "-<%= pkg.release %>" +
+                command: "tar cjCf build dist/<%=pkg%>-doc" +
+                            "-" + opt.version +
+                            "-" + opt.release +
                             buildNumber +
                             ".git<%= grunt.config.get('git-revision') %>" +
-                            ".tar.bz2 worldview-doc"
+                            ".tar.bz2 <%=pkg%>-doc"
             },
 
             // Create a tarball of the documentation without versioning
             // information
             tar_doc: {
-                command: "tar cjCf build dist/worldview-doc.tar.bz2 " +
-                            "worldview-doc"
+                command: "tar cjCf build dist/" +
+                            "<%=pkg%>-doc.tar.bz2 " +
+                            "<%=pkg%>-doc"
             },
 
             // Builds the RPM
@@ -246,32 +258,29 @@ module.exports = function(grunt) {
             // Official name of the application
             tokens: {
                 src: [
-                    "build/worldview-debug/web/*.html",
-                    "build/worldview-debug/web/js/**/*.js",
-                    "build/worldview-debug/web/pages/**/*.html"
+                    "build/<%=pkg%>-debug/web/*.html",
+                    "build/<%=pkg%>-debug/web/js/**/*.js",
+                    "build/<%=pkg%>-debug/web/pages/**/*.html"
                 ],
                 overwrite: true,
                 replacements: [{
                     from: "@OFFICIAL_NAME@",
-                    to: options.officialName
+                    to: opt.officialName
                 }, {
                     from: "@LONG_NAME@",
-                    to: options.longName
+                    to: opt.longName
                 },{
                     from: "@NAME@",
-                    to: options.shortName
+                    to: opt.shortName
                 },{
                     from: "@EMAIL@",
-                    to: options.email
-                },{
-                    from: "@WEBMASTERS@",
-                    to: options.webmasters
+                    to: opt.email
                 },{
                     from: "@BUILD_TIMESTAMP@",
                     to: buildTimestamp
                 },{
                     from: "@BUILD_VERSION@",
-                    to: "<%= pkg.version %>"
+                    to: opt.version
                 },{
                     from: "@BUILD_NONCE@",
                     to: buildNonce
@@ -282,8 +291,8 @@ module.exports = function(grunt) {
             // all the release links <1-- link.prod -->
             links: {
                 src: [
-                   "build/worldview-debug/web/index.html",
-                   "build/worldview-debug/web/pages/*.html",
+                   "build/<%=pkg%>-debug/web/index.html",
+                   "build/<%=pkg%>-debug/web/pages/*.html",
                 ],
                 overwrite: true,
                 replacements: [{
@@ -306,16 +315,30 @@ module.exports = function(grunt) {
                 overwrite: true,
                 replacements: [{
                     from: "@WORLDVIEW@",
-                    to: "<%= pkg.name %>"
+                    to: opt.packageName
                 }, {
                     from: "@BUILD_VERSION@",
-                    to: "<%= pkg.version %>"
+                    to: opt.version
                 },{
                     from: "@BUILD_RELEASE@",
-                    to: "<%= pkg.release %>"
+                    to: opt.release
                 },{
                     from: "@GIT_REVISION@",
                     to: ".git<%= grunt.config.get('git-revision') %>"
+                }]
+            },
+
+            apache: {
+                src: [
+                    "build/worldview-dev.conf"
+                ],
+                overwrite: true,
+                replacements: [{
+                    from: "@WORLDVIEW@",
+                    to: opt.packageName
+                },{
+                    from: "@ROOT@",
+                    to: process.cwd()
                 }]
             }
         },
@@ -324,12 +347,12 @@ module.exports = function(grunt) {
             // Combine all the Worldview JavaScript files into one file.
             wv_js: {
                 src: wvJs,
-                dest: "build/worldview-debug/web/js/wv.js"
+                dest: "build/<%=pkg%>-debug/web/js/wv.js"
             },
             // Combine all the Worldview CSS files into one file.
             wv_css: {
                 src: wvCss,
-                dest: "build/worldview-debug/web/css/wv.css"
+                dest: "build/<%=pkg%>-debug/web/css/wv.css"
             }
         },
 
@@ -340,8 +363,8 @@ module.exports = function(grunt) {
                     banner: banner
                 },
                 files: {
-                    "build/worldview/web/js/wv.js": [
-                        "build/worldview-debug/web/js/wv.js"
+                    "build/<%=pkg%>/web/js/wv.js": [
+                        "build/<%=pkg%>-debug/web/js/wv.js"
                     ]
                 }
             }
@@ -355,8 +378,8 @@ module.exports = function(grunt) {
                     keepSpecialComments: false
                 },
                 files: {
-                    "build/worldview/web/css/wv.css": [
-                        "build/worldview-debug/web/css/wv.css"
+                    "build/<%=pkg%>/web/css/wv.css": [
+                        "build/<%=pkg%>-debug/web/css/wv.css"
                     ]
                 }
             }
@@ -365,10 +388,10 @@ module.exports = function(grunt) {
         minjson: {
             main: {
                 files: {
-                    "build/worldview/web/conf/wv.json":
-                    "build/worldview/web/conf/wv.json",
-                    "build/worldview/web/conf/palettes.json":
-                    "build/worldview/web/conf/palettes.json"
+                    "build/<%=pkg%>/web/conf/wv.json":
+                    "build/<%=pkg%>/web/conf/wv.json",
+                    "build/<%=pkg%>/web/conf/palettes.json":
+                    "build/<%=pkg%>/web/conf/palettes.json"
                 }
             }
         },
@@ -378,21 +401,21 @@ module.exports = function(grunt) {
             // are a lot of blank lines in index.html. Remove them
             release: {
                 files: {
-                    "build/worldview/web/index.html":
-                        "build/worldview/web/index.html"
+                    "build/<%=pkg%>/web/index.html":
+                        "build/<%=pkg%>/web/index.html"
                 }
             }
         },
 
         yuidoc: {
             main: {
-                name: "Worldview",
-                description: "Interactive satellite imagery browser",
-                version: "<%= pkg.version %>",
-                url: "https://earthdata.nasa.gov/worldview",
+                name: opt.officialName,
+                description: opt.description,
+                version: opt.version,
+                url: opt.url,
                 options: {
                     paths: ["src/js"],
-                    outdir: "build/worldview-doc"
+                    outdir: "build/<%=pkg%>-doc"
                 }
             }
         },
@@ -440,13 +463,13 @@ module.exports = function(grunt) {
             // in a release build. Place exceptions for JavaScript and
             // CSS here.
             source: [
-                "build/worldview-debug/web/css/**/*.css",
-                "build/worldview-debug/web/**/*.js",
-                "!build/worldview-debug/web/css/wv.css",
-                "!build/worldview-debug/web/js/wv.js",
-                "!build/worldview-debug/web/css/bulkDownload.css",
-                "!build/worldview-debug/web/js/map/wv.map.tileworker.js",
-                "!build/worldview-debug/web/ext/**/*"
+                "build/<%=pkg%>-debug/web/css/**/*.css",
+                "build/<%=pkg%>-debug/web/**/*.js",
+                "!build/<%=pkg%>-debug/web/css/wv.css",
+                "!build/<%=pkg%>-debug/web/js/wv.js",
+                "!build/<%=pkg%>-debug/web/css/bulkDownload.css",
+                "!build/<%=pkg%>-debug/web/js/map/wv.map.tileworker.js",
+                "!build/<%=pkg%>-debug/web/ext/**/*"
             ],
             conf_src: [
                 "src/conf/**/*"
@@ -476,6 +499,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-git-rev-parse");
     grunt.loadNpmTasks("grunt-minjson");
     grunt.loadNpmTasks("grunt-text-replace");
+    grunt.loadNpmTasks("grunt-rename");
 
     grunt.renameTask("clean", "remove");
     grunt.task.run("git-rev-parse");
@@ -521,6 +545,13 @@ module.exports = function(grunt) {
         "copy:rpm"
     ]);
 
+    grunt.registerTask("apache-config" , [
+        "copy:apache",
+        "replace:apache",
+        "rename:apache"
+    ]);
+
+    grunt.registerTask("brand", ["copy:brand"]);
     grunt.registerTask("doc", ["yuidoc"]);
     grunt.registerTask("lint", ["jshint:console"]);
     grunt.registerTask("test", ["buster:console"]);

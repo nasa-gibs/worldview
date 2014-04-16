@@ -16,6 +16,7 @@
         "grunt-git-rev-parse": "0.1.x",
         "grunt-line-remover": "0.0.x",
         "grunt-minjson": "0.1.x",
+        "grunt-rename": "0.1.x",
         "grunt-text-replace": "0.3.x",
         "phantomjs": "1.9.x",
         "jshint": "2.3.x",

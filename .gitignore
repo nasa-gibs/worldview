@@ -12,4 +12,9 @@ tools
 *~
 *.swp
 conf/web/brand
+etc/brand.*
+!etc/brand.example
+!etc/brand.worldview
 options.json
+src/pages/about.html
+src/images/wv-logo.svg
