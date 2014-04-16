@@ -20,7 +20,7 @@ wv.proj = wv.proj || {};
  *
  * @class wv.proj.ui
  */
-wv.proj.ui = wv.proj.ui || function(models) {
+wv.proj.ui = wv.proj.ui || function(models, config) {
 
     var model = models.proj;
 
@@ -54,15 +54,21 @@ wv.proj.ui = wv.proj.ui || function(models) {
         var $menuItems = $("<ul></ul>");
 
         var $arctic = $("<li><a><i class='ui-icon icon-large fa fa-arrow-circle-up fa-fw'></i>Arctic</a></li>");
-        var $geographic = $("<li><a><i class='ui-icon icon-large fa fa-circle fa-fw'></i>Geographic</a></li>");
-        var $antarctic = $("<li><a><i class='ui-icon icon-large fa fa-arrow-circle-down fa-fw'></i>Antarctic</a></li>");
-
         $menuItems.append($arctic);
-        $menuItems.append($geographic);
-        $menuItems.append($antarctic);
-
         $arctic.click(function() { models.proj.select("arctic"); });
+
+        var $geographic = $("<li><a><i class='ui-icon icon-large fa fa-circle fa-fw'></i>Geographic</a></li>");
+        $menuItems.append($geographic);
         $geographic.click(function() { models.proj.select("geographic"); });
+
+        if ( config.parameters.webmerc ) {
+            var $webmerc = $("<li><a><i class='ui-icon icon-large fa fa-square fa-fw'></i>Mercator</a></li>");
+            $menuItems.append($webmerc);
+            $webmerc.click(function() { models.proj.select("webmerc"); });
+        }
+
+        var $antarctic = $("<li><a><i class='ui-icon icon-large fa fa-arrow-circle-down fa-fw'></i>Antarctic</a></li>");
+        $menuItems.append($antarctic);
         $antarctic.click(function() { models.proj.select("antarctic"); });
 
         $menu.append($menuItems);

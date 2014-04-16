@@ -109,7 +109,7 @@ $(function() {
         // Create widgets
         var ui = {};
 
-        ui.proj = wv.proj.ui(models);
+        ui.proj = wv.proj.ui(models, config);
         ui.sidebar = wv.layers.sidebar(models);
         ui.activeLayers = wv.layers.active(models, ui, config);
         ui.addLayers = wv.layers.add(models, ui, config);
