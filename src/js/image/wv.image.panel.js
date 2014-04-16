@@ -142,7 +142,7 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
 
 
               $("#btnImgDownload").unbind('click').click(function(){
-                 ntptEventTag('lc='+encodeURIComponent(dlURL+"&format="+$("#selImgFormat option:selected").val()+"&width="+$("#imgWidth").text()+"&height="+$("#imgHeight").text() ) );
+                 wv.util.metrics('lc='+encodeURIComponent(dlURL+"&format="+$("#selImgFormat option:selected").val()+"&width="+$("#imgWidth").text()+"&height="+$("#imgHeight").text() ) );
                  window.open(dlURL+"&format="+$("#selImgFormat option:selected").val()+"&width="+$("#imgWidth").text()+"&height="+$("#imgHeight").text(),"_blank");
               });
         } catch ( cause ) {

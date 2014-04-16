@@ -27,6 +27,9 @@ rm -f "$BUILD_DIR"/web/main/sources.json-e
 
 "$BASE_DIR"/gibs2wv "$BUILD_DIR"/../gc/*.xml \
     > "$BUILD_DIR"/web/main/gc.json
+if [ -e "$BUILD_DIR"/web/eosdis ] ; then
+    cp -r "$BUILD_DIR"/web/eosdis "$BUILD_DIR"/web/main
+fi
 "$BASE_DIR"/conf-cat --input-dir "$BUILD_DIR"/web/main \
     > "$DEBUG_DIR"/wv.json
 "$BASE_DIR"/conf-cat --input-dir "$BUILD_DIR"/web/palettes/custom \

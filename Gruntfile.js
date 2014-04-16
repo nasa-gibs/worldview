@@ -9,6 +9,7 @@
  * All Rights Reserved.
  */
 var moment = require("moment");
+var fs = require("fs");
 
 // Build date shown in the About box
 var buildTimestamp = moment.utc().format("MMMM DD, YYYY [-] HH:mm [UTC]");
@@ -26,6 +27,27 @@ module.exports = function(grunt) {
     // order
     var wvJs   = grunt.file.readJSON("etc/deploy/wv.js.json");
     var wvCss  = grunt.file.readJSON("etc/deploy/wv.css.json");
+
+    var bitly = fs.existsSync("conf/bitly_config.py");
+    var eosdis = fs.existsSync("conf/web/eosdis");
+    var gibsOps = !process.env.GIBS_HOST;
+    var official = bitly && eosdis && gibsOps;
+    var pkg = grunt.file.readJSON("package.json");
+
+    console.log();
+    console.log("============================================================");
+    console.log("[" + pkg.name + "] " + pkg.longName + ", Version " +
+            pkg.version + "-" + pkg.release);
+    console.log("");
+    console.log("GIBS public servers: " + gibsOps);
+    console.log("bit.ly support     : " + bitly);
+    console.log("EOSDIS options     : " + eosdis);
+    if ( !official ) {
+        console.error();
+        grunt.log.error("WARNING: This is NOT a standard configuration");
+    }
+    console.log("============================================================");
+    console.log();
 
     // Copyright notice to place at the top of the minified JavaScript and
     // CSS files

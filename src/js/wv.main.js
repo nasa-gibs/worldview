@@ -33,6 +33,13 @@ $(function() {
         // Export for debugging
         wv.config = config;
 
+        // Load any additional scripts as needed
+        if ( config.scripts ) {
+            _.each(config.scripts, function(script) {
+                $.getScript(script);
+            });
+        }
+
         wv.layers.validate(errors, config);
 
         parsers = [

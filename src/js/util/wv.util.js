@@ -419,6 +419,8 @@ wv.util = (function(self) {
         return str.replace(/([;&,\.\+\*\~':"\!\^#$%@\[\]\(\)=>\|])/g, '\\$1');
     };
 
+    self.metrics = window.ntptEventTag || function() {};
+
     return self;
 
 })(wv.util || {});
