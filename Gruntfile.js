@@ -32,50 +32,39 @@ module.exports = function(grunt) {
     // CSS files
     var banner = grunt.file.read("etc/deploy/banner.txt");
 
-    // Build options
-    var pkg = grunt.file.readJSON("package.json");
-    var options = {};
+    // Branding and build options
+    var opt = {};
+
     if ( fs.existsSync("options.json") ) {
-        options = grunt.file.readJSON("options.json");
+        opt = grunt.file.readJSON("etc/brand/options.json");
+
+        var bitly = fs.existsSync("conf/bitly_config.py");
+        var eosdis = fs.existsSync("conf/web/eosdis");
+        var gibsOps = !process.env.GIBS_HOST;
+        var official = bitly && eosdis && gibsOps &&
+                opt.email === "support@earthdata.nasa.gov";
+
+        console.log();
+        console.log("============================================================");
+        console.log("[" + opt.packageName + "] " + opt.officialName +
+                ", Version " + opt.version + "-" + opt.release);
+        console.log("");
+        console.log("Long name          : " + opt.officialName);
+        console.log("Short name         : " + opt.shortName);
+        console.log("GIBS public servers: " + gibsOps);
+        console.log("bit.ly support     : " + bitly);
+        console.log("EOSDIS options     : " + eosdis);
+        console.log("Support email      : " + opt.email);
+
+        if ( !official ) {
+            console.error();
+            grunt.log.error("WARNING: This is NOT a standard configuration");
+        }
+        console.log("============================================================");
+        console.log();
     }
-    options.officialName = options.officialName || "EOSDIS Worldview (Alpha)";
-    options.longName = options.longName || "EOSDIS Worldview";
-    options.shortName = options.shortName || "Worldview";
-
-    options.email = options.email || "worldview@example.com";
-    options.webmasters = options.webmasters || "";
-
-    var bitly = fs.existsSync("conf/bitly_config.py");
-    var eosdis = fs.existsSync("conf/web/eosdis");
-    var gibsOps = !process.env.GIBS_HOST;
-    var official = bitly && eosdis && gibsOps &&
-            options.email === "support@earthdata.nasa.gov";
-
-    console.log();
-    console.log("============================================================");
-    console.log("[" + pkg.name + "] " + options.officialName + ", Version " +
-            pkg.version + "-" + pkg.release);
-    console.log("");
-    console.log("Long name          : " + options.officialName);
-    console.log("Short name         : " + options.shortName);
-    console.log("GIBS public servers: " + gibsOps);
-    console.log("bit.ly support     : " + bitly);
-    console.log("EOSDIS options     : " + eosdis);
-    console.log("Support email      : " + options.email);
-    console.log("Webmasters         : " + options.webmasters);
-
-
-    if ( !official ) {
-        console.error();
-        grunt.log.error("WARNING: This is NOT a standard configuration");
-    }
-    console.log("============================================================");
-    console.log();
-
 
     grunt.initConfig({
-        pkg: grunt.file.readJSON("package.json"),
-
         "git-rev-parse": {
             build: {
                 options: {
@@ -86,14 +75,21 @@ module.exports = function(grunt) {
         },
 
         copy: {
+            brand: {
+                files: [
+                    { expand: true, cwd: "etc/brand",
+                      src: ["**"], dest: "." }
+                ]
+            },
+
             // Copies the source files to the build directory
             source: {
                 files: [
                     { expand: true, cwd: "src",
-		      src: ["**", "**/.htaccess"],
+		              src: ["**", "**/.htaccess"],
                       dest: "build/worldview-debug/web" },
                     { expand: true, cwd: "bin",
-		      src: "**", dest: "build/worldview-debug/bin" },
+		              src: "**", dest: "build/worldview-debug/bin" },
                     { expand: true, cwd: "conf",
                       src: "**", dest: "build/worldview-debug/conf" }
                 ]

@@ -11,5 +11,5 @@ doc
 tools
 *~
 *.swp
-conf/web/eosdis
+conf/web/brand
 options.json
