@@ -1,14 +1,12 @@
 {
     "name": "worldview",
-    "longName": "EOSDIS Worldview (Alpha)",
-    "shortName": "Worldview",
     "version": "0.7.0",
     "release": "1",
-    "author": "Worldview Team <support@earthdata.nasa.gov>",
+    "author": "Worldview Team",
     "description": "Browse full-resolution, near real-time satellite imagery",
     "repository": {
         "type": "git",
-        "url": "https://git.earthdata.nasa.gov/scm/wor/worldview.git"
+        "url": "https://github.com/nasa-gibs/worldview.git"
     },
     "devDependencies": {
         "buster": "0.7.x",

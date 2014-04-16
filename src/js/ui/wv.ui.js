@@ -44,8 +44,8 @@ wv.ui = (function(self) {
             "</div>" +
             "<div class='error-body'>Please reload the page and try " +
             "again. If you continue to have problems, contact us at " +
-            "<a href='mailto:support@earthdata.nasa.gov'>" +
-            "support@earthdata.nasa.gov</a>" +
+            "<a href='mailto:@MAIL@'>" +
+            "@MAIL@</a>" +
             "</div>", {
                 title: "Error",
                 height: 175

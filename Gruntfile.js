@@ -28,20 +28,43 @@ module.exports = function(grunt) {
     var wvJs   = grunt.file.readJSON("etc/deploy/wv.js.json");
     var wvCss  = grunt.file.readJSON("etc/deploy/wv.css.json");
 
+    // Copyright notice to place at the top of the minified JavaScript and
+    // CSS files
+    var banner = grunt.file.read("etc/deploy/banner.txt");
+
+    // Build options
+    var pkg = grunt.file.readJSON("package.json");
+    var options = {};
+    if ( fs.existsSync("options.json") ) {
+        options = grunt.file.readJSON("options.json");
+    }
+    options.officialName = options.officialName || "EOSDIS Worldview (Alpha)";
+    options.longName = options.longName || "EOSDIS Worldview";
+    options.shortName = options.shortName || "Worldview";
+
+    options.email = options.email || "worldview@example.com";
+    options.webmasters = options.webmasters || "";
+
     var bitly = fs.existsSync("conf/bitly_config.py");
     var eosdis = fs.existsSync("conf/web/eosdis");
     var gibsOps = !process.env.GIBS_HOST;
-    var official = bitly && eosdis && gibsOps;
-    var pkg = grunt.file.readJSON("package.json");
+    var official = bitly && eosdis && gibsOps &&
+            options.email === "support@earthdata.nasa.gov";
 
     console.log();
     console.log("============================================================");
-    console.log("[" + pkg.name + "] " + pkg.longName + ", Version " +
+    console.log("[" + pkg.name + "] " + options.officialName + ", Version " +
             pkg.version + "-" + pkg.release);
     console.log("");
+    console.log("Long name          : " + options.officialName);
+    console.log("Short name         : " + options.shortName);
     console.log("GIBS public servers: " + gibsOps);
     console.log("bit.ly support     : " + bitly);
     console.log("EOSDIS options     : " + eosdis);
+    console.log("Support email      : " + options.email);
+    console.log("Webmasters         : " + options.webmasters);
+
+
     if ( !official ) {
         console.error();
         grunt.log.error("WARNING: This is NOT a standard configuration");
@@ -49,9 +72,6 @@ module.exports = function(grunt) {
     console.log("============================================================");
     console.log();
 
-    // Copyright notice to place at the top of the minified JavaScript and
-    // CSS files
-    var banner = grunt.file.read("etc/deploy/banner.txt");
 
     grunt.initConfig({
         pkg: grunt.file.readJSON("package.json"),
@@ -228,7 +248,7 @@ module.exports = function(grunt) {
 
         replace: {
             // Official name of the application
-            name: {
+            tokens: {
                 src: [
                     "build/worldview-debug/web/*.html",
                     "build/worldview-debug/web/js/**/*.js",
@@ -236,50 +256,32 @@ module.exports = function(grunt) {
                 ],
                 overwrite: true,
                 replacements: [{
+                    from: "@OFFICIAL_NAME@",
+                    to: options.officialName
+                }, {
                     from: "@LONG_NAME@",
-                    to: "<%= pkg.longName %>"
+                    to: options.longName
                 },{
                     from: "@NAME@",
-                    to: "<%= pkg.shortName %>"
-                }]
-            },
-            // Add in the timestamp of the build as needed
-            timestamp: {
-                src: [
-                    "build/worldview-debug/web/js/**/*.js",
-                    "build/worldview-debug/web/pages/**/*.html"
-                ],
-                overwrite: true,
-                replacements: [{
+                    to: options.shortName
+                },{
+                    from: "@EMAIL@",
+                    to: options.email
+                },{
+                    from: "@WEBMASTERS@",
+                    to: options.webmasters
+                },{
                     from: "@BUILD_TIMESTAMP@",
                     to: buildTimestamp
-                }]
-            },
-            // Add in the version of this build as needed. Update the version
-            // in package.json
-            version: {
-                src: [
-                    "build/worldview-debug/web/js/**/*.js",
-                    "build/worldview-debug/web/pages/**/*.html"
-                ],
-                overwrite: true,
-                replacements: [{
+                },{
                     from: "@BUILD_VERSION@",
                     to: "<%= pkg.version %>"
-                }]
-            },
-            // Add in a timestamp nonce to URIs for cache busting
-            nonce: {
-                src: [
-                    "build/worldview-debug/web/**/*.html",
-                    "build/worldview-debug/web/**/*.js"
-                ],
-                overwrite: true,
-                replacements: [{
+                },{
                     from: "@BUILD_NONCE@",
                     to: buildNonce
                 }]
             },
+
             // Remove all development links <!-- link.dev --> and uncomment
             // all the release links <1-- link.prod -->
             links: {
@@ -493,10 +495,7 @@ module.exports = function(grunt) {
         "config",
         "copy:source",
         "concat",
-        "replace:name",
-        "replace:timestamp",
-        "replace:nonce",
-        "replace:version",
+        "replace:tokens",
         "replace:links",
         "remove:source",
         "copy:release",

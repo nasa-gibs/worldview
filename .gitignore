@@ -12,3 +12,4 @@ tools
 *~
 *.swp
 conf/web/eosdis
+options.json

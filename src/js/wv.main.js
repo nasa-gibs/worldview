@@ -196,8 +196,8 @@ $(function() {
                 "Incomplete configuration<br><br>" +
                 layersRemoved + " layer(s) were removed<br><br>" +
                 "Contact us at " +
-                "<a href='mailto:support@earthdata.nasa.gov'>" +
-                "support@earthdata.nasa.gov</a>");
+                "<a href='mailto:@MAIL@'>" +
+                "@MAIL@</a>");
         }
     };
 

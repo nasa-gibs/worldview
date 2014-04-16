@@ -38,7 +38,7 @@ wv.ui.info = wv.ui.info || (function(ui) {
     var $menu = $("<div></div>").attr("id", "wv-info-menu");
     var $menuItems = $("<ul></ul>");
 
-    var $feedback = $("<li><a><i class='ui-icon icon-large fa fa-envelope fa-fw'></i>Feedback</a></li>");
+    var $feedback = $("<li><a href='mailto:@MAIL@?subject=Feedback for @LONG_NAME@ tool' target='_blank'><i class='ui-icon icon-large fa fa-envelope fa-fw'></i>Feedback</a></li>");
     var $tour = $("<li><a><i class='ui-icon fa fa-truck fa-fw'></i>Start Tour</a></li>");
     var $about = $("<li><a><i class='ui-icon fa fa-file fa-fw'></i>About</a></li>");
 
