@@ -21,7 +21,7 @@ var buildNonce = moment.utc().format("YYYYMMDDHHmmssSSS");
 var buildNumber = ( process.env.BUILD_NUMBER )
     ? "." + process.env.BUILD_NUMBER : "";
 
-var brand = "example";
+var brand = "default";
 var opt = {};
 
 module.exports = function(grunt) {
