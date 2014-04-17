@@ -10,6 +10,7 @@
  */
 
 html,body, div, ul, li, p, h1, h2, h3, h4, h5, h6 {display:block; margin:0; padding:0; font: 100 12.8px/16px "helvetica",sans-serif;}
+
 body {min-width:320px; width:100%;}
 div {display:block;}
 h1, h2, h3, h4, h5, h6 { font-weight:400; }
@@ -303,6 +304,15 @@ a:hover {
 .error-body {
     margin-top: 10px;
 }
+
+.ui-menu {
+    width: 150px;
+}
+
+.ui-menu-item {
+    font-size: 18px;
+}
+
 
 /* Chrome wants to put a blue border around items when they have focus.
  * Remove it */

@@ -29,16 +29,12 @@ wv.ui.info = wv.ui.info || (function(ui) {
 
     $button.button({
         text: false
-    }).tooltip({
-        hide: {
-            duration: 0
-        }
     });
 
     var $menu = $("<div></div>").attr("id", "wv-info-menu");
     var $menuItems = $("<ul></ul>");
 
-    var $feedback = $("<li><a href='mailto:@MAIL@?subject=Feedback for @LONG_NAME@ tool' target='_blank'><i class='ui-icon icon-large fa fa-envelope fa-fw'></i>Feedback</a></li>");
+    var $feedback = $("<li><a href='mailto:@MAIL@?subject=Feedback for @LONG_NAME@ tool' target='_blank'><i class='ui-icon fa fa-envelope fa-fw'></i>Feedback</a></li>");
     var $tour = $("<li><a><i class='ui-icon fa fa-truck fa-fw'></i>Start Tour</a></li>");
     var $about = $("<li><a><i class='ui-icon fa fa-file fa-fw'></i>About</a></li>");
 
@@ -47,12 +43,7 @@ wv.ui.info = wv.ui.info || (function(ui) {
     $menuItems.append($about);
     $menu.append($menuItems);
     $("body").append($menu);
-
-    $menuItems.hide().menu({
-        select: function() {
-            $button.tooltip("enable");
-        }
-    });
+    $menuItems.hide().menu();
 
     $about.click(function() {
         wv.ui.about.show();
@@ -64,7 +55,6 @@ wv.ui.info = wv.ui.info || (function(ui) {
 
     $button.click(function() {
         $(".ui-menu").hide();
-        $button.tooltip("close").tooltip("disable");
         $menuItems.show().position({
             my: "right top",
             at: "right bottom+5",
@@ -72,7 +62,6 @@ wv.ui.info = wv.ui.info || (function(ui) {
         });
         $(document).one("click", function() {
             $menuItems.hide();
-            $button.tooltip("enable");
         });
         return false;
     });
