@@ -11,10 +11,10 @@ doc
 tools
 *~
 *.swp
-conf/web/brand
 etc/brand.*
-!etc/brand.example
+!etc/brand.default
 !etc/brand.worldview
-options.json
-src/pages/about.html
-src/images/wv-logo.svg
+brand
+conf/web/brand
+src/pages/brand
+src/images/brand

@@ -50,9 +50,11 @@ wv.link.ui = wv.link.ui || function(models) {
         var $dialog = wv.ui.getDialog();
         var item =  "<div id='wv-link' >" +
             "<span>Copy and paste the following link to share this view:</span>" +
-            "<input type='text' value='' name='permalink_content' id='permalink_content' />" +
-            "<div id='wv-link-shorten'><label id='wv-link-shorten-label' for='wv-link-shorten-check'>Shorten this link</label><input type='checkbox' value='' id='wv-link-shorten-check' /></div>" +
-        "</div>";
+            "<input type='text' value='' name='permalink_content' id='permalink_content' />";
+        if ( config.features.urlShortening ) {
+            item += "<div id='wv-link-shorten'><label id='wv-link-shorten-label' for='wv-link-shorten-check'>Shorten this link</label><input type='checkbox' value='' id='wv-link-shorten-check' /></div>";
+        }
+        item += "</div>";
         $dialog.html(item);
         $dialog.dialog({
             title: "Permalink",

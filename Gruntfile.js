@@ -21,7 +21,8 @@ var buildNonce = moment.utc().format("YYYYMMDDHHmmssSSS");
 var buildNumber = ( process.env.BUILD_NUMBER )
     ? "." + process.env.BUILD_NUMBER : "";
 
-var files = {};
+var brand = "example";
+var opt = {};
 
 module.exports = function(grunt) {
 
@@ -30,48 +31,11 @@ module.exports = function(grunt) {
     var wvJs   = grunt.file.readJSON("etc/deploy/wv.js.json");
     var wvCss  = grunt.file.readJSON("etc/deploy/wv.css.json");
 
-    var brand = grunt.option("name") || "example";
-
     // Copyright notice to place at the top of the minified JavaScript and
     // CSS files
     var banner = grunt.file.read("etc/deploy/banner.txt");
 
-    // Branding and build options
-    var opt = {};
-
-    if ( fs.existsSync("options.json") ) {
-        opt = grunt.file.readJSON("options.json");
-
-        var bitly = fs.existsSync("conf/bitly_config.py");
-        var brandConfig = fs.existsSync("conf/web/brand");
-        var gibsOps = !process.env.GIBS_HOST;
-        var official = bitly && brandConfig && gibsOps &&
-                opt.email === "support@earthdata.nasa.gov";
-
-        console.log();
-        console.log("============================================================");
-        console.log("[" + opt.packageName + "] " + opt.officialName +
-                ", Version " + opt.version + "-" + opt.release);
-        console.log("");
-        console.log("Branding        : " + brand);
-        console.log("Long name       : " + opt.officialName);
-        console.log("Short name      : " + opt.shortName);
-        console.log("Public GIBS     : " + gibsOps);
-        console.log("bit.ly support  : " + bitly);
-        console.log("Branding config : " + brandConfig);
-        console.log("Support email   : " + opt.email);
-
-        if ( !official ) {
-            console.error();
-            grunt.log.error("WARNING: This is NOT a standard configuration");
-        }
-        console.log("============================================================");
-        console.log();
-    }
-
     grunt.initConfig({
-        pkg: opt.packageName,
-
         "git-rev-parse": {
             build: {
                 options: {
@@ -84,7 +48,7 @@ module.exports = function(grunt) {
         copy: {
             brand: {
                 files: [
-                    { expand: true, cwd: "etc/brand." + brand,
+                    { expand: true, cwd: "etc/brand.<%=brand%>",
                       src: ["**"], dest: "." }
                 ]
             },
@@ -191,8 +155,8 @@ module.exports = function(grunt) {
             tar_debug_versioned: {
                 command: "tar cjCf build dist/<%=pkg%>" +
                             "-debug" +
-                            "-" + opt.version +
-                            "-" + opt.release +
+                            "-<%=opt.version%>" +
+                            "-<%=opt.release%>" +
                             buildNumber +
                             ".git<%= grunt.config.get('git-revision') %>" +
                             ".tar.bz2 " +
@@ -211,8 +175,8 @@ module.exports = function(grunt) {
             // git revision
             tar_release_versioned: {
                 command: "tar cjCf build dist/<%=pkg%>" +
-                            "-" + opt.version +
-                            "-" + opt.release +
+                            "-<%=opt.version%>" +
+                            "-<%=opt.release%>" +
                             buildNumber +
                             ".git<%= grunt.config.get('git-revision') %>" +
                             ".tar.bz2 " +
@@ -231,8 +195,8 @@ module.exports = function(grunt) {
             // git revision
             tar_doc_versioned: {
                 command: "tar cjCf build dist/<%=pkg%>-doc" +
-                            "-" + opt.version +
-                            "-" + opt.release +
+                            "-<%=opt.version%>" +
+                            "-<%=opt.release%>" +
                             buildNumber +
                             ".git<%= grunt.config.get('git-revision') %>" +
                             ".tar.bz2 <%=pkg%>-doc"
@@ -265,22 +229,22 @@ module.exports = function(grunt) {
                 overwrite: true,
                 replacements: [{
                     from: "@OFFICIAL_NAME@",
-                    to: opt.officialName
+                    to: "<%=opt.officialName%>"
                 }, {
                     from: "@LONG_NAME@",
-                    to: opt.longName
+                    to: "<%=opt.longName%>"
                 },{
                     from: "@NAME@",
-                    to: opt.shortName
+                    to: "<%=opt.shortName%>"
                 },{
                     from: "@EMAIL@",
-                    to: opt.email
+                    to: "<%=opt.email%>"
                 },{
                     from: "@BUILD_TIMESTAMP@",
                     to: buildTimestamp
                 },{
                     from: "@BUILD_VERSION@",
-                    to: opt.version
+                    to: "<%=opt.version%>"
                 },{
                     from: "@BUILD_NONCE@",
                     to: buildNonce
@@ -315,13 +279,13 @@ module.exports = function(grunt) {
                 overwrite: true,
                 replacements: [{
                     from: "@WORLDVIEW@",
-                    to: opt.packageName
+                    to: "<%=pkg%>"
                 }, {
                     from: "@BUILD_VERSION@",
-                    to: opt.version
+                    to: "<%=opt.version%>"
                 },{
                     from: "@BUILD_RELEASE@",
-                    to: opt.release
+                    to: "<%=opt.release%>"
                 },{
                     from: "@GIT_REVISION@",
                     to: ".git<%= grunt.config.get('git-revision') %>"
@@ -335,7 +299,7 @@ module.exports = function(grunt) {
                 overwrite: true,
                 replacements: [{
                     from: "@WORLDVIEW@",
-                    to: opt.packageName
+                    to: "<%=pkg%>"
                 },{
                     from: "@ROOT@",
                     to: process.cwd()
@@ -409,10 +373,10 @@ module.exports = function(grunt) {
 
         yuidoc: {
             main: {
-                name: opt.officialName,
-                description: opt.description,
-                version: opt.version,
-                url: opt.url,
+                name: "<%=opt.officialName%>",
+                description: "<%=opt.description%>",
+                version: "<%=opt.version%>",
+                url: "<%=opt.url%>",
                 options: {
                     paths: ["src/js"],
                     outdir: "build/<%=pkg%>-doc"
@@ -476,9 +440,47 @@ module.exports = function(grunt) {
             ],
             dist_tar: ["dist/*.tar.bz2"],
             dist_rpm: ["dist/*.rpm"],
-            rpmbuild: ["build/rpmbuild"]
+            rpmbuild: ["build/rpmbuild"],
+            cgi_echo: ["build/<%=pkg%>*/web/service/echo.cgi"],
+            cgi_shorten: ["build/<%=pkg%>*/web/service/link/*"]
         }
 
+    });
+
+    grunt.registerTask("brand_select", "Selecting brand", function() {
+        if ( fs.existsSync("brand/brand.json") ) {
+            brand = grunt.file.readJSON("brand/brand.json").brand || "default";
+        }
+        grunt.config("brand", brand);
+    });
+
+    grunt.registerTask("brand_config", "Loading branding options", function() {
+        opt = grunt.file.readJSON("brand/options.json");
+        features =
+            grunt.file.readJSON("conf/web/brand/features.json").features;
+
+        console.log();
+        console.log("============================================================");
+        console.log("[" + opt.packageName + "] " + opt.officialName +
+                ", Version " + opt.version + "-" + opt.release);
+        console.log("");
+        console.log("Branding        : " + brand);
+        console.log("Long name       : " + opt.longName);
+        console.log("Short name      : " + opt.shortName);
+        console.log("Public GIBS     : " + (!process.env.GIBS_HOST));
+        console.log("URL shortening  : " + features.urlShortening);
+        console.log("Data download   : " + features.dataDownload);
+        console.log("Support email   : " + opt.email);
+
+        if ( brand !== "worldview" ) {
+            console.error();
+            grunt.log.error("Using custom branding");
+        }
+        console.log("============================================================");
+        console.log();
+
+        grunt.config("opt", opt);
+        grunt.config("pkg", opt.packageName);
     });
 
     grunt.file.mkdir("build/rpmbuild");
@@ -511,7 +513,24 @@ module.exports = function(grunt) {
         "exec:config"
     ]);
 
+    grunt.registerTask("feature_shorten", "URL Shortening", function() {
+        if ( features.urlShortening ) {
+            grunt.task.run("exec:cgi_shorten");
+        } else {
+            grunt.task.run("remove:cgi_shorten");
+        }
+    });
+
+    grunt.registerTask("feature_download", "Data download", function() {
+        if ( features.dataDownload ) {
+            grunt.task.run("exec:cgi_echo");
+        } else {
+            grunt.task.run("remove:cgi_echo");
+        }
+    });
+
     grunt.registerTask("build", [
+        "brand",
         "config",
         "copy:source",
         "concat",
@@ -524,8 +543,8 @@ module.exports = function(grunt) {
         "minjson",
         "lineremover",
         "exec:empty",
-        "exec:cgi_echo",
-        "exec:cgi_shorten",
+        "feature_shorten",
+        "feature_download",
         "doc",
         "remove:dist_tar",
         "exec:tar_debug_versioned",
@@ -551,7 +570,7 @@ module.exports = function(grunt) {
         "rename:apache"
     ]);
 
-    grunt.registerTask("brand", ["copy:brand"]);
+    grunt.registerTask("brand", ["brand_select", "copy:brand", "brand_config"]);
     grunt.registerTask("doc", ["yuidoc"]);
     grunt.registerTask("lint", ["jshint:console"]);
     grunt.registerTask("test", ["buster:console"]);

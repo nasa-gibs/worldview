@@ -118,16 +118,19 @@ wv.layers.sidebar = wv.layers.sidebar || function(models) {
         $addTab.append($addLink);
         $tabs.append($addTab);
 
-        var $downloadTab = $("<li></li>")
-            .addClass("layerPicker")
-            .addClass("third")
-            .attr("data-tab", "download");
-        var $downloadLink = $("<a></a>")
-            .attr("href", "#DataDownload")
-            .addClass("tab")
-            .html(HTML_TAB_DOWNLOAD_UNSELECTED);
-        $downloadTab.append($downloadLink);
-        $tabs.append($downloadTab);
+        if ( config.features.dataDownload ) {
+            var $downloadTab = $("<li></li>")
+                .addClass("layerPicker")
+                .addClass("third")
+                .attr("data-tab", "download");
+            var $downloadLink = $("<a></a>")
+                .attr("href", "#DataDownload")
+                .addClass("tab")
+                .html(HTML_TAB_DOWNLOAD_UNSELECTED);
+            $downloadTab.append($downloadLink);
+            $tabs.append($downloadTab);
+        }
+
         $container.append($tabs);
 
         var $collapseContainer = $("<div></div>")
@@ -146,7 +149,6 @@ wv.layers.sidebar = wv.layers.sidebar || function(models) {
                   .append($("<div id='wv-data'></div>"));
 
         $container.tabs({
-            hide: { effect: "fade", duration: 200 },
             beforeActivate: onBeforeTabChange,
             activate: onTabChange
         });

@@ -81,7 +81,7 @@ wv.ui.about = wv.ui.about || (function() {
             height: 500,
             show: { effect: "fade" },
             hide: { effect: "fade" }
-        }).load("pages/about.html #page");
+        }).load("pages/brand/about.html?v=@BUILD_NONCE #page");
     };
 
 

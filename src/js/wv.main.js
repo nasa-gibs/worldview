@@ -47,9 +47,11 @@ $(function() {
             wv.layers.parse,
             wv.date.parse,
             wv.palettes.parse,
-            wv.data.parse,
             wv.map.parse
         ];
+        if ( config.features.dataDownload ) {
+            parsers.push(wv.data.parse);
+        };
 
         _.each(parsers, function(parser) {
             parser(state, errors, config);
@@ -83,7 +85,9 @@ $(function() {
         models.palettes = wv.palettes.model(models, config);
         models.layers   = wv.layers.model(models, config);
         models.date     = wv.date.model({ initial: initialDate });
-        models.data     = wv.data.model(models, config);
+        if ( config.features.dataDownload ) {
+            models.data = wv.data.model(models, config);
+        }
         models.link     = wv.link.model(config);
 
         // Export for debugging
@@ -103,8 +107,10 @@ $(function() {
             .register(models.proj)
             .register(models.layers)
             .register(models.date)
-            .register(models.palettes)
-            .register(models.data);
+            .register(models.palettes);
+        if ( config.features.dataDownload) {
+            models.link.register(models.data);
+        }
         models.link.load(state);
         models.proj.change = wv.proj.change(models);
 
@@ -125,9 +131,11 @@ $(function() {
         ui.dateWheels = wv.date.wheels(models, config);
         ui.rubberband = wv.image.rubberband(models, config);
         ui.image = wv.image.panel(models, ui, config);
-        ui.data = wv.data.ui(models, ui, config);
-        // FIXME: Why is this here?
-        ui.data.render();
+        if ( config.features.dataDownload ) {
+            ui.data = wv.data.ui(models, ui, config);
+            // FIXME: Why is this here?
+            ui.data.render();
+        }
         ui.link = wv.link.ui(models);
         ui.tour = wv.tour(models, ui);
 
@@ -160,8 +168,10 @@ $(function() {
                 ui.data.onViewChange(map);
             });
         */
-        // FIXME: This is a hack
-        models.map.events.on("projection", models.data.updateProjection);
+        if ( config.features.dataDownload ) {
+            // FIXME: This is a hack
+            models.map.events.on("projection", models.data.updateProjection);
+        }
 
         // Console notifications
         if ( wv.brand.release() ) {
