@@ -1,6 +1,7 @@
 # [Worldview](https://earthdata.nasa.gov/worldview)
 
 ## About
+
 This tool from [NASA's](http://nasa.gov) [EOSDIS](https://earthdata.nasa.gov)
 provides the capability to interactively browse global, full-resolution
 satellite imagery and then download the underlying data. Most of the 100+
@@ -20,40 +21,22 @@ several other clients. We encourage interested developers to build their own
 clients or integrate NASA imagery into their existing ones using these
 services.
 
-### Imagery Use
+## License
 
-NASA supports an open data policy and we encourage publication of imagery from
-Worldview; when doing so, please cite it as "NASA Worldview" and also consider
-including a permalink (such as this one) to allow others to explore the
-imagery.
+This code was originally developed at NASA/Goddard Space Flight Center for
+the Earth Science Data and Information System (ESDIS) project.
 
-### Acknowledgements
-Near-real time data is courtesy of [LANCE](http://lance.nasa.gov/) data
-providers: [AMSR-E SIPS](http://lance.nasa.gov/home/about/amsr-e-sips/),
-[GES DISC](http://lance.nasa.gov/home/about/ges-disc/),
-[MODAPS](http://lance.nasa.gov/home/about/modaps/),
-[OMI SIPS](http://lance.nasa.gov/home/about/omi-sips/), and
-[FIRMS](http://earthdata.nasa.gov/data/near-real-time-data/firms).
-Ocean color and temperature data provided by
-[OBPG](http://oceancolor.gsfc.nasa.gov/) and
-[PO.DAAC](http://podaac.jpl.nasa.gov/).
-Socioeconomic data supplied by [SEDAC](http://sedac.ciesin.org/).
-Orbit tracks provided by [space-track.org](https://www.space-track.org/).
-Polar coastlines and graticules courtesy of
-[ADD SCAR](http://www.add.scar.org/),
-[OpenStreetMap](http://www.openstreetmap.org/), and
-[PolarView](http://www.polarview.aq/). User-selectable color palettes are
-primarily derived from [NEO](http://neo.sci.gsfc.nasa.gov/). The imagery
-ingest and serving system (GIBS) is built by NASA/JPL and operated by
-NASA/GSFC. Worldview is built by the NASA/GSFC Earth Science Data
-Information System [(ESDIS)](http://earthdata.nasa.gov/esdis) Project and is
-grateful for the use of many
-[open source projects](http://localhost/worldview/pages/worldview-opensourcelibs.html).
+Copyright &copy; 2013 - 2014 United States Government as represented by the
+Administrator of the National Aeronautics and Space Administration.
+All Rights Reserved.
 
-### Disclaimer
-The information presented through this interface is provided "as is" and
-users bear all responsibility and liability for their use of the data. Please
-read the [full disclaimer](https://earthdata.nasa.gov/data/nrt-data/disclaimer).
+Licensed under the [NASA Open Source Agreement, Version 1.3](LICENSE.md).
+
+
+## Building
+
+The toolchain assumes a Mac OS X or Linux environment.
+
 
 ### [Release Notes](http://localhost/worldview/pages/release_notes.html)
 A full history of
@@ -263,14 +246,7 @@ To create an RPM on CentOS 6, issue the following:
 Built RPMs will be found in the ``dist`` directory.
 
 
-## Copyright
 
-This code was originally developed at NASA/Goddard Space Flight Center for
-the Earth Science Data and Information System (ESDIS) project.
-
-Copyright (C) 2013 - 2014 United States Government as represented by the
-Administrator of the National Aeronautics and Space Administration.
-All Rights Reserved.
 
 ## Contact
 
