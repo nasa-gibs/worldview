@@ -1,0 +1,11 @@
+{
+    "packageName":  "mymap",
+    "officialName": "My Map",
+    "longName":     "My Map",
+    "shortName":    "My Map",
+    "description":  "My Map",
+    "url":          "http://example.com",
+    "version":      "1.0.0",
+    "release":      "1",
+    "email":        "support@example.com"
+}

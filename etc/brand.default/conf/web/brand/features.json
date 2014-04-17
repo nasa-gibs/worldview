@@ -1,0 +1,6 @@
+{
+    "features": {
+        "dataDownload": false,
+        "urlShortening": false
+    }
+}

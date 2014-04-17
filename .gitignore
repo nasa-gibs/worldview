@@ -14,7 +14,7 @@ tools
 etc/brand.*
 !etc/brand.default
 !etc/brand.worldview
-brand
+/brand
 conf/web/brand
 src/pages/brand
 src/images/brand
