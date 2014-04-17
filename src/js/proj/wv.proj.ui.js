@@ -44,10 +44,6 @@ wv.proj.ui = wv.proj.ui || function(models, config) {
         $(self.selector).append($button);
         $button.button({
             text: false
-        }).tooltip({
-            hide: {
-                duration: 0
-            }
         });
 
         var $menu = $("<div></div>").attr("id", "wv-proj-menu");
@@ -78,7 +74,6 @@ wv.proj.ui = wv.proj.ui || function(models, config) {
 
         $button.click(function() {
             $(".ui-menu").hide();
-            $button.tooltip("close").tooltip("disable");
             $menuItems.show().position({
                 my: "left top",
                 at: "left bottom+5",
@@ -86,7 +81,6 @@ wv.proj.ui = wv.proj.ui || function(models, config) {
             });
             $(document).one("click", function() {
                 $menuItems.hide();
-                $button.tooltip("enable");
             });
             return false;
         });
