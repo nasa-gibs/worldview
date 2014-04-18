@@ -11,7 +11,12 @@
 
 html,body, div, ul, li, p, h1, h2, h3, h4, h5, h6 {display:block; margin:0; padding:0; font: 100 12.8px/16px "helvetica",sans-serif;}
 
-body {min-width:320px; width:100%;}
+body {
+    min-width: 320px;
+    width: 100%;
+    background: #000000;
+}
+
 div {display:block;}
 h1, h2, h3, h4, h5, h6 { font-weight:400; }
 

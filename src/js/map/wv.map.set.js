@@ -434,6 +434,7 @@ wv.map.set = wv.map.set || function(containerId, mapConfig, component) {
             .appendTo($div)
             .attr("id", id)
             .addClass("map-projection")
+            .addClass("map")
             .addClass(id);
 
         var mapClass = "map-projection " + id + " ";
@@ -471,24 +472,6 @@ wv.map.set = wv.map.set || function(containerId, mapConfig, component) {
         $zoomOut.click(function() {
             self.map.zoomOut();
         });
-
-        /*
-        // Create zoom in/out controls
-        var zoomInControl = new OpenLayers.Control.ZoomIn();
-        zoomInControl.title = "zoom in";
-        zoomInControl.displayClass = mapClass + "olControlZoomInCustom";
-
-        var zoomOutControl = new OpenLayers.Control.ZoomOut();
-        zoomOutControl.title = "zoom out";
-        zoomOutControl.displayClass = mapClass + "olControlZoomOutCustom";
-
-        // Create panel to hold zoom controls and add to map
-        var zoomPanel = new OpenLayers.Control.Panel();
-        zoomPanel.displayClass = mapClass + "olControlZoomPanelCustom";
-        zoomPanel.addControls(zoomInControl);
-        zoomPanel.addControls(zoomOutControl);
-        controls.push(zoomPanel);
-        */
 
         // Add navigation controls
         controls.push(new OpenLayers.Control.Navigation({
