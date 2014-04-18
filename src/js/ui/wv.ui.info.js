@@ -46,7 +46,17 @@ wv.ui.info = wv.ui.info || (function(ui) {
     $menuItems.hide().menu();
 
     $about.click(function() {
-        wv.ui.about.show();
+        if ( wv.util.browser.small ) {
+            window.open("pages/brand/about.html?v=@BUILD_NONCE@", "_blank");
+        } else {
+            wv.ui.getDialog().dialog({
+                title: "About",
+                width: 625,
+                height: 525,
+                show: { effect: "fade" },
+                hide: { effect: "fade" }
+            }).load("pages/brand/about.html?v=@BUILD_NONCE@ #page");
+        }
     });
 
     $tour.click(function() {

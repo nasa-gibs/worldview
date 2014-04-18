@@ -6,7 +6,6 @@
     "src/js/util/wv.util.events.js",
 
     "src/js/ui/wv.ui.js",
-    "src/js/ui/wv.ui.about.js",
     "src/js/ui/wv.ui.indicator.js",
     "src/js/ui/wv.ui.info.js",
 

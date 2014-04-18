@@ -6,11 +6,18 @@
 
 .wv-document p,
 .wv-document li,
-.wv-document div {
+.wv-document div,
+.wv-document h1,
+.wv-document h2 {
     font-weight: 100;
+    font-family: "helvetica",sans-serif;
+}
+
+.wv-document p,
+.wv-document li,
+.wv-document div {
     font-size: 16px;
     line-height: 22px;
-    font-family: "helvetica",sans-serif;
 }
 
 .wv-document h1 {
