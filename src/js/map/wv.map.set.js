@@ -117,7 +117,6 @@ wv.map.set = wv.map.set || function(containerId, mapConfig, component) {
             newMap.events.register("moveend", self, function() {
                 self.events.trigger(self.EVENT_MOVE_END, newMap);
             });
-            newMap.events.register("zoomend", self, onZoomEnd);
             newMap.events.register("zoomend", self, function() {
                 self.events.trigger(self.EVENT_ZOOM_END, newMap);
             });
@@ -521,6 +520,19 @@ wv.map.set = wv.map.set || function(containerId, mapConfig, component) {
         navControl.handlers.wheel.interval = 100;
         navControl.handlers.wheel.cumulative = false;
 
+        m.events.register("zoomend", null, function() {
+            if ( m.zoom === m.numZoomLevels - 1 ) {
+                $zoomIn.button("disable");
+                $zoomOut.button("enable");
+            } else if ( m.zoom === 0 ) {
+                $zoomIn.button("enable");
+                $zoomOut.button("disable");
+            } else {
+                $zoomIn.button("enable");
+                $zoomOut.button("enable");
+            }
+        });
+
         return m;
     };
 
@@ -551,36 +563,6 @@ wv.map.set = wv.map.set || function(containerId, mapConfig, component) {
         return wv.map.layers.static(map, mapConfig, projId, layerId);
     };
 
-    var onZoomEnd = function(evt) {
-        // "Disable" zoom in icon if zoomed to highest level
-        // TODO: fix "color" updates since they don't currently have an effect
-        if ( self.map.zoom === self.map.numZoomLevels - 1 ) {
-            $('.olControlZoomInCustomItemInactive', '.map-' + self.projection)
-                .css("background-color", "rgba(38,38,38,0.3)");
-            $('.olControlZoomInCustomItemInactive', '.map-' + self.projection)
-                .css("color", "#555555");
-        }
-        else {
-            $('.olControlZoomInCustomItemInactive', '.map-' + self.projection)
-                .css("background-color", "rgba(45,50,55,0.70)");
-            $('.olControlZoomInCustomItemInactive', '.map-' + self.projection)
-                .css("color", "#FFFFFF");
-        }
-
-        // "Disable" zoom out icon if zoomed to lowest level
-        if ( self.map.zoom === 0 ) {
-            $('.olControlZoomOutCustomItemInactive', '.map-' + self.projection)
-                .css("background-color", "rgba(38,38,38,0.3)");
-            $('.olControlZoomOutCustomItemInactive', '.map-' + self.projection)
-                .css("color", "#555555");
-        }
-        else {
-            $('.olControlZoomOutCustomItemInactive', '.map-' + self.projection)
-                .css("background-color", "rgba(45,50,55,0.70)");
-            $('.olControlZoomOutCustomItemInactive', '.map-' + self.projection)
-                .css("color", "#FFFFFF");
-        }
-    };
 
     // This has gotten really awkward, but seems to work
     var onAddLayer = function(event) {
