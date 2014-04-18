@@ -13,7 +13,7 @@ a configuration file for use with Apache, execute the following:
 A ``.conf`` file will be placed in the ``dist`` directory. As root, copy
 this file to the Apache configuration directory:
 
-* Max OS X: /private/etc/apache2/other
+* Mac OS X: /private/etc/apache2/other
 * RHEL/CentOS: /etc/httpd/conf.d
 
 Restart Apache:

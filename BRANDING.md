@@ -48,8 +48,8 @@ To create an "About" page, edit the following file:
 
 ## Rebuilding
 
-Inform the build process to use the "custom" brand directory with the
-following:
+Inform the build process to use the "custom" brand directory by issuing
+the following commands at the root of the repository:
 
     mkdir -p brand
     echo '{"brand": "custom"}' > brand/brand.json
