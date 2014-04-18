@@ -77,8 +77,8 @@ wv.ui.about = wv.ui.about || (function() {
         */
         $dialog.dialog({
             title: "About",
-            width: 600,
-            height: 500,
+            width: 625,
+            height: 525,
             show: { effect: "fade" },
             hide: { effect: "fade" }
         }).load("pages/brand/about.html?v=@BUILD_NONCE@ #page");
