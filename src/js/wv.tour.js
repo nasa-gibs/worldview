@@ -75,8 +75,6 @@ wv.tour = wv.tour || function(models, ui) {
             finalRow = "<td colspan='2'><p id='dontShowP' class=\"splash\"><input id='dontShowAgain' type='checkbox'>Do not show again (Access from <i class='fa fa-info-circle fa-fw'></i> menu)</p></td>";
         }
         var item = "<div class=\"splash\">"+
-                       "<h3>Welcome to @NAME@!</h3>"+
-                       "</br></br>"+
                        "<center>"+
                            "<p class=\"splashwelcome\">This application allows you to interactively browse global satellite imagery within hours of it being acquired. Use the features described below to find interesting imagery, then save and share what you find.</p>"+
                            "</br></br>"+
@@ -112,14 +110,14 @@ wv.tour = wv.tour || function(models, ui) {
         $startDialog
             .html(item)
             .dialog({
+                title: "Welcome to @NAME@!",
                 dialogClass: "tour",
                 modal: true,
                 width: 700,
-                height: 550,
+                height: "auto",
                 draggable: false,
                 resizable: false
             });
-        active = true;
         /*
         splashOverlay = new YAHOO.widget.Panel("splash", { zIndex:1020, visible:false, modal:true, draggable:false,  } );
 
@@ -237,8 +235,6 @@ wv.tour = wv.tour || function(models, ui) {
             var $dialog = wv.ui.getDialog();
             var conclusionText = "<div class=\"splash\">"+
                                  "<center>"+
-                                     "<h3>Finished!</h3>"+
-                                     "</br></br>"+
                                      "<p class='splashwelcome'>You have now completed a tour of @NAME@!  If you followed the “Try It” steps, you’re now looking at fires in northern California as they were observed by satellites on August 23, 2012.   You can use the tools in any order.  We hope you continue exploring!  <p>"+
                                      "</br>"+
                                      "<table class='tour'>"+
@@ -252,10 +248,11 @@ wv.tour = wv.tour || function(models, ui) {
             $dialog
                 .html(conclusionText)
                 .dialog({
+                    title: "Finished!",
                     dialogClass: "tour",
                     modal: true,
                     width: 600,
-                    height: 215,
+                    height: "auto",
                     draggable: false,
                     resizable: false
                 });
@@ -328,24 +325,12 @@ wv.tour = wv.tour || function(models, ui) {
             wv.util.localStorage('hideSplash', !hideSplash);
         };
 
-
-        $(window).resize(function() {
-             splashOverlay.center();
-             conclusionPanel.center();
-        });
-
         // assign events and start
         $("#takeTour").click(handleTakeTour);
         $("#skipTour").click(handleSkipTour);
         $("#dontShowAgain").click(setDoNotShow);
 
-        /*
-        YAHOO.util.Event.on('takeTour', 'click', handleTakeTour);
-        YAHOO.util.Event.on('skipTour', 'click', handleSkipTour);
-        YAHOO.util.Event.on('dontShowAgain', 'click', setDoNotShow);
-        YAHOO.util.Event.on('repeat', 'click', repeatTour);
-        YAHOO.util.Event.on('done', 'click', handleDone);
-        */
+        active = true;
     };
 
     var initTourState = function() {

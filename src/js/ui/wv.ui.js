@@ -46,10 +46,7 @@ wv.ui = (function(self) {
             "again. If you continue to have problems, contact us at " +
             "<a href='mailto:@MAIL@'>" +
             "@MAIL@</a>" +
-            "</div>", {
-                title: "Error",
-                height: 175
-            }
+            "</div>", "Error"
         );
     };
 
@@ -63,18 +60,15 @@ wv.ui = (function(self) {
      *
      * @param [title="Notice"] {string} Title for the dialog box.
      */
-    self.notify = function(message, options) {
+    self.notify = function(message, title) {
         var $dialog = self.getDialog();
-        options = options || {};
-        var title = options.title || "Notice";
-        var width = options.width || 300;
-        var height = options.height || 150;
+        var title = title || "Notice";
         $dialog.html(message).dialog({
             title: title,
             show: { effect: "fade" },
             hide: { effect: "fade" },
-            width: width,
-            height: height
+            width: 300,
+            height: "auto"
         });
     };
 

@@ -14,11 +14,29 @@ body {
 .yui-skin-sam .yui-panel-container .bd .splash h3{ color:rgb(38, 43, 49); font: 18px "Gill Sans", sans-serif; font-weight:400; text-decoration:none; }
 
 .tour .ui-dialog-content {
-    background: #AFB5C4
+    background: #AFB5C4;
 }
 
 .tour .ui-dialog-titlebar {
-    display: none;
+    font-size: 16px;
+    background: #AFB5C4;
+    color:rgb(38, 43, 49);
+    border: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.tour .ui-button {
+    background: #F4F5F5;
+    border-color: #F4F5F5;
+}
+
+.tour .ui-button:hover:enabled {
+    background: #d9dddd
+}
+
+.tour .ui-icon-closethick {
+    background-image: url("../ext/ui/jquery-ui-1.10.4/ui-darkness/images/ui-icons_404040_256x240.png");
 }
 
 .tour h3 {

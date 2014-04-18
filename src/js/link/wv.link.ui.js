@@ -61,7 +61,7 @@ wv.link.ui = wv.link.ui || function(models) {
             show: { effect: "fade" },
             hide: { effect: "fade" },
             width: 350,
-            height: 170
+            height: "auto"
         });
         $("#wv-link-shorten-check").button();
         $("#wv-link-shorten-check").click(function() {
