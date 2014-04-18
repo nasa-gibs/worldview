@@ -1,7 +1,6 @@
 
 .wv-document {
     background-color: #222;
-    color: #eee;
 }
 
 .wv-document p,
@@ -9,6 +8,7 @@
 .wv-document div,
 .wv-document h1,
 .wv-document h2 {
+    color: #eee;
     font-weight: 100;
     font-family: "helvetica",sans-serif;
 }

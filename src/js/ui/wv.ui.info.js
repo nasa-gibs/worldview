@@ -36,10 +36,12 @@ wv.ui.info = wv.ui.info || (function(ui) {
 
     var $feedback = $("<li><a href='mailto:@MAIL@?subject=Feedback for @LONG_NAME@ tool' target='_blank'><i class='ui-icon fa fa-envelope fa-fw'></i>Feedback</a></li>");
     var $tour = $("<li><a><i class='ui-icon fa fa-truck fa-fw'></i>Start Tour</a></li>");
+    var $new = $("<li><a><i class='ui-icon fa fa-flag fa-fw'></i>What's New</a></li>");
     var $about = $("<li><a><i class='ui-icon fa fa-file fa-fw'></i>About</a></li>");
 
     $menuItems.append($feedback);
     $menuItems.append($tour);
+    $menuItems.append($new);
     $menuItems.append($about);
     $menu.append($menuItems);
     $("body").append($menu);
@@ -56,6 +58,20 @@ wv.ui.info = wv.ui.info || (function(ui) {
                 show: { effect: "fade" },
                 hide: { effect: "fade" }
             }).load("pages/brand/about.html?v=@BUILD_NONCE@ #page");
+        }
+    });
+
+    $new.click(function() {
+        if ( wv.util.browser.small ) {
+            window.open("pages/brand/new.html?v=@BUILD_NONCE@", "_blank");
+        } else {
+            wv.ui.getDialog().dialog({
+                title: "What's New",
+                width: 625,
+                height: 525,
+                show: { effect: "fade" },
+                hide: { effect: "fade" }
+            }).load("pages/brand/new.html?v=@BUILD_NONCE@ #page");
         }
     });
 
