@@ -82,8 +82,8 @@ wv.ui.info = wv.ui.info || (function(ui) {
     $button.click(function() {
         $(".ui-menu").hide();
         $menuItems.show().position({
-            my: "right top",
-            at: "right bottom+5",
+            my: "left top",
+            at: "left bottom+5",
             of: $button
         });
         $(document).one("click", function() {

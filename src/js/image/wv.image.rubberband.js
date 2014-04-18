@@ -78,7 +78,12 @@ wv.image.rubberband = wv.image.rubberband || function(models, config) {
         var toggleOn = function() {
             state = "on";
             toolbarButtons("disable");
-            $("#imagedownload").show('slide', {direction: 'up'}, 1000);
+            self.events.trigger("show");
+            $(".ui-dialog").on("dialogclose", function() {
+                if ( state === "on" ) {
+                    toggle();
+                };
+            });
             draw();
         };
 
@@ -118,7 +123,6 @@ wv.image.rubberband = wv.image.rubberband || function(models, config) {
             state = "off";
             $button.prop("checked", false).button("refresh");
             jcropAPI.destroy();
-            $("#imagedownload").hide('slide', {direction: 'up'}, 1000);
             if (previousPalettes) {
                 // FIXME: What is this for?
                 //self.paletteWidget.noResture = false;
@@ -127,6 +131,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, config) {
                 });
             }
             toolbarButtons("enable");
+            wv.ui.closeDialog();
         }
     };
 

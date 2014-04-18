@@ -102,8 +102,8 @@ wv.link.ui = wv.link.ui || function(models) {
             height: "auto",
             minHeight: 10,
             position: {
-                my: "right top",
-                at: "right bottom+5",
+                my: "left top",
+                at: "left bottom+5",
                 of: $label
             },
             draggable: false,

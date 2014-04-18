@@ -27,13 +27,17 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
                "-" + config.parameters.imagegen + ".php");
     }
 
+    var init = function() {
+        ui.rubberband.events.on("update", update);
+        ui.rubberband.events.on("show", show);
+    };
+
     /**
       * Initialize a map object in Lat/Long projection, and add a "fake" layer to compute the map math.
       * Display the HTML UI with UI options.   *
       * @this {Download}
     */
-    var init = function(){
-
+    var show = function(){
         alignTo = { id: "wv-image-button" };
         container=document.getElementById(containerId);
 
@@ -46,17 +50,64 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
         setPosition();
         $(window).resize(setPosition);
 
-        var htmlElements = "<div>Resolution (per pixel): <select id='selImgResolution'><option value='1'>250m</option><option value='2'>500m</option><option value='4'>1km</option><option value='20'>5km</option><option value='40'>10km</option></select>";
-        htmlElements +="<br />Format: <select id='selImgFormat'><option value='image/jpeg'>JPEG</option><option value='image/png'>PNG</option><option value='image/geotiff'>GeoTIFF</option></select>";
-        htmlElements +="<br />Raw Image Size: ~ <span id='imgFileSize'> </span> MB <br />(<span id='imgWidth''></span> x <span id='imgHeight'></span> pixels)";
-        htmlElements += "<br /><span style='font-size:10px; color:#aaa; font-style:italic;'>(Max Size: 250 MB)</span> ";//(<span id='imgWidth''></span> x <span id='imgHeight'></span> pixels)
-        htmlElements += "<br /><input type='button' id='btnImgDownload' value='Download'/>";
-        htmlElements +="</div>";
+        var htmlElements =
+            "<div id='wv-image-resolution'>" +
+                "<input type='radio' id='wv-image-resolution-250m' name='wv-image-resolution' value='1' checked><label for='wv-image-resolution-250m'>250m</label>" +
+                "<input type='radio' id='wv-image-resolution-500m' name='wv-image-resolution' value='2' ><label for='wv-image-resolution-500m'>500m</label>" +
+                "<input type='radio' id='wv-image-resolution-1km'  name='wv-image-resolution' value='4' ><label for='wv-image-resolution-1km' >1km</label>" +
+                "<input type='radio' id='wv-image-resolution-5km'  name='wv-image-resolution' value='20'><label for='wv-image-resolution-5km' >5km</label>" +
+                "<input type='radio' id='wv-image-resolution-10km' name='wv-image-resolution' value='40'><label for='wv-image-resolution-10km' >10km</label>" +
+            "</div>" +
+            "<div class='wv-image-header'>Format</div>" +
+            "<div id='wv-image-format'>" +
+                "<input type='radio' id='wv-image-format-jpeg'    name='wv-image-format' value='image/jpeg' checked><label for='wv-image-format-jpeg'   >JPEG</label>" +
+                "<input type='radio' id='wv-image-format-png'     name='wv-image-format' value='image/png'     ><label for='wv-image-format-png'    >PNG</label>" +
+                "<input type='radio' id='wv-image-format-geotiff' name='wv-image-format' value='image/geotiff' ><label for='wv-image-format-geotiff'>GeoTIFF</label>" +
+                "<input type='radio' id='wv-image-format-kmz'     name='wv-image-format' value='image/kmz'     ><label for='wv-image-format-kmz'    >KMZ</label>" +
+            "</div>" +
+            "<table class='wv-image-download'>" +
+                "<tr>" +
+                    "<th>Raw Size</th>" +
+                    "<th>Maximum</th>" +
+                "</tr>" +
+                "<tr>" +
+                    "<td id='wv-image-size' class='wv-image-size'>000.00MB</td>" +
+                    "<td class='wv-image-size'>250 MB</td>" +
+                "</tr>" +
+                "<tr>" +
+                    "<td><span id='wv-image-width'>0000</span> x <span id='wv-image-height'>0000</span> px</td>" +
+                    "<td><button id='wv-image-download-button'>Download</button>" +
+                "</tr>" +
+            "</table>" +
+            "</div>";
 
-        $("#"+id).html(htmlElements);
+        var $dialog = wv.ui.getDialog().html(htmlElements);
+        $dialog.dialog({
+            dialogClass: "wv-panel wv-image",
+            title: "Resolution (per pixel)",
+            show: { effect: "slide", direction: "up" },
+            hide: { effect: "slide", direction: "up" },
+            width: 230,
+            height: "auto",
+            minHeight: 10,
+            position: {
+                my: "left top",
+                at: "left bottom+5",
+                of: ("#wv-image-button"),
+            },
+            draggable: false,
+            resizable: false,
+            autoOpen: false
+        });
+        $("#wv-image-resolution").buttonset();
+        $("#wv-image-format").buttonset();
+        $("#wv-image-download-button").button();
+        $(".ui-dialog").zIndex(600);
 
-        ui.rubberband.events.on("update", update);
-
+        if ( models.proj.selected.id !== "geographic" ) {
+             $("#wv-image-format-kmz").button("disable");
+        }
+        $dialog.dialog("open");
     };
 
     var setPosition = function(){
@@ -99,16 +150,9 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
 
             var conversionFactor = 256;
             if (s=="geographic") {
-                if( 0 === $('#selImgFormat option[value=KMZ]').length) {
-                    $('#selImgFormat').append( $('<option></option>').val("KMZ").text("KMZ"));
-                }
                 conversionFactor = 0.002197;
             }
-            else { //polar
-             if( 0 !== $('#selImgFormat option[value=KMZ]').length) {
-                    $('#selImgFormat option[value=KMZ]').remove();
-                }
-            }
+
              var dTime = time;
              //Julian date, padded with two zeros (to ensure the julian date is always in DDD format).
              var jStart = wv.util.parseDateUTC(dTime.getUTCFullYear() + "-01-01");
@@ -123,27 +167,36 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
             dlURL += "&epsg="+epsg;
             dlURL +="&layers=" + _.pluck(products, "id").join(",");
 
-             var imgWidth=0; var imgHeight=0;
+            var imgWidth=0; var imgHeight=0;
+            var imageRes, imgFileSize, imgFormat;
 
-
-            $("select#selImgResolution").change(function () {
-                        imgRes =  $("#selImgResolution option:selected").val();
+            $("#wv-image-resolution").change(function () {
+                        imgRes =  $("#wv-image-resolution input:checked").val();
                         imgWidth =  Math.round((Math.abs(lonlat2.lon - lonlat1.lon) / conversionFactor) / Number(imgRes));
                         imgHeight = Math.round((Math.abs(lonlat2.lat - lonlat1.lat) / conversionFactor) / Number(imgRes));
                         imgFilesize =  ((   imgWidth * imgHeight * 24) / 8388608).toFixed(2);
-
-                $("#imgWidth").text((imgWidth));
-                $("#imgHeight").text((imgHeight));
-                $("#imgFileSize").text(imgFilesize);
-                if(imgFilesize>250 || imgHeight === 0 || imgWidth === 0) { $("#imgFileSize").css("color", "#D99694");  $("#btnImgDownload").attr("disabled", "disabled"); }
-                else { $("#imgFileSize").css("color", "white"); $("#btnImgDownload").removeAttr("disabled"); }
+                        imgFormat = $("#wv-image-format input:checked").val();
+                var invalid = (imgFilesize>250 || imgHeight === 0 || imgWidth === 0);
+                var icon;
+                if ( invalid ) {
+                    icon = "<i class='fa fa-times fa-fw'></i>";
+                    $(".wv-image-size").addClass("wv-image-size-invalid");
+                    $("#wv-image-download-button").button("disable");
+                } else {
+                    icon = "<i class='fa fa-check fa-fw'></i>";
+                    $(".wv-image-size").removeClass("wv-image-size-invalid");
+                    $("#wv-image-download-button").button("enable");
+                }
+                $("#wv-image-width").html((imgWidth));
+                $("#wv-image-height").html((imgHeight));
+                $("#wv-image-size").html(icon + imgFilesize + " MB");
                 })
              .change();
 
 
-              $("#btnImgDownload").unbind('click').click(function(){
-                 wv.util.metrics('lc='+encodeURIComponent(dlURL+"&format="+$("#selImgFormat option:selected").val()+"&width="+$("#imgWidth").text()+"&height="+$("#imgHeight").text() ) );
-                 window.open(dlURL+"&format="+$("#selImgFormat option:selected").val()+"&width="+$("#imgWidth").text()+"&height="+$("#imgHeight").text(),"_blank");
+              $("#wv-image-download-button").unbind('click').click(function(){
+                 wv.util.metrics('lc='+encodeURIComponent(dlURL+"&format="+imgFormat+"&width="+imgWidth+"&height="+imgHeight) );
+                 window.open(dlURL+"&format="+imgFormat+"&width="+imgWidth+"&height="+imgHeight,"_blank");
               });
         } catch ( cause ) {
             wv.util.error(cause);
@@ -151,6 +204,7 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
     };
 
     init();
+
     return self;
 
 };

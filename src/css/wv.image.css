@@ -1,0 +1,56 @@
+#wv-image-resolution .ui-button-text {
+    font-weight: normal;
+    font-size: 10px;
+    width: 40px;
+    padding: 0.2em 0;
+}
+
+.wv-image .ui-dialog-content {
+    padding: 0 10px 0px 10px;
+}
+
+#wv-image-format .ui-button-text {
+    font-weight: normal;
+    font-size: 10px;
+    width: 50px;
+    padding: 0.2em 0;
+}
+
+.wv-image-header {
+    padding: .5em 0 0 0;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.wv-image-download {
+    margin-top: 0.5em;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.wv-image-download th {
+    font-weight: 400;
+    font-size: 12px;
+    text-align: center;
+    padding: .1em;
+}
+
+.wv-image-download td {
+    border: 1px solid rgba(0, 0, 0, 0);
+    font-weight: 400;
+    font-size: 10px;
+    text-align: center;
+    padding: .1em;
+    width: 50%;
+}
+
+.wv-image-download td.wv-image-size-invalid {
+    border: 1px solid #eee;
+}
+
+#wv-image-download-button .ui-button-text {
+    font-weight: bold;
+    font-size: 12px;
+    padding: 0.2em 1em;
+}
+
