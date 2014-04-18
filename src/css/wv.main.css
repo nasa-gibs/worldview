@@ -119,7 +119,7 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
     #wvlogo { width:54px; background-position: 0 center;}
 }
 
-.toolbar-icon {
+#toolbarlist {
 }
 
 #wv-logo {
@@ -136,14 +136,14 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
     color: #eeeeee;
 }
 
-.ui-button:hover:enabled {
-    background: #eeeeee;
-    color: #404040;
-}
-
-.ui-button:active:enabled {
+.ui-state-active {
     border: 1px solid #808080;
     background: #808080;
+}
+
+.ui-state-hover {
+    background: #eeeeee;
+    color: #404040;
 }
 
 .ui-menu { position: absolute; width: 100px; z-index: 1000; }
@@ -179,9 +179,7 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
     padding-bottom: 15px;
 }
 
-.ui-state-active {
-    background: #00457b;
-}
+
 
 .ui-tooltip {
     background: #FFFBE7;
@@ -225,5 +223,4 @@ a:hover {
  * Remove it */
 .ui-state-focus:focus { outline: none !important }
 .ui-state-focus a:focus { outline: none !important }
-
 

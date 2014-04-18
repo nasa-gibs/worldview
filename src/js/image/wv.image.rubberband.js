@@ -66,12 +66,18 @@ wv.image.rubberband = wv.image.rubberband || function(models, config) {
         $button.on('click', toggle);
     };
 
+    var toolbarButtons = function(action) {
+        $("#wv-info-button .ui-button").button(action);
+        $("#wv-proj-button .ui-button").button(action);
+        $("#wv-link-button .ui-button").button(action);
+    };
+
     var toggle = function(){
         var checked = $("#wv-image-button-check").prop("checked");
 
         var toggleOn = function() {
             state = "on";
-            //$("#"+id+"camera_link img").attr("src",onicon);
+            toolbarButtons("disable");
             $("#imagedownload").show('slide', {direction: 'up'}, 1000);
             draw();
         };
@@ -120,6 +126,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, config) {
                     models.palettes.add(layerId, paletteId);
                 });
             }
+            toolbarButtons("enable");
         }
     };
 
