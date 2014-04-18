@@ -69,7 +69,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, config) {
     var toolbarButtons = function(action) {
         $("#wv-info-button .ui-button").button(action);
         $("#wv-proj-button .ui-button").button(action);
-        $("#wv-link-button .ui-button").button(action);
+        $("#wv-link-button input").button(action);
     };
 
     var toggle = function(){

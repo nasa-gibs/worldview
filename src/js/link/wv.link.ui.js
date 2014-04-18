@@ -25,20 +25,35 @@ wv.link.ui = wv.link.ui || function(models) {
     var self = {};
     var id = "wv-link-button";
     var selector = "#" + id;
+    var $button;
+    var $label;
+    var watcher;
+    var longLink;
+    var link;
 
     var init = function() {
-        var $button = $("<button></button>")
-            .attr("title", "Share this map");
+        $button = $("<input></input>")
+            .attr("type", "checkbox")
+            .attr("id", "wv-link-button-check");
+        $label = $("<label></label>")
+            .attr("for", "wv-link-button-check")
+            .attr("tite", "Share this map");
         var $icon = $("<i></i>")
             .addClass("fa")
             .addClass("fa-link")
             .addClass("fa-2x");
-        $button.append($icon);
+        $label.append($icon);
+        $(selector).append($label);
         $(selector).append($button);
         $button.button({
             text: false
         }).click(function() {
-            self.show();
+            var checked = $("#wv-link-button-check").prop("checked");
+            if ( checked ) {
+                self.show();
+            } else {
+                wv.ui.closeDialog();
+            }
         });
     };
 
@@ -46,25 +61,52 @@ wv.link.ui = wv.link.ui || function(models) {
      * @method show
      */
     self.show = function() {
-        var link = models.link.get();
+        longLink = models.link.get();
+        link = longLink;
         var $dialog = wv.ui.getDialog();
         var item =  "<div id='wv-link' >" +
-            "<span>Copy and paste the following link to share this view:</span>" +
             "<input type='text' value='' name='permalink_content' id='permalink_content' />";
         if ( config.features.urlShortening ) {
-            item += "<div id='wv-link-shorten'><label id='wv-link-shorten-label' for='wv-link-shorten-check'>Shorten this link</label><input type='checkbox' value='' id='wv-link-shorten-check' /></div>";
+            item += "<div id='wv-link-shorten'>" +
+                "<input type='checkbox' value='' id='wv-link-shorten-check' />" +
+                "<label id='wv-link-shorten-label' for='wv-link-shorten-check'>Shorten this link</label>" +
+                "</div>";
         }
         item += "</div>";
-        $dialog.html(item);
+        $dialog.html(item).iCheck({checkboxClass: 'icheckbox_square-grey'});
+
+        $('#permalink_content').val(link);
+        setTimeout(function() {
+            $('#permalink_content').focus();
+            $('#permalink_content').select();
+        }, 500);
+
         $dialog.dialog({
-            title: "Permalink",
-            show: { effect: "fade" },
-            hide: { effect: "fade" },
-            width: 350,
-            height: "auto"
+            dialogClass: "wv-panel",
+            title: "Copy this link to share:",
+            show: { effect: "slide", direction: "up" },
+            hide: { effect: "slide", direction: "up" },
+            width: 300,
+            height: "auto",
+            minHeight: 10,
+            position: {
+                my: "right top",
+                at: "right bottom+5",
+                of: $label
+            },
+            draggable: false,
+            resizable: false
+        }).on("dialogclose", function() {
+            $("#wv-link-button-check").prop("checked", false);
+            $button.button("refresh");
+            if ( watcher ) {
+                clearInterval(watcher);
+                watcher = null;
+            }
         });
-        $("#wv-link-shorten-check").button();
-        $("#wv-link-shorten-check").click(function() {
+
+        //$("#wv-link-shorten-check").button();
+        $("#wv-link-shorten-check").on("ifChanged", function() {
             update();
         });
 
@@ -93,12 +135,21 @@ wv.link.ui = wv.link.ui || function(models) {
             } else {
                 $('#permalink_content').val(link);
             }
-            document.getElementById('permalink_content').focus();
-            document.getElementById('permalink_content').select();
+            $('#permalink_content').focus();
+            $('#permalink_content').select();
         };
 
         $("#wv-link-shorten-check").prop("checked", false);
-        update();
+
+        watcher = setInterval(function() {
+            var newLink = models.link.get();
+            if ( newLink !== longLink ) {
+                link = newLink;
+                longLink = link;
+                $("#wv-link-shorten-check").iCheck("uncheck");
+                update();
+            }
+        }, 100);
     };
 
     init();

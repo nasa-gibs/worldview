@@ -74,6 +74,7 @@ wv.proj.ui = wv.proj.ui || function(models, config) {
 
         $button.click(function() {
             $(".ui-menu").hide();
+            wv.ui.closeDialog();
             $menuItems.show().position({
                 my: "left top",
                 at: "left bottom+5",

@@ -168,13 +168,22 @@ wv.ui = (function(self) {
         var $dialog = $(".ui-dialog-content");
         if ( $dialog.length !== 0 ) {
             if ( $dialog.dialog ) {
-                $dialog.dialog("destroy");
+                $dialog.dialog("close");
             }
             $dialog.remove();
         }
         $dialog = $("<div></div>");
         $("body").append($dialog);
         return $dialog;
+    };
+
+    self.closeDialog = function() {
+        var $dialog = $(".ui-dialog-content");
+        if ( $dialog.length !== 0 ) {
+            if ( $dialog.dialog ) {
+                $dialog.dialog("close");
+            }
+        }
     };
 
     return self;

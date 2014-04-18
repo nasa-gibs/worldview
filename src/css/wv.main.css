@@ -218,6 +218,35 @@ a:hover {
     font-size: 18px;
 }
 
+.icheckbox_square-grey {
+    margin-right: 10px;
+}
+
+label {
+    -webkit-user-select: none; /* Chrome/Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+ */
+
+    /* Rules below not implemented in browsers yet */
+    -o-user-select: none;
+    user-select: none;
+}
+
+.wv-panel .ui-dialog-titlebar {
+    background: #222222;
+    border: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.wv-panel .ui-dialog-content {
+    padding: 0em 1em 1em 1em;
+}
+
+.wv-panel .ui-dialog-title {
+    font-size: 12px;
+    font-weight: normal;
+}
 
 /* Chrome wants to put a blue border around items when they have focus.
  * Remove it */
