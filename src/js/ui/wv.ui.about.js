@@ -65,6 +65,16 @@ wv.ui.about = wv.ui.about || (function() {
                         "<br /><h3>Disclaimer</h3>"+
                         "<p>The information presented through this interface is provided \"as is\" and users bear all responsibility and liability for their use of the data.  Please read the <a href='https://earthdata.nasa.gov/data/nrt-data/disclaimer' target='_blank'>full disclaimer</a>.</p>"+
                         "<br /><p>"+
+                        "<h3>License</h3>" +
+                        "<p>" +
+                        "Copyright &copy; 2013 - 2014 United States Government as represented " +
+                        "by the Administrator of the National Aeronautics and Space " +
+                        "Administration. All Rights Reserved. " +
+                        "This software is licensed under the " +
+                        "<a href='https://github.com/nasa-gibs/worldview/LICENSE.md'>NASA Open Source Software Agreement, Version 1.3.</a> " +
+                        "Source code is available on "  +
+                        "<a target='_blank' href='https://github.com/nasa-gibs/worldview'>github</a>." +
+                        "</p><br/>" +
                                 "Version: " + wv.brand.VERSION + " - " + wv.brand.BUILD_TIMESTAMP + " (<a href='pages/release_notes.html' target='_blank'>release notes</a>)<br />"+
                                 "Release Manager: <a href='mailto:mike.mcgann@nasa.gov'>Mike McGann</a><br />"+
                                 "Responsible NASA Official:  <a href='mailto:ryan.a.boller@nasa.gov'>Ryan Boller</a><br />"+
@@ -103,6 +113,9 @@ wv.ui.about = wv.ui.about || (function() {
             "</div>",
             "<div class='about'>",
                 "<a href='pages/about.html#disclaimer' target='_blank'>Disclaimer</a>",
+            "</div>",
+            "<div class='about'>",
+                "<a href='pages/about.html#license' target='_blank'>License</a>",
             "</div>",
             "<div class='about'>",
                 "<a href='pages/release_notes.html' target='_blank'>Release Notes</a>",
