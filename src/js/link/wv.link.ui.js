@@ -67,7 +67,7 @@ wv.link.ui = wv.link.ui || function(models) {
         var item =  "<div id='wv-link' >" +
             "<input type='text' value='' name='permalink_content' id='permalink_content' />";
         if ( config.features.urlShortening ) {
-            item += "<div id='wv-link-shorten'>" +
+            item += "<span autofocus></span><div id='wv-link-shorten'>" +
                 "<input type='checkbox' value='' id='wv-link-shorten-check' />" +
                 "<label id='wv-link-shorten-label' for='wv-link-shorten-check'>Shorten this link</label>" +
                 "</div>";
@@ -76,9 +76,21 @@ wv.link.ui = wv.link.ui || function(models) {
         $dialog.html(item).iCheck({checkboxClass: 'icheckbox_square-grey'});
 
         $('#permalink_content').val(link);
+
+        // If selected during the animation, the cursor will go to the
+        // end of the input box
         setTimeout(function() {
             $('#permalink_content').focus();
             $('#permalink_content').select();
+            watcher = setInterval(function() {
+                var newLink = models.link.get();
+                if ( newLink !== longLink ) {
+                    link = newLink;
+                    longLink = link;
+                    $("#wv-link-shorten-check").iCheck("uncheck");
+                    update();
+                }
+            }, 100);
         }, 500);
 
         $dialog.dialog({
@@ -141,15 +153,7 @@ wv.link.ui = wv.link.ui || function(models) {
 
         $("#wv-link-shorten-check").prop("checked", false);
 
-        watcher = setInterval(function() {
-            var newLink = models.link.get();
-            if ( newLink !== longLink ) {
-                link = newLink;
-                longLink = link;
-                $("#wv-link-shorten-check").iCheck("uncheck");
-                update();
-            }
-        }, 100);
+
     };
 
     init();

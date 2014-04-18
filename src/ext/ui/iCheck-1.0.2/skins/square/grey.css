@@ -1,7 +1,7 @@
-/* iCheck plugin Square skin, blue
+/* iCheck plugin Square skin, grey
 ----------------------------------- */
-.icheckbox_square-blue,
-.iradio_square-blue {
+.icheckbox_square-grey,
+.iradio_square-grey {
     display: inline-block;
     *display: inline;
     vertical-align: middle;
@@ -9,50 +9,50 @@
     padding: 0;
     width: 22px;
     height: 22px;
-    background: url(blue.png) no-repeat;
+    background: url(grey.png) no-repeat;
     border: none;
     cursor: pointer;
 }
 
-.icheckbox_square-blue {
+.icheckbox_square-grey {
     background-position: 0 0;
 }
-    .icheckbox_square-blue.hover {
+    .icheckbox_square-grey.hover {
         background-position: -24px 0;
     }
-    .icheckbox_square-blue.checked {
+    .icheckbox_square-grey.checked {
         background-position: -48px 0;
     }
-    .icheckbox_square-blue.disabled {
+    .icheckbox_square-grey.disabled {
         background-position: -72px 0;
         cursor: default;
     }
-    .icheckbox_square-blue.checked.disabled {
+    .icheckbox_square-grey.checked.disabled {
         background-position: -96px 0;
     }
 
-.iradio_square-blue {
+.iradio_square-grey {
     background-position: -120px 0;
 }
-    .iradio_square-blue.hover {
+    .iradio_square-grey.hover {
         background-position: -144px 0;
     }
-    .iradio_square-blue.checked {
+    .iradio_square-grey.checked {
         background-position: -168px 0;
     }
-    .iradio_square-blue.disabled {
+    .iradio_square-grey.disabled {
         background-position: -192px 0;
         cursor: default;
     }
-    .iradio_square-blue.checked.disabled {
+    .iradio_square-grey.checked.disabled {
         background-position: -216px 0;
     }
 
 /* HiDPI support */
 @media (-o-min-device-pixel-ratio: 5/4), (-webkit-min-device-pixel-ratio: 1.25), (min-resolution: 120dpi) {
-    .icheckbox_square-blue,
-    .iradio_square-blue {
-        background-image: url(blue@2x.png);
+    .icheckbox_square-grey,
+    .iradio_square-grey {
+        background-image: url(grey@2x.png);
         -webkit-background-size: 240px 24px;
         background-size: 240px 24px;
     }
