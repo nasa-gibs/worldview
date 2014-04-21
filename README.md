@@ -70,9 +70,9 @@ can be uploaded and unpacked to a web server.
 
 ## Other Information
 
-* [Branding](BRANDING.md)
-* [Optional Features](FEATURES.md)
-* [Development Notes](DEVELOP.md)
+* [Branding](doc/branding.md)
+* [Optional Features](doc/features.md)
+* [Development Notes](doc/developing.md)
 * [Third-Party Library Use](THIRD_PARTY.md)
 * [Release Notes](RELEASE_NOTES.md)
 
