@@ -51,20 +51,21 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
         $(window).resize(setPosition);
 
         var htmlElements =
-            "<div id='wv-image-resolution'>" +
-                "<input type='radio' id='wv-image-resolution-250m' name='wv-image-resolution' value='1' checked><label for='wv-image-resolution-250m'>250m</label>" +
-                "<input type='radio' id='wv-image-resolution-500m' name='wv-image-resolution' value='2' ><label for='wv-image-resolution-500m'>500m</label>" +
-                "<input type='radio' id='wv-image-resolution-1km'  name='wv-image-resolution' value='4' ><label for='wv-image-resolution-1km' >1km</label>" +
-                "<input type='radio' id='wv-image-resolution-5km'  name='wv-image-resolution' value='20'><label for='wv-image-resolution-5km' >5km</label>" +
-                "<input type='radio' id='wv-image-resolution-10km' name='wv-image-resolution' value='40'><label for='wv-image-resolution-10km' >10km</label>" +
-            "</div>" +
-            "<div class='wv-image-header'>Format</div>" +
-            "<div id='wv-image-format'>" +
-                "<input type='radio' id='wv-image-format-jpeg'    name='wv-image-format' value='image/jpeg' checked><label for='wv-image-format-jpeg'   >JPEG</label>" +
-                "<input type='radio' id='wv-image-format-png'     name='wv-image-format' value='image/png'     ><label for='wv-image-format-png'    >PNG</label>" +
-                "<input type='radio' id='wv-image-format-geotiff' name='wv-image-format' value='image/geotiff' ><label for='wv-image-format-geotiff'>GeoTIFF</label>" +
-                "<input type='radio' id='wv-image-format-kmz'     name='wv-image-format' value='image/kmz'     ><label for='wv-image-format-kmz'    >KMZ</label>" +
-            "</div>" +
+            "<div class='wv-image-header'>" +
+            "<select id='wv-image-resolution'>" +
+                "<option value='1' checked>250m</option>" +
+                "<option value='2' >500m</option>" +
+                "<option value='4' >1km</option>" +
+                "<option value='20'>5km</option>" +
+                "<option value='40'>10km</option>" +
+            "</select>Resolution (per pixel)</div>" +
+            "<div class='wv-image-header'>" +
+            "<select id='wv-image-format'>" +
+                "<option value='image/jpeg'checked>JPEG</option>" +
+                "<option value='image/png'>PNG</option>" +
+                "<option value='image/geotiff'>GeoTIFF</option>" +
+                "<option  value='image/kmz'>KMZ</option>" +
+            "</select>Format</div>" +
             "<table class='wv-image-download'>" +
                 "<tr>" +
                     "<th>Raw Size</th>" +
@@ -84,7 +85,7 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
         var $dialog = wv.ui.getDialog().html(htmlElements);
         $dialog.dialog({
             dialogClass: "wv-panel wv-image",
-            title: "Resolution (per pixel)",
+            title: "Take a snapshot",
             show: { effect: "slide", direction: "up" },
             hide: { effect: "slide", direction: "up" },
             width: 230,
@@ -99,8 +100,8 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
             resizable: false,
             autoOpen: false
         });
-        $("#wv-image-resolution").buttonset();
-        $("#wv-image-format").buttonset();
+        //$("#wv-image-resolution").buttonset();
+        //$("#wv-image-format").buttonset();
         $("#wv-image-download-button").button();
         $(".ui-dialog").zIndex(600);
 
@@ -171,11 +172,11 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
             var imageRes, imgFileSize, imgFormat;
 
             $("#wv-image-resolution").change(function () {
-                        imgRes =  $("#wv-image-resolution input:checked").val();
+                        imgRes =  $("#wv-image-resolution option:checked").val();
                         imgWidth =  Math.round((Math.abs(lonlat2.lon - lonlat1.lon) / conversionFactor) / Number(imgRes));
                         imgHeight = Math.round((Math.abs(lonlat2.lat - lonlat1.lat) / conversionFactor) / Number(imgRes));
                         imgFilesize =  ((   imgWidth * imgHeight * 24) / 8388608).toFixed(2);
-                        imgFormat = $("#wv-image-format input:checked").val();
+                        imgFormat = $("#wv-image-format option:checked").val();
                 var invalid = (imgFilesize>250 || imgHeight === 0 || imgWidth === 0);
                 var icon;
                 if ( invalid ) {

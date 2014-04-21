@@ -1,19 +1,10 @@
-#wv-image-resolution .ui-button-text {
-    font-weight: normal;
-    font-size: 10px;
-    width: 40px;
-    padding: 0.2em 0;
-}
-
 .wv-image .ui-dialog-content {
     padding: 0 10px 0px 10px;
 }
 
-#wv-image-format .ui-button-text {
-    font-weight: normal;
-    font-size: 10px;
-    width: 50px;
-    padding: 0.2em 0;
+.wv-image select {
+    width: 6em;
+    margin-right: 1em;
 }
 
 .wv-image-header {
