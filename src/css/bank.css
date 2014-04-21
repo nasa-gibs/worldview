@@ -48,9 +48,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3ffffff', e
     width:96%;
     padding:6px 0;
     overflow:hidden;
-    background: rgba(220,220,220,1);
+    /*background: rgba(220,220,220,1);*/
+    background: #eee;
     cursor:move;
-    margin:5px 2% 0 2%;
+    /*margin:5px 2% 0 2%;*/
+   margin: 1px 2% 0 2%;
 }
 
 .bank li.item-static {

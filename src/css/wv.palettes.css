@@ -9,6 +9,30 @@
  * All Rights Reserved.
  */
 
+#wv-palette-selector {
+    width: 280px;
+    height: 200px;
+    overflow: auto;
+}
+
+.wv-palette-selector-row {
+    background: #eee;
+    padding: .5em;
+    color: #000000;
+    margin-bottom: 1px;
+}
+
+.wv-palette-selector-row span {
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+.wv-palette-selector-row img {
+    margin-left: 10px;
+    border: 1px solid #404040;
+    vertical-align: middle;
+}
+
 .bank div .wv-palette {
     margin-top: 5px;
 }

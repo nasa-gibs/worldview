@@ -23,8 +23,8 @@ wv.palettes.custom = wv.palettes.custom || function(config, models, layer) {
 
     var init = function() {
         canvas = document.createElement("canvas");
-        canvas.width = 100;
-        canvas.height = 14;
+        canvas.width = 140;
+        canvas.height = 10;
         var promise = wv.palettes.loadCustom(config).done(loaded);
         wv.ui.indicator.delayed(promise);
 
@@ -32,91 +32,87 @@ wv.palettes.custom = wv.palettes.custom || function(config, models, layer) {
     };
 
     var loaded = function(custom) {
-        var properties = {
-            width: "245px",
-            height: "265px",
-            visible: false,
-            autofillheight: "body",
-            constraintoviewport: true ,
-            zindex: 210
-        };
-
-        // FIXME: SUPER HACK
-        if ( wv.dialogs && wv.dialogs.customPalette ) {
-            wv.dialogs.customPalette.destroy();
-            models.layers.events.off("remove", onLayerRemoved);
-            wv.dialogs.customPalette = null;
-        }
-
-        var $element = $(alignTo);
-        properties.x = Math.ceil($element.offset().left +
-                $element.width() + 20);
-        properties.y = Math.ceil($element.offset().top);
-
-        dialog = new YAHOO.widget.Panel("palette-selector-dialog",
-                properties);
-        dialog.setHeader("Select palette");
-        dialog.setBody([
-            "<div class='product-name'>" + layer.title + "</div>",
-            "<div class='product-description'>" +
-                layer.subtitle +
-            "</div>" +
-            "<div id='palette-selector'></div>"
-        ].join("\n"));
-        dialog.hideEvent.subscribe(function(i) {
-            models.layers.events.off("remove", onLayerRemoved);
-            if ( wv.dialogs.customPalette === dialog ) {
-                wv.dialogs.customPalette = null;
-            }
-            setTimeout(function() {
-                dialog.destroy();
-            }, 5);
-        });
-        dialog.render(document.body);
-
-        palettes = [];
-        palettes.push(defaultPalette());
+        var $dialog = wv.ui.getDialog();
+        var $pane = $("<div><span autofocus></span>Color palette</div>")
+            .attr("id", "wv-palette-selector");
+        $pane.append(defaultPalette());
         var recommended = layer.palette.recommended || [];
         _.each(recommended, function(id) {
-            palettes.push(customPalette(id));
+            $pane.append(customPalette(id));
         });
         _.each(config.paletteOrder, function(id) {
             if ( _.indexOf(recommended, id) < 0 ) {
-                palettes.push(customPalette(id));
+                $pane.append(customPalette(id));
             }
         });
+        $dialog.append($pane);
+        $pane.jScrollPane();
 
-
-        $dropDown = $("#palette-selector").msDropDown({
-            byJson: {
-                name: "Palettes",
-                data: palettes,
-                width: 225,
-            },
-            visibleRows: 5,
-            rowHeight: 17
-        }).data("dd");
-
-        $dropDown.on("change", selectPalette);
+        $dialog.dialog({
+            dialogClass: "wv-panel",
+            title: "Layer options",
+            show: { effect: "slide", direction: "left" },
+            hide: { effect: "slide", direction: "left" },
+            width: 300,
+            height: "auto",
+            position: {
+                my: "left top",
+                at: "right+5 top",
+                of: $("#products")
+            }
+        }).iCheck({radioClass: 'iradio_square-grey'});
 
         if ( models.palettes.active[layer.id] ) {
             var paletteId = models.palettes.active[layer.id];
-            var index = _.findIndex(palettes, { id: paletteId });
-            $dropDown.set("selectedIndex", index);
+            var index = $(".wv-palette-selector-row input[data-palette='" +
+                    paletteId + "']").iCheck("check");
+        } else {
+            $(".wv-palette-selector-row input[data-palette='__default']")
+                    .iCheck("check");
         }
-        dialog.show();
-        // FIXME: MAJOR HACK
-        wv.dialogs = wv.dialogs || {};
-        wv.dialogs.customPalette = dialog;
+
+        $("#wv-palette-selector input").on("ifChecked", function() {
+            var that = this;
+            setTimeout(function() {
+                var id = $(that).attr("data-palette");
+                if ( id === "__default" ) {
+                    models.palettes.remove(layer.id);
+                } else {
+                    models.palettes.add(layer.id, id);
+                }
+            }, 0);
+        });
+    };
+
+    var selectorItem = function(palette, id, description) {
+        wv.palettes.colorbar(canvas, palette);
+
+        var $row = $("<div></div>")
+                .addClass("wv-palette-selector-row");
+        var $radio = $("<input></input")
+                .attr("type", "radio")
+                .attr("id", "wv-palette-radio-" + id)
+                .attr("name", "wv-palette-radio")
+                .attr("data-palette", id);
+
+        var $label = $("<label></label>")
+                .attr("for", "wv-palette-radio-" + id);
+        var $image = $("<img></img>")
+                .attr("src", canvas.toDataURL("image/png"));
+        var $description = $("<span></span>")
+                .html(description);
+        $label.append($image);
+        $label.append($description);
+
+        $row.append($radio);
+        $row.append($label);
+
+        return $row;
     };
 
     var defaultPalette = function() {
         var palette = config.palettes.rendered[layer.palette.id];
-        wv.palettes.colorbar(canvas, palette);
-        return {
-            text: "Default",
-            image: canvas.toDataURL("image/png")
-        };
+        return selectorItem(palette, "__default", "Default");
     };
 
     var customPalette = function(id) {
@@ -124,12 +120,8 @@ wv.palettes.custom = wv.palettes.custom || function(config, models, layer) {
         var targetPalette = config.palettes.custom[id];
         var translatedPalette =
                 wv.palettes.translate(sourcePalette, targetPalette);
-        wv.palettes.colorbar(canvas, translatedPalette);
-        return {
-            text: targetPalette.name,
-            image: canvas.toDataURL("image/png"),
-            id: targetPalette.id
-        };
+
+        return selectorItem(translatedPalette, id, targetPalette.name);
     };
 
     var selectPalette = function() {
