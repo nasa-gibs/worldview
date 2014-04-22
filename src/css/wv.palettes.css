@@ -96,3 +96,8 @@
     margin-left:    5px;
 }
 
+.wv-palettes-color-box {
+    border: 1px solid black;
+    margin-right: 10px;
+    padding: 2px 8px 2px 8px;
+}

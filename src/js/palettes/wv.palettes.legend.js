@@ -33,7 +33,8 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         var $colorbarPanel = $("<div></div>")
                 .addClass("wv-palettes-panel");
         $colorbar = $("<canvas></canvas>")
-                .addClass("wv-palettes-colorbar");
+                .addClass("wv-palettes-colorbar")
+                .attr("title", "X");
 
         $colorbarPanel.append($colorbar);
         if ( layer.palette.single ) {
@@ -68,15 +69,19 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
             $parent.append($infoPanel);
         }
 
-        $colorbar.on("mousemove", function(event) {
-            showUnitHover(event);
-        }).on("mouseout", function() {
-            showUnitRange();
-        });
-
-        if ( layer.type !== "wms" && !layer.palette.single ) {
+        if ( layer.palette && layer.type !== "wms" && !layer.palette.single ) {
             $colorbar.on("click", showCustomSelector)
                 .addClass("editable");
+            $colorbar.on("mousemove", function(event) {
+                showUnitHover(event);
+            });
+            $colorbar.tooltip({
+                position: {
+                    my: "left middle",
+                    at: "right+15 middle",
+                    of: $colorbar
+                }
+            });
         }
         wv.palettes.colorbar(selector + " .wv-palettes-colorbar");
         model.events
@@ -120,7 +125,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
     };
 
     var showUnitHover = function(event) {
-        if ( !loaded || !layer.palette.classified ) {
+        if ( !loaded ) {
             return;
         }
         var palette = model.forLayer(layer.id);
@@ -129,12 +134,13 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         var percent = x / width;
         var bins = palette.values.length;
         var index = Math.floor(bins * percent);
-        if (index > bins) {
-            index = bins;
+        if (index >= bins) {
+            index = bins - 1;
         }
-        $(selector + " .wv-palettes-min").html("&nbsp;");
-        $(selector + " .wv-palettes-max").html("&nbsp;");
-        $(selector + " .wv-palettes-center").html(palette.values[index]);
+
+        $colorbar.tooltip("option", "content",
+            "<span class='wv-palettes-color-box' style='background: #" +
+            palette.colors[index] + "'>" + "</span>" + palette.values[index]);
     };
 
     var showCustomSelector = function(event) {

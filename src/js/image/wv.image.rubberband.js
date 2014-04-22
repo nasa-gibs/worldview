@@ -82,7 +82,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, config) {
             $(".ui-dialog").on("dialogclose", function() {
                 if ( state === "on" ) {
                     toggle();
-                };
+                }
             });
             draw();
         };

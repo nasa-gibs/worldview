@@ -51,7 +51,7 @@ $(function() {
         ];
         if ( config.features.dataDownload ) {
             parsers.push(wv.data.parse);
-        };
+        }
 
         _.each(parsers, function(parser) {
             parser(state, errors, config);

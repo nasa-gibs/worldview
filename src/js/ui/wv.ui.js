@@ -62,7 +62,7 @@ wv.ui = (function(self) {
      */
     self.notify = function(message, title) {
         var $dialog = self.getDialog();
-        var title = title || "Notice";
+        title = title || "Notice";
         $dialog.html(message).dialog({
             title: title,
             show: { effect: "fade" },
