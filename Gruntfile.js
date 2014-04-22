@@ -565,6 +565,7 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask("apache-config" , [
+        "brand",
         "copy:apache",
         "replace:apache",
         "rename:apache"
