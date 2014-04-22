@@ -1,4 +1,11 @@
 {
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/nasa-gibs/worldview.git"
+    },
+    "scripts": {
+        "test": "grunt test lint"
+    },
     "devDependencies": {
         "buster": "0.7.8",
         "grunt": "0.4.x",
