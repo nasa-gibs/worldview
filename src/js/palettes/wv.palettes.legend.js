@@ -69,9 +69,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
             $parent.append($infoPanel);
         }
 
-        if ( layer.palette && layer.type !== "wms" && !layer.palette.single ) {
-            $colorbar.on("click", showCustomSelector)
-                .addClass("editable");
+        if ( layer.palette && !layer.palette.single ) {
             $colorbar.on("mousemove", function(event) {
                 showUnitHover(event);
             });
@@ -82,7 +80,11 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
                     of: $colorbar
                 }
             });
+
+            $colorbar.on("click", showCustomSelector)
+                .addClass("editable");
         }
+
         wv.palettes.colorbar(selector + " .wv-palettes-colorbar");
         model.events
             .on("add", updateLegend)
