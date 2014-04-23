@@ -72,6 +72,9 @@ Start the build with:
 The ``dist`` directory now contains a ``worldview.tar.bz2`` file which
 can be uploaded and unpacked to a web server.
 
+*Please Note:* To run Worldview from your local machine, you will need to
+follow the instructions in [Development Notes](doc/developing.md).
+
 
 ## Other Information
 
