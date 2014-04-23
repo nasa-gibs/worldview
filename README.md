@@ -45,12 +45,15 @@ Licensed under the [NASA Open Source Agreement, Version 1.3](LICENSE.md).
 or broken until the next major release. The toolchain only works in a Mac OS X
 or a Linux environment at the moment.
 
-Download and install [Node.js](http://nodejs.org/). Now install a
-global version of [grunt](http://gruntjs.com/):
+Download and install [Node.js](http://nodejs.org/) using the intructions on
+their site. 
+
+Now install a global version of [grunt](http://gruntjs.com/) using the
+following command:
 
     sudo npm install --global grunt-cli
 
-Clone a copy of this repository and change to the ``worldview`` directory.
+Clone a copy of the Worldview repository and change to the ``worldview`` directory.
 Now install the packages required for building:
 
     npm install
