@@ -46,7 +46,7 @@ or broken until the next major release. The toolchain only works in a Mac OS X
 or a Linux environment at the moment.
 
 Download and install [Node.js](http://nodejs.org/) using the intructions on
-their site. 
+their site.
 
 Now install a global version of [grunt](http://gruntjs.com/) using the
 following command:
@@ -58,10 +58,12 @@ Now install the packages required for building:
 
     npm install
 
-Some python libraries are required. Run the following script which will
-install the necessary libraries in the python directory via virutalenv
-(If virtualenv is not yet installed, the script will attempt to globally
-install it via sudo):
+Some python libraries are required. Install virtualenv to keep additional
+libraries installed in a local directory:
+
+    sudo easy_install virtualenv==1.10.1
+
+Run the following script to install:
 
     ./python_install
 
