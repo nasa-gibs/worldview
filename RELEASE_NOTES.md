@@ -1,14 +1,19 @@
 # Release Notes
 
-## Version 0.6.5
-
-##### New Features
-* New layers: AMSR-E brightness temperatures, available from 2002/Jun/01 to
-2011/Oct/04
+## Version 0.6.6
 
 ##### Updates
-* Corrected color value in the Aerosol Optical Depth legend.
-* Corrected units range in Brightness Temperature
+
+* Data ranges for the OMI Sulfur Dioxide layers have changed from
+0.4/0.8 - 2.0 DU to 2.0 - 4.0 DU. The OMI Sulfur Dioxide Planetary Boundary
+layer is no longer being produced by the upstream provider and has been removed.
+Worldview will silently ignore the removed layer if provided in an
+exisitng permalink.
+* AMSR-E brightness temperature layers now correctly stop at 2011/Oct/04.
+* Link to the stylesheet in the open source library list has been fixed.
+* Worldview is now an open source project licensed under the NASA Open
+Source Agreement, Version 1.3 and is hosted on
+[github](https://github.com/nasa-gibs/worldview)
 
 ##### Known Issues
 * Internet Explorer 8 and below is not supported.
@@ -23,6 +28,16 @@ displayed properly in the older arctic projection (EPSG:3995).
 * A mixed content warning may be displayed when using layers from external
 servers not using https.
 * Layers with imagery before the year 2000 cannot be displayed.
+
+## Version 0.6.5 - April 10, 2014
+
+##### New Features
+* New layers: AMSR-E brightness temperatures, available from 2002/Jun/01 to
+2011/Oct/04
+
+##### Updates
+* Corrected color value in the Aerosol Optical Depth legend.
+* Corrected units range in Brightness Temperature
 
 
 ## Release 0.6.4 - March 13, 2014
