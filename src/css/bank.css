@@ -71,7 +71,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3ffffff', e
 .mCustomScrollBox > .mCSB_scrollTools {right: -6px;}
 
 
-.bank li.item a {float:right; color:#fff; margin-right:0.3em; cursor:default;}
+.bank li.item a {float:right; color:#444; margin-right:0.3em; cursor:default;}
 .bank li.item a.hdanchor {display:inline-block;  overflow:hidden; }
 .bank li.item h4 {font-size:0.85em; padding:0 3px;}
 .bank li.item p {padding:0 3px; color:#222; font-size:0.78em;}
@@ -79,7 +79,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3ffffff', e
 .bank li.item ul.palette li {float:left;}
 .bank ul.category {  overflow:auto; }
 .bank ul.category li h3 {display:block; clear:both; float:none;}
-img.bank-item-img { display:block; }
+img.bank-item-img { display:block;}
 img.hideReg { height: 14px; width: 20px; }
 .bank img.close { height: 14px; width: 14px; }
 
@@ -91,3 +91,10 @@ img.hideReg { height: 14px; width: 20px; }
     margin-left: 0 !important;
 }
 
+/* FIXME: This is ugly */
+.wv-layers-options-button {
+    float: right;
+    margin-top: 25px;
+    margin-right: -37px;
+    cursor: pointer;
+}

@@ -81,8 +81,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
                 }
             });
 
-            $colorbar.on("click", showCustomSelector)
-                .addClass("editable");
+            $colorbar.addClass("editable");
         }
 
         wv.palettes.colorbar(selector + " .wv-palettes-colorbar");
@@ -143,15 +142,6 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         $colorbar.tooltip("option", "content",
             "<span class='wv-palettes-color-box' style='background: #" +
             palette.colors[index] + "'>" + "</span>" + palette.values[index]);
-    };
-
-    var showCustomSelector = function(event) {
-        if ( wv.palettes.supported ) {
-            wv.palettes.custom(config, models, layer);
-        } else {
-            wv.ui.notify("This feature is not supported with your web " +
-                "browser. Upgrade or try again in a different browser");
-        }
     };
 
     init();
