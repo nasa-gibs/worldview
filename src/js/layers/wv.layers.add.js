@@ -90,6 +90,8 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
         $(self.selector + "search").on('keyup', filter);
         $(self.selector + "search").focus();
 
+        $(self.selector).iCheck({checkboxClass: 'icheckbox_square-grey'});
+
         updateAreasOfInterest();
         setTimeout(resize, 1);
     };
