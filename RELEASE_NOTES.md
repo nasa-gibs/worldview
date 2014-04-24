@@ -2,7 +2,7 @@
 
 ## Version 0.6.6
 
-##### Updates
+###### Updates
 
 * Data ranges for the OMI Sulfur Dioxide layers have changed from
 0.4/0.8 - 2.0 DU to 2.0 - 4.0 DU. The OMI Sulfur Dioxide Planetary Boundary
@@ -15,7 +15,7 @@ exisitng permalink.
 Source Agreement, Version 1.3 and is hosted on
 [github](https://github.com/nasa-gibs/worldview)
 
-##### Known Issues
+###### Known Issues
 * Internet Explorer 8 and below is not supported.
 * Internet Explorer 9 has difficulties rendering the user interface under
 certain circumstances, though should remain usable.
@@ -31,37 +31,37 @@ servers not using https.
 
 ## Version 0.6.5 - April 10, 2014
 
-##### New Features
+###### New Features
 * New layers: AMSR-E brightness temperatures, available from 2002/Jun/01 to
 2011/Oct/04
 
-##### Updates
+###### Updates
 * Corrected color value in the Aerosol Optical Depth legend.
 * Corrected units range in Brightness Temperature
 
 
 ## Release 0.6.4 - March 13, 2014
 
-#### Updates
+###### Updates
 * Lower bounds of MODIS Aerosol layers are now at -0.05 instead of 0.27
 
 
 ## Release 0.6.3 - March 6, 2014
 
-#### New Features
+###### New Features
 * Added a sampling of NSIDC MEaSUREs Freeze/Thaw products.
 * Permalinks can be shortened from within the application.
 * Class based layers now show a color legend. Hover over each color for its
 description.
 
-#### Updates
+###### Updates
 * No longer crashes when using private browsing mode in Safari.
 * Color legend for the AIRS Carbon Monoxide layer has been corrected.
 
 
 ## Release 0.6.2 - January 23, 2014
 
-#### Updates
+###### Updates
 * The map no longer caches tiles which could cause stale imagery to be shown.
 * Fixes the problem for iOS 7.1 where the date selector was hidden.
 * Fixes the problem where the sidebar was not fully collapsed in certain
@@ -74,7 +74,7 @@ smoother lines.
 
 ## Release 0.6.1 - November 18, 2013
 
-#### Updates
+###### Updates
 * Fixed the issue where units were not being displayed with the color legends.
 * wget and cURL download lists should now work consistently in Internet
 Explorer.
@@ -89,7 +89,7 @@ configuration file.
 
 ## Release 0.6.0 - October 31, 2013
 
-#### New Features
+###### New Features
 * Worldview now works in Internet Explorer 9+
 * Data granules can now be searched and downloaded from within the application
 * A product category has been added for "Featured" layers.
@@ -100,7 +100,7 @@ composited from Terra and Aqua
 projections.
 * Orbit tracks added for Calipso.
 
-#### Updates
+###### Updates
 * Active layers are now preserved when switching projections.
 * The style for layer names, scale bar, and mouse coordinates has changed to
 be more readable.
@@ -108,21 +108,21 @@ be more readable.
 
 ## Release 0.5.2 - September 25, 2013
 
-#### Updates
+###### Updates
 * Map tiles from GIBS are now retrieved using https and the browser no longer
 reports a mixed content warning.
 
 
 ## Release 0.5.1 - August 15, 2013
 
-#### New Features
+###### New Features
 * Added twenty AIRS (Atmospheric Infrared Sounder) products for temerature and
 relative humidity.
 
 
 ## Release 0.5.0 - July 17, 2013
 
-#### New Features
+###### New Features
 * Interface redesigned to support mobile devices.
 * The process for adding new layers has been streamlined and embedded into the
 active layers control.
@@ -132,7 +132,7 @@ the product name.
 * Image download now retains the screen location of the selection box.
 * New layers: Land / Water Map, Land Mask.
 
-#### Updates
+###### Updates
 * An invalid map extent can no longer be forced by resizing the browser window
 and switching projections.
 * The empty layer has been removed. All layers in the active list can now be
@@ -142,10 +142,10 @@ removed or hidden.
 
 ## Release 0.4.4 - June 5, 2013
 
-#### New Features
+###### New Features
 * Added fourteen Microwave Limb Sounder (MLS) products.
 
-#### Updates
+###### Updates
 * The Arctic projection has changed from Arctic Polar Stereographic
 (EPSG:3995, "Greenwich down") to NSIDC Polar Stereographic North
 (EPSG:3413, "Greenland down"). Imagery before this transition has not yet been
@@ -164,26 +164,26 @@ Debian 6 (Squeeze) although these browsers are not officialy supported.
 
 ## Release 0.4.3 - May 22, 2013
 
-#### Updates
+###### Updates
 * Fixed alignment issues with the date slider in Firefox 21.0
 
 
 ## Release 0.4.2 - April 29, 2013
 
-#### Updates
+###### Updates
 * Fixed issue where image download was using the wrong day in certain time
 zones.
 
 
 ## Release 0.4.1 - April 22, 2013
 
-#### Updates
+###### Updates
 * Fixed the file not found (404) error when using an unsupported browser.
 
 
 ## Release 0.4.0 - April 18, 2013
 
-#### New Features
+###### New Features
 * First-time users can take a tour that highlights the main features of
 Worldview.
 * Image download supported in polar projections.
@@ -194,7 +194,7 @@ My Layers.
 (Terra and Aqua / MODIS)
 * New product: Global 250m Water Map (Terra / MODIS, SRTM)
 
-#### Updates
+##### Updates
 * Image downloads for GeoTIFF now brings up a Save As... dialog.
 * Product selection can now scroll on iPads.
 * All layers can now be removed from the map.
@@ -213,45 +213,45 @@ near-real time processing delay.
 
 ## Release 0.3.1 - February 26, 2013
 
-#### New Features
+##### New Features
 * Notification message can now be displayed on startup.
 
-#### Updates
+##### Updates
 * Fixes issue where application can become unresponsive when going in and out
 of many category groups.
 
 
 ## Release 0.3.0 - February 7, 2013
 
-#### New Features
+##### New Features
 * Full-resolution imagery can now be selected and downloaded while in the
 geographic projection
 * Horizontal and vertical coordinates (e.g., latitude and longitude) of the
 point directly below the mouse cursor are now shown
 
-#### Updates
+##### Updates
 * A toolbar was created to hold certain user interface elements.
 
 
 ## Release 0.2.2
 
-#### Updates
+##### Updates
 * Fixed end-of-year bug
 
 
 ## Release 0.2.1
 
-#### Updates
+##### Updates
 * Added Suomi NPP/VIIRS City Lights 2012 imagery layer
 
 
 ## Release 0.2.0
 
-#### New Features
+##### New Features
 * Redesigned time slider allows selection of dates beginning in May 2012
 * Orbital tracks for Terra, Aqua, and Aura are available
 
-#### Updates
+##### Updates
 * A layer mask to show areas of "data vs no data" are now available for Terra
 and Aqua MODIS
 * Tweaked "pannable area" to be less restrictive
@@ -261,14 +261,14 @@ interactivity are improved
 
 ## Release 0.1.0
 
-#### New Features
+##### New Features
 * User interface redesigned for product selection and currently-shown layers
 * Color bars are available for palette-based products
 * Arctic and Antarctic views are integrated into main interface
 * Lower-resolution layers are dynamically rescaled on the client to be visible
 at higher zoom levels
 
-#### Updates
+##### Updates
 * Fires are viewable on a per-day basis as opposed to "past 24/48 hours"
 * Documentation for Worldview's backend, the Global Imagery Browse Services
 (GIBS), has been published (https://earthdata.nasa.gov/gibs)
