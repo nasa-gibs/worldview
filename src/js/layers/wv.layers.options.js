@@ -36,6 +36,9 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
 
     var loaded = function(custom) {
         var $dialog = wv.ui.getDialog();
+        $dialog.attr("id", "wv-layers-options-dialog");
+        renderOpacity($dialog);
+
         if ( custom ) {
             renderPaletteSelector($dialog);
         }
@@ -53,6 +56,25 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
                 of: $("#products")
             }
         }).iCheck({radioClass: 'iradio_square-grey'});
+    };
+
+    var renderOpacity = function($dialog) {
+        var $header = $("<div></div>")
+            .html("Opacity");
+        var $slider = $("<div></div>")
+            .noUiSlider({
+                start: models.layers.getOpacity(layer.id),
+                step: 0.1,
+                range: {
+                    min: 0,
+                    max: 1
+                },
+            }).on("slide", function() {
+                models.layers.setOpacity(layer.id, parseFloat($(this).val()));
+            });
+
+        $dialog.append($header);
+        $dialog.append($slider);
     };
 
     var renderPaletteSelector = function($dialog) {

@@ -12,6 +12,7 @@
 var wv = wv || {};
 wv.map = wv.map || {};
 
+// FIXME: This needs to be split out into model/ui sections
 wv.map.model = wv.map.model || function(models, config) {
 
     var containerId = "map";
@@ -46,7 +47,11 @@ wv.map.model = wv.map.model || function(models, config) {
         });
 
         models.proj.events.on("select", onProjectionSelect);
-        models.layers.events.on("change", onLayersChange);
+        models.layers.events.on("add", onLayersChange);
+        models.layers.events.on("remove", onLayersChange);
+        models.layers.events.on("update", onLayersChange);
+        models.layers.events.on("visibility", onLayersChange);
+        models.layers.events.on("opacity", onOpacityChange);
         models.date.events.on("select", onDateSelect);
         models.palettes.events.on("change", onPalettesChange);
     };
@@ -135,6 +140,10 @@ wv.map.model = wv.map.model || function(models, config) {
         self.maps.set(layers, visible);
         self.maps.setPalettes(models.palettes.active);
         self.events.trigger("projection");
+    };
+
+    var onOpacityChange = function(layer, opacity) {
+        self.maps.setOpacity(layer.id, opacity);
     };
 
     var onDateSelect = function() {

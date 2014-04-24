@@ -28,6 +28,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
         baselayers: [],
         overlays: []
     };
+    self.opacities = {};
     self.visible = {};
 
     var init = function() {
@@ -267,6 +268,17 @@ wv.layers.model = wv.layers.model || function(models, config) {
             self.events.trigger("visibility", layer, visible);
             self.events.trigger("change");
         }
+    };
+
+    self.setOpacity = function(id, opacity) {
+        var layer = getLayer(id);
+        self.opacities[id] = opacity;
+        self.events.trigger("opacity", layer, opacity);
+        self.events.trigger("change");
+    };
+
+    self.getOpacity = function(id) {
+        return ( _.has(self.opacities, id) ) ? self.opacities[id] : 1.0;
     };
 
     self.isActive = function(id) {
