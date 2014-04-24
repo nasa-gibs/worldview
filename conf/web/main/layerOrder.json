@@ -84,7 +84,6 @@
             "OMI_Aerosol_Index",
             "OMI_Aerosol_Optical_Depth",
             "OMI_Cloud_Pressure",
-            "OMI_SO2_Planetary_Boundary_Layer",
             "OMI_SO2_Lower_Troposphere",
             "OMI_SO2_Middle_Troposphere",
             "OMI_SO2_Upper_Troposphere_and_Stratosphere",
