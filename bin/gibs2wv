@@ -22,6 +22,7 @@ SKIP_LAYERS = [
     "Sea_Surface_Temp_Blended",
     "arctic_graticule_3413_reverb",
     "blue_marble_arctic",
+    "OMI_SO2_Planetary_Boundary_Layer",
 ]
 
 prog = os.path.basename(__file__)
