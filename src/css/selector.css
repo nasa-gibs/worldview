@@ -57,3 +57,7 @@ div.facetedSearch {display:block; background:#fff; width:96%; margin: .5em auto;
 #selectorbox .jspPane { width: 100% !important; }
 .selectorItem { margin-right: 20px; }
 
+
+#selectorbox .iCheck-checkbox {
+    margin-top: 3px;
+}

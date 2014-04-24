@@ -85,7 +85,8 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
         renderType($content, "baselayers", "Base Layers", "BaseLayers");
         renderType($content, "overlays", "Overlays", "Overlays");
         $(self.selector).append($content);
-        $(self.selector + " .selectorItem, " + self.selector + " .selectorItem input").on('click', toggleLayer);
+        //$(self.selector + " .selectorItem, " + self.selector + " .selectorItem input").on('click', toggleLayer);
+        $(self.selector + " .selectorItem, " + self.selector + " .selectorItem input").on('ifChanged', toggleLayer);
         $(self.selector + "select").on('change', filter);
         $(self.selector + "search").on('keyup', filter);
         $(self.selector + "search").focus();
@@ -126,6 +127,7 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
             console.warn("Skipping unknown layer", layerId);
             return;
         }
+        var $label = $("<label></label>");
         var $element = $("<li></li>")
             .addClass("selectorItem")
             .attr("data-layer", layerId)
@@ -162,7 +164,8 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
         $element.append($name);
         $element.append($description);
 
-        $parent.append($element);
+        $label.append($element);
+        $parent.append($label);
     };
 
     var adjustCategoryHeights = function() {
@@ -360,9 +363,9 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
                 filterProjection(layer) ||
                 filterSearch(layer, search);
             var display = filtered ? "none": "block";
-            var selector =
-                    "#" + wv.util.jqueryEscape(encodeURIComponent(layerId));
-            $(selector).parent().css("display", display);
+            var selector = "#selectorbox li[data-layer='" +
+                    wv.util.jqueryEscape(encodeURIComponent(layerId)) + "']";
+            $(selector).css("display", display);
             visible[layer.id] = !filtered;
         });
         adjustCategoryHeights();
