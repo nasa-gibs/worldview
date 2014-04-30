@@ -34,10 +34,6 @@ wv.map.set = wv.map.set || function(containerId, mapConfig, component) {
     // Public
     //-------------------------------------------------------------------------
 
-    /**
-     * Property: mapConfig
-     * The <Wordlview.JSON.MapConfig> used in configuration (read only).
-     */
     self.mapConfig = mapConfig;
 
     // Map objects, one for each supported projection
@@ -227,6 +223,8 @@ wv.map.set = wv.map.set || function(containerId, mapConfig, component) {
     * Throws:
     * An exception if the product for the given name is not defined.
     */
+    // FIXME: This awkwardness of this function is for historical reasons
+    // and can be cleaned up now.
     self.set = function(requestedLayers, visibleLayers) {
         var newLayers = [];
 

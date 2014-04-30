@@ -10,9 +10,9 @@
  */
 
 var wv = wv || {};
-wv.palettes = wv.palettes || {};
+wv.layers = wv.layers || {};
 
-wv.palettes.custom = wv.palettes.custom || function(config, models, layer) {
+wv.layers.options = wv.layers.options || function(config, models, layer) {
 
     var alignTo = "#products";
     var dialog;
@@ -22,31 +22,26 @@ wv.palettes.custom = wv.palettes.custom || function(config, models, layer) {
     var palettes;
 
     var init = function() {
-        canvas = document.createElement("canvas");
-        canvas.width = 140;
-        canvas.height = 10;
-        var promise = wv.palettes.loadCustom(config).done(loaded);
-        wv.ui.indicator.delayed(promise);
-
+        if ( layer.palette ) {
+            canvas = document.createElement("canvas");
+            canvas.width = 140;
+            canvas.height = 10;
+            var promise = wv.palettes.loadCustom(config).done(loaded);
+            wv.ui.indicator.delayed(promise);
+        } else {
+            loaded();
+        }
         models.layers.events.on("remove", onLayerRemoved);
     };
 
     var loaded = function(custom) {
         var $dialog = wv.ui.getDialog();
-        var $pane = $("<div><span autofocus></span>Color palette</div>")
-            .attr("id", "wv-palette-selector");
-        $pane.append(defaultPalette());
-        var recommended = layer.palette.recommended || [];
-        _.each(recommended, function(id) {
-            $pane.append(customPalette(id));
-        });
-        _.each(config.paletteOrder, function(id) {
-            if ( _.indexOf(recommended, id) < 0 ) {
-                $pane.append(customPalette(id));
-            }
-        });
-        $dialog.append($pane);
-        $pane.jScrollPane();
+        $dialog.attr("id", "wv-layers-options-dialog");
+        renderOpacity($dialog);
+
+        if ( custom ) {
+            renderPaletteSelector($dialog);
+        }
 
         $dialog.dialog({
             dialogClass: "wv-panel",
@@ -61,6 +56,42 @@ wv.palettes.custom = wv.palettes.custom || function(config, models, layer) {
                 of: $("#products")
             }
         }).iCheck({radioClass: 'iradio_square-grey'});
+    };
+
+    var renderOpacity = function($dialog) {
+        var $header = $("<div></div>")
+            .html("Opacity");
+        var $slider = $("<div></div>")
+            .noUiSlider({
+                start: models.layers.getOpacity(layer.id),
+                step: 0.1,
+                range: {
+                    min: 0,
+                    max: 1
+                },
+            }).on("slide", function() {
+                models.layers.setOpacity(layer.id, parseFloat($(this).val()));
+            });
+
+        $dialog.append($header);
+        $dialog.append($slider);
+    };
+
+    var renderPaletteSelector = function($dialog) {
+        var $pane = $("<div><span autofocus></span>Color palette</div>")
+            .attr("id", "wv-palette-selector");
+        $pane.append(defaultPalette());
+        var recommended = layer.palette.recommended || [];
+        _.each(recommended, function(id) {
+            $pane.append(customPalette(id));
+        });
+        _.each(config.paletteOrder, function(id) {
+            if ( _.indexOf(recommended, id) < 0 ) {
+                $pane.append(customPalette(id));
+            }
+        });
+        $dialog.append($pane);
+        $pane.jScrollPane();
 
         if ( models.palettes.active[layer.id] ) {
             var paletteId = models.palettes.active[layer.id];

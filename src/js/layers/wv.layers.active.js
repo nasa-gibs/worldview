@@ -153,6 +153,16 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         $visibleButton.append($visibleImage);
         $layer.append($visibleButton);
 
+        var $gearButton = $("<i></i>")
+            .addClass("fa")
+            .addClass("fa-gear")
+            .addClass("fa-1x")
+            .addClass("wv-layers-options-button")
+            .click(function() {
+                wv.layers.options(config, models, layer);
+            });
+        $layer.append($gearButton);
+
         $layer.append($("<h4></h4>").html(layer.title));
         $layer.append($("<p></p>").html(layer.subtitle));
 
