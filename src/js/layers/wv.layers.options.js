@@ -64,7 +64,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         var $slider = $("<div></div>")
             .noUiSlider({
                 start: models.layers.getOpacity(layer.id),
-                step: 0.1,
+                step: 0.01,
                 range: {
                     min: 0,
                     max: 1
@@ -176,4 +176,3 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
     return self;
 
 };
-

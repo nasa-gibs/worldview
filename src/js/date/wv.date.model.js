@@ -57,6 +57,10 @@ wv.date.model = wv.date.model || function(spec) {
         self.select(initial);
     };
 
+    self.string = function() {
+        return wv.util.toISOStringDate(self.selected);
+    };
+
     /**
      * Select a day to display on the map. If the selected date differs
      * from the current selection, a "selected" event is triggered.
@@ -124,4 +128,3 @@ wv.date.model = wv.date.model || function(spec) {
  * @event selected
  * @param {Date} date the newly selected day.
  */
-

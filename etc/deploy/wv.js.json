@@ -44,11 +44,10 @@
     "src/js/data/wv.data.ui.js",
 
     "src/js/map/wv.map.js",
-    "src/js/map/wv.map.layers.js",
     "src/js/map/wv.map.model.js",
-    "src/js/map/wv.map.set.js",
     "src/js/map/wv.map.palette.js",
-
+    "src/js/map/wv.map.ui.js",
+    
     "src/js/link/wv.link.model.js",
     "src/js/link/wv.link.ui.js",
 

@@ -12,85 +12,30 @@
 var wv = wv || {};
 wv.map = wv.map || {};
 
-// FIXME: This needs to be split out into model/ui sections
+// FIXME: The code is like this for historical reasons and should be refactored
+// at some point.
 wv.map.model = wv.map.model || function(models, config) {
 
-    var containerId = "map";
     var self = {};
 
-    /**
-     * Property: maps
-     * The <maps> that contains the map objects, one for
-     * each projection.
-     */
-    self.maps = null;
+    self.extent = [];
 
-    self.selected = null;
-
-    /**
-     * Property: config
-     * The map config object retrieved from the server that
-     * defines the available projections and data products.
-     */
-    self.config = config;
-
-    self.events = wv.util.events();
-
-    var init = function() {
-        self.config = validateConfig(self.config);
-        self.maps = wv.map.set(containerId, self.config, self);
-
-        $.each(self.config.layers, function(name, config) {
-            if ( config.defaultLayer === "true" ) {
-                self.maps.append(name);
-            }
-        });
-
-        models.proj.events.on("select", onProjectionSelect);
-        models.layers.events.on("add", onLayersChange);
-        models.layers.events.on("remove", onLayersChange);
-        models.layers.events.on("update", onLayersChange);
-        models.layers.events.on("visibility", onLayersChange);
-        models.layers.events.on("opacity", onOpacityChange);
-        models.date.events.on("select", onDateSelect);
-        models.palettes.events.on("change", onPalettesChange);
-    };
-
-    self.load = function(state, errors) {
-        onProjectionSelect();
+    self.load = function(state) {
         if ( state.map ) {
-            var map = self.maps.map;
-            // Verify that the viewport extent overlaps the valid extent, if
-            // invalid, just zoom out the max extent
-            var extent = state.map;
-            var intersects = extent.intersectsBounds(map.getMaxExtent());
-            if ( !intersects ) {
-                errors.push({message: "Extent outside of range"});
-                extent = map.getExtent();
-            }
-            self.maps.map.zoomToExtent(extent, true);
+            self.extent = state.map;
         } else {
             self.setExtentToLeading();
         }
-
-        // Initial state needs to be loaded here or the transition effect
-        // does not work when a palette is assigned via permalink
-        onDateSelect();
-        onLayersChange();
-        onPalettesChange();
     };
 
     self.save = function(state) {
-        state.map = self.maps.map.getExtent().toBBOX();
+        state.map = self.extent.slice(0);
     };
 
     self.setExtentToLeading = function() {
-        // Polar projections don't need to be positioned
-        if ( self.maps.projection !== "geographic" && self.maps.projection !== "webmerc" ) {
+        if ( models.proj.selected.id !== "geographic" ) {
             return;
         }
-
-        var map = self.maps.map;
 
         // Set default extent according to time of day:
         //   at 00:00 UTC, start at far eastern edge of map: "20.6015625,-46.546875,179.9296875,53.015625"
@@ -112,69 +57,8 @@ wv.map.model = wv.map.model || function(models, config) {
         var minLat = -46.546875;
         var maxLat = 53.015625;
 
-        var lat = minLat + (Math.abs(maxLat - minLat) / 2.0);
-        var lon = minLon + (Math.abs(maxLon - minLon) / 2.0);
-        var zoomLevel = 2;
-
-        var center = new OpenLayers.LonLat(lon, lat);
-        if ( self.maps.projection === "webmerc" ) {
-            center = center.transform("EPSG:4326", "EPSG:3857");
-            zoomLevel = 3;
-        }
-        map.setCenter(center, zoomLevel);
+        self.extent = [minLon, minLat, maxLon, maxLat];
     };
 
-    var onProjectionSelect = function() {
-        self.maps.setProjection(models.proj.selected.id);
-        self.selected = self.maps.map;
-        onLayersChange();
-    };
-
-    var onLayersChange = function() {
-        var active = models.layers.forProjection();
-        var layers =
-            _.pluck(active.overlays, "id")
-            .concat(_.pluck(active.baselayers, "id"));
-        layers.reverse();
-        var visible = models.layers.visible;
-        self.maps.set(layers, visible);
-        self.maps.setPalettes(models.palettes.active);
-        self.events.trigger("projection");
-    };
-
-    var onOpacityChange = function(layer, opacity) {
-        self.maps.setOpacity(layer.id, opacity);
-    };
-
-    var onDateSelect = function() {
-        self.maps.setDay(models.date.selected);
-    };
-
-    var onPalettesChange = function() {
-        self.maps.setPalettes(models.palettes.active);
-    };
-
-    /*
-     * Make sure that all the required parameters exist in the map
-     * configuration.
-     */
-    var validateConfig = function(config) {
-        var root = ["defaults", "projections", "layers"];
-        $.each(root, function(index, key) {
-            if ( !config.hasOwnProperty(key) ) {
-                throw key + " is required in the map configuration";
-            }
-        });
-        var _config = ["projection"];
-        $.each(_config, function(index, key) {
-            if ( !(key in config.defaults ) ) {
-                throw new Error("defaults." + key + " is required for the " +
-                        "map configuraiton");
-            }
-        });
-        return config;
-    };
-    init();
     return self;
 };
-

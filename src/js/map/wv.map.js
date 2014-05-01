@@ -24,48 +24,6 @@ wv.map = (function(self) {
             new OpenLayers.Bounds(-180, 60, 180, 90).toGeometry()
         ]);
 
-    /**
-     * An object that contains OpenLayers.Control.MousePosition objects
-     * that update the current latitude/longitude values on the map as the
-     * mouse moves. Keyed by projection name, either "geographic", "arctic",
-     * or "antarctic".
-     *
-     * Example:
-     *     *
-     * @attribute COORDINATE_CONTROLS
-     * @final
-     */
-    self.COORDINATE_CONTROLS = {
-        "geographic": new OpenLayers.Control.MousePosition({
-            formatOutput: function(mouseLonLat) {
-                return mouseLonLat.lon.toFixed(3) + "&#176;, " +
-                       mouseLonLat.lat.toFixed(3) + "&#176;";
-            }
-        }),
-        "arctic": new OpenLayers.Control.MousePosition({
-            projection: "EPSG:3413",
-            formatOutput: function(mouseLonLat) {
-                return this.projection + " " +
-                        Math.round(mouseLonLat.lon) + "m, " +
-                        Math.round(mouseLonLat.lat) + "m";
-            }
-        }),
-        "antarctic": new OpenLayers.Control.MousePosition({
-            formatOutput: function(mouseLonLat) {
-                return "EPSG:3031 " +
-                        Math.round(mouseLonLat.lon) + "m, " +
-                        Math.round(mouseLonLat.lat) + "m";
-            },
-        }),
-        "webmerc": new OpenLayers.Control.MousePosition({
-            formatOutput: function(mouseXY) {
-                var mouseLonLat = mouseXY.transform("EPSG:3857", "EPSG:4326");
-                return mouseLonLat.lon.toFixed(3) + "&#176;, " +
-                       mouseLonLat.lat.toFixed(3) + "&#176;";
-            }
-        })
-    };
-
     self.parse = function(state, errors) {
         if ( state.map ) {
             var extent = OpenLayers.Bounds.fromString(state.map);
@@ -291,4 +249,90 @@ wv.map.HoverControl = OpenLayers.Class(OpenLayers.Control, {
     out: function(feature) {
         this.events.triggerEvent("hoverout", {feature: feature});
     }
+});
+
+wv.map.mock = function() {
+
+    return {
+        setDay: function() {},
+        setOpacity: function() {},
+        setVisibility: function() {},
+        setZIndex: function() {},
+        dispose: function() {},
+        setLookup: function() {},
+        clearLookup: function() {}
+    };
+
+};
+
+
+wv.map.graticule = OpenLayers.Class(OpenLayers.Layer, {
+
+    graticuleLineStyle: null,
+    graticuleLabelStyle: null,
+    graticule: null,
+    isControl: true,
+
+    initialize: function(name, options) {
+        OpenLayers.Layer.prototype.initialize.apply(this, arguments);
+
+        this.graticuleLineStyle = new OpenLayers.Symbolizer.Line({
+            strokeColor: '#AAAAAA',
+            strokeOpacity: 0.95,
+            strokeWidth: 1.35,
+            strokeLinecap: 'square',
+            strokeDashstyle: 'dot'
+        });
+
+        this.graticuleLabelStyle = new OpenLayers.Symbolizer.Text({
+            fontFamily: 'Gill Sans',
+            fontSize: '16',
+            fontWeight: '550',
+            fontColor: '#0000e1',
+            fontOpacity: 1.0
+        });
+    },
+
+    /*
+     * Add the control when the layer is added to the map
+     */
+    setMap: function(map) {
+        OpenLayers.Layer.prototype.setMap.apply(this, arguments);
+
+        this.graticule = new OpenLayers.Control.Graticule({
+            layerName: 'ol_graticule_control',
+            numPoints: 2,
+            labelled: true,
+            lineSymbolizer: this.graticuleLineStyle,
+            labelSymbolizer: this.graticuleLabelStyle
+        });
+
+        map.addControl(this.graticule);
+    },
+
+    /*
+     * Remove the contorl when the layer is removed from the map
+     */
+    removeMap: function(map) {
+        OpenLayers.Layer.prototype.removeMap.apply(this, arguments);
+        map.removeControl(this.graticule);
+        this.graticule.destroy();
+        this.graticule = null;
+    },
+
+    setVisibility: function(value) {
+        if ( !this.granule ) {
+            return;
+        }
+        if ( value ) {
+            this.graticule.activate();
+        } else {
+            this.graticule.deactivate();
+        }
+    },
+
+    /*
+     * Name of this class per OpenLayers convention.
+     */
+    CLASS_NAME: "wv.map.layers.graticule"
 });

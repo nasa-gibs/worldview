@@ -20,7 +20,7 @@ wv.link = wv.link || {};
  *
  * @class wv.link.ui
  */
-wv.link.ui = wv.link.ui || function(models) {
+wv.link.ui = wv.link.ui || function(models, config) {
 
     var self = {};
     var id = "wv-link-button";

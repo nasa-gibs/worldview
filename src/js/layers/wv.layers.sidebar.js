@@ -18,7 +18,7 @@ wv.layers = wv.layers || {};
 /**
  * @class wv.layers.sidebar
  */
-wv.layers.sidebar = wv.layers.sidebar || function(models) {
+wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
 
     var HTML_TAB_ACTIVE_SELECTED =
         "<i class='productsIcon selected icon-layers'></i>" +

@@ -88,11 +88,11 @@ $(function() {
         if ( config.features.dataDownload ) {
             models.data = wv.data.model(models, config);
         }
+        models.map      = wv.map.model(models, config);
         models.link     = wv.link.model(config);
 
         // Export for debugging
         wv.models = models;
-
 
         var updateDateRange = function() {
             models.date.range(models.layers.dateRange());
@@ -107,23 +107,20 @@ $(function() {
             .register(models.proj)
             .register(models.layers)
             .register(models.date)
-            .register(models.palettes);
+            .register(models.palettes)
+            .register(models.map);
         if ( config.features.dataDownload) {
             models.link.register(models.data);
         }
         models.link.load(state);
         models.proj.change = wv.proj.change(models);
 
-        // Map is special as it actually creates UI components.
-        models.map = wv.map.model(models, config);
-        models.link.register(models.map);
-        models.map.load(state, errors);
-
         // Create widgets
         var ui = {};
 
+        ui.map = wv.map.ui(models, config);
         ui.proj = wv.proj.ui(models, config);
-        ui.sidebar = wv.layers.sidebar(models);
+        ui.sidebar = wv.layers.sidebar(models, config);
         ui.activeLayers = wv.layers.active(models, ui, config);
         ui.addLayers = wv.layers.add(models, ui, config);
         //ui.dateSliders = wv.date.sliders(models, config);
@@ -136,7 +133,7 @@ $(function() {
             // FIXME: Why is this here?
             ui.data.render();
         }
-        ui.link = wv.link.ui(models);
+        ui.link = wv.link.ui(models, config);
         ui.tour = wv.tour(models, ui);
 
         _.merge(wv.ui, ui);
@@ -168,10 +165,12 @@ $(function() {
                 ui.data.onViewChange(map);
             });
         */
+        /*
         if ( config.features.dataDownload ) {
             // FIXME: This is a hack
             models.map.events.on("projection", models.data.updateProjection);
         }
+        */
 
         // Console notifications
         if ( wv.brand.release() ) {
@@ -235,4 +234,3 @@ $(function() {
     wv.util.wrap(main)();
 
 });
-
