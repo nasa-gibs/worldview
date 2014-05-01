@@ -140,7 +140,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         clearLayers(map);
 
         map.addLayer(createLayerBlank(proj));
-        var layers = models.layers.get({proj: proj.id, reverse: true});
+        var layers = models.layers.get({flat: true, reverse: true});
         _.each(layers, function(layer) {
             map.addLayer(createLayer(layer, proj));
         });

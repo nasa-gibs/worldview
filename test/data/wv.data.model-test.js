@@ -81,4 +81,3 @@ buster.testCase("wv.data.model", {
         buster.refute.calledWith(this.models.wv.events.on, "startup");
     }
 });
-

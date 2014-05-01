@@ -291,7 +291,7 @@ wv.data.model = wv.data.model || function(models, config) {
         var productId = state.dataDownload;
         if ( productId ) {
             var found = false;
-            _.each(models.layers.get(), function(layer) {
+            _.each(models.layers.get({flat: true}), function(layer) {
                 if ( layer.product === productId ) {
                     found = true;
                 }
@@ -371,7 +371,7 @@ wv.data.model = wv.data.model || function(models, config) {
     var updateLayers = function() {
         self.layers = [];
         var foundSelected = false;
-        _.each(models.layers.forProjection(), function(type) {
+        _.each(models.layers.get(), function(type) {
             _.each(type, function(layer) {
                 var id = layer.id;
                 var layerName = layer.title;

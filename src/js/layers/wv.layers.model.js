@@ -54,28 +54,14 @@ wv.layers.model = wv.layers.model || function(models, config) {
         }
     };
 
-    // Deprecated
-    self.forProjection = function(proj) {
-        proj = proj || models.proj.selected.id;
-        var results = {
-            baselayers: [],
-            overlays: []
-        };
-        $.each(self.active, function(type, layers) {
-            $.each(layers, function(index, layer) {
-                if ( layer.projections[proj] ) {
-                    results[type].push(layer);
-                }
-            });
-        });
-        return results;
-    };
-
-    self.forGroup = function(group, spec) {
+    var forGroup = function(group, spec) {
         spec = spec || {};
+        var projId = spec.proj || models.proj.selected.id;
         var results = [];
-        var groups = self.forProjection();
-        _.each(groups[group], function(layer) {
+        _.each(self.active[group], function(layer) {
+            if ( !layer.projections[projId] ) {
+                return;
+            }
             if ( spec.visibleOnly && !self.visible[layer.id] ) {
                 return;
             }
@@ -92,9 +78,21 @@ wv.layers.model = wv.layers.model || function(models, config) {
 
     self.get = function(spec) {
         spec = spec || {};
-        var baselayers = self.forGroup("baselayers", spec);
-        var overlays = self.forGroup("overlays", spec);
-        return baselayers.concat(overlays);
+        var baselayers = forGroup("baselayers", spec);
+        var overlays = forGroup("overlays", spec);
+        if ( spec.group === "baselayers" ) {
+            return baselayers;
+        }
+        if ( spec.group === "overlays" ) {
+            return overlays;
+        }
+        if ( spec.group ) {
+            throw new Error("Invalid layer group: " + spec.group);
+        }
+        if ( spec.flat ) {
+            return baselayers.concat(overlays);
+        }
+        return { baselayers: baselayers, overlays: overlays };
     };
 
     self.available = function(layerId) {
@@ -162,18 +160,6 @@ wv.layers.model = wv.layers.model || function(models, config) {
                 end: new Date(max)
             };
         }
-    };
-
-    self.count = function(type, proj) {
-        proj = proj || models.proj.selected.id;
-        var layers = self.forProjection(proj);
-        return layers[type].length;
-    };
-
-    self.total = function(proj) {
-        proj = proj || models.proj.selected.id;
-        return self.count("baselayers", proj) +
-               self.count("overlays", proj);
     };
 
     self.add = function(id, hidden) {
@@ -295,7 +281,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
 
     self.save = function(state) {
         var groups = [];
-        _.each(self.forProjection(), function(layers, group) {
+        _.each(self.get(), function(layers, group) {
             group = [group];
             _.each(layers, function(layer) {
                 prefix = ( !self.visible[layer.id] ) ? "!": "";

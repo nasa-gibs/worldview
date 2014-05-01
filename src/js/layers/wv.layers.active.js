@@ -61,7 +61,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         );
 
         _.each(groups, function(group) {
-            renderType($container, group);
+            renderGroup($container, group);
         });
 
         $(self.selector).undelegate(".close" ,'click');
@@ -80,7 +80,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         $("." + self.id + "category li").disableSelection();
         $("." + self.id + "category").bind('sortstop', moveLayer);
 
-        $.each(model.forProjection().overlays, function(index, layer) {
+        _.each(model.get({ group: "overlays" }), function(layer) {
             if ( layer.palette ) {
                 renderLegendCanvas(layer);
             }
@@ -89,7 +89,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         setTimeout(resize, 1);
     };
 
-    var renderType = function($parent, group) {
+    var renderGroup = function($parent, group) {
         var $container = $("<div></div>")
             .attr("id", self.id + group.camel)
             .addClass("categoryContainer");
@@ -103,7 +103,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             .addClass(self.id + "category")
             .addClass("category");
 
-        $.each(model.forProjection()[group.id], function(index, layer) {
+        _.each(model.get({ group: group.id }), function(layer) {
             renderLayer($layers, group, layer);
         });
 

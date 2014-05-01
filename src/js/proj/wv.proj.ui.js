@@ -91,4 +91,3 @@ wv.proj.ui = wv.proj.ui || function(models, config) {
     return self;
 
 };
-
