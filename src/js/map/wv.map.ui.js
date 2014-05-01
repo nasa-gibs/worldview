@@ -131,7 +131,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         var activeLayers = map.layers.slice(0);
         _.each(activeLayers, function(mapLayer) {
             if ( mapLayer.name !== "Blank" ) {
-                map.removeLayer(activeLayers[i]);
+                map.removeLayer(mapLayer);
             }
         });
     };
