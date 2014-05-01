@@ -54,7 +54,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
             hideMap(self.selected);
         }
         self.selected = self.proj[models.proj.selected.id];
-        refreshLayers();
+        reloadLayers();
         showMap(self.selected);
     };
 
@@ -104,21 +104,26 @@ wv.map.ui = wv.map.ui || function(models, config) {
         adjustLayers();
     };
 
+    var refreshLayer = function(layer) {
+        var map = self.selected;
+        var proj = models.proj.selected;
+        var oldMapLayer = findLayer(layer.id);
+        var newMapLayer = createLayer(layer, proj);
+        var index = map.getLayerIndex(oldMapLayer);
+
+        map.addLayer(newMapLayer);
+        map.setLayerIndex(newMapLayer, index + 1);
+        map.removeLayer(oldMapLayer);
+    };
+
     var updateDate = function() {
-        /*
-        _.each(self.selected.layers, function(mapLayer) {
-            var layer = config.layers[mapLayer.wvid];
+        var proj = models.proj.selected;
+        var layers = models.layers.get({proj: proj.id});
+        _.each(layers, function(layer) {
             if ( layer.period === "daily" ) {
-                var newMapLayer = createLayer(layer, map.worldview.proj);
-                if ( models.layers.visible[layer.id] ) {
-                    newMapLayer.setVisible(true);
-                }
-                var oldMapLayer = mapLayers.getAt(index);
-                mapLayers.insertAt(index, newMapLayer);
-                map.removeLayer(oldMapLayer);
+                refreshLayer(layer);
             }
-        });*/
-        refreshLayers();
+        });
     };
 
     var clearLayers = function(map) {
@@ -128,7 +133,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         }
     };
 
-    var refreshLayers = function(map) {
+    var reloadLayers = function(map) {
         map = map || self.selected;
         var proj = models.proj.selected;
         clearLayers(map);
@@ -166,8 +171,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         var redraw = false;
         if ( !mapLayer.lookupTable ) {
             layerCache.clear();
-            removeLayer(layer);
-            addLayer(layer);
+            refreshLayer(layer);
             updateOrder();
         } else {
             mapLayer.lookupTable = getLookupTable(layerId);
@@ -182,8 +186,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
     var removePalette = function(layerId) {
         var layer = config.layers[layerId];
         layerCache.clear();
-        removeLayer(layer);
-        addLayer(layer);
+        refreshLayer(layer);
         updateOrder();
     };
 

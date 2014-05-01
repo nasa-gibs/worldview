@@ -262,7 +262,7 @@ label {
 #day-panel {
     position: absolute;
     left: 20em;
-    bottom: 1em;
+    bottom: 5em;
     padding: 1em;
     background-color: rgba(200, 200, 200, 0.8);
     border-radius: 5px;

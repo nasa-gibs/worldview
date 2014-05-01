@@ -72,6 +72,7 @@ wv.date.model = wv.date.model || function(spec) {
      * @return {Boolean} true if the date was updated, otherwise false.
      */
     self.select = function(date) {
+        date = wv.util.clearTimeUTC(date);
         if ( self.start && date < self.start ) {
             date = self.start;
         } else if ( self.end && date > self.end ) {
