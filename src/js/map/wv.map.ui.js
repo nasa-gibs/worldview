@@ -124,6 +124,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 refreshLayer(layer);
             }
         });
+        adjustLayers();
     };
 
     var clearLayers = function(map) {
