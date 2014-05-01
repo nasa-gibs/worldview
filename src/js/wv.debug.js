@@ -207,3 +207,19 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
     init();
 };
 
+// TEMP: Remove this once the new real slider goes in
+wv.debug.slider = function(models, config) {
+    $("#day-slider").slider({
+        value: 0,
+        min: -6,
+        max: 0,
+        step: 1,
+        slide: function(event, ui) {
+            // Add the slider value (effectively subracting) to today's
+            // date.
+            var newDay = new Date();
+            newDay.setUTCDate(new Date().getUTCDate() + ui.value);
+            models.date.select(newDay);
+        }
+    });
+}

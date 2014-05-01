@@ -125,6 +125,9 @@ $(function() {
         ui.addLayers = wv.layers.add(models, ui, config);
         //ui.dateSliders = wv.date.sliders(models, config);
         //ui.dateLabel = wv.date.label(models);
+        // TEMP: Remove this once the real slider goes in. Search for other
+        // comments marked as TEMP
+        wv.debug.slider(models, config);
         ui.dateWheels = wv.date.wheels(models, config);
         ui.rubberband = wv.image.rubberband(models, config);
         ui.image = wv.image.panel(models, ui, config);
