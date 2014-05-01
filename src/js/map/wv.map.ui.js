@@ -118,7 +118,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
 
     var updateDate = function() {
         var proj = models.proj.selected;
-        var layers = models.layers.get({proj: proj.id});
+        var layers = models.layers.get({flat: true});
         _.each(layers, function(layer) {
             if ( layer.period === "daily" ) {
                 refreshLayer(layer);
