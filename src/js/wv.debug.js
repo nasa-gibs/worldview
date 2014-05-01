@@ -222,4 +222,4 @@ wv.debug.slider = function(models, config) {
             models.date.select(newDay);
         }
     });
-}
+};
