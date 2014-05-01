@@ -129,9 +129,11 @@ wv.map.ui = wv.map.ui || function(models, config) {
 
     var clearLayers = function(map) {
         var activeLayers = map.layers.slice(0);
-        for ( var i = 0; i < activeLayers.length; i++ ) {
-            map.removeLayer(activeLayers[i]);
-        }
+        _.each(activeLayers, function(mapLayer) {
+            if ( mapLayer.name !== "Blank" ) {
+                map.removeLayer(activeLayers[i]);
+            }
+        });
     };
 
     var reloadLayers = function(map) {
@@ -139,7 +141,6 @@ wv.map.ui = wv.map.ui || function(models, config) {
         var proj = models.proj.selected;
         clearLayers(map);
 
-        map.addLayer(createLayerBlank(proj));
         var layers = models.layers.get({flat: true, reverse: true});
         _.each(layers, function(layer) {
             map.addLayer(createLayer(layer, proj));
@@ -261,8 +262,9 @@ wv.map.ui = wv.map.ui || function(models, config) {
             isBaseLayer: true,
             projection: proj.crs,
             maxExtent: proj.maxExtent,
-            maxResolution: proj.maxResolution,
-            units: proj.units || "dd"
+            resolutions: proj.resolutions,
+            units: proj.units || "dd",
+            numZoomLevels: proj.numZoomLevels
         };
         return new OpenLayers.Layer("Blank", options);
     };
