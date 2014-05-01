@@ -269,13 +269,15 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
     };
 
     var onLayerAdded = function(layer) {
-        var $element = $("#" + encodeURIComponent(layer.id));
-        $element.attr("checked", "checked");
+        var $element = $("#selectorbox [data-layer='" +
+                encodeURIComponent(layer.id) + "']");
+        $element.iCheck("check");
     };
 
     var onLayerRemoved = function(layer) {
-        var $element = $("#" + encodeURIComponent(layer.id));
-        $element.removeAttr("checked");
+        var $element = $("#selectorbox [data-layer='" +
+                encodeURIComponent(layer.id) + "']");
+        $element.iCheck("uncheck");
     };
 
     var onProjectionChange = function() {
