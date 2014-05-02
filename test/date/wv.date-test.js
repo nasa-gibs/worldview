@@ -11,12 +11,21 @@
 
 buster.testCase("wv.date", {
 
-    "Parses valid date": function() {
+    "1.1: Parses valid date": function() {
         var d = new Date(Date.UTC(2013, 0, 5));
         var state = { time: "2013-01-05" };
         var errors = [];
         wv.date.parse(state, errors);
-        buster.assert.equals(state.time, d);
+        buster.assert.equals(state.t, d);
+        buster.assert.equals(errors.length, 0);
+    },
+
+    "1.2: Parses valid date": function() {
+        var d = new Date(Date.UTC(2013, 0, 5));
+        var state = { t: "2013-01-05" };
+        var errors = [];
+        wv.date.parse(state, errors);
+        buster.assert.equals(state.t, d);
         buster.assert.equals(errors.length, 0);
     },
 
@@ -46,4 +55,3 @@ buster.testCase("wv.date", {
     }
 
 });
-

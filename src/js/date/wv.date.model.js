@@ -106,12 +106,12 @@ wv.date.model = wv.date.model || function(spec) {
     };
 
     self.save = function(state) {
-        state.time = self.selected.toISOString().split("T")[0];
+        state.t = self.selected.toISOString().split("T")[0];
     };
 
     self.load = function(state) {
-        if ( state.time ) {
-            self.select(state.time);
+        if ( state.t ) {
+            self.select(state.t);
         }
         if ( state.now ) {
             self.range({ start: self.start, end: self.end });

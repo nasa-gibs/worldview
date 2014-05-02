@@ -25,14 +25,21 @@ wv.map = (function(self) {
         ]);
 
     self.parse = function(state, errors) {
+        // 1.1 support
         if ( state.map ) {
-            var extent = OpenLayers.Bounds.fromString(state.map);
+            state.v = state.map;
+            delete state.map;
+        }
+        if ( state.v ) {
+            var extent = _.map(state.v.split(","), function(str) {
+                return parseFloat(str);
+            });
             var valid = wv.map.isExtentValid(extent);
             if ( !valid ) {
-                errors.push({message: "Invalid extent: " + state.map});
-                delete state.map;
+                errors.push({message: "Invalid extent: " + state.v});
+                delete state.v;
             } else {
-                state.map = extent;
+                state.v = extent;
             }
         }
     };
@@ -49,13 +56,17 @@ wv.map = (function(self) {
      * true.
      */
     self.isExtentValid = function(extent) {
-        if ( extent === undefined ) {
+        if ( _.isUndefined(extent) ) {
             return false;
         }
         var valid = true;
-        $.each(extent.toArray(), function(index, value) {
+        if ( extent.toArray ) {
+            extent = extent.toArray();
+        }
+        _.each(extent, function(value) {
             if ( isNaN(value) ) {
                 valid = false;
+                return false;
             }
         });
         return valid;

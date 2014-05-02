@@ -78,14 +78,13 @@ buster.testCase("wv.proj.model", {
         var model = wv.proj.model(this.config);
         var state = {};
         model.save(state);
-        buster.assert.equals(state["switch"], "geographic");
+        buster.assert.equals(state.p, "geographic");
     },
 
     "Loads state": function() {
         var model = wv.proj.model(this.config);
-        var state = {"switch": "arctic"};
+        var state = {"p": "arctic"};
         model.load(state);
         buster.assert.equals(model.selected.id, "arctic");
     }
-
 });

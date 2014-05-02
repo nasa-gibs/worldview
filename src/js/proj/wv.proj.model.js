@@ -51,11 +51,11 @@ wv.proj.model = wv.proj.model || function(config) {
     };
 
     self.save = function(state) {
-        state["switch"] = self.selected.id;
+        state.p = self.selected.id;
     };
 
     self.load = function(state) {
-        var projId = state["switch"];
+        var projId = state.p;
         if ( projId ) {
             self.select(projId);
         }

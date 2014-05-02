@@ -18,25 +18,23 @@ wv.map.model = wv.map.model || function(models, config) {
 
     var self = {};
 
-    self.extent = [];
+    self.extent = null;
 
     self.load = function(state) {
-        if ( state.map ) {
-            self.extent = state.map;
+        if ( state.v ) {
+            self.extent = state.v;
         } else {
-            self.setExtentToLeading();
+            if ( models.proj.selected.id === "geographic" ) {
+                self.setExtentToLeading();
+            }
         }
     };
 
     self.save = function(state) {
-        state.map = self.extent.slice(0);
+        state.v = self.extent.slice(0);
     };
 
     self.setExtentToLeading = function() {
-        if ( models.proj.selected.id !== "geographic" ) {
-            return;
-        }
-
         // Set default extent according to time of day:
         //   at 00:00 UTC, start at far eastern edge of map: "20.6015625,-46.546875,179.9296875,53.015625"
         //   at 23:00 UTC, start at far western edge of map: "-179.9296875,-46.546875,-20.6015625,53.015625"

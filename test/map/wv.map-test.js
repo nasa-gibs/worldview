@@ -17,13 +17,17 @@ buster.testCase("wv.map", {
         this.errors = [];
     },
 
-    "Parses state": function() {
+    "1.1: Parses state": function() {
         var state = { map: "0,1,2,3" };
         wv.map.parse(state, this.errors);
-        buster.assert.equals(state.map.left, 0);
-        buster.assert.equals(state.map.bottom, 1);
-        buster.assert.equals(state.map.right, 2);
-        buster.assert.equals(state.map.top, 3);
+        buster.assert.equals(state.v, [0, 1, 2, 3]);
+        buster.assert.equals(this.errors.length, 0);
+    },
+
+    "1.2: Parses state": function() {
+        var state = { v: "0,1,2,3" };
+        wv.map.parse(state, this.errors);
+        buster.assert.equals(state.v, [0, 1, 2, 3]);
         buster.assert.equals(this.errors.length, 0);
     },
 

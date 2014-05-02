@@ -432,7 +432,12 @@ wv.map.ui = wv.map.ui || function(models, config) {
         });
 
         map.addLayer(createLayerBlank(proj));
-        map.setCenter(proj.startCenter, proj.startZoom);
+
+        if ( models.proj.selected.id === proj.id && models.map.extent ) {
+            map.zoomToExtent(models.map.extent);
+        } else {
+            map.setCenter(proj.startCenter, proj.startZoom);
+        }
 
         map.events.register("zoomend", null, function() {
             if ( map.zoom === map.numZoomLevels - 1 ) {

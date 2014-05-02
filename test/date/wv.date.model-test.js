@@ -70,13 +70,13 @@ buster.testCase("wv.date.model", {
         date.select(d);
         var state = {};
         date.save(state);
-        buster.assert.equals(state.time, "2013-01-05");
+        buster.assert.equals(state.t, "2013-01-05");
     },
 
     "Loads state": function() {
         var date = new Date(Date.UTC(2013, 0, 5));
         var model = wv.date.model(this.config);
-        var state = { time: date };
+        var state = { t: date };
         model.load(state);
         buster.assert.equals(model.selected, date);
     },

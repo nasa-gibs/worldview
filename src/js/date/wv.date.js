@@ -5,12 +5,16 @@ wv.date = (function(self) {
 
     self.parse = function(state, errors) {
         if ( state.time ) {
+            state.t = state.time;
+            delete state.time;
+        }
+        if ( state.t ) {
             try {
-                state.time = wv.util.parseDateUTC(state.time);
+                state.t = wv.util.parseDateUTC(state.t);
             } catch ( error ) {
-                delete state.time;
+                delete state.t;
                 errors.push({
-                    message: "Invalid date: " + state.time,
+                    message: "Invalid date: " + state.t,
                     cause: error
                 });
             }
