@@ -95,13 +95,32 @@ wv.map.ui = wv.map.ui || function(models, config) {
     };
 
     var updateVisibility = function(layer, visible) {
-        findLayer(layer.id).setVisibility(visible);
+        var mapLayer = findLayer(layer.id);
+        mapLayer.setVisibility(visible);
         adjustLayers();
     };
 
     var updateOpacity = function(layer, opacity) {
-        findLayer(layer.id).setOpacity(opacity);
+        var mapLayer = findLayer(layer.id);
+        adjustTransition(layer, mapLayer, opacity);
+        mapLayer.setOpacity(opacity);
         adjustLayers();
+    };
+
+    var adjustTransition = function(layer, mapLayer, opacity) {
+        if ( opacity > 0 && opacity < 1 ) {
+            mapLayer.transitionEffect = null;
+            mapLayer.applyBackBuffer = mapLayer.fnDisabledBackBuffer;
+        } else {
+            var effect = null;
+            if ( layer.type === "wmts" ) {
+                effect = ( layer.noTransition ) ? null: "resize";
+            } else if ( layer.type === "wms" ) {
+                effect = ( layer.transition ) ? "resize": null;
+            }
+            mapLayer.transitionEffect = effect;
+            mapLayer.applyBackBuffer = mapLayer.fnEnabledBackBuffer;
+        }
     };
 
     var refreshLayer = function(layer) {
@@ -199,7 +218,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
     var adjustLayers = function() {
         var bottom = false;
         _.eachRight(self.selected.layers, function(mapLayer) {
-            if ( !mapLayer.wvid) {
+            if ( !mapLayer.wvid ) {
                 return;
             }
             if ( bottom ) {
@@ -212,21 +231,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
             if ( layer.group === "baselayer" && visible && opacity === 1.0 ) {
                 bottom = true;
             }
-            if ( opacity > 0.0 && opacity < 1.0 ) {
-                mapLayer.transitionEffect = "none";
-            } else {
-                mapLayer.transitionEffect = getTransition(layer);
-            }
         });
-    };
-
-    var getTransition = function(layer) {
-        if ( layer.type === "wmts" ) {
-            return ( layer.noTransition ) ? "none" : "resize";
-        } else if ( layer.type === "wms" ) {
-            return ( layer.transition ) ? "resize": "none";
-        }
-        throw new Error("Invalid layer type: " + layer.type);
     };
 
     var updateExtent = function() {
@@ -248,10 +253,16 @@ wv.map.ui = wv.map.ui || function(models, config) {
         }
         mapLayer.wvid = layer.id;
         mapLayer.wvgroup = layer.group;
+
+        mapLayer.fnEnabledBackBuffer = mapLayer.applyBackBuffer;
+        mapLayer.fnDisabledBackBuffer = function() {};
+
         if ( models.layers.visible[layer.id] ) {
             mapLayer.setVisibility(true);
         }
-        mapLayer.setOpacity(models.layers.getOpacity(layer.id));
+        var opacity = models.layers.getOpacity(layer.id);
+        mapLayer.setOpacity(opacity);
+        adjustTransition(layer, mapLayer, opacity);
         return mapLayer;
     };
 
@@ -285,11 +296,6 @@ wv.map.ui = wv.map.ui || function(models, config) {
                                           matrixSet.tileSize[1]),
             visibility: false
         };
-        if ( layer.noTransition ) {
-            param.transitionEffect = "none";
-        } else {
-            param.transitionEffect = "resize";
-        }
         if ( models.palettes.active[layer.id] ) {
             param.tileClass = wv.map.palette.canvasTile;
             param.lookupTable = getLookupTable(layer.id);
@@ -320,14 +326,6 @@ wv.map.ui = wv.map.ui || function(models, config) {
             tileSize: new OpenLayers.Size(512, 512),
             visiblity: false
         };
-        if ( layer.opacity ) {
-            options.opacity = layer.opacity;
-        }
-        if ( layer.transition ) {
-            options.transitionEffect = "resize";
-        } else {
-            options.transitionEffect = "none";
-        }
         var olLayer = new OpenLayers.Layer.WMS(layer.title, source.url,
                 params, options);
         return olLayer;
