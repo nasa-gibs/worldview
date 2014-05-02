@@ -107,6 +107,13 @@ wv.map.ui = wv.map.ui || function(models, config) {
         adjustLayers();
     };
 
+    // If the layer is not completely opaque, the resize transition doesn't
+    // work. A back buffer is used during the transition which ends up
+    // duplicating the layer during load which causes a flicker. In this
+    // case turn the transition off. Also, it appears that OpenLayers has
+    // a bug where the back buffer is used on a visibility change even
+    // if the resize transition is turned off. Also remove the back
+    // buffer function.
     var adjustTransition = function(layer, mapLayer, opacity) {
         if ( opacity > 0 && opacity < 1 ) {
             mapLayer.transitionEffect = null;
@@ -213,8 +220,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
 
     // After changes to the layer list, make sure that any layers underneath
     // an opaque layer are hidden to prevent tiles being fetched from the
-    // server. Any layers that are semi-transparent must have transitions
-    // turned off or the back buffer will interfere.
+    // server.
     var adjustLayers = function() {
         var bottom = false;
         _.eachRight(self.selected.layers, function(mapLayer) {
@@ -254,15 +260,18 @@ wv.map.ui = wv.map.ui || function(models, config) {
         mapLayer.wvid = layer.id;
         mapLayer.wvgroup = layer.group;
 
-        mapLayer.fnEnabledBackBuffer = mapLayer.applyBackBuffer;
-        mapLayer.fnDisabledBackBuffer = function() {};
 
         if ( models.layers.visible[layer.id] ) {
             mapLayer.setVisibility(true);
         }
+
+        // See the notes for adjustTransition for this awkward behavior.
+        mapLayer.fnEnabledBackBuffer = mapLayer.applyBackBuffer;
+        mapLayer.fnDisabledBackBuffer = function() {};
         var opacity = models.layers.getOpacity(layer.id);
         mapLayer.setOpacity(opacity);
         adjustTransition(layer, mapLayer, opacity);
+
         return mapLayer;
     };
 

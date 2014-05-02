@@ -120,7 +120,7 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
 
     var update = function(coords){
         try {
-            var map = models.map.selected;
+            var map = ui.map.selected;
             var bbox = map.getExtent();
             var time = models.date.selected;
             var pixels = coords;
@@ -128,7 +128,8 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
             var products = models.layers.get({
                 visibleOnly: true,
                 reverse: true,
-                availableOnly: true
+                availableOnly: true,
+                flat: true
             });
             // NOTE: This need to be changed back to the projection model
             // when the backfill removes the old projection.

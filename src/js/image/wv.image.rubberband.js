@@ -186,4 +186,3 @@ wv.image.rubberband = wv.image.rubberband || function(models, config) {
     init();
     return self;
 };
-
