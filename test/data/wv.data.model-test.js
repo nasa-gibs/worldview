@@ -23,6 +23,7 @@ buster.testCase("wv.data.model", {
             },
             layers: {
                 "layer1": {
+                    id: "layer1",
                     product: "product1",
                     group: "overlays",
                     projections: { geographic: {} }

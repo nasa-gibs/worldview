@@ -72,7 +72,7 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
 
     // FIXME: This should probably be renamed.
     self.inUse = function() {
-        var layers = models.layers.get({flat: true});
+        var layers = models.layers.get();
         var found = false;
         _.each(layers, function(layer) {
             if ( self.active[layer.id] ) {

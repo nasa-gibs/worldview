@@ -85,8 +85,8 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
         renderType($content, "baselayers", "Base Layers", "BaseLayers");
         renderType($content, "overlays", "Overlays", "Overlays");
         $(self.selector).append($content);
-        //$(self.selector + " .selectorItem, " + self.selector + " .selectorItem input").on('click', toggleLayer);
-        $(self.selector + " .selectorItem, " + self.selector + " .selectorItem input").on('ifChanged', toggleLayer);
+        $(self.selector + " .selectorItem, " + self.selector + " .selectorItem input").on('ifChecked', addLayer);
+        $(self.selector + " .selectorItem, " + self.selector + " .selectorItem input").on('ifUnchecked', removeLayer);
         $(self.selector + "select").on('change', filter);
         $(self.selector + "search").on('keyup', filter);
         $(self.selector + "search").focus();
@@ -156,7 +156,7 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
         if ( group === "baselayers" ) {
             $checkbox.attr("name", group);
         }
-        if ( model.isActive(layer.id) ) {
+        if ( _.find(model.active, {id: layer.id}) ) {
             $checkbox.attr("checked", "checked");
         }
 
@@ -251,21 +251,12 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
         adjustCategoryHeights();
     };
 
-    var toggleLayer = function(event) {
-        var $target;
-        if ( $(this).is(':checkbox') ) {
-            $target = $(this);
-        } else {
-            $target = $(this).find('input:checkbox');
-        }
-        if ( $target.is(':checked') ) {
+    var addLayer = function(event) {
+        model.add($(this).attr("data-layer"));
+    };
 
-            $target.attr('checked', false);
-            model.remove($target.attr("data-layer"));
-        } else {
-            $target.attr('checked', true);
-            model.add($target.attr("data-layer"));
-        }
+    var removeLayer = function(event) {
+        model.remove($(this).attr("data-layer"));
     };
 
     var onLayerAdded = function(layer) {

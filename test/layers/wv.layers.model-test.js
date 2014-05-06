@@ -103,7 +103,7 @@ buster.testCase("wv.layers.model", {
 
     "Saves state with hidden layer": function() {
         this.model.add("historical_1");
-        delete this.model.visible.historical_1;
+        this.model.setVisibility("historical_1", false);
         var state = {};
         this.model.save(state);
         buster.assert.equals(state.products, "baselayers,!historical_1");
@@ -115,8 +115,8 @@ buster.testCase("wv.layers.model", {
         };
         var errors = [];
         this.model.load(state, errors);
-        buster.assert.equals(this.model.active.baselayers[0].id, "historical_1");
-        buster.assert.equals(this.model.active.overlays[0].id, "historical_2");
+        buster.assert(_.find(this.model.active, { id: "historical_1" }));
+        buster.assert(_.find(this.model.active, { id: "historical_2" }));
         buster.assert.equals(errors.length, 0);
     },
 
@@ -127,8 +127,9 @@ buster.testCase("wv.layers.model", {
         };
         var errors = [];
         this.model.load(state, errors);
-        buster.assert.equals(this.model.active.baselayers[0].id, "historical_1");
-        buster.refute(this.model.visible.historical_1);
+        var def = _.find(this.model.active, { id: "historical_1" });
+        buster.assert(def);
+        buster.refute(def.visible);
         buster.assert.equals(errors.length, 0);
     }
 

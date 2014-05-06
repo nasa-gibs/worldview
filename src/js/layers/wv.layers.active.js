@@ -139,7 +139,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             .addClass("hide")
             .addClass("hideReg")
             .addClass("bank-item-img");
-        if ( !model.visible[layer.id] ) {
+        if ( !layer.visible ) {
             $visibleImage
                 .attr("title", "Show Layer")
                 .attr("data-action", "show")

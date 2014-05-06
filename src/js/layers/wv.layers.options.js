@@ -59,11 +59,12 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
     };
 
     var renderOpacity = function($dialog) {
+        var def = _.find(models.layers.active, { id: layer.id });
         var $header = $("<div></div>")
             .html("Opacity");
         var $slider = $("<div></div>")
             .noUiSlider({
-                start: models.layers.getOpacity(layer.id),
+                start: def.opacity,
                 step: 0.01,
                 range: {
                     min: 0,

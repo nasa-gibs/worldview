@@ -21,7 +21,9 @@ wv.map.ui = wv.map.ui || function(models, config) {
 
     // When the date changes, save the layer so that the tiles remain
     // cached.
-    var layerCache = new Cache(50);
+    var cache = {};
+    var stale = [];
+
     var $proj  = {};
 
     // One map for each projection
@@ -41,7 +43,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         models.layers.events.on("remove", removeLayer);
         models.layers.events.on("visibility", updateVisibility);
         models.layers.events.on("opacity", updateOpacity);
-        models.layers.events.on("update", updateOrder);
+        models.layers.events.on("update", updateMap);
         models.date.events.on("select", updateDate);
         models.palettes.events.on("add", addPalette);
         models.palettes.events.on("remove", removePalette);
@@ -66,91 +68,47 @@ wv.map.ui = wv.map.ui || function(models, config) {
         $(map.div).show();
     };
 
-    var addLayer = function(layer) {
+    var addLayer = function(def) {
+        updateLayer(def);
+        updateMap();
+    };
+
+    var updateLayer = function(def) {
         var map = self.selected;
-        var mapLayer = createLayer(layer, models.proj.selected);
-
-        // If this is a base layer, it should be added after the last
-        // base layer but before the first overlay
-        var lastLayer = 0;
-        _.each(map.layers, function(activeLayer, index) {
-            if ( layer.group === activeLayer.wvgroup ) {
-                lastLayer = index;
+        var key = layerKey(def);
+        if ( !_.find(map.layers, { key: key }) ) {
+            var renderable = models.layers.isRenderable(def.id);
+            if ( renderable ) {
+                if ( !cache[key] ) {
+                    var layer = createLayer(def);
+                    self.selected.addLayer(layer);
+                }
             }
-        });
-        self.selected.addLayer(mapLayer);
-        map.setLayerIndex(mapLayer, lastLayer + 1);
-        adjustLayers();
-    };
-
-    var removeLayer = function(layer) {
-        var map = self.selected;
-        var activeLayers = map.layers.slice(0);
-        _.each(activeLayers, function(mapLayer) {
-            if ( mapLayer.wvid === layer.id ) {
-                map.removeLayer(mapLayer);
-            }
-        });
-        adjustLayers();
-    };
-
-    var updateVisibility = function(layer, visible) {
-        var mapLayer = findLayer(layer.id);
-        mapLayer.setVisibility(visible);
-        adjustLayers();
-    };
-
-    var updateOpacity = function(layer, opacity) {
-        var mapLayer = findLayer(layer.id);
-        adjustTransition(layer, mapLayer, opacity);
-        mapLayer.setOpacity(opacity);
-        adjustLayers();
-    };
-
-    // If the layer is not completely opaque, the resize transition doesn't
-    // work. A back buffer is used during the transition which ends up
-    // duplicating the layer during load which causes a flicker. In this
-    // case turn the transition off. Also, it appears that OpenLayers has
-    // a bug where the back buffer is used on a visibility change even
-    // if the resize transition is turned off. Also remove the back
-    // buffer function.
-    var adjustTransition = function(layer, mapLayer, opacity) {
-        if ( opacity > 0 && opacity < 1 ) {
-            mapLayer.transitionEffect = null;
-            mapLayer.applyBackBuffer = mapLayer.fnDisabledBackBuffer;
-        } else {
-            var effect = null;
-            if ( layer.type === "wmts" ) {
-                effect = ( layer.noTransition ) ? null: "resize";
-            } else if ( layer.type === "wms" ) {
-                effect = ( layer.transition ) ? "resize": null;
-            }
-            mapLayer.transitionEffect = effect;
-            mapLayer.applyBackBuffer = mapLayer.fnEnabledBackBuffer;
         }
     };
 
-    var refreshLayer = function(layer) {
-        var map = self.selected;
-        var proj = models.proj.selected;
-        var oldMapLayer = findLayer(layer.id);
-        var newMapLayer = createLayer(layer, proj);
-        var index = map.getLayerIndex(oldMapLayer);
+    var removeLayer = function(def) {
+        updateMap();
+    };
 
-        map.addLayer(newMapLayer);
-        map.setLayerIndex(newMapLayer, index + 1);
-        map.removeLayer(oldMapLayer);
+    var updateVisibility = function(def, visible) {
+        updateLayer(def);
+        updateMap();
+    };
+
+    var updateOpacity = function(def) {
+        updateLayer(def);
+        updateMap();
     };
 
     var updateDate = function() {
-        var proj = models.proj.selected;
-        var layers = models.layers.get({flat: true});
-        _.each(layers, function(layer) {
-            if ( layer.period === "daily" ) {
-                refreshLayer(layer);
+        var defs = models.layers.get();
+        _.each(defs, function(def) {
+            if ( def.period === "daily" ) {
+                updateLayer(def);
             }
         });
-        adjustLayers();
+        updateMap();
     };
 
     var clearLayers = function(map) {
@@ -160,6 +118,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 map.removeLayer(mapLayer);
             }
         });
+        cache = {};
     };
 
     var reloadLayers = function(map) {
@@ -167,22 +126,78 @@ wv.map.ui = wv.map.ui || function(models, config) {
         var proj = models.proj.selected;
         clearLayers(map);
 
-        var layers = models.layers.get({flat: true, reverse: true});
-        _.each(layers, function(layer) {
-            map.addLayer(createLayer(layer, proj));
+        var defs = models.layers.get({reverse: true});
+        _.each(defs, function(def) {
+            addLayer(def);
         });
-        adjustLayers();
+        updateMap();
     };
 
-    var updateOrder = function() {
+    var purgeCache = function() {
         var map = self.selected;
-        var proj = models.proj.selected;
-        var layers = models.layers.get({proj: proj.id, reverse: true});
-        _.each(layers, function(layer, index) {
-            // Plus one because of the bogus base layer
-            map.setLayerIndex(findLayer(layer.id), index + 1);
+        _.each(_.clone(cache), function(layer) {
+            var def = config.layers[layer.wvid];
+            var renderable = models.layers.isRenderable(def.id);
+            var key = layerKey(def);
+            if ( !renderable || key !== layer.key ) {
+                layer.setVisibility(false);
+                delete cache[layer.key];
+                stale.push(layer);
+            }
         });
-        adjustLayers();
+        _.delay(function() {
+            _.each(stale, function(layer) {
+                map.removeLayer(layer);
+            });
+            stale = [];
+            updateMap();
+        }, 500);
+    };
+
+    var updateMap = function() {
+        var map = self.selected;
+        _.each(self.selected.layers, function(layer) {
+            if ( !layer.wvid ) {
+                return;
+            }
+            var def = _.find(models.layers.active, { id: layer.wvid });
+            var key = layerKey(def);
+            var renderable = models.layers.isRenderable(def.id);
+            if ( layer.key !== key || !renderable ) {
+                layer.setOpacity(0);
+                layer.div.style.zIndex = 0;
+            } else {
+                layer.setVisibility(true);
+                layer.setOpacity(def.opacity);
+                var length = models.layers.active.length;
+                var index = _.findIndex(models.layers.active, {id: def.id});
+                layer.div.style.zIndex = (length - index) + 1;
+                adjustTransition(def, layer);
+            }
+        });
+    };
+
+    var adjustTransition = function(def, layer) {
+        // If the layer is not completely opaque, the resize transition
+        // doesn't work. A back buffer is used during the transition which
+        // ends up duplicating the layer during load which causes a
+        // flicker. In this case turn the transition off. Also, it appears
+        // that OpenLayers has a bug where the back buffer is used on a
+        // visibility change even if the resize transition is turned off.
+        // Also remove the back buffer function.
+        if ( def.opacity > 0 && def.opacity < 1 ) {
+            layer.transitionEffect = null;
+            layer.applyBackBuffer = layer.fnDisabledBackBuffer;
+        } else {
+            var effect = null;
+            if ( def.type === "wmts" ) {
+                effect = ( def.noTransition ) ? null: "resize";
+            } else if ( def.type === "wms" ) {
+                effect = ( def.transition ) ? "resize": null;
+            }
+            layer.transitionEffect = effect;
+            layer.applyBackBuffer = layer.fnEnabledBackBuffer;
+        }
     };
 
     var getLookupTable = function(layerId) {
@@ -218,61 +233,31 @@ wv.map.ui = wv.map.ui || function(models, config) {
         updateOrder();
     };
 
-    // After changes to the layer list, make sure that any layers underneath
-    // an opaque layer are hidden to prevent tiles being fetched from the
-    // server.
-    var adjustLayers = function() {
-        var bottom = false;
-        _.eachRight(self.selected.layers, function(mapLayer) {
-            if ( !mapLayer.wvid ) {
-                return;
-            }
-            if ( bottom ) {
-                mapLayer.setVisibility(false);
-                return;
-            }
-            var layer = config.layers[mapLayer.wvid];
-            var visible = models.layers.visible[layer.id];
-            var opacity = models.layers.getOpacity(layer.id);
-            if ( layer.group === "baselayer" && visible && opacity === 1.0 ) {
-                bottom = true;
-            }
-        });
-    };
-
     var updateExtent = function() {
         models.map.extent = self.selected.getExtent().toArray();
     };
 
-    var createLayer = function(layer, proj) {
-        var key = layerKey(proj, layer, models.date.selected);
-        var mapLayer = layerCache.getItem(key);
-        if ( !mapLayer ) {
-            if ( layer.type === "wmts" ) {
-                mapLayer = createLayerWMTS(layer, proj);
-            } else if ( layer.type === "wms" ) {
-                mapLayer = createLayerWMS(layer, proj);
-            } else {
-                throw new Error("Unknown layer type: " + layer.type);
-            }
-            layerCache.setItem(key, mapLayer);
+    var createLayer = function(def) {
+        var key = layerKey(def);
+        if ( def.type === "wmts" ) {
+            layer = createLayerWMTS(def);
+        } else if ( layer.type === "wms" ) {
+            layer = createLayerWMS(def);
+        } else {
+            throw new Error("Unknown layer type: " + def.type);
         }
-        mapLayer.wvid = layer.id;
-        mapLayer.wvgroup = layer.group;
-
-
-        if ( models.layers.visible[layer.id] ) {
-            mapLayer.setVisibility(true);
-        }
-
+        cache[key] = layer;
+        layer.key = key;
+        layer.wvid = def.id;
+        layer.div.setAttribute("data-layer", def.id);
+        layer.div.setAttribute("data-key", key);
         // See the notes for adjustTransition for this awkward behavior.
-        mapLayer.fnEnabledBackBuffer = mapLayer.applyBackBuffer;
-        mapLayer.fnDisabledBackBuffer = function() {};
-        var opacity = models.layers.getOpacity(layer.id);
-        mapLayer.setOpacity(opacity);
-        adjustTransition(layer, mapLayer, opacity);
+        layer.fnEnabledBackBuffer = layer.applyBackBuffer;
+        layer.fnDisabledBackBuffer = function() {};
 
-        return mapLayer;
+        layer.setVisibility(false);
+        self.selected.addLayer(layer);
+        return layer;
     };
 
     var createLayerBlank = function(proj) {
@@ -289,55 +274,55 @@ wv.map.ui = wv.map.ui || function(models, config) {
         return new OpenLayers.Layer("Blank", options);
     };
 
-    var createLayerWMTS = function(layer, proj) {
-        var matrixSet = config.matrixSets[layer.projections[proj.id].matrixSet];
-        var source = config.sources[layer.projections[proj.id].source];
+    var createLayerWMTS = function(def) {
+        var proj = models.proj.selected;
+        var matrixSet = config.matrixSets[def.projections[proj.id].matrixSet];
+        var source = config.sources[def.projections[proj.id].source];
         var param = {
             url: source.url,
-            layer: layer.id,
+            layer: def.id,
             style: "",
-            format: layer.format,
+            format: def.format,
             matrixSet: matrixSet.id,
             maxResolution: matrixSet.maxResolution,
             serverResolutions: matrixSet.serverResolutions,
             maxExtent: proj.maxExtent,
             tileSize: new OpenLayers.Size(matrixSet.tileSize[0],
-                                          matrixSet.tileSize[1]),
-            visibility: false
+                                          matrixSet.tileSize[1])
         };
-        if ( models.palettes.active[layer.id] ) {
+        if ( models.palettes.active[def.id] ) {
             param.tileClass = wv.map.palette.canvasTile;
-            param.lookupTable = getLookupTable(layer.id);
+            param.lookupTable = getLookupTable(def.id);
         }
 
-        var olLayer = new OpenLayers.Layer.WMTS(param);
-        if ( layer.period === "daily" ) {
-            olLayer.mergeNewParams({"time": models.date.string()});
+        var layer = new OpenLayers.Layer.WMTS(param);
+        if ( def.period === "daily" ) {
+            layer.mergeNewParams({"time": models.date.string()});
         }
-        return olLayer;
+        return layer;
     };
 
-    var createLayerWMS = function(layer, proj) {
-        var source = config.sources[layer.projections[projId].source];
-        var layerParameter = layer.projections[projId].layer || layerId;
+    var createLayerWMS = function(def) {
+        var proj = models.proj.selected;
+        var source = config.sources[def.projections[projId].source];
+        var layerParameter = def.projections[projId].layer || def.id;
 
-        var transparent = ( layer.format === "image/png" );
+        var transparent = ( def.format === "image/png" );
 
         var params = {
             layers: layerParameter,
-            format: layer.format,
+            format: def.format,
             transparent: transparent
         };
-        if ( layer.period === "daily" ) {
+        if ( def.period === "daily" ) {
             params.time = models.date.string();
         }
         var options = {
-            tileSize: new OpenLayers.Size(512, 512),
-            visiblity: false
+            tileSize: new OpenLayers.Size(512, 512)
         };
-        var olLayer = new OpenLayers.Layer.WMS(layer.title, source.url,
+        var layer = new OpenLayers.Layer.WMS(def.title, source.url,
                 params, options);
-        return olLayer;
+        return layer;
     };
 
     var createMap = function(proj) {
@@ -459,25 +444,20 @@ wv.map.ui = wv.map.ui || function(models, config) {
             }
         });
         map.events.register("move", null, updateExtent);
-
+        map.events.register("movestart", null, purgeCache);
         $map.hide();
 
         return map;
     };
 
-    var findLayer = function(id) {
-        var found;
-        _.each(self.selected.layers, function(mapLayer) {
-            if ( mapLayer.wvid === id ) {
-                found = mapLayer;
-                return false;
-            }
-        });
-        return found;
-    };
-
-    var layerKey = function(proj, layer, date) {
-        return proj.id + ":" + layer.id + ":" + date.getTime();
+    var layerKey = function(layerDef) {
+        var layerId = layerDef.id;
+        var projId = models.proj.selected.id;
+        var date = wv.util.toISOStringDate(models.date.selected);
+        var dateId = ( layerDef.period === "daily" ) ? date : "";
+        var activePalette = models.palettes.active[layerDef.id];
+        var typeId = ( activePalette ) ? "canvas" : "image";
+        return [layerId, projId, dateId, typeId].join(":");
     };
 
     init();

@@ -290,12 +290,7 @@ wv.data.model = wv.data.model || function(models, config) {
     self.load = function(state, errors) {
         var productId = state.dataDownload;
         if ( productId ) {
-            var found = false;
-            _.each(models.layers.get({flat: true}), function(layer) {
-                if ( layer.product === productId ) {
-                    found = true;
-                }
-            });
+            var found = _.find(models.layers.active, { product: productId });
             if ( !found ) {
                 errors.push({message: "No active layers match product: " +
                         productId});
