@@ -12,7 +12,7 @@
 
 import json
 from optparse import OptionParser
-import os 
+import os
 import xmltodict
 
 prog = os.path.basename(__file__)
@@ -25,7 +25,7 @@ Convert an SLD document to a JSON palette suitable for Worldview.
 parser = OptionParser(usage="Usage: %s [options] sld_file output_dir" % prog,
                       version="%s version %s" % (prog, version),
                       epilog=help_description)
-parser.add_option("-o", "--output-dir", default=".", 
+parser.add_option("-o", "--output-dir", default=".",
                   help="Use this for output instead of the current directory")
 (options, args) = parser.parse_args()
 if len(args) < 0:
@@ -42,7 +42,7 @@ for input_file in args:
     with open(input_file) as fp:
         xml = fp.read()
     sld = xmltodict.parse(xml)
-    
+
     layers = to_list(sld["StyledLayerDescriptor"]["NamedLayer"])
     for layer in layers:
         name = layer["Name"]
@@ -66,11 +66,7 @@ for input_file in args:
         palette = {
             "id": name,
             "colors": colors,
-            "values": values 
+            "values": values
         }
         with open(os.path.join(output_dir, name + ".json"), "w") as fp:
             json.dump(palette, fp)
-
-        
-
-

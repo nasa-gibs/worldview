@@ -27,35 +27,61 @@ SKIP_LAYERS = [
 
 prog = os.path.basename(__file__)
 base_dir = os.path.join(os.path.dirname(__file__), "..")
-version = "1.0.0"
+version = "2.0.0"
 help_description = """\
-Extracts configuration information from a GetCapabilities file.
+Extracts configuration information from a WMTS GetCapabilities file.
 """
 
-parser = OptionParser(usage="Usage: %s [options] file [file...]" % prog,
+parser = OptionParser(usage="Usage: %s <config_file> <input_dir> <output_dir>" % prog,
                       version="%s version %s" % (prog, version),
                       epilog=help_description)
 (options, args) = parser.parse_args()
 
-wv = {
-    "layers": {}
-}
+if len(args) != 3:
+    parser.error("Invalid number of arguments")
 
-for filename in args:
-    with open(filename) as fp:
+config_file = args[0]
+input_dir = args[1]
+output_dir = args[2]
+
+with open(config_file) as fp:
+    config = json.load(fp)
+
+if not "wv-options-wmts" in config:
+    sys.exit(0)
+
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
+
+entries = config["wv-options-wmts"]
+skip = []
+if "skip" in config:
+    skip = config["skip"]
+
+for entry in entries:
+    wv = {
+        "layers": {},
+        "sources": {}
+    }
+    wv_matrix_sets = {}
+    wv["sources"][entry["source"]] = {
+        "matrixSets": wv_matrix_sets
+    }
+
+    input_file = os.path.join(input_dir, entry["from"])
+    with open(input_file) as fp:
         xml = fp.read()
     gc = xmltodict.parse(xml)
 
     gc_contents = gc["Capabilities"]["Contents"]
     wv_layers = wv["layers"]
-    for gc_layer in gc_contents["Layer"]:
 
+    for gc_layer in gc_contents["Layer"]:
         id = gc_layer["ows:Identifier"]
-        if id in SKIP_LAYERS:
-            sys.stderr.write("Skipping layer: {0}\n".format(id))
+        if id in skip:
+            print "%s: Skipping layer: %s" % (prog, id)
             continue
-        if id not in wv_layers:
-            wv_layers[id] = {}
+        wv_layers[id] = {}
         wv_layer = wv_layers[id]
 
         wv_layer["id"] = id
@@ -82,31 +108,34 @@ for filename in args:
 
         # Extract matrix set
         matrixSet = gc_layer["TileMatrixSetLink"]["TileMatrixSet"]
-        if not "projections" in wv_layer:
-            wv_layer["projections"] = {}
-        if matrixSet.startswith("EPSG4326"):
-            wv_layer["projections"]["geographic"] = {
-                 "source": "GIBS:geographic",
-                 "matrixSet": "GIBS:" + matrixSet
-            }
-        if matrixSet.startswith("EPSG3413"):
-            wv_layer["projections"]["arctic"] = {
-                 "source": "GIBS:arctic",
-                 "matrixSet": "GIBS:" + matrixSet
-            }
-        if matrixSet.startswith("EPSG3031"):
-            wv_layer["projections"]["antarctic"] = {
-                 "source": "GIBS:antarctic",
-                 "matrixSet": "GIBS:" + matrixSet
-            }
-        if matrixSet.startswith("GoogleMaps"):
-            wv_layer["projections"]["webmerc"] = {
-                "source": "GIBS:webmerc",
+        wv_layer["projections"] = {
+            entry["projection"]: {
+                "source": entry["source"],
                 "matrixSet": matrixSet
             }
+        }
 
-json_options = {}
-json_options["indent"] = 4
-json_options["separators"] = (',', ': ')
+    for gc_matrix_set in gc_contents["TileMatrixSet"]:
+        id = gc_matrix_set["ows:Identifier"]
+        zoom_levels = len(gc_matrix_set["TileMatrix"])
+        resolutions = []
+        max_resolution = entry["maxResolution"]
+        for zoom in xrange(0, zoom_levels):
+            resolutions = resolutions + [max_resolution / (2 ** zoom)]
+        wv_matrix_sets[id] = {
+            "id": id,
+            "maxResolution": max_resolution,
+            "resolutions": resolutions,
+            "tileSize": [
+                gc_matrix_set["TileMatrix"][0]["TileWidth"],
+                gc_matrix_set["TileMatrix"][0]["TileHeight"]
+            ]
+        }
 
-print json.dumps(wv, **json_options)
+    json_options = {}
+    json_options["indent"] = 4
+    json_options["separators"] = (',', ': ')
+
+    output_file = os.path.join(output_dir, entry["to"])
+    with open(output_file, "w") as fp:
+        json.dump(wv, fp, **json_options)

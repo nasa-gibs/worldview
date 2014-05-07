@@ -1,0 +1,50 @@
+#!/usr/bin/env python
+#
+# NASA Worldview
+#
+# This code was originally developed at NASA/Goddard Space Flight Center for
+# the Earth Science Data and Information System (ESDIS) project.
+#
+# Copyright (C) 2013 - 2014 United States Government as represented by the
+# Administrator of the National Aeronautics and Space Administration.
+# All Rights Reserved.
+#
+
+from optparse import OptionParser
+import os
+import sys
+import json
+import urllib2 as urllib
+
+prog = os.path.basename(__file__)
+base_dir = os.path.join(os.path.dirname(__file__), "..")
+version = "1.0.0"
+help_description = """\
+Fetches options from remote locations
+"""
+
+parser = OptionParser(usage="Usage: %s <config> <output_dir>" % prog,
+                      version="%s version %s" % (prog, version),
+                      epilog=help_description)
+
+(options, args) = parser.parse_args()
+if len(args) != 2:
+    parser.error("Invalid number of arguments")
+
+config_file = args[0]
+output_dir = args[1]
+
+os.makedirs(output_dir)
+
+with open(config_file) as fp:
+    config = json.load(fp)
+
+if "wv-options-fetch" in config:
+    for entry in config["wv-options-fetch"]:
+        url = entry["from"]
+        print "%s: %s" % (prog, url)
+        response = urllib.urlopen(url)
+        contents = response.read()
+        output_file = os.path.join(output_dir, entry["to"])
+        with open(output_file, "w") as fp:
+            fp.write(contents)

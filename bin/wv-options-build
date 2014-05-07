@@ -1,0 +1,53 @@
+#!/bin/bash
+#
+# NASA Worldview
+#
+# This code was originally developed at NASA/Goddard Space Flight Center for
+# the Earth Science Data and Information System (ESDIS) project.
+#
+# Copyright (C) 2013 - 2014 United States Government as represented by the
+# Administrator of the National Aeronautics and Space Administration.
+# All Rights Reserved.
+#
+
+set -e
+
+PROG=$(basename "$0")
+BASE=$(dirname "$0")/..
+
+BIN_DIR="$BASE/bin"
+SRC_DIR="$BASE/options"
+BUILD_DIR="$BASE/build/options-build"
+DEST_DIR="$BASE/build/options"
+
+die() {
+    echo "$PROG: ERROR: $@" >& 2
+    exit 1
+}
+
+[ -d "$SRC_DIR" ] || die "Options directory does not exist"
+
+rm -rf "$BUILD_DIR" "$DEST_DIR"
+mkdir -p "$BUILD_DIR" "$DEST_DIR"
+
+cp -r "$SRC_DIR"/* "$BUILD_DIR"
+
+mkdir "$DEST_DIR/config"
+
+if [ -e "$BUILD_DIR/features.json" ] ; then
+    cp "$BUILD_DIR/features.json" "$BUILD_DIR/config/wv.json/_features"
+fi
+
+if [ -e "$BUILD_DIR/config.json" ] ; then
+    "$BIN_DIR/wv-options-fetch" "$BUILD_DIR/config.json" "$BUILD_DIR/fetch"
+    "$BIN_DIR/wv-options-wmts" "$BUILD_DIR/config.json" "$BUILD_DIR/fetch" \
+            "$BUILD_DIR/config/wv.json/_wmts"
+fi
+
+configs=$(ls "$BUILD_DIR/config")
+for config in $configs; do
+    if [ -d "$BUILD_DIR/config/$config" ] ; then
+        "$BIN_DIR/wv-options-merge" "$BUILD_DIR/config/$config" \
+             "$DEST_DIR/config/$config"
+    fi
+done

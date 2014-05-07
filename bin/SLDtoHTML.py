@@ -16,10 +16,10 @@ class ColorMapEntry():
     label     = ""
     opacity   = None
     color     = ""
-    
+
     def __hash__(self):
         return hash(self.quantity)
-        
+
     def __cmp__(self, other):
         return self.quantity.cmp(other.quantity)
 
@@ -30,16 +30,16 @@ class ColorMapEntry():
 class NamedLayer():
     name    = ""
     entries = []
-    
+
     def __hash__(self):
         return hash(self.name)
-        
+
     def __cmp__(self, other):
         return self.name.cmp(other.name)
 
     def __eq__(self, other):
         return self.name.eq(other.name)
-    
+
 ## Global Variables ##
 layerList = []
 
@@ -54,16 +54,16 @@ def getText(nodelist):
 
 ## START Parse SLD ##
 def parseSLD(sourceXml) :
-    
+
     xmldoc     = minidom.parse(sourceXml)
     opacity    = None
 
     #for childNode in xmldoc.documentElement.childNodes :
     for nlNode in xmldoc.documentElement.getElementsByTagName("NamedLayer") :
-        
+
         namedLayer = NamedLayer()
         namedLayer.entries = []
-        
+
         for nlChildNode in nlNode.childNodes :
             if nlChildNode.nodeType == Node.ELEMENT_NODE :
                 if nlChildNode.nodeName == "Name" or nlChildNode.nodeName == "se:Name" :
@@ -81,23 +81,23 @@ def parseSLD(sourceXml) :
                                 if rsymChildNode.nodeName == "ColorMap" or rsymChildNode.nodeName == "se:ColorMap":
                                     for entryNode in rsymChildNode.getElementsByTagName("ColorMapEntry") :
                                         attrDict = dict(entryNode.attributes.items())
-    
+
                                         cmEntry = ColorMapEntry()
-                                        
+
                                         if 'opacity' in attrDict :
                                             cmEntry.opacity = float(attrDict['opacity'])
                                         elif opacity != None :
                                             cmEntry.opacity = opacity
-                                            
+
                                         if 'quantity' in attrDict :
                                             cmEntry.quantity = float(attrDict['quantity'])
-                                            
+
                                         cmEntry.label = attrDict.get('label', '')
                                         cmEntry.color = attrDict['color']
 
-                                    
+
                                         namedLayer.entries.append(cmEntry)
-                                
+
         layerList.append(namedLayer)
 
 
@@ -115,7 +115,7 @@ def is_bright(color):
 
 ## START Generate HTML ##
 def generateHTML(sldFile) :
-    
+
     for layer in layerList :
         print("<!doctype html>")
         print("<html>")
@@ -129,24 +129,24 @@ def generateHTML(sldFile) :
         print("<p>Download SLD file <a href=\"" + sldFile + "\">here</a><br><br>")
 
         print("<table>")
-        
+
         print("  <tr>")
         print("    <th>Color</th>")
         print("    <th class='opacity'>Opacity</th>")
         print("    <th class='data-value'>Label</th>")
         print("    <th class='data-value'>Quantity</th>")
         print("  </tr>")
-        
+
         for entry in layer.entries :
             print("  <tr>")
-            print("    <td class='color' bgcolor=" + entry.color + ">" + 
+            print("    <td class='color' bgcolor=" + entry.color + ">" +
                   "<font color=\"" + ("black" if is_bright(entry.color) else "white") + "\">" +
                   entry.color + "</font></td>")
             print("    <td class='opacity'>" + (str(entry.opacity) if entry.opacity != None else "") + "</td>")
             print("    <td class='data-value'>" + entry.label.encode('ascii', 'xmlcharrefreplace') + "</td>")
             print("    <td class='data-value'>" + (str(entry.quantity) if entry.quantity != None else "") + "</td>")
             print("  </tr>")
-        
+
         print("</table>")
         print("</body>")
         print("</html>")
@@ -172,4 +172,3 @@ def main(argv):
 
 if __name__ == "__main__":
    main(sys.argv[1:])
-

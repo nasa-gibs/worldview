@@ -11,10 +11,4 @@ doc
 tools
 *~
 *.swp
-etc/brand.*
-!etc/brand.default
-!etc/brand.worldview
-/brand
-conf/web/brand
-src/pages/brand
-src/images/brand
+options
