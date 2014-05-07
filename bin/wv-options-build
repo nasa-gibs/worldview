@@ -43,11 +43,21 @@ if [ -e "$BUILD_DIR/config.json" ] ; then
     "$BIN_DIR/wv-options-wmts" "$BUILD_DIR/config.json" "$BUILD_DIR/fetch" \
             "$BUILD_DIR/config/wv.json/_wmts"
 fi
+if [ -e "$BUILD_DIR/colormaps" ] ; then
+    mkdir -p "$BUILD_DIR"/config/palettes
+    find "$BUILD_DIR"/colormaps -type f -exec "$BIN_DIR/wv-options-colormap" \
+        {} "$BUILD_DIR/config/palettes" \;
+fi
 
 configs=$(ls "$BUILD_DIR/config")
 for config in $configs; do
-    if [ -d "$BUILD_DIR/config/$config" ] ; then
-        "$BIN_DIR/wv-options-merge" "$BUILD_DIR/config/$config" \
-             "$DEST_DIR/config/$config"
-    fi
+    case $config in
+        *.json)
+            "$BIN_DIR/wv-options-merge" "$BUILD_DIR/config/$config" \
+                 "$DEST_DIR/config/$config"
+             ;;
+         *)
+             cp -r "$BUILD_DIR/config/$config" "$DEST_DIR/config/$config"
+             ;;
+    esac
 done

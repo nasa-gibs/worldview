@@ -1,0 +1,67 @@
+#!/usr/bin/env python
+#
+# NASA Worldview
+#
+# This code was originally developed at NASA/Goddard Space Flight Center for
+# the Earth Science Data and Information System (ESDIS) project.
+#
+# Copyright (C) 2013 - 2014 United States Government as represented by the
+# Administrator of the National Aeronautics and Space Administration.
+# All Rights Reserved.
+#
+
+from optparse import OptionParser
+import os
+import sys
+import json
+import xmltodict
+
+prog = os.path.basename(__file__)
+base_dir = os.path.join(os.path.dirname(__file__), "..")
+version = "1.0.0"
+help_description = """\
+Converts colormaps to JSON files
+"""
+
+parser = OptionParser(usage="Usage: %s <input_file> <output_dir>" % prog,
+                      version="%s version %s" % (prog, version),
+                      epilog=help_description)
+
+(options, args) = parser.parse_args()
+if len(args) != 2:
+    parser.error("Invalid number of arguments")
+
+input_file = args[0]
+output_dir = args[1]
+
+with open(input_file) as fp:
+    xml = fp.read()
+colormap = xmltodict.parse(xml)
+
+colors = []
+labels = []
+values = []
+for entry in colormap["ColorMap"]["ColorMapEntry"]:
+    r,g,b = entry["@rgb"].split(",")
+    a = 0 if entry["@transparent"] == "true" else 255
+    color = "{0:02x}{1:02x}{2:02x}{3:02x}".format(int(r), int(g), int(b), a)
+    value = entry["@value"] if "@value" in entry else ""
+    colors += [color]
+    labels += [entry["@label"]]
+    values += [value]
+
+id = os.path.splitext(os.path.basename(input_file))[0]
+data = {
+    "colors": colors,
+    "labels": labels,
+    "values": values,
+    "id": id
+}
+
+json_options = {}
+json_options["indent"] = 4
+json_options["separators"] = (',', ': ')
+
+output_file = os.path.join(output_dir, id + ".json")
+with open(output_file, "w") as fp:
+    json.dump(data, fp, **json_options)
