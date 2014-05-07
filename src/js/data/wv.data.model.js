@@ -366,22 +366,20 @@ wv.data.model = wv.data.model || function(models, config) {
     var updateLayers = function() {
         self.layers = [];
         var foundSelected = false;
-        _.each(models.layers.get(), function(type) {
-            _.each(type, function(layer) {
-                var id = layer.id;
-                var layerName = layer.title;
-                var description = layer.subtitle;
-                var productName = layer.product;
-                self.layers.push({
-                    id: id,
-                    name: layerName,
-                    description: description,
-                    product: productName
-                });
-                if ( productName === self.selectedProduct ) {
-                    foundSelected = true;
-                }
+        _.each(models.layers.get(), function(layer) {
+            var id = layer.id;
+            var layerName = layer.title;
+            var description = layer.subtitle;
+            var productName = layer.product;
+            self.layers.push({
+                id: id,
+                name: layerName,
+                description: description,
+                product: productName
             });
+            if ( productName === self.selectedProduct ) {
+                foundSelected = true;
+            }
         });
         if ( !foundSelected ) {
             self.selectProduct(null);

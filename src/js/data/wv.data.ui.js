@@ -21,7 +21,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
     var selectionListPanel = null;
     var downloadListPanel = null;
     var lastResults = null;
-    var maps = models.map.maps;
+    var maps = ui.map;
 
     var self = {};
     self.selector = "#wv-data";
@@ -898,6 +898,3 @@ wv.data.ui.selectionListPanel = function(model, results) {
     return self;
 
 };
-
-
-

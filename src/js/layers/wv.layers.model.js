@@ -178,7 +178,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
         projId = projId || models.proj.selected.id;
         var defs = self.active.slice(0);
         _.each(defs, function(def) {
-            if ( projId && layer.projections[projId] ) {
+            if ( projId && def.projections[projId] ) {
                 self.remove(def.id);
             }
         });
@@ -286,7 +286,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
     self.load = function(state) {
         if ( state.products ) {
             self.clear(models.proj.selected.id);
-            _.each(state.products, function(layerId) {
+            _.eachRight(state.products, function(layerId) {
                 var hidden = state.hidden && state.hidden[layerId];
                 self.add(layerId, { visible: !hidden });
             });

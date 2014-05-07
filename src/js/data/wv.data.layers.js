@@ -59,7 +59,7 @@ wv.data.layers.button = wv.data.layers.button || function(model, maps, config) {
     self.events = wv.util.events();
 
     var init = function() {
-        $.each(maps.projections, function(index, map) {
+        $.each(maps.proj, function(index, map) {
             map.events.register("zoomend", self, resize);
         });
         model.events.on("granuleUnselect", onUnselect);
@@ -96,7 +96,7 @@ wv.data.layers.button = wv.data.layers.button || function(model, maps, config) {
     };
 
     self.clear = function() {
-        var layer = wv.map.getLayerByName(maps.map, LAYER_NAME);
+        var layer = wv.map.getLayerByName(maps.selected, LAYER_NAME);
         if ( layer ) {
             features = {};
             layer.removeAllFeatures();
@@ -104,7 +104,7 @@ wv.data.layers.button = wv.data.layers.button || function(model, maps, config) {
     };
 
     self.dispose = function() {
-        $.each(maps.projections, function(index, map) {
+        $.each(maps.proj, function(index, map) {
             var layer = wv.map.getLayerByName(map, LAYER_NAME);
             if ( layer ) {
                 map.removeControl(layer.hoverControl);
@@ -122,7 +122,7 @@ wv.data.layers.button = wv.data.layers.button || function(model, maps, config) {
         });
 
         layer.div.setAttribute("data-layer-name", LAYER_NAME);
-        maps.map.addLayer(layer);
+        maps.selected.addLayer(layer);
 
         layer.events.on({
             'featureselected': function(event) {
@@ -144,7 +144,7 @@ wv.data.layers.button = wv.data.layers.button || function(model, maps, config) {
                 onHoverOut(event);
             }
         });
-        maps.map.addControl(hoverControl);
+        maps.selected.addControl(hoverControl);
         hoverControl.activate();
         layer.hoverControl = hoverControl;
 
@@ -154,14 +154,14 @@ wv.data.layers.button = wv.data.layers.button || function(model, maps, config) {
             multiple: true,
             clickout: false
         });
-        maps.map.addControl(selectionControl);
+        maps.selected.addControl(selectionControl);
         layer.selectionControl = selectionControl;
 
         return layer;
     };
 
     var getLayer = function(map) {
-        map = map || maps.map;
+        map = map || maps.selected;
         var layer = wv.map.getLayerByName(map, LAYER_NAME);
         if ( !layer ) {
             layer = createLayer();
@@ -170,7 +170,7 @@ wv.data.layers.button = wv.data.layers.button || function(model, maps, config) {
     };
 
     var getSize = function() {
-        var zoom = maps.map.getZoom();
+        var zoom = maps.selected.getZoom();
         // Minimum size of the button is 15 pixels
         var base = 15;
         // Double the size for each zoom level
@@ -289,14 +289,14 @@ wv.data.layers.grid = wv.data.layers.grid || function(model, maps, config) {
     };
 
     self.clear = function() {
-        var layer = wv.map.getLayerByName(maps.map, LAYER_NAME);
+        var layer = wv.map.getLayerByName(maps.selected, LAYER_NAME);
         if ( layer ) {
             layer.removeAllFeatures();
         }
     };
 
     self.dispose = function() {
-        $.each(maps.projections, function(index, map) {
+        $.each(maps.proj, function(index, map) {
             var layer = wv.map.getLayerByName(map, LAYER_NAME);
             if ( layer ) {
                 map.removeLayer(layer);
@@ -309,12 +309,12 @@ wv.data.layers.grid = wv.data.layers.grid || function(model, maps, config) {
             styleMap: new OpenLayers.StyleMap(STYLE)
         });
         layer.div.setAttribute("data-layer-name", LAYER_NAME);
-        maps.map.addLayer(layer);
+        maps.selected.addLayer(layer);
         return layer;
     };
 
     var getLayer = function(map) {
-        map = map || maps.map;
+        map = map || maps.selected;
         var layer = wv.map.getLayerByName(map, LAYER_NAME);
         if ( !layer ) {
             layer = createLayer();
@@ -356,8 +356,8 @@ wv.data.layers.hover = wv.data.layers.hover || function(model, maps, config) {
             return;
         }
         var geom = granule.geometry[model.crs];
-        var extent =
-                config.projections[model.projection].maxExtent.toGeometry();
+        var extent = new OpenLayers.Bounds(
+                config.projections[model.projection].maxExtent).toGeometry();
         if ( geom && extent.intersects(geom) ) {
             var hoverFeature = new OpenLayers.Feature.Vector(
                 granule.geometry[model.crs], {
@@ -374,14 +374,14 @@ wv.data.layers.hover = wv.data.layers.hover || function(model, maps, config) {
     };
 
     self.clear = function() {
-        var layer = wv.map.getLayerByName(maps.map, LAYER_NAME);
+        var layer = wv.map.getLayerByName(maps.selected, LAYER_NAME);
         if ( layer ) {
             layer.removeAllFeatures();
         }
     };
 
     self.dispose = function() {
-        $.each(maps.projections, function(index, map) {
+        $.each(maps.proj, function(index, map) {
             var layer = wv.map.getLayerByName(map, LAYER_NAME);
             if ( layer ) {
                 map.removeLayer(layer);
@@ -412,12 +412,12 @@ wv.data.layers.hover = wv.data.layers.hover || function(model, maps, config) {
     var createLayer = function() {
         var layer = new OpenLayers.Layer.Vector(LAYER_NAME);
         layer.div.setAttribute("data-layer-name", LAYER_NAME);
-        maps.map.addLayer(layer);
+        maps.selected.addLayer(layer);
         return layer;
     };
 
     var getLayer = function(map) {
-        map = map || maps.map;
+        map = map || maps.selected;
         var layer = wv.map.getLayerByName(map, LAYER_NAME);
         if ( !layer ) {
             layer = createLayer();
@@ -451,14 +451,14 @@ wv.data.layers.selection = wv.data.layers.selection || function(model, maps, con
     };
 
     self.clear = function() {
-        var layer = wv.map.getLayerByName(maps.map, LAYER_NAME);
+        var layer = wv.map.getLayerByName(maps.selected, LAYER_NAME);
         if ( layer ) {
             layer.removeAllFeatures();
         }
     };
 
     self.dispose = function() {
-        $.each(maps.projections, function(index, map) {
+        $.each(maps.proj, function(index, map) {
             var layer = wv.map.getLayerByName(map, LAYER_NAME);
             if ( layer ) {
                 map.removeLayer(layer);
@@ -476,8 +476,8 @@ wv.data.layers.selection = wv.data.layers.selection || function(model, maps, con
             return;
         }
         var geom = granule.geometry[model.crs];
-        var extent =
-                config.projections[model.projection].maxExtent.toGeometry();
+        var extent = new OpenLayers.Bounds(
+                config.projections[model.projection].maxExtent).toGeometry();
         if ( geom && extent.intersects(geom) ) {
             // Exit if already selected
             if ( features[granule.id] ) {
@@ -517,13 +517,13 @@ wv.data.layers.selection = wv.data.layers.selection || function(model, maps, con
         });
         layer.div.setAttribute("data-layer-name", LAYER_NAME);
         layer.setOpacity(OPACITY);
-        maps.map.addLayer(layer);
+        maps.selected.addLayer(layer);
 
         return layer;
     };
 
     var getLayer = function(map) {
-        map = map || maps.map;
+        map = map || maps.selected;
         var layer = wv.map.getLayerByName(map, LAYER_NAME);
         if ( !layer ) {
             layer = createLayer();
@@ -591,14 +591,14 @@ wv.data.layers.swath = function(model, maps, config) {
     };
 
     self.clear = function() {
-        var layer = wv.map.getLayerByName(maps.map, LAYER_NAME);
+        var layer = wv.map.getLayerByName(maps.selected, LAYER_NAME);
         if ( layer ) {
             layer.removeAllFeatures();
         }
     };
 
     self.dispose = function() {
-        $.each(maps.projections, function(index, map) {
+        $.each(maps.proj, function(index, map) {
             var layer = wv.map.getLayerByName(map, LAYER_NAME);
             if ( layer ) {
                 map.removeLayer(layer);
@@ -611,12 +611,12 @@ wv.data.layers.swath = function(model, maps, config) {
             styleMap: new OpenLayers.StyleMap(STYLE)
         });
         layer.div.setAttribute("data-layer-name", LAYER_NAME);
-        maps.map.addLayer(layer);
+        maps.selected.addLayer(layer);
         return layer;
     };
 
     var getLayer = function(map) {
-        map = map || maps.map;
+        map = map || maps.selected;
         var layer = wv.map.getLayerByName(map, LAYER_NAME);
         if ( !layer ) {
             layer = createLayer();

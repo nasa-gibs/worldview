@@ -115,6 +115,7 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
         $.each(config.layerOrder[group], function(index, layerId) {
             renderLayer($element, group, layerId);
         });
+        
 
         $container.append($header);
         $container.append($element);
