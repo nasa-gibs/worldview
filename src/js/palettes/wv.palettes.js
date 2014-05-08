@@ -40,12 +40,16 @@ wv.palettes = (function(self) {
 
         g.fillStyle = checkerboard;
         g.fillRect(0, 0, canvas.width, canvas.height);
-        if ( palette && palette.scale ) {
-            var colors = palette.scale.colors;
-            var bins = colors.length;
+        if ( !palette ) {
+            return;
+        }
+        var info = palette.scale || palette.classes;
+        if ( info ) {
+            var colors = info.colors;
+            var bins = info.colors.length;
             var binWidth = canvas.width / bins;
             var drawWidth = Math.ceil(binWidth);
-            _.each(colors, function(color, i) {
+            _.each(info.colors, function(color, i) {
                 g.fillStyle = "#" + color.substring(0,6);
                 g.fillRect(Math.floor(binWidth * i), 0, drawWidth,
                         canvas.height);

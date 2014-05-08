@@ -246,7 +246,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         var key = layerKey(def);
         if ( def.type === "wmts" ) {
             layer = createLayerWMTS(def);
-        } else if ( layer.type === "wms" ) {
+        } else if ( def.type === "wms" ) {
             layer = createLayerWMS(def);
         } else {
             throw new Error("Unknown layer type: " + def.type);
@@ -309,8 +309,8 @@ wv.map.ui = wv.map.ui || function(models, config) {
 
     var createLayerWMS = function(def) {
         var proj = models.proj.selected;
-        var source = config.sources[def.projections[projId].source];
-        var layerParameter = def.projections[projId].layer || def.id;
+        var source = config.sources[def.projections[proj.id].source];
+        var layerParameter = def.projections[proj.id].layer || def.id;
 
         var transparent = ( def.format === "image/png" );
 

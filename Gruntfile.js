@@ -200,25 +200,6 @@ module.exports = function(grunt) {
                             "<%=pkg%>"
             },
 
-            // Create a tarball of the documentation with a version number and
-            // git revision
-            tar_doc_versioned: {
-                command: "tar cjCf build dist/<%=pkg%>-doc" +
-                            "-<%=opt.version%>" +
-                            "-<%=opt.release%>" +
-                            buildNumber +
-                            ".git<%= grunt.config.get('git-revision') %>" +
-                            ".tar.bz2 <%=pkg%>-doc"
-            },
-
-            // Create a tarball of the documentation without versioning
-            // information
-            tar_doc: {
-                command: "tar cjCf build dist/" +
-                            "<%=pkg%>-doc.tar.bz2 " +
-                            "<%=pkg%>-doc"
-            },
-
             // Builds the RPM
             rpmbuild: {
                 command: 'rpmbuild --define "_topdir $PWD/build/rpmbuild" ' +
@@ -503,14 +484,11 @@ module.exports = function(grunt) {
         "exec:empty",
         "feature_shorten",
         "feature_download",
-        "doc",
         "remove:dist_tar",
         "exec:tar_debug_versioned",
         "exec:tar_debug",
         "exec:tar_release_versioned",
         "exec:tar_release",
-        "exec:tar_doc_versioned",
-        "exec:tar_doc"
     ]);
 
     grunt.registerTask("rpm_only", [
@@ -529,7 +507,6 @@ module.exports = function(grunt) {
         "rename:apache"
     ]);
 
-    grunt.registerTask("doc", ["yuidoc"]);
     grunt.registerTask("lint", ["jshint:console"]);
     grunt.registerTask("test", ["buster:console"]);
     grunt.registerTask("push", ["lint", "test"]);
