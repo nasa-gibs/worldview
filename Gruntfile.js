@@ -21,10 +21,16 @@ var buildNonce = moment.utc().format("YYYYMMDDHHmmssSSS");
 var buildNumber = ( process.env.BUILD_NUMBER )
     ? "." + process.env.BUILD_NUMBER : "";
 
-var brand = "default";
-var opt = {};
-
 module.exports = function(grunt) {
+
+    var info = grunt.file.readJSON("package.json");
+    var opt = grunt.file.readJSON("options/brand.json");
+    var features = grunt.file.readJSON("options/features.json").features;
+
+    console.log("");
+    console.log("[" + opt.packageName + "] " + opt.officialName +
+            ", Version " + info.version + "-" + info.release);
+    console.log("");
 
     // Lists of JavaScript and CSS files to include and in the correct
     // order
@@ -36,6 +42,11 @@ module.exports = function(grunt) {
     var banner = grunt.file.read("etc/deploy/banner.txt");
 
     grunt.initConfig({
+
+        pkg: opt.packageName,
+        opt: opt,
+        features: features,
+
         "git-rev-parse": {
             build: {
                 options: {
@@ -46,13 +57,6 @@ module.exports = function(grunt) {
         },
 
         copy: {
-            brand: {
-                files: [
-                    { expand: true, cwd: "etc/brand.<%=brand%>",
-                      src: ["**"], dest: "." }
-                ]
-            },
-
             // Copies the source files to the build directory
             source: {
                 files: [
@@ -66,6 +70,15 @@ module.exports = function(grunt) {
                 ]
             },
 
+            config_src: {
+                files: [
+                    { expand: true, cwd: "build/options/config",
+                      src: ["**"], dest: "src/config" },
+                    { expand: true, cwd: "build/options/brand",
+                      src: ["**"], dest: "src/brand" }
+                ]
+            },
+
             // Copies the finished version of the debugging web root to
             // create a release web root. JavaScript and CSS files are omitted
             // since the concatenated version is used instead. Files that
@@ -74,7 +87,7 @@ module.exports = function(grunt) {
             release: {
                 files: [
                     { expand: true, cwd: "build/<%=pkg%>-debug",
-		      src: ["**", "**/.htaccess"],
+                      src: ["**", "**/.htaccess"],
                       dest: "build/<%=pkg%>" },
                     { expand: true, cwd: "build/<%=pkg%>-debug/web",
                       src: [
@@ -127,11 +140,7 @@ module.exports = function(grunt) {
 
         exec: {
             config: {
-                command: "PATH=python/bin:${PATH} bin/make-conf"
-            },
-
-            update_gc: {
-                command: "bin/fetch-gibs"
+                command: "PATH=python/bin:${PATH} bin/wv-options-build"
             },
 
             // After removing JavaScript and CSS files that are no longer
@@ -371,19 +380,6 @@ module.exports = function(grunt) {
             }
         },
 
-        yuidoc: {
-            main: {
-                name: "<%=opt.officialName%>",
-                description: "<%=opt.description%>",
-                version: "<%=opt.version%>",
-                url: "<%=opt.url%>",
-                options: {
-                    paths: ["src/js"],
-                    outdir: "build/<%=pkg%>-doc"
-                }
-            }
-        },
-
         jshint: {
             console: [
                 "src/js/**/wv.*.js",
@@ -435,8 +431,8 @@ module.exports = function(grunt) {
                 "!build/<%=pkg%>-debug/web/js/map/wv.map.tileworker.js",
                 "!build/<%=pkg%>-debug/web/ext/**/*"
             ],
-            conf_src: [
-                "src/conf/**/*"
+            config_src: [
+                "src/config/**/*"
             ],
             dist_tar: ["dist/*.tar.bz2"],
             dist_rpm: ["dist/*.rpm"],
@@ -445,42 +441,6 @@ module.exports = function(grunt) {
             cgi_shorten: ["build/<%=pkg%>*/web/service/link/*"]
         }
 
-    });
-
-    grunt.registerTask("brand_select", "Selecting brand", function() {
-        if ( fs.existsSync("brand/brand.json") ) {
-            brand = grunt.file.readJSON("brand/brand.json").brand || "default";
-        }
-        grunt.config("brand", brand);
-    });
-
-    grunt.registerTask("brand_config", "Loading branding options", function() {
-        opt = grunt.file.readJSON("brand/options.json");
-        features =
-            grunt.file.readJSON("conf/web/brand/features.json").features;
-
-        console.log();
-        console.log("============================================================");
-        console.log("[" + opt.packageName + "] " + opt.officialName +
-                ", Version " + opt.version + "-" + opt.release);
-        console.log("");
-        console.log("Branding        : " + brand);
-        console.log("Long name       : " + opt.longName);
-        console.log("Short name      : " + opt.shortName);
-        console.log("Public GIBS     : " + (!process.env.GIBS_HOST));
-        console.log("URL shortening  : " + features.urlShortening);
-        console.log("Data download   : " + features.dataDownload);
-        console.log("Support email   : " + opt.email);
-
-        if ( brand !== "worldview" ) {
-            console.error();
-            grunt.log.error("Using custom branding");
-        }
-        console.log("============================================================");
-        console.log();
-
-        grunt.config("opt", opt);
-        grunt.config("pkg", opt.packageName);
     });
 
     grunt.file.mkdir("build/rpmbuild");
@@ -495,7 +455,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-contrib-cssmin");
     grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-contrib-uglify");
-    grunt.loadNpmTasks("grunt-contrib-yuidoc");
     grunt.loadNpmTasks("grunt-line-remover");
     grunt.loadNpmTasks("grunt-exec");
     grunt.loadNpmTasks("grunt-git-rev-parse");
@@ -508,9 +467,9 @@ module.exports = function(grunt) {
 
     grunt.registerTask("config", [
         "clean",
-        "remove:conf_src",
-        "exec:update_gc",
-        "exec:config"
+        "remove:config_src",
+        "exec:config",
+        "copy:config_src"
     ]);
 
     grunt.registerTask("feature_shorten", "URL Shortening", function() {
@@ -530,7 +489,6 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask("build", [
-        "brand",
         "config",
         "copy:source",
         "concat",
@@ -571,7 +529,6 @@ module.exports = function(grunt) {
         "rename:apache"
     ]);
 
-    grunt.registerTask("brand", ["brand_select", "copy:brand", "brand_config"]);
     grunt.registerTask("doc", ["yuidoc"]);
     grunt.registerTask("lint", ["jshint:console"]);
     grunt.registerTask("test", ["buster:console"]);

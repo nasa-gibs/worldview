@@ -17,14 +17,6 @@ import os
 import sys
 import xmltodict
 
-SKIP_LAYERS = [
-    "Sea_Surface_Temp_Microwave",
-    "Sea_Surface_Temp_Blended",
-    "arctic_graticule_3413_reverb",
-    "blue_marble_arctic",
-    "OMI_SO2_Planetary_Boundary_Layer",
-]
-
 prog = os.path.basename(__file__)
 base_dir = os.path.join(os.path.dirname(__file__), "..")
 version = "2.0.0"
@@ -58,7 +50,56 @@ skip = []
 if "skip" in config:
     skip = config["skip"]
 
-for entry in entries:
+total_layer_count = 0
+total_warning_count = 0
+total_error_count = 0
+
+class SkipException(Exception):
+    pass
+
+def process_layer(gc_layer, wv_layers):
+    id = gc_layer["ows:Identifier"]
+    if id in skip:
+        raise SkipException(id)
+
+    wv_layers[id] = {}
+    wv_layer = wv_layers[id]
+
+    wv_layer["id"] = id
+    wv_layer["type"] = "wmts"
+    wv_layer["format"] = gc_layer["Format"]
+
+    # Extract start and end dates
+    if "Dimension" in gc_layer:
+        dimension = gc_layer["Dimension"]
+        if dimension["ows:Identifier"] == "time":
+            try:
+                wv_layer["period"] = "daily"
+                values = dimension["Value"].split("/")
+
+                # Layer is still actively being produced if the end date
+                # greater than yesterday
+                end_date = datetime.strptime(values[1], "%Y-%m-%d")
+                yesterday = datetime.now() - timedelta(days=1)
+                wv_layer["startDate"] = values[0]
+                if end_date < yesterday:
+                    wv_layer["endDate"] = values[1]
+            except ValueError:
+                raise Exception("Invalid time: {0}".format(values))
+
+    # Extract matrix set
+    matrixSet = gc_layer["TileMatrixSetLink"]["TileMatrixSet"]
+    wv_layer["projections"] = {
+        entry["projection"]: {
+            "source": entry["source"],
+            "matrixSet": matrixSet
+        }
+    }
+
+def process_entry(entry):
+    layer_count = 0
+    warning_count = 0
+    error_count = 0
     wv = {
         "layers": {},
         "sources": {}
@@ -78,42 +119,15 @@ for entry in entries:
 
     for gc_layer in gc_contents["Layer"]:
         id = gc_layer["ows:Identifier"]
-        if id in skip:
-            print "%s: Skipping layer: %s" % (prog, id)
-            continue
-        wv_layers[id] = {}
-        wv_layer = wv_layers[id]
-
-        wv_layer["id"] = id
-        wv_layer["type"] = "wmts"
-        wv_layer["format"] = gc_layer["Format"]
-
-        # Extract start and end dates
-        if "Dimension" in gc_layer:
-            dimension = gc_layer["Dimension"]
-            if dimension["ows:Identifier"] == "time":
-                try:
-                    wv_layer["period"] = "daily"
-                    values = dimension["Value"].split("/")
-
-                    # Layer is still actively being produced if the end date
-                    # greater than yesterday
-                    end_date = datetime.strptime(values[1], "%Y-%m-%d")
-                    yesterday = datetime.now() - timedelta(days=1)
-                    wv_layer["startDate"] = values[0]
-                    if end_date < yesterday:
-                        wv_layer["endDate"] = values[1]
-                except ValueError:
-                    raise Exception("Invalid time: {0}".format(values))
-
-        # Extract matrix set
-        matrixSet = gc_layer["TileMatrixSetLink"]["TileMatrixSet"]
-        wv_layer["projections"] = {
-            entry["projection"]: {
-                "source": entry["source"],
-                "matrixSet": matrixSet
-            }
-        }
+        try:
+            layer_count += 1
+            process_layer(gc_layer, wv_layers)
+        except SkipException as se:
+            warning_count += 1
+            sys.stderr.write("%s: WARNING: [%s] Skipping\n" % (prog, id))
+        except Exception as e:
+            error_count += 1
+            sys.stderr.write("%s: ERROR: [%s] %s\n" % (prog, id, str(e)))
 
     for gc_matrix_set in gc_contents["TileMatrixSet"]:
         id = gc_matrix_set["ows:Identifier"]
@@ -139,3 +153,20 @@ for entry in entries:
     output_file = os.path.join(output_dir, entry["to"])
     with open(output_file, "w") as fp:
         json.dump(wv, fp, **json_options)
+
+    print "%s: %d error(s), %d warning(s), %d layers for %s" % (prog,
+            error_count, warning_count, layer_count, entry["source"])
+    return [error_count, warning_count, layer_count]
+
+# Main
+for entry in entries:
+    error_count, warning_count, layer_count = process_entry(entry)
+    total_error_count += error_count
+    total_warning_count += warning_count
+    total_layer_count += layer_count
+
+print "%s: %d error(s), %d warning(s), %d layers" % (prog, total_error_count,
+        total_warning_count, total_layer_count)
+
+if total_error_count > 0:
+    sys.exit(1)

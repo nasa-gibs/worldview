@@ -57,9 +57,11 @@ input_dir = args[0]
 output_file = args[1]
 
 conf = {}
+file_count = 0
 for root, dirs, files in os.walk(input_dir):
     for file in files:
         try:
+            file_count += 1
             with open(os.path.join(root, file)) as fp:
                 data = json.load(fp)
             dict_merge(conf, data)
@@ -74,3 +76,6 @@ json_options["separators"] = (',', ': ')
 
 with open(output_file, "w") as fp:
     json.dump(conf, fp, **json_options)
+
+print "%s: %s file(s) merged into %s" % (prog, file_count,
+    os.path.basename(output_file))

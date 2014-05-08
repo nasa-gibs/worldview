@@ -147,4 +147,3 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
     init();
     return self;
 };
-

@@ -128,7 +128,7 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
 }
 
 #wv-logo {
-    background: url('../images/brand/wv-logo.png?v=@BUILD_NONCE@') no-repeat center;
+    background: url('../brand/images/wv-logo.png?v=@BUILD_NONCE@') no-repeat center;
     width:      247px;
     height:     45px;
     display:    inline-block;

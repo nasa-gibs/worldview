@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 #
 # NASA Worldview
-# 
-# This code was originally developed at NASA/Goddard Space Flight Center for
-# the Earth Science Data and Information System (ESDIS) project. 
 #
-# Copyright (C) 2013 United States Government as represented by the 
+# This code was originally developed at NASA/Goddard Space Flight Center for
+# the Earth Science Data and Information System (ESDIS) project.
+#
+# Copyright (C) 2013 United States Government as represented by the
 # Administrator of the National Aeronautics and Space Administration.
 # All Rights Reserved.
 #
@@ -21,7 +21,7 @@ help_description = """\
 Using a json index file, this converts ACT (Adobe Color Table) files into
 paletttes suitable for Worldview. Each color table is written out to
 a separate file.
-""" 
+"""
 
 default_index = os.path.join(basedir, "act", "index.json")
 default_act_dir = os.path.join(basedir, "act")
@@ -73,8 +73,8 @@ except Exception as e:
     sys.stderr.write("%s: Unable to load index %s\n%s" % (prog, options.index,
                                                           str(e)))
     sys.exit(1)
-                                                          
-return_code = 0    
+
+return_code = 0
 for act in index:
     act_file = os.path.join(options.act_dir, act["input"])
     notify("Reading ACT: %s" % act_file)
@@ -82,7 +82,7 @@ for act in index:
         with open(act_file) as fp:
             data = fp.read()
     except Exception as e:
-        sys.stderr.write("%s: Unable to load %s\n%s" % (prog, act_file, 
+        sys.stderr.write("%s: Unable to load %s\n%s" % (prog, act_file,
                                                         str(e)))
         return_code = 1
     stops = []
@@ -105,9 +105,8 @@ for act in index:
     palette_file = os.path.join(output_dir, "%s.json" % act["id"])
     notify("Writing palette: %s" % palette_file)
     with open(palette_file, "w") as fp:
-        json.dump(palette, fp, sort_keys=True, indent=4, 
+        json.dump(palette, fp, sort_keys=True, indent=4,
                   separators=(',', ': '))
 
 
 sys.exit(return_code)
-

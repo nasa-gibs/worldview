@@ -12,6 +12,7 @@
 
 from optparse import OptionParser
 import os
+import re
 import sys
 import json
 import xmltodict
@@ -23,7 +24,7 @@ help_description = """\
 Converts colormaps to JSON files
 """
 
-parser = OptionParser(usage="Usage: %s <input_file> <output_dir>" % prog,
+parser = OptionParser(usage="Usage: %s <input_dir> <output_dir>" % prog,
                       version="%s version %s" % (prog, version),
                       epilog=help_description)
 
@@ -31,37 +32,93 @@ parser = OptionParser(usage="Usage: %s <input_file> <output_dir>" % prog,
 if len(args) != 2:
     parser.error("Invalid number of arguments")
 
-input_file = args[0]
+input_dir = args[0]
 output_dir = args[1]
 
-with open(input_file) as fp:
-    xml = fp.read()
-colormap = xmltodict.parse(xml)
+def process_file(file):
+    input_file = os.path.join(root, file)
+    with open(input_file) as fp:
+        xml = fp.read()
+    colormap = xmltodict.parse(xml)
 
-colors = []
-labels = []
-values = []
-for entry in colormap["ColorMap"]["ColorMapEntry"]:
-    r,g,b = entry["@rgb"].split(",")
-    a = 0 if entry["@transparent"] == "true" else 255
-    color = "{0:02x}{1:02x}{2:02x}{3:02x}".format(int(r), int(g), int(b), a)
-    value = entry["@value"] if "@value" in entry else ""
-    colors += [color]
-    labels += [entry["@label"]]
-    values += [value]
+    scaleColors = []
+    scaleLabels = []
+    scaleValues = []
+    classColors = []
+    classLabels = []
+    specialColors = []
+    specialLabels = []
+    units = None
+    minValue = float("inf")
+    maxValue = float("-inf")
 
-id = os.path.splitext(os.path.basename(input_file))[0]
-data = {
-    "colors": colors,
-    "labels": labels,
-    "values": values,
-    "id": id
-}
+    entries = colormap["ColorMap"]["ColorMapEntry"]
+    if not isinstance(entries, list):
+        entries = [entries]
 
-json_options = {}
-json_options["indent"] = 4
-json_options["separators"] = (',', ': ')
+    for entry in entries:
+        r,g,b = entry["@rgb"].split(",")
+        a = 0 if entry["@transparent"] == "true" else 255
+        color = "{0:02x}{1:02x}{2:02x}{3:02x}".format(int(r), int(g), int(b), a)
+        label = entry["@label"]
+        if "@value" in entry:
+            items = re.sub(r"[\(\)\[\]]", "", entry["@value"]).split(",")
+            try:
+                scaleValues += [map(lambda v: float(v), items)]
+            except ValueError as e:
+                raise ValueError("Invalid value: %s" % entry["@value"])
+            scaleColors += [color]
+            scaleLabels += [label]
+        elif a == 0:
+            specialColors += [color]
+            specialLabels += [label]
+        else:
+            classColors += [color]
+            classLabels += [label]
 
-output_file = os.path.join(output_dir, id + ".json")
-with open(output_file, "w") as fp:
-    json.dump(data, fp, **json_options)
+    id = os.path.splitext(os.path.basename(input_file))[0]
+    data = {}
+    if len(scaleColors) > 0:
+        data["scale"] = {
+            "colors": scaleColors,
+            "values": scaleValues,
+            "labels": scaleLabels,
+        }
+    if len(specialColors) > 0:
+        data["special"] = {
+            "colors": specialColors,
+            "labels": specialLabels
+        }
+    if len(classColors) > 0:
+        data["classes"] = {
+            "colors": classColors,
+            "labels": classLabels,
+        }
+
+    data["id"] = id
+
+    json_options = {}
+    json_options["indent"] = 4
+    json_options["separators"] = (',', ': ')
+
+    output_file = os.path.join(output_dir, id + ".json")
+    with open(output_file, "w") as fp:
+        json.dump(data, fp, **json_options)
+
+# Main
+file_count = 0
+error_count = 0
+
+for root, dirs, files in os.walk(input_dir):
+    for file in files:
+        try:
+            file_count += 1
+            process_file(file)
+        except Exception as e:
+            sys.stderr.write("%s: ERROR: [%s] %s\n" % (prog, file, str(e)))
+            error_count += 1
+
+print "%s: %d error(s), %d file(s)" % (prog, error_count, file_count)
+
+if error_count > 0:
+    sys.exit(1)

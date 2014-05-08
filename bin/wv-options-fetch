@@ -39,12 +39,27 @@ os.makedirs(output_dir)
 with open(config_file) as fp:
     config = json.load(fp)
 
+def process_remote(entry):
+    url = entry["from"]
+    print "%s: %s" % (prog, url)
+    response = urllib.urlopen(url)
+    contents = response.read()
+    output_file = os.path.join(output_dir, entry["to"])
+    with open(output_file, "w") as fp:
+        fp.write(contents)
+
+remote_count = 0
+error_count = 0
 if "wv-options-fetch" in config:
     for entry in config["wv-options-fetch"]:
-        url = entry["from"]
-        print "%s: %s" % (prog, url)
-        response = urllib.urlopen(url)
-        contents = response.read()
-        output_file = os.path.join(output_dir, entry["to"])
-        with open(output_file, "w") as fp:
-            fp.write(contents)
+        try:
+            remote_count += 1
+            process_remote(entry)
+        except Exception as e:
+            error_count += 1
+            sys.stderr.write("%s: ERROR: %s\n" % (prog, str(e)))
+
+print "%s: %d error(s), %d remote(s)" % (prog, error_count, remote_count)
+
+if error_count > 0:
+    sys.exit(1)

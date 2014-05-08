@@ -113,13 +113,13 @@ wv.palettes = (function(self) {
     };
 
     self.loadCustom = function(config) {
-        return wv.util.load(config.palettes, "custom", "conf/palettes.json");
+        return wv.util.load(config.palettes, "custom", "config/palettes.json");
     };
 
     self.loadRendered = function(config, layerId) {
         var layer = config.layers[layerId];
         return wv.util.load(config.palettes.rendered, layer.palette.id,
-                "conf/palettes/" + layer.palette.id + ".json");
+                "config/palettes/" + layer.palette.id + ".json");
     };
 
     self.parse = function(state, errors, config) {

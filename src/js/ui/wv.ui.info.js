@@ -49,7 +49,7 @@ wv.ui.info = wv.ui.info || (function(ui) {
 
     $about.click(function() {
         if ( wv.util.browser.small ) {
-            window.open("pages/brand/about.html?v=@BUILD_NONCE@", "_blank");
+            window.open("brand/pages/about.html?v=@BUILD_NONCE@", "_blank");
         } else {
             wv.ui.getDialog().dialog({
                 title: "About",
@@ -57,13 +57,13 @@ wv.ui.info = wv.ui.info || (function(ui) {
                 height: 525,
                 show: { effect: "fade" },
                 hide: { effect: "fade" }
-            }).load("pages/brand/about.html?v=@BUILD_NONCE@ #page");
+            }).load("brand/pages/about.html?v=@BUILD_NONCE@ #page");
         }
     });
 
     $new.click(function() {
         if ( wv.util.browser.small ) {
-            window.open("pages/brand/new.html?v=@BUILD_NONCE@", "_blank");
+            window.open("brand/pages/new.html?v=@BUILD_NONCE@", "_blank");
         } else {
             wv.ui.getDialog().dialog({
                 title: "What's New",
@@ -71,7 +71,7 @@ wv.ui.info = wv.ui.info || (function(ui) {
                 height: 525,
                 show: { effect: "fade" },
                 hide: { effect: "fade" }
-            }).load("pages/brand/new.html?v=@BUILD_NONCE@ #page");
+            }).load("brand/pages/new.html?v=@BUILD_NONCE@ #page");
         }
     });
 
@@ -93,4 +93,3 @@ wv.ui.info = wv.ui.info || (function(ui) {
     });
 
 });
-
