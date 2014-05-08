@@ -112,13 +112,16 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
             return;
         }
         var palette = model.forLayer(layer.id);
+        if ( !palette.scale ) {
+            return;
+        }
         if (layer.palette.single) {
             $(selector + " .wv-palettes-type").html(palette.values[0]);
         } else if (layer.palette.classified) {
             $(selector + " .wv-palettes-center").html("Classes");
         } else {
-            var min = palette.values[0];
-            var max = palette.values[palette.values.length - 1];
+            var min = palette.scale.labels[0];
+            var max = palette.scale.labels[palette.scale.labels.length - 1];
             $(selector + " .wv-palettes-min").html(min);
             $(selector + " .wv-palettes-max").html(max);
             $(selector + " .wv-palettes-center").html("&nbsp;");
@@ -130,18 +133,23 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
             return;
         }
         var palette = model.forLayer(layer.id);
+        if ( !palette.scale ) {
+            return;
+        }
         var x = event.pageX - $colorbar.offset().left;
         var width = $colorbar.width();
         var percent = x / width;
-        var bins = palette.values.length;
+        var bins = palette.scale.labels.length;
         var index = Math.floor(bins * percent);
         if (index >= bins) {
             index = bins - 1;
         }
 
+        var color = palette.scale.colors[index].substring(0, 6);
+        var label = palette.scale.labels[index];
         $colorbar.tooltip("option", "content",
             "<span class='wv-palettes-color-box' style='background: #" +
-            palette.colors[index] + "'>" + "</span>" + palette.values[index]);
+            color + "'>" + "</span>" + label);
     };
 
     init();

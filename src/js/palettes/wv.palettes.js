@@ -40,13 +40,13 @@ wv.palettes = (function(self) {
 
         g.fillStyle = checkerboard;
         g.fillRect(0, 0, canvas.width, canvas.height);
-        if ( palette ) {
-            var colors = palette.colors;
+        if ( palette && palette.scale ) {
+            var colors = palette.scale.colors;
             var bins = colors.length;
             var binWidth = canvas.width / bins;
             var drawWidth = Math.ceil(binWidth);
             _.each(colors, function(color, i) {
-                g.fillStyle = "#" + color;
+                g.fillStyle = "#" + color.substring(0,6);
                 g.fillRect(Math.floor(binWidth * i), 0, drawWidth,
                         canvas.height);
             });
@@ -113,7 +113,7 @@ wv.palettes = (function(self) {
     };
 
     self.loadCustom = function(config) {
-        return wv.util.load(config.palettes, "custom", "config/palettes.json");
+        return wv.util.load(config.palettes, "custom", "config/palettes-custom.json");
     };
 
     self.loadRendered = function(config, layerId) {
