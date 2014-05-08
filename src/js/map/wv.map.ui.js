@@ -165,8 +165,8 @@ wv.map.ui = wv.map.ui || function(models, config) {
             if ( !def ) {
                 renderable = false;
             } else {
-                var key = layerKey(def);
-                var renderable = models.layers.isRenderable(def.id);
+                key = layerKey(def);
+                renderable = models.layers.isRenderable(def.id);
             }
             if ( layer.key !== key || !renderable ) {
                 layer.setOpacity(0);
