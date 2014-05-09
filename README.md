@@ -48,38 +48,39 @@ or a Linux environment at the moment.
 Download and install [Node.js](http://nodejs.org/) using the intructions on
 their site.
 
-Now install a global version of [grunt](http://gruntjs.com/) using the
-following command:
+Executing the following script will download all dependencies and
+build the application:
 
-    sudo npm install --global grunt-cli
+    ./wv-setup
 
-Clone a copy of the Worldview repository and change to the ``worldview`` directory.
-Now install the packages required for building:
+*Note*: Some steps require root privileges and you may be prompted for the
+root password. If you do not trust the script to perform administrative
+tasks on your behalf, either review the script before execution, or follow
+the [Manual Setup](doc/manual_setup.md) steps.
 
-    npm install
-
-Some python libraries are required. Install virtualenv to keep additional
-libraries installed in a local directory:
-
-    sudo easy_install virtualenv==1.10.1
-
-Run the following script to install:
-
-    ./python_install
-
-Start the build with:
-
-    grunt
-
-The ``dist`` directory now contains a ``worldview.tar.bz2`` file which
+The ``dist`` directory now contains a ``example-map.tar.bz2`` file which
 can be uploaded and unpacked to a web server.
 
-*Please Note:* To run Worldview from your local machine, you will need to
-follow the instructions in [Development Notes](doc/developing.md).
+To run Worldview from your local machine, execute the following script or
+follow the instructions in [Manual Setup](doc/manual_setup.md):
+
+*Note*: This only works on OS X at the moment.
+
+    ./wv-setup -d
+
+Worldview should now be available at the following:
+
+* [http://localhost/example-map](http://localhost/example-map): Uses the source
+directory
+* [http://localhost/example-map-debug](http://localhost/example-map-debug):
+Uses the debug version (non-minified versions) found in the build directory.
+* [http://localhost/example-map-release](http://localhost/example-map-release):
+Uses the release version (minified versions) found in the build directory.
 
 
 ## Other Information
 
+* [Manual Setup](doc/manual_setup.md)
 * [Branding](doc/branding.md)
 * [Optional Features](doc/features.md)
 * [Development Notes](doc/developing.md)
