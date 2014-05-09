@@ -23,15 +23,16 @@ help_description = """\
 Validates and corrects the configuration files.
 """
 
-parser = OptionParser(usage="Usage: %s <config_dir>" % prog,
+parser = OptionParser(usage="Usage: %s <config_json> <config_dir>" % prog,
                       version="%s version %s" % (prog, version),
                       epilog=help_description)
 (options, args) = parser.parse_args()
 
-if len(args) != 1:
+if len(args) != 2:
     parser.error("Invalid number of arguments")
 
-config_dir = args[0]
+options_file = args[0]
+config_dir = args[1]
 
 error_count = 0
 warning_count = 0
@@ -50,13 +51,15 @@ def warn(message):
 main_config_file = os.path.join(config_dir, "wv.json")
 with open(main_config_file) as fp:
     wv = json.load(fp)
+with open(options_file) as fp:
+    opt = json.load(fp)
 
 for layer_id in wv["layers"].keys():
     layer = wv["layers"][layer_id]
     if len(layer["projections"]) == 0:
         warn("[%s] No projections defined or not found in GC documents" %
             layer_id)
-    if layer_id not in wv["layerOrder"]:
+    if "warnOnUnexpectedLayer" in opt and layer_id not in wv["layerOrder"]:
         warn("[%s] Unexpected layer" % layer_id)
         del wv["layers"][layer_id]
     if "palette" in layer:
