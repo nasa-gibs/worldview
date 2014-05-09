@@ -59,8 +59,9 @@ for layer_id in wv["layers"].keys():
     if len(layer["projections"]) == 0:
         warn("[%s] No projections defined or not found in GC documents" %
             layer_id)
-    if "warnOnUnexpectedLayer" in opt and layer_id not in wv["layerOrder"]:
-        warn("[%s] Unexpected layer" % layer_id)
+    if layer_id not in wv["layerOrder"]:
+        if "warnOnUnexpectedLayer" in opt:
+            warn("[%s] Unexpected layer" % layer_id)
         del wv["layers"][layer_id]
     if "palette" in layer:
         palette_id = layer["palette"]["id"]

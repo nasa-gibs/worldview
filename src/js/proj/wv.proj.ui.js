@@ -30,7 +30,9 @@ wv.proj.ui = wv.proj.ui || function(models, config) {
     self.id = "wv-proj-button";
 
     var init = function() {
-        render();
+        if ( config.ui && config.ui.projections ) {
+            render();
+        }
     };
 
     var render = function() {
