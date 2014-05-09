@@ -51,23 +51,13 @@ wv.proj.ui = wv.proj.ui || function(models, config) {
         var $menu = $("<div></div>").attr("id", "wv-proj-menu");
         var $menuItems = $("<ul></ul>");
 
-        var $arctic = $("<li><a><i class='ui-icon icon-large fa fa-arrow-circle-up fa-fw'></i>Arctic</a></li>");
-        $menuItems.append($arctic);
-        $arctic.click(function() { models.proj.select("arctic"); });
-
-        var $geographic = $("<li><a><i class='ui-icon icon-large fa fa-circle fa-fw'></i>Geographic</a></li>");
-        $menuItems.append($geographic);
-        $geographic.click(function() { models.proj.select("geographic"); });
-
-        if ( config.parameters.webmerc ) {
-            var $webmerc = $("<li><a><i class='ui-icon icon-large fa fa-square fa-fw'></i>Mercator</a></li>");
-            $menuItems.append($webmerc);
-            $webmerc.click(function() { models.proj.select("webmerc"); });
-        }
-
-        var $antarctic = $("<li><a><i class='ui-icon icon-large fa fa-arrow-circle-down fa-fw'></i>Antarctic</a></li>");
-        $menuItems.append($antarctic);
-        $antarctic.click(function() { models.proj.select("antarctic"); });
+        _.each(config.ui.projections, function(ui) {
+            var $item = $(
+                "<li><a><i class='ui-icon icon-large " + ui.style + "'>" +
+                "</i>" + ui.name + "</a></li>");
+            $menuItems.append($item);
+            $item.click(function() { models.proj.select(ui.id); });
+        });
 
         $menu.append($menuItems);
         $("body").append($menu);
