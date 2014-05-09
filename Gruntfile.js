@@ -27,6 +27,9 @@ module.exports = function(grunt) {
 
     if ( fs.existsSync("options") ) {
         var opt = grunt.file.readJSON("options/brand.json");
+        opt.officialName = opt.officialName || opt.name;
+        opt.longName = opt.longName || opt.name;
+        opt.shortName = opt.shortName || opt.name;
         var features = grunt.file.readJSON("options/features.json").features;
 
         console.log("");
@@ -47,6 +50,7 @@ module.exports = function(grunt) {
     grunt.initConfig({
 
         pkg: ( opt ) ? opt.packageName : "",
+        info: info,
         opt: opt,
         features: features,
 
@@ -128,7 +132,7 @@ module.exports = function(grunt) {
             apache: {
                 files: [
                     { expand: true, flatten: true, cwd: "etc/dev",
-                      src: ["worldview-dev.conf"], dest: "build" }
+                      src: ["worldview-dev.httpd.conf"], dest: "build" }
                 ]
             },
 
@@ -136,8 +140,8 @@ module.exports = function(grunt) {
 
         rename: {
             apache: {
-                src: "build/worldview-dev.conf",
-                dest: "dist/<%=pkg%>-dev.conf"
+                src: "build/worldview-dev.httpd.conf",
+                dest: "dist/<%=pkg%>-dev.httpd.conf"
             }
         },
 
@@ -167,8 +171,8 @@ module.exports = function(grunt) {
             tar_debug_versioned: {
                 command: "tar cjCf build dist/<%=pkg%>" +
                             "-debug" +
-                            "-<%=opt.version%>" +
-                            "-<%=opt.release%>" +
+                            "-<%=info.version%>" +
+                            "-<%=info.release%>" +
                             buildNumber +
                             ".git<%= grunt.config.get('git-revision') %>" +
                             ".tar.bz2 " +
@@ -187,8 +191,8 @@ module.exports = function(grunt) {
             // git revision
             tar_release_versioned: {
                 command: "tar cjCf build dist/<%=pkg%>" +
-                            "-<%=opt.version%>" +
-                            "-<%=opt.release%>" +
+                            "-<%=info.version%>" +
+                            "-<%=info.release%>" +
                             buildNumber +
                             ".git<%= grunt.config.get('git-revision') %>" +
                             ".tar.bz2 " +
@@ -287,7 +291,7 @@ module.exports = function(grunt) {
 
             apache: {
                 src: [
-                    "build/worldview-dev.conf"
+                    "build/worldview-dev.httpd.conf"
                 ],
                 overwrite: true,
                 replacements: [{
@@ -504,7 +508,6 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask("apache-config" , [
-        "brand",
         "copy:apache",
         "replace:apache",
         "rename:apache"
