@@ -86,8 +86,8 @@ buster.testCase("wv.layers.model", {
         };
         var errors = [];
         this.model.load(state, errors);
-        buster.assert.equals(this.model.active[0].id, "base1");
-        buster.assert.equals(this.model.active[1].id, "over1" );
+        buster.assert.equals(this.model.active[0].id, "over1");
+        buster.assert.equals(this.model.active[1].id, "base1" );
         buster.assert.equals(errors.length, 0);
     },
 

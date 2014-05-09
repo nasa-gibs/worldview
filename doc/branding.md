@@ -41,16 +41,10 @@ To add a logo, replace the following file with an image that is 247 pixels by
 
 To create an "About" page, edit the following file:
 
-    etc/brand.custom/src/pages/brand/about.html
+    optoins/brands/pages/about.html
 
 ## Rebuilding
 
-Inform the build process to use the "custom" brand directory by issuing
-the following commands at the root of the repository:
-
-    mkdir -p brand
-    echo '{"brand": "custom"}' > brand/brand.json
-
-Build again and the customizations should now be incldued:
+Build again and the customizations should now be included:
 
     grunt

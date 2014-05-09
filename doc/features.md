@@ -8,8 +8,7 @@ to enable the feature if desired.
 The data download feature requires a CGI script to execute queries to ECHO
 on behalf of Worldview. For this reason, it is not enabled by default.
 If you understand the implications of this feature and wish to enable it,
-edit the ``conf/web/brand/features.json`` file in the active brand
-directory and change to:
+edit the ``options/features.json`` file and change to:
 
     "dataDownload": true
 
@@ -28,8 +27,7 @@ serivce. Once you have obtained a key, copy ``conf/bitly_config.sample.py`` to
 This feature also requires a CGI script to execute queries to bit.ly
 on behalf of Worldview. For this reason, it is not enabled by default.
 If you understand the implications of this feature and wish to enable it,
-edit the ``conf/web/brand/features.json`` file in the active brand
-directory and change to:
+edit the ``options/features.json`` file and change to:
 
     "urlShortening": true
 
@@ -37,5 +35,3 @@ Rebuild Worldview and the CGI script should be included in the
 ``service`` directory. If your system administrator has disabled
 ``.htaccess`` files, configure apache to allow the execution of this
 CGI script.
-
-
