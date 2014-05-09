@@ -24,13 +24,16 @@ var buildNumber = ( process.env.BUILD_NUMBER )
 module.exports = function(grunt) {
 
     var info = grunt.file.readJSON("package.json");
-    var opt = grunt.file.readJSON("options/brand.json");
-    var features = grunt.file.readJSON("options/features.json").features;
 
-    console.log("");
-    console.log("[" + opt.packageName + "] " + opt.officialName +
-            ", Version " + info.version + "-" + info.release);
-    console.log("");
+    if ( fs.existsSync("options") ) {
+        var opt = grunt.file.readJSON("options/brand.json");
+        var features = grunt.file.readJSON("options/features.json").features;
+
+        console.log("");
+        console.log("[" + opt.packageName + "] " + opt.officialName +
+                ", Version " + info.version + "-" + info.release);
+        console.log("");
+    }
 
     // Lists of JavaScript and CSS files to include and in the correct
     // order
@@ -43,7 +46,7 @@ module.exports = function(grunt) {
 
     grunt.initConfig({
 
-        pkg: opt.packageName,
+        pkg: ( opt ) ? opt.packageName : "",
         opt: opt,
         features: features,
 
