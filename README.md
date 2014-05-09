@@ -84,6 +84,7 @@ Uses the release version (minified versions) found in the build directory.
 * [Branding](doc/branding.md)
 * [Optional Features](doc/features.md)
 * [Development Notes](doc/developing.md)
+* [Configuration](doc/config.md)
 * [Third-Party Library Use](THIRD_PARTY.md)
 * [Release Notes](RELEASE_NOTES.md)
 
