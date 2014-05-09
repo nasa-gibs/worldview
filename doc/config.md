@@ -6,7 +6,7 @@ The configuration used by the official NASA EOSIS Worldview application can be f
 
 A basic configuration that only includes three starting layers can be found here:
 
-<https://github.com/nasa-gigs/worldview-options-template>
+<https://github.com/nasa-gibs/worldview-options-template>
 
 To customize the configuration of the application, use either repository above as a starting point.
 
