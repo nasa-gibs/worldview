@@ -30,6 +30,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
     var init = function() {
         var paletteId = layer.palette.id;
         if ( config.palettes.rendered[paletteId] ) {
+            loaded = true;
             render();
         } else {
             wv.palettes.loadRendered(config, layer.id).done(function() {
@@ -100,7 +101,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
             $colorbar.addClass("editable");
         }
 
-        wv.palettes.colorbar(selector + " .wv-palettes-colorbar");
+        wv.palettes.colorbar(selector + " .wv-palettes-colorbar", palette);
         model.events
             .on("add", updateLegend)
             .on("remove", updateLegend);

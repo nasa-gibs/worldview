@@ -22,6 +22,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
 
     var self = {};
 
+    var split = 0;
     self.events = wv.util.events();
 
     self.active = [];
@@ -142,7 +143,12 @@ wv.layers.model = wv.layers.model || function(models, config) {
             def.visible = !spec.hidden;
         }
         def.opacity = ( _.isUndefined(spec.opacity) ) ? 1.0 : spec.opacity;
-        self.active.unshift(def);
+        if ( def.group === "overlays" ) {
+            self.active.unshift(def);
+            split += 1;
+        } else {
+            self.active.splice(split, 0, def);
+        }
         self.events.trigger("add", def);
         self.events.trigger("change");
     };
@@ -152,6 +158,9 @@ wv.layers.model = wv.layers.model || function(models, config) {
         var def = self.active[index];
         if ( index >= 0 ) {
             self.active.splice(index, 1);
+            if ( index < split ) {
+                split -= 1;
+            }
             self.events.trigger("remove", def);
             self.events.trigger("change");
         }
@@ -159,19 +168,6 @@ wv.layers.model = wv.layers.model || function(models, config) {
 
     self.replace = function(idOld, idNew) {
         throw new Error("Replace called");
-        /*
-        var index = _.findIndex(self.active, {id: id});
-        var group = oldLayer.group;
-        var index = $.inArray(oldLayer, self.active[group]);
-        if ( index < 0 ) {
-            return;
-        }
-        var newLayer = getLayer(idNew);
-        self.active[group][index] = newLayer;
-        self.visible[idNew] = true;
-        self.events.trigger("update");
-        self.events.trigger("change");
-        */
     };
 
     self.clear = function(projId) {
@@ -191,7 +187,11 @@ wv.layers.model = wv.layers.model || function(models, config) {
         }
         var def = self.active[oldIndex];
         self.active.splice(oldIndex, 1);
-        self.active.push(def);
+        if ( def.group === "baselayers" ) {
+            self.active.push(def);
+        } else {
+            self.active.splice(split - 1, 0, def);
+        }
         self.events.trigger("update");
         self.events.trigger("change");
     };
