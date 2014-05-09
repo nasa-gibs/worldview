@@ -221,7 +221,8 @@ module.exports = function(grunt) {
                 src: [
                     "build/<%=pkg%>-debug/web/*.html",
                     "build/<%=pkg%>-debug/web/js/**/*.js",
-                    "build/<%=pkg%>-debug/web/pages/**/*.html"
+                    "build/<%=pkg%>-debug/web/pages/**/*.html",
+                    "build/<%=pkg%>-debug/web/brand/**/*.html"
                 ],
                 overwrite: true,
                 replacements: [{
@@ -241,7 +242,7 @@ module.exports = function(grunt) {
                     to: buildTimestamp
                 },{
                     from: "@BUILD_VERSION@",
-                    to: "<%=opt.version%>"
+                    to: "<%=info.version%>"
                 },{
                     from: "@BUILD_NONCE@",
                     to: buildNonce
