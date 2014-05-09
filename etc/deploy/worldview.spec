@@ -86,14 +86,14 @@ install -m 644 httpd.worldview-debug.conf \
 	%{buildroot}/%{httpdconfdir}/@WORLDVIEW@-debug.conf
 rm httpd.worldview-debug.conf
 
-# Release configuration directory
+# Release options directory
 install -m 755 -d %{buildroot}/%{_sysconfdir}
-mv worldview/conf %{buildroot}/%{_sysconfdir}/@WORLDVIEW@
-ln -s %{_sysconfdir}/@WORLDVIEW@ worldview/conf
+mv worldview/options %{buildroot}/%{_sysconfdir}/@WORLDVIEW@
+ln -s %{_sysconfdir}/@WORLDVIEW@ worldview/options
 
-# Debug configuration directory
-mv worldview-debug/conf %{buildroot}/%{_sysconfdir}/@WORLDVIEW@-debug
-ln -s %{_sysconfdir}/@WORLDVIEW@-debug worldview-debug/conf
+# Debug options directory
+mv worldview-debug/options %{buildroot}/%{_sysconfdir}/@WORLDVIEW@-debug
+ln -s %{_sysconfdir}/@WORLDVIEW@-debug worldview-debug/options
 
 # Release application
 install -m 755 -d %{buildroot}/%{_datadir}/@WORLDVIEW@

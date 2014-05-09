@@ -72,8 +72,8 @@ module.exports = function(grunt) {
                       dest: "build/<%= pkg %>-debug/web" },
                     { expand: true, cwd: "bin",
 		              src: "**", dest: "build/<%= pkg %>-debug/bin" },
-                    { expand: true, cwd: "conf",
-                      src: "**", dest: "build/<%= pkg %>-debug/conf" }
+                    { expand: true, cwd: "options",
+                      src: "**", dest: "build/<%= pkg %>-debug/options" }
                 ]
             },
 
@@ -279,10 +279,10 @@ module.exports = function(grunt) {
                     to: "<%=pkg%>"
                 }, {
                     from: "@BUILD_VERSION@",
-                    to: "<%=opt.version%>"
+                    to: "<%=info.version%>"
                 },{
                     from: "@BUILD_RELEASE@",
-                    to: "<%=opt.release%>"
+                    to: "<%=info.release%>"
                 },{
                     from: "@GIT_REVISION@",
                     to: ".git<%= grunt.config.get('git-revision') %>"
