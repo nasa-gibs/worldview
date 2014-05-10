@@ -1,0 +1,4 @@
+ExpiresActive On
+ExpiresDefault A0
+Header set Cache-Control "no-cache, must-revalidate, public"
+Header set Pragma "no-cache"

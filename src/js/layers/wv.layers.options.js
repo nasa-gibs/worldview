@@ -151,7 +151,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         var sourcePalette = config.palettes.rendered[layer.palette.id];
         var targetPalette = config.palettes.custom[id];
         var translatedPalette =
-                wv.palettes.translate(sourcePalette, targetPalette);
+                wv.palettes.translate(sourcePalette.scale, targetPalette);
 
         return selectorItem(translatedPalette, id, targetPalette.name);
     };

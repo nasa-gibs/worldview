@@ -15,11 +15,11 @@ baseDir = os.path.join(os.path.dirname(__file__), '..')
 parser = OptionParser()
 parser.add_option("-d", "--development", action="store_true",
                   help="Use the source tree instead of the system directories")
-parser.add_option("-f", "--feed", 
+parser.add_option("-f", "--feed",
                   help="Use file as feed instead of Earth Observatory")
 (options, args) = parser.parse_args()
-    
-mockFeed = None              
+
+mockFeed = None
 imgURI = "var/images"
 if options.feed:
     # Read in the entire feed before changing directories
@@ -97,7 +97,7 @@ def extractKmz(zipname):
             os.makedirs(f)
         else:
             z.extract(f)
-        return f   
+        return f
     except BadZipfile as e:
         errorLog.error('(extractKmz) Bad Zipfile: %s', zipname)
         return None
@@ -133,7 +133,7 @@ def download(url, fileName=None):
         fileName = fileName or getFileName(url, r)
         with open(fileName, 'wb') as f:
             shutil.copyfileobj(r,f)
-    
+
     finally:
         r.close()
 
@@ -174,7 +174,7 @@ def processEntry(entry):
     south = ""
     east = ""
     west = ""
-        
+
     # check for KMZ
     kmzLink = findKmz(content)
     kmzSuccess = True
@@ -198,7 +198,7 @@ def processEntry(entry):
                 os.removedirs(kmlDir)
             except OSError as e:
                 errorLog.error('(processEntry) %s: %s', e.strerror, e.filename)
-        
+
         else:
             kmzSuccess = False
 
@@ -233,7 +233,7 @@ def processEntry(entry):
 
         else:
             coords = False
-    
+
     # if the entry is kept, parse the rest of the fields
     date = entry["date"].split("T")[0]
     title = entry["title"]
@@ -264,20 +264,20 @@ def processEntry(entry):
     if category == 'Fires':
         if lowerContent.count('red outlines') > 0:
             keyword = 'outlines'
-    
-    retobj = { 
-            'title':title, 
-            'date':date, 
-            'description':description, 
-            'category':category, 
-            'satellite':sat, 
-            'instrument':instrument, 
-            'thumbnail':worldviewThumbnailURI, 
-            'link':story, 
-            'north':north, 
-            'south':south, 
-            'east':east, 
-            'west':west, 
+
+    retobj = {
+            'title':title,
+            'date':date,
+            'description':description,
+            'category':category,
+            'satellite':sat,
+            'instrument':instrument,
+            'thumbnail':worldviewThumbnailURI,
+            'link':story,
+            'north':north,
+            'south':south,
+            'east':east,
+            'west':west,
             'keyword':keyword,
             'pubDate':pubData,
             'point':point,
@@ -307,10 +307,10 @@ def main():
     	    else:
                 last_len = len(entries) * -1
     	    recent_entries = data[last_len:]
-  
+
     	    for r in recent_entries:
                 recent_titles.append(r["title"])
-           
+
         except ValueError:
             pass
 
@@ -326,7 +326,7 @@ def main():
                 num = num + 1
             else:
                 debugLog.debug("already seen: %s" % obj["title"])
-    
+
     outfile.seek(0)
     if len(data) < 100:
         json.dump(data, outfile)

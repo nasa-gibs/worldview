@@ -160,9 +160,14 @@ wv.map.ui = wv.map.ui || function(models, config) {
             if ( !layer.wvid ) {
                 return;
             }
+            var renderable, key;
             var def = _.find(models.layers.active, { id: layer.wvid });
-            var key = layerKey(def);
-            var renderable = models.layers.isRenderable(def.id);
+            if ( !def ) {
+                renderable = false;
+            } else {
+                key = layerKey(def);
+                renderable = models.layers.isRenderable(def.id);
+            }
             if ( layer.key !== key || !renderable ) {
                 layer.setOpacity(0);
                 layer.div.style.zIndex = 0;
@@ -241,7 +246,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         var key = layerKey(def);
         if ( def.type === "wmts" ) {
             layer = createLayerWMTS(def);
-        } else if ( layer.type === "wms" ) {
+        } else if ( def.type === "wms" ) {
             layer = createLayerWMS(def);
         } else {
             throw new Error("Unknown layer type: " + def.type);
@@ -276,8 +281,8 @@ wv.map.ui = wv.map.ui || function(models, config) {
 
     var createLayerWMTS = function(def) {
         var proj = models.proj.selected;
-        var matrixSet = config.matrixSets[def.projections[proj.id].matrixSet];
         var source = config.sources[def.projections[proj.id].source];
+        var matrixSet = source.matrixSets[def.projections[proj.id].matrixSet];
         var param = {
             url: source.url,
             layer: def.id,
@@ -304,8 +309,8 @@ wv.map.ui = wv.map.ui || function(models, config) {
 
     var createLayerWMS = function(def) {
         var proj = models.proj.selected;
-        var source = config.sources[def.projections[projId].source];
-        var layerParameter = def.projections[projId].layer || def.id;
+        var source = config.sources[def.projections[proj.id].source];
+        var layerParameter = def.projections[proj.id].layer || def.id;
 
         var transparent = ( def.format === "image/png" );
 

@@ -3,35 +3,6 @@
 *Please Note*: There is litte to no documentation at ths time and any
 comments in the code may be out of date.
 
-### Web Server Configuration
-
-Worldview must be accessed via a web server to properly work. To generate
-a configuration file for use with Apache, execute the following:
-
-    grunt apache-config
-
-A ``.conf`` file will be placed in the ``dist`` directory. As root, copy
-this file to the Apache configuration directory:
-
-* Mac OS X: /private/etc/apache2/other
-* RHEL/CentOS: /etc/httpd/conf.d
-
-Restart Apache:
-
-* Mac OS X: ``sudo apachectl restart``
-* RHEL/CentOS: ``sudo service httpd restart``
-
-Worldview should now be available at the following:
-
-* [http://localhost/worldview](http://localhost/worldview): Uses the source
-directory
-* [http://localhost/worldview-debug](http://localhost/worldview-debug):
-Uses the debug version (non-minified versions) found in the build directory.
-* [http://localhost/worldview-release](http://localhost/worldview-release):
-Uses the release version (minified versions) found in the build directory.
-* [http://localhost/worldview-doc](http://localhost/worldview-doc)
-
-
 ### Minification of CSS and JavaScript files
 
 The build script needs to know which files to minify and the correct order used

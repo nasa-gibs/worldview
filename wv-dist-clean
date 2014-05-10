@@ -1,0 +1,38 @@
+#!/bin/bash
+#
+# NASA Worldview
+#
+# This code was originally developed at NASA/Goddard Space Flight Center for
+# the Earth Science Data and Information System (ESDIS) project.
+#
+# Copyright (C) 2013 - 2014 United States Government as represented by the
+# Administrator of the National Aeronautics and Space Administration.
+# All Rights Reserved.
+#
+
+set -e
+
+PROG=$(basename "$0")
+BASE_DIR=$(dirname "$0")
+
+echo -n "$PROG: Removing node_modules... "
+rm -rf "$BASE_DIR/node_modules"
+echo "done."
+
+echo -n "$PROG: Removing python virtualenv... "
+rm -rf "$BASE_DIR"/python
+echo "done."
+
+echo -n "$PROG: Removing build directory... "
+rm -rf "$BASE_DIR"/build
+echo "done."
+
+echo -n "$PROG: Removing dist directory... "
+rm -rf "$BASE_DIR"/dist
+echo "done."
+
+echo -n "$PROG: Removing any other non-source files... "
+rm -f npm-debug.log
+rm -rf src/conf/*
+rm -rf src/config/*
+echo "done."

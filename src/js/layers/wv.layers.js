@@ -74,9 +74,7 @@ wv.layers = (function(self) {
             }
         });
 
-        var orders =
-                _.cloneDeep(config.layerOrder.baselayers).concat(
-                _.cloneDeep(config.layerOrder.overlays));
+        var orders = _.cloneDeep(config.layerOrder);
         _.each(orders, function(layerId) {
             if ( !config.layers[layerId] ) {
                 error(layerId, "No configuration");

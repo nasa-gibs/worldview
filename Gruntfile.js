@@ -21,10 +21,22 @@ var buildNonce = moment.utc().format("YYYYMMDDHHmmssSSS");
 var buildNumber = ( process.env.BUILD_NUMBER )
     ? "." + process.env.BUILD_NUMBER : "";
 
-var brand = "default";
-var opt = {};
-
 module.exports = function(grunt) {
+
+    var info = grunt.file.readJSON("package.json");
+
+    if ( fs.existsSync("options") ) {
+        var opt = grunt.file.readJSON("options/brand.json");
+        opt.officialName = opt.officialName || opt.name;
+        opt.longName = opt.longName || opt.name;
+        opt.shortName = opt.shortName || opt.name;
+        var features = grunt.file.readJSON("options/features.json").features;
+
+        console.log("");
+        console.log("[" + opt.packageName + "] " + opt.officialName +
+                ", Version " + info.version + "-" + info.release);
+        console.log("");
+    }
 
     // Lists of JavaScript and CSS files to include and in the correct
     // order
@@ -36,6 +48,12 @@ module.exports = function(grunt) {
     var banner = grunt.file.read("etc/deploy/banner.txt");
 
     grunt.initConfig({
+
+        pkg: ( opt ) ? opt.packageName : "",
+        info: info,
+        opt: opt,
+        features: features,
+
         "git-rev-parse": {
             build: {
                 options: {
@@ -46,13 +64,6 @@ module.exports = function(grunt) {
         },
 
         copy: {
-            brand: {
-                files: [
-                    { expand: true, cwd: "etc/brand.<%=brand%>",
-                      src: ["**"], dest: "." }
-                ]
-            },
-
             // Copies the source files to the build directory
             source: {
                 files: [
@@ -61,8 +72,17 @@ module.exports = function(grunt) {
                       dest: "build/<%= pkg %>-debug/web" },
                     { expand: true, cwd: "bin",
 		              src: "**", dest: "build/<%= pkg %>-debug/bin" },
-                    { expand: true, cwd: "conf",
-                      src: "**", dest: "build/<%= pkg %>-debug/conf" }
+                    { expand: true, cwd: "options",
+                      src: "**", dest: "build/<%= pkg %>-debug/options" }
+                ]
+            },
+
+            config_src: {
+                files: [
+                    { expand: true, cwd: "build/options/config",
+                      src: ["**"], dest: "src/config" },
+                    { expand: true, cwd: "build/options/brand",
+                      src: ["**"], dest: "src/brand" }
                 ]
             },
 
@@ -74,7 +94,7 @@ module.exports = function(grunt) {
             release: {
                 files: [
                     { expand: true, cwd: "build/<%=pkg%>-debug",
-		      src: ["**", "**/.htaccess"],
+                      src: ["**", "**/.htaccess"],
                       dest: "build/<%=pkg%>" },
                     { expand: true, cwd: "build/<%=pkg%>-debug/web",
                       src: [
@@ -112,7 +132,7 @@ module.exports = function(grunt) {
             apache: {
                 files: [
                     { expand: true, flatten: true, cwd: "etc/dev",
-                      src: ["worldview-dev.conf"], dest: "build" }
+                      src: ["worldview-dev.httpd.conf"], dest: "build" }
                 ]
             },
 
@@ -120,18 +140,14 @@ module.exports = function(grunt) {
 
         rename: {
             apache: {
-                src: "build/worldview-dev.conf",
-                dest: "dist/<%=pkg%>-dev.conf"
+                src: "build/worldview-dev.httpd.conf",
+                dest: "dist/<%=pkg%>-dev.httpd.conf"
             }
         },
 
         exec: {
             config: {
-                command: "PATH=python/bin:${PATH} bin/make-conf"
-            },
-
-            update_gc: {
-                command: "bin/fetch-gibs"
+                command: "PATH=python/bin:${PATH} bin/wv-options-build"
             },
 
             // After removing JavaScript and CSS files that are no longer
@@ -155,8 +171,8 @@ module.exports = function(grunt) {
             tar_debug_versioned: {
                 command: "tar cjCf build dist/<%=pkg%>" +
                             "-debug" +
-                            "-<%=opt.version%>" +
-                            "-<%=opt.release%>" +
+                            "-<%=info.version%>" +
+                            "-<%=info.release%>" +
                             buildNumber +
                             ".git<%= grunt.config.get('git-revision') %>" +
                             ".tar.bz2 " +
@@ -175,8 +191,8 @@ module.exports = function(grunt) {
             // git revision
             tar_release_versioned: {
                 command: "tar cjCf build dist/<%=pkg%>" +
-                            "-<%=opt.version%>" +
-                            "-<%=opt.release%>" +
+                            "-<%=info.version%>" +
+                            "-<%=info.release%>" +
                             buildNumber +
                             ".git<%= grunt.config.get('git-revision') %>" +
                             ".tar.bz2 " +
@@ -189,25 +205,6 @@ module.exports = function(grunt) {
                 command: "tar cjCf build dist/" +
                             "<%=pkg%>.tar.bz2 " +
                             "<%=pkg%>"
-            },
-
-            // Create a tarball of the documentation with a version number and
-            // git revision
-            tar_doc_versioned: {
-                command: "tar cjCf build dist/<%=pkg%>-doc" +
-                            "-<%=opt.version%>" +
-                            "-<%=opt.release%>" +
-                            buildNumber +
-                            ".git<%= grunt.config.get('git-revision') %>" +
-                            ".tar.bz2 <%=pkg%>-doc"
-            },
-
-            // Create a tarball of the documentation without versioning
-            // information
-            tar_doc: {
-                command: "tar cjCf build dist/" +
-                            "<%=pkg%>-doc.tar.bz2 " +
-                            "<%=pkg%>-doc"
             },
 
             // Builds the RPM
@@ -224,7 +221,8 @@ module.exports = function(grunt) {
                 src: [
                     "build/<%=pkg%>-debug/web/*.html",
                     "build/<%=pkg%>-debug/web/js/**/*.js",
-                    "build/<%=pkg%>-debug/web/pages/**/*.html"
+                    "build/<%=pkg%>-debug/web/pages/**/*.html",
+                    "build/<%=pkg%>-debug/web/brand/**/*.html"
                 ],
                 overwrite: true,
                 replacements: [{
@@ -244,7 +242,7 @@ module.exports = function(grunt) {
                     to: buildTimestamp
                 },{
                     from: "@BUILD_VERSION@",
-                    to: "<%=opt.version%>"
+                    to: "<%=info.version%>"
                 },{
                     from: "@BUILD_NONCE@",
                     to: buildNonce
@@ -282,10 +280,10 @@ module.exports = function(grunt) {
                     to: "<%=pkg%>"
                 }, {
                     from: "@BUILD_VERSION@",
-                    to: "<%=opt.version%>"
+                    to: "<%=info.version%>"
                 },{
                     from: "@BUILD_RELEASE@",
-                    to: "<%=opt.release%>"
+                    to: "<%=info.release%>"
                 },{
                     from: "@GIT_REVISION@",
                     to: ".git<%= grunt.config.get('git-revision') %>"
@@ -294,7 +292,7 @@ module.exports = function(grunt) {
 
             apache: {
                 src: [
-                    "build/worldview-dev.conf"
+                    "build/worldview-dev.httpd.conf"
                 ],
                 overwrite: true,
                 replacements: [{
@@ -371,19 +369,6 @@ module.exports = function(grunt) {
             }
         },
 
-        yuidoc: {
-            main: {
-                name: "<%=opt.officialName%>",
-                description: "<%=opt.description%>",
-                version: "<%=opt.version%>",
-                url: "<%=opt.url%>",
-                options: {
-                    paths: ["src/js"],
-                    outdir: "build/<%=pkg%>-doc"
-                }
-            }
-        },
-
         jshint: {
             console: [
                 "src/js/**/wv.*.js",
@@ -435,8 +420,8 @@ module.exports = function(grunt) {
                 "!build/<%=pkg%>-debug/web/js/map/wv.map.tileworker.js",
                 "!build/<%=pkg%>-debug/web/ext/**/*"
             ],
-            conf_src: [
-                "src/conf/**/*"
+            config_src: [
+                "src/config/**/*"
             ],
             dist_tar: ["dist/*.tar.bz2"],
             dist_rpm: ["dist/*.rpm"],
@@ -445,42 +430,6 @@ module.exports = function(grunt) {
             cgi_shorten: ["build/<%=pkg%>*/web/service/link/*"]
         }
 
-    });
-
-    grunt.registerTask("brand_select", "Selecting brand", function() {
-        if ( fs.existsSync("brand/brand.json") ) {
-            brand = grunt.file.readJSON("brand/brand.json").brand || "default";
-        }
-        grunt.config("brand", brand);
-    });
-
-    grunt.registerTask("brand_config", "Loading branding options", function() {
-        opt = grunt.file.readJSON("brand/options.json");
-        features =
-            grunt.file.readJSON("conf/web/brand/features.json").features;
-
-        console.log();
-        console.log("============================================================");
-        console.log("[" + opt.packageName + "] " + opt.officialName +
-                ", Version " + opt.version + "-" + opt.release);
-        console.log("");
-        console.log("Branding        : " + brand);
-        console.log("Long name       : " + opt.longName);
-        console.log("Short name      : " + opt.shortName);
-        console.log("Public GIBS     : " + (!process.env.GIBS_HOST));
-        console.log("URL shortening  : " + features.urlShortening);
-        console.log("Data download   : " + features.dataDownload);
-        console.log("Support email   : " + opt.email);
-
-        if ( brand !== "worldview" ) {
-            console.error();
-            grunt.log.error("Using custom branding");
-        }
-        console.log("============================================================");
-        console.log();
-
-        grunt.config("opt", opt);
-        grunt.config("pkg", opt.packageName);
     });
 
     grunt.file.mkdir("build/rpmbuild");
@@ -495,7 +444,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-contrib-cssmin");
     grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-contrib-uglify");
-    grunt.loadNpmTasks("grunt-contrib-yuidoc");
     grunt.loadNpmTasks("grunt-line-remover");
     grunt.loadNpmTasks("grunt-exec");
     grunt.loadNpmTasks("grunt-git-rev-parse");
@@ -508,9 +456,9 @@ module.exports = function(grunt) {
 
     grunt.registerTask("config", [
         "clean",
-        "remove:conf_src",
-        "exec:update_gc",
-        "exec:config"
+        "remove:config_src",
+        "exec:config",
+        "copy:config_src"
     ]);
 
     grunt.registerTask("feature_shorten", "URL Shortening", function() {
@@ -530,7 +478,6 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask("build", [
-        "brand",
         "config",
         "copy:source",
         "concat",
@@ -545,14 +492,11 @@ module.exports = function(grunt) {
         "exec:empty",
         "feature_shorten",
         "feature_download",
-        "doc",
         "remove:dist_tar",
         "exec:tar_debug_versioned",
         "exec:tar_debug",
         "exec:tar_release_versioned",
         "exec:tar_release",
-        "exec:tar_doc_versioned",
-        "exec:tar_doc"
     ]);
 
     grunt.registerTask("rpm_only", [
@@ -565,14 +509,11 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask("apache-config" , [
-        "brand",
         "copy:apache",
         "replace:apache",
         "rename:apache"
     ]);
 
-    grunt.registerTask("brand", ["brand_select", "copy:brand", "brand_config"]);
-    grunt.registerTask("doc", ["yuidoc"]);
     grunt.registerTask("lint", ["jshint:console"]);
     grunt.registerTask("test", ["buster:console"]);
     grunt.registerTask("push", ["lint", "test"]);

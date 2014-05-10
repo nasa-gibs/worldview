@@ -17,7 +17,7 @@ $(function() {
     var errors = [];
 
     var main = function() {
-        var configURI = wv.brand.url("conf/wv.json");
+        var configURI = wv.brand.url("config/wv.json");
         var promise = ( parameters.loadDelay ) ?
                 wv.debug.loadDelay(configURI, parameters) :
                 $.getJSON(configURI);

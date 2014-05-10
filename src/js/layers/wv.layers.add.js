@@ -62,11 +62,13 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
             .attr("id", self.id + "facetedSearch")
             .addClass("facetedSearch");
 
-        var $select = $("<select></select>")
-            .attr("id", self.id + "select")
-            .addClass("select");
+        if ( config.aoi ) {
+            var $select = $("<select></select>")
+                .attr("id", self.id + "select")
+                .addClass("select");
 
-        $form.append($select);
+            $form.append($select);
+        }
 
         var $search = $("<input>")
             .attr("id", self.id + "search")
@@ -112,10 +114,13 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
             .addClass("category")
             .addClass("scroll-pane");
 
-        $.each(config.layerOrder[group], function(index, layerId) {
-            renderLayer($element, group, layerId);
+        _.each(config.layerOrder, function(layerId) {
+            var layer = config.layers[layerId];
+            if ( layer.group === group ) {
+                renderLayer($element, group, layerId);
+            }
         });
-        
+
 
         $container.append($header);
         $container.append($element);
@@ -278,6 +283,9 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
     };
 
     var updateAreasOfInterest = function() {
+        if ( !config.aoi ) {
+            return;
+        }
         $select = $("#" + self.id + "select");
         var previous = $(self.selector + "select").val();
 

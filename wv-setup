@@ -1,0 +1,111 @@
+#!/bin/bash
+#
+# NASA Worldview
+#
+# This code was originally developed at NASA/Goddard Space Flight Center for
+# the Earth Science Data and Information System (ESDIS) project.
+#
+# Copyright (C) 2013 - 2014 United States Government as represented by the
+# Administrator of the National Aeronautics and Space Administration.
+# All Rights Reserved.
+#
+
+set -e
+
+BASE_DIR=$(dirname "$0")
+PROG=$(basename "$0")
+
+usage() {
+    cat << EOF
+Usage: $PROG [options]
+
+Options:
+   -d    Install apache configuration files and restart the web server
+   -h    Prints this usage
+EOF
+}
+
+while getopts dkh flag; do
+    case "$flag" in
+        d)
+            DEVELOP=1
+            shift
+            ;;
+        h)
+            usage
+            exit 0
+            ;;
+        ?)
+            usage
+            exit 1
+            ;;
+    esac
+done
+shift $(( OPTIND - 1 ));
+
+cd "$BASE_DIR"
+
+if [ ! -e /usr/local/bin/grunt ] ; then
+    echo "$PROG: ***** Installing a global version of grunt."
+    echo "You may be prompted for the root password to execute this command:"
+    echo "    sudo npm install --global grunt-cli"
+    sudo npm install --global grunt-cli
+fi
+
+if [ ! -d "$BASE_DIR/node_modules" ] ; then
+    echo "***** Installing node.js dependencies"
+    npm install
+fi
+
+if [ ! -e "/usr/local/bin/virtualenv" ] ; then
+    echo "$PROG: ***** Installing a global version of virtualenv"
+    echo "You may be prompted for the root password to execute this command:"
+    echo "    sudo easy_install virtualenv==1.10.1"
+    sudo easy_install virtualenv==1.10.1
+fi
+
+if [ ! -d "$BASE_DIR/python" ] ; then
+    echo "$PROG: ***** Installing python dependencies"
+    virtualenv python
+    "$BASE_DIR"/python/bin/pip install xmltodict
+fi
+
+if [ ! -d "$BASE_DIR/options" ] ; then
+    echo "$PROG: ***** Fetching options"
+    git clone https://github.com/nasa-gibs/worldview-options-template options
+    mkdir -p "$BASE_DIR/build"
+    git clone https://github.com/nasa-gibs/worldview-options-eosdis \
+            "$BASE_DIR/build/options-eosdis"
+    cp    "$BASE_DIR/build/options-eosdis/config.json" "$BASE_DIR/options"
+    cp -r "$BASE_DIR/build/options-eosdis/config" "$BASE_DIR/options"
+    cp -r "$BASE_DIR/build/options-eosdis/colormaps" "$BASE_DIR/options"
+fi
+
+if [ ! -d "$BASE_DIR/dist" ] ; then
+    echo "$PROG: ***** First time build"
+    grunt build
+fi
+
+if [ "$DEVELOP" ] ; then
+    echo "$PROG: ***** Creating apache configuration"
+    rm -f dist/*.httpd.conf
+    grunt apache-config
+
+    # OS X
+    if [ -d /etc/apache2/other ] ; then
+        echo "$PROG: ***** Installing configuration and restarting server"
+        echo "You may be prompted for the root password to execute these"
+        echo "commands:"
+        echo "    sudo cp dist/*.httpd.conf /etc/apache2/other"
+        echo "    sudo apachectl restart"
+        sudo cp dist/*.httpd.conf /etc/apache2/other
+        sudo apachectl restart
+    else
+        echo "This only works on OS X at the moment"
+        exit 1
+    fi
+
+    echo -e "\nApplication is now available at:\n"
+    grep Alias dist/*.httpd.conf | cut -f 2 -d" " | sed s_.*_http://localhost\&_g
+    echo
+fi
