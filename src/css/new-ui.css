@@ -1,0 +1,148 @@
+@font-face {
+    font-family: 'Ubuntu Condensed';
+    font-style: normal;
+    font-weight: 400;
+    src: url(../font/UbuntuCondensed-Regular.ttf) format('ttf');
+}
+*:focus {
+    outline: 0;
+}
+
+
+/************************Timeline!****************************/
+#timeline{
+    position:absolute;
+    bottom:5px;
+}
+#timeline footer text{
+    font-size:16px;
+    font-weight:normal;
+    font-family:'Arial Narrow';
+    font-style:normal;
+    font-variant:normal;
+    font-stretch:normal;
+    text-align:start;
+    line-height:125%;
+    letter-spacing:0px;
+    word-spacing:0px;
+    writing-mode:lr-tb;
+    text-anchor:start;
+    fill-opacity:1;
+    stroke:none;
+}
+.x.axis .tick text{
+    fill:#ccc;
+}
+#timeline header{
+    background:url("../images/bg-not-front.gif") transparent 20% 50% no-repeat;
+}
+#timeline header input{
+    height:60px;
+    background:transparent;
+    border:1px solid transparent;
+    color:#ccc;
+    font-size:33px;
+    font-family:'Arial Narrow', sans-serif;
+    vertical-align:middle;
+    box-sizing:border-box;
+}
+@media all{
+    #timeline header input::-moz-selection{
+        background:red;
+    }
+    #timeline header input::-webkit-selection{
+        background:red;
+    }
+}
+#this{
+position: absolute;
+left: 50%;
+top: 50%;
+color: #fff;
+}
+/* Temporary sizing of inputs until something more dynamic can be made */
+#timeline header input:nth-child(1){width:2em;padding:3px;}
+#timeline header input:nth-child(2){width:1.8em;padding:3px;}
+#timeline header input:nth-child(3){width:1.1em;padding:3px;}
+
+
+#timeline header input:hover{
+    border-color:#fff;
+}
+#timeline header .button-input-group-selected{
+    border-color:#fff;
+}
+#timeline header input::-webkit-selection {color:#1a1a1a;background:#fff;}
+#timeline header div{
+display:inline-block;}
+#timeline header svg {
+    width:40px;
+    height:60px;
+    vertical-align:middle;
+}
+#timeline header>div:hover {
+    background-color:#ffffff;
+    cursor:pointer;
+}
+#timeline header>div:hover .arrow{
+    fill:#1a1a1a;
+}
+#timeline header svg .arrow{
+    -webkit-transform: translate(8px,0px);
+    fill:#cccccc;
+    fill-opacity:1;
+    stroke:none;
+    
+}
+#timeline header, #timeline footer{
+    display:inline-block;
+    vertical-align:middle;
+}
+#timeline footer{
+    height:60px;
+    margin-left:-5px;
+    background:rgba(0,0,0,0.6);
+}
+
+
+
+/* Timeline svg classes */
+.plot {
+    fill: rgba(250, 250, 255, 0);
+}
+.grid .tick {
+    stroke: lightgrey;
+    opacity: 0.7;
+}
+.grid path {
+    stroke-width: 0;
+}
+.axis path, .axis line {
+    fill: none;
+    stroke: none;
+    shape-rendering: crispEdges;
+}
+.x.axis path {
+    display: none;
+}
+.line {
+    fill: none;
+    stroke: #999;
+    stroke-opacity:0.7;
+    stroke-width: 10px;
+}
+.line2 {
+    fill: steelblue;
+    stroke: steelblue;
+    stroke-width: 2px;
+}
+.hover-line{
+    fill:none;
+    stroke:red;
+    stroke-width: 2px;
+}
+.hover-text{
+    fill:red;
+    font-weight:normal;
+    font-size:12px;
+}

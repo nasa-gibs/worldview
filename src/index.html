@@ -86,7 +86,9 @@
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/dataDownload.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/global.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.sidebar.css">
+                      <link type="text/css" rel="Stylesheet" href="css/new-ui.css">
                       <link type="text/css" rel="Stylesheet" href="pages/css/wv.document.css">
+                      
 
     <!-- External libraries =============================================== -->
     <!-- link.dev  -->      <script type="text/javascript" src="ext/main/lodash-2.4.1/lodash.js"></script>
@@ -128,6 +130,8 @@
     <!-- link.prod --> <!-- <script type="text/javascript" src="ext/map/openlayers-2.13.1-wv1/OpenLayers.min.js"></script> -->
 
                             <script type="text/javascript" src="ext/ui/noUiSlider-6.1.10/jquery.nouislider.min.js"></script>
+                            
+                            <script type="text/javascript" src="ext/ui/d3/d3.js"></script>
 
     <!-- link.prod --> <!-- <script type="text/javascript" src="js/wv.js?v=20131218215115174&mobile"></script> -->
 
@@ -150,7 +154,8 @@
     <!-- link.dev --> <script type="text/javascript" src="js/date/wv.date.model.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/date/wv.date.sliders.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/date/wv.date.label.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/date/wv.date.wheels.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/date/wv.date.timeline.js"></script>
+    
 
     <!-- link.dev --> <script type="text/javascript" src="js/layers/wv.layers.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/layers/wv.layers.model.js"></script>
@@ -206,19 +211,31 @@
             <div id="imagedownload"></div>
             <div id="dlMap"></div>
 
-            <div class="horizontalContainer">
-                <div id="time">
-                    <div id="timeds">
-                        <div id="timedsdateHolder" class="dateHolder"></div>
-                    </div>
-                    <div id="timemds"></div>
-                </div>
-            </div>
+                    <section id="timeline">
+                        <header>
+                            <input type="text" value="2014" maxlength="4" class="button-input-group" id="year-input-group" />
+                            <input type="text" value="Mar" maxlength="3" class="button-input-group" id="month-input-group" />
+                            <input type="text" value="03" maxlength="2" class="button-input-group" id="day-input-group" />
+                            <div class="button-action-group" id="left-arrow-group">
+                                <svg>
+                                    <path
+                                     d="M 13.759236,15 0,30 13.759236,45 24,45 10.240764,30 24,15 13.759236,15 z"
+                                     class="arrow" />
+                                </svg>
+                            </div>
+                            <div class="button-action-group" id="right-arrow-group">
+                                <svg>
+                                    <path
+                                    d="M 10.240764,15 24,30 10.240764,45 0,45 13.759236,30 0,15 10.240764,15 z"
+                                    class="arrow" />
+                                </svg>
+                            </div>
+                        </header>
+                        <footer>
+                            
+                        </footer>
+                    </section>
 
-            <!-- TEMP: Remove this once the real slider goes in -->
-            <div id="day-panel">
-                <div id="day-slider"></div>
-            </div>
         </div>
     </div>
     <ol id="joyRideTipContent">

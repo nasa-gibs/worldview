@@ -18,7 +18,7 @@
     "src/js/date/wv.date.model.js",
     "src/js/date/wv.date.sliders.js",
     "src/js/date/wv.date.label.js",
-    "src/js/date/wv.date.wheels.js",
+    "src/js/date/wv.date.timeline.js",
 
     "src/js/layers/wv.layers.js",
     "src/js/layers/wv.layers.model.js",
