@@ -33,7 +33,7 @@ option set and copy out the necessary configurations:
 
     mkdir -p build
     git clone https://github.com/nasa-gibs/worldview-options-eosdis.git build/options-eosdis
-    cp -r build/options-eosds/{config,colormaps,config.json} options
+    cp -r build/options-eosdis/{config,colormaps,config.json} options
 
 Start the build with:
 
