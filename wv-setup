@@ -117,4 +117,6 @@ if [ "$DEVELOP" ] ; then
     echo -e "\nApplication is now available at:\n"
     grep Alias dist/*.httpd.conf | cut -f 2 -d" " | sed s_.*_http://localhost\&_g
     echo
+    echo "Please check to make sure apache can access this directory"
+    echo
 fi
