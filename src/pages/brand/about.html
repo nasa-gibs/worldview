@@ -1,0 +1,168 @@
+<!doctype html>
+<html>
+  <head>
+    <title>@OFFICIAL_NAME@ - About</title>
+    <link type="text/css" href="../css/wv.document.css?v=@BUILD_NONCE@" rel="Stylesheet" />
+    <link type="text/css" href="../css/wv.standalone.css?v=@BUILD_NONCE@" rel="Stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+
+  <body>
+    <div id="page" class="wv-document">
+      <div class="right">
+        <div class="caption">
+          Version @BUILD_VERSION@
+        </div>
+      </div>
+      <h1>Welcome to @NAME@</h1>
+      <p>
+        This tool from NASA's
+        <a href='https://earthdata.nasa.gov/about-eosdis' target='_blank'>EOSDIS</a>
+        provides the capability to interactively browse global,
+        full-resolution satellite imagery and then download the underlying
+        data.  Most of the 100+ available products are updated within three
+        hours of observation, essentially showing the entire Earth as it
+        looks "right now".  This supports time-critical application areas
+        such as wildfire management, air quality measurements, and flood
+        monitoring.  Arctic and Antarctic views of several products are
+        also available for a "full globe" perspective.  Browsing on tablet
+        and smartphone devices is generally supported for mobile access to
+        the imagery.
+      </p>
+      <div class="right">
+        <a href='https://earthdata.nasa.gov/gibs' target='_blank' class="gibs-logo"> </a>
+        <div class="caption gibs-caption">
+          Powered by GIBS
+        </div>
+      </div>
+      <p>
+        @NAME@ uses the
+        <a href='https://earthdata.nasa.gov/gibs' target='_blank'>Global Imagery Browse Services (GIBS)</a>
+        to rapidly retrieve its imagery for an interactive browsing experience.
+        While @NAME@ uses
+        <a href='http://openlayers.org/' target='_blank'>OpenLayers</a> as
+        its mapping library, GIBS imagery can also be accessed from
+        Google Earth, NASA World Wind, and several other clients.  We
+        encourage interested developers to build their own clients or
+        integrate NASA imagery into their existing ones using these
+        services.
+      </p>
+
+      <hr/>
+
+      <h2><a id='imagery-use'>Imagery Use</a></h2>
+      <p>
+        NASA supports an
+        <a href='http://science.nasa.gov/earth-science/earth-science-data/data-information-policy/' target='_blank'>open data policy</a>
+        and we encourage publication of imagery from @NAME@;  when
+        doing so, please cite it as "NASA @NAME@" and also consider
+        including a permalink (such as
+        <a href='https://earthdata.nasa.gov/labs/worldview/?map=-126.907471,36.373535,-117.415283,42.815918&products=baselayers,MODIS_Aqua_CorrectedReflectance_TrueColor~overlays,MODIS_Fires_All,sedac_bound&time=2012-08-23&switch=geographic' target='_blank'>this one</a>)
+        to allow others to explore the imagery.
+      </p>
+
+      <hr/>
+
+      <h2><a id='acknowledgements'>Acknowledgements</a></h2>
+      <p>
+        <ul>
+          <li>
+            Near-real time data is courtesy of <a href='http://lance.nasa.gov/' target='_blank'>LANCE</a> data providers:
+            <ul>
+              <li>
+                <a href='http://lance.nasa.gov/home/about/amsr-e-sips/' target='_blank'>AMSR-E SIPS</a>
+              </li>
+              <li>
+                <a href='http://lance.nasa.gov/home/about/ges-disc/' target='_blank'>GES DISC</a>
+              </li>
+              <li>
+                <a href='http://lance.nasa.gov/home/about/modaps/' target='_blank'>MODAPS</a>
+              </li>
+              <li>
+                <a href='http://lance.nasa.gov/home/about/omi-sips/' target='_blank'>OMI SIPS</a>
+              </li>
+              <li>
+                <a href='http://earthdata.nasa.gov/data/near-real-time-data/firms' target='_blank'>FIRMS</a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            Ocean color and temperature data provided by
+            <a href='http://oceancolor.gsfc.nasa.gov/' target='_blank'>OBPG</a>
+            and <a href='http://podaac.jpl.nasa.gov/' target='_blank'>PO.DAAC</a>
+          </li>
+          <li>
+            Socioeconomic data supplied by
+            <a href='http://sedac.ciesin.org/' target='_blank'>SEDAC</a>.
+          </li>
+          <li>
+            Freeze / Thaw products supplied by
+            <a href='http://nsidc.org' target='_blank'>NSIDC</a>.
+          </li>
+          <li>
+            Orbit tracks provided by
+            <a href='https://www.space-track.org' target='_blank'>space-track.org</a>.
+          </li>
+          <li>
+            Polar coastlines and graticules courtesy of
+            <a href='http://www.add.scar.org/' target='_blank'>ADD SCAR</a>, <a href='http://www.openstreetmap.org/' target='_blank'>OpenStreetMap</a>,
+            and <a href='http://www.polarview.aq/' target='_blank'>PolarView</a>.
+          </li>
+          <li>
+            User-selectable color palettes are primarily derived from
+            <a href='http://neo.sci.gsfc.nasa.gov/' target='_blank'>NEO</a>.
+          </li>
+          <li>
+            The imagery ingest and serving system (GIBS) is built by
+            NASA/JPL and operated by NASA/GSFC.
+          </li>
+          <li>
+            @NAME@ is built by the NASA/GSFC Earth Science Data
+            Information System
+            (<a href='http://earthdata.nasa.gov/esdis' target='_blank'>ESDIS</a>)
+            Project and is grateful for the use of many
+            <a href='pages/worldview-opensourcelibs.html' target='_blank'>open source projects</a>.
+          </li>
+        </ul>
+      </p>
+
+      <hr/>
+
+      <h2><a id='disclaimer'>Disclaimer</a></h2>
+      <p>
+        The information presented through this interface is provided
+        "as is" and users bear all responsibility and liability for their
+        use of the data.  Please read the
+        <a href='https://earthdata.nasa.gov/data/nrt-data/disclaimer' target='_blank'>full disclaimer</a>.
+      </p>
+
+      <hr/>
+
+      <h2><a id='license'>License</a></h2>
+      <p>
+        Copyright (C) 2013 - 2014 United States Government as represented
+        by the Administrator of the National Aeronautics and Space
+        Administration. All Rights Reserved.
+      </p>
+      <p>
+        This software is licensed under the
+        <a href='pages/license.html'>NASA Open Source Software Agreement, Version 1.3.</a>
+        Source code is available on
+        <a target='_blank' href="https://github.com/nasa-gibs/worldview.git">github</a>.
+      </p>
+      <hr/>
+
+      <p>
+        <div>
+          @BUILD_TIMESTAMP@
+        </div>
+        <div>
+          Release Management: <a href="mailto:mike.mcgann@nasa.gov">Mike McGann</a>
+        </div>
+        <div>
+          Responsible NASA official: <a href="mailto:ryan.a.boller@nasa.gov">Ryan Boller</a>
+        </div>
+      </p>
+
+    </div>
+  </body>

@@ -71,10 +71,10 @@ Element.prototype.toggleClass = function (className) {
     //Current date line
     var data2 = [
         {
-            "date": Date.now(),
+            "date": todayDateMs,
             "value": "0"
         }, {
-            "date": Date.now(),
+            "date": todayDateMs,
             "value": "6"
         }
     ];
@@ -120,7 +120,6 @@ Element.prototype.toggleClass = function (className) {
             });
     
     var zoomed = function(){
-        console.log("HERERERERERER###################");
         var t = zoom.translate(),
         s = zoom.scale();
 
@@ -145,7 +144,14 @@ Element.prototype.toggleClass = function (className) {
         svg.select(".line2")
             .attr("class", "line2")
             .attr("d", line);
+        
+        var makeFill = d3.select('.line2').attr("d");
+        d3.select(".line2").attr("d", makeFill + "l3,0l0,60z");
+        var makeFillPos = $(".line2").offset();
+        $("svg#now-line").css("left", (makeFillPos.left-3) + "px");
+        
         d3.selectAll('.x.axis .tick text').attr('x',5).attr('style','text-anchor:left;');
+        
     };
     
     var zoom = d3.behavior.zoom()
@@ -179,16 +185,6 @@ Element.prototype.toggleClass = function (className) {
 
     var init = function() {
         
-        
-                
-
-        
-
-        
-        
-
-        
-
         svg = d3.select('#timeline footer')
             .append("svg:svg")
             .attr('width', width + margin.left + margin.right)
@@ -238,6 +234,10 @@ Element.prototype.toggleClass = function (className) {
             .datum(data2)
             .attr("class", "line2")
             .attr("d", line);
+        var makeFill = d3.select('.line2').attr("d");
+        d3.select(".line2").attr("d", makeFill + "l3,0l0,60z");
+        var makeFillPos = $(".line2").offset();
+        $("svg#now-line").css("left", (makeFillPos.left-3) + "px");
 
         d3.selectAll('.x.axis .tick text').attr('x',5).attr('style','text-anchor:left;');
         
@@ -261,10 +261,14 @@ Element.prototype.toggleClass = function (className) {
 
         
         // Add mouseover events.
-        d3.select('#timeline footer').on("mouseover", function() { 
-          //console.log('mouseover')
+        
+        d3.select("#timeline footer").on("mouseenter", function() { 
+          //console.log(d3.event.pageX);
+          $("#timeline-text").show();
+          hoverLineGroup.style("opacity", 1);
         }).on("mousemove", function() {
           //console.log('mousemove', d3.mouse(this));
+          
           var mouse_x = d3.mouse(this)[0];
           var mouse_y = d3.mouse(this)[1];
           var graph_y = y.invert(mouse_y);
@@ -273,14 +277,22 @@ Element.prototype.toggleClass = function (className) {
           var format = d3.time.format('%e %b');
           //format.parse(graph_x)
           var stringDate = String(graph_x).split(' ');
-          hoverDate.text(stringDate[3] + " " + stringDate[1] + " " + stringDate[2]);
-          hoverDate.attr('x', mouse_x + 5);
+          $("#timeline-text").text(stringDate[3] + " " + stringDate[1] + " " + stringDate[2]);
           hoverLine.attr("x1", mouse_x).attr("x2", mouse_x);
-          hoverLineGroup.style("opacity", 1);
-            
+          if ((mouse_x > (x(data2[0].date)- 3)) && (mouse_x < (x(data2[0].date) + 6))){
+            hoverLineGroup.style("opacity", 1e-6);
+            $("#timeline-text").hide();
+            $(".line2").css("stroke","#fff");
+          }else {
+            $("#timeline-text").show();
+            hoverLineGroup.style("opacity", 1);
+            $(".line2").css("stroke","transparent");
+          }
+          $("#timeline-text").css({"left": d3.event.pageX});
         }).on("mouseleave", function() {
             //console.log('mouseout');
             hoverLineGroup.style("opacity", 1e-6);
+            $("#timeline-text").hide();
 
         }).on("click", function(){
             var mouse_x = d3.mouse(this)[0];
@@ -288,12 +300,63 @@ Element.prototype.toggleClass = function (className) {
             data2[1].date = Date.parse(x.invert(mouse_x));
             svg.select(".line2")
                 .attr("d", line);
+            var makeFill = d3.select('.line2').attr("d");
+            d3.select(".line2").attr("d", makeFill + "l3,0l0,60z");
+            var makeFillPos = $(".line2").offset();
+            $("svg#now-line").css("left", (makeFillPos.left-3) + "px");
             currentDate = new Date(data2[0].date);
             console.log("#################### Current date:  " + currentDate);
             updateTime();
+            
+            
         });
-        
-        
+        $("svg#now-line").mousedown(function(e){
+            console.log("mousedown");
+            e.preventDefault();
+            d3.select("#timeline footer").on("mousemove", function(){
+                var mouse_x = d3.mouse(this)[0];
+                data2[0].date = Date.parse(x.invert(mouse_x));
+                data2[1].date = Date.parse(x.invert(mouse_x));
+                svg.select(".line2")
+                    .attr("d", line);
+                var makeFill = d3.select('.line2').attr("d");
+                d3.select(".line2").attr("d", makeFill + "l3,0l0,60z");
+                var makeFillPos = $(".line2").offset();
+                $("svg#now-line").css("left", (makeFillPos.left-3) + "px");
+                currentDate = new Date(data2[0].date);
+                console.log("#################### Current date:  " + currentDate);
+                updateTime();
+            });
+        }).mouseup(function(){
+            console.log("mouseup!!!");
+                d3.select("#timeline footer").on("mousemove", null);
+                d3.select("#timeline footer").on("mousemove", function() {
+          //console.log('mousemove', d3.mouse(this));
+          
+          var mouse_x = d3.mouse(this)[0];
+          var mouse_y = d3.mouse(this)[1];
+          var graph_y = y.invert(mouse_y);
+          var graph_x = x.invert(mouse_x);
+          //console.log("########### " + x.invert(mouse_x) + "######## " + x(graph_x));
+          var format = d3.time.format('%e %b');
+          //format.parse(graph_x)
+          var stringDate = String(graph_x).split(' ');
+          $("#timeline-text").text(stringDate[3] + " " + stringDate[1] + " " + stringDate[2]);
+          hoverLine.attr("x1", mouse_x).attr("x2", mouse_x);
+          if ((mouse_x > (x(data2[0].date)- 3)) && (mouse_x < (x(data2[0].date) + 6))){
+            hoverLineGroup.style("opacity", 1e-6);
+            $("#timeline-text").hide();
+            $(".line2").css("stroke","#fff");
+          }else {
+            $("#timeline-text").show();
+            hoverLineGroup.style("opacity", 1);
+            $(".line2").css("stroke","transparent");
+          }
+          $("#timeline-text").css({"left": d3.event.pageX});
+        });
+                
+            });
+
         //bind click action to interval radio buttons
         var buttons = document.getElementsByClassName('button-input-group');
         
@@ -379,6 +442,12 @@ Element.prototype.toggleClass = function (className) {
                 var newTimeBar = x(new Date(data2[0].date));
                 //update timeline line
                 svg.select(".line2").attr("d", line);
+                
+                var makeFill = d3.select('.line2').attr("d");
+                d3.select(".line2").attr("d", makeFill + "l3,0l0,60z");
+                var makeFillPos = $(".line2").offset();
+                $("svg#now-line").css("left", (makeFillPos.left-3) + "px");
+                
                 currentDate = new Date(data2[0].date);
                 updateTime();
 
@@ -414,6 +483,12 @@ Element.prototype.toggleClass = function (className) {
                 var newTimeBar = x(new Date(data2[0].date));
                 //update timeline line
                 svg.select(".line2").attr("d", line);
+                
+                var makeFill = d3.select('.line2').attr("d");
+                d3.select(".line2").attr("d", makeFill + "l3,0l0,60z");
+                var makeFillPos = $(".line2").offset();
+                $("svg#now-line").css("left", (makeFillPos.left-3) + "px");
+                
                 currentDate = new Date(data2[0].date);
                 updateTime();
             }//if

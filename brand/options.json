@@ -1,0 +1,11 @@
+{
+    "packageName":  "worldview",
+    "officialName": "EOSDIS Worldview (Alpha)",
+    "longName":     "EOSDIS Worldview",
+    "shortName":    "Worldview",
+    "description":  "Interactive satellite viewer",
+    "url":          "https://earthdata.nasa.gov/worldview",
+    "version":      "0.7.0",
+    "release":      "1",
+    "email":        "support@earthdata.nasa.gov"
+}

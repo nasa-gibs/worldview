@@ -12,7 +12,8 @@
 /************************Timeline!****************************/
 #timeline{
     position:absolute;
-    bottom:5px;
+    bottom:10px;
+    left:10px;
 }
 #timeline footer text{
     font-size:16px;
@@ -37,6 +38,7 @@
     background:url("../images/bg-not-front.gif") transparent 20% 50% no-repeat;
 }
 #timeline header input{
+    
     height:60px;
     background:transparent;
     border:1px solid transparent;
@@ -45,21 +47,21 @@
     font-family:'Arial Narrow', sans-serif;
     vertical-align:middle;
     box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
 }
 @media all{
+    #timeline header input::selection{
+        background:#2059a6;
+    }
     #timeline header input::-moz-selection{
-        background:red;
+        background:#2059a6;
     }
     #timeline header input::-webkit-selection{
-        background:red;
+        background:#2059a6;
     }
 }
-#this{
-position: absolute;
-left: 50%;
-top: 50%;
-color: #fff;
-}
+
 /* Temporary sizing of inputs until something more dynamic can be made */
 #timeline header input:nth-child(1){width:2em;padding:3px;}
 #timeline header input:nth-child(2){width:1.8em;padding:3px;}
@@ -101,7 +103,7 @@ display:inline-block;}
 #timeline footer{
     height:60px;
     margin-left:-5px;
-    background:rgba(0,0,0,0.6);
+    background:rgba(0,0,0,0.8);
 }
 
 
@@ -133,16 +135,71 @@ display:inline-block;}
 }
 .line2 {
     fill: steelblue;
-    stroke: steelblue;
-    stroke-width: 2px;
+    stroke: transparent;
+    stroke-width: 1px;
+    cursor:pointer;
+}
+
+.hoverkill{
+    fill: steelblue;
+    stroke-width:1px;
+    stroke:transparent;
 }
 .hover-line{
     fill:none;
-    stroke:red;
-    stroke-width: 2px;
+    stroke:#ff2a2a;
+    stroke-width: 3px;
 }
 .hover-text{
     fill:red;
     font-weight:normal;
     font-size:12px;
+}
+#timeline-text{
+    color:black;
+    font-size:14px;
+    font-weight:bold;
+    position:absolute;
+    bottom:75px;
+    left:0;
+    display:none;
+    background-color:#ff2a2a;
+    border:2px solid #ff7070;
+    padding:5px;
+    border-radius:5px;
+}
+svg#now-line{
+    position:absolute;
+    bottom:0px;
+    left:0;
+    width:18px;
+    height:79px;
+    cursor:pointer;
+}
+
+.arrow-outer {
+    fill:#548edd;
+    fill-opacity:1;
+    stroke:#222222;
+    stroke-width:0.5;
+    stroke-opacity:1;
+}
+svg#now-line rect.arrow-inner{
+    stroke-width:0.5;
+    stroke:transparent;
+}
+svg#now-line:hover .arrow-outer{
+    stroke:#fff;
+}
+svg#now-line:hover rect.arrow-inner{
+    stroke:#fff;
+}
+.arrow-inner{
+    fill:#2059a6;
+    fill-opacity:1;
+}
+
+.arrow-inner-line{
+    fill:#222222;
+    fill-opacity:1;
 }
