@@ -15,7 +15,7 @@ directory.
 *Please Note*: The ``options`` directory is contained in the ``.gitignore`` file
 so that you can make a separate repository for the customizations.
 
-Edit the ``optoins/brand.json`` file and make changes as necessary using the
+Edit the ``options/brand.json`` file and make changes as necessary using the
 guidance below:
 
 * ``packageName``: Name used to create tar files, base directories and web

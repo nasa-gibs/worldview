@@ -22,10 +22,11 @@ Usage: $PROG [options]
 Options:
    -d    Install apache configuration files and restart the web server
    -h    Prints this usage
+   -w    Worldview EOSIS options
 EOF
 }
 
-while getopts dkh flag; do
+while getopts dhw flag; do
     case "$flag" in
         d)
             DEVELOP=1
@@ -34,6 +35,10 @@ while getopts dkh flag; do
         h)
             usage
             exit 0
+            ;;
+        w)
+            WORLDVIEW=1
+            shift;
             ;;
         ?)
             usage
@@ -72,13 +77,17 @@ fi
 
 if [ ! -d "$BASE_DIR/options" ] ; then
     echo "$PROG: ***** Fetching options"
-    git clone https://github.com/nasa-gibs/worldview-options-template options
-    mkdir -p "$BASE_DIR/build"
-    git clone https://github.com/nasa-gibs/worldview-options-eosdis \
-            "$BASE_DIR/build/options-eosdis"
-    cp    "$BASE_DIR/build/options-eosdis/config.json" "$BASE_DIR/options"
-    cp -r "$BASE_DIR/build/options-eosdis/config" "$BASE_DIR/options"
-    cp -r "$BASE_DIR/build/options-eosdis/colormaps" "$BASE_DIR/options"
+    if [ "$WORLDVIEW" ] ; then
+        git clone https://github.com/nasa-gibs/worldview-options-eosdis options
+    else
+        git clone https://github.com/nasa-gibs/worldview-options-template options
+        mkdir -p "$BASE_DIR/build"
+        git clone https://github.com/nasa-gibs/worldview-options-eosdis \
+                "$BASE_DIR/build/options-eosdis"
+        cp    "$BASE_DIR/build/options-eosdis/config.json" "$BASE_DIR/options"
+        cp -r "$BASE_DIR/build/options-eosdis/config" "$BASE_DIR/options"
+        cp -r "$BASE_DIR/build/options-eosdis/colormaps" "$BASE_DIR/options"
+    fi
 fi
 
 if [ ! -d "$BASE_DIR/dist" ] ; then
@@ -107,5 +116,7 @@ if [ "$DEVELOP" ] ; then
 
     echo -e "\nApplication is now available at:\n"
     grep Alias dist/*.httpd.conf | cut -f 2 -d" " | sed s_.*_http://localhost\&_g
+    echo
+    echo "Please check to make sure apache can access this directory"
     echo
 fi
