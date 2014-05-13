@@ -90,7 +90,6 @@ Element.prototype.toggleClass = function (className) {
     
     //subtract the datepicker from the width of the screen
     width = window.innerWidth - $("#timeline header").outerWidth() - 30;
-    console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ = " + width);
     height = 60 - margin.top - margin.bottom;
     var currentDate = new Date(data2[0].date);
     var monthNames = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -262,17 +261,14 @@ Element.prototype.toggleClass = function (className) {
         // Add mouseover events.
         
         d3.select("#timeline footer").on("mouseenter", function() { 
-          //console.log(d3.event.pageX);
           $("#timeline-text").show();
           hoverLineGroup.style("opacity", 1);
         }).on("mousemove", function() {
-          //console.log('mousemove', d3.mouse(this));
           
           var mouse_x = d3.mouse(this)[0];
           var mouse_y = d3.mouse(this)[1];
           var graph_y = y.invert(mouse_y);
           var graph_x = x.invert(mouse_x);
-          //console.log("########### " + x.invert(mouse_x) + "######## " + x(graph_x));
           var format = d3.time.format('%e %b');
           //format.parse(graph_x)
           var stringDate = String(graph_x).split(' ');
@@ -289,7 +285,6 @@ Element.prototype.toggleClass = function (className) {
           }
           $("#timeline-text").css({"left": d3.event.pageX});
         }).on("mouseleave", function() {
-            //console.log('mouseout');
             hoverLineGroup.style("opacity", 1e-6);
             $("#timeline-text").hide();
 
@@ -304,7 +299,6 @@ Element.prototype.toggleClass = function (className) {
             var makeFillPos = $(".line2").offset();
             $("svg#now-line").css("left", (makeFillPos.left-3) + "px");
             currentDate = new Date(data2[0].date);
-            console.log("#################### Current date:  " + currentDate);
             updateTime();
             
             
@@ -323,20 +317,16 @@ Element.prototype.toggleClass = function (className) {
                 var makeFillPos = $(".line2").offset();
                 $("svg#now-line").css("left", (makeFillPos.left-3) + "px");
                 currentDate = new Date(data2[0].date);
-                console.log("#################### Current date:  " + currentDate);
                 updateTime();
             });
         }).mouseup(function(){
-            console.log("mouseup!!!");
                 d3.select("#timeline footer").on("mousemove", null);
                 d3.select("#timeline footer").on("mousemove", function() {
-          //console.log('mousemove', d3.mouse(this));
           
           var mouse_x = d3.mouse(this)[0];
           var mouse_y = d3.mouse(this)[1];
           var graph_y = y.invert(mouse_y);
           var graph_x = x.invert(mouse_x);
-          //console.log("########### " + x.invert(mouse_x) + "######## " + x(graph_x));
           var format = d3.time.format('%e %b');
           //format.parse(graph_x)
           var stringDate = String(graph_x).split(' ');
@@ -357,7 +347,7 @@ Element.prototype.toggleClass = function (className) {
             });
 
         //bind click action to interval radio buttons
-        var buttons = $('#button-input-group');
+        var buttons = $('.button-input-group');
         buttons.click(function(e){
             buttons.removeClass('button-input-group-selected');
             this.addClass("button-input-group-selected");
@@ -452,7 +442,6 @@ Element.prototype.toggleClass = function (className) {
         var hoverDate = document.querySelectorAll(".button-input-group");
         for (var i=0;i<hoverDate.length;i++){
             if (hoverDate[i].hasClass("button-input-group-selected")){
-                //var selectedInt = hoverDate[i].querySelector("tspan");
 
                 var interval = hoverDate[i].getAttribute('id');
                 switch(interval){
