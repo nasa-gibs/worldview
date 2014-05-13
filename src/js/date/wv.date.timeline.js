@@ -128,8 +128,7 @@ Element.prototype.toggleClass = function (className) {
 
         zoom.translate([tx, ty]);
 
-        d3.event.translate;
-        d3.event.scale;
+        
         //console.log(d3.event.translate);
         //console.log(d3.event.scale);
         svg.select(".x.axis").call(xAxis);
@@ -246,7 +245,7 @@ Element.prototype.toggleClass = function (className) {
                             .attr("class", "hover-line");
         var hoverLine = hoverLineGroup
             .append("line")
-                    .attr("x1", 10).attr("x2", 10) 
+                    .attr("x1", 10).attr("x2", 10)
                     .attr("y1", 0).attr("y2", height);
 
         var hoverDate = hoverLineGroup.append('text')
@@ -358,25 +357,17 @@ Element.prototype.toggleClass = function (className) {
             });
 
         //bind click action to interval radio buttons
-        var buttons = document.getElementsByClassName('button-input-group');
-        
-        for (var i=0;i<buttons.length; i++) { //FIXME: Convert bindings and toggling to jquery
-            buttons[i].onclick = function(){
-                //console.log("click");
-                for (var j=0;j<buttons.length;j++){
-                    buttons[j].removeClass('button-input-group-selected');
-                }
-                
-                this.toggleClass('button-input-group-selected');
-                this.select();
-            };
-        }
+        var buttons = $('#button-input-group');
+        buttons.click(function(e){
+            buttons.removeClass('button-input-group-selected');
+            this.addClass("button-input-group-selected");
+            this.select();
+        });
+
         document.getElementById("right-arrow-group").onclick = increment_time;
         document.getElementById("left-arrow-group").onclick = decrement_time;
         document.querySelector('#day-input-group').addClass('button-input-group-selected');
-        
-        
-        
+
     };
 
     self.collapse = function() {
@@ -400,7 +391,7 @@ Element.prototype.toggleClass = function (className) {
     var updateTime = function() {
     
         var changeMapDate = new Date(data2[0].date);
-        console.log(changeMapDate + " ####################");
+
         models.date.select(changeMapDate);
         document.querySelector('#year-input-group').value = currentDate.getFullYear();
         document.querySelector('#month-input-group').value = monthNames[currentDate.getMonth()];
@@ -423,7 +414,6 @@ Element.prototype.toggleClass = function (className) {
                 //var selectedInt = hoverDate[i].querySelector("tspan");
 
                 var interval = hoverDate[i].getAttribute('id');
-                console.log(hoverDate[i]);
                 switch(interval){
                     case 'year-input-group':
                         newDate = currentDate.setFullYear(currentDate.getFullYear()+1);
