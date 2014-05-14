@@ -80,14 +80,15 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
     };
 
     var renderRange = function($dialog) {
-        var def = _.find(models.layers.active, { id: layer.id });
-        var rendered = config.palettes.rendered[def.palette.id];
+        var layerDef = _.find(models.layers.active, { id: layer.id });
+        var paletteDef = models.palettes.get(layerDef.id);
+        var rendered = config.palettes.rendered[layerDef.palette.id];
         var max = rendered.scale.colors.length - 1;
         var $header = $("<div></div>")
             .html("Thresholds");
         var $slider = $("<div></div>")
             .noUiSlider({
-                start: [0, max],
+                start: [paletteDef.min || 0, paletteDef.max || max],
                 step: 1,
                 range: {
                     min: 0,
