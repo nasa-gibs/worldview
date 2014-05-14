@@ -18,6 +18,8 @@ SRC_DIR="$BASE/options"
 BUILD_DIR="$BASE/build/options-build"
 DEST_DIR="$BASE/build/options"
 
+set -e
+
 die() {
     echo "$PROG: ERROR: $@" >& 2
     exit 1

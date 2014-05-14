@@ -75,6 +75,9 @@ for layer_id in wv["layerOrder"]:
 
 print "%s: %d error(s), %d warning(s)" % (prog, error_count, warning_count)
 
+if error_count > 0:
+    sys.exit(1)
+
 json_options = {}
 json_options["indent"] = 4
 json_options["separators"] = (',', ': ')
