@@ -26,4 +26,3 @@ wv.data = (function(self) {
     return self;
 
 })(wv.data || {});
-

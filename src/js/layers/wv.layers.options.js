@@ -40,6 +40,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         renderOpacity($dialog);
 
         if ( custom ) {
+            renderRange($dialog);
             renderPaletteSelector($dialog);
         }
 
@@ -72,6 +73,30 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
                 },
             }).on("slide", function() {
                 models.layers.setOpacity(layer.id, parseFloat($(this).val()));
+            });
+
+        $dialog.append($header);
+        $dialog.append($slider);
+    };
+
+    var renderRange = function($dialog) {
+        var def = _.find(models.layers.active, { id: layer.id });
+        var rendered = config.palettes.rendered[def.palette.id];
+        var max = rendered.scale.colors.length - 1;
+        var $header = $("<div></div>")
+            .html("Thresholds");
+        var $slider = $("<div></div>")
+            .noUiSlider({
+                start: [0, max],
+                step: 1,
+                range: {
+                    min: 0,
+                    max: max
+                }
+            }).on("slide", function() {
+                models.palettes.setRange(layer.id,
+                    parseFloat($(this).val()[0]),
+                    parseFloat($(this).val()[1]));
             });
 
         $dialog.append($header);
