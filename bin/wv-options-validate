@@ -69,6 +69,10 @@ for layer_id in wv["layers"].keys():
                 palette_id + ".json")):
             error("[%s] Unknown palette: %s" % (layer_id, palette_id))
 
+for layer_id in wv["layerOrder"]:
+    if layer_id not in wv["layers"]:
+        error("[%s] In layer order but no definition" % layer_id)
+
 print "%s: %d error(s), %d warning(s)" % (prog, error_count, warning_count)
 
 json_options = {}

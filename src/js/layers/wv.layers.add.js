@@ -47,7 +47,8 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
                 resize();
             }
         });
-       resize();
+        filter();
+        resize();
     };
 
     var render = function() {
@@ -326,6 +327,9 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
     };
 
     var filterAreaOfInterest = function(layerId) {
+        if ( !config.aoi ) {
+            return false;
+        }
         var aoi = $(self.selector + "select").val();
         if ( aoi === "All" ) {
             return false;
