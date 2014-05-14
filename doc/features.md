@@ -21,8 +21,15 @@ CGI script.
 
 The URL shortening feature uses the service provided by
 [bit.ly](http://bit.ly). You will need to obtain an API key to use this
-serivce. Once you have obtained a key, copy ``conf/bitly_config.sample.py`` to
-``conf/bity_config.py``, edit the file, and fill in the proper values.
+service. Once you have obtained a key, create a ``options/bitly.json``
+file using the following as a template:
+
+```json
+{
+    "login": "my_login",
+    "key": "xh367ahdfjwna"
+}
+```
 
 This feature also requires a CGI script to execute queries to bit.ly
 on behalf of Worldview. For this reason, it is not enabled by default.
