@@ -16,7 +16,8 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
 
     var alignTo = "#products";
     var $dialog;
-    var $slider;
+    var $opacity;
+    var $range;
     var $dropDown;
     var self = {};
     var canvas;
@@ -63,18 +64,23 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         models.layers.events
             .on("remove", onLayerRemoved)
             .on("opacity", onOpacityUpdate);
+        models.palettes.events
+            .on("range", onRangeUpdate);
     };
 
     var dispose = function() {
         models.layers.events
             .off("remove", onLayerRemoved)
             .off("opacity", onOpacityUpdate);
+        models.palettes.events
+            .off("range", onRangeUpdate);
     };
 
     var renderOpacity = function($dialog) {
         var $header = $("<div></div>")
-            .html("Opacity");
-        $slider = $("<div></div>")
+            .html("Opacity")
+            .addClass("wv-header");
+        var $slider = $("<div></div>")
             .noUiSlider({
                 start: layer.opacity,
                 step: 0.01,
@@ -86,10 +92,12 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
                 models.layers.setOpacity(layer.id, parseFloat($(this).val()));
             });
         var $label = $("<div></div>")
-            .addClass("wv-opacity-label");
+            .addClass("wv-label")
+            .addClass("wv-label-opacity");
         $dialog.append($header);
         $dialog.append($slider);
         $dialog.append($label);
+        $opacity = $slider;
         onOpacityUpdate(layer, layer.opacity);
     };
 
@@ -98,9 +106,9 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
             return;
         }
         var label = (opacity * 100).toFixed(0)  + "%";
-        $("#wv-layers-options-dialog .wv-opacity-label").html(label);
-        if ( $slider.val() !== opacity ) {
-            $slider.val(opacity);
+        $("#wv-layers-options-dialog .wv-label-opacity").html(label);
+        if ( $opacity.val() !== opacity ) {
+            $opacity.val(opacity);
         }
     };
 
@@ -110,10 +118,13 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         var rendered = config.palettes.rendered[layerDef.palette.id];
         var max = rendered.scale.colors.length - 1;
         var $header = $("<div></div>")
-            .html("Thresholds");
+            .html("Thresholds")
+            .addClass("wv-header");
+        var startMin = paletteDef.min || 0;
+        var startMax = paletteDef.max || max;
         var $slider = $("<div></div>")
             .noUiSlider({
-                start: [paletteDef.min || 0, paletteDef.max || max],
+                start: [startMin, startMax],
                 step: 1,
                 range: {
                     min: 0,
@@ -123,15 +134,49 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
                 models.palettes.setRange(layer.id,
                     parseFloat($(this).val()[0]),
                     parseFloat($(this).val()[1]));
+            }).on("slide", function() {
+                onRangeUpdate(layer.id,
+                    parseFloat($(this).val()[0]),
+                    parseFloat($(this).val()[1]));
             });
-
+        var $label = $("<div>&nbsp;</div>")
+            .addClass("wv-label");
+        $label.append($("<span></span>")
+            .addClass("wv-label-range-min"));
+        $label.append($("<span></span>")
+            .addClass("wv-label-range-max"));
         $dialog.append($header);
         $dialog.append($slider);
+        $dialog.append($label);
+        $range = $slider;
+        onRangeUpdate(layer.id, startMin, startMax);
+    };
+
+    var onRangeUpdate = function(layerId, min, max) {
+        if ( layerId !== layer.id ) {
+            return;
+        }
+        var layerDef = config.layers[layerId];
+        var active = models.palettes.get(layerId);
+        var rendered = config.palettes.rendered[layerDef.palette.id];
+
+        var min = min || active.min || 0;
+        var max = max || active.max || rendered.scale.colors.length;
+
+        var minLabel = rendered.scale.labels[min];
+        var maxLabel = rendered.scale.labels[max];
+        $("#wv-layers-options-dialog .wv-label-range-min").html(minLabel);
+        $("#wv-layers-options-dialog .wv-label-range-max").html(maxLabel);
+
+        if ( !_.isEqual($range.val(), [min, max]) ) {
+            $range.val([min, max]);
+        };
     };
 
     var renderPaletteSelector = function($dialog) {
         var $pane = $("<div><span autofocus></span>Color palette</div>")
-            .attr("id", "wv-palette-selector");
+            .attr("id", "wv-palette-selector")
+            .addClass("wv-header");
         $pane.append(defaultPalette());
         var recommended = layer.palette.recommended || [];
         _.each(recommended, function(id) {

@@ -103,6 +103,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
 
         wv.palettes.colorbar(selector + " .wv-palettes-colorbar", palette);
         rendered = true;
+        showUnitRange();
     };
 
     self.update = function() {

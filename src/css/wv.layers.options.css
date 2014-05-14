@@ -9,7 +9,25 @@
  * All Rights Reserved.
  */
 
-#wv-layers-options-dialog .wv-opacity-label {
-     width: 100%;
-     text-align: right;
+#wv-layers-options-dialog .wv-header {
+    margin-top: 1em;
+    font-size: 14px;
+}
+
+#wv-layers-options-dialog .wv-label {
+    width: 100%;
+}
+
+#wv-layers-options-dialog .wv-label-opacity {
+    text-align: right;
+}
+
+#wv-layers-options-dialog .wv-label-range-min {
+    float: left;
+    text-align: left;
+}
+
+#wv-layers-options-dialog .wv-label-range-max {
+    float: right;
+    text-align: right;
 }
