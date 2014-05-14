@@ -45,8 +45,9 @@ wv.map.ui = wv.map.ui || function(models, config) {
         models.layers.events.on("opacity", updateOpacity);
         models.layers.events.on("update", updateMap);
         models.date.events.on("select", updateDate);
-        models.palettes.events.on("add", addPalette);
-        models.palettes.events.on("remove", removePalette);
+        models.palettes.events.on("set-custom", addPalette);
+        models.palettes.events.on("clear-custom", removePalette);
+        models.palettes.events.on("range", updatePalette);
 
         updateProjection();
     };
@@ -205,21 +206,12 @@ wv.map.ui = wv.map.ui || function(models, config) {
         }
     };
 
-    var getLookupTable = function(layerId) {
-        var layer = config.layers[layerId];
-        var source = config.palettes.rendered[layer.palette.id];
-        var custom = config.palettes.custom[models.palettes.active[layerId]];
-        var target = wv.palettes.translate(source, custom);
-        return wv.palettes.lookup(source, target);
-    };
-
     var addPalette = function(layerId, paletteId) {
-        var layer = config.layers[layerId];
-        var mapLayer = findLayer(layer.id);
-        var redraw = false;
+        var def = config.layers[layerId];
+        var key = layerKey(def);
+        var mapLayer = _.find(self.selected.layers, { key: key });
         if ( !mapLayer.lookupTable ) {
-            layerCache.clear();
-            refreshLayer(layer);
+            updateLayer(def);
             updateOrder();
         } else {
             mapLayer.lookupTable = getLookupTable(layerId);
@@ -233,10 +225,28 @@ wv.map.ui = wv.map.ui || function(models, config) {
 
     var removePalette = function(layerId) {
         var layer = config.layers[layerId];
-        layerCache.clear();
-        refreshLayer(layer);
+        updateLayer(layer);
         updateOrder();
     };
+
+    var updatePalette = function(layerId) {
+        var def = config.layers[layerId];
+        var key = layerKey(def);
+        var mapLayer = _.find(self.selected.layers, { key: key });
+        var palette = models.palettes.get(layerId);
+        if ( !mapLayer ) {
+            updateLayer(def);
+            //updateMap();
+        } else if ( palette.lookup ) {
+            mapLayer.lookupTable = palette.lookup;
+            _.each(mapLayer.grid, function(row) {
+                _.each(row, function(tile) {
+                    tile.applyLookup();
+                });
+            });
+        }
+        updateMap();
+    }
 
     var updateExtent = function() {
         models.map.extent = self.selected.getExtent().toArray();
@@ -297,7 +307,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         };
         if ( models.palettes.active[def.id] ) {
             param.tileClass = wv.map.palette.canvasTile;
-            param.lookupTable = getLookupTable(def.id);
+            param.lookupTable = models.palettes.active[def.id].lookup;
         }
 
         var layer = new OpenLayers.Layer.WMTS(param);
@@ -460,7 +470,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         var projId = models.proj.selected.id;
         var date = wv.util.toISOStringDate(models.date.selected);
         var dateId = ( layerDef.period === "daily" ) ? date : "";
-        var activePalette = models.palettes.active[layerDef.id];
+        var activePalette = models.palettes.isActive(layerDef.id);
         var typeId = ( activePalette ) ? "canvas" : "image";
         return [layerId, projId, dateId, typeId].join(":");
     };

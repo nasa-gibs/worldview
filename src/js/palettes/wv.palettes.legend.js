@@ -103,8 +103,9 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
 
         wv.palettes.colorbar(selector + " .wv-palettes-colorbar", palette);
         model.events
-            .on("add", updateLegend)
-            .on("remove", updateLegend);
+            .on("set-custom", updateLegend)
+            .on("clear-custom", updateLegend)
+            .on("range", updateLegend)
         rendered = true;
     };
 
@@ -114,18 +115,19 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
     };
 
     var updateLegend = function() {
-        var palette = model.forLayer(layer.id);
-        if ( palette ) {
-            wv.palettes.colorbar(selector + " .wv-palettes-colorbar", palette);
-            showUnitRange();
+        if ( !loaded ) {
+            return;
         }
+        wv.palettes.colorbar(selector + " .wv-palettes-colorbar",
+                model.get(layer.id));
+        showUnitRange();
     };
 
     var showUnitRange = function() {
         if ( !loaded ) {
             return;
         }
-        var palette = model.forLayer(layer.id);
+        var palette = model.get(layer.id);
         var info = palette.scale || palette.classes;
         if ( !info ) {
             return;
@@ -145,7 +147,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         if ( !loaded ) {
             return;
         }
-        var palette = model.forLayer(layer.id);
+        var palette = model.get(layer.id);
         var info = palette.scale || palette.classes;
         if ( !info ) {
             return;
