@@ -16,6 +16,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
 
     var alignTo = "#products";
     var $dialog;
+    var $slider;
     var $dropDown;
     var self = {};
     var canvas;
@@ -60,17 +61,20 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         .on("dialogclose", dispose);
 
         models.layers.events
-            .on("remove", onLayerRemoved);
+            .on("remove", onLayerRemoved)
+            .on("opacity", onOpacityUpdate);
     };
 
     var dispose = function() {
-
+        models.layers.events
+            .off("remove", onLayerRemoved)
+            .off("opacity", onOpacityUpdate);
     };
 
     var renderOpacity = function($dialog) {
         var $header = $("<div></div>")
             .html("Opacity");
-        var $slider = $("<div></div>")
+        $slider = $("<div></div>")
             .noUiSlider({
                 start: layer.opacity,
                 step: 0.01,
@@ -95,6 +99,9 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         }
         var label = (opacity * 100).toFixed(0)  + "%";
         $("#wv-layers-options-dialog .wv-opacity-label").html(label);
+        if ( $slider.val() !== opacity ) {
+            $slider.val(opacity);
+        }
     };
 
     var renderRange = function($dialog) {
