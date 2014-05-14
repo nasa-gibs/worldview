@@ -93,7 +93,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
                     min: 0,
                     max: max
                 }
-            }).on("slide", function() {
+            }).on("set", function() {
                 models.palettes.setRange(layer.id,
                     parseFloat($(this).val()[0]),
                     parseFloat($(this).val()[1]));

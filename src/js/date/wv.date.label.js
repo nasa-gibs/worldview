@@ -40,4 +40,3 @@ wv.date.label = wv.date.label || function(models) {
     init();
     return self;
 };
-

@@ -36,7 +36,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
             wv.palettes.loadRendered(config, layer.id).done(function() {
                 loaded = true;
                 render();
-                updateLegend();
+                self.update();
             });
         }
     };
@@ -102,19 +102,10 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         }
 
         wv.palettes.colorbar(selector + " .wv-palettes-colorbar", palette);
-        model.events
-            .on("set-custom", updateLegend)
-            .on("clear-custom", updateLegend)
-            .on("range", updateLegend)
         rendered = true;
     };
 
-    self.dispose = function() {
-        model.events.off("add", updateLegend);
-        model.events.off("remove", updateLegend);
-    };
-
-    var updateLegend = function() {
+    self.update = function() {
         if ( !loaded ) {
             return;
         }
