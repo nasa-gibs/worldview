@@ -33,14 +33,14 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
         if ( !config.palettes.custom[paletteId] ) {
             throw new Error("Invalid palette: " + paletteId);
         }
-        if ( !self.active[layerId] ) {
+        if ( !config.layers[layerId] ) {
             throw new Error("Invalid layer: "+ layerId);
         }
         var active = self.active[layerId];
         if ( active && active.custom === paletteId ) {
             return;
         }
-        var def = active || { custom: paletteId }
+        var def = active || { custom: paletteId };
         updateLookup(layerId, def);
         self.active[layerId] = def;
         self.events.trigger("set-custom", layerId, def);
@@ -51,6 +51,7 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
         var def = self.active[layerId];
         if ( def && def.custom ) {
             delete def.custom;
+            delete def.lookup;
             self.events.trigger("clear-custom", layerId);
             self.events.trigger("change");
         }
@@ -73,7 +74,7 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
         } else if ( layer.palette ) {
             return config.palettes.rendered[layer.palette.id];
         }
-    }
+    };
 
     self.isActive = function(layerId) {
         var info = self.active[layerId];
@@ -82,8 +83,8 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
 
     self.clear = function() {
         throw new Error("Clear called");
-        self.active = {};
-        self.events.trigger("change");
+        //self.active = {};
+        //self.events.trigger("change");
     };
 
     self.save = function(state) {
@@ -103,10 +104,24 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
                     errors.push({message: "Invalid palette for layer" +
                         layerId + ": " + paletteId});
                 } else {
-                    self.add(layerId, paletteId);
+                    self.setCustom(layerId, paletteId);
                 }
             });
         }
+    };
+
+    // If any custom rendering is being used, image download must turn it
+    // off
+    self.inUse = function() {
+        var layers = models.layers.get();
+        var found = false;
+        _.each(layers, function(layer) {
+            if ( self.active[layer.id] ) {
+                found = true;
+                return false;
+            }
+        });
+        return found;
     };
 
     var useLookup = function(layerId, def) {
@@ -128,7 +143,8 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
             return;
         }
 
-        var source = config.palettes.rendered[layerId];
+        var layerDef = config.layers[layerId];
+        var source = config.palettes.rendered[layerDef.palette.id];
         var target;
         if ( def.custom ) {
             target = config.palettes.custom[def.custom];
@@ -178,7 +194,7 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
             lookup[sourceEntry] = targetEntry;
         });
         def.lookup = lookup;
-    }
+    };
 
     return self;
 

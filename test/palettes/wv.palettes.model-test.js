@@ -47,12 +47,14 @@ buster.testCase("wv.palettes.model", {
         this.stub($, "getJSON");
     },
 
-    "Adds a custom palette": function(done) {
+    "Sets a custom palette": function(done) {
         this.config.palettes.rendered = {
             "palette1": {
                 id: "palette1",
-                colors: ["c1"],
-                values: ["v1"]
+                scale: {
+                    colors: ["c1"],
+                    labels: ["v1"]
+                }
             }
         };
         this.config.palettes.custom = {
@@ -62,21 +64,23 @@ buster.testCase("wv.palettes.model", {
             }
         };
         var self = this;
-        this.model.events.on("add", function(layerId) {
-            var palette = self.model.forLayer(layerId);
-            buster.assert.equals(palette.colors[0], "x1");
-            buster.assert.equals(palette.values[0], "v1");
+        this.model.events.on("set-custom", function(layerId) {
+            var palette = self.model.get(layerId);
+            buster.assert.equals(palette.scale.colors[0], "x1");
+            buster.assert.equals(palette.scale.labels[0], "v1");
             done();
         });
-        this.model.add("layer1", "custom1");
+        this.model.setCustom("layer1", "custom1");
     },
 
-    "Removes a custom palette": function(done) {
+    "Clears a custom palette": function(done) {
         this.config.palettes.rendered = {
             "palette1": {
                 id: "palette1",
-                colors: ["c1"],
-                values: ["v1"]
+                scale: {
+                    colors: ["c1"],
+                    labels: ["v1"]
+                }
             }
         };
         this.config.palettes.custom = {
@@ -86,14 +90,14 @@ buster.testCase("wv.palettes.model", {
             }
         };
         var self = this;
-        this.model.events.on("remove", function(layerId) {
-            var palette = self.model.forLayer(layerId);
-            buster.assert.equals(palette.colors[0], "c1");
-            buster.assert.equals(palette.values[0], "v1");
+        this.model.events.on("clear-custom", function(layerId) {
+            var palette = self.model.get(layerId);
+            buster.assert.equals(palette.scale.colors[0], "c1");
+            buster.assert.equals(palette.scale.labels[0], "v1");
             done();
         });
-        this.model.add("layer1", "custom1");
-        this.model.remove("layer1");
+        this.model.setCustom("layer1", "custom1");
+        this.model.clearCustom("layer1");
     },
 
     "Saves state": function() {
@@ -113,7 +117,7 @@ buster.testCase("wv.palettes.model", {
     },
 
     "Loads state": function() {
-        this.stub(this.model, "add");
+        this.stub(this.model, "setCustom");
         var state = {
             palettes: {
                 layer1: "custom1",
@@ -126,8 +130,8 @@ buster.testCase("wv.palettes.model", {
         };
         var errors = [];
         this.model.load(state, errors);
-        buster.assert.calledWith(this.model.add, "layer1", "custom1");
-        buster.assert.calledWith(this.model.add, "layer3", "custom3");
+        buster.assert.calledWith(this.model.setCustom, "layer1", "custom1");
+        buster.assert.calledWith(this.model.setCustom, "layer3", "custom3");
         buster.assert.equals(errors.length, 0);
     },
 

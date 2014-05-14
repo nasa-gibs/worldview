@@ -246,7 +246,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
             });
         }
         updateMap();
-    }
+    };
 
     var updateExtent = function() {
         models.map.extent = self.selected.getExtent().toArray();
