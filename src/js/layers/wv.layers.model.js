@@ -154,7 +154,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
     };
 
     self.remove = function(id) {
-        var index = _.findIndex(self.active, {id: id});
+        var index = _.findIndex(self.active, { id: id });
         var def = self.active[index];
         if ( index >= 0 ) {
             self.active.splice(index, 1);
@@ -167,7 +167,15 @@ wv.layers.model = wv.layers.model || function(models, config) {
     };
 
     self.replace = function(idOld, idNew) {
-        throw new Error("Replace called");
+        var index = _.findIndex(self.active, { id: idOld });
+        if ( index < 0 ) {
+            return;
+        }
+        var oldDef = self.active[index];
+        var newDef = config.layers[idNew];
+        self.active[index] = newDef;
+        self.events.trigger("update");
+        self.events.trigger("change");
     };
 
     self.clear = function(projId) {
