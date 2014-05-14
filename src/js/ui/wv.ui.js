@@ -68,6 +68,7 @@ wv.ui = (function(self) {
             show: { effect: "fade" },
             hide: { effect: "fade" },
             width: 300,
+            minHeight: 1,
             height: "auto"
         });
     };

@@ -123,7 +123,6 @@ wv.link.ui = wv.link.ui || function(models, config) {
         });
 
         var error = function() {
-            permOverlay.hide();
             console.warn("Unable to shorten URL");
             console.warn.apply(console, arguments);
             wv.ui.notify("Unable to shorten the permalink at this time. " +
