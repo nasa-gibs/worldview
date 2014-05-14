@@ -19,7 +19,8 @@ import sys
 from urllib2 import Request, urlopen, HTTPError, quote
 
 endpoint = "http://api.bit.ly/v3/shorten"
-
+login = ""
+key = ""
 
 class RequestError(Exception):
   """
@@ -110,8 +111,8 @@ def process_request(options):
 
 
   url = "".join([endpoint,
-    "?login=" + bitly_config.login,
-    "&apiKey=" + bitly_config.api_key,
+    "?login=" + login,
+    "&apiKey=" + key,
     "&format=json",
     "&longUrl=" + quote(fields["url"].value)])
 
@@ -159,10 +160,13 @@ if __name__ == '__main__':
   """
   options = parse_options()
   try:
-    sys.path.append(os.path.join("..", "..", "..", "conf"))
-    import bitly_config
+    key_path = os.path.join("..", "..", "..", "options", "bitly.json")
+    with open(key_path) as fp:
+        config = json.load(fp)
+    login = config["login"]
+    key = config["key"]
     process_request(options)
-  except ImportError:
+  except IOError:
     options.error = True
     service_unavailable(options, "No API key")
   except RequestError as re:
