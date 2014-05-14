@@ -15,7 +15,8 @@ wv.layers = wv.layers || {};
 wv.layers.options = wv.layers.options || function(config, models, layer) {
 
     var alignTo = "#products";
-    var dialog;
+    var $dialog;
+    var $slider;
     var $dropDown;
     var self = {};
     var canvas;
@@ -31,15 +32,15 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         } else {
             loaded();
         }
-        models.layers.events.on("remove", onLayerRemoved);
     };
 
     var loaded = function(custom) {
-        var $dialog = wv.ui.getDialog();
+        $dialog = wv.ui.getDialog();
         $dialog.attr("id", "wv-layers-options-dialog");
         renderOpacity($dialog);
 
         if ( custom ) {
+            renderRange($dialog);
             renderPaletteSelector($dialog);
         }
 
@@ -55,16 +56,27 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
                 at: "right+5 top",
                 of: $("#products")
             }
-        }).iCheck({radioClass: 'iradio_square-grey'});
+        })
+        .iCheck({radioClass: 'iradio_square-grey'})
+        .on("dialogclose", dispose);
+
+        models.layers.events
+            .on("remove", onLayerRemoved)
+            .on("opacity", onOpacityUpdate);
+    };
+
+    var dispose = function() {
+        models.layers.events
+            .off("remove", onLayerRemoved)
+            .off("opacity", onOpacityUpdate);
     };
 
     var renderOpacity = function($dialog) {
-        var def = _.find(models.layers.active, { id: layer.id });
         var $header = $("<div></div>")
             .html("Opacity");
-        var $slider = $("<div></div>")
+        $slider = $("<div></div>")
             .noUiSlider({
-                start: def.opacity,
+                start: layer.opacity,
                 step: 0.01,
                 range: {
                     min: 0,
@@ -72,6 +84,45 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
                 },
             }).on("slide", function() {
                 models.layers.setOpacity(layer.id, parseFloat($(this).val()));
+            });
+        var $label = $("<div></div>")
+            .addClass("wv-opacity-label");
+        $dialog.append($header);
+        $dialog.append($slider);
+        $dialog.append($label);
+        onOpacityUpdate(layer, layer.opacity);
+    };
+
+    var onOpacityUpdate = function(def, opacity) {
+        if ( def.id !== layer.id ) {
+            return;
+        }
+        var label = (opacity * 100).toFixed(0)  + "%";
+        $("#wv-layers-options-dialog .wv-opacity-label").html(label);
+        if ( $slider.val() !== opacity ) {
+            $slider.val(opacity);
+        }
+    };
+
+    var renderRange = function($dialog) {
+        var layerDef = _.find(models.layers.active, { id: layer.id });
+        var paletteDef = models.palettes.get(layerDef.id);
+        var rendered = config.palettes.rendered[layerDef.palette.id];
+        var max = rendered.scale.colors.length - 1;
+        var $header = $("<div></div>")
+            .html("Thresholds");
+        var $slider = $("<div></div>")
+            .noUiSlider({
+                start: [paletteDef.min || 0, paletteDef.max || max],
+                step: 1,
+                range: {
+                    min: 0,
+                    max: max
+                }
+            }).on("set", function() {
+                models.palettes.setRange(layer.id,
+                    parseFloat($(this).val()[0]),
+                    parseFloat($(this).val()[1]));
             });
 
         $dialog.append($header);
@@ -166,10 +217,8 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
     };
 
     var onLayerRemoved = function(removedLayer) {
-        if ( layer.id === removedLayer.id ) {
-            if ( wv.dialogs.customPalette ) {
-                dialog.hide();
-            }
+        if ( layer.id === removedLayer.id && $dialog ) {
+            $dialog.dialog("close");
         }
     };
 

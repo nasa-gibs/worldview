@@ -27,60 +27,64 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
 
     var self = {};
     self.events = wv.util.events();
-
     self.active = {};
 
-    self.add = function(layerId, paletteId) {
+    self.setCustom = function(layerId, paletteId) {
         if ( !config.palettes.custom[paletteId] ) {
             throw new Error("Invalid palette: " + paletteId);
         }
         if ( !config.layers[layerId] ) {
             throw new Error("Invalid layer: "+ layerId);
         }
-        self.active[layerId] = paletteId;
-        self.events.trigger("add", layerId, self.active[layerId]);
+        var active = self.active[layerId];
+        if ( active && active.custom === paletteId ) {
+            return;
+        }
+        var def = active || { custom: paletteId };
+        updateLookup(layerId, def);
+        self.active[layerId] = def;
+        self.events.trigger("set-custom", layerId, def);
         self.events.trigger("change");
     };
 
-    self.remove = function(layerId) {
-        if ( self.active[layerId] ) {
-            delete self.active[layerId];
-            self.events.trigger("remove", layerId);
+    self.clearCustom = function(layerId) {
+        var def = self.active[layerId];
+        if ( def && def.custom ) {
+            delete def.custom;
+            delete def.lookup;
+            self.events.trigger("clear-custom", layerId);
             self.events.trigger("change");
         }
     };
 
-    self.clear = function() {
-        self.active = {};
+    self.setRange = function(layerId, min, max) {
+        var def = self.active[layerId] || {};
+        def.min = min;
+        def.max = max;
+        updateLookup(layerId, def);
+        self.active[layerId] = def;
+        self.events.trigger("range", layerId, min, max);
         self.events.trigger("change");
     };
 
-    self.forLayer = function(layerId) {
-        var sourcePaletteId =  config.layers[layerId].palette.id;
-        var sourcePalette = config.palettes.rendered[sourcePaletteId];
-        if ( !sourcePalette ) {
-            return null;
-        }
-        if ( self.active[layerId] ) {
-            var targetPaletteId = self.active[layerId];
-            var targetPalette = config.palettes.custom[targetPaletteId];
-            return wv.palettes.translate(sourcePalette, targetPalette);
-        } else {
-            return sourcePalette;
+    self.get = function(layerId) {
+        var layer = config.layers[layerId];
+        if ( self.active[layer.id] && self.active[layer.id].lookup ) {
+            return self.active[layer.id];
+        } else if ( layer.palette ) {
+            return config.palettes.rendered[layer.palette.id];
         }
     };
 
-    // FIXME: This should probably be renamed.
-    self.inUse = function() {
-        var layers = models.layers.get();
-        var found = false;
-        _.each(layers, function(layer) {
-            if ( self.active[layer.id] ) {
-                found = true;
-                return false;
-            }
-        });
-        return found;
+    self.isActive = function(layerId) {
+        var info = self.active[layerId];
+        return info && info.lookup;
+    };
+
+    self.clear = function() {
+        throw new Error("Clear called");
+        //self.active = {};
+        //self.events.trigger("change");
     };
 
     self.save = function(state) {
@@ -100,10 +104,96 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
                     errors.push({message: "Invalid palette for layer" +
                         layerId + ": " + paletteId});
                 } else {
-                    self.add(layerId, paletteId);
+                    self.setCustom(layerId, paletteId);
                 }
             });
         }
+    };
+
+    // If any custom rendering is being used, image download must turn it
+    // off
+    self.inUse = function() {
+        var layers = models.layers.get();
+        var found = false;
+        _.each(layers, function(layer) {
+            if ( self.active[layer.id] ) {
+                found = true;
+                return false;
+            }
+        });
+        return found;
+    };
+
+    var useLookup = function(layerId, def) {
+        var rendered = config.palettes.rendered[layerId];
+        if ( def.custom ) {
+            return true;
+        }
+        if ( rendered.scale ) {
+            var bins = rendered.scale.colors.length;
+            if ( def.min > 0 || def.max < bins - 1 ) {
+                return true;
+            }
+        }
+    };
+
+    var updateLookup = function(layerId, def) {
+        if ( !useLookup(layerId, def) ) {
+            def.lookup = null;
+            return;
+        }
+
+        var layerDef = config.layers[layerId];
+        var source = config.palettes.rendered[layerDef.palette.id];
+        var target;
+        if ( def.custom ) {
+            target = config.palettes.custom[def.custom];
+        } else {
+            target = source.scale;
+        }
+
+        var sourceCount = source.scale.colors.length;
+        var targetCount = target.colors.length;
+
+        var scale = {
+            "id": target.id,
+            "name": target.name || undefined
+        };
+        var newColors = [];
+        var newScale = [];
+        var newLabels = [];
+        _.each(source.scale.colors, function(color, index) {
+            if ( index < def.min || index > def.max ) {
+                newColors.push("00000000");
+            } else {
+                var sourcePercent = index / sourceCount;
+                var targetIndex = Math.floor(sourcePercent * targetCount);
+                newColors.push(target.colors[targetIndex]);
+                newScale.push(target.colors[targetIndex]);
+                newLabels.push(source.scale.labels[targetIndex]);
+            }
+        });
+        scale.colors = newScale;
+        scale.labels = newLabels;
+        def.scale = scale;
+
+        var lookup = {};
+        _.each(source.scale.colors, function(sourceColor, index) {
+            var sourceEntry =
+                parseInt(sourceColor.substring(0, 2), 16) + "," +
+                parseInt(sourceColor.substring(2, 4), 16) + "," +
+                parseInt(sourceColor.substring(4, 6), 16) + "," +
+                parseInt(sourceColor.substring(6, 8), 16);
+            var targetColor = newColors[index];
+            var targetEntry = {
+                r: parseInt(targetColor.substring(0, 2), 16),
+                g: parseInt(targetColor.substring(2, 4), 16),
+                b: parseInt(targetColor.substring(4, 6), 16),
+                a: parseInt(targetColor.substring(6, 8), 16)
+            };
+            lookup[sourceEntry] = targetEntry;
+        });
+        def.lookup = lookup;
     };
 
     return self;

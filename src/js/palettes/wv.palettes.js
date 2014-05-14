@@ -50,7 +50,11 @@ wv.palettes = (function(self) {
             var binWidth = canvas.width / bins;
             var drawWidth = Math.ceil(binWidth);
             _.each(info.colors, function(color, i) {
-                g.fillStyle = "#" + color.substring(0,6);
+                g.fillStyle = "rgba(" +
+                    parseInt(color.substring(0,2), 16) + "," +
+                    parseInt(color.substring(2,4), 16) + "," +
+                    parseInt(color.substring(4,6), 16) + "," +
+                    parseInt(color.substring(6,8), 16) + ")";
                 g.fillRect(Math.floor(binWidth * i), 0, drawWidth,
                         canvas.height);
             });

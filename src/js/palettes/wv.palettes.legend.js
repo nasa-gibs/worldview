@@ -36,7 +36,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
             wv.palettes.loadRendered(config, layer.id).done(function() {
                 loaded = true;
                 render();
-                updateLegend();
+                self.update();
             });
         }
     };
@@ -102,30 +102,23 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         }
 
         wv.palettes.colorbar(selector + " .wv-palettes-colorbar", palette);
-        model.events
-            .on("add", updateLegend)
-            .on("remove", updateLegend);
         rendered = true;
     };
 
-    self.dispose = function() {
-        model.events.off("add", updateLegend);
-        model.events.off("remove", updateLegend);
-    };
-
-    var updateLegend = function() {
-        var palette = model.forLayer(layer.id);
-        if ( palette ) {
-            wv.palettes.colorbar(selector + " .wv-palettes-colorbar", palette);
-            showUnitRange();
+    self.update = function() {
+        if ( !loaded ) {
+            return;
         }
+        wv.palettes.colorbar(selector + " .wv-palettes-colorbar",
+                model.get(layer.id));
+        showUnitRange();
     };
 
     var showUnitRange = function() {
         if ( !loaded ) {
             return;
         }
-        var palette = model.forLayer(layer.id);
+        var palette = model.get(layer.id);
         var info = palette.scale || palette.classes;
         if ( !info ) {
             return;
@@ -145,7 +138,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         if ( !loaded ) {
             return;
         }
-        var palette = model.forLayer(layer.id);
+        var palette = model.get(layer.id);
         var info = palette.scale || palette.classes;
         if ( !info ) {
             return;
