@@ -272,10 +272,10 @@ wv.data.results.dateTimeLabel = function(time) {
             var timeEnd = wv.util.parseTimestampUTC(granule.time_end);
             granule.label = wv.util.toISOStringDate(timeStart) + ": " +
                 wv.util.toISOStringTimeHM(timeStart) + "-" +
-                wv.util.toISOStringTimeHM(timeEnd);
+                wv.util.toISOStringTimeHM(timeEnd) + " UTC";
         } else {
             granule.label = wv.util.toISOStringDate(timeStart) + ": " +
-                wv.util.toISOStringTimeHM(timeStart);
+                wv.util.toISOStringTimeHM(timeStart) + " UTC";
         }
 
         return granule;
@@ -716,10 +716,10 @@ wv.data.results.timeLabel = function(time) {
         } else {
             displayEnd = "?";
         }
-        granule.label = displayStart + " - " + displayEnd + suffix;
+        granule.label = displayStart + " - " + displayEnd + " UTC" + suffix;
 
         granule.downloadLabel = wv.util.toISOStringDate(timeStart) + ": " +
-            displayStart + "-" + displayEnd;
+            displayStart + "-" + displayEnd + " UTC";
 
         return granule;
     };
@@ -770,5 +770,3 @@ wv.data.results.versionFilter = function() {
 
     return self;
 };
-
-
