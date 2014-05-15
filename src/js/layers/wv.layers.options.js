@@ -24,15 +24,11 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
     var palettes;
 
     var init = function() {
-        if ( layer.palette ) {
-            canvas = document.createElement("canvas");
-            canvas.width = 140;
-            canvas.height = 10;
-            var promise = wv.palettes.loadCustom(config).done(loaded);
-            wv.ui.indicator.delayed(promise);
-        } else {
-            loaded();
-        }
+        canvas = document.createElement("canvas");
+        canvas.width = 140;
+        canvas.height = 10;
+        var promise = wv.palettes.loadCustom(config).done(loaded);
+        wv.ui.indicator.delayed(promise);
     };
 
     var loaded = function(custom) {
@@ -40,7 +36,8 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         $dialog.attr("id", "wv-layers-options-dialog");
         renderOpacity($dialog);
 
-        if ( custom ) {
+        var palette = models.palettes.get(layer.id);
+        if ( palette.scale ) {
             renderRange($dialog);
             renderPaletteSelector($dialog);
         }
