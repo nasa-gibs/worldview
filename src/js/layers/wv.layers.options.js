@@ -135,7 +135,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
                     parseFloat($(this).val()[0]),
                     parseFloat($(this).val()[1]));
             }).on("slide", function() {
-                onRangeUpdate(layer.id,
+                updateRangeLabels(layer.id,
                     parseFloat($(this).val()[0]),
                     parseFloat($(this).val()[1]));
             });
@@ -153,6 +153,15 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
     };
 
     var onRangeUpdate = function(layerId, min, max) {
+        updateRangeLabels(layerId, min, max);
+
+        current = [parseFloat($range.val()[0]), parseFloat($range.val()[1])];
+        if ( !_.isEqual(current, [min, max]) ) {
+            $range.val([min, max]);
+        }
+    }
+
+    var updateRangeLabels = function(layerId, min, max) {
         if ( layerId !== layer.id ) {
             return;
         }
@@ -160,7 +169,9 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         var active = models.palettes.get(layerId);
         var rendered = config.palettes.rendered[layerDef.palette.id];
 
-        min = min || active.min || 0;
+        if ( _.isUndefined(min) ) {
+            min = active.min || 0;
+        }
         max = max || active.max || rendered.scale.colors.length;
 
         var minLabel = rendered.scale.labels[min];
@@ -168,9 +179,6 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         $("#wv-layers-options-dialog .wv-label-range-min").html(minLabel);
         $("#wv-layers-options-dialog .wv-label-range-max").html(maxLabel);
 
-        if ( !_.isEqual($range.val(), [min, max]) ) {
-            $range.val([min, max]);
-        }
     };
 
     var renderPaletteSelector = function($dialog) {
