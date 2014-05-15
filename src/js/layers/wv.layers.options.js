@@ -159,7 +159,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         if ( !_.isEqual(current, [min, max]) ) {
             $range.val([min, max]);
         }
-    }
+    };
 
     var updateRangeLabels = function(layerId, min, max) {
         if ( layerId !== layer.id ) {
