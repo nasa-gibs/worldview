@@ -1,7 +1,7 @@
 {
     "name": "worldview",
     "version": "0.6.6",
-    "release": "1",
+    "release": "2",
     "author": "Worldview Team <support@earthdata.nasa.gov>",
     "description": "Browse full-resolution, near real-time satellite imagery",
     "repository": {
