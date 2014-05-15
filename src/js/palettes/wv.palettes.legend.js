@@ -191,13 +191,13 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
     var highlightClass = function() {
         $(".wv-palettes-class-label[data-index='" +
             $(this).attr("data-index") + "']")
-            .addClass("wv-palettes-class-highlight")
+            .addClass("wv-palettes-class-highlight");
     };
 
     var unhighlightClass = function() {
         $(".wv-palettes-class-label[data-index='" +
             $(this).attr("data-index") + "']")
-            .removeClass("wv-palettes-class-highlight")
+            .removeClass("wv-palettes-class-highlight");
     };
 
 
