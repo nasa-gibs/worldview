@@ -421,4 +421,3 @@ if (!String.prototype.endsWith) {
     }
 
 })();
-

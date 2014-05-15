@@ -181,11 +181,11 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
             index = bins - 1;
         }
 
-        var color = info.colors[index].substring(0, 6);
+        var color = info.colors[index];
         var label = info.labels[index];
         $colorbar.tooltip("option", "content",
-            "<span class='wv-palettes-color-box' style='background: #" +
-            color + "'>" + "</span>" + label);
+            "<span class='wv-palettes-color-box' style='background: " +
+            wv.util.hexToRGBA(color) + "'>" + "</span>" + label);
     };
 
     var highlightClass = function() {

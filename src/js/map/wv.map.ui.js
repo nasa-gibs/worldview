@@ -210,23 +210,23 @@ wv.map.ui = wv.map.ui || function(models, config) {
         var def = config.layers[layerId];
         var key = layerKey(def);
         var mapLayer = _.find(self.selected.layers, { key: key });
-        if ( !mapLayer.lookupTable ) {
+        if ( !mapLayer ) {
             updateLayer(def);
-            updateOrder();
         } else {
-            mapLayer.lookupTable = getLookupTable(layerId);
+            mapLayer.lookupTable = models.palettes.get(layerId).lookup;
             _.each(mapLayer.grid, function(row) {
                 _.each(row, function(tile) {
                     tile.applyLookup();
                 });
             });
         }
+        updateMap();
     };
 
     var removePalette = function(layerId) {
         var layer = config.layers[layerId];
         updateLayer(layer);
-        updateOrder();
+        updateMap();
     };
 
     var updatePalette = function(layerId) {

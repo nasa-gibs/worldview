@@ -40,7 +40,8 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
         if ( active && active.custom === paletteId ) {
             return;
         }
-        var def = active || { custom: paletteId };
+        var def = active || {};
+        def.custom = paletteId;
         updateLookup(layerId, def);
         self.active[layerId] = def;
         self.events.trigger("set-custom", layerId, def);

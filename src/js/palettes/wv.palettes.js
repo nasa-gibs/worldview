@@ -43,18 +43,13 @@ wv.palettes = (function(self) {
         if ( !palette ) {
             return;
         }
-        var info = palette.scale || palette.classes;
-        if ( info ) {
-            var colors = info.colors;
-            var bins = info.colors.length;
+        var colors = palette.colors || palette.scale.colors;
+        if ( colors ) {
+            var bins = colors.length;
             var binWidth = canvas.width / bins;
             var drawWidth = Math.ceil(binWidth);
-            _.each(info.colors, function(color, i) {
-                g.fillStyle = "rgba(" +
-                    parseInt(color.substring(0,2), 16) + "," +
-                    parseInt(color.substring(2,4), 16) + "," +
-                    parseInt(color.substring(4,6), 16) + "," +
-                    parseInt(color.substring(6,8), 16) + ")";
+            _.each(colors, function(color, i) {
+                g.fillStyle = wv.util.hexToRGBA(color);
                 g.fillRect(Math.floor(binWidth * i), 0, drawWidth,
                         canvas.height);
             });

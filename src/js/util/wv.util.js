@@ -312,6 +312,14 @@ wv.util = (function(self) {
             parseInt(str.substring(4, 6), 16) + ")";
     };
 
+    self.hexToRGBA = function(str) {
+        return "rgba(" +
+            parseInt(str.substring(0, 2), 16) + "," +
+            parseInt(str.substring(2, 4), 16) + "," +
+            parseInt(str.substring(4, 6), 16) + "," +
+            parseInt(str.substring(6, 8), 16) + ")";
+    };
+
     /**
      * Submits an AJAX request or retreives the result from the cache.
      *

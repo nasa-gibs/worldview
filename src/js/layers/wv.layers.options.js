@@ -209,9 +209,9 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
             setTimeout(function() {
                 var id = $(that).attr("data-palette");
                 if ( id === "__default" ) {
-                    models.palettes.remove(layer.id);
+                    models.palettes.clearCustom(layer.id);
                 } else {
-                    models.palettes.add(layer.id, id);
+                    models.palettes.setCustom(layer.id, id);
                 }
             }, 0);
         });
