@@ -115,7 +115,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
     var clearLayers = function(map) {
         var activeLayers = map.layers.slice(0);
         _.each(activeLayers, function(mapLayer) {
-            if ( mapLayer.name !== "Blank" ) {
+            if ( mapLayer.wvid ) {
                 map.removeLayer(mapLayer);
             }
         });
