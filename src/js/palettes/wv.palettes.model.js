@@ -152,6 +152,9 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
             target = source.scale;
         }
 
+        var min = def.min || 0;
+        var max = def.max || source.scale.colors.length;
+
         var sourceCount = source.scale.colors.length;
         var targetCount = target.colors.length;
 
@@ -159,19 +162,18 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
             "id": target.id,
             "name": target.name || undefined
         };
-        var newColors = [];
+
         var newScale = [];
         var newLabels = [];
         _.each(source.scale.colors, function(color, index) {
             if ( index < def.min || index > def.max ) {
-                newColors.push("00000000");
+                newScale.push("00000000");
             } else {
                 var sourcePercent = index / sourceCount;
-                var targetIndex = Math.floor(sourcePercent * targetCount);
-                newColors.push(target.colors[targetIndex]);
+                var targetIndex = Math.floor(sourcePercent * (targetCount - 1));
                 newScale.push(target.colors[targetIndex]);
-                newLabels.push(source.scale.labels[targetIndex]);
             }
+            newLabels.push(source.scale.labels[index]);
         });
         scale.colors = newScale;
         scale.labels = newLabels;
@@ -184,7 +186,7 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
                 parseInt(sourceColor.substring(2, 4), 16) + "," +
                 parseInt(sourceColor.substring(4, 6), 16) + "," +
                 parseInt(sourceColor.substring(6, 8), 16);
-            var targetColor = newColors[index];
+            var targetColor = newScale[index];
             var targetEntry = {
                 r: parseInt(targetColor.substring(0, 2), 16),
                 g: parseInt(targetColor.substring(2, 4), 16),

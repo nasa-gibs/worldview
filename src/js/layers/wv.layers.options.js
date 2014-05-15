@@ -160,8 +160,8 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         var active = models.palettes.get(layerId);
         var rendered = config.palettes.rendered[layerDef.palette.id];
 
-        var min = min || active.min || 0;
-        var max = max || active.max || rendered.scale.colors.length;
+        min = min || active.min || 0;
+        max = max || active.max || rendered.scale.colors.length;
 
         var minLabel = rendered.scale.labels[min];
         var maxLabel = rendered.scale.labels[max];
@@ -170,7 +170,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
 
         if ( !_.isEqual($range.val(), [min, max]) ) {
             $range.val([min, max]);
-        };
+        }
     };
 
     var renderPaletteSelector = function($dialog) {
