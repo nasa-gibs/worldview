@@ -108,6 +108,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
             .append(
                 $("<span></span>")
                     .addClass("wv-palettes-class-label")
+                    .attr("data-index", index)
                     .html(palette.classes.labels[index]));
             $detailPanel.append($row);
         });
@@ -130,7 +131,8 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
                 .attr("data-index", index)
                 .addClass("wv-palettes-class")
                 .html("&nbsp;")
-                .css("background-color", wv.util.hexToRGB(color)));
+                .css("background-color", wv.util.hexToRGB(color))
+                .hover(highlightClass, unhighlightClass));
         });
     };
 
@@ -185,6 +187,19 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
             "<span class='wv-palettes-color-box' style='background: #" +
             color + "'>" + "</span>" + label);
     };
+
+    var highlightClass = function() {
+        $(".wv-palettes-class-label[data-index='" +
+            $(this).attr("data-index") + "']")
+            .addClass("wv-palettes-class-highlight")
+    };
+
+    var unhighlightClass = function() {
+        $(".wv-palettes-class-label[data-index='" +
+            $(this).attr("data-index") + "']")
+            .removeClass("wv-palettes-class-highlight")
+    };
+
 
     init();
     return self;

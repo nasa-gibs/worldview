@@ -88,6 +88,10 @@
     margin-left: 5px;
 }
 
+.wv-palettes-class-highlight {
+    text-decoration: underline;
+}
+
 .bank div .wv-palettes-colorbar[data-type='single'] {
     width: 10px;
 }
