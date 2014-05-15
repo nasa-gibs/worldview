@@ -37,7 +37,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         renderOpacity($dialog);
 
         var palette = models.palettes.get(layer.id);
-        if ( palette.scale ) {
+        if ( palette && palette.scale ) {
             renderRange($dialog);
             renderPaletteSelector($dialog);
         }
