@@ -116,7 +116,7 @@ reports a mixed content warning.
 ## Release 0.5.1 - August 15, 2013
 
 ###### New Features
-* Added twenty AIRS (Atmospheric Infrared Sounder) products for temerature and
+* Added twenty AIRS (Atmospheric Infrared Sounder) products for temperature and
 relative humidity.
 
 
