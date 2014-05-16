@@ -70,8 +70,10 @@ wv.util = (function(self) {
         var parameters = queryString.split("&");
         result = {};
         for ( var i = 0; i < parameters.length; i++ ) {
-            var fields = parameters[i].split("=");
-            result[fields[0]] = decodeURIComponent(fields[1]);
+            var index = parameters[i].indexOf("=");
+            var key = parameters[i].substring(0, index);
+            var value = parameters[i].substring(index + 1);
+            result[key] = decodeURIComponent(value);
         }
         return result;
     };

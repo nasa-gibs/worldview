@@ -60,11 +60,17 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
 
     self.setRange = function(layerId, min, max) {
         var def = self.active[layerId] || {};
-        def.min = min;
-        def.max = max;
+        var paletteId = config.layers[layerId].palette.id;
+        var rendered = config.palettes.rendered[paletteId];
+        if ( min > 0 ) {
+            def.min = min;
+        }
+        if ( max < rendered.scale.colors.length - 1 ) {
+            def.max = max;
+        }
         updateLookup(layerId, def);
         self.active[layerId] = def;
-        self.events.trigger("range", layerId, min, max);
+        self.events.trigger("range", layerId, def.min, def.max);
         self.events.trigger("change");
     };
 
@@ -89,26 +95,76 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
     };
 
     self.save = function(state) {
-        var parts = [];
-        _.each(self.active, function(paletteId, layerId) {
-            parts.push(layerId + "," + paletteId);
-        });
-        if ( parts.length > 0 ) {
-            state.palettes = parts.join("~");
+        if ( self.inUse() && !state.l ) {
+            throw new Error("No layers in state");
         }
+        _.each(self.active, function(def, layerId) {
+            if ( !_.find(models.layers.active, {id: layerId}) ) {
+                return;
+            }
+            var attr = _.find(state.l, {id: layerId}).attributes;
+            if ( def.custom ) {
+                attr.push({ id: "palette", value: def.custom });
+            }
+            if ( def.min ) {
+                attr.push({ id: "min", value: def.min });
+            }
+            if ( def.max ) {
+                attr.push({ id: "max", value: def.max });
+            }
+        });
     };
 
     self.load = function(state, errors) {
         if ( state.palettes ) {
-            _.each(state.palettes, function(paletteId, layerId) {
-                if ( !config.palettes.custom[paletteId] ) {
-                    errors.push({message: "Invalid palette for layer" +
-                        layerId + ": " + paletteId});
-                } else {
-                    self.setCustom(layerId, paletteId);
+            load11(state, errors);
+        } else {
+            load12(state, errors);
+        }
+    };
+
+    var load11 = function(state, errors) {
+        _.each(state.palettes, function(paletteId, layerId) {
+            if ( !config.palettes.custom[paletteId] ) {
+                errors.push({message: "Invalid palette for layer" +
+                    layerId + ": " + paletteId});
+            } else {
+                self.setCustom(layerId, paletteId);
+            }
+        });
+    };
+
+    var load12 = function(state, errors) {
+        _.each(state.l, function(layerDef) {
+            var layerId = layerDef.id;
+            var min, max;
+            _.each(layerDef.attributes, function(attr) {
+                if ( attr.id === "palette" ) {
+                    try {
+                        self.setCustom(layerId, attr.value);
+                    } catch ( error ) {
+                        errors.push("Invalid palette: " + attr.value);
+                    }
+                }
+                if ( attr.id === "min" ) {
+                    min = parseInt(attr.value);
+                    if ( _.isNaN(min) ) {
+                        errors.push("Invalid min value: " + attr.value);
+                        min = undefined;
+                    }
+                }
+                if ( attr.id === "max" ) {
+                    max = parseInt(attr.value);
+                    if ( _.isNaN(max) ) {
+                        errors.push("Invalid max value: " + attr.value);
+                        max = undefined;
+                    }
                 }
             });
-        }
+            if ( !_.isUndefined(min) || !_.isUndefined(max) ) {
+                self.setRange(layerId, min, max);
+            }
+        });
     };
 
     // If any custom rendering is being used, image download must turn it
@@ -171,7 +227,7 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
                 newScale.push("00000000");
             } else {
                 var sourcePercent = index / sourceCount;
-                var targetIndex = Math.floor(sourcePercent * (targetCount - 1));
+                var targetIndex = Math.floor(sourcePercent * targetCount);
                 newScale.push(target.colors[targetIndex]);
             }
             newLabels.push(source.scale.labels[index]);

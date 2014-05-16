@@ -68,8 +68,10 @@ buster.testCase("wv.layers.model", {
         this.model.add("over1");
         var state = {};
         this.model.save(state);
-        buster.assert.equals(state.products,
-                "baselayers,base1~overlays,over1");
+        buster.assert.equals(state.l, [
+            { id: "base1", attributes: [] },
+            { id: "over1", attributes: [] }
+        ]);
     },
 
     "Saves state with hidden layer": function() {
@@ -77,7 +79,9 @@ buster.testCase("wv.layers.model", {
         this.model.setVisibility("base1", false);
         var state = {};
         this.model.save(state);
-        buster.assert.equals(state.products, "baselayers,!base1");
+        buster.assert.equals(state.l, [
+            { id: "base1", attributes: [{ id: "hidden"}] }
+        ]);
     },
 
     "Loads state": function() {

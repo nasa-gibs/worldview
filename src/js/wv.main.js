@@ -46,7 +46,6 @@ $(function() {
             wv.proj.parse,
             wv.layers.parse,
             wv.date.parse,
-            wv.palettes.parse,
             wv.map.parse
         ];
         if ( config.features.dataDownload ) {

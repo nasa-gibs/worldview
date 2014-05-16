@@ -37,6 +37,9 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
                 loaded = true;
                 render();
                 self.update();
+                if ( spec.onLoad ) {
+                    spec.onLoad();
+                }
             });
         }
     };

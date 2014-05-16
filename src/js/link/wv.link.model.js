@@ -27,7 +27,8 @@ wv.link.model = wv.link.model || function(config) {
     var self = {};
     var DEBUG_SHORTEN_LINK = "http://1.usa.gov/1iKIZ4j";
     var ENCODING_EXCEPTIONS = [
-        { match: new RegExp("%2C", "g"), replace: "," }
+        { match: new RegExp("%2C", "g"), replace: "," },
+        { match: new RegExp("%3D", "g"), replace: "=" }
     ];
 
     var shortenCache = new Cache(10);
@@ -55,12 +56,37 @@ wv.link.model = wv.link.model || function(config) {
     self.toQueryString = function() {
         var state = {};
         _.each(components, function(component) {
-            var value = component.save(state);
+            component.save(state);
         });
-        state = _.map(state, function(value, key) {
+        var strings = _.map(state, function(value, key) {
+            if ( _.isArray(value) ) {
+                var parts = [];
+                _.each(value, function(item) {
+                    var part = "";
+                    if ( _.isObject(item) ) {
+                        part = item.id;
+                        if ( item.attributes && item.attributes.length > 0 ) {
+                            var attributes = [];
+                            _.each(item.attributes, function(attribute) {
+                                if ( attribute.value ) {
+                                    attributes.push(attribute.id + "=" +
+                                        attribute.value);
+                                } else {
+                                    attributes.push(attribute.id);
+                                }
+                            });
+                            part += "(" + attributes.join(",") + ")";
+                        }
+                    } else {
+                        part = item;
+                    }
+                    parts.push(part);
+                });
+                value = parts.join(",");
+            }
             return key + "=" + encode(value);
         });
-        return state.join("&");
+        return strings.join("&");
     };
 
     /**

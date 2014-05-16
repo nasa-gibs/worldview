@@ -195,10 +195,10 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         $dialog.append($pane);
         $pane.jScrollPane();
 
-        if ( models.palettes.active[layer.id] ) {
-            var paletteId = models.palettes.active[layer.id];
+        var palette = models.palettes.get(layer.id);
+        if ( palette.custom ) {
             var index = $(".wv-palette-selector-row input[data-palette='" +
-                    paletteId + "']").iCheck("check");
+                    palette.custom + "']").iCheck("check");
         } else {
             $(".wv-palette-selector-row input[data-palette='__default']")
                     .iCheck("check");

@@ -127,52 +127,20 @@ wv.palettes = (function(self) {
                 "config/palettes/" + layer.palette.id + ".json");
     };
 
-    self.parse = function(state, errors, config) {
-        if ( state.palettes ) {
-            if ( !wv.palettes.supported ) {
-                // FIXME: This should go in errors
-                delete state.palettes;
-                wv.ui.notify("The custom palette feature is not supported " +
-                        "with your web browser. Upgrade or try again in a " +
-                        "different browser");
-                return;
-            }
-            var results = {};
-            var parts = state.palettes.split("~");
-            _.each(parts, function(part) {
-                var items = part.split(",");
-                var layerId = items[0];
-                var paletteId = items[1];
-                if ( !config.layers[layerId] ) {
-                    errors.push({message: "Invalid layer for palette " +
-                        paletteId + ": " + layerId});
-                } else if ( !config.layers[layerId].palette ) {
-                    errors.push({message: "Layer " + layerId + " does not " +
-                        "support palettes"});
-                } else {
-                    results[layerId] = paletteId;
-                }
-            });
-            if ( _.size(results) > 0 ) {
-                state.palettes = results;
-            } else {
-                delete state.palettes;
-            }
-        }
-    };
-
     self.requirements = function(state, config) {
         var promises = [];
         config.palettes = {
             rendered: {},
             custom: {}
         };
-        if ( config.parameters.palettes ) {
-            promises.push(self.loadCustom(config));
-        }
-        _.each(state.products, function(layerId) {
+        _.each(state.l, function(qsLayer) {
+            var layerId = qsLayer.id;
             if ( config.layers[layerId].palette ) {
                 promises.push(self.loadRendered(config, layerId));
+            }
+            var custom = _.find(qsLayer.attributes, {id: "palette"});
+            if ( custom ) {
+                promises.push(self.loadCustom(config));
             }
         });
         if ( promises.length > 0 ) {

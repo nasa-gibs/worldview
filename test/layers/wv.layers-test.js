@@ -41,7 +41,6 @@ buster.testCase("wv.layers", {
 
     "Parses multiple layers": function() {
         var state  = { products: "baselayers,layer1~overlays,layer2,layer3" };
-        console.log(state);
         wv.layers.parse(state, this.errors, this.config);
         buster.assert.equals(state.products[0], "layer1");
         buster.assert.equals(state.products[1], "layer2");
