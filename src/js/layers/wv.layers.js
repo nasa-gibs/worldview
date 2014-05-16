@@ -35,8 +35,7 @@ wv.layers = (function(self) {
                     errors.push({message: "No such layer: " + id});
                     return;
                 }
-                // Layers have to be added in reverse
-                layers.unshift(id);
+                layers.push(id);
                 if ( !visible ) {
                     hidden[id] = true;
                 }

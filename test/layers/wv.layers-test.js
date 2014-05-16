@@ -41,11 +41,11 @@ buster.testCase("wv.layers", {
 
     "Parses multiple layers": function() {
         var state  = { products: "baselayers,layer1~overlays,layer2,layer3" };
+        console.log(state);
         wv.layers.parse(state, this.errors, this.config);
-        // Reverse order
-        buster.assert.equals(state.products[0], "layer3");
+        buster.assert.equals(state.products[0], "layer1");
         buster.assert.equals(state.products[1], "layer2");
-        buster.assert.equals(state.products[2], "layer1");
+        buster.assert.equals(state.products[2], "layer3");
         buster.assert.equals(this.errors.length, 0);
     },
 
@@ -59,9 +59,9 @@ buster.testCase("wv.layers", {
         var state  = { products: "baselayers.layer1~overlays.layer2.layer3" };
         wv.layers.parse(state, this.errors, this.config);
         // Reverse order
-        buster.assert.equals(state.products[0], "layer3");
+        buster.assert.equals(state.products[0], "layer1");
         buster.assert.equals(state.products[1], "layer2");
-        buster.assert.equals(state.products[2], "layer1");
+        buster.assert.equals(state.products[2], "layer3");
         buster.assert.equals(this.errors.length, 0);
     },
 
@@ -69,8 +69,8 @@ buster.testCase("wv.layers", {
         var state = { products: "baselayers,layer1~overlays,layerx,layer3" };
         wv.layers.parse(state, this.errors, this.config);
         // Reverse order
-        buster.assert.equals(state.products[0], "layer3");
-        buster.assert.equals(state.products[1], "layer1");
+        buster.assert.equals(state.products[0], "layer1");
+        buster.assert.equals(state.products[1], "layer3");
         buster.assert.equals(this.errors.length, 1);
     },
 
