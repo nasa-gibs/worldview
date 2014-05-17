@@ -37,7 +37,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
             .attr("id", "wv-link-button-check");
         $label = $("<label></label>")
             .attr("for", "wv-link-button-check")
-            .attr("tite", "Share this map");
+            .attr("title", "Share this map");
         var $icon = $("<i></i>")
             .addClass("fa")
             .addClass("fa-link")
