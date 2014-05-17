@@ -146,6 +146,11 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
     background: #808080;
 }
 
+.wv-menu-item-selected {
+    background: #888;
+    color: #eee;
+}
+
 .ui-state-hover {
     background: #eeeeee;
     color: #404040;

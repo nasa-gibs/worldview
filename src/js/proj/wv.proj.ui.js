@@ -53,7 +53,9 @@ wv.proj.ui = wv.proj.ui || function(models, config) {
 
         _.each(config.ui.projections, function(ui) {
             var $item = $(
-                "<li><a><i class='ui-icon icon-large " + ui.style + "'>" +
+                "<li>" +
+                "<a data-proj='" + ui.id + "'>" +
+                "<i class='ui-icon icon-large " + ui.style + "'>" +
                 "</i>" + ui.name + "</a></li>");
             $menuItems.append($item);
             $item.click(function() { models.proj.select(ui.id); });
@@ -72,6 +74,9 @@ wv.proj.ui = wv.proj.ui || function(models, config) {
                 at: "left bottom+5",
                 of: $button
             });
+            $("#wv-proj-menu a").removeClass("wv-menu-item-selected");
+            $("#wv-proj-menu a[data-proj='" + models.proj.selected.id + "']")
+                .addClass("wv-menu-item-selected");
             $(document).one("click", function() {
                 $menuItems.hide();
             });
