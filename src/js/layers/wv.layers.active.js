@@ -340,7 +340,9 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     };
 
     var onPaletteUpdate = function(layerId) {
-        legends[layerId].update();
+        if ( legends[layerId] ) {
+            legends[layerId].update();
+        }
     };
 
     var onProjectionChanged = function() {

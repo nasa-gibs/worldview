@@ -54,7 +54,7 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
         }
         if ( type === "gibs" ) {
             ui.sidebar.collapse();
-            ui.dateSliders.collapse();
+            //ui.dateSliders.collapse();
         }
         if ( type ) {
             if ( type === "palettes" ) {
@@ -152,7 +152,7 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
         console.log(config.layers[layerId].title + "; " + config.layers[layerId].subtitle);
         if ( selectedLayer ) {
             models.layers.remove(selectedLayer);
-            models.palettes.remove(selectedLayer);
+            models.palettes.clearCustom(selectedLayer);
         }
         models.layers.add(layerId);
         if ( type !== "gibs" ) {
@@ -167,9 +167,9 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
             wv.palettes.loadRendered(config, layerId).done(function() {
                 var layer = config.layers[layerId];
                 if ( layer.palette.recommended ) {
-                    models.palettes.add(layerId, layer.palette.recommended[0]);
+                    models.palettes.setCustom(layerId, layer.palette.recommended[0]);
                 } else {
-                    models.palettes.add(layerId, "rainbow_2");
+                    models.palettes.setCustom(layerId, "rainbow_2");
                 }
             });
         }
@@ -206,5 +206,3 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
 
     init();
 };
-
-
