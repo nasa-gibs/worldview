@@ -76,7 +76,11 @@ wv.proj.ui = wv.proj.ui || function(models, config) {
         $menu.append($menuItems);
         $("body").append($menu);
 
-        $menuItems.hide().menu();
+        $menuItems.hide().menu().position({
+            my: "left top",
+            at: "left bottom+5",
+            of: $label
+        });
 
         $button.click(function(event) {
             event.stopPropagation();
@@ -90,11 +94,7 @@ wv.proj.ui = wv.proj.ui || function(models, config) {
     };
 
     var show = function() {
-        $menuItems.show().position({
-            my: "left top",
-            at: "left bottom+5",
-            of: $label
-        });
+        $menuItems.show("slide", { direction: "up" });
         $("#wv-proj-menu a").removeClass("wv-menu-item-selected");
         $("#wv-proj-menu a[data-proj='" + models.proj.selected.id + "']")
             .addClass("wv-menu-item-selected");
@@ -102,7 +102,7 @@ wv.proj.ui = wv.proj.ui || function(models, config) {
             if ( $button.parent().has(event.target).length > 0 ) {
                 return;
             }
-            $menuItems.hide();
+            $menuItems.hide("slide", { direction: "up" });
             $("#wv-proj-button-check").prop("checked", false);
             $button.button("refresh");
         });

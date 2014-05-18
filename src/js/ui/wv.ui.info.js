@@ -50,7 +50,11 @@ wv.ui.info = wv.ui.info || (function(ui) {
     $menuItems.append($about);
     $menu.append($menuItems);
     $("body").append($menu);
-    $menuItems.hide().menu();
+    $menuItems.hide().menu().position({
+        my: "left top",
+        at: "left bottom+5",
+        of: $label
+    });
 
     $about.click(function() {
         if ( wv.util.browser.small ) {
@@ -98,16 +102,12 @@ wv.ui.info = wv.ui.info || (function(ui) {
         $("#wv-toolbar input:not(#wv-info-button-check)")
             .prop("checked", false)
             .button("refresh");
-        $menuItems.show().position({
-            my: "left top",
-            at: "left bottom+5",
-            of: $label
-        });
+        $menuItems.show("slide", { direction: "up" });
         $("html").one("click", function(event) {
             if ( $button.parent().has(event.target).length > 0 ) {
                 return;
             }
-            $menuItems.hide();
+            $menuItems.hide("slide", { direction: "up" });
             $("#wv-info-button-check").prop("checked", false);
             $button.button("refresh");
         });
