@@ -27,8 +27,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         canvas = document.createElement("canvas");
         canvas.width = 140;
         canvas.height = 10;
-        var promise = wv.palettes.loadCustom(config).done(loaded);
-        wv.ui.indicator.delayed(promise);
+        wv.palettes.loadCustom(config).done(loaded);
     };
 
     var loaded = function(custom) {

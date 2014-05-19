@@ -118,13 +118,14 @@ wv.palettes = (function(self) {
     };
 
     self.loadCustom = function(config) {
-        return wv.util.load(config.palettes, "custom", "config/palettes-custom.json");
+        return wv.util.load.config(config.palettes,
+            "custom", "config/palettes-custom.json");
     };
 
     self.loadRendered = function(config, layerId) {
         var layer = config.layers[layerId];
-        return wv.util.load(config.palettes.rendered, layer.palette.id,
-                "config/palettes/" + layer.palette.id + ".json");
+        return wv.util.load.config(config.palettes.rendered,
+            layer.palette.id, "config/palettes/" + layer.palette.id + ".json");
     };
 
     self.requirements = function(state, config) {

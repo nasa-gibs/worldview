@@ -34,11 +34,13 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
             render();
         } else {
             wv.palettes.loadRendered(config, layer.id).done(function() {
-                loaded = true;
-                render();
-                self.update();
-                if ( spec.onLoad ) {
-                    spec.onLoad();
+                if ( !loaded ) {
+                    loaded = true;
+                    render();
+                    self.update();
+                    if ( spec.onLoad ) {
+                        spec.onLoad();
+                    }
                 }
             });
         }
@@ -48,7 +50,6 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         var $parent = $(selector);
         var paletteId = layer.palette.id;
         var palette = config.palettes.rendered[paletteId];
-        var singleClass = palette.classes && palette.classes.colors.length === 1;
 
         var $legendPanel = $("<div></div>")
                 .addClass("wv-palettes-panel");

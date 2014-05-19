@@ -378,20 +378,6 @@ wv.util = (function(self) {
         }
     };
 
-    self.load = function(root, attr, url) {
-        var promise = $.Deferred();
-        if ( root[attr] && _.size(root[attr]) > 0 ) {
-            promise.resolve(root[attr]);
-        } else {
-            promise = $.getJSON(wv.brand.url(url));
-            promise.done(function(result) {
-                root[attr] = result;
-            });
-        }
-        promise.fail(wv.util.error);
-        return promise;
-    };
-
     /**
      * Wraps a function in a try/catch block that invokes wv.util.error
      * if an exception is thrown.
