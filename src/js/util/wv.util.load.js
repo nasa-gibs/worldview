@@ -17,6 +17,7 @@ wv.util.load = wv.util.load || (function() {
     var self = {};
     var configPromises = {};
     var loading = 0;
+    var indicatorTimeout = null;
 
     self.config = function(root, attr, url) {
         promise = $.Deferred();
@@ -28,17 +29,21 @@ wv.util.load = wv.util.load || (function() {
         if ( root[attr] && _.size(root[attr]) > 0 ) {
             promise.resolve(root[attr]);
         } else {
-            if ( loading === 0 ) {
-                wv.ui.indicator.delayed(promise, 1000);
-            }
             loading += 1;
             promise = $.getJSON(wv.brand.url(url));
+            if ( loading === 1 ) {
+                indicatorTimeout = setTimeout(function() {
+                    wv.ui.indicator.loading();
+                }, 2000);
+            }
             promise.done(function(result) {
                 root[attr] = result;
             }).always(function() {
                 delete configPromises[url];
                 loading -= 1;
                 if ( loading === 0 ) {
+                    clearTimeout(indicatorTimeout);
+                    indicatorTimeout = null;
                     wv.ui.indicator.hide();
                 }
             }).fail(wv.util.error);
