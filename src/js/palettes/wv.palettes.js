@@ -36,6 +36,9 @@ wv.palettes = (function(self) {
         } else {
             canvas = target;
         }
+        if ( !canvas ) {
+            return;
+        }
         var g = canvas.getContext("2d");
 
         g.fillStyle = checkerboard;

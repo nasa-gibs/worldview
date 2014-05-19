@@ -28,6 +28,10 @@ wv.util.load = wv.util.load || (function() {
         if ( root[attr] && _.size(root[attr]) > 0 ) {
             promise.resolve(root[attr]);
         } else {
+            if ( loading === 0 ) {
+                wv.ui.indicator.delayed(promise, 1000);
+            }
+            loading += 1;
             promise = $.getJSON(wv.brand.url(url));
             promise.done(function(result) {
                 root[attr] = result;
@@ -39,10 +43,6 @@ wv.util.load = wv.util.load || (function() {
                 }
             }).fail(wv.util.error);
 
-            if ( loading === 0 ) {
-                wv.ui.indicator.delayed(promise, 1000);
-            }
-            loading += 1;
             configPromises[url] = promise;
         }
         return promise;
