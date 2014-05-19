@@ -20,46 +20,47 @@ wv.debug = wv.debug || (function() {
 
     var init = function() {
         if ( parameters.loadDelay ) {
-            loadDelay();
+            var delay;
+            try {
+                delay = parseInt(parameters.loadDelay);
+                self.loadDelay(delay);
+            } catch ( error ) {
+                console.warn("Invalid load delay: " + delay);
+                return;
+            }
         }
     };
 
-    var loadDelay = function() {
-        var delay;
-        try {
-            delay = parseInt(parameters.loadDelay);
-        } catch ( error ) {
-            console.warn("Invalid load delay: " + delay);
-            return;
-        }
+    var delayedCallback = function(jqXHR, wrap, delay) {
+        return function(fn) {
+            wrap(function() {
+                var args = arguments;
+                setTimeout(function() {
+                    if (fn) { fn.apply(jqXHR, args); }
+                }, delay);
+            });
+            return jqXHR;
+        };
+    };
 
+    self.loadDelay = function(delay) {
         var ajax = $.ajax;
         $.ajax = function() {
             var ajaxArgs = arguments;
-            console.log("delay", ajaxArgs);
+            console.log("delay", delay, ajaxArgs);
             var jqXHR = ajax.apply($, arguments);
+
             var done = jqXHR.done;
-            jqXHR.done = function(fn) {
-                done(function() {
-                    var args = arguments;
-                    setTimeout(function() {
-                        fn.apply(jqXHR, args);
-                    }, delay);
-                });
-                return jqXHR;
-            };
+            jqXHR.done = delayedCallback(jqXHR, done, delay);
             jqXHR.done(function() { console.log("done", ajaxArgs); });
+
             var fail = jqXHR.fail;
-            jqXHR.fail = function(fn) {
-                fail(function() {
-                    var args = arguments;
-                    setTimeout(function() {
-                        fn.apply(jqXHR, args);
-                    }, delay);
-                });
-                return jqXHR;
-            };
+            jqXHR.fail = delayedCallback(jqXHR, fail, delay);
             jqXHR.fail(function() { console.log("fail", ajaxArgs); });
+
+            var always = jqXHR.always;
+            jqXHR.always = delayedCallback(jqXHR, always, delay);
+
             return jqXHR;
         }
     };

@@ -29,7 +29,7 @@ $(function() {
             yep: ['js/wv.debug.js'],
             complete: loadConfig
         });
-    }
+    };
 
     var loadConfig = function() {
         elapsed("loading config");
