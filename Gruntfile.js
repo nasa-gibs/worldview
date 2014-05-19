@@ -308,8 +308,12 @@ module.exports = function(grunt) {
         concat: {
             // Combine all the Worldview JavaScript files into one file.
             wv_js: {
-                src: wvJs,
-                dest: "build/<%=pkg%>-debug/web/js/wv.js"
+                src: wvJs["wv.js"],
+                dest: "build/<%=pkg%>-debug/web/js/wv.js",
+            },
+            wv_debug_js: {
+                src: wvJs["wv.debug.js"],
+                dest: "build/<%=pkg%>-debug/web/js/wv.debug.js"
             },
             // Combine all the Worldview CSS files into one file.
             wv_css: {
@@ -327,6 +331,9 @@ module.exports = function(grunt) {
                 files: {
                     "build/<%=pkg%>/web/js/wv.js": [
                         "build/<%=pkg%>-debug/web/js/wv.js"
+                    ],
+                    "build/<%=pkg%>/web/js/wv.debug.js": [
+                        "build/<%=pkg%>-debug/web/js/wv.debug.js"
                     ]
                 }
             }
@@ -416,6 +423,7 @@ module.exports = function(grunt) {
                 "build/<%=pkg%>-debug/web/**/*.js",
                 "!build/<%=pkg%>-debug/web/css/wv.css",
                 "!build/<%=pkg%>-debug/web/js/wv.js",
+                "!build/<%=pkg%>-debug/web/js/wv.debug.js",
                 "!build/<%=pkg%>-debug/web/css/bulkDownload.css",
                 "!build/<%=pkg%>-debug/web/js/map/wv.map.tileworker.js",
                 "!build/<%=pkg%>-debug/web/ext/**/*"

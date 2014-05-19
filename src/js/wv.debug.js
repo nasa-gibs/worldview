@@ -15,17 +15,53 @@
 var wv = wv || {};
 wv.debug = wv.debug || (function() {
 
+    var parameters = wv.util.fromQueryString(location.search);
     var self = {};
 
-    self.loadDelay = function(configURI, parameters) {
-        var delay = parseInt(parameters.loadDelay);
-        promise = $.Deferred();
-        $.getJSON(configURI).done(function(data) {
-            setTimeout(function() {
-                promise.resolve(data);
-            }, delay);
-        });
-        return promise;
+    var init = function() {
+        if ( parameters.loadDelay ) {
+            loadDelay();
+        }
+    };
+
+    var loadDelay = function() {
+        var delay;
+        try {
+            delay = parseInt(parameters.loadDelay);
+        } catch ( error ) {
+            console.warn("Invalid load delay: " + delay);
+            return;
+        }
+
+        var ajax = $.ajax;
+        $.ajax = function() {
+            var ajaxArgs = arguments;
+            console.log("delay", ajaxArgs);
+            var jqXHR = ajax.apply($, arguments);
+            var done = jqXHR.done;
+            jqXHR.done = function(fn) {
+                done(function() {
+                    var args = arguments;
+                    setTimeout(function() {
+                        fn.apply(jqXHR, args);
+                    }, delay);
+                });
+                return jqXHR;
+            };
+            jqXHR.done(function() { console.log("done", ajaxArgs); });
+            var fail = jqXHR.fail;
+            jqXHR.fail = function(fn) {
+                fail(function() {
+                    var args = arguments;
+                    setTimeout(function() {
+                        fn.apply(jqXHR, args);
+                    }, delay);
+                });
+                return jqXHR;
+            };
+            jqXHR.fail(function() { console.log("fail", ajaxArgs); });
+            return jqXHR;
+        }
     };
 
     self.error = function(parameters) {
@@ -34,6 +70,7 @@ wv.debug = wv.debug || (function() {
         }
     };
 
+    init();
     return self;
 
 })();

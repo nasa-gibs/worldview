@@ -15,18 +15,34 @@ $(function() {
     var state = wv.util.fromQueryString(location.search);
     var parameters = wv.util.fromQueryString(location.search);
     var errors = [];
+    var startTime;
 
     var main = function() {
+        if ( parameters.elapsed ) {
+            startTime = new Date().getTime();
+        } else {
+            elapsed = function() {};
+        }
+        elapsed("start");
+        yepnope({
+            test: parameters.debug,
+            yep: ['js/wv.debug.js'],
+            complete: loadConfig
+        });
+    }
+
+    var loadConfig = function() {
+        elapsed("loading config");
         var configURI = wv.brand.url("config/wv.json");
-        var promise = ( parameters.loadDelay ) ?
-                wv.debug.loadDelay(configURI, parameters) :
-                $.getJSON(configURI);
-        promise.done(wv.util.wrap(onConfigLoaded))
+        var promise = $.getJSON(configURI);
+        promise
+            .done(wv.util.wrap(onConfigLoaded))
             .fail(wv.util.error);
-        wv.ui.indicator.delayed(promise, 2000);
+        wv.ui.indicator.delayed(promise, 1000);
     };
 
     var onConfigLoaded = function(data) {
+        elapsed("config loaded");
         config = data;
         config.parameters = parameters;
 
@@ -66,6 +82,7 @@ $(function() {
     };
 
     var init = function() {
+        elapsed("init");
         // If at the beginning of the day, wait on the previous day until GIBS
         // catches up (about three hours)
         var initialDate = wv.util.now();
@@ -114,6 +131,7 @@ $(function() {
         models.link.load(state);
         models.proj.change = wv.proj.change(models);
 
+        elapsed("ui");
         // Create widgets
         var ui = {};
 
@@ -182,14 +200,15 @@ $(function() {
         } else {
             console.warn("Development version");
         }
-        wv.debug.layers(ui, models, config);
+        //wv.debug.layers(ui, models, config);
 
         errorReport();
-        wv.debug.error(parameters);
+        //wv.debug.error(parameters);
 
         ui.info = wv.ui.info(ui);
 
         models.wv.events.trigger("startup");
+        elapsed("done");
     };
 
     var errorReport = function() {
@@ -211,6 +230,11 @@ $(function() {
                 "<a href='mailto:@MAIL@'>" +
                 "@MAIL@</a>");
         }
+    };
+
+    var elapsed = function(message) {
+        var t = new Date().getTime() - startTime;
+        console.log(t, message);
     };
 
     /*
