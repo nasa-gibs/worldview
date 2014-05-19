@@ -62,7 +62,7 @@ wv.debug = wv.debug || (function() {
             jqXHR.always = delayedCallback(jqXHR, always, delay);
 
             return jqXHR;
-        }
+        };
     };
 
     self.error = function(parameters) {

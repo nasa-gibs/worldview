@@ -22,9 +22,9 @@ config["wv"] = {
         "src/ext/map/openlayers-2.13.1-wv1/OpenLayers.js"
     ],
     src: [
+        "src/js/util/wv.*.js",
         "src/js/wv.*.js",
         "!src/js/wv.main.js",
-        "src/js/util/wv.*.js",
         "src/js/ui/wv.ui.js",
         "src/js/ui/wv.ui.indicator.js",
         "src/js/date/wv.*.js",

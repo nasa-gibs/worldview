@@ -34,19 +34,19 @@ buster.testCase("wv.palettes.model", function() {
 
     self["Exception setting a custom palette when no layer exists"] = function() {
         buster.assert.exception(function() {
-            models.palette.setCustom("no-layer", "blue-1");
+            models.palettes.setCustom("no-layer", "blue-1");
         });
     };
 
     self["Exception setting an invalid custom palette"] = function() {
         buster.assert.exception(function() {
-            models.palette.setCustom("terra-aod", "no-palette");
+            models.palettes.setCustom("terra-aod", "no-palette");
         });
     };
 
     self["Exception setting a custom palette on a imagery layer"] = function() {
         buster.assert.exception(function() {
-            models.palette.setCustom("terra-cr", "blue-1");
+            models.palettes.setCustom("terra-cr", "blue-1");
         });
     };
 
