@@ -89,9 +89,13 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
     };
 
     self.clear = function() {
-        throw new Error("Clear called");
-        //self.active = {};
-        //self.events.trigger("change");
+        self.active = {};
+        self.events.trigger("update");
+    };
+
+    self.restore = function(active) {
+        self.active = active;
+        self.events.trigger("update");
     };
 
     self.save = function(state) {

@@ -61,7 +61,8 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
             .on("remove", onLayerRemoved)
             .on("opacity", onOpacityUpdate);
         models.palettes.events
-            .on("range", onRangeUpdate);
+            .on("range", onRangeUpdate)
+            .on("update", onPaletteUpdateAll);
     };
 
     var dispose = function() {
@@ -69,7 +70,8 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
             .off("remove", onLayerRemoved)
             .off("opacity", onOpacityUpdate);
         models.palettes.events
-            .off("range", onRangeUpdate);
+            .off("range", onRangeUpdate)
+            .off("update", onPaletteUpdateAll);
     };
 
     var renderOpacity = function($dialog) {
@@ -174,7 +176,14 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         var maxLabel = rendered.scale.labels[max];
         $("#wv-layers-options-dialog .wv-label-range-min").html(minLabel);
         $("#wv-layers-options-dialog .wv-label-range-max").html(maxLabel);
+    };
 
+    var onPaletteUpdateAll = function() {
+        var def = models.palettes.get(layer.id);
+        var min = ( _.isUndefined(def.min) ) ? 0 : def.min;
+        var max = ( _.isUndefined(def.max) ) ? def.scale.colors.length - 1 : def.max;
+        onRangeUpdate(layer.id, min, max);
+        onPaletteUpdate();
     };
 
     var renderPaletteSelector = function($dialog) {
@@ -214,6 +223,17 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
                 }
             }, 0);
         });
+    };
+
+    var onPaletteUpdate = function() {
+        var def = models.palettes.get(layer.id);
+        if ( def.custom ) {
+            $("#wv-palette-selector input[data-palette='" + def.custom + "']")
+                .iCheck("check");
+        } else {
+            $("#wv-palette-selector input[data-palette='__default']")
+                .iCheck("check");
+        }
     };
 
     var selectorItem = function(palette, id, description) {

@@ -48,6 +48,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         models.palettes.events.on("set-custom", addPalette);
         models.palettes.events.on("clear-custom", removePalette);
         models.palettes.events.on("range", updatePalette);
+        models.palettes.events.on("update", updateAll);
 
         updateProjection();
     };
@@ -245,6 +246,15 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 });
             });
         }
+        updateMap();
+    };
+
+    var updateAll = function() {
+        _.each(self.selected.layers, function(layer) {
+            if ( layer.wvid ) {
+                updateLayer(config.layers[layer.wvid]);
+            }
+        });
         updateMap();
     };
 
@@ -460,6 +470,8 @@ wv.map.ui = wv.map.ui || function(models, config) {
         });
         map.events.register("move", null, updateExtent);
         map.events.register("movestart", null, purgeCache);
+        map.events.register("preaddlayer", null, onAddLayer);
+        map.events.register("preremovelayer", null, onRemoveLayer);
         $map.hide();
 
         return map;
@@ -473,6 +485,45 @@ wv.map.ui = wv.map.ui || function(models, config) {
         var activePalette = models.palettes.isActive(layerDef.id);
         var typeId = ( activePalette ) ? "canvas" : "image";
         return [layerId, projId, dateId, typeId].join(":");
+    };
+
+
+    // Map load events
+    var layersLoading = {};
+
+    var onAddLayer = function(event) {
+        var layer = event.layer;
+        if ( !layer.wvid ) {
+            return;
+        }
+
+        var onLoadStart = function() {
+            if ( _.size(layersLoading) === 0 ) {
+                self.selected.events.triggerEvent("maploadstart");
+            }
+            layersLoading[layer.wvid] = true;
+        };
+
+        var onLoadEnd = function() {
+            if ( _.size(layersLoading) === 1 && layersLoading[layer.wvid] ) {
+                self.selected.events.triggerEvent("maploadend");
+            }
+            delete layersLoading[layer.wvid];
+        };
+
+        layer.events.register("loadstart", layer, onLoadStart);
+        layer.events.register("loadend", layer, onLoadEnd);
+        //onLoadStart();
+    };
+
+    var onRemoveLayer = function(event) {
+        if ( event.layer.wvid ) {
+            delete layersLoading[event.layer.wvid];
+        }
+    };
+
+    self.isLoading = function() {
+        return _.size(layersLoading) > 0;
     };
 
     init();

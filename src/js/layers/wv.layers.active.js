@@ -45,7 +45,8 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         models.palettes.events
             .on("set-custom", onPaletteUpdate)
             .on("clear-custom", onPaletteUpdate)
-            .on("range", onPaletteUpdate);
+            .on("range", onPaletteUpdate)
+            .on("update", onPaletteUpdateAll);
         $(window).resize(resize);
         ui.sidebar.events.on("select", function(tab) {
             if ( tab === "active" ) {
@@ -343,6 +344,12 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         if ( legends[layerId] ) {
             legends[layerId].update();
         }
+    };
+
+    var onPaletteUpdateAll = function() {
+        _.each(legends, function(legend) {
+            legend.update();
+        });
     };
 
     var onProjectionChanged = function() {

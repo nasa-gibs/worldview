@@ -12,7 +12,7 @@
 var wv = wv || {};
 wv.image = wv.image || {};
 
-wv.image.rubberband = wv.image.rubberband || function(models, config) {
+wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
 
     var self = {};
 
@@ -31,8 +31,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, config) {
     var id = containerId;
     var state = "off";
     var jcropAPI = null;
-    var previousPalettes = "";
-    var currentPalettes = "";
+    var previousPalettes = null;
     var $button;
     self.events = wv.util.events();
 
@@ -92,7 +91,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, config) {
         // elements in the map to do its background effect and if the map isn't
         // ready yet, it will copy blank images.
         var disablePalettes = function() {
-            var map = models.map.maps.map;
+            var map = ui.map.selected;
             var handler = function() {
                 map.events.unregister("maploadend", map, handler);
                 toggleOn();
@@ -101,9 +100,10 @@ wv.image.rubberband = wv.image.rubberband || function(models, config) {
 
             // Save the previous state to be restored later
             previousPalettes = models.palettes.active;
-            // FIXME: What is this for?
-            // self.paletteWidget.noRestore = true;
             models.palettes.clear();
+            if ( !ui.map.isLoading() ) {
+                handler();
+            }
         };
 
         if(state == "off") {
@@ -113,7 +113,10 @@ wv.image.rubberband = wv.image.rubberband || function(models, config) {
                 wv.ui.ask({
                     header: "Notice",
                     message: PALETTE_WARNING,
-                    onOk: disablePalettes
+                    onOk: disablePalettes,
+                    onCancel: function() {
+                        $button.prop("checked", false).button("refresh");
+                    }
                 });
             } else {
                 toggleOn();
@@ -124,11 +127,8 @@ wv.image.rubberband = wv.image.rubberband || function(models, config) {
             $button.prop("checked", false).button("refresh");
             jcropAPI.destroy();
             if (previousPalettes) {
-                // FIXME: What is this for?
-                //self.paletteWidget.noResture = false;
-                _.each(previousPalettes, function(paletteId, layerId) {
-                    models.palettes.add(layerId, paletteId);
-                });
+                models.palettes.restore(previousPalettes);
+                previousPalettes = null;
             }
             toolbarButtons("enable");
             wv.ui.closeDialog();

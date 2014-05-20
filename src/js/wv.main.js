@@ -147,7 +147,7 @@ $(function() {
         // comments marked as TEMP
         //wv.debug.slider(models, config);
         //ui.dateWheels = wv.date.wheels(models, config);
-        ui.rubberband = wv.image.rubberband(models, config);
+        ui.rubberband = wv.image.rubberband(models, ui, config);
         ui.image = wv.image.panel(models, ui, config);
         if ( config.features.dataDownload ) {
             ui.data = wv.data.ui(models, ui, config);
