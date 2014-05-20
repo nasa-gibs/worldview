@@ -17,8 +17,9 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
     var self = {};
 
     var PALETTE_WARNING =
-        "Image download does not yet support the custom palette(s) that you " +
-        "have applied. Would you like to continue with the default color palette(s)?";
+        "One or more layers on the map have been modified (changed palette, " +
+        "thresholds, etc.). These modifications cannot be used to take a " +
+        "snapshot. Would you like to revert to the original layer(s)?";
 
     var containerId = "wv-image-button";
     var container;

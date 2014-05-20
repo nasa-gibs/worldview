@@ -114,7 +114,10 @@ wv.ui = (function(self) {
             resizable: false,
             modal: true,
             buttons: buttons
-        }).html(spec.message);
+        }).html(spec.message)
+        .on("dialogclose", function() {
+            if ( spec.onCancel ) { spec.onCancel(); }
+        });
     };
 
     /**
