@@ -63,7 +63,7 @@ var execute = function(event) {
             destination[i + 0] = color.r;
             destination[i + 1] = color.g;
             destination[i + 2] = color.b;
-            destination[i + 3] = 0xff;
+            destination[i + 3] = color.a;
         }
         if ( cancelled ) {
             break;

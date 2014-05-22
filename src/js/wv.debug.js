@@ -15,17 +15,54 @@
 var wv = wv || {};
 wv.debug = wv.debug || (function() {
 
+    var parameters = wv.util.fromQueryString(location.search);
     var self = {};
 
-    self.loadDelay = function(configURI, parameters) {
-        var delay = parseInt(parameters.loadDelay);
-        promise = $.Deferred();
-        $.getJSON(configURI).done(function(data) {
-            setTimeout(function() {
-                promise.resolve(data);
-            }, delay);
-        });
-        return promise;
+    var init = function() {
+        if ( parameters.loadDelay ) {
+            var delay;
+            try {
+                delay = parseInt(parameters.loadDelay);
+                self.loadDelay(delay);
+            } catch ( error ) {
+                console.warn("Invalid load delay: " + delay);
+                return;
+            }
+        }
+    };
+
+    var delayedCallback = function(jqXHR, wrap, delay) {
+        return function(fn) {
+            wrap(function() {
+                var args = arguments;
+                setTimeout(function() {
+                    if (fn) { fn.apply(jqXHR, args); }
+                }, delay);
+            });
+            return jqXHR;
+        };
+    };
+
+    self.loadDelay = function(delay) {
+        var ajax = $.ajax;
+        $.ajax = function() {
+            var ajaxArgs = arguments;
+            console.log("delay", delay, ajaxArgs);
+            var jqXHR = ajax.apply($, arguments);
+
+            var done = jqXHR.done;
+            jqXHR.done = delayedCallback(jqXHR, done, delay);
+            jqXHR.done(function() { console.log("done", ajaxArgs); });
+
+            var fail = jqXHR.fail;
+            jqXHR.fail = delayedCallback(jqXHR, fail, delay);
+            jqXHR.fail(function() { console.log("fail", ajaxArgs); });
+
+            var always = jqXHR.always;
+            jqXHR.always = delayedCallback(jqXHR, always, delay);
+
+            return jqXHR;
+        };
     };
 
     self.error = function(parameters) {
@@ -34,6 +71,7 @@ wv.debug = wv.debug || (function() {
         }
     };
 
+    init();
     return self;
 
 })();
@@ -54,7 +92,7 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
         }
         if ( type === "gibs" ) {
             ui.sidebar.collapse();
-            ui.dateSliders.collapse();
+            //ui.dateSliders.collapse();
         }
         if ( type ) {
             if ( type === "palettes" ) {
@@ -152,7 +190,7 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
         console.log(config.layers[layerId].title + "; " + config.layers[layerId].subtitle);
         if ( selectedLayer ) {
             models.layers.remove(selectedLayer);
-            models.palettes.remove(selectedLayer);
+            models.palettes.clearCustom(selectedLayer);
         }
         models.layers.add(layerId);
         if ( type !== "gibs" ) {
@@ -167,9 +205,9 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
             wv.palettes.loadRendered(config, layerId).done(function() {
                 var layer = config.layers[layerId];
                 if ( layer.palette.recommended ) {
-                    models.palettes.add(layerId, layer.palette.recommended[0]);
+                    models.palettes.setCustom(layerId, layer.palette.recommended[0]);
                 } else {
-                    models.palettes.add(layerId, "rainbow_2");
+                    models.palettes.setCustom(layerId, "rainbow_2");
                 }
             });
         }
@@ -206,5 +244,3 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
 
     init();
 };
-
-

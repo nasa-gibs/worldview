@@ -1,0 +1,86 @@
+var fixtures = {
+    red: "ff0000ff",
+    light_red: "fff0f0ff",
+    dark_red: "400000ff",
+    green: "00ff00ff",
+    yellow: "ffff00ff",
+    blue: "0000ffff",
+    light_blue: "f0f0ffff",
+    dark_blue: "000040"
+};
+
+fixtures.config = function() { return {
+    defaults: {
+        projection: "geographic"
+    },
+    projections: {
+        geographic: {
+            id: "geographic",
+            epsg: 4326,
+            crs: "EPSG:4326"
+        },
+        arctic: {
+            id: "arctic",
+            epsg: 3413,
+            crs: "EPSG:3413"
+        },
+        antarctic: {
+            id: "antarctic",
+            epsg: 3031,
+            crs: "EPSG:3031"
+        }
+    },
+    layers: {
+        "terra-cr": {
+            id: "terra-cr",
+            group: "baselayers",
+            projections: { geographic: {}, arctic: {}, antarctic: {} }
+        },
+        "terra-aod": {
+            id: "terra-aod",
+            group: "overlays",
+            projections: { geographic: {} },
+            palette: { id: "terra-aod" }
+        },
+        "aqua-aod": {
+            id: "aqua-aod",
+            group: "overlays",
+            projections: { geographic: {} },
+            palette: { id: "aqua-aod" }
+        }
+    },
+    palettes: {
+        rendered: {
+            "terra-aod": {
+                scale: {
+                    colors: [fixtures.green, fixtures.yellow, fixtures.red],
+                    labels: ["0", "1", "2"]
+                }
+            },
+            "aqua-aod": {
+                scale: {
+                    colors: [fixtures.green, fixtures.yellow, fixtures.red],
+                    labels: ["0", "1", "2"]
+                }
+            }
+        },
+        custom: {
+            "blue-1": {
+                colors: [fixtures.light_blue, fixtures.blue, fixtures.dark_blue]
+            },
+            "red-1": {
+                colors: [fixtures.light_red, fixtures.red, fixtures.dark_red]
+            }
+        }
+    }
+};};
+
+fixtures.models = function(config) {
+    var models = {};
+
+    models.proj = wv.proj.model(config);
+    models.layers = wv.layers.model(models, config);
+    models.palettes = wv.palettes.model(models, config);
+
+    return models;
+};

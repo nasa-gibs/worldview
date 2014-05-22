@@ -18,13 +18,18 @@ wv.ui = wv.ui || {};
 wv.ui.info = wv.ui.info || (function(ui) {
 
     var selector = "#wv-info-button";
-    var $button = $("<button></button>")
+    var $button = $("<input></input>")
+        .attr("type", "checkbox")
+        .attr("id", "wv-info-button-check");
+    var $label = $("<label></label>")
+        .attr("for", "wv-info-button-check")
         .attr("title", "Information");
     var $icon = $("<i></i>")
         .addClass("fa")
         .addClass("fa-info-circle")
         .addClass("fa-2x");
-    $button.append($icon);
+    $label.append($icon);
+    $(selector).append($label);
     $(selector).append($button);
 
     $button.button({
@@ -45,7 +50,11 @@ wv.ui.info = wv.ui.info || (function(ui) {
     $menuItems.append($about);
     $menu.append($menuItems);
     $("body").append($menu);
-    $menuItems.hide().menu();
+    $menuItems.hide().menu().position({
+        my: "left top",
+        at: "left bottom+5",
+        of: $label
+    });
 
     $about.click(function() {
         if ( wv.util.browser.small ) {
@@ -79,17 +88,29 @@ wv.ui.info = wv.ui.info || (function(ui) {
         ui.tour.start();
     });
 
-    $button.click(function() {
+    $button.click(function(event) {
+        event.stopPropagation();
         $(".ui-menu").hide();
-        $menuItems.show().position({
-            my: "left top",
-            at: "left bottom+5",
-            of: $button
-        });
-        $(document).one("click", function() {
-            $menuItems.hide();
-        });
-        return false;
+        wv.ui.closeDialog();
+        var checked = $("#wv-info-button-check").prop("checked");
+        if ( checked ) {
+            show();
+        }
     });
+
+    var show = function() {
+        $("#wv-toolbar input:not(#wv-info-button-check)")
+            .prop("checked", false)
+            .button("refresh");
+        $menuItems.show("slide", { direction: "up" });
+        $("html").one("click", function(event) {
+            if ( $button.parent().has(event.target).length > 0 ) {
+                return;
+            }
+            $menuItems.hide("slide", { direction: "up" });
+            $("#wv-info-button-check").prop("checked", false);
+            $button.button("refresh");
+        });
+    };
 
 });

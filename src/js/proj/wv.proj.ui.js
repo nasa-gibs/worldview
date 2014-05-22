@@ -25,9 +25,12 @@ wv.proj.ui = wv.proj.ui || function(models, config) {
     var model = models.proj;
 
     var self = {};
+    var $button;
+    var $label;
+    var $menuItems;
 
-    self.selector = "#wv-proj-button";
-    self.id = "wv-proj-button";
+    var selector = "#wv-proj-button";
+    var id = "wv-proj-button";
 
     var init = function() {
         if ( config.ui && config.ui.projections ) {
@@ -36,46 +39,72 @@ wv.proj.ui = wv.proj.ui || function(models, config) {
     };
 
     var render = function() {
-        var $button = $("<button></button>")
+        $button = $("<input></input>")
+            .attr("type", "checkbox")
+            .attr("id", "wv-proj-button-check");
+        $label = $("<label></label>")
+            .attr("for", "wv-proj-button-check")
             .attr("title", "Switch projection");
         var $icon = $("<i></i>")
             .addClass("fa")
             .addClass("fa-globe")
             .addClass("fa-2x");
-        $button.append($icon);
-        $(self.selector).append($button);
+        $label.append($icon);
+        $(selector).append($label);
+        $(selector).append($button);
         $button.button({
             text: false
         });
 
         var $menu = $("<div></div>").attr("id", "wv-proj-menu");
-        var $menuItems = $("<ul></ul>");
+        $menuItems = $("<ul></ul>");
 
         _.each(config.ui.projections, function(ui) {
             var $item = $(
-                "<li><a><i class='ui-icon icon-large " + ui.style + "'>" +
+                "<li>" +
+                "<a data-proj='" + ui.id + "'>" +
+                "<i class='ui-icon icon-large " + ui.style + "'>" +
                 "</i>" + ui.name + "</a></li>");
             $menuItems.append($item);
-            $item.click(function() { models.proj.select(ui.id); });
+            $item.click(function() {
+                models.proj.select(ui.id);
+                $("#wv-proj-button-check").prop("checked", false);
+                $button.button("refresh");
+            });
         });
 
         $menu.append($menuItems);
         $("body").append($menu);
 
-        $menuItems.hide().menu();
+        $menuItems.hide().menu().position({
+            my: "left top",
+            at: "left bottom+5",
+            of: $label
+        });
 
-        $button.click(function() {
+        $button.click(function(event) {
+            event.stopPropagation();
             $(".ui-menu").hide();
             wv.ui.closeDialog();
-            $menuItems.show().position({
-                my: "left top",
-                at: "left bottom+5",
-                of: $button
-            });
-            $(document).one("click", function() {
-                $menuItems.hide();
-            });
-            return false;
+            var checked = $("#wv-proj-button-check").prop("checked");
+            if ( checked ) {
+                show();
+            }
+        });
+    };
+
+    var show = function() {
+        $menuItems.show("slide", { direction: "up" });
+        $("#wv-proj-menu a").removeClass("wv-menu-item-selected");
+        $("#wv-proj-menu a[data-proj='" + models.proj.selected.id + "']")
+            .addClass("wv-menu-item-selected");
+        $("body").one("click", function(event) {
+            if ( $button.parent().has(event.target).length > 0 ) {
+                return;
+            }
+            $menuItems.hide("slide", { direction: "up" });
+            $("#wv-proj-button-check").prop("checked", false);
+            $button.button("refresh");
         });
     };
 

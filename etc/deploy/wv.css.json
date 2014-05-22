@@ -18,5 +18,6 @@
     "src/css/dataDownload.css",
     "src/css/global.css",
     "src/css/wv.sidebar.css",
+    "src/css/wv.layers.options.css",
     "src/css/new-ui.css"
 ]

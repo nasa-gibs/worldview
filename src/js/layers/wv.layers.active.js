@@ -42,6 +42,11 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             .on("visibility", onLayerVisibility);
         models.proj.events
             .on("select", onProjectionChanged);
+        models.palettes.events
+            .on("set-custom", onPaletteUpdate)
+            .on("clear-custom", onPaletteUpdate)
+            .on("range", onPaletteUpdate)
+            .on("update", onPaletteUpdateAll);
         $(window).resize(resize);
         ui.sidebar.events.on("select", function(tab) {
             if ( tab === "active" ) {
@@ -51,6 +56,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     };
 
     var render = function() {
+        legends = {};
         var $container = $(self.selector);
         $container.empty();
 
@@ -190,7 +196,8 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             selector: selector,
             config: config,
             models: models,
-            layer: layer
+            layer: layer,
+            onLoad: adjustCategoryHeights
         });
     };
 
@@ -266,8 +273,8 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     };
 
     var removeLayer = function(event) {
-        var $target = $(event.target);
-        model.remove($target.attr("data-layer"));
+        var layerId = $(event.target).attr("data-layer");
+        model.remove(layerId);
     };
 
     var onLayerRemoved = function(layer) {
@@ -275,7 +282,6 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                 wv.util.jqueryEscape(encodeURIComponent(layer.id));
         $(layerSelector).remove();
         if ( legends[layer.id] ) {
-            legends[layer.id].dispose();
             delete legends[layer.id];
         }
         adjustCategoryHeights();
@@ -332,6 +338,18 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                 .attr("src", "images/invisible.png")
                 .attr("title", "Show Layer");
         }
+    };
+
+    var onPaletteUpdate = function(layerId) {
+        if ( legends[layerId] ) {
+            legends[layerId].update();
+        }
+    };
+
+    var onPaletteUpdateAll = function() {
+        _.each(legends, function(legend) {
+            legend.update();
+        });
     };
 
     var onProjectionChanged = function() {

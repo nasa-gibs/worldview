@@ -26,14 +26,17 @@ buster.testCase("wv.palettes", {
     },
 
     "Parses palette for valid layer": function() {
-        var state = { palettes: "layer1,palette1" };
-        wv.palettes.parse(state, this.errors, this.config);
-        buster.assert.equals(state.palettes.layer1, "palette1");
+        var state = { l: "layer1(palette=palette1)" };
+        wv.layers.parse(state, this.errors, this.config);
+        var attr = state.l[0].attributes[0];
+        buster.assert.equals(attr.id, "palette");
+        buster.assert.equals(attr.value, "palette1");
         buster.assert.equals(this.errors.length, 0);
     },
 
+    /*
     "Parses two palettes for valid layers": function() {
-        var state = { palettes: "layer1,palette1~layer2,palette2" };
+        var state = { l: "layer1(palette=palette1),layer2(palette=palette2)" };
         wv.palettes.parse(state, this.errors, this.config);
         buster.assert.equals(state.palettes.layer1, "palette1");
         buster.assert.equals(state.palettes.layer2, "palette2");
@@ -103,4 +106,5 @@ buster.testCase("wv.palettes", {
         buster.assert.equals(p.colors[4], "3");
         buster.assert.equals(p.colors[5], "3");
     }
+    */
 });

@@ -1,6 +1,6 @@
 # Configuration
 
-The configuration used by the official NASA EOSIS Worldview application can be found here:
+The configuration used by the official NASA EOSDIS Worldview application can be found here:
 
 <https://github.com/nasa-gibs/worldview-options-eosdis>
 

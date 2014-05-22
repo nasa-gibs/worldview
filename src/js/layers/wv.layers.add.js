@@ -35,7 +35,6 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
             visible[layer.id] = true;
         });
 
-        render();
         $(window).resize(resize);
 
         model.events
@@ -47,7 +46,14 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
                 resize();
             }
         });
-       resize();
+        // Rendering all the layers can take a half second or so. Place
+        // in a timeout to make startup look fast. This should all be
+        // replaced in the next version.
+        setTimeout(function() {
+            render();
+            filter();
+            resize();
+        }, 1);
     };
 
     var render = function() {
@@ -326,6 +332,9 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
     };
 
     var filterAreaOfInterest = function(layerId) {
+        if ( !config.aoi ) {
+            return false;
+        }
         var aoi = $(self.selector + "select").val();
         if ( aoi === "All" ) {
             return false;

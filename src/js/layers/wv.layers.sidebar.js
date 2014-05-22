@@ -232,7 +232,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
                 .removeClass('arrow')
                 .addClass('staticLayers');
             $('.accordionToggler').attr("title","Show Layer Selector");
-            $('.accordionToggler').html("Layers (" + models.layers.total() + ")");
+            $('.accordionToggler').html("Layers (" + models.layers.get().length + ")");
             var w = $('#app').outerWidth();
             $('.products').animate({left:'-'+w+"px"}, 100);
             collapsed = true;

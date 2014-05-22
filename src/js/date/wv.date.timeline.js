@@ -58,8 +58,8 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
             "value": "6"
         }
     ];
-    
-    
+
+
     //margins for the timeline
     margin = {
             top: 0,
@@ -67,7 +67,7 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
             bottom: 0,
             left: 0
         };
-    
+
     //subtract the datepicker from the width of the screen
     width = window.innerWidth - $("#timeline header").outerWidth() - 30;
     height = 60 - margin.top - margin.bottom;
@@ -79,19 +79,20 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
     
     var incrementBtn = $("#right-arrow-group");
     var decrementBtn = $("#left-arrow-group");
+
     var x = d3.time.scale()
             .domain([
                 d3.min(data, function(d) { return d.date; }),
                 d3.max(data, function(d) { return d.date; })
             ])
             .range([0, width]);
-    
+
     var y = d3.scale.linear()
             .domain(d3.extent(data2, function (d) {
                 return d.value;
             }))
             .range([height, 0]);
-    
+
     var line = d3.svg.line()
             .x(function (d) {
                 return x(d.date);
@@ -161,12 +162,12 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
         
         
     };
-    
+
     var zoom = d3.behavior.zoom()
             .x(x)
             .scaleExtent([1, 100])
             .on("zoom", zoomed);
-    
+
     var make_x_axis = function (x) {
         return d3.svg.axis()
             .scale(x)
@@ -180,7 +181,7 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
             .ticks(10);
             
     var init = function() {
-        
+
         svg = d3.select('#timeline footer')
             .append("svg:svg")
             .attr('width', width + margin.left + margin.right)
@@ -194,14 +195,14 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
             .attr("height", 60)
             .attr("class", "plot");
 
-        
+
 
         svg.append("svg:g")
             .attr("class", "x axis")
             .attr("transform", "translate(0, " + 35 + ")")
             .call(xAxis);
 
-        
+
 
         svg.append("g")
             .attr("class", "x grid")
@@ -233,8 +234,8 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
         updateTimeline();
         
         d3.selectAll('.x.axis .tick text').attr('x',5).attr('style','text-anchor:left;');
-        
-        // Hover line. 
+
+        // Hover line.
         var hoverLineGroup = svg.append("g")
                             .attr("class", "hover-line");
         var hoverLine = hoverLineGroup
@@ -245,7 +246,7 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
         var hoverDate = hoverLineGroup.append('text')
            .attr("class", "hover-text")
            .attr('y', height-40);
-        
+
         // Hide hover line by default.
         hoverLineGroup.style("opacity", 1e-6);
         
@@ -295,6 +296,7 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
             var mouse_x_jump = mouse_x_start + timelineJump;
             console.log("$$$$$$$$$$$$ ");
         })*/;
+        
         $("svg#now-line").mousedown(function(e){
             e.preventDefault();
             
@@ -313,6 +315,7 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
             }).mouseup(function(){
                 d3.select("#timeline footer").on("mousemove", null);
                 d3.select("#timeline footer").on("mousemove", function() {
+
           
                   var mouse_x = d3.mouse(this)[0];
                   var mouse_y = d3.mouse(this)[1];

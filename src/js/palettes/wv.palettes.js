@@ -36,6 +36,9 @@ wv.palettes = (function(self) {
         } else {
             canvas = target;
         }
+        if ( !canvas ) {
+            return;
+        }
         var g = canvas.getContext("2d");
 
         g.fillStyle = checkerboard;
@@ -43,14 +46,13 @@ wv.palettes = (function(self) {
         if ( !palette ) {
             return;
         }
-        var info = palette.scale || palette.classes;
-        if ( info ) {
-            var colors = info.colors;
-            var bins = info.colors.length;
+        var colors = palette.colors || palette.scale.colors;
+        if ( colors ) {
+            var bins = colors.length;
             var binWidth = canvas.width / bins;
             var drawWidth = Math.ceil(binWidth);
-            _.each(info.colors, function(color, i) {
-                g.fillStyle = "#" + color.substring(0,6);
+            _.each(colors, function(color, i) {
+                g.fillStyle = wv.util.hexToRGBA(color);
                 g.fillRect(Math.floor(binWidth * i), 0, drawWidth,
                         canvas.height);
             });
@@ -66,11 +68,13 @@ wv.palettes = (function(self) {
 
         var g = canvas.getContext("2d");
 
-        g.fillStyle = "rgb(102, 102, 102)";
+        //g.fillStyle = "rgb(102, 102, 102)";
+        g.fillStyle = "rgb(200, 200, 200)";
         g.fillRect(0, 0, size, size);
         g.fillRect(size, size, size, size);
 
-        g.fillStyle = "rgb(153, 153, 153)";
+        //g.fillStyle = "rgb(153, 153, 153)";
+        g.fillStyle = "rgb(240, 240, 240)";
         g.fillRect(0, size, size, size);
         g.fillRect(size, 0, size, size);
 
@@ -117,47 +121,14 @@ wv.palettes = (function(self) {
     };
 
     self.loadCustom = function(config) {
-        return wv.util.load(config.palettes, "custom", "config/palettes-custom.json");
+        return wv.util.load.config(config.palettes,
+            "custom", "config/palettes-custom.json");
     };
 
     self.loadRendered = function(config, layerId) {
         var layer = config.layers[layerId];
-        return wv.util.load(config.palettes.rendered, layer.palette.id,
-                "config/palettes/" + layer.palette.id + ".json");
-    };
-
-    self.parse = function(state, errors, config) {
-        if ( state.palettes ) {
-            if ( !wv.palettes.supported ) {
-                // FIXME: This should go in errors
-                delete state.palettes;
-                wv.ui.notify("The custom palette feature is not supported " +
-                        "with your web browser. Upgrade or try again in a " +
-                        "different browser");
-                return;
-            }
-            var results = {};
-            var parts = state.palettes.split("~");
-            _.each(parts, function(part) {
-                var items = part.split(",");
-                var layerId = items[0];
-                var paletteId = items[1];
-                if ( !config.layers[layerId] ) {
-                    errors.push({message: "Invalid layer for palette " +
-                        paletteId + ": " + layerId});
-                } else if ( !config.layers[layerId].palette ) {
-                    errors.push({message: "Layer " + layerId + " does not " +
-                        "support palettes"});
-                } else {
-                    results[layerId] = paletteId;
-                }
-            });
-            if ( _.size(results) > 0 ) {
-                state.palettes = results;
-            } else {
-                delete state.palettes;
-            }
-        }
+        return wv.util.load.config(config.palettes.rendered,
+            layer.palette.id, "config/palettes/" + layer.palette.id + ".json");
     };
 
     self.requirements = function(state, config) {
@@ -166,12 +137,14 @@ wv.palettes = (function(self) {
             rendered: {},
             custom: {}
         };
-        if ( config.parameters.palettes ) {
-            promises.push(self.loadCustom(config));
-        }
-        _.each(state.products, function(layerId) {
+        _.each(state.l, function(qsLayer) {
+            var layerId = qsLayer.id;
             if ( config.layers[layerId].palette ) {
                 promises.push(self.loadRendered(config, layerId));
+            }
+            var custom = _.find(qsLayer.attributes, {id: "palette"});
+            if ( custom ) {
+                promises.push(self.loadCustom(config));
             }
         });
         if ( promises.length > 0 ) {

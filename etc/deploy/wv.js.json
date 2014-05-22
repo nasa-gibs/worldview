@@ -1,57 +1,62 @@
-[
-    "src/js/wv.brand.js",
+{
+    "wv.js": [
+        "src/js/wv.brand.js",
 
-    "src/js/util/wv.util.browser.js",
-    "src/js/util/wv.util.js",
-    "src/js/util/wv.util.events.js",
+        "src/js/util/wv.util.browser.js",
+        "src/js/util/wv.util.js",
+        "src/js/util/wv.util.load.js",
+        "src/js/util/wv.util.events.js",
 
-    "src/js/ui/wv.ui.js",
-    "src/js/ui/wv.ui.indicator.js",
-    "src/js/ui/wv.ui.info.js",
+        "src/js/ui/wv.ui.js",
+        "src/js/ui/wv.ui.indicator.js",
+        "src/js/ui/wv.ui.info.js",
 
-    "src/js/proj/wv.proj.js",
-    "src/js/proj/wv.proj.change.js",
-    "src/js/proj/wv.proj.model.js",
-    "src/js/proj/wv.proj.ui.js",
+        "src/js/proj/wv.proj.js",
+        "src/js/proj/wv.proj.change.js",
+        "src/js/proj/wv.proj.model.js",
+        "src/js/proj/wv.proj.ui.js",
 
-    "src/js/date/wv.date.js",
-    "src/js/date/wv.date.model.js",
-    "src/js/date/wv.date.sliders.js",
-    "src/js/date/wv.date.label.js",
-    "src/js/date/wv.date.timeline.js",
+        "src/js/date/wv.date.js",
+        "src/js/date/wv.date.model.js",
+        "src/js/date/wv.date.sliders.js",
+        "src/js/date/wv.date.label.js",
+        "src/js/date/wv.date.timeline.js",
 
-    "src/js/layers/wv.layers.js",
-    "src/js/layers/wv.layers.model.js",
-    "src/js/layers/wv.layers.sidebar.js",
-    "src/js/layers/wv.layers.active.js",
-    "src/js/layers/wv.layers.add.js",
-    "src/js/layers/wv.layers.options.js",
+        "src/js/layers/wv.layers.js",
+        "src/js/layers/wv.layers.model.js",
+        "src/js/layers/wv.layers.sidebar.js",
+        "src/js/layers/wv.layers.active.js",
+        "src/js/layers/wv.layers.add.js",
+        "src/js/layers/wv.layers.options.js",
 
-    "src/js/image/wv.image.rubberband.js",
-    "src/js/image/wv.image.panel.js",
+        "src/js/image/wv.image.rubberband.js",
+        "src/js/image/wv.image.panel.js",
 
-    "src/js/palettes/wv.palettes.js",
-    "src/js/palettes/wv.palettes.legend.js",
-    "src/js/palettes/wv.palettes.model.js",
+        "src/js/palettes/wv.palettes.js",
+        "src/js/palettes/wv.palettes.legend.js",
+        "src/js/palettes/wv.palettes.model.js",
 
-    "src/js/data/wv.data.js",
-    "src/js/data/wv.data.echo.js",
-    "src/js/data/wv.data.handler.js",
-    "src/js/data/wv.data.layers.js",
-    "src/js/data/wv.data.map.js",
-    "src/js/data/wv.data.model.js",
-    "src/js/data/wv.data.results.js",
-    "src/js/data/wv.data.ui.js",
+        "src/js/data/wv.data.js",
+        "src/js/data/wv.data.echo.js",
+        "src/js/data/wv.data.handler.js",
+        "src/js/data/wv.data.layers.js",
+        "src/js/data/wv.data.map.js",
+        "src/js/data/wv.data.model.js",
+        "src/js/data/wv.data.results.js",
+        "src/js/data/wv.data.ui.js",
 
-    "src/js/map/wv.map.js",
-    "src/js/map/wv.map.model.js",
-    "src/js/map/wv.map.palette.js",
-    "src/js/map/wv.map.ui.js",
+        "src/js/map/wv.map.js",
+        "src/js/map/wv.map.model.js",
+        "src/js/map/wv.map.palette.js",
+        "src/js/map/wv.map.ui.js",
 
-    "src/js/link/wv.link.model.js",
-    "src/js/link/wv.link.ui.js",
+        "src/js/link/wv.link.model.js",
+        "src/js/link/wv.link.ui.js",
 
-    "src/js/wv.debug.js",
-    "src/js/wv.tour.js",
-    "src/js/wv.main.js"
-]
+        "src/js/wv.tour.js",
+        "src/js/wv.main.js"
+    ],
+    "wv.debug.js": [
+        "src/js/wv.debug.js"
+    ]
+}

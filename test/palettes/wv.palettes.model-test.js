@@ -9,160 +9,234 @@
  * All Rights Reserved.
  */
 
-buster.testCase("wv.palettes.model", {
+buster.testCase("wv.palettes.model", function() {
 
-    config: null,
-    models: null,
-    model: null,
+    var self = {};
 
-    setUp: function() {
-        this.config = {
-            layers: {
-                "layer1": {
-                    id: "layer1",
-                    group: "overlays",
-                    projections: {
-                        geographic: {}
-                    },
-                    palette: {
-                        id: "palette1"
-                    }
-                },
-                "layer3": {
-                    id: "layer3"
-                }
-            },
-            palettes: {
-                custom: {},
-                rendered: {}
-            }
-        };
-        this.models = {};
-        this.models.proj = {
-            selected: { id: "geographic" }
-        };
-        this.models.layers = wv.layers.model(this.models, this.config);
-        this.models.palettes =  wv.palettes.model(this.models, this.config);
-        this.model = this.models.palettes;
+    var config, models;
+
+    self.setUp = function() {
+        config = fixtures.config();
+        models = fixtures.models(config);
         this.stub($, "getJSON");
-    },
+    };
 
-    "Adds a custom palette": function(done) {
-        this.config.palettes.rendered = {
-            "palette1": {
-                id: "palette1",
-                colors: ["c1"],
-                values: ["v1"]
-            }
-        };
-        this.config.palettes.custom = {
-            "custom1": {
-                id: "custom1",
-                colors: ["x1"]
-            }
-        };
-        var self = this;
-        this.model.events.on("add", function(layerId) {
-            var palette = self.model.forLayer(layerId);
-            buster.assert.equals(palette.colors[0], "x1");
-            buster.assert.equals(palette.values[0], "v1");
+    self["Set a custom palette"] = function(done) {
+        models.palettes.events.on("set-custom", function(layerId) {
+            var palette = models.palettes.get(layerId);
+            buster.assert.equals(palette.scale.colors[0], fixtures.light_blue);
+            buster.assert.equals(palette.scale.labels[0], "0");
             done();
         });
-        this.model.add("layer1", "custom1");
-    },
+        models.layers.add("terra-aod");
+        models.palettes.setCustom("terra-aod", "blue-1");
+    };
 
-    "Removes a custom palette": function(done) {
-        this.config.palettes.rendered = {
-            "palette1": {
-                id: "palette1",
-                colors: ["c1"],
-                values: ["v1"]
-            }
-        };
-        this.config.palettes.custom = {
-            "custom1": {
-                id: "custom1",
-                colors: ["x1"]
-            }
-        };
-        var self = this;
-        this.model.events.on("remove", function(layerId) {
-            var palette = self.model.forLayer(layerId);
-            buster.assert.equals(palette.colors[0], "c1");
-            buster.assert.equals(palette.values[0], "v1");
-            done();
+    self["Exception setting a custom palette when no layer exists"] = function() {
+        buster.assert.exception(function() {
+            models.palettes.setCustom("no-layer", "blue-1");
         });
-        this.model.add("layer1", "custom1");
-        this.model.remove("layer1");
-    },
+    };
 
-    "Saves state": function() {
-        this.model.active = {
-            "layer1": "custom1",
-            "layer2": "custom2"
-        };
+    self["Exception setting an invalid custom palette"] = function() {
+        buster.assert.exception(function() {
+            models.palettes.setCustom("terra-aod", "no-palette");
+        });
+    };
+
+    self["Exception setting a custom palette on a imagery layer"] = function() {
+        buster.assert.exception(function() {
+            models.palettes.setCustom("terra-cr", "blue-1");
+        });
+    };
+
+    self["Clear a custom palette"] = function() {
+        this.stub(models.palettes.events, "trigger");
+
+        models.layers.add("aqua-aod");
+        models.palettes.setCustom("terra-aod", "blue-1");
+        models.palettes.clearCustom("terra-aod");
+
+        var palette = models.palettes.get("terra-aod");
+        buster.assert.equals(palette.scale.colors[0], fixtures.green);
+        buster.assert.equals(palette.scale.labels[0], "0");
+
+        buster.assert.calledWith(models.palettes.events.trigger, "clear-custom");
+        buster.assert.calledWith(models.palettes.events.trigger, "change");
+    };
+
+    self["Set a minimum threshold"] = function() {
+        this.stub(models.palettes.events, "trigger");
+
+        models.layers.add("terra-aod");
+        models.palettes.setRange("terra-aod", 1, 2);
+
+        var palette = models.palettes.get("terra-aod");
+        buster.assert.equals(palette.min, 1);
+        buster.assert(_.isUndefined(palette.max));
+        buster.assert.equals(palette.scale.colors[0], "00000000");
+        buster.assert.equals(palette.scale.colors[1], fixtures.yellow);
+        buster.assert.equals(palette.scale.colors[2], fixtures.red);
+
+        buster.assert.calledWith(models.palettes.events.trigger, "range");
+        buster.assert.calledWith(models.palettes.events.trigger, "change");
+    };
+
+    self["Set a maximum threshold"] = function() {
+        this.stub(models.palettes.events, "trigger");
+
+        models.layers.add("terra-aod");
+        models.palettes.setRange("terra-aod", 0, 1);
+
+        var palette = models.palettes.get("terra-aod");
+        buster.assert.equals(palette.max, 1);
+        buster.assert(_.isUndefined(palette.min));
+        buster.assert.equals(palette.scale.colors[0], fixtures.green);
+        buster.assert.equals(palette.scale.colors[1], fixtures.yellow);
+        buster.assert.equals(palette.scale.colors[2], "00000000");
+
+        buster.assert.calledWith(models.palettes.events.trigger, "range");
+        buster.assert.calledWith(models.palettes.events.trigger, "change");
+    };
+
+    self["Save custom palette"] = function() {
+        models.layers.add("aqua-aod");
+        models.layers.add("terra-aod");
+        models.palettes.setCustom("terra-aod", "blue-1");
+        models.palettes.setCustom("aqua-aod", "red-1");
+
         var state = {};
-        this.model.save(state);
-        buster.assert.equals(state.palettes, "layer1,custom1~layer2,custom2");
-    },
+        models.layers.save(state);
+        models.palettes.save(state);
+        buster.assert.equals(state.l, [
+            { id: "terra-aod", attributes: [{ id: "palette", value: "blue-1" }] },
+            { id: "aqua-aod",  attributes: [{ id: "palette", value: "red-1"  }] }
+        ]);
+    };
 
-    "Empty state no palettes are active": function() {
+    self["Save threshold minimum"] = function() {
+        models.layers.add("terra-aod");
+        models.palettes.setRange("terra-aod", 1, 2);
+
         var state = {};
-        this.model.save(state);
-        buster.refute(state.palettes);
-    },
+        models.layers.save(state);
+        models.palettes.save(state);
+        buster.assert.equals(state.l, [
+            { id: "terra-aod", attributes: [{ id: "min", value: 1 }] }
+        ]);
+    };
 
-    "Loads state": function() {
-        this.stub(this.model, "add");
+    self["Save threshold maximum"] = function() {
+        models.layers.add("terra-aod");
+        models.palettes.setRange("terra-aod", 0, 1);
+
+        var state = {};
+        models.layers.save(state);
+        models.palettes.save(state);
+        buster.assert.equals(state.l, [
+            { id: "terra-aod", attributes: [{ id: "max", value: 1 }] }
+        ]);
+    };
+
+    self["Save threshold range"] = function() {
+        models.layers.add("terra-aod");
+        models.palettes.setRange("terra-aod", 1, 1);
+
+        var state = {};
+        models.layers.save(state);
+        models.palettes.save(state);
+        buster.assert.equals(state.l, [
+            { id: "terra-aod", attributes: [
+                { id: "min", value: 1 },
+                { id: "max", value: 1 }
+            ]}
+        ]);
+    };
+
+    self["No save when not active"] = function() {
+        models.layers.add("terra-aod");
+
+        var state = {};
+        models.layers.save(state);
+        models.palettes.save(state);
+        buster.assert.equals(state.l, [
+            { id: "terra-aod", attributes: [] }
+        ]);
+    };
+
+    self["Load state"] = function() {
         var state = {
-            palettes: {
-                layer1: "custom1",
-                layer3: "custom3"
-            }
-        };
-        this.config.palettes.custom = {
-            custom1: {},
-            custom3: {}
+            l: [
+                {id: "terra-aod", attributes: [
+                    { id: "palette", value: "blue-1" },
+                    { id: "min",     value: "1" },
+                    { id: "max",     value: "1" }
+                ]}
+            ]
         };
         var errors = [];
-        this.model.load(state, errors);
-        buster.assert.calledWith(this.model.add, "layer1", "custom1");
-        buster.assert.calledWith(this.model.add, "layer3", "custom3");
+        models.layers.load(state, errors);
+        models.palettes.load(state, errors);
+        var palette = models.palettes.get("terra-aod");
+        buster.assert.equals(palette.custom, "blue-1");
+        buster.assert.equals(palette.min, 1);
+        buster.assert.equals(palette.max, 1);
         buster.assert.equals(errors.length, 0);
-    },
+    };
 
-    /*
-    "From permalink, encoded ~": function() {
-        this.stub(this.model, "add");
-        this.model.fromPermalink("palettes=layer1,custom1%7Elayer2,custom2");
-        buster.assert.calledWith(this.model.add, "layer1", "custom1");
-        buster.assert.calledWith(this.model.add, "layer2", "custom2");
-    },
-    */
-
-    "Error during load when layer doesn't support palettes": function() {
-        this.stub(wv.util, "warn");
+    self["Error loading non-existing palette"] = function() {
         var state = {
-            palettes: {
-                layer1: "customx"
-            }
+            l: [{id: "terra-aod", attributes: [{id: "palette", value: "none"}]}]
         };
         var errors = [];
-        this.model.load(state, errors);
+        models.layers.load(state, errors);
+        models.palettes.load(state, errors);
         buster.assert.equals(errors.length, 1);
-    },
+    };
 
-    "Palettes in use when active layer has a selected palette": function() {
-        this.models.layers.add("layer1");
-        this.model.active.layer1 = "palette1";
-        buster.assert(this.model.inUse());
-    },
+    self["Error loading invalid minimum"] = function() {
+        var state = {
+            l: [ {id: "terra-aod", attributes: [{ id: "min", value: "x"}]}]
+        };
+        var errors = [];
+        models.layers.load(state, errors);
+        models.palettes.load(state, errors);
+        buster.assert.equals(errors.length, 1);
+    };
 
-    "Palettes are not in use when no active layers have a palette": function() {
-        this.models.layers.add("layer1");
-        this.model.active.layer1 = "palette1";
-        this.models.layers.remove("layer1");
-        buster.refute(this.model.inUse());
-    }
+    self["Error loading invalid maximum"] = function() {
+        var state = {
+            l: [ {id: "terra-aod", attributes: [{ id: "max", value: "x"}]}]
+        };
+        var errors = [];
+        models.layers.load(state, errors);
+        models.palettes.load(state, errors);
+        buster.assert.equals(errors.length, 1);
+    };
 
-});
+    self["Canvas not in use"] = function() {
+        buster.refute(models.palettes.inUse());
+    };
+
+    self["Canvas in use with custom palette"] = function() {
+        models.layers.add("terra-aod");
+        models.palettes.setCustom("terra-aod", "blue-1");
+        buster.assert(models.palettes.inUse());
+    };
+
+    self["Canvas in use with threshold ranges"] = function() {
+        models.layers.add("terra-aod");
+        models.palettes.setRange("terra-aod", 1);
+        buster.assert(models.palettes.inUse());
+    };
+
+    self["Canvas not in use when not active layers have a palette"] = function() {
+        models.layers.add("terra-aod");
+        models.palettes.setCustom("terra-aod", "blue-1");
+        models.layers.remove("terra-aod");
+        buster.refute(models.palettes.inUse());
+    };
+
+    return self;
+
+}());

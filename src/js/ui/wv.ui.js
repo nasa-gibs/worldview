@@ -68,6 +68,7 @@ wv.ui = (function(self) {
             show: { effect: "fade" },
             hide: { effect: "fade" },
             width: 300,
+            minHeight: 1,
             height: "auto"
         });
     };
@@ -96,50 +97,27 @@ wv.ui = (function(self) {
      * button is pressed. If not specified, the dialog box simply closes.
      */
     self.ask = function(spec) {
-        var dialog = new YAHOO.widget.SimpleDialog("dialog", {
-            width: "20em",
-            effect: {
-                effect: YAHOO.widget.ContainerEffect.FADE,
-                duration: 0.25
-            },
-            fixedcenter: true,
+        var $dialog = self.getDialog("wv-dialog-ask");
+        var cancelText = spec.cancelButton || "Cancel";
+        var okText = spec.okButton || "OK";
+        var buttons = {};
+        buttons[cancelText] = function() {
+            $(this).dialog("close");
+            if ( spec.onCancel ) { spec.onCancel(); }
+        };
+        buttons[okText] = function() {
+            $(this).dialog("close");
+            if ( spec.onOk ) { spec.onOk(); }
+        };
+        $dialog.dialog({
+            title: spec.header || "Notice",
+            resizable: false,
             modal: true,
-            visible: false,
-            draggable: false
+            buttons: buttons
+        }).html(spec.message)
+        .on("dialogclose", function() {
+            if ( spec.onCancel ) { spec.onCancel(); }
         });
-
-        var header = spec.header || "Notice";
-        dialog.setHeader(header);
-        dialog.setBody(spec.message || "Are you sure?");
-
-        var handleOk = function() {
-            try {
-                this.hide();
-                if ( spec.onOk) {
-                    spec.onOk();
-                }
-            } catch ( error ) {
-                wv.util.error(error);
-            }
-        };
-        var handleCancel = function() {
-            try {
-                this.hide();
-                if ( spec.onCancel ) {
-                    spec.onCancel();
-                }
-            } catch ( error ) {
-                wv.util.error(error);
-            }
-        };
-
-        var buttons = [
-            { text: spec.cancelButton || "Cancel", handler: handleCancel },
-            { text: spec.okButton || "OK", handler: handleOk }
-        ];
-        dialog.cfg.queueProperty("buttons", buttons);
-        dialog.render(document.body);
-        dialog.show();
     };
 
     /**
@@ -164,21 +142,25 @@ wv.ui = (function(self) {
                 "browser. Upgrade or try again in a different browser.");
     };
 
-    self.getDialog = function() {
-        var $dialog = $(".ui-dialog-content");
+    self.getDialog = function(marker) {
+        marker = marker || "wv-dialog";
+        var selector = "." + marker;
+        var $dialog = $(selector);
         if ( $dialog.length !== 0 ) {
             if ( $dialog.dialog ) {
                 $dialog.dialog("close");
             }
             $dialog.remove();
         }
-        $dialog = $("<div></div>");
+        $dialog = $("<div></div>").addClass(marker);
         $("body").append($dialog);
         return $dialog;
     };
 
-    self.closeDialog = function() {
-        var $dialog = $(".ui-dialog-content");
+    self.closeDialog = function(marker) {
+        marker = marker || "wv-dialog";
+        var selector = "." + marker;
+        var $dialog = $(selector);
         if ( $dialog.length !== 0 ) {
             if ( $dialog.dialog ) {
                 $dialog.dialog("close");

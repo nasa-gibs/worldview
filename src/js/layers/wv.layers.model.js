@@ -154,7 +154,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
     };
 
     self.remove = function(id) {
-        var index = _.findIndex(self.active, {id: id});
+        var index = _.findIndex(self.active, { id: id });
         var def = self.active[index];
         if ( index >= 0 ) {
             self.active.splice(index, 1);
@@ -167,7 +167,15 @@ wv.layers.model = wv.layers.model || function(models, config) {
     };
 
     self.replace = function(idOld, idNew) {
-        throw new Error("Replace called");
+        var index = _.findIndex(self.active, { id: idOld });
+        if ( index < 0 ) {
+            return;
+        }
+        var oldDef = self.active[index];
+        var newDef = config.layers[idNew];
+        self.active[index] = newDef;
+        self.events.trigger("update");
+        self.events.trigger("change");
     };
 
     self.clear = function(projId) {
@@ -268,29 +276,61 @@ wv.layers.model = wv.layers.model || function(models, config) {
     };
 
     self.save = function(state) {
-        var groups = [];
-        _.each(self.get({group: "all"}), function(defs, group) {
-            group = [group];
-            _.each(defs, function(def) {
-                prefix = ( !def.visible ) ? "!": "";
-                group.push(prefix + def.id);
-            });
-            // Only list group if there are layers to save
-            if ( group.length > 1 ) {
-                groups.push(group.join(","));
+        var defs = self.get();
+        if ( !defs || defs.length === 0 ) {
+            return;
+        }
+        state.l = state.l || [];
+        _.each(self.get(), function(def) {
+            var lstate = _.find(state.l, { id: def.id });
+            if ( !lstate ) {
+                lstate = { id: def.id };
+                state.l.push(lstate);
+            }
+            if ( !lstate.attributes ) {
+                lstate.attributes = [];
+            }
+            if ( !def.visible ) {
+                lstate.attributes.push({id: "hidden"});
+            }
+            if ( def.opacity < 1 ) {
+                lstate.attributes.push({id: "opacity", value: def.opacity});
             }
         });
-        state.products = groups.join("~");
     };
 
     self.load = function(state) {
         if ( state.products ) {
-            self.clear(models.proj.selected.id);
-            _.eachRight(state.products, function(layerId) {
-                var hidden = state.hidden && state.hidden[layerId];
-                self.add(layerId, { visible: !hidden });
-            });
+            load11(state);
         }
+        if ( state.l ) {
+            load12(state);
+        }
+    };
+
+    var load11 = function(state) {
+        self.clear(models.proj.selected.id);
+        _.eachRight(state.products, function(layerId) {
+            var hidden = state.hidden && state.hidden[layerId];
+            self.add(layerId, { visible: !hidden });
+        });
+    };
+
+    var load12 = function(state) {
+        self.clear(models.proj.selected.id);
+        _.eachRight(state.l, function(layerDef) {
+            var hidden = false;
+            var opacity = 1.0;
+            _.each(layerDef.attributes, function(attr) {
+                if ( attr.id === "hidden" ) {
+                    hidden = true;
+                }
+                if ( attr.id === "opacity" ) {
+                    opacity = parseFloat(attr.value);
+                }
+            });
+            self.add(layerDef.id, { hidden: hidden, opacity: opacity });
+        });
     };
 
     var forGroup = function(group, spec) {

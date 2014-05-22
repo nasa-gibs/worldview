@@ -146,6 +146,11 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
     background: #808080;
 }
 
+.wv-menu-item-selected {
+    background: #888;
+    color: #eee;
+}
+
 .ui-state-hover {
     background: #eeeeee;
     color: #404040;
@@ -187,7 +192,8 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
 
 
 .ui-tooltip {
-    background: #FFFBE7;
+    /* background: #FFFBE7; */
+    background: #eee;
 }
 
 .ui-tooltip-content {
@@ -257,18 +263,3 @@ label {
  * Remove it */
 .ui-state-focus:focus { outline: none !important }
 .ui-state-focus a:focus { outline: none !important }
-
-/* TEMP: Remove this once the real slider goes in */
-#day-panel {
-    position: absolute;
-    left: 20em;
-    bottom: 5em;
-    padding: 1em;
-    background-color: rgba(200, 200, 200, 0.8);
-    border-radius: 5px;
-    border: 1px solid rgb(40, 40, 40);
-}
-
-#day-panel div {
-    width: 10em;
-}
