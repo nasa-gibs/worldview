@@ -18,34 +18,11 @@ wv.date = wv.date || {};
 /**
  * Undocumented.
  *
- * @class wv.date.sliders
+ * @class wv.date.timeline
  */
 wv.date.timeline = wv.date.timeline || function(models, config) {
 
-    Element.prototype.hasClass = function (className) {
-  return new RegExp('(\\s|^)' + className + '(\\s|$)').test(this.getAttribute('class'));
-};
 
-Element.prototype.addClass = function (className) {
-  if (!this.hasClass(className)) {
-    this.setAttribute('class', this.getAttribute('class') + ' ' + className);
-  }
-};
-
-Element.prototype.removeClass = function (className) {
-  var removedClass = this.getAttribute('class').replace(new RegExp('(\\s|^)' + className + '(\\s|$)', 'g'), '$2');
-  if (this.hasClass(className)) {
-    this.setAttribute('class', removedClass);
-  }
-};
-
-Element.prototype.toggleClass = function (className) {
-  if (this.hasClass(className)) {
-    this.removeClass(className);
-  } else {
-    this.addClass(className);
-  }
-};
 
     var id = "timeline";
     var selector = "#" + id;
@@ -55,16 +32,19 @@ Element.prototype.toggleClass = function (className) {
     var $container;
     var model = models.date;
     var svg;
+    var timelineJumpInPix;
+    var jumpInterval;
     var todayDateMs = model.selected.getTime();
     var startDateMs = model.start.getTime();
-    console.log("todays date is : " + todayDateMs + " and the start date is : " + model.start.getTime());
+    var endDateMs = model.end.getTime();
+
     //this is where the data would go for showing available dates
     var data = [
         {
             "date": startDateMs,
             "value": "5"
         }, {
-            "date": todayDateMs,
+            "date": endDateMs,
                 "value": "5"
         }
     ];
@@ -72,7 +52,7 @@ Element.prototype.toggleClass = function (className) {
     var data2 = [
         {
             "date": todayDateMs,
-            "value": "0"
+            "value": "0" 
         }, {
             "date": todayDateMs,
             "value": "6"
@@ -92,11 +72,13 @@ Element.prototype.toggleClass = function (className) {
     width = window.innerWidth - $("#timeline header").outerWidth() - 30;
     height = 60 - margin.top - margin.bottom;
     var currentDate = new Date(data2[0].date);
+    var dateTimestamp;
     var monthNames = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun",
                             "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
     var self = {};
     
-        
+    var incrementBtn = $("#right-arrow-group");
+    var decrementBtn = $("#left-arrow-group");
     var x = d3.time.scale()
             .domain([
                 d3.min(data, function(d) { return d.date; }),
@@ -117,6 +99,31 @@ Element.prototype.toggleClass = function (className) {
             .y(function (d) {
                 return y(d.value);
             });
+    var redraw = function(){
+        //resizing window redrawing goes here
+        
+        width = window.innerWidth - $("#timeline header").outerWidth() - 30;
+        
+        d3.select('#timeline footer svg')
+            .attr('width', width + margin.left + margin.right);
+            
+        d3.select("rect.plot")
+            .attr("width", width);
+        d3.select("#clip")
+            .attr("width", width);
+            
+        x.range([0, width]);
+        
+        d3.select(".axis").call(xAxis);
+        d3.select(".grid").call(make_x_axis(x).tickSize(-60, 0, 0));
+        d3.selectAll('.x.axis .tick text').attr('x',5).attr('style','text-anchor:left;');
+        
+        d3.select(".line").datum(data).attr("d", line);
+        d3.select(".line2").datum(data2).attr("d", line);
+        
+        updateTimeline();
+        
+    };
     
     var zoomed = function(){
         var t = zoom.translate(),
@@ -127,9 +134,6 @@ Element.prototype.toggleClass = function (className) {
 
         zoom.translate([tx, ty]);
 
-        
-        //console.log(d3.event.translate);
-        //console.log(d3.event.scale);
         svg.select(".x.axis").call(xAxis);
 
         svg.select(".x.grid")
@@ -142,19 +146,25 @@ Element.prototype.toggleClass = function (className) {
         svg.select(".line2")
             .attr("class", "line2")
             .attr("d", line);
+            
+        updateTimeline();
         
-        var makeFill = d3.select('.line2').attr("d");
-        d3.select(".line2").attr("d", makeFill + "l3,0l0,60z");
-        var makeFillPos = $(".line2").offset();
-        $("svg#now-line").css("left", (makeFillPos.left-3) + "px");
-        
+        if(($("svg#now-line").offset().left) < ($("#timeline footer").offset().left)){
+            $("svg#now-line").css("visibility","hidden");
+
+        }
+        else{
+            $("svg#now-line").css("visibility","visible");
+
+        }
         d3.selectAll('.x.axis .tick text').attr('x',5).attr('style','text-anchor:left;');
+        
         
     };
     
     var zoom = d3.behavior.zoom()
             .x(x)
-            .scaleExtent([1, 1500])
+            .scaleExtent([1, 100])
             .on("zoom", zoomed);
     
     var make_x_axis = function (x) {
@@ -164,23 +174,11 @@ Element.prototype.toggleClass = function (className) {
             .ticks(10);
     };
 
-    var make_y_axis = function (y) {
-        return d3.svg.axis()
-            .scale(y)
-            .orient("left")
-            .ticks(5);
-    };
-
     var xAxis = d3.svg.axis()
             .scale(x)
             .orient("bottom")
             .ticks(10);
             
-    var yAxis = d3.svg.axis()
-            .scale(y)
-            .orient("left")
-            .ticks(5);
-
     var init = function() {
         
         svg = d3.select('#timeline footer')
@@ -209,8 +207,7 @@ Element.prototype.toggleClass = function (className) {
             .attr("class", "x grid")
             .attr("transform", "translate(0," + 60 + ")")
             .call(make_x_axis(x)
-            .tickSize(-60, 0, 0)
-            .tickFormat(""));
+                .tickSize(-60, 0, 0));
 
         var clip = svg.append("svg:clipPath")
             .attr("id", "clip")
@@ -232,11 +229,9 @@ Element.prototype.toggleClass = function (className) {
             .datum(data2)
             .attr("class", "line2")
             .attr("d", line);
-        var makeFill = d3.select('.line2').attr("d");
-        d3.select(".line2").attr("d", makeFill + "l3,0l0,60z");
-        var makeFillPos = $(".line2").offset();
-        $("svg#now-line").css("left", (makeFillPos.left-3) + "px");
-
+        
+        updateTimeline();
+        
         d3.selectAll('.x.axis .tick text').attr('x',5).attr('style','text-anchor:left;');
         
         // Hover line. 
@@ -254,36 +249,32 @@ Element.prototype.toggleClass = function (className) {
         // Hide hover line by default.
         hoverLineGroup.style("opacity", 1e-6);
         
-        
-        updateTime();
-
-        
-        // Add mouseover events.
+        /****************************** TIMELINE LINES ************************************/
         
         d3.select("#timeline footer").on("mouseenter", function() { 
-          $("#timeline-text").show();
-          hoverLineGroup.style("opacity", 1);
-        }).on("mousemove", function() {
-          
-          var mouse_x = d3.mouse(this)[0];
-          var mouse_y = d3.mouse(this)[1];
-          var graph_y = y.invert(mouse_y);
-          var graph_x = x.invert(mouse_x);
-          var format = d3.time.format('%e %b');
-          //format.parse(graph_x)
-          var stringDate = String(graph_x).split(' ');
-          $("#timeline-text").text(stringDate[3] + " " + stringDate[1] + " " + stringDate[2]);
-          hoverLine.attr("x1", mouse_x).attr("x2", mouse_x);
-          if ((mouse_x > (x(data2[0].date)- 3)) && (mouse_x < (x(data2[0].date) + 6))){
-            hoverLineGroup.style("opacity", 1e-6);
-            $("#timeline-text").hide();
-            $(".line2").css("stroke","#fff");
-          }else {
             $("#timeline-text").show();
             hoverLineGroup.style("opacity", 1);
-            $(".line2").css("stroke","transparent");
-          }
-          $("#timeline-text").css({"left": d3.event.pageX});
+        }).on("mousemove", function() {
+          
+            var mouse_x = d3.mouse(this)[0];
+            var mouse_y = d3.mouse(this)[1];
+            var graph_y = y.invert(mouse_y);
+            var graph_x = x.invert(mouse_x);
+            var format = d3.time.format('%e %b');
+            //format.parse(graph_x)
+            var stringDate = String(graph_x).split(' ');
+            $("#timeline-text").text(stringDate[3] + " " + stringDate[1] + " " + stringDate[2]);
+            hoverLine.attr("x1", mouse_x).attr("x2", mouse_x);
+            if ((mouse_x > (x(data2[0].date)- 3)) && (mouse_x < (x(data2[0].date) + 6))){
+                hoverLineGroup.style("opacity", 1e-6);
+                $("#timeline-text").hide();
+                $(".line2").css("stroke","#fff");
+            }else {
+                $("#timeline-text").show();
+                hoverLineGroup.style("opacity", 1);
+                $(".line2").css("stroke","transparent");
+            }
+            $("#timeline-text").css({"left": d3.event.pageX});
         }).on("mouseleave", function() {
             hoverLineGroup.style("opacity", 1e-6);
             $("#timeline-text").hide();
@@ -294,190 +285,198 @@ Element.prototype.toggleClass = function (className) {
             data2[1].date = Date.parse(x.invert(mouse_x));
             svg.select(".line2")
                 .attr("d", line);
-            var makeFill = d3.select('.line2').attr("d");
-            d3.select(".line2").attr("d", makeFill + "l3,0l0,60z");
-            var makeFillPos = $(".line2").offset();
-            $("svg#now-line").css("left", (makeFillPos.left-3) + "px");
+            updateTimeline();
             currentDate = new Date(data2[0].date);
             updateTime();
             
             
-        });
+        })/*.on("mousedown",function(){
+            mouse_x_start = d3.mouse(this)[0];
+            var mouse_x_jump = mouse_x_start + timelineJump;
+            console.log("$$$$$$$$$$$$ ");
+        })*/;
         $("svg#now-line").mousedown(function(e){
-            console.log("mousedown");
             e.preventDefault();
+            
             d3.select("#timeline footer").on("mousemove", function(){
                 var mouse_x = d3.mouse(this)[0];
                 data2[0].date = Date.parse(x.invert(mouse_x));
                 data2[1].date = Date.parse(x.invert(mouse_x));
                 svg.select(".line2")
                     .attr("d", line);
-                var makeFill = d3.select('.line2').attr("d");
-                d3.select(".line2").attr("d", makeFill + "l3,0l0,60z");
-                var makeFillPos = $(".line2").offset();
-                $("svg#now-line").css("left", (makeFillPos.left-3) + "px");
+                updateTimeline();
                 currentDate = new Date(data2[0].date);
                 updateTime();
+                
+                
             });
-        }).mouseup(function(){
+            }).mouseup(function(){
                 d3.select("#timeline footer").on("mousemove", null);
                 d3.select("#timeline footer").on("mousemove", function() {
           
-          var mouse_x = d3.mouse(this)[0];
-          var mouse_y = d3.mouse(this)[1];
-          var graph_y = y.invert(mouse_y);
-          var graph_x = x.invert(mouse_x);
-          var format = d3.time.format('%e %b');
-          //format.parse(graph_x)
-          var stringDate = String(graph_x).split(' ');
-          $("#timeline-text").text(stringDate[3] + " " + stringDate[1] + " " + stringDate[2]);
-          hoverLine.attr("x1", mouse_x).attr("x2", mouse_x);
-          if ((mouse_x > (x(data2[0].date)- 3)) && (mouse_x < (x(data2[0].date) + 6))){
-            hoverLineGroup.style("opacity", 1e-6);
-            $("#timeline-text").hide();
-            $(".line2").css("stroke","#fff");
-          }else {
-            $("#timeline-text").show();
-            hoverLineGroup.style("opacity", 1);
-            $(".line2").css("stroke","transparent");
-          }
-          $("#timeline-text").css({"left": d3.event.pageX});
-        });
+                  var mouse_x = d3.mouse(this)[0];
+                  var mouse_y = d3.mouse(this)[1];
+                  var graph_y = y.invert(mouse_y);
+                  var graph_x = x.invert(mouse_x);
+                  var format = d3.time.format('%e %b');
+                  //format.parse(graph_x)
+                  var stringDate = String(graph_x).split(' ');
+                  $("#timeline-text").text(stringDate[3] + " " + stringDate[1] + " " + stringDate[2]);
+                  hoverLine.attr("x1", mouse_x).attr("x2", mouse_x);
+                  if ((mouse_x > (x(data2[0].date)- 3)) && (mouse_x < (x(data2[0].date) + 6))){
+                    hoverLineGroup.style("opacity", 1e-6);
+                    $("#timeline-text").hide();
+                    $(".line2").css("stroke","#fff");
+                  }else {
+                    $("#timeline-text").show();
+                    hoverLineGroup.style("opacity", 1);
+                    $(".line2").css("stroke","transparent");
+                  }
+                  $("#timeline-text").css({"left": d3.event.pageX});
+                });
                 
             });
-
+        /**************************END TIMELINE LINES****************************/
+        
         //bind click action to interval radio buttons
         var buttons = $('.button-input-group');
         buttons.click(function(e){
             buttons.removeClass('button-input-group-selected');
-            this.addClass("button-input-group-selected");
-            this.select();
+            $(this).addClass("button-input-group-selected");
+            
+            jumpInterval = $(this).attr('id');
+            switch(jumpInterval){
+                case 'year-input-group':
+                    bindBtnsToYear();
+                    break;
+                case 'month-input-group':
+                    bindBtnsToMonth();
+                    break;
+                case 'day-input-group':
+                    bindBtnsToDay();
+                    break;
+                default:
+                    alert("cannot find selected interval!");
+                    break;
+            }
+            
+            $(this).select();
+            updateBarSpeed();
         });
-
-        document.getElementById("right-arrow-group").onclick = increment_time;
-        document.getElementById("left-arrow-group").onclick = decrement_time;
-        document.querySelector('#day-input-group').addClass('button-input-group-selected');
-
-    };
-
-    self.collapse = function() {
-        // Do the "opposite" since the toggle will swap states
-        self.isCollapsed = false;
-        toggle();
-    };
-
-    self.expand = function() {
-        if ( !self.isCollapsed ) {
-            return false;
-        }
-        // Do the "opposite" since the toggle will swap states
-        self.isCollapsed = true;
-        toggle();
-    };
-
-    var render = function() {
+        model.events.on("select", updateTime);
+        updateTime();
+        $('#day-input-group').addClass('button-input-group-selected');
+        bindBtnsToDay();
+        
+    }; // /init
+    
+    var bindBtnsToYear = function(){
+        incrementBtn.unbind();
+        decrementBtn.unbind();
+        incrementBtn.click(function(e){
+            dateTimestamp = currentDate.setFullYear(currentDate.getFullYear()+1);
+            data2[0].date = dateTimestamp;
+            data2[1].date = dateTimestamp;
+            model.select(new Date(dateTimestamp));
+            updateTime();
+        });
+        decrementBtn.click(function(e){
+            dateTimestamp = currentDate.setFullYear(currentDate.getFullYear()-1);
+            data2[0].date = dateTimestamp;
+            data2[1].date = dateTimestamp;
+            model.select(new Date(dateTimestamp));
+            updateTime();
+        });
         
     };
-    var updateTime = function() {
-    
-        var changeMapDate = new Date(data2[0].date);
+    var bindBtnsToMonth = function(){
+        incrementBtn.unbind();
+        decrementBtn.unbind();
+        incrementBtn.click(function(e){
+            dateTimestamp = currentDate.setMonth(currentDate.getMonth()+1);
+            data2[0].date = dateTimestamp;
+            data2[1].date = dateTimestamp;
+            model.select(new Date(dateTimestamp));
+            updateTime();
+        });
+        decrementBtn.click(function(e){
+            dateTimestamp = currentDate.setMonth(currentDate.getMonth()-1);
+            data2[0].date = dateTimestamp;
+            data2[1].date = dateTimestamp;
+            model.select(new Date(dateTimestamp));
+            updateTime();
+        });
+        
+    };
+    var bindBtnsToDay = function(){
+        incrementBtn.unbind();
+        decrementBtn.unbind();
+        incrementBtn.click(function(e){
+            dateTimestamp = currentDate.setDate(currentDate.getDate()+1);
+            data2[0].date = dateTimestamp;
+            data2[1].date = dateTimestamp;
+            model.select(new Date(dateTimestamp));
+            updateTime();
+        });
+        decrementBtn.click(function(e){
+            dateTimestamp = currentDate.setDate(currentDate.getDate()-1);
+            data2[0].date = dateTimestamp;
+            data2[1].date = dateTimestamp;
+            model.select(new Date(dateTimestamp));
+            updateTime();
+        });
+    };
 
-        models.date.select(changeMapDate);
-        document.querySelector('#year-input-group').value = currentDate.getFullYear();
-        document.querySelector('#month-input-group').value = monthNames[currentDate.getMonth()];
-        if (currentDate.getDate()<10){
-            document.querySelector('#day-input-group').value = "0" + currentDate.getDate();
+    var updateTimeline = function(){
+            
+            //update timeline line
+            svg.select(".line2").attr("d", line);
+            var makeFill = d3.select('.line2').attr("d");
+            d3.select(".line2").attr("d", makeFill + "l3,0l0,60z");
+            var makeFillPos = $(".line2").offset();
+            $("svg#now-line").css("left", (makeFillPos.left-3) + "px");
+            
+    };
+    
+    var updateTime = function() {
+        
+        var changeMapDate = new Date(data2[0].date);
+        model.select(changeMapDate);
+        $('#year-input-group').val(changeMapDate.getFullYear());
+        $('#month-input-group').val(monthNames[changeMapDate.getMonth()]);
+        if (changeMapDate.getDate()<10){
+            $('#day-input-group').val("0" + changeMapDate.getDate());
         }
         else {
-            document.querySelector('#day-input-group').value = currentDate.getDate();
+            $('#day-input-group').val(changeMapDate.getDate());
         }
+        
+        currentDate = changeMapDate;
+        updateTimeline();
         
     };
     
-    //increments the time depending on which interval is selected and updates in timeline/datepicker
-    var increment_time = function(){
-        
-        //bind interval radio buttons, find currently selected, increment it by 1
-        var hoverDate = document.querySelectorAll(".button-input-group");
-        for (var i=0;i<hoverDate.length;i++){
-            if (hoverDate[i].hasClass("button-input-group-selected")){
-                //var selectedInt = hoverDate[i].querySelector("tspan");
-
-                var interval = hoverDate[i].getAttribute('id');
-                switch(interval){
-                    case 'year-input-group':
-                        newDate = currentDate.setFullYear(currentDate.getFullYear()+1);
-                        break;
-                    case 'month-input-group':
-                        newDate = currentDate.setMonth(currentDate.getMonth()+1);
-                        break;
-                    case 'day-input-group':
-                        newDate = currentDate.setDate(currentDate.getDate()+1);
-                        break;
-                    default:
-                        break;
-                } //switch
-                data2[0].date = newDate;
-                data2[1].date = newDate;
-                var newTimeBar = x(new Date(data2[0].date));
-                //update timeline line
-                svg.select(".line2").attr("d", line);
-                
-                var makeFill = d3.select('.line2').attr("d");
-                d3.select(".line2").attr("d", makeFill + "l3,0l0,60z");
-                var makeFillPos = $(".line2").offset();
-                $("svg#now-line").css("left", (makeFillPos.left-3) + "px");
-                
-                currentDate = new Date(data2[0].date);
-                updateTime();
-
-            }//if
-        }//for
-        
-    };// end increment_time
-
-    var decrement_time = function(){
-        
-        //bind interval radio buttons, find currently selected, increment it by 1
-        var hoverDate = document.querySelectorAll(".button-input-group");
-        for (var i=0;i<hoverDate.length;i++){
-            if (hoverDate[i].hasClass("button-input-group-selected")){
-
-                var interval = hoverDate[i].getAttribute('id');
-                switch(interval){
-                    case 'year-input-group':
-                        newDate = currentDate.setFullYear(currentDate.getFullYear()-1);
-                        break;
-                    case 'month-input-group':
-                        newDate = currentDate.setMonth(currentDate.getMonth()-1);
-                        break;
-                    case 'day-input-group':
-                        newDate = currentDate.setDate(currentDate.getDate()-1);
-                        break;
-                    default:
-                        break;
-                } //switch
-                data2[0].date = newDate;
-                data2[1].date = newDate;
-                var newTimeBar = x(new Date(data2[0].date));
-                //update timeline line
-                svg.select(".line2").attr("d", line);
-                
-                var makeFill = d3.select('.line2').attr("d");
-                d3.select(".line2").attr("d", makeFill + "l3,0l0,60z");
-                var makeFillPos = $(".line2").offset();
-                $("svg#now-line").css("left", (makeFillPos.left-3) + "px");
-                
-                currentDate = new Date(data2[0].date);
-                updateTime();
-            }//if
-        }//for
-        
-        
-    };//end decrement_time
-    
-    
+    var updateBarSpeed = function(){
+        var currentElement = $(".button-input-group-selected").attr("id");
+        var dateNow = new Date(data2[0].date);
+        switch (currentElement)
+        {
+            case 'year-input-group':
+                timelineJumpInPix = x(dateNow) - x( dateNow.setFullYear(dateNow.getFullYear() - 1) );
+                console.log("YEAR!!!");
+                break;
+            case 'month-input-group':
+                timelineJumpInPix = x(dateNow) - x( dateNow.setMonth(dateNow.getMonth() - 1) );
+                break;
+            case 'day-input-group':
+                timelineJumpInPix = x(dateNow) - x( dateNow.setDate(dateNow.getDate() - 1) );
+                break;
+        }
+        console.log("%%%%%%%%%%%%%%% " + timelineJumpInPix);
+    };
 
     init();
+    $(window).resize(redraw);
+
     return self;
 };

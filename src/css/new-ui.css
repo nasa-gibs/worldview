@@ -129,9 +129,8 @@ display:inline-block;}
 }
 .line {
     fill: none;
-    stroke: #999;
-    stroke-opacity:0.7;
-    stroke-width: 10px;
+    stroke: none;
+    
 }
 .line2 {
     fill: steelblue;
