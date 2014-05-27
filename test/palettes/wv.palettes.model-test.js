@@ -25,13 +25,46 @@ buster.testCase("wv.palettes.model", function() {
         models.palettes.events.on("set-custom", function(layerId) {
             var palette = models.palettes.get(layerId);
             buster.assert.equals(palette.scale.colors[0], fixtures.light_blue);
+            buster.assert.equals(palette.scale.colors[1], fixtures.blue);
+            buster.assert.equals(palette.scale.colors[2], fixtures.dark_blue);
             buster.assert.equals(palette.scale.labels[0], "0");
+            buster.assert.equals(palette.scale.labels[1], "1");
+            buster.assert.equals(palette.scale.labels[2], "2");
             done();
         });
         models.layers.add("terra-aod");
         models.palettes.setCustom("terra-aod", "blue-1");
     };
 
+    self["Palettte compresses color range"] = function() {
+        config.palettes.custom["blue-1"].colors = [
+            "1", "2", "3", "4", "5", "6"
+        ];
+        models = fixtures.models(config);
+        models.layers.add("terra-aod");
+        models.palettes.setCustom("terra-aod", "blue-1");
+        var palette = models.palettes.get("terra-aod");
+        buster.assert.equals(palette.scale.colors[0], "1");
+        buster.assert.equals(palette.scale.colors[1], "3");
+        buster.assert.equals(palette.scale.colors[2], "5");
+    };
+    
+    self["Palette expands color range"] = function() {
+        config.palettes.rendered["terra-aod"].scale.colors = [
+            "1", "2", "3", "4", "5", "6"
+        ];
+        models = fixtures.models(config);
+        models.layers.add("terra-aod");
+        models.palettes.setCustom("terra-aod", "blue-1");
+        var palette = models.palettes.get("terra-aod");
+        buster.assert.equals(palette.scale.colors[0], fixtures.light_blue);
+        buster.assert.equals(palette.scale.colors[1], fixtures.light_blue);
+        buster.assert.equals(palette.scale.colors[2], fixtures.blue);
+        buster.assert.equals(palette.scale.colors[3], fixtures.blue);
+        buster.assert.equals(palette.scale.colors[4], fixtures.dark_blue);
+        buster.assert.equals(palette.scale.colors[5], fixtures.dark_blue);
+    };
+    
     self["Exception setting a custom palette when no layer exists"] = function() {
         buster.assert.exception(function() {
             models.palettes.setCustom("no-layer", "blue-1");

@@ -155,6 +155,45 @@ wv.palettes = (function(self) {
             return promise;
         }
     };
+    
+    // Only for permalink 1.1 support
+    self.parse = function(state, errors, config) {
+        if ( state.palettes ) {
+            if ( !wv.palettes.supported ) {
+                // FIXME: This should go in errors
+                delete state.palettes;
+                wv.ui.notify("The custom palette feature is not supported " +
+                        "with your web browser. Upgrade or try again in a " +
+                        "different browser");
+                return;
+            }
+            var parts = state.palettes.split("~");
+            _.each(parts, function(part) {
+                var items = part.split(",");
+                var layerId = items[0];
+                var paletteId = items[1];
+                if ( !config.layers[layerId] ) {
+                    errors.push({message: "Invalid layer for palette " +
+                        paletteId + ": " + layerId});
+                } else if ( !config.layers[layerId].palette ) {
+                    errors.push({message: "Layer " + layerId + " does not " +
+                        "support palettes"});
+                } else {
+                    var layer = _.find(state.l, { id: layerId });
+                    if ( layer ) {
+                        layer.attributes.push({
+                            id: "palette",
+                            value: paletteId
+                        });
+                    } else {
+                        errors.push({message: "Layer " + layerId + " is not " + 
+                            "active"});
+                    }
+                }
+            });
+            delete state.paletes;
+        }
+    };
 
     init();
     return self;

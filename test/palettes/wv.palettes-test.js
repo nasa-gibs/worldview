@@ -9,102 +9,61 @@
  * All Rights Reserved.
  */
 
-buster.testCase("wv.palettes", {
+buster.testCase("wv.palettes", function() {
 
-    config: null,
-    errors: null,
+    var self = {};
+    var config, models, errors;
+    
+    self.setUp = function() {
+        config = fixtures.config();
+        models = fixtures.models(config);
+        errors = [];
+    };
 
-    setUp: function() {
-        this.config = {
-            layers: {
-                "layer1": { palette: {} },
-                "layer2": { palette: {} },
-                "layer3": {}
-            }
-        };
-        this.errors = [];
-    },
-
-    "Parses palette for valid layer": function() {
-        var state = { l: "layer1(palette=palette1)" };
-        wv.layers.parse(state, this.errors, this.config);
+    self["Parses palette for valid layer"] = function() {
+        var state = { l: "terra-aod(palette=blue-1)" };
+        wv.layers.parse(state, errors, config);
         var attr = state.l[0].attributes[0];
         buster.assert.equals(attr.id, "palette");
-        buster.assert.equals(attr.value, "palette1");
-        buster.assert.equals(this.errors.length, 0);
-    },
-
-    /*
-    "Parses two palettes for valid layers": function() {
-        var state = { l: "layer1(palette=palette1),layer2(palette=palette2)" };
-        wv.palettes.parse(state, this.errors, this.config);
-        buster.assert.equals(state.palettes.layer1, "palette1");
-        buster.assert.equals(state.palettes.layer2, "palette2");
-        buster.assert.equals(this.errors.length, 0);
-    },
-
-    "Rejects palette for invalid layer": function() {
-        var state = { palettes: "layerX,palette1~layer2,palette2" };
-        wv.palettes.parse(state, this.errors, this.config);
-        buster.refute(state.palettes.layerX);
-        buster.assert.equals(state.palettes.layer2, "palette2");
-        buster.assert.equals(this.errors.length, 1);
-    },
-
-    "Rejects for layer that doesn't support palettes": function() {
-        var state = { palettes: "layer1,palette1~layer3,palette2" };
-        wv.palettes.parse(state, this.errors, this.config);
-        buster.refute(state.palettes.layer3);
-        buster.assert.equals(this.errors.length, 1);
-    },
-
-    "Rejects all palettes for invalid layers": function() {
-        var state = { palettes: "layerX,paletteX~layerY,paletteY" };
-        wv.palettes.parse(state, this.errors, this.config);
-        buster.refute(state.palettes);
-        buster.assert.equals(this.errors.length, 2);
-    },
-
-    "Translate one to one with custom palette": function() {
-        var source = {
-            colors: ["a", "b", "c"]
-        };
-        var target = {
-            colors: ["1", "2", "3"]
-        };
-        var p = wv.palettes.translate(source, target);
-        buster.assert.equals(p.colors[0], "1");
-        buster.assert.equals(p.colors[1], "2");
-        buster.assert.equals(p.colors[2], "3");
-    },
-
-    "Translate by compressing color range": function() {
-        var source = {
-            colors: ["a", "b", "c"]
-        };
-        var target = {
-            colors: ["1", "2", "3", "4", "5", "6"]
-        };
-        var p = wv.palettes.translate(source, target);
-        buster.assert.equals(p.colors[0], "1");
-        buster.assert.equals(p.colors[1], "3");
-        buster.assert.equals(p.colors[2], "5");
-    },
-
-    "Translate by expanding color range": function() {
-        var source = {
-            colors: ["a", "b", "c", "e", "f", "g"]
-        };
-        var target = {
-            colors: ["1", "2", "3"]
-        };
-        var p = wv.palettes.translate(source, target);
-        buster.assert.equals(p.colors[0], "1");
-        buster.assert.equals(p.colors[1], "1");
-        buster.assert.equals(p.colors[2], "2");
-        buster.assert.equals(p.colors[3], "2");
-        buster.assert.equals(p.colors[4], "3");
-        buster.assert.equals(p.colors[5], "3");
-    }
-    */
-});
+        buster.assert.equals(attr.value, "blue-1");
+        buster.assert.equals(errors.length, 0);
+    };
+    
+    self["1.1: Parses palette for valid layer"] = function() {
+        var state = { l: "terra-aod", palettes: "terra-aod,blue-1"};
+        wv.layers.parse(state, errors, config);
+        wv.palettes.parse(state, errors, config);
+        var attr = state.l[0].attributes[0];
+        buster.assert.equals(attr.id, "palette");
+        buster.assert.equals(attr.value, "blue-1");
+        buster.assert.equals(errors.length, 0);
+    };
+    
+    self["1.1: Parses palette for two valid layers"] = function() {
+        var state = { l: "terra-aod,aqua-aod", 
+                      palettes: "terra-aod,blue-1~aqua-aod,red-1"};
+        wv.layers.parse(state, errors, config);
+        wv.palettes.parse(state, errors, config);
+        
+        var attr1 = state.l[0].attributes[0];
+        buster.assert.equals(attr1.id, "palette");
+        buster.assert.equals(attr1.value, "blue-1");
+        
+        var attr2 = state.l[1].attributes[0];
+        buster.assert.equals(attr2.id, "palette");
+        buster.assert.equals(attr2.value, "red-1");
+        
+        buster.assert.equals(errors.length, 0);
+    };
+    
+    self["1.1: Error if palette assigned to a layer that is not active"] = function() {
+        var state = { l: "terra-aod", 
+                      palettes: "aqua-aod,red-1"};
+        wv.layers.parse(state, errors, config);
+        wv.palettes.parse(state, errors, config);        
+        buster.assert.equals(errors.length, 1);
+    };
+    
+    return self;
+    
+}());

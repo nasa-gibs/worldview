@@ -62,7 +62,8 @@ $(function() {
             wv.proj.parse,
             wv.layers.parse,
             wv.date.parse,
-            wv.map.parse
+            wv.map.parse,
+            wv.palettes.parse
         ];
         if ( config.features.dataDownload ) {
             parsers.push(wv.data.parse);
@@ -71,7 +72,7 @@ $(function() {
         _.each(parsers, function(parser) {
             parser(state, errors, config);
         });
-
+        console.log(state);
         requirements = [
             wv.palettes.requirements(state, config)
         ];
