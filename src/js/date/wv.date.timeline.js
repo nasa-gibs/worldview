@@ -65,71 +65,72 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
 
     
     var setData = function(){
-	data = [
-	    {
-		"date": model.start,
-		"value": "5"
-	    },
-	    {
-		"date": model.end,
-		"value": "5"
-	    }
-	];
-	//Current date line
-	data2 = [
+    data = [
+        {
+        "date": model.start,
+        "value": "5"
+        },
+        {
+        "date": model.end,
+        "value": "5"
+        }
+    ];
+    //Current date line
+    data2 = [
             {
-		"date": model.selected.getTime(),
-		"value": "0" 
+        "date": model.selected.getTime(),
+        "value": "0" 
             },
-	    {
-		"date": model.selected.getTime(),
-		"value": "6"
+        {
+        "date": model.selected.getTime(),
+        "value": "6"
             }
-	];
-	x = d3.time.scale()
+    ];
+    x = d3.time.scale()
             .domain([
                 d3.min(data, function(d) { return d.date; }),
                 d3.max(data, function(d) { return d.date; })
             ])
             .range([0, width]);
 
-	y = d3.scale.linear()
+    y = d3.scale.linear()
             .domain(d3.extent(data2, function (d) {
                 return d.value;
             }))
             .range([height, 0]);
-	line = d3.svg.line()
+    line = d3.svg.line()
             .x(function (d) {
                 return x(d.date);
             })
             .y(function (d) {
                 return y(d.value);
             });
-	zoom = d3.behavior.zoom()
-            .x(x)
-            .scaleExtent([1, 100])
-            .on("zoom", zoomed);
 
-	xAxis = d3.svg.axis()
+    xAxis = d3.svg.axis()
             .scale(x)
             .orient("bottom")
             .ticks(10);
-	try{
-	    redrawAxis();
-	}
-	catch(e){
-	    console.log("error is following:" + e);
-	}
-
+    try{
+        redrawAxis();
+    }
+    catch(e){
+        console.log("error is following:" + e);
+    }
+    zoom = d3.behavior.zoom()
+            .x(x)
+            .scaleExtent([1, 100])
+            .on("zoom", zoomed);
+    
     };
     var redrawAxis = function(){
-	d3.select(".axis").call(xAxis);
+    d3.select(".axis").call(xAxis);
         d3.select(".grid").call(make_x_axis(x).tickSize(-60, 0, 0));
         d3.selectAll('.x.axis .tick text').attr('x',5).attr('style','text-anchor:left;');
         
         d3.select(".line").datum(data).attr("d", line);
         d3.select(".line2").datum(data2).attr("d", line);
-	updateTime();
+    updateTime();
+    svg = d3.select('#timeline footer').call(zoom);
     };
     var redraw = function(){
         //resizing window redrawing goes here
@@ -198,9 +199,9 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
 
             
     var init = function() {
-	console.log("setting data...");
-	setData();
-	console.log("data set!");
+    console.log("setting data...");
+    setData();
+    console.log("data set!");
         svg = d3.select('#timeline footer')
             .append("svg:svg")
             .attr('width', width + margin.left + margin.right)
@@ -362,9 +363,9 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
         model.events.on("select", function(){
             updateTime();
         });
-	models.layers.events.on("change",function(){
-	    setData();
-	});
+    models.layers.events.on("change",function(){
+        setData();
+    });
         updateTime();
         $('#day-input-group').addClass('button-input-group-selected');
         bindBtnsToDay();
