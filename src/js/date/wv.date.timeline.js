@@ -200,7 +200,7 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
 
             
     var init = function() {
-	setData();
+        setData();
         svg = d3.select('#timeline footer')
             .append("svg:svg")
             .attr('width', width + margin.left + margin.right)
