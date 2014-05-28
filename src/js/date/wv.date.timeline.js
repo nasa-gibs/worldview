@@ -42,7 +42,7 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
     //this is where the data would go for showing available dates
     var data = [];
     var data2 = [];
-    var x,y,line,zoom,xAxis;
+    var x,y,line,zoom,xAxis,hoverLineGroup,hoverLine;
     //margins for the timeline
     margin = {
             top: 0,
@@ -255,9 +255,9 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
         d3.selectAll('.x.axis .tick text').attr('x',5).attr('style','text-anchor:left;');
 
         // Hover line.
-        var hoverLineGroup = svg.append("g")
+        hoverLineGroup = svg.append("g")
                             .attr("class", "hover-line");
-        var hoverLine = hoverLineGroup
+        hoverLine = hoverLineGroup
             .append("line")
                     .attr("x1", 10).attr("x2", 10)
                     .attr("y1", 0).attr("y2", height);
@@ -270,26 +270,7 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
         d3.select("#timeline footer").on("mouseenter", function() { 
             $("#timeline-text").show();
             hoverLineGroup.style("opacity", 1);
-        }).on("mousemove", function() { //FIXME: replace with function
-            var mouse_x = d3.mouse(this)[0];
-            var graph_x = x.invert(mouse_x);
-            var format = d3.time.format('%e %b');
-            //format.parse(graph_x)
-            var stringDate = String(graph_x).split(' ');
-            $("#timeline-text").text(stringDate[3] + " " + stringDate[1] + " " + stringDate[2]); //FIXME: Use d3 time formatting
-            hoverLine.attr("x1", mouse_x).attr("x2", mouse_x);
-            if ((mouse_x > (x(data2[0].date)- 3)) && (mouse_x < (x(data2[0].date) + 6))){
-                hoverLineGroup.style("opacity", 1e-6);
-                $("#timeline-text").hide();
-                $(".line2").css("stroke","#fff");
-            }else {
-                $("#timeline-text").show();
-                hoverLineGroup.style("opacity", 1);
-                $(".line2").css("stroke","transparent");
-            }
-            $("#timeline-text").css({"left": d3.event.pageX});
-            
-        }).on("mouseleave", function() {
+        }).on("mousemove", bindTimelineMouseMove).on("mouseleave", function() {
             hoverLineGroup.style("opacity", 1e-6);
             $("#timeline-text").hide();
 
@@ -311,26 +292,7 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
             });
         }).mouseup(function(){
             d3.select("#timeline footer").on("mousemove", null);
-            d3.select("#timeline footer").on("mousemove", function() { //FIXME: Replace with function
-                var mouse_x = d3.mouse(this)[0];
-                var graph_x = x.invert(mouse_x);
-                var format = d3.time.format('%e %b');
-                //format.parse(graph_x)
-                var stringDate = String(graph_x).split(' ');
-                $("#timeline-text").text(stringDate[3] + " " + stringDate[1] + " " + stringDate[2]); //FIXME: Use d3 time formatting
-                hoverLine.attr("x1", mouse_x).attr("x2", mouse_x);
-                if ((mouse_x > (x(data2[0].date)- 3)) && (mouse_x < (x(data2[0].date) + 6))){
-                    hoverLineGroup.style("opacity", 1e-6);
-                    $("#timeline-text").hide();
-                    $(".line2").css("stroke","#fff");
-                }else {
-                    $("#timeline-text").show();
-                    hoverLineGroup.style("opacity", 1);
-                    $(".line2").css("stroke","transparent");
-                }
-                $("#timeline-text").css({"left": d3.event.pageX});
-            });
-            
+            d3.select("#timeline footer").on("mousemove", bindTimelineMouseMove);
         });
         /**************************END TIMELINE LINES****************************/
         
@@ -363,13 +325,37 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
             updateTime();
         });
         models.layers.events.on("change",function(){
-            setData();
+            if(model.start.getTime() !== startDateMs){
+                startDateMs = model.start.getTime();
+                setData();            
+            }
         });
         updateTime();
         $('#day-input-group').addClass('button-input-group-selected');
         bindBtnsToDay();
+        $('#day-input-group').select();
         
     }; // /init
+    var bindTimelineMouseMove = function() { //FIXME: Replace with function
+        var mouse_x = d3.mouse(this)[0];
+        var graph_x = x.invert(mouse_x);
+        var format = d3.time.format('%e %b');
+        //format.parse(graph_x)
+        var stringDate = String(graph_x).split(' ');
+        $("#timeline-text").text(stringDate[3] + " " + stringDate[1] + " " + stringDate[2]); //FIXME: Use d3 time formatting
+        hoverLine.attr("x1", mouse_x).attr("x2", mouse_x);
+        if ((mouse_x > (x(data2[0].date)- 3)) && (mouse_x < (x(data2[0].date) + 6))){
+            hoverLineGroup.style("opacity", 1e-6);
+            $("#timeline-text").hide();
+            $(".line2").css("stroke","#fff");
+        }else {
+            $("#timeline-text").show();
+            hoverLineGroup.style("opacity", 1);
+            $(".line2").css("stroke","transparent");
+        }
+        $("#timeline-text").css({"left": d3.event.pageX});
+            
+    };
     var bindUpdateOnFooter = function(){
         var mouse_x = d3.mouse(this)[0];
         model.select(x.invert(mouse_x));
@@ -450,6 +436,9 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
         else {
             $('#day-input-group').val(model.selected.getUTCDate());
         }
+	//remove selection when clicking too fast
+	//document.getSelection().removeAllRanges();
+	$('.button-input-group-selected').select();
         data2[0].date = model.selected.getTime();
         data2[1].date = data2[0].date;
         updateTimeline();
@@ -461,7 +450,6 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
         {
             case 'year-input-group':
                 timelineJumpInPix = x(dateNow) - x( dateNow.setUTCFullYear(dateNow.getUTCFullYear() - 1) );
-                console.log("YEAR!!!");
                 break;
             case 'month-input-group':
                 timelineJumpInPix = x(dateNow) - x( dateNow.setUTCMonth(dateNow.getUTCMonth() - 1) );
@@ -470,7 +458,6 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
                 timelineJumpInPix = x(dateNow) - x( dateNow.setUTCDate(dateNow.getUTCDate() - 1) );
                 break;
         }
-        console.log("%%%%%%%%%%%%%%% " + timelineJumpInPix);
     };
     init();
     $(window).resize(redraw);

@@ -134,7 +134,7 @@ display:inline-block;}
     
 }
 .line2 {
-    fill: steelblue;
+    fill: transparent;
     stroke: transparent;
     stroke-width: 1px;
     cursor:pointer;
