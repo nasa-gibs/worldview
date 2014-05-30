@@ -78,6 +78,7 @@ fixtures.config = function() { return {
 fixtures.models = function(config) {
     var models = {};
 
+    models.date = wv.date.model(config);
     models.proj = wv.proj.model(config);
     models.layers = wv.layers.model(models, config);
     models.palettes = wv.palettes.model(models, config);
