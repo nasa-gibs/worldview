@@ -75,9 +75,14 @@
 #timeline header .button-input-group-selected{
     border-color:#fff;
 }
-#timeline header input::-webkit-selection {color:#1a1a1a;background:#fff;}
 #timeline header div{
 display:inline-block;}
+.button-action-group{
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
 #timeline header svg {
     width:40px;
     height:60px;
