@@ -52,7 +52,7 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
         };
 
     //subtract the datepicker from the width of the screen
-    width = window.innerWidth - $("#timeline header").outerWidth() - 30;
+    width = window.innerWidth - $("#timeline header").outerWidth() - 20;
     height = 60 - margin.top - margin.bottom;
     //var currentDate = new Date(data2[0].date);
     var dateTimestamp;
@@ -139,7 +139,7 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
     var redraw = function(){
         //resizing window redrawing goes here
         
-        width = window.innerWidth - $("#timeline header").outerWidth() - 30;
+        width = window.innerWidth - $("#timeline header").outerWidth() - 20;
         
         d3.select('#timeline footer svg')
             .attr('width', width + margin.left + margin.right);
