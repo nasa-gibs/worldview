@@ -340,17 +340,12 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
                 var newInput = selected.val();
                 switch(YMDInterval){
                     case 'year-input-group':
-                        if(newInput>model.start.getUTCFullYear() && newInput<model.end.getUTCFullYear()){
-                            selectedDateObj = new Date((new Date(model.selected)).setUTCFullYear(newInput));
-                            model.select(selectedDateObj);
-                        }
-                        else{
-                            //TODO: error catching
-                        }
+                        selectedDateObj = new Date((new Date(model.selected)).setUTCFullYear(newInput));
+                        model.select(selectedDateObj);
                         break;
                     case 'month-input-group':
                         for(var i=0;i<monthNames.length;i++){
-                            if(newInput===monthNames[i] || (newInput==i+1)){
+                            if(newInput===monthNames[i] || (newInput==i+1) || (newInput===("0"+(i+1)))){
                                selectedDateObj = new Date((new Date(model.selected)).setUTCMonth(i));
                                model.select(selectedDateObj);
                             }
