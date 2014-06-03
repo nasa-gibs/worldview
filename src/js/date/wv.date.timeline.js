@@ -334,6 +334,60 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
         $('#day-input-group').addClass('button-input-group-selected');
         bindBtnsToDay();
         $('#day-input-group').select();
+        $('.button-input-group').change(function(){
+            if($(this).hasClass('button-input-group-selected')){
+                var selected = $(".button-input-group-selected");
+                var YMDInterval = selected.attr('id');
+                var newInput = selected.val();
+                switch(YMDInterval){
+                    case 'year-input-group':
+                        if(newInput>model.start.getUTCFullYear() && newInput<model.end.getUTCFullYear()){
+                            var selectedDateObj = new Date((new Date(model.selected)).setUTCFullYear(newInput));
+                            model.select(selectedDateObj);
+                        }
+                        else{
+                            //TODO: error catching
+                        }
+		        break;
+                    case 'month-input-group':
+                        for(var i=0;i<monthNames.length;i++){
+                            if(newInput===monthNames[i]){
+                               var selectedDateObj = new Date((new Date(model.selected)).setUTCMonth(i));
+                               model.select(selectedDateObj);
+                            }
+                        }		        
+                        break;
+                    case 'day-input-group':
+                        if(newInput>0 && newInput<=(new Date(model.selected.getYear(),model.selected.getMonth()+1,0).getDate())){
+                            var selectedDateObj = new Date((new Date(model.selected)).setUTCDate(newInput));
+                            try {
+                                model.select(selectedDateObj);
+                             }
+                            catch(e){
+                             //TODO: error catching
+                             }
+                        }
+                        else{
+                            //TODO: notice to user goes here
+                        }
+		        break;
+                }
+            }        
+        });
+        $("#timeline header").on('keydown', '.button-input-group', function(e) { 
+            var keyCode = e.keyCode || e.which; 
+            if (keyCode == 9) {  
+                var tabIndex = $(this).attr('tabindex');
+                var inputBtns = $('.button-input-group');
+                e.preventDefault();
+                var ntabindex = parseInt(document.activeElement.tabIndex);
+                ntabindex++;
+                inputBtns.removeClass('button-input-group-selected');
+                $('input[tabindex='+ntabindex+']').focus().addClass('button-input-group-selected').select();
+                
+            } 
+        });
+
         
     }; // /init
     var bindTimelineMouseMove = function() { //FIXME: Replace with function
