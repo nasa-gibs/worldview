@@ -34,8 +34,9 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
     var svg;
     var timelineJumpInPix;
     var jumpInterval;
+    var selectedDateObj;
     var selectedDateMs = model.selected.getTime();
-    
+        
     var startDateMs = model.start.getTime();
     var endDateMs = model.end.getTime();
 
@@ -342,24 +343,24 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
                 switch(YMDInterval){
                     case 'year-input-group':
                         if(newInput>model.start.getUTCFullYear() && newInput<model.end.getUTCFullYear()){
-                            var selectedDateObj = new Date((new Date(model.selected)).setUTCFullYear(newInput));
+                            selectedDateObj = new Date((new Date(model.selected)).setUTCFullYear(newInput));
                             model.select(selectedDateObj);
                         }
                         else{
                             //TODO: error catching
                         }
-		        break;
+                        break;
                     case 'month-input-group':
                         for(var i=0;i<monthNames.length;i++){
                             if(newInput===monthNames[i]){
-                               var selectedDateObj = new Date((new Date(model.selected)).setUTCMonth(i));
+                               selectedDateObj = new Date((new Date(model.selected)).setUTCMonth(i));
                                model.select(selectedDateObj);
                             }
-                        }		        
+                        }
                         break;
                     case 'day-input-group':
                         if(newInput>0 && newInput<=(new Date(model.selected.getYear(),model.selected.getMonth()+1,0).getDate())){
-                            var selectedDateObj = new Date((new Date(model.selected)).setUTCDate(newInput));
+                            selectedDateObj = new Date((new Date(model.selected)).setUTCDate(newInput));
                             try {
                                 model.select(selectedDateObj);
                              }
@@ -370,7 +371,7 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
                         else{
                             //TODO: notice to user goes here
                         }
-		        break;
+                        break;
                 }
             }        
         });
@@ -437,11 +438,11 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
         incrementBtn.unbind();
         decrementBtn.unbind();
         incrementBtn.click(function(e){
-            var selectedDateObj = new Date(model.selected);
+            selectedDateObj = new Date(model.selected);
             model.select(new Date(selectedDateObj.setUTCFullYear(model.selected.getUTCFullYear()+1)));
         });
         decrementBtn.click(function(e){
-            var selectedDateObj = new Date(model.selected);
+            selectedDateObj = new Date(model.selected);
             model.select(new Date(selectedDateObj.setUTCFullYear(model.selected.getUTCFullYear()-1)));
         });
         
@@ -450,11 +451,11 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
         incrementBtn.unbind();
         decrementBtn.unbind();
         incrementBtn.click(function(e){
-            var selectedDateObj = new Date(model.selected);
+            selectedDateObj = new Date(model.selected);
             model.select(new Date(selectedDateObj.setUTCMonth(model.selected.getUTCMonth()+1)));
         });
         decrementBtn.click(function(e){
-            var selectedDateObj = new Date(model.selected);
+            selectedDateObj = new Date(model.selected);
             model.select(new Date(selectedDateObj.setUTCMonth(model.selected.getUTCMonth()-1)));
         });
         
@@ -463,12 +464,12 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
         incrementBtn.unbind();
         decrementBtn.unbind();
         incrementBtn.click(function(e){
-            var selectedDateObj = new Date(model.selected);
+            selectedDateObj = new Date(model.selected);
             model.select(new Date(selectedDateObj.setUTCDate(model.selected.getUTCDate()+1)));
             
         });
         decrementBtn.click(function(e){
-            var selectedDateObj = new Date(model.selected);
+            selectedDateObj = new Date(model.selected);
             model.select(new Date(selectedDateObj.setUTCDate(model.selected.getUTCDate()-1)));
             
         });
