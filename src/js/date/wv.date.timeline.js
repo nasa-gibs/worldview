@@ -23,7 +23,6 @@ wv.date = wv.date || {};
 wv.date.timeline = wv.date.timeline || function(models, config) {
 
 
-
     var id = "timeline";
     var selector = "#" + id;
     var DAY_IN_MS = 24*60*60*1000;
@@ -36,7 +35,6 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
     var jumpInterval;
     var selectedDateObj;
     var selectedDateMs = model.selected.getTime();
-        
     var startDateMs = model.start.getTime();
     var endDateMs = model.end.getTime();
 
@@ -352,7 +350,7 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
                         break;
                     case 'month-input-group':
                         for(var i=0;i<monthNames.length;i++){
-                            if(newInput===monthNames[i]){
+                            if(newInput===monthNames[i] || (newInput==i+1)){
                                selectedDateObj = new Date((new Date(model.selected)).setUTCMonth(i));
                                model.select(selectedDateObj);
                             }
@@ -491,9 +489,9 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
         else {
             $('#day-input-group').val(model.selected.getUTCDate());
         }
-	//remove selection when clicking too fast
-	//document.getSelection().removeAllRanges();
-	$('.button-input-group-selected').select();
+        //remove selection when clicking too fast
+        //document.getSelection().removeAllRanges();
+        $('.button-input-group-selected').select();
         data2[0].date = model.selected.getTime();
         data2[1].date = data2[0].date;
         updateTimeline();
