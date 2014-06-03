@@ -45,7 +45,7 @@ Licensed under the [NASA Open Source Agreement, Version 1.3](LICENSE.md).
 or broken until the next major release. The toolchain only works in a Mac OS X
 or a Linux environment at the moment.
 
-Download and install [Node.js](http://nodejs.org/) using the intructions on
+Download and install [Node.js](http://nodejs.org/) using the instructions on
 their site.
 
 Executing the following script will download all dependencies and
@@ -63,8 +63,6 @@ can be uploaded and unpacked to a web server.
 
 To run Worldview from your local machine, execute the following script or
 follow the instructions in [Manual Setup](doc/manual_setup.md):
-
-*Note*: This only works on OS X at the moment.
 
     ./wv-setup -d
 
