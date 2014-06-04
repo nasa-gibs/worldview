@@ -266,41 +266,43 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
         
         /****************************** TIMELINE LINES ************************************/
         
-        d3.select("#timeline footer").on("mouseenter", function() { 
+        d3.select("#timeline footer")
+          .on("mouseenter", function() { 
             $("#timeline-text").show();
             hoverLineGroup.style("opacity", 1);
-        }).on("mousemove", bindTimelineMouseMove).on("mouseleave", function() {
+          })
+          .on("mousemove", bindTimelineMouseMove)
+          .on("mouseleave", function() {
             hoverLineGroup.style("opacity", 1e-6);
             $("#timeline-text").hide();
-
-        }).on("click", function(){
-            var mouse_x = d3.mouse(this)[0];
-            model.select(x.invert(mouse_x));
-            
-        })/*.on("mousedown",function(){
+          })
+          .on("click", bindUpdateOnFooter)/*.on("mousedown",function(){
             mouse_x_start = d3.mouse(this)[0];
             var mouse_x_jump = mouse_x_start + timelineJump;
             console.log("$$$$$$$$$$$$ ");
-        })*/;
+          })*/;
         
-        $("svg#now-line").mousedown(function(e){
+        $("svg#now-line")
+          .mousedown(function(e){
             e.preventDefault();
-            d3.select("#timeline footer").on("mousemove", function(){
-                var mouse_x = d3.mouse(this)[0];
-                model.select(x.invert(mouse_x));
-            });
-        }).mouseup(function(){
-            d3.select("#timeline footer").on("mousemove", null);
-            d3.select("#timeline footer").on("mousemove", bindTimelineMouseMove);
-        });
+            d3.select("#timeline footer")
+              .on("mousemove", bindUpdateOnFooter);
+          })
+          .mouseup(function(){
+            d3.select("#timeline footer")
+              .on("mousemove", null);
+            d3.select("#timeline footer")
+              .on("mousemove", bindTimelineMouseMove);
+          });
         /**************************END TIMELINE LINES****************************/
         
         //bind click action to interval radio buttons
         var buttons = $('.button-input-group');
-        buttons.click(function(e){
+        buttons.on('focus',function(e){
+            // e.stopPropagation();
+            // e.preventDefault();
             buttons.removeClass('button-input-group-selected');
-            $(this).addClass("button-input-group-selected");
-            
+            $(this).addClass('button-input-group-selected');
             jumpInterval = $(this).attr('id');
             switch(jumpInterval){
                 case 'year-input-group':
@@ -316,10 +318,10 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
                     alert("cannot find selected interval!");
                     break;
             }
-            
-            $(this).select();
             updateBarSpeed();
+            $(this).select();
         });
+
         model.events.on("select", function(){
             updateTime();
         });
@@ -329,6 +331,14 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
                 setData();            
             }
         });
+
+        $("#focus-guard-1").on('focus',function(){
+           $("#day-input-group").focus().select(); 
+        });
+        $("#focus-guard-2").on('focus',function(){
+           $("#year-input-group").focus().select(); 
+        });
+        
         updateTime();
         $('#day-input-group').addClass('button-input-group-selected');
         bindBtnsToDay();
@@ -368,23 +378,9 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
                 }
             }        
         });
-        $("#timeline header").on('keydown', '.button-input-group', function(e) { 
-            var keyCode = e.keyCode || e.which; 
-            if (keyCode == 9) {  
-                var tabIndex = $(this).attr('tabindex');
-                var inputBtns = $('.button-input-group');
-                e.preventDefault();
-                var ntabindex = parseInt(document.activeElement.tabIndex);
-                ntabindex++;
-                inputBtns.removeClass('button-input-group-selected');
-                $('input[tabindex='+ntabindex+']').focus().addClass('button-input-group-selected').select();
-                
-            } 
-        });
 
-        
     }; // /init
-    var bindTimelineMouseMove = function() { //FIXME: Replace with function
+    var bindTimelineMouseMove = function() {
         var mouse_x = d3.mouse(this)[0];
         var graph_x = x.invert(mouse_x);
         var format = d3.time.format('%e %b');

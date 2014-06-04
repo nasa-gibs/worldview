@@ -64,11 +64,13 @@
 }
 
 /* Temporary sizing of inputs until something more dynamic can be made */
-#timeline header input:nth-child(1){width:2em;padding:3px;}
-#timeline header input:nth-child(2){width:1.8em;padding:3px;}
-#timeline header input:nth-child(3){width:1.1em;padding:3px;}
+#timeline header input:nth-child(2){width:2em;padding:3px;}
+#timeline header input:nth-child(3){width:1.8em;padding:3px;}
+#timeline header input:nth-child(4){width:1.1em;padding:3px;}
 
-
+#timeline header .focus-guard{
+/*    display:none;
+*/}
 #timeline header input:hover{
     border-color:#fff;
 }
@@ -100,7 +102,6 @@ display:inline-block;}
     fill:#cccccc;
     fill-opacity:1;
     stroke:none;
-    
 }
 #timeline header, #timeline footer{
     display:inline-block;
