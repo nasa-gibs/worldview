@@ -406,7 +406,6 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
     
     var bindUpdateOnFooter = function(){
         var mouse_x = d3.mouse(this)[0];
-        console.log("trying to update");
         throttleSelect(x.invert(mouse_x));
     };
     
