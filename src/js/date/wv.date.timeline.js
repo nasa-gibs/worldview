@@ -62,7 +62,10 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
     var incrementBtn = $("#right-arrow-group");
     var decrementBtn = $("#left-arrow-group");
 
-    
+    var throttleSelect = _.throttle(function(date) {
+        model.select(date);
+    }, 100, { trailing: true });
+
     var setData = function(){
         data = [
             {
@@ -400,10 +403,13 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
         $("#timeline-text").css({"left": d3.event.pageX});
             
     };
+    
     var bindUpdateOnFooter = function(){
         var mouse_x = d3.mouse(this)[0];
-        model.select(x.invert(mouse_x));
+        console.log("trying to update");
+        throttleSelect(x.invert(mouse_x));
     };
+    
     var bindMouseOnFooter = function(d3){
         var mouse_x = d3.mouse(this)[0];
         var graph_x = x.invert(mouse_x);
