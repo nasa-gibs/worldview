@@ -465,6 +465,10 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
     };
     var updateTimeline = function(){
         //update timeline line
+        
+        // FIXME: This is invoked before svg is initialized
+        if ( !svg ) { return ; }
+        
         svg.select(".line2").attr("d", line);
         var makeFill = d3.select('.line2').attr("d");
         d3.select(".line2").attr("d", makeFill + "l3,0l0,60z");
