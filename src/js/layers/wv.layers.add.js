@@ -139,10 +139,11 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
             console.warn("Skipping unknown layer", layerId);
             return;
         }
-        var $label = $("<label></label>");
+        var $label = $("<label></label>")
+            .attr("data-layer", encodeURIComponent(layer.id));
         var $element = $("<li></li>")
             .addClass("selectorItem")
-            .attr("data-layer", layerId)
+            .attr("data-layer", encodeURIComponent(layer.id))
             .addClass("item");
 
         var $name = $("<h4></h4>")
@@ -366,7 +367,7 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
         return filtered;
     };
 
-    var filter = function() {
+    var filter = _.throttle(function() {
         var search = searchTerms();
         $.each(config.layers, function(layerId, layer) {
             var filtered =
@@ -380,7 +381,7 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
             visible[layer.id] = !filtered;
         });
         adjustCategoryHeights();
-    };
+    }, 250, { trailing: true });
 
     init();
     return self;
