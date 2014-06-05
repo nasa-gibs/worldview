@@ -332,7 +332,7 @@ wv.map.graticule = OpenLayers.Class(OpenLayers.Layer, {
     },
 
     setVisibility: function(value) {
-        if ( !this.granule ) {
+        if ( !this.wvid || !this.graticule ) {
             return;
         }
         if ( value ) {

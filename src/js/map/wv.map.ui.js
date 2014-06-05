@@ -159,7 +159,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
     var updateMap = function() {
         var map = self.selected;
         _.each(self.selected.layers, function(layer) {
-            if ( !layer.wvid ) {
+            if ( !layer || !layer.wvid ) {
                 return;
             }
             var renderable, key;
@@ -171,7 +171,11 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 renderable = models.layers.isRenderable(def.id);
             }
             if ( layer.key !== key || !renderable ) {
-                layer.setOpacity(0);
+                if ( layer.wvid === "ol_graticule" ) {
+                    layer.setVisibility(0);
+                } else {
+                    layer.setOpacity(0);
+                }
                 layer.div.style.zIndex = 0;
             } else {
                 layer.setVisibility(true);
@@ -268,6 +272,8 @@ wv.map.ui = wv.map.ui || function(models, config) {
             layer = createLayerWMTS(def);
         } else if ( def.type === "wms" ) {
             layer = createLayerWMS(def);
+        } else if ( def.type === "graticule" ) {
+            layer = new wv.map.graticule("Graticule");
         } else {
             throw new Error("Unknown layer type: " + def.type);
         }
