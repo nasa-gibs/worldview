@@ -126,10 +126,8 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
             var pixels = coords;
             var s = models.proj.selected.id;
             var products = models.layers.get({
-                visibleOnly: true,
                 reverse: true,
-                availableOnly: true,
-                flat: true
+                renderable: true
             });
             // NOTE: This need to be changed back to the projection model
             // when the backfill removes the old projection.

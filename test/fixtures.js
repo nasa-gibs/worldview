@@ -36,6 +36,16 @@ fixtures.config = function() { return {
             group: "baselayers",
             projections: { geographic: {}, arctic: {}, antarctic: {} }
         },
+        "aqua-cr": {
+            id: "aqua-cr",
+            group: "baselayers", 
+            projections: { geographic: {}, arctic: {}, antarctic: {} }
+        },
+        "mask": {
+            id: "mask",
+            group: "baselayers",
+            projections: { geographic: {}, arctic: {}, antarctic: {} }
+        },
         "terra-aod": {
             id: "terra-aod",
             group: "overlays",
@@ -47,6 +57,11 @@ fixtures.config = function() { return {
             group: "overlays",
             projections: { geographic: {} },
             palette: { id: "aqua-aod" }
+        },
+        "combo-aod": {
+            id: "combo-aod",
+            group: "overlays",
+            projections: { geographic: {} },
         }
     },
     palettes: {

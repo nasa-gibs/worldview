@@ -9,103 +9,159 @@
  * All Rights Reserved.
  */
 
-buster.testCase("wv.layers.model", {
+buster.testCase("wv.layers.model", function() {
 
-    config: null,
-    models: null,
-    model: null,
-
-    setUp: function() {
-        this.models = {};
-        this.models.proj = wv.proj.model({
-            defaults: {
-                projection: "geographic"
-            },
-            projections: {
-                arctic: { id: "arctic" },
-                geographic: { id: "geographic" }
-            }
-        });
-        this.models.layers = wv.layers.model(this.models, {
-            layers: {
-                base1: {
-                    id: "base1",
-                    group: "baselayers",
-                    projections: { geographic: {} }
-                },
-                base2: {
-                    id: "base2",
-                    group: "baselayers",
-                    projections: { geographic: {} }
-                },
-                over1: {
-                    id: "over1",
-                    group: "overlays",
-                    projections: { geographic: {} }
-                },
-                over2: {
-                    id: "over2",
-                    group: "overlays",
-                    projections: { geographic: {} }
-                }
-            }
-        });
-        this.model = this.models.layers;
+    var self = {};
+    var config, models, errors, listener, changeListener;
+    var l;
+    
+    self.setUp = function() {
+        config = fixtures.config();
+        models = fixtures.models(config);
+        l = models.layers;
+        errors = [];
         this.stub(wv.util, "today").returns(new Date(Date.UTC(2010, 0, 1)));
-    },
+        listener = this.stub();
+        changeListener = this.stub();
+    };
 
-    "Adds baselayers below overlays": function() {
-        this.model.add("base1");
-        this.model.add("over1");
-        this.model.add("base2");
-        this.model.add("over2");
-        buster.assert.equals(this.model.active[0].id, "over2");
-        buster.assert.equals(this.model.active[0].id, "over2");
-    },
+    var stack = function() {
+        l.add("terra-cr");
+        l.add("aqua-cr");
+        l.add("terra-aod");
+        l.add("aqua-aod");
+    };
+    
+    self["Adds base layer"] = function() {
+        stack();
+        l.events.on("add", listener);
+        l.events.on("change", changeListener);
+        l.add("mask");
+        buster.assert.equals(_.pluck(l.get(), "id"),
+            ["mask", "aqua-cr", "terra-cr", "aqua-aod", "terra-aod"]);
+        buster.assert.calledWith(listener, config.layers.mask);
+        buster.assert.called(changeListener);
+    };
+    
+    self["Adds overlay"] = function() {
+        stack();
+        l.events.on("add", listener);
+        l.events.on("change", changeListener);
+        l.add("combo-aod");
+        buster.assert.equals(_.pluck(l.get(), "id"), 
+            ["aqua-cr", "terra-cr", "combo-aod", "aqua-aod", "terra-aod"]);
+        buster.assert.calledWith(listener, config.layers["combo-aod"]);
+        buster.assert.called(changeListener);
+    };
+    
+    self["Doesn't add duplicate layer"] = function() {
+        stack();
+        l.events.on("add", listener);
+        l.events.on("change", changeListener);
+        l.add("terra-cr");
+        buster.assert.equals(_.pluck(l.get(), "id"), 
+            ["aqua-cr", "terra-cr", "aqua-aod", "terra-aod"]);
+        buster.refute.called(listener);
+        buster.refute.called(changeListener);
+    };
+    
+    self["Removes base layer"] = function() {
+        stack();
+        l.events.on("remove", listener);
+        l.events.on("change", changeListener);
+        l.remove("terra-cr");
+        buster.assert.equals(_.pluck(l.get(), "id"), 
+            ["aqua-cr", "aqua-aod", "terra-aod"]);
+        buster.assert.calledWith(listener, config.layers["terra-cr"]);
+        buster.assert.called(changeListener);
+    };
+    
+    self["Does nothing on removing a non-existant layer"] = function() {
+        stack();
+        l.events.on("remove", listener);
+        l.events.on("change", changeListener);
+        l.remove("mask");
+        buster.assert.equals(_.pluck(l.get(), "id"), 
+            ["aqua-cr", "terra-cr", "aqua-aod", "terra-aod"]);
+        buster.refute.called(listener);
+        buster.refute.called(changeListener);
+    };
+    
+    self["Clears all layers"] = function() {
+        stack();
+        l.events.on("remove", listener);
+        l.events.on("change", changeListener);
+        l.clear();
+        buster.assert.equals(_.pluck(l.get(), "id"), []);
+        buster.assert.called(listener);
+        buster.assert.called(changeListener);
+    };
 
-    "Saves state": function() {
-        this.model.add("base1");
-        this.model.add("over1");
+    self["Clears layers for projection"] = function() {
+        stack();
+        models.proj.select("arctic");
+        l.clear();
+        models.proj.select("geographic");
+        buster.assert.equals(_.pluck(l.get(), "id"), 
+            ["aqua-aod", "terra-aod"]);
+    };
+    
+    self["Resets to default layers"] = function() {
+        config.defaults.startingLayers = [
+            { id: "terra-cr" },
+            { id: "terra-aod"}
+        ];
+        models = fixtures.models(config);
+        stack();
+        l.reset();
+        buster.assert.equals(_.pluck(l.get(), "id"), 
+            ["terra-cr", "terra-aod"]);
+    };
+    
+    self["Saves state"] = function() {
+        l.add("terra-cr");
+        l.add("terra-aod");
         var state = {};
-        this.model.save(state);
+        l.save(state);
         buster.assert.equals(state.l, [
-            { id: "base1", attributes: [] },
-            { id: "over1", attributes: [] }
+            { id: "terra-cr", attributes: [] },
+            { id: "terra-aod", attributes: [] }
         ]);
-    },
+    };
 
-    "Saves state with hidden layer": function() {
-        this.model.add("base1");
-        this.model.setVisibility("base1", false);
+    self["Saves state with hidden layer"] = function() {
+        l.add("terra-cr");
+        l.setVisibility("terra-cr", false);
         var state = {};
-        this.model.save(state);
+        l.save(state);
         buster.assert.equals(state.l, [
-            { id: "base1", attributes: [{ id: "hidden"}] }
+            { id: "terra-cr", attributes: [{ id: "hidden"}] }
         ]);
-    },
+    };
 
-    "Loads state": function() {
+    
+    self["Loads state"] = function() {
         var state = {
-            products: ["base1", "over1"]
+            products: ["terra-cr", "terra-aod"]
         };
-        var errors = [];
-        this.model.load(state, errors);
-        buster.assert.equals(this.model.active[0].id, "over1");
-        buster.assert.equals(this.model.active[1].id, "base1" );
+        l.load(state, errors);
+        buster.assert.equals(l.active[0].id, "terra-aod");
+        buster.assert.equals(l.active[1].id, "terra-cr" );
         buster.assert.equals(errors.length, 0);
-    },
+    };
 
-    "Loads state with hidden layer": function() {
+    self["Loads state with hidden layer"] = function() {
         var state = {
-            products: ["base1"],
-            hidden: {"base1": true}
+            products: ["terra-cr"],
+            hidden: {"terra-cr": true}
         };
-        var errors = [];
-        this.model.load(state, errors);
-        var def = _.find(this.model.active, { id: "base1" });
+        l.load(state, errors);
+        var def = _.find(l.active, { id: "terra-cr" });
         buster.assert(def);
         buster.refute(def.visible);
         buster.assert.equals(errors.length, 0);
-    }
+    };
+    
+    return self;
 
-});
+}());
