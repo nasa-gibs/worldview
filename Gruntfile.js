@@ -18,11 +18,12 @@ var buildTimestamp = moment.utc().format("MMMM DD, YYYY [-] HH:mm [UTC]");
 var buildNonce = moment.utc().format("YYYYMMDDHHmmssSSS");
 
 // If being built with Jenkins or Bamboo, include the build number in artifacts
+console.log(process.env);
 var buildNumber = ( process.env.BUILD_NUMBER )
     ? "." + process.env.BUILD_NUMBER : "";
 if ( !buildNumber ) {
-    buildNumber = ( process.env["bamboo.buildNumber"] )
-    ? "." + process.env["bamboo.buildNumber"] : "";
+    buildNumber = ( process.env.BAMBOO_BUILDNUMBER )
+    ? "." + process.env.BAMBOO_BUILDNUMBER : "";
 }
 
 module.exports = function(grunt) {
