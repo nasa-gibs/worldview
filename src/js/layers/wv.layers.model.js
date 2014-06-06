@@ -59,20 +59,11 @@ wv.layers.model = wv.layers.model || function(models, config) {
         return baselayers.concat(overlays);
     };
 
-    self.available = function(layerId) {
-        var def = config.layers[layerId];
-        if ( def.period !== "daily" ) {
-            return true;
-        }
-        if ( def.startDate ) {
-            var start = wv.util.parseDateUTC(def.startDate);
-            if ( models.date.selected < start ) {
-                return false;
-            }
-        }
-        if ( def.endDate ) {
-            var end = wv.util.parseDateUTC(def.endDate);
-            if ( models.date.selected > end ) {
+    self.available = function(id) {
+        var range = self.dateRange({layer: id});
+        var date = models.date.selected;
+        if ( range ) {
+            if ( date < range.start || date > range.end ) {
                 return false;
             }
         }
@@ -242,20 +233,15 @@ wv.layers.model = wv.layers.model || function(models, config) {
             self.events.trigger("change");
         }
     };
-
+    
     self.isRenderable = function(id) {
         var def = _.find(self.active, { id: id });
         if ( !def ) {
             return false;
         }
-        var range = self.dateRange({layer: id});
-        var date = models.date.selected;
-        if ( range ) {
-            if ( date < range.start || date > range.end ) {
-                return false;
-            }
+        if ( !self.available(id) ) {
+            return false;
         }
-
         if ( !def.visible || def.opacity === 0 ) {
             return false;
         }
@@ -267,7 +253,8 @@ wv.layers.model = wv.layers.model || function(models, config) {
             if ( otherDef.id === def.id ) {
                 return false;
             }
-            if ( otherDef.visible && otherDef.opacity === 1.0 ) {
+            if ( otherDef.visible && otherDef.opacity === 1.0 && 
+                    self.available(otherDef.id) ) {
                 obscured = true;
                 return false;
             }

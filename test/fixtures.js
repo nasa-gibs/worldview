@@ -34,11 +34,15 @@ fixtures.config = function() { return {
         "terra-cr": {
             id: "terra-cr",
             group: "baselayers",
+            period: "daily",
+            startDate: "2000-01-01",
             projections: { geographic: {}, arctic: {}, antarctic: {} }
         },
         "aqua-cr": {
             id: "aqua-cr",
-            group: "baselayers", 
+            group: "baselayers",
+            period: "daily",
+            startDate: "2002-01-01",
             projections: { geographic: {}, arctic: {}, antarctic: {} }
         },
         "mask": {
@@ -49,12 +53,16 @@ fixtures.config = function() { return {
         "terra-aod": {
             id: "terra-aod",
             group: "overlays",
+            period: "daily",
+            startDate: "2000-01-01",
             projections: { geographic: {} },
             palette: { id: "terra-aod" }
         },
         "aqua-aod": {
             id: "aqua-aod",
             group: "overlays",
+            period: "daily",
+            startDate: "2002-01-01",
             projections: { geographic: {} },
             palette: { id: "aqua-aod" }
         },

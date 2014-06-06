@@ -13,6 +13,7 @@ buster.testCase("wv.layers.model", function() {
 
     var self = {};
     var config, models, errors, listener, changeListener;
+    var today;
     var l;
     
     self.setUp = function() {
@@ -20,7 +21,8 @@ buster.testCase("wv.layers.model", function() {
         models = fixtures.models(config);
         l = models.layers;
         errors = [];
-        this.stub(wv.util, "today").returns(new Date(Date.UTC(2010, 0, 1)));
+        today = new Date(Date.UTC(2014, 0, 1));
+        this.stub(wv.util, "today").returns(today);
         listener = this.stub();
         changeListener = this.stub();
     };
@@ -118,6 +120,190 @@ buster.testCase("wv.layers.model", function() {
             ["terra-cr", "terra-aod"]);
     };
     
+    self["No date range for static products"] = function() {
+        l.add("mask");
+        buster.refute(l.dateRange());
+    };
+    
+    self["Date range for ongoing layers"] = function() {
+        stack();
+        var range = l.dateRange();
+        buster.assert.equals(range.start, new Date(Date.UTC(2000, 0, 1)));
+        buster.assert.equals(range.start, new Date(Date.UTC(2000, 0, 1)));
+    };
+    
+    self["Date range for ended layers"] = function() {
+        config.layers.end1 = {
+            id: "end1",
+            group: "overlays",
+            projections: { geographic: {} },
+            startDate: "1990-01-01",
+            endDate: "2005-01-01",
+            inactive: true
+        };
+        config.layers.end2 = {
+            id: "end1",
+            group: "overlays",
+            projections: { geographic: {} },
+            startDate: "1992-01-01",
+            endDate: "2007-01-01",
+            inactive: true    
+        };
+        l.add("end1");
+        l.add("end2");
+        var range = l.dateRange();
+        buster.assert.equals(range.start, new Date(Date.UTC(1990, 0, 1)));
+        buster.assert.equals(range.end, new Date(Date.UTC(2007, 0, 1)));
+    };
+    
+    self["Gets layers in reverse"] = function() {
+        stack();
+        var list = l.get({reverse: true});
+        buster.assert.equals(_.pluck(list, "id"), 
+            ["terra-cr", "aqua-cr", "terra-aod", "aqua-aod"]);
+    };
+    
+    self["Gets baselayers"] = function() {
+        stack();
+        var list = l.get({group: "baselayers"});
+        buster.assert.equals(_.pluck(list, "id"), 
+            ["aqua-cr", "terra-cr"]);
+    };
+    
+    self["Gets overlays"] = function() {
+        stack();
+        var list = l.get({group: "overlays"});
+        buster.assert.equals(_.pluck(list, "id"), 
+            ["aqua-aod", "terra-aod"]);
+    };
+        
+    self["Gets all groups"] = function() {
+        stack();
+        var results = l.get({group: "all"});
+        buster.assert.equals(results.baselayers[0].id, "aqua-cr");
+        buster.assert.equals(results.baselayers[1].id, "terra-cr");
+        buster.assert.equals(results.overlays[0].id, "aqua-aod");
+        buster.assert.equals(results.overlays[1].id, "terra-aod");
+    };
+    
+    self["Gets layers for other projection"] = function() {
+        stack();
+        var list = l.get({proj: "arctic"});
+        buster.assert.equals(_.pluck(list, "id"), 
+            ["aqua-cr", "terra-cr"]);
+    };
+    
+    self["Obscured base layer is not renderable"] = function() {
+        stack();
+        var list = l.get({renderable: true});
+        buster.assert.equals(_.pluck(list, "id"), 
+            ["aqua-cr", "aqua-aod", "terra-aod"]);
+    };
+
+    self["Base layer is not obscured by semi-transparent layer"] = function() {
+        stack();
+        l.setOpacity("aqua-cr", 0.5);
+        var list = l.get({renderable: true});
+        buster.assert.equals(_.pluck(list, "id"), 
+            ["aqua-cr", "terra-cr", "aqua-aod", "terra-aod"]);
+    };
+    
+    self["Base layer is not obscured by a hidden layer"] = function() {
+        stack();
+        l.setVisibility("aqua-cr", false);
+        var list = l.get({renderable: true});
+        buster.assert.equals(_.pluck(list, "id"), 
+            ["terra-cr", "aqua-aod", "terra-aod"]);
+    };
+    
+    self["Layer with zero opacity is not renderable"] = function() {
+        stack();
+        l.setOpacity("aqua-aod", 0);
+        var list = l.get({renderable: true});
+        buster.assert.equals(_.pluck(list, "id"), 
+            ["aqua-cr", "terra-aod"]);
+    };
+    
+    self["Layer outside date range is not renderable"] = function() {
+        stack();
+        models.date.select(new Date(Date.UTC(2001, 0, 1)));
+        var list = l.get({renderable: true});
+        buster.assert.equals(_.pluck(list, "id"), 
+            ["terra-cr", "terra-aod"]);
+    };
+    
+    self["Replace base layer"] = function() {
+        stack();
+        l.events.on("update", listener);
+        l.events.on("change", changeListener);
+        l.replace("aqua-cr", "mask");
+        var list = l.get();
+        buster.assert.equals(_.pluck(list, "id"), 
+            ["mask", "terra-cr", "aqua-aod", "terra-aod"]);
+        buster.assert.called(listener);
+        buster.assert.called(changeListener);
+    };
+
+    self["Replace overlay"] = function() {
+        stack();
+        l.events.on("update", listener);
+        l.events.on("change", changeListener);
+        l.replace("aqua-aod", "combo-aod");
+        var list = l.get();
+        buster.assert.equals(_.pluck(list, "id"), 
+            ["aqua-cr", "terra-cr", "combo-aod", "terra-aod"]);
+        buster.assert.called(listener);
+        buster.assert.called(changeListener);
+    };
+    
+    self["Push base layer to bottom"] = function() {
+        stack();
+        l.events.on("update", listener);
+        l.events.on("change", changeListener);
+        l.pushToBottom("aqua-cr");
+        var list = l.get();
+        buster.assert.equals(_.pluck(list, "id"), 
+            ["terra-cr", "aqua-cr", "aqua-aod", "terra-aod"]);
+        buster.assert.called(listener);
+        buster.assert.called(changeListener);
+    };
+    
+    self["Push overlay to bottom"] = function() {
+        stack();
+        l.events.on("update", listener);
+        l.events.on("change", changeListener);
+        l.pushToBottom("aqua-aod");
+        var list = l.get();
+        buster.assert.equals(_.pluck(list, "id"), 
+            ["aqua-cr", "terra-cr", "terra-aod", "aqua-aod"]);
+        buster.assert.called(listener);
+        buster.assert.called(changeListener);
+    };
+    
+    self["Move base layer before"] = function() {
+        stack();
+        l.events.on("update", listener);
+        l.events.on("change", changeListener);
+        l.moveBefore("terra-cr", "aqua-cr");
+        var list = l.get();
+        buster.assert.equals(_.pluck(list, "id"), 
+            ["terra-cr", "aqua-cr", "aqua-aod", "terra-aod"]);
+        buster.assert.called(listener);
+        buster.assert.called(changeListener);
+    };
+    
+    self["Move overlay before"] = function() {
+        stack();
+        l.events.on("update", listener);
+        l.events.on("change", changeListener);
+        l.moveBefore("terra-aod", "aqua-aod");
+        var list = l.get();
+        buster.assert.equals(_.pluck(list, "id"), 
+            ["aqua-cr", "terra-cr", "terra-aod", "aqua-aod"]);
+        buster.assert.called(listener);
+        buster.assert.called(changeListener);
+    };
+    
     self["Saves state"] = function() {
         l.add("terra-cr");
         l.add("terra-aod");
@@ -139,7 +325,6 @@ buster.testCase("wv.layers.model", function() {
         ]);
     };
 
-    
     self["Loads state"] = function() {
         var state = {
             products: ["terra-cr", "terra-aod"]
