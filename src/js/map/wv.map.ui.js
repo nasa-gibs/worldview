@@ -81,10 +81,11 @@ wv.map.ui = wv.map.ui || function(models, config) {
         if ( !_.find(map.layers, { key: key }) ) {
             var renderable = models.layers.isRenderable(def.id);
             if ( renderable ) {
-                if ( !cache[key] ) {
+                var layer = cache[key];
+                if ( !layer ) {
                     var layer = createLayer(def);
-                    self.selected.addLayer(layer);
-                }
+                }   
+                self.selected.addLayer(layer);
             }
         }
     };
@@ -97,6 +98,10 @@ wv.map.ui = wv.map.ui || function(models, config) {
     };
     
     var removeLayer = function(def) {
+        var map = self.selected;
+        var key = layerKey(def);
+        var layer = _.find(map.layers, { key: key });
+        map.removeLayer(layer);
         updateMap();
     };
 
@@ -156,7 +161,9 @@ wv.map.ui = wv.map.ui || function(models, config) {
         });
         _.delay(function() {
             _.each(stale, function(layer) {
-                map.removeLayer(layer);
+                if ( map.getLayerIndex(layer) >= 0 ) {
+                    map.removeLayer(layer);
+                }
             });
             stale = [];
             updateMap();
