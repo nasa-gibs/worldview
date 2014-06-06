@@ -55,7 +55,7 @@ buster.testCase("wv.layers.model.dateRange", {
             }
         });
         this.model = this.models.layers;
-        this.stub(wv.util, "today").returns(new Date(Date.UTC(2010, 0, 1)));
+        this.stub(wv.util, "now").returns(new Date(Date.UTC(2010, 0, 1)));
     },
 
     "Date range with one layer": function() {

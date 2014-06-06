@@ -261,10 +261,14 @@ wv.util = (function(self) {
      * @static
      * @return {Date} The current time or an overriden value.
      */
-    self.now = function() {
+    var now = function() {
         return new Date();
     };
-
+    self.now = now;
+    self.resetNow = function() {
+        self.now = now;
+    };
+    
     /**
      * Gets the current day. Use this instead of the Date methods to allow
      * debugging alternate "now" times.

@@ -17,14 +17,14 @@ buster.testCase("wv.layers.model", function() {
     var l;
     
     self.setUp = function() {
+        today = new Date(Date.UTC(2014, 0, 1));
+        this.stub(wv.util, "now").returns(today);
         config = fixtures.config();
         models = fixtures.models(config);
         l = models.layers;
         errors = [];
-        today = new Date(Date.UTC(2014, 0, 1));
-        this.stub(wv.util, "today").returns(today);
         listener = this.stub();
-        changeListener = this.stub();
+        changeListener = this.stub();        
     };
 
     var stack = function() {
