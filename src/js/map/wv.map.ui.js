@@ -43,7 +43,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         models.layers.events.on("remove", removeLayer);
         models.layers.events.on("visibility", updateVisibility);
         models.layers.events.on("opacity", updateOpacity);
-        models.layers.events.on("update", updateMap);
+        models.layers.events.on("update", updateLayers);
         models.date.events.on("select", updateDate);
         models.palettes.events.on("set-custom", addPalette);
         models.palettes.events.on("clear-custom", removePalette);
@@ -89,6 +89,13 @@ wv.map.ui = wv.map.ui || function(models, config) {
         }
     };
 
+    var updateLayers = function() {
+        _.each(models.layers.get(), function(def) {
+            updateLayer(def);
+        });
+        updateMap();
+    };
+    
     var removeLayer = function(def) {
         updateMap();
     };
