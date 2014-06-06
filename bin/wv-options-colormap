@@ -61,7 +61,10 @@ def process_file(file):
         a = 0 if entry["@transparent"] == "true" else 255
         color = "{0:02x}{1:02x}{2:02x}{3:02x}".format(int(r), int(g), int(b), a)
         label = entry["@label"]
-        if "@value" in entry:
+        if a == 0:
+            specialColors += [color]
+            specialLabels += [label]
+        elif "@value" in entry:
             items = re.sub(r"[\(\)\[\]]", "", entry["@value"]).split(",")
             try:
                 scaleValues += [map(lambda v: float(v), items)]
@@ -69,9 +72,6 @@ def process_file(file):
                 raise ValueError("Invalid value: %s" % entry["@value"])
             scaleColors += [color]
             scaleLabels += [label]
-        elif a == 0:
-            specialColors += [color]
-            specialLabels += [label]
         else:
             classColors += [color]
             classLabels += [label]
