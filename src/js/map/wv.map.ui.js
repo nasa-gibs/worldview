@@ -71,8 +71,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
     };
 
     var addLayer = function(def) {
-        updateLayer(def);
-        updateMap();
+        updateLayers();
     };
 
     var updateLayer = function(def) {
@@ -106,23 +105,15 @@ wv.map.ui = wv.map.ui || function(models, config) {
     };
 
     var updateVisibility = function(def, visible) {
-        updateLayer(def);
-        updateMap();
+        updateLayers();
     };
 
     var updateOpacity = function(def) {
-        updateLayer(def);
-        updateMap();
+        updateLayers();
     };
 
     var updateDate = function() {
-        var defs = models.layers.get();
-        _.each(defs, function(def) {
-            if ( def.period === "daily" ) {
-                updateLayer(def);
-            }
-        });
-        updateMap();
+        updateLayers();
     };
 
     var clearLayers = function(map) {

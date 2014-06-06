@@ -72,7 +72,6 @@ $(function() {
         _.each(parsers, function(parser) {
             parser(state, errors, config);
         });
-        console.log(state);
         requirements = [
             wv.palettes.requirements(state, config)
         ];
