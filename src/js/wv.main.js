@@ -24,11 +24,14 @@ $(function() {
             elapsed = function() {};
         }
         elapsed("start");
+        /* May be included in next version
         yepnope({
             test: parameters.debug,
             yep: ['js/wv.debug.js'],
             complete: loadConfig
         });
+        */
+        loadConfig();
     };
 
     var loadConfig = function() {

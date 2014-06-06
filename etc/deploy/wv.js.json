@@ -54,9 +54,7 @@
         "src/js/link/wv.link.ui.js",
 
         "src/js/wv.tour.js",
+        "src/js/wv.debug.js",
         "src/js/wv.main.js"
-    ],
-    "wv.debug.js": [
-        "src/js/wv.debug.js"
     ]
 }

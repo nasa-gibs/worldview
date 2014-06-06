@@ -17,9 +17,13 @@ var buildTimestamp = moment.utc().format("MMMM DD, YYYY [-] HH:mm [UTC]");
 // Append to all URI references for cache busting
 var buildNonce = moment.utc().format("YYYYMMDDHHmmssSSS");
 
-// If being built with Jenkins, include the build number in artifacts
+// If being built with Jenkins or Bamboo, include the build number in artifacts
 var buildNumber = ( process.env.BUILD_NUMBER )
     ? "." + process.env.BUILD_NUMBER : "";
+if ( !buildNumber ) {
+    buildNumber = ( process.env["bamboo.buildNumber"] )
+    ? "." + process.env["bamboo.buildNumber"] : "";
+}
 
 module.exports = function(grunt) {
 
@@ -311,10 +315,6 @@ module.exports = function(grunt) {
                 src: wvJs["wv.js"],
                 dest: "build/<%=pkg%>-debug/web/js/wv.js",
             },
-            wv_debug_js: {
-                src: wvJs["wv.debug.js"],
-                dest: "build/<%=pkg%>-debug/web/js/wv.debug.js"
-            },
             // Combine all the Worldview CSS files into one file.
             wv_css: {
                 src: wvCss,
@@ -331,9 +331,6 @@ module.exports = function(grunt) {
                 files: {
                     "build/<%=pkg%>/web/js/wv.js": [
                         "build/<%=pkg%>-debug/web/js/wv.js"
-                    ],
-                    "build/<%=pkg%>/web/js/wv.debug.js": [
-                        "build/<%=pkg%>-debug/web/js/wv.debug.js"
                     ]
                 }
             }
@@ -423,7 +420,6 @@ module.exports = function(grunt) {
                 "build/<%=pkg%>-debug/web/**/*.js",
                 "!build/<%=pkg%>-debug/web/css/wv.css",
                 "!build/<%=pkg%>-debug/web/js/wv.js",
-                "!build/<%=pkg%>-debug/web/js/wv.debug.js",
                 "!build/<%=pkg%>-debug/web/css/bulkDownload.css",
                 "!build/<%=pkg%>-debug/web/js/map/wv.map.tileworker.js",
                 "!build/<%=pkg%>-debug/web/ext/**/*"
