@@ -83,7 +83,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
             if ( renderable ) {
                 var layer = cache[key];
                 if ( !layer ) {
-                    var layer = createLayer(def);
+                    layer = createLayer(def);
                 }   
                 self.selected.addLayer(layer);
             }
