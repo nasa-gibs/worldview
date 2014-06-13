@@ -289,18 +289,21 @@ wv.map.graticule = OpenLayers.Class(OpenLayers.Layer, {
 
         this.graticuleLineStyle = new OpenLayers.Symbolizer.Line({
             strokeColor: '#AAAAAA',
-            strokeOpacity: 0.95,
+            strokeOpacity: 1.0, 
             strokeWidth: 1.35,
             strokeLinecap: 'square',
             strokeDashstyle: 'dot'
         });
 
         this.graticuleLabelStyle = new OpenLayers.Symbolizer.Text({
-            fontFamily: 'Gill Sans',
-            fontSize: '16',
+            fontFamily: 'Courier New',
+            fontSize: '12',
             fontWeight: '550',
-            fontColor: '#0000e1',
-            fontOpacity: 1.0
+            fontColor: '#EEE',
+            fontOpacity: 1.0,
+            labelOutlineColor: '#222',
+            labelOutlineWidth: 3,
+            labelOutlineOpacity: 1
         });
     },
 
@@ -322,7 +325,7 @@ wv.map.graticule = OpenLayers.Class(OpenLayers.Layer, {
     },
 
     /*
-     * Remove the contorl when the layer is removed from the map
+     * Remove the control when the layer is removed from the map
      */
     removeMap: function(map) {
         OpenLayers.Layer.prototype.removeMap.apply(this, arguments);
