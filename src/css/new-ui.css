@@ -17,7 +17,7 @@
     border:1px solid #333;
 }
 #timeline footer text{
-    font-size:16px;
+    font-size:20px;
     font-weight:normal;
     font-family:'Arial Narrow';
     font-style:normal;
@@ -173,6 +173,7 @@ display:inline-block;}
     border:2px solid #ff7070;
     padding:5px;
     border-radius:5px;
+    z-index:10000;
 }
 svg#now-line{
     position:absolute;
@@ -208,4 +209,59 @@ svg#now-line:hover rect.arrow-inner{
 .arrow-inner-line{
     fill:#222222;
     fill-opacity:1;
+}
+#zoombtns{
+    position:absolute;
+    z-index:9999;
+    left:280px;
+    bottom:50px;
+    background:rgba(160,160,160,1);
+    cursor:pointer;
+    display:none;
+}
+#zoombtns a{
+    color:#000;
+    margin:0 3px;
+}
+#zoombtns a:hover{
+    text-decoration:underline;
+}
+.selected-int{
+    font-weight:bold;
+    text-decoration:underline;
+}
+#timeline-zoom{
+    position: absolute;
+    z-index: 9999;
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    display: inline-block;
+    padding: 5px;
+    right: 10px;
+      bottom: 80px;
+    background: none repeat scroll 0% 0% rgb(221, 221, 221);
+    height: 15px;
+    border-radius: 7px 7px 7px 7px;
+    border: 1px solid rgb(51, 51, 51);
+    line-height: 15px;
+}
+#timeline-zoom input{
+    width:100px;
+    margin-top:-3px;
+
+}
+#timeline-hide {
+    vertical-align: middle;
+    float: right;
+    background-color:#eee;
+    border-radius:5px;
+    font-size:12px;
+    cursor:pointer;
+    padding:2px;
+    margin-top:-3px;
+}
+#timeline-hide:hover{
+    background-color:#333;
+    color:#eee;
 }

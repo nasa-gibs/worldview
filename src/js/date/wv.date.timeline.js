@@ -88,7 +88,7 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
             "value": "6"
             }
         ];
-        x = d3.time.scale()
+        x = d3.time.scale.utc()
             .domain([
                 d3.min(data, function(d) { return d.date; }),
                 d3.max(data, function(d) { return d.date; })
@@ -108,10 +108,7 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
                 return y(d.value);
             });
 
-        xAxis = d3.svg.axis()
-            .scale(x)
-            .orient("bottom")
-            .ticks(10);
+        xAxis = make_x_axis(x);
 
         zoom = d3.behavior.zoom()
             .x(x)
@@ -128,8 +125,20 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
     
     };
     var redrawAxis = function(){
-        d3.select(".axis").call(xAxis);
-        d3.select(".grid").call(make_x_axis(x).tickSize(-60, 0, 0));
+        if (!svg){return;}
+        svg.select(".x.axis").call(xAxis);
+
+        svg.select(".x.grid")
+            .call(make_x_axis(x)
+            .tickSize(-60, 0, 0)
+            .tickFormat(""));
+        svg.select(".line")
+            .attr("class", "line")
+            .attr("d", line);
+        svg.select(".line2")
+            .attr("class", "line2")
+            .attr("d", line);
+
         d3.selectAll('.x.axis .tick text').attr('x',5).attr('style','text-anchor:left;');
         
         d3.select(".line").datum(data).attr("d", line);
@@ -154,33 +163,18 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
         x.range([0, width]);
         
         redrawAxis();
-        
-        
-        
     };
     
     var zoomed = function(){
         var t = zoom.translate(),
         s = zoom.scale();
-
+        console.log(s);
         tx = Math.min(0, Math.max(width * (1 - s), t[0]));
         ty = Math.min(0, Math.max(height * (1 - s), t[1]));
         zoom.translate([tx, ty]);
 
-        svg.select(".x.axis").call(xAxis);
-
-        svg.select(".x.grid")
-            .call(make_x_axis(x)
-            .tickSize(-60, 0, 0)
-            .tickFormat(""));
-        svg.select(".line")
-            .attr("class", "line")
-            .attr("d", line);
-        svg.select(".line2")
-            .attr("class", "line2")
-            .attr("d", line);
-        updateTimeline();
-        
+        redrawAxis();
+      
         if(($("svg#now-line").offset().left) < ($("#timeline footer").offset().left)){
             $("svg#now-line").css("visibility","hidden");
 
@@ -197,7 +191,7 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
         return d3.svg.axis()
             .scale(x)
             .orient("bottom")
-            .ticks(10);
+            .ticks(7);
     };
 
             
@@ -220,7 +214,7 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
 
         svg.append("svg:g")
             .attr("class", "x axis")
-            .attr("transform", "translate(0, " + 35 + ")")
+            .attr("transform", "translate(0, " + 30 + ")")
             .call(xAxis);
 
 
@@ -279,12 +273,17 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
             hoverLineGroup.style("opacity", 1e-6);
             $("#timeline-text").hide();
           })
-          .on("click", bindUpdateOnFooter)/*.on("mousedown",function(){
+          .on("click", bindUpdateOnFooter);
+        /*.on("mousedown",function(){
             mouse_x_start = d3.mouse(this)[0];
             var mouse_x_jump = mouse_x_start + timelineJump;
             console.log("$$$$$$$$$$$$ ");
-          })*/;
-        
+          })*/ 
+        d3.select("#timeline footer svg")
+            .on("mousewheel.zoom", zoomable)
+            .on("DOMMouseScroll.zoom", zoomable)
+            .on("dblclick.zoom", zoomable);
+
         $("svg#now-line")
           .mousedown(function(e){
             e.preventDefault();
@@ -381,8 +380,66 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
                 }
             }        
         });
+        $("#zoombtns #all").click(function(e){
+            zoom.scale(10);
+            s = zoom.scale();
+            tx = Math.min(0, width * (1 - s));
+            ty = Math.min(0, height * (1 - s));
+            zoom.translate([tx, ty]);
+            redrawAxis();
+            $("#zoombtns a").removeClass("selected-int");
+            $(this).addClass("selected-int");
+            
+        });
+        $("#timeline-zoom").hover(function(e){
+            $("#timeline footer").css("background","rgba(40,40,40,0.9)");
+        },function(e){
+            $("#timeline footer").css("background","");
+        });
+        $("#timeline-zoom input").on("input",function(e){
+            console.log("instant change");
+            if (zoom.scale === $(this).val()){
+                console.log("no change!");
+                return;
+            }
+            else{
+                var finalVal = Math.pow(($(this).val() / 10),2); 
+                zoom.scale(finalVal);
+                s = zoom.scale();
+                tx = Math.min(0, width * (1 - s));
+                ty = Math.min(0, height * (1 - s));
+                zoom.translate([tx, ty]);
+                redrawAxis();
+            }
+        }).on("change",function(e){
+            console.log("change after mouse release");
+        });
+        $("#timeline-hide").click(function(e){
+            var tl = $("#timeline footer");
+            if(tl.is(":hidden"))
+            {
+                tl.show("slow");
+                $("#timeline-zoom input").show();
+                $("#timeline-hide").text("Hide Timeline");
+                $("#timeline-zoom").css("right","10px");
+                $("#timeline-zoom").css("left","auto");
+               $("#now-line").hide();
 
+            }
+            else{
+                tl.hide("slow");
+                $("#timeline-zoom input").hide();
+                $("#timeline-hide").text("Show Timeline");
+                $("#timeline-zoom").css("right","auto");
+                $("#timeline-zoom").css("left","180px");
+                $("#now-line").hide();
+            }
+
+        });
     }; // /init
+    var zoomable = function(){
+        console.log("derr");
+    };
     var bindTimelineMouseMove = function() {
         var mouse_x = d3.mouse(this)[0];
         var graph_x = x.invert(mouse_x);
@@ -409,25 +466,6 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
         throttleSelect(x.invert(mouse_x));
     };
     
-    var bindMouseOnFooter = function(d3){
-        var mouse_x = d3.mouse(this)[0];
-        var graph_x = x.invert(mouse_x);
-        var format = d3.time.format('%e %b');
-        //format.parse(graph_x)
-        var stringDate = String(graph_x).split(' ');
-        $("#timeline-text").text(stringDate[3] + " " + stringDate[1] + " " + stringDate[2]); //FIXME: Use d3 time formatting
-        hoverLine.attr("x1", mouse_x).attr("x2", mouse_x);
-        if ((mouse_x > (x(data2[0].date)- 3)) && (mouse_x < (x(data2[0].date) + 6))){
-            hoverLineGroup.style("opacity", 1e-6);
-            $("#timeline-text").hide();
-            $(".line2").css("stroke","#fff");
-        }else {
-            $("#timeline-text").show();
-            hoverLineGroup.style("opacity", 1);
-            $(".line2").css("stroke","transparent");
-        }
-        $("#timeline-text").css({"left": d3.event.pageX});
-    };
     var bindBtnsToYear = function(){
         incrementBtn.unbind();
         decrementBtn.unbind();
@@ -475,10 +513,8 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
         if ( !svg ) { return ; }
         
         svg.select(".line2").attr("d", line);
-        var makeFill = d3.select('.line2').attr("d");
-        d3.select(".line2").attr("d", makeFill + "l3,0l0,60z");
-        var makeFillPos = $(".line2").offset();
-        $("svg#now-line").css("left", (makeFillPos.left-3) + "px");
+        var line2Pos = $(".line2").offset();
+        $("svg#now-line").css("left", (line2Pos.left-3) + "px");
     };
     var updateTime = function() {
         $('#year-input-group').val(model.selected.getUTCFullYear());
@@ -491,10 +527,11 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
         }
         //remove selection when clicking too fast
         //document.getSelection().removeAllRanges();
-        $('.button-input-group-selected').select();
+        //$('.button-input-group-selected').select();
         data2[0].date = model.selected.getTime();
         data2[1].date = data2[0].date;
         updateTimeline();
+        
     };
     var updateBarSpeed = function(){
         var currentElement = $(".button-input-group-selected").attr("id");
