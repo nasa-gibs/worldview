@@ -111,10 +111,14 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
                 attr.push({ id: "palette", value: def.custom });
             }
             if ( def.min ) {
-                attr.push({ id: "min", value: def.min });
+                var minValue = def.scale.values[def.min][0];
+                attr.push({ id: "min", value: minValue });
             }
             if ( def.max ) {
-                attr.push({ id: "max", value: def.max });
+                var maxValue = ( def.scale.values[def.max].length === 2 ) ?
+                        def.scale.values[def.max][1] :
+                        def.scale.values[def.max][0]; 
+                attr.push({ id: "max", value: maxValue });
             }
         });
     };
@@ -141,6 +145,7 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
     var load12 = function(state, errors) {
         _.each(state.l, function(layerDef) {
             var layerId = layerDef.id;
+            var minValue, maxValue;
             var min, max;
             _.each(layerDef.attributes, function(attr) {
                 if ( attr.id === "palette" ) {
@@ -151,17 +156,19 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
                     }
                 }
                 if ( attr.id === "min" ) {
-                    min = parseInt(attr.value);
-                    if ( _.isNaN(min) ) {
+                    minValue = parseFloat(attr.value);
+                    if ( _.isNaN(minValue) ) {
                         errors.push("Invalid min value: " + attr.value);
-                        min = undefined;
+                    } else {
+                        min = findIndex(layerId, "min", minValue);
                     }
                 }
                 if ( attr.id === "max" ) {
-                    max = parseInt(attr.value);
-                    if ( _.isNaN(max) ) {
+                    maxValue = parseFloat(attr.value);
+                    if ( _.isNaN(maxValue) ) {
                         errors.push("Invalid max value: " + attr.value);
-                        max = undefined;
+                    } else {
+                        max = findIndex(layerId, "max", maxValue);
                     }
                 }
             });
@@ -171,6 +178,24 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
         });
     };
 
+    var findIndex = function(layerId, type, value) {
+        var values = self.get(layerId).scale.values;
+        var result;
+        _.each(values, function(check, index) {
+            var min = check[0];
+            var max = check.length === 2 ? check[1] : check[0];
+            if ( type === "min" && value === min ) {
+                result = index;
+                return false;
+            }
+            if ( type === "max" && value === max ) {
+                result = index;
+                return false;
+            }
+        });
+        return result;
+    };
+    
     // If any custom rendering is being used, image download must turn it
     // off
     self.inUse = function() {
@@ -226,6 +251,7 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
 
         var newScale = [];
         var newLabels = [];
+        var newValues = [];
         _.each(source.scale.colors, function(color, index) {
             if ( index < def.min || index > def.max ) {
                 newScale.push("00000000");
@@ -235,9 +261,11 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
                 newScale.push(target.colors[targetIndex]);
             }
             newLabels.push(source.scale.labels[index]);
+            newValues.push(source.scale.values[index]);
         });
         scale.colors = newScale;
         scale.labels = newLabels;
+        scale.values = newValues;
         def.scale = scale;
 
         var lookup = {};
