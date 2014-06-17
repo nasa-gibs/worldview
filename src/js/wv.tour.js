@@ -14,7 +14,7 @@
  */
 var wv = wv || {};
 
-wv.tour = wv.tour || function(models, ui) {
+wv.tour = wv.tour || function(models, ui, config) {
 
     var self = {};
 
@@ -31,7 +31,7 @@ wv.tour = wv.tour || function(models, ui) {
 
     self.introduction = function() {
         // Don't start tour if coming in via a permalink
-        if ( window.location.search ) { return; }
+        if ( window.location.search && !config.parameters.tour ) { return; }
 
         // Tour does not work on IE 9 or below
         if ( wv.util.browser.ie && wv.util.browser.version <= 9 ) { return; }

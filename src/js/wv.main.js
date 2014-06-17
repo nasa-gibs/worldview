@@ -158,7 +158,7 @@ $(function() {
             ui.data.render();
         }
         ui.link = wv.link.ui(models, config);
-        ui.tour = wv.tour(models, ui);
+        ui.tour = wv.tour(models, ui, config);
 
         _.merge(wv.ui, ui);
 
