@@ -368,8 +368,9 @@ wv.data.model = wv.data.model || function(models, config) {
         var foundSelected = false;
         _.each(models.layers.get(), function(layer) {
             var id = layer.id;
-            var layerName = layer.title;
-            var description = layer.subtitle;
+            var names = models.layers.getTitles(layer.id);
+            var layerName = names.title;
+            var description = names.subtitle;
             var productName = layer.product;
             self.layers.push({
                 id: id,

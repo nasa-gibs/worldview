@@ -146,8 +146,10 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
             .attr("data-layer", encodeURIComponent(layer.id))
             .addClass("item");
 
+        var names = models.layers.getTitles(layer.id);
         var $name = $("<h4></h4>")
-            .html(layer.title);
+            .addClass("title")
+            .html(names.title);
         if ( config.parameters.markPalettes ) {
             if ( layer.palette ) {
                 $name.addClass("mark");
@@ -159,7 +161,8 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
             }
         }
         var $description = $("<p></p>")
-            .html(layer.subtitle);
+            .addClass("subtitle")
+            .html(names.subtitle);
 
         var $checkbox = $("<input></input>")
             .attr("id", encodeURIComponent(layer.id))
@@ -285,10 +288,22 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
     };
 
     var onProjectionChange = function() {
+        adjustTitles();
         updateAreasOfInterest();
         filter();
     };
 
+    var adjustTitles = function() {
+        var proj = models.proj.selected.id;
+        _.each(models.layers.get(), function(def) {
+            var names = models.layers.getTitles(def.id);
+            $("#selectorbox [data-layer='" + encodeURIComponent(def.id) + 
+                "'] .title").html(names.title);
+            $("#selectorbox [data-layer='" + encodeURIComponent(def.id) + 
+                "'] .subtitle").html(names.subtitle);
+        });
+    };
+    
     var updateAreasOfInterest = function() {
         if ( !config.aoi ) {
             return;
@@ -355,9 +370,10 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
         }
         var tags = ( layer.tags ) ? layer.tags : "";
         var filtered = false;
+        var names = models.layers.getTitles(layer.id);
         $.each(terms, function(index, term) {
-            filtered = !layer.title.toLowerCase().contains(term) &&
-                       !layer.subtitle.toLowerCase().contains(term) &&
+            filtered = !names.title.toLowerCase().contains(term) &&
+                       !names.subtitle.toLowerCase().contains(term) &&
                        !tags.toLowerCase().contains(term);
             if ( filtered ) {
                 return false;

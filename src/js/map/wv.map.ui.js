@@ -271,11 +271,17 @@ wv.map.ui = wv.map.ui || function(models, config) {
         models.map.extent = self.selected.getExtent().toArray();
     };
 
-    var createLayer = function(def) {
+    var createLayer = function(d) {
+        var proj = models.proj.selected;
+        var def = _.cloneDeep(d);
+        _.merge(def, d.projections[proj.id]);
+        console.log(def);
         var key = layerKey(def);
         if ( def.type === "wmts" ) {
+            console.log("wmts");
             layer = createLayerWMTS(def);
         } else if ( def.type === "wms" ) {
+            console.log("wms");
             layer = createLayerWMS(def);
         } else if ( def.type === "graticule" ) {
             layer = new wv.map.graticule("Graticule");
@@ -312,11 +318,11 @@ wv.map.ui = wv.map.ui || function(models, config) {
 
     var createLayerWMTS = function(def) {
         var proj = models.proj.selected;
-        var source = config.sources[def.projections[proj.id].source];
-        var matrixSet = source.matrixSets[def.projections[proj.id].matrixSet];
+        var source = config.sources[def.source];
+        var matrixSet = source.matrixSets[def.matrixSet];
         var param = {
             url: source.url,
-            layer: def.id,
+            layer: def.layer || def.id,
             style: "",
             format: def.format,
             matrixSet: matrixSet.id,
@@ -340,8 +346,8 @@ wv.map.ui = wv.map.ui || function(models, config) {
 
     var createLayerWMS = function(def) {
         var proj = models.proj.selected;
-        var source = config.sources[def.projections[proj.id].source];
-        var layerParameter = def.projections[proj.id].layer || def.id;
+        var source = config.sources[def.source];
+        var layerParameter = def.layer || def.id;
 
         var transparent = ( def.format === "image/png" );
 
