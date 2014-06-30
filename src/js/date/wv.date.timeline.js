@@ -329,7 +329,7 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
             updateTime();
         });
         models.layers.events.on("change",function(){
-            if(model.start.getTime() !== startDateMs){
+            if(model.start && model.start.getTime() !== startDateMs){
                 startDateMs = model.start.getTime();
                 setData();            
             }
