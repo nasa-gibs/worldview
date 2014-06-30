@@ -100,7 +100,9 @@ wv.map.ui = wv.map.ui || function(models, config) {
         var map = self.selected;
         var key = layerKey(def);
         var layer = _.find(map.layers, { key: key });
-        map.removeLayer(layer);
+        if ( layer ) {
+            map.removeLayer(layer);
+        }
         updateMap();
     };
 
