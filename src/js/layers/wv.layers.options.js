@@ -153,9 +153,13 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
     var onRangeUpdate = function(layerId, min, max) {
         updateRangeLabels(layerId, min, max);
 
+        var count = models.palettes.get(layerId).scale.colors.length;
+        var imin = ( _.isUndefined(min) ) ? 0 : min;
+        var imax = ( _.isUndefined(max) ) ? count - 1: max;
+        
         current = [parseFloat($range.val()[0]), parseFloat($range.val()[1])];
-        if ( !_.isEqual(current, [min, max]) ) {
-            $range.val([min, max]);
+        if ( !_.isEqual(current, [imin, imax]) ) {
+            $range.val([imin, imax]);
         }
     };
 
