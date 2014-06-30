@@ -277,13 +277,10 @@ wv.map.ui = wv.map.ui || function(models, config) {
         var proj = models.proj.selected;
         var def = _.cloneDeep(d);
         _.merge(def, d.projections[proj.id]);
-        console.log(def);
         var key = layerKey(def);
         if ( def.type === "wmts" ) {
-            console.log("wmts");
             layer = createLayerWMTS(def);
         } else if ( def.type === "wms" ) {
-            console.log("wms");
             layer = createLayerWMS(def);
         } else if ( def.type === "graticule" ) {
             layer = new wv.map.graticule("Graticule");
