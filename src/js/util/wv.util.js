@@ -432,7 +432,7 @@ wv.util = (function(self) {
         } else {
             console.log("no metrics"); 
         }
-    }
+    };
     
     return self;
 
