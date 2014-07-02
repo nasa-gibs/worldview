@@ -178,7 +178,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 renderable = models.layers.isRenderable(def.id);
             }
             if ( layer.key !== key || !renderable ) {
-                if ( layer.wvid === "ol_graticule" ) {
+                if ( layer.wvid === "Graticule" ) {
                     layer.setVisibility(0);
                 } else {
                     layer.setOpacity(0);
