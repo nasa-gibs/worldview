@@ -23,6 +23,8 @@ SKIP_LAYERS = [
     "arctic_graticule_3413_reverb",
     "blue_marble_arctic",
     "OMI_SO2_Planetary_Boundary_Layer",
+    "SCAR_Land_Mask",
+    "SCAR_Land_Water_Map",
 ]
 
 prog = os.path.basename(__file__)
@@ -106,4 +108,3 @@ json_options["indent"] = 4
 json_options["separators"] = (',', ': ')
 
 print json.dumps(wv, **json_options)
-
