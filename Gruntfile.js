@@ -310,6 +310,20 @@ module.exports = function(grunt) {
                 }]
             }
         },
+        
+        markdown: {
+            metadata: {
+                files: [
+                    { 
+                      expand: true, 
+                      cwd: "build/options/config/metadata",
+                      src: "**/*.md", 
+                      dest: "build/options/config/metadata",
+                      ext: ".html"
+                    }
+                ]
+            }
+        },
 
         concat: {
             // Combine all the Worldview JavaScript files into one file.
@@ -453,6 +467,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-line-remover");
     grunt.loadNpmTasks("grunt-exec");
     grunt.loadNpmTasks("grunt-git-rev-parse");
+    grunt.loadNpmTasks("grunt-markdown");
     grunt.loadNpmTasks("grunt-minjson");
     grunt.loadNpmTasks("grunt-text-replace");
     grunt.loadNpmTasks("grunt-rename");
@@ -464,6 +479,7 @@ module.exports = function(grunt) {
         "clean",
         "remove:config_src",
         "exec:config",
+        "markdown:metadata",
         "copy:config_src"
     ]);
 
