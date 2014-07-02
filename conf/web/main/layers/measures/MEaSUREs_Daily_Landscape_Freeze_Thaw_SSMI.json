@@ -2,7 +2,7 @@
     "layers": {
         "MEaSUREs_Daily_Landscape_Freeze_Thaw_SSMI": {
             "id":       "MEaSUREs_Daily_Landscape_Freeze_Thaw_SSMI",
-            "title":    "Freeze/Thaw (Daily Landscape) SAMPLE",
+            "title":    "Freeze/Thaw (Daily Landscape) 2000-2010",
             "subtitle": "DMSP / SSMI",
             "group":    "overlays",
             "inactive": "true",
