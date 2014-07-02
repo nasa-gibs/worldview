@@ -417,7 +417,10 @@ wv.map.ui = wv.map.ui || function(models, config) {
             formatOutput: function(mouseXY) {
                 var mouseLonLat = mouseXY.transform(proj.crs, "EPSG:4326");
                 return mouseLonLat.lon.toFixed(3) + "&#176;, " +
-                       mouseLonLat.lat.toFixed(3) + "&#176;";
+                       mouseLonLat.lat.toFixed(3) + "&#176; " + 
+                       // FIXME: Change back to projection model after
+                       // arctic has been backfilled
+                       models.proj.change.crs; 
             }
         });
         controls.push(coordinateControl);
@@ -463,7 +466,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         $zoomOut.click(function() {
             map.zoomOut();
         });
-
+                
         map.addLayer(createLayerBlank(proj));
 
         if ( models.proj.selected.id === proj.id && models.map.extent ) {

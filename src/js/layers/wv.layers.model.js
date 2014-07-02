@@ -176,6 +176,8 @@ wv.layers.model = wv.layers.model || function(models, config) {
         }
         var oldDef = self.active[index];
         var newDef = config.layers[idNew];
+        newDef.visible = true;
+        newDef.opacity = 1.0;
         self.active[index] = newDef;
         self.events.trigger("update");
         self.events.trigger("change");
