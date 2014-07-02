@@ -426,8 +426,14 @@ wv.util = (function(self) {
         return str.replace(/([;&,\.\+\*\~':"\!\^#$%@\[\]\(\)=>\|])/g, '\\$1');
     };
 
-    self.metrics = window.ntptEventTag || function() {};
-
+    self.metrics = function() {
+        if ( ntptEventTag ) {
+            ntptEventTag.apply(null, arguments);
+        } else {
+            console.log("no metrics"); 
+        }
+    }
+    
     return self;
 
 })(wv.util || {});
