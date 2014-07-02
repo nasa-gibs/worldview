@@ -23,6 +23,7 @@
         "src/js/date/wv.date.timeline.js",
 
         "src/js/layers/wv.layers.js",
+        "src/js/layers/wv.layers.metadata.js",
         "src/js/layers/wv.layers.model.js",
         "src/js/layers/wv.layers.sidebar.js",
         "src/js/layers/wv.layers.active.js",

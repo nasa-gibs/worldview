@@ -321,7 +321,10 @@ module.exports = function(grunt) {
                       dest: "build/options/config/metadata",
                       ext: ".html"
                     }
-                ]
+                ],
+                options: {
+                    template: "etc/deploy/metadata.template.html"
+                }
             }
         },
 
