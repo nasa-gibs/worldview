@@ -146,6 +146,31 @@ buster.testCase("wv.util", {
         var wrap = wv.util.wrap(func);
         wrap();
         buster.assert.called(wv.util.error);
+    },
+    
+    "dateAdd: Adds days": function() {
+        var d = new Date(2011, 01, 01);
+        var result = wv.util.dateAdd(d, "day", 4);
+        buster.assert.equals(result.getDate(), 5);
+    },
+    
+    "dateAdd: Adds months": function() {
+        var d = new Date(2011, 01, 01);
+        var result = wv.util.dateAdd(d, "month", 4);
+        buster.assert.equals(result.getMonth(), 5);
+    },
+    
+    "dateAdd: Adds years": function() {
+        var d = new Date(2011, 01, 01);
+        var result = wv.util.dateAdd(d, "year", 4);
+        buster.assert.equals(result.getFullYear(), 2015);
+    },
+    
+    "dateAdd: Throws error on invalid interval": function() {
+        var d = new Date(2011, 01, 01);
+        buster.assert.exception(function() {
+            wv.util.dateAdd(d, "foo", 5);
+        });
     }
 
 });

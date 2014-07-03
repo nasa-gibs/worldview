@@ -344,6 +344,9 @@ wv.layers.model = wv.layers.model || function(models, config) {
             if ( !def.projections[projId] ) {
                 return;
             }
+            if ( spec.dynamic && def.period !== "daily" ) {
+                return;
+            }
             if ( spec.renderable && !self.isRenderable(def.id) ) {
                 return;
             }

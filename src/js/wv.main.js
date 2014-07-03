@@ -139,12 +139,13 @@ $(function() {
         var ui = {};
 
         ui.map = wv.map.ui(models, config);
+        ui.anim = wv.date.anim(models.date, ui.map);
         ui.proj = wv.proj.ui(models, config);
         ui.sidebar = wv.layers.sidebar(models, config);
         ui.activeLayers = wv.layers.active(models, ui, config);
         ui.addLayers = wv.layers.add(models, ui, config);
         //ui.dateSliders = wv.date.sliders(models, config);
-        ui.timeline = wv.date.timeline(models, config);
+        ui.timeline = wv.date.timeline(models, config, ui);
         ui.dateLabel = wv.date.label(models);
         // TEMP: Remove this once the real slider goes in. Search for other
         // comments marked as TEMP
@@ -159,8 +160,8 @@ $(function() {
         }
         ui.link = wv.link.ui(models, config);
         ui.tour = wv.tour(models, ui, config);
-
-        _.merge(wv.ui, ui);
+        ui.info = wv.ui.info(ui);
+        wv.uis = ui;
 
         $(window).resize(function() {
           if ($(window).width() < 720) {
@@ -207,9 +208,7 @@ $(function() {
 
         errorReport();
         //wv.debug.error(parameters);
-
-        ui.info = wv.ui.info(ui);
-
+        
         models.wv.events.trigger("startup");
         elapsed("done");
     };

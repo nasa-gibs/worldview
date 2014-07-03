@@ -17,6 +17,7 @@
         "src/js/proj/wv.proj.ui.js",
 
         "src/js/date/wv.date.js",
+        "src/js/date/wv.date.anim.js",
         "src/js/date/wv.date.model.js",
         "src/js/date/wv.date.sliders.js",
         "src/js/date/wv.date.label.js",

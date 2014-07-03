@@ -216,6 +216,24 @@ wv.util = (function(self) {
         return date;
     };
 
+    self.dateAdd = function(date, interval, amount) {
+        var newDate = new Date(date.getTime());
+        switch ( interval ) {
+            case "day":
+                newDate.setUTCDate(newDate.getUTCDate() + amount);
+                break;
+            case "month":
+                newDate.setUTCMonth(newDate.getUTCMonth() + amount);
+                break;
+            case "year":
+                newDate.setUTCFullYear(newDate.getUTCFullYear() + amount);
+                break;
+            default:
+                throw new Error("[dateAdd] Invalid interval: " + inverval);
+        }
+        return newDate;
+    };
+    
     /**
      * Converts a date into a compact string representation.
      *

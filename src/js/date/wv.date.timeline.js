@@ -20,7 +20,7 @@ wv.date = wv.date || {};
  *
  * @class wv.date.timeline
  */
-wv.date.timeline = wv.date.timeline || function(models, config) {
+wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
 
     var id = "timeline";
@@ -37,7 +37,9 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
     var selectedDateMs = model.selected.getTime();
     var startDateMs = model.start.getTime();
     var endDateMs = model.end.getTime();
-
+    
+    var buttonInterval = "day";
+    
     //this is where the data would go for showing available dates
     var data = [];
     var data2 = [];
@@ -203,6 +205,24 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
             
     var init = function() {
         setData();
+        
+        incrementBtn.mousedown(function() {
+            models.date.add(buttonInterval, 1);
+            ui.anim.interval = buttonInterval;
+            ui.anim.play("forward");
+        });
+        incrementBtn.mouseup(function() {
+            ui.anim.stop();
+        });
+        decrementBtn.mousedown(function() {
+            models.date.add(buttonInterval, -1);
+            ui.anim.interval = buttonInterval;
+            ui.anim.play("reverse");
+        });
+        decrementBtn.mouseup(function() {
+            ui.anim.stop();
+        });
+
         svg = d3.select('#timeline footer')
             .append("svg:svg")
             .attr('width', width + margin.left + margin.right)
@@ -309,13 +329,13 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
             jumpInterval = $(this).attr('id');
             switch(jumpInterval){
                 case 'year-input-group':
-                    bindBtnsToYear();
+                    buttonInterval = "year";
                     break;
                 case 'month-input-group':
-                    bindBtnsToMonth();
+                    buttonInterval = "month";
                     break;
                 case 'day-input-group':
-                    bindBtnsToDay();
+                    buttonInterval = "day";
                     break;
                 default:
                     alert("cannot find selected interval!");
@@ -344,7 +364,6 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
         
         updateTime();
         $('#day-input-group').addClass('button-input-group-selected');
-        bindBtnsToDay();
         $('#day-input-group').select();
         $('.button-input-group').change(function(){
             if($(this).hasClass('button-input-group-selected')){
@@ -428,46 +447,7 @@ wv.date.timeline = wv.date.timeline || function(models, config) {
         }
         $("#timeline-text").css({"left": d3.event.pageX});
     };
-    var bindBtnsToYear = function(){
-        incrementBtn.unbind();
-        decrementBtn.unbind();
-        incrementBtn.click(function(e){
-            selectedDateObj = new Date(model.selected);
-            model.select(new Date(selectedDateObj.setUTCFullYear(model.selected.getUTCFullYear()+1)));
-        });
-        decrementBtn.click(function(e){
-            selectedDateObj = new Date(model.selected);
-            model.select(new Date(selectedDateObj.setUTCFullYear(model.selected.getUTCFullYear()-1)));
-        });
-        
-    };
-    var bindBtnsToMonth = function(){
-        incrementBtn.unbind();
-        decrementBtn.unbind();
-        incrementBtn.click(function(e){
-            selectedDateObj = new Date(model.selected);
-            model.select(new Date(selectedDateObj.setUTCMonth(model.selected.getUTCMonth()+1)));
-        });
-        decrementBtn.click(function(e){
-            selectedDateObj = new Date(model.selected);
-            model.select(new Date(selectedDateObj.setUTCMonth(model.selected.getUTCMonth()-1)));
-        });
-        
-    };
-    var bindBtnsToDay = function(){
-        incrementBtn.unbind();
-        decrementBtn.unbind();
-        incrementBtn.click(function(e){
-            selectedDateObj = new Date(model.selected);
-            model.select(new Date(selectedDateObj.setUTCDate(model.selected.getUTCDate()+1)));
-            
-        });
-        decrementBtn.click(function(e){
-            selectedDateObj = new Date(model.selected);
-            model.select(new Date(selectedDateObj.setUTCDate(model.selected.getUTCDate()-1)));
-            
-        });
-    };
+
     var updateTimeline = function(){
         //update timeline line
         
