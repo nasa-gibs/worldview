@@ -414,7 +414,10 @@ wv.map.ui = wv.map.ui || function(models, config) {
         var $map = $("<div></div>")
             .attr("id", target)
             .attr("data-projection", proj.id)
-            .addClass("map");
+            .addClass("map")
+            .click(function() {
+                $map.focus();
+            });
         $proj[proj.id] = $map;
         $(selector).append($map);
 

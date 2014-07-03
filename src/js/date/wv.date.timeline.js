@@ -61,6 +61,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                             "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
     var self = {};
     
+    // TODO: Prefix names with $ to indicate they are jQuery objects
     var incrementBtn = $("#right-arrow-group");
     var decrementBtn = $("#left-arrow-group");
 
@@ -202,27 +203,38 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .ticks(10);
     };
 
-            
+    var animateForward = function() {
+        if ( ui.anim.active ) {
+            return;
+        }
+        models.date.add(buttonInterval, 1);
+        ui.anim.interval = buttonInterval;
+        ui.anim.play("forward");
+    };
+    
+    var animateReverse = function() {
+        if ( ui.anim.active ) {
+            return;
+        }
+        models.date.add(buttonInterval, -1);
+        ui.anim.interval = buttonInterval;
+        ui.anim.play("reverse");
+    };
+    
+    var animateEnd = function() {
+        ui.anim.stop();
+    };
+    
     var init = function() {
         setData();
         
-        incrementBtn.mousedown(function() {
-            models.date.add(buttonInterval, 1);
-            ui.anim.interval = buttonInterval;
-            ui.anim.play("forward");
-        });
-        incrementBtn.mouseup(function() {
-            ui.anim.stop();
-        });
-        decrementBtn.mousedown(function() {
-            models.date.add(buttonInterval, -1);
-            ui.anim.interval = buttonInterval;
-            ui.anim.play("reverse");
-        });
-        decrementBtn.mouseup(function() {
-            ui.anim.stop();
-        });
-
+        incrementBtn
+            .mousedown(animateForward)
+            .mouseup(animateEnd);
+        decrementBtn
+            .mousedown(animateReverse)
+            .mouseup(animateEnd);
+            
         svg = d3.select('#timeline footer')
             .append("svg:svg")
             .attr('width', width + margin.left + margin.right)

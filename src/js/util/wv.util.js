@@ -452,6 +452,11 @@ wv.util = (function(self) {
         }
     };
     
+    self.key = {
+        LEFT: 37,
+        RIGHT: 39
+    };
+    
     return self;
 
 })(wv.util || {});

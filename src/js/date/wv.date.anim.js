@@ -33,10 +33,12 @@
      };
      
      self.play = function(direction) {
-         if ( self.active ) {
+         if ( self.active && direction !== self.direction ) {
              self.stop();
+         } else if ( self.active ) {
+             return;
          }
-         //console.log("play");
+         console.log("play");
          self.direction = direction || self.direction;
          self.active = true;
          prepareFrame();
