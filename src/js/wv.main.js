@@ -9,6 +9,8 @@
  * All Rights Reserved.
  */
 
+var wvx = wvx || {};
+
 $(function() {
 
     var config;
@@ -111,7 +113,7 @@ $(function() {
         models.link     = wv.link.model(config);
 
         // Export for debugging
-        wv.models = models;
+        wvx.models = models;
 
         var updateDateRange = function() {
             models.date.range(models.layers.dateRange());
@@ -161,7 +163,9 @@ $(function() {
         ui.link = wv.link.ui(models, config);
         ui.tour = wv.tour(models, ui, config);
         ui.info = wv.ui.info(ui);
-        wv.uis = ui;
+        
+        // Export for debugging
+        wvx.ui = ui;
 
         $(window).resize(function() {
           if ($(window).width() < 720) {
