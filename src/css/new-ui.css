@@ -249,11 +249,12 @@ svg#now-line:hover rect.arrow-inner{
 #timeline-zoom input{
     width:100px;
     margin-top:-3px;
+    float:left;
 
 }
 #timeline-hide {
     vertical-align: middle;
-    float: right;
+    display:inline-block;
     background-color:#eee;
     border-radius:5px;
     font-size:12px;
