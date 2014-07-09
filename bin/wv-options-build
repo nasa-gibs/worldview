@@ -18,7 +18,7 @@ SRC_DIR="$BASE/options"
 BUILD_DIR="$BASE/build/options-build"
 DEST_DIR="$BASE/build/options"
 
-set -e
+[ "$FORCE" ] || set -e
 
 die() {
     echo "$PROG: ERROR: $@" >& 2
@@ -41,7 +41,7 @@ fi
 if [ -e "$BUILD_DIR/config.json" ] ; then
     "$BIN_DIR/wv-options-fetch" "$BUILD_DIR/config.json" "$BUILD_DIR/fetch"
     "$BIN_DIR/wv-options-wmts" "$BUILD_DIR/config.json" "$BUILD_DIR/fetch" \
-            "$BUILD_DIR/config/wv.json/_wmts"
+            "$BUILD_DIR/config/wv.json/_wmts" "$BUILD_DIR/colormaps"
 fi
 if [ -e "$BUILD_DIR/colormaps" ] ; then
     mkdir -p "$BUILD_DIR"/config/palettes

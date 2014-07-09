@@ -208,7 +208,7 @@ $(function() {
         } else {
             console.warn("Development version");
         }
-        //wv.debug.layers(ui, models, config);
+        wv.debug.layers(ui, models, config);
 
         errorReport();
         //wv.debug.error(parameters);

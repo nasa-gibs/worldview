@@ -139,7 +139,7 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
         if ( !layer.projections[proj] ) {
             return false;
         }
-        if ( layer.id === "land_water_map" || layer.id === "land_mask" ) {
+        if ( layer.id === "Land_Water_Map" || layer.id === "Land_Mask" ) {
             return false;
         }
         if ( type === "gibs" && layer.period === "daily" && layer.type === "wmts" ) {
@@ -163,21 +163,24 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
         $select.empty();
         var proj = models.proj.selected.id;
         var sortedLayers = _.sortBy(config.layers, ["title", "subtitle"]);
+        console.log(config.layers);
+        console.log(sortedLayers);
         _.each(sortedLayers, function(layer) {
             if ( acceptLayer(layer) ) {
                 var text = layer.title + "; " + layer.subtitle;
                 if ( text.length > 65 ) {
                     text = text.substr(0, 65) + "...";
                 }
-                var option = $("<option></option>")
+                console.log(layer.id);
+                var $option = $("<option></option>")
                     .val(layer.id)
                     .html(text);
-                $select.append(option);
+                $select.append($option);
             }
         });
         models.layers.clear();
         if ( type !== "gibs" ) {
-            models.layers.add("land_water_map");
+            models.layers.add("Land_Water_Map");
         }
         updateLayers.apply($select);
         if ( type === "dataDownload" ) {
