@@ -167,13 +167,14 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
         console.log(sortedLayers);
         _.each(sortedLayers, function(layer) {
             if ( acceptLayer(layer) ) {
-                var text = layer.title + "; " + layer.subtitle;
+                var names = models.layers.getTitles(layer.id);
+                var text = names.title + "; " + names.subtitle;
                 if ( text.length > 65 ) {
                     text = text.substr(0, 65) + "...";
                 }
                 console.log(layer.id);
                 var $option = $("<option></option>")
-                    .val(layer.id)
+                    .val(encodeURIComponent(layer.id))
                     .html(text);
                 $select.append($option);
             }
@@ -189,8 +190,9 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
     };
 
     var updateLayers = function() {
-        var layerId = $(this).val();
-        console.log(config.layers[layerId].title + "; " + config.layers[layerId].subtitle);
+        var layerId = decodeURIComponent($(this).val());
+        var names = models.layers.getTitles(layerId);
+        console.log(names.title + "; " + names.subtitle);
         if ( selectedLayer ) {
             models.layers.remove(selectedLayer);
             models.palettes.clearCustom(selectedLayer);
