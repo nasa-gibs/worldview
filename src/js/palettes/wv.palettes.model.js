@@ -52,7 +52,11 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
         var def = self.active[layerId];
         if ( def && def.custom ) {
             delete def.custom;
-            delete def.lookup;
+            if ( !_.isUndefined(def.min) || !_.isUndefined(def.max) ) {
+                updateLookup(layerId, def);
+            } else {
+                delete def.lookup;
+            }
             self.events.trigger("clear-custom", layerId);
             self.events.trigger("change");
         }

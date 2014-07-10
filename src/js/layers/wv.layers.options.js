@@ -280,15 +280,6 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         return selectorItem(translatedPalette, id, targetPalette.name);
     };
 
-    var selectPalette = function() {
-        var index = $dropDown.selectedIndex;
-        if ( index > 0 ) {
-            models.palettes.add(layer.id, palettes[index].id);
-        } else {
-            models.palettes.remove(layer.id);
-        }
-    };
-
     var onLayerRemoved = function(removedLayer) {
         if ( layer.id === removedLayer.id && $dialog ) {
             $dialog.dialog("close");
