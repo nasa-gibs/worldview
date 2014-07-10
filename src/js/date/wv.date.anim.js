@@ -38,7 +38,7 @@
          } else if ( self.active ) {
              return;
          }
-         console.log("play");
+         notify("play");
          self.direction = direction || self.direction;
          self.active = true;
          prepareFrame();
@@ -53,7 +53,7 @@
      };
      
      self.stop = function() {
-         //console.log("stop");
+         notify("stop");
          if ( timer ) {
              clearTimeout(timer);
              timer = null;
@@ -65,19 +65,19 @@
          if ( !self.active ) {
              return;
          }
-         //console.log("prepare", self);
+         notify("prepare", self);
          loaded = false;
          expired = false;
          var amount = ( self.direction === "forward" ) ? 
                  self.delta : -self.delta;
          var newDate = wv.util.dateAdd(model.selected, self.interval, amount);
          ui.preload(newDate, function() {
-             //console.log("loaded");
+             notify("loaded");
              loaded = true;
              checkFrame(newDate);
          });
          timer = setTimeout(function() {
-             //console.log("expired");
+             notify("expired");
              expired = true;
              checkFrame(newDate);
          }, self.delay);
@@ -85,7 +85,7 @@
      
      var checkFrame = function(newDate) {
          if ( loaded && expired ) {
-             //console.log("advance");
+             notify("advance");
              var updated = model.select(newDate);
              if ( !updated ) {
                  self.stop();
@@ -94,7 +94,9 @@
              }
          }
      };
-          
+    
+     var notify = ( options.debug ) ? console.log : function() {};
+     
      init();
      return self;
  };

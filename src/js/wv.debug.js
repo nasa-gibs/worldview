@@ -85,6 +85,13 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
     var type;
     var selectedLayer;
 
+    var useDebugPanel = {
+        "gibs": true,
+        "layers": true, 
+        "palettes": true,
+        "dataDownload": true
+    };
+    
     var init = function() {
         type = config.parameters.debug;
         if ( config.parameters.debugGIBS ) {
@@ -94,7 +101,7 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
             ui.sidebar.collapse();
             //ui.dateSliders.collapse();
         }
-        if ( type ) {
+        if ( useDebugPanel[type] ) {
             if ( type === "palettes" ) {
                 wv.palettes.loadCustom(config).done(render);
             } else {
@@ -163,8 +170,6 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
         $select.empty();
         var proj = models.proj.selected.id;
         var sortedLayers = _.sortBy(config.layers, ["title", "subtitle"]);
-        console.log(config.layers);
-        console.log(sortedLayers);
         _.each(sortedLayers, function(layer) {
             if ( acceptLayer(layer) ) {
                 var names = models.layers.getTitles(layer.id);
