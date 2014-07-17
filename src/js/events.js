@@ -553,5 +553,3 @@ SOTE.widget.Events.prototype.getStatus = function(){
 };
 
 SOTE.widget.Events.prototype.getValue = function() {};
-
-

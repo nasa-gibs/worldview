@@ -134,6 +134,9 @@ display:inline-block;}
 .x.axis path {
     display: none;
 }
+.x.axis .first text{
+    fill:#fff;
+}
 .line {
     fill: none;
     stroke: none;
@@ -239,7 +242,7 @@ svg#now-line:hover rect.arrow-inner{
     display: inline-block;
     padding: 5px;
     right: 10px;
-      bottom: 80px;
+    bottom: 80px;
     background: none repeat scroll 0% 0% rgb(221, 221, 221);
     height: 15px;
     border-radius: 7px 7px 7px 7px;
@@ -254,7 +257,11 @@ svg#now-line:hover rect.arrow-inner{
 }
 #timeline-hide {
     vertical-align: middle;
+<<<<<<< Updated upstream
     display:inline-block;
+=======
+    float: left;
+>>>>>>> Stashed changes
     background-color:#eee;
     border-radius:5px;
     font-size:12px;

@@ -21,7 +21,10 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
     var alignTo = config.alignTo;
     var containerId = "imagedownload";
     var id = containerId;
-
+    var coords;
+    var resolution = "1";
+    var format = "image/jpeg";
+    
     if ( config.parameters.imagegen ) {
         wv.util.warn("Redirecting image download to: " + BASE_URL +
                "-" + config.parameters.imagegen + ".php");
@@ -53,7 +56,7 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
         var htmlElements =
             "<div class='wv-image-header'>" +
             "<select id='wv-image-resolution'>" +
-                "<option value='1' checked>250m</option>" +
+                "<option value='1' >250m</option>" +
                 "<option value='2' >500m</option>" +
                 "<option value='4' >1km</option>" +
                 "<option value='20'>5km</option>" +
@@ -61,7 +64,7 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
             "</select>Resolution (per pixel)</div>" +
             "<div class='wv-image-header'>" +
             "<select id='wv-image-format'>" +
-                "<option value='image/jpeg'checked>JPEG</option>" +
+                "<option value='image/jpeg'>JPEG</option>" +
                 "<option value='image/png'>PNG</option>" +
                 "<option value='image/geotiff'>GeoTIFF</option>" +
                 "<option  value='image/kmz'>KMZ</option>" +
@@ -108,7 +111,18 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
         if ( models.proj.selected.id !== "geographic" ) {
              $("#wv-image-format-kmz").button("disable");
         }
-        $dialog.dialog("open");
+        $("#wv-image-format").change(function() {
+            format = $("#wv-image-format option:checked").val();
+            update(coords);
+        });
+        
+        $("#wv-image-resolution option").removeAttr("selected");
+        $("#wv-image-resolution option[value='" + resolution + "']").attr("selected", "selected");
+
+        $("#wv-image-format option").removeAttr("selected");
+        $("#wv-image-format option[value='" + format + "']").attr("selected", "selected");
+        
+        $dialog.dialog("open");        
     };
 
     var setPosition = function(){
@@ -118,8 +132,9 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
     };
 
 
-    var update = function(coords){
+    var update = function(c){
         try {
+            coords = c;
             var map = ui.map.selected;
             var bbox = map.getExtent();
             var time = models.date.selected;
@@ -170,12 +185,13 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
             var imgWidth=0; var imgHeight=0;
             var imageRes, imgFileSize, imgFormat;
 
-            $("#wv-image-resolution").change(function () {
-                        imgRes =  $("#wv-image-resolution option:checked").val();
-                        imgWidth =  Math.round((Math.abs(lonlat2.lon - lonlat1.lon) / conversionFactor) / Number(imgRes));
-                        imgHeight = Math.round((Math.abs(lonlat2.lat - lonlat1.lat) / conversionFactor) / Number(imgRes));
-                        imgFilesize =  ((   imgWidth * imgHeight * 24) / 8388608).toFixed(2);
-                        imgFormat = $("#wv-image-format option:checked").val();
+            $("#wv-image-resolution").unbind("change").change(function () {
+                imgRes =  $("#wv-image-resolution option:checked").val();
+                resolution = imgRes;
+                imgWidth =  Math.round((Math.abs(lonlat2.lon - lonlat1.lon) / conversionFactor) / Number(imgRes));
+                imgHeight = Math.round((Math.abs(lonlat2.lat - lonlat1.lat) / conversionFactor) / Number(imgRes));
+                imgFilesize =  ((   imgWidth * imgHeight * 24) / 8388608).toFixed(2);
+                imgFormat = $("#wv-image-format option:checked").val();
                 var invalid = (imgFilesize>250 || imgHeight === 0 || imgWidth === 0);
                 var icon;
                 if ( invalid ) {

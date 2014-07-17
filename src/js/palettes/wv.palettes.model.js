@@ -62,9 +62,11 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
         var def = self.active[layerId] || {};
         var paletteId = config.layers[layerId].palette.id;
         var rendered = config.palettes.rendered[paletteId];
+        def.min = undefined;
         if ( min > 0 ) {
             def.min = min;
         }
+        def.max = undefined;
         if ( max < rendered.scale.colors.length - 1 ) {
             def.max = max;
         }

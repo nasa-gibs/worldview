@@ -59,6 +59,18 @@ wv.layers.model = wv.layers.model || function(models, config) {
         return baselayers.concat(overlays);
     };
 
+    self.getTitles = function(layerId, proj) {
+        proj = proj || models.proj.selected.id;
+        var title, subtitle;
+        if ( config.layers[layerId].projections[proj] ) {
+            title = config.layers[layerId].projections[proj].title;
+            subtitle = config.layers[layerId].projections[proj].subtitle;
+        }
+        title = title || config.layers[layerId].title;
+        subtitle = subtitle || config.layers[layerId].subtitle;
+        return { title: title, subtitle: subtitle };
+    };
+    
     self.available = function(id) {
         var range = self.dateRange({layer: id});
         var date = models.date.selected;
@@ -164,6 +176,8 @@ wv.layers.model = wv.layers.model || function(models, config) {
         }
         var oldDef = self.active[index];
         var newDef = config.layers[idNew];
+        newDef.visible = true;
+        newDef.opacity = 1.0;
         self.active[index] = newDef;
         self.events.trigger("update");
         self.events.trigger("change");
@@ -328,6 +342,9 @@ wv.layers.model = wv.layers.model || function(models, config) {
         _.each(defs, function(def) {
             // Skip if this layer isn't available for the selected projection
             if ( !def.projections[projId] ) {
+                return;
+            }
+            if ( spec.dynamic && def.period !== "daily" ) {
                 return;
             }
             if ( spec.renderable && !self.isRenderable(def.id) ) {

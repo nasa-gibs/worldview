@@ -156,12 +156,14 @@
     <!-- link.dev --> <script type="text/javascript" src="js/proj/wv.proj.ui.js"></script>
 
     <!-- link.dev --> <script type="text/javascript" src="js/date/wv.date.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/date/wv.date.anim.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/date/wv.date.model.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/date/wv.date.label.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/date/wv.date.timeline.js"></script>
 
 
     <!-- link.dev --> <script type="text/javascript" src="js/layers/wv.layers.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/layers/wv.layers.metadata.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/layers/wv.layers.model.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/layers/wv.layers.sidebar.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/layers/wv.layers.active.js"></script>
@@ -242,7 +244,7 @@
                 </footer>
             </section>
             <div id="timeline-zoom">
-              <input type="range" max="110" min="10" step="20" value="1" />
+              <input type="range" max="4" min="0" step="1" value="0" id="zoom-slider" />
               <div id="timeline-hide">Hide Timeline</div>
             </div>
             <svg id="now-line">

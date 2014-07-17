@@ -216,6 +216,24 @@ wv.util = (function(self) {
         return date;
     };
 
+    self.dateAdd = function(date, interval, amount) {
+        var newDate = new Date(date.getTime());
+        switch ( interval ) {
+            case "day":
+                newDate.setUTCDate(newDate.getUTCDate() + amount);
+                break;
+            case "month":
+                newDate.setUTCMonth(newDate.getUTCMonth() + amount);
+                break;
+            case "year":
+                newDate.setUTCFullYear(newDate.getUTCFullYear() + amount);
+                break;
+            default:
+                throw new Error("[dateAdd] Invalid interval: " + inverval);
+        }
+        return newDate;
+    };
+    
     /**
      * Converts a date into a compact string representation.
      *
@@ -426,8 +444,19 @@ wv.util = (function(self) {
         return str.replace(/([;&,\.\+\*\~':"\!\^#$%@\[\]\(\)=>\|])/g, '\\$1');
     };
 
-    self.metrics = window.ntptEventTag || function() {};
-
+    self.metrics = function() {
+        if ( ntptEventTag ) {
+            ntptEventTag.apply(null, arguments);
+        } else {
+            console.log("no metrics"); 
+        }
+    };
+    
+    self.key = {
+        LEFT: 37,
+        RIGHT: 39
+    };
+    
     return self;
 
 })(wv.util || {});

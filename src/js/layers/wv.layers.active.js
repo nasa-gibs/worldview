@@ -159,6 +159,18 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         $visibleButton.append($visibleImage);
         $layer.append($visibleButton);
 
+        if ( config.parameters.metadata && layer.metadata ) {
+            var $metadataButton = $("<i></i>")
+                .addClass("fa")
+                .addClass("fa-info-circle")
+                .addClass("fa-1x")
+                .addClass("wv-layers-metadata-button")
+                .click(function() {
+                    wv.layers.metadata(layer);
+                });
+            $layer.append($metadataButton);
+        }
+        
         var $gearButton = $("<i></i>")
             .addClass("fa")
             .addClass("fa-gear")
@@ -169,8 +181,9 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             });
         $layer.append($gearButton);
 
-        $layer.append($("<h4></h4>").html(layer.title));
-        $layer.append($("<p></p>").html(layer.subtitle));
+        var names = models.layers.getTitles(layer.id);
+        $layer.append($("<h4></h4>").html(names.title));
+        $layer.append($("<p></p>").html(names.subtitle));
 
         if ( layer.palette ) {
             renderLegend($layer, group, layer);

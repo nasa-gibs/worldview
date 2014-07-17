@@ -58,6 +58,8 @@ wv.data.echo.client = wv.data.echo.client || function(spec) {
         }
 
         var deferred = $.Deferred();
+        var metrics = "ev=data-download&" + $.param(queryParameters.data, true);
+        wv.util.metrics(metrics);
         ns.ajax.submit(queryParameters).done(function(data) {
             deferred.resolve(data.feed.entry);
         }).fail(function(jqXHR, textStatus, errorThrown) {
@@ -214,4 +216,3 @@ wv.data.echo.roundTime = function(timeString) {
     time.setUTCMilliseconds(0);
     return time.toISOString();
 };
-

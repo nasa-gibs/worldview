@@ -98,3 +98,10 @@ img.hideReg { height: 14px; width: 20px; }
     margin-right: -37px;
     cursor: pointer;
 }
+
+.wv-layers-metadata-button {
+    float: right;
+    margin-top: 25px;
+    margin-right: -17px;
+    cursor: pointer;
+}

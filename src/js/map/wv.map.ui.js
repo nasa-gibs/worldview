@@ -74,6 +74,43 @@ wv.map.ui = wv.map.ui || function(models, config) {
         updateLayers();
     };
 
+    self.preload = function(date, callback) {
+        var loading = 0;
+        
+        var loadend = function(layer) {
+            if ( layer ) { 
+                layer.events.unregister(loadend);
+            }
+            loading -= 1;
+            //console.log("loading", loading);
+            if ( loading === 0 ) {
+                callback();
+            }
+        };
+
+        var layers = models.layers.get({
+            renderable: true,
+            dynamic: true
+        });
+        loading = layers.length;
+        //console.log("loading", loading);
+        _.each(layers, function(def) {
+            var key = layerKey(def, {date: date});
+            var layer = cache[key];
+            if ( !layer ) {
+                //console.log("preloading", key);
+                layer = createLayer(def, {date: date});
+                layer.events.register("loadend", layer, function() {
+                    loadend(layer);
+                });
+                layer.setOpacity(0);
+                layer.setVisibility(true);
+            } else {
+                loadend();
+            }
+        });
+    };
+    
     var updateLayer = function(def) {
         var map = self.selected;
         var key = layerKey(def);
@@ -82,6 +119,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
             if ( renderable ) {
                 var layer = cache[key];
                 if ( !layer ) {
+                    //console.log("loading", key);
                     layer = createLayer(def);
                 }   
                 self.selected.addLayer(layer);
@@ -100,7 +138,9 @@ wv.map.ui = wv.map.ui || function(models, config) {
         var map = self.selected;
         var key = layerKey(def);
         var layer = _.find(map.layers, { key: key });
-        map.removeLayer(layer);
+        if ( layer ) {
+            map.removeLayer(layer);
+        }
         updateMap();
     };
 
@@ -176,7 +216,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 renderable = models.layers.isRenderable(def.id);
             }
             if ( layer.key !== key || !renderable ) {
-                if ( layer.wvid === "ol_graticule" ) {
+                if ( layer.wvid === "Graticule" ) {
                     layer.setVisibility(0);
                 } else {
                     layer.setOpacity(0);
@@ -271,12 +311,16 @@ wv.map.ui = wv.map.ui || function(models, config) {
         models.map.extent = self.selected.getExtent().toArray();
     };
 
-    var createLayer = function(def) {
-        var key = layerKey(def);
+    var createLayer = function(d, options) {
+        options = options || {};
+        var proj = models.proj.selected;
+        var def = _.cloneDeep(d);
+        _.merge(def, d.projections[proj.id]);
+        var key = layerKey(def, options);
         if ( def.type === "wmts" ) {
-            layer = createLayerWMTS(def);
+            layer = createLayerWMTS(def, options);
         } else if ( def.type === "wms" ) {
-            layer = createLayerWMS(def);
+            layer = createLayerWMS(def, options);
         } else if ( def.type === "graticule" ) {
             layer = new wv.map.graticule("Graticule");
         } else {
@@ -291,8 +335,8 @@ wv.map.ui = wv.map.ui || function(models, config) {
         layer.fnEnabledBackBuffer = layer.applyBackBuffer;
         layer.fnDisabledBackBuffer = function() {};
 
-        layer.setVisibility(false);
         self.selected.addLayer(layer);
+
         return layer;
     };
 
@@ -310,13 +354,13 @@ wv.map.ui = wv.map.ui || function(models, config) {
         return new OpenLayers.Layer("Blank", options);
     };
 
-    var createLayerWMTS = function(def) {
+    var createLayerWMTS = function(def, options) {
         var proj = models.proj.selected;
-        var source = config.sources[def.projections[proj.id].source];
-        var matrixSet = source.matrixSets[def.projections[proj.id].matrixSet];
+        var source = config.sources[def.source];
+        var matrixSet = source.matrixSets[def.matrixSet];
         var param = {
             url: source.url,
-            layer: def.id,
+            layer: def.layer || def.id,
             style: "",
             format: def.format,
             matrixSet: matrixSet.id,
@@ -333,15 +377,18 @@ wv.map.ui = wv.map.ui || function(models, config) {
 
         var layer = new OpenLayers.Layer.WMTS(param);
         if ( def.period === "daily" ) {
-            layer.mergeNewParams({"time": models.date.string()});
+            var date = options.date || models.date.selected;
+            layer.mergeNewParams({
+                "time": wv.util.toISOStringDate(date)
+            });
         }
         return layer;
     };
 
-    var createLayerWMS = function(def) {
+    var createLayerWMS = function(def, options) {
         var proj = models.proj.selected;
-        var source = config.sources[def.projections[proj.id].source];
-        var layerParameter = def.projections[proj.id].layer || def.id;
+        var source = config.sources[def.source];
+        var layerParameter = def.layer || def.id;
 
         var transparent = ( def.format === "image/png" );
 
@@ -351,13 +398,14 @@ wv.map.ui = wv.map.ui || function(models, config) {
             transparent: transparent
         };
         if ( def.period === "daily" ) {
-            params.time = models.date.string();
+            var date = options.date || models.date.selected;
+            params.time = wv.util.toISOStringDate(date);
         }
-        var options = {
+        var mapOptions = {
             tileSize: new OpenLayers.Size(512, 512)
         };
         var layer = new OpenLayers.Layer.WMS(def.title, source.url,
-                params, options);
+                params, mapOptions);
         return layer;
     };
 
@@ -366,7 +414,10 @@ wv.map.ui = wv.map.ui || function(models, config) {
         var $map = $("<div></div>")
             .attr("id", target)
             .attr("data-projection", proj.id)
-            .addClass("map");
+            .addClass("map")
+            .click(function() {
+                $map.focus();
+            });
         $proj[proj.id] = $map;
         $(selector).append($map);
 
@@ -412,7 +463,10 @@ wv.map.ui = wv.map.ui || function(models, config) {
             formatOutput: function(mouseXY) {
                 var mouseLonLat = mouseXY.transform(proj.crs, "EPSG:4326");
                 return mouseLonLat.lon.toFixed(3) + "&#176;, " +
-                       mouseLonLat.lat.toFixed(3) + "&#176;";
+                       mouseLonLat.lat.toFixed(3) + "&#176; " + 
+                       // FIXME: Change back to projection model after
+                       // arctic has been backfilled
+                       models.proj.change.crs; 
             }
         });
         controls.push(coordinateControl);
@@ -458,7 +512,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         $zoomOut.click(function() {
             map.zoomOut();
         });
-
+                
         map.addLayer(createLayerBlank(proj));
 
         if ( models.proj.selected.id === proj.id && models.map.extent ) {
@@ -488,10 +542,16 @@ wv.map.ui = wv.map.ui || function(models, config) {
         return map;
     };
 
-    var layerKey = function(layerDef) {
+    var layerKey = function(layerDef, options) {
+        options = options || {};
         var layerId = layerDef.id;
         var projId = models.proj.selected.id;
-        var date = wv.util.toISOStringDate(models.date.selected);
+        var date;
+        if ( options.date ) {
+            date = wv.util.toISOStringDate(options.date);
+        } else {
+            date = wv.util.toISOStringDate(models.date.selected);
+        }
         var dateId = ( layerDef.period === "daily" ) ? date : "";
         var activePalette = models.palettes.isActive(layerDef.id);
         var typeId = ( activePalette ) ? "canvas" : "image";
