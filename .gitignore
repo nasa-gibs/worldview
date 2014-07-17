@@ -12,3 +12,4 @@ tools
 *.swp
 options
 \#*
+npm-debug.log

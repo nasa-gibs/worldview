@@ -286,7 +286,35 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         decrementBtn
             .mousedown(animateReverse)
             .mouseup(animateEnd);
-            
+        $(document)
+            .keydown(function(event) {
+                if ( event.target.nodeName === "INPUT" ) {
+                    return;
+                }
+                switch ( event.keyCode ) {
+                    case wv.util.key.LEFT:
+                        animateReverse();
+                        event.preventDefault();
+                        break;
+                    case wv.util.key.RIGHT:
+                        animateForward();
+                        event.preventDefault();
+                        break;
+                }
+            })
+            .keyup(function(event) {
+                if ( event.target.nodeName === "INPUT" ) {
+                    return;
+                }
+                switch ( event.keyCode ) { 
+                    case wv.util.key.LEFT:
+                    case wv.util.key.RIGHT:
+                        animateEnd();
+                        event.preventDefault();
+                        break;
+                }
+            });
+        
         svg = d3.select('#timeline footer')
             .append("svg:svg")
             .attr('width', width + margin.left + margin.right)
@@ -413,7 +441,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         //bind click action to interval radio buttons
         var buttons = $('.button-input-group');
         buttons.on('focus',function(e){
-            // e.stopPropagation();
+            //e.stopPropagation();
             // e.preventDefault();
             buttons.removeClass('button-input-group-selected');
             $(this).addClass('button-input-group-selected');
@@ -565,6 +593,8 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
         });
 
+        $("#day-input-group").blur();
+        
     }; // /init
     var incrementZoom = function(){
 
@@ -655,6 +685,10 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         }
         //remove selection when clicking too fast
         //document.getSelection().removeAllRanges();
+
+        
+        // Don't grab focus to allow arrow keys to work
+
         //$('.button-input-group-selected').select();
         data2[0].date = model.selected.getTime();
         data2[1].date = data2[0].date;

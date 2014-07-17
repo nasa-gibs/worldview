@@ -63,11 +63,16 @@ for layer_id in wv["layers"].keys():
         if "warnOnUnexpectedLayer" in opt:
             warn("[%s] Unexpected layer" % layer_id)
         del wv["layers"][layer_id]
+        continue
     if "palette" in layer:
         palette_id = layer["palette"]["id"]
         if not os.path.exists(os.path.join(config_dir, "palettes",
                 palette_id + ".json")):
             error("[%s] Unknown palette: %s" % (layer_id, palette_id))
+    if "group" not in layer:
+        error("[%s] No group defined" % palette_id)
+        del wv["layers"][layer_id]
+        continue
 
 for layer_id in wv["layerOrder"]:
     if layer_id not in wv["layers"]:

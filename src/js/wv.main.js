@@ -141,7 +141,9 @@ $(function() {
         var ui = {};
 
         ui.map = wv.map.ui(models, config);
-        ui.anim = wv.date.anim(models.date, ui.map);
+        ui.anim = wv.date.anim(models.date, ui.map, {
+            debug: parameters.debug === "anim"
+        });
         ui.proj = wv.proj.ui(models, config);
         ui.sidebar = wv.layers.sidebar(models, config);
         ui.activeLayers = wv.layers.active(models, ui, config);
@@ -201,6 +203,13 @@ $(function() {
         }
         */
 
+        // Sink all focus on inputs if click unhandled
+        $(document).click(function(event) {
+            if ( event.target.nodeName !== "INPUT" ) {
+                $("input").blur();
+            }
+        });
+        
         // Console notifications
         if ( wv.brand.release() ) {
             console.info(wv.brand.NAME + " - Version " + wv.brand.VERSION +
@@ -208,7 +217,7 @@ $(function() {
         } else {
             console.warn("Development version");
         }
-        //wv.debug.layers(ui, models, config);
+        wv.debug.layers(ui, models, config);
 
         errorReport();
         //wv.debug.error(parameters);

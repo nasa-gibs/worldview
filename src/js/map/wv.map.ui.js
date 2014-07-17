@@ -45,7 +45,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         models.layers.events.on("opacity", updateOpacity);
         models.layers.events.on("update", updateLayers);
         models.date.events.on("select", updateDate);
-        models.palettes.events.on("set-custom", addPalette);
+        models.palettes.events.on("set-custom", applyLookup);
         models.palettes.events.on("clear-custom", removePalette);
         models.palettes.events.on("range", updatePalette);
         models.palettes.events.on("update", updateAll);
@@ -256,7 +256,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         }
     };
 
-    var addPalette = function(layerId, paletteId) {
+    var applyLookup = function(layerId) {
         var def = config.layers[layerId];
         var key = layerKey(def);
         var mapLayer = _.find(self.selected.layers, { key: key });
@@ -275,8 +275,12 @@ wv.map.ui = wv.map.ui || function(models, config) {
 
     var removePalette = function(layerId) {
         var layer = config.layers[layerId];
-        updateLayer(layer);
-        updateMap();
+        if ( models.palettes.isActive(layerId) ) {
+            applyLookup(layerId);
+        } else {
+            updateLayer(layer);
+            updateMap();
+        }
     };
 
     var updatePalette = function(layerId) {
@@ -553,8 +557,8 @@ wv.map.ui = wv.map.ui || function(models, config) {
             date = wv.util.toISOStringDate(models.date.selected);
         }
         var dateId = ( layerDef.period === "daily" ) ? date : "";
-        var activePalette = models.palettes.isActive(layerDef.id);
-        var typeId = ( activePalette ) ? "canvas" : "image";
+        var isActive = models.palettes.isActive(layerDef.id);
+        var typeId = ( isActive ) ? "canvas" : "image";
         return [layerId, projId, dateId, typeId].join(":");
     };
 

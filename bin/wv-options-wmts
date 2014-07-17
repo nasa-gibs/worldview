@@ -15,6 +15,7 @@ import json
 from optparse import OptionParser
 import os
 import sys
+import urllib2 as urllib
 import xmltodict
 
 prog = os.path.basename(__file__)
@@ -24,17 +25,18 @@ help_description = """\
 Extracts configuration information from a WMTS GetCapabilities file.
 """
 
-parser = OptionParser(usage="Usage: %s <config_file> <input_dir> <output_dir>" % prog,
+parser = OptionParser(usage="Usage: %s <config_file> <input_dir> <output_dir> <colormaps_dir>" % prog,
                       version="%s version %s" % (prog, version),
                       epilog=help_description)
 (options, args) = parser.parse_args()
 
-if len(args) != 3:
+if len(args) != 4:
     parser.error("Invalid number of arguments")
 
 config_file = args[0]
 input_dir = args[1]
 output_dir = args[2]
+colormaps_dir = args[3]
 
 with open(config_file) as fp:
     config = json.load(fp)
@@ -54,10 +56,14 @@ total_layer_count = 0
 total_warning_count = 0
 total_error_count = 0
 
+json_options = {}
+json_options["indent"] = 4
+json_options["separators"] = (',', ': ')
+
 class SkipException(Exception):
     pass
 
-def process_layer(gc_layer, wv_layers):
+def process_layer(gc_layer, wv_layers, colormaps):
     id = gc_layer["ows:Identifier"]
     if id in skip:
         raise SkipException(id)
@@ -95,8 +101,19 @@ def process_layer(gc_layer, wv_layers):
             "matrixSet": matrixSet
         }
     }
+    
+    # Colormap links
+    if "ows:Metadata" in gc_layer:
+        # FIXME: Assumes that there is only one metdata element
+        colormap_link = gc_layer["ows:Metadata"]["@xlink:href"]
+        colormap_file = os.path.basename(colormap_link)
+        colormap_id = os.path.splitext(colormap_file)[0]
+        colormaps[colormap_id] = colormap_link
+        wv_layer["palette"] = {
+            "id": colormap_id
+        }
 
-def process_entry(entry):
+def process_entry(entry, colormaps):
     layer_count = 0
     warning_count = 0
     error_count = 0
@@ -121,7 +138,7 @@ def process_entry(entry):
         id = gc_layer["ows:Identifier"]
         try:
             layer_count += 1
-            process_layer(gc_layer, wv_layers)
+            process_layer(gc_layer, wv_layers, colormaps)
         except SkipException as se:
             warning_count += 1
             sys.stderr.write("%s: WARNING: [%s] Skipping\n" % (prog, id))
@@ -146,25 +163,41 @@ def process_entry(entry):
             ]
         }
 
-    json_options = {}
-    json_options["indent"] = 4
-    json_options["separators"] = (',', ': ')
-
     output_file = os.path.join(output_dir, entry["to"])
     with open(output_file, "w") as fp:
         json.dump(wv, fp, **json_options)
-
     print "%s: %d error(s), %d warning(s), %d layers for %s" % (prog,
             error_count, warning_count, layer_count, entry["source"])
     return [error_count, warning_count, layer_count]
 
+def fetch_colormaps(colormaps):
+    print "%s: Fetching %d colormaps" % (prog, len(colormaps))
+    sys.stdout.flush()
+    errors = 0
+    for link in colormaps.values():
+        try:
+            response = urllib.urlopen(link)
+            contents = response.read()
+            output_file = os.path.join(colormaps_dir, os.path.basename(link))
+            with open(output_file, "w") as fp:
+                fp.write(contents)
+        except Exception as e:
+            errors += 1
+            sys.stderr.write("%s: ERROR: Unable to fetch %s: %s" % 
+                (prog, link, str(e)))
+
+    return errors
+    
 # Main
+colormaps = {}
 for entry in entries:
-    error_count, warning_count, layer_count = process_entry(entry)
+    error_count, warning_count, layer_count = process_entry(entry, colormaps)
     total_error_count += error_count
     total_warning_count += warning_count
     total_layer_count += layer_count
 
+total_error_count += fetch_colormaps(colormaps)
+    
 print "%s: %d error(s), %d warning(s), %d layers" % (prog, total_error_count,
         total_warning_count, total_layer_count)
 

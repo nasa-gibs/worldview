@@ -85,6 +85,13 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
     var type;
     var selectedLayer;
 
+    var useDebugPanel = {
+        "gibs": true,
+        "layers": true, 
+        "palettes": true,
+        "dataDownload": true
+    };
+    
     var init = function() {
         type = config.parameters.debug;
         if ( config.parameters.debugGIBS ) {
@@ -94,7 +101,7 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
             ui.sidebar.collapse();
             //ui.dateSliders.collapse();
         }
-        if ( type ) {
+        if ( useDebugPanel[type] ) {
             if ( type === "palettes" ) {
                 wv.palettes.loadCustom(config).done(render);
             } else {
@@ -139,7 +146,7 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
         if ( !layer.projections[proj] ) {
             return false;
         }
-        if ( layer.id === "land_water_map" || layer.id === "land_mask" ) {
+        if ( layer.id === "Land_Water_Map" || layer.id === "Land_Mask" ) {
             return false;
         }
         if ( type === "gibs" && layer.period === "daily" && layer.type === "wmts" ) {
@@ -165,19 +172,21 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
         var sortedLayers = _.sortBy(config.layers, ["title", "subtitle"]);
         _.each(sortedLayers, function(layer) {
             if ( acceptLayer(layer) ) {
-                var text = layer.title + "; " + layer.subtitle;
+                var names = models.layers.getTitles(layer.id);
+                var text = names.title + "; " + names.subtitle;
                 if ( text.length > 65 ) {
                     text = text.substr(0, 65) + "...";
                 }
-                var option = $("<option></option>")
-                    .val(layer.id)
+                console.log(layer.id);
+                var $option = $("<option></option>")
+                    .val(encodeURIComponent(layer.id))
                     .html(text);
-                $select.append(option);
+                $select.append($option);
             }
         });
         models.layers.clear();
         if ( type !== "gibs" ) {
-            models.layers.add("land_water_map");
+            models.layers.add("Land_Water_Map");
         }
         updateLayers.apply($select);
         if ( type === "dataDownload" ) {
@@ -186,8 +195,9 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
     };
 
     var updateLayers = function() {
-        var layerId = $(this).val();
-        console.log(config.layers[layerId].title + "; " + config.layers[layerId].subtitle);
+        var layerId = decodeURIComponent($(this).val());
+        var names = models.layers.getTitles(layerId);
+        console.log(names.title + "; " + names.subtitle);
         if ( selectedLayer ) {
             models.layers.remove(selectedLayer);
             models.palettes.clearCustom(selectedLayer);

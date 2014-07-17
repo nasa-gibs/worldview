@@ -7,6 +7,15 @@
     z-index: 0;
 }
 
+.olHandlerBoxZoomBox {
+    border: 2px solid red;
+    position: absolute;
+    background-color: white;
+    opacity: 0.50;
+    font-size: 1px;
+    filter: alpha(opacity=50);
+}
+
 .ui-body-c {
     text-shadow: none;
 }
