@@ -37,9 +37,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var selectedDateMs = model.selected.getTime();
     var startDateMs = model.start.getTime();
     var endDateMs = model.end.getTime();
-    
-    var buttonInterval = "day";
-    
+        
     //this is where the data would go for showing available dates
     var data = [];
     var data2 = [];
@@ -203,21 +201,21 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .ticks(10);
     };
 
-    var animateForward = function() {
+    var animateForward = function(interval) {
         if ( ui.anim.active ) {
             return;
         }
-        models.date.add(buttonInterval, 1);
-        ui.anim.interval = buttonInterval;
+        models.date.add(interval, 1);
+        ui.anim.interval = interval;
         ui.anim.play("forward");
     };
     
-    var animateReverse = function() {
+    var animateReverse = function(interval) {
         if ( ui.anim.active ) {
             return;
         }
-        models.date.add(buttonInterval, -1);
-        ui.anim.interval = buttonInterval;
+        models.date.add(interval, -1);
+        ui.anim.interval = interval;
         ui.anim.play("reverse");
     };
     
@@ -241,11 +239,19 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 }
                 switch ( event.keyCode ) {
                     case wv.util.key.LEFT:
-                        animateReverse();
+                        animateReverse("day");
                         event.preventDefault();
                         break;
                     case wv.util.key.RIGHT:
-                        animateForward();
+                        animateForward("day");
+                        event.preventDefault();
+                        break;
+                    case wv.util.key.UP:
+                        animateForward("month");
+                        event.preventDefault();
+                        break;
+                    case wv.util.key.DOWN:
+                        animateReverse("month");
                         event.preventDefault();
                         break;
                 }
@@ -257,6 +263,8 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 switch ( event.keyCode ) { 
                     case wv.util.key.LEFT:
                     case wv.util.key.RIGHT:
+                    case wv.util.key.UP:
+                    case wv.util.key.DOWN:
                         animateEnd();
                         event.preventDefault();
                         break;
