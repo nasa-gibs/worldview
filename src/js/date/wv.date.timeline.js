@@ -227,10 +227,14 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         setData();
         
         incrementBtn
-            .mousedown(animateForward)
+            .mousedown(function() {
+                animateForward("day");
+            })
             .mouseup(animateEnd);
         decrementBtn
-            .mousedown(animateReverse)
+            .mousedown(function() {
+                animateReverse("day");
+            })
             .mouseup(animateEnd);
         $(document)
             .keydown(function(event) {
