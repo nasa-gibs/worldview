@@ -369,7 +369,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
             format: def.format,
             matrixSet: matrixSet.id,
             maxResolution: matrixSet.maxResolution,
-            serverResolutions: matrixSet.serverResolutions,
+            serverResolutions: matrixSet.resolutions,
             maxExtent: proj.maxExtent,
             tileSize: new OpenLayers.Size(matrixSet.tileSize[0],
                                           matrixSet.tileSize[1])
