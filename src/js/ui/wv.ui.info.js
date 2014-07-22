@@ -44,6 +44,8 @@ wv.ui.info = wv.ui.info || (function(ui) {
     var $new = $("<li><a><i class='ui-icon fa fa-flag fa-fw'></i>What's New</a></li>");
     var $about = $("<li><a><i class='ui-icon fa fa-file fa-fw'></i>About</a></li>");
 
+    var feedbackInit = false;
+    
     $menuItems.append($feedback);
     $menuItems.append($tour);
     $menuItems.append($new);
@@ -70,6 +72,16 @@ wv.ui.info = wv.ui.info || (function(ui) {
         }
     });
 
+    $feedback.click(function(event) {
+        if ( window.feedback ) {
+            event.preventDefault();
+            if ( !feedbackInit ) {
+                feedback.init({showIcon: false});
+            }
+            feedback.showForm();
+        }
+    });
+    
     $new.click(function() {
         if ( wv.util.browser.small ) {
             window.open("brand/pages/new.html?v=@BUILD_NONCE@", "_blank");
