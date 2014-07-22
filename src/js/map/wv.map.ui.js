@@ -141,7 +141,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         if ( layer ) {
             map.removeLayer(layer);
         }
-        updateMap();
+        updateLayers();
     };
 
     var updateVisibility = function(def, visible) {
@@ -175,7 +175,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         _.each(defs, function(def) {
             addLayer(def);
         });
-        updateMap();
+        updateLayers();
     };
 
     var purgeCache = function() {
@@ -197,7 +197,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 }
             });
             stale = [];
-            updateMap();
+            updateLayers();
         }, 500);
     };
 
@@ -270,7 +270,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 });
             });
         }
-        updateMap();
+        updateLayers();
     };
 
     var removePalette = function(layerId) {
