@@ -60,6 +60,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         self.selected = self.proj[models.proj.selected.id];
         reloadLayers();
         showMap(self.selected);
+        updateExtent();
     };
 
     var hideMap = function(map) {
