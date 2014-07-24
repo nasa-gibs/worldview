@@ -325,6 +325,8 @@ wv.map.ui = wv.map.ui || function(models, config) {
             layer = createLayerWMTS(def, options);
         } else if ( def.type === "wms" ) {
             layer = createLayerWMS(def, options);
+        } else if ( def.type === "xyz" ) {
+            layer = createLayerXYZ(def);
         } else if ( def.type === "graticule" ) {
             layer = new wv.map.graticule("Graticule");
         } else {
@@ -389,6 +391,17 @@ wv.map.ui = wv.map.ui || function(models, config) {
         return layer;
     };
 
+    var createLayerXYZ = function(def) {
+        var source = config.sources[def.source];
+        var url = source.url + "/" + def.url;
+        var layer = new OpenLayers.Layer.XYZ(def.title, url, {
+            tileSize: new OpenLayers.Size(def.tileSize[0],
+                                          def.tileSize[1]),
+            transitionEffect: "none"
+        });
+        return layer;
+    };
+    
     var createLayerWMS = function(def, options) {
         var proj = models.proj.selected;
         var source = config.sources[def.source];
