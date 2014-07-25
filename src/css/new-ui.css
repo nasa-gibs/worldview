@@ -14,6 +14,7 @@
     position:absolute;
     bottom:10px;
     left:10px;
+    right:10px;
     border:1px solid #333;
     background: #f5f5f5; /* Old browsers */
     background: -moz-linear-gradient(top,  #f5f5f5 0%, #e2e2e2 50%, #c2c2c2 100%); /* FF3.6+ */
@@ -176,7 +177,9 @@ display:inline-block;}
 }
 #timeline-zoom{
     display:inline-block;
-    float:right;
+    vertical-align:middle;
+    margin-left:10px;
+    /*float:right;*/
 }
 #timeline-zoom a.zoom-btn{
     display:block;
