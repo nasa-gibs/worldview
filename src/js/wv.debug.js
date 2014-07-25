@@ -98,7 +98,7 @@ wv.debug.config = wv.debug.config || function(config) {
             config.layers.debug_tile.projections[proj.id] = {
                 "source": "debug_tile",
                 "matrixSet": tileSize
-            }
+            };
         });
         config.sources.debug_tile = {
             url: "service/debug_tile.cgi",
