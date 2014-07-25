@@ -52,7 +52,7 @@ $(function() {
         config.parameters = parameters;
 
         // Export for debugging
-        wv.config = config;
+        wvx.config = config;
 
         // Load any additional scripts as needed
         if ( config.scripts ) {

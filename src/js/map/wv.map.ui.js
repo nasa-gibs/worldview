@@ -60,6 +60,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         self.selected = self.proj[models.proj.selected.id];
         reloadLayers();
         showMap(self.selected);
+        updateExtent();
     };
 
     var hideMap = function(map) {
@@ -141,7 +142,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         if ( layer ) {
             map.removeLayer(layer);
         }
-        updateMap();
+        updateLayers();
     };
 
     var updateVisibility = function(def, visible) {
@@ -175,7 +176,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         _.each(defs, function(def) {
             addLayer(def);
         });
-        updateMap();
+        updateLayers();
     };
 
     var purgeCache = function() {
@@ -197,7 +198,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 }
             });
             stale = [];
-            updateMap();
+            updateLayers();
         }, 500);
     };
 
@@ -270,7 +271,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 });
             });
         }
-        updateMap();
+        updateLayers();
     };
 
     var removePalette = function(layerId) {
@@ -325,6 +326,8 @@ wv.map.ui = wv.map.ui || function(models, config) {
             layer = createLayerWMTS(def, options);
         } else if ( def.type === "wms" ) {
             layer = createLayerWMS(def, options);
+        } else if ( def.type === "xyz" ) {
+            layer = createLayerXYZ(def);
         } else if ( def.type === "graticule" ) {
             layer = new wv.map.graticule("Graticule");
         } else {
@@ -369,7 +372,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
             format: def.format,
             matrixSet: matrixSet.id,
             maxResolution: matrixSet.maxResolution,
-            serverResolutions: matrixSet.serverResolutions,
+            serverResolutions: matrixSet.resolutions,
             maxExtent: proj.maxExtent,
             tileSize: new OpenLayers.Size(matrixSet.tileSize[0],
                                           matrixSet.tileSize[1])
@@ -389,6 +392,17 @@ wv.map.ui = wv.map.ui || function(models, config) {
         return layer;
     };
 
+    var createLayerXYZ = function(def) {
+        var source = config.sources[def.source];
+        var url = source.url + "/" + def.url;
+        var layer = new OpenLayers.Layer.XYZ(def.title, url, {
+            tileSize: new OpenLayers.Size(def.tileSize[0],
+                                          def.tileSize[1]),
+            transitionEffect: "none"
+        });
+        return layer;
+    };
+    
     var createLayerWMS = function(def, options) {
         var proj = models.proj.selected;
         var source = config.sources[def.source];

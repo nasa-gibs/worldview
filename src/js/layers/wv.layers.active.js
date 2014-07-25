@@ -126,7 +126,8 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             .addClass("item")
             .attr("data-layer", layer.id);
 
-        var $removeButton = $("<a></a>");
+        var $removeButton = $("<a></a>")
+            .addClass("button");
         var $removeImage = $("<img></img>")
             .attr("id", "close" + group.id + encodeURIComponent(layer.id))
             .addClass("close")
@@ -138,7 +139,8 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         $layer.append($removeButton);
 
         var $visibleButton = $("<a></a>")
-            .addClass("hdanchor");
+            .addClass("hdanchor")
+            .addClass("button");
         var $visibleImage = $("<img></img>")
             .attr("id", "hide" + encodeURIComponent(layer.id))
             .attr("data-layer", layer.id)

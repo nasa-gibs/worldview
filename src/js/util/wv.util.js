@@ -445,7 +445,7 @@ wv.util = (function(self) {
     };
 
     self.metrics = function() {
-        if ( ntptEventTag ) {
+        if ( window.ntptEventTag ) {
             ntptEventTag.apply(null, arguments);
         } else {
             console.log("no metrics"); 
@@ -454,7 +454,9 @@ wv.util = (function(self) {
     
     self.key = {
         LEFT: 37,
-        RIGHT: 39
+        RIGHT: 39,
+        UP: 38,
+        DOWN: 40
     };
     
     return self;

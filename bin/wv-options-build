@@ -32,7 +32,8 @@ mkdir -p "$BUILD_DIR" "$DEST_DIR"
 
 cp -r "$SRC_DIR"/* "$BUILD_DIR"
 
-mkdir "$DEST_DIR/config"
+mkdir -p "$DEST_DIR/config"
+mkdir -p "$BUILD_DIR/colormaps"
 
 if [ -e "$BUILD_DIR/features.json" ] ; then
     cp "$BUILD_DIR/features.json" "$BUILD_DIR/config/wv.json/_features"

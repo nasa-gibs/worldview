@@ -145,6 +145,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var redrawAxis = function(){
         timeline.select(".x.axis").call(xAxis.tickSize(-height).tickPadding(10));
 
+
     };
     
     var updateTime = function() {
@@ -161,6 +162,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         //$('.button-input-group-selected').select();
         //data2[0].date = model.selected.getTime();
         //data2[1].date = data2[0].date;
+
     };
 
     var resizeWindow = function(){
@@ -174,10 +176,14 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var init = function() {
         setData(); //x,y,xAxis,yAxis,zoom
         incrementBtn
-            .mousedown(animateForward)
+            .mousedown(function() {
+                animateForward("day");
+            })
             .mouseup(animateEnd);
         decrementBtn
-            .mousedown(animateReverse)
+            .mousedown(function() {
+                animateReverse("day");
+            })
             .mouseup(animateEnd);
         $(document)
             .keydown(function(event) {
@@ -186,11 +192,19 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 }
                 switch ( event.keyCode ) {
                     case wv.util.key.LEFT:
-                        animateReverse();
+                        animateReverse("day");
                         event.preventDefault();
                         break;
                     case wv.util.key.RIGHT:
-                        animateForward();
+                        animateForward("day");
+                        event.preventDefault();
+                        break;
+                    case wv.util.key.UP:
+                        animateForward("month");
+                        event.preventDefault();
+                        break;
+                    case wv.util.key.DOWN:
+                        animateReverse("month");
                         event.preventDefault();
                         break;
                 }
@@ -202,6 +216,8 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 switch ( event.keyCode ) { 
                     case wv.util.key.LEFT:
                     case wv.util.key.RIGHT:
+                    case wv.util.key.UP:
+                    case wv.util.key.DOWN:
                         animateEnd();
                         event.preventDefault();
                         break;
