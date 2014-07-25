@@ -58,13 +58,13 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     }, 100, { trailing: true });
     var zoomLevels = function(){
         
-    }
+    };
     var selection = d3.svg.line()
         .x(function(d){
-            return x(d.x)
+            return x(d.x);
         })
         .y(function(d){
-            return y(d.y)
+            return y(d.y);
         });
     var setData = function(){
         data2 = [
