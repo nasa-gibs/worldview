@@ -165,7 +165,7 @@ module.exports = function(grunt) {
 
             // Enable executable bits for all CGI programs
             cgi_echo: {
-                command: "chmod 755 build/<%=pkg%>*/web/service/echo.cgi"
+                command: "chmod 755 build/<%=pkg%>*/web/service/*.cgi"
             },
 
             cgi_shorten: {

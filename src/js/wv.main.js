@@ -54,6 +54,8 @@ $(function() {
         // Export for debugging
         wvx.config = config;
 
+        wv.debug.config(config);
+        
         // Load any additional scripts as needed
         if ( config.scripts ) {
             _.each(config.scripts, function(script) {
