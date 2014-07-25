@@ -15,9 +15,18 @@
     bottom:10px;
     left:10px;
     border:1px solid #333;
+    background: #f5f5f5; /* Old browsers */
+    background: -moz-linear-gradient(top,  #f5f5f5 0%, #e2e2e2 50%, #c2c2c2 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f5f5f5), color-stop(50%,#e2e2e2), color-stop(100%,#c2c2c2)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #f5f5f5 0%,#e2e2e2 50%,#c2c2c2 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #f5f5f5 0%,#e2e2e2 50%,#c2c2c2 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #f5f5f5 0%,#e2e2e2 50%,#c2c2c2 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  #f5f5f5 0%,#e2e2e2 50%,#c2c2c2 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f5f5f5', endColorstr='#c2c2c2',GradientType=0 ); /* IE6-9 */
+
 }
-#timeline footer text{
-    font-size:20px;
+#timeline-footer text{
+    font-size:14px;
     font-weight:normal;
     font-family:'Arial Narrow';
     font-style:normal;
@@ -32,18 +41,40 @@
     fill-opacity:1;
     stroke:none;
 }
+.x.axis .tick{
+    cursor:pointer;
+}
 .x.axis .tick text{
-    fill:#ccc;
+    fill:#1a1a1a;
 }
-#timeline header{
-    background:url("../images/bg-not-front.gif") transparent 20% 50% no-repeat;
+.x.axis .tick line {
+    stroke-width:3;
+    stroke-miterlimit:4;
+    stroke-dasharray:3,9;
+    stroke:#727272;
+    stroke-linecap:butt;
+    stroke-linejoin:miter;
+    stroke-miterlimit:4;
 }
-#timeline header input{
-    
+.x.axis .tick rect {
+    fill:#e2e2e2;
+    fill-opacity:0;
+}
+.x.axis .tick:hover rect{
+    fill:#1a1a1a;
+    fill-opacity:1;
+}
+.x.axis .tick:hover text {
+    fill:#e2e2e2;
+}
+#timeline-header{
+    background:;
+}
+#timeline-header input{
     height:60px;
     background:transparent;
     border:1px solid transparent;
-    color:#ccc;
+    color:#1a1a1a;
     font-size:33px;
     font-family:'Arial Narrow', sans-serif;
     vertical-align:middle;
@@ -52,32 +83,32 @@
     -webkit-box-sizing:border-box;
 }
 @media all{
-    #timeline header input::selection{
+    #timeline-header input::selection{
         background:#2059a6;
     }
-    #timeline header input::-moz-selection{
+    #timeline-header input::-moz-selection{
         background:#2059a6;
     }
-    #timeline header input::-webkit-selection{
+    #timeline-header input::-webkit-selection{
         background:#2059a6;
     }
 }
 
 /* Temporary sizing of inputs until something more dynamic can be made */
-#timeline header input:nth-child(2){width:2em;padding:3px;}
-#timeline header input:nth-child(3){width:1.8em;padding:3px;}
-#timeline header input:nth-child(4){width:1.1em;padding:3px;}
+#timeline-header input:nth-child(2){width:2em;padding:3px;}
+#timeline-header input:nth-child(3){width:1.8em;padding:3px;}
+#timeline-header input:nth-child(4){width:1.1em;padding:3px;}
 
-#timeline header .focus-guard{
+#timeline-header .focus-guard{
 /*    display:none;
 */}
-#timeline header input:hover{
-    border-color:#fff;
+#timeline-header input:hover{
+    border-color:#1a1a1a;
 }
-#timeline header .button-input-group-selected{
-    border-color:#fff;
+#timeline-header .button-input-group-selected{
+    border-color:#1a1a1a;
 }
-#timeline header div{
+#timeline-header div{
 display:inline-block;}
 .button-action-group{
   -moz-user-select: none;
@@ -85,85 +116,50 @@ display:inline-block;}
   -ms-user-select: none;
 }
 
-#timeline header svg {
+#timeline-header svg {
     width:40px;
     height:60px;
     vertical-align:middle;
 }
-#timeline header>div:hover {
-    background-color:#ffffff;
+#timeline-header>div:hover {
+    background-color:#1a1a1a;
     cursor:pointer;
 }
-#timeline header>div:hover .arrow{
-    fill:#1a1a1a;
+#timeline-header>div:hover .arrow{
+    fill:#e2e2e2;
 }
-#timeline header svg .arrow{
+#timeline-header svg .arrow{
     -webkit-transform: translate(8px,0px);
-    fill:#cccccc;
+    fill:#1a1a1a;
     fill-opacity:1;
     stroke:none;
 }
-#timeline header, #timeline footer{
+#timeline-header, #timeline-footer{
     display:inline-block;
     vertical-align:middle;
 }
-#timeline footer{
-    height:60px;
-    margin-left:-5px;
-    background:rgba(0,0,0,0.8);
+#timeline-footer{
+    height:85px;
+    margin-left:0px;
+    
 }
-
-
 
 /* Timeline svg classes */
-.plot {
-    fill: rgba(250, 250, 255, 0);
-}
-.grid .tick {
-    stroke: lightgrey;
-    opacity: 0.7;
-}
-.grid path {
-    stroke-width: 0;
-}
+
+
 .axis path, .axis line {
     fill: none;
-    stroke: none;
+    stroke: #1a1a1a;
     shape-rendering: crispEdges;
 }
 .x.axis path {
     display: none;
 }
-.x.axis .first text{
-    fill:#fff;
-}
-.line {
-    fill: none;
-    stroke: none;
-    
-}
-.line2 {
-    fill: transparent;
-    stroke: transparent;
-    stroke-width: 1px;
-    cursor:pointer;
+.x.axis .selection{
+    display:block;
+    stroke:steelblue;
 }
 
-.hoverkill{
-    fill: steelblue;
-    stroke-width:1px;
-    stroke:transparent;
-}
-.hover-line{
-    fill:none;
-    stroke:#ff2a2a;
-    stroke-width: 3px;
-}
-.hover-text{
-    fill:red;
-    font-weight:normal;
-    font-size:12px;
-}
 #timeline-text{
     color:black;
     font-size:14px;
@@ -178,98 +174,16 @@ display:inline-block;}
     border-radius:5px;
     z-index:10000;
 }
-svg#now-line{
-    position:absolute;
-    bottom:0px;
-    left:0;
-    width:18px;
-    height:79px;
-    cursor:pointer;
-}
-
-.arrow-outer {
-    fill:#548edd;
-    fill-opacity:1;
-    stroke:#222222;
-    stroke-width:0.5;
-    stroke-opacity:1;
-}
-svg#now-line rect.arrow-inner{
-    stroke-width:0.5;
-    stroke:transparent;
-}
-svg#now-line:hover .arrow-outer{
-    stroke:#fff;
-}
-svg#now-line:hover rect.arrow-inner{
-    stroke:#fff;
-}
-.arrow-inner{
-    fill:#2059a6;
-    fill-opacity:1;
-}
-
-.arrow-inner-line{
-    fill:#222222;
-    fill-opacity:1;
-}
-#zoombtns{
-    position:absolute;
-    z-index:9999;
-    left:280px;
-    bottom:50px;
-    background:rgba(160,160,160,1);
-    cursor:pointer;
-    display:none;
-}
-#zoombtns a{
-    color:#000;
-    margin:0 3px;
-}
-#zoombtns a:hover{
-    text-decoration:underline;
-}
-.selected-int{
-    font-weight:bold;
-    text-decoration:underline;
-}
 #timeline-zoom{
-    position: absolute;
-    z-index: 9999;
-    text-decoration: none;
-    color: black;
-    font-weight: bold;
-    display: inline-block;
-    padding: 5px;
-    right: 10px;
-    bottom: 80px;
-    background: none repeat scroll 0% 0% rgb(221, 221, 221);
-    height: 15px;
-    border-radius: 7px 7px 7px 7px;
-    border: 1px solid rgb(51, 51, 51);
-    line-height: 15px;
-}
-#timeline-zoom input{
-    width:100px;
-    margin-top:-3px;
-    float:left;
-
-}
-#timeline-hide {
-    vertical-align: middle;
-<<<<<<< Updated upstream
     display:inline-block;
-=======
-    float: left;
->>>>>>> Stashed changes
-    background-color:#eee;
-    border-radius:5px;
-    font-size:12px;
-    cursor:pointer;
-    padding:2px;
-    margin-top:-3px;
+    float:right;
 }
-#timeline-hide:hover{
-    background-color:#333;
-    color:#eee;
+#timeline-zoom a.zoom-btn{
+    display:block;
+    clear:both;
+    cursor:pointer;
+}
+#timeline-zoom a.zoom-btn:hover{
+    background-color:#1a1a1a;
+    color:#fff;
 }

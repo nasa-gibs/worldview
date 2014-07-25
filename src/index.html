@@ -219,7 +219,7 @@
             <div id="timeline-text">Test</div>
 
             <section id="timeline">
-                <header>
+                <div id="timeline-header">
                     <div id="focus-guard-1" class="focus-guard" tabindex="1"></div>
                     <input type="text" value="2014" maxlength="4" class="button-input-group" id="year-input-group" tabindex="2" />
                     <input type="text" value="Mar" maxlength="3" class="button-input-group" id="month-input-group" tabindex="3" />
@@ -239,15 +239,19 @@
                             class="arrow" />
                         </svg>
                     </div>
-                </header>
-                <footer>
+                </div> <!--/timeline-header-->
+                <div id="timeline-footer">
 
-                </footer>
+                </div><!--/timeline-footer-->
+                <div id="timeline-zoom">
+                  <a class="zoom-btn" id="zoom-days">Days</a>
+                  <a class="zoom-btn" id="zoom-months">Months</a>
+                  <a class="zoom-btn" id="zoom-years">Years</a>
+                  <a class="zoom-btn" id="zoom-decades">Decades</a>
+                </div><!--/timeline-zoom-->
+                <div id="timeline-hide"></div>
             </section>
-            <div id="timeline-zoom">
-              <input type="range" max="4" min="0" step="1" value="0" id="zoom-slider" />
-              <div id="timeline-hide">Hide Timeline</div>
-            </div>
+
             <svg id="now-line">
               <rect
                  width="3"

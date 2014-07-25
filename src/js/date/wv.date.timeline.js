@@ -1,5 +1,4 @@
 
-
 /*
  * NASA Worldview
  *
@@ -24,44 +23,32 @@ wv.date = wv.date || {};
  */
 wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
-
     var id = "timeline";
     var selector = "#" + id;
     var DAY_IN_MS = 24*60*60*1000;
-
-    var sliderContent = [];
     var $container;
     var model = models.date;
-    var svg;
-    var timelineJumpInPix, zoomScale;
-    var jumpInterval;
-    var selectedDateObj;
     var selectedDateMs = model.selected.getTime();
     var startDateMs = model.start.getTime();
     var endDateMs = model.end.getTime();
     var buttonInterval = "day";
-    
-    //this is where the data would go for showing available dates
-    var data = [];
-    var data2 = [];
-    var x,y,line,zoom,xAxis,hoverLineGroup,hoverLine;
-    //margins for the timeline
-    margin = {
+    var jumpInterval, selectedDateObj, x,y,line,zoom,xAxis, yAxis, timeline, data2;
+
+    var margin = {
             top: 0,
             right: 0,
-            bottom: 0,
-            left: 0
+            bottom: 35,
+            left: 10
         };
 
     //subtract the datepicker from the width of the screen
-    width = window.innerWidth - $("#timeline header").outerWidth() - 20;
-    height = 60 - margin.top - margin.bottom;
-    //var currentDate = new Date(data2[0].date);
-    var dateTimestamp;
+    var width = window.innerWidth - $("#timeline-header").outerWidth() - 60 -50;
+    var height = 85 - margin.top - margin.bottom;
+
     var monthNames = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun",
                             "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
     var self = {};
-    
+    self.NAME = "TEST NAME";
     // TODO: Prefix names with $ to indicate they are jQuery objects
     var incrementBtn = $("#right-arrow-group");
     var decrementBtn = $("#left-arrow-group");
@@ -69,217 +56,123 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var throttleSelect = _.throttle(function(date) {
         model.select(date);
     }, 100, { trailing: true });
-
+    var zoomLevels = function(){
+        
+    }
+    var selection = d3.svg.line()
+        .x(function(d){
+            return x(d.x)
+        })
+        .y(function(d){
+            return y(d.y)
+        });
     var setData = function(){
-        data = [
-            {
-            "date": model.start,
-            "value": "5"
-            },
-            {
-            "date": model.end,
-            "value": "5"
-            }
-        ];
-        //Current date line
         data2 = [
             {
-            "date": model.selected.getTime(),
-            "value": "0" 
+                "x": model.selected.getTime(),
+                "y": "0" 
             },
             {
-            "date": model.selected.getTime(),
-            "value": "6"
+                "x": model.selected.getTime(),
+                "y": "6"
             }
         ];
         x = d3.time.scale.utc()
-            .domain([
-                d3.min(data, function(d) { return d.date; }),
-                d3.max(data, function(d) { return d.date; })
-            ])
-            .range([0, width]);
 
+            //for Decades:
+            .domain([new Date(1800,0,1), new Date(2200,0,1)])
+
+            //for Years:
+            //.domain([new Date(1970,0,1), new Date(2020,0,1)])
+            
+            //for Months:
+            //.domain([new Date(2000,0,1), new Date(2014,12,31)])
+
+            //.nice(d3.time.year)
+            .range([-2000, 3600]);
+        /* FIXME: Fix this to be ordinal in place of linear
+        y = d3.scale.ordinal()
+            .domain(["Data1","Data2","Data3"]) //loaded product data goes here
+            .rangeBands([0,height]);
+        */
         y = d3.scale.linear()
-            .domain(d3.extent(data2, function (d) {
-                return d.value;
-            }))
-            .range([height, 0]);
-        line = d3.svg.line()
-            .x(function (d) {
-                return x(d.date);
-            })
-            .y(function (d) {
-                return y(d.value);
-            });
+            .domain([0,6])
+            .range([-height,0]);
 
-        xAxis = make_x_axis(x);
+        xAxis = d3.svg.axis()
+            .scale(x)
+            //.tickValues(model.start,model.end)
+            .orient("bottom")
 
+            //for Decades
+            .ticks(d3.time.year.utc,10)
+
+            //for Years
+            //.ticks(d3.time.year.utc,1)
+            
+            //for Months
+            //.ticks(d3.time.month.utc,1)
+            
+            //for Days
+            //.ticks(d3.time.day.utc,1)
+            
+            //.tickFormat(d3.time.format.multi([["%b %Y", function(d) { return d.getUTCMonth(); }], ["%b %Y", function() { return true; }]]));
+            .tickFormat(customTimeFormat2);
+        yAxis = d3.svg.axis()
+            .scale(y)
+            .orient("left");
+    
         zoom = d3.behavior.zoom()
             .x(x)
-            .scaleExtent([1, 100])
+            //for Decades
+            .scale(1)
+            
+            //for Years
+            //.scale(10)
+
+            //for Months
+            //.scale(170)
+
+            //for Days
+            //.scale(3070)
+
+            //.translate()
+            //.scaleExtent([1, 100]) //FIXME: fix scale
             .on("zoom", zoomable, d3.event);
-
-        try{
-            redrawAxis();
-        }
-        catch(e){
-            console.log("error is following:" + e);
-        }
-
-    
+        
     };
+
     var redrawAxis = function(){
-        if (!svg){return;}
-        svg.select(".x.axis").call(xAxis);
+        timeline.select(".x.axis").call(xAxis.tickSize(-height).tickPadding(10));
 
-        svg.select(".x.grid")
-            .call(make_x_axis(x)
-            .tickSize(-60, 0, 0)
-            .tickFormat(""));
-        svg.select(".line")
-            .attr("class", "line")
-            .attr("d", line);
-        svg.select(".line2")
-            .attr("class", "line2")
-            .attr("d", line);
-
-        d3.selectAll('.x.axis .tick text').attr('x',5).attr('style','text-anchor:left;');
-        
-        d3.select(".line").datum(data).attr("d", line);
-        d3.select(".line2").datum(data2).attr("d", line);
-        updateTime();
-
-        d3.select('#timeline footer');
     };
-    var redraw = function(){
-        //resizing window redrawing goes here
-        
-        width = window.innerWidth - $("#timeline header").outerWidth() - 20;
-        
-        d3.select('#timeline footer svg')
+    
+    var updateTime = function() {
+        $('#year-input-group').val(model.selected.getUTCFullYear());
+        $('#month-input-group').val(monthNames[model.selected.getUTCMonth()]);
+        if (model.selected.getUTCDate()<10){
+            $('#day-input-group').val("0" + model.selected.getUTCDate());
+        }
+        else {
+            $('#day-input-group').val(model.selected.getUTCDate());
+        }
+        // Don't grab focus to allow arrow keys to work
+
+        //$('.button-input-group-selected').select();
+        //data2[0].date = model.selected.getTime();
+        //data2[1].date = data2[0].date;
+    };
+
+    var resizeWindow = function(){
+        width = window.innerWidth - $("#timeline-header").outerWidth() - 60 -50;
+        d3.select('#timeline-footer svg')
             .attr('width', width + margin.left + margin.right);
-            
-        d3.select("rect.plot")
-            .attr("width", width);
-        d3.select("#clip")
-            .attr("width", width);
-            
-        x.range([0, width]);
-        
-        redrawAxis();
+        timeline.select(".x.axis line:first-child").attr("x2",width);
+        //redrawAxis();
     };
-    //not using
-    var zoomed = function(){
-        var t = zoom.translate(),
-        s = zoom.scale();
-        console.log(s);
-        tx = Math.min(0, Math.max(width * (1 - s), t[0]));
-        ty = Math.min(0, Math.max(height * (1 - s), t[1]));
-        zoom.translate([tx, ty]);
-        
-        redrawAxis();
-        
-        if(($("svg#now-line").offset().left) < ($("#timeline footer").offset().left)){
-            $("svg#now-line").css("visibility","hidden");
 
-        }
-        else{
-            $("svg#now-line").css("visibility","visible");
-
-        }
-        d3.selectAll('.x.axis .tick text').attr('x',5).attr('style','text-anchor:left;');
-        
-    };
-    function timeFormat(formats) {
-        return function(date) {
-            var i = formats.length - 1, f = formats[i];
-            while (!f[1](date)) f = formats[--i];
-            return f[0](date);
-        };
-    }
-    function customTickFunction(t0, t1, dt)
-    {
-        console.log(t0);
-        console.log(t1);
-        console.log(dt);
-        var labelSize = 30; // largest label is 23 pixels ("May")
-        var maxTotalLabels = Math.floor(width / labelSize);
-        
-        function step(date, offset)
-        {
-            date.setMonth(date.getMonth() + offset);
-        }
-        
-        var time = d3.time.month.ceil(t0), times = [], monthFactors = [2,3,4,6];
-        
-        while (time < t1) times.push(new Date(+time)), step(time, 1);
-        
-        var i;
-        for(i=1 ; times.length > maxTotalLabels ; i++)
-            times = _.filter(times, function(d){
-                return (d.getMonth()) % monthFactors[i] == 0;
-            });
-        
-        return times;
-    }
-    var make_x_axis = function (x) {
-        return d3.svg.axis()
-            .scale(x)
-            .orient("bottom")
-            .ticks(7)//.tickFormat(d3.time.format("%Y %b %d"));
-            .tickFormat(customTimeFormat2);
-    };
-    var customTimeFormat = timeFormat([
-        [d3.time.format("%Y"), function() { return true; }],
-        [d3.time.format("%b"), function(d) { return d.getMonth(); }],
-        [function(){return "";}, function(d) { return d.getDate() != 1; }]
-    ]);
-    var customTimeFormat2 = d3.time.format.utc.multi([
-        [".%L", function(d) { return d.getUTCMilliseconds(); }],
-        [":%S", function(d) { return d.getUTCSeconds(); }],
-        ["%I:%M", function(d) { return d.getUTCMinutes(); }],
-        ["%I %p", function(d) { return d.getUTCHours(); }],
-        //["%a %d", function(d) { return d.getUTCDay() && d.getDate() != 1; }],
-        ["%d", function(d) { return d.getUTCDate() != 1; }],
-        ["%b", function(d) { return d.getUTCMonth(); }],
-        ["%Y", function(d) { return true; }],
-    ]);
-    var format = d3.time.format.multi([
-        [".%L", function(d) { return d.getMilliseconds(); }],
-        [":%S", function(d) { return d.getSeconds(); }],
-        ["%I:%M", function(d) { return d.getMinutes(); }],
-        ["%I %p", function(d) { return d.getHours(); }],
-        ["%a %d", function(d) { return d.getDay() && d.getDate() != 1; }],
-        ["%b %d", function(d) { return d.getDate() != 1; }],
-        ["%B", function(d) { return d.getMonth(); }],
-        ["%Y", function() { return true; }]
-    ]);
-
-    var animateForward = function() {
-        if ( ui.anim.active ) {
-            return;
-        }
-        models.date.add(buttonInterval, 1);
-        ui.anim.interval = buttonInterval;
-        ui.anim.play("forward");
-    };
-    
-    var animateReverse = function() {
-        if ( ui.anim.active ) {
-            return;
-        }
-        models.date.add(buttonInterval, -1);
-        ui.anim.interval = buttonInterval;
-        ui.anim.play("reverse");
-    };
-    
-    var animateEnd = function() {
-        ui.anim.stop();
-    };
-    
     var init = function() {
-        setData();
-        
+        setData(); //x,y,xAxis,yAxis,zoom
         incrementBtn
             .mousedown(animateForward)
             .mouseup(animateEnd);
@@ -315,134 +208,57 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 }
             });
         
-        svg = d3.select('#timeline footer')
+        timeline = d3.select('#timeline-footer')
             .append("svg:svg")
             .attr('width', width + margin.left + margin.right)
             .attr('height', height + margin.top + margin.bottom)
+            .call(zoom)
             .append("svg:g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-            .call(zoom);
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        //.call(zoom);
 
-        svg.append("svg:rect")
-            .attr("width", width)
-            .attr("height", 60)
-            .attr("class", "plot");
-
-
-
-        svg.append("svg:g")
+        timeline.append("svg:g")
             .attr("class", "x axis")
-            .attr("transform", "translate(0, " + 30 + ")")
-            .call(xAxis);
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis.tickSize(-height).tickPadding(10))
+            .insert("line",":first-child")
+                .attr("x1",0)
+                .attr("x2",width);
 
+        var ticks = timeline.selectAll('.x.axis .tick');
 
+        ticks.insert("svg:circle","text").attr("r","6");
 
-        svg.append("g")
-            .attr("class", "x grid")
-            .attr("transform", "translate(0," + 60 + ")")
-            .call(make_x_axis(x)
-                .tickSize(-60, 0, 0));
+        ticks.insert("svg:rect", "circle")
+            .attr("x","0")
+            .attr("y","0")
+            .attr("width","130")
+            .attr("height",height);
+        
+        ticks.selectAll("line")
+            .attr("y1",-height)
+            .attr("y2",margin.bottom);
 
-        var clip = svg.append("svg:clipPath")
-            .attr("id", "clip")
-            .append("svg:rect")
-            .attr("x", 0)
-            .attr("y", 0)
-            .attr("width", width)
-            .attr("height", 60);
-
-        var chartBody = svg.append("g")
-            .attr("clip-path", "url(#clip)").attr("height", 60);
-
-        chartBody.append("svg:path")
-            .datum(data)
-            .attr("class", "line")
-            .attr("d", line);
-
-        chartBody.append("svg:path")
+        timeline.append("svg:g")
+            .attr("class", "y axis")
+            .attr("transform", "translate(0,0)")
+            .call(yAxis);
+        
+        timeline.select(".x.axis").append("svg:path")
             .datum(data2)
-            .attr("class", "line2")
-            .attr("d", line);
-        
-        
+            .attr("class", "selection")
+            .attr("d", selection);
+                
+        d3.selectAll('.x.axis .tick text').attr('x',5).attr().attr('style','text-anchor:left;');
+        console.log("#######################################");
+        console.log(d3.event);
+        console.log(timeline);
+        console.log(d3.select("#timeline-footer svg"));
 
-        var firstTick = svg.select(".x.axis .tick:first-child text");
-        var firstTickData = firstTick.data()[0];
-        console.log(firstTickData.getUTCFullYear());
-        svg.select(".x.axis").insert("g",":first-child")
-            .attr("class", "first")
-            .attr("transform", "translate(5," + 23 + ")")
-            .append("text").text(firstTickData.getUTCFullYear());
-
-
-        updateTimeline();
-        
-        d3.selectAll('.x.axis .tick text').attr('x',5).attr('style','text-anchor:left;');
-        
-        if (zoom.scale() === 1){
-            console.log("True!");
-        }
-
-        console.log((new Date(2014, 0, 1) - new Date(2011, 0, 1))/DAY_IN_MS);
-        
-        // Hover line.
-        hoverLineGroup = svg.append("g")
-                            .attr("class", "hover-line");
-        hoverLine = hoverLineGroup
-            .append("line")
-                    .attr("x1", 10).attr("x2", 10)
-                    .attr("y1", 0).attr("y2", height);
-
-        // Hide hover line by default.
-        hoverLineGroup.style("opacity", 1e-6);
-        
-        /****************************** TIMELINE LINES ************************************/
-        
-        d3.select("#timeline footer")
-          .on("mouseenter", function() { 
-            $("#timeline-text").show();
-            hoverLineGroup.style("opacity", 1);
-          })
-          .on("mousemove", bindTimelineMouseMove)
-          .on("mouseleave", function() {
-            hoverLineGroup.style("opacity", 1e-6);
-            $("#timeline-text").hide();
-          })
-          .on("click", bindUpdateOnFooter);
-        /*.on("mousedown",function(){
-            mouse_x_start = d3.mouse(this)[0];
-            var mouse_x_jump = mouse_x_start + timelineJump;
-            console.log("$$$$$$$$$$$$ ");
-          })*/ 
-        d3.select("#timeline footer svg")
-            .on("mousewheel.zoom", null)
-            .on("DOMMouseScroll.zoom", null)
-            .on("dblclick.zoom", null)
-            .on("onwheel",null)
-            .on("mousewheel",null)
-            .on("onmousewheel",null)
-            .on("wheel",null)
-            .on("MozMousePixelScroll",null);
-
-        $("svg#now-line")
-          .mousedown(function(e){
-            e.preventDefault();
-            d3.select("#timeline footer")
-              .on("mousemove", bindUpdateOnFooter);
-          })
-          .mouseup(function(){
-            d3.select("#timeline footer")
-              .on("mousemove", null);
-            d3.select("#timeline footer")
-              .on("mousemove", bindTimelineMouseMove);
-          });
-        /**************************END TIMELINE LINES****************************/
         
         //bind click action to interval radio buttons
         var buttons = $('.button-input-group');
         buttons.on('focus',function(e){
-            //e.stopPropagation();
-            // e.preventDefault();
             buttons.removeClass('button-input-group-selected');
             $(this).addClass('button-input-group-selected');
             jumpInterval = $(this).attr('id');
@@ -460,7 +276,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                     alert("cannot find selected interval!");
                     break;
             }
-            updateBarSpeed();
             $(this).select();
         });
 
@@ -520,96 +335,70 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             }        
         });
 
-        $("#timeline-zoom").hover(function(e){
-            $("#timeline footer").css("background","rgba(40,40,40,0.9)");
-        },function(e){
-            $("#timeline footer").css("background","");
-        });
-        $("#timeline-zoom input").on("input",function(e){
-            var testZoomLevel = $(this).val();
-            if (zoomLevel != testZoomLevel){
-                switch(testZoomLevel){
-                case '0':
-                    zoomScale = 1;
-                    break;
-                    
-                case '1':
-                    zoomScale = 2;
-                    break;
-                case '2':
-                    zoomScale = 4;
-                    break;
-                case '3':
-                    zoomScale = 20;
-                    break;
-                case '4':
-                    zoomScale = 60;
-                    break;
-                default:
-                    console.log("Doesn't work");
-                }
-                //console.log(zoom.scale());
-                zoomLevel = testZoomLevel;
-                zoom.scale(zoomScale);
-                tx = Math.min(0, width * (1 - zoomScale));
-                ty = Math.min(0, height * (1 - zoomScale));
-                zoom.translate([tx, ty]);
-                redrawAxis();
-                var firstTickZ = svg.select(".x.axis .tick:nth-child(2) text");
-                var firstTickDataZ = firstTickZ.data()[0];
-                console.log(firstTickZ);
-                if ((zoomScale === 20) || (zoomScale === 60)){
-                    console.log("Correct" + firstTickDataZ.getUTCMonth());
-                    svg.select(".x.axis .first text").text(firstTickDataZ.getUTCFullYear() + 
-                            " " + monthNames[firstTickDataZ.getUTCMonth()]);
-                }
-                else{
-                    
-                    svg.select(".x.axis .first text").text(firstTickDataZ.getUTCFullYear());
-
-                    }
-            }
-        });
-        $("#timeline-hide").click(function(e){
-            var tl = $("#timeline footer");
-            if(tl.is(":hidden"))
-            {
-                tl.show("slow");
-                $("#timeline-zoom input").show();
-                $("#timeline-hide").text("Hide Timeline");
-                $("#timeline-zoom").css("right","10px");
-                $("#timeline-zoom").css("left","auto");
-                $("#now-line").show();
-
-            }
-            else{
-                tl.hide("slow");
-                $("#timeline-zoom input").hide();
-                $("#timeline-hide").text("Show Timeline");
-                $("#timeline-zoom").css("left","183px");
-                $("#timeline-zoom").css("right","auto");
-                $("#now-line").hide();
-            }
-
-        });
-
         $("#day-input-group").blur();
-        
+/*
+        $(".zoom-btn").on("click",function(){
+            console.log("test click");
+            //zoom.scale(100);
+            console.log(zoom.scale());
+            zoom.scale(40);
+            
+        });
+  */      
     }; // /init
-    var incrementZoom = function(){
 
+    var customTimeFormat2 = d3.time.format.utc.multi([
+        [".%L", function(d) { return d.getUTCMilliseconds(); }],
+        [":%S", function(d) { return d.getUTCSeconds(); }],
+        ["%I:%M", function(d) { return d.getUTCMinutes(); }],
+        ["%I %p", function(d) { return d.getUTCHours(); }],
+        //["%a %d", function(d) { return d.getUTCDay() && d.getDate() != 1; }],
+        ["%d", function(d) { return d.getUTCDate() != 1; }],
+        ["%Y %b", function(d) { return d.getUTCMonth(); }],
+        ["%Y %b", function(d) { return true; }],
+    ]);
+
+    var animateForward = function() {
+        if ( ui.anim.active ) {
+            return;
+        }
+        models.date.add(buttonInterval, 1);
+        ui.anim.interval = buttonInterval;
+        ui.anim.play("forward");
     };
+    
+    var animateReverse = function() {
+        if ( ui.anim.active ) {
+            return;
+        }
+        models.date.add(buttonInterval, -1);
+        ui.anim.interval = buttonInterval;
+        ui.anim.play("reverse");
+    };
+    
+    var animateEnd = function() {
+        ui.anim.stop();
+    };
+    
     var zoomable = function(e){
+        console.log(zoom.scale());
+        //console.log(d3.behavior.zoom());
+        console.log(x.domain());
+        console.log(x.range());
+        console.log("###################");
+        console.log(x.ticks());
         var tempVal;
         var sliderVal = parseInt($("#timeline-zoom input").val());
 
         var evt = window.event || d3.event.sourceEvent || e;
-        var delta=evt.deltaY ? evt.deltaY : evt.wheelDeltaY || evt.detail ? evt.detail*(-120) : evt.wheelDelta;
-        if (delta < 0){
-            
+        var deltaY=evt.deltaY ? evt.deltaY : evt.wheelDeltaY || evt.detail ? evt.detail*(-120) : evt.wheelDelta;
+        var deltaX=evt.deltaX ? evt.deltaY : evt.wheelDeltaX;
+        if (deltaY < 0){
+            //console.log("Up");
             tempVal = sliderVal + 1;
         }
         else{
+            //console.log("Down")
             tempVal = sliderVal - 1;
         }
         if ((tempVal >= 0) && (tempVal <= 4)){
@@ -618,101 +407,9 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         else
             return;
     };
-    var bindTimelineMouseMove = function() {
-        var mouse_x = d3.mouse(this)[0];
-        var graph_x = x.invert(mouse_x);
-        var format = d3.time.format('%e %b');
-        //format.parse(graph_x)
-        var stringDate = String(graph_x).split(' ');
-        $("#timeline-text").text(stringDate[3] + " " + stringDate[1] + " " + stringDate[2]); //FIXME: Use d3 time formatting
-        hoverLine.attr("x1", mouse_x).attr("x2", mouse_x);
-        if ((mouse_x > (x(data2[0].date)- 3)) && (mouse_x < (x(data2[0].date) + 6))){
-            hoverLineGroup.style("opacity", 1e-6);
-            $("#timeline-text").hide();
-            $(".line2").css("stroke","#fff");
-        }else {
-            $("#timeline-text").show();
-            hoverLineGroup.style("opacity", 1);
-            $(".line2").css("stroke","transparent");
-        }
-        $("#timeline-text").css({"left": d3.event.pageX});
-            
-    };
-    
-    var bindUpdateOnFooter = function(){
-        var mouse_x = d3.mouse(this)[0];
-        throttleSelect(x.invert(mouse_x));
-    };
-    
-    var bindMouseOnFooter = function(d3){
-        var mouse_x = d3.mouse(this)[0];
-        var graph_x = x.invert(mouse_x);
-        var format = d3.time.format('%e %b');
-        //format.parse(graph_x)
-        var stringDate = String(graph_x).split(' ');
-        $("#timeline-text").text(stringDate[3] + " " + stringDate[1] + " " + stringDate[2]); //FIXME: Use d3 time formatting
-        hoverLine.attr("x1", mouse_x).attr("x2", mouse_x);
-        if ((mouse_x > (x(data2[0].date)- 3)) && (mouse_x < (x(data2[0].date) + 6))){
-            hoverLineGroup.style("opacity", 1e-6);
-            $("#timeline-text").hide();
-            $(".line2").css("stroke","#fff");
-        }else {
-            $("#timeline-text").show();
-            hoverLineGroup.style("opacity", 1);
-            $(".line2").css("stroke","transparent");
-        }
-        $("#timeline-text").css({"left": d3.event.pageX});
-    };
-
-    var updateTimeline = function(){
-        //update timeline line
-        
-        // FIXME: This is invoked before svg is initialized
-        if ( !svg ) { return ; }
-        
-        svg.select(".line2").attr("d", line);
-        var line2Pos = $(".line2").offset();
-        $("svg#now-line").css("left", (line2Pos.left-3) + "px");
-    };
-    var updateTime = function() {
-        $('#year-input-group').val(model.selected.getUTCFullYear());
-        $('#month-input-group').val(monthNames[model.selected.getUTCMonth()]);
-        if (model.selected.getUTCDate()<10){
-            $('#day-input-group').val("0" + model.selected.getUTCDate());
-        }
-        else {
-            $('#day-input-group').val(model.selected.getUTCDate());
-        }
-        //remove selection when clicking too fast
-        //document.getSelection().removeAllRanges();
-
-        
-        // Don't grab focus to allow arrow keys to work
-
-        //$('.button-input-group-selected').select();
-        data2[0].date = model.selected.getTime();
-        data2[1].date = data2[0].date;
-        updateTimeline();
-        
-    };
-    var updateBarSpeed = function(){
-        var currentElement = $(".button-input-group-selected").attr("id");
-        var dateNow = new Date(data2[0].date);
-        switch (currentElement)
-        {
-            case 'year-input-group':
-                timelineJumpInPix = x(dateNow) - x( dateNow.setUTCFullYear(dateNow.getUTCFullYear() - 1) );
-                break;
-            case 'month-input-group':
-                timelineJumpInPix = x(dateNow) - x( dateNow.setUTCMonth(dateNow.getUTCMonth() - 1) );
-                break;
-            case 'day-input-group':
-                timelineJumpInPix = x(dateNow) - x( dateNow.setUTCDate(dateNow.getUTCDate() - 1) );
-                break;
-        }
-    };
+    self.test = "TESTING VAR";
     init();
-    $(window).resize(redraw);
+    $(window).resize(resizeWindow);
 
     return self;
 };
