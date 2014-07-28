@@ -29,8 +29,8 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var $container;
     var model = models.date;
     var selectedDateMs = model.selected.getTime();
-    var startDateMs = model.start.getTime();
-    var endDateMs = model.end.getTime();
+    var startDateMs = ( model.start ) ? model.start.getTime() : undefined;
+    var endDateMs = ( model.end ) ? model.end.getTime() : undefined;
     var buttonInterval = "day";
     var jumpInterval, selectedDateObj, x,y,line,zoom,xAxis, yAxis, timeline, data2;
 
