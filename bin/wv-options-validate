@@ -48,7 +48,6 @@ def warn(message):
     warning_count += 1
     
 def remove_layer(wv, layer_id):
-    print "REMOVING: " + layer_id
     del wv["layers"][layer_id]
     if layer_id in wv["layerOrder"]: wv["layerOrder"].remove(layer_id)
 
