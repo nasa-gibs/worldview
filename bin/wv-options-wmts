@@ -63,6 +63,9 @@ json_options["separators"] = (',', ': ')
 class SkipException(Exception):
     pass
 
+def to_list(val):
+    return [val] if not hasattr(val, 'reverse') else val
+        
 def process_layer(gc_layer, wv_layers, colormaps):
     id = gc_layer["ows:Identifier"]
     if id in skip:
@@ -81,17 +84,23 @@ def process_layer(gc_layer, wv_layers, colormaps):
         if dimension["ows:Identifier"] == "time":
             try:
                 wv_layer["period"] = "daily"
-                values = dimension["Value"].split("/")
-
+                ranges = to_list(dimension["Value"])
+                start_date = datetime.max;
+                end_date = datetime.min;
+                for range in ranges:
+                    times = range.split('/')
+                    start_date = min(start_date, 
+                        datetime.strptime(times[0], "%Y-%m-%d"))
+                    end_date = min(start_date, 
+                        datetime.strptime(times[1], "%Y-%m-%d"))                                        
                 # Layer is still actively being produced if the end date
                 # greater than yesterday
-                end_date = datetime.strptime(values[1], "%Y-%m-%d")
                 yesterday = datetime.now() - timedelta(days=1)
-                wv_layer["startDate"] = values[0]
+                wv_layer["startDate"] = start_date.strftime("%Y-%m-%d")
                 if end_date < yesterday:
-                    wv_layer["endDate"] = values[1]
+                    wv_layer["endDate"] = end_date.strftime("%Y-%m-%d")
             except ValueError:
-                raise Exception("Invalid time: {0}".format(values))
+                raise Exception("Invalid time: {0}".format(range))
 
     # Extract matrix set
     matrixSet = gc_layer["TileMatrixSetLink"]["TileMatrixSet"]

@@ -66,3 +66,5 @@ done
 cp -r "$BUILD_DIR/brand" "$DEST_DIR"
 
 "$BIN_DIR"/wv-options-validate "$BUILD_DIR/config.json" "$DEST_DIR/config"
+
+exit 0

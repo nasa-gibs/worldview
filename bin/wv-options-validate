@@ -46,7 +46,11 @@ def warn(message):
     global warning_count
     sys.stderr.write("%s:  WARN: %s\n" % (prog, message))
     warning_count += 1
-
+    
+def remove_layer(wv, layer_id):
+    print "REMOVING: " + layer_id
+    del wv["layers"][layer_id]
+    if layer_id in wv["layerOrder"]: wv["layerOrder"].remove(layer_id)
 
 main_config_file = os.path.join(config_dir, "wv.json")
 with open(main_config_file) as fp:
@@ -56,14 +60,15 @@ with open(options_file) as fp:
 
 for layer_id in wv["layers"].keys():
     layer = wv["layers"][layer_id]
-    if len(layer["projections"]) == 0:
-        warn("[%s] No projections defined or not found in GC documents" %
-            layer_id)
     if layer_id not in wv["layerOrder"]:
         if "warnOnUnexpectedLayer" in opt:
             warn("[%s] Unexpected layer" % layer_id)
-        del wv["layers"][layer_id]
+        remove_layer(wv, layer_id)
         continue
+    if "projections" not in layer or len(layer["projections"]) == 0:
+        warn("[%s] No projections defined or not found in GC documents" %
+            layer_id)
+        remove_layer(wv, layer_id)
     if "palette" in layer:
         palette_id = layer["palette"]["id"]
         if not os.path.exists(os.path.join(config_dir, "palettes",
@@ -71,7 +76,7 @@ for layer_id in wv["layers"].keys():
             error("[%s] Unknown palette: %s" % (layer_id, palette_id))
     if "group" not in layer:
         error("[%s] No group defined" % palette_id)
-        del wv["layers"][layer_id]
+        remove_layer(wv, layer_id)
         continue
 
 for layer_id in wv["layerOrder"]:
@@ -80,12 +85,12 @@ for layer_id in wv["layerOrder"]:
 
 print "%s: %d error(s), %d warning(s)" % (prog, error_count, warning_count)
 
-if error_count > 0:
-    sys.exit(1)
-
 json_options = {}
 json_options["indent"] = 4
 json_options["separators"] = (',', ': ')
 
 with open(main_config_file, "w") as fp:
     json.dump(wv, fp)
+
+if error_count > 0:
+    sys.exit(1)
