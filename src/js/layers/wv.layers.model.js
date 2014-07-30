@@ -323,6 +323,10 @@ wv.layers.model = wv.layers.model || function(models, config) {
     var load12 = function(state) {
         self.clear(models.proj.selected.id);
         _.eachRight(state.l, function(layerDef) {
+            if ( !config.layers[layerDef.id] ) {
+                console.warn("No such layer: " + layerDef.id);
+                return;
+            }
             var hidden = false;
             var opacity = 1.0;
             _.each(layerDef.attributes, function(attr) {

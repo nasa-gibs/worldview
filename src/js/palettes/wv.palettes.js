@@ -139,7 +139,7 @@ wv.palettes = (function(self) {
         };
         _.each(state.l, function(qsLayer) {
             var layerId = qsLayer.id;
-            if ( config.layers[layerId].palette ) {
+            if ( config.layers[layerId] && config.layers[layerId].palette ) {
                 promises.push(self.loadRendered(config, layerId));
             }
             var custom = _.find(qsLayer.attributes, {id: "palette"});
