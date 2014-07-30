@@ -25,9 +25,19 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
     var resolution = "1";
     var format = "image/jpeg";
     
+    var host, path;
+    
+     if ( config.features.imageDownload ) {
+         host = config.features.imageDownload.host;
+         path = config.parameters.imagegen || config.features.imageDownload.path;
+     } else {
+         host = "http://map2.vis.earthdata.nasa.gov";
+         path = "imagegen/index.php";
+     }
+     url = host + "/" + path + "?";
+    
     if ( config.parameters.imagegen ) {
-        wv.util.warn("Redirecting image download to: " + BASE_URL +
-               "-" + config.parameters.imagegen + ".php");
+        wv.util.warn("Redirecting image download to: " + url);
     }
 
     var init = function() {
@@ -155,14 +165,7 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
             var lonlat1 = map.getLonLatFromViewPortPx(new OpenLayers.Pixel(Math.floor(x1), Math.floor(y2)));
             var lonlat2 = map.getLonLatFromViewPortPx(new OpenLayers.Pixel(Math.floor(x2), Math.floor(y1)));
 
-            var dlURL = null;
-            var imagegen = config.parameters.imagegen;
-            if ( imagegen ) {
-                dlURL = BASE_URL + "-" + imagegen + ".php?";
-            } else {
-                dlURL= BASE_URL + ".php?";
-            }
-
+            var dlURL = url;
             var conversionFactor = 256;
             if (s=="geographic") {
                 conversionFactor = 0.002197;
