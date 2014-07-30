@@ -31,7 +31,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var selectedDateMs = model.selected.getTime();
     var startDateMs = ( model.start ) ? model.start.getTime() : undefined;
     var endDateMs = ( model.end ) ? model.end.getTime() : undefined;
-    var buttonInterval = "day";
     var jumpInterval, selectedDateObj, x,y,line,zoom,xAxis, yAxis, timeline, data2;
 
     var margin = {
@@ -277,6 +276,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         buttons.on('focus',function(e){
             buttons.removeClass('button-input-group-selected');
             $(this).addClass('button-input-group-selected');
+            /*
             jumpInterval = $(this).attr('id');
             switch(jumpInterval){
                 case 'year-input-group':
@@ -292,6 +292,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                     alert("cannot find selected interval!");
                     break;
             }
+            */
             $(this).select();
         });
 
@@ -374,21 +375,21 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         ["%Y %b", function(d) { return true; }],
     ]);
 
-    var animateForward = function() {
+    var animateForward = function(interval) {
         if ( ui.anim.active ) {
             return;
         }
-        models.date.add(buttonInterval, 1);
-        ui.anim.interval = buttonInterval;
+        models.date.add(interval, 1);
+        ui.anim.interval = interval;
         ui.anim.play("forward");
     };
     
-    var animateReverse = function() {
+    var animateReverse = function(interval) {
         if ( ui.anim.active ) {
             return;
         }
-        models.date.add(buttonInterval, -1);
-        ui.anim.interval = buttonInterval;
+        models.date.add(interval, -1);
+        ui.anim.interval = interval;
         ui.anim.play("reverse");
     };
     
