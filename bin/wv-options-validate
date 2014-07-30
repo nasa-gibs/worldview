@@ -91,7 +91,7 @@ for layer_id in wv["layers"].keys():
             error("[%s] Unknown palette: %s" % (layer_id, palette_id))
         del layer["palette"]
     if "group" not in layer:
-        error("[%s] Possible unexpected layer, no group defined" % palette_id)
+        error("[%s] Possible unexpected layer, no group defined" % layer_id)
         remove_layer(wv, layer_id)
         continue
     for proj_id in layer["projections"].keys():
