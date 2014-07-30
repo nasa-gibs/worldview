@@ -30,6 +30,8 @@ wv.tour = wv.tour || function(models, ui, config) {
     };
 
     self.introduction = function() {
+        if ( !config.features.tour ) { return; }
+        
         // Don't start tour if coming in via a permalink
         if ( window.location.search && !config.parameters.tour ) { return; }
 
