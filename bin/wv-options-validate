@@ -67,7 +67,7 @@ def remove_layer(wv, layer_id):
 
 if tolerant:
     warn("Validation enforcement disabled")
-
+    
 for layer_id in wv["layers"].keys():
     layer = wv["layers"][layer_id]
     if layer_id not in wv["layerOrder"]:
@@ -81,7 +81,10 @@ for layer_id in wv["layers"].keys():
         error("[%s] No projections defined or not found in GC documents" %
             layer_id)
         remove_layer(wv, layer_id)
-    if "palette" in layer:
+        continue
+    if "palette" in layer and "id" not in layer["palette"]:
+        error("[%s] No palette definition" % (layer_id))
+    elif "palette" in layer:            
         palette_id = layer["palette"]["id"]
         if not os.path.exists(os.path.join(config_dir, "palettes",
                 palette_id + ".json")):
@@ -100,6 +103,10 @@ for layer_id in wv["layers"].keys():
                 error("[%s:%s] Invalid source: %s" % 
                         (layer_id, proj_id, source))
                 del layer["projections"][proj_id]
+            elif "matrixSets" not in wv["sources"][source]:
+                error("[%s:%s] No matrix sets for projection" %
+                        (layer_id, proj_id))
+                del layer["projections"][proj_id] 
             elif matrix_set not in wv["sources"][source]["matrixSets"]:
                 error("[%s:%s] Invalid matrix set: %s" % 
                         (layer_id, proj_id, matrix_set))
@@ -109,6 +116,14 @@ for layer_id in wv["layers"].keys():
 for layer_id in wv["layerOrder"]:
     if layer_id not in wv["layers"]:
         error("[%s] In layer order but no definition" % layer_id)
+
+startingLayers = []
+for startingLayer in wv["defaults"]["startingLayers"]:
+    if startingLayer["id"] not in wv["layers"]:
+        error("Invalid starting layer: %s" % (startingLayer["id"]))
+    else:
+        startingLayers += [startingLayer]
+wv["defaults"]["startingLayers"] = startingLayers
 
 print "%s: %d error(s), %d warning(s), %d removed" % (prog, error_count, 
         warning_count, remove_count)
