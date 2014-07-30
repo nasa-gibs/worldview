@@ -15,7 +15,7 @@
 var wv = wv || {};
 wv.ui = wv.ui || {};
 
-wv.ui.info = wv.ui.info || (function(ui) {
+wv.ui.info = wv.ui.info || (function(ui, config) {
 
     var selector = "#wv-info-button";
     var $button = $("<input></input>")
@@ -46,9 +46,15 @@ wv.ui.info = wv.ui.info || (function(ui) {
 
     var feedbackInit = false;
     
-    $menuItems.append($feedback);
-    $menuItems.append($tour);
-    $menuItems.append($new);
+    if ( config.features.feedback ) {
+        $menuItems.append($feedback);
+    }
+    if ( config.features.tour ) {
+        $menuItems.append($tour);
+    }
+    if ( config.features.whatsNew ) {
+        $menuItems.append($new);
+    }
     $menuItems.append($about);
     $menu.append($menuItems);
     $("body").append($menu);

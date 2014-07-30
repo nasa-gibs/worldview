@@ -171,7 +171,7 @@ $(function() {
         }
         ui.link = wv.link.ui(models, config);
         ui.tour = wv.tour(models, ui, config);
-        ui.info = wv.ui.info(ui);
+        ui.info = wv.ui.info(ui, config);
         
         // Export for debugging
         wvx.ui = ui;
