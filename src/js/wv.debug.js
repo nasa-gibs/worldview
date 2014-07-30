@@ -218,7 +218,7 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
             }
         });
         models.layers.clear();
-        if ( type !== "gibs" ) {
+        if ( type !== "gibs" && config.layers.Land_Water_map ) {
             models.layers.add("Land_Water_Map");
         }
         updateLayers.apply($select);
@@ -238,7 +238,7 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
         models.layers.add(layerId);
         if ( type !== "gibs" ) {
             var range = models.layers.dateRange();
-            if ( range ) {
+            if ( range && (config.parameters && !config.parameters.ignoreRange) ) {
                 range.end.setUTCDate(range.end.getUTCDate() - 1);
                 models.date.select(range.end);
             }

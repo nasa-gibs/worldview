@@ -92,11 +92,16 @@ $(function() {
         elapsed("init");
         // If at the beginning of the day, wait on the previous day until GIBS
         // catches up (about three hours)
-        var initialDate = wv.util.now();
-        if ( initialDate.getUTCHours() < 3 ) {
-            initialDate.setUTCDate(initialDate.getUTCDate() - 1);
+        var initialDate;
+        if ( config.defaults.startDate ) {
+            initialDate = wv.util.parseDateUTC(config.defaults.startDate);
+        } else {
+            initialDate = wv.util.now();
+            if ( initialDate.getUTCHours() < 3 ) {
+                initialDate.setUTCDate(initialDate.getUTCDate() - 1);
+            }
         }
-
+        
         // Models
         var models = {
             wv: {

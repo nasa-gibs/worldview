@@ -87,7 +87,10 @@ wv.layers.model = wv.layers.model || function(models, config) {
         var projId = spec.projId || models.proj.selected.id;
         var layers = ( spec.layer ) ? [_.find(self.active, {id: spec.layer})]
                 : self.active;
-        if ( config.parameters && config.parameters.debugGIBS ) {
+        var ignoreRange = 
+            config.parameters &&
+            ( config.parameters.debugGIBS || config.parameters.ignoreDateRange );
+        if ( ignoreRange ) {
             return {
                 start: new Date(Date.UTC(1970, 0, 1)),
                 end: wv.util.today()

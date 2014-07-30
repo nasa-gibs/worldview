@@ -36,6 +36,7 @@ config_dir = args[1]
 
 error_count = 0
 warning_count = 0
+remove_count = 0
 
 def error(message):
     global error_count
@@ -48,6 +49,8 @@ def warn(message):
     warning_count += 1
     
 def remove_layer(wv, layer_id):
+    global remove_count
+    remove_count += 1
     del wv["layers"][layer_id]
     if layer_id in wv["layerOrder"]: wv["layerOrder"].remove(layer_id)
 
@@ -57,13 +60,19 @@ with open(main_config_file) as fp:
 with open(options_file) as fp:
     opt = json.load(fp)
 
+if "autoLayerOrder" in opt:
+    warn("Using automatic layer ordering")
+
 for layer_id in wv["layers"].keys():
     layer = wv["layers"][layer_id]
     if layer_id not in wv["layerOrder"]:
-        if "warnOnUnexpectedLayer" in opt:
-            warn("[%s] Unexpected layer" % layer_id)
-        remove_layer(wv, layer_id)
-        continue
+        if "autoLayerOrder" in opt:
+            wv["layerOrder"] += [layer_id]
+        else:
+            if not "allowUnexpectedLayers" in opt:
+                warn("[%s] Unexpected layer, not in layer order" % layer_id)
+            remove_layer(wv, layer_id)
+            continue
     if "projections" not in layer or len(layer["projections"]) == 0:
         warn("[%s] No projections defined or not found in GC documents" %
             layer_id)
@@ -71,10 +80,12 @@ for layer_id in wv["layers"].keys():
     if "palette" in layer:
         palette_id = layer["palette"]["id"]
         if not os.path.exists(os.path.join(config_dir, "palettes",
-                palette_id + ".json")):
+                palette_id + ".json")) and not "ignoreUnknownPalettes" in opt:
             error("[%s] Unknown palette: %s" % (layer_id, palette_id))
+        del layer["palette"]
     if "group" not in layer:
-        error("[%s] No group defined" % palette_id)
+        if not "allowUnexpectedLayers" in opt:
+            error("[%s] No group defined" % palette_id)
         remove_layer(wv, layer_id)
         continue
 
@@ -82,7 +93,8 @@ for layer_id in wv["layerOrder"]:
     if layer_id not in wv["layers"]:
         error("[%s] In layer order but no definition" % layer_id)
 
-print "%s: %d error(s), %d warning(s)" % (prog, error_count, warning_count)
+print "%s: %d error(s), %d warning(s), %d removed" % (prog, error_count, 
+        warning_count, remove_count)
 
 json_options = {}
 json_options["indent"] = 4
