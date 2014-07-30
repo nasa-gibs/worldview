@@ -40,6 +40,7 @@ colormaps_dir = args[3]
 
 with open(config_file) as fp:
     config = json.load(fp)
+tolerant = config.get("tolerant", False)
 
 if not "wv-options-wmts" in config:
     sys.exit(0)
@@ -136,8 +137,18 @@ def process_entry(entry, colormaps):
     }
 
     input_file = os.path.join(input_dir, entry["from"])
-    with open(input_file) as fp:
-        xml = fp.read()
+    try:
+        with open(input_file) as fp:
+            xml = fp.read()
+    except Exception as e:
+        if tolerant:
+            sys.stderr.write("%s:   WARN: No GC file: %s" % (prog, input_file))
+            warning_count += 1
+        else:
+            sys.stderr.write("%s: ERROR: No GC file: %s" % (prog, input_file))
+            error_count += 1
+        return [error_count, warning_count, layer_count]
+
     gc = xmltodict.parse(xml)
 
     gc_contents = gc["Capabilities"]["Contents"]

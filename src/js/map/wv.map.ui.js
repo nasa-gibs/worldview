@@ -365,6 +365,9 @@ wv.map.ui = wv.map.ui || function(models, config) {
         var proj = models.proj.selected;
         var source = config.sources[def.source];
         var matrixSet = source.matrixSets[def.matrixSet];
+        if ( !matrixSet ) {
+            throw new Error("Matrix set undefined: " + def.matrixSet);
+        }
         var param = {
             url: source.url,
             layer: def.layer || def.id,

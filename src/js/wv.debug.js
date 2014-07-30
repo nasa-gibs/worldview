@@ -228,6 +228,9 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
     };
 
     var updateLayers = function() {
+        if ( !$(this).val() ) {
+            return;
+        }
         var layerId = decodeURIComponent($(this).val());
         var names = models.layers.getTitles(layerId);
         console.log(names.title + "; " + names.subtitle);

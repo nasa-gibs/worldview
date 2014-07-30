@@ -50,14 +50,21 @@ def process_remote(entry):
 
 remote_count = 0
 error_count = 0
+warning_count = 0
+
+tolerant = config.get("tolerant", False)
 if "wv-options-fetch" in config:
     for entry in config["wv-options-fetch"]:
         try:
             remote_count += 1
             process_remote(entry)
         except Exception as e:
-            error_count += 1
-            sys.stderr.write("%s: ERROR: %s\n" % (prog, str(e)))
+            if tolerant:
+                warning_count += 1
+                sys.stderr.write("%s:   WARN: %s\n" % (prog, str(e)))
+            else:
+                error_count += 1
+                sys.stderr.write("%s: ERROR: %s\n" % (prog, str(e)))
 
 print "%s: %d error(s), %d remote(s)" % (prog, error_count, remote_count)
 

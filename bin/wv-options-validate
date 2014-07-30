@@ -37,57 +37,74 @@ config_dir = args[1]
 error_count = 0
 warning_count = 0
 remove_count = 0
-
-def error(message):
-    global error_count
-    sys.stderr.write("%s: ERROR: %s\n" % (prog, message))
-    error_count += 1
-
-def warn(message):
-    global warning_count
-    sys.stderr.write("%s:  WARN: %s\n" % (prog, message))
-    warning_count += 1
     
-def remove_layer(wv, layer_id):
-    global remove_count
-    remove_count += 1
-    del wv["layers"][layer_id]
-    if layer_id in wv["layerOrder"]: wv["layerOrder"].remove(layer_id)
-
 main_config_file = os.path.join(config_dir, "wv.json")
 with open(main_config_file) as fp:
     wv = json.load(fp)
 with open(options_file) as fp:
     opt = json.load(fp)
 
-if "autoLayerOrder" in opt:
-    warn("Using automatic layer ordering")
+tolerant = opt.get("tolerant", False)
+
+def fail(message):
+    global error_count
+    sys.stderr.write("%s: ERROR: %s\n" % (prog, message))
+    error_count += 1
+
+def error(message):
+    warn(message) if tolerant else fail(message)
+
+def warn(message):
+    global warning_count
+    sys.stderr.write("%s:  WARN: %s\n" % (prog, message))
+    warning_count += 1
+
+def remove_layer(wv, layer_id):
+    global remove_count
+    remove_count += 1
+    del wv["layers"][layer_id]
+    if layer_id in wv["layerOrder"]: wv["layerOrder"].remove(layer_id)
+
+if tolerant:
+    warn("Validation enforcement disabled")
 
 for layer_id in wv["layers"].keys():
     layer = wv["layers"][layer_id]
     if layer_id not in wv["layerOrder"]:
-        if "autoLayerOrder" in opt:
+        if tolerant:
             wv["layerOrder"] += [layer_id]
         else:
-            if not "allowUnexpectedLayers" in opt:
-                warn("[%s] Unexpected layer, not in layer order" % layer_id)
+            error("[%s] Unexpected layer, not in layer order" % layer_id)
             remove_layer(wv, layer_id)
             continue
     if "projections" not in layer or len(layer["projections"]) == 0:
-        warn("[%s] No projections defined or not found in GC documents" %
+        error("[%s] No projections defined or not found in GC documents" %
             layer_id)
         remove_layer(wv, layer_id)
     if "palette" in layer:
         palette_id = layer["palette"]["id"]
         if not os.path.exists(os.path.join(config_dir, "palettes",
-                palette_id + ".json")) and not "ignoreUnknownPalettes" in opt:
+                palette_id + ".json")):
             error("[%s] Unknown palette: %s" % (layer_id, palette_id))
         del layer["palette"]
     if "group" not in layer:
-        if not "allowUnexpectedLayers" in opt:
-            error("[%s] No group defined" % palette_id)
+        error("[%s] Possible unexpected layer, no group defined" % palette_id)
         remove_layer(wv, layer_id)
         continue
+    for proj_id in layer["projections"].keys():
+        projection = layer["projections"][proj_id]
+        if "matrixSet" in projection:
+            source = projection["source"]
+            matrix_set = projection["matrixSet"]
+            if source not in wv["sources"]:
+                error("[%s:%s] Invalid source: %s" % 
+                        (layer_id, proj_id, source))
+                del layer["projections"][proj_id]
+            elif matrix_set not in wv["sources"][source]["matrixSets"]:
+                error("[%s:%s] Invalid matrix set: %s" % 
+                        (layer_id, proj_id, matrix_set))
+                del layer["projections"][proj_id]
+
 
 for layer_id in wv["layerOrder"]:
     if layer_id not in wv["layers"]:
