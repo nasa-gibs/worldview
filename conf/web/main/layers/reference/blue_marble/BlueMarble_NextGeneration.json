@@ -1,0 +1,11 @@
+{
+    "layers": {
+        "BlueMarble_NextGeneration": {
+            "id":       "BlueMarble_NextGeneration",
+            "title":    "Blue Marble",
+            "subtitle": "MODIS / Earth Observatory",
+            "tags":     "bm bmng",
+            "group":    "baselayers"
+        }
+    }
+}

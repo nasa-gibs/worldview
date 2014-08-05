@@ -1,0 +1,11 @@
+{
+    "layers": {
+        "BlueMarble_ShadedRelief_Bathymetry": {
+            "id":       "BlueMarble_ShadedRelief_Bathymetry",
+            "title":    "Blue Marble (Shaded Relief &amp; Bathymetry)",
+            "subtitle": "MODIS / Earth Observatory",
+            "tags":     "bm bmng",
+            "group":    "baselayers"
+        }
+    }
+}

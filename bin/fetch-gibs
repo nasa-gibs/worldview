@@ -23,6 +23,3 @@ curl -s -o $DESTDIR/gibs-arctic.xml \
     "$GIBS_URL"/wmts-arctic/wmts.cgi?request=GetCapabilities 
 curl -s -o $DESTDIR/gibs-antarctic.xml \
     "$GIBS_URL"/wmts-antarctic/wmts.cgi?request=GetCapabilities 
-
-
-

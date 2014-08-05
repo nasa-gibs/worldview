@@ -12,6 +12,9 @@
             "MODIS_Aqua_CorrectedReflectance_Bands721",
             "MODIS_Terra_SurfaceReflectance_Bands721",
             "MODIS_Aqua_SurfaceReflectance_Bands721",
+            "BlueMarble_NextGeneration",
+            "BlueMarble_ShadedRelief",
+            "BlueMarble_ShadedRelief_Bathymetry",
             "VIIRS_CityLights_2012",
             "land_water_map"
         ],
