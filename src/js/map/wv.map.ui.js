@@ -398,11 +398,18 @@ wv.map.ui = wv.map.ui || function(models, config) {
     var createLayerXYZ = function(def) {
         var source = config.sources[def.source];
         var url = source.url + "/" + def.url;
-        var layer = new OpenLayers.Layer.XYZ(def.title, url, {
+        var mapOptions = {
             tileSize: new OpenLayers.Size(def.tileSize[0],
                                           def.tileSize[1]),
             transitionEffect: "none"
-        });
+        };
+        if ( def.tileOrigin ) {
+            mapOptions.tileOrigin = new OpenLayers.LonLat(
+                def.tileOrigin[0],
+                def.tileOrigin[1]
+            );
+        }
+        var layer = new OpenLayers.Layer.XYZ(def.title, url, mapOptions);
         return layer;
     };
     
