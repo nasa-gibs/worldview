@@ -55,6 +55,8 @@ if [ ! -e /usr/local/bin/grunt ] ; then
     echo "You may be prompted for the root password to execute this command:"
     echo "    sudo npm install --global grunt-cli"
     sudo npm install --global grunt-cli
+    echo "$PROG: ***** Clearing npm cache"
+    sudo rm -rf "${HOME}"/.npm/*
 fi
 
 if [ ! -d "$BASE_DIR/node_modules" ] ; then
