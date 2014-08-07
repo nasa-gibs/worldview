@@ -42,10 +42,6 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
 
     }
 
-    var opacities = [];
-    _(products).each( function(product){
-              opacities.push( ( _.isUndefined(product.opacity) ) ? 1: product.opacity );
-    });
 
     var init = function() {
         ui.rubberband.events.on("update", update);
@@ -179,6 +175,12 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
             // NOTE: This need to be changed back to the projection model
             // when the backfill removes the old projection.
             var epsg = models.proj.change.epsg;
+
+            // get layer transparencies (opacities)
+            var opacities = [];
+            _(products).each( function(product){
+                      opacities.push( ( _.isUndefined(product.opacity) ) ? 1: product.opacity );
+            });
 
             //console.log("EPSG: " + epsg);
 
