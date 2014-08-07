@@ -42,6 +42,11 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
 
     }
 
+    var opacities = [];
+    _(products).each( function(product){
+              opacities.push( ( _.isUndefined(product.opacity) ) ? 1: product.opacity );
+    });
+
     var init = function() {
         ui.rubberband.events.on("update", update);
         ui.rubberband.events.on("show", show);
@@ -201,6 +206,7 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
             //dlURL += "&switch="+s;
             dlURL += "&epsg="+epsg;
             dlURL +="&layers=" + _.pluck(products, "id").join(",");
+            dlURL +="&opacities="+opacities.join(",");
 
             var imgWidth=0; var imgHeight=0;
             var imageRes, imgFileSize, imgFormat, imgWorldfile;
