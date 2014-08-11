@@ -16,7 +16,7 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
 
     var self = {};
 
-    var BASE_URL = "http://map2.vis.earthdata.nasa.gov/imagegen/index";
+    var BASE_URL = "http://map2.vis.earthdata.nasa.gov/imagegen/";
     var container;
     var alignTo = config.alignTo;
     var containerId = "imagedownload";
@@ -24,9 +24,10 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
     var coords;
     var resolution = "1";
     var format = "image/jpeg";
-    
+    var worldfile = "no";
+
     var host, path;
-    
+
      if ( config.features.imageDownload ) {
          host = config.features.imageDownload.host;
          path = config.parameters.imagegen || config.features.imageDownload.path;
@@ -35,10 +36,12 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
          path = "imagegen/index.php";
      }
      url = host + "/" + path + "?";
-    
+
     if ( config.parameters.imagegen ) {
         wv.util.warn("Redirecting image download to: " + url);
+
     }
+
 
     var init = function() {
         ui.rubberband.events.on("update", update);
@@ -78,7 +81,12 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
                 "<option value='image/png'>PNG</option>" +
                 "<option value='image/geotiff'>GeoTIFF</option>" +
                 "<option  value='image/kmz'>KMZ</option>" +
-            "</select>Format</div>" +
+            "</select>Format</div>"+
+            "<div class='wv-image-header'>" +
+            "<select id='wv-image-worldfile' > "+
+                "<option value='no'>No</option>"+
+                "<option value='yes'>Yes</option>" +
+            "</select>Worldfile (.zip)</div>" +
             "<table class='wv-image-download'>" +
                 "<tr>" +
                     "<th>Raw Size</th>" +
@@ -125,14 +133,24 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
             format = $("#wv-image-format option:checked").val();
             update(coords);
         });
-        
+
+
+        $("#wv-image-worldfile").change(function(){
+            worldfile=$("#wv-image-worldfile option:checked").val();
+            update(coords);
+        });
+
         $("#wv-image-resolution option").removeAttr("selected");
         $("#wv-image-resolution option[value='" + resolution + "']").attr("selected", "selected");
 
         $("#wv-image-format option").removeAttr("selected");
         $("#wv-image-format option[value='" + format + "']").attr("selected", "selected");
-        
-        $dialog.dialog("open");        
+
+        $("#wv-image-worldfile option").removeAttr("selected");
+        $("#wv-image-worldfile option[value='" + worldfile + "']").attr("selected", "selected");
+
+
+        $dialog.dialog("open");
     };
 
     var setPosition = function(){
@@ -157,6 +175,12 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
             // NOTE: This need to be changed back to the projection model
             // when the backfill removes the old projection.
             var epsg = models.proj.change.epsg;
+
+            // get layer transparencies (opacities)
+            var opacities = [];
+            _(products).each( function(product){
+                      opacities.push( ( _.isUndefined(product.opacity) ) ? 1: product.opacity );
+            });
 
             //console.log("EPSG: " + epsg);
 
@@ -184,9 +208,10 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
             //dlURL += "&switch="+s;
             dlURL += "&epsg="+epsg;
             dlURL +="&layers=" + _.pluck(products, "id").join(",");
+            dlURL +="&opacities="+opacities.join(",");
 
             var imgWidth=0; var imgHeight=0;
-            var imageRes, imgFileSize, imgFormat;
+            var imageRes, imgFileSize, imgFormat, imgWorldfile;
 
             $("#wv-image-resolution").unbind("change").change(function () {
                 imgRes =  $("#wv-image-resolution option:checked").val();
@@ -195,6 +220,7 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
                 imgHeight = Math.round((Math.abs(lonlat2.lat - lonlat1.lat) / conversionFactor) / Number(imgRes));
                 imgFilesize =  ((   imgWidth * imgHeight * 24) / 8388608).toFixed(2);
                 imgFormat = $("#wv-image-format option:checked").val();
+                imgWorldfile = $("#wv-image-worldfile option:checked").val();
                 var invalid = (imgFilesize>250 || imgHeight === 0 || imgWidth === 0);
                 var icon;
                 if ( invalid ) {
@@ -214,8 +240,8 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
 
 
               $("#wv-image-download-button").unbind('click').click(function(){
-                 wv.util.metrics('lc='+encodeURIComponent(dlURL+"&format="+imgFormat+"&width="+imgWidth+"&height="+imgHeight) );
-                 window.open(dlURL+"&format="+imgFormat+"&width="+imgWidth+"&height="+imgHeight,"_blank");
+                 wv.util.metrics('lc='+encodeURIComponent(dlURL+"&worldfile="+imgWorldfile+"&format="+imgFormat+"&width="+imgWidth+"&height="+imgHeight) );
+                 window.open(dlURL+"&worldfile="+imgWorldfile+"&format="+imgFormat+"&width="+imgWidth+"&height="+imgHeight,"_blank");
               });
         } catch ( cause ) {
             wv.util.error(cause);
