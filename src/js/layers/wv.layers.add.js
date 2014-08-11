@@ -388,10 +388,12 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
             var faoi = filterAreaOfInterest(layerId);
             var fproj = filterProjection(layer);
             var fterms = filterSearch(layer, search);
+            /*
             if ( layerId.startsWith("carto") ) {
                 console.log(layerId, "faoi", faoi, "fproj", fproj, "fterms", fterms);
                 console.log(wv.util.jqueryEscape(layerId));
             }
+            */
             var filtered = faoi || fproj || fterms;
             var display = filtered ? "none": "block";
             var selector = "#selectorbox li[data-layer='" +
