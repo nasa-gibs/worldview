@@ -77,9 +77,9 @@ wv.map.ui = wv.map.ui || function(models, config) {
 
     self.preload = function(date, callback) {
         var loading = 0;
-        
+
         var loadend = function(layer) {
-            if ( layer ) { 
+            if ( layer ) {
                 layer.events.unregister(loadend);
             }
             loading -= 1;
@@ -111,7 +111,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
             }
         });
     };
-    
+
     var updateLayer = function(def) {
         var map = self.selected;
         var key = layerKey(def);
@@ -122,7 +122,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 if ( !layer ) {
                     //console.log("loading", key);
                     layer = createLayer(def);
-                }   
+                }
                 self.selected.addLayer(layer);
             }
         }
@@ -134,7 +134,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         });
         updateMap();
     };
-    
+
     var removeLayer = function(def) {
         var map = self.selected;
         var key = layerKey(def);
@@ -412,7 +412,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         var layer = new OpenLayers.Layer.XYZ(def.title, url, mapOptions);
         return layer;
     };
-    
+
     var createLayerWMS = function(def, options) {
         var proj = models.proj.selected;
         var source = config.sources[def.source];
@@ -491,10 +491,10 @@ wv.map.ui = wv.map.ui || function(models, config) {
             formatOutput: function(mouseXY) {
                 var mouseLonLat = mouseXY.transform(proj.crs, "EPSG:4326");
                 return mouseLonLat.lon.toFixed(3) + "&#176;, " +
-                       mouseLonLat.lat.toFixed(3) + "&#176; " + 
+                       mouseLonLat.lat.toFixed(3) + "&#176; " +
                        // FIXME: Change back to projection model after
                        // arctic has been backfilled
-                       models.proj.change.crs; 
+                       models.proj.change.crs;
             }
         });
         controls.push(coordinateControl);
@@ -540,11 +540,11 @@ wv.map.ui = wv.map.ui || function(models, config) {
         $zoomOut.click(function() {
             map.zoomOut();
         });
-                
+
         map.addLayer(createLayerBlank(proj));
 
         if ( models.proj.selected.id === proj.id && models.map.extent ) {
-            map.zoomToExtent(models.map.extent);
+            map.zoomToExtent(models.map.extent, true);
         } else {
             map.setCenter(proj.startCenter, proj.startZoom);
         }
