@@ -233,7 +233,7 @@ wv.util = (function(self) {
         }
         return newDate;
     };
-    
+
     /**
      * Converts a date into a compact string representation.
      *
@@ -286,7 +286,7 @@ wv.util = (function(self) {
     self.resetNow = function() {
         self.now = now;
     };
-    
+
     /**
      * Gets the current day. Use this instead of the Date methods to allow
      * debugging alternate "now" times.
@@ -441,24 +441,25 @@ wv.util = (function(self) {
 
     // http://totaldev.com/content/escaping-characters-get-valid-jquery-id
     self.jqueryEscape = function(str) {
-        return str.replace(/([;&,\.\+\*\~':"\!\^#$%@\[\]\(\)=>\|])/g, '\\$1');
+        return encodeURIComponent(str)
+            .replace(/([;&,\.\+\*\~':"\!\^#$%@\[\]\(\)=>\|])/g, '\\$1');
     };
 
     self.metrics = function() {
         if ( window.ntptEventTag ) {
             ntptEventTag.apply(null, arguments);
         } else {
-            console.log("no metrics"); 
+            console.log("no metrics");
         }
     };
-    
+
     self.key = {
         LEFT: 37,
         RIGHT: 39,
         UP: 38,
         DOWN: 40
     };
-    
+
     return self;
 
 })(wv.util || {});
