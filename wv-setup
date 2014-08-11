@@ -73,8 +73,7 @@ fi
 
 if [ ! -d "$BASE_DIR/python" ] ; then
     echo "$PROG: ***** Installing python dependencies"
-    virtualenv python
-    "$BASE_DIR"/python/bin/pip install xmltodict
+    "$BASE_DIR"/wv-python
 fi
 
 if [ ! -d "$BASE_DIR/options" ] ; then
