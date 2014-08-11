@@ -66,8 +66,8 @@ wv.layers.model = wv.layers.model || function(models, config) {
             title = config.layers[layerId].projections[proj].title;
             subtitle = config.layers[layerId].projections[proj].subtitle;
         }
-        title = title || config.layers[layerId].title;
-        subtitle = subtitle || config.layers[layerId].subtitle;
+        title = title || config.layers[layerId].title || "[" + layerId + "]";
+        subtitle = subtitle || config.layers[layerId].subtitle || "";
         return { title: title, subtitle: subtitle };
     };
 
