@@ -368,13 +368,12 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
         if ( search === "" ) {
             return false;
         }
-        var tags = ( layer.tags ) ? layer.tags : "";
         var filtered = false;
         var names = models.layers.getTitles(layer.id);
         $.each(terms, function(index, term) {
             filtered = !names.title.toLowerCase().contains(term) &&
                        !names.subtitle.toLowerCase().contains(term) &&
-                       !tags.toLowerCase().contains(term);
+                       !names.tags.toLowerCase().contains(term);
             if ( filtered ) {
                 return false;
             }

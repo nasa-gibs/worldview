@@ -63,12 +63,16 @@ wv.layers.model = wv.layers.model || function(models, config) {
         proj = proj || models.proj.selected.id;
         var title, subtitle;
         if ( config.layers[layerId].projections[proj] ) {
-            title = config.layers[layerId].projections[proj].title;
-            subtitle = config.layers[layerId].projections[proj].subtitle;
+            var forProj = config.layers[layerId].projections[proj];
+            title = forProj.title;
+            subtitle = forProj.subtitle;
+            tags = forProj.tags;
         }
-        title = title || config.layers[layerId].title || "[" + layerId + "]";
-        subtitle = subtitle || config.layers[layerId].subtitle || "";
-        return { title: title, subtitle: subtitle };
+        var forLayer = config.layers[layerId];
+        title = title || forLayer.title || "[" + layerId + "]";
+        subtitle = subtitle || forLayer.subtitle || "";
+        tags = tags || forLayer.tags || "";
+        return { title: title, subtitle: subtitle, tags: tags };
     };
 
     self.available = function(id) {
