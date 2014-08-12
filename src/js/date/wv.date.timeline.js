@@ -32,7 +32,12 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var startDateMs = ( model.start ) ? model.start.getTime() : undefined;
     var endDateMs = ( model.end ) ? model.end.getTime() : undefined;
     var jumpInterval, selectedDateObj, x,y,line,zoom,xAxis, yAxis, timeline, data2;
-
+    var zoomLvl = 2;
+    var zoomInterval = d3.time.month.utc;
+    var zoomStep = 1;
+    var subInterval = d3.time.day.utc;
+    var subStep = 1;
+    var zoomScale,axisBgWidth,subAxisBgWidth,smallTicks;
     var margin = {
             top: 0,
             right: 0,
@@ -55,9 +60,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var throttleSelect = _.throttle(function(date) {
         model.select(date);
     }, 100, { trailing: true });
-    var zoomLevels = function(){
-        
-    };
+
     var selection = d3.svg.line()
         .x(function(d){
             return x(d.x);
@@ -77,15 +80,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             }
         ];
         x = d3.time.scale.utc()
-
-            //for Decades:
             .domain([new Date(1800,0,1), new Date(2200,0,1)])
-
-            //for Years:
-            //.domain([new Date(1970,0,1), new Date(2020,0,1)])
-            
-            //for Months:
-            //.domain([new Date(2000,0,1), new Date(2014,12,31)])
 
             //.nice(d3.time.year)
             .range([-2000, 3600]);
@@ -96,53 +91,103 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         */
         y = d3.scale.linear()
             .domain([0,6])
-            .range([-height,0]);
+            .range([0,height]);
 
         xAxis = d3.svg.axis()
             .scale(x)
             //.tickValues(model.start,model.end)
             .orient("bottom")
 
-            //for Decades
-            .ticks(d3.time.year.utc,10)
-
-            //for Years
-            //.ticks(d3.time.year.utc,1)
-            
-            //for Months
-            //.ticks(d3.time.month.utc,1)
-            
-            //for Days
-            //.ticks(d3.time.day.utc,1)
-            
             //.tickFormat(d3.time.format.multi([["%b %Y", function(d) { return d.getUTCMonth(); }], ["%b %Y", function() { return true; }]]));
             .tickFormat(customTimeFormat2);
+        
         yAxis = d3.svg.axis()
             .scale(y)
             .orient("left");
     
         zoom = d3.behavior.zoom()
             .x(x)
-            //for Decades
-            .scale(1)
-            
-            //for Years
-            //.scale(10)
-
-            //for Months
-            //.scale(170)
-
-            //for Days
-            //.scale(3070)
-
-            //.translate()
-            //.scaleExtent([1, 100]) //FIXME: fix scale
+            .scale(170)
+            //.translate([-700,0])
+            .scaleExtent([1, 3070]) //FIXME: fix scale
             .on("zoom", zoomable, d3.event);
-        
+        zoomScale = 1;
     };
 
-    var redrawAxis = function(){
-        timeline.select(".x.axis").call(xAxis.tickSize(-height).tickPadding(10));
+    var redrawAxis = function(interval, step){
+        timeline.select(".x.axis").call(xAxis.ticks(0));
+
+        if (interval) { 
+            zoomInterval = interval; 
+            zoomStep = step;
+        }
+        timeline.select(".x.axis")
+            .call(xAxis.tickSize(-height)
+                  .tickPadding(10)
+                  .ticks(zoomInterval,zoomStep));
+
+        var ticks = timeline.selectAll('.x.axis>.tick');
+
+        ticks.insert("svg:circle","text").attr("r","6");
+
+        setAxisBgWidth();
+        ticks.insert("svg:rect", "circle")
+            .attr("x","0")
+            .attr("y","0")
+            .attr("width",axisBgWidth)
+            .attr("height",height)
+            .attr("class","axis-background");
+        
+        ticks.selectAll("line")
+            .attr("y1",-height)
+            .attr("y2",margin.bottom);
+
+
+        //Draw sub axes for smaller intervals, each tick has date attached
+        //FIXME: Optimize, probably dont need to redraw
+        for (i=0;i<ticks.data().length-1;i++){
+
+            var tickDate = ticks.data()[i];
+            var nextTickDate = ticks.data()[i+1];
+
+            var x2 = d3.time.scale.utc()
+                .domain([tickDate,nextTickDate])
+                .range([0,x(nextTickDate)-x(tickDate)]);
+
+            var xSmallAxis = d3.svg.axis()
+                .scale(x2);
+
+            var smallAxis = timeline.select('.x.axis>.tick:nth-child('+ (i+2) + ')').insert("svg:g","line")
+                .attr("class", "subtick")
+                .attr("transform", "translate(0,"+ -height +")")
+                .call(xSmallAxis.tickSize(height-1).ticks(subInterval,subStep));
+            smallAxis.selectAll("text").remove();
+
+            var smallAxisTicks = smallAxis.selectAll('g.subtick > .tick');
+
+            //get background width from one subtick to the next FIXME: probably can be condensed
+            var subTickBgWidth =  x(timeline.select('.x.axis > g.tick:nth-child('+(i+2)+') > g.subtick > g.tick:nth-child(2)').data()[0]) -
+                    x(timeline.select('.x.axis > g.tick:nth-child('+(i+2)+') > g.subtick > g.tick:nth-child(1)').data()[0]);
+
+
+            //draw background (rect) for each subtick
+            for (j=1;j<smallAxisTicks.data().length;j++){
+                timeline.select('.x.axis > g.tick:nth-child('+(i+2)+') > g.subtick > g.tick:nth-child('+j+')').append("svg:rect")
+                    .attr("class","subtick-background")
+                    .attr("height",height-1)
+                    .attr("width",subTickBgWidth);
+            }
+        }
+
+
+        
+        timeline.select(".selection")
+            .attr("d",selection);
+        
+        d3.selectAll('.x.axis>.tick text')
+            .attr('x',5)
+            .attr()
+            .attr('style','text-anchor:left;');
 
 
     };
@@ -230,69 +275,137 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .call(zoom)
             .append("svg:g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-        //.call(zoom);
+
+        zoom.translate([width/2 - x(model.selected),0]);
 
         timeline.append("svg:g")
             .attr("class", "x axis")
             .attr("transform", "translate(0," + height + ")")
-            .call(xAxis.tickSize(-height).tickPadding(10))
+            .call(xAxis.tickSize(-height).tickPadding(10).ticks(zoomInterval,zoomStep))
             .insert("line",":first-child")
                 .attr("x1",0)
                 .attr("x2",width);
 
-        var ticks = timeline.selectAll('.x.axis .tick');
+        var ticks = timeline.selectAll('.x.axis>.tick');
 
         ticks.insert("svg:circle","text").attr("r","6");
-
-        ticks.insert("svg:rect", "circle")
+        
+        setAxisBgWidth();
+        
+        ticks.insert("svg:rect", "text")
             .attr("x","0")
             .attr("y","0")
-            .attr("width","130")
-            .attr("height",height);
-        
-        ticks.selectAll("line")
+            .attr("width",axisBgWidth)
+            .attr("height",height)
+            .attr("class","axis-background");
+
+        ticks.selectAll("line:first-child")
             .attr("y1",-height)
             .attr("y2",margin.bottom);
 
-        timeline.append("svg:g")
+        //Draw sub axes for smaller intervals, each tick has date attached
+        for (i=0;i<ticks.data().length-1;i++){
+
+            var tickDate = ticks.data()[i];
+            var nextTickDate = ticks.data()[i+1];
+
+            var x2 = d3.time.scale.utc()
+                .domain([tickDate,nextTickDate])
+                .range([0,x(nextTickDate)-x(tickDate)]);
+
+            var xSmallAxis = d3.svg.axis()
+                .scale(x2);
+
+            var smallAxis = timeline.select('.x.axis>.tick:nth-child('+ (i+2) + ')').insert("svg:g","line")
+                .attr("class", "subtick")
+                .attr("transform", "translate(0,"+ -height +")")
+                .call(xSmallAxis.tickSize(height-1).ticks(subInterval,subStep));
+            smallAxis.selectAll("text").remove();
+
+            var smallAxisTicks = smallAxis.selectAll('g.subtick > .tick');
+
+            //get background width from one subtick to the next FIXME: probably can be condensed
+            var subTickBgWidth =  x(timeline.select('.x.axis > g.tick:nth-child('+(i+2)+') > g.subtick > g.tick:nth-child(2)').data()[0]) -
+                    x(timeline.select('.x.axis > g.tick:nth-child('+(i+2)+') > g.subtick > g.tick:nth-child(1)').data()[0]);
+
+
+            //draw background (rect) for each subtick
+            for (j=1;j<smallAxisTicks.data().length;j++){
+                timeline.select('.x.axis > g.tick:nth-child('+(i+2)+') > g.subtick > g.tick:nth-child('+j+')').append("svg:rect")
+                    .attr("class","subtick-background")
+                    .attr("height",height-1)
+                    .attr("width",subTickBgWidth);
+            }
+        }
+/* FIXME:  Garbage I might want to keep until the end, in case I need to reference something I did earlier
+/*            ticks.append("svg:g")
+                .attr("class", "subtick")
+                .attr("transform","translate(" + xPos  + ",0)")
+                .append("svg:rect")
+                    .attr("class","subtick-background")
+                    .attr("height",height)
+                    .attr("width",subAxisBgWidth)
+                    .attr("y",-height)
+                    .attr("x",0);
+            xPos += subAxisBgWidth;
+*/
+
+
+            //ticks.data[0];
+
+//            ticks.append("svg:g")
+//                .attr('class','subtick');
+        
+    // }
+        /* I'm probably working too hard for this below.  Going to try another method
+        var xPos = 0;
+        for (var i=0; i<10;i++){
+            ticks.append("svg:g")
+                .attr("class", "subtick")
+                .attr("transform","translate(" + xPos  + ",0)")
+                .append("svg:rect")
+                    .attr("class","subtick-background")
+                    .attr("height",height)
+                    .attr("width",subAxisBgWidth)
+                    .attr("y",-height)
+                    .attr("x",0);
+            xPos += subAxisBgWidth;
+            
+        }
+        //FIXME: remove line from all first subticks
+
+        timeline.selectAll('.x.axis .subtick')
+            .append("svg:line")
+                .attr("class","subtick-border")
+                .attr("y1",-height)
+                .attr("y2","-1");
+        //console.log($(".subtick:first-child"));        
+        d3.selectAll('.subtick:nth-child(5) .subtick-border').remove();        
+        ticks.selectAll("line:first-child")
+            .attr("y1",-height)
+            .attr("y2",margin.bottom);
+
+//        timeline.selectAll(".subtick:first-child line").remove();
+*/
+        verticalAxis = timeline.append("svg:g")
             .attr("class", "y axis")
             .attr("transform", "translate(0,0)")
             .call(yAxis);
-        
+
+        verticalAxis.selectAll("text").remove();
+
         timeline.select(".x.axis").append("svg:path")
             .datum(data2)
             .attr("class", "selection")
             .attr("d", selection);
                 
-        d3.selectAll('.x.axis .tick text').attr('x',5).attr().attr('style','text-anchor:left;');
-        console.log("#######################################");
-        console.log(d3.event);
-        console.log(timeline);
-        console.log(d3.select("#timeline-footer svg"));
+        d3.selectAll('.x.axis>.tick text').attr('x',5).attr().attr('style','text-anchor:left;');
 
-        
         //bind click action to interval radio buttons
         var buttons = $('.button-input-group');
         buttons.on('focus',function(e){
             buttons.removeClass('button-input-group-selected');
             $(this).addClass('button-input-group-selected');
-            /*
-            jumpInterval = $(this).attr('id');
-            switch(jumpInterval){
-                case 'year-input-group':
-                    buttonInterval = "year";
-                    break;
-                case 'month-input-group':
-                    buttonInterval = "month";
-                    break;
-                case 'day-input-group':
-                    buttonInterval = "day";
-                    break;
-                default:
-                    alert("cannot find selected interval!");
-                    break;
-            }
-            */
             $(this).select();
         });
 
@@ -353,26 +466,137 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         });
 
         $("#day-input-group").blur();
-/*
-        $(".zoom-btn").on("click",function(){
-            console.log("test click");
-            //zoom.scale(100);
-            console.log(zoom.scale());
-            zoom.scale(40);
-            
-        });
-  */      
-    }; // /init
 
+        $("#zoom-decades").on("click",function(e){
+            zoomLevels(0);
+        });
+        $("#zoom-years").on("click",function(e){
+            zoomLevels(1);
+        }); 
+        $("#zoom-months").on("click",function(e){
+            zoomLevels(2);
+        }); 
+        $("#zoom-days").on("click",function(e){
+            zoomLevels(3);
+        });
+
+    }; // /init
+    var zoomLevels = function(interval){
+        //console.log(interval);
+        zoomLvl = interval;
+        switch(zoomLvl){
+            case 'decades':
+            case 0:
+            zoomInterval = d3.time.year.utc;
+            subInterval = d3.time.year.utc;
+            subStep = 1;
+            zoomStep = 10;
+            zoomScale = 1;
+            break;
+            case 'years':
+            case 1:
+            zoomInterval = d3.time.year.utc;
+            subInterval = d3.time.month.utc;
+            subStep = 1;
+            zoomStep = 1;
+            zoomScale = 10;
+            break;
+            case 'months':
+            case 2:
+            zoomInterval = d3.time.month.utc;
+            subInterval = d3.time.day.utc;
+            subStep = 1;
+            zoomStep = 1;
+            zoomScale = 170;
+            break;
+            case 'days':
+            case 3:
+            zoomInterval = d3.time.day.utc;
+            subInterval = d3.time.hour.utc;
+            subStep = 1;
+            zoomStep = 1;
+            zoomScale = 3070;
+            break;
+            default:
+            console.log("went to default");
+            zoomInterval = d3.time.year.utc;
+            subInterval = d3.time.year.utc;
+            subStep = 1;
+            zoomStep = 10;
+            zoomScale = 1;
+        }
+        zoom.scale(zoomScale);
+        zoom.translate([0,0]);
+        zoom.translate([-x(model.selected)+width/2,0]);
+
+        redrawAxis(zoomInterval,zoomStep);
+
+    };
+    var setAxisBgWidth = function(){
+        var axisYear = model.selected.getUTCFullYear();
+        var axisMonth = model.selected.getUTCMonth();
+        var axisDate = model.selected.getUTCDate();
+        var axisHours = model.selected.getUTCHours();
+        switch (zoomLvl){
+            case 0:
+            axisBgWidth = x(new Date(axisYear+10,axisMonth,axisDate)) -
+                x(new Date(axisYear,axisMonth,axisDate));
+            subAxisBgWidth = x(new Date(axisYear+1,axisMonth,axisDate)) -
+                x(new Date(axisYear,axisMonth,axisDate));
+            break;
+            case 1:
+            axisBgWidth = x(new Date(axisYear+1,axisMonth,axisDate)) -
+                x(new Date(axisYear,axisMonth,axisDate));
+            subAxisBgWidth = x(new Date(axisYear,axisMonth+1,axisDate)) - 
+                x(new Date(axisYear,axisMonth,axisDate));
+            break;
+            case 2:
+            axisBgWidth = x(new Date(axisYear,axisMonth+1,axisDate)) -
+                x(new Date(axisYear,axisMonth,axisDate));
+            subAxisBgWidth = x(new Date(axisYear,axisMonth,axisDate+1)) - 
+                x(new Date(axisYear,axisMonth,axisDate));
+            break;
+            case 3:
+            axisBgWidth = x(new Date(axisYear,axisMonth,axisDate+1)) -
+                x(new Date(axisYear,axisMonth,axisDate));
+            subAxisBgWidth = x(new Date(axisYear,axisMonth,axisDate,axisHours+1)) -
+                x(new Date(axisYear,axisMonth,axisDate,axisHours));
+            break;
+        }
+    };
+    var setSmallAxisTickNumbers = function(ticks,i){
+
+        switch (zoomLvl){
+            case 0:
+            smallTickWidth = ticks.data()[i+1] - ticks.data()[i]/1000/60/60/24/365;
+            break;
+            case 1:
+            smallTickWidth = Math.floor((ticks.data()[i+1].getTime() - ticks.data()[i].getTime())/1000/60/60/24/30);
+            break;
+            case 2:
+            smallTickWidth = Math.floor((ticks.data()[i+1].getTime() - ticks.data()[i].getTime())/1000/60/60/24);            
+            break;
+            case 3:
+            smallTickWidth = Math.floor((ticks.data()[i+1].getTime() - ticks.data()[i].getTime())/1000/60/60);
+            break;
+            
+            default:
+            
+            break;
+        }
+//        console.log("Date: " + ticks.data()[i].toUTCString() + ", days to next interval: " + Math.floor(answer/1000/60/60/24));
+
+
+    }
     var customTimeFormat2 = d3.time.format.utc.multi([
         [".%L", function(d) { return d.getUTCMilliseconds(); }],
         [":%S", function(d) { return d.getUTCSeconds(); }],
         ["%I:%M", function(d) { return d.getUTCMinutes(); }],
         ["%I %p", function(d) { return d.getUTCHours(); }],
         //["%a %d", function(d) { return d.getUTCDay() && d.getDate() != 1; }],
-        ["%d", function(d) { return d.getUTCDate() != 1; }],
-        ["%Y %b", function(d) { return d.getUTCMonth(); }],
-        ["%Y %b", function(d) { return true; }],
+        ["%d %b", function(d) { return d.getUTCDate() != 1; }],
+        ["%b %Y", function(d) { return d.getUTCMonth(); }],
+        ["%Y", function(d) { return true; }],
     ]);
 
     var animateForward = function(interval) {
@@ -398,31 +622,29 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     };
     
     var zoomable = function(e){
-        console.log(zoom.scale());
-        //console.log(d3.behavior.zoom());
-        console.log(x.domain());
-        console.log(x.range());
-        console.log("###################");
-        console.log(x.ticks());
-        var tempVal;
-        var sliderVal = parseInt($("#timeline-zoom input").val());
 
+        console.log(d3.event.sourceEvent);
+        //redrawAxis();
         var evt = window.event || d3.event.sourceEvent || e;
         var deltaY=evt.deltaY ? evt.deltaY : evt.wheelDeltaY || evt.detail ? evt.detail*(-120) : evt.wheelDelta;
         var deltaX=evt.deltaX ? evt.deltaY : evt.wheelDeltaX;
         if (deltaY < 0){
             //console.log("Up");
-            tempVal = sliderVal + 1;
+            if (zoomLvl < 3){
+                zoomLvl++;
+                zoomLevels(zoomLvl);
+            }
+        }
+        else if (deltaY > 0){
+            //console.log("Down")
+            if (zoomLvl > 0){
+                zoomLvl--;
+                zoomLevels(zoomLvl);
+            }
         }
         else{
-            //console.log("Down")
-            tempVal = sliderVal - 1;
+            redrawAxis();
         }
-        if ((tempVal >= 0) && (tempVal <= 4)){
-            $("#timeline-zoom input").val(tempVal).trigger("input");
-        }
-        else
-            return;
     };
     self.test = "TESTING VAR";
     init();

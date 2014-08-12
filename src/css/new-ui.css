@@ -14,8 +14,7 @@
     position:absolute;
     bottom:10px;
     left:10px;
-    /* HACK: Hiding timeline for now */
-    /* right:10px; */
+    right:10px;
     border:1px solid #333;
     background: #f5f5f5; /* Old browsers */
     background: -moz-linear-gradient(top,  #f5f5f5 0%, #e2e2e2 50%, #c2c2c2 100%); /* FF3.6+ */
@@ -49,7 +48,7 @@
 .x.axis .tick text{
     fill:#1a1a1a;
 }
-.x.axis .tick line {
+.x.axis>.tick>line {
     stroke-width:3;
     stroke-miterlimit:4;
     stroke-dasharray:3,9;
@@ -58,16 +57,39 @@
     stroke-linejoin:miter;
     stroke-miterlimit:4;
 }
-.x.axis .tick rect {
+.x.axis> .tick rect {
     fill:#e2e2e2;
     fill-opacity:0;
 }
-.x.axis .tick:hover rect{
+.x.axis> .tick:hover rect.axis-background{
     fill:#1a1a1a;
     fill-opacity:1;
 }
-.x.axis .tick:hover text {
+.x.axis> .tick:hover text {
     fill:#e2e2e2;
+}
+/*.x.axis >.tick g.subtick:nth-child(5) line{
+    display:none;
+}*/
+.x.axis > .tick > .subtick > .tick:first-child line,
+.x.axis > .tick > .subtick > .tick:last-child line
+{
+    stroke:transparent;
+}
+.x.axis > .tick > .subtick > .tick:hover rect{
+    fill-opacity:0.3;
+    fill:#1a1a1a;
+}
+.x.axis > .tick > .subtick > .tick > line{
+    fill:none;
+    stroke:#c8c8c8;
+    stroke-width:2;
+    stroke-linecap:butt;
+    stroke-linejoin:miter;
+    stroke-miterlimit:4;
+    stroke-opacity:1;
+    stroke-dasharray:2, 4;
+    stroke-dashoffset:0;
 }
 #timeline-header{
     background:;
@@ -141,8 +163,7 @@ display:inline-block;}
     vertical-align:middle;
 }
 #timeline-footer{
-    /* HACK: Hiding for now */
-    display: none;
+    display: inline-block;
     height:85px;
     margin-left:0px;
 }
@@ -150,10 +171,14 @@ display:inline-block;}
 /* Timeline svg classes */
 
 
-.axis path, .axis line {
+.x.axis path, .x.axis line {
     fill: none;
     stroke: #1a1a1a;
     shape-rendering: crispEdges;
+}
+.y.axis path, .y.axis line {
+    fill:none;
+    stroke:none;
 }
 .x.axis path {
     display: none;
@@ -178,9 +203,7 @@ display:inline-block;}
     z-index:10000;
 }
 #timeline-zoom{
-    /* HACK: Hiding for now */
-    display: none;
-    /* display:inline-block; */
+    display:inline-block;
     vertical-align:middle;
     margin-left:10px;
     /*float:right;*/
