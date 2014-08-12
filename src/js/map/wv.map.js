@@ -289,7 +289,7 @@ wv.map.graticule = OpenLayers.Class(OpenLayers.Layer, {
 
         this.graticuleLineStyle = new OpenLayers.Symbolizer.Line({
             strokeColor: '#AAAAAA',
-            strokeOpacity: 1.0, 
+            strokeOpacity: 1.0,
             strokeWidth: 1.35,
             strokeLinecap: 'square',
             strokeDashstyle: 'dot'

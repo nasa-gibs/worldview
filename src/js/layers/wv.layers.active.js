@@ -172,7 +172,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                 });
             $layer.append($metadataButton);
         }
-        
+
         var $gearButton = $("<i></i>")
             .addClass("fa")
             .addClass("fa-gear")
@@ -206,7 +206,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
     var renderLegendCanvas = function(layer) {
         var selector = ".wv-palette[data-layer='" +
-                encodeURIComponent(layer.id) + "']";
+                wv.util.jqueryEscape(layer.id) + "']";
 		legends[layer.id] = wv.palettes.legend({
             selector: selector,
             config: config,
@@ -294,7 +294,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
     var onLayerRemoved = function(layer) {
         var layerSelector = "#" + layer.group + "-" +
-                wv.util.jqueryEscape(encodeURIComponent(layer.id));
+                wv.util.jqueryEscape(layer.id);
         $(layerSelector).remove();
         if ( legends[layer.id] ) {
             delete legends[layer.id];

@@ -21,9 +21,9 @@ wv.util.load = wv.util.load || (function() {
 
     self.config = function(root, attr, url) {
         promise = $.Deferred();
-        // If a request is already outstanding, "ignore" it by returning
-        // a promise that will never be fulfilled.
+        // If a request is already outstanding, chain to that one
         if ( configPromises[url]) {
+            configPromises[url].done(promise.resolve).fail(promise.reject);
             return promise;
         }
         if ( root[attr] && _.size(root[attr]) > 0 ) {

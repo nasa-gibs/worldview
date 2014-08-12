@@ -89,7 +89,7 @@ for layer_id in wv["layers"].keys():
         if not os.path.exists(os.path.join(config_dir, "palettes",
                 palette_id + ".json")):
             error("[%s] Unknown palette: %s" % (layer_id, palette_id))
-        del layer["palette"]
+            del layer["palette"]
     if "group" not in layer:
         error("[%s] Possible unexpected layer, no group defined" % layer_id)
         remove_layer(wv, layer_id)

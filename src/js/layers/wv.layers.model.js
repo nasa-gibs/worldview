@@ -66,11 +66,11 @@ wv.layers.model = wv.layers.model || function(models, config) {
             title = config.layers[layerId].projections[proj].title;
             subtitle = config.layers[layerId].projections[proj].subtitle;
         }
-        title = title || config.layers[layerId].title;
-        subtitle = subtitle || config.layers[layerId].subtitle;
+        title = title || config.layers[layerId].title || "[" + layerId + "]";
+        subtitle = subtitle || config.layers[layerId].subtitle || "";
         return { title: title, subtitle: subtitle };
     };
-    
+
     self.available = function(id) {
         var range = self.dateRange({layer: id});
         var date = models.date.selected;
@@ -87,7 +87,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
         var projId = spec.projId || models.proj.selected.id;
         var layers = ( spec.layer ) ? [_.find(self.active, {id: spec.layer})]
                 : self.active;
-        var ignoreRange = 
+        var ignoreRange =
             config.parameters &&
             ( config.parameters.debugGIBS || config.parameters.ignoreDateRange );
         if ( ignoreRange ) {
@@ -250,7 +250,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
             self.events.trigger("change");
         }
     };
-    
+
     self.isRenderable = function(id) {
         var def = _.find(self.active, { id: id });
         if ( !def ) {
@@ -270,7 +270,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
             if ( otherDef.id === def.id ) {
                 return false;
             }
-            if ( otherDef.visible && otherDef.opacity === 1.0 && 
+            if ( otherDef.visible && otherDef.opacity === 1.0 &&
                     self.available(otherDef.id) ) {
                 obscured = true;
                 return false;

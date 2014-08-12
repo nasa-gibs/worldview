@@ -201,7 +201,7 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
             var actual_height = 0;
             var count = 0;
             $(self.selector + group + ' li').each(function() {
-                var layerId = $(this).attr("data-layer");
+                var layerId = decodeURIComponent($(this).attr("data-layer"));
                 if ( visible[layerId] ) {
                     actual_height += $(this).outerHeight(true);
                     count++;
@@ -277,13 +277,13 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
 
     var onLayerAdded = function(layer) {
         var $element = $("#selectorbox [data-layer='" +
-                encodeURIComponent(layer.id) + "']");
+                wv.util.jqueryEscape(layer.id) + "']");
         $element.iCheck("check");
     };
 
     var onLayerRemoved = function(layer) {
         var $element = $("#selectorbox [data-layer='" +
-                encodeURIComponent(layer.id) + "']");
+                wv.util.jqueryEscape(layer.id) + "']");
         $element.iCheck("uncheck");
     };
 
@@ -297,13 +297,13 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
         var proj = models.proj.selected.id;
         _.each(models.layers.get(), function(def) {
             var names = models.layers.getTitles(def.id);
-            $("#selectorbox [data-layer='" + encodeURIComponent(def.id) + 
+            $("#selectorbox [data-layer='" + encodeURIComponent(def.id) +
                 "'] .title").html(names.title);
-            $("#selectorbox [data-layer='" + encodeURIComponent(def.id) + 
+            $("#selectorbox [data-layer='" + encodeURIComponent(def.id) +
                 "'] .subtitle").html(names.subtitle);
         });
     };
-    
+
     var updateAreasOfInterest = function() {
         if ( !config.aoi ) {
             return;
@@ -379,20 +379,25 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
                 return false;
             }
         });
-
         return filtered;
     };
 
     var filter = _.throttle(function() {
         var search = searchTerms();
         $.each(config.layers, function(layerId, layer) {
-            var filtered =
-                filterAreaOfInterest(layerId) ||
-                filterProjection(layer) ||
-                filterSearch(layer, search);
+            var faoi = filterAreaOfInterest(layerId);
+            var fproj = filterProjection(layer);
+            var fterms = filterSearch(layer, search);
+            /*
+            if ( layerId.startsWith("carto") ) {
+                console.log(layerId, "faoi", faoi, "fproj", fproj, "fterms", fterms);
+                console.log(wv.util.jqueryEscape(layerId));
+            }
+            */
+            var filtered = faoi || fproj || fterms;
             var display = filtered ? "none": "block";
             var selector = "#selectorbox li[data-layer='" +
-                    wv.util.jqueryEscape(encodeURIComponent(layerId)) + "']";
+                    wv.util.jqueryEscape(layerId) + "']";
             $(selector).css("display", display);
             visible[layer.id] = !filtered;
         });
