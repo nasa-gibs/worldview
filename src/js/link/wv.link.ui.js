@@ -9,17 +9,9 @@
  * All Rights Reserved.
  */
 
-/**
- * @module wv.link
- */
 var wv = wv || {};
 wv.link = wv.link || {};
 
-/**
- * Undocumented.
- *
- * @class wv.link.ui
- */
 wv.link.ui = wv.link.ui || function(models, config) {
 
     var self = {};
@@ -55,11 +47,15 @@ wv.link.ui = wv.link.ui || function(models, config) {
                 wv.ui.closeDialog();
             }
         });
+
+        models.link.events.on("update", replaceHistoryState);
     };
 
-    /**
-     * @method show
-     */
+    var replaceHistoryState = function() {
+        window.history.replaceState("", "@OFFICIAL_NAME@",
+                "?" + models.link.toQueryString());
+    };
+
     self.show = function() {
         longLink = models.link.get();
         link = longLink;

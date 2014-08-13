@@ -313,7 +313,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
     };
 
     var updateExtent = function() {
-        models.map.extent = self.selected.getExtent().toArray();
+        models.map.update(self.selected.getExtent().toArray());
     };
 
     var createLayer = function(d, options) {
