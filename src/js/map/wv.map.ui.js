@@ -561,7 +561,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 $zoomOut.button("enable");
             }
         });
-        map.events.register("move", null, updateExtent);
+        map.events.register("moveend", null, updateExtent);
         map.events.register("movestart", null, purgeCache);
         map.events.register("preaddlayer", null, onAddLayer);
         map.events.register("preremovelayer", null, onRemoveLayer);
