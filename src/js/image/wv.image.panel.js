@@ -24,7 +24,7 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
     var coords;
     var resolution = "1";
     var format = "image/jpeg";
-    var worldfile = "no";
+    var worldfile = "false";
 
     var host, path;
 
@@ -84,8 +84,8 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
             "</select>Format</div>"+
             "<div class='wv-image-header'>" +
             "<select id='wv-image-worldfile' > "+
-                "<option value='no'>No</option>"+
-                "<option value='yes'>Yes</option>" +
+                "<option value='false'>No</option>"+
+                "<option value='true'>Yes</option>" +
             "</select>Worldfile (.zip)</div>" +
             "<table class='wv-image-download'>" +
                 "<tr>" +
