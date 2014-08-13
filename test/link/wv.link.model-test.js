@@ -64,6 +64,23 @@ buster.testCase("wv.link.model", {
             buster.assert.calledOnce(call);
             done();
         });
+    },
+
+    "Update on any event": function() {
+        var c1 = {
+            events: wv.util.events()
+        };
+        var c2 = {
+            events: wv.util.events()
+        };
+        var link = wv.link.model();
+        link.register(c1);
+        link.register(c2);
+        var call = this.stub();
+        link.events.on("update", call);
+        c1.events.trigger("event");
+        c2.events.trigger("event");
+        buster.assert.calledTwice(call);
     }
 
 });

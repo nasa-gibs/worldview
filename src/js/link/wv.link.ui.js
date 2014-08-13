@@ -19,9 +19,6 @@ wv.link.ui = wv.link.ui || function(models, config) {
     var selector = "#" + id;
     var $button;
     var $label;
-    var watcher;
-    var longLink;
-    var link;
 
     var init = function() {
         $button = $("<input></input>")
@@ -51,14 +48,14 @@ wv.link.ui = wv.link.ui || function(models, config) {
         models.link.events.on("update", replaceHistoryState);
     };
 
-    var replaceHistoryState = function() {
-        window.history.replaceState("", "@OFFICIAL_NAME@",
-                "?" + models.link.toQueryString());
-    };
+    var replaceHistoryState = _.throttle(function() {
+        if ( wv.util.browser.history ) {
+            window.history.replaceState("", "@OFFICIAL_NAME@",
+                    "?" + models.link.toQueryString());
+        }
+    }, 250, {trailing: true});
 
     self.show = function() {
-        longLink = models.link.get();
-        link = longLink;
         var $dialog = wv.ui.getDialog();
         var item =  "<div id='wv-link' >" +
             "<input type='text' value='' name='permalink_content' id='permalink_content' />";
@@ -71,23 +68,18 @@ wv.link.ui = wv.link.ui || function(models, config) {
         item += "</div>";
         $dialog.html(item).iCheck({checkboxClass: 'icheckbox_square-grey'});
 
-        $('#permalink_content').val(link);
+        $('#permalink_content').val(models.link.get());
 
         // If selected during the animation, the cursor will go to the
         // end of the input box
-        setTimeout(function() {
+        var updateLink  = function() {
             $('#permalink_content').focus();
             $('#permalink_content').select();
-            watcher = setInterval(function() {
-                var newLink = models.link.get();
-                if ( newLink !== longLink ) {
-                    link = newLink;
-                    longLink = link;
-                    $("#wv-link-shorten-check").iCheck("uncheck");
-                    update();
-                }
-            }, 100);
-        }, 500);
+            $('#permalink_content').val(models.link.get());
+            $("#wv-link-shorten-check").iCheck("uncheck");
+        };
+
+        models.link.events.on("update", updateLink);
 
         $dialog.dialog({
             dialogClass: "wv-panel",
@@ -107,25 +99,11 @@ wv.link.ui = wv.link.ui || function(models, config) {
         }).on("dialogclose", function() {
             $("#wv-link-button-check").prop("checked", false);
             $button.button("refresh");
-            if ( watcher ) {
-                clearInterval(watcher);
-                watcher = null;
-            }
+            models.link.events.off("update", updateLink);
         });
 
         //$("#wv-link-shorten-check").button();
         $("#wv-link-shorten-check").on("ifChanged", function() {
-            update();
-        });
-
-        var error = function() {
-            console.warn("Unable to shorten URL");
-            console.warn.apply(console, arguments);
-            wv.ui.notify("Unable to shorten the permalink at this time. " +
-                    "Please try again later.");
-        };
-
-        var update = function() {
             var checked = $("#wv-link-shorten-check").prop("checked");
             if ( checked ) {
                 var promise = models.link.shorten();
@@ -140,14 +118,20 @@ wv.link.ui = wv.link.ui || function(models, config) {
                     error(textStatus, errorThrown);
                 });
             } else {
-                $('#permalink_content').val(link);
+                $('#permalink_content').val(models.link.get());
             }
             $('#permalink_content').focus();
             $('#permalink_content').select();
+        });
+
+        var error = function() {
+            console.warn("Unable to shorten URL");
+            console.warn.apply(console, arguments);
+            wv.ui.notify("Unable to shorten the permalink at this time. " +
+                    "Please try again later.");
         };
 
         $("#wv-link-shorten-check").prop("checked", false);
-
 
     };
 

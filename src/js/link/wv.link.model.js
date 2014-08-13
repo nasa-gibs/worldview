@@ -36,7 +36,9 @@ wv.link.model = wv.link.model || function(config) {
     self.register = function(component) {
         components.push(component);
         if ( component.events ) {
-            component.events.any(triggerUpdate);
+            component.events.any(function() {
+                self.events.trigger("update");
+            });
         }
         return self;
     };
@@ -123,10 +125,6 @@ wv.link.model = wv.link.model || function(config) {
         });
         return encoded;
     };
-
-    var triggerUpdate = _.throttle(function() {
-        self.events.trigger("update")
-    }, 250, {trailing: true});
 
     init();
 
