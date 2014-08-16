@@ -176,26 +176,6 @@ module.exports = function(grunt) {
                             "worldview"
             },
 
-            // Create a tarball of the documentation with a version number and
-            // git revision
-            tar_doc_versioned: {
-                command: "tar cjCf build dist/" +
-                            "<%= pkg.name %>" +
-                            "-doc" +
-                            "-<%= pkg.version %>" +
-                            "-<%= pkg.release %>" +
-                            buildNumber +
-                            ".git<%= grunt.config.get('git-revision') %>" +
-                            ".tar.bz2 worldview-doc"
-            },
-
-            // Create a tarball of the documentation without versioning
-            // information
-            tar_doc: {
-                command: "tar cjCf build dist/worldview-doc.tar.bz2 " +
-                            "worldview-doc"
-            },
-
             // Builds the RPM
             rpmbuild: {
                 command: 'rpmbuild --define "_topdir $PWD/build/rpmbuild" ' +
@@ -342,19 +322,6 @@ module.exports = function(grunt) {
             }
         },
 
-        yuidoc: {
-            main: {
-                name: "Worldview",
-                description: "Interactive satellite imagery browser",
-                version: "<%= pkg.version %>",
-                url: "https://earthdata.nasa.gov/worldview",
-                options: {
-                    paths: ["src/js"],
-                    outdir: "build/worldview-doc"
-                }
-            }
-        },
-
         jshint: {
             console: [
                 "src/js/**/wv.*.js",
@@ -429,7 +396,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-contrib-cssmin");
     grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-contrib-uglify");
-    grunt.loadNpmTasks("grunt-contrib-yuidoc");
     grunt.loadNpmTasks("grunt-line-remover");
     grunt.loadNpmTasks("grunt-exec");
     grunt.loadNpmTasks("grunt-git-rev-parse");
@@ -463,14 +429,11 @@ module.exports = function(grunt) {
         "exec:empty",
         "exec:cgi_echo",
         "exec:cgi_shorten",
-        "doc",
         "remove:dist_tar",
         "exec:tar_debug_versioned",
         "exec:tar_debug",
         "exec:tar_release_versioned",
-        "exec:tar_release",
-        "exec:tar_doc_versioned",
-        "exec:tar_doc"
+        "exec:tar_release"
     ]);
 
     grunt.registerTask("rpm_only", [
@@ -482,7 +445,6 @@ module.exports = function(grunt) {
         "copy:rpm"
     ]);
 
-    grunt.registerTask("doc", ["yuidoc"]);
     grunt.registerTask("lint", ["jshint:console"]);
     grunt.registerTask("test", ["buster:console"]);
     grunt.registerTask("push", ["lint", "test"]);
