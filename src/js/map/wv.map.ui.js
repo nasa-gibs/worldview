@@ -313,7 +313,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
     };
 
     var updateExtent = function() {
-        models.map.extent = self.selected.getExtent().toArray();
+        models.map.update(self.selected.getExtent().toArray());
     };
 
     var createLayer = function(d, options) {
@@ -364,6 +364,9 @@ wv.map.ui = wv.map.ui || function(models, config) {
     var createLayerWMTS = function(def, options) {
         var proj = models.proj.selected;
         var source = config.sources[def.source];
+        if ( !source ) {
+            throw new Error("[" + def.id + "]: Invalid source: " + def.source);
+        }
         var matrixSet = source.matrixSets[def.matrixSet];
         if ( !matrixSet ) {
             throw new Error("Matrix set undefined: " + def.matrixSet);
@@ -561,7 +564,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 $zoomOut.button("enable");
             }
         });
-        map.events.register("move", null, updateExtent);
+        map.events.register("moveend", null, updateExtent);
         map.events.register("movestart", null, purgeCache);
         map.events.register("preaddlayer", null, onAddLayer);
         map.events.register("preremovelayer", null, onRemoveLayer);

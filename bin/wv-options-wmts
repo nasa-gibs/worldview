@@ -66,7 +66,7 @@ class SkipException(Exception):
 
 def to_list(val):
     return [val] if not hasattr(val, 'reverse') else val
-        
+
 def process_layer(gc_layer, wv_layers, colormaps):
     id = gc_layer["ows:Identifier"]
     if id in skip:
@@ -90,10 +90,10 @@ def process_layer(gc_layer, wv_layers, colormaps):
                 end_date = datetime.min;
                 for range in ranges:
                     times = range.split('/')
-                    start_date = min(start_date, 
+                    start_date = min(start_date,
                         datetime.strptime(times[0], "%Y-%m-%d"))
-                    end_date = min(start_date, 
-                        datetime.strptime(times[1], "%Y-%m-%d"))                                        
+                    end_date = min(start_date,
+                        datetime.strptime(times[1], "%Y-%m-%d"))
                 # Layer is still actively being produced if the end date
                 # greater than yesterday
                 yesterday = datetime.now() - timedelta(days=1)
@@ -111,7 +111,7 @@ def process_layer(gc_layer, wv_layers, colormaps):
             "matrixSet": matrixSet
         }
     }
-    
+
     # Colormap links
     if "ows:Metadata" in gc_layer:
         # FIXME: Assumes that there is only one metdata element
@@ -137,17 +137,18 @@ def process_entry(entry, colormaps):
     }
 
     input_file = os.path.join(input_dir, entry["from"])
+    gc_id = os.path.basename(input_file)
     try:
         with open(input_file) as fp:
             xml = fp.read()
             gc = xmltodict.parse(xml)
     except Exception as e:
         if tolerant:
-            sys.stderr.write("%s:   WARN: [%s] Unable to get GC: %s\n" % 
+            sys.stderr.write("%s:   WARN: [%s] Unable to get GC: %s\n" %
                     (prog, input_file, str(e)))
             warning_count += 1
         else:
-            sys.stderr.write("%s: ERROR: [%s] Unable to get GC: %s\n" % 
+            sys.stderr.write("%s: ERROR: [%s] Unable to get GC: %s\n" %
                     (prog, input_file, str(e)))
             error_count += 1
         return [error_count, warning_count, layer_count]
@@ -165,7 +166,8 @@ def process_entry(entry, colormaps):
             sys.stderr.write("%s: WARNING: [%s] Skipping\n" % (prog, id))
         except Exception as e:
             error_count += 1
-            sys.stderr.write("%s: ERROR: [%s] %s\n" % (prog, id, str(e)))
+            sys.stderr.write("%s: ERROR: [%s:%s] %s\n" % (prog, gc_id,
+                    id, str(e)))
 
     for gc_matrix_set in gc_contents["TileMatrixSet"]:
         id = gc_matrix_set["ows:Identifier"]
@@ -204,11 +206,11 @@ def fetch_colormaps(colormaps):
                 fp.write(contents)
         except Exception as e:
             warnings += 1
-            sys.stderr.write("%s:   WARN: Unable to fetch %s: %s" % 
+            sys.stderr.write("%s:   WARN: Unable to fetch %s: %s" %
                 (prog, link, str(e)))
 
     return warnings
-    
+
 # Main
 colormaps = {}
 for entry in entries:
@@ -218,7 +220,7 @@ for entry in entries:
     total_layer_count += layer_count
 
 total_warning_count += fetch_colormaps(colormaps)
-    
+
 print "%s: %d error(s), %d warning(s), %d layers" % (prog, total_error_count,
         total_warning_count, total_layer_count)
 

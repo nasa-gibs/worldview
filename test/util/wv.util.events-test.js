@@ -41,5 +41,14 @@ buster.testCase("wv.util.events", {
         this.events.off("test", listener);
         this.events.trigger("test");
         buster.assert.calledOnce(listener);
+    },
+
+    "Any listener called on any event": function() {
+        var listener = this.stub();
+        this.events.on("event1", listener);
+        this.events.on("event2", listener);
+        this.events.trigger("event1");
+        this.events.trigger("event2");
+        buster.assert.calledTwice(listener);
     }
 });

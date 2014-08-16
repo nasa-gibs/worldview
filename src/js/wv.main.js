@@ -55,7 +55,7 @@ $(function() {
         wvx.config = config;
 
         wv.debug.config(config);
-        
+
         // Load any additional scripts as needed
         if ( config.scripts ) {
             _.each(config.scripts, function(script) {
@@ -101,7 +101,7 @@ $(function() {
                 initialDate.setUTCDate(initialDate.getUTCDate() - 1);
             }
         }
-        
+
         // Models
         var models = {
             wv: {
@@ -172,7 +172,7 @@ $(function() {
         ui.link = wv.link.ui(models, config);
         ui.tour = wv.tour(models, ui, config);
         ui.info = wv.ui.info(ui, config);
-        
+
         // Export for debugging
         wvx.ui = ui;
 
@@ -216,7 +216,7 @@ $(function() {
                 $("input").blur();
             }
         });
-        
+
         // Console notifications
         if ( wv.brand.release() ) {
             console.info(wv.brand.NAME + " - Version " + wv.brand.VERSION +
@@ -228,7 +228,7 @@ $(function() {
 
         errorReport();
         //wv.debug.error(parameters);
-        
+
         models.wv.events.trigger("startup");
         elapsed("done");
     };

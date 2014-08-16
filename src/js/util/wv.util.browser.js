@@ -90,6 +90,8 @@ wv.util.browser = wv.util.browser || (function() {
      */
     self.localStorage = true;
 
+    self.history = true;
+    
     var init = function() {
         var tests = self.tests;
 
@@ -105,6 +107,7 @@ wv.util.browser = wv.util.browser || (function() {
         self.webWorkers = tests.webWorkers();
         self.localStorage = tests.localStorage();
         self.small = tests.small();
+        self.history = tests.history();
 
         $(window).resize(function() {
             self.small = tests.small();
@@ -183,6 +186,13 @@ wv.util.browser = wv.util.browser || (function() {
 
     self.tests.small = function() {
         return $(window).width() < 720;
+    };
+
+    self.tests.history = function() {
+        if ( window.history && window.history.replaceState ) {
+            return true;
+        }
+        return false;
     };
 
     init();

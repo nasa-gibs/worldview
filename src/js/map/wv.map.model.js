@@ -19,6 +19,12 @@ wv.map.model = wv.map.model || function(models, config) {
     var self = {};
 
     self.extent = null;
+    self.events = wv.util.events();
+
+    self.update = function(extent) {
+        self.extent = extent;
+        self.events.trigger("update", extent);
+    };
 
     self.load = function(state) {
         if ( state.v ) {
