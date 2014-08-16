@@ -42,6 +42,7 @@ buster.testCase("wv.date.model", function() {
         buster.assert.calledWith(listener, d);
     };
 
+    /* FIXME: Remove once no longer needed
     self["Date before start date selects start date"] = function() {
         models.date.range({
             start: wv.util.parseDateUTC("2013-01-01"),
@@ -61,6 +62,7 @@ buster.testCase("wv.date.model", function() {
         buster.assert.equals(wv.util.toISOStringDate(models.date.selected),
             "2012-01-31");
     };
+    */
 
     self["Saves state"] = function() {
         var d = new Date(Date.UTC(2013, 0, 5));
@@ -93,10 +95,10 @@ buster.testCase("wv.date.model", function() {
             start: wv.util.parseDateUTC("2012-01-01"),
             end:   wv.util.parseDateUTC("2013-04-01")
         });
-        buster.assert.equals(models.date.end, 
+        buster.assert.equals(models.date.end,
                 wv.util.parseDateUTC("2013-01-15"));
     };
-    
+
     self["Clears time to UTC midnight when selecting"] = function() {
         var date = new Date(Date.UTC(2013, 1, 2, 3, 4, 5));
         models.date.select(date);
@@ -108,7 +110,7 @@ buster.testCase("wv.date.model", function() {
         buster.assert.equals(selected.getUTCMinutes(), 0);
         buster.assert.equals(selected.getUTCSeconds(), 0);
     };
-    
+
     return self;
 
 }());
