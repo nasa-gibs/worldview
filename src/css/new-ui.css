@@ -47,6 +47,7 @@
 }
 .x.axis .tick text{
     fill:#1a1a1a;
+    text-transform:uppercase;
 }
 .x.axis>.tick>line {
     stroke-width:3;
@@ -167,6 +168,9 @@ display:inline-block;}
     height:85px;
     margin-left:0px;
 }
+#timeline-footer svg {
+overflow:visible;
+}
 
 /* Timeline svg classes */
 
@@ -216,4 +220,33 @@ display:inline-block;}
 #timeline-zoom a.zoom-btn:hover{
     background-color:#1a1a1a;
     color:#fff;
+}
+.x.axis > g.tick > text.sub-label{
+    fill:#777;
+}
+.x.axis > g.tick:hover > text.sub-label{
+    fill:#fff;
+}
+#guitarpick{
+    cursor:pointer;
+}
+#guitarpick path{
+    fill:#cccccc;
+    fill-opacity:1;
+    stroke:#515151;
+    stroke-width:1;
+    stroke-opacity:1;
+
+}
+#guitarpick rect {
+    fill:#515151;
+    fill-opacity:1;
+    stroke:none;
+    
+}
+#guitarpick:hover path{
+    fill:#1a1a1a;
+}
+#guitarpick:hover rect{
+    fill:#999999;
 }

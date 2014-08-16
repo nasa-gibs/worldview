@@ -73,11 +73,11 @@ wv.date.model = wv.date.model || function(spec) {
      */
     self.select = function(date) {
         date = wv.util.clearTimeUTC(date);
-        if ( self.start && date < self.start ) {
+        /*if ( self.start && date < self.start ) {
             date = self.start;
         } else if ( self.end && date > self.end ) {
             date = self.end;
-        }
+        }*/
 
         var updated = false;
         if ( !self.selected || date.getTime() !== self.selected.getTime() ) {

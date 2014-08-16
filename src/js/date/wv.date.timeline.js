@@ -37,7 +37,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var zoomStep = 1;
     var subInterval = d3.time.day.utc;
     var subStep = 1;
-    var zoomScale,axisBgWidth,subAxisBgWidth,smallTicks;
+    var zoomScale,axisBgWidth,subAxisBgWidth,smallTicks,guitarPick;
     var margin = {
             top: 0,
             right: 0,
@@ -76,14 +76,14 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             },
             {
                 "x": model.selected.getTime(),
-                "y": "6"
+                "y": "10"
             }
         ];
         x = d3.time.scale.utc()
-            .domain([new Date(1800,0,1), new Date(2200,0,1)])
+            .domain([new Date(1900,0,1), new Date(2100,0,1)])
 
             //.nice(d3.time.year)
-            .range([-2000, 3600]);
+            .range([-200, 2800]);
         /* FIXME: Fix this to be ordinal in place of linear
         y = d3.scale.ordinal()
             .domain(["Data1","Data2","Data3"]) //loaded product data goes here
@@ -123,33 +123,47 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         }
         timeline.select(".x.axis")
             .call(xAxis.tickSize(-height)
-                  .tickPadding(10)
+                  .tickPadding(5)
                   .ticks(zoomInterval,zoomStep));
 
         var ticks = timeline.selectAll('.x.axis>.tick');
 
         ticks.insert("svg:circle","text").attr("r","6");
-
-        setAxisBgWidth();
-        ticks.insert("svg:rect", "circle")
-            .attr("x","0")
-            .attr("y","0")
-            .attr("width",axisBgWidth)
-            .attr("height",height)
-            .attr("class","axis-background");
-        
         ticks.selectAll("line")
             .attr("y1",-height)
             .attr("y2",margin.bottom);
 
 
-        //Draw sub axes for smaller intervals, each tick has date attached
-        //FIXME: Optimize, probably dont need to redraw
-        for (i=0;i<ticks.data().length-1;i++){
+        
 
+        d3.selectAll('.x.axis>.tick text')
+            .attr('x',7)
+            .attr('style','text-anchor:left;')
+        .attr('class','tick-label');
+
+        //Draw sub axes for smaller intervals, each tick has date attached
+        for (var i=0;i<ticks.data().length-1;i++){
+
+            var tickGroup = timeline.select('.x.axis>.tick:nth-child('+(i+2)+')');
             var tickDate = ticks.data()[i];
             var nextTickDate = ticks.data()[i+1];
-
+            var tickWidth = x(nextTickDate) - x(tickDate);
+            var subLabel = getSubLabel(tickDate);
+            //draw background (rect)
+            tickGroup.insert("svg:rect", "text")
+                .attr("x","0")
+                .attr("y","0")
+                .attr("width",tickWidth)
+                .attr("height",height)
+                .attr("class","axis-background");
+            
+            //draw sub-label (high freq)
+            if(subLabel){
+                tickGroup.append("svg:text")
+                    .text(subLabel)
+                    .attr("y","30")
+                    .attr("class","sub-label");
+            }
             var x2 = d3.time.scale.utc()
                 .domain([tickDate,nextTickDate])
                 .range([0,x(nextTickDate)-x(tickDate)]);
@@ -157,7 +171,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             var xSmallAxis = d3.svg.axis()
                 .scale(x2);
 
-            var smallAxis = timeline.select('.x.axis>.tick:nth-child('+ (i+2) + ')').insert("svg:g","line")
+            var smallAxis = tickGroup.insert("svg:g","line")
                 .attr("class", "subtick")
                 .attr("transform", "translate(0,"+ -height +")")
                 .call(xSmallAxis.tickSize(height-1).ticks(subInterval,subStep));
@@ -169,26 +183,50 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             var subTickBgWidth =  x(timeline.select('.x.axis > g.tick:nth-child('+(i+2)+') > g.subtick > g.tick:nth-child(2)').data()[0]) -
                     x(timeline.select('.x.axis > g.tick:nth-child('+(i+2)+') > g.subtick > g.tick:nth-child(1)').data()[0]);
 
-
-            //draw background (rect) for each subtick
-            for (j=1;j<smallAxisTicks.data().length;j++){
+            //draw background (rect) for each subtick and bind subtick mouseenter action
+            for (var j=1;j<smallAxisTicks.data().length;j++){
+                //console.log((i+2) + ":" + j);
                 timeline.select('.x.axis > g.tick:nth-child('+(i+2)+') > g.subtick > g.tick:nth-child('+j+')').append("svg:rect")
                     .attr("class","subtick-background")
                     .attr("height",height-1)
                     .attr("width",subTickBgWidth);
+                
             }
         }
+        d3.selectAll('.x.axis>.tick text').attr('x',7).attr('style','text-anchor:left;');
 
+        guitarPick.attr("transform","translate("+(x(model.selected)-25)+",-10)");
 
-        
-        timeline.select(".selection")
-            .attr("d",selection);
-        
-        d3.selectAll('.x.axis>.tick text')
-            .attr('x',5)
-            .attr()
-            .attr('style','text-anchor:left;');
+        var timelineTicks = timeline.selectAll('.x.axis>g.tick > g.subtick > g.tick');
+        timelineTicks.on("mouseenter",function(d){
+            var tickParent = d3.select(this.parentNode.parentNode);
+            var tickDate = d;
+            var rectWidth = tickParent.select('rect.axis-background').attr("width");
 
+            tickParent.selectAll('.tick-label, .sub-label').attr("visibility","hidden");
+            tickParent.append("svg:text")
+                .attr("class","hover-tick-label")
+                .attr("y","15")
+                .attr("x",rectWidth/2)
+                .attr("style","text-anchor:middle")
+                .text(tickDate.getUTCDate() + " " + monthNames[tickDate.getUTCMonth()]);
+            tickParent.append("svg:text")
+                .attr("class","hover-sub-label")
+                .attr("y","30")
+                .attr("x",rectWidth/2)
+                .attr("style","text-anchor:middle")
+                .text(tickDate.getUTCFullYear());
+            
+            //d3.select(this).data()[0];
+        })
+        .on("mouseleave",function(d){
+            var tickParent = d3.select(this.parentNode.parentNode);
+            tickParent.selectAll('.tick-label, .sub-label').attr("visibility","");
+            tickParent.selectAll('.hover-tick-label, .hover-sub-label').remove();
+        })
+        .on("click",function(d){
+            model.select(d);
+        });
 
     };
     
@@ -201,6 +239,9 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         else {
             $('#day-input-group').val(model.selected.getUTCDate());
         }
+
+
+        guitarPick.attr("transform","translate("+(x(model.selected)-25)+",-10)");
         // Don't grab focus to allow arrow keys to work
 
         //$('.button-input-group-selected').select();
@@ -268,47 +309,72 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 }
             });
         
-        timeline = d3.select('#timeline-footer')
+        d3.select('#timeline-footer')
             .append("svg:svg")
             .attr('width', width + margin.left + margin.right)
             .attr('height', height + margin.top + margin.bottom)
             .call(zoom)
+            .append("svg:defs")
+            .append("svg:clipPath")
+            .attr("id","timeline-boundary")
+            .append("svg:rect")
+            .attr('width', width + margin.left + margin.right)
+            .attr('height', height + margin.top + margin.bottom);
+
+        d3.select("#timeline-footer svg defs")
+            .append("svg:clipPath")
+            .attr("id","guitarpick-boundary")
+            .append("svg:rect")
+            .attr('width', width + margin.left + margin.right)
+            .attr('height', height + margin.top + margin.bottom+10)
+            .attr("y","-10");
+
+        timeline = d3.select("#timeline-footer svg")
             .append("svg:g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            .attr("style","clip-path:url(#timeline-boundary);");
 
         zoom.translate([width/2 - x(model.selected),0]);
-
+//        zoom.center([x(model.selected),0]);
         timeline.append("svg:g")
             .attr("class", "x axis")
             .attr("transform", "translate(0," + height + ")")
-            .call(xAxis.tickSize(-height).tickPadding(10).ticks(zoomInterval,zoomStep))
+            .call(xAxis.tickSize(-height).tickPadding(5).ticks(zoomInterval,zoomStep))
             .insert("line",":first-child")
-                .attr("x1",0)
+                .attr("x1",-10)
                 .attr("x2",width);
 
         var ticks = timeline.selectAll('.x.axis>.tick');
 
+        //general non-specific objects added to all ticks
         ticks.insert("svg:circle","text").attr("r","6");
-        
-        setAxisBgWidth();
-        
-        ticks.insert("svg:rect", "text")
-            .attr("x","0")
-            .attr("y","0")
-            .attr("width",axisBgWidth)
-            .attr("height",height)
-            .attr("class","axis-background");
-
         ticks.selectAll("line:first-child")
             .attr("y1",-height)
             .attr("y2",margin.bottom);
 
+        d3.selectAll('.x.axis>.tick text').attr('class','tick-label');
         //Draw sub axes for smaller intervals, each tick has date attached
-        for (i=0;i<ticks.data().length-1;i++){
+        for (var i=0;i<ticks.data().length-1;i++){
 
+            var tickGroup = timeline.select('.x.axis>.tick:nth-child('+(i+2)+')');
             var tickDate = ticks.data()[i];
             var nextTickDate = ticks.data()[i+1];
-
+            var tickWidth = x(nextTickDate) - x(tickDate);
+            var subLabel = getSubLabel(tickDate);
+            //draw background (rect)
+            tickGroup.insert("svg:rect", "text")
+                .attr("x","0")
+                .attr("y","0")
+                .attr("width",tickWidth)
+                .attr("height",height)
+                .attr("class","axis-background");
+            
+            //draw sub-label (high freq)
+            if(subLabel){
+                tickGroup.append("svg:text")
+                    .text(subLabel)
+                    .attr("y","30")
+                    .attr("class","sub-label");
+            }
             var x2 = d3.time.scale.utc()
                 .domain([tickDate,nextTickDate])
                 .range([0,x(nextTickDate)-x(tickDate)]);
@@ -316,7 +382,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             var xSmallAxis = d3.svg.axis()
                 .scale(x2);
 
-            var smallAxis = timeline.select('.x.axis>.tick:nth-child('+ (i+2) + ')').insert("svg:g","line")
+            var smallAxis = tickGroup.insert("svg:g","line")
                 .attr("class", "subtick")
                 .attr("transform", "translate(0,"+ -height +")")
                 .call(xSmallAxis.tickSize(height-1).ticks(subInterval,subStep));
@@ -328,65 +394,16 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             var subTickBgWidth =  x(timeline.select('.x.axis > g.tick:nth-child('+(i+2)+') > g.subtick > g.tick:nth-child(2)').data()[0]) -
                     x(timeline.select('.x.axis > g.tick:nth-child('+(i+2)+') > g.subtick > g.tick:nth-child(1)').data()[0]);
 
-
-            //draw background (rect) for each subtick
-            for (j=1;j<smallAxisTicks.data().length;j++){
+            //draw background (rect) for each subtick and bind subtick mouseenter action
+            for (var j=1;j<smallAxisTicks.data().length;j++){
+                //console.log((i+2) + ":" + j);
                 timeline.select('.x.axis > g.tick:nth-child('+(i+2)+') > g.subtick > g.tick:nth-child('+j+')').append("svg:rect")
                     .attr("class","subtick-background")
                     .attr("height",height-1)
                     .attr("width",subTickBgWidth);
+                
             }
         }
-/* FIXME:  Garbage I might want to keep until the end, in case I need to reference something I did earlier
-/*            ticks.append("svg:g")
-                .attr("class", "subtick")
-                .attr("transform","translate(" + xPos  + ",0)")
-                .append("svg:rect")
-                    .attr("class","subtick-background")
-                    .attr("height",height)
-                    .attr("width",subAxisBgWidth)
-                    .attr("y",-height)
-                    .attr("x",0);
-            xPos += subAxisBgWidth;
-*/
-
-
-            //ticks.data[0];
-
-//            ticks.append("svg:g")
-//                .attr('class','subtick');
-        
-    // }
-        /* I'm probably working too hard for this below.  Going to try another method
-        var xPos = 0;
-        for (var i=0; i<10;i++){
-            ticks.append("svg:g")
-                .attr("class", "subtick")
-                .attr("transform","translate(" + xPos  + ",0)")
-                .append("svg:rect")
-                    .attr("class","subtick-background")
-                    .attr("height",height)
-                    .attr("width",subAxisBgWidth)
-                    .attr("y",-height)
-                    .attr("x",0);
-            xPos += subAxisBgWidth;
-            
-        }
-        //FIXME: remove line from all first subticks
-
-        timeline.selectAll('.x.axis .subtick')
-            .append("svg:line")
-                .attr("class","subtick-border")
-                .attr("y1",-height)
-                .attr("y2","-1");
-        //console.log($(".subtick:first-child"));        
-        d3.selectAll('.subtick:nth-child(5) .subtick-border').remove();        
-        ticks.selectAll("line:first-child")
-            .attr("y1",-height)
-            .attr("y2",margin.bottom);
-
-//        timeline.selectAll(".subtick:first-child line").remove();
-*/
         verticalAxis = timeline.append("svg:g")
             .attr("class", "y axis")
             .attr("transform", "translate(0,0)")
@@ -394,12 +411,64 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
         verticalAxis.selectAll("text").remove();
 
-        timeline.select(".x.axis").append("svg:path")
-            .datum(data2)
-            .attr("class", "selection")
-            .attr("d", selection);
+        guitarPick = d3.select("#timeline-footer svg")
+            .append("svg:g")
+            .attr("id","guitarpick")
+            .attr("style","clip-path:url(#guitarpick-boundary);")
+            .append("svg:g")
+            .attr("transform","translate("+(x(model.selected)-28)+",-10)");
+
+        guitarPick.append("svg:path")
+            .attr("d", "M 7.3151,0.7426 C 3.5507,0.7426 0.5,3.7926 0.5,7.5553 l 0,21.2724 14.6038,15.7112 14.6039,15.7111 14.6038,-15.7111 14.6037,-15.7112 0,-21.2724 c 0,-3.7627 -3.051,-6.8127 -6.8151,-6.8127 l -44.785,0 z");
+        guitarPick.append("svg:rect")
+            .attr("width","4")
+            .attr("height","20")
+            .attr("x","21")
+            .attr("y","11");
+        guitarPick.append("svg:rect")
+            .attr("width","4")
+            .attr("height","20")
+            .attr("x","28")
+            .attr("y","11");
+        guitarPick.append("svg:rect")
+            .attr("width","4")
+            .attr("height","20")
+            .attr("x","35")
+            .attr("y","11");
                 
-        d3.selectAll('.x.axis>.tick text').attr('x',5).attr().attr('style','text-anchor:left;');
+        d3.selectAll('.x.axis>.tick text').attr('x',7).attr('style','text-anchor:left;');
+
+
+
+        var timelineTicks = timeline.selectAll('.x.axis>g.tick > g.subtick > g.tick');
+        timelineTicks.on("mouseenter",function(d){
+            var tickParent = d3.select(this.parentNode.parentNode);
+            var tickDate = d;
+            var rectWidth = tickParent.select('rect.axis-background').attr("width");
+            tickParent.selectAll('.tick-label, .sub-label').attr("visibility","hidden");
+            tickParent.append("svg:text")
+                .attr("class","hover-tick-label")
+                .attr("y","15")
+                .attr("x",rectWidth/2)
+                .attr("style","text-anchor:middle")
+                .text(tickDate.getUTCDate() + " " + monthNames[tickDate.getUTCMonth()]);
+            tickParent.append("svg:text")
+                .attr("class","hover-sub-label")
+                .attr("y","30")
+                .attr("x",rectWidth/2)
+                .attr("style","text-anchor:middle")
+                .text(tickDate.getUTCFullYear());
+            
+            //d3.select(this).data()[0];
+        })
+        .on("mouseleave",function(d){
+            var tickParent = d3.select(this.parentNode.parentNode);
+            tickParent.selectAll('.tick-label, .sub-label').attr("visibility","");
+            tickParent.selectAll('.hover-tick-label, .hover-sub-label').remove();
+        })
+        .on("click",function(d){
+            model.select(d);
+        });
 
         //bind click action to interval radio buttons
         var buttons = $('.button-input-group');
@@ -415,7 +484,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         models.layers.events.on("change",function(){
             if(model.start && model.start.getTime() !== startDateMs){
                 startDateMs = model.start.getTime();
-                setData();            
+                //setData();           FIXME: update actual data 
             }
         });
 
@@ -467,22 +536,23 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
         $("#day-input-group").blur();
 
-        $("#zoom-decades").on("click",function(e){
-            zoomLevels(0);
+        d3.select("#zoom-decades").on("click",function(d){
+            setZoomLevel(0);
         });
-        $("#zoom-years").on("click",function(e){
-            zoomLevels(1);
+        d3.select("#zoom-years").on("click",function(d){
+            setZoomLevel(1);
         }); 
-        $("#zoom-months").on("click",function(e){
-            zoomLevels(2);
+        d3.select("#zoom-months").on("click",function(d){
+            setZoomLevel(2);
         }); 
-        $("#zoom-days").on("click",function(e){
-            zoomLevels(3);
+        d3.select("#zoom-days").on("click",function(d){
+            setZoomLevel(3);
         });
 
     }; // /init
-    var zoomLevels = function(interval){
+    var setZoomLevel = function(interval,mousePos,mouseOffset){
         //console.log(interval);
+
         zoomLvl = interval;
         switch(zoomLvl){
             case 'decades':
@@ -518,51 +588,42 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             zoomScale = 3070;
             break;
             default:
-            console.log("went to default");
             zoomInterval = d3.time.year.utc;
             subInterval = d3.time.year.utc;
             subStep = 1;
             zoomStep = 10;
             zoomScale = 1;
         }
+        //zoom.translate([-9000,0]);
         zoom.scale(zoomScale);
-        zoom.translate([0,0]);
-        zoom.translate([-x(model.selected)+width/2,0]);
-
+        if (mousePos){
+            zoom.translate([0,0]);
+            zoom.translate([-x(mousePos)+width/2-mouseOffset,0]);
+        }
+        else{
+            zoom.translate([0,0]);
+            zoom.translate([-x(model.selected)+width/2,0]);
+        }
         redrawAxis(zoomInterval,zoomStep);
 
     };
-    var setAxisBgWidth = function(){
-        var axisYear = model.selected.getUTCFullYear();
-        var axisMonth = model.selected.getUTCMonth();
-        var axisDate = model.selected.getUTCDate();
-        var axisHours = model.selected.getUTCHours();
+    var getSubLabel = function(tickDate){
+        var sl;
         switch (zoomLvl){
             case 0:
-            axisBgWidth = x(new Date(axisYear+10,axisMonth,axisDate)) -
-                x(new Date(axisYear,axisMonth,axisDate));
-            subAxisBgWidth = x(new Date(axisYear+1,axisMonth,axisDate)) -
-                x(new Date(axisYear,axisMonth,axisDate));
-            break;
             case 1:
-            axisBgWidth = x(new Date(axisYear+1,axisMonth,axisDate)) -
-                x(new Date(axisYear,axisMonth,axisDate));
-            subAxisBgWidth = x(new Date(axisYear,axisMonth+1,axisDate)) - 
-                x(new Date(axisYear,axisMonth,axisDate));
+            sl = null;
             break;
             case 2:
-            axisBgWidth = x(new Date(axisYear,axisMonth+1,axisDate)) -
-                x(new Date(axisYear,axisMonth,axisDate));
-            subAxisBgWidth = x(new Date(axisYear,axisMonth,axisDate+1)) - 
-                x(new Date(axisYear,axisMonth,axisDate));
+            sl = tickDate.getUTCFullYear();
             break;
             case 3:
-            axisBgWidth = x(new Date(axisYear,axisMonth,axisDate+1)) -
-                x(new Date(axisYear,axisMonth,axisDate));
-            subAxisBgWidth = x(new Date(axisYear,axisMonth,axisDate,axisHours+1)) -
-                x(new Date(axisYear,axisMonth,axisDate,axisHours));
+            sl = monthNames[tickDate.getUTCMonth()] + " " + tickDate.getUTCFullYear();
             break;
+            default:
+            sl = null;
         }
+        return sl;
     };
     var setSmallAxisTickNumbers = function(ticks,i){
 
@@ -587,15 +648,15 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 //        console.log("Date: " + ticks.data()[i].toUTCString() + ", days to next interval: " + Math.floor(answer/1000/60/60/24));
 
 
-    }
+    };
     var customTimeFormat2 = d3.time.format.utc.multi([
         [".%L", function(d) { return d.getUTCMilliseconds(); }],
         [":%S", function(d) { return d.getUTCSeconds(); }],
         ["%I:%M", function(d) { return d.getUTCMinutes(); }],
         ["%I %p", function(d) { return d.getUTCHours(); }],
         //["%a %d", function(d) { return d.getUTCDay() && d.getDate() != 1; }],
-        ["%d %b", function(d) { return d.getUTCDate() != 1; }],
-        ["%b %Y", function(d) { return d.getUTCMonth(); }],
+        ["%d", function(d) { return d.getUTCDate() != 1; }],
+        ["%b", function(d) { return d.getUTCMonth(); }],
         ["%Y", function(d) { return true; }],
     ]);
 
@@ -623,8 +684,8 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     
     var zoomable = function(e){
 
-        console.log(d3.event.sourceEvent);
-        //redrawAxis();
+        var mousePos = x.invert(d3.mouse(this)[0]);
+        var mouseOffset = width/2 - d3.mouse(this)[0];
         var evt = window.event || d3.event.sourceEvent || e;
         var deltaY=evt.deltaY ? evt.deltaY : evt.wheelDeltaY || evt.detail ? evt.detail*(-120) : evt.wheelDelta;
         var deltaX=evt.deltaX ? evt.deltaY : evt.wheelDeltaX;
@@ -632,18 +693,20 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             //console.log("Up");
             if (zoomLvl < 3){
                 zoomLvl++;
-                zoomLevels(zoomLvl);
+                setZoomLevel(zoomLvl,mousePos,mouseOffset);
             }
         }
         else if (deltaY > 0){
             //console.log("Down")
             if (zoomLvl > 0){
                 zoomLvl--;
-                zoomLevels(zoomLvl);
+                setZoomLevel(zoomLvl,mousePos,mouseOffset);
             }
         }
         else{
+            //console.log(zoomTranslate);
             redrawAxis();
+            
         }
     };
     self.test = "TESTING VAR";
