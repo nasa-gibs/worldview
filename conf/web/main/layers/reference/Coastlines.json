@@ -14,11 +14,11 @@
                     "tags":         "borders reference"
                 },
                 "geographic": {
-                    "subtitle":     "&copy; OpenStreetMap <a target='_blank' href='http://www.openstreetmap.org/copyright'>(license)</a>, Natural Earth",
+                    "subtitle":     "&copy; OpenStreetMap <a target='_blank' href='http://www.openstreetmap.org/copyright'>(license)</a>",
                     "tags":         "borders reference osm"
                 },
                 "arctic": {
-                    "subtitle":     "&copy; OpenStreetMap <a target='_blank' href='http://www.openstreetmap.org/copyright'>(license)</a>, Natural Earth",
+                    "subtitle":     "&copy; OpenStreetMap <a target='_blank' href='http://www.openstreetmap.org/copyright'>(license)</a>",
                     "tags":         "borders reference osm"
                 }
             }
