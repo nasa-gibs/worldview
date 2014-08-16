@@ -7,9 +7,9 @@
                 { "id": "MODIS_Aqua_CorrectedReflectance_TrueColor", "hidden": "true" }
             ],
             "overlays": [
-                {"id": "sedac_bound" },
-                {"id": "arctic_coastlines_3413" },
-                {"id": "antarctic_coastlines" }
+                {"id": "Coastlines" },
+                {"id": "Reference_Features", "hidden": "true" },
+                {"id": "Reference_Labels", "hidden": "true" }
             ]
         }
     }

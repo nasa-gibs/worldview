@@ -101,7 +101,7 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
         if ( !layer.projections[proj] ) {
             return false;
         }
-        if ( layer.id === "land_water_map" || layer.id === "land_mask" ) {
+        if ( layer.id === "Land_Water_Map" || layer.id === "Land_Mask" ) {
             return false;
         }
         if ( type === "gibs" && layer.period === "daily" && layer.type === "wmts" ) {
@@ -127,7 +127,8 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
         var sortedLayers = _.sortBy(config.layers, ["title", "subtitle"]);
         _.each(sortedLayers, function(layer) {
             if ( acceptLayer(layer) ) {
-                var text = layer.title + "; " + layer.subtitle;
+                var names = models.layers.getTitles(layer.id);
+                var text = names.title + "; " + names.subtitle;
                 if ( text.length > 65 ) {
                     text = text.substr(0, 65) + "...";
                 }
@@ -139,7 +140,7 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
         });
         models.layers.clear();
         if ( type !== "gibs" ) {
-            models.layers.add("land_water_map");
+            models.layers.add("Land_Water_Map");
         }
         updateLayers.apply($select);
         if ( type === "dataDownload" ) {
@@ -149,7 +150,8 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
 
     var updateLayers = function() {
         var layerId = $(this).val();
-        console.log(config.layers[layerId].title + "; " + config.layers[layerId].subtitle);
+        var names = models.layers.getTitles(layerId);
+        console.log(names.title + "; " + names.subtitle);
         if ( selectedLayer ) {
             models.layers.remove(selectedLayer);
             models.palettes.remove(selectedLayer);
@@ -206,4 +208,3 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
 
     init();
 };
-

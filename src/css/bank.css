@@ -69,7 +69,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3ffffff', e
 .mCustomScrollBox > .mCSB_scrollTools {right: -6px;}
 
 
-.bank li.item a {float:right; color:#fff; margin-right:0.3em; cursor:default;}
+.bank li.item a.button {float:right; color:#fff; margin-right:0.3em; cursor:default;}
 .bank li.item a.hdanchor {display:inline-block;  overflow:hidden; }
 .bank li.item h4 {font-size:0.85em; padding:0 3px;}
 .bank li.item p {padding:0 3px; color:#222; font-size:0.78em;}

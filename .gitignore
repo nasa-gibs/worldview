@@ -18,3 +18,6 @@ etc/brand.*
 conf/web/brand
 src/pages/brand
 src/images/brand
+src/brand
+src/config
+options

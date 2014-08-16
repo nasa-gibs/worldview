@@ -2,8 +2,8 @@
     "redirects": {
         "layers": {
 
-            "polarview:graticuleN":          "arctic_graticule",
-            "polarview:graticule3031_10x30": "antarctic_graticule",
+            "polarview:graticuleN":          "Graticule",
+            "polarview:graticule3031_10x30": "Graticule",
 
             "Aqua_Antarctic_Orbit_Asc": "Aqua_Orbit_Asc",
             "Aqua_Arctic_Orbit_Asc":    "Aqua_Orbit_Asc",
@@ -13,7 +13,20 @@
             "Aura_Antarctic_Orbit_Asc": "Aura_Orbit_Asc",
             "Aura_Arctic_Orbit_Asc":    "Aura_Orbit_Asc",
             "Aura_Antarctic_Orbit_Dsc": "Aura_Orbit_Dsc",
-            "Aura_Arctic_Orbit_Dsc":    "Aura_Orbit_Dsc"
+            "Aura_Arctic_Orbit_Dsc":    "Aura_Orbit_Dsc",
+
+            "antarctic_graticule":      "Graticule",
+            "antarctic_coastlines":     "Coastlines",
+            "arctic_coastlines_3413":   "Coastlines",
+            "arctic_graticule_3413":    "Graticule",
+            "gpw-v3-coastlines":        "Coastlines",
+            "land_water_map":           "Land_Water_Map",
+            "land_mask":                "Land_Mask",
+            "ol_graticule":             "Graticule",
+
+            "sedac_bound":              "Coastlines",
+            "cartographic:esri-administrative-boundaries_level-1": "Reference_Features",
+            "cartographic:00-global-labels": "Reference_Labels"
         }
     }
 }

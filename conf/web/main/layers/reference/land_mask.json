@@ -1,28 +1,33 @@
 {
     "layers": {
-        "land_mask": {
-            "id":       "land_mask",
+        "Land_Mask": {
+            "id":       "Land_Mask",
             "title":    "Land Mask",
-            "subtitle": "OpenStreetMap / Coastlines",
             "tags":     "borders mask",
             "group":    "overlays",
             "format":   "image/png",
-            "type":		"wmts",
+            "type":     "wmts",
             "tileSize": [ 512, 512 ],
 
             "projections": {
-            	"antarctic": {
-            		"source": 		"GIBS:antarctic",
-            		"matrixSet":	"GIBS:EPSG3031_250m"
-            	},
-            	"arctic": {
-            		"source": 		"GIBS:arctic",
-            		"matrixSet":	"GIBS:EPSG3413_250m"
-            	},
-            	"geographic": {
-            		"source":		"GIBS:geographic",
-            		"matrixSet":	"GIBS:EPSG4326_250m"
-            	}
+                "antarctic": {
+                    "layer":        "SCAR_Land_Mask",
+                    "subtitle":     "Polarview / Coastlines",
+                    "source":       "GIBS:antarctic",
+                    "matrixSet":    "GIBS:EPSG3031_250m"
+                },
+                "arctic": {
+                    "layer":         "OSM_Land_Mask",
+                    "subtitle":      "&copy; OpenStreetMap <a target='_blank' href='http://www.openstreetmap.org/copyright'>(license)</a>",
+                    "source":        "GIBS:arctic",
+                    "matrixSet":     "GIBS:EPSG3413_250m"
+                },
+                "geographic": {
+                    "layer":         "OSM_Land_Mask",
+                    "subtitle":      "&copy; OpenStreetMap <a target='_blank' href='http://www.openstreetmap.org/copyright'>(license)</a>",
+                    "source":        "GIBS:geographic",
+                    "matrixSet":     "GIBS:EPSG4326_250m"
+                }
             }
         }
     }

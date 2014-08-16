@@ -71,15 +71,15 @@ wv.proj.change = wv.proj.change || function(models) {
         }
 
         if ( wasOld !== self.old && self.old ) {
-            models.layers.replace("arctic_coastlines_3413",
+            models.layers.replace("Coastlines",
                                   "arctic_coastlines");
-            models.layers.replace("arctic_graticule_3413",
+            models.layers.replace("Graticule",
                                   "arctic_graticule");
         } else if ( wasOld !== self.old && !self.old ) {
             models.layers.replace("arctic_coastlines",
-                                  "arctic_coastlines_3413");
+                                  "Coastlines");
             models.layers.replace("arctic_graticule",
-                                  "arctic_graticule_3413");
+                                  "Graticule");
         }
     };
 
@@ -142,4 +142,3 @@ wv.proj.change = wv.proj.change || function(models) {
     init();
     return self;
 };
-

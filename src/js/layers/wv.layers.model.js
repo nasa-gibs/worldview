@@ -96,6 +96,22 @@ wv.layers.model = wv.layers.model || function(models, config) {
         return baselayers.concat(overlays);
     };
 
+    self.getTitles = function(layerId, proj) {
+        proj = proj || models.proj.selected.id;
+        var title, subtitle;
+        if ( config.layers[layerId].projections[proj] ) {
+            var forProj = config.layers[layerId].projections[proj];
+            title = forProj.title;
+            subtitle = forProj.subtitle;
+            tags = forProj.tags;
+        }
+        var forLayer = config.layers[layerId];
+        title = title || forLayer.title || "[" + layerId + "]";
+        subtitle = subtitle || forLayer.subtitle || "";
+        tags = tags || forLayer.tags || "";
+        return { title: title, subtitle: subtitle, tags: tags };
+    };
+
     self.available = function(layerId) {
         var layer = config.layers[layerId];
         if ( layer.period !== "daily" ) {

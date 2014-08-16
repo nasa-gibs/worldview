@@ -1,0 +1,14 @@
+{
+    "layers": {
+        "Reference_Labels": {
+            "id":       "Reference_Labels",
+            "title":    "Place Labels",
+            "subtitle": "&copy; OpenStreetMap <a target='_blank' href='http://www.openstreetmap.org/copyright'>(license)</a>, Natural Earth",
+            "tags":     "osm reference",
+            "group":    "overlays",
+            "type":     "wmts",
+
+            "noTransition":     "true"
+        }
+    }
+}

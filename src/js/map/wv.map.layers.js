@@ -30,7 +30,7 @@ wv.map.layers.set = function(config, projId, layerId) {
         var source = config.sources[layer.projections[projId].source];
         var param = {
             url: source.url,
-            layer: layer.id,
+            layer: layer.projections[projId].layer || layer.id,
             style: "",
             format: layer.format,
             matrixSet: matrixSet.id,
@@ -105,7 +105,8 @@ wv.map.layers.set = function(config, projId, layerId) {
      */
     self.createLayer = function(options) {
         options = options || {};
-        var type = config.layers[layerId].type;
+        var layer = config.layers[layerId];
+        var type = layer.projections[projId].type || layer.type;
         if ( type === "wmts" ) {
             return createWMTS(options);
         } else if ( type === "wms" ) {
@@ -598,4 +599,3 @@ wv.map.layers.graticule = OpenLayers.Class(OpenLayers.Layer, {
      */
     CLASS_NAME: "wv.map.layers.graticule"
 });
-

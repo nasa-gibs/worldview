@@ -115,7 +115,8 @@ wv.layers.active = wv.layers.active || function(models, config) {
             .addClass("item")
             .attr("data-layer", layer.id);
 
-        var $removeButton = $("<a></a>");
+        var $removeButton = $("<a></a>")
+            .addClass("button");
         var $removeImage = $("<img></img>")
             .attr("id", "close" + group.id + encodeURIComponent(layer.id))
             .addClass("close")
@@ -127,7 +128,8 @@ wv.layers.active = wv.layers.active || function(models, config) {
         $layer.append($removeButton);
 
         var $visibleButton = $("<a></a>")
-            .addClass("hdanchor");
+            .addClass("hdanchor")
+            .addClass("button");
         var $visibleImage = $("<img></img>")
             .attr("id", "hide" + encodeURIComponent(layer.id))
             .attr("data-layer", layer.id)
@@ -148,8 +150,9 @@ wv.layers.active = wv.layers.active || function(models, config) {
         $visibleButton.append($visibleImage);
         $layer.append($visibleButton);
 
-        $layer.append($("<h4></h4>").html(layer.title));
-        $layer.append($("<p></p>").html(layer.subtitle));
+        var names = models.layers.getTitles(layer.id);
+        $layer.append($("<h4></h4>").html(names.title));
+        $layer.append($("<p></p>").html(names.subtitle));
 
         if ( layer.palette ) {
             renderLegend($layer, group, layer);

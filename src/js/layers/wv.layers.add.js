@@ -112,12 +112,17 @@ wv.layers.add = wv.layers.add || function(models, config) {
             console.warn("Skipping unknown layer", layerId);
             return;
         }
+        var $label = $("<label></label>")
+            .attr("data-layer", encodeURIComponent(layer.id));
         var $element = $("<li></li>")
             .addClass("selectorItem")
+            .attr("data-layer", encodeURIComponent(layer.id))
             .addClass("item");
 
+        var names = models.layers.getTitles(layer.id);
         var $name = $("<h4></h4>")
-            .html(layer.title);
+            .addClass("title")
+            .html(names.title);
         if ( config.parameters.markPalettes ) {
             if ( layer.palette ) {
                 $name.addClass("mark");
@@ -129,7 +134,8 @@ wv.layers.add = wv.layers.add || function(models, config) {
             }
         }
         var $description = $("<p></p>")
-            .html(layer.subtitle);
+            .addClass("subtitle")
+            .html(names.subtitle);
 
         var $checkbox = $("<input></input>")
             .attr("id", encodeURIComponent(layer.id))
@@ -147,8 +153,10 @@ wv.layers.add = wv.layers.add || function(models, config) {
         $element.append($name);
         $element.append($description);
 
-        $parent.append($element);
+        $label.append($element);
+        $parent.append($label);
     };
+
 
     var adjustCategoryHeights = function() {
         var heights = [];
@@ -241,28 +249,42 @@ wv.layers.add = wv.layers.add || function(models, config) {
             $target = $(this).find('input:checkbox');
         }
         if ( $target.is(':checked') ) {
-
             $target.attr('checked', false);
             model.remove($target.attr("data-layer"));
         } else {
             $target.attr('checked', true);
             model.add($target.attr("data-layer"));
         }
+        event.preventDefault();
     };
 
     var onLayerAdded = function(layer) {
-        var $element = $("#" + encodeURIComponent(layer.id));
+        var $element = $("#selectorbox [data-layer='" +
+            wv.util.jqueryEscape(layer.id) + "']");
         $element.attr("checked", "checked");
     };
 
     var onLayerRemoved = function(layer) {
-        var $element = $("#" + encodeURIComponent(layer.id));
+        var $element = $("#selectorbox [data-layer='" +
+            wv.util.jqueryEscape(layer.id) + "']");
         $element.removeAttr("checked");
     };
 
     var onProjectionChange = function() {
+        adjustTitles();
         updateAreasOfInterest();
         filter();
+    };
+
+    var adjustTitles = function() {
+        var proj = models.proj.selected.id;
+        _.each(models.layers.get(), function(def) {
+            var names = models.layers.getTitles(def.id);
+            $("#selectorbox [data-layer='" + encodeURIComponent(def.id) +
+                "'] .title").html(names.title);
+            $("#selectorbox [data-layer='" + encodeURIComponent(def.id) +
+                "'] .subtitle").html(names.subtitle);
+        });
     };
 
     var updateAreasOfInterest = function() {
@@ -323,12 +345,12 @@ wv.layers.add = wv.layers.add || function(models, config) {
         if ( search === "" ) {
             return false;
         }
-        var tags = ( layer.tags ) ? layer.tags : "";
         var filtered = false;
+        var names = models.layers.getTitles(layer.id);
         $.each(terms, function(index, term) {
-            filtered = !layer.title.toLowerCase().contains(term) &&
-                       !layer.subtitle.toLowerCase().contains(term) &&
-                       !tags.toLowerCase().contains(term);
+            filtered = !names.title.toLowerCase().contains(term) &&
+                       !names.subtitle.toLowerCase().contains(term) &&
+                       !names.tags.toLowerCase().contains(term);
             if ( filtered ) {
                 return false;
             }
@@ -345,8 +367,8 @@ wv.layers.add = wv.layers.add || function(models, config) {
                 filterProjection(layer) ||
                 filterSearch(layer, search);
             var display = filtered ? "none": "block";
-            var selector =
-                    "#" + wv.util.jqueryEscape(encodeURIComponent(layerId));
+            var selector = "#selectorbox li[data-layer='" +
+                wv.util.jqueryEscape(layerId) + "']";
             $(selector).parent().css("display", display);
         });
         adjustCategoryHeights();

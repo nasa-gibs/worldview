@@ -1,0 +1,27 @@
+{
+    "layers": {
+        "Coastlines": {
+            "id":       "Coastlines",
+            "title":    "Coastlines",
+            "group":    "overlays",
+            "format":   "image/png",
+            "type":     "wmts",
+            "tileSize": [ 512, 512 ],
+
+            "projections": {
+                "antarctic": {
+                    "subtitle":     "ADD SCAR / Coastlines",
+                    "tags":         "borders reference"
+                },
+                "geographic": {
+                    "subtitle":     "&copy; OpenStreetMap <a target='_blank' href='http://www.openstreetmap.org/copyright'>(license)</a>, Natural Earth",
+                    "tags":         "borders reference osm"
+                },
+                "arctic": {
+                    "subtitle":     "&copy; OpenStreetMap <a target='_blank' href='http://www.openstreetmap.org/copyright'>(license)</a>, Natural Earth",
+                    "tags":         "borders reference osm"
+                }
+            }
+        }
+    }
+}
