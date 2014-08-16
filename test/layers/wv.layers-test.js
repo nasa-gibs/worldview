@@ -85,7 +85,7 @@ buster.testCase("wv.layers", {
         buster.assert.equals(this.errors.length, 0);
     },
 
-    "Layer redirects": function() {
+    "Layer redirects, 1.1": function() {
         this.config.redirects = {
             layers: {
                 layer1: "layer3"
@@ -94,6 +94,18 @@ buster.testCase("wv.layers", {
         var state = { products: "layer1" };
         wv.layers.parse(state, this.errors, this.config);
         buster.assert.equals(state.products[0], "layer3");
+        buster.assert.equals(this.errors.length, 0);
+    },
+
+    "Layer redirects, 1.2": function() {
+        this.config.redirects = {
+            layers: {
+                layer1: "layer3"
+            }
+        };
+        var state = { l: "layer1" };
+        wv.layers.parse(state, this.errors, this.config);
+        buster.assert.equals(state.l[0].id, "layer3");
         buster.assert.equals(this.errors.length, 0);
     }
 

@@ -62,6 +62,9 @@ wv.layers = (function(self) {
         _.each(layerDefs, function(layerDef) {
             // Get the text before any paren or comma
             var layerId = layerDef.match(/[^\(,]+/)[0];
+            if ( config.redirects && config.redirects.layers ) {
+                layerId = config.redirects.layers[layerId] || layerId;
+            }
             var lstate = {
                 id: layerId,
                 attributes: []
