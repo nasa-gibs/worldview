@@ -48,7 +48,7 @@ buster.testCase("wv.palettes.model", function() {
         buster.assert.equals(palette.scale.colors[1], "3");
         buster.assert.equals(palette.scale.colors[2], "5");
     };
-    
+
     self["Palette expands color range"] = function() {
         config.palettes.rendered["terra-aod"].scale.colors = [
             "1", "2", "3", "4", "5", "6"
@@ -64,7 +64,7 @@ buster.testCase("wv.palettes.model", function() {
         buster.assert.equals(palette.scale.colors[4], fixtures.dark_blue);
         buster.assert.equals(palette.scale.colors[5], fixtures.dark_blue);
     };
-    
+
     self["Exception setting a custom palette when no layer exists"] = function() {
         buster.assert.exception(function() {
             models.palettes.setCustom("no-layer", "blue-1");

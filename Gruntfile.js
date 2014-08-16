@@ -310,14 +310,14 @@ module.exports = function(grunt) {
                 }]
             }
         },
-        
+
         markdown: {
             metadata: {
                 files: [
-                    { 
-                      expand: true, 
+                    {
+                      expand: true,
                       cwd: "build/options/config/metadata",
-                      src: "**/*.md", 
+                      src: "**/*.md",
                       dest: "build/options/config/metadata",
                       ext: ".html"
                     }
