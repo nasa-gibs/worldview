@@ -11,10 +11,10 @@ Summary:	Browse full-resolution, near real-time satellite imagery.
 
 License:	Copyright NASA
 URL:		http://earthdata.nasa.gov
-Source0:	worldview.tar.bz2
-Source1:	worldview-debug.tar.bz2
-Source2:	httpd.worldview.conf
-Source3:	httpd.worldview-debug.conf
+Source0:	@WORLDVIEW@.tar.bz2
+Source1:	@WORLDVIEW@-debug.tar.bz2
+Source2:	httpd.@WORLDVIEW@.conf
+Source3:	httpd.@WORLDVIEW@-debug.conf
 #Source4:	events_log.conf
 #Source4:	events_log-debug.conf
 #Source5:	cron.worldview
@@ -72,36 +72,36 @@ cp %{SOURCE3} .
 %install
 rm -rf %{buildroot}
 
-chmod 755 worldview/bin/*
-chmod 755 worldview-debug/bin/*
+chmod 755 @WORLDVIEW@/bin/*
+chmod 755 @WORLDVIEW@-debug/bin/*
 
 # Apache configuration for release
 install -m 755 -d %{buildroot}/%{httpdconfdir}
-install -m 644 httpd.worldview.conf \
+install -m 644 httpd.@WORLDVIEW@.conf \
 	%{buildroot}/%{httpdconfdir}/@WORLDVIEW@.conf
-rm httpd.worldview.conf
+rm httpd.@WORLDVIEW@.conf
 
 # Apache configuration for debug
-install -m 644 httpd.worldview-debug.conf \
+install -m 644 httpd.@WORLDVIEW@-debug.conf \
 	%{buildroot}/%{httpdconfdir}/@WORLDVIEW@-debug.conf
-rm httpd.worldview-debug.conf
+rm httpd.@WORLDVIEW@-debug.conf
 
 # Release options directory
 install -m 755 -d %{buildroot}/%{_sysconfdir}
-mv worldview/options %{buildroot}/%{_sysconfdir}/@WORLDVIEW@
-ln -s %{_sysconfdir}/@WORLDVIEW@ worldview/options
+mv @WORLDVIEW@/options %{buildroot}/%{_sysconfdir}/@WORLDVIEW@
+ln -s %{_sysconfdir}/@WORLDVIEW@ @WORLDVIEW@/options
 
 # Debug options directory
-mv worldview-debug/options %{buildroot}/%{_sysconfdir}/@WORLDVIEW@-debug
-ln -s %{_sysconfdir}/@WORLDVIEW@-debug worldview-debug/options
+mv @WORLDVIEW@-debug/options %{buildroot}/%{_sysconfdir}/@WORLDVIEW@-debug
+ln -s %{_sysconfdir}/@WORLDVIEW@-debug @WORLDVIEW@-debug/options
 
 # Release application
 install -m 755 -d %{buildroot}/%{_datadir}/@WORLDVIEW@
-cp -r worldview/* %{buildroot}/%{_datadir}/@WORLDVIEW@
+cp -r @WORLDVIEW@/* %{buildroot}/%{_datadir}/@WORLDVIEW@
 
 # Debug application
 install -m 755 -d %{buildroot}/%{_datadir}/@WORLDVIEW@-debug
-cp -r worldview-debug/* %{buildroot}/%{_datadir}/@WORLDVIEW@-debug
+cp -r @WORLDVIEW@-debug/* %{buildroot}/%{_datadir}/@WORLDVIEW@-debug
 
 #install -m 755 -d %{buildroot}/%{_sysconfdir}/@WORLDVIEW@
 #install -m 644 events_log.conf \
