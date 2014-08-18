@@ -36,6 +36,7 @@ module.exports = function(grunt) {
         opt.officialName = opt.officialName || opt.name;
         opt.longName = opt.longName || opt.name;
         opt.shortName = opt.shortName || opt.name;
+        opt.packageName = grunt.option("package-name") || opt.packageName;
         var features = grunt.file.readJSON("options/features.json").features;
 
         console.log("");
