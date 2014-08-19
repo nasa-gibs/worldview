@@ -73,7 +73,8 @@ wv.layers.add = wv.layers.add || function(models, config) {
         renderType($content, "baselayers", "Base Layers", "BaseLayers");
         renderType($content, "overlays", "Overlays", "Overlays");
         $(self.selector).append($content);
-        $(self.selector + " .selectorItem, " + self.selector + " .selectorItem input").on('click', toggleLayer);
+        //$(self.selector + " .selectorItem, " + self.selector + " .selectorItem input").on('click', toggleLayer);
+        $(self.selector + " .selectorItem input").on('change', toggleLayer);
         $(self.selector + "select").on('change', filter);
         $(self.selector + "search").on('keyup', filter);
         $(self.selector + "search").focus();
@@ -242,20 +243,12 @@ wv.layers.add = wv.layers.add || function(models, config) {
     };
 
     var toggleLayer = function(event) {
-        var $target;
-        if ( $(this).is(':checkbox') ) {
-            $target = $(this);
-        } else {
-            $target = $(this).find('input:checkbox');
-        }
-        if ( $target.is(':checked') ) {
-            $target.attr('checked', false);
+        var $target = $(this);
+        if ( !$target.is(':checked') ) {
             model.remove($target.attr("data-layer"));
         } else {
-            $target.attr('checked', true);
             model.add($target.attr("data-layer"));
         }
-        event.preventDefault();
     };
 
     var onLayerAdded = function(layer) {
