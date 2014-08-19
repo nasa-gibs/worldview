@@ -25,6 +25,11 @@ SKIP_LAYERS = [
     "OMI_SO2_Planetary_Boundary_Layer",
     "SCAR_Land_Mask",
     "SCAR_Land_Water_Map",
+    "AMSRE_Snow_Depth_Over_Ice_12km",
+    "AMSRE_Sea_Ice_Concentration_12km",
+    "AMSRE_Sea_Ice_Brightness_Temp_89V",
+    "AMSRE_Sea_Ice_Brightness_Temp_89H",
+    "AMSRE_Sea_Ice_Concentration_25km"
 ]
 
 prog = os.path.basename(__file__)
