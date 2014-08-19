@@ -18,7 +18,7 @@ wv.proj = wv.proj || {};
 /**
  * @class wv.proj.change
  */
-wv.proj.change = wv.proj.change || function(models, config) {
+wv.proj.change = wv.proj.change || function(models) {
 
     var PROJECTION_CHANGE_DATE = new Date(Date.UTC(2013, 05, 06));
     var DO_NOT_SHOW_AGAIN = "arcticProjectionChangeNotification";
@@ -62,9 +62,6 @@ wv.proj.change = wv.proj.change || function(models, config) {
     };
 
     var onChange = function() {
-        if ( !config.layers["arctic_coastines"] || !config.layers["arctic_graticule"] ) {
-            return;
-        }
         var wasOld = self.old;
         update();
         self.events.trigger("select", self);
