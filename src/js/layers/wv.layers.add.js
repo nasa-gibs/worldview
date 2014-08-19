@@ -278,7 +278,7 @@ wv.layers.add = wv.layers.add || function(models, config) {
 
     var adjustTitles = function() {
         var proj = models.proj.selected.id;
-        _.each(models.layers.get(), function(def) {
+        _.each(config.layers, function(def) {
             var names = models.layers.getTitles(def.id);
             $("#selectorbox [data-layer='" + encodeURIComponent(def.id) +
                 "'] .title").html(names.title);
