@@ -79,7 +79,7 @@ wv.ui.info = wv.ui.info || (function(ui, config) {
     });
 
     $feedback.click(function(event) {
-        if ( window.feedback ) {
+        if ( !wv.util.browser.small && window.feedback ) {
             event.preventDefault();
             if ( !feedbackInit ) {
                 feedback.init({showIcon: false});
