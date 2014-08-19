@@ -141,7 +141,7 @@ $(function() {
             models.link.register(models.data);
         }
         models.link.load(state);
-        models.proj.change = wv.proj.change(models);
+        models.proj.change = wv.proj.change(models, config);
 
         elapsed("ui");
         // Create widgets
