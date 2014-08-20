@@ -37,7 +37,7 @@ config_dir = args[1]
 error_count = 0
 warning_count = 0
 remove_count = 0
-    
+
 main_config_file = os.path.join(config_dir, "wv.json")
 with open(main_config_file) as fp:
     wv = json.load(fp)
@@ -67,10 +67,12 @@ def remove_layer(wv, layer_id):
 
 if tolerant:
     warn("Validation enforcement disabled")
-    
+
 for layer_id in wv["layers"].keys():
     layer = wv["layers"][layer_id]
     if layer_id not in wv["layerOrder"]:
+        if "layerOrderExceptions" in wv and layer_id in wv["layerOrderExceptions"]:
+            continue
         if tolerant:
             wv["layerOrder"] += [layer_id]
         else:
@@ -84,7 +86,7 @@ for layer_id in wv["layers"].keys():
         continue
     if "palette" in layer and "id" not in layer["palette"]:
         error("[%s] No palette definition" % (layer_id))
-    elif "palette" in layer:            
+    elif "palette" in layer:
         palette_id = layer["palette"]["id"]
         if not os.path.exists(os.path.join(config_dir, "palettes",
                 palette_id + ".json")):
@@ -100,15 +102,15 @@ for layer_id in wv["layers"].keys():
             source = projection["source"]
             matrix_set = projection["matrixSet"]
             if source not in wv["sources"]:
-                error("[%s:%s] Invalid source: %s" % 
+                error("[%s:%s] Invalid source: %s" %
                         (layer_id, proj_id, source))
                 del layer["projections"][proj_id]
             elif "matrixSets" not in wv["sources"][source]:
                 error("[%s:%s] No matrix sets for projection" %
                         (layer_id, proj_id))
-                del layer["projections"][proj_id] 
+                del layer["projections"][proj_id]
             elif matrix_set not in wv["sources"][source]["matrixSets"]:
-                error("[%s:%s] Invalid matrix set: %s" % 
+                error("[%s:%s] Invalid matrix set: %s" %
                         (layer_id, proj_id, matrix_set))
                 del layer["projections"][proj_id]
 
@@ -125,7 +127,7 @@ for startingLayer in wv["defaults"]["startingLayers"]:
         startingLayers += [startingLayer]
 wv["defaults"]["startingLayers"] = startingLayers
 
-print "%s: %d error(s), %d warning(s), %d removed" % (prog, error_count, 
+print "%s: %d error(s), %d warning(s), %d removed" % (prog, error_count,
         warning_count, remove_count)
 
 json_options = {}
