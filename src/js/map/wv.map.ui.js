@@ -493,11 +493,13 @@ wv.map.ui = wv.map.ui || function(models, config) {
         var coordinateControl = new OpenLayers.Control.MousePosition({
             formatOutput: function(mouseXY) {
                 var mouseLonLat = mouseXY.transform(proj.crs, "EPSG:4326");
+                // FIXME: Change back to projection model after
+                // arctic has been backfilled
+                var crs = ( models.proj.change ) ? models.proj.change.crs
+                        : models.proj.selected.crs;
                 return mouseLonLat.lon.toFixed(3) + "&#176;, " +
                        mouseLonLat.lat.toFixed(3) + "&#176; " +
-                       // FIXME: Change back to projection model after
-                       // arctic has been backfilled
-                       models.proj.change.crs;
+                       crs;
             }
         });
         controls.push(coordinateControl);

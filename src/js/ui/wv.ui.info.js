@@ -45,7 +45,7 @@ wv.ui.info = wv.ui.info || (function(ui, config) {
     var $about = $("<li><a><i class='ui-icon fa fa-file fa-fw'></i>About</a></li>");
 
     var feedbackInit = false;
-    
+
     if ( config.features.feedback ) {
         $menuItems.append($feedback);
     }
@@ -79,15 +79,16 @@ wv.ui.info = wv.ui.info || (function(ui, config) {
     });
 
     $feedback.click(function(event) {
-        if ( window.feedback ) {
+        if ( !wv.util.browser.small && window.feedback ) {
             event.preventDefault();
             if ( !feedbackInit ) {
                 feedback.init({showIcon: false});
             }
             feedback.showForm();
+            feedbackInit = true;
         }
     });
-    
+
     $new.click(function() {
         if ( wv.util.browser.small ) {
             window.open("brand/pages/new.html?v=@BUILD_NONCE@", "_blank");

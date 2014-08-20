@@ -36,6 +36,7 @@ module.exports = function(grunt) {
         opt.officialName = opt.officialName || opt.name;
         opt.longName = opt.longName || opt.name;
         opt.shortName = opt.shortName || opt.name;
+        opt.packageName = grunt.option("package-name") || opt.packageName;
         var features = grunt.file.readJSON("options/features.json").features;
 
         console.log("");
@@ -148,6 +149,14 @@ module.exports = function(grunt) {
             apache: {
                 src: "build/worldview-dev.httpd.conf",
                 dest: "dist/<%=pkg%>-dev.httpd.conf"
+	    },
+	    rpm_apache: {
+                src: "build/rpmbuild/SOURCES/httpd.conf",
+        	dest: "build/rpmbuild/SOURCES/httpd.<%=pkg%>.conf"
+	    },
+            rpm_apache_debug: {
+		src: "build/rpmbuild/SOURCES/httpd-debug.conf",
+                dest: "build/rpmbuild/SOURCES/httpd.<%=pkg%>-debug.conf"
             }
         },
 
@@ -527,6 +536,8 @@ module.exports = function(grunt) {
     grunt.registerTask("rpm_only", [
         "remove:rpmbuild",
         "copy:rpm_sources",
+        "rename:rpm_apache",
+        "rename:rpm_apache_debug",
         "replace:rpm_sources",
         "remove:dist_rpm",
         "exec:rpmbuild",

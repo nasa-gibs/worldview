@@ -207,7 +207,15 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
 
             //dlURL += "&switch="+s;
             dlURL += "&epsg="+epsg;
-            dlURL +="&layers=" + _.pluck(products, "id").join(",");
+            var layers = [];
+            _.each(products, function(layer) {
+                if ( layer.projections[s].layer ) {
+                    layers.push(layer.projections[s].layer);
+                } else {
+                    layers.push(layer.id);
+                }
+            });
+            dlURL +="&layers=" + layers.join(",");
             dlURL +="&opacities="+opacities.join(",");
 
             var imgWidth=0; var imgHeight=0;

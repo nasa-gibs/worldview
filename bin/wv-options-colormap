@@ -58,7 +58,9 @@ def process_file(file):
 
     for entry in entries:
         r,g,b = entry["@rgb"].split(",")
-        a = 0 if entry["@transparent"] == "true" else 255
+        a = 255
+        if "@transparent" in entry and entry["@transparent"] == "true":
+            a = 0
         color = "{0:02x}{1:02x}{2:02x}{3:02x}".format(int(r), int(g), int(b), a)
         label = entry["@label"]
         if a == 0:

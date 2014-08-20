@@ -114,14 +114,20 @@ def process_layer(gc_layer, wv_layers, colormaps):
 
     # Colormap links
     if "ows:Metadata" in gc_layer:
-        # FIXME: Assumes that there is only one metdata element
-        colormap_link = gc_layer["ows:Metadata"]["@xlink:href"]
-        colormap_file = os.path.basename(colormap_link)
-        colormap_id = os.path.splitext(colormap_file)[0]
-        colormaps[colormap_id] = colormap_link
-        wv_layer["palette"] = {
-            "id": colormap_id
-        }
+        if "skipPalettes" in config and id in config["skipPalettes"]:
+            sys.stderr.write("%s: WARNING: Skipping palette for %s\n" % (
+                prog, id))
+            global total_warning_count
+            total_warning_count += 1
+        else:
+            # FIXME: Assumes that there is only one metdata element
+            colormap_link = gc_layer["ows:Metadata"]["@xlink:href"]
+            colormap_file = os.path.basename(colormap_link)
+            colormap_id = os.path.splitext(colormap_file)[0]
+            colormaps[colormap_id] = colormap_link
+            wv_layer["palette"] = {
+                "id": colormap_id
+            }
 
 def process_entry(entry, colormaps):
     layer_count = 0
