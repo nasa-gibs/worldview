@@ -56,7 +56,18 @@ wv.proj.ui = wv.proj.ui || function(models, config) {
             text: false
         });
 
-        var $menu = $("<div></div>").attr("id", "wv-proj-menu");
+        $button.click(function(event) {
+            event.stopPropagation();
+            wv.ui.close();
+            var checked = $("#wv-proj-button-check").prop("checked");
+            if ( checked ) {
+                show();
+            }
+        });
+    };
+
+    var show = function() {
+        var $menu = wv.ui.getMenu().attr("id", "wv-proj-menu");
         $menuItems = $("<ul></ul>");
 
         _.each(config.ui.projections, function(ui) {
@@ -72,40 +83,29 @@ wv.proj.ui = wv.proj.ui || function(models, config) {
                 $button.button("refresh");
             });
         });
-
         $menu.append($menuItems);
-        $("body").append($menu);
 
-        $menuItems.hide().menu().position({
+        $menuItems.menu();
+        wv.ui.positionMenu($menuItems, {
             my: "left top",
             at: "left bottom+5",
             of: $label
         });
-
-        $button.click(function(event) {
-            event.stopPropagation();
-            $(".ui-menu").hide();
-            wv.ui.closeDialog();
-            var checked = $("#wv-proj-button-check").prop("checked");
-            if ( checked ) {
-                show();
-            }
-        });
-    };
-
-    var show = function() {
+        $menuItems.hide();
         $menuItems.show("slide", { direction: "up" });
         $("#wv-proj-menu a").removeClass("wv-menu-item-selected");
         $("#wv-proj-menu a[data-proj='" + models.proj.selected.id + "']")
             .addClass("wv-menu-item-selected");
-        $("body").one("click", function(event) {
+
+        var clickOut = function(event) {
             if ( $button.parent().has(event.target).length > 0 ) {
                 return;
             }
-            $menuItems.hide("slide", { direction: "up" });
+            $menuItems.hide();
             $("#wv-proj-button-check").prop("checked", false);
             $button.button("refresh");
-        });
+        };
+        $("body").one("click", clickOut);
     };
 
     init();
