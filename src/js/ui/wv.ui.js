@@ -182,7 +182,7 @@ wv.ui = (function(self) {
     };
 
     self.getMenu = function(marker) {
-        self.close()
+        self.close();
         return getComponent(marker || "wv-menu", closeMenu);
     };
 
@@ -210,8 +210,7 @@ wv.ui = (function(self) {
         $dialog.on("dialogclose", function() {
             $(window).off("resize", position);
         });
-    }
-
+    };
 
     return self;
 
