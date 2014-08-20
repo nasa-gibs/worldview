@@ -216,10 +216,14 @@ overflow:visible;
     display:block;
     clear:both;
     cursor:pointer;
+    text-transform:uppercase;
 }
 #timeline-zoom a.zoom-btn:hover{
     background-color:#1a1a1a;
     color:#fff;
+}
+.zoom-btn-selected{
+
 }
 .x.axis > g.tick > text.sub-label{
     fill:#777;
