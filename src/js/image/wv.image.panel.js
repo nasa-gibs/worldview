@@ -173,7 +173,8 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
             });
             // NOTE: This need to be changed back to the projection model
             // when the backfill removes the old projection.
-            var epsg = models.proj.change.epsg;
+            var epsg = ( models.proj.change ) ? models.proj.change.epsg :
+                    models.proj.selected.epsg;
 
             // get layer transparencies (opacities)
             var opacities = [];
