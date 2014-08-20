@@ -72,8 +72,9 @@ for layer_id in wv["layers"].keys():
     layer = wv["layers"][layer_id]
     if layer_id not in wv["layerOrder"]:
         if "layerOrderExceptions" in wv and layer_id in wv["layerOrderExceptions"]:
+            remove_layer(wv, layer_id)
             continue
-        if tolerant:
+        elif tolerant:
             wv["layerOrder"] += [layer_id]
         else:
             warn("[%s] Unexpected layer, not in layer order" % layer_id)
