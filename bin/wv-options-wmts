@@ -94,12 +94,8 @@ def process_layer(gc_layer, wv_layers, colormaps):
                         datetime.strptime(times[0], "%Y-%m-%d"))
                     end_date = min(start_date,
                         datetime.strptime(times[1], "%Y-%m-%d"))
-                # Layer is still actively being produced if the end date
-                # greater than yesterday
-                yesterday = datetime.now() - timedelta(days=1)
                 wv_layer["startDate"] = start_date.strftime("%Y-%m-%d")
-                if end_date < yesterday:
-                    wv_layer["endDate"] = end_date.strftime("%Y-%m-%d")
+                wv_layer["endDate"] = end_date.strftime("%Y-%m-%d")
             except ValueError:
                 raise Exception("Invalid time: {0}".format(range))
 
