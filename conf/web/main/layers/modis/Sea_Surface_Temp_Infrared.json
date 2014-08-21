@@ -6,6 +6,7 @@
             "subtitle": "PODAAC / MODIS / Terra and Aqua / 5 day",
             "tags":     "sst",
             "group":    "overlays",
+            "active":   "true",
 
             "palette": {
                 "id":           "Sea_Surface_Temp_Infrared",

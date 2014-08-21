@@ -123,7 +123,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
                 return false;
             }
         }
-        if ( layer.endDate ) {
+        if ( layer.endDate && !layer.active ) {
             var end = wv.util.parseDateUTC(layer.endDate);
             if ( models.date.selected > end ) {
                 return false;
@@ -156,7 +156,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
                     range = true;
                     var end = wv.util.parseDateUTC(layer.endDate).getTime();
                     max = Math.max(max, end);
-                } else if ( layer.endDate ) {
+                } else if ( layer.endDate || layer.active ) {
                     range = true;
                     max = wv.util.today().getTime();
                 }
