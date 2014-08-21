@@ -37,8 +37,4 @@ cp -r "$BUILD_DIR"/web/palettes/rendered \
     "$BUILD_DIR"/sld/*.xml
 
 
-cp -r "$DEBUG_DIR" "$BASE_DIR"/../src 
-
-
- 
-
+cp -r "$DEBUG_DIR" "$BASE_DIR"/../src

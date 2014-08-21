@@ -6,7 +6,8 @@
             "subtitle": "&copy; OpenStreetMap <a target='_blank' href='http://www.openstreetmap.org/copyright'>(license)</a>, Natural Earth",
             "tags":     "osm reference",
             "group":    "overlays",
-            "type":     "wmts"
+            "type":     "wmts",
+            "noTransition": true
         }
     }
 }

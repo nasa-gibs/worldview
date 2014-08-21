@@ -7,7 +7,6 @@
             "tags":     "osm reference",
             "group":    "overlays",
             "type":     "wmts",
-
             "noTransition":     "true"
         }
     }
