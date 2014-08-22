@@ -85,22 +85,23 @@ wv.link.ui = wv.link.ui || function(models, config) {
             dialogClass: "wv-panel",
             title: "Copy this link to share:",
             show: { effect: "slide", direction: "up" },
-            hide: { effect: "slide", direction: "up" },
             width: 300,
             height: "auto",
             minHeight: 10,
-            position: {
-                my: "left top",
-                at: "left bottom+5",
-                of: $label
-            },
             draggable: false,
-            resizable: false
+            resizable: false,
+            autoOpen: false
         }).on("dialogclose", function() {
             $("#wv-link-button-check").prop("checked", false);
             $button.button("refresh");
             models.link.events.off("update", updateLink);
         });
+        wv.ui.positionDialog($dialog, {
+            my: "left top",
+            at: "left bottom+5",
+            of: $label
+        });
+        $dialog.dialog("open");
 
         //$("#wv-link-shorten-check").button();
         $("#wv-link-shorten-check").on("ifChanged", function() {

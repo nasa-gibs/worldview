@@ -142,30 +142,74 @@ wv.ui = (function(self) {
                 "browser. Upgrade or try again in a different browser.");
     };
 
-    self.getDialog = function(marker) {
-        marker = marker || "wv-dialog";
+    var getComponent = function(marker, fnClose) {
+        $element = $("<div></div>").addClass(marker);
+        $("body").append($element);
+        return $element;
+    };
+
+    var closeComponent = function(marker, fnClose) {
         var selector = "." + marker;
-        var $dialog = $(selector);
-        if ( $dialog.length !== 0 ) {
-            if ( $dialog.dialog ) {
-                $dialog.dialog("close");
-            }
-            $dialog.remove();
+        var $element = $(selector);
+        if ( $element.length !== 0 ) {
+            fnClose($element);
         }
-        $dialog = $("<div></div>").addClass(marker);
-        $("body").append($dialog);
-        return $dialog;
+    };
+
+    var closeDialog = function($element) {
+        if ( $element.length !== 0 ) {
+            if ( $element.dialog ) {
+                $element.dialog("close");
+            }
+            $element.remove();
+        }
+    };
+
+    var closeMenu = function($element) {
+        if ( $element.length !== 0 ) {
+            $element.remove();
+        }
+    };
+
+    self.close = function() {
+        closeComponent("wv-dialog", closeDialog);
+        closeComponent("wv-menu", closeMenu);
+    };
+
+    self.getDialog = function(marker) {
+        self.close(marker);
+        return getComponent(marker || "wv-dialog", closeDialog);
+    };
+
+    self.getMenu = function(marker) {
+        self.close();
+        return getComponent(marker || "wv-menu", closeMenu);
     };
 
     self.closeDialog = function(marker) {
-        marker = marker || "wv-dialog";
-        var selector = "." + marker;
-        var $dialog = $(selector);
-        if ( $dialog.length !== 0 ) {
-            if ( $dialog.dialog ) {
-                $dialog.dialog("close");
-            }
-        }
+        self.close();
+    };
+
+    self.positionMenu = function($menuItems, pos) {
+        var position = function() {
+            $menuItems.menu().position(pos);
+        };
+        position();
+        $(window).resize(position);
+        $menuItems.on("hide", function() {
+            $(window).off("resize", position);
+        });
+    };
+
+    self.positionDialog = function($dialog, pos) {
+        var position = function() {
+            $dialog.dialog("option", "position", pos);
+        };
+        position();
+        $(window).resize(position);
+        $dialog.on("dialogclose", function() {
+            $(window).off("resize", position);
+        });
     };
 
     return self;

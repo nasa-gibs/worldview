@@ -114,7 +114,11 @@ for layer_id in wv["layers"].keys():
                 error("[%s:%s] Invalid matrix set: %s" %
                         (layer_id, proj_id, matrix_set))
                 del layer["projections"][proj_id]
-
+    if layer.get("inactive", False):
+        pass
+    else:
+        if "endDate" in layer:
+            del layer["endDate"]
 
 for layer_id in wv["layerOrder"]:
     if layer_id not in wv["layers"]:

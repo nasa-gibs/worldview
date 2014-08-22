@@ -112,11 +112,6 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
             width: 230,
             height: "auto",
             minHeight: 10,
-            position: {
-                my: "left top",
-                at: "left bottom+5",
-                of: ("#wv-image-button"),
-            },
             draggable: false,
             resizable: false,
             autoOpen: false
@@ -149,7 +144,11 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
         $("#wv-image-worldfile option").removeAttr("selected");
         $("#wv-image-worldfile option[value='" + worldfile + "']").attr("selected", "selected");
 
-
+        wv.ui.positionDialog($dialog, {
+            my: "left top",
+            at: "left bottom+5",
+            of: ("#wv-image-button"),
+        });
         $dialog.dialog("open");
     };
 
@@ -174,7 +173,8 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
             });
             // NOTE: This need to be changed back to the projection model
             // when the backfill removes the old projection.
-            var epsg = models.proj.change.epsg;
+            var epsg = ( models.proj.change ) ? models.proj.change.epsg :
+                    models.proj.selected.epsg;
 
             // get layer transparencies (opacities)
             var opacities = [];
