@@ -47,7 +47,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
     //subtract the datepicker from the width of the screen
     var width;
-    var setWidth = function(){width = window.innerWidth - $("#timeline-header").outerWidth() - $("#timeline-zoom").outerWidth() - $("#timeline-hide").outerWidth() - 40;}
+    var setWidth = function(){width = window.innerWidth - $("#timeline-header").outerWidth() - $("#timeline-zoom").outerWidth() - $("#timeline-hide").outerWidth() - 40;};
     setWidth();
     var height = 75 - margin.top - margin.bottom;
 
@@ -624,7 +624,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             subInterval = d3.time.month.utc;
             subStep = 1;
             zoomStep = 1;
-            zoomScale = 10
+            zoomScale = 10;
             $('.zoom-btn').removeClass(function (index, css) {
                 return (css.match (/(^|\s)depth-\S+/g) || []).join(' ');
             }).css("margin","").css("font-size","");
