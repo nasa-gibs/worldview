@@ -1,8 +1,14 @@
 @font-face {
-    font-family: 'Ubuntu Condensed';
+    font-family: 'Play';
     font-style: normal;
     font-weight: 400;
-    src: url(../font/UbuntuCondensed-Regular.ttf) format('ttf');
+    src: url(../font/Play-Regular.ttf) format('truetype');
+}
+@font-face {
+    font-family: 'Play Bold';
+    font-style:bold;
+    font-weight: 700;
+    src: url(../font/Play-Bold.ttf) format('ttf');
 }
 *:focus {
     outline: 0;
@@ -29,7 +35,7 @@
 #timeline-footer text{
     font-size:14px;
     font-weight:normal;
-    font-family:'Arial Narrow';
+    font-family:'Play', Fallback, sans-serif;
     font-style:normal;
     font-variant:normal;
     font-stretch:normal;
@@ -93,7 +99,7 @@
     stroke-dashoffset:0;
 }
 #timeline-header{
-    background:;
+    margin-top:7px;
 }
 #timeline-header input{
     height:60px;
@@ -101,7 +107,7 @@
     border:1px solid transparent;
     color:#1a1a1a;
     font-size:33px;
-    font-family:'Arial Narrow', sans-serif;
+    font-family:'Play', Fallback, sans-serif;
     vertical-align:middle;
     box-sizing:border-box;
     -moz-box-sizing:border-box;
@@ -118,11 +124,6 @@
         background:#2059a6;
     }
 }
-
-/* Temporary sizing of inputs until something more dynamic can be made */
-#timeline-header input:nth-child(2){width:2em;padding:3px;}
-#timeline-header input:nth-child(3){width:1.8em;padding:3px;}
-#timeline-header input:nth-child(4){width:1.1em;padding:3px;}
 
 #timeline-header .focus-guard{
 /*    display:none;
@@ -159,17 +160,17 @@ display:inline-block;}
     fill-opacity:1;
     stroke:none;
 }
-#timeline-header, #timeline-footer{
-    display:inline-block;
-    vertical-align:middle;
+#timeline-header,#timeline-footer,#timeline-zoom,#timeline-hide{
+    float:left;
 }
 #timeline-footer{
     display: inline-block;
-    height:85px;
+    height:75px;
     margin-left:0px;
+
 }
 #timeline-footer svg {
-overflow:visible;
+    overflow:visible;
 }
 
 /* Timeline svg classes */
@@ -209,7 +210,13 @@ overflow:visible;
 #timeline-zoom{
     display:inline-block;
     vertical-align:middle;
-    margin-left:10px;
+    overflow:hidden;
+    height:75px;
+    width:100px;
+    box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+    
     /*float:right;*/
 }
 #timeline-zoom a.zoom-btn{
@@ -217,13 +224,40 @@ overflow:visible;
     clear:both;
     cursor:pointer;
     text-transform:uppercase;
+    text-align:center;
+    font-family:'Play', Fallback, sans-serif;
+}
+#timeline-zoom a.zoom-btn.depth-1{
+    color:#1a1a1a;
+    font-size:1.5em;
+    line-height:1.5em;
+}
+#timeline-zoom a.zoom-btn.depth-2{
+    color:#666666;
+    font-size:1em;
+    line-height:1em;
+}
+#timeline-zoom a.zoom-btn.depth-3{
+    color:#b3b3b3;
+    font-size:0.7em;
+    line-height:1em;
+}
+#timeline-zoom a.zoom-btn.depth-4{
+    display:none;
 }
 #timeline-zoom a.zoom-btn:hover{
     background-color:#1a1a1a;
     color:#fff;
 }
-.zoom-btn-selected{
-
+#timeline-hide {
+    height:75px;
+    width:20px;
+    cursor:pointer;
+    float:right;
+    border-left:1px solid #1a1a1a;
+}
+#timeline-hide:hover{
+    background-color:#1a1a1a;
 }
 .x.axis > g.tick > text.sub-label{
     fill:#777;
@@ -253,4 +287,15 @@ overflow:visible;
 }
 #guitarpick:hover rect{
     fill:#999999;
+}
+#timeline-hide .hamburger{
+    vertical-align:middle;
+    display:block;
+    margin:32px auto 0 auto;
+}
+#timeline-hide .hamburger path{
+    fill:#1a1a1a;
+}
+#timeline-hide:hover .hamburger path {
+    fill:#cccccc;
 }

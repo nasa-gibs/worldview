@@ -221,9 +221,9 @@
             <section id="timeline">
                 <div id="timeline-header">
                     <div id="focus-guard-1" class="focus-guard" tabindex="1"></div>
-                    <input type="text" value="2014" maxlength="4" class="button-input-group" id="year-input-group" tabindex="2" />
-                    <input type="text" value="Mar" maxlength="3" class="button-input-group" id="month-input-group" tabindex="3" />
-                    <input type="text" value="3" maxlength="2" class="button-input-group" id="day-input-group" tabindex="4" />
+                    <input type="text" size="4" maxlength="4" class="button-input-group" id="year-input-group" tabindex="2" />
+                    <input type="text" size="2" maxlength="3" class="button-input-group" id="month-input-group" tabindex="3" />
+                    <input type="text" size="1" maxlength="2" class="button-input-group" id="day-input-group" tabindex="4" />
                     <div id="focus-guard-2" class="focus-guard" tabindex="5"></div>
                     <div class="button-action-group" id="left-arrow-group">
                         <svg>
@@ -233,7 +233,7 @@
                         </svg>
                     </div>
                     <div class="button-action-group" id="right-arrow-group">
-                        <svg>
+                        <svg >
                             <path
                             d="M 10.240764,15 24,30 10.240764,45 0,45 13.759236,30 0,15 10.240764,15 z"
                             class="arrow" />
@@ -244,12 +244,16 @@
 
                 </div><!--/timeline-footer-->
                 <div id="timeline-zoom">
-                  <a class="zoom-btn" id="zoom-days">Weeks</a>
+                  <a class="zoom-btn" id="zoom-weeks">Weeks</a>
                   <a class="zoom-btn" id="zoom-months">Months</a>
                   <a class="zoom-btn" id="zoom-years">Years</a>
                   <a class="zoom-btn" id="zoom-decades">Decades</a>
                 </div><!--/timeline-zoom-->
-                <div id="timeline-hide"></div>
+                <div id="timeline-hide">
+                  <svg class="hamburger" width="10" height="9">
+                    <path d="M 0,0 0,1 10,1 10,0 0,0 z M 0,4 0,5 10,5 10,4 0,4 z M 0,8 0,9 10,9 10,8 0,8 z" />
+                  </svg>
+                </div>
             </section>
 
         </div>
