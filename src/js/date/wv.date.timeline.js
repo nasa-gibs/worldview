@@ -51,8 +51,8 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     setWidth();
     var height = 75 - margin.top - margin.bottom;
 
-    var monthNames = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
+    var monthNames = [ "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
+                            "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" ];
     var self = {};
     self.NAME = "TEST NAME";
     // TODO: Prefix names with $ to indicate they are jQuery objects
@@ -294,7 +294,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         else {
             $('#day-input-group').val(model.selected.getUTCDate());
         }
-
 
         guitarPick.attr("transform","translate("+(x(model.selected)-25)+",-20)");
         // Don't grab focus to allow arrow keys to work
@@ -549,6 +548,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                         model.select(selectedDateObj);
                         break;
                     case 'month-input-group':
+                    newInput = newInput.toUpperCase();
                         for(var i=0;i<monthNames.length;i++){
                             if(newInput===monthNames[i] || (newInput==i+1) || (newInput===("0"+(i+1)))){
                                selectedDateObj = new Date((new Date(model.selected)).setUTCMonth(i));
