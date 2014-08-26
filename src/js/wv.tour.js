@@ -345,7 +345,6 @@ wv.tour = wv.tour || function(models, ui, config) {
     var validScreenSize = function() {
         var viewWidth = $(window).width();
         var viewHeight = $(window).height();
-        console.log(viewWidth, viewHeight);
         return viewWidth >= 768 && viewHeight >= 680;
     };
 
