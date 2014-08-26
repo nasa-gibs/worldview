@@ -46,11 +46,13 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         };
 
     //subtract the datepicker from the width of the screen
-    var width = window.innerWidth - $("#timeline-header").outerWidth() - 60 -50;
-    var height = 85 - margin.top - margin.bottom;
+    var width;
+    var setWidth = function(){width = window.innerWidth - $("#timeline-header").outerWidth() - $("#timeline-zoom").outerWidth() - $("#timeline-hide").outerWidth() - 40;};
+    setWidth();
+    var height = 75 - margin.top - margin.bottom;
 
-    var monthNames = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
+    var monthNames = [ "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
+                            "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" ];
     var self = {};
     self.NAME = "TEST NAME";
     // TODO: Prefix names with $ to indicate they are jQuery objects
@@ -140,7 +142,9 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         addSubAxes();
 
         //UPDATE GUITARPICK
-        guitarPick.attr("transform","translate("+(x(model.selected)-25)+",-10)");
+        if (guitarPick){
+            guitarPick.attr("transform","translate("+(x(model.selected)-25)+",-20)");
+        }
 
     };
     var addSubAxes = function(){
@@ -211,7 +215,8 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             var newDate;
             switch(zoomLvl){
             case 0:
-                newDate = new Date((Math.ceil(d.getUTCFullYear() / 10) * 10),model.selected.getUTCMonth(),model.selected.getUTCDate());
+                var yearOffset = model.selected.getUTCFullYear() - Math.ceil(new Date(model.selected.getUTCFullYear()/10)*10);
+                newDate = new Date(d.getUTCFullYear()+yearOffset,model.selected.getUTCMonth(),model.selected.getUTCDate());
                 break;
             case 1:
                 newDate = new Date(d.getUTCFullYear(),model.selected.getUTCMonth(),model.selected.getUTCDate());
@@ -290,8 +295,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             $('#day-input-group').val(model.selected.getUTCDate());
         }
 
-
-        guitarPick.attr("transform","translate("+(x(model.selected)-25)+",-10)");
+        guitarPick.attr("transform","translate("+(x(model.selected)-25)+",-20)");
         // Don't grab focus to allow arrow keys to work
 
         //$('.button-input-group-selected').select();
@@ -301,7 +305,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     };
 
     var resizeWindow = function(){
-        width = window.innerWidth - $("#timeline-header").outerWidth() - 60 -50;
+        setWidth();
         d3.select('#timeline-footer svg')
             .attr('width', width + margin.left + margin.right);
         timeline.select(".x.axis line:first-child").attr("x2",width);
@@ -377,24 +381,28 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .append("svg:rect")
             .attr('width', width + margin.left + margin.right)
             .attr('height', height + margin.top + margin.bottom+10)
-            .attr("y","-10");
+            .attr("y","-20");
 
         timeline = d3.select("#timeline-footer svg")
             .append("svg:g")
+            .attr("clip-path","#timeline-boundary")
             .attr("style","clip-path:url(#timeline-boundary);");
 
         zoom.translate([width/2 - x(model.selected),0]);
-//        zoom.center([x(model.selected),0]);
+
         timeline.append("svg:g")
             .attr("class", "x axis")
             .attr("transform", "translate(0," + height + ")")
-            .call(xAxis.tickSize(-height).tickPadding(5).ticks(zoomInterval,zoomStep))
             .insert("line",":first-child")
                 .attr("x1",-10)
-                .attr("x2",width);
+                .attr("x2",width+100);
 
-        addSubAxes();
+        redrawAxis(zoomInterval, zoomStep);
 
+        $('#zoom-decades').addClass("depth-3").css("margin","5px 0 0 0");
+        $('#zoom-years').addClass("depth-2");
+        $('#zoom-months').addClass("depth-1");
+        $('#zoom-weeks').addClass("depth-2").css("margin","10px 0 0 0");
         //Add y axis and remove labels
 
         verticalAxis = timeline.append("svg:g")
@@ -408,12 +416,14 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         //Plot data
         var chartBody = timeline.append("svg:g")
             .attr("style","clip-path:url(#timeline-boundary)")
+            .attr("clip-path","#timeline-boundary")
             .attr("height",height);
         /*chartBody.append("svg:path")
             .datum(layers)
             .attr("class","layer-bar")
             .attr("d", bar);
 */
+
         //Add guitar pick
 
         guitarPick = d3.select("#timeline-footer svg")
@@ -421,7 +431,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .attr("id","guitarpick")
             .attr("style","clip-path:url(#guitarpick-boundary);")
             .append("svg:g")
-            .attr("transform","translate("+(x(model.selected)-28)+",-10)");
+            .attr("transform","translate("+(x(model.selected)-28)+",-20)");
 
         guitarPick.append("svg:path")
             .attr("d", "M 7.3151,0.7426 C 3.5507,0.7426 0.5,3.7926 0.5,7.5553 l 0,21.2724 14.6038,15.7112 14.6039,15.7111 14.6038,-15.7111 14.6037,-15.7112 0,-21.2724 c 0,-3.7627 -3.051,-6.8127 -6.8151,-6.8127 l -44.785,0 z");
@@ -475,7 +485,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
                     break;
                 }
-                guitarPick.attr("transform","translate("+ (x(newDate)-28) +",-10)");
+                guitarPick.attr("transform","translate("+ (x(newDate)-28) +",-20)");
                 model.select(newDate);
             }
         });
@@ -492,7 +502,21 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             $(this).addClass('button-input-group-selected');
             $(this).select();
         });
-
+        $('#timeline-hide').click(function(e){
+            var $tl = $('#timeline-footer, #timeline-zoom');
+            if($tl.is(':hidden')){
+                $tl.show('slow');
+                $('#timeline').css('right','10px');
+                d3.select('#timeline-footer svg g').attr("clip-path","#timeline-boundary");
+                $("#guitarpick").show();
+            }
+            else{
+                $tl.hide('slow');
+                $("#guitarpick").hide();
+                $('#timeline').css('right','auto');
+            }
+            
+        });
         model.events.on("select", function(){
             updateTime();
         });
@@ -524,6 +548,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                         model.select(selectedDateObj);
                         break;
                     case 'month-input-group':
+                    newInput = newInput.toUpperCase();
                         for(var i=0;i<monthNames.length;i++){
                             if(newInput===monthNames[i] || (newInput==i+1) || (newInput===("0"+(i+1)))){
                                selectedDateObj = new Date((new Date(model.selected)).setUTCMonth(i));
@@ -557,8 +582,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             setZoomLevel(0);
         });
         d3.select("#zoom-years").on("click",function(d){
-            $('.zoom-btn').removeClass("zoom-btn-selected");
-            $(this).addClass("zoom-btn-selected");
             setZoomLevel(1);
         }); 
         d3.select("#zoom-months").on("click",function(d){
@@ -566,7 +589,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             $(this).addClass("zoom-btn-selected");
             setZoomLevel(2);
         }); 
-        d3.select("#zoom-days").on("click",function(d){
+        d3.select("#zoom-weeks").on("click",function(d){
             $('.zoom-btn').removeClass("zoom-btn-selected");
             $(this).addClass("zoom-btn-selected");
             setZoomLevel(3);
@@ -585,6 +608,15 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             subStep = 1;
             zoomStep = 10;
             zoomScale = 1;
+            $('.zoom-btn').removeClass(function (index, css) {
+                return (css.match (/(^|\s)depth-\S+/g) || []).join(' ');
+            }).css("margin","").css("font-size","");
+            $('#zoom-decades').addClass("depth-1");
+            $('#zoom-years').addClass("depth-2").css("font-size","1.2em");
+            $('#zoom-months').addClass("depth-3").css("margin","-3px 0 5px 0");
+            $('#zoom-weeks').addClass("depth-4");
+            
+
             break;
             case 'years':
             case 1:
@@ -593,6 +625,13 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             subStep = 1;
             zoomStep = 1;
             zoomScale = 10;
+            $('.zoom-btn').removeClass(function (index, css) {
+                return (css.match (/(^|\s)depth-\S+/g) || []).join(' ');
+            }).css("margin","").css("font-size","");
+            $('#zoom-decades, #zoom-months').addClass("depth-2");
+            $('#zoom-years').addClass("depth-1").css("font-size","1.7em");
+            $('#zoom-weeks').addClass("depth-3").css("margin","-3px 0 3px 0");
+
             break;
             case 'months':
             case 2:
@@ -601,14 +640,30 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             subStep = 1;
             zoomStep = 1;
             zoomScale = 170;
+            $('.zoom-btn').removeClass(function (index, css) {
+                return (css.match (/(^|\s)depth-\S+/g) || []).join(' ');
+            }).css("margin","").css("font-size","");
+            $('#zoom-decades').addClass("depth-3").css("margin","5px 0 0 0");
+            $('#zoom-years').addClass("depth-2");
+            $('#zoom-months').addClass("depth-1");
+            $('#zoom-weeks').addClass("depth-2").css("margin","10px 0 0 0");
+
             break;
-            case 'days':
+            case 'weeks':
             case 3:
             zoomInterval = d3.time.week.utc;
             subInterval = d3.time.day.utc;
             subStep = 1;
             zoomStep = 1;
             zoomScale = 570;
+            $('.zoom-btn').removeClass(function (index, css) {
+                return (css.match (/(^|\s)depth-\S+/g) || []).join(' ');
+            }).css("margin","").css("font-size","");
+            $('#zoom-decades').addClass("depth-4");
+            $('#zoom-years').addClass("depth-3").css("margin","5px 0 0 0");
+            $('#zoom-months').addClass("depth-2");
+            $('#zoom-weeks').addClass("depth-1").css("margin","25px 0 0 0");
+
             break;
             default:
             zoomInterval = d3.time.year.utc;
