@@ -573,7 +573,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             timer = setTimeout(function(){
                 model.select(selectedDate);
                 timer = null;
-            },1000);
+            },400);
             $(this).siblings('.button-input-group').focus();
         });
         $('input').focus(function(e){
@@ -628,7 +628,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             timer = setTimeout(function(){
                 model.select(selectedDate);
                 timer = null;
-            },1000);
+            },400);
 
             $(this).siblings('.button-input-group').focus();
         });
