@@ -91,7 +91,7 @@ wv.date.model = wv.date.model || function(spec) {
     self.add = function(interval, amount) {
         self.select(wv.util.dateAdd(self.selected, interval, amount));
     };
-    
+
     self.range = function(range) {
         if ( range) {
             self.start = range.start;

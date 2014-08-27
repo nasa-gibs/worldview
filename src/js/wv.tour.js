@@ -20,7 +20,6 @@ wv.tour = wv.tour || function(models, ui, config) {
 
     var conclusionPanel = null;
     var splashOverlay = null;
-    var active = false;
 
     var init = function() {
         $("#wv-tour").click(function() {
@@ -31,7 +30,7 @@ wv.tour = wv.tour || function(models, ui, config) {
 
     self.introduction = function() {
         if ( !config.features.tour ) { return; }
-        
+
         // Don't start tour if coming in via a permalink
         if ( window.location.search && !config.parameters.tour ) { return; }
 
@@ -62,11 +61,6 @@ wv.tour = wv.tour || function(models, ui, config) {
         if ( !validScreenSize() ) {
             wv.ui.notify("Unfortunately the @NAME@ tour can only be viewed in larger web browser windows.");
             return;
-        }
-
-        /* --- Set Up --- */
-        if ( active ) {
-            $('#joyRideTipContent').joyride("destroy");
         }
 
         var padding = 15; // padding - used for all of the tour windows
@@ -120,6 +114,7 @@ wv.tour = wv.tour || function(models, ui, config) {
                 draggable: false,
                 resizable: false
             });
+
         /*
         splashOverlay = new YAHOO.widget.Panel("splash", { zIndex:1020, visible:false, modal:true, draggable:false,  } );
 
@@ -260,7 +255,6 @@ wv.tour = wv.tour || function(models, ui, config) {
                 });
             $("#repeat").click(repeatTour);
             $("#done").click(handleDone);
-            active = false;
         };
 
         /*
@@ -292,7 +286,6 @@ wv.tour = wv.tour || function(models, ui, config) {
          * Close the splash and go straight to worldview.
          */
         var handleSkipTour = function() {
-            active = false;
             $(".ui-dialog-content").dialog("close");
         };
 
@@ -332,7 +325,6 @@ wv.tour = wv.tour || function(models, ui, config) {
         $("#skipTour").click(handleSkipTour);
         $("#dontShowAgain").click(setDoNotShow);
 
-        active = true;
     };
 
     var initTourState = function() {
@@ -353,7 +345,6 @@ wv.tour = wv.tour || function(models, ui, config) {
     var validScreenSize = function() {
         var viewWidth = $(window).width();
         var viewHeight = $(window).height();
-
         return viewWidth >= 768 && viewHeight >= 680;
     };
 
