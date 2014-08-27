@@ -35,7 +35,7 @@
 #timeline-footer text{
     font-size:14px;
     font-weight:normal;
-    font-family:'Play', Fallback, sans-serif;
+    font-family:‘Lucida Console’, Monaco, monospace;
     font-style:normal;
     font-variant:normal;
     font-stretch:normal;
@@ -99,15 +99,23 @@
     stroke-dashoffset:0;
 }
 #timeline-header{
-    margin-top:7px;
+    margin-top:2px;
+}
+#timeline-header .input-wrapper{
+    background: transparent;
+    border: 1px solid transparent;
+    vertical-align:middle;
+    -moz-box-sizing:border-box;
+    box-sizing:border-box;
+    -webkit-box-sizing:border-box;
 }
 #timeline-header input{
-    height:60px;
-    background:transparent;
-    border:1px solid transparent;
+    height:40px;
     color:#1a1a1a;
-    font-size:33px;
-    font-family:'Play', Fallback, sans-serif;
+    font-size:24px;
+    background:transparent;
+    border:0px;
+    font-family:‘Lucida Console’, Monaco, monospace;
     vertical-align:middle;
     box-sizing:border-box;
     -moz-box-sizing:border-box;
@@ -128,10 +136,13 @@
 #timeline-header .focus-guard{
 /*    display:none;
 */}
-#timeline-header input:hover{
+#timeline-header .input-wrapper:hover{
     border-color:#1a1a1a;
 }
-#timeline-header .button-input-group-selected{
+#timeline-header .input-wrapper:hover .date-arrows{
+    visibility:visible;
+}
+#timeline-header .input-wrapper.selected{
     border-color:#1a1a1a;
 }
 #timeline-header div{
@@ -140,21 +151,64 @@ display:inline-block;}
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
+  height:60px;
+  width:40px;
+  vertical-align:middle;
+  position:relative;
 }
 
-#timeline-header svg {
-    width:40px;
-    height:60px;
-    vertical-align:middle;
+#timeline-header .button-action-group svg {
+    position: absolute;
+    top: 50%;
+    margin-top: -15px;
+    left: 50%;
+    margin-left: -12px;
 }
-#timeline-header>div:hover {
+#timeline-header .date-arrows-wrapper{
+    vertical-align:middle;
+    visibility:hidden;
+    display:inline-block;
+}
+#timeline-header .date-arrows{
+    display:block;
+    visibility:hidden;
+    height:10px;
+}
+#timeline-header .date-arrows svg{
+    vertical-align:top;
+    display:block;
+    margin:0 auto;
+}
+#timeline-header .date-arrows:hover svg path {
+    fill:#ffffff;
+}
+#timeline-header .date-arrow-up{
+    
+}
+#timeline-header .date-arrow-down{
+    -moz-transform: scaleY(-1);
+    -o-transform: scaleY(-1);
+    -webkit-transform: scaleY(-1);
+    transform: scaleY(-1);
+    filter: FlipV;
+    -ms-filter: "FlipV";
+}
+#timeline-header>.button-action-group:hover,#timeline-header .date-arrows:hover {
     background-color:#1a1a1a;
     cursor:pointer;
 }
-#timeline-header>div:hover .arrow{
+#left-arrow-group{
+     -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+}
+#timeline-header>.button-action-group:hover .arrow{
     fill:#e2e2e2;
 }
-#timeline-header svg .arrow{
+#timeline-header>.buttion-action-group:hover .arrow{
     -webkit-transform: translate(8px,0px);
     fill:#1a1a1a;
     fill-opacity:1;
@@ -165,12 +219,15 @@ display:inline-block;}
 }
 #timeline-footer{
     display: inline-block;
-    height:75px;
+    height:65px;
     margin-left:0px;
 
 }
 #timeline-footer svg {
     overflow:visible;
+}
+#timeline-footer svg > g{
+    overflow:hidden;
 }
 
 /* Timeline svg classes */
@@ -198,7 +255,7 @@ display:inline-block;}
     font-size:14px;
     font-weight:bold;
     position:absolute;
-    bottom:75px;
+    bottom:65px;
     left:0;
     display:none;
     background-color:#ff2a2a;
@@ -211,7 +268,7 @@ display:inline-block;}
     display:inline-block;
     vertical-align:middle;
     overflow:hidden;
-    height:75px;
+    height:65px;
     width:100px;
     box-sizing:border-box;
     -moz-box-sizing:border-box;
@@ -225,7 +282,7 @@ display:inline-block;}
     cursor:pointer;
     text-transform:uppercase;
     text-align:center;
-    font-family:'Play', Fallback, sans-serif;
+    font-family:‘Lucida Console’, Monaco, monospace;
 }
 #timeline-zoom a.zoom-btn.depth-1{
     color:#1a1a1a;
@@ -250,7 +307,7 @@ display:inline-block;}
     color:#fff;
 }
 #timeline-hide {
-    height:75px;
+    height:65px;
     width:20px;
     cursor:pointer;
     float:right;
@@ -259,10 +316,10 @@ display:inline-block;}
 #timeline-hide:hover{
     background-color:#1a1a1a;
 }
-.x.axis > g.tick > text.sub-label{
+.x.axis > g.tick > text > .sub-label{
     fill:#777;
 }
-.x.axis > g.tick:hover > text.sub-label{
+.x.axis > g.tick:hover > text > .sub-label{
     fill:#fff;
 }
 #guitarpick{
@@ -291,7 +348,7 @@ display:inline-block;}
 #timeline-hide .hamburger{
     vertical-align:middle;
     display:block;
-    margin:32px auto 0 auto;
+    margin:26px auto 0 auto;
 }
 #timeline-hide .hamburger path{
     fill:#1a1a1a;

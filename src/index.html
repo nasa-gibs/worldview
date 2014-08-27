@@ -197,6 +197,7 @@
     <!-- link.dev --> <script type="text/javascript" src="js/wv.tour.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/wv.debug.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/wv.main.js"></script>
+
 </head>
 
 <body class="yui-skin-sam">
@@ -221,21 +222,57 @@
             <section id="timeline">
                 <div id="timeline-header">
                     <div id="focus-guard-1" class="focus-guard" tabindex="1"></div>
-                    <input type="text" size="4" maxlength="4" class="button-input-group" id="year-input-group" tabindex="2" />
-                    <input type="text" size="2" maxlength="3" class="button-input-group" id="month-input-group" tabindex="3" />
-                    <input type="text" size="1" maxlength="2" class="button-input-group" id="day-input-group" tabindex="4" />
+                    <div class="input-wrapper">
+                        <div class="date-arrows date-arrow-up">
+                          <svg width="25" height="8">
+                            <path d="M 12.5,0 25,8 0,8 z" class="uparrow" />
+                          </svg>
+                        </div>
+                      <input type="text" size="4" maxlength="4" class="button-input-group" id="year-input-group" tabindex="2" />
+                        <div class="date-arrows date-arrow-down">
+                          <svg width="25" height="8">
+                            <path d="M 12.5,0 25,8 0,8 z" class="downarrow"  />
+                          </svg>
+                        </div>
+                    </div><!--/input-wrapper-->
+                    <div class="input-wrapper">
+                        <div class="date-arrows date-arrow-up">
+                          <svg width="25" height="8">
+                            <path d="M 12.5,0 25,8 0,8 z" class="uparrow" />
+                          </svg>
+                        </div>
+                      <input type="text" size="3" maxlength="3" class="button-input-group" id="month-input-group" tabindex="3" />
+                        <div class="date-arrows date-arrow-down">
+                          <svg width="25" height="8">
+                            <path d="M 12.5,0 25,8 0,8 z" class="downarrow"  />
+                          </svg>
+                        </div>
+                    </div><!--/input-wrapper-->
+                    <div class="input-wrapper">
+                        <div class="date-arrows date-arrow-up">
+                          <svg width="25" height="8">
+                            <path d="M 12.5,0 25,8 0,8 z" class="uparrow" />
+                          </svg>
+                        </div>
+                      <input type="text" size="2" maxlength="2" class="button-input-group" id="day-input-group" tabindex="4" />
+                        <div class="date-arrows date-arrow-down">
+                          <svg width="25" height="8">
+                            <path d="M 12.5,0 25,8 0,8 z" class="downarrow"  />
+                          </svg>
+                        </div>
+                    </div><!--/input-wrapper-->
                     <div id="focus-guard-2" class="focus-guard" tabindex="5"></div>
                     <div class="button-action-group" id="left-arrow-group">
-                        <svg>
+                        <svg width="24" height="30">
                             <path
-                             d="M 13.759236,15 0,30 13.759236,45 24,45 10.240764,30 24,15 13.759236,15 z"
+                             d="M 10.240764,0 24,15 10.240764,30 0,30 13.759236,15 0,0 10.240764,0 z"
                              class="arrow" />
                         </svg>
                     </div>
                     <div class="button-action-group" id="right-arrow-group">
-                        <svg >
+                        <svg width="24" height="30" >
                             <path
-                            d="M 10.240764,15 24,30 10.240764,45 0,45 13.759236,30 0,15 10.240764,15 z"
+                            d="M 10.240764,0 24,15 10.240764,30 0,30 13.759236,15 0,0 10.240764,0 z"
                             class="arrow" />
                         </svg>
                     </div>
