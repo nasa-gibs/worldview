@@ -80,7 +80,7 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
                 "<option value='image/jpeg'>JPEG</option>" +
                 "<option value='image/png'>PNG</option>" +
                 "<option value='image/geotiff'>GeoTIFF</option>" +
-                "<option  value='image/kmz'>KMZ</option>" +
+                "<option value='image/kmz'>KMZ</option>" +
             "</select>Format</div>"+
             "<div class='wv-image-header'>" +
             "<select id='wv-image-worldfile' > "+
@@ -122,7 +122,7 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
         $(".ui-dialog").zIndex(600);
 
         if ( models.proj.selected.id !== "geographic" ) {
-             $("#wv-image-format-kmz").button("disable");
+             $("#wv-image-format [value='image/kmz']").remove();
         }
         $("#wv-image-format").change(function() {
             format = $("#wv-image-format option:checked").val();
