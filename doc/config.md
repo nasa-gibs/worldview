@@ -16,7 +16,7 @@ Information here is incomplete and can be flushed out on an as-needed basis.
 
 All paths in the document are relative to the options repository root unless specified otherwise.
 
-After making any changed to the configuration, run ``grunt config`` from the command line to rebuild the configuration for use by the application.
+After making any changes to the configuration, run ``grunt config`` from the command line to rebuild the configuration for use by the application.
 
 ## New Layers
 
