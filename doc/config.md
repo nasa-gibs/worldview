@@ -37,7 +37,7 @@ The following is the minimum configuration needed for the Aerosol Optical Depth 
 }
 ```
 
-All properties should in as an object keyed by the layer identifier used in the WMTS of WMS call.
+All properties should be in an object keyed by the layer identifier used in the WMTS of WMS call.
 
 ### Required Properties
 
