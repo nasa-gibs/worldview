@@ -26,6 +26,7 @@ SKIP_LAYERS = [
     "SCAR_Land_Mask",
     "SCAR_Land_Water_Map",
     "AMSRE_Snow_Depth_Over_Ice_12km",
+    "AMSRE_Snow_Depth_Over_Ice",
     "AMSRE_Sea_Ice_Concentration_12km",
     "AMSRE_Sea_Ice_Brightness_Temp_89V",
     "AMSRE_Sea_Ice_Brightness_Temp_89H",
