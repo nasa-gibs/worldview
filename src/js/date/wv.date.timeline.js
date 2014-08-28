@@ -38,10 +38,11 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var subInterval = d3.time.day.utc;
     var subStep = 1;
     var zoomScale,axisBgWidth,subAxisBgWidth,smallTicks,guitarPick,chartBody,layers;
+    var timer,selectedDate, daysInMonth;
     var margin = {
             top: 0,
             right: 0,
-            bottom: 35,
+            bottom: 20,
             left: 10
         };
 
@@ -49,10 +50,17 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var width;
     var setWidth = function(){width = window.innerWidth - $("#timeline-header").outerWidth() - $("#timeline-zoom").outerWidth() - $("#timeline-hide").outerWidth() - 40;};
     setWidth();
-    var height = 75 - margin.top - margin.bottom;
+    var height = 65 - margin.top - margin.bottom;
 
     var monthNames = [ "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
                             "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" ];
+    var monthNumber = function(name){
+        for (var i=0;i<monthNames.length;i++){
+            if (name.toUpperCase() === monthNames[i]){
+                return i;
+            }
+        }
+    };
     var self = {};
     self.NAME = "TEST NAME";
     // TODO: Prefix names with $ to indicate they are jQuery objects
@@ -143,7 +151,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
         //UPDATE GUITARPICK
         if (guitarPick){
-            guitarPick.attr("transform","translate("+(x(model.selected)-25)+",-20)");
+            guitarPick.attr("transform","translate("+(x(model.selected)-25)+",-16)");
         }
 
     };
@@ -176,9 +184,8 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             
             //draw sub-label (high freq)
             if(subLabel){
-                tickGroup.append("svg:text")
-                    .text(subLabel)
-                    .attr("y","30")
+                tickGroup.select('text').append("tspan")
+                    .text(" " + subLabel)
                     .attr("class","sub-label");
             }
             var x2 = d3.time.scale.utc()
@@ -240,20 +247,25 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             var tickParent = d3.select(this.parentNode.parentNode);
             var tickDate = d;
             var rectWidth = tickParent.select('rect.axis-background').attr("width");
-
+            if (zoomLvl === 0){
+                tickDate = new Date(d.getUTCFullYear(),model.selected.getUTCMonth(),model.selected.getUTCDate());
+            }
+            else if (zoomLvl === 1){
+                tickDate = new Date(d.getUTCFullYear(),d.getUTCMonth(),model.selected.getUTCDate());
+            }
             tickParent.selectAll('.tick-label, .sub-label').attr("visibility","hidden");
             tickParent.append("svg:text")
                 .attr("class","hover-tick-label")
                 .attr("y","15")
                 .attr("x",rectWidth/2)
                 .attr("style","text-anchor:middle")
-                .text(tickDate.getUTCDate() + " " + monthNames[tickDate.getUTCMonth()]);
-            tickParent.append("svg:text")
+                .text(tickDate.getUTCDate() + " " + monthNames[tickDate.getUTCMonth()] + " " + tickDate.getUTCFullYear());
+/*            tickParent.append("svg:text")
                 .attr("class","hover-sub-label")
                 .attr("y","30")
                 .attr("x",rectWidth/2)
                 .attr("style","text-anchor:middle")
-                .text(tickDate.getUTCFullYear());
+                .text(tickDate.getUTCFullYear());*/
             
         })
         .on("mouseleave",function(d){
@@ -295,7 +307,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             $('#day-input-group').val(model.selected.getUTCDate());
         }
 
-        guitarPick.attr("transform","translate("+(x(model.selected)-25)+",-20)");
+        guitarPick.attr("transform","translate("+(x(model.selected)-25)+",-16)");
         // Don't grab focus to allow arrow keys to work
 
         //$('.button-input-group-selected').select();
@@ -308,6 +320,8 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         setWidth();
         d3.select('#timeline-footer svg')
             .attr('width', width + margin.left + margin.right);
+        d3.select('#timeline-boundary rect').attr('width',width+margin.left+margin.right);
+        d3.select('#guitarpick-boundary rect').attr('width',width+margin.left+margin.right);
         timeline.select(".x.axis line:first-child").attr("x2",width);
         //redrawAxis();
     };
@@ -380,8 +394,8 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .attr("id","guitarpick-boundary")
             .append("svg:rect")
             .attr('width', width + margin.left + margin.right)
-            .attr('height', height + margin.top + margin.bottom+10)
-            .attr("y","-20");
+            .attr('height', height + margin.top + margin.bottom)
+            .attr("y","-16");
 
         timeline = d3.select("#timeline-footer svg")
             .append("svg:g")
@@ -392,6 +406,8 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
         timeline.append("svg:g")
             .attr("class", "x axis")
+//            .attr("clip-path","#timeline-boundary")
+//            .style("clip-path","url(#timeline-boundary)")
             .attr("transform", "translate(0," + height + ")")
             .insert("line",":first-child")
                 .attr("x1",-10)
@@ -431,7 +447,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .attr("id","guitarpick")
             .attr("style","clip-path:url(#guitarpick-boundary);")
             .append("svg:g")
-            .attr("transform","translate("+(x(model.selected)-28)+",-20)");
+            .attr("transform","translate("+(x(model.selected)-28)+",-16)");
 
         guitarPick.append("svg:path")
             .attr("d", "M 7.3151,0.7426 C 3.5507,0.7426 0.5,3.7926 0.5,7.5553 l 0,21.2724 14.6038,15.7112 14.6039,15.7111 14.6038,-15.7111 14.6037,-15.7112 0,-21.2724 c 0,-3.7627 -3.051,-6.8127 -6.8151,-6.8127 l -44.785,0 z");
@@ -452,13 +468,9 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .attr("y","11");
         var mousedown = false;
         guitarPick.on("mousedown",function(){  //TODO: Drag slider over small axes
-            console.log("mousedown");
             mousedown = true;
             d3.event.preventDefault();
             d3.event.stopPropagation();
-//            console.log(d3.mouse(this)[0]);
-
-            
         })
         .on("mouseup",function(){
             mousedown = false;
@@ -485,7 +497,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
                     break;
                 }
-                guitarPick.attr("transform","translate("+ (x(newDate)-28) +",-20)");
+                guitarPick.attr("transform","translate("+ (x(newDate)-28) +",-16)");
                 model.select(newDate);
             }
         });
@@ -496,23 +508,144 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         });
 
         //bind click action to interval radio buttons
-        var buttons = $('.button-input-group');
-        buttons.on('focus',function(e){
-            buttons.removeClass('button-input-group-selected');
-            $(this).addClass('button-input-group-selected');
+        var $buttons = $('.button-input-group');
+        $buttons.on('focus',function(e){
+            e.preventDefault();
+            $buttons.siblings('.date-arrows').css('visibility','');
+            $buttons.parent().removeClass('selected');
+            $(this).parent().addClass('selected');
+            $(this).siblings('.date-arrows').css('visibility','visible');
+        });
+        $buttons.click(function(e){
             $(this).select();
         });
-        $('#timeline-hide').click(function(e){
-            var $tl = $('#timeline-footer, #timeline-zoom');
-            if($tl.is(':hidden')){
-                $tl.show('slow');
-                $('#timeline').css('right','10px');
-                d3.select('#timeline-footer svg g').attr("clip-path","#timeline-boundary");
-                $("#guitarpick").show();
+        $buttons.focusout(function(e){
+            $buttons.siblings('.date-arrows').css('visibility','');
+            $buttons.parent().removeClass('selected');
+        });
+        var $incrementIntDate = $('.date-arrow-up');
+        var $decrementIntDate = $('.date-arrow-down');
+        $incrementIntDate.click(function(e){
+            if(timer){
+                clearTimeout(timer);
+                daysInMonth = (new Date(selectedDate.getUTCFullYear(),selectedDate.getUTCMonth()+1,0)).getUTCDate();
             }
             else{
-                $tl.hide('slow');
-                $("#guitarpick").hide();
+                selectedDate = new Date(model.selected);
+                daysInMonth = (new Date(model.selected.getUTCFullYear(),model.selected.getUTCMonth()+1,0)).getUTCDate();
+            }
+            var $interval = $(this).siblings('.button-input-group').attr('id').replace("-input-group", "");
+            var $dateVal = $(this).siblings('input.button-input-group');
+
+            switch($interval){
+                case 'day':
+                var numberDate;
+                if(parseInt($dateVal.val())<daysInMonth){
+                    numberDate = parseInt(selectedDate.getUTCDate())+1;
+                }
+                else{
+                    numberDate = 1;
+                }
+                if (numberDate>9){
+                    $dateVal.val(numberDate);
+                }
+                else{
+                    $dateVal.val("0" + numberDate);
+                }
+                selectedDate.setUTCDate(numberDate);
+                break;
+                case 'month':
+                var monthDate;
+                if (monthNumber($dateVal.val())+1<monthNames.length){
+                    monthDate = parseInt(selectedDate.getUTCMonth())+1;
+                }
+                else{
+                    monthDate = 0;
+                }
+                $dateVal.val(monthNames[monthDate]);
+                selectedDate.setUTCMonth(monthDate);
+                break;
+                case 'year':
+                $dateVal.val(parseInt(selectedDate.getUTCFullYear())+1);
+                selectedDate.setUTCFullYear($dateVal.val());
+                break;
+            }
+            timer = setTimeout(function(){
+                model.select(selectedDate);
+                timer = null;
+            },400);
+            $(this).siblings('.button-input-group').focus();
+        });
+        $('input').focus(function(e){
+            $(this).select();
+        });
+
+        $decrementIntDate.click(function(e){
+            if(timer){
+                clearTimeout(timer);
+                daysInMonth = (new Date(selectedDate.getUTCFullYear(),selectedDate.getUTCMonth()+1,0)).getUTCDate();
+            }
+            else{
+                selectedDate = new Date(model.selected);
+                daysInMonth = (new Date(model.selected.getUTCFullYear(),model.selected.getUTCMonth()+1,0)).getUTCDate();
+            }
+            var $interval = $(this).siblings('.button-input-group').attr('id').replace("-input-group", "");
+            var $dateVal = $(this).siblings('input.button-input-group');
+            
+                switch($interval){
+                case 'day':
+                    var numberDate;
+                    if($dateVal.val()>1){
+                        numberDate = parseInt(selectedDate.getUTCDate())-1;
+                    }
+                    else{
+                        numberDate = daysInMonth;
+                    }
+                    if(numberDate>9){
+                        $dateVal.val(numberDate);
+                    }
+                    else{
+                        $dateVal.val("0" + numberDate);
+                    }
+                    selectedDate.setUTCDate(numberDate);
+                    break;
+                case 'month':
+                    var monthDate;
+                    if (monthNumber($dateVal.val())>0){
+                        monthDate = parseInt(selectedDate.getUTCMonth())-1;
+                    }
+                    else{
+                        monthDate = 11;
+                    }
+                    $dateVal.val(monthNames[monthDate]);
+                    selectedDate.setUTCMonth(monthDate);
+                    break;
+                case 'year':
+                    $dateVal.val(parseInt(selectedDate.getUTCFullYear())-1);
+                    selectedDate.setUTCFullYear($dateVal.val());
+                    break;
+                }
+            timer = setTimeout(function(){
+                model.select(selectedDate);
+                timer = null;
+            },400);
+
+            $(this).siblings('.button-input-group').focus();
+        });
+        $('#timeline-hide').click(function(e){
+            var tl = d3.select('#timeline-footer svg');
+            var tlZ = d3.select('#timeline-zoom');
+            if(tl.style('display')==='none'){
+                tl.style('display','');
+                tlZ.style('display','');
+
+                $('#timeline').css('right','10px');
+                d3.select("#guitarpick").attr("style","display:block;");
+            }
+            else{
+                tl.style('display','none');
+                tlZ.style('display','none');
+                d3.select("#guitarpick").attr("style","display:none;");
                 $('#timeline').css('right','auto');
             }
             
@@ -535,11 +668,10 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         });
         
         updateTime();
-        $('#day-input-group').addClass('button-input-group-selected');
-        $('#day-input-group').select();
+
         $('.button-input-group').change(function(){
-            if($(this).hasClass('button-input-group-selected')){
-                var selected = $(".button-input-group-selected");
+            if($(this).parent().hasClass('selected')){
+                var selected = $(this);
                 var YMDInterval = selected.attr('id');
                 var newInput = selected.val();
                 switch(YMDInterval){
@@ -561,6 +693,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                             selectedDateObj = new Date((new Date(model.selected)).setUTCDate(newInput));
                             try {
                                 model.select(selectedDateObj);
+                                $(this).select();
                              }
                             catch(e){
                              //TODO: error catching
@@ -757,7 +890,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var animateEnd = function() {
         ui.anim.stop();
     };
-    
+    var zoomLvlTiny = 0;
     var zoomable = function(e){
 
         var mousePos = x.invert(d3.mouse(this)[0]);
@@ -768,15 +901,23 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         if (deltaY < 0){
             //console.log("Up");
             if (zoomLvl < 3){
-                zoomLvl++;
-                setZoomLevel(zoomLvl,mousePos,mouseOffset);
+                zoomLvlTiny++;
+                if (zoomLvlTiny===3){
+                    zoomLvl++;
+                    zoomLvlTiny = 0;
+                    setZoomLevel(zoomLvl,mousePos,mouseOffset);
+                }
             }
         }
         else if (deltaY > 0){
             //console.log("Down")
             if (zoomLvl > 0){
-                zoomLvl--;
-                setZoomLevel(zoomLvl,mousePos,mouseOffset);
+                zoomLvlTiny--;
+                if (zoomLvlTiny===-3){
+                    zoomLvl--;
+                    zoomLvlTiny = 0;
+                    setZoomLevel(zoomLvl,mousePos,mouseOffset);
+                }
             }
         }
         else{
