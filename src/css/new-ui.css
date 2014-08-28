@@ -109,6 +109,15 @@
     box-sizing:border-box;
     -webkit-box-sizing:border-box;
 }
+#timeline-header .input-wrapper:nth-child(2){
+    max-width:60px;
+}
+#timeline-header .input-wrapper:nth-child(3){
+    max-width:50px;
+}
+#timeline-header .input-wrapper:nth-child(4){
+    max-width:35px;
+}
 #timeline-header input{
     height:40px;
     color:#1a1a1a;
@@ -120,6 +129,7 @@
     box-sizing:border-box;
     -moz-box-sizing:border-box;
     -webkit-box-sizing:border-box;
+    padding:0;
 }
 @media all{
     #timeline-header input::selection{

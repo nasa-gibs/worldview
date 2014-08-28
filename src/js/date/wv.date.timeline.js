@@ -259,7 +259,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 .attr("y","15")
                 .attr("x",rectWidth/2)
                 .attr("style","text-anchor:middle")
-                .text(tickDate.getUTCDate() + " " + monthNames[tickDate.getUTCMonth()] + " " + tickDate.getUTCFullYear());
+                .text(tickDate.getUTCFullYear() + " " + monthNames[tickDate.getUTCMonth()] + " " + tickDate.getUTCDate());
 /*            tickParent.append("svg:text")
                 .attr("class","hover-sub-label")
                 .attr("y","30")
@@ -500,6 +500,16 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 guitarPick.attr("transform","translate("+ (x(newDate)-28) +",-16)");
                 model.select(newDate);
             }
+            /*
+            tickParent.selectAll('.tick-label, .sub-label').attr("visibility","hidden");
+            tickParent.append("svg:text")
+                .attr("class","hover-tick-label")
+                .attr("y","15")
+                .attr("x",rectWidth/2)
+                .attr("style","text-anchor:middle")
+                .text(tickDate.getUTCFullYear() + " " + monthNames[tickDate.getUTCMonth()] + " " + tickDate.getUTCDate());
+
+                */
         });
         d3.select(document).on("mouseup",function(){
             if (mousedown){
@@ -633,18 +643,14 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             $(this).siblings('.button-input-group').focus();
         });
         $('#timeline-hide').click(function(e){
-            var tl = d3.select('#timeline-footer svg');
-            var tlZ = d3.select('#timeline-zoom');
-            if(tl.style('display')==='none'){
-                tl.style('display','');
-                tlZ.style('display','');
-
+            var tl = $('#timeline-footer, #timeline-zoom');
+            if(tl.is(':hidden')){
+                tl.show('slow');
                 $('#timeline').css('right','10px');
                 d3.select("#guitarpick").attr("style","display:block;");
             }
             else{
-                tl.style('display','none');
-                tlZ.style('display','none');
+                tl.hide('slow');
                 d3.select("#guitarpick").attr("style","display:none;");
                 $('#timeline').css('right','auto');
             }
