@@ -19,7 +19,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
     var PALETTE_WARNING =
         "One or more layers on the map have been modified (changed palette, " +
         "thresholds, etc.). These modifications cannot be used to take a " +
-        "snapshot. Would you like to temporarily revert to the original " + 
+        "snapshot. Would you like to temporarily revert to the original " +
         "layer(s)?";
 
     var containerId = "wv-image-button";

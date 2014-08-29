@@ -144,7 +144,7 @@ $(function() {
         if ( config.features.arcticProjectionChange ) {
             models.proj.change = wv.proj.change(models, config);
         }
-        
+
         elapsed("ui");
         // Create widgets
         var ui = {};

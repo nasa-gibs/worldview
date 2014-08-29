@@ -123,14 +123,20 @@ wv.ui.info = wv.ui.info || (function(ui, config) {
             .prop("checked", false)
             .button("refresh");
         $menuItems.show("slide", { direction: "up" });
-        $("html").one("click", function(event) {
+
+        var clickOut = function(event) {
             if ( $button.parent().has(event.target).length > 0 ) {
                 return;
             }
             $menuItems.hide();
             $("#wv-info-button-check").prop("checked", false);
             $button.button("refresh");
+            $("body").off("click", clickOut).off("touchstart", clickOut);
+        };
+        $menuItems.on("touchstart", function(event) {
+            event.stopPropagation();
         });
+        $("html").one("click", clickOut).one("touchstart", clickOut);
     };
 
 });

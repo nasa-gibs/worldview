@@ -104,8 +104,12 @@ wv.proj.ui = wv.proj.ui || function(models, config) {
             $menuItems.hide();
             $("#wv-proj-button-check").prop("checked", false);
             $button.button("refresh");
+            $("body").off("click", clickOut).off("touchstart", clickOut);
         };
-        $("body").one("click", clickOut);
+        $menuItems.on("touchstart", function(event) {
+            event.stopPropagation();
+        });
+        $("body").one("click", clickOut).one("touchstart", clickOut);
     };
 
     init();
