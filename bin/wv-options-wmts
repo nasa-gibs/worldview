@@ -92,11 +92,13 @@ def process_layer(gc_layer, wv_layers, colormaps):
                     times = range.split('/')
                     start_date = min(start_date,
                         datetime.strptime(times[0], "%Y-%m-%d"))
-                    end_date = min(start_date,
+                    end_date = min(end_date,
                         datetime.strptime(times[1], "%Y-%m-%d"))
                 wv_layer["startDate"] = start_date.strftime("%Y-%m-%d")
-                wv_layer["endDate"] = end_date.strftime("%Y-%m-%d")
+                if end_date != datetime.min:
+                    wv_layer["endDate"] = end_date.strftime("%Y-%m-%d")
             except ValueError:
+                raise
                 raise Exception("Invalid time: {0}".format(range))
 
     # Extract matrix set
