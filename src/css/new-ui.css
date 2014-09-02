@@ -209,7 +209,6 @@ display:inline-block;}
     -ms-filter: "FlipH";
 }
 #timeline-header>.button-action-group:hover .arrow{
-    -webkit-transform: translate(8px,0px);
     fill:#1a1a1a;
     fill-opacity:1;
     stroke:none;
