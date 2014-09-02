@@ -129,7 +129,7 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
 
 #wv-logo {
     background: url('../brand/images/wv-logo.png?v=@BUILD_NONCE@') no-repeat center rgba(40,40,40,0.85);
-    width: 263px;
+    width: 286px;
     height:55px;
     padding:5px 0;
     position:absolute;
