@@ -9,7 +9,7 @@
  * All Rights Reserved.
  */
 
-html,body, div, ul, li, p, h1, h2, h3, h4, h5, h6 {display:block; margin:0; padding:0; font: 100 12.8px/16px "helvetica",sans-serif;}
+html,body, div, ul, li, p, h1, h2, h3, h4, h5, h6 {display:block; margin:0; padding:0; font: 100 11px/11px "Lucida Console",Monaco, monospace;}
 
 html, body {
     width: 100%;
@@ -128,32 +128,56 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
 }
 
 #wv-logo {
-    background: url('../brand/images/wv-logo.png?v=@BUILD_NONCE@') no-repeat center;
-    width:      247px;
-    height:     45px;
-    display:    inline-block;
+    background: url('../brand/images/wv-logo.png?v=@BUILD_NONCE@') no-repeat center rgba(40,40,40,0.85);
+    width: 263px;
+    height:55px;
+    padding:5px 0;
+    position:absolute;
+    top:10px;
+    left:10px;
+    border:1px solid #333;
+    border-bottom:0;
+    z-index:10000;
+    -webkit-box-sizing:border-box;
+    -o-box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    box-sizing:border-box;
 }
 
+#wv-toolbar{
+    position:absolute;
+    right:10px;
+    top:10px;
+    z-index:10000;
+    background:rgba(40,40,40,0.85);
+    border-radius:0;
+    border:1px solid #333;
+}
+#wv-toolbar li{
+    display:inline-block;
+}
+#wv-toolbar li label {
+    border-radius:0;
+    border:0;
+}
+#wv-toolbar li .ui-state-default{
+    background-color:transparent;
+    background-image:none;
+}
+#wv-toolbar li .ui-state-hover{
+    background-color:#fff;
+    color:#1a1a1a;
+}
 .ui-button {
-    z-index: 1000;
-    border: 1px solid #aaa;
-    background: rgba(0, 0, 0, 0.5);
     color: #eeeeee;
 }
 
 .ui-state-active {
-    border: 1px solid #808080;
-    background: #808080;
 }
 
 .wv-menu-item-selected {
     background: #888;
     color: #eee;
-}
-
-.ui-state-hover {
-    background: #eeeeee;
-    color: #404040;
 }
 
 .ui-menu { position: absolute; width: 100px; z-index: 1000; }
@@ -166,7 +190,7 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
     text-indent: 0;
     /* Bump it up - jQuery UI is -8px */
     /*margin-top: -0.5em; */
-    margin-top: 3px;
+
 }
 
 /* Allow use of icon-large to be properly aligned */
@@ -180,15 +204,19 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
 }
 
 .ui-widget-content {
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(40, 40, 40, 0.85);
+    border:0;
+    border-radius:0;
 }
 
 .ui-dialog .ui-dialog-content {
-    background: #222222;
+    background-image: none;
     padding-top: 15px;
     padding-bottom: 15px;
 }
-
+.ui-corner-all{
+border-radius:0;
+}
 
 
 .ui-tooltip {
@@ -226,7 +254,10 @@ a:hover {
 }
 
 .ui-menu-item {
-    font-size: 18px;
+    font-size: 13px;
+}
+.ui-menu-item i{
+    font-size:18px;
 }
 
 .iCheck-checkbox {
@@ -242,20 +273,27 @@ label {
     -o-user-select: none;
     user-select: none;
 }
-
+.wv-panel{
+    border:1px solid #333;
+}
 .wv-panel .ui-dialog-titlebar {
-    background: #222222;
+    background: none transparent;
     border: 0;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
 }
-
+.ui-widget-header .ui-state-default{
+    background:none transparent;
+    border:0;
+}
+.ui-widget-header .ui-state-hover{
+    background:#fff;
+}
 .wv-panel .ui-dialog-content {
     padding: 0em 1em 1em 1em;
 }
 
 .wv-panel .ui-dialog-title {
-    font-size: 12px;
     font-weight: normal;
 }
 

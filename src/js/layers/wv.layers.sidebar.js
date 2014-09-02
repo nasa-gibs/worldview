@@ -142,6 +142,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
             .addClass("arrow")
             .attr("title", "Hide");
         $collapseContainer.append($collapseButton);
+       
         $container.append($collapseContainer);
 
         $container.append($("<div id='products'></div>"))
@@ -221,7 +222,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
                 .addClass('arrow');
             $('.accordionToggler').attr("title","Hide Layer Selector");
             $('.accordionToggler').empty();
-            $('.products').animate({left:'0'}, now ? 0 : 300);
+            $('.products').show('fast');
             collapsed = false;
             $('.accordionToggler').appendTo("#"+self.id+"toggleButtonHolder");
         }
@@ -234,7 +235,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
             $('.accordionToggler').attr("title","Show Layer Selector");
             $('.accordionToggler').html("Layers (" + models.layers.get().length + ")");
             var w = $('#app').outerWidth();
-            $('.products').animate({left:'-'+w+"px"}, 100);
+            $('.products').hide('fast');
             collapsed = true;
             $("#" + self.id).after($('.accordionToggler'));
         }

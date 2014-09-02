@@ -10,7 +10,8 @@
  */
 
 #productsHolder {
-    border: 0px;
+    border: 1px solid #333;
+    border-top:0;
 }
 
 #productsHoldertabs {

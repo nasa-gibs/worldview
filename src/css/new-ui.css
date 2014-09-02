@@ -1,15 +1,4 @@
-@font-face {
-    font-family: 'Play';
-    font-style: normal;
-    font-weight: 400;
-    src: url(../font/Play-Regular.ttf) format('truetype');
-}
-@font-face {
-    font-family: 'Play Bold';
-    font-style:bold;
-    font-weight: 700;
-    src: url(../font/Play-Bold.ttf) format('ttf');
-}
+
 *:focus {
     outline: 0;
 }
@@ -22,13 +11,7 @@
     left:10px;
     right:10px;
     border:1px solid #333;
-    background: #f5f5f5; /* Old browsers */
-    background: -moz-linear-gradient(top,  #f5f5f5 0%, #e2e2e2 50%, #c2c2c2 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f5f5f5), color-stop(50%,#e2e2e2), color-stop(100%,#c2c2c2)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  #f5f5f5 0%,#e2e2e2 50%,#c2c2c2 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top,  #f5f5f5 0%,#e2e2e2 50%,#c2c2c2 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  #f5f5f5 0%,#e2e2e2 50%,#c2c2c2 100%); /* IE10+ */
-    background: linear-gradient(to bottom,  #f5f5f5 0%,#e2e2e2 50%,#c2c2c2 100%); /* W3C */
+    background: rgba(40,40,40,0.9); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f5f5f5', endColorstr='#c2c2c2',GradientType=0 ); /* IE6-9 */
 
 }
@@ -52,7 +35,7 @@
     cursor:pointer;
 }
 .x.axis .tick text{
-    fill:#1a1a1a;
+    fill:#fff;
     text-transform:uppercase;
 }
 .x.axis>.tick>line {
@@ -64,16 +47,19 @@
     stroke-linejoin:miter;
     stroke-miterlimit:4;
 }
+.x.axis > .tick circle{
+    fill:#fff;
+}
 .x.axis> .tick rect {
     fill:#e2e2e2;
     fill-opacity:0;
 }
 .x.axis> .tick:hover rect.axis-background{
-    fill:#1a1a1a;
+    fill:#fff;
     fill-opacity:1;
 }
 .x.axis> .tick:hover text {
-    fill:#e2e2e2;
+    fill:#1a1a1a;
 }
 /*.x.axis >.tick g.subtick:nth-child(5) line{
     display:none;
@@ -85,11 +71,11 @@
 }
 .x.axis > .tick > .subtick > .tick:hover rect{
     fill-opacity:0.3;
-    fill:#1a1a1a;
+    fill:#fff;
 }
 .x.axis > .tick > .subtick > .tick > line{
     fill:none;
-    stroke:#c8c8c8;
+    stroke:#333;
     stroke-width:2;
     stroke-linecap:butt;
     stroke-linejoin:miter;
@@ -120,7 +106,7 @@
 }
 #timeline-header input{
     height:40px;
-    color:#1a1a1a;
+    color:#fff;
     font-size:24px;
     background:transparent;
     border:0px;
@@ -147,13 +133,13 @@
 /*    display:none;
 */}
 #timeline-header .input-wrapper:hover{
-    border-color:#1a1a1a;
+    border-color:#fff;
 }
 #timeline-header .input-wrapper:hover .date-arrows{
     visibility:visible;
 }
 #timeline-header .input-wrapper.selected{
-    border-color:#1a1a1a;
+    border-color:#fff;
 }
 #timeline-header div{
 display:inline-block;}
@@ -174,6 +160,10 @@ display:inline-block;}
     left: 50%;
     margin-left: -12px;
 }
+#timeline-header .button-action-group svg path{
+    fill:#fff;
+}
+
 #timeline-header .date-arrows-wrapper{
     vertical-align:middle;
     visibility:hidden;
@@ -189,8 +179,11 @@ display:inline-block;}
     display:block;
     margin:0 auto;
 }
+#timeline-header .date-arrows svg path{
+    fill:#fff;
+}
 #timeline-header .date-arrows:hover svg path {
-    fill:#ffffff;
+    fill:#1a1a1a;
 }
 #timeline-header .date-arrow-up{
     
@@ -204,7 +197,7 @@ display:inline-block;}
     -ms-filter: "FlipV";
 }
 #timeline-header>.button-action-group:hover,#timeline-header .date-arrows:hover {
-    background-color:#1a1a1a;
+    background-color:#fff;
     cursor:pointer;
 }
 #left-arrow-group{
@@ -216,9 +209,6 @@ display:inline-block;}
     -ms-filter: "FlipH";
 }
 #timeline-header>.button-action-group:hover .arrow{
-    fill:#e2e2e2;
-}
-#timeline-header>.buttion-action-group:hover .arrow{
     -webkit-transform: translate(8px,0px);
     fill:#1a1a1a;
     fill-opacity:1;
@@ -245,7 +235,7 @@ display:inline-block;}
 
 .x.axis path, .x.axis line {
     fill: none;
-    stroke: #1a1a1a;
+    stroke: #ffffff;
     shape-rendering: crispEdges;
 }
 .y.axis path, .y.axis line {
@@ -260,20 +250,6 @@ display:inline-block;}
     stroke:steelblue;
 }
 
-#timeline-text{
-    color:black;
-    font-size:14px;
-    font-weight:bold;
-    position:absolute;
-    bottom:65px;
-    left:0;
-    display:none;
-    background-color:#ff2a2a;
-    border:2px solid #ff7070;
-    padding:5px;
-    border-radius:5px;
-    z-index:10000;
-}
 #timeline-zoom{
     display:inline-block;
     vertical-align:middle;
@@ -295,17 +271,17 @@ display:inline-block;}
     font-family:‘Lucida Console’, Monaco, monospace;
 }
 #timeline-zoom a.zoom-btn.depth-1{
-    color:#1a1a1a;
+    color:#ffffff;
     font-size:1.5em;
     line-height:1.5em;
 }
 #timeline-zoom a.zoom-btn.depth-2{
-    color:#666666;
+    color:#999999;
     font-size:1em;
     line-height:1em;
 }
 #timeline-zoom a.zoom-btn.depth-3{
-    color:#b3b3b3;
+    color:#222;
     font-size:0.7em;
     line-height:1em;
 }
@@ -313,8 +289,8 @@ display:inline-block;}
     display:none;
 }
 #timeline-zoom a.zoom-btn:hover{
-    background-color:#1a1a1a;
-    color:#fff;
+    background-color:#fff;
+    color:#1a1a1a;
 }
 #timeline-hide {
     height:65px;
@@ -324,13 +300,13 @@ display:inline-block;}
     border-left:1px solid #1a1a1a;
 }
 #timeline-hide:hover{
-    background-color:#1a1a1a;
+    background-color:#fff;
 }
 .x.axis > g.tick > text > .sub-label{
-    fill:#777;
+    fill:#333;
 }
 .x.axis > g.tick:hover > text > .sub-label{
-    fill:#fff;
+    fill:#1a1a1a;
 }
 #guitarpick{
     cursor:pointer;
@@ -361,8 +337,8 @@ display:inline-block;}
     margin:26px auto 0 auto;
 }
 #timeline-hide .hamburger path{
-    fill:#1a1a1a;
+    fill:#fff;
 }
 #timeline-hide:hover .hamburger path {
-    fill:#cccccc;
+    fill:#1a1a1a;
 }

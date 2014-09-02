@@ -80,8 +80,18 @@ div.olControlScaleLineCustom {
 }
 
 .wv-map-zoom {
-    right: 2px;
+    right: 10px;
     position: absolute;
+    z-index:10000;
+}
+.wv-map-zoom.ui-state-default{
+    background:none rgba(40,40,40,0.85);
+    border:1px solid #333;
+}
+.wv-map-zoom.ui-state-hover{
+    background-color:#fff;
+    color:#1a1a1a;
+    border:1px solid #333;
 }
 
 .wv-map-zoom-in {
