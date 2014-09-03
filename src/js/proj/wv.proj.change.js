@@ -93,8 +93,11 @@ wv.proj.change = wv.proj.change || function(models) {
             "<br/><br/>",
             "The <b>Arctic projection</b> changed from Arctic Polar ",
             "Stereographic (EPSG:3995, \"Greenwich down\") to NSIDC Polar ",
-            "Stereographic North (EPSG:3413, \"Greenland down\").",
+            "Stereographic North (EPSG:3413, \"Greenland down\"). ",
+            "Coastlines and Graticule in the older projection ",
+            "can be found in the Add Layer tab by searching for \"EPSG:3995\". ",
             "<br/><br/>" +
+
             "The <b>Antarctic projection</b> changed from being projected onto ",
             "a sphere with radius of 6371007.181 meters to being projected ",
             "onto the WGS84 ellipsoid. The projection is now the correct ",
@@ -104,9 +107,7 @@ wv.proj.change = wv.proj.change || function(models) {
             "<br/><br/>",
 
             "Imagery before this date has not yet been reprocessed to the ",
-            "new projection. Coastlines and Graticule in the older projection ",
-            "can be found in the Add Layer tab by searching for \"EPSG:3995\". ",
-            "In addition, the \"Population Density\" ",
+            "new projection. In addition, the \"Population Density\" ",
             "layer can no longer be displayed properly ",
             "in the older projection.",
             "<br/><br/>",
