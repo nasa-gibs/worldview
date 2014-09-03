@@ -70,4 +70,3 @@ wv.proj.model = wv.proj.model || function(config) {
     init();
     return self;
 };
-
