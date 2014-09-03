@@ -329,10 +329,24 @@ module.exports = function(grunt) {
                       src: "**/*.md",
                       dest: "build/options/config/metadata",
                       ext: ".html"
-                    }
+                  },
                 ],
                 options: {
                     template: "etc/deploy/metadata.template.html"
+                }
+            },
+            new: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: "build/options/brand/pages",
+                        src: "**/*.md",
+                        dest: "build/options/brand/pages",
+                        ext: ".html"
+                    }
+                ],
+                options: {
+                    template: "etc/deploy/new.template.html"
                 }
             }
         },
@@ -491,7 +505,7 @@ module.exports = function(grunt) {
         "clean",
         "remove:config_src",
         "exec:config",
-        "markdown:metadata",
+        "markdown",
         "copy:config_src"
     ]);
 
