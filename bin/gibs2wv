@@ -24,13 +24,7 @@ SKIP_LAYERS = [
     "blue_marble_arctic",
     "OMI_SO2_Planetary_Boundary_Layer",
     "SCAR_Land_Mask",
-    "SCAR_Land_Water_Map",
-    "AMSRE_Snow_Depth_Over_Ice_12km",
-    "AMSRE_Snow_Depth_Over_Ice",
-    "AMSRE_Sea_Ice_Concentration_12km",
-    "AMSRE_Sea_Ice_Brightness_Temp_89V",
-    "AMSRE_Sea_Ice_Brightness_Temp_89H",
-    "AMSRE_Sea_Ice_Concentration_25km"
+    "SCAR_Land_Water_Map"
 ]
 
 prog = os.path.basename(__file__)
