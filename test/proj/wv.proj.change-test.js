@@ -162,27 +162,6 @@ buster.testCase("wv.proj.change", {
         var model = wv.proj.change(this.models);
         this.models.date.select(new Date(Date.UTC(2014, 0, 1)));
         buster.refute.called(wv.ui.notify);
-    },
-
-    "Change from new to old switches layers": function() {
-        var model = wv.proj.change(this.models);
-        this.models.proj.select("arctic");
-        this.models.date.select(new Date(Date.UTC(2013, 0, 1)));
-        buster.assert.calledWith(this.replace,
-            "Coastlines", "arctic_coastlines");
-        buster.assert.calledWith(this.replace,
-            "Graticule", "arctic_graticule");
-    },
-
-    "Change from old to new switches layers": function() {
-        this.models.proj.select("arctic");
-        this.models.date.select(new Date(Date.UTC(2013, 0, 1)));
-        var model = wv.proj.change(this.models);
-        this.models.date.select(new Date(Date.UTC(2014, 0, 1)));
-        buster.assert.calledWith(this.replace,
-            "arctic_coastlines", "Coastlines");
-        buster.assert.calledWith(this.replace,
-            "arctic_graticule", "Graticule");
     }
 
 });
