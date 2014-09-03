@@ -106,7 +106,7 @@ wv.proj.change = wv.proj.change || function(models) {
             "Imagery before this date has not yet been reprocessed to the ",
             "new projection. Coastlines and Graticule in the older projection ",
             "can be found in the Add Layer tab by searching for \"EPSG:3995\". ",
-            "In addition, the \"Population Density\" and ",
+            "In addition, the \"Population Density\" ",
             "layer can no longer be displayed properly ",
             "in the older projection.",
             "<br/><br/>",
