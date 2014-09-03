@@ -60,14 +60,15 @@ wv.ui = (function(self) {
      *
      * @param [title="Notice"] {string} Title for the dialog box.
      */
-    self.notify = function(message, title) {
+    self.notify = function(message, title, width) {
         var $dialog = self.getDialog();
         title = title || "Notice";
+        width = width || 300;
         $dialog.html(message).dialog({
             title: title,
             show: { effect: "fade" },
             hide: { effect: "fade" },
-            width: 300,
+            width: width,
             minHeight: 1,
             height: "auto"
         });
