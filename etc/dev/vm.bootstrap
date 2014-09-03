@@ -1,0 +1,36 @@
+#!/bin/bash
+
+set -e
+set -x
+
+yum install -y http://mirrors.kernel.org/fedora-epel/7/x86_64/e/epel-release-7-1.noarch.rpm
+
+yum install -y \
+    httpd \
+    git \
+    nodejs \
+    npm \
+    python-virtualenv
+
+cd /vagrant
+
+# The certificate used for npmjs.org has changed and it is not recognized by
+# the bundled CA: https://github.com/npm/npm-www/issues/185
+#
+# Workaround is to not verify ssl certificate:
+#npm config set strict-ssl false
+
+if [ ! -d options ] ; then
+    git clone https://github.com/nasa-gibs/worldview-options-eosdis.git options
+fi
+npm install -g grunt-cli
+npm install
+./wv-python
+grunt
+grunt apache-config
+cp dist/worldview-dev.httpd.conf /etc/httpd/conf.d
+
+systemctl enable httpd.service
+systemctl start httpd.service
+systemctl stop firewalld.service
+systemctl disable firewalld.service
