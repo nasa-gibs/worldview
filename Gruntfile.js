@@ -174,7 +174,11 @@ module.exports = function(grunt) {
 
             // Enable executable bits for all CGI programs
             cgi_echo: {
-                command: "chmod 755 build/<%=pkg%>*/web/service/*.cgi"
+                command: "chmod 755 build/<%=pkg%>*/web/service/echo.cgi"
+            },
+
+            cgi_debug_tile: {
+                command: "chmod 755 build/<%=pkg%>*/web/service/debug_tile.cgi"
             },
 
             cgi_shorten: {
@@ -540,6 +544,7 @@ module.exports = function(grunt) {
         "exec:empty",
         "feature_shorten",
         "feature_download",
+        "exec:cgi_debug_tile",
         "remove:dist_tar",
         "exec:tar_debug_versioned",
         "exec:tar_debug",
