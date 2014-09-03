@@ -11,7 +11,8 @@
 
 #productsHolder {
     border: 1px solid #333;
-    border-top:0;
+    border-bottom-left-radius:5px;
+    border-bottom-right-radius:5px;
 }
 
 #productsHoldertabs {

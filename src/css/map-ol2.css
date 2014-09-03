@@ -84,6 +84,9 @@ div.olControlScaleLineCustom {
     position: absolute;
     z-index:10000;
 }
+.wv-map-zoom .ui-button-text{
+    padding:1em;
+}
 .wv-map-zoom.ui-state-default{
     background:none rgba(40,40,40,0.85);
     border:1px solid #333;
@@ -96,9 +99,13 @@ div.olControlScaleLineCustom {
 
 .wv-map-zoom-in {
     top: 135px;
+    border-top-left-radius:10px;
+    border-top-right-radius:10px;
 }
 .wv-map-zoom-out {
-    top: 170px;
+    top: 180px;
+    border-bottom-left-radius:10px;
+    border-bottom-right-radius:10px;
 }
 
 .olLayerGrid .olTileImage {

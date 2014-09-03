@@ -182,13 +182,16 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                 wv.layers.options(config, models, layer);
             });
         $layer.append($gearButton);
-
+        
         var names = models.layers.getTitles(layer.id);
-        $layer.append($("<h4></h4>").html(names.title));
-        $layer.append($("<p></p>").html(names.subtitle));
+        $layer.append($('<div></div>')
+                      .addClass('layer-main')
+                      .append($("<h4></h4>").html(names.title))
+                      .append($("<p></p>").html(names.subtitle))
+                     );
 
         if ( layer.palette ) {
-            renderLegend($layer, group, layer);
+            renderLegend($layer.find('.layer-main'), group, layer);
         }
         if ( top ) {
             $parent.prepend($layer);

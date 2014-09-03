@@ -14,7 +14,7 @@
     background: rgba(40,40,40,0.9); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f5f5f5', endColorstr='#c2c2c2',GradientType=0 ); /* IE6-9 */
     min-width:286px;
-
+    border-radius:5px;
 }
 #timeline-footer text{
     font-size:14px;
@@ -76,7 +76,7 @@
 }
 .x.axis > .tick > .subtick > .tick > line{
     fill:none;
-    stroke:#333;
+    stroke:#444;
     stroke-width:2;
     stroke-linecap:butt;
     stroke-linejoin:miter;
