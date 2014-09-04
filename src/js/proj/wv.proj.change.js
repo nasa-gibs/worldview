@@ -89,7 +89,7 @@ wv.proj.change = wv.proj.change || function(models) {
         notified = true;
         var message = [
             "On " + wv.util.toISOStringDate(PROJECTION_CHANGE_DATE) +
-            " the polar projections changed as follows:" ,
+            " the polar projections for some layers changed as follows:" ,
             "<br/><br/>",
             "The <b>Arctic projection</b> changed from Arctic Polar ",
             "Stereographic (EPSG:3995, \"Greenwich down\") to NSIDC Polar ",
