@@ -5,7 +5,11 @@
             "title":    "Sea Ice Concentration, 25km",
             "subtitle": "Aqua / AMSR-E",
             "group":    "overlays",
-            "inactive": true
+            "inactive": true,
+
+            "palette": {
+                "id": "AMSRE_Sea_Ice_Concentration_25km"
+            }
         }
     }
 }

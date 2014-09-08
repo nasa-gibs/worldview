@@ -5,7 +5,11 @@
             "title":    "Snow Depth Over Ice, 12km",
             "subtitle": "Aqua / AMSR-E",
             "group":    "overlays",
-            "inactive": true
+            "inactive": true,
+
+            "palette": {
+                "id": "AMSRE_Snow_Depth_Over_Ice"
+            }
         }
     }
 }
