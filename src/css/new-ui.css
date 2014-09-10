@@ -303,13 +303,14 @@ display:inline-block;}
     background-color:#fff;
 }
 .x.axis > g.tick > text > .sub-label{
-    fill:#333;
+    fill:#555;
 }
 .x.axis > g.tick:hover > text > .sub-label{
     fill:#1a1a1a;
 }
 #guitarpick{
     cursor:pointer;
+    clip-path:url(#guitarpick-boundary);
 }
 #guitarpick path{
     fill:#cccccc;

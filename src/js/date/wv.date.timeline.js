@@ -37,6 +37,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var zoomStep = 1;
     var subInterval = d3.time.day.utc;
     var subStep = 1;
+    var zoomTimeFormat = d3.time.format.utc("%b");
     var zoomScale,axisBgWidth,subAxisBgWidth,smallTicks,guitarPick,chartBody,layers;
     var timer,selectedDate, daysInMonth;
     var margin = {
@@ -116,9 +117,9 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .scale(x)
             //.tickValues(model.start,model.end)
             .orient("bottom")
-
+            .tickFormat(zoomTimeFormat);
             //.tickFormat(d3.time.format.multi([["%b %Y", function(d) { return d.getUTCMonth(); }], ["%b %Y", function() { return true; }]]));
-            .tickFormat(customTimeFormat2);
+            //.tickFormat(customTimeFormat2);
         
         yAxis = d3.svg.axis()
             .scale(y)
@@ -129,7 +130,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .x(x)
             .scale(170)
             //.translate([-700,0])
-            .scaleExtent([1, 3070]) //FIXME: fix scale
+            .scaleExtent([1, 570]) //FIXME: fix scale
             .on("zoom", zoomable, d3.event);
         zoomScale = 1;
     };
@@ -145,7 +146,8 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         timeline.select(".x.axis")
             .call(xAxis.tickSize(-height)
                   .tickPadding(5)
-                  .ticks(zoomInterval,zoomStep));
+                  .ticks(zoomInterval,zoomStep)
+                  .tickFormat(zoomTimeFormat));
 
         addSubAxes();
 
@@ -157,7 +159,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     };
     var addSubAxes = function(){
         var ticks = timeline.selectAll('.x.axis>.tick');
-
+//        console.log(ticks.data());
         //general non-specific objects added to all ticks
         ticks.insert("svg:circle","text").attr("r","6");
         ticks.selectAll("line:first-child")
@@ -181,7 +183,12 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 .attr("width",tickWidth)
                 .attr("height",height)
                 .attr("class","axis-background");
-            
+            tickGroup.append("svg:rect")
+                .attr("x","0")
+                .attr("y","0")
+                .attr("width",tickWidth)
+                .attr("height",height)
+                .attr("class","axis-foreground");
             //draw sub-label (high freq)
             if(subLabel){
                 tickGroup.select('text').append("tspan")
@@ -217,9 +224,10 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 
             }
         }
-        d3.selectAll(".x.axis rect.axis-background").on("click",function(){
+        d3.selectAll(".x.axis rect.axis-foreground").on("click",function(){
             var d = d3.select(this.parentNode).data()[0];
             var newDate;
+            console.log(d);
             switch(zoomLvl){
             case 0:
                 var yearOffset = model.selected.getUTCFullYear() - Math.ceil(new Date(model.selected.getUTCFullYear()/10)*10);
@@ -232,7 +240,9 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 newDate = new Date(d.getUTCFullYear(),d.getUTCMonth(),model.selected.getUTCDate());
                 break;
             case 3:
-                newDate = new Date(d.getUTCFullYear(),d.getUTCMonth(),model.selected.getUTCDate());
+                var dayOffset = model.selected.getUTCDay() - d.getUTCDay();
+                console.log(dayOffset);
+                newDate = new Date(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate() + dayOffset);
                 break;
             default:
                 break;
@@ -497,6 +507,26 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
                     break;
                 }
+                timeline.selectAll('.x.axis>.tick > .subtick > .tick').filter(function(d,i){
+//                    console.log(i + ",   " + d.toISOString() + " " + newDate.toISOString());
+                    var tempDate = new Date(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate());
+                    var tempDate2 = new Date(newDate.getUTCFullYear(),newDate.getUTCMonth(),newDate.getUTCDate());
+//                    console.log(i + ", " + tempDate + " ------ " + tempDate2);
+                    if (i === 71){
+                        //console.log(this);
+                        //console.log(d);
+//                        console.log(i + ", " + d + ", " + tempDate + " : " + tempDate2);
+                        return this;
+                    }
+                    else{
+//                        console.log('boo');
+                    }
+                    
+//                    console.log("->>>" + newDate);
+                   // if(d3.select(this).data()[0]===newDate){
+                     //   return this;
+                   // }/*if (d.date === newDate) { return this;} else { return undefined;}*/
+                });
                 guitarPick.attr("transform","translate("+ (x(newDate)-28) +",-16)");
                 model.select(newDate);
             }
@@ -747,6 +777,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             subStep = 1;
             zoomStep = 10;
             zoomScale = 1;
+            zoomTimeFormat = d3.time.format.utc("%Y");
             $('.zoom-btn').removeClass(function (index, css) {
                 return (css.match (/(^|\s)depth-\S+/g) || []).join(' ');
             }).css("margin","").css("font-size","");
@@ -764,6 +795,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             subStep = 1;
             zoomStep = 1;
             zoomScale = 10;
+            zoomTimeFormat = d3.time.format.utc("%Y");
             $('.zoom-btn').removeClass(function (index, css) {
                 return (css.match (/(^|\s)depth-\S+/g) || []).join(' ');
             }).css("margin","").css("font-size","");
@@ -779,6 +811,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             subStep = 1;
             zoomStep = 1;
             zoomScale = 170;
+            zoomTimeFormat = d3.time.format.utc("%b");
             $('.zoom-btn').removeClass(function (index, css) {
                 return (css.match (/(^|\s)depth-\S+/g) || []).join(' ');
             }).css("margin","").css("font-size","");
@@ -795,6 +828,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             subStep = 1;
             zoomStep = 1;
             zoomScale = 570;
+            zoomTimeFormat = d3.time.format.utc("%d");
             $('.zoom-btn').removeClass(function (index, css) {
                 return (css.match (/(^|\s)depth-\S+/g) || []).join(' ');
             }).css("margin","").css("font-size","");
@@ -811,7 +845,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             zoomStep = 10;
             zoomScale = 1;
         }
-        //zoom.translate([-9000,0]);
+
         zoom.scale(zoomScale);
         if (mousePos){
             zoom.translate([0,0]);
