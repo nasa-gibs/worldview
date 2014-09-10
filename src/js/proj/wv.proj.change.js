@@ -89,7 +89,7 @@ wv.proj.change = wv.proj.change || function(models) {
         notified = true;
         var message = [
             "On " + wv.util.toISOStringDate(PROJECTION_CHANGE_DATE) +
-            " the polar projections changed as follows:" ,
+            " the polar projections for some layers changed as follows:" ,
             "<br/><br/>",
             "The <b>Arctic projection</b> changed from Arctic Polar ",
             "Stereographic (EPSG:3995, \"Greenwich down\") to NSIDC Polar ",
@@ -106,10 +106,10 @@ wv.proj.change = wv.proj.change || function(models) {
             "depending on the location.",
             "<br/><br/>",
 
-            "Imagery before this date has not yet been reprocessed to the ",
-            "new projection. In addition, the \"Population Density\" ",
-            "layer can no longer be displayed properly ",
-            "in the older projection.",
+			"Imagery before this transition date will eventually be ",
+			"reprocessed to be consistent with the imagery after it. In ",
+            "addition, the \"Population Density\" layer can no longer be ",
+            "displayed properly in the older projection.",
             "<br/><br/>",
 
             "Thanks for your patience as we improve and expand our ",
