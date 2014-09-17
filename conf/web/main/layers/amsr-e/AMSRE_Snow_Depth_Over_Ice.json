@@ -8,7 +8,8 @@
             "inactive": true,
 
             "palette": {
-                "id": "AMSRE_Snow_Depth_Over_Ice"
+                "id": "AMSRE_Snow_Depth_Over_Ice",
+                "recommended": ["blue_4", "purple_2"]
             }
         }
     }
