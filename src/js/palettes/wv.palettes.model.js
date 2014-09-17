@@ -123,32 +123,13 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
             if ( def.max ) {
                 var maxValue = ( def.scale.values[def.max].length === 2 ) ?
                         def.scale.values[def.max][1] :
-                        def.scale.values[def.max][0]; 
+                        def.scale.values[def.max][0];
                 attr.push({ id: "max", value: maxValue });
             }
         });
     };
 
     self.load = function(state, errors) {
-        if ( state.palettes ) {
-            load11(state, errors);
-        } else {
-            load12(state, errors);
-        }
-    };
-
-    var load11 = function(state, errors) {
-        _.each(state.palettes, function(paletteId, layerId) {
-            if ( !config.palettes.custom[paletteId] ) {
-                errors.push({message: "Invalid palette for layer" +
-                    layerId + ": " + paletteId});
-            } else {
-                self.setCustom(layerId, paletteId);
-            }
-        });
-    };
-
-    var load12 = function(state, errors) {
         _.each(state.l, function(layerDef) {
             var layerId = layerDef.id;
             var minValue, maxValue;
@@ -201,7 +182,7 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
         });
         return result;
     };
-    
+
     // If any custom rendering is being used, image download must turn it
     // off
     self.inUse = function() {

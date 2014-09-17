@@ -327,23 +327,39 @@ buster.testCase("wv.layers.model", function() {
 
     self["Loads state"] = function() {
         var state = {
-            products: ["terra-cr", "terra-aod"]
+            l: [
+                { id: "terra-cr", attributes: [] },
+                { id: "terra-aod", attributes: [] }
+            ]
         };
         l.load(state, errors);
-        buster.assert.equals(l.active[0].id, "terra-aod");
-        buster.assert.equals(l.active[1].id, "terra-cr" );
+        buster.assert(_.find(l.active, {id: "terra-aod"}));
+        buster.assert(_.find(l.active, {id: "terra-cr"}));
         buster.assert.equals(errors.length, 0);
     };
 
     self["Loads state with hidden layer"] = function() {
         var state = {
-            products: ["terra-cr"],
-            hidden: {"terra-cr": true}
+            l: [
+                { id: "terra-cr", attributes: [{ id: "hidden", value: true}] }
+            ]
         };
         l.load(state, errors);
-        var def = _.find(l.active, { id: "terra-cr" });
+        var def = _.find(models.layers.active, { id: "terra-cr" });
         buster.assert(def);
         buster.refute(def.visible);
+        buster.assert.equals(errors.length, 0);
+    };
+
+    self["Loads state with opacity"] = function() {
+        var state = {
+            l: [
+                { id: "terra-cr", attributes: [{ id: "opacity", value: 0.12}] }
+            ]
+        };
+        l.load(state, errors);
+        var def = _.find(models.layers.active, { id: "terra-cr" });
+        buster.assert(0.12, def.opacity);
         buster.assert.equals(errors.length, 0);
     };
 

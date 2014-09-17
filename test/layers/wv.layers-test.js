@@ -22,67 +22,97 @@ buster.testCase("wv.layers", function() {
         errors = [];
     };
 
-    self["Parses only one baselayer"] = function() {
+    self["1.1: Parses only one baselayer"] = function() {
         var state  = { products: "baselayers,terra-cr" };
         wv.layers.parse(state, errors, config);
-        buster.assert.equals(state.products[0], "terra-cr");
+        buster.assert(state.l[0].id, "terra-cr");
         buster.assert.equals(errors.length, 0);
     };
 
-    self["Parses only one overlay"] = function() {
+    self["1.1: Parses only one overlay"] = function() {
         var state  = { products: "overlays,terra-aod" };
         wv.layers.parse(state, errors, config);
-        buster.assert.equals(state.products[0], "terra-aod");
+        buster.assert.equals(state.l[0].id, "terra-aod");
         buster.assert.equals(errors.length, 0);
     };
 
-    self["Parses multiple layers"] = function() {
+    self["1.2: Parses only one layer"] = function() {
+        var state  = { l: "terra-cr" };
+        wv.layers.parse(state, errors, config);
+        buster.assert(state.l[0].id, "terra-cr");
+        buster.assert.equals(errors.length, 0);
+    };
+
+    self["1.1: Parses multiple layers"] = function() {
         var state  = { products: "baselayers,terra-cr~overlays,terra-aod,aqua-aod" };
         wv.layers.parse(state, errors, config);
-        buster.assert.equals(state.products[0], "terra-cr");
-        buster.assert.equals(state.products[1], "terra-aod");
-        buster.assert.equals(state.products[2], "aqua-aod");
+        buster.assert(_.find(state.l, { id: "terra-cr"}));
+        buster.assert(_.find(state.l, { id: "terra-aod"}));
+        buster.assert(_.find(state.l, { id: "aqua-aod"}));
         buster.assert.equals(errors.length, 0);
     };
 
-    self["Empty layer list"] = function() {
+    self["1.2: Parses multiple layers"] = function() {
+        var state  = { l: "terra-cr,terra-aod,aqua-aod" };
+        wv.layers.parse(state, errors, config);
+        buster.assert(_.find(state.l, { id: "terra-cr"}));
+        buster.assert(_.find(state.l, { id: "terra-aod"}));
+        buster.assert(_.find(state.l, { id: "aqua-aod"}));
+        buster.assert.equals(errors.length, 0);
+    };
+
+    self["1.1: Empty layer list"] = function() {
         var state = { products: "baselayers~overlays"};
         wv.layers.parse(state, errors, config);
-        buster.assert.equals(state.products.length, 0);
+        buster.assert.equals(state.l.length, 0);
     };
 
-    self["Supports old style period delimiters"] = function() {
+    self["1.2: Empty layer list"] = function() {
+        var state = { l: ""};
+        wv.layers.parse(state, errors, config);
+        buster.assert.equals(state.l.length, 0);
+    };
+
+    self["1.0: Supports old style period delimiters"] = function() {
         var state  = { products: "baselayers.terra-cr~overlays.terra-aod.aqua-aod" };
         wv.layers.parse(state, errors, config);
-        buster.assert.equals(state.products[0], "terra-cr");
-        buster.assert.equals(state.products[1], "terra-aod");
-        buster.assert.equals(state.products[2], "aqua-aod");
+        buster.assert(_.find(state.l, { id: "terra-cr"}));
+        buster.assert(_.find(state.l, { id: "terra-aod"}));
+        buster.assert(_.find(state.l, { id: "aqua-aod"}));
         buster.assert.equals(errors.length, 0);
     };
 
-    self["Skips invalid layers and records an error"] = function () {
+    self["1.1: Skips invalid layers and records an error"] = function () {
         var state = { products: "baselayers,terra-cr~overlays,layerx,aqua-aod" };
         wv.layers.parse(state, errors, config);
-        buster.assert.equals(state.products[0], "terra-cr");
-        buster.assert.equals(state.products[1], "aqua-aod");
+        buster.assert(_.find(state.l, { id: "terra-cr"}));
+        buster.assert(_.find(state.l, { id: "aqua-aod"}));
         buster.assert.equals(errors.length, 1);
     };
 
-    self["No layers and no error if no groups found"] = function() {
-        var state = { products: "layerx,layery" };
+    self["1.2: Skips invalid layers and records an error"] = function () {
+        var state = { products: "terra-cr,layerx,aqua-aod" };
         wv.layers.parse(state, errors, config);
-        buster.assert.equals(state.products.length, 0);
+        buster.assert(_.find(state.l, { id: "terra-cr"}));
+        buster.assert(_.find(state.l, { id: "aqua-aod"}));
+        buster.assert.equals(errors.length, 1);
     };
 
-    self["Hidden layers, 1.1"] = function() {
+    self["1.1: No layers and no error if no groups found"] = function() {
+        var state = { products: "layerx,layery" };
+        wv.layers.parse(state, errors, config);
+        buster.assert.equals(state.l.length, 0);
+    };
+
+    self["1.1: Hidden layers"] = function() {
         var state = { products: "baselayers,!terra-cr" };
         wv.layers.parse(state, errors, config);
-        buster.assert.equals(state.products[0], "terra-cr");
-        buster.assert(state.hidden["terra-cr"]);
+        buster.assert.equals(state.l[0].id, "terra-cr");
+        buster.assert.equals(state.l[0].attributes[0].id, "hidden");
         buster.assert.equals(errors.length, 0);
     };
 
-    self["Hidden layers, 1.2"] = function() {
+    self["1.2: Hidden layers"] = function() {
         var state = { l: "terra-cr(hidden)" };
         wv.layers.parse(state, errors, config);
         buster.assert.equals(state.l[0].id, "terra-cr");
@@ -120,7 +150,7 @@ buster.testCase("wv.layers", function() {
         buster.assert.equals(errors.length, 0);
     };
 
-    self["Layer redirects, 1.1"] = function() {
+    self["1.1: Layer redirects"] = function() {
         config.redirects = {
             layers: {
                 "terra-cr": "aqua-cr"
@@ -128,11 +158,11 @@ buster.testCase("wv.layers", function() {
         };
         var state = { products: "baselayers,terra-cr" };
         wv.layers.parse(state, errors, config);
-        buster.assert.equals(state.products[0], "aqua-cr");
+        buster.assert.equals(state.l[0].id, "aqua-cr");
         buster.assert.equals(errors.length, 0);
     };
 
-    self["Layer redirects, 1.2"] = function() {
+    self["1.2: Layer redirects"] = function() {
         config.redirects = {
             layers: {
                 "terra-cr": "aqua-cr"

@@ -307,28 +307,11 @@ wv.layers.model = wv.layers.model || function(models, config) {
         });
     };
 
-    self.load = function(state) {
-        if ( state.products ) {
-            load11(state);
-        }
-        if ( state.l ) {
-            load12(state);
-        }
-    };
-
-    var load11 = function(state) {
-        self.clear(models.proj.selected.id);
-        _.eachRight(state.products, function(layerId) {
-            var hidden = state.hidden && state.hidden[layerId];
-            self.add(layerId, { visible: !hidden });
-        });
-    };
-
-    var load12 = function(state) {
+    self.load = function(state, errors) {
         self.clear(models.proj.selected.id);
         _.eachRight(state.l, function(layerDef) {
             if ( !config.layers[layerDef.id] ) {
-                console.warn("No such layer: " + layerDef.id);
+                errors.push({message: "No such layer: " + layerDef.id});
                 return;
             }
             var hidden = false;

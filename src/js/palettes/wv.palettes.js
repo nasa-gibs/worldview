@@ -155,7 +155,7 @@ wv.palettes = (function(self) {
             return promise;
         }
     };
-    
+
     // Only for permalink 1.1 support
     self.parse = function(state, errors, config) {
         if ( state.palettes ) {
@@ -186,7 +186,7 @@ wv.palettes = (function(self) {
                             value: paletteId
                         });
                     } else {
-                        errors.push({message: "Layer " + layerId + " is not " + 
+                        errors.push({message: "Layer " + layerId + " is not " +
                             "active"});
                     }
                 }

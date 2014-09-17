@@ -34,7 +34,7 @@ wv.map.model = wv.map.model || function(models, config) {
             if ( extent.intersectsBounds(maxExtent) ) {
                 self.extent = state.v;
             } else {
-                self.extent = proj.maxExtent
+                self.extent = proj.maxExtent;
                 errors.push({message: "Extent outside of range"});
             }
         } else {
