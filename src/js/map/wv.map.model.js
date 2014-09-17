@@ -26,9 +26,17 @@ wv.map.model = wv.map.model || function(models, config) {
         self.events.trigger("update", extent);
     };
 
-    self.load = function(state) {
+    self.load = function(state, errors) {
         if ( state.v ) {
-            self.extent = state.v;
+            var proj = models.proj.selected;
+            var extent = new OpenLayers.Bounds(state.v);
+            var maxExtent = new OpenLayers.Bounds(proj.maxExtent);
+            if ( extent.intersectsBounds(maxExtent) ) {
+                self.extent = state.v;
+            } else {
+                self.extent = proj.maxExtent
+                errors.push({message: "Extent outside of range"});
+            }
         } else {
             if ( models.proj.selected.id === "geographic" ) {
                 self.setExtentToLeading();
