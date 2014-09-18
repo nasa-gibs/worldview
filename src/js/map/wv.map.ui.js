@@ -55,11 +55,20 @@ wv.map.ui = wv.map.ui || function(models, config) {
 
     var updateProjection = function() {
         if ( self.selected ) {
+            // Keep track of center point on projection switch
+            self.selected.previousCenter = self.selected.getCenter();
             hideMap(self.selected);
         }
         self.selected = self.proj[models.proj.selected.id];
         reloadLayers();
+
+        // If the browser was resized, the inactive map was not notified of
+        // the event. Force the update no matter what and reposition the center
+        // using the previous value.
         showMap(self.selected);
+        self.selected.updateSize();
+        self.selected.setCenter(self.selected.previousCenter);
+
         updateExtent();
     };
 
@@ -571,6 +580,9 @@ wv.map.ui = wv.map.ui || function(models, config) {
         map.events.register("preaddlayer", null, onAddLayer);
         map.events.register("preremovelayer", null, onRemoveLayer);
         $map.hide();
+
+        // Keep track of center point on projection switch
+        map.previousCenter = map.getCenter();
 
         return map;
     };

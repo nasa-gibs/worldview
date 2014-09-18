@@ -9,9 +9,6 @@
  * All Rights Reserved.
  */
 
-/**
- * @module @wv
- */
 var wv = wv || {};
 
 wv.tour = wv.tour || function(models, ui, config) {
