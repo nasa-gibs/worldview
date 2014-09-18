@@ -17,7 +17,8 @@ fixtures.config = function() { return {
         geographic: {
             id: "geographic",
             epsg: 4326,
-            crs: "EPSG:4326"
+            crs: "EPSG:4326",
+            maxExtent: [-180, -90, 180, 90]
         },
         arctic: {
             id: "arctic",
@@ -107,6 +108,7 @@ fixtures.models = function(config) {
     models.proj = wv.proj.model(config);
     models.layers = wv.layers.model(models, config);
     models.palettes = wv.palettes.model(models, config);
+    models.map = wv.map.model(models, config);
 
     return models;
 };

@@ -14,11 +14,11 @@ var wv = wv || {};
 wv.layers = (function(self) {
 
     self.parse = function(state, errors, config) {
-        if ( state.products ) {
-            parse11(state, errors, config);
-        }
         if ( state.l ) {
             parse12(state, errors, config);
+        }
+        if ( state.products ) {
+            parse11(state, errors, config);
         }
     };
 
@@ -44,13 +44,16 @@ wv.layers = (function(self) {
                 errors.push({message: "No such layer: " + id});
                 return;
             }
-            layers.push(id);
+            var lstate = {
+                id: id,
+                attributes: []
+            };
             if ( !visible ) {
-                hidden[id] = true;
+                lstate.attributes.push({id: "hidden", value: true});
             }
+            layers.push(lstate);
         });
-        state.products = layers;
-        state.hidden = hidden;
+        state.l = layers;
     };
 
     // Permalink version 1.2

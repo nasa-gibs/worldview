@@ -33,6 +33,8 @@ wv.ui.indicator = wv.ui.indicator || (function() {
 
     var self = {};
 
+    self.active = [];
+
     /**
      * Shows the indicator with a message and an icon. If another indicator
      * is already active, this call will replace the other one.
@@ -45,6 +47,7 @@ wv.ui.indicator = wv.ui.indicator || (function() {
      */
     self.show = function(message, icon) {
         self.hide();
+        self.active.push(message);
         if ( icon ) {
             $("body").append([
                 "<div id='indicator'>",
@@ -70,6 +73,7 @@ wv.ui.indicator = wv.ui.indicator || (function() {
      */
     self.hide = function() {
         $("#indicator").remove();
+        
     };
 
     /**
