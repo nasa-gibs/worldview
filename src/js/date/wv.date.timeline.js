@@ -754,7 +754,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     }; // /init
     var throwUIDateError = function(field){
         $('#' + field + '').parent().css('border-color','#ff0000');
-    }
+    };
     var setZoomLevel = function(interval,mousePos,mouseOffset){
         zoomLvl = interval;
         switch(zoomLvl){
@@ -920,31 +920,30 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     };
     var zoomLvlTiny = 0;
     var panLimit = function() {
-	/*
-	  
-	  include boolean to work out the panExtent and return to zoom.translate()
-	
-	*/
+        /*
+          
+          include boolean to work out the panExtent and return to zoom.translate()
+          
+        */
         
-	var divisor = {h: height / ((y.domain()[1]-y.domain()[0])*zoom.scale()), w: width / ((x.domain()[1]-x.domain()[0])*zoom.scale())},
-	minX = -(((x.domain()[0]-x.domain()[1])*zoom.scale())+(panExtent.x[1]-(panExtent.x[1]-(width/divisor.w)))),
-	minY = -(((y.domain()[0]-y.domain()[1])*zoom.scale())+(panExtent.y[1]-(panExtent.y[1]-(height*(zoom.scale())/divisor.h))))*divisor.h,
-	maxX = -(((x.domain()[0]-x.domain()[1]))+(panExtent.x[1]-panExtent.x[0]))*divisor.w*zoom.scale(),
-	maxY = (((y.domain()[0]-y.domain()[1])*zoom.scale())+(panExtent.y[1]-panExtent.y[0]))*divisor.h*zoom.scale(), 
+        var divisor = {h: height / ((y.domain()[1]-y.domain()[0])*zoom.scale()), w: width / ((x.domain()[1]-x.domain()[0])*zoom.scale())},
+        minX = -(((x.domain()[0]-x.domain()[1])*zoom.scale())+(panExtent.x[1]-(panExtent.x[1]-(width/divisor.w)))),
+        minY = -(((y.domain()[0]-y.domain()[1])*zoom.scale())+(panExtent.y[1]-(panExtent.y[1]-(height*(zoom.scale())/divisor.h))))*divisor.h,
+        maxX = -(((x.domain()[0]-x.domain()[1]))+(panExtent.x[1]-panExtent.x[0]))*divisor.w*zoom.scale(),
+        maxY = (((y.domain()[0]-y.domain()[1])*zoom.scale())+(panExtent.y[1]-panExtent.y[0]))*divisor.h*zoom.scale(), 
         
-	tx = x.domain()[0] < panExtent.x[0] ? 
-	    minX : 
-	    x.domain()[1] > panExtent.x[1] ? 
-	    maxX : 
-	    zoom.translate()[0],
-	ty = y.domain()[0]  < panExtent.y[0]? 
-	    minY : 
-	    y.domain()[1] > panExtent.y[1] ? 
-	    maxY : 
-	    zoom.translate()[1];
-	
-	return [tx,ty];
+        tx = x.domain()[0] < panExtent.x[0] ? 
+            minX : 
+            x.domain()[1] > panExtent.x[1] ? 
+            maxX : 
+            zoom.translate()[0],
+        ty = y.domain()[0]  < panExtent.y[0]? 
+            minY : 
+            y.domain()[1] > panExtent.y[1] ? 
+            maxY : 
+            zoom.translate()[1];
         
+        return [tx,ty]; 
     };
     var zoomable = function(e){
         var mousePos = x.invert(d3.mouse(this)[0]);
