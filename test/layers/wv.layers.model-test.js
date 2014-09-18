@@ -363,6 +363,26 @@ buster.testCase("wv.layers.model", function() {
         buster.assert.equals(errors.length, 0);
     };
 
+    self["Starts with default layers when no permalink"] = function() {
+        config.defaults.startingLayers = [
+            { id: "terra-cr" }
+        ];
+        l = wv.layers.model(models, config);
+        l.load({});
+        buster.assert(l.active[0].id, "terra-cr");
+        buster.assert(l.active[0].visible);
+    };
+
+    self["Starts with a default hidden layer"] = function() {
+        config.defaults.startingLayers = [
+            { id: "terra-cr", hidden: true }
+        ];
+        l = wv.layers.model(models, config);
+        l.load({});
+        buster.assert(l.active[0].id, "terra-cr");
+        buster.refute(l.active[0].visible);
+    };
+
     return self;
 
 }());
