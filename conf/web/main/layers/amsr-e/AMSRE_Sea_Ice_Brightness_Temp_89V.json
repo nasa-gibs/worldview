@@ -8,8 +8,7 @@
             "inactive": true,
 
             "palette": {
-                "id": "AMSRE_Sea_Ice_Brightness_Temp_89V",
-                "recommended": ["blue_4", "purple_2"]
+                "id": "AMSRE_Sea_Ice_Brightness_Temp_89V"
             }
         }
     }
