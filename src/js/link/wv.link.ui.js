@@ -104,7 +104,8 @@ wv.link.ui = wv.link.ui || function(models, config) {
             at: "left bottom+5",
             of: $label
         });
-        $dialog.dialog("open");
+        $(".ui-dialog").zIndex(600);
+        $dialog.dialog("open")
 
         //$("#wv-link-shorten-check").button();
         $("#wv-link-shorten-check").on("ifChanged", function() {
