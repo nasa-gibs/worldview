@@ -459,7 +459,7 @@ wv.util = (function(self) {
         UP: 38,
         DOWN: 40
     };
-    
+
     return self;
 
 })(wv.util || {});
