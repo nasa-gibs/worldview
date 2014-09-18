@@ -484,9 +484,11 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             mousedown = true;
             d3.event.preventDefault();
             d3.event.stopPropagation();
+            $("#guitarpick").css("pointer-events","none");
         })
         .on("mouseup",function(){
             mousedown = false;
+                        $("#guitarpick").css("pointer-events","");
         });
         d3.select("#timeline-footer svg").on("mousemove",function(){
             if (mousedown){
@@ -510,21 +512,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
                     break;
                 }
-                /* Not ready yet
-                  var tickParent = d3.select(timeline.selectAll('.x.axis>.tick > .subtick > .tick').filter(function(d,i){
-
-                    var tempDate = new Date(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate()).toUTCString();
-                    var tempDate2 = new Date(newDate.getUTCFullYear(),newDate.getUTCMonth(),newDate.getUTCDate()).toUTCString();
-                    if ( tempDate === tempDate2){
-                        return this;
-                    }
-                    else{
-                        return undefined;
-                    }
-                })[0][0])[0][0];//.parentNode.parentNode);
-                smallTickMouseleave.call(tickParent,newDate);
-                smallTickMouseenter.call(tickParent,newDate);
-                */
                 guitarPick.attr("transform","translate("+ (x(newDate)-28) +",-16)");
                 model.select(newDate);
             }
@@ -533,6 +520,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             if (mousedown){
                 mousedown = false;
                 smallTickMouseleave();
+                $('#guitarpick').css('pointer-events','');
             }
         });
 
