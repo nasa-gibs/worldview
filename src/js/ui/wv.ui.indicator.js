@@ -4,137 +4,117 @@
  * This code was originally developed at NASA/Goddard Space Flight Center for
  * the Earth Science Data and Information System (ESDIS) project.
  *
- * Copyright (C) 2013 United States Government as represented by the
+ * Copyright (C) 2013 - 2014 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
 
-/**
- * @module wv.ui
- */
 var wv = wv || {};
 wv.ui = wv.ui || {};
 
-/**
- * Displays an indicator on the screen.
- *
- * The indicator has an image and text associated with it. Use show to
- * display and hide to remove. Example:
- *
- *      wv.ui.indicator.show("Please Wait", "images/wait.png");
- *
- * Only one indicator can be visibile at a time. If show is called while
- * another indicator is already active, it will be replaced.
- *
- * @class wv.ui.indicator
- * @static
- */
 wv.ui.indicator = wv.ui.indicator || (function() {
 
     var self = {};
 
+    var $indicator;
+    var $icon;
+    var $message;
+
     self.active = [];
 
-    /**
-     * Shows the indicator with a message and an icon. If another indicator
-     * is already active, this call will replace the other one.
-     *
-     * @method show
-     * @static
-     *
-     * @param message {string} The message to display
-     * @param icon {string} URL to the icon to display
-     */
+    var init = function() {
+        $indicator = $("<div></div>")
+            .attr("id", "indicator");
+        $icon = $("<img></img>");
+        $message = $("<span></span");
+
+        $indicator.append($icon).append($message).hide();
+        $("body").append($indicator);
+    };
+
     self.show = function(message, icon) {
-        self.hide();
-        self.active.push(message);
-        if ( icon ) {
-            $("body").append([
-                "<div id='indicator'>",
-                 "<img src='" + icon + "'></img>",
-                    "<span>" + message + "</span>",
-                "</div>"
-            ].join("\n"));
+        self._show(message, icon);
+        var id = _.uniqueId();
+        self.active.push({
+            id: id,
+            message: message,
+            icon: icon
+        });
+        return id;
+    };
+
+    self.hide = function(hides) {
+        if ( _.isString(hides) ) {
+            hides = [hides];
+        }
+        _.each(hides, function(id) {
+            _.remove(self.active, { id: id });
+        });
+        if ( _.isEmpty(self.active) ) {
+            self._hide();
         } else {
-            $("body").append([
-                "<div id='indicator' class='message'>",
-                message,
-                "</div>"
-            ].join("\n"));
+            var def = _.last(self.active);
+            self._show(def.message, def.icon);
         }
     };
 
-    /**
-     * Hides the indicator. If no indicator is displayed, this method does
-     * nothing.
-     *
-     * @method hide
-     * @static
-     */
-    self.hide = function() {
-        $("#indicator").remove();
-        
+    self.replace = function(hides, message, icon) {
+        self.hide(hides);
+        return self.show(message, icon);
     };
 
-    /**
-     * Displays a "Searching" indicator. This is a convenience method for:
-     *
-     *      wv.ui.indicator.show("Searching", "images/activity.gif")
-     *
-     * @method searching
-     * @static
-     */
-    self.searching = function() {
-        self.show("Searching ECHO for Data", "images/activity.gif");
+    self._show = function(message, icon) {
+        if ( !$indicator ) {
+            init();
+        }
+        if ( icon ) {
+            $indicator.removeClass("message");
+            $icon.attr("src", icon).show();
+        } else {
+            $indicator.addClass("message");
+            $icon.removeAttr("src").hide();
+        }
+        $message.html(message);
+        $indicator.show();
     };
 
-    /**
-     * Displays a "Loading" indicator. This is a convenience method for:
-     *
-     *      wv.ui.indicator.show("Loading", "images/activity.gif")
-     *
-     * @method searching
-     * @static
-     */
-    self.loading = function() {
-        self.show("Loading", "images/activity.gif");
+    self._hide = function() {
+        if ( $indicator ) {
+            $indicator.hide();
+        }
     };
 
-    /**
-     * Displays a "No data available" indicator. This is a convenience method
-     * for:
-     *
-     *      wv.ui.indicator.show("No data available", "images/red-x.svg")
-     *
-     * @method noData
-     * @static
-     */
-    self.noData = function() {
-        self.show("No Data Avaialble", "images/red-x.svg");
+    self.searching = function(hides) {
+        if ( hides ) {
+            self.hide(hides);
+        }
+        return self.show("Searching ECHO for Data", "images/activity.gif");
     };
 
-    /**
-     * Displays a "Loading" indicator if the specified promise is not
-     * fulfilled in a certain amount of time. Once the promise is fulfilled,
-     * any active indicator is hidden.
-     *
-     * @method delayed
-     * @static
-     * @param {jQuery.Deferred} The active promise
-     * @param [int] Time, in milliseconds, to wait until showing the
-     * indicator. If not specified, a delay of one second is used.
-     */
+    self.loading = function(hides) {
+        if ( hides ) {
+            self.hide(hides);
+        }
+        return self.show("Loading", "images/activity.gif");
+    };
+
+    self.noData = function(hides) {
+        if ( hides ) {
+            self.hide(hides);
+        }
+        return self.show("No Data Avaialble", "images/red-x.svg");
+    };
+
     self.delayed = function(promise, delay) {
         delay = delay || 1000;
-        var shown = false;
+        var id;
         var timeout = setTimeout(function() {
-            shown = true;
-            self.loading();
+            id = self.loading();
         }, delay);
         promise.always(function() {
             clearTimeout(timeout);
-            if ( shown ) {
-                self.hide();
+            if ( id ) {
+                self.hide(id);
             }
         });
     };

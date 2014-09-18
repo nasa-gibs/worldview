@@ -91,7 +91,7 @@ wv.util.browser = wv.util.browser || (function() {
     self.localStorage = true;
 
     self.history = true;
-    
+
     var init = function() {
         var tests = self.tests;
 

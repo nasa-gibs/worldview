@@ -23,6 +23,11 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
     var lastResults = null;
     var maps = ui.map;
 
+    var indicators = {
+        query: null,
+        noneInView: null
+    };
+
     var self = {};
     self.selector = "#wv-data";
     self.id = "wv-data";
@@ -176,6 +181,8 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
    };
 
     self.onViewChange = function(map) {
+        var indicator;
+
         if ( !model.active || queryActive || !lastResults ) {
             return;
         }
@@ -194,10 +201,10 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
                 }
             }
         });
+        wv.ui.indicator.hide(indicators.noneInView);
         if ( hasCentroids && !inView ) {
-            wv.ui.indicator.show("Zoom out or move map");
-        } else {
-            wv.ui.indicator.hide();
+            indicators.noneInView =
+                    wv.ui.indicator.show("Zoom out or move map");
         }
     };
 
@@ -215,7 +222,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
     };
 
     var onDeactivate = function() {
-        wv.ui.indicator.hide();
+        wv.ui.indicator.hide(indicators);
         if ( selectionListPanel ) {
             selectionListPanel.hide();
         }
@@ -238,7 +245,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
 
     var onQuery = function() {
         queryActive = true;
-        wv.ui.indicator.searching();
+        indicators.query = wv.ui.indicator.searching(indicators);
         if ( selectionListPanel ) {
             selectionListPanel.hide();
         }
@@ -250,9 +257,9 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
     var onQueryResults = function(results) {
         queryActive = false;
         lastResults = results;
-        wv.ui.indicator.hide();
+        wv.ui.indicator.hide(indicators);
         if ( model.selectedProduct !== null && results.granules.length === 0 ) {
-            wv.ui.indicator.noData();
+            wv.ui.indicator.noData(indicators);
         } else {
             if ( results.meta.showList ) {
                 selectionListPanel =
@@ -269,12 +276,12 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
 
     var onQueryCancel = function() {
         queryActive = false;
-        wv.ui.indicator.hide();
+        wv.ui.indicator.hide(indicators);
     };
 
     var onQueryError = function(status, error) {
         queryActive = false;
-        wv.ui.indicator.hide();
+        wv.ui.indicator.hide(indicators);
         if ( status !== "abort" ) {
             console.error("Unable to search", status, error);
             wv.ui.notify("Unable to search at this time.<br/><br/>Please try " +
@@ -284,7 +291,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
 
     var onQueryTimeout = function() {
         queryActive = false;
-        wv.ui.indicator.hide();
+        wv.ui.indicator.hide(indicators);
         wv.ui.notify(
             "No results received yet. This may be due to a " +
             "connectivity issue. Please try again later."
