@@ -311,6 +311,7 @@ display:inline-block;}
 #guitarpick{
     cursor:pointer;
     clip-path:url(#guitarpick-boundary);
+    
 }
 #guitarpick path{
     fill:#cccccc;
