@@ -350,11 +350,13 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         $(document)
             .keydown(function(event) {
                 if ( event.target.nodeName === "INPUT" ) {
-                    if((event.keyCode || event.which) === 9){
+                    /*if((event.keyCode || event.which) === 9){
+                        
                         $('.button-input-group').parent().css('border-color','');
                         updateTime();
+                        
                     }
-                    else return;
+                    else*/ return;
                 }
                 switch ( event.keyCode ) {
                     case wv.util.key.LEFT:
@@ -722,12 +724,14 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 }
                 if(selectedDateObj){ 
                     model.select(selectedDateObj);
+                    $('.button-input-group').parent().css('border-color','');
                 }
                 else{
-                    throwUIDateError(YMDInterval);
+                    updateTime();
+
                 }
+
             }
-            $(this).select();
         });
 
         $("#day-input-group").blur();
