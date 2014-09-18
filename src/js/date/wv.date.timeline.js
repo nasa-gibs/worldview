@@ -31,14 +31,14 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var selectedDateMs = model.selected.getTime();
     var startDateMs = ( model.start ) ? model.start.getTime() : undefined;
     var endDateMs = ( model.end ) ? model.end.getTime() : undefined;
-    var selectedDateObj, x,y,line,zoom,xAxis, yAxis, timeline, data2;
+    var x,y,line,zoom,xAxis, yAxis, timeline, data2;
     var zoomLvl = 2;
     var zoomInterval = d3.time.month.utc;
     var zoomStep = 1;
     var subInterval = d3.time.day.utc;
     var subStep = 1;
     var zoomTimeFormat = d3.time.format.utc("%b");
-    var zoomScale,axisBgWidth,subAxisBgWidth,smallTicks,guitarPick,chartBody,layers;
+    var zoomScale,axisBgWidth,subAxisBgWidth,smallTicks,guitarPick,chartBody,layers, panExtent;
     var timer,selectedDate, daysInMonth;
     var margin = {
             top: 0,
@@ -98,11 +98,12 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 "y": "10"
             }
         ];
+        panExtent = {x: [-200,2800], y: [0,height] };
         x = d3.time.scale.utc()
-            .domain([new Date(1900,0,1), new Date(2100,0,1)])
+            .domain([new Date(1900,0,1),new Date(2100,0,1)])
 
             //.nice(d3.time.year)
-            .range([-200, 2800]);
+            .range([-200,2800]);
         /* FIXME: Fix this to be ordinal in place of linear
         */
         y = d3.scale.ordinal()
@@ -159,7 +160,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     };
     var addSubAxes = function(){
         var ticks = timeline.selectAll('.x.axis>.tick');
-//        console.log(ticks.data());
+
         //general non-specific objects added to all ticks
         ticks.insert("svg:circle","text").attr("r","6");
         ticks.selectAll("line:first-child")
@@ -227,7 +228,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         d3.selectAll(".x.axis rect.axis-foreground").on("click",function(){
             var d = d3.select(this.parentNode).data()[0];
             var newDate;
-            console.log(d);
             switch(zoomLvl){
             case 0:
                 var yearOffset = model.selected.getUTCFullYear() - Math.ceil(new Date(model.selected.getUTCFullYear()/10)*10);
@@ -241,7 +241,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 break;
             case 3:
                 var dayOffset = model.selected.getUTCDay() - d.getUTCDay();
-                console.log(dayOffset);
                 newDate = new Date(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate() + dayOffset);
                 break;
             default:
@@ -253,39 +252,39 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         d3.selectAll('.x.axis>.tick text').attr('x',7).attr('style','text-anchor:left;');
 
         var timelineTicks = timeline.selectAll('.x.axis>g.tick > g.subtick > g.tick');
-        timelineTicks.on("mouseenter",function(d){
-            var tickParent = d3.select(this.parentNode.parentNode);
-            var tickDate = d;
-            var rectWidth = tickParent.select('rect.axis-background').attr("width");
-            if (zoomLvl === 0){
-                tickDate = new Date(d.getUTCFullYear(),model.selected.getUTCMonth(),model.selected.getUTCDate());
+        timelineTicks.on("mouseenter",smallTickMouseenter)
+            .on("mouseleave",smallTickMouseleave)
+            .on("click",function(d){
+                model.select(selectByDateInterval(d));
+            });
+    };
+    var smallTickMouseenter = function(d){
+        var tickParent = d3.select(this.parentNode.parentNode);
+        var tickDate = d;
+        var rectWidth = tickParent.select('rect.axis-background').attr("width");
+        if (zoomLvl === 0){
+            tickDate = new Date(d.getUTCFullYear(),model.selected.getUTCMonth(),model.selected.getUTCDate());
+        }
+        else if (zoomLvl === 1){
+            tickDate = new Date(d.getUTCFullYear(),d.getUTCMonth(),model.selected.getUTCDate());
             }
-            else if (zoomLvl === 1){
-                tickDate = new Date(d.getUTCFullYear(),d.getUTCMonth(),model.selected.getUTCDate());
-            }
-            tickParent.selectAll('.tick-label, .sub-label').attr("visibility","hidden");
-            tickParent.append("svg:text")
-                .attr("class","hover-tick-label")
-                .attr("y","15")
-                .attr("x",rectWidth/2)
-                .attr("style","text-anchor:middle")
-                .text(tickDate.getUTCFullYear() + " " + monthNames[tickDate.getUTCMonth()] + " " + tickDate.getUTCDate());
-/*            tickParent.append("svg:text")
-                .attr("class","hover-sub-label")
-                .attr("y","30")
-                .attr("x",rectWidth/2)
-                .attr("style","text-anchor:middle")
-                .text(tickDate.getUTCFullYear());*/
-            
-        })
-        .on("mouseleave",function(d){
-            var tickParent = d3.select(this.parentNode.parentNode);
-            tickParent.selectAll('.tick-label, .sub-label').attr("visibility","");
-            tickParent.selectAll('.hover-tick-label, .hover-sub-label').remove();
-        })
-        .on("click",function(d){
-            model.select(selectByDateInterval(d));
-        });
+        tickParent.selectAll('.tick-label, .sub-label').attr("visibility","hidden");
+        tickParent.append("svg:text")
+            .attr("class","hover-tick-label")
+            .attr("y","15")
+            .attr("x",rectWidth/2)
+            .attr("style","text-anchor:middle")
+            .text(tickDate.getUTCFullYear() + " " + monthNames[tickDate.getUTCMonth()] + " " + tickDate.getUTCDate());
+        /*            tickParent.append("svg:text")
+                      .attr("class","hover-sub-label")
+                      .attr("y","30")
+                      .attr("x",rectWidth/2)
+                      .attr("style","text-anchor:middle")
+                      .text(tickDate.getUTCFullYear());*/
+    };
+    var smallTickMouseleave = function(d){
+        timeline.selectAll('.tick-label, .sub-label').attr("visibility","");
+        timeline.selectAll('.hover-tick-label, .hover-sub-label').remove();
     };
     var selectByDateInterval = function(d){
         var newDate;
@@ -351,7 +350,11 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         $(document)
             .keydown(function(event) {
                 if ( event.target.nodeName === "INPUT" ) {
-                    return;
+                    if((event.keyCode || event.which) === 9){
+                        $('.button-input-group').parent().css('border-color','');
+                        updateTime();
+                    }
+                    else return;
                 }
                 switch ( event.keyCode ) {
                     case wv.util.key.LEFT:
@@ -507,43 +510,29 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
                     break;
                 }
-                timeline.selectAll('.x.axis>.tick > .subtick > .tick').filter(function(d,i){
-//                    console.log(i + ",   " + d.toISOString() + " " + newDate.toISOString());
-                    var tempDate = new Date(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate());
-                    var tempDate2 = new Date(newDate.getUTCFullYear(),newDate.getUTCMonth(),newDate.getUTCDate());
-//                    console.log(i + ", " + tempDate + " ------ " + tempDate2);
-                    if (i === 71){
-                        //console.log(this);
-                        //console.log(d);
-//                        console.log(i + ", " + d + ", " + tempDate + " : " + tempDate2);
+                /* Not ready yet
+                  var tickParent = d3.select(timeline.selectAll('.x.axis>.tick > .subtick > .tick').filter(function(d,i){
+
+                    var tempDate = new Date(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate()).toUTCString();
+                    var tempDate2 = new Date(newDate.getUTCFullYear(),newDate.getUTCMonth(),newDate.getUTCDate()).toUTCString();
+                    if ( tempDate === tempDate2){
                         return this;
                     }
                     else{
-//                        console.log('boo');
+                        return undefined;
                     }
-                    
-//                    console.log("->>>" + newDate);
-                   // if(d3.select(this).data()[0]===newDate){
-                     //   return this;
-                   // }/*if (d.date === newDate) { return this;} else { return undefined;}*/
-                });
+                })[0][0])[0][0];//.parentNode.parentNode);
+                smallTickMouseleave.call(tickParent,newDate);
+                smallTickMouseenter.call(tickParent,newDate);
+                */
                 guitarPick.attr("transform","translate("+ (x(newDate)-28) +",-16)");
                 model.select(newDate);
             }
-            /*
-            tickParent.selectAll('.tick-label, .sub-label').attr("visibility","hidden");
-            tickParent.append("svg:text")
-                .attr("class","hover-tick-label")
-                .attr("y","15")
-                .attr("x",rectWidth/2)
-                .attr("style","text-anchor:middle")
-                .text(tickDate.getUTCFullYear() + " " + monthNames[tickDate.getUTCMonth()] + " " + tickDate.getUTCDate());
-
-                */
         });
         d3.select(document).on("mouseup",function(){
             if (mousedown){
                 mousedown = false;
+                smallTickMouseleave();
             }
         });
 
@@ -555,9 +544,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             $buttons.parent().removeClass('selected');
             $(this).parent().addClass('selected');
             $(this).siblings('.date-arrows').css('visibility','visible');
-        });
-        $buttons.click(function(e){
-            $(this).select();
         });
         $buttons.focusout(function(e){
             $buttons.siblings('.date-arrows').css('visibility','');
@@ -616,8 +602,12 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             },400);
             $(this).siblings('.button-input-group').focus();
         });
+        
+        //select all input on focus
         $('input').focus(function(e){
             $(this).select();
+        }).mouseup(function(e){
+            e.preventDefault();
         });
 
         $decrementIntDate.click(function(e){
@@ -710,37 +700,46 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 var selected = $(this);
                 var YMDInterval = selected.attr('id');
                 var newInput = selected.val();
+                var selectedDateObj = null;
                 switch(YMDInterval){
                     case 'year-input-group':
+                    if ((newInput > 1000) && (newInput < 9999))
                         selectedDateObj = new Date((new Date(model.selected)).setUTCFullYear(newInput));
-                        model.select(selectedDateObj);
-                        break;
+                    break;
                     case 'month-input-group':
-                    newInput = newInput.toUpperCase();
-                        for(var i=0;i<monthNames.length;i++){
-                            if(newInput===monthNames[i] || (newInput==i+1) || (newInput===("0"+(i+1)))){
-                               selectedDateObj = new Date((new Date(model.selected)).setUTCMonth(i));
-                               model.select(selectedDateObj);
+                    if ($.isNumeric(newInput) && (newInput < 13) && (newInput > 0)){
+                        selectedDateObj = new Date((new Date(model.selected)).setUTCMonth(newInput-1));
+                    }
+                    else{
+                        var validStr = false;
+                        var newIntInput;
+                        newInput = newInput.toUpperCase();
+                        
+                        for (var i=0;i<monthNames.length;i++){
+                            if (newInput === monthNames[i]){
+                                validStr = true;
+                                newIntInput = i;
                             }
                         }
-                        break;
+                        if (validStr){
+                            selectedDateObj = new Date((new Date(model.selected)).setUTCMonth(newIntInput));
+                        }
+                    }
+                    break;
                     case 'day-input-group':
-                        if(newInput>0 && newInput<=(new Date(model.selected.getYear(),model.selected.getMonth()+1,0).getDate())){
-                            selectedDateObj = new Date((new Date(model.selected)).setUTCDate(newInput));
-                            try {
-                                model.select(selectedDateObj);
-                                $(this).select();
-                             }
-                            catch(e){
-                             //TODO: error catching
-                             }
-                        }
-                        else{
-                            //TODO: notice to user goes here
-                        }
-                        break;
+                    if(newInput>0 && newInput<=(new Date(model.selected.getYear(),model.selected.getMonth()+1,0).getDate())){
+                        selectedDateObj = new Date((new Date(model.selected)).setUTCDate(newInput));
+                    }
+                    break;
                 }
-            }        
+                if(selectedDateObj){ 
+                    model.select(selectedDateObj);
+                }
+                else{
+                    throwUIDateError(YMDInterval);
+                }
+            }
+            $(this).select();
         });
 
         $("#day-input-group").blur();
@@ -765,9 +764,10 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         });
 
     }; // /init
+    var throwUIDateError = function(field){
+        $('#' + field + '').parent().css('border-color','#ff0000');
+    }
     var setZoomLevel = function(interval,mousePos,mouseOffset){
-        //console.log(interval);
-
         zoomLvl = interval;
         switch(zoomLvl){
             case 'decades':
@@ -931,8 +931,34 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         ui.anim.stop();
     };
     var zoomLvlTiny = 0;
+    var panLimit = function() {
+	/*
+	  
+	  include boolean to work out the panExtent and return to zoom.translate()
+	
+	*/
+        
+	var divisor = {h: height / ((y.domain()[1]-y.domain()[0])*zoom.scale()), w: width / ((x.domain()[1]-x.domain()[0])*zoom.scale())},
+	minX = -(((x.domain()[0]-x.domain()[1])*zoom.scale())+(panExtent.x[1]-(panExtent.x[1]-(width/divisor.w)))),
+	minY = -(((y.domain()[0]-y.domain()[1])*zoom.scale())+(panExtent.y[1]-(panExtent.y[1]-(height*(zoom.scale())/divisor.h))))*divisor.h,
+	maxX = -(((x.domain()[0]-x.domain()[1]))+(panExtent.x[1]-panExtent.x[0]))*divisor.w*zoom.scale(),
+	maxY = (((y.domain()[0]-y.domain()[1])*zoom.scale())+(panExtent.y[1]-panExtent.y[0]))*divisor.h*zoom.scale(), 
+        
+	tx = x.domain()[0] < panExtent.x[0] ? 
+	    minX : 
+	    x.domain()[1] > panExtent.x[1] ? 
+	    maxX : 
+	    zoom.translate()[0],
+	ty = y.domain()[0]  < panExtent.y[0]? 
+	    minY : 
+	    y.domain()[1] > panExtent.y[1] ? 
+	    maxY : 
+	    zoom.translate()[1];
+	
+	return [tx,ty];
+        
+    };
     var zoomable = function(e){
-
         var mousePos = x.invert(d3.mouse(this)[0]);
         var mouseOffset = width/2 - d3.mouse(this)[0];
         var evt = window.event || d3.event.sourceEvent || e;
@@ -961,6 +987,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             }
         }
         else{
+            //zoom.translate(panLimit());
             redrawAxis();
         }
     };
