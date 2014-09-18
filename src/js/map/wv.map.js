@@ -16,7 +16,7 @@ wv.map = (function(self) {
 
     self.CRS_WGS_84 = "EPSG:4326";
 
-    self.CRS_WGS_84_QUERY_EXTENT = new OpenLayers.Bounds(-180, -60, 180, 60);
+    self.CRS_WGS_84_QUERY_EXTENT = [-180, -60, 180, 60];
 
     self.CRS_WGS_84_QUERY_MASK =
         new OpenLayers.Geometry.MultiPolygon([
