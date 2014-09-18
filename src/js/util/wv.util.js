@@ -459,14 +459,7 @@ wv.util = (function(self) {
         UP: 38,
         DOWN: 40
     };
-
-    self.removeOne = function(array, value) {
-        var index = _.indexOf(array, value);
-        if ( index >= 0 ) {
-            array.splice(index, 1);
-        }
-    };
-
+    
     return self;
 
 })(wv.util || {});
