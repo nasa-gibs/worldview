@@ -29,6 +29,11 @@ wv.debug = wv.debug || (function() {
                 return;
             }
         }
+        if ( parameters.showError ) {
+            $(function() {
+                wv.util.error();
+            });
+        }
     };
 
     var delayedCallback = function(jqXHR, wrap, delay) {
@@ -63,12 +68,6 @@ wv.debug = wv.debug || (function() {
 
             return jqXHR;
         };
-    };
-
-    self.error = function(parameters) {
-        if ( parameters.showError ) {
-            wv.util.error();
-        }
     };
 
     init();
@@ -120,11 +119,11 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
 
     var useDebugPanel = {
         "gibs": true,
-        "layers": true, 
+        "layers": true,
         "palettes": true,
         "dataDownload": true
     };
-    
+
     var init = function() {
         type = config.parameters.debug;
         if ( config.parameters.debugGIBS ) {
