@@ -822,10 +822,11 @@ wv.data.ui.selectionListPanel = function(model, results) {
                 width: 400,
                 height: 400
             });
+        $("button.ui-dialog-titlebar-close").hide();
+
         $.each(results.granules, function(index, granule) {
             granules[granule.id] = granule;
         });
-
         $("#wv-data-list input").on("click", toggleSelection);
     };
 
