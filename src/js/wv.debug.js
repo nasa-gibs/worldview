@@ -217,7 +217,7 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
             }
         });
         models.layers.clear();
-        if ( type !== "gibs" && config.layers.Land_Water_map ) {
+        if ( type !== "gibs" && config.layers.Land_Water_Map ) {
             models.layers.add("Land_Water_Map");
         }
         updateLayers.apply($select);
