@@ -514,7 +514,7 @@ wv.data.ui.downloadListPanel = function(config, model) {
             .attr("id", "wv-data-selection")
             .html(bodyText(selection));
         $dialog.dialog({
-            title: "Download links",
+            title: "Download Links",
             width: 600,
             height: 400
         });
