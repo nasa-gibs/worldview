@@ -192,7 +192,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
         var hasCentroids = false;
         var inView = false;
         var extent = map.getExtent().toGeometry();
-        $.each(lastResults.granules, function(index, granule) {
+        _.each(lastResults.granules, function(granule) {
             if ( granule.centroid && granule.centroid[map.projection] ) {
                 hasCentroids = true;
                 if ( extent.intersects(granule.centroid[map.projection]) ) {

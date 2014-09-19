@@ -189,28 +189,24 @@ $(function() {
         $("#eventsHolder").hide();
 
         // Wirings
-        /*
-        models.data.events
-            .on("activate", function() {
-                ui.sidebar.selectTab("download");
-            })
-            .on("queryResults", function() {
-                ui.data.onViewChange(models.map.selected);
-            });
-        models.map.maps.events
-            .on("moveEnd", function(map) {
-                ui.data.onViewChange(map);
-            })
-            .on("zoomEnd", function(map) {
-                ui.data.onViewChange(map);
-            });
-        */
-        /*
         if ( config.features.dataDownload ) {
-            // FIXME: This is a hack
-            models.map.events.on("projection", models.data.updateProjection);
+            models.data.events
+                .on("activate", function() {
+                    ui.sidebar.selectTab("download");
+                })
+                .on("queryResults", function() {
+                    ui.data.onViewChange(ui.map.selected);
+                });
+            ui.map.events
+                .on("moveEnd", function(map) {
+                    ui.data.onViewChange(map);
+                })
+                .on("zoomEnd", function(map) {
+                    ui.data.onViewChange(map);
+                });
+                // FIXME: This is a hack
+                models.map.events.on("projection", models.data.updateProjection);
         }
-        */
 
         // Sink all focus on inputs if click unhandled
         $(document).click(function(event) {

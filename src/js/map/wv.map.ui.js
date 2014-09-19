@@ -32,6 +32,8 @@ wv.map.ui = wv.map.ui || function(models, config) {
     // The map for the selected projection
     self.selected = null;
 
+    self.events = wv.util.events();
+
     var init = function() {
         _.each(config.projections, function(proj) {
             var map = createMap(proj);
@@ -575,10 +577,16 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 $zoomOut.button("enable");
             }
         });
-        map.events.register("moveend", null, updateExtent);
+        map.events.register("moveend", null, function() {
+            updateExtent();
+            self.events.trigger("moveEnd", map);
+        });
         map.events.register("movestart", null, purgeCache);
         map.events.register("preaddlayer", null, onAddLayer);
         map.events.register("preremovelayer", null, onRemoveLayer);
+        map.events.register("zoomend", null, function() {
+            self.events.trigger("zoomEnd", map);
+        });
         $map.hide();
 
         // Keep track of center point on projection switch
