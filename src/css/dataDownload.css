@@ -18,6 +18,17 @@
     margin-right: 20px;
 }
 
+#wv-data-download-button {
+    background: #585;
+    color: #fff;
+}
+
+#wv-data-download-button.ui-button-disabled {
+    background-color: #000;
+    color: #bebebe;
+    opacity: 1.0;
+}
+
 .action {
     display:block;
     width: 90%;
