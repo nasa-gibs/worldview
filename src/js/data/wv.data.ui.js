@@ -320,7 +320,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
             $("#" + productId + "dynamictext").html("" + count + " selected");
         });
         if ( downloadListPanel && downloadListPanel.visible() ) {
-            downloadListPanel.show();
+            downloadListPanel.refresh();
         }
 
     };
@@ -508,32 +508,29 @@ wv.data.ui.downloadListPanel = function(config, model) {
     self.events = wv.util.events();
 
     self.show = function() {
-        selection = reformatSelection();
-        var newPanel = false;
         $dialog = wv.ui.getDialog()
-            .attr("id", "wv-data-selection")
-            .html(bodyText(selection));
+            .attr("id", "wv-data-selection");
+
         $dialog.dialog({
             title: "Download Links",
             width: 600,
-            height: 400
+            height: 400,
+            autoOpen: false
         });
+        var $bottomPane = $("<div></div>")
+            .attr("id", "wv-data-bulk-download-links")
+            .addClass("ui-dialog-buttonpane")
+            .addClass("ui-widget-content")
+            .addClass("ui-helper-clearfix")
+            .html(bulkDownloadText());
+        $(".ui-dialog").append($bottomPane);
+        $dialog.dialog("open");
 
         $("#wv-data-selection a.wget").click(showWgetPage);
         $("#wv-data-selection a.curl").click(showCurlPage);
         $("#wv-data-selection .remove").click(removeGranule);
         $("#wv-data-selection tr").on("mouseenter", onHoverOver);
         $("#wv-data-selection tr").on("mouseleave", onHoverOut);
-
-        var bulkVisible = isBulkDownloadable() &&
-                _.size(model.selectedGranules) !== 0;
-        if ( bulkVisible ) {
-            $("#wv-data-selection .ft .bulk")
-                    .css("visibility", "visible");
-        } else {
-            $("#wv-data-selection .ft .bulk")
-                    .css("visibility", "hidden");
-        }
 
         $dialog.find(".collapse").accordion({
             collapsible: true,
@@ -546,6 +543,20 @@ wv.data.ui.downloadListPanel = function(config, model) {
         $dialog.on("dialogclose", function() {
             self.events.trigger("close");
         });
+        self.refresh();
+    };
+
+    self.refresh = function() {
+        console.log("refresh");
+        selection = reformatSelection();
+        $("#wv-data-selection").html(bodyText(selection));
+        var bulkVisible = isBulkDownloadable() &&
+                _.size(model.selectedGranules) !== 0;
+        if ( bulkVisible ) {
+            $("wv-data-bulk-download-links").show();
+        } else {
+            $("wv-data-bulk-download-links").hide();
+        }
     };
 
     self.hide = function() {
@@ -717,22 +728,20 @@ wv.data.ui.downloadListPanel = function(config, model) {
             "<h3>" + product.name + "</h3>"
         ];
 
-        if ( product.links && product.links.length > 0 ) {
-            elements.push("<div class='collapse'>");
-            elements.push("<h5>Data Collection Information</h5>");
-            elements.push("<div class='product'>");
-            elements.push(linksText(product.links));
-            elements.push("</div>");
-            elements.push("</div>");
-        }
-
-        //elements.push("<h5>Selected Data</h5>");
+        elements.push("<h5>Selected Data</h5>");
         elements.push("<table>");
 
         $.each(product.list, function(index, item) {
             elements.push(granuleText(product, item));
         });
         elements.push("</table>");
+
+        if ( product.links && product.links.length > 0 ) {
+            elements.push("<h5>Data Collection Information</h5>");
+            elements.push("<div class='product'>");
+            elements.push(linksText(product.links));
+            elements.push("</div>");
+        }
 
         return elements.join("\n");
     };
@@ -745,14 +754,11 @@ wv.data.ui.downloadListPanel = function(config, model) {
         if ( urs ) {
             elements.push(NOTICE);
         }
-        if ( isBulkDownloadable() ) {
-            elements.push(bulkDownloadText());
-        }
         var products = [];
         $.each(selection, function(key, product) {
             products.push(productText(product));
         });
-        elements.push(products.join("<br/>"));
+        elements.push(products.join("<br/><br/><br/>"));
         var text = elements.join("");
         return text;
     };
@@ -762,10 +768,10 @@ wv.data.ui.downloadListPanel = function(config, model) {
             "<div class='bulk collapse'>" +
             "<h5>Bulk Download</h5>" +
             "<ul class='BulkDownload'>" +
-            "<li><a class='wget' href='#'>List of Links:</a> " +
+            "<li><a class='wget' href='#'>List of Links</a>: " +
                 "for wget or download managers that accept a list of " +
                 "URLs</li>" +
-            "<li><a class='curl' href='#'>List of cURL Commands:</a> " +
+            "<li><a class='curl' href='#'>List of cURL Commands</a>: " +
                 "can be copied and pasted to " +
                 "a terminal window to download using cURL.</li>" +
             "</ul>" +

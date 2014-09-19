@@ -54,15 +54,18 @@
 }
 
 .wv-document a {
-    color: #eeeeee;
+    color: #8cf;
+    text-decoration: none;
 }
 
 .wv-document a:visted {
-    color: #eeeeee;
+    color: #8cf;
+    text-decoration: none;
 }
 
-.wv-document a:hover:link {
+.wv-document a:hover {
     color: #8cf;
+    text-decoration: none;
 }
 
 .wv-document .right {

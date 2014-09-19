@@ -157,7 +157,7 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
 #wv-toolbar li{
     display:inline-block;
     margin:0;
-    background:rgba(40,40,40,0.85);    
+    background:rgba(40,40,40,0.85);
     border:1px solid #333;
     border-radius:5px;
 }
@@ -235,8 +235,22 @@ border-radius:0;
     color: #000;
 }
 
+a {
+    color: #8cf;
+    text-decoration: none;
+}
+
+.ui-widget-content a {
+    color: #8cf;
+    text-docoration: none;
+}
+
 a:hover {
     color: #8cf;
+}
+
+.ui-menu-item a {
+    color: #fff;
 }
 
 .ui-accordion .ui-accordion-content {

@@ -49,6 +49,7 @@
 }
 
 #wv-data-selection li {
+    font: 100 10px/10px "Lucida Sans",Monaco,monospace;
     margin-top: 3px;
     display: list-item;
     list-style-type: none;
@@ -100,7 +101,6 @@
 #wv-data-selection td {
     border-bottom: 1px solid #404040;
     padding: 5px;
-    vertical-align: top;
 }
 
 #wv-data-selection .remove {
@@ -153,6 +153,28 @@
     padding: 0 0 0.5em 2.5em;
 }
 
+#wv-data-bulk-download-links {
+    border-top: 1px solid #bebebe;
+}
+
+#wv-data-bulk-download-links div.bulk {
+    padding: 10px;
+}
+
+#wv-data-bulk-download-links h5 {
+    font-size: 11pt;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    color: #FFFBE7;
+}
+
+#wv-data-bulk-download-links li {
+    list-style-type: disc;
+    margin-left: 10px;
+    display: list-item;
+    margin-top: 3px;
+}
+
 .wv-data-unavailable-header {
     color: #eeeeee;
     font-size: 12pt;
@@ -162,14 +184,12 @@
 
 #wv-data-selection-notice {
     width: 80%;
-    margin: 0 auto;
-    border-radius: 5px;
-    background-color: #eee;
+    margin: 0 auto 15px auto;
     padding: 5px;
 }
 
 #wv-data-selection-notice .icon {
-    color: #404040;
+    color: #fffbe7;
     width: 32px;
     height: 32px;
     float: left;
@@ -177,9 +197,10 @@
 
 #wv-data-selection-notice .text {
     margin-left: 47px;
-    color: #404040;
+    color: #fffbe7;
 }
 
+/*
 #wv-data-selection-notice .text a {
     color: #444;
 }
@@ -187,6 +208,7 @@
 #wv-data-selection-notice .text a:hover {
     color: #24d;
 }
+*/
 
 /*
 #DataDownload_GranuleList .button {
