@@ -525,14 +525,11 @@ wv.data.ui.downloadListPanel = function(config, model) {
             .html(bulkDownloadText());
         $(".ui-dialog").append($bottomPane);
         $(".ui-dialog .ui-dialog-titlebar-close").attr("tabindex", -1);
-        
+
         $dialog.dialog("open");
 
         $("#wv-data-selection a.wget").click(showWgetPage);
         $("#wv-data-selection a.curl").click(showCurlPage);
-        $("#wv-data-selection .remove").click(removeGranule);
-        $("#wv-data-selection tr").on("mouseenter", onHoverOver);
-        $("#wv-data-selection tr").on("mouseleave", onHoverOut);
 
         $dialog.find(".collapse").accordion({
             collapsible: true,
@@ -549,7 +546,6 @@ wv.data.ui.downloadListPanel = function(config, model) {
     };
 
     self.refresh = function() {
-        console.log("refresh");
         selection = reformatSelection();
         $("#wv-data-selection").html(bodyText(selection));
         var bulkVisible = isBulkDownloadable() &&
@@ -559,6 +555,9 @@ wv.data.ui.downloadListPanel = function(config, model) {
         } else {
             $("wv-data-bulk-download-links").hide();
         }
+        $("#wv-data-selection .remove").click(removeGranule);
+        $("#wv-data-selection tr").on("mouseenter", onHoverOver);
+        $("#wv-data-selection tr").on("mouseleave", onHoverOut);
     };
 
     self.hide = function() {
