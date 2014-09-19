@@ -543,6 +543,9 @@ wv.data.ui.downloadListPanel = function(config, model) {
                 activeHeader: "fa fa-caret-down fa-fw"
             }
         });
+        $dialog.on("dialogclose", function() {
+            self.events.trigger("close");
+        });
     };
 
     self.hide = function() {
