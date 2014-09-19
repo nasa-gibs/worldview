@@ -71,15 +71,13 @@ wv.link.ui = wv.link.ui || function(models, config) {
         item += "</div>";
         $dialog.html(item).iCheck({checkboxClass: 'icheckbox_square-grey'});
 
-        $('#permalink_content').val(models.link.get());
-
         // If selected during the animation, the cursor will go to the
         // end of the input box
         var updateLink  = function() {
-            $('#permalink_content').focus();
-            $('#permalink_content').select();
             $('#permalink_content').val(models.link.get());
             $("#wv-link-shorten-check").iCheck("uncheck");
+            $('#permalink_content').focus();
+            $('#permalink_content').select();
         };
 
         models.link.events.on("update", updateLink);
@@ -105,7 +103,10 @@ wv.link.ui = wv.link.ui || function(models, config) {
             of: $label
         });
         $(".ui-dialog").zIndex(600);
+
+        $('#permalink_content').val(models.link.get());
         $dialog.dialog("open");
+        setTimeout(updateLink, 500);
 
         //$("#wv-link-shorten-check").button();
         $("#wv-link-shorten-check").on("ifChanged", function() {
