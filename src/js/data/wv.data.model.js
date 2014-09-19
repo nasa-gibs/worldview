@@ -395,7 +395,7 @@ wv.data.model = wv.data.model || function(models, config) {
         // FIXME: This is a hack for now and should be cleaned up when
         // everything changes to models.
         var products = self.groupByProducts();
-        $.each(self.selectedGranules, function(index, selected) {
+        _.each(self.selectedGranules, function(selected) {
             if ( !products[selected.product] &&
                     !productActive(selected.product)) {
                 self.unselectGranule(selected);
@@ -405,13 +405,11 @@ wv.data.model = wv.data.model || function(models, config) {
 
     var productActive = function(product) {
         var active = false;
-        $.each(["baselayers", "overlays"], function(i, type) {
-            $.each(layersModel.active[type], function(j, layer) {
-                if ( layer.product === product ) {
-                    active = true;
-                    return false;
-                }
-            });
+        _.each(layersModel.active, function(layer) {
+            if ( layer.product === product ) {
+                active = true;
+                return false;
+            }
         });
         return active;
     };

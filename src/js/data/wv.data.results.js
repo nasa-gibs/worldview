@@ -358,9 +358,7 @@ wv.data.results.extentFilter = function(projection, extent) {
     };
 
     if ( !extent ) { throw new Error("No extent"); }
-    console.log("before", extent);
     extent = new OpenLayers.Bounds(extent);
-    console.log("extent", extent);
 
     return self;
 };
