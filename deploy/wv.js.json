@@ -1,0 +1,62 @@
+{
+    "wv.js": [
+        "web/js/wv.brand.js",
+
+        "web/js/util/wv.util.browser.js",
+        "web/js/util/wv.util.js",
+        "web/js/util/wv.util.load.js",
+        "web/js/util/wv.util.events.js",
+
+        "web/js/ui/wv.ui.js",
+        "web/js/ui/wv.ui.indicator.js",
+        "web/js/ui/wv.ui.info.js",
+
+        "web/js/proj/wv.proj.js",
+        "web/js/proj/wv.proj.change.js",
+        "web/js/proj/wv.proj.model.js",
+        "web/js/proj/wv.proj.ui.js",
+
+        "web/js/date/wv.date.js",
+        "web/js/date/wv.date.anim.js",
+        "web/js/date/wv.date.model.js",
+        "web/js/date/wv.date.sliders.js",
+        "web/js/date/wv.date.label.js",
+        "web/js/date/wv.date.timeline.js",
+
+        "web/js/layers/wv.layers.js",
+        "web/js/layers/wv.layers.metadata.js",
+        "web/js/layers/wv.layers.model.js",
+        "web/js/layers/wv.layers.sidebar.js",
+        "web/js/layers/wv.layers.active.js",
+        "web/js/layers/wv.layers.add.js",
+        "web/js/layers/wv.layers.options.js",
+
+        "web/js/image/wv.image.rubberband.js",
+        "web/js/image/wv.image.panel.js",
+
+        "web/js/palettes/wv.palettes.js",
+        "web/js/palettes/wv.palettes.legend.js",
+        "web/js/palettes/wv.palettes.model.js",
+
+        "web/js/data/wv.data.js",
+        "web/js/data/wv.data.echo.js",
+        "web/js/data/wv.data.handler.js",
+        "web/js/data/wv.data.layers.js",
+        "web/js/data/wv.data.map.js",
+        "web/js/data/wv.data.model.js",
+        "web/js/data/wv.data.results.js",
+        "web/js/data/wv.data.ui.js",
+
+        "web/js/map/wv.map.js",
+        "web/js/map/wv.map.model.js",
+        "web/js/map/wv.map.palette.js",
+        "web/js/map/wv.map.ui.js",
+
+        "web/js/link/wv.link.model.js",
+        "web/js/link/wv.link.ui.js",
+
+        "web/js/wv.tour.js",
+        "web/js/wv.debug.js",
+        "web/js/wv.main.js"
+    ]
+}
