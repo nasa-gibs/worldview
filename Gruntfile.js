@@ -84,7 +84,7 @@ module.exports = function(grunt) {
                       src: ["**"], dest: "web/brand" }
                 ]
             },
- 
+
             rpm_sources: {
                 files: [
                     { expand: true, cwd: "deploy/sources",
@@ -100,7 +100,7 @@ module.exports = function(grunt) {
                       dest: "build/rpmbuild/SOURCES" }
                 ]
             },
-     
+
             // Copies the source files to the build directory
             source: {
                 files: [{
@@ -255,12 +255,12 @@ module.exports = function(grunt) {
 
             tar_site_debug: {
                 command: "tar cjCf build dist/site-<%=grunt.option('packageName')%>-debug.tar.bz2 " +
-                            "site-worldview-debug"
+                            "site-<%=grunt.option('packageName')%>-debug"
             },
 
             tar_site_release: {
                 command: "tar cjCf build dist/site-<%=grunt.option('packageName')%>.tar.bz2 " +
-                            "site-worldview"
+                            "site-<%=grunt.option('packageName')%>"
             },
 
             tar_source_debug: {
@@ -425,7 +425,7 @@ module.exports = function(grunt) {
                     from: "@BUILD_NUMBER@",
                     to: buildNumber
                 }]
-            }, 
+            },
 
             tokens: {
                 src: [
