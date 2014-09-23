@@ -10,6 +10,13 @@
  */
 
 var fs = require("fs")
+var moment = require("moment");
+
+// Build date shown in the About box
+var buildTimestamp = moment.utc().format("MMMM DD, YYYY [-] HH:mm [UTC]");
+
+// Append to all URI references for cache busting
+var buildNonce = moment.utc().format("YYYYMMDDHHmmssSSS");
 
 module.exports = function(grunt) {
 
@@ -17,6 +24,8 @@ module.exports = function(grunt) {
         version: 0,
         release: 0
     };
+
+    var pkg = grunt.file.readJSON("package.json");
 
     if ( fs.existsSync("options/version.json") ) {
         options = grunt.file.readJSON("options/version.json");
@@ -33,7 +42,7 @@ module.exports = function(grunt) {
 
     grunt.initConfig({
 
-        pkg: grunt.file.readJSON('package.json'),
+        pkg: pkg,
         opt: options,
 
         buster: {
@@ -59,6 +68,13 @@ module.exports = function(grunt) {
         },
 
         copy: {
+            brand_info: {
+                files: [{
+                    src: "options/brand.json",
+                    dest: "build/options/brand.json"
+                }]
+            },
+
             config_src: {
                 files: [
                     { expand: true, cwd: "build/options/config",
@@ -111,6 +127,28 @@ module.exports = function(grunt) {
                 }]
             },
 
+            dist_site_debug_versioned: {
+                files: [{
+                    src: "dist/site-<%=grunt.option('packageName')%>-debug.tar.bz2",
+                    dest: "dist/site-<%=grunt.option('packageName')%>-debug" +
+                        "-<%=pkg.version%>" +
+                        "-<%=pkg.release%>" +
+                        ".git<%=grunt.config.get('source-revision')%>" +
+                        ".tar.bz2"
+                }]
+            },
+
+            dist_site_release_versioned: {
+                files: [{
+                    src: "dist/site-<%=grunt.option('packageName')%>.tar.bz2",
+                    dest: "dist/site-<%=grunt.option('packageName')%>" +
+                        "-<%=pkg.version%>" +
+                        "-<%=pkg.release%>" +
+                        ".git<%=grunt.config.get('source-revision')%>" +
+                        ".tar.bz2"
+                }]
+            },
+
             dist_source_debug_versioned: {
                 files: [{
                     src: "dist/worldview-debug.tar.bz2",
@@ -130,6 +168,26 @@ module.exports = function(grunt) {
                         "-<%=pkg.release%>" +
                         ".git<%= grunt.config.get('source-revision') %>" +
                         ".tar.bz2"
+                }]
+            },
+
+            site: {
+                files: [{
+                    expand: true, cwd: "build/worldview-debug",
+                    src: ["web/**"],
+                    dest: "build/site-<%=grunt.option('packageName')%>-debug"
+                },{
+                    expand: true, cwd: "build",
+                    src: ["options/**"],
+                    dest: "build/site-<%=grunt.option('packageName')%>-debug/web"
+                },{
+                    expand: true, cwd: "build/worldview",
+                    src: ["web/**"],
+                    dest: "build/site-<%=grunt.option('packageName')%>"
+                },{
+                    expand: true, cwd: "build",
+                    src: ["options/**"],
+                    dest: "build/site-<%=grunt.option('packageName')%>/web"
                 }]
             }
         },
@@ -164,6 +222,16 @@ module.exports = function(grunt) {
             tar_config: {
                 command: "tar cjCf build dist/worldview-config.tar.bz2 " +
                             "options"
+            },
+
+            tar_site_debug: {
+                command: "tar cjCf build dist/site-<%=grunt.option('packageName')%>-debug.tar.bz2 " +
+                            "site-worldview-debug"
+            },
+
+            tar_site_release: {
+                command: "tar cjCf build dist/site-<%=grunt.option('packageName')%>.tar.bz2 " +
+                            "site-worldview"
             },
 
             tar_source_debug: {
@@ -261,6 +329,18 @@ module.exports = function(grunt) {
             ],
             config_src: [
                 "web/config/**/*"
+            ],
+            build_source: [
+                "build/worldview",
+                "build/worldview-debug"
+            ],
+            build_config: [
+                "build/options",
+                "build/options-build"
+            ],
+            build_site: [
+                "build/site-<%=grunt.option('packageName')%>-debug",
+                "build/site-<%=grunt.option('packageName')%>",
             ]
         },
 
@@ -279,6 +359,38 @@ module.exports = function(grunt) {
                 }, {
                     from: /.*link.prod.*(!--|\/\*)(.*)(--|\*\/).*/g,
                     to: "$2"
+                }]
+            },
+
+            tokens: {
+                src: [
+                    "build/site-<%=grunt.option('packageName')%>-debug/**/*.html",
+                    "build/site-<%=grunt.option('packageName')%>-debug/**/*.js",
+                    "build/site-<%=grunt.option('packageName')%>/**/*.html",
+                    "build/site-<%=grunt.option('packageName')%>/**/*.js",
+                ],
+                overwrite: true,
+                replacements: [{
+                    from: "@OFFICIAL_NAME@",
+                    to: "<%=grunt.option('officialName')%>"
+                }, {
+                    from: "@LONG_NAME@",
+                    to: "<%=grunt.option('longName')%>"
+                },{
+                    from: "@NAME@",
+                    to: "<%=grunt.option('shortName')%>"
+                },{
+                    from: "@EMAIL@",
+                    to: "<%=grunt.option('email')%>"
+                },{
+                    from: "@BUILD_TIMESTAMP@",
+                    to: buildTimestamp
+                },{
+                    from: "@BUILD_VERSION@",
+                    to: "<%=pkg.version%>"
+                },{
+                    from: "@BUILD_NONCE@",
+                    to: buildNonce
                 }]
             },
         },
@@ -342,8 +454,27 @@ module.exports = function(grunt) {
     grunt.file.mkdir("build/rpmbuild");
     grunt.file.mkdir("dist");
 
+    grunt.registerTask("load_branding", "Load branding", function() {
+        var brand = grunt.file.readJSON("build/options/brand.json");
+        brand.officialName = brand.officialName || brand.name;
+        brand.longName = brand.longName || brand.name;
+        brand.shortName = brand.shortName || brand.name;
+        brand.packageName = grunt.option("package-name") || brand.packageName;
+        brand.email = brand.email || "support@example.com";
+
+        console.log("\n=========================================================");
+        console.log("[" + brand.packageName + "] " + brand.officialName +
+                ", Version " + pkg.version + "-" + pkg.release);
+        console.log("=========================================================");
+
+        grunt.option("officialName", brand.officialName);
+        grunt.option("longName", brand.longName);
+        grunt.option("shortName", brand.shortName);
+        grunt.option("packageName", brand.packageName);
+    });
+
     grunt.registerTask("build", [
-        "clean",
+        "remove:build_source",
         "git-rev-parse:source",
         "copy:source",
         "concat",
@@ -362,15 +493,28 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask("config", [
-        "clean",
+        "remove:build_config",
         "git-rev-parse:config",
         "remove:config_src",
         "exec:config",
         "markdown",
         "copy:config_src",
+        "copy:brand_info",
         "mkdir:dist",
         "exec:tar_config",
         "copy:dist_config_versioned"
+    ]);
+
+    grunt.registerTask("site", [
+        "load_branding",
+        "git-rev-parse:source",
+        "remove:build_site",
+        "copy:site",
+        "replace:tokens",
+        "exec:tar_site_debug",
+        "copy:dist_site_debug_versioned",
+        "exec:tar_site_release",
+        "copy:dist_site_release_versioned"
     ]);
 
     grunt.registerTask("check", ["lint", "test"]);
@@ -379,5 +523,5 @@ module.exports = function(grunt) {
     grunt.registerTask("lint", ["jshint:console"]);
     grunt.registerTask("test", ["buster:console"]);
 
-    grunt.registerTask("default", ["build"]);
+    grunt.registerTask("default", ["build", "config", "site"]);
 };
