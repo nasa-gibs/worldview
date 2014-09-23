@@ -83,7 +83,10 @@ module.exports = function(grunt) {
                         "!web/var/**"
                     ],
                     dest: "build/worldview-debug",
-                }]
+                }],
+                options: {
+                    mode: true
+                }
             },
 
             release: {
@@ -91,7 +94,10 @@ module.exports = function(grunt) {
                     expand: true, cwd: "build/worldview-debug",
                     src: ["**", "**/.htaccess"],
                     dest: "build/worldview"
-                }]
+                }],
+                options: {
+                    mode: true
+                }
             },
 
             dist_config_versioned: {
@@ -144,10 +150,6 @@ module.exports = function(grunt) {
         },
 
         exec: {
-            cgi: {
-                command: "chmod 755 build/*/web/service/*/*.cgi"
-            },
-
             config: {
                 command: "PATH=python/bin:${PATH} bin/wv-options-build"
             },
@@ -352,7 +354,6 @@ module.exports = function(grunt) {
         "cssmin",
         "replace:links",
         "lineremover",
-        "exec:cgi",
         "mkdir:dist",
         "exec:tar_source_debug",
         "copy:dist_source_debug_versioned",
