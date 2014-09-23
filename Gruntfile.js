@@ -9,7 +9,18 @@
  * All Rights Reserved.
  */
 
+var fs = require("fs")
+
 module.exports = function(grunt) {
+
+    var options = {
+        version: 0,
+        release: 0
+    };
+
+    if ( fs.existsSync("options/version.json") ) {
+        options = grunt.file.readJSON("options/version.json");
+    }
 
     // Lists of JavaScript and CSS files to include and in the correct
     // order
@@ -23,6 +34,7 @@ module.exports = function(grunt) {
     grunt.initConfig({
 
         pkg: grunt.file.readJSON('package.json'),
+        opt: options,
 
         buster: {
             console: {},
@@ -47,6 +59,15 @@ module.exports = function(grunt) {
         },
 
         copy: {
+            config_src: {
+                files: [
+                    { expand: true, cwd: "build/options/config",
+                      src: ["**"], dest: "web/config" },
+                    { expand: true, cwd: "build/options/brand",
+                      src: ["**"], dest: "web/brand" }
+                ]
+            },
+
             // Copies the source files to the build directory
             source: {
                 files: [{
@@ -73,13 +94,24 @@ module.exports = function(grunt) {
                 }]
             },
 
+            dist_config_versioned: {
+                files: [{
+                    src: "dist/worldview-config.tar.bz2",
+                    dest: "dist/worldview-config" +
+                        "-<%=opt.version%>" +
+                        "-<%=opt.release%>" +
+                        ".git<%= grunt.config.get('config-revision') %>" +
+                        ".tar.bz2"
+                }]
+            },
+
             dist_source_debug_versioned: {
                 files: [{
                     src: "dist/worldview-debug.tar.bz2",
                     dest: "dist/worldview-debug" +
                         "-<%=pkg.version%>" +
                         "-<%=pkg.release%>" +
-                        ".git<%= grunt.config.get('git-revision') %>" +
+                        ".git<%= grunt.config.get('source-revision') %>" +
                         ".tar.bz2"
                 }]
             },
@@ -90,7 +122,7 @@ module.exports = function(grunt) {
                     dest: "dist/worldview" +
                         "-<%=pkg.version%>" +
                         "-<%=pkg.release%>" +
-                        ".git<%= grunt.config.get('git-revision') %>" +
+                        ".git<%= grunt.config.get('source-revision') %>" +
                         ".tar.bz2"
                 }]
             }
@@ -116,11 +148,20 @@ module.exports = function(grunt) {
                 command: "chmod 755 build/*/web/service/*/*.cgi"
             },
 
+            config: {
+                command: "PATH=python/bin:${PATH} bin/wv-options-build"
+            },
+
             // After removing JavaScript and CSS files that are no longer
             // need in a release build, there are a lot of empty directories.
             // Remove all of them.
             empty: {
                 command: "find build -type d -empty -delete"
+            },
+
+            tar_config: {
+                command: "tar cjCf build dist/worldview-config.tar.bz2 " +
+                            "options"
             },
 
             tar_source_debug: {
@@ -132,13 +173,19 @@ module.exports = function(grunt) {
                 command: "tar cjCf build dist/worldview.tar.bz2 " +
                             "worldview"
             }
-
         },
 
         "git-rev-parse": {
-            build: {
+            source: {
                 options: {
-                    prop: 'git-revision',
+                    prop: "source-revision",
+                    number: 6
+                }
+            },
+            config: {
+                options: {
+                    prop: "config-revision",
+                    cwd: "options",
                     number: 6
                 }
             }
@@ -153,6 +200,37 @@ module.exports = function(grunt) {
                     src: ["**/web/**/*.html"],
                     dest: "build"
                 }]
+            }
+        },
+
+        markdown: {
+            metadata: {
+                files: [
+                    {
+                      expand: true,
+                      cwd: "build/options/config/metadata",
+                      src: "**/*.md",
+                      dest: "build/options/config/metadata",
+                      ext: ".html"
+                  },
+                ],
+                options: {
+                    template: "deploy/metadata.template.html"
+                }
+            },
+            new: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: "build/options/brand/pages",
+                        src: "**/*.md",
+                        dest: "build/options/brand/pages",
+                        ext: ".html"
+                    }
+                ],
+                options: {
+                    template: "deploy/new.template.html"
+                }
             }
         },
 
@@ -179,6 +257,9 @@ module.exports = function(grunt) {
                 "!build/worldview-debug/web/js/map/wv.map.tileworker.js",
                 "!build/worldview-debug/web/ext/**/*"
             ],
+            config_src: [
+                "web/config/**/*"
+            ]
         },
 
         replace: {
@@ -261,7 +342,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask("build", [
         "clean",
-        "git-rev-parse",
+        "git-rev-parse:source",
         "copy:source",
         "concat",
         "remove:source",
@@ -279,8 +360,21 @@ module.exports = function(grunt) {
         "copy:dist_source_release_versioned"
     ]);
 
+    grunt.registerTask("config", [
+        "clean",
+        "git-rev-parse:config",
+        "remove:config_src",
+        "exec:config",
+        "markdown",
+        "copy:config_src",
+        "mkdir:dist",
+        "exec:tar_config",
+        "copy:dist_config_versioned"
+    ]);
+
     grunt.registerTask("check", ["lint", "test"]);
-    grunt.registerTask("clean", ["remove:build", "remove:dist"]);
+    grunt.registerTask("clean", ["remove:build"]);
+    grunt.registerTask("distclean", ["remove:build", "remove:dist"]);
     grunt.registerTask("lint", ["jshint:console"]);
     grunt.registerTask("test", ["buster:console"]);
 
