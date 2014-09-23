@@ -6,15 +6,16 @@
 
 Name:		@WORLDVIEW@
 Version:	@BUILD_VERSION@
-Release:	@BUILD_RELEASE@%{?build_num}@GIT_REVISION@%{?dist}
+Release:	@BUILD_RELEASE@.@BUILD_NUMBER@.git@GIT_REVISION@%{?dist}
 Summary:	Browse full-resolution, near real-time satellite imagery.
 
 License:	Copyright NASA
 URL:		http://earthdata.nasa.gov
-Source0:	@WORLDVIEW@.tar.bz2
-Source1:	@WORLDVIEW@-debug.tar.bz2
-Source2:	httpd.@WORLDVIEW@.conf
-Source3:	httpd.@WORLDVIEW@-debug.conf
+Source0:	site-@WORLDVIEW@.tar.bz2
+Source1:	site-@WORLDVIEW@-debug.tar.bz2
+Source2:        worldview-config.tar.bz2
+Source3:	httpd.conf
+Source4:	httpd-debug.conf
 #Source4:	events_log.conf
 #Source4:	events_log-debug.conf
 #Source5:	cron.worldview
@@ -57,8 +58,11 @@ Non-minified version of	Worldview for debugging
 %setup -c -T
 tar xf %{SOURCE0}
 tar xf %{SOURCE1}
-cp %{SOURCE2} .
+tar xf %{SOURCE2}
+cp -r options/{brand,config} site-@WORLDVIEW@/web
+cp -r options/{brand,config} site-@WORLDVIEW@-debug/web
 cp %{SOURCE3} .
+cp %{SOURCE4} .
 #cp %{SOURCE4} .
 #cp %{SOURCE5} .
 #cp %{SOURCE6} .
@@ -72,36 +76,27 @@ cp %{SOURCE3} .
 %install
 rm -rf %{buildroot}
 
-chmod 755 @WORLDVIEW@/bin/*
-chmod 755 @WORLDVIEW@-debug/bin/*
+#chmod 755 @WORLDVIEW@/bin/*
+#chmod 755 @WORLDVIEW@-debug/bin/*
 
 # Apache configuration for release
 install -m 755 -d %{buildroot}/%{httpdconfdir}
-install -m 644 httpd.@WORLDVIEW@.conf \
+install -m 644 httpd.conf \
 	%{buildroot}/%{httpdconfdir}/@WORLDVIEW@.conf
-rm httpd.@WORLDVIEW@.conf
+rm httpd.conf
 
 # Apache configuration for debug
-install -m 644 httpd.@WORLDVIEW@-debug.conf \
+install -m 644 httpd-debug.conf \
 	%{buildroot}/%{httpdconfdir}/@WORLDVIEW@-debug.conf
-rm httpd.@WORLDVIEW@-debug.conf
-
-# Release options directory
-install -m 755 -d %{buildroot}/%{_sysconfdir}
-mv @WORLDVIEW@/options %{buildroot}/%{_sysconfdir}/@WORLDVIEW@
-ln -s %{_sysconfdir}/@WORLDVIEW@ @WORLDVIEW@/options
-
-# Debug options directory
-mv @WORLDVIEW@-debug/options %{buildroot}/%{_sysconfdir}/@WORLDVIEW@-debug
-ln -s %{_sysconfdir}/@WORLDVIEW@-debug @WORLDVIEW@-debug/options
+rm httpd-debug.conf
 
 # Release application
 install -m 755 -d %{buildroot}/%{_datadir}/@WORLDVIEW@
-cp -r @WORLDVIEW@/* %{buildroot}/%{_datadir}/@WORLDVIEW@
+cp -r site-@WORLDVIEW@/* %{buildroot}/%{_datadir}/@WORLDVIEW@
 
 # Debug application
 install -m 755 -d %{buildroot}/%{_datadir}/@WORLDVIEW@-debug
-cp -r @WORLDVIEW@-debug/* %{buildroot}/%{_datadir}/@WORLDVIEW@-debug
+cp -r site-@WORLDVIEW@-debug/* %{buildroot}/%{_datadir}/@WORLDVIEW@-debug
 
 #install -m 755 -d %{buildroot}/%{_sysconfdir}/@WORLDVIEW@
 #install -m 644 events_log.conf \
@@ -134,7 +129,6 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %{_datadir}/@WORLDVIEW@
 %config(noreplace) %{httpdconfdir}/@WORLDVIEW@.conf
-%{_sysconfdir}/@WORLDVIEW@
 #%config(noreplace) %{_sysconfdir}/@WORLDVIEW@/events_log.conf
 #%config(noreplace) %{_sysconfdir}/cron.d/@WORLDVIEW@
 #%config(noreplace) %{_sysconfdir}/logrotate.d/@WORLDVIEW@
@@ -147,7 +141,6 @@ rm -rf %{buildroot}
 %files debug
 %{_datadir}/@WORLDVIEW@-debug
 %config(noreplace) %{httpdconfdir}/@WORLDVIEW@-debug.conf
-%{_sysconfdir}/@WORLDVIEW@-debug
 #%config(noreplace) %{_sysconfdir}/@WORLDVIEW@-debug/events_log-debug.conf
 #%config(noreplace) %{_sysconfdir}/cron.d/@WORLDVIEW@-debug
 #%config(noreplace) %{_sysconfdir}/logrotate.d/@WORLDVIEW@-debug

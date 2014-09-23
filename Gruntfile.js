@@ -17,6 +17,7 @@ var buildTimestamp = moment.utc().format("MMMM DD, YYYY [-] HH:mm [UTC]");
 
 // Append to all URI references for cache busting
 var buildNonce = moment.utc().format("YYYYMMDDHHmmssSSS");
+var buildNumber = moment.utc().format("YYMMDDHHmmss");
 
 module.exports = function(grunt) {
 
@@ -83,7 +84,23 @@ module.exports = function(grunt) {
                       src: ["**"], dest: "web/brand" }
                 ]
             },
-
+ 
+            rpm_sources: {
+                files: [
+                    { expand: true, cwd: "deploy/sources",
+                      src: ["**"], dest: "build/rpmbuild/SOURCES" },
+                    { expand: true, cwd: "deploy",
+                      src: ["worldview.spec"], dest: "build/rpmbuild/SPECS" },
+                    { expand: true, cwd: "dist",
+                      src: [
+                          "site-<%=grunt.option('packageName')%>.tar.bz2",
+                          "site-<%=grunt.option('packageName')%>-debug.tar.bz2",
+                          "worldview-config.tar.bz2"
+                      ],
+                      dest: "build/rpmbuild/SOURCES" }
+                ]
+            },
+     
             // Copies the source files to the build directory
             source: {
                 files: [{
@@ -171,6 +188,13 @@ module.exports = function(grunt) {
                 }]
             },
 
+            rpm: {
+                files: [{
+                    expand: true, flatten: true, cwd: "build/rpmbuild",
+                    src: ["**/*.rpm"], dest: "dist"
+                }]
+            },
+
             site: {
                 files: [{
                     expand: true, cwd: "build/worldview-debug",
@@ -217,6 +241,11 @@ module.exports = function(grunt) {
             // Remove all of them.
             empty: {
                 command: "find build -type d -empty -delete"
+            },
+
+            rpmbuild: {
+                command: 'rpmbuild --define "_topdir $PWD/build/rpmbuild" ' +
+                             '-ba build/rpmbuild/SPECS/worldview.spec'
             },
 
             tar_config: {
@@ -309,6 +338,11 @@ module.exports = function(grunt) {
                 options: {
                     create: ["dist"]
                 }
+            },
+            rpmbuild: {
+                options: {
+                    create: ["build/rpmbuild"]
+                }
             }
         },
 
@@ -341,7 +375,13 @@ module.exports = function(grunt) {
             build_site: [
                 "build/site-<%=grunt.option('packageName')%>-debug",
                 "build/site-<%=grunt.option('packageName')%>",
-            ]
+            ],
+            dist_rpm: [
+                "dist/*.rpm"
+            ],
+            rpmbuild: [
+                "build/rpmbuild"
+            ],
         },
 
         replace: {
@@ -361,6 +401,31 @@ module.exports = function(grunt) {
                     to: "$2"
                 }]
             },
+
+            rpm_sources: {
+                src: [
+                    "build/rpmbuild/SOURCES/*",
+                    "build/rpmbuild/SPECS/*",
+                    "!**/*.tar.bz2"
+                ],
+                overwrite: true,
+                replacements: [{
+                    from: "@WORLDVIEW@",
+                    to: "<%=grunt.option('packageName')%>"
+                }, {
+                    from: "@BUILD_VERSION@",
+                    to: "<%=pkg.version%>"
+                }, {
+                    from: "@BUILD_RELEASE@",
+                    to: "<%=pkg.release%>"
+                }, {
+                    from: "@GIT_REVISION@",
+                    to: "<%=grunt.config.get('source-revision')%>"
+                }, {
+                    from: "@BUILD_NUMBER@",
+                    to: buildNumber
+                }]
+            }, 
 
             tokens: {
                 src: [
@@ -450,10 +515,6 @@ module.exports = function(grunt) {
     // Lets use "clean" as a target instead of the name of the task
     grunt.renameTask("clean", "remove");
 
-    // Make sure these directories exist
-    grunt.file.mkdir("build/rpmbuild");
-    grunt.file.mkdir("dist");
-
     grunt.registerTask("load_branding", "Load branding", function() {
         var brand = grunt.file.readJSON("build/options/brand.json");
         brand.officialName = brand.officialName || brand.name;
@@ -515,6 +576,18 @@ module.exports = function(grunt) {
         "copy:dist_site_debug_versioned",
         "exec:tar_site_release",
         "copy:dist_site_release_versioned"
+    ]);
+
+    grunt.registerTask("rpm-only", [
+        "load_branding",
+        "git-rev-parse:source",
+        "remove:rpmbuild",
+        "mkdir:rpmbuild",
+        "copy:rpm_sources",
+        "replace:rpm_sources",
+        "remove:dist_rpm",
+        "exec:rpmbuild",
+        "copy:rpm"
     ]);
 
     grunt.registerTask("check", ["lint", "test"]);
