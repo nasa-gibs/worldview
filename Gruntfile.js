@@ -202,7 +202,7 @@ module.exports = function(grunt) {
 
         jshint: {
             console: [
-                "src/js/**/wv.*.js",
+                "web/js/**/wv.*.js",
                 "test/**/*.js",
             ],
             report: {
@@ -211,7 +211,7 @@ module.exports = function(grunt) {
                 },
                 files: {
                     src: [
-                        "src/js/**/wv.*.js",
+                        "web/js/**/wv.*.js",
                         "test/**/*.js",
                     ]
                 }
