@@ -514,7 +514,7 @@ wv.data.ui.downloadListPanel = function(config, model) {
         $dialog.dialog({
             title: "Download Links",
             width: 600,
-            height: 400,
+            height: 500,
             autoOpen: false
         });
         var $bottomPane = $("<div></div>")
