@@ -48,15 +48,12 @@ wv.link.ui = wv.link.ui || function(models, config) {
         models.link.events.on("update", replaceHistoryState);
     };
 
-    var replaceHistoryState = function() {};
-    /*
     var replaceHistoryState = _.throttle(function() {
         if ( wv.util.browser.history ) {
             window.history.replaceState("", "@OFFICIAL_NAME@",
                     "?" + models.link.toQueryString());
         }
     }, 250, {trailing: true});
-    */
 
     self.show = function() {
         var $dialog = wv.ui.getDialog();
