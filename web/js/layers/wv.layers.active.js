@@ -182,7 +182,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                 wv.layers.options(config, models, layer);
             });
         $layer.append($gearButton);
-        
+
         var names = models.layers.getTitles(layer.id);
         $layer.append($('<div></div>')
                       .addClass('layer-main')

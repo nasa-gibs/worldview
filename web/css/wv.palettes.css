@@ -22,7 +22,11 @@
     margin-bottom: 1px;
 }
 
-.wv-palette-selector-row span {
+.wv-palette-selector-row label {
+    margin-left: 10px;
+}
+
+.wv-palette-label {
     margin-left: 10px;
     vertical-align: middle;
 }

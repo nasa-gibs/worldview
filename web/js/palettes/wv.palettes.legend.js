@@ -47,12 +47,16 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
     };
 
     var render = function() {
+        if ( !loaded ) {
+            return;
+        }
         var $parent = $(selector);
         var paletteId = layer.palette.id;
         var palette = config.palettes.rendered[paletteId];
 
         var $legendPanel = $("<div></div>")
-                .addClass("wv-palettes-panel");
+                .addClass("wv-palettes-panel")
+                .attr("data-layer", layer.id);
         $parent.append($legendPanel);
         if ( palette.scale ) {
             renderScale($legendPanel, palette);
@@ -99,6 +103,28 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
                 .attr("title", "X");
         $legendPanel.append($panel);
 
+        $panel.tooltip({
+            position: {
+                my: "left middle",
+                at: "right+15 middle",
+                of: $panel
+            },
+            content: "X"
+        });
+        updateClasses(palette);
+    };
+
+    var updateClasses = function(palette) {
+        var $panel = $(selector + " .wv-palettes-classes");
+        $panel.empty();
+        _.each(palette.classes.colors, function(color, index) {
+            $panel.append($("<span></span>")
+                .attr("data-index", index)
+                .addClass("wv-palettes-class")
+                .html("&nbsp;")
+                .css("background-color", wv.util.hexToRGB(color))
+                .hover(highlightClass, unhighlightClass));
+        });
         var $detailPanel = $("<div></div>");
         _.each(palette.classes.colors, function(color, index) {
             var $row = $("<div></div>")
@@ -116,32 +142,15 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
                     .html(palette.classes.labels[index]));
             $detailPanel.append($row);
         });
-
-        $panel.tooltip({
-            position: {
-                my: "left middle",
-                at: "right+15 middle",
-                of: $panel
-            },
-            content: $detailPanel.html()
-        });
-    };
-
-    var updateClasses = function(palette) {
-        var $panel = $(selector + " .wv-palettes-classes");
-        $panel.empty();
-        _.each(palette.classes.colors, function(color, index) {
-            $panel.append($("<span></span>")
-                .attr("data-index", index)
-                .addClass("wv-palettes-class")
-                .html("&nbsp;")
-                .css("background-color", wv.util.hexToRGB(color))
-                .hover(highlightClass, unhighlightClass));
-        });
+        $panel.tooltip("option", "content", $detailPanel.html());
     };
 
     self.update = function() {
         if ( !loaded ) {
+            return;
+        }
+        if ( !rendered ) {
+            render();
             return;
         }
         var palette = model.get(layer.id);

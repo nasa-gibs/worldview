@@ -29,6 +29,29 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
     self.events = wv.util.events();
     self.active = {};
 
+    self.type = function(layerId) {
+        var palette = models.palettes.get(layerId);
+        if ( !palette ) {
+            return;
+        }
+        if ( palette.scale ) {
+            return "scale";
+        }
+        if ( palette.classes && palette.classes.colors.length === 1 ) {
+            return "single";
+        }
+        if ( palette.lookup ) {
+            return ( _.size(palette.lookup) === 1 ) ? "single" : "scale";
+        }
+    };
+
+    self.allowed = function(layerId) {
+        if ( !wv.palettes.supported ) {
+            return false;
+        }
+        return self.type(layerId);
+    };
+
     self.setCustom = function(layerId, paletteId) {
         if ( !config.palettes.custom[paletteId] ) {
             throw new Error("Invalid palette: " + paletteId);
@@ -56,6 +79,9 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
                 updateLookup(layerId, def);
             } else {
                 delete def.lookup;
+            }
+            if ( !def.custom && !def.lookup ) {
+                delete self.active[layerId];
             }
             self.events.trigger("clear-custom", layerId);
             self.events.trigger("change");
@@ -215,7 +241,10 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
             def.lookup = null;
             return;
         }
-
+        if ( models.palettes.type(layerId) === "single" ) {
+            updateLookupSingle(layerId, def);
+            return;
+        }
         var layerDef = config.layers[layerId];
         var source = config.palettes.rendered[layerDef.palette.id];
         var target;
@@ -271,6 +300,38 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
             };
             lookup[sourceEntry] = targetEntry;
         });
+        def.lookup = lookup;
+    };
+
+    var updateLookupSingle = function(layerId, def) {
+        var layerDef = config.layers[layerId];
+        var source = config.palettes.rendered[layerDef.palette.id];
+        var target;
+        if ( def.custom ) {
+            target = config.palettes.custom[def.custom].colors;
+        } else {
+            target = source.colors;
+        }
+        var lookup = {};
+        var sourceColor = source.classes.colors[0];
+        var targetColor = target[0];
+
+        var sourceEntry =
+            parseInt(sourceColor.substring(0, 2), 16) + "," +
+            parseInt(sourceColor.substring(2, 4), 16) + "," +
+            parseInt(sourceColor.substring(4, 6), 16) + "," +
+            parseInt(sourceColor.substring(6, 8), 16);
+        var targetEntry = {
+            r: parseInt(targetColor.substring(0, 2), 16),
+            g: parseInt(targetColor.substring(2, 4), 16),
+            b: parseInt(targetColor.substring(4, 6), 16),
+            a: parseInt(targetColor.substring(6, 8), 16)
+        };
+        def.classes = {
+            colors: [targetColor],
+            labels: [source.classes.labels[0]]
+        }
+        lookup[sourceEntry] = targetEntry;
         def.lookup = lookup;
     };
 

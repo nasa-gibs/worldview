@@ -142,7 +142,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
             .addClass("arrow")
             .attr("title", "Hide");
         $collapseContainer.append($collapseButton);
-       
+
         $container.append($collapseContainer);
 
         $container.append($("<div id='products'></div>"))

@@ -446,6 +446,10 @@ wv.map.ui = wv.map.ui || function(models, config) {
         var mapOptions = {
             tileSize: new OpenLayers.Size(512, 512)
         };
+        if ( models.palettes.active[def.id] ) {
+            mapOptions.tileClass = wv.map.palette.canvasTile;
+            mapOptions.lookupTable = models.palettes.active[def.id].lookup;
+        }
         var layer = new OpenLayers.Layer.WMS(def.title, source.url,
                 params, mapOptions);
         return layer;

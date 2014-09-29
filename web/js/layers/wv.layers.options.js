@@ -40,9 +40,10 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         renderOpacity($dialog);
 
         if ( config.features.customPalettes ) {
-            var palette = models.palettes.get(layer.id);
-            if ( palette && palette.scale ) {
-                renderRange($dialog);
+            if ( models.palettes.allowed(layer.id) ) {
+                if ( models.palettes.type(layer.id) === "scale" ) {
+                    renderRange($dialog);
+                }
                 renderPaletteSelector($dialog);
             }
         }
@@ -200,20 +201,26 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         var $pane = $("<div><span autofocus></span>Color palette</div>")
             .attr("id", "wv-palette-selector")
             .addClass("wv-header");
+        var palette = models.palettes.get(layer.id);
         $pane.append(defaultPalette());
         var recommended = layer.palette.recommended || [];
         _.each(recommended, function(id) {
-            $pane.append(customPalette(id));
+            var item = customPalette(id);
+            if ( item ) {
+                $pane.append(item);
+            }
         });
         _.each(config.paletteOrder, function(id) {
             if ( _.indexOf(recommended, id) < 0 ) {
-                $pane.append(customPalette(id));
+                var item = customPalette(id);
+                if ( item ) {
+                    $pane.append(item);
+                }
             }
         });
         $dialog.append($pane);
         $pane.jScrollPane();
 
-        var palette = models.palettes.get(layer.id);
         if ( palette.custom ) {
             var index = $(".wv-palette-selector-row input[data-palette='" +
                     palette.custom + "']").iCheck("check");
@@ -246,12 +253,12 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         }
     };
 
-    var selectorItem = function(palette, id, description) {
+    var selectorItemScale = function(palette, id, description) {
         wv.palettes.colorbar(canvas, palette);
 
         var $row = $("<div></div>")
                 .addClass("wv-palette-selector-row");
-        var $radio = $("<input></input")
+        var $radio = $("<input></input>")
                 .attr("type", "radio")
                 .attr("id", "wv-palette-radio-" + id)
                 .attr("name", "wv-palette-radio")
@@ -262,6 +269,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         var $image = $("<img></img>")
                 .attr("src", canvas.toDataURL("image/png"));
         var $description = $("<span></span>")
+                .addClass("wv-palette-label")
                 .html(description);
         $label.append($image);
         $label.append($description);
@@ -272,18 +280,57 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         return $row;
     };
 
+    var selectorItemSingle = function(palette, id, description) {
+        var $row = $("<div></div>")
+            .addClass("wv-palette-selector-row");
+        var $radio = $("<input></input>")
+            .attr("type", "radio")
+            .attr("id", "wv-palette-radio-" + id)
+            .attr("name", "wv-palette-radio")
+            .attr("data-palette", id);
+
+        var color = ( palette.classes ) ? palette.classes.colors[0] : palette.colors[0];
+        var $label = $("<label></label>")
+            .attr("for", "wv-palette-radio-" + id);
+        var $image = $("<span></span>")
+            .addClass("wv-palettes-class")
+            .css("background-color", wv.util.hexToRGB(color))
+            .html("&nbsp;");
+        var $description = $("<span></span>")
+            .html(description)
+            .addClass("wv-palette-label");
+        $label.append($image)
+        $label.append($description);
+
+        $row.append($radio);
+        $row.append($label);
+
+        return $row;
+    };
+
     var defaultPalette = function() {
         var palette = config.palettes.rendered[layer.palette.id];
-        return selectorItem(palette, "__default", "Default");
+        if ( models.palettes.type(layer.id) === "scale" ) {
+            return selectorItemScale(palette, "__default", "Default");
+        } else {
+            return selectorItemSingle(palette, "__default", "Default");
+        }
     };
 
     var customPalette = function(id) {
-        var sourcePalette = config.palettes.rendered[layer.palette.id];
         var targetPalette = config.palettes.custom[id];
-        var translatedPalette =
-                wv.palettes.translate(sourcePalette.scale, targetPalette);
+        var sourceType = models.palettes.type(layer.id);
+        var targetType = ( targetPalette.colors.length === 1 ) ? "single" : "scale";
 
-        return selectorItem(translatedPalette, id, targetPalette.name);
+        if ( sourceType === "scale" && targetType === "scale" ) {
+            var sourcePalette = config.palettes.rendered[layer.palette.id];
+            var translatedPalette =
+                    wv.palettes.translate(sourcePalette.scale, targetPalette);
+            return selectorItemScale(translatedPalette, id, targetPalette.name);
+        }
+        if ( sourceType === "single" && targetType === "single" ) {
+            return selectorItemSingle(targetPalette, id, targetPalette.name);
+        }
     };
 
     var onLayerRemoved = function(removedLayer) {

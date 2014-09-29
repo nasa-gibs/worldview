@@ -184,8 +184,7 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
         if ( type === "gibs" && layer.period === "daily" && layer.type === "wmts" ) {
             return true;
         }
-        if ( type === "palettes" && layer.palette && !layer.palette.single &&
-                layer.type !== "wms" ) {
+        if ( type === "palettes" && layer.palette && !layer.palette.immutable ) {
             return true;
         }
         if ( type === "dataDownload" && layer.product ) {
@@ -252,7 +251,11 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
                 if ( layer.palette.recommended ) {
                     models.palettes.setCustom(layerId, layer.palette.recommended[0]);
                 } else {
-                    models.palettes.setCustom(layerId, "rainbow_2");
+                    if ( models.palettes.type(layerId) === "scale" ) {
+                        models.palettes.setCustom(layerId, "rainbow_2");
+                    } else {
+                        models.palettes.setCustom(layerId, "blue");
+                    }
                 }
             });
         }
