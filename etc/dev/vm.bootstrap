@@ -1,9 +1,16 @@
 #!/bin/bash
 
 set -e
-set -x
 
-yum install -y http://mirrors.kernel.org/fedora-epel/7/x86_64/e/epel-release-7-1.noarch.rpm
+cd /vagrant
+if [ ! -d options ] ; then
+    echo "ERROR: options directory does not exist" >&2
+    exit 1
+fi
+
+if ! rpm -q epel-release; then
+    yum install -y http://mirrors.kernel.org/fedora-epel/7/x86_64/e/epel-release-7-2.noarch.rpm
+fi
 
 yum install -y \
     httpd \
@@ -12,19 +19,15 @@ yum install -y \
     npm \
     python-virtualenv
 
-cd /vagrant
-
 # The certificate used for npmjs.org has changed and it is not recognized by
 # the bundled CA: https://github.com/npm/npm-www/issues/185
 #
 # Workaround is to not verify ssl certificate:
 #npm config set strict-ssl false
 
-if [ ! -d options ] ; then
-    git clone https://github.com/nasa-gibs/worldview-options-eosdis.git options
-fi
 npm install -g grunt-cli
 npm install
+rm -rf python
 ./wv-python
 grunt
 grunt apache-config

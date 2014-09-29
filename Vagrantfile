@@ -5,7 +5,7 @@
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box = "hfm4/centos7"
+  config.vm.box = "matyunin/centos7"
   config.vm.provision :shell, path: "etc/dev/vm.bootstrap"
   config.vm.hostname = "worldview"
   config.vm.network "forwarded_port", guest: 80, host: 8182
