@@ -330,7 +330,7 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
         def.classes = {
             colors: [targetColor],
             labels: [source.classes.labels[0]]
-        }
+        };
         lookup[sourceEntry] = targetEntry;
         def.lookup = lookup;
     };

@@ -299,7 +299,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         var $description = $("<span></span>")
             .html(description)
             .addClass("wv-palette-label");
-        $label.append($image)
+        $label.append($image);
         $label.append($description);
 
         $row.append($radio);
