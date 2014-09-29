@@ -201,16 +201,16 @@ module.exports = function(grunt) {
                     src: ["web/**"],
                     dest: "build/site-<%=grunt.option('packageName')%>-debug"
                 },{
-                    expand: true, cwd: "build",
-                    src: ["options/**"],
+                    expand: true, cwd: "build/options",
+                    src: ["**"],
                     dest: "build/site-<%=grunt.option('packageName')%>-debug/web"
                 },{
                     expand: true, cwd: "build/worldview",
                     src: ["web/**"],
                     dest: "build/site-<%=grunt.option('packageName')%>"
                 },{
-                    expand: true, cwd: "build",
-                    src: ["options/**"],
+                    expand: true, cwd: "build/options",
+                    src: ["**"],
                     dest: "build/site-<%=grunt.option('packageName')%>/web"
                 }]
             }
@@ -381,7 +381,7 @@ module.exports = function(grunt) {
             ],
             rpmbuild: [
                 "build/rpmbuild"
-            ],
+            ]
         },
 
         replace: {
