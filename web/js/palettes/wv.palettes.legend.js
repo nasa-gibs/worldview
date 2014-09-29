@@ -47,9 +47,6 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
     };
 
     var render = function() {
-        if ( !loaded ) {
-            return;
-        }
         var $parent = $(selector);
         var paletteId = layer.palette.id;
         var palette = config.palettes.rendered[paletteId];
@@ -147,10 +144,6 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
 
     self.update = function() {
         if ( !loaded ) {
-            return;
-        }
-        if ( !rendered ) {
-            render();
             return;
         }
         var palette = model.get(layer.id);
