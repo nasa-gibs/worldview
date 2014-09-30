@@ -38,20 +38,19 @@
 }
 
 .wv-palettes-ranges {
-	margin-top: -6px;
-	width: 100%;
+    margin-top: -6px;
+    width: 100%;
 }
 
-.wv-palettes-min {
-    font-size: 0.8em;
-    float: left;
-    white-space: nowrap;
+.wv-palettes-min, .wv-palettes-max{
+    font-size:0.8em;
+    white-space:nowrap;
 }
-
+.layer-hidden .wv-palettes-min, .layer-hidden .wv-palettes-max{
+    color:#999;
+}
 .wv-palettes-max {
-    font-size: 0.8em;
     float: right;
-    white-space: nowrap;
 }
 
 /* FIXME: Too specific */

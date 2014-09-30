@@ -9,18 +9,59 @@
  * All Rights Reserved.
  */
 
-#productsHolder {
-    border: 1px solid #333;
+#products .categoryContainer, #productsHoldertabs, #selectorbox,#wv-data{
+    background:none repeat scroll 0% 0% rgba(40, 40, 40, 0.85);
+    box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+    -o-box-sizing:border-box;
+    border-left:1px solid #333;
+    border-right:1px solid #333;
+        
+}
+#products, #selectorbox, #selectorboxcontent{
+    margin-bottom:-10px;
+}
+#products .categoryContainer:last-child, #selectorbox, #wv-data{
+    padding-bottom:10px;
+    border-bottom:1px solid #333;
     border-bottom-left-radius:5px;
     border-bottom-right-radius:5px;
 }
-
-#productsHoldertabs {
-    background: rgba(0, 0, 0, 0);
+#productsHoldertabs{
+    width:100%;
+    border-top:1px solid #333;
+    border-left:1px solid #333;
+    border-right:1px solid #333;
     padding: 0;
-    border-top: 0;
-    border-left: 0;
-    border-right: 0;
+}
+
+#productsHolder-wrapper {
+    z-index:2;
+    min-width:286px;
+    width:286px;
+    position:absolute;
+    left:10px;
+    top:68px;
+    -webkit-box-sizing:border-box;
+    -o-box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    box-sizing:border-box;
+}
+#productsHolder-wrapper .accordionToggler{
+    display:block;
+    height:10px;
+}
+
+#productsHolder {
+    height:100%;
+    overflow:hidden;
+    padding:0;
+/*    border: 1px solid #333;
+    border-bottom-left-radius:5px;
+    border-bottom-right-radius:5px;
+*/
+    background: none;
 }
 
 #productsHoldertabs .ui-state-default {
@@ -44,4 +85,114 @@
 
 #productsHolder .ui-tabs-panel {
     padding: 0;
+}
+
+/*  Layer options */
+
+.bank li.item.productsitem, .bank li.itemstatic{
+    padding:0;
+    min-height:40px;
+    box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+    -o-box-sizing:border-box;
+    position:relative;
+    border:1px solid transparent;
+}
+.bank li.item.productsitem:hover{
+    border-color:#fff;
+}
+
+.productsitem a.hdanchor.hideReg{
+    width:30px;
+    background-color:#ccc;
+    position:absolute;
+    top:0;
+    bottom:0;
+    cursor:pointer;
+}
+.productsitem.layer-visible a.hdanchor:hover {
+    background:#fff;
+}
+.productsitem a.hdanchor.hideReg i{
+    width:21px;
+    height:12px;
+    background:url('../images/wv.layers/show-hide.png') no-repeat 0 0 transparent;
+    position:absolute;
+    top:50%;
+    margin-top:-6px;
+    left:50%;
+    margin-left:-10.5px;
+    pointer-events:none;
+}
+.productsitem.layer-visible a.hdanchor.hideReg i{
+    background-position:0 0;
+}
+.productsitem.layer-hidden a.hdanchor.hideReg i{
+    background-position:-42px 0;
+}
+
+i.wv-layers-options-button{
+    display:none;
+}
+.productsitem a.button.close {
+    display:block;
+    float:right;
+    width:20px;
+    height:20px;
+    position:relative;
+    cursor:pointer;
+
+    
+}
+.bank li.item.productsitem:hover a.button.close{
+    display:block;
+}
+.productsitem.layer-visible a.button.close:hover{
+    background-color:#fff;
+}
+.productsitem.layer-hidden a.button.close:hover{
+    background:#fff;
+}
+
+.productsitem a.button.close i {
+    background:url('../images/wv.layers/show-hide.png') no-repeat 0 -24px;
+    width:12px;
+    height:12px;
+    pointer-events:none;
+    position:absolute;
+    top:50%;
+    margin-top:-6px;
+    left:50%;
+    margin-left:-6px;
+}
+.productsitem.layer-hidden a.button.close i{
+    background-position:-21px -24px;
+}
+.productsitem.layer-hidden a.button.close:hover i{
+    background-position:0px -24px;
+}
+.productsitem .layer-main{
+    width:auto;
+    background-color:#ccc;
+    margin-left:31px;
+    cursor:pointer;
+    min-height:40px;
+  
+
+}
+.productsitem.layer-hidden .layer-main, .productsitem.layer-hidden a.hdanchor {
+    background:rgba(60,60,60,0.6);
+}
+.productsitem.layer-hidden .layer-main:hover, .productsitem.layer-hidden a.hdanchor:hover{
+    background:rgba(90,90,90,1);
+}
+.productsitem.layer-visible .layer-main:hover{
+    background-color:#fff;
+}
+.productsitem.layer-hidden .layer-main h4, .productsitem.layer-hidden .layer-main p{
+    color:#999;
+}
+.bank .layer-main h4, .bank .layer-main p{
+    padding:0;
 }

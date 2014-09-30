@@ -159,10 +159,14 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
     };
 
    var resize = function() {
+
+       var productsWrapperHeight = $(window).height() - $('#timeline').outerHeight() - $('#wv-logo').outerHeight() - 40; // 40 padding
+       $('#productsHolder-wrapper').css('height', productsWrapperHeight);
+
         var tabs_height = $(".ui-tabs-nav").outerHeight(true);
         var button_height = $(self.selector + "_Button").outerHeight(true);
         $(self.selector).height(
-            $(self.selector).parent().outerHeight() - tabs_height - button_height
+            $(self.selector).parent().parent().outerHeight() - tabs_height - button_height
         );
 
         var $pane = $(self.selector + "content");

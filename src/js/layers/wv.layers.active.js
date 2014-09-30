@@ -26,8 +26,8 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     var jsp;
     var legends = {};
 
-    var ICON_VISIBLE = "images/visible.png";
-    var ICON_HIDDEN = "images/invisible.png";
+//    var ICON_VISIBLE = "images/wv.layers/show-hide.png";
+//    var ICON_HIDDEN = "images/wv.layers/show-hide.png";
 
     var self = {};
     self.id = "products";
@@ -59,7 +59,10 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         legends = {};
         var $container = $(self.selector);
         $container.empty();
-
+/*
+        var productsWrapperHeight = $(window).height() - $('#timeline').outerHeight() - $('#wv-logo').outerHeight() - 40; // 40 padding
+        $('#productsHolder-wrapper').css('height', productsWrapperHeight);
+        */
         var tabs_height = $(".ui-tabs-nav").outerHeight(true);
         $container.addClass('bank');
         $container.height(
@@ -68,6 +71,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
         _.each(groups, function(group) {
             renderGroup($container, group);
+            //console.log("group rendered");
         });
 
         $(self.selector).undelegate(".close" ,'click');
@@ -92,7 +96,18 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             }
         });
 
+
         setTimeout(resize, 1);
+/*        console.log('$$$$$$$$$$$$$$$$$$$$');
+        console.log();
+
+
+        $container.css('max-height',
+            $(self.selector).parent().parent().outerHeight() - tabs_height
+        ).css('height',
+             $($(self.selector).children()[0]).height() + $($(self.selector).children()[1]).height()
+             );
+*/
     };
 
     var renderGroup = function($parent, group) {
@@ -124,42 +139,43 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             .attr("id", group.id + "-" + encodeURIComponent(layer.id))
             .addClass(self.id + "item")
             .addClass("item")
-            .attr("data-layer", layer.id);
+            .attr("data-layer", layer.id);            
 
         var $removeButton = $("<a></a>")
-            .addClass("button");
-        var $removeImage = $("<img></img>")
             .attr("id", "close" + group.id + encodeURIComponent(layer.id))
-            .addClass("close")
-            .addClass("bank-item-img")
+            .addClass("button close bank-item-img")
             .attr("data-layer", layer.id)
-            .attr("title", "Remove Layer")
-            .attr("src", "images/close-x.png");
+            .attr("title", "Remove Layer");
+        var $removeImage = $("<i></i>");
+        
         $removeButton.append($removeImage);
         $layer.append($removeButton);
 
         var $visibleButton = $("<a></a>")
-            .addClass("hdanchor")
-            .addClass("button");
-        var $visibleImage = $("<img></img>")
+            .addClass("hdanchor hide hideReg bank-item-img")
             .attr("id", "hide" + encodeURIComponent(layer.id))
-            .attr("data-layer", layer.id)
-            .addClass("hide")
-            .addClass("hideReg")
-            .addClass("bank-item-img");
-        if ( !layer.visible ) {
-            $visibleImage
-                .attr("title", "Show Layer")
-                .attr("data-action", "show")
-                .attr("src", ICON_HIDDEN);
-        } else {
-            $visibleImage
-                .attr("title", "Hide Layer")
-                .attr("data-action", "hide")
-                .attr("src", ICON_VISIBLE);
-        }
+            .attr("data-layer", layer.id);
+
+
+        var $visibleImage = $("<i></i>");
+
+
         $visibleButton.append($visibleImage);
         $layer.append($visibleButton);
+
+        if ( !layer.visible ) {
+            $visibleButton
+                .attr("title", "Show Layer")
+                .attr("data-action", "show")
+                .parent()
+                .addClass("layer-hidden");
+        } else {
+            $visibleButton
+                .attr("title", "Hide Layer")
+                .attr("data-action", "hide")
+                .parent()
+                .addClass("layer-visible");
+        }
 
         if ( config.parameters.metadata && layer.metadata ) {
             var $metadataButton = $("<i></i>")
@@ -172,7 +188,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                 });
             $layer.append($metadataButton);
         }
-
+/*
         var $gearButton = $("<i></i>")
             .addClass("fa")
             .addClass("fa-gear")
@@ -182,13 +198,19 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                 wv.layers.options(config, models, layer);
             });
         $layer.append($gearButton);
-        
+*/
         var names = models.layers.getTitles(layer.id);
-        $layer.append($('<div></div>')
-                      .addClass('layer-main')
-                      .append($("<h4></h4>").html(names.title))
-                      .append($("<p></p>").html(names.subtitle))
-                     );
+        var mainLayerDiv = $('<div></div>')
+            .addClass('layer-main')
+            .toggle(function() {
+                wv.layers.options(config, models, layer);
+            },function(){
+                wv.ui.closeDialog('wv-layers-options-dialog');
+            })
+            .append($('<h4></h4>').html(names.title))
+            .append($('<p></p>').html(names.subtitle));
+            
+        $layer.append(mainLayerDiv);
 
         if ( layer.palette ) {
             renderLegend($layer.find('.layer-main'), group, layer);
@@ -282,11 +304,30 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                     .jScrollPane({autoReinitialise: false, verticalGutter:0});
             }
         }
-
+/*
+        //resize wrapper
+        var productsWrapperHeight = $(window).height() - $('#timeline').outerHeight() - $('#wv-logo').outerHeight() - 40; // 40 padding
+        $('#productsHolder-wrapper').css('height', productsWrapperHeight);
+*/
         var tabs_height = $(".ui-tabs-nav").outerHeight(true);
         $(self.selector).height(
             $(self.selector).parent().outerHeight() - tabs_height
         );
+/*
+        $(self.selector).css('max-height',
+            $(self.selector).parent().parent().outerHeight() - tabs_height
+                            )
+        .css('height',
+             $($(self.selector).children()[0]).height() + $($(self.selector).children()[1]).height()
+            );
+
+        //resize productsHolder
+/*
+        var productsInnerHeight = $('#products').height() + $('#productsHoldertabs').height();
+        $('#productsHolder').css('height',productsInnerHeight);
+*/
+
+
         adjustCategoryHeights();
     };
 
@@ -349,12 +390,16 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         var $element = $(".hideReg[data-layer='" + layer.id + "']");
         if ( visible ) {
             $element.attr("data-action", "hide")
-                .attr("src", "images/visible.png")
-                .attr("title", 'Hide Layer');
+                .attr("title", 'Hide Layer')
+                .parent()
+                .removeClass('layer-hidden')
+                .addClass('layer-visible');
         } else {
             $element.attr("data-action", "show")
-                .attr("src", "images/invisible.png")
-                .attr("title", "Show Layer");
+                .attr("title", "Show Layer")
+                .parent()
+                .removeClass('layer-visible')
+                .addClass('layer-hidden');
         }
     };
 

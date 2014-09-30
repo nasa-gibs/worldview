@@ -124,7 +124,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
                 .addClass("third")
                 .attr("data-tab", "download");
             var $downloadLink = $("<a></a>")
-                .attr("href", "#DataDownload")
+                .attr("href", "#wv-data")
                 .addClass("tab")
                 .html(HTML_TAB_DOWNLOAD_UNSELECTED);
             $downloadTab.append($downloadLink);
@@ -133,26 +133,23 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
 
         $container.append($tabs);
 
-        var $collapseContainer = $("<div></div>")
-            .attr("id", self.id + "toggleButtonHolder")
-            .addClass("toggleButtonHolder");
+        $container.append($("<div id='products'></div>"))
+                  .append($("<div id='selectorbox'></div>"))
+                  .append($("<div id='wv-data'></div>"));
+
         var $collapseButton = $("<a></a>")
             .addClass("accordionToggler")
             .addClass("atcollapse")
             .addClass("arrow")
             .attr("title", "Hide");
-        $collapseContainer.append($collapseButton);
        
-        $container.append($collapseContainer);
-
-        $container.append($("<div id='products'></div>"))
-                  .append($("<div id='selectorbox'></div>"))
-                  .append($("<div id='wv-data'></div>"));
+        $container.after($collapseButton);
 
         $container.tabs({
             beforeActivate: onBeforeTabChange,
             activate: onTabChange
         });
+
         $('.accordionToggler').bind('click', slide);
     };
 
@@ -240,7 +237,9 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
             $("#" + self.id).after($('.accordionToggler'));
         }
     };
-
+    self.setProductsHeight = function(){
+        
+    };
     var adjustAlignment = function() {
         if ( wv.util.browser.small && collapsed ) {
             var w = $('.products').outerWidth();

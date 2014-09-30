@@ -46,10 +46,10 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
                 renderPaletteSelector($dialog);
             }
         }
-
+        var names = models.layers.getTitles(layer.id);
         $dialog.dialog({
             dialogClass: "wv-panel",
-            title: "Layer options",
+            title: names.title,
             show: { effect: "slide", direction: "left" },
             hide: { effect: "slide", direction: "left" },
             width: 300,

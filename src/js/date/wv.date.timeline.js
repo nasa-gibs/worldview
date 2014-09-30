@@ -725,6 +725,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 if(selectedDateObj){ 
                     model.select(selectedDateObj);
                     $('.button-input-group').parent().css('border-color','');
+                    selected.select();
                 }
                 else{
                     updateTime();
