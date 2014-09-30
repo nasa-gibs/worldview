@@ -34,12 +34,16 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
         if ( !palette ) {
             return;
         }
+        if ( config.layers[layerId].palette.immutable ) {
+            return false;
+        }
         if ( palette.scale ) {
             return "scale";
         }
         if ( palette.classes && palette.classes.colors.length === 1 ) {
             return "single";
         }
+        // FIXME: May not be needed any more
         if ( palette.lookup ) {
             return ( _.size(palette.lookup) === 1 ) ? "single" : "scale";
         }
