@@ -59,10 +59,10 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
                 my: "left top",
                 at: "right+5 top",
                 of: $("#products")
-            }
+            },
+            close: dispose
         })
-        .iCheck({radioClass: 'iradio_square-grey'})
-        .on("dialogclose", dispose);
+        .iCheck({radioClass: 'iradio_square-grey'});
 
         models.layers.events
             .on("remove", onLayerRemoved)
@@ -79,6 +79,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         models.palettes.events
             .off("range", onRangeUpdate)
             .off("update", onPaletteUpdateAll);
+        $dialog = null;
     };
 
     var renderOpacity = function($dialog) {
@@ -336,7 +337,6 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
     var onLayerRemoved = function(removedLayer) {
         if ( layer.id === removedLayer.id && $dialog ) {
             $dialog.dialog("close");
-            $dialog = null;
         }
     };
 
