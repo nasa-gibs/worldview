@@ -3,7 +3,7 @@
  *
  * This code was originally developed at NASA/Goddard Space Flight Center for
  * the Earth Science Data and Information System (ESDIS) project.
- * 
+ *
  * Copyright (C) 2013 - 2014 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
@@ -45,6 +45,7 @@ module.exports = function(grunt) {
 
         pkg: pkg,
         opt: options,
+        apache_version: grunt.option("apache-version") || "22",
 
         buster: {
             console: {},
@@ -69,6 +70,11 @@ module.exports = function(grunt) {
         },
 
         copy: {
+            apache: {
+                src: "etc/dev/worldview-dev.httpd<%=apache_version%>.conf",
+                dest: "dist/<%=grunt.option('packageName')%>.conf"
+            },
+
             brand_info: {
                 files: [{
                     src: "options/brand.json",
@@ -385,6 +391,20 @@ module.exports = function(grunt) {
         },
 
         replace: {
+            apache: {
+                src: [
+                    "dist/<%=grunt.option('packageName')%>.conf"
+                ],
+                overwrite: true,
+                replacements: [{
+                    from: "@WORLDVIEW@",
+                    to: "<%=grunt.option('packageName')%>"
+                },{
+                    from: "@ROOT@",
+                    to: process.cwd()
+                }]
+            },
+
             // Remove all development links <!-- link.dev --> and uncomment
             // all the release links <1-- link.prod -->
             links: {
@@ -588,6 +608,12 @@ module.exports = function(grunt) {
         "remove:dist_rpm",
         "exec:rpmbuild",
         "copy:rpm"
+    ]);
+
+    grunt.registerTask("apache-config", [
+        "load_branding",
+        "copy:apache",
+        "replace:apache"
     ]);
 
     grunt.registerTask("check", ["lint", "test"]);

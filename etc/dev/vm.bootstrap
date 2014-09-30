@@ -30,10 +30,24 @@ npm install
 rm -rf python
 ./wv-python
 grunt
-grunt apache-config
-cp dist/worldview-dev.httpd.conf /etc/httpd/conf.d
+grunt --apache-version=24 apache-config
+cp dist/*.conf /etc/httpd/conf.d
 
 systemctl enable httpd.service
 systemctl start httpd.service
 systemctl stop firewalld.service
 systemctl disable firewalld.service
+
+setenforce 0
+sed -i -e 's/SELINUX=enforcing/SELINUX=disabled/' /etc/sysconfig/selinux
+
+ROOT=$(basename $(ls dist/*.conf) | cut -f1 -d.)
+
+cat <<EOF
+
+==============================================================
+Worldview is now ready! Open your web browser to:
+
+http://localhost:8182/$ROOT
+
+EOF
