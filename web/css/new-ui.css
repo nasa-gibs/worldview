@@ -139,6 +139,9 @@
 #timeline-header .input-wrapper:hover .date-arrows{
     visibility:visible;
 }
+#timeline-header .input-wrapper:hover .date-arrows svg path{
+    fill: #fff;
+}
 #timeline-header .input-wrapper.selected{
     border-color:#fff;
 }
@@ -167,12 +170,11 @@ display:inline-block;}
 
 #timeline-header .date-arrows-wrapper{
     vertical-align:middle;
-    /*visibility:hidden;*/
+    visibility:hidden;
     display:inline-block;
 }
 #timeline-header .date-arrows{
     display:block;
-    /*visibility:hidden;*/
     height:10px;
 }
 #timeline-header .date-arrows svg{
@@ -181,9 +183,9 @@ display:inline-block;}
     margin:0 auto;
 }
 #timeline-header .date-arrows svg path{
-    fill:#333;
+    fill:#444;
 }
-#timeline-header .date-arrows:hover svg path {
+#timeline-header .input-wrapper:hover .date-arrows:hover svg path {
     fill:#1a1a1a;
 }
 #timeline-header .date-arrow-up{

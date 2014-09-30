@@ -336,6 +336,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
     var onLayerRemoved = function(removedLayer) {
         if ( layer.id === removedLayer.id && $dialog ) {
             $dialog.dialog("close");
+            $dialog = null;
         }
     };
 
