@@ -26,6 +26,9 @@ several other clients. We encourage interested developers to build their own
 clients or integrate NASA imagery into their existing ones using these
 services.
 
+*Please Note:* Worldview is under active development. Features may be absent
+or broken until the next major release. The toolchain only works in a Mac OS X
+or a Linux environment at the moment.
 
 ## License
 
@@ -38,43 +41,53 @@ All Rights Reserved.
 
 Licensed under the [NASA Open Source Agreement, Version 1.3](LICENSE.md).
 
+## Installation
 
-## Building
+These instructions install a development version of Worldview using a virtual
+machine. If you prefer to install locally on your computer, follow the
+directions in [Manual Setup](doc/manual_setup.md)
 
-*Please Note:* Worldivew is under active development. Features may be absent
-or broken until the next major release. The toolchain only works in a Mac OS X
-or a Linux environment at the moment.
+*Notes:* This has only been tested on Mac OS X. Let us know if this works in
+other environments.
 
-Download and install [Node.js](http://nodejs.org/) using the instructions on
-their site.
+Install the following:
 
-Executing the following script will download all dependencies and
-build the application:
+* [VirutalBox](https://www.virtualbox.org)
+* [Vagrant](https://www.vagrantup.com)
 
-    ./wv-setup
+Clone this repository:
 
-*Note*: Some steps require root privileges and you may be prompted for the
-root password. If you do not trust the script to perform administrative
-tasks on your behalf, either review the script before execution, or follow
-the [Manual Setup](doc/manual_setup.md) steps.
+```bash
+git clone https://github.com/nasa-gibs/worldview.git
+cd worldview
+```
 
-The ``dist`` directory now contains a ``example-map.tar.bz2`` file which
-can be uploaded and unpacked to a web server.
+Select one of the following configuration repositories:
 
-To run Worldview from your local machine, execute the following script or
-follow the instructions in [Manual Setup](doc/manual_setup.md):
+```bash
+# Official EOSDIS configurations
+git clone https://github.com/nasa-gibs/worldview-options-eosdis.git options
 
-    ./wv-setup -d
+# Or a blank repository with only Corrected Reflectance and no branding
+git clone https://github.com/nasa-gibs/worldview-options-template.git options
+```
 
-Worldview should now be available at the following:
+Build the virtual machine with:
 
-* [http://localhost/example-map](http://localhost/example-map): Uses the source
-directory
-* [http://localhost/example-map-debug](http://localhost/example-map-debug):
-Uses the debug version (non-minified versions) found in the build directory.
-* [http://localhost/example-map-release](http://localhost/example-map-release):
-Uses the release version (minified versions) found in the build directory.
+```bash
+vagrant up
+```
 
+After the command finishes, Worldview should be ready and available at
+one of the following:
+
+```bash
+# Official EOSDIS configurations
+http://localhost:8182/worldview
+
+# Blank repository
+http://localhost:8182/example-map
+```
 
 ## Other Information
 

@@ -13,3 +13,4 @@ tools
 options
 \#*
 npm-debug.log
+.vagrant

@@ -1,0 +1,105 @@
+
+.wv-document {
+    background-color: #222;
+}
+
+.wv-document p,
+.wv-document li,
+.wv-document div,
+.wv-document h1,
+.wv-document h2 {
+    color: #eee;
+    font-weight: 100;
+    font-family: "helvetica",sans-serif;
+}
+
+.wv-document p,
+.wv-document li,
+.wv-document div {
+    font-size: 16px;
+    line-height: 22px;
+}
+
+.wv-document h1 {
+    font-size: 20px;
+    margin: .67em 0;
+    font-weight: bold;
+}
+
+.wv-document h2 {
+    font-size: 18px;
+    margin: .75em 0;
+    font-weight: bold;
+}
+
+.wv-document p {
+    margin: 1.12em 0;
+}
+
+.wv-document hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #404040;
+    margin: 1em 0;
+    padding: 0;
+}
+
+.wv-document ul {
+    margin-left: 2em;
+}
+
+.wv-document li {
+    display: list-item;
+}
+
+.wv-document a {
+    color: #8cf;
+    text-decoration: none;
+}
+
+.wv-document a:visted {
+    color: #8cf;
+    text-decoration: none;
+}
+
+.wv-document a:hover {
+    color: #8cf;
+    text-decoration: none;
+}
+
+.wv-document .right {
+    float: right;
+    margin: 0em 1em 1em 1em;
+}
+
+.wv-document strong {
+    font-weight: bold;
+}
+
+.wv-document .underline {
+    text-decoration: underline;
+}
+
+.version {
+    font-size: 12px;
+}
+
+.gibs-logo {
+    background-image: url("../images/gibs.png");
+    width: 64px;
+    height: 64px;
+    display: block;
+}
+
+.wv-document .caption {
+    font-size: 12px;
+    line-height: 18px;
+}
+
+.wv-document .gibs-caption {
+    margin-top: 3px;
+    width: 64px;
+    font-style: italic;
+    text-align: center;
+}
