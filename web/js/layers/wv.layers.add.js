@@ -58,10 +58,10 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
 
     var render = function() {
         $(self.selector).empty();
-/*
+
         var productsWrapperHeight = $(window).height() - $('#timeline').outerHeight() - $('#wv-logo').outerHeight() - 40; // 40 padding
         $('#productsHolder-wrapper').css('height', productsWrapperHeight);
-*/
+
         var tabs_height = $(".ui-tabs-nav").outerHeight(true);
         $(self.selector).addClass('selector');
 /*
@@ -250,10 +250,10 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
     };
 
     var resize = function() {
-/*
+
         var productsWrapperHeight = $(window).height() - $('#timeline').outerHeight() - $('#wv-logo').outerHeight() - 40; // 40 padding
         $('#productsHolder-wrapper').css('height', productsWrapperHeight);
-*/
+
         var tabs_height = $(".ui-tabs-nav").outerHeight(true);
         $(self.selector)
             .height($(self.selector).parent().outerHeight() - tabs_height);

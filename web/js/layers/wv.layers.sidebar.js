@@ -89,6 +89,10 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
     };
 
     var render = function() {
+        
+        var productsWrapperHeight = $(window).height() - $('#timeline').outerHeight() - $('#wv-logo').outerHeight() - 40; // 40 padding
+       $('#productsHolder-wrapper').css('height', productsWrapperHeight);
+        
         var $container = $(self.selector);
         $container.empty().addClass("products");
 
