@@ -282,3 +282,6 @@
     display:inline-block;
     margin:0 10px  0 5px;
 }
+#wv-datacontent div[data-product='__NO_PRODUCT'] a {
+    color: #000;
+}

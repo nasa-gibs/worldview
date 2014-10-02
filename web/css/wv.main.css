@@ -240,6 +240,7 @@ a,
 .ui-widget-content a {
     color: #7bf;
     text-decoration: none;
+    cursor: pointer;
 }
 
 .link:hover,
