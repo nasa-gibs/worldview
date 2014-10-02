@@ -204,7 +204,7 @@ module.exports = function(grunt) {
             site: {
                 files: [{
                     expand: true, cwd: "build/worldview-debug",
-                    src: ["web/**"],
+                    src: ["web/**", "web/**/.htaccess"],
                     dest: "build/site-<%=grunt.option('packageName')%>-debug"
                 },{
                     expand: true, cwd: "build/options",
@@ -212,7 +212,7 @@ module.exports = function(grunt) {
                     dest: "build/site-<%=grunt.option('packageName')%>-debug/web"
                 },{
                     expand: true, cwd: "build/worldview",
-                    src: ["web/**"],
+                    src: ["web/**", "web/**/.htaccess"],
                     dest: "build/site-<%=grunt.option('packageName')%>"
                 },{
                     expand: true, cwd: "build/options",
