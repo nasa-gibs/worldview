@@ -156,7 +156,6 @@ module.exports = function(grunt) {
                     dest: "dist/site-<%=grunt.option('packageName')%>-debug" +
                         "-<%=pkg.version%>" +
                         "-<%=pkg.release%>" +
-                        ".git<%=grunt.config.get('source-revision')%>" +
                         ".tar.bz2"
                 }]
             },
@@ -167,7 +166,6 @@ module.exports = function(grunt) {
                     dest: "dist/site-<%=grunt.option('packageName')%>" +
                         "-<%=pkg.version%>" +
                         "-<%=pkg.release%>" +
-                        ".git<%=grunt.config.get('source-revision')%>" +
                         ".tar.bz2"
                 }]
             },
@@ -439,9 +437,6 @@ module.exports = function(grunt) {
                     from: "@BUILD_RELEASE@",
                     to: "<%=pkg.release%>"
                 }, {
-                    from: "@GIT_REVISION@",
-                    to: "<%=grunt.config.get('source-revision')%>"
-                }, {
                     from: "@BUILD_NUMBER@",
                     to: buildNumber
                 }]
@@ -588,7 +583,6 @@ module.exports = function(grunt) {
 
     grunt.registerTask("site", [
         "load_branding",
-        "git-rev-parse:source",
         "remove:build_site",
         "copy:site",
         "replace:tokens",
