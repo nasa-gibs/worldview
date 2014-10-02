@@ -13,7 +13,6 @@ License:	Copyright NASA
 URL:		http://earthdata.nasa.gov
 Source0:	site-@WORLDVIEW@.tar.bz2
 Source1:	site-@WORLDVIEW@-debug.tar.bz2
-Source2:        worldview-config.tar.bz2
 Source3:	httpd.conf
 Source4:	httpd-debug.conf
 #Source4:	events_log.conf
@@ -58,9 +57,6 @@ Non-minified version of	Worldview for debugging
 %setup -c -T
 tar xf %{SOURCE0}
 tar xf %{SOURCE1}
-tar xf %{SOURCE2}
-cp -r options/{brand,config} site-@WORLDVIEW@/web
-cp -r options/{brand,config} site-@WORLDVIEW@-debug/web
 cp %{SOURCE3} .
 cp %{SOURCE4} .
 #cp %{SOURCE4} .
