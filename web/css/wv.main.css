@@ -235,18 +235,16 @@ border-radius:0;
     color: #000;
 }
 
-a {
-    color: #8cf;
+.link,
+a,
+.ui-widget-content a {
+    color: #7bf;
     text-decoration: none;
 }
 
-.ui-widget-content a {
-    color: #8cf;
-    text-docoration: none;
-}
-
+.link:hover,
 a:hover {
-    color: #8cf;
+    color: #9df;
 }
 
 .ui-menu-item a {

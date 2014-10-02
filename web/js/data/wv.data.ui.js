@@ -350,10 +350,13 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
         var headerMsg = "<h3 class='wv-data-unavailable-header'>Why are these layers not available for downloading?</h3>";
         var bodyMsg = 'Some layers in Worldview do not have corresponding source data products available for download.  These include National Boundaries, Orbit Tracks, Earth at Night, and MODIS Corrected Reflectance products.<br><br>For a downloadable product similar to MODIS Corrected Reflectance, please try the MODIS Land Surface Reflectance layers available in Worldview.  If you would like to generate MODIS Corrected Reflectance imagery yourself, please see the following document: <a href="https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf" target="_blank">https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf</a><br><br>If you would like to download only an image, please use the "camera" icon in the upper right.';
 
+        wv.ui.notify(headerMsg + bodyMsg, "Notice", 600);
+        /*
         wv.ui.notify(headerMsg + bodyMsg, {
             width: 600,
             height: 275
         });
+        */
     };
 
     init();
