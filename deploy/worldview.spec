@@ -6,7 +6,7 @@
 
 Name:		@WORLDVIEW@
 Version:	@BUILD_VERSION@
-Release:	@BUILD_RELEASE@.@BUILD_NUMBER@{?dist}
+Release:	@BUILD_RELEASE@.@BUILD_NUMBER@%{?dist}
 Summary:	Browse full-resolution, near real-time satellite imagery.
 
 License:	Copyright NASA
