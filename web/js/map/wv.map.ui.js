@@ -35,6 +35,9 @@ wv.map.ui = wv.map.ui || function(models, config) {
     self.events = wv.util.events();
 
     var init = function() {
+        if ( config.parameters.mockMap ) {
+            return;
+        }
         _.each(config.projections, function(proj) {
             var map = createMap(proj);
             self.proj[proj.id] = map;
