@@ -72,6 +72,10 @@
     cursor: crosshair;
 }
 
+.bank div.wv-palettes-classes {
+    padding-bottom: 3px;
+}
+
 .wv-palettes-classes {
     cursor: crosshair;
 }
@@ -81,10 +85,11 @@
     padding-right: 5px;
     margin-left: 3px;
     border: 1px solid #000;
+    font-size: 11px;
 }
 
 .wv-palettes-class-detail {
-    margin: 2px 5px 2px 0;
+    margin: 2px 5px 4px 0;
 }
 
 .wv-palettes-class-label {

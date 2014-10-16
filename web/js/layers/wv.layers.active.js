@@ -139,7 +139,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             .attr("id", group.id + "-" + encodeURIComponent(layer.id))
             .addClass(self.id + "item")
             .addClass("item")
-            .attr("data-layer", layer.id);            
+            .attr("data-layer", layer.id);
 
         var $removeButton = $("<a></a>")
             .attr("id", "close" + group.id + encodeURIComponent(layer.id))
@@ -147,7 +147,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             .attr("data-layer", layer.id)
             .attr("title", "Remove Layer");
         var $removeImage = $("<i></i>");
-        
+
         $removeButton.append($removeImage);
         $layer.append($removeButton);
 
@@ -209,7 +209,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             })
             .append($('<h4></h4>').html(names.title))
             .append($('<p></p>').html(names.subtitle));
-            
+
         $layer.append(mainLayerDiv);
 
         if ( layer.palette ) {

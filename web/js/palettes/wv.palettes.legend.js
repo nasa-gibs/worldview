@@ -87,7 +87,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         $colorbar.tooltip({
             position: {
                 my: "left middle",
-                at: "right+15 middle",
+                at: "right+30 middle",
                 of: $colorbar
             }
         });
@@ -103,7 +103,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         $panel.tooltip({
             position: {
                 my: "left middle",
-                at: "right+15 middle",
+                at: "right+30 middle",
                 of: $panel
             },
             content: "X"
