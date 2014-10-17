@@ -939,7 +939,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     };
 
     var zoomable = function(){
-        var threshold = 20;
+        var threshold = 40;
         var position = threshold / 2;
 
         return function(e) {
@@ -951,7 +951,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
             position += deltaY;
             if (position < 0){
-                position = position % threshold;
+                position = Math.abs(position % threshold);
                 //console.log("Up");
                 if (zoomLvl < 3){
                     zoomLvlTiny++;
@@ -975,7 +975,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                         setZoomLevel(zoomLvl,mousePos,mouseOffset);
                     }
                 } else {
-                    position = 0;
+                    position = threshold;
                 }
             }
         };
