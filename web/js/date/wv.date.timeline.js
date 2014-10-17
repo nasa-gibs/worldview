@@ -949,34 +949,38 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             var deltaY=evt.deltaY ? evt.deltaY : evt.wheelDeltaY || evt.detail ? evt.detail*(-120) : evt.wheelDelta;
             var deltaX=evt.deltaX ? evt.deltaY : evt.wheelDeltaX;
 
-            position += deltaY;
-            if (position < 0){
-                position = Math.abs(position % threshold);
-                //console.log("Up");
-                if (zoomLvl < 3){
-                    zoomLvlTiny++;
-                    if (zoomLvlTiny===3){
-                        zoomLvl++;
-                        zoomLvlTiny = 0;
-                        setZoomLevel(zoomLvl,mousePos,mouseOffset);
+            if ( deltaY ) {
+                position += deltaY;
+                if (position < 0){
+                    position = Math.abs(position % threshold);
+                    //console.log("Up");
+                    if (zoomLvl < 3){
+                        zoomLvlTiny++;
+                        if (zoomLvlTiny===3){
+                            zoomLvl++;
+                            zoomLvlTiny = 0;
+                            setZoomLevel(zoomLvl,mousePos,mouseOffset);
+                        }
+                    } else {
+                        position = 0;
                     }
-                } else {
-                    position = 0;
                 }
-            }
-            else if (position > threshold){
-                position = position % threshold;
-                //console.log("Down")
-                if (zoomLvl > 0){
-                    zoomLvlTiny--;
-                    if (zoomLvlTiny===-3){
-                        zoomLvl--;
-                        zoomLvlTiny = 0;
-                        setZoomLevel(zoomLvl,mousePos,mouseOffset);
+                else if (position > threshold){
+                    position = position % threshold;
+                    //console.log("Down")
+                    if (zoomLvl > 0){
+                        zoomLvlTiny--;
+                        if (zoomLvlTiny===-3){
+                            zoomLvl--;
+                            zoomLvlTiny = 0;
+                            setZoomLevel(zoomLvl,mousePos,mouseOffset);
+                        }
+                    } else {
+                        position = threshold;
                     }
-                } else {
-                    position = threshold;
                 }
+            } else {
+                redrawAxis();
             }
         };
     }();
