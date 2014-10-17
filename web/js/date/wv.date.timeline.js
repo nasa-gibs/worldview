@@ -937,39 +937,49 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
         return [tx,ty];
     };
-    var zoomable = function(e){
-        var mousePos = x.invert(d3.mouse(this)[0]);
-        var mouseOffset = width/2 - d3.mouse(this)[0];
-        var evt = window.event || d3.event.sourceEvent || e;
-        var deltaY=evt.deltaY ? evt.deltaY : evt.wheelDeltaY || evt.detail ? evt.detail*(-120) : evt.wheelDelta;
-        var deltaX=evt.deltaX ? evt.deltaY : evt.wheelDeltaX;
-        if (deltaY < 0){
-            //console.log("Up");
-            if (zoomLvl < 3){
-                zoomLvlTiny++;
-                if (zoomLvlTiny===3){
-                    zoomLvl++;
-                    zoomLvlTiny = 0;
-                    setZoomLevel(zoomLvl,mousePos,mouseOffset);
+
+    var zoomable = function(){
+        var threshold = 20;
+        var position = threshold / 2;
+
+        return function(e) {
+            var mousePos = x.invert(d3.mouse(this)[0]);
+            var mouseOffset = width/2 - d3.mouse(this)[0];
+            var evt = window.event || d3.event.sourceEvent || e;
+            var deltaY=evt.deltaY ? evt.deltaY : evt.wheelDeltaY || evt.detail ? evt.detail*(-120) : evt.wheelDelta;
+            var deltaX=evt.deltaX ? evt.deltaY : evt.wheelDeltaX;
+
+            position += deltaY;
+            if (position < 0){
+                position = position % threshold;
+                //console.log("Up");
+                if (zoomLvl < 3){
+                    zoomLvlTiny++;
+                    if (zoomLvlTiny===3){
+                        zoomLvl++;
+                        zoomLvlTiny = 0;
+                        setZoomLevel(zoomLvl,mousePos,mouseOffset);
+                    }
+                } else {
+                    position = 0;
                 }
             }
-        }
-        else if (deltaY > 0){
-            //console.log("Down")
-            if (zoomLvl > 0){
-                zoomLvlTiny--;
-                if (zoomLvlTiny===-3){
-                    zoomLvl--;
-                    zoomLvlTiny = 0;
-                    setZoomLevel(zoomLvl,mousePos,mouseOffset);
+            else if (position > threshold){
+                position = position % threshold;
+                //console.log("Down")
+                if (zoomLvl > 0){
+                    zoomLvlTiny--;
+                    if (zoomLvlTiny===-3){
+                        zoomLvl--;
+                        zoomLvlTiny = 0;
+                        setZoomLevel(zoomLvl,mousePos,mouseOffset);
+                    }
+                } else {
+                    position = 0;
                 }
             }
-        }
-        else{
-            //zoom.translate(panLimit());
-            redrawAxis();
-        }
-    };
+        };
+    }();
     self.test = "TESTING VAR";
     init();
     $(window).resize(resizeWindow);
