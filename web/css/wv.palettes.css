@@ -44,17 +44,30 @@
 .wv-palettes-ranges {
     margin-top: -6px;
     width: 100%;
+    position: relative;
 }
 
-.wv-palettes-min, .wv-palettes-max{
+.wv-palettes-min, .wv-palettes-title, .wv-palettes-max{
     font-size:0.8em;
     white-space:nowrap;
 }
 .layer-hidden .wv-palettes-min, .layer-hidden .wv-palettes-max{
     color:#999;
 }
-.wv-palettes-max {
-    float: right;
+.bank div.wv-palettes-title {
+    margin: 0 auto;
+    width: 100%;
+    text-align: center;
+}
+.bank div.wv-palettes-min {
+    position: absolute;
+    left: 0;
+    width: auto;
+}
+.bank div.wv-palettes-max {
+    position: absolute;
+    right: 0;
+    width: auto;
 }
 
 /* FIXME: Too specific */

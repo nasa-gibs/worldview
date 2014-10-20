@@ -29,7 +29,7 @@ wv.palettes = (function(self) {
         }
     };
 
-    self.colorbar = function(target, palette) {
+    self.colorbar = function(target, entries) {
         var canvas;
         if ( target.length ) {
             canvas = $(target).get(0);
@@ -43,10 +43,10 @@ wv.palettes = (function(self) {
 
         g.fillStyle = checkerboard;
         g.fillRect(0, 0, canvas.width, canvas.height);
-        if ( !palette ) {
+        if ( !entries ) {
             return;
         }
-        var colors = palette.colors || palette.scale.colors;
+        var colors = entries.colors;
         if ( colors ) {
             var bins = colors.length;
             var binWidth = canvas.width / bins;

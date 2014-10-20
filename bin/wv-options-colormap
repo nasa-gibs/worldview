@@ -98,6 +98,8 @@ def process_file(file):
         if "Legend" in colormap:
             legend = process_entries(colomap["Legend"]["ColorMapEntry"])
             result["legend"] = legend
+        if "@title" in colormap:
+            result["title"] = colormap["@title"]
         maps += [result]
 
     id = os.path.splitext(os.path.basename(input_file))[0]
