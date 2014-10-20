@@ -37,21 +37,25 @@
     vertical-align: middle;
 }
 
-.bank div .wv-palette {
+.bank div.wv-palette {
+    padding-bottom: 3px;
+}
+
+.bank div.wv-palettes-legend {
     margin-top: 5px;
 }
 
-.wv-palettes-ranges {
-    margin-top: -6px;
+.bank div.wv-palettes-ranges {
+    margin-top: -3px;
     width: 100%;
     position: relative;
 }
 
 .wv-palettes-min, .wv-palettes-title, .wv-palettes-max{
-    font-size:0.8em;
+    font-size:0.7em;
     white-space:nowrap;
 }
-.layer-hidden .wv-palettes-min, .layer-hidden .wv-palettes-max{
+.layer-hidden .wv-palettes-min, .layer-hidden .wv-palettes-max, .layer-hidden .wv-palettes-title {
     color:#999;
 }
 .bank div.wv-palettes-title {

@@ -96,7 +96,7 @@ def process_file(file):
             continue
         result["entries"] = entries
         if "Legend" in colormap:
-            legend = process_entries(colomap["Legend"]["ColorMapEntry"])
+            legend = process_entries(colormap["Legend"]["ColorMapEntry"])
             result["legend"] = legend
         if "@title" in colormap:
             result["title"] = colormap["@title"]

@@ -69,6 +69,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
 
     var renderScale = function($legendPanel, entries, index) {
         $container = $("<div></div>")
+            .addClass("wv-palettes-legend")
             .attr("data-index", index);
         $colorbar = $("<canvas></canvas>")
                 .addClass("wv-palettes-colorbar")
@@ -103,6 +104,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
 
     var renderClasses = function($legendPanel, entries, index) {
         var $panel = $("<div></div>")
+                .addClass("wv-palettes-legend")
                 .addClass("wv-palettes-classes")
                 .attr("data-index", index)
                 .attr("title", "X");
