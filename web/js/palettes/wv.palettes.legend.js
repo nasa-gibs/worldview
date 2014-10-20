@@ -56,10 +56,10 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         $parent.append($legendPanel);
         _.each(palette.maps, function(map, index) {
             var entries = map.legend || map.entries;
-            if ( entries.type == "scale" ) {
+            if ( entries.type === "scale" ) {
                 renderScale($legendPanel, entries, index);
             }
-            if ( entries.type == "class" ) {
+            if ( entries.type === "class" ) {
                 renderClasses($legendPanel, entries, index);
             }
         });
@@ -118,7 +118,6 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
             },
             content: "X"
         });
-        updateClasses(entries, index);
     };
 
     var updateClasses = function(entries, index) {
@@ -126,6 +125,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         $panel.empty();
         _.each(entries.colors, function(color, classIndex) {
             $panel.append($("<span></span>")
+                .attr("data-index", index)
                 .attr("data-class-index", classIndex)
                 .addClass("wv-palettes-class")
                 .html("&nbsp;")
@@ -145,6 +145,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
             .append(
                 $("<span></span>")
                     .addClass("wv-palettes-class-label")
+                    .attr("data-index", index)
                     .attr("data-class-index", classIndex)
                     .html(entries.labels[classIndex]));
             $detailPanel.append($row);
@@ -212,14 +213,18 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
     };
 
     var highlightClass = function() {
-        $(".wv-palettes-class-label[data-index='" +
-            $(this).attr("data-index") + "']")
+        legendIndex = $(this).attr("data-index");
+        classIndex = $(this).attr("data-class-index");
+        $(".wv-palettes-class-label[data-index='" + legendIndex + "']" +
+            "[data-class-index='" + classIndex + "']")
             .addClass("wv-palettes-class-highlight");
     };
 
     var unhighlightClass = function() {
-        $(".wv-palettes-class-label[data-index='" +
-            $(this).attr("data-index") + "']")
+        legendIndex = $(this).attr("data-index");
+        classIndex = $(this).attr("data-class-index");
+        $(".wv-palettes-class-label[data-index='" + legendIndex + "']" +
+            "[data-class-index='" + classIndex + "']")
             .removeClass("wv-palettes-class-highlight");
     };
 
