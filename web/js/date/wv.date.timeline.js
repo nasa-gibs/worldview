@@ -952,29 +952,19 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             if ( deltaY ) {
                 position += deltaY;
                 if (position < 0){
-                    position = Math.abs(position % threshold);
-                    //console.log("Up");
                     if (zoomLvl < 3){
-                        zoomLvlTiny++;
-                        if (zoomLvlTiny===3){
-                            zoomLvl++;
-                            zoomLvlTiny = 0;
-                            setZoomLevel(zoomLvl,mousePos,mouseOffset);
-                        }
+                        position = threshold - Math.abs(position % threshold);
+                        zoomLvl++;
+                        setZoomLevel(zoomLvl);
                     } else {
                         position = 0;
                     }
                 }
                 else if (position > threshold){
-                    position = position % threshold;
-                    //console.log("Down")
-                    if (zoomLvl > 0){
-                        zoomLvlTiny--;
-                        if (zoomLvlTiny===-3){
-                            zoomLvl--;
-                            zoomLvlTiny = 0;
-                            setZoomLevel(zoomLvl,mousePos,mouseOffset);
-                        }
+                    if (zoomLvl > 0) {
+                        position = position % threshold;
+                        zoomLvl--;
+                        setZoomLevel(zoomLvl);
                     } else {
                         position = threshold;
                     }
