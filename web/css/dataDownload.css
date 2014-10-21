@@ -255,6 +255,9 @@
 .dl-group ul, .dl-group li.item-static {
     cursor:pointer;
 }
+.dl-group li.item-static {
+    background: #ccc;
+}
 .dl-group:hover{
     background:rgba(100,100,100,0.6)
 }
