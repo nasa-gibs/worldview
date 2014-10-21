@@ -74,7 +74,7 @@ for layer_id in wv["layers"].keys():
         if layer_id in wv.get("layerOrderExceptions", []):
             remove_layer(wv, layer_id)
             continue
-        elif tolerant:
+        elif tolerant or wv.get("ignoreLayerOrder", False):
             wv["layerOrder"] += [layer_id]
         elif opt.get("warnOnUnexpectedLayer"):
             warn("[%s] Unexpected layer, not in layer order" % layer_id)
@@ -87,6 +87,11 @@ for layer_id in wv["layers"].keys():
     if "projections" not in layer or len(layer["projections"]) == 0:
         error("[%s] No projections defined or not found in GC documents" %
             layer_id)
+        remove_layer(wv, layer_id)
+        continue
+    if "type" not in layer:
+        error("[" + layer_id + "] No type defined. Possible to be expecting " +
+            "configuration via GC document but was not found")
         remove_layer(wv, layer_id)
         continue
     if "palette" in layer and "id" not in layer["palette"]:
