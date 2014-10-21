@@ -25,7 +25,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
 
     var init = function() {
         canvas = document.createElement("canvas");
-        canvas.width = 140;
+        canvas.width = 120;
         canvas.height = 10;
         if ( config.features.customPalettes ) {
             wv.palettes.loadCustom(config).done(loaded);
@@ -65,6 +65,9 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
             close: dispose
         })
         .iCheck({radioClass: 'iradio_square-grey'});
+        $("#wv-layers-options-dialog .jspScrollable").each(function() {
+            $(this).jScrollPane().data("jsp").reinitialise();
+        });
 
         models.layers.events
             .on("remove", onLayerRemoved)
@@ -201,9 +204,11 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
     };
 
     var renderPaletteSelector = function($dialog) {
-        var $pane = $("<div><span autofocus></span>Color palette</div>")
-            .attr("id", "wv-palette-selector")
-            .addClass("wv-header");
+        var $header = $("<div></div>")
+            .addClass("wv-header")
+            .html("Color Palette");
+        var $pane = $("<div></div>")
+            .attr("id", "wv-palette-selector");
         var palette = models.palettes.get(layer.id);
         $pane.append(defaultPalette());
         var recommended = layer.palette.recommended || [];
@@ -221,6 +226,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
                 }
             }
         });
+        $dialog.append($header);
         $dialog.append($pane);
         $pane.jScrollPane();
 

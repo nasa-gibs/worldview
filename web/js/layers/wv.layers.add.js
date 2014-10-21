@@ -293,7 +293,7 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
 
     var addLayer = function(event) {
         model.add(decodeURIComponent($(this).attr("data-layer")));
-        
+
     };
 
     var removeLayer = function(event) {
