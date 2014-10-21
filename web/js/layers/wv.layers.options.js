@@ -36,7 +36,9 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
 
     var loaded = function(custom) {
         $dialog = wv.ui.getDialog();
-        $dialog.attr("id", "wv-layers-options-dialog");
+        $dialog
+            .attr("id", "wv-layers-options-dialog")
+            .attr("data-layer", layer.id);
         renderOpacity($dialog);
 
         if ( config.features.customPalettes ) {
