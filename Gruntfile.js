@@ -216,7 +216,10 @@ module.exports = function(grunt) {
                     expand: true, cwd: "build/options",
                     src: ["**"],
                     dest: "build/site-<%=grunt.option('packageName')%>/web"
-                }]
+                }],
+                options: {
+                    mode: true
+                }
             }
         },
 
