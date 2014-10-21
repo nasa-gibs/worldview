@@ -712,7 +712,7 @@ wv.data.ui.downloadListPanel = function(config, model) {
                         "data-granule='" + granule.id + "' " +
                         "value='X'></input></td>",
                     "<td><nobr><ul><li>" + granule.label + "</li></ul></nobr></td>",
-                    "<td>" + linksText(granule.links) + "</td>",
+                    "<td class='wv-data-granule-link'>" + linksText(granule.links) + "</td>",
                 "</tr>"
             ];
         } else {

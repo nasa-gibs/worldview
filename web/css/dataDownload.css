@@ -136,6 +136,10 @@
     background-color: rgb(55, 58, 62);
 }
 
+#wv-data-selection .wv-data-granule-link {
+    width: 100%;
+}
+
 #wv-data-selection .collapse {
     width: 100%;
     border: 0;
