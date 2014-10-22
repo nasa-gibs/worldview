@@ -203,10 +203,10 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         var mainLayerDiv = $('<div></div>')
             .addClass('layer-main')
             .attr("data-layer", layer.id)
-            .click(toggleOptionsPanel)
             .append($('<h4></h4>').html(names.title))
             .append($('<p></p>').html(names.subtitle));
-
+        wv.ui.click(mainLayerDiv, toggleOptionsPanel);
+        
         $layer.append(mainLayerDiv);
 
         if ( layer.palette ) {

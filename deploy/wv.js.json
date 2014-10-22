@@ -8,6 +8,7 @@
         "web/js/util/wv.util.events.js",
 
         "web/js/ui/wv.ui.js",
+        "web/js/ui/wv.ui.click.js",
         "web/js/ui/wv.ui.indicator.js",
         "web/js/ui/wv.ui.info.js",
 
