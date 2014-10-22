@@ -824,7 +824,7 @@ wv.data.ui.selectionListPanel = function(model, results) {
     };
 
     self.show = function() {
-        $dialog = wv.ui.getDialog();
+        $dialog = wv.ui.getDialog("wv-data-list");
         $dialog
             .attr("id", "wv-data-list")
             .html(bodyText())
