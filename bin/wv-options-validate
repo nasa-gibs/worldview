@@ -71,10 +71,10 @@ if tolerant:
 for layer_id in wv["layers"].keys():
     layer = wv["layers"][layer_id]
     if layer_id not in wv["layerOrder"]:
-        if layer_id in wv.get("layerOrderExceptions", []):
+        if layer_id in opt.get("layerOrderExceptions", []):
             remove_layer(wv, layer_id)
             continue
-        elif tolerant or wv.get("ignoreLayerOrder", False):
+        elif tolerant or opt.get("ignoreLayerOrder", False):
             wv["layerOrder"] += [layer_id]
             continue
         elif opt.get("warnOnUnexpectedLayer"):
