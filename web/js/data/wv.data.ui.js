@@ -25,7 +25,8 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
 
     var indicators = {
         query: null,
-        noneInView: null
+        noneInView: null,
+        noResults: null
     };
 
     var self = {};
@@ -260,7 +261,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
         lastResults = results;
         wv.ui.indicator.hide(indicators);
         if ( model.selectedProduct !== null && results.granules.length === 0 ) {
-            wv.ui.indicator.noData(indicators);
+            indicators.noData = wv.ui.indicator.noData(indicators);
         } else {
             if ( results.meta.showList ) {
                 selectionListPanel =
