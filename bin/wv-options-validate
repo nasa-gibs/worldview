@@ -76,7 +76,6 @@ for layer_id in wv["layers"].keys():
             continue
         elif tolerant or opt.get("ignoreLayerOrder", False):
             wv["layerOrder"] += [layer_id]
-            continue
         elif opt.get("warnOnUnexpectedLayer"):
             warn("[%s] Unexpected layer, not in layer order" % layer_id)
             remove_layer(wv, layer_id)
@@ -103,8 +102,11 @@ for layer_id in wv["layers"].keys():
                 palette_id + ".json")):
             error("[%s] Unknown palette: %s" % (layer_id, palette_id))
             del layer["palette"]
-    if "group" not in layer:
+    if "group" not in layer and opt.get("warnOnUnexpectedLayer"):
         error("[%s] Possible unexpected layer, no group defined" % layer_id)
+        remove_layer(wv, layer_id)
+        continue
+    elif "group" not in layer:
         remove_layer(wv, layer_id)
         continue
     for proj_id in layer["projections"].keys():
