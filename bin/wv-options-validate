@@ -76,6 +76,7 @@ for layer_id in wv["layers"].keys():
             continue
         elif tolerant or wv.get("ignoreLayerOrder", False):
             wv["layerOrder"] += [layer_id]
+            continue
         elif opt.get("warnOnUnexpectedLayer"):
             warn("[%s] Unexpected layer, not in layer order" % layer_id)
             remove_layer(wv, layer_id)
