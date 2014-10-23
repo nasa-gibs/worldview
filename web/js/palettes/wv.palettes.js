@@ -29,7 +29,7 @@ wv.palettes = (function(self) {
         }
     };
 
-    self.colorbar = function(target, entries) {
+    self.colorbar = function(target, colors) {
         var canvas;
         if ( target.length ) {
             canvas = $(target).get(0);
@@ -43,10 +43,6 @@ wv.palettes = (function(self) {
 
         g.fillStyle = checkerboard;
         g.fillRect(0, 0, canvas.width, canvas.height);
-        if ( !entries ) {
-            return;
-        }
-        var colors = entries.colors;
         if ( colors ) {
             var bins = colors.length;
             var binWidth = canvas.width / bins;
@@ -81,23 +77,14 @@ wv.palettes = (function(self) {
         checkerboard = g.createPattern(canvas, "repeat");
     };
 
-    self.translate = function(sourcePalette, targetPalette) {
-        var sourceCount = sourcePalette.colors.length;
-        var targetCount = targetPalette.colors.length;
-
-        var newPalette = {
-            "id": targetPalette.id,
-            "name": targetPalette.name || undefined,
-            "values": sourcePalette.values || undefined
-        };
-        var newColors = [];
-        _.each(sourcePalette.colors, function(color, index) {
-            var sourcePercent = index / sourceCount;
-            var targetIndex = Math.floor(sourcePercent * targetCount);
-            newColors.push(targetPalette.colors[targetIndex]);
+    self.translate = function(source, target) {
+        var translation = [];
+        _.each(source, function(color, index) {
+            var sourcePercent = index / source.length;
+            var targetIndex = Math.floor(sourcePercent * target.length);
+            translation.push(target[targetIndex]);
         });
-        newPalette.colors = newColors;
-        return newPalette;
+        return translation;
     };
 
     self.lookup = function(sourcePalette, targetPalette) {

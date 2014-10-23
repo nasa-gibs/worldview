@@ -144,3 +144,8 @@
 #wv-layers-options-dialog .noUi-target {
     margin: 10px 10px 10px 15px;
 }
+
+.wv-legend-buttons {
+    width: 100%;
+    text-align: center;
+}

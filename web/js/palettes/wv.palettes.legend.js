@@ -54,20 +54,20 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
                 .addClass("wv-palettes-panel")
                 .attr("data-layer", layer.id);
         $parent.append($legendPanel);
-        _.each(palette.maps, function(map, index) {
-            var entries = map.legend || map.entries;
-            if ( entries.type === "scale" ) {
-                renderScale($legendPanel, entries, index);
+        var legends = model.getLegends(layer.id);
+        _.each(legends, function(legend, index) {
+            if ( legend.type === "scale" ) {
+                renderScale($legendPanel, legend, index);
             }
-            if ( entries.type === "class" ) {
-                renderClasses($legendPanel, entries, index);
+            if ( legend.type === "class" ) {
+                renderClasses($legendPanel, legend, index);
             }
         });
         rendered = true;
         self.update();
     };
 
-    var renderScale = function($legendPanel, entries, index) {
+    var renderScale = function($legendPanel, legend, index) {
         $container = $("<div></div>")
             .addClass("wv-palettes-legend")
             .attr("data-index", index);
@@ -99,10 +99,10 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         });
         $legendPanel.append($container);
         wv.palettes.colorbar(selector + " " +
-            "[data-index='" + index + "'] canvas", entries);
+            "[data-index='" + index + "'] canvas", legend.colors);
     };
 
-    var renderClasses = function($legendPanel, entries, index) {
+    var renderClasses = function($legendPanel, legend, index) {
         var $panel = $("<div></div>")
                 .addClass("wv-palettes-legend")
                 .addClass("wv-palettes-classes")
@@ -120,10 +120,10 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         });
     };
 
-    var updateClasses = function(entries, index) {
+    var updateClasses = function(legend, index) {
         var $panel = $(selector + " [data-index='" + index + "']");
         $panel.empty();
-        _.each(entries.colors, function(color, classIndex) {
+        _.each(legend.colors, function(color, classIndex) {
             $panel.append($("<span></span>")
                 .attr("data-index", index)
                 .attr("data-class-index", classIndex)
@@ -133,7 +133,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
                 .hover(highlightClass, unhighlightClass));
         });
         var $detailPanel = $("<div></div>");
-        _.each(entries.colors, function(color, classIndex) {
+        _.each(legend.colors, function(color, classIndex) {
             var $row = $("<div></div>")
                 .addClass("wv-palettes-class-detail")
                 .attr("data-class-index", classIndex);
@@ -157,15 +157,14 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         if ( !loaded ) {
             return;
         }
-        var palette = model.get(layer.id);
-        _.each(palette.maps, function(map, index) {
-            entries = map.legend || map.entries;
-            if ( entries.type === "scale" ) {
+        var legends = model.getLegends(layer.id);
+        _.each(legends, function(legend, index) {
+            if ( legend.type === "scale" ) {
                 wv.palettes.colorbar(selector + " " +
-                    "[data-index='" + index + "'] canvas", entries);
+                    "[data-index='" + index + "'] canvas", legend.colors);
                 showUnitRange(index);
-            } else if ( entries.type === "class" ) {
-                updateClasses(entries, index);
+            } else if ( legend.type === "class" ) {
+                updateClasses(legend, index);
             }
         });
     };
@@ -174,14 +173,12 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         if ( !loaded ) {
             return;
         }
-        var palette = model.get(layer.id);
-        var map = palette.maps[index];
-        var entries = palette.maps[index].legend || palette.maps[index].entries;
-        var min = entries.labels[0];
-        var max = entries.labels[entries.labels.length - 1];
+        var legend = model.getLegend(layer.id, index);
+        var min = _.first(legend.labels);
+        var max = _.last(legend.labels);
         $(selector + " [data-index='" + index + "'] .wv-palettes-min").html(min);
         $(selector + " [data-index='" + index + "'] .wv-palettes-max").html(max);
-        var title = map.title || "&nbsp;";
+        var title = legend.title || "&nbsp;";
         $(selector + " [data-index='" + index + "'] .wv-palettes-title").html(title);
     };
 
@@ -189,24 +186,20 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         if ( !loaded ) {
             return;
         }
-        var palette = model.get(layer.id);
+        var legend = model.getLegend(layer.id, index);
         var index = _.parseInt($(this).attr("data-index"));
-        var info = palette.maps[index].legend || palette.maps[index].entries;
-        if ( !info ) {
-            return;
-        }
         var $colorbar = $(this);
         var x = event.pageX - $colorbar.offset().left;
         var width = $colorbar.width();
         var percent = x / width;
-        var bins = info.labels.length;
+        var bins = legend.colors.length;
         var colorIndex = Math.floor(bins * percent);
         if (colorIndex >= bins) {
             colorIndex = bins - 1;
         }
 
-        var color = info.colors[colorIndex];
-        var label = info.labels[colorIndex];
+        var color = legend.colors[colorIndex];
+        var label = legend.labels[colorIndex];
         $colorbar.tooltip("option", "content",
             "<span class='wv-palettes-color-box' style='background: " +
             wv.util.hexToRGBA(color) + "'>" + "</span>" + label);

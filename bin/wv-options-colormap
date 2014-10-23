@@ -46,6 +46,7 @@ def get_map_type(entries):
             return "scale"
         else:
             return "class"
+    return "special"
 
 def process_entries(entries):
     entries = to_list(entries)
@@ -95,11 +96,13 @@ def process_file(file):
         if entries["type"] == "special":
             continue
         result["entries"] = entries
+        if "@title" in colormap:
+            result["entries"]["title"] = colormap["@title"]
         if "Legend" in colormap:
             legend = process_entries(colormap["Legend"]["ColorMapEntry"])
             result["legend"] = legend
-        if "@title" in colormap:
-            result["title"] = colormap["@title"]
+            if "@title" in colormap:
+                result["legend"]["title"] = colormap["@title"]
         maps += [result]
 
     id = os.path.splitext(os.path.basename(input_file))[0]
