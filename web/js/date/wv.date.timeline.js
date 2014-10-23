@@ -369,41 +369,43 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     };
     var getNextBoundaryTickData = function(tick){
         var nextTick = new Date(tick);
+        var rt;
         switch(zoomLvl){
         case 0:
-            var returnTick = new Date(nextTick.setUTCFullYear(nextTick.getUTCFullYear()+10));
+            rt = new Date(nextTick.setUTCFullYear(nextTick.getUTCFullYear()+10));
             break;
         case 1:
-            var returnTick = new Date(nextTick.setUTCFullYear(nextTick.getUTCFullYear()+1));
+            rt = new Date(nextTick.setUTCFullYear(nextTick.getUTCFullYear()+1));
             break;
         case 2:
-            var returnTick = new Date(nextTick.setUTCMonth(nextTick.getUTCMonth()+1));
+            rt = new Date(nextTick.setUTCMonth(nextTick.getUTCMonth()+1));
             break;
         case 3:
-            var returnTick = new Date(nextTick.setUTCDate(nextTick.getUTCDate()+7));
+            rt = new Date(nextTick.setUTCDate(nextTick.getUTCDate()+7));
             break;
             
         }
-        return returnTick;
+        return rt;
     };
     var getNextNormalTickData = function(tick){
         var nextTick = new Date(tick);
+        var rt;
         switch(zoomLvl){
         case 0:
-            var returnTick = new Date(nextTick.setUTCFullYear(nextTick.getUTCFullYear()+1));
+            rt = new Date(nextTick.setUTCFullYear(nextTick.getUTCFullYear()+1));
             break;
         case 1:
-            var returnTick = new Date(nextTick.setUTCMonth(nextTick.getUTCMonth()+1));
+            rt = new Date(nextTick.setUTCMonth(nextTick.getUTCMonth()+1));
             break;
         case 2:
-            var returnTick = new Date(nextTick.setUTCDate(nextTick.getUTCDate()+1));
+            rt = new Date(nextTick.setUTCDate(nextTick.getUTCDate()+1));
             break;
         case 3:
-            var returnTick = new Date(nextTick.setUTCDate(nextTick.getUTCDate()+1));
+            rt = new Date(nextTick.setUTCDate(nextTick.getUTCDate()+1));
             break;
             
         }
-        return returnTick;
+        return rt;
     };
     var redrawAxis = function(){  //TODO: Draw y axis
 
@@ -429,7 +431,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
             var subLabel = getSubLabel(boundaryTickData);
 
-            if (!($(this).find('line').attr('y1') === '20')){
+            if (($(this).find('line').attr('y1') !== '20')){
                 boundaryTick.select('line')
                     .attr("y1","20")
                     .attr("y2","-50");
@@ -495,7 +497,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 //            var nextNormalTickData = d3.select($(this).nextAll('g.tick').first()[0]).data()[0];
             var normalTickWidth = x(nextNormalTickData) - x(normalTickData);
 
-            if(!($(this).find('line').attr('y1') === '-2')){
+            if(($(this).find('line').attr('y1') !== '-2')){
                 normalTick.select('line')
                     .attr("y1","-2");
             }
@@ -652,12 +654,13 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         var lastEndDomain = x.domain()[1];
         var extStartDate = new Date(zoom.xExtent()[0]);
         var extEndDate = new Date(zoom.xExtent()[1]);
-        var boundaryTickWidth, endDateInt, endDate,maxNumberOfTicks,normalTickWidth;
+        var boundaryTickWidth, endDateInt, endDate,maxNumberOfTicks,normalTickWidth,tw;
         var rangeWidth;
-
+        var mouseBool,mousePos,mouseOffset;
         if($(this).is('svg') && d3.event.sourceEvent){ //TODO: button zoom errors with this but mouse zooming doesnt
-            var mousePos = x.invert(d3.mouse(this)[0]);
-            var mouseOffset = width/2 - d3.mouse(this)[0];
+            mouseBool = true;
+            mousePos = x.invert(d3.mouse(this)[0]);
+            mouseOffset = width/2 - d3.mouse(this)[0];
         }
         
 
@@ -666,7 +669,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         switch (interval){
         case 'decade':
         case 0:
-            var tw = 150/10;
+            tw = 150/10;
             //Each tick is one year, see how many there are until xExtent
 
             numberOfTicks = (extEndDate.getUTCFullYear() - extStartDate.getUTCFullYear());
@@ -694,11 +697,10 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             break;
         case 'year':
         case 1:
-            var tw = 150/12;
+            tw = 150/12;
 
             //Each tick is one month, see how many there are until xExtent
-            numberOfTicks = (extEndDate.getUTCFullYear() - extStartDate.getUTCFullYear())*12
-                + extEndDate.getUTCMonth() + 1 - extStartDate.getUTCMonth();
+            numberOfTicks = (extEndDate.getUTCFullYear() - extStartDate.getUTCFullYear())*12 + extEndDate.getUTCMonth() + 1 - extStartDate.getUTCMonth();
 
             //Max possible ticks for this screen resolution
             maxNumberOfTicks = Math.ceil(width/tw);
@@ -724,7 +726,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             break;
         case 'month': //FIXME: needs to be fixed for being tooSmall
         case 2:
-            var tw = 7;
+            tw = 7;
             
             //Each tick is one year, see how many there are until xExtent
             numberOfTicks = (extEndDate - extStartDate)/1000/60/60/24;
@@ -752,7 +754,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             break;
         case 'week': //FIXME: for maxNumberofTicks and tooSmall
         case 3:
-             var tw = 18;
+            tw = 18;
             
             //Each tick is one year, see how many there are until xExtent
             numberOfTicks = (extEndDate - extStartDate)/1000/60/60/24;
@@ -829,7 +831,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
         d3.select('#timeline-footer svg').call(zoom);
         
-        if (mousePos){
+        if (mouseBool){
             zoom.translate([-x(mousePos)+width/2-mouseOffset,0]);
         }
         else{
@@ -861,14 +863,13 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
         boundaryTicks.each(function(){
             var boundaryTick = d3.select(this);
-            var boundaryTickWidth,normalTickWidth;
             var boundaryTickData = boundaryTick.data()[0];
             var nextBoundaryTickData = getNextBoundaryTickData(boundaryTickData);
             var nextNormalTickData = getNextNormalTickData(boundaryTickData);
 
-            var boundaryTickWidth = x(nextBoundaryTickData) - x(boundaryTickData);
+            boundaryTickWidth = x(nextBoundaryTickData) - x(boundaryTickData);
 
-            var normalTickWidth = x(nextNormalTickData) - x(boundaryTickData);
+            normalTickWidth = x(nextNormalTickData) - x(boundaryTickData);
             
             var subLabel = getSubLabel(boundaryTickData);
 
@@ -912,12 +913,11 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
         normalTicks.each(function(){
             var normalTick = d3.select(this);
-            var normalTickWidth;
             var normalTickData = normalTick.data()[0];
             var nextNormalTickData = getNextNormalTickData(normalTickData);//d3.select($(this).nextAll('g.tick').first()[0]).data()[0];
 
             //replaces statement below
-            var normalTickWidth = x(nextNormalTickData) - x(normalTickData);
+            normalTickWidth = x(nextNormalTickData) - x(normalTickData);
             /*
             nextNormalTickData ? 
                 normalTickWidth = x(nextNormalTickData) - x(normalTickData) 
@@ -1026,10 +1026,12 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var showHoverLabel = function(d){
         var tick = this.parentNode;
         var boundaryTick, boundaryTickWidth;
-        tick.classList.contains('tick-labeled') ? //TODO: Check comaptibility of classList.contains
-            $boundaryTick = $(tick)
-            :
+        if(tick.classList.contains('tick-labeled')){ //TODO: Check comaptibility of classList.contains
+            $boundaryTick = $(tick);
+        }
+        else{
             $boundaryTick = $(tick).prevAll('g.tick-labeled').first(); //Grab Boundary Tick if it is a Normal Tick
+        }
 
         boundaryTickWidth = $boundaryTick.find('rect.boundarytick-background').attr('width'); //get width from one boundary to the next
         boundaryTick = d3.select($boundaryTick[0]); //Convert jquery selection to d3 selection
@@ -1221,16 +1223,12 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                         switch(zoomLvl){
                         case 0:
                             return (d.getUTCFullYear() === newDate.getUTCFullYear());
-                            break;
                         case 1:
                             return (d.getUTCFullYear() === newDate.getUTCFullYear()) && (d.getUTCMonth() === newDate.getUTCMonth());
-                            break;
                         case 2:
                             return (d.getUTCFullYear() === newDate.getUTCFullYear()) && (d.getUTCMonth() === newDate.getUTCMonth() && (d.getUTCDate() === newDate.getUTCDate()));
-                            break;
                         case 3:
                             return (d.getUTCFullYear() === newDate.getUTCFullYear()) && (d.getUTCMonth() === newDate.getUTCMonth() && (d.getUTCDate() === newDate.getUTCDate()));
-                            break;
                             
                         }
                     });
@@ -1543,19 +1541,23 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var forwardNextDay = function(){ //FIXME: Limit animation correctly
         var nextDay = new Date(new Date(model.selected)
                                .setUTCDate(model.selected.getUTCDate()+1));
-        (nextDay <= dataLimits[1]) ?
-            animateForward("day")
-            :
+        if(nextDay <= dataLimits[1]){
+            animateForward("day");
+        }
+        else{
             animateEnd();
+        }
     };
     var reversePrevDay = function(){ //FIXME: Limit animation correctly
          var prevDay = new Date(new Date(model.selected)
                                .setUTCDate(model.selected.getUTCDate()-1));
-        (prevDay >= dataLimits[0]) ?
-            animateReverse("day")
-            :
+        if(prevDay >= dataLimits[0]){
+            animateReverse("day");
+        }
+        else{
             animateEnd();
-    }
+        }
+    };
     var animateForward = function(interval) {
         if ( ui.anim.active ) {
             return;
@@ -1646,4 +1648,4 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     };
     
     return self;
-}
+};
