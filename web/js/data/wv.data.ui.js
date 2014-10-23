@@ -25,7 +25,8 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
 
     var indicators = {
         query: null,
-        noneInView: null
+        noneInView: null,
+        noResults: null
     };
 
     var self = {};
@@ -260,7 +261,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
         lastResults = results;
         wv.ui.indicator.hide(indicators);
         if ( model.selectedProduct !== null && results.granules.length === 0 ) {
-            wv.ui.indicator.noData(indicators);
+            indicators.noData = wv.ui.indicator.noData(indicators);
         } else {
             if ( results.meta.showList ) {
                 selectionListPanel =
@@ -712,7 +713,7 @@ wv.data.ui.downloadListPanel = function(config, model) {
                         "data-granule='" + granule.id + "' " +
                         "value='X'></input></td>",
                     "<td><nobr><ul><li>" + granule.label + "</li></ul></nobr></td>",
-                    "<td>" + linksText(granule.links) + "</td>",
+                    "<td class='wv-data-granule-link'>" + linksText(granule.links) + "</td>",
                 "</tr>"
             ];
         } else {
@@ -824,7 +825,7 @@ wv.data.ui.selectionListPanel = function(model, results) {
     };
 
     self.show = function() {
-        $dialog = wv.ui.getDialog();
+        $dialog = wv.ui.getDialog("wv-data-list");
         $dialog
             .attr("id", "wv-data-list")
             .html(bodyText())

@@ -139,7 +139,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             .attr("id", group.id + "-" + encodeURIComponent(layer.id))
             .addClass(self.id + "item")
             .addClass("item")
-            .attr("data-layer", layer.id);            
+            .attr("data-layer", layer.id);
 
         var $removeButton = $("<a></a>")
             .attr("id", "close" + group.id + encodeURIComponent(layer.id))
@@ -147,7 +147,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             .attr("data-layer", layer.id)
             .attr("title", "Remove Layer");
         var $removeImage = $("<i></i>");
-        
+
         $removeButton.append($removeImage);
         $layer.append($removeButton);
 
@@ -202,14 +202,11 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         var names = models.layers.getTitles(layer.id);
         var mainLayerDiv = $('<div></div>')
             .addClass('layer-main')
-            .toggle(function() {
-                wv.layers.options(config, models, layer);
-            },function(){
-                wv.ui.closeDialog('wv-layers-options-dialog');
-            })
+            .attr("data-layer", layer.id)
             .append($('<h4></h4>').html(names.title))
             .append($('<p></p>').html(names.subtitle));
-            
+        wv.ui.click(mainLayerDiv, toggleOptionsPanel);
+        
         $layer.append(mainLayerDiv);
 
         if ( layer.palette ) {
@@ -219,6 +216,20 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             $parent.prepend($layer);
         } else {
             $parent.append($layer);
+        }
+    };
+
+    var toggleOptionsPanel = function() {
+        var $d = $("#wv-layers-options-dialog");
+        var thisLayerId = $(this).attr("data-layer");
+        var thisLayer = config.layers[thisLayerId];
+        if ( $d.length === 0 ) {
+            wv.layers.options(config, models, thisLayer);
+        } else if ( $d.attr("data-layer") !== thisLayerId ) {
+            wv.ui.closeDialog();
+            wv.layers.options(config, models, thisLayer);
+        } else {
+            wv.ui.closeDialog();
         }
     };
 
