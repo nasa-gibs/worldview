@@ -68,11 +68,11 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
                 of: $("#products")
             },
             close: dispose
-        })
-        //.iCheck({radioClass: 'iradio_square-grey'});
-        //$("#wv-layers-options-dialog .jspScrollable").each(function() {
-        //    $(this).jScrollPane().data("jsp").reinitialise();
-        //});
+        });
+        $("#wv-palette-selector").iCheck({radioClass: 'iradio_square-grey'});
+        $("#wv-layers-options-dialog .jspScrollable").each(function() {
+            $(this).jScrollPane().data("jsp").reinitialise();
+        });
         ;
         models.layers.events
             .on("remove", onLayerRemoved)
