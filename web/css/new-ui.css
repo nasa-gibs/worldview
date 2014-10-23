@@ -4,7 +4,7 @@
 }
 
 
-/************************Timeline!****************************/
+/************************Timeline****************************/
 #timeline{
     position:absolute;
     bottom:10px;
@@ -39,42 +39,38 @@
     fill:#fff;
     text-transform:uppercase;
 }
-.x.axis>.tick>line {
-    stroke-width:3;
-    stroke-miterlimit:4;
-    stroke-dasharray:3,9;
-    stroke:#727272;
-    stroke-linecap:butt;
-    stroke-linejoin:miter;
-    stroke-miterlimit:4;
-}
+
 .x.axis > .tick circle{
     fill:#fff;
 }
-.x.axis> .tick rect {
+.x.axis> g.tick rect {
     fill:#e2e2e2;
     fill-opacity:0;
 }
-.x.axis> .tick:hover rect.axis-background{
+.x.axis> g.tick:hover rect.boundarytick-background,
+.x.axis> g.tick rect.boundarytick-background.bg-hover{
     fill:#fff;
     fill-opacity:1;
 }
-.x.axis> .tick:hover text {
-    fill:#1a1a1a;
+.x.axis> g.tick.label-only rect.boundarytick-background.bg-hover{
+    fill:transparent;
 }
-/*.x.axis >.tick g.subtick:nth-child(5) line{
-    display:none;
-}*/
-.x.axis > .tick > .subtick > .tick:first-child line,
-.x.axis > .tick > .subtick > .tick:last-child line
-{
-    stroke:transparent;
-}
-.x.axis > .tick > .subtick > .tick:hover rect{
+.x.axis> g.tick rect.normaltick-background:hover{
     fill-opacity:0.3;
     fill:#fff;
 }
-.x.axis > .tick > .subtick > .tick > line{
+.x.axis> g.tick:hover text,
+.x.axis> g.tick text.hover-tick-label {
+    fill:#1a1a1a;
+    pointer-events:none;
+}
+.x.axis > g.tick > text > .sub-label{
+    fill:#555;
+}
+.x.axis > g.tick:hover > text > .sub-label{
+    fill:#1a1a1a;
+}
+.x.axis > .tick > line{
     fill:none;
     stroke:#444;
     stroke-width:2;
@@ -84,6 +80,15 @@
     stroke-opacity:1;
     stroke-dasharray:2, 4;
     stroke-dashoffset:0;
+}
+.x.axis>.tick-labeled>line {
+    stroke-width:3;
+    stroke-miterlimit:4;
+    stroke-dasharray:3,9;
+    stroke:#727272;
+    stroke-linecap:butt;
+    stroke-linejoin:miter;
+    stroke-miterlimit:4;
 }
 #timeline-header{
     margin-top:2px;
@@ -304,12 +309,7 @@ display:inline-block;}
 #timeline-hide:hover{
     background-color:#fff;
 }
-.x.axis > g.tick > text > .sub-label{
-    fill:#555;
-}
-.x.axis > g.tick:hover > text > .sub-label{
-    fill:#1a1a1a;
-}
+
 #guitarpick{
     cursor:pointer;
     clip-path:url(#guitarpick-boundary);
