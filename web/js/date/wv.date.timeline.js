@@ -30,6 +30,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var x,xAxis,y,yAxis,zoom;
     var zoomInterval,zoomStep,subInterval,subStep,zoomTimeFormat,zoomLvl,resizeDomain;
     var timeline,verticalAxis,guitarPick;
+    var timer;
     var margin = {
         top: 0,
         right: 0,
@@ -50,8 +51,9 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             }
         }
     };
-
-    var dataLimits = [new Date(Date.UTC(2002,11,1)), new Date(Date.UTC(2021,5,1))];
+    var startDateMs = ( model.start ) ? model.start.getTime() : undefined;
+    var endDateMs = ( model.end ) ? model.end.getTime() : undefined;
+    var dataLimits = [new Date(Date.UTC(1979,0,1)), new Date(endDateMs)]; //TODO: Fill in data limits here
 
 
     var self = {};
@@ -60,7 +62,9 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var decrementBtn = $("#left-arrow-group");
 
     var throttleSelect = _.throttle(function(date) {
-        model.select(date);
+        if((date>dataLimits[0])&&(date<dataLimits[1])){
+            model.select(date);
+        }
     }, 100, { trailing: true });
 
     var selection = d3.svg.line()
@@ -92,6 +96,9 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
     };
     var updateTime = function() {
+        var ms = new Date(model.selected);
+        var nd = new Date(ms.setUTCDate(ms.getUTCDate()+1));
+        var pd = new Date(ms.setUTCDate(ms.getUTCDate()-1));
         $('#year-input-group').val(model.selected.getUTCFullYear());
         $('#month-input-group').val(monthNames[model.selected.getUTCMonth()]);
         if (model.selected.getUTCDate()<10){
@@ -100,7 +107,18 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         else {
             $('#day-input-group').val(model.selected.getUTCDate());
         }
-
+        if(nd > dataLimits[1]){
+            incrementBtn.addClass('button-disabled');
+        }
+        else{
+            incrementBtn.removeClass('button-disabled');
+        }
+        if(pd.toUTCString() === dataLimits[0].toUTCString()){
+            decrementBtn.addClass('button-disabled');
+        }
+        else{
+            decrementBtn.removeClass('button-disabled');
+        }
         guitarPick.attr("transform","translate("+(x(model.selected)-25)+",-16)");
 
     };
@@ -112,9 +130,9 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         d3.select('#timeline-boundary rect').attr('width',width+margin.left+margin.right);
         d3.select('#guitarpick-boundary rect').attr('width',width+margin.left+margin.right);
         timeline.select(".x.axis line:first-child").attr("x2",width+10);
-        console.log(zoomLvl);
+
         setZoom(zoomLvl);
-        //redrawAxis();
+
     };
     var getSubLabel = function(tickDate){
         var sl;
@@ -157,11 +175,12 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .data([fNormData])
             .attr('class','tick')
             .attr('transform','translate(' + x(fNormData) + ',0)')
-            .classed('label-only',true);
+            .classed('label-only',true)
+            .classed('normal-tick',true);
         fNormTick.append('line')
             .attr('y2',-height);
         
-        setTicks();
+        setNormalTicks();
     };
     var addNormEndTick = function(){
         var allTickData = d3.selectAll('.x.axis>g.tick').data();
@@ -184,11 +203,12 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .data([lNormData])
             .attr('class','tick')
             .attr('transform','translate(' + x(lNormData) + ',0)')
-            .classed('label-only',true);
+            .classed('label-only',true)
+            .classed('normal-tick',true);
         lNormTick.append('line')
             .attr('y2',-height);
         
-        setTicks();
+        setNormalTicks();
     };
 
     var addStartTick = function(){
@@ -224,7 +244,9 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .attr('dy','.71em')
             .text(fBoundTxt);
         
-        setTicks();
+        d3.selectAll('.x.axis>g.tick').classed('tick-labeled',false);
+        setBoundaryTicks();
+        boundaryTicks.classed('tick-labeled',true);
         
     };
 
@@ -263,15 +285,13 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .attr('y','5')
             .attr('dy','.71em')
             .text(lBoundTxt);
-
-        setTicks();
+        
+        d3.selectAll('.x.axis>g.tick').classed('tick-labeled',false);
+        setBoundaryTicks();
+        boundaryTicks.classed('tick-labeled',true);
         
     };
-
-    var setTicks = function(){
-        var allTicks = d3.selectAll('.x.axis>g.tick');
-        allTicks.classed('tick-labeled',false);
-
+    var setNormalTicks = function(){
         normalTicks = d3.selectAll('.x.axis>g.tick').filter(function(d){
             var selection,value;
             switch (zoomLvl){
@@ -294,16 +314,8 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             }
             return selection !== value;
         });
-        
-        if(tooSmall){
-            if(allTicks.data()[0] > dataLimits[0]){
-                return addNormStartTick();
-            }
-            if(allTicks.data()[allTicks.data().length-1] <= dataLimits[1]){
-                return addNormEndTick();
-            }
-        }
-        
+    };
+    var setBoundaryTicks = function(){
         boundaryTicks = d3.selectAll('.x.axis>g.tick').filter(function(d){
             var selection,value;
             switch (zoomLvl){
@@ -326,14 +338,30 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             }
             return selection === value;
         });
+    };
+    var setTicks = function(){
+        var allTicks = d3.selectAll('.x.axis>g.tick');
+        allTicks.classed('tick-labeled',false);
+
+        setNormalTicks();
+        
+        if(tooSmall){
+            if(allTicks.data()[0] > dataLimits[0]){
+                addNormStartTick();
+            }
+            if(allTicks.data()[allTicks.data().length-1] <= dataLimits[1]){
+                addNormEndTick();
+            }
+        }
+        
+        setBoundaryTicks();
 
         if($(normalTicks[0][0]).is(':nth-child(2)')){
             addStartTick();
-            return;
         }
 
         if(d3.select($(normalTicks[0][normalTicks[0].length-1]).next()[0]).classed('domain')){
-            return addEndTick();
+            addEndTick();
         }
 
         boundaryTicks.classed('tick-labeled',true);
@@ -566,11 +594,56 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         }
     };
     var removeLabelOnlyStuff = function(){
-        d3.selectAll('.x.axis>g.label-only.tick-labeled rect.normaltick-background').remove();
-        d3.selectAll('.x.axis>g.label-only.tick-labeled rect.boundarytick-foreground')
-            .on('mouseenter',null)
-            .on('mouseleave',null)
-            .on('click',null);
+        var sd;
+        var labeledBoundaryTicks = d3.selectAll('.x.axis>g.label-only.tick-labeled');
+
+        labeledBoundaryTicks.selectAll('rect.normaltick-background').remove();
+        d3.select(labeledBoundaryTicks[0][labeledBoundaryTicks[0].length-1]).selectAll('rect').remove();
+
+        switch(zoomLvl){
+        case 0:
+            sd = new Date(dataLimits[0].getUTCFullYear(),model.selected.getUTCMonth(),model.selected.getUTCDate());
+            break;
+        case 1:
+            sd = new Date(dataLimits[0].getUTCFullYear(),dataLimits[0].getUTCMonth(),model.selected.getUTCDate());
+            break;
+        case 2:
+        case 3:
+            sd = new Date(dataLimits[0].getUTCFullYear(),dataLimits[0].getUTCMonth(),dataLimits[0].getUTCDate());
+            break;
+        }
+        if(dataLimits[0] < sd){ //FIXME:  Need to dynamically show and hide selectable areas
+            /*d3.selectAll('.x.axis>g.label-only.tick-labeled rect.boundarytick-foreground')
+                .on('mouseenter',null)
+                .on('mouseleave',null)
+                .on('click',null);
+            */
+        }
+    };
+    var removeNormalTickOnlyStuff = function(){
+        var sd;
+        var ftd = d3.selectAll('.x.axis>g.tick').data()[0];
+        var lnt = d3.selectAll('.x.axis>g.label-only.tick rect.normaltick-background');
+
+        d3.select(lnt[0][lnt[0].length-1]).remove();
+        switch(zoomLvl){
+        case 0:
+            sd = new Date(ftd.getUTCFullYear(),model.selected.getUTCMonth(),model.selected.getUTCDate());
+            break;
+        case 1:
+            sd = new Date(ftd.getUTCFullYear(),dataLimits[0].getUTCMonth(),model.selected.getUTCDate());
+            break;
+        case 2:
+        case 3:
+            sd = new Date(ftd.getUTCFullYear(),ftd.getUTCMonth(),ftd.getUTCDate());
+            break;
+        }
+
+        
+        if(dataLimits[0] < sd){ //FIXME: need to dynamically show and hide selectable areas
+            //var ft = d3.select(normalTicks[0][0]);
+            //ft.remove();
+        }
     };
     var setZoom = function(interval){  //this function should replace zoomable
 
@@ -583,7 +656,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         var rangeWidth;
 
         if($(this).is('svg') && d3.event.sourceEvent){ //TODO: button zoom errors with this but mouse zooming doesnt
-            console.log('mouse');
             var mousePos = x.invert(d3.mouse(this)[0]);
             var mouseOffset = width/2 - d3.mouse(this)[0];
         }
@@ -778,9 +850,8 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         timeline.select(".x.axis")
             .call(xAxis); //update view after translate
 
-//        console.log('xaxis updated');
-
         setTicks();
+        //setTicks();
         
         boundaryTicks.selectAll('line')
             .attr("y1","20")
@@ -861,7 +932,9 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 .attr("width",normalTickWidth);
 
         });
-        
+
+
+
         allTickBackgrounds = d3.selectAll('.x.axis>g.tick>rect.normaltick-background');
         allBoundaryTickForegrounds = d3.selectAll(".x.axis>g.tick>rect.boundarytick-foreground");
 
@@ -885,54 +958,15 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 d = d3.select(this.parentNode).data()[0]; //get Data from parent node (which is a tick)
                 clickBoundaryTick.call(this,d);
             });
-        removeLabelOnlyStuff();
-
-
-
+        if(tooSmall){
+            removeLabelOnlyStuff();
+            removeNormalTickOnlyStuff();
+        }
         //UPDATE GUITARPICK
         if (guitarPick){
             guitarPick.attr("transform","translate("+(x(model.selected)-25)+",-16)");
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-        //redrawAxis(); this doesnt work because it only updates existing ticks, not draw whole new ones
-        
-    };
-    var clickBoundaryTick = function(d){ //FIXME: Combine with selectByDateInterval
-        d3.event.stopPropagation();
-        var d = d3.select(this.parentNode).data()[0];
-        var newDate;
-        
-        switch(zoomLvl){ //FIXME: combine with other zoomLvl actions
-        case 0:
-            var yearOffset = model.selected.getUTCFullYear() - Math.ceil(new Date(model.selected.getUTCFullYear()/10)*10);
-            newDate = new Date(d.getUTCFullYear()+yearOffset,model.selected.getUTCMonth(),model.selected.getUTCDate());
-            break;
-        case 1:
-            newDate = new Date(d.getUTCFullYear(),model.selected.getUTCMonth(),model.selected.getUTCDate());
-            break;
-        case 2:
-            newDate = new Date(d.getUTCFullYear(),d.getUTCMonth(),model.selected.getUTCDate());
-            break;
-        case 3:
-            var dayOffset = model.selected.getUTCDay() - d.getUTCDay();
-            newDate = new Date(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate() + dayOffset);
-            break;
-        default:
-            break;
-        }
-        model.select(newDate);
     };
 
     var hoverBoundaryTick = function(d){
@@ -946,8 +980,9 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     };
     var clickBoundaryTick = function(d){
         switch(zoomLvl){
-            case 0:
-            d = new Date(d.getUTCFullYear(),model.selected.getUTCMonth(),model.selected.getUTCDate());
+        case 0:
+            var yearOffset = model.selected.getUTCFullYear() - Math.ceil(new Date(model.selected.getUTCFullYear()/10)*10);
+            d = new Date(d.getUTCFullYear()+yearOffset,model.selected.getUTCMonth(),model.selected.getUTCDate());
             break;
             case 1:
             d = new Date(d.getUTCFullYear(),model.selected.getUTCMonth(),model.selected.getUTCDate());
@@ -1020,55 +1055,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .classed('bg-hover',false); //untrigger hover state
 
     };
-    var setOffscreenBoundaryTick = function(){
-        //TODO: Optimize
-        var firstBoundaryTick = d3.select(boundaryTicks[0][0]);
-        var firstBoundaryTickData = firstBoundaryTick.data()[0];
-       
-        if(firstBoundaryTick.classed('tick-labeled')) {
-            var offscreenBoundaryTickData = getOffscreenBoundaryTickData(firstBoundaryTickData);
 
-            var offscreenBoundaryTick = timeline.select('.x.axis')
-                .insert('svg:g','g.tick')
-                .attr('class','tick tick-labeled')
-                .attr('transform','translate('+ x(offscreenBoundaryTickData) +',0)')
-                .data([offscreenBoundaryTickData]);
-
-            offscreenBoundaryTick
-                .append('svg:text')
-                .attr('y',5)
-                .attr('dy','.71em')
-                .text(offscreenBoundaryTickText);
-
-            offscreenBoundaryTick
-                .insert('svg:line','text');
-
-            //TODO: Optimize, don't have to set normalTicks
-            setTicks();
-        }
-    };
-    var getOffscreenBoundaryTickData = function(d){
-        switch(zoomLvl){
-            case 0:
-            d = new Date(new Date(d).setUTCFullYear(d.getUTCFullYear()-10));
-            offscreenBoundaryTickText = d.getUTCFullYear();
-            break;
-            case 1:
-            d = new Date(new Date(d).setUTCFullYear(d.getUTCFullYear()-1));
-            offscreenBoundaryTickText = d.getUTCFullYear();
-            break;
-            case 2:
-            d = new Date(new Date(d).setUTCMonth(d.getUTCMonth()-1));
-            offscreenBoundaryTickText = d.getUTCMonth();
-            break;
-            case 3:
-            d = new Date(new Date(d).setUTCDate(d.getUTCDate()-7));
-            offscreenBoundaryTickText = d.getUTCDate();
-            break;
-            //FIXME:  Add default case
-        }
-        return d;
-    };
     var init = function() {
 
         var endDateInt,endDate;
@@ -1223,20 +1210,36 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                     newDate = new Date(mouseDate.getUTCFullYear(),mouseDate.getUTCMonth(),mouseDate.getUTCDate());
                     break;
                 }
-                guitarPick.attr("transform","translate("+ (x(newDate)-28) +",-16)");
 
-                model.select(newDate);
-
-                //TODO: This is going to need to be udated when the zoom changes
-                var hoveredNormalTick = d3.selectAll('.x.axis>g.tick').filter(function(d){
-                    return (d.getUTCFullYear() === newDate.getUTCFullYear()) && (d.getUTCMonth() === newDate.getUTCMonth());
-                });
-                var hoveredNormalTickBackground = hoveredNormalTick.select('rect.normaltick-background')[0][0];
-                var d = d3.select(hoveredNormalTick[0][0]).data()[0];
-
-                unHoverTick();
-                hoverNormalTick.call(hoveredNormalTickBackground,d);
+                if((newDate > dataLimits[0]) && (newDate < dataLimits[1])){
+                    guitarPick.attr("transform","translate("+ (x(newDate)-28) +",-16)");
+                    model.select(newDate);
                 
+
+                    //TODO: This is going to need to be udated when the zoom changes
+                    var hoveredNormalTick = d3.selectAll('.x.axis>g.tick').filter(function(d){
+                        switch(zoomLvl){
+                        case 0:
+                            return (d.getUTCFullYear() === newDate.getUTCFullYear());
+                            break;
+                        case 1:
+                            return (d.getUTCFullYear() === newDate.getUTCFullYear()) && (d.getUTCMonth() === newDate.getUTCMonth());
+                            break;
+                        case 2:
+                            return (d.getUTCFullYear() === newDate.getUTCFullYear()) && (d.getUTCMonth() === newDate.getUTCMonth() && (d.getUTCDate() === newDate.getUTCDate()));
+                            break;
+                        case 3:
+                            return (d.getUTCFullYear() === newDate.getUTCFullYear()) && (d.getUTCMonth() === newDate.getUTCMonth() && (d.getUTCDate() === newDate.getUTCDate()));
+                            break;
+                            
+                        }
+                    });
+                    var hoveredNormalTickBackground = hoveredNormalTick.select('rect.normaltick-background')[0][0];
+                    var d = d3.select(hoveredNormalTick[0][0]).data()[0];
+                    
+                    unHoverTick();
+                    hoverNormalTick.call(hoveredNormalTickBackground,d);
+                }
             }
         });
 
@@ -1246,8 +1249,258 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 mousedown = false;
             }
         });
+        ////////////////////////////End Timeline/////////////////////////////////////
+        ///////////////////////////Begin Datepicker//////////////////////////////////
+        incrementBtn
+            .mousedown(function() {
+                forwardNextDay();
+            })
+            .mouseup(animateEnd);
+        decrementBtn
+            .mousedown(function() {
+                reversePrevDay();
+            })
+            .mouseup(animateEnd);
+        $(document)
+            .keydown(function(event) {
+                if ( event.target.nodeName === "INPUT" ) {
+                    /*if((event.keyCode || event.which) === 9){
 
-////////////////////////////Click bindings/////////////////////////////////// 
+                        $('.button-input-group').parent().css('border-color','');
+                        updateTime();
+
+                    }
+                    else*/ return;
+                }
+                switch ( event.keyCode ) {
+                    case wv.util.key.LEFT:
+                        animateReverse("day");
+                        event.preventDefault();
+                        break;
+                    case wv.util.key.RIGHT:
+                        animateForward("day");
+                        event.preventDefault();
+                        break;
+                    case wv.util.key.UP:
+                        animateForward("month");
+                        event.preventDefault();
+                        break;
+                    case wv.util.key.DOWN:
+                        animateReverse("month");
+                        event.preventDefault();
+                        break;
+                }
+            })
+            .keyup(function(event) {
+                if ( event.target.nodeName === "INPUT" ) {
+                    return;
+                }
+                switch ( event.keyCode ) {
+                    case wv.util.key.LEFT:
+                    case wv.util.key.RIGHT:
+                    case wv.util.key.UP:
+                    case wv.util.key.DOWN:
+                        animateEnd();
+                        event.preventDefault();
+                        break;
+                }
+            });
+
+        //bind click action to interval radio buttons
+        var $buttons = $('.button-input-group');
+        $buttons.on('focus',function(e){
+            e.preventDefault();
+            $buttons.siblings('.date-arrows').css('visibility','');
+            $buttons.parent().removeClass('selected');
+            $(this).parent().addClass('selected');
+            $(this).siblings('.date-arrows').css('visibility','visible');
+        });
+        $buttons.focusout(function(e){
+            $buttons.siblings('.date-arrows').css('visibility','');
+            $buttons.parent().removeClass('selected');
+        });
+        var $incrementIntDate = $('.date-arrow-up');
+        var $decrementIntDate = $('.date-arrow-down');
+        $incrementIntDate.click(function(e){
+            if(timer){
+                clearTimeout(timer);
+                daysInMonth = (new Date(selectedDate.getUTCFullYear(),selectedDate.getUTCMonth()+1,0)).getUTCDate();
+            }
+            else{
+                selectedDate = new Date(model.selected);
+                daysInMonth = (new Date(model.selected.getUTCFullYear(),model.selected.getUTCMonth()+1,0)).getUTCDate();
+            }
+            var $interval = $(this).siblings('.button-input-group').attr('id').replace("-input-group", "");
+            var $dateVal = $(this).siblings('input.button-input-group');
+
+            switch($interval){
+                case 'day':
+                var numberDate;
+                if(parseInt($dateVal.val())<daysInMonth){
+                    numberDate = parseInt(selectedDate.getUTCDate())+1;
+                }
+                else{
+                    numberDate = 1;
+                }
+                if (numberDate>9){
+                    $dateVal.val(numberDate);
+                }
+                else{
+                    $dateVal.val("0" + numberDate);
+                }
+                selectedDate.setUTCDate(numberDate);
+                break;
+                case 'month':
+                var monthDate;
+                if (monthNumber($dateVal.val())+1<monthNames.length){
+                    monthDate = parseInt(selectedDate.getUTCMonth())+1;
+                }
+                else{
+                    monthDate = 0;
+                }
+                $dateVal.val(monthNames[monthDate]);
+                selectedDate.setUTCMonth(monthDate);
+                break;
+                case 'year':
+                $dateVal.val(parseInt(selectedDate.getUTCFullYear())+1);
+                selectedDate.setUTCFullYear($dateVal.val());
+                break;
+            }
+            timer = setTimeout(function(){
+                if((selectedDate>dataLimits[0])&&(selectedDate<dataLimits[1])){
+                    model.select(selectedDate);
+                }
+                else{
+                    updateTime();
+                }
+                timer = null;
+            },400);
+            $(this).siblings('.button-input-group').focus();
+        });
+
+        //select all input on focus
+        $('input').focus(function(e){
+            $(this).select();
+        }).mouseup(function(e){
+            e.preventDefault();
+        });
+
+        $decrementIntDate.click(function(e){
+            if(timer){
+                clearTimeout(timer);
+                daysInMonth = (new Date(selectedDate.getUTCFullYear(),selectedDate.getUTCMonth()+1,0)).getUTCDate();
+            }
+            else{
+                selectedDate = new Date(model.selected);
+                daysInMonth = (new Date(model.selected.getUTCFullYear(),model.selected.getUTCMonth()+1,0)).getUTCDate();
+            }
+            var $interval = $(this).siblings('.button-input-group').attr('id').replace("-input-group", "");
+            var $dateVal = $(this).siblings('input.button-input-group');
+
+                switch($interval){
+                case 'day':
+                    var numberDate;
+                    if($dateVal.val()>1){
+                        numberDate = parseInt(selectedDate.getUTCDate())-1;
+                    }
+                    else{
+                        numberDate = daysInMonth;
+                    }
+                    if(numberDate>9){
+                        $dateVal.val(numberDate);
+                    }
+                    else{
+                        $dateVal.val("0" + numberDate);
+                    }
+                    selectedDate.setUTCDate(numberDate);
+                    break;
+                case 'month':
+                    var monthDate;
+                    if (monthNumber($dateVal.val())>0){
+                        monthDate = parseInt(selectedDate.getUTCMonth())-1;
+                    }
+                    else{
+                        monthDate = 11;
+                    }
+                    $dateVal.val(monthNames[monthDate]);
+                    selectedDate.setUTCMonth(monthDate);
+                    break;
+                case 'year':
+                    $dateVal.val(parseInt(selectedDate.getUTCFullYear())-1);
+                    selectedDate.setUTCFullYear($dateVal.val());
+                    break;
+                }
+            timer = setTimeout(function(){
+                if((selectedDate>dataLimits[0])&&(selectedDate<dataLimits[1])){
+                    model.select(selectedDate);
+                }
+                else{
+                    updateTime();
+                }
+                timer = null;
+            },400);
+
+            $(this).siblings('.button-input-group').focus();
+        });
+        
+        $('.button-input-group').change(function(){
+            if($(this).parent().hasClass('selected')){
+                var selected = $(this);
+                var YMDInterval = selected.attr('id');
+                var newInput = selected.val();
+                var selectedDateObj = null;
+                switch(YMDInterval){
+                    case 'year-input-group':
+                    if ((newInput > 1000) && (newInput < 9999))
+                        selectedDateObj = new Date((new Date(model.selected)).setUTCFullYear(newInput));
+                    break;
+                    case 'month-input-group':
+                    if ($.isNumeric(newInput) && (newInput < 13) && (newInput > 0)){
+                        selectedDateObj = new Date((new Date(model.selected)).setUTCMonth(newInput-1));
+                    }
+                    else{
+                        var validStr = false;
+                        var newIntInput;
+                        newInput = newInput.toUpperCase();
+
+                        for (var i=0;i<monthNames.length;i++){
+                            if (newInput === monthNames[i]){
+                                validStr = true;
+                                newIntInput = i;
+                            }
+                        }
+                        if (validStr){
+                            selectedDateObj = new Date((new Date(model.selected)).setUTCMonth(newIntInput));
+                        }
+                    }
+                    break;
+                    case 'day-input-group':
+                    if(newInput>0 && newInput<=(new Date(model.selected.getYear(),model.selected.getMonth()+1,0).getDate())){
+                        selectedDateObj = new Date((new Date(model.selected)).setUTCDate(newInput));
+                    }
+                    break;
+                }
+                if((selectedDateObj > dataLimits[0]) && (selectedDateObj <= dataLimits[1])){
+                    model.select(selectedDateObj);
+                    $('.button-input-group').parent().css('border-color','');
+                    selected.select();
+                }
+                else{
+                    updateTime();
+                    selected.select();
+
+                }
+
+            }
+        });
+        $("#focus-guard-1").on('focus',function(){
+           $("#day-input-group").focus().select();
+        });
+        $("#focus-guard-2").on('focus',function(){
+           $("#year-input-group").focus().select();
+        });
+        ///////////////////////////End Datepicker////////////////////////////////////
+        ////////////////////////////Click bindings/////////////////////////////////// 
         d3.select("#zoom-decades").on("click",function(d){
             $('.zoom-btn').removeClass("zoom-btn-selected");
             $(this).addClass("zoom-btn-selected");
@@ -1271,24 +1524,59 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
         });
 
-//////////////////////////////end clicks////////////////////////////////////
+        $('#timeline-hide').click(function() { self.toggle(); });
 
+//////////////////////////////end clicks////////////////////////////////////
+                
+        
         model.events.on("select", function(){
             updateTime();
         });
 
         models.layers.events.on("change",function(){
-            if(model.start && model.start.getTime() !== startDateMs){
-                startDateMs = model.start.getTime();
-                //setData();           FIXME: update actual data
-            }
+            //empty
         });
 
         updateTime();
 
     }; // end init()
+    var forwardNextDay = function(){ //FIXME: Limit animation correctly
+        var nextDay = new Date(new Date(model.selected)
+                               .setUTCDate(model.selected.getUTCDate()+1));
+        (nextDay <= dataLimits[1]) ?
+            animateForward("day")
+            :
+            animateEnd();
+    };
+    var reversePrevDay = function(){ //FIXME: Limit animation correctly
+         var prevDay = new Date(new Date(model.selected)
+                               .setUTCDate(model.selected.getUTCDate()-1));
+        (prevDay >= dataLimits[0]) ?
+            animateReverse("day")
+            :
+            animateEnd();
+    }
+    var animateForward = function(interval) {
+        if ( ui.anim.active ) {
+            return;
+        }
+        models.date.add(interval, 1);
+        ui.anim.interval = interval;
+        ui.anim.play("forward");
+    };
 
+    var animateReverse = function(interval) {
+        if ( ui.anim.active ) {
+            return;
+        }
+        models.date.add(interval, -1);
+        ui.anim.interval = interval;
+        ui.anim.play("reverse");
+    };
 
+    var animateEnd = function() {
+        ui.anim.stop();
+    };
 
     var zoomLvlTiny = 0;
     var zoomable = function(e){
@@ -1320,12 +1608,42 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         }
         else{
             //zoom.translate(panLimit());
-            redrawAxis();
+            if(!(tooSmall)){
+                redrawAxis();
+            }
         }
 
     };
     init();
     $(window).resize(resizeWindow);
 
+    self.toggle = function(){
+        var tl = $('#timeline-footer, #timeline-zoom');
+        if(tl.is(':hidden')){
+            tl.show('slow');
+            $('#timeline').css('right','10px');
+            d3.select("#guitarpick").attr("style","display:block;");
+        }
+        else{
+            tl.hide('slow');
+            d3.select("#guitarpick").attr("style","display:none;");
+            $('#timeline').css('right','auto');
+        }
+    };
+
+    self.expand = function(){
+        var tl = $('#timeline-footer, #timeline-zoom');
+        if (tl.is(":hidden")){
+            self.toggle();
+        }
+    };
+
+    self.collapse = function(){
+        var tl = $('#timeline-footer, #timeline-zoom');
+        if (!tl.is(":hidden")){
+            self.toggle();
+        }
+    };
+    
     return self;
 }

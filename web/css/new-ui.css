@@ -35,6 +35,7 @@
 .x.axis .tick{
     cursor:pointer;
 }
+
 .x.axis .tick text{
     fill:#fff;
     text-transform:uppercase;
@@ -52,14 +53,12 @@
     fill:#fff;
     fill-opacity:1;
 }
-.x.axis> g.tick.label-only rect.boundarytick-background.bg-hover{
-    fill:transparent;
-}
+
 .x.axis> g.tick rect.normaltick-background:hover{
     fill-opacity:0.3;
     fill:#fff;
 }
-.x.axis> g.tick:hover text,
+
 .x.axis> g.tick text.hover-tick-label {
     fill:#1a1a1a;
     pointer-events:none;
@@ -204,9 +203,13 @@ display:inline-block;}
     filter: FlipV;
     -ms-filter: "FlipV";
 }
-#timeline-header>.button-action-group:hover,#timeline-header .date-arrows:hover {
+#timeline-header>.button-action-group:hover,#timeline-header .date-arrows:hover{
     background-color:#fff;
     cursor:pointer;
+                                            }
+#timeline-header>.button-action-group.button-disabled:hover{
+    background-color:transparent;
+    cursor:default;
 }
 #left-arrow-group{
      -moz-transform: scaleX(-1);
@@ -220,6 +223,12 @@ display:inline-block;}
     fill:#1a1a1a;
     fill-opacity:1;
     stroke:none;
+}
+#timeline-header>.button-action-group.button-disabled .arrow{
+    fill:#333;
+}
+#timeline-header>.button-action-group.button-disabled:hover .arrow{
+    fill:#333;
 }
 #timeline-header,#timeline-footer,#timeline-zoom,#timeline-hide{
     float:left;
