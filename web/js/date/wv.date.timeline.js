@@ -1616,7 +1616,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                     redrawAxis();
                 }
             }
-        }
+        };
     })();
 
     init();
