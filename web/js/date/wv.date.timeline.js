@@ -21,7 +21,7 @@ wv.date = wv.date || {};
  * @class wv.date.timeline
  */
 wv.date.timeline = wv.date.timeline || function(models, config, ui) {
-    
+
     var id = "timeline";
     var selector = "#" + id;
     var model = models.date;
@@ -179,13 +179,13 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .classed('normal-tick',true);
         fNormTick.append('line')
             .attr('y2',-height);
-        
+
         setNormalTicks();
     };
     var addNormEndTick = function(){
         var allTickData = d3.selectAll('.x.axis>g.tick').data();
         var endTick = dataLimits[1];
-        
+
         var lNormData;
         switch (zoomLvl){
         case 0:
@@ -207,7 +207,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .classed('normal-tick',true);
         lNormTick.append('line')
             .attr('y2',-height);
-        
+
         setNormalTicks();
     };
 
@@ -243,18 +243,18 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .attr('y','5')
             .attr('dy','.71em')
             .text(fBoundTxt);
-        
+
         d3.selectAll('.x.axis>g.tick').classed('tick-labeled',false);
         setBoundaryTicks();
         boundaryTicks.classed('tick-labeled',true);
-        
+
     };
 
     var addEndTick = function(){
 
         var lBoundData,lBoundTxt;
         var lNormData = normalTicks.data()[normalTicks.data().length-1];
-        
+
         switch (zoomLvl){
         case 0:
             lBoundData = new Date(Date.UTC(Math.ceil(lNormData.getUTCFullYear()/10)*10,0,1));
@@ -285,11 +285,11 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .attr('y','5')
             .attr('dy','.71em')
             .text(lBoundTxt);
-        
+
         d3.selectAll('.x.axis>g.tick').classed('tick-labeled',false);
         setBoundaryTicks();
         boundaryTicks.classed('tick-labeled',true);
-        
+
     };
     var setNormalTicks = function(){
         normalTicks = d3.selectAll('.x.axis>g.tick').filter(function(d){
@@ -344,7 +344,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         allTicks.classed('tick-labeled',false);
 
         setNormalTicks();
-        
+
         if(tooSmall){
             if(allTicks.data()[0] > dataLimits[0]){
                 addNormStartTick();
@@ -353,7 +353,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 addNormEndTick();
             }
         }
-        
+
         setBoundaryTicks();
 
         if($(normalTicks[0][0]).is(':nth-child(2)')){
@@ -383,7 +383,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         case 3:
             rt = new Date(nextTick.setUTCDate(nextTick.getUTCDate()+7));
             break;
-            
+
         }
         return rt;
     };
@@ -403,7 +403,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         case 3:
             rt = new Date(nextTick.setUTCDate(nextTick.getUTCDate()+1));
             break;
-            
+
         }
         return rt;
     };
@@ -413,9 +413,9 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .call(xAxis);
 
         //FIXME: Make function for other zoom levels
-        
+
         setTicks();
-        
+
         var allTicks = d3.selectAll('.x.axis>g.tick');
 
         boundaryTicks.each(function(){
@@ -486,7 +486,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 boundaryTick.select('rect.normaltick-background')
                     .attr("width",normalTickWidth);
             }
-            
+
         });
 
         normalTicks.each(function(){
@@ -501,7 +501,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 normalTick.select('line')
                     .attr("y1","-2");
             }
-            
+
             if(($(this).find('text').length)){
                 normalTick.select("text").remove();
             }
@@ -641,7 +641,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             break;
         }
 
-        
+
         if(dataLimits[0] < sd){ //FIXME: need to dynamically show and hide selectable areas
             //var ft = d3.select(normalTicks[0][0]);
             //ft.remove();
@@ -662,7 +662,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             mousePos = x.invert(d3.mouse(this)[0]);
             mouseOffset = width/2 - d3.mouse(this)[0];
         }
-        
+
 
         setZoomBtns(interval);
 
@@ -686,13 +686,13 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 tooSmall = false;
 
                 endDateInt = extStartDate.getUTCFullYear() + maxNumberOfTicks;
-                endDate = new Date(endDateInt,extStartDate.getUTCMonth(),extStartDate.getUTCDate()); 
+                endDate = new Date(endDateInt,extStartDate.getUTCMonth(),extStartDate.getUTCDate());
             }
-            
+
             zoomInterval = d3.time.year.utc;
             zoomStep = 1;
             zoomTimeFormat = d3.time.format.utc("%Y");
-            
+
             zoomLvl = 0;
             break;
         case 'year':
@@ -721,13 +721,13 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             zoomInterval = d3.time.month.utc;
             zoomStep = 1;
             zoomTimeFormat = d3.time.format.utc("%Y");
-            
+
             zoomLvl = 1;
             break;
         case 'month': //FIXME: needs to be fixed for being tooSmall
         case 2:
             tw = 7;
-            
+
             //Each tick is one year, see how many there are until xExtent
             numberOfTicks = (extEndDate - extStartDate)/1000/60/60/24;
 
@@ -745,17 +745,17 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 endDateInt = extStartDate.getUTCDate() + maxNumberOfTicks;
                 endDate = new Date(extStartDate.getUTCFullYear(),extStartDate.getUTCMonth(),endDateInt);
             }
-            
+
             zoomInterval = d3.time.day.utc;
             zoomStep = 1;
             zoomTimeFormat = d3.time.format.utc("%b");
-            
+
             zoomLvl = 2;
             break;
         case 'week': //FIXME: for maxNumberofTicks and tooSmall
         case 3:
             tw = 18;
-            
+
             //Each tick is one year, see how many there are until xExtent
             numberOfTicks = (extEndDate - extStartDate)/1000/60/60/24;
 
@@ -777,15 +777,15 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             zoomInterval = d3.time.day.utc;
             zoomStep = 1;
             zoomTimeFormat = d3.time.format.utc("%d");
-            
+
             zoomLvl = 3;
             break;
-            
+
         }
         //console.log(zoom.translate());
-        
+
         if (tooSmall === true){
-            
+
             x = d3.time.scale.utc()
                 .domain([startDate,endDate])
                 .range([(width/2)-(rangeWidth/2),(width/2)+(rangeWidth/2)]);
@@ -797,7 +797,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 .tickPadding(5)
                 .ticks(zoomInterval,zoomStep)
                 .tickFormat(zoomTimeFormat);
-            
+
             zoom = d3.behavior.zoom()
                 .x(x)
                 .scale(1)
@@ -805,7 +805,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 .xExtent(dataLimits)
                 .on("zoom", zoomable, d3.event);
         }
-        
+
         else{
 
             x = d3.time.scale.utc()
@@ -819,18 +819,18 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 .tickPadding(5)
                 .ticks(zoomInterval,zoomStep)
                 .tickFormat(zoomTimeFormat);
-            
+
             zoom = d3.behavior.zoom()
                 .x(x)
                 .scale(1)
                 .scaleExtent([1, 1]) //don't use default zoom provided by d3
                 .xExtent(dataLimits)
                 .on("zoom", zoomable, d3.event);
-            
+
         }
 
         d3.select('#timeline-footer svg').call(zoom);
-        
+
         if (mouseBool){
             zoom.translate([-x(mousePos)+width/2-mouseOffset,0]);
         }
@@ -854,11 +854,11 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
         setTicks();
         //setTicks();
-        
+
         boundaryTicks.selectAll('line')
             .attr("y1","20")
             .attr("y2","-50");
-        
+
         boundaryTicks.insert("svg:circle","text").attr("r","6");
 
         boundaryTicks.each(function(){
@@ -870,7 +870,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             boundaryTickWidth = x(nextBoundaryTickData) - x(boundaryTickData);
 
             normalTickWidth = x(nextNormalTickData) - x(boundaryTickData);
-            
+
             var subLabel = getSubLabel(boundaryTickData);
 
             boundaryTick.insert("svg:rect", "text")
@@ -892,7 +892,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 .attr("height",height-1)
                 .attr("y",-height)
                 .attr("width",normalTickWidth);
-            
+
             if(subLabel){
                 boundaryTick.select('text').append("tspan")
                     .text(" " + subLabel)
@@ -919,9 +919,9 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             //replaces statement below
             normalTickWidth = x(nextNormalTickData) - x(normalTickData);
             /*
-            nextNormalTickData ? 
-                normalTickWidth = x(nextNormalTickData) - x(normalTickData) 
-                : 
+            nextNormalTickData ?
+                normalTickWidth = x(nextNormalTickData) - x(normalTickData)
+                :
                 normalTickWidth = width - x(normalTickData);
             */
 
@@ -1038,7 +1038,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         boundaryTick
             .selectAll('.tick-label, .sub-label')
             .attr('visibility','hidden'); //hide current labels
-            
+
         boundaryTick.select('rect.boundarytick-background')
             .classed('bg-hover',true); //trigger hover state
 
@@ -1074,7 +1074,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         zoomStep = 1;
         zoomTimeFormat = d3.time.format.utc("%Y");
         zoomLvl = 1;
-        
+
         x = d3.time.scale.utc()
             .domain([startDate,endDate])
             .range([0,width]);
@@ -1086,7 +1086,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .tickPadding(5)
             .ticks(zoomInterval,zoomStep)
             .tickFormat(zoomTimeFormat);
-        
+
         zoom = d3.behavior.zoom()
             .x(x)
             .scale(1)
@@ -1135,7 +1135,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .call(xAxis); //update view after translate
 
         setZoom('year');
-        
+
         //initial setup of zoom buttons FIXME: make this much better
         $('#zoom-decades, #zoom-months').addClass("depth-2");
         $('#zoom-years').addClass("depth-1").css("font-size","1.7em");
@@ -1183,7 +1183,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .attr("y","11");
 
         var mousedown = false;
-        
+
         guitarPick.on("mousedown",function(){  //TODO: Drag slider over small axes
             mousedown = true;
             d3.event.preventDefault();
@@ -1192,7 +1192,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         .on("mouseup",function(){
             mousedown = false;
         });
-        
+
         //update date when sliding guitarpick across small axis
         d3.select("#timeline-footer svg").on("mousemove",function(){
 
@@ -1216,7 +1216,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 if((newDate > dataLimits[0]) && (newDate < dataLimits[1])){
                     guitarPick.attr("transform","translate("+ (x(newDate)-28) +",-16)");
                     model.select(newDate);
-                
+
 
                     //TODO: This is going to need to be udated when the zoom changes
                     var hoveredNormalTick = d3.selectAll('.x.axis>g.tick').filter(function(d){
@@ -1229,12 +1229,12 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                             return (d.getUTCFullYear() === newDate.getUTCFullYear()) && (d.getUTCMonth() === newDate.getUTCMonth() && (d.getUTCDate() === newDate.getUTCDate()));
                         case 3:
                             return (d.getUTCFullYear() === newDate.getUTCFullYear()) && (d.getUTCMonth() === newDate.getUTCMonth() && (d.getUTCDate() === newDate.getUTCDate()));
-                            
+
                         }
                     });
                     var hoveredNormalTickBackground = hoveredNormalTick.select('rect.normaltick-background')[0][0];
                     var d = d3.select(hoveredNormalTick[0][0]).data()[0];
-                    
+
                     unHoverTick();
                     hoverNormalTick.call(hoveredNormalTickBackground,d);
                 }
@@ -1440,7 +1440,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
             $(this).siblings('.button-input-group').focus();
         });
-        
+
         $('.button-input-group').change(function(){
             if($(this).parent().hasClass('selected')){
                 var selected = $(this);
@@ -1498,7 +1498,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
            $("#year-input-group").focus().select();
         });
         ///////////////////////////End Datepicker////////////////////////////////////
-        ////////////////////////////Click bindings/////////////////////////////////// 
+        ////////////////////////////Click bindings///////////////////////////////////
         d3.select("#zoom-decades").on("click",function(d){
             $('.zoom-btn').removeClass("zoom-btn-selected");
             $(this).addClass("zoom-btn-selected");
@@ -1525,8 +1525,8 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         $('#timeline-hide').click(function() { self.toggle(); });
 
 //////////////////////////////end clicks////////////////////////////////////
-                
-        
+
+
         model.events.on("select", function(){
             updateTime();
         });
@@ -1646,6 +1646,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             self.toggle();
         }
     };
-    
+
     return self;
 };
