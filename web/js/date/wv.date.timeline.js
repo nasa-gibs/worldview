@@ -153,9 +153,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         return sl;
     };
 
-    var selectByDateInterval = function(d){
-
-    };
     var addNormStartTick = function(){
         var startTick = d3.selectAll('.x.axis>g.tick').data()[0];
         var fNormData;
@@ -1249,6 +1246,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         });
         ////////////////////////////End Timeline/////////////////////////////////////
         ///////////////////////////Begin Datepicker//////////////////////////////////
+        //TODO: move to new file
         incrementBtn
             .mousedown(function() {
                 forwardNextDay();
@@ -1611,7 +1609,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 }
             }
             else {
-                //zoom.translate(panLimit());
                 if ( !(tooSmall) ) {
                     redrawAxis();
                 }
