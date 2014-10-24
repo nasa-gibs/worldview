@@ -1583,7 +1583,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var zoomable = (function() {
 
         var threshold = 40;
-        var position = threshold / 20;
+        var position = threshold / 2;
 
         return function(e) {
             var evt = window.event || d3.event.sourceEvent || e;
