@@ -1580,42 +1580,45 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         ui.anim.stop();
     };
 
-    var zoomLvlTiny = 0;
-    var zoomable = function(e){
+    var zoomable = (function() {
 
-        var evt = window.event || d3.event.sourceEvent || e;
-        var deltaY=evt.deltaY ? evt.deltaY : evt.wheelDeltaY || evt.detail ? evt.detail*(-120) : evt.wheelDelta;
-        var deltaX=evt.deltaX ? evt.deltaY : evt.wheelDeltaX;
-        if (deltaY < 0){
-            //console.log("Up");
-            if (zoomLvl < 3){
-                zoomLvlTiny++;
-                if (zoomLvlTiny===3){
-                    zoomLvl++;
-                    zoomLvlTiny = 0;
-                    setZoom.call(this,zoomLvl);
+        var threshold = 40;
+        var position = threshold / 20;
+
+        return function(e) {
+            var evt = window.event || d3.event.sourceEvent || e;
+            var deltaY=evt.deltaY ? evt.deltaY : evt.wheelDeltaY || evt.detail ? evt.detail*(-120) : evt.wheelDelta;
+            var deltaX=evt.deltaX ? evt.deltaY : evt.wheelDeltaX;
+
+            // Force to be a zero in the case where deltaY is undefined
+            deltaY = deltaY || 0;
+            position += deltaY;
+
+            if ( position < 0 ) {
+                if ( zoomLvl < 3 ) {
+                    setZoom.call(this, zoomLvl + 1);
+                    position = threshold - Math.abs(position % threshold);
+                } else {
+                    position = 0;
+                }
+            }
+            else if ( position > threshold ) {
+                if ( zoomLvl > 0 ) {
+                    setZoom.call(this, zoomLvl - 1);
+                    position = position % threshold;
+                } else {
+                    position = threshold;
+                }
+            }
+            else {
+                //zoom.translate(panLimit());
+                if ( !(tooSmall) ) {
+                    redrawAxis();
                 }
             }
         }
-        else if (deltaY > 0){
-            //console.log("Down")
-            if (zoomLvl > 0){
-                zoomLvlTiny--;
-                if (zoomLvlTiny===-3){
-                    zoomLvl--;
-                    zoomLvlTiny = 0;
-                    setZoom.call(this,zoomLvl);
-                }
-            }
-        }
-        else{
-            //zoom.translate(panLimit());
-            if(!(tooSmall)){
-                redrawAxis();
-            }
-        }
+    })();
 
-    };
     init();
     $(window).resize(resizeWindow);
 
