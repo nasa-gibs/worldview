@@ -69,11 +69,6 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
             },
             close: dispose
         });
-        $("#wv-palette-selector").iCheck({radioClass: 'iradio_square-grey'});
-        $("#wv-layers-options-dialog .jspScrollable").each(function() {
-            $(this).jScrollPane().data("jsp").reinitialise();
-        });
-        ;
         models.layers.events
             .on("remove", onLayerRemoved)
             .on("opacity", onOpacityUpdate);
@@ -140,14 +135,29 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         });
         $panel.buttonset();
         $dialog.append($panel);
+
+        $(".wv-legend-buttons input[type='radio']").change(function() {
+            index = _.parseInt($(this).val());
+            rerenderRange();
+            rerenderPaletteSelector();
+        });
     };
 
-    var renderRange = function($dialog) {
-        var legend = models.palettes.getLegend(layer.id, index);
-        var max = legend.values.length - 1;
+    var renderRange = function() {
         var $header = $("<div></div>")
             .html("Thresholds")
             .addClass("wv-header");
+        var $panel = $("<div></div>")
+            .addClass("wv-layer-options-threshold");
+        $dialog.append($header);
+        $dialog.append($panel);
+        rerenderRange();
+    };
+
+    var rerenderRange = function() {
+        var legend = models.palettes.getLegend(layer.id, index);
+        var max = legend.values.length - 1;
+
         var startMin = legend.min || 0;
         var startMax = legend.max || max;
         var $slider = $("<div></div>")
@@ -160,8 +170,10 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
                 }
             }).on("set", function() {
                 models.palettes.setRange(
+                    layer.id,
                     parseFloat($(this).val()[0]),
-                    parseFloat($(this).val()[1]));
+                    parseFloat($(this).val()[1]),
+                    index);
             }).on("slide", function() {
                 updateRangeLabels(
                     parseFloat($(this).val()[0]),
@@ -173,9 +185,11 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
             .addClass("wv-label-range-min"));
         $label.append($("<span></span>")
             .addClass("wv-label-range-max"));
-        $dialog.append($header);
-        $dialog.append($slider);
-        $dialog.append($label);
+
+        $(".wv-layer-options-threshold")
+            .empty()
+            .append($slider)
+            .append($label);
         $range = $slider;
         onRangeUpdate();
     };
@@ -210,13 +224,22 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         onPaletteUpdate();
     };
 
-    var renderPaletteSelector = function($dialog) {
+    var renderPaletteSelector = function() {
         var $header = $("<div></div>")
             .addClass("wv-header")
             .html("Color Palette");
         var $pane = $("<div></div>")
             .attr("id", "wv-palette-selector");
+        $dialog.append($header).append($pane);
+        rerenderPaletteSelector();
+    };
 
+    var rerenderPaletteSelector = function() {
+        $("#wv-layers-options-dialog .jspScrollable").each(function() {
+            $(this).jScrollPane().data("jsp").destroy();
+        });
+
+        var $pane = $("#wv-palette-selector").empty();
         $pane.append(defaultLegend());
         var recommended = layer.palette.recommended || [];
         _.each(recommended, function(id) {
@@ -233,8 +256,6 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
                 }
             }
         });
-        $dialog.append($header);
-        $dialog.append($pane);
         $pane.jScrollPane();
 
         var palette = models.palettes.get(layer.id, index);
@@ -256,6 +277,11 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
                     models.palettes.setCustom(layer.id, id, index);
                 }
             }, 0);
+        });
+
+        $("#wv-palette-selector").iCheck({radioClass: 'iradio_square-grey'});
+        $("#wv-layers-options-dialog .jspScrollable").each(function() {
+            $(this).jScrollPane().data("jsp").reinitialise();
         });
     };
 

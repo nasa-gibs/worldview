@@ -278,7 +278,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         if ( !mapLayer ) {
             updateLayer(def);
         } else {
-            mapLayer.lookupTable = models.palettes.get(layerId).lookup;
+            mapLayer.lookupTable = models.palettes.getLookup(layerId);
             _.each(mapLayer.grid, function(row) {
                 _.each(row, function(tile) {
                     tile.applyLookup();
@@ -286,16 +286,6 @@ wv.map.ui = wv.map.ui || function(models, config) {
             });
         }
         updateLayers();
-    };
-
-    var removePalette = function(layerId) {
-        var layer = config.layers[layerId];
-        if ( models.palettes.isActive(layerId) ) {
-            applyLookup(layerId);
-        } else {
-            updateLayer(layer);
-            updateMap();
-        }
     };
 
     var updatePalette = function(layerId) {
@@ -316,6 +306,18 @@ wv.map.ui = wv.map.ui || function(models, config) {
         }
         updateMap();
     };
+
+    var removePalette = function(layerId) {
+        var layer = config.layers[layerId];
+        if ( models.palettes.isActive(layerId) ) {
+            applyLookup(layerId);
+        } else {
+            updateLayer(layer);
+            updateMap();
+        }
+    };
+
+
 
     var updateAll = function() {
         _.each(self.selected.layers, function(layer) {

@@ -38,7 +38,11 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
     };
 
     self.getCustom = function(paletteId) {
-        return config.palettes.custom[paletteId];
+        palette = config.palettes.custom[paletteId];
+        if ( !palette ) {
+            throw new Error("Invalid palette: " + paletteId);
+        }
+        return palette;
     };
 
     var prepare = function(layerId) {
@@ -61,21 +65,19 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
     };
 
     self.setCustom = function(layerId, paletteId, index) {
-        if ( !config.palettes.custom[paletteId] ) {
-            throw new Error("Invalid palette: " + paletteId);
-        }
         if ( !config.layers[layerId] ) {
             throw new Error("Invalid layer: "+ layerId);
         }
         prepare(layerId);
         index = ( _.isUndefined(index) ) ? 0 : index;
         var active = self.active[layerId];
-        var palette = active[index];
+        var palette = active.maps[index];
         if ( palette.custom === paletteId ) {
             return;
         }
         palette.custom = paletteId;
         updateLookup(layerId);
+        console.log("set-custom", layerId);
         self.events.trigger("set-custom", layerId, active);
         self.events.trigger("change");
     };
@@ -83,10 +85,14 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
     self.clearCustom = function(layerId, index) {
         index = ( _.isUndefined(index) ) ? 0 : index;
         var active = self.active[layerId];
-        if ( !active || !active[index].custom ) {
+        if ( !active ) {
             return;
         }
-        delete active[index].custom;
+        var palette = active.maps[index];
+        if ( !palette.custom ) {
+            return;
+        }
+        delete palette.custom;
         updateLookup(layerId);
         self.events.trigger("clear-custom", layerId);
         self.events.trigger("change");
@@ -95,11 +101,11 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
     self.setRange = function(layerId, min, max, index) {
         prepare(layerId);
         index = ( _.isUndefined(index) ) ? 0 : index;
-        var palette = self.active[layerId][index];
-        palette.min = min;
-        palette.max = max;
+        var legend = self.getLegend(layerId);
+        legend.min = min;
+        legend.max = max;
         updateLookup(layerId);
-        self.events.trigger("range", layerId, palette.min, palette.max);
+        self.events.trigger("range", layerId, legend.min, legend.max);
         self.events.trigger("change");
     };
 
@@ -124,7 +130,7 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
         var palette = self.getRendered(layerId, index);
         return palette.legend || palette.entries;
     };
-    
+
     self.getLegends = function(layerId) {
         var legends = [];
         var count = self.getCount(layerId);
@@ -132,6 +138,10 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
             legends.push(self.getLegend(layerId, i));
         }
         return legends;
+    };
+
+    self.getLookup = function(layerId) {
+        return self.active[layerId].lookup;
     };
 
     // Is a canvas required?
@@ -252,7 +262,7 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
 
     var useLookup = function(layerId) {
         var use = false;
-        var active = self.active[layerId];
+        var active = self.active[layerId].maps;
         _.each(active, function(palette, index) {
             if ( palette.custom ) {
                 use = true;
@@ -278,7 +288,7 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
             delete self.active[layerId];
             return;
         }
-        var active = self.active[layerId];
+        var active = self.active[layerId].maps;
         var lookup = {};
         _.each(active, function(palette, index) {
             entries = palette.entries;
@@ -289,7 +299,7 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
                 type: entries.type
             };
             var source = entries.colors;
-            var values = entires.values;
+            var values = entries.values;
             var target = ( palette.custom ) ?
                 self.getCustom(palette.custom).colors : source;
             var min = palette.min || 0;
@@ -316,13 +326,10 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
                     b: _.parseInt(targetColor.substring(4, 6), 16),
                     a: _.parseInt(targetColor.substring(6, 8), 16)
                 };
-                if ( color === targetColor ) {
-                    lookupTarget = 0;
-                }
                 lookup[lookupSource] = lookupTarget;
             });
-
         });
+        self.active[layerId].lookup = lookup;
     };
 
     return self;

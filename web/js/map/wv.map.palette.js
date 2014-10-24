@@ -173,7 +173,6 @@ wv.map.palette.canvasTile = OpenLayers.Class(OpenLayers.Tile.Image, {
                 this.canvas.height);
         var destination = this.graphics.getImageData(0, 0, this.canvas.width,
                 this.canvas.height);
-
         this.latestJobId = wv.map.tileScheduler().submit({
             message: {
                 lookupTable: lookupTable,
