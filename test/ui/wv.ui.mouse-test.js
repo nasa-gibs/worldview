@@ -9,7 +9,7 @@
  * All Rights Reserved.
  */
 
-buster.testCase("wv.ui.click", function() {
+buster.testCase("wv.ui.mouse.click", function() {
 
     var self = {};
     var element, down, up;
@@ -27,7 +27,7 @@ buster.testCase("wv.ui.click", function() {
 
     self["Within click limit"] = function() {
         var callback = this.stub();
-        wv.ui.click(element, callback);
+        wv.ui.mouse.click(element, callback);
         down({ clientX: 0, clientY: 0});
         up({clientX: 2, clientY: 2});
         buster.assert.called(callback);
@@ -35,7 +35,7 @@ buster.testCase("wv.ui.click", function() {
 
     self["Outside click limit"] = function() {
         var callback = this.stub();
-        wv.ui.click(element, callback);
+        wv.ui.mouse.click(element, callback);
         down({ clientX: 0, clientY: 0});
         up({clientX: 12, clientY: 12});
         buster.refute.called(callback);

@@ -11,8 +11,9 @@
 
 var wv = wv || {};
 wv.ui = wv.ui || {};
+wv.ui.mouse = wv.ui.mouse || {};
 
-wv.ui.click = wv.ui.click || function($element, callback) {
+wv.ui.mouse.click = wv.ui.mouse.click || function($element, callback) {
 
     var startX, startY;
 

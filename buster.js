@@ -27,7 +27,7 @@ config["wv"] = {
         "web/js/wv.*.js",
         "!web/js/wv.main.js",
         "web/js/ui/wv.ui.js",
-        "web/js/ui/wv.ui.click.js",
+        "web/js/ui/wv.ui.mouse.js",
         "web/js/ui/wv.ui.indicator.js",
         "web/js/date/wv.*.js",
         "web/js/layers/wv.*.js",
