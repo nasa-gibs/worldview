@@ -340,6 +340,7 @@ display:inline-block;}
 }
 #guitarpick:hover path{
     fill:#5E676F;
+    stroke:#999999;
 }
 #guitarpick:hover rect{
     fill:#999999;
