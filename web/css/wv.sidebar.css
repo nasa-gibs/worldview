@@ -182,16 +182,16 @@ i.wv-layers-options-button{
 
 }
 .productsitem.layer-hidden .layer-main, .productsitem.layer-hidden a.hdanchor {
-    background:rgba(60,60,60,0.6);
+    background:rgba(120, 120, 120, 0.81);
 }
 .productsitem.layer-hidden .layer-main:hover, .productsitem.layer-hidden a.hdanchor:hover{
-    background:rgba(90,90,90,1);
+    background:rgba(255,255,255,1);
 }
 .productsitem.layer-visible .layer-main:hover{
     background-color:#fff;
 }
 .productsitem.layer-hidden .layer-main h4, .productsitem.layer-hidden .layer-main p{
-    color:#999;
+    color:#000;
 }
 .bank .layer-main h4, .bank .layer-main p{
     padding:0;
