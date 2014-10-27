@@ -31,6 +31,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var zoomInterval,zoomStep,subInterval,subStep,zoomTimeFormat,zoomLvl,resizeDomain;
     var timeline,verticalAxis,guitarPick;
     var timer;
+    var mousedown = false;
     var margin = {
         top: 0,
         right: 0,
@@ -125,12 +126,22 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     };
     var moveToPick = function(){
         var zt = zoom.translate()[0];
-        if(x(model.selected) > width){
-            zoom.translate([zt - x(model.selected) + (width/8)*7,0]);
+        if(x(model.selected) >= x(normalTicks.data()[normalTicks.data().length-2])){
+            if (mousedown){
+                zoom.translate([zt - x(model.selected)+x(normalTicks.data()[normalTicks.data().length-2]),0]);
+            }
+            else{
+                zoom.translate([zt - x(model.selected) + (width/8)*7,0]);
+            }
             redrawAxis();
         }
-        else if(x(model.selected) < 0){
-            zoom.translate([zt - x(model.selected) + width/8,0]);
+        else if(x(model.selected) <= x(normalTicks.data()[1])){
+            if (mousedown){
+                zoom.translate([zt - x(model.selected)+x(normalTicks.data()[1]),0]);
+            }
+            else{
+                zoom.translate([zt - x(model.selected) + width/8,0]);
+            }
             redrawAxis();
         }
     };
@@ -348,7 +359,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             }
             return selection === value;
         });
-        console.log(boundaryTicks);
     };
     var setTicks = function(){
         var allTicks = d3.selectAll('.x.axis>g.tick');
@@ -1187,7 +1197,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .attr("x","35")
             .attr("y","11");
 
-        var mousedown = false;
+
 
         guitarPick.on("mousedown",function(){  //TODO: Drag slider over small axes
             mousedown = true;
