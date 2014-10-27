@@ -219,7 +219,6 @@ wv.map.ui = wv.map.ui || function(models, config) {
     };
 
     var updateMap = function() {
-        console.log("updateMap");
         var map = self.selected;
         _.each(self.selected.layers, function(layer) {
             if ( !layer || !layer.wvid ) {
