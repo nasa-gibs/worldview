@@ -51,7 +51,7 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
         active.maps = active.maps || [];
         _.each(self.getRendered(layerId).maps, function(palette, index) {
             if ( !active.maps[index] ) {
-                active.maps[index] = palette;
+                active.maps[index] = _.cloneDeep(palette);
             }
         });
     };
@@ -77,7 +77,6 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
         }
         palette.custom = paletteId;
         updateLookup(layerId);
-        console.log("set-custom", layerId);
         self.events.trigger("set-custom", layerId, active);
         self.events.trigger("change");
     };
@@ -101,11 +100,11 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
     self.setRange = function(layerId, min, max, index) {
         prepare(layerId);
         index = ( _.isUndefined(index) ) ? 0 : index;
-        var legend = self.getLegend(layerId);
-        legend.min = min;
-        legend.max = max;
+        var palette = self.active[layerId].maps[index];
+        palette.min = min;
+        palette.max = max;
         updateLookup(layerId);
-        self.events.trigger("range", layerId, legend.min, legend.max);
+        self.events.trigger("range", layerId, palette.min, palette.max);
         self.events.trigger("change");
     };
 
@@ -115,8 +114,8 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
 
     self.get = function(layerId, index) {
         index = ( _.isUndefined(index) ) ? 0 : index;
-        if ( self.active[layer.id] ) {
-            return self.active[layer.id];
+        if ( self.active[layerId] ) {
+            return self.active[layerId].maps[index];
         }
         return self.getRendered(layerId, index);
     };
@@ -296,7 +295,8 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
                 colors: [],
                 labels: entries.labels,
                 values: entries.values,
-                type: entries.type
+                type: entries.type,
+                title: entries.title
             };
             var source = entries.colors;
             var values = entries.values;
@@ -314,7 +314,7 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
                     var targetIndex = Math.floor(sourcePercent * target.length);
                     targetColor = target[targetIndex];
                 }
-                legend.colors += [targetColor];
+                legend.colors.push(targetColor);
                 var lookupSource =
                     _.parseInt(color.substring(0, 2), 16) + "," +
                     _.parseInt(color.substring(2, 4), 16) + "," +
@@ -328,6 +328,7 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
                 };
                 lookup[lookupSource] = lookupTarget;
             });
+            palette.legend = legend;
         });
         self.active[layerId].lookup = lookup;
     };

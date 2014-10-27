@@ -197,11 +197,10 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
     var onRangeUpdate = function() {
         updateRangeLabels();
 
-        var legend = models.palettes.getLegend(layer.id, index);
-        var imin = ( _.isUndefined(legend.min) ) ? 0 : legend.min;
-        var imax = ( _.isUndefined(legend.max) ) ? legend.values.length - 1
-                : legend.max;
-
+        var palette = models.palettes.get(layer.id, index);
+        var imin = ( _.isUndefined(palette.min) ) ? 0 : palette.min;
+        var imax = ( _.isUndefined(palette.max) ) ?
+                palette.entries.labels.length - 1 : palette.max;
         current = [parseFloat($range.val()[0]), parseFloat($range.val()[1])];
         if ( !_.isEqual(current, [imin, imax]) ) {
             $range.val([imin, imax]);
@@ -209,9 +208,10 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
     };
 
     var updateRangeLabels = function(min, max) {
+        var palette = models.palettes.get(layer.id, index);
         var legend = models.palettes.getLegend(layer.id, index);
-        min = min || legend.min || 0;
-        max = max || legend.max || legend.values.length - 1;
+        min = min || palette.min || 0;
+        max = max || palette.max || legend.labels.length - 1;
 
         var minLabel = legend.labels[min];
         var maxLabel = legend.labels[max];

@@ -50,7 +50,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         models.layers.events.on("opacity", updateOpacity);
         models.layers.events.on("update", updateLayers);
         models.date.events.on("select", updateDate);
-        models.palettes.events.on("set-custom", applyLookup);
+        models.palettes.events.on("set-custom", updatePalette);
         models.palettes.events.on("clear-custom", removePalette);
         models.palettes.events.on("range", updatePalette);
         models.palettes.events.on("update", updateAll);
@@ -292,12 +292,11 @@ wv.map.ui = wv.map.ui || function(models, config) {
         var def = config.layers[layerId];
         var key = layerKey(def);
         var mapLayer = _.find(self.selected.layers, { key: key });
-        var palette = models.palettes.get(layerId);
+        var palette = models.palettes.active[layerId];
         if ( !mapLayer ) {
             updateLayer(def);
-            //updateMap();
-        } else if ( palette.lookup ) {
-            mapLayer.lookupTable = palette.lookup;
+        } else if ( palette && palette.lookup ) {
+            mapLayer.lookupTable = models.palettes.getLookup(layerId);
             _.each(mapLayer.grid, function(row) {
                 _.each(row, function(tile) {
                     tile.applyLookup();
