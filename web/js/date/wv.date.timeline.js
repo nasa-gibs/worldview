@@ -120,9 +120,20 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             decrementBtn.removeClass('button-disabled');
         }
         guitarPick.attr("transform","translate("+(x(model.selected)-25)+",-16)");
+        
 
     };
-
+    var moveToPick = function(){
+        var zt = zoom.translate()[0];
+        if(x(model.selected) > width){
+            zoom.translate([zt - x(model.selected) + (width/8)*7,0]);
+            redrawAxis();
+        }
+        else if(x(model.selected) < 0){
+            zoom.translate([zt - x(model.selected) + width/8,0]);
+            redrawAxis();
+        }
+    };
     var resizeWindow = function(){
         getTimelineWidth();
         d3.select('#timeline-footer svg')
@@ -1191,9 +1202,9 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         });
 
         //update date when sliding guitarpick across small axis
-        d3.select("#timeline-footer svg").on("mousemove",function(){
-
+        d3.select('#timeline-footer svg').on("mousemove",function(){
             if (mousedown){
+                //window.event.x needed for moving anywhere on document
                 var newDate;
                 var mouseDate = x.invert(d3.mouse(this)[0]);
                 var currentDate = new Date(model.selected);
@@ -1365,6 +1376,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             timer = setTimeout(function(){
                 if((selectedDate>dataLimits[0])&&(selectedDate<dataLimits[1])){
                     model.select(selectedDate);
+                    moveToPick();
                 }
                 else{
                     updateTime();
@@ -1429,6 +1441,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             timer = setTimeout(function(){
                 if((selectedDate>dataLimits[0])&&(selectedDate<dataLimits[1])){
                     model.select(selectedDate);
+                    moveToPick();
                 }
                 else{
                     updateTime();
@@ -1477,14 +1490,15 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                     break;
                 }
                 if((selectedDateObj > dataLimits[0]) && (selectedDateObj <= dataLimits[1])){
+                    var ztw = zoom.translate()[0];
                     model.select(selectedDateObj);
                     $('.button-input-group').parent().css('border-color','');
                     selected.select();
+                    moveToPick();
                 }
                 else{
                     updateTime();
                     selected.select();
-
                 }
 
             }
@@ -1522,7 +1536,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
         $('#timeline-hide').click(function() { self.toggle(); });
 
-//////////////////////////////end clicks////////////////////////////////////
+        //////////////////////////////end clicks////////////////////////////////////
 
 
         model.events.on("select", function(){
@@ -1563,6 +1577,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         models.date.add(interval, 1);
         ui.anim.interval = interval;
         ui.anim.play("forward");
+//        moveToPick();
     };
 
     var animateReverse = function(interval) {
@@ -1572,6 +1587,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         models.date.add(interval, -1);
         ui.anim.interval = interval;
         ui.anim.play("reverse");
+//        moveToPick();
     };
 
     var animateEnd = function() {
