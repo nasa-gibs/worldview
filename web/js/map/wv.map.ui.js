@@ -50,7 +50,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         models.layers.events.on("opacity", updateOpacity);
         models.layers.events.on("update", updateLayers);
         models.date.events.on("select", updateDate);
-        models.palettes.events.on("set-custom", updatePalette);
+        models.palettes.events.on("set-custom", applyLookup);
         models.palettes.events.on("clear-custom", removePalette);
         models.palettes.events.on("range", updatePalette);
         models.palettes.events.on("update", updateAll);
@@ -205,18 +205,21 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 stale.push(layer);
             }
         });
-        _.delay(function() {
-            _.each(stale, function(layer) {
-                if ( map.getLayerIndex(layer) >= 0 ) {
-                    map.removeLayer(layer);
-                }
-            });
-            stale = [];
-            updateLayers();
-        }, 500);
+        if ( stale.length > 0 ) {
+            _.delay(function() {
+                _.each(stale, function(layer) {
+                    if ( map.getLayerIndex(layer) >= 0 ) {
+                        map.removeLayer(layer);
+                    }
+                });
+                stale = [];
+                updateLayers();
+            }, 500);
+        }
     };
 
     var updateMap = function() {
+        console.log("updateMap");
         var map = self.selected;
         _.each(self.selected.layers, function(layer) {
             if ( !layer || !layer.wvid ) {
