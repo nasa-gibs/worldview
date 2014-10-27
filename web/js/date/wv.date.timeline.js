@@ -44,7 +44,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var notClickDelay = 200;
     var notClick = function(){
         clicked = false;
-    }
+    };
     /*                     */
     
     var width;
