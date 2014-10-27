@@ -1596,7 +1596,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
     var zoomable = (function() {
 
-        var threshold = 40;
+        var threshold = 150;
         var position = threshold / 2;
 
         return function(e) {
