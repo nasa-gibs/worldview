@@ -234,7 +234,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             break;
         case 2:
             fBoundData = new Date(Date.UTC(fNormData.getUTCFullYear(),fNormData.getUTCMonth(),1));
-            fBoundTxt = fBoundData.getUTCMonth();
+            fBoundTxt = monthNames[fBoundData.getUTCMonth()];
             break;
         case 3:
             fBoundData =  new Date(Date.UTC(fNormData.getUTCFullYear(),fNormData.getUTCMonth(),fNormData.getUTCDate()-fNormData.getUTCDay())); //FIXME
@@ -482,12 +482,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                     .attr("height",height-1)
                     .attr("y",-height)
                     .attr("width",normalTickWidth);
-
-                if(subLabel){
-                    boundaryTick.select('text').append("tspan")
-                        .text(" " + subLabel)
-                        .attr("class","sub-label");
-                }
             }
             else{
                 boundaryTick.select('rect.boundarytick-background')
