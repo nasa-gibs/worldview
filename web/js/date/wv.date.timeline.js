@@ -38,7 +38,15 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         bottom: 20,
         left: 10
     };
-
+    /* Click or mousedown? */
+    var cancelClick;
+    var clicked = true;
+    var notClickDelay = 200;
+    var notClick = function(){
+        clicked = false;
+    }
+    /*                     */
+    
     var width;
     var getTimelineWidth = function(){width = window.innerWidth - $("#timeline-header").outerWidth() - $("#timeline-zoom").outerWidth() - $("#timeline-hide").outerWidth() - 40;};
     var height = 65 - margin.top - margin.bottom;
@@ -121,6 +129,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             decrementBtn.removeClass('button-disabled');
         }
         guitarPick.attr("transform","translate("+(x(model.selected)-25)+",-16)");
+
         
 
     };
@@ -543,9 +552,20 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 hoverNormalTick.call(this,d);
             })
             .on('mouseleave',unHoverTick)
-            .on('click',function(){
+            /*.on('click',function(){
                 d = d3.select(this.parentNode).data()[0]; //get Data from parent node (which is a tick)
                 clickNormalTick.call(this,d);
+            })*/
+            .on('mousedown',function(){
+                cancelClick = setTimeout(notClick,notClickDelay);
+            })
+            .on('mouseup',function(){
+                clearTimeout(cancelClick);
+                if(clicked){
+                    d = d3.select(this.parentNode).data()[0]; //get Data from parent node (which is a tick)
+                    clickNormalTick.call(this,d);
+                }
+                clicked = true;
             });
         allBoundaryTickForegrounds
             .on('mouseenter',function(){
@@ -553,10 +573,21 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 hoverBoundaryTick.call(this,d);
             })
             .on('mouseleave',unHoverTick)
-            .on('click',function(){
+            .on('mousedown',function(){
+                cancelClick = setTimeout(notClick,notClickDelay);
+            })
+            .on('mouseup',function(){
+                clearTimeout(cancelClick);
+                if(clicked){
+                    d = d3.select(this.parentNode).data()[0]; //get Data from parent node (which is a tick)
+                    clickBoundaryTick.call(this,d);
+                }
+                clicked = true;
+            })
+            /*.on('click',function(){
                 d = d3.select(this.parentNode).data()[0]; //get Data from parent node (which is a tick)
                 clickBoundaryTick.call(this,d);
-            });
+            })*/;
 
         //UPDATE GUITARPICK
         if (guitarPick){
@@ -959,9 +990,16 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 hoverNormalTick.call(this,d);
             })
             .on('mouseleave',unHoverTick)
-            .on('click',function(){
-                d = d3.select(this.parentNode).data()[0]; //get Data from parent node (which is a tick)
-                clickNormalTick.call(this,d);
+            .on('mousedown',function(){
+                cancelClick = setTimeout(notClick,notClickDelay);
+            })
+            .on('mouseup',function(){
+                clearTimeout(cancelClick);
+                if(clicked){
+                    d = d3.select(this.parentNode).data()[0]; //get Data from parent node (which is a tick)
+                    clickNormalTick.call(this,d);
+                }
+                clicked = true;
             });
         allBoundaryTickForegrounds
             .on('mouseenter',function(){
@@ -969,9 +1007,16 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 hoverBoundaryTick.call(this,d);
             })
             .on('mouseleave',unHoverTick)
-            .on('click',function(){
-                d = d3.select(this.parentNode).data()[0]; //get Data from parent node (which is a tick)
-                clickBoundaryTick.call(this,d);
+            .on('mousedown',function(){
+                cancelClick = setTimeout(notClick,notClickDelay);
+            })
+            .on('mouseup',function(){
+                clearTimeout(cancelClick);
+                if(clicked){
+                    d = d3.select(this.parentNode).data()[0]; //get Data from parent node (which is a tick)
+                    clickBoundaryTick.call(this,d);
+                }
+                clicked = true;
             });
         if(tooSmall){
             removeLabelOnlyStuff();
@@ -1255,7 +1300,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 }
             }
         });
-
+        
         //stop guitarpick if mouseup anywhere on document
         d3.select(document).on("mouseup",function(){
             if (mousedown){
