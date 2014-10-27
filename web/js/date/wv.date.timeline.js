@@ -179,6 +179,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             fNormData = new Date(Date.UTC(startTick.getUTCFullYear(),startTick.getUTCMonth(),startTick.getUTCDate()-1));
             break;
         }
+
         var fNormTick = timeline.select('.x.axis').insert('g','g.tick')
             .data([fNormData])
             .attr('class','tick')
@@ -236,7 +237,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             fBoundTxt = fBoundData.getUTCMonth();
             break;
         case 3:
-            fBoundData =  new Date(Date.UTC(fNormData.getUTCFullYear(),fNormData.getUTCMonth(),fNormData.getUTCDate()));
+            fBoundData =  new Date(Date.UTC(fNormData.getUTCFullYear(),fNormData.getUTCMonth(),fNormData.getUTCDate()-fNormData.getUTCDay())); //FIXME
             fBoundTxt = fBoundData.getUTCDate();
             break;
         }
@@ -322,6 +323,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             }
             return selection !== value;
         });
+
     };
     var setBoundaryTicks = function(){
         boundaryTicks = d3.selectAll('.x.axis>g.tick').filter(function(d){
@@ -346,10 +348,11 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             }
             return selection === value;
         });
+        console.log(boundaryTicks);
     };
     var setTicks = function(){
         var allTicks = d3.selectAll('.x.axis>g.tick');
-        allTicks.classed('tick-labeled',false);
+        allTicks.classed('tick-labeled',false).classed('label-only',false);
 
         setNormalTicks();
 
