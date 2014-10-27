@@ -1376,7 +1376,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             timer = setTimeout(function(){
                 if((selectedDate>dataLimits[0])&&(selectedDate<dataLimits[1])){
                     model.select(selectedDate);
-                    moveToPick();
                 }
                 else{
                     updateTime();
@@ -1441,7 +1440,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             timer = setTimeout(function(){
                 if((selectedDate>dataLimits[0])&&(selectedDate<dataLimits[1])){
                     model.select(selectedDate);
-                    moveToPick();
                 }
                 else{
                     updateTime();
@@ -1494,7 +1492,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                     model.select(selectedDateObj);
                     $('.button-input-group').parent().css('border-color','');
                     selected.select();
-                    moveToPick();
                 }
                 else{
                     updateTime();
@@ -1541,6 +1538,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
         model.events.on("select", function(){
             updateTime();
+            moveToPick();
         });
 
         models.layers.events.on("change",function(){
@@ -1577,7 +1575,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         models.date.add(interval, 1);
         ui.anim.interval = interval;
         ui.anim.play("forward");
-//        moveToPick();
     };
 
     var animateReverse = function(interval) {
@@ -1587,7 +1584,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         models.date.add(interval, -1);
         ui.anim.interval = interval;
         ui.anim.play("reverse");
-//        moveToPick();
     };
 
     var animateEnd = function() {
