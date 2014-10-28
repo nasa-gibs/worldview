@@ -598,47 +598,48 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     };
     var setZoomBtns = function(interval){
         switch (interval){
-            case 'week':
-            case 3:
-                $('.zoom-btn').removeClass(function (index, css) {
-                    return (css.match (/(^|\s)depth-\S+/g) || []).join(' ');
-                }).css("margin","").css("font-size","");
-                $('#zoom-decades').addClass("depth-4");
-                $('#zoom-years').addClass("depth-3").css("margin","5px 0 0 0");
-                $('#zoom-months').addClass("depth-2");
-                $('#zoom-weeks').addClass("depth-1").css("margin","25px 0 0 0");
+        case 'week':
+        case 3:
+            $('.zoom-btn').removeClass(function (index, css) {
+                return (css.match (/(^|\s)depth-\S+/g) || []).join(' ');
+            }).css("margin","").css("font-size","");
+            $('#zoom-years').addClass("depth-4");
+            $('#zoom-months').addClass("depth-3").css("margin","5px 0 0 0");
+            $('#zoom-days').addClass("depth-2");
+            //$('#zoom-weeks').addClass("depth-1").css("margin","25px 0 0 0");
             break;
-
-            case 'month':
-            case 2:
-                $('.zoom-btn').removeClass(function (index, css) {
-                    return (css.match (/(^|\s)depth-\S+/g) || []).join(' ');
-                }).css("margin","").css("font-size","");
-                $('#zoom-decades').addClass("depth-3").css("margin","5px 0 0 0");
-                $('#zoom-years').addClass("depth-2");
-                $('#zoom-months').addClass("depth-1");
-                $('#zoom-weeks').addClass("depth-2").css("margin","10px 0 0 0");
+            
+        case 'days':
+        case 2:
+            $('.zoom-btn').removeClass(function (index, css) {
+                return (css.match (/(^|\s)depth-\S+/g) || []).join(' ');
+            }).css("margin","").css("font-size","");
+            $('#zoom-years').addClass("depth-3").css("margin","6px 0 0 0");
+            $('#zoom-months').addClass("depth-2");
+            $('#zoom-days').addClass("depth-1").css("margin", "10px 0 0 0").css('font-size','1.8em');
+            //$('#zoom-weeks').addClass("depth-2").css("margin","10px 0 0 0");
             break;
-
-            case 'year':
-            case 1:
-                $('.zoom-btn').removeClass(function (index, css) {
-                    return (css.match (/(^|\s)depth-\S+/g) || []).join(' ');
-                }).css("margin","").css("font-size","");
-                $('#zoom-decades, #zoom-months').addClass("depth-2");
-                $('#zoom-years').addClass("depth-1").css("font-size","1.7em");
-                $('#zoom-weeks').addClass("depth-3").css("margin","-3px 0 3px 0");
+            
+        case 'months':
+        case 1:
+            $('.zoom-btn').removeClass(function (index, css) {
+                return (css.match (/(^|\s)depth-\S+/g) || []).join(' ');
+            }).css("margin","").css("font-size","");
+            $('#zoom-days').addClass("depth-2").css("margin","5px 0 0 0");
+            $('#zoom-years').addClass("depth-2");
+            $('#zoom-months').addClass("depth-1").css("font-size","1.7em");
+            //$('#zoom-weeks').addClass("depth-3").css("margin","-3px 0 3px 0");
             break;
-
-            case 'decade':
-            case 0:
-                $('.zoom-btn').removeClass(function (index, css) {
-                    return (css.match (/(^|\s)depth-\S+/g) || []).join(' ');
-                }).css("margin","").css("font-size","");
-                $('#zoom-decades').addClass("depth-1");
-                $('#zoom-years').addClass("depth-2").css("font-size","1.2em");
-                $('#zoom-months').addClass("depth-3").css("margin","-3px 0 5px 0");
-                $('#zoom-weeks').addClass("depth-4");
+            
+        case 'years':
+        case 0:
+            $('.zoom-btn').removeClass(function (index, css) {
+                return (css.match (/(^|\s)depth-\S+/g) || []).join(' ');
+            }).css("margin","").css("font-size","");
+            $('#zoom-years').addClass("depth-1");
+            $('#zoom-months').addClass("depth-2").css("font-size","1.2em");
+            $('#zoom-days').addClass("depth-3").css("margin","-3px 0 5px 0");
+            //$('#zoom-weeks').addClass("depth-4");
         }
     };
     var removeLabelOnlyStuff = function(){
@@ -713,7 +714,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         setZoomBtns(interval);
 
         switch (interval){
-        case 'decade':
+        case 'years':
         case 0:
             tw = 150/10;
             //Each tick is one year, see how many there are until xExtent
@@ -741,7 +742,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
             zoomLvl = 0;
             break;
-        case 'year':
+        case 'months':
         case 1:
             tw = 150/12;
 
@@ -770,9 +771,9 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
             zoomLvl = 1;
             break;
-        case 'month': //FIXME: needs to be fixed for being tooSmall
+        case 'days': //FIXME: needs to be fixed for being tooSmall
         case 2:
-            tw = 7;
+            tw = 11;
 
             //Each tick is one year, see how many there are until xExtent
             numberOfTicks = (extEndDate - extStartDate)/1000/60/60/24;
@@ -1194,12 +1195,10 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         timeline.select(".x.axis")
             .call(xAxis); //update view after translate
 
-        setZoom('year');
+        setZoom('months');
 
         //initial setup of zoom buttons FIXME: make this much better
-        $('#zoom-decades, #zoom-months').addClass("depth-2");
-        $('#zoom-years').addClass("depth-1").css("font-size","1.7em");
-        $('#zoom-weeks').addClass("depth-3").css("margin","-3px 0 3px 0");
+        setZoomBtns('months');
 
         //draw vertical ticks
         verticalAxis = timeline.append("svg:g")
@@ -1560,28 +1559,28 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         });
         ///////////////////////////End Datepicker////////////////////////////////////
         ////////////////////////////Click bindings///////////////////////////////////
-        d3.select("#zoom-decades").on("click",function(d){
-            $('.zoom-btn').removeClass("zoom-btn-selected");
-            $(this).addClass("zoom-btn-selected");
-            setZoom('decade');
-        });
         d3.select("#zoom-years").on("click",function(d){
             $('.zoom-btn').removeClass("zoom-btn-selected");
             $(this).addClass("zoom-btn-selected");
-            setZoom('year');
+            setZoom('years');
         });
         d3.select("#zoom-months").on("click",function(d){
             $('.zoom-btn').removeClass("zoom-btn-selected");
             $(this).addClass("zoom-btn-selected");
-            setZoom('month');
+            setZoom('months');
+        });
+        d3.select("#zoom-days").on("click",function(d){
+            $('.zoom-btn').removeClass("zoom-btn-selected");
+            $(this).addClass("zoom-btn-selected");
+            setZoom('days');
 
         });
-        d3.select("#zoom-weeks").on("click",function(d){
+        /*d3.select("#zoom-weeks").on("click",function(d){
             $('.zoom-btn').removeClass("zoom-btn-selected");
             $(this).addClass("zoom-btn-selected");
             setZoom('week');
 
-        });
+        });*/
 
         $('#timeline-hide').click(function() { self.toggle(); });
 
@@ -1657,7 +1656,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             position += deltaY;
 
             if ( position < 0 ) {
-                if ( zoomLvl < 3 ) {
+                if ( zoomLvl < 2 ) {
                     setZoom.call(this, zoomLvl + 1);
                     position = threshold - Math.abs(position % threshold);
                 } else {
@@ -1672,8 +1671,8 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                     position = threshold;
                 }
             }
-            else {
-                if ( !(tooSmall) ) {
+            else { 
+                if ( !(tooSmall) ) { //pan by mousedown and drag
                     redrawAxis();
                 }
             }
