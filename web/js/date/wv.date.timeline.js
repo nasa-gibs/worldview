@@ -26,6 +26,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var selector = "#" + id;
     var model = models.date;
     var layers;
+    var dataStartDate = config.startDate;
     var boundaryTicks,normalTicks,allTicks,allBoundaryTickForegrounds,offscreenBoundaryTickText, tooSmall;
     var x,xAxis,y,yAxis,zoom;
     var zoomInterval,zoomStep,subInterval,subStep,zoomTimeFormat,zoomLvl,resizeDomain;
@@ -62,7 +63,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     };
     var startDateMs = ( model.start ) ? model.start.getTime() : undefined;
     var endDateMs = ( model.end ) ? model.end.getTime() : undefined;
-    var dataLimits = [new Date(Date.UTC(1979,0,1)), new Date(endDateMs)]; //TODO: Fill in data limits here
+    var dataLimits = [new Date(dataStartDate), new Date(endDateMs)]; //TODO: Fill in data limits here
 
 
     var self = {};
@@ -1147,7 +1148,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var init = function() {
 
         var endDateInt,endDate;
-
         getTimelineWidth();
 
         var startDate = dataLimits[0]; //TODO: place first date of data here
