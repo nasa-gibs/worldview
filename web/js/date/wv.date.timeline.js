@@ -633,7 +633,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             }).css("margin","").css("font-size","");
             $('#zoom-years').addClass("depth-3").css("margin","6px 0 0 0");
             $('#zoom-months').addClass("depth-2");
-            $('#zoom-days').addClass("depth-1").css("margin", "10px 0 0 0").css('font-size','1.8em');
+            $('#zoom-days').addClass("depth-1").css("margin", "8px 0 0 0").css('font-size','1.8em');
             //$('#zoom-weeks').addClass("depth-2").css("margin","10px 0 0 0");
             break;
             
@@ -653,7 +653,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             $('.zoom-btn').removeClass(function (index, css) {
                 return (css.match (/(^|\s)depth-\S+/g) || []).join(' ');
             }).css("margin","").css("font-size","");
-            $('#zoom-years').addClass("depth-1");
+            $('#zoom-years').addClass("depth-1").css("font-size","1.7em");
             $('#zoom-months').addClass("depth-2").css("font-size","1.2em");
             $('#zoom-days').addClass("depth-3").css("margin","-3px 0 5px 0");
             //$('#zoom-weeks').addClass("depth-4");
