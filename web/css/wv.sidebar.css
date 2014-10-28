@@ -182,7 +182,7 @@ i.wv-layers-options-button{
 
 }
 .productsitem.layer-hidden .layer-main, .productsitem.layer-hidden a.hdanchor {
-    background:rgba(120, 120, 120, 0.81);
+    background:rgba(255, 255, 255, 0.39);
 }
 .productsitem.layer-hidden .layer-main:hover, .productsitem.layer-hidden a.hdanchor:hover{
     background:rgba(255,255,255,1);
