@@ -142,7 +142,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             else{
                 zoom.translate([zt - x(model.selected) + (width/8)*7,0]);
             }
-            redrawAxis();
+            panAxis();
         }
         else if(x(model.selected) <= x(normalTicks.data()[1])){
             if (mousedown){
@@ -151,7 +151,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             else{
                 zoom.translate([zt - x(model.selected) + width/8,0]);
             }
-            redrawAxis();
+            panAxis();
         }
     };
     var resizeWindow = function(){
@@ -370,7 +370,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         });
     };
     var setTicks = function(){
-        var allTicks = d3.selectAll('.x.axis>g.tick');
+        allTicks = d3.selectAll('.x.axis>g.tick');
         allTicks.classed('tick-labeled',false).classed('label-only',false);
 
         setNormalTicks();
@@ -437,7 +437,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         }
         return rt;
     };
-    var redrawAxis = function(){  //TODO: Draw y axis
+    var panAxis = function(){  //TODO: Draw y axis
 
         timeline.select(".x.axis")
             .call(xAxis);
@@ -446,7 +446,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
         setTicks();
 
-        var allTicks = d3.selectAll('.x.axis>g.tick');
+        allTicks = d3.selectAll('.x.axis>g.tick');
 
         boundaryTicks.each(function(){
 
@@ -541,7 +541,24 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                     .attr("width",normalTickWidth);
             }
         });
-
+        
+        if(zoomLvl === 2){
+            allTicks.each(function(){
+                if(!$(this).find('line.tick-week').length){
+                    var currentTick = d3.select(this);
+                    var currentTickData = currentTick.data()[0];
+                    if (currentTickData.getUTCDay() === 0){
+                        //console.log(currentTick);
+                        currentTick
+                            .insert('line','rect')
+                            .attr('y1',0)
+                            .attr('y2',-10)
+                            .attr('x2',0)
+                            .classed('tick-week',true);
+                    }
+                }
+            });
+        }    
         allTickBackgrounds = d3.selectAll('.x.axis>g.tick>rect.normaltick-background');
         allBoundaryTickForegrounds = d3.selectAll(".x.axis>g.tick>rect.boundarytick-foreground");
 
@@ -961,26 +978,34 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         normalTicks.each(function(){
             var normalTick = d3.select(this);
             var normalTickData = normalTick.data()[0];
-            var nextNormalTickData = getNextNormalTickData(normalTickData);//d3.select($(this).nextAll('g.tick').first()[0]).data()[0];
+            var nextNormalTickData = getNextNormalTickData(normalTickData);
 
-            //replaces statement below
             normalTickWidth = x(nextNormalTickData) - x(normalTickData);
-            /*
-            nextNormalTickData ?
-                normalTickWidth = x(nextNormalTickData) - x(normalTickData)
-                :
-                normalTickWidth = width - x(normalTickData);
-            */
 
             normalTick.append("svg:rect")
                 .attr("class","normaltick-background")
                 .attr("height",height-1)
                 .attr("y",-height)
                 .attr("width",normalTickWidth);
-
         });
 
+        allTicks = d3.selectAll('.x.axis>g.tick');
 
+        if(zoomLvl === 2){
+            allTicks.each(function(){
+                var currentTick = d3.select(this);
+                var currentTickData = currentTick.data()[0];
+                if (currentTickData.getUTCDay() === 0){
+                    //console.log(currentTick);
+                    currentTick
+                        .insert('line','rect')
+                        .attr('y1',0)
+                        .attr('y2',-10)
+                        .attr('x2',0)
+                        .classed('tick-week',true);
+                }
+            });
+        }
 
         allTickBackgrounds = d3.selectAll('.x.axis>g.tick>rect.normaltick-background');
         allBoundaryTickForegrounds = d3.selectAll(".x.axis>g.tick>rect.boundarytick-foreground");
@@ -1673,7 +1698,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             }
             else { 
                 if ( !(tooSmall) ) { //pan by mousedown and drag
-                    redrawAxis();
+                    panAxis();
                 }
             }
         };

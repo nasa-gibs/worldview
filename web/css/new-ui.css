@@ -89,6 +89,11 @@
     stroke-linejoin:miter;
     stroke-miterlimit:4;
 }
+.x.axis>.tick>line.tick-week{
+    stroke:#fff;
+    stroke-width:1;
+    stroke-dasharray:0;
+}
 #timeline-header{
     margin-top:2px;
 }
