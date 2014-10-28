@@ -1282,7 +1282,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         d3.select(document).on("mousemove",function(){
             if (mousedown){
                 var newDate;
-                var mouseDate = x.invert((window.event.x-$('#timeline-header').outerWidth()-10));
+                var mouseDate = x.invert((window.event.x-$('#timeline-header').outerWidth()-margin.left));
                 var currentDate = new Date(model.selected);
                 switch(zoomLvl){
                     case 0:
