@@ -1272,17 +1272,17 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             mousedown = true;
             d3.event.preventDefault();
             d3.event.stopPropagation();
+            guitarPick.classed('pick-clicked',true);
         })
         .on("mouseup",function(){
             mousedown = false;
         });
 
         //update date when sliding guitarpick across small axis
-        d3.select('#timeline-footer svg').on("mousemove",function(){
+        d3.select(document).on("mousemove",function(){
             if (mousedown){
-                //window.event.x needed for moving anywhere on document
                 var newDate;
-                var mouseDate = x.invert(d3.mouse(this)[0]);
+                var mouseDate = x.invert((window.event.x-$('#timeline-header').outerWidth()-10));
                 var currentDate = new Date(model.selected);
                 switch(zoomLvl){
                     case 0:
@@ -1329,6 +1329,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         d3.select(document).on("mouseup",function(){
             if (mousedown){
                 mousedown = false;
+                guitarPick.classed('pick-clicked',false);
             }
         });
         ////////////////////////////End Timeline/////////////////////////////////////

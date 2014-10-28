@@ -343,11 +343,11 @@ display:inline-block;}
     stroke:none;
 
 }
-#guitarpick:hover path{
+#guitarpick:hover path, #guitarpick > .pick-clicked path{
     fill:#5E676F;
     stroke:#999999;
 }
-#guitarpick:hover rect{
+#guitarpick:hover rect, #guitarpick > .pick-clicked rect{
     fill:#999999;
 }
 #timeline-hide .hamburger{
