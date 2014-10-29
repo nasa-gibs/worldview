@@ -346,6 +346,9 @@ wv.layers.model = wv.layers.model || function(models, config) {
             if ( spec.renderable && !self.isRenderable(def.id) ) {
                 return;
             }
+            if ( spec.visible && !def.visible ) {
+                return;
+            }
             results.push(def);
         });
         if ( spec.reverse ) {
