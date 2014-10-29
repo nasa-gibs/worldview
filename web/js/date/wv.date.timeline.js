@@ -47,7 +47,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         clicked = false;
     };
     /*                     */
-    
+
     var width;
     var getTimelineWidth = function(){width = window.innerWidth - $("#timeline-header").outerWidth() - $("#timeline-zoom").outerWidth() - $("#timeline-hide").outerWidth() - 40;};
     var height = 65 - margin.top - margin.bottom;
@@ -114,7 +114,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .datum(layers)
             .attr("class", "data-bar")
             .attr("d", selection);
-        
+
     };
     var hideInvalidTicks = function(){
         console.log('hiding invalid ticks ' + normalTicks.data()[0]);
@@ -170,7 +170,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         //hideInvalidTicks();
         guitarPick.attr("transform","translate("+(x(model.selected)-25)+",-16)");
 
-        
+
 
     };
     var moveToPick = function(){
@@ -581,7 +581,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                     .attr("width",normalTickWidth);
             }
         });
-        
+
         if(zoomLvl === 2){
             allTicks.each(function(){
                 if(!$(this).find('line.tick-week').length){
@@ -598,7 +598,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                     }
                 }
             });
-        }    
+        }
         allTickBackgrounds = d3.selectAll('.x.axis>g.tick>rect.normaltick-background');
         allBoundaryTickForegrounds = d3.selectAll(".x.axis>g.tick>rect.boundarytick-foreground");
 
@@ -647,7 +647,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             })*/;
 
         dataBar.attr('d',selection);
-        
+
         //UPDATE GUITARPICK
         if (guitarPick){
             guitarPick.attr("transform","translate("+(x(model.selected)-25)+",-16)");
@@ -667,7 +667,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             $('#zoom-days').addClass("depth-2");
             //$('#zoom-weeks').addClass("depth-1").css("margin","25px 0 0 0");
             break;
-            
+
         case 'days':
         case 2:
             $('.zoom-btn').removeClass(function (index, css) {
@@ -678,7 +678,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             $('#zoom-days').addClass("depth-1").css("margin", "8px 0 0 0").css('font-size','1.8em');
             //$('#zoom-weeks').addClass("depth-2").css("margin","10px 0 0 0");
             break;
-            
+
         case 'months':
         case 1:
             $('.zoom-btn').removeClass(function (index, css) {
@@ -689,7 +689,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             $('#zoom-months').addClass("depth-1").css("font-size","1.7em");
             //$('#zoom-weeks').addClass("depth-3").css("margin","-3px 0 3px 0");
             break;
-            
+
         case 'years':
         case 0:
             $('.zoom-btn').removeClass(function (index, css) {
@@ -1236,7 +1236,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 "y": "Data2"
             }
         ];
-        
+
         y = d3.scale.ordinal()
             .domain(["Data1","Data2"]) //loaded product data goes here
             .rangeBands([0,height]);
@@ -1245,7 +1245,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .scale(y)
             .orient("left")
             .ticks(3);
-        
+
         //create timeline elements
         d3.select('#timeline-footer')
             .append("svg:svg")
@@ -1292,7 +1292,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
         verticalAxis.selectAll("text").remove();
 
-        
+
         //Plot data
         dataBar = timeline.insert("svg:g",'.x.axis')
             .attr("style","clip-path:url(#timeline-boundary)")
@@ -1305,7 +1305,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .attr("d", selection);
 
         setZoom('months');
-        
+
         //initial setup of zoom buttons FIXME: make this much better
         setZoomBtns('months');
 
@@ -1394,7 +1394,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 }
             }
         });
-        
+
         //stop guitarpick if mouseup anywhere on document
         d3.select(document).on("mouseup",function(){
             if (mousedown){
@@ -1767,7 +1767,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                     position = threshold;
                 }
             }
-            else { 
+            else {
                 if ( !(tooSmall) ) { //pan by mousedown and drag
                     panAxis();
                 }
