@@ -71,7 +71,7 @@
 }
 .x.axis > .tick > line{
     fill:none;
-    stroke:#444;
+    stroke:#555;
     stroke-width:2;
     stroke-linecap:butt;
     stroke-linejoin:miter;
@@ -81,16 +81,16 @@
     stroke-dashoffset:0;
 }
 .x.axis>.tick-labeled>line {
-    stroke-width:3;
+    stroke-width:2;
     stroke-miterlimit:4;
-    stroke-dasharray:3,9;
-    stroke:#727272;
+    stroke-dasharray:3,0;
+    stroke:#888888;
     stroke-linecap:butt;
     stroke-linejoin:miter;
     stroke-miterlimit:4;
 }
 .x.axis>.tick>line.tick-week{
-    stroke:#fff;
+    stroke:#888;
     stroke-width:1;
     stroke-dasharray:0;
 }
