@@ -91,7 +91,7 @@
 }
 .x.axis>.tick>line.tick-week{
     stroke:#888;
-    stroke-width:1;
+    stroke-width:2;
     stroke-dasharray:0;
 }
 g.plot path.data-bar {
