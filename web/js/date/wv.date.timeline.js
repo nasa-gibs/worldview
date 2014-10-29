@@ -30,7 +30,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var boundaryTicks,normalTicks,allTicks,allBoundaryTickForegrounds,offscreenBoundaryTickText, tooSmall;
     var x,xAxis,y,yAxis,zoom;
     var zoomInterval,zoomStep,subInterval,subStep,zoomTimeFormat,zoomLvl,resizeDomain;
-    var timeline,verticalAxis,guitarPick;
+    var timeline,verticalAxis,guitarPick,dataBar;
     var timer;
     var mousedown = false;
     var margin = {
@@ -86,24 +86,62 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         });
 
     var setData = function(){ //TODO: Finish setting data from product data
+        console.log('model.start = ' + model.start);
+        console.log('model.end = ' + model.end);
+        console.log('range = ');
         layers = [
             {
-                "x1": model.start,
-                "x2": model.end
+                "x": model.start,
+                "y": "Data2"
             },
             {
+                "x": model.end,
+                "y": "Data2"
             }
         ];
 
-        y = d3.scale.ordinal()
-            .domain(["Data1","Data2","Data3"]) //loaded product data goes here
-            .rangeBands([0,height]);
+        //y.domain(["Data1","Data2"]); //loaded product data goes here
 
-        yAxis = d3.svg.axis()
-            .scale(y)
-            .orient("left")
-            .ticks(3);
+        //update vertical ticks
 
+        dataBar.remove();
+        dataBar = timeline.insert("svg:g",'.x.axis')
+            .attr("style","clip-path:url(#timeline-boundary)")
+            .attr("clip-path","#timeline-boundary")
+            .attr("height",height)
+            .classed('plot',true)
+            .append("svg:path")
+            .datum(layers)
+            .attr("class", "data-bar")
+            .attr("d", selection);
+        
+    };
+    var hideInvalidTicks = function(){
+        console.log('hiding invalid ticks ' + normalTicks.data()[0]);
+        if(tooSmall){
+            console.log('tooSmall true');
+            var ms = model.selected;
+            var yos = parseInt(ms.getUTCFullYear() - Math.floor(ms.getUTCFullYear()/10)*10);
+            var nt = new Date(Math.floor(normalTicks.data()[0].getUTCFullYear()/10)*10+yos,ms.getUTCMonth(),ms.getUTCDate());
+            console.log('nt = ' + nt);
+            switch(zoomLvl){
+            case 0:
+                if(nt < normalTicks.data()[0]){
+                    d3.select(boundaryTicks[0][0]).selectAll('rect.').on('mouseenter',null);
+                    console.log('delete click');
+                }
+                else{
+                    d3.select(boundaryTicks[0][0]).selectAll('rect');//.('visibility','');
+                }
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            }
+        }
     };
     var updateTime = function() {
         var ms = new Date(model.selected);
@@ -129,6 +167,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         else{
             decrementBtn.removeClass('button-disabled');
         }
+        //hideInvalidTicks();
         guitarPick.attr("transform","translate("+(x(model.selected)-25)+",-16)");
 
         
@@ -607,6 +646,8 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 clickBoundaryTick.call(this,d);
             })*/;
 
+        dataBar.attr('d',selection);
+        
         //UPDATE GUITARPICK
         if (guitarPick){
             guitarPick.attr("transform","translate("+(x(model.selected)-25)+",-16)");
@@ -1049,6 +1090,9 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             removeLabelOnlyStuff();
             removeNormalTickOnlyStuff();
         }
+
+        dataBar.attr('d',selection);
+
         //UPDATE GUITARPICK
         if (guitarPick){
             guitarPick.attr("transform","translate("+(x(model.selected)-25)+",-16)");
@@ -1180,8 +1224,28 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .xExtent(dataLimits)
             .on("zoom", zoomable, d3.event);
 
-        setData();
+        //setData();
 
+        layers = [
+            {
+                "x": model.start,
+                "y": "Data2"
+            },
+            {
+                "x": model.end,
+                "y": "Data2"
+            }
+        ];
+        
+        y = d3.scale.ordinal()
+            .domain(["Data1","Data2"]) //loaded product data goes here
+            .rangeBands([0,height]);
+
+        yAxis = d3.svg.axis()
+            .scale(y)
+            .orient("left")
+            .ticks(3);
+        
         //create timeline elements
         d3.select('#timeline-footer')
             .append("svg:svg")
@@ -1220,11 +1284,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         timeline.select(".x.axis")
             .call(xAxis); //update view after translate
 
-        setZoom('months');
-
-        //initial setup of zoom buttons FIXME: make this much better
-        setZoomBtns('months');
-
         //draw vertical ticks
         verticalAxis = timeline.append("svg:g")
             .attr("class", "y axis")
@@ -1233,12 +1292,22 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
         verticalAxis.selectAll("text").remove();
 
+        
         //Plot data
-        var chartBody = timeline.append("svg:g")
+        dataBar = timeline.insert("svg:g",'.x.axis')
             .attr("style","clip-path:url(#timeline-boundary)")
             .attr("clip-path","#timeline-boundary")
-            .attr("height",height);
+            .attr("height",height)
+            .classed('plot',true)
+            .append("svg:path")
+            .datum(layers)
+            .attr("class", "data-bar")
+            .attr("d", selection);
 
+        setZoom('months');
+        
+        //initial setup of zoom buttons FIXME: make this much better
+        setZoomBtns('months');
 
         //Add guitar pick
         guitarPick = d3.select("#timeline-footer svg")
@@ -1276,6 +1345,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         })
         .on("mouseup",function(){
             mousedown = false;
+            guitarPick.classed('pick-clicked',false);
         });
 
         //update date when sliding guitarpick across small axis
@@ -1619,7 +1689,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         });
 
         models.layers.events.on("change",function(){
-            //empty
+            setData();
         });
 
         updateTime();

@@ -94,6 +94,14 @@
     stroke-width:1;
     stroke-dasharray:0;
 }
+g.plot path.data-bar {
+    stroke:rgb(0, 75, 150);
+    stroke-width:15px;
+    stroke-linecap:round;
+    stroke-linejoin:miter;
+    stroke-opacity:0.8;
+    pointer-events:none;
+}
 #timeline-header{
     margin-top:2px;
 }
