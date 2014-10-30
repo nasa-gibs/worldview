@@ -92,7 +92,7 @@ def process_layer(gc_layer, wv_layers, colormaps):
                     times = range.split('/')
                     start_date = min(start_date,
                         datetime.strptime(times[0], "%Y-%m-%d"))
-                    end_date = min(end_date,
+                    end_date = max(end_date,
                         datetime.strptime(times[1], "%Y-%m-%d"))
                 wv_layer["startDate"] = start_date.strftime("%Y-%m-%d")
                 if end_date != datetime.min:
