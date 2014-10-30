@@ -25,6 +25,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var id = "timeline";
     var selector = "#" + id;
     var model = models.date;
+    var layersModel = models.layers;
     var layers;
     var dataStartDate = config.startDate;
     var boundaryTicks,normalTicks,allTicks,allBoundaryTickForegrounds,offscreenBoundaryTickText, tooSmall;
@@ -39,6 +40,10 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         bottom: 20,
         left: 10
     };
+    $(layersModel.get({visible:true})).each(function(){
+        console.log(this);
+        
+    });
     /* Click or mousedown? */
     var cancelClick;
     var clicked = true;
@@ -104,7 +109,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
         //update vertical ticks
 
-        dataBar.remove();
+        d3.selectAll('g.plot').remove();
         dataBar = timeline.insert("svg:g",'.x.axis')
             .attr("style","clip-path:url(#timeline-boundary)")
             .attr("clip-path","#timeline-boundary")
@@ -1335,8 +1340,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .attr("x","35")
             .attr("y","11");
 
-
-
         guitarPick.on("mousedown",function(){  //TODO: Drag slider over small axes
             mousedown = true;
             d3.event.preventDefault();
@@ -1417,15 +1420,15 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .mouseup(animateEnd);
         $(document)
             .keydown(function(event) {
-                if ( event.target.nodeName === "INPUT" ) {
-                    /*if((event.keyCode || event.which) === 9){
+                /*if ( event.target.nodeName === "INPUT" ) {
+                    if((event.keyCode || event.which) === 9){
 
                         $('.button-input-group').parent().css('border-color','');
                         updateTime();
 
                     }
-                    else*/ return;
-                }
+                    else return;
+                }*/
                 switch ( event.keyCode ) {
                     case wv.util.key.LEFT:
                         animateReverse("day");
@@ -1597,55 +1600,70 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             $(this).siblings('.button-input-group').focus();
         });
 
-        $('.button-input-group').change(function(){
-            if($(this).parent().hasClass('selected')){
-                var selected = $(this);
-                var YMDInterval = selected.attr('id');
-                var newInput = selected.val();
-                var selectedDateObj = null;
-                switch(YMDInterval){
+        $('.button-input-group').keydown(function(event){
+            //.change(function(){
+            var kc = event.keyCode || event.which;
+            if((kc === 13) || (kc === 9)){
+                event.preventDefault();
+                    
+                if($(this).parent().hasClass('selected')){
+                    var selected = $(this);
+                    var YMDInterval = selected.attr('id');
+                    var newInput = selected.val();
+                    var selectedDateObj = null;
+                    switch(YMDInterval){
                     case 'year-input-group':
-                    if ((newInput > 1000) && (newInput < 9999))
-                        selectedDateObj = new Date((new Date(model.selected)).setUTCFullYear(newInput));
-                    break;
+                        if ((newInput > 1000) && (newInput < 9999))
+                            selectedDateObj = new Date((new Date(model.selected)).setUTCFullYear(newInput));
+                        break;
                     case 'month-input-group':
-                    if ($.isNumeric(newInput) && (newInput < 13) && (newInput > 0)){
-                        selectedDateObj = new Date((new Date(model.selected)).setUTCMonth(newInput-1));
-                    }
-                    else{
-                        var validStr = false;
-                        var newIntInput;
-                        newInput = newInput.toUpperCase();
-
-                        for (var i=0;i<monthNames.length;i++){
-                            if (newInput === monthNames[i]){
-                                validStr = true;
-                                newIntInput = i;
+                        if ($.isNumeric(newInput) && (newInput < 13) && (newInput > 0)){
+                            selectedDateObj = new Date((new Date(model.selected)).setUTCMonth(newInput-1));
+                        }
+                        else{
+                            var validStr = false;
+                            var newIntInput;
+                            newInput = newInput.toUpperCase();
+                            
+                            for (var i=0;i<monthNames.length;i++){
+                                if (newInput === monthNames[i]){
+                                    validStr = true;
+                                    newIntInput = i;
+                                }
+                            }
+                            if (validStr){
+                                selectedDateObj = new Date((new Date(model.selected)).setUTCMonth(newIntInput));
                             }
                         }
-                        if (validStr){
-                            selectedDateObj = new Date((new Date(model.selected)).setUTCMonth(newIntInput));
-                        }
-                    }
-                    break;
+                        break;
                     case 'day-input-group':
-                    if(newInput>0 && newInput<=(new Date(model.selected.getYear(),model.selected.getMonth()+1,0).getDate())){
-                        selectedDateObj = new Date((new Date(model.selected)).setUTCDate(newInput));
+                        if(newInput>0 && newInput<=(new Date(model.selected.getYear(),model.selected.getMonth()+1,0).getDate())){
+                            selectedDateObj = new Date((new Date(model.selected)).setUTCDate(newInput));
+                        }
+                        break;
                     }
-                    break;
+                    if((selectedDateObj > dataLimits[0]) && (selectedDateObj <= dataLimits[1])){
+                        var ztw = zoom.translate()[0];
+                        var sib =  selected.parent().next('div.input-wrapper').find('input.button-input-group');
+                        if(sib.length < 1){
+                            $('#focus-guard-2').focus();
+                        }
+                        model.select(selectedDateObj);
+                        $('.button-input-group').parent().css('border-color','');
+                        selected.parent().removeClass('selected');
+                        sib.select().addClass('selected');
+                    }
+                    else{
+                        selected.parent().css('border-color','#ff0000');
+                        //updateTime();
+                        selected.select();
+                    }
+                    
                 }
-                if((selectedDateObj > dataLimits[0]) && (selectedDateObj <= dataLimits[1])){
-                    var ztw = zoom.translate()[0];
-                    model.select(selectedDateObj);
-                    $('.button-input-group').parent().css('border-color','');
-                    selected.select();
-                }
-                else{
-                    updateTime();
-                    selected.select();
-                }
-
+                
+                
             }
+            
         });
         $("#focus-guard-1").on('focus',function(){
            $("#day-input-group").focus().select();
