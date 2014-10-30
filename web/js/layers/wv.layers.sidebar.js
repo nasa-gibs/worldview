@@ -36,7 +36,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
 
     var HTML_TAB_DOWNLOAD_SELECTED =
         "<i class='productsIcon selected icon-download'></i>" +
-        "Download";
+        "Download Data";
 
     var HTML_TAB_DOWNLOAD_UNSELECTED =
         "<i class='productsIcon selected icon-download' title='Download Data'></i>";
