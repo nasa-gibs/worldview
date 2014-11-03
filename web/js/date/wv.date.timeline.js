@@ -25,13 +25,13 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var id = "timeline";
     var selector = "#" + id;
     var model = models.date;
-    var layersModel = models.layers;
     var layers;
     var dataStartDate = config.startDate;
     var boundaryTicks,normalTicks,allTicks,allBoundaryTickForegrounds,offscreenBoundaryTickText, tooSmall;
     var x,xAxis,y,yAxis,zoom;
     var zoomInterval,zoomStep,subInterval,subStep,zoomTimeFormat,zoomLvl,resizeDomain;
-    var timeline,verticalAxis,guitarPick,dataBar;
+    var timeline,verticalAxis,guitarPick,dataBars;
+    var activeLayers,activeLayersDynamic,activeLayersInvisible,layerCount,activeLayersTitles;
     var timer;
     var mousedown = false;
     var margin = {
@@ -39,11 +39,13 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         right: 0,
         bottom: 20,
         left: 10
-    };
-    $(layersModel.get({visible:true})).each(function(){
-        console.log(this);
+    };    
 
+
+    $(models.layers.get()).each(function(){
+        console.log(this);
     });
+
     /* Click or mousedown? */
     var cancelClick;
     var clicked = true;
@@ -91,35 +93,79 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         });
 
     var setData = function(){ //TODO: Finish setting data from product data
-        console.log('model.start = ' + model.start);
-        console.log('model.end = ' + model.end);
-        console.log('range = ');
-        layers = [
-            {
-                "x": model.start,
-                "y": "Data2"
-            },
-            {
-                "x": model.end,
-                "y": "Data2"
+        dataBars.selectAll('rect').remove();
+        activeLayersTitles = [];
+        
+        activeLayers = models.layers.get();
+        
+        activeLayersDynamic = activeLayers.filter(function(al){
+            return al.startDate;
+        });
+        activeLayersInvisible = activeLayers.filter(function(al){
+            return al.visible === false;
+        });
+
+        layerCount = activeLayers.length;
+        
+        $(activeLayers).each(function(i){
+            activeLayersTitles[i] = this.id;
+        });
+        
+        console.log(activeLayersTitles);
+        
+        y = d3.scale.ordinal()
+            .domain(activeLayersTitles) //loaded product data goes here
+            .rangeBands([5,height]);
+        
+        yAxis = d3.svg.axis()
+            .scale(y)
+            .orient("left")
+            .ticks(layerCount);
+        
+        $(activeLayers).each(function(al){
+            var layerStart,layerEnd,layerXY;
+            var layerVisible = true;
+            var staticLayer = true;
+            var layerId = this.id;
+            
+            if(this.startDate) {
+                layerStart = new Date(this.startDate);
+                staticLayer = false;
             }
-        ];
+            else{
+                layerStart = dataLimits[0];
+            }
+            if(this.inactive === true) {
+                layerEnd = new Date(this.endDate);
+            }
+            else{
+                layerEnd = dataLimits[1];
+            }
+            
+            var currentDB = dataBars.append("svg:rect")
+                .attr('x',x(layerStart))
+                .attr('width',x(layerEnd)-x(layerStart))
+                //.attr('height',2)
+                .attr('y',y(layerId)-2.5)
+                .attr('rx',4)
+                .attr('ry',4)
+                .attr("class", "data-bar");
+//                .attr("d", selection);
+            if(!staticLayer){
+                currentDB.classed('data-bar-dyn',true);
+            }
+            if(this.visible === false){
+                layerVisible = false;
+                currentDB.classed('data-bar-invisible',true);
+            }
+            
+        });
+        dataBars.selectAll('rect')
+            .attr('height',(height-15)/layerCount);
 
-        //y.domain(["Data1","Data2"]); //loaded product data goes here
-
-        //update vertical ticks
-
-        d3.selectAll('g.plot').remove();
-        dataBar = timeline.insert("svg:g",'.x.axis')
-            .attr("style","clip-path:url(#timeline-boundary)")
-            .attr("clip-path","#timeline-boundary")
-            .attr("height",height)
-            .classed('plot',true)
-            .append("svg:path")
-            .datum(layers)
-            .attr("class", "data-bar")
-            .attr("d", selection);
-
+        if(verticalAxis){
+            verticalAxis.call(yAxis);
+        }
     };
     var hideInvalidTicks = function(){
         console.log('hiding invalid ticks ' + normalTicks.data()[0]);
@@ -172,7 +218,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         else{
             decrementBtn.removeClass('button-disabled');
         }
-        //hideInvalidTicks();
+        hideInvalidTicks();
         guitarPick.attr("transform","translate("+(x(model.selected)-25)+",-16)");
 
 
@@ -651,8 +697,10 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 clickBoundaryTick.call(this,d);
             })*/;
 
-        dataBar.attr('d',selection);
+        //dataBar.attr('d',selection);
 
+        setData();
+        
         //UPDATE GUITARPICK
         if (guitarPick){
             guitarPick.attr("transform","translate("+(x(model.selected)-25)+",-16)");
@@ -1095,8 +1143,8 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             removeLabelOnlyStuff();
             removeNormalTickOnlyStuff();
         }
-
-        dataBar.attr('d',selection);
+        setData();
+        //dataBar.attr('d',selection);
 
         //UPDATE GUITARPICK
         if (guitarPick){
@@ -1229,27 +1277,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .xExtent(dataLimits)
             .on("zoom", zoomable, d3.event);
 
-        //setData();
 
-        layers = [
-            {
-                "x": model.start,
-                "y": "Data2"
-            },
-            {
-                "x": model.end,
-                "y": "Data2"
-            }
-        ];
-
-        y = d3.scale.ordinal()
-            .domain(["Data1","Data2"]) //loaded product data goes here
-            .rangeBands([0,height]);
-
-        yAxis = d3.svg.axis()
-            .scale(y)
-            .orient("left")
-            .ticks(3);
 
         //create timeline elements
         d3.select('#timeline-footer')
@@ -1289,6 +1317,17 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         timeline.select(".x.axis")
             .call(xAxis); //update view after translate
 
+
+
+        dataBars = timeline.insert("svg:g",'.x.axis')
+            .attr("style","clip-path:url(#timeline-boundary)")
+            .attr("clip-path","#timeline-boundary")
+            .attr("height",height)
+            .classed('plot',true);
+
+        setZoom('months');
+        setZoomBtns('months');        
+
         //draw vertical ticks
         verticalAxis = timeline.append("svg:g")
             .attr("class", "y axis")
@@ -1297,8 +1336,9 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
         verticalAxis.selectAll("text").remove();
 
-
         //Plot data
+
+        /*
         dataBar = timeline.insert("svg:g",'.x.axis')
             .attr("style","clip-path:url(#timeline-boundary)")
             .attr("clip-path","#timeline-boundary")
@@ -1308,11 +1348,11 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .datum(layers)
             .attr("class", "data-bar")
             .attr("d", selection);
+        */
 
-        setZoom('days');
 
         //initial setup of zoom buttons FIXME: make this much better
-        setZoomBtns('days');
+
 
         //Add guitar pick
         guitarPick = d3.select("#timeline-footer svg")
@@ -1658,15 +1698,11 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                         //updateTime();
                         selected.select();
                     }
-
                 }
-
-
             }
-
         });
         $("#focus-guard-1").on('focus',function(){
-           $("#day-input-group").focus().select();
+            $("#day-input-group").focus().select();
         });
         $("#focus-guard-2").on('focus',function(){
            $("#year-input-group").focus().select();
@@ -1708,6 +1744,12 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
         models.layers.events.on("change",function(){
             setData();
+        });
+        models.layers.events.on('update',function(){
+            console.log('this layer has been changed somehow');
+        });
+        models.layers.events.on('visibility',function(){
+            console.log('visibility changed');
         });
 
         updateTime();
