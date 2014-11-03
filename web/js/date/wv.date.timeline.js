@@ -203,15 +203,12 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
     var resizeWindow = function() {
         if ( self.enabled && wv.util.browser.small ) {
-            console.log("timeline", "****** disable");
             self.enabled = false;
             $("#timeline").hide();
         } else if ( !self.enabled && !wv.util.browser.small ) {
-            console.log("timeline", "****** enable");
             self.enabled = true;
             $("#timeline").show();
         }
-        console.log("timeline status", self.enabled);
         if ( self.enabled ) {
             getTimelineWidth();
             d3.select('#timeline-footer svg')

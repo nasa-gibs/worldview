@@ -29,13 +29,10 @@ wv.date.wheels = wv.date.wheels || function(models, config) {
 
     var self = {};
     self.enabled = false;
-    self.startDate = null;
-    self.endDate = null;
 
     var init = function() {
         render();
         model.events.on("select", update);
-        models.layers.events.on("change", updateRange);
         $(window).on("resize", resize);
         updateRange();
         update();
@@ -75,30 +72,21 @@ wv.date.wheels = wv.date.wheels || function(models, config) {
 
     var resize = function() {
         if ( !self.enabled && wv.util.browser.small ) {
-            console.log("wheels", "***** enable");
             self.enabled = true;
             $container.show();
         } else if ( self.enabled && !wv.util.browser.small ) {
-            console.log("wheels", "***** disable");
             self.enabled = false;
             $container.hide();
         }
-        console.log("wheels state", self.enabled);
     };
 
     var updateRange = function() {
-        var range = models.layers.dateRange();
-        if ( !range ) {
-            self.startDate = null;
-            self.endDate = null;
-            $("#linkmode").mobiscroll("option", "disabled", true);
-            return;
-        }
-        self.startDate = range.start;
-        self.endDate = range.end;
+        startDate = wv.util.parseDateUTC(config.startDate);
+        endDate = wv.util.today();
+        console.log("range", startDate, endDate);
         $("#linkmode").mobiscroll("option", "disabled", false);
-        $("#linkmode").mobiscroll("option", "minDate", UTCToLocal(self.startDate));
-        $("#linkmode").mobiscroll("option", "maxDate", UTCToLocal(self.endDate));
+        $("#linkmode").mobiscroll("option", "minDate", UTCToLocal(startDate));
+        $("#linkmode").mobiscroll("option", "maxDate", UTCToLocal(endDate));
     };
 
     var update = function() {
