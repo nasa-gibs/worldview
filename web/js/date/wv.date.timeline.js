@@ -72,6 +72,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
 
     var self = {};
+    self.enabled = false;
 
     var incrementBtn = $("#right-arrow-group");
     var decrementBtn = $("#left-arrow-group");
@@ -199,17 +200,27 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             panAxis();
         }
     };
-    var resizeWindow = function(){
-        getTimelineWidth();
-        d3.select('#timeline-footer svg')
-            .attr('width', width + margin.left + margin.right);
-        d3.select('#timeline-boundary rect').attr('width',width+margin.left+margin.right);
-        d3.select('#guitarpick-boundary rect').attr('width',width+margin.left+margin.right);
-        timeline.select(".x.axis line:first-child").attr("x2",width+10);
 
-        setZoom(zoomLvl);
+    var resizeWindow = function() {
+        if ( self.enabled && wv.util.browser.small ) {
+            self.enabled = false;
+            $("#timeline").hide();
+        } else if ( !self.enabled && !wv.util.browser.small ) {
+            self.enabled = true;
+            $("#timeline").show();
+        }
+        if ( self.enabled ) {
+            getTimelineWidth();
+            d3.select('#timeline-footer svg')
+                .attr('width', width + margin.left + margin.right);
+            d3.select('#timeline-boundary rect').attr('width',width+margin.left+margin.right);
+            d3.select('#guitarpick-boundary rect').attr('width',width+margin.left+margin.right);
+            timeline.select(".x.axis line:first-child").attr("x2",width+10);
 
+            setZoom(zoomLvl);
+        }
     };
+
     var getSubLabel = function(tickDate){
         var sl;
         switch (zoomLvl){
