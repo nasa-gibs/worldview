@@ -59,21 +59,9 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
     var render = function() {
         $(self.selector).empty();
 
-        var productsWrapperHeight = $(window).height() - $('#timeline').outerHeight() - $('#wv-logo').outerHeight() - 40; // 40 padding
-        $('#productsHolder-wrapper').css('height', productsWrapperHeight);
-
         var tabs_height = $(".ui-tabs-nav").outerHeight(true);
         $(self.selector).addClass('selector');
-/*
 
-        console.log($($(self.selector).children()[0]).height() + $($($(self.selector).children()[1]).children()[0]).height() + $($($(self.selector).children()[1]).children()[1]).height());
-
-        $(self.selector).css('max-height',
-            $(self.selector).parent().parent().outerHeight() - tabs_height
-        )/*
-            .css('height',
-                 $($(self.selector).children()[0]).height() + $($($(self.selector).children()[1]).children()[0]).height() + $($($(self.selector).children()[1]).children()[1]).height()
-                );*/
         $(self.selector).height(
             $(self.selector).parent().outerHeight() - tabs_height
         );
@@ -251,19 +239,10 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
 
     var resize = function() {
 
-        var productsWrapperHeight = $(window).height() - $('#timeline').outerHeight() - $('#wv-logo').outerHeight() - 40; // 40 padding
-        $('#productsHolder-wrapper').css('height', productsWrapperHeight);
-
         var tabs_height = $(".ui-tabs-nav").outerHeight(true);
         $(self.selector)
             .height($(self.selector).parent().outerHeight() - tabs_height);
-/*
-            .css('max-height',$(self.selector).parent().parent().outerHeight() - tabs_height)
 
-        .css('height',
-             $($(self.selector).children()[0]).height() + $($(self.selector).children()[1]).height()
-            );
-*/
         if ( !wv.util.browser.small ) {
             if ( jsp ) {
                 var api = jsp.data('jsp');

@@ -136,10 +136,10 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
         }
 
         $container.append($tabs);
+        var $collapseContainer = $("<div></div>")
+            .attr("id", self.id + "toggleButtonHolder")
+            .addClass("toggleButtonHolder");
 
-        $container.append($("<div id='products'></div>"))
-                  .append($("<div id='selectorbox'></div>"))
-                  .append($("<div id='wv-data'></div>"));
 
         var $collapseButton = $("<a></a>")
             .addClass("accordionToggler")
@@ -147,8 +147,14 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
             .addClass("arrow")
             .attr("title", "Hide");
 
-        $container.after($collapseButton);
-
+        $collapseContainer.append($collapseButton);
+        
+        $container.append($collapseContainer);
+        
+        $container.append($("<div id='products'></div>"))
+                  .append($("<div id='selectorbox'></div>"))
+                  .append($("<div id='wv-data'></div>"));
+        
         $container.tabs({
             beforeActivate: onBeforeTabChange,
             activate: onTabChange
@@ -240,9 +246,6 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
             collapsed = true;
             $("#" + self.id).after($('.accordionToggler'));
         }
-    };
-    self.setProductsHeight = function(){
-
     };
     var adjustAlignment = function() {
         if ( wv.util.browser.small && collapsed ) {

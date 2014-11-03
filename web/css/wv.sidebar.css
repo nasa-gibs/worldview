@@ -9,59 +9,15 @@
  * All Rights Reserved.
  */
 
-#products .categoryContainer, #productsHoldertabs, #selectorbox,#wv-data{
-    background:none repeat scroll 0% 0% rgba(40, 40, 40, 0.85);
-    box-sizing:border-box;
-    -moz-box-sizing:border-box;
-    -webkit-box-sizing:border-box;
-    -o-box-sizing:border-box;
-    border-left:1px solid #333;
-    border-right:1px solid #333;
-
-}
-#products, #selectorbox, #selectorboxcontent{
-    margin-bottom:-10px;
-}
-#products .categoryContainer:last-child, #selectorbox, #wv-data{
-    padding-bottom:10px;
-    border-bottom:1px solid #333;
+#productsHolder {
+    border: 1px solid #333;
     border-bottom-left-radius:5px;
     border-bottom-right-radius:5px;
 }
 #productsHoldertabs{
-    width:100%;
-    border-top:1px solid #333;
-    border-left:1px solid #333;
-    border-right:1px solid #333;
-    padding: 0;
-}
-
-#productsHolder-wrapper {
-    z-index:2;
-    min-width:286px;
-    width:286px;
-    position:absolute;
-    left:10px;
-    top:68px;
-    -webkit-box-sizing:border-box;
-    -o-box-sizing:border-box;
-    -moz-box-sizing:border-box;
-    box-sizing:border-box;
-}
-#productsHolder-wrapper .accordionToggler{
-    display:block;
-    height:10px;
-}
-
-#productsHolder {
-    height:100%;
-    overflow:hidden;
     padding:0;
-/*    border: 1px solid #333;
-    border-bottom-left-radius:5px;
-    border-bottom-right-radius:5px;
-*/
-    background: none;
+
+    background: rgba(0,0,0,0);
 }
 
 #productsHoldertabs .ui-state-default {

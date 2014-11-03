@@ -59,10 +59,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         legends = {};
         var $container = $(self.selector);
         $container.empty();
-/*
-        var productsWrapperHeight = $(window).height() - $('#timeline').outerHeight() - $('#wv-logo').outerHeight() - 40; // 40 padding
-        $('#productsHolder-wrapper').css('height', productsWrapperHeight);
-        */
+
         var tabs_height = $(".ui-tabs-nav").outerHeight(true);
         $container.addClass('bank');
         $container.height(
@@ -71,7 +68,6 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
         _.each(groups, function(group) {
             renderGroup($container, group);
-            //console.log("group rendered");
         });
 
         $(self.selector).undelegate(".close" ,'click');
@@ -98,16 +94,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
 
         setTimeout(resize, 1);
-/*        console.log('$$$$$$$$$$$$$$$$$$$$');
-        console.log();
 
-
-        $container.css('max-height',
-            $(self.selector).parent().parent().outerHeight() - tabs_height
-        ).css('height',
-             $($(self.selector).children()[0]).height() + $($(self.selector).children()[1]).height()
-             );
-*/
     };
 
     var renderGroup = function($parent, group) {
@@ -315,29 +302,11 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                     .jScrollPane({autoReinitialise: false, verticalGutter:0});
             }
         }
-/*
-        //resize wrapper
-        var productsWrapperHeight = $(window).height() - $('#timeline').outerHeight() - $('#wv-logo').outerHeight() - 40; // 40 padding
-        $('#productsHolder-wrapper').css('height', productsWrapperHeight);
-*/
+
         var tabs_height = $(".ui-tabs-nav").outerHeight(true);
         $(self.selector).height(
             $(self.selector).parent().outerHeight() - tabs_height
         );
-/*
-        $(self.selector).css('max-height',
-            $(self.selector).parent().parent().outerHeight() - tabs_height
-                            )
-        .css('height',
-             $($(self.selector).children()[0]).height() + $($(self.selector).children()[1]).height()
-            );
-
-        //resize productsHolder
-/*
-        var productsInnerHeight = $('#products').height() + $('#productsHoldertabs').height();
-        $('#productsHolder').css('height',productsInnerHeight);
-*/
-
 
         adjustCategoryHeights();
     };
