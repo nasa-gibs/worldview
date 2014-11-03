@@ -211,7 +211,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         else{
             decrementBtn.removeClass('button-disabled');
         }
-        hideInvalidTicks();
+        //hideInvalidTicks(); TODO: Implement invalid ticks
         guitarPick.attr("transform","translate("+(x(model.selected)-25)+",-16)");
 
 
