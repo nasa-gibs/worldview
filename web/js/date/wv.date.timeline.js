@@ -39,12 +39,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         right: 0,
         bottom: 20,
         left: 10
-    };    
-
-
-    $(models.layers.get()).each(function(){
-        console.log(this);
-    });
+    };
 
     /* Click or mousedown? */
     var cancelClick;
@@ -53,7 +48,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var notClick = function(){
         clicked = false;
     };
-    /*                     */
 
     var width;
     var getTimelineWidth = function(){width = window.innerWidth - $("#timeline-header").outerWidth() - $("#timeline-zoom").outerWidth() - $("#timeline-hide").outerWidth() - 40;};
@@ -112,8 +106,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             activeLayersTitles[i] = this.id;
         });
         
-        console.log(activeLayersTitles);
-        
         y = d3.scale.ordinal()
             .domain(activeLayersTitles) //loaded product data goes here
             .rangeBands([5,height]);
@@ -168,19 +160,19 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             verticalAxis.call(yAxis);
         }
     };
-    var hideInvalidTicks = function(){
-        console.log('hiding invalid ticks ' + normalTicks.data()[0]);
+    var hideInvalidTicks = function(){ //TODO: In progress
+        //console.log('hiding invalid ticks ' + normalTicks.data()[0]);
         if(tooSmall){
-            console.log('tooSmall true');
+            //console.log('tooSmall true');
             var ms = model.selected;
             var yos = parseInt(ms.getUTCFullYear() - Math.floor(ms.getUTCFullYear()/10)*10);
             var nt = new Date(Math.floor(normalTicks.data()[0].getUTCFullYear()/10)*10+yos,ms.getUTCMonth(),ms.getUTCDate());
-            console.log('nt = ' + nt);
+            //console.log('nt = ' + nt);
             switch(zoomLvl){
             case 0:
                 if(nt < normalTicks.data()[0]){
                     d3.select(boundaryTicks[0][0]).selectAll('rect.').on('mouseenter',null);
-                    console.log('delete click');
+                    //console.log('delete click');
                 }
                 else{
                     d3.select(boundaryTicks[0][0]).selectAll('rect');//.('visibility','');
@@ -1405,8 +1397,11 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         //update date when sliding guitarpick across small axis
         d3.select(document).on("mousemove",function(){
             if (mousedown){
+                console.log(d3.event);
+                var evt = window.event || d3.event || e;
+                var xPos = evt.x || evt.clientX; //FIXME: needs more accuracy in Firefox
                 var newDate;
-                var mouseDate = x.invert((window.event.x-$('#timeline-header').outerWidth()-margin.left));
+                var mouseDate = x.invert((xPos-$('#timeline-header').outerWidth()-margin.left));
                 var currentDate = new Date(model.selected);
                 switch(zoomLvl){
                     case 0:
@@ -1757,10 +1752,10 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             setData();
         });
         models.layers.events.on('update',function(){
-            console.log('this layer has been changed somehow');
+
         });
         models.layers.events.on('visibility',function(){
-            console.log('visibility changed');
+
         });
 
         updateTime();
