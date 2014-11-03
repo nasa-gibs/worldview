@@ -95,7 +95,7 @@
     stroke-dasharray:0;
 }
 g.plot rect.data-bar {
-    fill:#ccc;
+    fill:#999;
     stroke:transparent;
     stroke-width:1px;
     
@@ -113,7 +113,7 @@ g.plot rect.data-bar-hovered{
 }
 g.plot rect.data-bar-invisible{
     fill:#777;
-    fill-opacity:0.3;
+    fill-opacity:0.5;
 }
 #timeline-header{
     margin-top:2px;

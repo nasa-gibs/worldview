@@ -108,7 +108,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         
         y = d3.scale.ordinal()
             .domain(activeLayersTitles) //loaded product data goes here
-            .rangeBands([5,height]);
+            .rangeBands([5,height-5]);
         
         yAxis = d3.svg.axis()
             .scale(y)
