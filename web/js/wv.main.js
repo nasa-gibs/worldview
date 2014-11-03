@@ -157,13 +157,9 @@ $(function() {
         ui.sidebar = wv.layers.sidebar(models, config);
         ui.activeLayers = wv.layers.active(models, ui, config);
         ui.addLayers = wv.layers.add(models, ui, config);
-        //ui.dateSliders = wv.date.sliders(models, config);
         ui.timeline = wv.date.timeline(models, config, ui);
         ui.dateLabel = wv.date.label(models);
-        // TEMP: Remove this once the real slider goes in. Search for other
-        // comments marked as TEMP
-        //wv.debug.slider(models, config);
-        //ui.dateWheels = wv.date.wheels(models, config);
+        ui.dateWheels = wv.date.wheels(models, config);
         ui.rubberband = wv.image.rubberband(models, ui, config);
         ui.image = wv.image.panel(models, ui, config);
         if ( config.features.dataDownload ) {

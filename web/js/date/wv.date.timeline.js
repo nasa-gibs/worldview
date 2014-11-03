@@ -1722,6 +1722,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         });
 
         updateTime();
+        resizeWindow();
 
     }; // end init()
     var forwardNextDay = function(){ //FIXME: Limit animation correctly
