@@ -42,7 +42,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     };
     $(layersModel.get({visible:true})).each(function(){
         console.log(this);
-        
+
     });
     /* Click or mousedown? */
     var cancelClick;
@@ -1309,10 +1309,10 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .attr("class", "data-bar")
             .attr("d", selection);
 
-        setZoom('months');
+        setZoom('days');
 
         //initial setup of zoom buttons FIXME: make this much better
-        setZoomBtns('months');
+        setZoomBtns('days');
 
         //Add guitar pick
         guitarPick = d3.select("#timeline-footer svg")
@@ -1605,7 +1605,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             var kc = event.keyCode || event.which;
             if((kc === 13) || (kc === 9)){
                 event.preventDefault();
-                    
+
                 if($(this).parent().hasClass('selected')){
                     var selected = $(this);
                     var YMDInterval = selected.attr('id');
@@ -1624,7 +1624,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                             var validStr = false;
                             var newIntInput;
                             newInput = newInput.toUpperCase();
-                            
+
                             for (var i=0;i<monthNames.length;i++){
                                 if (newInput === monthNames[i]){
                                     validStr = true;
@@ -1658,12 +1658,12 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                         //updateTime();
                         selected.select();
                     }
-                    
+
                 }
-                
-                
+
+
             }
-            
+
         });
         $("#focus-guard-1").on('focus',function(){
            $("#day-input-group").focus().select();
