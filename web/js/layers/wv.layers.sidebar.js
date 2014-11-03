@@ -148,13 +148,13 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
             .attr("title", "Hide");
 
         $collapseContainer.append($collapseButton);
-        
+
         $container.append($collapseContainer);
-        
+
         $container.append($("<div id='products'></div>"))
                   .append($("<div id='selectorbox'></div>"))
                   .append($("<div id='wv-data'></div>"));
-        
+
         $container.tabs({
             beforeActivate: onBeforeTabChange,
             activate: onTabChange

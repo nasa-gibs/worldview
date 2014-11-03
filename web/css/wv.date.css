@@ -179,9 +179,19 @@ div.ui-slider {
     height: 23px;
 }
 
-#linkmode {
+#wv-date-mobile-label {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #333;
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
     border: none;
     text-shadow: none;
+    font-family: "Lucida Sans", "Arial", "sans serif";
+    color: white;
+    background-color: rgba(40, 40, 40, 0.85);
+    text-align: center;
 }
 
 a.ui-btn {
@@ -201,6 +211,3 @@ a.ui-btn-up-c {
     padding: 0;
     left: 0;
 }
-
-
-

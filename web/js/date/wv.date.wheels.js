@@ -22,15 +22,15 @@ wv.date = wv.date || {};
  */
 wv.date.wheels = wv.date.wheels || function(models, config) {
 
-    var id = "timemds";
+    var id = "timewheels";
     var $container = $("#" + id);
     var MSEC_TO_MIN = 1000*60;
     var model = models.date;
 
     var self = {};
+    self.enabled = false;
     self.startDate = null;
     self.endDate = null;
-    self.isCollapsed = false;
 
     var init = function() {
         render();
@@ -45,7 +45,7 @@ wv.date.wheels = wv.date.wheels || function(models, config) {
     var render = function() {
         $container
             .addClass("datespan")
-            .html("<input name='linkmode' id='linkmode' />");
+            .html("<div id='wv-date-mobile-label'></div><input type='hidden' id='linkmode' readonly>");
 
         $("#linkmode").mobiscroll().date({
             display: "bottom",
@@ -54,15 +54,18 @@ wv.date.wheels = wv.date.wheels || function(models, config) {
                 model.select(d);
             },
             onShow: function(){
-                $("#linkmode").css("display","none");
+                $("#wv-date-mobile-label").css("display","none");
             },
             onClose: function(){
-                $("#linkmode").css("display","block");
+                $("#wv-date-mobile-label").css("display","block");
             },
             dateFormat: 'yyyy-mm-dd',
             setText: 'OK'
         });
         $("#linkmode").mobiscroll('setDate', UTCToLocal(model.selected),true);
+        $("#wv-date-mobile-label").click(function(e) {
+            $("#linkmode").mobiscroll("show");
+        });
     };
 
     var UTCToLocal = function(d) {
@@ -71,14 +74,16 @@ wv.date.wheels = wv.date.wheels || function(models, config) {
     };
 
     var resize = function() {
-        /*
-        if ( wv.util.browser.small ) {
+        if ( !self.enabled && wv.util.browser.small ) {
+            console.log("wheels", "***** enable");
+            self.enabled = true;
             $container.show();
-        } else {
+        } else if ( self.enabled && !wv.util.browser.small ) {
+            console.log("wheels", "***** disable");
+            self.enabled = false;
             $container.hide();
         }
-        */
-       $container.show();
+        console.log("wheels state", self.enabled);
     };
 
     var updateRange = function() {
@@ -97,6 +102,7 @@ wv.date.wheels = wv.date.wheels || function(models, config) {
     };
 
     var update = function() {
+        $("#wv-date-mobile-label").html(wv.util.toISOStringDate(model.selected));
         $("#linkmode").mobiscroll('setDate', UTCToLocal(model.selected), true);
     };
 
