@@ -1397,7 +1397,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         //update date when sliding guitarpick across small axis
         d3.select(document).on("mousemove",function(){
             if (mousedown){
-                console.log(d3.event);
                 var evt = window.event || d3.event || e;
                 var xPos = evt.x || evt.clientX; //FIXME: needs more accuracy in Firefox
                 var newDate;
