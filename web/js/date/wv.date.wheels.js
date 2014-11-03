@@ -83,7 +83,6 @@ wv.date.wheels = wv.date.wheels || function(models, config) {
     var updateRange = function() {
         startDate = wv.util.parseDateUTC(config.startDate);
         endDate = wv.util.today();
-        console.log("range", startDate, endDate);
         $("#linkmode").mobiscroll("option", "disabled", false);
         $("#linkmode").mobiscroll("option", "minDate", UTCToLocal(startDate));
         $("#linkmode").mobiscroll("option", "maxDate", UTCToLocal(endDate));
