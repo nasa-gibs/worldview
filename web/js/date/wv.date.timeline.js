@@ -1328,8 +1328,8 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .attr("height",height)
             .classed('plot',true);
 
-        setZoom('months');
-        setZoomBtns('months');        
+        setZoom('days');
+        setZoomBtns('days');        
 
         //draw vertical ticks
         verticalAxis = timeline.append("svg:g")
