@@ -194,6 +194,15 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             .append($('<p></p>').html(names.subtitle));
         wv.ui.mouse.click(mainLayerDiv, toggleOptionsPanel);
 
+        $layer.hover(function(){
+            d3.select('#timeline-footer svg g.plot rect[data-layer="'+ layer.id +'"]')
+                .classed('data-bar-hovered',true);
+
+        },function(){
+            d3.select('#timeline-footer svg g.plot rect[data-layer="'+ layer.id +'"]')
+                .classed('data-bar-hovered',false);
+        });
+        
         $layer.append(mainLayerDiv);
 
         if ( layer.palette ) {

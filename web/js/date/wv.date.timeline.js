@@ -92,14 +92,14 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         activeLayersTitles = [];
         
         activeLayers = models.layers.get();
-        
+        /*
         activeLayersDynamic = activeLayers.filter(function(al){
             return al.startDate;
         });
         activeLayersInvisible = activeLayers.filter(function(al){
             return al.visible === false;
         });
-
+        */
         layerCount = activeLayers.length;
         
         $(activeLayers).each(function(i){
@@ -142,6 +142,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 .attr('y',y(layerId)-2.5)
                 .attr('rx',4)
                 .attr('ry',4)
+                .attr('data-layer',layerId)
                 .attr("class", "data-bar");
 //                .attr("d", selection);
             if(!staticLayer){
