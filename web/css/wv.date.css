@@ -180,7 +180,7 @@ div.ui-slider {
 }
 
 #wv-date-mobile-label {
-    padding: 5px;
+    padding: 7px;
     border-radius: 5px;
     border: 1px solid #333;
     position: absolute;
@@ -192,6 +192,7 @@ div.ui-slider {
     color: white;
     background-color: rgba(40, 40, 40, 0.85);
     text-align: center;
+    width: 100px;
 }
 
 a.ui-btn {

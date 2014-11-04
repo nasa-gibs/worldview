@@ -41,6 +41,7 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
             .on("add", onLayerAdded)
             .on("remove", onLayerRemoved);
         models.proj.events.on("select", onProjectionChange);
+        models.wv.events.on("sidebar-expand", resize);
         ui.sidebar.events.on("select", function(tab) {
             if ( tab === "add" ) {
                 resize();

@@ -106,6 +106,8 @@
     a.staticLayers {
         width: 100px;
         background-image: none;
+        border-radius: 5px;
+        top: 55px;
     }
 
     a.staticLayers:hover {
