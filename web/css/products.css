@@ -111,6 +111,13 @@
     a.staticLayers:hover {
         background-image: none;
     }
+
+    #wv-toolbar li {
+        display: block;
+        float: left;
+        margin: 1px;
+    }
+
 }
 
 .cats {
