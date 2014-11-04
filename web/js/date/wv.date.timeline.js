@@ -810,8 +810,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             //ft.remove();
         }
     };
-    var setZoom = function(interval){  //this function should replace zoomable
-
+    var setZoom = function(interval, event){  //this function should replace zoomable
         var startDate = dataLimits[0];
         var lastStartDomain = x.domain()[0];
         var lastEndDomain = x.domain()[1];
@@ -820,12 +819,12 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         var boundaryTickWidth, endDateInt, endDate,maxNumberOfTicks,normalTickWidth,tw;
         var rangeWidth;
         var mouseBool,mousePos,mouseOffset;
+
         if($(this).is('svg') && d3.event.sourceEvent){ //TODO: button zoom errors with this but mouse zooming doesnt
             mouseBool = true;
             mousePos = x.invert(d3.mouse(this)[0]);
             mouseOffset = width/2 - d3.mouse(this)[0];
         }
-
 
         setZoomBtns(interval);
 
@@ -966,7 +965,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 .scale(1)
                 .scaleExtent([1, 1]) //don't use default zoom provided by d3
                 .xExtent(dataLimits)
-                .on("zoom", zoomable, d3.event);
+                .on("zoom", onPan, d3.event);
         }
 
         else{
@@ -988,8 +987,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 .scale(1)
                 .scaleExtent([1, 1]) //don't use default zoom provided by d3
                 .xExtent(dataLimits)
-                .on("zoom", zoomable, d3.event);
-
+                .on("zoom", onPan, d3.event);
         }
 
         d3.select('#timeline-footer svg').call(zoom);
@@ -1278,8 +1276,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .x(x)
             .scale(1)
             .scaleExtent([1, 1]) //don't use default zoom provided by d3
-            .xExtent(dataLimits)
-            .on("zoom", zoomable, d3.event);
+            .xExtent(dataLimits);
 
 
 
@@ -1760,7 +1757,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
         updateTime();
         resizeWindow();
-
+        wv.ui.mouse.wheel($("#timeline-footer svg")).change(zoomed);
     }; // end init()
     var forwardNextDay = function(){ //FIXME: Limit animation correctly
         var nextDay = new Date(new Date(model.selected)
@@ -1804,43 +1801,22 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         ui.anim.stop();
     };
 
-    var zoomable = (function() {
+    var zoomed = function(amount, event) {
+        zoomLvl += amount;
+        if ( zoomLvl < 0 ) {
+            zoomLvl = 0;
+        }
+        if ( zoomLvl > 2 ) {
+            zoomLvl = 2;
+        }
+        setZoom.call(this, zoomLvl, event);
+    };
 
-        var threshold = 150;
-        var position = threshold / 2;
-
-        return function(e) {
-            var evt = window.event || d3.event.sourceEvent || e;
-            var deltaY=evt.deltaY ? evt.deltaY : evt.wheelDeltaY || evt.detail ? evt.detail*(-120) : evt.wheelDelta;
-            var deltaX=evt.deltaX ? evt.deltaY : evt.wheelDeltaX;
-
-            // Force to be a zero in the case where deltaY is undefined
-            deltaY = deltaY || 0;
-            position += deltaY;
-
-            if ( position < 0 ) {
-                if ( zoomLvl < 2 ) {
-                    setZoom.call(this, zoomLvl + 1);
-                    position = threshold - Math.abs(position % threshold);
-                } else {
-                    position = 0;
-                }
-            }
-            else if ( position > threshold ) {
-                if ( zoomLvl > 0 ) {
-                    setZoom.call(this, zoomLvl - 1);
-                    position = position % threshold;
-                } else {
-                    position = threshold;
-                }
-            }
-            else {
-                if ( !(tooSmall) ) { //pan by mousedown and drag
-                    panAxis();
-                }
-            }
-        };
-    })();
+    var onPan = function(event) {
+        if ( !(tooSmall) ) { //pan by mousedown and drag
+            panAxis();
+        }
+    };
 
     init();
     $(window).resize(resizeWindow);
