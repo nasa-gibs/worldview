@@ -74,14 +74,15 @@
     .products {
         display:block;
         float:left;
+        left: 0;
         min-width:238px;
         width:100%;
         height:100%;
-        positßion:absolute !important;
+        position:absolute !important;
         overflow:hidden;
-        background: rgba(38,43,49,0.95);
+        background: rgb(38,43,49);
         border-radius:0 10px 10px 0;
-        top:0; z-index:295;
+        top:0; z-index: 10100;
     }
     .bank {
         height:96%;
