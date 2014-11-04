@@ -1822,15 +1822,25 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     $(window).resize(resizeWindow);
 
     self.toggle = function(){
-        var tl = $('#timeline-footer, #timeline-zoom');
+        var tl = $('#timeline-footer');
+        var tlz = $('#timeline-zoom');
+        var tlg = d3.select('#timeline-footer svg > g:nth-child(2)');
+        var gp = d3.select('#guitarpick');
         if(tl.is(':hidden')){
-            tl.show('slow');
-            $('#timeline').css('right','10px');
-            d3.select("#guitarpick").attr("style","display:block;");
+            tl.show('slow',function(){
+                tlz.show();
+                $('#timeline').css('right','10px');
+                tlg.attr('style','clip-path:url("#timeline-boundary")');
+                gp.attr("style","display:block;clip-path:url(#guitarpick-boundary);");
+            });
+
         }
         else{
+            console.log(tlg);
+            tlg.attr('style','clip-path:none');
+            gp.attr("style","display:none;clip-path:none");
+            tlz.hide();
             tl.hide('slow');
-            d3.select("#guitarpick").attr("style","display:none;");
             $('#timeline').css('right','auto');
         }
     };
