@@ -64,7 +64,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     };
     var startDateMs = ( model.start ) ? model.start.getTime() : undefined;
     var endDateMs = ( model.end ) ? model.end.getTime() : undefined;
-    var dataLimits = [new Date(dataStartDate), new Date(endDateMs)]; //TODO: Fill in data limits here
+    var dataLimits = [new Date(dataStartDate), new Date(endDateMs)]; //FIXME: used date constructor with a string
 
 
     var self = {};
@@ -1836,7 +1836,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
         }
         else{
-            console.log(tlg);
             tlg.attr('style','clip-path:none');
             gp.attr("style","display:none;clip-path:none");
             tlz.hide();
