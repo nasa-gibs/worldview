@@ -90,9 +90,9 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var setData = function(){ //TODO: Finish setting data from product data
         dataBars.selectAll('rect').remove();
         activeLayersTitles = [];
-        
+
         activeLayers = models.layers.get();
-        
+
         activeLayersDynamic = activeLayers.filter(function(al){
             return al.startDate;
         });
@@ -101,26 +101,26 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         });
 
         layerCount = activeLayers.length;
-        
+
         $(activeLayers).each(function(i){
             activeLayersTitles[i] = this.id;
         });
-        
+
         y = d3.scale.ordinal()
             .domain(activeLayersTitles) //loaded product data goes here
             .rangeBands([5,height-5]);
-        
+
         yAxis = d3.svg.axis()
             .scale(y)
             .orient("left")
             .ticks(layerCount);
-        
+
         $(activeLayers).each(function(al){
             var layerStart,layerEnd,layerXY;
             var layerVisible = true;
             var staticLayer = true;
             var layerId = this.id;
-            
+
             if(this.startDate) {
                 layerStart = new Date(this.startDate);
                 staticLayer = false;
@@ -134,7 +134,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             else{
                 layerEnd = dataLimits[1];
             }
-            
+
             var currentDB = dataBars.append("svg:rect")
                 .attr('x',x(layerStart))
                 .attr('width',x(layerEnd)-x(layerStart))
@@ -151,7 +151,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 layerVisible = false;
                 currentDB.classed('data-bar-invisible',true);
             }
-            
+
         });
         dataBars.selectAll('rect')
             .attr('height',(height-15)/layerCount);
@@ -703,7 +703,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         //dataBar.attr('d',selection);
 
         setData();
-        
+
         //UPDATE GUITARPICK
         if (guitarPick){
             guitarPick.attr("transform","translate("+(x(model.selected)-25)+",-16)");
@@ -1326,7 +1326,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .classed('plot',true);
 
         setZoom('days');
-        setZoomBtns('days');        
+        setZoomBtns('days');
 
         //draw vertical ticks
         verticalAxis = timeline.append("svg:g")
