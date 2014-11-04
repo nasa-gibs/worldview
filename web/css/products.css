@@ -94,8 +94,21 @@
     }
 
     #wv-logo {
-        background-position:0%;
-    width:54px;
+        background: url("../brand/images/wv-logo-mobile.png") no-repeat center rgba(40, 40, 40, 0.85);
+        height: 42px;
+        width: 56px;
+        padding: 5px;
+        border-radius: 5px;
+        border: 1px solid #333;
+    }
+
+    a.staticLayers {
+        width: 100px;
+        background-image: none;
+    }
+
+    a.staticLayers:hover {
+        background-image: none;
     }
 }
 
