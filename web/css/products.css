@@ -122,6 +122,21 @@
         display: none;
     }
 
+    .wv-map-zoom {
+        display: none;
+    }
+
+    div.olControlScaleLineCustom {
+        bottom: 10px;
+    }
+
+    .olControlScaleLineCustomBottom {
+        display: none;
+    }
+
+    div.olControlMousePosition {
+        display: none;
+    }
 }
 
 .cats {
