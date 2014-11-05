@@ -151,13 +151,15 @@ g.plot rect.data-bar-invisible{
 }
 @media all{
     #timeline-header input::selection{
-        background:#2059a6;
+        background:#ffffff;
+        color:#999;
     }
     #timeline-header input::-moz-selection{
-        background:#2059a6;
+        background:#ffffff;
+        color:#999;
     }
     #timeline-header input::-webkit-selection{
-        background:#2059a6;
+        background:#ffffff;
     }
 }
 
