@@ -52,7 +52,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var width;
     
     var getTimelineWidth = function(){
-        width = $(window).outerWidth(true) - $("#timeline-header").outerWidth(true) - $("#timeline-zoom").outerWidth(true) - $("#timeline-hide").outerWidth(true)-margin.left-margin.right - 22 //margin left + right + 1px border * 2
+        width = $(window).outerWidth(true) - $("#timeline-header").outerWidth(true) - $("#timeline-zoom").outerWidth(true) - $("#timeline-hide").outerWidth(true)-margin.left-margin.right - 22; //margin left + right + 1px border * 2
     };
     var height = 65 - margin.top - margin.bottom;
 
