@@ -1572,6 +1572,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 selectedDate.setUTCFullYear($dateVal.val());
                 break;
             }
+
             timer = setTimeout(function(){
                 if((selectedDate>dataLimits[0])&&(selectedDate<dataLimits[1])){
                     model.select(selectedDate);
@@ -1579,6 +1580,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 else{
                     updateTime();
                 }
+                $dateVal.select();
                 timer = null;
             },400);
             $(this).siblings('.button-input-group').focus();
@@ -1643,6 +1645,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 else{
                     updateTime();
                 }
+                $dateVal.select();
                 timer = null;
             },400);
 

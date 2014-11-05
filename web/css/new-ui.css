@@ -109,7 +109,7 @@ g.plot rect.data-bar {
     pointer-events:none;
 }
 g.plot rect.data-bar-hovered{
-    stroke:#fff;
+    stroke:#999;
 }
 g.plot rect.data-bar-invisible{
     fill:#777;
