@@ -104,7 +104,9 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
         $('.accordionToggler').attr("title","Hide Layer Selector");
         $('.accordionToggler').empty();
         var speed = ( now ) ? undefined : "fast";
-        $('.products').show(speed);
+        $('.products').show(speed, function() {
+            models.wv.events.trigger("sidebar-expand");
+        });
         $('.accordionToggler').appendTo("#"+self.id+"toggleButtonHolder");
     };
 
@@ -261,16 +263,6 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
             self.expandNow();
             mobile = false;
         }
-        adjustAlignment();
-    };
-
-    var adjustAlignment = function() {
-        /*
-        if ( wv.util.browser.small && collapsed ) {
-            var w = $('.products').outerWidth();
-            $('.products').css("left", "-" + w + "px");
-        }
-        */
     };
 
     var onProjectionChange = function() {

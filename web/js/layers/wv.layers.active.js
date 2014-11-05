@@ -47,6 +47,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             .on("clear-custom", onPaletteUpdate)
             .on("range", onPaletteUpdate)
             .on("update", onPaletteUpdateAll);
+        models.wv.events.on("sidebar-expand", resize);
         $(window).resize(resize);
         ui.sidebar.events.on("select", function(tab) {
             if ( tab === "active" ) {
@@ -202,7 +203,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             d3.select('#timeline-footer svg g.plot rect[data-layer="'+ layer.id +'"]')
                 .classed('data-bar-hovered',false);
         });
-        
+
         $layer.append(mainLayerDiv);
 
         if ( layer.palette ) {

@@ -185,7 +185,7 @@ wv.util.browser = wv.util.browser || (function() {
     };
 
     self.tests.small = function() {
-        return $(window).width() < 720;
+        return $(window).width() < 720 || $(window).height() < 360;
     };
 
     self.tests.history = function() {

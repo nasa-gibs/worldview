@@ -105,16 +105,25 @@ buster.testCase("wv.util.browser", {
 
     "Large device": function() {
         this.stub(window, "$").returns({
-            width: this.stub().returns(1000)
+            width: this.stub().returns(1000),
+            height: this.stub().returns(1000)
         });
         buster.refute(wv.util.browser.tests.small());
     },
 
-    "Small device": function() {
+    "Small device, width": function() {
         this.stub(window, "$").returns({
-            width: this.stub().returns(600)
+            width: this.stub().returns(600),
+            height: this.stub().returns(1000)
         });
         buster.assert(wv.util.browser.tests.small());
     },
 
+    "Small device, height": function() {
+        this.stub(window, "$").returns({
+            width: this.stub().returns(1000),
+            height: this.stub().returns(300)
+        });
+        buster.assert(wv.util.browser.tests.small());
+    }
 });
