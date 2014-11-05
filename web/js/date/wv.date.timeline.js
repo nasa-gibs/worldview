@@ -36,9 +36,9 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var mousedown = false;
     var margin = {
         top: 0,
-        right: 0,
+        right: 30,
         bottom: 20,
-        left: 10
+        left: 30
     };
 
     /* Click or mousedown? */
@@ -50,7 +50,10 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     };
 
     var width;
-    var getTimelineWidth = function(){width = window.innerWidth - $("#timeline-header").outerWidth() - $("#timeline-zoom").outerWidth() - $("#timeline-hide").outerWidth() - 40;};
+    
+    var getTimelineWidth = function(){
+        width = $(window).outerWidth(true) - $("#timeline-header").outerWidth(true) - $("#timeline-zoom").outerWidth(true) - $("#timeline-hide").outerWidth(true)-margin.left-margin.right - 22; //margin left + right + 1px border * 2
+    };
     var height = 65 - margin.top - margin.bottom;
 
     var monthNames = [ "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
@@ -251,10 +254,10 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         if ( self.enabled ) {
             getTimelineWidth();
             d3.select('#timeline-footer svg')
-                .attr('width', width + margin.left + margin.right);
-            d3.select('#timeline-boundary rect').attr('width',width+margin.left+margin.right);
-            d3.select('#guitarpick-boundary rect').attr('width',width+margin.left+margin.right);
-            timeline.select(".x.axis line:first-child").attr("x2",width+10);
+                .attr('width', width);// + margin.left + margin.right);
+            d3.select('#timeline-boundary rect').attr('width',width);//+margin.left+margin.right);
+            d3.select('#guitarpick-boundary rect').attr('width',width+margin.left+margin.right);//+margin.left+margin.right);
+            timeline.select(".x.axis line:first-child").attr("x2",width);//+margin.left+margin.right);
 
             setZoom(zoomLvl);
         }
@@ -1007,7 +1010,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .attr("transform", "translate(0," + height + ")")
             .insert("line",":first-child")
                 .attr("x1",0)
-                .attr("x2",width);
+                .attr("x2",width);//+margin.left+margin.right);
 
 
         timeline.select(".x.axis")
@@ -1157,10 +1160,14 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
     var hoverBoundaryTick = function(d){
         if (zoomLvl === 0){
-            d = new Date(d.getUTCFullYear(),model.selected.getUTCMonth(),model.selected.getUTCDate());
+            var yearOffset = model.selected.getUTCFullYear() - Math.ceil(new Date(model.selected.getUTCFullYear()/10)*10);
+            d = new Date(d.getUTCFullYear()+yearOffset,model.selected.getUTCMonth(),model.selected.getUTCDate());
         }
         else if (zoomLvl === 1){
             d = new Date(d.getUTCFullYear(),model.selected.getUTCMonth(),model.selected.getUTCDate());
+        }
+        else if (zoomLvl === 2){
+            d = new Date(d.getUTCFullYear(),d.getUTCMonth(),model.selected.getUTCDate());
         }
         showHoverLabel.call(this,d);
     };
@@ -1283,23 +1290,24 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         //create timeline elements
         d3.select('#timeline-footer')
             .append("svg:svg")
-            .attr('width', width + margin.left + margin.right)
+            .attr('width', width)// + margin.left + margin.right)
             .attr('height', height + margin.top + margin.bottom)
             .call(zoom)
             .append("svg:defs")
             .append("svg:clipPath")
             .attr("id","timeline-boundary")
             .append("svg:rect")
-            .attr('width', width + margin.left + margin.right)
+            .attr('width', width)// + margin.left + margin.right)
             .attr('height', height + margin.top + margin.bottom);
 
         d3.select("#timeline-footer svg defs")
             .append("svg:clipPath")
             .attr("id","guitarpick-boundary")
             .append("svg:rect")
-            .attr('width', width + margin.left + margin.right)
+            .attr('width', width+margin.left+margin.right)// + margin.left + margin.right)
             .attr('height', height + margin.top + margin.bottom)
-            .attr("y","-16");
+            .attr("y","-16")
+            .attr("x",-margin.left);
 
         timeline = d3.select("#timeline-footer svg")
             .append("svg:g")
@@ -1311,7 +1319,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .attr("transform", "translate(0," + height + ")")
             .insert("line",":first-child")
                 .attr("x1",0)
-                .attr("x2",width);
+                .attr("x2",width);//+margin.left+margin.right);
 
         zoom.translate([width/2 - x(model.selected),0]); //go to selected date
 
@@ -1390,6 +1398,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         .on("mouseup",function(){
             mousedown = false;
             guitarPick.classed('pick-clicked',false);
+
         });
 
         //update date when sliding guitarpick across small axis
@@ -1446,6 +1455,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             if (mousedown){
                 mousedown = false;
                 guitarPick.classed('pick-clicked',false);
+                unHoverTick();
             }
         });
         ////////////////////////////End Timeline/////////////////////////////////////
@@ -1758,6 +1768,8 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         updateTime();
         resizeWindow();
         wv.ui.mouse.wheel($("#timeline-footer svg")).change(zoomed);
+        $('#timeline-footer').css('margin-left',margin.left-1 + 'px');
+        $('#timeline-footer').css('margin-right',margin.right-1 + 'px');        
     }; // end init()
     var forwardNextDay = function(){ //FIXME: Limit animation correctly
         var nextDay = new Date(new Date(model.selected)
