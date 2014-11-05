@@ -71,7 +71,7 @@
 }
 .x.axis > .tick > line{
     fill:none;
-    stroke:#555;
+    stroke:#9B9b9b;
     stroke-width:1;
     stroke-linecap:butt;
     stroke-linejoin:miter;
@@ -84,18 +84,18 @@
     stroke-width:1;
     stroke-miterlimit:4;
     stroke-dasharray:0;
-    stroke:#888888;
+    stroke:#fff;
     stroke-linecap:butt;
     stroke-linejoin:miter;
     stroke-miterlimit:4;
 }
 .x.axis>.tick>line.tick-week{
-    stroke:#888;
+    stroke:#cfc;
     stroke-width:1;
     stroke-dasharray:0;
 }
 g.plot rect.data-bar {
-    fill:#999;
+    fill:#4e5e87;
     stroke:transparent;
     stroke-width:1px;
 
@@ -151,15 +151,14 @@ g.plot rect.data-bar-invisible{
 }
 @media all{
     #timeline-header input::selection{
-        background:#ffffff;
-        color:#999;
+
     }
     #timeline-header input::-moz-selection{
         background:#ffffff;
         color:#999;
     }
     #timeline-header input::-webkit-selection{
-        background:#ffffff;
+
     }
 }
 

@@ -109,7 +109,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
         y = d3.scale.ordinal()
             .domain(activeLayersTitles) //loaded product data goes here
-            .rangeBands([5,height-5]);
+            .rangeBands([5,height-12]);
 
         yAxis = d3.svg.axis()
             .scale(y)
@@ -156,7 +156,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
         });
         dataBars.selectAll('rect')
-            .attr('height',(height-15)/layerCount);
+            .attr('height',(height-22)/layerCount);
 
         if(verticalAxis){
             verticalAxis.call(yAxis);
