@@ -93,7 +93,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         activeLayersTitles = [];
 
         activeLayers = models.layers.get();
-        
+
         activeLayersDynamic = activeLayers.filter(function(al){
             return al.startDate;
         });
