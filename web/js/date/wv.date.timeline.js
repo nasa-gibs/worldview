@@ -93,17 +93,17 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         activeLayersTitles = [];
 
         activeLayers = models.layers.get();
-        /*
+        
         activeLayersDynamic = activeLayers.filter(function(al){
             return al.startDate;
         });
-        activeLayersInvisible = activeLayers.filter(function(al){
+        /*activeLayersInvisible = activeLayers.filter(function(al){
             return al.visible === false;
-        });
-        */
-        layerCount = activeLayers.length;
+        });*/
 
-        $(activeLayers).each(function(i){
+        layerCount = activeLayersDynamic.length;
+
+        $(activeLayersDynamic).each(function(i){
             activeLayersTitles[i] = this.id;
         });
 
@@ -116,7 +116,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .orient("left")
             .ticks(layerCount);
 
-        $(activeLayers).each(function(al){
+        $(activeLayersDynamic).each(function(al){
             var layerStart,layerEnd,layerXY;
             var layerVisible = true;
             var staticLayer = true;
