@@ -9,7 +9,7 @@
  * All Rights Reserved.
  */
 
-html,body, div, ul, li, p, h1, h2, h3, h4, h5, h6 {display:block; margin:0; padding:0; font: 100 13px/13px "Lucida Sans",Monaco, Sans-Serif;}
+html,body, div, ul, li, p, h1, h2, h3, h4, h5, h6 {display:block; margin:0; padding:0; font: 100 13px/13px "Lucida Sans", "Arial", Sans-Serif;}
 
 html, body {
     width: 100%;
