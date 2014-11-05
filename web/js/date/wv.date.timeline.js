@@ -1160,10 +1160,14 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
     var hoverBoundaryTick = function(d){
         if (zoomLvl === 0){
-            d = new Date(d.getUTCFullYear(),model.selected.getUTCMonth(),model.selected.getUTCDate());
+            var yearOffset = model.selected.getUTCFullYear() - Math.ceil(new Date(model.selected.getUTCFullYear()/10)*10);
+            d = new Date(d.getUTCFullYear()+yearOffset,model.selected.getUTCMonth(),model.selected.getUTCDate());
         }
         else if (zoomLvl === 1){
             d = new Date(d.getUTCFullYear(),model.selected.getUTCMonth(),model.selected.getUTCDate());
+        }
+        else if (zoomLvl === 2){
+            d = new Date(d.getUTCFullYear(),d.getUTCMonth(),model.selected.getUTCDate());
         }
         showHoverLabel.call(this,d);
     };
