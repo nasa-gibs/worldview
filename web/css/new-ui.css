@@ -117,6 +117,7 @@ g.plot rect.data-bar-invisible{
 }
 #timeline-header{
     margin-top:2px;
+    width:250px;
 }
 #timeline-header .input-wrapper{
     background: transparent;
@@ -260,9 +261,9 @@ display:inline-block;}
     float:left;
 }
 #timeline-footer{
-    display: inline-block;
     height:65px;
-    margin-left:0px;
+    border-left:1px solid #333;
+    border-right:1px solid #333;
 
 }
 #timeline-footer svg {
