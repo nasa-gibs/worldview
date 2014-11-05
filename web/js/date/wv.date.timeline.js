@@ -65,9 +65,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             }
         }
     };
-    var startDateMs = ( model.start ) ? model.start.getTime() : undefined;
-    var endDateMs = ( model.end ) ? model.end.getTime() : undefined;
-    var dataLimits = [new Date(dataStartDate), new Date(endDateMs)]; //FIXME: used date constructor with a string
+    var dataLimits = [new Date(dataStartDate), wv.util.today()]; //FIXME: used date constructor with a string
 
 
     var self = {};
@@ -1284,8 +1282,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .scale(1)
             .scaleExtent([1, 1]) //don't use default zoom provided by d3
             .xExtent(dataLimits);
-
-
 
         //create timeline elements
         d3.select('#timeline-footer')
