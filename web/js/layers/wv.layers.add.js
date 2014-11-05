@@ -244,7 +244,7 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
         $(self.selector)
             .height($(self.selector).parent().outerHeight() - tabs_height);
 
-        if ( !wv.util.browser.small ) {
+        if ( !wv.util.browser.small || true /* Use on mobile too for now */ ) {
             if ( jsp ) {
                 var api = jsp.data('jsp');
                 if ( api ) {
