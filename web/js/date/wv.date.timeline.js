@@ -50,7 +50,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     };
 
     var width;
-    
+
     var getTimelineWidth = function(){
         width = $(window).outerWidth(true) - $("#timeline-header").outerWidth(true) - $("#timeline-zoom").outerWidth(true) - $("#timeline-hide").outerWidth(true)-margin.left-margin.right - 22; //margin left + right + 1px border * 2
     };
@@ -93,7 +93,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         activeLayersTitles = [];
 
         activeLayers = models.layers.get();
-        
+
         activeLayersDynamic = activeLayers.filter(function(al){
             return al.startDate;
         });
@@ -1765,7 +1765,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         resizeWindow();
         wv.ui.mouse.wheel($("#timeline-footer svg")).change(zoomed);
         $('#timeline-footer').css('margin-left',margin.left-1 + 'px');
-        $('#timeline-footer').css('margin-right',margin.right-1 + 'px');        
+        $('#timeline-footer').css('margin-right',margin.right-1 + 'px');
     }; // end init()
     var forwardNextDay = function(){ //FIXME: Limit animation correctly
         var nextDay = new Date(new Date(model.selected)

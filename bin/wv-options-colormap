@@ -69,7 +69,13 @@ def process_file(file):
         elif "@value" in entry:
             items = re.sub(r"[\(\)\[\]]", "", entry["@value"]).split(",")
             try:
-                scaleValues += [map(lambda v: float(v), items)]
+                for scaleValue in items:
+                    v = float(scaleValue)
+                    if v == float("inf"):
+                        v = sys.float_info.max
+                    if v == float("-inf"):
+                        v = sys.float_info.min
+                    scaleValues += [v]
             except ValueError as e:
                 raise ValueError("Invalid value: %s" % entry["@value"])
             scaleColors += [color]
