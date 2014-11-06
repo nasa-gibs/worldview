@@ -90,7 +90,7 @@
     stroke-miterlimit:4;
 }
 .x.axis>.tick>line.tick-week{
-    stroke:#cfc;
+    stroke:#cfcfcf;
     stroke-width:1;
     stroke-dasharray:0;
 }

@@ -826,7 +826,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             break;
         }
 
-
         if(dataLimits[0] < sd){ //FIXME: need to dynamically show and hide selectable areas
             //var ft = d3.select(normalTicks[0][0]);
             //ft.remove();
@@ -841,13 +840,13 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         var boundaryTickWidth, endDateInt, endDate,maxNumberOfTicks,normalTickWidth,tw;
         var rangeWidth;
         var mouseBool,mousePos,mouseOffset;
-
-        if($(this).is('svg') && d3.event.sourceEvent){ //TODO: button zoom errors with this but mouse zooming doesnt
+        if (event){
+            var parentOffset = $(event.currentTarget).offset();
+            var relX = event.clientX - parentOffset.left;
+            mousePos = x.invert(relX);
             mouseBool = true;
-            mousePos = x.invert(d3.mouse(this)[0]);
-            mouseOffset = width/2 - d3.mouse(this)[0];
+            mouseOffset = (width-margin.left-margin.right)/2 - relX;
         }
-
         setZoomBtns(interval);
 
         switch (interval){
@@ -966,7 +965,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             break;
 
         }
-        //console.log(zoom.translate());
 
         if (tooSmall === true){
             x = d3.time.scale.utc()
@@ -1005,10 +1003,10 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         d3.select('#timeline-footer svg').call(zoom);
 
         if (mouseBool){
-            zoom.translate([-x(mousePos)+width/2-mouseOffset,0]);
+            zoom.translate([-x(mousePos)+(width-margin.left-margin.right)/2-mouseOffset,0]);
         }
         else{
-            zoom.translate([-x(model.selected)+width/2,0]);
+            zoom.translate([-x(model.selected)+(width-margin.left-margin.right)/2,0]);
         }
 
         timeline.selectAll('.x.axis').remove();
@@ -1822,6 +1820,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         if ( zoomLvl > 2 ) {
             zoomLvl = 2;
         }
+
         setZoom.call(this, zoomLvl, event);
     };
 
