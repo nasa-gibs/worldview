@@ -214,14 +214,28 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             decrementBtn.removeClass('button-disabled');
         }
         //hideInvalidTicks(); TODO: Implement invalid ticks
+        /*
+        var gpLocation = guitarPick.attr('transform').split('(')[1].split(',')[0];
+
+        if ((gpLocation-30) >= (width-margin.left-margin.right)){
+            $('#guitarpick').hide();
+        }
+        else if((gpLocation) <= -30){
+            $('#guitarpick').hide();
+        }
+        else{
+            $('#guitarpick').show();
+            }*/
+//        if($('#guitarpick').is(':hidden')){
+
+//        }
         guitarPick.attr("transform","translate("+(x(model.selected)-25)+",-16)");
-
-
 
     };
     var moveToPick = function(){
         var zt = zoom.translate()[0];
-        if(x(model.selected) >= x(normalTicks.data()[normalTicks.data().length-2])){
+
+        if(x(model.selected) >= x(normalTicks.data()[normalTicks.data().length-1])){
             if (mousedown){
                 zoom.translate([zt - x(model.selected)+x(normalTicks.data()[normalTicks.data().length-2]),0]);
             }
@@ -230,7 +244,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             }
             panAxis();
         }
-        else if(x(model.selected) <= x(normalTicks.data()[1])){
+        else if(x(model.selected) <= x(normalTicks.data()[0])){
             if (mousedown){
                 zoom.translate([zt - x(model.selected)+x(normalTicks.data()[1]),0]);
             }
@@ -239,6 +253,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             }
             panAxis();
         }
+        $('#guitarpick').show();
     };
 
     var resizeWindow = function() {
@@ -538,8 +553,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         timeline.select(".x.axis")
             .call(xAxis);
 
-        //FIXME: Make function for other zoom levels
-
         setTicks();
 
         allTicks = d3.selectAll('.x.axis>g.tick');
@@ -707,11 +720,19 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         setData();
 
         //UPDATE GUITARPICK
-        if (guitarPick){
-            guitarPick.attr("transform","translate("+(x(model.selected)-25)+",-16)");
+
+        var gpLocation = guitarPick.attr('transform').split('(')[1].split(',')[0];
+
+        if ((gpLocation-30) >= (width-margin.left-margin.right)){
+            $('#guitarpick').hide();
         }
-
-
+        else if((gpLocation) <= -30){
+            $('#guitarpick').hide();
+        }
+        else{
+            $('#guitarpick').show();
+        }
+        guitarPick.attr("transform","translate("+(x(model.selected)-25)+",-16)");
     };
     var setZoomBtns = function(interval){
         switch (interval){
@@ -948,7 +969,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         //console.log(zoom.translate());
 
         if (tooSmall === true){
-
             x = d3.time.scale.utc()
                 .domain([startDate,endDate])
                 .range([(width/2)-(rangeWidth/2),(width/2)+(rangeWidth/2)]);
@@ -960,17 +980,9 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 .tickPadding(5)
                 .ticks(zoomInterval,zoomStep)
                 .tickFormat(zoomTimeFormat);
-
-            zoom = d3.behavior.zoom()
-                .x(x)
-                .scale(1)
-                .scaleExtent([1, 1]) //don't use default zoom provided by d3
-                .xExtent(dataLimits)
-                .on("zoom", onPan, d3.event);
         }
 
         else{
-
             x = d3.time.scale.utc()
                 .domain([startDate,endDate])
                 .range([0,width]);
@@ -982,15 +994,14 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 .tickPadding(5)
                 .ticks(zoomInterval,zoomStep)
                 .tickFormat(zoomTimeFormat);
-
-            zoom = d3.behavior.zoom()
-                .x(x)
-                .scale(1)
-                .scaleExtent([1, 1]) //don't use default zoom provided by d3
-                .xExtent(dataLimits)
-                .on("zoom", onPan, d3.event);
         }
-
+        zoom = d3.behavior.zoom()
+            .x(x)
+            .scale(1)
+            .scaleExtent([1, 1]) //don't use default zoom provided by d3
+            .xExtent(dataLimits)
+            .on("zoom", onPan, d3.event);
+        
         d3.select('#timeline-footer svg').call(zoom);
 
         if (mouseBool){
@@ -1150,10 +1161,19 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         //dataBar.attr('d',selection);
 
         //UPDATE GUITARPICK
-        if (guitarPick){
+        if(guitarPick){
+            var gpLocation = guitarPick.attr('transform').split('(')[1].split(',')[0];
+            if ((gpLocation-30) >= (width-margin.left-margin.right)){
+                $('#guitarpick').hide();
+            }
+            else if((gpLocation) <= -30){
+                $('#guitarpick').hide();
+            }
+            else{
+                $('#guitarpick').show();
+            }
             guitarPick.attr("transform","translate("+(x(model.selected)-25)+",-16)");
         }
-
     };
 
     var hoverBoundaryTick = function(d){
@@ -1340,24 +1360,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .call(yAxis);
 
         verticalAxis.selectAll("text").remove();
-
-        //Plot data
-
-        /*
-        dataBar = timeline.insert("svg:g",'.x.axis')
-            .attr("style","clip-path:url(#timeline-boundary)")
-            .attr("clip-path","#timeline-boundary")
-            .attr("height",height)
-            .classed('plot',true)
-            .append("svg:path")
-            .datum(layers)
-            .attr("class", "data-bar")
-            .attr("d", selection);
-        */
-
-
-        //initial setup of zoom buttons FIXME: make this much better
-
 
         //Add guitar pick
         guitarPick = d3.select("#timeline-footer svg")
