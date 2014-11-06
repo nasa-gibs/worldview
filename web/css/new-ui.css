@@ -263,8 +263,8 @@ display:inline-block;}
 }
 #timeline-footer{
     height:65px;
-    border-left:1px solid #333;
-    border-right:1px solid #333;
+    border-left:1px solid #666;
+    border-right:1px solid #666;
 
 }
 #timeline-footer svg {
