@@ -120,6 +120,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         $container.append($layers);
 
         $parent.append($container);
+
     };
 
     var renderLayer = function($parent, group, layer, top) {
@@ -176,24 +177,27 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                 });
             $layer.append($metadataButton);
         }
-/*
-        var $gearButton = $("<i></i>")
-            .addClass("fa")
-            .addClass("fa-gear")
-            .addClass("fa-1x")
-            .addClass("wv-layers-options-button")
-            .click(function() {
-                wv.layers.options(config, models, layer);
-            });
-        $layer.append($gearButton);
-*/
+
+        var $editButton = $("<a></a>")
+            .attr("data-layer", layer.id)
+            .addClass("wv-layers-options");
+
+        wv.ui.mouse.click($editButton, toggleOptionsPanel);
+
+        var $gearIcon = $("<i></i>")
+            .addClass("wv-layers-options-icon");
+
+        $editButton.append($gearIcon);
+
+        $layer.append($editButton);
+
         var names = models.layers.getTitles(layer.id);
-        var mainLayerDiv = $('<div></div>')
+        var $mainLayerDiv = $('<div></div>')
             .addClass('layer-main')
             .attr("data-layer", layer.id)
             .append($('<h4></h4>').html(names.title))
             .append($('<p></p>').html(names.subtitle));
-        wv.ui.mouse.click(mainLayerDiv, toggleOptionsPanel);
+        
 
         $layer.hover(function(){
             d3.select('#timeline-footer svg g.plot rect[data-layer="'+ layer.id +'"]')
@@ -204,7 +208,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                 .classed('data-bar-hovered',false);
         });
 
-        $layer.append(mainLayerDiv);
+        $layer.append($mainLayerDiv);
 
         if ( layer.palette ) {
             renderLegend($layer.find('.layer-main'), group, layer);
