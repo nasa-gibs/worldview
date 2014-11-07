@@ -91,6 +91,9 @@
     background-position:0 0;
 }
 .productsitem.layer-hidden a.hdanchor.hideReg i{
+    background-position:-42px 0;
+}
+.productsitem.layer-hidden a.hdanchor.hideReg:hover i{
     background-position:-63px 0;
 }
 .productsitem a.wv-layers-options{
@@ -117,7 +120,9 @@ i.wv-layers-options-icon{
 .productsitem.layer-hidden a.wv-layers-options i.wv-layers-options-icon{
     background-position: -21px -69px;
 }
-
+.productsitem.layer-hidden a.wv-layers-options:hover i.wv-layers-options-icon{
+    background-position: 0 -69px;
+}
 .productsitem a.button.close {
     display:block;
     float:right;
@@ -165,7 +170,7 @@ i.wv-layers-options-icon{
 
 }
 .productsitem.layer-hidden .layer-main, .productsitem.layer-hidden a.hdanchor {
-    background:rgba(255, 255, 255, 0.39);
+    background:rgba(255, 255, 255, 0.2);
 }
 .productsitem.layer-hidden a.hdanchor:hover{
     background:rgba(255,255,255,1);
@@ -176,7 +181,7 @@ i.wv-layers-options-icon{
 }
 */
 .productsitem.layer-hidden .layer-main h4, .productsitem.layer-hidden .layer-main p{
-    color:#000;
+    color:#999;
 }
 .bank .layer-main h4, .bank .layer-main p{
     padding:0;

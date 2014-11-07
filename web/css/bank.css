@@ -9,7 +9,7 @@ a.staticLayers {
   float:left;
   left:10px;
   position:absolute;
-  top:65px;
+  top:67px;
   height:auto;
   background: no-repeat 80px 50% url("../images/hg.png") rgba(40,40,40,0.85);
   border-radius: 0;
@@ -20,7 +20,6 @@ a.staticLayers {
   width: 286px;
   margin: 0;
   border: 1px solid #333;
-  border-top: 0;
   cursor:pointer;
   padding:7px 0;
   text-align:center;
