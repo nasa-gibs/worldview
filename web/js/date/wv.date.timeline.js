@@ -26,11 +26,12 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var selector = "#" + id;
     var model = models.date;
     var layers;
-    var dataStartDate = config.startDate;
+    var dataStartDate = new Date(config.startDate);
+    var dataEndDate = new Date(new Date(wv.util.today()).setUTCDate(wv.util.today().getUTCDate()+1));
     var boundaryTicks,normalTicks,allTicks,allBoundaryTickForegrounds,offscreenBoundaryTickText, tooSmall;
     var x,xAxis,y,yAxis,zoom;
     var zoomInterval,zoomStep,subInterval,subStep,zoomTimeFormat,zoomLvl,resizeDomain;
-    var timeline,verticalAxis,guitarPick,dataBars;
+    var timeline,verticalAxis,guitarPick,dataBars,gpLocation;
     var activeLayers,activeLayersDynamic,activeLayersInvisible,layerCount,activeLayersTitles;
     var timer;
     var mousedown = false;
@@ -65,7 +66,8 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             }
         }
     };
-    var dataLimits = [new Date(dataStartDate), wv.util.today()]; //FIXME: used date constructor with a string
+    
+    var dataLimits = [dataStartDate, dataEndDate]; //FIXME: used date constructor with a string
 
 
     var self = {};
@@ -75,7 +77,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var decrementBtn = $("#left-arrow-group");
 
     var throttleSelect = _.throttle(function(date) {
-        if((date>dataLimits[0])&&(date<dataLimits[1])){
+        if((date>dataLimits[0])&&(date<wv.util.today())){
             model.select(date);
         }
     }, 100, { trailing: true });
@@ -201,7 +203,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         else {
             $('#day-input-group').val(model.selected.getUTCDate());
         }
-        if(nd > dataLimits[1]){
+        if(nd > wv.util.today()){
             incrementBtn.addClass('button-disabled');
         }
         else{
@@ -230,6 +232,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
 //        }
         guitarPick.attr("transform","translate("+(x(model.selected)-25)+",-16)");
+        gpLocation = guitarPick.attr('transform').split('(')[1].split(',')[0];
 
     };
     var moveToPick = function(){
@@ -324,7 +327,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     };
     var addNormEndTick = function(){
         var allTickData = d3.selectAll('.x.axis>g.tick').data();
-        var endTick = dataLimits[1];
+        var endTick = wv.util.today();
 
         var lNormData;
         switch (zoomLvl){
@@ -490,7 +493,8 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             if(allTicks.data()[0] > dataLimits[0]){
                 addNormStartTick();
             }
-            if(allTicks.data()[allTicks.data().length-1] <= dataLimits[1]){
+            
+            if(allTicks.data()[allTicks.data().length-1] <= wv.util.today()){
                 addNormEndTick();
             }
         }
@@ -720,8 +724,8 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         setData();
 
         //UPDATE GUITARPICK
-
-        var gpLocation = guitarPick.attr('transform').split('(')[1].split(',')[0];
+        guitarPick.attr("transform","translate("+(x(model.selected)-25)+",-16)");
+        gpLocation = guitarPick.attr('transform').split('(')[1].split(',')[0];
 
         if ((gpLocation-30) >= (width-margin.left-margin.right)){
             $('#guitarpick').hide();
@@ -732,7 +736,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         else{
             $('#guitarpick').show();
         }
-        guitarPick.attr("transform","translate("+(x(model.selected)-25)+",-16)");
     };
     var setZoomBtns = function(interval){
         switch (interval){
@@ -1160,7 +1163,8 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
         //UPDATE GUITARPICK
         if(guitarPick){
-            var gpLocation = guitarPick.attr('transform').split('(')[1].split(',')[0];
+            guitarPick.attr("transform","translate("+(x(model.selected)-25)+",-16)");
+            gpLocation = guitarPick.attr('transform').split('(')[1].split(',')[0];
             if ((gpLocation-30) >= (width-margin.left-margin.right)){
                 $('#guitarpick').hide();
             }
@@ -1170,7 +1174,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             else{
                 $('#guitarpick').show();
             }
-            guitarPick.attr("transform","translate("+(x(model.selected)-25)+",-16)");
         }
     };
 
@@ -1397,6 +1400,8 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
         });
 
+        gpLocation = guitarPick.attr('transform').split('(')[1].split(',')[0];
+
         //update date when sliding guitarpick across small axis
         d3.select(document).on("mousemove",function(){
             if (mousedown){
@@ -1420,6 +1425,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
                 if((newDate > dataLimits[0]) && (newDate < dataLimits[1])){
                     guitarPick.attr("transform","translate("+ (x(newDate)-28) +",-16)");
+                    gpLocation = guitarPick.attr('transform').split('(')[1].split(',')[0];
                     model.select(newDate);
 
 
@@ -1574,7 +1580,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             }
 
             timer = setTimeout(function(){
-                if((selectedDate>dataLimits[0])&&(selectedDate<dataLimits[1])){
+                if((selectedDate>dataLimits[0])&&(selectedDate<wv.util.today())){
                     model.select(selectedDate);
                 }
                 else{
@@ -1639,7 +1645,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                     break;
                 }
             timer = setTimeout(function(){
-                if((selectedDate>dataLimits[0])&&(selectedDate<dataLimits[1])){
+                if((selectedDate>dataLimits[0])&&(selectedDate<wv.util.today())){
                     model.select(selectedDate);
                 }
                 else{
@@ -1694,7 +1700,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                         }
                         break;
                     }
-                    if((selectedDateObj > dataLimits[0]) && (selectedDateObj <= dataLimits[1])){
+                    if((selectedDateObj > dataLimits[0]) && (selectedDateObj <= wv.util.today())){
                         var ztw = zoom.translate()[0];
                         var sib =  selected.parent().next('div.input-wrapper').find('input.button-input-group');
                         if(sib.length < 1){
@@ -1773,7 +1779,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var forwardNextDay = function(){ //FIXME: Limit animation correctly
         var nextDay = new Date(new Date(model.selected)
                                .setUTCDate(model.selected.getUTCDate()+1));
-        if(nextDay <= dataLimits[1]){
+        if(nextDay <= wv.util.today()){
             animateForward("day");
         }
         else{
