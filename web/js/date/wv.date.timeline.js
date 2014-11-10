@@ -247,7 +247,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             }
             panAxis();
         }
-        else if(x(model.selected) <= x(normalTicks.data()[0])){
+        else if(x(model.selected) < x(normalTicks.data()[0])){
             if (mousedown){
                 zoom.translate([zt - x(model.selected)+x(normalTicks.data()[1]),0]);
             }
