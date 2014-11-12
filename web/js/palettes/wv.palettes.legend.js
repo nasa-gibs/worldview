@@ -147,7 +147,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
                     .addClass("wv-palettes-class-label")
                     .attr("data-index", index)
                     .attr("data-class-index", classIndex)
-                    .html(entries.labels[classIndex]));
+                    .html(legend.labels[classIndex]));
             $detailPanel.append($row);
         });
         $panel.tooltip("option", "content", $detailPanel.html());
