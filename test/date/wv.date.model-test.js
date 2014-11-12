@@ -42,28 +42,6 @@ buster.testCase("wv.date.model", function() {
         buster.assert.calledWith(listener, d);
     };
 
-    /* FIXME: Remove once no longer needed
-    self["Date before start date selects start date"] = function() {
-        models.date.range({
-            start: wv.util.parseDateUTC("2013-01-01"),
-            end: wv.util.parseDateUTC("2013-12-31")
-        });
-        models.date.select(wv.util.parseDateUTC("2012-03-15"));
-        buster.assert.equals(wv.util.toISOStringDate(models.date.selected),
-            "2013-01-01");
-    };
-
-    self["Date after end date selects end date"] = function() {
-        models.date.range({
-            start: wv.util.parseDateUTC("2012-01-01"),
-            end: wv.util.parseDateUTC("2012-01-31")
-        });
-        models.date.select(wv.util.parseDateUTC("2012-02-01"));
-        buster.assert.equals(wv.util.toISOStringDate(models.date.selected),
-            "2012-01-31");
-    };
-    */
-
     self["Saves state"] = function() {
         var d = new Date(Date.UTC(2013, 0, 5));
         models.date.select(d);
@@ -84,26 +62,11 @@ buster.testCase("wv.date.model", function() {
         buster.assert.equals(models.date.selected, now);
     };
 
-    self["Start/End times set to null if range is null"] = function() {
-        models.date.range(null);
-        buster.assert.equals(models.date.start, null);
-        buster.assert.equals(models.date.end, null);
-    };
-
-    self["End date set to today if end range is later"] = function() {
-        models.date.range({
-            start: wv.util.parseDateUTC("2012-01-01"),
-            end:   wv.util.parseDateUTC("2013-04-01")
-        });
-        buster.assert.equals(models.date.end,
-                wv.util.parseDateUTC("2013-01-15"));
-    };
-
     self["Clears time to UTC midnight when selecting"] = function() {
-        var date = new Date(Date.UTC(2013, 1, 2, 3, 4, 5));
+        var date = new Date(Date.UTC(2012, 1, 2, 3, 4, 5));
         models.date.select(date);
         var selected = models.date.selected;
-        buster.assert.equals(selected.getUTCFullYear(), 2013);
+        buster.assert.equals(selected.getUTCFullYear(), 2012);
         buster.assert.equals(selected.getUTCMonth(), 1);
         buster.assert.equals(selected.getUTCDate(), 2);
         buster.assert.equals(selected.getUTCHours(), 0);

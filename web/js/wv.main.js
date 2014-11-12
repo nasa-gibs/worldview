@@ -122,15 +122,6 @@ $(function() {
         // Export for debugging
         wvx.models = models;
 
-        var updateDateRange = function() {
-            models.date.range(models.layers.dateRange());
-        };
-        models.layers.events
-                .on("add", updateDateRange)
-                .on("remove", updateDateRange)
-                .on("update", updateDateRange);
-        updateDateRange();
-
         models.link
             .register(models.proj)
             .register(models.layers)
