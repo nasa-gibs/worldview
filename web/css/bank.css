@@ -50,7 +50,7 @@ a.staticLayers:hover {
 }
 
 a.atcollapse {
-    background: 50% 50% no-repeat url("../images/angle-double-left.png");
+    background: 50% 50% no-repeat url("../images/angle-double-up.png");
     border-radius:0;
     box-sizing: border-box;
     position: absolute;
@@ -59,7 +59,7 @@ a.atcollapse {
     padding: 10px;
 }
 a.atcollapse:hover{
-    background-image:url("../images/angle-double-left-highlight.png");
+    background-image:url("../images/angle-double-up-highlight.png");
     background-color:#fff;
     cursor:pointer;
 }
