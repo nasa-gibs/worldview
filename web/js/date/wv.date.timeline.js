@@ -66,7 +66,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             }
         }
     };
-    
+
     var dataLimits = [dataStartDate, dataEndDate]; //FIXME: used date constructor with a string
 
 
@@ -493,7 +493,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             if(allTicks.data()[0] > dataLimits[0]){
                 addNormStartTick();
             }
-            
+
             if(allTicks.data()[allTicks.data().length-1] <= wv.util.today()){
                 addNormEndTick();
             }
@@ -1002,7 +1002,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .scaleExtent([1, 1]) //don't use default zoom provided by d3
             .xExtent(dataLimits)
             .on("zoom", onPan, d3.event);
-        
+
         d3.select('#timeline-footer svg').call(zoom);
 
         if (mouseBool){
@@ -1656,67 +1656,81 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             $(this).siblings('.button-input-group').focus();
         });
 
-        $('.button-input-group').keydown(function(event){
-            //.change(function(){
+        var validateInput = function(event) {
+            console.log("event", event.type);
             var kc = event.keyCode || event.which;
-            if((kc === 13) || (kc === 9)){
-                event.preventDefault();
+            var entered = (kc == 13) || (kc === 9);
+            if ( event.type == "focusout" || entered ) {
+                if ( entered ) {
+                    event.preventDefault();
+                }
 
-                if($(this).parent().hasClass('selected')){
-                    var selected = $(this);
-                    var YMDInterval = selected.attr('id');
-                    var newInput = selected.val();
-                    var selectedDateObj = null;
-                    switch(YMDInterval){
-                    case 'year-input-group':
-                        if ((newInput > 1000) && (newInput < 9999))
-                            selectedDateObj = new Date((new Date(model.selected)).setUTCFullYear(newInput));
-                        break;
-                    case 'month-input-group':
-                        if ($.isNumeric(newInput) && (newInput < 13) && (newInput > 0)){
-                            selectedDateObj = new Date((new Date(model.selected)).setUTCMonth(newInput-1));
-                        }
-                        else{
-                            var validStr = false;
-                            var newIntInput;
-                            newInput = newInput.toUpperCase();
-
-                            for (var i=0;i<monthNames.length;i++){
-                                if (newInput === monthNames[i]){
-                                    validStr = true;
-                                    newIntInput = i;
-                                }
-                            }
-                            if (validStr){
-                                selectedDateObj = new Date((new Date(model.selected)).setUTCMonth(newIntInput));
-                            }
-                        }
-                        break;
-                    case 'day-input-group':
-                        if(newInput>0 && newInput<=(new Date(model.selected.getYear(),model.selected.getMonth()+1,0).getDate())){
-                            selectedDateObj = new Date((new Date(model.selected)).setUTCDate(newInput));
-                        }
-                        break;
-                    }
-                    if((selectedDateObj > dataLimits[0]) && (selectedDateObj <= wv.util.today())){
-                        var ztw = zoom.translate()[0];
-                        var sib =  selected.parent().next('div.input-wrapper').find('input.button-input-group');
-                        if(sib.length < 1){
-                            $('#focus-guard-2').focus();
-                        }
-                        model.select(selectedDateObj);
-                        $('.button-input-group').parent().css('border-color','');
-                        selected.parent().removeClass('selected');
-                        sib.select().addClass('selected');
+                var selected = $(this);
+                var YMDInterval = selected.attr('id');
+                var newInput = selected.val();
+                var selectedDateObj = null;
+                switch(YMDInterval){
+                case 'year-input-group':
+                    if ((newInput > 1000) && (newInput < 9999))
+                        selectedDateObj = new Date((new Date(model.selected)).setUTCFullYear(newInput));
+                    break;
+                case 'month-input-group':
+                    if ($.isNumeric(newInput) && (newInput < 13) && (newInput > 0)){
+                        selectedDateObj = new Date((new Date(model.selected)).setUTCMonth(newInput-1));
                     }
                     else{
-                        selected.parent().css('border-color','#ff0000');
-                        //updateTime();
+                        var validStr = false;
+                        var newIntInput;
+                        newInput = newInput.toUpperCase();
+
+                        for (var i=0;i<monthNames.length;i++){
+                            if (newInput === monthNames[i]){
+                                validStr = true;
+                                newIntInput = i;
+                            }
+                        }
+                        if (validStr){
+                            selectedDateObj = new Date((new Date(model.selected)).setUTCMonth(newIntInput));
+                        }
+                    }
+                    break;
+                case 'day-input-group':
+                    if(newInput>0 && newInput<=(new Date(model.selected.getYear(),model.selected.getMonth()+1,0).getDate())){
+                        selectedDateObj = new Date((new Date(model.selected)).setUTCDate(newInput));
+                    }
+                    break;
+                }
+                if((selectedDateObj > dataLimits[0]) && (selectedDateObj <= wv.util.today())){
+                    var ztw = zoom.translate()[0];
+                    var sib =  selected.parent().next('div.input-wrapper').find('input.button-input-group');
+                    if ( entered && sib.length < 1 ) {
+                        $('#focus-guard-2').focus();
+                    }
+                    model.select(selectedDateObj);
+                    $('.button-input-group').parent().css('border-color','');
+                    selected.parent().removeClass('selected');
+                    sib.select().addClass('selected');
+                }
+                else{
+                    selected.parent().css('border-color','#ff0000');
+                    if ( event.type !== "focusout" ) {
                         selected.select();
+                    } else {
+                        selected.parent().animate({
+                            borderColor: "rgba(40, 40, 40, .9)"
+                        }, {
+                            complete: function() {
+                                selected.parent().css("border-color", "");
+                            }
+                        });
+                        updateTime();
                     }
                 }
             }
-        });
+        };
+
+        $('.button-input-group').keydown(validateInput).focusout(validateInput);
+
         $("#focus-guard-1").on('focus',function(){
             $("#day-input-group").focus().select();
         });
