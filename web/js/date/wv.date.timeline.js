@@ -1576,18 +1576,19 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 selectedDate.setUTCFullYear($dateVal.val());
                 break;
             }
+            $(this).parent().css("border-color", "");
 
             timer = setTimeout(function(){
+                console.log("timer", timer);
                 if((selectedDate>dataLimits[0])&&(selectedDate<wv.util.today())){
                     model.select(selectedDate);
                 }
                 else{
                     updateTime();
                 }
-                $dateVal.select();
                 timer = null;
             },400);
-            $(this).siblings('.button-input-group').focus();
+            //$(this).siblings('.button-input-group').focus();
         });
 
         //select all input on focus
@@ -1642,6 +1643,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                     selectedDate.setUTCFullYear($dateVal.val());
                     break;
                 }
+            $(this).parent().css("border-color", "");
             timer = setTimeout(function(){
                 if((selectedDate>dataLimits[0])&&(selectedDate<wv.util.today())){
                     model.select(selectedDate);
@@ -1649,15 +1651,13 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 else{
                     updateTime();
                 }
-                $dateVal.select();
                 timer = null;
             },400);
 
-            $(this).siblings('.button-input-group').focus();
+            //$(this).siblings('.button-input-group').focus();
         });
 
         var validateInput = function(event) {
-            console.log("event", event.type);
             var kc = event.keyCode || event.which;
             var entered = (kc == 13) || (kc === 9);
             if ( event.type == "focusout" || entered ) {
@@ -1709,7 +1709,9 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                     model.select(selectedDateObj);
                     $('.button-input-group').parent().css('border-color','');
                     selected.parent().removeClass('selected');
-                    sib.select().addClass('selected');
+                    if ( entered ) {
+                        sib.select().addClass('selected');
+                    }
                 }
                 else{
                     selected.parent().css('border-color','#ff0000');
@@ -1729,7 +1731,17 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             }
         };
 
-        $('.button-input-group').keydown(validateInput).focusout(validateInput);
+        $('.button-input-group')
+            .keydown(validateInput)
+            .focusout(function(event) {
+                if ( $(this).hasClass("focus") ) {
+                    $(this).removeClass("focus");
+                    validateInput.call(this, event);
+                }
+            })
+            .focus(function() {
+                $(this).addClass("focus");
+            });
 
         $("#focus-guard-1").on('focus',function(){
             $("#day-input-group").focus().select();
@@ -1737,6 +1749,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         $("#focus-guard-2").on('focus',function(){
            $("#year-input-group").focus().select();
         });
+
         ///////////////////////////End Datepicker////////////////////////////////////
         ////////////////////////////Click bindings///////////////////////////////////
         d3.select("#zoom-years").on("click",function(d){
