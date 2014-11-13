@@ -73,14 +73,14 @@ wv.tour = wv.tour || function(models, ui, config) {
                            "</br></br>"+
                            "<table id=\"splashTable\" class=\"splash\">"+
                                "<tr>"+
-                                   "<td><img src=\"images/tour-picker-0.6.png\" alt=\"Product Picker\" width=\"100\" height=\"85\" class=\"splash\"/></td>"+
-                                   "<td><img src=\"images/tour-date.png\" alt=\"Date Slider\" width=\"100\" class=\"splash\"/></td>"+
-                                   "<td><img src=\"images/tour-toolbar.png\" alt=\"Toolbar\" width=\"100\" class=\"splash\"/></td>"+
-                                   "<td><img src=\"images/tour-map.png\" alt=\"Map\" width=\"100\" class=\"splash\"/></td>"+
+                                   "<td><img src=\"images/tour/layer-picker-0.7.png\" alt=\"Layer Picker\" width=\"150\" height=\"93\" class=\"splash\"/></td>"+
+                                   "<td><img src=\"images/tour/time-slider-0.7.png\" alt=\"Time Slider\" width=\"150\" height=\"78\" class=\"splash\"/></td>"+
+                                   "<td><img src=\"images/tour/toolbar-0.7.png\" alt=\"Toolbar\" width=\"124\" height=\"50\" class=\"splash\"/></td>"+
+                                   "<td><img src=\"images/tour/map-0.7.png\" alt=\"Map\" width=\"100\" height=\"75\" class=\"splash\"/></td>"+
                                "</tr>"+
                                "<tr class='splash-info'>"+
-                                   "<td class='splash-info'><p class=\"splash\">Use the <span class=\"highlight\">Product Picker</span> on the left to choose the type of imagery to display on the map.  It also has a tab to download the underlying data.</p></td>"+
-                                   "<td class='splash-info'><p class=\"splash\">Use the <span class=\"highlight\">Date Slider</span> on the bottom to choose the date of the observations.</p></td>"+
+                                   "<td class='splash-info'><p class=\"splash\">Use the <span class=\"highlight\">Layer Picker</span> on the left to choose the type of imagery to display on the map.  It also has a tab to download the underlying data.</p></td>"+
+                                   "<td class='splash-info'><p class=\"splash\">Use the <span class=\"highlight\">Time Slider</span> on the bottom to choose the date of the observations.</p></td>"+
                                    "<td class='splash-info'><p class=\"splash\">Use the <span class=\"highlight\">Tool Bar</span> at the top to see other tools for changing and saving the view.</p></td>"+
                                    "<td class='splash-info'><p class=\"splash\">Use the <span class=\"highlight\">Map</span> itself to pan or zoom in on an area.</p></td>"+
                                "</tr>"+
