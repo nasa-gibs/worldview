@@ -216,6 +216,11 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
     border-radius:0;
 }
 
+.ui-widget-content.wv-opaque {
+    background: #222;
+}
+
+
 .ui-dialog .ui-dialog-content {
     background-image: none;
     padding-top: 15px;

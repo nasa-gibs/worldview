@@ -86,7 +86,9 @@ wv.ui.info = wv.ui.info || (function(ui, config) {
                     height: 525,
                     show: { effect: "fade" },
                     hide: { effect: "fade" }
-                }).load("brand/pages/about.html?v=@BUILD_NONCE@ #page");
+                })
+                .load("brand/pages/about.html?v=@BUILD_NONCE@ #page")
+                .addClass("wv-opaque");
             }
         });
 
@@ -111,7 +113,9 @@ wv.ui.info = wv.ui.info || (function(ui, config) {
                     height: 525,
                     show: { effect: "fade" },
                     hide: { effect: "fade" }
-                }).load("brand/pages/new.html?v=@BUILD_NONCE@ #page");
+                })
+                .load("brand/pages/new.html?v=@BUILD_NONCE@ #page")
+                .addClass("wv-opaque");
             }
         });
 
