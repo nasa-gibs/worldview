@@ -79,7 +79,7 @@
 .productsitem a.hdanchor.hideReg i{
     width:21px;
     height:12px;
-    background:url('../images/wv.layers/show-hide.png') no-repeat 0 0 transparent;
+    background:url('../images/wv.layers/show-hide.png?v=@BUILD_NONCE@') no-repeat 0 0 transparent;
     position:absolute;
     top:50%;
     margin-top:-6px;
@@ -106,7 +106,7 @@
     background:#fff;
 }
 i.wv-layers-options-icon{
-    background: url('../images/wv.layers/show-hide.png') no-repeat 0 -24px;
+    background: url('../images/wv.layers/show-hide.png?v=@BUILD_NONCE@') no-repeat 0 -24px;
     width: 12px;
     height: 12px;
     position:absolute;
@@ -144,7 +144,7 @@ i.wv-layers-options-icon{
 }
 
 .productsitem a.button.close i {
-    background:url('../images/wv.layers/show-hide.png') no-repeat 0 -24px;
+    background:url('../images/wv.layers/show-hide.png?v=@BUILD_NONCE@') no-repeat 0 -24px;
     width:12px;
     height:12px;
     pointer-events:none;
@@ -175,7 +175,7 @@ i.wv-layers-options-icon{
 .productsitem.layer-hidden a.hdanchor:hover{
     background:rgba(255,255,255,1);
 }
-/* 
+/*
 .productsitem.layer-visible .layer-main:hover{
     background-color:#fff;
 }

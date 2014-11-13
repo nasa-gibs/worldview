@@ -197,7 +197,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             .attr("data-layer", layer.id)
             .append($('<h4></h4>').html(names.title))
             .append($('<p></p>').html(names.subtitle));
-        
+
 
         $layer.hover(function(){
             d3.select('#timeline-footer svg g.plot rect[data-layer="'+ layer.id +'"]')

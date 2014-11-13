@@ -1,9 +1,0 @@
-ExpiresActive On
-ExpiresDefault A31104000
-Header set Cache-Control "max-age=31104000, public"
-
-
-
-
-
-
