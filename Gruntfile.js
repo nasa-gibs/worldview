@@ -209,6 +209,9 @@ module.exports = function(grunt) {
                     src: ["**"],
                     dest: "build/site-<%=grunt.option('packageName')%>-debug/web"
                 },{
+                    src: "options/bitly.json",
+                    dest: "build/site-<%=grunt.option('packageName')%>-debug/etc/bitly.json"
+                },{
                     expand: true, cwd: "build/worldview",
                     src: ["web/**", "web/**/.htaccess"],
                     dest: "build/site-<%=grunt.option('packageName')%>"
@@ -216,6 +219,9 @@ module.exports = function(grunt) {
                     expand: true, cwd: "build/options",
                     src: ["**"],
                     dest: "build/site-<%=grunt.option('packageName')%>/web"
+                },{
+                    src: "options/bitly.json",
+                    dest: "build/site-<%=grunt.option('packageName')%>/etc/bitly.json"
                 }],
                 options: {
                     mode: true
