@@ -147,13 +147,11 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
                 attr.push({ id: "palette", value: def.custom });
             }
             if ( def.min ) {
-                var minValue = def.scale.values[def.min][0];
+                var minValue = def.scale.values[def.min];
                 attr.push({ id: "min", value: minValue });
             }
             if ( def.max ) {
-                var maxValue = ( def.scale.values[def.max].length === 2 ) ?
-                        def.scale.values[def.max][1] :
-                        def.scale.values[def.max][0];
+                var maxValue = def.scale.values[def.max];
                 attr.push({ id: "max", value: maxValue });
             }
         });
@@ -199,8 +197,8 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
         var values = self.get(layerId).scale.values;
         var result;
         _.each(values, function(check, index) {
-            var min = check[0];
-            var max = check.length === 2 ? check[1] : check[0];
+            var min = check;
+            var max = check;
             if ( type === "min" && value === min ) {
                 result = index;
                 return false;

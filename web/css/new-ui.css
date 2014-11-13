@@ -166,16 +166,20 @@ g.plot rect.data-bar-invisible{
 /*    display:none;
 */}
 #timeline-header .input-wrapper:hover{
-    border-color:#fff;
+    border-color: #666;
 }
 #timeline-header .input-wrapper:hover .date-arrows{
     visibility:visible;
 }
 #timeline-header .input-wrapper:hover .date-arrows svg path{
-    fill: #fff;
+    /*fill: #fff;*/
+    fill: #888;
 }
 #timeline-header .input-wrapper.selected{
     border-color:#fff;
+}
+#timeline-header .input-wrapper.selected .date-arrows svg path{
+    fill: #fff;
 }
 #timeline-header div{
 display:inline-block;}
