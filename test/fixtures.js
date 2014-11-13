@@ -79,14 +79,14 @@ fixtures.config = function() { return {
                 scale: {
                     colors: [fixtures.green, fixtures.yellow, fixtures.red],
                     labels: ["0", "1", "2"],
-                    values: [[0], [1], [2]]
+                    values: [0, 1, 2]
                 }
             },
             "aqua-aod": {
                 scale: {
                     colors: [fixtures.green, fixtures.yellow, fixtures.red],
                     labels: ["0", "1", "2"],
-                    values: [[0, 1], [1, 2], [2, 3]]
+                    values: [0, 1, 2]
                 }
             }
         },
