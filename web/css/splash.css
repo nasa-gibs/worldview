@@ -35,8 +35,13 @@ body {
     background: #d9dddd
 }
 
-.tour .ui-icon-closethick {
-    background-image: url("../ext/ui/jquery-ui-1.10.4/ui-darkness/images/ui-icons_404040_256x240.png");
+.tour .ui-dialog-titlebar .ui-button {
+    background: transparent;
+    border: none;
+}
+
+.tour .ui-dialog-titlebar .ui-icon-closethick {
+    background-image: url("../images/close-highlight.png")
 }
 
 .tour h3 {
@@ -275,4 +280,3 @@ ul.tour li{
 table.splash td.splash-info {
     vertical-align: top;
 }
-
