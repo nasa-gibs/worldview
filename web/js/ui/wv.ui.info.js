@@ -48,8 +48,7 @@ wv.ui.info = wv.ui.info || (function(ui, config) {
     var show = function() {
         var $menu = wv.ui.getMenu().attr("id", "wv-info-menu");
         var $menuItems = $("<ul></ul>");
-
-        var $feedback = $("<li><a class='feedback'><i class='ui-icon fa fa-envelope fa-fw'></i>Feedback</a></li>");
+        var $feedback = $("<li><a class='feedback'><i class='ui-icon fa fa-envelope fa-fw'></i>Send Feedback</a></li>");
         var $tour = $("<li><a><i class='ui-icon fa fa-truck fa-fw'></i>Start Tour</a></li>");
         var $new = $("<li><a><i class='ui-icon fa fa-flag fa-fw'></i>What's New</a></li>");
         var $about = $("<li><a><i class='ui-icon fa fa-file fa-fw'></i>About</a></li>");
