@@ -280,3 +280,11 @@ ul.tour li{
 table.splash td.splash-info {
     vertical-align: top;
 }
+
+.splashwelcome a {
+    color: #00f
+}
+
+.splashwelcome a:hover {
+    color: #66f
+}

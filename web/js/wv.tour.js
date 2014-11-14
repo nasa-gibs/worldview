@@ -230,7 +230,9 @@ wv.tour = wv.tour || function(models, ui, config) {
             var conclusionText = "<div class=\"splash\">"+
                                  "<center>"+
                                      "<p class='splashwelcome'>You have now completed a tour of @NAME@!  If you followed the “Try It” steps, you’re now looking at fires in northern California as they were observed by satellites on August 23, 2012.   You can use the tools in any order.  We hope you continue exploring!  <p>"+
-                                     "</br>"+
+                                     "<br/>" +
+                                     "<p class='splashwelcome'><a class='feedback'>Contact us</a> if you have any questions about @NAME@.</p>" +
+                                     "<br/>"+
                                      "<table class='tour'>"+
                                          "<tr>"+
                                              "<td rowspan=\"2\" colspan=\"2\"><button id='repeat' type='button' class='repeatTour'>Repeat Tour</button></td>"+
@@ -250,6 +252,7 @@ wv.tour = wv.tour || function(models, ui, config) {
                     draggable: false,
                     resizable: false
                 });
+            wv.feedback.decorate($dialog.find(".feedback"));
             $("#repeat").click(repeatTour);
             $("#done").click(handleDone);
         };
