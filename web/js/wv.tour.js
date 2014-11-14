@@ -174,19 +174,19 @@ wv.tour = wv.tour || function(models, ui, config) {
                               "<p>The toolbar provides several additional utilities for interacting with @NAME@.</p>"+
                               "<table class=\"tour\">"+
                                   "<tr>" +
-                                      "<td><img src=\"images/permalinkon.png\"/></td>"+
+                                      "<td style='text-align: center'><i class='fa fa-link fa-2x'></i></td>"+
                                       "<td><p class=\"tour\">The permalink icon lets you create a permanent, shareable link to a particular view in @NAME@.</p></td>"+
                                   "</tr>" +
                                   "<tr>" +
-                                      "<td><img src=\"images/globe.png\"/></td>"+
+                                      "<td style='text-align: center'><i class='fa fa-globe fa-2x'></i></td>"+
                                       "<td><p class=\"tour\">The globe icon lets you change between Arctic, geographic, and Antarctic projections of the world.</p></td>"+
                                   "</tr>" +
                                   "<tr>" +
-                                      "<td><img src=\"images/camera.png\"/></td>"+
+                                      "<td style='text-align: center'><i class='fa fa-camera fa-2x'></i></td>"+
                                       "<td><p class=\"tour\">The camera icon lets you download an image of your current view in @NAME@. User-selected palettes are not yet supported with this feature.</p></td>"+
                                   "</tr>" +
                                   "<tr>" +
-                                      "<td><img src=\"images/informationon.png\"/></td>"+
+                                      "<td style='text-align: center'><i class='fa fa-info-circle fa-2x'></i></td>"+
                                       "<td><p class=\"tour\">The information icon provides you with more information on @NAME@ and its data sources.</p></td>"+
                                   "</tr>" +
                               "</table>" +
