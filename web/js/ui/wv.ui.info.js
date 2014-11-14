@@ -134,7 +134,7 @@ wv.ui.info = wv.ui.info || (function(ui, config) {
             }
             $menuItems.hide();
             $("#wv-info-button-check").prop("checked", false);
-            $("#wv-info-button label").removeClass("ui-state-hover")
+            $("#wv-info-button label").removeClass("ui-state-hover");
             $button.button("refresh");
             $("body").off("click", clickOut).off("touchstart", clickOut);
         };
