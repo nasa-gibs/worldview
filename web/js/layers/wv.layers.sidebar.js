@@ -198,6 +198,10 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
     };
 
     var onTabChange = function(e, ui) {
+        var tab = ui.newTab.attr("data-tab");
+        if ( tab === "add" || tab === "download" ) {
+            $("#wv-layers-options-dialog").dialog("close");
+        }
         self.events.trigger("select", ui.newTab.attr("data-tab"));
     };
 
