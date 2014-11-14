@@ -138,7 +138,7 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
     border:1px solid #333;
     border-top-right-radius:5px;
     border-top-left-radius:5px;
-    z-index:10000;
+    z-index:1;
     -webkit-box-sizing:border-box;
     -o-box-sizing:border-box;
     -moz-box-sizing:border-box;
@@ -149,7 +149,7 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
     position:absolute;
     right:10px;
     top:10px;
-    z-index:10000;
+    z-index:1;
 
     border-radius:0;
 
