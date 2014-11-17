@@ -156,8 +156,7 @@ wv.util.browser = wv.util.browser || (function() {
 
     self.tests.touchDevice = function() {
         var el = document.createElement('div');
-        el.setAttribute('ontouchstart', 'return;'); // or try "ontouchstart"
-        console.log(el);
+        el.setAttribute('ontouchstart', 'return;');
         return typeof el.ontouchstart === "function";
     };
     
