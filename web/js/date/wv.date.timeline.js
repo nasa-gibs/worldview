@@ -1750,6 +1750,9 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
            $("#year-input-group").focus().select();
         });
 
+        if (wv.util.browser.tests.touchDevice()){
+            $('.button-input-group').prop('disabled', true);
+        }
         ///////////////////////////End Datepicker////////////////////////////////////
         ////////////////////////////Click bindings///////////////////////////////////
         d3.select("#zoom-years").on("click",function(d){
