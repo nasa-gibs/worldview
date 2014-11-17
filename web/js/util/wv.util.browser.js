@@ -154,6 +154,13 @@ wv.util.browser = wv.util.browser || (function() {
         return false;
     };
 
+    self.tests.touchDevice = function() {
+        var el = document.createElement('div');
+        el.setAttribute('ontouchstart', 'return;'); // or try "ontouchstart"
+        console.log(el);
+        return typeof el.ontouchstart === "function";
+    };
+    
     self.tests.ieVersion = function() {
         var navigator = self.tests.navigator();
         var version = navigator.userAgent.match(/MSIE ([\d\.]+)/);
