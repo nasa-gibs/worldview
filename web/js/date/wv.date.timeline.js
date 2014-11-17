@@ -1407,17 +1407,17 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 var xPos = evt.x || evt.clientX; //FIXME: needs more accuracy in Firefox
                 var newDate;
                 var mouseDate = x.invert((xPos-$('#timeline-header').outerWidth()-margin.left));
-                var currentDate = new Date(model.selected);
+                var currentDate = model.selected;
                 switch(zoomLvl){
                     case 0:
-                    newDate = new Date(mouseDate.getUTCFullYear(),currentDate.getUTCMonth(),currentDate.getUTCDate());
+                    newDate = new Date(Date.UTC(mouseDate.getUTCFullYear(),currentDate.getUTCMonth(),currentDate.getUTCDate()));
                     break;
                     case 1:
-                    newDate = new Date(mouseDate.getUTCFullYear(),mouseDate.getUTCMonth(),currentDate.getUTCDate());
+                    newDate = new Date(Date.UTC(mouseDate.getUTCFullYear(),mouseDate.getUTCMonth(),currentDate.getUTCDate()));
                     break;
                     case 2:
                     case 3:
-                    newDate = new Date(mouseDate.getUTCFullYear(),mouseDate.getUTCMonth(),mouseDate.getUTCDate());
+                    newDate = new Date(Date.UTC(mouseDate.getUTCFullYear(),mouseDate.getUTCMonth(),mouseDate.getUTCDate()));
                     break;
                 }
 
