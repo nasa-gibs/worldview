@@ -89,8 +89,8 @@ wv.util.browser = wv.util.browser || (function() {
      * @type Boolean
      */
     self.localStorage = true;
-
     self.history = true;
+    self.touchDevice = false;
 
     var init = function() {
         var tests = self.tests;
@@ -108,7 +108,8 @@ wv.util.browser = wv.util.browser || (function() {
         self.localStorage = tests.localStorage();
         self.small = tests.small();
         self.history = tests.history();
-
+        self.touchDevice = tests.touchDevice();
+        
         $(window).resize(function() {
             self.small = tests.small();
         });
@@ -159,7 +160,7 @@ wv.util.browser = wv.util.browser || (function() {
         el.setAttribute('ontouchstart', 'return;');
         return typeof el.ontouchstart === "function";
     };
-    
+
     self.tests.ieVersion = function() {
         var navigator = self.tests.navigator();
         var version = navigator.userAgent.match(/MSIE ([\d\.]+)/);

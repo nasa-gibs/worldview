@@ -74,7 +74,7 @@ wv.ui.info = wv.ui.info || (function(ui, config) {
         $menuItems.hide();
 
         $about.click(function() {
-            if ( wv.util.browser.small ) {
+            if ( wv.util.browser.small || wv.util.browser.touchDevice ) {
                 window.open("brand/pages/about.html?v=@BUILD_NONCE@", "_blank");
             } else {
                 wv.ui.getDialog().dialog({
@@ -92,7 +92,7 @@ wv.ui.info = wv.ui.info || (function(ui, config) {
         wv.feedback.decorate($feedback.find("a"));
 
         $new.click(function() {
-            if ( wv.util.browser.small ) {
+            if ( wv.util.browser.small || wv.util.browser.touchDevice ) {
                 window.open("brand/pages/new.html?v=@BUILD_NONCE@", "_blank");
             } else {
                 wv.ui.getDialog().dialog({
