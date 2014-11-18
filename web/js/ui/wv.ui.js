@@ -177,7 +177,7 @@ wv.ui = (function(self) {
         closeComponent("wv-menu", closeMenu);
     };
 
-    self.getDialog = function(marker) {
+    self.getDialog = function(marker, exclusive) {
         self.close(marker);
         return getComponent(marker || "wv-dialog", closeDialog);
     };

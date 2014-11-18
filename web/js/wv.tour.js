@@ -60,9 +60,8 @@ wv.tour = wv.tour || function(models, ui, config) {
             return;
         }
 
-        $content = $("#joyRideTipContent");
+        $content = $("#wv-tour-content");
         if ( $content.children().length === 0 ) {
-            console.log("loading");
             $content.load("pages/tour.html", function() { onLoad(introduction); });
         } else {
             onLoad(introduction);
@@ -70,49 +69,12 @@ wv.tour = wv.tour || function(models, ui, config) {
     };
 
     var onLoad = function(introduction) {
-        console.log("loaded");
         var padding = 15; // padding - used for all of the tour windows
         var pos, width, height, xval, yval; // helpful calculation vars
 
-        var finalRow = "";
-        if(introduction) {
-            finalRow = "<td colspan='2'><p id='dontShowP' class=\"splash\"><input id='dontShowAgain' type='checkbox'>Do not show again (Access from <i class='fa fa-info-circle fa-fw'></i> menu)</p></td>";
-        }
-        var item = "<div class=\"splash\">"+
-                       "<center>"+
-                           "<p class=\"splashwelcome\">This application allows you to interactively browse global satellite imagery within hours of it being acquired. Use the features described below to find interesting imagery, save and share what you find, and download the underlying data.</p>"+
-                           "</br></br>"+
-                           "<table id=\"splashTable\" class=\"splash\">"+
-                               "<tr>"+
-                                   "<td><img src=\"images/tour/layer-picker-0.7.png\" alt=\"Layer Picker\" width=\"150\" height=\"93\" class=\"splash\"/></td>"+
-                                   "<td><img src=\"images/tour/time-slider-0.7.png\" alt=\"Time Slider\" width=\"150\" height=\"78\" class=\"splash\"/></td>"+
-                                   "<td><img src=\"images/tour/toolbar-0.7.png\" alt=\"Toolbar\" width=\"124\" height=\"50\" class=\"splash\"/></td>"+
-                                   "<td><img src=\"images/tour/map-0.7.png\" alt=\"Map\" width=\"100\" height=\"75\" class=\"splash\"/></td>"+
-                               "</tr>"+
-                               "<tr class='splash-info'>"+
-                                   "<td class='splash-info'><p class=\"splash\">Use the <span class=\"highlight\">Layer Picker</span> on the left to choose the type of imagery to display on the map.  It also has a tab to download the underlying data.</p></td>"+
-                                   "<td class='splash-info'><p class=\"splash\">Use the <span class=\"highlight\">Time Slider</span> on the bottom to choose the date of the observations.</p></td>"+
-                                   "<td class='splash-info'><p class=\"splash\">Use the <span class=\"highlight\">Tool Bar</span> at the top to see other tools for changing and saving the view.</p></td>"+
-                                   "<td class='splash-info'><p class=\"splash\">Use the <span class=\"highlight\">Map</span> itself to pan or zoom in on an area.</p></td>"+
-                               "</tr>"+
-                               "<tr>"+
-                               "<td><p></p></td>"+
-                               "</tr>"+
-                               "<tr>"+
-                                   "<td rowspan=\"2\" colspan=\"4\"><p style='text-align:center;'><button id='takeTour' type='button' class=\"takeTour\"; background-image:url('../images/splash-button.png')\">Take Tour</button><button id='skipTour' type='button' class=\"skipTour\">Skip Tour</button></p></td>"+
-                                   //"<td rowspan=\"2\" colspan=\"2\"><button id='skipTour' type='button' class=\"skipTour\">Skip Tour</button></td>"+
-                               "</tr>"+
-                               "<tr></tr>"+
-                               "<tr>"+
-                                   finalRow +
-                               "</tr>"+
-                           "</table>"+
-                       "</center>"+
-                   "</div>";
-
-        var $startDialog = wv.ui.getDialog();
+        wv.ui.close();
+        var $startDialog = $("#wv-tour-intro");
         $startDialog
-            .html(item)
             .dialog({
                 title: "Welcome to @NAME@!",
                 dialogClass: "tour",
@@ -123,110 +85,12 @@ wv.tour = wv.tour || function(models, ui, config) {
                 resizable: false
             });
 
-        /*
-        splashOverlay = new YAHOO.widget.Panel("splash", { zIndex:1020, visible:false, modal:true, draggable:false,  } );
+        if ( introduction ) {
+            $("#wv-tour-skip").show();
+        } else {
+            $("#wv-tour-skip").hide();
+        }
 
-        splashOverlay.setBody(item);
-        splashOverlay.show();
-        */
-
-        /* set up all of the callout panels */
-        /*
-        var baseLayers = "<div>"+
-                              "<h3>Layer Picker - Base Layers</h3>"+
-                              "</br></br>"+
-                              "<p class='tour'>A <span class='highlight'>Base Layer</span> is an opaque background image - you can have multiple active base layers, but you can only show one at a time.</p>"+
-                              "<p class='tour'>There are several ways to interact with the layers: </p>" +
-                              "<ul class='tour'>"+
-                                  "<li>Use the <img style='height: 14px' src=\"images/visible.png\"/> icon to show and hide layers.</li>" +
-                                  "<li>Use the <img style='height: 14px' src=\"images/close-x.png\"/> icon to remove layers.</li>"+
-                                  "<li>Drag the layers to rearrange them.</li>" +
-                              "</ul>"+
-                              "<p class='tour'> <span class='tryIt'>Try It!</span></p>"+
-                              "<ul class='tour'>"+
-                                  "<li>Click on the <img style='height: 14px' src='images/visible.png'/> for \"Corrected Reflectance (True Color) Aqua / MODIS\" under Base Layers.</li>" +
-                                  "<li>Drag \"Corrected Reflectance (True Color) Aqua / MODIS\" to the bottom of the list.  Notice how the map changes.</li>" +
-                                  "<li>Drag \"Corrected Reflectance (True Color) Aqua / MODIS\" back to the top of the list.</li>" +
-                              "</ul>"+
-                              "</br>"+
-                          "</div>";
-        document.getElementById("wv-tour-base-layers").innerHTML = baseLayers;
-
-        var overlayLayers = "<div>"+
-                              "<h3>Layer Picker - Continued</h3>"+
-                              "</br></br>"+
-                              "<p class='tour'>An <span class='highlight'>Overlay</span> is a partially transparent layer to view on top of the background - you can view multiple overlays at once.  If an overlay has a color bar, you can click the color bar and select a new color palette."+
-                              "<p>On the <i class=\"productsIcon selected icon-add\"></i> tab, you can use the drop down list or the search bar to find and add layers.</p> "+
-                              "<p>On the <i class=\"productsIcon selected icon-download\"></i> tab, you can download data for layers you are currently viewing.</p> "+
-                              "<p class='tour'> <span class='tryIt'>Try It!</span></p>"+
-                              "<ul class='tour'>"+
-                                  "<li>Click on the <i class=\"productsIcon selected icon-add\"></i> tab.</li>"+
-                                  "<li>Select \"Fires\" from the drop down list.</li>"+
-                                  "<li>Type \"aqua\" in the search box.</li>"+
-                                  "<li>Add the \"Fires (Day and Night) Aqua/MODIS Fire and Thermal Anomalies\" overlay.</li>"+
-                                  "<li>Click on the <i class=\"productsIcon selected icon-download\"></i> tab to see what data can be downloaded.</li>"+
-                                  "<li>Click on the <i class=\"productsIcon selected icon-active\"></i> tab to see the layers that have been added.</li>"+
-                              "</ul>"+
-                              "</br>"+
-                          "</div>";
-        document.getElementById("wv").innerHTML = overlayText;
-
-        var dateText = "<div class=\"tour\">"+
-                           "<h3>Date Slider</h3>"+
-                           "</br></br>"+
-                           "<p class='tour'>The <span class='highlight'>Date Slider</span> is used to show imagery that was observed on a specific date.  You can click the slider to choose a date or drag the slider to view changes over time.</p>"+
-                           "<p class='tour'><span class='tryIt'>Try It!</span></p>"+
-                           "<p class='tour'>Use the date slider to change the date to 2012 Aug 23.</p>"+
-                       "</div>";
-        document.getElementById("datePanel").innerHTML = dateText;
-
-        var toolbarText = "<div>"+
-                              "<h3>Toolbar</h3>"+
-                              "</br></br>"+
-                              "<p>The toolbar provides several additional utilities for interacting with @NAME@.</p>"+
-                              "<table class=\"tour\">"+
-                                  "<tr>" +
-                                      "<td style='text-align: center'><i class='fa fa-link fa-2x'></i></td>"+
-                                      "<td><p class=\"tour\">The permalink icon lets you create a permanent, shareable link to a particular view in @NAME@.</p></td>"+
-                                  "</tr>" +
-                                  "<tr>" +
-                                      "<td style='text-align: center'><i class='fa fa-globe fa-2x'></i></td>"+
-                                      "<td><p class=\"tour\">The globe icon lets you change between Arctic, geographic, and Antarctic projections of the world.</p></td>"+
-                                  "</tr>" +
-                                  "<tr>" +
-                                      "<td style='text-align: center'><i class='fa fa-camera fa-2x'></i></td>"+
-                                      "<td><p class=\"tour\">The camera icon lets you download an image of your current view in @NAME@. User-selected palettes are not yet supported with this feature.</p></td>"+
-                                  "</tr>" +
-                                  "<tr>" +
-                                      "<td style='text-align: center'><i class='fa fa-info-circle fa-2x'></i></td>"+
-                                      "<td><p class=\"tour\">The information icon provides you with more information on @NAME@ and its data sources.</p></td>"+
-                                  "</tr>" +
-                              "</table>" +
-                              "</br>"+
-                          "</div>";
-        document.getElementById("toolbarPanel").innerHTML = toolbarText;
-
-        var mapText = "<div>"+
-                          "<h3>Map</h3>"+
-                          "</br></br>"+
-                          "<p class='tour\'>There are several ways you can interact with the map to pan or zoom.</p>"+
-                          "<p class='tour\'>To pan, drag the map.</p>"+
-                          "<p class='tour\'>To zoom:</p>"+
-                          "<ul class='tour\'>"+
-                              "<li>Use the mouse wheel</li>"+
-                              "<li>Use the +/- icons on the right</li>"+
-                              "<li>Double-click (centers and zooms)</li>"+
-                              "<li>Shift-click-drag (zooms in on a box)</li>"+
-                          "</ul>"+
-                          "</br>"+
-                          "<p class='tour'><span class='tryIt'>Try It!</span></p>"+
-                          "<p class='tour\'>Move the map to North America and zoom in on northern California, USA.</p>"+
-                          "<img src=\"images/tour-fire-location.png\" alt=\"Location\" width=\"200\" class=\"splash\"/>"+
-                          "</br>"+
-                      "</div>";
-
-        document.getElementById("mapPanel").innerHTML = mapText;
-        */
         var mapAnchor = document.getElementById("mapPanelTourAnchor");
         if(!mapAnchor) {
             //console.log("creating mapanchor");
@@ -238,23 +102,9 @@ wv.tour = wv.tour || function(models, ui, config) {
         }
 
         var endTour = function() {
-            var $dialog = wv.ui.getDialog();
-            var conclusionText = "<div class=\"splash\">"+
-                                 "<center>"+
-                                     "<p class='splashwelcome'>You have now completed a tour of @NAME@!  If you followed the “Try It” steps, you’re now looking at fires in northern California as they were observed by satellites on August 23, 2012.   You can use the tools in any order.  We hope you continue exploring!  <p>"+
-                                     "<br/>" +
-                                     "<p class='splashwelcome'><a class='feedback'>Contact us</a> if you have any questions about @NAME@.</p>" +
-                                     "<br/>"+
-                                     "<table class='tour'>"+
-                                         "<tr>"+
-                                             "<td rowspan=\"2\" colspan=\"2\"><button id='repeat' type='button' class='repeatTour'>Repeat Tour</button></td>"+
-                                             "<td rowspan=\"2\" colspan=\"2\"><button id='done' type='button' class='done'>Done!</button></td>"+
-                                         "</tr>"+
-                                     "</table>"+
-                                    "</center>"+
-                                "</div>";
+            wv.ui.close();
+            $dialog = $("#wv-tour-end");
             $dialog
-                .html(conclusionText)
                 .dialog({
                     title: "Finished!",
                     dialogClass: "tour",
