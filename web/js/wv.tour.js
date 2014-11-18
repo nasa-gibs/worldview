@@ -60,6 +60,17 @@ wv.tour = wv.tour || function(models, ui, config) {
             return;
         }
 
+        $content = $("#joyRideTipContent");
+        if ( $content.children().length === 0 ) {
+            console.log("loading");
+            $content.load("pages/tour.html", function() { onLoad(introduction); });
+        } else {
+            onLoad(introduction);
+        }
+    };
+
+    var onLoad = function(introduction) {
+        console.log("loaded");
         var padding = 15; // padding - used for all of the tour windows
         var pos, width, height, xval, yval; // helpful calculation vars
 
@@ -120,7 +131,8 @@ wv.tour = wv.tour || function(models, ui, config) {
         */
 
         /* set up all of the callout panels */
-        var productText = "<div>"+
+        /*
+        var baseLayers = "<div>"+
                               "<h3>Layer Picker - Base Layers</h3>"+
                               "</br></br>"+
                               "<p class='tour'>A <span class='highlight'>Base Layer</span> is an opaque background image - you can have multiple active base layers, but you can only show one at a time.</p>"+
@@ -138,9 +150,9 @@ wv.tour = wv.tour || function(models, ui, config) {
                               "</ul>"+
                               "</br>"+
                           "</div>";
-        document.getElementById("productBasePanel").innerHTML = productText;
+        document.getElementById("wv-tour-base-layers").innerHTML = baseLayers;
 
-        var overlayText = "<div>"+
+        var overlayLayers = "<div>"+
                               "<h3>Layer Picker - Continued</h3>"+
                               "</br></br>"+
                               "<p class='tour'>An <span class='highlight'>Overlay</span> is a partially transparent layer to view on top of the background - you can view multiple overlays at once.  If an overlay has a color bar, you can click the color bar and select a new color palette."+
@@ -157,7 +169,7 @@ wv.tour = wv.tour || function(models, ui, config) {
                               "</ul>"+
                               "</br>"+
                           "</div>";
-        document.getElementById("productOverlayPanel").innerHTML = overlayText;
+        document.getElementById("wv").innerHTML = overlayText;
 
         var dateText = "<div class=\"tour\">"+
                            "<h3>Date Slider</h3>"+
@@ -214,7 +226,7 @@ wv.tour = wv.tour || function(models, ui, config) {
                       "</div>";
 
         document.getElementById("mapPanel").innerHTML = mapText;
-
+        */
         var mapAnchor = document.getElementById("mapPanelTourAnchor");
         if(!mapAnchor) {
             //console.log("creating mapanchor");
@@ -268,7 +280,7 @@ wv.tour = wv.tour || function(models, ui, config) {
                                              includepage:true,
                                              template : {'link':'<a href="#" class="joyride-close-tip">X</a>'},
                                              postStepCallback : function (index, tip) {
-                                                 if(index == 4) {
+                                                 if(index == 5) {
                                                      endTour();
                                                  }
                                              }});
@@ -292,7 +304,7 @@ wv.tour = wv.tour || function(models, ui, config) {
         var onStop = function(index, tip, button) {
             //console.log(index, tip, button);
             setTourState();
-            if(index == 4 && button !== "previous") {
+            if(index == 5 && button !== "previous") {
                 endTour();
             }
         };
