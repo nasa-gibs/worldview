@@ -351,6 +351,42 @@ p.wv-tour-page-count {
     background-position: 0px -70px;
 }
 
+.wv-tour-timeline-bars-icon {
+    display: inline-block;
+    width: 99px;
+    height: 66px;
+    background: url("../images/tour/timeline-bars-0.7.png");
+}
+
+.wv-tour-timeline-interval-icon {
+    display: inline-block;
+    width: 99px;
+    height: 66px;
+    background: url("../images/tour/timeline-interval-0.7.png");
+}
+
+.wv-tour-timeline-day-buttons-icon {
+    display: inline-block;
+    width: 95px;
+    height: 65px;
+    background: url("../images/tour/timeline-day-buttons-0.7.png");
+}
+
+.wv-tour-timeline-entry-icon {
+    display: inline-block;
+    width: 95px;
+    height: 65px;
+    background: url("../images/tour/timeline-entry-0.7.png");
+}
+
+.wv-tour-toolbar-icon {
+    border-radius: 5px;
+    display: inline-block;
+    background: rgb(40, 40, 40);
+    color: #fff;
+    padding: .3em .6em;
+}
+
 .wv-tour-table-icon {
     text-align: center;
     vertical-align: middle;

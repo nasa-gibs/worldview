@@ -12,13 +12,13 @@ data.
 <table id="splashTable" class="splash">
     <tr>
         <td><img src="images/tour/layer-picker-0.7.png" alt="Layer Picker" width="150" height="93" class="splash"/></td>
-        <td><img src="images/tour/time-slider-0.7.png" alt="Time Slider" width="150" height="78" class="splash"/></td>
+        <td><img src="images/tour/timeline-0.7.png" alt="Timeline" width="150" height="78" class="splash"/></td>
         <td><img src="images/tour/toolbar-0.7.png" alt="Toolbar" width="124" height="50" class="splash"/></td>
         <td><img src="images/tour/map-0.7.png" alt="Map" width="100" height="75" class="splash"/></td>
     </tr>
    <tr class='splash-info'>
        <td class='splash-info'><p class="splash">Use the <span class="highlight">Layer Picker</span> on the left to choose the type of imagery to display on the map.  It also has a tab to download the underlying data.</p></td>
-       <td class='splash-info'><p class="splash">Use the <span class="highlight">Time Slider</span> on the bottom to choose the date of the observations.</p></td>
+       <td class='splash-info'><p class="splash">Use the <span class="highlight">Timeline</span> on the bottom to choose the date of the observations.</p></td>
        <td class='splash-info'><p class="splash">Use the <span class="highlight">Tool Bar</span> at the top to see other tools for changing and saving the view.</p></td>
        <td class='splash-info'><p class="splash">Use the <span class="highlight">Map</span> itself to pan or zoom in on an area.</p></td>
    </tr>
@@ -51,19 +51,83 @@ data.
 <ol id="joyRideTipContent" class="tour">
 
 <!-- Timeline -->
-<li id="wv-tour-timeline" data-id="timeline-footer" data-button="Next" data-options="tipLocation:top;tipAnimation:fade;nubPosition:bottom;bordered:true">
-    <div>
-        <h3>Timeline</h3>
-        <p>This is some sample text for the tour</p>
-    </div>
+<li id="wv-tour-timeline" class="wide" data-id="timeline-footer" data-button="Next" data-options="tipLocation:top;tipAnimation:fade;nubPosition:bottom;bordered:true">
+<div class="tour">
+<h3>Timeline</h3>
+<p>
+    Use the timeline below to explore satellite imagery that is available in
+    the archive.</p>
+<table>
+    <tr>
+        <td class='wv-tour-table-icon'>
+            <svg width="60" height="60">
+                <defs>
+                    <clipPath id="guitarpick-boundary"><rect width="814" height="65" x="-30"></rect></clipPath>
+                </defs>
+                <g id="guitarpick" style="clip-path:url(#guitarpick-boundary);">
+                    <path d="M 7.3151,0.7426 C 3.5507,0.7426 0.5,3.7926 0.5,7.5553 l 0,21.2724 14.6038,15.7112 14.6039,15.7111 14.6038,-15.7111 14.6037,-15.7112 0,-21.2724 c 0,-3.7627 -3.051,-6.8127 -6.8151,-6.8127 l -44.785,0 z"></path>
+                    <rect width="4" height="20" x="21" y="11"></rect>
+                    <rect width="4" height="20" x="28" y="11"></rect>
+                    <rect width="4" height="20" x="35" y="11"></rect>
+                </g>
+            </svg>
+        </td>
+        <td><p>
+            The slider shows you where the selected date lies along the
+            timeline. Click and drag the slider to quickly sweep through
+            a range of time.
+        </p></td>
+    </tr>
+    <tr>
+        <td class='wv-tour-table-icon'><i class='wv-tour-timeline-bars-icon'></i></td>
+        <td><p>
+            Click directly on the timeline to jump to a specific day. A blue
+            bar indicates a layer has imagery availble. The bar
+            will be gray if the layer has been turned off and is not visible.
+        </p></td>
+    </tr>
+    <tr>
+        <td class='wv-tour-table-icon'><i class='wv-tour-timeline-interval-icon'></i></td>
+        <td><p>
+            Click on either "Days", "Months", or "Years" to expand or compress
+            the range shown on the timeline.
+        </p></td>
+    </tr>
+</table>
+<br/>
+<p><span class='tryIt'>Try It!</span></p>
+<ul>
+    <li>Change the interval to "Months" and click on July, 2012</li>
+    <li>Change the interval to "Days" and explore the imagery for that month.
+</ul>
+</div>
 </li>
 
 <!-- Timeline - Continued -->
 <li id="wv-tour-timline-continued" data-id="timeline" data-button="Next" data-options="tipLocation:top;tipAnimation:fade;nubPosition:bottom;prevButton:true;bordered:true">
-    <div>
-        <h3>Timeline - Continued</h3>
-        <p>More text about the tour</p>
-    </div>
+<div class="tour">
+<h3>Timeline - Continued</h3>
+<p>To the left of the timeline the selected day is shown.</p>
+<table>
+    <tr>
+        <td class='wv-tour-table-icon'><i class="wv-tour-timeline-day-buttons-icon"></i></td>
+        <td><p>Click the left and right arrows to quickly go to the previous
+        or next day.</p></td>
+    </tr>
+    <tr>
+        <td class='wv-tour-table-icon'><i class="wv-tour-timeline-entry-icon"></i></td>
+        <td><p>Buttons above each portion of the date allow you to quickly
+        go to the previous or next day, month, or year. Click on the text to
+        type in a specific date.</p></td>
+    </tr>
+</table>
+<br/>
+<p><span class='tryIt'>Try It!</span></p>
+<ul>
+    <li>Click on the button above the month to go to August.</li>
+    <li>Click on the day text and type in "23"</li>
+</ul>
+</div>
 </li>
 
 <!-- Layer Picker - Base Layers -->
@@ -166,26 +230,26 @@ The toolbar provides several additional utilities for interacting with @NAME@.
 </p>
 <table>
     <tr>
-        <td style='wv-tour-table-icon'><i class='fa fa-link fa-2x'></i></td>
-        <td><p>The permalink icon lets you create a permanent, shareable link
+        <td class='wv-tour-table-icon'><i class='fa fa-link fa-2x wv-tour-toolbar-icon'></i></td>
+        <td><p>The permalink button lets you create a permanent, shareable link
             to a particular view in @NAME@.</p></td>
     </tr>
     <tr>
-        <td style='wv-tour-table-icon'><i class='fa fa-globe fa-2x'></i></td>
-        <td><p>The globe icon lets you change between Arctic, geographic, and
+        <td class='wv-tour-table-icon'><i class='fa fa-globe fa-2x wv-tour-toolbar-icon'></i></td>
+        <td><p>The globe button lets you change between Arctic, geographic, and
             Antarctic projections of the world.</p></td>
     </tr>
     <tr>
-        <td style='wv-tour-table-icon'><i class='fa fa-camera fa-2x'></i></td>
-        <td><p>The camera icon lets you download an image of your current view
+        <td class='wv-tour-table-icon'><i class='fa fa-camera fa-2x wv-tour-toolbar-icon'></i></td>
+        <td><p>The camera button lets you download an image of your current view
             in @NAME@. User-selected palettes are not yet supported with this
             feature.</p></td>
     </tr>
     <tr>
-        <td style='wv-tour-table-icon'><i class='fa fa-info-circle fa-2x'></i></td>
-        <td><p>The information icon provides you with more information on
+        <td class='wv-tour-table-icon'><i class='fa fa-info-circle fa-2x wv-tour-toolbar-icon'></i></td>
+        <td><p>The information button provides you with more information on
             @NAME@ and its data sources.</p></td>
-        </tr>
+    </tr>
 </table>
 </div>
 </li>
