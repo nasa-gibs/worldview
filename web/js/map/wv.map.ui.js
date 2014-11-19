@@ -299,14 +299,17 @@ wv.map.ui = wv.map.ui || function(models, config) {
     };
 
     var updatePalette = function(layerId) {
+        console.log("updatePalette", layerId);
         var def = config.layers[layerId];
         var key = layerKey(def);
         var mapLayer = _.find(self.selected.layers, { key: key });
         var palette = models.palettes.get(layerId);
         if ( !mapLayer ) {
+            console.log("no map layer");
             updateLayer(def);
             //updateMap();
         } else if ( palette.lookup ) {
+            console.log("still has lookup")
             mapLayer.lookupTable = palette.lookup;
             _.each(mapLayer.grid, function(row) {
                 _.each(row, function(tile) {
@@ -397,7 +400,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
             tileSize: new OpenLayers.Size(matrixSet.tileSize[0],
                                           matrixSet.tileSize[1])
         };
-        if ( models.palettes.active[def.id] ) {
+        if ( models.palettes.isActive(def.id) ) {
             param.tileClass = wv.map.palette.canvasTile;
             param.lookupTable = models.palettes.active[def.id].lookup;
         }
