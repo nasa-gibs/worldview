@@ -139,7 +139,7 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
             throw new Error("No layers in state");
         }
         _.each(self.active, function(def, layerId) {
-            if ( !_.find(models.layers.active, {id: layerId}) ) {
+            if ( !_.find(models.layers.get(), {id: layerId}) ) {
                 return;
             }
             var attr = _.find(state.l, {id: layerId}).attributes;
