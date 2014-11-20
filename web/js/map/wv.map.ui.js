@@ -342,7 +342,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         cache.setItem(key, layer, { callback: onCacheRemoval });
         layer.key = key;
         layer.wvid = def.id;
-        layer.wvdate = wv.util.toISOStringDate(models.date.selected);
+        layer.wvdate = wv.util.toISOStringDate(options.date || models.date.selected);
         layer.wvproj = proj.id;
         layer.div.setAttribute("data-layer", def.id);
         layer.div.setAttribute("data-key", key);
@@ -652,12 +652,14 @@ wv.map.ui = wv.map.ui || function(models, config) {
     };
 
     self.status = function(message) {
+        /*
         message = message || "status";
         var map = self.selected;
         console.log(message + ":",
             "layers", map.layers.length,
             "cache", cache.size(),
             "stale", stale.length);
+        */
     };
 
     init();
