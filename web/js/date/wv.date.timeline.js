@@ -1043,7 +1043,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .call(xAxis); //update view after translate
 
         setTicks();
-        //setTicks();
 
         boundaryTicks.selectAll('line')
             .attr("y1","20")
@@ -1105,13 +1104,15 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             var normalTick = d3.select(this);
             var normalTickData = normalTick.data()[0];
             var nextNormalTickData = getNextNormalTickData(normalTickData);
-
-            normalTickWidth = x(nextNormalTickData) - x(normalTickData);
+            //var normalTickLine = normalTick.select('line');
+            //console.log(normalTickLine);
+            normalTickWidth = x(nextNormalTickData) - x(normalTickData) + 1; //FIXME: Calculate actual width of tick line
 
             normalTick.append("svg:rect")
                 .attr("class","normaltick-background")
                 .attr("height",height-1)
                 .attr("y",-height)
+                .attr("x",-0.5)
                 .attr("width",normalTickWidth);
         });
 
@@ -1470,8 +1471,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
         timeline.select(".x.axis")
             .call(xAxis); //update view after translate
-
-
 
         dataBars = timeline.insert("svg:g",'.x.axis')
             .attr("height",height)
