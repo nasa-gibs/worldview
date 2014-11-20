@@ -121,7 +121,6 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
 }
 
 @media screen and (max-width: 440px){
-    #wvlogo { width:54px; background-position: 0 center;}
 }
 
 #toolbarlist {
