@@ -39,8 +39,8 @@
 
     <!-- CSS resources ==================================================== -->
 
-    <!-- link.dev -->       <link type="text/css" rel="Stylesheet" href="ext/ui/font-awesome-4.0.3/css/font-awesome.css">
-    <!-- link.prod --> <!-- <link type="text/css" rel="Stylesheet" href="ext/ui/font-awesome-4.0.3/css/font-awesome.min.css"> -->
+    <!-- link.dev -->       <link type="text/css" rel="Stylesheet" href="ext/ui/font-awesome-4.2.0/css/font-awesome.css">
+    <!-- link.prod --> <!-- <link type="text/css" rel="Stylesheet" href="ext/ui/font-awesome-4.2.0/css/font-awesome.min.css"> -->
 
     <!-- link.dev -->       <link type="text/css" rel="Stylesheet" href="ext/ui/jquery-ui-1.10.4/ui-darkness/jquery-ui-1.10.4.custom.css">
     <!-- link.prod --> <!-- <link type="text/css" rel="Stylesheet" href="ext/ui/jquery-ui-1.10.4/ui-darkness/jquery-ui-1.10.4.custom.min.css"> -->
@@ -56,8 +56,8 @@
     <!-- link.dev  -->      <link type="text/css" rel="Stylesheet" href="ext/palettes/jquery.dd-3.3/jquery.dd.css">
     <!-- link.prod --> <!-- <link type="text/css" rel="Stylesheet" href="ext/palettes/jquery.dd-3.3/jquery.dd.min.css"> -->
 
-    <!-- link.dev  -->      <link type="text/css" rel="Stylesheet" href="ext/tour/joyride-2.0.3-2/joyride.css">
-    <!-- link.prod --> <!-- <link type="text/css" rel="Stylesheet" href="ext/tour/joyride-2.0.3-2/joyride.min.css"> -->
+    <!-- link.dev  -->      <link type="text/css" rel="Stylesheet" href="ext/tour/joyride-2.0.3-3/joyride.css">
+    <!-- link.prod --> <!-- <link type="text/css" rel="Stylesheet" href="ext/tour/joyride-2.0.3-3/joyride.min.css"> -->
 
     <!-- link.dev  -->      <link type="text/css" rel="Stylesheet" href="ext/image/jcrop-0.9.10-p1/jcrop.css">
     <!-- link.prod --> <!-- <link type="text/css" rel="Stylesheet" href="ext/image/jcrop-0.9.10-p1/jcrop.min.css"> -->
@@ -81,7 +81,7 @@
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/menuPicker.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/accordionPicker.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/selector.css">
-    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/splash.css">
+    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.tour.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/products.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/indicator.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/events.css">
@@ -125,8 +125,8 @@
     <!-- link.dev  -->      <script type="text/javascript" src="ext/palettes/jquery.dd-3.3/jquery.dd.js"></script>
     <!-- link.prod --> <!-- <script type="text/javascript" src="ext/palettes/jquery.dd-3.3/jquery.dd.min.js"></script> -->
 
-    <!-- link.dev  -->      <script type="text/javascript" src="ext/tour/joyride-2.0.3-2/joyride.js"></script>
-    <!-- link.prod --> <!-- <script type="text/javascript" src="ext/tour/joyride-2.0.3-2/joyride.min.js"></script> -->
+    <!-- link.dev  -->      <script type="text/javascript" src="ext/tour/joyride-2.0.3-3/joyride.js"></script>
+    <!-- link.prod --> <!-- <script type="text/javascript" src="ext/tour/joyride-2.0.3-3/joyride.min.js"></script> -->
 
     <!-- link.dev  -->      <script type="text/javascript" src="ext/proj/proj4js-1.1.0-1/proj4js.js"></script>
     <!-- link.prod --> <!-- <script type="text/javascript" src="ext/proj/proj4js-1.1.0-1/proj4js.min.js"></script> -->
@@ -303,12 +303,6 @@
 
         </div>
     </div>
-    <ol id="joyRideTipContent">
-        <li id="datePanel" data-id="timeline" data-button="Next" data-options="tipLocation:top;tipAnimation:fade;nubPosition:bottom;bordered:true"></li>
-          <li id="productBasePanel" data-id="productsBaseLayers" data-button="Next" data-options="tipLocation:right;nubPosition:left;tipAnimation:fade;prevButton:true;bordered:true"></li>
-          <li id="productOverlayPanel" class="wide" data-id="productsOverlays" data-button="Next" data-options="tipLocation:right;nubPosition:left;tipAnimation:fade;prevButton:true;bordered:true;class:wide"></li>
-          <li id="mapPanel" data-id="mapPanelTourAnchor" data-button="Next" data-options="tipLocation:left;nubPosition:left;prevButton:true;bordered:true"></li>
-          <li id="toolbarPanel" class="toolbarTip" data-id="wv-toolbar" data-button="Finish" data-options="tipLocation:bottom;nubPosition:top;tipAnimation:fade;prevButton:true;bordered:true;class:toolbar"></li>
-    </ol>
+    <div id="wv-tour-content"></div>
 </body>
 </html>

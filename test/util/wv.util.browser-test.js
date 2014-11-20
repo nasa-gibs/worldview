@@ -109,21 +109,30 @@ buster.testCase("wv.util.browser", {
             height: this.stub().returns(1000)
         });
         buster.refute(wv.util.browser.tests.small());
+        buster.refute(wv.util.browser.tests.constrained());
     },
 
-    "Small device, width": function() {
+    "Small device": function() {
+        this.stub(window, "$").returns({
+            width: this.stub().returns(200),
+            height: this.stub().returns(200)
+        });
+        buster.assert(wv.util.browser.tests.small());
+    },
+
+    "Constrained device, width": function() {
         this.stub(window, "$").returns({
             width: this.stub().returns(600),
             height: this.stub().returns(1000)
         });
-        buster.assert(wv.util.browser.tests.small());
+        buster.assert(wv.util.browser.tests.constrained());
     },
 
-    "Small device, height": function() {
+    "Constrained device, height": function() {
         this.stub(window, "$").returns({
             width: this.stub().returns(1000),
             height: this.stub().returns(300)
         });
-        buster.assert(wv.util.browser.tests.small());
+        buster.assert(wv.util.browser.tests.constrained());
     }
 });

@@ -269,10 +269,10 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     };
 
     var resizeWindow = function() {
-        if ( self.enabled && wv.util.browser.small ) {
+        if ( self.enabled && wv.util.browser.constrained) {
             self.enabled = false;
             $("#timeline").hide();
-        } else if ( !self.enabled && !wv.util.browser.small ) {
+        } else if ( !self.enabled && !wv.util.browser.constrained ) {
             self.enabled = true;
             $("#timeline").show();
         }
