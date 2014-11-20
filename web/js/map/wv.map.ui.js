@@ -235,6 +235,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
                     layer.setVisibility(0);
                 } else {
                     layer.setOpacity(0);
+                    layer.removeBackBuffer();
                 }
                 layer.div.style.zIndex = 0;
             } else {
