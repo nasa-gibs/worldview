@@ -51,10 +51,10 @@ wv.map.ui = wv.map.ui || function(models, config) {
         models.layers.events.on("opacity", updateOpacity);
         models.layers.events.on("update", updateLayers);
         models.date.events.on("select", updateDate);
-        models.palettes.events.on("set-custom", applyLookup);
-        models.palettes.events.on("clear-custom", removePalette);
-        models.palettes.events.on("range", updatePalette);
-        models.palettes.events.on("update", updateAll);
+        models.palettes.events.on("set-custom", updateLookup);
+        models.palettes.events.on("clear-custom", updateLookup);
+        models.palettes.events.on("range", updateLookup);
+        models.palettes.events.on("update", updateLayers);
 
         updateProjection();
     };
@@ -130,7 +130,8 @@ wv.map.ui = wv.map.ui || function(models, config) {
     var updateLayer = function(def) {
         var map = self.selected;
         var key = layerKey(def);
-        if ( !_.find(map.layers, { key: key }) ) {
+        var mapLayer = _.find(map.layers, { key: key });
+        if ( !mapLayer ) {
             var renderable = models.layers.isRenderable(def.id);
             if ( renderable ) {
                 var layer = cache.getItem(key);
@@ -139,6 +140,16 @@ wv.map.ui = wv.map.ui || function(models, config) {
                     layer = createLayer(def);
                 }
                 self.selected.addLayer(layer);
+            }
+        } else if ( models.palettes.isActive(def.id) )  {
+            var palette = models.palettes.get(def.id);
+            if ( palette.lookup != mapLayer.lookupTable ) {
+                mapLayer.lookupTable = palette.lookup;
+                _.each(mapLayer.grid, function(row) {
+                    _.each(row, function(tile) {
+                        tile.applyLookup();
+                    });
+                });
             }
         }
     };
@@ -201,8 +212,8 @@ wv.map.ui = wv.map.ui || function(models, config) {
         cache.removeWhere(function(key, mapLayer) {
             var def = config.layers[mapLayer.wvid];
             var renderable = models.layers.isRenderable(def.id);
-            var key = layerKey(def);
-            if ( !renderable || key !== mapLayer.key ) {
+            var usedKey = layerKey(def);
+            if ( !renderable || usedKey !== mapLayer.key ) {
                 mapLayer.setVisibility(false);
                 return true;
             }
@@ -290,59 +301,21 @@ wv.map.ui = wv.map.ui || function(models, config) {
         }
     };
 
-    var applyLookup = function(layerId) {
-        var def = config.layers[layerId];
-        var key = layerKey(def);
-        var mapLayer = _.find(self.selected.layers, { key: key });
-        if ( !mapLayer ) {
-            updateLayer(def);
-        } else {
-            mapLayer.lookupTable = models.palettes.get(layerId).lookup;
-            _.each(mapLayer.grid, function(row) {
-                _.each(row, function(tile) {
-                    tile.applyLookup();
-                });
-            });
-        }
-        updateLayers();
-    };
-
-    var removePalette = function(layerId) {
-        var layer = config.layers[layerId];
-        if ( models.palettes.isActive(layerId) ) {
-            applyLookup(layerId);
-        } else {
-            updateLayer(layer);
-            updateMap();
-        }
-    };
-
-    var updatePalette = function(layerId) {
-        var def = config.layers[layerId];
-        var key = layerKey(def);
-        var mapLayer = _.find(self.selected.layers, { key: key });
-        var palette = models.palettes.get(layerId);
-        if ( !mapLayer ) {
-            updateLayer(def);
-            //updateMap();
-        } else if ( palette.lookup ) {
-            mapLayer.lookupTable = palette.lookup;
-            _.each(mapLayer.grid, function(row) {
-                _.each(row, function(tile) {
-                    tile.applyLookup();
-                });
-            });
-        }
-        updateMap();
-    };
-
-    var updateAll = function() {
-        _.each(self.selected.layers, function(layer) {
-            if ( layer.wvid ) {
-                updateLayer(config.layers[layer.wvid]);
+    var updateLookup = function(layerId) {
+        // If the lookup changes, all layers in the cache are now stale
+        // since the tiles need to be rerendered. Remove from cache.
+        var selectedDate = wv.util.toISOStringDate(models.date.selected);
+        var selectedProj = models.proj.selected.id;
+        cache.removeWhere(function(key, mapLayer) {
+            if ( mapLayer.wvid === layerId &&
+                 mapLayer.wvproj === selectedProj &&
+                 mapLayer.wvdate !== selectedDate &&
+                 mapLayer.lookupTable ) {
+                return true;
             }
+            return false;
         });
-        updateMap();
+        updateLayers();
     };
 
     var updateExtent = function() {
@@ -369,6 +342,8 @@ wv.map.ui = wv.map.ui || function(models, config) {
         cache.setItem(key, layer, { callback: onCacheRemoval });
         layer.key = key;
         layer.wvid = def.id;
+        layer.wvdate = wv.util.toISOStringDate(models.date.selected);
+        layer.wvproj = proj.id;
         layer.div.setAttribute("data-layer", def.id);
         layer.div.setAttribute("data-key", key);
         // See the notes for adjustTransition for this awkward behavior.
