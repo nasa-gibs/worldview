@@ -62,6 +62,7 @@ wv.util.browser = wv.util.browser || (function() {
      * @type Boolean
      */
     self.small = false;
+    self.constrained = false;
 
     /**
      * True if this browser properly supports cross-origin resource
@@ -91,6 +92,8 @@ wv.util.browser = wv.util.browser || (function() {
     self.localStorage = true;
     self.history = true;
     self.touchDevice = false;
+    self.mobileWidth = 720;
+    self.mobileHeight = 360;
 
     var init = function() {
         var tests = self.tests;
@@ -109,9 +112,10 @@ wv.util.browser = wv.util.browser || (function() {
         self.small = tests.small();
         self.history = tests.history();
         self.touchDevice = tests.touchDevice();
-        
+
         $(window).resize(function() {
             self.small = tests.small();
+            self.constrained = tests.constrained();
         });
     };
 
@@ -192,7 +196,11 @@ wv.util.browser = wv.util.browser || (function() {
     };
 
     self.tests.small = function() {
-        return $(window).width() < 720 || $(window).height() < 360;
+        return $(window).width() < self.mobileWidth && $(window).height() < self.mobileHeight;
+    };
+
+    self.tests.constrained = function() {
+        return $(window).width() < self.mobileWidth || $(window).height() < self.mobileHeight;
     };
 
     self.tests.history = function() {
