@@ -21,8 +21,9 @@ wv.map.ui = wv.map.ui || function(models, config) {
 
     // When the date changes, save the layer so that the tiles remain
     // cached.
-    var cache = {};
+    var cache = new Cache(100);
     var stale = [];
+    var reaper = null;
 
     var $proj  = {};
 
@@ -111,7 +112,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         //console.log("loading", loading);
         _.each(layers, function(def) {
             var key = layerKey(def, {date: date});
-            var layer = cache[key];
+            var layer = cache.getItem(key);
             if ( !layer ) {
                 //console.log("preloading", key);
                 layer = createLayer(def, {date: date});
@@ -132,7 +133,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         if ( !_.find(map.layers, { key: key }) ) {
             var renderable = models.layers.isRenderable(def.id);
             if ( renderable ) {
-                var layer = cache[key];
+                var layer = cache.getItem(key);
                 if ( !layer ) {
                     //console.log("loading", key);
                     layer = createLayer(def);
@@ -147,6 +148,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
             updateLayer(def);
         });
         updateMap();
+        self.status("update");
     };
 
     var removeLayer = function(def) {
@@ -178,7 +180,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 map.removeLayer(mapLayer);
             }
         });
-        cache = {};
+        cache.clear();
     };
 
     var reloadLayers = function(map) {
@@ -194,24 +196,40 @@ wv.map.ui = wv.map.ui || function(models, config) {
     };
 
     var purgeCache = function() {
+        self.status("purge");
         var map = self.selected;
-        _.each(_.clone(cache), function(layer) {
-            var def = config.layers[layer.wvid];
+        cache.removeWhere(function(key, mapLayer) {
+            var def = config.layers[mapLayer.wvid];
             var renderable = models.layers.isRenderable(def.id);
             var key = layerKey(def);
-            if ( !renderable || key !== layer.key ) {
-                layer.setVisibility(false);
-                delete cache[layer.key];
-                stale.push(layer);
+            if ( !renderable || key !== mapLayer.key ) {
+                mapLayer.setVisibility(false);
+                return true;
             }
+            return false;
         });
-        _.delay(function() {
+    };
+
+    var onCacheRemoval = function(key, layer) {
+        stale.push(layer);
+        scheduleReaper();
+    };
+
+    var scheduleReaper = function() {
+        // Already scheduled?
+        if ( reaper ) {
+            return;
+        }
+        var map = self.selected;
+        reaper = _.delay(function() {
+            self.status("reap");
             _.each(stale, function(layer) {
                 if ( map.getLayerIndex(layer) >= 0 ) {
                     map.removeLayer(layer);
                 }
             });
             stale = [];
+            reaper = null;
             updateLayers();
         }, 500);
     };
@@ -257,10 +275,10 @@ wv.map.ui = wv.map.ui || function(models, config) {
         // that OpenLayers has a bug where the back buffer is used on a
         // visibility change even if the resize transition is turned off.
         // Also remove the back buffer function.
-        if ( def.opacity > 0 && def.opacity < 1 ) {
+        if ( def.opacity > 0 && def.opacity < 1 && layer.transitionEffect ) {
             layer.transitionEffect = null;
             layer.applyBackBuffer = layer.fnDisabledBackBuffer;
-        } else {
+        } else if ( !layer.transitionEffect ) {
             var effect = null;
             if ( def.type === "wmts" ) {
                 effect = ( def.noTransition ) ? null: "resize";
@@ -348,7 +366,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         } else {
             throw new Error("Unknown layer type: " + def.type);
         }
-        cache[key] = layer;
+        cache.setItem(key, layer, { callback: onCacheRemoval });
         layer.key = key;
         layer.wvid = def.id;
         layer.div.setAttribute("data-layer", def.id);
@@ -356,7 +374,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         // See the notes for adjustTransition for this awkward behavior.
         layer.fnEnabledBackBuffer = layer.applyBackBuffer;
         layer.fnDisabledBackBuffer = function() {};
-
+        layer.transitionEffect = null;
         self.selected.addLayer(layer);
 
         return layer;
@@ -656,6 +674,15 @@ wv.map.ui = wv.map.ui || function(models, config) {
 
     self.isLoading = function() {
         return _.size(layersLoading) > 0;
+    };
+
+    self.status = function(message) {
+        message = message || "status";
+        var map = self.selected;
+        console.log(message + ":",
+            "layers", map.layers.length,
+            "cache", cache.size(),
+            "stale", stale.length);
     };
 
     init();
