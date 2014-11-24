@@ -151,6 +151,7 @@ for startingLayer in wv["defaults"]["startingLayers"]:
     else:
         startingLayers += [startingLayer]
 wv["defaults"]["startingLayers"] = startingLayers
+wv["buildDate"] = datetime.now().isoformat(" ")
 
 print "%s: %d error(s), %d warning(s), %d removed" % (prog, error_count,
         warning_count, remove_count)
