@@ -11,8 +11,7 @@
     left:10px;
     right:10px;
     border:1px solid #333;
-    background: rgba(40,40,40,0.9); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f5f5f5', endColorstr='#c2c2c2',GradientType=0 ); /* IE6-9 */
+    background: rgba(40,40,40,0.9);
     min-width:286px;
     border-radius:5px;
 }
@@ -193,13 +192,7 @@ display:inline-block;}
   position:relative;
 }
 
-#timeline-header .button-action-group svg {
-    position: absolute;
-    top: 50%;
-    margin-top: -15px;
-    left: 50%;
-    margin-left: -12px;
-}
+
 #timeline-header .button-action-group svg path{
     fill:#fff;
 }
@@ -238,16 +231,25 @@ display:inline-block;}
 #timeline-header>.button-action-group:hover,#timeline-header .date-arrows:hover{
     background-color:#fff;
     cursor:pointer;
-                                            }
+}
 #timeline-header>.button-action-group.button-disabled:hover{
     background-color:transparent;
     cursor:default;
 }
-#left-arrow-group{
+#timeline-header .button-action-group svg {
+    position: absolute;
+    top: 50%;
+    margin-top: -15px;
+    left: 50%;
+    margin-left: -12px;
+}
+#timeline-header #left-arrow-group{
      -moz-transform: scaleX(-1);
     -o-transform: scaleX(-1);
     -webkit-transform: scaleX(-1);
     transform: scaleX(-1);
+}
+#timeline-header #left-arrow-group svg{
     filter: FlipH;
     -ms-filter: "FlipH";
 }
@@ -355,7 +357,6 @@ display:inline-block;}
 #guitarpick{
     cursor:pointer;
     clip-path:url(#guitarpick-boundary);
-
 }
 #guitarpick path{
     fill:#cccccc;

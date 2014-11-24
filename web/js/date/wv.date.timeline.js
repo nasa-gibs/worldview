@@ -241,7 +241,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         
         changeDate = undefined;
 
-        gpLocation = guitarPick.attr('transform').split('(')[1].split(',')[0];
+        gpLocation = parseFloat(guitarPick.attr('transform').split('(')[1].split(',')[0]);
 
     };
     var moveToPick = function(){
@@ -740,12 +740,11 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .data([{x: x(model.selected)-30, y:0}])
             .call(drag);
         
-        gpLocation = guitarPick.attr('transform').split('(')[1].split(',')[0];
-
+        gpLocation = parseFloat(guitarPick.attr('transform').split('(')[1].split(',')[0]);
         if ((gpLocation-30) >= (width-margin.left-margin.right)){
             $('#guitarpick').hide();
         }
-        else if((gpLocation) <= -30){
+        else if(gpLocation <= -30){
             $('#guitarpick').hide();
         }
         else{
@@ -1191,7 +1190,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
             guitarPick.attr("transform","translate("+(x(model.selected)-30)+",0)");
 
-            gpLocation = guitarPick.attr('transform').split('(')[1].split(',')[0];
+            gpLocation = parseFloat(guitarPick.attr('transform').split('(')[1].split(',')[0]);
 
             if ((gpLocation-30) >= (width-margin.left-margin.right)){
                 $('#guitarpick').hide();
@@ -1266,7 +1265,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var showHoverLabel = function(d){
         var tick = this.parentNode;
         var boundaryTick, boundaryTickWidth;
-        if(tick.classList.contains('tick-labeled')){ //TODO: Check comaptibility of classList.contains
+        if(d3.select(tick).classed('tick-labeled')){
             $boundaryTick = $(tick);
         }
         else{
@@ -1297,13 +1296,18 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .classed('bg-hover',false); //untrigger hover state
 
     };
-
+    var dragForward;
     var dragmove = function(d){  //FIXME: still moves slightly to the right or left when changing directions
         var halfPickWidth = pickWidth/2;
         var pickOffset = Math.max(-halfPickWidth,Math.min(width-halfPickWidth,d3.event.x));
         var pickTipDate = x.invert(pickOffset+halfPickWidth);
 
         if(d3.event.dx > 0){//moving right
+            if(dragForward===false)
+            {
+                dragforward = true;
+                changeDate = undefined;
+            }
             if((changeDate === undefined)){
                 forwardChangeDate(pickTipDate);
             }
@@ -1313,6 +1317,12 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             }
         }
         else if(d3.event.dx < 0){//moving left
+            if(dragForward)
+            {
+                dragforward = false;
+                changeDate = undefined;
+            }
+
             if((changeDate === undefined)){
                 backwardChangeDate(pickTipDate);
             }
@@ -1493,6 +1503,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .origin(function(d) { return d; })
             .on("dragstart",function(){
                 mousedown = true;
+                changeDate = undefined;
                 d3.event.sourceEvent.stopPropagation();
                 guitarPick.classed('pick-clicked',true);
             })
@@ -1530,7 +1541,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .attr("y","11");
 
 
-        gpLocation = guitarPick.attr('transform').split('(')[1].split(',')[0];
+        gpLocation = parseFloat(guitarPick.attr('transform').split('(')[1].split(',')[0]);
 
         //stop guitarpick if mouseup anywhere on document
         d3.select(document).on("mouseup",function(){
