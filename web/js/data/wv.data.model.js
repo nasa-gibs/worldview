@@ -283,12 +283,12 @@ wv.data.model = wv.data.model || function(models, config) {
 
     self.save = function(state) {
         if ( self.active ) {
-            state.dataDownload = self.selectedProduct;
+            state.download = self.selectedProduct;
         }
     };
 
     self.load = function(state, errors) {
-        var productId = state.dataDownload;
+        var productId = state.download;
         if ( productId ) {
             var found = _.find(models.layers.active, { product: productId });
             if ( !found ) {
