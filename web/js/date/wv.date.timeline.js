@@ -1303,35 +1303,34 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         var halfPickWidth = pickWidth/2;
         var pickOffset = Math.max(-halfPickWidth,Math.min(width-halfPickWidth,d3.event.x));
         var pickTipDate = x.invert(pickOffset+halfPickWidth);
-
+        console.log(dragForward);
         if(d3.event.dx > 0){//moving right
-            if(dragForward===false)
-            {
-                dragforward = true;
-                changeDate = undefined;
-            }
-            if((changeDate === undefined)){
+            if((dragForward===false) || (dragForward === undefined)){
+                console.log('right');
+                dragForward = true;
                 forwardChangeDate(pickTipDate);
             }
-            if((pickTipDate >= changeDate)){
+            else if ((pickTipDate >= changeDate)){
                 changePickDate.call(this,pickOffset,halfPickWidth);
                 forwardChangeDate(pickTipDate);
+                dragForward = true;
             }
+            console.log(dragForward + ' dragforward');
         }
+        
         else if(d3.event.dx < 0){//moving left
-            if(dragForward)
-            {
-                dragforward = false;
-                changeDate = undefined;
-            }
-
-            if((changeDate === undefined)){
+            if((dragForward===true) || (dragForward===undefined)){
+                console.log('left');
+                dragForward = false;
                 backwardChangeDate(pickTipDate);
             }
-            if((pickTipDate < changeDate)){
+            else if((pickTipDate < changeDate)){
                 changePickDate.call(this,pickOffset,halfPickWidth);
                 backwardChangeDate(pickTipDate);
+                dragForward = false;
+                
             }
+            console.log(dragForward + ' dragforward');
         }
     };
     var forwardChangeDate = function(pickTipDate){
@@ -1512,6 +1511,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .on("drag", dragmove)
             .on("dragend",function(){
                 mousedown = false;
+                dragForward = undefined;
                 guitarPick.classed('pick-clicked',false);
             });
 
