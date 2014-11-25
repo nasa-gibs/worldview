@@ -96,7 +96,8 @@ wv.ui.mouse.wheel = wv.ui.mouse.wheel || function($element, options) {
     var end = function() {
         timer = null;
         if ( !zoomed ) {
-            self.events.trigger("change", Math.sign(delta), lastEvent);
+            var sign = delta?delta<0?-1:1:0;
+            self.events.trigger("change", sign, lastEvent);
         }
         lastEvent = null;
         delta = 0;
