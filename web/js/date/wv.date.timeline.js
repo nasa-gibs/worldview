@@ -1674,7 +1674,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             $(this).parent().css("border-color", "");
 
             timer = setTimeout(function(){
-                if((selectedDate>dataLimits[0])&&(selectedDate<wv.util.today())){
+                if((selectedDate>=dataLimits[0])&&(selectedDate<=wv.util.today())){
                     model.select(selectedDate);
                 }
                 else{
@@ -1739,7 +1739,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 }
             $(this).parent().css("border-color", "");
             timer = setTimeout(function(){
-                if((selectedDate>dataLimits[0])&&(selectedDate<wv.util.today())){
+                if((selectedDate>=dataLimits[0])&&(selectedDate<=wv.util.today())){
                     model.select(selectedDate);
                 }
                 else{
