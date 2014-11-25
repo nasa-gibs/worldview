@@ -269,10 +269,11 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     };
 
     var resizeWindow = function() {
-        if ( self.enabled && wv.util.browser.constrained) {
+        var small = wv.util.browser.small || wv.util.browser.constrained;
+        if ( self.enabled && small ) {
             self.enabled = false;
             $("#timeline").hide();
-        } else if ( !self.enabled && !wv.util.browser.constrained ) {
+        } else if ( !self.enabled && !small ) {
             self.enabled = true;
             $("#timeline").show();
         }

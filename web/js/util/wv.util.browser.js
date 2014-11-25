@@ -92,7 +92,9 @@ wv.util.browser = wv.util.browser || (function() {
     self.localStorage = true;
     self.history = true;
     self.touchDevice = false;
-    self.mobileSize = 720;
+
+    self.mobileWidth = 720;
+    self.constrainedHeight = 320;
 
     var init = function() {
         var tests = self.tests;
@@ -115,7 +117,6 @@ wv.util.browser = wv.util.browser || (function() {
         var onResize = function() {
             self.small = tests.small();
             self.constrained = tests.constrained();
-            console.log("small", wv.util.browser.small, "constrained", self.constrained, $(window).width(), $(window).height());
         };
         $(window).on("resize", onResize);
         onResize();
@@ -198,11 +199,11 @@ wv.util.browser = wv.util.browser || (function() {
     };
 
     self.tests.small = function() {
-        return $(window).width() < self.mobileSize || $(window).height() < self.mobileSize;
+        return $(window).width() < self.mobileWidth;
     };
 
     self.tests.constrained = function() {
-        return $(window).width() < self.mobileSize || $(window).height() < self.mobileSize;
+        return $(window).height() < self.constrainedHeight;
     };
 
     self.tests.history = function() {

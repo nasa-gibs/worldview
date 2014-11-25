@@ -1,5 +1,4 @@
-/* @media only screen and (max-width: 720px) and (orientation: portrait), only screen and (max-height: 320px) and (orientation: landscape), only screen and (device-aspect-ratio: 2/3) and (orientation:portrait), only screen and (device-aspect-ratio:40/71) and (orientation:portrait){ */
-@media screen and (max-width: 720px), screen and (max-height: 720px) {
+@media only screen and (max-width: 720px) and (orientation: portrait), only screen and (max-height: 320px) and (orientation: landscape), only screen and (device-aspect-ratio: 2/3) and (orientation:portrait), only screen and (device-aspect-ratio:40/71) and (orientation:portrait){ 
     .products {
         display:block;
         float:left;

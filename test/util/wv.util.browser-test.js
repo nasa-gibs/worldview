@@ -120,14 +120,6 @@ buster.testCase("wv.util.browser", {
         buster.assert(wv.util.browser.tests.small());
     },
 
-    "Constrained device, width": function() {
-        this.stub(window, "$").returns({
-            width: this.stub().returns(600),
-            height: this.stub().returns(1000)
-        });
-        buster.assert(wv.util.browser.tests.constrained());
-    },
-
     "Constrained device, height": function() {
         this.stub(window, "$").returns({
             width: this.stub().returns(1000),

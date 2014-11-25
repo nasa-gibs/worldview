@@ -259,14 +259,11 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
     };
 
     var resize = function() {
-        console.log("check");
         if ( !mobile && wv.util.browser.small ) {
-            console.log("COLLAPSE");
             self.collapseNow();
             mobile = true;
 
         } else if ( mobile && !wv.util.browser.small ) {
-            console.log("EXPAND");
             self.expandNow();
             mobile = false;
         }
