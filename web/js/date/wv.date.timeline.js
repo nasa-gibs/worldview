@@ -165,24 +165,46 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         }
     };
     var hideInvalidTicks = function(){ //TODO: In progress
-        //console.log('hiding invalid ticks ' + normalTicks.data()[0]);
         if(tooSmall){
-            //console.log('tooSmall true');
             var ms = model.selected;
             var yos = parseInt(ms.getUTCFullYear() - Math.floor(ms.getUTCFullYear()/10)*10);
-            var nt = new Date(Math.floor(normalTicks.data()[0].getUTCFullYear()/10)*10+yos,ms.getUTCMonth(),ms.getUTCDate());
-            //console.log('nt = ' + nt);
+            var nt = new Date(Math.floor(boundaryTicks.data()[0].getUTCFullYear()/10)*10+yos,ms.getUTCMonth(),ms.getUTCDate());
+            
             switch(zoomLvl){
             case 0:
                 if(nt < normalTicks.data()[0]){
-                    d3.select(boundaryTicks[0][0]).selectAll('rect.').on('mouseenter',null);
-                    //console.log('delete click');
+                    d3.select(boundaryTicks[0][0]).selectAll('rect')
+                        .on('mouseenter',null)
+                        .on('mouseleave',null)
+                        .on('mousedown',null)
+                        .on('mouseup',null);
+                    d3.select(boundaryTicks[0][0])
+                        .classed('tick-labeled-disabled',true);
+
                 }
                 else{
-                    d3.select(boundaryTicks[0][0]).selectAll('rect');//.('visibility','');
+                    d3.select(boundaryTicks[0][0])
+                        .classed('tick-labeled-disabled',false);
+                     d3.select(boundaryTicks[0][0]).select('rect.boundarytick-foreground')
+                        .on('mouseenter',function(){
+                            d = d3.select(this).data()[0];
+                            hoverBoundaryTick.call(this,d);
+                        })
+                        .on('mouseleave',unHoverTick)
+                        .on('mousedown',function(){
+                            cancelClick = setTimeout(notClick,notClickDelay);
+                        })
+                        .on('mouseup',function(){
+                            clearTimeout(cancelClick);
+                            if(clicked){
+                                d = d3.select(this.parentNode).data()[0];
+                                clickBoundaryTick.call(this,d);
+                            }
+                            clicked = true;
+                        });
                 }
                 break;
-            case 1:
+            case 1://TODO: Finish other zoom levels
                 break;
             case 2:
                 break;
@@ -215,7 +237,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         else{
             decrementBtn.removeClass('button-disabled');
         }
-        //hideInvalidTicks(); TODO: Implement invalid ticks
+        hideInvalidTicks();
         /*
         var gpLocation = guitarPick.attr('transform').split('(')[1].split(',')[0];
 
@@ -1179,7 +1201,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         setData();
         //dataBar.attr('d',selection);
 
-
+        hideInvalidTicks();
 
         //UPDATE GUITARPICK
         if(guitarPick){
@@ -1189,6 +1211,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 .call(drag);
 
             changeDate = undefined;
+            dragForward = undefined;
 
             guitarPick.attr("transform","translate("+(x(model.selected)-30)+",0)");
 
@@ -1303,10 +1326,10 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         var halfPickWidth = pickWidth/2;
         var pickOffset = Math.max(-halfPickWidth,Math.min(width-halfPickWidth,d3.event.x));
         var pickTipDate = x.invert(pickOffset+halfPickWidth);
-        console.log(dragForward);
+        //console.log(dragForward);
         if(d3.event.dx > 0){//moving right
             if((dragForward===false) || (dragForward === undefined)){
-                console.log('right');
+                //console.log('right');
                 dragForward = true;
                 forwardChangeDate(pickTipDate);
             }
@@ -1315,12 +1338,13 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 forwardChangeDate(pickTipDate);
                 dragForward = true;
             }
-            console.log(dragForward + ' dragforward');
+            //console.log(changeDate.toUTCString());
+            //console.log(dragForward + ' dragforward');
         }
         
         else if(d3.event.dx < 0){//moving left
             if((dragForward===true) || (dragForward===undefined)){
-                console.log('left');
+                //console.log('left');
                 dragForward = false;
                 backwardChangeDate(pickTipDate);
             }
@@ -1330,7 +1354,8 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 dragForward = false;
                 
             }
-            console.log(dragForward + ' dragforward');
+            //console.log(changeDate.toUTCString());
+            //console.log(dragForward + ' dragforward');
         }
     };
     var forwardChangeDate = function(pickTipDate){
@@ -1512,6 +1537,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .on("dragend",function(){
                 mousedown = false;
                 dragForward = undefined;
+                changeDate = undefined;
                 guitarPick.classed('pick-clicked',false);
             });
 

@@ -52,6 +52,15 @@
     fill:#fff;
     fill-opacity:1;
 }
+.x.axis> g.tick.tick-labeled-disabled:hover rect.boundarytick-background{
+    fill-opacity:0;
+}
+.x.axis> g.tick.tick-labeled-disabled{
+    cursor:default;
+}
+.x.axis> g.tick.label-only text{
+    cursor:default;
+}
 
 .x.axis> g.tick rect.normaltick-background:hover{
     fill-opacity:0.3;
