@@ -320,13 +320,13 @@ wv.util = (function(self) {
         var year = date.getUTCFullYear();
         switch ( interval ) {
             case "day":
-                var day = self.roll(day + amount, min, max);
+                day = self.roll(day + amount, min, max);
                 break;
             case "month":
-                var month = self.roll(month + amount, min, max);
+                month = self.roll(month + amount, min, max);
                 break;
             case "year":
-                var year = self.roll(year + amount, min, max);
+                year = self.roll(year + amount, min, max);
                 break;
             default:
                 throw new Error("[rollDate] Invalid interval: " + interval);
