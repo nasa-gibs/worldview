@@ -109,6 +109,9 @@ $(function() {
             }
         };
         var ui = {};
+        // Export for debugging
+        wvx.models = models;
+        wvx.ui = ui;
 
         models.proj     = wv.proj.model(config);
         models.palettes = wv.palettes.model(models, config);
@@ -116,25 +119,26 @@ $(function() {
         models.date     = wv.date.model(config, { initial: initialDate });
         models.map      = wv.map.model(models, config);
         models.link     = wv.link.model(config);
-        // HACK: Map needs to be created before the data download model
-        ui.map = wv.map.ui(models, config);
-        if ( config.features.dataDownload ) {
-            models.data = wv.data.model(models, config);
-        }
-
-        // Export for debugging
-        wvx.models = models;
-
         models.link
             .register(models.proj)
             .register(models.layers)
             .register(models.date)
             .register(models.palettes)
             .register(models.map);
+        models.link.load(state);
+
+        // HACK: Map needs to be created before the data download model
+        ui.map = wv.map.ui(models, config);
+        if ( config.features.dataDownload ) {
+            models.data = wv.data.model(models, config);
+        }
         if ( config.features.dataDownload) {
             models.link.register(models.data);
         }
+        // HACK: Map needs permalink state loaded before starting. But
+        // data download now needs it too. 
         models.link.load(state);
+
         if ( config.features.arcticProjectionChange ) {
             models.proj.change = wv.proj.change(models, config);
         }
@@ -162,8 +166,6 @@ $(function() {
         ui.tour = wv.tour(models, ui, config);
         ui.info = wv.ui.info(ui, config);
 
-        // Export for debugging
-        wvx.ui = ui;
 
         $(window).resize(function() {
           if ($(window).width() < 720) {
