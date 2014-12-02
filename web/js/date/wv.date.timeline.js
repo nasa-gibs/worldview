@@ -21,6 +21,7 @@ wv.date = wv.date || {};
  * @class wv.date.timeline
  */
 wv.date.timeline = wv.date.timeline || function(models, config, ui) {
+    //TODO: Get rid of all of the terrible, shameless switch statements; clean and optimize file; and stop building on lazy code
 
     var id = "timeline";
     var selector = "#" + id;
@@ -30,8 +31,8 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var dataEndDate = new Date(new Date(wv.util.today()).setUTCDate(wv.util.today().getUTCDate()+1));
     var boundaryTicks,normalTicks,allTicks,allBoundaryTickForegrounds,offscreenBoundaryTickText, tooSmall;
     var x,xAxis,y,yAxis,zoom;
-    var zoomInterval,zoomStep,subInterval,subStep,zoomTimeFormat,zoomLvl,resizeDomain;
-    var timelineSVG,timeline,verticalAxis,guitarPick,pickWidth,drag,changeDate,dataBars,gpLocation;
+    var zoomInterval,zoomStep,subInterval,subStep,zoomTimeFormat,zoomLvl;
+    var timelineSVG,timeline,verticalAxis,guitarPick,pickWidth,drag,dataBars,gpLocation,halfPickWidth,pickOffset,pickTipDate,prevChange,nextChange;
     var activeLayers,activeLayersDynamic,activeLayersInvisible,layerCount,activeLayersTitles;
     var timer, rollingDate;
     var mousedown = false;
@@ -68,7 +69,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     };
 
     var dataLimits = [dataStartDate, dataEndDate]; //FIXME: used date constructor with a string
-
 
     var self = {};
     self.enabled = false;
@@ -164,7 +164,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             verticalAxis.call(yAxis);
         }
     };
-    var hideInvalidTicks = function(){ //TODO: In progress
+    var hideInvalidTicks = function(){ //FIXME: Forward invalids arent working
         if(tooSmall){
             var ms = model.selected;
             var yos = parseInt(ms.getUTCFullYear() - Math.floor(ms.getUTCFullYear()/10)*10);
@@ -238,32 +238,21 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             decrementBtn.removeClass('button-disabled');
         }
         hideInvalidTicks();
-        /*
-        var gpLocation = guitarPick.attr('transform').split('(')[1].split(',')[0];
 
-        if ((gpLocation-30) >= (width-margin.left-margin.right)){
-            $('#guitarpick').hide();
-        }
-        else if((gpLocation) <= -30){
-            $('#guitarpick').hide();
-        }
-        else{
-            $('#guitarpick').show();
-            }*/
-//        if($('#guitarpick').is(':hidden')){
-
-//        }
         if(mousedown===false){
-            guitarPick.attr("transform","translate("+(x(model.selected)-30)+",0)");
+            pickOffset = x(model.selected)-halfPickWidth;
+
         }
+        guitarPick.attr("transform","translate("+(pickOffset)+",0)");
 
         guitarPick
-            .data([{x: x(model.selected)-30, y:0}])
+            .data([{x: pickOffset, y:0}])
             .call(drag);
 
-        changeDate = undefined;
+        prevChange = undefined;
+        nextChange = undefined;
 
-        gpLocation = parseFloat(guitarPick.attr('transform').split('(')[1].split(',')[0]);
+        gpLocation = parseFloat(guitarPick.attr('transform').split('(')[1].split(',')[0]); //FIXME: Replace with pickOffset;
 
     };
     var moveToPick = function(){
@@ -403,7 +392,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             fBoundTxt = monthNames[fBoundData.getUTCMonth()];
             break;
         case 3:
-            fBoundData =  new Date(Date.UTC(fNormData.getUTCFullYear(),fNormData.getUTCMonth(),fNormData.getUTCDate()-fNormData.getUTCDay())); //FIXME
+            fBoundData =  new Date(Date.UTC(fNormData.getUTCFullYear(),fNormData.getUTCMonth(),fNormData.getUTCDate()-fNormData.getUTCDay()));
             fBoundTxt = fBoundData.getUTCDate();
             break;
         }
@@ -693,7 +682,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                     var currentTick = d3.select(this);
                     var currentTickData = currentTick.data()[0];
                     if (currentTickData.getUTCDay() === 0){
-                        //console.log(currentTick);
                         currentTick
                             .insert('line','rect')
                             .attr('y1',0)
@@ -745,25 +733,19 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                     clickBoundaryTick.call(this,d);
                 }
                 clicked = true;
-            })
-            /*.on('click',function(){
-                d = d3.select(this.parentNode).data()[0]; //get Data from parent node (which is a tick)
-                clickBoundaryTick.call(this,d);
-            })*/;
-
-        //dataBar.attr('d',selection);
+            });
 
         setData();
 
         //UPDATE GUITARPICK
-
-        guitarPick.attr("transform","translate("+(x(model.selected)-30)+",0)");
+        pickOffset = x(model.selected)-30;
+        guitarPick.attr("transform","translate("+(pickOffset)+",0)");
 
         guitarPick
-            .data([{x: x(model.selected)-30, y:0}])
+            .data([{x: pickOffset, y:0}])
             .call(drag);
 
-        gpLocation = parseFloat(guitarPick.attr('transform').split('(')[1].split(',')[0]);
+        gpLocation = parseFloat(guitarPick.attr('transform').split('(')[1].split(',')[0]); //FIXME: Replace with pickOffset
 
         if ((gpLocation-30) >= (width-margin.left-margin.right)){
             $('#guitarpick').hide();
@@ -1128,7 +1110,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             var normalTickData = normalTick.data()[0];
             var nextNormalTickData = getNextNormalTickData(normalTickData);
             //var normalTickLine = normalTick.select('line');
-            //console.log(normalTickLine);
+
             normalTickWidth = x(nextNormalTickData) - x(normalTickData) + 1; //FIXME: Calculate actual width of tick line
 
             normalTick.append("svg:rect")
@@ -1146,7 +1128,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 var currentTick = d3.select(this);
                 var currentTickData = currentTick.data()[0];
                 if (currentTickData.getUTCDay() === 0){
-                    //console.log(currentTick);
                     currentTick
                         .insert('line','rect')
                         .attr('y1',0)
@@ -1205,17 +1186,18 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
         //UPDATE GUITARPICK
         if(guitarPick){
-//            drag.origin(function(d) { return d; });
+            //            drag.origin(function(d) { return d; });
+            pickOffset = x(model.selected)-halfPickWidth;
             guitarPick
-                .data([{x: x(model.selected)-30, y:0}])
+                .data([{x: pickOffset, y:0}])
                 .call(drag);
 
-            changeDate = undefined;
-            dragForward = undefined;
+            prevChange = undefined;
+            nextChange = undefined;
 
-            guitarPick.attr("transform","translate("+(x(model.selected)-30)+",0)");
+            guitarPick.attr("transform","translate("+(pickOffset)+",0)");
 
-            gpLocation = parseFloat(guitarPick.attr('transform').split('(')[1].split(',')[0]);
+            gpLocation = parseFloat(guitarPick.attr('transform').split('(')[1].split(',')[0]); //FIXME: Replace with pickOffset
 
             if ((gpLocation-30) >= (width-margin.left-margin.right)){
                 $('#guitarpick').hide();
@@ -1321,94 +1303,60 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .classed('bg-hover',false); //untrigger hover state
 
     };
-    var dragForward;
-    var dragmove = function(d){  //FIXME: still moves slightly to the right or left when changing directions
-        var halfPickWidth = pickWidth/2;
-        var pickOffset = Math.max(-halfPickWidth,Math.min(width-halfPickWidth,d3.event.x));
-        var pickTipDate = x.invert(pickOffset+halfPickWidth);
-        //console.log(dragForward);
-        if(d3.event.dx > 0){//moving right
-            if((dragForward===false) || (dragForward === undefined)){
-                //console.log('right');
-                dragForward = true;
-                forwardChangeDate(pickTipDate);
-            }
-            else if ((pickTipDate >= changeDate)){
-                changePickDate.call(this,pickOffset,halfPickWidth);
-                forwardChangeDate(pickTipDate);
-                dragForward = true;
-            }
-            //console.log(changeDate.toUTCString());
-            //console.log(dragForward + ' dragforward');
-        }
-
-        else if(d3.event.dx < 0){//moving left
-            if((dragForward===true) || (dragForward===undefined)){
-                //console.log('left');
-                dragForward = false;
-                backwardChangeDate(pickTipDate);
-            }
-            else if((pickTipDate < changeDate)){
-                changePickDate.call(this,pickOffset,halfPickWidth);
-                backwardChangeDate(pickTipDate);
-                dragForward = false;
-
-            }
-            //console.log(changeDate.toUTCString());
-            //console.log(dragForward + ' dragforward');
-        }
-    };
-    var forwardChangeDate = function(pickTipDate){
-        var midnightDate,testDate;
+    var setPickChangeEnds = function(tempPickOffset,tempPickTipDate){
         switch(zoomLvl){
         case 0:
-            midnightDate = new Date(Date.UTC(pickTipDate.getUTCFullYear(),model.selected.getUTCMonth(),model.selected.getUTCDate()));
-            testDate = new Date(midnightDate.setUTCFullYear(midnightDate.getUTCFullYear()+1));
+            prevChange = new Date(Date.UTC(tempPickTipDate.getUTCFullYear(),model.selected.getUTCMonth(),model.selected.getUTCDate()));
+            nextChange = new Date(Date.UTC(tempPickTipDate.getUTCFullYear()+1,model.selected.getUTCMonth(),model.selected.getUTCDate()));
             break;
         case 1:
-            midnightDate = new Date(Date.UTC(pickTipDate.getUTCFullYear(),pickTipDate.getUTCMonth(),model.selected.getUTCDate()));
-            testDate = new Date(midnightDate.setUTCMonth(midnightDate.getUTCMonth()+1));
+            prevChange = new Date(Date.UTC(tempPickTipDate.getUTCFullYear(),tempPickTipDate.getUTCMonth(),model.selected.getUTCDate()));
+            nextChange = new Date(Date.UTC(tempPickTipDate.getUTCFullYear(),tempPickTipDate.getUTCMonth()+1,model.selected.getUTCDate()));
             break;
         case 2:
-            midnightDate = new Date(Date.UTC(pickTipDate.getUTCFullYear(),pickTipDate.getUTCMonth(),pickTipDate.getUTCDate()));
-            testDate = new Date(midnightDate.setUTCDate(midnightDate.getUTCDate()+1));
+            prevChange = new Date(Date.UTC(tempPickTipDate.getUTCFullYear(),tempPickTipDate.getUTCMonth(),tempPickTipDate.getUTCDate()));
+            nextChange = new Date(Date.UTC(tempPickTipDate.getUTCFullYear(),tempPickTipDate.getUTCMonth(),tempPickTipDate.getUTCDate()+1));
             break;
-        }
-        if(testDate < dataLimits[1]){
-            changeDate = testDate;
-        }
-        else{
-            changeDate = dataLimits[1];
         }
     };
-    var backwardChangeDate = function(pickTipDate){
-        var testDate;
-        switch(zoomLvl){
-        case 0:
-            testDate = new Date(Date.UTC(pickTipDate.getUTCFullYear(),model.selected.getUTCMonth(),model.selected.getUTCDate()));
-            break;
-        case 1:
-            testDate = new Date(Date.UTC(pickTipDate.getUTCFullYear(),pickTipDate.getUTCMonth(),model.selected.getUTCDate()));
-            break;
-        case 2:
-            testDate = new Date(Date.UTC(pickTipDate.getUTCFullYear(),pickTipDate.getUTCMonth(),pickTipDate.getUTCDate()));
-            break;
-        }
-        if(testDate >= dataLimits[0]){
-            changeDate = testDate;
-        }
-        else{
-            changeDate = dataLimits[0];
-        }
+    var dragmove = function(d){
 
+        var tempPickOffset = Math.max(-halfPickWidth,Math.min(width-halfPickWidth,d3.event.x));
+        var tempPickTipOffset = tempPickOffset+halfPickWidth;
+        var tempPickTipDate = x.invert(tempPickTipOffset);
+
+        if(d3.event.dx > 0){
+            if(nextChange===undefined){
+                setPickChangeEnds(tempPickOffset,tempPickTipDate);
+            }
+            else if(tempPickTipDate >= nextChange){
+                pickOffset = x(nextChange)-halfPickWidth;
+                pickTipDate = nextChange;
+                changePickDate.call(this);
+                setPickChangeEnds(tempPickOffset,tempPickTipDate);
+            }
+        }
+        else if(d3.event.dx < 0){
+            if(prevChange===undefined){
+                setPickChangeEnds(tempPickOffset,tempPickTipDate);
+            }
+            else if(tempPickTipDate <= prevChange){
+                pickOffset = x(prevChange)-halfPickWidth;
+                pickTipDate = prevChange;
+                changePickDate.call(this);
+                setPickChangeEnds(tempPickOffset,tempPickTipDate);
+            }
+        }
     };
-    var changePickDate = function(pickOffset,halfPickWidth){
-        var newDate = changeDate;
+    var changePickDate = function(){
+        var newDate = pickTipDate;
 
         d3.select(this)
-            .attr("transform", 'translate('+(x(changeDate)-halfPickWidth)+','+ 0 +')');
-        //        console.log(changeDate.getUTCFullYear());
+            .attr("transform", 'translate('+pickOffset+','+ 0 +')');
 
+        guitarPick
+            .data([{x: pickOffset, y:0}])
+            .call(drag);
 
         model.select(newDate);
 
@@ -1430,7 +1378,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
         unHoverTick();
         hoverNormalTick.call(hoveredNormalTickBackground,d);
-
     };
     var init = function() {
 
@@ -1524,30 +1471,31 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         verticalAxis.selectAll("text").remove();
 
         pickWidth = 60;
+        halfPickWidth = pickWidth/2;
 
         drag = d3.behavior.drag()
             .origin(function(d) { return d; })
             .on("dragstart",function(){
                 mousedown = true;
-                changeDate = undefined;
                 d3.event.sourceEvent.stopPropagation();
                 guitarPick.classed('pick-clicked',true);
             })
             .on("drag", dragmove)
             .on("dragend",function(){
                 mousedown = false;
-                dragForward = undefined;
-                changeDate = undefined;
+                prevChange = undefined;
+                nextChange = undefined;
                 guitarPick.classed('pick-clicked',false);
             });
 
+        pickOffset = x(model.selected)-halfPickWidth;
         //Add guitar pick
         guitarPick = d3.select("#timeline-footer svg")
             .append("svg:g")
-            .data([{x: x(model.selected)-30, y:0}])
+            .data([{x: pickOffset, y:0}])
             .attr("id","guitarpick")
             .attr("style","clip-path:url(#guitarpick-boundary);")
-            .attr("transform","translate(" + (x(model.selected)-30) + ",0)")
+            .attr("transform","translate(" + (pickOffset) + ",0)")
             .call(drag);
 
         guitarPick.append("svg:path")
@@ -1569,7 +1517,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .attr("y","11");
 
 
-        gpLocation = parseFloat(guitarPick.attr('transform').split('(')[1].split(',')[0]);
+        gpLocation = parseFloat(guitarPick.attr('transform').split('(')[1].split(',')[0]); //FIXME: Replace with pickOffset
 
         //stop guitarpick if mouseup anywhere on document
         d3.select(document).on("mouseup",function(){
