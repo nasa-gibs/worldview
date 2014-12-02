@@ -533,8 +533,8 @@ wv.data.ui.downloadListPanel = function(config, model) {
 
         $dialog.dialog("open");
 
-        $("#wv-data-selection a.wget").click(showWgetPage);
-        $("#wv-data-selection a.curl").click(showCurlPage);
+        $("a.wget").click(showWgetPage);
+        $("a.curl").click(showCurlPage);
 
         $dialog.find(".collapse").accordion({
             collapsible: true,
