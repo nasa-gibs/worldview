@@ -30,17 +30,7 @@ wv.date.model = wv.date.model || function(config, spec) {
     };
 
     self.select = function(date) {
-        date = wv.util.clearTimeUTC(date);
-        if ( date > wv.util.today() ) {
-            date = wv.util.today();
-        }
-        if ( config.startDate ) {
-            startDate = wv.util.parseDateUTC(config.startDate);
-            if ( date < startDate ) {
-                date = startDate;
-            }
-        }
-
+        date = self.clamp(wv.util.clearTimeUTC(date));
         var updated = false;
         if ( !self.selected || date.getTime() !== self.selected.getTime() ) {
             self.selected = date;
@@ -54,6 +44,43 @@ wv.date.model = wv.date.model || function(config, spec) {
         self.select(wv.util.dateAdd(self.selected, interval, amount));
     };
 
+    self.clamp = function(date) {
+        if ( date > wv.util.today() ) {
+            date = wv.util.today();
+        }
+        if ( config.startDate ) {
+            startDate = wv.util.parseDateUTC(config.startDate);
+            if ( date < startDate ) {
+                date = startDate;
+            }
+        }
+        return date;
+    };
+
+    self.isValid = function(date) {
+        if ( date > wv.util.today() ) {
+            return false;
+        }
+        if ( config.startDate ) {
+            startDate = wv.util.parseDateUTC(config.startDate);
+            if ( date < startDate ) {
+                return false;
+            }
+        }
+        return true;
+    };
+
+    self.minDate = function() {
+        if ( config.startDate ) {
+            return wv.util.parseDateUTC(config.startDate);
+        }
+        return wv.util.minDate();
+    };
+
+    self.maxDate = function() {
+        return wv.util.today();
+    };
+    
     self.save = function(state) {
         state.t = self.selected.toISOString().split("T")[0];
     };

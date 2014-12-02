@@ -33,7 +33,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var zoomInterval,zoomStep,subInterval,subStep,zoomTimeFormat,zoomLvl,resizeDomain;
     var timelineSVG,timeline,verticalAxis,guitarPick,pickWidth,drag,changeDate,dataBars,gpLocation;
     var activeLayers,activeLayersDynamic,activeLayersInvisible,layerCount,activeLayersTitles;
-    var timer;
+    var timer, rollingDate;
     var mousedown = false;
     var margin = {
         top: 0,
@@ -1651,130 +1651,15 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             $buttons.parent().removeClass('selected');
         });
         var $incrementIntDate = $('.date-arrow-up');
+        $incrementIntDate.click(roll);
         var $decrementIntDate = $('.date-arrow-down');
-        $incrementIntDate.click(function(e){
-            if(timer){
-                clearTimeout(timer);
-                daysInMonth = (new Date(selectedDate.getUTCFullYear(),selectedDate.getUTCMonth()+1,0)).getUTCDate();
-            }
-            else{
-                selectedDate = new Date(model.selected);
-                daysInMonth = (new Date(model.selected.getUTCFullYear(),model.selected.getUTCMonth()+1,0)).getUTCDate();
-            }
-            var $interval = $(this).siblings('.button-input-group').attr('id').replace("-input-group", "");
-            var $dateVal = $(this).siblings('input.button-input-group');
-
-            switch($interval){
-                case 'day':
-                var numberDate;
-                if(parseInt($dateVal.val())<daysInMonth){
-                    numberDate = parseInt(selectedDate.getUTCDate())+1;
-                }
-                else{
-                    numberDate = 1;
-                }
-                if (numberDate>9){
-                    $dateVal.val(numberDate);
-                }
-                else{
-                    $dateVal.val("0" + numberDate);
-                }
-                selectedDate.setUTCDate(numberDate);
-                break;
-                case 'month':
-                var monthDate;
-                if (monthNumber($dateVal.val())+1<monthNames.length){
-                    monthDate = parseInt(selectedDate.getUTCMonth())+1;
-                }
-                else{
-                    monthDate = 0;
-                }
-                $dateVal.val(monthNames[monthDate]);
-                selectedDate.setUTCMonth(monthDate);
-                break;
-                case 'year':
-                $dateVal.val(parseInt(selectedDate.getUTCFullYear())+1);
-                selectedDate.setUTCFullYear($dateVal.val());
-                break;
-            }
-            $(this).parent().css("border-color", "");
-
-            timer = setTimeout(function(){
-                if((selectedDate>=dataLimits[0])&&(selectedDate<=wv.util.today())){
-                    model.select(selectedDate);
-                }
-                else{
-                    updateTime();
-                }
-                timer = null;
-            },400);
-            //$(this).siblings('.button-input-group').focus();
-        });
+        $decrementIntDate.click(roll);
 
         //select all input on focus
         $('input').focus(function(e){
             $(this).select();
         }).mouseup(function(e){
             e.preventDefault();
-        });
-
-        $decrementIntDate.click(function(e){
-            if(timer){
-                clearTimeout(timer);
-                daysInMonth = (new Date(selectedDate.getUTCFullYear(),selectedDate.getUTCMonth()+1,0)).getUTCDate();
-            }
-            else{
-                selectedDate = new Date(model.selected);
-                daysInMonth = (new Date(model.selected.getUTCFullYear(),model.selected.getUTCMonth()+1,0)).getUTCDate();
-            }
-            var $interval = $(this).siblings('.button-input-group').attr('id').replace("-input-group", "");
-            var $dateVal = $(this).siblings('input.button-input-group');
-
-                switch($interval){
-                case 'day':
-                    var numberDate;
-                    if($dateVal.val()>1){
-                        numberDate = parseInt(selectedDate.getUTCDate())-1;
-                    }
-                    else{
-                        numberDate = daysInMonth;
-                    }
-                    if(numberDate>9){
-                        $dateVal.val(numberDate);
-                    }
-                    else{
-                        $dateVal.val("0" + numberDate);
-                    }
-                    selectedDate.setUTCDate(numberDate);
-                    break;
-                case 'month':
-                    var monthDate;
-                    if (monthNumber($dateVal.val())>0){
-                        monthDate = parseInt(selectedDate.getUTCMonth())-1;
-                    }
-                    else{
-                        monthDate = 11;
-                    }
-                    $dateVal.val(monthNames[monthDate]);
-                    selectedDate.setUTCMonth(monthDate);
-                    break;
-                case 'year':
-                    $dateVal.val(parseInt(selectedDate.getUTCFullYear())-1);
-                    selectedDate.setUTCFullYear($dateVal.val());
-                    break;
-                }
-            $(this).parent().css("border-color", "");
-            timer = setTimeout(function(){
-                if((selectedDate>=dataLimits[0])&&(selectedDate<=wv.util.today())){
-                    model.select(selectedDate);
-                }
-                else{
-                    updateTime();
-                }
-                timer = null;
-            },400);
-
-            //$(this).siblings('.button-input-group').focus();
         });
 
         var validateInput = function(event) {
@@ -1982,6 +1867,38 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var onPan = function(event) {
         if ( !(tooSmall) ) { //pan by mousedown and drag
             panAxis();
+        }
+    };
+
+    var updateDateInputs = function(date) {
+        date = date || models.selected.date;
+        $("#year-input-group").val(date.getUTCFullYear());
+        $("#month-input-group").val(monthNames[date.getUTCMonth()]);
+        var day = date.getUTCDate();
+        $("#day-input-group").val(wv.util.pad(date.getUTCDate(), 2, "0"));
+    };
+
+    var roll = function() {
+        if ( timer ) {
+            clearTimeout(timer);
+            timer = null;
+        }
+        var interval = $(this).attr("data-interval");
+        var amount = _.parseInt($(this).attr("data-value"));
+        var date = rollingDate || models.date.selected;
+        var min = models.date.minDate();
+        var max = models.date.maxDate();
+        var newDate = wv.util.rollDate(date, interval, amount, min, max);
+
+        if ( newDate !== date ) {
+            rollingDate = newDate;
+            $(this).parent().css("border-color", "");
+            updateDateInputs(rollingDate);
+            timer = setTimeout(function() {
+                model.select(rollingDate);
+                rollingDate = null;
+                timer = null;
+            }, 400);
         }
     };
 
