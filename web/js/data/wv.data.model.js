@@ -99,7 +99,7 @@ wv.data.model = wv.data.model || function(models, config) {
 
     var init = function() {
         models.layers.events.on("change", updateLayers);
-        models.proj.events.on("select", updateProjectionInfo);
+        models.proj.events.on("select", updateProjection);
         models.date.events.on("select", updateDate);
         updateLayers();
         updateProjection();
