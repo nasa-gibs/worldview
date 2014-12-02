@@ -113,7 +113,7 @@ $(function() {
         models.proj     = wv.proj.model(config);
         models.palettes = wv.palettes.model(models, config);
         models.layers   = wv.layers.model(models, config);
-        models.date     = wv.date.model({ initial: initialDate });
+        models.date     = wv.date.model(config, { initial: initialDate });
         models.map      = wv.map.model(models, config);
         models.link     = wv.link.model(config);
         // HACK: Map needs to be created before the data download model

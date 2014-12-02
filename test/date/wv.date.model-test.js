@@ -29,7 +29,7 @@ buster.testCase("wv.date.model", function() {
 
     self["Initializes with a specified date"] = function() {
         var initial = new Date(Date.UTC(2013, 0, 5));
-        var date = wv.date.model({ initial: initial });
+        var date = wv.date.model(config, { initial: initial });
         buster.assert.equals(date.selected, initial);
     };
 
