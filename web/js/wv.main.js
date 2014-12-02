@@ -108,16 +108,19 @@ $(function() {
                 events: wv.util.events()
             }
         };
+        var ui = {};
 
         models.proj     = wv.proj.model(config);
         models.palettes = wv.palettes.model(models, config);
         models.layers   = wv.layers.model(models, config);
-        models.date     = wv.date.model({ initial: initialDate });
+        models.date     = wv.date.model(config, { initial: initialDate });
+        models.map      = wv.map.model(models, config);
+        models.link     = wv.link.model(config);
+        // HACK: Map needs to be created before the data download model
+        ui.map = wv.map.ui(models, config);
         if ( config.features.dataDownload ) {
             models.data = wv.data.model(models, config);
         }
-        models.map      = wv.map.model(models, config);
-        models.link     = wv.link.model(config);
 
         // Export for debugging
         wvx.models = models;
@@ -138,9 +141,6 @@ $(function() {
 
         elapsed("ui");
         // Create widgets
-        var ui = {};
-
-        ui.map = wv.map.ui(models, config);
         ui.anim = wv.date.anim(models.date, ui.map, {
             debug: parameters.debug === "anim"
         });

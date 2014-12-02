@@ -234,6 +234,46 @@ wv.util = (function(self) {
         return newDate;
     };
 
+    self.daysInMonth = function(d) {
+        var y = d.getUTCFullYear();
+        var m = d.getUTCMonth();
+        var lastDay = new Date(Date.UTC(y, m + 1, 0));
+        return lastDay.getUTCDate();
+    };
+
+    self.roll = function(val, min, max) {
+        if ( val < min ) { return max - (min - val) + 1; }
+        if ( val > max ) { return min + (val - max) - 1; }
+        return val;
+    };
+
+
+    self.rollDate = function(date, interval, amount) {
+        var newDate = new Date(date.getTime());
+        var min, max;
+        switch ( interval ) {
+            case "day":
+                min = 1;
+                max = self.daysInMonth(date);
+                var day = self.roll(date.getUTCDate() + amount, min, max);
+                newDate.setUTCDate(day);
+                break;
+            case "month":
+                min = 0;
+                max = 11;
+                var month = self.roll(date.getUTCMonth() + amount, min, max);
+                newDate.setUTCMonth(month);
+                break;
+            case "year":
+                var year = date.getUTCFullYear() + amount;
+                newDate.setUTCFullYear(year);
+                break;
+            default:
+                throw new Error("[rollDate] Invalid interval: " + interval);
+        }
+        return newDate;
+    };
+
     /**
      * Converts a date into a compact string representation.
      *

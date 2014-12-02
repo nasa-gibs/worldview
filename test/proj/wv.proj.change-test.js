@@ -41,7 +41,7 @@ buster.testCase("wv.proj.change", {
         };
         this.replace = this.stub();
         this.models = {
-            date: wv.date.model(),
+            date: wv.date.model(this.config),
             proj: wv.proj.model(this.config),
             layers: { replace: this.replace }
         };

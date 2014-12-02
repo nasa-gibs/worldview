@@ -12,7 +12,7 @@
 var wv = wv || {};
 wv.date = wv.date || {};
 
-wv.date.model = wv.date.model || function(spec) {
+wv.date.model = wv.date.model || function(config, spec) {
 
     spec = spec || {};
 
@@ -33,6 +33,12 @@ wv.date.model = wv.date.model || function(spec) {
         date = wv.util.clearTimeUTC(date);
         if ( date > wv.util.today() ) {
             date = wv.util.today();
+        }
+        if ( config.startDate ) {
+            startDate = wv.util.parseDateUTC(config.startDate);
+            if ( date < startDate ) {
+                date = startDate;
+            }
         }
 
         var updated = false;
