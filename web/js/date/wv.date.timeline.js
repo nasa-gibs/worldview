@@ -169,7 +169,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             var ms = model.selected;
             var yos = parseInt(ms.getUTCFullYear() - Math.floor(ms.getUTCFullYear()/10)*10);
             var nt = new Date(Math.floor(boundaryTicks.data()[0].getUTCFullYear()/10)*10+yos,ms.getUTCMonth(),ms.getUTCDate());
-            
+
             switch(zoomLvl){
             case 0:
                 if(nt < normalTicks.data()[0]){
@@ -1341,7 +1341,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             //console.log(changeDate.toUTCString());
             //console.log(dragForward + ' dragforward');
         }
-        
+
         else if(d3.event.dx < 0){//moving left
             if((dragForward===true) || (dragForward===undefined)){
                 //console.log('left');
@@ -1352,7 +1352,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 changePickDate.call(this,pickOffset,halfPickWidth);
                 backwardChangeDate(pickTipDate);
                 dragForward = false;
-                
+
             }
             //console.log(changeDate.toUTCString());
             //console.log(dragForward + ' dragforward');

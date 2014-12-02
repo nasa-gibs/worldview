@@ -175,6 +175,88 @@ buster.testCase("wv.util", function() {
         });
     };
 
+    self["daysInMonth: Feb, non-leap"] = function() {
+        var d = new Date(2015, 01, 15);
+        buster.assert.equals(wv.util.daysInMonth(d), 28);
+    };
+
+    self["daysInMonth: Feb, leap"] = function() {
+        var d = new Date(2016, 01, 15);
+        buster.assert.equals(wv.util.daysInMonth(d), 29);
+    };
+
+    self["roll: middle"] = function() {
+        buster.assert.equals(wv.util.roll(15, 10, 20), 15);
+    };
+
+    self["roll: min"] = function() {
+        buster.assert.equals(wv.util.roll(8, 10, 20), 19);
+    };
+
+    self["roll: max"] = function() {
+        buster.assert.equals(wv.util.roll(22, 10, 20), 11);
+    };
+
+    self["rollDate: Day up"] = function() {
+        var d = new Date(Date.UTC(2014, 01, 15));
+        d = wv.util.rollDate(d, "day", 1);
+        buster.assert.equals(d, new Date(Date.UTC(2014, 01, 16)));
+    };
+
+    self["rollDate: Day up, roll"] = function() {
+        var d = new Date(Date.UTC(2014, 01, 28));
+        d = wv.util.rollDate(d, "day", 1);
+        buster.assert.equals(d, new Date(Date.UTC(2014, 01, 01)));
+    };
+
+    self["rollDate: Day down"] = function() {
+        var d = new Date(Date.UTC(2014, 01, 15));
+        d = wv.util.rollDate(d, "day", -1);
+        buster.assert.equals(d, new Date(Date.UTC(2014, 01, 14)));
+    };
+
+    self["rollDate: Day down, roll"] = function() {
+        var d = new Date(Date.UTC(2014, 01, 01));
+        d = wv.util.rollDate(d, "day", -1);
+        buster.assert.equals(d, new Date(Date.UTC(2014, 01, 28)));
+    };
+
+    self["rollDate: Month up"] = function() {
+        var d = new Date(Date.UTC(2014, 05, 15));
+        d = wv.util.rollDate(d, "month", 1);
+        buster.assert.equals(d, new Date(Date.UTC(2014, 06, 15)));
+    };
+
+    self["rollDate: Month up, roll"] = function() {
+        var d = new Date(Date.UTC(2014, 11, 15));
+        d = wv.util.rollDate(d, "month", 1);
+        buster.assert.equals(d, new Date(Date.UTC(2014, 0, 15)));
+    };
+
+    self["rollDate: Month down"] = function() {
+        var d = new Date(Date.UTC(2014, 05, 15));
+        d = wv.util.rollDate(d, "month", -1);
+        buster.assert.equals(d, new Date(Date.UTC(2014, 04, 15)));
+    };
+
+    self["rollDate: Month down, roll"] = function() {
+        var d = new Date(Date.UTC(2014, 0, 15));
+        d = wv.util.rollDate(d, "month", -1);
+        buster.assert.equals(d, new Date(Date.UTC(2014, 11, 15)));
+    };
+
+    self["rollDate: Year up"] = function() {
+        var d = new Date(Date.UTC(2014, 05, 15));
+        d = wv.util.rollDate(d, "year", 1);
+        buster.assert.equals(d, new Date(Date.UTC(2015, 05, 15)));
+    };
+
+    self["rollDate: Year down"] = function() {
+        var d = new Date(Date.UTC(2014, 05, 15));
+        d = wv.util.rollDate(d, "year", -1);
+        buster.assert.equals(d, new Date(Date.UTC(2013, 05, 15)));
+    };
+
     return self;
 
 }());
