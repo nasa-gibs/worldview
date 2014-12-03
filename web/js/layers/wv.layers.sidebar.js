@@ -262,7 +262,6 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
         if ( !mobile && wv.util.browser.small ) {
             self.collapseNow();
             mobile = true;
-
         } else if ( mobile && !wv.util.browser.small ) {
             self.expandNow();
             mobile = false;

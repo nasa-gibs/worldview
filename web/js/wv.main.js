@@ -136,7 +136,7 @@ $(function() {
             models.link.register(models.data);
         }
         // HACK: Map needs permalink state loaded before starting. But
-        // data download now needs it too. 
+        // data download now needs it too.
         models.link.load(state);
 
         if ( config.features.arcticProjectionChange ) {
