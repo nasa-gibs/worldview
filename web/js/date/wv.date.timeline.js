@@ -1842,8 +1842,11 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             rollingDate = newDate;
             $(this).parent().css("border-color", "");
             updateDateInputs(rollingDate);
+            $(this).parent().find('input').select();
+            var that = this;
             timer = setTimeout(function() {
                 model.select(rollingDate);
+                $(that).parent().find('input').select();
                 rollingDate = null;
                 timer = null;
             }, 400);
