@@ -119,7 +119,9 @@ wv.util.browser = wv.util.browser || (function() {
             self.constrained = tests.constrained();
         };
         $(window).on("resize", onResize);
-        onResize();
+        $(function() {
+            onResize();
+        });
     };
 
     // The following functions should not be used directly. Use the values
@@ -213,9 +215,7 @@ wv.util.browser = wv.util.browser || (function() {
         return false;
     };
 
-    $(function() {
-        init();
-    });
+    init();
     return self;
 
 })();
