@@ -190,11 +190,14 @@ g.plot rect.data-bar-invisible{
     fill: #fff;
 }
 #timeline-header div{
-display:inline-block;}
-.button-action-group{
+    display:inline-block;
+}
+.button-action-group,.date-arrows{
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
+}
+.button-action-group{
   height:60px;
   width:40px;
   vertical-align:middle;
