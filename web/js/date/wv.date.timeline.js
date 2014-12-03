@@ -1671,6 +1671,14 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                     if ( event.type !== "focusout" ) {
                         selected.select();
                     } else {
+                        if (document.selection)
+                        {
+                            document.selection.empty();
+                        }
+                        else
+                        {
+                            window.getSelection().removeAllRanges();
+                        }
                         selected.parent().animate({
                             borderColor: "rgba(40, 40, 40, .9)"
                         }, {
@@ -1679,7 +1687,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                             }
                         });
                         updateTime();
-                        selected.select();
                     }
                 }
             }
