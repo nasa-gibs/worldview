@@ -158,6 +158,9 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
     };
 
     self.load = function(state, errors) {
+        if ( !wv.palettes.supported ) {
+            return;
+        }
         _.each(state.l, function(layerDef) {
             var layerId = layerDef.id;
             var minValue, maxValue;
