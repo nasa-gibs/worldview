@@ -1320,27 +1320,26 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         }
     };
     var dragmove = function(d){
-
         var tempPickOffset = Math.max(-halfPickWidth,Math.min(width-halfPickWidth,d3.event.x));
         var tempPickTipOffset = tempPickOffset+halfPickWidth;
         var tempPickTipDate = x.invert(tempPickTipOffset);
 
-        if(d3.event.dx > 0){
+        if((d3.event.dx > 0) && (tempPickTipDate >= dataLimits[0]) && (tempPickTipDate <= dataLimits[1])){
             if(nextChange===undefined){
                 setPickChangeEnds(tempPickOffset,tempPickTipDate);
             }
-            else if(tempPickTipDate >= nextChange){
+            else if((tempPickTipDate >= nextChange) && (nextChange <= dataLimits[1])){
                 pickOffset = x(nextChange)-halfPickWidth;
                 pickTipDate = nextChange;
                 changePickDate.call(this);
                 setPickChangeEnds(tempPickOffset,tempPickTipDate);
             }
         }
-        else if(d3.event.dx < 0){
+        else if((d3.event.dx < 0) && (tempPickTipDate <= dataLimits[1]) && (tempPickTipDate >= dataLimits[0])){
             if(prevChange===undefined){
                 setPickChangeEnds(tempPickOffset,tempPickTipDate);
             }
-            else if(tempPickTipDate <= prevChange){
+            else if((tempPickTipDate <= prevChange) && (prevChange >= dataLimits[0]) ){
                 pickOffset = x(prevChange)-halfPickWidth;
                 pickTipDate = prevChange;
                 changePickDate.call(this);
