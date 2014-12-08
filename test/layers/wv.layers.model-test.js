@@ -371,6 +371,30 @@ buster.testCase("wv.layers.model", function() {
         buster.assert.equals(errors.length, 0);
     };
 
+    self["Loads state, opacity clamped at 1"] = function() {
+        var state = {
+            l: [
+            { id: "terra-cr", attributes: [{ id: "opacity", value: 5}] }
+            ]
+        };
+        l.load(state, errors);
+        var def = _.find(models.layers.active, { id: "terra-cr" });
+        buster.assert.equals(1, def.opacity);
+        buster.assert.equals(errors.length, 0);
+    };
+
+    self["Loads state, opacity clamped at 0"] = function() {
+        var state = {
+            l: [
+            { id: "terra-cr", attributes: [{ id: "opacity", value: -5}] }
+            ]
+        };
+        l.load(state, errors);
+        var def = _.find(models.layers.active, { id: "terra-cr" });
+        buster.assert.equals(0, def.opacity);
+        buster.assert.equals(errors.length, 0);
+    };
+
     self["Starts with default layers when no permalink"] = function() {
         config.defaults.startingLayers = [
             { id: "terra-cr" }

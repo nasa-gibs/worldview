@@ -319,7 +319,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
                         hidden = true;
                     }
                     if ( attr.id === "opacity" ) {
-                        opacity = parseFloat(attr.value);
+                        opacity = wv.util.clamp(parseFloat(attr.value), 0, 1);
                     }
                 });
                 self.add(layerDef.id, { hidden: hidden, opacity: opacity });
