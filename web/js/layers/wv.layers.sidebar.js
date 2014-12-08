@@ -203,6 +203,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
             $("#wv-layers-options-dialog").dialog("close");
         }
         self.events.trigger("select", ui.newTab.attr("data-tab"));
+        e.currentTarget.blur();
     };
 
     var onBeforeTabChange = function(e, ui) {
