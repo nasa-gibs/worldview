@@ -469,7 +469,7 @@ module.exports = function(grunt) {
                     from: "@NAME@",
                     to: "<%=grunt.option('shortName')%>"
                 },{
-                    from: "@EMAIL@",
+                    from: "@MAIL@",
                     to: "<%=grunt.option('email')%>"
                 },{
                     from: "@BUILD_TIMESTAMP@",
@@ -556,6 +556,7 @@ module.exports = function(grunt) {
         grunt.option("longName", brand.longName);
         grunt.option("shortName", brand.shortName);
         grunt.option("packageName", brand.packageName);
+        grunt.option("email", brand.email);
     });
 
     grunt.registerTask("build", [

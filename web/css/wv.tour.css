@@ -12,6 +12,10 @@ body {
     display: none;
 }
 
+#wv-tour-content {
+    display: none;
+}
+
 #splash_c div {
     background-color: rgba(175, 181, 196, 1);
 }

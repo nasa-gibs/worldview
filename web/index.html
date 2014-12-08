@@ -15,6 +15,7 @@
 <html>
 <head>
     <title>@OFFICIAL_NAME@</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <script type="text/javascript">
         if ( /MSIE (\d+\.\d+);/.test(navigator.userAgent) && ! /unsupported/.test(location.search) ) {
@@ -39,8 +40,7 @@
 
     <!-- CSS resources ==================================================== -->
 
-    <!-- link.dev -->       <link type="text/css" rel="Stylesheet" href="ext/ui/font-awesome-4.2.0/css/font-awesome.css">
-    <!-- link.prod --> <!-- <link type="text/css" rel="Stylesheet" href="ext/ui/font-awesome-4.2.0/css/font-awesome.min.css"> -->
+                            <link type="text/css" rel="Stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
 
     <!-- link.dev -->       <link type="text/css" rel="Stylesheet" href="ext/ui/jquery-ui-1.10.4/ui-darkness/jquery-ui-1.10.4.custom.css">
     <!-- link.prod --> <!-- <link type="text/css" rel="Stylesheet" href="ext/ui/jquery-ui-1.10.4/ui-darkness/jquery-ui-1.10.4.custom.min.css"> -->
@@ -234,39 +234,39 @@
                     <div class="input-wrapper">
                         <div class="date-arrows date-arrow-up" data-interval="year" data-value="1">
                           <svg width="25" height="8">
-                            <path d="M 12.5,0 25,8 0,8 z" class="uparrow" />
+                            <path d="M 12.5,0 25,8 0,8 z" class="uparrow"></path>
                           </svg>
                         </div>
                       <input type="text" size="4" maxlength="4" class="button-input-group" id="year-input-group" tabindex="2" onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.keyCode == 13 || event.keyCode == 9 || event.keyCode == 8" />
                         <div class="date-arrows date-arrow-down" data-interval="year" data-value="-1">
                           <svg width="25" height="8">
-                            <path d="M 12.5,0 25,8 0,8 z" class="downarrow"  />
+                            <path d="M 12.5,0 25,8 0,8 z" class="downarrow"></path>
                           </svg>
                         </div>
                     </div><!--/input-wrapper-->
                     <div class="input-wrapper">
                         <div class="date-arrows date-arrow-up" data-interval="month" data-value="1">
                           <svg width="25" height="8">
-                            <path d="M 12.5,0 25,8 0,8 z" class="uparrow" />
+                            <path d="M 12.5,0 25,8 0,8 z" class="uparrow"></path>
                           </svg>
                         </div>
                       <input type="text" size="3" maxlength="3" class="button-input-group" id="month-input-group" tabindex="3" />
                         <div class="date-arrows date-arrow-down" data-interval="month" data-value="-1">
                           <svg width="25" height="8">
-                            <path d="M 12.5,0 25,8 0,8 z" class="downarrow"  />
+                            <path d="M 12.5,0 25,8 0,8 z" class="downarrow"></path>
                           </svg>
                         </div>
                     </div><!--/input-wrapper-->
                     <div class="input-wrapper">
                         <div class="date-arrows date-arrow-up" data-interval="day" data-value="1">
                           <svg width="25" height="8">
-                            <path d="M 12.5,0 25,8 0,8 z" class="uparrow"/>
+                            <path d="M 12.5,0 25,8 0,8 z" class="uparrow"></path>
                           </svg>
                         </div>
                       <input type="text" size="2" maxlength="2" class="button-input-group" id="day-input-group" tabindex="4" onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.keyCode == 13 || event.keyCode == 9 || even.keyCode == 8" />
                         <div class="date-arrows date-arrow-down" data-interval="day" data-value="-1">
                           <svg width="25" height="8">
-                            <path d="M 12.5,0 25,8 0,8 z" class="downarrow" />
+                            <path d="M 12.5,0 25,8 0,8 z" class="downarrow"></path>
                           </svg>
                         </div>
                     </div><!--/input-wrapper-->
@@ -275,14 +275,14 @@
                         <svg width="24" height="30">
                             <path
                              d="M 10.240764,0 24,15 10.240764,30 0,30 13.759236,15 0,0 10.240764,0 z"
-                             class="arrow" />
+                             class="arrow"></path>
                         </svg>
                     </div>
                     <div class="button-action-group" id="right-arrow-group" title="Click and hold to animate forwards">
                         <svg width="24" height="30" >
                             <path
                             d="M 10.240764,0 24,15 10.240764,30 0,30 13.759236,15 0,0 10.240764,0 z"
-                            class="arrow" />
+                            class="arrow"></path>
                         </svg>
                     </div>
                 </div> <!--/timeline-header-->
@@ -297,7 +297,7 @@
                 </div><!--/timeline-zoom-->
                 <div id="timeline-hide">
                   <svg class="hamburger" width="10" height="9">
-                    <path d="M 0,0 0,1 10,1 10,0 0,0 z M 0,4 0,5 10,5 10,4 0,4 z M 0,8 0,9 10,9 10,8 0,8 z" />
+                    <path d="M 0,0 0,1 10,1 10,0 0,0 z M 0,4 0,5 10,5 10,4 0,4 z M 0,8 0,9 10,9 10,8 0,8 z"></path>
                   </svg>
                 </div>
             </section>
