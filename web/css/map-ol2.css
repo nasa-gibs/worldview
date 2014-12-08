@@ -61,13 +61,6 @@ div.olControlScaleLineCustom {
     border-top: none;
 }
 
-/*  CSS for full-screen map div and mobile device support  */
-@media only screen and (max-width: 600px) {
-    html, body {
-        height: 117%;
-    }
-}
-
 .olControlAttribution {
     position: absolute;
     font-size: 10px;
