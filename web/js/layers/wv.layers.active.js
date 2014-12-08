@@ -146,7 +146,10 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             .attr("data-layer", layer.id);
 
 
-        var $visibleImage = $("<i></i>");
+        var $visibleImage = $("<i></i>")
+            .on('click', function(){
+                $visibleButton.trigger('click');
+            });
 
 
         $visibleButton.append($visibleImage);
