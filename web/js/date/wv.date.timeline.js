@@ -1862,19 +1862,24 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     init();
     $(window).resize(resizeWindow);
 
-    self.toggle = function(){
+    self.toggle = function(now){
         var tl = $('#timeline-footer');
         var tlz = $('#timeline-zoom');
         var tlg = d3.select('#timeline-footer svg > g:nth-child(2)');
         var gp = d3.select('#guitarpick');
         if(tl.is(':hidden')){
-            tl.show('slow',function(){
+            var afterShow = function() {
                 tlz.show();
                 $('#timeline').css('right','10px');
                 tlg.attr('style','clip-path:url("#timeline-boundary")');
                 gp.attr("style","display:block;clip-path:url(#guitarpick-boundary);");
-            });
-
+            };
+            if ( now ) {
+                tl.show();
+                afterShow();
+            } else {
+                tl.show('slow', afterShow);
+            }
         }
         else{
             tlg.attr('style','clip-path:none');
@@ -1885,11 +1890,16 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         }
     };
 
-    self.expand = function(){
+    self.expand = function(now){
+        now = now || false;
         var tl = $('#timeline-footer, #timeline-zoom');
         if (tl.is(":hidden")){
-            self.toggle();
+            self.toggle(now);
         }
+    };
+
+    self.expandNow = function() {
+        self.expand(true);
     };
 
     self.collapse = function(){
