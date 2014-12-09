@@ -1324,25 +1324,40 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         var tempPickTipOffset = tempPickOffset+halfPickWidth;
         var tempPickTipDate = x.invert(tempPickTipOffset);
 
-        if((d3.event.dx > 0) && (tempPickTipDate >= dataLimits[0]) && (tempPickTipDate <= dataLimits[1])){
+        if((d3.event.dx > 0)){
             if(nextChange===undefined){
                 setPickChangeEnds(tempPickOffset,tempPickTipDate);
             }
-            else if((tempPickTipDate >= nextChange) && (nextChange <= dataLimits[1])){
+            else if((tempPickTipDate >= nextChange) && (nextChange <= dataEndDate) && (nextChange > dataLimits[0])){
                 pickOffset = x(nextChange)-halfPickWidth;
                 pickTipDate = nextChange;
                 changePickDate.call(this);
                 setPickChangeEnds(tempPickOffset,tempPickTipDate);
             }
-        }
-        else if((d3.event.dx < 0) && (tempPickTipDate <= dataLimits[1]) && (tempPickTipDate >= dataLimits[0])){
-            if(prevChange===undefined){
+            else if(nextChange > dataEndDate){
+                pickTipDate = new Date(Date.UTC(dataEndDate.getUTCFullYear(),model.selected.getUTCMonth(),model.selected.getUTCDate()));
+                pickOffset = x(pickTipDate)-halfPickWidth;
+                changePickDate.call(this);
                 setPickChangeEnds(tempPickOffset,tempPickTipDate);
             }
-            else if((tempPickTipDate <= prevChange) && (prevChange >= dataLimits[0]) ){
+            else if(nextChange < dataLimits[0]){
+                nextChange = new Date(Date.UTC(dataLimits[0].getUTCFullYear(),model.selected.getUTCMonth(),model.selected.getUTCDate()));
+            }
+        }
+        else if((d3.event.dx < 0)){
+            if((prevChange===undefined)){
+                setPickChangeEnds(tempPickOffset,tempPickTipDate);
+            }
+            else if((tempPickTipDate <= prevChange) && (prevChange >= dataLimits[0]) && (prevChange < dataEndDate)){
                 pickOffset = x(prevChange)-halfPickWidth;
                 pickTipDate = prevChange;
                 changePickDate.call(this);
+                setPickChangeEnds(tempPickOffset,tempPickTipDate);
+            }
+            else if(prevChange < dataLimits[0]){
+                setPickChangeEnds(tempPickOffset,tempPickTipDate);
+            }
+            else{
                 setPickChangeEnds(tempPickOffset,tempPickTipDate);
             }
         }
@@ -1476,6 +1491,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .origin(function(d) { return d; })
             .on("dragstart",function(){
                 mousedown = true;
+                d3.event.sourceEvent.preventDefault();
                 d3.event.sourceEvent.stopPropagation();
                 guitarPick.classed('pick-clicked',true);
             })
@@ -1530,12 +1546,14 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         ///////////////////////////Begin Datepicker//////////////////////////////////
         //TODO: move to new file
         incrementBtn
-            .mousedown(function() {
+            .mousedown(function(e) {
+                e.preventDefault();
                 forwardNextDay();
             })
             .mouseup(animateEnd);
         decrementBtn
-            .mousedown(function() {
+            .mousedown(function(e) {
+                e.preventDefault();
                 reversePrevDay();
             })
             .mouseup(animateEnd);
@@ -1583,7 +1601,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                         break;
                 }
             });
-
         //bind click action to interval radio buttons
         var $buttons = $('.button-input-group');
         $buttons.on('focus',function(e){
@@ -1599,8 +1616,14 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         });
         var $incrementIntDate = $('.date-arrow-up');
         $incrementIntDate.click(roll);
+        $incrementIntDate.mousedown(function(e){
+            e.preventDefault();
+        });
         var $decrementIntDate = $('.date-arrow-down');
         $decrementIntDate.click(roll);
+        $decrementIntDate.mousedown(function(e){
+            e.preventDefault();
+        });
 
         //select all input on focus
         $('input').focus(function(e){
