@@ -200,7 +200,7 @@ wv.tour = wv.tour || function(models, ui, config) {
     var setTourState = function() {
         ui.sidebar.expandNow();
         ui.sidebar.selectTab("active");
-        //ui.dateSliders.expand();
+        ui.timeline.expandNow();
         models.proj.selectDefault();
     };
 
