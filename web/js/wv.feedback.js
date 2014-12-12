@@ -19,9 +19,8 @@ wv.feedback = wv.feedback || (function() {
     var feedbackInit = false;
 
     self.decorate = function($element) {
-        $element
-            .attr("href", "mailto:@MAIL@?subject=Feedback for @LONG_NAME@ tool")
-            .attr("target", "_blank");
+        $element.attr("href",
+            "mailto:@MAIL@?subject=Feedback for @LONG_NAME@ tool");
 
         $element.click(function(event) {
             if ( !wv.util.browser.small && window.feedback ) {
