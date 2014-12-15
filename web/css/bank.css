@@ -7,7 +7,7 @@ a.accordionToggler {
     display:block;
     width:10%;
     overflow:hidden;
-    z-index:292;
+    z-index:1;
     height: 35px;
     width: 30px;
     background: none no-repeat scroll left;
