@@ -566,6 +566,25 @@ wv.util = (function(self) {
         DOWN: 40
     };
 
+    self.formatDM = function(value, type) {
+        var width, signs;
+        if ( type === "longitude" ) {
+            width = 3;
+            signs = "EW";
+        } else {
+            width = 2;
+            signs = "NS";
+        }
+        var sign = ( value >= 0 ) ? signs[0] : signs[1];
+        var totalMinutes = Math.abs(value * 60);
+        var degrees = Math.floor(totalMinutes / 60);
+        var minutes = totalMinutes - (degrees * 60);
+
+        var sdegrees = self.pad(degrees, width, " ");
+        var sminutes = self.pad(minutes.toFixed(3), 6, " ");
+        return sdegrees + "&deg;" + sminutes + "'" + sign;
+    };
+
     return self;
 
 })(wv.util || {});
