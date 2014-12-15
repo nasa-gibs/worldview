@@ -258,18 +258,18 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var moveToPick = function(){
         var zt = zoom.translate()[0];
 
-        if(x(model.selected) >= x(normalTicks.data()[normalTicks.data().length-1])){
+        if(x(model.selected) >= (width-15)){
             if (mousedown){
-                zoom.translate([zt - x(model.selected)+x(normalTicks.data()[normalTicks.data().length-1]),0]);
+                zoom.translate([zt - x(model.selected)+(width-15),0]);
             }
             else{
                 zoom.translate([zt - x(model.selected) + (width/8)*7,0]);
             }
             panAxis();
         }
-        else if(x(model.selected) < x(normalTicks.data()[0])){
+        else if(x(model.selected) < 15){
             if (mousedown){
-                zoom.translate([zt - x(model.selected)+x(normalTicks.data()[0]),0]);
+                zoom.translate([zt - x(model.selected)+15,0]);
             }
             else{
                 zoom.translate([zt - x(model.selected) + width/8,0]);
