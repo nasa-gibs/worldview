@@ -510,8 +510,8 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 // arctic has been backfilled
                 var crs = ( models.proj.change ) ? models.proj.change.crs
                         : models.proj.selected.crs;
-                var str = wv.util.formatDM(mouseLonLat.lat, "latitude") + ", " +
-                       wv.util.formatDM(mouseLonLat.lon, "longitude") + " " +
+                var str = wv.util.formatDMS(mouseLonLat.lat, "latitude") + ", " +
+                       wv.util.formatDMS(mouseLonLat.lon, "longitude") + " " +
                        crs;
                 return str;
             }
@@ -594,9 +594,6 @@ wv.map.ui = wv.map.ui || function(models, config) {
 
         // Keep track of center point on projection switch
         map.previousCenter = map.getCenter();
-
-                                   // "13D12.123'N, 123D12.123'W EPSG:1234"
-        $(coordinateControl.div).html("                                   ");
         return map;
     };
 

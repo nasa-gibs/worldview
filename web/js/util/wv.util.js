@@ -566,7 +566,7 @@ wv.util = (function(self) {
         DOWN: 40
     };
 
-    self.formatDM = function(value, type) {
+    self.formatDMS = function(value, type) {
         var width, signs;
         if ( type === "longitude" ) {
             width = 3;
@@ -576,13 +576,15 @@ wv.util = (function(self) {
             signs = "NS";
         }
         var sign = ( value >= 0 ) ? signs[0] : signs[1];
-        var totalMinutes = Math.abs(value * 60);
-        var degrees = Math.floor(totalMinutes / 60);
-        var minutes = totalMinutes - (degrees * 60);
+        value = Math.abs(value);
+        var degrees = Math.floor(value);
+        var minutes = Math.floor((value * 60) - (degrees * 60));
+        var seconds = Math.floor((value * 3600) - (degrees * 3600) - (minutes * 60));
 
         var sdegrees = self.pad(degrees, width, " ");
-        var sminutes = self.pad(minutes.toFixed(3), 6, " ");
-        return sdegrees + "&deg;" + sminutes + "'" + sign;
+        var sminutes = self.pad(minutes, 2, "0");
+        var sseconds = self.pad(seconds, 2, "0");
+        return sdegrees + "&deg;" + sminutes + "'" + sseconds + '"' + sign;
     };
 
     return self;
