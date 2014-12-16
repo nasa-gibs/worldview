@@ -361,6 +361,34 @@ buster.testCase("wv.util", function() {
         buster.assert.equals(d, new Date(Date.UTC(2015, 06, 16)));
     };
 
+    self["formatDMS: zero"] = function() {
+        var lat = wv.util.formatDMS(0, "latitude");
+        var lon = wv.util.formatDMS(0, "longitude");
+        buster.assert.equals(" 0&deg;00'00\"N", lat);
+        buster.assert.equals("  0&deg;00'00\"E", lon);
+    };
+
+    self["formatDMS: positive"] = function() {
+        var lat = wv.util.formatDMS(12.582222, "latitude");
+        var lon = wv.util.formatDMS(12.582222, "longitude");
+        buster.assert.equals("12&deg;34'55\"N", lat);
+        buster.assert.equals(" 12&deg;34'55\"E", lon);
+    };
+
+    self["formatDMS: negative"] = function() {
+        var lat = wv.util.formatDMS(-12.582222, "latitude");
+        var lon = wv.util.formatDMS(-12.582222, "longitude");
+        buster.assert.equals("12&deg;34'55\"S", lat);
+        buster.assert.equals(" 12&deg;34'55\"W", lon);
+    };
+
+    self["formatDMS: max"] = function() {
+        var lat = wv.util.formatDMS(89.999997, "latitude");
+        var lon = wv.util.formatDMS(179.999997, "longitude");
+        buster.assert.equals("89&deg;59'59\"N", lat);
+        buster.assert.equals("179&deg;59'59\"E", lon);
+    };
+
     return self;
 
 }());
