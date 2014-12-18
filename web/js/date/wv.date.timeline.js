@@ -31,7 +31,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var dataEndDate = new Date(new Date(wv.util.today()).setUTCDate(wv.util.today().getUTCDate()+1));
     var boundaryTicks,normalTicks,allTicks,allBoundaryTickForegrounds,offscreenBoundaryTickText, tooSmall;
     var x,xAxis,y,yAxis,zoom;
-    var zoomInterval,zoomStep,subInterval,subStep,zoomTimeFormat,zoomLvl;
+    var zoomInterval,zoomStep,subInterval,subStep,zoomTimeFormat,zoomLvl,zoomTranslate;
     var timelineSVG,timeline,verticalAxis,guitarPick,pickWidth,drag,dataBars,gpLocation,halfPickWidth,pickOffset,pickTipDate,prevChange,nextChange;
     var activeLayers,activeLayersDynamic,activeLayersInvisible,layerCount,activeLayersTitles;
     var timer, rollingDate;
@@ -256,8 +256,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
     };
     var moveToPick = function(){
-        var zt = zoom.translate()[0];
-
+        var zt = zoomTranslate;
         if(x(model.selected) >= (width-15)){
             if (mousedown){
                 zoom.translate([zt - x(model.selected)+(width-15),0]);
@@ -265,7 +264,8 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             else{
                 zoom.translate([zt - x(model.selected) + (width/8)*7,0]);
             }
-            panAxis();
+            zoomTranslate = zoom.translate()[0];
+            self.panAxis();
         }
         else if(x(model.selected) < 15){
             if (mousedown){
@@ -274,7 +274,8 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             else{
                 zoom.translate([zt - x(model.selected) + width/8,0]);
             }
-            panAxis();
+            zoomTranslate = zoom.translate()[0];
+            self.panAxis();
         }
         $('#guitarpick').show();
     };
@@ -573,9 +574,18 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         }
         return rt;
     };
-    var panAxis = function(){  //TODO: Draw y axis
 
-        timeline.select(".x.axis")
+    self.panAxis = function(event){  //TODO: Draw y axis
+        if(event){
+            var evt = event.sourceEvent || event;
+            var delX = evt.deltaX;
+            if((evt.type === "wheel") && ((evt.deltaX < 0) || (evt.deltaX > 0))){
+                zoom.translate([zoomTranslate+delX,0]);
+                zoomTranslate = zoom.translate()[0];
+            }
+        }
+
+        d3.select("#timeline-footer svg .x.axis")
             .call(xAxis);
 
         setTicks();
@@ -865,8 +875,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         var mouseBool,mousePos,mouseOffset;
 
         if (event){
-            var parentOffset = $(event.currentTarget).offset();
-            var relX = event.clientX - parentOffset.left;
+            var relX = event.offsetX;
             mousePos = x.invert(relX);
             mouseBool = true;
             mouseOffset = (width-margin.left-margin.right)/2 - relX;
@@ -1021,8 +1030,9 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .x(x)
             .scale(1)
             .scaleExtent([1, 1]) //don't use default zoom provided by d3
-            .xExtent(dataLimits)
-            .on("zoom", onPan, d3.event);
+            .xExtent(dataLimits);
+
+        wv.ui.mouse.wheel(zoom,ui).change(zoomed);
 
         timelineSVG.call(zoom);
 
@@ -1032,7 +1042,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         else{
             zoom.translate([-x(model.selected)+(width-margin.left-margin.right)/2,0]);
         }
-
+        zoomTranslate = zoom.translate()[0];
         timeline.selectAll('.x.axis').remove();
 
 
@@ -1465,6 +1475,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 .attr("x2",width);//+margin.left+margin.right);
 
         zoom.translate([width/2 - x(model.selected),0]); //go to selected date
+        zoomTranslate = zoom.translate()[0];
 
         timeline.select(".x.axis")
             .call(xAxis); //update view after translate
@@ -1676,7 +1687,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                     break;
                 }
                 if((selectedDateObj > dataLimits[0]) && (selectedDateObj <= wv.util.today())){
-                    var ztw = zoom.translate()[0];
+                    var ztw = zoom.translate()[0]; //FIXME: Is this needed?
                     var sib =  selected.parent().next('div.input-wrapper').find('input.button-input-group');
                     if ( entered && sib.length < 1 ) {
                         $('#focus-guard-2').focus();
@@ -1754,12 +1765,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             setZoom('days');
 
         });
-        /*d3.select("#zoom-weeks").on("click",function(d){
-            $('.zoom-btn').removeClass("zoom-btn-selected");
-            $(this).addClass("zoom-btn-selected");
-            setZoom('week');
-
-        });*/
 
         $('#timeline-hide').click(function() { self.toggle(); });
 
@@ -1774,16 +1779,10 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         models.layers.events.on("change",function(){
             setData();
         });
-        models.layers.events.on('update',function(){
-
-        });
-        models.layers.events.on('visibility',function(){
-
-        });
 
         updateTime();
         resizeWindow();
-        wv.ui.mouse.wheel($("#timeline-footer svg")).change(zoomed);
+
         $('#timeline-footer').css('margin-left',margin.left-1 + 'px');
         $('#timeline-footer').css('margin-right',margin.right-1 + 'px');
     }; // end init()
@@ -1830,7 +1829,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     };
 
     var zoomed = function(amount, event) {
-        zoomLvl += amount;
+        zoomLvl += -amount;
         if ( zoomLvl < 0 ) {
             zoomLvl = 0;
         }
@@ -1840,12 +1839,9 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
         setZoom.call(this, zoomLvl, event);
     };
-
-    var onPan = function(event) {
-        if ( !(tooSmall) ) { //pan by mousedown and drag
-            panAxis();
-        }
-    };
+    self.smallSize = function(){
+        return tooSmall;
+    }
 
     var updateDateInputs = function(date) {
         date = date || models.selected.date;
