@@ -1841,7 +1841,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     };
     self.smallSize = function(){
         return tooSmall;
-    }
+    };
 
     var updateDateInputs = function(date) {
         date = date || models.selected.date;
