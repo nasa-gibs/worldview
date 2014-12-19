@@ -69,7 +69,7 @@ $(function() {
             wv.proj.parse,
             wv.layers.parse,
             wv.date.parse,
-            wv.map.parse,
+            // FIXME OL3: wv.map.parse,
             wv.palettes.parse
         ];
         if ( config.features.dataDownload ) {
@@ -178,6 +178,7 @@ $(function() {
         $("#eventsHolder").hide();
 
         // Wirings
+        /* FIXME: OL3
         if ( config.features.dataDownload ) {
             models.data.events
                 .on("activate", function() {
@@ -196,6 +197,7 @@ $(function() {
                 // FIXME: This is a hack
                 models.map.events.on("projection", models.data.updateProjection);
         }
+        */
 
         // Sink all focus on inputs if click unhandled
         $(document).click(function(event) {

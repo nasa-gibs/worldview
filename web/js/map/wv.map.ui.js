@@ -14,6 +14,9 @@ wv.map = wv.map || {};
 
 wv.map.ui = wv.map.ui || function(models, config) {
 
+    return {};
+
+    /*
     var self = {};
 
     var id = "map";
@@ -652,18 +655,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         return _.size(layersLoading) > 0;
     };
 
-    self.status = function(message) {
-        /*
-        message = message || "status";
-        var map = self.selected;
-        console.log(message + ":",
-            "layers", map.layers.length,
-            "cache", cache.size(),
-            "stale", stale.length);
-        */
-    };
-
     init();
     return self;
-
+    */
 };

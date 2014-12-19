@@ -18,11 +18,13 @@ wv.map = (function(self) {
 
     self.CRS_WGS_84_QUERY_EXTENT = [-180, -60, 180, 60];
 
+    /* FIXME OL3
     self.CRS_WGS_84_QUERY_MASK =
         new OpenLayers.Geometry.MultiPolygon([
             new OpenLayers.Bounds(-180, -90, 180, -60).toGeometry(),
             new OpenLayers.Bounds(-180, 60, 180, 90).toGeometry()
         ]);
+    */
 
     self.parse = function(state, errors) {
         // 1.1 support
@@ -214,54 +216,7 @@ wv.map = (function(self) {
 
 })(wv.map || {});
 
-wv.map.HoverControl = OpenLayers.Class(OpenLayers.Control, {
-
-    layer: null,
-
-    defaultHandlerOptions: {
-        delay: 2000,
-        pixelTolerance: 1,
-        stopMove: false
-    },
-
-    featureHandler: null,
-
-    initialize: function(layer, options) {
-        this.layer = layer;
-        this.handlerOptions = OpenLayers.Util.extend({},
-                this.defaultHandlerOptions);
-        OpenLayers.Control.prototype.initialize.apply(this, arguments);
-
-        this.featureHandler = new OpenLayers.Handler.Feature(this, this.layer, {
-            over: this.over,
-            out: this.out
-        }, {});
-        this.handlers = {
-             feature: this.featureHandler
-         };
-    },
-
-    draw: function() {
-        return false;
-    },
-
-    activate: function() {
-        this.handlers.feature.activate();
-    },
-
-    deactivate: function() {
-        this.handlers.feature.deactivate();
-    },
-
-    over: function(feature) {
-        this.events.triggerEvent("hoverover", {feature: feature});
-    },
-
-    out: function(feature) {
-        this.events.triggerEvent("hoverout", {feature: feature});
-    }
-});
-
+/* FIXME OL3
 wv.map.mock = function() {
 
     return {
@@ -275,78 +230,4 @@ wv.map.mock = function() {
     };
 
 };
-
-
-wv.map.graticule = OpenLayers.Class(OpenLayers.Layer, {
-
-    graticuleLineStyle: null,
-    graticuleLabelStyle: null,
-    graticule: null,
-    isControl: true,
-
-    initialize: function(name, options) {
-        OpenLayers.Layer.prototype.initialize.apply(this, arguments);
-
-        this.graticuleLineStyle = new OpenLayers.Symbolizer.Line({
-            strokeColor: '#AAAAAA',
-            strokeOpacity: 1.0,
-            strokeWidth: 1.35,
-            strokeLinecap: 'square',
-            strokeDashstyle: 'dot'
-        });
-
-        this.graticuleLabelStyle = new OpenLayers.Symbolizer.Text({
-            fontFamily: 'Courier New',
-            fontSize: '12',
-            fontWeight: '550',
-            fontColor: '#EEE',
-            fontOpacity: 1.0,
-            labelOutlineColor: '#222',
-            labelOutlineWidth: 3,
-            labelOutlineOpacity: 1
-        });
-    },
-
-    /*
-     * Add the control when the layer is added to the map
-     */
-    setMap: function(map) {
-        OpenLayers.Layer.prototype.setMap.apply(this, arguments);
-
-        this.graticule = new OpenLayers.Control.Graticule({
-            layerName: 'ol_graticule_control',
-            numPoints: 2,
-            labelled: true,
-            lineSymbolizer: this.graticuleLineStyle,
-            labelSymbolizer: this.graticuleLabelStyle
-        });
-
-        map.addControl(this.graticule);
-    },
-
-    /*
-     * Remove the control when the layer is removed from the map
-     */
-    removeMap: function(map) {
-        OpenLayers.Layer.prototype.removeMap.apply(this, arguments);
-        map.removeControl(this.graticule);
-        this.graticule.destroy();
-        this.graticule = null;
-    },
-
-    setVisibility: function(value) {
-        if ( !this.wvid || !this.graticule ) {
-            return;
-        }
-        if ( value ) {
-            this.graticule.activate();
-        } else {
-            this.graticule.deactivate();
-        }
-    },
-
-    /*
-     * Name of this class per OpenLayers convention.
-     */
-    CLASS_NAME: "wv.map.layers.graticule"
-});
+*/

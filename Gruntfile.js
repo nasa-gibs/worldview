@@ -371,7 +371,6 @@ module.exports = function(grunt) {
                 "!build/worldview-debug/web/css/wv.css",
                 "!build/worldview-debug/web/js/wv.js",
                 "!build/worldview-debug/web/css/bulkDownload.css",
-                "!build/worldview-debug/web/js/map/wv.map.tileworker.js",
                 "!build/worldview-debug/web/ext/**/*"
             ],
             config_src: [

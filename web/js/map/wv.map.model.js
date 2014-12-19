@@ -27,6 +27,7 @@ wv.map.model = wv.map.model || function(models, config) {
     };
 
     self.load = function(state, errors) {
+        /* FIXME: OL3
         if ( state.v ) {
             var proj = models.proj.selected;
             var extent = new OpenLayers.Bounds(state.v);
@@ -42,10 +43,13 @@ wv.map.model = wv.map.model || function(models, config) {
                 self.setExtentToLeading();
             }
         }
+        */
     };
 
     self.save = function(state) {
+        /* FIXME: OL3
         state.v = self.extent.slice(0);
+        */
     };
 
     self.setExtentToLeading = function() {
