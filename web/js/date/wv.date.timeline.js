@@ -591,7 +591,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             var nextNormalTickData = getNextNormalTickData(boundaryTickData);
 
             var boundaryTickWidth = Math.abs(x(nextBoundaryTickData) - x(boundaryTickData));
-            var normalTickWidth = Math.abs(x(nextNormalTickData) - x(boundaryTickData));
+            var normalTickWidth = Math.abs(x(nextNormalTickData) - x(boundaryTickData))+1;
 
             var subLabel = getSubLabel(boundaryTickData);
 
@@ -634,6 +634,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                     .attr("class","normaltick-background")
                     .attr("height",height-1)
                     .attr("y",-height)
+                    .attr("x",-0.5)
                     .attr("width",normalTickWidth);
             }
             else{
@@ -653,7 +654,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             var normalTickData = normalTick.data()[0];
             var nextNormalTickData = getNextNormalTickData(normalTickData);
 //            var nextNormalTickData = d3.select($(this).nextAll('g.tick').first()[0]).data()[0];
-            var normalTickWidth = x(nextNormalTickData) - x(normalTickData);
+            var normalTickWidth = x(nextNormalTickData) - x(normalTickData) + 1;
 
             if(($(this).find('line').attr('y1') !== '-2')){
                 normalTick.select('line')
@@ -668,6 +669,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                     .attr("class","normaltick-background")
                     .attr("height",height-1)
                     .attr("y",-height)
+                    .attr("x",-0.5)
                     .attr("width",normalTickWidth);
             }
             else{
@@ -1063,7 +1065,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
             boundaryTickWidth = x(nextBoundaryTickData) - x(boundaryTickData);
 
-            normalTickWidth = x(nextNormalTickData) - x(boundaryTickData);
+            normalTickWidth = x(nextNormalTickData) - x(boundaryTickData) + 1;
 
             var subLabel = getSubLabel(boundaryTickData);
 
@@ -1085,6 +1087,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 .attr("class","normaltick-background")
                 .attr("height",height-1)
                 .attr("y",-height)
+                .attr("x",-0.5)
                 .attr("width",normalTickWidth);
 
             if(subLabel){
