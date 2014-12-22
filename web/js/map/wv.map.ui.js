@@ -59,7 +59,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         self.selected.updateSize();
         if ( self.selected.previousCenter ) {
             self.selected.setCenter(self.selected.previousCenter);
-        };
+        }
         // FIXME: OL3 updateExtent();
     };
 
@@ -175,7 +175,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 date: wv.util.toISOStringDate(date),
                 proj: proj.id,
                 def: def
-            }
+            };
             cache.setItem(key, layer);
             layer.setVisible(false);
         }
@@ -275,7 +275,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
             text: false
         });
         $zoomIn.click(zoomAction(map, 1));
-    }
+    };
 
     var zoomAction = function(map, amount) {
         return function() {
