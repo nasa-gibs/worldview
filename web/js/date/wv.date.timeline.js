@@ -875,7 +875,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         var mouseBool,mousePos,mouseOffset;
 
         if (event){
-            var relX = event.offsetX;
+            var relX = event.offsetX || (event.clientX - $('#timeline-footer').offset().left);
             mousePos = x.invert(relX);
             mouseBool = true;
             mouseOffset = (width-margin.left-margin.right)/2 - relX;

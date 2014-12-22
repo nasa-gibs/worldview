@@ -71,8 +71,7 @@ wv.ui.mouse.wheel = wv.ui.mouse.wheel || function(element, ui, options) {
         return self;
     };
 
-    var wheel = function(event) {
-
+    var wheel = function() {
         var evt = d3.event.sourceEvent;
         if(Math.abs(evt.deltaX) <= Math.abs(evt.deltaY)){
             lastEvent = evt;
