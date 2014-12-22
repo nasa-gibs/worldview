@@ -11,11 +11,46 @@
 * Licensed under the NASA Open Source Agreement, Version 1.3
 * http://opensource.gsfc.nasa.gov/nosa.php
 */
- .map {
+ .wv-map {
      position: absolute;
      margin: 0;
      padding: 0;
-     width: 100%;
-     height: 100%;
+     left: 0;
+     top: 0;
+     right: 0;
+     bottom: 0;
      z-index: 0;
- }
+}
+
+.wv-map-zoom {
+    right: 10px;
+    position: absolute;
+    z-index:10000;
+}
+
+.wv-map-zoom .ui-button-text{
+    padding:1em;
+}
+
+.wv-map-zoom.ui-state-default{
+    background:none rgba(40,40,40,0.85);
+    border:1px solid #333;
+}
+
+.wv-map-zoom.ui-state-hover{
+    background-color:#fff;
+    color:#1a1a1a;
+    border:1px solid #333;
+}
+
+.wv-map-zoom-in {
+    top: 135px;
+    border-top-left-radius:10px;
+    border-top-right-radius:10px;
+}
+
+.wv-map-zoom-out {
+    top: 180px;
+    border-bottom-left-radius:10px;
+    border-bottom-right-radius:10px;
+}

@@ -14,28 +14,13 @@ wv.map = wv.map || {};
 
 wv.map.ui = wv.map.ui || function(models, config) {
 
-    return {};
-
-    /*
-    var self = {};
-
-    var id = "map";
+    var id = "wv-map";
     var selector = "#" + id;
+    var cache = new Cache(100); // Save layers from days visited
 
-    // When the date changes, save the layer so that the tiles remain
-    // cached.
-    var cache = new Cache(100);
-    var stale = [];
-    var reaper = null;
-
-    var $proj  = {};
-
-    // One map for each projection
-    self.proj = {};
-
-    // The map for the selected projection
-    self.selected = null;
-
+    var self = {};
+    self.proj = {}; // One map for each projection
+    self.selected = null; // The map for the selected projection
     self.events = wv.util.events();
 
     var init = function() {
@@ -46,6 +31,286 @@ wv.map.ui = wv.map.ui || function(models, config) {
             var map = createMap(proj);
             self.proj[proj.id] = map;
         });
+
+        models.proj.events.on("select", updateProjection);
+        models.layers.events
+            .on("add", addLayer)
+            .on("remove", removeLayer)
+            .on("visibility", updateLayerVisibilities)
+            .on("opacity", updateOpacity)
+            .on("update", updateLayerOrder);
+        models.date.events.on("select", updateDate);
+        updateProjection();
+    };
+
+    var updateProjection = function() {
+        if ( self.selected ) {
+            // Keep track of center point on projection switch
+            self.selected.previousCenter = self.selected.center;
+            hideMap(self.selected);
+        }
+        self.selected = self.proj[models.proj.selected.id];
+        reloadLayers();
+
+        // If the browser was resized, the inactive map was not notified of
+        // the event. Force the update no matter what and reposition the center
+        // using the previous value.
+        showMap(self.selected);
+        self.selected.updateSize();
+        if ( self.selected.previousCenter ) {
+            self.selected.setCenter(self.selected.previousCenter);
+        };
+        // FIXME: OL3 updateExtent();
+    };
+
+    var hideMap = function(map) {
+        $("#" + map.getTarget()).hide();
+    };
+
+    var showMap = function(map) {
+        $("#" + map.getTarget()).show();
+    };
+
+    var clearLayers = function(map) {
+        var activeLayers = map.getLayers().getArray().slice(0);
+        _.each(activeLayers, function(mapLayer) {
+            if ( mapLayer.wv ) {
+                map.removeLayer(mapLayer);
+            }
+        });
+        //cache.clear();
+    };
+
+    var reloadLayers = function(map) {
+        map = map || self.selected;
+        var proj = models.proj.selected;
+        clearLayers(map);
+
+        var defs = models.layers.get({reverse: true});
+        _.each(defs, function(def) {
+            map.addLayer(createLayer(def));
+        });
+        updateLayerVisibilities();
+    };
+
+    var updateLayerVisibilities = function() {
+        self.selected.getLayers().forEach(function(layer) {
+            if ( layer.wv ) {
+                var renderable = models.layers.isRenderable(layer.wv.id);
+                layer.setVisible(renderable);
+            }
+        });
+    };
+
+    var updateOpacity = function(def, value) {
+        var layer = findLayer(def);
+        layer.setOpacity(value);
+        updateLayerVisibilities();
+    };
+
+    var addLayer = function(def) {
+        var mapIndex = _.findIndex(models.layers.get({reverse: true}), {
+            id: def.id
+        });
+        var layer = createLayer(def);
+        self.selected.getLayers().insertAt(mapIndex, layer);
+        updateLayerVisibilities();
+    };
+
+    var removeLayer = function(def) {
+        var layer = findLayer(def);
+        self.selected.removeLayer(layer);
+    };
+
+    var updateLayerOrder = function() {
+        reloadLayers();
+    };
+
+    var updateDate = function() {
+        var defs = models.layers.get();
+        _.each(defs, function(def) {
+            if ( def.period !== "daily" ) {
+                return;
+            }
+            var index = findLayerIndex(def);
+            self.selected.getLayers().setAt(index, createLayer(def));
+        });
+        updateLayerVisibilities();
+    };
+
+    // FIXME: OL3
+    // Don't call directly, use an event instead
+    self.preload = function() {
+    };
+
+    var findLayer = function(def) {
+        var layers = self.selected.getLayers().getArray();
+        var layer = _.find(layers, { wv: { id: def.id } });
+        return layer;
+    };
+
+    var findLayerIndex = function(def) {
+        var layers = self.selected.getLayers().getArray();
+        var layer = _.findIndex(layers, { wv: { id: def.id } });
+        return layer;
+    };
+
+    var createLayer = function(def, options) {
+        options = options || {};
+        var key = layerKey(def, options);
+        var layer = cache.getItem(key);
+        if ( !layer ) {
+            var proj = models.proj.selected;
+            def = _.cloneDeep(def);
+            _.merge(def, def.projections[proj.id]);
+            if ( def.type === "wmts" ) {
+                layer = createLayerWMTS(def, options);
+            } else {
+                throw new Error("Unknown layer type: " + def.type);
+            }
+            var date = options.date || models.date.selected;
+            layer.wv = {
+                id: def.id,
+                key: key,
+                date: wv.util.toISOStringDate(date),
+                proj: proj.id,
+                def: def
+            }
+            cache.setItem(key, layer);
+            layer.setVisible(false);
+        }
+        layer.setOpacity(def.opacity || 1.0);
+        return layer;
+    };
+
+    var createLayerWMTS = function(def, options) {
+        var proj = models.proj.selected;
+        var source = config.sources[def.source];
+        if ( !source ) {
+            throw new Error(def.id + ": Invalid source: " + def.source);
+        }
+        var matrixSet = source.matrixSets[def.matrixSet];
+        if ( !matrixSet ) {
+            throw new Error(def.id + ": Undefined matrix set: " + def.matrixSet);
+        }
+        var matrixIds = [];
+        _.each(matrixSet.resolutions, function(resolution, index) {
+            matrixIds.push(index);
+        });
+        var parameters = "";
+        if ( def.period === "daily" ) {
+            var date = options.date || models.date.selected;
+            parameters = "?TIME=" + wv.util.toISOStringDate(date);
+        }
+        var layer = new ol.layer.Tile({
+            source: new ol.source.WMTS({
+                url: source.url + parameters,
+                layer: def.layer || def.id,
+                format: def.format,
+                matrixSet: matrixSet.id,
+                tileGrid: new ol.tilegrid.WMTS({
+                    origin: [proj.maxExtent[0], proj.maxExtent[3]],
+                    resolutions: matrixSet.resolutions,
+                    matrixIds: matrixIds,
+                    tileSize: matrixSet.tileSize[0]
+                })
+            })
+        });
+        return layer;
+    };
+
+    var createMap = function(proj) {
+        var id = "wv-map-" + proj.id;
+        var $map = $("<div></div>")
+            .attr("id", id)
+            .attr("data-proj", proj.id)
+            .addClass("wv-map")
+            .hide();
+        $(selector).append($map);
+
+        var map = new ol.Map({
+            view: new ol.View({
+                maxResolution: proj.resolutions[0],
+                projection: ol.proj.get(proj.crs),
+                extent: proj.maxExtent,
+                center: proj.startCenter,
+                zoom: proj.startZoom,
+                maxZoom: proj.numZoomLevels,
+            }),
+            target: id,
+            renderer: ["canvas", "dom"],
+            logo: false
+        });
+        createZoomButtons(map);
+        return map;
+    };
+
+    var createZoomButtons = function(map) {
+        var $map = $("#" + map.getTarget());
+
+        var $zoomOut = $("<button></button>")
+            .addClass("wv-map-zoom-out")
+            .addClass("wv-map-zoom");
+        var $outIcon = $("<i></i>")
+            .addClass("fa")
+            .addClass("fa-minus")
+            .addClass("fa-1x");
+        $zoomOut.append($outIcon);
+        $map.append($zoomOut);
+        $zoomOut.button({
+            text: false
+        });
+        $zoomOut.click(zoomAction(map, -1));
+
+        var $zoomIn = $("<button></button>")
+            .addClass("wv-map-zoom-in")
+            .addClass("wv-map-zoom");
+        var $inIcon = $("<i></i>")
+            .addClass("fa")
+            .addClass("fa-plus")
+            .addClass("fa-1x");
+        $zoomIn.append($inIcon);
+        $map.append($zoomIn);
+        $zoomIn.button({
+            text: false
+        });
+        $zoomIn.click(zoomAction(map, 1));
+    }
+
+    var zoomAction = function(map, amount) {
+        return function() {
+            var zoom = map.getView().getZoom();
+            map.beforeRender(ol.animation.zoom({
+                resolution: map.getView().getResolution(),
+                duration: 250
+            }));
+            map.getView().setZoom(zoom + amount);
+        };
+    };
+
+    var layerKey = function(def, options) {
+        var layerId = def.id;
+        var projId = models.proj.selected.id;
+        var date;
+        if ( options.date ) {
+            date = wv.util.toISOStringDate(options.date);
+        } else {
+            date = wv.util.toISOStringDate(models.date.selected);
+        }
+        var dateId = ( def.period === "daily" ) ? date : "";
+        return [layerId, projId, dateId].join(":");
+    };
+
+    init();
+    return self;
+
+    /*
+    var $proj  = {};
+
+
+
+    var init = function() {
+
 
         models.proj.events.on("select", updateProjection);
         models.layers.events.on("add", addLayer);
@@ -62,32 +327,6 @@ wv.map.ui = wv.map.ui || function(models, config) {
         updateProjection();
     };
 
-    var updateProjection = function() {
-        if ( self.selected ) {
-            // Keep track of center point on projection switch
-            self.selected.previousCenter = self.selected.getCenter();
-            hideMap(self.selected);
-        }
-        self.selected = self.proj[models.proj.selected.id];
-        reloadLayers();
-
-        // If the browser was resized, the inactive map was not notified of
-        // the event. Force the update no matter what and reposition the center
-        // using the previous value.
-        showMap(self.selected);
-        self.selected.updateSize();
-        self.selected.setCenter(self.selected.previousCenter);
-
-        updateExtent();
-    };
-
-    var hideMap = function(map) {
-        $(map.div).hide();
-    };
-
-    var showMap = function(map) {
-        $(map.div).show();
-    };
 
     var addLayer = function(def) {
         updateLayers();
@@ -187,27 +426,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         updateLayers();
     };
 
-    var clearLayers = function(map) {
-        var activeLayers = map.layers.slice(0);
-        _.each(activeLayers, function(mapLayer) {
-            if ( mapLayer.wvid ) {
-                map.removeLayer(mapLayer);
-            }
-        });
-        cache.clear();
-    };
 
-    var reloadLayers = function(map) {
-        map = map || self.selected;
-        var proj = models.proj.selected;
-        clearLayers(map);
-
-        var defs = models.layers.get({reverse: true});
-        _.each(defs, function(def) {
-            addLayer(def);
-        });
-        updateLayers();
-    };
 
     var purgeCache = function() {
         self.status("purge");
