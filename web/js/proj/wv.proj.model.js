@@ -27,7 +27,10 @@ wv.proj.model = wv.proj.model || function(config) {
     var init = function() {
         self.selectDefault();
         _.each(config.projections, function(proj) {
-            self.register(proj.crs, proj.proj4);
+            if ( proj.crs && proj.proj4 ) {
+                self.register(proj.crs, proj.proj4);
+                ol.proj.get(proj.crs).setExtent(proj.maxExtent);
+            }
         });
     };
 
@@ -62,8 +65,8 @@ wv.proj.model = wv.proj.model || function(config) {
     };
 
     self.register = function(crs, def) {
-        if ( def && window.Proj4js && !Proj4js.defs[crs] ) {
-            Proj4js.defs[crs] = def;
+        if ( def && window.proj4 ) {
+            proj4.defs(crs, def);
         }
     };
 

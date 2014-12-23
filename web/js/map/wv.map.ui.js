@@ -114,7 +114,6 @@ wv.map.ui = wv.map.ui || function(models, config) {
     };
 
     var addLayer = function(def) {
-        console.log("add");
         var mapIndex = _.findIndex(models.layers.get({reverse: true}), {
             id: def.id
         });
@@ -128,7 +127,6 @@ wv.map.ui = wv.map.ui || function(models, config) {
     };
 
     var removeLayer = function(def) {
-        console.log("remove");
         if ( isGraticule(def) ) {
             removeGraticule();
         } else {
@@ -310,6 +308,18 @@ wv.map.ui = wv.map.ui || function(models, config) {
             className: "wv-map-scale-imperial",
             units: "imperial"
         });
+        var coordinateFormat = function(source) {
+            var target = ol.proj.transform(source, proj.crs, "EPSG:4326");
+            var crs = ( models.proj.change ) ? models.proj.change.crs
+                    : models.proj.selected.crs;
+            var str = wv.util.formatDMS(target[1], "latitude") + ", " +
+                      wv.util.formatDMS(target[0], "longitude") + " " +
+                      crs;
+            return str;
+        };
+        var mousePosition = new ol.control.MousePosition({
+            coordinateFormat: coordinateFormat
+        });
 
         var map = new ol.Map({
             view: new ol.View({
@@ -325,7 +335,8 @@ wv.map.ui = wv.map.ui || function(models, config) {
             logo: false,
             controls: [
                 scaleMetric,
-                scaleImperial
+                scaleImperial,
+                mousePosition
             ]
         });
         createZoomButtons(map);
