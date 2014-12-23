@@ -19,7 +19,7 @@ config["wv"] = {
         "web/ext/main/jquery-1.11.0/jquery.js",
         "web/ext/main/jquery.migrate-1.2.1/jquery-migrate.min.js",
         "web/ext/main/jscache-gitba01cdc/cache.js",
-        "web/ext/map/openlayers-3.0.0.git3bc84c7/ol.js",
+        "web/ext/map/openlayers-3.1.0/ol.js",
         "test/fixtures.js"
     ],
     src: [
@@ -35,8 +35,7 @@ config["wv"] = {
         "web/js/palettes/wv.*.js",
         "web/js/proj/wv.*.js",
         "web/js/data/wv.*.js",
-        "web/js/map/wv.*.js",
-        "!web/js/map/wv.map.tileworker.js"
+        "web/js/map/wv.*.js"
     ],
     tests: [
         "test/**/*.js"
