@@ -32,7 +32,9 @@ wv.map.ui = wv.map.ui || function(models, config) {
             self.proj[proj.id] = map;
         });
 
-        models.proj.events.on("select", updateProjection);
+        models.proj.events.on("select", function() {
+            updateProjection();
+        });
         models.layers.events
             .on("add", addLayer)
             .on("remove", removeLayer)
@@ -59,13 +61,23 @@ wv.map.ui = wv.map.ui || function(models, config) {
         // using the previous value.
         showMap(map);
         map.updateSize();
-        if ( start && models.proj.selected.id === "geographic" &&
-                !models.map.extent ) {
-            var extent = models.map.getLeadingExtent();
-            map.getView().fitExtent(extent, map.getSize());
-        }
+
         if ( self.selected.previousCenter ) {
             self.selected.setCenter(self.selected.previousCenter);
+        }
+
+        // This is awkward and needs a refactoring
+        if ( start ) {
+            var projId = models.proj.selected.id;
+            var extent = null;
+            if ( models.map.extent ) {
+                extent = models.map.extent;
+            } else if ( !models.map.extent && projId === "geographic" ) {
+                extent = models.map.getLeadingExtent();
+            }
+            if ( extent ) {
+                map.getView().fitExtent(extent, map.getSize());
+            }
         }
         updateExtent();
     };
@@ -362,6 +374,10 @@ wv.map.ui = wv.map.ui || function(models, config) {
             ]
         });
         createZoomButtons(map, proj);
+
+        map.getView().on("change:center", updateExtent);
+        map.getView().on("change:resolution", updateExtent);
+
         return map;
     };
 

@@ -32,6 +32,7 @@ wv.map.model = wv.map.model || function(models, config) {
             var extent = state.v;
             var maxExtent = proj.maxExtent;
             if ( ol.extent.intersects(extent, maxExtent) ) {
+                console.log("loading extent", state.v);
                 self.extent = state.v;
             } else {
                 self.extent = _.clone(proj.maxExtent);
