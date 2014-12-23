@@ -165,6 +165,8 @@ wv.map.ui = wv.map.ui || function(models, config) {
             _.merge(def, def.projections[proj.id]);
             if ( def.type === "wmts" ) {
                 layer = createLayerWMTS(def, options);
+            } else if ( def.type === "wms" ) {
+                layer = createLayerWMS(def, options);
             } else {
                 throw new Error("Unknown layer type: " + def.type);
             }
@@ -218,6 +220,40 @@ wv.map.ui = wv.map.ui || function(models, config) {
         });
         return layer;
     };
+
+    var createLayerWMS = function(def, options) {
+        var proj = models.proj.selected;
+        var source = config.sources[def.source];
+        if ( !source ) {
+            throw new Error(def.id + ": Invalid source: " + def.source);
+        }
+
+        var transparent = ( def.format === "image/png" );
+        var parameters = {
+            LAYERS: def.layer || def.id,
+            FORMAT: def.format,
+            TRANSPARENT: transparent,
+            VERSION: "1.1.1"
+        }
+        var extra = "";
+        if ( def.period === "daily" ) {
+            var date = options.date || models.date.selected;
+            extra = "?TIME=" + wv.util.toISOStringDate(date);
+        }
+        var layer = new ol.layer.Tile({
+            source: new ol.source.TileWMS({
+                url: source.url + extra,
+                params: parameters,
+                tileGrid: new ol.tilegrid.TileGrid({
+                    origin: [proj.maxExtent[0], proj.maxExtent[3]],
+                    resolutions: proj.resolutions,
+                    tileSize: 512
+                })
+            })
+        });
+        return layer;
+    };
+
 
     var createMap = function(proj) {
         var id = "wv-map-" + proj.id;
