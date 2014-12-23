@@ -329,6 +329,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 center: proj.startCenter,
                 zoom: proj.startZoom,
                 maxZoom: proj.numZoomLevels,
+                enableRotation: false
             }),
             target: id,
             renderer: ["canvas", "dom"],
@@ -337,6 +338,13 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 scaleMetric,
                 scaleImperial,
                 mousePosition
+            ],
+            interactions: [
+                new ol.interaction.DoubleClickZoom(),
+                new ol.interaction.DragPan(),
+                new ol.interaction.PinchZoom(),
+                new ol.interaction.MouseWheelZoom(),
+                new ol.interaction.DragZoom()
             ]
         });
         createZoomButtons(map, proj);
