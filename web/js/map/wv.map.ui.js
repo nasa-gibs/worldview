@@ -302,6 +302,15 @@ wv.map.ui = wv.map.ui || function(models, config) {
             .hide();
         $(selector).append($map);
 
+        var scaleMetric = new ol.control.ScaleLine({
+            className: "wv-map-scale-metric",
+            units: "metric"
+        });
+        var scaleImperial = new ol.control.ScaleLine({
+            className: "wv-map-scale-imperial",
+            units: "imperial"
+        });
+
         var map = new ol.Map({
             view: new ol.View({
                 maxResolution: proj.resolutions[0],
@@ -313,7 +322,11 @@ wv.map.ui = wv.map.ui || function(models, config) {
             }),
             target: id,
             renderer: ["canvas", "dom"],
-            logo: false
+            logo: false,
+            controls: [
+                scaleMetric,
+                scaleImperial
+            ]
         });
         createZoomButtons(map);
         return map;
