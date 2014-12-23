@@ -353,7 +353,9 @@ wv.map.ui = wv.map.ui || function(models, config) {
             ],
             interactions: [
                 new ol.interaction.DoubleClickZoom(),
-                new ol.interaction.DragPan(),
+                new ol.interaction.DragPan({
+                    kinetic: new ol.Kinetic(-0.005, 0.05, 100)
+                }),
                 new ol.interaction.PinchZoom(),
                 new ol.interaction.MouseWheelZoom(),
                 new ol.interaction.DragZoom()
