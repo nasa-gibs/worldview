@@ -339,11 +339,11 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 mousePosition
             ]
         });
-        createZoomButtons(map);
+        createZoomButtons(map, proj);
         return map;
     };
 
-    var createZoomButtons = function(map) {
+    var createZoomButtons = function(map, proj) {
         var $map = $("#" + map.getTarget());
 
         var $zoomOut = $("<button></button>")
@@ -373,6 +373,24 @@ wv.map.ui = wv.map.ui || function(models, config) {
             text: false
         });
         $zoomIn.click(zoomAction(map, 1));
+
+        var onZoomChange = function() {
+            var maxZoom = proj.resolutions.length;
+            var zoom = map.getView().getZoom();
+            if ( zoom === 0 ) {
+                $zoomIn.button("enable");
+                $zoomOut.button("disable");
+            } else if ( zoom === maxZoom ) {
+                $zoomIn.button("disable");
+                $zoomOut.button("enable");
+            } else {
+                $zoomIn.button("enable");
+                $zoomOut.button("enable");
+            }
+        };
+
+        map.getView().on("change:resolution", onZoomChange);
+        onZoomChange();
     };
 
     var zoomAction = function(map, amount) {
