@@ -166,7 +166,7 @@ $(function() {
         ui.tour = wv.tour(models, ui, config);
         ui.info = wv.ui.info(ui, config);
 
-
+        //FIXME: Old hack
         $(window).resize(function() {
           if ($(window).width() < 720) {
             $('#productsHoldertabs li.first a').trigger('click');

@@ -49,8 +49,7 @@ wv.ui.mouse.click = wv.ui.mouse.click || function($element, callback) {
 
 };
 
-wv.ui.mouse.wheel = wv.ui.mouse.wheel || function($element, options) {
-
+wv.ui.mouse.wheel = wv.ui.mouse.wheel || function(element, ui, options) {
     options = options || {};
 
     var self = {};
@@ -64,7 +63,7 @@ wv.ui.mouse.wheel = wv.ui.mouse.wheel || function($element, options) {
     var lastEvent = null;
 
     var init = function() {
-        $element.on("mousewheel", wheel);
+        element.on("zoom", wheel);
     };
 
     self.change = function(listener) {
@@ -72,21 +71,29 @@ wv.ui.mouse.wheel = wv.ui.mouse.wheel || function($element, options) {
         return self;
     };
 
-    var wheel = function(event) {
-        lastEvent = event;
-        delta += event.deltaY;
-        if ( !timer ) {
-            zoomed = false;
+    var wheel = function() {
+        var evt = d3.event.sourceEvent;
+        if(Math.abs(evt.deltaX) <= Math.abs(evt.deltaY)){
+            lastEvent = evt;
+            delta += evt.deltaY;
+            if ( !timer ) {
+                zoomed = false;
+            }
+            clearTimeout(timer);
+            timer = setTimeout(end, self.timeout);
+            update(evt);
         }
-        clearTimeout(timer);
-        timer = setTimeout(end, self.timeout);
-        update(event);
+        else{
+            if(!(ui.timeline.smallSize())){
+                ui.timeline.panAxis(d3.event);
+            }
+        }
     };
 
     var update = function(event) {
         var change = Math.floor(Math.abs(delta) / self.threshold);
         if ( change >= 1 ) {
-            var sign = Math.sign(delta);
+            var sign = delta?delta<0?-1:1:0;
             self.events.trigger("change", sign * change, event);
             delta = delta % self.threshold;
             zoomed = true;
