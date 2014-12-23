@@ -78,6 +78,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 map.removeLayer(mapLayer);
             }
         });
+        removeGraticule();
         //cache.clear();
     };
 
@@ -88,7 +89,11 @@ wv.map.ui = wv.map.ui || function(models, config) {
 
         var defs = models.layers.get({reverse: true});
         _.each(defs, function(def) {
-            map.addLayer(createLayer(def));
+            if ( isGraticule(def) ) {
+                addGraticule();
+            } else {
+                self.selected.addLayer(createLayer(def));
+            }
         });
         updateLayerVisibilities();
     };
@@ -109,17 +114,27 @@ wv.map.ui = wv.map.ui || function(models, config) {
     };
 
     var addLayer = function(def) {
+        console.log("add");
         var mapIndex = _.findIndex(models.layers.get({reverse: true}), {
             id: def.id
         });
-        var layer = createLayer(def);
-        self.selected.getLayers().insertAt(mapIndex, layer);
+        if ( isGraticule(def) ) {
+            addGraticule();
+        } else {
+            var layer = createLayer(def);
+            self.selected.getLayers().insertAt(mapIndex, layer);
+        }
         updateLayerVisibilities();
     };
 
     var removeLayer = function(def) {
-        var layer = findLayer(def);
-        self.selected.removeLayer(layer);
+        console.log("remove");
+        if ( isGraticule(def) ) {
+            removeGraticule();
+        } else {
+            var layer = findLayer(def);
+            self.selected.removeLayer(layer);
+        }
     };
 
     var updateLayerOrder = function() {
@@ -254,6 +269,29 @@ wv.map.ui = wv.map.ui || function(models, config) {
         return layer;
     };
 
+    var isGraticule = function(def) {
+        var proj = models.proj.selected.id;
+        return ( def.projections[proj].type === "graticule" ||
+            def.type === "graticule" );
+    };
+
+    var addGraticule = function() {
+        var graticule = new ol.Graticule({
+            map: self.selected,
+            strokeStyle: new ol.style.Stroke({
+                color: 'rgba(255, 255, 255, 0.5)',
+                width: 2,
+                lineDash: [0.5, 4]
+            })
+        });
+        self.selected.graticule = graticule;
+    };
+
+    var removeGraticule = function() {
+        if ( self.selected.graticule ) {
+            self.selected.graticule.setMap(null);
+        }
+    };
 
     var createMap = function(proj) {
         var id = "wv-map-" + proj.id;
