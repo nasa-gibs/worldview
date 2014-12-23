@@ -69,7 +69,7 @@ $(function() {
             wv.proj.parse,
             wv.layers.parse,
             wv.date.parse,
-            // FIXME OL3: wv.map.parse,
+            wv.map.parse,
             wv.palettes.parse
         ];
         if ( config.features.dataDownload ) {
