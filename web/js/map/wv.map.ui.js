@@ -231,14 +231,14 @@ wv.map.ui = wv.map.ui || function(models, config) {
         _.each(matrixSet.resolutions, function(resolution, index) {
             matrixIds.push(index);
         });
-        var parameters = "";
+        var extra = "";
         if ( def.period === "daily" ) {
             var date = options.date || models.date.selected;
-            parameters = "?TIME=" + wv.util.toISOStringDate(date);
+            extra = "?TIME=" + wv.util.toISOStringDate(date);
         }
         var layer = new ol.layer.Tile({
             source: new ol.source.WMTS({
-                url: source.url + parameters,
+                url: source.url + extra,
                 layer: def.layer || def.id,
                 format: def.format,
                 matrixSet: matrixSet.id,

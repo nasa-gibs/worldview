@@ -1,6 +1,6 @@
 // OpenLayers 3. See http://openlayers.org/
 // License: https://raw.githubusercontent.com/openlayers/ol3/master/LICENSE.md
-// Version: v3.1.0
+// Version: v3.1.0-2-g97afb31
 
 (function (root, factory) {
   if (typeof define === "function" && define.amd) {
@@ -73857,6 +73857,21 @@ ol.Map = function(options) {
   var optionsInternal = ol.Map.createOptionsInternal(options);
 
   /**
+   * @type {boolean}
+   * @private
+   */
+  this.loadTilesWhileAnimating_ = goog.isDef(options.loadTilesWhileAnimating) ?
+      options.loadTilesWhileAnimating : false;
+
+  /**
+   * @type {boolean}
+   * @private
+   */
+  this.loadTilesWhileInteracting_ =
+      goog.isDef(options.loadTilesWhileInteracting) ?
+          options.loadTilesWhileInteracting : false;
+
+  /**
    * @private
    * @type {number}
    */
@@ -73992,12 +74007,6 @@ ol.Map = function(options) {
    * @private
    */
   this.controls_ = optionsInternal.controls;
-
-  /**
-   * @type {olx.DeviceOptions}
-   * @private
-   */
-  this.deviceOptions_ = optionsInternal.deviceOptions;
 
   /**
    * @type {ol.Collection.<ol.interaction.Interaction>}
@@ -74606,15 +74615,14 @@ ol.Map.prototype.handlePostRender = function() {
     var tileSourceCount = 0;
     if (!goog.isNull(frameState)) {
       var hints = frameState.viewHints;
-      var deviceOptions = this.deviceOptions_;
       if (hints[ol.ViewHint.ANIMATING]) {
-        maxTotalLoading = deviceOptions.loadTilesWhileAnimating === false ?
-            0 : 8;
+        maxTotalLoading = this.loadTilesWhileAnimating_ === true ?
+            8 : 0;
         maxNewLoads = 2;
       }
       if (hints[ol.ViewHint.INTERACTING]) {
-        maxTotalLoading = deviceOptions.loadTilesWhileInteracting === false ?
-            0 : 8;
+        maxTotalLoading = this.loadTilesWhileInteracting_ === true ?
+            8 : 0;
         maxNewLoads = 2;
       }
       tileSourceCount = goog.object.getCount(frameState.wantedTiles);
@@ -75088,7 +75096,6 @@ ol.Map.prototype.unskipFeature = function(feature) {
 
 /**
  * @typedef {{controls: ol.Collection.<ol.control.Control>,
- *            deviceOptions: olx.DeviceOptions,
  *            interactions: ol.Collection.<ol.interaction.Interaction>,
  *            keyboardEventTarget: (Element|Document),
  *            logos: Object,
@@ -75202,9 +75209,6 @@ ol.Map.createOptionsInternal = function(options) {
     controls = ol.control.defaults();
   }
 
-  var deviceOptions = goog.isDef(options.deviceOptions) ?
-      options.deviceOptions : /** @type {olx.DeviceOptions} */ ({});
-
   var interactions;
   if (goog.isDef(options.interactions)) {
     if (goog.isArray(options.interactions)) {
@@ -75231,7 +75235,6 @@ ol.Map.createOptionsInternal = function(options) {
 
   return {
     controls: controls,
-    deviceOptions: deviceOptions,
     interactions: interactions,
     keyboardEventTarget: keyboardEventTarget,
     logos: logos,
@@ -111150,7 +111153,7 @@ ol.source.WMTS = function(options) {
         var y = -tileCoord[2] - 1;
         var tileExtent = tileGrid.getTileCoordExtent(tileCoord, tmpExtent);
         var extent = projection.getExtent();
-
+        /*
         if (!goog.isNull(extent) && projection.isGlobal()) {
           var numCols = Math.ceil(
               ol.extent.getWidth(extent) /
@@ -111161,6 +111164,7 @@ ol.source.WMTS = function(options) {
           tmpTileCoord[2] = tileCoord[2];
           tileExtent = tileGrid.getTileCoordExtent(tmpTileCoord, tmpExtent);
         }
+        */
         if (!ol.extent.intersects(tileExtent, extent) ||
             ol.extent.touches(tileExtent, extent)) {
           return null;
