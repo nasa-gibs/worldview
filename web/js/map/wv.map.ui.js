@@ -257,20 +257,24 @@ wv.map.ui = wv.map.ui || function(models, config) {
             var date = options.date || models.date.selected;
             extra = "?TIME=" + wv.util.toISOStringDate(date);
         }
-        var layer = new ol.layer.Tile({
-            source: new ol.source.WMTS({
-                url: source.url + extra,
-                layer: def.layer || def.id,
-                format: def.format,
-                matrixSet: matrixSet.id,
-                tileGrid: new ol.tilegrid.WMTS({
-                    origin: [proj.maxExtent[0], proj.maxExtent[3]],
-                    resolutions: matrixSet.resolutions,
-                    matrixIds: matrixIds,
-                    tileSize: matrixSet.tileSize[0]
-                }),
-                tileClass: wv.map.ui.lookupTileClass
+        var sourceOptions = {
+            url: source.url + extra,
+            layer: def.layer || def.id,
+            format: def.format,
+            matrixSet: matrixSet.id,
+            tileGrid: new ol.tilegrid.WMTS({
+                origin: [proj.maxExtent[0], proj.maxExtent[3]],
+                resolutions: matrixSet.resolutions,
+                matrixIds: matrixIds,
+                tileSize: matrixSet.tileSize[0]
             })
+        };
+        if ( models.palettes.isActive(def.id) ) {
+            sourceOptions.tileClass =
+                wv.map.ui.lookupTileClassFactory(models, def);
+        };
+        var layer = new ol.layer.Tile({
+            source: new ol.source.WMTS(sourceOptions)
         });
         return layer;
     };
@@ -474,7 +478,11 @@ wv.map.ui = wv.map.ui || function(models, config) {
             date = wv.util.toISOStringDate(models.date.selected);
         }
         var dateId = ( def.period === "daily" ) ? date : "";
-        return [layerId, projId, dateId].join(":");
+        var palette = "";
+        if ( models.palettes.isActive(def.id) ) {
+            palette = models.palettes.key(def.id);
+        }
+        return [layerId, projId, dateId, palette].join(":");
     };
 
     init();
@@ -482,50 +490,59 @@ wv.map.ui = wv.map.ui || function(models, config) {
 
 };
 
-wv.map.ui.lookupTileClass = function(tileCoord, tileState, src, crossOrigin,
-        tileLoadFunction) {
+wv.map.ui.lookupTileClassFactory = function(models, def) {
 
-    var image = new Image();
-    var canvas = document.createElement("canvas");
+    return function(tileCoord, tileState, src, crossOrigin, tileLoadFunction) {
+        var image = new Image();
+        var canvas = document.createElement("canvas");
 
-    var self = new ol.ImageTile(tileCoord, tileState, null, "anonymous",
-            tileLoadFunction);
+        var self = new ol.ImageTile(tileCoord, tileState, null, "anonymous",
+                tileLoadFunction);
 
-    self.getImage = function(opt_context) {
-        return canvas;
+        self.getImage = function(opt_context) {
+            return canvas;
+        };
+
+        self.getKey = function() {
+            return image.src;
+        };
+
+        self.load = function() {
+            if ( self.state == ol.TileState.IDLE ) {
+                var lookup = models.palettes.get(def.id).lookup;
+                self.state = ol.TileState.LOADING;
+                image.addEventListener("load", function() {
+                    w = image.width;
+                    h = image.height;
+                    canvas.width = w;
+                    canvas.height = h;
+                    var g = canvas.getContext("2d");
+                    g.drawImage(image, 0, 0);
+                    var imageData = g.getImageData(0, 0, canvas.width,
+                        canvas.height);
+                    var pixelData = imageData.data;
+                    for ( var i = 0; i < w * h * 4; i += 4 ) {
+                        var source = pixelData[i + 0] + "," +
+                                     pixelData[i + 1] + "," +
+                                     pixelData[i + 2] + "," +
+                                     pixelData[i + 3];
+                        var target = lookup[source];
+                        if ( target ) {
+                            pixelData[i + 0] = target.r;
+                            pixelData[i + 1] = target.g;
+                            pixelData[i + 2] = target.b;
+                            pixelData[i + 3] = target.a;
+                        }
+                    }
+                    g.putImageData(imageData, 0, 0);
+                    self.state = ol.TileState.LOADED;
+                    self.changed();
+                });
+                image.crossOrigin = "anonymous";
+                image.src = src;
+            }
+        };
+
+        return self;
     };
-
-    self.getKey = function() {
-        return image.src;
-    };
-
-    self.load = function() {
-        if ( self.state == ol.TileState.IDLE ) {
-            self.state = ol.TileState.LOADING;
-            image.addEventListener("load", function() {
-                canvas = document.createElement("canvas");
-                w = image.width;
-                h = image.height;
-                canvas.width = w;
-                canvas.height = h;
-                var g = canvas.getContext("2d");
-                g.drawImage(image, 0, 0);
-                var imageData = g.getImageData(0, 0, canvas.width,
-                    canvas.height);
-                var pixelData = imageData.data;
-                for ( var i = 0; i < w * h * 4; i += 4 ) {
-                    pixelData[i+1] = 0;
-                    pixelData[i+2] = 0;
-                }
-                g.putImageData(imageData, 0, 0);
-                self.state = ol.TileState.LOADED;
-                self.changed();
-            });
-            image.crossOrigin = "anonymous";
-            image.src = src;
-        }
-    };
-
-    return self;
-
 };
