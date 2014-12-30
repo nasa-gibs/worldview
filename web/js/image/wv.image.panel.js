@@ -163,7 +163,8 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
         try {
             coords = c;
             var map = ui.map.selected;
-            var bbox = map.getExtent();
+            //What's this for?
+            //var bbox = map.getExtent();
             var time = models.date.selected;
             var pixels = coords;
             var s = models.proj.selected.id;
@@ -186,8 +187,11 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
 
             var px = pixels;
             var x1 = px.x; var y1= px.y; var x2 = px.x2; var y2=px.y2;
-            var lonlat1 = map.getLonLatFromViewPortPx(new OpenLayers.Pixel(Math.floor(x1), Math.floor(y2)));
-            var lonlat2 = map.getLonLatFromViewPortPx(new OpenLayers.Pixel(Math.floor(x2), Math.floor(y1)));
+
+            //var lonlat1 = map.getLonLatFromViewPortPx(new OpenLayers.Pixel(Math.floor(x1), Math.floor(y2)));
+            //var lonlat2 = map.getLonLatFromViewPortPx(new OpenLayers.Pixel(Math.floor(x2), Math.floor(y1)));
+            var lonlat1 = map.getCoordinateFromPixel([Math.floor(x1), Math.floor(y2)]);
+            var lonlat2 = map.getCoordinateFromPixel([Math.floor(x2), Math.floor(y1)]);
 
             var dlURL = url;
             var conversionFactor = 256;
@@ -203,7 +207,7 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
 
 
 
-            dlURL += "&extent="+lonlat1.lon+","+lonlat1.lat+","+lonlat2.lon+","+lonlat2.lat;
+            dlURL += "&extent="+lonlat1[0]+","+lonlat1[1]+","+lonlat2[0]+","+lonlat2[1];
 
             //dlURL += "&switch="+s;
             dlURL += "&epsg="+epsg;
@@ -224,8 +228,8 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
             $("#wv-image-resolution").unbind("change").change(function () {
                 imgRes =  $("#wv-image-resolution option:checked").val();
                 resolution = imgRes;
-                imgWidth =  Math.round((Math.abs(lonlat2.lon - lonlat1.lon) / conversionFactor) / Number(imgRes));
-                imgHeight = Math.round((Math.abs(lonlat2.lat - lonlat1.lat) / conversionFactor) / Number(imgRes));
+                imgWidth =  Math.round((Math.abs(lonlat2[0] - lonlat1[0]) / conversionFactor) / Number(imgRes));
+                imgHeight = Math.round((Math.abs(lonlat2[1] - lonlat1[1]) / conversionFactor) / Number(imgRes));
                 imgFilesize =  ((   imgWidth * imgHeight * 24) / 8388608).toFixed(2);
                 imgFormat = $("#wv-image-format option:checked").val();
                 imgWorldfile = $("#wv-image-worldfile option:checked").val();
