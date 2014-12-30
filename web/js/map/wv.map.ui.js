@@ -42,6 +42,10 @@ wv.map.ui = wv.map.ui || function(models, config) {
             .on("opacity", updateOpacity)
             .on("update", updateLayerOrder);
         models.date.events.on("select", updateDate);
+        models.palettes.events
+            .on("set-custom", updateLookup)
+            .on("clear-custom", updateLookup)
+            .on("range", updateLookup);
 
         updateProjection(true);
     };
@@ -170,6 +174,23 @@ wv.map.ui = wv.map.ui || function(models, config) {
         updateLayerVisibilities();
     };
 
+    var updateLookup = function(layerId) {
+        // If the lookup changes, all layers in the cache are now stale
+        // since the tiles need to be rerendered. Remove from cache.
+        var selectedDate = wv.util.toISOStringDate(models.date.selected);
+        var selectedProj = models.proj.selected.id;
+        cache.removeWhere(function(key, mapLayer) {
+            if ( mapLayer.wvid === layerId &&
+                 mapLayer.wvproj === selectedProj &&
+                 mapLayer.wvdate !== selectedDate &&
+                 mapLayer.lookupTable ) {
+                return true;
+            }
+            return false;
+        });
+        reloadLayers();
+    };
+
     // FIXME: OL3
     // Don't call directly, use an event instead
     self.preload = function() {
@@ -236,19 +257,24 @@ wv.map.ui = wv.map.ui || function(models, config) {
             var date = options.date || models.date.selected;
             extra = "?TIME=" + wv.util.toISOStringDate(date);
         }
-        var layer = new ol.layer.Tile({
-            source: new ol.source.WMTS({
-                url: source.url + extra,
-                layer: def.layer || def.id,
-                format: def.format,
-                matrixSet: matrixSet.id,
-                tileGrid: new ol.tilegrid.WMTS({
-                    origin: [proj.maxExtent[0], proj.maxExtent[3]],
-                    resolutions: matrixSet.resolutions,
-                    matrixIds: matrixIds,
-                    tileSize: matrixSet.tileSize[0]
-                })
+        var sourceOptions = {
+            url: source.url + extra,
+            layer: def.layer || def.id,
+            format: def.format,
+            matrixSet: matrixSet.id,
+            tileGrid: new ol.tilegrid.WMTS({
+                origin: [proj.maxExtent[0], proj.maxExtent[3]],
+                resolutions: matrixSet.resolutions,
+                matrixIds: matrixIds,
+                tileSize: matrixSet.tileSize[0]
             })
+        };
+        if ( models.palettes.isActive(def.id) ) {
+            sourceOptions.tileClass =
+                wv.map.ui.lookupTileClassFactory(models, def);
+        };
+        var layer = new ol.layer.Tile({
+            source: new ol.source.WMTS(sourceOptions)
         });
         return layer;
     };
@@ -452,10 +478,71 @@ wv.map.ui = wv.map.ui || function(models, config) {
             date = wv.util.toISOStringDate(models.date.selected);
         }
         var dateId = ( def.period === "daily" ) ? date : "";
-        return [layerId, projId, dateId].join(":");
+        var palette = "";
+        if ( models.palettes.isActive(def.id) ) {
+            palette = models.palettes.key(def.id);
+        }
+        return [layerId, projId, dateId, palette].join(":");
     };
 
     init();
     return self;
 
+};
+
+wv.map.ui.lookupTileClassFactory = function(models, def) {
+
+    return function(tileCoord, tileState, src, crossOrigin, tileLoadFunction) {
+        var image = new Image();
+        var canvas = document.createElement("canvas");
+
+        var self = new ol.ImageTile(tileCoord, tileState, null, "anonymous",
+                tileLoadFunction);
+
+        self.getImage = function(opt_context) {
+            return canvas;
+        };
+
+        self.getKey = function() {
+            return image.src;
+        };
+
+        self.load = function() {
+            if ( self.state == ol.TileState.IDLE ) {
+                var lookup = models.palettes.get(def.id).lookup;
+                self.state = ol.TileState.LOADING;
+                image.addEventListener("load", function() {
+                    w = image.width;
+                    h = image.height;
+                    canvas.width = w;
+                    canvas.height = h;
+                    var g = canvas.getContext("2d");
+                    g.drawImage(image, 0, 0);
+                    var imageData = g.getImageData(0, 0, canvas.width,
+                        canvas.height);
+                    var pixelData = imageData.data;
+                    for ( var i = 0; i < w * h * 4; i += 4 ) {
+                        var source = pixelData[i + 0] + "," +
+                                     pixelData[i + 1] + "," +
+                                     pixelData[i + 2] + "," +
+                                     pixelData[i + 3];
+                        var target = lookup[source];
+                        if ( target ) {
+                            pixelData[i + 0] = target.r;
+                            pixelData[i + 1] = target.g;
+                            pixelData[i + 2] = target.b;
+                            pixelData[i + 3] = target.a;
+                        }
+                    }
+                    g.putImageData(imageData, 0, 0);
+                    self.state = ol.TileState.LOADED;
+                    self.changed();
+                });
+                image.crossOrigin = "anonymous";
+                image.src = src;
+            }
+        };
+
+        return self;
+    };
 };
