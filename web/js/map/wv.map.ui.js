@@ -272,7 +272,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         if ( models.palettes.isActive(def.id) ) {
             sourceOptions.tileClass =
                 wv.map.ui.lookupTileClassFactory(models, def);
-        };
+        }
         var layer = new ol.layer.Tile({
             source: new ol.source.WMTS(sourceOptions)
         });
