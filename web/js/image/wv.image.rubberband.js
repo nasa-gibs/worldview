@@ -29,7 +29,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
     var previousCoords = null;
     var icon = "images/camera.png";
     var onicon = "images/cameraon.png";
-    var cropee = "map";
+    var $cropee = $("#wv-map"); //TODO: Test on non-canvas
     var id = containerId;
     var state = "off";
     var jcropAPI = null;
@@ -158,7 +158,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
     */
     var draw =  function() {
 
-        $("#"+cropee).Jcrop({
+        $cropee.Jcrop({
                 bgColor:     'black',
                 bgOpacity:   0.3,
                 onSelect:  function(c){previousCoords=coords;handleChange(c);},
@@ -167,7 +167,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                 fullScreen: true
                 });
 
-        jcropAPI = $('#'+cropee).data('Jcrop');
+        jcropAPI = $cropee.data('Jcrop');
 
         if(coords) {
             jcropAPI.setSelect([coords.x, coords.y,coords.x2,coords.y2]);
