@@ -73,7 +73,7 @@ wv.ui.mouse.wheel = wv.ui.mouse.wheel || function(element, ui, options) {
 
     var wheel = function() {
         var evt = d3.event.sourceEvent;
-        if(Math.abs(evt.deltaX) <= Math.abs(evt.deltaY)){
+        if(Math.abs(evt.deltaX) <= Math.abs(evt.deltaY)/7){
             lastEvent = evt;
             delta += evt.deltaY;
             if ( !timer ) {
