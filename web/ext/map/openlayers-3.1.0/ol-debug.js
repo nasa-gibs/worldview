@@ -1,6 +1,6 @@
 // OpenLayers 3. See http://openlayers.org/
 // License: https://raw.githubusercontent.com/openlayers/ol3/master/LICENSE.md
-// Version: v3.1.0-2-g97afb31
+// Version: v3.1.1-13-g322d562
 
 (function (root, factory) {
   if (typeof define === "function" && define.amd) {
@@ -18767,7 +18767,7 @@ ol.proj.Projection.prototype.getAxisOrientation = function() {
 
 /**
  * Is this projection a global projection which spans the whole world?
- * @return {boolean} Wether the projection is global.
+ * @return {boolean} Whether the projection is global.
  * @api stable
  */
 ol.proj.Projection.prototype.isGlobal = function() {
@@ -48585,6 +48585,7 @@ goog.require('ol.TileCoord');
 
 /**
  * @enum {number}
+ * @api
  */
 ol.TileState = {
   IDLE: 0,
@@ -48604,6 +48605,7 @@ ol.TileState = {
  * @extends {goog.events.EventTarget}
  * @param {ol.TileCoord} tileCoord Tile coordinate.
  * @param {ol.TileState} state State.
+ * @api
  */
 ol.Tile = function(tileCoord, state) {
 
@@ -48615,7 +48617,7 @@ ol.Tile = function(tileCoord, state) {
   this.tileCoord = tileCoord;
 
   /**
-   * @protected
+   * @api
    * @type {ol.TileState}
    */
   this.state = state;
@@ -48625,7 +48627,7 @@ goog.inherits(ol.Tile, goog.events.EventTarget);
 
 
 /**
- * @protected
+ * @api
  */
 ol.Tile.prototype.changed = function() {
   this.dispatchEvent(goog.events.EventType.CHANGE);
@@ -50797,14 +50799,13 @@ ol.renderer.Map.prototype.forEachFeatureAtPixel =
     function(coordinate, frameState, callback, thisArg,
         layerFilter, thisArg2) {
   var result;
-  var extent = frameState.extent;
   var viewState = frameState.viewState;
   var viewResolution = viewState.resolution;
   var viewRotation = viewState.rotation;
   if (!goog.isNull(this.replayGroup)) {
     /** @type {Object.<string, boolean>} */
     var features = {};
-    result = this.replayGroup.forEachGeometryAtPixel(extent, viewResolution,
+    result = this.replayGroup.forEachGeometryAtPixel(viewResolution,
         viewRotation, coordinate, {},
         /**
          * @param {ol.Feature} feature Feature.
@@ -96129,13 +96130,13 @@ ol.ImageTile = function(tileCoord, state, src, crossOrigin, tileLoadFunction) {
   /**
    * Image URI
    *
-   * @private
+   * @protected
    * @type {string}
    */
   this.src_ = src;
 
   /**
-   * @private
+   * @protected
    * @type {Image}
    */
   this.image_ = new Image();
@@ -111038,6 +111039,7 @@ ol.source.WMTS = function(options) {
 
   var version = goog.isDef(options.version) ? options.version : '1.0.0';
   var format = goog.isDef(options.format) ? options.format : 'image/jpeg';
+  var wrapX = goog.isDef(options.wrapX) ? options.wrapX : true;
 
   /**
    * @private
@@ -111153,8 +111155,8 @@ ol.source.WMTS = function(options) {
         var y = -tileCoord[2] - 1;
         var tileExtent = tileGrid.getTileCoordExtent(tileCoord, tmpExtent);
         var extent = projection.getExtent();
-        /*
-        if (!goog.isNull(extent) && projection.isGlobal()) {
+
+        if (wrapX && !goog.isNull(extent) && projection.isGlobal()) {
           var numCols = Math.ceil(
               ol.extent.getWidth(extent) /
               ol.extent.getWidth(tileExtent));
@@ -111164,7 +111166,6 @@ ol.source.WMTS = function(options) {
           tmpTileCoord[2] = tileCoord[2];
           tileExtent = tileGrid.getTileCoordExtent(tmpTileCoord, tmpExtent);
         }
-        */
         if (!ol.extent.intersects(tileExtent, extent) ||
             ol.extent.touches(tileExtent, extent)) {
           return null;
@@ -112568,6 +112569,97 @@ ol.style.RegularShape.prototype.getChecksum = function() {
   return this.checksums_[0];
 };
 
+/*
+* NASA Worldview
+*
+* This code was originally developed at NASA/Goddard Space Flight Center for
+* the Earth Science Data and Information System (ESDIS) project.
+*
+* Copyright (C) 2013 - 2015 United States Government as represented by the
+* Administrator of the National Aeronautics and Space Administration.
+* All Rights Reserved.
+*/
+
+goog.provide('ol.wv');
+goog.provide('ol.wv.LookupImageTile');
+goog.require('ol.ImageTile');
+
+/**
+ * @constructor
+ * @extends {ol.ImageTile}
+ */
+ol.wv.LookupImageTile = function(lookup, tileCoord, state, src, crossOrigin, tileLoadFunction) {
+
+    goog.base(this, tileCoord, state, src, "anonymous", tileLoadFunction);
+
+    /**
+     * @private
+     */
+    this.lookup_ = lookup;
+
+    /**
+     * @private
+     */
+    this.canvas_ = null;
+};
+goog.inherits(ol.wv.LookupImageTile, ol.ImageTile);
+
+/**
+ * @return (HTMLCanvasElement|HTMLImageElement|HTMLVideoElement|null)
+ */
+ol.wv.LookupImageTile.prototype.getImage = function(opt_context) {
+    return this.canvas_;
+};
+
+ol.wv.LookupImageTile.prototype.load = function() {
+
+    if ( this.state === ol.TileState.IDLE ) {
+        this.state = ol.TileState.LOADING;
+        var that = this;
+        this.image_.addEventListener("load", function() {
+            that.canvas_ = document.createElement("canvas");
+            that.canvas_.width = that.image_.width;
+            that.canvas_.height = that.image_.height;
+            var octets = that.canvas_.width * that.canvas_.height * 4;
+            var g = that.canvas_.getContext("2d");
+            g.drawImage(that.image_, 0, 0);
+            var imageData = g.getImageData(0, 0, that.canvas_.width,
+                    that.canvas_.height);
+            var pixels = imageData.data;
+
+            for ( var i = 0; i < octets; i += 4 ) {
+                var source = pixels[i + 0] + "," +
+                             pixels[i + 1] + "," +
+                             pixels[i + 2] + "," +
+                             pixels[i + 3];
+                var target = that.lookup_[source];
+
+                if ( target ) {
+                    pixels[i + 0] = target["r"];
+                    pixels[i + 1] = target["g"];
+                    pixels[i + 2] = target["b"];
+                    pixels[i + 3] = target["a"];
+                }
+            }
+            g.putImageData(imageData, 0, 0);
+            that.state = ol.TileState.LOADED;
+            that.changed();
+        });
+        this.image_.src = this.src_;
+    };
+
+};
+
+/**
+ * @api
+ */
+ol.wv.LookupImageTile.factory = function(lookup) {
+    return function(tileCoord, state, src, crossOrigin, tileLoadFunction) {
+        return new ol.wv.LookupImageTile(lookup, tileCoord, state, src,
+                crossOrigin, tileLoadFunction);
+    };
+};
+
 // Copyright 2009 The Closure Library Authors.
 // All Rights Reserved.
 //
@@ -112788,6 +112880,8 @@ goog.require('ol.tilegrid.XYZ');
 goog.require('ol.tilegrid.Zoomify');
 goog.require('ol.tilejson');
 goog.require('ol.webgl.Context');
+goog.require('ol.wv');
+goog.require('ol.wv.LookupImageTile');
 goog.require('ol.xml');
 
 
@@ -113696,6 +113790,21 @@ goog.exportProperty(
     'setPositioning',
     ol.Overlay.prototype.setPositioning);
 
+goog.exportSymbol(
+    'ol.Tile',
+    ol.Tile,
+    OPENLAYERS);
+
+goog.exportProperty(
+    ol.Tile.prototype,
+    'state',
+    ol.Tile.prototype.state);
+
+goog.exportProperty(
+    ol.Tile.prototype,
+    'changed',
+    ol.Tile.prototype.changed);
+
 goog.exportProperty(
     ol.Tile.prototype,
     'getTileCoord',
@@ -113795,6 +113904,11 @@ goog.exportProperty(
     ol.View.prototype,
     'setZoom',
     ol.View.prototype.setZoom);
+
+goog.exportSymbol(
+    'ol.wv.LookupImageTile.factory',
+    ol.wv.LookupImageTile.factory,
+    OPENLAYERS);
 
 goog.exportSymbol(
     'ol.xml.getAllTextContent',
@@ -116783,6 +116897,16 @@ goog.exportProperty(
 
 goog.exportProperty(
     ol.ImageTile.prototype,
+    'state',
+    ol.ImageTile.prototype.state);
+
+goog.exportProperty(
+    ol.ImageTile.prototype,
+    'changed',
+    ol.ImageTile.prototype.changed);
+
+goog.exportProperty(
+    ol.ImageTile.prototype,
     'getTileCoord',
     ol.ImageTile.prototype.getTileCoord);
 
@@ -117040,6 +117164,21 @@ goog.exportProperty(
     ol.View.prototype,
     'unByKey',
     ol.View.prototype.unByKey);
+
+goog.exportProperty(
+    ol.wv.LookupImageTile.prototype,
+    'state',
+    ol.wv.LookupImageTile.prototype.state);
+
+goog.exportProperty(
+    ol.wv.LookupImageTile.prototype,
+    'changed',
+    ol.wv.LookupImageTile.prototype.changed);
+
+goog.exportProperty(
+    ol.wv.LookupImageTile.prototype,
+    'getTileCoord',
+    ol.wv.LookupImageTile.prototype.getTileCoord);
 
 goog.exportProperty(
     ol.tilegrid.WMTS.prototype,

@@ -267,11 +267,12 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 resolutions: matrixSet.resolutions,
                 matrixIds: matrixIds,
                 tileSize: matrixSet.tileSize[0]
-            })
+            }),
+            wrapX: false
         };
         if ( models.palettes.isActive(def.id) ) {
-            sourceOptions.tileClass =
-                wv.map.ui.lookupTileClassFactory(models, def);
+            var lookup = models.palettes.get(def.id).lookup;
+            sourceOptions.tileClass = ol.wv.LookupImageTile.factory(lookup);
         }
         var layer = new ol.layer.Tile({
             source: new ol.source.WMTS(sourceOptions)
@@ -512,6 +513,7 @@ wv.map.ui.lookupTileClassFactory = function(models, def) {
                 var lookup = models.palettes.get(def.id).lookup;
                 self.state = ol.TileState.LOADING;
                 image.addEventListener("load", function() {
+                    console.log("load called");
                     w = image.width;
                     h = image.height;
                     canvas.width = w;
@@ -536,7 +538,9 @@ wv.map.ui.lookupTileClassFactory = function(models, def) {
                     }
                     g.putImageData(imageData, 0, 0);
                     self.state = ol.TileState.LOADED;
-                    self.changed();
+                    console.log("self.chagned", self.changed);
+                    self.changed.apply(self);
+                    self.dispatchEvent("change");
                 });
                 image.crossOrigin = "anonymous";
                 image.src = src;
