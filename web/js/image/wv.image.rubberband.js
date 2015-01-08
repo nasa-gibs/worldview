@@ -127,6 +127,8 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
         else {
             state = "off";
             $button.prop("checked", false).button("refresh");
+            $cropee
+                .insertAfter('#productsHolder');
             jcropAPI.destroy();
             if (previousPalettes) {
                 models.palettes.restore(previousPalettes);
