@@ -31,7 +31,7 @@ die() {
 if [ "$FETCH_GC" ] ; then
     rm -rf "$OPT_DIR/gc/*"
     rm -rf "$OPT_DIR/colormaps/gc/*"
-    "$BIN_DIR/wv-options-fetch" "$BUILD_DIR/config.json" "$OPT_DIR/gc"
+    "$BIN_DIR/wv-options-fetch" "$OPT_DIR/config.json" "$OPT_DIR/gc"
     exit 0
 fi
 
