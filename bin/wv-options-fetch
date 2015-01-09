@@ -91,11 +91,6 @@ def process_colormaps():
 
 tolerant = config.get("tolerant", False)
 if "wv-options-fetch" in config:
-    with open(os.path.join(output_dir, "info.json"), "w") as fp:
-        info = {
-            "fetched": datetime.today().isoformat()
-        }
-        json.dump(info, fp)
     for entry in config["wv-options-fetch"]:
         try:
             remote_count += 1
