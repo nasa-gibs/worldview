@@ -152,9 +152,11 @@ $(function() {
         ui.sidebar = wv.layers.sidebar(models, config);
         ui.activeLayers = wv.layers.active(models, ui, config);
         ui.addLayers = wv.layers.add(models, ui, config);
-        ui.timeline = wv.date.timeline(models, config, ui);
-        ui.dateLabel = wv.date.label(models);
-        ui.dateWheels = wv.date.wheels(models, config);
+        if ( config.startDate ) {
+            ui.timeline = wv.date.timeline(models, config, ui);
+            ui.dateLabel = wv.date.label(models);
+            ui.dateWheels = wv.date.wheels(models, config);
+        }
         ui.rubberband = wv.image.rubberband(models, ui, config);
         ui.image = wv.image.panel(models, ui, config);
         if ( config.features.dataDownload ) {
