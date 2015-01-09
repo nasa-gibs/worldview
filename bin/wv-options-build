@@ -17,6 +17,7 @@ BIN_DIR="$BASE/bin"
 SRC_DIR="$BASE/options"
 BUILD_DIR="$BASE/build/options-build"
 DEST_DIR="$BASE/build/options"
+OPT_DIR="$BASE/options"
 
 [ "$FORCE" ] || set -e
 
@@ -26,6 +27,13 @@ die() {
 }
 
 [ -d "$SRC_DIR" ] || die "Options directory does not exist"
+
+if [ "$FETCH_GC" ] ; then
+    rm -rf "$OPT_DIR/gc/*"
+    rm -rf "$OPT_DIR/colormaps/gc/*"
+    "$BIN_DIR/wv-options-fetch" "$BUILD_DIR/config.json" "$OPT_DIR/gc"
+    exit 0
+fi
 
 rm -rf "$BUILD_DIR" "$DEST_DIR"
 mkdir -p "$BUILD_DIR" "$DEST_DIR"
@@ -40,8 +48,7 @@ if [ -e "$BUILD_DIR/features.json" ] ; then
 fi
 
 if [ -e "$BUILD_DIR/config.json" ] ; then
-    "$BIN_DIR/wv-options-fetch" "$BUILD_DIR/config.json" "$BUILD_DIR/fetch"
-    "$BIN_DIR/wv-options-wmts" "$BUILD_DIR/config.json" "$BUILD_DIR/fetch" \
+    "$BIN_DIR/wv-options-wmts" "$BUILD_DIR/config.json" "$OPT_DIR/gc" \
             "$BUILD_DIR/config/wv.json/_wmts" "$BUILD_DIR/colormaps"
 fi
 if [ -e "$BUILD_DIR/colormaps" ] ; then
