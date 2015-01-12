@@ -60,6 +60,7 @@ wv.ui.mouse.wheel = wv.ui.mouse.wheel || function(element, ui, options) {
     var delta = 0;
     var zoomed = false;
     var timer = null;
+    var timeout = false;
     var lastEvent = null;
 
     var init = function() {
@@ -73,7 +74,7 @@ wv.ui.mouse.wheel = wv.ui.mouse.wheel || function(element, ui, options) {
 
     var wheel = function() {
         var evt = d3.event.sourceEvent;
-        if(Math.abs(evt.deltaX) <= Math.abs(evt.deltaY)/7){
+        if((Math.abs(evt.deltaX) <= Math.abs(evt.deltaY)) && timeout===false){
             lastEvent = evt;
             delta += evt.deltaY;
             if ( !timer ) {
@@ -83,9 +84,14 @@ wv.ui.mouse.wheel = wv.ui.mouse.wheel || function(element, ui, options) {
             timer = setTimeout(end, self.timeout);
             update(evt);
         }
-        else{
+        else if ((Math.abs(evt.deltaX) >= Math.abs(evt.deltaY))){
             if(!(ui.timeline.smallSize())){
                 ui.timeline.panAxis(d3.event);
+                timeout = true;
+                clearTimeout(timer);
+                timer = setTimeout(function(){
+                    timeout = false;
+                },500);
             }
         }
     };

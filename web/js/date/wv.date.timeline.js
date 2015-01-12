@@ -580,7 +580,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             var evt = event.sourceEvent || event;
             var delX = evt.deltaX;
             if((evt.type === "wheel") && ((evt.deltaX < 0) || (evt.deltaX > 0))){
-                zoom.translate([zoomTranslate+delX,0]);
+                zoom.translate([zoomTranslate-delX,0]);
                 zoomTranslate = zoom.translate()[0];
             }
         }
