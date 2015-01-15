@@ -1556,6 +1556,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 unHoverTick();
             }
         });
+
         ////////////////////////////End Timeline/////////////////////////////////////
         ///////////////////////////Begin Datepicker//////////////////////////////////
         //TODO: move to new file
@@ -1783,11 +1784,19 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             setData();
         });
 
+
         updateTime();
         resizeWindow();
 
         $('#timeline-footer').css('margin-left',margin.left-1 + 'px');
         $('#timeline-footer').css('margin-right',margin.right-1 + 'px');
+
+        if ( wv.util.browser.localStorage ) {
+            if ( localStorage.getItem("timesliderState") === "collapsed" ) {
+                self.collapseNow();
+            }
+        }
+
     }; // end init()
     var forwardNextDay = function(){ //FIXME: Limit animation correctly
         var nextDay = new Date(new Date(model.selected)
@@ -1880,14 +1889,12 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         }
     };
 
-    init();
-    $(window).resize(resizeWindow);
-
     self.toggle = function(now){
         var tl = $('#timeline-footer');
         var tlz = $('#timeline-zoom');
         var tlg = d3.select('#timeline-footer svg > g:nth-child(2)');
         var gp = d3.select('#guitarpick');
+        var state;
         if(tl.is(':hidden')){
             var afterShow = function() {
                 tlz.show();
@@ -1901,13 +1908,23 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             } else {
                 tl.show('slow', afterShow);
             }
+            state = "expanded";
         }
         else{
             tlg.attr('style','clip-path:none');
             gp.attr("style","display:none;clip-path:none");
             tlz.hide();
-            tl.hide('slow');
+            if ( now ) {
+                tl.hide();
+            } else {
+                tl.hide('slow');
+            }
             $('#timeline').css('right','auto');
+            state = "collapsed";
+        }
+
+        if ( wv.util.browser.localStorage ) {
+            localStorage.setItem("timesliderState", state);
         }
     };
 
@@ -1923,12 +1940,19 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         self.expand(true);
     };
 
-    self.collapse = function(){
+    self.collapse = function(now){
         var tl = $('#timeline-footer, #timeline-zoom');
         if (!tl.is(":hidden")){
-            self.toggle();
+            self.toggle(now);
         }
     };
+
+    self.collapseNow = function() {
+        self.collapse(true);
+    };
+
+    init();
+    $(window).resize(resizeWindow);
 
     return self;
 };

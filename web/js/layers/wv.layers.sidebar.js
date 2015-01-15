@@ -55,6 +55,12 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
         $(window).resize(resize);
         models.proj.events.on("change", onProjectionChange);
         resize();
+
+        if ( wv.util.browser.localStorage ) {
+            if ( localStorage.getItem("sidebarState") === "collapsed" ) {
+                self.collapseNow();
+            }
+        }
     };
 
     self.selectTab = function(tabName) {
@@ -85,6 +91,10 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
         var speed = ( now ) ? undefined : "fast";
         $('.products').hide(speed);
         $("#" + self.id).after($('.accordionToggler'));
+
+        if ( wv.util.browser.localStorage ) {
+            localStorage.setItem("sidebarState", "collapsed");
+        }
     };
 
     self.collapseNow = function() {
@@ -108,6 +118,10 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
             models.wv.events.trigger("sidebar-expand");
         });
         $('.accordionToggler').appendTo("#"+self.id+"toggleButtonHolder");
+
+        if ( wv.util.browser.localStorage ) {
+            localStorage.setItem("sidebarState", "expanded");
+        }
     };
 
     self.expandNow = function() {
