@@ -27,7 +27,9 @@ wv.map.ui = wv.map.ui || function(models, config) {
         if ( config.parameters.mockMap ) {
             return;
         }
-        _.each(config.projections, function(proj) {
+        // NOTE: iOS sometimes bombs if this is _.each instead. In that case,
+        // it is possible that config.projections somehow becomes array-like.
+        _.forOwn(config.projections, function(proj) {
             var map = createMap(proj);
             self.proj[proj.id] = map;
         });

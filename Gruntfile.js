@@ -256,6 +256,10 @@ module.exports = function(grunt) {
                 command: "find build -type d -empty -delete"
             },
 
+            fetch: {
+                command: "PATH=python/bin:${PATH} FETCH_GC=1 bin/wv-options-build"
+            },
+
             rpmbuild: {
                 command: 'rpmbuild --define "_topdir $PWD/build/rpmbuild" ' +
                              '-ba build/rpmbuild/SPECS/worldview.spec'
@@ -590,6 +594,8 @@ module.exports = function(grunt) {
         "copy:dist_config_versioned"
     ]);
 
+    grunt.registerTask("fetch", ["exec:fetch"])
+    
     grunt.registerTask("site", [
         "load_branding",
         "remove:build_site",
