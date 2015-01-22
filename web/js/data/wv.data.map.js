@@ -65,7 +65,7 @@ wv.data.map = wv.data.map || function(model, maps, config) {
                     fill: new ol.style.Fill({color: "#ffffff"}),
                     stroke: new ol.style.Stroke({
                         color: "rgba(0, 0, 0, .7)",
-                        width: 6
+                        width: 5
                     }),
                     offsetY: offset
                 })
