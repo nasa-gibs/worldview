@@ -743,7 +743,7 @@ wv.data.results.transform = function(projection) {
         var projGeom = geom.clone()
                 .transform(wv.map.CRS_WGS_84, projection);
         granule.geometry[projection] = projGeom;
-        granule.centroid[projection] = projGeom.getCentroid();
+        granule.centroid[projection] = projGeom.getInteriorPoint();
         return granule;
     };
 

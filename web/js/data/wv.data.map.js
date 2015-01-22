@@ -117,12 +117,9 @@ wv.data.map = wv.data.map || function(model, maps, config) {
         selectionLayer = new ol.layer.Vector({
             source: new ol.source.Vector(),
             style: new ol.style.Style({
-                fill: new ol.style.Fill({color: "rgba(127, 127, 127, 0.6)"}),
-                stroke: new ol.style.Stroke({
-                    color: "rgba(127, 127, 127, 0.6)",
-                    width: 3
-                })
-            })
+                fill: new ol.style.Fill({color: "rgb(127, 127, 127)"}),
+            }),
+            opacity: 0.6
         });
         map.addLayer(selectionLayer);
     };
@@ -149,6 +146,9 @@ wv.data.map = wv.data.map || function(model, maps, config) {
     var updateGranules = function(results) {
         granules = results.granules;
         updateButtons();
+        _.each(model.selectedGranules, function(granule) {
+            selectGranule(granule);
+        });
     };
 
     var updateButtons = function() {
@@ -173,10 +173,10 @@ wv.data.map = wv.data.map || function(model, maps, config) {
     var selectGranule = function(granule) {
         granule.feature.changed();
 
-        var feature = new ol.Feature(granule.geometry[model.crs]);
-        feature.granule = granule;
-        granule.selectedFeature = feature;
-        selectionLayer.getSource().addFeature(feature);
+        var select = new ol.Feature(granule.geometry[model.crs]);
+        select.granule = granule;
+        granule.selectedFeature = select;
+        selectionLayer.getSource().addFeature(select);
     };
 
     var unselectGranule = function(granule) {
@@ -189,7 +189,6 @@ wv.data.map = wv.data.map || function(model, maps, config) {
         dispose();
         map = maps.selected;
         create();
-        updateButtons();
     };
 
     var clear = function() {
