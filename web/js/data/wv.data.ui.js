@@ -231,6 +231,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
         if ( downloadListPanel ) {
             downloadListPanel.hide();
         }
+        mapController.dispose();
     };
 
     var onProductSelect = function(product) {

@@ -17,79 +17,223 @@ wv.data = wv.data || {};
 
 wv.data.map = wv.data.map || function(model, maps, config) {
 
-    var ns = wv.data;
-
     var self = {};
-    var results = [];
 
-    var selectionLayers = ns.layers.selection(model, maps, config);
-    var swathLayers = ns.layers.swath(model, maps, config);
-    var gridLayers = ns.layers.grid(model, maps, config);
-    var hoverLayers = ns.layers.hover(model, maps, config);
-    var buttonLayers = ns.layers.button(model, maps, config);
+    var map = null;
+    var granules = [];
+    var hoverLayer = null;
+    var buttonLayer = null;
+    var hovering = null;
 
     var init = function() {
         model.events
             .on("query", clear)
-            .on("queryResults", onQueryResults)
-            .on("projectionUpdate", onProjectionUpdate)
-            .on("activate", onActivate)
-            .on("deactivate", onDeactivate)
-            .on("hoverOver", function(granule) {
-                hoverLayers.hoverOver(granule);
-            })
-            .on("hoverOut", hoverLayers.hoverOut);
-
-        buttonLayers.events
-            .on("hoverover", function(event) {
-                hoverLayers.hoverOver(event.feature.attributes.granule);
-            })
-            .on("hoverout", function() {
-                hoverLayers.hoverOut();
-            });
+            .on("queryResults", updateGranules)
+            .on("projectionUpdate", updateProjection)
+            .on("granuleSelect", refreshGranule)
+            .on("granuleUnselect", refreshGranule)
+        updateProjection();
     };
 
-    var onQueryResults = function(newResults) {
-        update(newResults);
-    };
-
-    var update = function(newResults) {
-        if ( newResults ) {
-            results = newResults;
+    var buttonStyle = function(feature) {
+        var dim = getButtonDimensions();
+        var image;
+        if ( model.isSelected(feature.granule) ) {
+            image = "images/data-download-minus-button-red.svg";
+        } else {
+            image = "images/data-download-plus-button-orange.svg";
         }
-        swathLayers.update(results);
-        gridLayers.update(results);
-        buttonLayers.update(results);
+
+        if ( feature !== hovering ) {
+            return [new ol.style.Style({
+                image: new ol.style.Icon({
+                    src: image,
+                    scale: dim.scale
+                })
+            })];
+        } else {
+            var offset = -(dim.size / 2.0 + 14);
+            return [new ol.style.Style({
+                image: new ol.style.Icon({
+                    src: image,
+                    scale: dim.scale
+                }),
+                text: new ol.style.Text({
+                    font: "bold 14px ‘Lucida Sans’, Arial, Sans-Serif",
+                    text: feature.granule.label,
+                    fill: new ol.style.Fill({color: "#ffffff"}),
+                    stroke: new ol.style.Stroke({
+                        color: "rgba(0, 0, 0, .7)",
+                        width: 6
+                    }),
+                    offsetY: offset
+                })
+            })]
+        }
     };
 
-    var onProjectionUpdate = function() {
-        selectionLayers.refresh();
+    var hoverStyle = function(feature) {
+        if ( !model.isSelected(feature.granule) ) {
+            return [new ol.style.Style({
+                fill: new ol.style.Fill({
+                    color: "rgba(181, 158, 50, 0.25)"
+                }),
+                stroke: new ol.style.Stroke({
+                    color: "rgb(251, 226, 109)",
+                    width: 3
+                })
+            })];
+        } else {
+            return [new ol.style.Style({
+                fill: new ol.style.Fill({
+                    color: "rgba(242, 12, 12, 0.25)"
+                }),
+                stroke: new ol.style.Stroke({
+                    color: "rgb(255, 6, 0)",
+                    width: 3
+                })
+            })];
+        }
     };
 
-    var onDeactivate = function() {
-        selectionLayers.dispose();
-        swathLayers.dispose();
-        gridLayers.dispose();
-        hoverLayers.dispose();
-        buttonLayers.dispose();
-    };
-
-    var onActivate = function() {
-        // FIXME: This is a major hack. "Reselect" all the granules again
-        // if necessary.
-        $.each(model.selectedGranules, function(index, granule) {
-            selectionLayers.select(granule);
+    var createButtonLayer = function() {
+        buttonLayer = new ol.layer.Vector({
+            source: new ol.source.Vector(),
+            style: buttonStyle
         });
+        map.addLayer(buttonLayer);
+    };
+
+    var createHoverLayer = function() {
+        hoverLayer = new ol.layer.Vector({
+            source: new ol.source.Vector(),
+            style: hoverStyle
+        });
+        map.addLayer(hoverLayer);
+    };
+
+    var create = function() {
+        createHoverLayer();
+        createButtonLayer();
+        $(maps.selected.getViewport()).on("mousemove", hoverCheck);
+        $(maps.selected.getViewport()).on("click", clickCheck);
+    };
+
+    var dispose = function() {
+        if ( map ) {
+            map.removeLayer(hoverLayer);
+            map.removeLayer(buttonLayer);
+        }
+        $(maps.selected.getViewport()).off("mousemove", hoverCheck);
+        $(maps.selected.getViewport()).off("click", clickCheck);
+    };
+    self.dispose = dispose;
+
+    var updateGranules = function(results) {
+        granules = results.granules;
+        updateButtons();
+    };
+
+    var updateButtons = function() {
+        buttonLayer.getSource().clear();
+        var features = []
+        _.each(granules, function(granule) {
+            if ( !granule.centroid || !granule.centroid[model.crs] ) {
+                return;
+            }
+            var centroid = granule.centroid[model.crs];
+            var feature = new ol.Feature({
+                geometry: centroid
+            });
+            feature.button = true;
+            feature.granule = granule;
+            granule.feature = feature;
+            features.push(feature);
+        });
+        buttonLayer.getSource().addFeatures(features);
+    };
+
+    var refreshGranule = function(granule) {
+        granule.feature.changed();
+    };
+
+    var updateProjection = function() {
+        dispose();
+        map = maps.selected;
+        create();
+        updateButtons();
     };
 
     var clear = function() {
-        //selectionLayers.clear();
-        swathLayers.clear();
-        gridLayers.clear();
-        hoverLayers.clear();
-        buttonLayers.clear();
-        // TODO: Remove if not used
-        //maskLayers.clear();
+        if ( map ) {
+            hoverLayer.getSource().clear();
+            buttonLayer.getSource().clear();
+        }
+    };
+
+    var hoverCheck = function(event) {
+        var pixel = map.getEventPixel(event.originalEvent);
+        var newFeature = null;
+        map.forEachFeatureAtPixel(pixel, function(feature, layer) {
+            if ( feature.button ) {
+                newFeature = feature;
+            }
+        });
+
+        if ( hovering ) {
+            hovering.changed();
+        }
+        if ( newFeature ) {
+            newFeature.changed();
+        }
+        if ( hovering !== newFeature ) {
+            if ( newFeature ) {
+                hoverOver(newFeature);
+            } else {
+                hoverOut(hovering);
+            }
+        }
+        hovering = newFeature;
+    };
+
+    var clickCheck = function(event) {
+        var pixel = map.getEventPixel(event.originalEvent);
+        map.forEachFeatureAtPixel(pixel, function(feature, layer) {
+            if ( feature.button ) {
+                model.toggleGranule(feature.granule);
+                hovering = false;
+                hoverCheck(event);
+            }
+        });
+    };
+
+    var hoverOver = function(feature) {
+        granule = feature.granule;
+        if ( !granule.geometry ) {
+            return;
+        }
+        var feature = new ol.Feature(granule.geometry[model.crs]);
+        feature.granule = granule;
+        hoverLayer.getSource().clear();
+        hoverLayer.getSource().addFeature(feature);
+    };
+
+    var hoverOut = function() {
+        hoverLayer.getSource().clear();
+    };
+
+    var getButtonDimensions = function() {
+        var zoom = map.getView().getZoom();
+        // Minimum size of the button is 15 pixels
+        var base = 12;
+        // Double the size for each zoom level
+        var add = Math.pow(2, zoom);
+        // But 47 pixels is the maximum size
+        var size = Math.min(base + add, base + 32);
+        return {
+            scale: size / 48,
+            size: size
+        };
     };
 
     init();

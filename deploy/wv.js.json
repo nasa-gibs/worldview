@@ -43,7 +43,6 @@
         "web/js/data/wv.data.js",
         "web/js/data/wv.data.echo.js",
         "web/js/data/wv.data.handler.js",
-        "web/js/data/wv.data.layers.js",
         "web/js/data/wv.data.map.js",
         "web/js/data/wv.data.model.js",
         "web/js/data/wv.data.results.js",

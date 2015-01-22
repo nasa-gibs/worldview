@@ -141,21 +141,17 @@ wv.map = (function(self) {
     };
 
     self.getLayerByName = function(map, name) {
-        var layers = map.getLayersByName(name);
-        if ( layers && layers.length > 1 ) {
-            throw new Error("Multiple layers found for: " + name);
-        }
-        if ( layers ) {
-            return layers[0];
-        }
+        var layers = map.getLayers().getArray();
+        return _.find(layers, { "wvname": name });
     };
 
     self.isPolygonValid = function(polygon, maxDistance) {
-        var outerRing = polygon.components[0];
-        for ( var i = 0; i < outerRing.components.length - 1; i++ ) {
-            var p1 = outerRing.components[i];
-            var p2 = outerRing.components[i + 1];
-            if ( Math.abs(p2.x - p1.x) > maxDistance ) {
+        var outerRing = polygon.getLinearRing(0);
+        var points = outerRing.getCoordinates();
+        for ( var i = 0; i < points.length - 1; i++ ) {
+            var p1 = points[i];
+            var p2 = points[i + 1];
+            if ( Math.abs(p2[0] - p1[0]) > maxDistance ) {
                 return false;
             }
         }
@@ -163,22 +159,18 @@ wv.map = (function(self) {
     };
 
     self.adjustAntiMeridian = function(polygon, adjustSign) {
-        var outerRing = polygon.components[0];
-        var points = outerRing.components.slice();
+        var outerRing = polygon.getLinearRing(0);
+        var points = outerRing.getCoordinates().slice();
 
         for ( var i = 0 ; i < points.length; i++ ) {
-            if ( adjustSign > 0 && points[i].x < 0 ) {
-                points[i] = new OpenLayers.Geometry.Point(
-                    points[i].x + 360, points[i].y);
+            if ( adjustSign > 0 && points[i][0] < 0 ) {
+                points[i] = [points[i][0] + 360, points[i][1]];
             }
-            if ( adjustSign < 0 && points[i].x > 0 ) {
-                points[i] = new OpenLayers.Geometry.Point(
-                    points[i].x - 360, points[i].y);
+            if ( adjustSign < 0 && points[i][0] > 0 ) {
+                points[i] = [points[i][0] - 360, points[i][1]];
             }
         }
-        return new OpenLayers.Geometry.Polygon(
-            [new OpenLayers.Geometry.LinearRing(points)]
-        );
+        return new ol.geom.Polygon([points]);
     };
 
     self.distance2D = function(p1, p2) {

@@ -96,12 +96,12 @@ wv.data.echo.geometry = function(result) {
             $.each(polygon, function(index, ring) {
                 var olPoints = [];
                 $.each(ring, function(index, point) {
-                    var p = new OpenLayers.Geometry.Point(point.x, point.y);
+                    var p = [point.x, point.y];
                     olPoints.push(p);
                 });
-                olRings.push(new OpenLayers.Geometry.LinearRing(olPoints));
+                olRings.push(olPoints);
             });
-            olPolygons.push(new OpenLayers.Geometry.Polygon(olRings));
+            olPolygons.push(new ol.geom.Polygon(olRings));
         });
         return olPolygons[0];
     };

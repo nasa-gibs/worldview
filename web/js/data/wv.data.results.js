@@ -237,8 +237,8 @@ wv.data.results.connectSwaths = function(projection) {
 
         $.each(polys1, function(index, poly1) {
             $.each(polys2, function(index, poly2) {
-                var x1 = poly1.getCentroid().x;
-                var x2 = poly2.getCentroid().x;
+                var x1 = poly1.getInteriorPoint[0];
+                var x2 = poly2.getInteriorPoint[0];
                 if ( Math.abs(x2 - x1) < maxDistance ) {
                     allowed = true;
                     return false;
@@ -351,14 +351,13 @@ wv.data.results.extentFilter = function(projection, extent) {
         if ( !geom ) {
             return result;
         }
-        var mbr = geom.getBounds();
-        if ( extent.intersectsBounds(mbr) ) {
+        var mbr = geom.getExtent();
+        if ( ol.extent.intersects(extent, mbr) ) {
             return granule;
         }
     };
 
     if ( !extent ) { throw new Error("No extent"); }
-    extent = new OpenLayers.Bounds(extent);
 
     return self;
 };
@@ -381,7 +380,7 @@ wv.data.results.geometryFromECHO = function(densify) {
         if ( !granule.geometry[wv.map.CRS_WGS_84] ) {
             var echoGeom = wv.data.echo.geometry(granule, densify);
             var geom = echoGeom.toOpenLayers();
-            var centroid = geom.getCentroid();
+            var centroid = geom.getInteriorPoint();
             granule.geometry[wv.map.CRS_WGS_84] = geom;
             granule.centroid[wv.map.CRS_WGS_84] = centroid;
         }
@@ -666,10 +665,10 @@ wv.data.results.timeFilter = function(spec) {
             geom =
                 wv.map.adjustAntiMeridian(geom, adjustSign);
             granule.geometry[wv.map.CRS_WGS_84] = geom;
-            granule.centroid[wv.map.CRS_WGS_84] = geom.getCentroid();
+            granule.centroid[wv.map.CRS_WGS_84] = geom.getInteriorPoint();
         }
 
-        var x = granule.centroid[wv.map.CRS_WGS_84].x;
+        var x = granule.centroid[wv.map.CRS_WGS_84][0];
         if ( time < eastZone && x < 0 ) {
             return;
         }

@@ -114,7 +114,7 @@ wv.data.model = wv.data.model || function(models, config) {
      */
     self.activate = function(productName) {
         if ( !self.active ) {
-            try {
+            // try { FIXME: OL3
                 if ( productName ) {
                     validateProduct(productName);
                 }
@@ -129,11 +129,13 @@ wv.data.model = wv.data.model || function(models, config) {
                             self.selectedProduct);
                     query();
                 }
+            /* FIXME: OL3
             } catch ( error ) {
                 self.active = false;
                 self.selectedProduct = null;
                 throw error;
             }
+            */
         }
     };
 
@@ -235,6 +237,14 @@ wv.data.model = wv.data.model || function(models, config) {
         if ( self.selectedGranules[granule.id] ) {
             delete self.selectedGranules[granule.id];
             self.events.trigger(self.EVENT_GRANULE_UNSELECT, granule);
+        }
+    };
+
+    self.toggleGranule = function(granule) {
+        if ( self.isSelected(granule) ) {
+            self.unselectGranule(granule);
+        } else {
+            self.selectGranule(granule);
         }
     };
 
