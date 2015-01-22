@@ -117,9 +117,13 @@ wv.data.map = wv.data.map || function(model, maps, config) {
         selectionLayer = new ol.layer.Vector({
             source: new ol.source.Vector(),
             style: new ol.style.Style({
-                fill: new ol.style.Fill({color: "rgb(127, 127, 127)"}),
-            }),
-            opacity: 0.6
+                fill: new ol.style.Fill({color: "rgba(127, 127, 127, 0.2)"}),
+                stroke: new ol.style.Stroke({
+                    color: "rgb(127, 127, 127)",
+                    width: 3
+                }),
+                opacity: 0.6
+            })
         });
         map.addLayer(selectionLayer);
     };
