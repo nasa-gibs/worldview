@@ -23,6 +23,7 @@ wv.data.map = wv.data.map || function(model, maps, config) {
     var granules = [];
     var hoverLayer = null;
     var buttonLayer = null;
+    var selectionLayer = null;
     var hovering = null;
 
     var init = function() {
@@ -30,8 +31,8 @@ wv.data.map = wv.data.map || function(model, maps, config) {
             .on("query", clear)
             .on("queryResults", updateGranules)
             .on("projectionUpdate", updateProjection)
-            .on("granuleSelect", refreshGranule)
-            .on("granuleUnselect", refreshGranule)
+            .on("granuleSelect", selectGranule)
+            .on("granuleUnselect", unselectGranule);
         updateProjection();
     };
 
@@ -68,7 +69,7 @@ wv.data.map = wv.data.map || function(model, maps, config) {
                     }),
                     offsetY: offset
                 })
-            })]
+            })];
         }
     };
 
@@ -112,7 +113,22 @@ wv.data.map = wv.data.map || function(model, maps, config) {
         map.addLayer(hoverLayer);
     };
 
+    var createSelectionLayer = function() {
+        selectionLayer = new ol.layer.Vector({
+            source: new ol.source.Vector(),
+            style: new ol.style.Style({
+                fill: new ol.style.Fill({color: "rgba(127, 127, 127, 0.6)"}),
+                stroke: new ol.style.Stroke({
+                    color: "rgba(127, 127, 127, 0.6)",
+                    width: 3
+                })
+            })
+        });
+        map.addLayer(selectionLayer);
+    };
+
     var create = function() {
+        createSelectionLayer();
         createHoverLayer();
         createButtonLayer();
         $(maps.selected.getViewport()).on("mousemove", hoverCheck);
@@ -123,6 +139,7 @@ wv.data.map = wv.data.map || function(model, maps, config) {
         if ( map ) {
             map.removeLayer(hoverLayer);
             map.removeLayer(buttonLayer);
+            map.removeLayer(selectionLayer);
         }
         $(maps.selected.getViewport()).off("mousemove", hoverCheck);
         $(maps.selected.getViewport()).off("click", clickCheck);
@@ -136,7 +153,7 @@ wv.data.map = wv.data.map || function(model, maps, config) {
 
     var updateButtons = function() {
         buttonLayer.getSource().clear();
-        var features = []
+        var features = [];
         _.each(granules, function(granule) {
             if ( !granule.centroid || !granule.centroid[model.crs] ) {
                 return;
@@ -153,8 +170,19 @@ wv.data.map = wv.data.map || function(model, maps, config) {
         buttonLayer.getSource().addFeatures(features);
     };
 
-    var refreshGranule = function(granule) {
+    var selectGranule = function(granule) {
         granule.feature.changed();
+
+        var feature = new ol.Feature(granule.geometry[model.crs]);
+        feature.granule = granule;
+        granule.selectedFeature = feature;
+        selectionLayer.getSource().addFeature(feature);
+    };
+
+    var unselectGranule = function(granule) {
+        granule.feature.changed();
+        selectionLayer.getSource().removeFeature(granule.selectedFeature);
+        delete granule.selectedFeature;
     };
 
     var updateProjection = function() {
@@ -212,10 +240,10 @@ wv.data.map = wv.data.map || function(model, maps, config) {
         if ( !granule.geometry ) {
             return;
         }
-        var feature = new ol.Feature(granule.geometry[model.crs]);
-        feature.granule = granule;
+        var hover = new ol.Feature(granule.geometry[model.crs]);
+        hover.granule = granule;
         hoverLayer.getSource().clear();
-        hoverLayer.getSource().addFeature(feature);
+        hoverLayer.getSource().addFeature(hover);
     };
 
     var hoverOut = function() {
