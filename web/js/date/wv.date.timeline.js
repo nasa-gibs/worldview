@@ -584,7 +584,9 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 zoomTranslate = zoom.translate()[0];
             }
         }
-
+        else{
+            zoomTranslate = zoom.translate()[0];
+        }
         d3.select("#timeline-footer svg .x.axis")
             .call(xAxis);
 

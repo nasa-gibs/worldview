@@ -94,6 +94,11 @@ wv.ui.mouse.wheel = wv.ui.mouse.wheel || function(element, ui, options) {
                 },500);
             }
         }
+        else{
+            if ( !(ui.timeline.smallSize()) ){
+                ui.timeline.panAxis();
+            }
+        }
     };
 
     var update = function(event) {
