@@ -234,11 +234,10 @@ wv.data.results.connectSwaths = function(projection) {
         var polys1 = wv.map.toPolys(g1.geometry[projection]);
         var polys2 = wv.map.toPolys(g2.geometry[projection]);
         var allowed = false;
-
         $.each(polys1, function(index, poly1) {
             $.each(polys2, function(index, poly2) {
-                var x1 = poly1.getInteriorPoint[0];
-                var x2 = poly2.getInteriorPoint[0];
+                var x1 = poly1.getInteriorPoint().getCoordinates()[0];
+                var x2 = poly2.getInteriorPoint().getCoordinates()[0];
                 if ( Math.abs(x2 - x1) < maxDistance ) {
                     allowed = true;
                     return false;

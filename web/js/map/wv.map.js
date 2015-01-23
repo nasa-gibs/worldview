@@ -179,7 +179,7 @@ wv.map = (function(self) {
     };
 
     self.distanceX = function(p1, p2) {
-        return Math.abs(p2.x - p1.x);
+        return Math.abs(p2 - p1);
     };
 
     self.interpolate2D = function(p1, p2, amount) {
@@ -195,13 +195,10 @@ wv.map = (function(self) {
     // If multipolygon, return a list of the polygons. If polygon, return
     // the single item in a list
     self.toPolys = function(geom) {
-        var polys = [];
-        if ( geom.CLASS_NAME === "OpenLayers.Geometry.MultiPolygon" ) {
-            polys = geom.components;
-        } else {
-            polys = [geom];
+        if ( geom.getPolygons ) {
+            return geom.getPolygons();
         }
-        return polys;
+        return [geom];
     };
 
     return self;

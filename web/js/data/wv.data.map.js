@@ -9,9 +9,6 @@
  * All Rights Reserved.
  */
 
-/**
- * @module wv.data
- */
 var wv = wv || {};
 wv.data = wv.data || {};
 
@@ -20,6 +17,7 @@ wv.data.map = wv.data.map || function(model, maps, config) {
     var self = {};
 
     var map = null;
+    var results = [];
     var granules = [];
     var hoverLayer = null;
     var buttonLayer = null;
@@ -128,8 +126,22 @@ wv.data.map = wv.data.map || function(model, maps, config) {
         map.addLayer(selectionLayer);
     };
 
+    var createSwathLayer = function() {
+        swathLayer = new ol.layer.Vector({
+            source: new ol.source.Vector(),
+            style: new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: "rgba(195, 189, 123, 0.75)",
+                    width: 2
+                })
+            })
+        });
+        map.addLayer(swathLayer);
+    };
+
     var create = function() {
         createSelectionLayer();
+        createSwathLayer();
         createHoverLayer();
         createButtonLayer();
         $(maps.selected.getViewport()).on("mousemove", hoverCheck);
@@ -138,18 +150,21 @@ wv.data.map = wv.data.map || function(model, maps, config) {
 
     var dispose = function() {
         if ( map ) {
+            map.removeLayer(selectionLayer);
+            map.removeLayer(swathLayer);
             map.removeLayer(hoverLayer);
             map.removeLayer(buttonLayer);
-            map.removeLayer(selectionLayer);
         }
         $(maps.selected.getViewport()).off("mousemove", hoverCheck);
         $(maps.selected.getViewport()).off("click", clickCheck);
     };
     self.dispose = dispose;
 
-    var updateGranules = function(results) {
-        granules = results.granules;
+    var updateGranules = function(r) {
+        results = r;
+        granules = r.granules;
         updateButtons();
+        updateSwaths();
         _.each(model.selectedGranules, function(granule) {
             selectGranule(granule);
         });
@@ -172,6 +187,41 @@ wv.data.map = wv.data.map || function(model, maps, config) {
             features.push(feature);
         });
         buttonLayer.getSource().addFeatures(features);
+    };
+
+    var updateSwaths = function() {
+        swathLayer.getSource().clear();
+        var swaths = results.meta.swaths;
+        if ( !swaths ) {
+            return;
+        }
+        var maxDistance = ( model.crs === wv.map.CRS_WGS_84) ?
+            270 : Number.POSITIVE_INFINITY;
+        var features = [];
+        _.each(swaths, function(swath) {
+            var lastGranule = null;
+            _.each(swath, function(granule) {
+                if ( !lastGranule ) {
+                    lastGranule = granule;
+                    return;
+                }
+                var polys1 = wv.map.toPolys(lastGranule.geometry[model.crs]);
+                var polys2 = wv.map.toPolys(granule.geometry[model.crs]);
+                _.each(polys1, function(poly1) {
+                    _.each(polys2, function(poly2) {
+                        var c1 = poly1.getInteriorPoint().getCoordinates();
+                        var c2 = poly2.getInteriorPoint().getCoordinates();
+                        var distanceX = wv.map.distanceX(c1[0], c2[0]);
+                        if ( distanceX < maxDistance ) {
+                            var ls = new ol.geom.LineString([c1, c2]);
+                            features.push(new ol.Feature(ls));
+                        }
+                    });
+                });
+                lastGranule = granule;
+            });
+        });
+        swathLayer.getSource().addFeatures(features);
     };
 
     var selectGranule = function(granule) {
@@ -197,6 +247,7 @@ wv.data.map = wv.data.map || function(model, maps, config) {
 
     var clear = function() {
         if ( map ) {
+            swathLayer.getSource().clear();
             hoverLayer.getSource().clear();
             buttonLayer.getSource().clear();
         }
