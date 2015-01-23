@@ -80,7 +80,7 @@ wv.date.model = wv.date.model || function(config, spec) {
     self.maxDate = function() {
         return wv.util.today();
     };
-    
+
     self.save = function(state) {
         state.t = self.selected.toISOString().split("T")[0];
     };

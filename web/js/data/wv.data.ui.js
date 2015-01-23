@@ -275,6 +275,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
                 selectionListPanel = null;
             }
         }
+        updateSelection();
     };
 
     var onQueryCancel = function() {

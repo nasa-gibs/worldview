@@ -431,8 +431,8 @@ wv.data.model = wv.data.model || function(models, config) {
 
     var updateProjection = function() {
         updateProjectionInfo();
-        updateLayers();
         self.events.trigger("projectionUpdate");
+        updateLayers();
         query();
     };
     // FIXME: This is a hack
