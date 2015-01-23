@@ -261,8 +261,10 @@ wv.data.map = wv.data.map || function(model, maps, config) {
     };
 
     var selectGranule = function(granule) {
+        if ( !granule.feature ) {
+            return;
+        }
         granule.feature.changed();
-
         var select = new ol.Feature(granule.geometry[model.crs]);
         select.granule = granule;
         granule.selectedFeature = select;
@@ -270,6 +272,9 @@ wv.data.map = wv.data.map || function(model, maps, config) {
     };
 
     var unselectGranule = function(granule) {
+        if ( !granule.feature ) {
+            return;
+        }
         granule.feature.changed();
         selectionLayer.getSource().removeFeature(granule.selectedFeature);
         delete granule.selectedFeature;
