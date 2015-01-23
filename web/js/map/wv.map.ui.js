@@ -339,9 +339,14 @@ wv.map.ui = wv.map.ui || function(models, config) {
         }
     };
 
+    var triggerExtent = _.throttle(function() {
+        self.events.trigger("extent");
+    }, 500, { trailing: true });
+
     var updateExtent = function() {
         var map = self.selected;
         models.map.update(map.getView().calculateExtent(map.getSize()));
+        triggerExtent();
     };
 
     var createMap = function(proj) {

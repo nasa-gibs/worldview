@@ -180,26 +180,20 @@ $(function() {
         $("#eventsHolder").hide();
 
         // Wirings
-        /* FIXME: OL3
         if ( config.features.dataDownload ) {
             models.data.events
                 .on("activate", function() {
                     ui.sidebar.selectTab("download");
                 })
                 .on("queryResults", function() {
-                    ui.data.onViewChange(ui.map.selected);
+                    ui.data.onViewChange();
                 });
-            ui.map.events
-                .on("moveEnd", function(map) {
-                    ui.data.onViewChange(map);
-                })
-                .on("zoomEnd", function(map) {
-                    ui.data.onViewChange(map);
-                });
-                // FIXME: This is a hack
-                models.map.events.on("projection", models.data.updateProjection);
+            ui.map.events.on("extent", function() {
+                ui.data.onViewChange();
+            });
+            // FIXME: This is a hack
+            models.map.events.on("projection", models.data.updateProjection);
         }
-        */
 
         // Sink all focus on inputs if click unhandled
         $(document).click(function(event) {
