@@ -295,16 +295,15 @@ wv.data.results.densify = function() {
     self.process = function(meta, granule) {
         var geom = granule.geometry[wv.map.CRS_WGS_84];
         var newGeom = null;
-        if ( geom.CLASS_NAME === "OpenLayers.Geometry.Polygon" ) {
-            newGeom = densifyPolygon(geom);
-        } else if ( geom.CLASS_NAME === "OpenLayers.Geometry.MultiPolygon" ) {
+        if ( geom.getPolygons ) {
             var polys = [];
-            $.each(geom.components, function(index, poly) {
+            _.each(geom.getPolygons(), function(poly) {
                 polys.push(densifyPolygon(poly));
             });
-            newGeom = new OpenLayers.Geometry.MultiPolygon(polys);
+            newGeom = new ol.geom.MultiPolygon([polys]);
         } else {
-            throw Error("Cannot handle geometry: " + geom.CLASS_NAME);
+            var ring = densifyPolygon(geom);
+            newGeom = new ol.geom.Polygon([ring]);
         }
         granule.geometry[wv.map.CRS_WGS_84] = newGeom;
         return granule;
@@ -312,7 +311,7 @@ wv.data.results.densify = function() {
 
     var densifyPolygon = function(poly) {
         // Get the outer ring and then get an array of all the points
-        var ring = poly.components[0].components.slice();
+        var ring = poly.getLinearRing(0).getCoordinates();
         var points = [];
         var end;
         for ( var i = 0; i < ring.length - 2; i++ ) {
@@ -329,10 +328,7 @@ wv.data.results.densify = function() {
             }
         }
         points.push(end);
-        var newRing = new OpenLayers.Geometry.LinearRing(points);
-        var newPoly = new OpenLayers.Geometry.Polygon([newRing]);
-
-        return newPoly;
+        return points;
     };
 
     return self;

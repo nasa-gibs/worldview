@@ -174,8 +174,8 @@ wv.map = (function(self) {
     };
 
     self.distance2D = function(p1, p2) {
-        return Math.sqrt(Math.pow(p1.x - p2.x, 2) +
-                        (Math.pow(p1.y - p2.y, 2)));
+        return Math.sqrt(Math.pow(p1[0] - p2[0], 2) +
+                        (Math.pow(p1[1] - p2[1], 2)));
     };
 
     self.distanceX = function(p1, p2) {
@@ -183,13 +183,13 @@ wv.map = (function(self) {
     };
 
     self.interpolate2D = function(p1, p2, amount) {
-        var distX = p2.x - p1.x;
-        var distY = p2.y - p1.y;
+        var distX = p2[0] - p1[0];
+        var distY = p2[1] - p1[1];
 
-        var interpX = p1.x + (distX * amount);
-        var interpY = p1.y + (distY * amount);
+        var interpX = p1[0] + (distX * amount);
+        var interpY = p1[1] + (distY * amount);
 
-        return new OpenLayers.Geometry.Point(interpX, interpY);
+        return [interpX, interpY];
     };
 
     // If multipolygon, return a list of the polygons. If polygon, return
