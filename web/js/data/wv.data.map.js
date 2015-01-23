@@ -26,6 +26,7 @@ wv.data.map = wv.data.map || function(model, maps, config) {
 
     var init = function() {
         model.events
+            .on("activate", updateProjection)
             .on("query", clear)
             .on("queryResults", updateGranules)
             .on("projectionUpdate", updateProjection)
@@ -140,6 +141,7 @@ wv.data.map = wv.data.map || function(model, maps, config) {
     };
 
     var create = function() {
+        //console.log("create");
         createSelectionLayer();
         createSwathLayer();
         createHoverLayer();
@@ -161,6 +163,7 @@ wv.data.map = wv.data.map || function(model, maps, config) {
     self.dispose = dispose;
 
     var updateGranules = function(r) {
+        //console.log("results");
         results = r;
         granules = r.granules;
         updateButtons();
@@ -246,6 +249,7 @@ wv.data.map = wv.data.map || function(model, maps, config) {
     };
 
     var clear = function() {
+        //console.log("clear");
         if ( map ) {
             swathLayer.getSource().clear();
             hoverLayer.getSource().clear();
