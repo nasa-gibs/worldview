@@ -392,7 +392,7 @@ wv.data.results.geometryFromECHO = function(densify) {
 
 wv.data.results.geometryFromMODISGrid = function(projection) {
 
-    var parser = new OpenLayers.Format.GeoJSON();
+    var parser = new ol.format.GeoJSON();
 
     var self = {};
 
@@ -410,11 +410,11 @@ wv.data.results.geometryFromMODISGrid = function(projection) {
                 return;
             }
             var grid = meta.grid[granule.hv];
-            var geom = parser.read(meta.grid[granule.hv].geometry, "Geometry");
-            var centroid = new OpenLayers.Geometry.Point(
+            var geom = parser.readGeometry(meta.grid[granule.hv].geometry);
+            var centroid = new ol.geom.Point([
                 grid.properties.CENTER_X,
                 grid.properties.CENTER_Y
-            );
+            ]);
 
             granule.geometry[projection] = geom;
             granule.centroid[projection] = centroid;

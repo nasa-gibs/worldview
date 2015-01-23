@@ -22,6 +22,7 @@ wv.data.map = wv.data.map || function(model, maps, config) {
     var hoverLayer = null;
     var buttonLayer = null;
     var selectionLayer = null;
+    var gridLayer = null;
     var hovering = null;
 
     var init = function() {
@@ -140,9 +141,23 @@ wv.data.map = wv.data.map || function(model, maps, config) {
         map.addLayer(swathLayer);
     };
 
+    var createGridLayer = function() {
+        gridLayer = new ol.layer.Vector({
+            source: new ol.source.Vector(),
+            style: new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: "rgba(186, 180, 152, 0.6)",
+                    width: 1.5
+                })
+            })
+        });
+        map.addLayer(gridLayer);
+    };
+
     var create = function() {
         //console.log("create");
         createSelectionLayer();
+        createGridLayer();
         createSwathLayer();
         createHoverLayer();
         createButtonLayer();
@@ -153,6 +168,7 @@ wv.data.map = wv.data.map || function(model, maps, config) {
     var dispose = function() {
         if ( map ) {
             map.removeLayer(selectionLayer);
+            map.removeLayer(gridLayer);
             map.removeLayer(swathLayer);
             map.removeLayer(hoverLayer);
             map.removeLayer(buttonLayer);
@@ -168,6 +184,7 @@ wv.data.map = wv.data.map || function(model, maps, config) {
         granules = r.granules;
         updateButtons();
         updateSwaths();
+        updateGrid();
         _.each(model.selectedGranules, function(granule) {
             selectGranule(granule);
         });
@@ -227,6 +244,22 @@ wv.data.map = wv.data.map || function(model, maps, config) {
         swathLayer.getSource().addFeatures(features);
     };
 
+    var updateGrid = function() {
+        gridLayer.getSource().clear();
+        var grid = results.meta.grid;
+        if ( !grid ) {
+            return;
+        }
+        var features = [];
+        var parser = new ol.format.GeoJSON();
+        _.each(grid, function(cell) {
+            var geom = parser.readGeometry(cell.geometry);
+            var feature = new ol.Feature(geom);
+            features.push(feature);
+        });
+        gridLayer.getSource().addFeatures(features);
+    };
+
     var selectGranule = function(granule) {
         granule.feature.changed();
 
@@ -252,6 +285,7 @@ wv.data.map = wv.data.map || function(model, maps, config) {
         //console.log("clear");
         if ( map ) {
             swathLayer.getSource().clear();
+            gridLayer.getSource().clear();
             hoverLayer.getSource().clear();
             buttonLayer.getSource().clear();
         }
