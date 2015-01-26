@@ -114,7 +114,7 @@ wv.data.model = wv.data.model || function(models, config) {
      */
     self.activate = function(productName) {
         if ( !self.active ) {
-            // try { FIXME: OL3
+            try {
                 if ( productName ) {
                     validateProduct(productName);
                 }
@@ -129,13 +129,11 @@ wv.data.model = wv.data.model || function(models, config) {
                             self.selectedProduct);
                     query();
                 }
-            /* FIXME: OL3
             } catch ( error ) {
                 self.active = false;
                 self.selectedProduct = null;
                 throw error;
             }
-            */
         }
     };
 

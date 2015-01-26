@@ -18,14 +18,14 @@ wv.map = (function(self) {
 
     self.CRS_WGS_84_QUERY_EXTENT = [-180, -60, 180, 60];
 
-    /* FIXME OL3
+    /*
     self.CRS_WGS_84_QUERY_MASK =
-        new OpenLayers.Geometry.MultiPolygon([
-            new OpenLayers.Bounds(-180, -90, 180, -60).toGeometry(),
-            new OpenLayers.Bounds(-180, 60, 180, 90).toGeometry()
+        new ol.geom.MultiPolygon([
+            [-180, -90], [180, -90], [180, -60], [-180, -60], [-180, -90]],
+            [-180, 60], [180, 60], [180, 90], [-180, 90], [-180, 60]]
         ]);
     */
-
+    
     self.parse = function(state, errors) {
         // 1.1 support
         if ( state.map ) {
