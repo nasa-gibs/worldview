@@ -24,16 +24,23 @@ wv.data.results.antiMeridianMulti = function(maxDistance) {
     self.name = "AntiMeridianMulti";
 
     self.process = function(meta, granule) {
+        console.log("process", meta, granule);
         var geom = granule.geometry[wv.map.CRS_WGS_84];
         if ( !wv.map.isPolygonValid(geom, maxDistance) ) {
             var geomEast = wv.map.adjustAntiMeridian(geom, 1);
             var geomWest = wv.map.adjustAntiMeridian(geom, -1);
-            var centroidEast = geomEast.getCentroid();
-            var centroidWest = geomWest.getCentroid();
+            var centroidEast = geomEast.getInteriorPoint();
+            var centroidWest = geomWest.getInteriorPoint();
             var newGeom =
-                new OpenLayers.Geometry.MultiPolygon([geomEast, geomWest]);
+                new ol.geom.MultiPolygon([
+                    geomEast.getCoordinates(),
+                    geomWest.getCoordinates()
+                ]);
             var newCentroid =
-                new OpenLayers.Geometry.MultiPoint([centroidEast, centroidWest]);
+                new ol.geom.MultiPoint([
+                    centroidEast.getCoordinates(),
+                    centroidWest.getCoordinates()
+                ]);
             granule.geometry[wv.map.CRS_WGS_84] = newGeom;
             granule.centroid[wv.map.CRS_WGS_84] = newCentroid;
         }
