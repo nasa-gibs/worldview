@@ -40,9 +40,9 @@ wv.data.map = wv.data.map || function(model, maps, config) {
         var dim = getButtonDimensions();
         var image;
         if ( model.isSelected(feature.granule) ) {
-            image = "images/data-download-minus-button-red.svg";
+            image = "images/data.minus-button.png";
         } else {
-            image = "images/data-download-plus-button-orange.svg";
+            image = "images/data.plus-button.png";
         }
 
         if ( feature !== hovering ) {
