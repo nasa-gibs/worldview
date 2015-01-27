@@ -135,6 +135,7 @@ wv.data.results.collectVersions = function() {
         if ( !meta.versions ) {
             meta.versions = {};
         }
+        console.log("granule", granule);
         if ( granule.version ) {
             var timeStart = wv.data.echo.roundTime(granule.time_start);
             var previousVersion = meta.versions[timeStart] || 0;
@@ -762,6 +763,7 @@ wv.data.results.versionFilter = function() {
     self.process = function(meta, granule) {
         if ( granule.version ) {
             var timeStart = wv.data.echo.roundTime(granule.time_start);
+            console.log(timeStart, meta.versions[timeStart]);
             if ( meta.versions[timeStart] ) {
                 if ( meta.versions[timeStart] !== granule.version ) {
                     return;
@@ -769,6 +771,21 @@ wv.data.results.versionFilter = function() {
             }
         }
         return granule;
+    };
+
+    return self;
+};
+
+wv.data.results.versionFilterExact = function(version) {
+
+    var self = {};
+
+    self.name = "versionFilterExact";
+
+    self.process = function(meta, granule) {
+        if ( granule.version && granule.version === version ) {
+            return granule;
+        }
     };
 
     return self;
