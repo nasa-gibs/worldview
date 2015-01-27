@@ -264,19 +264,20 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
         queryActive = false;
         lastResults = results;
         wv.ui.indicator.hide(indicators);
+        var hasResults = true;
         if ( model.selectedProduct !== null && results.granules.length === 0 ) {
             indicators.noData = wv.ui.indicator.noData(indicators);
+            hasResults = false;
+        }
+        if ( results.meta.showList && hasResults ) {
+            selectionListPanel =
+                    wv.data.ui.selectionListPanel(model, results);
+            selectionListPanel.show();
         } else {
-            if ( results.meta.showList ) {
-                selectionListPanel =
-                        wv.data.ui.selectionListPanel(model, results);
-                selectionListPanel.show();
-            } else {
-                if ( selectionListPanel ) {
-                    selectionListPanel.hide();
-                }
-                selectionListPanel = null;
+            if ( selectionListPanel ) {
+                selectionListPanel.hide();
             }
+            selectionListPanel = null;
         }
         updateSelection();
     };
