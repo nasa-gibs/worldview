@@ -22,6 +22,7 @@ wv.data.handler.getByName = function(name) {
         "AquaSwathMultiDay":    wv.data.handler.aquaSwathMultiDay,
         "CollectionList":       wv.data.handler.collectionList,
         "List":                 wv.data.handler.list,
+        "DailyGranuleList":     wv.data.handler.dailyGranuleList,
         "MODISGrid":            wv.data.handler.modisGrid,
         "MODISMix":             wv.data.handler.modisMix,
         "MODISSwath":           wv.data.handler.modisSwath,
@@ -267,6 +268,22 @@ wv.data.handler.list = function(config, model, spec) {
     return self;
 };
 
+wv.data.handler.dailyGranuleList = function(config, model, spec) {
+    var self = wv.data.handler.list(config, model, spec);
+
+    self._submit = function(queryData) {
+        var queryOptions = {
+            startTimeDelta: 180,
+            endTimeDelta: -180,
+            time: model.time,
+            data: queryData
+        };
+
+        return self.echo.submit(queryOptions);
+    };
+
+    return self;
+};
 
 wv.data.handler.modisGrid = function(config, model, spec) {
     var self = wv.data.handler.base(config);
