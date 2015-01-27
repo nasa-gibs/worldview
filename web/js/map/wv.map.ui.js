@@ -47,7 +47,8 @@ wv.map.ui = wv.map.ui || function(models, config) {
         models.palettes.events
             .on("set-custom", updateLookup)
             .on("clear-custom", updateLookup)
-            .on("range", updateLookup);
+            .on("range", updateLookup)
+            .on("update", updateLookup);
 
         updateProjection(true);
     };

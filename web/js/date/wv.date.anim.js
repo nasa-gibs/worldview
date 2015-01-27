@@ -24,9 +24,7 @@
      self.interval = options.interval || "day";
      self.delta = options.delta || 1;
      self.active = false;
-
      var expired = false;
-     var loaded  = false;
      var timer;
 
      var init = function() {
@@ -66,32 +64,22 @@
              return;
          }
          notify("prepare", self);
-         loaded = true;
-         expired = false;
          var amount = ( self.direction === "forward" ) ?
                  self.delta : -self.delta;
          var newDate = wv.util.dateAdd(model.selected, self.interval, amount);
-         ui.preload(newDate, function() {
-             notify("loaded");
-             loaded = true;
-             checkFrame(newDate);
-         });
+         ui.preload(newDate);
          timer = setTimeout(function() {
-             notify("expired");
-             expired = true;
-             checkFrame(newDate);
+             advance(newDate);
          }, self.delay);
      };
 
-     var checkFrame = function(newDate) {
-         if ( loaded && expired ) {
-             notify("advance");
-             var updated = model.select(newDate);
-             if ( !updated ) {
-                 self.stop();
-             } else {
-                 prepareFrame();
-             }
+     var advance = function(newDate) {
+         notify("advance");
+         var updated = model.select(newDate);
+         if ( !updated ) {
+             self.stop();
+         } else {
+             prepareFrame();
          }
      };
 

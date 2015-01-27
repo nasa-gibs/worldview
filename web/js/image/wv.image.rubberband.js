@@ -88,24 +88,12 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
             draw();
         };
 
-        // When disabling the palettes, we need to wait for the map to reload all
-        // the tiles before enabling the crop box. The crop box copies all
-        // elements in the map to do its background effect and if the map isn't
-        // ready yet, it will copy blank images.
         var disablePalettes = function() {
             var map = ui.map.selected;
-            var handler = function() {
-                map.events.unregister("maploadend", map, handler);
-                toggleOn();
-            };
-            map.events.register("maploadend", map, handler);
-
             // Save the previous state to be restored later
             previousPalettes = models.palettes.active;
             models.palettes.clear();
-            if ( !ui.map.isLoading() ) {
-                handler();
-            }
+            toggleOn();
         };
 
         if(state == "off") {
