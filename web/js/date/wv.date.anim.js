@@ -13,25 +13,25 @@
  */
  var wv = wv || {};
  wv.date = wv.date || {};
- 
+
  wv.date.anim = wv.date.anim || function(model, ui, options) {
-    
+
      options = options || {};
      var self = {};
-     
+
      self.delay = options.delay || 500;
      self.direction = "forward";
      self.interval = options.interval || "day";
      self.delta = options.delta || 1;
      self.active = false;
-     
+
      var expired = false;
      var loaded  = false;
      var timer;
-     
+
      var init = function() {
      };
-     
+
      self.play = function(direction) {
          if ( self.active && direction !== self.direction ) {
              self.stop();
@@ -43,15 +43,15 @@
          self.active = true;
          prepareFrame();
      };
-     
+
      self.forward = function() {
          self.play("forward");
      };
-     
+
      self.reverse = function() {
          self.play("reverse");
      };
-     
+
      self.stop = function() {
          notify("stop");
          if ( timer ) {
@@ -60,15 +60,15 @@
          }
          self.active = false;
      };
-     
+
      var prepareFrame = function() {
          if ( !self.active ) {
              return;
          }
          notify("prepare", self);
-         loaded = false;
+         loaded = true;
          expired = false;
-         var amount = ( self.direction === "forward" ) ? 
+         var amount = ( self.direction === "forward" ) ?
                  self.delta : -self.delta;
          var newDate = wv.util.dateAdd(model.selected, self.interval, amount);
          ui.preload(newDate, function() {
@@ -82,7 +82,7 @@
              checkFrame(newDate);
          }, self.delay);
      };
-     
+
      var checkFrame = function(newDate) {
          if ( loaded && expired ) {
              notify("advance");
@@ -94,10 +94,9 @@
              }
          }
      };
-    
+
      var notify = ( options.debug ) ? console.log : function() {};
-     
+
      init();
      return self;
  };
- 

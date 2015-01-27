@@ -193,9 +193,18 @@ wv.map.ui = wv.map.ui || function(models, config) {
         reloadLayers();
     };
 
-    // FIXME: OL3
-    // Don't call directly, use an event instead
-    self.preload = function() {
+    self.preload = function(date) {
+        var layers = models.layers.get({
+            renderable: true,
+            dynamic: true
+        });
+        _.each(layers, function(def) {
+            var key = layerKey(def, {date: date});
+            var layer = cache.getItem(key);
+            if ( !layer ) {
+                layer = createLayer(def, {date: date});
+            }
+        });
     };
 
     var findLayer = function(def) {
