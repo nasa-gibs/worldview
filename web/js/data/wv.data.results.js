@@ -671,7 +671,7 @@ wv.data.results.timeFilter = function(spec) {
             granule.centroid[wv.map.CRS_WGS_84] = geom.getInteriorPoint();
         }
 
-        var x = granule.centroid[wv.map.CRS_WGS_84][0];
+        var x = granule.centroid[wv.map.CRS_WGS_84].getCoordinates()[0];
         if ( time < eastZone && x < 0 ) {
             return;
         }
@@ -763,7 +763,6 @@ wv.data.results.versionFilter = function() {
     self.process = function(meta, granule) {
         if ( granule.version ) {
             var timeStart = wv.data.echo.roundTime(granule.time_start);
-            console.log(timeStart, meta.versions[timeStart]);
             if ( meta.versions[timeStart] ) {
                 if ( meta.versions[timeStart] !== granule.version ) {
                     return;
