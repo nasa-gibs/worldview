@@ -261,6 +261,10 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
     };
 
     var onQueryResults = function(results) {
+        if ( selectionListPanel ) {
+            selectionListPanel.hide();
+            selectionListPanel = null;
+        }
         queryActive = false;
         lastResults = results;
         wv.ui.indicator.hide(indicators);
@@ -273,11 +277,6 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
             selectionListPanel =
                     wv.data.ui.selectionListPanel(model, results);
             selectionListPanel.show();
-        } else {
-            if ( selectionListPanel ) {
-                selectionListPanel.hide();
-            }
-            selectionListPanel = null;
         }
         updateSelection();
     };
