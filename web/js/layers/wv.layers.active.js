@@ -181,8 +181,11 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             $layer.append($metadataButton);
         }
 
+        var names = models.layers.getTitles(layer.id);
+
         var $editButton = $("<a></a>")
             .attr("data-layer", layer.id)
+            .attr("title", "Layer options for " + names.title)
             .addClass("wv-layers-options");
 
         wv.ui.mouse.click($editButton, toggleOptionsPanel);
@@ -194,7 +197,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
         $layer.append($editButton);
 
-        var names = models.layers.getTitles(layer.id);
+        
         var $mainLayerDiv = $('<div></div>')
             .addClass('layer-main')
             .attr("data-layer", layer.id)
