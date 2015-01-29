@@ -154,6 +154,9 @@ $(function() {
         ui.addLayers = wv.layers.add(models, ui, config);
         if ( config.startDate ) {
             ui.timeline = wv.date.timeline(models, config, ui);
+            ui.timeline.data = wv.date.timeline.data(models, config, ui);
+            ui.timeline.ticks = wv.date.timeline.ticks(models, config, ui);
+            ui.timeline.zoom = wv.date.timeline.zoom(models, config, ui);
             ui.dateLabel = wv.date.label(models);
             ui.dateWheels = wv.date.wheels(models, config);
         }
@@ -268,3 +271,4 @@ $(function() {
     wv.util.wrap(main)();
 
 });
+
