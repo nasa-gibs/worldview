@@ -69,7 +69,7 @@ wv.date.timeline.zoom = wv.date.timeline.zoom || function(models, config, ui) {
         if (max > count){
             tl.isCropped = false;
             d2 = tl.data.end();
-            r1 = (tl.width/2)-((count*w)/2),
+            r1 = (tl.width/2)-((count*w)/2);
             r2 = (tl.width/2)+((count*w)/2);
         }
         else{

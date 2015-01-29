@@ -30,11 +30,11 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     };
 
     self.getWidth = function(){
-        self.width = $(window).outerWidth(true)
-            - $("#timeline-header").outerWidth(true)
-            - $("#timeline-zoom").outerWidth(true)
-            - $("#timeline-hide").outerWidth(true)
-            - self.margin.left - self.margin.right - 22;
+        self.width = $(window).outerWidth(true) -
+             $("#timeline-header").outerWidth(true) -
+             $("#timeline-zoom").outerWidth(true) -
+             $("#timeline-hide").outerWidth(true) -
+             self.margin.left - self.margin.right - 22;
         return self.width;
     };
 
