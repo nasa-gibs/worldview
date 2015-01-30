@@ -1,10 +1,10 @@
 [
     "web/css/wv.main.css",
+    "web/css/wv.map.css",
     "web/css/wv.link.css",
     "web/css/wv.image.css",
     "web/css/wv.palettes.css",
     "web/css/wv.debug.css",
-    "web/css/map-ol2.css",
     "web/css/wv.date.css",
     "web/css/menuPicker.css",
     "web/css/accordionPicker.css",

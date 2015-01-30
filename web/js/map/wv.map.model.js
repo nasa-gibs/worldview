@@ -29,26 +29,22 @@ wv.map.model = wv.map.model || function(models, config) {
     self.load = function(state, errors) {
         if ( state.v ) {
             var proj = models.proj.selected;
-            var extent = new OpenLayers.Bounds(state.v);
-            var maxExtent = new OpenLayers.Bounds(proj.maxExtent);
-            if ( extent.intersectsBounds(maxExtent) ) {
+            var extent = state.v;
+            var maxExtent = proj.maxExtent;
+            if ( ol.extent.intersects(extent, maxExtent) ) {
                 self.extent = state.v;
             } else {
-                self.extent = proj.maxExtent;
+                self.extent = _.clone(proj.maxExtent);
                 errors.push({message: "Extent outside of range"});
-            }
-        } else {
-            if ( models.proj.selected.id === "geographic" ) {
-                self.setExtentToLeading();
             }
         }
     };
 
     self.save = function(state) {
-        state.v = self.extent.slice(0);
+        state.v = _.clone(self.extent);
     };
 
-    self.setExtentToLeading = function() {
+    self.getLeadingExtent = function() {
         // Set default extent according to time of day:
         //   at 00:00 UTC, start at far eastern edge of map: "20.6015625,-46.546875,179.9296875,53.015625"
         //   at 23:00 UTC, start at far western edge of map: "-179.9296875,-46.546875,-20.6015625,53.015625"
@@ -69,7 +65,7 @@ wv.map.model = wv.map.model || function(models, config) {
         var minLat = -46.546875;
         var maxLat = 53.015625;
 
-        self.extent = [minLon, minLat, maxLon, maxLat];
+        return [minLon, minLat, maxLon, maxLat];
     };
 
     return self;

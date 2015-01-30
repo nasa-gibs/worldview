@@ -29,8 +29,7 @@ buster.testCase("wv.proj.change", {
                 arctic: {
                     id: "arctic",
                     epsg: "3413",
-                    crs: "EPSG:3413",
-                    proj4: "Proj4 def"
+                    crs: "EPSG:3413"
                 },
                 antarctic: {
                     id: "antarctic",

@@ -184,8 +184,8 @@ def process_entry(entry, colormaps):
             "maxResolution": max_resolution,
             "resolutions": resolutions,
             "tileSize": [
-                gc_matrix_set["TileMatrix"][0]["TileWidth"],
-                gc_matrix_set["TileMatrix"][0]["TileHeight"]
+                int(gc_matrix_set["TileMatrix"][0]["TileWidth"]),
+                int(gc_matrix_set["TileMatrix"][0]["TileHeight"])
             ]
         }
 

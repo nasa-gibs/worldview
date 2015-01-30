@@ -29,7 +29,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
     var previousCoords = null;
     var icon = "images/camera.png";
     var onicon = "images/cameraon.png";
-    var cropee = "map";
+    var $cropee = $("#wv-map"); //TODO: Test on non-canvas
     var id = containerId;
     var state = "off";
     var jcropAPI = null;
@@ -88,24 +88,12 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
             draw();
         };
 
-        // When disabling the palettes, we need to wait for the map to reload all
-        // the tiles before enabling the crop box. The crop box copies all
-        // elements in the map to do its background effect and if the map isn't
-        // ready yet, it will copy blank images.
         var disablePalettes = function() {
             var map = ui.map.selected;
-            var handler = function() {
-                map.events.unregister("maploadend", map, handler);
-                toggleOn();
-            };
-            map.events.register("maploadend", map, handler);
-
             // Save the previous state to be restored later
             previousPalettes = models.palettes.active;
             models.palettes.clear();
-            if ( !ui.map.isLoading() ) {
-                handler();
-            }
+            toggleOn();
         };
 
         if(state == "off") {
@@ -127,6 +115,8 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
         else {
             state = "off";
             $button.prop("checked", false).button("refresh");
+            $cropee
+                .insertAfter('#productsHolder');
             jcropAPI.destroy();
             if (previousPalettes) {
                 models.palettes.restore(previousPalettes);
@@ -158,7 +148,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
     */
     var draw =  function() {
 
-        $("#"+cropee).Jcrop({
+        $cropee.Jcrop({
                 bgColor:     'black',
                 bgOpacity:   0.3,
                 onSelect:  function(c){previousCoords=coords;handleChange(c);},
@@ -167,7 +157,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                 fullScreen: true
                 });
 
-        jcropAPI = $('#'+cropee).data('Jcrop');
+        jcropAPI = $cropee.data('Jcrop');
 
         if(coords) {
             jcropAPI.setSelect([coords.x, coords.y,coords.x2,coords.y2]);

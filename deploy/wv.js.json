@@ -43,7 +43,6 @@
         "web/js/data/wv.data.js",
         "web/js/data/wv.data.echo.js",
         "web/js/data/wv.data.handler.js",
-        "web/js/data/wv.data.layers.js",
         "web/js/data/wv.data.map.js",
         "web/js/data/wv.data.model.js",
         "web/js/data/wv.data.results.js",
@@ -51,7 +50,6 @@
 
         "web/js/map/wv.map.js",
         "web/js/map/wv.map.model.js",
-        "web/js/map/wv.map.palette.js",
         "web/js/map/wv.map.ui.js",
 
         "web/js/link/wv.link.model.js",

@@ -157,6 +157,24 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
         });
     };
 
+    self.key = function(layerId) {
+        if ( !self.isActive(layerId) ) {
+            return "";
+        }
+        var def = self.get(layerId);
+        var keys = [];
+        if ( def.custom ) {
+            keys.push("palette=" + def.custom);
+        }
+        if ( def.min ) {
+            keys.push("min=" + def.min);
+        }
+        if ( def.max ) {
+            keys.push("max=" + def.max);
+        }
+        return keys.join(",");
+    };
+
     self.load = function(state, errors) {
         if ( !wv.palettes.supported ) {
             return;

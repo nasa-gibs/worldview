@@ -27,13 +27,10 @@ buster.testCase("wv.proj.model", {
                 "arctic": {
                     id: "arctic",
                     epsg: "3413",
-                    crs: "EPSG:3413",
-                    proj4: "Proj4 def"
+                    crs: "EPSG:3413"
                 }
             }
         };
-        window.Proj4js = window.Proj4js || {};
-        window.Proj4js.defs = window.Proj4js.defs || {};
     },
 
     "Initializes with default": function() {
@@ -60,11 +57,13 @@ buster.testCase("wv.proj.model", {
         buster.assert.calledOnce(listener);
     },
 
+    /* FIXME: OL3
     "Registers projection": function() {
         var model = wv.proj.model(this.config);
         model.select("arctic");
         buster.assert.equals(Proj4js.defs["EPSG:3413"], "Proj4 def");
     },
+    */
 
     "Event not fired if selection does not change": function() {
         var model = wv.proj.model(this.config);

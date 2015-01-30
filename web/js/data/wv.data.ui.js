@@ -182,8 +182,9 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
         }
    };
 
-    self.onViewChange = function(map) {
+    self.onViewChange = function() {
         var indicator;
+        var map = ui.map.selected;
 
         if ( !model.active || queryActive || !lastResults ) {
             return;
@@ -193,11 +194,13 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
         }
         var hasCentroids = false;
         var inView = false;
-        var extent = map.getExtent().toGeometry();
+        var extent = map.getView().calculateExtent(map.getSize());
+        var crs = models.proj.selected.crs;
         _.each(lastResults.granules, function(granule) {
-            if ( granule.centroid && granule.centroid[map.projection] ) {
+            if ( granule.centroid && granule.centroid[crs] ) {
                 hasCentroids = true;
-                if ( extent.intersects(granule.centroid[map.projection]) ) {
+                if ( ol.extent.intersects(extent,
+                        granule.centroid[crs].getExtent()) ) {
                     inView = true;
                     return true;
                 }
@@ -231,6 +234,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
         if ( downloadListPanel ) {
             downloadListPanel.hide();
         }
+        mapController.dispose();
     };
 
     var onProductSelect = function(product) {
@@ -257,23 +261,24 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
     };
 
     var onQueryResults = function(results) {
+        if ( selectionListPanel ) {
+            selectionListPanel.hide();
+            selectionListPanel = null;
+        }
         queryActive = false;
         lastResults = results;
         wv.ui.indicator.hide(indicators);
+        var hasResults = true;
         if ( model.selectedProduct !== null && results.granules.length === 0 ) {
             indicators.noData = wv.ui.indicator.noData(indicators);
-        } else {
-            if ( results.meta.showList ) {
-                selectionListPanel =
-                        wv.data.ui.selectionListPanel(model, results);
-                selectionListPanel.show();
-            } else {
-                if ( selectionListPanel ) {
-                    selectionListPanel.hide();
-                }
-                selectionListPanel = null;
-            }
+            hasResults = false;
         }
+        if ( results.meta.showList && hasResults ) {
+            selectionListPanel =
+                    wv.data.ui.selectionListPanel(model, results);
+            selectionListPanel.show();
+        }
+        updateSelection();
     };
 
     var onQueryCancel = function() {

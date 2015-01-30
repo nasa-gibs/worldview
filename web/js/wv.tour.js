@@ -94,7 +94,7 @@ wv.tour = wv.tour || function(models, ui, config) {
         var mapAnchor = document.getElementById("mapPanelTourAnchor");
         if(!mapAnchor) {
             //console.log("creating mapanchor");
-            var owner = document.getElementById("map");
+            var owner = document.getElementById("wv-map");
             mapAnchor = document.createElement("div");
             mapAnchor.setAttribute("id", "mapPanelTourAnchor");
             mapAnchor.setAttribute("style", "float:right; height:68px; right:14px; top:90px; width:36px; position:relative; z-index:-1");

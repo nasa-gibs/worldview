@@ -238,6 +238,14 @@ wv.data.model = wv.data.model || function(models, config) {
         }
     };
 
+    self.toggleGranule = function(granule) {
+        if ( self.isSelected(granule) ) {
+            self.unselectGranule(granule);
+        } else {
+            self.selectGranule(granule);
+        }
+    };
+
     self.isSelected = function(granule) {
         var selected = false;
         $.each(self.selectedGranules, function(index, selection) {

@@ -1,3 +1,8 @@
+// FIXME: OL3
+proj4.defs("EPSG:3413", "+title=WGS 84 / NSIDC Sea Ice Polar Stereographic North +proj=stere +lat_0=90 +lat_ts=70 +lon_0=-45 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs");
+proj4.defs("EPSG:3031", "+title=WGS 84 / Antarctic Polar Stereographic +proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs");
+
+
 var fixtures = {
     red: "ff0000ff",
     light_red: "fff0f0ff",
