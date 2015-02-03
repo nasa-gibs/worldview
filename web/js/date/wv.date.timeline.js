@@ -1575,6 +1575,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             })
             .mouseup(animateEnd);
         $(document)
+            .mouseout(animateEnd)
             .keydown(function(event) {
                 /*if ( event.target.nodeName === "INPUT" ) {
                     if((event.keyCode || event.which) === 9){
