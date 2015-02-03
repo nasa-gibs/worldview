@@ -190,10 +190,12 @@ wv.tour = wv.tour || function(models, ui, config) {
     };
 
     var initTourState = function() {
+        var map = ui.map.selected;
         models.proj.selectDefault();
         models.date.select(wv.util.today());
         models.layers.reset();
-        models.map.setExtentToLeading();
+        var leading = models.map.getLeadingExtent();
+        map.getView().fitExtent(leading, map.getSize());
         setTourState();
     };
 
