@@ -88,12 +88,14 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .attr("style","clip-path:url(#timeline-boundary)")
             .attr("transform","translate(0,16)");
 
-        self.boundary.append("svg:g")
+        self.axis = self.boundary.append("svg:g")
             .attr("class", "x axis")
-            .attr("transform", "translate(0," + self.height + ")")
+            .attr("transform", "translate(0," + self.height + ")");
+
+        self.axis
             .insert("line",":first-child")
-                .attr("x1",0)
-                .attr("x2",self.width);//+margin.left+margin.right);
+            .attr("x1",0)
+            .attr("x2",self.width);//+margin.left+margin.right);
         
         self.dataBars = self.boundary.insert("svg:g",'.x.axis')
             .attr("height",self.height)
@@ -124,6 +126,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .attr("x","35")
             .attr("y","11");
     };
+
     var init = function(){
         
         drawContainers();

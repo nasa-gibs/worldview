@@ -90,6 +90,8 @@ wv.date.model = wv.date.model || function(config, spec) {
             self.select(state.t);
         }
     };
+    self.monthAbbr = [ "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
+                            "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" ];
 
     init();
     return self;
