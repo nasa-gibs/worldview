@@ -58,56 +58,54 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
             ticks.insert("svg:circle","text").attr("r","6");
 
             ticks.each(function(){
+
                 var current = d3.select(this);
                 var currentData = current.data()[0];
                 var nextData = tl.zoom.current.ticks.boundary.next(currentData);
-                console.log(nextData);
-                //console.log(d3.select($(this).next('.tick-labeled')[0]).data()[0]);
+                var nextNormalData = tl.zoom.current.ticks.normal.next(currentData);
+                var bWidth,nWidth;
+                var subLabel;
+
+                bWidth = tl.x(nextData) - tl.x(currentData);
+
+                nWidth = tl.x(nextNormalData) - tl.x(currentData) + 1;
+
+                //subLabel = getSubLabel(boundaryTickData);
+
+                current.insert("svg:rect", "text")
+                    .attr("x","0")
+                    .attr("y","0")
+                    .attr("width",bWidth)
+                    .attr("height",tl.height)
+                    .attr("class","boundarytick-background");
+                
+                current.append("svg:rect")
+                    .attr("x","0")
+                    .attr("y","0")
+                    .attr("width",bWidth)
+                    .attr("height",tl.height)
+                    .attr("class","boundarytick-foreground");
+
+                current.append("svg:rect")
+                    .attr("class","normaltick-background")
+                    .attr("height",tl.height-1)
+                    .attr("y",-tl.height)
+                    .attr("x",-0.5)
+                    .attr("width",nWidth);
+                /*
+                  if(subLabel){
+                  boundaryTick.select('text').append("tspan")
+                  .text(" " + subLabel)
+                  .attr("class","sub-label");
+                  }*/
+                
             });
-            /*
-            var nextData = getNextBoundaryTickData(boundaryTickData);
-            var nextNormalTickData = getNextNormalTickData(boundaryTickData);
 
-            boundaryTickWidth = x(nextBoundaryTickData) - x(boundaryTickData);
+            ticks.selectAll('text')
+                .attr('class','tick-label')
+                .attr('x',7)
+                .attr('style','text-anchor:left;');
 
-            normalTickWidth = x(nextNormalTickData) - x(boundaryTickData) + 1;
-
-            var subLabel = getSubLabel(boundaryTickData);
-
-            boundaryTick.insert("svg:rect", "text")
-                .attr("x","0")
-                .attr("y","0")
-                .attr("width",boundaryTickWidth)
-                .attr("height",height)
-                .attr("class","boundarytick-background");
-
-            boundaryTick.append("svg:rect")
-                .attr("x","0")
-                .attr("y","0")
-                .attr("width",boundaryTickWidth)
-                .attr("height",height)
-                .attr("class","boundarytick-foreground");
-
-            boundaryTick.append("svg:rect")
-                .attr("class","normaltick-background")
-                .attr("height",height-1)
-                .attr("y",-height)
-                .attr("x",-0.5)
-                .attr("width",normalTickWidth);
-
-            if(subLabel){
-                boundaryTick.select('text').append("tspan")
-                    .text(" " + subLabel)
-                    .attr("class","sub-label");
-            }
-
-        });
-
-        boundaryTicks.selectAll('text')
-            .attr('class','tick-label')
-            .attr('x',7)
-            .attr('style','text-anchor:left;');
-*/
         }
     };
     self.compare = function(proto, end){
