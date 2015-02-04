@@ -301,6 +301,12 @@ wv.data.results.densify = function() {
     self.name = "Densify";
 
     self.process = function(meta, granule) {
+        // There is a bug exposed here discovered when switching to OL3. Since this
+        // function isn't needed for any of the data that we have, just skip it 
+        // for now and fix it later.
+        return granule;
+
+        /*
         var geom = granule.geometry[wv.map.CRS_WGS_84];
         var newGeom = null;
         if ( geom.getPolygons ) {
@@ -315,6 +321,7 @@ wv.data.results.densify = function() {
         }
         granule.geometry[wv.map.CRS_WGS_84] = newGeom;
         return granule;
+        */
     };
 
     var densifyPolygon = function(poly) {
@@ -327,7 +334,7 @@ wv.data.results.densify = function() {
             end = ring[i + 1];
             var distance = wv.map.distance2D(start, end);
             var numPoints = Math.floor(distance / MAX_DISTANCE);
-            points.push(start);
+            points.push(_.clone(start));
             for ( var j = 1; j < numPoints - 1; j++ ) {
                 var d = j / numPoints;
                 // This is what REVERB does, so we will do the same
@@ -335,7 +342,7 @@ wv.data.results.densify = function() {
                 points.push(p);
             }
         }
-        points.push(end);
+        points.push(_.clone(end));
         return points;
     };
 
