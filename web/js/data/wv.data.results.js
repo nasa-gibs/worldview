@@ -24,7 +24,6 @@ wv.data.results.antiMeridianMulti = function(maxDistance) {
     self.name = "AntiMeridianMulti";
 
     self.process = function(meta, granule) {
-        console.log("process", meta, granule);
         var geom = granule.geometry[wv.map.CRS_WGS_84];
         if ( !wv.map.isPolygonValid(geom, maxDistance) ) {
             var geomEast = wv.map.adjustAntiMeridian(geom, 1);
@@ -135,7 +134,6 @@ wv.data.results.collectVersions = function() {
         if ( !meta.versions ) {
             meta.versions = {};
         }
-        console.log("granule", granule);
         if ( granule.version ) {
             var timeStart = wv.data.echo.roundTime(granule.time_start);
             var previousVersion = meta.versions[timeStart] || 0;
