@@ -14,211 +14,136 @@
  */
 var wv = wv || {};
 wv.date = wv.date || {};
-
+wv.date.timeline = wv.date.timeline || {};
 
 /**
  * Perform timeline tick functions
  *
  * @class wv.date.timeline.ticks
  */
-
 wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) {
 
     var tl = ui.timeline;
 
     var self = {};
 
-    self.refresh = function(normalInterval,boundaryInterval){
-        //setTicks()
-        self.allTicks = d3.selectAll('.x.axis>g.tick');
-        self.allTicks.classed('tick-labeled',false).classed('label-only',false);
+    self.setAll = function(){
+        self.all = d3.selectAll('.x.axis>g.tick');
+        self.firstDate = self.all.data()[0];
+        self.lastDate = self.all.data()[self.all.data().length-1];
+        //remove previous classes for labels
+        self.all.classed('tick-labeled',false).classed('label-only',false);
 
-        self.normal.set(normalInterval);
-
-        if(!tl.isCropped){  //TODO: rewrite later
-            if(self.allTicks.data()[0] > tl.data.start()){
-                self.normal.add.start(normalInterval);
-                //addNormStartTick();
-            }
-
-            if(self.allTicks.data()[self.allTicks.data().length-1] <= wv.util.today()){
-                self.normal.add.end(normalInterval);
-                //addNormEndTick();
-            }
-        }
-
-        self.boundary.set(normalInterval);
-
-        if($(self.normalTicks[0][0]).is(':nth-child(2)')){
-            self.boundary.add.start(boundaryInterval);
-            //addStartTick();
-        }
-
-        if(d3.select($(self.normalTicks[0][self.normalTicks[0].length-1]).next()[0]).classed('domain')){
-            self.boundary.add.end(boundaryInterval);
-            //addEndTick();
-        }
-
-        self.boundaryTicks.classed('tick-labeled',true);
     };
-
     self.normal = {
-        add: {
-            start: function(interval){ //TODO: Clean up and remove case.
-                //addNormStartTick()
-                var startTick = d3.selectAll('.x.axis>g.tick').data()[0];
-                var fNormData;
-                switch (interval){
-                case 'year':
-                    fNormData = new Date(Date.UTC(startTick.getUTCFullYear()-1,0,1));
-                    break;
-                case 'month':
-                    fNormData = new Date(Date.UTC(startTick.getUTCFullYear(),startTick.getUTCMonth()-1,1));
-                    break;
-                case 'day':
-                    fNormData = new Date(Date.UTC(startTick.getUTCFullYear(),startTick.getUTCMonth(),startTick.getUTCDate()-1));
-                    break;
-                }
-                
-                var fNormTick = timeline.select('.x.axis').insert('g','g.tick')
-                    .data([fNormData])
-                    .attr('class','tick')
-                    .attr('transform','translate(' + x(fNormData) + ',0)')
-                    .classed('label-only',true)
-                    .classed('normal-tick',true);
-                fNormTick.append('line')
-                    .attr('y2',-tl.height);
-                
-                self.normal.set(interval);
-                
-            },
-            end: function(interval){  //TODO: Clean up, remove case and maybe combine with start
-                //addNormEndTick()
-                var allTickData = d3.selectAll('.x.axis>g.tick').data();
-                var endTick = wv.util.today();
-
-                var lNormData;
-                switch (interval){
-                case 'year':
-                    lNormData = new Date(Date.UTC(endTick.getUTCFullYear()+1,0,1));
-                    break;
-                case 'month':
-                    lNormData = new Date(Date.UTC(endTick.getUTCFullYear(),endTick.getUTCMonth()+1,1));
-                    break;
-                case 'day':
-                    lNormData = new Date(Date.UTC(endTick.getUTCFullYear(),endTick.getUTCMonth(),endTick.getUTCDate()+1));
-                    break;
-                }
-                var lNormTick = timeline.select('.x.axis').insert('g','path.domain')
-                    .data([lNormData])
-                    .attr('class','tick')
-                    .attr('transform','translate(' + x(lNormData) + ',0)')
-                    .classed('label-only',true)
-                    .classed('normal-tick',true);
-                lNormTick.append('line')
-                    .attr('y2',-tl.height);
-                
-                self.normal.set(interval);
-            }
-        },
-        set: function(interval){  //TODO: remove cases?
-            //setNormalTicks()
-            self.normalTicks = d3.selectAll('.x.axis>g.tick').filter(function(d){
-                var selection, value;
-                switch (interval){
-                case 'year':
-                    selection = d.getUTCFullYear() % 10;
-                    value = 0;
-                    break;
-                case 'month':
-                    selection = d.getUTCMonth();
-                    value = 0;
-                    break;
-                case 'day':
-                    selection = d.getUTCDate();
-                    value = 1;
-                    break;
-                }
-                return selection !== value;
-            });
-        },
-        hover: function(){
-            //hoverNormalTick()
-        },
-        click: function(){
-            //clickNormalTick()
+        //FIXME: this is actually the ends of all ticks,
+        //not just the normal ticks.
+        setEnds: function(){  
+            var all = self.normal.all;
+            self.normal.firstDate = all.data()[0];
+            self.normal.firstElem = all[0][0];
+            self.normal.lastDate = all.data()[all.data().length-1];
+            self.normal.lastElem = all[0][all.length-1];
         }
     };
     self.boundary = {
-        add: { //TODO: Clean up and optimize
-            start: function(interval){
-                //addStartTick()
-                var fBoundData,fBoundTxt;
-                var fNormData = self.normalTicks.data()[0];
-                switch (interval){
-                case 'year':
-                    fBoundData = new Date(Date.UTC(Math.floor(fNormData.getUTCFullYear()/10)*10,0,1));
-                    fBoundTxt = fBoundData.getUTCFullYear();
-                    break;
-                case 'month':
-                    fBoundData = new Date(Date.UTC(fNormData.getUTCFullYear(),0,1));
-                    fBoundTxt = fBoundData.getUTCFullYear();
-                    break;
-                case 'day':
-                    fBoundData = new Date(Date.UTC(fNormData.getUTCFullYear(),fNormData.getUTCMonth(),1));
-                    fBoundTxt = '';//FIXME: monthNames[fBoundData.getUTCMonth()];
-                    break;
-                
-                }
-                var fBoundTick = tl.boundary.select('.x.axis').insert('g','g.tick').data([fBoundData])
-                    .attr('class','tick')
-                    .attr('transform','translate(' + x(fBoundData) + ',0)')
-                    .classed('label-only',true);
-                fBoundTick.append('line')
-                    .attr('y1',20)
-                    .attr('y2',-50);//TODO: make these dynamic
-                fBoundTick.append('text')
-                    .attr('y','5')
-                    .attr('dy','.71em')
-                    .text(fBoundTxt);
-                
-                d3.selectAll('.x.axis>g.tick').classed('tick-labeled',false);
-                self.boundary.set(interval);
-                self.boundaryTicks.classed('tick-labeled',true);
-            },
-            end: function(){
-                //addEndTick()
-                
-            },
-        },
-        set: function(interval){ //FIXME: Remove cases?
-            //setBoundaryTicks()
-            self.boundaryTicks = d3.selectAll('.x.axis>g.tick').filter(function(d){
-                var selection, value;
-                switch (interval){
-                case 'year':
-                    selection = d.getUTCFullYear() % 10;
-                    value = 0;
-                    break;
-                case 'month':
-                    selection = d.getUTCMonth();
-                    value = 0;
-                    break;
-                case 'day':
-                    selection = d.getUTCDate();
-                    value = 1;
-                    break;
-                }
-                return selection === value;
+
+        init: function(){  //TODO: In progress
+            
+            var ticks = self.boundary.all;
+            ticks.selectAll('line')
+                .attr("y1","20")
+                .attr("y2","-50");
+
+            ticks.insert("svg:circle","text").attr("r","6");
+
+            ticks.each(function(){
+                var current = d3.select(this);
+                var currentData = current.data()[0];
+                var nextData = tl.zoom.current.ticks.boundary.next(currentData);
+                console.log(nextData);
+                //console.log(d3.select($(this).next('.tick-labeled')[0]).data()[0]);
             });
-        },
-        hover: function(){
-            //hoverBoundaryTick()
-        },
-        click: function(){
-            //clickBoundaryTick()
+            /*
+            var nextData = getNextBoundaryTickData(boundaryTickData);
+            var nextNormalTickData = getNextNormalTickData(boundaryTickData);
+
+            boundaryTickWidth = x(nextBoundaryTickData) - x(boundaryTickData);
+
+            normalTickWidth = x(nextNormalTickData) - x(boundaryTickData) + 1;
+
+            var subLabel = getSubLabel(boundaryTickData);
+
+            boundaryTick.insert("svg:rect", "text")
+                .attr("x","0")
+                .attr("y","0")
+                .attr("width",boundaryTickWidth)
+                .attr("height",height)
+                .attr("class","boundarytick-background");
+
+            boundaryTick.append("svg:rect")
+                .attr("x","0")
+                .attr("y","0")
+                .attr("width",boundaryTickWidth)
+                .attr("height",height)
+                .attr("class","boundarytick-foreground");
+
+            boundaryTick.append("svg:rect")
+                .attr("class","normaltick-background")
+                .attr("height",height-1)
+                .attr("y",-height)
+                .attr("x",-0.5)
+                .attr("width",normalTickWidth);
+
+            if(subLabel){
+                boundaryTick.select('text').append("tspan")
+                    .text(" " + subLabel)
+                    .attr("class","sub-label");
+            }
+
+        });
+
+        boundaryTicks.selectAll('text')
+            .attr('class','tick-label')
+            .attr('x',7)
+            .attr('style','text-anchor:left;');
+*/
         }
-        
+    };
+    self.compare = function(proto, end){
+        if(self.firstDate > tl.data.start()){
+            //the data and what element to insert it before
+            //probably a better way of doing this
+            self.add(proto, 'g.tick');
+        }
+        if(self.lastDate <= wv.util.today()){
+            self.add(end, 'path.domain');
+        }
+    };
+    self.add = function(data, elem){
+        var tick = tl.axis.insert('g', elem)
+            .data([data])
+            .attr('class','tick')
+            .attr('transform','translate(' + x(data) + ',0)')
+            .classed('label-only',true); //if add function is for label only
+
+        var text = data.getUTCFullYear() +
+            ' ' + models.date.monthAbbr[data.getUTCMonth()] +
+            ' ' + data.getUTCDate();
+
+        tick.append('line')
+            .attr('y2',-tl.height);
+
+        tick.append('text')
+            .attr('y', '5')
+            .attr('dy','.71em')
+            .text(text);
+    };
+    self.hover = {
+        //hoverNormalTick()
+    };
+    self.click = {
+        //clickNormalTick()
     };
 
     self.label = {
@@ -231,11 +156,74 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
     };
 
     var init = function(){
-        
-        //self.refresh();
+
     };
 
     init();
     return self;
 };
 
+/**
+ * Loaded after setting up wv.date.timeline.zoom
+ *
+ * @class wv.date.timeline.ticks
+ */
+/*
+wv.date.timeline.ticks.update = function(models, config, ui, current) {
+    var tl = ui.timeline;
+
+    var self = {};
+    console.log(current.ticks.normal);
+    var update = function(){
+        tl.ticks.setAll();
+        
+        //Checks to see if all of the ticks fit onto the timeline space
+        //and if so check to see that first and last major ticks are printed
+        if(!tl.isCropped){
+            var first = tl.ticks.firstDate;
+            var last = tl.ticks.lastDate;
+            var proto = new Date(Date.UTC(first.getUTCFullYear(),
+                                          first.getUTCMonth(),
+                                          first.getUTCDate()-1));
+            var end = new Date(Date.UTC(last.getUTCFullYear(),
+                                        last.getUTCMonth(),
+                                        last.getUTCDate()+1));
+            tl.ticks.compare(proto, end);
+        }
+        //set normal ticks
+        current.ticks.normal.all();
+
+        //FIXME: Section below is terrible {
+        //For determining needed boundary ticks
+        if($(tl.ticks.normal.firstElem).is(':nth-child(2)')){
+            var first = tl.ticks.normal.firstDate;
+            var proto = new Date(Date.UTC(first.getUTCFullYear(),
+                                          first.getUTCMonth(),
+                                          1));
+            tl.ticks.add(proto, 'g.tick');
+        }
+
+        //FIXME: Passing from d3 to jQuery to d3 in order to check if its the last tick elem.  WAT.
+        if(d3.select($(tl.ticks.normal.lastElem)
+                     .next()[0]).classed('domain')){
+            var last = tl.ticks.normal.lastDate;
+            var end = new Date(Date.UTC(last.getUTCFullYear()+1,
+                                        last.getUTCMonth()+1,
+                                        1));
+            tl.ticks.add(end, 'path.domain');
+        }
+        // } End terrible
+
+        //update boundary ticks
+        current.ticks.boundary.all();
+        tl.ticks.boundary.all.classed('tick-labeled',true);
+
+        tl.ticks.boundary.init();
+        console.log('ttt');
+
+    };
+
+    update();
+};
+
+*/
