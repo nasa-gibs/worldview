@@ -177,6 +177,15 @@ wv.date.timeline.zoom.lvl = wv.date.timeline.zoom.lvl || function(models, config
             return new Date(next.setUTCDate(next.getUTCDate()+1));
         };
 
+        tl.zoom.current.ticks.normal.label = function(d){
+            //No modifications at this zoom level
+            return d;
+        };
+
+        tl.zoom.current.ticks.normal.clickDate = function(d){
+            return new Date(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate());
+        };
+
         self.update();
 
     };
@@ -227,6 +236,9 @@ wv.date.timeline.zoom.lvl = wv.date.timeline.zoom.lvl || function(models, config
         tl.ticks.boundary.all.classed('tick-labeled',true);
 
         tl.ticks.boundary.init();
+        tl.ticks.normal.init();
+        tl.ticks.normal.set();
+        tl.ticks.normal.bind();
 
     };
 
