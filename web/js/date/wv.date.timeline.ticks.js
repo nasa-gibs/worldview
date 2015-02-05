@@ -24,6 +24,7 @@ wv.date.timeline = wv.date.timeline || {};
 wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) {
 
     var tl = ui.timeline;
+    var model = models.date;
 
     var self = {};
 
@@ -36,19 +37,80 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
 
     };
     self.normal = {
-        //FIXME: this is actually the ends of all ticks,
-        //not just the normal ticks.
-        setEnds: function(){  
+        set: function(){
+            self.normal.background = self.all.selectAll('rect.normaltick-background');
+        },
+        setEnds: function(){
+            //FIXME: this is actually the ends of all ticks,
+            //not just the normal ticks.
             var all = self.normal.all;
             self.normal.firstDate = all.data()[0];
             self.normal.firstElem = all[0][0];
             self.normal.lastDate = all.data()[all.data().length-1];
             self.normal.lastElem = all[0][all.length-1];
-        }
+        },
+        init: function(){
+            var ticks = self.normal.all;
+            ticks.selectAll('line')
+                .attr("y1","-2");
+
+            ticks.selectAll("text").remove();
+
+            ticks.each(function(){
+                var current = d3.select(this);
+                var currentData = current.data()[0];
+                var nextData = tl.zoom.current.ticks.normal.next(currentData);
+                //var normalTickLine = normalTick.select('line'); What's this for?
+
+                nWidth = tl.x(nextData) - tl.x(currentData) + 1; //FIXME: Calculate actual width of tick line
+
+                current.append("svg:rect")
+                    .attr("class","normaltick-background")
+                    .attr("height",tl.height-1)
+                    .attr("y",-tl.height)
+                    .attr("x",-0.5)
+                    .attr("width",nWidth);
+            });
+        },
+        bind: function(){
+            console.log(self.normal.background);
+            self.normal.background
+                .on('mouseenter',function(){
+                    d = d3.select(this.parentNode).data()[0];
+                    self.normal.hover.call(this,d);
+                })
+                .on('mouseleave',self.label.remove)
+                .on('mousedown',function(){
+                    cancelClick = setTimeout(notClick,notClickDelay);
+                })
+                .on('mouseup',function(){
+                    clearTimeout(cancelClick);
+                    if(clicked){
+                        d = d3.select(this.parentNode).data()[0];
+                        clickNormalTick.call(this,d);
+                    }
+                    clicked = true;
+                });
+        },
+        hover: function(d){
+            var label = tl.zoom.current.ticks.normal.label(d);
+            self.label.show.call(this,label);
+        },
+        click: function(d){
+            var date = tl.zoom.current.ticks.normal.clickDate(d);
+            model.select(date);
+        },
+        
     };
     self.boundary = {
-
-        init: function(){  //TODO: In progress
+        set: function(){
+            self.boundary.background = self.boundary.all
+                .selectAll('rect.boundarytick-foreground');
+        },
+        update: function(){
+            
+        },
+        init: function(){
             
             var ticks = self.boundary.all;
             ticks.selectAll('line')
@@ -144,12 +206,52 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
         //clickNormalTick()
     };
 
-    self.label = {
-        show: function(){
-            //showHoverLabel()
-        },
-        remove: function(){
+    self.label = {  //TODO: Update, this is just copied over
+        show: function(d){
+            var tick = this.parentNode;
+            var boundaryTick, boundaryTickWidth;
             
+            //Using jquery to precise select as it's easier than d3
+            if(d3.select(tick).classed('tick-labeled')){
+                $boundaryTick = $(tick);
+            }
+            else{
+                //Grab Boundary Tick if it is a Normal Tick
+                $boundaryTick = $(tick).prevAll('g.tick-labeled').first(); 
+            }
+
+            //get width from one boundary to the next
+            boundaryTickWidth = $boundaryTick
+                .find('rect.boundarytick-background')
+                .attr('width');
+
+            //Convert jquery selection back to d3 selection
+            boundaryTick = d3.select($boundaryTick[0]);
+
+            //hide current labels
+            boundaryTick
+                .selectAll('.tick-label, .sub-label')
+                .attr('visibility','hidden'); 
+
+            //trigger hover state
+            boundaryTick.select('rect.boundarytick-background')
+                .classed('bg-hover',true); 
+
+            boundaryTick.append("svg:text")
+                .attr("class","hover-tick-label")
+                .attr("y","15")
+                .attr("x",boundaryTickWidth/2)
+                .attr("style","text-anchor:middle")
+                .attr("width",boundaryTickWidth)
+                .text(d.getUTCFullYear() +
+                      " " + model.monthAbbr[d.getUTCMonth()] +
+                      " " + d.getUTCDate()); //Add hover Label
+        },
+        remove: function(){ //TODO: update
+            tl.boundary.selectAll('.tick-label, .sub-label').attr("visibility","");
+            tl.boundary.selectAll('.hover-tick-label, .hover-sub-label').remove();
+            tl.boundary.selectAll('rect.boundarytick-background.bg-hover')
+                .classed('bg-hover',false);
         }
     };
 
