@@ -438,7 +438,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
             scaleMetric: scaleMetric,
             scaleImperial: scaleImperial,
             mousePosition: mousePosition
-        }
+        };
         createZoomButtons(map, proj);
 
         map.getView().on("change:center", updateExtent);

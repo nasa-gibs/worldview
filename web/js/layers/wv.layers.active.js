@@ -187,8 +187,10 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             .attr("data-layer", layer.id)
             .attr("title", "Layer options for " + names.title)
             .addClass("wv-layers-options");
-
         wv.ui.mouse.click($editButton, toggleOptionsPanel);
+        if ( wv.util.browser.small ) {
+            $editButton.hide();
+        }
 
         var $gearIcon = $("<i></i>")
             .addClass("wv-layers-options-icon");
@@ -197,7 +199,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
         $layer.append($editButton);
 
-        
+
         var $mainLayerDiv = $('<div></div>')
             .addClass('layer-main')
             .attr("data-layer", layer.id)
@@ -321,6 +323,9 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                 this.jsp = $("." + self.id + "category")
                     .jScrollPane({autoReinitialise: false, verticalGutter:0});
             }
+            $(".wv-layers-options").show();
+        } else {
+            $(".wv-layers-options").hide();
         }
 
         var tabs_height = $(".ui-tabs-nav").outerHeight(true);
