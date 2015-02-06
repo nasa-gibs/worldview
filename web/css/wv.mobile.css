@@ -22,12 +22,6 @@
         max-height:97%;
     }
 
-    .bank li.item a {
-        float:right;
-        color:#fff;
-        margin-right:1.6em;
-    }
-
     img.bank-item-img {
         display:block;
         height: 1.6em;
