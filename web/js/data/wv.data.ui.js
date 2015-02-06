@@ -506,7 +506,7 @@ wv.data.ui.downloadListPanel = function(config, model) {
                 "EOSDIS User Registration System (URS) to download. " +
                 "It is simple and free to sign up! " +
                 "<a href='https://urs.eosdis.nasa.gov/users/new' target='urs'>" +
-                "Click to register for an account.</a>" +
+                "Click to register for a profile.</a>" +
             "</p>" +
         "</div>";
 
