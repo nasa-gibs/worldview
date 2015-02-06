@@ -49,7 +49,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
             .on("clear-custom", updateLookup)
             .on("range", updateLookup)
             .on("update", updateLookup);
-
+        $(window).on("resize", onResize);
         updateProjection(true);
     };
 
@@ -87,6 +87,22 @@ wv.map.ui = wv.map.ui || function(models, config) {
             }
         }
         updateExtent();
+        onResize();
+    };
+
+    var onResize = function() {
+        var map = self.selected;
+        if ( map.small !== wv.util.browser.small ) {
+            if ( wv.util.browser.small ) {
+                map.removeControl(map.wv.scaleImperial);
+                map.removeControl(map.wv.scaleMetric);
+                map.removeControl(map.wv.mousePosition);
+            } else {
+                map.addControl(map.wv.scaleImperial);
+                map.addControl(map.wv.scaleMetric);
+                map.addControl(map.wv.mousePosition);
+            }
+        }
     };
 
     var hideMap = function(map) {
@@ -417,6 +433,12 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 new ol.interaction.DragZoom()
             ]
         });
+        map.wv = {
+            small: false,
+            scaleMetric: scaleMetric,
+            scaleImperial: scaleImperial,
+            mousePosition: mousePosition
+        }
         createZoomButtons(map, proj);
 
         map.getView().on("change:center", updateExtent);
