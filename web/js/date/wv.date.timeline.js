@@ -299,6 +299,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
             setZoom(zoomLvl);
         }
+        self.setClip();
     };
 
     var getSubLabel = function(tickDate){
@@ -1954,8 +1955,17 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         self.collapse(true);
     };
 
+    self.setClip = function(){ //This is a hack until Firefox fixes their svg rendering problems
+        d3.select('#timeline-footer svg > g:nth-child(2)').attr('visibility', 'hidden');
+        d3.select('#timeline-footer svg > g:nth-child(2)').attr('style','');
+        setTimeout(function(){
+            d3.select('#timeline-footer svg > g:nth-child(2)').attr('style','clip-path:url("#timeline-boundary")');
+            d3.select('#timeline-footer svg > g:nth-child(2)').attr('visibility', '');
+            console.log('clip reset successfully');
+        },50);
+    };
+
     init();
     $(window).resize(resizeWindow);
-
     return self;
 };
