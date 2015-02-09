@@ -395,3 +395,6 @@ p.wv-tour-page-count {
     text-align: center;
     vertical-align: middle;
 }
+.joyride-nub, .joyride-nub-border{
+    pointer-events:none;
+}
