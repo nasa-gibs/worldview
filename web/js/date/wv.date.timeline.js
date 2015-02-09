@@ -21,6 +21,7 @@ wv.date = wv.date || {};
  */
 wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var self = {};
+    var model = models.date;
 
     self.margin = {
         top: 0,
