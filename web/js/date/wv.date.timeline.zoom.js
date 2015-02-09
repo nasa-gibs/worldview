@@ -100,6 +100,7 @@ wv.date.timeline.zoom = wv.date.timeline.zoom || function(models, config, ui) {
 wv.date.timeline.zoom.lvl = wv.date.timeline.zoom.lvl || function(models, config, ui) {
     var self = {};
     var tl = ui.timeline;
+    var model = models.date;
     self.level1 = function(){
 /*
         tl.ticks.normalTicks = tl.ticks.all.filter(function(d){
@@ -185,6 +186,9 @@ wv.date.timeline.zoom.lvl = wv.date.timeline.zoom.lvl || function(models, config
         tl.zoom.current.ticks.normal.clickDate = function(d){
             return new Date(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate());
         };
+        tl.zoom.current.ticks.boundary.label = function(d){
+            return new Date(d.getUTCFullYear(),d.getUTCMonth(),model.selected.getUTCDate());
+        };
 
         self.update();
 
@@ -237,12 +241,16 @@ wv.date.timeline.zoom.lvl = wv.date.timeline.zoom.lvl || function(models, config
 
         tl.ticks.boundary.init();
         tl.ticks.normal.init();
-        tl.ticks.normal.set();
+        tl.ticks.normal.set(); //could probably combine set and bind
         tl.ticks.normal.bind();
+        tl.ticks.boundary.set();
+        tl.ticks.boundary.bind();
 
     };
 
     var init = function(){
+
+        //Default zoom
         self.level3();
     };
 

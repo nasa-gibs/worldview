@@ -37,7 +37,9 @@ wv.date.timeline.data = wv.date.timeline.data || function(models, config, ui) {
                 .setUTCDate(wv.util.today()
                             .getUTCDate()+1));
     };
-
+    self.set = function(){
+        
+    };
     var init = function(){
         tl.axisZoom
             .xExtent([self.start(),self.end()]);

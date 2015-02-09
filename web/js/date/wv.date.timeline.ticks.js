@@ -28,6 +28,14 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
 
     var self = {};
 
+    var cancelClick;
+    var clicked = true;
+    var notClickDelay = 200;
+
+    var notClick = function(){
+        clicked = false;
+    };
+
     self.setAll = function(){
         self.all = d3.selectAll('.x.axis>g.tick');
         self.firstDate = self.all.data()[0];
@@ -37,9 +45,6 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
 
     };
     self.normal = {
-        set: function(){
-            self.normal.background = self.all.selectAll('rect.normaltick-background');
-        },
         setEnds: function(){
             //FIXME: this is actually the ends of all ticks,
             //not just the normal ticks.
@@ -72,8 +77,11 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
                     .attr("width",nWidth);
             });
         },
+        set: function(){
+            self.normal.background = self.all.selectAll('rect.normaltick-background');
+        },
         bind: function(){
-            console.log(self.normal.background);
+            
             self.normal.background
                 .on('mouseenter',function(){
                     d = d3.select(this.parentNode).data()[0];
@@ -87,7 +95,7 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
                     clearTimeout(cancelClick);
                     if(clicked){
                         d = d3.select(this.parentNode).data()[0];
-                        clickNormalTick.call(this,d);
+                        self.normal.click.call(this,d);
                     }
                     clicked = true;
                 });
@@ -103,10 +111,6 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
         
     };
     self.boundary = {
-        set: function(){
-            self.boundary.background = self.boundary.all
-                .selectAll('rect.boundarytick-foreground');
-        },
         update: function(){
             
         },
@@ -168,7 +172,38 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
                 .attr('x',7)
                 .attr('style','text-anchor:left;');
 
+        },
+        set: function(){
+            self.boundary.background = self.boundary.all
+                .selectAll('rect.boundarytick-foreground');
+        },
+        bind: function(){
+            self.boundary.background
+                .on('mouseenter',function(){
+                    d = d3.select(this.parentNode).data()[0];
+                    self.boundary.hover.call(this,d);
+                })
+                .on('mouseleave',self.label.remove)
+                .on('mousedown',function(){
+                    cancelClick = setTimeout(notClick,notClickDelay);
+                })
+                .on('mouseup',function(){
+                    clearTimeout(cancelClick);
+                    if(clicked){
+                        d = d3.select(this.parentNode).data()[0];
+                        clickBoundaryTick.call(this,d);
+                    }
+                    clicked = true;
+                });
+        },
+        hover: function(d){
+            var label = tl.zoom.current.ticks.boundary.label(d);
+            self.label.show.call(this,label);
+        },
+        click: function(d){
+            
         }
+        
     };
     self.compare = function(proto, end){
         if(self.firstDate > tl.data.start()){
@@ -205,7 +240,6 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
     self.click = {
         //clickNormalTick()
     };
-
     self.label = {  //TODO: Update, this is just copied over
         show: function(d){
             var tick = this.parentNode;
@@ -262,68 +296,3 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
     init();
     return self;
 };
-
-/**
- * Loaded after setting up wv.date.timeline.zoom
- *
- * @class wv.date.timeline.ticks
- */
-/*
-wv.date.timeline.ticks.update = function(models, config, ui, current) {
-    var tl = ui.timeline;
-
-    var self = {};
-    console.log(current.ticks.normal);
-    var update = function(){
-        tl.ticks.setAll();
-        
-        //Checks to see if all of the ticks fit onto the timeline space
-        //and if so check to see that first and last major ticks are printed
-        if(!tl.isCropped){
-            var first = tl.ticks.firstDate;
-            var last = tl.ticks.lastDate;
-            var proto = new Date(Date.UTC(first.getUTCFullYear(),
-                                          first.getUTCMonth(),
-                                          first.getUTCDate()-1));
-            var end = new Date(Date.UTC(last.getUTCFullYear(),
-                                        last.getUTCMonth(),
-                                        last.getUTCDate()+1));
-            tl.ticks.compare(proto, end);
-        }
-        //set normal ticks
-        current.ticks.normal.all();
-
-        //FIXME: Section below is terrible {
-        //For determining needed boundary ticks
-        if($(tl.ticks.normal.firstElem).is(':nth-child(2)')){
-            var first = tl.ticks.normal.firstDate;
-            var proto = new Date(Date.UTC(first.getUTCFullYear(),
-                                          first.getUTCMonth(),
-                                          1));
-            tl.ticks.add(proto, 'g.tick');
-        }
-
-        //FIXME: Passing from d3 to jQuery to d3 in order to check if its the last tick elem.  WAT.
-        if(d3.select($(tl.ticks.normal.lastElem)
-                     .next()[0]).classed('domain')){
-            var last = tl.ticks.normal.lastDate;
-            var end = new Date(Date.UTC(last.getUTCFullYear()+1,
-                                        last.getUTCMonth()+1,
-                                        1));
-            tl.ticks.add(end, 'path.domain');
-        }
-        // } End terrible
-
-        //update boundary ticks
-        current.ticks.boundary.all();
-        tl.ticks.boundary.all.classed('tick-labeled',true);
-
-        tl.ticks.boundary.init();
-        console.log('ttt');
-
-    };
-
-    update();
-};
-
-*/
