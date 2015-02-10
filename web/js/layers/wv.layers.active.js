@@ -47,6 +47,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             .on("clear-custom", onPaletteUpdate)
             .on("range", onPaletteUpdate)
             .on("update", onPaletteUpdateAll);
+        models.wv.events.on("sidebar-expand", resize);
         $(window).resize(resize);
         ui.sidebar.events.on("select", function(tab) {
             if ( tab === "active" ) {
@@ -59,10 +60,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         legends = {};
         var $container = $(self.selector);
         $container.empty();
-/*
-        var productsWrapperHeight = $(window).height() - $('#timeline').outerHeight() - $('#wv-logo').outerHeight() - 40; // 40 padding
-        $('#productsHolder-wrapper').css('height', productsWrapperHeight);
-        */
+
         var tabs_height = $(".ui-tabs-nav").outerHeight(true);
         $container.addClass('bank');
         $container.height(
@@ -71,7 +69,6 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
         _.each(groups, function(group) {
             renderGroup($container, group);
-            //console.log("group rendered");
         });
 
         $(self.selector).undelegate(".close" ,'click');
@@ -98,16 +95,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
 
         setTimeout(resize, 1);
-/*        console.log('$$$$$$$$$$$$$$$$$$$$');
-        console.log();
 
-
-        $container.css('max-height',
-            $(self.selector).parent().parent().outerHeight() - tabs_height
-        ).css('height',
-             $($(self.selector).children()[0]).height() + $($(self.selector).children()[1]).height()
-             );
-*/
     };
 
     var renderGroup = function($parent, group) {
@@ -132,6 +120,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         $container.append($layers);
 
         $parent.append($container);
+
     };
 
     var renderLayer = function($parent, group, layer, top) {
@@ -157,7 +146,10 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             .attr("data-layer", layer.id);
 
 
-        var $visibleImage = $("<i></i>");
+        var $visibleImage = $("<i></i>")
+            .on('click', function(){
+                $visibleButton.trigger('click');
+            });
 
 
         $visibleButton.append($visibleImage);
@@ -188,26 +180,43 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                 });
             $layer.append($metadataButton);
         }
-/*
-        var $gearButton = $("<i></i>")
-            .addClass("fa")
-            .addClass("fa-gear")
-            .addClass("fa-1x")
-            .addClass("wv-layers-options-button")
-            .click(function() {
-                wv.layers.options(config, models, layer);
-            });
-        $layer.append($gearButton);
-*/
+
         var names = models.layers.getTitles(layer.id);
-        var mainLayerDiv = $('<div></div>')
+
+        var $editButton = $("<a></a>")
+            .attr("data-layer", layer.id)
+            .attr("title", "Layer options for " + names.title)
+            .addClass("wv-layers-options");
+        wv.ui.mouse.click($editButton, toggleOptionsPanel);
+        if ( wv.util.browser.small ) {
+            $editButton.hide();
+        }
+
+        var $gearIcon = $("<i></i>")
+            .addClass("wv-layers-options-icon");
+
+        $editButton.append($gearIcon);
+
+        $layer.append($editButton);
+
+
+        var $mainLayerDiv = $('<div></div>')
             .addClass('layer-main')
             .attr("data-layer", layer.id)
-            .click(toggleOptionsPanel)
             .append($('<h4></h4>').html(names.title))
             .append($('<p></p>').html(names.subtitle));
 
-        $layer.append(mainLayerDiv);
+
+        $layer.hover(function(){
+            d3.select('#timeline-footer svg g.plot rect[data-layer="'+ layer.id +'"]')
+                .classed('data-bar-hovered',true);
+
+        },function(){
+            d3.select('#timeline-footer svg g.plot rect[data-layer="'+ layer.id +'"]')
+                .classed('data-bar-hovered',false);
+        });
+
+        $layer.append($mainLayerDiv);
 
         if ( layer.palette ) {
             renderLegend($layer.find('.layer-main'), group, layer);
@@ -314,30 +323,15 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                 this.jsp = $("." + self.id + "category")
                     .jScrollPane({autoReinitialise: false, verticalGutter:0});
             }
+            $(".wv-layers-options").show();
+        } else {
+            $(".wv-layers-options").hide();
         }
-/*
-        //resize wrapper
-        var productsWrapperHeight = $(window).height() - $('#timeline').outerHeight() - $('#wv-logo').outerHeight() - 40; // 40 padding
-        $('#productsHolder-wrapper').css('height', productsWrapperHeight);
-*/
+
         var tabs_height = $(".ui-tabs-nav").outerHeight(true);
         $(self.selector).height(
             $(self.selector).parent().outerHeight() - tabs_height
         );
-/*
-        $(self.selector).css('max-height',
-            $(self.selector).parent().parent().outerHeight() - tabs_height
-                            )
-        .css('height',
-             $($(self.selector).children()[0]).height() + $($(self.selector).children()[1]).height()
-            );
-
-        //resize productsHolder
-/*
-        var productsInnerHeight = $('#products').height() + $('#productsHoldertabs').height();
-        $('#productsHolder').css('height',productsInnerHeight);
-*/
-
 
         adjustCategoryHeights();
     };

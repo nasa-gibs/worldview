@@ -59,7 +59,6 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
             dialogClass: "wv-panel",
             title: names.title,
             show: { effect: "slide", direction: "left" },
-            hide: { effect: "slide", direction: "left" },
             width: 300,
             height: "auto",
             position: {
@@ -85,6 +84,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
             .off("range", onRangeUpdate)
             .off("update", onPaletteUpdateAll);
         $dialog = null;
+        wv.ui.closeDialog();
     };
 
     var renderOpacity = function($dialog) {

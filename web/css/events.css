@@ -1,26 +1,26 @@
 /* primary containers */
-#eventsContainer { 
-	display:block; 
-	float:right; 
-	z-index:200; 
-	width:238px; 
-	height:300px; 
-	position:absolute; 
-	right:0; 
+#eventsContainer {
+	display:block;
+	float:right;
+	z-index:200;
+	width:238px;
+	height:300px;
+	position:absolute;
+	right:0;
 	top:30%;
-	font: 10px/12px "Gill Sans","helvetica",sans-serif; 
+	font: 10px/12px "Gill Sans","helvetica",sans-serif;
 	text-shadow:none;
 	color: #141b4c;
 }
 
-#eventsHolder { 
-	display:block; 
-	float:right; 
-	z-index:200; 
-	width:auto; 
-	height:300px; 
-	position:absolute; 
-	right:0; 
+#eventsHolder {
+	display:block;
+	float:right;
+	z-index:200;
+	width:auto;
+	height:300px;
+	position:absolute;
+	right:0;
 	top:250px; /* to prevent conflict with zoom controls */
 	text-shadow:none;
 }
@@ -32,14 +32,14 @@
     position: relative;
 }
 
-.events { 
-	display:block; 
-	position:relative; 
-	float:right; 
-	width: 210px; 
-	min-height:275px; 
-	max-height:300px; 
-	background: none repeat scroll 0 0 rgba(38, 43, 49, 0.65); 
+.events {
+	display:block;
+	position:relative;
+	float:right;
+	width: 210px;
+	min-height:275px;
+	max-height:300px;
+	background: none repeat scroll 0 0 rgba(38, 43, 49, 0.65);
 	border-radius: 10px 0 0 10px;
 	overflow:hidden;
 }
@@ -49,21 +49,21 @@
 }
 
 /* toggling */
-a.evaccordionToggler { 
-	float:right; 
-	display:inline-block; 
-	border-radius: 5px 0 0 5px; 
-	-moz-border-radius: 5px 0 0 5px; 
-	-webkit-border-radius: 5px 0 0 5px; 
-	text-decoration:none; 
-	background: none no-repeat scroll center rgba(45,50,55,0.65); 
-	color:#fff; 
-	letter-spacing:2px; 
+a.evaccordionToggler {
+	float:right;
+	display:inline-block;
+	border-radius: 5px 0 0 5px;
+	-moz-border-radius: 5px 0 0 5px;
+	-webkit-border-radius: 5px 0 0 5px;
+	text-decoration:none;
+	background: none no-repeat scroll center rgba(45,50,55,0.65);
+	color:#fff;
+	letter-spacing:2px;
 }
 
 a.evcollapse {
-	display:inline-block; 
-	background-image:url("../images/expandOut.png"); 
+	display:inline-block;
+	background-image:url("../images/expandOut.png");
 	position:relative;
 	top:30px;
 	height:36px;
@@ -71,21 +71,21 @@ a.evcollapse {
 }
 
 a.evexpand {
-	display:inline-block; 
+	display:inline-block;
 	background-image: url("../images/expandIn.png");
-	width:6em; 
+	width:6em;
 	position:absolute;
 	height:auto;
-	background-position:left; 
+	background-position:left;
 	text-align:center;
-	padding:0.3em 0px; 
+	padding:0.3em 0px;
 	padding-left:28px;
-	margin-bottom:10px; 
+	margin-bottom:10px;
 	margin-top:3px;
-	text-shadow:none; 
-	color:#fff; 
-	font-weight:bold; 
-	font-size:.9em; 
+	text-shadow:none;
+	color:#fff;
+	font-weight:bold;
+	font-size:.9em;
 	vertical-align:middle;
 	right:0px;
 	top:380px;
@@ -119,12 +119,12 @@ a.evexpand {
 
 /* entry list items */
 .events li.item {
-	border:solid; 
-	border-width:3px; 
+	border:solid;
+	border-width:3px;
 	border-color:transparent;
-	display:block; 
-	width:188px; 
-	max-width:188px; 
+	display:block;
+	width:188px;
+	max-width:188px;
 	padding:6px 0;
 	margin:5px 2% 0 2%;
 	background: rgba(238,238,238,0.85);
@@ -148,4 +148,3 @@ a.evexpand {
 .events li.item ul.palette li {float:left;}*/
 .events li.sel {border-color:rgba(0,81,144,0.7);}
 .events img.thumb {float:left; width:10}
- 

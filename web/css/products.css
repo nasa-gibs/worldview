@@ -1,4 +1,23 @@
-.ui-tabs-nav {clear:both; display:inline-block; overflow:hidden; width:90%; border-radius:0; border-bottom: 3px #00457b solid; float:left;}
+.products {
+    display:block;
+    float:left;
+    z-index:2;
+    min-width:286px;
+    width:286px;
+    height:65%;
+    position:absolute;
+    overflow:hidden;
+    background: rgba(40,40,40,0.85);
+    border-radius:0;
+    left:10px;
+    top:68px;
+    -webkit-box-sizing:border-box;
+    -o-box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    box-sizing:border-box;
+}
+
+.ui-tabs-nav {clear:both; display:inline-block; overflow:hidden; width:90%; border-radius:0;border:0; border-bottom: 3px #00457b solid; float:left;}
 .ui-tabs-nav li.layerPicker {height:100%; display:inline-block; float:left; width:20%;}
 .ui-tabs-nav li.layerPicker.ui-state-active { width: 60%; }
 
@@ -51,37 +70,6 @@
     border-bottom: 3px rgb(99,53,45) solid;
 }
 
-
-
-@media only screen and (max-width: 720px) and (orientation: portrait), only screen and (device-aspect-ratio: 2/3) and (orientation:portrait), only screen and (device-aspect-ratio:40/71) and (orientation:portrait){
-    .products {
-        display:block;
-        float:left;
-        min-width:238px;
-        width:100%;
-        height:100%;
-        position:absolute !important;
-        overflow:hidden;
-        background: rgba(38,43,49,0.95);
-        border-radius:0 10px 10px 0;
-        top:0; z-index:295;
-    }
-    .bank {
-        height:96%;
-    }
-    #selectorboxcontent { max-height:97%;}
-    .bank li.item a {float:right; color:#fff; margin-right:1.6em;}
-    img.bank-item-img { display:block; height: 1.6em; width:auto;}
-    #productsHolder li.third {
-        display:none;
-    }
-
-    #wv-logo {
-        background-position:0%;
-    width:54px;
-    }
-}
-
 .cats {
     float: right;
     margin-right:20px;
@@ -120,5 +108,4 @@ ul#productsHoldertabs li.ui-state-active i.productsIcon {
 }
 
 @media screen and (max-device-height: 720px) and (orientation: landscape){
-        div.olControlMousePosition, div.olControlScaleLineCustom {display:none !important;}
 }

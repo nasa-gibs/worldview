@@ -36,14 +36,14 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
 
     var HTML_TAB_DOWNLOAD_SELECTED =
         "<i class='productsIcon selected icon-download'></i>" +
-        "Download";
+        "Download Data";
 
     var HTML_TAB_DOWNLOAD_UNSELECTED =
         "<i class='productsIcon selected icon-download' title='Download Data'></i>";
 
     var collapsed = false;
-    var mobile = false;
     var portrait = false;
+    var mobile = false;
     var self = {};
 
     self.id = "productsHolder";
@@ -52,11 +52,15 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
 
     var init = function() {
         render();
-        if ( wv.util.browser.small ) {
-            slide();
-        }
-        $(window).resize(adjustAlignment);
+        $(window).resize(resize);
         models.proj.events.on("change", onProjectionChange);
+        resize();
+
+        if ( wv.util.browser.localStorage ) {
+            if ( localStorage.getItem("sidebarState") === "collapsed" ) {
+                self.collapseNow();
+            }
+        }
     };
 
     self.selectTab = function(tabName) {
@@ -71,21 +75,65 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
         }
     };
 
-    self.collapse = function() {
-        collpased = true;
-        slide();
+    self.collapse = function(now) {
+        if ( collapsed ) {
+            return;
+        }
+        collapsed = true;
+        $('.accordionToggler')
+            .removeClass('atcollapse')
+            .addClass('dateHolder')
+            .removeClass('arrow')
+            .addClass('staticLayers');
+        $('.accordionToggler').attr("title","Show Layer Selector");
+        $('.accordionToggler').html("Layers (" + models.layers.get().length + ")");
+        var w = $('#app').outerWidth();
+        var speed = ( now ) ? undefined : "fast";
+        $('.products').hide(speed);
+        $("#" + self.id).after($('.accordionToggler'));
+
+        if ( wv.util.browser.localStorage ) {
+            localStorage.setItem("sidebarState", "collapsed");
+        }
+    };
+
+    self.collapseNow = function() {
+        self.collapse(true);
     };
 
     self.expand = function(now) {
         if ( !collapsed ) {
             return;
         }
-        collapsed = true;
-        slide(null, null, now);
+        collapsed = false;
+        $('.accordionToggler')
+            .removeClass('atexpand')
+            .addClass('atcollapse')
+            .removeClass('staticLayers dateHolder')
+            .addClass('arrow');
+        $('.accordionToggler').attr("title","Hide Layer Selector");
+        $('.accordionToggler').empty();
+        var speed = ( now ) ? undefined : "fast";
+        $('.products').show(speed, function() {
+            models.wv.events.trigger("sidebar-expand");
+        });
+        $('.accordionToggler').appendTo("#"+self.id+"toggleButtonHolder");
+
+        if ( wv.util.browser.localStorage ) {
+            localStorage.setItem("sidebarState", "expanded");
+        }
     };
 
     self.expandNow = function() {
         self.expand(true);
+    };
+
+    self.toggle = function() {
+        if ( collapsed ) {
+            self.expand();
+        } else {
+            self.collapse();
+        }
     };
 
     var render = function() {
@@ -136,10 +184,10 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
         }
 
         $container.append($tabs);
+        var $collapseContainer = $("<div></div>")
+            .attr("id", self.id + "toggleButtonHolder")
+            .addClass("toggleButtonHolder");
 
-        $container.append($("<div id='products'></div>"))
-                  .append($("<div id='selectorbox'></div>"))
-                  .append($("<div id='wv-data'></div>"));
 
         var $collapseButton = $("<a></a>")
             .addClass("accordionToggler")
@@ -147,18 +195,31 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
             .addClass("arrow")
             .attr("title", "Hide");
 
-        $container.after($collapseButton);
+        $collapseContainer.append($collapseButton);
+
+        $container.append($collapseContainer);
+
+        $container.append($("<div id='products'></div>"))
+                  .append($("<div id='selectorbox'></div>"))
+                  .append($("<div id='wv-data'></div>"));
 
         $container.tabs({
             beforeActivate: onBeforeTabChange,
             activate: onTabChange
         });
 
-        $('.accordionToggler').bind('click', slide);
+        $('.accordionToggler').bind('click', self.toggle);
     };
 
     var onTabChange = function(e, ui) {
+        var tab = ui.newTab.attr("data-tab");
+        if ( tab === "add" || tab === "download" ) {
+            $("#wv-layers-options-dialog").dialog("close");
+        }
         self.events.trigger("select", ui.newTab.attr("data-tab"));
+        if ( e.currentTarget ) {
+            e.currentTarget.blur();
+        }
     };
 
     var onBeforeTabChange = function(e, ui) {
@@ -214,40 +275,13 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
         return true;
     };
 
-    var slide = function(e, ui, now) {
-        if ( collapsed ) {
-            $('.accordionToggler')
-                .removeClass('atexpand')
-                .addClass('atcollapse')
-                .removeClass('staticLayers dateHolder')
-                .addClass('arrow');
-            $('.accordionToggler').attr("title","Hide Layer Selector");
-            $('.accordionToggler').empty();
-            $('.products').show('fast');
-            collapsed = false;
-            $('.accordionToggler').appendTo("#"+self.id+"toggleButtonHolder");
-        }
-        else {
-            $('.accordionToggler')
-                .removeClass('atcollapse')
-                .addClass('dateHolder')
-                .removeClass('arrow')
-                .addClass('staticLayers');
-            $('.accordionToggler').attr("title","Show Layer Selector");
-            $('.accordionToggler').html("Layers (" + models.layers.get().length + ")");
-            var w = $('#app').outerWidth();
-            $('.products').hide('fast');
-            collapsed = true;
-            $("#" + self.id).after($('.accordionToggler'));
-        }
-    };
-    self.setProductsHeight = function(){
-
-    };
-    var adjustAlignment = function() {
-        if ( wv.util.browser.small && collapsed ) {
-            var w = $('.products').outerWidth();
-            $('.products').css("left", "-" + w + "px");
+    var resize = function() {
+        if ( !mobile && wv.util.browser.small ) {
+            self.collapseNow();
+            mobile = true;
+        } else if ( mobile && !wv.util.browser.small ) {
+            self.expandNow();
+            mobile = false;
         }
     };
 

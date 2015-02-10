@@ -14,10 +14,14 @@ var wv = wv || {};
 wv.data = (function(self) {
 
     self.parse = function(state, errors, config) {
-        var productId = state.dataDownload;
+        if ( state.dataDownload ) {
+            state.download = state.dataDownload;
+            delete state.dataDownload;
+        }
+        var productId = state.download;
         if ( productId ) {
             if ( !config.products[productId] ) {
-                delete state.dataDownload;
+                delete state.download;
                 errors.push({ message: "No such product: " + productId });
             }
         }

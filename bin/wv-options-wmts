@@ -92,7 +92,7 @@ def process_layer(gc_layer, wv_layers, colormaps):
                     times = range.split('/')
                     start_date = min(start_date,
                         datetime.strptime(times[0], "%Y-%m-%d"))
-                    end_date = min(end_date,
+                    end_date = max(end_date,
                         datetime.strptime(times[1], "%Y-%m-%d"))
                 wv_layer["startDate"] = start_date.strftime("%Y-%m-%d")
                 if end_date != datetime.min:
@@ -122,7 +122,6 @@ def process_layer(gc_layer, wv_layers, colormaps):
             colormap_link = gc_layer["ows:Metadata"]["@xlink:href"]
             colormap_file = os.path.basename(colormap_link)
             colormap_id = os.path.splitext(colormap_file)[0]
-            colormaps[colormap_id] = colormap_link
             wv_layer["palette"] = {
                 "id": colormap_id
             }
@@ -185,8 +184,8 @@ def process_entry(entry, colormaps):
             "maxResolution": max_resolution,
             "resolutions": resolutions,
             "tileSize": [
-                gc_matrix_set["TileMatrix"][0]["TileWidth"],
-                gc_matrix_set["TileMatrix"][0]["TileHeight"]
+                int(gc_matrix_set["TileMatrix"][0]["TileWidth"]),
+                int(gc_matrix_set["TileMatrix"][0]["TileHeight"])
             ]
         }
 
@@ -197,23 +196,6 @@ def process_entry(entry, colormaps):
             error_count, warning_count, layer_count, entry["source"])
     return [error_count, warning_count, layer_count]
 
-def fetch_colormaps(colormaps):
-    print "%s: Fetching %d colormaps" % (prog, len(colormaps))
-    sys.stdout.flush()
-    warnings = 0
-    for link in colormaps.values():
-        try:
-            response = urllib.urlopen(link)
-            contents = response.read()
-            output_file = os.path.join(colormaps_dir, os.path.basename(link))
-            with open(output_file, "w") as fp:
-                fp.write(contents)
-        except Exception as e:
-            warnings += 1
-            sys.stderr.write("%s:   WARN: Unable to fetch %s: %s" %
-                (prog, link, str(e)))
-
-    return warnings
 
 # Main
 colormaps = {}
@@ -222,8 +204,6 @@ for entry in entries:
     total_error_count += error_count
     total_warning_count += warning_count
     total_layer_count += layer_count
-
-total_warning_count += fetch_colormaps(colormaps)
 
 print "%s: %d error(s), %d warning(s), %d layers" % (prog, total_error_count,
         total_warning_count, total_layer_count)

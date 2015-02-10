@@ -164,7 +164,7 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
             throw new Error("No layers in state");
         }
         _.each(self.active, function(def, layerId) {
-            if ( !_.find(models.layers.active, {id: layerId}) ) {
+            if ( !_.find(models.layers.get(), {id: layerId}) ) {
                 return;
             }
             var attr = _.find(state.l, {id: layerId}).attributes;
@@ -172,21 +172,39 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
                 attr.push({ id: "palette", value: def.custom });
             }
             if ( def.min ) {
-                var minValue = def.scale.values[def.min][0];
+                var minValue = def.scale.values[def.min];
                 attr.push({ id: "min", value: minValue });
             }
             if ( def.max ) {
-                var maxValue = ( def.scale.values[def.max].length === 2 ) ?
-                        def.scale.values[def.max][1] :
-                        def.scale.values[def.max][0];
+                var maxValue = def.scale.values[def.max];
                 attr.push({ id: "max", value: maxValue });
             }
         });
         */
     };
 
+    self.key = function(layerId) {
+        if ( !self.isActive(layerId) ) {
+            return "";
+        }
+        var def = self.get(layerId);
+        var keys = [];
+        if ( def.custom ) {
+            keys.push("palette=" + def.custom);
+        }
+        if ( def.min ) {
+            keys.push("min=" + def.min);
+        }
+        if ( def.max ) {
+            keys.push("max=" + def.max);
+        }
+        return keys.join(",");
+    };
+
     self.load = function(state, errors) {
-        /*
+        if ( !wv.palettes.supported ) {
+            return;
+        }
         _.each(state.l, function(layerDef) {
             var layerId = layerDef.id;
             var minValue, maxValue;
@@ -220,16 +238,14 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
                 self.setRange(layerId, min, max);
             }
         });
-        */
     };
 
     var findIndex = function(layerId, type, value) {
-        /*
         var values = self.get(layerId).scale.values;
         var result;
         _.each(values, function(check, index) {
-            var min = check[0];
-            var max = check.length === 2 ? check[1] : check[0];
+            var min = check;
+            var max = check;
             if ( type === "min" && value === min ) {
                 result = index;
                 return false;
@@ -240,13 +256,11 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
             }
         });
         return result;
-        */
     };
 
     // If any custom rendering is being used, image download must turn it
     // off
     self.inUse = function() {
-        /*
         var layers = models.layers.get();
         var found = false;
         _.each(layers, function(layer) {
@@ -256,7 +270,6 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
             }
         });
         return found;
-        */
     };
 
     var useLookup = function(layerId) {

@@ -248,13 +248,14 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
         if ( type === "palettes" ) {
             wv.palettes.loadRendered(config, layerId).done(function() {
                 var layer = config.layers[layerId];
+                var palette = config.palettes.rendered[layerId];
                 if ( layer.palette.recommended ) {
                     models.palettes.setCustom(layerId, layer.palette.recommended[0]);
                 } else {
-                    if ( models.palettes.type(layerId) === "scale" ) {
+                    if ( palette.scale ) {
                         models.palettes.setCustom(layerId, "rainbow_2");
                     } else {
-                        models.palettes.setCustom(layerId, "blue");
+                        models.palettes.setCustom(layerId, "blue_light");
                     }
                 }
             });

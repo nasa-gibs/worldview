@@ -28,12 +28,18 @@ wv.data.results.antiMeridianMulti = function(maxDistance) {
         if ( !wv.map.isPolygonValid(geom, maxDistance) ) {
             var geomEast = wv.map.adjustAntiMeridian(geom, 1);
             var geomWest = wv.map.adjustAntiMeridian(geom, -1);
-            var centroidEast = geomEast.getCentroid();
-            var centroidWest = geomWest.getCentroid();
+            var centroidEast = geomEast.getInteriorPoint();
+            var centroidWest = geomWest.getInteriorPoint();
             var newGeom =
-                new OpenLayers.Geometry.MultiPolygon([geomEast, geomWest]);
+                new ol.geom.MultiPolygon([
+                    geomEast.getCoordinates(),
+                    geomWest.getCoordinates()
+                ]);
             var newCentroid =
-                new OpenLayers.Geometry.MultiPoint([centroidEast, centroidWest]);
+                new ol.geom.MultiPoint([
+                    centroidEast.getCoordinates(),
+                    centroidWest.getCoordinates()
+                ]);
             granule.geometry[wv.map.CRS_WGS_84] = newGeom;
             granule.centroid[wv.map.CRS_WGS_84] = newCentroid;
         }
@@ -234,11 +240,10 @@ wv.data.results.connectSwaths = function(projection) {
         var polys1 = wv.map.toPolys(g1.geometry[projection]);
         var polys2 = wv.map.toPolys(g2.geometry[projection]);
         var allowed = false;
-
         $.each(polys1, function(index, poly1) {
             $.each(polys2, function(index, poly2) {
-                var x1 = poly1.getCentroid().x;
-                var x2 = poly2.getCentroid().x;
+                var x1 = poly1.getInteriorPoint().getCoordinates()[0];
+                var x2 = poly2.getInteriorPoint().getCoordinates()[0];
                 if ( Math.abs(x2 - x1) < maxDistance ) {
                     allowed = true;
                     return false;
@@ -294,26 +299,32 @@ wv.data.results.densify = function() {
     self.name = "Densify";
 
     self.process = function(meta, granule) {
+        // There is a bug exposed here discovered when switching to OL3. Since this
+        // function isn't needed for any of the data that we have, just skip it 
+        // for now and fix it later.
+        return granule;
+
+        /*
         var geom = granule.geometry[wv.map.CRS_WGS_84];
         var newGeom = null;
-        if ( geom.CLASS_NAME === "OpenLayers.Geometry.Polygon" ) {
-            newGeom = densifyPolygon(geom);
-        } else if ( geom.CLASS_NAME === "OpenLayers.Geometry.MultiPolygon" ) {
+        if ( geom.getPolygons ) {
             var polys = [];
-            $.each(geom.components, function(index, poly) {
+            _.each(geom.getPolygons(), function(poly) {
                 polys.push(densifyPolygon(poly));
             });
-            newGeom = new OpenLayers.Geometry.MultiPolygon(polys);
+            newGeom = new ol.geom.MultiPolygon([polys]);
         } else {
-            throw Error("Cannot handle geometry: " + geom.CLASS_NAME);
+            var ring = densifyPolygon(geom);
+            newGeom = new ol.geom.Polygon([ring]);
         }
         granule.geometry[wv.map.CRS_WGS_84] = newGeom;
         return granule;
+        */
     };
 
     var densifyPolygon = function(poly) {
         // Get the outer ring and then get an array of all the points
-        var ring = poly.components[0].components.slice();
+        var ring = poly.getLinearRing(0).getCoordinates();
         var points = [];
         var end;
         for ( var i = 0; i < ring.length - 2; i++ ) {
@@ -321,7 +332,7 @@ wv.data.results.densify = function() {
             end = ring[i + 1];
             var distance = wv.map.distance2D(start, end);
             var numPoints = Math.floor(distance / MAX_DISTANCE);
-            points.push(start);
+            points.push(_.clone(start));
             for ( var j = 1; j < numPoints - 1; j++ ) {
                 var d = j / numPoints;
                 // This is what REVERB does, so we will do the same
@@ -329,11 +340,8 @@ wv.data.results.densify = function() {
                 points.push(p);
             }
         }
-        points.push(end);
-        var newRing = new OpenLayers.Geometry.LinearRing(points);
-        var newPoly = new OpenLayers.Geometry.Polygon([newRing]);
-
-        return newPoly;
+        points.push(_.clone(end));
+        return points;
     };
 
     return self;
@@ -351,14 +359,13 @@ wv.data.results.extentFilter = function(projection, extent) {
         if ( !geom ) {
             return result;
         }
-        var mbr = geom.getBounds();
-        if ( extent.intersectsBounds(mbr) ) {
+        var mbr = geom.getExtent();
+        if ( ol.extent.intersects(extent, mbr) ) {
             return granule;
         }
     };
 
     if ( !extent ) { throw new Error("No extent"); }
-    extent = new OpenLayers.Bounds(extent);
 
     return self;
 };
@@ -381,7 +388,7 @@ wv.data.results.geometryFromECHO = function(densify) {
         if ( !granule.geometry[wv.map.CRS_WGS_84] ) {
             var echoGeom = wv.data.echo.geometry(granule, densify);
             var geom = echoGeom.toOpenLayers();
-            var centroid = geom.getCentroid();
+            var centroid = geom.getInteriorPoint();
             granule.geometry[wv.map.CRS_WGS_84] = geom;
             granule.centroid[wv.map.CRS_WGS_84] = centroid;
         }
@@ -394,7 +401,7 @@ wv.data.results.geometryFromECHO = function(densify) {
 
 wv.data.results.geometryFromMODISGrid = function(projection) {
 
-    var parser = new OpenLayers.Format.GeoJSON();
+    var parser = new ol.format.GeoJSON();
 
     var self = {};
 
@@ -412,11 +419,11 @@ wv.data.results.geometryFromMODISGrid = function(projection) {
                 return;
             }
             var grid = meta.grid[granule.hv];
-            var geom = parser.read(meta.grid[granule.hv].geometry, "Geometry");
-            var centroid = new OpenLayers.Geometry.Point(
+            var geom = parser.readGeometry(meta.grid[granule.hv].geometry);
+            var centroid = new ol.geom.Point([
                 grid.properties.CENTER_X,
                 grid.properties.CENTER_Y
-            );
+            ]);
 
             granule.geometry[projection] = geom;
             granule.centroid[projection] = centroid;
@@ -666,10 +673,10 @@ wv.data.results.timeFilter = function(spec) {
             geom =
                 wv.map.adjustAntiMeridian(geom, adjustSign);
             granule.geometry[wv.map.CRS_WGS_84] = geom;
-            granule.centroid[wv.map.CRS_WGS_84] = geom.getCentroid();
+            granule.centroid[wv.map.CRS_WGS_84] = geom.getInteriorPoint();
         }
 
-        var x = granule.centroid[wv.map.CRS_WGS_84].x;
+        var x = granule.centroid[wv.map.CRS_WGS_84].getCoordinates()[0];
         if ( time < eastZone && x < 0 ) {
             return;
         }
@@ -744,7 +751,7 @@ wv.data.results.transform = function(projection) {
         var projGeom = geom.clone()
                 .transform(wv.map.CRS_WGS_84, projection);
         granule.geometry[projection] = projGeom;
-        granule.centroid[projection] = projGeom.getCentroid();
+        granule.centroid[projection] = projGeom.getInteriorPoint();
         return granule;
     };
 
@@ -768,6 +775,21 @@ wv.data.results.versionFilter = function() {
             }
         }
         return granule;
+    };
+
+    return self;
+};
+
+wv.data.results.versionFilterExact = function(version) {
+
+    var self = {};
+
+    self.name = "versionFilterExact";
+
+    self.process = function(meta, granule) {
+        if ( granule.version && granule.version === version ) {
+            return granule;
+        }
     };
 
     return self;

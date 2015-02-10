@@ -103,6 +103,7 @@ wv.proj.ui = wv.proj.ui || function(models, config) {
             }
             $menuItems.hide();
             $("#wv-proj-button-check").prop("checked", false);
+            $("#wv-proj-button label").removeClass("ui-state-hover");
             $button.button("refresh");
             $("body").off("click", clickOut).off("touchstart", clickOut);
         };

@@ -285,9 +285,6 @@ wv.layers.model = wv.layers.model || function(models, config) {
 
     self.save = function(state) {
         var defs = self.get();
-        if ( !defs || defs.length === 0 ) {
-            return;
-        }
         state.l = state.l || [];
         _.each(self.get(), function(def) {
             var lstate = _.find(state.l, { id: def.id });
@@ -308,7 +305,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
     };
 
     self.load = function(state, errors) {
-        if ( state.l ) {
+        if ( !_.isUndefined(state.l) ) {
             self.clear(models.proj.selected.id);
             _.eachRight(state.l, function(layerDef) {
                 if ( !config.layers[layerDef.id] ) {
@@ -322,7 +319,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
                         hidden = true;
                     }
                     if ( attr.id === "opacity" ) {
-                        opacity = parseFloat(attr.value);
+                        opacity = wv.util.clamp(parseFloat(attr.value), 0, 1);
                     }
                 });
                 self.add(layerDef.id, { hidden: hidden, opacity: opacity });
@@ -344,6 +341,9 @@ wv.layers.model = wv.layers.model || function(models, config) {
                 return;
             }
             if ( spec.renderable && !self.isRenderable(def.id) ) {
+                return;
+            }
+            if ( spec.visible && !def.visible ) {
                 return;
             }
             results.push(def);

@@ -59,7 +59,7 @@ output_file = args[1]
 conf = {}
 file_count = 0
 for root, dirs, files in os.walk(input_dir):
-    for file in files:
+    for file in sorted(files):
         try:
             file_count += 1
             with open(os.path.join(root, file)) as fp:

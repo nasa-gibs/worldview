@@ -35,7 +35,7 @@ buster.testCase("wv.data.model", {
         this.models.proj.selected = {
             id: "geographic"
         };
-        this.models.date = wv.date.model();
+        this.models.date = wv.date.model(this.config);
         this.models.layers = wv.layers.model(this.models, this.config);
         this.models.layers.add("layer1");
         this.model = wv.data.model(this.models, this.config);
@@ -46,7 +46,7 @@ buster.testCase("wv.data.model", {
         this.model.selectProduct("product1");
         var state = {};
         this.model.save(state);
-        buster.refute(state.dataDownload);
+        buster.refute(state.download);
     },
 
     "Saves state": function() {
@@ -54,7 +54,7 @@ buster.testCase("wv.data.model", {
         this.model.selectedProduct = "product1";
         var state = {};
         this.model.save(state);
-        buster.assert.equals(state.dataDownload, "product1");
+        buster.assert.equals(state.download, "product1");
     },
 
     "Subscribed for startup event when data download in load state": function() {
@@ -63,7 +63,7 @@ buster.testCase("wv.data.model", {
                 on: this.stub()
             }
         };
-        var state = { dataDownload: "product1" };
+        var state = { download: "product1" };
         this.model.load(state, this.errors);
         buster.assert.equals(this.errors.length, 0);
         buster.assert.calledWith(this.models.wv.events.on, "startup");
@@ -76,7 +76,7 @@ buster.testCase("wv.data.model", {
             }
         };
         this.models.layers.remove("layer1");
-        var state = { dataDownload: "product1" };
+        var state = { download: "product1" };
         this.model.load(state, this.errors);
         buster.assert.equals(this.errors.length, 1);
         buster.refute.calledWith(this.models.wv.events.on, "startup");

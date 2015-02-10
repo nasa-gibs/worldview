@@ -15,6 +15,7 @@
 <html>
 <head>
     <title>@OFFICIAL_NAME@</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <script type="text/javascript">
         if ( /MSIE (\d+\.\d+);/.test(navigator.userAgent) && ! /unsupported/.test(location.search) ) {
@@ -39,8 +40,7 @@
 
     <!-- CSS resources ==================================================== -->
 
-    <!-- link.dev -->       <link type="text/css" rel="Stylesheet" href="ext/ui/font-awesome-4.0.3/css/font-awesome.css">
-    <!-- link.prod --> <!-- <link type="text/css" rel="Stylesheet" href="ext/ui/font-awesome-4.0.3/css/font-awesome.min.css"> -->
+                            <link type="text/css" rel="Stylesheet" href="ext/ui/font-awesome-4.2.0/css/font-awesome.min.css">
 
     <!-- link.dev -->       <link type="text/css" rel="Stylesheet" href="ext/ui/jquery-ui-1.10.4/ui-darkness/jquery-ui-1.10.4.custom.css">
     <!-- link.prod --> <!-- <link type="text/css" rel="Stylesheet" href="ext/ui/jquery-ui-1.10.4/ui-darkness/jquery-ui-1.10.4.custom.min.css"> -->
@@ -53,35 +53,31 @@
     <!-- link.dev  -->      <link type="text/css" rel="Stylesheet" href="ext/date/mobiscroll-2.6.0/mobiscroll.css">
     <!-- link.prod --> <!-- <link type="text/css" rel="Stylesheet" href="ext/date/mobiscroll-2.6.0/mobiscroll.min.css"> -->
 
-    <!-- link.dev  -->      <link type="text/css" rel="Stylesheet" href="ext/palettes/jquery.dd-3.3/jquery.dd.css">
-    <!-- link.prod --> <!-- <link type="text/css" rel="Stylesheet" href="ext/palettes/jquery.dd-3.3/jquery.dd.min.css"> -->
+    <!-- link.dev  -->      <link type="text/css" rel="Stylesheet" href="ext/tour/joyride-2.0.3-3/joyride.css">
+    <!-- link.prod --> <!-- <link type="text/css" rel="Stylesheet" href="ext/tour/joyride-2.0.3-3/joyride.min.css"> -->
 
-    <!-- link.dev  -->      <link type="text/css" rel="Stylesheet" href="ext/tour/joyride-2.0.3-2/joyride.css">
-    <!-- link.prod --> <!-- <link type="text/css" rel="Stylesheet" href="ext/tour/joyride-2.0.3-2/joyride.min.css"> -->
-
-    <!-- link.dev  -->      <link type="text/css" rel="Stylesheet" href="ext/image/jcrop-0.9.10-p1/jcrop.css">
-    <!-- link.prod --> <!-- <link type="text/css" rel="Stylesheet" href="ext/image/jcrop-0.9.10-p1/jcrop.min.css"> -->
+    <!-- link.dev  -->      <link type="text/css" rel="Stylesheet" href="ext/image/jcrop-0.9.12/jquery.Jcrop.css">
+    <!-- link.prod --> <!-- <link type="text/css" rel="Stylesheet" href="ext/image/jcrop-0.9.12/jquery.Jcrop.min.css"> -->
 
                             <link type="text/css" rel="Stylesheet" href="ext/ui/noUiSlider-6.1.10/jquery.nouislider.css">
+                            <link type="text/css" rel="Stylesheet" href="ext/map/openlayers-3.1.0/ol.css">
 
     <!-- link.prod --> <!-- <link type="text/css" href="css/wv.css?v=20131218215115174" rel="Stylesheet" /> -->
 
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/bank.css">
 
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.main.css">
+    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.map.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.link.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.palettes.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.image.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.debug.css">
-
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/projection.css">
-    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/map.css">
-    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/map-ol2.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.date.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/menuPicker.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/accordionPicker.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/selector.css">
-    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/splash.css">
+    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.tour.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/products.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/indicator.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/events.css">
@@ -90,13 +86,11 @@
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.sidebar.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.layers.options.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/new-ui.css">
+    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.mobile.css">
                       <link type="text/css" rel="Stylesheet" href="pages/css/wv.document.css">
 
 
     <!-- External libraries =============================================== -->
-    <!-- link.dev --> <!-- <script type="text/javascript" src="ext/main/yepnope-1.5.4/yepnope.js"></script> -->
-    <!-- link.dev --> <!-- <script type="text/javascript" src="ext/main/yepnope-1.5.4/yepnope.min.js"></script> -->
-
     <!-- link.dev  -->      <script type="text/javascript" src="ext/main/lodash-2.4.1/lodash.js"></script>
     <!-- link.prod --> <!-- <script type="text/javascript" src="ext/main/lodash-2.4.1/lodash.min.js"></script> -->
 
@@ -120,24 +114,21 @@
     <!-- link.dev  -->      <script type="text/javascript" src="ext/date/mobiscroll-2.6.0/mobiscroll.js"></script>
     <!-- link.prod --> <!-- <script type="text/javascript" src="ext/date/mobiscroll-2.6.0/mobiscroll.min.js"></script> -->
 
-    <!-- link.dev  -->      <script type="text/javascript" src="ext/palettes/jquery.dd-3.3/jquery.dd.js"></script>
-    <!-- link.prod --> <!-- <script type="text/javascript" src="ext/palettes/jquery.dd-3.3/jquery.dd.min.js"></script> -->
+    <!-- link.dev  -->      <script type="text/javascript" src="ext/tour/joyride-2.0.3-3/joyride.js"></script>
+    <!-- link.prod --> <!-- <script type="text/javascript" src="ext/tour/joyride-2.0.3-3/joyride.min.js"></script> -->
 
-    <!-- link.dev  -->      <script type="text/javascript" src="ext/tour/joyride-2.0.3-2/joyride.js"></script>
-    <!-- link.prod --> <!-- <script type="text/javascript" src="ext/tour/joyride-2.0.3-2/joyride.min.js"></script> -->
+                            <script type="text/javascript" src="ext/proj/proj4js-2.3.3-1/proj4.js"></script>
 
-    <!-- link.dev  -->      <script type="text/javascript" src="ext/proj/proj4js-1.1.0-1/proj4js.js"></script>
-    <!-- link.prod --> <!-- <script type="text/javascript" src="ext/proj/proj4js-1.1.0-1/proj4js.min.js"></script> -->
+    <!-- link.dev  -->      <script type="text/javascript" src="ext/image/jcrop-0.9.12/jquery.Jcrop.js"></script>
+    <!-- link.prod --> <!-- <script type="text/javascript" src="ext/image/jcrop-0.9.12/jquery.Jcrop.min.js"></script> -->
 
-    <!-- link.dev  -->      <script type="text/javascript" src="ext/image/jcrop-0.9.10-p1/jcrop.js"></script>
-    <!-- link.prod --> <!-- <script type="text/javascript" src="ext/image/jcrop-0.9.10-p1/jcrop.min.js"></script> -->
-
-    <!-- link.dev  -->      <script type="text/javascript" src="ext/map/openlayers-2.13.1-wv1/OpenLayers.js"></script>
-    <!-- link.prod --> <!-- <script type="text/javascript" src="ext/map/openlayers-2.13.1-wv1/OpenLayers.min.js"></script> -->
+    <!-- link.dev  -->      <script type="text/javascript" src="ext/map/openlayers-3.1.0/ol-debug.js"></script>
+    <!-- link.prod --> <!-- <script type="text/javascript" src="ext/map/openlayers-3.1.0/ol.js"></script> -->
 
                             <script type="text/javascript" src="ext/ui/noUiSlider-6.1.10/jquery.nouislider.min.js"></script>
 
-                            <script type="text/javascript" src="ext/ui/d3/d3.js"></script>
+    <!-- link.dev  -->      <script type="text/javascript" src="ext/ui/d3/d3.js"></script>
+    <!-- link.prod --> <!-- <script type="text/javascript" src="ext/ui/d3/d3.min.js"></script> -->
 
     <!-- link.prod --> <!-- <script type="text/javascript" src="js/wv.js?v=20131218215115174&mobile"></script> -->
 
@@ -149,6 +140,7 @@
     <!-- link.dev --> <script type="text/javascript" src="js/util/wv.util.events.js"></script>
 
     <!-- link.dev --> <script type="text/javascript" src="js/ui/wv.ui.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/ui/wv.ui.mouse.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/ui/wv.ui.indicator.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/ui/wv.ui.info.js"></script>
 
@@ -162,7 +154,7 @@
     <!-- link.dev --> <script type="text/javascript" src="js/date/wv.date.model.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/date/wv.date.label.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/date/wv.date.timeline.js"></script>
-
+    <!-- link.dev --> <script type="text/javascript" src="js/date/wv.date.wheels.js"></script>
 
     <!-- link.dev --> <script type="text/javascript" src="js/layers/wv.layers.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/layers/wv.layers.metadata.js"></script>
@@ -182,7 +174,6 @@
     <!-- link.dev --> <script type="text/javascript" src="js/data/wv.data.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/data/wv.data.echo.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/data/wv.data.handler.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/data/wv.data.layers.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/data/wv.data.map.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/data/wv.data.model.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/data/wv.data.results.js"></script>
@@ -190,12 +181,12 @@
 
     <!-- link.dev --> <script type="text/javascript" src="js/map/wv.map.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/map/wv.map.model.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/map/wv.map.palette.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/map/wv.map.ui.js"></script>
 
     <!-- link.dev --> <script type="text/javascript" src="js/link/wv.link.model.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/link/wv.link.ui.js"></script>
 
+    <!-- link.dev --> <script type="text/javascript" src="js/wv.feedback.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/wv.tour.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/wv.debug.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/wv.main.js"></script>
@@ -214,53 +205,53 @@
                 </ul>
 
             <div id="wv-logo"></div>
-            <div id="productsHolder-wrapper">
-              <div id="productsHolder"></div>
-            </div>
-            <div id="map" class="map"></div>
+            <div id="productsHolder"></div>
+            <div id="wv-map" class="wv-map"></div>
             <div id="eventsHolder"></div>
             <div id="imagedownload"></div>
             <div id="dlMap"></div>
 
-            <section id="timeline">
+            <div id="timewheels" style="display:none"></div>
+
+            <section id="timeline" style="display: none">
                 <div id="timeline-header">
                     <div id="focus-guard-1" class="focus-guard" tabindex="1"></div>
                     <div class="input-wrapper">
-                        <div class="date-arrows date-arrow-up">
+                        <div class="date-arrows date-arrow-up" data-interval="year" data-value="1">
                           <svg width="25" height="8">
-                            <path d="M 12.5,0 25,8 0,8 z" class="uparrow" />
+                            <path d="M 12.5,0 25,8 0,8 z" class="uparrow"></path>
                           </svg>
                         </div>
                       <input type="text" size="4" maxlength="4" class="button-input-group" id="year-input-group" tabindex="2" onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.keyCode == 13 || event.keyCode == 9 || event.keyCode == 8" />
-                        <div class="date-arrows date-arrow-down">
+                        <div class="date-arrows date-arrow-down" data-interval="year" data-value="-1">
                           <svg width="25" height="8">
-                            <path d="M 12.5,0 25,8 0,8 z" class="downarrow"  />
+                            <path d="M 12.5,0 25,8 0,8 z" class="downarrow"></path>
                           </svg>
                         </div>
                     </div><!--/input-wrapper-->
                     <div class="input-wrapper">
-                        <div class="date-arrows date-arrow-up">
+                        <div class="date-arrows date-arrow-up" data-interval="month" data-value="1">
                           <svg width="25" height="8">
-                            <path d="M 12.5,0 25,8 0,8 z" class="uparrow" />
+                            <path d="M 12.5,0 25,8 0,8 z" class="uparrow"></path>
                           </svg>
                         </div>
                       <input type="text" size="3" maxlength="3" class="button-input-group" id="month-input-group" tabindex="3" />
-                        <div class="date-arrows date-arrow-down">
+                        <div class="date-arrows date-arrow-down" data-interval="month" data-value="-1">
                           <svg width="25" height="8">
-                            <path d="M 12.5,0 25,8 0,8 z" class="downarrow"  />
+                            <path d="M 12.5,0 25,8 0,8 z" class="downarrow"></path>
                           </svg>
                         </div>
                     </div><!--/input-wrapper-->
                     <div class="input-wrapper">
-                        <div class="date-arrows date-arrow-up">
+                        <div class="date-arrows date-arrow-up" data-interval="day" data-value="1">
                           <svg width="25" height="8">
-                            <path d="M 12.5,0 25,8 0,8 z" class="uparrow" />
+                            <path d="M 12.5,0 25,8 0,8 z" class="uparrow"></path>
                           </svg>
                         </div>
                       <input type="text" size="2" maxlength="2" class="button-input-group" id="day-input-group" tabindex="4" onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.keyCode == 13 || event.keyCode == 9 || even.keyCode == 8" />
-                        <div class="date-arrows date-arrow-down">
+                        <div class="date-arrows date-arrow-down" data-interval="day" data-value="-1">
                           <svg width="25" height="8">
-                            <path d="M 12.5,0 25,8 0,8 z" class="downarrow"  />
+                            <path d="M 12.5,0 25,8 0,8 z" class="downarrow"></path>
                           </svg>
                         </div>
                     </div><!--/input-wrapper-->
@@ -269,14 +260,14 @@
                         <svg width="24" height="30">
                             <path
                              d="M 10.240764,0 24,15 10.240764,30 0,30 13.759236,15 0,0 10.240764,0 z"
-                             class="arrow" />
+                             class="arrow"></path>
                         </svg>
                     </div>
                     <div class="button-action-group" id="right-arrow-group" title="Click and hold to animate forwards">
                         <svg width="24" height="30" >
                             <path
                             d="M 10.240764,0 24,15 10.240764,30 0,30 13.759236,15 0,0 10.240764,0 z"
-                            class="arrow" />
+                            class="arrow"></path>
                         </svg>
                     </div>
                 </div> <!--/timeline-header-->
@@ -284,26 +275,20 @@
 
                 </div><!--/timeline-footer-->
                 <div id="timeline-zoom">
-                  <a class="zoom-btn" id="zoom-weeks">Weeks</a>
+                  <!--<a class="zoom-btn" id="zoom-weeks">Weeks</a>-->
+                  <a class="zoom-btn" id="zoom-days">Days</a>
                   <a class="zoom-btn" id="zoom-months">Months</a>
                   <a class="zoom-btn" id="zoom-years">Years</a>
-                  <a class="zoom-btn" id="zoom-decades">Decades</a>
                 </div><!--/timeline-zoom-->
                 <div id="timeline-hide">
                   <svg class="hamburger" width="10" height="9">
-                    <path d="M 0,0 0,1 10,1 10,0 0,0 z M 0,4 0,5 10,5 10,4 0,4 z M 0,8 0,9 10,9 10,8 0,8 z" />
+                    <path d="M 0,0 0,1 10,1 10,0 0,0 z M 0,4 0,5 10,5 10,4 0,4 z M 0,8 0,9 10,9 10,8 0,8 z"></path>
                   </svg>
                 </div>
             </section>
 
         </div>
     </div>
-    <ol id="joyRideTipContent">
-        <li id="datePanel" data-id="timeline" data-button="Next" data-options="tipLocation:top;tipAnimation:fade;nubPosition:bottom;bordered:true"></li>
-          <li id="productBasePanel" data-id="productsBaseLayers" data-button="Next" data-options="tipLocation:right;nubPosition:left;tipAnimation:fade;prevButton:true;bordered:true"></li>
-          <li id="productOverlayPanel" class="wide" data-id="productsOverlays" data-button="Next" data-options="tipLocation:right;nubPosition:left;tipAnimation:fade;prevButton:true;bordered:true;class:wide"></li>
-          <li id="mapPanel" data-id="mapPanelTourAnchor" data-button="Next" data-options="tipLocation:left;nubPosition:left;prevButton:true;bordered:true"></li>
-          <li id="toolbarPanel" class="toolbarTip" data-id="wv-toolbar" data-button="Finish" data-options="tipLocation:bottom;nubPosition:top;tipAnimation:fade;prevButton:true;bordered:true;class:toolbar"></li>
-    </ol>
+    <div id="wv-tour-content"></div>
 </body>
 </html>

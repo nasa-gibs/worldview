@@ -48,13 +48,10 @@ wv.ui.info = wv.ui.info || (function(ui, config) {
     var show = function() {
         var $menu = wv.ui.getMenu().attr("id", "wv-info-menu");
         var $menuItems = $("<ul></ul>");
-
-        var $feedback = $("<li><a href='mailto:@MAIL@?subject=Feedback for @LONG_NAME@ tool' target='_blank'><i class='ui-icon fa fa-envelope fa-fw'></i>Feedback</a></li>");
+        var $feedback = $("<li><a class='feedback'><i class='ui-icon fa fa-envelope fa-fw'></i>Send Feedback</a></li>");
         var $tour = $("<li><a><i class='ui-icon fa fa-truck fa-fw'></i>Start Tour</a></li>");
         var $new = $("<li><a><i class='ui-icon fa fa-flag fa-fw'></i>What's New</a></li>");
         var $about = $("<li><a><i class='ui-icon fa fa-file fa-fw'></i>About</a></li>");
-
-        var feedbackInit = false;
 
         if ( config.features.feedback ) {
             $menuItems.append($feedback);
@@ -77,7 +74,7 @@ wv.ui.info = wv.ui.info || (function(ui, config) {
         $menuItems.hide();
 
         $about.click(function() {
-            if ( wv.util.browser.small ) {
+            if ( wv.util.browser.small || wv.util.browser.touchDevice ) {
                 window.open("brand/pages/about.html?v=@BUILD_NONCE@", "_blank");
             } else {
                 wv.ui.getDialog().dialog({
@@ -86,23 +83,16 @@ wv.ui.info = wv.ui.info || (function(ui, config) {
                     height: 525,
                     show: { effect: "fade" },
                     hide: { effect: "fade" }
-                }).load("brand/pages/about.html?v=@BUILD_NONCE@ #page");
+                })
+                .load("brand/pages/about.html?v=@BUILD_NONCE@ #page")
+                .addClass("wv-opaque");
             }
         });
 
-        $feedback.click(function(event) {
-            if ( !wv.util.browser.small && window.feedback ) {
-                event.preventDefault();
-                if ( !feedbackInit ) {
-                    feedback.init({showIcon: false});
-                }
-                feedback.showForm();
-                feedbackInit = true;
-            }
-        });
+        wv.feedback.decorate($feedback.find("a"));
 
         $new.click(function() {
-            if ( wv.util.browser.small ) {
+            if ( wv.util.browser.small || wv.util.browser.touchDevice ) {
                 window.open("brand/pages/new.html?v=@BUILD_NONCE@", "_blank");
             } else {
                 wv.ui.getDialog().dialog({
@@ -111,7 +101,9 @@ wv.ui.info = wv.ui.info || (function(ui, config) {
                     height: 525,
                     show: { effect: "fade" },
                     hide: { effect: "fade" }
-                }).load("brand/pages/new.html?v=@BUILD_NONCE@ #page");
+                })
+                .load("brand/pages/new.html?v=@BUILD_NONCE@ #page")
+                .addClass("wv-opaque");
             }
         });
 
@@ -130,6 +122,7 @@ wv.ui.info = wv.ui.info || (function(ui, config) {
             }
             $menuItems.hide();
             $("#wv-info-button-check").prop("checked", false);
+            $("#wv-info-button label").removeClass("ui-state-hover");
             $button.button("refresh");
             $("body").off("click", clickOut).off("touchstart", clickOut);
         };

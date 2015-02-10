@@ -209,6 +209,9 @@ module.exports = function(grunt) {
                     src: ["**"],
                     dest: "build/site-<%=grunt.option('packageName')%>-debug/web"
                 },{
+                    src: "options/bitly.json",
+                    dest: "build/site-<%=grunt.option('packageName')%>-debug/etc/bitly.json"
+                },{
                     expand: true, cwd: "build/worldview",
                     src: ["web/**", "web/**/.htaccess"],
                     dest: "build/site-<%=grunt.option('packageName')%>"
@@ -216,6 +219,9 @@ module.exports = function(grunt) {
                     expand: true, cwd: "build/options",
                     src: ["**"],
                     dest: "build/site-<%=grunt.option('packageName')%>/web"
+                },{
+                    src: "options/bitly.json",
+                    dest: "build/site-<%=grunt.option('packageName')%>/etc/bitly.json"
                 }],
                 options: {
                     mode: true
@@ -248,6 +254,10 @@ module.exports = function(grunt) {
             // Remove all of them.
             empty: {
                 command: "find build -type d -empty -delete"
+            },
+
+            fetch: {
+                command: "PATH=python/bin:${PATH} FETCH_GC=1 bin/wv-options-build"
             },
 
             rpmbuild: {
@@ -365,7 +375,6 @@ module.exports = function(grunt) {
                 "!build/worldview-debug/web/css/wv.css",
                 "!build/worldview-debug/web/js/wv.js",
                 "!build/worldview-debug/web/css/bulkDownload.css",
-                "!build/worldview-debug/web/js/map/wv.map.tileworker.js",
                 "!build/worldview-debug/web/ext/**/*"
             ],
             config_src: [
@@ -463,7 +472,7 @@ module.exports = function(grunt) {
                     from: "@NAME@",
                     to: "<%=grunt.option('shortName')%>"
                 },{
-                    from: "@EMAIL@",
+                    from: "@MAIL@",
                     to: "<%=grunt.option('email')%>"
                 },{
                     from: "@BUILD_TIMESTAMP@",
@@ -550,6 +559,7 @@ module.exports = function(grunt) {
         grunt.option("longName", brand.longName);
         grunt.option("shortName", brand.shortName);
         grunt.option("packageName", brand.packageName);
+        grunt.option("email", brand.email);
     });
 
     grunt.registerTask("build", [
@@ -584,6 +594,8 @@ module.exports = function(grunt) {
         "copy:dist_config_versioned"
     ]);
 
+    grunt.registerTask("fetch", ["exec:fetch"])
+    
     grunt.registerTask("site", [
         "load_branding",
         "remove:build_site",

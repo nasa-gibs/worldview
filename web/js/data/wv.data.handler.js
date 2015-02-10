@@ -22,6 +22,8 @@ wv.data.handler.getByName = function(name) {
         "AquaSwathMultiDay":    wv.data.handler.aquaSwathMultiDay,
         "CollectionList":       wv.data.handler.collectionList,
         "List":                 wv.data.handler.list,
+        "DailyGranuleList":     wv.data.handler.dailyGranuleList,
+        "DailyAMSRE":           wv.data.handler.dailyAMSRE,
         "MODISGrid":            wv.data.handler.modisGrid,
         "MODISMix":             wv.data.handler.modisMix,
         "MODISSwath":           wv.data.handler.modisSwath,
@@ -81,6 +83,7 @@ wv.data.handler.base = function(config, model) {
                     return;
                 }
                 var results = self._processResults(data);
+                //console.log(results);
                 self.events.trigger("results", results);
             } catch ( error ) {
                 self.events.trigger("error", "exception", error);
@@ -267,6 +270,60 @@ wv.data.handler.list = function(config, model, spec) {
     return self;
 };
 
+wv.data.handler.dailyGranuleList = function(config, model, spec) {
+    var self = wv.data.handler.list(config, model, spec);
+
+    self._submit = function(queryData) {
+        var queryOptions = {
+            startTimeDelta: 180,
+            endTimeDelta: -180,
+            time: model.time,
+            data: queryData
+        };
+
+        return self.echo.submit(queryOptions);
+    };
+
+    return self;
+};
+
+wv.data.handler.dailyAMSRE = function(config, model, spec) {
+
+    var self = wv.data.handler.base(config, model);
+
+    self._submit = function(queryData) {
+        var queryOptions = {
+            startTimeDelta: 180,
+            endTimeDelta: -180,
+            time: model.time,
+            data: queryData
+        };
+
+        return self.echo.submit(queryOptions);
+    };
+
+    self._processResults = function(data) {
+        var results = {
+            meta: {},
+            granules: data
+        };
+
+        var ns = wv.data.results;
+        var productConfig = config.products[model.selectedProduct];
+        var chain = ns.chain();
+        chain.processes = [
+            ns.tagList(),
+            ns.tagProduct(model.selectedProduct),
+            ns.tagURS(productConfig.urs),
+            ns.tagVersion(),
+            ns.versionFilterExact(productConfig.version),
+            ns.dateTimeLabel(model.time)
+        ];
+        return chain.process(results);
+    };
+
+    return self;
+};
 
 wv.data.handler.modisGrid = function(config, model, spec) {
     var self = wv.data.handler.base(config);

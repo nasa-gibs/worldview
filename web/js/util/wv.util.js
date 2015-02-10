@@ -22,11 +22,7 @@ var wv = wv || {};
  */
 wv.util = (function(self) {
 
-    /**
-     * Layer groups: baselayers and overlays
-     *
-     * @attribute LAYER_GROUPS
-     */
+    // Needed anymore?
     self.LAYER_GROUPS = {
         baselayers: {
             id: "baselayers",
@@ -38,6 +34,23 @@ wv.util = (function(self) {
             camel: "Overlays",
             description: "Overlays"
         }
+    };
+
+    self.repeat = function(value, length) {
+        result = "";
+        for ( var i = 0; i < length; i++ ) {
+            result += value;
+        }
+        return result;
+    };
+
+    self.pad = function(value, width, padding) {
+        value = "" + value;
+        if ( value.length < width ) {
+            var add = width - value.length;
+            value = self.repeat(padding, add) + value;
+        }
+        return value;
     };
 
     /**
@@ -231,6 +244,99 @@ wv.util = (function(self) {
             default:
                 throw new Error("[dateAdd] Invalid interval: " + inverval);
         }
+        return newDate;
+    };
+
+    self.daysInMonth = function(d) {
+        var y;
+        var m;
+        if ( d.getUTCFullYear ) {
+            y = d.getUTCFullYear();
+            m = d.getUTCMonth();
+        } else {
+            y = d.year;
+            m = d.month;
+        }
+        var lastDay = new Date(Date.UTC(y, m + 1, 0));
+        return lastDay.getUTCDate();
+    };
+
+    self.clamp = function(val, min, max) {
+        if ( val < min ) { return min; }
+        if ( val > max ) { return max; }
+        return val;
+    };
+
+    self.roll = function(val, min, max) {
+        if ( val < min ) { return max - (min - val) + 1; }
+        if ( val > max ) { return min + (val - max) - 1; }
+        return val;
+    };
+
+    self.minDate = function() {
+        return new Date(Date.UTC(1000, 0, 1));
+    };
+
+    self.maxDate = function() {
+        return new Date(Date.UTC(3000, 11, 31));
+    };
+
+    self.rollRange = function(date, interval, minDate, maxDate) {
+        var y = date.getUTCFullYear();
+        var m = date.getUTCMonth();
+        var d = date.getUTCDate();
+        var first, last;
+        switch ( interval ) {
+            case "day":
+                var firstDay = new Date(Date.UTC(y, m, 1));
+                var lastDay = new Date(Date.UTC(y, m, self.daysInMonth(date)));
+                first = new Date(Math.max(firstDay, minDate)).getUTCDate();
+                last = new Date(Math.min(lastDay, maxDate)).getUTCDate();
+                break;
+            case "month":
+                var firstMonth = new Date(Date.UTC(y, 0, 1));
+                var lastMonth = new Date(Date.UTC(y, 11, 31));
+                first = new Date(Math.max(firstMonth, minDate)).getUTCMonth();
+                last = new Date(Math.min(lastMonth, maxDate)).getUTCMonth();
+                break;
+            case "year":
+                var firstYear = self.minDate();
+                var lastYear = self.maxDate();
+                first = new Date(Math.max(firstYear, minDate)).getUTCFullYear();
+                last = new Date(Math.min(lastYear, maxDate)).getUTCFullYear();
+                break;
+        }
+        return { first: first, last: last };
+    };
+
+    self.rollDate = function(date, interval, amount, minDate, maxDate) {
+        minDate = minDate || self.minDate();
+        maxDate = maxDate || self.maxDate();
+        var range = self.rollRange(date, interval, minDate, maxDate);
+        var min = range.first;
+        var max = range.last;
+        var day = date.getUTCDate();
+        var month = date.getUTCMonth();
+        var year = date.getUTCFullYear();
+        switch ( interval ) {
+            case "day":
+                day = self.roll(day + amount, min, max);
+                break;
+            case "month":
+                month = self.roll(month + amount, min, max);
+                break;
+            case "year":
+                year = self.roll(year + amount, min, max);
+                break;
+            default:
+                throw new Error("[rollDate] Invalid interval: " + interval);
+        }
+        var daysInMonth = self.daysInMonth({year: year, month: month});
+        if ( day > daysInMonth ) {
+            day = daysInMonth;
+        }
+        var newDate = new Date(Date.UTC(year, month, day));
+        newDate = new Date(wv.util.clamp(newDate, minDate, maxDate));
         return newDate;
     };
 
@@ -458,6 +564,27 @@ wv.util = (function(self) {
         RIGHT: 39,
         UP: 38,
         DOWN: 40
+    };
+
+    self.formatDMS = function(value, type) {
+        var width, signs;
+        if ( type === "longitude" ) {
+            width = 3;
+            signs = "EW";
+        } else {
+            width = 2;
+            signs = "NS";
+        }
+        var sign = ( value >= 0 ) ? signs[0] : signs[1];
+        value = Math.abs(value);
+        var degrees = Math.floor(value);
+        var minutes = Math.floor((value * 60) - (degrees * 60));
+        var seconds = Math.floor((value * 3600) - (degrees * 3600) - (minutes * 60));
+
+        var sdegrees = self.pad(degrees, width, " ");
+        var sminutes = self.pad(minutes, 2, "0");
+        var sseconds = self.pad(seconds, 2, "0");
+        return sdegrees + "&deg;" + sminutes + "'" + sseconds + '"' + sign;
     };
 
     return self;

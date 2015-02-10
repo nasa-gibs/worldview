@@ -9,7 +9,7 @@
  * All Rights Reserved.
  */
 
-html,body, div, ul, li, p, h1, h2, h3, h4, h5, h6 {display:block; margin:0; padding:0; font: 100 13px/13px "Lucida Sans",Monaco, monospace;}
+html,body, div, ul, li, p, h1, h2, h3, h4, h5, h6 {display:block; margin:0; padding:0; font: 100 13px/13px "Lucida Sans", "Arial", Sans-Serif;}
 
 html, body {
     width: 100%;
@@ -121,7 +121,6 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
 }
 
 @media screen and (max-width: 440px){
-    #wvlogo { width:54px; background-position: 0 center;}
 }
 
 #toolbarlist {
@@ -138,7 +137,7 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
     border:1px solid #333;
     border-top-right-radius:5px;
     border-top-left-radius:5px;
-    z-index:10000;
+    z-index:1;
     -webkit-box-sizing:border-box;
     -o-box-sizing:border-box;
     -moz-box-sizing:border-box;
@@ -149,7 +148,7 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
     position:absolute;
     right:10px;
     top:10px;
-    z-index:10000;
+    z-index:1;
 
     border-radius:0;
 
@@ -216,6 +215,14 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
     border-radius:0;
 }
 
+.ui-widget-content.wv-opaque {
+    background: #222;
+}
+
+.ui-dialog {
+    padding: 0;
+}
+
 .ui-dialog .ui-dialog-content {
     background-image: none;
     padding-top: 15px;
@@ -225,6 +232,15 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
 border-radius:0;
 }
 
+.ui-state-default .ui-icon-closethick {
+    background-position: 0 0;
+    background-image: url("../images/close.png");
+}
+
+.ui-state-hover .ui-icon-closethick {
+    background-position: 0 0;
+    background-image: url("../images/close-highlight.png");
+}
 
 .ui-tooltip {
     /* background: #FFFBE7; */
@@ -282,6 +298,11 @@ a:hover {
 
 .iCheck-checkbox {
     margin: 0 10px;
+    background-position: -24px 0;
+}
+
+.iCheck-radio {
+    background-position: -144px 0;
 }
 
 label {
@@ -297,18 +318,25 @@ label {
     border:1px solid #333;
 }
 .wv-panel .ui-dialog-titlebar {
-    background: none transparent;
+    background: rgb(40, 40, 40);
     border: 0;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
 }
+
+.ui-widget-header {
+    background: rgb(40, 40, 40);
+}
+
 .ui-widget-header .ui-state-default{
     background:none transparent;
     border:0;
 }
+
 .ui-widget-header .ui-state-hover{
     background:#fff;
 }
+
 .wv-panel .ui-dialog-content {
     padding: 0em 1em 1em 1em;
 }

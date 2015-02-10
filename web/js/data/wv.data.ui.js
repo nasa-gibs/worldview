@@ -25,7 +25,8 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
 
     var indicators = {
         query: null,
-        noneInView: null
+        noneInView: null,
+        noResults: null
     };
 
     var self = {};
@@ -163,7 +164,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
         var tabs_height = $(".ui-tabs-nav").outerHeight(true);
         var button_height = $(self.selector + "_Button").outerHeight(true);
         $(self.selector).height(
-            $(self.selector).parent().parent().outerHeight() - tabs_height - button_height
+            $(self.selector).parent().outerHeight() - tabs_height - button_height
         );
 
         var $pane = $(self.selector + "content");
@@ -181,8 +182,9 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
         }
    };
 
-    self.onViewChange = function(map) {
+    self.onViewChange = function() {
         var indicator;
+        var map = ui.map.selected;
 
         if ( !model.active || queryActive || !lastResults ) {
             return;
@@ -192,11 +194,13 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
         }
         var hasCentroids = false;
         var inView = false;
-        var extent = map.getExtent().toGeometry();
+        var extent = map.getView().calculateExtent(map.getSize());
+        var crs = models.proj.selected.crs;
         _.each(lastResults.granules, function(granule) {
-            if ( granule.centroid && granule.centroid[map.projection] ) {
+            if ( granule.centroid && granule.centroid[crs] ) {
                 hasCentroids = true;
-                if ( extent.intersects(granule.centroid[map.projection]) ) {
+                if ( ol.extent.intersects(extent,
+                        granule.centroid[crs].getExtent()) ) {
                     inView = true;
                     return true;
                 }
@@ -230,6 +234,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
         if ( downloadListPanel ) {
             downloadListPanel.hide();
         }
+        mapController.dispose();
     };
 
     var onProductSelect = function(product) {
@@ -256,23 +261,24 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
     };
 
     var onQueryResults = function(results) {
+        if ( selectionListPanel ) {
+            selectionListPanel.hide();
+            selectionListPanel = null;
+        }
         queryActive = false;
         lastResults = results;
         wv.ui.indicator.hide(indicators);
+        var hasResults = true;
         if ( model.selectedProduct !== null && results.granules.length === 0 ) {
-            wv.ui.indicator.noData(indicators);
-        } else {
-            if ( results.meta.showList ) {
-                selectionListPanel =
-                        wv.data.ui.selectionListPanel(model, results);
-                selectionListPanel.show();
-            } else {
-                if ( selectionListPanel ) {
-                    selectionListPanel.hide();
-                }
-                selectionListPanel = null;
-            }
+            indicators.noData = wv.ui.indicator.noData(indicators);
+            hasResults = false;
         }
+        if ( results.meta.showList && hasResults ) {
+            selectionListPanel =
+                    wv.data.ui.selectionListPanel(model, results);
+            selectionListPanel.show();
+        }
+        updateSelection();
     };
 
     var onQueryCancel = function() {
@@ -496,11 +502,11 @@ wv.data.ui.downloadListPanel = function(config, model) {
         "<div id='wv-data-selection-notice'>" +
             "<i class='icon fa fa-info-circle fa-3x'></i>" +
             "<p class='text'>" +
-                "Some items you have selected require an account with the " +
+                "Some items you have selected require a profile with the " +
                 "EOSDIS User Registration System (URS) to download. " +
                 "It is simple and free to sign up! " +
                 "<a href='https://urs.eosdis.nasa.gov/users/new' target='urs'>" +
-                "Click to register for an account.</a>" +
+                "Click to register for a profile.</a>" +
             "</p>" +
         "</div>";
 
@@ -532,8 +538,8 @@ wv.data.ui.downloadListPanel = function(config, model) {
 
         $dialog.dialog("open");
 
-        $("#wv-data-selection a.wget").click(showWgetPage);
-        $("#wv-data-selection a.curl").click(showCurlPage);
+        $("a.wget").click(showWgetPage);
+        $("a.curl").click(showCurlPage);
 
         $dialog.find(".collapse").accordion({
             collapsible: true,
@@ -824,7 +830,7 @@ wv.data.ui.selectionListPanel = function(model, results) {
     };
 
     self.show = function() {
-        $dialog = wv.ui.getDialog();
+        $dialog = wv.ui.getDialog("wv-data-list");
         $dialog
             .attr("id", "wv-data-list")
             .html(bodyText())

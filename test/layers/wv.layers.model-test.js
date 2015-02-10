@@ -200,14 +200,6 @@ buster.testCase("wv.layers.model", function() {
             ["aqua-cr", "aqua-aod", "terra-aod"]);
     };
 
-    self["Base layer is not obscured by semi-transparent layer"] = function() {
-        stack();
-        l.setOpacity("aqua-cr", 0.5);
-        var list = l.get({renderable: true});
-        buster.assert.equals(_.pluck(list, "id"),
-            ["aqua-cr", "terra-cr", "aqua-aod", "terra-aod"]);
-    };
-
     self["Base layer is not obscured by a hidden layer"] = function() {
         stack();
         l.setVisibility("aqua-cr", false);
@@ -230,6 +222,22 @@ buster.testCase("wv.layers.model", function() {
         var list = l.get({renderable: true});
         buster.assert.equals(_.pluck(list, "id"),
             ["terra-cr", "terra-aod"]);
+    };
+
+    self["All layers are visible"] = function() {
+        stack();
+        var list = l.get({visible: true});
+        buster.assert.equals(_.pluck(list, "id"),
+            ["aqua-cr", "terra-cr", "aqua-aod", "terra-aod"]);
+    };
+
+    self["Only visible layers"] = function() {
+        stack();
+        l.setVisibility("terra-cr", false);
+        l.setVisibility("terra-aod", false);
+        var list = l.get({visible: true});
+        buster.assert.equals(_.pluck(list, "id"),
+            ["aqua-cr", "aqua-aod"]);
     };
 
     self["Replace base layer"] = function() {
@@ -360,6 +368,30 @@ buster.testCase("wv.layers.model", function() {
         l.load(state, errors);
         var def = _.find(models.layers.active, { id: "terra-cr" });
         buster.assert(0.12, def.opacity);
+        buster.assert.equals(errors.length, 0);
+    };
+
+    self["Loads state, opacity clamped at 1"] = function() {
+        var state = {
+            l: [
+            { id: "terra-cr", attributes: [{ id: "opacity", value: 5}] }
+            ]
+        };
+        l.load(state, errors);
+        var def = _.find(models.layers.active, { id: "terra-cr" });
+        buster.assert.equals(1, def.opacity);
+        buster.assert.equals(errors.length, 0);
+    };
+
+    self["Loads state, opacity clamped at 0"] = function() {
+        var state = {
+            l: [
+            { id: "terra-cr", attributes: [{ id: "opacity", value: -5}] }
+            ]
+        };
+        l.load(state, errors);
+        var def = _.find(models.layers.active, { id: "terra-cr" });
+        buster.assert.equals(0, def.opacity);
         buster.assert.equals(errors.length, 0);
     };
 

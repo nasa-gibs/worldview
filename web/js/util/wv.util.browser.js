@@ -62,6 +62,7 @@ wv.util.browser = wv.util.browser || (function() {
      * @type Boolean
      */
     self.small = false;
+    self.constrained = false;
 
     /**
      * True if this browser properly supports cross-origin resource
@@ -89,8 +90,11 @@ wv.util.browser = wv.util.browser || (function() {
      * @type Boolean
      */
     self.localStorage = true;
-
     self.history = true;
+    self.touchDevice = false;
+
+    self.mobileWidth = 720;
+    self.constrainedHeight = 320;
 
     var init = function() {
         var tests = self.tests;
@@ -108,9 +112,15 @@ wv.util.browser = wv.util.browser || (function() {
         self.localStorage = tests.localStorage();
         self.small = tests.small();
         self.history = tests.history();
+        self.touchDevice = tests.touchDevice();
 
-        $(window).resize(function() {
+        var onResize = function() {
             self.small = tests.small();
+            self.constrained = tests.constrained();
+        };
+        $(window).on("resize", onResize);
+        $(function() {
+            onResize();
         });
     };
 
@@ -154,6 +164,12 @@ wv.util.browser = wv.util.browser || (function() {
         return false;
     };
 
+    self.tests.touchDevice = function() {
+        var el = document.createElement('div');
+        el.setAttribute('ontouchstart', 'return;');
+        return typeof el.ontouchstart === "function";
+    };
+
     self.tests.ieVersion = function() {
         var navigator = self.tests.navigator();
         var version = navigator.userAgent.match(/MSIE ([\d\.]+)/);
@@ -185,7 +201,11 @@ wv.util.browser = wv.util.browser || (function() {
     };
 
     self.tests.small = function() {
-        return $(window).width() < 720;
+        return $(window).width() < self.mobileWidth;
+    };
+
+    self.tests.constrained = function() {
+        return $(window).height() < self.constrainedHeight;
     };
 
     self.tests.history = function() {
@@ -429,5 +449,11 @@ if (!String.prototype.endsWith) {
             $("#app, .ui-mobile, .ui-mobile .ui-page").css("min-height", 0);
         }
     }
+
+    $(window).on("touchmove", function(event) {
+        if ( !event.target.classList.contains("scrollable") ) {
+            event.preventDefault();
+        }
+    }, false);
 
 })();

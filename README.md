@@ -26,10 +26,6 @@ several other clients. We encourage interested developers to build their own
 clients or integrate NASA imagery into their existing ones using these
 services.
 
-*Please Note:* Worldview is under active development. Features may be absent
-or broken until the next major release. The toolchain only works in a Mac OS X
-or a Linux environment at the moment.
-
 ## License
 
 This code was originally developed at NASA/Goddard Space Flight Center for

@@ -108,48 +108,43 @@ $(function() {
                 events: wv.util.events()
             }
         };
+        var ui = {};
+        // Export for debugging
+        wvx.models = models;
+        wvx.ui = ui;
 
         models.proj     = wv.proj.model(config);
         models.palettes = wv.palettes.model(models, config);
         models.layers   = wv.layers.model(models, config);
-        models.date     = wv.date.model({ initial: initialDate });
-        if ( config.features.dataDownload ) {
-            models.data = wv.data.model(models, config);
-        }
+        models.date     = wv.date.model(config, { initial: initialDate });
         models.map      = wv.map.model(models, config);
         models.link     = wv.link.model(config);
-
-        // Export for debugging
-        wvx.models = models;
-
-        var updateDateRange = function() {
-            models.date.range(models.layers.dateRange());
-        };
-        models.layers.events
-                .on("add", updateDateRange)
-                .on("remove", updateDateRange)
-                .on("update", updateDateRange);
-        updateDateRange();
-
         models.link
             .register(models.proj)
             .register(models.layers)
             .register(models.date)
             .register(models.palettes)
             .register(models.map);
+        models.link.load(state);
+
+        // HACK: Map needs to be created before the data download model
+        ui.map = wv.map.ui(models, config);
+        if ( config.features.dataDownload ) {
+            models.data = wv.data.model(models, config);
+        }
         if ( config.features.dataDownload) {
             models.link.register(models.data);
         }
+        // HACK: Map needs permalink state loaded before starting. But
+        // data download now needs it too.
         models.link.load(state);
+
         if ( config.features.arcticProjectionChange ) {
             models.proj.change = wv.proj.change(models, config);
         }
 
         elapsed("ui");
         // Create widgets
-        var ui = {};
-
-        ui.map = wv.map.ui(models, config);
         ui.anim = wv.date.anim(models.date, ui.map, {
             debug: parameters.debug === "anim"
         });
@@ -157,13 +152,11 @@ $(function() {
         ui.sidebar = wv.layers.sidebar(models, config);
         ui.activeLayers = wv.layers.active(models, ui, config);
         ui.addLayers = wv.layers.add(models, ui, config);
-        //ui.dateSliders = wv.date.sliders(models, config);
-        ui.timeline = wv.date.timeline(models, config, ui);
-        ui.dateLabel = wv.date.label(models);
-        // TEMP: Remove this once the real slider goes in. Search for other
-        // comments marked as TEMP
-        //wv.debug.slider(models, config);
-        //ui.dateWheels = wv.date.wheels(models, config);
+        if ( config.startDate ) {
+            ui.timeline = wv.date.timeline(models, config, ui);
+            ui.dateLabel = wv.date.label(models);
+            ui.dateWheels = wv.date.wheels(models, config);
+        }
         ui.rubberband = wv.image.rubberband(models, ui, config);
         ui.image = wv.image.panel(models, ui, config);
         if ( config.features.dataDownload ) {
@@ -175,9 +168,7 @@ $(function() {
         ui.tour = wv.tour(models, ui, config);
         ui.info = wv.ui.info(ui, config);
 
-        // Export for debugging
-        wvx.ui = ui;
-
+        //FIXME: Old hack
         $(window).resize(function() {
           if ($(window).width() < 720) {
             $('#productsHoldertabs li.first a').trigger('click');
@@ -195,17 +186,13 @@ $(function() {
                     ui.sidebar.selectTab("download");
                 })
                 .on("queryResults", function() {
-                    ui.data.onViewChange(ui.map.selected);
+                    ui.data.onViewChange();
                 });
-            ui.map.events
-                .on("moveEnd", function(map) {
-                    ui.data.onViewChange(map);
-                })
-                .on("zoomEnd", function(map) {
-                    ui.data.onViewChange(map);
-                });
-                // FIXME: This is a hack
-                models.map.events.on("projection", models.data.updateProjection);
+            ui.map.events.on("extent", function() {
+                ui.data.onViewChange();
+            });
+            // FIXME: This is a hack
+            models.map.events.on("projection", models.data.updateProjection);
         }
 
         // Sink all focus on inputs if click unhandled

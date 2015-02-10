@@ -69,6 +69,13 @@ def process_entries(entries):
             items = re.sub(r"[\(\)\[\]]", "", entry["@value"]).split(",")
             try:
                 values += [map(lambda v: float(v), items)]
+                for item in items:
+                    v = float(item)
+                    if v == float("inf"):
+                        v = sys.float_info.max
+                    if v == float("-inf"):
+                        v = sys.float_info.min
+                    values += [v]
             except ValueError as e:
                 raise ValueError("Invalid value: %s" % entry["@value"])
 

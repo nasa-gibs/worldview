@@ -99,7 +99,7 @@ wv.data.model = wv.data.model || function(models, config) {
 
     var init = function() {
         models.layers.events.on("change", updateLayers);
-        models.proj.events.on("select", updateProjectionInfo);
+        models.proj.events.on("select", updateProjection);
         models.date.events.on("select", updateDate);
         updateLayers();
         updateProjection();
@@ -238,6 +238,14 @@ wv.data.model = wv.data.model || function(models, config) {
         }
     };
 
+    self.toggleGranule = function(granule) {
+        if ( self.isSelected(granule) ) {
+            self.unselectGranule(granule);
+        } else {
+            self.selectGranule(granule);
+        }
+    };
+
     self.isSelected = function(granule) {
         var selected = false;
         $.each(self.selectedGranules, function(index, selection) {
@@ -283,12 +291,12 @@ wv.data.model = wv.data.model || function(models, config) {
 
     self.save = function(state) {
         if ( self.active ) {
-            state.dataDownload = self.selectedProduct;
+            state.download = self.selectedProduct;
         }
     };
 
     self.load = function(state, errors) {
-        var productId = state.dataDownload;
+        var productId = state.download;
         if ( productId ) {
             var found = _.find(models.layers.active, { product: productId });
             if ( !found ) {

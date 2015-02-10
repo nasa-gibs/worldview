@@ -68,6 +68,8 @@ def remove_layer(wv, layer_id):
 if tolerant:
     warn("Validation enforcement disabled")
 
+start_date = datetime.max
+
 for layer_id in wv["layers"].keys():
     layer = wv["layers"][layer_id]
     if layer_id not in wv["layerOrder"]:
@@ -131,6 +133,12 @@ for layer_id in wv["layers"].keys():
     else:
         if "endDate" in layer:
             del layer["endDate"]
+    if "startDate" in layer:
+        d = datetime.strptime(layer["startDate"], "%Y-%m-%d")
+        start_date = min(start_date, d)
+
+if start_date != datetime.max:
+    wv["startDate"] = start_date.strftime("%Y-%m-%d")
 
 for layer_id in wv["layerOrder"]:
     if layer_id not in wv["layers"]:
@@ -143,6 +151,7 @@ for startingLayer in wv["defaults"]["startingLayers"]:
     else:
         startingLayers += [startingLayer]
 wv["defaults"]["startingLayers"] = startingLayers
+wv["buildDate"] = datetime.now().isoformat(" ")
 
 print "%s: %d error(s), %d warning(s), %d removed" % (prog, error_count,
         warning_count, remove_count)

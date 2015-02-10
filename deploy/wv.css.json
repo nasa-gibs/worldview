@@ -1,16 +1,16 @@
 [
     "web/css/wv.main.css",
+    "web/css/wv.map.css",
     "web/css/wv.link.css",
     "web/css/wv.image.css",
     "web/css/wv.palettes.css",
     "web/css/wv.debug.css",
-    "web/css/map-ol2.css",
     "web/css/wv.date.css",
     "web/css/menuPicker.css",
     "web/css/accordionPicker.css",
     "web/css/bank.css",
     "web/css/selector.css",
-    "web/css/splash.css",
+    "web/css/wv.tour.css",
     "web/css/products.css",
     "web/css/projection.css",
     "web/css/indicator.css",
@@ -19,5 +19,6 @@
     "web/css/global.css",
     "web/css/wv.sidebar.css",
     "web/css/wv.layers.options.css",
-    "web/css/new-ui.css"
+    "web/css/new-ui.css",
+    "web/css/wv.mobile.css"
 ]
