@@ -1578,15 +1578,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         $(document)
             .mouseout(animateEnd)
             .keydown(function(event) {
-                /*if ( event.target.nodeName === "INPUT" ) {
-                    if((event.keyCode || event.which) === 9){
-
-                        $('.button-input-group').parent().css('border-color','');
-                        updateTime();
-
-                    }
-                    else return;
-                }*/
                 switch ( event.keyCode ) {
                     case wv.util.key.LEFT:
                         animateReverse("day");
@@ -1596,14 +1587,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                         animateForward("day");
                         event.preventDefault();
                         break;
-                    case wv.util.key.UP:
-                        animateForward("month");
-                        event.preventDefault();
-                        break;
-                    case wv.util.key.DOWN:
-                        animateReverse("month");
-                        event.preventDefault();
-                        break;
+                    
                 }
             })
             .keyup(function(event) {
@@ -1613,8 +1597,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                 switch ( event.keyCode ) {
                     case wv.util.key.LEFT:
                     case wv.util.key.RIGHT:
-                    case wv.util.key.UP:
-                    case wv.util.key.DOWN:
                         animateEnd();
                         event.preventDefault();
                         break;
@@ -1622,6 +1604,37 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             });
         //bind click action to interval radio buttons
         var $buttons = $('.button-input-group');
+        $buttons.unbind();
+
+        //FIXME: Quick fix for fixing the propagation of events with arrow keys and input field
+        $buttons.keydown(function(event){
+            var interval = $(this).attr('id').split('-')[0];
+            event.preventDefault();
+            event.stopPropagation();
+            switch( event.keyCode ) {
+            case wv.util.key.UP:
+                models.date.add(interval, 1);
+                event.preventDefault();
+                break;
+
+            case wv.util.key.DOWN:
+                models.date.add(interval, -1);
+                event.preventDefault();
+                break;
+            }
+            $(this).select().focus();
+        })
+            .keyup(function(event) {
+                if ( event.target.nodeName === "INPUT" ) {
+                    return;
+                }
+                switch ( event.keyCode ) {
+                    case wv.util.key.UP:
+                    case wv.util.key.DOWN:
+                        event.preventDefault();
+                        break;
+                }
+            });
         $buttons.on('focus',function(e){
             e.preventDefault();
             $buttons.siblings('.date-arrows').css('visibility','');
