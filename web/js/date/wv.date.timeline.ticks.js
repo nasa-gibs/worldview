@@ -54,6 +54,39 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
             self.normal.lastDate = all.data()[all.data().length-1];
             self.normal.lastElem = all[0][all.length-1];
         },
+        update: function(){
+            var ticks = self.normal.all;
+
+            ticks.each(function(){
+                var current = d3.select(this);
+                var currentData = current.data()[0];
+                var nextData = tl.zoom.current.ticks.normal.next(currentData);
+                //var normalTickLine = normalTick.select('line'); What's this for?
+
+                //FIXME: Calculate actual width of tick line
+                nWidth = tl.x(nextData) - tl.x(currentData) + 1; 
+
+                if(($(this).find('line').attr('y1') !== '-2')){
+                    current.select('line')
+                        .attr("y1","-2");
+                }
+
+                if(($(this).find('text').length)){
+                    current.select("text").remove();
+                }
+
+                if(!$(this).find('rect').length){
+                    self.normal.insert.rect(current, nWidth);
+                }
+                else{
+                    current.select('rect.normaltick-background')
+                        .attr("width",nWidth);
+                }
+            });
+
+            self.normal.set();
+            self.normal.bind();
+        },
         init: function(){
             var ticks = self.normal.all;
             ticks.selectAll('line')
@@ -67,15 +100,21 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
                 var nextData = tl.zoom.current.ticks.normal.next(currentData);
                 //var normalTickLine = normalTick.select('line'); What's this for?
 
-                nWidth = tl.x(nextData) - tl.x(currentData) + 1; //FIXME: Calculate actual width of tick line
+                //FIXME: Calculate actual width of tick line
+                nWidth = tl.x(nextData) - tl.x(currentData) + 1; 
 
+                self.normal.insert.rect(current, nWidth);
+            });
+        },
+        insert: {
+            rect: function(current, nWidth){
                 current.append("svg:rect")
                     .attr("class","normaltick-background")
                     .attr("height",tl.height-1)
                     .attr("y",-tl.height)
                     .attr("x",-0.5)
                     .attr("width",nWidth);
-            });
+            }
         },
         set: function(){
             self.normal.background = self.all.selectAll('rect.normaltick-background');
@@ -101,19 +140,66 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
                 });
         },
         hover: function(d){
-            var label = tl.zoom.current.ticks.normal.label(d);
+            var label = tl.zoom.current.ticks.normal.hover(d);
             self.label.show.call(this,label);
         },
         click: function(d){
             var date = tl.zoom.current.ticks.normal.clickDate(d);
             model.select(date);
+            console.log(model.selected);
         },
         
     };
     self.boundary = {
         update: function(){
-            
-        },
+            var ticks = self.boundary.all;
+
+            ticks.each(function(){
+                //This is a repeat, maybe fix?
+                var current = d3.select(this);
+                var currentData = current.data()[0];
+                var nextData = tl.zoom.current.ticks.boundary.next(currentData);
+                var nextNormalData = tl.zoom.current.ticks.normal.next(currentData);
+                var bWidth = tl.x(nextData) - tl.x(currentData);
+                var nWidth = tl.x(nextNormalData) - tl.x(currentData) + 1;
+                var subLabel = tl.zoom.current.ticks.boundary.subLabel(currentData);
+                //end repeat
+                
+                if (($(this).find('line').attr('y1') !== '20')){
+                    current.select('line')
+                        .attr("y1","20")
+                        .attr("y2","-50");
+                }
+                if(!$(this).find('text').hasClass('tick-label')){
+                    current.select('text')
+                        .attr('class','tick-label')
+                        .attr('x',7)
+                        .attr('style','text-anchor:left;');
+                    if(subLabel){
+                        current.select('text').append("tspan")
+                            .text(" " + subLabel)
+                            .attr("class","sub-label");
+                    }
+                }
+                if(!$(this).find('circle').length)
+                    current.insert("svg:circle","text").attr("r","6");
+                
+                if(!$(this).find('rect').length){
+                    self.boundary.insert.rect(current, bWidth, nWidth);
+                }
+                else{
+                    current.select('rect.boundarytick-background')
+                        .attr("width", bWidth);
+                    current.select('rect.boundarytick-foreground')
+                        .attr("width", bWidth);
+                    current.select('rect.normaltick-background')
+                        .attr("width", bWidth);
+                }
+            });
+
+            self.boundary.set();
+            self.boundary.bind();
+        },         
         init: function(){
             
             var ticks = self.boundary.all;
@@ -129,22 +215,35 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
                 var currentData = current.data()[0];
                 var nextData = tl.zoom.current.ticks.boundary.next(currentData);
                 var nextNormalData = tl.zoom.current.ticks.normal.next(currentData);
-                var bWidth,nWidth;
-                var subLabel;
+                var bWidth = tl.x(nextData) - tl.x(currentData);
+                var nWidth = tl.x(nextNormalData) - tl.x(currentData) + 1;
+                var subLabel = tl.zoom.current.ticks.boundary.subLabel(currentData);
 
-                bWidth = tl.x(nextData) - tl.x(currentData);
+                self.boundary.insert.rect(current, bWidth, nWidth);
 
-                nWidth = tl.x(nextNormalData) - tl.x(currentData) + 1;
+                //TODO: Sublabel
+                if(subLabel){
+                    current.select('text').append("tspan")
+                        .text(" " + subLabel)
+                        .attr("class","sub-label");
+                }
+            });
 
-                //subLabel = getSubLabel(boundaryTickData);
+            ticks.selectAll('text')
+                .attr('class','tick-label')
+                .attr('x',7)
+                .attr('style','text-anchor:left;');
 
+        },
+        insert: {
+            rect: function(current, bWidth, nWidth){
                 current.insert("svg:rect", "text")
                     .attr("x","0")
                     .attr("y","0")
                     .attr("width",bWidth)
                     .attr("height",tl.height)
                     .attr("class","boundarytick-background");
-                
+                    
                 current.append("svg:rect")
                     .attr("x","0")
                     .attr("y","0")
@@ -158,20 +257,7 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
                     .attr("y",-tl.height)
                     .attr("x",-0.5)
                     .attr("width",nWidth);
-                /*
-                  if(subLabel){
-                  boundaryTick.select('text').append("tspan")
-                  .text(" " + subLabel)
-                  .attr("class","sub-label");
-                  }*/
-                
-            });
-
-            ticks.selectAll('text')
-                .attr('class','tick-label')
-                .attr('x',7)
-                .attr('style','text-anchor:left;');
-
+            }
         },
         set: function(){
             self.boundary.background = self.boundary.all
@@ -191,17 +277,19 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
                     clearTimeout(cancelClick);
                     if(clicked){
                         d = d3.select(this.parentNode).data()[0];
-                        clickBoundaryTick.call(this,d);
+                        self.boundary.click.call(this,d);
                     }
                     clicked = true;
                 });
         },
         hover: function(d){
-            var label = tl.zoom.current.ticks.boundary.label(d);
+            var label = tl.zoom.current.ticks.boundary.hover(d);
+            console.log(d);
             self.label.show.call(this,label);
         },
         click: function(d){
-            
+            var date = tl.zoom.current.ticks.boundary.clickDate(d);
+            model.select(date);
         }
         
     };
@@ -219,12 +307,10 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
         var tick = tl.axis.insert('g', elem)
             .data([data])
             .attr('class','tick')
-            .attr('transform','translate(' + x(data) + ',0)')
+            .attr('transform','translate(' + tl.x(data) + ',0)')
             .classed('label-only',true); //if add function is for label only
 
-        var text = data.getUTCFullYear() +
-            ' ' + models.date.monthAbbr[data.getUTCMonth()] +
-            ' ' + data.getUTCDate();
+        var text = tl.zoom.current.ticks.boundary.label(data);
 
         tick.append('line')
             .attr('y2',-tl.height);

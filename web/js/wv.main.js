@@ -157,6 +157,7 @@ $(function() {
             ui.timeline.data = wv.date.timeline.data(models, config, ui);
             ui.timeline.zoom = wv.date.timeline.zoom(models, config, ui);
             ui.timeline.ticks = wv.date.timeline.ticks(models, config, ui);
+            ui.timeline.pan = wv.date.timeline.pan(models, config, ui);
             ui.timeline.zoom.lvl = wv.date.timeline.zoom.lvl(models, config, ui);
             ui.dateLabel = wv.date.label(models);
             ui.dateWheels = wv.date.wheels(models, config);

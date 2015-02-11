@@ -23,6 +23,7 @@ wv.date.timeline = wv.date.timeline || {};
 wv.date.timeline.zoom = wv.date.timeline.zoom || function(models, config, ui) {
 
     var tl = ui.timeline;
+    var model = models.date;
 
     var self = {};
 
@@ -36,6 +37,22 @@ wv.date.timeline.zoom = wv.date.timeline.zoom || function(models, config, ui) {
                 
             },
         },
+    };
+
+    self.change = function(amount, event) {
+        console.log('changing zoom!');
+        //TODO: Below
+        /*
+        zoomLvl += -amount;
+        if ( zoomLvl < 0 ) {
+            zoomLvl = 0;
+        }
+        if ( zoomLvl > 2 ) {
+            zoomLvl = 2;
+        }
+
+        setZoom.call(this, zoomLvl, event);
+        */
     };
 
     self.drawTicks = function(count, max, aEnd, w, i, s, f){
@@ -72,12 +89,20 @@ wv.date.timeline.zoom = wv.date.timeline.zoom || function(models, config, ui) {
         tl.axisZoom
             .x(tl.x);
 
+        wv.ui.mouse.wheel(tl.axisZoom,ui).change(self.change);
+
         tl.svg.call(tl.axisZoom);
+
+        tl.pan.toSelection();
+        //console.log(tl.x.invert(tl.axisZoom.translate()[0]));
+        //tl.axisZoom.translate([-tl.x(model.selected),0]);
 
         //??need to remove first?
         tl.boundary.select(".x.axis")
             .call(tl.xAxis);
-
+        
+        console.log(tl.x.invert(tl.axisZoom.translate()[0]));
+        
     };
 
     var init = function(){
@@ -168,33 +193,54 @@ wv.date.timeline.zoom.lvl = wv.date.timeline.zoom.lvl || function(models, config
             });
         };
 
+        //Calculated next boundary tick by date
         tl.zoom.current.ticks.boundary.next = function(current){
             var next = new Date(current);
             return new Date(next.setUTCMonth(next.getUTCMonth()+1));
         };
 
+        //Calculated next normal tick by date
         tl.zoom.current.ticks.normal.next = function(current){
             var next = new Date(current);
             return new Date(next.setUTCDate(next.getUTCDate()+1));
         };
 
-        tl.zoom.current.ticks.normal.label = function(d){
-            //No modifications at this zoom level
+        //Value for hovered normal label
+        tl.zoom.current.ticks.normal.hover = function(d){
+            //No modifications to date obj at this zoom level
             return d;
         };
 
+        //Value for clicked normal tick
         tl.zoom.current.ticks.normal.clickDate = function(d){
             return new Date(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate());
         };
-        tl.zoom.current.ticks.boundary.label = function(d){
+
+        //Value for hovered boundary tick
+        tl.zoom.current.ticks.boundary.hover = function(d){
             return new Date(d.getUTCFullYear(),d.getUTCMonth(),model.selected.getUTCDate());
         };
 
-        self.update();
+        tl.zoom.current.ticks.boundary.label = function(d){
+            return model.monthAbbr[d.getUTCMonth()];
+        };
+
+        //Displayed default sub-label (if any)
+        tl.zoom.current.ticks.boundary.subLabel = function(d){
+            return d.getUTCFullYear();
+        };
+
+        //Value for clicked boundary tick
+        tl.zoom.current.ticks.boundary.clickDate = function(d){
+            return new Date(d.getUTCFullYear(),d.getUTCMonth(),model.selected.getUTCDate());
+        };
+
+        self.configure();
+        initTicks();
 
     };
 
-    self.update = function(){
+    self.configure = function(){
         var first, last, proto, end;
         tl.ticks.setAll();
         
@@ -217,13 +263,14 @@ wv.date.timeline.zoom.lvl = wv.date.timeline.zoom.lvl || function(models, config
         //FIXME: Section below is terrible {
         //For determining needed boundary ticks
         if($(tl.ticks.normal.firstElem).is(':nth-child(2)')){
+            console.log(true);
             first = tl.ticks.normal.firstDate;
             proto = new Date(Date.UTC(first.getUTCFullYear(),
                                           first.getUTCMonth(),
                                           1));
             tl.ticks.add(proto, 'g.tick');
         }
-
+        
         //FIXME: Passing from d3 to jQuery to d3 in order to check if its the last tick elem.  WAT.
         if(d3.select($(tl.ticks.normal.lastElem)
                      .next()[0]).classed('domain')){
@@ -235,17 +282,22 @@ wv.date.timeline.zoom.lvl = wv.date.timeline.zoom.lvl || function(models, config
         }
         // } End terrible
 
+        tl.ticks.setAll();
+
         //update boundary ticks
         tl.zoom.current.ticks.boundary.all();
+
         tl.ticks.boundary.all.classed('tick-labeled',true);
 
+    };
+
+    var initTicks = function(){
         tl.ticks.boundary.init();
         tl.ticks.normal.init();
         tl.ticks.normal.set(); //could probably combine set and bind
         tl.ticks.normal.bind();
         tl.ticks.boundary.set();
         tl.ticks.boundary.bind();
-
     };
 
     var init = function(){

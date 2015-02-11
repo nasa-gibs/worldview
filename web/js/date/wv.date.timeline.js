@@ -23,6 +23,8 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     var self = {};
     var model = models.date;
 
+    self.enabled = false;
+
     self.margin = {
         top: 0,
         right: 30,
@@ -44,19 +46,74 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     self.isCropped = true;
 
     self.toggle = function(){
-        
+        var tl = $('#timeline-footer');
+        var tlz = $('#timeline-zoom');
+        var tlg = self.boundary;
+        var gp = d3.select('#guitarpick');
+        if(tl.is(':hidden')){
+            var afterShow = function() {
+                tlz.show();
+                $('#timeline').css('right','10px');
+                tlg.attr('style','clip-path:url("#timeline-boundary")');
+                gp.attr("style","display:block;clip-path:url(#guitarpick-boundary);");
+            };
+            if ( now ) {
+                tl.show();
+                afterShow();
+            } else {
+                tl.show('slow', afterShow);
+            }
+        }
+        else{
+            tlg.attr('style','clip-path:none');
+            gp.attr("style","display:none;clip-path:none");
+            tlz.hide();
+            tl.hide('slow');
+            $('#timeline').css('right','auto');
+        }
     };
 
     self.expand = function(){
-        
+        now = now || false;
+        var tl = $('#timeline-footer, #timeline-zoom');
+        if (tl.is(":hidden")){
+            self.toggle(now);
+        }
     };
 
     self.expandNow = function(){
-        
+        self.expand(true);
     };
 
     self.collapse = function(){
-        
+        var tl = $('#timeline-footer, #timeline-zoom');
+        if (!tl.is(":hidden")){
+            self.toggle();
+        }
+    };
+
+    var resize = function(){
+        var small = wv.util.browser.small || wv.util.browser.constrained;
+        if ( self.enabled && small ) {
+            self.enabled = false;
+            $("#timeline").hide();
+        } else if ( !self.enabled && !small ) {
+            self.enabled = true;
+            $("#timeline").show();
+        }
+        //TODO: Below
+        /*
+        if ( self.enabled ) {
+            getTimelineWidth();
+            d3.select('#timeline-footer svg')
+                .attr('width', width);// + margin.left + margin.right);
+            d3.select('#timeline-boundary rect').attr('width',width);//+margin.left+margin.right);
+            d3.select('#guitarpick-boundary rect').attr('width',width+margin.left+margin.right);//+margin.left+margin.right);
+            timeline.select(".x.axis line:first-child").attr("x2",width);//+margin.left+margin.right);
+
+            setZoom(zoomLvl);
+        }
+        */
     };
 
     var drawContainers = function(){
@@ -111,6 +168,8 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .attr("id","guitarpick")
             .attr("style","clip-path:url(#guitarpick-boundary);");
 
+        self.guitarPick.append("svg:path")
+            .attr("d", "M 7.3151,0.7426 C 3.5507,0.7426 0.5,3.7926 0.5,7.5553 l 0,21.2724 14.6038,15.7112 14.6039,15.7111 14.6038,-15.7111 14.6037,-15.7112 0,-21.2724 c 0,-3.7627 -3.051,-6.8127 -6.8151,-6.8127 l -44.785,0 z");
         self.guitarPick.append("svg:rect")
             .attr("width","4")
             .attr("height","20")
@@ -132,6 +191,9 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         
         drawContainers();
 
+        $('#timeline-footer').css('margin-left',self.margin.left-1 + 'px');
+        $('#timeline-footer').css('margin-right',self.margin.right-1 + 'px');
+
         self.x = d3.time.scale.utc();
 
         self.xAxis = d3.svg.axis()
@@ -142,6 +204,8 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         self.axisZoom = d3.behavior.zoom()
             .scale(1)
             .scaleExtent([1,1]);
+
+        resize();
     };
 
     init();
