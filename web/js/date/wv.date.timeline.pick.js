@@ -29,7 +29,6 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
     var self = {};
 
     var width = 60;
-    var offset = tl.x(model.selected) - width/2;
 
     var mousedown = false;
     var nextChange, prevChange;
@@ -50,7 +49,7 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
                      ( nextChange <= tl.data.end() ) &&
                      ( nextChange > tl.data.start() ) )
             {
-                offset = tl.x(nextChange) - width / 2;
+                self.offset = tl.x(nextChange) - width / 2;
                 tipDate = nextChange;
                 change.call(this);
                 updateChanges(tempPickTipDate);
@@ -59,7 +58,7 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
                 tipDate = new Date( Date.UTC( tl.data.end().getUTCFullYear(),
                                               model.selected.getUTCMonth(),
                                               model.selected.getUTCDate() ) );
-                offset = tl.x(pickTipDate) - width / 2;
+                self.offset = tl.x(pickTipDate) - width / 2;
                 change.call(this);
                 updateChanges(tempPickTipDate);
             }
@@ -77,7 +76,7 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
                      ( prevChange >= tl.data.start() ) &&
                      ( prevChange < tl.data.end() ) )
             {
-                offset = tl.x(prevChange) - width / 2;
+                self.offset = tl.x(prevChange) - width / 2;
                 tipDate = prevChange;
                 change.call(this);
                 updateChanges(tempPickTipDate);
@@ -108,12 +107,12 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
         var d;
         var newDate = tipDate;
         var tick, tickBg;
-        
-        d3.select(this)
-            .attr("transform", 'translate('+ offset +','+ 0 +')');
 
         tl.guitarPick
-            .data([{x: offset, y:0}])
+            .attr("transform", 'translate('+ self.offset +','+ 0 +')');
+
+        tl.guitarPick
+            .data([{x: self.offset, y:0}])
             .call(drag);
 
         model.select(newDate);
@@ -127,7 +126,6 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
 
         tl.ticks.label.remove();
         tl.ticks.normal.hover.call(tickBg,d);
-
     };
 
     var updateChanges = function(d){
@@ -135,15 +133,73 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
         nextChange = tl.zoom.current.pick.nextChange(d);
     };
 
+    // Pan the timeline if the pick is dragged off the side
+    // or if the date input goes outside of the shown range
+    self.shiftView = function(){
+        var zt = tl.pan.xPosition;
+        if( tl.x( model.selected ) >= ( tl.width - 15 ) ) {
+            if ( mousedown ) {
+                tl.axisZoom.translate( [zt - tl.x( model.selected ) +
+                                        ( tl.width - 15), 0] );
+            }
+            else {
+                tl.axisZoom.translate( [zt - tl.x( model.selected ) +
+                                        ( tl.width / 8 ) * 7, 0] );
+            }
+            tl.pan.xPosition = tl.axisZoom.translate()[0];
+            tl.pan.axis();
+        }
+        else if( tl.x( model.selected ) < 15 ) {
+            if ( mousedown ){
+                tl.axisZoom.translate( [zt - tl.x( model.selected ) + 15, 0] );
+            }
+            else{
+                tl.axisZoom.translate( [zt - tl.x( model.selected ) +
+                                        tl.width / 8, 0] );
+            }
+
+            tl.pan.xPosition = tl.axisZoom.translate()[0];
+            tl.pan.axis();
+        }
+        $('#guitarpick').show();
+    };
+
+    // Hide/show pick if it goes off/on the timeline
+    self.checkLocation = function(){
+        if ( ( self.offset - width / 2 ) >=
+             ( tl.width - tl.margin.left - tl.margin.right ) ||
+             ( self.offset <= -30 ) )
+        {
+            $('#guitarpick').hide();
+        }
+        else{
+            $('#guitarpick').show();
+        }
+    };
+
+    // Simple update the position of the pick
+    self.update = function(){
+
+        if ( mousedown === false ) {
+            self.offset = tl.x(model.selected) - width/2;
+        }
+
+        tl.guitarPick
+            .data( [{ x: self.offset, y: 0 }] )
+            .attr("transform","translate(" + self.offset + ",0)")
+            .call(drag);
+
+        prevChange = undefined;
+        nextChange = undefined;
+    };
+
     var init = function(){
+
         //Draw the pick
         tl.guitarPick = tl.svg
             .append("svg:g")
-            .data( [{ x: offset, y: 0 }] )
             .attr("id","guitarpick")
             .attr("style","clip-path:url(#guitarpick-boundary);")
-            .attr("transform","translate(" + offset + ",0)")
-            .call(drag);
 
         tl.guitarPick.append("svg:path")
             .attr("d", "M 7.3151,0.7426 C 3.5507,0.7426 0.5,3.7926 0.5,7.5553 l 0,21.2724 14.6038,15.7112 14.6039,15.7111 14.6038,-15.7111 14.6037,-15.7112 0,-21.2724 c 0,-3.7627 -3.051,-6.8127 -6.8151,-6.8127 l -44.785,0 z");
@@ -163,6 +219,14 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
             .attr("x","35")
             .attr("y","11");
 
+        //stop guitarpick if mouseup anywhere on document
+        d3.select(document).on("mouseup",function(){
+            if (mousedown){
+                mousedown = false;
+                tl.guitarPick.classed('pick-clicked',false);
+                tl.ticks.label.remove();
+            }
+        });
     };
 
     init();

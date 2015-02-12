@@ -184,6 +184,13 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .scaleExtent([1,1]);
 
         resize();
+
+        if ( wv.util.browser.localStorage ) {
+            if ( localStorage.getItem("timesliderState") === "collapsed" ) {
+                self.collapseNow();
+            }
+        }
+
     };
 
     init();
