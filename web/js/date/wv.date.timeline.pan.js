@@ -49,6 +49,9 @@ wv.date.timeline.pan = wv.date.timeline.pan || function(models, config, ui) {
 
         tl.ticks.boundary.update();
         tl.ticks.normal.update();
+
+        tl.pick.update();
+        tl.pick.checkLocation();
     };
 
     self.toSelection = function(){
