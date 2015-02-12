@@ -1609,17 +1609,33 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         //FIXME: Quick fix for fixing the propagation of events with arrow keys and input field
         $buttons.keydown(function(event){
             var interval = $(this).attr('id').split('-')[0];
-            event.preventDefault();
+            event.stopPropagation();
+            if( event.keyCode === (wv.util.key.LEFT || wv.util.key.RIGHT) ) {
+                event.preventDefault();
+            }
+            else if ( event.keyCode === (wv.util.key.UP) ) {
+                event.preventDefault();
+                roll(interval, 1);
+            }
+            else if ( event.keyCode === (wv.util.key.DOWN) ) {
+                event.preventDefault();
+                roll(interval, -1);
+            }
+            $(this).select().focus();
+        });
+        /*$buttons.keydown(function(event){
+            var interval = $(this).attr('id').split('-')[0];
+
             event.stopPropagation();
             switch( event.keyCode ) {
             case wv.util.key.UP:
                 models.date.add(interval, 1);
-                event.preventDefault();
+                //event.preventDefault();
                 break;
 
             case wv.util.key.DOWN:
                 models.date.add(interval, -1);
-                event.preventDefault();
+                //event.preventDefault();
                 break;
             }
             $(this).select().focus();
@@ -1634,7 +1650,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
                         event.preventDefault();
                         break;
                 }
-            });
+            });*/
         $buttons.on('focus',function(e){
             e.preventDefault();
             $buttons.siblings('.date-arrows').css('visibility','');
@@ -1880,13 +1896,13 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         $("#day-input-group").val(wv.util.pad(date.getUTCDate(), 2, "0"));
     };
 
-    var roll = function() {
+    var roll = function(dateInterval, amt) {
         if ( timer ) {
             clearTimeout(timer);
             timer = null;
         }
-        var interval = $(this).attr("data-interval");
-        var amount = _.parseInt($(this).attr("data-value"));
+        var interval = $(this).attr("data-interval") || dateInterval;
+        var amount = _.parseInt($(this).attr("data-value")) || amt;
         var date = rollingDate || models.date.selected;
         var min = models.date.minDate();
         var max = models.date.maxDate();
