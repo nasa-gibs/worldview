@@ -75,7 +75,6 @@ wv.ui.mouse.wheel = wv.ui.mouse.wheel || function(element, ui, options) {
     var wheel = function() {
         var evt = d3.event.sourceEvent;
         if((Math.abs(evt.deltaX) <= Math.abs(evt.deltaY)) && timeout===false){
-            console.log('zoom with mousewheel');
             lastEvent = evt;
             delta += evt.deltaY;
             if ( !timer ) {
@@ -87,7 +86,6 @@ wv.ui.mouse.wheel = wv.ui.mouse.wheel || function(element, ui, options) {
         }
         else if ((Math.abs(evt.deltaX) >= Math.abs(evt.deltaY))){
             if( ui.timeline.isCropped ){
-                console.log('pan with trackpad');
                 ui.timeline.pan.axis(d3.event);
                 timeout = true;
                 clearTimeout(timer);
@@ -98,7 +96,6 @@ wv.ui.mouse.wheel = wv.ui.mouse.wheel || function(element, ui, options) {
         }
         else{
             if ( ui.timeline.isCropped ){
-                console.log('pan with mouse');
                 ui.timeline.pan.axis();
             }
         }
