@@ -29,7 +29,7 @@ wv.date.timeline.zoom = wv.date.timeline.zoom || function(models, config, ui) {
 
     self.current = {
         ticks: {
-            //Empty for filling
+            //Placeholders
             boundary: {
                 
             },
@@ -37,10 +37,13 @@ wv.date.timeline.zoom = wv.date.timeline.zoom || function(models, config, ui) {
                 
             },
         },
+        pick: {
+            //Placeholder
+        }
     };
 
     self.change = function(amount, event) {
-        console.log('changing zoom!');
+        //console.log('changing zoom!');
         //TODO: Below
         /*
         zoomLvl += -amount;
@@ -89,19 +92,14 @@ wv.date.timeline.zoom = wv.date.timeline.zoom || function(models, config, ui) {
         tl.axisZoom
             .x(tl.x);
 
-        wv.ui.mouse.wheel(tl.axisZoom,ui).change(self.change);
+        wv.ui.mouse.wheel(tl.axisZoom, ui).change(self.change);
 
         tl.svg.call(tl.axisZoom);
 
         tl.pan.toSelection();
-        //console.log(tl.x.invert(tl.axisZoom.translate()[0]));
-        //tl.axisZoom.translate([-tl.x(model.selected),0]);
 
         //??need to remove first?
-        tl.boundary.select(".x.axis")
-            .call(tl.xAxis);
-        
-        console.log(tl.x.invert(tl.axisZoom.translate()[0]));
+        tl.axis.call(tl.xAxis);
         
     };
 
@@ -122,6 +120,8 @@ wv.date.timeline.zoom = wv.date.timeline.zoom || function(models, config, ui) {
  *
  * @class wv.date.timeline.zoom.lvl
  */
+
+//TODO: Maybe reorganize this somewhere else/in another file
 wv.date.timeline.zoom.lvl = wv.date.timeline.zoom.lvl || function(models, config, ui) {
     var self = {};
     var tl = ui.timeline;
@@ -158,15 +158,22 @@ wv.date.timeline.zoom.lvl = wv.date.timeline.zoom.lvl || function(models, config
     self.level3 = function(){
         var altEnd,
             fNormData,
+            //format of the label
             labelFormat = d3.time.format.utc("%b"),
+            //printed type of tick
             dateInterval = d3.time.day.utc,
+            //step of the ticks
             dateStep = 1,
+            //number of ticks total of data range, in days
             tickCount = (tl.data.end() - tl.data.start())/1000/60/60/24,
             tickCountMax,
+            //width in pixels of each tick
             tickWidth = 11;
 
+        //Max number of ticks able to be shown on this resolution
         tickCountMax = Math.ceil(tl.width/tickWidth);
 
+        //end tick date if tickCount is less than tickCountMax
         altEnd = new Date(tl.data.start().getUTCFullYear(),
                           tl.data.start().getUTCMonth(),
                           tl.data.start().getUTCDate() + tickCountMax);
@@ -178,15 +185,16 @@ wv.date.timeline.zoom.lvl = wv.date.timeline.zoom.lvl || function(models, config
                   dateInterval,
                   dateStep,
                   labelFormat);
-        
+
+        //Filters ticks for nonboundaries that have the following attribute
         tl.zoom.current.ticks.normal.all = function(){
             tl.ticks.normal.all = tl.ticks.all.filter(function(d){
                 return d.getUTCDate() !== 1;
             });
             tl.ticks.normal.setEnds();
-            
         };
 
+        //Filters ticks for boundaries that have the following attribute
         tl.zoom.current.ticks.boundary.all = function(){
             tl.ticks.boundary.all = tl.ticks.all.filter(function(d){
                 return d.getUTCDate() === 1;
@@ -221,6 +229,7 @@ wv.date.timeline.zoom.lvl = wv.date.timeline.zoom.lvl || function(models, config
             return new Date(d.getUTCFullYear(),d.getUTCMonth(),model.selected.getUTCDate());
         };
 
+        //Displayed default label
         tl.zoom.current.ticks.boundary.label = function(d){
             return model.monthAbbr[d.getUTCMonth()];
         };
@@ -233,6 +242,25 @@ wv.date.timeline.zoom.lvl = wv.date.timeline.zoom.lvl || function(models, config
         //Value for clicked boundary tick
         tl.zoom.current.ticks.boundary.clickDate = function(d){
             return new Date(d.getUTCFullYear(),d.getUTCMonth(),model.selected.getUTCDate());
+        };
+
+        //When the date updates while dragging the pick forward
+        tl.zoom.current.pick.nextChange = function(d){
+            return new Date(Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate()+1));
+        };
+
+        //When the date updates while dragging the pick backward
+        tl.zoom.current.pick.prevChange = function(d){
+            return new Date(Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate()));
+        };
+
+        tl.zoom.current.pick.hoverTick = function(newDate){
+            tl.zoom.current.pick.hoveredTick = d3.selectAll('.x.axis>g.tick')
+                .filter(function(d){
+                    return (d.getUTCFullYear() === newDate.getUTCFullYear()) &&
+                        (d.getUTCMonth() === newDate.getUTCMonth() &&
+                         (d.getUTCDate() === newDate.getUTCDate()));
+                });
         };
 
         self.configure();
@@ -263,7 +291,6 @@ wv.date.timeline.zoom.lvl = wv.date.timeline.zoom.lvl || function(models, config
         //FIXME: Section below is terrible {
         //For determining needed boundary ticks
         if($(tl.ticks.normal.firstElem).is(':nth-child(2)')){
-            console.log(true);
             first = tl.ticks.normal.firstDate;
             proto = new Date(Date.UTC(first.getUTCFullYear(),
                                           first.getUTCMonth(),

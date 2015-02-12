@@ -80,7 +80,7 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
                 }
                 else{
                     current.select('rect.normaltick-background')
-                        .attr("width",nWidth);
+                        .attr("width", nWidth);
                 }
             });
 
@@ -146,7 +146,6 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
         click: function(d){
             var date = tl.zoom.current.ticks.normal.clickDate(d);
             model.select(date);
-            console.log(model.selected);
         },
         
     };
@@ -193,13 +192,13 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
                     current.select('rect.boundarytick-foreground')
                         .attr("width", bWidth);
                     current.select('rect.normaltick-background')
-                        .attr("width", bWidth);
+                        .attr("width", nWidth);
                 }
             });
 
             self.boundary.set();
             self.boundary.bind();
-        },         
+        },
         init: function(){
             
             var ticks = self.boundary.all;
@@ -284,7 +283,6 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
         },
         hover: function(d){
             var label = tl.zoom.current.ticks.boundary.hover(d);
-            console.log(d);
             self.label.show.call(this,label);
         },
         click: function(d){

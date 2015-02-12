@@ -25,22 +25,23 @@ wv.date.timeline.pan = wv.date.timeline.pan || function(models, config, ui) {
 
     var tl = ui.timeline;
     var model = models.date;
-    var xPosition = tl.axisZoom.translate()[0];
     
     var self = {};
 
+    self.xPosition = tl.axisZoom.translate()[0];
+
     self.axis = function(event){
-        console.log('axis');
+
         if(event){
             var evt = event.sourceEvent || event;
             var delX = evt.deltaX;
             if((evt.type === "wheel") && ((evt.deltaX < 0) || (evt.deltaX > 0))){
-                tl.axisZoom.translate([xPosition-delX,0]);
-                xPosition = tl.axisZoom.translate()[0];
+                tl.axisZoom.translate([self.xPosition-delX,0]);
+                self.xPosition = tl.axisZoom.translate()[0];
             }
         }
         else{
-            xPosition = tl.axisZoom.translate()[0];
+            self.xPosition = tl.axisZoom.translate()[0];
         }
         tl.axis.call(tl.xAxis);
 
@@ -51,15 +52,15 @@ wv.date.timeline.pan = wv.date.timeline.pan || function(models, config, ui) {
     };
 
     self.toSelection = function(){
-        console.log('panning');
-        console.log(tl.axisZoom.translate());
-        //tl.axisZoom.translate([-2000,0]);
+
         tl.axisZoom.translate([-tl.x(model.selected) +
                                (tl.width -
                                 tl.margin.left -
                                 tl.margin.right) /
                                2,0]);
-        console.log(tl.axisZoom.translate()[0]);
+
+        self.xPosition = tl.axisZoom.translate()[0];
+
     };
 
     var init = function(){

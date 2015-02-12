@@ -163,28 +163,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .attr("class", "y axis")
             .attr("transform", "translate(0,0)");
 
-        self.guitarPick = d3.select("#timeline-footer svg")
-            .append("svg:g")
-            .attr("id","guitarpick")
-            .attr("style","clip-path:url(#guitarpick-boundary);");
-
-        self.guitarPick.append("svg:path")
-            .attr("d", "M 7.3151,0.7426 C 3.5507,0.7426 0.5,3.7926 0.5,7.5553 l 0,21.2724 14.6038,15.7112 14.6039,15.7111 14.6038,-15.7111 14.6037,-15.7112 0,-21.2724 c 0,-3.7627 -3.051,-6.8127 -6.8151,-6.8127 l -44.785,0 z");
-        self.guitarPick.append("svg:rect")
-            .attr("width","4")
-            .attr("height","20")
-            .attr("x","21")
-            .attr("y","11");
-        self.guitarPick.append("svg:rect")
-            .attr("width","4")
-            .attr("height","20")
-            .attr("x","28")
-            .attr("y","11");
-        self.guitarPick.append("svg:rect")
-            .attr("width","4")
-            .attr("height","20")
-            .attr("x","35")
-            .attr("y","11");
     };
 
     var init = function(){
