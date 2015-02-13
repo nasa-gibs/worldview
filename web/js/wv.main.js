@@ -159,7 +159,7 @@ $(function() {
             ui.timeline.ticks = wv.date.timeline.ticks(models, config, ui);
             ui.timeline.pick = wv.date.timeline.pick(models, config, ui);
             ui.timeline.pan = wv.date.timeline.pan(models, config, ui);
-            ui.timeline.zoom.lvl = wv.date.timeline.zoom.lvl(models, config, ui);
+            ui.timeline.configure = wv.date.timeline.zoom.lvl(models, config, ui);
             ui.timeline.input = wv.date.timeline.input(models, config, ui);
             ui.dateLabel = wv.date.label(models);
             ui.dateWheels = wv.date.wheels(models, config);

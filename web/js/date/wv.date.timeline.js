@@ -45,7 +45,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
     self.isCropped = true;
 
-    self.toggle = function(){
+    self.toggle = function(now){
         var tl = $('#timeline-footer');
         var tlz = $('#timeline-zoom');
         var tlg = self.boundary;
@@ -73,7 +73,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         }
     };
 
-    self.expand = function(){
+    self.expand = function(now){
         now = now || false;
         var tl = $('#timeline-footer, #timeline-zoom');
         if (tl.is(":hidden")){
@@ -85,11 +85,15 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         self.expand(true);
     };
 
-    self.collapse = function(){
+    self.collapse = function(now){
         var tl = $('#timeline-footer, #timeline-zoom');
         if (!tl.is(":hidden")){
-            self.toggle();
+            self.toggle(now);
         }
+    };
+
+    self.collapseNow = function() {
+        self.collapse(true);
     };
 
     var resize = function(){
@@ -101,19 +105,25 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             self.enabled = true;
             $("#timeline").show();
         }
-        //TODO: Below
-        /*
-        if ( self.enabled ) {
-            getTimelineWidth();
-            d3.select('#timeline-footer svg')
-                .attr('width', width);// + margin.left + margin.right);
-            d3.select('#timeline-boundary rect').attr('width',width);//+margin.left+margin.right);
-            d3.select('#guitarpick-boundary rect').attr('width',width+margin.left+margin.right);//+margin.left+margin.right);
-            timeline.select(".x.axis line:first-child").attr("x2",width);//+margin.left+margin.right);
 
-            setZoom(zoomLvl);
+        if ( self.enabled ) {
+            self.getWidth();
+
+            self.svg.attr('width', self.width);
+
+            d3.select('#timeline-boundary rect').attr( 'width', self.width);
+
+            d3.select('#guitarpick-boundary rect')
+                .attr('width', self.width
+                      + self.margin.left
+                      + self.margin.right );
+
+            self.axis.select("line:first-child")
+                .attr("x2", self.width);
+
+            //tl.zoom.refresh();
         }
-        */
+        
     };
 
     var drawContainers = function(){
@@ -184,12 +194,15 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .scaleExtent([1,1]);
 
         resize();
+        $(window).resize(resize);
 
         if ( wv.util.browser.localStorage ) {
             if ( localStorage.getItem("timesliderState") === "collapsed" ) {
                 self.collapseNow();
             }
         }
+
+        $('#timeline-hide').click(function() { self.toggle(); });
 
     };
 

@@ -373,8 +373,59 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
         }
     };
 
-    var init = function(){
+    self.check = function(){
+        var first, last, proto, end;
+        tl.ticks.setAll();
+        
+        //Checks to see if all of the ticks fit onto the timeline space
+        //and if so check to see that first and last major ticks are printed
+        if(!tl.isCropped){
+            first = tl.ticks.firstDate;
+            last = tl.ticks.lastDate;
+            proto = new Date(Date.UTC(first.getUTCFullYear(),
+                                          first.getUTCMonth(),
+                                          first.getUTCDate()-1));
+            end = new Date(Date.UTC(last.getUTCFullYear(),
+                                        last.getUTCMonth(),
+                                        last.getUTCDate()+1));
+            tl.ticks.compare(proto, end);
+        }
+        //set normal ticks
+        tl.zoom.current.ticks.normal.all();
 
+        //FIXME: Section below is terrible {
+        //For determining needed boundary ticks
+        if($(tl.ticks.normal.firstElem).is(':nth-child(2)')){
+            first = tl.ticks.normal.firstDate;
+            proto = new Date(Date.UTC(first.getUTCFullYear(),
+                                          first.getUTCMonth(),
+                                          1));
+            tl.ticks.add(proto, 'g.tick');
+        }
+        
+        //FIXME: Passing from d3 to jQuery to d3 in order to check if its the last tick elem.  WAT.
+        if(d3.select($(tl.ticks.normal.lastElem)
+                     .next()[0]).classed('domain')){
+            last = tl.ticks.normal.lastDate;
+            end = new Date(Date.UTC(last.getUTCFullYear()+1,
+                                        last.getUTCMonth()+1,
+                                        1));
+            tl.ticks.add(end, 'path.domain');
+        }
+        // } End terrible
+
+        tl.ticks.setAll();
+
+        //update boundary ticks
+        tl.zoom.current.ticks.boundary.all();
+
+        tl.ticks.boundary.all.classed('tick-labeled',true);
+
+    };
+
+
+    var init = function(){
+        
     };
 
     init();
