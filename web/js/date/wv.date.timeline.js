@@ -114,9 +114,9 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             d3.select('#timeline-boundary rect').attr( 'width', self.width);
 
             d3.select('#guitarpick-boundary rect')
-                .attr('width', self.width
-                      + self.margin.left
-                      + self.margin.right );
+                .attr('width', self.width +
+                      self.margin.left +
+                      self.margin.right );
 
             self.axis.select("line:first-child")
                 .attr("x2", self.width);
