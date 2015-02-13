@@ -45,7 +45,7 @@ wv.date.timeline.pan = wv.date.timeline.pan || function(models, config, ui) {
         }
         tl.axis.call(tl.xAxis);
 
-        tl.zoom.lvl.configure();
+        tl.ticks.check();
 
         tl.ticks.boundary.update();
         tl.ticks.normal.update();
