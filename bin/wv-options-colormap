@@ -19,21 +19,26 @@ import xmltodict
 
 prog = os.path.basename(__file__)
 base_dir = os.path.join(os.path.dirname(__file__), "..")
-version = "1.0.0"
+version = "2.0.0"
 help_description = """\
 Converts colormaps to JSON files
 """
 
-parser = OptionParser(usage="Usage: %s <input_dir> <output_dir>" % prog,
+parser = OptionParser(usage="Usage: %s <config_file> <input_dir> <output_dir>" % prog,
                       version="%s version %s" % (prog, version),
                       epilog=help_description)
 
 (options, args) = parser.parse_args()
-if len(args) != 2:
+if len(args) != 3:
     parser.error("Invalid number of arguments")
 
-input_dir = args[0]
-output_dir = args[1]
+config_file = args[0]
+input_dir = args[1]
+output_dir = args[2]
+
+with open(config_file) as fp:
+    config = json.load(fp)
+skips = config.get("skipPalettes", [])
 
 def to_list(v):
     return v if isinstance(v, list) else [v]
@@ -91,6 +96,12 @@ def process_entries(entries):
 
 def process_file(file):
     input_file = os.path.join(root, file)
+    id = os.path.splitext(os.path.basename(input_file))[0]
+    if id in skips:
+        sys.stderr.write("%s:  WARN: [%s] %s\n" % (prog, input_file,
+                "Skipping"))
+        return
+
     with open(input_file) as fp:
         xml = fp.read()
     document = xmltodict.parse(xml)
@@ -106,13 +117,12 @@ def process_file(file):
         if "@title" in colormap:
             result["entries"]["title"] = colormap["@title"]
         if "Legend" in colormap:
-            legend = process_entries(colormap["Legend"]["ColorMapEntry"])
+            legend = process_entries(colormap["Legend"]["LegendEntry"])
             result["legend"] = legend
             if "@title" in colormap:
                 result["legend"]["title"] = colormap["@title"]
         maps += [result]
 
-    id = os.path.splitext(os.path.basename(input_file))[0]
     data = {
         "id": id,
         "maps": maps

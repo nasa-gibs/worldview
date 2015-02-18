@@ -53,8 +53,8 @@ if [ -e "$BUILD_DIR/config.json" ] ; then
 fi
 if [ -e "$BUILD_DIR/colormaps" ] ; then
     mkdir -p "$BUILD_DIR"/config/palettes
-    "$BIN_DIR/wv-options-colormap" "$BUILD_DIR/colormaps" \
-            "$BUILD_DIR/config/palettes"
+    "$BIN_DIR/wv-options-colormap" "$BUILD_DIR/config.json" \
+            "$BUILD_DIR/colormaps" "$BUILD_DIR/config/palettes"
 fi
 
 configs=$(ls "$BUILD_DIR/config")
