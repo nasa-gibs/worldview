@@ -26,19 +26,22 @@ die() {
     exit 1
 }
 
+ENV=$1
+
 [ -d "$SRC_DIR" ] || die "Options directory does not exist"
 
 if [ "$FETCH_GC" ] ; then
-    rm -rf "$OPT_DIR/gc/*"
-    rm -rf "$OPT_DIR/colormaps/gc/*"
-    "$BIN_DIR/wv-options-fetch" "$OPT_DIR/config.json" "$OPT_DIR/gc"
+    rm -rf "$OPT_DIR/$ENV/gc/*"
+    rm -rf "$OPT_DIR/$ENV/colormaps/gc/*"
+    "$BIN_DIR/wv-options-fetch" "$OPT_DIR/$ENV/config.json" "$OPT_DIR/$ENV/gc"
     exit 0
 fi
 
 rm -rf "$BUILD_DIR" "$DEST_DIR"
 mkdir -p "$BUILD_DIR" "$DEST_DIR"
 
-cp -r "$SRC_DIR"/* "$BUILD_DIR"
+cp -r "$SRC_DIR"/common/* "$BUILD_DIR"
+rsync -a "$SRC_DIR/$ENV"/* "$BUILD_DIR"
 
 mkdir -p "$DEST_DIR/config"
 mkdir -p "$BUILD_DIR/colormaps"
@@ -48,11 +51,14 @@ if [ -e "$BUILD_DIR/features.json" ] ; then
 fi
 
 if [ -e "$BUILD_DIR/config.json" ] ; then
-    "$BIN_DIR/wv-options-wmts" "$BUILD_DIR/config.json" "$OPT_DIR/gc" \
+    "$BIN_DIR/wv-options-wmts" "$BUILD_DIR/config.json" "$BUILD_DIR/gc" \
             "$BUILD_DIR/config/wv.json/_wmts" "$BUILD_DIR/colormaps"
 fi
 if [ -e "$BUILD_DIR/colormaps" ] ; then
     mkdir -p "$BUILD_DIR"/config/palettes
+    if [ -d "$BUILD_DIR"/gc/colormaps ] ; then
+        cp -r "$BUILD_DIR"/gc/colormaps "$BUILD_DIR"/colormaps/gc
+    fi
     "$BIN_DIR/wv-options-colormap" "$BUILD_DIR/config.json" \
             "$BUILD_DIR/colormaps" "$BUILD_DIR/config/palettes"
 fi
