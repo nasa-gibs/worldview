@@ -175,6 +175,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
             var layer = findLayer(def);
             self.selected.removeLayer(layer);
         }
+        updateLayerVisibilities();
     };
 
     var updateLayerOrder = function() {
