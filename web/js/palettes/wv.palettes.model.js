@@ -30,7 +30,8 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
     self.active = {};
 
     self.getRendered = function(layerId, index) {
-        var palette = config.palettes.rendered[layerId];
+        var name = config.layers[layerId].palette.id;
+        var palette = config.palettes.rendered[name];
         if ( !_.isUndefined(index) ) {
             palette = palette.maps[index];
         }
