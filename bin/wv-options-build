@@ -77,6 +77,7 @@ for config in $configs; do
 done
 
 cp -r "$BUILD_DIR/brand" "$DEST_DIR"
+cp "$BUILD_DIR/brand.json" "$DEST_DIR"
 
 "$BIN_DIR"/wv-options-validate "$BUILD_DIR/config.json" "$DEST_DIR/config"
 
