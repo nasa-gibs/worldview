@@ -300,7 +300,7 @@ wv.data.results.densify = function() {
 
     self.process = function(meta, granule) {
         // There is a bug exposed here discovered when switching to OL3. Since this
-        // function isn't needed for any of the data that we have, just skip it 
+        // function isn't needed for any of the data that we have, just skip it
         // for now and fix it later.
         return granule;
 
@@ -598,7 +598,9 @@ wv.data.results.tagURS = function(spec) {
             return granule;
         }
         var isURS;
-        if ( spec.by === "value" ) {
+        if ( spec.by === "constant" ) {
+            isURS = spec.value;
+        } else if ( spec.by === "value" ) {
             isURS = granule[spec.field] === spec.value;
         } else if ( spec.by === "regex" ) {
             var re = new RegExp(spec.value);
