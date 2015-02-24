@@ -21,7 +21,7 @@ wv.proj = wv.proj || {};
 wv.proj.change = wv.proj.change || function(models) {
 
     var PROJECTION_CHANGE_DATE = new Date(Date.UTC(2013, 05, 06));
-    var EARLIEST_CHANGE_DATE = new Date(Date.UTC(2011, 09, 01));
+    var EARLIEST_CHANGE_DATE = new Date(Date.UTC(2011, 10, 01));
     var DO_NOT_SHOW_AGAIN = "arcticProjectionChangeNotification";
     var notified = false;
     var polarVisited = 0;
