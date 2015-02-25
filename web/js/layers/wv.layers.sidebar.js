@@ -42,6 +42,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
         "<i class='productsIcon selected icon-download' title='Download Data'></i>";
 
     var collapsed = false;
+    var collapseRequested = false;
     var portrait = false;
     var mobile = false;
     var self = {};
@@ -59,6 +60,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
         if ( wv.util.browser.localStorage ) {
             if ( localStorage.getItem("sidebarState") === "collapsed" ) {
                 self.collapseNow();
+                collapseRequested = true;
             }
         }
     };
@@ -131,8 +133,10 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
     self.toggle = function() {
         if ( collapsed ) {
             self.expand();
+            collapseRequested = false;
         } else {
             self.collapse();
+            collapseRequested = true;
         }
     };
 
@@ -279,7 +283,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
         if ( !mobile && wv.util.browser.small ) {
             self.collapseNow();
             mobile = true;
-        } else if ( mobile && !wv.util.browser.small ) {
+        } else if ( mobile && !wv.util.browser.small && !collapseRequested ) {
             self.expandNow();
             mobile = false;
         }

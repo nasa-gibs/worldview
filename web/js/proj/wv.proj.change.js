@@ -21,6 +21,7 @@ wv.proj = wv.proj || {};
 wv.proj.change = wv.proj.change || function(models) {
 
     var PROJECTION_CHANGE_DATE = new Date(Date.UTC(2013, 05, 06));
+    var EARLIEST_CHANGE_DATE = new Date(Date.UTC(2011, 10, 01));
     var DO_NOT_SHOW_AGAIN = "arcticProjectionChangeNotification";
     var notified = false;
     var polarVisited = 0;
@@ -49,7 +50,8 @@ wv.proj.change = wv.proj.change || function(models) {
             polarVisited = polarVisited + 1;
             var day = models.date.selected.getTime();
             var change = PROJECTION_CHANGE_DATE.getTime();
-            self.old = day < change;
+            var earliest = EARLIEST_CHANGE_DATE.getTime();
+            self.old = day < change && day > earliest;
         }
 
         if ( proj.id === "arctic" && self.old ) {
