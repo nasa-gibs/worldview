@@ -1612,16 +1612,19 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             event.stopPropagation();
             if( event.keyCode === (wv.util.key.LEFT || wv.util.key.RIGHT) ) {
                 event.preventDefault();
+                $(this).select().focus();
             }
             else if ( event.keyCode === (wv.util.key.UP) ) {
                 event.preventDefault();
                 roll(interval, 1);
+                $(this).select().focus();
             }
             else if ( event.keyCode === (wv.util.key.DOWN) ) {
                 event.preventDefault();
                 roll(interval, -1);
+                $(this).select().focus();
             }
-            $(this).select().focus();
+
         });
         /*$buttons.keydown(function(event){
             var interval = $(this).attr('id').split('-')[0];
