@@ -373,15 +373,6 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             $('.button-input-group').prop('disabled', true);
         }
 
-        model.events.on("select", function(){
-            self.update();
-            tl.pick.shiftView();
-        });
-
-        models.layers.events.on("change",function(){
-            //setData();
-        });
-
         self.update();
 
     };

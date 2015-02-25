@@ -36,11 +36,9 @@ wv.date.timeline.pan = wv.date.timeline.pan || function(models, config, ui) {
             var evt = event.sourceEvent || event;
             var delX = evt.deltaX;
             if((evt.type === "wheel") && ((evt.deltaX < 0) || (evt.deltaX > 0))){
-                tl.axisZoom.translate([self.xPosition-delX,0]);
-                self.xPosition = tl.axisZoom.translate()[0];
+                update(self.xPosition-delX,0);
             }
-        }
-        else{
+        } else {
             self.xPosition = tl.axisZoom.translate()[0];
         }
         tl.axis.call(tl.xAxis);
@@ -52,18 +50,35 @@ wv.date.timeline.pan = wv.date.timeline.pan || function(models, config, ui) {
 
         tl.pick.update();
         tl.pick.checkLocation();
+
+        tl.data.set();
+    };
+
+    var update = function(x, y){
+        tl.axisZoom.translate([x, y]);
+        self.xPosition = tl.axisZoom.translate()[0];
     };
 
     self.toSelection = function(){
 
-        tl.axisZoom.translate([-tl.x(model.selected) +
-                               (tl.width -
-                                tl.margin.left -
-                                tl.margin.right) /
-                               2,0]);
+        var x = -tl.x(model.selected) +
+            (tl.width - tl.margin.left -
+             tl.margin.right) / 2;
 
-        self.xPosition = tl.axisZoom.translate()[0];
+        update(x, 0);
 
+        tl.data.set();
+
+    };
+    self.toCursor = function(mousePos, mouseOffset){
+
+        var x = -tl.x(mousePos) +
+            (tl.width - tl.margin.left -
+             tl.margin.right) / 2 - mouseOffset;
+
+        update(x, 0);
+
+        tl.data.set();
     };
 
     var init = function(){

@@ -293,16 +293,13 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
     // compare the first and last ticks with the first and last
     // dates of data range, if they exceed it, add these ticks
     self.compare = function(proto, end){
-        console.log(self.firstDate);
-        console.log(' > ' + tl.data.start());
+        //TODO: Finish for !isCropped
         if(self.firstDate > tl.data.start()){
             //the data and what element to insert it before
             //probably a better way of doing this
-            console.log('first yep');
             //self.add(proto, 'g.tick');
         }
         if(self.lastDate <= wv.util.today()){
-            console.log('yep');
             //self.add(end, 'path.domain');
         }
     };

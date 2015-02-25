@@ -32,12 +32,18 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         left: 30
     };
 
+    self.getPadding = function(){
+        self.padding = self.width/4;
+        return self.padding;
+    };
+
     self.getWidth = function(){
         self.width = $(window).outerWidth(true) -
              $("#timeline-header").outerWidth(true) -
              $("#timeline-zoom").outerWidth(true) -
              $("#timeline-hide").outerWidth(true) -
-             self.margin.left - self.margin.right - 22;
+            self.margin.left - self.margin.right - 22;
+
         return self.width;
     };
 
@@ -96,7 +102,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         self.collapse(true);
     };
 
-    var resize = function(){
+    self.resize = function(){
         var small = wv.util.browser.small || wv.util.browser.constrained;
         if ( self.enabled && small ) {
             self.enabled = false;
@@ -121,7 +127,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             self.axis.select("line:first-child")
                 .attr("x2", self.width);
 
-            //tl.zoom.refresh();
         }
         
     };
@@ -193,8 +198,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .scale(1)
             .scaleExtent([1,1]);
 
-        resize();
-        $(window).resize(resize);
+        self.resize();
 
         if ( wv.util.browser.localStorage ) {
             if ( localStorage.getItem("timesliderState") === "collapsed" ) {
@@ -203,6 +207,20 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         }
 
         $('#timeline-hide').click(function() { self.toggle(); });
+
+        $(window).resize(function(){
+            self.resize();
+            self.zoom.refresh();
+        });
+
+        model.events.on("select", function(){
+            self.input.update();
+            self.pick.shiftView();
+        });
+
+        models.layers.events.on("change",function(){
+            self.data.set();
+        });
 
     };
 
