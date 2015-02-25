@@ -41,18 +41,16 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
         self.firstDate = self.all.data()[0];
         self.lastDate = self.all.data()[self.all.data().length-1];
         //remove previous classes for labels
-        self.all.classed('tick-labeled',false).classed('label-only',false);
+        self.all.classed('tick-labeled',false);//.classed('label-only',false);
 
     };
     self.normal = {
         setEnds: function(){
-            //FIXME: this is actually the ends of all ticks,
-            //not just the normal ticks.
             var all = self.normal.all;
             self.normal.firstDate = all.data()[0];
             self.normal.firstElem = all[0][0];
             self.normal.lastDate = all.data()[all.data().length-1];
-            self.normal.lastElem = all[0][all.length-1];
+            self.normal.lastElem = all[0][all[0].length-1];
         },
         update: function(){
             var ticks = self.normal.all;
@@ -291,14 +289,21 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
         }
         
     };
+
+    // compare the first and last ticks with the first and last
+    // dates of data range, if they exceed it, add these ticks
     self.compare = function(proto, end){
+        console.log(self.firstDate);
+        console.log(' > ' + tl.data.start());
         if(self.firstDate > tl.data.start()){
             //the data and what element to insert it before
             //probably a better way of doing this
-            self.add(proto, 'g.tick');
+            console.log('first yep');
+            //self.add(proto, 'g.tick');
         }
         if(self.lastDate <= wv.util.today()){
-            self.add(end, 'path.domain');
+            console.log('yep');
+            //self.add(end, 'path.domain');
         }
     };
     self.add = function(data, elem){
@@ -375,51 +380,47 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
 
     self.check = function(){
         var first, last, proto, end;
-        tl.ticks.setAll();
+        self.setAll();
         
         //Checks to see if all of the ticks fit onto the timeline space
         //and if so check to see that first and last major ticks are printed
         if(!tl.isCropped){
-            first = tl.ticks.firstDate;
-            last = tl.ticks.lastDate;
+            first = self.firstDate;
+            last = self.lastDate;
             proto = new Date(Date.UTC(first.getUTCFullYear(),
                                           first.getUTCMonth(),
                                           first.getUTCDate()-1));
             end = new Date(Date.UTC(last.getUTCFullYear(),
                                         last.getUTCMonth(),
                                         last.getUTCDate()+1));
-            tl.ticks.compare(proto, end);
+            self.compare(proto, end);
         }
         //set normal ticks
         tl.zoom.current.ticks.normal.all();
 
         //FIXME: Section below is terrible {
         //For determining needed boundary ticks
-        if($(tl.ticks.normal.firstElem).is(':nth-child(2)')){
-            first = tl.ticks.normal.firstDate;
-            proto = new Date(Date.UTC(first.getUTCFullYear(),
-                                          first.getUTCMonth(),
-                                          1));
-            tl.ticks.add(proto, 'g.tick');
+        self.all.classed('label-only',false);
+
+        if($(self.normal.firstElem).is(':nth-child(2)')){
+            proto = tl.zoom.current.ticks.boundary.first();
+            self.add(proto, 'g.tick');
         }
         
         //FIXME: Passing from d3 to jQuery to d3 in order to check if its the last tick elem.  WAT.
-        if(d3.select($(tl.ticks.normal.lastElem)
+        if(d3.select($(self.normal.lastElem)
                      .next()[0]).classed('domain')){
-            last = tl.ticks.normal.lastDate;
-            end = new Date(Date.UTC(last.getUTCFullYear()+1,
-                                        last.getUTCMonth()+1,
-                                        1));
-            tl.ticks.add(end, 'path.domain');
+            end = tl.zoom.current.ticks.boundary.last();
+            self.add(end, 'path.domain');
         }
         // } End terrible
 
-        tl.ticks.setAll();
+        self.setAll();
 
         //update boundary ticks
         tl.zoom.current.ticks.boundary.all();
 
-        tl.ticks.boundary.all.classed('tick-labeled',true);
+        self.boundary.all.classed('tick-labeled',true);
 
     };
 
