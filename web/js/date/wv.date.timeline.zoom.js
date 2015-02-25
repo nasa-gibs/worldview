@@ -43,22 +43,22 @@ wv.date.timeline.zoom = wv.date.timeline.zoom || function(models, config, ui) {
     };
 
     self.change = function(amount, event) {
-        //console.log('changing zoom!');
-        //TODO: Below
-        /*
-        zoomLvl += -amount;
-        if ( zoomLvl < 0 ) {
-            zoomLvl = 0;
+
+        var zoom = tl.config.currentZoom;
+
+        zoom += -amount;
+        if ( zoom < 1 ) {
+            zoom = 1;
         }
-        if ( zoomLvl > 2 ) {
-            zoomLvl = 2;
+        if ( zoom > 3 ) {
+            zoom = 3;
         }
 
-        setZoom.call(this, zoomLvl, event);
-        */
+        tl.config.zoom.call(this, zoom, event);
+
     };
 
-    self.drawTicks = function(count, max, aEnd, w, i, s, f){
+    self.drawTicks = function(count, max, aEnd, w, i, s, f, e){
         var d1 = tl.data.start(),
             d2,
             r1 = (tl.width/2)-((count*w)/2),
@@ -77,13 +77,23 @@ wv.date.timeline.zoom = wv.date.timeline.zoom || function(models, config, ui) {
             r2 = tl.width;
         }
 
-        update(d1, d2, r1, r2, i, s, f);
+        update(d1, d2, r1, r2, i, s, f, e);
     };
 
-    var update = function(d1, d2, r1, r2, i, s, f){
+    self.refresh = function(){
+        tl.config.zoom(tl.config.currentZoom);
+    };
 
+    var update = function(d1, d2, r1, r2, i, s, f, e){
 
-        
+        if(e){
+            var relX = e.offsetX ||
+                (e.clientX - $('#timeline-footer').offset().left);
+            var mousePos = tl.x.invert(relX);
+            var mouseOffset = (tl.width-tl.margin.left-tl.margin.right)/2 - relX;
+            console.log(mousePos);
+        }
+
         tl.x.domain([d1,d2])
             .range([r1,r2]);
 
@@ -98,9 +108,12 @@ wv.date.timeline.zoom = wv.date.timeline.zoom || function(models, config, ui) {
 
         tl.svg.call(tl.axisZoom);
 
-        tl.pan.toSelection();
+        if(e){
+            tl.pan.toCursor(mousePos, mouseOffset);
+        } else {
+            tl.pan.toSelection();
+        }
 
-        //??need to remove first?
         tl.axis.selectAll('.tick').remove();
 
         tl.axis.call(tl.xAxis);
@@ -109,7 +122,6 @@ wv.date.timeline.zoom = wv.date.timeline.zoom || function(models, config, ui) {
 
     var init = function(){
         
-        //self.level3();
     };
 
     init();
