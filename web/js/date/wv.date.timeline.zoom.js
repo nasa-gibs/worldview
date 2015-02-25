@@ -85,13 +85,12 @@ wv.date.timeline.zoom = wv.date.timeline.zoom || function(models, config, ui) {
     };
 
     var update = function(d1, d2, r1, r2, i, s, f, e){
-
+        var mouseOffset, mousePos;
         if(e){
             var relX = e.offsetX ||
                 (e.clientX - $('#timeline-footer').offset().left);
-            var mousePos = tl.x.invert(relX);
-            var mouseOffset = (tl.width-tl.margin.left-tl.margin.right)/2 - relX;
-            console.log(mousePos);
+            mousePos = tl.x.invert(relX);
+            mouseOffset = (tl.width-tl.margin.left-tl.margin.right)/2 - relX;
         }
 
         tl.x.domain([d1,d2])
