@@ -26,8 +26,6 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
         var tickCountMax;
         //width in pixels of each tick
         var tickWidth;
-        //Max number of ticks able to be shown on this resolution
-        var tickCountMax;
         //end tick date if tickCount is less than tickCountMax
         var altEnd;
 
