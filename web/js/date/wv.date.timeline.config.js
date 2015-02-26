@@ -28,6 +28,7 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
         var tickWidth;
         //end tick date if tickCount is less than tickCountMax
         var altEnd;
+        var paddedRange;
 
         switch(level){
         case 1:
@@ -37,9 +38,17 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
             tickWidth = 15;
             tickCountMax = Math.ceil(tl.width/tickWidth);
 
+            paddedRange = [new Date(tl.data.start()
+                                    .setUTCFullYear(tl.data.start().getUTCFullYear()-10)),
+                           new Date(tl.data.end()
+                                    .setUTCFullYear(tl.data.end().getUTCFullYear()+10))];
+            
             altEnd = new Date(tl.data.start().getUTCFullYear() + tickCountMax,
                               tl.data.start().getUTCMonth(),
                               tl.data.start().getUTCDate());
+
+            tl.axisZoom
+                .xExtent(paddedRange);
 
             tl.zoom.drawTicks(tickCount,
                               tickCountMax,
@@ -183,10 +192,16 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
             tickWidth = 11;
             tickCountMax = Math.ceil(tl.width/tickWidth);
 
+            paddedRange = [new Date(tl.data.start()
+                                    .setUTCFullYear(tl.data.start().getUTCFullYear()-1)),
+                           new Date(tl.data.end()
+                                    .setUTCFullYear(tl.data.end().getUTCFullYear()+1))];
+
             altEnd = new Date(tl.data.start().getUTCFullYear(),
                               tl.data.start().getUTCMonth() + tickCountMax,
                               tl.data.start().getUTCDate());
-
+            tl.axisZoom
+                .xExtent(paddedRange);
             tl.zoom.drawTicks(tickCount,
                               tickCountMax,
                               altEnd,
@@ -313,9 +328,16 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
             tickWidth = 11;
             tickCountMax = Math.ceil(tl.width/tickWidth);
 
+            paddedRange = [new Date(tl.data.start()
+                                    .setUTCDate(tl.data.start().getUTCDate()-15)),
+                           new Date(tl.data.end()
+                                    .setUTCDate(tl.data.end().getUTCDate()+15))];
+
             altEnd = new Date(tl.data.start().getUTCFullYear(),
                               tl.data.start().getUTCMonth(),
                               tl.data.start().getUTCDate() + tickCountMax);
+            tl.axisZoom
+                .xExtent(paddedRange);
 
             tl.zoom.drawTicks(tickCount,
                               tickCountMax,
@@ -445,13 +467,18 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
         default:
             console.log('Invalid Zoom level');
         }
+        
+
         tl.ticks.check();
         initTicks();
 
         tl.pick.update();
         tl.pick.checkLocation();
-    };
+        tl.ticks.removePaddingData();
 
+        
+    };
+    
     //Draw ticks based on zoom level
     var initTicks = function(){
         tl.ticks.boundary.init();
@@ -481,7 +508,7 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
 
         });
         //Default zoom
-        self.zoom(2);
+        self.zoom(3);
     };
 
     init();
