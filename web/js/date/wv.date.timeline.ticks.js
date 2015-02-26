@@ -375,6 +375,20 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
         }
     };
 
+    self.removePaddingData = function(){
+        self.all.each(function(){
+            if (((d3.select(this).data()[0] < tl.data.start()) ||
+                 (d3.select(this).data()[0] > tl.data.end()))){
+                if(!d3.select(this).classed('tick-labeled')){
+                    d3.select(this).remove();
+                }
+                else {
+                    d3.select(this).selectAll('rect').remove();
+                }
+            }
+        });
+    };
+
     self.check = function(){
         var first, last, proto, end;
         self.setAll();

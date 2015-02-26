@@ -39,12 +39,6 @@ wv.date.timeline.data = wv.date.timeline.data || function(models, config, ui) {
                              .getUTCDate() + 1 ) );
     };
 
-    self.addPadding = function(){
-        var buffer = tl.padding;
-        self.paddedStart = tl.x.invert(-buffer);
-        self.paddedEnd = tl.x.invert(tl.width + buffer);
-    };
-
     self.set = function(){
 
         var activeLayers = models.layers.get();
@@ -120,8 +114,7 @@ wv.date.timeline.data = wv.date.timeline.data || function(models, config, ui) {
     };
 
     var init = function(){
-        tl.axisZoom
-            .xExtent( [self.start(), self.end()] );
+        
 
     };
 
