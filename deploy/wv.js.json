@@ -23,6 +23,13 @@
         "web/js/date/wv.date.sliders.js",
         "web/js/date/wv.date.label.js",
         "web/js/date/wv.date.timeline.js",
+        "web/js/date/wv.date.timeline.data.js",
+        "web/js/date/wv.date.timeline.ticks.js",
+        "web/js/date/wv.date.timeline.zoom.js",
+        "web/js/date/wv.date.timeline.pick.js",
+        "web/js/date/wv.date.timeline.pan.js",
+        "web/js/date/wv.date.timeline.input.js",
+        "web/js/date/wv.date.timeline.config.js",
         "web/js/date/wv.date.wheels.js",
 
         "web/js/layers/wv.layers.js",
