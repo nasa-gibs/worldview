@@ -41,23 +41,23 @@ wv.data.handler.base = function(config, model) {
     var self = {};
 
     self.events = wv.util.events();
-    self.echo = null;
+    self.cmr = null;
     self.ajax = null;
 
     var init = function() {
         var ns = wv.data.handler.base;
 
-        if ( !ns.echo ) {
-            if ( config.parameters.mockECHO ) {
-                ns.echo = wv.data.echo.mockClient(
-                        config.parameters.mockECHO);
+        if ( !ns.cmr ) {
+            if ( config.parameters.mockCMR ) {
+                ns.cmr = wv.data.cmr.mockClient(
+                        config.parameters.mockCMR);
             } else {
-                ns.echo = wv.data.echo.client({
-                    timeout: config.parameters.timeoutECHO
+                ns.cmr = wv.data.cmr.client({
+                    timeout: config.parameters.timeoutCMR
                 });
             }
         }
-        self.echo = ns.echo;
+        self.cmr = ns.cmr;
 
         if ( !ns.ajax ) {
             ns.ajax = wv.util.ajaxCache();
@@ -124,7 +124,7 @@ wv.data.handler.modisSwathMultiDay = function(config, model, spec) {
             data: queryData
         };
 
-        return self.echo.submit(queryOptions);
+        return self.cmr.submit(queryOptions);
     };
 
     self._processResults = function(data) {
@@ -148,7 +148,7 @@ wv.data.handler.modisSwathMultiDay = function(config, model, spec) {
             ns.tagVersion(),
             ns.collectVersions(),
             ns.versionFilter(),
-            ns.geometryFromECHO(),
+            ns.geometryFromCMR(),
             ns.transform(model.crs),
             ns.extentFilter(model.crs, self.extents[model.crs]),
             ns.timeFilter({
@@ -203,7 +203,7 @@ wv.data.handler.collectionList = function(config, model, spec) {
             data: queryData
         };
 
-        return self.echo.submit(queryOptions);
+        return self.cmr.submit(queryOptions);
     };
 
     self._processResults = function(data) {
@@ -240,7 +240,7 @@ wv.data.handler.list = function(config, model, spec) {
             data: queryData
         };
 
-        return self.echo.submit(queryOptions);
+        return self.cmr.submit(queryOptions);
     };
 
     self._processResults = function(data) {
@@ -281,7 +281,7 @@ wv.data.handler.dailyGranuleList = function(config, model, spec) {
             data: queryData
         };
 
-        return self.echo.submit(queryOptions);
+        return self.cmr.submit(queryOptions);
     };
 
     return self;
@@ -299,7 +299,7 @@ wv.data.handler.dailyAMSRE = function(config, model, spec) {
             data: queryData
         };
 
-        return self.echo.submit(queryOptions);
+        return self.cmr.submit(queryOptions);
     };
 
     self._processResults = function(data) {
@@ -336,7 +336,7 @@ wv.data.handler.modisGrid = function(config, model, spec) {
             data: config.products[model.selectedProduct].query
         };
 
-        var granules = self.echo.submit(queryOptions);
+        var granules = self.cmr.submit(queryOptions);
         var grid = self.ajax.submit({
             url: "data/MODIS_Grid." + crs + ".json?v=" + wv.brand.BUILD_NONCE,
             dataType: "json"
@@ -407,13 +407,13 @@ wv.data.handler.modisMix = function(config, model, spec) {
             endTimeDelta: nrtHandler.endTimeDelta,
             data: config.products[model.selectedProduct].query.nrt
         };
-        var nrt = self.echo.submit(nrtQueryOptions);
+        var nrt = self.cmr.submit(nrtQueryOptions);
 
         var scienceQueryOptions = {
             time: model.time,
             data: config.products[model.selectedProduct].query.science
         };
-        var science = self.echo.submit(scienceQueryOptions);
+        var science = self.cmr.submit(scienceQueryOptions);
 
         var grid = self.ajax.submit({
             url: "data/MODIS_Grid." + crs + ".json?v=" + wv.brand.BUILD_NONCE,
@@ -466,7 +466,7 @@ wv.data.handler.modisSwath = function(config, model, spec) {
             data: queryData
         };
 
-        return self.echo.submit(queryOptions);
+        return self.cmr.submit(queryOptions);
     };
 
     self._processResults = function(data) {
@@ -490,7 +490,7 @@ wv.data.handler.modisSwath = function(config, model, spec) {
             ns.tagVersion(),
             ns.collectVersions(),
             ns.versionFilter(),
-            ns.geometryFromECHO(),
+            ns.geometryFromCMR(),
             ns.antiMeridianMulti(MAX_DISTANCE),
             ns.densify(),
             ns.transform(model.crs),

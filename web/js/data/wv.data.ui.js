@@ -496,7 +496,7 @@ wv.data.ui.bulkDownloadPage = wv.data.ui.bulkDownloadPage ||
 
 wv.data.ui.downloadListPanel = function(config, model) {
 
-    var echo = wv.data.echo;
+    var cmr = wv.data.cmr;
 
     var NOTICE =
         "<div id='wv-data-selection-notice'>" +
@@ -618,7 +618,7 @@ wv.data.ui.downloadListPanel = function(config, model) {
             // repeated in all granules for that product. If so, we want to
             // bump that up to product level instead of at the granule level.
             $.each(granule.links, function(index, link) {
-                if ( link.rel !== echo.REL_DATA && link.rel !== echo.REL_BROWSE ) {
+                if ( link.rel !== cmr.REL_DATA && link.rel !== cmr.REL_BROWSE ) {
                     if ( !product.counts[link.href]  ) {
                         product.counts[link.href] = 1;
                     } else {
@@ -656,7 +656,7 @@ wv.data.ui.downloadListPanel = function(config, model) {
                         return;
                     }
                     // Skip browse images per Kevin's request
-                    if ( link.rel === echo.REL_BROWSE ) {
+                    if ( link.rel === cmr.REL_BROWSE ) {
                         return;
                     }
                     item.links.push(reformatLink(link));
@@ -693,7 +693,7 @@ wv.data.ui.downloadListPanel = function(config, model) {
         return {
             href: link.href,
             title: ( link.title ) ? link.title : link.href.split("/").slice(-1),
-            data: ( link.rel === echo.REL_DATA )
+            data: ( link.rel === cmr.REL_DATA )
         };
     };
 

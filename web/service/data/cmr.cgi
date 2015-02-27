@@ -55,7 +55,7 @@ def handle_error(error_code, message, options, info=None):
     print str(info)
 
   # Print to standard out for the Apache error log
-  sys.stderr.write("worldview/echo.cgi [%s]: %s" % (error_code, message))
+  sys.stderr.write("worldview/cmr.cgi [%s]: %s" % (error_code, message))
   if info:
     sys.stderr.write(": %s" % info)
   sys.stderr.write("\n")
@@ -143,10 +143,10 @@ def create_xml(fields):
   Creates an XML document given the provided CGI fields
 
   Parameters:
-  - fields: CGI fields to use a parameters for the ECHO query
+  - fields: CGI fields to use a parameters for the CMR query
 
   Returns:
-  - AQL XML document for the ECHO query request as a string.
+  - AQL XML document for the CMR query request as a string.
   """
 
   # It isn't necessary to have the official prolog and DOCTYPE
@@ -194,13 +194,13 @@ def create_xml(fields):
   return "\n".join(xml)
 
 
-def query_echo(url, options, xml):
+def query_cmr(url, options, xml):
   """
-  Submit an AQL document to ECHO and proxy the results to standard out.
+  Submit an AQL document to CMR and proxy the results to standard out.
 
   Parameters:
   - options: Execution options.
-  - xml: AQL document to submit to ECHO
+  - xml: AQL document to submit to CMR
   """
 
   url = url + "&page_size=%s" % options.page_size
@@ -231,7 +231,7 @@ def query_echo(url, options, xml):
 def process_request(options):
   """
   Handle the request by converting CGI parameters into an AQL document
-  and sumbitting to ECHO.
+  and sumbitting to CMR.
 
   CGI Parameters:
   - day: UTC day to search for in YYYY-DD-MM format
@@ -269,7 +269,7 @@ def process_request(options):
   if options.url:
     print query_url
   if not options.no_query:
-    query_echo(query_url, options, xml)
+    query_cmr(query_url, options, xml)
 
 
 def parse_options():
@@ -289,11 +289,11 @@ def parse_options():
   parser.add_option("-p", "--page-size", default=300,
     help="Change the maximum number of results")
   parser.add_option("-n", "--no-query", action="store_true",
-    help="Do not execute ECHO query")
+    help="Do not execute CMR query")
   parser.add_option("-u", "--url" ,action="store_true",
-    help="Print URL used to access ECHO")
+    help="Print URL used to access CMR")
   parser.add_option("-x", "--xml", action="store_true",
-    help="Print XML to be sent to ECHO")
+    help="Print XML to be sent to CMR")
   (options, args) = parser.parse_args()
 
   if options.all:
