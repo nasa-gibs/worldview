@@ -445,7 +445,7 @@ wv.data.model = wv.data.model || function(models, config) {
         var foundProduct = null;
         var list = models.layers.get({flat: true});
 
-        // Find the top most layer that has a product entry in ECHO
+        // Find the top most layer that has a product entry in CMR
         for ( var i = list.length - 1; i >= 0; i-- ) {
             if ( list[i].product ) {
                 foundProduct = list[i].product;

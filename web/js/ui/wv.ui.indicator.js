@@ -88,7 +88,7 @@ wv.ui.indicator = wv.ui.indicator || (function() {
         if ( hides ) {
             self.hide(hides);
         }
-        return self.show("Searching ECHO for Data", "images/activity.gif");
+        return self.show("Searching CMR for Data", "images/activity.gif");
     };
 
     self.loading = function(hides) {

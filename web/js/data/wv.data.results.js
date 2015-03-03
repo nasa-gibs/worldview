@@ -114,7 +114,7 @@ wv.data.results.collectPreferred = function(prefer) {
                 (prefer === "nrt" && granule.nrt) ||
                 (prefer === "science" && !granule.nrt);
         if ( preferred ) {
-            var timeStart = wv.data.echo.roundTime(granule.time_start);
+            var timeStart = wv.data.cmr.roundTime(granule.time_start);
             meta.preferred[timeStart] = granule;
         }
         return granule;
@@ -135,7 +135,7 @@ wv.data.results.collectVersions = function() {
             meta.versions = {};
         }
         if ( granule.version ) {
-            var timeStart = wv.data.echo.roundTime(granule.time_start);
+            var timeStart = wv.data.cmr.roundTime(granule.time_start);
             var previousVersion = meta.versions[timeStart] || 0;
             meta.versions[timeStart] = Math.max(previousVersion,
                     granule.version);
@@ -255,7 +255,7 @@ wv.data.results.connectSwaths = function(projection) {
 
 
     var roundTime = function(timeString) {
-        return wv.data.echo.roundTime(timeString);
+        return wv.data.cmr.roundTime(timeString);
     };
 
     return self;
@@ -371,11 +371,11 @@ wv.data.results.extentFilter = function(projection, extent) {
 };
 
 
-wv.data.results.geometryFromECHO = function(densify) {
+wv.data.results.geometryFromCMR = function(densify) {
 
     var self = {};
 
-    self.name = "GeometryFromECHO";
+    self.name = "GeometryFromCMR";
 
     self.process = function(meta, granule) {
         if ( !granule.geometry ) {
@@ -386,8 +386,8 @@ wv.data.results.geometryFromECHO = function(densify) {
         }
 
         if ( !granule.geometry[wv.map.CRS_WGS_84] ) {
-            var echoGeom = wv.data.echo.geometry(granule, densify);
-            var geom = echoGeom.toOpenLayers();
+            var cmrGeom = wv.data.cmr.geometry(granule, densify);
+            var geom = cmrGeom.toOpenLayers();
             var centroid = geom.getInteriorPoint();
             granule.geometry[wv.map.CRS_WGS_84] = geom;
             granule.centroid[wv.map.CRS_WGS_84] = centroid;
@@ -490,7 +490,7 @@ wv.data.results.preferredFilter = function(prefer) {
     self.name = "PreferredFilter";
 
     self.process = function(meta, granule) {
-        var timeStart = wv.data.echo.roundTime(granule.time_start);
+        var timeStart = wv.data.cmr.roundTime(granule.time_start);
         if ( meta.preferred[timeStart] ) {
             if ( prefer === "nrt" && !granule.nrt ) {
                 return;
@@ -702,7 +702,7 @@ wv.data.results.timeLabel = function(time) {
     self.process = function(meta, granule) {
         var timeStart = wv.util.parseTimestampUTC(granule.time_start);
 
-        // Sometimes an end time is not provided by ECHO
+        // Sometimes an end time is not provided by CMR
         var timeEnd;
         if ( granule.time_end ) {
             timeEnd = wv.util.parseTimestampUTC(granule.time_end);
@@ -769,7 +769,7 @@ wv.data.results.versionFilter = function() {
 
     self.process = function(meta, granule) {
         if ( granule.version ) {
-            var timeStart = wv.data.echo.roundTime(granule.time_start);
+            var timeStart = wv.data.cmr.roundTime(granule.time_start);
             if ( meta.versions[timeStart] ) {
                 if ( meta.versions[timeStart] !== granule.version ) {
                     return;

@@ -14,17 +14,17 @@
  */
 var wv = wv || {};
 wv.data = wv.data || {};
-wv.data.echo = wv.data.echo || {};
+wv.data.cmr = wv.data.cmr || {};
 
-wv.data.echo.client = wv.data.echo.client || function(spec) {
+wv.data.cmr.client = wv.data.cmr.client || function(spec) {
 
     // Abort query after 45 seconds
     var QUERY_TIMEOUT = spec.timeout || 45 * 1000;
 
-    var ns = wv.data.echo.client;
+    var ns = wv.data.cmr.client;
 
     var ajaxOptions = {
-        url: wv.brand.url("service/data/echo.cgi"),
+        url: wv.brand.url("service/data/cmr.cgi"),
         traditional: true,
         dataType: "json",
         timeout: QUERY_TIMEOUT
@@ -74,7 +74,7 @@ wv.data.echo.client = wv.data.echo.client || function(spec) {
 };
 
 
-wv.data.echo.geometry = function(result) {
+wv.data.cmr.geometry = function(result) {
 
     var self = {};
     self.polygons = [];
@@ -106,12 +106,12 @@ wv.data.echo.geometry = function(result) {
         return olPolygons[0];
     };
 
-    var initFromPolygons = function(echoPolygons) {
-        $.each(echoPolygons, function(index, echoPolygon) {
+    var initFromPolygons = function(cmrPolygons) {
+        $.each(cmrPolygons, function(index, cmrPolygon) {
             var rings = [];
-            $.each(echoPolygon, function(index, echoRing) {
+            $.each(cmrPolygon, function(index, cmrRing) {
                 var ring = [];
-                var parts = echoRing.split(" ");
+                var parts = cmrRing.split(" ");
                 for ( var i = 0; i < parts.length; i+= 2 ) {
                     var y = parseFloat(parts[i]);
                     var x = parseFloat(parts[i + 1]);
@@ -123,10 +123,10 @@ wv.data.echo.geometry = function(result) {
         });
     };
 
-    var initFromBoxes = function(echoBoxes) {
-        $.each(echoBoxes, function(index, echoBox) {
+    var initFromBoxes = function(cmrBoxes) {
+        $.each(cmrBoxes, function(index, cmrBox) {
             var ring = [];
-            var fields = echoBox.split(" ");
+            var fields = cmrBox.split(" ");
             var ymin = parseFloat(fields[0]);
             var xmin = parseFloat(fields[1]);
             var ymax = parseFloat(fields[2]);
@@ -146,7 +146,7 @@ wv.data.echo.geometry = function(result) {
 };
 
 
-wv.data.echo.mockClient = function(suffix) {
+wv.data.cmr.mockClient = function(suffix) {
 
     var endpoint;
     var results;
@@ -155,13 +155,13 @@ wv.data.echo.mockClient = function(suffix) {
 
     var init = function() {
         if ( !suffix ) {
-            throw new Error("No mock ECHO suffix specified");
+            throw new Error("No mock CMR suffix specified");
         }
-        endpoint = "mock/echo.cgi-" + suffix;
+        endpoint = "mock/cmr.cgi-" + suffix;
     };
 
     self.submit = function(parameters) {
-        console.warn("Mocking ECHO query", endpoint);
+        console.warn("Mocking CMR query", endpoint);
         var deferred = $.Deferred();
         if ( !results ) {
             $.getJSON(endpoint, function(data) {
@@ -205,10 +205,10 @@ wv.data.echo.mockClient = function(suffix) {
     return self;
 };
 
-wv.data.echo.REL_DATA = "http://esipfed.org/ns/fedsearch/1.1/data#";
-wv.data.echo.REL_BROWSE = "http://esipfed.org/ns/fedsearch/1.1/browse#";
+wv.data.cmr.REL_DATA = "http://esipfed.org/ns/fedsearch/1.1/data#";
+wv.data.cmr.REL_BROWSE = "http://esipfed.org/ns/fedsearch/1.1/browse#";
 
-wv.data.echo.roundTime = function(timeString) {
+wv.data.cmr.roundTime = function(timeString) {
     var time = wv.util.parseTimestampUTC(timeString);
     if ( time.getUTCMilliseconds() >= 500 ) {
         time.setUTCSeconds(time.getUTCSeconds() + 1);

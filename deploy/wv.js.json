@@ -41,7 +41,7 @@
         "web/js/palettes/wv.palettes.model.js",
 
         "web/js/data/wv.data.js",
-        "web/js/data/wv.data.echo.js",
+        "web/js/data/wv.data.cmr.js",
         "web/js/data/wv.data.handler.js",
         "web/js/data/wv.data.map.js",
         "web/js/data/wv.data.model.js",
