@@ -289,10 +289,11 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
         }
 
         var min = def.min || 0;
-        var max = def.max || source.scale.colors.length;
+        var max = def.max || source.scale.colors.length - 1;
 
         var sourceCount = source.scale.colors.length;
         var targetCount = target.colors.length;
+        var indexCount = max - min;
 
         var scale = {
             "id": target.id,
@@ -309,9 +310,12 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
                 var sourcePercent, targetIndex;
                 if ( def.squash ) {
                     sourcePercent = (index - min) / (max - min);
+                    if ( index == max ) {
+                        sourcePercent = 1.0;
+                    }
                     targetIndex = Math.floor(sourcePercent * targetCount);
-                    if ( targetIndex >= source.scale.colors.length ) {
-                        targetIndex = source.scale.colors.length - 1;
+                    if ( targetIndex >= targetCount ) {
+                        targetIndex = targetCount - 1;
                     }
                 } else {
                     sourcePercent = index / sourceCount;
