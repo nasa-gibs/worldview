@@ -155,6 +155,9 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
                 var maxValue = def.scale.values[def.max];
                 attr.push({ id: "max", value: maxValue });
             }
+            if ( def.squash ) {
+                attr.push({ id: "squash" });
+            }
         });
     };
 
@@ -187,6 +190,7 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
             var layerId = layerDef.id;
             var minValue, maxValue;
             var min, max;
+            var squash = false;
             _.each(layerDef.attributes, function(attr) {
                 if ( attr.id === "palette" ) {
                     try {
@@ -211,9 +215,12 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
                         max = findIndex(layerId, "max", maxValue);
                     }
                 }
+                if ( attr.id === "squash" ) {
+                    squash = true;
+                }
             });
             if ( !_.isUndefined(min) || !_.isUndefined(max) ) {
-                self.setRange(layerId, min, max);
+                self.setRange(layerId, min, max, squash);
             }
         });
     };
