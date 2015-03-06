@@ -152,8 +152,8 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
             .attr("id", "wv-squash-button-check");
         var $squashLabel = $("<label></label>")
             .attr("for", "wv-squash-button-check")
-            .attr("title", "Squash")
-            .html("Squash");
+            .attr("title", "Squash Palette")
+            .html("Squash Palette");
         $squash.append($squashButton).append($squashLabel);
 
         var startMin = paletteDef.min || 0;
