@@ -63,8 +63,10 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
             },
             close: dispose
         })
-        .iCheck({radioClass: 'iradio_square-grey'})
-        .iCheck({checkboxClass: 'icheckbox_square-grey'});
+        .iCheck({
+            radioClass: 'iradio_square-grey',
+            checkboxClass: 'icheckbox_square-grey'
+        });
 
         $("#wv-layers-options-dialog .jspScrollable").each(function() {
             $(this).jScrollPane().data("jsp").reinitialise();
