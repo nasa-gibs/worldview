@@ -159,6 +159,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         var startMin = paletteDef.min || 0;
         var startMax = paletteDef.max || max;
         var startSquash = paletteDef.squash;
+        console.log("start squash", startSquash);
         var $slider = $("<div></div>")
             .attr("id", "wv-range-slider")
             .noUiSlider({
@@ -205,6 +206,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         if ( !_.isEqual(current, [imin, imax]) ) {
             $range.val([imin, imax]);
         }
+        $("#wv-squash-button-check").prop("checked", squash);
     };
 
     var updateRangeLabels = function(layerId, min, max) {
