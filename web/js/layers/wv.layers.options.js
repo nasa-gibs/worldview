@@ -63,9 +63,20 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
             },
             close: dispose
         })
-        .iCheck({radioClass: 'iradio_square-grey'});
+        .iCheck({radioClass: 'iradio_square-grey'})
+        .iCheck({checkboxClass: 'icheckbox_square-grey'});
+
         $("#wv-layers-options-dialog .jspScrollable").each(function() {
             $(this).jScrollPane().data("jsp").reinitialise();
+        });
+
+        $("#wv-squash-button-check").on("ifChanged", function() {
+            var squash = $("#wv-squash-button-check").prop("checked");
+            var $slider = $("#wv-range-slider");
+            models.palettes.setRange(layer.id,
+                parseFloat($slider.val()[0]),
+                parseFloat($slider.val()[1]),
+                squash);
         });
 
         models.layers.events
@@ -131,9 +142,23 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         var $header = $("<div></div>")
             .html("Thresholds")
             .addClass("wv-header");
+
+        var $squash = $("<div></div>")
+            .addClass("wv-palette-squash");
+        var $squashButton = $("<input></input>")
+            .attr("type", "checkbox")
+            .attr("id", "wv-squash-button-check");
+        var $squashLabel = $("<label></label>")
+            .attr("for", "wv-squash-button-check")
+            .attr("title", "Squash")
+            .html("Squash");
+        $squash.append($squashButton).append($squashLabel);
+
         var startMin = paletteDef.min || 0;
         var startMax = paletteDef.max || max;
+        var startSquash = paletteDef.squash;
         var $slider = $("<div></div>")
+            .attr("id", "wv-range-slider")
             .noUiSlider({
                 start: [startMin, startMax],
                 step: 1,
@@ -142,9 +167,11 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
                     max: max
                 }
             }).on("set", function() {
+                var squash = $("#wv-squash-button-check").prop("checked");
                 models.palettes.setRange(layer.id,
                     parseFloat($(this).val()[0]),
-                    parseFloat($(this).val()[1]));
+                    parseFloat($(this).val()[1]),
+                    squash);
             }).on("slide", function() {
                 updateRangeLabels(layer.id,
                     parseFloat($(this).val()[0]),
@@ -157,13 +184,15 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         $label.append($("<span></span>")
             .addClass("wv-label-range-max"));
         $dialog.append($header);
+        $dialog.append($squash);
         $dialog.append($slider);
         $dialog.append($label);
         $range = $slider;
-        onRangeUpdate(layer.id, startMin, startMax);
+
+        onRangeUpdate(layer.id, startMin, startMax, startSquash);
     };
 
-    var onRangeUpdate = function(layerId, min, max) {
+    var onRangeUpdate = function(layerId, min, max, squash) {
         updateRangeLabels(layerId, min, max);
 
         var count = models.palettes.get(layerId).scale.colors.length;

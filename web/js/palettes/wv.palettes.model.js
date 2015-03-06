@@ -92,7 +92,7 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
         }
     };
 
-    self.setRange = function(layerId, min, max) {
+    self.setRange = function(layerId, min, max, squash) {
         var def = self.active[layerId] || {};
         var paletteId = config.layers[layerId].palette.id;
         var rendered = config.palettes.rendered[paletteId];
@@ -104,6 +104,7 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
         if ( max < rendered.scale.colors.length - 1 ) {
             def.max = max;
         }
+        def.squash = squash;
         updateLookup(layerId, def);
         self.active[layerId] = def;
         self.events.trigger("range", layerId, def.min, def.max);
@@ -171,6 +172,9 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
         }
         if ( def.max ) {
             keys.push("max=" + def.max);
+        }
+        if ( def.squash ) {
+            keys.push("squash");
         }
         return keys.join(",");
     };
@@ -295,8 +299,17 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
             if ( index < def.min || index > def.max ) {
                 newScale.push("00000000");
             } else {
-                var sourcePercent = index / sourceCount;
-                var targetIndex = Math.floor(sourcePercent * targetCount);
+                var sourcePercent, targetIndex;
+                if ( def.squash ) {
+                    sourcePercent = (index - min) / (max - min);
+                    targetIndex = Math.floor(sourcePercent * targetCount);
+                    if ( targetIndex >= source.scale.colors.length ) {
+                        targetIndex = source.scale.colors.length - 1;
+                    }
+                } else {
+                    sourcePercent = index / sourceCount;
+                    targetIndex = Math.floor(sourcePercent * targetCount);
+                }
                 newScale.push(target.colors[targetIndex]);
             }
             newLabels.push(source.scale.labels[index]);

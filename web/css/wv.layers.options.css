@@ -31,3 +31,9 @@
     float: right;
     text-align: right;
 }
+
+#wv-layers-options-dialog .wv-palette-squash {
+    float: right;
+    margin-top: -1.5em;
+}
+
