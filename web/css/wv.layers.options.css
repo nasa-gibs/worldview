@@ -12,6 +12,11 @@
 #wv-layers-options-dialog .wv-header {
     margin-top: 1em;
     font-size: 14px;
+    margin-bottom: 1em;
+}
+
+#wv-layers-options-dialog .wv-header.wv-color-palette-label {
+    margin-bottom: 0.5em;
 }
 
 #wv-layers-options-dialog .wv-label {
@@ -34,6 +39,6 @@
 
 #wv-layers-options-dialog .wv-palette-squash {
     float: right;
-    margin-top: -1.5em;
+    margin-top: -2.4em;
 }
 

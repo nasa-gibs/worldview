@@ -238,6 +238,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
     var renderPaletteSelector = function($dialog) {
         var $header = $("<div></div>")
             .addClass("wv-header")
+            .addClass("wv-color-palette-label")
             .html("Color Palette");
         var $pane = $("<div></div>")
             .attr("id", "wv-palette-selector");
