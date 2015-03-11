@@ -19,7 +19,10 @@ var buildTimestamp = moment.utc().format("MMMM DD, YYYY [-] HH:mm [UTC]");
 var buildNonce = moment.utc().format("YYYYMMDDHHmmssSSS");
 var buildNumber = moment.utc().format("YYMMDDHHmmss");
 
+
 module.exports = function(grunt) {
+
+    var env = grunt.option("env") || "release";
 
     var options = {
         version: 0,
@@ -246,7 +249,7 @@ module.exports = function(grunt) {
 
         exec: {
             config: {
-                command: "PATH=python/bin:${PATH} bin/wv-options-build"
+                command: "PATH=python/bin:${PATH} bin/wv-options-build " + env
             },
 
             // After removing JavaScript and CSS files that are no longer
@@ -257,7 +260,7 @@ module.exports = function(grunt) {
             },
 
             fetch: {
-                command: "PATH=python/bin:${PATH} FETCH_GC=1 bin/wv-options-build"
+                command: "PATH=python/bin:${PATH} FETCH_GC=1 bin/wv-options-build " + env
             },
 
             rpmbuild: {
@@ -595,7 +598,7 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask("fetch", ["exec:fetch"])
-    
+
     grunt.registerTask("site", [
         "load_branding",
         "remove:build_site",
