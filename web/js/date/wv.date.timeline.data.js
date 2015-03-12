@@ -36,7 +36,7 @@ wv.date.timeline.data = wv.date.timeline.data || function(models, config, ui) {
         return new Date(
             new Date( wv.util.today() )
                 .setUTCDate( wv.util.today()
-                             .getUTCDate() + 1 ) );
+                             .getUTCDate() ) );
     };
 
     self.set = function(){

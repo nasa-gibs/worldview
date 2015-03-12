@@ -58,19 +58,22 @@ wv.date.timeline.zoom = wv.date.timeline.zoom || function(models, config, ui) {
 
     };
 
-    self.drawTicks = function(count, max, aEnd, w, i, s, f, e){
+    self.drawTicks = function(count, max, aEnd, w, i, s, f, e, p){
         var d1 = tl.data.start(),
             d2,
             r1 = (tl.width/2)-((count*w)/2),
             r2 = (tl.width/2)+((count*w)/2);
 
         if (max > count){
+            
             tl.isCropped = false;
             d2 = tl.data.end();
             r1 = (tl.width/2)-((count*w)/2);
             r2 = (tl.width/2)+((count*w)/2);
         }
         else{
+            tl.axisZoom
+                .xExtent(p);
             tl.isCropped = true;
             d2 = aEnd;
             r1 = 0;

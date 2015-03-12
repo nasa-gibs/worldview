@@ -47,8 +47,7 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
                               tl.data.start().getUTCMonth(),
                               tl.data.start().getUTCDate());
 
-            tl.axisZoom
-                .xExtent(paddedRange);
+            
 
             tl.zoom.drawTicks(tickCount,
                               tickCountMax,
@@ -57,7 +56,8 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
                               dateInterval,
                               dateStep,
                               labelFormat,
-                              event);
+                              event,
+                              paddedRange);
 
             //Filters ticks for nonboundaries for this zoom level
             tl.zoom.current.ticks.normal.all = function(){
@@ -92,6 +92,14 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
                 return new Date(Date.UTC(Math.floor(first.getUTCFullYear()/10)*10,
                                          0,
                                          1));
+            };
+
+            //Date of first printed normal tick
+            tl.zoom.current.ticks.normal.first = function(){
+                var first = tl.ticks.firstDate;
+                return new Date(Date.UTC(first.getUTCFullYear() - 1,
+                                          first.getUTCMonth(),
+                                          first.getUTCDate()));
             };
 
             //Date of last printed boundary interval of this zoom level
@@ -200,8 +208,7 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
             altEnd = new Date(tl.data.start().getUTCFullYear(),
                               tl.data.start().getUTCMonth() + tickCountMax,
                               tl.data.start().getUTCDate());
-            tl.axisZoom
-                .xExtent(paddedRange);
+
             tl.zoom.drawTicks(tickCount,
                               tickCountMax,
                               altEnd,
@@ -209,7 +216,8 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
                               dateInterval,
                               dateStep,
                               labelFormat,
-                              event);
+                              event,
+                              paddedRange);
 
             //Filters ticks for nonboundaries for this zoom level
             tl.zoom.current.ticks.normal.all = function(){
@@ -244,6 +252,14 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
                 return new Date(Date.UTC(first.getUTCFullYear(),
                                          0,
                                          1));
+            };
+
+            //Date of first printed normal tick
+            tl.zoom.current.ticks.normal.first = function(){
+                var first = tl.ticks.normal.firstDate;
+                return new Date(Date.UTC(first.getUTCFullYear(),
+                                          first.getUTCMonth() - 1,
+                                          first.getUTCDate()));
             };
 
             //Date of last printed boundary interval of this zoom level
@@ -336,8 +352,6 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
             altEnd = new Date(tl.data.start().getUTCFullYear(),
                               tl.data.start().getUTCMonth(),
                               tl.data.start().getUTCDate() + tickCountMax);
-            tl.axisZoom
-                .xExtent(paddedRange);
 
             tl.zoom.drawTicks(tickCount,
                               tickCountMax,
@@ -346,7 +360,8 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
                               dateInterval,
                               dateStep,
                               labelFormat,
-                              event);
+                              event,
+                              paddedRange);
 
             //Filters ticks for nonboundaries that have the following attribute
             tl.zoom.current.ticks.normal.all = function(){
@@ -381,6 +396,14 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
                 return new Date(Date.UTC(first.getUTCFullYear(),
                                          first.getUTCMonth(),
                                          1));
+            };
+
+            //Date of first printed normal tick
+            tl.zoom.current.ticks.normal.first = function(){
+                var first = tl.ticks.normal.firstDate;
+                return new Date(Date.UTC(first.getUTCFullYear(),
+                                          first.getUTCMonth(),
+                                          first.getUTCDate() - 1));
             };
 
             //Date of last printed boundary interval of this zoom level
@@ -451,6 +474,20 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
                     });
             };
 
+            d3.selectAll('.x.axis > g.tick').each(function(){
+                var currentTick = d3.select(this);
+                var currentTickData = currentTick.data()[0];
+                if ((currentTickData.getUTCDay() === 0) &&
+                    (currentTickData.getUTCDate() !== 1)){
+                    currentTick
+                        .insert('line','rect')
+                        .attr('y1',0)
+                        .attr('y2',-10)
+                        .attr('x2',0)
+                        .classed('tick-week',true);
+                }
+            });
+
             //Update placement of zoom buttons
             $('.zoom-btn').removeClass(function (index, css) {
                 return (css.match (/(^|\s)depth-\S+/g) || []).join(' ');
@@ -468,14 +505,12 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
             console.log('Invalid Zoom level');
         }
         
-
+        //TODO: Maybe group check, initTicks, and removePadding
         tl.ticks.check();
         initTicks();
 
         tl.pick.update();
         tl.pick.checkLocation();
-        tl.ticks.removePaddingData();
-
         
     };
     

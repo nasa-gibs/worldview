@@ -52,7 +52,6 @@ wv.date.timeline.pan = wv.date.timeline.pan || function(models, config, ui) {
         tl.pick.checkLocation();
 
         tl.data.set();
-        tl.ticks.removePaddingData();
     };
 
     var update = function(x, y){

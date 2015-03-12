@@ -131,6 +131,15 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         
     };
 
+    var setClip = function(){ //This is a hack until Firefox fixes their svg rendering problems
+        d3.select('#timeline-footer svg > g:nth-child(2)').attr('visibility', 'hidden');
+        d3.select('#timeline-footer svg > g:nth-child(2)').attr('style','');
+        setTimeout(function(){
+            d3.select('#timeline-footer svg > g:nth-child(2)').attr('style','clip-path:url("#timeline-boundary")');
+            d3.select('#timeline-footer svg > g:nth-child(2)').attr('visibility', '');
+        },50);
+    };
+
     var drawContainers = function(){
         self.getWidth();
 
@@ -211,6 +220,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         $(window).resize(function(){
             self.resize();
             self.zoom.refresh();
+            setClip();
         });
 
         model.events.on("select", function(){
