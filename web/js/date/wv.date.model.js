@@ -20,6 +20,9 @@ wv.date.model = wv.date.model || function(config, spec) {
     self.events = wv.util.events();
     self.selected = null;
 
+    self.monthAbbr = [ "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
+                            "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" ];
+
     var init = function() {
         var initial = spec.initial || wv.util.today();
         self.select(initial);

@@ -85,8 +85,8 @@ wv.ui.mouse.wheel = wv.ui.mouse.wheel || function(element, ui, options) {
             update(evt);
         }
         else if ((Math.abs(evt.deltaX) >= Math.abs(evt.deltaY))){
-            if(!(ui.timeline.smallSize())){
-                ui.timeline.panAxis(d3.event);
+            if( ui.timeline.isCropped ){
+                ui.timeline.pan.axis(d3.event);
                 timeout = true;
                 clearTimeout(timer);
                 timer = setTimeout(function(){
@@ -95,8 +95,8 @@ wv.ui.mouse.wheel = wv.ui.mouse.wheel || function(element, ui, options) {
             }
         }
         else{
-            if ( !(ui.timeline.smallSize()) ){
-                ui.timeline.panAxis();
+            if ( ui.timeline.isCropped ){
+                ui.timeline.pan.axis();
             }
         }
     };
