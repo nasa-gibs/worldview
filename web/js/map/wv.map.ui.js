@@ -425,13 +425,21 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 mousePosition
             ],
             interactions: [
-                new ol.interaction.DoubleClickZoom(),
+                new ol.interaction.DoubleClickZoom({
+                    duration: 0
+                }),
                 new ol.interaction.DragPan({
                     kinetic: new ol.Kinetic(-0.005, 0.05, 100)
                 }),
-                new ol.interaction.PinchZoom(),
-                new ol.interaction.MouseWheelZoom(),
-                new ol.interaction.DragZoom()
+                new ol.interaction.PinchZoom({
+                    duration: 0
+                }),
+                new ol.interaction.MouseWheelZoom({
+                    duration: 0
+                }),
+                new ol.interaction.DragZoom({
+                    duration: 0
+                })
             ]
         });
         map.wv = {
@@ -503,7 +511,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
             var zoom = map.getView().getZoom();
             map.beforeRender(ol.animation.zoom({
                 resolution: map.getView().getResolution(),
-                duration: 250
+                duration: 0
             }));
             map.getView().setZoom(zoom + amount);
         };
