@@ -124,15 +124,39 @@ i.wv-layers-options-icon{
     background-position: 0 -69px;
 }
 .productsitem div.zot {
+    /*
     margin-left: 31px;
     position: absolute;
     top: 0;
     bottom: 0;
     width: 10px;
     background: #421414;
-    display:none;
+   */
+    /*
+    position: relative;
+    width: 15px;
+    background: #2F2F2F;
+    display: none;
+    height: 15px;
+    float: right;
+    border-radius: 20px;
+    margin: 2.5px;
+   */
+      position: relative;
+      width: 10px;
+      background: #c57f00;
+      height: 10px;
+      float: left;
+      border-radius: 20px;
+      margin: 1px 0 0 4px;
+      border: 1px solid transparent;
+      display:none;
+}
+.productsitem div.zot:hover{
+    border: 1px solid #fff;
 }
 .productsitem div.zot b {
+    /*
     text-align: center;
     height: 20px;
     line-height: 20px;
@@ -142,7 +166,20 @@ i.wv-layers-options-icon{
     right: 0;
     margin-top: -10px;
     color: #fff
+   */
+      text-align: center;
+      height: 10px;
+      line-height: 10px;
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      margin-top: -5px;
+      /* color: #fff; */
+      font-size: 80%;
+      font-weight: normal;
 }
+
 .productsitem.zotted div.zot{
     display: block;
 }
@@ -188,9 +225,9 @@ i.wv-layers-options-icon{
     cursor:default;
     min-height:40px;
 }
-.productsitem.zotted .layer-main{
+/*.productsitem.zotted .layer-main{
     margin-left: 42px;
-}
+}*/
 .productsitem.layer-hidden .layer-main, .productsitem.layer-hidden a.hdanchor {
     background:rgba(255, 255, 255, 0.2);
 }

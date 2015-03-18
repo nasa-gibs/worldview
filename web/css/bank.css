@@ -123,7 +123,13 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3ffffff', e
     font-size:0.85em;
     padding:0 3px;
 }
-.bank li.item p {padding:0 3px; color:#222; font-size:0.78em; font-style:italic;}
+.bank li.item p {
+    padding:0 3px;
+    color:#222;
+    font-size:0.78em;
+    font-style:italic;
+    margin-top:1px
+}
 .bank li.item span.palette {display:block; overflow:hidden; margin-top:5px; margin-left:5px;}
 .bank li.item ul.palette li {float:left;}
 .bank ul.category {  overflow:auto; }

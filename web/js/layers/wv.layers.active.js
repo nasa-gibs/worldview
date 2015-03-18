@@ -156,11 +156,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         $visibleButton.append($visibleImage);
         $layer.append($visibleButton);
 
-        var $zot = $("<div></div>")
-            .addClass('zot')
-            .append('<b>!</b>');
 
-        $layer.append($zot);
 
         if ( !layer.visible ) {
             $visibleButton
@@ -206,13 +202,16 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
         $layer.append($editButton);
 
-
+        
+        
         var $mainLayerDiv = $('<div></div>')
             .addClass('layer-main')
             .attr("data-layer", layer.id)
+            .append($("<div></div>")
+                    .addClass('zot')
+                    .append('<b>!</b>'))
             .append($('<h4></h4>').html(names.title).attr('title',names.title))
             .append($('<p></p>').html(names.subtitle));
-
 
         $layer.hover(function(){
             d3.select('#timeline-footer svg g.plot rect[data-layer="'+ layer.id +'"]')
