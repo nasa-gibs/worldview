@@ -129,7 +129,7 @@ i.wv-layers-options-icon{
     top: 0;
     bottom: 0;
     width: 10px;
-    background: #ccc;
+    background: #421414;
     display:none;
 }
 .productsitem div.zot b {
@@ -141,6 +141,7 @@ i.wv-layers-options-icon{
     left: 0;
     right: 0;
     margin-top: -10px;
+    color: #fff
 }
 .productsitem.zotted div.zot{
     display: block;

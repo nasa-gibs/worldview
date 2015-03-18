@@ -54,7 +54,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                 resize();
             }
         });
-
+        
         ui.map.selected.getView().on("change:resolution", onZoomChange);
     };
 
@@ -95,7 +95,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             }
         });
 
-
+        onZoomChange();
         setTimeout(resize, 1);
 
     };
@@ -413,6 +413,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                 .removeClass('layer-visible')
                 .addClass('layer-hidden');
         }
+        onZoomChange();
     };
 
     var onPaletteUpdate = function(layerId) {
@@ -435,7 +436,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     var onZoomChange = function() {
         var map = ui.map;
         var zoom = map.selected.getView().getZoom();
-        console.log(zoom);
+
         var sources = config.sources;
         var proj = models.proj.selected.id;
         
@@ -447,34 +448,34 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                     .matrixSets[matrixSet]
                     .resolutions.length - 1;
 
-                if( zoom > zoomLimit)
-                    addZot(layer.id);
-                else removeZot(layer.id);
-                
-                console.log(layer.id + ' ' + zoomLimit);
+                var layerPane = '#products';
+                var $layer = $(layerPane +
+                               ' li.productsitem[data-layer="' + layer.id + '"]');
+                var $zot = $layer.find('div.zot');
+                if(zoom > zoomLimit) {
+                    $zot.attr('title', 'Layer is overzoomed by ' +
+                              (zoom - zoomLimit) * 100 + '%' );
+
+                    if( !( $layer.hasClass('layer-hidden') ) &&
+                        !( $layer.hasClass('zotted') ) ) {
+                        $layer.addClass('zotted');
+                    }
+                    else if( ( $layer.hasClass('layer-hidden') ) &&
+                             ( $layer.hasClass('zotted') ) ) {
+                        $layer.removeClass('zotted');
+                    }
+                }
+                else {
+
+                    $layer.find('div.zot').attr('title', 'Layer is zoomed by ' +
+                                                (zoom - zoomLimit) * 100 + '%' );
+                    if ( $layer.hasClass('zotted')  ) {
+                        $layer.removeClass('zotted');
+                    }
+                }
             }
         });
         
-    };
-
-    var removeZot = function(layer){
-        var layerPane = ui.activeLayers.selector;
-        var $layer = $(layerPane + ' li.productsitem[data-layer="' + layer + '"]');
-        if($layer.hasClass('zotted'))
-            $layer.removeClass('zotted');
-        else {
-            return;
-        }
-    };
-    var addZot = function(layer){
-        var layerPane = ui.activeLayers.selector;
-        var $layer = $(layerPane + ' li.productsitem[data-layer="' + layer + '"]');
-        if($layer.hasClass('zotted'))
-            return;
-        else {
-            $layer.addClass('zotted');
-            
-        }
     };
 
     init();
