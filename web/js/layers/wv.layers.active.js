@@ -47,6 +47,8 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             .on("clear-custom", onPaletteUpdate)
             .on("range", onPaletteUpdate)
             .on("update", onPaletteUpdateAll);
+        models.date.events
+            .on("select", onDateChange);
         models.wv.events.on("sidebar-expand", resize);
         $(window).resize(resize);
         ui.sidebar.events.on("select", function(tab) {
@@ -124,6 +126,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     };
 
     var renderLayer = function($parent, group, layer, top) {
+        console.log(layer);
         var $layer = $("<li></li>")
             .attr("id", group.id + "-" + encodeURIComponent(layer.id))
             .addClass(self.id + "item")
@@ -154,20 +157,33 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
         $visibleButton.append($visibleImage);
         $layer.append($visibleButton);
+        console.log($layer);
+        console.log(new Date(layer.startDate) >= models.date.selected);
 
-        if ( !layer.visible ) {
+        if (new Date(layer.startDate) >= models.date.selected){
+            $layer.addClass('disabled');
             $visibleButton
-                .attr("title", "Show Layer")
-                .attr("data-action", "show")
-                .parent()
-                .addClass("layer-hidden");
-        } else {
-            $visibleButton
-                .attr("title", "Hide Layer")
-                .attr("data-action", "hide")
-                .parent()
-                .addClass("layer-visible");
+                .attr("title", "No data on selected date for this layer")
         }
+        else {
+            $layer.removeClass('disabled');
+
+            if ( !layer.visible ) {
+                $visibleButton
+                    .attr("title", "Show Layer")
+                    .attr("data-action", "show")
+                    .parent()
+                    .addClass("layer-hidden");
+            } else {
+                $visibleButton
+                    .attr("title", "Hide Layer")
+                    .attr("data-action", "hide")
+                    .parent()
+                .addClass("layer-visible");
+            }
+        }
+
+        
 
         if ( config.parameters.metadata && layer.metadata ) {
             var $metadataButton = $("<i></i>")
@@ -421,6 +437,11 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     };
 
     var onProjectionChanged = function() {
+        // Timeout prevents redraw artifacts
+        setTimeout(render, 1);
+    };
+
+    var onDateChange = function() {
         // Timeout prevents redraw artifacts
         setTimeout(render, 1);
     };
