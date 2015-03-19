@@ -163,7 +163,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         if (new Date(layer.startDate) >= models.date.selected){
             $layer.addClass('disabled');
             $visibleButton
-                .attr("title", "No data on selected date for this layer")
+                .attr("title", "No data on selected date for this layer");
         }
         else {
             $layer.removeClass('disabled');
