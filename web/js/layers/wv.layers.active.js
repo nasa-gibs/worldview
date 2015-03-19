@@ -152,11 +152,12 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                 $visibleButton.trigger('click');
             });
 
-
         $visibleButton.append($visibleImage);
         $layer.append($visibleButton);
 
-
+        $layer.append($("<div></div>")
+                      .addClass('zot')
+                      .append('<b>!</b>'));
 
         if ( !layer.visible ) {
             $visibleButton
@@ -202,14 +203,9 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
         $layer.append($editButton);
 
-        
-        
         var $mainLayerDiv = $('<div></div>')
             .addClass('layer-main')
             .attr("data-layer", layer.id)
-            .append($("<div></div>")
-                    .addClass('zot')
-                    .append('<b>!</b>'))
             .append($('<h4></h4>').html(names.title).attr('title',names.title))
             .append($('<p></p>').html(names.subtitle));
 
