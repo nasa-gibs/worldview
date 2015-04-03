@@ -17,6 +17,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
     var id = "wv-map";
     var selector = "#" + id;
     var cache = new Cache(100); // Save layers from days visited
+    var animationDuration = 250;
 
     var self = {};
     self.proj = {}; // One map for each projection
@@ -27,6 +28,11 @@ wv.map.ui = wv.map.ui || function(models, config) {
         if ( config.parameters.mockMap ) {
             return;
         }
+
+        if ( wv.util.browser.firefox ) {
+            animationDuration = 0;
+        }
+
         // NOTE: iOS sometimes bombs if this is _.each instead. In that case,
         // it is possible that config.projections somehow becomes array-like.
         _.forOwn(config.projections, function(proj) {
@@ -426,19 +432,19 @@ wv.map.ui = wv.map.ui || function(models, config) {
             ],
             interactions: [
                 new ol.interaction.DoubleClickZoom({
-                    duration: 0
+                    duration: animationDuration
                 }),
                 new ol.interaction.DragPan({
                     kinetic: new ol.Kinetic(-0.005, 0.05, 100)
                 }),
                 new ol.interaction.PinchZoom({
-                    duration: 0
+                    duration: animationDuration
                 }),
                 new ol.interaction.MouseWheelZoom({
-                    duration: 0
+                    duration: animationDuration
                 }),
                 new ol.interaction.DragZoom({
-                    duration: 0
+                    duration: animationDuration
                 })
             ]
         });
@@ -511,7 +517,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
             var zoom = map.getView().getZoom();
             map.beforeRender(ol.animation.zoom({
                 resolution: map.getView().getResolution(),
-                duration: 0
+                duration: animationDuration
             }));
             map.getView().setZoom(zoom + amount);
         };

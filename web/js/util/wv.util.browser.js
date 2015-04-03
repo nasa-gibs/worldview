@@ -44,6 +44,8 @@ wv.util.browser = wv.util.browser || (function() {
      */
     self.safari = false;
 
+    self.firefox = false;
+
     /**
      * Major version number of the browser detected in the user-agent string.
      * If the version is not important for Worldview at the moment, this
@@ -105,6 +107,8 @@ wv.util.browser = wv.util.browser || (function() {
         } else if ( tests.ie() ) {
             self.ie = true;
             self.version = tests.ieVersion();
+        } else if ( tests.firefox() ) {
+            self.firefox = true;
         }
 
         self.cors = tests.cors();
@@ -162,6 +166,10 @@ wv.util.browser = wv.util.browser || (function() {
             return true;
         }
         return false;
+    };
+
+    self.tests.firefox = function() {
+        return navigator.userAgent.toLowerCase().indexOf("firefox") > -1;
     };
 
     self.tests.touchDevice = function() {
