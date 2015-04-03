@@ -54,7 +54,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
     var init = function() {
         render();
         $(window).resize(resize);
-        models.proj.events.on("change", onProjectionChange);
+        models.proj.events.on("select", onProjectionChange);
         resize();
 
         if ( wv.util.browser.localStorage ) {
@@ -291,7 +291,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
 
     var onProjectionChange = function() {
         if ( collapsed ) {
-            $('.accordionToggler').html("Layers (" + models.layers.total() + ")");
+            $('.accordionToggler').html("Layers (" + models.layers.get().length + ")");
         }
     };
 
