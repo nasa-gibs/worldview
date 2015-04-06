@@ -83,7 +83,9 @@ wv.date.timeline.data = wv.date.timeline.data || function(models, config, ui) {
                 layerEnd = new Date( this.endDate );
             }
             else{
-                layerEnd = self.end();
+                layerEnd = new Date(self.end()
+                                    .setUTCDate(self.end()
+                                                .getUTCDate()+1));
             }
 
             var currentDB = tl.dataBars.append("svg:rect")
