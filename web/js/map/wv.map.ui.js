@@ -153,6 +153,17 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 layer.setVisible(renderable);
             }
         });
+        var defs = models.layers.get();
+        _.each(defs, function(def) {
+            if ( isGraticule(def) ) {
+                var renderable = models.layers.isRenderable(def.id);
+                if ( renderable ) {
+                    addGraticule();
+                } else {
+                    removeGraticule();
+                }
+            }
+        });
     };
 
     var updateOpacity = function(def, value) {
@@ -355,6 +366,9 @@ wv.map.ui = wv.map.ui || function(models, config) {
     };
 
     var addGraticule = function() {
+        if ( self.selected.graticule ) {
+            return;
+        }
         var graticule = new ol.Graticule({
             map: self.selected,
             strokeStyle: new ol.style.Stroke({
@@ -370,6 +384,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         if ( self.selected.graticule ) {
             self.selected.graticule.setMap(null);
         }
+        self.selected.graticule = null;
     };
 
     var triggerExtent = _.throttle(function() {
