@@ -340,6 +340,9 @@ wv.map.ui = wv.map.ui || function(models, config) {
             TRANSPARENT: transparent,
             VERSION: "1.1.1"
         };
+        if ( def.styles ) {
+            parameters.STYLES = def.styles;
+        }
         var extra = "";
         if ( def.period === "daily" ) {
             var date = options.date || models.date.selected;
