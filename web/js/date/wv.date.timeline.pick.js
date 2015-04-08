@@ -58,7 +58,7 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
                 tipDate = new Date( Date.UTC( tl.data.end().getUTCFullYear(),
                                               model.selected.getUTCMonth(),
                                               model.selected.getUTCDate() ) );
-                self.offset = tl.x(pickTipDate) - width / 2;
+                self.offset = tl.x(tipDate) - width / 2;
                 change.call(this);
                 updateChanges(tempPickTipDate);
             }
