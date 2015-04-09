@@ -91,7 +91,7 @@
 .x.axis>.tick-labeled>line {
     stroke-width:1;
     stroke-miterlimit:4;
-    stroke-dasharray:0;
+    stroke-dasharray:none;
     stroke:#fff;
     stroke-linecap:butt;
     stroke-linejoin:miter;
