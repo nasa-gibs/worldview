@@ -24,6 +24,7 @@ wv.data.map = wv.data.map || function(model, maps, config) {
     var selectionLayer = null;
     var gridLayer = null;
     var hovering = null;
+    var selectedFeatures = null;
 
     var init = function() {
         model.events
@@ -173,6 +174,7 @@ wv.data.map = wv.data.map || function(model, maps, config) {
             map.removeLayer(hoverLayer);
             map.removeLayer(buttonLayer);
         }
+        selectedFeatures = [];
         $(maps.selected.getViewport()).off("mousemove", hoverCheck);
         $(maps.selected.getViewport()).off("click", clickCheck);
     };
@@ -186,6 +188,10 @@ wv.data.map = wv.data.map || function(model, maps, config) {
         updateSwaths();
         updateGrid();
         _.each(model.selectedGranules, function(granule) {
+            if ( selectedFeatures[granule.id] ) {
+                selectionLayer.getSource().removeFeature(selectedFeatures[granule.id]);
+                delete selectedFeatures[granule.id];
+            }
             selectGranule(granule);
         });
     };
@@ -267,8 +273,9 @@ wv.data.map = wv.data.map || function(model, maps, config) {
         granule.feature.changed();
         var select = new ol.Feature(granule.geometry[model.crs]);
         select.granule = granule;
-        granule.selectedFeature = select;
+        //granule.selectedFeature = select;
         selectionLayer.getSource().addFeature(select);
+        selectedFeatures[granule.id] = select;
     };
 
     var unselectGranule = function(granule) {
@@ -276,8 +283,10 @@ wv.data.map = wv.data.map || function(model, maps, config) {
             return;
         }
         granule.feature.changed();
-        selectionLayer.getSource().removeFeature(granule.selectedFeature);
-        delete granule.selectedFeature;
+        //selectionLayer.getSource().removeFeature(granule.selectedFeature);
+        //delete granule.selectedFeature;
+        selectionLayer.getSource().removeFeature(selectedFeatures[granule.id]);
+        delete selectedFeatures[granule.id];
     };
 
     var updateProjection = function() {
