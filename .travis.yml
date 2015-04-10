@@ -5,4 +5,4 @@ before_install: npm install -g grunt-cli
 install: npm install
 notifications:
   slack:
-    secure: XPKCo6dUD8svmRJV4kapbtIFujF5NWhqHWAAoRGvpDgfdlHOlB3NLTx6+p0Efc+7ifaN/IOSvjK9ulUYdF704aL26DqTsltEcpWl0ok43i1cQnF66FCzKXaUcE7BtdB6XILJtdi4G/NJBrBJhnVJ2C6C4XxNtblsw/+rZzUHNa4=
+    secure: ifd6a2cATNMMDzNl6rsHTpNRhxMa8mes3qrj3lBkv9VzmjN/WaQToOjvQS03//njtYGhq5IHIKAvFg4/6uhRnSWDJIgWvFWz3tB719EOBzNCw6+H6IypWI/Ofl7yr3HuwtofJEuUmOfF6HgxxEU3Oi46HmDTgzIJynPLy6+VcXg=
