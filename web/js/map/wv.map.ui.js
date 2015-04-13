@@ -102,11 +102,11 @@ wv.map.ui = wv.map.ui || function(models, config) {
             if ( wv.util.browser.small ) {
                 map.removeControl(map.wv.scaleImperial);
                 map.removeControl(map.wv.scaleMetric);
-                $('#' + map.getTarget() + ' select').hide();
+                $('#' + map.getTarget() + ' .select-wrapper').hide();
             } else {
                 map.addControl(map.wv.scaleImperial);
                 map.addControl(map.wv.scaleMetric);
-                $('#' + map.getTarget() + ' select').show();
+                $('#' + map.getTarget() + ' .select-wrapper').show();
             }
         }
     };
@@ -526,6 +526,9 @@ wv.map.ui = wv.map.ui || function(models, config) {
             .attr("id", mapId)
             .addClass("wv-coords-map");
 
+        var $mousePositionWrapper = $('<div></div>')
+            .addClass('.select-wrapper');
+
         var coordinateFormat = function(source, data) {
             var str;
             var target = ol.proj.transform(source, proj.crs, "EPSG:4326");
@@ -556,7 +559,8 @@ wv.map.ui = wv.map.ui || function(models, config) {
             return str;
         };
 
-        $map.append($mousePosition);
+        $mousePositionWrapper.append($mousePosition);
+        $map.append($mousePositionWrapper);
 
         var $latlonDec = $("<option></option>")
             .attr('id', mapId + '-latlon-decimal')
@@ -579,17 +583,10 @@ wv.map.ui = wv.map.ui || function(models, config) {
         $mousePosition.append($latlonDec).append($latlonDeg)
             .append($lonlatDec).append($lonlatDeg);
         $("#" + map.getTarget())
-            .mouseenter(function(){
-                if ( map.small !== wv.util.browser.small ) {
-                    if ( wv.util.browser.small ) {
-                        $('#' + mapId).hide();
-                    }
-                    else{
-                        $('#' + mapId).show();
-                    }
-                }
+            .mouseover(function(){
+                $('#' + mapId).show();
             })
-            .mouseleave(function(){
+            .mouseout(function(){
                 $('#' + mapId).hide();
             })
             .mousemove(function(e){
