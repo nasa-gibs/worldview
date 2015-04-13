@@ -96,10 +96,16 @@
     outline: none;
     color: #fff;
     text-shadow:-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-    font-size:90%;
+    font-size:100%;
     border: none;
     border-radius:0;
-    background: rgba(40, 40, 40, 0.85);
+    background: none;
     display:none;
     
+}
+.wv-coords-map:hover{
+    background:rgba(40,40,40,0.85);
+}
+.wv-coords-map option{
+    text-align:right;
 }

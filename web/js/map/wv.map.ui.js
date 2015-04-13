@@ -582,7 +582,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
 
         $mousePosition.append($latlonDec).append($latlonDeg)
             .append($lonlatDec).append($lonlatDeg);
-        $("#" + map.getTarget())
+        $("#" + map.getTarget() + '>div')
             .mouseover(function(){
                 $('#' + mapId).show();
             })
