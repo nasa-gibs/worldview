@@ -102,11 +102,11 @@ wv.map.ui = wv.map.ui || function(models, config) {
             if ( wv.util.browser.small ) {
                 map.removeControl(map.wv.scaleImperial);
                 map.removeControl(map.wv.scaleMetric);
-                map.removeControl(map.wv.mousePosition);
+                $('#' + map.getTarget() + ' select').hide();
             } else {
                 map.addControl(map.wv.scaleImperial);
                 map.addControl(map.wv.scaleMetric);
-                map.addControl(map.wv.mousePosition);
+                $('#' + map.getTarget() + ' select').show();
             }
         }
     };
@@ -417,18 +417,6 @@ wv.map.ui = wv.map.ui || function(models, config) {
             className: "wv-map-scale-imperial",
             units: "imperial"
         });
-        var coordinateFormat = function(source) {
-            var target = ol.proj.transform(source, proj.crs, "EPSG:4326");
-            var crs = ( models.proj.change ) ? models.proj.change.crs
-                    : models.proj.selected.crs;
-            var str = wv.util.formatDMS(target[1], "latitude") + ", " +
-                      wv.util.formatDMS(target[0], "longitude") + " " +
-                      crs;
-            return str;
-        };
-        var mousePosition = new ol.control.MousePosition({
-            coordinateFormat: coordinateFormat
-        });
 
         var map = new ol.Map({
             view: new ol.View({
@@ -445,8 +433,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
             logo: false,
             controls: [
                 scaleMetric,
-                scaleImperial,
-                mousePosition
+                scaleImperial
             ],
             interactions: [
                 new ol.interaction.DoubleClickZoom({
@@ -469,10 +456,10 @@ wv.map.ui = wv.map.ui || function(models, config) {
         map.wv = {
             small: false,
             scaleMetric: scaleMetric,
-            scaleImperial: scaleImperial,
-            mousePosition: mousePosition
+            scaleImperial: scaleImperial
         };
         createZoomButtons(map, proj);
+        createMousePosSel(map, proj);
 
         map.getView().on("change:center", updateExtent);
         map.getView().on("change:resolution", updateExtent);
@@ -528,6 +515,90 @@ wv.map.ui = wv.map.ui || function(models, config) {
 
         map.getView().on("change:resolution", onZoomChange);
         onZoomChange();
+    };
+
+    var createMousePosSel = function(map, proj){
+        var $map = $("#" + map.getTarget());
+        map = map || self.selected;
+        var mapId = 'coords-' + proj.id;
+
+        var $mousePosition = $('<select></select>')
+            .attr("id", mapId)
+            .addClass("wv-coords-map");
+
+        var coordinateFormat = function(source, data) {
+            var str;
+            var target = ol.proj.transform(source, proj.crs, "EPSG:4326");
+            var crs = ( models.proj.change ) ? models.proj.change.crs
+                : models.proj.selected.crs;
+            switch(data){
+            case 'latlon-deg':
+                str = wv.util.formatDMS(target[1], "latitude") + ", " +
+                    wv.util.formatDMS(target[0], "longitude") + " " +
+                    crs;
+                break;
+            case 'latlon-decimal':
+                str = target[1].toFixed(4) + ", " +
+                    target[0].toFixed(4) + " " +
+                    crs;
+                break;
+            case 'lonlat-decimal':
+                str = target[0].toFixed(4) + ", " +
+                    target[1].toFixed(4) + " " +
+                    crs;
+                break;
+            case 'lonlat-deg':
+                str = wv.util.formatDMS(target[0], "longitude") + ", " +
+                    wv.util.formatDMS(target[1], "latitude") + " " +
+                    crs;
+                break;
+            }
+            return str;
+        };
+
+        $map.append($mousePosition);
+
+        var $latlonDec = $("<option></option>")
+            .attr('id', mapId + '-latlon-decimal')
+            .attr('data-coord', 'latlon-decimal')
+            .addClass('map-coord');
+        var $latlonDeg = $("<option></option>")
+            .attr('id', mapId + '-latlon-deg')
+            .attr('data-coord', 'latlon-deg')
+            .addClass('map-coord')
+            .prop("selected",true);
+        var $lonlatDec = $("<option></option>")
+            .attr('id', mapId + '-lonlat-decimal')
+            .attr('data-coord', 'lonlat-decimal')
+            .addClass('map-coord');
+        var $lonlatDeg = $("<option></option>")
+            .attr('id', mapId + '-lonlat-deg')
+            .attr('data-coord', 'lonlat-deg')
+            .addClass('map-coord');
+
+        $mousePosition.append($latlonDec).append($latlonDeg)
+            .append($lonlatDec).append($lonlatDeg);
+        $("#" + map.getTarget())
+            .mouseenter(function(){
+                if ( map.small !== wv.util.browser.small ) {
+                    if ( wv.util.browser.small ) {
+                        $('#' + mapId).hide();
+                    }
+                    else{
+                        $('#' + mapId).show();
+                    }
+                }
+            })
+            .mouseleave(function(){
+                $('#' + mapId).hide();
+            })
+            .mousemove(function(e){
+                var coords = map.getCoordinateFromPixel([e.pageX,e.pageY]);
+                $('#' + mapId + ' option.map-coord').each(function(){
+                    var data = $(this).attr('data-coord');
+                    $(this).html(coordinateFormat(coords, data));
+                });
+            });
     };
 
     var zoomAction = function(map, amount) {
