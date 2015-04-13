@@ -96,8 +96,10 @@
     outline: none;
     color: #fff;
     text-shadow:-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    font-size:90%;
     border: none;
     border-radius:0;
     background: rgba(40, 40, 40, 0.85);
     display:none;
+    
 }
