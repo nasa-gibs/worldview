@@ -548,6 +548,7 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
         });
         //Default zoom
         self.zoom(3);
+        tl.setClip(); //fix for firefox svg overflow
     };
 
     init();
