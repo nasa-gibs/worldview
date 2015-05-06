@@ -26,9 +26,9 @@ yum install -y \
 #npm config set strict-ssl false
 
 npm install -g grunt-cli
-npm install
+npm install --no-bin-links
 rm -rf python
-./wv-python
+easy_install xmltodict
 grunt
 grunt --apache-version=24 apache-config
 cp dist/*.conf /etc/httpd/conf.d
