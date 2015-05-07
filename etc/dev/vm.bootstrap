@@ -26,11 +26,16 @@ yum install -y \
 #npm config set strict-ssl false
 
 npm install -g grunt-cli
+easy_install xmltodict
+rm -rf ~/.npm
+
+sudo -u vagrant -s -- <<EOF
 npm install --no-bin-links
 rm -rf python
-easy_install xmltodict
 grunt
 grunt --apache-version=24 apache-config
+EOF
+
 cp dist/*.conf /etc/httpd/conf.d
 
 systemctl enable httpd.service
