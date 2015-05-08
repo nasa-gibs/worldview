@@ -200,8 +200,8 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
             var minLat = lonlat2[1];
             var maxLat = lonlat1[1];
 
-            var ll = wv.util.formatCoordinate([maxLat, minLon]);
-            var ur = wv.util.formatCoordinate([minLat, maxLon]);
+            var ll = wv.util.formatCoordinate([minLon, maxLat]);
+            var ur = wv.util.formatCoordinate([maxLon, minLat]);
 
             if ( x2 - x1 < 150 ) {
                 ll = "";
