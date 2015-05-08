@@ -22,6 +22,10 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
         "snapshot. Would you like to temporarily revert to the original " +
         "layer(s)?";
 
+    var GRATICLE_WARNING =
+        "The graticule layer cannot be used to take a snapshot. Would you " +
+        "like to hide this layer?";
+
     var containerId = "wv-image-button";
     var container;
     var selector = "#" + containerId;
@@ -93,10 +97,30 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
             // Save the previous state to be restored later
             previousPalettes = models.palettes.active;
             models.palettes.clear();
-            toggleOn();
+            toggle();
+        };
+
+        var disableGraticle = function() {
+            models.layers.setVisibility("Graticule", false);
+            toggle();
         };
 
         if(state == "off") {
+            var layers = models.layers.get({renderable: true});
+            var geographic = models.proj.selected.id === "geographic";
+            var on = true;
+            if ( _.find(layers, {id: "Graticule"}) && geographic ) {
+                wv.ui.ask({
+                    header: "Notice",
+                    message: GRATICLE_WARNING,
+                    onOk: disableGraticle,
+                    onCancel: function() {
+                        $button.prop("checked", false).button("refresh");
+                    }
+                });
+                return;
+            }
+
             // Confirm with the user they want to continue, and if so, disable
             // the palettes before bringing up the crop box.
             if ( models.palettes.inUse() ) {
@@ -108,9 +132,10 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                         $button.prop("checked", false).button("refresh");
                     }
                 });
-            } else {
-                toggleOn();
+                return;
             }
+
+            toggleOn();
         }
         else {
             state = "off";
