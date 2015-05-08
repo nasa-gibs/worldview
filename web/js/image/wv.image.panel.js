@@ -126,6 +126,9 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
 
         if ( models.proj.selected.id !== "geographic" ) {
              $("#wv-image-format [value='image/kmz']").remove();
+             $("#wv-image-resolution [value='0.5']").remove();
+             $("#wv-image-resolution [value='0.25']").remove();
+             $("#wv-image-resolution [value='0.125']").remove();
         }
         $("#wv-image-format").change(function() {
             format = $("#wv-image-format option:checked").val();
