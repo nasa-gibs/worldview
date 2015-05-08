@@ -131,7 +131,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         
     };
 
-    var setClip = function(){ //This is a hack until Firefox fixes their svg rendering problems
+    self.setClip = function(){ //This is a hack until Firefox fixes their svg rendering problems
         d3.select('#timeline-footer svg > g:nth-child(2)').attr('visibility', 'hidden');
         d3.select('#timeline-footer svg > g:nth-child(2)').attr('style','');
         setTimeout(function(){
@@ -220,7 +220,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         $(window).resize(function(){
             self.resize();
             self.zoom.refresh();
-            setClip();
+            self.setClip();
         });
 
         model.events.on("select", function(){
