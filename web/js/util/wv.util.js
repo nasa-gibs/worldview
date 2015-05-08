@@ -587,6 +587,27 @@ wv.util = (function(self) {
         return sdegrees + "&deg;" + sminutes + "'" + sseconds + '"' + sign;
     };
 
+    self.setCoordinateFormat = function(type) {
+        if ( type !== "latlon-dd" && type !== "latlon-dms" ) {
+            throw new Error("Invalid coordinate format: " + type);
+        }
+        self.localStorage("coordinateFormat", type);
+    };
+
+    self.getCoordinateFormat = function() {
+        return self.localStorage("coordinateFormat") || "latlon-dd";
+    };
+
+    self.formatCoordinate = function(coord, format) {
+        var type = format || self.getCoordinateFormat();
+        if ( type === "latlon-dms" ) {
+            return self.formatDMS(coord[1], "latitude") + ", " +
+                   self.formatDMS(coord[0], "longitude");
+        } else {
+            return coord[1].toFixed(4) + ", " + coord[0].toFixed(4);
+        }
+    };
+
     return self;
 
 })(wv.util || {});

@@ -150,6 +150,8 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
             of: ("#wv-image-button"),
         });
         $dialog.dialog("open");
+
+        $(".wv-image-coords").show();
     };
 
     var setPosition = function(){
@@ -192,6 +194,30 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
             //var lonlat2 = map.getLonLatFromViewPortPx(new OpenLayers.Pixel(Math.floor(x2), Math.floor(y1)));
             var lonlat1 = map.getCoordinateFromPixel([Math.floor(x1), Math.floor(y2)]);
             var lonlat2 = map.getCoordinateFromPixel([Math.floor(x2), Math.floor(y1)]);
+
+            var minLon = lonlat1[0];
+            var maxLon = lonlat2[0];
+            var minLat = lonlat2[1];
+            var maxLat = lonlat1[1];
+
+            var ll = wv.util.formatCoordinate([maxLat, minLon]);
+            var ur = wv.util.formatCoordinate([minLat, maxLon]);
+
+            if ( x2 - x1 < 150 ) {
+                ll = "";
+                ur = "";
+            }
+
+            $("#wv-image-top").css({
+                left: x1 - 10,
+                top: y1 - 20,
+                width: x2 - x1
+            }).html(ur);
+            $("#wv-image-bottom").css({
+                left: x1,
+                top: y2,
+                width: x2 - x1
+            }).html(ll);
 
             var dlURL = url;
             var conversionFactor = 256;

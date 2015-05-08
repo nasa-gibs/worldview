@@ -517,7 +517,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         onZoomChange();
     };
 
-    var createMousePosSel = function(map, proj){
+    var createMousePosSel = function(map, proj) {
         var $map = $("#" + map.getTarget());
         map = map || self.selected;
         var mapId = 'coords-' + proj.id;
@@ -529,59 +529,42 @@ wv.map.ui = wv.map.ui || function(models, config) {
         var $mousePositionWrapper = $('<div></div>')
             .addClass('.select-wrapper');
 
-        var coordinateFormat = function(source, data) {
-            var str;
+        var coordinateFormat = function(source, format) {
+            if ( !source ) {
+                return "";
+            }
             var target = ol.proj.transform(source, proj.crs, "EPSG:4326");
             var crs = ( models.proj.change ) ? models.proj.change.crs
                 : models.proj.selected.crs;
-            switch(data){
-            case 'latlon-deg':
-                str = wv.util.formatDMS(target[1], "latitude") + ", " +
-                    wv.util.formatDMS(target[0], "longitude") + " " +
-                    crs;
-                break;
-            case 'latlon-decimal':
-                str = target[1].toFixed(4) + ", " +
-                    target[0].toFixed(4) + " " +
-                    crs;
-                break;
-            case 'lonlat-decimal':
-                str = target[0].toFixed(4) + ", " +
-                    target[1].toFixed(4) + " " +
-                    crs;
-                break;
-            case 'lonlat-deg':
-                str = wv.util.formatDMS(target[0], "longitude") + ", " +
-                    wv.util.formatDMS(target[1], "latitude") + " " +
-                    crs;
-                break;
-            }
-            return str;
+
+            return wv.util.formatCoordinate(target, format) + " " + crs;
         };
 
         $mousePositionWrapper.append($mousePosition);
         $map.append($mousePositionWrapper);
 
-        var $latlonDec = $("<option></option>")
-            .attr('id', mapId + '-latlon-decimal')
-            .attr('data-coord', 'latlon-decimal')
+        var $latlonDD = $("<option></option>")
+            .attr('id', mapId + '-latlon-dd')
+            .attr('data-format', 'latlon-dd')
             .addClass('map-coord');
-        var $latlonDeg = $("<option></option>")
-            .attr('id', mapId + '-latlon-deg')
-            .attr('data-coord', 'latlon-deg')
-            .addClass('map-coord')
-            .prop("selected",true);
-        var $lonlatDec = $("<option></option>")
-            .attr('id', mapId + '-lonlat-decimal')
-            .attr('data-coord', 'lonlat-decimal')
-            .addClass('map-coord');
-        var $lonlatDeg = $("<option></option>")
-            .attr('id', mapId + '-lonlat-deg')
-            .attr('data-coord', 'lonlat-deg')
+        var $latlonDMS = $("<option></option>")
+            .attr('id', mapId + '-latlon-dms')
+            .attr('data-format', 'latlon-dms')
             .addClass('map-coord');
 
-        $mousePosition.append($latlonDec).append($latlonDeg)
-            .append($lonlatDec).append($lonlatDeg);
+        if ( wv.util.getCoordinateFormat() === "latlon-dd" ) {
+            $latlonDD.prop("selected", true);
+        } else {
+            $latlonDMS.prop("selected", true);
+        }
+
+        $mousePosition
+            .append($latlonDD)
+            .append($latlonDMS)
+            .change(function() {
+                wv.util.setCoordinateFormat($(this).find(":selected").attr("data-format"));
+            });
+
         $("#" + map.getTarget() + '>div')
             .mouseover(function(){
                 $('#' + mapId).show();
@@ -592,8 +575,8 @@ wv.map.ui = wv.map.ui || function(models, config) {
             .mousemove(function(e){
                 var coords = map.getCoordinateFromPixel([e.pageX,e.pageY]);
                 $('#' + mapId + ' option.map-coord').each(function(){
-                    var data = $(this).attr('data-coord');
-                    $(this).html(coordinateFormat(coords, data));
+                    var format = $(this).attr('data-format');
+                    $(this).html(coordinateFormat(coords, format));
                 });
             });
     };
