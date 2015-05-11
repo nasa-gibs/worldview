@@ -190,10 +190,13 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
             var px = pixels;
             var x1 = px.x; var y1= px.y; var x2 = px.x2; var y2=px.y2;
 
-            //var lonlat1 = map.getLonLatFromViewPortPx(new OpenLayers.Pixel(Math.floor(x1), Math.floor(y2)));
-            //var lonlat2 = map.getLonLatFromViewPortPx(new OpenLayers.Pixel(Math.floor(x2), Math.floor(y1)));
-            var lonlat1 = map.getCoordinateFromPixel([Math.floor(x1), Math.floor(y2)]);
-            var lonlat2 = map.getCoordinateFromPixel([Math.floor(x2), Math.floor(y1)]);
+            var crs = models.proj.selected.crs;
+            var lonlat1 = ol.proj.transform(
+                map.getCoordinateFromPixel([Math.floor(x1), Math.floor(y2)]),
+                crs, "EPSG:4326");
+            var lonlat2 = ol.proj.transform(
+                map.getCoordinateFromPixel([Math.floor(x2), Math.floor(y1)]),
+                crs, "EPSG:4326");
 
             var minLon = lonlat1[0];
             var maxLon = lonlat2[0];
