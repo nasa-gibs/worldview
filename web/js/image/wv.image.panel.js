@@ -191,17 +191,16 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
             var x1 = px.x; var y1= px.y; var x2 = px.x2; var y2=px.y2;
 
             var crs = models.proj.selected.crs;
-            var lonlat1 = ol.proj.transform(
-                map.getCoordinateFromPixel([Math.floor(x1), Math.floor(y2)]),
-                crs, "EPSG:4326");
-            var lonlat2 = ol.proj.transform(
-                map.getCoordinateFromPixel([Math.floor(x2), Math.floor(y1)]),
-                crs, "EPSG:4326");
+            var lonlat1 = map.getCoordinateFromPixel([Math.floor(x1), Math.floor(y2)]);
+            var lonlat2 = map.getCoordinateFromPixel([Math.floor(x2), Math.floor(y1)]);
 
-            var minLon = lonlat1[0];
-            var maxLon = lonlat2[0];
-            var minLat = lonlat2[1];
-            var maxLat = lonlat1[1];
+            var geolonlat1 = ol.proj.transform(lonlat1, crs, "EPSG:4326");
+            var geolonlat2 = ol.proj.transform(lonlat2, crs, "EPSG:4326");
+
+            var minLon = geolonlat1[0];
+            var maxLon = geolonlat2[0];
+            var minLat = geolonlat2[1];
+            var maxLat = geolonlat1[1];
 
             var ll = wv.util.formatCoordinate([minLon, maxLat]);
             var ur = wv.util.formatCoordinate([maxLon, minLat]);
