@@ -90,9 +90,8 @@
     top: auto;
     right: 10px;
     bottom: 95px;
-    height:25px;
     white-space: pre;
-    padding: 2px 10px 2px 2px;
+    padding: 5px;
     outline: none;
     color: #fff;
     text-shadow:-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
@@ -101,11 +100,12 @@
     border-radius:0;
     background: none;
     display:none;
-    
+    cursor:pointer;
 }
 .wv-coords-map:hover{
     background:rgba(40,40,40,0.85);
 }
-.wv-coords-map option{
-    text-align:right;
+.wv-coords-map button{
+    margin-left:10px;
+    cursor:pointer;
 }

@@ -522,12 +522,9 @@ wv.map.ui = wv.map.ui || function(models, config) {
         map = map || self.selected;
         var mapId = 'coords-' + proj.id;
 
-        var $mousePosition = $('<select></select>')
+        var $mousePosition = $('<div></div>')
             .attr("id", mapId)
-            .addClass("wv-coords-map");
-
-        var $mousePositionWrapper = $('<div></div>')
-            .addClass('.select-wrapper');
+            .addClass("wv-coords-map wv-coords-map-btn");
 
         var coordinateFormat = function(source, format) {
             if ( !source ) {
@@ -540,29 +537,44 @@ wv.map.ui = wv.map.ui || function(models, config) {
             return wv.util.formatCoordinate(target, format) + " " + crs;
         };
 
-        $mousePositionWrapper.append($mousePosition);
-        $map.append($mousePositionWrapper);
+        $map.append($mousePosition);
 
-        var $latlonDD = $("<option></option>")
+        var $latlonDD = $("<span></span>")
             .attr('id', mapId + '-latlon-dd')
             .attr('data-format', 'latlon-dd')
             .addClass('map-coord');
-        var $latlonDMS = $("<option></option>")
+        var $latlonDMS = $("<span></span>")
             .attr('id', mapId + '-latlon-dms')
             .attr('data-format', 'latlon-dms')
             .addClass('map-coord');
 
         if ( wv.util.getCoordinateFormat() === "latlon-dd" ) {
-            $latlonDD.prop("selected", true);
+            $latlonDMS.hide().removeClass('lanlon-selected');
+            $latlonDD.show().addClass('latlon-selected');
         } else {
-            $latlonDMS.prop("selected", true);
+            $latlonDD.hide().removeClass('latlon-selected');
+            $latlonDMS.show().addClass('latlon-selected');
         }
-
+        var $coordBtn = $("<button></button>")
+            .addClass('coord-switch');
         $mousePosition
             .append($latlonDD)
             .append($latlonDMS)
-            .change(function() {
-                wv.util.setCoordinateFormat($(this).find(":selected").attr("data-format"));
+            .append($coordBtn)
+            .click(function() {
+                var $format = $(this).find(".latlon-selected");
+                
+                if($format.attr("data-format") === "latlon-dd"){
+                    $latlonDD.hide().removeClass('latlon-selected');
+                    $latlonDMS.show().addClass('latlon-selected');
+                    wv.util.setCoordinateFormat('latlon-dms');
+                }
+                else{
+                    $latlonDMS.hide().removeClass('lanlon-selected');
+                    $latlonDD.show().addClass('latlon-selected');
+                    wv.util.setCoordinateFormat('latlon-dd');
+                }
+                
             });
 
         $("#" + map.getTarget() + '>div')
@@ -574,7 +586,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
             })
             .mousemove(function(e){
                 var coords = map.getCoordinateFromPixel([e.pageX,e.pageY]);
-                $('#' + mapId + ' option.map-coord').each(function(){
+                $('#' + mapId + ' span.map-coord').each(function(){
                     var format = $(this).attr('data-format');
                     $(this).html(coordinateFormat(coords, format));
                 });
