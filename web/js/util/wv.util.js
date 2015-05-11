@@ -604,7 +604,8 @@ wv.util = (function(self) {
             return self.formatDMS(coord[1], "latitude") + ", " +
                    self.formatDMS(coord[0], "longitude");
         } else {
-            return coord[1].toFixed(4) + ", " + coord[0].toFixed(4);
+            return coord[1].toFixed(4) + "&deg;, " +
+                   coord[0].toFixed(4) + "&deg;"
         }
     };
 
