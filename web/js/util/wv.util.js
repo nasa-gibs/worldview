@@ -605,7 +605,7 @@ wv.util = (function(self) {
                    self.formatDMS(coord[0], "longitude");
         } else {
             return coord[1].toFixed(4) + "&deg;, " +
-                   coord[0].toFixed(4) + "&deg;"
+                coord[0].toFixed(4) + "&deg;";
         }
     };
 
