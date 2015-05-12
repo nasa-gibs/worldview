@@ -149,6 +149,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
             }
             toolbarButtons("enable");
             wv.ui.closeDialog();
+            $(".wv-image-coords").hide();
         }
     };
 

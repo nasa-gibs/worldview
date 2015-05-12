@@ -102,11 +102,11 @@ wv.map.ui = wv.map.ui || function(models, config) {
             if ( wv.util.browser.small ) {
                 map.removeControl(map.wv.scaleImperial);
                 map.removeControl(map.wv.scaleMetric);
-                map.removeControl(map.wv.mousePosition);
+                $('#' + map.getTarget() + ' .select-wrapper').hide();
             } else {
                 map.addControl(map.wv.scaleImperial);
                 map.addControl(map.wv.scaleMetric);
-                map.addControl(map.wv.mousePosition);
+                $('#' + map.getTarget() + ' .select-wrapper').show();
             }
         }
     };
@@ -417,18 +417,6 @@ wv.map.ui = wv.map.ui || function(models, config) {
             className: "wv-map-scale-imperial",
             units: "imperial"
         });
-        var coordinateFormat = function(source) {
-            var target = ol.proj.transform(source, proj.crs, "EPSG:4326");
-            var crs = ( models.proj.change ) ? models.proj.change.crs
-                    : models.proj.selected.crs;
-            var str = wv.util.formatDMS(target[1], "latitude") + ", " +
-                      wv.util.formatDMS(target[0], "longitude") + " " +
-                      crs;
-            return str;
-        };
-        var mousePosition = new ol.control.MousePosition({
-            coordinateFormat: coordinateFormat
-        });
 
         var map = new ol.Map({
             view: new ol.View({
@@ -445,8 +433,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
             logo: false,
             controls: [
                 scaleMetric,
-                scaleImperial,
-                mousePosition
+                scaleImperial
             ],
             interactions: [
                 new ol.interaction.DoubleClickZoom({
@@ -469,10 +456,10 @@ wv.map.ui = wv.map.ui || function(models, config) {
         map.wv = {
             small: false,
             scaleMetric: scaleMetric,
-            scaleImperial: scaleImperial,
-            mousePosition: mousePosition
+            scaleImperial: scaleImperial
         };
         createZoomButtons(map, proj);
+        createMousePosSel(map, proj);
 
         map.getView().on("change:center", updateExtent);
         map.getView().on("change:resolution", updateExtent);
@@ -528,6 +515,88 @@ wv.map.ui = wv.map.ui || function(models, config) {
 
         map.getView().on("change:resolution", onZoomChange);
         onZoomChange();
+    };
+
+    var createMousePosSel = function(map, proj) {
+        var $map = $("#" + map.getTarget());
+        map = map || self.selected;
+        var mapId = 'coords-' + proj.id;
+
+        var $mousePosition = $('<div></div>')
+            .attr("id", mapId)
+            .addClass("wv-coords-map wv-coords-map-btn");
+
+        var coordinateFormat = function(source, format) {
+            if ( !source ) {
+                return "";
+            }
+            var target = ol.proj.transform(source, proj.crs, "EPSG:4326");
+            var crs = ( models.proj.change ) ? models.proj.change.crs
+                : models.proj.selected.crs;
+
+            return wv.util.formatCoordinate(target, format) + " " + crs;
+        };
+
+        $map.append($mousePosition);
+
+        var $latlonDD = $("<span></span>")
+            .attr('id', mapId + '-latlon-dd')
+            .attr('data-format', 'latlon-dd')
+            .addClass('map-coord');
+        var $latlonDMS = $("<span></span>")
+            .attr('id', mapId + '-latlon-dms')
+            .attr('data-format', 'latlon-dms')
+            .addClass('map-coord');
+
+        
+        if ( wv.util.getCoordinateFormat() === "latlon-dd" ) {
+            $('div.map-coord').removeClass('latlon-selected');
+            $latlonDD.addClass('latlon-selected');
+        } else {
+            $('div.map-coord').removeClass('latlon-selected');
+            $latlonDMS.addClass('latlon-selected');
+        }
+        var $coordBtn = $("<i></i>")
+            .addClass('coord-switch');
+
+        var $coordWrapper = $("<div></div>")
+            .addClass('coord-btn');
+
+        $coordWrapper.append($coordBtn);
+        $mousePosition
+            .append($latlonDD)
+            .append($latlonDMS)
+            .append($coordWrapper)
+            .click(function() {
+                var $format = $(this).find(".latlon-selected");
+                
+                if($format.attr("data-format") === "latlon-dd"){
+                    $('span.map-coord').removeClass('latlon-selected');
+                    $latlonDMS.addClass('latlon-selected');
+                    wv.util.setCoordinateFormat('latlon-dms');
+                }
+                else{
+                    $('span.map-coord').removeClass('latlon-selected');
+                    $latlonDD.addClass('latlon-selected');
+                    wv.util.setCoordinateFormat('latlon-dd');
+                }
+                
+            });
+
+        $("#" + map.getTarget() + '>div')
+            .mouseover(function(){
+                $('#' + mapId).show();
+            })
+            .mouseout(function(){
+                $('#' + mapId).hide();
+            })
+            .mousemove(function(e){
+                var coords = map.getCoordinateFromPixel([e.pageX,e.pageY]);
+                $('#' + mapId + ' span.map-coord').each(function(){
+                    var format = $(this).attr('data-format');
+                    $(this).html(coordinateFormat(coords, format));
+                });
+            });
     };
 
     var zoomAction = function(map, amount) {
