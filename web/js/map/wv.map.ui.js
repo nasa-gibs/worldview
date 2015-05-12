@@ -539,21 +539,22 @@ wv.map.ui = wv.map.ui || function(models, config) {
 
         $map.append($mousePosition);
 
-        var $latlonDD = $("<div></div>")
+        var $latlonDD = $("<span></span>")
             .attr('id', mapId + '-latlon-dd')
             .attr('data-format', 'latlon-dd')
             .addClass('map-coord');
-        var $latlonDMS = $("<div></div>")
+        var $latlonDMS = $("<span></span>")
             .attr('id', mapId + '-latlon-dms')
             .attr('data-format', 'latlon-dms')
             .addClass('map-coord');
 
+        
         if ( wv.util.getCoordinateFormat() === "latlon-dd" ) {
-            $latlonDMS.hide().removeClass('lanlon-selected');
-            $latlonDD.show().addClass('latlon-selected');
+            $('div.map-coord').removeClass('latlon-selected');
+            $latlonDD.addClass('latlon-selected');
         } else {
-            $latlonDD.hide().removeClass('latlon-selected');
-            $latlonDMS.show().addClass('latlon-selected');
+            $('div.map-coord').removeClass('latlon-selected');
+            $latlonDMS.addClass('latlon-selected');
         }
         var $coordBtn = $("<i></i>")
             .addClass('coord-switch');
@@ -570,12 +571,12 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 var $format = $(this).find(".latlon-selected");
                 
                 if($format.attr("data-format") === "latlon-dd"){
-                    $('div.map-coord').removeClass('latlon-selected');
+                    $('span.map-coord').removeClass('latlon-selected');
                     $latlonDMS.addClass('latlon-selected');
                     wv.util.setCoordinateFormat('latlon-dms');
                 }
                 else{
-                    $('div.map-coord').removeClass('latlon-selected');
+                    $('span.map-coord').removeClass('latlon-selected');
                     $latlonDD.addClass('latlon-selected');
                     wv.util.setCoordinateFormat('latlon-dd');
                 }
@@ -591,7 +592,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
             })
             .mousemove(function(e){
                 var coords = map.getCoordinateFromPixel([e.pageX,e.pageY]);
-                $('#' + mapId + ' div.map-coord').each(function(){
+                $('#' + mapId + ' span.map-coord').each(function(){
                     var format = $(this).attr('data-format');
                     $(this).html(coordinateFormat(coords, format));
                 });

@@ -89,7 +89,7 @@
     position: absolute;
     top: auto;
     right: 10px;
-    bottom: 95px;
+    bottom: 85px;
     white-space: pre;
     outline: none;
     color: #fff;
@@ -100,43 +100,47 @@
     background: none;
     display:none;
     cursor:pointer;
-    height:19px;
-    line-height:19px;
-    padding:0 2px 0 5px;
+    height:35px;
+    padding:0 0 0 5px;
 }
 .wv-coords-map:hover{
     background:rgba(40,40,40,0.85);
 }
-.wv-coords-map div.map-coord{
+.wv-coords-map:hover div.coord-btn{
+    background-image:none;
+    background:#fff;
+}
+.wv-coords-map:hover div.coord-btn i{
+    background-position:0;
+}
+.wv-coords-map span.map-coord{
     display:none !important;
-    line-height:19px;
-    margin-top:-5px;
-    height: 19px;
+    line-height:35px;
+    float:left;
+    height: 35px;
     vertical-align: middle;
 }
-.wv-coords-map div.map-coord.latlon-selected{
+.wv-coords-map span.map-coord.latlon-selected{
     display:inline-block !important;
 }
 .wv-coords-map div.coord-btn{
     position:relative;
-    width:16px;
-    height:15px;
-    background:linear-gradient(#fcfcfc, #eee) #eee;
-    border:1px solid #d5d5d5;
+    width:20px;
+    height:35px;
+    background:rgba(40,40,40,0.85);
+    border:1px solid transparent;
     display:inline-block;
     margin-left:5px;
     cursor:pointer;
     padding:1px;
     box-sizing:border-box;
-    margin-top:2px;
-    
 }
 .wv-coords-map div.coord-btn:hover{
     background-image:none;
     background:#fff;
 }
 .wv-coords-map div.coord-btn:hover i{
-    background-position:-14px 0;
+    background-position:0;
 }
 .wv-coords-map div.coord-btn i{
     position:absolute;
@@ -147,5 +151,6 @@
     width:14px;
     height:13px;
     background:url('../images/map/latlon.png') no-repeat;
+    background-position:-14px;
     
 }
