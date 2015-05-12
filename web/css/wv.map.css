@@ -105,7 +105,11 @@
 .wv-coords-map:hover{
     background:rgba(40,40,40,0.85);
 }
-.wv-coords-map button{
-    margin-left:10px;
+.wv-coords-map i{
+    display:inline-block;
+    width:16px;
+    height:16px;
+    margin-left:5px;
     cursor:pointer;
+    background-image:url('../images/map/latlon.png');
 }

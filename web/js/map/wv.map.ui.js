@@ -555,7 +555,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
             $latlonDD.hide().removeClass('latlon-selected');
             $latlonDMS.show().addClass('latlon-selected');
         }
-        var $coordBtn = $("<button></button>")
+        var $coordBtn = $("<i></i>")
             .addClass('coord-switch');
         $mousePosition
             .append($latlonDD)
