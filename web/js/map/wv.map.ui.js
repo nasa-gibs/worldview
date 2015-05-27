@@ -39,7 +39,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
             var map = createMap(proj);
             self.proj[proj.id] = map;
         });
-
+        
         models.proj.events.on("select", function() {
             updateProjection();
         });
