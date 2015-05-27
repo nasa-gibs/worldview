@@ -54,6 +54,8 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                 resize();
             }
         });
+        
+        ui.map.selected.getView().on("change:resolution", onZoomChange);
     };
 
     var render = function() {
@@ -93,7 +95,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             }
         });
 
-
+        onZoomChange();
         setTimeout(resize, 1);
 
     };
@@ -145,15 +147,17 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             .attr("id", "hide" + encodeURIComponent(layer.id))
             .attr("data-layer", layer.id);
 
-
         var $visibleImage = $("<i></i>")
             .on('click', function(){
                 $visibleButton.trigger('click');
             });
 
-
         $visibleButton.append($visibleImage);
         $layer.append($visibleButton);
+
+        $layer.append($("<div></div>")
+                      .addClass('zot')
+                      .append('<b>!</b>'));
 
         if ( !layer.visible ) {
             $visibleButton
@@ -199,13 +203,11 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
         $layer.append($editButton);
 
-
         var $mainLayerDiv = $('<div></div>')
             .addClass('layer-main')
             .attr("data-layer", layer.id)
-            .append($('<h4></h4>').html(names.title))
+            .append($('<h4></h4>').html(names.title).attr('title',names.title))
             .append($('<p></p>').html(names.subtitle));
-
 
         $layer.hover(function(){
             d3.select('#timeline-footer svg g.plot rect[data-layer="'+ layer.id +'"]')
@@ -406,6 +408,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                 .removeClass('layer-visible')
                 .addClass('layer-hidden');
         }
+        onZoomChange();
     };
 
     var onPaletteUpdate = function(layerId) {
@@ -423,6 +426,51 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     var onProjectionChanged = function() {
         // Timeout prevents redraw artifacts
         setTimeout(render, 1);
+    };
+
+    var onZoomChange = function() {
+        var map = ui.map;
+        var zoom = map.selected.getView().getZoom();
+
+        var sources = config.sources;
+        var proj = models.proj.selected.id;
+        
+        _.each(model.active, function(layer){
+            var matrixSet = layer.projections[proj].matrixSet;
+            if(matrixSet !== undefined){
+                var source = layer.projections[proj].source;
+                var zoomLimit = sources[source]
+                    .matrixSets[matrixSet]
+                    .resolutions.length - 1;
+
+                var layerPane = '#products';
+                var $layer = $(layerPane +
+                               ' li.productsitem[data-layer="' + layer.id + '"]');
+                var $zot = $layer.find('div.zot');
+                if(zoom > zoomLimit) {
+                    $zot.attr('title', 'Layer is overzoomed by ' +
+                              (zoom - zoomLimit) * 100 + '%' );
+
+                    if( !( $layer.hasClass('layer-hidden') ) &&
+                        !( $layer.hasClass('zotted') ) ) {
+                        $layer.addClass('zotted');
+                    }
+                    else if( ( $layer.hasClass('layer-hidden') ) &&
+                             ( $layer.hasClass('zotted') ) ) {
+                        $layer.removeClass('zotted');
+                    }
+                }
+                else {
+
+                    $layer.find('div.zot').attr('title', 'Layer is zoomed by ' +
+                                                (zoom - zoomLimit) * 100 + '%' );
+                    if ( $layer.hasClass('zotted')  ) {
+                        $layer.removeClass('zotted');
+                    }
+                }
+            }
+        });
+        
     };
 
     init();
