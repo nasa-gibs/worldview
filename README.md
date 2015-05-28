@@ -1,9 +1,9 @@
-# [Worldview](https://earthdata.nasa.gov/worldview)
+# [Worldview](https://worldview.earthdata.nasa.gov)
 
 [![Build Status](https://travis-ci.org/nasa-gibs/worldview.svg?branch=master)](https://travis-ci.org/nasa-gibs/worldview)
 
 Visit Worldview at
-[https://earthdata.nasa.gov/worldview](https://earthdata.nasa.gov/worldview)
+[https://worldview.earthdata.nasa.gov](https://worldview.earthdata.nasa.gov)
 
 ## About
 
