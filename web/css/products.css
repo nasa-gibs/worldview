@@ -90,7 +90,6 @@
 .icon-layers      { background-position:0 -10px; }
 ul#productsHoldertabs .tab:hover i.icon-layers {background-position:0 20px;}
 ul#productsHoldertabs li.ui-state-active .tab:hover i.icon-layers {background-position: 0 -10px;}
-.icon-download    { background-position:-30px -10px; }
 ul#productsHoldertabs .tab:hover i.icon-download    { background-position:-30px 20px; }
 ul#productsHoldertabs li.ui-state-active .tab:hover i.icon-download {background-position:-30px -10px;}
 .icon-download-alt{ background-position:-60px -10px; }
@@ -98,6 +97,19 @@ ul#productsHoldertabs li.ui-state-active .tab:hover i.icon-download {background-
 ul#productsHoldertabs .tab:hover i.icon-add    { background-position:-90px 20px; }
 ul#productsHoldertabs li.ui-state-active .tab:hover i.icon-add {background-position:-90px -10px;}
 .icon-add-alt     { background-position:-120px -10px; }
+
+.icon-events {
+    display:inline-block;
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    background: url(../images/events-icon.png);
+    margin:0;
+}
+
+.icon-events:hover {
+    background: url(../images/events-icon-highlight.png);
+}
 
 /***********************************End Icons***********************************/
 ul#productsHoldertabs li.ui-state-active i.productsIcon {

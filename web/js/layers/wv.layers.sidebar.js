@@ -34,12 +34,12 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
     var HTML_TAB_ADD_UNSELECTED =
         "<i class='productsIcon selected icon-add' title='Add Layers'></i>";
 
-    var HTML_TAB_DOWNLOAD_SELECTED =
-        "<i class='productsIcon selected icon-download'></i>" +
-        "Download Data";
+    var HTML_TAB_EVENTS_SELECTED =
+        "<i class='selected icon-events'></i>" +
+        "Recent Events";
 
-    var HTML_TAB_DOWNLOAD_UNSELECTED =
-        "<i class='productsIcon selected icon-download' title='Download Data'></i>";
+    var HTML_TAB_EVENTS_UNSELECTED =
+        "<i class='selected icon-events' title='Recent Events'></i>";
 
     var collapsed = false;
     var collapseRequested = false;
@@ -70,7 +70,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
             $(self.selector).tabs("option", "active", 0);
         } else if ( tabName === "add" ) {
             $(self.selector).tabs("option", "active", 1);
-        } else if ( tabName === "download" ) {
+        } else if ( tabName === "events" ) {
             $(self.selector).tabs("option", "active", 2);
         } else {
             throw new Error("Invalid tab: " + tabName);
@@ -174,18 +174,16 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
         $addTab.append($addLink);
         $tabs.append($addTab);
 
-        if ( config.features.dataDownload ) {
-            var $downloadTab = $("<li></li>")
-                .addClass("layerPicker")
-                .addClass("third")
-                .attr("data-tab", "download");
-            var $downloadLink = $("<a></a>")
-                .attr("href", "#wv-data")
-                .addClass("tab")
-                .html(HTML_TAB_DOWNLOAD_UNSELECTED);
-            $downloadTab.append($downloadLink);
-            $tabs.append($downloadTab);
-        }
+        var $eventsTab = $("<li></li>")
+            .addClass("layerPicker")
+            .addClass("third")
+            .attr("data-tab", "events");
+        var $eventsLink = $("<a></a>")
+            .attr("href", "#wv-events")
+            .addClass("tab")
+            .html(HTML_TAB_EVENTS_UNSELECTED);
+        $eventsTab.append($eventsLink);
+        $tabs.append($eventsTab);
 
         $container.append($tabs);
         var $collapseContainer = $("<div></div>")
@@ -261,14 +259,8 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
             HTML_TAB_ACTIVE_SELECTED : HTML_TAB_ACTIVE_UNSELECTED;
         var tab2 = ( tab === "add" ) ?
             HTML_TAB_ADD_SELECTED : HTML_TAB_ADD_UNSELECTED;
-        var tab3 = ( tab === "download" ) ?
-            HTML_TAB_DOWNLOAD_SELECTED : HTML_TAB_DOWNLOAD_UNSELECTED;
-
-        if ( ui.index === "download" ) {
-            self.events.trigger("dataDownloadSelect");
-        } else {
-            self.events.trigger("dataDownloadUnselect");
-        }
+        var tab3 = ( tab === "events" ) ?
+            HTML_TAB_EVENTS_SELECTED : HTML_TAB_EVENTS_UNSELECTED;
 
         self.events.trigger("before-select", tab);
 

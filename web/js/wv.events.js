@@ -9,14 +9,15 @@
  * All Rights Reserved.
  */
 
-var wv = wv || {}
+var wv = wv || {};
+
 wv.events = wv.events || (function() {
 
     var self = {};
 
     self.query = function() {
         console.log("DOING IT");
-        $.getJSON("http://eonet.sci.gsfc.nasa.gov/events", function(data) {
+        $.getJSON("service/events/eo-net.cgi?path=/api/v1/events", function(data) {
             console.log("GOT IT");
             console.log(data);
         });
