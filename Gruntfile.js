@@ -45,7 +45,6 @@ module.exports = function(grunt) {
 	var findCmd;
 	if(process.platform === 'win32')
 		findCmd = ";" //cygwin find doesn't really work in Windows compared to CentOS
-		//findCmd = "\"C:\\Program Files (x86)\\Git\\bin\\find\" build -type d -empty -exec rmdir {} ; ";
 	else
 		findCmd = "find build -type d -empty -delete";
 	
