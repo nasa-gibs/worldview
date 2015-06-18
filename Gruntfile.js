@@ -40,7 +40,14 @@ module.exports = function(grunt) {
     // Copyright notice to place at the top of the minified JavaScript and
     // CSS files
     var banner = grunt.file.read("deploy/banner.txt");
-
+	
+	//Platform specific command for find
+	var findCmd;
+	if(process.platform === 'win32')
+		findCmd = ";" //cygwin find doesn't really work in Windows compared to CentOS
+	else
+		findCmd = "find build -type d -empty -delete";
+	
     grunt.initConfig({
 
         pkg: pkg,
@@ -253,7 +260,7 @@ module.exports = function(grunt) {
             // need in a release build, there are a lot of empty directories.
             // Remove all of them.
             empty: {
-                command: "find build -type d -empty -delete"
+                command: findCmd
             },
 
             fetch: {
