@@ -107,7 +107,8 @@ ul#productsHoldertabs li.ui-state-active .tab:hover i.icon-add {background-posit
     margin:0;
 }
 
-.icon-events:hover {
+.icon-events:hover,
+ul#productsHoldertabs .tab:hover i.icon-events {
     background: url(../images/events-icon-highlight.png);
 }
 
