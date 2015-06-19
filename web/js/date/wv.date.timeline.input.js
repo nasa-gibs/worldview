@@ -29,6 +29,8 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
     var self = {};
 
     var timer, rollingDate;
+	
+	var daysCount = 0;
 
     var $incrementBtn = $("#right-arrow-group");
     var $decrementBtn = $("#left-arrow-group");
@@ -277,6 +279,14 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                         animateForward("day");
                         event.preventDefault();
                         break;
+					case wv.util.key.UP:
+						//Start an animation that repeats every sec but resets after 5 times. We need global variable to keep track
+						//var myVar = setInterval(function(){
+						animateReverse("day");
+						event.preventDefault();
+						//}, 1000);
+							
+						break;
                     
                 }
             })
@@ -287,6 +297,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 switch ( event.keyCode ) {
                     case wv.util.key.LEFT:
                     case wv.util.key.RIGHT:
+						console.log("Animation stopped");
                         animateEnd();
                         event.preventDefault();
                         break;
@@ -378,5 +389,6 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
     };
 
     init();
+	
     return self;
 };

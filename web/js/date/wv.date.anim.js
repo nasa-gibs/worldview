@@ -12,6 +12,7 @@
  * http://opensource.gsfc.nasa.gov/nosa.php
  */
  var wv = wv || {};
+ var days = 0; //keep track of how many days to animate
  wv.date = wv.date || {};
 
  wv.date.anim = wv.date.anim || function(model, ui, options) {
@@ -68,15 +69,17 @@
                  self.delta : -self.delta;
          var newDate = wv.util.dateAdd(model.selected, self.interval, amount);
          ui.preload(newDate);
-         timer = setTimeout(function() {
+         timer = setTimeout(function() { //this function is called once after 500 ms
              advance(newDate);
          }, self.delay);
+		 days++;
      };
 
      var advance = function(newDate) {
          notify("advance");
          var updated = model.select(newDate);
-         if ( !updated ) {
+         if ( !updated || days >= 4 ) { //do this 5 times
+			 days = 0;
              self.stop();
          } else {
              prepareFrame();
