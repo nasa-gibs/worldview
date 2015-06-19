@@ -98,19 +98,27 @@ ul#productsHoldertabs .tab:hover i.icon-add    { background-position:-90px 20px;
 ul#productsHoldertabs li.ui-state-active .tab:hover i.icon-add {background-position:-90px -10px;}
 .icon-add-alt     { background-position:-120px -10px; }
 
-.icon-events {
+.icon-events,
+ul#productsHoldertabs li.ui-state-active .tab:hover i.icon-events {
     display:inline-block;
     width: 20px;
     height: 20px;
     vertical-align: middle;
     background: url(../images/events-icon.png);
     margin:0;
+    margin-right: 5px;
+}
+
+ul#productsHoldertabs li.ui-state-active i.icon-events {
+    margin-right: 5px;
 }
 
 .icon-events:hover,
 ul#productsHoldertabs .tab:hover i.icon-events {
     background: url(../images/events-icon-highlight.png);
+    margin-right: 5px;
 }
+
 
 /***********************************End Icons***********************************/
 ul#productsHoldertabs li.ui-state-active i.productsIcon {

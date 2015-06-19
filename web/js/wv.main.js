@@ -72,9 +72,6 @@ $(function() {
             wv.map.parse,
             wv.palettes.parse
         ];
-        if ( config.features.dataDownload ) {
-            parsers.push(wv.data.parse);
-        }
 
         _.each(parsers, function(parser) {
             parser(state, errors, config);
@@ -129,12 +126,7 @@ $(function() {
 
         // HACK: Map needs to be created before the data download model
         ui.map = wv.map.ui(models, config);
-        if ( config.features.dataDownload ) {
-            models.data = wv.data.model(models, config);
-        }
-        if ( config.features.dataDownload) {
-            models.link.register(models.data);
-        }
+
         // HACK: Map needs permalink state loaded before starting. But
         // data download now needs it too.
         models.link.load(state);
@@ -166,11 +158,6 @@ $(function() {
         }
         ui.rubberband = wv.image.rubberband(models, ui, config);
         ui.image = wv.image.panel(models, ui, config);
-        if ( config.features.dataDownload ) {
-            ui.data = wv.data.ui(models, ui, config);
-            // FIXME: Why is this here?
-            ui.data.render();
-        }
         ui.link = wv.link.ui(models, config);
         ui.tour = wv.tour(models, ui, config);
         ui.info = wv.ui.info(ui, config);
@@ -185,22 +172,6 @@ $(function() {
         document.activeElement.blur();
         $("input").blur();
         $("#eventsHolder").hide();
-
-        // Wirings
-        if ( config.features.dataDownload ) {
-            models.data.events
-                .on("activate", function() {
-                    ui.sidebar.selectTab("download");
-                })
-                .on("queryResults", function() {
-                    ui.data.onViewChange();
-                });
-            ui.map.events.on("extent", function() {
-                ui.data.onViewChange();
-            });
-            // FIXME: This is a hack
-            models.map.events.on("projection", models.data.updateProjection);
-        }
 
         // Sink all focus on inputs if click unhandled
         $(document).click(function(event) {

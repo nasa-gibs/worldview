@@ -15,6 +15,11 @@ wv.events = wv.events || (function() {
 
     var self = {};
 
+    var init = function() {
+        console.log("do it")
+        $("#wv-data").html("Hello World!");
+    };
+
     self.query = function() {
         console.log("DOING IT");
         $.getJSON("service/events/eo-net.cgi?path=/api/v1/events", function(data) {
@@ -22,6 +27,8 @@ wv.events = wv.events || (function() {
             console.log(data);
         });
     };
+
+    init();
 
     return self;
 })();

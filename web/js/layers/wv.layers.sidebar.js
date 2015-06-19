@@ -36,10 +36,10 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
 
     var HTML_TAB_EVENTS_SELECTED =
         "<i class='selected icon-events'></i>" +
-        "Recent Events";
+        "Events";
 
     var HTML_TAB_EVENTS_UNSELECTED =
-        "<i class='selected icon-events' title='Recent Events'></i>";
+        "<i class='selected icon-events' title='Events'></i>";
 
     var collapsed = false;
     var collapseRequested = false;
@@ -243,7 +243,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
             $('.ui-tabs-nav li.first').removeClass("ui-state-active");
             $('.ui-tabs-nav li.second').addClass("ui-state-active");
             $('.ui-tabs-nav li.third').removeClass("ui-state-active");
-        } else if ( tab === "download" ) {
+        } else if ( tab === "events" ) {
             $('.ui-tabs-nav')
                   .removeClass('firstselected')
                   .removeClass('secondselected')
