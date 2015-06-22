@@ -61,29 +61,42 @@
      };
 
      var prepareFrame = function() {
-         if ( !self.active ) {
+         if ( !self.active )
              return;
-         }
+
          notify("prepare", self);
          var amount = ( self.direction === "forward" ) ?
                  self.delta : -self.delta;
          var newDate = wv.util.dateAdd(model.selected, self.interval, amount);
          ui.preload(newDate);
-         timer = setTimeout(function() { //this function is called once after 500 ms
+
+         //control animation if enabled. set before next imagery load
+         if(doAnimation) days++;
+
+         //if custom animation, change delay here
+         self.delay = doAnimation ? animSpeed : self.delay;
+
+         timer = setTimeout(function() { //this function is called once either after 500 ms or animation delay
              advance(newDate);
          }, self.delay);
-		 days++;
      };
 
      var advance = function(newDate) {
          notify("advance");
          var updated = model.select(newDate);
-         if ( !updated || days >= 4 ) { //do this 5 times
-			 days = 0;
+
+         //determine if animation should stop
+         if(doAnimation && days >= animDuration - 1 ) {
+             days = animDuration = 0;
+             doAnimation = false;
+             self.delay = 500;
              self.stop();
-         } else {
-             prepareFrame();
          }
+
+         if (!updated)
+             self.stop();
+         else
+             prepareFrame();
      };
 
      var notify = ( options.debug ) ? console.log : function() {};

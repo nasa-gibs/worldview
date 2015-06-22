@@ -16,6 +16,10 @@ var wv = wv || {};
 wv.date = wv.date || {};
 wv.date.timeline = wv.date.timeline || {};
 
+var doAnimation = false; //global variable to control animation
+var animDuration = 0; //control how long animation is
+var animSpeed = 0; //control how fast animation is in milliseconds
+
 /**
  * Implements the date input
  *
@@ -29,8 +33,6 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
     var self = {};
 
     var timer, rollingDate;
-	
-	var daysCount = 0;
 
     var $incrementBtn = $("#right-arrow-group");
     var $decrementBtn = $("#left-arrow-group");
@@ -281,13 +283,20 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                         break;
 					case wv.util.key.UP:
 						//Start an animation that repeats every sec but resets after 5 times. We need global variable to keep track
-						//var myVar = setInterval(function(){
-						animateReverse("day");
+                        doAnimation = true; //set a flag
+                        animDuration = 10;
+                        animSpeed = 100;
+                        animateReverse("day");
 						event.preventDefault();
-						//}, 1000);
-							
 						break;
-                    
+                    case wv.util.key.DOWN:
+                        //Start animation to go forward
+                        doAnimation = true;
+                        animDuration = 10;
+                        animSpeed = 250;
+                        animateForward("day");
+                        event.preventDefault();
+                        break;
                 }
             })
             .keyup(function(event) {
@@ -297,7 +306,6 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 switch ( event.keyCode ) {
                     case wv.util.key.LEFT:
                     case wv.util.key.RIGHT:
-						console.log("Animation stopped");
                         animateEnd();
                         event.preventDefault();
                         break;
