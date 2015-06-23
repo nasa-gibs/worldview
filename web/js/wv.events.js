@@ -19,9 +19,19 @@ wv.events = wv.events || function(models, ui) {
             ["MODIS_Terra_CorrectedReflectance_TrueColor", true],
             ["MODIS_Fires_All", true]
         ],
+        "Temperature Extremes": [
+            ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
+            ["MODIS_Terra_CorrectedReflectance_TrueColor", true],
+            ["MODIS_Aqua_Land_Surface_Temp_Day", false],
+            ["MODIS_Terra_Land_Surface_Temp_Day", true]
+        ],
         Floods: [
             ["MODIS_Aqua_SurfaceReflectance_Bands121", false],
             ["MODIS_Terra_SurfaceReflectance_Bands121", true]
+        ],
+        Volcanoes: [
+            ["MODIS_Aqua_CorrectedReflectance_Bands721", false],
+            ["MODIS_Terra_CorrectedReflectance_Bands721", true]
         ],
         Default: [
             ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
