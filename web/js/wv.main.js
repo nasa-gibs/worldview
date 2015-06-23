@@ -161,6 +161,7 @@ $(function() {
         ui.link = wv.link.ui(models, config);
         ui.tour = wv.tour(models, ui, config);
         ui.info = wv.ui.info(ui, config);
+        ui.events = wv.events(models, ui);
 
         //FIXME: Old hack
         $(window).resize(function() {

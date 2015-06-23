@@ -426,7 +426,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 center: proj.startCenter,
                 zoom: proj.startZoom,
                 maxZoom: proj.numZoomLevels,
-                enableRotation: false
+                enableRotation: false,
             }),
             target: id,
             renderer: ["canvas", "dom"],
@@ -451,7 +451,8 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 new ol.interaction.DragZoom({
                     duration: animationDuration
                 })
-            ]
+            ],
+            loadTilesWhileAnimating: true
         });
         map.wv = {
             small: false,

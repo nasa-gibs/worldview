@@ -148,3 +148,13 @@ a.evexpand {
 .events li.item ul.palette li {float:left;}*/
 .events li.sel {border-color:rgba(0,81,144,0.7);}
 .events img.thumb {float:left; width:10}
+
+#wv-events-detail {
+	background-color: rgb(204, 204, 204);
+}
+
+#wv-events-list li.dates {
+	margin-left: 10px;
+	font-size: 0.85em;
+}
+
