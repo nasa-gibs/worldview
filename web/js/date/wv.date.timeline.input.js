@@ -36,6 +36,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
 
     var $incrementBtn = $("#right-arrow-group");
     var $decrementBtn = $("#left-arrow-group");
+    var $animateBtn   = $("#animate-arrow-group");
 
     var forwardNextDay = function(){ //FIXME: Limit animation correctly
         var nextDay = new Date(new Date(model.selected)
@@ -268,6 +269,60 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 reversePrevDay();
             })
             .mouseup(animateEnd);
+
+        $animateBtn.click(function(event) {
+            $("#dialog").dialog("open");
+            event.preventDefault();
+        });
+
+        //Add slider and html elements to dialog area
+        var $header = $("<div></div>")
+            .html("Days")
+            .addClass("wv-header");
+
+        var $slider = $("<div></div>")
+            .noUiSlider({
+                start: animDuration,
+                step: 1,
+                range: {
+                    min: 0,
+                    max: 14
+                }
+            }).on("slide", function() {
+                animDuration = $slider.val();
+                $label.html(parseFloat(animDuration));
+            });
+
+        var $label = $("<div></div>")
+            .html(animDuration)
+            .addClass("wv-label")
+            .addClass("wv-label-opacity");
+
+        $("#dialog").append($header).append($slider).append($label)
+            .dialog({
+            autoOpen: false,
+            dialogClass: "wv-panel",
+            title: "Play Animation",
+            width: 300,
+            show: { effect: "slide", direction: "down" },
+            position: {
+                my: "left bottom",
+                at: "left top",
+                of: $("#timeline-footer")
+            },
+            buttons: [
+                {
+                    text: "Animate",
+                    click: function() {
+                        doAnimation = true;
+                        animSpeed = 100;
+                        animDuration = parseFloat($slider.val());
+                        $( this ).dialog( "close" );
+                        animateReverse("day");
+                    }
+                }
+            ]
+        });
 
         $(document)
             .mouseout(animateEnd)
