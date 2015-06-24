@@ -52,12 +52,14 @@
      };
 
      self.stop = function() {
-         notify("stop");
-         if ( timer ) {
-             clearTimeout(timer);
-             timer = null;
+         if ( self.active ) {
+             notify("stop");
+             if (timer) {
+                 clearTimeout(timer);
+                 timer = null;
+             }
+             self.active = false;
          }
-         self.active = false;
      };
 
      var prepareFrame = function() {
@@ -81,27 +83,28 @@
          }, self.delay);
      };
 
+     var stopAnimation = function() {
+         days = animDuration = 0;
+         doAnimation = false;
+         self.delay = 500;
+         self.stop();
+     }
+
      var advance = function(newDate) {
          notify("advance");
          var updated = model.select(newDate);
 
          //determine if animation should stop
-         if(doAnimation && days >= animDuration - 1 ) {
-             days = animDuration = 0;
-             doAnimation = false;
-             self.delay = 500;
-             self.stop();
-         }
+         if(doAnimation && days >= animDuration - 1 )
+             stopAnimation();
 
-         if (!updated)
-             self.stop();
-         else
-             prepareFrame();
+         //determine if we can continue
+         !updated ? stopAnimation() : prepareFrame();
      };
 
      //Enable console logging here if needed
-     options.debug = false;
-     var notify = ( options.debug ) ? function(message) { console.log(message); } : function() {};
+     options.debug = true;
+     var notify = (options.debug) ? function(message) { console.log(message); } : function() {};
 
      init();
      return self;

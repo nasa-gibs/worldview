@@ -16,6 +16,7 @@ var wv = wv || {};
 wv.date = wv.date || {};
 wv.date.timeline = wv.date.timeline || {};
 
+//TODO:Remove global variables
 var doAnimation = false; //global variable to control animation
 var animDuration = 7; //control how long animation is
 var animSpeed = 500; //control how fast animation is in milliseconds
@@ -109,9 +110,8 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         var kc = event.keyCode || event.which;
         var entered = (kc == 13) || (kc === 9);
         if ( event.type == "focusout" || entered ) {
-            if ( entered ) {
+            if ( entered )
                 event.preventDefault();
-            }
             
             var selected = $(this);
             var YMDInterval = selected.attr('id');
@@ -167,9 +167,8 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 var sib =  selected.parent().next('div.input-wrapper')
                     .find('input.button-input-group');
 
-                if ( entered && sib.length < 1 ) {
+                if (entered && sib.length < 1)
                     $('#focus-guard-2').focus();
-                }
 
                 model.select(selectedDateObj);
 
@@ -177,9 +176,8 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
 
                 selected.parent().removeClass('selected');
 
-                if ( entered ) {
+                if (entered)
                     sib.select().addClass('selected');
-                }
             }
             else{
                 selected.parent().css('border-color','#ff0000');
@@ -187,13 +185,10 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                     selected.select();
                 } else {
                     if (document.selection)
-                    {
                         document.selection.empty();
-                    }
                     else
-                    {
                         window.getSelection().removeAllRanges();
-                    }
+
                     selected.parent().animate({
                         borderColor: "rgba(40, 40, 40, .9)"
                     }, {
@@ -225,26 +220,21 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         //Update fields
         $('#year-input-group').val( model.selected.getUTCFullYear() );
         $('#month-input-group').val( model.monthAbbr[ model.selected.getUTCMonth() ] );
-        if ( model.selected.getUTCDate() < 10 ) {
+        if ( model.selected.getUTCDate() < 10 )
             $('#day-input-group').val("0" + model.selected.getUTCDate());
-        }
-        else {
+        else
             $('#day-input-group').val(model.selected.getUTCDate());
-        }
 
         //Disable arrows if nothing before/after selection
-        if( nd > wv.util.today() ) {
+        if(nd > wv.util.today())
             $incrementBtn.addClass('button-disabled');
-        }
-        else{
+        else
             $incrementBtn.removeClass('button-disabled');
-        }
-        if( pd.toUTCString() === tl.data.start().toUTCString() ){
+
+        if(pd.toUTCString() === tl.data.start().toUTCString())
             $decrementBtn.addClass('button-disabled');
-        }
-        else{
+        else
             $decrementBtn.removeClass('button-disabled');
-        }
 
         tl.pick.update();
     };
@@ -289,8 +279,8 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                     max: 14
                 }
             }).on("slide", function() {
-                animDuration = $slider.val();
-                $label.html(parseFloat(animDuration));
+                animDuration = parseFloat($slider.val());
+                $label.html(animDuration);
             });
 
         var $speedSlider = $("<div></div>")
@@ -302,8 +292,8 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                     max: 1000
                 }
             }).on("slide", function() {
-                animSpeed = $speedSlider.val();
-                $speedLabel.html(parseFloat(animSpeed) + ' ms');
+                animSpeed = parseFloat($speedSlider.val());
+                $speedLabel.html(animSpeed + ' ms');
             });
 
         var $label = $("<div></div>")
@@ -330,20 +320,33 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             },
             buttons: [
                 {
-                    text: "Animate",
+                    text: "Backward",
                     click: function() {
                         doAnimation = true;
                         animSpeed = parseFloat($speedSlider.val());
                         animDuration = parseFloat($slider.val());
-                        $( this ).dialog( "close" );
+                        $(this).dialog("close");
                         animateReverse("day");
+                    }
+                },
+                {
+                    text: "Forward",
+                    click: function() {
+                        doAnimation = true;
+                        animSpeed = parseFloat($speedSlider.val());
+                        animDuration = parseFloat($slider.val());
+                        $(this).dialog("close");
+                        animateForward("day");
                     }
                 }
             ]
         });
 
         $(document)
-            //.mouseout(function() {console.log("stopping in document mouseout()"); animateEnd();})
+            /*.mouseout(function() { //this is a bug! fires far too often than it should when it should only fire when mouse exits browser
+                if ( ui.anim.active )
+                    animateEnd();
+                })*/
             .keydown(function(event) {
                 switch ( event.keyCode ) {
                     case wv.util.key.LEFT:
