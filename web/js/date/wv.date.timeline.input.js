@@ -17,8 +17,8 @@ wv.date = wv.date || {};
 wv.date.timeline = wv.date.timeline || {};
 
 var doAnimation = false; //global variable to control animation
-var animDuration = 0; //control how long animation is
-var animSpeed = 0; //control how fast animation is in milliseconds
+var animDuration = 7; //control how long animation is
+var animSpeed = 500; //control how fast animation is in milliseconds
 
 /**
  * Implements the date input
@@ -280,12 +280,16 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             .html("Days")
             .addClass("wv-header");
 
+        var $speedHeader = $("<div></div>")
+            .html("Speed")
+            .addClass("wv-header");
+
         var $slider = $("<div></div>")
             .noUiSlider({
                 start: animDuration,
                 step: 1,
                 range: {
-                    min: 0,
+                    min: 1,
                     max: 14
                 }
             }).on("slide", function() {
@@ -293,12 +297,30 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 $label.html(parseFloat(animDuration));
             });
 
+        var $speedSlider = $("<div></div>")
+            .noUiSlider({
+                start: animSpeed,
+                step: 100,
+                range: {
+                    min: 100,
+                    max: 1000
+                }
+            }).on("slide", function() {
+                animSpeed = $speedSlider.val();
+                $speedLabel.html(parseFloat(animSpeed) + ' ms');
+            });
+
         var $label = $("<div></div>")
             .html(animDuration)
             .addClass("wv-label")
             .addClass("wv-label-opacity");
 
-        $("#dialog").append($header).append($slider).append($label)
+        var $speedLabel = $("<div></div>")
+            .html(animSpeed + ' ms')
+            .addClass("wv-label")
+            .addClass("wv-label-opacity");
+
+        $("#dialog").append($header).append($slider).append($label).append($speedHeader).append($speedSlider).append($speedLabel)
             .dialog({
             autoOpen: false,
             dialogClass: "wv-panel",
@@ -315,7 +337,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                     text: "Animate",
                     click: function() {
                         doAnimation = true;
-                        animSpeed = 100;
+                        animSpeed = parseFloat($speedSlider.val());
                         animDuration = parseFloat($slider.val());
                         $( this ).dialog( "close" );
                         animateReverse("day");
