@@ -41,38 +41,34 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
     var forwardNextDay = function(){ //FIXME: Limit animation correctly
         var nextDay = new Date(new Date(model.selected)
                                .setUTCDate(model.selected.getUTCDate()+1));
-        if(nextDay <= wv.util.today()){
+        if(nextDay <= wv.util.today())
             animateForward("day");
-        }
-        else{
+        else
             animateEnd();
-        }
     };
 
     var reversePrevDay = function(){ //FIXME: Limit animation correctly
-         var prevDay = new Date(new Date(model.selected)
+        var prevDay = new Date(new Date(model.selected)
                                .setUTCDate(model.selected.getUTCDate()-1));
-        if(prevDay >= tl.data.start() ){
+        if(prevDay >= tl.data.start())
             animateReverse("day");
-        }
-        else{
+        else
             animateEnd();
-        }
     };
 
     var animateForward = function(interval) {
-        if ( ui.anim.active ) {
+        if ( ui.anim.active )
             return;
-        }
+
         models.date.add(interval, 1);
         ui.anim.interval = interval;
         ui.anim.play("forward");
     };
 
     var animateReverse = function(interval) {
-        if ( ui.anim.active ) {
+        if ( ui.anim.active )
             return;
-        }
+
         models.date.add(interval, -1);
         ui.anim.interval = interval;
         ui.anim.play("reverse");
@@ -347,7 +343,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         });
 
         $(document)
-            .mouseout(animateEnd)
+            //.mouseout(function() {console.log("stopping in document mouseout()"); animateEnd();})
             .keydown(function(event) {
                 switch ( event.keyCode ) {
                     case wv.util.key.LEFT:
@@ -355,22 +351,6 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                         event.preventDefault();
                         break;
                     case wv.util.key.RIGHT:
-                        animateForward("day");
-                        event.preventDefault();
-                        break;
-					case wv.util.key.UP:
-						//Start an animation that repeats every sec but resets after 5 times. We need global variable to keep track
-                        doAnimation = true; //set a flag
-                        animDuration = 10;
-                        animSpeed = 100;
-                        animateReverse("day");
-						event.preventDefault();
-						break;
-                    case wv.util.key.DOWN:
-                        //Start animation to go forward
-                        doAnimation = true;
-                        animDuration = 10;
-                        animSpeed = 250;
                         animateForward("day");
                         event.preventDefault();
                         break;

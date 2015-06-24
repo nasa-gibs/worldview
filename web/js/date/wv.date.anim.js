@@ -99,7 +99,9 @@
              prepareFrame();
      };
 
-     var notify = ( options.debug ) ? console.log : function() {};
+     //Enable console logging here if needed
+     options.debug = false;
+     var notify = ( options.debug ) ? function(message) { console.log(message); } : function() {};
 
      init();
      return self;
