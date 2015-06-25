@@ -12,7 +12,6 @@
  * http://opensource.gsfc.nasa.gov/nosa.php
  */
  var wv = wv || {};
- var days = 0; //keep track of how many days to animate
  wv.date = wv.date || {};
 
  wv.date.anim = wv.date.anim || function(model, ui, options) {
@@ -25,6 +24,7 @@
      self.interval = options.interval || "day";
      self.delta = options.delta || 1;
      self.active = false;
+     var expired = false;
      var timer;
 
      var init = function() {
@@ -51,62 +51,39 @@
      };
 
      self.stop = function() {
-         if ( self.active ) {
-             notify("stop");
-             if (timer) {
-                 clearTimeout(timer);
-                 timer = null;
-             }
-             self.active = false;
+         notify("stop");
+         if ( timer ) {
+             clearTimeout(timer);
+             timer = null;
          }
+         self.active = false;
      };
 
      var prepareFrame = function() {
-         if ( !self.active )
+         if ( !self.active ) {
              return;
-
+         }
          notify("prepare", self);
          var amount = ( self.direction === "forward" ) ?
                  self.delta : -self.delta;
          var newDate = wv.util.dateAdd(model.selected, self.interval, amount);
          ui.preload(newDate);
-
-         //control animation if enabled. set before next imagery load
-         if(doAnimation) days++;
-
-         //if custom animation, change delay here
-         self.delay = doAnimation ? animSpeed : self.delay;
-
-         timer = setTimeout(function() { //this function is called once either after 500 ms or animation delay
+         timer = setTimeout(function() {
              advance(newDate);
          }, self.delay);
-     };
-
-     var stopAnimation = function() {
-         days = animDuration = 0;
-         doAnimation = false;
-         self.delay = 500;
-         self.stop();
      };
 
      var advance = function(newDate) {
          notify("advance");
          var updated = model.select(newDate);
-
-         //determine if animation should stop
-         if(doAnimation && days >= animDuration - 1 )
-             stopAnimation();
-
-         //determine if we can continue
-         if(!updated)
-            stopAnimation();
-         else
-            prepareFrame();
+         if ( !updated ) {
+             self.stop();
+         } else {
+             prepareFrame();
+         }
      };
 
-     //Enable console logging here if needed
-     options.debug = true;
-     var notify = (options.debug) ? function(message) { console.log(message); } : function() {};
+     var notify = ( options.debug ) ? console.log : function() {};
 
      init();
      return self;
