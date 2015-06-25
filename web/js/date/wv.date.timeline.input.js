@@ -20,6 +20,7 @@ wv.date.timeline = wv.date.timeline || {};
 var doAnimation = false; //global variable to control animation
 var animDuration = 7; //control how long animation is
 var animSpeed = 500; //control how fast animation is in milliseconds
+var loop = false;
 
 /**
  * Implements the date input
@@ -264,7 +265,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             event.preventDefault();
         });
 
-        //Add slider and html elements to dialog area
+        //Add slider, labels, and input elements to dialog area
         var $header = $("<div></div>")
             .html("Days")
             .addClass("wv-header");
@@ -298,6 +299,10 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 animSpeed = parseFloat($speedSlider.val());
                 $speedLabel.html(animSpeed + ' ms');
             });
+
+        var $loopCheck = $("<input />")
+            .attr("type", "checkbox")
+            .attr("id", "loopcheck")
 
         var $label = $("<div></div>")
             .html(animDuration)
@@ -337,7 +342,8 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             }
         });
 
-        $("#dialog").append($header).append($slider).append($label).append($speedHeader).append($speedSlider).append($speedLabel).append($fromDate).append($toLabel).append($toDate)
+        $("#dialog").append($header).append($slider).append($label).append($speedHeader).append($speedSlider).append($speedLabel)
+                    .append($fromDate).append($toLabel).append($toDate).append("<br />").append($loopCheck).append('<label>Loop (Press a arrow key to cancel)</label>')
             .dialog({
             autoOpen: false,
             dialogClass: "wv-panel",
@@ -358,7 +364,6 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                         animSpeed = parseFloat($speedSlider.val());
                         */
                         $(this).dialog("close");
-
                     }
                 },
                 {
@@ -368,6 +373,8 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                         animSpeed = parseFloat($speedSlider.val());
                         animDuration = parseFloat($slider.val());
                         $(this).dialog("close");
+                        if(document.getElementById("loopcheck").checked) //check for loop
+                            loop = true;
                         animateReverse("day");
                     }
                 },
@@ -378,6 +385,8 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                         animSpeed = parseFloat($speedSlider.val());
                         animDuration = parseFloat($slider.val());
                         $(this).dialog("close");
+                        if(document.getElementById("loopcheck").checked)
+                            loop = true;
                         animateForward("day");
                     }
                 }
@@ -385,7 +394,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         });
 
         $(document)
-            /*.mouseout(function() { //this is a bug! fires far too often than it should when it should only fire when mouse exits browser
+            /*.mouseout(function() { //FIXME:this is a bug! fires far too often than it should when it should only fire when mouse exits browser
                 if ( ui.anim.active )
                     animateEnd();
                 })*/
