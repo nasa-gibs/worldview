@@ -56,7 +56,7 @@ grunt
 The ``dist`` directory now contains ``site`` tar files that can be
 can be uploaded and unpacked to a web server.
 
-##Building Worldview in Windows
+##Building Worldview in Windows - Work in Progress
 Worldview may be built on Windows with the above instructions. First, install Node.js, Python 2, and XAMPP, then add the following to the PATH variable to include the git, nodejs, and Python binary executables (this is not an exhaustive list):
 
 ```bash
@@ -64,6 +64,8 @@ C:\Python27\;C:\Python27\Scripts\;C:\Program Files (x86)\git\bin;C:\Program File
 ```
 
 Next install the grunt program, install the python library with "pip install xmltodict", install the packages defined in package.json with "npm install", and finally build Worldview with grunt
+
+NOTE: The build process in Windows may not give error but does not seem to build everything
 
 ##Unpacking to a XAMPP web server
 
