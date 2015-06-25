@@ -43,7 +43,7 @@ These instructions install a development version of Worldview using a virtual
 machine. If you prefer to install locally on your computer, follow the
 directions in [Manual Setup](doc/manual_setup.md)
 
-*Notes:* This has only been tested on Mac OS X. Let us know if this works in
+*Notes:* This has only been tested on Mac OS X and Windows 8.1. Let us know if this works in
 other environments.
 
 Install the following:
@@ -71,7 +71,7 @@ git clone https://github.com/nasa-gibs/worldview-options-template.git options
 Build the virtual machine with:
 
 ```bash
-vagrant up
+vagrant up (or 'vagrant up --provision' if you already built it previously)
 ```
 
 After the command finishes, Worldview should be ready and available at
