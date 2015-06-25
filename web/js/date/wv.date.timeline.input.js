@@ -35,6 +35,9 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
 
     var timer, rollingDate;
 
+    //vars for dialog dates
+    var toDate, fromDate;
+
     var $incrementBtn = $("#right-arrow-group");
     var $decrementBtn = $("#left-arrow-group");
     var $animateBtn   = $("#animate-arrow-group");
@@ -304,9 +307,37 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         var $speedLabel = $("<div></div>")
             .html(animSpeed + ' ms')
             .addClass("wv-label")
+            .addClass("wv-label-speed")
             .addClass("wv-label-opacity");
 
-        $("#dialog").append($header).append($slider).append($label).append($speedHeader).append($speedSlider).append($speedLabel)
+        var $toLabel = $("<label></label>")
+            .html(' to ')
+            .attr("for", "to");
+
+        var $fromDate = $("<input />")
+            .addClass("wv-datepicker"),
+            $toDate = $("<input />")
+            .addClass("wv-datepicker");
+
+        $fromDate.attr("id", "from").attr("type", "text").attr("name", "from");
+        $toDate.attr("id", "to").attr("type", "text").attr("name", "to");
+
+        //set up the datepickers
+        $fromDate.datepicker({
+            onSelect: function() {
+                fromDate = $("#from").datepicker("getDate");
+                console.log(fromDate);
+            }
+        });
+
+        $toDate.datepicker({
+            onSelect: function() {
+                toDate = $("#to").datepicker("getDate");
+                console.log(toDate);
+            }
+        });
+
+        $("#dialog").append($header).append($slider).append($label).append($speedHeader).append($speedSlider).append($speedLabel).append($fromDate).append($toLabel).append($toDate)
             .dialog({
             autoOpen: false,
             dialogClass: "wv-panel",
@@ -319,6 +350,17 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 of: $("#timeline-footer")
             },
             buttons: [
+                {
+                    text: "Go",
+                    click: function() {
+                        /* TODO: set animation based on the two given dates. Try to start at the given date. Check for valid input
+                        doAnimation = true;
+                        animSpeed = parseFloat($speedSlider.val());
+                        */
+                        $(this).dialog("close");
+
+                    }
+                },
                 {
                     text: "Backward",
                     click: function() {

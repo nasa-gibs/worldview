@@ -24,6 +24,14 @@
     margin: 10px 10px 10px 15px;
 }
 
+.wv-datepicker { /* datepickers */
+    width: 100px
+}
+
+.wv-label-speed {
+    padding-bottom: 5px;
+}
+
 #timeds, #timemds {
     position: relative;
 }

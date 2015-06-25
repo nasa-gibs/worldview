@@ -222,7 +222,8 @@
 
             <!-- ui-dialog -->
             <div id="dialog" title="Dialog Title">
-
+                <!-- class is included in jquery, used so jquery-ui dialog can focus on it instead of on datepicker -->
+                <span class="ui-helper-hidden-accessible"><input type="text"/></span>
             </div>
 
             <div id="timewheels" style="display:none"></div>
