@@ -25,7 +25,6 @@
      self.interval = options.interval || "day";
      self.delta = options.delta || 1;
      self.active = false;
-     var expired = false;
      var timer;
 
      var init = function() {
@@ -88,7 +87,7 @@
          doAnimation = false;
          self.delay = 500;
          self.stop();
-     }
+     };
 
      var advance = function(newDate) {
          notify("advance");
@@ -99,7 +98,10 @@
              stopAnimation();
 
          //determine if we can continue
-         !updated ? stopAnimation() : prepareFrame();
+         if(!updated)
+            stopAnimation();
+         else
+            prepareFrame();
      };
 
      //Enable console logging here if needed
