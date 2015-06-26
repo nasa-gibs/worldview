@@ -12,7 +12,6 @@
  * http://opensource.gsfc.nasa.gov/nosa.php
  */
  var wv = wv || {};
- var days = 0; //keep track of how many days to animate
  wv.date = wv.date || {};
 
  wv.date.anim = wv.date.anim || function(model, ui, options) {
@@ -20,6 +19,7 @@
      options = options || {};
      var self = {};
 
+     self.days = 0; //keep track of how many days to animate
      self.delay = options.delay || 500;
      self.direction = "forward";
      self.interval = options.interval || "day";
@@ -53,6 +53,11 @@
      self.stop = function() {
          if ( self.active ) {
              notify("stop");
+             self.days = 0; //always reset the number of days animated to 0 to avoid issues
+             animDuration = 0;
+             doAnimation = false;
+             self.delay = 500;
+             loop = false;
              if (timer) {
                  clearTimeout(timer);
                  timer = null;
@@ -72,7 +77,7 @@
          ui.preload(newDate);
 
          //control animation if enabled. set before next imagery load
-         if(doAnimation) days++;
+         if(doAnimation) self.days++;
 
          //if custom animation, change delay here
          self.delay = doAnimation ? animSpeed : self.delay;
@@ -83,10 +88,15 @@
      };
 
      var stopAnimation = function() {
-         days = animDuration = 0;
-         doAnimation = false;
-         self.delay = 500;
-         self.stop();
+         if(loop) { //repeat animation by resetting days and calling play. direction is retained
+             notify("looping");
+             var amount = ( self.direction === "forward" ) ? self.delta : -self.delta; //determine if set date by -1 or +1
+             model.selected = new Date(new Date(initDate).setUTCDate(initDate.getUTCDate() - amount) ); //set the correct date. Make new objects to avoid modifying existing ones
+             self.days = -2; //need to start at -2 to animate same number of days
+             self.play(self.direction);
+         } else { //stop animation normally
+             self.stop();
+         }
      };
 
      var advance = function(newDate) {
@@ -94,7 +104,7 @@
          var updated = model.select(newDate);
 
          //determine if animation should stop
-         if(doAnimation && days >= animDuration - 1 )
+         if(doAnimation && self.days >= animDuration - 1 )
              stopAnimation();
 
          //determine if we can continue

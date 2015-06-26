@@ -21,6 +21,7 @@ var doAnimation = false; //global variable to control animation
 var animDuration = 7; //control how long animation is
 var animSpeed = 500; //control how fast animation is in milliseconds
 var loop = false;
+var initDate;
 
 /**
  * Implements the date input
@@ -243,6 +244,18 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         tl.pick.update();
     };
 
+    //Prepare animation when button pressed
+    var prepareAnim = function(speedSlider, slider) {
+        doAnimation = true;
+        animSpeed = parseFloat(speedSlider.val());
+        animDuration = parseFloat(slider.val());
+
+        if(document.getElementById("loopcheck").checked) { //check for loop
+            loop = true;
+            initDate = new Date(new Date(model.selected).setUTCDate(model.selected.getUTCDate())); //get date from picker
+        }
+    };
+
     //TODO: Cleanup
     var init = function(){
 
@@ -302,7 +315,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
 
         var $loopCheck = $("<input />")
             .attr("type", "checkbox")
-            .attr("id", "loopcheck")
+            .attr("id", "loopcheck");
 
         var $label = $("<div></div>")
             .html(animDuration)
@@ -343,7 +356,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         });
 
         $("#dialog").append($header).append($slider).append($label).append($speedHeader).append($speedSlider).append($speedLabel)
-                    .append($fromDate).append($toLabel).append($toDate).append("<br />").append($loopCheck).append('<label>Loop (Press a arrow key to cancel)</label>')
+                    .append($fromDate).append($toLabel).append($toDate).append("<br />").append($loopCheck).append('<label>Loop (Press an arrow key to cancel)</label>')
             .dialog({
             autoOpen: false,
             dialogClass: "wv-panel",
@@ -369,24 +382,16 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 {
                     text: "Backward",
                     click: function() {
-                        doAnimation = true;
-                        animSpeed = parseFloat($speedSlider.val());
-                        animDuration = parseFloat($slider.val());
-                        $(this).dialog("close");
-                        if(document.getElementById("loopcheck").checked) //check for loop
-                            loop = true;
+                        prepareAnim($speedSlider, $slider);
+                        $(this).dialog("close"); //avoid error by closing dialog here
                         animateReverse("day");
                     }
                 },
                 {
                     text: "Forward",
                     click: function() {
-                        doAnimation = true;
-                        animSpeed = parseFloat($speedSlider.val());
-                        animDuration = parseFloat($slider.val());
+                        prepareAnim($speedSlider, $slider);
                         $(this).dialog("close");
-                        if(document.getElementById("loopcheck").checked)
-                            loop = true;
                         animateForward("day");
                     }
                 }
