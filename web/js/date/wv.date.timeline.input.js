@@ -275,6 +275,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
 
         $animateBtn.click(function(event) {
             $("#dialog").dialog("open");
+            animateEnd(); //Let the animation end when another one is being set
             event.preventDefault();
         });
 
@@ -293,11 +294,11 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 step: 1,
                 range: {
                     min: 1,
-                    max: 14
+                    max: 30
                 }
             }).on("slide", function() {
                 animDuration = parseFloat($slider.val());
-                $label.html(animDuration);
+                $label.html(animDuration + ' days');
             });
 
         var $speedSlider = $("<div></div>")
@@ -318,7 +319,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             .attr("id", "loopcheck");
 
         var $label = $("<div></div>")
-            .html(animDuration)
+            .html(animDuration + ' days')
             .addClass("wv-label")
             .addClass("wv-label-opacity");
 
@@ -369,14 +370,20 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 of: $("#timeline-footer")
             },
             buttons: [
-                {
+                {   //TODO: Error checking!
                     text: "Go",
                     click: function() {
-                        /* TODO: set animation based on the two given dates. Try to start at the given date. Check for valid input
-                        doAnimation = true;
-                        animSpeed = parseFloat($speedSlider.val());
-                        */
+                        prepareAnim($speedSlider, $slider);
+
+                        //Compare the two dates in terms of milliseconds, divide it by milliseconds
+                        //in a day to get the number of days to animate
+                        animDuration = (toDate.getTime() - fromDate.getTime()) / (86400 * 1000);
+
+                        //TODO:For now let's assume we want to animate forward. Later integrate it to the other two buttons
+                        //So backward button would start from end to start date
+                        model.selected = fromDate;
                         $(this).dialog("close");
+                        animateForward("day");
                     }
                 },
                 {
