@@ -21,6 +21,8 @@ var buildNumber = moment.utc().format("YYMMDDHHmmss");
 
 module.exports = function(grunt) {
 
+    var env = grunt.option("env") || "release";
+
     var options = {
         version: 0,
         release: 0
@@ -40,6 +42,13 @@ module.exports = function(grunt) {
     // Copyright notice to place at the top of the minified JavaScript and
     // CSS files
     var banner = grunt.file.read("deploy/banner.txt");
+
+	//Platform specific command for find
+	var findCmd;
+	if(process.platform === 'win32')
+		findCmd = ";" //cygwin find doesn't really work in Windows compared to CentOS
+	else
+		findCmd = "find build -type d -empty -delete";
 
     grunt.initConfig({
 
@@ -246,18 +255,18 @@ module.exports = function(grunt) {
 
         exec: {
             config: {
-                command: "PATH=python/bin:${PATH} bin/wv-options-build"
+                command: "PATH=python/bin:${PATH} bin/wv-options-build " + env
             },
 
             // After removing JavaScript and CSS files that are no longer
             // need in a release build, there are a lot of empty directories.
             // Remove all of them.
             empty: {
-                command: "find build -type d -empty -delete"
+                command: findCmd
             },
 
             fetch: {
-                command: "PATH=python/bin:${PATH} FETCH_GC=1 bin/wv-options-build"
+                command: "PATH=python/bin:${PATH} FETCH_GC=1 bin/wv-options-build " + env
             },
 
             rpmbuild: {
@@ -595,7 +604,7 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask("fetch", ["exec:fetch"])
-    
+
     grunt.registerTask("site", [
         "load_branding",
         "remove:build_site",
