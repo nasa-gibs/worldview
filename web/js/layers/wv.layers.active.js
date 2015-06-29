@@ -263,7 +263,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         // after timeline markup is corrected to be loaded first
         $("section#productsHolder #products").css("max-height", winSize -
                                                   headSize - footSize -
-                                                  offset['top'] - timeSize -
+                                                  offset.top - timeSize -
                                                   secSize - 10 - 5);
     };
 
