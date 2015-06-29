@@ -25,6 +25,7 @@
      self.interval = options.interval || "day";
      self.delta = options.delta || 1;
      self.active = false;
+     var expired = false;
      var timer;
 
      var init = function() {
@@ -67,9 +68,9 @@
      };
 
      var prepareFrame = function() {
-         if ( !self.active )
+         if ( !self.active ) 
              return;
-
+         
          notify("prepare", self);
          var amount = ( self.direction === "forward" ) ?
                  self.delta : -self.delta;
@@ -114,9 +115,7 @@
             prepareFrame();
      };
 
-     //Enable console logging here if needed
-     options.debug = true;
-     var notify = (options.debug) ? function(message) { console.log(message); } : function() {};
+     var notify = ( options.debug ) ? console.log : function() {};
 
      init();
      return self;

@@ -42,7 +42,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
 
     var $incrementBtn = $("#right-arrow-group");
     var $decrementBtn = $("#left-arrow-group");
-    var $animateBtn   = $("#animate-arrow-group");
+	var $animateBtn   = $("#animate-arrow-group");
 
     var forwardNextDay = function(){ //FIXME: Limit animation correctly
         var nextDay = new Date(new Date(model.selected)
@@ -54,27 +54,27 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
     };
 
     var reversePrevDay = function(){ //FIXME: Limit animation correctly
-        var prevDay = new Date(new Date(model.selected)
+         var prevDay = new Date(new Date(model.selected)
                                .setUTCDate(model.selected.getUTCDate()-1));
-        if(prevDay >= tl.data.start())
+        if(prevDay >= tl.data.start() )
             animateReverse("day");
         else
             animateEnd();
     };
 
     var animateForward = function(interval) {
-        if ( ui.anim.active )
+        if ( ui.anim.active ) {
             return;
-
+        }
         models.date.add(interval, 1);
         ui.anim.interval = interval;
         ui.anim.play("forward");
     };
 
     var animateReverse = function(interval) {
-        if ( ui.anim.active )
+        if ( ui.anim.active ) {
             return;
-
+        }
         models.date.add(interval, -1);
         ui.anim.interval = interval;
         ui.anim.play("reverse");
@@ -172,7 +172,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 var sib =  selected.parent().next('div.input-wrapper')
                     .find('input.button-input-group');
 
-                if (entered && sib.length < 1)
+                if ( entered && sib.length < 1 )
                     $('#focus-guard-2').focus();
 
                 model.select(selectedDateObj);
@@ -193,7 +193,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                         document.selection.empty();
                     else
                         window.getSelection().removeAllRanges();
-
+					
                     selected.parent().animate({
                         borderColor: "rgba(40, 40, 40, .9)"
                     }, {
@@ -225,13 +225,13 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         //Update fields
         $('#year-input-group').val( model.selected.getUTCFullYear() );
         $('#month-input-group').val( model.monthAbbr[ model.selected.getUTCMonth() ] );
-        if ( model.selected.getUTCDate() < 10 )
+        if ( model.selected.getUTCDate() < 10 ) 
             $('#day-input-group').val("0" + model.selected.getUTCDate());
-        else
+        else 
             $('#day-input-group').val(model.selected.getUTCDate());
 
         //Disable arrows if nothing before/after selection
-        if(nd > wv.util.today())
+        if( nd > wv.util.today() ) 
             $incrementBtn.addClass('button-disabled');
         else
             $incrementBtn.removeClass('button-disabled');
@@ -538,6 +538,5 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
     };
 
     init();
-	
     return self;
 };

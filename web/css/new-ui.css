@@ -125,7 +125,7 @@ g.plot rect.data-bar-invisible{
 }
 #timeline-header{
     margin-top:2px;
-    width:295px;
+    width:250px;
 }
 #timeline-header .input-wrapper{
     background: transparent;
