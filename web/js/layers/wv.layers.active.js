@@ -59,13 +59,12 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     var render = function() {
         legends = {};
         var $container = $(self.selector);
-        $container.empty();
+        var $addBtn = $("#layers-add");
+        
+        $addBtn.button();
+        sizeProducts();
 
-        var tabs_height = $(".ui-tabs-nav").outerHeight(true);
         $container.addClass('bank');
-        $container.height(
-            $(self.selector).parent().outerHeight() - tabs_height
-        );
 
         _.each(groups, function(group) {
             renderGroup($container, group);
@@ -99,25 +98,16 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     };
 
     var renderGroup = function($parent, group) {
-        var $container = $("<div></div>")
-            .attr("id", self.id + group.camel)
-            .addClass("categoryContainer");
-
-        var $header = $("<h3></h3>")
-            .addClass("head")
-            .html(group.description);
-
-        var $layers = $("<ul></ul>")
+        var $container = $("<ul></ul>")
             .attr("id", group.id)
-            .addClass(self.id + "category")
             .addClass("category");
 
         _.each(model.get({ group: group.id }), function(layer) {
-            renderLayer($layers, group, layer);
+            renderLayer($container, group, layer);
         });
 
-        $container.append($header);
-        $container.append($layers);
+        //$container.append($header);
+        //$contain.append($layers);
 
         $parent.append($container);
 
@@ -257,53 +247,24 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             config: config,
             models: models,
             layer: layer,
-            onLoad: adjustCategoryHeights
+            //onLoad: //adjustCategoryHeights
         });
     };
 
-    var adjustCategoryHeights = function() {
-        var heights = [];
-        var container_height = $(self.selector).outerHeight(true);
-        var labelHeight = 0;
-        $(self.selector + ' .head').each(function(){
-            labelHeight += $(this).outerHeight(true);
-        });
-        container_height -= labelHeight;
-        $.each(["baselayers", "overlays"], function(i, group) {
-            var actual_height = 0;
-            var count = 0;
-            $('#' + group + ' li').each(function() {
-                actual_height += $(this).outerHeight(true);
-                count++;
-            });
+    var sizeProducts = function(){
+        var winSize = $(window).outerHeight(true);
+        var headSize = $("ul#productsHolder-tabs").outerHeight(true);//
+        var footSize = $("section#productsHolder footer").outerHeight(true);
+        var secSize = $("#productsHolder").innerHeight() - $("#productsHolder").height();
+        var offset = $("#productsHolder").offset();
+        var timeSize = $("#timeline").outerHeight(true); // + $("#timeline").offset()['top'];
 
-            heights.push({
-                name: group,
-                height: actual_height,
-                count: count
-            });
-        });
-
-        if ( heights[0].height + heights[1].height > container_height ) {
-            if ( heights[0].height > container_height / 2 ) {
-                heights[0].height = container_height / 2;
-            }
-            heights[1].height = container_height - heights[0].height;
-        }
-
-        $("#" + heights[0].name).css("height",heights[0].height+"px");
-        $("#" + heights[1].name).css("height",heights[1].height+"px");
-
-        reinitializeScrollbars();
-    };
-
-    var reinitializeScrollbars = function() {
-        $("." + self.id + "category").each(function() {
-            var api = $(this).data('jsp');
-            if ( api ) {
-                api.reinitialise();
-            }
-        });
+        //FIXME: -10 here is the timeline's bottom position from page, fix
+        // after timeline markup is corrected to be loaded first
+        $("section#productsHolder #products").css("max-height", winSize -
+                                                  headSize - footSize -
+                                                  offset['top'] - timeSize -
+                                                  secSize - 10 - 5);
     };
 
     var resize = function() {
@@ -328,12 +289,8 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             $(".wv-layers-options").hide();
         }
 
-        var tabs_height = $(".ui-tabs-nav").outerHeight(true);
-        $(self.selector).height(
-            $(self.selector).parent().outerHeight() - tabs_height
-        );
-
-        adjustCategoryHeights();
+        sizeProducts();
+        
     };
 
     var removeLayer = function(event) {
@@ -348,7 +305,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         if ( legends[layer.id] ) {
             delete legends[layer.id];
         }
-        adjustCategoryHeights();
+        //adjustCategoryHeights();
     };
 
     var onLayerAdded = function(layer) {
@@ -361,7 +318,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         if ( layer.palette ) {
             renderLegendCanvas(layer);
         }
-        adjustCategoryHeights();
+        //adjustCategoryHeights();
     };
 
     var toggleVisibility = function(event) {

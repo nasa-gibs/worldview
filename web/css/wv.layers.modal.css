@@ -1,0 +1,8 @@
+.grid-item {
+    background-color:#fff;
+    width: 25%;
+}
+.grid-item--width2 {
+    background-color:#880;
+    width: 50%;
+}

@@ -25,18 +25,6 @@ body {
 div {display:block;}
 h1, h2, h3, h4, h5, h6 { font-weight:400; }
 
-.yui-skin-sam .yui-panel {background: transparent; width:700px;     font: 13px "Gill Sans", sans-serif; font-weight:100;}
-#selector_c .yui-panel {background: transparent; width:210px; font: 13px "Gill Sans", sans-serif; font-weight:100;}
-#selector_c .yui-panel .bd {padding:0 !important;}
-
-.yui-skin-sam .yui-panel-container .hd{ background:rgba(38, 43, 49, 0.65); color:#ffffff; border-bottom: none; padding:0; padding-left: 10px;}
-.yui-skin-sam .yui-panel-container .bd{ background:rgb(25, 28, 32); color:#d7d7d7;}
-.yui-skin-sam .yui-panel-container .ft{ background:rgba(18, 18, 18, 0.75); color:#d7d7d7;}
-.yui-skin-sam .yui-panel-container .bd h3{ color:#FFFFFF; font: 18px "Gill Sans", sans-serif; font-weight:400; text-decoration:none; }
-.yui-skin-sam .yui-panel-container .bd h4{ color:#000000; font: 18px "Gill Sans", sans-serif; font-weight:400; text-decoration:none; }
-.yui-skin-sam .yui-panel-container .bd a {color: #82CDFA; }
-#splash_c.yui-overlay-hidden, #conclusionPanel_c.yui-overlay-hidden {display:none;}
-
 .jspVerticalBar {width:10px !important; background:transparent;}
 .jspTrack {
     background: #555555;
@@ -46,8 +34,6 @@ h1, h2, h3, h4, h5, h6 { font-weight:400; }
     background: #cccccc;
     padding:2px 0;
 }
-
-
 
 #info_drop { border:none; margin:0px;}
 #info_drop div.hidden a {display:block; color:#fff; font-weight:100; line-height:1em; font-size: 11px; width:70px; padding: 2px 5px; text-align:right; text-decoration:none;}
@@ -61,10 +47,6 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
 #permalink_content {margin-top:10px;}
 
 .hidden {display:none;}
-
-#products {display:block; float:left;  position:relative; left:0; }
-
-
 
 #banner {
     display:block;
@@ -118,12 +100,6 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
 
 #transition ul li:hover {
     border-color: yellow;
-}
-
-@media screen and (max-width: 440px){
-}
-
-#toolbarlist {
 }
 
 #wv-logo {

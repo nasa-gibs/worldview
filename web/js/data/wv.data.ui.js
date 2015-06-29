@@ -58,9 +58,12 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
     };
 
     self.render = function() {
+        var $footer = $("#productsHolder footer");
+        
         var $container = $(self.selector).empty()
             .addClass(self.id + "list")
             .addClass("bank");
+
         var $actionButton = $("<button></button>")
             .attr("id", "wv-data-download-button")
             .addClass("action")
@@ -68,12 +71,15 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
             .attr("value", "")
             .on("click", showDownloadList);
 
-        $container.append($actionButton);
+        $footer.append($actionButton);
+
+        $actionButton.hide();
 
         var $list = $("<div></div>")
             .attr("id", self.id + "content")
             .addClass("content");
         $container.append($list);
+
         $("#wv-data-download-button").button();
 
         self.refresh();
@@ -160,20 +166,13 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
     };
 
    var resize = function() {
-
-        var tabs_height = $(".ui-tabs-nav").outerHeight(true);
-        var button_height = $(self.selector + "_Button").outerHeight(true);
-        $(self.selector).height(
-            $(self.selector).parent().outerHeight() - tabs_height - button_height
-        );
-
         var $pane = $(self.selector + "content");
         var api = $pane.data("jsp");
         if ( !wv.util.browser.small ) {
             if ( api ) {
                 api.reinitialise();
             } else {
-                $pane.jScrollPane({verticalGutter:0, contentWidth:238, autoReinitialise:false});
+                //$pane.jScrollPane({verticalGutter:0, contentWidth:238, autoReinitialise:false});
             }
         } else {
             if ( api ) {

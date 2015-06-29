@@ -64,8 +64,7 @@ a.atcollapse:hover{
     cursor:pointer;
 }
 a.atexpand {background-image: url("../images/angle-double-down.png");}
-
-div.bank { display:inline-block; float:left;  width: 100%; height:100%;  /*box-shadow: 0 0 4px 1px #bbb;*/  font: 1em; color: #222; text-shadow:none;}
+.bank{color:#222;}
 .bank h1,h2,h3,h4 {margin:0px; padding:0px; color:#000; font-weight:400;}
 .bank h2 {font-size:1.4em; display:inline-block; float: left; color:#ffffff; border:none; padding:9px 30px 9px 30px;
 background: -moz-linear-gradient(top,  rgba(255,255,255,0.7) 0%, rgba(11,95,160,0.7) 23%, rgba(0,88,156,0.7) 24%, rgba(0,81,144,0.7) 99%, rgba(0,81,144,0.7) 100%); /* FF3.6+ */
@@ -85,8 +84,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3ffffff', e
 .bank .category {overflow:hidden;}
 .bank h3 {background: none; padding: 1px 3px; font-size:0.9em; margin-top:10px; margin-left:2%;text-transform:uppercase;}
 .bank li.item {
-    display:block;
-    width:96%;
     padding:6px 0;
     overflow:hidden;
     /*background: rgba(220,220,220,1);*/
@@ -97,7 +94,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3ffffff', e
 
 .bank li.item-static {
     cursor: default;
-    width: 94%;
 }
 
 .bank li.item-static:hover {
@@ -132,4 +128,151 @@ img.hideReg { height: 14px; width: 20px; }
 
 .jspPane {
     margin-left: 0 !important;
+}
+
+/*  Layer options */
+
+.bank li.item.productsitem, .bank li.itemstatic{
+    padding:0;
+    min-height:40px;
+    box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+    -o-box-sizing:border-box;
+    position:relative;
+    border:1px solid transparent;
+}
+.bank li.item.productsitem:hover{
+    border-color:#fff;
+}
+.bank li.item.productsitem .layer-main:hover a.hdanchor{
+
+}
+.bank li.item.productsitem .layer-main:hover a.hdanchor i{
+    background-position:5px -36px;
+}
+
+.productsitem a.hdanchor.hideReg{
+    width:30px;
+    background-color:#ccc;
+    position:absolute;
+    top:0;
+    bottom:0;
+    cursor:pointer;
+}
+.productsitem.layer-visible a.hdanchor:hover {
+    background:#fff;
+}
+.productsitem a.hdanchor.hideReg i{
+    width:21px;
+    height:12px;
+    background:url('../images/wv.layers/show-hide.png?v=@BUILD_NONCE@') no-repeat 0 0 transparent;
+    position:absolute;
+    top:50%;
+    margin-top:-6px;
+    left:50%;
+    margin-left:-10.5px;
+    pointer-events:none;
+}
+.productsitem.layer-visible a.hdanchor.hideReg i{
+    background-position:0 0;
+}
+.productsitem.layer-hidden a.hdanchor.hideReg i{
+    background-position:-42px 0;
+}
+.productsitem.layer-hidden a.hdanchor.hideReg:hover i{
+    background-position:-63px 0;
+}
+.productsitem a.wv-layers-options{
+    position:relative;
+    width:20px;
+    height:20px;
+    float:right;
+}
+.productsitem a.wv-layers-options:hover{
+    background:#fff;
+}
+i.wv-layers-options-icon{
+    background: url('../images/wv.layers/show-hide.png?v=@BUILD_NONCE@') no-repeat 0 -24px;
+    width: 12px;
+    height: 12px;
+    position:absolute;
+    top:50%;
+    margin-top:-6px;
+    left:50%;
+    margin-left:-6px;
+    background-position: 0 -69px;
+}
+
+.productsitem.layer-hidden a.wv-layers-options i.wv-layers-options-icon{
+    background-position: -21px -69px;
+}
+.productsitem.layer-hidden a.wv-layers-options:hover i.wv-layers-options-icon{
+    background-position: 0 -69px;
+}
+.productsitem a.button.close {
+    display:block;
+    float:right;
+    width:20px;
+    height:20px;
+    position:relative;
+    cursor:pointer;
+
+
+}
+.bank li.item.productsitem:hover a.button.close{
+    display:block;
+}
+.productsitem.layer-visible a.button.close:hover{
+    background-color:#fff;
+}
+.productsitem.layer-hidden a.button.close:hover{
+    background:#fff;
+}
+
+.productsitem a.button.close i {
+    background:url('../images/wv.layers/show-hide.png?v=@BUILD_NONCE@') no-repeat 0 -24px;
+    width:12px;
+    height:12px;
+    pointer-events:none;
+    position:absolute;
+    top:50%;
+    margin-top:-6px;
+    left:50%;
+    margin-left:-6px;
+}
+.productsitem.layer-hidden a.button.close i{
+    background-position:-21px -24px;
+}
+.productsitem.layer-hidden a.button.close:hover i{
+    background-position:0px -24px;
+}
+.productsitem .layer-main{
+    width:auto;
+    background-color:#ccc;
+    margin-left:31px;
+    cursor:default;
+    min-height:40px;
+
+
+}
+.productsitem.layer-hidden .layer-main, .productsitem.layer-hidden a.hdanchor {
+    background:rgba(255, 255, 255, 0.2);
+}
+.productsitem.layer-hidden a.hdanchor:hover{
+    background:rgba(255,255,255,1);
+}
+/*
+.productsitem.layer-visible .layer-main:hover{
+    background-color:#fff;
+}
+*/
+.productsitem.layer-hidden .layer-main h4, .productsitem.layer-hidden .layer-main p{
+    color:#999;
+}
+.bank .layer-main h4, .bank .layer-main p{
+    padding:0;
+}
+.bank li.layer-hidden a {
+    color: #999;
 }
