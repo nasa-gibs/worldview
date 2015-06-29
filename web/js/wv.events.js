@@ -162,7 +162,7 @@ wv.events = wv.events || function(models, ui) {
         models.date.select(eventDate);
 
         category = "Default";
-        categories = event["category"]
+        categories = event.category;
         if ( categories.constructor !== Array ) {
             categories = [categories];
         }
@@ -175,7 +175,7 @@ wv.events = wv.events || function(models, ui) {
 
         layers = layerLists[category];
         if ( !layers ) {
-            layers = layerLists["Default"];
+            layers = layerLists.Default;
         }
         models.layers.clear();
         _.each(layers, function(layer) {
