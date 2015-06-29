@@ -250,7 +250,9 @@ wv.events = wv.events || function(models, ui) {
     };
 
     self.query = function() {
-        $.getJSON("service/events/eo-net.cgi?path=/api/v1/events", function(data) {
+        console.log("sending query");
+        //$.getJSON("service/events/eo-net.cgi?path=/api/v1/events", function(data) {
+        $.getJSON("http://eonet.sci.gsfc.nasa.gov/api/v1/events", function(data) {
             self.data = data.item;
             console.log("data received", self.data);
             self.refresh();
