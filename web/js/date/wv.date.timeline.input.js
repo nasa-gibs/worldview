@@ -37,8 +37,8 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
 
     var timer, rollingDate;
 
-    //vars for dialog dates
-    var toDate, fromDate;
+    //vars for dialog dates and time interval
+    var toDate, fromDate, interval;
 
     var $incrementBtn = $("#right-arrow-group");
     var $decrementBtn = $("#left-arrow-group");
@@ -252,8 +252,13 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
 
         if(document.getElementById("loopcheck").checked) { //check for loop
             loop = true;
-            initDate = new Date(new Date(model.selected).setUTCDate(model.selected.getUTCDate())); //get date from picker
+            initDate = new Date(new Date().setUTCDate(model.selected.getUTCDate())); //get date from picker
         }
+    };
+
+    //When the Go button is pressed, the dates are checked to make sure they exist and are valid
+    var animDateCheck = function() {
+        return fromDate !== undefined && toDate.getTime() !== fromDate.getTime();
     };
 
     //TODO: Cleanup
@@ -313,6 +318,10 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 animSpeed = parseFloat($speedSlider.val());
                 $speedLabel.html(animSpeed + ' ms');
             });
+        /*
+        $("#interval").selectmenu({
+            appendTo: "#dialog"
+        });*/
 
         var $loopCheck = $("<input />")
             .attr("type", "checkbox")
@@ -369,21 +378,30 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 at: "left top",
                 of: $("#timeline-footer")
             },
-            buttons: [
-                {   //TODO: Error checking!
+            buttons: [ //Go button controls date range animation, other two control animation based on Days slider
+                {
                     text: "Go",
                     click: function() {
                         prepareAnim($speedSlider, $slider);
 
                         //Compare the two dates in terms of milliseconds, divide it by milliseconds
                         //in a day to get the number of days to animate
-                        animDuration = (toDate.getTime() - fromDate.getTime()) / (86400 * 1000);
+                        if(animDateCheck()) {
+                            //Get the time difference. Negative ranges are supported
+                            var to = toDate.getTime(), from = fromDate.getTime();
+                            animDuration = to > from ? ((to - from) / (86400 * 1000)) + 1 : ((from - to) / (86400 * 1000)) + 1 ;
+                            $(this).dialog("close");
 
-                        //TODO:For now let's assume we want to animate forward. Later integrate it to the other two buttons
-                        //So backward button would start from end to start date
-                        model.selected = fromDate;
-                        $(this).dialog("close");
-                        animateForward("day");
+                            if(to > from) {
+                                model.selected = new Date(new Date().setUTCDate(fromDate.getUTCDate() - 1)); //animation starts at the next day selected
+                                animateForward("day");
+                            }
+                            else {
+                                model.selected = new Date(new Date().setUTCDate(fromDate.getUTCDate() + 1)); //animation starts at the next day selected
+                                animateReverse("day");
+                            }
+                        } else
+                            wv.ui.notify("Invalid date range, please make sure the start date is before the end date");
                     }
                 },
                 {
