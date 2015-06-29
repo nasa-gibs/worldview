@@ -347,5 +347,24 @@ label {
 
 /* Chrome wants to put a blue border around items when they have focus.
  * Remove it */
-.ui-state-focus:focus { outline: none !important }
-.ui-state-focus a:focus { outline: none !important }
+.ui-menu .ui-menu-item {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.ui-widget-content .ui-state-focus {
+    border-color: #eee;
+    background-color: #eee;
+    background-image: none;
+}
+
+.ui-widget-content .ui-state-focus.ui-menu-item a {
+    color: #404040;
+}
+
+.ui-state-focus:focus {
+    outline: none !important ;
+}
+.ui-state-focus a:focus {
+    outline: none !important;
+}
