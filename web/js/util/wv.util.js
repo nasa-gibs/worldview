@@ -242,7 +242,7 @@ wv.util = (function(self) {
                 newDate.setUTCFullYear(newDate.getUTCFullYear() + amount);
                 break;
             default:
-                throw new Error("[dateAdd] Invalid interval: " + inverval);
+                throw new Error("[dateAdd] Invalid interval: " + interval);
         }
         return newDate;
     };

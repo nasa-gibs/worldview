@@ -25,13 +25,19 @@
      self.interval = options.interval || "day";
      self.delta = options.delta || 1;
      self.active = false;
-     var expired = false;
+     self.loop = false;
+     self.doAnimation = false;
+     self.animDuration = 7;
+     self.initDate = undefined;
      var timer;
 
      var init = function() {
      };
 
      self.play = function(direction) {
+         //Check for loop first
+         self.loop = document.getElementById("loopcheck").checked;
+
          if ( self.active && direction !== self.direction ) {
              self.stop();
          } else if ( self.active ) {
@@ -55,10 +61,10 @@
          if ( self.active ) {
              notify("stop");
              self.days = 0; //always reset the number of days animated to 0 to avoid issues
-             animDuration = 0;
-             doAnimation = false;
+             self.animDuration = 0;
+             self.doAnimation = false;
              self.delay = 500;
-             loop = false;
+             self.loop = false;
              if (timer) {
                  clearTimeout(timer);
                  timer = null;
@@ -78,10 +84,7 @@
          ui.preload(newDate);
 
          //control animation if enabled. set before next imagery load
-         if(doAnimation) self.days++;
-
-         //if custom animation, change delay here
-         self.delay = doAnimation ? animSpeed : self.delay;
+         if(self.doAnimation) self.days++;
 
          timer = setTimeout(function() { //this function is called once either after 500 ms or animation delay
              advance(newDate);
@@ -89,10 +92,10 @@
      };
 
      var stopAnimation = function() {
-         if(loop) { //repeat animation by resetting days and calling play. direction is retained
+         if(self.loop) { //repeat animation by resetting days and calling play. direction is retained
              notify("looping");
              var amount = ( self.direction === "forward" ) ? self.delta : -self.delta; //determine if set date by -1 or +1
-             model.selected = new Date(new Date(initDate).setUTCDate(initDate.getUTCDate() - amount) ); //set the correct date. Make new objects to avoid modifying existing ones
+             model.selected = new Date(new Date(self.initDate).setUTCDate(self.initDate.getUTCDate() - amount) ); //set the correct date. Make new objects to avoid modifying existing ones
              self.days = -2; //need to start at -2 to animate same number of days
              self.play(self.direction);
          } else { //stop animation normally
@@ -105,7 +108,7 @@
          var updated = model.select(newDate);
 
          //determine if animation should stop
-         if(doAnimation && self.days >= animDuration - 1 )
+         if(self.doAnimation && self.days >= self.animDuration - 1 )
              stopAnimation();
 
          //determine if we can continue

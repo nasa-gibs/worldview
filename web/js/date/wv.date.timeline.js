@@ -193,8 +193,8 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         
         drawContainers();
 
-        $('#timeline-footer').css('margin-left',self.margin.left-20 + 'px'); //20 not 1 to fit animation btn
-        $('#timeline-footer').css('margin-right',self.margin.right-1 + 'px');
+        $('#timeline-footer').css('margin-left',self.margin.left-20 + 'px') //20 not 1 to fit animation btn
+        .css('margin-right',self.margin.right-1 + 'px');
 
         self.x = d3.time.scale.utc();
 

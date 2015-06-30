@@ -16,13 +16,6 @@ var wv = wv || {};
 wv.date = wv.date || {};
 wv.date.timeline = wv.date.timeline || {};
 
-//TODO:Remove global variables
-var doAnimation = false; //global variable to control animation
-var animDuration = 7; //control how long animation is
-var animSpeed = 500; //control how fast animation is in milliseconds
-var loop = false;
-var initDate;
-
 /**
  * Implements the date input
  *
@@ -246,14 +239,12 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
 
     //Prepare animation when button pressed
     var prepareAnim = function(speedSlider, slider) {
-        doAnimation = true;
-        animSpeed = parseFloat(speedSlider.val());
-        animDuration = parseFloat(slider.val());
+        ui.anim.doAnimation = true;
+        ui.anim.delay = parseFloat(speedSlider.val());
+        ui.anim.animDuration = parseFloat(slider.val());
 
-        if(document.getElementById("loopcheck").checked) { //check for loop
-            loop = true;
-            initDate = new Date(new Date().setUTCDate(model.selected.getUTCDate())); //get date from picker
-        }
+        if(document.getElementById("loopcheck").checked)  //check for loop
+            ui.anim.initDate = new Date(new Date().setUTCDate(model.selected.getUTCDate())); //get date from picker
     };
 
     //When the Go button is pressed, the dates are checked to make sure they exist and are valid
@@ -295,28 +286,28 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
 
         var $slider = $("<div></div>")
             .noUiSlider({
-                start: animDuration,
+                start: ui.anim.animDuration,
                 step: 1,
                 range: {
                     min: 1,
                     max: 30
                 }
             }).on("slide", function() {
-                animDuration = parseFloat($slider.val());
-                $label.html(animDuration);
+                ui.anim.animDuration = parseFloat($slider.val());
+                $label.html(ui.anim.animDuration);
             });
 
         var $speedSlider = $("<div></div>")
             .noUiSlider({
-                start: animSpeed,
+                start: ui.anim.delay,
                 step: 100,
                 range: {
                     min: 100,
                     max: 1000
                 }
             }).on("slide", function() {
-                animSpeed = parseFloat($speedSlider.val());
-                $speedLabel.html(animSpeed + ' ms');
+                ui.anim.delay = parseFloat($speedSlider.val());
+                $speedLabel.html(ui.anim.delay + ' ms');
             });
 
         var $loopCheck = $("<input />")
@@ -325,12 +316,12 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             .attr("id", "loopcheck");
 
         var $label = $("<div></div>")
-            .html(animDuration)
+            .html(ui.anim.animDuration)
             .addClass("wv-label")
             .addClass("wv-label-opacity");
 
         var $speedLabel = $("<div></div>")
-            .html(animSpeed + ' ms')
+            .html(ui.anim.delay + ' ms')
             .addClass("wv-label")
             .addClass("wv-label-speed")
             .addClass("wv-label-opacity");
@@ -386,7 +377,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                         if(animDateCheck()) {
                             //Get the time difference. Negative ranges are supported
                             var to = toDate.getTime(), from = fromDate.getTime();
-                            animDuration = to > from ? ((to - from) / (86400 * 1000)) + 1 : ((from - to) / (86400 * 1000)) + 1 ;
+                            ui.anim.animDuration = to > from ? ((to - from) / (86400 * 1000)) + 1 : ((from - to) / (86400 * 1000)) + 1 ;
                             $(this).dialog("close");
 
                             if(to > from) {
