@@ -1,8 +1,73 @@
+/*jqueryUI overrides*/
+.layer-modal .ui-widget-header,
+.layer-modal .ui-dialog-titlebar,
+.layer-modal .ui-widget-content,
+.layer-modal .ui-dialog-content{
+    background:none;
+    border:0;
+}
+.layer-modal, .layer-modal.ui-dialog{
+    background:rgb(220,220,220);
+}
+.layer-modal div, .layer-modal span{
+    font-family:open_sans_light;
+    font-weight:300;
+    color:#383838;
+}
+
+
+.layer-modal .ui-dialog-titlebar{
+    height:40px;
+    padding:5px 5px 5px 10px;
+    line-height:40px;
+}
+.layer-modal .ui-dialog-title{
+    width:auto;
+    font-weight:300;
+    font-size:32px;
+    line-height:40px;
+    margin:0;
+}
+.layer-modal .ui-dialog-titlebar-close{
+    position:relative;
+    top:0;
+    margin:0;
+    width:40px;
+    height:40px;
+    float:right;
+}
+.layer-modal .ui-dialog-titlebar-close .ui-icon-closethick{
+    width:32px;
+    height:32px;
+    margin:-16px 0 0 -16px;
+    top:50%;
+    left:50%;
+    background:url('../images/wv-icons.png') 32px 32px;
+}
+
+
+/* Tile layout */
+.product-modal{
+    position:relative;
+}
 .grid-item {
-    background-color:#fff;
-    width: 25%;
+    background-color:#000;
+    width: 150px;
+    height: 70px;
 }
 .grid-item--width2 {
-    background-color:#880;
-    width: 50%;
+    background-color:#666;
+    width: 310px;
+}
+.grid-item--width3{
+    background-color:blue;
+    width: 470px;
+}
+.grid-item--height2{
+    background-color:red;
+    height: 150px;
+}
+.grid-item--height3{
+    background-color:green;
+    height:230px;
 }

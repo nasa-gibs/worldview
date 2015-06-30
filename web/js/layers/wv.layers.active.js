@@ -76,11 +76,12 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         $(self.selector).delegate(".close" ,'click', removeLayer);
         $(self.selector).delegate(".hideReg" ,'click', toggleVisibility);
 
-        $("." + self.id + "category").sortable({
+        $("#" + self.id + " ul.category").sortable({
             items: "li:not(.head)",
             axis: "y",
             containment: "parent",
-            tolerance: "pointer"
+            tolerance: "pointer",
+            placeholder: "state-saver"
         });
 
         $("." + self.id + "category li").disableSelection();

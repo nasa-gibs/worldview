@@ -1,6 +1,8 @@
 /*canvas {float:left;}*/
 .toggleButtonHolder{
-
+    position:absolute;
+    right:0;
+    top:0;
 }
 
 a.accordionToggler {
@@ -53,8 +55,6 @@ a.atcollapse {
     background: 50% 50% no-repeat url("../images/angle-double-up.png");
     border-radius:0;
     box-sizing: border-box;
-    position: absolute;
-    right: 0;
     border-right: 0;
     padding: 10px;
 }
@@ -63,32 +63,65 @@ a.atcollapse:hover{
     background-color:#fff;
     cursor:pointer;
 }
-a.atexpand {background-image: url("../images/angle-double-down.png");}
-.bank{color:#222;}
-.bank h1,h2,h3,h4 {margin:0px; padding:0px; color:#000; font-weight:400;}
-.bank h2 {font-size:1.4em; display:inline-block; float: left; color:#ffffff; border:none; padding:9px 30px 9px 30px;
-background: -moz-linear-gradient(top,  rgba(255,255,255,0.7) 0%, rgba(11,95,160,0.7) 23%, rgba(0,88,156,0.7) 24%, rgba(0,81,144,0.7) 99%, rgba(0,81,144,0.7) 100%); /* FF3.6+ */
-background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0.7)), color-stop(23%,rgba(11,95,160,0.7)), color-stop(24%,rgba(0,88,156,0.7)), color-stop(99%,rgba(0,81,144,0.7)), color-stop(100%,rgba(0,81,144,0.7))); /* Chrome,Safari4+ */
-background: -webkit-linear-gradient(top,  rgba(255,255,255,0.7) 0%,rgba(11,95,160,0.7) 23%,rgba(0,88,156,0.7) 24%,rgba(0,81,144,0.7) 99%,rgba(0,81,144,0.7) 100%); /* Chrome10+,Safari5.1+ */
-background: -o-linear-gradient(top,  rgba(255,255,255,0.7) 0%,rgba(11,95,160,0.7) 23%,rgba(0,88,156,0.7) 24%,rgba(0,81,144,0.7) 99%,rgba(0,81,144,0.7) 100%); /* Opera 11.10+ */
-background: -ms-linear-gradient(top,  rgba(255,255,255,0.7) 0%,rgba(11,95,160,0.7) 23%,rgba(0,88,156,0.7) 24%,rgba(0,81,144,0.7) 99%,rgba(0,81,144,0.7) 100%); /* IE10+ */
-background: linear-gradient(to bottom,  rgba(255,255,255,0.7) 0%,rgba(11,95,160,0.7) 23%,rgba(0,88,156,0.7) 24%,rgba(0,81,144,0.7) 99%,rgba(0,81,144,0.7) 100%); /* W3C */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3ffffff', endColorstr='#b3005190',GradientType=0 ); /* IE6-9 */
-
+a.atexpand {
+    background-image: url("../images/angle-double-down.png");
+}
+.bank {
+    color:#222;
+}
+.bank h1,h2,h3,h4 {
+    margin:0px;
+    padding:0px;
+    color:#000;
+    font-weight:400;
+}
+.bank h2 {
+    font-size:1.4em;
+    display:inline-block;
+    float: left;
+    color:#ffffff;
+    border:none;
+    padding:9px 30px 9px 30px;
 }
 
-.bank .tabContainer {border-bottom: 2px #005190 solid; }
-.bank h3 {display:block; color:#ffffff; font-size: 1em; border:none; text-decoration:none; width:98%;}
-#callSelectorLink {display: inline-block; width:32px; height:32px; background: transparent url("../images/addLayers.png"); margin-left: 50px;float:right;}
-.bank div,.bank ul {display:block;width:100%; margin:0 auto;}
-.bank .category {overflow:hidden;}
-.bank h3 {background: none; padding: 1px 3px; font-size:0.9em; margin-top:10px; margin-left:2%;text-transform:uppercase;}
+.bank .tabContainer {
+    border-bottom: 2px #005190 solid;
+}
+.bank h3 {
+    display:block;
+    color:#ffffff;
+    font-size: 1em;
+    border:none;
+    text-decoration:none;
+}
+#callSelectorLink {
+    display: inline-block;
+    width:32px;
+    height:32px;
+    background: transparent url("../images/addLayers.png");
+    margin-left: 50px;
+    float:right;
+}
+.bank div,.bank ul {
+    display:block;
+    width:100%;
+    margin:0 auto;
+}
+.bank .category {
+    overflow:hidden;
+}
+.bank h3 {
+    background: none;
+    padding: 1px 3px;
+    font-size:0.9em;
+    margin-top:10px;
+    margin-left:2%;
+    text-transform:uppercase;
+}
 .bank li.item {
     padding:6px 0;
     overflow:hidden;
-    /*background: rgba(220,220,220,1);*/
     cursor:move;
-    /*margin:5px 2% 0 2%;*/
    margin: 0 auto;
 }
 
@@ -100,31 +133,76 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3ffffff', e
     background: rgba(220,220,220,1);
 }
 
-.categoryContainer { display:block; width:100%; overflow:hidden;}
+.categoryContainer {
+    display:block;
+    width:100%;
+    overflow:hidden;
+}
 
-.mCustomScrollBox > .mCSB_scrollTools {right: -6px;}
+.mCustomScrollBox > .mCSB_scrollTools {
+    right: -6px;
+}
 
 /* HACK: McGann, triage */
-.bank li.item a       { color: #22a; }
-.bank li.item a:hover { color: #88f; }
+.bank li.item a       {
+    color: #22a;
+}
+.bank li.item a:hover {
+    color: #88f;
+}
 
-#selectorboxcontent a       { color: #22a; }
-#selectorboxcontent a:hover { color: #88f; }
+#selectorboxcontent a       {
+    color: #22a;
+}
+#selectorboxcontent a:hover {
+    color: #88f;
+}
 /* HACK : End */
 
-.bank li.item h4 {font-size:0.85em; padding:0 3px;}
-.bank li.item p {padding:0 3px; color:#222; font-size:0.78em; font-style:italic;}
-.bank li.item span.palette {display:block; overflow:hidden; margin-top:5px; margin-left:5px;}
-.bank li.item ul.palette li {float:left;}
-.bank ul.category {  overflow:auto; }
-.bank ul.category li h3 {display:block; clear:both; float:none;}
-img.bank-item-img { display:block;}
-img.hideReg { height: 14px; width: 20px; }
-.bank img.close { height: 14px; width: 14px; }
+.bank li.item h4 {
+    font-size:0.85em;
+    padding:0 3px;
+}
+.bank li.item p {
+    padding:0 3px;
+    color:#222;
+    font-size:0.78em;
+    font-style:italic;
+}
+.bank li.item span.palette {
+    display:block;
+    overflow:hidden;
+    margin-top:5px;
+    margin-left:5px;
+}
+.bank li.item ul.palette li {
+    float:left;
+}
+.bank ul.category {
+    overflow:auto;
+}
+.bank ul.category li h3 {
+    display:block;
+    clear:both;
+    float:none;
+}
+img.bank-item-img {
+    display:block;
+}
+img.hideReg {
+    height: 14px;
+    width: 20px;
+}
+.bank img.close {
+    height: 14px;
+    width: 14px;
+}
 
-
-
-.ui-tabs-hide {/*display:none !important;*/ position:absolute !important; left:-999em !important;}
+.ui-tabs-hide {
+    /*display:none !important;*/
+    position:absolute !important;
+    left:-999em !important;
+}
 
 .jspPane {
     margin-left: 0 !important;
@@ -275,4 +353,8 @@ i.wv-layers-options-icon{
 }
 .bank li.layer-hidden a {
     color: #999;
+}
+.state-saver{
+    background:rgba(220,220,0,0.3);
+    height:42px;
 }

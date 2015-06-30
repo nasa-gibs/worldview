@@ -8,8 +8,16 @@
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
-
-html,body, div, ul, li, p, h1, h2, h3, h4, h5, h6 {display:block; margin:0; padding:0; font: 100 13px/13px "Lucida Sans", "Arial", Sans-Serif;}
+@font-face {
+    font-family: open_sans_light;
+    src: local(open_sans_light), url('../font/OpenSans-Light.ttf') format('opentype');
+}
+html,body, div, ul, li, p, h1, h2, h3, h4, h5, h6 {
+    display:block;
+    margin:0;
+    padding:0;
+    font: 100 13px/13px "Lucida Sans", "Arial", Sans-Serif;
+}
 
 html, body {
     width: 100%;
@@ -39,11 +47,22 @@ h1, h2, h3, h4, h5, h6 { font-weight:400; }
 #info_drop div.hidden a {display:block; color:#fff; font-weight:100; line-height:1em; font-size: 11px; width:70px; padding: 2px 5px; text-align:right; text-decoration:none;}
 #info_drop div.hidden a:hover {background: rgba(38,43,49,0.45); }
 #info_drop:hover div.hidden {display:block; background: rgba(38,43,49,0.45); width:80px; margin-left:-40px; margin-top:2px;}
-#info {display:block; width:40px; height:40px; border:none;}
-
-
-div.horizontalContainer {width:100%; display:block; float:left;  position:absolute; bottom:10px; overflow:hidden; z-index:200; padding: 0;}
-
+#info {
+    display:block;
+    width:40px;
+    height:40px;
+    border:none;
+}
+div.horizontalContainer {
+    width:100%;
+    display:block;
+    float:left;
+    position:absolute;
+    bottom:10px;
+    overflow:hidden;
+    z-index:200;
+    padding: 0;
+}
 #permalink_content {margin-top:10px;}
 
 .hidden {display:none;}
@@ -299,7 +318,10 @@ label {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
 }
-
+.ui-widget-overlay{
+    background:#000;
+    opacity:0.7;
+}
 .ui-widget-header {
     background: rgb(40, 40, 40);
 }
