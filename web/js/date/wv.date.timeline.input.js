@@ -243,8 +243,11 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         ui.anim.delay = parseFloat(speedSlider.val());
         ui.anim.animDuration = parseFloat(slider.val());
 
-        if(document.getElementById("loopcheck").checked)  //check for loop
-            ui.anim.initDate = new Date(new Date().setUTCDate(model.selected.getUTCDate())); //get date from picker
+        if(document.getElementById("loopcheck").checked) {  //check for loop
+            ui.anim.initDate = new Date(new Date(model.selected.valueOf())); //clone date from picker. FIXME: Heisenbug when cancelling animation and changing date
+            console.log(model.selected);
+            console.log(ui.anim.initDate);
+        }
     };
 
     //When the Go button is pressed, the dates are checked to make sure they exist and are valid
