@@ -38,7 +38,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
     var timer, rollingDate;
 
     //vars for dialog dates and time interval
-    var toDate, fromDate, interval;
+    var toDate, fromDate, interval = 'day';
 
     var $incrementBtn = $("#right-arrow-group");
     var $decrementBtn = $("#left-arrow-group");
@@ -286,7 +286,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
 
         //Add slider, labels, and input elements to dialog area
         var $header = $("<div></div>")
-            .html("Days")
+            .html("Frames")
             .addClass("wv-header");
 
         var $speedHeader = $("<div></div>")
@@ -303,7 +303,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 }
             }).on("slide", function() {
                 animDuration = parseFloat($slider.val());
-                $label.html(animDuration + ' days');
+                $label.html(animDuration);
             });
 
         var $speedSlider = $("<div></div>")
@@ -318,17 +318,14 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 animSpeed = parseFloat($speedSlider.val());
                 $speedLabel.html(animSpeed + ' ms');
             });
-        /*
-        $("#interval").selectmenu({
-            appendTo: "#dialog"
-        });*/
 
         var $loopCheck = $("<input />")
+            .addClass("wv-header")
             .attr("type", "checkbox")
             .attr("id", "loopcheck");
 
         var $label = $("<div></div>")
-            .html(animDuration + ' days')
+            .html(animDuration)
             .addClass("wv-label")
             .addClass("wv-label-opacity");
 
@@ -366,7 +363,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         });
 
         $("#dialog").append($header).append($slider).append($label).append($speedHeader).append($speedSlider).append($speedLabel)
-                    .append($fromDate).append($toLabel).append($toDate).append("<br />").append($loopCheck).append('<label>Loop (Press an arrow key to cancel)</label>')
+                    .append($fromDate).append($toLabel).append($toDate).append("<br />").append($loopCheck).append('<label class="wv-header">Loop (Press an arrow key to cancel)</label>')
             .dialog({
             autoOpen: false,
             dialogClass: "wv-panel",
@@ -409,7 +406,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                     click: function() {
                         prepareAnim($speedSlider, $slider);
                         $(this).dialog("close"); //avoid error by closing dialog here
-                        animateReverse("day");
+                        animateReverse(interval);
                     }
                 },
                 {
@@ -417,11 +414,25 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                     click: function() {
                         prepareAnim($speedSlider, $slider);
                         $(this).dialog("close");
-                        animateForward("day");
+                        animateForward(interval);
                     }
                 }
             ]
         });
+
+        //Create the selectmenu here
+        $('<br /><label>Interval: </label>').appendTo('#dialog');
+        $('<select id="interval" />').appendTo('#dialog');
+        $('<option value="day" selected="selected">Day</option>').appendTo('#interval');
+        $('<option value="month">Month</option>').appendTo('#interval');
+        $('<option value="year">Year</option>').appendTo('#interval');
+        //Create the Jquery UI element. By default the width is 0px, change it to something more sane
+        $("#interval").selectmenu({
+            select: function(event, ui) {
+                interval = ui.item.value;
+            }
+        });
+        $("#interval-button").attr("style","width: 90px;");
 
         $(document)
             /*.mouseout(function() { //FIXME:this is a bug! fires far too often than it should when it should only fire when mouse exits browser
@@ -431,11 +442,11 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             .keydown(function(event) {
                 switch ( event.keyCode ) {
                     case wv.util.key.LEFT:
-                        animateReverse("day");
+                        animateReverse(interval);
                         event.preventDefault();
                         break;
                     case wv.util.key.RIGHT:
-                        animateForward("day");
+                        animateForward(interval);
                         event.preventDefault();
                         break;
                 }
