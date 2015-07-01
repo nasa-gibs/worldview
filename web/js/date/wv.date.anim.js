@@ -95,7 +95,16 @@
          if(self.loop) { //repeat animation by resetting days and calling play. direction is retained
              notify("looping");
              var amount = ( self.direction === "forward" ) ? self.delta : -self.delta; //determine if set date by -1 or +1
-             model.selected = new Date(new Date(self.initDate).setUTCDate(self.initDate.getUTCDate() - amount) ); //set the correct date. Make new objects to avoid modifying existing ones
+             model.selected = new Date(self.initDate.valueOf()); //clone then set correct date
+
+             //The date needs to be set to the previous date that we want to start with to animate from the end to the start
+             if(self.interval == 'day')
+                 model.selected.setUTCDate(model.selected.getDate());
+             else if(self.interval == 'month')
+                 model.selected.setUTCMonth(model.selected.getMonth() - amount);
+             else
+                 model.selected.setUTCFullYear(model.selected.getUTCFullYear() - amount);
+
              self.days = -2; //need to start at -2 to animate same number of days
              self.play(self.direction);
          } else { //stop animation normally
@@ -118,7 +127,8 @@
             prepareFrame();
      };
 
-     var notify = ( options.debug ) ? console.log : function() {};
+     options.debug = true;
+     var notify = (options.debug) ? function(message) { console.log(message); } : function() {};
 
      init();
      return self;

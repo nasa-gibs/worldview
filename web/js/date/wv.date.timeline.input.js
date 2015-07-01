@@ -384,11 +384,13 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                             $(this).dialog("close");
 
                             if(to > from) {
-                                model.selected = new Date(new Date().setUTCDate(fromDate.getUTCDate() - 1)); //animation starts at the next day selected
+                                model.selected = new Date(fromDate.valueOf()); //clone fromDate
+                                model.selected.setUTCDate(model.selected.getDate()-1); //set it back so animation starts at right date
                                 animateForward("day");
                             }
                             else {
-                                model.selected = new Date(new Date().setUTCDate(fromDate.getUTCDate() + 1)); //animation starts at the next day selected
+                                model.selected = new Date(fromDate.valueOf());
+                                model.selected.setUTCDate(model.selected.getDate()+1);
                                 animateReverse("day");
                             }
                         } else
