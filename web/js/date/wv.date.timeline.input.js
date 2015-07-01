@@ -343,6 +343,8 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
 
         //set up the datepickers
         $fromDate.datepicker({
+            changeMonth: true,
+            changeYear: true,
             onSelect: function() {
                 fromDate = $("#from").datepicker("getDate");
                 console.log(fromDate);
@@ -350,6 +352,8 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         });
 
         $toDate.datepicker({
+            changeMonth: true,
+            changeYear: true,
             onSelect: function() {
                 toDate = $("#to").datepicker("getDate");
                 console.log(toDate);
@@ -374,24 +378,42 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                     text: "Go",
                     click: function() {
                         prepareAnim($speedSlider, $slider);
+                        self.loop = false; //looping custom ranges gets more complex
 
                         //Compare the two dates in terms of milliseconds, divide it by milliseconds
                         //in a day to get the number of days to animate
                         if(animDateCheck()) {
                             //Get the time difference. Negative ranges are supported
                             var to = toDate.getTime(), from = fromDate.getTime();
-                            ui.anim.animDuration = to > from ? ((to - from) / (86400 * 1000)) + 1 : ((from - to) / (86400 * 1000)) + 1 ;
+
+                            //Get the number of frames to animate. Then divide it by 30 or 365 depending on interval
+                            ui.anim.animDuration = to > from ? ((to - from) / (86400 * 1000)) + 1 : ((from - to) / (86400 * 1000)) + 1;
+                            if(interval === 'month' && ui.anim.animDuration >= 30)
+                                ui.anim.animDuration = Math.floor(ui.anim.animDuration /30) + 1;
+                            else if(interval === 'year' && ui.anim.animDuration >= 365)
+                                ui.anim.animDuration = Math.floor(ui.anim.animDuration /365) + 1;
+
                             $(this).dialog("close");
 
-                            if(to > from) {
+                            if(to > from) { //set it back so animation starts at right date
                                 model.selected = new Date(fromDate.valueOf()); //clone fromDate
-                                model.selected.setUTCDate(model.selected.getDate()-1); //set it back so animation starts at right date
-                                animateForward("day");
+                                if(interval === 'year')
+                                    model.selected.setUTCFullYear(model.selected.getUTCFullYear()-1);
+                                else if(interval === 'month')
+                                    model.selected.setUTCMonth(model.selected.getMonth()-1);
+                                else
+                                    model.selected.setUTCDate(model.selected.getDate()-1);
+                                animateForward(interval);
                             }
                             else {
                                 model.selected = new Date(fromDate.valueOf());
-                                model.selected.setUTCDate(model.selected.getDate()+1);
-                                animateReverse("day");
+                                if(interval === 'year')
+                                    model.selected.setUTCFullYear(model.selected.getUTCFullYear()+1);
+                                else if(interval === 'month')
+                                    model.selected.setUTCMonth(model.selected.getMonth()+1);
+                                else
+                                    model.selected.setUTCDate(model.selected.getDate()+1);
+                                animateReverse(interval);
                             }
                         } else
                             wv.ui.notify("Invalid date range, please make sure the start date is before the end date");

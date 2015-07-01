@@ -98,9 +98,9 @@
              model.selected = new Date(self.initDate.valueOf()); //clone then set correct date
 
              //The date needs to be set to the previous date that we want to start with to animate from the end to the start
-             if(self.interval == 'day')
+             if(self.interval === 'day')
                  model.selected.setUTCDate(model.selected.getDate());
-             else if(self.interval == 'month')
+             else if(self.interval === 'month')
                  model.selected.setUTCMonth(model.selected.getMonth() - amount);
              else
                  model.selected.setUTCFullYear(model.selected.getUTCFullYear() - amount);
