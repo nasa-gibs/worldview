@@ -244,7 +244,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         ui.anim.animDuration = parseFloat(slider.val());
 
         if(document.getElementById("loopcheck").checked) {  //check for loop
-            ui.anim.initDate = new Date(new Date(model.selected.valueOf())); //clone date from picker. FIXME: Heisenbug when cancelling animation and changing date
+            ui.anim.initDate = new Date(model.selected.valueOf()); //clone date from picker
             console.log(model.selected);
             console.log(ui.anim.initDate);
         }
@@ -296,7 +296,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                     max: 30
                 }
             }).on("slide", function() {
-                $label.html(ui.anim.animDuration);
+                $label.html(parseFloat($slider.val()));
             });
 
         var $speedSlider = $("<div></div>")
@@ -376,7 +376,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                     text: "Go",
                     click: function() {
                         prepareAnim($speedSlider, $slider);
-                        self.loop = false; //looping custom ranges gets more complex
+                        ui.anim.customLoop = true;
 
                         //Compare the two dates in terms of milliseconds, divide it by milliseconds
                         //in a day to get the number of days to animate
@@ -393,8 +393,11 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
 
                             $(this).dialog("close");
 
+                            //initDate needs to be set separately
+                            model.selected = new Date(fromDate.valueOf()); //clone fromDate
+                            ui.anim.initDate = new Date(model.selected.valueOf());
+
                             if(to > from) { //set it back so animation starts at right date
-                                model.selected = new Date(fromDate.valueOf()); //clone fromDate
                                 if(interval === 'year')
                                     model.selected.setUTCFullYear(model.selected.getUTCFullYear()-1);
                                 else if(interval === 'month')
@@ -404,7 +407,6 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                                 animateForward(interval);
                             }
                             else {
-                                model.selected = new Date(fromDate.valueOf());
                                 if(interval === 'year')
                                     model.selected.setUTCFullYear(model.selected.getUTCFullYear()+1);
                                 else if(interval === 'month')

@@ -26,6 +26,7 @@
      self.delta = options.delta || 1;
      self.active = false;
      self.loop = false;
+     self.customLoop = false;
      self.doAnimation = false;
      self.animDuration = 7;
      self.initDate = undefined;
@@ -64,7 +65,7 @@
              self.animDuration = 0;
              self.doAnimation = false;
              self.delay = 500;
-             self.loop = false;
+             self.loop = self.customLoop = false;
              if (timer) {
                  clearTimeout(timer);
                  timer = null;
@@ -98,14 +99,18 @@
              model.selected = new Date(self.initDate.valueOf()); //clone then set correct date
 
              //The date needs to be set to the previous date that we want to start with to animate from the end to the start
+             //In advance(), at the start of a loop, the current date is then set to the start date
              if(self.interval === 'day')
-                 model.selected.setUTCDate(model.selected.getUTCDate());
+                 model.selected.setUTCDate(model.selected.getUTCDate() - amount);
              else if(self.interval === 'month')
                  model.selected.setUTCMonth(model.selected.getUTCMonth() - amount);
              else
                  model.selected.setUTCFullYear(model.selected.getUTCFullYear() - amount);
 
-             self.days = -2; //need to start at -2 to animate same number of days
+             console.log(model.selected);
+             console.log(self.initDate);
+
+             self.days = self.customLoop ? -1 : -2; //need to start at -2 to "animate" back to the beginning
              self.play(self.direction);
          } else { //stop animation normally
              self.stop();
