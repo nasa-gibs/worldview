@@ -99,9 +99,9 @@
 
              //The date needs to be set to the previous date that we want to start with to animate from the end to the start
              if(self.interval === 'day')
-                 model.selected.setUTCDate(model.selected.getDate());
+                 model.selected.setUTCDate(model.selected.getUTCDate());
              else if(self.interval === 'month')
-                 model.selected.setUTCMonth(model.selected.getMonth() - amount);
+                 model.selected.setUTCMonth(model.selected.getUTCMonth() - amount);
              else
                  model.selected.setUTCFullYear(model.selected.getUTCFullYear() - amount);
 

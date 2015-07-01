@@ -240,7 +240,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
     //Prepare animation when button pressed
     var prepareAnim = function(speedSlider, slider) {
         ui.anim.doAnimation = true;
-        ui.anim.delay = parseFloat(speedSlider.val());
+        ui.anim.delay = parseFloat(1000 / speedSlider.val());
         ui.anim.animDuration = parseFloat(slider.val());
 
         if(document.getElementById("loopcheck").checked) {  //check for loop
@@ -296,21 +296,19 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                     max: 30
                 }
             }).on("slide", function() {
-                ui.anim.animDuration = parseFloat($slider.val());
                 $label.html(ui.anim.animDuration);
             });
 
         var $speedSlider = $("<div></div>")
             .noUiSlider({
-                start: ui.anim.delay,
-                step: 100,
+                start: 2,
+                step: 1,
                 range: {
-                    min: 100,
-                    max: 1000
+                    min: 1,
+                    max: 30
                 }
             }).on("slide", function() {
-                ui.anim.delay = parseFloat($speedSlider.val());
-                $speedLabel.html(ui.anim.delay + ' ms');
+                $speedLabel.html(parseFloat($speedSlider.val()) + ' frames per second');
             });
 
         var $loopCheck = $("<input />")
@@ -324,7 +322,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             .addClass("wv-label-opacity");
 
         var $speedLabel = $("<div></div>")
-            .html(ui.anim.delay + ' ms')
+            .html('2 frames per second')
             .addClass("wv-label")
             .addClass("wv-label-speed")
             .addClass("wv-label-opacity");
@@ -400,9 +398,9 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                                 if(interval === 'year')
                                     model.selected.setUTCFullYear(model.selected.getUTCFullYear()-1);
                                 else if(interval === 'month')
-                                    model.selected.setUTCMonth(model.selected.getMonth()-1);
+                                    model.selected.setUTCMonth(model.selected.getUTCMonth()-1);
                                 else
-                                    model.selected.setUTCDate(model.selected.getDate()-1);
+                                    model.selected.setUTCDate(model.selected.getUTCDate()-1);
                                 animateForward(interval);
                             }
                             else {
@@ -410,9 +408,9 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                                 if(interval === 'year')
                                     model.selected.setUTCFullYear(model.selected.getUTCFullYear()+1);
                                 else if(interval === 'month')
-                                    model.selected.setUTCMonth(model.selected.getMonth()+1);
+                                    model.selected.setUTCMonth(model.selected.getUTCMonth()+1);
                                 else
-                                    model.selected.setUTCDate(model.selected.getDate()+1);
+                                    model.selected.setUTCDate(model.selected.getUTCDate()+1);
                                 animateReverse(interval);
                             }
                         } else
