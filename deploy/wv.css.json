@@ -18,6 +18,7 @@
     "web/css/dataDownload.css",
     "web/css/global.css",
     "web/css/wv.sidebar.css",
+    "web/css/wv.layers.modal.css",
     "web/css/wv.layers.options.css",
     "web/css/new-ui.css",
     "web/css/wv.mobile.css"
