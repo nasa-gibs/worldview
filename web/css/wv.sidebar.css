@@ -34,6 +34,9 @@
     -o-box-sizing:border-box;
     padding:5px 0 0 0;
 }
+#productsHolder ul#overlays{
+    margin-bottom:10px;
+}
 #productsHolder footer{
     padding:10px 0;
 }

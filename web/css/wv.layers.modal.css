@@ -8,6 +8,7 @@
 }
 .layer-modal, .layer-modal.ui-dialog{
     background:rgb(220,220,220);
+    
 }
 .layer-modal div, .layer-modal span{
     font-family:open_sans_light;
@@ -47,13 +48,36 @@
 
 
 /* Tile layout */
-.product-modal{
-    position:relative;
+#product-modal{
+    padding-left:10px;
+    padding-right:10px;
+    padding-top:0;
+}
+.stamp {
+    cursor:pointer;
+    position:absolute
+}
+.grid{
+    height:100%;
+}
+.grid1{
+    position: relative;
+    float:left;
+    width:310px;
+}
+
+.grid2{
+    margin-left:320px;
 }
 .grid-item {
     background-color:#000;
     width: 150px;
     height: 70px;
+    cursor:pointer;
+}
+.grid-item:hover,
+.stamp:hover {
+    opacity:0.6;
 }
 .grid-item--width2 {
     background-color:#666;

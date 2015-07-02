@@ -66,7 +66,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
         $container.addClass('bank');
 
-        _.each(groups, function(group) {
+        _.eachRight(groups, function(group) {
             renderGroup($container, group);
         });
 
