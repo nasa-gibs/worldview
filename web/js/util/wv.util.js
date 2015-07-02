@@ -137,7 +137,7 @@ wv.util = (function(self) {
      * @static
      * @param str {String} Date to parse in the form of
      * ``YYYY-MM-DDTHH:MM:SS.SSSZ``. Fractional seconds and the "Z"
-     * time zone desginator are optional.
+     * time zone designator are optional.
      * @return {Date} converted string as a datetime object, throws an
      * exception if the string is invalid.
      */
