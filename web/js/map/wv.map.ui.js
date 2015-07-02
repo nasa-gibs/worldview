@@ -409,6 +409,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
             .hide();
         $(selector).append($map);
 
+        //Create two specific controls
         var scaleMetric = new ol.control.ScaleLine({
             className: "wv-map-scale-metric",
             units: "metric"
@@ -416,6 +417,14 @@ wv.map.ui = wv.map.ui || function(models, config) {
         var scaleImperial = new ol.control.ScaleLine({
             className: "wv-map-scale-imperial",
             units: "imperial"
+        });
+
+        //insert this to polar map views for desktop and mobile rotation
+        var rotateInteraction = new ol.interaction.DragRotate({
+            condition: ol.events.condition.altKeyOnly,
+            duration: animationDuration
+        }), mobileRotation = new ol.interaction.PinchRotate({
+            duration: animationDuration
         });
 
         var map = new ol.Map({
@@ -450,12 +459,6 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 }),
                 new ol.interaction.DragZoom({
                     duration: animationDuration
-                }),
-                new ol.interaction.PinchRotate({
-                    duration: animationDuration
-                }),
-                new ol.interaction.DragRotate({
-                    duration: animationDuration
                 })
             ]
         });
@@ -466,6 +469,12 @@ wv.map.ui = wv.map.ui || function(models, config) {
         };
         createZoomButtons(map, proj);
         createMousePosSel(map, proj);
+
+        //allow rotation by dragging for polar projections
+        if(proj.id !== 'geographic') {
+            map.addInteraction(rotateInteraction);
+            map.addInteraction(mobileRotation);
+        }
 
         map.getView().on("change:center", updateExtent);
         map.getView().on("change:resolution", updateExtent);
