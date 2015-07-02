@@ -426,7 +426,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 center: proj.startCenter,
                 zoom: proj.startZoom,
                 maxZoom: proj.numZoomLevels,
-                enableRotation: false
+                enableRotation: true
             }),
             target: id,
             renderer: ["canvas", "dom"],
@@ -449,6 +449,12 @@ wv.map.ui = wv.map.ui || function(models, config) {
                     duration: animationDuration
                 }),
                 new ol.interaction.DragZoom({
+                    duration: animationDuration
+                }),
+                new ol.interaction.PinchRotate({
+                    duration: animationDuration
+                }),
+                new ol.interaction.DragRotate({
                     duration: animationDuration
                 })
             ]

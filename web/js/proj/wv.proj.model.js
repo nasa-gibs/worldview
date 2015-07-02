@@ -37,7 +37,7 @@ wv.proj.model = wv.proj.model || function(config) {
     self.select = function(id) {
         var proj = config.projections[id];
         if ( !proj ) {
-            throw new Error("Invaid projection: " + id);
+            throw new Error("Invalid projection: " + id);
         }
         var updated = false;
         if ( !self.selected || self.selected.id !== id ) {
