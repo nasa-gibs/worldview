@@ -369,7 +369,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             position: {
                 my: "left bottom",
                 at: "left top",
-                of: $("#timeline-footer")
+                of: $("#timeline-header")
             },
             buttons: [ //Go button controls date range animation, other two control animation based on Days slider
                 {

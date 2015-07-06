@@ -137,31 +137,27 @@ wv.map.ui = wv.map.ui || function(models, config) {
 
         var defs = models.layers.get({reverse: true});
         _.each(defs, function(def) {
-            if ( isGraticule(def) ) {
+            if ( isGraticule(def) )
                 addGraticule();
-            } else {
+            else
                 self.selected.addLayer(createLayer(def));
-            }
         });
         updateLayerVisibilities();
     };
 
     var updateLayerVisibilities = function() {
         self.selected.getLayers().forEach(function(layer) {
-            if ( layer.wv ) {
-                var renderable = models.layers.isRenderable(layer.wv.id);
-                layer.setVisible(renderable);
-            }
+            if ( layer.wv )
+                layer.setVisible(models.layers.isRenderable(layer.wv.id));
+
         });
         var defs = models.layers.get();
         _.each(defs, function(def) {
             if ( isGraticule(def) ) {
-                var renderable = models.layers.isRenderable(def.id);
-                if ( renderable ) {
+                if ( models.layers.isRenderable(def.id) )
                     addGraticule();
-                } else {
+                else
                     removeGraticule();
-                }
             }
         });
     };
@@ -217,13 +213,10 @@ wv.map.ui = wv.map.ui || function(models, config) {
         var selectedDate = wv.util.toISOStringDate(models.date.selected);
         var selectedProj = models.proj.selected.id;
         cache.removeWhere(function(key, mapLayer) {
-            if ( mapLayer.wvid === layerId &&
+            return ( mapLayer.wvid === layerId &&
                  mapLayer.wvproj === selectedProj &&
                  mapLayer.wvdate !== selectedDate &&
-                 mapLayer.lookupTable ) {
-                return true;
-            }
-            return false;
+                 mapLayer.lookupTable );
         });
         reloadLayers();
     };
