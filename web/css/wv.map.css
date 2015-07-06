@@ -55,6 +55,11 @@
     border-bottom-right-radius:10px;
 }
 
+.wv-map-reset-rotation { /* Place reset button above zoom buttons */
+    top: 70px;
+    border-radius:10px;
+}
+
 .wv-map-scale-imperial {
     position: absolute;
     right: 10px;
