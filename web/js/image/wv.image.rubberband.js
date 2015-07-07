@@ -80,6 +80,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
     var toggle = function(){
         var checked = $("#wv-image-button-check").prop("checked");
 
+        //Enables UI to select an area on the map while darkening the view
         var toggleOn = function() {
             state = "on";
             toolbarButtons("disable");
@@ -135,7 +136,11 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                 return;
             }
 
-            toggleOn();
+            //Don't toggle area select UI for downloading image if image rotated
+            if(ui.map.selected.getView().getRotation() === 0.0)
+                toggleOn();
+            else
+                wv.ui.notify("Image may not be downloaded when rotated. Would you like to reset rotation?");
         }
         else {
             state = "off";
