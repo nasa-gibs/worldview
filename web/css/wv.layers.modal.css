@@ -45,53 +45,33 @@
     left:50%;
     background:url('../images/wv-icons.png') 32px 32px;
 }
-
+.no-titlebar .ui-dialog-titlebar{
+    display:none;
+}
 
 /* Tile layout */
-#product-modal{
+#layer-modal{
     padding-left:10px;
     padding-right:10px;
     padding-top:0;
 }
+
 .stamp {
     cursor:pointer;
     position:absolute
 }
-.grid{
+#layer-categories{
     height:100%;
 }
-.grid1{
-    position: relative;
-    float:left;
-    width:310px;
-}
 
-.grid2{
-    margin-left:320px;
-}
-.grid-item {
+.layer-category {
     background-color:#000;
-    width: 150px;
-    height: 70px;
     cursor:pointer;
-}
-.grid-item:hover,
-.stamp:hover {
-    opacity:0.6;
-}
-.grid-item--width2 {
     background-color:#666;
     width: 310px;
-}
-.grid-item--width3{
-    background-color:blue;
-    width: 470px;
-}
-.grid-item--height2{
-    background-color:red;
-    height: 150px;
-}
-.grid-item--height3{
-    background-color:green;
     height:230px;
+}
+.layer-category:hover,
+.stamp:hover {
+    opacity:0.6;
 }

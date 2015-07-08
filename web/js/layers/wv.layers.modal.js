@@ -21,89 +21,111 @@ wv.layers = wv.layers || {};
 wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
     var model = models.layers;
-    var $addBtn = $("#layers-add");
     var self = {};
+
+    self.selector = "#layer-modal";
+    self.id = "layer-modal";
+
+    var $addBtn = $("#layers-add");
+    var $categoriesGrid = $(self.selector + " #layer-categories");
+    var gridItemWidth = 320; //with of grid item + spacing
+    var modalHeight;
     var sizeMultiplier;
 
+    var setModalSize = function(){
+        var availableWidth = $( window ).width() - ( $( window ).width() * 0.15 );
+        sizeMultiplier = Math.floor( availableWidth / gridItemWidth );
+        modalHeight = $( window ).height() - 200;
+    };
     var redo = function(){
-        var h = $(window).height() - 200;
-        var w = $(window).width() - ($(window).width()*0.15);
-        var gridItemWidth = 160; //with of grid item + spacing
-        sizeMultiplier = Math.floor(w / gridItemWidth);
+        setModalSize();
 
-        $( "#product-modal" ).dialog( "option", {
-            height: h,
+        $( self.selector ).dialog( "option", {
+            height: modalHeight,
             width: gridItemWidth * sizeMultiplier + 10,
         });
-        $( '.stamp' ).css("width", sizeMultiplier * gridItemWidth - 10 + "px");
+        //$( '.stamp' ).css("width", sizeMultiplier * gridItemWidth - 10 + "px");
     };
     var resize = function(){
-        if( $("#product-modal").dialog( "isOpen" ) ) {
+        if( $( self.selector ).dialog( "isOpen" ) ) {
             redo();
         }
     };
+
     var drawCategories = function(){
 
-    };
-
-    var init = function(){
-        var h = $(window).height() - 200;
-        var w = $(window).width() - ($(window).width()*0.15);
-        var gridItemWidth = 160; //with of grid item + spacing
-
-        sizeMultiplier = Math.floor(w / gridItemWidth);
-
-        $( '.stamp' ).css("width", sizeMultiplier * gridItemWidth - 10 + "px");
-        
-        $( '.grid, .grid2' ).isotope( {
-            // options
-            itemSelector: '.grid-item',
-            stamp: '.stamp',
-            sortBy: 'number',
+        $( '#layer-categories' ).isotope( {
+            itemSelector: '.layer-category',
+            //stamp: '.stamp',
+            //sortBy: 'number',
             layoutMode: 'packery',
             packery: {
                 gutter: 10,
-                //isHorizontal: true
             },
             //transitionDuration: '0.2s'
         } );
+    };
 
-        $addBtn.click(function(e){
-            $( "#product-modal" ).dialog({
-                resizable: false,
-                height: h,
-                width: gridItemWidth * sizeMultiplier + 10,
-                modal: true,
-                dialogClass: "layer-modal",
-                draggable: false,
-                title: "Search",
-                show: {
-                    effect: "puff",
-                    duration: 400
-                },
-                hide: {
-                    effect: "puff",
+    var render = function(){
 
-                    duration: 300
-                },
-                open: function( event, ui ) {
-                    redo();
-                    //$('.grid').show(50);
-                    $('.grid').isotope();
-                    
-                    $(".ui-widget-overlay").click(function(e){
-                        $( "#product-modal" ).dialog( "close" );
-                    });
-                },
-                close: function( event, ui ) {
-                    //$('.grid').hide(50);
-                    $(".ui-widget-overlay").unbind("click");
-                },
-            });
+        setModalSize();
 
+        $( self.selector ).dialog({
+            autoOpen: false,
+            resizable: false,
+            height: modalHeight,
+            width: gridItemWidth * sizeMultiplier + 10,
+            modal: true,
+            dialogClass: "layer-modal no-titlebar",
+            draggable: false,
+            title: "Layer Catalog",
+            show: {
+                effect: "fade",
+                duration: 400
+            },
+            hide: {
+                effect: "fade",
+                duration: 200
+            },
+            open: function( event, ui ) {
+                redo();
+
+                $( "#layer-categories" ).isotope();
+ 
+                $( ".ui-widget-overlay" ).click( function(e) {
+                    $( self.selector ).dialog( "close" );
+                } );
+            },
+            close: function( event, ui ) {
+                $( ".ui-widget-overlay" ).unbind( "click" );
+            }
         });
 
-        //$( "#product-modal" ).dialog("close");
+        var $search = $( "<div></div>" )
+            .attr( "id", "layer-search" );
+
+        var $searchBtn = $("<label></label>")
+            .addClass( "search-icon" )
+            .append( "<i></i>" );
+
+        var $searchInput = $( "<input></input>" )
+            .attr( "id", "layers-search-input" );
+
+        $search.append( $searchBtn )
+            .append( $searchInput );
+
+        drawCategories();
+    };
+
+    var init = function(){
+        
+
+        //Create tiles
+        render();
+
+        $addBtn.click(function(e){
+            $( self.selector ).dialog("open");
+        });
 
         $(window).resize(resize);
     };
