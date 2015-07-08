@@ -473,6 +473,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         //allow rotation by dragging for polar projections
         if(proj.id !== 'geographic') {
             createResetButton(map);
+            createRotationWidget(map);
             map.addInteraction(rotateInteraction);
             map.addInteraction(mobileRotation);
         }
@@ -639,6 +640,49 @@ wv.map.ui = wv.map.ui || function(models, config) {
                     $(this).html(coordinateFormat(coords, format));
                 });
             });
+    };
+
+    //Create rotation buttons for polar views
+    var createRotationWidget = function(map) {
+        var $map = $("#" + map.getTarget());
+
+        var $left = $("<button></button>")
+            .addClass("wv-map-rotate-left wv-map-zoom"),
+            $lefticon = $("<i></i>")
+                .addClass("fa fa-repeat");
+
+        var $right = $("<button></button>")
+            .addClass("wv-map-rotate-right wv-map-zoom"),
+            $righticon = $("<i></i>")
+                .addClass("fa fa-undo");
+
+        $left.append($lefticon); $right.append($righticon);
+        $map.append($left).append($right);
+
+        //Set buttons to animate rotation by 18 degrees
+        $left.button({
+            text: false
+        }).click(function() {
+            map.beforeRender(ol.animation.rotate({
+                duration: 500,
+                rotation: map.getView().getRotation()
+            }));
+
+            map.getView().rotate(map.getView().getRotation() + (Math.PI / 10));
+        });
+
+        $right.button({
+            text: false
+        }).click(function() {
+            map.beforeRender(ol.animation.rotate({
+                duration: 500,
+                rotation: map.getView().getRotation()
+            }));
+
+            map.getView().rotate(map.getView().getRotation() - (Math.PI / 10));
+        });
+
+
     };
 
     var zoomAction = function(map, amount) {

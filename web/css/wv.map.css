@@ -60,6 +60,18 @@
     border-radius:10px;
 }
 
+.wv-map-rotate-left {
+    top: 250px;
+    border-top-left-radius:10px;
+    border-top-right-radius:10px;
+}
+
+.wv-map-rotate-right {
+    top: 300px;
+    border-bottom-left-radius:10px;
+    border-bottom-right-radius:10px;
+}
+
 .wv-map-scale-imperial {
     position: absolute;
     right: 10px;
