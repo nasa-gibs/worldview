@@ -158,3 +158,12 @@ a.evexpand {
 	font-size: 0.85em;
 }
 
+#wv-events-facets {
+	margin-bottom: 5px;
+}
+
+.wv-events-facet {
+	width: 250px;
+	margin-left: 5px;
+}
+

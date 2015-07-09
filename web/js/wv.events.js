@@ -54,6 +54,20 @@ wv.events = wv.events || function(models, ui) {
     self.render = function() {
         var $panels = $(self.selector).empty();
 
+        var $searchContainer = $("<div></div>")
+            .attr("id", "wv-events-facets")
+            ;//.addClass("facetedSearch");
+
+        var $typeFacet = $("<select></select>")
+            .attr("id", "wv-events-types")
+            .addClass("wv-events-facet");
+        var $sourceFacet = $("<select></select>")
+            .attr("id", "wv-events-sources")
+            .addClass("wv-events-facet");
+
+        $searchContainer.append($typeFacet).append($sourceFacet);
+        $panels.append($searchContainer);
+
         var $listContainer = $("<div></div>")
             .attr("id", "wv-events-list")
             .addClass(self.id + "list")
@@ -249,14 +263,101 @@ wv.events = wv.events || function(models, ui) {
         }
     };
 
-    self.query = function() {
-        console.log("sending query");
-        //$.getJSON("service/events/eo-net.cgi?path=/api/v1/events", function(data) {
-        $.getJSON("http://eonet.sci.gsfc.nasa.gov/api/v1/events", function(data) {
+    var queryEvents = function() {
+        var url = "http://eonet.sci.gsfc.nasa.gov/api/v1/events";
+        console.log("sending query", url);
+        $.getJSON(url, function(data) {
             self.data = data.item;
-            console.log("data received", self.data);
+            console.log("events received", self.data);
             self.refresh();
         });
+    };
+
+    var queryTypes = function() {
+        var url = "http://eonet.sci.gsfc.nasa.gov/api/v1/events/types";
+        console.log("sending query", url);
+        $.getJSON(url, function(data) {
+            self.types = data.item;
+            console.log("types received", self.types);
+
+            var $facet = $("#wv-events-types");
+            $facet.append($("<option></option>")
+                .val("none")
+                .html("Type..."));
+            _.each(self.types, function(type) {
+                var $type = $("<option></option>")
+                    .val(type.title)
+                    .html(type.title);
+                $facet.append($type);
+            });
+            $facet.change(updateFacets);
+        });
+    };
+
+    var querySources = function() {
+        var url = "http://eonet.sci.gsfc.nasa.gov/api/v1/events/sources";
+        console.log("sending query", url);
+        $.getJSON(url, function(data) {
+            self.sources = data.item;
+            console.log("sources received", self.sources);
+
+            var $facet = $("#wv-events-sources");
+            $facet.append($("<option></option>")
+                .val("none")
+                .html("Source..."));
+            _.each(self.sources, function(source) {
+                var maxLen = 35;
+                if ( source.title.length > maxLen ) {
+                    source.title = source.title.substring(0, maxLen) + "...";
+                }
+                var $source = $("<option></option>")
+                    .val(source.id)
+                    .html(source.title);
+                $facet.append($source);
+            });
+            $facet.change(updateFacets);
+        });
+
+    };
+
+    var updateFacets = function() {
+        $("#wv-events-list .selectorItem").hide();
+        var source = $("#wv-events-sources").val();
+        var type = $("#wv-events-types").val();
+
+        console.log("source", source, "type", type);
+        $("#wv-events-list .selectorItem").each(function() {
+            var index = $(this).attr("data-index");
+            var passType = true;
+            var passSource = true;
+            var event = self.data[index];
+            if ( source !== "none" && event.reference.id !== source ) {
+                passSource = false;
+            }
+            if ( type !== "none" ) {
+                var categories = toArray(event.category);
+                console.log(type, categories);
+                if ( !_.find(categories, { "#text": type }) ) {
+                    passType = false;
+                }
+            }
+            if ( passType && passSource ) {
+                $(this).show();
+            }
+        });
+    };
+
+    self.query = function() {
+        queryTypes();
+        queryEvents();
+        querySources();
+    };
+
+    var toArray = function(value) {
+        if ( value.constructor !== Array ) {
+            value = [value];
+        }
+        return value;
     };
 
     init();
