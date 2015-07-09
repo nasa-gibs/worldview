@@ -49,7 +49,7 @@ h1, h2, h3, h4, h5, h6 { font-weight:400; }
 
 
 
-#info_drop { border:none; margin:0px;}
+#info_drop { border:none; margin: 0;}
 #info_drop div.hidden a {display:block; color:#fff; font-weight:100; line-height:1em; font-size: 11px; width:70px; padding: 2px 5px; text-align:right; text-decoration:none;}
 #info_drop div.hidden a:hover {background: rgba(38,43,49,0.45); }
 #info_drop:hover div.hidden {display:block; background: rgba(38,43,49,0.45); width:80px; margin-left:-40px; margin-top:2px;}
@@ -78,7 +78,7 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
 }
 
 
-@media
+@media {
 #banner img.logo {padding:11px 5px;}
 #banner ul {float:right; }
 #banner ul li {display:block; float:right; margin:3px 3px; line-height:0; }
@@ -347,5 +347,34 @@ label {
 
 /* Chrome wants to put a blue border around items when they have focus.
  * Remove it */
-.ui-state-focus:focus { outline: none !important }
-.ui-state-focus a:focus { outline: none !important }
+.ui-menu .ui-menu-item {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+/* style for UI dialog buttons that are hovered over */
+.ui-widget-content .ui-state-hover {
+    border-color: #eee;
+    background-color: #eee;
+    background-image: none;
+    color: #404040;
+}
+
+/* style for UI info select menu that are hovered over */
+.ui-widget-content .ui-state-focus {
+    border-color: #eee;
+    background-color: #eee;
+    background-image: none;
+    color: #404040;
+}
+
+.ui-widget-content .ui-state-focus.ui-menu-item a {
+    color: #404040;
+}
+
+.ui-state-focus:focus {
+    outline: none !important ;
+}
+.ui-state-focus a:focus {
+    outline: none !important;
+}}
