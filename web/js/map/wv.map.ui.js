@@ -659,29 +659,40 @@ wv.map.ui = wv.map.ui || function(models, config) {
         $left.append($lefticon); $right.append($righticon);
         $map.append($left).append($right);
 
-        //Set buttons to animate rotation by 18 degrees
+        var intervalId, dur = 500;
+
+        //Set buttons to animate rotation by 18 degrees. use setInterval to repeat the rotation when mouse button is held
         $left.button({
             text: false
-        }).click(function() {
-            map.beforeRender(ol.animation.rotate({
-                duration: 500,
-                rotation: map.getView().getRotation()
-            }));
-
-            map.getView().rotate(map.getView().getRotation() + (Math.PI / 10));
+        }).mousedown(function() {
+            rotate(10, dur);
+            intervalId = setInterval(function() {
+                rotate(10, dur);
+            }, dur);
+        }).mouseup(function() {
+            clearInterval(intervalId);
         });
 
         $right.button({
             text: false
-        }).click(function() {
+        }).mousedown(function() {
+            rotate(-10, dur);
+            intervalId = setInterval(function() {
+                rotate(-10, dur);
+            }, dur)
+        }).mouseup(function() {
+            clearInterval(intervalId);
+        });
+
+        //Function to rotate polar map tile when button is pressed
+        var rotate = function(amount, duration) {
             map.beforeRender(ol.animation.rotate({
-                duration: 500,
+                duration: duration,
                 rotation: map.getView().getRotation()
             }));
 
-            map.getView().rotate(map.getView().getRotation() - (Math.PI / 10));
-        });
-
+            map.getView().rotate(map.getView().getRotation() - (Math.PI / amount));
+        };
 
     };
 
