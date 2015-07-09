@@ -13,6 +13,30 @@ var wv = wv || {};
 
 wv.events = wv.events || function(models, ui) {
 
+    var dayNames = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+    ];
+    var monthNames = [
+        "January",
+        "Febuaray",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+    ];
+
     var layerLists = {
         Wildfires: [
             ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
@@ -47,7 +71,6 @@ wv.events = wv.events || function(models, ui) {
     var lastDateIndex = -1;
 
     var init = function() {
-        self.render();
         self.query();
     };
 
@@ -86,6 +109,8 @@ wv.events = wv.events || function(models, ui) {
             .hide();
         $panels.append($detailContainer);
 
+        renderTypes();
+        renderSources();
         self.refresh();
     };
 
@@ -110,13 +135,19 @@ wv.events = wv.events || function(models, ui) {
     };
 
     var refreshEvent = function($content, event, index) {
+
+        var geoms = toArray(event.geometry);
+        eventDate = wv.util.parseDateUTC(geoms[0].date);
+        dateString = dayNames[eventDate.getUTCDay()] + ", " +
+                monthNames[eventDate.getUTCMonth()] + " " +
+                eventDate.getUTCDate();
         var $item = $("<li></li>")
             .addClass("selectorItem")
             .addClass("item")
             .attr("data-index", index);
         var $title = $("<h4></h4>")
             .addClass("title")
-            .html(event.title);
+            .html(event.title + "<br/>" + dateString);
         var $subtitle = $("<p></p>")
             .addClass("subtitle")
             .html(event.description)
@@ -136,6 +167,21 @@ wv.events = wv.events || function(models, ui) {
         }
 
         $item.append($title).append($subtitle).append($dates);
+        var references = toArray(event.reference);
+        if ( references.length > 0 ) {
+            items = []
+            _.each(references, function(reference) {
+                var source = _.find(self.sources, { id: reference.id });
+                if ( reference.url ) {
+                    items.push("<a target='event' href='" + reference.url + "'>" +
+                        source.title + "</a>");
+                } else {
+                    items.push(source.title);
+                }
+            });
+            $subtitle.append("<br/>" + items.join(", "));
+        }
+
         $content.append($item);
     };
 
@@ -269,7 +315,7 @@ wv.events = wv.events || function(models, ui) {
         $.getJSON(url, function(data) {
             self.data = data.item;
             console.log("events received", self.data);
-            self.refresh();
+            checkRender();
         });
     };
 
@@ -279,20 +325,23 @@ wv.events = wv.events || function(models, ui) {
         $.getJSON(url, function(data) {
             self.types = data.item;
             console.log("types received", self.types);
-
-            var $facet = $("#wv-events-types");
-            $facet.append($("<option></option>")
-                .val("none")
-                .html("Type..."));
-            _.each(self.types, function(type) {
-                var $type = $("<option></option>")
-                    .val(type.title)
-                    .html(type.title);
-                $facet.append($type);
-            });
-            $facet.change(updateFacets);
+            checkRender();
         });
     };
+
+    var renderTypes = function() {
+        var $facet = $("#wv-events-types");
+        $facet.append($("<option></option>")
+            .val("none")
+            .html("Type..."));
+        _.each(self.types, function(type) {
+            var $type = $("<option></option>")
+                .val(type.title)
+                .html(type.title);
+            $facet.append($type);
+        });
+        $facet.change(updateFacets);
+    }
 
     var querySources = function() {
         var url = "http://eonet.sci.gsfc.nasa.gov/api/v1/events/sources";
@@ -300,24 +349,27 @@ wv.events = wv.events || function(models, ui) {
         $.getJSON(url, function(data) {
             self.sources = data.item;
             console.log("sources received", self.sources);
-
-            var $facet = $("#wv-events-sources");
-            $facet.append($("<option></option>")
-                .val("none")
-                .html("Source..."));
-            _.each(self.sources, function(source) {
-                var maxLen = 35;
-                if ( source.title.length > maxLen ) {
-                    source.title = source.title.substring(0, maxLen) + "...";
-                }
-                var $source = $("<option></option>")
-                    .val(source.id)
-                    .html(source.title);
-                $facet.append($source);
-            });
-            $facet.change(updateFacets);
+            checkRender();
         });
 
+    };
+
+    var renderSources = function() {
+        var $facet = $("#wv-events-sources");
+        $facet.append($("<option></option>")
+            .val("none")
+            .html("Source..."));
+        _.each(self.sources, function(source) {
+            var maxLen = 35;
+            if ( source.title.length > maxLen ) {
+                source.abbr = source.title.substring(0, maxLen) + "...";
+            }
+            var $source = $("<option></option>")
+                .val(source.id)
+                .html(source.abbr || source.title);
+            $facet.append($source);
+        });
+        $facet.change(updateFacets);
     };
 
     var updateFacets = function() {
@@ -354,10 +406,21 @@ wv.events = wv.events || function(models, ui) {
     };
 
     var toArray = function(value) {
+        if ( !value ) {
+            return [];
+        }
         if ( value.constructor !== Array ) {
             value = [value];
         }
         return value;
+    };
+
+    var checkRender = function() {
+        if ( self.data && self.sources && self.types ) {
+            self.render();
+            self.refresh();
+            updateFacets();
+        }
     };
 
     init();
