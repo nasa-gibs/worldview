@@ -647,12 +647,14 @@ wv.map.ui = wv.map.ui || function(models, config) {
         var $map = $("#" + map.getTarget());
 
         var $left = $("<button></button>")
-            .addClass("wv-map-rotate-left wv-map-zoom"),
+            .addClass("wv-map-rotate-left wv-map-zoom")
+                .attr("title","You may also rotate by holding Alt and dragging the mouse"),
             $lefticon = $("<i></i>")
                 .addClass("fa fa-repeat");
 
         var $right = $("<button></button>")
-            .addClass("wv-map-rotate-right wv-map-zoom"),
+            .addClass("wv-map-rotate-right wv-map-zoom")
+            .attr("title","You may also rotate by holding Alt and dragging the mouse"),
             $righticon = $("<i></i>")
                 .addClass("fa fa-undo");
 
