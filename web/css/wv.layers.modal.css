@@ -48,6 +48,37 @@
 .no-titlebar .ui-dialog-titlebar{
     display:none;
 }
+#layer-modal header,
+#layer-search {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    height: 40px;
+    line-height: 40px;
+}
+
+#layer-search {
+    display: inline-block;
+}
+
+.search-icon {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    float: left;
+    cursor: pointer;
+}
+.search-icon i{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 32px;
+    height: 32px;
+    margin: -16px 0 0 -16px;
+    background: url('../images/wv-icons.png') 0 32px;
+}
 
 /* Tile layout */
 #layer-modal{

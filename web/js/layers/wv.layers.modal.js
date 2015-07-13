@@ -65,6 +65,104 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             //transitionDuration: '0.2s'
         } );
     };
+    var addLayer = function(event) {
+        model.add(decodeURIComponent($(this).attr("data-layer")));
+        console.log('add');
+
+    };
+
+    var removeLayer = function(event) {
+        model.remove(decodeURIComponent($(this).attr("data-layer")));
+        console.log('remove');
+    };
+
+    var onLayerAdded = function(layer) {
+        var $element = $( self.selector + " [data-layer='" +
+                wv.util.jqueryEscape(layer.id) + "']");
+        $element.iCheck("check");
+        console.log('added');
+    };
+
+    var onLayerRemoved = function(layer) {
+        var $element = $( self.selector + " [data-layer='" +
+                wv.util.jqueryEscape(layer.id) + "']");
+        $element.iCheck("uncheck");
+        console.log('removed');
+    };
+
+    var drawAll = function(){
+        var group = "overlays";
+        _.each(config.layerOrder, function(layerId) {
+            var layer = config.layers[layerId];
+            if ( layer.group === group ) {
+                renderLayer(group, layerId);
+                //renderLayer("baselayers", layerId);
+            }
+        });
+        group = "baselayers";
+        _.each(config.layerOrder, function(layerId) {
+            var layer = config.layers[layerId];
+            if ( layer.group === group ) {
+                renderLayer(group, layerId);
+                //renderLayer("baselayers", layerId);
+            }
+        });
+
+        $(self.selector + " .selectorItem, " + self.selector + " .selectorItem input").on('ifChecked', addLayer);
+        $(self.selector + " .selectorItem, " + self.selector + " .selectorItem input").on('ifUnchecked', removeLayer);
+
+        $("#all-layers").iCheck({checkboxClass: 'icheckbox_square-grey'});
+    };
+
+    var renderLayer = function(group, layerId) {
+        var layer = config.layers[layerId];
+        if ( !layer ) {
+            console.warn("Skipping unknown layer", layerId);
+            return;
+        }
+        var $label = $("<li></li>")
+            .attr("data-layer", encodeURIComponent(layer.id));
+        var $element = $("<li></li>")
+            .addClass("selectorItem")
+            .attr("data-layer", encodeURIComponent(layer.id))
+            .addClass("item");
+
+        var names = models.layers.getTitles(layer.id);
+        var $name = $("<h4></h4>")
+            .addClass("title")
+            .html(names.title);
+        if ( config.parameters.markPalettes ) {
+            if ( layer.palette ) {
+                $name.addClass("mark");
+            }
+        }
+        if ( config.parameters.markDownloads ) {
+            if ( layer.product ) {
+                $name.addClass("mark");
+            }
+        }
+        var $description = $("<p></p>")
+            .addClass("subtitle")
+            .html(names.subtitle);
+
+        var $checkbox = $("<input></input>")
+            .attr("id", encodeURIComponent(layer.id))
+            .attr("value", layer.id)
+            .attr("type", "checkbox")
+            .attr("data-layer", layer.id);
+        if ( group === "baselayers" ) {
+            $checkbox.attr("name", group);
+        }
+        if ( _.find(model.active, {id: layer.id}) ) {
+            $checkbox.attr("checked", "checked");
+        }
+
+        $element.append($checkbox);
+        $element.append($name);
+        $element.append($description);
+
+        $("#all-layers ul").append($element);
+    };
 
     var render = function(){
 
@@ -101,24 +199,58 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             }
         });
 
+        var $header = $( self.selector + " header" );
+
         var $search = $( "<div></div>" )
             .attr( "id", "layer-search" );
 
+        var $searchInput = $( "<input></input>" )
+            .attr( "id", "layers-search-input" )
+            .hide()
+            ;
+
         var $searchBtn = $("<label></label>")
             .addClass( "search-icon" )
+            .toggle( function( e ) {
+                var that = this;
+                console.log('click on');
+                $searchInput.show( "fast", function(e){
+                    console.log('visible');
+                    console.log(this);
+                    /*$(this).focus().blur(function(e){
+                        console.log('blurring');
+                        $(that).toggle();
+                    });
+                    */
+                });
+                //console.log(e);
+            }, function ( e ) {
+                console.log('click off');
+                $searchInput.hide(function(e){
+                    console.log('unblurring');
+                    //$(this).off("blur");
+                });
+                console.log(e);
+            } )
             .append( "<i></i>" );
 
-        var $searchInput = $( "<input></input>" )
-            .attr( "id", "layers-search-input" );
-
+        //$searchInput
+        
+        
         $search.append( $searchBtn )
             .append( $searchInput );
 
-        drawCategories();
+        $header.append( $search );
+
+        //drawCategories();
+        drawAll();
     };
 
     var init = function(){
         
+        model.events
+            .on("add", onLayerAdded)
+            .on("remove", onLayerRemoved);
 
         //Create tiles
         render();
