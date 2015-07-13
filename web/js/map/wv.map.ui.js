@@ -685,7 +685,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
             rotate(-10, dur);
             intervalId = setInterval(function() {
                 rotate(-10, dur);
-            }, dur)
+            }, dur);
         }).mouseup(function() {
             clearInterval(intervalId);
         });
