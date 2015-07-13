@@ -149,6 +149,8 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                             rotation: ui.map.selected.getView().getRotation()
                         }));
                         ui.map.selected.getView().rotate(0);
+                        models.map.rotation = 0.0; //update url to reflect rotation reset
+                        window.history.replaceState("", "@OFFICIAL_NAME@","?" + models.link.toQueryString());
                         //Let rotation finish before image download can occur
                         setTimeout(toggle, 500);
                     }

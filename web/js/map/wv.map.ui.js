@@ -433,6 +433,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 projection: ol.proj.get(proj.crs),
                 extent: proj.maxExtent,
                 center: proj.startCenter,
+                rotation: models.map.rotation,
                 zoom: proj.startZoom,
                 maxZoom: proj.numZoomLevels,
                 enableRotation: true
@@ -506,6 +507,9 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 rotation: map.getView().getRotation()
             }));
             map.getView().rotate(0);
+            models.map.rotation = 0.0; //update url to reflect rotation reset
+            window.history.replaceState("", "@OFFICIAL_NAME@","?" + models.link.toQueryString());
+
         });
     };
 
@@ -694,6 +698,8 @@ wv.map.ui = wv.map.ui || function(models, config) {
             }));
 
             map.getView().rotate(map.getView().getRotation() - (Math.PI / amount));
+            models.map.rotation = map.getView().getRotation(); //save rotation for permalink
+            window.history.replaceState("", "@OFFICIAL_NAME@","?" + models.link.toQueryString());
         };
 
     };
