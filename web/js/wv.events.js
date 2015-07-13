@@ -169,7 +169,7 @@ wv.events = wv.events || function(models, ui) {
         $item.append($title).append($subtitle).append($dates);
         var references = toArray(event.reference);
         if ( references.length > 0 ) {
-            items = []
+            items = [];
             _.each(references, function(reference) {
                 var source = _.find(self.sources, { id: reference.id });
                 if ( reference.url ) {
@@ -216,7 +216,7 @@ wv.events = wv.events || function(models, ui) {
         if ( event.geometry.length > 1 ) {
             eventItem = event.geometry[dateIndex || 0];
         } else {
-            eventItem = event.geometry;
+            eventItem = event.geometry[0];
         }
         eventDate = wv.util.parseTimestampUTC(eventItem.date);
         models.date.select(eventDate);
@@ -244,11 +244,13 @@ wv.events = wv.events || function(models, ui) {
             models.layers.add(id, { visible: visible });
         });
 
+        console.log("COORDS", eventItem.coordinates);
         if ( eventItem.type === "Point" ) {
             goTo(method, eventItem.coordinates);
-        } else if ( eventItem.type === "Polygon" && eventItem.coordinates.length == 4 ) {
+        } else if ( eventItem.type === "Polygon" && eventItem.coordinates.length == 5 ) {
             c = eventItem.coordinates;
-            var extent = [c[1][0], c[0][0], c[3][0], c[2][0]];
+            var extent = [c[0][0], c[0][1], c[2][0], c[2][1]];
+            console.log("extent", extent);
             goTo(method, extent);
         }
     };
@@ -341,7 +343,7 @@ wv.events = wv.events || function(models, ui) {
             $facet.append($type);
         });
         $facet.change(updateFacets);
-    }
+    };
 
     var querySources = function() {
         var url = "http://eonet.sci.gsfc.nasa.gov/api/v1/events/sources";
