@@ -394,11 +394,18 @@ wv.map.ui = wv.map.ui || function(models, config) {
         self.events.trigger("extent");
     }, 500, { trailing: true });
 
+    //Called as event listener when map is zoomed or panned
     var updateExtent = function() {
         var map = self.selected;
         models.map.update(map.getView().calculateExtent(map.getSize()));
         triggerExtent();
     };
+
+    //Called as event listener when map is rotated. Update url to reflect rotation reset
+    self.updateRotation = function() {
+        models.map.rotation = self.selected.getView().getRotation();
+        window.history.replaceState("", "@OFFICIAL_NAME@","?" + models.link.toQueryString());
+    }
 
     var createMap = function(proj) {
         var id = "wv-map-" + proj.id;
@@ -479,8 +486,10 @@ wv.map.ui = wv.map.ui || function(models, config) {
             map.addInteraction(mobileRotation);
         }
 
+        //Set event listeners for changes on the map view (when rotated, zoomed, panned)
         map.getView().on("change:center", updateExtent);
         map.getView().on("change:resolution", updateExtent);
+        map.getView().on("change:rotation", self.updateRotation);
 
         return map;
     };
@@ -507,8 +516,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 rotation: map.getView().getRotation()
             }));
             map.getView().rotate(0);
-            models.map.rotation = 0.0; //update url to reflect rotation reset
-            window.history.replaceState("", "@OFFICIAL_NAME@","?" + models.link.toQueryString());
+                self.updateRotation();
 
         });
     };
@@ -698,8 +706,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
             }));
 
             map.getView().rotate(map.getView().getRotation() - (Math.PI / amount));
-            models.map.rotation = map.getView().getRotation(); //save rotation for permalink
-            window.history.replaceState("", "@OFFICIAL_NAME@","?" + models.link.toQueryString());
+            self.updateRotation();
         };
 
     };
