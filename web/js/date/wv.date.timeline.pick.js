@@ -87,6 +87,35 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
         }
     };
 
+    //Listener function when a animation datepicker moves
+    var animdrag = function(d) {
+        //Here we have access to information in the d3.event object
+        //this should also provide access to the date picker
+        //TODO: Acquire hovered element
+        var tempPickOffset = Math.max( -(width / 2), Math.min( tl.width - (width / 2), d3.event.x ) );
+        var tempPickTipOffset = tempPickOffset + (width / 2);
+        var tempPickTipDate = tl.x.invert(tempPickTipOffset); //FIXME:Why doesn't this code go through?
+
+        tl.input.fromDate = tempPickTipDate;
+        $("#from").datepicker("setDate", tempPickTipDate);
+        console.log(tl.input.fromDate);
+
+        /*if(this === d3.select("#fromPick")) {
+            tl.input.fromDate = tempPickTipDate;
+            $("#from").datepicker("setDate", tempPickTipDate);
+        }
+        else if(this === d3.select("#toPick")) {
+            tl.input.toDate = tempPickTipDate;
+            $("#to").datepicker("setDate", tempPickTipDate);
+        }
+        else
+            console.log("Couldn't select a date picker");*/
+
+        //Hopefully a call to updateChanges should suffice
+        updateChanges(tempPickTipDate);
+    };
+
+    //Handling drag gestures with the guitarpick
     var drag = d3.behavior.drag()
         .origin(function(d) { return d; })
         .on("dragstart", function(){
@@ -101,6 +130,20 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
             prevChange = undefined;
             nextChange = undefined;
             tl.guitarPick.classed('pick-clicked',false);
+        });
+
+    //Handling drag gestures with the animation date pickers
+    var animDrag = d3.behavior.drag()
+        .on("dragstart", function() {
+            mousedown = true; //TODO: Allows the tile layers and date to change. what does this do?
+            d3.event.sourceEvent.preventDefault();
+            d3.event.sourceEvent.stopPropagation();
+        })
+        .on("drag", animdrag)
+        .on("dragend", function() {
+            mousedown = false;
+            prevChange = undefined;
+            nextChange = undefined;
         });
 
     var change = function(){
@@ -259,6 +302,9 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
             .attr("d", "M0 0 L40 0 L20 40 Z")
             .attr("transform", self.updateAnimPickers(model.selected));
 
+        //register drag behaviour with the date pickers here to guarantee it is called
+        d3.select("#fromPick").call(animDrag);
+        d3.select("#toPick").call(animDrag);
         $(".animpick").hide();
     };
 
