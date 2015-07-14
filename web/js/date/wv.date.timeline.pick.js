@@ -252,12 +252,12 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
         tl.animPick1.append("svg:path")
             .attr("id", "fromPick")
             .attr("d", "M0 0 L40 0 L20 40 Z")
-            .attr("transform", "translate(500 20)");
+            .attr("transform", self.updateAnimPickers(model.selected));
 
         tl.animPick2.append("svg:path")
             .attr("id", "toPick")
             .attr("d", "M0 0 L40 0 L20 40 Z")
-            .attr("transform", "translate(600 20)");
+            .attr("transform", self.updateAnimPickers(model.selected));
 
         $(".animpick").hide();
     };

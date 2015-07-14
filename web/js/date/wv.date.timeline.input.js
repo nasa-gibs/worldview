@@ -345,6 +345,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         $fromDate.datepicker({
             changeMonth: true,
             changeYear: true,
+            maxDate: 0, //can't choose date after today
             onSelect: function() {
                 self.fromDate = $("#from").datepicker("getDate");
                 console.log(self.fromDate);
@@ -353,10 +354,11 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
 
             }
         });
-        //TODO:Check input of dates for moving pickers
+
         $toDate.datepicker({
             changeMonth: true,
             changeYear: true,
+            maxDate: 0,
             onSelect: function() {
                 self.toDate = $("#to").datepicker("getDate");
                 console.log(self.toDate);
