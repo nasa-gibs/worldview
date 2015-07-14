@@ -31,7 +31,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
     var timer, rollingDate;
 
     //vars for dialog dates and time interval
-    var toDate, fromDate, interval = 'day';
+    var toDate, fromDate, interval = 'day', dialogOpen = false;
 
     var $incrementBtn = $("#right-arrow-group");
     var $decrementBtn = $("#left-arrow-group");
@@ -346,6 +346,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             onSelect: function() {
                 fromDate = $("#from").datepicker("getDate");
                 console.log(fromDate);
+                //TODO: Change datepickers here
             }
         });
 
@@ -355,6 +356,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             onSelect: function() {
                 toDate = $("#to").datepicker("getDate");
                 console.log(toDate);
+                //TODO: Change datepickers here
             }
         });
 
@@ -370,6 +372,21 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 my: "left bottom",
                 at: "left top",
                 of: $("#timeline-header")
+            },
+            open: function(event, ui) {
+                //Show datepickers and set from date to current datepicker date
+                $(".animpick").show();
+                if(fromDate === undefined) { //once per session
+                    fromDate = new Date(model.selected.valueOf());
+                    $fromDate.datepicker("setDate", fromDate);
+                }
+
+                dialogOpen = true;
+            },
+            close: function(event, ui) {
+                //Hide datepickers
+                $(".animpick").hide();
+                dialogOpen = false;
             },
             buttons: [ //Go button controls date range animation, other two control animation based on Days slider
                 {

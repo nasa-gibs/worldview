@@ -229,6 +229,29 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
         });
     };
 
+    //Create animation pickers and translate them
+    //Translation must be applied to a selected SVG path (underlying path in animPick1/2)
+    var animPicks = function() {
+        tl.animPick1 = tl.svg
+            .append("svg:svg")
+            .attr("class","animpick");
+
+        tl.animPick2 = tl.svg
+            .append("svg:svg")
+            .attr("class","animpick");
+
+        tl.animPick1.append("svg:path")
+            .attr("d", "M0 0 L40 0 L20 40 Z")
+            .attr("transform", "translate(500 20)");
+
+        tl.animPick2.append("svg:path")
+            .attr("d", "M0 0 L40 0 L20 40 Z")
+            .attr("transform", "translate(600 20)");
+
+        $(".animpick").hide();
+    };
+
     init();
+    animPicks();
     return self;
 };
