@@ -516,6 +516,14 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
         tl.pick.update();
         tl.pick.checkLocation();
 
+        //Update date pickers when timeline zoom level changes.
+        //We need to check tl.input because this executes when page is loaded
+        if(tl.input !== undefined && tl.input !== undefined)
+            if(tl.input.fromDate !== undefined && tl.input.toDate !== undefined) {
+                d3.select("#fromPick").attr("transform", tl.pick.updateAnimPickers(tl.input.fromDate));
+                d3.select("#toPick").attr("transform", tl.pick.updateAnimPickers(tl.input.toDate));
+            }
+
     };
 
     //Draw ticks based on zoom level

@@ -193,6 +193,15 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
         nextChange = undefined;
     };
 
+    //Given a date, returns a transform string to translate a date picker
+    //we want to move the picker to the correct x position
+    self.updateAnimPickers = function(date) {
+        var str = "translate(", val = "0";
+
+        val = (tl.x(date) - width/2) + 8; //need offset of 8 for correct position
+        return str + val + " 20)";
+    };
+
     var init = function(){
 
         //Draw the pick
@@ -241,10 +250,12 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
             .attr("class","animpick");
 
         tl.animPick1.append("svg:path")
+            .attr("id", "fromPick")
             .attr("d", "M0 0 L40 0 L20 40 Z")
             .attr("transform", "translate(500 20)");
 
         tl.animPick2.append("svg:path")
+            .attr("id", "toPick")
             .attr("d", "M0 0 L40 0 L20 40 Z")
             .attr("transform", "translate(600 20)");
 

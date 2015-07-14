@@ -27,11 +27,13 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
     var model = models.date;
 
     var self = {};
+    self.fromDate = undefined;
+    self.toDate = undefined;
 
     var timer, rollingDate;
 
     //vars for dialog dates and time interval
-    var toDate, fromDate, interval = 'day', dialogOpen = false;
+    var interval = 'day', dialogOpen = false;
 
     var $incrementBtn = $("#right-arrow-group");
     var $decrementBtn = $("#left-arrow-group");
@@ -252,7 +254,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
 
     //When the Go button is pressed, the dates are checked to make sure they exist and are valid
     var animDateCheck = function() {
-        return fromDate !== undefined && toDate.getTime() !== fromDate.getTime();
+        return self.fromDate !== undefined && self.toDate.getTime() !== self.fromDate.getTime();
     };
 
     //TODO: Cleanup
@@ -344,19 +346,22 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             changeMonth: true,
             changeYear: true,
             onSelect: function() {
-                fromDate = $("#from").datepicker("getDate");
-                console.log(fromDate);
-                //TODO: Change datepickers here
+                self.fromDate = $("#from").datepicker("getDate");
+                console.log(self.fromDate);
+                //Move animation date picker in timeline according to the new date
+                d3.select("#fromPick").attr("transform", ui.timeline.pick.updateAnimPickers(self.fromDate));
+
             }
         });
-
+        //TODO:Check input of dates for moving pickers
         $toDate.datepicker({
             changeMonth: true,
             changeYear: true,
             onSelect: function() {
-                toDate = $("#to").datepicker("getDate");
-                console.log(toDate);
-                //TODO: Change datepickers here
+                self.toDate = $("#to").datepicker("getDate");
+                console.log(self.toDate);
+                //Move animation date picker in timeline according to the new date
+                d3.select("#toPick").attr("transform", ui.timeline.pick.updateAnimPickers(self.toDate));
             }
         });
 
@@ -376,9 +381,9 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             open: function(event, ui) {
                 //Show datepickers and set from date to current datepicker date
                 $(".animpick").show();
-                if(fromDate === undefined) { //once per session
-                    fromDate = new Date(model.selected.valueOf());
-                    $fromDate.datepicker("setDate", fromDate);
+                if(self.fromDate === undefined) { //once per session
+                    self.fromDate = new Date(model.selected.valueOf());
+                    $fromDate.datepicker("setDate", self.fromDate);
                 }
 
                 dialogOpen = true;
@@ -399,7 +404,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                         //in a day to get the number of days to animate
                         if(animDateCheck()) {
                             //Get the time difference. Negative ranges are supported
-                            var to = toDate.getTime(), from = fromDate.getTime();
+                            var to = self.toDate.getTime(), from = self.fromDate.getTime();
 
                             //Get the number of frames to animate. Then divide it by 30 or 365 depending on interval
                             ui.anim.animDuration = to > from ? ((to - from) / (86400 * 1000)) + 1 : ((from - to) / (86400 * 1000)) + 1;
@@ -411,7 +416,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                             $(this).dialog("close");
 
                             //initDate needs to be set separately
-                            model.selected = new Date(fromDate.valueOf()); //clone fromDate
+                            model.selected = new Date(self.fromDate.valueOf()); //clone fromDate
                             ui.anim.initDate = new Date(model.selected.valueOf());
 
                             if(to > from) { //set it back so animation starts at right date
