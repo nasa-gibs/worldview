@@ -72,6 +72,8 @@ start_date = datetime.max
 
 for layer_id in wv["layers"].keys():
     layer = wv["layers"][layer_id]
+    if layer_id != layer["id"]:
+        error("[%s] layer id does not match id of %s" % (layer_id, layer["id"]))
     if layer_id not in wv["layerOrder"]:
         if layer_id in opt.get("layerOrderExceptions", []):
             remove_layer(wv, layer_id)
