@@ -92,9 +92,9 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
     var animdrag = function() {
         //Here we have access to information in the d3.event object
         //Use it to acquire the date
-        var tempPickOffset = Math.max( -(width / 2), Math.min( tl.width - (width / 2), d3.event.x ) );
-        var tempPickTipOffset = tempPickOffset + (width / 2);
-        var tempPickTipDate = tl.x.invert(tempPickTipOffset);
+        var tempPickTipOffset = Math.max( -(width / 2), Math.min( tl.width - (width / 2), d3.event.x ) );
+        var tempPickOffset = tempPickTipOffset - 20; //we want the x coordinate of left corner
+        var tempPickTipDate = tl.x.invert(tempPickTipOffset); //date chosen should match tip area
 
         if(d3.select(this).attr("id") === d3.select("#fromPick").attr("id")) { //compare their ids
             tl.input.fromDate = tempPickTipDate;
@@ -105,9 +105,7 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
         }
 
         //update position of selected date picker
-        d3.select(this).attr("transform", self.updateAnimPickers(tempPickTipDate));
-
-        //Not sure what did does yet in this context
+        d3.select(this).attr("transform", "translate(" + tempPickOffset +" 20)");
         updateChanges(tempPickTipDate);
     };
 
