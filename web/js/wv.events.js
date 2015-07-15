@@ -322,7 +322,7 @@ wv.events = wv.events || function(models, ui) {
     };
 
     var queryTypes = function() {
-        var url = "http://eonet.sci.gsfc.nasa.gov/api/v1/events/types";
+        var url = "http://eonet.sci.gsfc.nasa.gov/api/v1/types";
         console.log("sending query", url);
         $.getJSON(url, function(data) {
             self.types = data.item;
@@ -346,7 +346,7 @@ wv.events = wv.events || function(models, ui) {
     };
 
     var querySources = function() {
-        var url = "http://eonet.sci.gsfc.nasa.gov/api/v1/events/sources";
+        var url = "http://eonet.sci.gsfc.nasa.gov/api/v1/sources";
         console.log("sending query", url);
         $.getJSON(url, function(data) {
             self.sources = data.item;
