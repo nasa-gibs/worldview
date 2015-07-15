@@ -557,6 +557,12 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
         //Default zoom
         self.zoom(3);
         tl.setClip(); //fix for firefox svg overflow
+
+        //Safe to translate the animation date pickers once to default positions
+        var tempDate = new Date(model.selected.valueOf());
+        tempDate.setUTCDate(tempDate.getUTCDate() - 14);
+        d3.select("#fromPick").attr("transform", ui.timeline.pick.updateAnimPickers(tempDate));
+        d3.select("#toPick").attr("transform", ui.timeline.pick.updateAnimPickers(model.selected));
     };
 
     init();
