@@ -35,7 +35,7 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
     var tipDate;
 
     //FIXME: Optimize a lot, this is terrible
-    var dragmove = function(d){
+    var dragmove = function(){
         var tempPickOffset = Math.max( -(width / 2),
                                        Math.min( tl.width - (width / 2), d3.event.x ) );
         var tempPickTipOffset = tempPickOffset + (width / 2);
@@ -87,31 +87,27 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
         }
     };
 
+    //FIXME: Optimize this
     //Listener function when a animation datepicker moves
-    var animdrag = function(d) {
+    var animdrag = function() {
         //Here we have access to information in the d3.event object
-        //this should also provide access to the date picker
-        //TODO: Acquire hovered element
+        //Use it to acquire the date
         var tempPickOffset = Math.max( -(width / 2), Math.min( tl.width - (width / 2), d3.event.x ) );
         var tempPickTipOffset = tempPickOffset + (width / 2);
-        var tempPickTipDate = tl.x.invert(tempPickTipOffset); //FIXME:Why doesn't this code go through?
+        var tempPickTipDate = tl.x.invert(tempPickTipOffset);
 
-        tl.input.fromDate = tempPickTipDate;
-        $("#from").datepicker("setDate", tempPickTipDate);
-        console.log(tl.input.fromDate);
-
-        /*if(this === d3.select("#fromPick")) {
+        if(d3.select(this).attr("id") === d3.select("#fromPick").attr("id")) { //compare their ids
             tl.input.fromDate = tempPickTipDate;
             $("#from").datepicker("setDate", tempPickTipDate);
-        }
-        else if(this === d3.select("#toPick")) {
+        } else {
             tl.input.toDate = tempPickTipDate;
             $("#to").datepicker("setDate", tempPickTipDate);
         }
-        else
-            console.log("Couldn't select a date picker");*/
 
-        //Hopefully a call to updateChanges should suffice
+        //update position of selected date picker
+        d3.select(this).attr("transform", self.updateAnimPickers(tempPickTipDate));
+
+        //Not sure what did does yet in this context
         updateChanges(tempPickTipDate);
     };
 
@@ -135,7 +131,7 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
     //Handling drag gestures with the animation date pickers
     var animDrag = d3.behavior.drag()
         .on("dragstart", function() {
-            mousedown = true; //TODO: Allows the tile layers and date to change. what does this do?
+            mousedown = true;
             d3.event.sourceEvent.preventDefault();
             d3.event.sourceEvent.stopPropagation();
         })
@@ -149,7 +145,7 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
     var change = function(){
         var d;
         var newDate = tipDate;
-        var tick, tickBg;
+        var tickBg;
 
         tl.guitarPick
             .attr("transform", 'translate('+ self.offset +','+ 0 +')');
@@ -239,10 +235,8 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
     //Given a date, returns a transform string to translate a date picker
     //we want to move the picker to the correct x position
     self.updateAnimPickers = function(date) {
-        var str = "translate(", val = "0";
-
-        val = (tl.x(date) - width/2) + 8; //need offset of 8 for correct position
-        return str + val + " 20)";
+        var xVal = (tl.x(date) - width/2) + 8; //need offset of 8 for correct position
+        return "translate(" + xVal + " 20)";
     };
 
     var init = function(){
