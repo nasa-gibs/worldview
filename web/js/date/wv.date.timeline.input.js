@@ -447,19 +447,26 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                     }
                 },
                 {
-                    text: "Backward",
+                    text: "Share",
                     click: function() {
-                        prepareAnim($speedSlider, $slider);
                         $(this).dialog("close"); //avoid error by closing dialog here
-                        animateReverse(interval);
-                    }
-                },
-                {
-                    text: "Forward",
-                    click: function() {
-                        prepareAnim($speedSlider, $slider);
-                        $(this).dialog("close");
-                        animateForward(interval);
+                        gifshot.createGIF({
+                            gifWidth: 640,
+                            gifHeight: 640,
+                            images: [
+                                'http://map2.vis.earthdata.nasa.gov/image-download?TIME=2015120&extent=-2498560,-1380352,983040,2101248&epsg=3413&layers=MODIS_Terra_CorrectedReflectance_TrueColor,Coastlines&opacities=1,1&worldfile=false&format=image/jpeg&width=680&height=680',
+                                'http://map2.vis.earthdata.nasa.gov/image-download?TIME=2015121&extent=-2498560,-1380352,983040,2101248&epsg=3413&layers=MODIS_Terra_CorrectedReflectance_TrueColor,Coastlines&opacities=1,1&worldfile=false&format=image/jpeg&width=680&height=680',
+                                'http://map2.vis.earthdata.nasa.gov/image-download?TIME=2015122&extent=-2498560,-1380352,983040,2101248&epsg=3413&layers=MODIS_Terra_CorrectedReflectance_TrueColor,Coastlines&opacities=1,1&worldfile=false&format=image/jpeg&width=680&height=680',
+                                'http://map2.vis.earthdata.nasa.gov/image-download?TIME=2015123&extent=-2498560,-1380352,983040,2101248&epsg=3413&layers=MODIS_Terra_CorrectedReflectance_TrueColor,Coastlines&opacities=1,1&worldfile=false&format=image/jpeg&width=680&height=680',
+                                'http://map2.vis.earthdata.nasa.gov/image-download?TIME=2015124&extent=-2498560,-1380352,983040,2101248&epsg=3413&layers=MODIS_Terra_CorrectedReflectance_TrueColor,Coastlines&opacities=1,1&worldfile=false&format=image/jpeg&width=680&height=680'
+                            ]
+                        }, function (obj) {
+                            if (!obj.error) {
+                                var image = obj.image, animatedImage = document.createElement('img');
+                                animatedImage.src = image;
+                                $("#products").append(animatedImage); //place it somewhere viewable
+                            }
+                        });
                     }
                 }
             ]
