@@ -240,10 +240,9 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
     };
 
     //Prepare animation when button pressed
-    var prepareAnim = function(speedSlider, slider) {
+    var prepareAnim = function(speedSlider) {
         ui.anim.doAnimation = true;
         ui.anim.delay = parseFloat(1000 / speedSlider.val());
-        ui.anim.animDuration = parseFloat(slider.val());
 
         if(document.getElementById("loopcheck").checked) {  //check for loop
             ui.anim.initDate = new Date(model.selected.valueOf()); //clone date from picker
@@ -281,25 +280,9 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         });
 
         //Add slider, labels, and input elements to dialog area
-        var $header = $("<div></div>")
-            .html("Frames")
-            .addClass("wv-header");
-
         var $speedHeader = $("<div></div>")
             .html("Speed")
             .addClass("wv-header");
-
-        var $slider = $("<div></div>")
-            .noUiSlider({
-                start: ui.anim.animDuration,
-                step: 1,
-                range: {
-                    min: 1,
-                    max: 30
-                }
-            }).on("slide", function() {
-                $label.html(parseFloat($slider.val()));
-            });
 
         var $speedSlider = $("<div></div>")
             .noUiSlider({
@@ -317,11 +300,6 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             .addClass("wv-header")
             .attr("type", "checkbox")
             .attr("id", "loopcheck");
-
-        var $label = $("<div></div>")
-            .html(ui.anim.animDuration)
-            .addClass("wv-label")
-            .addClass("wv-label-opacity");
 
         var $speedLabel = $("<div></div>")
             .html('2 frames per second')
@@ -367,7 +345,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             }
         });
 
-        $("#dialog").append($header).append($slider).append($label).append($speedHeader).append($speedSlider).append($speedLabel)
+        $("#dialog").append($speedHeader).append($speedSlider).append($speedLabel)
                     .append($fromDate).append($toLabel).append($toDate).append("<br />").append($loopCheck).append('<label class="wv-header">Loop (Press an arrow key to cancel)</label>')
             .dialog({
             autoOpen: false,
@@ -381,6 +359,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 of: $("#timeline-header")
             },
             open: function(event, ui) {
+                $("#products").find("img").remove(); //remove generated gifs
                 //Show datepickers and set from date range to be two weeks apart
                 $(".animpick").show();
                 if(self.fromDate === undefined) { //once per session
@@ -402,7 +381,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 {
                     text: "Go",
                     click: function() {
-                        prepareAnim($speedSlider, $slider);
+                        prepareAnim($speedSlider);
                         ui.anim.customLoop = true;
 
                         //Compare the two dates in terms of milliseconds, divide it by milliseconds
@@ -450,20 +429,32 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                     text: "Share",
                     click: function() {
                         $(this).dialog("close"); //avoid error by closing dialog here
+                        var a = [], from, to, jStart, jDate;
+                        //Parse the fromDate and toDates to Juilan time
+                        jStart = wv.util.parseDateUTC(self.fromDate.getUTCFullYear() + "-01-01");
+                        jDate = "00" + (1+Math.ceil((self.fromDate.getTime() - jStart) / 86400000));
+                        from = self.fromDate.getUTCFullYear()+(jDate).substr((jDate.length)-3);
+
+                        jStart = wv.util.parseDateUTC(self.toDate.getUTCFullYear() + "-01-01");
+                        jDate = "00" + (1+Math.ceil((self.toDate.getTime() - jStart) / 86400000));
+                        to = self.toDate.getUTCFullYear()+(jDate).substr((jDate.length)-3);
+
+                        for(var i = from; i <= to; i++) {
+                            a.push(wv.util.format('http://map2.vis.earthdata.nasa.gov/image-download?TIME={1}&extent=-2498560,-1380352,983040,2101248&epsg=3413&layers=MODIS_Terra_CorrectedReflectance_TrueColor,Coastlines&opacities=1,1&worldfile=false&format=image/jpeg&width=680&height=680', i));
+                            //if the interval is in two years, take it to account
+                            if(i.toString().indexOf("365") != -1)
+                                i = parseInt(self.toDate.getUTCFullYear()+ "000"); //will be incremented to 001
+
+                        }
+
                         gifshot.createGIF({
-                            gifWidth: 640,
-                            gifHeight: 640,
-                            images: [
-                                'http://map2.vis.earthdata.nasa.gov/image-download?TIME=2015120&extent=-2498560,-1380352,983040,2101248&epsg=3413&layers=MODIS_Terra_CorrectedReflectance_TrueColor,Coastlines&opacities=1,1&worldfile=false&format=image/jpeg&width=680&height=680',
-                                'http://map2.vis.earthdata.nasa.gov/image-download?TIME=2015121&extent=-2498560,-1380352,983040,2101248&epsg=3413&layers=MODIS_Terra_CorrectedReflectance_TrueColor,Coastlines&opacities=1,1&worldfile=false&format=image/jpeg&width=680&height=680',
-                                'http://map2.vis.earthdata.nasa.gov/image-download?TIME=2015122&extent=-2498560,-1380352,983040,2101248&epsg=3413&layers=MODIS_Terra_CorrectedReflectance_TrueColor,Coastlines&opacities=1,1&worldfile=false&format=image/jpeg&width=680&height=680',
-                                'http://map2.vis.earthdata.nasa.gov/image-download?TIME=2015123&extent=-2498560,-1380352,983040,2101248&epsg=3413&layers=MODIS_Terra_CorrectedReflectance_TrueColor,Coastlines&opacities=1,1&worldfile=false&format=image/jpeg&width=680&height=680',
-                                'http://map2.vis.earthdata.nasa.gov/image-download?TIME=2015124&extent=-2498560,-1380352,983040,2101248&epsg=3413&layers=MODIS_Terra_CorrectedReflectance_TrueColor,Coastlines&opacities=1,1&worldfile=false&format=image/jpeg&width=680&height=680'
-                            ]
+                            gifWidth: 320,
+                            gifHeight: 320,
+                            images: a
                         }, function (obj) {
                             if (!obj.error) {
-                                var image = obj.image, animatedImage = document.createElement('img');
-                                animatedImage.src = image;
+                                var animatedImage = document.createElement('img');
+                                animatedImage.src = obj.image;
                                 $("#products").append(animatedImage); //place it somewhere viewable
                             }
                         });

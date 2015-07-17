@@ -609,6 +609,18 @@ wv.util = (function(self) {
         }
     };
 
+    //allows simple printf functionality with strings
+    //arguments array contains all args passed. String must be formatted so that first replacement starts with "{1}"
+    //usage example: wv.util.format("{1}{2}",'World','view')
+    self.format = function() {
+        var formatted = arguments[0];
+        for (var i = 1; i < arguments.length; i++) {
+            var regexp = new RegExp('\\{'+i+'\\}', 'gi');
+            formatted = formatted.replace(regexp, arguments[i]);
+        }
+        return formatted;
+    };
+
     return self;
 
 })(wv.util || {});
