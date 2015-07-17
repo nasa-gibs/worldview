@@ -439,12 +439,20 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                         jDate = "00" + (1+Math.ceil((self.toDate.getTime() - jStart) / 86400000));
                         to = self.toDate.getUTCFullYear()+(jDate).substr((jDate.length)-3);
 
-                        for(var i = from; i <= to; i++) {
+                        //Determine interval for updating date
+                        var delta;
+                        if(interval === 'month')
+                            delta = 30;
+                        else if(interval === 'year')
+                            delta = 365;
+                        else
+                            delta = 1;
+
+                        for(var i = parseInt(from); i <= to; i += delta) { //Convert to integer first
                             a.push(wv.util.format('http://map2.vis.earthdata.nasa.gov/image-download?TIME={1}&extent=-2498560,-1380352,983040,2101248&epsg=3413&layers=MODIS_Terra_CorrectedReflectance_TrueColor,Coastlines&opacities=1,1&worldfile=false&format=image/jpeg&width=680&height=680', i));
                             //if the interval is in two years, take it to account
-                            if(i.toString().indexOf("365") != -1)
-                                i = parseInt(self.toDate.getUTCFullYear()+ "000"); //will be incremented to 001
-
+                            if(i.toString().indexOf("365") !== -1) //TODO:Better method to do roll over
+                                i = parseInt(self.toDate.getUTCFullYear()+ "000");
                         }
 
                         gifshot.createGIF({
