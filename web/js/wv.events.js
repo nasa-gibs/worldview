@@ -385,8 +385,11 @@ wv.events = wv.events || function(models, ui) {
             var passType = true;
             var passSource = true;
             var event = self.data[index];
-            if ( source !== "none" && event.reference.id !== source ) {
-                passSource = false;
+            if ( source !== "none" ) {
+                var references = toArray(event.reference);
+                if ( !_.find(references, { "id": source }) ) {
+                    passSource = false;
+                }
             }
             if ( type !== "none" ) {
                 var categories = toArray(event.category);
