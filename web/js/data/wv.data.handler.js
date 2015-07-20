@@ -28,6 +28,7 @@ wv.data.handler.getByName = function(name) {
         "MODISMix":             wv.data.handler.modisMix,
         "MODISSwath":           wv.data.handler.modisSwath,
         "TerraSwathMultiDay":   wv.data.handler.terraSwathMultiDay,
+        "HalfOrbit":            wv.data.handler.halfOrbit
     };
     var handler = map[name];
     if ( !handler ) {
@@ -504,3 +505,57 @@ wv.data.handler.modisSwath = function(config, model, spec) {
     init();
     return self;
 };
+
+wv.data.handler.halfOrbit = function(config, model, spec) {
+
+    var self = wv.data.handler.base(config, model);
+
+    var init = function() {
+        self.extents[wv.map.CRS_WGS_84] =
+               wv.map.CRS_WGS_84_QUERY_EXTENT;
+    };
+
+    self._submit = function(queryData) {
+        var queryOptions = {
+            time: model.time,
+            data: queryData
+        };
+
+        return self.cmr.submit(queryOptions);
+    };
+
+    self._processResults = function(data) {
+        var results = {
+            meta: {},
+            granules: data
+        };
+        if ( model.crs === wv.map.CRS_WGS_84 ) {
+            results.meta.queryMask = wv.map.CRS_WGS_84_QUERY_MASK;
+        }
+
+        var ns = wv.data.results;
+        var productConfig = config.products[model.selectedProduct];
+        var chain = ns.chain();
+        chain.processes = [
+            ns.tagProduct(model.selectedProduct),
+            ns.tagNRT(productConfig.nrt),
+            ns.tagURS(productConfig.urs),
+            ns.collectPreferred(model.prefer),
+            ns.preferredFilter(model.prefer),
+            ns.tagVersion(),
+            ns.collectVersions(),
+            ns.versionFilter(),
+            ns.geometryFromCMR(),
+            ns.dividePolygon(),
+            ns.densify(),
+            ns.transform(model.crs),
+            ns.timeLabel(model.time)
+        ];
+        console.log("before process", results);
+        return chain.process(results);
+    };
+
+    init();
+    return self;
+};
+

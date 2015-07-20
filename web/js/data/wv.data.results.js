@@ -347,6 +347,41 @@ wv.data.results.densify = function() {
     return self;
 };
 
+wv.data.results.dividePolygon = function() {
+
+    var self = {};
+
+    self.name = "DividePolygon";
+
+    self.process = function(meta, granule) {
+        if ( granule.geometry["EPSG:4326"].getPolygons ) {
+            return granule;
+        }
+        var ring = granule.geometry["EPSG:4326"].getLinearRing(0);
+        var coords = ring.getCoordinates();
+        var latlons = [];
+        _.each(coords, function(coord) {
+            var latlon = new L.LatLng(coord[1], coord[0]);
+            latlons.push(latlon);
+        });
+        var result = L.sphericalPolygon.dividePolygon(latlons);
+        var newPolys = result.interiors;
+        var resultMultiPoly = [];
+        _.each(newPolys, function(newPoly) {
+            var resultPoly = [];
+            _.each(newPoly, function(newCoord) {
+                resultPoly.push([newCoord.lng, newCoord.lat]);
+            });
+            resultMultiPoly.push(resultPoly);
+        });
+        granule.geometry["EPSG:4326"] =
+                new ol.geom.MultiPolygon([resultMultiPoly]);
+        console.log("result", granule.geometry["EPSG:4326"]);
+        return granule;
+    };
+
+    return self;
+};
 
 wv.data.results.extentFilter = function(projection, extent) {
 
