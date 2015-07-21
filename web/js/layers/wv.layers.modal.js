@@ -28,6 +28,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
     var $addBtn = $("#layers-add");
     var $categoriesGrid = $(self.selector + " #layer-categories");
+    var $selectedCategory = $(self.selector + " #selected-category");
     var gridItemWidth = 320; //with of grid item + spacing
     var modalHeight;
     var sizeMultiplier;
@@ -54,6 +55,25 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
     var drawCategories = function(){
 
+        _.each(config.categories.scientific, function(category) {
+
+            var $category = $('<div></div>')
+                .addClass('layer-category layer-category-scientific')
+                .attr('id', category.id )
+                .append('<h3>' + category.title + '</h3>');
+
+            var $measurements = $('<ul></ul>');
+
+            _.each(category.measurements,function(measurement){
+                var title = config.measurements[measurement].title;
+                $measurements.append('<li>' + title + '</li>');
+            });
+
+            $category.append( $measurements );
+            $categoriesGrid.append( $category );
+            
+        });
+
         $( '#layer-categories' ).isotope( {
             itemSelector: '.layer-category',
             //stamp: '.stamp',
@@ -67,101 +87,27 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     };
     var addLayer = function(event) {
         model.add(decodeURIComponent($(this).attr("data-layer")));
-        console.log('add');
 
     };
 
     var removeLayer = function(event) {
         model.remove(decodeURIComponent($(this).attr("data-layer")));
-        console.log('remove');
     };
 
     var onLayerAdded = function(layer) {
         var $element = $( self.selector + " [data-layer='" +
                 wv.util.jqueryEscape(layer.id) + "']");
-        $element.iCheck("check");
-        console.log('added');
     };
 
     var onLayerRemoved = function(layer) {
         var $element = $( self.selector + " [data-layer='" +
                 wv.util.jqueryEscape(layer.id) + "']");
-        $element.iCheck("uncheck");
-        console.log('removed');
     };
 
-    var drawAll = function(){
-        var group = "overlays";
-        _.each(config.layerOrder, function(layerId) {
-            var layer = config.layers[layerId];
-            if ( layer.group === group ) {
-                renderLayer(group, layerId);
-                //renderLayer("baselayers", layerId);
-            }
-        });
-        group = "baselayers";
-        _.each(config.layerOrder, function(layerId) {
-            var layer = config.layers[layerId];
-            if ( layer.group === group ) {
-                renderLayer(group, layerId);
-                //renderLayer("baselayers", layerId);
-            }
-        });
-
-        $(self.selector + " .selectorItem, " + self.selector + " .selectorItem input").on('ifChecked', addLayer);
-        $(self.selector + " .selectorItem, " + self.selector + " .selectorItem input").on('ifUnchecked', removeLayer);
-
-        $("#all-layers").iCheck({checkboxClass: 'icheckbox_square-grey'});
-    };
-
-    var renderLayer = function(group, layerId) {
-        var layer = config.layers[layerId];
-        if ( !layer ) {
-            console.warn("Skipping unknown layer", layerId);
-            return;
-        }
-        var $label = $("<li></li>")
-            .attr("data-layer", encodeURIComponent(layer.id));
-        var $element = $("<li></li>")
-            .addClass("selectorItem")
-            .attr("data-layer", encodeURIComponent(layer.id))
-            .addClass("item");
-
-        var names = models.layers.getTitles(layer.id);
-        var $name = $("<h4></h4>")
-            .addClass("title")
-            .html(names.title);
-        if ( config.parameters.markPalettes ) {
-            if ( layer.palette ) {
-                $name.addClass("mark");
-            }
-        }
-        if ( config.parameters.markDownloads ) {
-            if ( layer.product ) {
-                $name.addClass("mark");
-            }
-        }
-        var $description = $("<p></p>")
-            .addClass("subtitle")
-            .html(names.subtitle);
-
-        var $checkbox = $("<input></input>")
-            .attr("id", encodeURIComponent(layer.id))
-            .attr("value", layer.id)
-            .attr("type", "checkbox")
-            .attr("data-layer", layer.id);
-        if ( group === "baselayers" ) {
-            $checkbox.attr("name", group);
-        }
-        if ( _.find(model.active, {id: layer.id}) ) {
-            $checkbox.attr("checked", "checked");
-        }
-
-        $element.append($checkbox);
-        $element.append($name);
-        $element.append($description);
-
-        $("#all-layers ul").append($element);
+    var drawCategary = function(category){
+        $selectedCategory.empty().show();
+        $categoryGrid.hide();
+        
     };
 
     var render = function(){
@@ -199,6 +145,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             }
         });
 
+        $('#layer-modal-main').css('height', modalHeight - 40);
         var $header = $( self.selector + " header" );
 
         var $search = $( "<div></div>" )
@@ -236,14 +183,18 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
         //$searchInput
         
-        
         $search.append( $searchBtn )
             .append( $searchInput );
 
         $header.append( $search );
 
-        //drawCategories();
-        drawAll();
+        var $nav = $('<nav></nav>');
+
+        $header.append( $nav );
+
+        $selectedCategory.hide();
+        drawCategories();
+        //drawAll();
     };
 
     var init = function(){

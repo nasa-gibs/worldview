@@ -10,12 +10,14 @@
     background:rgb(220,220,220);
     
 }
-.layer-modal div, .layer-modal span{
+.layer-modal div, .layer-modal span,
+.layer-modal p, .layer-modal div,
+.layer-modal h1, .layer-modal h2,
+.layer-modal h3, .layer-modal h4 {
     font-family:open_sans_light;
     font-weight:300;
     color:#383838;
 }
-
 
 .layer-modal .ui-dialog-titlebar{
     height:40px;
@@ -80,11 +82,19 @@
     background: url('../images/wv-icons.png') 0 32px;
 }
 
+#layer-modal nav {
+    display:inline;
+}
+
 /* Tile layout */
 #layer-modal{
     padding-left:10px;
     padding-right:10px;
     padding-top:0;
+    overflow:hidden;
+}
+#layer-modal-main{
+    overflow:auto;
 }
 
 .stamp {
@@ -105,4 +115,15 @@
 .layer-category:hover,
 .stamp:hover {
     opacity:0.6;
+}
+.layer-category h3{
+    font-size:20px;
+    line-height:20px;
+    padding:10px;
+}
+.layer-category ul {
+    padding-left:10px;
+}
+.layer-category li{
+    margin:5px 0;
 }
