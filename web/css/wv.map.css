@@ -55,9 +55,8 @@
     border-bottom-right-radius:10px;
 }
 
-.wv-map-reset-rotation { /* Place reset button above zoom buttons */
-    top: 70px;
-    border-radius:10px;
+.wv-map-reset-rotation { /* Place reset button between zoom buttons */
+    top: 300px;
 }
 
 .wv-map-rotate-left {
@@ -67,7 +66,7 @@
 }
 
 .wv-map-rotate-right {
-    top: 300px;
+    top: 350px;
     border-bottom-left-radius:10px;
     border-bottom-right-radius:10px;
 }

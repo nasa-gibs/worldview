@@ -18,6 +18,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
     var selector = "#" + id;
     var cache = new Cache(100); // Save layers from days visited
     var animationDuration = 250;
+    var $mid;
 
     var self = {};
     self.proj = {}; // One map for each projection
@@ -405,7 +406,8 @@ wv.map.ui = wv.map.ui || function(models, config) {
     self.updateRotation = function() {
         models.map.rotation = self.selected.getView().getRotation();
         window.history.replaceState("", "@OFFICIAL_NAME@","?" + models.link.toQueryString());
-    }
+        $mid.button("option", "label", Number((models.map.rotation) * (180.0 / Math.PI)).toFixed() );
+    };
 
     var createMap = function(proj) {
         var id = "wv-map-" + proj.id;
@@ -480,7 +482,6 @@ wv.map.ui = wv.map.ui || function(models, config) {
 
         //allow rotation by dragging for polar projections
         if(proj.id !== 'geographic') {
-            createResetButton(map);
             createRotationWidget(map);
             map.addInteraction(rotateInteraction);
             map.addInteraction(mobileRotation);
@@ -492,33 +493,6 @@ wv.map.ui = wv.map.ui || function(models, config) {
         map.getView().on("change:rotation", self.updateRotation);
 
         return map;
-    };
-
-    //Create a button to reset rotation
-    var createResetButton = function(map) {
-        var $map = $("#" + map.getTarget());
-        var $outIcon = $("<i></i>")
-            .addClass("fa")
-            .addClass("fa-minus")
-            .addClass("fa-1x");
-        var $button = $("<button></button>")
-            .addClass("wv-map-zoom")
-            .addClass("wv-map-reset-rotation")
-            .append($outIcon);
-
-        $map.append($button);
-        $button.button({
-            label: "Reset rotation"
-        })
-        .click(function(event) { //create a rotation to rotate it back to zero degrees
-            map.beforeRender(ol.animation.rotate({
-                duration: 500,
-                rotation: map.getView().getRotation()
-            }));
-            map.getView().rotate(0);
-                self.updateRotation();
-
-        });
     };
 
     var createZoomButtons = function(map, proj) {
@@ -662,16 +636,20 @@ wv.map.ui = wv.map.ui || function(models, config) {
             .addClass("wv-map-rotate-left wv-map-zoom")
                 .attr("title","You may also rotate by holding Alt and dragging the mouse"),
             $lefticon = $("<i></i>")
-                .addClass("fa fa-repeat");
+                .addClass("fa fa-undo");
 
         var $right = $("<button></button>")
             .addClass("wv-map-rotate-right wv-map-zoom")
             .attr("title","You may also rotate by holding Alt and dragging the mouse"),
             $righticon = $("<i></i>")
-                .addClass("fa fa-undo");
+                .addClass("fa fa-repeat");
+
+        $mid = $("<button></button>")
+            .addClass("wv-map-reset-rotation wv-map-zoom")
+            .attr("title", "Click to reset");
 
         $left.append($lefticon); $right.append($righticon);
-        $map.append($left).append($right);
+        $map.append($left).append($mid).append($right);
 
         var intervalId, dur = 500;
 
@@ -698,7 +676,20 @@ wv.map.ui = wv.map.ui || function(models, config) {
             clearInterval(intervalId);
         });
 
-        //Function to rotate polar map tile when button is pressed
+        $mid.button({
+            label: models.map.rotation
+        }).mousedown(function() { //reset rotation
+            map.beforeRender(ol.animation.rotate({
+                duration: 500,
+                rotation: map.getView().getRotation()
+            }));
+            map.getView().rotate(0);
+            self.updateRotation();
+
+            $mid.button("option", "label", "0");
+        });
+
+        //Function to rotate polar map tile when button is pressed. Amount divides a 180 degree rotation
         var rotate = function(amount, duration) {
             map.beforeRender(ol.animation.rotate({
                 duration: duration,
