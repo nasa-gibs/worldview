@@ -330,9 +330,8 @@ wv.map.ui = wv.map.ui || function(models, config) {
     var createLayerWMS = function(def, options) {
         var proj = models.proj.selected;
         var source = config.sources[def.source];
-        if ( !source ) {
+        if ( !source )
             throw new Error(def.id + ": Invalid source: " + def.source);
-        }
 
         var transparent = ( def.format === "image/png" );
         var parameters = {
@@ -341,9 +340,9 @@ wv.map.ui = wv.map.ui || function(models, config) {
             TRANSPARENT: transparent,
             VERSION: "1.1.1"
         };
-        if ( def.styles ) {
+        if ( def.styles )
             parameters.STYLES = def.styles;
-        }
+
         var extra = "";
         if ( def.period === "daily" ) {
             var date = options.date || models.date.selected;
@@ -370,10 +369,10 @@ wv.map.ui = wv.map.ui || function(models, config) {
     };
 
     var addGraticule = function() {
-        if ( self.selected.graticule ) {
+        if ( self.selected.graticule )
             return;
-        }
-        var graticule = new ol.Graticule({
+
+        self.selected.graticule = new ol.Graticule({
             map: self.selected,
             strokeStyle: new ol.style.Stroke({
                 color: 'rgba(255, 255, 255, 0.5)',
@@ -381,13 +380,12 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 lineDash: [0.5, 4]
             })
         });
-        self.selected.graticule = graticule;
     };
 
     var removeGraticule = function() {
-        if ( self.selected.graticule ) {
+        if ( self.selected.graticule )
             self.selected.graticule.setMap(null);
-        }
+
         self.selected.graticule = null;
     };
 
@@ -406,7 +404,15 @@ wv.map.ui = wv.map.ui || function(models, config) {
     self.updateRotation = function() {
         models.map.rotation = self.selected.getView().getRotation();
         window.history.replaceState("", "@OFFICIAL_NAME@","?" + models.link.toQueryString());
+
+        //Set reset button content and proper CSS styling to position it correctly
         $mid.button("option", "label", Number((models.map.rotation) * (180.0 / Math.PI)).toFixed() );
+        if((models.map.rotation) * (180.0 / Math.PI) >= 100.0)
+            $mid.find("span").attr("style","padding-left: 9px");
+        else if((models.map.rotation) * (180.0 / Math.PI) <= -100.0)
+            $mid.find("span").attr("style","padding-left: 6px");
+        else
+            $mid.find("span").attr("style","padding-left: 14px");
     };
 
     var createMap = function(proj) {
@@ -646,7 +652,8 @@ wv.map.ui = wv.map.ui || function(models, config) {
 
         $mid = $("<button></button>")
             .addClass("wv-map-reset-rotation wv-map-zoom")
-            .attr("title", "Click to reset");
+            .attr("title", "Click to reset")
+            .attr("style", "width: 43px");
 
         $left.append($lefticon); $right.append($righticon);
         $map.append($left).append($mid).append($right);
@@ -677,7 +684,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         });
 
         $mid.button({
-            label: models.map.rotation
+            label: Number(models.map.rotation * (180/Math.PI)).toFixed()
         }).mousedown(function() { //reset rotation
             map.beforeRender(ol.animation.rotate({
                 duration: 500,
