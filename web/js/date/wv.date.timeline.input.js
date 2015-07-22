@@ -359,7 +359,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 of: $("#timeline-header")
             },
             open: function(event, ui) {
-                $("#products").find("img").remove(); //remove generated gifs
+                $(".ui-dialog-content").find("img").remove(); //remove generated gif, TODO: close dialog before new anim
                 //Show datepickers and set from date range to be two weeks apart
                 $(".animpick").show();
                 if(self.fromDate === undefined) { //once per session

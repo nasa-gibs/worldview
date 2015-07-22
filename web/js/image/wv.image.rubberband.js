@@ -233,9 +233,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
 
     //Setup a dialog to enable gif generation and turn on image cropping
     self.animToggle = function(from, to, delta) {
-
-        //Set default coordinates
-        if(!animCoords)
+        if(!animCoords) //Set default coordinates
             animCoords = [($(window).width()/2)-100,($(window).height()/2)-100,($(window).width()/2)+100,($(window).height()/2)+100];
 
         var htmlElements = "<div id='gifDialog'>" +
@@ -250,7 +248,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                                     "<option value='40'>10km</option>" +
                                 "</select>Resolution (per pixel)" +
                            "</div>";
-        var $dialog = wv.ui.getDialog().html(htmlElements) //place it above image crop
+        var $dialog = wv.ui.getDialog().html(htmlElements); //place it above image crop
         $dialog.dialog({
             dialogClass: "wv-panel",
             title: "Generate GIF",
@@ -264,6 +262,9 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
 
         //Wire the button to generate the URL and GIF
         $("#wv-gif-button").button().click(function() {
+            $dialog.dialog("close"); //FIXME: jCrop won't properly init next time
+            $("#wv-map").insertAfter('#productsHolder'); //retain map element before disabling jcrop
+            jcropAPI.destroy();
             var url = formImageURL(), a = [];
             for(var i = parseInt(from); i <= parseInt(to); i += delta) { //Convert to integer first
                 a.push(wv.util.format(url, i));
@@ -280,7 +281,16 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                 if (!obj.error) {
                     var animatedImage = document.createElement('img');
                     animatedImage.src = obj.image;
-                    $("#products").append(animatedImage); //place it somewhere viewable
+
+                    //Create a dialog over the view and place the image there
+                    var $imgDialog = wv.ui.getDialog().append(animatedImage);
+                    $imgDialog.dialog({
+                        dialogClass: "wv-panel",
+                        width: animatedImage.width + 32,
+                        close: function() {
+                            $imgDialog.find("img").remove();
+                        }
+                    });
                 }
             });
         });
@@ -316,7 +326,6 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
         }, function() {
             jcropAPI = this;
         });
-
     };
 
     var handleChange = function(c){
