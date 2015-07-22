@@ -74,7 +74,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
             //Begin source level
             _.each( current.sources, function( source ) {
-                var $sourceTab = $( '<li></li>' )
+                var $sourceTab = $( '<li></li>' );
 
                 var $sourceLink = $( '<a></a>' )
                     .text( source.title )
@@ -124,7 +124,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         });
         
         if( selectedMeasurement ) {
-            config.categories
+            //config.categories
             $categoryList.accordion( "option", "active", selectedIndex);
         }
 
