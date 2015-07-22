@@ -381,11 +381,14 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 of: $("#timeline-header")
             },
             open: function(event, ui) {
-                //Show datepickers and set from date to current datepicker date
+                //Show datepickers and set from date range to be two weeks apart
                 $(".animpick").show();
                 if(self.fromDate === undefined) { //once per session
                     self.fromDate = new Date(model.selected.valueOf());
+                    self.fromDate.setUTCDate(self.fromDate.getUTCDate() - 14);
                     $fromDate.datepicker("setDate", self.fromDate);
+                    self.toDate = new Date(model.selected.valueOf());
+                    $toDate.datepicker("setDate", self.toDate);
                 }
 
                 dialogOpen = true;

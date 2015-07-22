@@ -87,7 +87,7 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
         }
     };
 
-    //FIXME: Optimize this
+    //TODO:Snapping
     //Listener function when a animation datepicker moves
     var animdrag = function() {
         //Here we have access to information in the d3.event object
@@ -284,15 +284,14 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
             .append("svg:svg")
             .attr("class","animpick");
 
+        //Default positions for pickers set at ui.timeline.config.init()
         tl.animPick1.append("svg:path")
             .attr("id", "fromPick")
-            .attr("d", "M0 0 L40 0 L20 40 Z")
-            .attr("transform", self.updateAnimPickers(model.selected));
+            .attr("d", "M0 0 L40 0 L20 40 Z");
 
         tl.animPick2.append("svg:path")
             .attr("id", "toPick")
-            .attr("d", "M0 0 L40 0 L20 40 Z")
-            .attr("transform", self.updateAnimPickers(model.selected));
+            .attr("d", "M0 0 L40 0 L20 40 Z");
 
         //register drag behaviour with the date pickers here to guarantee it is called
         d3.select("#fromPick").call(animDrag);
