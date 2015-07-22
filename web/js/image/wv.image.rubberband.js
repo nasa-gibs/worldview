@@ -198,43 +198,36 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
 
     var formImageURL = function() {
         //Gather all data to get the image
-        var time = models.date.selected,
-            proj = models.proj.selected.id,
+        var proj = models.proj.selected.id,
             products = models.layers.get({
                 reverse: true,
                 renderable: true
             }),
             epsg = ( models.proj.change ) ? models.proj.change.epsg : models.proj.selected.epsg,
             opacities = [], layers = [];
-        var crs = models.proj.selected.crs;
+
         var lonlat1 = ui.map.selected.getCoordinateFromPixel([Math.floor(animCoords.x), Math.floor(animCoords.y2)]);
         var lonlat2 = ui.map.selected.getCoordinateFromPixel([Math.floor(animCoords.x2), Math.floor(animCoords.y)]);
-        var geolonlat1 = ol.proj.transform(lonlat1, crs, "EPSG:4326");
-        var geolonlat2 = ol.proj.transform(lonlat2, crs, "EPSG:4326");
 
-        var minLon = geolonlat1[0];
-        var maxLon = geolonlat2[0];
-        var minLat = geolonlat2[1];
-        var maxLat = geolonlat1[1];
+        var conversionFactor = proj === "geographic" ? 0.002197 : 256,
+            res = $("#wv-gif-resolution").find("option:checked").val();
 
-        var ll = wv.util.formatCoordinate([minLon, maxLat]);
-        var ur = wv.util.formatCoordinate([maxLon, minLat]);
-
-        var conversionFactor = s === "geographic" ? 0.002197 : 256;
+        var imgWidth = Math.round((Math.abs(lonlat2[0] - lonlat1[0]) / conversionFactor) / Number(res)),
+            imgHeight = Math.round((Math.abs(lonlat2[1] - lonlat1[1]) / conversionFactor) / Number(res));
 
         _(products).each( function(product){
             opacities.push( ( _.isUndefined(product.opacity) ) ? 1: product.opacity );
         });
 
         _.each(products, function(layer) {
-            if ( layer.projections[s].layer ) {
-                layers.push(layer.projections[s].layer);
+            if ( layer.projections[proj].layer ) {
+                layers.push(layer.projections[proj].layer);
             } else {
                 layers.push(layer.id);
             }
         });
 
-        return wv.util.format("http://map2.vis.earthdata.nasa.gov/imagegen/index.php?{1}&extent={2}&epsg={3}&layers={4}&opacities={5}", "TIME={1}", lonlat1[0]+","+lonlat1[1]+","+lonlat2[0]+","+lonlat2[1], epsg, layers.join(","), opacities.join(","));
+        return wv.util.format("http://map2.vis.earthdata.nasa.gov/imagegen/index.php?{1}&extent={2}&epsg={3}&layers={4}&opacities={5}&worldfile=false&format=image/jpeg&width={6}&height={7}", "TIME={1}", lonlat1[0]+","+lonlat1[1]+","+lonlat2[0]+","+lonlat2[1], epsg, layers.join(","), opacities.join(","), imgWidth, imgHeight);
         //return 'http://map2.vis.earthdata.nasa.gov/image-download?TIME={1}&extent=-2498560,-1380352,983040,2101248&epsg=3413&layers=MODIS_Terra_CorrectedReflectance_TrueColor,Coastlines&opacities=1,1&worldfile=false&format=image/jpeg&width=680&height=680';
     };
 
@@ -248,9 +241,16 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
         var htmlElements = "<div id='gifDialog'>" +
                                 "<label>Width: </label>" + "<span id='wv-gif-width'>0</span>" + "<br />" +
                                 "<label>Height: </label>" + "<span id='wv-gif-height'>0</span>" + "<br />" +
-                                "<button id='wv-gif-button'>Generate</button>" +
+                                "<button id='wv-gif-button'>Generate</button>" + "<br />" +
+                                "<select id='wv-gif-resolution'>" +
+                                    "<option value='1' >250m</option>" +
+                                    "<option value='2' >500m</option>" +
+                                    "<option value='4' >1km</option>" +
+                                    "<option value='20'>5km</option>" +
+                                    "<option value='40'>10km</option>" +
+                                "</select>Resolution (per pixel)" +
                            "</div>";
-        var $dialog = wv.ui.getDialog().html(htmlElements);
+        var $dialog = wv.ui.getDialog().html(htmlElements) //place it above image crop
         $dialog.dialog({
             dialogClass: "wv-panel",
             title: "Generate GIF",
@@ -264,27 +264,25 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
 
         //Wire the button to generate the URL and GIF
         $("#wv-gif-button").button().click(function() {
-            console.log("Hi!");
             var url = formImageURL(), a = [];
-             for(var i = parseInt(from); i <= to; i += delta) { //Convert to integer first
+            for(var i = parseInt(from); i <= parseInt(to); i += delta) { //Convert to integer first
                 a.push(wv.util.format(url, i));
                 //if the interval is in two years, take it to account
                 if(i.toString().indexOf("365") !== -1) //TODO:Better method to do roll over
                     i = parseInt(self.toDate.getUTCFullYear()+ "000");
-                }
+            }
 
-             gifshot.createGIF({
+            gifshot.createGIF({
                 gifWidth: animCoords.w,
                 gifHeight: animCoords.h,
                 images: a
-             }, function (obj) {
-                 if (!obj.error) {
-                     var animatedImage = document.createElement('img');
-                     animatedImage.src = obj.image;
-                     $("#products").append(animatedImage); //place it somewhere viewable
-                 }
-             });
-
+            }, function (obj) {
+                if (!obj.error) {
+                    var animatedImage = document.createElement('img');
+                    animatedImage.src = obj.image;
+                    $("#products").append(animatedImage); //place it somewhere viewable
+                }
+            });
         });
 
         //Start the image cropping. Show the dialog
@@ -309,11 +307,10 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                 else
                     $("#wv-gif-button").button("enable");
             },
-            onRelease: function(c) { //TODO: Restore functionality
-                console.log("Turning off Jcrop");
-                $("#wv-map")
-                    .insertAfter('#productsHolder');
+            onRelease: function(c) {
+                $("#wv-map").insertAfter('#productsHolder'); //retain map element before disabling jcrop
                 jcropAPI.destroy();
+                animCoords = null;
                 $dialog.dialog("close");
             }
         }, function() {
