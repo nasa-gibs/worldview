@@ -311,6 +311,9 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
             },
             onRelease: function(c) { //TODO: Restore functionality
                 console.log("Turning off Jcrop");
+                $("#wv-map")
+                    .insertAfter('#productsHolder');
+                jcropAPI.destroy();
                 $dialog.dialog("close");
             }
         }, function() {
