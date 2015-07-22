@@ -52,30 +52,86 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             redo();
         }
     };
-    var selectMeasurement = function(category, measurement){
-        console.log( category, measurement );
+    var selectMeasurement = function(category, selectedMeasurement, selectedIndex){
+        console.log( category, selectedMeasurement );
         $selectedCategory.empty();
 
         var $categoryList = $( '<div></div>' )
             .attr( 'id', category.id + '-list' );
 
+        //Begin Measurement Level
         _.each( category.measurements, function( measurement ) {
             var current = config.measurements[measurement];
             var $measurementHeader = $( '<h3></h3>' )
                 .attr('id', 'accordion-' + category.id + '-' + current.id )
                 .text(current.title);
 
+            var $sourceTabs = $( '<ul></ul>' );
+
             var $measurementContent = $( '<div></div>' );
 
-            var $measurementSources = $( '<ul></ul>' );
+            $measurementContent.append( $sourceTabs );
 
-            _.each( current.sources, function(source) {
-                console.log(source);
+            //Begin source level
+            _.each( current.sources, function( source ) {
+                var $sourceTab = $( '<li></li>' )
+
+                var $sourceLink = $( '<a></a>' )
+                    .text( source.title )
+                    .attr( 'href', '#' + current.id + '-' + source.id );
+
+                $sourceTab.append( $sourceLink );
+                $sourceTabs.append( $sourceTab );
+
+                var $sourceContent = $( '<div></div>' )
+                    .attr( 'id', current.id + '-' + source.id );
+
+                var $sourceMeta = $( '<p></p>' )
+                    .text(source.description);
+
+                if( source.settings.length !== 1 ) {
+                    var $sourceSettings = $( '<ul></ul>' );
+
+                    _.each( source.settings, function( setting ) {
+                        var layer = config.layers[setting];
+                        var $setting = $( '<li></li>' )
+                            .text(layer.title);
+
+                        $sourceSettings.append( $setting );
+                    });
+
+                    $sourceMeta.append( $sourceSettings );
+                }
+
+                $sourceContent.append( $sourceMeta );
+
+                $measurementContent.append( $sourceContent );
+
             });
-        });
+            //End source level
+            $measurementContent.tabs();
 
-        //$categoriesGrid.hide();
-        //$selectedCategory.show();
+            $categoryList.append( $measurementHeader );
+            $categoryList.append( $measurementContent );
+            
+        });
+        //End measurement level
+
+        $categoryList.accordion({
+            collapsible: true,
+            heightStyle: "content",
+            active: false
+        });
+        
+        if( selectedMeasurement ) {
+            config.categories
+            $categoryList.accordion( "option", "active", selectedIndex);
+        }
+
+        $selectedCategory.append( $categoryList );
+
+        $categoriesGrid.hide();
+        $selectedCategory.show();
         
     };
     var drawCategories = function(){
@@ -89,20 +145,21 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
             var $measurements = $('<ul></ul>');
 
-            _.each(category.measurements,function(measurement){
+            _.each( category.measurements, function( measurement, index ) {
                 var current = config.measurements[measurement];
                 var $measurement = $( '<a></a>' )
                     .attr( 'data-category', category.id )
                     .attr( 'data-measurement', current.id )
                     .attr( 'title', category.title + ' - ' + current.title )
-                    .text(current.title);
+                    .text( current.title );
 
-                $measurement.click(function(e){
-                    selectMeasurement(category, current.id);
+                $measurement.click( function( e ) {
+                    console.log(index);
+                    selectMeasurement( category, current.id, index );
                 });
 
                 var $measurementItem = $( '<li></li>' )
-                    .addClass('layer-category-item');
+                    .addClass( 'layer-category-item' );
 
                 $measurementItem.append( $measurement );
 
