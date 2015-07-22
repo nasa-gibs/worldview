@@ -19,108 +19,114 @@ import xmltodict
 
 prog = os.path.basename(__file__)
 base_dir = os.path.join(os.path.dirname(__file__), "..")
-version = "1.0.0"
+version = "3.0.0"
 help_description = """\
 Converts colormaps to JSON files
 """
 
-parser = OptionParser(usage="Usage: %s <input_dir> <output_dir>" % prog,
+parser = OptionParser(usage="Usage: %s <config_file> <input_dir> <output_dir>" % prog,
                       version="%s version %s" % (prog, version),
                       epilog=help_description)
 
 (options, args) = parser.parse_args()
-if len(args) != 2:
+if len(args) != 3:
     parser.error("Invalid number of arguments")
 
-input_dir = args[0]
-output_dir = args[1]
+config_file = args[0]
+input_dir = args[1]
+output_dir = args[2]
 
-def to_list(items):
-    if not isinstance(items, list):
-        items = [items]
-    return items
+with open(config_file) as fp:
+    config = json.load(fp)
+skips = config.get("skipPalettes", [])
 
-def process_file(file):
-    input_file = os.path.join(root, file)
-    with open(input_file) as fp:
-        xml = fp.read()
-    document = xmltodict.parse(xml)
+def to_list(v):
+    return v if isinstance(v, list) else [v]
 
-    scaleColors = []
-    scaleLabels = []
-    scaleValues = []
-    classColors = []
-    classLabels = []
-    specialColors = []
-    specialLabels = []
-    units = None
-    minValue = float("inf")
-    maxValue = float("-inf")
+def get_map_type(entries):
+    for entry in entries:
+        if entry.get("@transparent", "false") == "true":
+            pass
+        elif "@value" in entry:
+            return "scale"
+        else:
+            return "class"
+    return "special"
 
-    # Find the colormap with the Legend
-    entries = None
-    colormaps = to_list(document["ColorMaps"]["ColorMap"])
-    for colormap in colormaps:
-        items = to_list(colormap["Entries"]["ColorMapEntry"])
-        for item in items:
-            if item.get("@transparent", "false") == "false":
-                entries = items
-                break
-        if entries:
-            break
+def process_entries(entries):
+    entries = to_list(entries)
+    map_type = get_map_type(entries)
 
-    if not entries:
-        raise ValueError("No valid ColorMap found")
+    colors = []
+    labels = []
+    values = []
+
+    color_format = "{0:02x}{1:02x}{2:02x}{3:02x}"
 
     for entry in entries:
         r,g,b = entry["@rgb"].split(",")
-        a = 255
-        if "@transparent" in entry and entry["@transparent"] == "true":
-            a = 0
-        color = "{0:02x}{1:02x}{2:02x}{3:02x}".format(int(r), int(g), int(b), a)
-        label = entry["@label"]
+        a = 0 if entry.get("@transparent", "false") == "true" else 255
         if a == 0:
-            specialColors += [color]
-            specialLabels += [label]
-        elif "@value" in entry:
+            continue
+        colors += [color_format.format(int(r), int(g), int(b), a)]
+        labels += [entry["@label"]]
+        if map_type == "scale":
             items = re.sub(r"[\(\)\[\]]", "", entry["@value"]).split(",")
             try:
-                for scaleValue in items:
-                    v = float(scaleValue)
+                values += [map(lambda v: float(v), items)]
+                for item in items:
+                    v = float(item)
                     if v == float("inf"):
                         v = sys.float_info.max
                     if v == float("-inf"):
                         v = sys.float_info.min
-                    scaleValues += [v]
+                    values += [v]
             except ValueError as e:
                 raise ValueError("Invalid value: %s" % entry["@value"])
-            scaleColors += [color]
-            scaleLabels += [label]
-        else:
-            classColors += [color]
-            classLabels += [label]
 
+    result = {
+        "type": map_type,
+        "colors": colors,
+        "labels": labels
+    }
+    if map_type == "scale":
+        result["values"] = values
+    return result
+
+
+def process_file(file):
+    input_file = os.path.join(root, file)
     id = os.path.splitext(os.path.basename(input_file))[0]
-    data = {}
-    if len(scaleColors) > 0:
-        data["scale"] = {
-            "colors": scaleColors,
-            "values": scaleValues,
-            "labels": scaleLabels,
-        }
-    if len(specialColors) > 0:
-        data["special"] = {
-            "colors": specialColors,
-            "labels": specialLabels
-        }
-    if len(classColors) > 0:
-        data["classes"] = {
-            "colors": classColors,
-            "labels": classLabels,
-        }
+    if id in skips:
+        sys.stderr.write("%s:  WARN: [%s] %s\n" % (prog, input_file,
+                "Skipping"))
+        return
 
-    data["id"] = id
+    with open(input_file) as fp:
+        xml = fp.read()
+    document = xmltodict.parse(xml)
 
+    colormaps = to_list(document["ColorMaps"]["ColorMap"])
+    maps = []
+    for colormap in colormaps:
+        result = {}
+        entries = process_entries(colormap["Entries"]["ColorMapEntry"])
+        if entries["type"] == "special":
+            continue
+        result["entries"] = entries
+        if "@title" in colormap:
+            result["entries"]["title"] = colormap["@title"]
+        if "WorldviewLegend" in colormap:
+            legend = process_entries(colormap["WorldviewLegend"]["LegendEntry"])
+            result["legend"] = legend
+            if "@title" in colormap:
+                result["legend"]["title"] = colormap["@title"]
+        maps += [result]
+
+    data = {
+        "id": id,
+        "maps": maps
+    }
     json_options = {}
     json_options["indent"] = 4
     json_options["separators"] = (',', ': ')
@@ -140,8 +146,7 @@ for root, dirs, files in os.walk(input_dir):
             process_file(file)
         except Exception as e:
             sys.stderr.write("%s: ERROR: [%s] %s\n" % (prog, file, str(e)))
-            # FIXME: Change back to error count!!!
-            # error_count += 1
+            error_count += 1
 
 print "%s: %d error(s), %d file(s)" % (prog, error_count, file_count)
 
