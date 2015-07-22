@@ -29,7 +29,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
     var containerId = "wv-image-button";
     var container;
     var selector = "#" + containerId;
-    var coords = null;
+    var coords = null, animCoords = null;
     var previousCoords = null;
     var icon = "images/camera.png";
     var onicon = "images/cameraon.png";
@@ -190,20 +190,137 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
 
         jcropAPI = $cropee.data('Jcrop');
 
-        if(coords) {
+        if(coords)
             jcropAPI.setSelect([coords.x, coords.y,coords.x2,coords.y2]);
-        }
-        else {
+        else
             jcropAPI.setSelect([($(window).width()/2)-100,($(window).height()/2)-100,($(window).width()/2)+100,($(window).height()/2)+100]);
-        }
+    };
+
+    var formImageURL = function() {
+        //Gather all data to get the image
+        var time = models.date.selected,
+            proj = models.proj.selected.id,
+            products = models.layers.get({
+                reverse: true,
+                renderable: true
+            }),
+            epsg = ( models.proj.change ) ? models.proj.change.epsg : models.proj.selected.epsg,
+            opacities = [], layers = [];
+        var crs = models.proj.selected.crs;
+        var lonlat1 = ui.map.selected.getCoordinateFromPixel([Math.floor(animCoords.x), Math.floor(animCoords.y2)]);
+        var lonlat2 = ui.map.selected.getCoordinateFromPixel([Math.floor(animCoords.x2), Math.floor(animCoords.y)]);
+        var geolonlat1 = ol.proj.transform(lonlat1, crs, "EPSG:4326");
+        var geolonlat2 = ol.proj.transform(lonlat2, crs, "EPSG:4326");
+
+        var minLon = geolonlat1[0];
+        var maxLon = geolonlat2[0];
+        var minLat = geolonlat2[1];
+        var maxLat = geolonlat1[1];
+
+        var ll = wv.util.formatCoordinate([minLon, maxLat]);
+        var ur = wv.util.formatCoordinate([maxLon, minLat]);
+
+        var conversionFactor = s === "geographic" ? 0.002197 : 256;
+
+        _(products).each( function(product){
+            opacities.push( ( _.isUndefined(product.opacity) ) ? 1: product.opacity );
+        });
+
+        _.each(products, function(layer) {
+            if ( layer.projections[s].layer ) {
+                layers.push(layer.projections[s].layer);
+            } else {
+                layers.push(layer.id);
+            }
+        });
+
+        return wv.util.format("http://map2.vis.earthdata.nasa.gov/imagegen/index.php?{1}&extent={2}&epsg={3}&layers={4}&opacities={5}", "TIME={1}", lonlat1[0]+","+lonlat1[1]+","+lonlat2[0]+","+lonlat2[1], epsg, layers.join(","), opacities.join(","));
+        //return 'http://map2.vis.earthdata.nasa.gov/image-download?TIME={1}&extent=-2498560,-1380352,983040,2101248&epsg=3413&layers=MODIS_Terra_CorrectedReflectance_TrueColor,Coastlines&opacities=1,1&worldfile=false&format=image/jpeg&width=680&height=680';
+    };
+
+    //Setup a dialog to enable gif generation and turn on image cropping
+    self.animToggle = function(from, to, delta) {
+
+        //Set default coordinates
+        if(!animCoords)
+            animCoords = [($(window).width()/2)-100,($(window).height()/2)-100,($(window).width()/2)+100,($(window).height()/2)+100];
+
+        var htmlElements = "<div id='gifDialog'>" +
+                                "<label>Width: </label>" + "<span id='wv-gif-width'>0</span>" + "<br />" +
+                                "<label>Height: </label>" + "<span id='wv-gif-height'>0</span>" + "<br />" +
+                                "<button id='wv-gif-button'>Generate</button>" +
+                           "</div>";
+        var $dialog = wv.ui.getDialog().html(htmlElements);
+        $dialog.dialog({
+            dialogClass: "wv-panel",
+            title: "Generate GIF",
+            show: { effect: "slide", direction: "down" },
+            position: {
+                my: "left bottom",
+                at: "left top",
+                of: $("#timeline-footer")
+            }
+        });
+
+        //Wire the button to generate the URL and GIF
+        $("#wv-gif-button").button().click(function() {
+            console.log("Hi!");
+            var url = formImageURL(), a = [];
+             for(var i = parseInt(from); i <= to; i += delta) { //Convert to integer first
+                a.push(wv.util.format(url, i));
+                //if the interval is in two years, take it to account
+                if(i.toString().indexOf("365") !== -1) //TODO:Better method to do roll over
+                    i = parseInt(self.toDate.getUTCFullYear()+ "000");
+                }
+
+             gifshot.createGIF({
+                gifWidth: animCoords.w,
+                gifHeight: animCoords.h,
+                images: a
+             }, function (obj) {
+                 if (!obj.error) {
+                     var animatedImage = document.createElement('img');
+                     animatedImage.src = obj.image;
+                     $("#products").append(animatedImage); //place it somewhere viewable
+                 }
+             });
+
+        });
+
+        //Start the image cropping. Show the dialog
+        $("#wv-map").Jcrop({
+            bgColor:     'black',
+            bgOpacity:   0.3,
+            fullScreen:  true,
+            setSelect: animCoords,
+            onSelect: function(c) {
+                animCoords = c;
+                $("#wv-gif-width").html((c.w));
+                $("#wv-gif-height").html((c.h));
+            },
+            onChange: function(c) {
+                animCoords = c;
+                $("#wv-gif-width").html((c.w));
+                $("#wv-gif-height").html((c.h));
+
+                //disable GIF generation if GIF would be too large
+                if(c.w > 640 || c.h > 640)
+                    $("#wv-gif-button").button("disable");
+                else
+                    $("#wv-gif-button").button("enable");
+            },
+            onRelease: function(c) { //TODO: Restore functionality
+                console.log("Turning off Jcrop");
+                $dialog.dialog("close");
+            }
+        }, function() {
+            jcropAPI = this;
+        });
 
     };
 
-
     var handleChange = function(c){
-
         setCoords(c);
-
     };
 
     init();

@@ -429,7 +429,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                     text: "Share",
                     click: function() {
                         $(this).dialog("close"); //avoid error by closing dialog here
-                        var a = [], from, to, jStart, jDate;
+                        var from, to, jStart, jDate;
                         //Parse the fromDate and toDates to Juilan time
                         jStart = wv.util.parseDateUTC(self.fromDate.getUTCFullYear() + "-01-01");
                         jDate = "00" + (1+Math.ceil((self.fromDate.getTime() - jStart) / 86400000));
@@ -448,24 +448,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                         else
                             delta = 1;
 
-                        for(var i = parseInt(from); i <= to; i += delta) { //Convert to integer first
-                            a.push(wv.util.format('http://map2.vis.earthdata.nasa.gov/image-download?TIME={1}&extent=-2498560,-1380352,983040,2101248&epsg=3413&layers=MODIS_Terra_CorrectedReflectance_TrueColor,Coastlines&opacities=1,1&worldfile=false&format=image/jpeg&width=680&height=680', i));
-                            //if the interval is in two years, take it to account
-                            if(i.toString().indexOf("365") !== -1) //TODO:Better method to do roll over
-                                i = parseInt(self.toDate.getUTCFullYear()+ "000");
-                        }
-
-                        gifshot.createGIF({
-                            gifWidth: 320,
-                            gifHeight: 320,
-                            images: a
-                        }, function (obj) {
-                            if (!obj.error) {
-                                var animatedImage = document.createElement('img');
-                                animatedImage.src = obj.image;
-                                $("#products").append(animatedImage); //place it somewhere viewable
-                            }
-                        });
+                        ui.rubberband.animToggle(from, to, delta);
                     }
                 }
             ]
