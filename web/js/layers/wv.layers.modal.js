@@ -52,7 +52,32 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             redo();
         }
     };
+    var selectMeasurement = function(category, measurement){
+        console.log( category, measurement );
+        $selectedCategory.empty();
 
+        var $categoryList = $( '<div></div>' )
+            .attr( 'id', category.id + '-list' );
+
+        _.each( category.measurements, function( measurement ) {
+            var current = config.measurements[measurement];
+            var $measurementHeader = $( '<h3></h3>' )
+                .attr('id', 'accordion-' + category.id + '-' + current.id )
+                .text(current.title);
+
+            var $measurementContent = $( '<div></div>' );
+
+            var $measurementSources = $( '<ul></ul>' );
+
+            _.each( current.sources, function(source) {
+                console.log(source);
+            });
+        });
+
+        //$categoriesGrid.hide();
+        //$selectedCategory.show();
+        
+    };
     var drawCategories = function(){
 
         _.each(config.categories.scientific, function(category) {
@@ -65,8 +90,23 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             var $measurements = $('<ul></ul>');
 
             _.each(category.measurements,function(measurement){
-                var title = config.measurements[measurement].title;
-                $measurements.append('<li>' + title + '</li>');
+                var current = config.measurements[measurement];
+                var $measurement = $( '<a></a>' )
+                    .attr( 'data-category', category.id )
+                    .attr( 'data-measurement', current.id )
+                    .attr( 'title', category.title + ' - ' + current.title )
+                    .text(current.title);
+
+                $measurement.click(function(e){
+                    selectMeasurement(category, current.id);
+                });
+
+                var $measurementItem = $( '<li></li>' )
+                    .addClass('layer-category-item');
+
+                $measurementItem.append( $measurement );
+
+                $measurements.append( $measurementItem );
             });
 
             $category.append( $measurements );
