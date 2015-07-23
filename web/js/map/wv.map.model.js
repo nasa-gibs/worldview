@@ -40,11 +40,11 @@ wv.map.model = wv.map.model || function(models, config) {
                 errors.push({message: "Extent outside of range"});
             }
             //get rotation if it exists
+            self.rotation = 0; //don't rotate geographic view
             if(state.p === 'arctic' || state.p === 'antarctic') {
-                if (state.r)  //convert to radians here
+                if (!isNaN(state.r))  //convert to radians here
                     self.rotation = state.r * (Math.PI / 180.0);
-            } else
-                self.rotation = 0; //don't rotate geographic view
+            }
         }
     };
 
