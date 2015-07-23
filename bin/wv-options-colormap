@@ -73,14 +73,15 @@ def process_entries(entries):
         if map_type == "scale":
             items = re.sub(r"[\(\)\[\]]", "", entry["@value"]).split(",")
             try:
-                values += [map(lambda v: float(v), items)]
+                new_items = []
                 for item in items:
                     v = float(item)
                     if v == float("inf"):
                         v = sys.float_info.max
                     if v == float("-inf"):
                         v = sys.float_info.min
-                    values += [v]
+                    new_items += [v]
+                values += [new_items]
             except ValueError as e:
                 raise ValueError("Invalid value: %s" % entry["@value"])
 

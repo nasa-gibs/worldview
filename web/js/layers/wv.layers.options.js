@@ -22,6 +22,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
     var self = {};
     var canvas;
     var palettes;
+    var index = 0;
 
     var init = function() {
         canvas = document.createElement("canvas");
@@ -43,7 +44,11 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
 
         if ( config.features.customPalettes ) {
             if ( models.palettes.allowed(layer.id) ) {
-                if ( models.palettes.type(layer.id) === "scale" ) {
+                if ( models.palettes.getLegends(layer.id).length > 1 ) {
+                    renderLegendButtons($dialog);
+                }
+                var legend = models.palettes.getLegend(layer.id, index);
+                if ( legend.type === "scale" ) {
                     renderRange($dialog);
                 }
                 renderPaletteSelector($dialog);
@@ -62,8 +67,11 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
                 of: $("#products")
             },
             close: dispose
-        })
-        .iCheck({
+        });
+
+        $("#wv-squash-button-check").addClass("custom-check");
+        $("#wv-palette-selector").addClass("custom-check");
+        $("#wv-layers-options-dialog .custom-check").iCheck({
             radioClass: 'iradio_square-grey',
             checkboxClass: 'icheckbox_square-grey'
         });
@@ -136,14 +144,31 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         }
     };
 
-    var renderRange = function($dialog) {
-        var layerDef = _.find(models.layers.active, { id: layer.id });
-        var paletteDef = models.palettes.get(layerDef.id);
-        var rendered = config.palettes.rendered[layerDef.palette.id];
-        var max = rendered.scale.colors.length - 1;
+    var renderLegendButtons = function($dialog) {
+        var $panel = $("<div></div>")
+            .addClass("wv-legend-buttons");
+        var legends = models.palettes.getLegends(layer.id);
+        _.each(legends, function(legend, index) {
+            id = "wv-legend-" + index;
+            $panel.append("<input type='radio' id='" + id + "' " +
+                "name='legend' value='" + index + "'>" +
+                "<label for='" + id + "'>" + legend.title + "</label>");
+        });
+        $panel.buttonset();
+        $dialog.append($panel);
+
+        $(".wv-legend-buttons input[type='radio']").change(function() {
+            index = _.parseInt($(this).val());
+            rerenderRange();
+            rerenderPaletteSelector();
+        });
+    };
+
+    var renderRange = function() {
         var $header = $("<div></div>")
             .html("Thresholds")
             .addClass("wv-header");
+
 
         var $squash = $("<div></div>")
             .addClass("wv-palette-squash");
@@ -156,11 +181,23 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
             .html("Squash Palette");
         $squash.append($squashButton).append($squashLabel);
 
-        var startMin = paletteDef.min || 0;
-        var startMax = paletteDef.max || max;
-        var startSquash = paletteDef.squash;
+        var $panel = $("<div></div>")
+            .addClass("wv-layer-options-threshold");
+        $dialog.append($header);
+        $dialog.append($squash);
+        $dialog.append($panel);
+        rerenderRange();
+    };
+
+    var rerenderRange = function() {
+        var legend = models.palettes.getLegend(layer.id, index);
+        var max = legend.values.length - 1;
+
+        var startMin = legend.min || 0;
+        var startMax = legend.max || max;
+        console.log("total max", max);
+        var startSquash = legend.squash;
         var $slider = $("<div></div>")
-            .attr("id", "wv-range-slider")
             .noUiSlider({
                 start: [startMin, startMax],
                 step: 1,
@@ -173,7 +210,8 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
                 models.palettes.setRange(layer.id,
                     parseFloat($(this).val()[0]),
                     parseFloat($(this).val()[1]),
-                    squash);
+                    squash,
+                    index);
             }).on("slide", function() {
                 updateRangeLabels(layer.id,
                     parseFloat($(this).val()[0]),
@@ -185,109 +223,117 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
             .addClass("wv-label-range-min"));
         $label.append($("<span></span>")
             .addClass("wv-label-range-max"));
-        $dialog.append($header);
-        $dialog.append($squash);
-        $dialog.append($slider);
-        $dialog.append($label);
+
+        $(".wv-layer-options-threshold")
+            .empty()
+            .append($slider)
+            .append($label);
+        $range = $slider;
         $range = $slider;
 
-        onRangeUpdate(layer.id, startMin, startMax, startSquash);
+        onRangeUpdate();
     };
 
-    var onRangeUpdate = function(layerId, min, max, squash) {
-        updateRangeLabels(layerId, min, max);
+    var onRangeUpdate = function() {
+        updateRangeLabels();
 
-        var count = models.palettes.get(layerId).scale.colors.length;
-        var imin = ( _.isUndefined(min) ) ? 0 : min;
-        var imax = ( _.isUndefined(max) ) ? count - 1: max;
-
+        var palette = models.palettes.get(layer.id, index);
+        var imin = ( _.isUndefined(palette.min) ) ? 0 : palette.min;
+        var imax = ( _.isUndefined(palette.max) ) ?
+                palette.entries.labels.length - 1 : palette.max;
         current = [parseFloat($range.val()[0]), parseFloat($range.val()[1])];
         if ( !_.isEqual(current, [imin, imax]) ) {
+            console.log("imin", imin, "imax", imax);
             $range.val([imin, imax]);
         }
-        $("#wv-squash-button-check").prop("checked", squash);
     };
 
-    var updateRangeLabels = function(layerId, min, max) {
-        if ( layerId !== layer.id ) {
-            return;
-        }
-        var layerDef = config.layers[layerId];
-        var active = models.palettes.get(layerId);
-        var rendered = config.palettes.rendered[layerDef.palette.id];
+    var updateRangeLabels = function(min, max) {
+        var palette = models.palettes.get(layer.id, index);
+        var legend = models.palettes.getLegend(layer.id, index);
+        min = min || palette.min || 0;
+        max = max || palette.max || legend.labels.length - 1;
 
-        if ( _.isUndefined(min) ) {
-            min = active.min || 0;
-        }
-        max = max || active.max || rendered.scale.colors.length;
-
-        var minLabel = rendered.scale.labels[min];
-        var maxLabel = rendered.scale.labels[max];
+        var minLabel = legend.labels[min];
+        var maxLabel = legend.labels[max];
         $("#wv-layers-options-dialog .wv-label-range-min").html(minLabel);
         $("#wv-layers-options-dialog .wv-label-range-max").html(maxLabel);
     };
 
     var onPaletteUpdateAll = function() {
-        var def = models.palettes.get(layer.id);
-        var min = ( _.isUndefined(def.min) ) ? 0 : def.min;
-        var max = ( _.isUndefined(def.max) ) ? def.scale.colors.length - 1 : def.max;
-        onRangeUpdate(layer.id, min, max);
+        onRangeUpdate();
         onPaletteUpdate();
     };
 
     var renderPaletteSelector = function($dialog) {
         var $header = $("<div></div>")
             .addClass("wv-header")
-            .addClass("wv-color-palette-label")
             .html("Color Palette");
         var $pane = $("<div></div>")
             .attr("id", "wv-palette-selector");
-        var palette = models.palettes.get(layer.id);
-        $pane.append(defaultPalette());
+        $dialog.append($header).append($pane);
+        rerenderPaletteSelector(true);
+    };
+
+    var rerenderPaletteSelector = function(firstTime) {
+        $("#wv-layers-options-dialog .jspScrollable").each(function() {
+            $(this).jScrollPane().data("jsp").destroy();
+        });
+
+        var $pane = $("#wv-palette-selector").empty();
+        $pane.append(defaultLegend());
         var recommended = layer.palette.recommended || [];
         _.each(recommended, function(id) {
-            var item = customPalette(id);
+            var item = customLegend(id);
             if ( item ) {
                 $pane.append(item);
             }
         });
         _.each(config.paletteOrder, function(id) {
             if ( _.indexOf(recommended, id) < 0 ) {
-                var item = customPalette(id);
+                var item = customLegend(id);
                 if ( item ) {
                     $pane.append(item);
                 }
             }
         });
-        $dialog.append($header);
-        $dialog.append($pane);
         $pane.jScrollPane();
 
+        var palette = models.palettes.get(layer.id, index);
         if ( palette.custom ) {
-            var index = $(".wv-palette-selector-row input[data-palette='" +
+            $(".wv-palette-selector-row input[data-palette='" +
                     palette.custom + "']").iCheck("check");
         } else {
             $(".wv-palette-selector-row input[data-palette='__default']")
                     .iCheck("check");
         }
 
+        console.log("register");
         $("#wv-palette-selector input").on("ifChecked", function() {
             var that = this;
+            console.log($(this));
             setTimeout(function() {
                 var id = $(that).attr("data-palette");
                 if ( id === "__default" ) {
-                    models.palettes.clearCustom(layer.id);
+                    models.palettes.clearCustom(layer.id, index);
                 } else {
-                    models.palettes.setCustom(layer.id, id);
+                    models.palettes.setCustom(layer.id, id, index);
                 }
             }, 0);
+        });
+
+        if ( !firstTime ) {
+            $("#wv-palette-selector").iCheck({radioClass: 'iradio_square-grey'});
+        }
+        $("#wv-layers-options-dialog .jspScrollable").each(function() {
+            $(this).jScrollPane().data("jsp").reinitialise();
         });
     };
 
     var onPaletteUpdate = function() {
-        var def = models.palettes.get(layer.id);
-        if ( def.custom ) {
-            $("#wv-palette-selector input[data-palette='" + def.custom + "']")
+        var palette = models.palettes.get(layer.id, index);
+        if ( palette.custom ) {
+            $("#wv-palette-selector input[data-palette='" + palette.custom + "']")
                 .iCheck("check");
         } else {
             $("#wv-palette-selector input[data-palette='__default']")
@@ -350,28 +396,27 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         return $row;
     };
 
-    var defaultPalette = function() {
-        var palette = config.palettes.rendered[layer.palette.id];
-        if ( models.palettes.type(layer.id) === "scale" ) {
-            return selectorItemScale(palette, "__default", "Default");
+    var defaultLegend = function() {
+        var legend = models.palettes.getDefaultLegend(layer.id, index);
+        if ( legend.type === "scale" ) {
+            return selectorItemScale(legend.colors, "__default", "Default");
         } else {
-            return selectorItemSingle(palette, "__default", "Default");
+            return selectorItemSingle(legend, "__default", "Default");
         }
     };
 
-    var customPalette = function(id) {
-        var targetPalette = config.palettes.custom[id];
-        var sourceType = models.palettes.type(layer.id);
-        var targetType = ( targetPalette.colors.length === 1 ) ? "single" : "scale";
+    var customLegend = function(id) {
+        var source = models.palettes.getDefaultLegend(layer.id, index);
+        var target = models.palettes.getCustom(id);
+        var targetType = ( target.colors.length === 1 ) ? "single": "scale";
 
-        if ( sourceType === "scale" && targetType === "scale" ) {
-            var sourcePalette = config.palettes.rendered[layer.palette.id];
-            var translatedPalette =
-                    wv.palettes.translate(sourcePalette.scale, targetPalette);
-            return selectorItemScale(translatedPalette, id, targetPalette.name);
+        if ( source.type === "scale" && targetType === "scale" ) {
+            var translated = wv.palettes.translate(source.colors,
+                    target.colors);
+            return selectorItemScale(translated, id, target.name);
         }
-        if ( sourceType === "single" && targetType === "single" ) {
-            return selectorItemSingle(targetPalette, id, targetPalette.name);
+        if ( source.type === "single" && targetType === "single" ) {
+            return selectorItemSingle(target, id, target.name);
         }
     };
 

@@ -161,7 +161,6 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
     };
 
     self.save = function(state) {
-        /*
         if ( self.inUse() && !state.l ) {
             throw new Error("No layers in state");
         }
@@ -185,7 +184,6 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
                 attr.push({ id: "squash" });
             }
         });
-        */
     };
 
     self.key = function(layerId) {
