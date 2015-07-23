@@ -53,7 +53,7 @@ wv.ui.mouse.wheel = wv.ui.mouse.wheel || function(element, ui, options) {
     options = options || {};
 
     var self = {};
-    self.timeout = options.timeout || 100; // millseconds
+    self.timeout = options.timeout || 100; // milliseconds
     self.threshold = options.threshold || 100; // delta units
     self.events = wv.util.events();
 
