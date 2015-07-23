@@ -338,8 +338,8 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             $toDate = $("<input />")
             .addClass("wv-datepicker");
 
-        $fromDate.attr("id", "from").attr("type", "text").attr("name", "from");
-        $toDate.attr("id", "to").attr("type", "text").attr("name", "to");
+        $fromDate.attr("id", "from").attr("type", "text").attr("name", "from").attr("readonly","true");
+        $toDate.attr("id", "to").attr("type", "text").attr("name", "to").attr("readonly", "true");
 
         //set up the datepickers
         $fromDate.datepicker({
