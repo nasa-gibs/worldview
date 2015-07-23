@@ -237,20 +237,25 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
             animCoords = [($(window).width()/2)-100,($(window).height()/2)-100,($(window).width()/2)+100,($(window).height()/2)+100];
 
         var htmlElements = "<div id='gifDialog'>" +
-                                "<label>Width: </label>" + "<span id='wv-gif-width'>0</span>" + "<br />" +
-                                "<label>Height: </label>" + "<span id='wv-gif-height'>0</span>" + "<br />" +
-                                "<button id='wv-gif-button'>Generate</button>" + "<br />" +
-                                "<select id='wv-gif-resolution'>" +
-                                    "<option value='1' >250m</option>" +
-                                    "<option value='2' >500m</option>" +
-                                    "<option value='4' >1km</option>" +
-                                    "<option value='20'>5km</option>" +
-                                    "<option value='40'>10km</option>" +
-                                "</select>Resolution (per pixel)" +
+                                "<div class='wv-image-header'>" +
+                                    "<select id='wv-gif-resolution'>" +
+                                        "<option value='1' >250m</option>" +
+                                        "<option value='2' >500m</option>" +
+                                        "<option value='4' selected='selected'>1km</option>" +
+                                        "<option value='20'>5km</option>" +
+                                        "<option value='40'>10km</option>" +
+                                    "</select>Resolution (per pixel)" +
+                                "</div>" +
+                                "<table class='wv-image-download' style='padding-bottom: 7px'>" +
+                                    "<tr>" + "<td>GIF Size:</td>" + "<td><span id='wv-gif-width'>0</span> x <span id='wv-gif-height'>0</span></td>" + "</tr>" +
+                                    "<tr>" + "<td>Image Size:</td>" + "<td id='wv-gif-size' class='wv-image-size'>0 MB</td>" + "</tr>" +
+                                    "<tr>" + "<td>Maximum Image Size:</td>" + "<td class='wv-image-size'>250 MB</td>" + "</tr>" +
+                                "</table>" +
+                                "<button id='wv-gif-button'>Generate</button>" +
                            "</div>";
         var $dialog = wv.ui.getDialog().html(htmlElements); //place it above image crop
         $dialog.dialog({
-            dialogClass: "wv-panel",
+            dialogClass: "wv-panel wv-image",
             title: "Generate GIF",
             show: { effect: "slide", direction: "down" },
             position: {
@@ -317,18 +322,19 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                 $("#wv-gif-width").html((c.w));
                 $("#wv-gif-height").html((c.h));
             },
-            onChange: function(c) {
+            onChange: function(c) { //Update gif size and image size in MB
                 animCoords = c;
-                $("#wv-gif-width").html((c.w));
-                $("#wv-gif-height").html((c.h));
+                var dataSize = calcSize(c);
 
-                //disable GIF generation if GIF would be too large
-                if(c.w > 640 || c.h > 640)
+                //Update the gif selection dialog
+                $("#wv-gif-width").html((c.w)); $("#wv-gif-height").html((c.h)); $("#wv-gif-size").html(dataSize + " MB");
+
+                if(dataSize > 250) //disable GIF generation if GIF would be too large
                     $("#wv-gif-button").button("disable");
                 else
                     $("#wv-gif-button").button("enable");
             },
-            onRelease: function(c) {
+            onRelease: function() {
                 $("#wv-map").insertAfter('#productsHolder'); //retain map element before disabling jcrop
                 jcropAPI.destroy();
                 animCoords = null;
@@ -337,6 +343,31 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
         }, function() {
             jcropAPI = this;
         });
+
+        //Update sizes when selectmenu option chosen
+        $("#wv-gif-resolution").change(function() {
+            var dataSize = calcSize(animCoords);
+
+            $("#wv-gif-width").html((animCoords.w)); $("#wv-gif-height").html((animCoords.h)); $("#wv-gif-size").html(dataSize + " MB");
+
+            if(dataSize > 250) //disable GIF generation if GIF would be too large
+                $("#wv-gif-button").button("disable");
+            else
+                $("#wv-gif-button").button("enable");
+        }).change();
+    };
+
+    var calcSize = function(c) {
+        var lonlat1 = ui.map.selected.getCoordinateFromPixel([Math.floor(c.x), Math.floor(c.y2)]);
+        var lonlat2 = ui.map.selected.getCoordinateFromPixel([Math.floor(c.x2), Math.floor(c.y)]);
+
+        var conversionFactor = models.proj.selected.id === "geographic" ? 0.002197 : 256,
+            res = $("#wv-gif-resolution").find("option:checked").val();
+
+        var imgWidth = Math.round((Math.abs(lonlat2[0] - lonlat1[0]) / conversionFactor) / Number(res)),
+            imgHeight = Math.round((Math.abs(lonlat2[1] - lonlat1[1]) / conversionFactor) / Number(res));
+
+        return ((imgWidth * imgHeight * 24) / 8388608).toFixed(2);
     };
 
     var handleChange = function(c){
