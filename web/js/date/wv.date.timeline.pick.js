@@ -96,17 +96,21 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
         var tempPickOffset = tempPickTipOffset - 20; //we want the x coordinate of left corner
         var tempPickTipDate = tl.x.invert(tempPickTipOffset); //date chosen should match tip area
 
-        if(d3.select(this).attr("id") === d3.select("#fromPick").attr("id")) { //compare their ids
-            tl.input.fromDate = tempPickTipDate;
-            $("#from").datepicker("setDate", tempPickTipDate);
-        } else {
-            tl.input.toDate = tempPickTipDate;
-            $("#to").datepicker("setDate", tempPickTipDate);
-        }
+        //Check for future date, if so don't move the pickers past timeline
+        var today = new Date();
+        if(tempPickTipDate.valueOf() < today.valueOf()) {
+            if (d3.select(this).attr("id") === d3.select("#fromPick").attr("id")) { //compare their ids
+                tl.input.fromDate = tempPickTipDate;
+                $("#from").datepicker("setDate", tempPickTipDate);
+            } else {
+                tl.input.toDate = tempPickTipDate;
+                $("#to").datepicker("setDate", tempPickTipDate);
+            }
 
-        //update position of selected date picker
-        d3.select(this).attr("transform", "translate(" + tempPickOffset +" 20)");
-        updateChanges(tempPickTipDate);
+            //update position of selected date picker
+            d3.select(this).attr("transform", "translate(" + tempPickOffset + " 20)");
+            updateChanges(tempPickTipDate);
+        }
     };
 
     //Handling drag gestures with the guitarpick
