@@ -137,31 +137,27 @@ wv.map.ui = wv.map.ui || function(models, config) {
 
         var defs = models.layers.get({reverse: true});
         _.each(defs, function(def) {
-            if ( isGraticule(def) ) {
+            if ( isGraticule(def) )
                 addGraticule();
-            } else {
+            else
                 self.selected.addLayer(createLayer(def));
-            }
         });
         updateLayerVisibilities();
     };
 
     var updateLayerVisibilities = function() {
         self.selected.getLayers().forEach(function(layer) {
-            if ( layer.wv ) {
-                var renderable = models.layers.isRenderable(layer.wv.id);
-                layer.setVisible(renderable);
-            }
+            if ( layer.wv )
+                layer.setVisible(models.layers.isRenderable(layer.wv.id));
+
         });
         var defs = models.layers.get();
         _.each(defs, function(def) {
             if ( isGraticule(def) ) {
-                var renderable = models.layers.isRenderable(def.id);
-                if ( renderable ) {
+                if ( models.layers.isRenderable(def.id) )
                     addGraticule();
-                } else {
+                else
                     removeGraticule();
-                }
             }
         });
     };
@@ -217,13 +213,10 @@ wv.map.ui = wv.map.ui || function(models, config) {
         var selectedDate = wv.util.toISOStringDate(models.date.selected);
         var selectedProj = models.proj.selected.id;
         cache.removeWhere(function(key, mapLayer) {
-            if ( mapLayer.wvid === layerId &&
+            return ( mapLayer.wvid === layerId &&
                  mapLayer.wvproj === selectedProj &&
                  mapLayer.wvdate !== selectedDate &&
-                 mapLayer.lookupTable ) {
-                return true;
-            }
-            return false;
+                 mapLayer.lookupTable );
         });
         reloadLayers();
     };
@@ -409,6 +402,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
             .hide();
         $(selector).append($map);
 
+        //Create two specific controls
         var scaleMetric = new ol.control.ScaleLine({
             className: "wv-map-scale-metric",
             units: "metric"
@@ -416,6 +410,14 @@ wv.map.ui = wv.map.ui || function(models, config) {
         var scaleImperial = new ol.control.ScaleLine({
             className: "wv-map-scale-imperial",
             units: "imperial"
+        });
+
+        //insert this to polar map views for desktop and mobile rotation
+        var rotateInteraction = new ol.interaction.DragRotate({
+            condition: ol.events.condition.altKeyOnly,
+            duration: animationDuration
+        }), mobileRotation = new ol.interaction.PinchRotate({
+            duration: animationDuration
         });
 
         var map = new ol.Map({
@@ -426,7 +428,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 center: proj.startCenter,
                 zoom: proj.startZoom,
                 maxZoom: proj.numZoomLevels,
-                enableRotation: false
+                enableRotation: true
             }),
             target: id,
             renderer: ["canvas", "dom"],
@@ -461,10 +463,42 @@ wv.map.ui = wv.map.ui || function(models, config) {
         createZoomButtons(map, proj);
         createMousePosSel(map, proj);
 
+        //allow rotation by dragging for polar projections
+        if(proj.id !== 'geographic') {
+            createResetButton(map);
+            map.addInteraction(rotateInteraction);
+            map.addInteraction(mobileRotation);
+        }
+
         map.getView().on("change:center", updateExtent);
         map.getView().on("change:resolution", updateExtent);
 
         return map;
+    };
+
+    //Create a button to reset rotation
+    var createResetButton = function(map) {
+        var $map = $("#" + map.getTarget());
+        var $outIcon = $("<i></i>")
+            .addClass("fa")
+            .addClass("fa-minus")
+            .addClass("fa-1x");
+        var $button = $("<button></button>")
+            .addClass("wv-map-zoom")
+            .addClass("wv-map-reset-rotation")
+            .append($outIcon);
+
+        $map.append($button);
+        $button.button({
+            label: "Reset rotation"
+        })
+        .click(function(event) { //create a rotation to rotate it back to zero degrees
+            map.beforeRender(ol.animation.rotate({
+                duration: 500,
+                rotation: map.getView().getRotation()
+            }));
+            map.getView().rotate(0);
+        });
     };
 
     var createZoomButtons = function(map, proj) {

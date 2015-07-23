@@ -9,6 +9,29 @@
  * All Rights Reserved.
  */
 
+/* css for animation dialog*/
+.wv-header { /* header */
+    margin-top: 1em;
+    font-size: 14px;
+    margin-bottom: 1em;
+}
+
+.wv-label-opacity { /*label*/
+    text-align: right;
+}
+
+.noUi-target { /* slider */
+    margin: 10px 10px 10px 15px;
+}
+
+.wv-datepicker { /* datepickers */
+    width: 100px
+}
+
+.wv-label-speed {
+    padding-bottom: 5px;
+}
+
 #timeds, #timemds {
     position: relative;
 }

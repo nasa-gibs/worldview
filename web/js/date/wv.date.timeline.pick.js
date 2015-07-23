@@ -35,7 +35,7 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
     var tipDate;
 
     //FIXME: Optimize a lot, this is terrible
-    var dragmove = function(d){
+    var dragmove = function(){
         var tempPickOffset = Math.max( -(width / 2),
                                        Math.min( tl.width - (width / 2), d3.event.x ) );
         var tempPickTipOffset = tempPickOffset + (width / 2);
@@ -87,6 +87,33 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
         }
     };
 
+    //TODO:Snapping
+    //Listener function when a animation datepicker moves
+    var animdrag = function() {
+        //Here we have access to information in the d3.event object
+        //Use it to acquire the date
+        var tempPickTipOffset = Math.max( -(width / 2), Math.min( tl.width - (width / 2), d3.event.x ) );
+        var tempPickOffset = tempPickTipOffset - 20; //we want the x coordinate of left corner
+        var tempPickTipDate = tl.x.invert(tempPickTipOffset); //date chosen should match tip area
+
+        //Check for future date, if so don't move the pickers past timeline
+        var today = new Date();
+        if(tempPickTipDate.valueOf() < today.valueOf()) {
+            if (d3.select(this).attr("id") === d3.select("#fromPick").attr("id")) { //compare their ids
+                tl.input.fromDate = tempPickTipDate;
+                $("#from").datepicker("setDate", tempPickTipDate);
+            } else {
+                tl.input.toDate = tempPickTipDate;
+                $("#to").datepicker("setDate", tempPickTipDate);
+            }
+
+            //update position of selected date picker
+            d3.select(this).attr("transform", "translate(" + tempPickOffset + " 20)");
+            updateChanges(tempPickTipDate);
+        }
+    };
+
+    //Handling drag gestures with the guitarpick
     var drag = d3.behavior.drag()
         .origin(function(d) { return d; })
         .on("dragstart", function(){
@@ -103,10 +130,24 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
             tl.guitarPick.classed('pick-clicked',false);
         });
 
+    //Handling drag gestures with the animation date pickers
+    var animDrag = d3.behavior.drag()
+        .on("dragstart", function() {
+            mousedown = true;
+            d3.event.sourceEvent.preventDefault();
+            d3.event.sourceEvent.stopPropagation();
+        })
+        .on("drag", animdrag)
+        .on("dragend", function() {
+            mousedown = false;
+            prevChange = undefined;
+            nextChange = undefined;
+        });
+
     var change = function(){
         var d;
         var newDate = tipDate;
-        var tick, tickBg;
+        var tickBg;
 
         tl.guitarPick
             .attr("transform", 'translate('+ self.offset +','+ 0 +')');
@@ -193,6 +234,13 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
         nextChange = undefined;
     };
 
+    //Given a date, returns a transform string to translate a date picker
+    //we want to move the picker to the correct x position
+    self.updateAnimPickers = function(date) {
+        var xVal = (tl.x(date) - width/2) + 8; //need offset of 8 for correct position
+        return "translate(" + xVal + " 20)";
+    };
+
     var init = function(){
 
         //Draw the pick
@@ -229,6 +277,33 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
         });
     };
 
+    //Create animation pickers and translate them
+    //Translation must be applied to a selected SVG path (underlying path in animPick1/2)
+    var animPicks = function() {
+        tl.animPick1 = tl.svg
+            .append("svg:svg")
+            .attr("class","animpick");
+
+        tl.animPick2 = tl.svg
+            .append("svg:svg")
+            .attr("class","animpick");
+
+        //Default positions for pickers set at ui.timeline.config.init()
+        tl.animPick1.append("svg:path")
+            .attr("id", "fromPick")
+            .attr("d", "M0 0 L40 0 L20 40 Z");
+
+        tl.animPick2.append("svg:path")
+            .attr("id", "toPick")
+            .attr("d", "M0 0 L40 0 L20 40 Z");
+
+        //register drag behaviour with the date pickers here to guarantee it is called
+        d3.select("#fromPick").call(animDrag);
+        d3.select("#toPick").call(animDrag);
+        $(".animpick").hide();
+    };
+
     init();
+    animPicks();
     return self;
 };
