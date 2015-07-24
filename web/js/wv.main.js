@@ -237,12 +237,15 @@ $(function() {
         });
 
         if ( layersRemoved > 0 ) {
+            // Remove for now until new GIBS has settled down.
+            /*
             wv.ui.notify(
                 "Incomplete configuration<br><br>" +
                 layersRemoved + " layer(s) were removed<br><br>" +
                 "Contact us at " +
                 "<a href='mailto:@MAIL@'>" +
                 "@MAIL@</a>");
+            */
         }
     };
 

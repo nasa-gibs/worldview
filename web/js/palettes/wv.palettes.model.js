@@ -325,16 +325,33 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
             var values = entries.values;
             var target = ( palette.custom ) ?
                 self.getCustom(palette.custom).colors : source;
+
             var min = palette.min || 0;
             var max = palette.max || source.length;
+
+            var sourceCount = source.length;
+            var targetCount = target.length;
+            var indexCount = max - min;
 
             _.each(source, function(color, index) {
                 var newColor;
                 if ( index < min || index > max ) {
                     targetColor = "00000000";
                 } else {
-                    var sourcePercent = index / source.length;
-                    var targetIndex = Math.floor(sourcePercent * target.length);
+                    var sourcePercent, targetIndex;
+                    if ( palette.squash ) {
+                        sourcePercent = (index - min) / (max - min);
+                        if ( index == max ) {
+                            sourcePercent = 1.0;
+                        }
+                        targetIndex = Math.floor(sourcePercent * targetCount);
+                        if ( targetIndex >= targetCount ) {
+                            targetIndex = targetCount - 1;
+                        }
+                    } else {
+                        sourcePercent = index / sourceCount;
+                        targetIndex = Math.floor(sourcePercent * targetCount);
+                    }
                     targetColor = target[targetIndex];
                 }
                 legend.colors.push(targetColor);

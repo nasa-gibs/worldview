@@ -125,7 +125,9 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
 
         _.each(config.layerOrder, function(layerId) {
             var layer = config.layers[layerId];
-            if ( layer.group === group ) {
+            if ( !layer ) {
+                console.warn("In layer order but not defined", layerId);
+            } else if ( layer.group === group ) {
                 renderLayer($element, group, layerId);
             }
         });

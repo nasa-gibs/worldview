@@ -82,11 +82,14 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
 
         $("#wv-squash-button-check").on("ifChanged", function() {
             var squash = $("#wv-squash-button-check").prop("checked");
-            var $slider = $("#wv-range-slider");
+            //var $slider = $("#wv-range-slider");
+            var $slider = $range;
+            console.log("slider", $slider, $slider.val());
             models.palettes.setRange(layer.id,
                 parseFloat($slider.val()[0]),
                 parseFloat($slider.val()[1]),
-                squash);
+                squash,
+                index);
         });
 
         models.layers.events
@@ -195,8 +198,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
 
         var startMin = legend.min || 0;
         var startMax = legend.max || max;
-        console.log("total max", max);
-        var startSquash = legend.squash;
+
         var $slider = $("<div></div>")
             .noUiSlider({
                 start: [startMin, startMax],
@@ -243,8 +245,13 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
                 palette.entries.labels.length - 1 : palette.max;
         current = [parseFloat($range.val()[0]), parseFloat($range.val()[1])];
         if ( !_.isEqual(current, [imin, imax]) ) {
-            console.log("imin", imin, "imax", imax);
             $range.val([imin, imax]);
+        }
+
+        if ( palette.squash ) {
+            $("#wv-squash-button-check").iCheck("check");
+        } else {
+            $("#wv-squash-button-check").iCheck("uncheck");
         }
     };
 
@@ -308,10 +315,8 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
                     .iCheck("check");
         }
 
-        console.log("register");
         $("#wv-palette-selector input").on("ifChecked", function() {
             var that = this;
-            console.log($(this));
             setTimeout(function() {
                 var id = $(that).attr("data-palette");
                 if ( id === "__default" ) {
