@@ -28,6 +28,24 @@
     width: 100px
 }
 
+input[type=radio] { /* hide radio button*/
+    display:none;
+}
+
+input[type=radio] + label { /* implement jquery-ui styling here b/c it is more a "specific" selector */
+    display:inline-block;
+    margin:-2px;
+    padding: 4px 12px;
+    background: #555555 url("../ext/ui/jquery-ui-1.11.4/images/ui-bg_glass_20_555555_1x400.png") 50% 50% repeat-x;
+    border-color: #ddd;
+    font-weight: bold;
+}
+
+input[type=radio]:checked + label {
+    font-weight: bold;
+    background: #555555 url("../ext/ui/jquery-ui-1.11.4/images/ui-bg_glass_20_555555_1x400.png") 50% 50% repeat-x;
+}
+
 .wv-label-speed {
     padding-bottom: 5px;
 }

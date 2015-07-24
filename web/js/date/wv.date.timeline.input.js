@@ -454,19 +454,17 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             ]
         });
 
-        //Create the selectmenu here
-        $('<br /><label>Interval: </label>').appendTo('#dialog');
-        $('<select id="interval" />').appendTo('#dialog');
-        $('<option value="day" selected="selected">Day</option>').appendTo('#interval');
-        $('<option value="month">Month</option>').appendTo('#interval');
-        $('<option value="year">Year</option>').appendTo('#interval');
-        //Create the Jquery UI element. By default the width is 0px, change it to something more sane
-        $("#interval").selectmenu({
-            select: function(event, ui) {
-                interval = ui.item.value;
-            }
+        //Create the interval radio buttons here
+        var intervalHTML = "<input type='radio' id='wv-day' class='wv-interval ui-button ui-widget' name='radios' value='day' checked/>" +
+                                "<label for='wv-day'>Day</label>" +
+                            "<input type='radio' id='wv-month' class='wv-interval ui-button ui-widget' name='radios' value='month'/>" +
+                                "<label for='wv-month'>Month</label>" +
+                            "<input type='radio' id='wv-year' class='wv-interval ui-button ui-widget' name='radios' value='year'/>" +
+                                "<label for='wv-year'>Year</label>";
+        $("#dialog").append(intervalHTML);
+        $(".wv-interval").click(function() {
+            interval = $(this).attr("value");
         });
-        $("#interval-button").attr("style","width: 90px;");
 
         $(document)
             /*.mouseout(function() { //FIXME:this is a bug! fires far too often than it should when it should only fire when mouse exits browser
