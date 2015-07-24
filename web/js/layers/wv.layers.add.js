@@ -130,7 +130,6 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
             }
         });
 
-
         $container.append($header);
         $container.append($element);
         $parent.append($container);

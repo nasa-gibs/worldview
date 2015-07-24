@@ -51,7 +51,8 @@
     display:none;
 }
 #layer-modal header,
-#layer-search {
+#layer-search,
+#layer-modal nav{
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
@@ -61,7 +62,7 @@
 }
 
 #layer-search {
-    display: inline-block;
+    float:left;
 }
 
 .search-icon {
@@ -83,7 +84,7 @@
 }
 
 #layer-modal nav {
-    display:inline;
+    float:left;
 }
 
 /* Tile layout */
@@ -126,4 +127,9 @@
 }
 .layer-category li{
     margin:5px 0;
+}
+#selected-category .ui-tabs .ui-tabs-nav{
+    float:left;
+    max-width:150px;
+    overflow:auto;
 }

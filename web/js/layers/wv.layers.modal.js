@@ -90,20 +90,32 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     .text(source.description);
 
                 if( source.settings.length !== 1 ) {
-                    var $sourceSettings = $( '<ul></ul>' );
+                    var $sourceSettings = $( '<div></div>' );
 
                     _.each( source.settings, function( setting ) {
                         var layer = config.layers[setting];
-                        var $setting = $( '<li></li>' )
-                            .text(layer.title);
+                        var $setting = $( '<input />' )
+                            .attr( 'type', 'radio' )
+                            .attr( 'id', 'setting-' + layer.id )
+                            .attr( 'data-layer', encodeURIComponent( layer.id ) )
 
-                        $sourceSettings.append( $setting );
+                        var $label = $( '<label></label>' )
+                            .attr( 'for', 'setting-' + encodeURIComponent( layer.id ) )
+                            .text( layer.title );
+
+                        $sourceSettings.append( $setting )
+                            .append( $label );
+
+                        $sourceSettings.buttonset();
+                        
                     });
-
-                    $sourceMeta.append( $sourceSettings );
+                    $sourceContent.append( $sourceMeta );
+                    $sourceContent.append( $sourceSettings );
                 }
-
-                $sourceContent.append( $sourceMeta );
+                else {
+                    $sourceContent.append( $sourceMeta );
+                }
+                
 
                 $measurementContent.append( $sourceContent );
 
@@ -134,10 +146,15 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         $selectedCategory.show();
         
     };
+
+    var createNavBar = function(filter){
+        
+    };
+
     var drawCategories = function(){
 
         _.each(config.categories.scientific, function(category) {
-
+            
             var $category = $('<div></div>')
                 .addClass('layer-category layer-category-scientific')
                 .attr('id', category.id )
@@ -170,8 +187,43 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             $categoriesGrid.append( $category );
             
         });
+        //for legacy categories, combine with each above
+        _.each(config.categories['hazards and disasters'], function(category) {
 
-        $( '#layer-categories' ).isotope( {
+            var $category = $('<div></div>')
+                .addClass('layer-category layer-category-legacy')
+                .attr('id', category.id )
+                .append('<h3>' + category.title + '</h3>');
+
+            var $measurements = $('<ul></ul>');
+
+            _.each( category.measurements, function( measurement, index ) {
+                var current = config.measurements[measurement];
+                var $measurement = $( '<a></a>' )
+                    .attr( 'data-category', category.id )
+                    .attr( 'data-measurement', current.id )
+                    .attr( 'title', category.title + ' - ' + current.title )
+                    .text( current.title );
+
+                $measurement.click( function( e ) {
+                    console.log(index);
+                    selectMeasurement( category, current.id, index );
+                });
+
+                var $measurementItem = $( '<li></li>' )
+                    .addClass( 'layer-category-item' );
+
+                $measurementItem.append( $measurement );
+
+                $measurements.append( $measurementItem );
+            });
+
+            $category.append( $measurements );
+            $categoriesGrid.append( $category );
+            
+        });
+
+        var $tiles = $( '#layer-categories' ).isotope( {
             itemSelector: '.layer-category',
             //stamp: '.stamp',
             //sortBy: 'number',
@@ -180,7 +232,42 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 gutter: 10,
             },
             //transitionDuration: '0.2s'
-        } );
+        });
+
+        _.each(config.categories, function( topCategory, name ) {
+            console.log(topCategory, name);
+            
+            var $filterButton = $( '<input />' )
+                .attr( 'type', 'radio')
+                .text( name );
+
+            var $label = $( '<label></label>' )
+                .text(name);
+
+            if(name === 'hazards and disasters'){
+                name = 'legacy';
+            };
+
+            $filterButton
+                .attr( 'id', 'button-filter-' + name )
+                .attr( 'data-filter', name )
+                .click( function( e ) {
+                    $tiles.isotope({
+                        filter: '.layer-category-' + name
+                    });
+                    //$(this).active();
+                    console.log('showing ' + name);
+                    
+                });
+
+            $label.attr('for', 'button-filter-' + name );
+
+            $('#layer-modal nav').append( $filterButton );
+
+            $('#layer-modal nav').append( $label );
+
+            $('#layer-modal nav').buttonset();            
+        });
     };
     var addLayer = function(event) {
         model.add(decodeURIComponent($(this).attr("data-layer")));
