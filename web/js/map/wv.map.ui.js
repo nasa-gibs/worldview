@@ -18,7 +18,6 @@ wv.map.ui = wv.map.ui || function(models, config) {
     var selector = "#" + id;
     var cache = new Cache(100); // Save layers from days visited
     var animationDuration = 250;
-    var $mid;
 
     var self = {};
     self.proj = {}; // One map for each projection
@@ -69,6 +68,10 @@ wv.map.ui = wv.map.ui || function(models, config) {
         self.selected = self.proj[models.proj.selected.id];
         var map = self.selected;
         reloadLayers();
+
+        //Update the rotation buttons if polar projection to display correct value
+        if(models.proj.selected.id !== "geographic")
+            self.updateRotation();
 
         // If the browser was resized, the inactive map was not notified of
         // the event. Force the update no matter what and reposition the center
@@ -406,13 +409,15 @@ wv.map.ui = wv.map.ui || function(models, config) {
         window.history.replaceState("", "@OFFICIAL_NAME@","?" + models.link.toQueryString());
 
         //Set reset button content and proper CSS styling to position it correctly
-        $mid.button("option", "label", Number((models.map.rotation) * (180.0 / Math.PI)).toFixed() );
+        $(".wv-map-reset-rotation").button("option", "label", Number((models.map.rotation) * (180.0 / Math.PI)).toFixed() );
         if((models.map.rotation) * (180.0 / Math.PI) >= 100.0)
-            $mid.find("span").attr("style","padding-left: 9px");
+            $(".wv-map-reset-rotation").find("span").attr("style","padding-left: 9px");
         else if((models.map.rotation) * (180.0 / Math.PI) <= -100.0)
-            $mid.find("span").attr("style","padding-left: 6px");
+            $(".wv-map-reset-rotation").find("span").attr("style","padding-left: 6px");
+        else if((models.map.rotation) * (180.0 / Math.PI) <= -10.0)
+            $(".wv-map-reset-rotation").find("span").attr("style","padding-left: 10px");
         else
-            $mid.find("span").attr("style","padding-left: 14px");
+            $(".wv-map-reset-rotation").find("span").attr("style","padding-left: 14px");
     };
 
     var createMap = function(proj) {
@@ -448,7 +453,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 projection: ol.proj.get(proj.crs),
                 extent: proj.maxExtent,
                 center: proj.startCenter,
-                rotation: models.map.rotation,
+                rotation: proj.id === "geographic" ? 0.0 : models.map.rotation,
                 zoom: proj.startZoom,
                 maxZoom: proj.numZoomLevels,
                 enableRotation: true
@@ -650,7 +655,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
             $righticon = $("<i></i>")
                 .addClass("fa fa-repeat");
 
-        $mid = $("<button></button>")
+        var $mid = $("<button></button>")
             .addClass("wv-map-reset-rotation wv-map-zoom")
             .attr("title", "Click to reset")
             .attr("style", "width: 43px");

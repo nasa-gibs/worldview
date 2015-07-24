@@ -19,7 +19,7 @@ wv.map.model = wv.map.model || function(models, config) {
     var self = {};
 
     self.extent = null;
-    self.rotation = 0; //initial rotation from url
+    self.rotation = 0; //initial rotation from url. This is shared amongst both polar rotations
     self.events = wv.util.events();
 
     self.update = function(extent) {
@@ -40,7 +40,6 @@ wv.map.model = wv.map.model || function(models, config) {
                 errors.push({message: "Extent outside of range"});
             }
             //get rotation if it exists
-            self.rotation = 0; //don't rotate geographic view
             if(state.p === 'arctic' || state.p === 'antarctic') {
                 if (!isNaN(state.r))  //convert to radians here
                     self.rotation = state.r * (Math.PI / 180.0);
