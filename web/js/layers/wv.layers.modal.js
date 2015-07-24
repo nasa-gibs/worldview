@@ -97,7 +97,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                         var $setting = $( '<input />' )
                             .attr( 'type', 'radio' )
                             .attr( 'id', 'setting-' + layer.id )
-                            .attr( 'data-layer', encodeURIComponent( layer.id ) )
+                            .attr( 'data-layer', encodeURIComponent( layer.id ) );
 
                         var $label = $( '<label></label>' )
                             .attr( 'for', 'setting-' + encodeURIComponent( layer.id ) )
@@ -246,7 +246,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
             if(name === 'hazards and disasters'){
                 name = 'legacy';
-            };
+            }
 
             $filterButton
                 .attr( 'id', 'button-filter-' + name )
