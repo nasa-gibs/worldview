@@ -33,7 +33,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
     var timer, rollingDate;
 
     //vars for dialog dates and time interval
-    var interval = 'day', dialogOpen = false;
+    var interval = 'day';
 
     var $incrementBtn = $("#right-arrow-group");
     var $decrementBtn = $("#left-arrow-group");
@@ -370,12 +370,10 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                     $toDate.datepicker("setDate", self.toDate);
                 }
 
-                dialogOpen = true;
             },
             close: function(event, ui) {
                 //Hide datepickers
                 $(".animpick").hide();
-                dialogOpen = false;
             },
             buttons: [ //Go button controls date range animation, other two control animation based on Days slider
                 {
@@ -455,12 +453,12 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         });
 
         //Create the interval radio buttons here
-        var intervalHTML = "<input type='radio' id='wv-day' class='wv-interval ui-button ui-widget' name='radios' value='day' checked/>" +
-                                "<label for='wv-day'>Day</label>" +
-                            "<input type='radio' id='wv-month' class='wv-interval ui-button ui-widget' name='radios' value='month'/>" +
-                                "<label for='wv-month'>Month</label>" +
-                            "<input type='radio' id='wv-year' class='wv-interval ui-button ui-widget' name='radios' value='year'/>" +
-                                "<label for='wv-year'>Year</label>";
+        var intervalHTML = "<input type='radio' id='wv-day' class='wv-interval' name='radios' value='day' checked/>" +
+                                "<label for='wv-day' class='ui-button ui-widget'>Day</label>" +
+                            "<input type='radio' id='wv-month' class='wv-interval' name='radios' value='month'/>" +
+                                "<label for='wv-month' class='ui-button ui-widget'>Month</label>" +
+                            "<input type='radio' id='wv-year' class='wv-interval' name='radios' value='year'/>" +
+                                "<label for='wv-year' class='ui-button ui-widget'>Year</label>";
         $("#dialog").append(intervalHTML);
         $(".wv-interval").click(function() {
             interval = $(this).attr("value");
