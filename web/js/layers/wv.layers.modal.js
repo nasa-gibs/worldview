@@ -53,7 +53,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         }
     };
     var selectMeasurement = function(category, selectedMeasurement, selectedIndex){
-        console.log( category, selectedMeasurement );
+
         $selectedCategory.empty();
 
         var $categoryList = $( '<div></div>' )
@@ -89,34 +89,83 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 var $sourceMeta = $( '<p></p>' )
                     .text(source.description);
 
+                $sourceContent.append( $sourceMeta );
+
+                var $addButton = $( '<button></button>' )
+                    .text( 'Add' )
+                    .attr( 'id', 'add-' + current.id + '-' + source.id );
+                var $removeButton = $( '<button></button>' )
+                    .text( 'Remove' )
+                    .attr( 'id', 'remove-' + current.id + '-' + source.id );
+
                 if( source.settings.length !== 1 ) {
                     var $sourceSettings = $( '<div></div>' );
 
                     _.each( source.settings, function( setting ) {
                         var layer = config.layers[setting];
+                        var title;
+
+                        // The following complex if statement is a placeholder
+                        // for truncating the layer names, until the rest of
+                        // the interface is implemented
+
+                        if( layer.title.indexOf('(') !== -1 ) {
+                            var regExp = /\(([^)]+)\)/;
+                            var matches = regExp.exec(layer.title);
+                            title = matches[1];
+                        } else if ( layer.title.indexOf( ':' ) !== -1 ){
+                            
+                        } else if ( layer.title.indexOf( ',' ) !== -1 ) {
+                            
+                        } else {
+
+                        }
+
                         var $setting = $( '<input />' )
                             .attr( 'type', 'radio' )
+                            .addClass( 'settings-radio')
                             .attr( 'id', 'setting-' + layer.id )
+                            .attr( 'value', encodeURIComponent( layer.id ) )
+                        //maybe dont need value and data-layer both
                             .attr( 'data-layer', encodeURIComponent( layer.id ) );
 
                         var $label = $( '<label></label>' )
                             .attr( 'for', 'setting-' + encodeURIComponent( layer.id ) )
-                            .text( layer.title );
+                            .text( title );
 
                         $sourceSettings.append( $setting )
                             .append( $label );
 
-                        $sourceSettings.buttonset();
-                        
                     });
-                    $sourceContent.append( $sourceMeta );
+
+                    $sourceSettings.buttonset();
+
+                    // might need mose more logic here, the click "checks"
+                    // the radio, instead of unchecking the rest then checking
+                    // the selected
+                    $sourceSettings.find( 'input.settings-radio' )
+                        .click( function( e ) {
+                            $addButton.val( $( this ).val() );
+                            $removeButton.val( $( this ).val() );
+                        });
+
                     $sourceContent.append( $sourceSettings );
                 }
+                // if there are no settings then just create an add button
+                // for the selected source
                 else {
-                    $sourceContent.append( $sourceMeta );
+                    //$sourceContent.append( $sourceMeta );
+                    $addButton.val( source.settings[0] );
+                    $removeButton.val( source.settings[0] );
                 }
-                
 
+                $addButton.button()
+                    .click( addLayer );
+
+                $removeButton.button()
+                    .click( removeLayer );
+
+                $sourceContent.append( $addButton, $removeButton );
                 $measurementContent.append( $sourceContent );
 
             });
@@ -171,7 +220,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     .text( current.title );
 
                 $measurement.click( function( e ) {
-                    console.log(index);
                     selectMeasurement( category, current.id, index );
                 });
 
@@ -206,7 +254,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     .text( current.title );
 
                 $measurement.click( function( e ) {
-                    console.log(index);
+                    //console.log(index);
                     selectMeasurement( category, current.id, index );
                 });
 
@@ -235,7 +283,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         });
 
         _.each(config.categories, function( topCategory, name ) {
-            console.log(topCategory, name);
+            //console.log(topCategory, name);
             
             var $filterButton = $( '<input />' )
                 .attr( 'type', 'radio')
@@ -255,9 +303,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     $tiles.isotope({
                         filter: '.layer-category-' + name
                     });
-                    //$(this).active();
-                    console.log('showing ' + name);
-                    
                 });
 
             $label.attr('for', 'button-filter-' + name );
@@ -270,12 +315,12 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         });
     };
     var addLayer = function(event) {
-        model.add(decodeURIComponent($(this).attr("data-layer")));
+        model.add( decodeURIComponent( $( this ).val() ) );
 
     };
 
     var removeLayer = function(event) {
-        model.remove(decodeURIComponent($(this).attr("data-layer")));
+        model.remove( decodeURIComponent( $( this ).val() ) );
     };
 
     var onLayerAdded = function(layer) {
@@ -344,10 +389,10 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             .addClass( "search-icon" )
             .toggle( function( e ) {
                 var that = this;
-                console.log('click on');
+                //console.log('click on');
                 $searchInput.show( "fast", function(e){
-                    console.log('visible');
-                    console.log(this);
+                    //console.log('visible');
+                    //console.log(this);
                     /*$(this).focus().blur(function(e){
                         console.log('blurring');
                         $(that).toggle();
@@ -356,12 +401,12 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 });
                 //console.log(e);
             }, function ( e ) {
-                console.log('click off');
+                //console.log('click off');
                 $searchInput.hide(function(e){
-                    console.log('unblurring');
+                    //console.log('unblurring');
                     //$(this).off("blur");
                 });
-                console.log(e);
+                //console.log(e);
             } )
             .append( "<i></i>" );
 
