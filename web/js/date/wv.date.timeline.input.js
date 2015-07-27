@@ -427,26 +427,29 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                     text: "Share",
                     click: function() {
                         $(this).dialog("close"); //avoid error by closing dialog here
-                        var from, to, jStart, jDate;
-                        //Parse the fromDate and toDates to Juilan time
-                        jStart = wv.util.parseDateUTC(self.fromDate.getUTCFullYear() + "-01-01");
-                        jDate = "00" + (1+Math.ceil((self.fromDate.getTime() - jStart) / 86400000));
-                        from = self.fromDate.getUTCFullYear()+(jDate).substr((jDate.length)-3);
+                        if(gifshot.isExistingImagesGIFSupported()) {
+                            var from, to, jStart, jDate;
+                            //Parse the fromDate and toDates to Juilan time
+                            jStart = wv.util.parseDateUTC(self.fromDate.getUTCFullYear() + "-01-01");
+                            jDate = "00" + (1 + Math.ceil((self.fromDate.getTime() - jStart) / 86400000));
+                            from = self.fromDate.getUTCFullYear() + (jDate).substr((jDate.length) - 3);
 
-                        jStart = wv.util.parseDateUTC(self.toDate.getUTCFullYear() + "-01-01");
-                        jDate = "00" + (1+Math.ceil((self.toDate.getTime() - jStart) / 86400000));
-                        to = self.toDate.getUTCFullYear()+(jDate).substr((jDate.length)-3);
+                            jStart = wv.util.parseDateUTC(self.toDate.getUTCFullYear() + "-01-01");
+                            jDate = "00" + (1 + Math.ceil((self.toDate.getTime() - jStart) / 86400000));
+                            to = self.toDate.getUTCFullYear() + (jDate).substr((jDate.length) - 3);
 
-                        //Determine interval for updating date
-                        var delta;
-                        if(interval === 'month')
-                            delta = 30;
-                        else if(interval === 'year')
-                            delta = 365;
-                        else
-                            delta = 1;
+                            //Determine interval for updating date
+                            var delta;
+                            if (interval === 'month')
+                                delta = 30;
+                            else if (interval === 'year')
+                                delta = 365;
+                            else
+                                delta = 1;
 
-                        ui.rubberband.animToggle(from, to, delta);
+                            ui.rubberband.animToggle(from, to, delta);
+                        } else
+                            wv.ui.notify("Sorry, but this feature is not supported in your browser (typically Internet Explorer)");
                     }
                 }
             ]

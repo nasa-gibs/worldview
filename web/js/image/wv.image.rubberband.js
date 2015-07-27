@@ -308,7 +308,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                         .attr("download", "animation.gif")
                         .attr("href", obj.image)
                         .attr("class", "ui-button ui-widget ui-state-default ui-button-text-only")
-                        .hover(function() {$(this).addClass("ui-state-hover")}, function() {$(this).removeClass("ui-state-hover")});
+                        .hover(function() {$(this).addClass("ui-state-hover");}, function() {$(this).removeClass("ui-state-hover");});
 
                     //Create a dialog over the view and place the image there
                     var $imgDialog = wv.ui.getDialog().append(animatedImage).append($download);
