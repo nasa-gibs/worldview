@@ -274,8 +274,10 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             .mouseup(animateEnd);
 
         $animateBtn.click(function(event) {
-            $("#dialog").dialog("open");
             animateEnd(); //Let the animation end when another one is being set
+            wv.ui.closeDialog();
+
+            $("#dialog").dialog("open");
             event.preventDefault();
         });
 

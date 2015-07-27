@@ -275,14 +275,18 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                 my: "left bottom",
                 at: "left top",
                 of: $("#timeline-footer")
+            },
+            close: function(event) {
+                if(event.srcElement) //check if pressed from X or generate button
+                    animCoords = undefined;
+                $("#wv-map").insertAfter('#productsHolder'); //retain map element before disabling jcrop
+                jcropAPI.destroy();
             }
         });
 
         //Wire the button to generate the URL and GIF
         $("#wv-gif-button").button().click(function() {
-            $dialog.dialog("close"); //FIXME: jCrop won't properly init next time
-            $("#wv-map").insertAfter('#productsHolder'); //retain map element before disabling jcrop
-            jcropAPI.destroy();
+            $dialog.dialog("close");
             var url = formImageURL(), a = [];
             for(var i = parseInt(from); i <= parseInt(to); i += delta) { //Convert to integer first
                 a.push(wv.util.format(url, i));
@@ -300,6 +304,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                     var animatedImage = document.createElement('img');
                     animatedImage.src = obj.image;
                     animatedImage.setAttribute("style", "padding: 10px 0px");
+                    animCoords = undefined;
 
                     //Create download link and apply button CSS
                     var $download = $("<a><span class=ui-button-text>Download</span></a>")
@@ -348,9 +353,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                     $("#wv-gif-button").button("enable");
             },
             onRelease: function() {
-                $("#wv-map").insertAfter('#productsHolder'); //retain map element before disabling jcrop
-                jcropAPI.destroy();
-                animCoords = null;
+                removeCrop();
                 $dialog.dialog("close");
             }
         }, function() {
@@ -368,6 +371,12 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
             else
                 $("#wv-gif-button").button("enable");
         }).change();
+    };
+
+    var removeCrop = function() {
+        $("#wv-map").insertAfter('#productsHolder'); //retain map element before disabling jcrop
+        animCoords = undefined;
+        jcropAPI.destroy();
     };
 
     var calcSize = function(c) {
