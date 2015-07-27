@@ -61,8 +61,7 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
         if ( !wv.palettes.supported ) {
             return false;
         }
-        //FIXME: return self.type(layerId);
-        return true;
+        return config.layers[layerId].palette;
     };
 
     self.setCustom = function(layerId, paletteId, index) {
@@ -102,6 +101,12 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
         prepare(layerId);
         index = ( _.isUndefined(index) ) ? 0 : index;
         var palette = self.active[layerId].maps[index];
+        if ( min === 0 ) {
+            min = undefined;
+        }
+        if ( max === self.get(layerId, index).entries.values.length - 1 ) {
+            max = undefined;
+        }
         palette.min = min;
         palette.max = max;
         palette.squash = squash;
@@ -160,6 +165,14 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
         self.events.trigger("update");
     };
 
+    var getMinValue = function(v) {
+        return ( v.length ) ? v[0] : v;
+    };
+
+    var getMaxValue = function(v) {
+        return ( v.length ) ? v[1]: v;
+    };
+
     self.save = function(state) {
         if ( self.inUse() && !state.l ) {
             throw new Error("No layers in state");
@@ -168,22 +181,83 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
             if ( !_.find(models.layers.get(), {id: layerId}) ) {
                 return;
             }
-            var attr = _.find(state.l, {id: layerId}).attributes;
-            if ( def.custom ) {
-                attr.push({ id: "palette", value: def.custom });
-            }
-            if ( def.min ) {
-                var minValue = def.scale.values[def.min];
-                attr.push({ id: "min", value: minValue });
-            }
-            if ( def.max ) {
-                var maxValue = def.scale.values[def.max];
-                attr.push({ id: "max", value: maxValue });
-            }
-            if ( def.squash ) {
-                attr.push({ id: "squash" });
+            if ( self.getCount(layerId) > 1 ) {
+                self.saveMulti(state, layerId);
+            } else {
+                self.saveSingle(state, layerId);
             }
         });
+    };
+
+    self.saveSingle = function(state, layerId) {
+        var attr = _.find(state.l, {id: layerId}).attributes;
+        var def = self.get(layerId);
+        if ( def.custom ) {
+            attr.push({ id: "palette", value: def.custom });
+        }
+        if ( def.min ) {
+            var minValue = def.entries.values[def.min];
+            attr.push({ id: "min", value: minValue });
+        }
+        if ( def.max ) {
+            var maxValue = def.entries.values[def.max];
+            attr.push({ id: "max", value: maxValue });
+        }
+        if ( def.squash ) {
+            attr.push({ id: "squash" });
+        }
+    };
+
+    self.saveMulti = function(state, layerId) {
+        var palettes = [], hasPalettes = false;
+        var min = [], hasMin = false;
+        var max = [], hasMax = false;
+        var squash = [], hasSquash = false;
+
+        for ( var i = 0; i < self.getCount(layerId); i++ ) {
+            var def = self.get(layerId, i);
+            if ( def.custom ) {
+                palettes.push(def.custom);
+                hasPalettes = true;
+            } else {
+                palettes.push("");
+            }
+
+            if ( def.min ) {
+                min.push(getMinValue(def.entries.values[def.min]));
+                hasMin = true;
+            } else {
+                min.push("");
+            }
+
+            if ( def.max ) {
+                max.push(getMaxValue(def.entries.values[def.max]));
+                hasMax = true;
+            } else {
+                max.push("");
+            }
+
+            if ( def.squash ) {
+                squash.push(def.squash);
+                hasSquash = true;
+            } else {
+                squash.push("");
+            }
+        }
+
+        var attr = _.find(state.l, {id: layerId}).attributes;
+        if ( hasPalettes ) {
+            attr.push({ id: "palette", value: palettes.join(";") });
+        }
+        if ( hasMin ) {
+            attr.push({ id: "min", value: min.join(";") });
+        }
+        if ( hasMax ) {
+            attr.push({ id: "max", value: max.join(";") });
+        }
+        if ( hasSquash ) {
+            attr.push({ id: "squash", value: squash.join(";") });
+        }
     };
 
     self.key = function(layerId) {
@@ -211,51 +285,87 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
         if ( !wv.palettes.supported ) {
             return;
         }
+
         _.each(state.l, function(layerDef) {
             var layerId = layerDef.id;
             var minValue, maxValue;
-            var min, max;
-            var squash = false;
+            var min = [], max = [];
+            var squash = [];
+            var count = 0;
             _.each(layerDef.attributes, function(attr) {
                 if ( attr.id === "palette" ) {
-                    try {
-                        self.setCustom(layerId, attr.value);
-                    } catch ( error ) {
-                        errors.push("Invalid palette: " + attr.value);
-                    }
+                    count = self.getCount(layerId);
+                    values = wv.util.toArray(attr.value.split(";"));
+                    _.each(values, function(value, index) {
+                        try {
+                            self.setCustom(layerId, value, index);
+                        } catch ( error ) {
+                            errors.push("Invalid palette: " + value);
+                        }
+                    });
                 }
                 if ( attr.id === "min" ) {
-                    minValue = parseFloat(attr.value);
-                    if ( _.isNaN(minValue) ) {
-                        errors.push("Invalid min value: " + attr.value);
-                    } else {
-                        min = findIndex(layerId, "min", minValue);
-                    }
+                    count = self.getCount(layerId);
+                    values = wv.util.toArray(attr.value.split(";"));
+                    _.each(values, function(value, index) {
+                        if ( value === "" ) {
+                            min.push(undefined);
+                            return;
+                        }
+                        minValue = parseFloat(value);
+                        if ( _.isNaN(minValue) ) {
+                            errors.push("Invalid min value: " + value);
+                        } else {
+                            min.push(findIndex(layerId, "min", minValue, index));
+                        }
+                    });
                 }
                 if ( attr.id === "max" ) {
-                    maxValue = parseFloat(attr.value);
-                    if ( _.isNaN(maxValue) ) {
-                        errors.push("Invalid max value: " + attr.value);
-                    } else {
-                        max = findIndex(layerId, "max", maxValue);
-                    }
+                    count = self.getCount(layerId);
+                    values = wv.util.toArray(attr.value.split(";"));
+                    _.each(values, function(value, index) {
+                        if ( value === "" ) {
+                            max.push(undefined);
+                            return;
+                        }
+                        maxValue = parseFloat(value);
+                        if ( _.isNaN(maxValue) ) {
+                            errors.push("Invalid max value: " + value);
+                        } else {
+                            max.push(findIndex(layerId, "max", maxValue, index));
+                        }
+                    });
                 }
                 if ( attr.id === "squash" ) {
-                    squash = true;
+                    count = self.getCount(layerId);
+                    if ( attr.value === true ) {
+                        squash[0] = true;
+                    } else {
+                        values = wv.util.toArray(attr.value.split(";"));
+                        _.each(values, function(value) {
+                            squash.push(value === "true");
+                        });
+                    }
                 }
             });
-            if ( !_.isUndefined(min) || !_.isUndefined(max) ) {
-                self.setRange(layerId, min, max, squash);
+            if ( min.length > 0 || max.length > 0 ) {
+                for ( var i = 0; i < count; i++ ) {
+                    var vmin = ( min.length > 0 ) ? min[i] : undefined;
+                    var vmax = ( max.length > 0 ) ? max[i] : undefined;
+                    var vsquash = ( squash.length > 0 ) ? squash[i] : undefined;
+                    self.setRange(layerId, vmin, vmax, vsquash, i);
+                }
             }
         });
     };
 
-    var findIndex = function(layerId, type, value) {
-        var values = self.get(layerId).scale.values;
+    var findIndex = function(layerId, type, value, index) {
+        index = index || 0;
+        var values = self.get(layerId, index).entries.values;
         var result;
         _.each(values, function(check, index) {
-            var min = check;
-            var max = check;
+            var min = getMinValue(check);
+            var max = getMaxValue(check);
             if ( type === "min" && value === min ) {
                 result = index;
                 return false;

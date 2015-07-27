@@ -84,7 +84,6 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
             var squash = $("#wv-squash-button-check").prop("checked");
             //var $slider = $("#wv-range-slider");
             var $slider = $range;
-            console.log("slider", $slider, $slider.val());
             models.palettes.setRange(layer.id,
                 parseFloat($slider.val()[0]),
                 parseFloat($slider.val()[1]),
