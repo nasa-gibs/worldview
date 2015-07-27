@@ -33,7 +33,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
     var timer, rollingDate;
 
     //vars for dialog dates and time interval
-    var interval = 'day', dialogOpen = false;
+    var interval = 'day';
 
     var $incrementBtn = $("#right-arrow-group");
     var $decrementBtn = $("#left-arrow-group");
@@ -274,8 +274,10 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             .mouseup(animateEnd);
 
         $animateBtn.click(function(event) {
-            $("#dialog").dialog("open");
             animateEnd(); //Let the animation end when another one is being set
+            wv.ui.closeDialog();
+
+            $("#dialog").dialog("open");
             event.preventDefault();
         });
 
@@ -359,7 +361,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 of: $("#timeline-header")
             },
             open: function(event, ui) {
-                $("#products").find("img").remove(); //remove generated gifs
+                $(".ui-dialog-content").find("img").remove(); //remove generated gif, TODO: close dialog before new anim
                 //Show datepickers and set from date range to be two weeks apart
                 $(".animpick").show();
                 if(self.fromDate === undefined) { //once per session
@@ -370,12 +372,10 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                     $toDate.datepicker("setDate", self.toDate);
                 }
 
-                dialogOpen = true;
             },
             close: function(event, ui) {
                 //Hide datepickers
                 $(".animpick").hide();
-                dialogOpen = false;
             },
             buttons: [ //Go button controls date range animation, other two control animation based on Days slider
                 {
@@ -429,44 +429,45 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                     text: "Share",
                     click: function() {
                         $(this).dialog("close"); //avoid error by closing dialog here
-                        var from, to, jStart, jDate;
-                        //Parse the fromDate and toDates to Juilan time
-                        jStart = wv.util.parseDateUTC(self.fromDate.getUTCFullYear() + "-01-01");
-                        jDate = "00" + (1+Math.ceil((self.fromDate.getTime() - jStart) / 86400000));
-                        from = self.fromDate.getUTCFullYear()+(jDate).substr((jDate.length)-3);
+                        if(gifshot.isExistingImagesGIFSupported()) {
+                            var from, to, jStart, jDate;
+                            //Parse the fromDate and toDates to Juilan time
+                            jStart = wv.util.parseDateUTC(self.fromDate.getUTCFullYear() + "-01-01");
+                            jDate = "00" + (1 + Math.ceil((self.fromDate.getTime() - jStart) / 86400000));
+                            from = self.fromDate.getUTCFullYear() + (jDate).substr((jDate.length) - 3);
 
-                        jStart = wv.util.parseDateUTC(self.toDate.getUTCFullYear() + "-01-01");
-                        jDate = "00" + (1+Math.ceil((self.toDate.getTime() - jStart) / 86400000));
-                        to = self.toDate.getUTCFullYear()+(jDate).substr((jDate.length)-3);
+                            jStart = wv.util.parseDateUTC(self.toDate.getUTCFullYear() + "-01-01");
+                            jDate = "00" + (1 + Math.ceil((self.toDate.getTime() - jStart) / 86400000));
+                            to = self.toDate.getUTCFullYear() + (jDate).substr((jDate.length) - 3);
 
-                        //Determine interval for updating date
-                        var delta;
-                        if(interval === 'month')
-                            delta = 30;
-                        else if(interval === 'year')
-                            delta = 365;
-                        else
-                            delta = 1;
+                            //Determine interval for updating date
+                            var delta;
+                            if (interval === 'month')
+                                delta = 30;
+                            else if (interval === 'year')
+                                delta = 365;
+                            else
+                                delta = 1;
 
-                        ui.rubberband.animToggle(from, to, delta);
+                            ui.rubberband.animToggle(from, to, delta);
+                        } else
+                            wv.ui.notify("Sorry, but this feature is not supported in your browser (typically Internet Explorer)");
                     }
                 }
             ]
         });
 
-        //Create the selectmenu here
-        $('<br /><label>Interval: </label>').appendTo('#dialog');
-        $('<select id="interval" />').appendTo('#dialog');
-        $('<option value="day" selected="selected">Day</option>').appendTo('#interval');
-        $('<option value="month">Month</option>').appendTo('#interval');
-        $('<option value="year">Year</option>').appendTo('#interval');
-        //Create the Jquery UI element. By default the width is 0px, change it to something more sane
-        $("#interval").selectmenu({
-            select: function(event, ui) {
-                interval = ui.item.value;
-            }
+        //Create the interval radio buttons here
+        var intervalHTML = "<input type='radio' id='wv-day' class='wv-interval' name='radios' value='day' checked/>" +
+                                "<label for='wv-day' class='ui-button ui-widget'>Day</label>" +
+                            "<input type='radio' id='wv-month' class='wv-interval' name='radios' value='month'/>" +
+                                "<label for='wv-month' class='ui-button ui-widget'>Month</label>" +
+                            "<input type='radio' id='wv-year' class='wv-interval' name='radios' value='year'/>" +
+                                "<label for='wv-year' class='ui-button ui-widget'>Year</label>";
+        $("#dialog").append(intervalHTML);
+        $(".wv-interval").click(function() {
+            interval = $(this).attr("value");
         });
-        $("#interval-button").attr("style","width: 90px;");
 
         $(document)
             /*.mouseout(function() { //FIXME:this is a bug! fires far too often than it should when it should only fire when mouse exits browser

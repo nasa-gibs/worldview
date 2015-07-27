@@ -140,7 +140,20 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
             if(ui.map.selected.getView().getRotation() === 0.0)
                 toggleOn();
             else
-                wv.ui.notify("Image may not be downloaded when rotated. Would you like to reset rotation?");
+                wv.ui.ask({
+                    header: "Reset rotation?",
+                    message: "Image may not be downloaded when rotated. Would you like to reset rotation?",
+                    onOk: function() {
+                        ui.map.selected.beforeRender(ol.animation.rotate({
+                            duration: 400,
+                            rotation: ui.map.selected.getView().getRotation()
+                        }));
+                        ui.map.selected.getView().rotate(0);
+                        ui.map.updateRotation();
+                        //Let rotation finish before image download can occur
+                        setTimeout(toggle, 500);
+                    }
+                });
         }
         else {
             state = "off";
@@ -198,93 +211,122 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
 
     var formImageURL = function() {
         //Gather all data to get the image
-        var time = models.date.selected,
-            proj = models.proj.selected.id,
+        var proj = models.proj.selected.id,
             products = models.layers.get({
                 reverse: true,
                 renderable: true
             }),
             epsg = ( models.proj.change ) ? models.proj.change.epsg : models.proj.selected.epsg,
             opacities = [], layers = [];
-        var crs = models.proj.selected.crs;
+
         var lonlat1 = ui.map.selected.getCoordinateFromPixel([Math.floor(animCoords.x), Math.floor(animCoords.y2)]);
         var lonlat2 = ui.map.selected.getCoordinateFromPixel([Math.floor(animCoords.x2), Math.floor(animCoords.y)]);
-        var geolonlat1 = ol.proj.transform(lonlat1, crs, "EPSG:4326");
-        var geolonlat2 = ol.proj.transform(lonlat2, crs, "EPSG:4326");
 
-        var minLon = geolonlat1[0];
-        var maxLon = geolonlat2[0];
-        var minLat = geolonlat2[1];
-        var maxLat = geolonlat1[1];
+        var conversionFactor = proj === "geographic" ? 0.002197 : 256,
+            res = $("#wv-gif-resolution").find("option:checked").val();
 
-        var ll = wv.util.formatCoordinate([minLon, maxLat]);
-        var ur = wv.util.formatCoordinate([maxLon, minLat]);
-
-        var conversionFactor = s === "geographic" ? 0.002197 : 256;
+        var imgWidth = Math.round((Math.abs(lonlat2[0] - lonlat1[0]) / conversionFactor) / Number(res)),
+            imgHeight = Math.round((Math.abs(lonlat2[1] - lonlat1[1]) / conversionFactor) / Number(res));
 
         _(products).each( function(product){
             opacities.push( ( _.isUndefined(product.opacity) ) ? 1: product.opacity );
         });
 
         _.each(products, function(layer) {
-            if ( layer.projections[s].layer ) {
-                layers.push(layer.projections[s].layer);
+            if ( layer.projections[proj].layer ) {
+                layers.push(layer.projections[proj].layer);
             } else {
                 layers.push(layer.id);
             }
         });
 
-        return wv.util.format("http://map2.vis.earthdata.nasa.gov/imagegen/index.php?{1}&extent={2}&epsg={3}&layers={4}&opacities={5}", "TIME={1}", lonlat1[0]+","+lonlat1[1]+","+lonlat2[0]+","+lonlat2[1], epsg, layers.join(","), opacities.join(","));
+        return wv.util.format("http://map2.vis.earthdata.nasa.gov/imagegen/index.php?{1}&extent={2}&epsg={3}&layers={4}&opacities={5}&worldfile=false&format=image/jpeg&width={6}&height={7}", "TIME={1}", lonlat1[0]+","+lonlat1[1]+","+lonlat2[0]+","+lonlat2[1], epsg, layers.join(","), opacities.join(","), imgWidth, imgHeight);
         //return 'http://map2.vis.earthdata.nasa.gov/image-download?TIME={1}&extent=-2498560,-1380352,983040,2101248&epsg=3413&layers=MODIS_Terra_CorrectedReflectance_TrueColor,Coastlines&opacities=1,1&worldfile=false&format=image/jpeg&width=680&height=680';
     };
 
     //Setup a dialog to enable gif generation and turn on image cropping
     self.animToggle = function(from, to, delta) {
-
-        //Set default coordinates
-        if(!animCoords)
+        if(!animCoords) //Set default coordinates
             animCoords = [($(window).width()/2)-100,($(window).height()/2)-100,($(window).width()/2)+100,($(window).height()/2)+100];
 
         var htmlElements = "<div id='gifDialog'>" +
-                                "<label>Width: </label>" + "<span id='wv-gif-width'>0</span>" + "<br />" +
-                                "<label>Height: </label>" + "<span id='wv-gif-height'>0</span>" + "<br />" +
+                                "<div class='wv-image-header'>" +
+                                    "<select id='wv-gif-resolution'>" +
+                                        "<option value='1' >250m</option>" +
+                                        "<option value='2' >500m</option>" +
+                                        "<option value='4' selected='selected'>1km</option>" +
+                                        "<option value='20'>5km</option>" +
+                                        "<option value='40'>10km</option>" +
+                                    "</select>Resolution (per pixel)" +
+                                "</div>" +
+                                "<table class='wv-image-download' style='padding-bottom: 7px'>" +
+                                    "<tr>" + "<td>GIF Size:</td>" + "<td><span id='wv-gif-width'>0</span> x <span id='wv-gif-height'>0</span></td>" + "</tr>" +
+                                    "<tr>" + "<td>Image Size:</td>" + "<td id='wv-gif-size' class='wv-image-size'>0 MB</td>" + "</tr>" +
+                                    "<tr>" + "<td>Maximum Image Size:</td>" + "<td class='wv-image-size'>250 MB</td>" + "</tr>" +
+                                "</table>" +
                                 "<button id='wv-gif-button'>Generate</button>" +
                            "</div>";
-        var $dialog = wv.ui.getDialog().html(htmlElements);
+        var $dialog = wv.ui.getDialog().html(htmlElements); //place it above image crop
         $dialog.dialog({
-            dialogClass: "wv-panel",
+            dialogClass: "wv-panel wv-image",
             title: "Generate GIF",
             show: { effect: "slide", direction: "down" },
             position: {
                 my: "left bottom",
                 at: "left top",
                 of: $("#timeline-footer")
+            },
+            close: function(event) {
+                if(event.srcElement) //check if pressed from X or generate button
+                    animCoords = undefined;
+                $("#wv-map").insertAfter('#productsHolder'); //retain map element before disabling jcrop
+                jcropAPI.destroy();
             }
         });
 
         //Wire the button to generate the URL and GIF
         $("#wv-gif-button").button().click(function() {
-            console.log("Hi!");
+            $dialog.dialog("close");
             var url = formImageURL(), a = [];
-             for(var i = parseInt(from); i <= to; i += delta) { //Convert to integer first
+            for(var i = parseInt(from); i <= parseInt(to); i += delta) { //Convert to integer first
                 a.push(wv.util.format(url, i));
                 //if the interval is in two years, take it to account
                 if(i.toString().indexOf("365") !== -1) //TODO:Better method to do roll over
                     i = parseInt(self.toDate.getUTCFullYear()+ "000");
-                }
+            }
 
-             gifshot.createGIF({
+            gifshot.createGIF({
                 gifWidth: animCoords.w,
                 gifHeight: animCoords.h,
                 images: a
-             }, function (obj) {
-                 if (!obj.error) {
-                     var animatedImage = document.createElement('img');
-                     animatedImage.src = obj.image;
-                     $("#products").append(animatedImage); //place it somewhere viewable
-                 }
-             });
+            }, function (obj) {
+                if (!obj.error) {
+                    var animatedImage = document.createElement('img');
+                    animatedImage.src = obj.image;
+                    animatedImage.setAttribute("style", "padding: 10px 0px");
+                    animCoords = undefined;
 
+                    //Create download link and apply button CSS
+                    var $download = $("<a><span class=ui-button-text>Download</span></a>")
+                        .attr("type", "button")
+                        .attr("role", "button")
+                        .attr("download", "animation.gif")
+                        .attr("href", obj.image)
+                        .attr("class", "ui-button ui-widget ui-state-default ui-button-text-only")
+                        .hover(function() {$(this).addClass("ui-state-hover");}, function() {$(this).removeClass("ui-state-hover");});
+
+                    //Create a dialog over the view and place the image there
+                    var $imgDialog = wv.ui.getDialog().append(animatedImage).append($download);
+                    $imgDialog.dialog({
+                        dialogClass: "wv-panel",
+                        title: "View Animation",
+                        width: animatedImage.width + 32,
+                        close: function() {
+                            $imgDialog.find("img").remove();
+                        }
+                    });
+                }
+            });
         });
 
         //Start the image cropping. Show the dialog
@@ -298,28 +340,56 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                 $("#wv-gif-width").html((c.w));
                 $("#wv-gif-height").html((c.h));
             },
-            onChange: function(c) {
+            onChange: function(c) { //Update gif size and image size in MB
                 animCoords = c;
-                $("#wv-gif-width").html((c.w));
-                $("#wv-gif-height").html((c.h));
+                var dataSize = calcSize(c);
 
-                //disable GIF generation if GIF would be too large
-                if(c.w > 640 || c.h > 640)
+                //Update the gif selection dialog
+                $("#wv-gif-width").html((c.w)); $("#wv-gif-height").html((c.h)); $("#wv-gif-size").html(dataSize + " MB");
+
+                if(dataSize > 250) //disable GIF generation if GIF would be too large
                     $("#wv-gif-button").button("disable");
                 else
                     $("#wv-gif-button").button("enable");
             },
-            onRelease: function(c) { //TODO: Restore functionality
-                console.log("Turning off Jcrop");
-                $("#wv-map")
-                    .insertAfter('#productsHolder');
-                jcropAPI.destroy();
+            onRelease: function() {
+                removeCrop();
                 $dialog.dialog("close");
             }
         }, function() {
             jcropAPI = this;
         });
 
+        //Update sizes when selectmenu option chosen
+        $("#wv-gif-resolution").change(function() {
+            var dataSize = calcSize(animCoords);
+
+            $("#wv-gif-width").html((animCoords.w)); $("#wv-gif-height").html((animCoords.h)); $("#wv-gif-size").html(dataSize + " MB");
+
+            if(dataSize > 250) //disable GIF generation if GIF would be too large
+                $("#wv-gif-button").button("disable");
+            else
+                $("#wv-gif-button").button("enable");
+        }).change();
+    };
+
+    var removeCrop = function() {
+        $("#wv-map").insertAfter('#productsHolder'); //retain map element before disabling jcrop
+        animCoords = undefined;
+        jcropAPI.destroy();
+    };
+
+    var calcSize = function(c) {
+        var lonlat1 = ui.map.selected.getCoordinateFromPixel([Math.floor(c.x), Math.floor(c.y2)]);
+        var lonlat2 = ui.map.selected.getCoordinateFromPixel([Math.floor(c.x2), Math.floor(c.y)]);
+
+        var conversionFactor = models.proj.selected.id === "geographic" ? 0.002197 : 256,
+            res = $("#wv-gif-resolution").find("option:checked").val();
+
+        var imgWidth = Math.round((Math.abs(lonlat2[0] - lonlat1[0]) / conversionFactor) / Number(res)),
+            imgHeight = Math.round((Math.abs(lonlat2[1] - lonlat1[1]) / conversionFactor) / Number(res));
+
+        return ((imgWidth * imgHeight * 24) / 8388608).toFixed(2);
     };
 
     var handleChange = function(c){

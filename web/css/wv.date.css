@@ -28,6 +28,26 @@
     width: 100px
 }
 
+input[type=radio] { /* hide radio button*/
+    display:none;
+}
+
+/* if the label is hovered over or label is checked. This styles the label */
+input[type=radio] + label:hover, input[type=radio]:checked + label {
+    background-color: #eee;
+    background-image: none;
+    color: #404040;
+}
+
+input[type=radio] + label { /* implement jquery-ui styling here b/c this is more a "specific" selector */
+    display:inline-block;
+    margin:2px -1px 0 -1px;
+    padding: .4em 1em;
+    background: #555555 url("../ext/ui/jquery-ui-1.11.4/images/ui-bg_glass_20_555555_1x400.png") 50% 50% repeat-x;
+    border-color: #ddd;
+    font-weight: bold;
+}
+
 .wv-label-speed {
     padding-bottom: 5px;
 }
