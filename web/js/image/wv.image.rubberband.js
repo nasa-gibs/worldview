@@ -240,7 +240,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
             }
         });
 
-        return wv.util.format("http://map2.vis.earthdata.nasa.gov/imagegen/index.php?{1}&extent={2}&epsg={3}&layers={4}&opacities={5}&worldfile=false&format=image/jpeg&width={6}&height={7}", "TIME={1}", lonlat1[0]+","+lonlat1[1]+","+lonlat2[0]+","+lonlat2[1], epsg, layers.join(","), opacities.join(","), imgWidth, imgHeight);
+        return wv.util.format("http://map2.vis.earthdata.nasa.gov/image-download?{1}&extent={2}&epsg={3}&layers={4}&opacities={5}&worldfile=false&format=image/jpeg&width={6}&height={7}", "TIME={1}", lonlat1[0]+","+lonlat1[1]+","+lonlat2[0]+","+lonlat2[1], epsg, layers.join(","), opacities.join(","), imgWidth, imgHeight);
         //return 'http://map2.vis.earthdata.nasa.gov/image-download?TIME={1}&extent=-2498560,-1380352,983040,2101248&epsg=3413&layers=MODIS_Terra_CorrectedReflectance_TrueColor,Coastlines&opacities=1,1&worldfile=false&format=image/jpeg&width=680&height=680';
     };
 
