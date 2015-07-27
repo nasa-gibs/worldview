@@ -29,6 +29,7 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
     var self = {};
 
     var width = 60;
+    var ANIM_OFFSET = 8, ANIM_DRAG_OFFSET = 5;
 
     var mousedown = false;
     var nextChange, prevChange;
@@ -107,8 +108,8 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
                 $("#to").datepicker("setDate", tempPickTipDate);
             }
 
-            //update position of selected date picker
-            d3.select(this).attr("transform", "translate(" + tempPickOffset + " 20)");
+            //update position of selected date picker. ANIM_OFFSET (5) needed to put in right position
+            d3.select(this).attr("transform", "translate(" + (tempPickOffset - ANIM_DRAG_OFFSET) + " 20)");
             updateChanges(tempPickTipDate);
         }
     };
@@ -237,7 +238,7 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
     //Given a date, returns a transform string to translate a date picker
     //we want to move the picker to the correct x position
     self.updateAnimPickers = function(date) {
-        var xVal = (tl.x(date) - width/2) + 8; //need offset of 8 for correct position
+        var xVal = (tl.x(date) - width/2) + ANIM_OFFSET; //need offset of 8 for correct position
         return "translate(" + xVal + " 20)";
     };
 
