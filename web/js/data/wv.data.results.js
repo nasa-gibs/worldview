@@ -376,7 +376,6 @@ wv.data.results.dividePolygon = function() {
         });
         granule.geometry["EPSG:4326"] =
                 new ol.geom.MultiPolygon([resultMultiPoly]);
-        console.log("result", granule.geometry["EPSG:4326"]);
         return granule;
     };
 
@@ -469,7 +468,6 @@ wv.data.results.geometryFromMODISGrid = function(projection) {
     return self;
 };
 
-
 wv.data.results.modisGridIndex = function() {
 
     var self = {};
@@ -512,6 +510,28 @@ wv.data.results.modisGridLabel = function() {
         granule.downloadLabel = date + ": h" + granule.h + "-" + granule.v;
 
         return granule;
+    };
+
+    return self;
+};
+
+wv.data.results.orbitFilter = function(spec) {
+
+    var self = {};
+
+    self.name = "OrbitFilter";
+
+    self.process = function(meta, granule) {
+        if ( spec ) {
+            var regex = new RegExp(spec.regex);
+            var text = granule[spec.field];
+            var result = text.match(regex);
+            if ( result && result[1] === spec.match ) {
+                return granule;
+            }
+        } else {
+            return granule;
+        }
     };
 
     return self;

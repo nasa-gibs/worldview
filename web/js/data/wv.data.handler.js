@@ -537,6 +537,7 @@ wv.data.handler.halfOrbit = function(config, model, spec) {
         var productConfig = config.products[model.selectedProduct];
         var chain = ns.chain();
         chain.processes = [
+            ns.orbitFilter(productConfig.orbit),
             ns.tagProduct(model.selectedProduct),
             ns.tagNRT(productConfig.nrt),
             ns.tagURS(productConfig.urs),
