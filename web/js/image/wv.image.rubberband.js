@@ -246,8 +246,6 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
 
     //Setup a dialog to enable gif generation and turn on image cropping
     self.animToggle = function(from, to, delta) {
-        if(!animCoords) //Set default coordinates
-            animCoords = [($(window).width()/2)-100,($(window).height()/2)-100,($(window).width()/2)+100,($(window).height()/2)+100];
 
         var htmlElements = "<div id='gifDialog'>" +
                                 "<div class='wv-image-header'>" +
@@ -277,8 +275,6 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                 of: $("#timeline-footer")
             },
             close: function(event) {
-                if(event.srcElement) //check if pressed from X or generate button
-                    animCoords = undefined;
                 $("#wv-map").insertAfter('#productsHolder'); //retain map element before disabling jcrop
                 jcropAPI.destroy();
             }
@@ -304,7 +300,6 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                     var animatedImage = document.createElement('img');
                     animatedImage.src = obj.image;
                     animatedImage.setAttribute("style", "padding: 10px 0px");
-                    animCoords = undefined;
 
                     //Create download link and apply button CSS
                     var $download = $("<a><span class=ui-button-text>Download</span></a>")
@@ -323,8 +318,9 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                     $imgDialog.dialog({
                         dialogClass: "wv-panel",
                         title: "View Animation",
-                        width: animatedImage.width + 32,
+                        width: animCoords.w + 32,
                         close: function() {
+                            animCoords = undefined;
                             $imgDialog.find("img").remove();
                         }
                     });
@@ -337,7 +333,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
             bgColor:     'black',
             bgOpacity:   0.3,
             fullScreen:  true,
-            setSelect: animCoords,
+            setSelect: [($(window).width()/2)-100,($(window).height()/2)-100,($(window).width()/2)+100,($(window).height()/2)+100],
             onSelect: function(c) {
                 animCoords = c;
                 $("#wv-gif-width").html((c.w));
