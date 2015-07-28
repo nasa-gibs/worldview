@@ -315,8 +315,11 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                         .attr("class", "ui-button ui-widget ui-state-default ui-button-text-only")
                         .hover(function() {$(this).addClass("ui-state-hover");}, function() {$(this).removeClass("ui-state-hover");});
 
+                    var $imgSize = $("<label></label>")
+                        .html("<span>Estimated Size: " + ((obj.image.length) / 1000).toFixed() + " KB</span>");
+
                     //Create a dialog over the view and place the image there
-                    var $imgDialog = wv.ui.getDialog().append(animatedImage).append($download);
+                    var $imgDialog = wv.ui.getDialog().append(animatedImage).append($download).append($imgSize);
                     $imgDialog.dialog({
                         dialogClass: "wv-panel",
                         title: "View Animation",
