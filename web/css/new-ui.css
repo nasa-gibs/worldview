@@ -125,7 +125,7 @@ g.plot rect.data-bar-invisible{
 }
 #timeline-header{
     margin-top:2px;
-    width:250px;
+    width:295px;
 }
 #timeline-header .input-wrapper{
     background: transparent;
@@ -384,6 +384,22 @@ g.plot rect.data-bar-invisible{
     stroke:none;
 
 }
+
+/* styles for the animation pickers, same as guitarpick */
+.animpick{
+    cursor:pointer;
+    clip-path:url(#guitarpick-boundary);
+}
+
+.animpick path{
+    fill:#cccccc;
+    fill-opacity:1;
+    stroke:#515151;
+    stroke-width:1;
+    stroke-opacity:1;
+
+}
+
 #guitarpick:hover path, #guitarpick.pick-clicked path{
     fill:#5E676F;
     stroke:#999999;

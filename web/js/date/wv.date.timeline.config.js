@@ -499,7 +499,7 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
             $('#zoom-years').addClass("depth-3").css("margin","6px 0 0 0");
             $('#zoom-months').addClass("depth-2");
             $('#zoom-days').addClass("depth-1")
-                .css("margin", "8px 0 0 0")
+                .css("margin", "2px 0 0 0")
                 .css('font-size','1.8em');
 
             self.currentZoom = 3;
@@ -515,6 +515,14 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
 
         tl.pick.update();
         tl.pick.checkLocation();
+
+        //Update date pickers when timeline zoom level changes.
+        //We need to check tl.input because this executes when page is loaded
+        if(tl.input !== undefined && tl.input !== undefined)
+            if(tl.input.fromDate !== undefined && tl.input.toDate !== undefined) {
+                d3.select("#fromPick").attr("transform", tl.pick.updateAnimPickers(tl.input.fromDate));
+                d3.select("#toPick").attr("transform", tl.pick.updateAnimPickers(tl.input.toDate));
+            }
 
     };
 
@@ -549,6 +557,12 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
         //Default zoom
         self.zoom(3);
         tl.setClip(); //fix for firefox svg overflow
+
+        //Safe to translate the animation date pickers once to default positions
+        var tempDate = new Date(model.selected.valueOf());
+        tempDate.setUTCDate(tempDate.getUTCDate() - 14);
+        d3.select("#fromPick").attr("transform", ui.timeline.pick.updateAnimPickers(tempDate));
+        d3.select("#toPick").attr("transform", ui.timeline.pick.updateAnimPickers(model.selected));
     };
 
     init();

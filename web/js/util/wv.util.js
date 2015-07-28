@@ -242,7 +242,7 @@ wv.util = (function(self) {
                 newDate.setUTCFullYear(newDate.getUTCFullYear() + amount);
                 break;
             default:
-                throw new Error("[dateAdd] Invalid interval: " + inverval);
+                throw new Error("[dateAdd] Invalid interval: " + interval);
         }
         return newDate;
     };
@@ -607,6 +607,18 @@ wv.util = (function(self) {
             return coord[1].toFixed(4) + "&deg;, " +
                 coord[0].toFixed(4) + "&deg;";
         }
+    };
+
+    //allows simple printf functionality with strings
+    //arguments array contains all args passed. String must be formatted so that first replacement starts with "{1}"
+    //usage example: wv.util.format("{1}{2}",'World','view')
+    self.format = function() {
+        var formatted = arguments[0];
+        for (var i = 1; i < arguments.length; i++) {
+            var regexp = new RegExp('\\{'+i+'\\}', 'gi');
+            formatted = formatted.replace(regexp, arguments[i]);
+        }
+        return formatted;
     };
 
     return self;

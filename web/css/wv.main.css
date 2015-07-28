@@ -221,6 +221,7 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
 
 .ui-dialog {
     padding: 0;
+    z-index: 600; /* always above image crop */
 }
 
 .ui-dialog .ui-dialog-content {
