@@ -53,7 +53,7 @@ wv.brand = wv.brand || (function() {
 
     /**
      * The value of the timestamp in numeric form that can be used as
-     * a URL nonce "invalidte" cache entries. This value is filled in
+     * a URL nonce "invalidate" cache entries. This value is filled in
      * during the build process.
      *
      * @attribute BUILD_NONCE
