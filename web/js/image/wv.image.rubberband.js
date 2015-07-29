@@ -284,11 +284,21 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
         $("#wv-gif-button").button().click(function() {
             $dialog.dialog("close");
             var url = formImageURL(), a = [];
-            for(var i = parseInt(from); i <= parseInt(to); i += delta) { //Convert to integer first
+            for(var i = parseInt(from); i <= parseInt(to); ) { //Convert to integer first. change i manually
                 a.push(wv.util.format(url, i));
                 //if the interval is in two years, take it to account
-                if(i.toString().indexOf("365") !== -1) //TODO:Better method to do roll over
-                    i = parseInt(self.toDate.getUTCFullYear()+ "000");
+                if(delta > 1) { //30 or 365
+                    var test = Number(i.toString().substring(4));
+                    if(test + delta > 365) { //correct set number of day for the next year
+                        test = delta - (365 - test);
+                        var zeros = test < 10 ? "00" : ((test < 100) ? "0" : "");
+                        i = parseInt( (Number((i.toString().substring(0, 4))) + 1) + zeros + test.toString());
+                    } else
+                        i += delta;
+                } else if(i.toString().indexOf("365") !== -1)
+                    i = parseInt( (Number((i.toString().substring(0, 4))) + 1) + "001");
+                else
+                    i += delta;
             }
 
             gifshot.createGIF({
