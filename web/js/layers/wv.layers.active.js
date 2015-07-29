@@ -60,6 +60,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         legends = {};
         var $container = $(self.selector);
         var $addBtn = $("#layers-add");
+        $container.empty();
         
         $addBtn.button();
         sizeProducts();

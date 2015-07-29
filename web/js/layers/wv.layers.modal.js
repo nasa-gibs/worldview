@@ -45,8 +45,52 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             height: modalHeight,
             width: gridItemWidth * sizeMultiplier + 10,
         });
+
+        $( '#layer-modal-main' ).css( 'height', modalHeight - 40 );
+
         //$( '.stamp' ).css("width", sizeMultiplier * gridItemWidth - 10 + "px");
     };
+    var filterProjection = function(layer) {
+        return config.layers[layer].projections[models.proj.selected.id];
+    };
+    var drawPage = function() {
+        var projection = models.proj.selected.id;
+
+        _.each( config.categories['hazards and disasters'].All.measurements,
+                function( measurement ) {
+
+                    _.each( config.measurements[measurement].sources,
+                            function( source, sourceIndex ) {
+
+                                _.each( source.settings, function( setting ) {
+
+                                    var fproj = filterProjection(setting);
+                                    var layer = config.layers[ setting ];
+ 
+                                    if( fproj ) {
+                                        var mm = measurement;
+                                        return mm;
+                                    }
+
+                                    /*_.each( config.layers[ setting ].projections,
+                                            function( proj, projId ) {
+
+                                            }
+                                          );
+                                    */
+                                });
+                                
+                            }
+                          );
+                    console.log(mm);
+                }
+              );
+
+        
+        $selectedCategory.hide();
+        drawCategories();
+    };
+
     var resize = function(){
         if( $( self.selector ).dialog( "isOpen" ) ) {
             redo();
@@ -276,6 +320,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             //stamp: '.stamp',
             //sortBy: 'number',
             layoutMode: 'packery',
+            filter: '.layer-category-scientific',
             packery: {
                 gutter: 10,
             },
@@ -351,7 +396,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             modal: true,
             dialogClass: "layer-modal no-titlebar",
             draggable: false,
-            title: "Layer Catalog",
+            title: "Layer Picker",
             show: {
                 effect: "fade",
                 duration: 400
@@ -362,10 +407,10 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             },
             open: function( event, ui ) {
                 redo();
-
+                
                 $( "#layer-categories" ).isotope();
  
-                $( ".ui-widget-overlay" ).click( function(e) {
+                $( ".ui-widget-overlay" ).click( function( e ) {
                     $( self.selector ).dialog( "close" );
                 } );
             },
@@ -373,8 +418,9 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 $( ".ui-widget-overlay" ).unbind( "click" );
             }
         });
+        
+        $( '#layer-modal-main' ).css( 'height', modalHeight - 40 );
 
-        $('#layer-modal-main').css('height', modalHeight - 40);
         var $header = $( self.selector + " header" );
 
         var $search = $( "<div></div>" )
@@ -421,9 +467,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
         $header.append( $nav );
 
-        $selectedCategory.hide();
-        drawCategories();
-        //drawAll();
+        drawPage();
     };
 
     var init = function(){
