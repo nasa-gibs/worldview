@@ -11,6 +11,7 @@
 @font-face {
     font-family: open_sans_light;
     src: local(open_sans_light), url('../font/OpenSans-Light.ttf') format('opentype');
+    font-weight:300;
 }
 html,body, div, ul, li, p, h1, h2, h3, h4, h5, h6 {
     display:block;

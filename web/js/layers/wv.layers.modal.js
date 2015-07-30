@@ -27,11 +27,24 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     self.id = "layer-modal";
 
     var $addBtn = $("#layers-add");
-    var $categoriesGrid = $(self.selector + " #layer-categories");
+    var $header = $( self.selector + " header" );
+    var $categories = $(self.selector + " #layer-categories, " +
+                        self.selector + " #categories-nav");
+
     var $selectedCategory = $(self.selector + " #selected-category");
     var gridItemWidth = 320; //with of grid item + spacing
     var modalHeight;
     var sizeMultiplier;
+
+    //Create container for 'by interest' filters buttons
+    var $nav = $('<nav></nav>')
+        .attr( 'id', 'categories-nav' );
+    $header.append( $nav );
+    
+    //Create container for breadcrumb
+    var $breadcrumb = $('<nav></nav>')
+        .attr( 'id', 'category-breadcrumb' );
+    $header.append( $breadcrumb );    
 
     var setModalSize = function(){
         var availableWidth = $( window ).width() - ( $( window ).width() * 0.15 );
@@ -82,7 +95,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                                 
                             }
                           );
-                    console.log(mm);
+                    //console.log(mm);
                 }
               );
 
@@ -96,19 +109,27 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             redo();
         }
     };
-    var selectMeasurement = function(category, selectedMeasurement, selectedIndex){
+    var drawMeasurements = function(category, selectedMeasurement, selectedIndex){
 
         $selectedCategory.empty();
+        $breadcrumb.empty();
 
         var $categoryList = $( '<div></div>' )
             .attr( 'id', category.id + '-list' );
 
         //Begin Measurement Level
-        _.each( category.measurements, function( measurement ) {
+        _.each( category.measurements, function( measurement, measurementName ) {
+
             var current = config.measurements[measurement];
-            var $measurementHeader = $( '<h3></h3>' )
-                .attr('id', 'accordion-' + category.id + '-' + current.id )
-                .text(current.title);
+
+            var $measurementHeader = $( '<div></div>' )
+                .attr('id', 'accordion-' + category.id + '-' + current.id );
+
+            var $measurementTitle = $( '<h3></h3>' )
+                .text( current.title );
+
+            var $measurementSubtitle = $('<h5></h5>')
+                .text( current.subtitle );
 
             var $sourceTabs = $( '<ul></ul>' );
 
@@ -117,7 +138,8 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             $measurementContent.append( $sourceTabs );
 
             //Begin source level
-            _.each( current.sources, function( source ) {
+            _.each( current.sources, function( source, souceName ) {
+
                 var $sourceTab = $( '<li></li>' );
 
                 var $sourceLink = $( '<a></a>' )
@@ -216,6 +238,9 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             //End source level
             $measurementContent.tabs();
 
+            $measurementHeader.append( $measurementTitle );
+            $measurementHeader.append( $measurementSubtitle );
+
             $categoryList.append( $measurementHeader );
             $categoryList.append( $measurementContent );
             
@@ -225,6 +250,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         $categoryList.accordion({
             collapsible: true,
             heightStyle: "content",
+            animate: false,
             active: false
         });
         
@@ -235,86 +261,111 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
         $selectedCategory.append( $categoryList );
 
-        $categoriesGrid.hide();
+        //Create breadcrumb crumbs
+        var $homeCrumb = $( '<a></a>' )
+            .text('Categories')
+            .attr( 'alt', 'categories' )
+            .attr( 'title', 'Back to Layer Categories')
+            .click( categoriesCrumb );
+
+        $breadcrumb.append( $homeCrumb )
+            .append('<b> / ' + category.title + '</b>' );
+
+        //Switch navs
+        $('#layer-categories, #categories-nav').hide();
+
         $selectedCategory.show();
+        $breadcrumb.show();
         
     };
-
-    var createNavBar = function(filter){
+    var categoriesCrumb = function( e ) {
+        $selectedCategory.hide();
+        $breadcrumb.hide();
+        $('#layer-categories, #categories-nav').show();
         
+    };
+    var cssName = function(name){
+        if ( name === 'hazards and disasters' ) {
+            return 'legacy';
+        }
+        else return name;
     };
 
     var drawCategories = function(){
 
-        _.each(config.categories.scientific, function(category) {
-            
-            var $category = $('<div></div>')
-                .addClass('layer-category layer-category-scientific')
-                .attr('id', category.id )
-                .append('<h3>' + category.title + '</h3>');
+        $categories.empty();
 
-            var $measurements = $('<ul></ul>');
+        _.each( config.categories, function( metaCategory, metaCategoryName ) {
 
-            _.each( category.measurements, function( measurement, index ) {
-                var current = config.measurements[measurement];
-                var $measurement = $( '<a></a>' )
-                    .attr( 'data-category', category.id )
-                    .attr( 'data-measurement', current.id )
-                    .attr( 'title', category.title + ' - ' + current.title )
-                    .text( current.title );
+            _.each(config.categories[metaCategoryName], function( category, name ) {
 
-                $measurement.click( function( e ) {
-                    selectMeasurement( category, current.id, index );
+                var $category = $( '<div></div>' )
+                    .addClass( 'layer-category layer-category-' + cssName(metaCategoryName) )
+                    .attr( 'id', category.id );
+
+                var $categoryTitle = $( '<h3></h3>' );
+
+                var $categoryLink = $( '<a></a>' )
+                    .text( category.title )
+                    .attr( 'alt', category.title )
+                    .click( function( e ) {
+                        drawMeasurements( category );
+                    });
+
+                $categoryTitle.append( $categoryLink );
+                $category.append( $categoryTitle );
+
+                var $measurements = $('<ul></ul>');
+
+                _.each( category.measurements, function( measurement, index ) {
+                    var current = config.measurements[measurement];
+                    var $measurement = $( '<a></a>' )
+                        .attr( 'data-category', category.id )
+                        .attr( 'data-measurement', current.id )
+                        .attr( 'title', category.title + ' - ' + current.title )
+                        .text( current.title );
+
+                    $measurement.click( function( e ) {
+                        drawMeasurements( category, current.id, index );
+                    });
+
+                    var $measurementItem = $( '<li></li>' )
+                        .addClass( 'layer-category-item' );
+
+                    $measurementItem.append( $measurement );
+
+                    $measurements.append( $measurementItem );
                 });
 
-                var $measurementItem = $( '<li></li>' )
-                    .addClass( 'layer-category-item' );
+                $category.append( $measurements );
+                $categories.append( $category );
 
-                $measurementItem.append( $measurement );
-
-                $measurements.append( $measurementItem );
             });
 
-            $category.append( $measurements );
-            $categoriesGrid.append( $category );
-            
-        });
-        //for legacy categories, combine with each above
-        _.each(config.categories['hazards and disasters'], function(category) {
+            var $filterButton = $( '<input />' )
+                .attr( 'type', 'radio')
+                .text( metaCategoryName );
 
-            var $category = $('<div></div>')
-                .addClass('layer-category layer-category-legacy')
-                .attr('id', category.id )
-                .append('<h3>' + category.title + '</h3>');
+            var $label = $( '<label></label>' )
+                .text( metaCategoryName );
 
-            var $measurements = $('<ul></ul>');
-
-            _.each( category.measurements, function( measurement, index ) {
-                var current = config.measurements[measurement];
-                var $measurement = $( '<a></a>' )
-                    .attr( 'data-category', category.id )
-                    .attr( 'data-measurement', current.id )
-                    .attr( 'title', category.title + ' - ' + current.title )
-                    .text( current.title );
-
-                $measurement.click( function( e ) {
-                    //console.log(index);
-                    selectMeasurement( category, current.id, index );
+            $filterButton
+                .attr( 'id', 'button-filter-' + cssName(metaCategoryName) )
+                .attr( 'data-filter', cssName(metaCategoryName) )
+                .click( function( e ) {
+                    $tiles.isotope({
+                        filter: '.layer-category-' + cssName(metaCategoryName)
+                    });
                 });
 
-                var $measurementItem = $( '<li></li>' )
-                    .addClass( 'layer-category-item' );
+            $label.attr('for', 'button-filter-' + cssName(metaCategoryName) );
 
-                $measurementItem.append( $measurement );
-
-                $measurements.append( $measurementItem );
-            });
-
-            $category.append( $measurements );
-            $categoriesGrid.append( $category );
-            
+            $nav.append( $filterButton );
+            $nav.append( $label );
+            //Create radiobuttons with filter buttons
+            $nav.buttonset();
         });
-
+        
         var $tiles = $( '#layer-categories' ).isotope( {
             itemSelector: '.layer-category',
             //stamp: '.stamp',
@@ -328,35 +379,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         });
 
         _.each(config.categories, function( topCategory, name ) {
-            //console.log(topCategory, name);
-            
-            var $filterButton = $( '<input />' )
-                .attr( 'type', 'radio')
-                .text( name );
-
-            var $label = $( '<label></label>' )
-                .text(name);
-
-            if(name === 'hazards and disasters'){
-                name = 'legacy';
-            }
-
-            $filterButton
-                .attr( 'id', 'button-filter-' + name )
-                .attr( 'data-filter', name )
-                .click( function( e ) {
-                    $tiles.isotope({
-                        filter: '.layer-category-' + name
-                    });
-                });
-
-            $label.attr('for', 'button-filter-' + name );
-
-            $('#layer-modal nav').append( $filterButton );
-
-            $('#layer-modal nav').append( $label );
-
-            $('#layer-modal nav').buttonset();            
+     
         });
     };
     var addLayer = function(event) {
@@ -376,12 +399,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     var onLayerRemoved = function(layer) {
         var $element = $( self.selector + " [data-layer='" +
                 wv.util.jqueryEscape(layer.id) + "']");
-    };
-
-    var drawCategary = function(category){
-        $selectedCategory.empty().show();
-        $categoryGrid.hide();
-        
     };
 
     var render = function(){
@@ -421,15 +438,12 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         
         $( '#layer-modal-main' ).css( 'height', modalHeight - 40 );
 
-        var $header = $( self.selector + " header" );
-
         var $search = $( "<div></div>" )
             .attr( "id", "layer-search" );
 
         var $searchInput = $( "<input></input>" )
             .attr( "id", "layers-search-input" )
-            .hide()
-            ;
+            .hide();
 
         var $searchBtn = $("<label></label>")
             .addClass( "search-icon" )
@@ -455,17 +469,11 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 //console.log(e);
             } )
             .append( "<i></i>" );
-
-        //$searchInput
         
         $search.append( $searchBtn )
             .append( $searchInput );
 
-        $header.append( $search );
-
-        var $nav = $('<nav></nav>');
-
-        $header.append( $nav );
+        $header.prepend( $search );
 
         drawPage();
     };
