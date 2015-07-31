@@ -21,7 +21,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
     var $label;
 
     var init = function() {
-        $button = $("<input></input>")
+        $button = $("<input />")
             .attr("type", "checkbox")
             .attr("id", "wv-link-button-check");
         $label = $("<label></label>")
@@ -72,10 +72,8 @@ wv.link.ui = wv.link.ui || function(models, config) {
         // If selected during the animation, the cursor will go to the
         // end of the input box
         var updateLink  = function() {
-            $('#permalink_content').val(models.link.get());
+            $('#permalink_content').val(models.link.get()).focus().select();
             $("#wv-link-shorten-check").iCheck("uncheck");
-            $('#permalink_content').focus();
-            $('#permalink_content').select();
         };
 
         models.link.events.on("update", updateLink);
@@ -124,9 +122,8 @@ wv.link.ui = wv.link.ui || function(models, config) {
             } else {
                 $('#permalink_content').val(models.link.get());
             }
-            $('#permalink_content').focus();
-            $('#permalink_content').select();
-        });
+            $('#permalink_content').focus().select();
+        }).prop("checked", false);
 
         var error = function() {
             console.warn("Unable to shorten URL");
@@ -134,9 +131,6 @@ wv.link.ui = wv.link.ui || function(models, config) {
             wv.ui.notify("Unable to shorten the permalink at this time. " +
                     "Please try again later.");
         };
-
-        $("#wv-link-shorten-check").prop("checked", false);
-
     };
 
     init();

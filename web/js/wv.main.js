@@ -65,7 +65,7 @@ $(function() {
 
         wv.layers.validate(errors, config);
 
-        parsers = [
+        var parsers = [
             wv.proj.parse,
             wv.layers.parse,
             wv.date.parse,
@@ -79,7 +79,7 @@ $(function() {
         _.each(parsers, function(parser) {
             parser(state, errors, config);
         });
-        requirements = [
+        var requirements = [
             wv.palettes.requirements(state, config)
         ];
 

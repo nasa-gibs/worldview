@@ -27,7 +27,7 @@ wv.data.handler.getByName = function(name) {
         "MODISGrid":            wv.data.handler.modisGrid,
         "MODISMix":             wv.data.handler.modisMix,
         "MODISSwath":           wv.data.handler.modisSwath,
-        "TerraSwathMultiDay":   wv.data.handler.terraSwathMultiDay,
+        "TerraSwathMultiDay":   wv.data.handler.terraSwathMultiDay
     };
     var handler = map[name];
     if ( !handler ) {

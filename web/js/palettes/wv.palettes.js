@@ -109,13 +109,12 @@ wv.palettes = (function(self) {
                 parseInt(sourceColor.substring(4, 6), 16) + "," +
                 "255";
             var targetColor = targetPalette.colors[index];
-            var target = {
+            lookup[source] = {
                 r: parseInt(targetColor.substring(0, 2), 16),
                 g: parseInt(targetColor.substring(2, 4), 16),
                 b: parseInt(targetColor.substring(4, 6), 16),
                 a: 255
             };
-            lookup[source] = target;
         });
         return lookup;
     };

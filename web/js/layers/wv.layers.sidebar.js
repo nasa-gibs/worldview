@@ -43,7 +43,6 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
 
     var collapsed = false;
     var collapseRequested = false;
-    var portrait = false;
     var mobile = false;
     var self = {};
 
@@ -82,17 +81,18 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
             return;
         }
         collapsed = true;
-        $('.accordionToggler')
+        var accordion = $('.accordionToggler');
+
+        accordion
             .removeClass('atcollapse')
             .addClass('dateHolder')
             .removeClass('arrow')
             .addClass('staticLayers');
-        $('.accordionToggler').attr("title","Show Layer Selector");
-        $('.accordionToggler').html("Layers (" + models.layers.get().length + ")");
-        var w = $('#app').outerWidth();
+            attr("title","Show Layer Selector");
+            html("Layers (" + models.layers.get().length + ")");
         var speed = ( now ) ? undefined : "fast";
         $('.products').hide(speed);
-        $("#" + self.id).after($('.accordionToggler'));
+        $("#" + self.id).after(accordion);
 
         if ( wv.util.browser.localStorage ) {
             localStorage.setItem("sidebarState", "collapsed");
@@ -108,18 +108,20 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
             return;
         }
         collapsed = false;
-        $('.accordionToggler')
+        var accordion = $('.accordionToggler');
+
+        accordion
             .removeClass('atexpand')
             .addClass('atcollapse')
             .removeClass('staticLayers dateHolder')
-            .addClass('arrow');
-        $('.accordionToggler').attr("title","Hide Layer Selector");
-        $('.accordionToggler').empty();
+            .addClass('arrow')
+            .attr("title","Hide Layer Selector")
+            .empty();
         var speed = ( now ) ? undefined : "fast";
         $('.products').show(speed, function() {
             models.wv.events.trigger("sidebar-expand");
         });
-        $('.accordionToggler').appendTo("#"+self.id+"toggleButtonHolder");
+        accordion.appendTo("#"+self.id+"toggleButtonHolder");
 
         if ( wv.util.browser.localStorage ) {
             localStorage.setItem("sidebarState", "expanded");

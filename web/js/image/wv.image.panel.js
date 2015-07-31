@@ -35,7 +35,7 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
          host = "http://map2.vis.earthdata.nasa.gov";
          path = "imagegen/index.php";
      }
-     url = host + "/" + path + "?";
+    var url = host + "/" + path + "?";
 
     if ( config.parameters.imagegen ) {
         wv.util.warn("Redirecting image download to: " + url);
@@ -126,27 +126,25 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
         $("#wv-image-format").change(function() {
             format = $("#wv-image-format option:checked").val();
             update(coords);
-        });
+        }).find("option").removeAttr("selected");
 
 
         $("#wv-image-worldfile").change(function(){
             worldfile=$("#wv-image-worldfile option:checked").val();
             update(coords);
-        });
+        }).find("option").removeAttr("selected");
 
-        $("#wv-image-resolution option").removeAttr("selected");
+        $("#wv-image-resolution").find("option").removeAttr("selected");
         $("#wv-image-resolution option[value='" + resolution + "']").attr("selected", "selected");
 
-        $("#wv-image-format option").removeAttr("selected");
         $("#wv-image-format option[value='" + format + "']").attr("selected", "selected");
 
-        $("#wv-image-worldfile option").removeAttr("selected");
         $("#wv-image-worldfile option[value='" + worldfile + "']").attr("selected", "selected");
 
         wv.ui.positionDialog($dialog, {
             my: "left top",
             at: "left bottom+5",
-            of: ("#wv-image-button"),
+            of: ("#wv-image-button")
         });
         $dialog.dialog("open");
 
@@ -250,16 +248,16 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
             dlURL +="&opacities="+opacities.join(",");
 
             var imgWidth=0; var imgHeight=0;
-            var imageRes, imgFileSize, imgFormat, imgWorldfile;
+            var imgFormat, imgWorldfile;
 
             $("#wv-image-resolution").unbind("change").change(function () {
-                imgRes =  $("#wv-image-resolution option:checked").val();
+                var imgRes =  $("#wv-image-resolution").find("option:checked").val();
                 resolution = imgRes;
                 imgWidth =  Math.round((Math.abs(lonlat2[0] - lonlat1[0]) / conversionFactor) / Number(imgRes));
                 imgHeight = Math.round((Math.abs(lonlat2[1] - lonlat1[1]) / conversionFactor) / Number(imgRes));
-                imgFilesize =  ((   imgWidth * imgHeight * 24) / 8388608).toFixed(2);
-                imgFormat = $("#wv-image-format option:checked").val();
-                imgWorldfile = $("#wv-image-worldfile option:checked").val();
+                var imgFilesize =  ((   imgWidth * imgHeight * 24) / 8388608).toFixed(2);
+                imgFormat = $("#wv-image-format").find("option:checked").val();
+                imgWorldfile = $("#wv-image-worldfile").find("option:checked").val();
                 var invalid = (imgFilesize>250 || imgHeight === 0 || imgWidth === 0);
                 var icon;
                 if ( invalid ) {

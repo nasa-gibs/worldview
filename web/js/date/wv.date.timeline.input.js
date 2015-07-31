@@ -417,7 +417,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                         $(this).dialog("close"); //avoid error by closing dialog here
                         if(gifshot.isExistingImagesGIFSupported()) {
                             var from, to, jStart, jDate;
-                            //Parse the fromDate and toDates to Juilan time
+                            //Parse the fromDate and toDates to Julian time
                             jStart = wv.util.parseDateUTC(self.fromDate.getUTCFullYear() + "-01-01");
                             jDate = "00" + (1 + Math.ceil((self.fromDate.getTime() - jStart) / 86400000));
                             from = self.fromDate.getUTCFullYear() + (jDate).substr((jDate.length) - 3);

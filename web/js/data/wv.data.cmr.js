@@ -90,7 +90,7 @@ wv.data.cmr.geometry = function(result) {
     };
 
     self.toOpenLayers = function() {
-        olPolygons = [];
+        var olPolygons = [];
         $.each(self.polygons, function(index, polygon) {
             var olRings = [];
             $.each(polygon, function(index, ring) {

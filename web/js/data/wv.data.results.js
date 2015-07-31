@@ -76,8 +76,7 @@ wv.data.results.chain = function() {
             }
         });
 
-        newGranules = [];
-        filteredGranules = {};
+        var newGranules = [], filteredGranules = {};
         $.each(results.granules, function(index, granule) {
             if ( !granule.filtered ) {
                 newGranules.push(granule);
@@ -585,7 +584,7 @@ wv.data.results.tagProduct = function(product) {
 
 };
 
-// FIXME: Code copy and pasted from TagNRT, maybe consoldate this?
+// FIXME: Code copy and pasted from TagNRT, maybe consolidate this?
 wv.data.results.tagURS = function(spec) {
 
     var self = {};
@@ -652,6 +651,7 @@ wv.data.results.timeFilter = function(spec) {
     var westZone = null;
     var eastZone = null;
     var maxDistance = null;
+    var timeOffset = null;
 
     var self = {};
 

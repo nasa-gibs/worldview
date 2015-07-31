@@ -31,7 +31,7 @@ SOTE.widget.Events = function(containerId, config) {
 	this.title = config.title;
 	this.models = config.models;
 	this.maps = config.maps;
-	this.meta = new Object;
+	this.meta = {};
 	this.buildMetaDone = false;
 	this.initRenderComplete = false;
 	this.statusStr = "";
@@ -54,7 +54,7 @@ SOTE.widget.Events = function(containerId, config) {
 SOTE.widget.Events.prototype.buildMeta = function() {
 	this.buildMetaDone = false;
 	var metaData;
-	self = this;
+	var self = this;
 
     var endpoint = "var/events_data.json";
     if ( this.config.parameters.mockEvents ) {
@@ -182,7 +182,7 @@ SOTE.widget.Events.prototype.render = function() {
 		                           "<td colspan='2' style='padding-left:5px'></br><p>" + this.meta[i].description +"</p></td>"+
 		                       "</tr>"+
 		                       "<tr>" +
-		                           "<td colspan='2' style='padding-left:5px; text-align'center'></br><a href=\"" + this.meta[i].link + "\" target=\"_blank\">See Full Story on Earth Observatory</a></td>"+
+		                           "<td colspan='2' style='padding-left:5px; text-align='center'></br><a href=\"" + this.meta[i].link + "\" target=\"_blank\">See Full Story on Earth Observatory</a></td>"+
 		                       "</tr>"+
 		                   "</table>";
 
@@ -286,17 +286,12 @@ SOTE.widget.Events.toggle = function(e,ui){
 SOTE.widget.Events.prototype.toggle = function(numNew) {
 	console.log("prototype toggle - starting " + this.isCollapsed);
 	if(this.isCollapsed){
-		$('.evaccordionToggler').removeClass('evexpand').addClass('evcollapse');
-		$('.evaccordionToggler').attr("title","Hide Events");
-		$('.evaccordionToggler').html("");
+		$('.evaccordionToggler').removeClass('evexpand').addClass('evcollapse').attr("title","Hide Events").html("").appendTo("#eventsHolder");
 		$('#eventsHolder').animate({right:'0'}, 300);
 		this.isCollapsed = false;
-		$('.evaccordionToggler').appendTo("#eventsHolder");
 	}
 	else{
-		$('.evaccordionToggler').removeClass('evcollapse').addClass('evexpand');
-		$('.evaccordionToggler').attr("title","Show Events");
-		$('.evaccordionToggler').html("New("+ numNew +")");
+		$('.evaccordionToggler').removeClass('evcollapse').addClass('evexpand').attr("title","Show Events").html("New("+ numNew +")");
 		$('#eventsHolder').animate({right:'-210px'}, 300);
 		this.isCollapsed = true;
 		$("#eventsHolder").after($('.evaccordionToggler'));
@@ -330,7 +325,7 @@ SOTE.widget.Events.toggleDescription = function(e) {
     	this.innerHTML = this.detailHTML;
 
     	// get event index
-    	var all = $('#eventList li');
+    	var all = $('#eventList').find("li");
     	var ind = all.index(this);
 
     	// if event was new, make it not new anymore

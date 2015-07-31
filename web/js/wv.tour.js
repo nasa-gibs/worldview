@@ -60,7 +60,7 @@ wv.tour = wv.tour || function(models, ui, config) {
             return;
         }
 
-        $content = $("#wv-tour-content");
+        var $content = $("#wv-tour-content");
         if ( $content.children().length === 0 ) {
             $content.load("pages/tour.html", function() { onLoad(introduction); });
         } else {
@@ -103,7 +103,7 @@ wv.tour = wv.tour || function(models, ui, config) {
 
         var endTour = function() {
             wv.ui.close();
-            $dialog = $("#wv-tour-end");
+            var $dialog = $("#wv-tour-end");
             $dialog
                 .dialog({
                     title: "Finished!",

@@ -52,7 +52,7 @@ wv.date.model = wv.date.model || function(config, spec) {
             date = wv.util.today();
         }
         if ( config.startDate ) {
-            startDate = wv.util.parseDateUTC(config.startDate);
+            var startDate = wv.util.parseDateUTC(config.startDate);
             if ( date < startDate ) {
                 date = startDate;
             }
@@ -65,7 +65,7 @@ wv.date.model = wv.date.model || function(config, spec) {
             return false;
         }
         if ( config.startDate ) {
-            startDate = wv.util.parseDateUTC(config.startDate);
+            var startDate = wv.util.parseDateUTC(config.startDate);
             if ( date < startDate ) {
                 return false;
             }

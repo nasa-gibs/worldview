@@ -111,7 +111,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
                 range: {
                     min: 0,
                     max: 1
-                },
+                }
             }).on("slide", function() {
                 models.layers.setOpacity(layer.id, parseFloat($(this).val()));
             });
@@ -147,7 +147,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
 
         var $squash = $("<div></div>")
             .addClass("wv-palette-squash");
-        var $squashButton = $("<input></input>")
+        var $squashButton = $("<input />")
             .attr("type", "checkbox")
             .attr("id", "wv-squash-button-check");
         var $squashLabel = $("<label></label>")
@@ -201,7 +201,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         var imin = ( _.isUndefined(min) ) ? 0 : min;
         var imax = ( _.isUndefined(max) ) ? count - 1: max;
 
-        current = [parseFloat($range.val()[0]), parseFloat($range.val()[1])];
+        var current = [parseFloat($range.val()[0]), parseFloat($range.val()[1])];
         if ( !_.isEqual(current, [imin, imax]) ) {
             $range.val([imin, imax]);
         }
@@ -271,7 +271,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
                     .iCheck("check");
         }
 
-        $("#wv-palette-selector input").on("ifChecked", function() {
+        $("#wv-palette-selector").find("input").on("ifChecked", function() {
             var that = this;
             setTimeout(function() {
                 var id = $(that).attr("data-palette");
@@ -300,7 +300,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
 
         var $row = $("<div></div>")
                 .addClass("wv-palette-selector-row");
-        var $radio = $("<input></input>")
+        var $radio = $("<input />")
                 .attr("type", "radio")
                 .attr("id", "wv-palette-radio-" + id)
                 .attr("name", "wv-palette-radio")
@@ -308,7 +308,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
 
         var $label = $("<label></label>")
                 .attr("for", "wv-palette-radio-" + id);
-        var $image = $("<img></img>")
+        var $image = $("<img />")
                 .attr("src", canvas.toDataURL("image/png"));
         var $description = $("<span></span>")
                 .addClass("wv-palette-label")
@@ -325,7 +325,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
     var selectorItemSingle = function(palette, id, description) {
         var $row = $("<div></div>")
             .addClass("wv-palette-selector-row");
-        var $radio = $("<input></input>")
+        var $radio = $("<input />")
             .attr("type", "radio")
             .attr("id", "wv-palette-radio-" + id)
             .attr("name", "wv-palette-radio")

@@ -150,7 +150,7 @@ wv.util = (function(self) {
      *
      * @method parseDateUTC
      * @static
-     * @param str {string} Date to parse in the form of ``YYYY-MM-DD``.
+     * @param dateAsString {string} Date to parse in the form of ``YYYY-MM-DD``.
      * @return {Date} converted string as a date object, throws an exception if
      * the string is invalid
      */
@@ -451,7 +451,7 @@ wv.util = (function(self) {
     };
 
     /**
-     * Submits an AJAX request or retreives the result from the cache.
+     * Submits an AJAX request or retrieves the result from the cache.
      *
      * @class wv.util.ajaxCache
      * @constructor
@@ -475,7 +475,7 @@ wv.util = (function(self) {
              * @param {Object} parameters Parameters to pass to the jQuery.ajax
              * call.
              * @return {jQuery.Deferred} a deferred object that will resolve
-             * when the query returns, or resolves immedately if the results
+             * when the query returns, or resolves immediately if the results
              * are cached.
              */
             submit: function(parameters) {

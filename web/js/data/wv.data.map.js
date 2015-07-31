@@ -130,7 +130,7 @@ wv.data.map = wv.data.map || function(model, maps, config) {
     };
 
     var createSwathLayer = function() {
-        swathLayer = new ol.layer.Vector({
+        map.addLayer(new ol.layer.Vector({
             source: new ol.source.Vector(),
             style: new ol.style.Style({
                 stroke: new ol.style.Stroke({
@@ -138,12 +138,11 @@ wv.data.map = wv.data.map || function(model, maps, config) {
                     width: 2
                 })
             })
-        });
-        map.addLayer(swathLayer);
+        }));
     };
 
     var createGridLayer = function() {
-        gridLayer = new ol.layer.Vector({
+        map.addLayer(new ol.layer.Vector({
             source: new ol.source.Vector(),
             style: new ol.style.Style({
                 stroke: new ol.style.Stroke({
@@ -151,8 +150,7 @@ wv.data.map = wv.data.map || function(model, maps, config) {
                     width: 1.5
                 })
             })
-        });
-        map.addLayer(gridLayer);
+        }));
     };
 
     var create = function() {
@@ -342,7 +340,7 @@ wv.data.map = wv.data.map || function(model, maps, config) {
     };
 
     var hoverOver = function(feature) {
-        granule = feature.granule;
+        var granule = feature.granule;
         if ( !granule.geometry ) {
             return;
         }

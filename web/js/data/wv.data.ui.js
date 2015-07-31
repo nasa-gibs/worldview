@@ -110,7 +110,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
                 .attr("id", key + "dynamictext")
                 .addClass("dynamic")
                 .html("0 selected");
-            $productSelector = $("<input type='radio'></input>")
+            $productSelector = $("<input type='radio' />")
                 .attr("value", key)
                 .attr("data-product", key);
 
@@ -306,7 +306,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
     };
 
     var updateSelection = function() {
-        $button = $("#wv-data-download-button");
+        var $button = $("#wv-data-download-button");
         var selected = _.size(model.selectedGranules);
         if ( selected > 0 ) {
             $button.button("enable");
@@ -556,8 +556,9 @@ wv.data.ui.downloadListPanel = function(config, model) {
     };
 
     self.refresh = function() {
+        var $data_select = $("#wv-data-selection");
         selection = reformatSelection();
-        $("#wv-data-selection").html(bodyText(selection));
+        $data_select.html(bodyText(selection));
         var bulkVisible = isBulkDownloadable() &&
                 _.size(model.selectedGranules) !== 0;
         if ( bulkVisible ) {
@@ -566,8 +567,8 @@ wv.data.ui.downloadListPanel = function(config, model) {
             $("wv-data-bulk-download-links").hide();
         }
         $("#wv-data-selection .remove").click(removeGranule);
-        $("#wv-data-selection tr").on("mouseenter", onHoverOver);
-        $("#wv-data-selection tr").on("mouseleave", onHoverOut);
+        $data_select.find("tr").on("mouseenter", onHoverOver);
+        $data_select.find("tr").on("mouseleave", onHoverOut);
     };
 
     self.hide = function() {
@@ -592,7 +593,7 @@ wv.data.ui.downloadListPanel = function(config, model) {
     };
 
     var reformatSelection = function() {
-        var selection = {};
+        var selection = {}, productConfig;
 
         urs = false;
         $.each(model.selectedGranules, function(key, granule) {
@@ -605,7 +606,7 @@ wv.data.ui.downloadListPanel = function(config, model) {
                     name: productConfig.name,
                     granules: [granule],
                     counts: {},
-                    noBulkDownload: productConfig.noBulkDownload || false,
+                    noBulkDownload: productConfig.noBulkDownload || false
                 };
             } else {
                 selection[granule.product].granules.push(granule);
@@ -770,13 +771,11 @@ wv.data.ui.downloadListPanel = function(config, model) {
             products.push(productText(product));
         });
         elements.push(products.join("<br/><br/><br/>"));
-        var text = elements.join("");
-        return text;
+        return elements.join("");
     };
 
     var bulkDownloadText = function() {
-        var bulk =
-            "<div class='bulk collapse'>" +
+        return ("<div class='bulk collapse'>" +
             "<h5>Bulk Download</h5>" +
             "<ul class='BulkDownload'>" +
             "<li><a class='wget' href='#'>List of Links</a>: " +
@@ -786,8 +785,7 @@ wv.data.ui.downloadListPanel = function(config, model) {
                 "can be copied and pasted to " +
                 "a terminal window to download using cURL.</li>" +
             "</ul>" +
-            "</div>";
-        return bulk;
+            "</div>");
     };
 
     var showWgetPage = function() {
@@ -844,7 +842,7 @@ wv.data.ui.selectionListPanel = function(model, results) {
         $.each(results.granules, function(index, granule) {
             granules[granule.id] = granule;
         });
-        $("#wv-data-list input").on("click", toggleSelection);
+        $("#wv-data-list").find("input").on("click", toggleSelection);
     };
 
     self.hide = function() {
@@ -873,7 +871,7 @@ wv.data.ui.selectionListPanel = function(model, results) {
     var dispose = function() {
         panel.destroy();
         panel = null;
-        $("#wv-data-selection_GranuleList input").off("click", toggleSelection);
+        $("#wv-data-selection_GranuleList").find("input").off("click", toggleSelection);
     };
 
     var resultsText = function() {
@@ -890,8 +888,7 @@ wv.data.ui.selectionListPanel = function(model, results) {
                 "</tr>"
             );
         });
-        var text = elements.join("\n");
-        return text;
+        return elements.join("\n");
     };
 
     var bodyText = function() {
@@ -902,8 +899,7 @@ wv.data.ui.selectionListPanel = function(model, results) {
             "</table>",
             "</div>"
         ];
-        var text = elements.join("\n") + "<br/>";
-        return text;
+        return elements.join("\n") + "<br/>";
     };
 
     var toggleSelection = function(event, ui) {
@@ -917,8 +913,7 @@ wv.data.ui.selectionListPanel = function(model, results) {
     };
 
     var onGranuleUnselect = function(granule) {
-        $("#wv-data-list input[value='" + granule.id + "']")
-                .removeAttr("checked");
+        $("#wv-data-list").find("input[value='" + granule.id + "']").removeAttr("checked");
     };
 
 

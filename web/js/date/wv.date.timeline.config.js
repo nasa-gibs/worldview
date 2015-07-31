@@ -1,5 +1,5 @@
 /**
- * Modify zoom levels here. Maybe this isnt the best way to do this.
+ * Modify zoom levels here. Maybe this isn't the best way to do this.
  * It could be called just level without the zoom part instead.
  *
  * When the zoom level is changed, this re renders everything of the timeline.

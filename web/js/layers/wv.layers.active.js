@@ -4,7 +4,7 @@
  * This code was originally developed at NASA/Goddard Space Flight Center for
  * the Earth Science Data and Information System (ESDIS) project.
  *
- * Copyright (C) 2013 - 2014 United States Government as represe`nted by the
+ * Copyright (C) 2013 - 2014 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
@@ -59,6 +59,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     var render = function() {
         legends = {};
         var $container = $(self.selector);
+        var $cat_selector = $("." + self.id + "category");
         $container.empty();
 
         var tabs_height = $(".ui-tabs-nav").outerHeight(true);
@@ -71,21 +72,21 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             renderGroup($container, group);
         });
 
-        $(self.selector).undelegate(".close" ,'click');
-        $(self.selector).undelegate(".hideReg" ,'click');
+        $(self.selector).off('click', ".close");
+        $(self.selector).off('click', ".hideReg");
 
-        $(self.selector).delegate(".close" ,'click', removeLayer);
-        $(self.selector).delegate(".hideReg" ,'click', toggleVisibility);
+        $(self.selector).on('click', ".close", removeLayer);
+        $(self.selector).on('click', ".hideReg", toggleVisibility);
 
-        $("." + self.id + "category").sortable({
+        $cat_selector.sortable({
             items: "li:not(.head)",
             axis: "y",
             containment: "parent",
             tolerance: "pointer"
         });
 
-        $("." + self.id + "category li").disableSelection();
-        $("." + self.id + "category").bind('sortstop', moveLayer);
+        $cat_selector.find("li").disableSelection();
+        $cat_selector.bind('sortstop', moveLayer);
 
         _.each(model.get({ group: "overlays" }), function(layer) {
             if ( layer.palette ) {

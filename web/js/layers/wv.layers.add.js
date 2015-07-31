@@ -167,7 +167,7 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
             .addClass("subtitle")
             .html(names.subtitle);
 
-        var $checkbox = $("<input></input>")
+        var $checkbox = $("<input />")
             .attr("id", encodeURIComponent(layer.id))
             .attr("value", layer.id)
             .attr("type", "checkbox")
@@ -313,7 +313,7 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
         if ( !config.aoi ) {
             return;
         }
-        $select = $("#" + self.id + "select");
+        var $select = $("#" + self.id + "select");
         var previous = $(self.selector + "select").val();
 
         $select.empty();
@@ -348,8 +348,7 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
 
     var searchTerms = function() {
         var search = $(self.selector + "search").val().toLowerCase();
-        var terms = search.split(/ +/);
-        return terms;
+        return search.split(/ +/);
     };
 
     var filterAreaOfInterest = function(layerId) {

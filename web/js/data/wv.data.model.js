@@ -99,10 +99,10 @@ wv.data.model = wv.data.model || function(models, config) {
 
     var init = function() {
         models.layers.events.on("change", updateLayers);
-        models.proj.events.on("select", updateProjection);
+        models.proj.events.on("select", self.updateProjection);
         models.date.events.on("select", updateDate);
         updateLayers();
-        updateProjection();
+        self.updateProjection();
         updateDate();
     };
 
@@ -272,7 +272,7 @@ wv.data.model = wv.data.model || function(models, config) {
     };
 
     self.getSelectionCounts = function() {
-        counts = {};
+        var counts = {};
         $.each(self.layers, function(index, layer) {
             if ( layer.product ) {
                 counts[layer.product] = 0;
@@ -427,14 +427,13 @@ wv.data.model = wv.data.model || function(models, config) {
         self.crs = models.proj.selected.crs;
     };
 
-    var updateProjection = function() {
+    // FIXME: This is a hack
+    self.updateProjection = function() {
         updateProjectionInfo();
         self.events.trigger("projectionUpdate");
         updateLayers();
         query();
     };
-    // FIXME: This is a hack
-    self.updateProjection = updateProjection;
 
     var updateDate = function() {
         self.time = models.date.selected;

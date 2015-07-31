@@ -39,7 +39,7 @@ wv.proj.ui = wv.proj.ui || function(models, config) {
     };
 
     var render = function() {
-        $button = $("<input></input>")
+        $button = $("<input />")
             .attr("type", "checkbox")
             .attr("id", "wv-proj-button-check");
         $label = $("<label></label>")
@@ -93,7 +93,7 @@ wv.proj.ui = wv.proj.ui || function(models, config) {
         });
         $menuItems.hide();
         $menuItems.show("slide", { direction: "up" });
-        $("#wv-proj-menu li").removeClass("wv-menu-item-selected");
+        $("#wv-proj-menu").find("li").removeClass("wv-menu-item-selected");
         $("#wv-proj-menu li[data-proj='" + models.proj.selected.id + "']")
             .addClass("wv-menu-item-selected");
 
@@ -103,7 +103,7 @@ wv.proj.ui = wv.proj.ui || function(models, config) {
             }
             $menuItems.hide();
             $("#wv-proj-button-check").prop("checked", false);
-            $("#wv-proj-button label").removeClass("ui-state-hover");
+            $("#wv-proj-button").find("label").removeClass("ui-state-hover");
             $button.button("refresh");
             $("body").off("click", clickOut).off("touchstart", clickOut);
         };

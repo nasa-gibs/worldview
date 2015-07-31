@@ -22,7 +22,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
         "snapshot. Would you like to temporarily revert to the original " +
         "layer(s)?";
 
-    var GRATICLE_WARNING =
+    var GRATICULE_WARNING =
         "The graticule layer cannot be used to take a snapshot. Would you " +
         "like to hide this layer?";
 
@@ -51,7 +51,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
         if (container===null){
             throw new Error("Error: element '"+containerId+"' not found!");
         }
-        $button = $("<input></input>")
+        $button = $("<input />")
             .attr("type", "checkbox")
             .attr("id", "wv-image-button-check")
             .val("");
@@ -72,9 +72,9 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
     };
 
     var toolbarButtons = function(action) {
-        $("#wv-info-button input").button(action);
-        $("#wv-proj-button input").button(action);
-        $("#wv-link-button input").button(action);
+        $("#wv-info-button").find("input").button(action);
+        $("#wv-proj-button").find("input").button(action);
+        $("#wv-link-button").find("input").button(action);
     };
 
     var toggle = function(){
@@ -113,7 +113,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
             if ( _.find(layers, {id: "Graticule"}) && geographic ) {
                 wv.ui.ask({
                     header: "Notice",
-                    message: GRATICLE_WARNING,
+                    message: GRATICULE_WARNING,
                     onOk: disableGraticle,
                     onCancel: function() {
                         $button.prop("checked", false).button("refresh");
@@ -174,7 +174,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
     /**
       * Sets the values for the rubberband (x1, y1, x2, y2, width, height) from the passed "coordinates" object of JCrop  *
       * @this {RBand}
-      * @param {String} coordinates object of JCrop
+      * @param {String} c object of JCrop
       *
     */
     var setCoords = function(c) {
