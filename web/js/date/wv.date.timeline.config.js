@@ -145,7 +145,7 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
             };
 
             //Displayed default sub-label (if any)
-            tl.zoom.current.ticks.boundary.subLabel = function(d){
+            tl.zoom.current.ticks.boundary.subLabel = function(){
                 return null;
             };
 
@@ -298,7 +298,7 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
             };
 
             //Displayed default sub-label (if any)
-            tl.zoom.current.ticks.boundary.subLabel = function(d){
+            tl.zoom.current.ticks.boundary.subLabel = function(){
                 return null;
             };
 
@@ -538,17 +538,17 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
 
     var init = function(){
 
-        d3.select("#zoom-years").on("click",function(d){
+        d3.select("#zoom-years").on("click",function(){
             $('.zoom-btn').removeClass("zoom-btn-selected");
             $(this).addClass("zoom-btn-selected");
             self.zoom(1);
         });
-        d3.select("#zoom-months").on("click",function(d){
+        d3.select("#zoom-months").on("click",function(){
             $('.zoom-btn').removeClass("zoom-btn-selected");
             $(this).addClass("zoom-btn-selected");
             self.zoom(2);
         });
-        d3.select("#zoom-days").on("click",function(d){
+        d3.select("#zoom-days").on("click",function(){
             $('.zoom-btn').removeClass("zoom-btn-selected");
             $(this).addClass("zoom-btn-selected");
             self.zoom(3);

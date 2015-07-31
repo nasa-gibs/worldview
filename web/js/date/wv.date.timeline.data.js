@@ -24,8 +24,6 @@ wv.date.timeline = wv.date.timeline || {};
 wv.date.timeline.data = wv.date.timeline.data || function(models, config, ui) {
 
     var tl = ui.timeline;
-    var model = models.date;
-
     var self = {};
 
     self.start = function(){
@@ -33,14 +31,10 @@ wv.date.timeline.data = wv.date.timeline.data || function(models, config, ui) {
     };
 
     self.end = function(){
-        return new Date(
-            new Date( wv.util.today() )
-                .setUTCDate( wv.util.today()
-                             .getUTCDate() ) );
+        return new Date(new Date(wv.util.today()).setUTCDate(wv.util.today().getUTCDate()));
     };
 
     self.set = function(){
-
         var activeLayers = models.layers.get();
         var activeLayersDynamic = activeLayers.filter(function(al){
             return al.startDate;
@@ -67,8 +61,7 @@ wv.date.timeline.data = wv.date.timeline.data || function(models, config, ui) {
             .ticks(layerCount);
 
         $(activeLayersDynamic).each(function(al){
-            var layerStart,layerEnd,layerXY;
-            var layerVisible = true;
+            var layerStart,layerEnd;
             var staticLayer = true;
             var layerId = this.id;
 
@@ -76,17 +69,13 @@ wv.date.timeline.data = wv.date.timeline.data || function(models, config, ui) {
                 layerStart = new Date( this.startDate );
                 staticLayer = false;
             }
-            else{
+            else
                 layerStart = self.start();
-            }
-            if( this.inactive === true ) {
+
+            if( this.inactive === true )
                 layerEnd = new Date( this.endDate );
-            }
-            else{
-                layerEnd = new Date(self.end()
-                                    .setUTCDate(self.end()
-                                                .getUTCDate()+1));
-            }
+            else
+                layerEnd = new Date(self.end().setUTCDate(self.end().getUTCDate()+1));
 
             var currentDB = tl.dataBars.append("svg:rect")
                 .attr( 'x', tl.x( layerStart ) )
@@ -98,21 +87,16 @@ wv.date.timeline.data = wv.date.timeline.data || function(models, config, ui) {
                 .attr( 'data-layer', layerId )
                 .attr( "class", "data-bar" );
 //                .attr("d", selection);
-            if( !staticLayer ){
+            if( !staticLayer )
                 currentDB.classed( 'data-bar-dyn', true );
-            }
-            if( this.visible === false ) {
-                layerVisible = false;
+
+            if( this.visible === false )
                 currentDB.classed( 'data-bar-invisible', true );
-            }
-
         });
-        tl.dataBars.selectAll( 'rect' )
-            .attr( 'height', ( tl.height - 22 ) / layerCount );
+        tl.dataBars.selectAll('rect').attr('height', (tl.height - 22) / layerCount);
 
-        if( tl.verticalAxis ) {
+        if( tl.verticalAxis )
             tl.verticalAxis.call( tl.yAxis );
-        }
     };
 
     var init = function(){

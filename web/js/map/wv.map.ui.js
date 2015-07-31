@@ -36,8 +36,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         // NOTE: iOS sometimes bombs if this is _.each instead. In that case,
         // it is possible that config.projections somehow becomes array-like.
         _.forOwn(config.projections, function(proj) {
-            var map = createMap(proj);
-            self.proj[proj.id] = map;
+            self.proj[proj.id] = createMap(proj);
         });
 
         models.proj.events.on("select", function() {
@@ -136,7 +135,6 @@ wv.map.ui = wv.map.ui || function(models, config) {
 
     var reloadLayers = function(map) {
         map = map || self.selected;
-        var proj = models.proj.selected;
         clearLayers(map);
 
         var defs = models.layers.get({reverse: true});
@@ -241,14 +239,12 @@ wv.map.ui = wv.map.ui || function(models, config) {
 
     var findLayer = function(def) {
         var layers = self.selected.getLayers().getArray();
-        var layer = _.find(layers, { wv: { id: def.id } });
-        return layer;
+        return _.find(layers, { wv: { id: def.id } });
     };
 
     var findLayerIndex = function(def) {
         var layers = self.selected.getLayers().getArray();
-        var layer = _.findIndex(layers, { wv: { id: def.id } });
-        return layer;
+        return _.findIndex(layers, { wv: { id: def.id } });
     };
 
     var createLayer = function(def, options) {
@@ -317,10 +313,9 @@ wv.map.ui = wv.map.ui || function(models, config) {
             var lookup = models.palettes.get(def.id).lookup;
             sourceOptions.tileClass = ol.wv.LookupImageTile.factory(lookup);
         }
-        var layer = new ol.layer.Tile({
+        return new ol.layer.Tile({
             source: new ol.source.WMTS(sourceOptions)
         });
-        return layer;
     };
 
     var createLayerWMS = function(def, options) {
@@ -344,7 +339,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
             var date = options.date || models.date.selected;
             extra = "?TIME=" + wv.util.toISOStringDate(date);
         }
-        var layer = new ol.layer.Tile({
+        return new ol.layer.Tile({
             source: new ol.source.TileWMS({
                 url: source.url + extra,
                 params: parameters,
@@ -355,7 +350,6 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 })
             })
         });
-        return layer;
     };
 
     var isGraticule = function(def) {
@@ -400,17 +394,18 @@ wv.map.ui = wv.map.ui || function(models, config) {
     self.updateRotation = function() {
         models.map.rotation = self.selected.getView().getRotation();
         window.history.replaceState("", "@OFFICIAL_NAME@","?" + models.link.toQueryString());
+        var rotation_sel = $(".wv-map-reset-rotation");
 
         //Set reset button content and proper CSS styling to position it correctly
-        $(".wv-map-reset-rotation").button("option", "label", Number((models.map.rotation) * (180.0 / Math.PI)).toFixed() );
+        rotation_sel.button("option", "label", Number((models.map.rotation) * (180.0 / Math.PI)).toFixed() );
         if((models.map.rotation) * (180.0 / Math.PI) >= 100.0)
-            $(".wv-map-reset-rotation").find("span").attr("style","padding-left: 9px");
+            rotation_sel.find("span").attr("style","padding-left: 9px");
         else if((models.map.rotation) * (180.0 / Math.PI) <= -100.0)
-            $(".wv-map-reset-rotation").find("span").attr("style","padding-left: 6px");
+            rotation_sel.find("span").attr("style","padding-left: 6px");
         else if((models.map.rotation) * (180.0 / Math.PI) <= -10.0)
-            $(".wv-map-reset-rotation").find("span").attr("style","padding-left: 10px");
+            rotation_sel.find("span").attr("style","padding-left: 10px");
         else
-            $(".wv-map-reset-rotation").find("span").attr("style","padding-left: 14px");
+            rotation_sel.find("span").attr("style","padding-left: 14px");
     };
 
     var createMap = function(proj) {
