@@ -37,9 +37,9 @@ wv.ui.mouse.click = wv.ui.mouse.click || function($element, callback) {
     };
 
     var withinClickDistance = function(event) {
-        targetX = event.clientX;
-        targetY = event.clientY;
-        distance = Math.sqrt(Math.pow(startX - targetX, 2) +
+        var targetX = event.clientX;
+        var targetY = event.clientY;
+        var distance = Math.sqrt(Math.pow(startX - targetX, 2) +
                 Math.pow(startY - targetY, 2));
         return distance <= self.sensitivity;
     };

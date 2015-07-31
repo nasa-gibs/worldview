@@ -52,7 +52,7 @@ wv.util.browser = wv.util.browser || (function() {
      * value will be null.
      *
      * @attribute version
-     * @type Integer
+     * @type Number
      */
     self.version = null;
 
@@ -161,11 +161,7 @@ wv.util.browser = wv.util.browser || (function() {
             return true;
         }
         // IE 11
-        if ( navigator.appName === "Netscape" &&
-                /Trident/.test(navigator.userAgent) ) {
-            return true;
-        }
-        return false;
+        return navigator.appName === "Netscape" && /Trident/.test(navigator.userAgent);
     };
 
     self.tests.firefox = function() {
@@ -190,15 +186,11 @@ wv.util.browser = wv.util.browser || (function() {
         if ( self.tests.safari() && self.tests.safariVersion() <= 6 ) {
             return false;
         }
-        if ( self.tests.ie() ) {
-            return false;
-        }
-        return true;
+        return !self.tests.ie();
     };
 
     self.tests.webWorkers = function() {
-        if ( !self.tests.window("Worker") ) { return false; }
-        return true;
+        return self.tests.window("Worker");
     };
 
     self.tests.localStorage = function() {
@@ -217,10 +209,7 @@ wv.util.browser = wv.util.browser || (function() {
     };
 
     self.tests.history = function() {
-        if ( window.history && window.history.replaceState ) {
-            return true;
-        }
-        return false;
+        return window.history && window.history.replaceState;
     };
 
     init();
@@ -445,13 +434,11 @@ if (!String.prototype.endsWith) {
 
     // Set the div height
     function setHeight($body) {
-        var nua = navigator.userAgent;
         if (navigator.userAgent.match(/(iPad|iPhone|iPod touch);.*CPU.*OS 6_\d/i)){
             var new_height = $(window).height();
             // if mobileSafari 6 add +60px
             new_height += 60;
-            $('#app').css('min-height', 0 );
-            $('#app').css('height', new_height );
+            $('#app').css('min-height', 0).css('height', new_height);
         }
         else {
             $("#app, .ui-mobile, .ui-mobile .ui-page").css("min-height", 0);

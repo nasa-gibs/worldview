@@ -21,7 +21,7 @@ wv.util.load = wv.util.load || (function() {
     var indicatorId = null;
 
     self.config = function(root, attr, url) {
-        promise = $.Deferred();
+        var promise = $.Deferred();
         // If a request is already outstanding, chain to that one
         if ( configPromises[url]) {
             configPromises[url].done(promise.resolve).fail(promise.reject);
