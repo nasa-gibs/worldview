@@ -172,10 +172,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
         if ( config.parameters.metadata && layer.metadata ) {
             var $metadataButton = $("<i></i>")
-                .addClass("fa")
-                .addClass("fa-info-circle")
-                .addClass("fa-1x")
-                .addClass("wv-layers-metadata-button")
+                .addClass("fa fa-info-circle fa-1x wv-layers-metadata-button")
                 .click(function() {
                     wv.layers.metadata(layer);
                 });

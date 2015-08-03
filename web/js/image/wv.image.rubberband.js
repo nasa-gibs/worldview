@@ -59,9 +59,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
             .attr("for", "wv-image-button-check")
             .attr("title", "Take a snapshot");
         var $icon = $("<i></i>")
-            .addClass("fa")
-            .addClass("fa-camera")
-            .addClass("fa-2x");
+            .addClass("fa fa-camera fa-2x");
         $label.append($icon);
         $(selector).append($label);
         $(selector).append($button);

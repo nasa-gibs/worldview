@@ -116,8 +116,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
                 models.layers.setOpacity(layer.id, parseFloat($(this).val()));
             });
         var $label = $("<div></div>")
-            .addClass("wv-label")
-            .addClass("wv-label-opacity");
+            .addClass("wv-label wv-label-opacity");
         $dialog.append($header);
         $dialog.append($slider);
         $dialog.append($label);
@@ -237,8 +236,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
 
     var renderPaletteSelector = function($dialog) {
         var $header = $("<div></div>")
-            .addClass("wv-header")
-            .addClass("wv-color-palette-label")
+            .addClass("wv-header wv-color-palette-label")
             .html("Color Palette");
         var $pane = $("<div></div>")
             .attr("id", "wv-palette-selector");

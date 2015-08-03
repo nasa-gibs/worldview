@@ -291,9 +291,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
 
         var $speedLabel = $("<div></div>")
             .html('2 frames per second')
-            .addClass("wv-label")
-            .addClass("wv-label-speed")
-            .addClass("wv-label-opacity");
+            .addClass("wv-label wv-label-speed wv-label-opacity");
 
         var $toLabel = $("<label></label>")
             .html(' to ')

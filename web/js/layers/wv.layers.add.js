@@ -120,8 +120,7 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
         var $element = $("<ul></ul>")
             .attr("id", self.id + group)
             .addClass(self.id + "category")
-            .addClass("category")
-            .addClass("scroll-pane");
+            .addClass("category scroll-pane");
 
         _.each(config.layerOrder, function(layerId) {
             var layer = config.layers[layerId];
@@ -145,9 +144,8 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
         var $label = $("<label></label>")
             .attr("data-layer", encodeURIComponent(layer.id));
         var $element = $("<li></li>")
-            .addClass("selectorItem")
-            .attr("data-layer", encodeURIComponent(layer.id))
-            .addClass("item");
+            .addClass("selectorItem item")
+            .attr("data-layer", encodeURIComponent(layer.id));
 
         var names = models.layers.getTitles(layer.id);
         var $name = $("<h4></h4>")

@@ -498,12 +498,9 @@ wv.map.ui = wv.map.ui || function(models, config) {
         var $map = $("#" + map.getTarget());
 
         var $zoomOut = $("<button></button>")
-            .addClass("wv-map-zoom-out")
-            .addClass("wv-map-zoom");
+            .addClass("wv-map-zoom-out wv-map-zoom");
         var $outIcon = $("<i></i>")
-            .addClass("fa")
-            .addClass("fa-minus")
-            .addClass("fa-1x");
+            .addClass("fa fa-minus fa-1x");
         $zoomOut.append($outIcon);
         $map.append($zoomOut);
         $zoomOut.button({
@@ -512,12 +509,9 @@ wv.map.ui = wv.map.ui || function(models, config) {
         $zoomOut.click(zoomAction(map, -1));
 
         var $zoomIn = $("<button></button>")
-            .addClass("wv-map-zoom-in")
-            .addClass("wv-map-zoom");
+            .addClass("wv-map-zoom-in wv-map-zoom");
         var $inIcon = $("<i></i>")
-            .addClass("fa")
-            .addClass("fa-plus")
-            .addClass("fa-1x");
+            .addClass("fa fa-plus fa-1x");
         $zoomIn.append($inIcon);
         $map.append($zoomIn);
         $zoomIn.button({

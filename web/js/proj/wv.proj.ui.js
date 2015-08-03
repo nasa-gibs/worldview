@@ -46,9 +46,7 @@ wv.proj.ui = wv.proj.ui || function(models, config) {
             .attr("for", "wv-proj-button-check")
             .attr("title", "Switch projection");
         var $icon = $("<i></i>")
-            .addClass("fa")
-            .addClass("fa-globe")
-            .addClass("fa-2x");
+            .addClass("fa fa-globe fa-2x");
         $label.append($icon);
         $(selector).append($label);
         $(selector).append($button);

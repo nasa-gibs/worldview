@@ -152,8 +152,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
     var refreshLayers = function($container, key, value, layer) {
         var $item = $("<li></li>")
             .attr("id", self.id + key + encodeURIComponent(layer.value))
-            .addClass("item")
-            .addClass("item-static");
+            .addClass("item item-static");
         $item.append("<h4>" + layer.label + "</h4>");
         $item.append("<p>" + layer.sublabel + "</p>");
         $container.append($item);
@@ -529,9 +528,7 @@ wv.data.ui.downloadListPanel = function(config, model) {
         });
         var $bottomPane = $("<div></div>")
             .attr("id", "wv-data-bulk-download-links")
-            .addClass("ui-dialog-buttonpane")
-            .addClass("ui-widget-content")
-            .addClass("ui-helper-clearfix")
+            .addClass("ui-dialog-buttonpane ui-widget-content ui-helper-clearfix")
             .html(bulkDownloadText());
         $(".ui-dialog").append($bottomPane);
         $(".ui-dialog .ui-dialog-titlebar-close").attr("tabindex", -1);
