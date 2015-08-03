@@ -691,6 +691,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         $mid.button({
             label: Number(models.map.rotation * (180/Math.PI)).toFixed()
         }).mousedown(function() { //reset rotation
+            clearInterval(intervalId); //stop repeating rotation on mobile
             map.beforeRender(ol.animation.rotate({
                 duration: 500,
                 rotation: map.getView().getRotation()
