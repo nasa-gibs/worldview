@@ -224,7 +224,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
         if ( tab === "active" ) {
             $('.ui-tabs-nav')
                   .addClass('firstselected')
-                  .removeClass('secondselected thirdselected')
+                  .removeClass('secondselected thirdselected');
             $('.ui-tabs-nav li.first').addClass("ui-state-active");
             $('.ui-tabs-nav li.second').removeClass("ui-state-active");
             $('.ui-tabs-nav li.third').removeClass("ui-state-active");

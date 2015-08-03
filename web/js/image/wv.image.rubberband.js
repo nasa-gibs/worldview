@@ -306,20 +306,37 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
             }, function (obj) {
                 if (!obj.error) {
                     var animatedImage = document.createElement('img');
-                    animatedImage.src = obj.image;
                     animatedImage.setAttribute("style", "padding: 10px 0px");
+
+                    //Create a blob out of the image's base64 encoding because Chrome can't handle large data URIs, taken from:
+                    //http://stackoverflow.com/questions/16761927/aw-snap-when-data-uri-is-too-large
+                    var byteCharacters = atob(obj.image.substring(22)), byteArrays = []; //remove "data:image/gif;base64,"
+                    for (var offset = 0; offset < byteCharacters.length; offset += 512) {
+                        var slice = byteCharacters.slice(offset, offset + 512);
+
+                        var byteNumbers = new Array(slice.length);
+                        for (var i = 0; i < slice.length; i++)
+                            byteNumbers[i] = slice.charCodeAt(i);
+
+                        var byteArray = new Uint8Array(byteNumbers);
+                        byteArrays.push(byteArray);
+                    }
+
+                    var blob = new Blob(byteArrays, {type: "image/gif"});
+                    var blobURL = URL.createObjectURL(blob); //supported in Chrome and FF
+                    animatedImage.src = blobURL;
 
                     //Create download link and apply button CSS
                     var $download = $("<a><span class=ui-button-text>Download</span></a>")
                         .attr("type", "button")
                         .attr("role", "button")
                         .attr("download", "animation.gif")
-                        .attr("href", obj.image)
+                        .attr("href", blobURL)
                         .attr("class", "ui-button ui-widget ui-state-default ui-button-text-only")
                         .hover(function() {$(this).addClass("ui-state-hover");}, function() {$(this).removeClass("ui-state-hover");});
 
                     var $imgSize = $("<label></label>")
-                        .html("<span>Estimated Size: " + ((obj.image.length) / 1000).toFixed() + " KB</span>");
+                        .html("<span>Estimated Size: " + (blob.size / 1024).toFixed() + " KB</span>");
 
                     //Create a dialog over the view and place the image there
                     var $imgDialog = wv.ui.getDialog().append(animatedImage).append($download).append($imgSize);
