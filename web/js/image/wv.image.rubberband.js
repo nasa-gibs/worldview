@@ -239,7 +239,6 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
         });
 
         return wv.util.format("http://map2.vis.earthdata.nasa.gov/image-download?{1}&extent={2}&epsg={3}&layers={4}&opacities={5}&worldfile=false&format=image/jpeg&width={6}&height={7}", "TIME={1}", lonlat1[0]+","+lonlat1[1]+","+lonlat2[0]+","+lonlat2[1], epsg, layers.join(","), opacities.join(","), imgWidth, imgHeight);
-        //return 'http://map2.vis.earthdata.nasa.gov/image-download?TIME={1}&extent=-2498560,-1380352,983040,2101248&epsg=3413&layers=MODIS_Terra_CorrectedReflectance_TrueColor,Coastlines&opacities=1,1&worldfile=false&format=image/jpeg&width=680&height=680';
     };
 
     //Setup a dialog to enable gif generation and turn on image cropping
@@ -250,8 +249,8 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                                     "<select id='wv-gif-resolution'>" +
                                         "<option value='1' >250m</option>" +
                                         "<option value='2' >500m</option>" +
-                                        "<option value='4' selected='selected'>1km</option>" +
-                                        "<option value='20'>5km</option>" +
+                                        "<option value='4' >1km</option>" +
+                                        "<option value='20' selected='selected'>5km</option>" +
                                         "<option value='40'>10km</option>" +
                                     "</select>Resolution (per pixel)" +
                                 "</div>" +
@@ -336,7 +335,12 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                         .hover(function() {$(this).addClass("ui-state-hover");}, function() {$(this).removeClass("ui-state-hover");});
 
                     var $imgSize = $("<label></label>")
-                        .html("<span>Estimated Size: " + (blob.size / 1024).toFixed() + " KB</span>");
+                        .html("<span> Estimated Size: " + (blob.size / 1024).toFixed() + " KB</span>");
+
+                    //calculate the offset of the dialog position based on image size to display it properly
+                    //only height needs to be adjusted to center the dialog
+                    var pos_width = animCoords.w * 1 / window.innerWidth, pos_height = animCoords.h * 50 / window.innerHeight;
+                    var at_string = "center-" + pos_width.toFixed() + "% center-" + pos_height.toFixed() + "%";
 
                     //Create a dialog over the view and place the image there
                     var $imgDialog = wv.ui.getDialog().append(animatedImage).append($download).append($imgSize);
@@ -347,6 +351,11 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                         close: function() {
                             animCoords = undefined;
                             $imgDialog.find("img").remove();
+                        },
+                        position: { //based on image size
+                            my: "center center",
+                            at: at_string,
+                            of: window
                         }
                     });
                 }
