@@ -48,8 +48,13 @@ input[type=radio] + label { /* implement jquery-ui styling here b/c this is more
     font-weight: bold;
 }
 
-.wv-label-speed {
-    padding-bottom: 5px;
+#wv-label-speed {
+    width: 20em;
+    padding: 5px 5px 10px 5px;
+}
+
+#wv-whitespace {
+    float: right
 }
 
 #timeds, #timemds {

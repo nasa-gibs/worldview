@@ -281,7 +281,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                     max: 30
                 }
             }).on("slide", function() {
-                $speedLabel.html(parseFloat($speedSlider.val()) + ' frames per second');
+                $speedLabel.addClass("wv-label-opacity").html(parseFloat($speedSlider.val()) + ' frames per second');
             });
 
         var $loopCheck = $("<input />")
@@ -289,9 +289,10 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             .attr("type", "checkbox")
             .attr("id", "loopcheck");
 
-        var $speedLabel = $("<div></div>")
-            .html('2 frames per second')
-            .addClass("wv-label wv-label-speed wv-label-opacity");
+        var $speedLabel = $("<ul></ul>") //Show user what is fast/slow first
+            .html("<li>Slow <span id='wv-whitespace'>Fast</span></li>")
+            .attr("id", "wv-label-speed");
+
 
         var $toLabel = $("<label></label>")
             .html(' to ')
