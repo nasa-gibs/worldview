@@ -3,7 +3,7 @@
 *Note*: This feature exclusively uses the Common Metadata Repository and is
 of no use for datasets stored elsewhere.
 
-Each layer in Worldview can be mapped to a data product found in the CMR. In the layer configurtion, use the *product* attribute and provide the identifier that will be used for the downloadable product.
+Each layer in Worldview can be mapped to a data product found in the CMR. In the layer configuration, use the *product* attribute and provide the identifier that will be used for the downloadable product.
 
 Each *product* is defined in the *products* section, keyed by identifier. An
 example follows below:
