@@ -50,6 +50,8 @@ small fraction of the day.
 from yesterday and tomorrow. This handler is only used for MODIS Combined
 Value Added AOD and granules appear to be in six hour chunks. It isn't apparent
 why this handler was necessary.
+* `HalfOrbit`: Handles large granules that are broken up into an ascending
+and descending component.
 * `List`: Displays all granules for the given day listed in a dialog box and
 not displayed on the map.
 * `MODISGrid`: Maps MODIS H and V tiles to the sinusoidal grid.
@@ -135,6 +137,11 @@ Creates a label for this granule based on its acquisition date and time.
 
 Not used at the moment.
 
+##### DividePolygon
+
+For polygons that cross the anti-meridian, normalize and create a mutlipolygon
+with a polygon on each side. Uses code provided by the Earthdata Search Client.
+
 ##### ExtentFilter
 
 Excludes granules that do not intersect the `extent` provided in the
@@ -155,6 +162,27 @@ Creates a index value by combining the MODIS H and V tile numbers.
 ##### MODISGridLabel
 
 Creates a label for this granule based on the MODIS H and V tile numbers.
+
+##### OrbitFilter
+
+Filter by ascending or descending orbit. Configure with `orbit` with the
+following parameters:
+
+* `type`: Always `regex_group`
+* `field`: The field to inspect to determine the orbit
+* `regex`: The regular expression to match against, should have one group.
+* `match`: Keep the granule if it matches this value.
+
+Example:
+
+```json
+"orbit": {
+    "type": "regex_group",
+    "field": "producer_granule_id",
+    "regex": ".*([AD])\\.hdf$",
+    "match": "A"
+}
+```
 
 ##### PreferredFilter
 

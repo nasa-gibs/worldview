@@ -65,6 +65,16 @@ module.exports = function(grunt) {
             }
         },
 
+        coffee: {
+            build: {
+                expand: true,
+                cwd: "web/coffee",
+                src: ["**/*.coffee"],
+                dest: "web/js",
+                ext: ".js"
+            }
+        },
+
         concat: {
             // Combine all the Worldview JavaScript files into one file.
             js: {
@@ -532,6 +542,7 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks("grunt-buster");
     grunt.loadNpmTasks("grunt-contrib-clean");
+    grunt.loadNpmTasks("grunt-contrib-coffee");
     grunt.loadNpmTasks("grunt-contrib-concat");
     grunt.loadNpmTasks("grunt-contrib-compress");
     grunt.loadNpmTasks("grunt-contrib-copy");
@@ -572,6 +583,7 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask("build", [
+        "coffee",
         "remove:build_source",
         "git-rev-parse:source",
         "copy:source",
