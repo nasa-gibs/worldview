@@ -459,10 +459,10 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         });
 
         $(document)
-            /*.mouseout(function() { //FIXME:this is a bug! fires far too often than it should when it should only fire when mouse exits browser
+            .mouseleave(function() {
                 if ( ui.anim.active )
                     animateEnd();
-                })*/
+                })
             .keydown(function(event) {
                 switch ( event.keyCode ) {
                     case wv.util.key.LEFT:
