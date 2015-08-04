@@ -29,7 +29,7 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
     var self = {};
 
     var width = 60;
-    var ANIM_OFFSET = 8, ANIM_DRAG_OFFSET = 5;
+    var ANIM_OFFSET = 8, animDragOffset = 5;
 
     var mousedown = false;
     var nextChange, prevChange;
@@ -88,7 +88,7 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
         }
     };
 
-    //TODO:Snapping
+    //TODO:Snapping, and below day zoom level, picker can't reach today's date (not a offset issue)
     //Listener function when a animation datepicker moves
     var animdrag = function() {
         //Here we have access to information in the d3.event object
@@ -100,6 +100,18 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
         //Check for future date, if so don't move the pickers past timeline
         var today = new Date();
         if(tempPickTipDate.valueOf() < today.valueOf()) {
+            //Get zoom level and set drag offset
+            switch(tl.config.currentZoom) {
+                case 1: //years
+                    animDragOffset = 0;
+                    break;
+                case 2: //months
+                    animDragOffset = 0;
+                    break;
+                default: //3, days
+                    animDragOffset = 5;
+            }
+
             if (d3.select(this).attr("id") === d3.select("#fromPick").attr("id")) { //compare their ids
                 tl.input.fromDate = tempPickTipDate;
                 $("#from").datepicker("setDate", tempPickTipDate);
@@ -108,8 +120,8 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
                 $("#to").datepicker("setDate", tempPickTipDate);
             }
 
-            //update position of selected date picker. ANIM_OFFSET (5) needed to put in right position
-            d3.select(this).attr("transform", "translate(" + (tempPickOffset - ANIM_DRAG_OFFSET) + " 20)");
+            //update position of selected date picker. animDragOffset (5) needed to put in right position
+            d3.select(this).attr("transform", "translate(" + (tempPickOffset - animDragOffset) + " 20)");
             updateChanges(tempPickTipDate);
         }
     };

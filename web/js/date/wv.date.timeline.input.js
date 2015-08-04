@@ -345,10 +345,10 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 at: "left top",
                 of: $("#timeline-header")
             },
-            open: function(event, ui) {
+            open: function(event) {
                 $(".ui-dialog-content").find("img").remove(); //remove generated gif
-                //Show datepickers and set from date range to be two weeks apart
-                $(".animpick").show();
+
+                //Show datepickers and set date range to be two weeks
                 if(self.fromDate === undefined) { //once per session
                     self.fromDate = new Date(model.selected.valueOf());
                     self.fromDate.setUTCDate(self.fromDate.getUTCDate() - 14);
@@ -357,6 +357,10 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                     $toDate.datepicker("setDate", self.toDate);
                 }
 
+                //update the datepickers before showing them (account for zoom changes)
+                d3.select("#fromPick").attr("transform", ui.timeline.pick.updateAnimPickers(self.fromDate));
+                d3.select("#toPick").attr("transform", ui.timeline.pick.updateAnimPickers(self.toDate));
+                $(".animpick").show();
             },
             close: function() {
                 //Hide datepickers
