@@ -20,19 +20,19 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
         "One or more layers on the map have been modified (changed palette, " +
         "thresholds, etc.). These modifications cannot be used to take a " +
         "snapshot. Would you like to temporarily revert to the original " +
-        "layer(s)?";
+        "layer(s)?",
 
-    var GRATICULE_WARNING =
+        GRATICULE_WARNING =
         "The graticule layer cannot be used to take a snapshot. Would you " +
-        "like to hide this layer?";
+        "like to hide this layer?",
+
+        ROTATE_WARNING = "Image may not be downloaded when rotated. Would you like to reset rotation?";
 
     var containerId = "wv-image-button";
     var container;
     var selector = "#" + containerId;
     var coords = null, animCoords = null;
     var previousCoords = null;
-    var icon = "images/camera.png";
-    var onicon = "images/cameraon.png";
     var $cropee = $("#wv-map"); //TODO: Test on non-canvas
     var id = containerId;
     var state = "off";
@@ -92,7 +92,6 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
         };
 
         var disablePalettes = function() {
-            var map = ui.map.selected;
             // Save the previous state to be restored later
             previousPalettes = models.palettes.active;
             models.palettes.clear();
@@ -140,16 +139,10 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
             else
                 wv.ui.ask({
                     header: "Reset rotation?",
-                    message: "Image may not be downloaded when rotated. Would you like to reset rotation?",
+                    message: ROTATE_WARNING,
                     onOk: function() {
-                        ui.map.selected.beforeRender(ol.animation.rotate({
-                            duration: 400,
-                            rotation: ui.map.selected.getView().getRotation()
-                        }));
-                        ui.map.selected.getView().rotate(0);
-                        ui.map.updateRotation();
-                        //Let rotation finish before image download can occur
-                        setTimeout(toggle, 500);
+                        resetRotation();
+                        setTimeout(toggle, 500); //Let rotation finish before image download can occur
                     }
                 });
         }
@@ -159,10 +152,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
             $cropee
                 .insertAfter('#productsHolder');
             jcropAPI.destroy();
-            if (previousPalettes) {
-                models.palettes.restore(previousPalettes);
-                previousPalettes = null;
-            }
+            restorePalettes();
             toolbarButtons("enable");
             wv.ui.closeDialog();
             $(".wv-image-coords").hide();
@@ -244,6 +234,44 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
     //Setup a dialog to enable gif generation and turn on image cropping
     self.animToggle = function(from, to, delta) {
 
+        //check for rotation, changed palettes, and graticule layers and ask for reset if so
+        var layers = models.layers.get({renderable: true});
+        if (models.palettes.inUse()) {
+            wv.ui.ask({
+                header: "Notice",
+                message: PALETTE_WARNING,
+                onOk: function() {
+                    previousPalettes = models.palettes.active;
+                    models.palettes.clear();
+                    self.animToggle(from, to, delta);
+                }
+            });
+            return;
+        }
+        if ( _.find(layers, {id: "Graticule"}) && models.proj.selected.id === "geographic" ) {
+            wv.ui.ask({
+                header: "Notice",
+                message: GRATICULE_WARNING,
+                onOk: function() {
+                    models.layers.setVisibility("Graticule", false);
+                    self.animToggle(from, to, delta);
+                }
+            });
+            return;
+        }
+        if(ui.map.selected.getView().getRotation() !== 0.0) {
+            wv.ui.ask({
+                header: "Reset rotation?",
+                message: ROTATE_WARNING,
+                onOk: function() {
+                    resetRotation();
+                    //Let rotation finish before image download can occur
+                    setTimeout(self.animToggle(from, to, delta), 500);
+                }
+            });
+            return;
+        }
+
         var htmlElements = "<div id='gifDialog'>" +
                                 "<div class='wv-image-header'>" +
                                     "<select id='wv-gif-resolution'>" +
@@ -274,6 +302,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
             close: function(event) {
                 $("#wv-map").insertAfter('#productsHolder'); //retain map element before disabling jcrop
                 jcropAPI.destroy();
+                restorePalettes();
             }
         });
 
@@ -410,6 +439,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
         $("#wv-map").insertAfter('#productsHolder'); //retain map element before disabling jcrop
         animCoords = undefined;
         jcropAPI.destroy();
+        restorePalettes();
     };
 
     var calcSize = function(c) {
@@ -427,6 +457,22 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
 
     var handleChange = function(c){
         setCoords(c);
+    };
+
+    var restorePalettes = function() {
+        if (previousPalettes) {
+            models.palettes.restore(previousPalettes);
+            previousPalettes = null;
+        }
+    };
+
+    var resetRotation = function() {
+        ui.map.selected.beforeRender(ol.animation.rotate({
+            duration: 400,
+            rotation: ui.map.selected.getView().getRotation()
+        }));
+        ui.map.selected.getView().rotate(0);
+        ui.map.updateRotation();
     };
 
     init();

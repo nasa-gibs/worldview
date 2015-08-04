@@ -415,7 +415,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                     }
                 },
                 {
-                    text: "Share",
+                    text: "Share GIF",
                     click: function() {
                         $(this).dialog("close"); //avoid error by closing dialog here
                         if(gifshot.isExistingImagesGIFSupported()) {
