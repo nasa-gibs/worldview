@@ -366,7 +366,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 //Hide datepickers
                 $(".animpick").hide();
             },
-            buttons: [ //Go button controls date range animation, other two control animation based on Days slider
+            buttons: [ //Go button controls date range animation, share controls gif generation
                 {
                     text: "Go",
                     click: function() {
@@ -438,7 +438,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                             else
                                 delta = 1;
 
-                            ui.rubberband.animToggle(from, to, delta);
+                            ui.rubberband.animToggle(from, to, delta, (1 / $speedSlider.val()).toPrecision(3));
                         } else
                             wv.ui.notify("Sorry, but this feature is not supported in your browser (typically Internet Explorer)");
                     }

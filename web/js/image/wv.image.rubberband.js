@@ -232,7 +232,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
     };
 
     //Setup a dialog to enable gif generation and turn on image cropping
-    self.animToggle = function(from, to, delta) {
+    self.animToggle = function(from, to, delta, interval) {
 
         //check for rotation, changed palettes, and graticule layers and ask for reset if so
         var layers = models.layers.get({renderable: true});
@@ -243,7 +243,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                 onOk: function() {
                     previousPalettes = models.palettes.active;
                     models.palettes.clear();
-                    self.animToggle(from, to, delta);
+                    self.animToggle(from, to, delta, interval);
                 }
             });
             return;
@@ -254,7 +254,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                 message: GRATICULE_WARNING,
                 onOk: function() {
                     models.layers.setVisibility("Graticule", false);
-                    self.animToggle(from, to, delta);
+                    self.animToggle(from, to, delta, interval);
                 }
             });
             return;
@@ -266,7 +266,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                 onOk: function() {
                     resetRotation();
                     //Let rotation finish before image download can occur
-                    setTimeout(self.animToggle(from, to, delta), 500);
+                    setTimeout(self.animToggle(from, to, delta, interval), 500);
                 }
             });
             return;
@@ -283,6 +283,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                                     "</select>Resolution (per pixel)" +
                                 "</div>" +
                                 "<table class='wv-image-download' style='padding-bottom: 7px'>" +
+                                    "<tr>" + "<td>GIF Speed:</td>" + "<td class='wv-image-size'>" + (1/interval).toFixed() + " Frames Per Second</td></tr>" +
                                     "<tr>" + "<td>GIF Size:</td>" + "<td><span id='wv-gif-width'>0</span> x <span id='wv-gif-height'>0</span></td>" + "</tr>" +
                                     "<tr>" + "<td>Image Size:</td>" + "<td id='wv-gif-size' class='wv-image-size'>0 MB</td>" + "</tr>" +
                                     "<tr>" + "<td>Maximum Image Size:</td>" + "<td class='wv-image-size'>250 MB</td>" + "</tr>" +
@@ -293,6 +294,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
         $dialog.dialog({
             dialogClass: "wv-panel wv-image",
             title: "Generate GIF",
+            height: 160,
             show: { effect: "slide", direction: "down" },
             position: {
                 my: "left bottom",
@@ -330,7 +332,8 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
             gifshot.createGIF({
                 gifWidth: animCoords.w,
                 gifHeight: animCoords.h,
-                images: a
+                images: a,
+                interval: interval
             }, function (obj) {
                 if (!obj.error) {
                     var animatedImage = document.createElement('img');
