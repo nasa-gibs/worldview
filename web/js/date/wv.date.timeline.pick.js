@@ -29,7 +29,7 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
     var self = {};
 
     var width = 60;
-    var ANIM_OFFSET = 8, animDragOffset = 5;
+    var ANIM_OFFSET = 8, POS2DATE_OFFSET = 10, animDragOffset;
 
     var mousedown = false;
     var nextChange, prevChange;
@@ -91,26 +91,34 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
     //TODO:Snapping, and below day zoom level, picker can't reach today's date (not a offset issue)
     //Listener function when a animation datepicker moves
     var animdrag = function() {
+        //Get zoom level and set drag offset for choosing date
+        switch(tl.config.currentZoom) {
+            case 1: //years
+                animDragOffset = 0;
+                POS2DATE_OFFSET = 20;
+                break;
+            case 2: //months
+                animDragOffset = 0;
+                POS2DATE_OFFSET = 20;
+                break;
+            default: //3, days
+                animDragOffset = 12;
+                POS2DATE_OFFSET = 10;
+        }
+
         //Here we have access to information in the d3.event object
         //Use it to acquire the date
         var tempPickTipOffset = Math.max( -(width / 2), Math.min( tl.width - (width / 2), d3.event.x ) );
-        var tempPickOffset = tempPickTipOffset - 20; //we want the x coordinate of left corner
+        var tempPickOffset = tempPickTipOffset - POS2DATE_OFFSET; //we want the x coordinate of left corner
         var tempPickTipDate = tl.x.invert(tempPickTipOffset); //date chosen should match tip area
 
         //Check for future date, if so don't move the pickers past timeline
         var today = new Date();
         if(tempPickTipDate.valueOf() < today.valueOf()) {
-            //Get zoom level and set drag offset
-            switch(tl.config.currentZoom) {
-                case 1: //years
-                    animDragOffset = 0;
-                    break;
-                case 2: //months
-                    animDragOffset = 0;
-                    break;
-                default: //3, days
-                    animDragOffset = 5;
-            }
+            tempPickTipDate = wv.util.clearTimeUTC(tempPickTipDate);//set it to midnight
+            //It is offset by one so change date so slider is dragged in the middle
+            tempPickTipDate.setUTCDate(tempPickTipDate.getUTCDate() + 1);
+            console.log(tempPickTipDate);
 
             if (d3.select(this).attr("id") === d3.select("#fromPick").attr("id")) { //compare their ids
                 tl.input.fromDate = tempPickTipDate;

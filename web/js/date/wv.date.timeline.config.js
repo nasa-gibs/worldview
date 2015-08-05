@@ -188,7 +188,7 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
             }).css("margin","").css("font-size","");
             $('#zoom-years').addClass("depth-1").css("font-size","1.7em");
             $('#zoom-months').addClass("depth-2").css("font-size","1.2em");
-            $('#zoom-days').addClass("depth-3").css("margin","-3px 0 5px 0");
+            $('#zoom-days').addClass("depth-3").css("margin","3px 0 5px 0");
 
             self.currentZoom = 1;
             break;
