@@ -135,8 +135,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                 });
                 return;
             }
-            toggleOn();
-            /*
+
             //Don't toggle area select UI for downloading image if image rotated
             if(ui.map.selected.getView().getRotation() === 0.0)
                 toggleOn();
@@ -155,7 +154,6 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                         setTimeout(toggle, 500);
                     }
                 });
-            */
         }
         else {
             state = "off";

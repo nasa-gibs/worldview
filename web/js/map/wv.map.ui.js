@@ -68,11 +68,11 @@ wv.map.ui = wv.map.ui || function(models, config) {
         self.selected = self.proj[models.proj.selected.id];
         var map = self.selected;
         reloadLayers();
-        /* 
+
         //Update the rotation buttons if polar projection to display correct value
         if(models.proj.selected.id !== "geographic")
             self.updateRotation();
-        */
+
         // If the browser was resized, the inactive map was not notified of
         // the event. Force the update no matter what and reposition the center
         // using the previous value.
@@ -402,7 +402,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         models.map.update(map.getView().calculateExtent(map.getSize()));
         triggerExtent();
     };
-    /*
+
     //Called as event listener when map is rotated. Update url to reflect rotation reset
     self.updateRotation = function() {
         models.map.rotation = self.selected.getView().getRotation();
@@ -419,7 +419,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         else
             $(".wv-map-reset-rotation").find("span").attr("style","padding-left: 14px");
     };
-    */
+
     var createMap = function(proj) {
         var id = "wv-map-" + proj.id;
         var $map = $("<div></div>")
@@ -438,7 +438,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
             className: "wv-map-scale-imperial",
             units: "imperial"
         });
-        /*
+
         //insert this to polar map views for desktop and mobile rotation
         var rotateInteraction = new ol.interaction.DragRotate({
             condition: ol.events.condition.altKeyOnly,
@@ -446,17 +446,17 @@ wv.map.ui = wv.map.ui || function(models, config) {
         }), mobileRotation = new ol.interaction.PinchRotate({
             duration: animationDuration
         });
-        */
+
         var map = new ol.Map({
             view: new ol.View({
                 maxResolution: proj.resolutions[0],
                 projection: ol.proj.get(proj.crs),
                 extent: proj.maxExtent,
                 center: proj.startCenter,
-                //rotation: proj.id === "geographic" ? 0.0 : models.map.rotation,
+                rotation: proj.id === "geographic" ? 0.0 : models.map.rotation,
                 zoom: proj.startZoom,
                 maxZoom: proj.numZoomLevels,
-                enableRotation: false//true
+                enableRotation: true
             }),
             target: id,
             renderer: ["canvas", "dom"],
@@ -490,18 +490,18 @@ wv.map.ui = wv.map.ui || function(models, config) {
         };
         createZoomButtons(map, proj);
         createMousePosSel(map, proj);
-        /*
+
         //allow rotation by dragging for polar projections
         if(proj.id !== 'geographic') {
             createRotationWidget(map);
             map.addInteraction(rotateInteraction);
             map.addInteraction(mobileRotation);
         }
-        */
+
         //Set event listeners for changes on the map view (when rotated, zoomed, panned)
         map.getView().on("change:center", updateExtent);
         map.getView().on("change:resolution", updateExtent);
-        //map.getView().on("change:rotation", self.updateRotation);
+        map.getView().on("change:rotation", self.updateRotation);
 
         return map;
     };
@@ -638,7 +638,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 });
             });
     };
-    /*
+
     //Create rotation buttons for polar views
     var createRotationWidget = function(map) {
         var $map = $("#" + map.getTarget());
@@ -714,7 +714,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         };
 
     };
-    */
+
     var zoomAction = function(map, amount) {
         return function() {
             var zoom = map.getView().getZoom();
