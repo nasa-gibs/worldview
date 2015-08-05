@@ -1,5 +1,12 @@
 {
     "wv.js": [
+        "web/js/edsc.js",
+        "web/js/edsc/coordinate.js",
+        "web/js/edsc/arc.js",
+        "web/js/edsc/geoutil.js",
+        "web/js/edsc/interpolation.js",
+        "web/js/edsc/spherical_polygon.js",
+
         "web/js/wv.brand.js",
 
         "web/js/util/wv.util.browser.js",

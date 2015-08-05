@@ -639,8 +639,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
 
         var $mid = $("<button></button>")
             .addClass("wv-map-reset-rotation wv-map-zoom")
-            .attr("title", "Click to reset")
-            .attr("style", "width: 43px");
+            .attr("title", "Click to reset");
 
         $left.append($lefticon); $right.append($righticon);
         $map.append($left).append($mid).append($right);
@@ -673,6 +672,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         $mid.button({
             label: Number(models.map.rotation * (180/Math.PI)).toFixed()
         }).mousedown(function() { //reset rotation
+            clearInterval(intervalId); //stop repeating rotation on mobile
             map.beforeRender(ol.animation.rotate({
                 duration: 500,
                 rotation: map.getView().getRotation()

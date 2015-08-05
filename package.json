@@ -1,5 +1,5 @@
 {
-    "version": "0.8.4",
+    "version": "0.8.5",
     "release": "1",
     "repository": {
         "type": "git",
@@ -14,6 +14,7 @@
         "grunt-buster": "0.3.x",
         "grunt-contrib-clean": "0.5.x",
         "grunt-contrib-concat": "0.3.x",
+        "grunt-contrib-coffee": "0.13.x",
         "grunt-contrib-compress": "0.5.x",
         "grunt-contrib-copy": "0.6.x",
         "grunt-contrib-csslint": "0.2.x",

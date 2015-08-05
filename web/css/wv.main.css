@@ -78,7 +78,7 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
 }
 
 
-@media {
+
 #banner img.logo {padding:11px 5px;}
 #banner ul {float:right; }
 #banner ul li {display:block; float:right; margin:3px 3px; line-height:0; }
@@ -378,4 +378,4 @@ label {
 }
 .ui-state-focus a:focus {
     outline: none !important;
-}}
+}
