@@ -37,7 +37,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
 
     var $incrementBtn = $("#right-arrow-group");
     var $decrementBtn = $("#left-arrow-group");
-	var $animateBtn   = $("#animate-arrow-group");
+	var $animateBtn   = $("#animate-button");
 
     var forwardNextDay = function(){
         var nextDay = new Date(new Date(model.selected)
@@ -337,7 +337,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             .dialog({
             autoOpen: false,
             dialogClass: "wv-panel",
-            title: "Play Animation",
+            title: "Setup Animation",
             width: 300,
             show: { effect: "slide", direction: "down" },
             position: {
@@ -368,7 +368,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             },
             buttons: [ //Go button controls date range animation, share controls gif generation
                 {
-                    text: "Go",
+                    text: "Play",
                     click: function() {
                         prepareAnim($speedSlider);
                         ui.anim.customLoop = true;

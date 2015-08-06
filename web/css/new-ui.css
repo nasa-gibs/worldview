@@ -192,11 +192,13 @@ g.plot rect.data-bar-invisible{
 #timeline-header div{
     display:inline-block;
 }
+
 .button-action-group,.date-arrows{
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
 }
+
 .button-action-group{
   height:60px;
   width:40px;
@@ -279,6 +281,18 @@ g.plot rect.data-bar-invisible{
 #timeline-header,#timeline-footer,#timeline-zoom,#timeline-hide{
     float:left;
 }
+
+/* styles for animate button */
+#wv-animate {
+    color: white;
+    font-size: 2.5em;
+    margin: 12px 0 0 2px;
+}
+
+#wv-animate:hover {
+    color: #1a1a1a;
+}
+
 #timeline-footer{
     height:65px;
     border-left:1px solid #666;
