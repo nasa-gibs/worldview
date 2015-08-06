@@ -271,6 +271,17 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
             });
             return;
         }
+        if(parseInt(from) >= parseInt(to)) {
+            wv.ui.ask({
+                header: "Reverse date range?",
+                message: "The start date (" + ui.timeline.input.fromDate.toDateString() + ") is after the end date (" + ui.timeline.input.toDate.toDateString() +
+                         "). Would you like to reverse the dates?",
+                onOk: function() {
+                    self.animToggle(to, from, delta, interval);
+                }
+            });
+            return;
+        }
 
         var htmlElements = "<div id='gifDialog'>" +
                                 "<div class='wv-image-header'>" +
