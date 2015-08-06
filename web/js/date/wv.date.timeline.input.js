@@ -381,10 +381,21 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
 
                             //Get the number of frames to animate. Then divide it by 30 or 365 depending on interval
                             ui.anim.animDuration = to > from ? ((to - from) / (86400 * 1000)) + 1 : ((from - to) / (86400 * 1000)) + 1;
-                            if(interval === 'month' && ui.anim.animDuration >= 30)
-                                ui.anim.animDuration = Math.floor(ui.anim.animDuration /30) + 1;
-                            else if(interval === 'year' && ui.anim.animDuration >= 365)
-                                ui.anim.animDuration = Math.floor(ui.anim.animDuration /365) + 1;
+                            if (interval === 'month') {
+                                if(Math.abs(ui.anim.animDuration) <= 30) //if date range is smaller than interval, animate once
+                                    ui.anim.animDuration = to > from ? 1 : -1;
+                                else
+                                    ui.anim.animDuration = Math.floor(ui.anim.animDuration / 30) + 1;
+                            }
+                            else if(interval === 'year') {
+                                if(Math.abs(ui.anim.animDuration) <= 365)
+                                    ui.anim.animDuration = to > from ? 1 : -1;
+                                else
+                                    ui.anim.animDuration = Math.floor(ui.anim.animDuration / 365) + 1;
+                            }
+                            //Don't allow looping for one frames
+                            if(Math.abs(ui.anim.animDuration) === 1)
+                                document.getElementById("loopcheck").checked = false;
 
                             $(this).dialog("close");
 
