@@ -48,7 +48,6 @@
 .wv-image-coords {
     position: absolute;
     z-index: 500;
-    color: white;
     white-space: pre;
     color: #fff;
     text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
@@ -61,5 +60,9 @@
 
 #wv-image-top {
     text-align: right;
+}
+
+#wv-gif-button {
+    margin-top: 2px;
 }
 

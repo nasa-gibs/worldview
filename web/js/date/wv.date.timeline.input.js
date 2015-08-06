@@ -393,7 +393,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                                 else
                                     ui.anim.animDuration = Math.floor(ui.anim.animDuration / 365) + 1;
                             }
-                            //Don't allow looping for one frames
+                            //Don't allow looping for one frame
                             if(Math.abs(ui.anim.animDuration) === 1)
                                 document.getElementById("loopcheck").checked = false;
 

@@ -258,7 +258,20 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
     //Given a date, returns a transform string to translate a date picker
     //we want to move the picker to the correct x position
     self.updateAnimPickers = function(date) {
-        var xVal = (tl.x(date) - width/2) + ANIM_OFFSET; //need offset of 8 for correct position
+        if(tl.config) //need to check because this function runs at startup
+            switch(tl.config.currentZoom) { //offset corrects the positioning
+                case 1:
+                    ANIM_OFFSET = 10;
+                    break;
+                case 2:
+                    ANIM_OFFSET = 10;
+                    break;
+                default:
+                    ANIM_OFFSET = 8;
+                    break;
+            }
+
+        var xVal = (tl.x(date) - width/2) + ANIM_OFFSET;
         return "translate(" + xVal + " 20)";
     };
 

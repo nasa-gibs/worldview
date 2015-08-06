@@ -294,10 +294,10 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                                     "</select>Resolution (per pixel)" +
                                 "</div>" +
                                 "<table class='wv-image-download' style='padding-bottom: 7px'>" +
-                                    "<tr>" + "<td>GIF Speed:</td>" + "<td class='wv-image-size'>" + (1/interval).toFixed() + " Frames Per Second</td></tr>" +
-                                    "<tr>" + "<td>GIF Size:</td>" + "<td><span id='wv-gif-width'>0</span> x <span id='wv-gif-height'>0</span></td>" + "</tr>" +
-                                    "<tr>" + "<td>Image Size:</td>" + "<td id='wv-gif-size' class='wv-image-size'>0 MB</td>" + "</tr>" +
-                                    "<tr>" + "<td>Maximum Image Size:</td>" + "<td class='wv-image-size'>250 MB</td>" + "</tr>" +
+                                    "<tr>" + "<th>GIF Speed:</th>" + "<td class='wv-image-size'>" + (1/interval).toFixed() + " Frames Per Second</td></tr>" +
+                                    "<tr>" + "<th>GIF Size:</th>" + "<td><span id='wv-gif-width'>0</span> x <span id='wv-gif-height'>0</span></td>" + "</tr>" +
+                                    "<tr>" + "<th>Image Size:</th>" + "<td id='wv-gif-size' class='wv-image-size'>0 MB</td>" + "</tr>" +
+                                    "<tr>" + "<th>Maximum Image Size:</th>" + "<td class='wv-image-size'>250 MB</td>" + "</tr>" +
                                 "</table>" +
                                 "<button id='wv-gif-button'>Generate</button>" +
                            "</div>";
