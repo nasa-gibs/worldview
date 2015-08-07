@@ -270,7 +270,8 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         //Add slider, labels, and input elements to dialog area
         var $speedHeader = $("<div></div>")
             .html("Speed")
-            .addClass("wv-header");
+            .addClass("wv-header"),
+            speedHTML = "<li>Slow <span id='wv-whitespace'>Fast</span></li>";
 
         var $speedSlider = $("<div></div>")
             .noUiSlider({
@@ -280,8 +281,10 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                     min: 1,
                     max: 30
                 }
-            }).on("slide", function() {
+            }).on("slide", function() { //update value when slider moves
                 $speedLabel.addClass("wv-label-opacity").html(parseFloat($speedSlider.val()) + ' frames per second');
+            }).on("set", function() { //show slow/fast when slider released
+                setTimeout(function() {$speedLabel.removeClass("wv-label-opacity").html(speedHTML).attr("id", "wv-label-speed");}, 1000);
             });
 
         var $loopCheck = $("<input />")
@@ -290,7 +293,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             .attr("id", "loopcheck");
 
         var $speedLabel = $("<ul></ul>") //Show user what is fast/slow first
-            .html("<li>Slow <span id='wv-whitespace'>Fast</span></li>")
+            .html(speedHTML)
             .attr("id", "wv-label-speed");
 
 

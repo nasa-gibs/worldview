@@ -325,11 +325,13 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
         //Default positions for pickers set at ui.timeline.config.init()
         tl.animPick1.append("svg:path")
             .attr("id", "fromPick")
-            .attr("d", "M0 0 L40 0 L20 40 Z");
+            .attr("d", "M0 0 L40 0 L20 40 Z")
+            .attr("style","fill:rgb(255,0,0)");
 
         tl.animPick2.append("svg:path")
             .attr("id", "toPick")
-            .attr("d", "M0 0 L40 0 L20 40 Z");
+            .attr("d", "M0 0 L40 0 L20 40 Z")
+            .attr("style","fill:rgb(0,255,0)");
 
         //register drag behaviour with the date pickers here to guarantee it is called
         d3.select("#fromPick").call(animDrag);
