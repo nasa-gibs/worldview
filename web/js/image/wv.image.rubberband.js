@@ -210,8 +210,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
         var lonlat1 = ui.map.selected.getCoordinateFromPixel([Math.floor(animCoords.x), Math.floor(animCoords.y2)]);
         var lonlat2 = ui.map.selected.getCoordinateFromPixel([Math.floor(animCoords.x2), Math.floor(animCoords.y)]);
 
-        var conversionFactor = proj === "geographic" ? 0.002197 : 256,
-            res = $("#wv-gif-resolution").find("option:checked").val();
+        var conversionFactor = proj === "geographic" ? 0.002197 : 256, res = calcRes(0);
 
         var imgWidth = Math.round((Math.abs(lonlat2[0] - lonlat1[0]) / conversionFactor) / Number(res)),
             imgHeight = Math.round((Math.abs(lonlat2[1] - lonlat1[1]) / conversionFactor) / Number(res));
@@ -266,7 +265,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                 onOk: function() {
                     resetRotation();
                     //Let rotation finish before image download can occur
-                    setTimeout(self.animToggle(from, to, delta, interval), 500);
+                    self.animToggle(from, to, delta, interval);
                 }
             });
             return;
@@ -284,20 +283,11 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
         }
 
         var htmlElements = "<div id='gifDialog'>" +
-                                "<div class='wv-image-header'>" +
-                                    "<select id='wv-gif-resolution'>" +
-                                        "<option value='1' >250m</option>" +
-                                        "<option value='2' >500m</option>" +
-                                        "<option value='4' >1km</option>" +
-                                        "<option value='20' selected='selected'>5km</option>" +
-                                        "<option value='40'>10km</option>" +
-                                    "</select>Resolution (per pixel)" +
-                                "</div>" +
                                 "<table class='wv-image-download' style='padding-bottom: 7px'>" +
                                     "<tr>" + "<th>GIF Speed:</th>" + "<td class='wv-image-size'>" + (1/interval).toFixed() + " Frames Per Second</td></tr>" +
-                                    "<tr>" + "<th>GIF Size:</th>" + "<td><span id='wv-gif-width'>0</span> x <span id='wv-gif-height'>0</span></td>" + "</tr>" +
-                                    "<tr>" + "<th>Image Size:</th>" + "<td id='wv-gif-size' class='wv-image-size'>0 MB</td>" + "</tr>" +
-                                    "<tr>" + "<th>Maximum Image Size:</th>" + "<td class='wv-image-size'>250 MB</td>" + "</tr>" +
+                                    "<tr>" + "<th>GIF Size:</th>" + "<td><span id='wv-gif-width'>0</span> x <span id='wv-gif-height'>0</span></td></tr>" +
+                                    "<tr>" + "<th>Image Resolution</th>" + "<td>" + calcRes(1) + "</td></tr>" +
+                                    "<tr>" + "<th>Image Size:</th>" + "<td id='wv-gif-size' class='wv-image-size'>0 MB</td></tr>" +
                                 "</table>" +
                                 "<button id='wv-gif-button'>Generate</button>" +
                            "</div>";
@@ -435,18 +425,6 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
         }, function() {
             jcropAPI = this;
         });
-
-        //Update sizes when selectmenu option chosen
-        $("#wv-gif-resolution").change(function() {
-            var dataSize = calcSize(animCoords);
-
-            $("#wv-gif-width").html((animCoords.w)); $("#wv-gif-height").html((animCoords.h)); $("#wv-gif-size").html(dataSize + " MB");
-
-            if(dataSize > 250) //disable GIF generation if GIF would be too large
-                $("#wv-gif-button").button("disable");
-            else
-                $("#wv-gif-button").button("enable");
-        }).change();
     };
 
     var removeCrop = function() {
@@ -454,39 +432,65 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
         animCoords = undefined;
         jcropAPI.destroy();
         restorePalettes();
-    };
+    },
 
-    var calcSize = function(c) {
-        var lonlat1 = ui.map.selected.getCoordinateFromPixel([Math.floor(c.x), Math.floor(c.y2)]);
-        var lonlat2 = ui.map.selected.getCoordinateFromPixel([Math.floor(c.x2), Math.floor(c.y)]);
+    calcSize = function(c) {
+        var lonlat1 = ui.map.selected.getCoordinateFromPixel([Math.floor(c.x), Math.floor(c.y2)]),
+            lonlat2 = ui.map.selected.getCoordinateFromPixel([Math.floor(c.x2), Math.floor(c.y)]);
 
-        var conversionFactor = models.proj.selected.id === "geographic" ? 0.002197 : 256,
-            res = $("#wv-gif-resolution").find("option:checked").val();
+        var conversionFactor = models.proj.selected.id === "geographic" ? 0.002197 : 256, res = calcRes(0);
 
         var imgWidth = Math.round((Math.abs(lonlat2[0] - lonlat1[0]) / conversionFactor) / Number(res)),
             imgHeight = Math.round((Math.abs(lonlat2[1] - lonlat1[1]) / conversionFactor) / Number(res));
 
         return ((imgWidth * imgHeight * 24) / 8388608).toFixed(2);
-    };
+    },
 
-    var handleChange = function(c){
+    handleChange = function(c){
         setCoords(c);
-    };
+    },
 
-    var restorePalettes = function() {
+    restorePalettes = function() {
         if (previousPalettes) {
             models.palettes.restore(previousPalettes);
             previousPalettes = null;
         }
-    };
+    },
 
-    var resetRotation = function() {
+    resetRotation = function() {
         ui.map.selected.beforeRender(ol.animation.rotate({
             duration: 400,
             rotation: ui.map.selected.getView().getRotation()
         }));
         ui.map.selected.getView().rotate(0);
         ui.map.updateRotation();
+    },
+
+    calcRes = function(mode) { //return either multipler or string resolution
+        var zoom_res = [40, 20, 4, 2, 1], str, res;
+        res = zoom_res[Math.floor((ui.map.selected.getView().getZoom()/2))];
+
+        if(mode === 0)
+            return res;
+        else {
+            switch(res){
+                case 1:
+                    str = "250m";
+                    break;
+                case 2:
+                    str = "500m";
+                    break;
+                case 4:
+                    str = "1km";
+                    break;
+                case 20:
+                    str = "5km";
+                    break;
+                default:
+                    str = "10km";
+            }
+            return str;
+        }
     };
 
     init();
