@@ -261,7 +261,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
 
         $animateBtn.click(function(event) {
             animateEnd(); //Let the animation end when another one is being set
-            wv.ui.closeDialog();
+            wv.ui.closeDialog(); //Close any active dialog
 
             $dialog_sel.dialog("open");
             event.preventDefault();
@@ -295,7 +295,6 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         var $speedLabel = $("<ul></ul>") //Show user what is fast/slow first
             .html(speedHTML)
             .attr("id", "wv-label-speed");
-
 
         var $toLabel = $("<label></label>")
             .html(' to ')
@@ -367,7 +366,8 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             },
             close: function() {
                 //Hide datepickers
-                $(".animpick").hide();
+                if(!ui.anim.doAnimation)
+                    $(".animpick").hide();
             },
             buttons: [ //Go button controls date range animation, share controls gif generation
                 {

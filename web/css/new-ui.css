@@ -286,10 +286,15 @@ g.plot rect.data-bar-invisible{
 #wv-animate {
     color: white;
     font-size: 2.5em;
-    margin: 12px 0 0 2px;
+    padding: 12px 3px 15px 3px;
+    margin: 0 0 0 0.5px; /*place icon in middle of white area */
 }
 
 #wv-animate:hover {
+    color: #1a1a1a;
+}
+
+#animate-button:hover {
     color: #1a1a1a;
 }
 

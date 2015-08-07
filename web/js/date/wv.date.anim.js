@@ -71,6 +71,7 @@
                  timer = null;
              }
              self.active = false;
+             $(".animpick").hide();
          }
      };
 
