@@ -286,7 +286,7 @@ g.plot rect.data-bar-invisible{
 #wv-animate {
     color: white;
     font-size: 2.5em;
-    padding: 12px 3px 15px 3px;
+    padding: 12px 3px 15px 2px;
     margin: 0 0 0 0.5px; /*place icon in middle of white area */
 }
 

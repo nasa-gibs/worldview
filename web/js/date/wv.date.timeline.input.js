@@ -288,25 +288,29 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             });
 
         var $loopCheck = $("<input />")
-            .addClass("wv-header")
-            .attr("type", "checkbox")
-            .attr("id", "loopcheck");
+            .addClass("wv-header").attr("type", "checkbox").attr("id", "loopcheck"),
 
-        var $speedLabel = $("<ul></ul>") //Show user what is fast/slow first
-            .html(speedHTML)
-            .attr("id", "wv-label-speed");
+        $speedLabel = $("<ul></ul>") //Show user what is fast/slow first
+            .html(speedHTML).attr("id", "wv-label-speed"),
 
-        var $toLabel = $("<label></label>")
-            .html(' to ')
-            .attr("for", "to");
+        $toLabel = $("<label></label>")
+            .html(' to ').attr("for", "to"),
 
-        var $fromDate = $("<input />")
-            .addClass("wv-datepicker"),
-            $toDate = $("<input />")
-            .addClass("wv-datepicker");
+        $fromDate = $("<input />")
+            .addClass("wv-datepicker").attr("id", "from").attr("type", "text").attr("name", "from").attr("readonly","true"),
+        $toDate = $("<input />")
+            .addClass("wv-datepicker").attr("id", "to").attr("type", "text").attr("name", "to").attr("readonly", "true"),
 
-        $fromDate.attr("id", "from").attr("type", "text").attr("name", "from").attr("readonly","true");
-        $toDate.attr("id", "to").attr("type", "text").attr("name", "to").attr("readonly", "true");
+        playButtons = [ //TODO: WIP
+            {
+                text: "Play",
+                click: function() {}
+            },
+            {
+                text: "Pause",
+                click: function() {}
+            }
+        ];
 
         //set up the datepickers
         $fromDate.datepicker({
@@ -318,7 +322,6 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 console.log(self.fromDate);
                 //Move animation date picker in timeline according to the new date
                 d3.select("#fromPick").attr("transform", ui.timeline.pick.updateAnimPickers(self.fromDate));
-
             }
         });
 
@@ -399,8 +402,6 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                             //Don't allow looping for one frame
                             if(Math.abs(ui.anim.animDuration) === 1)
                                 document.getElementById("loopcheck").checked = false;
-
-                            $(this).dialog("close");
 
                             //initDate needs to be set separately
                             model.selected = new Date(self.fromDate.valueOf()); //clone fromDate
