@@ -283,6 +283,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
         }
 
         var htmlElements = "<div id='gifDialog'>" +
+                            "<span class='ui-helper-hidden-accessible'><input type='text' readonly/></span>" +
                                 "<table class='wv-image-download' style='padding-bottom: 7px'>" +
                                     "<tr>" + "<th>GIF Speed:</th>" + "<td class='wv-image-size'>" + (1/interval).toFixed() + " Frames Per Second</td></tr>" +
                                     "<tr>" + "<th>GIF Size:</th>" + "<td><span id='wv-gif-width'>0</span> x <span id='wv-gif-height'>0</span></td></tr>" +
@@ -290,6 +291,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                                     "<tr>" + "<th>Image Size:</th>" + "<td id='wv-gif-size' class='wv-image-size'>0 MB</td></tr>" +
                                 "</table>" +
                                 "<button id='wv-gif-button'>Generate</button>" +
+                                "<button id='wv-gif-goback'>Go Back</button>" +
                            "</div>";
         var $dialog = wv.ui.getDialog().html(htmlElements); //place it above image crop
         $dialog.dialog({
@@ -307,6 +309,11 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                 jcropAPI.destroy();
                 restorePalettes();
             }
+        });
+
+        $("#wv-gif-goback").button().click(function() {
+            $dialog.dialog("close");
+            $("#dialog").dialog("open");
         });
 
         //Wire the button to generate the URL and GIF
