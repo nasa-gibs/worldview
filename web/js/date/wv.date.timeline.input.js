@@ -338,7 +338,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         });
 
         $dialog_sel.append($speedHeader).append($speedSlider).append($speedLabel)
-                    .append($fromDate).append($toLabel).append($toDate).append("<br />").append($loopCheck).append('<label class="wv-header">Loop (Press an arrow key to cancel)</label>')
+                    .append($fromDate).append($toLabel).append($toDate).append("<br />").append($loopCheck).append('<label class="wv-header">Loop</label> <br />')
             .dialog({
             autoOpen: false,
             dialogClass: "wv-panel",

@@ -71,7 +71,6 @@
                  timer = null;
              }
              self.active = false;
-             $(".animpick").hide();
          }
      };
 
@@ -94,6 +93,7 @@
      };
 
      var stopAnimation = function() {
+         self.loop = document.getElementById("loopcheck").checked;//check if user has unchecked loop box during animation
          if(self.loop) { //repeat animation by resetting days and calling play. direction is retained
              notify("looping");
              var amount = ( self.direction === "forward" ) ? self.delta : -self.delta; //determine if set date by -1 or +1
