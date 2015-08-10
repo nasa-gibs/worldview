@@ -39,19 +39,20 @@ wv.map.model = wv.map.model || function(models, config) {
                 self.extent = _.clone(proj.maxExtent);
                 errors.push({message: "Extent outside of range"});
             }
-            //get rotation if it exists
-            if(state.p === 'arctic' || state.p === 'antarctic') {
-                if (!isNaN(state.r))  //convert to radians here
-                    self.rotation = state.r * (Math.PI / 180.0);
-            }
         }
+
+        //get rotation if it exists
+        if(state.p === 'arctic' || state.p === 'antarctic')
+            if (!isNaN(state.r))  //convert to radians here
+                self.rotation = state.r * (Math.PI / 180.0);
+
     };
 
     //When models.link.toQueryString() is called, save extent and rotation
     self.save = function(state) {
         state.v = _.clone(self.extent);
         if(self.rotation !== 0.0 && self.rotation !== 0 && models.proj.selected.id !== 'geographic')
-            state.r = self.rotation * (180.0 / Math.PI); //convert from radians to degrees
+            state.r = (self.rotation * (180.0 / Math.PI)).toPrecision(6); //convert from radians to degrees
     };
 
     self.getLeadingExtent = function() {
