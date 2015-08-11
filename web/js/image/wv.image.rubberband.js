@@ -135,6 +135,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                 });
                 return;
             }
+            toggleOn();
         }
         else {
             state = "off";
