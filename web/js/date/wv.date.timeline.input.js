@@ -38,6 +38,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
     var $incrementBtn = $("#right-arrow-group");
     var $decrementBtn = $("#left-arrow-group");
 	var $animateBtn   = $("#animate-button");
+    var resumeButton, pauseButton, playButton, GIFButton;
 
     var forwardNextDay = function(){
         var nextDay = new Date(new Date(model.selected)
@@ -224,6 +225,12 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         tl.pick.update();
     };
 
+    self.defaultDialog = function() {
+        $("#dialog").dialog("option", "buttons", [
+            playButton, GIFButton
+        ]);
+    };
+
     //Prepare animation when button pressed
     var prepareAnim = function(speedSlider) {
         ui.anim.doAnimation = true;
@@ -299,18 +306,119 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         $fromDate = $("<input />")
             .addClass("wv-datepicker").attr("id", "from").attr("type", "text").attr("name", "from").attr("readonly","true"),
         $toDate = $("<input />")
-            .addClass("wv-datepicker").attr("id", "to").attr("type", "text").attr("name", "to").attr("readonly", "true"),
+            .addClass("wv-datepicker").attr("id", "to").attr("type", "text").attr("name", "to").attr("readonly", "true");
 
-        playButtons = [ //TODO: WIP
-            {
-                text: "Play",
-                click: function() {}
-            },
-            {
-                text: "Pause",
-                click: function() {}
+        resumeButton = {
+            text: "Resume",
+            click: function() { //Resume animation, restore pause button
+                ui.anim.resume();
+                $dialog_sel.dialog("option", "buttons",[
+                    pauseButton, GIFButton
+                ]);
             }
-        ];
+        };
+
+        pauseButton = {
+            text: "Pause",
+            click: function() { //Resume animation, replace with resume button
+                ui.anim.pause();
+                $dialog_sel.dialog("option", "buttons",[
+                    resumeButton, GIFButton
+                ]);
+            }
+        };
+
+        playButton = {
+            text: "Play",
+            click: function() {
+                prepareAnim($speedSlider);
+                ui.anim.customLoop = true;
+
+                //Compare the two dates in terms of milliseconds, divide it by milliseconds
+                //in a day to get the number of days to animate
+                if(animDateCheck()) {
+                    //Get the time difference. Negative ranges are supported
+                    var to = self.toDate.getTime(), from = self.fromDate.getTime();
+
+                    //Get the number of frames to animate. Then divide it by 30 or 365 depending on interval
+                    ui.anim.animDuration = to > from ? ((to - from) / (86400 * 1000)) + 1 : ((from - to) / (86400 * 1000)) + 1;
+                    if (interval === 'month') {
+                        if(Math.abs(ui.anim.animDuration) <= 30) //if date range is smaller than interval, animate once
+                            ui.anim.animDuration = to > from ? 1 : -1;
+                        else
+                            ui.anim.animDuration = Math.floor(ui.anim.animDuration / 30) + 1;
+                    }
+                    else if(interval === 'year') {
+                        if(Math.abs(ui.anim.animDuration) <= 365)
+                            ui.anim.animDuration = to > from ? 1 : -1;
+                        else
+                            ui.anim.animDuration = Math.floor(ui.anim.animDuration / 365) + 1;
+                    }
+                    //Don't allow looping for one frame
+                    if(Math.abs(ui.anim.animDuration) === 1)
+                        document.getElementById("loopcheck").checked = false;
+
+                    //initDate needs to be set separately
+                    model.selected = new Date(self.fromDate.valueOf()); //clone fromDate
+                    ui.anim.initDate = new Date(model.selected.valueOf());
+
+                    //Set pause button
+                    $dialog_sel.dialog("option", "buttons", [
+                        pauseButton, GIFButton
+                    ]);
+
+                    if(to > from) { //set it back so animation starts at right date
+                        if(interval === 'year')
+                            model.selected.setUTCFullYear(model.selected.getUTCFullYear()-1);
+                        else if(interval === 'month')
+                            model.selected.setUTCMonth(model.selected.getUTCMonth()-1);
+                        else
+                            model.selected.setUTCDate(model.selected.getUTCDate()-1);
+                        animateForward(interval);
+                    }
+                    else {
+                        if(interval === 'year')
+                            model.selected.setUTCFullYear(model.selected.getUTCFullYear()+1);
+                        else if(interval === 'month')
+                            model.selected.setUTCMonth(model.selected.getUTCMonth()+1);
+                        else
+                            model.selected.setUTCDate(model.selected.getUTCDate()+1);
+                        animateReverse(interval);
+                    }
+                } else
+                    wv.ui.notify("Invalid date range, please make sure the start date is before the end date");
+            }
+        };
+
+        GIFButton = {
+            text: "Share GIF",
+            click: function() {
+                $dialog_sel.dialog("close");
+                if(gifshot.isExistingImagesGIFSupported()) {
+                    var from, to, jStart, jDate;
+                    //Parse the fromDate and toDates to Julian time
+                    jStart = wv.util.parseDateUTC(self.fromDate.getUTCFullYear() + "-01-01");
+                    jDate = "00" + (1 + Math.ceil((self.fromDate.getTime() - jStart) / 86400000));
+                    from = self.fromDate.getUTCFullYear() + (jDate).substr((jDate.length) - 3);
+
+                    jStart = wv.util.parseDateUTC(self.toDate.getUTCFullYear() + "-01-01");
+                    jDate = "00" + (1 + Math.ceil((self.toDate.getTime() - jStart) / 86400000));
+                    to = self.toDate.getUTCFullYear() + (jDate).substr((jDate.length) - 3);
+
+                    //Determine interval for updating date
+                    var delta;
+                    if (interval === 'month')
+                        delta = 30;
+                    else if (interval === 'year')
+                        delta = 365;
+                    else
+                        delta = 1;
+
+                    ui.rubberband.animToggle(from, to, delta, (1 / $speedSlider.val()).toPrecision(3));
+                } else
+                    wv.ui.notify("Sorry, but this feature is not supported in your browser (typically Internet Explorer)");
+            }
+        };
 
         //set up the datepickers
         $fromDate.datepicker({
@@ -378,91 +486,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                     $(".animpick").hide();
             },
             buttons: [ //Go button controls date range animation, share controls gif generation
-                {
-                    text: "Play",
-                    click: function() {
-                        prepareAnim($speedSlider);
-                        ui.anim.customLoop = true;
-
-                        //Compare the two dates in terms of milliseconds, divide it by milliseconds
-                        //in a day to get the number of days to animate
-                        if(animDateCheck()) {
-                            //Get the time difference. Negative ranges are supported
-                            var to = self.toDate.getTime(), from = self.fromDate.getTime();
-
-                            //Get the number of frames to animate. Then divide it by 30 or 365 depending on interval
-                            ui.anim.animDuration = to > from ? ((to - from) / (86400 * 1000)) + 1 : ((from - to) / (86400 * 1000)) + 1;
-                            if (interval === 'month') {
-                                if(Math.abs(ui.anim.animDuration) <= 30) //if date range is smaller than interval, animate once
-                                    ui.anim.animDuration = to > from ? 1 : -1;
-                                else
-                                    ui.anim.animDuration = Math.floor(ui.anim.animDuration / 30) + 1;
-                            }
-                            else if(interval === 'year') {
-                                if(Math.abs(ui.anim.animDuration) <= 365)
-                                    ui.anim.animDuration = to > from ? 1 : -1;
-                                else
-                                    ui.anim.animDuration = Math.floor(ui.anim.animDuration / 365) + 1;
-                            }
-                            //Don't allow looping for one frame
-                            if(Math.abs(ui.anim.animDuration) === 1)
-                                document.getElementById("loopcheck").checked = false;
-
-                            //initDate needs to be set separately
-                            model.selected = new Date(self.fromDate.valueOf()); //clone fromDate
-                            ui.anim.initDate = new Date(model.selected.valueOf());
-
-                            if(to > from) { //set it back so animation starts at right date
-                                if(interval === 'year')
-                                    model.selected.setUTCFullYear(model.selected.getUTCFullYear()-1);
-                                else if(interval === 'month')
-                                    model.selected.setUTCMonth(model.selected.getUTCMonth()-1);
-                                else
-                                    model.selected.setUTCDate(model.selected.getUTCDate()-1);
-                                animateForward(interval);
-                            }
-                            else {
-                                if(interval === 'year')
-                                    model.selected.setUTCFullYear(model.selected.getUTCFullYear()+1);
-                                else if(interval === 'month')
-                                    model.selected.setUTCMonth(model.selected.getUTCMonth()+1);
-                                else
-                                    model.selected.setUTCDate(model.selected.getUTCDate()+1);
-                                animateReverse(interval);
-                            }
-                        } else
-                            wv.ui.notify("Invalid date range, please make sure the start date is before the end date");
-                    }
-                },
-                {
-                    text: "Share GIF",
-                    click: function() {
-                        $(this).dialog("close"); //avoid error by closing dialog here
-                        if(gifshot.isExistingImagesGIFSupported()) {
-                            var from, to, jStart, jDate;
-                            //Parse the fromDate and toDates to Julian time
-                            jStart = wv.util.parseDateUTC(self.fromDate.getUTCFullYear() + "-01-01");
-                            jDate = "00" + (1 + Math.ceil((self.fromDate.getTime() - jStart) / 86400000));
-                            from = self.fromDate.getUTCFullYear() + (jDate).substr((jDate.length) - 3);
-
-                            jStart = wv.util.parseDateUTC(self.toDate.getUTCFullYear() + "-01-01");
-                            jDate = "00" + (1 + Math.ceil((self.toDate.getTime() - jStart) / 86400000));
-                            to = self.toDate.getUTCFullYear() + (jDate).substr((jDate.length) - 3);
-
-                            //Determine interval for updating date
-                            var delta;
-                            if (interval === 'month')
-                                delta = 30;
-                            else if (interval === 'year')
-                                delta = 365;
-                            else
-                                delta = 1;
-
-                            ui.rubberband.animToggle(from, to, delta, (1 / $speedSlider.val()).toPrecision(3));
-                        } else
-                            wv.ui.notify("Sorry, but this feature is not supported in your browser (typically Internet Explorer)");
-                    }
-                }
+                playButton, GIFButton
             ]
         });
 

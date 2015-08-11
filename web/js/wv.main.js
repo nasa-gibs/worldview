@@ -145,7 +145,7 @@ $(function() {
 
         elapsed("ui");
         // Create widgets
-        ui.anim = wv.date.anim(models.date, ui.map, {
+        ui.anim = wv.date.anim(models.date, ui, {
             debug: parameters.debug === "anim"
         });
         ui.proj = wv.proj.ui(models, config);

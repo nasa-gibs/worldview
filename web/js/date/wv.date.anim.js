@@ -26,6 +26,7 @@
      self.delta = options.delta || 1;
      self.active = false;
      self.loop = false;
+     self.paused = false;
      self.customLoop = false;
      self.doAnimation = false;
      self.animDuration = 7;
@@ -70,7 +71,26 @@
                  clearTimeout(timer);
                  timer = null;
              }
+             ui.timeline.input.defaultDialog();
              self.active = false;
+         }
+     };
+
+     //Pause button functionality, just clear timer
+     self.pause = function() {
+         if(self.active) {
+             notify("pause");
+             clearTimeout(timer);
+             self.paused = true;
+         }
+     };
+
+     //Resume button functionality, just continue where left off
+     self.resume = function() {
+         if(self.paused) {
+             notify("resume");
+             self.paused = false;
+             prepareFrame();
          }
      };
 
@@ -82,7 +102,7 @@
          var amount = ( self.direction === "forward" ) ?
                  self.delta : -self.delta;
          var newDate = wv.util.dateAdd(model.selected, self.interval, amount);
-         ui.preload(newDate);
+         ui.map.preload(newDate);
 
          //control animation if enabled. set before next imagery load
          if(self.doAnimation) self.days++;
