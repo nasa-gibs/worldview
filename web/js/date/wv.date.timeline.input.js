@@ -357,9 +357,14 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 if(self.fromDate === undefined) { //once per session
                     self.fromDate = new Date(model.selected.valueOf());
                     self.fromDate.setUTCDate(self.fromDate.getUTCDate() - 14);
-                    $fromDate.datepicker("setDate", self.fromDate);
                     self.toDate = new Date(model.selected.valueOf());
-                    $toDate.datepicker("setDate", self.toDate);
+
+                    //HACK: Weird functionality with Date objects mean to show the right date, need to offset it by one
+                    var tempFrom = new Date(self.fromDate), tempTo = new Date(self.toDate);
+                    tempFrom.setUTCDate(tempFrom.getUTCDate() + 1); tempTo.setUTCDate(tempTo.getUTCDate() + 1);
+
+                    $fromDate.datepicker("setDate", tempFrom);
+                    $toDate.datepicker("setDate", tempTo);
                 }
 
                 //update the datepickers before showing them (account for zoom changes)

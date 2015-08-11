@@ -120,11 +120,14 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
             tempPickTipDate.setUTCDate(tempPickTipDate.getUTCDate() + 1);
             console.log(tempPickTipDate);
 
+            //HACK: Due to weird Date object behaviour, we need to set fromDate and toDate one day back
             if (d3.select(this).attr("id") === d3.select("#fromPick").attr("id")) { //compare their ids
-                tl.input.fromDate = tempPickTipDate;
+                tl.input.fromDate = new Date(tempPickTipDate);
+                tl.input.fromDate.setUTCDate(tl.input.fromDate.getUTCDate() - 1);
                 $("#from").datepicker("setDate", tempPickTipDate);
             } else {
-                tl.input.toDate = tempPickTipDate;
+                tl.input.toDate = new Date(tempPickTipDate);
+                tl.input.toDate.setUTCDate(tl.input.toDate.getUTCDate() - 1);
                 $("#to").datepicker("setDate", tempPickTipDate);
             }
 
