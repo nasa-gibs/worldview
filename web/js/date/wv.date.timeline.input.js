@@ -225,10 +225,12 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         tl.pick.update();
     };
 
-    self.defaultDialog = function() {
+    self.restoreDialog = function() {
+        $(".wv-datepicker").datepicker("option", "disabled", false);
         $("#dialog").dialog("option", "buttons", [
             playButton, GIFButton
         ]);
+        ui.timeline.pick.turnOnDrag();
     };
 
     //Prepare animation when button pressed
@@ -288,10 +290,12 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                     min: 1,
                     max: 30
                 }
-            }).on("slide", function() { //update value when slider moves
+            }).on("slide", function() { //update animation speed when slider moves
                 $speedLabel.addClass("wv-label-opacity").html(parseFloat($speedSlider.val()) + ' frames per second');
+                ui.anim.delay = parseFloat(1000 / $speedSlider.val());
             }).on("set", function() { //show slow/fast when slider released
                 setTimeout(function() {$speedLabel.removeClass("wv-label-opacity").html(speedHTML).attr("id", "wv-label-speed");}, 1000);
+                ui.anim.delay = parseFloat(1000 / $speedSlider.val());
             });
 
         var $loopCheck = $("<input />")
@@ -310,7 +314,8 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
 
         resumeButton = {
             text: "Play",
-            click: function() { //Resume animation, restore pause button
+            click: function() { //Resume animation, update speed, restore pause button
+                ui.anim.delay = parseFloat(1000 / $speedSlider.val());
                 ui.anim.resume();
                 $dialog_sel.dialog("option", "buttons",[
                     pauseButton, GIFButton
@@ -357,6 +362,12 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                     $dialog_sel.dialog("option", "buttons", [
                         pauseButton, GIFButton
                     ]);
+
+                    //Disable datepickers and slider drag behaviour
+                    $fromDate.datepicker("option", "disabled", true);
+                    $toDate.datepicker("option", "disabled", true);
+                    d3.select("#fromPick").on(".drag", null);
+                    d3.select("#toPick").on(".drag", null);
 
                     if(to > from) { //set it back because animation needs to "animate" to the right date
                         if(interval === 'year')
@@ -417,7 +428,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             changeYear: true,
             maxDate: 0, //can't choose date after today
             onSelect: function() {
-                self.fromDate = $("#from").datepicker("getDate");
+                self.fromDate = $fromDate.datepicker("getDate");
                 console.log(self.fromDate);
                 //Move animation date picker in timeline according to the new date
                 d3.select("#fromPick").attr("transform", ui.timeline.pick.updateAnimPickers(self.fromDate));
@@ -429,7 +440,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             changeYear: true,
             maxDate: 0,
             onSelect: function() {
-                self.toDate = $("#to").datepicker("getDate");
+                self.toDate = $toDate.datepicker("getDate");
                 console.log(self.toDate);
                 //Move animation date picker in timeline according to the new date
                 d3.select("#toPick").attr("transform", ui.timeline.pick.updateAnimPickers(self.toDate));

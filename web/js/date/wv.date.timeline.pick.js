@@ -314,6 +314,12 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
         });
     };
 
+    self.turnOnDrag = function() {
+        //register drag behaviour with the date pickers here to guarantee it is called
+        d3.select("#fromPick").call(animDrag);
+        d3.select("#toPick").call(animDrag);
+    };
+
     //Create animation pickers and translate them
     //Translation must be applied to a selected SVG path (underlying path in animPick1/2)
     var animPicks = function() {
@@ -336,9 +342,7 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
             .attr("d", "M0 0 L40 0 L20 40 Z")
             .attr("style","fill:rgb(0,255,0)");
 
-        //register drag behaviour with the date pickers here to guarantee it is called
-        d3.select("#fromPick").call(animDrag);
-        d3.select("#toPick").call(animDrag);
+        self.turnOnDrag();
         $(".animpick").hide();
     };
 

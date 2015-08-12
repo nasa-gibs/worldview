@@ -66,11 +66,11 @@
                  clearTimeout(timer);
                  timer = null;
              }
-             ui.timeline.input.defaultDialog();
+             ui.timeline.input.restoreDialog();
          }
      };
 
-     //Pause button functionality, send signal to pause gracefully
+     //Pause button functionality, just pause it
      self.pause = function() {
          if(self.active) {
              notify("pause");
