@@ -309,7 +309,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             .addClass("wv-datepicker").attr("id", "to").attr("type", "text").attr("name", "to").attr("readonly", "true");
 
         resumeButton = {
-            text: "Resume",
+            text: "Play",
             click: function() { //Resume animation, restore pause button
                 ui.anim.resume();
                 $dialog_sel.dialog("option", "buttons",[
@@ -332,42 +332,33 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             text: "Play",
             click: function() {
                 prepareAnim($speedSlider);
-                ui.anim.customLoop = true;
 
-                //Compare the two dates in terms of milliseconds, divide it by milliseconds
-                //in a day to get the number of days to animate
+                //Compare the two dates in terms of milliseconds to determine the end animation date
                 if(animDateCheck()) {
                     //Get the time difference. Negative ranges are supported
-                    var to = self.toDate.getTime(), from = self.fromDate.getTime();
+                    var to = self.toDate.getTime(), from = self.fromDate.getTime(), animDuration;
 
-                    //Get the number of frames to animate. Then divide it by 30 or 365 depending on interval
-                    ui.anim.animDuration = to > from ? ((to - from) / (86400 * 1000)) + 1 : ((from - to) / (86400 * 1000)) + 1;
+                    //Get the number of frames to animate, just to check if loop should be applied
+                    animDuration = to > from ? ((to - from) / (86400 * 1000)) + 1 : ((from - to) / (86400 * 1000)) + 1;
                     if (interval === 'month') {
-                        if(Math.abs(ui.anim.animDuration) <= 30) //if date range is smaller than interval, animate once
-                            ui.anim.animDuration = to > from ? 1 : -1;
-                        else
-                            ui.anim.animDuration = Math.floor(ui.anim.animDuration / 30) + 1;
+                        if(Math.abs(animDuration) <= 30) //if date range is smaller than interval, animate once
+                            document.getElementById("loopcheck").checked = false;
+                    } else if(interval === 'year') {
+                        if(Math.abs(animDuration) <= 365) //one frame, don't loop
+                            document.getElementById("loopcheck").checked = false;
                     }
-                    else if(interval === 'year') {
-                        if(Math.abs(ui.anim.animDuration) <= 365)
-                            ui.anim.animDuration = to > from ? 1 : -1;
-                        else
-                            ui.anim.animDuration = Math.floor(ui.anim.animDuration / 365) + 1;
-                    }
-                    //Don't allow looping for one frame
-                    if(Math.abs(ui.anim.animDuration) === 1)
-                        document.getElementById("loopcheck").checked = false;
 
                     //initDate needs to be set separately
                     model.selected = new Date(self.fromDate.valueOf()); //clone fromDate
                     ui.anim.initDate = new Date(model.selected.valueOf());
+                    ui.anim.endDate = new Date(self.toDate.valueOf());
 
                     //Set pause button
                     $dialog_sel.dialog("option", "buttons", [
                         pauseButton, GIFButton
                     ]);
 
-                    if(to > from) { //set it back so animation starts at right date
+                    if(to > from) { //set it back because animation needs to "animate" to the right date
                         if(interval === 'year')
                             model.selected.setUTCFullYear(model.selected.getUTCFullYear()-1);
                         else if(interval === 'month')

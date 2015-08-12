@@ -19,7 +19,6 @@
      options = options || {};
      var self = {};
 
-     self.days = 0; //keep track of how many days to animate
      self.delay = options.delay || 500;
      self.direction = "forward";
      self.interval = options.interval || "day";
@@ -27,10 +26,9 @@
      self.active = false;
      self.loop = false;
      self.paused = false;
-     self.customLoop = false;
      self.doAnimation = false;
-     self.animDuration = 7;
      self.initDate = undefined;
+     self.endDate = undefined;
      var timer;
 
      var init = function() {
@@ -62,21 +60,17 @@
      self.stop = function() {
          if ( self.active ) {
              notify("stop");
-             self.days = 0; //always reset the number of days animated to 0 to avoid issues
-             self.animDuration = 0;
-             self.doAnimation = false;
              self.delay = 500;
-             self.loop = self.customLoop = false;
+             self.loop = self.doAnimation = self.paused = self.active = false;
              if (timer) {
                  clearTimeout(timer);
                  timer = null;
              }
              ui.timeline.input.defaultDialog();
-             self.active = false;
          }
      };
 
-     //Pause button functionality, just clear timer
+     //Pause button functionality, send signal to pause gracefully
      self.pause = function() {
          if(self.active) {
              notify("pause");
@@ -104,9 +98,6 @@
          var newDate = wv.util.dateAdd(model.selected, self.interval, amount);
          ui.map.preload(newDate);
 
-         //control animation if enabled. set before next imagery load
-         if(self.doAnimation) self.days++;
-
          timer = setTimeout(function() { //this function is called once either after 500 ms or animation delay
              advance(newDate);
          }, self.delay);
@@ -131,7 +122,6 @@
              console.log(model.selected);
              console.log(self.initDate);
 
-             self.days = self.customLoop ? -1 : -2; //need to start at -2 to "animate" back to the beginning
              self.play(self.direction);
          } else { //stop animation normally
              self.stop();
@@ -143,7 +133,7 @@
          var updated = model.select(newDate);
 
          //determine if animation should stop
-         if(self.doAnimation && self.days >= self.animDuration - 1 )
+         if(self.doAnimation && checkToStop())
              stopAnimation();
 
          //determine if we can continue
@@ -151,6 +141,20 @@
             stopAnimation();
          else
             prepareFrame();
+     };
+
+     //compare the current and end dates
+     var checkToStop = function() {
+         var curr = model.selected.valueOf(), to = self.endDate.valueOf();
+
+         var daysLeft = self.delta > 0 ? ((to - curr) / (86400 * 1000)) : ((curr - to) / (86400 * 1000));
+
+         if(self.interval === 'day') //check how many days left, animate if there are enough
+             return Math.abs(daysLeft) < (self.delta * 1);
+         else if(self.interval === 'month')
+             return Math.abs(daysLeft) < (self.delta * 30);
+         else
+             return Math.abs(daysLeft) < (self.delta * 365);
      };
 
      options.debug = true;
