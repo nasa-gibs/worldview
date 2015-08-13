@@ -339,7 +339,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
             }
 
             $progress = $("<progress />") //display progress for GIF creation
-                .attr("id", "GIFprogress")
+                .attr("id", "wv-gif-progress")
                 .appendTo("#products");
 
             gifshot.createGIF({

@@ -272,7 +272,10 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             animateEnd(); //Let the animation end when another one is being set
             wv.ui.closeDialog(); //Close any active dialog
 
-            $dialog_sel.dialog("open");
+            if($dialog_sel.dialog("isOpen"))
+                $dialog_sel.dialog("close");
+            else
+                $dialog_sel.dialog("open");
             event.preventDefault();
         });
 
