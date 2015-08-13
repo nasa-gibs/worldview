@@ -1,12 +1,12 @@
 /*Copyrights for code authored by Yahoo Inc. is licensed under the following terms:
 MIT License
-Copyright  2014 Yahoo Inc.
+Copyright  2015 Yahoo Inc.
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 ;(function(window, document, navigator, undefined) {
-var utils, error, defaultOptions, isSupported, isWebCamGIFSupported, isExistingImagesGIFSupported, isExistingVideoGIFSupported, NeuQuant, processFrameWorker, gifWriter, AnimatedGIF, getBase64GIF, existingImages, screenShot, videoStream, stopVideoStreaming, createAndGetGIF, existingVideo, existingWebcam, createGIF, takeSnapShot, API, _index_;
+var utils, error, defaultOptions, isSupported, isWebCamGIFSupported, isExistingImagesGIFSupported, isExistingVideoGIFSupported, NeuQuant, processFrameWorker, gifWriter, AnimatedGIF, getBase64GIF, existingImages, screenShot, videoStream, stopVideoStreaming, createAndGetGIF, existingVideo, existingWebcam, createGIF, takeSnapShot, API;
 utils = function () {
   var utils = {
     'URL': window.URL || window.webkitURL || window.mozURL || window.msURL,
@@ -80,12 +80,15 @@ utils = function () {
             'ogg': false,
             'webm': false
           };
-        if (testEl && testEl.canPlayType) {
-          supportObj.mp4 = testEl.canPlayType('video/mp4; codecs="mp4v.20.8"') !== '';
-          supportObj.h264 = (testEl.canPlayType('video/mp4; codecs="avc1.42E01E"') || testEl.canPlayType('video/mp4; codecs="avc1.42E01E, mp4a.40.2"')) !== '';
-          supportObj.ogv = testEl.canPlayType('video/ogg; codecs="theora"') !== '';
-          supportObj.ogg = testEl.canPlayType('video/ogg; codecs="theora"') !== '';
-          supportObj.webm = testEl.canPlayType('video/webm; codecs="vp8, vorbis"') !== -1;
+        try {
+          if (testEl && testEl.canPlayType) {
+            supportObj.mp4 = testEl.canPlayType('video/mp4; codecs="mp4v.20.8"') !== '';
+            supportObj.h264 = (testEl.canPlayType('video/mp4; codecs="avc1.42E01E"') || testEl.canPlayType('video/mp4; codecs="avc1.42E01E, mp4a.40.2"')) !== '';
+            supportObj.ogv = testEl.canPlayType('video/ogg; codecs="theora"') !== '';
+            supportObj.ogg = testEl.canPlayType('video/ogg; codecs="theora"') !== '';
+            supportObj.webm = testEl.canPlayType('video/webm; codecs="vp8, vorbis"') !== -1;
+          }
+        } catch (e) {
         }
         return supportObj;
       }()
@@ -288,7 +291,8 @@ defaultOptions = {
   'completeCallback': function () {
   },
   'saveRenderingContexts': false,
-  'savedRenderingContexts': []
+  'savedRenderingContexts': [],
+  'crossOrigin': 'Anonymous'
 };
 isSupported = function () {
   return error.isValid();
@@ -711,8 +715,10 @@ processFrameWorker = function (NeuQuant) {
   var workerCode = function () {
     try {
       self.onmessage = function (ev) {
-        var data = ev.data, response = workerMethods.run(data);
-        if (data && data.gifshot) {
+        var data = ev.data || {};
+        var response;
+        if (data.gifshot) {
+          response = workerMethods.run(data);
           postMessage(response);
         }
       };
@@ -1181,38 +1187,41 @@ existingImages = function (obj) {
   var images = obj.images, imagesLength = obj.imagesLength, callback = obj.callback, options = obj.options, skipObj = {
       'getUserMedia': true,
       'window.URL': true
-    }, errorObj = error.validate(skipObj), loadedImages = 0, tempImage, ag;
+    }, errorObj = error.validate(skipObj), loadedImages = [], loadedImagesLength = 0, tempImage, ag;
   if (errorObj.error) {
     return callback(errorObj);
   }
   ag = new AnimatedGIF(options);
   utils.each(images, function (index, currentImage) {
     if (utils.isElement(currentImage)) {
-      currentImage.crossOrigin = 'Anonymous';
-      ag.addFrame(currentImage, options);
-      loadedImages += 1;
-      if (loadedImages === imagesLength) {
-        getBase64GIF(ag, callback);
+      if (options.crossOrigin) {
+        currentImage.crossOrigin = options.crossOrigin;
+      }
+      loadedImages[index] = currentImage;
+      loadedImagesLength += 1;
+      if (loadedImagesLength === imagesLength) {
+        addLoadedImagesToGif();
       }
     } else if (utils.isString(currentImage)) {
       tempImage = document.createElement('img');
-      tempImage.crossOrigin = 'Anonymous';
+      if (options.crossOrigin) {
+        tempImage.crossOrigin = options.crossOrigin;
+      }
       tempImage.onerror = function (e) {
-        if (imagesLength > 0) {
-          imagesLength -= 1;
+        if (loadedImages.length > index) {
+          loadedImages[index] = undefined;
         }
-      };
-      tempImage.src = currentImage;
-      (function (tempImage) {
+      }(function (tempImage) {
         tempImage.onload = function () {
-          ag.addFrame(tempImage, options);
-          utils.removeElement(tempImage);
-          loadedImages += 1;
-          if (loadedImages === imagesLength) {
-            getBase64GIF(ag, callback);
+          loadedImages[index] = tempImage;
+          loadedImagesLength += 1;
+          if (loadedImagesLength === imagesLength) {
+            addLoadedImagesToGif();
           }
+          utils.removeElement(tempImage);
         };
       }(tempImage));
+      tempImage.src = currentImage;
       utils.setCSSAttr(tempImage, {
         'position': 'fixed',
         'opacity': '0'
@@ -1220,6 +1229,14 @@ existingImages = function (obj) {
       document.body.appendChild(tempImage);
     }
   });
+  function addLoadedImagesToGif() {
+    utils.each(loadedImages, function (index, loadedImage) {
+      if (loadedImage) {
+        ag.addFrame(loadedImage, options);
+      }
+    });
+    getBase64GIF(ag, callback);
+  }
 };
 screenShot = {
   getGIF: function (options, callback) {
@@ -1229,6 +1246,7 @@ screenShot = {
         var framesLeft = pendingFrames - 1;
         if (savedRenderingContexts.length) {
           context.putImageData(savedRenderingContexts[numFrames - pendingFrames], 0, 0);
+          finishCapture();
         } else {
           drawVideo();
         }
@@ -1296,7 +1314,7 @@ screenShot = {
     canvas.height = gifHeight;
     context = canvas.getContext('2d');
     (function capture() {
-      if (videoElement.currentTime === 0) {
+      if (!savedRenderingContexts && videoElement.currentTime === 0) {
         setTimeout(capture, 100);
         return;
       }
@@ -1407,8 +1425,10 @@ videoStream = {
     }, 100);
   },
   'startStreaming': function (obj) {
-    var self = this, errorCallback = utils.isFunction(obj.error) ? obj.error : utils.noop, streamedCallback = utils.isFunction(obj.streamed) ? obj.streamed : utils.noop, completedCallback = utils.isFunction(obj.completed) ? obj.completed : utils.noop, existingVideo = obj.existingVideo, webcamVideoElement = obj.webcamVideoElement, videoElement = utils.isElement(existingVideo) ? existingVideo : webcamVideoElement ? webcamVideoElement : document.createElement('video'), lastCameraStream = obj.lastCameraStream, cameraStream;
-    videoElement.crossOrigin = 'Anonymous';
+    var self = this, errorCallback = utils.isFunction(obj.error) ? obj.error : utils.noop, streamedCallback = utils.isFunction(obj.streamed) ? obj.streamed : utils.noop, completedCallback = utils.isFunction(obj.completed) ? obj.completed : utils.noop, existingVideo = obj.existingVideo, webcamVideoElement = obj.webcamVideoElement, videoElement = utils.isElement(existingVideo) ? existingVideo : webcamVideoElement ? webcamVideoElement : document.createElement('video'), lastCameraStream = obj.lastCameraStream, crossOrigin = obj.crossOrigin, options = obj.options, cameraStream;
+    if (crossOrigin) {
+      videoElement.crossOrigin = options.crossOrigin;
+    }
     videoElement.autoplay = true;
     videoElement.loop = true;
     videoElement.muted = true;
@@ -1470,7 +1490,9 @@ videoStream = {
         });
       },
       'lastCameraStream': options.lastCameraStream,
-      'webcamVideoElement': webcamVideoElement
+      'webcamVideoElement': webcamVideoElement,
+      'crossOrigin': options.crossOrigin,
+      'options': options
     });
   },
   'stopVideoStreaming': function (obj) {
@@ -1560,7 +1582,9 @@ existingVideo = function (obj) {
       obj.options = options || {};
       createAndGetGIF(obj, callback);
     },
-    'existingVideo': existingVideo
+    'existingVideo': existingVideo,
+    'crossOrigin': options.crossOrigin,
+    'options': options
   });
 };
 existingWebcam = function (obj) {
@@ -1580,7 +1604,8 @@ existingWebcam = function (obj) {
   }, {
     'lastCameraStream': lastCameraStream,
     'callback': callback,
-    'webcamVideoElement': webcamVideoElement
+    'webcamVideoElement': webcamVideoElement,
+    'crossOrigin': options.crossOrigin
   });
 };
 createGIF = function (userOptions, callback) {
@@ -1590,6 +1615,10 @@ createGIF = function (userOptions, callback) {
     return;
   }
   var options = utils.mergeOptions(defaultOptions, userOptions) || {}, lastCameraStream = userOptions.cameraStream, images = options.images, imagesLength = images ? images.length : 0, video = options.video, webcamVideoElement = options.webcamVideoElement;
+  options = utils.mergeOptions(options, {
+    'gifWidth': Math.floor(options.gifWidth),
+    'gifHeight': Math.floor(options.gifHeight)
+  });
   if (imagesLength) {
     existingImages({
       'images': images,
@@ -1620,7 +1649,9 @@ takeSnapShot = function (userOptions, callback) {
   }
   var mergedOptions = utils.mergeOptions(defaultOptions, userOptions), options = utils.mergeOptions(mergedOptions, {
       'interval': 0.1,
-      'numFrames': 1
+      'numFrames': 1,
+      'gifWidth': Math.floor(mergedOptions.gifWidth),
+      'gifHeight': Math.floor(mergedOptions.gifHeight)
     });
   createGIF(options, callback);
 };
@@ -1636,7 +1667,7 @@ API = function (utils, error, defaultOptions, isSupported, isWebCamGIFSupported,
     'isWebCamGIFSupported': isWebCamGIFSupported,
     'isExistingVideoGIFSupported': isExistingVideoGIFSupported,
     'isExistingImagesGIFSupported': isExistingImagesGIFSupported,
-    'VERSION': '0.1.1'
+    'VERSION': '0.2.1'
   };
   return gifshot;
 }(utils, error, defaultOptions, isSupported, isWebCamGIFSupported, isExistingImagesGIFSupported, isExistingVideoGIFSupported, createGIF, takeSnapShot, stopVideoStreaming);
