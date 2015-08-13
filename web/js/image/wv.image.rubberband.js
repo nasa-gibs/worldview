@@ -39,6 +39,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
     var jcropAPI = null;
     var previousPalettes = null;
     var $button;
+    var $progress;
     self.events = wv.util.events();
 
     /**
@@ -337,13 +338,21 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                     i += delta;
             }
 
+            $progress = $("<progress />") //display progress for GIF creation
+                .attr("id", "GIFprogress")
+                .appendTo("#products");
+
             gifshot.createGIF({
                 gifWidth: animCoords.w,
                 gifHeight: animCoords.h,
                 images: a,
-                interval: interval
-            }, function (obj) {
+                interval: interval,
+                progressCallback: function(captureProgress) {
+                    $progress.attr("value",captureProgress);
+                }
+            }, function (obj) { //callback function for when image is finished
                 if (!obj.error) {
+                    $progress.remove();
                     var animatedImage = document.createElement('img');
                     animatedImage.setAttribute("style", "padding: 10px 0px");
 
