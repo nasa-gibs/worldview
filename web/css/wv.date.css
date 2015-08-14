@@ -59,6 +59,10 @@ http://stackoverflow.com/questions/13571706/how-to-add-white-spaces-in-html-para
     float: right
 }
 
+.wv-noDateChoose {
+    cursor: not-allowed;
+}
+
 #timeds, #timemds {
     position: relative;
 }
@@ -158,12 +162,12 @@ a.expand {
 }
 
 input.ui-slider-input {
-    width: 0px;
-    margin: 0px;
+    width: 0;
+    margin: 0;
 }
 
 .slider {/*background: rgba(45,50,55,.75);*/
-    margin-bottom: 0px; /*box-shadow: 0px 0px 4px 1px #bbb;*/
+    margin-bottom: 0; /*box-shadow: 0px 0px 4px 1px #bbb;*/
     background: -moz-linear-gradient(top,  rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.8) 100%); /* FF3.6+ */
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.6)), color-stop(50%,rgba(0,0,0,0.7)), color-stop(100%,rgba(0,0,0,0.8))); /* Chrome,Safari4+ */
     background: -webkit-linear-gradient(top,  rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.7) 50%,rgba(0,0,0,0.8) 100%); /* Chrome10+,Safari5.1+ */
@@ -189,7 +193,7 @@ ul.sliderLabel {
 ul.sliderLabel li {
     float: left;
     background: none;
-    margin: 0px;
+    margin: 0;
     text-align: center;
     overflow: hidden;
     font-weight: 700;
@@ -224,8 +228,8 @@ a.ui-slider-handle {
 div.ui-slider {
     border: none;
     background: rgba(0,0,0,0.05); /*<-----Fix for IE10*/
-    margin: 0px;
-    top: 0px;
+    margin: 0;
+    top: 0;
     height: 23px;
 }
 
@@ -238,7 +242,7 @@ div.ui-slider {
     bottom: 85px;
     border: none;
     text-shadow: none;
-    font-family: "Lucida Sans", "Arial", "sans serif";
+    font-family: "Lucida Sans", "Arial", "sans-serif";
     color: white;
     background-color: rgba(40, 40, 40, 0.85);
     text-align: center;

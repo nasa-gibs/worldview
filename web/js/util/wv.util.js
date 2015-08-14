@@ -560,6 +560,7 @@ wv.util = (function(self) {
     };
 
     self.key = {
+        SPACE: 32,
         LEFT: 37,
         RIGHT: 39,
         UP: 38,

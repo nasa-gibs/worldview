@@ -20,7 +20,7 @@ wv.proj = wv.proj || {};
  *
  * @class wv.proj.ui
  */
-wv.proj.ui = wv.proj.ui || function(models, config) {
+wv.proj.ui = wv.proj.ui || function(models, config, ui) {
 
     var model = models.proj;
 
@@ -99,6 +99,7 @@ wv.proj.ui = wv.proj.ui || function(models, config) {
             if ( $button.parent().has(event.target).length > 0 ) {
                 return;
             }
+            ui.anim.stop(); //stop current animation first
             $menuItems.hide();
             $("#wv-proj-button-check").prop("checked", false);
             $("#wv-proj-button").find("label").removeClass("ui-state-hover");

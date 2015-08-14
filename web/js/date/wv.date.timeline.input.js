@@ -226,7 +226,9 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
     };
 
     self.restoreDialog = function() {
-        $(".wv-datepicker").datepicker("option", "disabled", false);
+        //Remove not allowed cursor, enable date pickers (widget + sliders), restore dialog buttons
+        $(".wv-datepicker").removeClass("wv-noDateChoose").datepicker("option", "disabled", false);
+        d3.selectAll(".animpick").attr("style", "cursor: select");
         $("#dialog").dialog("option", "buttons", [
             playButton, GIFButton
         ]);
@@ -251,8 +253,22 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
     };
 
     //TODO: Cleanup
-    var init = function(){
+    var init = function() {
         var $dialog_sel = $("#dialog");
+
+        var animPause = function() {
+            ui.anim.pause();
+            $dialog_sel.dialog("option", "buttons",[
+                resumeButton, GIFButton
+            ]);
+        },
+        animResume = function() {
+            ui.anim.delay = parseFloat(1000 / $speedSlider.val());
+            ui.anim.resume();
+            $dialog_sel.dialog("option", "buttons",[
+                pauseButton, GIFButton
+            ]);
+        };
 
         $incrementBtn
             .mousedown(function(e) {
@@ -318,21 +334,14 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         resumeButton = {
             text: "Play",
             click: function() { //Resume animation, update speed, restore pause button
-                ui.anim.delay = parseFloat(1000 / $speedSlider.val());
-                ui.anim.resume();
-                $dialog_sel.dialog("option", "buttons",[
-                    pauseButton, GIFButton
-                ]);
+                animResume();
             }
         };
 
         pauseButton = {
             text: "Pause",
             click: function() { //Resume animation, replace with resume button
-                ui.anim.pause();
-                $dialog_sel.dialog("option", "buttons",[
-                    resumeButton, GIFButton
-                ]);
+               animPause();
             }
         };
 
@@ -369,6 +378,9 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                     //Disable datepickers and slider drag behaviour
                     $fromDate.datepicker("option", "disabled", true);
                     $toDate.datepicker("option", "disabled", true);
+                    $(".wv-datepicker").addClass("wv-noDateChoose");
+                    //$(".animpick").addClass("wv-noDateChoose");
+                    d3.selectAll(".animpick").attr("style", "cursor: not-allowed");
                     d3.select("#fromPick").on(".drag", null);
                     d3.select("#toPick").on(".drag", null);
 
@@ -486,9 +498,8 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 $(".animpick").show();
             },
             close: function() {
-                //Hide datepickers
-                if(!ui.anim.doAnimation)
-                    $(".animpick").hide();
+                animateEnd(); //End animation, hide animation sliders
+                $(".animpick").hide();
             },
             buttons: [ //Go button controls date range animation, share controls gif generation
                 playButton, GIFButton
@@ -508,10 +519,6 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         });
 
         $(document)
-            .mouseleave(function() {
-                if ( ui.anim.active )
-                    animateEnd();
-                })
             .keydown(function(event) {
                 switch ( event.keyCode ) {
                     case wv.util.key.LEFT:
@@ -520,6 +527,13 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                         break;
                     case wv.util.key.RIGHT:
                         animateForward(interval);
+                        event.preventDefault();
+                        break;
+                    case wv.util.key.SPACE: //pause or resume
+                        if(ui.anim.paused)
+                            animResume();
+                        else if(ui.anim.doAnimation)
+                            animPause();
                         event.preventDefault();
                         break;
                 }
@@ -559,7 +573,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 roll(interval, -1);
                 $(this).select().focus();
             }
-            
+
         });
 
         $buttons.on('focus',function(e){
@@ -618,7 +632,6 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         }
 
         self.update();
-
     };
 
     init();

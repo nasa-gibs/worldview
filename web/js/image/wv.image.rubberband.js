@@ -81,6 +81,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
 
         //Enables UI to select an area on the map while darkening the view
         var toggleOn = function() {
+            ui.anim.stop(); //end current animation first
             state = "on";
             toolbarButtons("disable");
             self.events.trigger("show");
@@ -342,13 +343,19 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                 .attr("id", "wv-gif-progress")
                 .appendTo("#products");
 
+            wv.ui.getDialog().append($progress).dialog({
+                title: "Creating GIF...",
+                width: 300,
+                height: 100
+            });
+
             gifshot.createGIF({
                 gifWidth: animCoords.w,
                 gifHeight: animCoords.h,
                 images: a,
                 interval: interval,
                 progressCallback: function(captureProgress) {
-                    $progress.attr("value",captureProgress);
+                    $progress.attr("value", captureProgress);
                 }
             }, function (obj) { //callback function for when image is finished
                 if (!obj.error) {

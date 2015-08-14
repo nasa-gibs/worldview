@@ -148,7 +148,7 @@ $(function() {
         ui.anim = wv.date.anim(models.date, ui, {
             debug: parameters.debug === "anim"
         });
-        ui.proj = wv.proj.ui(models, config);
+        ui.proj = wv.proj.ui(models, config, ui);
         ui.sidebar = wv.layers.sidebar(models, config);
         ui.activeLayers = wv.layers.active(models, ui, config);
         ui.addLayers = wv.layers.add(models, ui, config);
