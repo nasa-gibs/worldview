@@ -285,9 +285,10 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
         }
 
         var htmlElements = "<div id='gifDialog'>" +
+                            "<div id='wv-gif-speedSlider'></div>" +
                             "<span class='ui-helper-hidden-accessible'><input type='text' readonly/></span>" +
                                 "<table class='wv-image-download' style='padding-bottom: 7px'>" +
-                                    "<tr>" + "<th>GIF Speed:</th>" + "<td class='wv-image-size'>" + (1/interval).toFixed() + " Frames Per Second</td></tr>" +
+                                    "<tr>" + "<th>GIF Speed:</th>" + "<td id='wv-gif-speed' class='wv-image-size'>" + (1/interval).toFixed() + " Frames Per Second</td></tr>" +
                                     "<tr>" + "<th>GIF Size:</th>" + "<td><span id='wv-gif-width'>0</span> x <span id='wv-gif-height'>0</span></td></tr>" +
                                     "<tr>" + "<th>Image Resolution</th>" + "<td>" + calcRes(1) + "</td></tr>" +
                                     "<tr>" + "<th>Image Size:</th>" + "<td id='wv-gif-size' class='wv-image-size'>0 MB</td></tr>" +
@@ -295,7 +296,24 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                                 "<button id='wv-gif-button'>Generate</button>" +
                                 "<button id='wv-gif-goback'>Go Back</button>" +
                            "</div>";
+
         var $dialog = wv.ui.getDialog().html(htmlElements); //place it above image crop
+
+        $("#wv-gif-speedSlider").noUiSlider({
+            start: parseInt((1/interval).toFixed()),
+            step: 1,
+            range: {
+                min: 1,
+                max: 30
+            }
+        }).on("slide", function() {
+            interval = parseFloat(1 / $(this).val());
+            $('#wv-gif-speed').text((1/interval).toFixed() + " Frames Per Second");
+        }).on("set", function() {
+            interval = parseFloat(1 / $(this).val());
+            $('#wv-gif-speed').text((1/interval).toFixed() + " Frames Per Second");
+        });
+
         $dialog.dialog({
             dialogClass: "wv-panel wv-image",
             title: "Generate GIF",
@@ -318,7 +336,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
             $("#dialog").dialog("open");
         });
 
-        //Wire the button to generate the URL and GIF
+        //Wire the button to form the URLs and GIF
         $("#wv-gif-button").button().click(function() {
             $dialog.dialog("close");
             var url = formImageURL(), a = [];
@@ -343,7 +361,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                 .attr("id", "wv-gif-progress")
                 .appendTo("#products");
 
-            wv.ui.getDialog().append($progress).dialog({
+            wv.ui.getDialog().append($progress).dialog({ //dialog for progress
                 title: "Creating GIF...",
                 width: 300,
                 height: 100

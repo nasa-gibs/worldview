@@ -335,12 +335,12 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
         tl.animPick1.append("svg:path")
             .attr("id", "fromPick")
             .attr("d", "M0 0 L40 0 L20 40 Z")
-            .attr("style","fill:rgb(255,0,0)");
+            .attr("style","fill:rgb(0,255,0)");
 
         tl.animPick2.append("svg:path")
             .attr("id", "toPick")
             .attr("d", "M0 0 L40 0 L20 40 Z")
-            .attr("style","fill:rgb(0,255,0)");
+            .attr("style","fill:rgb(255,0,0)");
 
         self.turnOnDrag();
         $(".animpick").hide();
