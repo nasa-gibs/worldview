@@ -81,7 +81,10 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
 
         //Enables UI to select an area on the map while darkening the view
         var toggleOn = function() {
-            ui.anim.stop(); //end current animation first
+            if($("#dialog").dialog("isOpen"))
+                $("#dialog").dialog("close");
+            ui.anim.stop(); //close animation dialog, end current animation first
+
             state = "on";
             toolbarButtons("disable");
             self.events.trigger("show");

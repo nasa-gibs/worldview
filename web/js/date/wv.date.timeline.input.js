@@ -505,6 +505,11 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             ]
         });
 
+        //Make dialog responsive to window resizing
+        $(window).resize(function() {
+            $dialog_sel.dialog("option", "position", {my: "left bottom", at: "left top", of: $("#timeline-header")});
+        });
+
         //Create the interval radio buttons here
         var intervalHTML = "<input type='radio' id='wv-day' class='wv-interval' name='radios' value='day' checked/>" +
                                 "<label for='wv-day' class='ui-button ui-widget'>Day</label>" +
