@@ -34,6 +34,14 @@
      var init = function() {
      };
 
+     self.load = function(state, errors) {
+
+     };
+
+     self.save = function(state) {
+
+     };
+
      self.play = function(direction) {
          //Check for loop first
          self.loop = document.getElementById("loopcheck").checked;

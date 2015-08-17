@@ -448,6 +448,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 console.log(self.fromDate);
                 //Move animation date picker in timeline according to the new date
                 d3.select("#fromPick").attr("transform", ui.timeline.pick.updateAnimPickers(self.fromDate));
+                ui.timeline.pick.checkAnimPickers();
             }
         });
 
@@ -460,6 +461,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 console.log(self.toDate);
                 //Move animation date picker in timeline according to the new date
                 d3.select("#toPick").attr("transform", ui.timeline.pick.updateAnimPickers(self.toDate));
+                ui.timeline.pick.checkAnimPickers();
             }
         });
 

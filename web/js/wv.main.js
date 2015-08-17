@@ -125,7 +125,7 @@ $(function() {
             .register(models.date)
             .register(models.palettes)
             .register(models.map);
-        models.link.load(state);
+
 
         // HACK: Map needs to be created before the data download model
         ui.map = wv.map.ui(models, config, ui);
@@ -148,6 +148,11 @@ $(function() {
         ui.anim = wv.date.anim(models.date, ui, {
             debug: parameters.debug === "anim"
         });
+
+        //finish registering objects then configure Worldview state based on URL
+        models.link.register(ui.anim);
+        models.link.load(state);
+
         ui.proj = wv.proj.ui(models, config, ui);
         ui.sidebar = wv.layers.sidebar(models, config);
         ui.activeLayers = wv.layers.active(models, ui, config);
