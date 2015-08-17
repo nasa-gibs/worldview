@@ -228,7 +228,8 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
     self.restoreDialog = function() {
         //Remove not allowed cursor, enable date pickers (widget + sliders), restore dialog buttons
         $(".wv-datepicker").removeClass("wv-noDateChoose").datepicker("option", "disabled", false);
-        d3.selectAll(".animpick").attr("style", "cursor: pointer");
+        d3.select("#fromPick").classed("wv-noDateChoose", false);
+        d3.select("#toPick").classed("wv-noDateChoose", false);
         $("#dialog").dialog("option", "buttons", [
             playButton, GIFButton
         ]);
@@ -379,7 +380,8 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                     $fromDate.datepicker("option", "disabled", true);
                     $toDate.datepicker("option", "disabled", true);
                     $(".wv-datepicker").addClass("wv-noDateChoose");
-                    d3.selectAll(".animpick").attr("style", "cursor: not-allowed");
+                    d3.select("#fromPick").classed("wv-noDateChoose", true);
+                    d3.select("#toPick").classed("wv-noDateChoose", true);
                     d3.select("#fromPick").on(".drag", null);
                     d3.select("#toPick").on(".drag", null);
 

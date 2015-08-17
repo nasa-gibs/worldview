@@ -12,7 +12,7 @@
 var wv = wv || {};
 wv.map = wv.map || {};
 
-wv.map.ui = wv.map.ui || function(models, config) {
+wv.map.ui = wv.map.ui || function(models, config, ui) {
 
     var id = "wv-map";
     var selector = "#" + id;
@@ -270,7 +270,8 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 proj: proj.id,
                 def: def
             };
-            cache.setItem(key, layer);
+            if(!(animating() && !def.visible)) //For animations, the cache is not big enough, so cache only visible items
+                cache.setItem(key, layer);
             layer.setVisible(false);
         }
         layer.setOpacity(def.opacity || 1.0);
@@ -722,6 +723,13 @@ wv.map.ui = wv.map.ui || function(models, config) {
             palette = models.palettes.key(def.id);
         }
         return [layerId, projId, dateId, palette].join(":");
+    };
+
+    //Check if an animation is on session, or whether the animation state exists
+    var animating = function() {
+        if(ui.anim === undefined)
+            return false;
+        return ui.anim.doAnimation;
     };
 
     init();

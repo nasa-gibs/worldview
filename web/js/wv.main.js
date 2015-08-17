@@ -128,7 +128,7 @@ $(function() {
         models.link.load(state);
 
         // HACK: Map needs to be created before the data download model
-        ui.map = wv.map.ui(models, config);
+        ui.map = wv.map.ui(models, config, ui);
         if ( config.features.dataDownload ) {
             models.data = wv.data.model(models, config);
         }

@@ -361,8 +361,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
             }
 
             $progress = $("<progress />") //display progress for GIF creation
-                .attr("id", "wv-gif-progress")
-                .appendTo("#products");
+                .attr("id", "wv-gif-progress");
 
             wv.ui.getDialog().append($progress).dialog({ //dialog for progress
                 title: "Creating GIF...",
@@ -376,7 +375,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                 images: a,
                 interval: interval,
                 progressCallback: function(captureProgress) {
-                    $progress.attr("value", captureProgress);
+                    $progress.attr("value", captureProgress); //before value set, it is in indeterminate state
                 }
             }, function (obj) { //callback function for when image is finished
                 if (!obj.error) {
