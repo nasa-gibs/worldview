@@ -108,7 +108,7 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
 
         //Here we have access to information in the d3.event object
         //Use it to acquire the date
-        var tempPickTipOffset = Math.max( -(width / 2), Math.min( tl.width - (width / 2), d3.event.x ) );
+        var tempPickTipOffset = Math.max( 0, Math.min( tl.width, d3.event.x ) );
         var tempPickOffset = tempPickTipOffset - POS2DATE_OFFSET; //we want the x coordinate of left corner
         var tempPickTipDate = tl.x.invert(tempPickTipOffset); //date chosen should match tip area
 
