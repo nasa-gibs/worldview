@@ -49,6 +49,7 @@ wv.date.timeline.pan = wv.date.timeline.pan || function(models, config, ui) {
 
         tl.pick.update();
         tl.pick.checkLocation();
+        tl.pick.checkAnimPickers();
 
         //Update date pickers when timeline zoom level changes.
         //We need to check tl.input because this executes when page is loaded

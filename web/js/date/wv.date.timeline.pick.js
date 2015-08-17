@@ -29,7 +29,7 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
     var self = {};
 
     var width = 60;
-    var ANIM_OFFSET = 8, POS2DATE_OFFSET = 10, animDragOffset;
+    var ANIM_OUTOFBOUNDS = 5, ANIM_OFFSET = 8, POS2DATE_OFFSET = 10, animDragOffset;
 
     var mousedown = false;
     var nextChange, prevChange;
@@ -240,6 +240,20 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
         else{
             $('#guitarpick').show();
         }
+    };
+
+    self.checkAnimPickers = function() {
+        //get positions of datepickers and check if there are outside the
+        var fromPos = tl.x(tl.input.fromDate), toPos = tl.x(tl.input.toDate);
+        if(fromPos >= ( tl.width + ANIM_OUTOFBOUNDS ) || fromPos <= 0)
+            $('#fromPick').hide();
+        else
+            $('#fromPick').show();
+
+        if(toPos >= ( tl.width + ANIM_OUTOFBOUNDS ) || toPos <= 0)
+            $('#toPick').hide();
+        else
+            $('#toPick').show();
     };
 
     // Simple update the position of the pick

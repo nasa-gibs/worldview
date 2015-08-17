@@ -364,7 +364,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                 .attr("id", "wv-gif-progress");
 
             wv.ui.getDialog().append($progress).dialog({ //dialog for progress
-                title: "Creating GIF...",
+                title: "Downloading images...",
                 width: 300,
                 height: 100
             });
@@ -375,6 +375,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                 images: a,
                 interval: interval,
                 progressCallback: function(captureProgress) {
+                    $progress.parent().dialog("option", "title", "Creating GIF..."); //set dialog title
                     $progress.attr("value", captureProgress); //before value set, it is in indeterminate state
                 }
             }, function (obj) { //callback function for when image is finished
@@ -438,12 +439,18 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
             });
         });
 
+        //Set JCrop selection
+        if(previousCoords === null || previousCoords === undefined)
+            previousCoords = [($(window).width()/2)-100,($(window).height()/2)-100,($(window).width()/2)+100,($(window).height()/2)+100];
+        else
+            previousCoords = [previousCoords.x, previousCoords.y, previousCoords.x2, previousCoords.y2];
+
         //Start the image cropping. Show the dialog
         $("#wv-map").Jcrop({
             bgColor:     'black',
             bgOpacity:   0.3,
             fullScreen:  true,
-            setSelect: [($(window).width()/2)-100,($(window).height()/2)-100,($(window).width()/2)+100,($(window).height()/2)+100],
+            setSelect: previousCoords,
             onSelect: function(c) {
                 animCoords = c;
                 $("#wv-gif-width").html((c.w));
@@ -451,6 +458,8 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
             },
             onChange: function(c) { //Update gif size and image size in MB
                 animCoords = c;
+                if(c.h !== 0 && c.w !== 0) //don't save coordinates if empty selection
+                    previousCoords = c;
                 var dataSize = calcSize(c);
 
                 //Update the gif selection dialog
@@ -461,7 +470,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                 else
                     $("#wv-gif-button").button("enable");
             },
-            onRelease: function() {
+            onRelease: function(c) {
                 removeCrop();
                 $dialog.dialog("close");
             }
@@ -509,7 +518,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
         ui.map.updateRotation();
     },
 
-    calcRes = function(mode) { //return either multipler or string resolution
+    calcRes = function(mode) { //return either multiplier or string resolution
         var zoom_res = [40, 20, 4, 2, 1], str, res;
         res = zoom_res[Math.floor((ui.map.selected.getView().getZoom()/2))];
 
