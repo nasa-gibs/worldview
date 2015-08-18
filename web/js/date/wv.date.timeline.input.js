@@ -236,16 +236,20 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         ui.timeline.pick.turnOnDrag();
     };
 
+    self.disableDialog = function() {
+        //Disable datepickers and slider drag behaviour
+        $(".wv-datepicker").addClass("wv-noDateChoose").datepicker("option", "disabled", true);
+        d3.select("#fromPick").classed("wv-noDateChoose", true).on(".drag", null);
+        d3.select("#toPick").classed("wv-noDateChoose", true).on(".drag", null);
+    };
+
     //Prepare animation when button pressed
     var prepareAnim = function(speedSlider) {
         ui.anim.doAnimation = true;
         ui.anim.delay = parseFloat(1000 / speedSlider.val());
 
-        if(document.getElementById("loopcheck").checked) {  //check for loop
+        if(document.getElementById("loopcheck").checked)   //check for loop
             ui.anim.initDate = new Date(model.selected.valueOf()); //clone date from picker
-            console.log(model.selected);
-            console.log(ui.anim.initDate);
-        }
     };
 
     //When the Go button is pressed, the dates are checked to make sure they exist and are valid
@@ -370,41 +374,18 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                     model.selected = new Date(self.fromDate.valueOf()); //clone fromDate
                     ui.anim.initDate = new Date(model.selected.valueOf());
                     ui.anim.endDate = new Date(self.toDate.valueOf());
+                    ui.anim.interval = interval;
 
                     //Set pause button
                     $dialog_sel.dialog("option", "buttons", [
                         pauseButton, GIFButton
                     ]);
 
-                    //Disable datepickers and slider drag behaviour
-                    $fromDate.datepicker("option", "disabled", true);
-                    $toDate.datepicker("option", "disabled", true);
-                    $(".wv-datepicker").addClass("wv-noDateChoose");
-                    d3.select("#fromPick").classed("wv-noDateChoose", true);
-                    d3.select("#toPick").classed("wv-noDateChoose", true);
-                    d3.select("#fromPick").on(".drag", null);
-                    d3.select("#toPick").on(".drag", null);
+                    self.disableDialog();
+                    ui.anim.setDirectionAndRun(to, from);
 
-                    if(to > from) { //set it back because animation needs to "animate" to the right date
-                        if(interval === 'year')
-                            model.selected.setUTCFullYear(model.selected.getUTCFullYear()-1);
-                        else if(interval === 'month')
-                            model.selected.setUTCMonth(model.selected.getUTCMonth()-1);
-                        else
-                            model.selected.setUTCDate(model.selected.getUTCDate()-1);
-                        animateForward(interval);
-                    }
-                    else {
-                        if(interval === 'year')
-                            model.selected.setUTCFullYear(model.selected.getUTCFullYear()+1);
-                        else if(interval === 'month')
-                            model.selected.setUTCMonth(model.selected.getUTCMonth()+1);
-                        else
-                            model.selected.setUTCDate(model.selected.getUTCDate()+1);
-                        animateReverse(interval);
-                    }
                 } else
-                    wv.ui.notify("Invalid date range, please make sure the start date is before the end date");
+                    wv.ui.notify("Invalid date range, start and end dates cannot be the same");
             }
         };
 
@@ -445,7 +426,6 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             maxDate: 0, //can't choose date after today
             onSelect: function() {
                 self.fromDate = $fromDate.datepicker("getDate");
-                console.log(self.fromDate);
                 //Move animation date picker in timeline according to the new date
                 d3.select("#fromPick").attr("transform", ui.timeline.pick.updateAnimPickers(self.fromDate));
                 ui.timeline.pick.checkAnimPickers();
@@ -458,7 +438,6 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             maxDate: 0,
             onSelect: function() {
                 self.toDate = $toDate.datepicker("getDate");
-                console.log(self.toDate);
                 //Move animation date picker in timeline according to the new date
                 d3.select("#toPick").attr("transform", ui.timeline.pick.updateAnimPickers(self.toDate));
                 ui.timeline.pick.checkAnimPickers();
@@ -524,6 +503,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         $dialog_sel.append(intervalHTML);
         $(".wv-interval").click(function() {
             interval = $(this).attr("value");
+            ui.anim.interval = interval;
         });
 
         $(document)

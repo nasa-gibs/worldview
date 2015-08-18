@@ -37,6 +37,9 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
 
     //FIXME: Optimize a lot, this is terrible
     var dragmove = function(){
+        if(ui.anim.doAnimation) //stop animation
+            ui.anim.stop();
+
         var tempPickOffset = Math.max( -(width / 2),
                                        Math.min( tl.width - (width / 2), d3.event.x ) );
         var tempPickTipOffset = tempPickOffset + (width / 2);
@@ -118,7 +121,6 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
             tempPickTipDate = wv.util.clearTimeUTC(tempPickTipDate);//set it to midnight
             //It is offset by one so change date so slider is dragged in the middle
             tempPickTipDate.setUTCDate(tempPickTipDate.getUTCDate() + 1);
-            console.log(tempPickTipDate);
 
             //HACK: Due to weird Date object behaviour, we need to set fromDate and toDate one day back
             if (d3.select(this).attr("id") === d3.select("#fromPick").attr("id")) { //compare their ids

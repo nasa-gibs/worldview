@@ -149,8 +149,7 @@ $(function() {
             debug: parameters.debug === "anim"
         });
 
-        //finish registering objects then configure Worldview state based on URL
-        models.link.register(ui.anim);
+        //Handle animation permalink stuff later
         models.link.load(state);
 
         ui.proj = wv.proj.ui(models, config, ui);
@@ -206,6 +205,11 @@ $(function() {
             // FIXME: This is a hack
             models.map.events.on("projection", models.data.updateProjection);
         }
+
+        //Handle animation permalink stuff here
+        ui.anim.parse(state, errors, config);
+        models.link.register(ui.anim);
+        ui.anim.load(state, errors);
 
         // Sink all focus on inputs if click unhandled
         $(document).click(function(event) {

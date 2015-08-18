@@ -34,12 +34,80 @@
      var init = function() {
      };
 
-     self.load = function(state, errors) {
+     //Given the raw string, parse state.a into an object
+     self.parse = function(state, errors, config) {
+         if(!_.isUndefined(state.a)) {
+             var str = state.a, astate = {attributes: []};
 
+             //Get text before (
+             var on = str.match(/[^\(,]+/)[0];
+             if (on !== 'on') { //don't do anything if wrong format
+                 state.a = undefined;
+                 return;
+             }
+
+             //remove (, get key value pairs
+             str = str.match(/\(.*\)/)[0].replace(/[\(\)]/g, "");
+             var kvps = str.split(",");
+             _.each(kvps, function (kvp) {
+                 var parts = kvp.split("=");
+                 astate.attributes.push({id: parts[0], value: parts[1]});
+             });
+
+             state.a = astate;
+         }
      };
 
-     self.save = function(state) {
+     //state.a is now an object, check input and set values
+     //TODO: Set values for UI elements, check everything else has loaded open dialog, set back date, start animation
+     self.load = function(state, errors) {
+         if ( !_.isUndefined(state.a) ) {
+             var attributes = state.a.attributes;
+             attributes.forEach(function(attr) {
+                 if(attr.id === 'speed')
+                     self.delay = parseFloat(1000 / attr.value);
+                 else if(attr.id === 'loop')
+                     self.loop = attr.value;
+                 else if(attr.id === 'interval')
+                     self.interval = attr.value;
+                 else if(attr.id === 'start')
+                     self.initDate = wv.util.parseDateUTC(attr.value);
+                 else if(attr.id === 'end')
+                     self.endDate = wv.util.parseDateUTC(attr.value);
+             });
 
+             self.doAnimation = true;
+
+             //Prepare and start animation. Set right dates for datepickers
+             $("#dialog").dialog("open");
+
+             //HACK: Weird functionality with Date objects mean to show the right date, need to offset it by one
+             var tempFrom = new Date(self.initDate), tempTo = new Date(self.endDate);
+             tempFrom.setUTCDate(tempFrom.getUTCDate() + 1); tempTo.setUTCDate(tempTo.getUTCDate() + 1);
+
+             $("#from").datepicker("setDate", tempFrom);
+             $("#to").datepicker("setDate", tempTo);
+             model.selected = new Date(self.initDate.valueOf());
+
+             ui.timeline.input.disableDialog();
+             self.setDirectionAndRun(self.endDate.getTime(), self.initDate.getTime());
+         }
+     };
+
+     //update animation fields, set animation settings into an object
+     self.save = function(state) {
+         self.loop = document.getElementById("loopcheck").checked;
+         self.initDate = $("#from").datepicker("getDate");
+         self.endDate = $("#to").datepicker("getDate");
+
+         if($("#dialog").dialog("isOpen")) { //save if animation dialog open not just animating
+             state.a = state.a || [];
+             var astate = {id: "on"};
+             astate.attributes = [];
+             astate.attributes.push({id: "speed", value: (1000 /self.delay).toFixed()}, {id: "loop", value: (self.loop) ? "true" : "false"}, {id: "interval", value: self.interval});
+             astate.attributes.push({id: "start", value: self.initDate.toISOString().split("T")[0]}, {id: "end", value: self.endDate.toISOString().split("T")[0]});
+             state.a.push(astate);
+         }
      };
 
      self.play = function(direction) {
@@ -96,6 +164,30 @@
          }
      };
 
+     //Primary function to set the direction and play animation from dialog or permalink
+     self.setDirectionAndRun = function(to, from) {
+         if (to > from) { //set it back because animation needs to "animate" to the right date
+             if (self.interval === 'year')
+                 model.selected.setUTCFullYear(model.selected.getUTCFullYear() - 1);
+             else if (self.interval === 'month')
+                 model.selected.setUTCMonth(model.selected.getUTCMonth() - 1);
+             else
+                 model.selected.setUTCDate(model.selected.getUTCDate() - 1);
+             model.add(self.interval, 1);
+             self.play("forward");
+         }
+         else {
+             if (self.interval === 'year')
+                 model.selected.setUTCFullYear(model.selected.getUTCFullYear() + 1);
+             else if (self.interval === 'month')
+                 model.selected.setUTCMonth(model.selected.getUTCMonth() + 1);
+             else
+                 model.selected.setUTCDate(model.selected.getUTCDate() + 1);
+             model.add(self.interval, -1);
+             self.play("reverse");
+         }
+     };
+
      var prepareFrame = function() {
          if ( !self.active ) 
              return;
@@ -126,9 +218,6 @@
                  model.selected.setUTCMonth(model.selected.getUTCMonth() - amount);
              else
                  model.selected.setUTCFullYear(model.selected.getUTCFullYear() - amount);
-
-             console.log(model.selected);
-             console.log(self.initDate);
 
              self.play(self.direction);
          } else { //stop animation normally
