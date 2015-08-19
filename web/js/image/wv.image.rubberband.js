@@ -401,12 +401,13 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                     var blob = new Blob(byteArrays, {type: "image/gif"});
                     var blobURL = URL.createObjectURL(blob); //supported in Chrome and FF
                     animatedImage.src = blobURL;
+                    var dlURL = wv.util.format("nasa-worldview-{1}-to-{2}.gif", wv.util.toISOStringDate(ui.timeline.input.fromDate), wv.util.toISOStringDate(ui.timeline.input.toDate));
 
                     //Create download link and apply button CSS
                     var $download = $("<a><span class=ui-button-text>Download</span></a>")
                         .attr("type", "button")
                         .attr("role", "button")
-                        .attr("download", "animation.gif")
+                        .attr("download", dlURL)
                         .attr("href", blobURL)
                         .attr("class", "ui-button ui-widget ui-state-default ui-button-text-only")
                         .hover(function() {$(this).addClass("ui-state-hover");}, function() {$(this).removeClass("ui-state-hover");});

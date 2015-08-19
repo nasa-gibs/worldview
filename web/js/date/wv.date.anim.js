@@ -59,38 +59,75 @@
      };
 
      //state.a is now an object, check input and set values
-     //TODO: Set values for UI elements, check everything else has loaded open dialog, set back date, start animation
      self.load = function(state, errors) {
          if ( !_.isUndefined(state.a) ) {
+             self.doAnimation = true; //set to false if something is wrong
+
              var attributes = state.a.attributes;
-             attributes.forEach(function(attr) {
-                 if(attr.id === 'speed')
-                     self.delay = parseFloat(1000 / attr.value);
+             attributes.forEach(function(attr) { //handle all input here
+                 if(attr.id === 'speed') {
+                     try {
+                         self.delay = parseFloat(1000 / attr.value);
+                         if (self.delay > 1000)
+                             self.delay = 1000;
+                         else if (self.delay < 33)
+                             self.delay = 33;
+                     } catch (e) {
+                         errors.push({message: "Invalid speed: " + e});
+                         self.doAnimation = false;
+                     }
+                 }
                  else if(attr.id === 'loop')
-                     self.loop = attr.value;
-                 else if(attr.id === 'interval')
+                     self.loop = attr.value === 'true';
+                 else if(attr.id === 'interval') {
                      self.interval = attr.value;
-                 else if(attr.id === 'start')
-                     self.initDate = wv.util.parseDateUTC(attr.value);
-                 else if(attr.id === 'end')
-                     self.endDate = wv.util.parseDateUTC(attr.value);
+                     if(self.interval !== 'day' && self.interval !== 'month' && self.interval !== 'year')
+                         self.interval = 'day';
+                 }
+                 else if(attr.id === 'start') {
+                     try {
+                         self.initDate = wv.util.parseDateUTC(attr.value);
+                     } catch (e) {
+                         errors.push({message: "Invalid initial date: " + e});
+                         self.doAnimation = false;
+                     }
+                 }
+                 else if(attr.id === 'end') {
+                     try {
+                         self.endDate = wv.util.parseDateUTC(attr.value);
+                     } catch (e) {
+                         errors.push({message: "Invalid end date: " + e});
+                         self.doAnimation = false;
+                     }
+                 }
              });
 
-             self.doAnimation = true;
+             if(self.doAnimation) {
+                 //Prepare and start animation. Set UI elements
+                 $("#dialog").dialog("open");
 
-             //Prepare and start animation. Set right dates for datepickers
-             $("#dialog").dialog("open");
+                 //HACK: Weird functionality with Date objects mean to show the right date, need to offset it by one
+                 var tempFrom = new Date(self.initDate), tempTo = new Date(self.endDate);
+                 tempFrom.setUTCDate(tempFrom.getUTCDate() + 1);
+                 tempTo.setUTCDate(tempTo.getUTCDate() + 1);
 
-             //HACK: Weird functionality with Date objects mean to show the right date, need to offset it by one
-             var tempFrom = new Date(self.initDate), tempTo = new Date(self.endDate);
-             tempFrom.setUTCDate(tempFrom.getUTCDate() + 1); tempTo.setUTCDate(tempTo.getUTCDate() + 1);
+                 //update date picker widgets and sliders
+                 if(self.interval === 'month')
+                     $("#wv-month").attr("checked", "true");
+                 else if(self.interval === 'year')
+                     $("#wv-year").attr("checked", "true");
 
-             $("#from").datepicker("setDate", tempFrom);
-             $("#to").datepicker("setDate", tempTo);
-             model.selected = new Date(self.initDate.valueOf());
+                 $("#wv-speed-slider").val((1000 / self.delay).toFixed()); //val is the nouislider setter
+                 $("#loopcheck").attr("checked", self.loop);
+                 $("#from").datepicker("setDate", tempFrom);
+                 $("#to").datepicker("setDate", tempTo);
+                 d3.select("#fromPick").attr("transform", ui.timeline.pick.updateAnimPickers(self.initDate));
+                 d3.select("#toPick").attr("transform", ui.timeline.pick.updateAnimPickers(self.endDate));
+                 model.selected = new Date(self.initDate.valueOf());
 
-             ui.timeline.input.disableDialog();
-             self.setDirectionAndRun(self.endDate.getTime(), self.initDate.getTime());
+                 ui.timeline.input.disableDialog();
+                 self.setDirectionAndRun(self.endDate.getTime(), self.initDate.getTime());
+             }
          }
      };
 

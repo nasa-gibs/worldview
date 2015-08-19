@@ -297,6 +297,8 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 $dialog_sel.dialog("close");
             else
                 $dialog_sel.dialog("open");
+
+            model.events.trigger("change"); //update animation state on URL
             event.preventDefault();
         });
 
@@ -306,7 +308,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             .addClass("wv-header"),
             speedHTML = "<li>Slow <span id='wv-whitespace'>Fast</span></li>";
 
-        var $speedSlider = $("<div></div>")
+        var $speedSlider = $("<div></div>").attr("id","wv-speed-slider")
             .noUiSlider({
                 start: 2,
                 step: 1,
@@ -317,13 +319,16 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             }).on("slide", function() { //update animation speed when slider moves
                 $speedLabel.addClass("wv-label-opacity").html(parseFloat($speedSlider.val()) + ' frames per second');
                 ui.anim.delay = parseFloat(1000 / $speedSlider.val());
+                model.events.trigger("change"); //serialize animation state to URL
             }).on("set", function() { //show slow/fast when slider released
                 setTimeout(function() {$speedLabel.removeClass("wv-label-opacity").html(speedHTML).attr("id", "wv-label-speed");}, 1000);
                 ui.anim.delay = parseFloat(1000 / $speedSlider.val());
+                model.events.trigger("change");
             });
 
         var $loopCheck = $("<input />")
-            .addClass("wv-header").attr("type", "checkbox").attr("id", "loopcheck"),
+            .addClass("wv-header").attr("type", "checkbox").attr("id", "loopcheck")
+                .click(function() {model.events.trigger("change");}),
 
         $speedLabel = $("<ul></ul>") //Show user what is fast/slow first
             .html(speedHTML).attr("id", "wv-label-speed"),
@@ -415,7 +420,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
 
                     ui.rubberband.animToggle(from, to, delta, (1 / $speedSlider.val()).toPrecision(3));
                 } else
-                    wv.ui.notify("Sorry, but this feature is not supported in your browser (typically Internet Explorer)");
+                    wv.ui.notify("Sorry, but this feature is not supported on your browser");
             }
         };
 
@@ -429,6 +434,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 //Move animation date picker in timeline according to the new date
                 d3.select("#fromPick").attr("transform", ui.timeline.pick.updateAnimPickers(self.fromDate));
                 ui.timeline.pick.checkAnimPickers();
+                model.events.trigger("change"); //serialize animation state to URL
             }
         });
 
@@ -441,6 +447,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 //Move animation date picker in timeline according to the new date
                 d3.select("#toPick").attr("transform", ui.timeline.pick.updateAnimPickers(self.toDate));
                 ui.timeline.pick.checkAnimPickers();
+                model.events.trigger("change");
             }
         });
 
@@ -482,6 +489,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             close: function() {
                 animateEnd(); //End animation, hide animation sliders
                 $(".animpick").hide();
+                model.events.trigger("change"); //get rid of animation state from URL
             },
             buttons: [ //Go button controls date range animation, share controls gif generation
                 playButton, GIFButton
@@ -504,6 +512,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         $(".wv-interval").click(function() {
             interval = $(this).attr("value");
             ui.anim.interval = interval;
+            model.events.trigger("change");
         });
 
         $(document)

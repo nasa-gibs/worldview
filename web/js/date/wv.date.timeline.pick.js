@@ -136,6 +136,7 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
             //update position of selected date picker. animDragOffset (5) needed to put in right position
             d3.select(this).attr("transform", "translate(" + (tempPickOffset - animDragOffset) + " 20)");
             updateChanges(tempPickTipDate);
+            model.events.trigger("change"); //update animation state on URL
         }
     };
 
