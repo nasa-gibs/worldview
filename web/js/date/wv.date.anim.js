@@ -110,12 +110,18 @@
                  var tempFrom = new Date(self.initDate), tempTo = new Date(self.endDate);
                  tempFrom.setUTCDate(tempFrom.getUTCDate() + 1);
                  tempTo.setUTCDate(tempTo.getUTCDate() + 1);
+                 ui.timeline.input.fromDate = _.clone(self.initDate);
+                 ui.timeline.input.toDate = _.clone(self.endDate);
 
                  //update date picker widgets and sliders
-                 if(self.interval === 'month')
+                 if(self.interval === 'month') {
                      $("#wv-month").attr("checked", "true");
-                 else if(self.interval === 'year')
+                     ui.timeline.config.zoom(2); //zoom out to see pickers
+                 }
+                 else if(self.interval === 'year') {
                      $("#wv-year").attr("checked", "true");
+                     ui.timeline.config.zoom(2);
+                 }
 
                  $("#wv-speed-slider").val((1000 / self.delay).toFixed()); //val is the nouislider setter
                  $("#loopcheck").attr("checked", self.loop);
@@ -173,13 +179,12 @@
      self.stop = function() {
          if ( self.active ) {
              notify("stop");
-             self.delay = 500;
              self.loop = self.doAnimation = self.paused = self.active = false;
              if (timer) {
                  clearTimeout(timer);
                  timer = null;
              }
-             ui.timeline.input.restoreDialog();
+             ui.timeline.input.restoreDialog('reset');
          }
      };
 
@@ -189,15 +194,25 @@
              notify("pause");
              clearTimeout(timer);
              self.paused = true;
+             ui.timeline.input.restoreDialog('pause');
          }
      };
 
-     //Resume button functionality, just continue where left off
+     //Resume button functionality, check date range continue where left off
      self.resume = function() {
          if(self.paused) {
              notify("resume");
              self.paused = false;
-             prepareFrame();
+             ui.timeline.input.disableDialog();
+
+             //If the date range changed, set the guitarpick to the animation start slider, restart animation
+             if(model.selected.getTime() > self.endDate.getTime() || model.selected.getTime() < self.initDate.getTime()) {
+                 model.selected = new Date(self.initDate.getTime());
+                 self.active = false;
+                 self.setDirectionAndRun(self.endDate.getTime(), self.initDate.getTime());
+             }
+             else
+                 prepareFrame();
          }
      };
 
@@ -291,7 +306,7 @@
              return Math.abs(daysLeft) < (self.delta * 365);
      };
 
-     options.debug = true;
+     options.debug = false;
      var notify = (options.debug) ? function(message) { console.log(message); } : function() {};
 
      init();

@@ -280,13 +280,13 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
     self.updateAnimPickers = function(date) {
         if(tl.config) //need to check because this function runs at startup
             switch(tl.config.currentZoom) { //offset corrects the positioning
-                case 1:
+                case 1: //year
                     ANIM_OFFSET = 10;
                     break;
-                case 2:
+                case 2: //month
                     ANIM_OFFSET = 10;
                     break;
-                default:
+                default: //day
                     ANIM_OFFSET = 8;
                     break;
             }

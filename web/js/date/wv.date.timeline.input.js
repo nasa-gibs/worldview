@@ -62,6 +62,8 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         if ( ui.anim.active ) {
             return;
         }
+        ui.anim.delay = 500;
+        $("#wv-speed-slider").val(2);
         models.date.add(interval, 1);
         ui.anim.interval = interval;
         ui.anim.play("forward");
@@ -71,6 +73,8 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         if ( ui.anim.active ) {
             return;
         }
+        ui.anim.delay = 500;
+        $("#wv-speed-slider").val(2);
         models.date.add(interval, -1);
         ui.anim.interval = interval;
         ui.anim.play("reverse");
@@ -225,19 +229,23 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         tl.pick.update();
     };
 
-    self.restoreDialog = function() {
-        //Remove not allowed cursor, enable date pickers (widget + sliders), restore dialog buttons
+    //Remove not allowed cursor, enable date pickers (widget + sliders), restore dialog buttons
+    self.restoreDialog = function(mode) {
         $(".wv-datepicker").removeClass("wv-noDateChoose").datepicker("option", "disabled", false);
         d3.select("#fromPick").classed("wv-noDateChoose", false);
         d3.select("#toPick").classed("wv-noDateChoose", false);
-        $("#dialog").dialog("option", "buttons", [
-            playButton, GIFButton
-        ]);
         ui.timeline.pick.turnOnDrag();
+
+        if(mode === 'reset')
+            $("#dialog").dialog("option", "buttons", [playButton, GIFButton]);
+        else
+            $("#dialog").dialog("option", "buttons", [pauseButton, GIFButton]);
     };
 
+    //Set pause button, Disable datepickers and slider drag behaviour
     self.disableDialog = function() {
-        //Disable datepickers and slider drag behaviour
+        $("#dialog").dialog("option", "buttons", [pauseButton, GIFButton]);
+
         $(".wv-datepicker").addClass("wv-noDateChoose").datepicker("option", "disabled", true);
         d3.select("#fromPick").classed("wv-noDateChoose", true).on(".drag", null);
         d3.select("#toPick").classed("wv-noDateChoose", true).on(".drag", null);
@@ -277,6 +285,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
 
         $incrementBtn
             .mousedown(function(e) {
+                $("#wv-day").attr("checked", "true");
                 e.preventDefault();
                 forwardNextDay();
             })
@@ -284,6 +293,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
 
         $decrementBtn
             .mousedown(function(e) {
+                $("#wv-day").attr("checked", "true");
                 e.preventDefault();
                 reversePrevDay();
             })
@@ -381,11 +391,6 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                     ui.anim.endDate = new Date(self.toDate.valueOf());
                     ui.anim.interval = interval;
 
-                    //Set pause button
-                    $dialog_sel.dialog("option", "buttons", [
-                        pauseButton, GIFButton
-                    ]);
-
                     self.disableDialog();
                     ui.anim.setDirectionAndRun(to, from);
 
@@ -464,11 +469,11 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 at: "left top",
                 of: $("#timeline-header")
             },
-            open: function(event) {
+            open: function(event) { //FIXME: Opening dialog + pressing arrow key starts animation. Is doAnimation being used?
                 $(".ui-dialog-content").find("img").remove(); //remove generated gif
 
                 //Show datepickers and set date range to be two weeks
-                if(self.fromDate === undefined) { //once per session
+                if(self.fromDate === undefined) { //once per session if no animation permalink
                     self.fromDate = new Date(model.selected.valueOf());
                     self.fromDate.setUTCDate(self.fromDate.getUTCDate() - 14);
                     self.toDate = new Date(model.selected.valueOf());
