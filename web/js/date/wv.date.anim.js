@@ -88,7 +88,7 @@
                      try {
                          self.initDate = wv.util.parseDateUTC(attr.value);
                      } catch (e) {
-                         errors.push({message: "Invalid initial date: " + e});
+                         errors.push({message: e});
                          self.doAnimation = false;
                      }
                  }
@@ -96,11 +96,15 @@
                      try {
                          self.endDate = wv.util.parseDateUTC(attr.value);
                      } catch (e) {
-                         errors.push({message: "Invalid end date: " + e});
+                         errors.push({message: e});
                          self.doAnimation = false;
                      }
                  }
              });
+
+             //Check if dates have been set, otherwise no animation
+             if(self.initDate === undefined || self.endDate === undefined)
+                 self.doAnimation = false;
 
              if(self.doAnimation) {
                  //Prepare and start animation. Set UI elements

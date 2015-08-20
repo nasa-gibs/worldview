@@ -280,7 +280,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
             wv.ui.ask({
                 header: "Reverse date range?",
                 message: "The start date (" + ui.timeline.input.fromDate.toDateString() + ") is after the end date (" + ui.timeline.input.toDate.toDateString() +
-                         "). Would you like to reverse the dates?",
+                         "). This date range is currently not supported. Would you like to reverse the date range and proceed?",
                 onOk: function() {
                     self.animToggle(to, from, delta, interval);
                 }
