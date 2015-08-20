@@ -125,7 +125,7 @@ $(function() {
             .register(models.date)
             .register(models.palettes)
             .register(models.map);
-
+        models.link.load(state);
 
         // HACK: Map needs to be created before the data download model
         ui.map = wv.map.ui(models, config, ui);
@@ -148,9 +148,6 @@ $(function() {
         ui.anim = wv.date.anim(models.date, ui, {
             debug: parameters.debug === "anim"
         });
-
-        //Handle animation permalink stuff later
-        models.link.load(state);
 
         ui.proj = wv.proj.ui(models, config, ui);
         ui.sidebar = wv.layers.sidebar(models, config);
@@ -206,7 +203,7 @@ $(function() {
             models.map.events.on("projection", models.data.updateProjection);
         }
 
-        //Handle animation permalink stuff here
+        //HACK: Animation stuff requires timeline to be ready. Handle animation permalink here
         ui.anim.parse(state, errors, config);
         models.link.register(ui.anim);
         ui.anim.load(state, errors);
