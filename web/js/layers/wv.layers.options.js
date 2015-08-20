@@ -68,7 +68,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
             checkboxClass: 'icheckbox_square-grey'
         });
 
-        $("#wv-layers-options-dialog .jspScrollable").each(function() {
+        $("#wv-layers-options-dialog").find(".jspScrollable").each(function() {
             $(this).jScrollPane().data("jsp").reinitialise();
         });
 
@@ -221,9 +221,9 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         max = max || active.max || rendered.scale.colors.length;
 
         var minLabel = rendered.scale.labels[min];
-        var maxLabel = rendered.scale.labels[max];
-        $("#wv-layers-options-dialog .wv-label-range-min").html(minLabel);
-        $("#wv-layers-options-dialog .wv-label-range-max").html(maxLabel);
+        var maxLabel = rendered.scale.labels[max], dialog_sel = $("#wv-layers-options-dialog");
+        dialog_sel.find(".wv-label-range-min").html(minLabel);
+        dialog_sel.find(".wv-label-range-max").html(maxLabel);
     };
 
     var onPaletteUpdateAll = function() {

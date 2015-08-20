@@ -124,13 +124,13 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
              $("#wv-image-format [value='image/kmz']").remove();
         }
         $("#wv-image-format").change(function() {
-            format = $("#wv-image-format option:checked").val();
+            format = $("#wv-image-format").find("option:checked").val();
             update(coords);
         }).find("option").removeAttr("selected");
 
 
         $("#wv-image-worldfile").change(function(){
-            worldfile=$("#wv-image-worldfile option:checked").val();
+            worldfile=$("#wv-image-worldfile").find("option:checked").val();
             update(coords);
         }).find("option").removeAttr("selected");
 

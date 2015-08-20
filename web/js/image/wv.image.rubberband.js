@@ -239,6 +239,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
     self.animToggle = function(from, to, delta, interval) {
 
         //check for rotation, changed palettes, and graticule layers and ask for reset if so
+        ui.anim.stop();
         var layers = models.layers.get({renderable: true});
         if (models.palettes.inUse()) {
             wv.ui.ask({

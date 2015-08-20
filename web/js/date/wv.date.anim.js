@@ -218,6 +218,7 @@
 
      //Primary function to set the direction and play animation from dialog or permalink
      self.setDirectionAndRun = function(to, from) {
+         self.doAnimation = true;
          if (to > from) { //set it back because animation needs to "animate" to the right date
              if (self.interval === 'year')
                  model.selected.setUTCFullYear(model.selected.getUTCFullYear() - 1);

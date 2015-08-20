@@ -563,7 +563,7 @@ wv.data.ui.downloadListPanel = function(config, model) {
         } else {
             $("wv-data-bulk-download-links").hide();
         }
-        $("#wv-data-selection .remove").click(removeGranule);
+        $data_select.find(".remove").click(removeGranule);
         $data_select.find("tr").on("mouseenter", onHoverOver);
         $data_select.find("tr").on("mouseleave", onHoverOut);
     };

@@ -182,7 +182,7 @@ $(function() {
         //FIXME: Old hack
         $(window).resize(function() {
           if ($(window).width() < 720) {
-            $('#productsHoldertabs li.first a').trigger('click');
+            $('#productsHoldertabs').find('li.first a').trigger('click');
           }
         });
 
