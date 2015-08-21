@@ -541,6 +541,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             })
             .keyup(function(event) {
                 switch ( event.keyCode ) {
+                    case wv.util.key.ESCAPE:
                     case wv.util.key.LEFT:
                     case wv.util.key.RIGHT:
                         animateEnd();
