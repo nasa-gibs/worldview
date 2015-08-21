@@ -1,0 +1,1 @@
+At the time of this writing progressCallback for images doesn't work in the official gifshot release. This version has been customized to add support for progressCallback
