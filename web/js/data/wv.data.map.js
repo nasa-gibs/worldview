@@ -22,6 +22,7 @@ wv.data.map = wv.data.map || function(model, maps, config) {
     var hoverLayer = null;
     var buttonLayer = null;
     var selectionLayer = null;
+    var swathLayer = null;
     var gridLayer = null;
     var hovering = null;
     var selectedFeatures = null;
@@ -130,7 +131,7 @@ wv.data.map = wv.data.map || function(model, maps, config) {
     };
 
     var createSwathLayer = function() {
-        map.addLayer(new ol.layer.Vector({
+        swathLayer = new ol.layer.Vector({
             source: new ol.source.Vector(),
             style: new ol.style.Style({
                 stroke: new ol.style.Stroke({
@@ -138,11 +139,12 @@ wv.data.map = wv.data.map || function(model, maps, config) {
                     width: 2
                 })
             })
-        }));
+        });
+        map.addLayer(swathLayer);
     };
 
     var createGridLayer = function() {
-        map.addLayer(new ol.layer.Vector({
+        gridLayer = new ol.layer.Vector({
             source: new ol.source.Vector(),
             style: new ol.style.Style({
                 stroke: new ol.style.Stroke({
@@ -150,7 +152,8 @@ wv.data.map = wv.data.map || function(model, maps, config) {
                     width: 1.5
                 })
             })
-        }));
+        });
+        map.addLayer(gridLayer);
     };
 
     var create = function() {

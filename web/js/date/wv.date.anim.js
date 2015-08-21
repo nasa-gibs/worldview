@@ -102,8 +102,8 @@
                  }
              });
 
-             //Check if dates have been set, otherwise no animation
-             if(self.initDate === undefined || self.endDate === undefined)
+             //Check if dates have been set and no data download, otherwise no animation
+             if(self.initDate === undefined || self.endDate === undefined || state.download)
                  self.doAnimation = false;
 
              if(self.doAnimation) {
