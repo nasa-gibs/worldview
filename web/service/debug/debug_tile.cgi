@@ -1,3 +1,4 @@
+#!C:\Python27\python.exe
 #!/usr/bin/python
 
 import cgi
