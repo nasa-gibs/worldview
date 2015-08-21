@@ -521,8 +521,15 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
     },
 
     calcRes = function(mode) { //return either multiplier or string resolution
+        //geographic has 10 zoom levels from 0 to 9, polar projections have 8 from 0 to 7
+        var isGeographic = models.proj.selected.id === "geographic";
+
+        //Map the zoom level from 0-9 / 0-7 to an index from 0-4
         var zoom_res = [40, 20, 4, 2, 1], str, res;
-        res = zoom_res[Math.floor((ui.map.selected.getView().getZoom()/2))];
+        if(isGeographic)
+            res = zoom_res[Math.floor((ui.map.selected.getView().getZoom()/2))];
+        else
+            res = zoom_res[Math.floor((ui.map.selected.getView().getZoom() + 2 /2))];
 
         if(mode === 0)
             return res;
