@@ -80,6 +80,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
     var toggle = function(){
         var checked = $("#wv-image-button-check").prop("checked");
 
+        //Enables UI to select an area on the map while darkening the view
         var toggleOn = function() {
             state = "on";
             toolbarButtons("disable");
@@ -134,7 +135,6 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                 });
                 return;
             }
-
             toggleOn();
         }
         else {

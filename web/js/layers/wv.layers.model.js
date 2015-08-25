@@ -320,6 +320,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
                     }
                     if ( attr.id === "opacity" ) {
                         opacity = wv.util.clamp(parseFloat(attr.value), 0, 1);
+                        if(isNaN(opacity)) opacity = 0; //"opacity=0.0" is opacity in URL, resulting in NaN
                     }
                 });
                 self.add(layerDef.id, { hidden: hidden, opacity: opacity });

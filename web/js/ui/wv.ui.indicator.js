@@ -25,8 +25,8 @@ wv.ui.indicator = wv.ui.indicator || (function() {
     var init = function() {
         $indicator = $("<div></div>")
             .attr("id", "indicator");
-        $icon = $("<img></img>");
-        $message = $("<span></span");
+        $icon = $("<img />");
+        $message = $("<span></span>");
 
         $indicator.append($icon).append($message).hide();
         $("body").append($indicator);

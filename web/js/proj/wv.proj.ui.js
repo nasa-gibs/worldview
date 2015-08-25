@@ -72,7 +72,7 @@ wv.proj.ui = wv.proj.ui || function(models, config) {
 
         _.each(config.ui.projections, function(ui) {
             var $item = $(
-                "<li>" +
+                "<li data-proj='" + ui.id + "'>" +
                 "<a data-proj='" + ui.id + "'>" +
                 "<i class='ui-icon icon-large " + ui.style + "'>" +
                 "</i>" + ui.name + "</a></li>");
@@ -93,8 +93,8 @@ wv.proj.ui = wv.proj.ui || function(models, config) {
         });
         $menuItems.hide();
         $menuItems.show("slide", { direction: "up" });
-        $("#wv-proj-menu a").removeClass("wv-menu-item-selected");
-        $("#wv-proj-menu a[data-proj='" + models.proj.selected.id + "']")
+        $("#wv-proj-menu li").removeClass("wv-menu-item-selected");
+        $("#wv-proj-menu li[data-proj='" + models.proj.selected.id + "']")
             .addClass("wv-menu-item-selected");
 
         var clickOut = function(event) {

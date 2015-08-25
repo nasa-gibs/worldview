@@ -37,7 +37,7 @@ wv.util = (function(self) {
     };
 
     self.repeat = function(value, length) {
-        result = "";
+        var result = "";
         for ( var i = 0; i < length; i++ ) {
             result += value;
         }
@@ -81,7 +81,7 @@ wv.util = (function(self) {
             queryString = queryString.substring(1);
         }
         var parameters = queryString.split("&");
-        result = {};
+        var result = {};
         for ( var i = 0; i < parameters.length; i++ ) {
             var index = parameters[i].indexOf("=");
             var key = parameters[i].substring(0, index);
@@ -137,7 +137,7 @@ wv.util = (function(self) {
      * @static
      * @param str {String} Date to parse in the form of
      * ``YYYY-MM-DDTHH:MM:SS.SSSZ``. Fractional seconds and the "Z"
-     * time zone desginator are optional.
+     * time zone designator are optional.
      * @return {Date} converted string as a datetime object, throws an
      * exception if the string is invalid.
      */
@@ -242,7 +242,7 @@ wv.util = (function(self) {
                 newDate.setUTCFullYear(newDate.getUTCFullYear() + amount);
                 break;
             default:
-                throw new Error("[dateAdd] Invalid interval: " + inverval);
+                throw new Error("[dateAdd] Invalid interval: " + interval);
         }
         return newDate;
     };
@@ -416,7 +416,7 @@ wv.util = (function(self) {
      * @method error
      * @static
      * @param {string} message Message to display to the end user.
-     * @param {exception} cause The exception object that caused the error
+     * @param {Exception} cause The exception object that caused the error
      */
     self.error = function(message, cause) {
         wv.ui.error(message, cause);
@@ -455,7 +455,7 @@ wv.util = (function(self) {
      *
      * @class wv.util.ajaxCache
      * @constructor
-     * @param {Integer} [spec.size] maximum number of items to store in the
+     * @param {Number} [spec.size] maximum number of items to store in the
      * cache.
      * @param {Object} [spec.options] options to pass to jscache on setItem.
      *

@@ -1,3 +1,4 @@
+#!C:\Python27\python.exe
 #!/usr/bin/python
 
 #
@@ -207,7 +208,9 @@ def query_cmr(url, options, xml):
 
   headers = {
      "Client-Id": "Worldview",
+     #Echo-Token": "XXX-XXX",
   }
+
   if xml:
     headers["Content-type"] = "application/xml"
 

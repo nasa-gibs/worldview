@@ -190,10 +190,7 @@ wv.debug.layers = wv.debug.layers || function(ui, models, config) {
         if ( type === "dataDownload" && layer.product ) {
             return true;
         }
-        if ( type === "layers" ) {
-            return true;
-        }
-        return false;
+        return type === "layers";
     };
 
     var initLayers = function() {

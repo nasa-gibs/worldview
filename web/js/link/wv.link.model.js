@@ -44,6 +44,7 @@ wv.link.model = wv.link.model || function(config) {
         return self;
     };
 
+    //Returns a serialized string containing information of the current session
     self.toQueryString = function() {
         var state = {};
         _.each(components, function(component) {
