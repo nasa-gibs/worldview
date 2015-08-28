@@ -110,6 +110,79 @@ def process_file(file):
         newSchema = document["ColorMaps"]
     except:
         print "Layer uses old colormap schema, processing differently..."
+        sys.stderr.write("---- this is the old schema ---")
+        scaleColors = []
+        scaleLabels = []
+        scaleValues = []
+        classColors = []
+        classLabels = []
+        specialColors = []
+        specialLabels = []
+        units = None
+        minValue = float("inf")
+        maxValue = float("-inf")
+
+        entries = document["ColorMap"]["ColorMapEntry"]
+        if not isinstance(entries, list):
+            entries = [entries]
+
+        for entry in entries:
+            r,g,b = entry["@rgb"].split(",")
+            a = 255
+            if "@transparent" in entry and entry["@transparent"] == "true":
+                a = 0
+            color = "{0:02x}{1:02x}{2:02x}{3:02x}".format(int(r), int(g), int(b), a)
+            label = entry["@label"]
+            if a == 0:
+                specialColors += [color]
+                specialLabels += [label]
+            elif "@value" in entry:
+                items = re.sub(r"[\(\)\[\]]", "", entry["@value"]).split(",")
+                try:
+                    for scaleValue in items:
+                        v = float(scaleValue)
+                        if v == float("inf"):
+                            v = sys.float_info.max
+                        if v == float("-inf"):
+                            v = sys.float_info.min
+                        scaleValues += [v]
+                except ValueError as e:
+                    raise ValueError("Invalid value: %s" % entry["@value"])
+                scaleColors += [color]
+                scaleLabels += [label]
+            else:
+                classColors += [color]
+                classLabels += [label]
+
+        id = os.path.splitext(os.path.basename(input_file))[0]
+        data = {}
+        if len(scaleColors) > 0:
+            data["scale"] = {
+                "colors": scaleColors,
+                "values": scaleValues,
+                "labels": scaleLabels,
+            }
+        if len(specialColors) > 0:
+            data["special"] = {
+                "colors": specialColors,
+                "labels": specialLabels
+            }
+        if len(classColors) > 0:
+            data["classes"] = {
+                "colors": classColors,
+                "labels": classLabels,
+            }
+
+        data["id"] = id
+
+        json_options = {}
+        json_options["indent"] = 4
+        json_options["separators"] = (',', ': ')
+
+        output_file = os.path.join(output_dir, id + ".json")
+        with open(output_file, "w") as fp:
+            json.dump(data, fp, **json_options)
+
     else:
         if newSchema is not None:
             colormaps = to_list(document["ColorMaps"]["ColorMap"])
