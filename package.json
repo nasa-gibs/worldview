@@ -1,6 +1,6 @@
 {
-    "version": "0.8.3",
-    "release": "2",
+    "version": "0.8.8",
+    "release": "1",
     "repository": {
         "type": "git",
         "url": "https://github.com/nasa-gibs/worldview.git"
@@ -14,6 +14,7 @@
         "grunt-buster": "0.3.x",
         "grunt-contrib-clean": "0.5.x",
         "grunt-contrib-concat": "0.3.x",
+        "grunt-contrib-coffee": "0.13.x",
         "grunt-contrib-compress": "0.5.x",
         "grunt-contrib-copy": "0.6.x",
         "grunt-contrib-csslint": "0.2.x",

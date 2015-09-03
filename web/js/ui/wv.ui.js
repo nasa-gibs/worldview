@@ -31,8 +31,7 @@ wv.ui = (function(self) {
      * @method error
      * @static
      *
-     * @param {string} message Message to display to the end user.
-     * @param {exception} cause The exception object that caused the error
+     * @param {Exception} cause The exception object that caused the error
      */
     self.error = function() {
         console.error.apply(console, arguments);
@@ -56,7 +55,7 @@ wv.ui = (function(self) {
      * @method notify
      * @static
      *
-     * @param {string} The message to display to the user.
+     * @param {string} message The message to display to the user.
      *
      * @param [title="Notice"] {string} Title for the dialog box.
      */
@@ -187,7 +186,7 @@ wv.ui = (function(self) {
         return getComponent(marker || "wv-menu", closeMenu);
     };
 
-    self.closeDialog = function(marker) {
+    self.closeDialog = function() {
         self.close();
     };
 

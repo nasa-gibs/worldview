@@ -37,9 +37,9 @@ wv.ui.mouse.click = wv.ui.mouse.click || function($element, callback) {
     };
 
     var withinClickDistance = function(event) {
-        targetX = event.clientX;
-        targetY = event.clientY;
-        distance = Math.sqrt(Math.pow(startX - targetX, 2) +
+        var targetX = event.clientX;
+        var targetY = event.clientY;
+        var distance = Math.sqrt(Math.pow(startX - targetX, 2) +
                 Math.pow(startY - targetY, 2));
         return distance <= self.sensitivity;
     };
@@ -53,7 +53,7 @@ wv.ui.mouse.wheel = wv.ui.mouse.wheel || function(element, ui, options) {
     options = options || {};
 
     var self = {};
-    self.timeout = options.timeout || 100; // millseconds
+    self.timeout = options.timeout || 100; // milliseconds
     self.threshold = options.threshold || 100; // delta units
     self.events = wv.util.events();
 

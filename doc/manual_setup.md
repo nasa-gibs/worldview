@@ -56,20 +56,8 @@ grunt
 The ``dist`` directory now contains ``site`` tar files that can be
 can be uploaded and unpacked to a web server.
 
-##Building Worldview in Windows
-Worldview may be built on Windows with the above instructions. First, install Node.js, Python 2, and XAMPP, then add the following to the PATH variable to include the git, nodejs, and Python binary executables (this is not an exhaustive list):
-
-```bash
-C:\Python27\;C:\Python27\Scripts\;C:\Program Files (x86)\git\bin;C:\Program Files\nodejs;
-```
-
-Next install the grunt program, install the python library with "pip install xmltodict", install the packages defined in package.json with "npm install", and finally build Worldview with grunt
-
-##Unpacking to a XAMPP web server
-
-Worldview can be set up on a web server powered by the cross-platform XAMPP package.
-
-Choose a tar file from the deploy directory, such as "worldview-debug.tar.bz2", and extract the web directory to &lt;xampp root&gt;\htdocs\
+##Setting a Worldview development environment in Windows
+Worldview may be setup on Windows with XAMPP. First install XAMPP, the default location is at C:\xampp. Clone the Worldview repo at C:\xampp\htdocs and then the configuration repo in Worldview.
 
 Edit the httpd.conf file at &lt;xampp root&gt;\apache\conf to uncomment:
 
@@ -79,4 +67,4 @@ Edit the httpd.conf file at &lt;xampp root&gt;\apache\conf to uncomment:
 "LoadModule deflate_module modules/mod_deflate.so"
 ```
 
-Turn on xampp, and Worldview should be ready at "localhost/web"! If you encounter any code 500 errors, check the error log at &lt;xampp root&gt;\apache\logs
+Turn on xampp, and Worldview should be ready at "localhost/worldview/web"! If you encounter any code 500 errors, check the error log at &lt;xampp root&gt;\apache\logs

@@ -105,14 +105,14 @@ wv.map = (function(self) {
     };
 
     /**
-     * Sets the visiblity of a layer. If the layer is supposed to be not
+     * Sets the visibility of a layer. If the layer is supposed to be not
      * visible, this actually sets the opacity to zero. This allows the
      * quick transition effects between days.
      *
      * @method setVisibility
      * @static
      *
-     * @param layer {OpenLayers.Layer} The layer to set the visiblity.
+     * @param layer {OpenLayers.Layer} The layer to set the visibility.
      *
      * @param visible {boolean} True if the layer should be visible, otherwise
      * false.

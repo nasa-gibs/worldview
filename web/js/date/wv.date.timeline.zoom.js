@@ -65,10 +65,10 @@ wv.date.timeline.zoom = wv.date.timeline.zoom || function(models, config, ui) {
         var mouseOffset, mousePos;
 
         if(e){
-            var relX = e.offsetX ||
-                (e.clientX - $('#timeline-footer').offset().left);
+            var relX = e.clientX - $('#timeline-footer').offset().left;
             mousePos = tl.x.invert(relX);
             mouseOffset = (tl.width-tl.margin.left-tl.margin.right)/2 - relX;
+            console.log(relX);
         }
 
         var d1 = tl.data.start(),
