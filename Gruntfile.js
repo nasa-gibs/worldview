@@ -563,7 +563,7 @@ module.exports = function(grunt) {
     grunt.renameTask("clean", "remove");
 
     grunt.registerTask("load_branding", "Load branding", function() {
-        var brand = grunt.file.readJSON("build/options/common/brand.json");
+        var brand = grunt.file.readJSON("build/options-build/brand.json");
         brand.officialName = brand.officialName || brand.name;
         brand.longName = brand.longName || brand.name;
         brand.shortName = brand.shortName || brand.name;
