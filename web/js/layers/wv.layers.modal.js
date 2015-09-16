@@ -165,7 +165,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     .attr( 'id', 'remove-' + current.id + '-' + source.id );
 
                 if( source.settings.length !== 1 ) {
-                    var $sourceSettings = $( '<div></div>' );
+                    var $sourceSettings = $( '<form></form>' );
 
                     _.each( source.settings, function( setting ) {
                         var layer = config.layers[setting];
@@ -193,7 +193,11 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                             .attr( 'id', 'setting-' + layer.id )
                             .attr( 'value', encodeURIComponent( layer.id ) )
                         //maybe dont need value and data-layer both
-                            .attr( 'data-layer', encodeURIComponent( layer.id ) );
+                            .attr( 'data-layer', encodeURIComponent( layer.id ) )
+                            .click( function( e ) {
+                                $addButton.val( $( this ).val() );
+                                $removeButton.val( $( this ).val() );
+                            });
 
                         var $label = $( '<label></label>' )
                             .attr( 'for', 'setting-' + encodeURIComponent( layer.id ) )
@@ -209,11 +213,8 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     // might need mose more logic here, the click "checks"
                     // the radio, instead of unchecking the rest then checking
                     // the selected
-                    $sourceSettings.find( 'input.settings-radio' )
-                        .click( function( e ) {
-                            $addButton.val( $( this ).val() );
-                            $removeButton.val( $( this ).val() );
-                        });
+                    //$sourceSettings.find( 'input.settings-radio' )
+                        
 
                     $sourceContent.append( $sourceSettings );
                 }
