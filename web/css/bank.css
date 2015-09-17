@@ -119,7 +119,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3ffffff', e
 .bank li.item h4 {
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space:nowrap;
     font-size:0.85em;
     padding:0 3px;
 }
