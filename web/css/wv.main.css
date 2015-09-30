@@ -361,14 +361,14 @@ label {
 }
 
 /* style for UI info select menu that are hovered over */
-.ui-widget-content .ui-state-focus {
+.ui-widget-content .ui-state-hover {
     border-color: #eee;
     background-color: #eee;
     background-image: none;
     color: #404040;
 }
 
-.ui-widget-content .ui-state-focus.ui-menu-item a {
+.ui-widget-content .ui-state-hover.ui-menu-item a {
     color: #404040;
 }
 
