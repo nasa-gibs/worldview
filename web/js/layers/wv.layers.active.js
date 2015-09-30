@@ -95,7 +95,6 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             }
         });
 
-        onZoomChange();
         setTimeout(resize, 1);
 
     };
@@ -126,6 +125,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     };
 
     var renderLayer = function($parent, group, layer, top) {
+        console.log(layer.id);
         var $layer = $("<li></li>")
             .attr("id", group.id + "-" + encodeURIComponent(layer.id))
             .addClass(self.id + "item")
@@ -159,6 +159,8 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                       .addClass('zot')
                       .append('<b>!</b>'));
 
+        checkZots($layer, layer);
+        
         if ( !layer.visible ) {
             $visibleButton
                 .attr("title", "Show Layer")
@@ -425,52 +427,57 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
     var onProjectionChanged = function() {
         // Timeout prevents redraw artifacts
+        ui.map.selected.getView().on("change:resolution", onZoomChange);
         setTimeout(render, 1);
     };
 
-    var onZoomChange = function() {
+    var checkZots = function($layer, layer) {
         var map = ui.map;
         var zoom = map.selected.getView().getZoom();
 
         var sources = config.sources;
         var proj = models.proj.selected.id;
         
-        _.each(model.active, function(layer){
-            var matrixSet = layer.projections[proj].matrixSet;
-            if(matrixSet !== undefined){
-                var source = layer.projections[proj].source;
-                var zoomLimit = sources[source]
-                    .matrixSets[matrixSet]
-                    .resolutions.length - 1;
+        var matrixSet = layer.projections[proj].matrixSet;
+        if(matrixSet !== undefined){
+            var source = layer.projections[proj].source;
+            var zoomLimit = sources[source]
+                .matrixSets[matrixSet]
+                .resolutions.length - 1;
 
-                var layerPane = '#products';
-                var $layer = $(layerPane +
-                               ' li.productsitem[data-layer="' + layer.id + '"]');
-                var $zot = $layer.find('div.zot');
-                if(zoom > zoomLimit) {
-                    $zot.attr('title', 'Layer is overzoomed by ' +
-                              (zoom - zoomLimit) * 100 + '%' );
+            var $zot = $layer.find('div.zot');
+            if(zoom > zoomLimit) {
+                $zot.attr('title', 'Layer is overzoomed by ' +
+                          (zoom - zoomLimit) * 100 + '%' );
 
-                    if( !( $layer.hasClass('layer-hidden') ) &&
-                        !( $layer.hasClass('zotted') ) ) {
-                        $layer.addClass('zotted');
-                    }
-                    else if( ( $layer.hasClass('layer-hidden') ) &&
-                             ( $layer.hasClass('zotted') ) ) {
-                        $layer.removeClass('zotted');
-                    }
+                if( !( $layer.hasClass('layer-hidden') ) &&
+                    !( $layer.hasClass('zotted') ) ) {
+                    $layer.addClass('zotted');
                 }
-                else {
-
-                    $layer.find('div.zot').attr('title', 'Layer is zoomed by ' +
-                                                (zoom - zoomLimit) * 100 + '%' );
-                    if ( $layer.hasClass('zotted')  ) {
-                        $layer.removeClass('zotted');
-                    }
+                else if( ( $layer.hasClass('layer-hidden') ) &&
+                         ( $layer.hasClass('zotted') ) ) {
+                    $layer.removeClass('zotted');
                 }
             }
-        });
+            else {
+                $zot.attr('title', 'Layer is zoomed by ' +
+                          (zoom - zoomLimit) * 100 + '%' );
+                if ( $layer.hasClass('zotted')  ) {
+                    $layer.removeClass('zotted');
+                }
+            }
+        }
+    };
+
+    var onZoomChange = function(layers) {
         
+        _.each(groups, function(group) {
+            _.each(model.get({ group: group.id }), function(layer) {
+                var $layer = $('#products li.productsitem[data-layer="' +
+                               layer.id + '"]');
+                checkZots( $layer, layer );
+            });
+        });
     };
 
     init();
