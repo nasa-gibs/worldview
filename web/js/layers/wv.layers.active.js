@@ -125,7 +125,6 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     };
 
     var renderLayer = function($parent, group, layer, top) {
-        console.log(layer.id);
         var $layer = $("<li></li>")
             .attr("id", group.id + "-" + encodeURIComponent(layer.id))
             .addClass(self.id + "item")

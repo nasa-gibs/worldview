@@ -232,8 +232,6 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             self.data.set();
         });
 
-        console.log(ui.map);
-
     };
 
     init();
