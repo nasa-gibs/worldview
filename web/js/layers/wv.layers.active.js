@@ -157,8 +157,6 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         $layer.append($("<div></div>")
                       .addClass('zot')
                       .append('<b>!</b>'));
-
-        checkZots($layer, layer);
         
         if ( !layer.visible ) {
             $visibleButton
@@ -173,6 +171,8 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                 .parent()
                 .addClass("layer-visible");
         }
+
+        checkZots($layer, layer);
 
         if ( config.parameters.metadata && layer.metadata ) {
             var $metadataButton = $("<i></i>")
