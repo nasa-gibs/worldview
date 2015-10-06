@@ -69,9 +69,12 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
         var htmlElements =
             "<div class='wv-image-header'>" +
             "<select id='wv-image-resolution'>" +
-                "<option value='1' >250m</option>" +
-                "<option value='2' >500m</option>" +
-                "<option value='4' >1km</option>" +
+                "<option value='0.125'>30m</option>" +
+                "<option value='0.25'>60m</option>" +
+                "<option value='0.5'>125m</option>" +
+                "<option value='1' selected>250m</option>" +
+                "<option value='2'>500m</option>" +
+                "<option value='4'>1km</option>" +
                 "<option value='20'>5km</option>" +
                 "<option value='40'>10km</option>" +
             "</select>Resolution (per pixel)</div>" +
@@ -123,6 +126,9 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
 
         if ( models.proj.selected.id !== "geographic" ) {
              $("#wv-image-format [value='image/kmz']").remove();
+             $("#wv-image-resolution [value='0.5']").remove();
+             $("#wv-image-resolution [value='0.25']").remove();
+             $("#wv-image-resolution [value='0.125']").remove();
         }
         $("#wv-image-format").change(function() {
             format = $("#wv-image-format option:checked").val();

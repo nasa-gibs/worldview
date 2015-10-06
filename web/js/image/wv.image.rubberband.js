@@ -135,25 +135,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                 });
                 return;
             }
-
-            //Don't toggle area select UI for downloading image if image rotated
-            if(ui.map.selected.getView().getRotation() === 0.0)
-                toggleOn();
-            else
-                wv.ui.ask({
-                    header: "Reset rotation?",
-                    message: "Image may not be downloaded when rotated. Would you like to reset rotation?",
-                    onOk: function() {
-                        ui.map.selected.beforeRender(ol.animation.rotate({
-                            duration: 400,
-                            rotation: ui.map.selected.getView().getRotation()
-                        }));
-                        ui.map.selected.getView().rotate(0);
-                        ui.map.updateRotation();
-                        //Let rotation finish before image download can occur
-                        setTimeout(toggle, 500);
-                    }
-                });
+            toggleOn();
         }
         else {
             state = "off";

@@ -80,7 +80,7 @@ div.horizontalContainer {
 }
 
 
-@media {
+
 #banner img.logo {padding:11px 5px;}
 #banner ul {float:right; }
 #banner ul li {display:block; float:right; margin:3px 3px; line-height:0; }
@@ -360,6 +360,7 @@ label {
 }
 
 /* style for UI info select menu that are hovered over */
+
 .ui-widget-content .ui-state-focus {
     border-color: #eee;
     background-color: #eee;
@@ -376,4 +377,8 @@ label {
 }
 .ui-state-focus a:focus {
     outline: none !important;
-}}
+}
+
+.ui-widget-content .ui-dialog-titlebar-close.ui-state-focus {
+    background:none;
+}
