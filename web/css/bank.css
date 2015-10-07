@@ -288,6 +288,34 @@ i.wv-layers-options-icon{
 .productsitem.layer-hidden a.wv-layers-options:hover i.wv-layers-options-icon{
     background-position: 0 -69px;
 }
+.productsitem div.zot {
+
+    margin-left: 31px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 10px;
+    background: #DACF00;
+    cursor: default;
+    display:none;
+}
+.productsitem div.zot:hover{
+    background: #fff200;
+}
+.productsitem div.zot b {
+    text-align: center;
+    height: 20px;
+    line-height: 20px;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    margin-top: -10px;
+}
+
+.productsitem.zotted div.zot{
+    display: block;
+}
 .productsitem a.button.close {
     display:block;
     float:right;
@@ -333,6 +361,9 @@ i.wv-layers-options-icon{
     min-height:40px;
 
 
+}
+.productsitem.zotted .layer-main{
+    margin-left: 42px;
 }
 .productsitem.layer-hidden .layer-main, .productsitem.layer-hidden a.hdanchor {
     background:rgba(255, 255, 255, 0.2);
