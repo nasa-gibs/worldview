@@ -54,6 +54,9 @@ wv.date.timeline.zoom = wv.date.timeline.zoom || function(models, config, ui) {
             zoom = 3;
         }
 
+        console.log(this);
+        console.log(zoom);
+        console.log(event);
         tl.config.zoom.call(this, zoom, event);
 
     };

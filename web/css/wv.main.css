@@ -361,6 +361,7 @@ label {
 }
 
 /* style for UI info select menu that are hovered over */
+
 .ui-widget-content .ui-state-focus {
     border-color: #eee;
     background-color: #eee;
@@ -377,4 +378,8 @@ label {
 }
 .ui-state-focus a:focus {
     outline: none !important;
+}
+
+.ui-widget-content .ui-dialog-titlebar-close.ui-state-focus {
+    background:none;
 }
