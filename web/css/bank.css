@@ -85,7 +85,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3ffffff', e
     display:block;
     width:100%;
     margin:0 auto;
-    overflow: auto;
 }
 .bank .category {overflow:hidden;}
 .bank h3 {background: none; padding: 1px 3px; font-size:0.9em; margin-top:10px; margin-left:2%;text-transform:uppercase;}
