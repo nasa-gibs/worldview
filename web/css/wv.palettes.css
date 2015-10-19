@@ -47,15 +47,14 @@
 }
 
 .wv-palettes-min, .wv-palettes-max{
-    font-size:10px;
+    font-size:1em;
     white-space:nowrap;
 }
 .layer-hidden .wv-palettes-min, .layer-hidden .wv-palettes-max{
     color:#999;
 }
 .wv-palettes-max {
-    position: absolute;
-    right: 0;
+    float: right;
 }
 
 /* FIXME: Too specific */

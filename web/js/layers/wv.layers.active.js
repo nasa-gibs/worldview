@@ -131,16 +131,6 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             .addClass("item")
             .attr("data-layer", layer.id);
 
-        var $removeButton = $("<a></a>")
-            .attr("id", "close" + group.id + encodeURIComponent(layer.id))
-            .addClass("button close bank-item-img")
-            .attr("data-layer", layer.id)
-            .attr("title", "Remove Layer");
-        var $removeImage = $("<i></i>");
-
-        $removeButton.append($removeImage);
-        $layer.append($removeButton);
-
         var $visibleButton = $("<a></a>")
             .addClass("hdanchor hide hideReg bank-item-img")
             .attr("id", "hide" + encodeURIComponent(layer.id))
@@ -188,6 +178,16 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
         var names = models.layers.getTitles(layer.id);
 
+         var $removeButton = $("<a></a>")
+            .attr("id", "close" + group.id + encodeURIComponent(layer.id))
+            .addClass("button close bank-item-img")
+            .attr("data-layer", layer.id)
+            .attr("title", "Remove Layer");
+        var $removeImage = $("<i></i>");
+
+        $removeButton.append($removeImage);
+        
+
         var $editButton = $("<a></a>")
             .attr("data-layer", layer.id)
             .attr("title", "Layer options for " + names.title)
@@ -201,8 +201,6 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             .addClass("wv-layers-options-icon");
 
         $editButton.append($gearIcon);
-
-        $layer.append($editButton);
 
         var $mainLayerDiv = $('<div></div>')
             .addClass('layer-main')
@@ -219,6 +217,8 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                 .classed('data-bar-hovered',false);
         });
 
+        $mainLayerDiv.prepend($editButton);
+        $mainLayerDiv.prepend($removeButton);
         $layer.append($mainLayerDiv);
 
         if ( layer.palette ) {
