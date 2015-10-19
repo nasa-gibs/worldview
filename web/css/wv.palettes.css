@@ -47,7 +47,7 @@
 }
 
 .wv-palettes-min, .wv-palettes-max{
-    font-size:1em;
+    font-size:0.8em;
     white-space:nowrap;
 }
 .layer-hidden .wv-palettes-min, .layer-hidden .wv-palettes-max{
