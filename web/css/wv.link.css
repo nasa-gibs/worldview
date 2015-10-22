@@ -7,3 +7,11 @@
     width: 100%;
 }
 
+#wv-link-shorten-notice {
+    margin: 0 5px;
+    cursor: default;
+    color: #49749C;
+}
+#wv-link-shorten-notice:hover {
+    color: #fff
+}

@@ -329,7 +329,7 @@ wv.data.model = wv.data.model || function(models, config) {
 
         var handlerFactory = wv.data.handler.getByName(productConfig.handler);
         var handler = handlerFactory(config, self);
-
+        console.log(handler);
         handler.events.on("query", function() {
             self.events.trigger(self.EVENT_QUERY);
         }).on("results", function(results) {
@@ -361,6 +361,7 @@ wv.data.model = wv.data.model || function(models, config) {
         if ( !queryExecuting ) {
             try {
                 queryExecuting = true;
+                console.log('messed up');
                 handler.submit();
             } catch ( error ) {
                 queryExecuting = false;
