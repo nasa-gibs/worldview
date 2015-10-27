@@ -63,6 +63,23 @@
 
 #layer-search {
     float:left;
+    border:1px solid transparent;
+}
+#layer-search:hover{
+    border:1px solid #000;
+}
+#layer-search input {
+    background: none;
+    border: 0;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box;
+    height: 40px;
+    line-height:40px;
+    font-size: 16px;
+    font-family: open_sans_light;
+    padding:0 10px;
 }
 
 .search-icon {
@@ -84,7 +101,7 @@
 }
 
 #layer-modal nav {
-    float:left;
+    float:right;
 }
 
 /* Tile layout */
@@ -137,12 +154,13 @@
 }
 #categories-nav label span{
     text-transform: capitalize;
+    font-size: 16px;
 }
 
 /* Measurement accordion view */
 #category-breadcrumb{
     font-family:open_sans_light;
-    font-size:15px;
+    font-size:16px;
     color:#000;
     /*font-style:italic;*/
     margin-left:10px;
@@ -156,12 +174,17 @@
 #selected-category{
     color: #fff;
 }
-#selected-category .ui-accordion-header{
+#layers-all .layers-all-layer {
+    padding: .5em .5em .5em .7em;
+}
+#selected-category .ui-accordion-header,
+#layers-all .layers-all-layer {
     border:0;
     margin-top:5px;
 }
 #selected-category .ui-accordion-header,
-#selected-category .ui-state-focus{
+#selected-category .ui-state-focus,
+#layers-all .layers-all-layer {
     background:rgba(0, 0, 0, 0.75);
 }
 #selected-category .ui-state-active,
@@ -171,19 +194,24 @@
 #selected-category .ui-accordion .ui-corner-top{
     border-radius:0;
 }
-#selected-category .ui-accordion .ui-accordion-icons{
+#selected-category .ui-accordion .ui-accordion-icons,
+#layers-all .layers-all-layer {
     padding-left:1.2em;
 }
-#selected-category .ui-accordion-header-icon{
+#selected-category .ui-accordion-header-icon
+,
+#layers-all .layers-all-layer .layers-all-layer-icon {
     left:auto;
     right:1.2em;
 }
-#selected-category .ui-accordion-header h3{
+#selected-category .ui-accordion-header h3,
+#layers-all .layers-all-layer h3 {
     color:#fff;
     font-size:20px;
     line-height:100%;
 }
-#selected-category .ui-accordion-header h5{
+#selected-category .ui-accordion-header h5,
+#layers-all .layers-all-layer h5{
     color:#b3b3b3;
     font-size:12px;
     line-height:100%;
@@ -239,4 +267,7 @@
 }
 #selected-category .ui-tabs-panel .ui-buttonset{
     
+}
+#layers-all .iCheck-checkbox {
+    float: right;
 }

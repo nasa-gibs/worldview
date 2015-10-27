@@ -32,9 +32,13 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                         self.selector + " #categories-nav");
 
     var $selectedCategory = $(self.selector + " #selected-category");
+    var $allLayers = $(self.selector + " #layers-all");
     var gridItemWidth = 320; //with of grid item + spacing
     var modalHeight;
     var sizeMultiplier;
+
+    //Visible Layers
+    var visible = {};
 
     //Create container for 'by interest' filters buttons
     var $nav = $('<nav></nav>')
@@ -63,9 +67,11 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
         //$( '.stamp' ).css("width", sizeMultiplier * gridItemWidth - 10 + "px");
     };
+
     var filterProjection = function(layer) {
         return config.layers[layer].projections[models.proj.selected.id];
     };
+
     var drawPage = function() {
         var projection = models.proj.selected.id;
 
@@ -101,6 +107,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
         
         $selectedCategory.hide();
+        $allLayers.hide();
         drawCategories();
     };
 
@@ -274,17 +281,95 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
         //Switch navs
         $('#layer-categories, #categories-nav').hide();
+        $allLayers.hide();
 
         $selectedCategory.show();
         $breadcrumb.show();
         
     };
-    var categoriesCrumb = function( e ) {
+
+    var drawAllLayers = function() {
+
+        $allLayers.empty();
+
+        var $fullLayerList = $( '<ul></ul>' )
+            .attr( 'id', 'flat-layer-list' );
+
+        _.each( config.layerOrder, function( layerId ) {
+
+            var current = config.layers[layerId];
+
+            var $layerItem = $( '<li></li>' )
+                .attr('id', 'layer-flat-' + current.id )
+                .attr("data-layer", encodeURIComponent(current.id))
+                .addClass('layers-all-layer');
+
+            var $layerTitle = $( '<h3></h3>' )
+                .text( current.title );
+
+            var $layerSubtitle = $('<h5></h5>')
+                .text( current.subtitle );
+
+            var $checkbox = $("<input></input>")
+                .attr("id", encodeURIComponent(current.id))
+                .attr("value", current.id)
+                .attr("type", "checkbox")
+                .attr("data-layer", current.id)
+                .on('ifChecked', addLayer)
+                .on('ifUnchecked', removeLayer);
+
+            if ( _.find(model.active, {id: current.id}) ) {
+                $checkbox.attr("checked", "checked");
+            }
+
+            $layerItem.append( $checkbox );
+            $layerItem.append( $layerTitle );
+            $layerItem.append( $layerSubtitle );
+            
+
+            $fullLayerList.append( $layerItem );
+
+        });
+        /*
+        $(self.selector + " .selectorItem, " + self.selector +
+          " .selectorItem input").on('ifChecked', addLayer);
+        $(self.selector + " .selectorItem, " + self.selector +
+          " .selectorItem input").on('ifUnchecked', removeLayer);
+        */
+        
+
+        $allLayers.append( $fullLayerList );
+
         $selectedCategory.hide();
+        $('#layer-categories, #categories-nav').hide();
+        $allLayers.show();
+
+        $allLayers.iCheck({checkboxClass: 'icheckbox_square-grey'});
+
+        //Create breadcrumb crumbs
+        $breadcrumb.empty();
+
+        var $homeCrumb = $( '<a></a>' )
+            .text('Categories')
+            .attr( 'alt', 'categories' )
+            .attr( 'title', 'Back to Layer Categories')
+            .click( categoriesCrumb );
+
+        $breadcrumb.append( $homeCrumb )
+            .append('<b> / Search Results</b>' );
+
+        $breadcrumb.show();
+    };
+
+    var categoriesCrumb = function( e ) {
+        searchOpen = 1;
+        $selectedCategory.hide();
+        $allLayers.hide();
         $breadcrumb.hide();
         $('#layer-categories, #categories-nav').show();
         
     };
+
     var cssName = function(name){
         if ( name === 'hazards and disasters' ) {
             return 'legacy';
@@ -385,6 +470,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     };
     var addLayer = function(event) {
         model.add( decodeURIComponent( $( this ).val() ) );
+        console.log('test');
 
     };
 
@@ -394,17 +480,50 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
     var onLayerAdded = function(layer) {
         var $element = $( self.selector + " [data-layer='" +
-                wv.util.jqueryEscape(layer.id) + "']");
+                          wv.util.jqueryEscape(layer.id) + "']");
+        $element.iCheck("check");
     };
 
     var onLayerRemoved = function(layer) {
         var $element = $( self.selector + " [data-layer='" +
-                wv.util.jqueryEscape(layer.id) + "']");
+                          wv.util.jqueryEscape(layer.id) + "']");
+        $element.iCheck("uncheck");
     };
 
     var render = function(){
 
         setModalSize();
+
+        $( '#layer-modal-main' ).css( 'height', modalHeight - 40 );
+
+        var $search = $( "<div></div>" )
+            .attr( "id", "layer-search" );
+
+        var $searchInput = $( "<input></input>" )
+            .attr( "id", "layers-search-input" );
+
+        var searchClickState = 0;
+
+        var $searchBtn = $("<label></label>")
+            .addClass( "search-icon" )
+            .click( function( e ) {
+                var that = this;
+                if ( searchClickState === 0 ) {
+                    searchClickState = 1;
+                    //console.log('click on');
+                    //$searchInput.show( 1, function( e ) {
+                    //    $( this ).focus();
+                    //});
+                    drawAllLayers();
+                }
+                else if ( searchClickState === 1 ) {
+                    searchClickState = 0;
+                    //console.log('click off');
+                    //$searchInput.blur();
+                    //$searchInput.hide();
+                }
+            } )
+            .append( "<i></i>" );
 
         $( self.selector ).dialog({
             autoOpen: false,
@@ -431,56 +550,39 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 $( ".ui-widget-overlay" ).click( function( e ) {
                     $( self.selector ).dialog( "close" );
                 } );
+                /*var current = $searchInput.val();
+                $( window ).keypress( function ( e ) {
+                    if ( e.which !== 0 &&
+                        !e.ctrlKey && !e.metaKey && !e.altKey
+                       ) {
+                        if( searchClickState === 0){
+                            $searchBtn.click();
+                        }
+                    }
+                });*/
             },
             close: function( event, ui ) {
                 $( ".ui-widget-overlay" ).unbind( "click" );
             }
         });
         
-        $( '#layer-modal-main' ).css( 'height', modalHeight - 40 );
-
-        var $search = $( "<div></div>" )
-            .attr( "id", "layer-search" );
-
-        var $searchInput = $( "<input></input>" )
-            .attr( "id", "layers-search-input" )
-            .hide();
-
-        var $searchBtn = $("<label></label>")
-            .addClass( "search-icon" )
-            .toggle( function( e ) {
-                var that = this;
-                //console.log('click on');
-                $searchInput.show( "fast", function(e){
-                    //console.log('visible');
-                    //console.log(this);
-                    /*$(this).focus().blur(function(e){
-                        console.log('blurring');
-                        $(that).toggle();
-                    });
-                    */
-                });
-                //console.log(e);
-            }, function ( e ) {
-                //console.log('click off');
-                $searchInput.hide(function(e){
-                    //console.log('unblurring');
-                    //$(this).off("blur");
-                });
-                //console.log(e);
-            } )
-            .append( "<i></i>" );
         
         $search.append( $searchBtn )
             .append( $searchInput );
 
         $header.prepend( $search );
 
+        //$(self.selector + "select").on('change', filter);
+        $searchInput.on('keyup', filter);
+
         drawPage();
     };
 
     var init = function(){
-        
+        _.each(config.layers, function(layer) {
+            visible[layer.id] = true;
+        });
+        console.log(visible);
         model.events
             .on("add", onLayerAdded)
             .on("remove", onLayerRemoved);
@@ -494,6 +596,75 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
         $(window).resize(resize);
     };
+
+    var searchTerms = function() {
+        var search = $("#layers-search-input").val().toLowerCase();
+        var terms = search.split(/ +/);
+        return terms;
+    };
+
+    var filterAreaOfInterest = function(layerId) {
+        if ( !config.aoi ) {
+            return false;
+        }
+        var aoi = $(self.selector + "select").val();
+        if ( aoi === "All" ) {
+            return false;
+        }
+        return $.inArray(layerId, config.aoi[aoi].baselayers) < 0 &&
+               $.inArray(layerId, config.aoi[aoi].overlays) < 0;
+    };
+    //Similar name to another var above
+    var filterProjections = function(layer) {
+        return !layer.projections[models.proj.selected.id];
+    };
+
+    var filterSearch = function(layer, terms) {
+        var search = $(self.selector + "search").val();
+        if ( search === "" ) {
+            return false;
+        }
+        var filtered = false;
+        var names = models.layers.getTitles(layer.id);
+        $.each(terms, function(index, term) {
+            filtered = !names.title.toLowerCase().contains(term) &&
+                       !names.subtitle.toLowerCase().contains(term) &&
+                       !names.tags.toLowerCase().contains(term);
+            if ( filtered ) {
+                return false;
+            }
+        });
+        return filtered;
+    };
+    var searchOpen = 0;
+    var filter = _.throttle(function() {
+        var search = searchTerms();
+        $.each(config.layers, function(layerId, layer) {            
+            //var faoi = filterAreaOfInterest(layerId);
+            var fproj = filterProjections(layer);
+            var fterms = filterSearch(layer, search);
+            /*
+            if ( layerId.startsWith("carto") ) {
+                console.log(layerId, "faoi", faoi, "fproj", fproj, "fterms", fterms);
+                console.log(wv.util.jqueryEscape(layerId));
+            }
+            */
+            var filtered = fproj || fterms;
+            visible[layer.id] = !filtered;
+            if(searchOpen) {
+                var display = filtered ? "none": "block";
+                var selector = "#flat-layer-list li[data-layer='" +
+                    wv.util.jqueryEscape(layerId) + "']";
+                $(selector).css("display", display);
+            }
+            else {
+                drawAllLayers();
+                searchOpen = 1;
+            }
+            console.log(visible[layer.id]);
+        });
+        //adjustCategoryHeights();
+    }, 250, { trailing: true });
 
     init();
     return self;

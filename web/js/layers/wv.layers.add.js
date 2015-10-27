@@ -388,7 +388,7 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
     var filter = _.throttle(function() {
         var search = searchTerms();
         $.each(config.layers, function(layerId, layer) {
-            var faoi = filterAreaOfInterest(layerId);
+            //var faoi = filterAreaOfInterest(layerId);
             var fproj = filterProjection(layer);
             var fterms = filterSearch(layer, search);
             /*
@@ -397,7 +397,7 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
                 console.log(wv.util.jqueryEscape(layerId));
             }
             */
-            var filtered = faoi || fproj || fterms;
+            var filtered = fproj || fterms;
             var display = filtered ? "none": "block";
             var selector = "#selectorbox li[data-layer='" +
                     wv.util.jqueryEscape(layerId) + "']";
