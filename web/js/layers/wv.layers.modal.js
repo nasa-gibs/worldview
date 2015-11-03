@@ -77,7 +77,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
         _.each( config.categories['hazards and disasters'].All.measurements,
                 function( measurement ) {
-
                     _.each( config.measurements[measurement].sources,
                             function( source, sourceIndex ) {
 
@@ -470,7 +469,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     };
     var addLayer = function(event) {
         model.add( decodeURIComponent( $( this ).val() ) );
-        console.log('test');
 
     };
 
@@ -582,7 +580,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         _.each(config.layers, function(layer) {
             visible[layer.id] = true;
         });
-        console.log(visible);
         model.events
             .on("add", onLayerAdded)
             .on("remove", onLayerRemoved);
@@ -661,7 +658,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 drawAllLayers();
                 searchOpen = 1;
             }
-            console.log(visible[layer.id]);
         });
         //adjustCategoryHeights();
     }, 250, { trailing: true });
