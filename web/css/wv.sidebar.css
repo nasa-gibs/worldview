@@ -27,12 +27,26 @@
 }
 
 #productsHolder main#products{
-    overflow:scroll;
+    overflow-y:scroll;
     box-sizing:border-box;
     -moz-box-sizing:border-box;
     -webkit-box-sizing:border-box;
     -o-box-sizing:border-box;
     padding:5px 0 0 0;
+}
+main#products::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: transparent;
+}
+
+main#products::-webkit-scrollbar {
+    width: 12px;
+    background-color: transparent;
+}
+
+main#products::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    background-color: #F5F5F5;
 }
 #productsHolder ul#overlays{
     margin-bottom:10px;

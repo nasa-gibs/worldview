@@ -40,20 +40,39 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     //Visible Layers
     var visible = {};
 
+    var init = function(){
+        _.each(config.layers, function(layer) {
+            visible[layer.id] = true;
+        });
+
+        model.events
+            .on("add", onLayerAdded)
+            .on("remove", onLayerRemoved);
+
+        models.proj.events.on("select", onProjectionChange);
+
+        //Create tiles
+        render();
+
+        $addBtn.click(function(e){
+            $( self.selector ).dialog("open");
+        });
+
+        $(window).resize(resize);
+    };
+
     //Create container for 'by interest' filters buttons
     var $nav = $('<nav></nav>')
         .attr( 'id', 'categories-nav' );
-    $header.append( $nav );
     
     //Create container for breadcrumb
     var $breadcrumb = $('<nav></nav>')
         .attr( 'id', 'category-breadcrumb' );
-    $header.append( $breadcrumb );    
 
     var setModalSize = function(){
         var availableWidth = $( window ).width() - ( $( window ).width() * 0.15 );
         sizeMultiplier = Math.floor( availableWidth / gridItemWidth );
-        modalHeight = $( window ).height() - 200;
+        modalHeight = $( window ).height() - 100;
     };
     var redo = function(){
         setModalSize();
@@ -74,7 +93,8 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
     var drawPage = function() {
         var projection = models.proj.selected.id;
-
+        console.log(projection);
+        if(projection==='geographic') {
         _.each( config.categories['hazards and disasters'].All.measurements,
                 function( measurement ) {
                     _.each( config.measurements[measurement].sources,
@@ -105,9 +125,14 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
               );
 
         
-        $selectedCategory.hide();
-        $allLayers.hide();
-        drawCategories();
+        
+            $selectedCategory.hide();
+            $allLayers.hide();
+            drawCategories();
+        }
+        else {
+            drawAllLayers();
+        }
     };
 
     var resize = function(){
@@ -158,88 +183,46 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 var $sourceContent = $( '<div></div>' )
                     .attr( 'id', current.id + '-' + source.id );
 
+                //Metadata
                 var $sourceMeta = $( '<p></p>' )
                     .text(source.description);
 
-                $sourceContent.append( $sourceMeta );
+                //$sourceContent.append( $sourceMeta );
 
-                var $addButton = $( '<button></button>' )
-                    .text( 'Add' )
-                    .attr( 'id', 'add-' + current.id + '-' + source.id );
-                var $removeButton = $( '<button></button>' )
-                    .text( 'Remove' )
-                    .attr( 'id', 'remove-' + current.id + '-' + source.id );
+                var $sourceSettings = $( '<ul></ul>' );
 
-                if( source.settings.length !== 1 ) {
-                    var $sourceSettings = $( '<form></form>' );
-
-                    _.each( source.settings, function( setting ) {
-                        var layer = config.layers[setting];
-                        var title;
-
-                        // The following complex if statement is a placeholder
-                        // for truncating the layer names, until the rest of
-                        // the interface is implemented
-
-                        if( layer.title.indexOf('(') !== -1 ) {
-                            var regExp = /\(([^)]+)\)/;
-                            var matches = regExp.exec(layer.title);
-                            title = matches[1];
-                        } else if ( layer.title.indexOf( ':' ) !== -1 ){
-                            
-                        } else if ( layer.title.indexOf( ',' ) !== -1 ) {
-                            
-                        } else {
-
-                        }
-
-                        var $setting = $( '<input />' )
-                            .attr( 'type', 'radio' )
-                            .addClass( 'settings-radio')
-                            .attr( 'id', 'setting-' + layer.id )
-                            .attr( 'value', encodeURIComponent( layer.id ) )
+                _.each( source.settings, function( setting ) {
+                    var layer = config.layers[setting];
+                    var title;
+                    var $wrapper = $('<li></li>');
+                    var $setting = $( '<input></input>' )
+                        .attr( 'type', 'checkbox' )
+                        .addClass( 'settings-check')
+                        .attr( 'id', 'setting-' + layer.id )
+                        .attr( 'value', encodeURIComponent( layer.id ) )
                         //maybe dont need value and data-layer both
-                            .attr( 'data-layer', encodeURIComponent( layer.id ) )
-                            .click( function( e ) {
-                                $addButton.val( $( this ).val() );
-                                $removeButton.val( $( this ).val() );
-                            });
+                        .attr( 'data-layer', encodeURIComponent( layer.id ) )
+                        .on('ifChecked', addLayer)
+                        .on('ifUnchecked', removeLayer);
 
-                        var $label = $( '<label></label>' )
-                            .attr( 'for', 'setting-' + encodeURIComponent( layer.id ) )
-                            .text( title );
+                    if ( _.find(model.active, {id: layer.id}) ) {
+                        $setting.attr("checked", "checked");
+                    }
 
-                        $sourceSettings.append( $setting )
-                            .append( $label );
+                    var $label = $( '<label></label>' )
+                        .attr( 'for', 'setting-' + encodeURIComponent( layer.id ) )
+                        .text( layer.title );
 
-                    });
-
-                    $sourceSettings.buttonset();
-
-                    // might need mose more logic here, the click "checks"
-                    // the radio, instead of unchecking the rest then checking
-                    // the selected
-                    //$sourceSettings.find( 'input.settings-radio' )
-                        
-
+                    $wrapper.append( $setting )
+                        .append( $label );
+                    $sourceSettings.append( $wrapper );
                     $sourceContent.append( $sourceSettings );
-                }
-                // if there are no settings then just create an add button
-                // for the selected source
-                else {
-                    //$sourceContent.append( $sourceMeta );
-                    $addButton.val( source.settings[0] );
-                    $removeButton.val( source.settings[0] );
-                }
 
-                $addButton.button()
-                    .click( addLayer );
+                });
 
-                $removeButton.button()
-                    .click( removeLayer );
-
-                $sourceContent.append( $addButton, $removeButton );
+                //$sourceContent.append( $addButton, $removeButton );
                 $measurementContent.append( $sourceContent );
+                
 
             });
             //End source level
@@ -253,6 +236,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             
         });
         //End measurement level
+        
 
         $categoryList.accordion({
             collapsible: true,
@@ -277,12 +261,16 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
         $breadcrumb.append( $homeCrumb )
             .append('<b> / ' + category.title + '</b>' );
+        $selectedCategory.prepend( $breadcrumb );
+        $('#layers-search-input').show();
+        searchClickState = 1;
 
         //Switch navs
         $('#layer-categories, #categories-nav').hide();
         $allLayers.hide();
 
         $selectedCategory.show();
+        $selectedCategory.iCheck({checkboxClass: 'icheckbox_square-grey'});
         $breadcrumb.show();
         
     };
@@ -357,21 +345,35 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         $breadcrumb.append( $homeCrumb )
             .append('<b> / Search Results</b>' );
 
+        $allLayers.prepend( $breadcrumb );
+        $('#layers-search-input').show();
+        searchClickState = 1;
+
         $breadcrumb.show();
     };
 
     var categoriesCrumb = function( e ) {
-        searchOpen = 1;
+        searchOpen = 0;
         $selectedCategory.hide();
         $allLayers.hide();
         $breadcrumb.hide();
-        $('#layer-categories, #categories-nav').show();
+        $( '#layers-search-input' ).val('');
+        searchClickState = 0;
+        $( '#layer-categories, #categories-nav' ).show();
+        $( "#layer-categories" ).isotope();
         
     };
 
     var cssName = function(name){
         if ( name === 'hazards and disasters' ) {
             return 'legacy';
+        }
+        else return name;
+    };
+
+    var replaceIfScientific = function(name){
+        if(name === 'scientific'){
+            return 'science discipline'
         }
         else return name;
     };
@@ -383,22 +385,43 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         _.each( config.categories, function( metaCategory, metaCategoryName ) {
 
             _.each(config.categories[metaCategoryName], function( category, name ) {
+                var sortNumber;
 
+                if(category.placement){
+                    if (category.placement === 'first'){
+                        sortNumber = 1;
+                    }
+                    else if(category.placement === 'last'){
+                        sortNumber = 3;
+                    }
+                }
+                else sortNumber = 2;
                 var $category = $( '<div></div>' )
+                    .attr('data-sort', sortNumber)
                     .addClass( 'layer-category layer-category-' + cssName(metaCategoryName) )
                     .attr( 'id', category.id );
+                if(category.image){
+                    $category
+                        .css('background-image','url("images/wv.layers/categories/' + category.image + '")');
+                }
+
+                var $categoryOpaque = $('<div></div>')
+                    .addClass('category-background-cover');
+
+                $category.append( $categoryOpaque );
 
                 var $categoryTitle = $( '<h3></h3>' );
 
                 var $categoryLink = $( '<a></a>' )
                     .text( category.title )
                     .attr( 'alt', category.title )
+                    .addClass('layer-category-name')
                     .click( function( e ) {
                         drawMeasurements( category );
                     });
-
+                
                 $categoryTitle.append( $categoryLink );
-                $category.append( $categoryTitle );
+                $categoryOpaque.append( $categoryTitle );
 
                 var $measurements = $('<ul></ul>');
 
@@ -422,17 +445,18 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     $measurements.append( $measurementItem );
                 });
 
-                $category.append( $measurements );
+                $categoryOpaque.append( $measurements );
+                
                 $categories.append( $category );
 
             });
 
             var $filterButton = $( '<input />' )
                 .attr( 'type', 'radio')
-                .text( metaCategoryName );
+                .text( replaceIfScientific(metaCategoryName) );
 
             var $label = $( '<label></label>' )
-                .text( metaCategoryName );
+                .text( replaceIfScientific(metaCategoryName) );
 
             $filterButton
                 .attr( 'id', 'button-filter-' + cssName(metaCategoryName) )
@@ -441,6 +465,9 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     $tiles.isotope({
                         filter: '.layer-category-' + cssName(metaCategoryName)
                     });
+                    $('#categories-nav .ui-button').removeClass('nav-selected');
+                    $("label[for=" + $(this).attr("id") + "]")
+                        .addClass('nav-selected');
                 });
 
             $label.attr('for', 'button-filter-' + cssName(metaCategoryName) );
@@ -454,14 +481,21 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         var $tiles = $( '#layer-categories' ).isotope( {
             itemSelector: '.layer-category',
             //stamp: '.stamp',
-            //sortBy: 'number',
-            layoutMode: 'packery',
-            filter: '.layer-category-scientific',
-            packery: {
-                gutter: 10,
+            getSortData: {
+                name: '.layer-category-name', // text from querySelector
+                order: '[data-sort]'
             },
-            //transitionDuration: '0.2s'
+            sortBy: [ 'order', 'name' ],
+            filter: '.layer-category-scientific',
+            masonry: {
+                gutter: 10
+            }
+
         });
+
+        $('#layer-modal-main').prepend( $nav );
+
+        $('label[for=button-filter-scientific]').addClass('nav-selected');
 
         _.each(config.categories, function( topCategory, name ) {
      
@@ -487,7 +521,17 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                           wv.util.jqueryEscape(layer.id) + "']");
         $element.iCheck("uncheck");
     };
-
+    var onProjectionChange = function() {
+        var proj = models.proj.selected.id;
+        console.log(proj);
+        if(proj === 'geographic'){
+            categoriesCrumb();
+        }
+        else{
+            filter();
+        }
+        
+    };
     var render = function(){
 
         setModalSize();
@@ -498,7 +542,8 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             .attr( "id", "layer-search" );
 
         var $searchInput = $( "<input></input>" )
-            .attr( "id", "layers-search-input" );
+            .attr( "id", "layers-search-input" )
+            .attr( 'placeholder', 'Search');
 
         var searchClickState = 0;
 
@@ -508,17 +553,19 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 var that = this;
                 if ( searchClickState === 0 ) {
                     searchClickState = 1;
-                    //console.log('click on');
-                    //$searchInput.show( 1, function( e ) {
-                    //    $( this ).focus();
-                    //});
-                    drawAllLayers();
+                    console.log('click on');
+                    $('#layers-search-input').focus();
+                    //$(this).addClass('search-on');
+                    //$nav.hide();
+                    //drawAllLayers();
                 }
                 else if ( searchClickState === 1 ) {
                     searchClickState = 0;
-                    //console.log('click off');
-                    //$searchInput.blur();
+                    console.log('click off');
+                    $searchInput.val('');
                     //$searchInput.hide();
+                    $(this).removeClass('search-on');
+                    //$nav.show();
                 }
             } )
             .append( "<i></i>" );
@@ -568,30 +615,21 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         $search.append( $searchBtn )
             .append( $searchInput );
 
-        $header.prepend( $search );
+        $header.append( $search );
+
+        var $closeButton = $('<div></div>')
+            .attr('id', 'layers-modal-close')
+            .click( function( e ) {
+                $( self.selector ).dialog( "close" );
+            })
+            .append('<i></i>');
+        
+        $header.append ( $closeButton );
 
         //$(self.selector + "select").on('change', filter);
         $searchInput.on('keyup', filter);
 
         drawPage();
-    };
-
-    var init = function(){
-        _.each(config.layers, function(layer) {
-            visible[layer.id] = true;
-        });
-        model.events
-            .on("add", onLayerAdded)
-            .on("remove", onLayerRemoved);
-
-        //Create tiles
-        render();
-
-        $addBtn.click(function(e){
-            $( self.selector ).dialog("open");
-        });
-
-        $(window).resize(resize);
     };
 
     var searchTerms = function() {
@@ -657,6 +695,8 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             else {
                 drawAllLayers();
                 searchOpen = 1;
+                searchClickState = 1;
+                $('label.search-icon').addClass('search-on');
             }
         });
         //adjustCategoryHeights();
