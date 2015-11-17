@@ -35,7 +35,7 @@ wv.date.timeline.zoom = wv.date.timeline.zoom || function(models, config, ui) {
             },
             normal: {
                 
-            },
+            }
         },
         pick: {
             //Placeholder

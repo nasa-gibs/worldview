@@ -339,13 +339,12 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
                 parseInt(sourceColor.substring(4, 6), 16) + "," +
                 parseInt(sourceColor.substring(6, 8), 16);
             var targetColor = newScale[index];
-            var targetEntry = {
+            lookup[sourceEntry] = {
                 r: parseInt(targetColor.substring(0, 2), 16),
                 g: parseInt(targetColor.substring(2, 4), 16),
                 b: parseInt(targetColor.substring(4, 6), 16),
                 a: parseInt(targetColor.substring(6, 8), 16)
             };
-            lookup[sourceEntry] = targetEntry;
         });
         def.lookup = lookup;
     };

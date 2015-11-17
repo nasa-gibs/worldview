@@ -143,7 +143,7 @@ wv.ui = (function(self) {
     };
 
     var getComponent = function(marker, fnClose) {
-        $element = $("<div></div>").addClass(marker);
+        var $element = $("<div></div>").addClass(marker);
         $("body").append($element);
         return $element;
     };

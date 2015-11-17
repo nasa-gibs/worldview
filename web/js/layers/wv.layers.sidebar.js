@@ -43,7 +43,6 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
 
     var collapsed = false;
     var collapseRequested = false;
-    var portrait = false;
     var mobile = false;
     var self = {};
 
@@ -82,17 +81,16 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
             return;
         }
         collapsed = true;
-        $('.accordionToggler')
-            .removeClass('atcollapse')
-            .addClass('dateHolder')
-            .removeClass('arrow')
-            .addClass('staticLayers');
-        $('.accordionToggler').attr("title","Show Layer Selector");
-        $('.accordionToggler').html("Layers (" + models.layers.get().length + ")");
-        var w = $('#app').outerWidth();
+        var accordion = $('.accordionToggler');
+
+        accordion
+            .removeClass('atcollapse arrow')
+            .addClass('dateHolder staticLayers')
+            .attr("title","Show Layer Selector")
+            .html("Layers (" + models.layers.get().length + ")");
         var speed = ( now ) ? undefined : "fast";
         $('.products').hide(speed);
-        $("#" + self.id).after($('.accordionToggler'));
+        $("#" + self.id).after(accordion);
 
         if ( wv.util.browser.localStorage ) {
             localStorage.setItem("sidebarState", "collapsed");
@@ -108,18 +106,18 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
             return;
         }
         collapsed = false;
-        $('.accordionToggler')
-            .removeClass('atexpand')
-            .addClass('atcollapse')
-            .removeClass('staticLayers dateHolder')
-            .addClass('arrow');
-        $('.accordionToggler').attr("title","Hide Layer Selector");
-        $('.accordionToggler').empty();
+        var accordion = $('.accordionToggler');
+
+        accordion
+            .removeClass('atexpand staticLayers dateHolder')
+            .addClass('atcollapse arrow')
+            .attr("title","Hide Layer Selector")
+            .empty();
         var speed = ( now ) ? undefined : "fast";
         $('.products').show(speed, function() {
             models.wv.events.trigger("sidebar-expand");
         });
-        $('.accordionToggler').appendTo("#"+self.id+"toggleButtonHolder");
+        accordion.appendTo("#"+self.id+"toggleButtonHolder");
 
         if ( wv.util.browser.localStorage ) {
             localStorage.setItem("sidebarState", "expanded");
@@ -152,20 +150,17 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
             .attr("id", self.id + "tabs");
 
         var $activeTab = $("<li></li>")
-            .addClass("layerPicker")
-            .addClass("first")
+            .addClass("layerPicker first")
             .attr("data-tab", "active");
         var $activeLink = $("<a></a>")
             .attr("href", "#products")
-            .addClass("activetab")
-            .addClass("tab")
+            .addClass("activetab tab")
             .html(HTML_TAB_ACTIVE_SELECTED);
         $activeTab.append($activeLink);
         $tabs.append($activeTab);
 
         var $addTab = $("<li></li>")
-            .addClass("layerPicker")
-            .addClass("second")
+            .addClass("layerPicker second")
             .attr("data-tab", "add");
         var $addLink = $("<a></a>")
             .attr("href", "#selectorbox")
@@ -176,8 +171,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
 
         if ( config.features.dataDownload ) {
             var $downloadTab = $("<li></li>")
-                .addClass("layerPicker")
-                .addClass("third")
+                .addClass("layerPicker third")
                 .attr("data-tab", "download");
             var $downloadLink = $("<a></a>")
                 .attr("href", "#wv-data")
@@ -194,9 +188,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
 
 
         var $collapseButton = $("<a></a>")
-            .addClass("accordionToggler")
-            .addClass("atcollapse")
-            .addClass("arrow")
+            .addClass("accordionToggler atcollapse arrow")
             .attr("title", "Hide");
 
         $collapseContainer.append($collapseButton);
@@ -232,23 +224,20 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
         if ( tab === "active" ) {
             $('.ui-tabs-nav')
                   .addClass('firstselected')
-                  .removeClass('secondselected')
-                  .removeClass('thirdselected');
+                  .removeClass('secondselected thirdselected');
             $('.ui-tabs-nav li.first').addClass("ui-state-active");
             $('.ui-tabs-nav li.second').removeClass("ui-state-active");
             $('.ui-tabs-nav li.third').removeClass("ui-state-active");
         } else if ( tab === "add" ) {
             $('.ui-tabs-nav')
-                  .removeClass('firstselected')
                   .addClass('secondselected')
-                  .removeClass('thirdselected');
+                  .removeClass('firstselected thirdselected');
             $('.ui-tabs-nav li.first').removeClass("ui-state-active");
             $('.ui-tabs-nav li.second').addClass("ui-state-active");
             $('.ui-tabs-nav li.third').removeClass("ui-state-active");
         } else if ( tab === "download" ) {
             $('.ui-tabs-nav')
-                  .removeClass('firstselected')
-                  .removeClass('secondselected')
+                  .removeClass('firstselected secondselected')
                   .addClass('thirdselected');
             $('.ui-tabs-nav li.first').removeClass("ui-state-active");
             $('.ui-tabs-nav li.second').removeClass("ui-state-active");

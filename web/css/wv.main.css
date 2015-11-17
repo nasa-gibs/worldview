@@ -47,8 +47,6 @@ h1, h2, h3, h4, h5, h6 { font-weight:400; }
     padding:2px 0;
 }
 
-
-
 #info_drop { border:none; margin: 0;}
 #info_drop div.hidden a {display:block; color:#fff; font-weight:100; line-height:1em; font-size: 11px; width:70px; padding: 2px 5px; text-align:right; text-decoration:none;}
 #info_drop div.hidden a:hover {background: rgba(38,43,49,0.45); }
@@ -64,8 +62,6 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
 
 #products {display:block; float:left;  position:relative; left:0; }
 
-
-
 #banner {
     display:block;
     z-index:294;
@@ -76,8 +72,6 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
     /*background: rgba(65,65,65,0.5);*/
     /*border-bottom: 1px solid #000;*/
 }
-
-
 
 #banner img.logo {padding:11px 5px;}
 #banner ul {float:right; }
@@ -153,6 +147,7 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
     border-radius:0;
 
 }
+
 #wv-toolbar li{
     display:inline-block;
     margin:0;
@@ -174,6 +169,7 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
     background-color:#fff;
     color:#1a1a1a;
 }
+
 .ui-button {
     color: #eeeeee;
 }
@@ -221,6 +217,7 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
 
 .ui-dialog {
     padding: 0;
+    z-index: 600; /* always above image crop */
 }
 
 .ui-dialog .ui-dialog-content {
@@ -228,8 +225,9 @@ div.horizontalContainer {width:100%; display:block; float:left;  position:absolu
     padding-top: 15px;
     padding-bottom: 15px;
 }
-.ui-corner-all{
-border-radius:0;
+
+.ui-corner-all {
+    border-radius:0;
 }
 
 .ui-state-default .ui-icon-closethick {
@@ -314,9 +312,11 @@ label {
     -o-user-select: none;
     user-select: none;
 }
+
 .wv-panel{
     border:1px solid #333;
 }
+
 .wv-panel .ui-dialog-titlebar {
     background: rgb(40, 40, 40);
     border: 0;
@@ -338,7 +338,7 @@ label {
 }
 
 .wv-panel .ui-dialog-content {
-    padding: 0em 1em 1em 1em;
+    padding: 0 1em 1em 1em;
 }
 
 .wv-panel .ui-dialog-title {
@@ -376,6 +376,7 @@ label {
 .ui-state-focus:focus {
     outline: none !important ;
 }
+
 .ui-state-focus a:focus {
     outline: none !important;
 }

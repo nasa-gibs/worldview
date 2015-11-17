@@ -95,10 +95,9 @@ wv.map = (function(self) {
      */
     self.setOpacity = function(layer, opacity) {
         layer.setOpacity(opacity);
-        if ( opacity === 1 ) {
-            var effect = layer.originalTransitionEffect || "resize";
-            layer.transitionEffect = effect;
-        } else {
+        if ( opacity === 1 )
+            layer.transitionEffect = layer.originalTransitionEffect || "resize";
+        else {
             layer.originalTransitionEffect = layer.transitionEffect;
             layer.transitionEffect = "none";
         }
@@ -124,8 +123,7 @@ wv.map = (function(self) {
         if ( layer.isControl ) {
             layer.setVisibility(visible);
         } else {
-            var actualOpacity = ( visible ) ? opacity : 0;
-            layer.div.style.opacity = actualOpacity;
+            layer.div.style.opacity = ( visible ) ? opacity : 0;
             if ( visible && opacity > 0 && !layer.getVisibility() ) {
                 layer.setVisibility(true);
             }

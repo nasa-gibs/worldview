@@ -65,7 +65,7 @@ $(function() {
 
         wv.layers.validate(errors, config);
 
-        parsers = [
+        var parsers = [
             wv.proj.parse,
             wv.layers.parse,
             wv.date.parse,
@@ -79,7 +79,7 @@ $(function() {
         _.each(parsers, function(parser) {
             parser(state, errors, config);
         });
-        requirements = [
+        var requirements = [
             wv.palettes.requirements(state, config)
         ];
 
@@ -128,7 +128,7 @@ $(function() {
         models.link.load(state);
 
         // HACK: Map needs to be created before the data download model
-        ui.map = wv.map.ui(models, config);
+        ui.map = wv.map.ui(models, config, ui);
         if ( config.features.dataDownload ) {
             models.data = wv.data.model(models, config);
         }
@@ -145,10 +145,11 @@ $(function() {
 
         elapsed("ui");
         // Create widgets
-        ui.anim = wv.date.anim(models.date, ui.map, {
+        ui.anim = wv.date.anim(models.date, ui, {
             debug: parameters.debug === "anim"
         });
-        ui.proj = wv.proj.ui(models, config);
+
+        ui.proj = wv.proj.ui(models, config, ui);
         ui.sidebar = wv.layers.sidebar(models, config);
         ui.activeLayers = wv.layers.active(models, ui, config);
         ui.addLayers = wv.layers.add(models, ui, config);
@@ -178,7 +179,7 @@ $(function() {
         //FIXME: Old hack
         $(window).resize(function() {
           if ($(window).width() < 720) {
-            $('#productsHoldertabs li.first a').trigger('click');
+            $('#productsHoldertabs').find('li.first a').trigger('click');
           }
         });
 
@@ -201,6 +202,11 @@ $(function() {
             // FIXME: This is a hack
             models.map.events.on("projection", models.data.updateProjection);
         }
+
+        //HACK: Animation stuff requires timeline to be ready. Handle animation permalink here
+        ui.anim.parse(state, errors, config);
+        models.link.register(ui.anim);
+        ui.anim.load(state, errors);
 
         // Sink all focus on inputs if click unhandled
         $(document).click(function(event) {

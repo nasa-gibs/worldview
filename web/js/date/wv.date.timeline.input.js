@@ -27,38 +27,43 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
     var model = models.date;
 
     var self = {};
+    self.fromDate = undefined;
+    self.toDate = undefined;
 
     var timer, rollingDate;
 
+    //vars for dialog dates and time interval
+    var interval = 'day';
+
     var $incrementBtn = $("#right-arrow-group");
     var $decrementBtn = $("#left-arrow-group");
+	var $animateBtn   = $("#animate-button");
+    var resumeButton, pauseButton, playButton, GIFButton;
 
-    var forwardNextDay = function(){ //FIXME: Limit animation correctly
+    var forwardNextDay = function(){
         var nextDay = new Date(new Date(model.selected)
                                .setUTCDate(model.selected.getUTCDate()+1));
-        if(nextDay <= wv.util.today()){
+        if(nextDay <= wv.util.today())
             animateForward("day");
-        }
-        else{
+        else
             animateEnd();
-        }
     };
 
-    var reversePrevDay = function(){ //FIXME: Limit animation correctly
+    var reversePrevDay = function(){
          var prevDay = new Date(new Date(model.selected)
                                .setUTCDate(model.selected.getUTCDate()-1));
-        if(prevDay >= tl.data.start() ){
+        if(prevDay >= tl.data.start() )
             animateReverse("day");
-        }
-        else{
+        else
             animateEnd();
-        }
     };
 
     var animateForward = function(interval) {
         if ( ui.anim.active ) {
             return;
         }
+        ui.anim.delay = 500;
+        $("#wv-speed-slider").val(2);
         models.date.add(interval, 1);
         ui.anim.interval = interval;
         ui.anim.play("forward");
@@ -68,6 +73,8 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         if ( ui.anim.active ) {
             return;
         }
+        ui.anim.delay = 500;
+        $("#wv-speed-slider").val(2);
         models.date.add(interval, -1);
         ui.anim.interval = interval;
         ui.anim.play("reverse");
@@ -103,72 +110,55 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         }
     };
 
-    //TODO: Cleanup
     var validateInput = function(event) {
         var kc = event.keyCode || event.which;
         var entered = (kc == 13) || (kc === 9);
         if ( event.type == "focusout" || entered ) {
-            if ( entered ) {
+            if ( entered )
                 event.preventDefault();
-            }
             
             var selected = $(this);
             var YMDInterval = selected.attr('id');
             var newInput = selected.val();
             var selectedDateObj = null;
+
             switch( YMDInterval ) {
             case 'year-input-group':
-                if ( ( newInput > 1000 ) && ( newInput < 9999 ) )
-                    selectedDateObj = new Date(
-                        ( new Date( model.selected ) )
-                            .setUTCFullYear( newInput ) );
+                if ((newInput > 1000) && (newInput < 9999))
+                    selectedDateObj = new Date((new Date(model.selected)).setUTCFullYear(newInput));
                 break;
             case 'month-input-group':
-                if ( ( $.isNumeric( newInput ) ) &&
-                     ( newInput < 13 ) && ( newInput > 0 ) )
-                {
-                    selectedDateObj = new Date(
-                        ( new Date( model.selected ) )
-                            .setUTCMonth( newInput - 1 ) );
-                }
-                else{
+                if (($.isNumeric(newInput)) && (newInput < 13) && ( newInput > 0))
+                    selectedDateObj = new Date((new Date(model.selected)).setUTCMonth(newInput - 1));
+                else {
                     var validStr = false;
                     var newIntInput;
                     newInput = newInput.toUpperCase();
-                    
-                    for ( var i=0; i < model.monthAbbr.length; i++ ) {
-                        if ( newInput === model.monthAbbr[i] ) {
+
+                    var len = model.monthAbbr.length;
+                    for (var i=0; i < len; i++)
+                        if (newInput === model.monthAbbr[i]) {
                             validStr = true;
                             newIntInput = i;
                         }
-                    }
-                    if ( validStr ){
-                        selectedDateObj = new Date(
-                            ( new Date( model.selected ) )
-                                .setUTCMonth( newIntInput ) );
-                    }
+
+                    if (validStr)
+                        selectedDateObj = new Date((new Date(model.selected )).setUTCMonth(newIntInput ));
                 }
                 break;
             case 'day-input-group':
-                if( newInput > 0 &&
-                    newInput <= ( new Date ( model.selected.getYear(),
-                                             model.selected.getMonth() + 1 ,0 )
-                                  .getDate() ) )
-                {
-                    selectedDateObj = new Date(
-                        ( new Date( model.selected ) ).setUTCDate( newInput ) );
-                }
+                if(newInput > 0 && newInput <= (new Date(model.selected.getYear(), model.selected.getMonth()+1,0).getDate()))
+                    selectedDateObj = new Date((new Date(model.selected)).setUTCDate(newInput));
                 break;
             }
-            if( ( selectedDateObj > tl.data.start() ) &&
-                ( selectedDateObj <= wv.util.today() ) )
+
+            if((selectedDateObj > tl.data.start()) && (selectedDateObj <= wv.util.today()))
             {
                 var sib =  selected.parent().next('div.input-wrapper')
                     .find('input.button-input-group');
 
-                if ( entered && sib.length < 1 ) {
+                if (entered && sib.length < 1)
                     $('#focus-guard-2').focus();
-                }
 
                 model.select(selectedDateObj);
 
@@ -176,23 +166,19 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
 
                 selected.parent().removeClass('selected');
 
-                if ( entered ) {
+                if (entered)
                     sib.select().addClass('selected');
-                }
             }
-            else{
+            else {
                 selected.parent().css('border-color','#ff0000');
                 if ( event.type !== "focusout" ) {
                     selected.select();
                 } else {
                     if (document.selection)
-                    {
                         document.selection.empty();
-                    }
                     else
-                    {
                         window.getSelection().removeAllRanges();
-                    }
+					
                     selected.parent().animate({
                         borderColor: "rgba(40, 40, 40, .9)"
                     }, {
@@ -224,35 +210,81 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         //Update fields
         $('#year-input-group').val( model.selected.getUTCFullYear() );
         $('#month-input-group').val( model.monthAbbr[ model.selected.getUTCMonth() ] );
-        if ( model.selected.getUTCDate() < 10 ) {
+        if ( model.selected.getUTCDate() < 10 ) 
             $('#day-input-group').val("0" + model.selected.getUTCDate());
-        }
-        else {
+        else 
             $('#day-input-group').val(model.selected.getUTCDate());
-        }
 
         //Disable arrows if nothing before/after selection
-        if( nd > wv.util.today() ) {
+        if( nd > wv.util.today() ) 
             $incrementBtn.addClass('button-disabled');
-        }
-        else{
+        else
             $incrementBtn.removeClass('button-disabled');
-        }
-        if( pd.toUTCString() === tl.data.start().toUTCString() ){
+
+        if(pd.toUTCString() === tl.data.start().toUTCString())
             $decrementBtn.addClass('button-disabled');
-        }
-        else{
+        else
             $decrementBtn.removeClass('button-disabled');
-        }
 
         tl.pick.update();
     };
 
+    //Remove not allowed cursor, enable date pickers (widget + sliders), restore dialog buttons
+    self.restoreDialog = function(mode) {
+        $(".wv-datepicker").removeClass("wv-noDateChoose").datepicker("option", "disabled", false);
+        d3.select("#fromPick").classed("wv-noDateChoose", false);
+        d3.select("#toPick").classed("wv-noDateChoose", false);
+        ui.timeline.pick.turnOnDrag();
+
+        if(mode === 'reset')
+            $("#dialog").dialog("option", "buttons", [playButton, GIFButton]);
+        else
+            $("#dialog").dialog("option", "buttons", [pauseButton, GIFButton]);
+    };
+
+    //Set pause button, Disable datepickers and slider drag behaviour
+    self.disableDialog = function() {
+        $("#dialog").dialog("option", "buttons", [pauseButton, GIFButton]);
+
+        $(".wv-datepicker").addClass("wv-noDateChoose").datepicker("option", "disabled", true);
+        d3.select("#fromPick").classed("wv-noDateChoose", true).on(".drag", null);
+        d3.select("#toPick").classed("wv-noDateChoose", true).on(".drag", null);
+    };
+
+    //Prepare animation when button pressed
+    var prepareAnim = function(speedSlider) {
+        ui.anim.delay = parseFloat(1000 / speedSlider.val());
+
+        if(document.getElementById("loopcheck").checked)   //check for loop
+            ui.anim.initDate = new Date(model.selected.valueOf()); //clone date from picker
+    };
+
+    //When the Go button is pressed, the dates are checked to make sure they exist and are valid
+    var animDateCheck = function() {
+        return self.fromDate !== undefined && self.toDate.getTime() !== self.fromDate.getTime();
+    };
+
     //TODO: Cleanup
-    var init = function(){
+    var init = function() {
+        var $dialog_sel = $("#dialog");
+
+        var animPause = function() {
+            ui.anim.pause();
+            $dialog_sel.dialog("option", "buttons",[
+                resumeButton, GIFButton
+            ]);
+        },
+        animResume = function() {
+            ui.anim.delay = parseFloat(1000 / $speedSlider.val());
+            ui.anim.resume();
+            $dialog_sel.dialog("option", "buttons",[
+                pauseButton, GIFButton
+            ]);
+        };
 
         $incrementBtn
             .mousedown(function(e) {
+                $("#wv-day").attr("checked", "true");
                 e.preventDefault();
                 forwardNextDay();
             })
@@ -260,31 +292,256 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
 
         $decrementBtn
             .mousedown(function(e) {
+                $("#wv-day").attr("checked", "true");
                 e.preventDefault();
                 reversePrevDay();
             })
             .mouseup(animateEnd);
 
+        $animateBtn.click(function(event) {
+            animateEnd(); //Let the animation end when another one is being set
+            wv.ui.closeDialog(); //Close any active dialog
+
+            if($dialog_sel.dialog("isOpen"))
+                $dialog_sel.dialog("close");
+            else
+                $dialog_sel.dialog("open");
+
+            model.events.trigger("change"); //update animation state on URL
+            event.preventDefault();
+        });
+
+        //Add slider, labels, and input elements to dialog area
+        var $speedHeader = $("<div></div>")
+            .html("Speed")
+            .addClass("wv-header"),
+            speedHTML = "<li>Slow <span id='wv-whitespace'>Fast</span></li>";
+
+        var $speedSlider = $("<div></div>").attr("id","wv-speed-slider")
+            .noUiSlider({
+                start: 2,
+                step: 1,
+                range: {
+                    min: 1,
+                    max: 30
+                }
+            }).on("slide", function() { //update animation speed when slider moves
+                $speedLabel.addClass("wv-label-opacity").html(parseFloat($speedSlider.val()) + ' frames per second');
+                ui.anim.delay = parseFloat(1000 / $speedSlider.val());
+                model.events.trigger("change"); //serialize animation state to URL
+            }).on("set", function() { //show slow/fast when slider released
+                setTimeout(function() {$speedLabel.removeClass("wv-label-opacity").html(speedHTML).attr("id", "wv-label-speed");}, 1000);
+                ui.anim.delay = parseFloat(1000 / $speedSlider.val());
+                model.events.trigger("change");
+            });
+
+        var $loopCheck = $("<input />")
+            .addClass("wv-header").attr("type", "checkbox").attr("id", "loopcheck")
+                .click(function() {model.events.trigger("change");}),
+
+        $speedLabel = $("<ul></ul>") //Show user what is fast/slow first
+            .html(speedHTML).attr("id", "wv-label-speed"),
+
+        $toLabel = $("<label></label>")
+            .html(' to ').attr("for", "to"),
+
+        $fromDate = $("<input />")
+            .addClass("wv-datepicker").attr("id", "from").attr("type", "text").attr("name", "from").attr("readonly","true"),
+        $toDate = $("<input />")
+            .addClass("wv-datepicker").attr("id", "to").attr("type", "text").attr("name", "to").attr("readonly", "true");
+
+        resumeButton = {
+            text: "Play",
+            click: function() { //Resume animation, update speed, restore pause button
+                animResume();
+            }
+        };
+
+        pauseButton = {
+            text: "Pause",
+            click: function() { //Resume animation, replace with resume button
+               animPause();
+            }
+        };
+
+        playButton = {
+            text: "Play",
+            click: function() {
+                prepareAnim($speedSlider);
+
+                //Compare the two dates in terms of milliseconds to determine the end animation date
+                if(animDateCheck()) {
+                    //Get the time difference. Negative ranges are supported
+                    var to = self.toDate.getTime(), from = self.fromDate.getTime(), animDuration;
+
+                    //Get the number of frames to animate, just to check if loop should be applied
+                    animDuration = to > from ? ((to - from) / (86400 * 1000)) + 1 : ((from - to) / (86400 * 1000)) + 1;
+                    if (interval === 'month') {
+                        if(Math.abs(animDuration) <= 30) //if date range is smaller than interval, animate once
+                            document.getElementById("loopcheck").checked = false;
+                    } else if(interval === 'year') {
+                        if(Math.abs(animDuration) <= 365) //one frame, don't loop
+                            document.getElementById("loopcheck").checked = false;
+                    }
+
+                    //initDate needs to be set separately
+                    model.selected = new Date(self.fromDate.valueOf()); //clone fromDate
+                    ui.anim.initDate = new Date(model.selected.valueOf());
+                    ui.anim.endDate = new Date(self.toDate.valueOf());
+                    ui.anim.interval = interval;
+
+                    self.disableDialog();
+                    ui.anim.setDirectionAndRun(to, from);
+
+                } else
+                    wv.ui.notify("Invalid date range, start and end dates cannot be the same");
+            }
+        };
+
+        GIFButton = {
+            text: "Share GIF",
+            click: function() {
+                $dialog_sel.dialog("close");
+                if(gifshot.isExistingImagesGIFSupported()) {
+                    var from, to, jStart, jDate;
+                    //Parse the fromDate and toDates to Julian time
+                    jStart = wv.util.parseDateUTC(self.fromDate.getUTCFullYear() + "-01-01");
+                    jDate = "00" + (1 + Math.ceil((self.fromDate.getTime() - jStart) / 86400000));
+                    from = self.fromDate.getUTCFullYear() + (jDate).substr((jDate.length) - 3);
+
+                    jStart = wv.util.parseDateUTC(self.toDate.getUTCFullYear() + "-01-01");
+                    jDate = "00" + (1 + Math.ceil((self.toDate.getTime() - jStart) / 86400000));
+                    to = self.toDate.getUTCFullYear() + (jDate).substr((jDate.length) - 3);
+
+                    //Determine interval for updating date
+                    var delta;
+                    if (interval === 'month')
+                        delta = 30;
+                    else if (interval === 'year')
+                        delta = 365;
+                    else
+                        delta = 1;
+
+                    ui.rubberband.animToggle(from, to, delta, (1 / $speedSlider.val()).toPrecision(3));
+                } else
+                    wv.ui.notify("Sorry, but this feature is not supported on your browser");
+            }
+        };
+
+        //set up the datepickers
+        $fromDate.datepicker({
+            changeMonth: true,
+            changeYear: true,
+            maxDate: 0, //can't choose date after today
+            onSelect: function() {
+                self.fromDate = $fromDate.datepicker("getDate");
+                //Move animation date picker in timeline according to the new date
+                d3.select("#fromPick").attr("transform", ui.timeline.pick.updateAnimPickers(self.fromDate));
+                ui.timeline.pick.checkAnimPickers();
+                model.events.trigger("change"); //serialize animation state to URL
+            }
+        });
+
+        $toDate.datepicker({
+            changeMonth: true,
+            changeYear: true,
+            maxDate: 0,
+            onSelect: function() {
+                self.toDate = $toDate.datepicker("getDate");
+                //Move animation date picker in timeline according to the new date
+                d3.select("#toPick").attr("transform", ui.timeline.pick.updateAnimPickers(self.toDate));
+                ui.timeline.pick.checkAnimPickers();
+                model.events.trigger("change");
+            }
+        });
+
+        $dialog_sel.append($speedHeader).append($speedSlider).append($speedLabel)
+                    .append($fromDate).append($toLabel).append($toDate).append("<br />").append($loopCheck).append('<label class="wv-header">Loop</label> <br />')
+            .dialog({
+            autoOpen: false,
+            dialogClass: "wv-panel",
+            title: "Setup Animation",
+            width: 300,
+            show: { effect: "slide", direction: "down" },
+            position: {
+                my: "left bottom",
+                at: "left top",
+                of: $("#timeline-header")
+            },
+            open: function(event) { //FIXME: Opening dialog + pressing arrow key starts animation. Is doAnimation being used?
+                $(".ui-dialog-content").find("img").remove(); //remove generated gif
+
+                //Show datepickers and set date range to be two weeks
+                if(self.fromDate === undefined) { //once per session if no animation permalink
+                    self.fromDate = new Date(model.selected.valueOf());
+                    self.fromDate.setUTCDate(self.fromDate.getUTCDate() - 14);
+                    self.toDate = new Date(model.selected.valueOf());
+
+                    //HACK: Weird functionality with Date objects mean to show the right date, need to offset it by one
+                    var tempFrom = new Date(self.fromDate), tempTo = new Date(self.toDate);
+                    tempFrom.setUTCDate(tempFrom.getUTCDate() + 1); tempTo.setUTCDate(tempTo.getUTCDate() + 1);
+
+                    $fromDate.datepicker("setDate", tempFrom);
+                    $toDate.datepicker("setDate", tempTo);
+                }
+
+                //update the datepickers before showing them (account for zoom changes)
+                d3.select("#fromPick").attr("transform", ui.timeline.pick.updateAnimPickers(self.fromDate));
+                d3.select("#toPick").attr("transform", ui.timeline.pick.updateAnimPickers(self.toDate));
+                $(".animpick").show();
+            },
+            close: function() {
+                animateEnd(); //End animation, hide animation sliders
+                $(".animpick").hide();
+                model.events.trigger("change"); //get rid of animation state from URL
+            },
+            buttons: [ //Go button controls date range animation, share controls gif generation
+                playButton, GIFButton
+            ]
+        });
+
+        //Make dialog responsive to window resizing
+        $(window).resize(function() {
+            $dialog_sel.dialog("option", "position", {my: "left bottom", at: "left top", of: $("#timeline-header")});
+        });
+
+        //Create the interval radio buttons here
+        var intervalHTML = "<input type='radio' id='wv-day' class='wv-interval' name='radios' value='day' checked/>" +
+                                "<label for='wv-day' class='ui-button ui-widget'>Day</label>" +
+                            "<input type='radio' id='wv-month' class='wv-interval' name='radios' value='month'/>" +
+                                "<label for='wv-month' class='ui-button ui-widget'>Month</label>" +
+                            "<input type='radio' id='wv-year' class='wv-interval' name='radios' value='year'/>" +
+                                "<label for='wv-year' class='ui-button ui-widget'>Year</label>";
+        $dialog_sel.append(intervalHTML);
+        $(".wv-interval").click(function() {
+            interval = $(this).attr("value");
+            ui.anim.interval = interval;
+            model.events.trigger("change");
+        });
+
         $(document)
-            .mouseout(animateEnd)
             .keydown(function(event) {
                 switch ( event.keyCode ) {
                     case wv.util.key.LEFT:
-                        animateReverse("day");
+                        animateReverse(interval);
                         event.preventDefault();
                         break;
                     case wv.util.key.RIGHT:
-                        animateForward("day");
+                        animateForward(interval);
                         event.preventDefault();
                         break;
-                    
+                    case wv.util.key.SPACE: //pause or resume
+                        if(ui.anim.paused)
+                            animResume();
+                        else if(ui.anim.doAnimation)
+                            animPause();
+                        event.preventDefault();
+                        break;
                 }
             })
             .keyup(function(event) {
-                if ( event.target.nodeName === "INPUT" ) {
-                    return;
-                }
                 switch ( event.keyCode ) {
+                    case wv.util.key.ESCAPE:
                     case wv.util.key.LEFT:
                     case wv.util.key.RIGHT:
                         animateEnd();
@@ -315,7 +572,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 roll(interval, -1);
                 $(this).select().focus();
             }
-            
+
         });
 
         $buttons.on('focus',function(e){
@@ -326,7 +583,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             $(this).siblings('.date-arrows').css('visibility','visible');
         });
 
-        $buttons.focusout(function(e){
+        $buttons.focusout(function(){
             $buttons.siblings('.date-arrows').css('visibility','');
             $buttons.parent().removeClass('selected');
         });
@@ -344,13 +601,13 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         });
 
         //select all input on focus
-        $('input').focus(function(e){
+        $('input').focus(function(){
             $(this).select();
         }).mouseup(function(e){
             e.preventDefault();
         });
 
-        $('.button-input-group')
+        $buttons
             .keydown(validateInput)
             .focusout(function(event) {
                 if ( $(this).hasClass("focus") ) {
@@ -370,11 +627,10 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         });
 
         if (wv.util.browser.tests.touchDevice()){
-            $('.button-input-group').prop('disabled', true);
+            $buttons.prop('disabled', true);
         }
 
         self.update();
-
     };
 
     init();

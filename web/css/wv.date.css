@@ -9,6 +9,60 @@
  * All Rights Reserved.
  */
 
+/* css for animation dialog*/
+.wv-header { /* header */
+    margin-top: 1em;
+    font-size: 14px;
+    margin-bottom: 1em;
+}
+
+.wv-label-opacity { /*label*/
+    text-align: right;
+}
+
+.noUi-target { /* slider */
+    margin: 10px 10px 10px 15px;
+}
+
+.wv-datepicker { /* datepickers */
+    width: 100px
+}
+
+input[type=radio] { /* hide radio button*/
+    display:none;
+}
+
+/* if the label is hovered over or label is checked. This styles the label */
+input[type=radio] + label:hover, input[type=radio]:checked + label {
+    background-color: #eee;
+    background-image: none;
+    color: #404040;
+}
+
+input[type=radio] + label { /* implement jquery-ui styling here b/c this is more a "specific" selector */
+    display:inline-block;
+    margin:2px -1px 0 -1px;
+    padding: .4em 1em;
+    background: #555555 url("../ext/ui/jquery-ui-1.11.4/images/ui-bg_glass_20_555555_1x400.png") 50% 50% repeat-x;
+    border-color: #ddd;
+    font-weight: bold;
+}
+
+/* HTML Whitespacing, found at
+http://stackoverflow.com/questions/13571706/how-to-add-white-spaces-in-html-paragraph*/
+#wv-label-speed {
+    width: 20em;
+    padding: 5px 5px 10px 5px;
+}
+
+#wv-whitespace {
+    float: right
+}
+
+.wv-noDateChoose {
+    cursor: not-allowed;
+}
+
 #timeds, #timemds {
     position: relative;
 }
@@ -108,12 +162,12 @@ a.expand {
 }
 
 input.ui-slider-input {
-    width: 0px;
-    margin: 0px;
+    width: 0;
+    margin: 0;
 }
 
 .slider {/*background: rgba(45,50,55,.75);*/
-    margin-bottom: 0px; /*box-shadow: 0px 0px 4px 1px #bbb;*/
+    margin-bottom: 0; /*box-shadow: 0px 0px 4px 1px #bbb;*/
     background: -moz-linear-gradient(top,  rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.8) 100%); /* FF3.6+ */
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.6)), color-stop(50%,rgba(0,0,0,0.7)), color-stop(100%,rgba(0,0,0,0.8))); /* Chrome,Safari4+ */
     background: -webkit-linear-gradient(top,  rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.7) 50%,rgba(0,0,0,0.8) 100%); /* Chrome10+,Safari5.1+ */
@@ -139,7 +193,7 @@ ul.sliderLabel {
 ul.sliderLabel li {
     float: left;
     background: none;
-    margin: 0px;
+    margin: 0;
     text-align: center;
     overflow: hidden;
     font-weight: 700;
@@ -174,8 +228,8 @@ a.ui-slider-handle {
 div.ui-slider {
     border: none;
     background: rgba(0,0,0,0.05); /*<-----Fix for IE10*/
-    margin: 0px;
-    top: 0px;
+    margin: 0;
+    top: 0;
     height: 23px;
 }
 
@@ -188,7 +242,7 @@ div.ui-slider {
     bottom: 85px;
     border: none;
     text-shadow: none;
-    font-family: "Lucida Sans", "Arial", "sans serif";
+    font-family: "Lucida Sans", "Arial", "sans-serif";
     color: white;
     background-color: rgba(40, 40, 40, 0.85);
     text-align: center;

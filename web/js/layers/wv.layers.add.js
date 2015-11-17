@@ -120,8 +120,7 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
         var $element = $("<ul></ul>")
             .attr("id", self.id + group)
             .addClass(self.id + "category")
-            .addClass("category")
-            .addClass("scroll-pane");
+            .addClass("category scroll-pane");
 
         _.each(config.layerOrder, function(layerId) {
             var layer = config.layers[layerId];
@@ -145,9 +144,8 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
         var $label = $("<label></label>")
             .attr("data-layer", encodeURIComponent(layer.id));
         var $element = $("<li></li>")
-            .addClass("selectorItem")
-            .attr("data-layer", encodeURIComponent(layer.id))
-            .addClass("item");
+            .addClass("selectorItem item")
+            .attr("data-layer", encodeURIComponent(layer.id));
 
         var names = models.layers.getTitles(layer.id);
         var $name = $("<h4></h4>")
@@ -167,7 +165,7 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
             .addClass("subtitle")
             .html(names.subtitle);
 
-        var $checkbox = $("<input></input>")
+        var $checkbox = $("<input />")
             .attr("id", encodeURIComponent(layer.id))
             .attr("value", layer.id)
             .attr("type", "checkbox")
@@ -313,7 +311,7 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
         if ( !config.aoi ) {
             return;
         }
-        $select = $("#" + self.id + "select");
+        var $select = $("#" + self.id + "select");
         var previous = $(self.selector + "select").val();
 
         $select.empty();
@@ -348,8 +346,7 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
 
     var searchTerms = function() {
         var search = $(self.selector + "search").val().toLowerCase();
-        var terms = search.split(/ +/);
-        return terms;
+        return search.split(/ +/);
     };
 
     var filterAreaOfInterest = function(layerId) {

@@ -61,7 +61,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
 
     self.getTitles = function(layerId, proj) {
         proj = proj || models.proj.selected.id;
-        var title, subtitle;
+        var title, subtitle, tags;
         if ( config.layers[layerId].projections[proj] ) {
             var forProj = config.layers[layerId].projections[proj];
             title = forProj.title;

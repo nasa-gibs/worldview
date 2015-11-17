@@ -20,7 +20,7 @@ wv.proj = wv.proj || {};
  *
  * @class wv.proj.ui
  */
-wv.proj.ui = wv.proj.ui || function(models, config) {
+wv.proj.ui = wv.proj.ui || function(models, config, ui) {
 
     var model = models.proj;
 
@@ -39,16 +39,14 @@ wv.proj.ui = wv.proj.ui || function(models, config) {
     };
 
     var render = function() {
-        $button = $("<input></input>")
+        $button = $("<input />")
             .attr("type", "checkbox")
             .attr("id", "wv-proj-button-check");
         $label = $("<label></label>")
             .attr("for", "wv-proj-button-check")
             .attr("title", "Switch projection");
         var $icon = $("<i></i>")
-            .addClass("fa")
-            .addClass("fa-globe")
-            .addClass("fa-2x");
+            .addClass("fa fa-globe fa-2x");
         $label.append($icon);
         $(selector).append($label);
         $(selector).append($button);
@@ -93,7 +91,7 @@ wv.proj.ui = wv.proj.ui || function(models, config) {
         });
         $menuItems.hide();
         $menuItems.show("slide", { direction: "up" });
-        $("#wv-proj-menu li").removeClass("wv-menu-item-selected");
+        $("#wv-proj-menu").find("li").removeClass("wv-menu-item-selected");
         $("#wv-proj-menu li[data-proj='" + models.proj.selected.id + "']")
             .addClass("wv-menu-item-selected");
 
@@ -101,9 +99,10 @@ wv.proj.ui = wv.proj.ui || function(models, config) {
             if ( $button.parent().has(event.target).length > 0 ) {
                 return;
             }
+            ui.anim.stop(); //stop current animation first
             $menuItems.hide();
             $("#wv-proj-button-check").prop("checked", false);
-            $("#wv-proj-button label").removeClass("ui-state-hover");
+            $("#wv-proj-button").find("label").removeClass("ui-state-hover");
             $button.button("refresh");
             $("body").off("click", clickOut).off("touchstart", clickOut);
         };

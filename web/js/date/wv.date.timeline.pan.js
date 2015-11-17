@@ -31,16 +31,15 @@ wv.date.timeline.pan = wv.date.timeline.pan || function(models, config, ui) {
     self.xPosition = tl.axisZoom.translate()[0];
 
     self.axis = function(event){
-
-        if(event){
+        if(event) {
             var evt = event.sourceEvent || event;
             var delX = evt.deltaX;
             if((evt.type === "wheel") && ((evt.deltaX < 0) || (evt.deltaX > 0))){
                 update(self.xPosition-delX,0);
             }
-        } else {
+        } else
             self.xPosition = tl.axisZoom.translate()[0];
-        }
+
         tl.axis.call(tl.xAxis);
 
         tl.ticks.check();
@@ -50,6 +49,15 @@ wv.date.timeline.pan = wv.date.timeline.pan || function(models, config, ui) {
 
         tl.pick.update();
         tl.pick.checkLocation();
+        tl.pick.checkAnimPickers();
+
+        //Update date pickers when timeline zoom level changes.
+        //We need to check tl.input because this executes when page is loaded
+        if(tl.input !== undefined)
+            if(tl.input.fromDate !== undefined && tl.input.toDate !== undefined) {
+                d3.select("#fromPick").attr("transform", tl.pick.updateAnimPickers(tl.input.fromDate));
+                d3.select("#toPick").attr("transform", tl.pick.updateAnimPickers(tl.input.toDate));
+            }
 
         tl.data.set();
     };
@@ -60,7 +68,6 @@ wv.date.timeline.pan = wv.date.timeline.pan || function(models, config, ui) {
     };
 
     self.toSelection = function(){
-
         var x = -tl.x(model.selected) +
             (tl.width - tl.margin.left -
              tl.margin.right) / 2;
@@ -68,10 +75,8 @@ wv.date.timeline.pan = wv.date.timeline.pan || function(models, config, ui) {
         update(x, 0);
 
         tl.data.set();
-
     };
-    self.toCursor = function(mousePos, mouseOffset){
-
+    self.toCursor = function(mousePos, mouseOffset) {
         var x = -tl.x(mousePos) +
             (tl.width - tl.margin.left -
              tl.margin.right) / 2 - mouseOffset;

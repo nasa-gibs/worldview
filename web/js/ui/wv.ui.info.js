@@ -25,9 +25,7 @@ wv.ui.info = wv.ui.info || (function(ui, config) {
         .attr("for", "wv-info-button-check")
         .attr("title", "Information");
     var $icon = $("<i></i>")
-        .addClass("fa")
-        .addClass("fa-info-circle")
-        .addClass("fa-2x");
+        .addClass("fa fa-info-circle fa-2x");
     $label.append($icon);
     $(selector).append($label);
     $(selector).append($button);

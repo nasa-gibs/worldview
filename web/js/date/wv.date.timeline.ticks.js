@@ -65,7 +65,7 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
                 //var normalTickLine = normalTick.select('line'); What's this for?
 
                 //FIXME: Calculate actual width of tick line
-                nWidth = tl.x(nextData) - tl.x(currentData) + 1; 
+                var nWidth = tl.x(nextData) - tl.x(currentData) + 1;
 
                 if(($(this).find('line:first-child').attr('y1') !== '-2')){
                     current.select('line')
@@ -129,7 +129,7 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
                 //var normalTickLine = normalTick.select('line'); What's this for?
 
                 //FIXME: Calculate actual width of tick line
-                nWidth = tl.x(nextData) - tl.x(currentData) + 1; 
+                var nWidth = tl.x(nextData) - tl.x(currentData) + 1;
 
                 self.normal.insert.rect(current, nWidth);
 
@@ -161,8 +161,7 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
             
             self.normal.background
                 .on('mouseenter',function(){
-                    d = d3.select(this.parentNode).data()[0];
-                    self.normal.hover.call(this,d);
+                    self.normal.hover.call(this, d3.select(this.parentNode).data()[0]);
                 })
                 .on('mouseleave',self.label.remove)
                 .on('mousedown',function(){
@@ -170,10 +169,8 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
                 })
                 .on('mouseup',function(){
                     clearTimeout(cancelClick);
-                    if(clicked){
-                        d = d3.select(this.parentNode).data()[0];
-                        self.normal.click.call(this,d);
-                    }
+                    if(clicked)
+                        self.normal.click.call(this, d3.select(this.parentNode).data()[0]);
                     clicked = true;
                 });
         },
@@ -184,7 +181,7 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
         click: function(d){
             var date = tl.zoom.current.ticks.normal.clickDate(d);
             model.select(date);
-        },
+        }
         
     };
     self.boundary = {
@@ -305,7 +302,7 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
         bind: function(){
             self.boundary.background
                 .on('mouseenter',function(){
-                    d = d3.select(this.parentNode).data()[0];
+                    var d = d3.select(this.parentNode).data()[0];
                     self.boundary.hover.call(this,d);
                 })
                 .on('mouseleave',self.label.remove)
@@ -315,7 +312,7 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
                 .on('mouseup',function(){
                     clearTimeout(cancelClick);
                     if(clicked){
-                        d = d3.select(this.parentNode).data()[0];
+                        var d = d3.select(this.parentNode).data()[0];
                         self.boundary.click.call(this,d);
                     }
                     clicked = true;
@@ -356,7 +353,7 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
     self.label = {  //TODO: Update, this is just copied over
         show: function(d){
             var tick = this.parentNode;
-            var boundaryTick, boundaryTickWidth;
+            var boundaryTick, boundaryTickWidth, $boundaryTick;
             
             //Using jquery to precise select as it's easier than d3
             if(d3.select(tick).classed('tick-labeled')){
@@ -417,7 +414,7 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
     };
 
     self.check = function(){
-        var first, last, proto, end;
+        var proto, end;
         self.setAll();
         tl.ticks.removePaddingData();
         self.setAll();
@@ -426,9 +423,8 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
         //and if so check to see that first normal tick is printed
         if(!tl.isCropped){
             if(self.firstDate > tl.data.start()){
-                protoNorm = tl.zoom.current.ticks.normal.first();
+                var protoNorm = tl.zoom.current.ticks.normal.first();
                 self.add(protoNorm, 'g.tick', true);
-                
             }
         }
         self.setAll();
@@ -452,7 +448,6 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
         if(sibElem.classed('domain')){
             end = tl.zoom.current.ticks.boundary.last();
             self.add(end, 'path.domain');
-            
         }
         if(sibElem.classed('end-tick')){
             

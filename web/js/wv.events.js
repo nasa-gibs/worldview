@@ -20,7 +20,7 @@ wv.events = wv.events || function(models, ui) {
         "Wednesday",
         "Thursday",
         "Friday",
-        "Saturday",
+        "Saturday"
     ];
     var monthNames = [
         "January",
@@ -59,12 +59,13 @@ wv.events = wv.events || function(models, ui) {
         ],
         Default: [
             ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
-            ["MODIS_Terra_CorrectedReflectance_TrueColor", true],
+            ["MODIS_Terra_CorrectedReflectance_TrueColor", true]
         ]
     };
 
     var self = {};
     self.selector = "#wv-data";
+    self.event_selector = $("#wv-events-list");
     self.id = "wv-data";
     self.data = {};
     var lastIndex = -1;
@@ -137,8 +138,8 @@ wv.events = wv.events || function(models, ui) {
     var refreshEvent = function($content, event, index) {
 
         var geoms = toArray(event.geometry);
-        eventDate = wv.util.parseDateUTC(geoms[0].date);
-        dateString = dayNames[eventDate.getUTCDay()] + ", " +
+        var eventDate = wv.util.parseDateUTC(geoms[0].date);
+        var dateString = dayNames[eventDate.getUTCDay()] + ", " +
                 monthNames[eventDate.getUTCMonth()] + " " +
                 eventDate.getUTCDate();
         var $item = $("<li></li>")
@@ -156,8 +157,8 @@ wv.events = wv.events || function(models, ui) {
         var $dates = $("<ul></ul>").addClass("dates").hide();
         if ( event.geometry.length > 1 ) {
             _.each(event.geometry, function(geometry, dateIndex) {
-                date = geometry.date.split(/T/)[0];
-                $date = $("<a></a>")
+                var date = geometry.date.split(/T/)[0];
+                var $date = $("<a></a>")
                     .addClass("date")
                     .attr("data-date-index", dateIndex)
                     .attr("data-index", index)
@@ -169,7 +170,7 @@ wv.events = wv.events || function(models, ui) {
         $item.append($title).append($subtitle).append($dates);
         var references = toArray(event.reference);
         if ( references.length > 0 ) {
-            items = [];
+            var items = [];
             _.each(references, function(reference) {
                 var source = _.find(self.sources, { id: reference.id });
                 if ( reference.url ) {
@@ -202,27 +203,24 @@ wv.events = wv.events || function(models, ui) {
             method = "pan";
         }
         lastIndex = index;
-        lastDateIndex = lastDateIndex;
 
-        $("#wv-events-list .subtitle").hide();
-        $("#wv-events-list .dates").hide();
+        self.event_selector.find(".subtitle").hide();
+        self.event_selector.find(".dates").hide();
         $("#wv-events-list [data-index='" + index + "'] .subtitle").show();
         $("#wv-events-list [data-index='" + index + "'] .dates").show();
         resize();
 
-        event = self.data[index];
+        var event = self.data[index], eventItem = null;
         console.log("event", event);
-        eventItem = null;
+
         if ( event.geometry.length > 1 ) {
             eventItem = event.geometry[dateIndex || 0];
         } else {
             eventItem = event.geometry[0];
         }
-        eventDate = wv.util.parseTimestampUTC(eventItem.date);
-        models.date.select(eventDate);
+        models.date.select(wv.util.parseTimestampUTC(eventItem.date));
 
-        category = "Default";
-        categories = event.category;
+        var category = "Default", categories = event.category;
         if ( categories.constructor !== Array ) {
             categories = [categories];
         }
@@ -233,7 +231,7 @@ wv.events = wv.events || function(models, ui) {
             }
         });
 
-        layers = layerLists[category];
+        var layers = layerLists[category];
         if ( !layers ) {
             layers = layerLists.Default;
         }
@@ -292,7 +290,7 @@ wv.events = wv.events || function(models, ui) {
     };
 
     var resizePane = function($pane) {
-        var tabs_height = $(".ui-tabs-nav").outerHeight(true);
+        //var tabs_height = $(".ui-tabs-nav").outerHeight(true);
         //var button_height = $(self.selector + "_Button").outerHeight(true);
         $(self.selector).height(
             $(self.selector).parent().outerHeight()// - tabs_height// - button_height
@@ -375,12 +373,12 @@ wv.events = wv.events || function(models, ui) {
     };
 
     var updateFacets = function() {
-        $("#wv-events-list .selectorItem").hide();
+        self.event_selector.find(".selectorItem").hide();
         var source = $("#wv-events-sources").val();
         var type = $("#wv-events-types").val();
 
         console.log("source", source, "type", type);
-        $("#wv-events-list .selectorItem").each(function() {
+        self.event_selector.find(".selectorItem").each(function() {
             var index = $(this).attr("data-index");
             var passType = true;
             var passSource = true;

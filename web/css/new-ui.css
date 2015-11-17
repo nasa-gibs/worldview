@@ -125,7 +125,7 @@ g.plot rect.data-bar-invisible{
 }
 #timeline-header{
     margin-top:2px;
-    width:250px;
+    width:295px;
 }
 #timeline-header .input-wrapper{
     background: transparent;
@@ -192,11 +192,13 @@ g.plot rect.data-bar-invisible{
 #timeline-header div{
     display:inline-block;
 }
+
 .button-action-group,.date-arrows{
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
 }
+
 .button-action-group{
   height:60px;
   width:40px;
@@ -279,6 +281,23 @@ g.plot rect.data-bar-invisible{
 #timeline-header,#timeline-footer,#timeline-zoom,#timeline-hide{
     float:left;
 }
+
+/* styles for animate button */
+#wv-animate {
+    color: white;
+    font-size: 2.5em;
+    padding: 12px 3px 15px 2px;
+    margin: 0 0 0 0.5px; /*place icon in middle of white area */
+}
+
+#wv-animate:hover {
+    color: #1a1a1a;
+}
+
+#animate-button:hover {
+    color: #1a1a1a;
+}
+
 #timeline-footer{
     height:65px;
     border-left:1px solid #666;
@@ -384,6 +403,22 @@ g.plot rect.data-bar-invisible{
     stroke:none;
 
 }
+
+/* styles for the animation pickers, same as guitarpick */
+.animpick{
+    cursor:pointer;
+    clip-path:url(#guitarpick-boundary);
+}
+
+.animpick path{
+    fill:#cccccc;
+    fill-opacity:1;
+    stroke:#515151;
+    stroke-width:1;
+    stroke-opacity:1;
+
+}
+
 #guitarpick:hover path, #guitarpick.pick-clicked path{
     fill:#5E676F;
     stroke:#999999;

@@ -44,7 +44,9 @@ wv.date.wheels = wv.date.wheels || function(models, config) {
             .addClass("datespan")
             .html("<div id='wv-date-mobile-label'></div><input type='hidden' id='linkmode' readonly>");
 
-        $("#linkmode").mobiscroll().date({
+        var linkmode = $("#linkmode");
+
+        linkmode.mobiscroll().date({
             display: "bottom",
             onChange: function(valueText) {
                 var d = wv.util.parseDateUTC(valueText);
@@ -59,7 +61,7 @@ wv.date.wheels = wv.date.wheels || function(models, config) {
             dateFormat: 'yyyy-mm-dd',
             setText: 'OK'
         });
-        $("#linkmode").mobiscroll('setDate', UTCToLocal(model.selected),true);
+        linkmode.mobiscroll('setDate', UTCToLocal(model.selected),true);
         $("#wv-date-mobile-label").click(function(e) {
             $("#linkmode").mobiscroll("show");
         });
@@ -81,11 +83,11 @@ wv.date.wheels = wv.date.wheels || function(models, config) {
     };
 
     var updateRange = function() {
-        startDate = wv.util.parseDateUTC(config.startDate);
-        endDate = wv.util.today();
-        $("#linkmode").mobiscroll("option", "disabled", false);
-        $("#linkmode").mobiscroll("option", "minDate", UTCToLocal(startDate));
-        $("#linkmode").mobiscroll("option", "maxDate", UTCToLocal(endDate));
+        var startDate = wv.util.parseDateUTC(config.startDate), link_mode = $("#linkmode");
+        var endDate = wv.util.today();
+        link_mode.mobiscroll("option", "disabled", false);
+        link_mode.mobiscroll("option", "minDate", UTCToLocal(startDate));
+        link_mode.mobiscroll("option", "maxDate", UTCToLocal(endDate));
     };
 
     var update = function() {

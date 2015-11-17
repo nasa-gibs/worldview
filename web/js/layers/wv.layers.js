@@ -80,7 +80,7 @@ wv.layers = (function(self) {
                 // Key value pairs
                 var kvps = strAttr.split(",");
                 _.each(kvps, function(kvp) {
-                    parts = kvp.split("=");
+                    var parts = kvp.split("=");
                     if ( parts.length === 1 ) {
                         lstate.attributes.push({id: parts[0], value: true});
                     } else {
@@ -115,18 +115,14 @@ wv.layers = (function(self) {
                 error(layer.id, "No group defined");
                 return;
             }
-            if ( !layer.projections ) {
+            if ( !layer.projections )
                 error(layer.id, "No projections defined");
-                return;
-            }
         });
 
         var orders = _.cloneDeep(config.layerOrder);
         _.each(orders, function(layerId) {
-            if ( !config.layers[layerId] ) {
+            if ( !config.layers[layerId] )
                 error(layerId, "No configuration");
-                return;
-            }
         });
     };
 

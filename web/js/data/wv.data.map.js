@@ -22,6 +22,7 @@ wv.data.map = wv.data.map || function(model, maps, config) {
     var hoverLayer = null;
     var buttonLayer = null;
     var selectionLayer = null;
+    var swathLayer = null;
     var gridLayer = null;
     var hovering = null;
     var selectedFeatures = null;
@@ -342,7 +343,7 @@ wv.data.map = wv.data.map || function(model, maps, config) {
     };
 
     var hoverOver = function(feature) {
-        granule = feature.granule;
+        var granule = feature.granule;
         if ( !granule.geometry ) {
             return;
         }

@@ -1,5 +1,5 @@
 /**
- * Modify zoom levels here. Maybe this isnt the best way to do this.
+ * Modify zoom levels here. Maybe this isn't the best way to do this.
  * It could be called just level without the zoom part instead.
  *
  * When the zoom level is changed, this re renders everything of the timeline.
@@ -145,7 +145,7 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
             };
 
             //Displayed default sub-label (if any)
-            tl.zoom.current.ticks.boundary.subLabel = function(d){
+            tl.zoom.current.ticks.boundary.subLabel = function(){
                 return null;
             };
 
@@ -188,7 +188,7 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
             }).css("margin","").css("font-size","");
             $('#zoom-years').addClass("depth-1").css("font-size","1.7em");
             $('#zoom-months').addClass("depth-2").css("font-size","1.2em");
-            $('#zoom-days').addClass("depth-3").css("margin","-3px 0 5px 0");
+            $('#zoom-days').addClass("depth-3").css("margin","3px 0 5px 0");
 
             self.currentZoom = 1;
             break;
@@ -298,7 +298,7 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
             };
 
             //Displayed default sub-label (if any)
-            tl.zoom.current.ticks.boundary.subLabel = function(d){
+            tl.zoom.current.ticks.boundary.subLabel = function(){
                 return null;
             };
 
@@ -499,7 +499,7 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
             $('#zoom-years').addClass("depth-3").css("margin","6px 0 0 0");
             $('#zoom-months').addClass("depth-2");
             $('#zoom-days').addClass("depth-1")
-                .css("margin", "8px 0 0 0")
+                .css("margin", "2px 0 0 0")
                 .css('font-size','1.8em');
 
             self.currentZoom = 3;
@@ -516,6 +516,15 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
         tl.pick.update();
         tl.pick.checkLocation();
 
+        //Update date pickers when timeline zoom level changes.
+        //We need to check tl.input because this executes when page is loaded
+        if(tl.input !== undefined && tl.input !== undefined)
+            if(tl.input.fromDate !== undefined && tl.input.toDate !== undefined) {
+                tl.pick.checkAnimPickers();
+                d3.select("#fromPick").attr("transform", tl.pick.updateAnimPickers(tl.input.fromDate));
+                d3.select("#toPick").attr("transform", tl.pick.updateAnimPickers(tl.input.toDate));
+            }
+
     };
 
     //Draw ticks based on zoom level
@@ -530,17 +539,17 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
 
     var init = function(){
 
-        d3.select("#zoom-years").on("click",function(d){
+        d3.select("#zoom-years").on("click",function(){
             $('.zoom-btn').removeClass("zoom-btn-selected");
             $(this).addClass("zoom-btn-selected");
             self.zoom(1);
         });
-        d3.select("#zoom-months").on("click",function(d){
+        d3.select("#zoom-months").on("click",function(){
             $('.zoom-btn').removeClass("zoom-btn-selected");
             $(this).addClass("zoom-btn-selected");
             self.zoom(2);
         });
-        d3.select("#zoom-days").on("click",function(d){
+        d3.select("#zoom-days").on("click",function(){
             $('.zoom-btn').removeClass("zoom-btn-selected");
             $(this).addClass("zoom-btn-selected");
             self.zoom(3);
@@ -549,6 +558,12 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
         //Default zoom
         self.zoom(3);
         tl.setClip(); //fix for firefox svg overflow
+
+        //Safe to translate the animation date pickers once to default positions
+        var tempDate = new Date(model.selected.valueOf());
+        tempDate.setUTCDate(tempDate.getUTCDate() - 14);
+        d3.select("#fromPick").attr("transform", ui.timeline.pick.updateAnimPickers(tempDate));
+        d3.select("#toPick").attr("transform", ui.timeline.pick.updateAnimPickers(model.selected));
     };
 
     init();
