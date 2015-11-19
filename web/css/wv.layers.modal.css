@@ -419,6 +419,13 @@
     background:rgba(255,255,255,0.3);
     cursor:pointer;
 }
+
+#selected-category .ui-tabs-panel h3.source-orbits-title{
+    color:#fff;
+    font-weight:bold;
+    padding:10px 20px;
+}
+
 #layers-all .iCheck-checkbox {
     float: right;
 }

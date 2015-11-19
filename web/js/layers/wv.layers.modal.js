@@ -193,11 +193,16 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
                 //$sourceContent.append( $sourceMeta );
 
-                var $sourceSettings = $( '<ul></ul>' );
+                var $sourceSettings = $( '<ul></ul>' )
+                    .addClass('source-settings');
+
+                var $sourceOrbits = $( '<ul></ul>' )
+                    .addClass('source-orbit-tracks')
+                    .attr('id', source.id + '-orbit-tracks');
 
                 _.each( source.settings, function( setting ) {
                     var layer = config.layers[setting];
-                    var title;
+
                     var $wrapper = $('<li></li>')
                         .attr('data-layer', encodeURIComponent(layer.id) )
                         .addClass('measurement-settings-item');
@@ -221,10 +226,38 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
                     $wrapper.append( $setting )
                         .append( $label );
-                    $sourceSettings.append( $wrapper );
-                    $sourceContent.append( $sourceSettings );
+
+                    //If this is an orbit track.... put it in the orbit track list
+                    if(layer.title.indexOf("Orbital Track") !== -1){
+                        var orbitTitle;
+                        // The following complex if statement is a placeholder
+                        // for truncating the layer names, until the rest of
+                        // the interface is implemented
+
+                        if( layer.title.indexOf('(') !== -1 ) {
+                            var regExp = /\(([^)]+)\)/;
+                            var matches = regExp.exec(layer.title);
+                            orbitTitle = matches[1];
+                        }
+                        $label.empty().text(orbitTitle);
+                        $sourceOrbits.append( $wrapper );
+                    }
+                    else{
+                        $sourceSettings.append( $wrapper );
+                    }
 
                 });
+
+                $sourceContent.append( $sourceSettings );
+
+                if($sourceOrbits.children().length > 0){
+                    var $orbitsTitle = $('<h3></h3>')
+                        .addClass('source-orbits-title')
+                        .text('Orbital Tracks:');
+
+                    $sourceContent.append( $orbitsTitle );
+                    $sourceContent.append( $sourceOrbits );
+                }
 
                 //$sourceContent.append( $addButton, $removeButton );
                 $measurementContent.append( $sourceContent );
@@ -448,7 +481,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 var $measurements = $('<ul></ul>');
 
                 _.each( category.measurements, function( measurement, index ) {
-                    console.log(measurement, index);
                     if(index > 5){
                         setCategoryOverflow(category, $measurements);
                     }
@@ -503,7 +535,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             //Create radiobuttons with filter buttons
             $nav.buttonset();
 
-            console.log($('#layer-modal-main').hasScrollBar());
         });
         
         var $tiles = $( '#layer-categories' ).isotope( {
@@ -551,7 +582,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     };
     var onProjectionChange = function() {
         var proj = models.proj.selected.id;
-        console.log(proj);
+
         if(proj === 'geographic'){
             categoriesCrumb();
         }
@@ -582,7 +613,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 var that = this;
                 if ( searchClickState === 0 ) {
                     searchClickState = 1;
-                    console.log('click on');
+
                     $('#layers-search-input').focus();
                     //$(this).addClass('search-on');
                     //$nav.hide();
@@ -590,7 +621,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 }
                 else if ( searchClickState === 1 ) {
                     searchClickState = 0;
-                    console.log('click off');
+
                     $searchInput.val('');
                     //$searchInput.hide();
                     $(this).removeClass('search-on');
