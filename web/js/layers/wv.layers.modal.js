@@ -385,7 +385,21 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         }
         else return name;
     };
+    var setCategoryOverflow = function(category, $measurements){
+        var $dotContinueItem = $('<li></li>')
+            .addClass('layer-category-item');
 
+        var $dotContinueLink = $('<a></a>')
+            .attr('data-category', category.id)
+            .text('...');
+
+        $dotContinueLink.click( function( e ) {
+            drawMeasurements( category );
+        });
+
+        $dotContinueItem.append( $dotContinueLink );
+        $measurements.append( $dotContinueItem );
+    };
     var drawCategories = function(){
 
         $categories.empty();
@@ -434,6 +448,10 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 var $measurements = $('<ul></ul>');
 
                 _.each( category.measurements, function( measurement, index ) {
+                    console.log(measurement, index);
+                    if(index > 5){
+                        setCategoryOverflow(category, $measurements);
+                    }
                     var current = config.measurements[measurement];
                     var $measurement = $( '<a></a>' )
                         .attr( 'data-category', category.id )
@@ -496,7 +514,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 order: '[data-sort]'
             },
             sortBy: [ 'order', 'name' ],
-            filter: '.layer-category-scientific',
+            filter: '.layer-category-legacy',
             masonry: {
                 gutter: 10
             }
@@ -505,7 +523,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
         $('#layer-modal-main').prepend( $nav );
 
-        $('label[for=button-filter-scientific]').addClass('nav-selected');
+        $('label[for=button-filter-legacy]').addClass('nav-selected');
 
         _.each(config.categories, function( topCategory, name ) {
      
