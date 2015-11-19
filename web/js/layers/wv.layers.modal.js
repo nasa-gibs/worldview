@@ -381,7 +381,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
     var replaceIfScientific = function(name){
         if(name === 'scientific'){
-            return 'science discipline'
+            return 'science discipline';
         }
         else return name;
     };

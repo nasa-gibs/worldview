@@ -193,7 +193,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
         //FIXME: -10 here is the timeline's bottom position from page, fix
         // after timeline markup is corrected to be loaded first
         var maxHeight = winSize - headSize - footSize -
-            offset.top - timeSize - secSize - 10 - 5
+            offset.top - timeSize - secSize - 10 - 5;
         $(self.selector).css("max-height", maxHeight);
             /*
         var childrenHeight = $('ul#overlays').outerHeight(true) +
