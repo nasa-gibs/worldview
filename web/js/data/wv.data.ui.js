@@ -64,6 +64,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
             .addClass(self.id + "list")
             .addClass("bank");
 
+        sizeDownloadTab();
         var $actionButton = $("<button></button>")
             .attr("id", "wv-data-download-button")
             .addClass("action")
@@ -165,7 +166,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
         $container.append($item);
     };
 
-   var resize = function() {
+    var resize = function() {
         var $pane = $(self.selector + "content");
         var api = $pane.data("jsp");
         if ( !wv.util.browser.small ) {
@@ -179,8 +180,47 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
                 api.destroy();
             }
         }
-   };
+        sizeDownloadTab();
+    };
+    var sizeDownloadTab = function(){
+        var winSize = $(window).outerHeight(true);
+        var headSize = $("ul#productsHolder-tabs").outerHeight(true);//
+        var footSize = $("section#productsHolder footer").outerHeight(true);
+        var secSize = $("#productsHolder").innerHeight() - $("#productsHolder").height();
+        var offset = $("#productsHolder").offset();
+        var timeSize = $("#timeline").outerHeight(true); // + $("#timeline").offset()['top'];
 
+        //FIXME: -10 here is the timeline's bottom position from page, fix
+        // after timeline markup is corrected to be loaded first
+        var maxHeight = winSize - headSize - footSize -
+            offset.top - timeSize - secSize - 10 - 5
+        $(self.selector).css("max-height", maxHeight);
+            /*
+        var childrenHeight = $('ul#overlays').outerHeight(true) +
+            $('ul#baselayers').outerHeight(true);
+        //console.log(maxHeight, childrenHeight);
+        
+        if((maxHeight <= childrenHeight)) {
+            $("#products").css('height', maxHeight)
+                .css('padding-right', '10px');
+            if(productsIsOverflow){
+                $(self.selector).perfectScrollbar('update');
+            }
+            else{
+                $(self.selector).perfectScrollbar();
+                productsIsOverflow = true;
+            }
+        }
+        else{
+            $("#products").css('height', '')
+                .css('padding-right', '');
+            if(productsIsOverflow){
+                $(self.selector).perfectScrollbar('destroy');
+                productsIsOverflow = false;
+            }
+        }
+            */
+    };
     self.onViewChange = function() {
         var indicator;
         var map = ui.map.selected;

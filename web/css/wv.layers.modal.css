@@ -85,7 +85,7 @@
     font-family: open_sans_light;
     padding:0 10px;
     position:absolute;
-    left:50px;
+    left:35px;
     right:50px;
     width:100%;
     padding-right:50px;
@@ -103,13 +103,19 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 32px;
-    height: 32px;
-    margin: -16px 0 0 -16px;
-    background: url('../images/wv-icons.png') 0 32px;
+    width: 26px;
+    height: 26px;
+    margin: -13px 0 0 -13px;
+    background: url('../images/wv-icons.png') 0 26px;
 }
 #layer-search .search-on i{
-    background-position: 32px 32px;
+    background-position: 26px 26px;
+}
+#layer-search .search-on:hover{
+    background-color:#1a1a1a;
+}
+#layer-search .search-on:hover i{
+    background-position: 26px 0px;
 }
 #layer-modal header nav {
     float:left;
@@ -138,16 +144,16 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 32px;
-    height: 32px;
-    margin: -16px 0 0 -16px;
-    background: url('../images/wv-icons.png') 64px 32px;
+    width: 26px;
+    height: 26px;
+    margin: -13px 0 0 -13px;
+    background: url('../images/wv-icons.png') 52px 26px;
 }
 #layers-modal-close:hover{
     background-color:#1a1a1a;
 }
 #layers-modal-close:hover i{
-    background-position: 64px -64px;
+    background-position: 52px -52px;
 }
 #layer-modal nav .nav-selected{
     background:#00457B;
@@ -159,12 +165,13 @@
 /* Tile layout */
 #layer-modal{
     padding-left:10px;
-    padding-right:10px;
+    padding-right:0;
     padding-top:0;
     overflow:hidden;
 }
 #layer-modal-main{
     overflow:auto;
+    position:relative;
 }
 
 .stamp {
@@ -176,9 +183,8 @@
 }
 
 .layer-category {
-    background-color:#000;
     cursor:pointer;
-    background-color:#666;
+    background-color:rgba(0,0,0,0.75);
     width: 310px;
     height:230px;
     overflow:hidden;
@@ -279,11 +285,16 @@
 #selected-category .ui-accordion-header,
 #selected-category .ui-state-focus,
 #layers-all .layers-all-layer {
-    background:rgba(0, 0, 0, 0.75);
+    background:rgba(0, 0, 0, 0.85);
 }
+#selected-category .ui-accordion-header:hover{
+    background: rgba(0, 0, 0, 0.75);
+}
+
 #selected-category .ui-state-active,
+#selected-category .ui-state-active:hover,
 #selected-category .ui-accordion-content{
-    background:rgba(0, 0, 0, 0.65);
+    background:rgba(0, 0, 0, 0.85);
 }
 #selected-category .ui-accordion .ui-corner-top{
     border-radius:0;
@@ -292,11 +303,24 @@
 #layers-all .layers-all-layer {
     padding-left:1.2em;
 }
-#selected-category .ui-accordion-header-icon
-,
+#selected-category .ui-accordion-header-icon,
 #layers-all .layers-all-layer .layers-all-layer-icon {
     left:auto;
     right:1.2em;
+}
+#selected-category .ui-icon-triangle-1-e,
+#selected-category .ui-icon-triangle-1-s
+{
+    width:30px;
+    height:30px;
+    margin-top:-15px;
+    background: url('../images/wv.layers/accordion.png') transparent;
+}
+#selected-category .ui-icon-triangle-1-e{
+    background-position:0 0;
+}
+#selected-category .ui-icon-triangle-1-s{
+    background-position:30px 0;
 }
 #selected-category .ui-accordion-header h3,
 #layers-all .layers-all-layer h3 {
@@ -317,6 +341,13 @@
     padding: .5em 1.2em;
 }
 
+/*Override jqueryUI hover class*/
+#selected-category .ui-widget-content .ui-state-hover{
+    background:none;
+}
+#selected-category .ui-tabs-nav li.ui-state-default:hover a{
+    background:rgba(255,255,255,0.2);
+}
 #selected-category .ui-tabs .ui-tabs-nav{
     float:left;
     clear:both;
@@ -324,9 +355,15 @@
     padding:0;
 }
 #selected-category .ui-tabs .ui-tabs-nav li {
+    max-width:200px;
+    border-left:10px solid transparent;
     margin: 0;
     padding: 0;
     clear:both;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -o-box-sizing: border-box;
 }
 #selected-category .ui-tabs .ui-tabs-nav li a {
     float:none;
@@ -342,7 +379,11 @@
     font-weight:300;
 }
 #selected-category .ui-tabs .ui-tabs-nav li.ui-tabs-active {
-    background:rgba(255, 255, 255,0.35);
+    background:rgba(255, 255, 255,0.9);
+    border-left:10px solid #d54e21;
+}
+#selected-category .ui-tabs .ui-tabs-nav li.ui-tabs-active a{
+    color:#000;
 }
 
 #selected-category .ui-tabs-panel{
@@ -364,6 +405,77 @@
 #selected-category .ui-tabs-panel .ui-buttonset{
     
 }
+#selected-category .ui-tabs-panel li.measurement-settings-item iCheck-checkbox,
+#selected-category .ui-tabs-panel li.measurement-settings-item label,
+#selected-category .ui-tabs-panel li.measurement-settings-item
+{
+    cursor:pointer;
+}
+#selected-category .ui-tabs-panel li.measurement-settings-item{
+    padding:5px 0;
+    margin:0 0 2px 10px;
+}
+#selected-category .ui-tabs-panel li.measurement-settings-item:hover{
+    background:rgba(255,255,255,0.3);
+    cursor:pointer;
+}
 #layers-all .iCheck-checkbox {
     float: right;
 }
+/*lazy code to put scrollbar in the right place*/
+
+#layer-categories,
+#selected-category,
+#layers-all
+{
+    padding-right:10px;
+}
+#categories-nav {
+    margin-right:10px;
+}
+
+/* perfect-scrollbar */
+.ps-container > .ps-scrollbar-y-rail,
+.ps-container > .ps-scrollbar-y-rail .ps-scrollbar-y
+{
+    border-radius:0;
+    -webkit-border-radius:0;
+    -moz-border-radius:0;
+    -o-border-radius:0;
+    -webkit-transition: none;
+    -moz-transition: none;
+    -o-transition: none;
+    transition: none;
+    opacity:1;
+}
+.ps-container > .ps-scrollbar-y-rail {
+    right:0;
+}
+.ps-container > .ps-scrollbar-y-rail .ps-scrollbar-y{
+    background-color: #666;
+}
+.ps-container:hover.ps-in-scrolling {
+    pointer-events: none; }
+    .ps-container:hover.ps-in-scrolling.ps-x > .ps-scrollbar-x-rail {
+      background-color: #eee;
+      opacity: 1; }
+      .ps-container:hover.ps-in-scrolling.ps-x > .ps-scrollbar-x-rail > .ps-scrollbar-x {
+        background-color: #999; }
+    .ps-container:hover.ps-in-scrolling.ps-y > .ps-scrollbar-y-rail {
+      background-color: #eee;
+      opacity: 1; }
+      .ps-container:hover.ps-in-scrolling.ps-y > .ps-scrollbar-y-rail > .ps-scrollbar-y {
+        background-color: #999; }
+  .ps-container:hover > .ps-scrollbar-x-rail,
+  .ps-container:hover > .ps-scrollbar-y-rail {
+    opacity: 1; }
+  .ps-container:hover > .ps-scrollbar-x-rail:hover {
+    background-color: #eee;
+    opacity: 1; }
+    .ps-container:hover > .ps-scrollbar-x-rail:hover > .ps-scrollbar-x {
+      background-color: #999; }
+  .ps-container:hover > .ps-scrollbar-y-rail:hover {
+    background-color: #eee;
+    opacity: 1; }
+    .ps-container:hover > .ps-scrollbar-y-rail:hover > .ps-scrollbar-y {
+      background-color: #999; }

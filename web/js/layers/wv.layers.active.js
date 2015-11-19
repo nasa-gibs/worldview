@@ -86,7 +86,6 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             tolerance: "pointer",
             placeholder: "state-saver"
         });
-
         $("." + self.id + "category li").disableSelection();
         $("." + self.id + "category").bind('sortstop', moveLayer);
 
@@ -105,11 +104,17 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             .attr("id", group.id)
             .addClass("category");
 
+        var $header = $("<h3></h3>")
+            .addClass("head")
+            .html(group.description);
+
+        $parent.append($header);
+
         _.each(model.get({ group: group.id }), function(layer) {
             renderLayer($container, group, layer);
         });
 
-        //$container.append($header);
+        
         //$contain.append($layers);
 
         $parent.append($container);
@@ -255,7 +260,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             //onLoad: //adjustCategoryHeights
         });
     };
-
+    var productsIsOverflow = false;
     var sizeProducts = function(){
         var winSize = $(window).outerHeight(true);
         var headSize = $("ul#productsHolder-tabs").outerHeight(true);//
@@ -266,10 +271,34 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
         //FIXME: -10 here is the timeline's bottom position from page, fix
         // after timeline markup is corrected to be loaded first
-        $("section#productsHolder #products").css("max-height", winSize -
-                                                  headSize - footSize -
-                                                  offset.top - timeSize -
-                                                  secSize - 10 - 5);
+        // 26 is the combined height of the OVERLAYS and BASE LAYERS titles.
+        var maxHeight = winSize - headSize - footSize -
+            offset.top - timeSize - secSize - 10 - 5;
+        $("section#productsHolder #products").css("max-height", maxHeight);
+
+        var childrenHeight = $('ul#overlays').outerHeight(true) +
+            $('ul#baselayers').outerHeight(true);
+        //console.log(maxHeight, childrenHeight);
+        
+        if((maxHeight <= childrenHeight)) {
+            $("#products").css('height', maxHeight)
+                .css('padding-right', '10px');
+            if(productsIsOverflow){
+                $(self.selector).perfectScrollbar('update');
+            }
+            else{
+                $(self.selector).perfectScrollbar();
+                productsIsOverflow = true;
+            }
+        }
+        else{
+            $("#products").css('height', '')
+                .css('padding-right', '');
+            if(productsIsOverflow){
+                $(self.selector).perfectScrollbar('destroy');
+                productsIsOverflow = false;
+            }
+        }
     };
 
     var resize = function() {
@@ -310,6 +339,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         if ( legends[layer.id] ) {
             delete legends[layer.id];
         }
+        resize();
         //adjustCategoryHeights();
     };
 
@@ -323,6 +353,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         if ( layer.palette ) {
             renderLegendCanvas(layer);
         }
+        resize();
         //adjustCategoryHeights();
     };
 

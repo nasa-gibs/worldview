@@ -74,6 +74,11 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         sizeMultiplier = Math.floor( availableWidth / gridItemWidth );
         modalHeight = $( window ).height() - 100;
     };
+
+    $.fn.hasScrollBar = function() {
+        return this.get(0).scrollHeight > this.height();
+    };
+
     var redo = function(){
         setModalSize();
 
@@ -81,8 +86,9 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             height: modalHeight,
             width: gridItemWidth * sizeMultiplier + 10,
         });
-
-        $( '#layer-modal-main' ).css( 'height', modalHeight - 40 );
+        
+        $( '#layer-modal-main' ).css( 'height', modalHeight - 40 )
+            .perfectScrollbar('update');
 
         //$( '.stamp' ).css("width", sizeMultiplier * gridItemWidth - 10 + "px");
     };
@@ -93,39 +99,37 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
     var drawPage = function() {
         var projection = models.proj.selected.id;
-        console.log(projection);
+        //console.log(projection);
         if(projection==='geographic') {
-        _.each( config.categories['hazards and disasters'].All.measurements,
-                function( measurement ) {
-                    _.each( config.measurements[measurement].sources,
-                            function( source, sourceIndex ) {
-
-                                _.each( source.settings, function( setting ) {
-
-                                    var fproj = filterProjection(setting);
-                                    var layer = config.layers[ setting ];
- 
-                                    if( fproj ) {
-                                        var mm = measurement;
-                                        return mm;
-                                    }
-
-                                    /*_.each( config.layers[ setting ].projections,
-                                            function( proj, projId ) {
-
-                                            }
+            _.each( config.categories['hazards and disasters'].All.measurements,
+                    function( measurement ) {
+                        _.each( config.measurements[measurement].sources,
+                                function( source, sourceIndex ) {
+                                    
+                                    _.each( source.settings, function( setting ) {
+                                        
+                                        var fproj = filterProjection(setting);
+                                        var layer = config.layers[ setting ];
+                                        
+                                        if( fproj ) {
+                                            var mm = measurement;
+                                            return mm;
+                                        }
+                                        
+                                        /*_.each( config.layers[ setting ].projections,
+                                          function( proj, projId ) {
+                                          
+                                          }
                                           );
-                                    */
-                                });
-                                
-                            }
-                          );
-                    //console.log(mm);
-                }
-              );
-
-        
-        
+                                        */
+                                    });
+                                    
+                                }
+                              );
+                        //console.log(mm);
+                    }
+                  );
+            
             $selectedCategory.hide();
             $allLayers.hide();
             drawCategories();
@@ -194,7 +198,9 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 _.each( source.settings, function( setting ) {
                     var layer = config.layers[setting];
                     var title;
-                    var $wrapper = $('<li></li>');
+                    var $wrapper = $('<li></li>')
+                        .attr('data-layer', encodeURIComponent(layer.id) )
+                        .addClass('measurement-settings-item');
                     var $setting = $( '<input></input>' )
                         .attr( 'type', 'checkbox' )
                         .addClass( 'settings-check')
@@ -270,7 +276,8 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         $allLayers.hide();
 
         $selectedCategory.show();
-        $selectedCategory.iCheck({checkboxClass: 'icheckbox_square-grey'});
+        $('#layer-modal-main').perfectScrollbar('update');
+        $selectedCategory.iCheck({checkboxClass: 'icheckbox_square-red'});
         $breadcrumb.show();
         
     };
@@ -358,6 +365,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         $allLayers.hide();
         $breadcrumb.hide();
         $( '#layers-search-input' ).val('');
+        $( '#layer-search label.search-icon' ).removeClass('search-on');
         searchClickState = 0;
         $( '#layer-categories, #categories-nav' ).show();
         $( "#layer-categories" ).isotope();
@@ -476,6 +484,8 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             $nav.append( $label );
             //Create radiobuttons with filter buttons
             $nav.buttonset();
+
+            console.log($('#layer-modal-main').hasScrollBar());
         });
         
         var $tiles = $( '#layer-categories' ).isotope( {
@@ -536,7 +546,8 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
         setModalSize();
 
-        $( '#layer-modal-main' ).css( 'height', modalHeight - 40 );
+        $( '#layer-modal-main' ).css( 'height', modalHeight - 40 )
+            .perfectScrollbar();
 
         var $search = $( "<div></div>" )
             .attr( "id", "layer-search" );
@@ -697,6 +708,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 searchOpen = 1;
                 searchClickState = 1;
                 $('label.search-icon').addClass('search-on');
+                $('label.search-on').click(categoriesCrumb);
             }
         });
         //adjustCategoryHeights();

@@ -1,5 +1,7 @@
 
-
+#wv-data{
+    overflow:scroll;
+}
 #wv-data-selection ul {
     display: list;
     margin: 0 5px;
@@ -248,6 +250,16 @@
     font-weight: bold;
     display:inline-block;
     margin:0 10px  0 5px;
+}
+#wv-datacontent{
+
+}
+#wv-datacontent>div{
+    padding:0 5px;
+    box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+    -o-box-sizing:border-box;
 }
 #wv-datacontent div[data-product='__NO_PRODUCT'] a {
     color: #000;
