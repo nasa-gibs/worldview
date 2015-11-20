@@ -371,7 +371,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         $('#layer-categories, #categories-nav').hide();
         $allLayers.show();
 
-        $allLayers.iCheck({checkboxClass: 'icheckbox_square-grey'});
+        $allLayers.iCheck({checkboxClass: 'icheckbox_square-red'});
 
         //Create breadcrumb crumbs
         $breadcrumb.empty();
@@ -651,7 +651,8 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 redo();
                 
                 $( "#layer-categories" ).isotope();
- 
+
+                $('#layer-modal-main').perfectScrollbar('update');
                 $( ".ui-widget-overlay" ).click( function( e ) {
                     $( self.selector ).dialog( "close" );
                 } );
