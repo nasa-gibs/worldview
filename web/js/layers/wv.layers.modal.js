@@ -136,6 +136,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         }
         else {
             drawAllLayers();
+            filter();
         }
     };
 
@@ -390,6 +391,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         searchClickState = 1;
 
         $breadcrumb.show();
+
     };
 
     var categoriesCrumb = function( e ) {
@@ -414,7 +416,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
     var replaceIfScientific = function(name){
         if(name === 'scientific'){
-            return 'science discipline';
+            return 'science disciplines';
         }
         else return name;
     };
