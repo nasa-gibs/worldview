@@ -404,6 +404,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         searchClickState = 0;
         $( '#layer-categories, #categories-nav' ).show();
         $( "#layer-categories" ).isotope();
+        $( '#layer-modal-main' ).perfectScrollbar('update');
         
     };
 
