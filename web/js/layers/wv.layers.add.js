@@ -96,8 +96,10 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
         renderType($content, "baselayers", "Base Layers", "BaseLayers");
         renderType($content, "overlays", "Overlays", "Overlays");
         $(self.selector).append($content);
-        $(self.selector + " .selectorItem, " + self.selector + " .selectorItem input").on('ifChecked', addLayer);
-        $(self.selector + " .selectorItem, " + self.selector + " .selectorItem input").on('ifUnchecked', removeLayer);
+        $(self.selector + " .selectorItem, " + self.selector +
+          " .selectorItem input").on('ifChecked', addLayer);
+        $(self.selector + " .selectorItem, " + self.selector +
+          " .selectorItem input").on('ifUnchecked', removeLayer);
         $(self.selector + "select").on('change', filter);
         $(self.selector + "search").on('keyup', filter);
         $(self.selector + "search").focus();

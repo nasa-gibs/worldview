@@ -281,13 +281,15 @@
 #layers-all .layers-all-layer {
     border:0;
     margin-top:5px;
+    cursor:pointer;
 }
 #selected-category .ui-accordion-header,
 #selected-category .ui-state-focus,
 #layers-all .layers-all-layer {
     background:rgba(0, 0, 0, 0.85);
 }
-#selected-category .ui-accordion-header:hover{
+#selected-category .ui-accordion-header:hover,
+#layers-all .layers-all-layer:hover{
     background: rgba(0, 0, 0, 0.75);
 }
 

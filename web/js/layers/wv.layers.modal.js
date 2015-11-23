@@ -206,7 +206,14 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
                     var $wrapper = $('<li></li>')
                         .attr('data-layer', encodeURIComponent(layer.id) )
-                        .addClass('measurement-settings-item');
+                        .attr( 'value', encodeURIComponent( layer.id ) )
+                        .addClass('measurement-settings-item')
+                        .click( function( e ){
+                            var $checkbox = $( this )
+                                .find( '#setting-' + layer.id )
+                                .iCheck('toggle');
+                        });
+                        
                     var $setting = $( '<input></input>' )
                         .attr( 'type', 'checkbox' )
                         .addClass( 'settings-check')
@@ -334,7 +341,11 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             var $layerItem = $( '<li></li>' )
                 .attr('id', 'layer-flat-' + current.id )
                 .attr("data-layer", encodeURIComponent(current.id))
-                .addClass('layers-all-layer');
+                .addClass('layers-all-layer')
+                .click( function( e ){
+                    $( this ).find('input#' + encodeURIComponent(current.id))
+                        .iCheck('toggle');
+                });
 
             var $layerTitle = $( '<h3></h3>' )
                 .text( current.title );
