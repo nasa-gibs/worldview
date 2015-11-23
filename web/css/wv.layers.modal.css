@@ -327,6 +327,7 @@
     color:#fff;
     font-size:20px;
     line-height:100%;
+    margin-right:50px;
 }
 #selected-category .ui-accordion-header h5,
 #layers-all .layers-all-layer h5{
@@ -336,6 +337,7 @@
     font-weight:300;
     margin-top:3px;
     font-style: italic;
+    margin-right: 50px;
 }
 #selected-category .ui-accordion-content{
     padding: .5em 1.2em;

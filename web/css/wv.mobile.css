@@ -82,4 +82,22 @@
     .wv-coords-map{
         display: none !important;
     }
+    button#layers-add{
+        width:100%;
+    }
+    #selected-category .ui-tabs-panel{
+        clear:both;
+        margin-left:0;
+        border-top: 2px solid #d54e21;
+        padding-top: 10px;
+    }
+    #selected-category .ui-tabs .ui-tabs-nav{
+        margin-bottom:15px;
+    }
+    #categories-nav label span {
+        font-size: 1em;
+    }
+    #selected-category .ui-tabs-panel li.measurement-settings-item{
+        margin-left:0px;
+    }
 }
