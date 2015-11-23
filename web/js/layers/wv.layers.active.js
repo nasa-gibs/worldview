@@ -272,8 +272,15 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         //FIXME: -10 here is the timeline's bottom position from page, fix
         // after timeline markup is corrected to be loaded first
         // 26 is the combined height of the OVERLAYS and BASE LAYERS titles.
-        var maxHeight = winSize - headSize - footSize -
-            offset.top - timeSize - secSize - 10 - 5;
+        if(wv.util.browser.small){
+            var maxHeight = winSize - headSize - footSize -
+                offset.top - secSize - 10 - 5;
+        }
+        else {
+            var maxHeight = winSize - headSize - footSize -
+                offset.top - timeSize - secSize - 10 - 5;
+        }
+        
         $("section#productsHolder #products").css("max-height", maxHeight);
 
         var childrenHeight = $('ul#overlays').outerHeight(true) +
