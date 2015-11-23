@@ -282,7 +282,11 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             collapsible: true,
             heightStyle: "content",
             animate: false,
-            active: false
+            active: false,
+            activate: function( event, ui ) {
+                $('#layer-modal-main').perfectScrollbar('update');
+            }
+            
         });
         
         if( selectedMeasurement ) {
