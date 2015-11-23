@@ -621,7 +621,9 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 if ( searchClickState === 0 ) {
                     searchClickState = 1;
 
-                    $('#layers-search-input').focus();
+                    if(!wv.util.browser.small){
+                        $('#layers-search-input').focus();
+                    }
                     //$(this).addClass('search-on');
                     //$nav.hide();
                     //drawAllLayers();
