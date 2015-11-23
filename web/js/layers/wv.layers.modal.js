@@ -579,11 +579,13 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         });
     };
     var addLayer = function(event) {
+        event.stopPropagation();
         model.add( decodeURIComponent( $( this ).val() ) );
 
     };
 
     var removeLayer = function(event) {
+        event.stopPropagation();
         model.remove( decodeURIComponent( $( this ).val() ) );
     };
 
