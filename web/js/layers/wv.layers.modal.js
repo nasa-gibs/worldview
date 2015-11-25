@@ -341,7 +341,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         if( $categories.data('isotope') && models.proj.selected.id !== 'geographic' ) {
             $categories.isotope('destroy');
             $categories.empty();
-        };
+        }
 
         var $fullLayerList = $( '<ul></ul>' )
             .attr( 'id', 'flat-layer-list' );
@@ -462,10 +462,10 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     };
     var drawCategories = function(){
 
-        $categories.empty()
+        $categories.empty();
         if( $categories.data('isotope') ) {
             $categories.isotope('destroy');
-        };
+        }
 
         $nav.empty();
 
@@ -665,7 +665,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
                 if( $categories.data('isotope') ) {
                     $categories.isotope();
-                };
+                }
 
                 redoScrollbar();
 
