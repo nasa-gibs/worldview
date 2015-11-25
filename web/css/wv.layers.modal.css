@@ -395,6 +395,9 @@
     margin-left:160px;
     color:#fff;
 }
+#selected-category .ui-tabs-panel .source-metadata{
+    padding:0 20px;
+}
 #selected-category .ui-tabs-panel p {
     font-style: italics;
     margin-bottom: 15px;

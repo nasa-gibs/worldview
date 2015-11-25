@@ -197,11 +197,18 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     .attr( 'id', current.id + '-' + source.id );
 
                 //Metadata
-                var $sourceMeta = $( '<p></p>' )
-                    .text(source.description);
+               
+                var $sourceMeta = $( '<div></div>' )
+                    .addClass('source-metadata');
 
-                //$sourceContent.append( $sourceMeta );
+                if(source.description !== 'no description' ){
+                    $.get('config/metadata/' + source.description + '.html')
+                        .success(function(data) {
+                            $sourceMeta.html(data);
+                        });
 
+                    $sourceContent.append( $sourceMeta );
+                }
                 var $sourceSettings = $( '<ul></ul>' )
                     .addClass('source-settings');
 
