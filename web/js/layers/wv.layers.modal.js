@@ -23,19 +23,20 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     var model = models.layers;
     var self = {};
 
-    self.selector = "#layer-modal";
-    self.id = "layer-modal";
+    self.selector = '#layer-modal';
+    self.id = 'layer-modal';
 
-    var $addBtn = $("#layers-add");
-    var $header = $( self.selector + " header" );
-    var $categories = $(self.selector + " #layer-categories, " +
-                        self.selector + " #categories-nav");
+    var $addBtn = $('#layers-add');
+    var $header = $( self.selector + ' header' );
+    var $categories = $(' #layer-categories ');
+    //var $categoriesNav = $(' #categories-nav ');
 
     var $selectedCategory = $(self.selector + " #selected-category");
     var $allLayers = $(self.selector + " #layers-all");
     var gridItemWidth = 320; //with of grid item + spacing
     var modalHeight;
     var sizeMultiplier;
+    var searchBool;
 
     //Visible Layers
     var visible = {};
@@ -49,7 +50,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             .on("add", onLayerAdded)
             .on("remove", onLayerRemoved);
 
-        models.proj.events.on("select", onProjectionChange);
+        models.proj.events.on("select", drawDefaultPage );
 
         //Create tiles
         render();
@@ -93,44 +94,30 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         //$( '.stamp' ).css("width", sizeMultiplier * gridItemWidth - 10 + "px");
     };
 
+    var redoScrollbar = function(){
+        $( '#layer-modal-main' ).perfectScrollbar('update');
+    };
+
     var filterProjection = function(layer) {
         return config.layers[layer].projections[models.proj.selected.id];
     };
-
-    var drawPage = function() {
+    //This draws the default page, depending on projection
+    // and hides the breadcrumb, and sets the search back to normal
+    // and updates the scrollbar.
+    var removeSearch = function(){
+        $selectedCategory.hide();
+        $breadcrumb.hide();
+        searchBool = false;
+        $( '#layers-search-input' ).val('');
+        $( '#layer-search label.search-icon' ).removeClass('search-on').off('click');
+    };
+    var drawDefaultPage = function( e ) {
         var projection = models.proj.selected.id;
-        //console.log(projection);
-        if(projection==='geographic') {
-            _.each( config.categories['hazards and disasters'].All.measurements,
-                    function( measurement ) {
-                        _.each( config.measurements[measurement].sources,
-                                function( source, sourceIndex ) {
-                                    
-                                    _.each( source.settings, function( setting ) {
-                                        
-                                        var fproj = filterProjection(setting);
-                                        var layer = config.layers[ setting ];
-                                        
-                                        if( fproj ) {
-                                            var mm = measurement;
-                                            return mm;
-                                        }
-                                        
-                                        /*_.each( config.layers[ setting ].projections,
-                                          function( proj, projId ) {
-                                          
-                                          }
-                                          );
-                                        */
-                                    });
-                                    
-                                }
-                              );
-                        //console.log(mm);
-                    }
-                  );
-            
-            $selectedCategory.hide();
+
+        removeSearch();
+
+        if( projection === 'geographic' ) {
+
             $allLayers.hide();
             drawCategories();
         }
@@ -138,8 +125,28 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             drawAllLayers();
             filter();
         }
-    };
 
+        redoScrollbar();
+
+    };
+    var showDefaultPage = function( e ){
+        var projection = models.proj.selected.id;
+
+        removeSearch();
+
+        if( projection === 'geographic' ) {
+
+            $allLayers.hide();
+            $categories.show().isotope();
+            $nav.show();
+
+        }
+        else {
+            filter();
+        }
+
+        redoScrollbar();
+    };
     var resize = function(){
         if( $( self.selector ).dialog( "isOpen" ) ) {
             redo();
@@ -291,7 +298,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             animate: false,
             active: false,
             activate: function( event, ui ) {
-                $('#layer-modal-main').perfectScrollbar('update');
+                redoScrollbar();
             }
             
         });
@@ -308,20 +315,20 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             .text('Categories')
             .attr( 'alt', 'categories' )
             .attr( 'title', 'Back to Layer Categories')
-            .click( categoriesCrumb );
+            .click( showDefaultPage );
 
         $breadcrumb.append( $homeCrumb )
             .append('<b> / ' + category.title + '</b>' );
         $selectedCategory.prepend( $breadcrumb );
         $('#layers-search-input').show();
-        searchClickState = 1;
 
         //Switch navs
-        $('#layer-categories, #categories-nav').hide();
+        $categories.hide();
+        $nav.hide();
         $allLayers.hide();
 
         $selectedCategory.show();
-        $('#layer-modal-main').perfectScrollbar('update');
+        redoScrollbar();
         $selectedCategory.iCheck({checkboxClass: 'icheckbox_square-red'});
         $breadcrumb.show();
         
@@ -330,6 +337,10 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     var drawAllLayers = function() {
 
         $allLayers.empty();
+        if( $categories.data('isotope') && models.proj.selected.id !== 'geographic' ) {
+            $categories.isotope('destroy');
+            $categories.empty();
+        };
 
         var $fullLayerList = $( '<ul></ul>' )
             .attr( 'id', 'flat-layer-list' );
@@ -373,54 +384,51 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             $fullLayerList.append( $layerItem );
 
         });
-        /*
-        $(self.selector + " .selectorItem, " + self.selector +
-          " .selectorItem input").on('ifChecked', addLayer);
-        $(self.selector + " .selectorItem, " + self.selector +
-          " .selectorItem input").on('ifUnchecked', removeLayer);
-        */
-        
+
 
         $allLayers.append( $fullLayerList );
 
         $selectedCategory.hide();
-        $('#layer-categories, #categories-nav').hide();
+        $categories.hide();
+        $nav.hide();
         $allLayers.show();
 
-        $allLayers.iCheck({checkboxClass: 'icheckbox_square-red'});
+        $allLayers.iCheck( { checkboxClass: 'icheckbox_square-red' } );
 
         //Create breadcrumb crumbs
         $breadcrumb.empty();
 
-        var $homeCrumb = $( '<a></a>' )
-            .text('Categories')
-            .attr( 'alt', 'categories' )
-            .attr( 'title', 'Back to Layer Categories')
-            .click( categoriesCrumb );
 
-        $breadcrumb.append( $homeCrumb )
-            .append('<b> / Search Results</b>' );
+        //If this is not the geographic projection, All layers are always drawn
+        // and filtered, so thats the default page. Dont show breadcrumb
 
-        $allLayers.prepend( $breadcrumb );
-        $('#layers-search-input').show();
-        searchClickState = 1;
+        if( searchBool ) {
 
-        $breadcrumb.show();
+            var crumbText;
+            if( models.proj.selected.id !== 'geographic' ){
+                crumbText = 'Layers';
+            }
+            else {
+                crumbText = 'Categories';
+            }
+            var $homeCrumb = $( '<a></a>' )
+                .text( crumbText )
+                .attr( 'alt', crumbText )
+                .attr( 'title', 'Back to ' + crumbText )
+                .click( showDefaultPage );
 
-    };
+            $breadcrumb.append( $homeCrumb )
+                .append('<b> / Search Results</b>' );
 
-    var categoriesCrumb = function( e ) {
-        searchOpen = 0;
-        $selectedCategory.hide();
-        $allLayers.hide();
-        $breadcrumb.hide();
-        $( '#layers-search-input' ).val('');
-        $( '#layer-search label.search-icon' ).removeClass('search-on');
-        searchClickState = 0;
-        $( '#layer-categories, #categories-nav' ).show();
-        $( "#layer-categories" ).isotope();
-        $( '#layer-modal-main' ).perfectScrollbar('update');
-        
+            $allLayers.prepend( $breadcrumb );
+            $( '#layers-search-input' ).show();
+
+            $( 'label.search-icon' ).addClass( 'search-on' );
+            $( 'label.search-on' ).click( showDefaultPage );
+
+            $breadcrumb.show();
+
+        }
     };
 
     var cssName = function(name){
@@ -453,7 +461,12 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     };
     var drawCategories = function(){
 
-        $categories.empty();
+        $categories.empty()
+        if( $categories.data('isotope') ) {
+            $categories.isotope('destroy');
+        };
+
+        $nav.empty();
 
         _.each( config.categories, function( metaCategory, metaCategoryName ) {
 
@@ -527,35 +540,37 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
             });
 
+            $categories.show();
+
             var $filterButton = $( '<input />' )
                 .attr( 'type', 'radio')
-                .text( replaceIfScientific(metaCategoryName) );
+                .text( replaceIfScientific( metaCategoryName ) );
 
             var $label = $( '<label></label>' )
-                .text( replaceIfScientific(metaCategoryName) );
+                .text( replaceIfScientific( metaCategoryName ) );
 
             $filterButton
-                .attr( 'id', 'button-filter-' + cssName(metaCategoryName) )
-                .attr( 'data-filter', cssName(metaCategoryName) )
+                .attr( 'id', 'button-filter-' + cssName( metaCategoryName ) )
+                .attr( 'data-filter', cssName( metaCategoryName ) )
                 .click( function( e ) {
-                    $tiles.isotope({
-                        filter: '.layer-category-' + cssName(metaCategoryName)
+                    $categories.isotope({
+                        filter: '.layer-category-' + cssName( metaCategoryName )
                     });
-                    $('#categories-nav .ui-button').removeClass('nav-selected');
+                    $nav.find('.ui-button').removeClass( 'nav-selected' );
                     $("label[for=" + $(this).attr("id") + "]")
                         .addClass('nav-selected');
                 });
 
-            $label.attr('for', 'button-filter-' + cssName(metaCategoryName) );
+            $label.attr('for', 'button-filter-' + cssName( metaCategoryName ) );
 
             $nav.append( $filterButton );
             $nav.append( $label );
             //Create radiobuttons with filter buttons
             $nav.buttonset();
-
+            $nav.show();
         });
         
-        var $tiles = $( '#layer-categories' ).isotope( {
+        $categories.isotope( {
             itemSelector: '.layer-category',
             //stamp: '.stamp',
             getSortData: {
@@ -568,15 +583,12 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 gutter: 10
             }
 
-        });
+        } );
 
         $('#layer-modal-main').prepend( $nav );
 
         $('label[for=button-filter-legacy]').addClass('nav-selected');
-
-        _.each(config.categories, function( topCategory, name ) {
-     
-        });
+        
     };
     var addLayer = function(event) {
         event.stopPropagation();
@@ -600,22 +612,13 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                           wv.util.jqueryEscape(layer.id) + "']");
         $element.iCheck("uncheck");
     };
-    var onProjectionChange = function() {
-        var proj = models.proj.selected.id;
 
-        if(proj === 'geographic'){
-            categoriesCrumb();
-        }
-        else{
-            filter();
-        }
-        
-    };
     var render = function(){
 
         setModalSize();
 
-        $( '#layer-modal-main' ).css( 'height', modalHeight - 40 )
+        $( '#layer-modal-main' )
+            .css( 'height', modalHeight - 40 )
             .perfectScrollbar();
 
         var $search = $( "<div></div>" )
@@ -625,29 +628,16 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             .attr( "id", "layers-search-input" )
             .attr( 'placeholder', 'Search');
 
-        var searchClickState = 0;
-
         var $searchBtn = $("<label></label>")
             .addClass( "search-icon" )
             .click( function( e ) {
                 var that = this;
-                if ( searchClickState === 0 ) {
-                    searchClickState = 1;
-
-                    if(!wv.util.browser.small){
-                        $('#layers-search-input').focus();
-                    }
-                    //$(this).addClass('search-on');
-                    //$nav.hide();
-                    //drawAllLayers();
+                //TODO: Click for search icon
+                if(!wv.util.browser.small){
+                    $('#layers-search-input').focus();
                 }
-                else if ( searchClickState === 1 ) {
-                    searchClickState = 0;
-
-                    $searchInput.val('');
-                    //$searchInput.hide();
-                    $(this).removeClass('search-on');
-                    //$nav.show();
+                else {
+                    $('#layers-search-input').blur();
                 }
             } )
             .append( "<i></i>" );
@@ -671,23 +661,17 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             },
             open: function( event, ui ) {
                 redo();
-                
-                $( "#layer-categories" ).isotope();
 
-                $('#layer-modal-main').perfectScrollbar('update');
+                if( $categories.data('isotope') ) {
+                    $categories.isotope();
+                };
+
+                redoScrollbar();
+
                 $( ".ui-widget-overlay" ).click( function( e ) {
                     $( self.selector ).dialog( "close" );
                 } );
-                /*var current = $searchInput.val();
-                $( window ).keypress( function ( e ) {
-                    if ( e.which !== 0 &&
-                        !e.ctrlKey && !e.metaKey && !e.altKey
-                       ) {
-                        if( searchClickState === 0){
-                            $searchBtn.click();
-                        }
-                    }
-                });*/
+
             },
             close: function( event, ui ) {
                 $( ".ui-widget-overlay" ).unbind( "click" );
@@ -710,9 +694,10 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         $header.append ( $closeButton );
 
         //$(self.selector + "select").on('change', filter);
-        $searchInput.on('keyup', filter);
+        $searchInput.keyup( filter );
 
-        drawPage();
+        drawDefaultPage();
+        
     };
 
     var searchTerms = function() {
@@ -732,6 +717,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         return $.inArray(layerId, config.aoi[aoi].baselayers) < 0 &&
                $.inArray(layerId, config.aoi[aoi].overlays) < 0;
     };
+
     //Similar name to another var above
     var filterProjections = function(layer) {
         return !layer.projections[models.proj.selected.id];
@@ -754,37 +740,59 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         });
         return filtered;
     };
-    var searchOpen = 0;
-    var filter = _.throttle(function() {
+    var runSearch = _.throttle( function() {
         var search = searchTerms();
+
         $.each(config.layers, function(layerId, layer) {            
-            //var faoi = filterAreaOfInterest(layerId);
+
             var fproj = filterProjections(layer);
             var fterms = filterSearch(layer, search);
-            /*
-            if ( layerId.startsWith("carto") ) {
-                console.log(layerId, "faoi", faoi, "fproj", fproj, "fterms", fterms);
-                console.log(wv.util.jqueryEscape(layerId));
-            }
-            */
+
             var filtered = fproj || fterms;
+
             visible[layer.id] = !filtered;
-            if(searchOpen) {
-                var display = filtered ? "none": "block";
-                var selector = "#flat-layer-list li[data-layer='" +
-                    wv.util.jqueryEscape(layerId) + "']";
-                $(selector).css("display", display);
-            }
-            else {
-                drawAllLayers();
-                searchOpen = 1;
-                searchClickState = 1;
-                $('label.search-icon').addClass('search-on');
-                $('label.search-on').click(categoriesCrumb);
-            }
+
+            var display = filtered ? "none": "block";
+            var selector = "#flat-layer-list li[data-layer='" +
+                wv.util.jqueryEscape(layerId) + "']";
+            $(selector).css("display", display);
         });
-        //adjustCategoryHeights();
+
+        redoScrollbar();
     }, 250, { trailing: true });
+
+    var filter = function( e ) {
+
+        if( $( '#layers-search-input' ).val().length !== 0 ) {
+            searchBool = true;
+        }
+        else{
+            searchBool = false;
+
+            if (models.proj.selected.id === 'geographic'){
+                $allLayers.hide();
+                $categories.show().isotope();
+                $nav.show();
+            }
+            else{
+                drawAllLayers();
+            }
+            removeSearch();
+        }
+        // Ran on every keystroke in search
+        if( searchBool ) {
+            if( ( $allLayers.css('display') === 'none' ) ||
+                ( $breadcrumb.css('display') === 'none') ) {
+                drawAllLayers();
+            }
+            runSearch();
+        }
+        //Opening state for non-geographic projections
+        else if( ( searchBool === false ) &&
+                 ( models.proj.selected.id !== 'geographic' ) ) {
+            runSearch();
+        }
+    };
 
     init();
     return self;
