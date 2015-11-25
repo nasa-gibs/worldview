@@ -73,6 +73,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     var setModalSize = function(){
         var availableWidth = $( window ).width() - ( $( window ).width() * 0.15 );
         sizeMultiplier = Math.floor( availableWidth / gridItemWidth );
+        if(sizeMultiplier < 1) sizeMultiplier = 1;
         modalHeight = $( window ).height() - 100;
     };
 
