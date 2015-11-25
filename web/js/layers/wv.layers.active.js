@@ -65,7 +65,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         $container.empty();
         
         $addBtn.button();
-        sizeProducts();
+
 
         $container.addClass('bank');
 
@@ -94,7 +94,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                 renderLegendCanvas(layer);
             }
         });
-
+        sizeProducts();
         setTimeout(resize, 1);
 
     };
