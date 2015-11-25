@@ -13,7 +13,7 @@
     border: 1px solid #333;
     border-bottom-left-radius:5px;
     border-bottom-right-radius:5px;
-    position:relative;
+    position:absolute;
     z-index:2;
     min-width:286px;
     width:286px;
