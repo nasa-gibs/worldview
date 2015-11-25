@@ -86,8 +86,8 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             tolerance: "pointer",
             placeholder: "state-saver"
         });
-        $("." + self.id + "category li").disableSelection();
-        $("." + self.id + "category").bind('sortstop', moveLayer);
+        $("#" + self.id + " ul.category li").disableSelection();
+        $("#" + self.id + " ul.category").bind('sortstop', moveLayer);
 
         _.each(model.get({ group: "overlays" }), function(layer) {
             if ( layer.palette ) {
@@ -286,7 +286,6 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
         var childrenHeight = $('ul#overlays').outerHeight(true) +
             $('ul#baselayers').outerHeight(true);
-        //console.log(maxHeight, childrenHeight);
         
         if((maxHeight <= childrenHeight)) {
             $("#products").css('height', maxHeight)
@@ -348,7 +347,6 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             delete legends[layer.id];
         }
         resize();
-        //adjustCategoryHeights();
     };
 
     var onLayerAdded = function(layer) {
@@ -362,7 +360,6 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             renderLegendCanvas(layer);
         }
         resize();
-        //adjustCategoryHeights();
     };
 
     var toggleVisibility = function(event) {
@@ -375,6 +372,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     };
 
     var moveLayer = function(event, ui) {
+
         var $target = ui.item;
         var $next = $target.next();
         if ( $next.length ) {
@@ -389,10 +387,12 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         // Scroll pane can be kind of glitchy, so just show what the
         // current state is.
         // Timeout prevents redraw artifacts
+
         setTimeout(render, 1);
     };
 
     var onLayerVisibility = function(layer, visible) {
+
         var $element = $(".hideReg[data-layer='" + layer.id + "']");
         if ( visible ) {
             $element.attr("data-action", "hide")
