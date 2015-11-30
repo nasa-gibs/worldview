@@ -64,7 +64,6 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
             .addClass(self.id + "list")
             .addClass("bank");
 
-        sizeDownloadTab();
         var $actionButton = $("<button></button>")
             .attr("id", "wv-data-download-button")
             .addClass("action")
@@ -84,14 +83,14 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
         $("#wv-data-download-button").button();
 
         self.refresh();
+
+        //sizeDownloadTab();
+
     };
 
     self.refresh = function() {
         var $content = $(self.selector + "content");
-        var api = $content.data("jsp");
-        if ( api ) {
-            api.destroy();
-        }
+
         $content = $(self.selector + "content").empty();
         var data = model.groupByProducts();
         $.each(data, function(key, value) {
@@ -101,7 +100,8 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
         $('.dl-group[value="__NO_PRODUCT"] h3 span').click(function(e){
             showUnavailableReason();
         });
-        resize();
+
+        sizeDownloadTab();
     };
 
     var refreshProduct = function($content, key, value) {
@@ -167,19 +167,6 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
     };
 
     var resize = function() {
-        var $pane = $(self.selector + "content");
-        var api = $pane.data("jsp");
-        if ( !wv.util.browser.small ) {
-            if ( api ) {
-                api.reinitialise();
-            } else {
-                //$pane.jScrollPane({verticalGutter:0, contentWidth:238, autoReinitialise:false});
-            }
-        } else {
-            if ( api ) {
-                api.destroy();
-            }
-        }
         sizeDownloadTab();
     };
     var productsIsOverflow = false;

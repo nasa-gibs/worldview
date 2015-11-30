@@ -286,7 +286,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
         var childrenHeight = $('ul#overlays').outerHeight(true) +
             $('ul#baselayers').outerHeight(true);
-        
+
         if((maxHeight <= childrenHeight)) {
             $("#products").css('height', maxHeight)
                 .css('padding-right', '10px');
