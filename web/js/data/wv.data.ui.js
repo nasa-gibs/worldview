@@ -182,6 +182,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
         }
         sizeDownloadTab();
     };
+    var productsIsOverflow = false;
     var sizeDownloadTab = function(){
         var winSize = $(window).outerHeight(true);
         var headSize = $("ul#productsHolder-tabs").outerHeight(true);//
@@ -195,13 +196,11 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
         var maxHeight = winSize - headSize - footSize -
             offset.top - timeSize - secSize - 10 - 5;
         $(self.selector).css("max-height", maxHeight);
-            /*
-        var childrenHeight = $('ul#overlays').outerHeight(true) +
-            $('ul#baselayers').outerHeight(true);
-        //console.log(maxHeight, childrenHeight);
+
+        var childrenHeight = $('#wv-datacontent').outerHeight(true);
         
         if((maxHeight <= childrenHeight)) {
-            $("#products").css('height', maxHeight)
+            $("#wv-data").css('height', maxHeight)
                 .css('padding-right', '10px');
             if(productsIsOverflow){
                 $(self.selector).perfectScrollbar('update');
@@ -212,14 +211,14 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
             }
         }
         else{
-            $("#products").css('height', '')
+            $("#wv-data").css('height', '')
                 .css('padding-right', '');
             if(productsIsOverflow){
                 $(self.selector).perfectScrollbar('destroy');
                 productsIsOverflow = false;
             }
         }
-            */
+
     };
     self.onViewChange = function() {
         var indicator;

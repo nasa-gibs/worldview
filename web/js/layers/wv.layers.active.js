@@ -267,7 +267,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         var footSize = $("section#productsHolder footer").outerHeight(true);
         var secSize = $("#productsHolder").innerHeight() - $("#productsHolder").height();
         var offset = $("#productsHolder").offset();
-        var timeSize = $("#timeline").outerHeight(true); // + $("#timeline").offset()['top'];
+        var timeSize = $("#timeline").outerHeight(true);
         var maxHeight;
 
         //FIXME: -10 here is the timeline's bottom position from page, fix
