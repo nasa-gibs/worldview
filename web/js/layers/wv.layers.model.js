@@ -51,12 +51,12 @@ wv.layers.model = wv.layers.model || function(models, config) {
             return overlays;
         }
         if ( spec.group === "all" ) {
-            return { baselayers: baselayers, overlays: overlays };
+            return { overlays: overlays, baselayers: baselayers };
         }
         if ( spec.group ) {
             throw new Error("Invalid layer group: " + spec.group);
         }
-        return baselayers.concat(overlays);
+        return overlays.concat(baselayers);
     };
 
     self.getTitles = function(layerId, proj) {
