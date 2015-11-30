@@ -278,8 +278,10 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                 offset.top - secSize - 10 - 5;
         }
         else {
+            //FIXME: Hack, the timeline sometimes renders twice as large of a height and
+            //creates a miscalculation here for timeSize
             maxHeight = winSize - headSize - footSize -
-                offset.top - timeSize - secSize - 10 - 5;
+                offset.top - /*timeSize*/ 67 - secSize - 10 - 5;
         }
 
         $("section#productsHolder #products").css("max-height", maxHeight);
