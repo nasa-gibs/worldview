@@ -94,8 +94,8 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                 renderLegendCanvas(layer);
             }
         });
-        sizeProducts();
-        setTimeout(resize, 1);
+
+        setTimeout(resize, 1000);
 
     };
 
@@ -272,7 +272,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
         //FIXME: -10 here is the timeline's bottom position from page, fix
         // after timeline markup is corrected to be loaded first
-        // 26 is the combined height of the OVERLAYS and BASE LAYERS titles.
+
         if(wv.util.browser.small){
             maxHeight = winSize - headSize - footSize -
                 offset.top - secSize - 10 - 5;
@@ -281,11 +281,12 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             maxHeight = winSize - headSize - footSize -
                 offset.top - timeSize - secSize - 10 - 5;
         }
-        
+
         $("section#productsHolder #products").css("max-height", maxHeight);
 
+        // 26 is the combined height of the OVERLAYS and BASE LAYERS titles.
         var childrenHeight = $('ul#overlays').outerHeight(true) +
-            $('ul#baselayers').outerHeight(true);
+            $('ul#baselayers').outerHeight(true) + 26;
 
         if((maxHeight <= childrenHeight)) {
             $("#products").css('height', maxHeight)
@@ -311,20 +312,6 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     var resize = function() {
         // If on a mobile device, use the native scroll bars
         if ( !wv.util.browser.small ) {
-            if ( jsp ) {
-                var api = jsp.data('jsp');
-                if ( api ) {
-                    api.destroy();
-                }
-            }
-            if (wv.util.browser.ie){
-                this.jsp = $("." + self.id + "category")
-                    .jScrollPane({autoReinitialise: false, verticalGutter:0, mouseWheelSpeed: 60});
-            }
-            else {
-                this.jsp = $("." + self.id + "category")
-                    .jScrollPane({autoReinitialise: false, verticalGutter:0});
-            }
             $(".wv-layers-options").show();
         } else {
             $(".wv-layers-options").hide();
@@ -351,10 +338,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
     var onLayerAdded = function(layer) {
         var $container = $("#" + layer.group);
-        var api = $container.data("jsp");
-        if ( api ) {
-            $container = api.getContentPane();
-        }
+        
         renderLayer($container, groups[layer.group], layer, "top");
         if ( layer.palette ) {
             renderLegendCanvas(layer);
