@@ -363,7 +363,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 .text( current.title );
 
             var $layerSubtitle = $('<h5></h5>')
-                .text( current.subtitle );
+                .append( current.subtitle );
 
             var $checkbox = $("<input></input>")
                 .attr("id", encodeURIComponent(current.id))
