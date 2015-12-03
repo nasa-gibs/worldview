@@ -398,6 +398,13 @@
 #selected-category .ui-tabs-panel .source-metadata{
     padding:0 20px;
 }
+#selected-category .ui-tabs-panel .source-metadata h1{
+    color: #fff;
+    font-weight:bold;
+    font-size: 14px;
+    line-height: 14px;
+    margin: 10px 0;
+}
 #selected-category .ui-tabs-panel p {
     font-style: italics;
     margin-bottom: 15px;
