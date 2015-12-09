@@ -614,6 +614,15 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         $element.iCheck("uncheck");
     };
 
+    var unfocusInput = function(){
+        if(!wv.util.browser.small){
+            $('#layers-search-input').focus();
+        }
+        else {
+            $('#layers-search-input').blur();
+            $('#layer-modal-main').focus();
+        }
+    };
     var render = function(){
 
         setModalSize();
@@ -634,12 +643,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             .click( function( e ) {
                 var that = this;
                 //TODO: Click for search icon
-                if(!wv.util.browser.small){
-                    $('#layers-search-input').focus();
-                }
-                else {
-                    $('#layers-search-input').blur();
-                }
             } )
             .append( "<i></i>" );
 
@@ -673,6 +676,9 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     $( self.selector ).dialog( "close" );
                 } );
 
+                //fade in time for show is 400 above, so after that
+                setTimeout(unfocusInput, 410);
+
             },
             close: function( event, ui ) {
                 $( ".ui-widget-overlay" ).unbind( "click" );
@@ -698,7 +704,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         $searchInput.keyup( filter );
 
         drawDefaultPage();
-        
     };
 
     var searchTerms = function() {
