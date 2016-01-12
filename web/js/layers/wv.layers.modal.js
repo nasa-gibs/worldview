@@ -201,14 +201,41 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 var $sourceMeta = $( '<div></div>' )
                     .addClass('source-metadata');
 
-                if(source.description !== 'no description' ){
+                var $showMore = $('<div></div>')
+                    .addClass('metadata-more');
+
+                var $moreElps = $('<span></span>')
+                    .addClass('ellipsis')
+                    .text('...');
+
+                $showMore.append( $moreElps );
+
+                $showMore.toggle( function(e){
+                    $sourceMeta.removeClass('overflow');
+                    $moreElps.text('^').addClass('up');
+                    redoScrollbar();
+                }, function(e){
+                    $sourceMeta.addClass('overflow');
+                    $moreElps.text('...').removeClass('up');
+                    redoScrollbar();
+                });
+
+                //Simple test to see if theres a link to some metadata
+                if( (source.description !== 'no description') ||
+                    (source.description === '') ) {
                     $.get('config/metadata/' + source.description + '.html')
                         .success(function(data) {
                             $sourceMeta.html(data);
+                            //More than a thousand chars add show more widget
+                            if ( $sourceMeta.text().length > 1000 ) {
+                                $sourceMeta.addClass('overflow');
+                            }
                         });
 
-                    $sourceContent.append( $sourceMeta );
+                    $sourceContent.append( $sourceMeta )
+                        .append($showMore);
                 }
+
                 var $sourceSettings = $( '<ul></ul>' )
                     .addClass('source-settings');
 
@@ -308,11 +335,8 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             activate: function( event, ui ) {
                 redoScrollbar();
             }
-            
         });
-        
         if( selectedMeasurement ) {
-            //config.categories
             $categoryList.accordion( "option", "active", selectedIndex);
         }
 

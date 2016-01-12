@@ -272,7 +272,7 @@
 }
 
 #selected-category{
-    color: #fff;
+    color: #ddd;
 }
 #layers-all .layers-all-layer {
     padding: .5em .5em .5em .7em;
@@ -326,7 +326,7 @@
 }
 #selected-category .ui-accordion-header h3,
 #layers-all .layers-all-layer h3 {
-    color:#fff;
+    color:#ddd;
     font-size:20px;
     line-height:100%;
     margin-right:50px;
@@ -391,19 +391,24 @@
 }
 
 #selected-category .ui-tabs-panel{
-    padding: 0;
     margin-left:160px;
-    color:#fff;
-}
-#selected-category .ui-tabs-panel .source-metadata{
+    color:#ddd;
     padding:0 20px;
 }
-#selected-category .ui-tabs-panel .source-metadata h1{
-    color: #fff;
+.source-metadata{
+
+}
+.source-metadata h1{
+    color: #ddd;
     font-weight:bold;
     font-size: 14px;
     line-height: 14px;
     margin: 10px 0;
+}
+.source-metadata h2{
+    color: #ddd;
+    font-weight: bold;
+    margin-bottom: 5px;
 }
 #selected-category .ui-tabs-panel p {
     font-style: italics;
@@ -414,7 +419,39 @@
     font-size: 11px;
     font-family: open_sans_light;
     font-weight: 300;
-    color: #fff;
+    color: #bbb;
+}
+#selected-category .ui-tabs-panel .source-metadata{
+    overflow:hidden;
+}
+#selected-category .ui-tabs-panel .source-metadata.overflow{
+    height:200px;
+}
+#selected-category .ui-tabs-panel .metadata-more{
+    display:block;
+    height:20px;
+    line-height:20px;
+    border-top: 1px solid #D54E21;
+}
+#selected-category .ui-tabs-panel .metadata-more:hover{
+    background:rgba(255,255,255,0.3);
+    cursor: pointer;
+}
+#selected-category .ui-tabs-panel .metadata-more .ellipsis {
+    display: block;
+    height: 12px;
+    width: 40px;
+    background: #D54E21 none repeat scroll 0% 0%;
+    color:#fff;
+    line-height: 0;
+    margin:0 auto;
+    font-size: 1.5em;
+    text-align: center;
+    font-weight: bold;
+}
+#selected-category .ui-tabs-panel .metadata-more .ellipsis.up {
+    font-size:1em;
+    line-height:1em;
 }
 #selected-category .ui-tabs-panel .ui-buttonset{
     
@@ -435,7 +472,7 @@
 }
 
 #selected-category .ui-tabs-panel h3.source-orbits-title{
-    color:#fff;
+    color:#ddd;
     font-weight:bold;
     padding:10px 20px;
 }
