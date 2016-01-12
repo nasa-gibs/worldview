@@ -48,7 +48,7 @@ other environments.
 
 Install the following:
 
-* [VirutalBox](https://www.virtualbox.org)
+* [VirtualBox](https://www.virtualbox.org)
 * [Vagrant](https://www.vagrantup.com)
 
 Clone this repository:
