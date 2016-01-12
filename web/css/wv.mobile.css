@@ -89,7 +89,7 @@
         clear:both;
         margin-left:0;
         border-top: 2px solid #d54e21;
-        padding-top: 10px;
+        padding-top: 10px 0 0 0;
     }
     #selected-category .ui-tabs .ui-tabs-nav{
         margin-bottom:15px;

@@ -226,14 +226,13 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     $.get('config/metadata/' + source.description + '.html')
                         .success(function(data) {
                             $sourceMeta.html(data);
+                            $sourceContent.prepend( $sourceMeta );
                             //More than a thousand chars add show more widget
                             if ( $sourceMeta.text().length > 1000 ) {
-                                $sourceMeta.addClass('overflow');
+                                $sourceMeta.addClass('overflow')
+                                    .after($showMore);
                             }
                         });
-
-                    $sourceContent.append( $sourceMeta )
-                        .append($showMore);
                 }
 
                 var $sourceSettings = $( '<ul></ul>' )

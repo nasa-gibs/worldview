@@ -333,7 +333,7 @@
 }
 #selected-category .ui-accordion-header h5,
 #layers-all .layers-all-layer h5{
-    color:#b3b3b3;
+    color:#888;
     font-size:12px;
     line-height:100%;
     font-weight:300;
@@ -403,7 +403,10 @@
     font-weight:bold;
     font-size: 14px;
     line-height: 14px;
-    margin: 10px 0;
+    margin: 15px 0px 5px;
+}
+.source-metadata h1:first-child{
+    margin-top:0;
 }
 .source-metadata h2{
     color: #ddd;
@@ -464,7 +467,7 @@
 }
 #selected-category .ui-tabs-panel li.measurement-settings-item{
     padding:5px 0;
-    margin:0 0 2px 10px;
+    margin:0 0 2px 0px;
 }
 #selected-category .ui-tabs-panel li.measurement-settings-item:hover{
     background:rgba(255,255,255,0.3);
@@ -474,7 +477,7 @@
 #selected-category .ui-tabs-panel h3.source-orbits-title{
     color:#ddd;
     font-weight:bold;
-    padding:10px 20px;
+    padding:10px 0px;
 }
 
 #layers-all .iCheck-checkbox {
