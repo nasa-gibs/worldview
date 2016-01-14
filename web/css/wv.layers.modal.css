@@ -427,8 +427,15 @@
 #selected-category .ui-tabs-panel .source-metadata{
     overflow:hidden;
 }
+#selected-category .ui-tabs-panel .source-metadata p,
+#selected-category .ui-tabs-panel .source-metadata a{
+    font-family: open_sans_light;
+    font-size: 13px;
+    line-height:14px;
+
+}
 #selected-category .ui-tabs-panel .source-metadata.overflow{
-    height:200px;
+    height:100px;
 }
 #selected-category .ui-tabs-panel .metadata-more{
     display:block;

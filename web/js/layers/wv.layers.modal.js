@@ -74,6 +74,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         var availableWidth = $( window ).width() - ( $( window ).width() * 0.15 );
         sizeMultiplier = Math.floor( availableWidth / gridItemWidth );
         if(sizeMultiplier < 1) sizeMultiplier = 1;
+        if(sizeMultiplier > 3) sizeMultiplier = 3;
         modalHeight = $( window ).height() - 100;
     };
 
@@ -227,6 +228,9 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                         .success(function(data) {
                             $sourceMeta.html(data);
                             $sourceContent.prepend( $sourceMeta );
+
+                            $sourceMeta.find('a')
+                                .attr('target','_blank');
                             //More than a thousand chars add show more widget
                             if ( $sourceMeta.text().length > 1000 ) {
                                 $sourceMeta.addClass('overflow')
