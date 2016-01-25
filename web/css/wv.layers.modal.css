@@ -396,7 +396,9 @@
     padding:0 20px;
 }
 .source-metadata{
-
+    padding-top:7px;
+    border-top: 2px solid #d54e21;
+    margin-top:7px;
 }
 .source-metadata h1{
     color: #ddd;

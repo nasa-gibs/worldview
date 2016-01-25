@@ -227,7 +227,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     $.get('config/metadata/' + source.description + '.html')
                         .success(function(data) {
                             $sourceMeta.html(data);
-                            $sourceContent.prepend( $sourceMeta );
+                            $sourceContent.append( $sourceMeta );
 
                             $sourceMeta.find('a')
                                 .attr('target','_blank');
