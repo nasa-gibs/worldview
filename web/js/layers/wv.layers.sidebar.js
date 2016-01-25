@@ -69,10 +69,8 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
         
         if ( tabName === "active" ) {
             $(self.selector).tabs("option", "active", 0);
-        } else if ( tabName === "add" ) {
-            $(self.selector).tabs("option", "active", 1);
         } else if ( tabName === "download" ) {
-            $(self.selector).tabs("option", "active", 2);
+            $(self.selector).tabs("option", "active", 1);
         } else {
             throw new Error("Invalid tab: " + tabName);
         }

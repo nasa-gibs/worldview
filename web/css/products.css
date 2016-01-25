@@ -115,9 +115,6 @@ ul#productsHoldertabs li.ui-state-active .tab:hover i.icon-add {background-posit
 ul#productsHoldertabs li.ui-state-active i.productsIcon {
     margin-right: 10px;
 }
-.content {
-    height:100%;
-}
 
 @media screen and (max-device-height: 720px) and (orientation: landscape){
 }

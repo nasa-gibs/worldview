@@ -64,7 +64,6 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
             .addClass(self.id + "list")
             .addClass("bank");
 
-        sizeDownloadTab();
         var $actionButton = $("<button></button>")
             .attr("id", "wv-data-download-button")
             .addClass("action")
@@ -84,14 +83,14 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
         $("#wv-data-download-button").button();
 
         self.refresh();
+
+        //sizeDownloadTab();
+
     };
 
     self.refresh = function() {
         var $content = $(self.selector + "content");
-        var api = $content.data("jsp");
-        if ( api ) {
-            api.destroy();
-        }
+
         $content = $(self.selector + "content").empty();
         var data = model.groupByProducts();
         $.each(data, function(key, value) {
@@ -101,7 +100,8 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
         $('.dl-group[value="__NO_PRODUCT"] h3 span').click(function(e){
             showUnavailableReason();
         });
-        resize();
+
+        sizeDownloadTab();
     };
 
     var refreshProduct = function($content, key, value) {
@@ -167,21 +167,9 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
     };
 
     var resize = function() {
-        var $pane = $(self.selector + "content");
-        var api = $pane.data("jsp");
-        if ( !wv.util.browser.small ) {
-            if ( api ) {
-                api.reinitialise();
-            } else {
-                //$pane.jScrollPane({verticalGutter:0, contentWidth:238, autoReinitialise:false});
-            }
-        } else {
-            if ( api ) {
-                api.destroy();
-            }
-        }
         sizeDownloadTab();
     };
+    var productsIsOverflow = false;
     var sizeDownloadTab = function(){
         var winSize = $(window).outerHeight(true);
         var headSize = $("ul#productsHolder-tabs").outerHeight(true);//
@@ -195,13 +183,11 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
         var maxHeight = winSize - headSize - footSize -
             offset.top - timeSize - secSize - 10 - 5;
         $(self.selector).css("max-height", maxHeight);
-            /*
-        var childrenHeight = $('ul#overlays').outerHeight(true) +
-            $('ul#baselayers').outerHeight(true);
-        //console.log(maxHeight, childrenHeight);
+
+        var childrenHeight = $('#wv-datacontent').outerHeight(true);
         
         if((maxHeight <= childrenHeight)) {
-            $("#products").css('height', maxHeight)
+            $("#wv-data").css('height', maxHeight)
                 .css('padding-right', '10px');
             if(productsIsOverflow){
                 $(self.selector).perfectScrollbar('update');
@@ -212,14 +198,14 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
             }
         }
         else{
-            $("#products").css('height', '')
+            $("#wv-data").css('height', '')
                 .css('padding-right', '');
             if(productsIsOverflow){
                 $(self.selector).perfectScrollbar('destroy');
                 productsIsOverflow = false;
             }
         }
-            */
+
     };
     self.onViewChange = function() {
         var indicator;

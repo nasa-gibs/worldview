@@ -69,10 +69,10 @@
     background-image:none;
 }
 /* perfect scrollbars */
-#products .ps-scrollbar-y-rail{
+#productsHolder .ps-scrollbar-y-rail{
     background-color: transparent;
     margin-top:5px;
 }
-#products .ps-scrollbar-y {
+#productsHolder .ps-scrollbar-y {
     background:#ccc;
 }

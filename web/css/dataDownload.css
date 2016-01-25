@@ -1,6 +1,6 @@
 
 #wv-data{
-    overflow:scroll;
+    position: relative;
 }
 #wv-data-selection ul {
     display: list;
