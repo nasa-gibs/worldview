@@ -63,8 +63,8 @@ wv.ui.info = wv.ui.info || (function(ui, config) {
         if ( config.features.whatsNew ) {
             $menuItems.append($new);
         }
-        $menuItems.append($about);
         $menuItems.append($source);
+        $menuItems.append($about);
         $menu.append($menuItems);
 
         $menuItems.menu();
