@@ -106,6 +106,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
         var $header = $("<h3></h3>")
             .addClass("head")
+            .attr("id", group.id + '-header')
             .html(group.description);
 
         $parent.append($header);
