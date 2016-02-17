@@ -222,8 +222,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 });
 
                 //Simple test to see if theres a link to some metadata
-                if( (source.description !== 'no description') ||
-                    (source.description === '') ) {
+                if( source.description ) {
                     $.get('config/metadata/' + source.description + '.html')
                         .success(function(data) {
                             $sourceMeta.html(data);
@@ -247,6 +246,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     .attr('id', source.id + '-orbit-tracks');
 
                 _.each( source.settings, function( setting ) {
+
                     var layer = config.layers[setting];
 
                     var $wrapper = $('<li></li>')
