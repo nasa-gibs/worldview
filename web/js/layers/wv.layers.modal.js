@@ -46,10 +46,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             visible[layer.id] = true;
         });
 
-        model.events
-            .on("add", onLayerAdded)
-            .on("remove", onLayerRemoved);
-
         models.proj.events.on("select", drawDefaultPage );
 
         //Create tiles
@@ -296,8 +292,9 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     $wrapper.click( function( e ){
                         e.stopPropagation();
                         var $checkbox = $( this )
-                            .find( 'input#setting-' + layer.id )
-                            .iCheck('toggle');
+                            .find( 'input#setting-' + layer.id );
+
+                        $checkbox.iCheck('toggle');
                     });
 
                 });
@@ -635,18 +632,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     var removeLayer = function(event) {
         event.stopPropagation();
         model.remove( decodeURIComponent( $( this ).val() ) );
-    };
-
-    var onLayerAdded = function(layer) {
-        var $element = $( self.selector + " [data-layer='" +
-                          wv.util.jqueryEscape(layer.id) + "']");
-        $element.iCheck("check");
-    };
-
-    var onLayerRemoved = function(layer) {
-        var $element = $( self.selector + " [data-layer='" +
-                          wv.util.jqueryEscape(layer.id) + "']");
-        $element.iCheck("uncheck");
     };
 
     var unfocusInput = function(){
