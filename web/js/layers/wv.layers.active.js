@@ -145,12 +145,12 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         $visibleButton.append($visibleImage);
         $layer.append($visibleButton);
 
-<<<<<<< HEAD
         if ( (models.date.selected < new Date(layer.startDate)) ||
              (models.date.selected > new Date(layer.endDate)) ){
             $layer.addClass('disabled');
             $layer.addClass('layer-hidden');
-=======
+        }
+
         $layer.append($("<div></div>")
                       .addClass('zot')
                       .append('<b>!</b>'));
@@ -162,7 +162,6 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                 .parent()
                 .addClass("layer-hidden");
         } else {
->>>>>>> master
             $visibleButton
                 .attr("title", "No data on selected date for this layer");
         }
