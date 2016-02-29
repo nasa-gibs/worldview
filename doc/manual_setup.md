@@ -55,3 +55,16 @@ grunt
 
 The ``dist`` directory now contains ``site`` tar files that can be
 can be uploaded and unpacked to a web server.
+
+##Setting a Worldview development environment in Windows
+Worldview may be setup on Windows with XAMPP. First install XAMPP, the default location is at C:\xampp. Clone the Worldview repo at C:\xampp\htdocs and then the configuration repo in Worldview.
+
+Edit the httpd.conf file at &lt;xampp root&gt;\apache\conf to uncomment:
+
+```bash
+"LoadModule expires_module modules/mod_expires.so" 
+"LoadModule filter_module modules/mod_filter.so"
+"LoadModule deflate_module modules/mod_deflate.so"
+```
+
+Turn on xampp, and Worldview should be ready at "localhost/worldview/web"! If you encounter any code 500 errors, check the error log at &lt;xampp root&gt;\apache\logs

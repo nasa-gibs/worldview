@@ -69,9 +69,12 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
         var htmlElements =
             "<div class='wv-image-header'>" +
             "<select id='wv-image-resolution'>" +
-                "<option value='1' >250m</option>" +
-                "<option value='2' >500m</option>" +
-                "<option value='4' >1km</option>" +
+                "<option value='0.125'>30m</option>" +
+                "<option value='0.25'>60m</option>" +
+                "<option value='0.5'>125m</option>" +
+                "<option value='1' selected>250m</option>" +
+                "<option value='2'>500m</option>" +
+                "<option value='4'>1km</option>" +
                 "<option value='20'>5km</option>" +
                 "<option value='40'>10km</option>" +
             "</select>Resolution (per pixel)</div>" +
@@ -123,6 +126,9 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
 
         if ( models.proj.selected.id !== "geographic" ) {
              $("#wv-image-format [value='image/kmz']").remove();
+             $("#wv-image-resolution [value='0.5']").remove();
+             $("#wv-image-resolution [value='0.25']").remove();
+             $("#wv-image-resolution [value='0.125']").remove();
         }
         $("#wv-image-format").change(function() {
             format = $("#wv-image-format option:checked").val();
@@ -150,6 +156,8 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
             of: ("#wv-image-button"),
         });
         $dialog.dialog("open");
+
+        $(".wv-image-coords").show();
     };
 
     var setPosition = function(){
@@ -188,10 +196,36 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
             var px = pixels;
             var x1 = px.x; var y1= px.y; var x2 = px.x2; var y2=px.y2;
 
-            //var lonlat1 = map.getLonLatFromViewPortPx(new OpenLayers.Pixel(Math.floor(x1), Math.floor(y2)));
-            //var lonlat2 = map.getLonLatFromViewPortPx(new OpenLayers.Pixel(Math.floor(x2), Math.floor(y1)));
+            var crs = models.proj.selected.crs;
             var lonlat1 = map.getCoordinateFromPixel([Math.floor(x1), Math.floor(y2)]);
             var lonlat2 = map.getCoordinateFromPixel([Math.floor(x2), Math.floor(y1)]);
+
+            var geolonlat1 = ol.proj.transform(lonlat1, crs, "EPSG:4326");
+            var geolonlat2 = ol.proj.transform(lonlat2, crs, "EPSG:4326");
+
+            var minLon = geolonlat1[0];
+            var maxLon = geolonlat2[0];
+            var minLat = geolonlat2[1];
+            var maxLat = geolonlat1[1];
+
+            var ll = wv.util.formatCoordinate([minLon, maxLat]);
+            var ur = wv.util.formatCoordinate([maxLon, minLat]);
+
+            if ( x2 - x1 < 150 ) {
+                ll = "";
+                ur = "";
+            }
+
+            $("#wv-image-top").css({
+                left: x1 - 10,
+                top: y1 - 20,
+                width: x2 - x1
+            }).html(ur);
+            $("#wv-image-bottom").css({
+                left: x1,
+                top: y2,
+                width: x2 - x1
+            }).html(ll);
 
             var dlURL = url;
             var conversionFactor = 256;

@@ -56,20 +56,22 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                 resize();
             }
         });
+        
+        ui.map.selected.getView().on("change:resolution", onZoomChange);
     };
 
     var render = function() {
         legends = {};
         var $container = $(self.selector);
+        var $addBtn = $("#layers-add");
         $container.empty();
+        
+        $addBtn.button();
 
-        var tabs_height = $(".ui-tabs-nav").outerHeight(true);
+
         $container.addClass('bank');
-        $container.height(
-            $(self.selector).parent().outerHeight() - tabs_height
-        );
 
-        _.each(groups, function(group) {
+        _.eachRight(groups, function(group) {
             renderGroup($container, group);
         });
 
@@ -79,15 +81,15 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         $(self.selector).delegate(".close" ,'click', removeLayer);
         $(self.selector).delegate(".hideReg" ,'click', toggleVisibility);
 
-        $("." + self.id + "category").sortable({
+        $("#" + self.id + " ul.category").sortable({
             items: "li:not(.head)",
             axis: "y",
             containment: "parent",
-            tolerance: "pointer"
+            tolerance: "pointer",
+            placeholder: "state-saver"
         });
-
-        $("." + self.id + "category li").disableSelection();
-        $("." + self.id + "category").bind('sortstop', moveLayer);
+        $("#" + self.id + " ul.category li").disableSelection();
+        $("#" + self.id + " ul.category").bind('sortstop', moveLayer);
 
         _.each(model.get({ group: "overlays" }), function(layer) {
             if ( layer.palette ) {
@@ -95,31 +97,28 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             }
         });
 
-
-        setTimeout(resize, 1);
+        setTimeout(resize, 1000);
 
     };
 
     var renderGroup = function($parent, group) {
-        var $container = $("<div></div>")
-            .attr("id", self.id + group.camel)
-            .addClass("categoryContainer");
+        var $container = $("<ul></ul>")
+            .attr("id", group.id)
+            .addClass("category");
 
         var $header = $("<h3></h3>")
             .addClass("head")
+            .attr("id", group.id + '-header')
             .html(group.description);
 
-        var $layers = $("<ul></ul>")
-            .attr("id", group.id)
-            .addClass(self.id + "category")
-            .addClass("category");
+        $parent.append($header);
 
         _.each(model.get({ group: group.id }), function(layer) {
-            renderLayer($layers, group, layer);
+            renderLayer($container, group, layer);
         });
 
-        $container.append($header);
-        $container.append($layers);
+        
+        //$contain.append($layers);
 
         $parent.append($container);
 
@@ -133,35 +132,37 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             .addClass("item")
             .attr("data-layer", layer.id);
 
-        var $removeButton = $("<a></a>")
-            .attr("id", "close" + group.id + encodeURIComponent(layer.id))
-            .addClass("button close bank-item-img")
-            .attr("data-layer", layer.id)
-            .attr("title", "Remove Layer");
-        var $removeImage = $("<i></i>");
-
-        $removeButton.append($removeImage);
-        $layer.append($removeButton);
-
         var $visibleButton = $("<a></a>")
             .addClass("hdanchor hide hideReg bank-item-img")
             .attr("id", "hide" + encodeURIComponent(layer.id))
             .attr("data-layer", layer.id);
-
 
         var $visibleImage = $("<i></i>")
             .on('click', function(){
                 $visibleButton.trigger('click');
             });
 
-
         $visibleButton.append($visibleImage);
         $layer.append($visibleButton);
 
+<<<<<<< HEAD
         if ( (models.date.selected < new Date(layer.startDate)) ||
              (models.date.selected > new Date(layer.endDate)) ){
             $layer.addClass('disabled');
             $layer.addClass('layer-hidden');
+=======
+        $layer.append($("<div></div>")
+                      .addClass('zot')
+                      .append('<b>!</b>'));
+        
+        if ( !layer.visible ) {
+            $visibleButton
+                .attr("title", "Show Layer")
+                .attr("data-action", "show")
+                .parent()
+                .addClass("layer-hidden");
+        } else {
+>>>>>>> master
             $visibleButton
                 .attr("title", "No data on selected date for this layer");
         }
@@ -182,6 +183,8 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             }
         }
 
+        checkZots($layer, layer);
+
         if ( config.parameters.metadata && layer.metadata ) {
             var $metadataButton = $("<i></i>")
                 .addClass("fa")
@@ -195,6 +198,16 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         }
 
         var names = models.layers.getTitles(layer.id);
+
+         var $removeButton = $("<a></a>")
+            .attr("id", "close" + group.id + encodeURIComponent(layer.id))
+            .addClass("button close bank-item-img")
+            .attr("data-layer", layer.id)
+            .attr("title", "Remove Layer");
+        var $removeImage = $("<i></i>");
+
+        $removeButton.append($removeImage);
+        
 
         var $editButton = $("<a></a>")
             .attr("data-layer", layer.id)
@@ -210,15 +223,11 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
         $editButton.append($gearIcon);
 
-        $layer.append($editButton);
-
-
         var $mainLayerDiv = $('<div></div>')
             .addClass('layer-main')
             .attr("data-layer", layer.id)
-            .append($('<h4></h4>').html(names.title))
+            .append($('<h4></h4>').html(names.title).attr('title',names.title))
             .append($('<p></p>').html(names.subtitle));
-
 
         $layer.hover(function(){
             d3.select('#timeline-footer svg g.plot rect[data-layer="'+ layer.id +'"]')
@@ -229,6 +238,8 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                 .classed('data-bar-hovered',false);
         });
 
+        $mainLayerDiv.prepend($editButton);
+        $mainLayerDiv.prepend($removeButton);
         $layer.append($mainLayerDiv);
 
         if ( layer.palette ) {
@@ -270,83 +281,70 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             config: config,
             models: models,
             layer: layer,
-            onLoad: adjustCategoryHeights
+            //onLoad: //adjustCategoryHeights
         });
     };
+    var productsIsOverflow = false;
+    var sizeProducts = function(){
+        var winSize = $(window).outerHeight(true);
+        var headSize = $("ul#productsHolder-tabs").outerHeight(true);//
+        var footSize = $("section#productsHolder footer").outerHeight(true);
+        var secSize = $("#productsHolder").innerHeight() - $("#productsHolder").height();
+        var offset = $("#productsHolder").offset();
+        var timeSize = $("#timeline").outerHeight(true);
+        var maxHeight;
 
-    var adjustCategoryHeights = function() {
-        var heights = [];
-        var container_height = $(self.selector).outerHeight(true);
-        var labelHeight = 0;
-        $(self.selector + ' .head').each(function(){
-            labelHeight += $(this).outerHeight(true);
-        });
-        container_height -= labelHeight;
-        $.each(["baselayers", "overlays"], function(i, group) {
-            var actual_height = 0;
-            var count = 0;
-            $('#' + group + ' li').each(function() {
-                actual_height += $(this).outerHeight(true);
-                count++;
-            });
+        //FIXME: -10 here is the timeline's bottom position from page, fix
+        // after timeline markup is corrected to be loaded first
 
-            heights.push({
-                name: group,
-                height: actual_height,
-                count: count
-            });
-        });
-
-        if ( heights[0].height + heights[1].height > container_height ) {
-            if ( heights[0].height > container_height / 2 ) {
-                heights[0].height = container_height / 2;
-            }
-            heights[1].height = container_height - heights[0].height;
+        if(wv.util.browser.small){
+            maxHeight = winSize - headSize - footSize -
+                offset.top - secSize - 10 - 5;
+        }
+        else {
+            //FIXME: Hack, the timeline sometimes renders twice as large of a height and
+            //creates a miscalculation here for timeSize
+            maxHeight = winSize - headSize - footSize -
+                offset.top - /*timeSize*/ 67 - secSize - 10 - 5;
         }
 
-        $("#" + heights[0].name).css("height",heights[0].height+"px");
-        $("#" + heights[1].name).css("height",heights[1].height+"px");
+        $("section#productsHolder #products").css("max-height", maxHeight);
 
-        reinitializeScrollbars();
-    };
+        // 26 is the combined height of the OVERLAYS and BASE LAYERS titles.
+        var childrenHeight = $('ul#overlays').outerHeight(true) +
+            $('ul#baselayers').outerHeight(true) + 26;
 
-    var reinitializeScrollbars = function() {
-        $("." + self.id + "category").each(function() {
-            var api = $(this).data('jsp');
-            if ( api ) {
-                api.reinitialise();
+        if((maxHeight <= childrenHeight)) {
+            $("#products").css('height', maxHeight)
+                .css('padding-right', '10px');
+            if(productsIsOverflow){
+                $(self.selector).perfectScrollbar('update');
             }
-        });
+            else{
+                $(self.selector).perfectScrollbar();
+                productsIsOverflow = true;
+            }
+        }
+        else{
+            $("#products").css('height', '')
+                .css('padding-right', '');
+            if(productsIsOverflow){
+                $(self.selector).perfectScrollbar('destroy');
+                productsIsOverflow = false;
+            }
+        }
     };
 
     var resize = function() {
         // If on a mobile device, use the native scroll bars
         if ( !wv.util.browser.small ) {
-            if ( jsp ) {
-                var api = jsp.data('jsp');
-                if ( api ) {
-                    api.destroy();
-                }
-            }
-            if (wv.util.browser.ie){
-                this.jsp = $("." + self.id + "category")
-                    .jScrollPane({autoReinitialise: false, verticalGutter:0, mouseWheelSpeed: 60});
-            }
-            else {
-                this.jsp = $("." + self.id + "category")
-                    .jScrollPane({autoReinitialise: false, verticalGutter:0});
-            }
             $(".wv-layers-options").show();
         } else {
             $(".wv-layers-options").hide();
         }
 
-        var tabs_height = $(".ui-tabs-nav").outerHeight(true);
-        $(self.selector).height(
-            $(self.selector).parent().outerHeight() - tabs_height
-        );
-
-        adjustCategoryHeights();
+        sizeProducts();
+        
     };
 
     var removeLayer = function(event) {
@@ -361,20 +359,17 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         if ( legends[layer.id] ) {
             delete legends[layer.id];
         }
-        adjustCategoryHeights();
+        resize();
     };
 
     var onLayerAdded = function(layer) {
         var $container = $("#" + layer.group);
-        var api = $container.data("jsp");
-        if ( api ) {
-            $container = api.getContentPane();
-        }
+        
         renderLayer($container, groups[layer.group], layer, "top");
         if ( layer.palette ) {
             renderLegendCanvas(layer);
         }
-        adjustCategoryHeights();
+        resize();
     };
 
     var toggleVisibility = function(event) {
@@ -387,6 +382,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     };
 
     var moveLayer = function(event, ui) {
+
         var $target = ui.item;
         var $next = $target.next();
         if ( $next.length ) {
@@ -401,10 +397,12 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         // Scroll pane can be kind of glitchy, so just show what the
         // current state is.
         // Timeout prevents redraw artifacts
+
         setTimeout(render, 1);
     };
 
     var onLayerVisibility = function(layer, visible) {
+
         var $element = $(".hideReg[data-layer='" + layer.id + "']");
         //if ($element.parent().hasClass('disabled'))
         //    return;
@@ -421,6 +419,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                 .removeClass('layer-visible')
                 .addClass('layer-hidden');
         }
+        onZoomChange();
     };
 
     var onPaletteUpdate = function(layerId) {
@@ -437,6 +436,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
     var onProjectionChanged = function() {
         // Timeout prevents redraw artifacts
+        ui.map.selected.getView().on("change:resolution", onZoomChange);
         setTimeout(render, 1);
     };
 
@@ -480,7 +480,55 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                             .addClass("layer-visible");
                     }
                 }
+            });
+        });
+    };
 
+    var checkZots = function($layer, layer) {
+        var map = ui.map;
+        var zoom = map.selected.getView().getZoom();
+
+        var sources = config.sources;
+        var proj = models.proj.selected.id;
+        
+        var matrixSet = layer.projections[proj].matrixSet;
+        if(matrixSet !== undefined){
+            var source = layer.projections[proj].source;
+            var zoomLimit = sources[source]
+                .matrixSets[matrixSet]
+                .resolutions.length - 1;
+
+            var $zot = $layer.find('div.zot');
+            if(zoom > zoomLimit) {
+                $zot.attr('title', 'Layer is overzoomed by ' +
+                          (zoom - zoomLimit) * 100 + '%' );
+
+                if( !( $layer.hasClass('layer-hidden') ) &&
+                    !( $layer.hasClass('zotted') ) ) {
+                    $layer.addClass('zotted');
+                }
+                else if( ( $layer.hasClass('layer-hidden') ) &&
+                         ( $layer.hasClass('zotted') ) ) {
+                    $layer.removeClass('zotted');
+                }
+            }
+            else {
+                $zot.attr('title', 'Layer is zoomed by ' +
+                          (zoom - zoomLimit) * 100 + '%' );
+                if ( $layer.hasClass('zotted')  ) {
+                    $layer.removeClass('zotted');
+                }
+            }
+        }
+    };
+
+    var onZoomChange = function(layers) {
+        
+        _.each(groups, function(group) {
+            _.each(model.get({ group: group.id }), function(layer) {
+                var $layer = $('#products li.productsitem[data-layer="' +
+                               layer.id + '"]');
+                checkZots( $layer, layer );
             });
         });
     };

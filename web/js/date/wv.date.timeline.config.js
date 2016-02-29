@@ -7,6 +7,10 @@
  * @class wv.date.timeline.config
  */
 
+var wv = wv || {};
+wv.date = wv.date || {};
+wv.date.timeline = wv.date.timeline || {};
+
 wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui) {
     var self = {};
     var tl = ui.timeline;
@@ -42,12 +46,12 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
                                     .setUTCFullYear(tl.data.start().getUTCFullYear()-10)),
                            new Date(tl.data.end()
                                     .setUTCFullYear(tl.data.end().getUTCFullYear()+10))];
-            
+
             altEnd = new Date(tl.data.start().getUTCFullYear() + tickCountMax,
                               tl.data.start().getUTCMonth(),
                               tl.data.start().getUTCDate());
 
-            
+
 
             tl.zoom.drawTicks(tickCount,
                               tickCountMax,
@@ -132,7 +136,7 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
 
                 return new Date(d.getUTCFullYear() + yearOffset,
                                 model.selected.getUTCMonth(),
-                                model.selected.getUTCDate());            
+                                model.selected.getUTCDate());
             };
 
             //Displayed default label
@@ -176,7 +180,7 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
                     });
             };
 
-            
+
 
             //Update placement of zoom buttons
             $('.zoom-btn').removeClass(function (index, css) {
@@ -504,16 +508,16 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
         default:
             console.log('Invalid Zoom level');
         }
-        
+
         //TODO: Maybe group check, initTicks, and removePadding
         tl.ticks.check();
         initTicks();
 
         tl.pick.update();
         tl.pick.checkLocation();
-        
+
     };
-    
+
     //Draw ticks based on zoom level
     var initTicks = function(){
         tl.ticks.boundary.init();
@@ -544,6 +548,7 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
         });
         //Default zoom
         self.zoom(3);
+        tl.setClip(); //fix for firefox svg overflow
     };
 
     init();

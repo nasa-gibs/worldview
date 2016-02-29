@@ -18,7 +18,7 @@ wv.ui = wv.ui || {};
 wv.ui.info = wv.ui.info || (function(ui, config) {
 
     var selector = "#wv-info-button";
-    var $button = $("<input></input>")
+    var $button = $("<input />")
         .attr("type", "checkbox")
         .attr("id", "wv-info-button-check");
     var $label = $("<label></label>")
@@ -52,6 +52,7 @@ wv.ui.info = wv.ui.info || (function(ui, config) {
         var $tour = $("<li><a><i class='ui-icon fa fa-truck fa-fw'></i>Start Tour</a></li>");
         var $new = $("<li><a><i class='ui-icon fa fa-flag fa-fw'></i>What's New</a></li>");
         var $about = $("<li><a><i class='ui-icon fa fa-file fa-fw'></i>About</a></li>");
+        var $source = $("<li><a><i class='ui-icon fa fa-code fa-fw'></i>Source</a></li>");
 
         if ( config.features.feedback ) {
             $menuItems.append($feedback);
@@ -62,6 +63,7 @@ wv.ui.info = wv.ui.info || (function(ui, config) {
         if ( config.features.whatsNew ) {
             $menuItems.append($new);
         }
+        $menuItems.append($source);
         $menuItems.append($about);
         $menu.append($menuItems);
 
@@ -89,6 +91,10 @@ wv.ui.info = wv.ui.info || (function(ui, config) {
             }
         });
 
+        $source.click( function( e ){
+            window.open("https://github.com/nasa-gibs/worldview", "_blank");
+        });
+
         wv.feedback.decorate($feedback.find("a"));
 
         $new.click(function() {
@@ -111,7 +117,7 @@ wv.ui.info = wv.ui.info || (function(ui, config) {
             ui.tour.start();
         });
 
-        $("#wv-toolbar input:not(#wv-info-button-check)")
+        $("#wv-toolbar").find("input:not(#wv-info-button-check)")
             .prop("checked", false)
             .button("refresh");
         $menuItems.show("slide", { direction: "up" });
@@ -122,7 +128,7 @@ wv.ui.info = wv.ui.info || (function(ui, config) {
             }
             $menuItems.hide();
             $("#wv-info-button-check").prop("checked", false);
-            $("#wv-info-button label").removeClass("ui-state-hover");
+            $("#wv-info-button").find("label").removeClass("ui-state-hover");
             $button.button("refresh");
             $("body").off("click", clickOut).off("touchstart", clickOut);
         };

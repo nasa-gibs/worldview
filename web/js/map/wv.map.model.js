@@ -26,6 +26,7 @@ wv.map.model = wv.map.model || function(models, config) {
         self.events.trigger("update", extent);
     };
 
+    //Set map view from parsed URL
     self.load = function(state, errors) {
         if ( state.v ) {
             var proj = models.proj.selected;
@@ -40,6 +41,7 @@ wv.map.model = wv.map.model || function(models, config) {
         }
     };
 
+    //When models.link.toQueryString() is called, save extent and rotation
     self.save = function(state) {
         state.v = _.clone(self.extent);
     };

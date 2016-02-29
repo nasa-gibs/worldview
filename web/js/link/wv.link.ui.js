@@ -48,6 +48,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
         models.link.events.on("update", replaceHistoryState);
     };
 
+    //Calls toQueryString to fetch updated state and returns URL
     var replaceHistoryState = _.throttle(function() {
         if ( wv.util.browser.history ) {
             window.history.replaceState("", "@OFFICIAL_NAME@",
@@ -63,6 +64,9 @@ wv.link.ui = wv.link.ui || function(models, config) {
             item += "<span autofocus></span><div id='wv-link-shorten'>" +
                 "<input type='checkbox' value='' id='wv-link-shorten-check' />" +
                 "<label id='wv-link-shorten-label' for='wv-link-shorten-check'>Shorten this link</label>" +
+                "<span id='wv-link-shorten-notice' title='NOTE: The base URL for creating a shortened link recently changed from 1.usa.gov to go.nasa.gov. " +
+                "The shortened queries that were previously generated can still be accessed by replacing their base URL with the new one, e.g. " +
+                "http://1.usa.gov/1hEGqWu is now http://go.nasa.gov/1hEGqWu'>(?)</span>" +
                 "</div>";
         }
         item += "</div>";

@@ -3,6 +3,3 @@ node_js:
 - '0.10'
 before_install: npm install -g grunt-cli
 install: npm install
-notifications:
-  slack:
-    secure: XPKCo6dUD8svmRJV4kapbtIFujF5NWhqHWAAoRGvpDgfdlHOlB3NLTx6+p0Efc+7ifaN/IOSvjK9ulUYdF704aL26DqTsltEcpWl0ok43i1cQnF66FCzKXaUcE7BtdB6XILJtdi4G/NJBrBJhnVJ2C6C4XxNtblsw/+rZzUHNa4=

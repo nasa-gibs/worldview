@@ -16,11 +16,11 @@ config["wv"] = {
     environment: "browser",
     libs: [
         "web/ext/main/lodash-2.4.1/lodash.js",
-        "web/ext/main/jquery-1.11.0/jquery.js",
+        "web/ext/main/jquery-2.1.4/jquery.js",
         "web/ext/main/jquery.migrate-1.2.1/jquery-migrate.min.js",
         "web/ext/main/jscache-gitba01cdc/cache.js",
         "web/ext/proj/proj4js-2.3.3-1/proj4.js",
-        "web/ext/map/openlayers-3.3.0.wv1/ol.js",
+        "web/ext/map/openlayers-3.4.0.wv1/ol.js",
         "test/fixtures.js"
     ],
     src: [

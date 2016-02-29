@@ -207,7 +207,9 @@ def query_cmr(url, options, xml):
 
   headers = {
      "Client-Id": "Worldview",
+     #Echo-Token": "XXX-XXX",
   }
+
   if xml:
     headers["Content-type"] = "application/xml"
 
@@ -286,7 +288,7 @@ def parse_options():
     help="Print detailed error information")
   parser.add_option("-r", "--request-headers", action="store_true",
     help="Print headers submitted with request")
-  parser.add_option("-p", "--page-size", default=300,
+  parser.add_option("-p", "--page-size", default=1000,
     help="Change the maximum number of results")
   parser.add_option("-n", "--no-query", action="store_true",
     help="Do not execute CMR query")

@@ -54,11 +54,23 @@ wv.date.timeline.zoom = wv.date.timeline.zoom || function(models, config, ui) {
             zoom = 3;
         }
 
+        console.log(this);
+        console.log(zoom);
+        console.log(event);
         tl.config.zoom.call(this, zoom, event);
 
     };
 
     self.drawTicks = function(count, max, aEnd, w, i, s, f, e, p){
+        var mouseOffset, mousePos;
+
+        if(e){
+            var relX = e.clientX - $('#timeline-footer').offset().left;
+            mousePos = tl.x.invert(relX);
+            mouseOffset = (tl.width-tl.margin.left-tl.margin.right)/2 - relX;
+            console.log(relX);
+        }
+
         var d1 = tl.data.start(),
             d2,
             r1 = (tl.width/2)-((count*w)/2),
@@ -72,28 +84,11 @@ wv.date.timeline.zoom = wv.date.timeline.zoom || function(models, config, ui) {
             r2 = (tl.width/2)+((count*w)/2);
         }
         else{
-            tl.axisZoom
-                .xExtent(p);
+
             tl.isCropped = true;
             d2 = aEnd;
             r1 = 0;
             r2 = tl.width;
-        }
-
-        update(d1, d2, r1, r2, i, s, f, e);
-    };
-
-    self.refresh = function(){
-        tl.config.zoom(tl.config.currentZoom);
-    };
-
-    var update = function(d1, d2, r1, r2, i, s, f, e){
-        var mouseOffset, mousePos;
-        if(e){
-            var relX = e.offsetX ||
-                (e.clientX - $('#timeline-footer').offset().left);
-            mousePos = tl.x.invert(relX);
-            mouseOffset = (tl.width-tl.margin.left-tl.margin.right)/2 - relX;
         }
 
         tl.x.domain([d1,d2])
@@ -103,8 +98,17 @@ wv.date.timeline.zoom = wv.date.timeline.zoom || function(models, config, ui) {
             .ticks(i, s)
             .tickFormat(f);
 
-        tl.axisZoom
+        tl.axisZoom = d3.behavior.zoom()
+            .scale(1)
+            .scaleExtent([1,1])
             .x(tl.x);
+
+        if(tl.isCropped){
+            tl.axisZoom.xExtent(p);
+        }
+        else{
+            tl.axisZoom.xExtent([tl.data.start(),tl.data.end()]);
+        }
 
         wv.ui.mouse.wheel(tl.axisZoom, ui).change(self.change);
 
@@ -119,7 +123,11 @@ wv.date.timeline.zoom = wv.date.timeline.zoom || function(models, config, ui) {
         tl.axis.selectAll('.tick').remove();
 
         tl.axis.call(tl.xAxis);
-        
+
+    };
+
+    self.refresh = function(){
+        tl.config.zoom(tl.config.currentZoom);
     };
 
     var init = function(){

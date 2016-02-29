@@ -1,9 +1,9 @@
-# [Worldview](https://earthdata.nasa.gov/worldview)
+# [Worldview](https://worldview.earthdata.nasa.gov)
 
 [![Build Status](https://travis-ci.org/nasa-gibs/worldview.svg?branch=master)](https://travis-ci.org/nasa-gibs/worldview)
 
 Visit Worldview at
-[https://earthdata.nasa.gov/worldview](https://earthdata.nasa.gov/worldview)
+[https://worldview.earthdata.nasa.gov](https://worldview.earthdata.nasa.gov)
 
 ## About
 
@@ -31,7 +31,7 @@ services.
 This code was originally developed at NASA/Goddard Space Flight Center for
 the Earth Science Data and Information System (ESDIS) project.
 
-Copyright &copy; 2013 - 2014 United States Government as represented by the
+Copyright &copy; 2013 - 2015 United States Government as represented by the
 Administrator of the National Aeronautics and Space Administration.
 All Rights Reserved.
 
@@ -43,12 +43,12 @@ These instructions install a development version of Worldview using a virtual
 machine. If you prefer to install locally on your computer, follow the
 directions in [Manual Setup](doc/manual_setup.md)
 
-*Notes:* This has only been tested on Mac OS X. Let us know if this works in
+*Notes:* This has only been tested on Mac OS X and Windows 8.1. Let us know if this works in
 other environments.
 
 Install the following:
 
-* [VirutalBox](https://www.virtualbox.org)
+* [VirtualBox](https://www.virtualbox.org)
 * [Vagrant](https://www.vagrantup.com)
 
 Clone this repository:
@@ -71,7 +71,7 @@ git clone https://github.com/nasa-gibs/worldview-options-template.git options
 Build the virtual machine with:
 
 ```bash
-vagrant up
+vagrant up (or 'vagrant up --provision' if you already built it previously)
 ```
 
 After the command finishes, Worldview should be ready and available at

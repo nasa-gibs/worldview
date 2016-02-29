@@ -25,8 +25,8 @@ wv.ui.indicator = wv.ui.indicator || (function() {
     var init = function() {
         $indicator = $("<div></div>")
             .attr("id", "indicator");
-        $icon = $("<img></img>");
-        $message = $("<span></span");
+        $icon = $("<img />");
+        $message = $("<span></span>");
 
         $indicator.append($icon).append($message).hide();
         $("body").append($indicator);
@@ -88,7 +88,7 @@ wv.ui.indicator = wv.ui.indicator || (function() {
         if ( hides ) {
             self.hide(hides);
         }
-        return self.show("Searching CMR for Data", "images/activity.gif");
+        return self.show("Searching for Data", "images/activity.gif");
     };
 
     self.loading = function(hides) {

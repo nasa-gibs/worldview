@@ -166,6 +166,9 @@ button.skipTour:hover {
     color:rgb(38, 43, 49);
     font: 100 12.8px/16px helvetica,sans-serif;
 }
+.joyride-content-wrapper{
+    padding-bottom:0px;
+}
 
 .joyride-prev-tip {
     font: 100 12.8px/16px helvetica,sans-serif;

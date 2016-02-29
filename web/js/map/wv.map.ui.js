@@ -17,6 +17,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
     var id = "wv-map";
     var selector = "#" + id;
     var cache = new Cache(100); // Save layers from days visited
+    var animationDuration = 250;
 
     var self = {};
     self.proj = {}; // One map for each projection
@@ -27,13 +28,18 @@ wv.map.ui = wv.map.ui || function(models, config) {
         if ( config.parameters.mockMap ) {
             return;
         }
+
+        if ( wv.util.browser.firefox ) {
+            animationDuration = 0;
+        }
+
         // NOTE: iOS sometimes bombs if this is _.each instead. In that case,
         // it is possible that config.projections somehow becomes array-like.
         _.forOwn(config.projections, function(proj) {
             var map = createMap(proj);
             self.proj[proj.id] = map;
         });
-
+        
         models.proj.events.on("select", function() {
             updateProjection();
         });
@@ -96,11 +102,11 @@ wv.map.ui = wv.map.ui || function(models, config) {
             if ( wv.util.browser.small ) {
                 map.removeControl(map.wv.scaleImperial);
                 map.removeControl(map.wv.scaleMetric);
-                map.removeControl(map.wv.mousePosition);
+                $('#' + map.getTarget() + ' .select-wrapper').hide();
             } else {
                 map.addControl(map.wv.scaleImperial);
                 map.addControl(map.wv.scaleMetric);
-                map.addControl(map.wv.mousePosition);
+                $('#' + map.getTarget() + ' .select-wrapper').show();
             }
         }
     };
@@ -145,6 +151,17 @@ wv.map.ui = wv.map.ui || function(models, config) {
             if ( layer.wv ) {
                 var renderable = models.layers.isRenderable(layer.wv.id);
                 layer.setVisible(renderable);
+            }
+        });
+        var defs = models.layers.get();
+        _.each(defs, function(def) {
+            if ( isGraticule(def) ) {
+                var renderable = models.layers.isRenderable(def.id);
+                if ( renderable ) {
+                    addGraticule();
+                } else {
+                    removeGraticule();
+                }
             }
         });
     };
@@ -312,9 +329,8 @@ wv.map.ui = wv.map.ui || function(models, config) {
     var createLayerWMS = function(def, options) {
         var proj = models.proj.selected;
         var source = config.sources[def.source];
-        if ( !source ) {
+        if ( !source )
             throw new Error(def.id + ": Invalid source: " + def.source);
-        }
 
         var transparent = ( def.format === "image/png" );
         var parameters = {
@@ -323,6 +339,9 @@ wv.map.ui = wv.map.ui || function(models, config) {
             TRANSPARENT: transparent,
             VERSION: "1.1.1"
         };
+        if ( def.styles )
+            parameters.STYLES = def.styles;
+
         var extra = "";
         if ( def.period === "daily" ) {
             var date = options.date || models.date.selected;
@@ -349,7 +368,10 @@ wv.map.ui = wv.map.ui || function(models, config) {
     };
 
     var addGraticule = function() {
-        var graticule = new ol.Graticule({
+        if ( self.selected.graticule )
+            return;
+
+        self.selected.graticule = new ol.Graticule({
             map: self.selected,
             strokeStyle: new ol.style.Stroke({
                 color: 'rgba(255, 255, 255, 0.5)',
@@ -357,19 +379,20 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 lineDash: [0.5, 4]
             })
         });
-        self.selected.graticule = graticule;
     };
 
     var removeGraticule = function() {
-        if ( self.selected.graticule ) {
+        if ( self.selected.graticule )
             self.selected.graticule.setMap(null);
-        }
+
+        self.selected.graticule = null;
     };
 
     var triggerExtent = _.throttle(function() {
         self.events.trigger("extent");
     }, 500, { trailing: true });
 
+    //Called as event listener when map is zoomed or panned
     var updateExtent = function() {
         var map = self.selected;
         models.map.update(map.getView().calculateExtent(map.getSize()));
@@ -385,6 +408,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
             .hide();
         $(selector).append($map);
 
+        //Create two specific controls
         var scaleMetric = new ol.control.ScaleLine({
             className: "wv-map-scale-metric",
             units: "metric"
@@ -392,18 +416,6 @@ wv.map.ui = wv.map.ui || function(models, config) {
         var scaleImperial = new ol.control.ScaleLine({
             className: "wv-map-scale-imperial",
             units: "imperial"
-        });
-        var coordinateFormat = function(source) {
-            var target = ol.proj.transform(source, proj.crs, "EPSG:4326");
-            var crs = ( models.proj.change ) ? models.proj.change.crs
-                    : models.proj.selected.crs;
-            var str = wv.util.formatDMS(target[1], "latitude") + ", " +
-                      wv.util.formatDMS(target[0], "longitude") + " " +
-                      crs;
-            return str;
-        };
-        var mousePosition = new ol.control.MousePosition({
-            coordinateFormat: coordinateFormat
         });
 
         var map = new ol.Map({
@@ -421,27 +433,35 @@ wv.map.ui = wv.map.ui || function(models, config) {
             logo: false,
             controls: [
                 scaleMetric,
-                scaleImperial,
-                mousePosition
+                scaleImperial
             ],
             interactions: [
-                new ol.interaction.DoubleClickZoom(),
+                new ol.interaction.DoubleClickZoom({
+                    duration: animationDuration
+                }),
                 new ol.interaction.DragPan({
                     kinetic: new ol.Kinetic(-0.005, 0.05, 100)
                 }),
-                new ol.interaction.PinchZoom(),
-                new ol.interaction.MouseWheelZoom(),
-                new ol.interaction.DragZoom()
+                new ol.interaction.PinchZoom({
+                    duration: animationDuration
+                }),
+                new ol.interaction.MouseWheelZoom({
+                    duration: animationDuration
+                }),
+                new ol.interaction.DragZoom({
+                    duration: animationDuration
+                })
             ]
         });
         map.wv = {
             small: false,
             scaleMetric: scaleMetric,
-            scaleImperial: scaleImperial,
-            mousePosition: mousePosition
+            scaleImperial: scaleImperial
         };
         createZoomButtons(map, proj);
+        createMousePosSel(map, proj);
 
+        //Set event listeners for changes on the map view (when rotated, zoomed, panned)
         map.getView().on("change:center", updateExtent);
         map.getView().on("change:resolution", updateExtent);
 
@@ -498,12 +518,95 @@ wv.map.ui = wv.map.ui || function(models, config) {
         onZoomChange();
     };
 
+    var createMousePosSel = function(map, proj) {
+        var $map = $("#" + map.getTarget());
+        map = map || self.selected;
+        var mapId = 'coords-' + proj.id;
+
+        var $mousePosition = $('<div></div>')
+            .attr("id", mapId)
+            .addClass("wv-coords-map wv-coords-map-btn");
+
+        var coordinateFormat = function(source, format) {
+            if ( !source ) {
+                return "";
+            }
+            var target = ol.proj.transform(source, proj.crs, "EPSG:4326");
+            var crs = ( models.proj.change ) ? models.proj.change.crs
+                : models.proj.selected.crs;
+
+            return wv.util.formatCoordinate(target, format) + " " + crs;
+        };
+
+        $map.append($mousePosition);
+
+        var $latlonDD = $("<span></span>")
+            .attr('id', mapId + '-latlon-dd')
+            .attr('data-format', 'latlon-dd')
+            .addClass('map-coord');
+        var $latlonDMS = $("<span></span>")
+            .attr('id', mapId + '-latlon-dms')
+            .attr('data-format', 'latlon-dms')
+            .addClass('map-coord');
+
+
+        if ( wv.util.getCoordinateFormat() === "latlon-dd" ) {
+            $('div.map-coord').removeClass('latlon-selected');
+            $latlonDD.addClass('latlon-selected');
+        } else {
+            $('div.map-coord').removeClass('latlon-selected');
+            $latlonDMS.addClass('latlon-selected');
+        }
+        var $coordBtn = $("<i></i>")
+            .addClass('coord-switch');
+
+        var $coordWrapper = $("<div></div>")
+            .addClass('coord-btn');
+
+        $coordWrapper.append($coordBtn);
+        $mousePosition
+            .append($latlonDD)
+            .append($latlonDMS)
+            .append($coordWrapper)
+            .click(function() {
+                var $format = $(this).find(".latlon-selected");
+
+                if($format.attr("data-format") === "latlon-dd"){
+                    $('span.map-coord').removeClass('latlon-selected');
+                    $('span.map-coord[data-format="latlon-dms"]').addClass('latlon-selected');
+                    wv.util.setCoordinateFormat('latlon-dms');
+                }
+                else{
+                    $('span.map-coord').removeClass('latlon-selected');
+                    $('span.map-coord[data-format="latlon-dd"]').addClass('latlon-selected');
+                    wv.util.setCoordinateFormat('latlon-dd');
+                }
+
+            });
+
+        $("#" + map.getTarget() + '>div')
+            .mouseover(function(){
+                $('#' + mapId).show();
+            })
+            .mouseout(function(){
+                $('#' + mapId).hide();
+            })
+            .mousemove(function(e){
+                $('#' + mapId).show();
+                var coords = map.getCoordinateFromPixel([e.pageX,e.pageY]);
+                $('#' + mapId + ' span.map-coord').each(function(){
+                    var format = $(this).attr('data-format');
+                    $(this).html(coordinateFormat(coords, format));
+                });
+            });
+    };
+
     var zoomAction = function(map, amount) {
         return function() {
             var zoom = map.getView().getZoom();
             map.beforeRender(ol.animation.zoom({
                 resolution: map.getView().getResolution(),
-                duration: 250
+                duration: animationDuration
             }));
             map.getView().setZoom(zoom + amount);
         };
