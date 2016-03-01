@@ -66,11 +66,12 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
     };
 
     self.selectTab = function(tabName) {
+        
         if ( tabName === "active" ) {
             $(self.selector).tabs("option", "active", 0);
-        } else if ( tabName === "add" ) {
-            $(self.selector).tabs("option", "active", 1);
         } else if ( tabName === "events" ) {
+            $(self.selector).tabs("option", "active", 1);
+        } else if ( tabName === "download" ) {
             $(self.selector).tabs("option", "active", 2);
         } else {
             throw new Error("Invalid tab: " + tabName);
@@ -142,37 +143,27 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
 
     var render = function() {
 
-        var productsWrapperHeight = $(window).height() - $('#timeline').outerHeight() - $('#wv-logo').outerHeight() - 40; // 40 padding
-       $('#productsHolder-wrapper').css('height', productsWrapperHeight);
-
         var $container = $(self.selector);
-        $container.empty().addClass("products");
+        $container.addClass("products");
 
-        var $tabs = $("<ul></ul>")
-            .attr("id", self.id + "tabs");
+        var $tabs = $("ul#productsHolder-tabs");
 
         var $activeTab = $("<li></li>")
             .addClass("layerPicker")
             .addClass("first")
             .attr("data-tab", "active");
+
+        $(self.selector + " footer button").hide();
+        $("#layers-add").show();
+
         var $activeLink = $("<a></a>")
             .attr("href", "#products")
             .addClass("activetab")
             .addClass("tab")
             .html(HTML_TAB_ACTIVE_SELECTED);
+
         $activeTab.append($activeLink);
         $tabs.append($activeTab);
-
-        var $addTab = $("<li></li>")
-            .addClass("layerPicker")
-            .addClass("second")
-            .attr("data-tab", "add");
-        var $addLink = $("<a></a>")
-            .attr("href", "#selectorbox")
-            .addClass("tab")
-            .html(HTML_TAB_ADD_UNSELECTED);
-        $addTab.append($addLink);
-        $tabs.append($addTab);
 
         var $eventsTab = $("<li></li>")
             .addClass("layerPicker")
@@ -185,11 +176,22 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
         $eventsTab.append($eventsLink);
         $tabs.append($eventsTab);
 
-        $container.append($tabs);
-        var $collapseContainer = $("<div></div>")
-            .attr("id", self.id + "toggleButtonHolder")
-            .addClass("toggleButtonHolder");
+        if ( config.features.dataDownload ) {
+            var $downloadTab = $("<li></li>")
+                .addClass("layerPicker")
+                .addClass("third")
+                .attr("data-tab", "download");
+            var $downloadLink = $("<a></a>")
+                .attr("href", "#wv-data")
+                .addClass("tab")
+                .html(HTML_TAB_DOWNLOAD_UNSELECTED);
+            $downloadTab.append($downloadLink);
+            $tabs.append($downloadTab);
+        }
 
+        //$container.append($tabs);
+        var $collapseContainer = $("div#productsHoldertoggleButtonHolder")
+            .addClass("toggleButtonHolder");
 
         var $collapseButton = $("<a></a>")
             .addClass("accordionToggler")
@@ -199,11 +201,11 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
 
         $collapseContainer.append($collapseButton);
 
-        $container.append($collapseContainer);
+        //$container.append($collapseContainer);
 
-        $container.append($("<div id='products'></div>"))
-                  .append($("<div id='selectorbox'></div>"))
-                  .append($("<div id='wv-data'></div>"));
+        //$container//.append($("<div id='products'></div>"))
+                  //.append($("<div id='selectorbox'></div>"))
+                  //.append($("<div id='wv-data'></div>"));
 
         $container.tabs({
             beforeActivate: onBeforeTabChange,
@@ -225,6 +227,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
     };
 
     var onBeforeTabChange = function(e, ui) {
+        var $footerBtns = $(self.selector + " footer button");
         // FIXME: This code is very clunky.
         var tab = ui.newTab.attr("data-tab");
         if ( tab === "active" ) {
@@ -235,7 +238,9 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
             $('.ui-tabs-nav li.first').addClass("ui-state-active");
             $('.ui-tabs-nav li.second').removeClass("ui-state-active");
             $('.ui-tabs-nav li.third').removeClass("ui-state-active");
-        } else if ( tab === "add" ) {
+            $footerBtns.hide();
+            $("#layers-add").show();
+        } else if ( tab === "events" ) {
             $('.ui-tabs-nav')
                   .removeClass('firstselected')
                   .addClass('secondselected')
@@ -243,7 +248,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
             $('.ui-tabs-nav li.first').removeClass("ui-state-active");
             $('.ui-tabs-nav li.second').addClass("ui-state-active");
             $('.ui-tabs-nav li.third').removeClass("ui-state-active");
-        } else if ( tab === "events" ) {
+        } else if ( tab === "download" ) {
             $('.ui-tabs-nav')
                   .removeClass('firstselected')
                   .removeClass('secondselected')
@@ -251,6 +256,8 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
             $('.ui-tabs-nav li.first').removeClass("ui-state-active");
             $('.ui-tabs-nav li.second').removeClass("ui-state-active");
             $('.ui-tabs-nav li.third').addClass("ui-state-active");
+            $footerBtns.hide();
+            $("#wv-data-download-button").show();
         } else {
             throw new Error("Invalid tab index: " + ui.index);
         }

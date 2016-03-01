@@ -72,11 +72,11 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         $legendPanel.append($colorbar);
 
         var $ranges = $("<div></div>")
-                .addClass("wv-palettes-ranges");
+            .addClass("wv-palettes-ranges");
         var $min = $("<span></span>")
-                .addClass("wv-palettes-min");
+            .addClass("wv-palettes-min");
         var $max = $("<span></span>")
-                .addClass("wv-palettes-max");
+            .addClass("wv-palettes-max");
 
         $ranges.append($min).append($max);
         $legendPanel.append($ranges);
@@ -164,8 +164,12 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         var palette = model.get(layer.id);
         var min = palette.scale.labels[0];
         var max = palette.scale.labels[palette.scale.labels.length - 1];
-        $(selector + " .wv-palettes-min").html(min);
-        $(selector + " .wv-palettes-max").html(max);
+        $(selector + " .wv-palettes-min")
+            .html(min)
+            .attr("title", min);
+        $(selector + " .wv-palettes-max")
+            .html(max)
+            .attr("title", max);
         $(selector + " .wv-palettes-center").html("&nbsp;");
     };
 

@@ -1,5 +1,12 @@
 {
     "wv.js": [
+        "web/js/edsc.js",
+        "web/js/edsc/coordinate.js",
+        "web/js/edsc/arc.js",
+        "web/js/edsc/geoutil.js",
+        "web/js/edsc/interpolation.js",
+        "web/js/edsc/spherical_polygon.js",
+
         "web/js/wv.brand.js",
 
         "web/js/util/wv.util.browser.js",
@@ -37,6 +44,7 @@
         "web/js/layers/wv.layers.model.js",
         "web/js/layers/wv.layers.sidebar.js",
         "web/js/layers/wv.layers.active.js",
+        "web/js/layers/wv.layers.modal.js",
         "web/js/layers/wv.layers.add.js",
         "web/js/layers/wv.layers.options.js",
 

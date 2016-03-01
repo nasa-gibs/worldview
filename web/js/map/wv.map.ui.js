@@ -39,7 +39,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
             var map = createMap(proj);
             self.proj[proj.id] = map;
         });
-
+        
         models.proj.events.on("select", function() {
             updateProjection();
         });
@@ -329,9 +329,8 @@ wv.map.ui = wv.map.ui || function(models, config) {
     var createLayerWMS = function(def, options) {
         var proj = models.proj.selected;
         var source = config.sources[def.source];
-        if ( !source ) {
+        if ( !source )
             throw new Error(def.id + ": Invalid source: " + def.source);
-        }
 
         var transparent = ( def.format === "image/png" );
         var parameters = {
@@ -340,9 +339,9 @@ wv.map.ui = wv.map.ui || function(models, config) {
             TRANSPARENT: transparent,
             VERSION: "1.1.1"
         };
-        if ( def.styles ) {
+        if ( def.styles )
             parameters.STYLES = def.styles;
-        }
+
         var extra = "";
         if ( def.period === "daily" ) {
             var date = options.date || models.date.selected;
@@ -369,10 +368,10 @@ wv.map.ui = wv.map.ui || function(models, config) {
     };
 
     var addGraticule = function() {
-        if ( self.selected.graticule ) {
+        if ( self.selected.graticule )
             return;
-        }
-        var graticule = new ol.Graticule({
+
+        self.selected.graticule = new ol.Graticule({
             map: self.selected,
             strokeStyle: new ol.style.Stroke({
                 color: 'rgba(255, 255, 255, 0.5)',
@@ -380,13 +379,12 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 lineDash: [0.5, 4]
             })
         });
-        self.selected.graticule = graticule;
     };
 
     var removeGraticule = function() {
-        if ( self.selected.graticule ) {
+        if ( self.selected.graticule )
             self.selected.graticule.setMap(null);
-        }
+
         self.selected.graticule = null;
     };
 
@@ -394,6 +392,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         self.events.trigger("extent");
     }, 500, { trailing: true });
 
+    //Called as event listener when map is zoomed or panned
     var updateExtent = function() {
         var map = self.selected;
         models.map.update(map.getView().calculateExtent(map.getSize()));
@@ -409,6 +408,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
             .hide();
         $(selector).append($map);
 
+        //Create two specific controls
         var scaleMetric = new ol.control.ScaleLine({
             className: "wv-map-scale-metric",
             units: "metric"
@@ -462,6 +462,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         createZoomButtons(map, proj);
         createMousePosSel(map, proj);
 
+        //Set event listeners for changes on the map view (when rotated, zoomed, panned)
         map.getView().on("change:center", updateExtent);
         map.getView().on("change:resolution", updateExtent);
 

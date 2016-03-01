@@ -68,8 +68,8 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
             checkboxClass: 'icheckbox_square-grey'
         });
 
-        $("#wv-layers-options-dialog .jspScrollable").each(function() {
-            $(this).jScrollPane().data("jsp").reinitialise();
+        $("#wv-layers-options-dialog #wv-palette-selector").each(function() {
+            $(this).perfectScrollbar('update');
         });
 
         $("#wv-squash-button-check").on("ifChanged", function() {
@@ -261,7 +261,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         });
         $dialog.append($header);
         $dialog.append($pane);
-        $pane.jScrollPane();
+        $pane.perfectScrollbar();
 
         if ( palette.custom ) {
             var index = $(".wv-palette-selector-row input[data-palette='" +

@@ -58,9 +58,12 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
     };
 
     self.render = function() {
+        var $footer = $("#productsHolder footer");
+        
         var $container = $(self.selector).empty()
             .addClass(self.id + "list")
             .addClass("bank");
+
         var $actionButton = $("<button></button>")
             .attr("id", "wv-data-download-button")
             .addClass("action")
@@ -68,23 +71,26 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
             .attr("value", "")
             .on("click", showDownloadList);
 
-        $container.append($actionButton);
+        $footer.append($actionButton);
+
+        $actionButton.hide();
 
         var $list = $("<div></div>")
             .attr("id", self.id + "content")
             .addClass("content");
         $container.append($list);
+
         $("#wv-data-download-button").button();
 
         self.refresh();
+
+        //sizeDownloadTab();
+
     };
 
     self.refresh = function() {
         var $content = $(self.selector + "content");
-        var api = $content.data("jsp");
-        if ( api ) {
-            api.destroy();
-        }
+
         $content = $(self.selector + "content").empty();
         var data = model.groupByProducts();
         $.each(data, function(key, value) {
@@ -94,7 +100,8 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
         $('.dl-group[value="__NO_PRODUCT"] h3 span').click(function(e){
             showUnavailableReason();
         });
-        resize();
+
+        sizeDownloadTab();
     };
 
     var refreshProduct = function($content, key, value) {
@@ -159,29 +166,47 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
         $container.append($item);
     };
 
-   var resize = function() {
+    var resize = function() {
+        sizeDownloadTab();
+    };
+    var productsIsOverflow = false;
+    var sizeDownloadTab = function(){
+        var winSize = $(window).outerHeight(true);
+        var headSize = $("ul#productsHolder-tabs").outerHeight(true);//
+        var footSize = $("section#productsHolder footer").outerHeight(true);
+        var secSize = $("#productsHolder").innerHeight() - $("#productsHolder").height();
+        var offset = $("#productsHolder").offset();
+        var timeSize = $("#timeline").outerHeight(true); // + $("#timeline").offset()['top'];
 
-        var tabs_height = $(".ui-tabs-nav").outerHeight(true);
-        var button_height = $(self.selector + "_Button").outerHeight(true);
-        $(self.selector).height(
-            $(self.selector).parent().outerHeight() - tabs_height - button_height
-        );
+        //FIXME: -10 here is the timeline's bottom position from page, fix
+        // after timeline markup is corrected to be loaded first
+        var maxHeight = winSize - headSize - footSize -
+            offset.top - timeSize - secSize - 10 - 5;
+        $(self.selector).css("max-height", maxHeight);
 
-        var $pane = $(self.selector + "content");
-        var api = $pane.data("jsp");
-        if ( !wv.util.browser.small ) {
-            if ( api ) {
-                api.reinitialise();
-            } else {
-                $pane.jScrollPane({verticalGutter:0, contentWidth:238, autoReinitialise:false});
+        var childrenHeight = $('#wv-datacontent').outerHeight(true);
+        
+        if((maxHeight <= childrenHeight)) {
+            $("#wv-data").css('height', maxHeight)
+                .css('padding-right', '10px');
+            if(productsIsOverflow){
+                $(self.selector).perfectScrollbar('update');
             }
-        } else {
-            if ( api ) {
-                api.destroy();
+            else{
+                $(self.selector).perfectScrollbar();
+                productsIsOverflow = true;
             }
         }
-   };
+        else{
+            $("#wv-data").css('height', '')
+                .css('padding-right', '');
+            if(productsIsOverflow){
+                $(self.selector).perfectScrollbar('destroy');
+                productsIsOverflow = false;
+            }
+        }
 
+    };
     self.onViewChange = function() {
         var indicator;
         var map = ui.map.selected;
