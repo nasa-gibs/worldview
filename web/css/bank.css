@@ -389,3 +389,27 @@ i.wv-layers-options-icon{
     background:rgba(220,220,0,0.3);
     height:42px;
 }
+
+.bank li.item.productsitem.disabled.layer-hidden:hover {
+    border-color:transparent;
+}
+.bank li.item.productsitem .layer-main:hover a.hdanchor i{
+    background-position:5px -36px;
+}
+.layer-hidden a.hdanchor{
+
+}
+.disabled.layer-hidden a.hdanchor.hideReg i {
+    width: 15px;
+    height: 15px;
+    margin-top: -7.5px;
+    margin-left: -7.5px;
+    background-position: 0 -54px;
+}
+.disabled.layer-hidden a.hdanchor:hover{
+    background:rgba(255, 255, 255, 0.2);
+    cursor:default;
+}
+.productsitem.disabled.layer-hidden a.hdanchor:hover i{
+    background-position: 0 -54px;
+}

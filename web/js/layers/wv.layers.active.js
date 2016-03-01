@@ -149,24 +149,14 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
              (models.date.selected > new Date(layer.endDate)) ){
             $layer.addClass('disabled');
             $layer.addClass('layer-hidden');
-        }
-
-        $layer.append($("<div></div>")
-                      .addClass('zot')
-                      .append('<b>!</b>'));
-        
-        if ( !layer.visible ) {
-            $visibleButton
-                .attr("title", "Show Layer")
-                .attr("data-action", "show")
-                .parent()
-                .addClass("layer-hidden");
-        } else {
             $visibleButton
                 .attr("title", "No data on selected date for this layer");
         }
-        else {
 
+        else {
+            $layer.append($("<div></div>")
+                          .addClass('zot')
+                          .append('<b>!</b>'));
             if ( !layer.visible ) {
                 $visibleButton
                     .attr("title", "Show Layer")
