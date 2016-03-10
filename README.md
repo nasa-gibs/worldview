@@ -5,6 +5,8 @@
 Visit Worldview at
 [https://worldview.earthdata.nasa.gov](https://worldview.earthdata.nasa.gov)
 
+### [We're Hiring!](https://www.ssaihq.com/employment/careers/Careers.aspx?adata=EGNFr4JyfqkXBkSFY4KRR9YEqpT2RtU2lTR%2brMk78G3XlBtirOuT4vbY4D9MNd1o6DN%2ffgOJ2cQYGo7lGto%2bqLDTmkyiY8cKKgA91Nb%2bldb%2fkMEINLuT3LczH60s7gFqYv8gR2Oc2zNlvXl2Pqb0GA2XAD3ETEV0QW5DeOJa6BQbT7YKsY8dBvsHeiy%2fMBDirQ%3d%3d)
+
 ## About
 
 This tool from [NASA's](http://nasa.gov) [EOSDIS](https://earthdata.nasa.gov)
