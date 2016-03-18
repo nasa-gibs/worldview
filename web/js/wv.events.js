@@ -64,18 +64,26 @@ wv.events = wv.events || function(models, ui) {
     };
 
     var self = {};
-    self.selector = "#wv-data";
-    self.id = "wv-data";
+    self.selector = "#wv-events";
+    self.id = "wv-events";
     self.data = {};
     var lastIndex = -1;
     var lastDateIndex = -1;
 
     var init = function() {
         self.query();
+
+        ui.sidebar.events.on("select", function(tab) {
+            if ( tab === "events" ) {
+                resize();
+            }
+        });
     };
 
     self.render = function() {
-        var $panels = $(self.selector).empty();
+        var $panels = $(self.selector).empty()
+            .addClass(self.id + "list")
+            .addClass("bank");
 
         var $searchContainer = $("<div></div>")
             .attr("id", "wv-events-facets")
@@ -89,7 +97,7 @@ wv.events = wv.events || function(models, ui) {
             .addClass("wv-events-facet");
 
         $searchContainer.append($typeFacet).append($sourceFacet);
-        $panels.append($searchContainer);
+        //$panels.append($searchContainer);
 
         var $listContainer = $("<div></div>")
             .attr("id", "wv-events-list")
@@ -97,17 +105,21 @@ wv.events = wv.events || function(models, ui) {
             .addClass("bank")
             .addClass("selector");
 
-        var $list = $("<div></div>")
+        var $list = $("<ul></ul>")
             .attr("id", self.id + "content")
-            .addClass("content");
+            .addClass("content")
+            .addClass("bank")
+            .addClass("selector");
 
-        $listContainer.append($list);
-        $panels.append($listContainer);
+        $panels.append($list);
+        //$panels.append($listContainer);
 
         var $detailContainer = $("<div></div>")
             .attr("id", "wv-events-detail")
             .hide();
         $panels.append($detailContainer);
+
+        $(window).resize(resize);
 
         renderTypes();
         renderSources();
@@ -116,10 +128,7 @@ wv.events = wv.events || function(models, ui) {
 
     self.refresh = function() {
         var $content = $(self.selector + "content");
-        var api = $content.data("jsp");
-        if ( api ) {
-            api.destroy();
-        }
+
         $content = $(self.selector + "content").empty();
         _.each(self.data, function(event, index) {
             refreshEvent($content, event, index);
@@ -187,9 +196,9 @@ wv.events = wv.events || function(models, ui) {
 
     var eventList = function(events) {
         _.each(events, function(event) {
-            $("#wv-data").append(createEvent(event));
+            $("#wv-events").append(createEvent(event));
         });
-        $("#wv-data").jScrollPane();
+        //        $("#wv-events").jScrollPane();
     };
 
     var showEvent = function(index, dateIndex) {
@@ -204,10 +213,10 @@ wv.events = wv.events || function(models, ui) {
         lastIndex = index;
         lastDateIndex = lastDateIndex;
 
-        $("#wv-events-list .subtitle").hide();
-        $("#wv-events-list .dates").hide();
-        $("#wv-events-list [data-index='" + index + "'] .subtitle").show();
-        $("#wv-events-list [data-index='" + index + "'] .dates").show();
+        $("#wv-eventscontent .subtitle").hide();
+        $("#wv-eventscontent .dates").hide();
+        $("#wv-eventscontent [data-index='" + index + "'] .subtitle").show();
+        $("#wv-eventscontent [data-index='" + index + "'] .dates").show();
         resize();
 
         event = self.data[index];
@@ -288,27 +297,49 @@ wv.events = wv.events || function(models, ui) {
     };
 
     var resize = function() {
-        resizePane($(self.selector + "content"));
+        //resizePane($(self.selector + "content"));
+        sizeEventsTab();
     };
+    var productsIsOverflow = false;
+    var sizeEventsTab = function(){
+        console.log('resizing');
+        var winSize = $(window).outerHeight(true);
+        var headSize = $("ul#productsHolder-tabs").outerHeight(true);//
+        var footSize = $("section#productsHolder footer").outerHeight(true);
+        var head2Size = $('#wv-events-facet').outerHeight(true);
+        var secSize = $("#productsHolder").innerHeight() - $("#productsHolder").height();
+        var offset = $("#productsHolder").offset();
+        var timeSize = $("#timeline").outerHeight(true); // + $("#timeline").offset()['top'];
 
-    var resizePane = function($pane) {
-        var tabs_height = $(".ui-tabs-nav").outerHeight(true);
-        //var button_height = $(self.selector + "_Button").outerHeight(true);
-        $(self.selector).height(
-            $(self.selector).parent().outerHeight()// - tabs_height// - button_height
-        );
-        var api = $pane.data("jsp");
-        if ( !wv.util.browser.small ) {
-            if ( api ) {
-                api.reinitialise();
-            } else {
-                $pane.jScrollPane({verticalGutter:0, contentWidth:238, autoReinitialise:false});
+        //FIXME: -10 here is the timeline's bottom position from page, fix
+        // after timeline markup is corrected to be loaded first
+        var maxHeight = winSize - headSize - head2Size - footSize -
+            offset.top - timeSize - secSize - 10 - 5;
+        $(self.selector).css("max-height", maxHeight);
+
+        var childrenHeight = 
+            $('#wv-eventscontent').outerHeight(true);
+        console.log(maxHeight + ' ' + childrenHeight);
+        if((maxHeight <= childrenHeight)) {
+            $("#wv-events").css('height', maxHeight)
+                .css('padding-right', '10px');
+            if(productsIsOverflow){
+                $(self.selector).perfectScrollbar('update');
             }
-        } else {
-            if ( api ) {
-                api.destroy();
+            else{
+                $(self.selector).perfectScrollbar();
+                productsIsOverflow = true;
             }
         }
+        else{
+            $("#wv-events").css('height', '')
+                .css('padding-right', '');
+            if(productsIsOverflow){
+                $(self.selector).perfectScrollbar('destroy');
+                productsIsOverflow = false;
+            }
+        }
+
     };
 
     var queryEvents = function() {

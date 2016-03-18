@@ -34,6 +34,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
     self.id = "wv-data";
 
     var init = function() {
+
         model.events
             .on("activate", onActivate)
             .on("deactivate", onDeactivate)
@@ -47,8 +48,10 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
             .on("granuleSelect", updateSelection)
             .on("granuleUnselect", updateSelection);
         $(window).resize(resize);
+
         ui.sidebar.events.on("select", function(tab) {
             if ( tab === "download" ) {
+                console.log('download');
                 resize();
                 model.activate();
             } else {

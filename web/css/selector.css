@@ -15,14 +15,16 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3ffffff', e
 
 }
 .selector .tabContainer {border-bottom: 2px #906a00 solid; }
-
+#wv-events{
+    position: relative;
+}
 
 .selector h3 {display:inline-block; float: left; color:#333333; font-size: 0.9em;  border:none; text-decoration:none; }
 .selector div.jspPane,.selector ul {display:block; overflow:hidden;margin:0 auto; width:100%;}
 .selector .icheckbox_square-grey { float: right; }
 
 /*.selector li.item {padding:6px 0px; width:93%; margin: 5px 2% 0; display:block; float:left; overflow:hidden;cursor:pointer;*/
-.selector li.item {padding:6px 0px; width:93%; margin: 1px 2% 0; display:block; float:left; overflow:hidden;cursor:pointer;
+.selector li.item {padding:6px 0px; width:auto; margin: 1px 2% 0; display:block; overflow:hidden;cursor:pointer;
 color:#000; background: rgb(204,204,204);}
 .selector li.item:hover{background:rgba(250,250,250,1)}
 .selector li.item input {float:right;}

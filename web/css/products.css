@@ -8,13 +8,13 @@
 
 #productsHolder-tabs .ui-state-default {
     background: rgba(0, 0, 0, 0);
-    width: 20%;
     border: 0;
-    margin: 0 0 -1px 0;
+    margin: 0 2px -1px 2px;
+    padding:0;
 }
 
 #productsHolder-tabs .ui-state-active {
-    width: 60%;
+    
 }
 
 #productsHolder-tabs .ui-state-active a {
@@ -22,7 +22,9 @@
 }
 
 #productsHolder-tabs .ui-tabs-anchor {
-    padding: 0.5em 0;
+    padding: 0.5em .3em;
+    float: none;
+    
 }
 
 .ui-tabs-nav {
@@ -30,13 +32,18 @@
     border:0;
     border-bottom: 3px #00457b solid;
 }
-.ui-tabs-nav li.layerPicker {height:100%; display:inline-block; float:left; width:20%;}
-.ui-tabs-nav li.layerPicker.ui-state-active { width: 60%; }
+.ui-tabs-nav li.layerPicker {
+    display:inline-block;
+    float:none;
+}
+.ui-tabs-nav li.layerPicker.ui-state-active {
+
+}
 
 .ui-tabs-nav li a {
     /*border-radius: 10px 10px 0 0;*/
     color: #fff;
-    font-size: 1.1em;
+    font-size: 1em;
     font-weight: 400;
     border: none;
     padding: 0.5em 0;
@@ -93,7 +100,7 @@
     height: 20px;
     vertical-align: middle;
     background:url(../images/wv-icons.svg) transparent 0 -10px;
-    margin:0;
+    margin:0 7px 0 0;
 }
 /*ul#productsHoldertabs li.ui-state-active .tab:hover i.productsIcon{
     background-position:0 -10px;
@@ -102,6 +109,7 @@
 .icon-layers      { background-position:0 -10px; }
 ul#productsHoldertabs .tab:hover i.icon-layers {background-position:0 20px;}
 ul#productsHoldertabs li.ui-state-active .tab:hover i.icon-layers {background-position: 0 -10px;}
+.icon-download    { background-position:-30px -10px; }
 ul#productsHoldertabs .tab:hover i.icon-download    { background-position:-30px 20px; }
 ul#productsHoldertabs li.ui-state-active .tab:hover i.icon-download {background-position:-30px -10px;}
 .icon-download-alt{ background-position:-60px -10px; }
