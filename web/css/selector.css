@@ -18,7 +18,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3ffffff', e
 #wv-events{
     position: relative;
 }
-
+#wv-events li.item i{
+    float: left;
+    margin: 0 10px 5px 5px;
+}
 .selector h3 {display:inline-block; float: left; color:#333333; font-size: 0.9em;  border:none; text-decoration:none; }
 .selector div.jspPane,.selector ul {display:block; overflow:hidden;margin:0 auto; width:100%;}
 .selector .icheckbox_square-grey { float: right; }
@@ -29,7 +32,17 @@ color:#000; background: rgb(204,204,204);}
 .selector li.item:hover{background:rgba(250,250,250,1)}
 .selector li.item input {float:right;}
 .selector li.item h4 {font-size:0.85em; color:#000;padding: 0 3px;}
-.selector li.item p {padding: 0 3px; font-size:0.78em; color: #222;font-style:italic;}
+.selector li.item p, .selector li.item ul {
+    padding: 0 3px;
+    font-size:0.78em;
+    color: #222;
+    font-style:italic;
+    margin-left: 25px;
+    margin-top: 5px;
+}
+.selector li.item p a {
+    
+}
 .selector ul.selectorboxcategory {  outline:none !important; float:left; overflow:auto;}
 .selector h3.head {display:block; float: left; color:#fff; width:100%;  border:none; text-decoration:none; background: none;  padding: 1px 3px; margin:10px 0 0 2%; text-transform:uppercase}
 .selector a.flowbutton {text-decoration:none; display:inline-block; float: left; color:#ffffff; font-size: 1.4em; border:none; padding:6px 0; margin-top:20px; margin-left:5px;}

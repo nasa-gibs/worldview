@@ -161,6 +161,8 @@ wv.events = wv.events || function(models, ui) {
             .addClass("subtitle")
             .html(event.description)
             .hide();
+        var $mapMarker = $("<i></i>")
+            .addClass('fa fa-map-marker fa-2x');
 
         var $dates = $("<ul></ul>").addClass("dates").hide();
         if ( event.geometry.length > 1 ) {
@@ -175,7 +177,7 @@ wv.events = wv.events || function(models, ui) {
             });
         }
 
-        $item.append($title).append($subtitle).append($dates);
+        $item.append($mapMarker).append($title).append($subtitle).append($dates);
         var references = toArray(event.reference);
         if ( references.length > 0 ) {
             items = [];
