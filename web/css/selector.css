@@ -40,6 +40,9 @@ color:#000; background: rgb(204,204,204);}
     margin-left: 25px;
     margin-top: 5px;
 }
+.selector li.item p{
+    color: #666;
+}
 .selector li.item p a {
     
 }

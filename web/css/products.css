@@ -55,6 +55,10 @@
 }
 .ui-tabs-nav li.ui-state-default:hover a{
     background-color:#ccc;
+    color: #000;
+}
+.ui-tabs-nav li.ui-state-default:hover a i{
+    color: #000;
 }
 .ui-tabs-nav li.first.ui-state-active a {
     background-color:#00457b;

@@ -24,7 +24,7 @@ wv.events = wv.events || function(models, ui) {
     ];
     var monthNames = [
         "January",
-        "Febuaray",
+        "February",
         "March",
         "April",
         "May",
@@ -54,8 +54,14 @@ wv.events = wv.events || function(models, ui) {
             ["MODIS_Terra_SurfaceReflectance_Bands121", true]
         ],
         Volcanoes: [
+            ["MODIS_Fires_All", true],
+            ["MODIS_Terra_CorrectedReflectance_TrueColor", true],
             ["MODIS_Aqua_CorrectedReflectance_Bands721", false],
-            ["MODIS_Terra_CorrectedReflectance_Bands721", true]
+            ["MODIS_Terra_CorrectedReflectance_Bands721", false],
+            ["MODIS_Aqua_CorrectedReflectance_TrueColor", false]
+
+            
+            
         ],
         Default: [
             ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
@@ -304,7 +310,6 @@ wv.events = wv.events || function(models, ui) {
     };
     var productsIsOverflow = false;
     var sizeEventsTab = function(){
-        console.log('resizing');
         var winSize = $(window).outerHeight(true);
         var headSize = $("ul#productsHolder-tabs").outerHeight(true);//
         var footSize = $("section#productsHolder footer").outerHeight(true);
