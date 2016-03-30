@@ -1,3 +1,4 @@
+
 /*
  * NASA Worldview
  *
@@ -39,13 +40,17 @@ wv.events = wv.events || function(models, ui) {
 
     var layerLists = {
         Wildfires: [
-            ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
             ["MODIS_Terra_CorrectedReflectance_TrueColor", true],
-            ["MODIS_Fires_All", true]
+            ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
+            ["VIIRS_SNPP_CorrectedReflectance_TrueColor", false],
+            ["MODIS_Fires_All", true],
+            ["VIIRS_SNPP_Fires_375m_Day", false],
+            ["VIIRS_SNPP_Fires_375m_Night", false]
         ],
         "Temperature Extremes": [
             ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
             ["MODIS_Terra_CorrectedReflectance_TrueColor", true],
+            ["VIIRS_SNPP_CorrectedReflectance_TrueColor", false],
             ["MODIS_Aqua_Land_Surface_Temp_Day", false],
             ["MODIS_Terra_Land_Surface_Temp_Day", true]
         ],
@@ -56,16 +61,15 @@ wv.events = wv.events || function(models, ui) {
         Volcanoes: [
             ["MODIS_Fires_All", true],
             ["MODIS_Terra_CorrectedReflectance_TrueColor", true],
-            ["MODIS_Aqua_CorrectedReflectance_Bands721", false],
-            ["MODIS_Terra_CorrectedReflectance_Bands721", false],
-            ["MODIS_Aqua_CorrectedReflectance_TrueColor", false]
-
-            
-            
+            ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
+            ["VIIRS_SNPP_CorrectedReflectance_TrueColor", false],
+            ["VIIRS_SNPP_Fires_375m_Day", false],
+            ["VIIRS_SNPP_Fires_375m_Night", false]
         ],
         Default: [
-            ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
             ["MODIS_Terra_CorrectedReflectance_TrueColor", true],
+            ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
+            ["VIIRS_SNPP_CorrectedReflectance_TrueColor", false]
         ]
     };
 
@@ -254,11 +258,22 @@ wv.events = wv.events || function(models, ui) {
         if ( !layers ) {
             layers = layerLists.Default;
         }
-        models.layers.clear();
+
+        // Turn off all layers in list first
+        _.each(models.layers.active, function(layer){
+            models.layers.setVisibility( layer.id, false );
+        });
+
+        // Turn on or add new layers
         _.each(layers, function(layer) {
             var id = layer[0];
             var visible = layer[1];
-            models.layers.add(id, { visible: visible });
+            if( models.layers.exists( id ) ) {
+                models.layers.setVisibility( id, visible );
+            }
+            else{
+                models.layers.add(id, { visible: visible });
+            }
         });
 
         console.log("COORDS", eventItem.coordinates);
@@ -326,7 +341,7 @@ wv.events = wv.events || function(models, ui) {
 
         var childrenHeight = 
             $('#wv-eventscontent').outerHeight(true);
-        console.log(maxHeight + ' ' + childrenHeight);
+
         if((maxHeight <= childrenHeight)) {
             $("#wv-events").css('height', maxHeight)
                 .css('padding-right', '10px');

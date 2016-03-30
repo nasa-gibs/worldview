@@ -261,7 +261,6 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
             $('.ui-tabs-nav li.second').removeClass("ui-state-active");
             $('.ui-tabs-nav li.third').addClass("ui-state-active");
             $footerBtns.hide();
-            console.log('download');
             $("#wv-data-download-button").show();
         } else {
             throw new Error("Invalid tab index: " + ui.index);
