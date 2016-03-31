@@ -66,10 +66,12 @@ def process_remote(entry):
                 global warning_count
                 warning_count += 1
             else:
-                colormap_link = layer["ows:Metadata"]["@xlink:href"]
-                colormap_file = os.path.basename(colormap_link)
-                colormap_id = os.path.splitext(colormap_file)[0]
-                colormaps[colormap_id] = colormap_link
+                for item in layer["ows:Metadata"]:
+                   if item["@xlink:role"] == "http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.2":
+                      colormap_link = item["@xlink:href"]
+                      colormap_file = os.path.basename(colormap_link)
+                      colormap_id = os.path.splitext(colormap_file)[0]
+                      colormaps[colormap_id] = colormap_link
 
 def process_colormaps():
     print "%s: Fetching %d colormaps" % (prog, len(colormaps))
@@ -88,6 +90,7 @@ def process_colormaps():
                 (prog, link, str(e)))
             global warning_count
             warning_count += 1
+    print "%s: Fetching2 %d colormaps" % (prog, len(colormaps))
 
 tolerant = config.get("tolerant", False)
 if "wv-options-fetch" in config:
