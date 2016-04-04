@@ -43,7 +43,8 @@ wv.events = wv.events || function(models, ui) {
             ["MODIS_Terra_CorrectedReflectance_TrueColor", true],
             ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
             ["VIIRS_SNPP_CorrectedReflectance_TrueColor", false],
-            ["MODIS_Fires_All", true],
+            ["MODIS_Fires_Terra", true],
+            ["MODIS_Fires_Aqua", false],
             ["VIIRS_SNPP_Fires_375m_Day", false],
             ["VIIRS_SNPP_Fires_375m_Night", false]
         ],
@@ -59,10 +60,11 @@ wv.events = wv.events || function(models, ui) {
             ["MODIS_Terra_SurfaceReflectance_Bands121", true]
         ],
         Volcanoes: [
-            ["MODIS_Fires_All", true],
             ["MODIS_Terra_CorrectedReflectance_TrueColor", true],
             ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
             ["VIIRS_SNPP_CorrectedReflectance_TrueColor", false],
+            ["MODIS_Fires_Terra", true],
+            ["MODIS_Fires_Aqua", false],
             ["VIIRS_SNPP_Fires_375m_Day", false],
             ["VIIRS_SNPP_Fires_375m_Night", false]
         ],
@@ -288,7 +290,7 @@ wv.events = wv.events || function(models, ui) {
     };
 
     var goTo = function(method, location) {
-        var zoom = 4;
+        var zoom = 3;
         var map = ui.map.selected;
         var duration = ( method == "fly" ) ? 5000 : 1000;
         var wait = ( method == "fly" ) ? 1000 : 1;
@@ -312,17 +314,15 @@ wv.events = wv.events || function(models, ui) {
             }
             if ( location.length == 2 ) {
                 map.getView().setCenter(location);
-                map.getView().setZoom(5);
+                map.getView().setZoom(6);
             } else {
-                map.getView().fitExtent(location, map.getSize());
+                //map.getView().fitExtent(location, map.getSize());
+                map.getView().setCenter(location);
+                map.getView().setZoom(8);
             }
         }, wait);
     };
 
-    var resize = function() {
-        //resizePane($(self.selector + "content"));
-        sizeEventsTab();
-    };
     var productsIsOverflow = false;
     var sizeEventsTab = function(){
         var winSize = $(window).outerHeight(true);
@@ -362,6 +362,11 @@ wv.events = wv.events || function(models, ui) {
             }
         }
 
+    };
+
+    var resize = function() {
+        //resizePane($(self.selector + "content"));
+        sizeEventsTab();
     };
 
     var queryEvents = function() {
