@@ -147,6 +147,8 @@ wv.events = wv.events || function(models, ui) {
         });
         $(self.selector + "content li").click(function() {
             showEvent($(this).attr("data-index"));
+            $(self.selector + "content li").removeClass('item-selected');
+            $(this).addClass('item-selected');
         });
         $(self.selector + "content a.date").click(function(event) {
             showEvent($(this).attr("data-index"), $(this).attr("data-date-index"));
