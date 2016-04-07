@@ -97,34 +97,15 @@ wv.events = wv.events || function(models, ui) {
             .addClass(self.id + "list")
             .addClass("bank");
 
-        var $searchContainer = $("<div></div>")
-            .attr("id", "wv-events-facets")
-            ;//.addClass("facetedSearch");
-
-        var $typeFacet = $("<select></select>")
-            .attr("id", "wv-events-types")
-            .addClass("wv-events-facet");
-        var $sourceFacet = $("<select></select>")
-            .attr("id", "wv-events-sources")
-            .addClass("wv-events-facet");
-
-        $searchContainer.append($typeFacet).append($sourceFacet);
-        //$panels.append($searchContainer);
-
-        var $listContainer = $("<div></div>")
-            .attr("id", "wv-events-list")
-            .addClass(self.id + "list")
-            .addClass("bank")
-            .addClass("selector");
-
         var $list = $("<ul></ul>")
             .attr("id", self.id + "content")
             .addClass("content")
             .addClass("bank")
             .addClass("selector");
 
+        var $message = $('<div>Events may not be visible until the following day.</div>');
+
         $panels.append($list);
-        //$panels.append($listContainer);
 
         var $detailContainer = $("<div></div>")
             .attr("id", "wv-events-detail")
@@ -133,8 +114,6 @@ wv.events = wv.events || function(models, ui) {
 
         $(window).resize(resize);
 
-        renderTypes();
-        renderSources();
         self.refresh();
     };
 
@@ -290,7 +269,10 @@ wv.events = wv.events || function(models, ui) {
             goTo(method, extent);
         }
     };
-
+    var notify = function() {
+        var $message = $('<div>Events may not be visible until the following day.</div>');
+        
+    };
     var goTo = function(method, location) {
         var zoom = 3;
         var map = ui.map.selected;
@@ -330,7 +312,7 @@ wv.events = wv.events || function(models, ui) {
         var winSize = $(window).outerHeight(true);
         var headSize = $("ul#productsHolder-tabs").outerHeight(true);//
         var footSize = $("section#productsHolder footer").outerHeight(true);
-        var head2Size = $('#wv-events-facet').outerHeight(true);
+        var head2Size = $('#wv-events-facets').outerHeight(true);
         var secSize = $("#productsHolder").innerHeight() - $("#productsHolder").height();
         var offset = $("#productsHolder").offset();
         var timeSize = $("#timeline").outerHeight(true); // + $("#timeline").offset()['top'];
@@ -391,20 +373,6 @@ wv.events = wv.events || function(models, ui) {
         });
     };
 
-    var renderTypes = function() {
-        var $facet = $("#wv-events-types");
-        $facet.append($("<option></option>")
-            .val("none")
-            .html("Type..."));
-        _.each(self.types, function(type) {
-            var $type = $("<option></option>")
-                .val(type.title)
-                .html(type.title);
-            $facet.append($type);
-        });
-        $facet.change(updateFacets);
-    };
-
     var querySources = function() {
         var url = "http://eonet.sci.gsfc.nasa.gov/api/v1/sources";
         console.log("sending query", url);
@@ -414,54 +382,6 @@ wv.events = wv.events || function(models, ui) {
             checkRender();
         });
 
-    };
-
-    var renderSources = function() {
-        var $facet = $("#wv-events-sources");
-        $facet.append($("<option></option>")
-            .val("none")
-            .html("Source..."));
-        _.each(self.sources, function(source) {
-            var maxLen = 35;
-            if ( source.title.length > maxLen ) {
-                source.abbr = source.title.substring(0, maxLen) + "...";
-            }
-            var $source = $("<option></option>")
-                .val(source.id)
-                .html(source.abbr || source.title);
-            $facet.append($source);
-        });
-        $facet.change(updateFacets);
-    };
-
-    var updateFacets = function() {
-        $("#wv-events-list .selectorItem").hide();
-        var source = $("#wv-events-sources").val();
-        var type = $("#wv-events-types").val();
-
-        console.log("source", source, "type", type);
-        $("#wv-events-list .selectorItem").each(function() {
-            var index = $(this).attr("data-index");
-            var passType = true;
-            var passSource = true;
-            var event = self.data[index];
-            if ( source !== "none" ) {
-                var references = toArray(event.reference);
-                if ( !_.find(references, { "id": source }) ) {
-                    passSource = false;
-                }
-            }
-            if ( type !== "none" ) {
-                var categories = toArray(event.category);
-                console.log(type, categories);
-                if ( !_.find(categories, { "#text": type }) ) {
-                    passType = false;
-                }
-            }
-            if ( passType && passSource ) {
-                $(this).show();
-            }
-        });
     };
 
     self.query = function() {
@@ -484,7 +404,6 @@ wv.events = wv.events || function(models, ui) {
         if ( self.data && self.sources && self.types ) {
             self.render();
             self.refresh();
-            updateFacets();
         }
     };
 
