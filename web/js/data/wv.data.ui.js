@@ -558,7 +558,7 @@ wv.data.ui.downloadListPanel = function(config, model) {
             .addClass("ui-widget-content")
             .addClass("ui-helper-clearfix")
             .html(bulkDownloadText());
-        $(".ui-dialog").append($bottomPane);
+        $("#wv-data-selection").after($bottomPane);
         $(".ui-dialog .ui-dialog-titlebar-close").attr("tabindex", -1);
 
         $dialog.dialog("open");
