@@ -1,0 +1,25 @@
+.notify-alert {
+    position: absolute;
+    top: 60px !important;
+    right: 10px !important;
+    left: auto !important;
+}
+.notify-alert i{
+    font-size: 1.4em;
+    height: 40px;
+    box-sizing: border-box;
+    line-height: 40px;
+}
+.notify-alert i:first-child{
+    color: #d54e21;
+    margin-right: 10px;
+}
+.notify-alert i:last-child{
+    float: right;
+    margin-left: 10px;
+}
+.notify-alert .ui-dialog-content {
+    padding: 0 10px;
+    box-sizing: border-box;
+    line-height: 40px;
+}

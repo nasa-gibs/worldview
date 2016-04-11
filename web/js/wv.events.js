@@ -81,6 +81,9 @@ wv.events = wv.events || function(models, ui) {
     self.data = {};
     var lastIndex = -1;
     var lastDateIndex = -1;
+    //Local storage may not be a good idea because they'll never see it again
+    var notified = false;//wv.util.localStorage('notified') || false;
+    var $notification;
 
     var init = function() {
         self.query();
@@ -102,8 +105,6 @@ wv.events = wv.events || function(models, ui) {
             .addClass("content")
             .addClass("bank")
             .addClass("selector");
-
-        var $message = $('<div>Events may not be visible until the following day.</div>');
 
         $panels.append($list);
 
@@ -128,6 +129,7 @@ wv.events = wv.events || function(models, ui) {
             showEvent($(this).attr("data-index"));
             $(self.selector + "content li").removeClass('item-selected');
             $(this).addClass('item-selected');
+            notify();
         });
         $(self.selector + "content a.date").click(function(event) {
             showEvent($(this).attr("data-index"), $(this).attr("data-date-index"));
@@ -193,7 +195,6 @@ wv.events = wv.events || function(models, ui) {
         _.each(events, function(event) {
             $("#wv-events").append(createEvent(event));
         });
-        //        $("#wv-events").jScrollPane();
     };
 
     var showEvent = function(index, dateIndex) {
@@ -269,11 +270,52 @@ wv.events = wv.events || function(models, ui) {
             goTo(method, extent);
         }
     };
-    var notify = function() {
-        var $message = $('<div>Events may not be visible until the following day.</div>');
+    var notify = function( text ) {
+        var message = text || 'Events may not be visible ' +
+            'until the next day.';
+
+        var $icon = $('<i></i>')
+            .addClass('fa fa-warning')
+            .addClass('fa-1x');
+
+        var $close = $('<i></i>')
+            .addClass('fa fa-times-circle-o')
+            .addClass('fa-1x')
+            .click(function(e){
+                $notification.dialog( 'close' );
+            });
+
+        //$notification.clear();
+
+        $notification = $('<div></div>')
+            .append( $icon)
+            .append( message )
+            .append( $close );
         
+        if ( !notified ){
+            $notification.dialog({
+                autoOpen: true,
+                resizable: false,
+                height: 40,
+                width: 370,
+                draggable: false,
+                show: {
+                     effect: "fade",
+                     duration: 400
+                 },
+                hide: {
+                    effect: "fade",
+                    duration: 200
+                },
+                dialogClass: 'no-titlebar notify-alert',
+                close: function( event, ui ) {
+                    wv.util.localStorage( 'notified', !notified );
+                }
+            });
+        }
     };
     var goTo = function(method, location) {
+        //TODO: Seems to be starting zoom, make it current zoom
         var zoom = 3;
         var map = ui.map.selected;
         var duration = ( method == "fly" ) ? 5000 : 1000;
