@@ -111,7 +111,45 @@ wv.events = wv.events || function(models, ui) {
         var $detailContainer = $("<div></div>")
             .attr("id", "wv-events-detail")
             .hide();
+
         $panels.append($detailContainer);
+
+        var $message = $('<span></span>')
+            .addClass('notify-message');
+
+        var $icon = $('<i></i>')
+            .addClass('fa fa-warning fa-1x');
+
+        var $close = $('<i></i>')
+            .addClass('fa fa-times-circle-o fa-1x')
+            .click(function(e){
+                $notification.dialog( 'close' );
+            });
+
+        $notification = $('<div></div>')
+            .append( $icon)
+            .append( $message )
+            .append( $close )
+            .dialog({
+                autoOpen: false,
+                resizable: false,
+                height: 40,
+                width: 370,
+                draggable: false,
+                show: {
+                    effect: "fade",
+                    duration: 400
+                },
+                hide: {
+                    effect: "fade",
+                    duration: 200
+                },
+                dialogClass: 'no-titlebar notify-alert',
+                close: function( event, ui ) {
+                    //wv.util.localStorage( 'notified', !notified );
+                    notified = true;
+                }
+            });
 
         $(window).resize(resize);
 
@@ -271,47 +309,20 @@ wv.events = wv.events || function(models, ui) {
         }
     };
     var notify = function( text ) {
+
         var message = text || 'Events may not be visible ' +
             'until the next day.';
 
-        var $icon = $('<i></i>')
-            .addClass('fa fa-warning')
-            .addClass('fa-1x');
+        var $message = $('.notify-message');
 
-        var $close = $('<i></i>')
-            .addClass('fa fa-times-circle-o')
-            .addClass('fa-1x')
-            .click(function(e){
-                $notification.dialog( 'close' );
-            });
+        $message.empty();
+        $message.append( message );
 
-        //$notification.clear();
+        $notification.find('i:first-child')
+            .attr('title', message);
 
-        $notification = $('<div></div>')
-            .append( $icon)
-            .append( message )
-            .append( $close );
-        
         if ( !notified ){
-            $notification.dialog({
-                autoOpen: true,
-                resizable: false,
-                height: 40,
-                width: 370,
-                draggable: false,
-                show: {
-                     effect: "fade",
-                     duration: 400
-                 },
-                hide: {
-                    effect: "fade",
-                    duration: 200
-                },
-                dialogClass: 'no-titlebar notify-alert',
-                close: function( event, ui ) {
-                    wv.util.localStorage( 'notified', !notified );
-                }
-            });
+            $notification.dialog( 'open' );
         }
     };
     var goTo = function(method, location) {
