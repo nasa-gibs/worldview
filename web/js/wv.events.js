@@ -104,7 +104,7 @@ wv.events = wv.events || function(models, ui) {
             .attr("id", self.id + "content")
             .addClass("content")
             .addClass("bank")
-            .addClass("selector");
+            .addClass("map-item-list");
 
         $panels.append($list);
 

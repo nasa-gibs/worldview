@@ -93,7 +93,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
             .addClass('staticLayers');
         $('.accordionToggler').attr("title","Show Layer Selector");
         $('.accordionToggler').html("Layers (" + models.layers.get().length + ")");
-        var w = $('#app').outerWidth();
+
         var speed = ( now ) ? undefined : "fast";
         $('.products').hide(speed);
         $("#" + self.id).after($('.accordionToggler'));

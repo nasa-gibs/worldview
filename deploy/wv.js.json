@@ -45,7 +45,6 @@
         "web/js/layers/wv.layers.sidebar.js",
         "web/js/layers/wv.layers.active.js",
         "web/js/layers/wv.layers.modal.js",
-        "web/js/layers/wv.layers.add.js",
         "web/js/layers/wv.layers.options.js",
 
         "web/js/image/wv.image.rubberband.js",

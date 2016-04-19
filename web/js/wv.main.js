@@ -152,7 +152,7 @@ $(function() {
         ui.sidebar = wv.layers.sidebar(models, config);
         ui.activeLayers = wv.layers.active(models, ui, config);
         ui.addModal = wv.layers.modal(models, ui, config);
-        //ui.addLayers = wv.layers.add(models, ui, config);
+
         if ( config.startDate ) {
             ui.timeline = wv.date.timeline(models, config, ui);
             ui.timeline.data = wv.date.timeline.data(models, config, ui);
