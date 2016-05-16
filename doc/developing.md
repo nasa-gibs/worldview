@@ -113,6 +113,6 @@ the address shown:
 
 To create an RPM on CentOS 6, issue the following:
 
-    grunt rpm
+    grunt rpm-only
 
 Built RPMs will be found in the ``dist`` directory.

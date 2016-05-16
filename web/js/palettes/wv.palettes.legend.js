@@ -86,6 +86,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         var $title = $("<div></div>")
                 .addClass("wv-palettes-title");
 
+
         $ranges.append($min).append($max).append($title);
         $container.append($ranges);
 
