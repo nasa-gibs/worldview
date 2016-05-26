@@ -45,7 +45,11 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         _.each(config.layers, function(layer) {
             visible[layer.id] = true;
         });
-
+        model.events
+        //FIXME: on "add" needs to be present without trying to add a product
+        // multiple times
+            //.on("add", onLayerAdded)
+            .on("remove", onLayerRemoved);
         models.proj.events.on("select", drawDefaultPage );
 
         //Create tiles
@@ -633,7 +637,17 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         event.stopPropagation();
         model.remove( decodeURIComponent( $( this ).val() ) );
     };
-
+    var onLayerAdded = function(layer) {
+        var $element = $( self.selector + " [data-layer='" +
+                          wv.util.jqueryEscape(layer.id) + "']");
+        $element.iCheck("check");
+    };
+    
+    var onLayerRemoved = function(layer) {
+        var $element = $( self.selector + " [data-layer='" +
+                          wv.util.jqueryEscape(layer.id) + "']");
+        $element.iCheck("uncheck");
+    };
     var unfocusInput = function(){
         if(!wv.util.browser.small){
             $('#layers-search-input').focus();

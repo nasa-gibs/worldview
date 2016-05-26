@@ -382,7 +382,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
 
     var showUnavailableReason = function() {
         var headerMsg = "<h3 class='wv-data-unavailable-header'>Why are these layers not available for downloading?</h3>";
-        var bodyMsg = 'Some layers in Worldview do not have corresponding source data products available for download.  These include National Boundaries, Orbit Tracks, Earth at Night, and MODIS Corrected Reflectance products.<br><br>For a downloadable product similar to MODIS Corrected Reflectance, please try the MODIS Land Surface Reflectance layers available in Worldview.  If you would like to generate MODIS Corrected Reflectance imagery yourself, please see the following document: <a href="https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf" target="_blank">https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf</a><br><br>If you would like to download only an image, please use the "camera" icon in the upper right.';
+        var bodyMsg = 'Some layers in Worldview do not have corresponding source data products available for download.  These include National Boundaries, Orbit Tracks, Earth at Night, and MODIS Corrected Reflectance products.<br><br>For a downloadable product similar to MODIS Corrected Reflectance, please try the MODIS Land Surface Reflectance layers available in Worldview.  If you would like to generate MODIS Corrected Reflectance imagery yourself, please see the following document: <a href="https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf" target="_blank">https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf</a><br><br>If you would like to download only an image, please use the "camera" icon in the upper right.<br><br> Data download will not work for "Terra and Aqua" Fires, select Terra only Fires and/or Aqua only Fires to download the associated data files.';
 
         wv.ui.notify(headerMsg + bodyMsg, "Notice", 600);
         /*
@@ -530,8 +530,8 @@ wv.data.ui.downloadListPanel = function(config, model) {
         "<div id='wv-data-selection-notice'>" +
             "<i class='icon fa fa-info-circle fa-3x'></i>" +
             "<p class='text'>" +
-                "Some items you have selected require a profile with the " +
-                "EOSDIS User Registration System (URS) to download. " +
+                "Some items you have selected require a profile with " +
+                "Earthdata Login to download. " +
                 "It is simple and free to sign up! " +
                 "<a href='https://urs.earthdata.nasa.gov/users/new' target='urs'>" +
                 "Click to register for a profile.</a>" +
@@ -561,7 +561,7 @@ wv.data.ui.downloadListPanel = function(config, model) {
             .addClass("ui-widget-content")
             .addClass("ui-helper-clearfix")
             .html(bulkDownloadText());
-        $(".ui-dialog").append($bottomPane);
+        $("#wv-data-selection").after($bottomPane);
         $(".ui-dialog .ui-dialog-titlebar-close").attr("tabindex", -1);
 
         $dialog.dialog("open");
