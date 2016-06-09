@@ -188,7 +188,6 @@ wv.events = wv.events || function(models, ui) {
         $('.notify-message-alt').show();
 
         $('.notify-message-long').show();
-        $()
     };
     var showNotificationHelp = function(){
         var headerMsg = "<h3 class='wv-data-unavailable-header'>Why can’t I see an event?</h3>";
