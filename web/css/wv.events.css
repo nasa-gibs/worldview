@@ -95,29 +95,53 @@
     right: 10px !important;
     left: auto !important;
 }
+.notify-alert div {
+
+}
 .notify-alert i{
     font-size: 1.4em;
     height: 40px;
     box-sizing: border-box;
     line-height: 40px;
 }
-.notify-alert i:first-child{
+.notify-alert .ui-dialog-content div> i{
     color: #d54e21;
     margin-right: 10px;
+    margin-left: 10px;
 }
-.notify-alert i:last-child{
+.notify-alert .ui-dialog-content div{
+    margin-right: 40px;
+    
+}
+.notify-alert .ui-dialog-content div:hover{
+    background:#ccc;
+    cursor:pointer;
+}
+.notify-alert .ui-dialog-content div:hover span{
+    color:#000;
+}
+.notify-alert .ui-dialog-content>i{
     float: right;
     padding:0 10px;
 }
-.notify-alert i:last-child:hover {
+.notify-alert .ui-dialog-content>i:hover {
     cursor: pointer;
     background: #ccc;
     color: #333;
 }
 .notify-alert .ui-dialog-content {
-    padding: 0 0 0 10px;
+    padding: 0 0 0 0px;
     box-sizing: border-box;
     line-height: 40px;
 }
-
+.wv-dialog ul {
+    padding-left:20px;
+    margin:10px 0;
+}
+.wv-dialog ul li{
+    list-style-type: disc;
+    display: list-item;
+    margin: 2px 0 2px 20px;
+    
+}
 /****************** End Notifications ********************/

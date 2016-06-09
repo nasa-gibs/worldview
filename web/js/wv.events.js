@@ -120,16 +120,44 @@ wv.events = wv.events || function(models, ui) {
         var $icon = $('<i></i>')
             .addClass('fa fa-warning fa-1x');
 
+        var $messageWrapper = $('<div></div>')
+            .click( function(e){
+                showNotificationHelp();
+                //showLargeNotification();
+            });
+
+        var $altMessage = $('<span></span>')
+            .text("Why can’t I see an event?")
+            .addClass('notify-message-alt').hide();
+
+        var $longmessage = 'There are a variety of factors as to why you may not be seeing an event in Worldview at the moment.' +
+            '<ul>' +
+            '<li>Satellite overpass time and the event occurrence time may not coincide.</li>' +
+            '<li>Cloud cover may obscure the event.</li><li>The time it takes for an event to appear in the imagery, you may have to wait a day or two for an event to be visible. Try and scroll through the days to see an event’s progression.</li>' +
+            '<li>The resolution of the imagery may be too coarse to see an event.</li>' +
+            '<li>There are swath data gaps between some of the imagery layers, and an event may have occurred in the data gap.</li>' +
+            '</ul>' +
+            'This is currently an experimental feature and we are working closely with the provider of these events, the <a href="http://eonet.sci.gsfc.nasa.gov/" target="_blank">Earth Observatory Natural Event Tracker</a>, to refine this listing to only show events that are visible with our satellite imagery.';
+
+        var $longWrapper = $('<div></div>')
+            .addClass('notify-message-body')
+            .hide();
+        
+        $messageWrapper
+            .append($icon)
+            .append($message)
+            .append($altMessage);
+
         var $close = $('<i></i>')
-            .addClass('fa fa-times-circle-o fa-1x')
+            .addClass('fa fa-times fa-1x')
             .click(function(e){
                 $notification.dialog( 'close' );
             });
 
         $notification = $('<div></div>')
-            .append( $icon)
-            .append( $message )
             .append( $close )
+            .append( $messageWrapper )
+            .append( $longWrapper )
             .dialog({
                 autoOpen: false,
                 resizable: false,
@@ -154,6 +182,26 @@ wv.events = wv.events || function(models, ui) {
         $(window).resize(resize);
 
         self.refresh();
+    };
+    var showLargeNotification = function(){
+        $('.notify-message').hide();
+        $('.notify-message-alt').show();
+
+        $('.notify-message-long').show();
+        $()
+    };
+    var showNotificationHelp = function(){
+        var headerMsg = "<h3 class='wv-data-unavailable-header'>Why can’t I see an event?</h3>";
+        var bodyMsg = 'There are a variety of factors as to why you may not be seeing an event in Worldview at the moment.' +
+            '<ul>' +
+            '<li>Satellite overpass time and the event occurrence time may not coincide.</li>' +
+            '<li>Cloud cover may obscure the event.</li><li>The time it takes for an event to appear in the imagery, you may have to wait a day or two for an event to be visible. Try and scroll through the days to see an event’s progression.</li>' +
+            '<li>The resolution of the imagery may be too coarse to see an event.</li>' +
+            '<li>There are swath data gaps between some of the imagery layers, and an event may have occurred in the data gap.</li>' +
+            '</ul>' +
+            'This is currently an experimental feature and we are working closely with the provider of these events, the <a href="http://eonet.sci.gsfc.nasa.gov/" target="_blank">Earth Observatory Natural Event Tracker</a>, to refine this listing to only show events that are visible with our satellite imagery.';
+
+        wv.ui.notify(headerMsg + bodyMsg, "Notice", 800);
     };
 
     self.refresh = function() {
