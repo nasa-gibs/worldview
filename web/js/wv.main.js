@@ -152,7 +152,7 @@ $(function() {
         ui.sidebar = wv.layers.sidebar(models, config);
         ui.activeLayers = wv.layers.active(models, ui, config);
         ui.addModal = wv.layers.modal(models, ui, config);
-
+        //ui.addLayers = wv.layers.add(models, ui, config);
         if ( config.startDate ) {
             ui.timeline = wv.date.timeline(models, config, ui);
             ui.timeline.data = wv.date.timeline.data(models, config, ui);
@@ -175,7 +175,6 @@ $(function() {
         ui.link = wv.link.ui(models, config);
         ui.tour = wv.tour(models, ui, config);
         ui.info = wv.ui.info(ui, config);
-        ui.events = wv.events(models, ui);
 
         //FIXME: Old hack
         $(window).resize(function() {
@@ -188,6 +187,7 @@ $(function() {
         $("input").blur();
         $("#eventsHolder").hide();
 
+        // Wirings
         if ( config.features.dataDownload ) {
             models.data.events
                 .on("activate", function() {
@@ -202,6 +202,7 @@ $(function() {
             // FIXME: This is a hack
             models.map.events.on("projection", models.data.updateProjection);
         }
+
         // Sink all focus on inputs if click unhandled
         $(document).click(function(event) {
             if ( event.target.nodeName !== "INPUT" ) {

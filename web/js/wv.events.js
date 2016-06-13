@@ -1,4 +1,3 @@
-
 /*
  * NASA Worldview
  *
@@ -25,7 +24,7 @@ wv.events = wv.events || function(models, ui) {
     ];
     var monthNames = [
         "January",
-        "February",
+        "Febuaray",
         "March",
         "April",
         "May",
@@ -40,18 +39,13 @@ wv.events = wv.events || function(models, ui) {
 
     var layerLists = {
         Wildfires: [
-            ["MODIS_Terra_CorrectedReflectance_TrueColor", true],
             ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
-            ["VIIRS_SNPP_CorrectedReflectance_TrueColor", false],
-            ["MODIS_Fires_Terra", true],
-            ["MODIS_Fires_Aqua", false],
-            ["VIIRS_SNPP_Fires_375m_Day", false],
-            ["VIIRS_SNPP_Fires_375m_Night", false]
+            ["MODIS_Terra_CorrectedReflectance_TrueColor", true],
+            ["MODIS_Fires_All", true]
         ],
         "Temperature Extremes": [
             ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
             ["MODIS_Terra_CorrectedReflectance_TrueColor", true],
-            ["VIIRS_SNPP_CorrectedReflectance_TrueColor", false],
             ["MODIS_Aqua_Land_Surface_Temp_Day", false],
             ["MODIS_Terra_Land_Surface_Temp_Day", true]
         ],
@@ -60,161 +54,78 @@ wv.events = wv.events || function(models, ui) {
             ["MODIS_Terra_SurfaceReflectance_Bands121", true]
         ],
         Volcanoes: [
-            ["MODIS_Terra_CorrectedReflectance_TrueColor", true],
-            ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
-            ["VIIRS_SNPP_CorrectedReflectance_TrueColor", false],
-            ["MODIS_Fires_Terra", true],
-            ["MODIS_Fires_Aqua", false],
-            ["VIIRS_SNPP_Fires_375m_Day", false],
-            ["VIIRS_SNPP_Fires_375m_Night", false]
+            ["MODIS_Aqua_CorrectedReflectance_Bands721", false],
+            ["MODIS_Terra_CorrectedReflectance_Bands721", true]
         ],
         Default: [
-            ["MODIS_Terra_CorrectedReflectance_TrueColor", true],
             ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
-            ["VIIRS_SNPP_CorrectedReflectance_TrueColor", false]
+            ["MODIS_Terra_CorrectedReflectance_TrueColor", true],
         ]
     };
 
     var self = {};
-    self.selector = "#wv-events";
-    self.id = "wv-events";
+    self.selector = "#wv-data";
+    self.id = "wv-data";
     self.data = {};
     var lastIndex = -1;
     var lastDateIndex = -1;
-    //Local storage may not be a good idea because they'll never see it again
-    var notified = false;//wv.util.localStorage('notified') || false;
-    var $notification;
 
     var init = function() {
         self.query();
-
-        ui.sidebar.events.on("select", function(tab) {
-            if ( tab === "events" ) {
-                resize();
-            }
-        });
     };
 
     self.render = function() {
-        var $panels = $(self.selector).empty()
+        var $panels = $(self.selector).empty();
+
+        var $searchContainer = $("<div></div>")
+            .attr("id", "wv-events-facets")
+            ;//.addClass("facetedSearch");
+
+        var $typeFacet = $("<select></select>")
+            .attr("id", "wv-events-types")
+            .addClass("wv-events-facet");
+        var $sourceFacet = $("<select></select>")
+            .attr("id", "wv-events-sources")
+            .addClass("wv-events-facet");
+
+        $searchContainer.append($typeFacet).append($sourceFacet);
+        $panels.append($searchContainer);
+
+        var $listContainer = $("<div></div>")
+            .attr("id", "wv-events-list")
             .addClass(self.id + "list")
-            .addClass("bank");
-
-        var $list = $("<ul></ul>")
-            .attr("id", self.id + "content")
-            .addClass("content")
             .addClass("bank")
-            .addClass("map-item-list");
+            .addClass("selector");
 
-        $panels.append($list);
+        var $list = $("<div></div>")
+            .attr("id", self.id + "content")
+            .addClass("content");
+
+        $listContainer.append($list);
+        $panels.append($listContainer);
 
         var $detailContainer = $("<div></div>")
             .attr("id", "wv-events-detail")
             .hide();
-
         $panels.append($detailContainer);
 
-        var $message = $('<span></span>')
-            .addClass('notify-message');
-
-        var $icon = $('<i></i>')
-            .addClass('fa fa-warning fa-1x');
-
-        var $messageWrapper = $('<div></div>')
-            .click( function(e){
-                showNotificationHelp();
-                //showLargeNotification();
-            });
-
-        var $altMessage = $('<span></span>')
-            .text("Why can’t I see an event?")
-            .addClass('notify-message-alt').hide();
-
-        var $longmessage = 'There are a variety of factors as to why you may not be seeing an event in Worldview at the moment.' +
-            '<ul>' +
-            '<li>Satellite overpass time and the event occurrence time may not coincide.</li>' +
-            '<li>Cloud cover may obscure the event.</li><li>The time it takes for an event to appear in the imagery, you may have to wait a day or two for an event to be visible. Try and scroll through the days to see an event’s progression.</li>' +
-            '<li>The resolution of the imagery may be too coarse to see an event.</li>' +
-            '<li>There are swath data gaps between some of the imagery layers, and an event may have occurred in the data gap.</li>' +
-            '</ul>' +
-            'This is currently an experimental feature and we are working closely with the provider of these events, the <a href="http://eonet.sci.gsfc.nasa.gov/" target="_blank">Earth Observatory Natural Event Tracker</a>, to refine this listing to only show events that are visible with our satellite imagery.';
-
-        var $longWrapper = $('<div></div>')
-            .addClass('notify-message-body')
-            .hide();
-        
-        $messageWrapper
-            .append($icon)
-            .append($message)
-            .append($altMessage);
-
-        var $close = $('<i></i>')
-            .addClass('fa fa-times fa-1x')
-            .click(function(e){
-                $notification.dialog( 'close' );
-            });
-
-        $notification = $('<div></div>')
-            .append( $close )
-            .append( $messageWrapper )
-            .append( $longWrapper )
-            .dialog({
-                autoOpen: false,
-                resizable: false,
-                height: 40,
-                width: 370,
-                draggable: false,
-                show: {
-                    effect: "fade",
-                    duration: 400
-                },
-                hide: {
-                    effect: "fade",
-                    duration: 200
-                },
-                dialogClass: 'no-titlebar notify-alert',
-                close: function( event, ui ) {
-                    //wv.util.localStorage( 'notified', !notified );
-                    notified = true;
-                }
-            });
-
-        $(window).resize(resize);
-
+        renderTypes();
+        renderSources();
         self.refresh();
-    };
-    var showLargeNotification = function(){
-        $('.notify-message').hide();
-        $('.notify-message-alt').show();
-
-        $('.notify-message-long').show();
-    };
-    var showNotificationHelp = function(){
-        var headerMsg = "<h3 class='wv-data-unavailable-header'>Why can’t I see an event?</h3>";
-        var bodyMsg = 'There are a variety of factors as to why you may not be seeing an event in Worldview at the moment.' +
-            '<ul>' +
-            '<li>Satellite overpass time and the event occurrence time may not coincide.</li>' +
-            '<li>Cloud cover may obscure the event.</li><li>The time it takes for an event to appear in the imagery, you may have to wait a day or two for an event to be visible. Try and scroll through the days to see an event’s progression.</li>' +
-            '<li>The resolution of the imagery may be too coarse to see an event.</li>' +
-            '<li>There are swath data gaps between some of the imagery layers, and an event may have occurred in the data gap.</li>' +
-            '</ul>' +
-            'This is currently an experimental feature and we are working closely with the provider of these events, the <a href="http://eonet.sci.gsfc.nasa.gov/" target="_blank">Earth Observatory Natural Event Tracker</a>, to refine this listing to only show events that are visible with our satellite imagery.';
-
-        wv.ui.notify(headerMsg + bodyMsg, "Notice", 800);
     };
 
     self.refresh = function() {
         var $content = $(self.selector + "content");
-
+        var api = $content.data("jsp");
+        if ( api ) {
+            api.destroy();
+        }
         $content = $(self.selector + "content").empty();
         _.each(self.data, function(event, index) {
             refreshEvent($content, event, index);
         });
         $(self.selector + "content li").click(function() {
             showEvent($(this).attr("data-index"));
-            $(self.selector + "content li").removeClass('item-selected');
-            $(this).addClass('item-selected');
-            notify();
         });
         $(self.selector + "content a.date").click(function(event) {
             showEvent($(this).attr("data-index"), $(this).attr("data-date-index"));
@@ -241,8 +152,6 @@ wv.events = wv.events || function(models, ui) {
             .addClass("subtitle")
             .html(event.description)
             .hide();
-        var $mapMarker = $("<i></i>")
-            .addClass('fa fa-map-marker fa-2x');
 
         var $dates = $("<ul></ul>").addClass("dates").hide();
         if ( event.geometry.length > 1 ) {
@@ -257,7 +166,7 @@ wv.events = wv.events || function(models, ui) {
             });
         }
 
-        $item.append($mapMarker).append($title).append($subtitle).append($dates);
+        $item.append($title).append($subtitle).append($dates);
         var references = toArray(event.reference);
         if ( references.length > 0 ) {
             items = [];
@@ -278,8 +187,9 @@ wv.events = wv.events || function(models, ui) {
 
     var eventList = function(events) {
         _.each(events, function(event) {
-            $("#wv-events").append(createEvent(event));
+            $("#wv-data").append(createEvent(event));
         });
+        $("#wv-data").jScrollPane();
     };
 
     var showEvent = function(index, dateIndex) {
@@ -294,10 +204,10 @@ wv.events = wv.events || function(models, ui) {
         lastIndex = index;
         lastDateIndex = lastDateIndex;
 
-        $("#wv-eventscontent .subtitle").hide();
-        $("#wv-eventscontent .dates").hide();
-        $("#wv-eventscontent [data-index='" + index + "'] .subtitle").show();
-        $("#wv-eventscontent [data-index='" + index + "'] .dates").show();
+        $("#wv-events-list .subtitle").hide();
+        $("#wv-events-list .dates").hide();
+        $("#wv-events-list [data-index='" + index + "'] .subtitle").show();
+        $("#wv-events-list [data-index='" + index + "'] .dates").show();
         resize();
 
         event = self.data[index];
@@ -327,22 +237,11 @@ wv.events = wv.events || function(models, ui) {
         if ( !layers ) {
             layers = layerLists.Default;
         }
-
-        // Turn off all layers in list first
-        _.each(models.layers.active, function(layer){
-            models.layers.setVisibility( layer.id, false );
-        });
-
-        // Turn on or add new layers
+        models.layers.clear();
         _.each(layers, function(layer) {
             var id = layer[0];
             var visible = layer[1];
-            if( models.layers.exists( id ) ) {
-                models.layers.setVisibility( id, visible );
-            }
-            else{
-                models.layers.add(id, { visible: visible });
-            }
+            models.layers.add(id, { visible: visible });
         });
 
         console.log("COORDS", eventItem.coordinates);
@@ -355,26 +254,9 @@ wv.events = wv.events || function(models, ui) {
             goTo(method, extent);
         }
     };
-    var notify = function( text ) {
 
-        var message = text || 'Events may not be visible ' +
-            'until the next day.';
-
-        var $message = $('.notify-message');
-
-        $message.empty();
-        $message.append( message );
-
-        $notification.find('i:first-child')
-            .attr('title', message);
-
-        if ( !notified ){
-            $notification.dialog( 'open' );
-        }
-    };
     var goTo = function(method, location) {
-        //TODO: Seems to be starting zoom, make it current zoom
-        var zoom = 3;
+        var zoom = 4;
         var map = ui.map.selected;
         var duration = ( method == "fly" ) ? 5000 : 1000;
         var wait = ( method == "fly" ) ? 1000 : 1;
@@ -398,59 +280,35 @@ wv.events = wv.events || function(models, ui) {
             }
             if ( location.length == 2 ) {
                 map.getView().setCenter(location);
-                map.getView().setZoom(6);
+                map.getView().setZoom(5);
             } else {
-                //map.getView().fitExtent(location, map.getSize());
-                map.getView().setCenter(location);
-                map.getView().setZoom(8);
+                map.getView().fitExtent(location, map.getSize());
             }
         }, wait);
     };
 
-    var productsIsOverflow = false;
-    var sizeEventsTab = function(){
-        var winSize = $(window).outerHeight(true);
-        var headSize = $("ul#productsHolder-tabs").outerHeight(true);//
-        var footSize = $("section#productsHolder footer").outerHeight(true);
-        var head2Size = $('#wv-events-facets').outerHeight(true);
-        var secSize = $("#productsHolder").innerHeight() - $("#productsHolder").height();
-        var offset = $("#productsHolder").offset();
-        var timeSize = $("#timeline").outerHeight(true); // + $("#timeline").offset()['top'];
-
-        //FIXME: -10 here is the timeline's bottom position from page, fix
-        // after timeline markup is corrected to be loaded first
-        var maxHeight = winSize - headSize - head2Size - footSize -
-            offset.top - timeSize - secSize - 10 - 5;
-        $(self.selector).css("max-height", maxHeight);
-
-        var childrenHeight = 
-            $('#wv-eventscontent').outerHeight(true);
-
-        if((maxHeight <= childrenHeight)) {
-            $("#wv-events").css('height', maxHeight)
-                .css('padding-right', '10px');
-            if(productsIsOverflow){
-                $(self.selector).perfectScrollbar('update');
-            }
-            else{
-                $(self.selector).perfectScrollbar();
-                productsIsOverflow = true;
-            }
-        }
-        else{
-            $("#wv-events").css('height', '')
-                .css('padding-right', '');
-            if(productsIsOverflow){
-                $(self.selector).perfectScrollbar('destroy');
-                productsIsOverflow = false;
-            }
-        }
-
+    var resize = function() {
+        resizePane($(self.selector + "content"));
     };
 
-    var resize = function() {
-        //resizePane($(self.selector + "content"));
-        sizeEventsTab();
+    var resizePane = function($pane) {
+        var tabs_height = $(".ui-tabs-nav").outerHeight(true);
+        //var button_height = $(self.selector + "_Button").outerHeight(true);
+        $(self.selector).height(
+            $(self.selector).parent().outerHeight()// - tabs_height// - button_height
+        );
+        var api = $pane.data("jsp");
+        if ( !wv.util.browser.small ) {
+            if ( api ) {
+                api.reinitialise();
+            } else {
+                $pane.jScrollPane({verticalGutter:0, contentWidth:238, autoReinitialise:false});
+            }
+        } else {
+            if ( api ) {
+                api.destroy();
+            }
+        }
     };
 
     var queryEvents = function() {
@@ -473,6 +331,20 @@ wv.events = wv.events || function(models, ui) {
         });
     };
 
+    var renderTypes = function() {
+        var $facet = $("#wv-events-types");
+        $facet.append($("<option></option>")
+            .val("none")
+            .html("Type..."));
+        _.each(self.types, function(type) {
+            var $type = $("<option></option>")
+                .val(type.title)
+                .html(type.title);
+            $facet.append($type);
+        });
+        $facet.change(updateFacets);
+    };
+
     var querySources = function() {
         var url = "http://eonet.sci.gsfc.nasa.gov/api/v1/sources";
         console.log("sending query", url);
@@ -482,6 +354,54 @@ wv.events = wv.events || function(models, ui) {
             checkRender();
         });
 
+    };
+
+    var renderSources = function() {
+        var $facet = $("#wv-events-sources");
+        $facet.append($("<option></option>")
+            .val("none")
+            .html("Source..."));
+        _.each(self.sources, function(source) {
+            var maxLen = 35;
+            if ( source.title.length > maxLen ) {
+                source.abbr = source.title.substring(0, maxLen) + "...";
+            }
+            var $source = $("<option></option>")
+                .val(source.id)
+                .html(source.abbr || source.title);
+            $facet.append($source);
+        });
+        $facet.change(updateFacets);
+    };
+
+    var updateFacets = function() {
+        $("#wv-events-list .selectorItem").hide();
+        var source = $("#wv-events-sources").val();
+        var type = $("#wv-events-types").val();
+
+        console.log("source", source, "type", type);
+        $("#wv-events-list .selectorItem").each(function() {
+            var index = $(this).attr("data-index");
+            var passType = true;
+            var passSource = true;
+            var event = self.data[index];
+            if ( source !== "none" ) {
+                var references = toArray(event.reference);
+                if ( !_.find(references, { "id": source }) ) {
+                    passSource = false;
+                }
+            }
+            if ( type !== "none" ) {
+                var categories = toArray(event.category);
+                console.log(type, categories);
+                if ( !_.find(categories, { "#text": type }) ) {
+                    passType = false;
+                }
+            }
+            if ( passType && passSource ) {
+                $(this).show();
+            }
+        });
     };
 
     self.query = function() {
@@ -504,6 +424,7 @@ wv.events = wv.events || function(models, ui) {
         if ( self.data && self.sources && self.types ) {
             self.render();
             self.refresh();
+            updateFacets();
         }
     };
 

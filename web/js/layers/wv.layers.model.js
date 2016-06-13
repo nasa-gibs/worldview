@@ -86,19 +86,6 @@ wv.layers.model = wv.layers.model || function(models, config) {
         return true;
     };
 
-    // Takes a layer id and returns a true or false value
-    // if the layer exists in the active layer list
-    self.exists = function( layer ){
-        var found = false;
-        _.each( self.active, function( current ) {
-            if( layer === current.id ){
-                found = true;
-                return;
-            }
-        } );
-        return found;
-    };
-
     self.dateRange = function(spec) {
         spec = spec || {};
         var projId = spec.projId || models.proj.selected.id;

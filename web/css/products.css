@@ -8,13 +8,13 @@
 
 #productsHolder-tabs .ui-state-default {
     background: rgba(0, 0, 0, 0);
+    width: 20%;
     border: 0;
-    margin: 0 2px -1px 2px;
-    padding:0;
+    margin: 0 0 -1px 0;
 }
 
 #productsHolder-tabs .ui-state-active {
-    
+    width: 60%;
 }
 
 #productsHolder-tabs .ui-state-active a {
@@ -22,9 +22,7 @@
 }
 
 #productsHolder-tabs .ui-tabs-anchor {
-    padding: 0.5em .3em;
-    float: none;
-    
+    padding: 0.5em 0;
 }
 
 .ui-tabs-nav {
@@ -32,18 +30,13 @@
     border:0;
     border-bottom: 3px #00457b solid;
 }
-.ui-tabs-nav li.layerPicker {
-    display:inline-block;
-    float:none;
-}
-.ui-tabs-nav li.layerPicker.ui-state-active {
-
-}
+.ui-tabs-nav li.layerPicker {height:100%; display:inline-block; float:left; width:20%;}
+.ui-tabs-nav li.layerPicker.ui-state-active { width: 60%; }
 
 .ui-tabs-nav li a {
     /*border-radius: 10px 10px 0 0;*/
     color: #fff;
-    font-size: 1em;
+    font-size: 1.1em;
     font-weight: 400;
     border: none;
     padding: 0.5em 0;
@@ -55,10 +48,6 @@
 }
 .ui-tabs-nav li.ui-state-default:hover a{
     background-color:#ccc;
-    color: #000;
-}
-.ui-tabs-nav li.ui-state-default:hover a i{
-    color: #000;
 }
 .ui-tabs-nav li.first.ui-state-active a {
     background-color:#00457b;
@@ -104,7 +93,7 @@
     height: 20px;
     vertical-align: middle;
     background:url(../images/wv-icons.svg) transparent 0 -10px;
-    margin:0 7px 0 0;
+    margin:0;
 }
 /*ul#productsHoldertabs li.ui-state-active .tab:hover i.productsIcon{
     background-position:0 -10px;
@@ -121,28 +110,6 @@ ul#productsHoldertabs li.ui-state-active .tab:hover i.icon-download {background-
 ul#productsHoldertabs .tab:hover i.icon-add    { background-position:-90px 20px; }
 ul#productsHoldertabs li.ui-state-active .tab:hover i.icon-add {background-position:-90px -10px;}
 .icon-add-alt     { background-position:-120px -10px; }
-
-.icon-events,
-ul#productsHoldertabs li.ui-state-active .tab:hover i.icon-events {
-    display:inline-block;
-    width: 20px;
-    height: 20px;
-    vertical-align: middle;
-    background: url(../images/events-icon.png);
-    margin:0;
-    margin-right: 5px;
-}
-
-ul#productsHoldertabs li.ui-state-active i.icon-events {
-    margin-right: 5px;
-}
-
-.icon-events:hover,
-ul#productsHoldertabs .tab:hover i.icon-events {
-    background: url(../images/events-icon-highlight.png);
-    margin-right: 5px;
-}
-
 
 /***********************************End Icons***********************************/
 ul#productsHoldertabs li.ui-state-active i.productsIcon {
