@@ -132,7 +132,7 @@ $(function() {
         if ( config.features.dataDownload ) {
             models.data = wv.data.model(models, config);
         }
-        if ( config.features.dataDownload) {
+        if ( config.features.dataDownload ) {
             models.link.register(models.data);
         }
         // HACK: Map needs permalink state loaded before starting. But
@@ -172,10 +172,12 @@ $(function() {
             // FIXME: Why is this here?
             ui.data.render();
         }
+        if ( config.features.naturalEvents ) {
+            ui.events = wv.events(models, ui, config);
+        }
         ui.link = wv.link.ui(models, config);
         ui.tour = wv.tour(models, ui, config);
         ui.info = wv.ui.info(ui, config);
-        ui.events = wv.events(models, ui);
 
         //FIXME: Old hack
         $(window).resize(function() {
