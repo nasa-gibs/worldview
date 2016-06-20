@@ -54,9 +54,6 @@ wv.date.timeline.zoom = wv.date.timeline.zoom || function(models, config, ui) {
             zoom = 3;
         }
 
-        console.log(this);
-        console.log(zoom);
-        console.log(event);
         tl.config.zoom.call(this, zoom, event);
 
     };
@@ -68,7 +65,6 @@ wv.date.timeline.zoom = wv.date.timeline.zoom || function(models, config, ui) {
             var relX = e.clientX - $('#timeline-footer').offset().left;
             mousePos = tl.x.invert(relX);
             mouseOffset = (tl.width-tl.margin.left-tl.margin.right)/2 - relX;
-            console.log(relX);
         }
 
         var d1 = tl.data.start(),
