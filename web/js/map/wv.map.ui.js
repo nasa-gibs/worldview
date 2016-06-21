@@ -12,14 +12,14 @@
 var wv = wv || {};
 wv.map = wv.map || {};
 
-wv.map.ui = wv.map.ui || function(models, config) {
-
+wv.map.ui = wv.map.ui || function(models, config, Rotation) {
     var id = "wv-map";
     var selector = "#" + id;
     var cache = new Cache(100); // Save layers from days visited
     var animationDuration = 250;
-
     var self = {};
+    var rotation = new Rotation(self, models);
+
     self.proj = {}; // One map for each projection
     self.selected = null; // The map for the selected projection
     self.events = wv.util.events();
@@ -71,7 +71,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
 
         //Update the rotation buttons if polar projection to display correct value
         if(models.proj.selected.id !== "geographic")
-            self.updateRotation();
+            rotation.updateRotation();
 
         // If the browser was resized, the inactive map was not notified of
         // the event. Force the update no matter what and reposition the center
@@ -404,22 +404,6 @@ wv.map.ui = wv.map.ui || function(models, config) {
     };
 
     //Called as event listener when map is rotated. Update url to reflect rotation reset
-    self.updateRotation = function() {
-        models.map.rotation = self.selected.getView().getRotation();
-        window.history.replaceState("", "@OFFICIAL_NAME@","?" + models.link.toQueryString());
-
-        //Set reset button content and proper CSS styling to position it correctly
-        $(".wv-map-reset-rotation").button("option", "label", Number((models.map.rotation) * (180.0 / Math.PI)).toFixed() );
-        if((models.map.rotation) * (180.0 / Math.PI) >= 100.0)
-            $(".wv-map-reset-rotation").find("span").attr("style","padding-left: 9px");
-        else if((models.map.rotation) * (180.0 / Math.PI) <= -100.0)
-            $(".wv-map-reset-rotation").find("span").attr("style","padding-left: 6px");
-        else if((models.map.rotation) * (180.0 / Math.PI) <= -10.0)
-            $(".wv-map-reset-rotation").find("span").attr("style","padding-left: 10px");
-        else
-            $(".wv-map-reset-rotation").find("span").attr("style","padding-left: 14px");
-    };
-
     var createMap = function(proj) {
         var id = "wv-map-" + proj.id;
         var $map = $("<div></div>")
@@ -493,7 +477,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
 
         //allow rotation by dragging for polar projections
         if(proj.id !== 'geographic') {
-            createRotationWidget(map);
+            rotation.createRotationWidget(map);
             map.addInteraction(rotateInteraction);
             map.addInteraction(mobileRotation);
         }
@@ -501,7 +485,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
         //Set event listeners for changes on the map view (when rotated, zoomed, panned)
         map.getView().on("change:center", updateExtent);
         map.getView().on("change:resolution", updateExtent);
-        map.getView().on("change:rotation", self.updateRotation);
+        map.getView().on("change:rotation", rotation.updateRotation);
 
         return map;
     };
@@ -637,82 +621,6 @@ wv.map.ui = wv.map.ui || function(models, config) {
                     $(this).html(coordinateFormat(coords, format));
                 });
             });
-    };
-
-    //Create rotation buttons for polar views
-    var createRotationWidget = function(map) {
-        var $map = $("#" + map.getTarget());
-
-        var $left = $("<button></button>")
-            .addClass("wv-map-rotate-left wv-map-zoom")
-                .attr("title","You may also rotate by holding Alt and dragging the mouse"),
-            $lefticon = $("<i></i>")
-                .addClass("fa fa-undo");
-
-        var $right = $("<button></button>")
-            .addClass("wv-map-rotate-right wv-map-zoom")
-            .attr("title","You may also rotate by holding Alt and dragging the mouse"),
-            $righticon = $("<i></i>")
-                .addClass("fa fa-repeat");
-
-        var $mid = $("<button></button>")
-            .addClass("wv-map-reset-rotation wv-map-zoom")
-            .attr("title", "Click to reset")
-            .attr("style", "width: 43px");
-
-        $left.append($lefticon); $right.append($righticon);
-        $map.append($left).append($mid).append($right);
-
-        var intervalId, dur = 500;
-
-        //Set buttons to animate rotation by 18 degrees. use setInterval to repeat the rotation when mouse button is held
-        $left.button({
-            text: false
-        }).mousedown(function() {
-            rotate(10, dur);
-            intervalId = setInterval(function() {
-                rotate(10, dur);
-            }, dur);
-        }).mouseup(function() {
-            clearInterval(intervalId);
-        });
-
-        $right.button({
-            text: false
-        }).mousedown(function() {
-            rotate(-10, dur);
-            intervalId = setInterval(function() {
-                rotate(-10, dur);
-            }, dur);
-        }).mouseup(function() {
-            clearInterval(intervalId);
-        });
-
-        $mid.button({
-            label: Number(models.map.rotation * (180/Math.PI)).toFixed()
-        }).mousedown(function() { //reset rotation
-            clearInterval(intervalId); //stop repeating rotation on mobile
-            map.beforeRender(ol.animation.rotate({
-                duration: 500,
-                rotation: map.getView().getRotation()
-            }));
-            map.getView().rotate(0);
-            self.updateRotation();
-
-            $mid.button("option", "label", "0");
-        });
-
-        //Function to rotate polar map tile when button is pressed. Amount divides a 180 degree rotation
-        var rotate = function(amount, duration) {
-            map.beforeRender(ol.animation.rotate({
-                duration: duration,
-                rotation: map.getView().getRotation()
-            }));
-
-            map.getView().rotate(map.getView().getRotation() - (Math.PI / amount));
-            self.updateRotation();
-        };
-
     };
 
     var zoomAction = function(map, amount) {
