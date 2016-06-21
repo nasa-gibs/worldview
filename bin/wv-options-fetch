@@ -69,6 +69,9 @@ def process_remote(entry):
                 colormap_link = layer["ows:Metadata"]["@xlink:href"]
                 colormap_file = os.path.basename(colormap_link)
                 colormap_id = os.path.splitext(colormap_file)[0]
+                if ident != colormap_id:
+                    error_count += 1
+                    sys.stderr.write("%s     ERROR: %s Colormap name does not match layer ID\n" % (prog, colormap_id))
                 colormaps[colormap_id] = colormap_link
 
 def process_colormaps():
