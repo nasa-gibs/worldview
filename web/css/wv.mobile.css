@@ -1,9 +1,10 @@
 /*@media only screen and (max-width: 720px) and (orientation: portrait), only screen and (max-height: 320px) and (orientation: landscape), only screen and (device-aspect-ratio: 2/3) and (orientation:portrait), only screen and (device-aspect-ratio:40/71) and (orientation:portrait){ */
 @media only screen and (max-width: 719px) {
-    .products {
+    #productsHolder {
         display:block;
         float:left;
         left: 0;
+        
         min-width:238px;
         width:100%;
         height:100%;
@@ -13,7 +14,9 @@
         border-radius:0 10px 10px 0;
         top:0; z-index: 10100;
     }
-
+    #productsHolder footer {
+        
+    }
     .bank {
         height:96%;
     }
@@ -78,5 +81,23 @@
 
     .wv-coords-map{
         display: none !important;
+    }
+    button#layers-add{
+        width:100%;
+    }
+    #selected-category .ui-tabs-panel{
+        clear:both;
+        margin-left:0;
+        border-top: 2px solid #d54e21;
+        padding: 10px 0 0 0;
+    }
+    #selected-category .ui-tabs .ui-tabs-nav{
+        margin-bottom:15px;
+    }
+    #categories-nav label span {
+        font-size: 1em;
+    }
+    #selected-category .ui-tabs-panel li.measurement-settings-item{
+        margin-left:0px;
     }
 }

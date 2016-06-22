@@ -1,23 +1,35 @@
-.products {
-    display:block;
-    float:left;
-    z-index:2;
-    min-width:286px;
-    width:286px;
-    height:65%;
-    position:absolute;
-    overflow:hidden;
-    background: rgba(40,40,40,0.85);
-    border-radius:0;
-    left:10px;
-    top:68px;
-    -webkit-box-sizing:border-box;
-    -o-box-sizing:border-box;
-    -moz-box-sizing:border-box;
-    box-sizing:border-box;
+#productsHolder .ui-tabs-panel {
+    padding: 0;
+}
+#productsHolder-tabs{
+    padding:0;
+    background: rgba(0,0,0,0);
 }
 
-.ui-tabs-nav {clear:both; display:inline-block; overflow:hidden; width:90%; border-radius:0;border:0; border-bottom: 3px #00457b solid; float:left;}
+#productsHolder-tabs .ui-state-default {
+    background: rgba(0, 0, 0, 0);
+    width: 20%;
+    border: 0;
+    margin: 0 0 -1px 0;
+}
+
+#productsHolder-tabs .ui-state-active {
+    width: 60%;
+}
+
+#productsHolder-tabs .ui-state-active a {
+    color: #FFFFFF;
+}
+
+#productsHolder-tabs .ui-tabs-anchor {
+    padding: 0.5em 0;
+}
+
+.ui-tabs-nav {
+    border-radius:0;
+    border:0;
+    border-bottom: 3px #00457b solid;
+}
 .ui-tabs-nav li.layerPicker {height:100%; display:inline-block; float:left; width:20%;}
 .ui-tabs-nav li.layerPicker.ui-state-active { width: 60%; }
 
@@ -102,9 +114,6 @@ ul#productsHoldertabs li.ui-state-active .tab:hover i.icon-add {background-posit
 /***********************************End Icons***********************************/
 ul#productsHoldertabs li.ui-state-active i.productsIcon {
     margin-right: 10px;
-}
-.content {
-    height:100%;
 }
 
 @media screen and (max-device-height: 720px) and (orientation: landscape){

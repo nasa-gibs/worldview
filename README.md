@@ -1,6 +1,6 @@
 # [Worldview](https://worldview.earthdata.nasa.gov)
 
-[![Build Status](https://travis-ci.org/nasa-gibs/worldview.svg?branch=master)](https://travis-ci.org/nasa-gibs/worldview)
+[![Build Status](https://api.travis-ci.org/nasa-gibs/worldview.svg?branch=master)](https://travis-ci.org/nasa-gibs/worldview)
 
 Visit Worldview at
 [https://worldview.earthdata.nasa.gov](https://worldview.earthdata.nasa.gov)
@@ -48,7 +48,7 @@ other environments.
 
 Install the following:
 
-* [VirutalBox](https://www.virtualbox.org)
+* [VirtualBox](https://www.virtualbox.org)
 * [Vagrant](https://www.vagrantup.com)
 
 Clone this repository:

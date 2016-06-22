@@ -39,7 +39,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
             var map = createMap(proj);
             self.proj[proj.id] = map;
         });
-
+        
         models.proj.events.on("select", function() {
             updateProjection();
         });
@@ -423,7 +423,6 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
             units: "imperial"
         });
 
-        //insert this to polar map views for desktop and mobile rotation
         var rotateInteraction = new ol.interaction.DragRotate({
             condition: ol.events.condition.altKeyOnly,
             duration: animationDuration
@@ -437,10 +436,9 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
                 projection: ol.proj.get(proj.crs),
                 extent: proj.maxExtent,
                 center: proj.startCenter,
-                rotation: proj.id === "geographic" ? 0.0 : models.map.rotation,
                 zoom: proj.startZoom,
                 maxZoom: proj.numZoomLevels,
-                enableRotation: true
+                enableRotation: false
             }),
             target: id,
             renderer: ["canvas", "dom"],
@@ -478,6 +476,9 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
         //allow rotation by dragging for polar projections
         if(proj.id !== 'geographic') {
             rotation.createRotationWidget(map);
+            rotation.evts.on('rotate-left-max', function() {rotation.freezeClick('wv-map-rotate-left')})
+            rotation.evts.on('rotate-right-max', function() {rotation.freezeClick('wv-map-rotate-right')})
+            rotation.evts.on('remove-freeze', rotation.removeFreeze)
             map.addInteraction(rotateInteraction);
             map.addInteraction(mobileRotation);
         }
@@ -489,6 +490,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
 
         return map;
     };
+
 
     var createZoomButtons = function(map, proj) {
         var $map = $("#" + map.getTarget());
