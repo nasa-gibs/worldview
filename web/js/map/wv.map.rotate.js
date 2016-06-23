@@ -196,34 +196,5 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
         }
         map.getView().rotate(map.getView().getRotation() - (Math.PI / amount));
     };
-
-
-    /*
-     * Adds 'freeze' class to rotate button that has reached it's limit
-     *
-     * @method freezeClick
-     * @static
-     *
-     * @returns {void}
-     */
-    this.freezeClick = function( className ) {
-        $('.' + className).addClass('ui-button-click-prevent');
-    };
-
-
-    /*
-     * Removes freeze class to rotate button that has reached it's limit
-     *
-     * @method freezeClick
-     * @static
-     *
-     * @returns {void}
-     */
-    this.removeFreeze = function() {
-        var freezeEl = $('.wv-map-zoom.ui-button-click-prevent');
-        if(freezeEl) {
-            freezeEl.removeClass('ui-button-click-prevent');
-        }
-    };
 };
 

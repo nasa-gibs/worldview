@@ -477,9 +477,6 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
         //allow rotation by dragging for polar projections
         if(proj.id !== 'geographic') {
             rotation.init(map);
-            rotation.evts.on('rotate-left-max', function() {rotation.freezeClick('wv-map-rotate-left')})
-            rotation.evts.on('rotate-right-max', function() {rotation.freezeClick('wv-map-rotate-right')})
-            rotation.evts.on('remove-freeze', rotation.removeFreeze)
             map.addInteraction(rotateInteraction);
             map.addInteraction(mobileRotation);
         }
