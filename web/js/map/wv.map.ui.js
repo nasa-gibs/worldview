@@ -19,7 +19,6 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
     var animationDuration = 250;
     var self = {};
     var rotation = new Rotation(self, models);
-
     self.proj = {}; // One map for each projection
     self.selected = null; // The map for the selected projection
     self.events = wv.util.events();
@@ -476,7 +475,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
 
         //allow rotation by dragging for polar projections
         if(proj.id !== 'geographic') {
-            rotation.init(map);
+            rotation.init(map, proj.id);
             map.addInteraction(rotateInteraction);
             map.addInteraction(mobileRotation);
         }

@@ -21,9 +21,9 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
      *
      * @returns {void}
      */
-    this.init = function(map) {
+    this.init = function(map, id) {
         this.buildRotationWidget(map);
-        this.setRotationEvents(map);
+        this.setRotationEvents(map, id);
     };
     /*
      * Draws Rotation Widget
@@ -38,25 +38,24 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
      */
     this.buildRotationWidget = function(map) {
         var $map = $("#" + map.getTarget());
-
-        this.rotateLeftButton = $("<button></button>")
+        var $rotateLeftButton = $("<button></button>")
             .addClass("wv-map-rotate-left wv-map-zoom")
-                .attr("title","You may also rotate by holding Alt and dragging the mouse");
-        $lefticon = $("<i></i>").addClass("fa fa-undo");
+            .attr("title","You may also rotate by holding Alt and dragging the mouse");
+        var $lefticon = $("<i></i>").addClass("fa fa-undo");
 
-        this.rotateRightButton = $("<button></button>")
+        var $rotateRightButton = $("<button></button>")
             .addClass("wv-map-rotate-right wv-map-zoom")
             .attr("title","You may also rotate by holding Alt and dragging the mouse");
-        $righticon = $("<i></i>").addClass("fa fa-repeat");
+        var $righticon = $("<i></i>").addClass("fa fa-repeat");
 
-        this.resetButton = $("<button></button>")
+        var $resetButton = $("<button></button>")
             .addClass("wv-map-reset-rotation wv-map-zoom")
             .attr("title", "Click to reset")
             .attr("style", "width: 43px");
 
-        this.rotateLeftButton.append($lefticon);
-        this.rotateRightButton.append($righticon);
-        $map.append(this.rotateLeftButton).append(this.resetButton).append(this.rotateRightButton);
+        $rotateLeftButton.append($lefticon);
+        $rotateRightButton.append($righticon);
+        $map.append($rotateLeftButton).append($resetButton).append($rotateRightButton);
     };
     /*
      * Applies Jquery click events to rotation-widget
@@ -69,44 +68,48 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
      *
      * @returns {void}
      */
-    this.setRotationEvents = function(map) {
+    this.setRotationEvents = function(map, id) {
         var dur = 500;
-
+        var $leftButton = $('#wv-map-' + id + ' .wv-map-rotate-left');
+        var $rightButton = $('#wv-map-' + id + ' .wv-map-rotate-right');
+        var $resetButton = $('#wv-map-' + id + ' .wv-map-reset-rotation');
+        console.log($leftButton)
         var clickManager = function(el, rotation) {
-            el.unbind('mousedown');
-            self.rotate(rotation, dur, map);
-            setTimeout(function() {
-                el.bind('mousedown', function() {
-                    clickManager(el, rotation);
-                });
-            }, dur);
+            //el.unbind('mousedown');
+            
+            // setTimeout(function() {
+            //     //el.bind('mousedown', function() {
+            //         //clickManager(el, rotation);
+            //     });
+            // }, dur);
         };
         //Set buttons to animate rotation by 18 degrees. use setInterval to repeat the rotation when mouse button is held
-        this.rotateLeftButton.button({
+        $leftButton.button({
             text: false
-        }).bind('mousedown', function() {
+        }).mousedown(function() {
           self.intervalId = setInterval(function() {
               self.rotate(10, dur, map);
           }, dur);
-          clickManager(self.rotateLeftButton, 10);
+          self.rotate(10, dur, map);
 
         })
         .mouseup(function() {
             clearInterval(self.intervalId);
         });
 
-        this.rotateRightButton.button({
+        $rightButton.button({
             text: false
-        }).bind('mousedown', function() {
+        }).mousedown(function() {
             self.intervalId = setInterval(function() {
                 self.rotate(-10, dur, map);
             }, dur);
-            clickManager(self.rotateRightButton, -10);
+            self.rotate(-10, dur, map);
+            
         }).mouseup(function() {
             clearInterval(self.intervalId);
         });
 
-        this.resetButton.button({
+        $resetButton.button({
             label: Number(models.map.rotation * (180/Math.PI)).toFixed()
         }).mousedown(function() { //reset rotation
             clearInterval(self.intervalId); //stop repeating rotation on mobile
@@ -116,7 +119,7 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
             }));
             map.getView().rotate(0);
 
-            self.resetButton.button("option", "label", "0");
+            $resetButton.button("option", "label", "0");
         });
     };
 
