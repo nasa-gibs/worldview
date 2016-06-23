@@ -436,6 +436,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
                 projection: ol.proj.get(proj.crs),
                 extent: proj.maxExtent,
                 center: proj.startCenter,
+                rotation: proj.id === "geographic" ? 0.0 : models.map.rotation,
                 zoom: proj.startZoom,
                 maxZoom: proj.numZoomLevels,
                 enableRotation: true
