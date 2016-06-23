@@ -79,7 +79,7 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
                 el.bind('mousedown', function() {
                     clickManager(el, rotation);
                 });
-            }, dur + 20);
+            }, dur);
         };
         //Set buttons to animate rotation by 18 degrees. use setInterval to repeat the rotation when mouse button is held
         this.rotateLeftButton.button({
