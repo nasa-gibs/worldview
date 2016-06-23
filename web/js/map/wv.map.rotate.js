@@ -6,7 +6,7 @@ wv.map = wv.map || {};
  */
 wv.map.rotate = wv.map.rotate || function(ui, models, map) {
     this.evts = wv.util.events();
-    this.intervalId;
+    this.intervalId = null;
     var self = this;
 
 
@@ -23,8 +23,8 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
      */
     this.init = function(map) {
         this.buildRotationWidget(map);
-        this.setRotationEvents(map)
-    }
+        this.setRotationEvents(map);
+    };
     /*
      * Draws Rotation Widget
      *
@@ -41,15 +41,13 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
 
         this.rotateLeftButton = $("<button></button>")
             .addClass("wv-map-rotate-left wv-map-zoom")
-                .attr("title","You may also rotate by holding Alt and dragging the mouse"),
-            $lefticon = $("<i></i>")
-                .addClass("fa fa-undo");
+                .attr("title","You may also rotate by holding Alt and dragging the mouse");
+        $lefticon = $("<i></i>").addClass("fa fa-undo");
 
         this.rotateRightButton = $("<button></button>")
             .addClass("wv-map-rotate-right wv-map-zoom")
-            .attr("title","You may also rotate by holding Alt and dragging the mouse"),
-            $righticon = $("<i></i>")
-                .addClass("fa fa-repeat");
+            .attr("title","You may also rotate by holding Alt and dragging the mouse");
+        $righticon = $("<i></i>").addClass("fa fa-repeat");
 
         this.resetButton = $("<button></button>")
             .addClass("wv-map-reset-rotation wv-map-zoom")
@@ -59,7 +57,7 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
         this.rotateLeftButton.append($lefticon);
         this.rotateRightButton.append($righticon);
         $map.append(this.rotateLeftButton).append(this.resetButton).append(this.rotateRightButton);
-    }
+    };
     /*
      * Applies Jquery click events to rotation-widget
      *
@@ -75,14 +73,14 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
         var dur = 500;
 
         var clickManager = function(el, rotation) {
-            el.unbind('mousedown')
+            el.unbind('mousedown');
             self.rotate(rotation, dur, map);
             setTimeout(function() {
                 el.bind('mousedown', function() {
-                    clickManager(el, rotation)
-                })
-            }, dur + 10);
-        }
+                    clickManager(el, rotation);
+                });
+            }, dur + 20);
+        };
         //Set buttons to animate rotation by 18 degrees. use setInterval to repeat the rotation when mouse button is held
         this.rotateLeftButton.button({
             text: false
@@ -138,7 +136,7 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
         deg = radians * (180.0 / Math.PI);
         models.map.rotation = radians;
         window.history.replaceState("", "@OFFICIAL_NAME@","?" + models.link.toQueryString());
-        self.setResetButton(deg)
+        self.setResetButton(deg);
     };
 
 
@@ -168,7 +166,7 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
                 button.find("span").attr("style","padding-left: 14px");
                 break;
         }
-    }
+    };
 
     /*
      * Called as event listener when map is rotated. Update url to reflect rotation reset
@@ -181,16 +179,23 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
     this.rotate = function( amount, duration, map) {
         
         var currentDeg = (map.getView().getRotation() * (180.0 / Math.PI));
-        if(Math.abs(currentDeg) !== 360){
+        if(Math.abs(currentDeg) <= 342 ) { 
             map.beforeRender(ol.animation.rotate({
                 duration: 10,
                 rotation: map.getView().getRotation()
             }));
-        } else {
+        } else if(Math.abs(currentDeg) === 360){
             map.getView().setRotation(0);
+        } else {
+            var newNadVal = ((360 - Math.abs(currentDeg)) * (Math.PI/180));
+            if(currentDeg < 0) {
+                map.getView().setRotation(newNadVal);
+            } else {
+                map.getView().setRotation(-newNadVal);
+            }
         }
         map.getView().rotate(map.getView().getRotation() - (Math.PI / amount));
-    }
+    };
 
 
     /*
@@ -203,7 +208,7 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
      */
     this.freezeClick = function( className ) {
         $('.' + className).addClass('ui-button-click-prevent');
-    }
+    };
 
 
     /*
@@ -219,6 +224,6 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
         if(freezeEl) {
             freezeEl.removeClass('ui-button-click-prevent');
         }
-    }
-}
+    };
+};
 
