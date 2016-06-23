@@ -2,12 +2,7 @@ var wv = wv || {};
 
 wv.map = wv.map || {};
 /*
- * class that 
- *
- * @Class wv.map.rotate
- *
- * @param ui
- *
+ * @Class
  */
 wv.map.rotate = wv.map.rotate || function(ui, models, map) {
     this.evts = wv.util.events();
@@ -137,23 +132,12 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
      * @returns {void}
      */
     this.updateRotation = function() {
-        var deg, radians;
-        radians = ui.selected.getView().getRotation();
+        var deg, radians, view;
+        view = ui.selected.getView();
+        radians = view.getRotation();
+        deg = radians * (180.0 / Math.PI);
         models.map.rotation = radians;
-
         window.history.replaceState("", "@OFFICIAL_NAME@","?" + models.link.toQueryString());
-        deg = ((radians) * (180.0 / Math.PI));
-
-        if(Math.abs(deg) >= 360) {
-            clearInterval(self.intervalId);
-            if(deg > 0) {
-                self.evts.trigger('rotate-right-max');
-            } else {
-                self.evts.trigger('rotate-left-max');
-            }   
-        } else {
-            self.evts.trigger('remove-freeze');
-        }        
         self.setResetButton(deg)
     };
 
@@ -195,11 +179,16 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
      * @returns {void}
      */
     this.rotate = function( amount, duration, map) {
-        map.beforeRender(ol.animation.rotate({
-            duration: duration,
-            rotation: map.getView().getRotation()
-        }));
-
+        
+        var currentDeg = (map.getView().getRotation() * (180.0 / Math.PI));
+        if(Math.abs(currentDeg) !== 360){
+            map.beforeRender(ol.animation.rotate({
+                duration: 10,
+                rotation: map.getView().getRotation()
+            }));
+        } else {
+            map.getView().setRotation(0);
+        }
         map.getView().rotate(map.getView().getRotation() - (Math.PI / amount));
     }
 
