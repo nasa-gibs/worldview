@@ -9,7 +9,7 @@
 #productsHolder-tabs .ui-state-default {
     background: rgba(0, 0, 0, 0);
     border: 0;
-    margin: 0 2px -1px 2px;
+    margin: 0;
     padding:0;
 }
 
@@ -22,7 +22,11 @@
 }
 
 #productsHolder-tabs .ui-tabs-anchor {
-    padding: 0.5em .3em;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    padding: 0.5em .7em;
     float: none;
     
 }
@@ -110,20 +114,42 @@
     background-position:0 -10px;
 }*/
 /***********************************Icons***********************************/
-.icon-layers      { background-position:0 -10px; }
-ul#productsHoldertabs .tab:hover i.icon-layers {background-position:0 20px;}
-ul#productsHoldertabs li.ui-state-active .tab:hover i.icon-layers {background-position: 0 -10px;}
-.icon-download    { background-position:-30px -10px; }
-ul#productsHoldertabs .tab:hover i.icon-download    { background-position:-30px 20px; }
-ul#productsHoldertabs li.ui-state-active .tab:hover i.icon-download {background-position:-30px -10px;}
-.icon-download-alt{ background-position:-60px -10px; }
-.icon-add         { background-position:-90px -10px; }
-ul#productsHoldertabs .tab:hover i.icon-add    { background-position:-90px 20px; }
-ul#productsHoldertabs li.ui-state-active .tab:hover i.icon-add {background-position:-90px -10px;}
-.icon-add-alt     { background-position:-120px -10px; }
+.icon-layers {
+    background-position:0 -10px;
+}
+ul#productsHolder-tabs .tab:hover i.icon-layers {
+    background-position:0 20px;
+}
+ul#productsHolder-tabs li.ui-state-active .tab:hover i.icon-layers {
+    background-position: 0 -10px;
+}
+.icon-download {
+    background-position:-30px -10px;
+}
+ul#productsHolder-tabs .tab:hover i.icon-download    {
+    background-position:-30px 20px;
+}
+ul#productsHoldertabs li.ui-state-active .tab:hover i.icon-download {
+    background-position:-30px -10px;
+}
+.icon-download-alt {
+    background-position:-60px -10px;
+}
+.icon-add {
+    background-position:-90px -10px;
+}
+ul#productsHolder-tabs .tab:hover i.icon-add {
+    background-position:-90px 20px;
+}
+ul#productsHolder-tabs li.ui-state-active .tab:hover i.icon-add {
+    background-position:-90px -10px;
+}
+.icon-add-alt {
+    background-position:-120px -10px;
+}
 
 .icon-events,
-ul#productsHoldertabs li.ui-state-active .tab:hover i.icon-events {
+ul#productsHolder-tabs li.ui-state-active.ui-state-hover i.icon-events {
     display:inline-block;
     width: 20px;
     height: 20px;
@@ -137,11 +163,11 @@ ul#productsHoldertabs li.ui-state-active i.icon-events {
     margin-right: 5px;
 }
 
-.icon-events:hover,
-ul#productsHoldertabs .tab:hover i.icon-events {
+ul#productsHolder-tabs li.ui-state-hover i.icon-events {
     background: url(../images/events-icon-highlight.png);
     margin-right: 5px;
 }
+ul#productsHolder
 
 
 /***********************************End Icons***********************************/

@@ -48,7 +48,18 @@
     color: #666;
 }
 .map-item-list li.item p a {
-    
+    display: block;
+    clear:both;
+    margin-top: 7px;
+    position: relative;
+    padding-left: 15px;
+}
+#wv-events .map-item-list li.item p a i.fa-external-link {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    margin-top: -5px;
+    left: 0;
 }
 .map-item-list ul.selectorboxcategory {
     outline:none !important;
@@ -95,6 +106,12 @@
     right: 10px !important;
     left: auto !important;
 }
+@media screen and (max-device-height: 720px) {
+    .notify-alert {
+        display:none;
+    }
+}
+
 .notify-alert div {
 
 }

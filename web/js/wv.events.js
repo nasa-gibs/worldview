@@ -162,7 +162,7 @@ wv.events = wv.events || function(models, ui) {
                 autoOpen: false,
                 resizable: false,
                 height: 40,
-                width: 370,
+                width: 320,
                 draggable: false,
                 show: {
                     effect: "fade",
@@ -214,6 +214,9 @@ wv.events = wv.events || function(models, ui) {
             showEvent($(this).attr("data-index"));
             $(self.selector + "content li").removeClass('item-selected');
             $(this).addClass('item-selected');
+            if (wv.util.browser.small){
+                ui.sidebar.collapseNow();
+            }
             notify();
         });
         $(self.selector + "content a.date").click(function(event) {
@@ -224,7 +227,9 @@ wv.events = wv.events || function(models, ui) {
     };
 
     var refreshEvent = function($content, event, index) {
-
+        if (event.category[0]['-domain'] === 'Floods'){
+            return;
+        }
         var geoms = toArray(event.geometry);
         eventDate = wv.util.parseDateUTC(geoms[0].date);
         dateString = dayNames[eventDate.getUTCDay()] + ", " +
@@ -265,12 +270,13 @@ wv.events = wv.events || function(models, ui) {
                 var source = _.find(self.sources, { id: reference.id });
                 if ( reference.url ) {
                     items.push("<a target='event' href='" + reference.url + "'>" +
+                               "<i class='fa fa-external-link fa-1'></i>" +
                         source.title + "</a>");
                 } else {
                     items.push(source.title);
                 }
             });
-            $subtitle.append("<br/>" + items.join(", "));
+            $subtitle.append(items.join(" "));
         }
 
         $content.append($item);
@@ -357,8 +363,7 @@ wv.events = wv.events || function(models, ui) {
     };
     var notify = function( text ) {
 
-        var message = text || 'Events may not be visible ' +
-            'until the next day.';
+        var message = text || 'Events may not be visible at all times.';
 
         var $message = $('.notify-message');
 
