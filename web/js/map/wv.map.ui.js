@@ -438,7 +438,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
                 center: proj.startCenter,
                 zoom: proj.startZoom,
                 maxZoom: proj.numZoomLevels,
-                enableRotation: false
+                enableRotation: true
             }),
             target: id,
             renderer: ["canvas", "dom"],
