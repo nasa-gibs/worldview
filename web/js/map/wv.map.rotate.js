@@ -73,16 +73,7 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
         var $leftButton = $('#wv-map-' + id + ' .wv-map-rotate-left');
         var $rightButton = $('#wv-map-' + id + ' .wv-map-rotate-right');
         var $resetButton = $('#wv-map-' + id + ' .wv-map-reset-rotation');
-        console.log($leftButton)
-        var clickManager = function(el, rotation) {
-            //el.unbind('mousedown');
-            
-            // setTimeout(function() {
-            //     //el.bind('mousedown', function() {
-            //         //clickManager(el, rotation);
-            //     });
-            // }, dur);
-        };
+
         //Set buttons to animate rotation by 18 degrees. use setInterval to repeat the rotation when mouse button is held
         $leftButton.button({
             text: false
@@ -104,7 +95,7 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
                 self.rotate(-10, dur, map);
             }, dur);
             self.rotate(-10, dur, map);
-            
+
         }).mouseup(function() {
             clearInterval(self.intervalId);
         });
