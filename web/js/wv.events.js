@@ -63,6 +63,8 @@ wv.events = wv.events || function(models, ui) {
             ["MODIS_Terra_CorrectedReflectance_TrueColor", true],
             ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
             ["VIIRS_SNPP_CorrectedReflectance_TrueColor", false],
+            ["AIRS_Prata_SO2_Index_Day", true],
+            ["AIRS_Prata_SO2_Index_Night", false],
             ["MODIS_Fires_Terra", true],
             ["MODIS_Fires_Aqua", false],
             ["VIIRS_SNPP_Fires_375m_Day", false],
