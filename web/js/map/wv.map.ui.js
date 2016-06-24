@@ -29,10 +29,6 @@ wv.map.ui = wv.map.ui || function(models, config) {
             return;
         }
 
-        if ( wv.util.browser.firefox ) {
-            animationDuration = 0;
-        }
-
         // NOTE: iOS sometimes bombs if this is _.each instead. In that case,
         // it is possible that config.projections somehow becomes array-like.
         _.forOwn(config.projections, function(proj) {
