@@ -14,19 +14,42 @@ wv.map = wv.map || {};
 
 // FIXME: The code is like this for historical reasons and should be refactored
 // at some point.
+/*
+ * @Class
+ */
 wv.map.model = wv.map.model || function(models, config) {
 
     var self = {};
 
     self.extent = null;
     self.events = wv.util.events();
-
+    /*
+     * Emits update event
+     *
+     * @method update
+     * @static
+     *
+     * @param extent {object} Map Extent Array
+     *
+     * @returns {void}
+     */
     self.update = function(extent) {
         self.extent = extent;
         self.events.trigger("update", extent);
     };
 
-    //Set map view from parsed URL
+    /*
+     * Sets map view from parsed URL
+     *
+     * @method load
+     * @static
+     *
+     * @param state {object} map state object from permalink
+     *
+     * @param errors {string} errors
+     *
+     * @returns {void}
+     */
     self.load = function(state, errors) {
         if ( state.v ) {
             var proj = models.proj.selected;
@@ -45,17 +68,40 @@ wv.map.model = wv.map.model || function(models, config) {
                 self.rotation = state.r * (Math.PI / 180.0);
     };
 
-    //When models.link.toQueryString() is called, save extent and rotation
+    /*
+     * Saves extent and rotation When 
+     * models.link.toQueryString() is called
+     *
+     * @method save
+     * @static
+     *
+     * @param state {object} map state object from permalink
+     *
+     *
+     * @returns {void}
+     */
     self.save = function(state) {
         state.v = _.clone(self.extent);
         if(self.rotation !== 0.0 && self.rotation !== 0 && models.proj.selected.id !== 'geographic')
             state.r = (self.rotation * (180.0 / Math.PI)).toPrecision(6); //convert from radians to degrees
     };
 
+    /*
+     * Set default extent according to time of day:
+     *
+     * at 00:00 UTC, start at far eastern edge of 
+     * map: "20.6015625,-46.546875,179.9296875,53.015625"
+     *
+     * at 23:00 UTC, start at far western edge of map: 
+     * "-179.9296875,-46.546875,-20.6015625,53.015625"
+     *
+     * @method getLeadingExtent
+     * @static
+     *
+     *
+     * @returns {object} Extent Array
+     */
     self.getLeadingExtent = function() {
-        // Set default extent according to time of day:
-        //   at 00:00 UTC, start at far eastern edge of map: "20.6015625,-46.546875,179.9296875,53.015625"
-        //   at 23:00 UTC, start at far western edge of map: "-179.9296875,-46.546875,-20.6015625,53.015625"
         var curHour = wv.util.now().getUTCHours();
 
         // For earlier hours when data is still being filled in, force a far eastern perspective
