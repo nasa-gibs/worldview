@@ -16,8 +16,9 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
      * @method init
      * @static
      *
-     * @param {object} openLayers map object
+     * @param map {object} openLayers map object
      *
+     * @param id {string} projection id string
      *
      * @returns {void}
      */
@@ -31,8 +32,7 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
      * @method createRotationWidget
      * @static
      *
-     * @param {object} openLayers map object
-     *
+     * @param map {object} openLayers map object
      *
      * @returns {void}
      */
@@ -63,8 +63,9 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
      * @method setRotationEvents
      * @static
      *
-     * @param {object} openLayers map object
+     * @param map {object} openLayers map object
      *
+     * @param id {string} projection id string
      *
      * @returns {void}
      */
@@ -135,10 +136,13 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
 
 
     /*
-     * examines the number of characters present in the reset button and reassigns padding accordingly
+     * examines the number of characters present in the 
+     * reset button and reassigns padding accordingly
      *
      * @method setResetButtonWidth
      * @static
+     *
+     * @param deg {number} map rotation degree value
      *
      * @returns {void}
      */
@@ -167,6 +171,12 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
      *
      * @method rotate
      * @static
+     *
+     * @param amount {number} value of degrees to rotate
+     *
+     * @param duration {number} how long the animation should last
+     *
+     * @param map {object} Openlayers map object
      *
      * @returns {void}
      */
