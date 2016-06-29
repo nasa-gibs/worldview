@@ -1,0 +1,164 @@
+#wv-events {
+    position: relative;
+}
+#wv-events li.item i{
+    float: left;
+    margin: 0 10px 5px 5px;
+}
+
+.map-item-list li.item {
+    padding:6px 0px;
+    width:auto;
+    margin:0;
+    display:block;
+    overflow:hidden;
+    cursor:pointer;
+    color:#d54e21;
+    background: transparent;
+}
+.map-item-list li.item h4 {
+    font-size:0.85em;
+    color:#ccc;
+    padding: 0 3px;
+}
+.map-item-list li.item p,
+.map-item-list li.item ul {
+    padding: 0 3px;
+    font-size:0.78em;
+    color: #bbb;
+    font-style:italic;
+    margin-left: 25px;
+    margin-top: 5px;
+}
+.map-item-list li.item:hover,
+.map-item-list li.item-selected {
+    background:rgba(250,250,250,1);
+}
+.map-item-list li.item:hover h4,
+.map-item-list li.item:hover p,
+.map-item-list li.item-selected h4,
+.map-item-list li.item-selected p{
+    color:#666;
+}
+.map-item-list li.item input {
+    float:right;
+}
+
+.map-item-list li.item p{
+    color: #666;
+}
+.map-item-list li.item p a {
+    display: block;
+    clear:both;
+    margin-top: 7px;
+    position: relative;
+    padding-left: 15px;
+}
+#wv-events .map-item-list li.item p a i.fa-external-link {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    margin-top: -5px;
+    left: 0;
+}
+.map-item-list ul.selectorboxcategory {
+    outline:none !important;
+    float:left;
+    overflow:auto;
+}
+.map-item-list h3.head {
+    display:block;
+    float: left;
+    color:#fff;
+    width:100%;
+    border:none;
+    text-decoration:none;
+    background: none;
+    padding: 1px 3px;
+    margin:10px 0 0 2%;
+    text-transform:uppercase;
+}
+.map-item-list a.flowbutton {
+    text-decoration:none;
+    display:inline-block;
+    float: left;
+    color:#ffffff;
+    font-size: 1.4em;
+    border:none;
+    padding:6px 0;
+    margin-top:20px;
+    margin-left:5px;
+}
+.map-item-list ul li div {
+    padding:0 !important;
+}
+
+.map-item-list li.item h4.mark {
+    font-weight: bold;
+    color: red;
+}
+
+/******************** Notifications **********************/
+
+.notify-alert {
+    position: absolute;
+    top: 60px !important;
+    right: 10px !important;
+    left: auto !important;
+}
+@media screen and (max-device-height: 720px) {
+    .notify-alert {
+        display:none;
+    }
+}
+
+.notify-alert div {
+
+}
+.notify-alert i{
+    font-size: 1.4em;
+    height: 40px;
+    box-sizing: border-box;
+    line-height: 40px;
+}
+.notify-alert .ui-dialog-content div> i{
+    color: #d54e21;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+.notify-alert .ui-dialog-content div{
+    margin-right: 40px;
+    
+}
+.notify-alert .ui-dialog-content div:hover{
+    background:#ccc;
+    cursor:pointer;
+}
+.notify-alert .ui-dialog-content div:hover span{
+    color:#000;
+}
+.notify-alert .ui-dialog-content>i{
+    float: right;
+    padding:0 10px;
+}
+.notify-alert .ui-dialog-content>i:hover {
+    cursor: pointer;
+    background: #ccc;
+    color: #333;
+}
+.notify-alert .ui-dialog-content {
+    padding: 0 0 0 0px;
+    box-sizing: border-box;
+    line-height: 40px;
+}
+.wv-dialog ul {
+    padding-left:20px;
+    margin:10px 0;
+}
+.wv-dialog ul li{
+    list-style-type: disc;
+    display: list-item;
+    margin: 2px 0 2px 20px;
+    
+}
+/****************** End Notifications ********************/

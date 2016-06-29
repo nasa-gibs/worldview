@@ -28,10 +28,6 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
             return;
         }
 
-        if ( wv.util.browser.firefox ) {
-            animationDuration = 0;
-        }
-
         // NOTE: iOS sometimes bombs if this is _.each instead. In that case,
         // it is possible that config.projections somehow becomes array-like.
         _.forOwn(config.projections, function(proj) {
@@ -463,7 +459,8 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
                 new ol.interaction.DragZoom({
                     duration: animationDuration
                 })
-            ]
+            ],
+            loadTilesWhileAnimating: true
         });
         map.wv = {
             small: false,

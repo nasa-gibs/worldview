@@ -5,7 +5,7 @@
   = This code was originally developed at NASA/Goddard Space Flight Center for
   - the Earth Science Data and Information System (ESDIS) project.
   -
-  - Copyright (C) 2013 - 2014 United States Government as represented by the
+  - Copyright (C) 2013 - 2016 United States Government as represented by the
   - Administrator of the National Aeronautics and Space Administration.
   - All Rights Reserved.
   -
@@ -40,7 +40,7 @@
 
     <!-- CSS resources ==================================================== -->
 
-                            <link type="text/css" rel="Stylesheet" href="ext/ui/font-awesome-4.2.0/css/font-awesome.min.css">
+    <link type="text/css" rel="Stylesheet" href="ext/ui/font-awesome-4.2.0/css/font-awesome.min.css">
 
     <!-- link.dev -->       <link type="text/css" rel="Stylesheet" href="ext/ui/jquery-ui-1.11.4/jquery-ui.css">
     <!-- link.prod --> <!-- <link type="text/css" rel="Stylesheet" href="ext/ui/jquery-ui-1.11.4/jquery-ui.min.css"> -->
@@ -70,7 +70,6 @@
     <!-- link.prod --> <!-- <link type="text/css" href="css/wv.css?v=20131218215115174" rel="Stylesheet" /> -->
 
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/bank.css">
-
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.main.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.map.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.link.css">
@@ -80,18 +79,15 @@
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/projection.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.date.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/menuPicker.css">
-    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/accordionPicker.css">
-    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/selector.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.tour.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/products.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/indicator.css">
-    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/events.css">
+    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.events.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/dataDownload.css">
-    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/global.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.sidebar.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.layers.modal.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.layers.options.css">
-    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/new-ui.css">
+    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.timeline.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.mobile.css">
                       <link type="text/css" rel="Stylesheet" href="pages/css/wv.document.css">
 
@@ -194,7 +190,6 @@
     <!-- link.dev --> <script type="text/javascript" src="js/layers/wv.layers.model.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/layers/wv.layers.sidebar.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/layers/wv.layers.active.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/layers/wv.layers.add.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/layers/wv.layers.modal.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/layers/wv.layers.options.js"></script>
 
@@ -223,12 +218,13 @@
 
     <!-- link.dev --> <script type="text/javascript" src="js/wv.feedback.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/wv.tour.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/wv.events.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/wv.debug.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/wv.main.js"></script>
 
 </head>
 
-<body class="yui-skin-sam">
+<body>
     <div data-role="page" id="app">
         <div data-role="content">
 
@@ -244,6 +240,7 @@
               <ul id="productsHolder-tabs"></ul>
               <div id="productsHoldertoggleButtonHolder"></div> <!-- bad -->
               <main id="products"></main>
+              <div id="wv-events"></div>
               <div id="wv-data"></div>
               <footer>
                 <button id="layers-add" class="action">+ Add Layers</button>
