@@ -230,7 +230,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
     };
 
     var onBeforeTabChange = function(e, ui) {
-        var $footerBtns = $(self.selector + " footer button");
+        var $footerBtns = $(self.selector + " footer");
         // FIXME: This code is very clunky.
         var tab = ui.newTab.attr("data-tab");
         if ( tab === "active" ) {
@@ -241,7 +241,8 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
             $('.ui-tabs-nav li.first').addClass("ui-state-active");
             $('.ui-tabs-nav li.second').removeClass("ui-state-active");
             $('.ui-tabs-nav li.third').removeClass("ui-state-active");
-            $footerBtns.hide();
+            $footerBtns.show();
+            $footerBtns.find("button").hide();
             $("#layers-add").show();
         } else if ( tab === "events" ) {
             $('.ui-tabs-nav')
@@ -260,7 +261,8 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
             $('.ui-tabs-nav li.first').removeClass("ui-state-active");
             $('.ui-tabs-nav li.second').removeClass("ui-state-active");
             $('.ui-tabs-nav li.third').addClass("ui-state-active");
-            $footerBtns.hide();
+            $footerBtns.show();
+            $footerBtns.find("button").hide();
             $("#wv-data-download-button").show();
         } else {
             throw new Error("Invalid tab index: " + ui.index);

@@ -105,7 +105,6 @@ wv.events = wv.events || function(models, ui) {
         var $list = $("<ul></ul>")
             .attr("id", self.id + "content")
             .addClass("content")
-            .addClass("bank")
             .addClass("map-item-list");
 
         $panels.append($list);
@@ -418,7 +417,7 @@ wv.events = wv.events || function(models, ui) {
     var sizeEventsTab = function(){
         var winSize = $(window).outerHeight(true);
         var headSize = $("ul#productsHolder-tabs").outerHeight(true);//
-        var footSize = $("section#productsHolder footer").outerHeight(true);
+        //var footSize = $("section#productsHolder footer").outerHeight(true);
         var head2Size = $('#wv-events-facets').outerHeight(true);
         var secSize = $("#productsHolder").innerHeight() - $("#productsHolder").height();
         var offset = $("#productsHolder").offset();
@@ -426,8 +425,11 @@ wv.events = wv.events || function(models, ui) {
 
         //FIXME: -10 here is the timeline's bottom position from page, fix
         // after timeline markup is corrected to be loaded first
-        var maxHeight = winSize - headSize - head2Size - footSize -
-            offset.top - timeSize - secSize - 10 - 5;
+        var maxHeight = winSize - headSize - head2Size -
+            offset.top - secSize;
+        if ( !wv.util.browser.small ){
+            maxHeight = maxHeight - timeSize - 10 - 5;
+        }
         $(self.selector).css("max-height", maxHeight);
 
         var childrenHeight = 
@@ -452,7 +454,6 @@ wv.events = wv.events || function(models, ui) {
                 productsIsOverflow = false;
             }
         }
-
     };
 
     var resize = function() {
