@@ -12,13 +12,14 @@
 var wv = wv || {};
 wv.map = wv.map || {};
 
-wv.map.ui = wv.map.ui || function(models, config, Rotation) {
+wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
     var id = "wv-map";
     var selector = "#" + id;
     var cache = new Cache(100); // Save layers from days visited
     var animationDuration = 250;
     var self = {};
     var rotation = new Rotation(self, models);
+    var dataRunner = new DataRunner();
     self.proj = {}; // One map for each projection
     self.selected = null; // The map for the selected projection
     self.events = wv.util.events();
@@ -125,6 +126,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
                 map.removeLayer(mapLayer);
             }
         });
+        dataRunner.resetActiveLayers(activeLayers)
         removeGraticule();
         //cache.clear();
     };
@@ -146,7 +148,8 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
     };
 
     var updateLayerVisibilities = function() {
-        self.selected.getLayers().forEach(function(layer) {
+        var layers = self.selected.getLayers();
+        layers.forEach(function(layer) {
             if ( layer.wv ) {
                 var renderable = models.layers.isRenderable(layer.wv.id);
                 layer.setVisible(renderable);
@@ -163,6 +166,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
                 }
             }
         });
+        dataRunner.updateLayers(layers.getArray());
     };
 
     var updateOpacity = function(def, value) {
@@ -179,6 +183,12 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
             addGraticule();
         } else {
             var layer = createLayer(def);
+            layer.on('precompose', function(evt) {
+              dataRunner.preRender(evt);
+            })
+            layer.on('postcompose', function(evt) {
+              dataRunner.postRender(evt);
+            })
             self.selected.getLayers().insertAt(mapIndex, layer);
         }
         updateLayerVisibilities();
@@ -305,6 +315,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
         var sourceOptions = {
             url: source.url + extra,
             layer: def.layer || def.id,
+            crossOrigin: "anonymous",
             format: def.format,
             matrixSet: matrixSet.id,
             tileGrid: new ol.tilegrid.WMTS({
@@ -320,7 +331,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
             sourceOptions.tileClass = ol.wv.LookupImageTile.factory(lookup);
         }
         var layer = new ol.layer.Tile({
-            source: new ol.source.WMTS(sourceOptions)
+            source: new ol.source.WMTS(sourceOptions),
         });
         return layer;
     };
@@ -349,6 +360,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
         var layer = new ol.layer.Tile({
             source: new ol.source.TileWMS({
                 url: source.url + extra,
+                crossOrigin: "anonymous",
                 params: parameters,
                 tileGrid: new ol.tilegrid.TileGrid({
                     origin: [proj.maxExtent[0], proj.maxExtent[3]],
@@ -582,6 +594,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
             .addClass('coord-btn');
 
         $coordWrapper.append($coordBtn);
+
         $mousePosition
             .append($latlonDD)
             .append($latlonDMS)
@@ -612,10 +625,15 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
             .mousemove(function(e){
                 $('#' + mapId).show();
                 var coords = map.getCoordinateFromPixel([e.pageX,e.pageY]);
+
+                dataRunner.newPoint(map.getPixelFromCoordinate(coords), map);
+
                 $('#' + mapId + ' span.map-coord').each(function(){
                     var format = $(this).attr('data-format');
                     $(this).html(coordinateFormat(coords, format));
                 });
+                map.render();
+                e.preventDefault();
             });
     };
 
