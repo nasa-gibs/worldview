@@ -11,7 +11,9 @@
 
 var wv = wv || {};
 wv.map = wv.map || {};
-
+/*
+ * @Class
+ */
 wv.map.ui = wv.map.ui || function(models, config, Rotation) {
     var id = "wv-map";
     var selector = "#" + id;
@@ -22,7 +24,14 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
     self.proj = {}; // One map for each projection
     self.selected = null; // The map for the selected projection
     self.events = wv.util.events();
-
+    /*
+     * Sets up map listeners
+     *
+     * @method init
+     * @static
+     *
+     * @returns {void}
+     */
     var init = function() {
         if ( config.parameters.mockMap ) {
             return;
@@ -53,7 +62,16 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
         $(window).on("resize", onResize);
         updateProjection(true);
     };
-
+    /*
+     * Changes visual projection
+     *
+     * @method updateProjection
+     * @static
+     *
+     * @param start {boolean} new extents are needed: true/false
+     *
+     * @returns {void}
+     */
     var updateProjection = function(start) {
         if ( self.selected ) {
             // Keep track of center point on projection switch
@@ -94,7 +112,14 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
         updateExtent();
         onResize();
     };
-
+    /*
+     * When page is resised set for mobile or desktop
+     *
+     * @method onResize
+     * @static
+     *
+     * @returns {void}
+     */
     var onResize = function() {
         var map = self.selected;
         if ( map.small !== wv.util.browser.small ) {
@@ -109,15 +134,42 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
             }
         }
     };
-
+    /*
+     * Hide Map
+     *
+     * @method hideMap
+     * @static
+     *
+     * @param map {object} Openlayers Map obj
+     *
+     * @returns {void}
+     */
     var hideMap = function(map) {
         $("#" + map.getTarget()).hide();
     };
-
+    /*
+     * Show Map
+     *
+     * @method showMap
+     * @static
+     *
+     * @param map {object} Openlayers Map obj
+     *
+     * @returns {void}
+     */
     var showMap = function(map) {
         $("#" + map.getTarget()).show();
     };
-
+    /*
+     * Remove Layers from map
+     *
+     * @method clearLayers
+     * @static
+     *
+     * @param map {object} Openlayers Map obj
+     *
+     * @returns {void}
+     */
     var clearLayers = function(map) {
         var activeLayers = map.getLayers().getArray().slice(0);
         _.each(activeLayers, function(mapLayer) {
@@ -128,7 +180,17 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
         removeGraticule();
         //cache.clear();
     };
-
+    /*
+     * get layers from models obj
+     * and add each layer to the map
+     *
+     * @method reloadLayers
+     * @static
+     *
+     * @param map {object} Openlayers Map obj
+     *
+     * @returns {void}
+     */
     var reloadLayers = function(map) {
         map = map || self.selected;
         var proj = models.proj.selected;
@@ -144,7 +206,15 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
         });
         updateLayerVisibilities();
     };
-
+    /*
+     * Function called when layers need to be updated
+     * e.g: can be the result of new data or another display
+     *
+     * @method updateLayerVisibilities
+     * @static
+     *
+     * @returns {void}
+     */
     var updateLayerVisibilities = function() {
         self.selected.getLayers().forEach(function(layer) {
             if ( layer.wv ) {
@@ -164,8 +234,20 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
             }
         });
     };
-
+    /*
+     * Sets new opacity to layer
+     *
+     * @method updateOpacity
+     * @static
+     *
+     * @param map {object} 
+     *
+     * @param value {number} number value 
+     *
+     * @returns {void}
+     */
     var updateOpacity = function(def, value) {
+        console.log(def, value)
         var layer = findLayer(def);
         layer.setOpacity(value);
         updateLayerVisibilities();
