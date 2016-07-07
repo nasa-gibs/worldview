@@ -403,12 +403,13 @@ wv.events = wv.events || function(models, ui) {
                 map.beforeRender(pan);
             }
             if ( location.length == 2 ) {
-                map.getView().setCenter(location);
-                map.getView().setZoom(6);
+                map.getView()
+                    .setCenter(location);
+                map.getView().setZoom(5);
             } else {
-                //map.getView().fitExtent(location, map.getSize());
-                map.getView().setCenter(location);
-                map.getView().setZoom(8);
+                map.getView().fitExtent(location, map.getSize());
+                if(map.getView().getZoom() > 8)
+                    map.getView().setZoom(8);
             }
         }, wait);
     };
