@@ -197,7 +197,7 @@ wv.tour = wv.tour || function(models, ui, config) {
         models.date.select(wv.util.today());
         models.layers.reset();
         var leading = models.map.getLeadingExtent();
-        map.getView().fitExtent(leading, map.getSize());
+        map.getView().fit(leading, map.getSize());
         setTourState();
     };
 

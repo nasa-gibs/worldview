@@ -407,7 +407,7 @@ wv.events = wv.events || function(models, ui) {
                     .setCenter(location);
                 map.getView().setZoom(5);
             } else {
-                map.getView().fitExtent(location, map.getSize());
+                map.getView().fit(location, map.getSize());
                 if(map.getView().getZoom() > 8)
                     map.getView().setZoom(8);
             }
