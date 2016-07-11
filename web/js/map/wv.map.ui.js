@@ -19,7 +19,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
     var animationDuration = 250;
     var self = {};
     var rotation = new Rotation(self, models);
-    var dataRunner = new DataRunner();
+    var dataRunner = new DataRunner(models);
     self.proj = {}; // One map for each projection
     self.selected = null; // The map for the selected projection
     self.events = wv.util.events();
@@ -126,7 +126,6 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
                 map.removeLayer(mapLayer);
             }
         });
-        dataRunner.resetActiveLayers(activeLayers)
         removeGraticule();
         //cache.clear();
     };
@@ -166,7 +165,6 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
                 }
             }
         });
-        dataRunner.updateLayers(layers.getArray());
     };
 
     var updateOpacity = function(def, value) {
@@ -182,14 +180,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
         if ( isGraticule(def) ) {
             addGraticule();
         } else {
-            var layer = createLayer(def);
-            layer.on('precompose', function(evt) {
-              dataRunner.preRender(evt);
-            })
-            layer.on('postcompose', function(evt) {
-              dataRunner.postRender(evt);
-            })
-            self.selected.getLayers().insertAt(mapIndex, layer);
+            self.selected.getLayers().insertAt(mapIndex, createLayer(def));
         }
         updateLayerVisibilities();
     };

@@ -4,77 +4,28 @@ wv.map = wv.map || {};
 /*
  * @Class
  */
-wv.map.runningdata = wv.map.runningdata || function(activeLayers) {
+wv.map.runningdata = wv.map.runningdata || function(models) {
     var self = this;
     self.layers = [];
     self.prePixelData = [];
     self.pixel  = null;
-    self.activeLayers = activeLayers;
+    self.models
 
-    self.resetActiveLayers = function(activeLayers) {
-      self.activeLayers = activeLayers;
-    }
-    self.preRender = function(evt) {
-        var context, x, y, data, pixelRatio, blank;
-        if(self.pixel) {
-            context = evt.context
-            pixelRatio = evt.frameState.pixelRatio;
-            self.x = self.pixel[0];
-            self.y = self.pixel[1];
-            x = self.x * pixelRatio;
-            y = self.y * pixelRatio;
-            self.prePixelData = evt.context.getImageData(x, y, 1, 1).data;
-            blank = context.createImageData(1,1)
-            context.putImageData(blank, x, y);
-        }
-    }
-    self.postRender = function(evt) {
-        var layer, pixelRatio, context, data, x, y, d;
-        if(self.pixel) {
-            d = self.prePixelData;
-            layer = evt.target;
-            pixelRatio = evt.frameState.pixelRatio;
-            context = evt.context;
+    self.newPoint = function(coords, map) {
+        map.forEachLayerAtPixel(coords, function(layer, data){
+            var palette = models.palettes.get(layer.wv.id);
+            if(palette && palette.scale) {
+                var hex = wv.util.rgbaToHex(data[0], data[1], data[2]);
+                var paletteInfo = self.getDataLabel(palette.scale, hex);
+            };
+        });
+    };
 
-            x = self.x * pixelRatio;
-            y = self.y * pixelRatio;
-            data = context.getImageData(x, y, 1, 1).data;
-            context.fillStyle = "rgba("+d[0]+","+d[1]+","+d[2]+","+d[3]+")";
-        }
-    }
-    self.addLayerToSideBar = function() {
-
-    }
-
-    self.arraysAreEqual = function(arr1, arr2) {
-        if(arr1.length !== arr2.length)
-            return false;
-        for(var i = arr1.length; i--;) {
-            if(arr1[i] !== arr2[i])
-                return false;
-        }
-        return true;
-    }
-
-
-    self.updateLayers = function(layers) {
-
-        // this.layers= [];
-        // for(var i = 0, len = layers.length; i < len; i++ ) {
-        //   // var def = layers[i].wv.def;
-        //   // if(def.visible && def.pallete) {
-        //   //   this.layers.push
-        //   // }
-        //     console.log('layer-obj' + layers[i].wv.def.visible + 'group' +layers[i].wv.def.palette);
-
-        // }
-    }
-
-    self.newPoint = function(pixel) {
-        self.pixel = pixel;
-    }
-
-    self.retrieveValues = function() {
-
-    }
-}
+    self.getDataLabel = function(scale, hex) {
+        for(var i = 0, len = scale.colors.length; i < len; i++)  {
+            if(scale.colors[i] == hex) {
+                return {label:scale.labels[i], percent:Number(i/len)};
+            };
+        };
+    };
+};
