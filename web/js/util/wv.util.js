@@ -497,6 +497,13 @@ wv.util = (function(self) {
             parseInt(str.substring(4, 6), 16) + "," +
             parseInt(str.substring(6, 8), 16) + ")";
     };
+    self.rgbaToHex = function(r, g, b) {
+      function hex(c) {
+          var hex = c.toString(16);
+              return hex.length == 1 ? "0" + hex : hex;
+          }
+        return hex(r) + hex(g) + hex(b) + 'ff';
+    }
 
     /**
      * Submits an AJAX request or retreives the result from the cache.
