@@ -308,7 +308,7 @@ wv.events = wv.events || function(models, ui) {
         resize();
 
         event = self.data[index];
-        console.log("event", event);
+
         eventItem = null;
         if ( event.geometry.length > 1 ) {
             eventItem = event.geometry[dateIndex || 0];
@@ -352,13 +352,11 @@ wv.events = wv.events || function(models, ui) {
             }
         });
 
-        console.log("COORDS", eventItem.coordinates);
         if ( eventItem.type === "Point" ) {
             goTo(method, eventItem.coordinates);
         } else if ( eventItem.type === "Polygon" && eventItem.coordinates.length == 5 ) {
             c = eventItem.coordinates;
             var extent = [c[0][0], c[0][1], c[2][0], c[2][1]];
-            console.log("extent", extent);
             goTo(method, extent);
         }
     };
@@ -380,8 +378,9 @@ wv.events = wv.events || function(models, ui) {
     };
     var goTo = function(method, location) {
         //TODO: Seems to be starting zoom, make it current zoom
-        var zoom = 3;
+
         var map = ui.map.selected;
+        var zoom = map.getView().getZoom();//3;
         var duration = ( method == "fly" ) ? 5000 : 1000;
         var wait = ( method == "fly" ) ? 1000 : 1;
         var start = +new Date();
@@ -392,13 +391,24 @@ wv.events = wv.events || function(models, ui) {
         });
         var bounce = ol.animation.bounce({
             duration: duration,
+            resolution: models.proj.selected.resolutions[zoom-2],
+            start: start
+        });
+        var zoomTo = ol.animation.zoom({
+            duration: duration,
             resolution: models.proj.selected.resolutions[zoom],
             start: start
         });
+        //HAX
+        if(zoom < 4){
+            method = 'zoom';
+        }
 
         setTimeout(function() {
             if ( method === "fly" ) {
                 map.beforeRender(pan, bounce);
+            } else if ( method === 'zoom' ) {
+                map.beforeRender(pan, zoomTo);
             } else {
                 map.beforeRender(pan);
             }
@@ -464,30 +474,24 @@ wv.events = wv.events || function(models, ui) {
 
     var queryEvents = function() {
         var url = "https://eonet.sci.gsfc.nasa.gov/api/v1/events";
-        console.log("sending query", url);
         $.getJSON(url, function(data) {
             self.data = data.item;
-            console.log("events received", self.data);
             checkRender();
         });
     };
 
     var queryTypes = function() {
         var url = "https://eonet.sci.gsfc.nasa.gov/api/v1/types";
-        console.log("sending query", url);
         $.getJSON(url, function(data) {
             self.types = data.item;
-            console.log("types received", self.types);
             checkRender();
         });
     };
 
     var querySources = function() {
         var url = "https://eonet.sci.gsfc.nasa.gov/api/v1/sources";
-        console.log("sending query", url);
         $.getJSON(url, function(data) {
             self.sources = data.item;
-            console.log("sources received", self.sources);
             checkRender();
         });
 
