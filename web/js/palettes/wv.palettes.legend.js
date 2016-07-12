@@ -52,8 +52,8 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         var palette = config.palettes.rendered[paletteId];
 
         var $legendPanel = $("<div></div>")
-                .addClass("wv-palettes-panel")
-                .attr("data-layer", layer.id);
+            .addClass("wv-palettes-panel")
+            .attr("data-layer", layer.id);
         $parent.append($legendPanel);
         if ( palette.scale ) {
             renderScale($legendPanel, palette);
@@ -65,11 +65,19 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         self.update();
     };
 
+
     var renderScale = function($legendPanel, palette) {
         $colorbar = $("<canvas></canvas>")
-                .addClass("wv-palettes-colorbar")
-                .attr("title", "X");
+            .addClass("wv-palettes-colorbar")
+            .attr("id", palette.id + "_palette")
+            .attr("title", "X");
         $legendPanel.append($colorbar);
+
+        var $runningDataPointBar = $("<div></div>")
+            .addClass("wv-running-bar");
+        var $runningDataPointLabel = $("<span></span>")
+            .addClass("wv-running-label");
+
 
         var $ranges = $("<div></div>")
             .addClass("wv-palettes-ranges");
@@ -78,8 +86,14 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         var $max = $("<span></span>")
             .addClass("wv-palettes-max");
 
-        $ranges.append($min).append($max);
-        $legendPanel.append($ranges);
+        $ranges
+            .append($min)
+            .append($max)
+            .append($runningDataPointLabel);
+
+        $legendPanel
+            .append($ranges)
+            .append($runningDataPointBar);
 
         $colorbar.on("mousemove", function(event) {
             showUnitHover(event);
@@ -93,11 +107,10 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         });
         wv.palettes.colorbar(selector + " .wv-palettes-colorbar");
     };
-
     var renderClasses = function($legendPanel, palette) {
         var $panel = $("<div></div>")
-                .addClass("wv-palettes-classes")
-                .attr("title", "X");
+            .addClass("wv-palettes-classes")
+            .attr("title", "X");
         $legendPanel.append($panel);
 
         $panel.tooltip({
