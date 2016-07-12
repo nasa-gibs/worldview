@@ -20,6 +20,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
     var self = {};
     var rotation = new Rotation(self, models);
     var dataRunner = new DataRunner(models);
+    var mapIsbeingDragged = false
     self.proj = {}; // One map for each projection
     self.selected = null; // The map for the selected projection
     self.events = wv.util.events();
@@ -351,6 +352,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
             extra = "?TIME=" + wv.util.toISOStringDate(date);
         }
         var layer = new ol.layer.Tile({
+            extent: proj.maxExtent,
             source: new ol.source.TileWMS({
                 url: source.url + extra,
                 crossOrigin: "anonymous",
@@ -482,10 +484,16 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
             map.addInteraction(mobileRotation);
         }
 
-        //Set event listeners for changes on the map view (when rotated, zoomed, panned)
+        // Set event listeners for changes on the map view (when rotated, zoomed, panned)
         map.getView().on("change:center", updateExtent);
         map.getView().on("change:resolution", updateExtent);
         map.getView().on("change:rotation", rotation.updateRotation);
+        map.on('pointerdrag', function() {
+            mapIsbeingDragged = true;
+        })
+        map.on('moveend', function() {
+            mapIsbeingDragged = false;
+        })
 
         return map;
     };
@@ -542,15 +550,26 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
     };
 
     var createMousePosSel = function(map, proj) {
-        var $map = $("#" + map.getTarget());
+        var $map;
+        var mapId;
+        var $mousePosition;
+        var $latlonDD;
+        var $latlonDMS;
+        var $coordBtn;
+        var $coordWrapper;
+        var coordinateFormat;
+        // var timer = null;
+        // var isIntervalSet = false;
+        
+        $map = $("#" + map.getTarget());
         map = map || self.selected;
-        var mapId = 'coords-' + proj.id;
+        mapId = 'coords-' + proj.id;
 
-        var $mousePosition = $('<div></div>')
+        $mousePosition = $('<div></div>')
             .attr("id", mapId)
             .addClass("wv-coords-map wv-coords-map-btn");
 
-        var coordinateFormat = function(source, format) {
+        coordinateFormat = function(source, format) {
             if ( !source ) {
                 return "";
             }
@@ -563,11 +582,11 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
 
         $map.append($mousePosition);
 
-        var $latlonDD = $("<span></span>")
+        $latlonDD = $("<span></span>")
             .attr('id', mapId + '-latlon-dd')
             .attr('data-format', 'latlon-dd')
             .addClass('map-coord');
-        var $latlonDMS = $("<span></span>")
+        $latlonDMS = $("<span></span>")
             .attr('id', mapId + '-latlon-dms')
             .attr('data-format', 'latlon-dms')
             .addClass('map-coord');
@@ -580,10 +599,10 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
             $('div.map-coord').removeClass('latlon-selected');
             $latlonDMS.addClass('latlon-selected');
         }
-        var $coordBtn = $("<i></i>")
+        $coordBtn = $("<i></i>")
             .addClass('coord-switch');
 
-        var $coordWrapper = $("<div></div>")
+        $coordWrapper = $("<div></div>")
             .addClass('coord-btn');
 
         $coordWrapper.append($coordBtn);
@@ -616,18 +635,24 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
                 $('#' + mapId).hide();
             })
             .mousemove(function(e){
-                $('#' + mapId).show();
+                e.preventDefault();
                 var coords = map.getCoordinateFromPixel([e.pageX,e.pageY]);
 
-                dataRunner.newPoint(map.getPixelFromCoordinate(coords), map);
+                $('#' + mapId).show();
+                
 
                 $('#' + mapId + ' span.map-coord').each(function(){
                     var format = $(this).attr('data-format');
                     $(this).html(coordinateFormat(coords, format));
                 });
-                map.render();
-                e.preventDefault();
+
+                // setting a limit on running-data retrievel
+                if (mapIsbeingDragged) {
+                   return;
+                }
+                  dataRunner.newPoint(map.getPixelFromCoordinate(coords), map);
             });
+
     };
 
     var zoomAction = function(map, amount) {
