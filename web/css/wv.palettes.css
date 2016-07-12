@@ -52,9 +52,10 @@
 .wv-palettes-ranges {
     margin-top: -6px;
     width: 100%;
+    min-height: 16px;
 }
 
-.wv-palettes-min, .wv-palettes-max{
+.wv-palettes-min, .wv-palettes-max , .wv-running-label {
     font-size:0.8em;
     white-space:nowrap;
     max-width: 112px;
@@ -75,6 +76,29 @@
     padding-left: 3px;
     padding-right: 5px;
     width: auto;
+    position: relative;
+}
+/* 
+ * Running data styles
+ */
+.bank div .wv-palettes-panel .wv-running-label,
+.bank div .wv-palettes-panel .wv-running-bar {
+    visibility: hidden;
+    position: absolute;
+}
+.bank div .wv-palettes-panel .wv-running-bar {
+    top: 1px;
+    width: 1px;
+    height: 10px;
+    background: #000;
+}
+.bank div .wv-palettes-panel.wv-running .wv-palettes-min,
+.bank div .wv-palettes-panel.wv-running .wv-palettes-max {
+    display: none;
+}
+.bank div .wv-palettes-panel.wv-running .wv-running-label,
+.bank div .wv-palettes-panel.wv-running .wv-running-bar {
+    visibility: visible;
 }
 
 /* FIXME: Too specific */
