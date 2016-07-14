@@ -20,7 +20,8 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
     var self = {};
     var rotation = new Rotation(self, models);
     var dataRunner = new DataRunner(models);
-    var mapIsbeingDragged = false
+    var mapIsbeingDragged = false;
+
     self.proj = {}; // One map for each projection
     self.selected = null; // The map for the selected projection
     self.events = wv.util.events();
@@ -626,7 +627,29 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
                 }
 
             });
+        function onMouseMove(e) {
+            var coords;
+            var pixelRatio;
+            var pixelValue;
+            var pixels;
 
+            coords = map.getCoordinateFromPixel([e.pageX,e.pageY]);
+            pixels =  map.getPixelFromCoordinate(coords);
+            pixelRatio = self.selected.pixelRatio;
+            pixelValue = [pixels[0] * pixelRatio, pixels[1] * pixelRatio]
+
+            $('#' + mapId).show();
+            $('#' + mapId + ' span.map-coord').each(function(){
+                var format = $(this).attr('data-format');
+                $(this).html(coordinateFormat(coords, format));
+            });
+
+            // setting a limit on running-data retrievel
+            if (mapIsbeingDragged) {
+                return;
+            }
+            _.throttle(dataRunner.newPoint(pixels, map), 200);
+        };
         $("#" + map.getTarget() + '>div')
             .mouseover(function(){
                 $('#' + mapId).show();
@@ -634,25 +657,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
             .mouseout(function(){
                 $('#' + mapId).hide();
             })
-            .mousemove(function(e){
-                e.preventDefault();
-                var coords = map.getCoordinateFromPixel([e.pageX,e.pageY]);
-
-                $('#' + mapId).show();
-                
-
-                $('#' + mapId + ' span.map-coord').each(function(){
-                    var format = $(this).attr('data-format');
-                    $(this).html(coordinateFormat(coords, format));
-                });
-
-                // setting a limit on running-data retrievel
-                if (mapIsbeingDragged) {
-                   return;
-                }
-                  dataRunner.newPoint(map.getPixelFromCoordinate(coords), map);
-            });
-
+            .mousemove(_.throttle(onMouseMove, 100));
     };
 
     var zoomAction = function(map, amount) {
