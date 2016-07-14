@@ -106,7 +106,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
                 extent = models.map.getLeadingExtent();
             }
             if ( extent ) {
-                map.getView().fitExtent(extent, map.getSize());
+                map.getView().fit(extent, map.getSize());
             }
         }
         updateExtent();
@@ -395,13 +395,15 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
                 matrixIds: matrixIds,
                 tileSize: matrixSet.tileSize[0]
             }),
-            wrapX: false
+            wrapX: false,
+            style: 'default'
         };
         if ( models.palettes.isActive(def.id) ) {
             var lookup = models.palettes.get(def.id).lookup;
             sourceOptions.tileClass = ol.wv.LookupImageTile.factory(lookup);
         }
         var layer = new ol.layer.Tile({
+            extent: proj.maxExtent,
             source: new ol.source.WMTS(sourceOptions)
         });
         return layer;
@@ -429,6 +431,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
             extra = "?TIME=" + wv.util.toISOStringDate(date);
         }
         var layer = new ol.layer.Tile({
+            extent: proj.maxExtent,
             source: new ol.source.TileWMS({
                 url: source.url + extra,
                 params: parameters,

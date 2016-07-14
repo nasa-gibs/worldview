@@ -1,5 +1,8 @@
 {
     "wv.js": [
+
+        "webjs/ol.wv/ol.wv.lookupimagetile.js",
+
         "web/js/edsc.js",
         "web/js/edsc/coordinate.js",
         "web/js/edsc/arc.js",
