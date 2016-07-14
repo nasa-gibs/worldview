@@ -648,7 +648,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
             if (mapIsbeingDragged) {
                 return;
             }
-            _.throttle(dataRunner.newPoint(pixels, map), 200);
+            dataRunner.newPoint(pixels, map);
         };
         $("#" + map.getTarget() + '>div')
             .mouseover(function(){
