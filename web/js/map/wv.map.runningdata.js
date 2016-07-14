@@ -67,7 +67,6 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
     };
     self.remove = function(id) {
         var $paletteCase = $('#' + id).parent();
-        console.log('remove:' + id)
         $paletteCase.removeClass('wv-running');
     }
     self.setLayerValue = function(id, data) {
