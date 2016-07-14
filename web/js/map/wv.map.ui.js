@@ -346,6 +346,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
             extra = "?TIME=" + wv.util.toISOStringDate(date);
         }
         var layer = new ol.layer.Tile({
+            extent: proj.maxExtent,
             source: new ol.source.TileWMS({
                 url: source.url + extra,
                 params: parameters,
