@@ -9,28 +9,8 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
     self.layers = [];
     self.prePixelData = [];
     self.pixel  = null;
-    self.newLayers = [];
     self.oldLayers = [];
 
-    self.newPoint = function(coords, map) {
-        self.activeLayers = [];
-        map.forEachLayerAtPixel(coords, function(layer, data){
-            if(layer.wv.def.palette){
-                var palette = models.palettes.get(layer.wv.id);
-                if(palette.scale) {
-                    var hex = wv.util.rgbaToHex(data[0], data[1], data[2]);
-                    var paletteInfo = self.getDataLabel(palette.scale, hex);
-                    if(paletteInfo) {
-                        self.setLayerValue(palette.id, paletteInfo);
-                    }
-                    self.activeLayers.push(palette.id +'_palette');
-                };
-              };
-        });
-        if(self.oldLayers.length) {
-            self.updateRunners(self.LayersToRemove(self.oldLayers, self.activeLayers));
-        }
-    };
     self.getDataLabel = function(scale, hex) {
         for(var i = 0, len = scale.colors.length; i < len; i++)  {
             if(scale.colors[i] === hex) {
@@ -52,27 +32,42 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
         return $('#' + id + '_palette');
     }
     self.getPercent = function(len, index, caseWidth) {
-
-      var segmentWidth;
-      var location;
+        var segmentWidth;
+        var location;
         if(len < 250) {
             segmentWidth = (caseWidth / (len));
             location = ((segmentWidth * index) + (0.5 * segmentWidth));
             return (location / caseWidth);
         } else {
-          return (index / len);
+            return (index / len);
         }
     }
     self.LayersToRemove = function(oldArray, newArray) {
-        return _.difference(old, newArray);
+        return _.difference(oldArray, newArray);
     }
-    self.updateRunners = function(layers) {
-        for(var i = 0, len = layers.length; i < len; i++)  {
-            self.remove(layers[id]);
+    self.newPoint = function(coords, map) {
+        self.activeLayers = [];
+        map.forEachLayerAtPixel(coords, function(layer, data){
+            if(layer.wv.def.palette){
+                var palette = models.palettes.get(layer.wv.id);
+                if(palette.scale) {
+                    var hex = wv.util.rgbaToHex(data[0], data[1], data[2]);
+                    var paletteInfo = self.getDataLabel(palette.scale, hex);
+                    if(paletteInfo) {
+                        self.setLayerValue(palette.id, paletteInfo);
+                    }
+                    self.activeLayers.push(palette.id +'_palette');
+                };
+              };
+        });
+        if(self.oldLayers.length) {
+            self.updateRunners(self.LayersToRemove(self.oldLayers, self.activeLayers));
         }
-    }
+        self.oldLayers = self.activeLayers;
+    };
     self.remove = function(id) {
         var $paletteCase = $('#' + id).parent();
+        console.log('remove:' + id)
         $paletteCase.removeClass('wv-running');
     }
     self.setLayerValue = function(id, data) {
@@ -84,7 +79,6 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
         var labelMargin;
         var location;
         var margin;
-
         
         $palette = self.getPalette(id);
         $paletteCase = $palette.parent();
@@ -106,5 +100,12 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
         $paletteLabel.attr('style', 'left:' + Math.round(labelMargin) + 'px;');
         $paletteBar.attr('style', 'left:' + Math.round(location) + 'px;');
         $paletteCase.addClass('wv-running');
+    }
+    self.updateRunners = function(layers) {
+        if(layers.length) {
+            for(var i = 0, len = layers.length; i < len; i++)  {
+                self.remove(layers[i]);
+            };
+        };
     }
 };
