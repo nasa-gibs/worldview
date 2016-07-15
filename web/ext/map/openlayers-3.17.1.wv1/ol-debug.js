@@ -43681,13 +43681,17 @@ ol.renderer.canvas.TileLayer.prototype.forEachLayerAtPixel = function(
     pixel, frameState, callback, thisArg) {
   var canvas = this.context.canvas;
   var size = frameState.size;
-  canvas.width = size[0];
-  canvas.height = size[1];
+  
+  canvas.width = size[0] * frameState.pixelRatio;
+  canvas.height = size[1] * frameState.pixelRatio;
+
   this.composeFrame(frameState, this.getLayer().getLayerState(), this.context);
 
   var imageData = this.context.getImageData(
       pixel[0], pixel[1], 1, 1).data;
 
+  this.context.rect(pixel[0], pixel[1], 30, 30)
+  this.context.stroke();
   if (imageData[3] > 0) {
     return callback.call(thisArg, this.getLayer(), imageData);
   } else {
@@ -49759,7 +49763,6 @@ ol.renderer.webgl.TileLayer.prototype.forEachLayerAtPixel = function(pixel, fram
   var pixelOnMapScaled = [
     pixel[0] / frameState.size[0],
     (frameState.size[1] - pixel[1]) / frameState.size[1]];
-
   var pixelOnFrameBufferScaled = ol.transform.apply(
       this.texCoordMatrix, pixelOnMapScaled.slice());
   var pixelOnFrameBuffer = [
