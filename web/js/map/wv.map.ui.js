@@ -21,6 +21,8 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
     var rotation = new Rotation(self, models);
     var dataRunner = new DataRunner(models);
     var mapIsbeingDragged = false;
+    var hiDPI = ol.has.DEVICE_PIXEL_RATIO > 1;
+    var pixelRatio = hiDPI ? 2 : 1;
 
     self.proj = {}; // One map for each projection
     self.selected = null; // The map for the selected projection
@@ -315,7 +317,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
                 origin: [proj.maxExtent[0], proj.maxExtent[3]],
                 resolutions: matrixSet.resolutions,
                 matrixIds: matrixIds,
-                tileSize: matrixSet.tileSize[0]
+                tileSize: matrixSet.tileSize[0],
             }),
             wrapX: false,
             style: 'default'
@@ -629,15 +631,13 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
             });
         function onMouseMove(e) {
             var coords;
-            var pixelRatio;
             var pixelValue;
             var pixels;
 
-            coords = map.getCoordinateFromPixel([e.pageX,e.pageY]);
-            pixels =  map.getPixelFromCoordinate(coords);
-            pixelRatio = self.selected.pixelRatio;
-            pixelValue = [pixels[0] * pixelRatio, pixels[1] * pixelRatio]
+            pixels =  [e.pageX,e.pageY];
+            coords = map.getCoordinateFromPixel(pixels);
 
+            pixelValue = [pixels[0] * pixelRatio, pixels[1] * pixelRatio]
             $('#' + mapId).show();
             $('#' + mapId + ' span.map-coord').each(function(){
                 var format = $(this).attr('data-format');
@@ -648,9 +648,9 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
             if (mapIsbeingDragged) {
                 return;
             }
-            dataRunner.newPoint(pixels, map);
+            dataRunner.newPoint(pixelValue, map);
         };
-        $("#" + map.getTarget() + '>div')
+        $(map.getViewport())
             .mouseover(function(){
                 $('#' + mapId).show();
             })
