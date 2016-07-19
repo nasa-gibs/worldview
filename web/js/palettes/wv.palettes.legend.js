@@ -108,10 +108,18 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         wv.palettes.colorbar(selector + " .wv-palettes-colorbar");
     };
     var renderClasses = function($legendPanel, palette) {
+        var $runningDataPointLabel = $("<span></span>")
+            .addClass("wv-running-category-label");
         var $panel = $("<div></div>")
             .addClass("wv-palettes-classes")
             .attr("title", "X");
-        $legendPanel.append($panel);
+
+
+        $legendPanel
+          .attr("id", palette.id + "_palette")
+          .append($panel)
+          .append($runningDataPointLabel);
+
 
         $panel.tooltip({
             position: {

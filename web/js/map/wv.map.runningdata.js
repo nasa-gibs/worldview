@@ -21,7 +21,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
     self.prePixelData = [];
     self.pixel  = null;
     self.oldLayers = [];
-
+    
     self.getDataLabel = function(scale, hex) {
         for(var i = 0, len = scale.colors.length; i < len; i++)  {
             if(scale.colors[i] === hex) {
@@ -29,7 +29,8 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
             };
         };
         return undefined;
-    };
+    }
+
     self.getLabelMarginLeft = function(labelWidth, caseWidth, location) {
         if(location + (labelWidth / 2) > caseWidth) {
             return (caseWidth - labelWidth);
@@ -58,14 +59,26 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
     }
     self.newPoint = function(coords, map) {
         self.activeLayers = [];
+
         map.forEachLayerAtPixel(coords, function(layer, data){
+
+            var hex;
+            var palette;
+            var paletteInfo;
             if(layer.wv.def.palette){
                 var palette = models.palettes.get(layer.wv.id);
-                if(palette.scale) {
-                    var hex = wv.util.rgbaToHex(data[0], data[1], data[2]);
-                    var paletteInfo = self.getDataLabel(palette.scale, hex);
-                    if(paletteInfo) {
-                        self.setLayerValue(palette.id, paletteInfo);
+                if(palette) {
+                    hex = wv.util.rgbaToHex(data[0], data[1], data[2]);
+                    if(palette.scale) {
+                        paletteInfo = self.getDataLabel(palette.scale, hex);
+                        if(paletteInfo) {
+                            self.setLayerValue(palette.id, paletteInfo);
+                        }
+                    } else if(palette.classes) {
+                        paletteInfo = self.getDataLabel(palette.classes, hex);
+                        if(paletteInfo) {
+                            self.setCategoryValue(palette.id +'_palette', paletteInfo);
+                        }
                     }
                     self.activeLayers.push(palette.id +'_palette');
                 };
@@ -77,8 +90,41 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
         self.oldLayers = self.activeLayers;
     };
     self.remove = function(id) {
-        var $paletteCase = $('#' + id).parent();
+        var $palette = $('#' + id);
+        var $paletteCase = $palette.parent();
         $paletteCase.removeClass('wv-running');
+        $palette.removeClass('wv-running');
+    }
+    self.setCategoryValue = function(id, data) {
+        var $categoryPaletteCase;
+        var $caseWidth;
+        var $labelWidth;
+        var $colorSquare;
+        var $paletteLabel;
+        var location;
+        var marginLeft;
+        var squareWidth;
+
+        marginLeft = 3;
+        squareWidth = 15;
+
+        $categoryPaletteCase = $('#' + id);
+        
+        $colorSquare = $categoryPaletteCase.find("[data-index='" + data.index + "']");
+        $paletteLabel = $categoryPaletteCase.find('.wv-running-category-label');
+
+        $caseWidth = $categoryPaletteCase.width();
+
+        $paletteLabel.text(data.label);
+        $labelWidth = $paletteLabel.width();
+        location = ((marginLeft + squareWidth) * data.index);
+        labelMargin = self.getLabelMarginLeft($labelWidth, $caseWidth, location);
+
+        $paletteLabel.attr('style', 'left:' + Math.round(location) + 'px;'); 
+        $categoryPaletteCase.addClass('wv-running');
+        $categoryPaletteCase.find('.wv-active').removeClass('wv-active');
+        $colorSquare.addClass('wv-active');
+
     }
     self.setLayerValue = function(id, data) {
         var $palette;
