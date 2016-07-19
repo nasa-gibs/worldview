@@ -26,10 +26,10 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
         for(var i = 0, len = scale.colors.length; i < len; i++)  {
             if(scale.colors[i] === hex) {
                 return {label:scale.labels[i], len: len, index:i};
-            };
-        };
+            }
+        }
         return undefined;
-    }
+    };
 
     self.getLabelMarginLeft = function(labelWidth, caseWidth, location) {
         if(location + (labelWidth / 2) > caseWidth) {
@@ -39,10 +39,10 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
         } else {
             return (location - (labelWidth / 2));
         }
-    }
+    };
     self.getPalette = function(id) {
         return $('#' + id + '_palette');
-    }
+    };
     self.getPercent = function(len, index, caseWidth) {
         var segmentWidth;
         var location;
@@ -53,10 +53,10 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
         } else {
             return (index / len);
         }
-    }
+    };
     self.LayersToRemove = function(oldArray, newArray) {
         return _.difference(oldArray, newArray);
-    }
+    };
     self.newPoint = function(coords, map) {
         self.activeLayers = [];
 
@@ -66,7 +66,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
             var palette;
             var paletteInfo;
             if(layer.wv.def.palette){
-                var palette = models.palettes.get(layer.wv.id);
+                palette = models.palettes.get(layer.wv.id);
                 if(palette) {
                     hex = wv.util.rgbaToHex(data[0], data[1], data[2]);
                     if(palette.scale) {
@@ -81,8 +81,8 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
                         }
                     }
                     self.activeLayers.push(palette.id +'_palette');
-                };
-              };
+                }
+              }
         });
         if(self.oldLayers.length) {
             self.updateRunners(self.LayersToRemove(self.oldLayers, self.activeLayers));
@@ -94,7 +94,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
         var $paletteCase = $palette.parent();
         $paletteCase.removeClass('wv-running');
         $palette.removeClass('wv-running');
-    }
+    };
     self.setCategoryValue = function(id, data) {
         var $categoryPaletteCase;
         var $caseWidth;
@@ -124,8 +124,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
         $categoryPaletteCase.addClass('wv-running');
         $categoryPaletteCase.find('.wv-active').removeClass('wv-active');
         $colorSquare.addClass('wv-active');
-
-    }
+    };
     self.setLayerValue = function(id, data) {
         var $palette;
         var $paletteCase;
@@ -144,7 +143,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
         $paletteBar = $paletteCase.find('.wv-running-bar');
 
         percent = self.getPercent(data.len, data.index, $paletteWidth);
-        margin = (($paletteCaseWidth - $paletteWidth) / 2)
+        margin = (($paletteCaseWidth - $paletteWidth) / 2);
         location = ($paletteWidth * percent + margin);
 
 
@@ -156,12 +155,12 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
         $paletteLabel.attr('style', 'left:' + Math.round(labelMargin) + 'px;');
         $paletteBar.attr('style', 'left:' + Math.round(location) + 'px;');
         $paletteCase.addClass('wv-running');
-    }
+    };
     self.updateRunners = function(layers) {
         if(layers.length) {
             for(var i = 0, len = layers.length; i < len; i++)  {
                 self.remove(layers[i]);
-            };
-        };
-    }
+            }
+        }
+    };
 };

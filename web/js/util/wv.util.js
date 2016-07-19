@@ -499,11 +499,11 @@ wv.util = (function(self) {
     };
     self.rgbaToHex = function(r, g, b) {
       function hex(c) {
-          var hex = c.toString(16);
-              return hex.length == 1 ? "0" + hex : hex;
+          var strHex = c.toString(16);
+              return strHex.length == 1 ? "0" + strHex : strHex;
           }
         return hex(r) + hex(g) + hex(b) + 'ff';
-    }
+    };
 
     /**
      * Submits an AJAX request or retreives the result from the cache.

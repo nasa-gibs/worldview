@@ -492,10 +492,10 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
         map.getView().on("change:rotation", rotation.updateRotation);
         map.on('pointerdrag', function() {
             mapIsbeingDragged = true;
-        })
+        });
         map.on('moveend', function() {
             mapIsbeingDragged = false;
-        })
+        });
 
         return map;
     };
@@ -636,7 +636,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
             pixels =  [e.pageX,e.pageY];
             coords = map.getCoordinateFromPixel(pixels);
 
-            pixelValue = [pixels[0] * pixelRatio, pixels[1] * pixelRatio]
+            pixelValue = [pixels[0] * pixelRatio, pixels[1] * pixelRatio];
             $('#' + mapId).show();
             $('#' + mapId + ' span.map-coord').each(function(){
                 var format = $(this).attr('data-format');
@@ -648,7 +648,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
                 return;
             }
             dataRunner.newPoint(pixelValue, map);
-        };
+        }
         $(map.getViewport())
             .mouseover(function(){
                 $('#' + mapId).show();
