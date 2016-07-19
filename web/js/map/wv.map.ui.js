@@ -352,8 +352,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 params: parameters,
                 tileGrid: new ol.tilegrid.TileGrid({
                     origin: [proj.maxExtent[0], proj.maxExtent[3]],
-                    resolutions: proj.resolutions,
-                    tileSize: 512
+                    resolutions: proj.resolutions
                 })
             })
         });
