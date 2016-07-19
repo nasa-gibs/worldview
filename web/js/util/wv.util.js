@@ -262,11 +262,11 @@ wv.util = (function(self) {
     };
 
     /**
-     * Returns the day of week for the given date
+     * Returns the day of week for the given date object
      *
-     * @method giveWeek
+     * @method giveWeekDay
      * @static
-     * @param date {Date} date of which to determine week day
+     * @param date {Date} date object of which to determine week day
      * @return {String} the full name of the day of the week
      */
     self.giveWeekDay = function( d ) {
@@ -283,11 +283,11 @@ wv.util = (function(self) {
         return day[d.getUTCDay()];
     };
     /**
-     * Returns the month of the year for the given date
+     * Returns the month of the year for the given date object
      *
      * @method giveMonth
      * @static
-     * @param date {Date} date of which to determine the Month
+     * @param date {Date} date object of which to determine the Month name
      * @return {String} the full name of the month
      */
     self.giveMonth = function( d ) {

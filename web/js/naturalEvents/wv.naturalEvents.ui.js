@@ -11,32 +11,9 @@
  */
 
 var wv = wv || {};
+wv.naturalEvents = wv.naturalEvents || {};
 
-wv.events = wv.events || function(models, ui) {
-
-    var dayNames = [
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-    ];
-    var monthNames = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December"
-    ];
+wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
 
     var layerLists = {
         Wildfires: [
@@ -78,26 +55,41 @@ wv.events = wv.events || function(models, ui) {
     };
 
     var self = {};
+    var model = models.naturalEvents;
+    var data;
     self.selector = "#wv-events";
     self.id = "wv-events";
-    self.data = {};
+
     var lastIndex = -1;
     var lastDateIndex = -1;
+
     //Local storage may not be a good idea because they'll never see it again
-    var notified = false;//wv.util.localStorage('notified') || false;
+    //wv.util.localStorage('notified') || false;    
+    var notified = false;
     var $notification;
 
-    var init = function() {
-        self.query();
+    var onQueryResults = function(){
+        //FIXME: this if check needs to be reworked
+        if ( model.data && model.sources && model.types ) {
+            data = model.data;
+            self.refresh();
+        }
+    };
 
+    var init = function() {
+        model.events.on( "queryResults", onQueryResults );
+        //models.naturalEvents.events.on("select", onSelect);
         ui.sidebar.events.on("select", function(tab) {
             if ( tab === "events" ) {
                 resize();
             }
         });
+
+        render();
+
     };
 
-    self.render = function() {
+    var render = function() {
         var $panels = $(self.selector).empty()
             .addClass(self.id + "list")
             .addClass("bank");
@@ -115,6 +107,8 @@ wv.events = wv.events || function(models, ui) {
 
         $panels.append($detailContainer);
 
+        //******************************************
+        //TODO: This should be moved to wv.ui.notify
         var $message = $('<span></span>')
             .addClass('notify-message');
 
@@ -179,6 +173,7 @@ wv.events = wv.events || function(models, ui) {
                     notified = true;
                 }
             });
+        //**************************************
 
         $(window).resize(resize);
 
@@ -208,7 +203,7 @@ wv.events = wv.events || function(models, ui) {
         var $content = $(self.selector + "content");
 
         $content = $(self.selector + "content").empty();
-        _.each(self.data, function(event, index) {
+        _.each(data, function(event, index) {
             refreshEvent($content, event, index);
         });
         $(self.selector + "content li").click(function() {
@@ -233,9 +228,11 @@ wv.events = wv.events || function(models, ui) {
         }
         var geoms = toArray(event.geometry);
         eventDate = wv.util.parseDateUTC(geoms[0].date);
-        dateString = dayNames[eventDate.getUTCDay()] + ", " +
-                monthNames[eventDate.getUTCMonth()] + " " +
-                eventDate.getUTCDate();
+
+        dateString = wv.util.giveWeekDay(eventDate) + ", " +
+            wv.util.giveMonth(eventDate) + " " +
+            eventDate.getUTCDate();
+
         var $item = $("<li></li>")
             .addClass("selectorItem")
             .addClass("item")
@@ -258,7 +255,7 @@ wv.events = wv.events || function(models, ui) {
                     .addClass("date")
                     .attr("data-date-index", dateIndex)
                     .attr("data-index", index)
-                    .html("&bull; " + date);
+                    .html(date);
                 $dates.append($("<li class='dates'></li>").append($date));
             });
         }
@@ -268,7 +265,7 @@ wv.events = wv.events || function(models, ui) {
         if ( references.length > 0 ) {
             items = [];
             _.each(references, function(reference) {
-                var source = _.find(self.sources, { id: reference.id });
+                var source = _.find(model.sources, { id: reference.id });
                 if ( reference.url ) {
                     items.push("<a target='event' href='" + reference.url + "'>" +
                                "<i class='fa fa-external-link fa-1'></i>" +
@@ -307,7 +304,7 @@ wv.events = wv.events || function(models, ui) {
         $("#wv-eventscontent [data-index='" + index + "'] .dates").show();
         resize();
 
-        event = self.data[index];
+        event = data[index];
 
         eventItem = null;
         if ( event.geometry.length > 1 ) {
@@ -423,7 +420,7 @@ wv.events = wv.events || function(models, ui) {
             }
         }, wait);
     };
-
+    //TODO: Move to wv.ui.sidebar
     var productsIsOverflow = false;
     var sizeEventsTab = function(){
         var winSize = $(window).outerHeight(true);
@@ -472,37 +469,6 @@ wv.events = wv.events || function(models, ui) {
         sizeEventsTab();
     };
 
-    var queryEvents = function() {
-        var url = "https://eonet.sci.gsfc.nasa.gov/api/v1/events";
-        $.getJSON(url, function(data) {
-            self.data = data.item;
-            checkRender();
-        });
-    };
-
-    var queryTypes = function() {
-        var url = "https://eonet.sci.gsfc.nasa.gov/api/v1/types";
-        $.getJSON(url, function(data) {
-            self.types = data.item;
-            checkRender();
-        });
-    };
-
-    var querySources = function() {
-        var url = "https://eonet.sci.gsfc.nasa.gov/api/v1/sources";
-        $.getJSON(url, function(data) {
-            self.sources = data.item;
-            checkRender();
-        });
-
-    };
-
-    self.query = function() {
-        queryTypes();
-        queryEvents();
-        querySources();
-    };
-
     var toArray = function(value) {
         if ( !value ) {
             return [];
@@ -511,13 +477,6 @@ wv.events = wv.events || function(models, ui) {
             value = [value];
         }
         return value;
-    };
-
-    var checkRender = function() {
-        if ( self.data && self.sources && self.types ) {
-            self.render();
-            self.refresh();
-        }
     };
 
     init();
