@@ -51,7 +51,6 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
 
         ui.sidebar.events.on("select", function(tab) {
             if ( tab === "download" ) {
-                console.log('download');
                 resize();
                 model.activate();
             } else {

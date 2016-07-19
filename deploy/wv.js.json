@@ -73,7 +73,8 @@
         "web/js/link/wv.link.model.js",
         "web/js/link/wv.link.ui.js",
 
-        "web/js/wv.events.js",
+        "web/js/naturalEvents/wv.naturalEvents.model.js",
+        "web/js/naturalEvents/wv.naturalEvents.ui.js",
 
         "web/js/wv.feedback.js",
         "web/js/wv.tour.js",
