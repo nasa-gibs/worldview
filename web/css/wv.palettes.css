@@ -139,7 +139,12 @@
 .bank div.wv-palettes-classes {
     padding-bottom: 19px;
 }
-
+.bank div.wv-palettes-classes.wv-running .wv-palettes-class.wv-active {
+    opacity: 1;
+}
+.bank div.wv-palettes-classes.wv-running .wv-palettes-class {
+    opacity: 0.25;
+}
 .wv-palettes-classes {
     cursor: crosshair;
 }
