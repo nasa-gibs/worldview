@@ -61,7 +61,6 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
         self.activeLayers = [];
 
         map.forEachLayerAtPixel(coords, function(layer, data){
-
             var hex;
             var palette;
             var paletteInfo;
@@ -72,7 +71,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
                     if(palette.scale) {
                         paletteInfo = self.getDataLabel(palette.scale, hex);
                         if(paletteInfo) {
-                            self.setLayerValue(palette.id, paletteInfo);
+                            self.setLayerValue(layer.wv.id, paletteInfo);
                         }
                     } else if(palette.classes) {
                         paletteInfo = self.getDataLabel(palette.classes, hex);
@@ -80,7 +79,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
                             self.setCategoryValue(palette.id +'_palette', paletteInfo);
                         }
                     }
-                    self.activeLayers.push(palette.id +'_palette');
+                    self.activeLayers.push(layer.wv.id +'_palette');
                 }
               }
         });
