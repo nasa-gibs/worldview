@@ -114,6 +114,9 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
         lastIndex = index;
         lastDateIndex = lastDateIndex;
 
+        if(models.proj.selected.id !=='geographic'){
+            models.proj.select('geographic');
+        }
         self.selected = index;
         event = self.data[index];
 
@@ -170,7 +173,6 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
     };
 
     var goTo = function(method, location) {
-        //TODO: Seems to be starting zoom, make it current zoom
 
         var map = wvx.ui.map.selected;
         var zoom = map.getView().getZoom();//3;
