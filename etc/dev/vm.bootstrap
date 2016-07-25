@@ -9,7 +9,7 @@ if [ ! -d options ] ; then
 fi
 
 if ! rpm -q epel-release; then
-    yum install -y http://mirrors.kernel.org/fedora-epel/7/x86_64/e/epel-release-7-5.noarch.rpm
+    yum install -y http://mirrors.kernel.org/fedora-epel/7/x86_64/e/epel-release-7-7.noarch.rpm
 fi
 
 yum install -y \
