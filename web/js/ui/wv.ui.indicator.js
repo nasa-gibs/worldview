@@ -4,7 +4,7 @@
  * This code was originally developed at NASA/Goddard Space Flight Center for
  * the Earth Science Data and Information System (ESDIS) project.
  *
- * Copyright (C) 2013 - 2014 United States Government as represented by the
+ * Copyright (C) 2013 - 2016 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
@@ -102,7 +102,7 @@ wv.ui.indicator = wv.ui.indicator || (function() {
         if ( hides ) {
             self.hide(hides);
         }
-        return self.show("No Data Avaialble", "images/red-x.svg");
+        return self.show("No Data Available", "images/red-x.svg");
     };
 
     self.delayed = function(promise, delay) {

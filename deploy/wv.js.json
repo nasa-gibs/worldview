@@ -1,5 +1,8 @@
 {
     "wv.js": [
+
+        "webjs/ol.wv/ol.wv.lookupimagetile.js",
+
         "web/js/edsc.js",
         "web/js/edsc/coordinate.js",
         "web/js/edsc/arc.js",
@@ -45,7 +48,6 @@
         "web/js/layers/wv.layers.sidebar.js",
         "web/js/layers/wv.layers.active.js",
         "web/js/layers/wv.layers.modal.js",
-        "web/js/layers/wv.layers.add.js",
         "web/js/layers/wv.layers.options.js",
 
         "web/js/image/wv.image.rubberband.js",
@@ -69,6 +71,9 @@
 
         "web/js/link/wv.link.model.js",
         "web/js/link/wv.link.ui.js",
+
+        "web/js/naturalEvents/wv.naturalEvents.model.js",
+        "web/js/naturalEvents/wv.naturalEvents.ui.js",
 
         "web/js/wv.feedback.js",
         "web/js/wv.tour.js",

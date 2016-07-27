@@ -22,24 +22,27 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
 
     var HTML_TAB_ACTIVE_SELECTED =
         "<i class='productsIcon selected icon-layers'></i>" +
-        "Active";
+        "Layers";
 
     var HTML_TAB_ACTIVE_UNSELECTED =
-        "<i class='productsIcon selected icon-layers' title='Active Layers'></i>";
+        "<i class='productsIcon selected icon-layers' title='Active Layers'></i>"+
+        "Layers";
 
-    var HTML_TAB_ADD_SELECTED =
-        "<i class='productsIcon selected icon-add'></i>" +
-        "Add Layers";
+    var HTML_TAB_EVENTS_SELECTED =
+        "<i class='selected icon-events'></i>" +
+        "Events";
 
-    var HTML_TAB_ADD_UNSELECTED =
-        "<i class='productsIcon selected icon-add' title='Add Layers'></i>";
+    var HTML_TAB_EVENTS_UNSELECTED =
+        "<i class='selected icon-events' title='Events'></i>" +
+        "Events";
 
     var HTML_TAB_DOWNLOAD_SELECTED =
         "<i class='productsIcon selected icon-download'></i>" +
-        "Download Data";
+        "Data";
 
     var HTML_TAB_DOWNLOAD_UNSELECTED =
-        "<i class='productsIcon selected icon-download' title='Download Data'></i>";
+        "<i class='productsIcon selected icon-download' title='Data'></i>" +
+        "Data";
 
     var collapsed = false;
     var collapseRequested = false;
@@ -69,8 +72,10 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
         
         if ( tabName === "active" ) {
             $(self.selector).tabs("option", "active", 0);
-        } else if ( tabName === "download" ) {
+        } else if ( tabName === "events" ) {
             $(self.selector).tabs("option", "active", 1);
+        } else if ( tabName === "download" ) {
+            $(self.selector).tabs("option", "active", 2);
         } else {
             throw new Error("Invalid tab: " + tabName);
         }
@@ -88,7 +93,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
             .addClass('staticLayers');
         $('.accordionToggler').attr("title","Show Layer Selector");
         $('.accordionToggler').html("Layers (" + models.layers.get().length + ")");
-        var w = $('#app').outerWidth();
+
         var speed = ( now ) ? undefined : "fast";
         $('.products').hide(speed);
         $("#" + self.id).after($('.accordionToggler'));
@@ -163,6 +168,17 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
         $activeTab.append($activeLink);
         $tabs.append($activeTab);
 
+        var $eventsTab = $("<li></li>")
+            .addClass("layerPicker")
+            .addClass("second")
+            .attr("data-tab", "events");
+        var $eventsLink = $("<a></a>")
+            .attr("href", "#wv-events")
+            .addClass("tab")
+            .html(HTML_TAB_EVENTS_UNSELECTED);
+        $eventsTab.append($eventsLink);
+        $tabs.append($eventsTab);
+
         if ( config.features.dataDownload ) {
             var $downloadTab = $("<li></li>")
                 .addClass("layerPicker")
@@ -204,7 +220,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
 
     var onTabChange = function(e, ui) {
         var tab = ui.newTab.attr("data-tab");
-        if ( tab === "add" || tab === "download" ) {
+        if ( tab === "events" || tab === "download" ) {
             $("#wv-layers-options-dialog").dialog("close");
         }
         self.events.trigger("select", ui.newTab.attr("data-tab"));
@@ -214,7 +230,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
     };
 
     var onBeforeTabChange = function(e, ui) {
-        var $footerBtns = $(self.selector + " footer button");
+        var $footerBtns = $(self.selector + " footer");
         // FIXME: This code is very clunky.
         var tab = ui.newTab.attr("data-tab");
         if ( tab === "active" ) {
@@ -225,9 +241,10 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
             $('.ui-tabs-nav li.first').addClass("ui-state-active");
             $('.ui-tabs-nav li.second').removeClass("ui-state-active");
             $('.ui-tabs-nav li.third').removeClass("ui-state-active");
-            $footerBtns.hide();
+            $footerBtns.show();
+            $footerBtns.find("button").hide();
             $("#layers-add").show();
-        } else if ( tab === "add" ) {
+        } else if ( tab === "events" ) {
             $('.ui-tabs-nav')
                   .removeClass('firstselected')
                   .addClass('secondselected')
@@ -235,7 +252,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
             $('.ui-tabs-nav li.first').removeClass("ui-state-active");
             $('.ui-tabs-nav li.second').addClass("ui-state-active");
             $('.ui-tabs-nav li.third').removeClass("ui-state-active");
-            
+            $footerBtns.hide();
         } else if ( tab === "download" ) {
             $('.ui-tabs-nav')
                   .removeClass('firstselected')
@@ -244,7 +261,8 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
             $('.ui-tabs-nav li.first').removeClass("ui-state-active");
             $('.ui-tabs-nav li.second').removeClass("ui-state-active");
             $('.ui-tabs-nav li.third').addClass("ui-state-active");
-            $footerBtns.hide();
+            $footerBtns.show();
+            $footerBtns.find("button").hide();
             $("#wv-data-download-button").show();
         } else {
             throw new Error("Invalid tab index: " + ui.index);
@@ -252,16 +270,10 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
 
         var tab1 = ( tab === "active" ) ?
             HTML_TAB_ACTIVE_SELECTED : HTML_TAB_ACTIVE_UNSELECTED;
-        var tab2 = ( tab === "add" ) ?
-            HTML_TAB_ADD_SELECTED : HTML_TAB_ADD_UNSELECTED;
+        var tab2 = ( tab === "events" ) ?
+            HTML_TAB_EVENTS_SELECTED : HTML_TAB_EVENTS_UNSELECTED;
         var tab3 = ( tab === "download" ) ?
             HTML_TAB_DOWNLOAD_SELECTED : HTML_TAB_DOWNLOAD_UNSELECTED;
-
-        if ( ui.index === "download" ) {
-            self.events.trigger("dataDownloadSelect");
-        } else {
-            self.events.trigger("dataDownloadUnselect");
-        }
 
         self.events.trigger("before-select", tab);
 

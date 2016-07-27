@@ -29,10 +29,6 @@ wv.map.ui = wv.map.ui || function(models, config) {
             return;
         }
 
-        if ( wv.util.browser.firefox ) {
-            animationDuration = 0;
-        }
-
         // NOTE: iOS sometimes bombs if this is _.each instead. In that case,
         // it is possible that config.projections somehow becomes array-like.
         _.forOwn(config.projections, function(proj) {
@@ -89,7 +85,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 extent = models.map.getLeadingExtent();
             }
             if ( extent ) {
-                map.getView().fitExtent(extent, map.getSize());
+                map.getView().fit(extent, map.getSize());
             }
         }
         updateExtent();
@@ -314,13 +310,15 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 matrixIds: matrixIds,
                 tileSize: matrixSet.tileSize[0]
             }),
-            wrapX: false
+            wrapX: false,
+            style: 'default'
         };
         if ( models.palettes.isActive(def.id) ) {
             var lookup = models.palettes.get(def.id).lookup;
             sourceOptions.tileClass = ol.wv.LookupImageTile.factory(lookup);
         }
         var layer = new ol.layer.Tile({
+            extent: proj.maxExtent,
             source: new ol.source.WMTS(sourceOptions)
         });
         return layer;
@@ -348,13 +346,13 @@ wv.map.ui = wv.map.ui || function(models, config) {
             extra = "?TIME=" + wv.util.toISOStringDate(date);
         }
         var layer = new ol.layer.Tile({
+            extent: proj.maxExtent,
             source: new ol.source.TileWMS({
                 url: source.url + extra,
                 params: parameters,
                 tileGrid: new ol.tilegrid.TileGrid({
                     origin: [proj.maxExtent[0], proj.maxExtent[3]],
-                    resolutions: proj.resolutions,
-                    tileSize: 512
+                    resolutions: proj.resolutions
                 })
             })
         });
@@ -426,7 +424,7 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 center: proj.startCenter,
                 zoom: proj.startZoom,
                 maxZoom: proj.numZoomLevels,
-                enableRotation: false
+                enableRotation: false,
             }),
             target: id,
             renderer: ["canvas", "dom"],
@@ -451,7 +449,8 @@ wv.map.ui = wv.map.ui || function(models, config) {
                 new ol.interaction.DragZoom({
                     duration: animationDuration
                 })
-            ]
+            ],
+            loadTilesWhileAnimating: true
         });
         map.wv = {
             small: false,

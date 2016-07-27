@@ -261,6 +261,54 @@ wv.util = (function(self) {
         return lastDay.getUTCDate();
     };
 
+    /**
+     * Returns the day of week for the given date object
+     *
+     * @method giveWeekDay
+     * @static
+     * @param date {Date} date object of which to determine week day
+     * @return {String} the full name of the day of the week
+     */
+    self.giveWeekDay = function( d ) {
+        var day = [
+            "Sunday",
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+        ];
+        
+        return day[d.getUTCDay()];
+    };
+    /**
+     * Returns the month of the year for the given date object
+     *
+     * @method giveMonth
+     * @static
+     * @param date {Date} date object of which to determine the Month name
+     * @return {String} the full name of the month
+     */
+    self.giveMonth = function( d ) {
+        var month = [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December"
+        ];
+
+        return month[d.getUTCMonth()];
+    };
+
     self.clamp = function(val, min, max) {
         if ( val < min ) { return min; }
         if ( val > max ) { return max; }

@@ -125,15 +125,16 @@ wv.tour = wv.tour || function(models, ui, config) {
         var repeatTour = function(e) {
             e.stopPropagation();
             $(".ui-dialog-content").dialog("close");
-            $('#joyRideTipContent').joyride({adjustForPhone:false,
-                                             bordered:true,
-                                             includepage:true,
-                                             template : {'link':'<a href="#" class="joyride-close-tip">X</a>'},
-                                             postStepCallback : function (index, tip) {
-                                                 if(index == 5) {
-                                                     endTour();
-                                                 }
-                                             }});
+            $('#joyRideTipContent').joyride({
+                adjustForPhone:false,
+                bordered:true,
+                includepage:true,
+                template : {'link':'<a href="#" class="joyride-close-tip">X</a>'},
+                postStepCallback : function (index, tip) {
+                    if(index == 5) {
+                        endTour();
+                    }
+                }});
         };
 
         /*
@@ -167,11 +168,12 @@ wv.tour = wv.tour || function(models, ui, config) {
             $(".ui-dialog-content").dialog("close");
             initTourState();
 
-            $('#joyRideTipContent').joyride({adjustForPhone:false,
-                                             bordered:true,
-                                             includepage:true,
-                                             template : {'link':'<a href="#" class="joyride-close-tip">X</a>'},
-                                             postStepCallback : onStop});
+            $('#joyRideTipContent').joyride({
+                adjustForPhone:false,
+                bordered:true,
+                includepage:true,
+                template : {'link':'<a href="#" class="joyride-close-tip">X</a>'},
+                postStepCallback : onStop});
         };
 
         /*
@@ -195,7 +197,7 @@ wv.tour = wv.tour || function(models, ui, config) {
         models.date.select(wv.util.today());
         models.layers.reset();
         var leading = models.map.getLeadingExtent();
-        map.getView().fitExtent(leading, map.getSize());
+        map.getView().fit(leading, map.getSize());
         setTourState();
     };
 
