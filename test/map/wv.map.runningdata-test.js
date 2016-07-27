@@ -23,6 +23,14 @@ buster.testCase("wv.map.runningdata", {
         };
         var value = this.runner.getDataLabel(scale, "1e00eaff");
         buster.assert.equals(value.label, "50 – 60 ppb");
+    },
+    "1.2: Removes layers that are no longer present": function() {
+        var arra1 = ['layer1', 'layer2', 'layer3'];
+        var arra2 = ['layer1', 'layer2'];
+
+        var value = this.runner.LayersToRemove(arra1, arra2);
+        console.log(value)
+        buster.assert.equals(value, ['layer3']);
     }
 
 });
