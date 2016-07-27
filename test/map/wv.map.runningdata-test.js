@@ -29,7 +29,6 @@ buster.testCase("wv.map.runningdata", {
         var arra2 = ['layer1', 'layer2'];
 
         var value = this.runner.LayersToRemove(arra1, arra2);
-        console.log(value)
         buster.assert.equals(value, ['layer3']);
     }
 
