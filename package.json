@@ -9,7 +9,7 @@
         "test": "grunt test lint"
     },
     "devDependencies": {
-        "buster": "0.7.x",
+        "buster": "0.7.12",
         "grunt": "0.4.x",
         "grunt-buster": "0.4.x",
         "grunt-contrib-clean": "0.5.x",
