@@ -11,93 +11,44 @@
  */
 
 var wv = wv || {};
+wv.naturalEvents = wv.naturalEvents || {};
 
-wv.events = wv.events || function(models, ui) {
-
-    var dayNames = [
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-    ];
-    var monthNames = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December"
-    ];
-
-    var layerLists = {
-        Wildfires: [
-            ["MODIS_Terra_CorrectedReflectance_TrueColor", true],
-            ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
-            ["VIIRS_SNPP_CorrectedReflectance_TrueColor", false],
-            ["MODIS_Fires_Terra", true],
-            ["MODIS_Fires_Aqua", false],
-            ["VIIRS_SNPP_Fires_375m_Day", false],
-            ["VIIRS_SNPP_Fires_375m_Night", false]
-        ],
-        "Temperature Extremes": [
-            ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
-            ["MODIS_Terra_CorrectedReflectance_TrueColor", true],
-            ["VIIRS_SNPP_CorrectedReflectance_TrueColor", false],
-            ["MODIS_Aqua_Land_Surface_Temp_Day", false],
-            ["MODIS_Terra_Land_Surface_Temp_Day", true]
-        ],
-        Floods: [
-            ["MODIS_Aqua_SurfaceReflectance_Bands121", false],
-            ["MODIS_Terra_SurfaceReflectance_Bands121", true]
-        ],
-        Volcanoes: [
-            ["MODIS_Terra_CorrectedReflectance_TrueColor", true],
-            ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
-            ["VIIRS_SNPP_CorrectedReflectance_TrueColor", false],
-            ["AIRS_Prata_SO2_Index_Day", true],
-            ["AIRS_Prata_SO2_Index_Night", false],
-            ["MODIS_Fires_Terra", true],
-            ["MODIS_Fires_Aqua", false],
-            ["VIIRS_SNPP_Fires_375m_Day", false],
-            ["VIIRS_SNPP_Fires_375m_Night", false]
-        ],
-        Default: [
-            ["MODIS_Terra_CorrectedReflectance_TrueColor", true],
-            ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
-            ["VIIRS_SNPP_CorrectedReflectance_TrueColor", false]
-        ]
-    };
+wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
 
     var self = {};
+    var model = models.naturalEvents;
+    var data;
     self.selector = "#wv-events";
     self.id = "wv-events";
-    self.data = {};
-    var lastIndex = -1;
-    var lastDateIndex = -1;
+
     //Local storage may not be a good idea because they'll never see it again
-    var notified = false;//wv.util.localStorage('notified') || false;
+    //wv.util.localStorage('notified') || false;    
+    var notified = false;
     var $notification;
 
     var init = function() {
-        self.query();
-
+        //model.events.on("select", onSelect);
+        model.events.on( "queryResults", onQueryResults );
         ui.sidebar.events.on("select", function(tab) {
             if ( tab === "events" ) {
                 resize();
             }
+            else {
+                
+            }
         });
-    };
 
-    self.render = function() {
+        render();
+
+    };
+    var onQueryResults = function(){
+        //FIXME: this if check needs to be reworked
+        if ( model.data && model.sources && model.types ) {
+            data = model.data;
+            self.refresh();
+        }
+    };
+    var render = function() {
         var $panels = $(self.selector).empty()
             .addClass(self.id + "list")
             .addClass("bank");
@@ -115,6 +66,8 @@ wv.events = wv.events || function(models, ui) {
 
         $panels.append($detailContainer);
 
+        //******************************************
+        //TODO: This should be moved to wv.ui.notify
         var $message = $('<span></span>')
             .addClass('notify-message');
 
@@ -179,6 +132,7 @@ wv.events = wv.events || function(models, ui) {
                     notified = true;
                 }
             });
+        //**************************************
 
         $(window).resize(resize);
 
@@ -208,7 +162,7 @@ wv.events = wv.events || function(models, ui) {
         var $content = $(self.selector + "content");
 
         $content = $(self.selector + "content").empty();
-        _.each(self.data, function(event, index) {
+        _.each(data, function(event, index) {
             refreshEvent($content, event, index);
         });
         $(self.selector + "content li").click(function() {
@@ -228,14 +182,16 @@ wv.events = wv.events || function(models, ui) {
     };
 
     var refreshEvent = function($content, event, index) {
-        if (event.category[0]['-domain'] === 'Floods'){
+        if (event.category[0]['-domain'] === 'Floods') {
             return;
         }
         var geoms = toArray(event.geometry);
         eventDate = wv.util.parseDateUTC(geoms[0].date);
-        dateString = dayNames[eventDate.getUTCDay()] + ", " +
-                monthNames[eventDate.getUTCMonth()] + " " +
-                eventDate.getUTCDate();
+
+        dateString = wv.util.giveWeekDay(eventDate) + ", " +
+            wv.util.giveMonth(eventDate) + " " +
+            eventDate.getUTCDate();
+
         var $item = $("<li></li>")
             .addClass("selectorItem")
             .addClass("item")
@@ -252,14 +208,19 @@ wv.events = wv.events || function(models, ui) {
 
         var $dates = $("<ul></ul>").addClass("dates").hide();
         if ( event.geometry.length > 1 ) {
+            var lastDate;
             _.each(event.geometry, function(geometry, dateIndex) {
                 date = geometry.date.split(/T/)[0];
+                if (date === lastDate){
+                    return;
+                }
                 $date = $("<a></a>")
                     .addClass("date")
                     .attr("data-date-index", dateIndex)
                     .attr("data-index", index)
-                    .html("&bull; " + date);
+                    .html(date);
                 $dates.append($("<li class='dates'></li>").append($date));
+                lastDate = date;
             });
         }
 
@@ -268,7 +229,7 @@ wv.events = wv.events || function(models, ui) {
         if ( references.length > 0 ) {
             items = [];
             _.each(references, function(reference) {
-                var source = _.find(self.sources, { id: reference.id });
+                var source = _.find(model.sources, { id: reference.id });
                 if ( reference.url ) {
                     items.push("<a target='event' href='" + reference.url + "'>" +
                                "<i class='fa fa-external-link fa-1'></i>" +
@@ -290,16 +251,6 @@ wv.events = wv.events || function(models, ui) {
     };
 
     var showEvent = function(index, dateIndex) {
-        if ( index === lastIndex && lastDateIndex === dateIndex ) {
-            return;
-        }
-
-        var method = "fly";
-        if ( index == lastIndex && dateIndex != lastDateIndex ) {
-            method = "pan";
-        }
-        lastIndex = index;
-        lastDateIndex = lastDateIndex;
 
         $("#wv-eventscontent .subtitle").hide();
         $("#wv-eventscontent .dates").hide();
@@ -307,60 +258,8 @@ wv.events = wv.events || function(models, ui) {
         $("#wv-eventscontent [data-index='" + index + "'] .dates").show();
         resize();
 
-        event = self.data[index];
-        console.log("event", event);
-        eventItem = null;
-        if ( event.geometry.length > 1 ) {
-            eventItem = event.geometry[dateIndex || 0];
-        } else {
-            eventItem = event.geometry[0];
-        }
-        eventDate = wv.util.parseTimestampUTC(eventItem.date);
-        models.date.select(eventDate);
-
-        category = "Default";
-        categories = event.category;
-        if ( categories.constructor !== Array ) {
-            categories = [categories];
-        }
-        _.each(categories, function(c) {
-            if ( layerLists[c["#text"]] ) {
-                category = c["#text"];
-                return;
-            }
-        });
-
-        layers = layerLists[category];
-        if ( !layers ) {
-            layers = layerLists.Default;
-        }
-
-        // Turn off all layers in list first
-        _.each(models.layers.active, function(layer){
-            models.layers.setVisibility( layer.id, false );
-        });
-
-        // Turn on or add new layers
-        _.each(layers, function(layer) {
-            var id = layer[0];
-            var visible = layer[1];
-            if( models.layers.exists( id ) ) {
-                models.layers.setVisibility( id, visible );
-            }
-            else{
-                models.layers.add(id, { visible: visible });
-            }
-        });
-
-        console.log("COORDS", eventItem.coordinates);
-        if ( eventItem.type === "Point" ) {
-            goTo(method, eventItem.coordinates);
-        } else if ( eventItem.type === "Polygon" && eventItem.coordinates.length == 5 ) {
-            c = eventItem.coordinates;
-            var extent = [c[0][0], c[0][1], c[2][0], c[2][1]];
-            console.log("extent", extent);
-            goTo(method, extent);
-        }
+        model.select(index, dateIndex);
+        
     };
     var notify = function( text ) {
 
@@ -378,42 +277,8 @@ wv.events = wv.events || function(models, ui) {
             $notification.dialog( 'open' );
         }
     };
-    var goTo = function(method, location) {
-        //TODO: Seems to be starting zoom, make it current zoom
-        var zoom = 3;
-        var map = ui.map.selected;
-        var duration = ( method == "fly" ) ? 5000 : 1000;
-        var wait = ( method == "fly" ) ? 1000 : 1;
-        var start = +new Date();
-        var pan = ol.animation.pan({
-            duration: duration,
-            source: map.getView().getCenter(),
-            start: start
-        });
-        var bounce = ol.animation.bounce({
-            duration: duration,
-            resolution: models.proj.selected.resolutions[zoom],
-            start: start
-        });
 
-        setTimeout(function() {
-            if ( method === "fly" ) {
-                map.beforeRender(pan, bounce);
-            } else {
-                map.beforeRender(pan);
-            }
-            if ( location.length == 2 ) {
-                map.getView()
-                    .setCenter(location);
-                map.getView().setZoom(5);
-            } else {
-                map.getView().fit(location, map.getSize());
-                if(map.getView().getZoom() > 8)
-                    map.getView().setZoom(8);
-            }
-        }, wait);
-    };
-
+    //TODO: Move to wv.ui.sidebar
     var productsIsOverflow = false;
     var sizeEventsTab = function(){
         var winSize = $(window).outerHeight(true);
@@ -462,43 +327,6 @@ wv.events = wv.events || function(models, ui) {
         sizeEventsTab();
     };
 
-    var queryEvents = function() {
-        var url = "https://eonet.sci.gsfc.nasa.gov/api/v1/events";
-        console.log("sending query", url);
-        $.getJSON(url, function(data) {
-            self.data = data.item;
-            console.log("events received", self.data);
-            checkRender();
-        });
-    };
-
-    var queryTypes = function() {
-        var url = "https://eonet.sci.gsfc.nasa.gov/api/v1/types";
-        console.log("sending query", url);
-        $.getJSON(url, function(data) {
-            self.types = data.item;
-            console.log("types received", self.types);
-            checkRender();
-        });
-    };
-
-    var querySources = function() {
-        var url = "https://eonet.sci.gsfc.nasa.gov/api/v1/sources";
-        console.log("sending query", url);
-        $.getJSON(url, function(data) {
-            self.sources = data.item;
-            console.log("sources received", self.sources);
-            checkRender();
-        });
-
-    };
-
-    self.query = function() {
-        queryTypes();
-        queryEvents();
-        querySources();
-    };
-
     var toArray = function(value) {
         if ( !value ) {
             return [];
@@ -507,13 +335,6 @@ wv.events = wv.events || function(models, ui) {
             value = [value];
         }
         return value;
-    };
-
-    var checkRender = function() {
-        if ( self.data && self.sources && self.types ) {
-            self.render();
-            self.refresh();
-        }
     };
 
     init();

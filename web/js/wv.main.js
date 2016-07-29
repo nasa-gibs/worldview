@@ -135,6 +135,10 @@ $(function() {
         if ( config.features.dataDownload ) {
             models.link.register(models.data);
         }
+        if ( config.features.naturalEvents ) {
+            models.naturalEvents = wv.naturalEvents.model(models, config);
+            //models.link.register(models.naturalEvents);
+        }
         // HACK: Map needs permalink state loaded before starting. But
         // data download now needs it too.
         models.link.load(state);
@@ -173,7 +177,7 @@ $(function() {
             ui.data.render();
         }
         if ( config.features.naturalEvents ) {
-            ui.events = wv.events(models, ui, config);
+            ui.naturalEvents = wv.naturalEvents.ui(models, ui, config);
         }
         ui.link = wv.link.ui(models, config);
         ui.tour = wv.tour(models, ui, config);

@@ -100,7 +100,7 @@ wv.data.map = wv.data.map || function(model, maps, config) {
 
     var createButtonLayer = function() {
         buttonLayer = new ol.layer.Vector({
-            source: new ol.source.Vector(),
+            source: new ol.source.Vector({wrapX: false}),
             style: buttonStyle
         });
         map.addLayer(buttonLayer);
@@ -108,7 +108,7 @@ wv.data.map = wv.data.map || function(model, maps, config) {
 
     var createHoverLayer = function() {
         hoverLayer = new ol.layer.Vector({
-            source: new ol.source.Vector(),
+            source: new ol.source.Vector({wrapX: false}),
             style: hoverStyle
         });
         map.addLayer(hoverLayer);
@@ -116,7 +116,7 @@ wv.data.map = wv.data.map || function(model, maps, config) {
 
     var createSelectionLayer = function() {
         selectionLayer = new ol.layer.Vector({
-            source: new ol.source.Vector(),
+            source: new ol.source.Vector({wrapX: false}),
             style: new ol.style.Style({
                 fill: new ol.style.Fill({color: "rgba(127, 127, 127, 0.2)"}),
                 stroke: new ol.style.Stroke({
@@ -131,7 +131,7 @@ wv.data.map = wv.data.map || function(model, maps, config) {
 
     var createSwathLayer = function() {
         swathLayer = new ol.layer.Vector({
-            source: new ol.source.Vector(),
+            source: new ol.source.Vector({wrapX: false}),
             style: new ol.style.Style({
                 stroke: new ol.style.Stroke({
                     color: "rgba(195, 189, 123, 0.75)",
@@ -144,7 +144,7 @@ wv.data.map = wv.data.map || function(model, maps, config) {
 
     var createGridLayer = function() {
         gridLayer = new ol.layer.Vector({
-            source: new ol.source.Vector(),
+            source: new ol.source.Vector({wrapX: false}),
             style: new ol.style.Style({
                 stroke: new ol.style.Stroke({
                     color: "rgba(186, 180, 152, 0.6)",
@@ -156,7 +156,7 @@ wv.data.map = wv.data.map || function(model, maps, config) {
     };
 
     var create = function() {
-        //console.log("create");
+
         createSelectionLayer();
         createGridLayer();
         createSwathLayer();
