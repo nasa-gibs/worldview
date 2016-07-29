@@ -182,7 +182,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
     };
 
     var refreshEvent = function($content, event, index) {
-        if (event.category[0]['-domain'] === 'Floods'){
+        if (event.category[0]['-domain'] === 'Floods') {
             return;
         }
         var geoms = toArray(event.geometry);
@@ -208,14 +208,19 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
 
         var $dates = $("<ul></ul>").addClass("dates").hide();
         if ( event.geometry.length > 1 ) {
+            var lastDate;
             _.each(event.geometry, function(geometry, dateIndex) {
                 date = geometry.date.split(/T/)[0];
+                if (date === lastDate){
+                    return;
+                }
                 $date = $("<a></a>")
                     .addClass("date")
                     .attr("data-date-index", dateIndex)
                     .attr("data-index", index)
                     .html(date);
                 $dates.append($("<li class='dates'></li>").append($date));
+                lastDate = date;
             });
         }
 

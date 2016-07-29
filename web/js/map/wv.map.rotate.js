@@ -27,9 +27,9 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
      * @method init
      * @static
      *
-     * @param map {object} openLayers map object
+     * @param {object} map - openLayers map object
      *
-     * @param id {string} projection id string
+     * @param {string} d - projection id string
      *
      * @returns {void}
      */
@@ -43,7 +43,7 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
      * @method createRotationWidget
      * @static
      *
-     * @param map {object} openLayers map object
+     * @param {object} map - openLayers map object
      *
      * @returns {void}
      */
@@ -74,9 +74,9 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
      * @method setRotationEvents
      * @static
      *
-     * @param map {object} openLayers map object
+     * @param {object} map - openLayers map object
      *
-     * @param id {string} projection id string
+     * @param {string} d - projection id string
      *
      * @returns {void}
      */
@@ -153,7 +153,7 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
      * @method setResetButtonWidth
      * @static
      *
-     * @param deg {number} map rotation degree value
+     * @param {number} deg - map rotation degree value
      *
      * @returns {void}
      */
@@ -183,11 +183,11 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
      * @method rotate
      * @static
      *
-     * @param amount {number} value of degrees to rotate
+     * @param {number} amount - value of degrees to rotate
      *
-     * @param duration {number} how long the animation should last
+     * @param {number} duration - how long the animation should last
      *
-     * @param map {object} Openlayers map object
+     * @param {object} map - openLayers map object
      *
      * @returns {void}
      */
