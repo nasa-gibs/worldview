@@ -68,7 +68,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
      * @method updateProjection
      * @static
      *
-     * @param start {boolean} new extents are needed: true/false
+     * @param {boolean} start - new extents are needed: true/false
      *
      * @returns {void}
      */
@@ -140,7 +140,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
      * @method hideMap
      * @static
      *
-     * @param map {object} Openlayers Map obj
+     * @param {object} map - Openlayers Map obj
      *
      * @returns {void}
      */
@@ -153,7 +153,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
      * @method showMap
      * @static
      *
-     * @param map {object} Openlayers Map obj
+     * @param {object} map - Openlayers Map obj
      *
      * @returns {void}
      */
@@ -166,7 +166,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
      * @method clearLayers
      * @static
      *
-     * @param map {object} Openlayers Map obj
+     * @param {object} map - Openlayers Map obj
      *
      * @returns {void}
      */
@@ -187,7 +187,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
      * @method reloadLayers
      * @static
      *
-     * @param map {object} Openlayers Map obj
+     * @param {object} map - Openlayers Map obj
      *
      * @returns {void}
      */
@@ -240,18 +240,27 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
      * @method updateOpacity
      * @static
      *
-     * @param map {object} 
+     * @param {object} def - layer Specs
      *
-     * @param value {number} number value 
+     * @param {number} value - number value 
      *
      * @returns {void}
      */
     var updateOpacity = function(def, value) {
-        console.log(def, value)
         var layer = findLayer(def);
         layer.setOpacity(value);
         updateLayerVisibilities();
     };
+    /*
+     *Initiates the adding of a layer or Graticule
+     *
+     * @method addLayer
+     * @static
+     *
+     * @param {object} def - layer Specs
+     *
+     * @returns {void}
+     */
 
     var addLayer = function(def) {
         var mapIndex = _.findIndex(models.layers.get({reverse: true}), {
@@ -265,7 +274,16 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
         }
         updateLayerVisibilities();
     };
-
+    /*
+     *Initiates the adding of a layer or Graticule
+     *
+     * @method removeLayer
+     * @static
+     *
+     * @param {object} def - layer Specs
+     *
+     * @returns {void}
+     */
     var removeLayer = function(def) {
         if ( isGraticule(def) ) {
             removeGraticule();
@@ -276,10 +294,28 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
         updateLayerVisibilities();
     };
 
+    /*
+     * Reloads layers on a change in layer order
+     *
+     * @method updateLayerOrder
+     * @static
+     *
+     *
+     * @returns {void}
+     */
     var updateLayerOrder = function() {
         reloadLayers();
     };
 
+    /*
+     * Update layers for the correct Date
+     *
+     * @method updateDate
+     * @static
+     *
+     *
+     * @returns {void}
+     */
     var updateDate = function() {
         var defs = models.layers.get();
         _.each(defs, function(def) {
@@ -292,6 +328,15 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
         updateLayerVisibilities();
     };
 
+    /*
+     * Update layers for the correct Date
+     *
+     * @method updateDate
+     * @static
+     *
+     *
+     * @returns {void}
+     */
     var updateLookup = function(layerId) {
         // If the lookup changes, all layers in the cache are now stale
         // since the tiles need to be rerendered. Remove from cache.
@@ -309,6 +354,19 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
         reloadLayers();
     };
 
+    /*
+     * Loaded the layers that are needed for anyone data.
+     * Checks the cache to see if a layer has already 
+     * been stored
+     *
+     * @method preload
+     * @static
+     *
+     * @param {object} date - Date of data to be displayed
+     * on the map.
+     *
+     * @returns {void}
+     */
     self.preload = function(date) {
         var layers = models.layers.get({
             renderable: true,
@@ -323,18 +381,53 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
         });
     };
 
+    /*
+     * Get a layer object from id
+     *
+     * @method findlayer
+     * @static
+     *
+     * @param {object} def - Layer Specs
+     *
+     *
+     * @returns {object} Layer object
+     */
     var findLayer = function(def) {
         var layers = self.selected.getLayers().getArray();
         var layer = _.find(layers, { wv: { id: def.id } });
         return layer;
     };
 
+    /*
+     * Return an Index value for a layer in the OPenLayers layer array
+     *
+     * @method findLayerIndex
+     * @static
+     *
+     * @param {object} def - Layer Specs
+     *
+     *
+     * @returns {number} Index of layer in OpenLayers layer array
+     */
     var findLayerIndex = function(def) {
         var layers = self.selected.getLayers().getArray();
         var layer = _.findIndex(layers, { wv: { id: def.id } });
         return layer;
     };
 
+    /*
+     * Create a new OpenLayers Layer
+     *
+     * @method createLayer
+     * @static
+     *
+     * @param {object} def - Layer Specs
+     * 
+     * @param {object} options - Layer options
+     *
+     *
+     * @returns {object} OpenLayers layer
+     */
     var createLayer = function(def, options) {
         options = options || {};
         var key = layerKey(def, options);
@@ -365,6 +458,19 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
         return layer;
     };
 
+    /*
+     * Create a new WMTS Layer
+     *
+     * @method createLayerWMTS
+     * @static
+     *
+     * @param {object} def - Layer Specs
+     * 
+     * @param {object} options - Layer options
+     *
+     *
+     * @returns {object} OpenLayers WMTS layer
+     */
     var createLayerWMTS = function(def, options) {
         var proj = models.proj.selected;
         var source = config.sources[def.source];
@@ -409,6 +515,19 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
         return layer;
     };
 
+    /*
+     * Create a new WMS Layer
+     *
+     * @method createLayerWMTS
+     * @static
+     *
+     * @param {object} def - Layer Specs
+     * 
+     * @param {object} options - Layer options
+     *
+     *
+     * @returns {object} OpenLayers WMS layer
+     */
     var createLayerWMS = function(def, options) {
         var proj = models.proj.selected;
         var source = config.sources[def.source];
@@ -445,12 +564,36 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
         return layer;
     };
 
+    /*
+     * Checks a layer's properties to deterimine if 
+     * it is a graticule
+     * 
+     *
+     * @method isGraticule
+     * @static
+     *
+     * @param def {object} Layer Specs
+     * 
+     *
+     * @returns {boolean}
+     */
     var isGraticule = function(def) {
         var proj = models.proj.selected.id;
         return ( def.projections[proj].type === "graticule" ||
             def.type === "graticule" );
     };
 
+    /*
+     * Adds a graticule to the OpenLayers Map
+     * if a graticule does not already exist
+     * 
+     *
+     * @method addGraticule
+     * @static
+     * 
+     *
+     * @returns {void}
+     */
     var addGraticule = function() {
         if ( self.selected.graticule )
             return;
@@ -465,6 +608,16 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
         });
     };
 
+    /*
+     * Adds a graticule to the OpenLayers Map
+     * if a graticule does not already exist
+     * 
+     *
+     * @method removeGraticule
+     * @static
+     *
+     * @returns {void}
+     */
     var removeGraticule = function() {
         if ( self.selected.graticule )
             self.selected.graticule.setMap(null);
@@ -476,14 +629,32 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
         self.events.trigger("extent");
     }, 500, { trailing: true });
 
-    //Called as event listener when map is zoomed or panned
+    /*
+     * Updates the extents of OpenLayers map
+     * 
+     *
+     * @method updateExtent
+     * @static
+     *
+     * @returns {void}
+     */    
     var updateExtent = function() {
         var map = self.selected;
         models.map.update(map.getView().calculateExtent(map.getSize()));
         triggerExtent();
     };
-
-    //Called as event listener when map is rotated. Update url to reflect rotation reset
+    /*
+     * Updates the extents of OpenLayers map
+     * 
+     *
+     * @method updateExtent
+     * @static
+     *
+     * @param {object} proj - Projection properties
+     *
+     *
+     * @returns {object} OpenLayers Map Object
+     */
     var createMap = function(proj) {
         var id = "wv-map-" + proj.id;
         var $map = $("<div></div>")
@@ -570,7 +741,20 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
         return map;
     };
 
-
+    /*
+     * Creates map zoom buttons
+     * 
+     *
+     * @method createZoomButtons
+     * @static
+     *
+     * @param {object} map - OpenLayers Map Object
+     *
+     * @param {object} proj - Projection properties
+     *
+     *
+     * @returns {void}
+     */
     var createZoomButtons = function(map, proj) {
         var $map = $("#" + map.getTarget());
 
@@ -602,6 +786,16 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
         });
         $zoomIn.click(zoomAction(map, 1));
 
+        /*
+         * Sets zoom buttons as active or inactive based
+         * on the zoom level 
+         * 
+         * @funct onZoomChange
+         * @static
+         *
+         * @returns {void}
+         *
+         */
         var onZoomChange = function() {
             var maxZoom = proj.resolutions.length;
             var zoom = map.getView().getZoom();
@@ -621,6 +815,22 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
         onZoomChange();
     };
 
+    /*
+     * Creates map events based on mouse position
+     * 
+     *
+     * @method createMousePosSel
+     * @static
+     *
+     * @param {object} map - OpenLayers Map Object
+     *
+     * @param {object} proj - Projection properties
+     *
+     *
+     * @returns {void}
+     *
+     * @todo move this component to another Location
+     */
     var createMousePosSel = function(map, proj) {
         var $map = $("#" + map.getTarget());
         map = map || self.selected;
@@ -630,6 +840,17 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
             .attr("id", mapId)
             .addClass("wv-coords-map wv-coords-map-btn");
 
+        /*
+         * Creates map events based on mouse position
+         *
+         * @function coordinateFormat
+         * @static
+         *
+         * @param {Array} source - Coordinates
+         * @param {String} format - units of coordinates
+         *
+         * @returns {void}
+         */
         var coordinateFormat = function(source, format) {
             if ( !source ) {
                 return "";
@@ -704,6 +925,18 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
             });
     };
 
+    /*
+     * Setting a zoom action 
+     *
+     * @function zoomAction
+     * @static
+     *
+     * @param {Object} map - OpenLayers Map Object
+     * @param {number} amount - Direction and
+     *  amount to zoom
+     *
+     * @returns {void}
+     */
     var zoomAction = function(map, amount) {
         return function() {
             var zoom = map.getView().getZoom();
@@ -715,6 +948,18 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation) {
         };
     };
 
+    /*
+     * Create a layer key
+     *
+     * @function layerKey
+     * @static
+     *
+     * @param {Object} def - Layer properties
+     *
+     * @param {number} options - Layer options
+     *
+     * @returns {object} layer key Object
+     */
     var layerKey = function(def, options) {
         var layerId = def.id;
         var projId = models.proj.selected.id;
