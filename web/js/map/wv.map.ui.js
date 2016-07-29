@@ -875,7 +875,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
          *
          * @returns {void}
          */
-        var coordinateFormat = function(source, format) {
+        coordinateFormat = function(source, format) {
             if ( !source ) {
                 return "";
             }
