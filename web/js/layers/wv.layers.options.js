@@ -282,9 +282,10 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
     };
 
     var rerenderPaletteSelector = function(firstTime) {
-        $("#wv-layers-options-dialog .jspScrollable").each(function() {
-            $(this).jScrollPane().data("jsp").destroy();
-        });
+        var $header = $("<div></div>")
+            .addClass("wv-header")
+            .addClass("wv-color-palette-label")
+            .html("Color Palette");
 
         var $pane = $("#wv-palette-selector").empty();
         $pane.append(defaultLegend());
