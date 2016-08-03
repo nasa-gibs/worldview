@@ -125,7 +125,6 @@ g.plot rect.data-bar-invisible{
 }
 #timeline-header{
     margin-top:2px;
-    width:250px;
 }
 #timeline-header .input-wrapper{
     background: transparent;
@@ -278,6 +277,14 @@ g.plot rect.data-bar-invisible{
 }
 #timeline-header,#timeline-footer,#timeline-zoom,#timeline-hide{
     float:left;
+}
+#timeline-header .wv-animate {
+    color: #fff;
+    font-size: 2.5em;
+    margin: 12px 0 0 2px;
+}
+#timeline-header .wv-animate:hover {
+    color: #1a1a1a;
 }
 #timeline-footer{
     height:65px;
