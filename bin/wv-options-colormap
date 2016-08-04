@@ -54,9 +54,7 @@ def get_map_type(entries):
     return "special"
 
 def process_entries(entries):
-    
-    # entries = to_list(entries)
-
+    entries = to_list(entries)
     map_type = get_map_type(entries)
 
     colors = []
@@ -111,34 +109,72 @@ def process_file(file):
     try:
         newSchema = document["ColorMaps"]
     except:
-        # colormaps = to_list(document["ColorMaps"]["ColorMap"])
-        
-        maps = []
-        # for colormap in colormaps:
-        result = {}
+        print "Layer uses old colormap schema, processing differently..."
+        sys.stderr.write("---- this is the old schema ---")
+        scaleColors = []
+        scaleLabels = []
+        scaleValues = []
+        classColors = []
+        classLabels = []
+        specialColors = []
+        specialLabels = []
+        units = None
+        minValue = float("inf")
+        maxValue = float("-inf")
 
-        entry = document["ColorMap"]["ColorMapEntry"]
+        entries = document["ColorMap"]["ColorMapEntry"]
+        if not isinstance(entries, list):
+            entries = [entries]
 
-        if not isinstance(entry, list):
-            entry = [entry]
-        entries = process_entries(entry)
-        
-        #if entries["type"] == "special":
-        #    continue
-        result["entries"] = entries
-        if "@title" in document:
-            result["entries"]["title"] = document["@title"]
-        if "WorldviewLegend" in document:
-            legend = process_entries(document["WorldviewLegend"]["LegendEntry"])
-            result["legend"] = legend
-            if "@title" in document:
-                result["legend"]["title"] = document["@title"]
-        maps = [result]
+        for entry in entries:
+            r,g,b = entry["@rgb"].split(",")
+            a = 255
+            if "@transparent" in entry and entry["@transparent"] == "true":
+                a = 0
+            color = "{0:02x}{1:02x}{2:02x}{3:02x}".format(int(r), int(g), int(b), a)
+            label = entry["@label"]
+            if a == 0:
+                specialColors += [color]
+                specialLabels += [label]
+            elif "@value" in entry:
+                items = re.sub(r"[\(\)\[\]]", "", entry["@value"]).split(",")
+                try:
+                    for scaleValue in items:
+                        v = float(scaleValue)
+                        if v == float("inf"):
+                            v = sys.float_info.max
+                        if v == float("-inf"):
+                            v = sys.float_info.min
+                        scaleValues += [v]
+                except ValueError as e:
+                    raise ValueError("Invalid value: %s" % entry["@value"])
+                scaleColors += [color]
+                scaleLabels += [label]
+            else:
+                classColors += [color]
+                classLabels += [label]
 
-        data = {
-            "id": id,
-            "maps": maps
-        }
+        id = os.path.splitext(os.path.basename(input_file))[0]
+        data = {}
+        if len(scaleColors) > 0:
+            data["scale"] = {
+                "colors": scaleColors,
+                "values": scaleValues,
+                "labels": scaleLabels,
+            }
+        if len(specialColors) > 0:
+            data["special"] = {
+                "colors": specialColors,
+                "labels": specialLabels
+            }
+        if len(classColors) > 0:
+            data["classes"] = {
+                "colors": classColors,
+                "labels": classLabels,
+            }
+
+        data["id"] = id
+
         json_options = {}
         json_options["indent"] = 4
         json_options["separators"] = (',', ': ')
@@ -153,8 +189,7 @@ def process_file(file):
             maps = []
             for colormap in colormaps:
                 result = {}
-                entry = to_list(colormap["Entries"]["ColorMapEntry"])
-                entries = process_entries(entry)
+                entries = process_entries(colormap["Entries"]["ColorMapEntry"])
                 if entries["type"] == "special":
                     continue
                 result["entries"] = entries
@@ -178,6 +213,80 @@ def process_file(file):
                 output_file = os.path.join(output_dir, id + ".json")
                 with open(output_file, "w") as fp:
                     json.dump(data, fp, **json_options)
+        else:
+            sys.stderr.write("---- this is the old schema ---")
+            scaleColors = []
+            scaleLabels = []
+            scaleValues = []
+            classColors = []
+            classLabels = []
+            specialColors = []
+            specialLabels = []
+            units = None
+            minValue = float("inf")
+            maxValue = float("-inf")
+
+            entries = document["ColorMap"]["ColorMapEntry"]
+            if not isinstance(entries, list):
+                entries = [entries]
+
+            for entry in entries:
+                r,g,b = entry["@rgb"].split(",")
+                a = 255
+                if "@transparent" in entry and entry["@transparent"] == "true":
+                    a = 0
+                color = "{0:02x}{1:02x}{2:02x}{3:02x}".format(int(r), int(g), int(b), a)
+                label = entry["@label"]
+                if a == 0:
+                    specialColors += [color]
+                    specialLabels += [label]
+                elif "@value" in entry:
+                    items = re.sub(r"[\(\)\[\]]", "", entry["@value"]).split(",")
+                    try:
+                        for scaleValue in items:
+                            v = float(scaleValue)
+                            if v == float("inf"):
+                                v = sys.float_info.max
+                            if v == float("-inf"):
+                                v = sys.float_info.min
+                            scaleValues += [v]
+                    except ValueError as e:
+                        raise ValueError("Invalid value: %s" % entry["@value"])
+                    scaleColors += [color]
+                    scaleLabels += [label]
+                else:
+                    classColors += [color]
+                    classLabels += [label]
+
+            id = os.path.splitext(os.path.basename(input_file))[0]
+            data = {}
+            if len(scaleColors) > 0:
+                data["scale"] = {
+                    "colors": scaleColors,
+                    "values": scaleValues,
+                    "labels": scaleLabels,
+                }
+            if len(specialColors) > 0:
+                data["special"] = {
+                    "colors": specialColors,
+                    "labels": specialLabels
+                }
+            if len(classColors) > 0:
+                data["classes"] = {
+                    "colors": classColors,
+                    "labels": classLabels,
+                }
+
+            data["id"] = id
+
+            json_options = {}
+            json_options["indent"] = 4
+            json_options["separators"] = (',', ': ')
+
+            output_file = os.path.join(output_dir, id + ".json")
+            with open(output_file, "w") as fp:
+                json.dump(data, fp, **json_options)
+
 # Main
 file_count = 0
 error_count = 0
