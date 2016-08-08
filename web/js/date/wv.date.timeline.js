@@ -164,7 +164,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
             .attr('height', self.height + self.margin.top + self.margin.bottom)
             .attr("x",-self.margin.left);
 
-        self.boundary = d3.select("#timeline-footer svg")
+        self.boundary = self.svg
             .append("svg:g")
             .attr("clip-path","#timeline-boundary")
             .attr("style","clip-path:url(#timeline-boundary)")
@@ -186,6 +186,13 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         self.verticalAxis = self.boundary.append("svg:g")
             .attr("class", "y axis")
             .attr("transform", "translate(0,0)");
+        self.animboundary = self.svg
+            .append("svg:g")
+            .attr("clip-path","#timeline-boundary")
+            .attr("transform","translate(0,16)");
+        self.animboundary
+            .append('g')
+            .attr('id', 'wv-rangeselector-case');
 
     };
 

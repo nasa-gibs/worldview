@@ -88,11 +88,16 @@
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.layers.modal.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.layers.options.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.timeline.css">
+    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.anim.widget.css">
+
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.mobile.css">
                       <link type="text/css" rel="Stylesheet" href="pages/css/wv.document.css">
 
 
     <!-- External libraries =============================================== -->
+    <!-- link.dev  -->      <script type="text/javascript" src="../node_modules/react/dist/react.js"></script>
+    <!-- link.dev  -->      <script type="text/javascript" src="../node_modules/react-dom/dist/react-dom.js"></script>
+    <!-- link.dev  -->      <script type="text/javascript" src="../node_modules/wv-timeline-animation/browser/wv-animation.js"></script>
     <!-- link.dev  -->      <script type="text/javascript" src="ext/main/lodash-2.4.1/lodash.js"></script>
     <!-- link.prod --> <!-- <script type="text/javascript" src="ext/main/lodash-2.4.1/lodash.min.js"></script> -->
 
@@ -173,6 +178,8 @@
 
     <!-- link.dev --> <script type="text/javascript" src="js/date/wv.date.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/date/wv.date.anim.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/date/wv.date.anim.ui.js"></script>
+
     <!-- link.dev --> <script type="text/javascript" src="js/date/wv.date.model.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/date/wv.date.label.js"></script>
 
@@ -321,7 +328,7 @@
 
                 </div> <!--/timeline-header-->
                 <div id="timeline-footer">
-
+                    <div id="wv-animation-widet-case"> </div>
                 </div><!--/timeline-footer-->
                 <div id="timeline-zoom">
                   <!--<a class="zoom-btn" id="zoom-weeks">Weeks</a>-->

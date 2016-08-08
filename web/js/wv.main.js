@@ -166,6 +166,7 @@ $(function() {
             ui.timeline.pan = wv.date.timeline.pan(models, config, ui);
             ui.timeline.config = wv.date.timeline.config(models, config, ui);
             ui.timeline.input = wv.date.timeline.input(models, config, ui);
+            ui.timeline.ui = wv.date.anim.ui(models, config, ui);
             ui.dateLabel = wv.date.label(models);
             ui.dateWheels = wv.date.wheels(models, config);
         }
