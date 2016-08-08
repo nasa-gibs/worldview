@@ -106,7 +106,6 @@ def process_file(file):
     with open(input_file) as fp:
         xml = fp.read()
     document = xmltodict.parse(xml)
-
     colormaps = to_list(document["ColorMaps"]["ColorMap"])
     maps = []
     for colormap in colormaps:
