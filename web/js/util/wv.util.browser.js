@@ -95,7 +95,7 @@ wv.util.browser = wv.util.browser || (function() {
     self.history = true;
     self.touchDevice = false;
 
-    self.mobileWidth = 720;
+    self.mobileWidth = 740;
     self.constrainedHeight = 320;
 
     var init = function() {
