@@ -4,7 +4,7 @@
  * This code was originally developed at NASA/Goddard Space Flight Center for
  * the Earth Science Data and Information System (ESDIS) project.
  *
- * Copyright (C) 2013 - 2014 United States Government as represented by the
+ * Copyright (C) 2013 - 2016 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  *
@@ -38,8 +38,8 @@ wv.date.anim.ui = wv.date.anim.ui || function(models) {
             endColor: '#295f92',
             rangeColor: '#45bdff',
             rangeOpacity: 0.3,
-            pinWidth: 10,
-            height: 40
+            pinWidth: 5,
+            height: 45
       })
       //mount react components
       ReactDOM.render(Widget, $('#wv-animation-widet-case')[0]);
