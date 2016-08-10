@@ -116,17 +116,18 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
             .call(drag);
 
         model.select(newDate);
-
-        tl.zoom.current.pick.hoverTick(newDate);
-
-        tickBg = tl.zoom.current.pick.hoveredTick
-            .select('rect.normaltick-background')[0][0];
-
-        d = d3.select(tl.zoom.current.pick.hoveredTick[0][0]).data()[0];
-
-        tl.ticks.label.remove();
-        tl.ticks.normal.hover.call(tickBg,d);
+        self.hoverDate(newDate);
     };
+    self.hoverDate = function(date) {
+      var d;
+
+      tl.zoom.current.pick.hoverTick(date);
+      tickBg = tl.zoom.current.pick.hoveredTick
+            .select('rect.normaltick-background')[0][0];
+      d = d3.select(tl.zoom.current.pick.hoveredTick[0][0]).data()[0];
+      tl.ticks.label.remove();
+      tl.ticks.normal.hover.call(tickBg,d);
+    }
 
     var updateChanges = function(d){
         prevChange = tl.zoom.current.pick.prevChange(d);
