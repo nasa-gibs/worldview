@@ -12,11 +12,10 @@
  * http://opensource.gsfc.nasa.gov/nosa.php
  */
 var wv = wv || {};
-wv.date = wv.date || {};
 
-wv.date.anim = wv.date.anim || {};
+wv.anim = wv.anim || {};
 
-wv.date.anim.widget = wv.date.anim.widget || function(models, config, ui) {
+wv.anim.widget = wv.anim.widget || function(models, config, ui) {
     var self = this;
     var timeline = ui.timeline;
     var widgetFactory = React.createFactory(Animate.AnimationWidget);

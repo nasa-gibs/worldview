@@ -47,6 +47,7 @@ wv.link.model = wv.link.model || function(config) {
     self.toQueryString = function() {
         var state = {};
         _.each(components, function(component) {
+            console.log(component)
             component.save(state);
         });
         var strings = _.map(state, function(value, key) {

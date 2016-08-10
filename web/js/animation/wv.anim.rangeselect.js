@@ -12,11 +12,10 @@
  * http://opensource.gsfc.nasa.gov/nosa.php
  */
 var wv = wv || {};
-wv.date = wv.date || {};
 
-wv.date.anim = wv.date.anim || {};
+wv.anim = wv.anim || {};
 
-wv.date.anim.rangeselect = wv.date.anim.rangeselect || function(models, config, ui) {
+wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
     var self = this;
     var timeline = ui.timeline;
     var rangeSelectionFactory = React.createFactory(Animate.RangeSelector); 

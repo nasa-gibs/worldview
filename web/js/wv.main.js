@@ -70,7 +70,8 @@ $(function() {
             wv.layers.parse,
             wv.date.parse,
             wv.map.parse,
-            wv.palettes.parse
+            wv.palettes.parse,
+            wv.anim.parse
         ];
         if ( config.features.dataDownload ) {
             parsers.push(wv.data.parse);
@@ -119,12 +120,14 @@ $(function() {
         models.date     = wv.date.model(config, { initial: initialDate });
         models.map      = wv.map.model(models, config);
         models.link     = wv.link.model(config);
+        models.anim     = wv.anim.model(models, config);
         models.link
             .register(models.proj)
             .register(models.layers)
             .register(models.date)
             .register(models.palettes)
-            .register(models.map);
+            .register(models.map)
+            .register(models.anim);
         models.link.load(state);
 
         // HACK: Map needs to be created before the data download model
@@ -149,9 +152,7 @@ $(function() {
 
         elapsed("ui");
         // Create widgets
-        ui.anim = wv.date.anim(models.date, ui.map, {
-            debug: parameters.debug === "anim"
-        });
+        ui.anim = wv.anim.ui(models.date, ui.map);
         ui.proj = wv.proj.ui(models, config);
         ui.sidebar = wv.layers.sidebar(models, config);
         ui.activeLayers = wv.layers.active(models, ui, config);
@@ -166,8 +167,9 @@ $(function() {
             ui.timeline.pan = wv.date.timeline.pan(models, config, ui);
             ui.timeline.config = wv.date.timeline.config(models, config, ui);
             ui.timeline.input = wv.date.timeline.input(models, config, ui);
-            ui.timeline.rangeselect = wv.date.anim.rangeselect(models, config, ui);
-            ui.timeline.widget = wv.date.anim.widget(models, config, ui);
+            ui.anim.rangeselect = wv.anim.rangeselect(models, config, ui);
+            ui.anim.widget = wv.anim.widget(models, config, ui);
+
             ui.dateLabel = wv.date.label(models);
             ui.dateWheels = wv.date.wheels(models, config);
         }
