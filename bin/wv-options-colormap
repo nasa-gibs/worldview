@@ -69,7 +69,8 @@ def process_entries(entries):
         if a == 0:
             continue
         colors += [color_format.format(int(r), int(g), int(b), a)]
-        labels += [entry["@label"]]
+        if "@label" in entry:
+            labels += [entry["@label"]]
         if map_type == "scale":
             items = re.sub(r"[\(\)\[\]]", "", entry["@value"]).split(",")
             try:
@@ -116,11 +117,18 @@ def process_file(file):
         result["entries"] = entries
         if "@title" in colormap:
             result["entries"]["title"] = colormap["@title"]
-        if "WorldviewLegend" in colormap:
-            legend = process_entries(colormap["WorldviewLegend"]["LegendEntry"])
+        if "Legend" in colormap:
+
+            legend = process_entries(colormap["Legend"]["LegendEntry"])
             result["legend"] = legend
+            result["legend"]["type"] = colormap["Legend"]["@type"]
+            result["entries"]["type"] = result["legend"]["type"]
             if "@title" in colormap:
                 result["legend"]["title"] = colormap["@title"]
+            if "@minLabel" in colormap["Legend"]:
+                result["legend"]["minLabel"] = colormap["Legend"]["@minLabel"]
+            if "@maxLabel" in colormap["Legend"]:
+                result["legend"]["maxLabel"] = colormap["Legend"]["@maxLabel"]
         maps += [result]
 
     data = {

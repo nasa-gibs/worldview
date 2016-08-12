@@ -48,7 +48,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
                     renderLegendButtons($dialog);
                 }
                 var legend = models.palettes.getLegend(layer.id, index);
-                if ( legend.type === "scale" ) {
+                if ( legend.type === "continuous" ) {
                     renderRange($dialog);
                 }
                 renderPaletteSelector($dialog);
@@ -150,7 +150,9 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         var $panel = $("<div></div>")
             .addClass("wv-legend-buttons");
         var legends = models.palettes.getLegends(layer.id);
+
         _.each(legends, function(legend, index) {
+
             id = "wv-legend-" + index;
             $panel.append("<input type='radio' id='" + id + "' " +
                 "name='legend' value='" + index + "'>" +
@@ -167,10 +169,10 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
     };
 
     var renderRange = function() {
+        console.log('range');
         var $header = $("<div></div>")
             .html("Thresholds")
             .addClass("wv-header");
-
 
         var $squash = $("<div></div>")
             .addClass("wv-palette-squash");
@@ -192,8 +194,8 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
     };
 
     var rerenderRange = function() {
-        var legend = models.palettes.getLegend(layer.id, index);
-        var max = legend.values.length - 1;
+        var legend = models.palettes.get(layer.id, index);
+        var max = legend.entries.values.length - 1;
 
         var startMin = legend.min || 0;
         var startMax = legend.max || max;
@@ -274,6 +276,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
     var renderPaletteSelector = function($dialog) {
         var $header = $("<div></div>")
             .addClass("wv-header")
+            .addClass("wv-color-palette-label")
             .html("Color Palette");
         var $pane = $("<div></div>")
             .attr("id", "wv-palette-selector");
@@ -282,11 +285,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
     };
 
     var rerenderPaletteSelector = function(firstTime) {
-        var $header = $("<div></div>")
-            .addClass("wv-header")
-            .addClass("wv-color-palette-label")
-            .html("Color Palette");
-
+        console.log(layer);
         var $pane = $("#wv-palette-selector").empty();
         $pane.append(defaultLegend());
         var recommended = layer.palette.recommended || [];
@@ -304,7 +303,6 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
                 }
             }
         });
-        $dialog.append($header);
         $dialog.append($pane);
         $pane.perfectScrollbar();
 
@@ -405,7 +403,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
 
     var defaultLegend = function() {
         var legend = models.palettes.getDefaultLegend(layer.id, index);
-        if ( legend.type === "scale" ) {
+        if ( legend.type === "continuous" ) {
             return selectorItemScale(legend.colors, "__default", "Default");
         } else {
             return selectorItemSingle(legend, "__default", "Default");
@@ -415,14 +413,14 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
     var customLegend = function(id) {
         var source = models.palettes.getDefaultLegend(layer.id, index);
         var target = models.palettes.getCustom(id);
-        var targetType = ( target.colors.length === 1 ) ? "single": "scale";
+        var targetType = ( target.colors.length === 1 ) ? "single": "continuous";
 
-        if ( source.type === "scale" && targetType === "scale" ) {
+        if ( source.type === "continuous" && targetType === "continuous" ) {
             var translated = wv.palettes.translate(source.colors,
                     target.colors);
             return selectorItemScale(translated, id, target.name);
         }
-        if ( source.type === "single" && targetType === "single" ) {
+        if ( source.type === "continuous" && targetType === "continuous" ) {
             return selectorItemSingle(target, id, target.name);
         }
     };

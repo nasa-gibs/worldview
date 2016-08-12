@@ -56,10 +56,10 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         $parent.append($legendPanel);
         var legends = model.getLegends(layer.id);
         _.each(legends, function(legend, index) {
-            if ( legend.type === "scale" ) {
+            if ( legend.type === "continuous" ) {
                 renderScale($legendPanel, legend, index);
             }
-            if ( legend.type === "class" ) {
+            if ( legend.type === "classification" ) {
                 renderClasses($legendPanel, legend, index);
             }
         });
@@ -86,8 +86,8 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         var $title = $("<div></div>")
                 .addClass("wv-palettes-title");
 
-
-        $ranges.append($min).append($max).append($title);
+        $container.prepend($title);
+        $ranges.append($max).append($min);
         $container.append($ranges);
 
         $colorbar.on("mousemove", showUnitHover);
@@ -160,11 +160,11 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         }
         var legends = model.getLegends(layer.id);
         _.each(legends, function(legend, index) {
-            if ( legend.type === "scale" ) {
+            if ( legend.type === "continuous" ) {
                 wv.palettes.colorbar(selector + " " +
                     "[data-index='" + index + "'] canvas", legend.colors);
                 showUnitRange(index);
-            } else if ( legend.type === "class" ) {
+            } else if ( legend.type === "classification" ) {
                 updateClasses(legend, index);
             }
         });
@@ -174,13 +174,23 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         if ( !loaded ) {
             return;
         }
-        var legend = model.getLegend(layer.id, index);
-        var min = _.first(legend.labels);
-        var max = _.last(legend.labels);
-        $(selector + " [data-index='" + index + "'] .wv-palettes-min").html(min);
-        $(selector + " [data-index='" + index + "'] .wv-palettes-max").html(max);
-        var title = legend.title || "&nbsp;";
-        $(selector + " [data-index='" + index + "'] .wv-palettes-title").html(title);
+        var legends = model.getLegends(layer.id, index);
+        var entries = model.get(layer.id, index).entries;        
+        _.each(legends, function(legend, index) {
+            console.log(legend);
+            var min =  _.first(legend.labels) || _.first(entries.labels);
+            var max =  _.last(legend.labels) || _.last(entries.labels);
+            $(selector + " [data-index='" + index + "'] .wv-palettes-min").html(min);
+            $(selector + " [data-index='" + index + "'] .wv-palettes-max").html(max);
+            var title = legend.title || "&nbsp;";
+
+            if (legends.length === 1 ){
+                $(selector + " [data-index='" + index + "'] .wv-palettes-title").hide();
+            }
+            else{
+                $(selector + " [data-index='" + index + "'] .wv-palettes-title").html(title);
+            }
+        });
     };
 
     var showUnitHover = function(event) {

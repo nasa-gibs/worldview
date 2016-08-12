@@ -62,7 +62,6 @@
 .wv-palettes-min, .wv-palettes-title, .wv-palettes-max{
     font-size:0.7em;
     white-space:nowrap;
-    max-width: 112px;
     overflow: hidden;
     display: inline-block;
     text-overflow: ellipsis;
@@ -76,14 +75,12 @@
     text-align: center;
 }
 .bank div.wv-palettes-min {
-    position: absolute;
-    left: 0;
-    width: auto;
+    max-width: 112px;
 }
 .bank div.wv-palettes-max {
-    position: absolute;
-    right: 0;
-    width: auto;
+    float:right;
+    text-align:right;
+    max-width: 112px;
 }
 
 /* FIXME: Too specific */

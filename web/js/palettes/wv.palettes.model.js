@@ -53,6 +53,8 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
         _.each(self.getRendered(layerId).maps, function(palette, index) {
             if ( !active.maps[index] ) {
                 active.maps[index] = _.cloneDeep(palette);
+                //console.log(palette);
+                //console.log(active.maps[index]);
             }
         });
     };
@@ -400,11 +402,13 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
                 use = true;
                 return false;
             }
+            //FIXME: palette.min and rendered.values point to inexisting objs
             var rendered = self.getRendered(layerId, index);
-            if ( palette.min < _.first(_.last(rendered.values)) ) {
+
+            if ( palette.min < _.first(_.last(rendered.entries.values)) ) {
                 delete palette.min;
             }
-            if ( palette.min > _.last(_.first(rendered.values)) ) {
+            if ( palette.min > _.last(_.first(rendered.entries.values)) ) {
                 delete palette.max;
             }
             if ( !_.isUndefined(palette.min) || !_.isUndefined(palette.max) ) {
