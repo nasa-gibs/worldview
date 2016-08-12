@@ -68,7 +68,6 @@ def process_remote(entry):
                     warning_count += 1
                 else:
                     for item in layer["ows:Metadata"]:
-                        print item["@xlink:role"]
                         schema_version = item["@xlink:role"]
                         #if item != "@xlink:role":
                         #   continue
