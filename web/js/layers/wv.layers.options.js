@@ -169,7 +169,6 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
     };
 
     var renderRange = function() {
-        console.log('range');
         var $header = $("<div></div>")
             .html("Thresholds")
             .addClass("wv-header");
@@ -285,7 +284,6 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
     };
 
     var rerenderPaletteSelector = function(firstTime) {
-        console.log(layer);
         var $pane = $("#wv-palette-selector").empty();
         $pane.append(defaultLegend());
         var recommended = layer.palette.recommended || [];

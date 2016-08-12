@@ -120,7 +120,17 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
     self.getCount = function(layerId) {
         return self.getRendered(layerId).maps.length;
     };
-
+    /**
+     * Gets a single colormap (entries / legend combo)
+     *
+     *
+     * @method get
+     * @static
+     * @param str {string} The ID of the layer
+     * @param number {Number} The index of the colormap for this layer, default 0
+     * object.
+     * @return {object} object including the entries and legend
+     */
     self.get = function(layerId, index) {
         index = ( _.isUndefined(index) ) ? 0 : index;
         if ( self.active[layerId] ) {
@@ -128,12 +138,32 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
         }
         return self.getRendered(layerId, index);
     };
-
+    /**
+     * Gets the legend of a colormap
+     *
+     *
+     * @method getLegend
+     * @static
+     * @param str {string} The ID of the layer
+     * @param number {Number} The index of the colormap for this layer, default 0
+     * object.
+     * @return {object} object of the legend
+     */
     self.getLegend = function(layerId, index) {
         var value = self.get(layerId, index);
         return value.legend || value.entries;
     };
-
+    /**
+     * Gets the legend of a colormap
+     *
+     *
+     * @method getDefaultLegend
+     * @static
+     * @param str {string} The ID of the layer
+     * @param number {Number} The index of the colormap for this layer, default 0
+     * object.
+     * @return {object} object of the legend
+     */
     self.getDefaultLegend = function(layerId, index) {
         var palette = self.getRendered(layerId, index);
         return palette.legend || palette.entries;
