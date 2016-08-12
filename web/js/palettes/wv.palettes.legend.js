@@ -199,6 +199,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         }
         var index = _.parseInt($(this).attr("data-index"));
         var legend = model.getLegend(layer.id, index);
+        var entry = model.get(layer.id, index).entries;
         var $colorbar = $(this);
         var x = event.pageX - $colorbar.offset().left;
         var width = $colorbar.width();
@@ -210,7 +211,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         }
 
         var color = legend.colors[colorIndex];
-        var label = legend.labels[colorIndex];
+        var label = legend.labels[colorIndex] || entry.labels[colorIndex];
         $colorbar.tooltip("option", "content",
             "<span class='wv-palettes-color-box' style='background: " +
             wv.util.hexToRGBA(color) + "'>" + "</span>" + label);
