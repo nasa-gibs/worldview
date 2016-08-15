@@ -43,7 +43,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         renderOpacity($dialog);
 
         if ( config.features.customPalettes ) {
-            if ( models.palettes.allowed(layer.id) ) {
+            if ( models.palettes.allowed(layer.id) && models.palettes.getLegends(layer.id).length < 2 ) {
                 if ( models.palettes.getLegends(layer.id).length > 1 ) {
                     renderLegendButtons($dialog);
                 }
@@ -328,9 +328,6 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         if ( !firstTime ) {
             $("#wv-palette-selector").iCheck({radioClass: 'iradio_square-grey'});
         }
-        $("#wv-layers-options-dialog .jspScrollable").each(function() {
-            $(this).jScrollPane().data("jsp").reinitialise();
-        });
     };
 
     var onPaletteUpdate = function() {
