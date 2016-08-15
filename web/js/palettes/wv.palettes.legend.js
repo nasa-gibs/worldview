@@ -177,7 +177,6 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         var legends = model.getLegends(layer.id, index);
         var entries = model.get(layer.id, index).entries;
         _.each(legends, function(legend, index) {
-            console.log(legend);
             var min =  legend.minLabel || _.first(legend.labels) || _.first(entries.labels);
             var max =  legend.maxLabel || _.last(legend.labels) || _.last(entries.labels);
             $(selector + " [data-index='" + index + "'] .wv-palettes-min").html(min);
