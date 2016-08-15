@@ -53,8 +53,6 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
         _.each(self.getRendered(layerId).maps, function(palette, index) {
             if ( !active.maps[index] ) {
                 active.maps[index] = _.cloneDeep(palette);
-                //console.log(palette);
-                //console.log(active.maps[index]);
             }
         });
     };
@@ -462,6 +460,8 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
                 colors: [],
                 labels: entries.labels,
                 values: entries.values,
+                minLabel: entries.minLabel,
+                maxLabel: entries.maxLabel,
                 type: entries.type,
                 title: entries.title
             };
