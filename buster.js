@@ -15,7 +15,7 @@ config["wv"] = {
     rootPath: "./",
     environment: "browser",
     libs: [
-        "web/ext/main/lodash-4.15.0/lodash.js",
+        "web/ext/main/lodash-2.4.1/lodash.js",
         "web/ext/main/jquery-2.1.4/jquery.js",
         "web/ext/main/jquery.migrate-1.2.1/jquery-migrate.min.js",
         "web/ext/main/jscache-gitba01cdc/cache.js",
