@@ -81,18 +81,26 @@ fixtures.config = function() { return {
     palettes: {
         rendered: {
             "terra-aod": {
-                scale: {
-                    colors: [fixtures.green, fixtures.yellow, fixtures.red],
-                    labels: ["0", "1", "2"],
-                    values: [0, 1, 2]
-                }
+                id: "terra-aod",
+                maps: [{
+                    entries: {
+                        type: "scale",
+                        colors: [fixtures.green, fixtures.yellow, fixtures.red],
+                        labels: ["0", "1", "2"],
+                        values: [0, 1, 2]
+                    }
+                }]
             },
             "aqua-aod": {
-                scale: {
-                    colors: [fixtures.green, fixtures.yellow, fixtures.red],
-                    labels: ["0", "1", "2"],
-                    values: [0, 1, 2]
-                }
+                id: "aqua-aod",
+                maps: [{
+                    entries: {
+                        type: "scale",
+                        colors: [fixtures.green, fixtures.yellow, fixtures.red],
+                        labels: ["0", "1", "2"],
+                        values: [0, 1, 2]
+                    }
+                }]
             }
         },
         custom: {

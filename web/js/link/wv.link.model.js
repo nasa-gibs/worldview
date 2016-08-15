@@ -18,6 +18,7 @@ wv.link.model = wv.link.model || function(config) {
     var DEBUG_SHORTEN_LINK = "http://1.usa.gov/1iKIZ4j";
     var ENCODING_EXCEPTIONS = [
         { match: new RegExp("%2C", "g"), replace: "," },
+        { match: new RegExp("%3B", "g"), replace: ";" },
         { match: new RegExp("%3D", "g"), replace: "=" }
     ];
 

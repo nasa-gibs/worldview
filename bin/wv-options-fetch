@@ -6,7 +6,6 @@
 # the Earth Science Data and Information System (ESDIS) project.
 #
 # Copyright (C) 2013 - 2014 United States Government as represented by the
-# Administrator of the National Aeronautics and Space Administration.
 # All Rights Reserved.
 #
 
@@ -17,6 +16,7 @@ import sys
 import json
 import urllib2 as urllib
 import xmltodict
+import traceback
 
 prog = os.path.basename(__file__)
 base_dir = os.path.join(os.path.dirname(__file__), "..")
@@ -36,7 +36,7 @@ if len(args) != 2:
 config_file = args[0]
 output_dir = args[1]
 colormaps = {}
-colormaps_dir = os.path.join(output_dir, "colormaps", "gc")
+colormaps_dir = os.path.join(output_dir, "colormaps")
 remote_count = 0
 error_count = 0
 warning_count = 0
@@ -57,22 +57,30 @@ def process_remote(entry):
         fp.write(contents)
     gc = xmltodict.parse(contents)
 
-    for layer in gc["Capabilities"]["Contents"]["Layer"]:
-        ident = layer["ows:Identifier"]
-        if "ows:Metadata" in layer:
-            if ident in config.get("skipPalettes", []):
-                sys.stderr.write("%s:    WARN: Skipping palette for %s\n" %
-                    prog, ident)
-                global warning_count
-                warning_count += 1
-            else:
-                colormap_link = layer["ows:Metadata"]["@xlink:href"]
-                colormap_file = os.path.basename(colormap_link)
-                colormap_id = os.path.splitext(colormap_file)[0]
-                if ident != colormap_id:
-                    error_count += 1
-                    sys.stderr.write("%s     ERROR: %s Colormap name does not match layer ID\n" % (prog, colormap_id))
-                colormaps[colormap_id] = colormap_link
+    try:
+        for layer in gc["Capabilities"]["Contents"]["Layer"]:
+            ident = layer["ows:Identifier"]
+            if "ows:Metadata" in layer:
+                if ident in config.get("skipPalettes", []):
+                    sys.stderr.write("%s:    WARN: Skipping palette for %s\n" %
+                                     prog, ident)
+                    global warning_count
+                    warning_count += 1
+                else:
+                    for item in layer["ows:Metadata"]:
+                        schema_version = item["@xlink:role"]
+                        #if item != "@xlink:role":
+                        #   continue
+                        #if layer["ows:Metadata"][item] == "http://earthdata.nasa.gov/gibs/metadata-type/colormap":
+                        if schema_version == "http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.2":
+                            colormap_link = item["@xlink:href"]
+                            #colormap_link = layer["ows:Metadata"]["@xlink:href"]
+                            colormap_file = os.path.basename(colormap_link)
+                            colormap_id = os.path.splitext(colormap_file)[0]
+                            colormaps[colormap_id] = colormap_link
+    except:
+        print(ident)
+        print(str(traceback.format_exc()))
 
 def process_colormaps():
     print "%s: Fetching %d colormaps" % (prog, len(colormaps))
@@ -91,6 +99,7 @@ def process_colormaps():
                 (prog, link, str(e)))
             global warning_count
             warning_count += 1
+    print "%s: Fetching %d colormaps" % (prog, len(colormaps))
 
 tolerant = config.get("tolerant", False)
 if "wv-options-fetch" in config:
