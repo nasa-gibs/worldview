@@ -25,6 +25,7 @@ wv.date.timeline.pan = wv.date.timeline.pan || function(models, config, ui) {
 
     var tl = ui.timeline;
     var model = models.date;
+    var animModel = models.anim;
     
     var self = {};
 
@@ -51,6 +52,8 @@ wv.date.timeline.pan = wv.date.timeline.pan || function(models, config, ui) {
 
         tl.pick.update();
         tl.pick.checkLocation();
+        animModel.events.trigger('timeline-change');
+
 
         tl.data.set();
     };
