@@ -8,20 +8,19 @@
  */
 var wv = wv || {};
 wv.anim = wv.anim || {};
-wv.anim.ui = wv.anim.ui || function(models, ui, options) { 
-    options = options || {};
+wv.anim.ui = wv.anim.ui || function(model, ui) { 
     var self = {};
-
-    self.delay = options.delay || 500;
+    self.delay =  500;
     self.direction = "forward";
-    self.interval = options.interval || "day";
-    self.delta = options.delta || 1;
+    self.interval = "day";
+    self.delta = 1;
     self.active = false;
     self.loop = false;
     self.paused = false;
     self.doAnimation = false;
     self.initDate = undefined;
     self.endDate = undefined;
+    self.events = wv.util.events();
     var timer;
 
     self.play = function(direction) {
