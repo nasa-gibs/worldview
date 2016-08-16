@@ -28,7 +28,7 @@ ol.wv.LookupImageTile = function(lookup, tileCoord, state, src, crossOrigin, til
      */
     this.canvas_ = null;
 };
-//goog.inherits(ol.wv.LookupImageTile, ol.ImageTile);
+goog.inherits(ol.wv.LookupImageTile, ol.ImageTile);
 
 /**
  * @return (HTMLCanvasElement|HTMLImageElement|HTMLVideoElement|null)
