@@ -18,7 +18,7 @@ wv.anim = wv.anim || {};
 wv.anim.widget = wv.anim.widget || function(models, config, ui) {
     var self = {};
     var timeline = ui.timeline;
-    var model = models.date;
+    var model = models.anim;
     var widgetFactory = React.createFactory(Animate.AnimationWidget);
     self.init = function() {
         var $animateButton = $('#animate-button');
@@ -32,7 +32,7 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
 
         self.$widgetCase = $('#wv-animation-widget');
         $animateButton.on('click', self.toggleAnimationWidget);
-        model.on('change', self.update)
+        //model.events.on('update', self.update)
     };
     self.toggleAnimationWidget = function() {
         return self.$widgetCase.toggleClass('wv-active');
