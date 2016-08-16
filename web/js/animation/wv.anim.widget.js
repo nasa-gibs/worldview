@@ -16,20 +16,23 @@ var wv = wv || {};
 wv.anim = wv.anim || {};
 
 wv.anim.widget = wv.anim.widget || function(models, config, ui) {
-    var self = this;
+    var self = {};
     var timeline = ui.timeline;
+    var model = models.date;
     var widgetFactory = React.createFactory(Animate.AnimationWidget);
     self.init = function() {
         var $animateButton = $('#animate-button');
         var Widget = widgetFactory({
             callback: self.onPressPlay,
-            label: 'Frames Per Second'
+            label: 'Frames Per Second',
+            currentDate: model.selected
         });
-      //mount react component
-      ReactDOM.render(Widget, $('#wv-animation-widet-case')[0]);
+        //mount react component
+        ReactDOM.render(Widget, $('#wv-animation-widet-case')[0]);
 
-      self.$widgetCase = $('#wv-animation-widget');
-      $animateButton.on('click', self.toggleAnimationWidget)
+        self.$widgetCase = $('#wv-animation-widget');
+        $animateButton.on('click', self.toggleAnimationWidget);
+        model.on('change', self.update)
     };
     self.toggleAnimationWidget = function() {
         return self.$widgetCase.toggleClass('wv-active');
