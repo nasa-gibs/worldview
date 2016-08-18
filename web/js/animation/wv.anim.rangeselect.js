@@ -46,6 +46,7 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
         } else {
             startLocation = animEndLocation - 100;
             endLocation = animEndLocation
+            self.updateRange(startLocation, endLocation);
         }
 
         self.options = {
@@ -61,7 +62,8 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
             onDrag: self.showDateOnDrag,
             onDragStop: self.updateRange
         };
-        model.events.on('timeline-change', self.update)
+        model.events.on('timeline-change', self.update);
+        model.events.on('', self.update)
       self.render(self.options);
     };
     self.render = function(options) {

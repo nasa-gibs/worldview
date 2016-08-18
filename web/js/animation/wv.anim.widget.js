@@ -23,17 +23,31 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
     self.init = function() {
         var $animateButton = $('#animate-button');
         var Widget = widgetFactory({
-            callback: self.onPressPlay,
+            onPushPlay: self.onPressPlay,
+            onDateChange: self.dateUpdate,
             label: 'Frames Per Second',
-            currentDate: model.selected
+            startDate: new Date(model.rangeState.startDate),
+            endDate: new Date(model.rangeState.endDate)
         });
         //mount react component
-        ReactDOM.render(Widget, $('#wv-animation-widet-case')[0]);
+        self.reactComponent = ReactDOM.render(Widget, $('#wv-animation-widet-case')[0]);
 
         self.$widgetCase = $('#wv-animation-widget');
         $animateButton.on('click', self.toggleAnimationWidget);
-        //model.events.on('update', self.update)
+        model.events.on('change', self.update)
     };
+    self.update = function() {
+        self.reactComponent.setState({
+            startDate: new Date(model.rangeState.startDate),
+            endDate: new Date(model.rangeState.endDate)
+        });
+    }
+    self.dateUpdate = function(startDate, endDate) {
+        var state = model.rangeState;
+        state.startDate = wv.util.toISOStringDate(startDate) || 0;
+        state.endDate = wv.util.toISOStringDate(endDate);
+        models.events.trigger('change');
+    }
     self.toggleAnimationWidget = function() {
         return self.$widgetCase.toggleClass('wv-active');
     };
