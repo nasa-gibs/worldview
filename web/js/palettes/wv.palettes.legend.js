@@ -56,7 +56,8 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         $parent.append($legendPanel);
         var legends = model.getLegends(layer.id);
         _.each(legends, function(legend, index) {
-            if ( legend.type === "continuous" ) {
+            if ( (legend.type === "continuous") ||
+                 (legend.type === "discrete") ) {
                 renderScale($legendPanel, legend, index);
             }
             if ( legend.type === "classification" ) {
@@ -160,7 +161,8 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         }
         var legends = model.getLegends(layer.id);
         _.each(legends, function(legend, index) {
-            if ( legend.type === "continuous" ) {
+            if ( (legend.type === "continuous") ||
+                 (legend.type === "discrete") ) {
                 wv.palettes.colorbar(selector + " " +
                     "[data-index='" + index + "'] canvas", legend.colors);
                 showUnitRange(index);
@@ -177,8 +179,8 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         var legends = model.getLegends(layer.id, index);
         var entries = model.get(layer.id, index).entries;
         _.each(legends, function(legend, index) {
-            var min =  entries.minLabel || _.first(entries.labels);
-            var max =  entries.maxLabel || _.last(entries.labels);
+            var min =  legend.minLabel || _.first(entries.labels);
+            var max =  legend.maxLabel || _.last(entries.labels);
             $(selector + " [data-index='" + index + "'] .wv-palettes-min").html(min);
             $(selector + " [data-index='" + index + "'] .wv-palettes-max").html(max);
             var title = legend.title || "&nbsp;";
