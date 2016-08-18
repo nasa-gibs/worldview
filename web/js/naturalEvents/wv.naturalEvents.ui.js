@@ -22,7 +22,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
     self.id = "wv-events";
 
     //Local storage may not be a good idea because they'll never see it again
-    //wv.util.localStorage('notified') || false;    
+    //wv.util.localStorage('notified') || false;
     var notified = false;
     var $notification;
 
@@ -34,7 +34,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
                 resize();
             }
             else {
-                
+
             }
         });
 
@@ -96,7 +96,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
         var $longWrapper = $('<div></div>')
             .addClass('notify-message-body')
             .hide();
-        
+
         $messageWrapper
             .append($icon)
             .append($message)
@@ -116,7 +116,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
                 autoOpen: false,
                 resizable: false,
                 height: 40,
-                width: 320,
+                width: 420,
                 draggable: false,
                 show: {
                     effect: "fade",
@@ -259,11 +259,11 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
         resize();
 
         model.select(index, dateIndex);
-        
+
     };
     var notify = function( text ) {
 
-        var message = text || 'Events may not be visible at all times.';
+        var message = text || 'Events may not be visible at all times.  Read more...';
 
         var $message = $('.notify-message');
 
@@ -298,7 +298,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
         }
         $(self.selector).css("max-height", maxHeight);
 
-        var childrenHeight = 
+        var childrenHeight =
             $('#wv-eventscontent').outerHeight(true);
 
         if((maxHeight <= childrenHeight)) {
@@ -341,4 +341,3 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
     return self;
 
 };
-
