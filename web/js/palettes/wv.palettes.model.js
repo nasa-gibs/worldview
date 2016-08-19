@@ -432,11 +432,10 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
             }
             //FIXME: palette.min and rendered.values point to inexisting objs
             var rendered = self.getRendered(layerId, index);
-
-            if ( palette.min < _.first(_.last(rendered.entries.values)) ) {
+            if ( palette.min <= 0 ) {
                 delete palette.min;
             }
-            if ( palette.min > _.last(_.first(rendered.entries.values)) ) {
+            if ( palette.max >= rendered.entries.values.length ) {
                 delete palette.max;
             }
             if ( !_.isUndefined(palette.min) || !_.isUndefined(palette.max) ) {
