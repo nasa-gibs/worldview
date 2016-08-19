@@ -218,7 +218,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
                     squash,
                     index);
             }).on("slide", function() {
-                updateRangeLabels(layer.id,
+                updateRangeLabels(
                     parseFloat($(this).val()[0]),
                     parseFloat($(this).val()[1]));
             });
