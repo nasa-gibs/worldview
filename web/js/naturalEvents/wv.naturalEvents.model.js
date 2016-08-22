@@ -210,7 +210,25 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
             if ( location.length == 2 ) {
                 map.getView()
                     .setCenter(location);
-                map.getView().setZoom(5);
+
+                // Retrieve event category name, if possible
+                var eventCategoryName = null;
+                if ((lastIndex != -1) && (self.data !== null) && (self.data[lastIndex] !== null)) {
+                  var eventCategory = self.data[lastIndex].category;
+                  if (eventCategory.length > 0)
+                  {
+                    eventCategory = eventCategory[0];
+                    eventCategoryName = eventCategory["#text"];
+                  }
+                }
+
+                // If an event is a Wildfire, zoom in more
+                if ((eventCategoryName !== null) && (eventCategoryName == "Wildfires")) {
+                  map.getView().setZoom(7);
+                } else {
+                  map.getView().setZoom(5);
+                }
+
             } else {
                 map.getView().fit(location, map.getSize());
                 if(map.getView().getZoom() > 8)
