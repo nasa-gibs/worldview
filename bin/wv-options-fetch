@@ -69,10 +69,7 @@ def process_remote(entry):
                 else:
                     for item in layer["ows:Metadata"]:
                         schema_version = item["@xlink:role"]
-                        #if item != "@xlink:role":
-                        #   continue
-                        #if layer["ows:Metadata"][item] == "http://earthdata.nasa.gov/gibs/metadata-type/colormap":
-                        if schema_version == "http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.2":
+                        if schema_version == "http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3":
                             colormap_link = item["@xlink:href"]
                             #colormap_link = layer["ows:Metadata"]["@xlink:href"]
                             colormap_file = os.path.basename(colormap_link)

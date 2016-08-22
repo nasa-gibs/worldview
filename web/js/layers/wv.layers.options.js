@@ -263,9 +263,8 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         var legend = models.palettes.getLegend(layer.id, index);
         min = min || palette.min || 0;
         max = max || palette.max || legend.labels.length - 1;
-
-        var minLabel = legend.labels[min] + " " + legend.units;
-        var maxLabel = legend.labels[max] + " " + legend.units;
+        var minLabel = ( legend.units ) ? legend.labels[min] + " " + legend.units : legend.labels[min];
+        var maxLabel = ( legend.units ) ? legend.labels[max] + " " + legend.units : legend.labels[max];
         $("#wv-layers-options-dialog .wv-label-range-min").html(minLabel);
         $("#wv-layers-options-dialog .wv-label-range-max").html(maxLabel);
     };

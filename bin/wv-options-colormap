@@ -71,13 +71,13 @@ def process_entries(colormap):
         if a == 0:
             continue
         colors += [color_format.format(int(r), int(g), int(b), a)]
-        tooltips += entry["@tooltip"]
         if "Legend" in colormap:
             legend = match_legend(entry, legends)
             if "@label" in legend:
                 labels += [legend["@label"]]
             elif "@label" in entry:
                 labels += [entry["@label"]]
+            tooltips += [legend["@tooltip"]]
         elif "@label" in entry:
             labels += [entry["@label"]]
         if (map_type == "continuous") or (map_type == "discrete"):
@@ -136,7 +136,7 @@ def process_file(file):
         result["entries"]["title"] = colormap["@title"]
         result["legend"]["title"] = colormap["@title"]
         if "Legend" in colormap:
-            if "@minLabel" in colormap["Legend"]):
+            if "@minLabel" in colormap["Legend"]:
                 result["legend"]["minLabel"] = colormap["Legend"]["@minLabel"]
                 result["entries"]["minLabel"] = colormap["Legend"]["@minLabel"]
             if "@maxLabel" in colormap["Legend"]:

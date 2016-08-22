@@ -136,6 +136,8 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         });
         var $detailPanel = $("<div></div>");
         _.each(legend.colors, function(color, classIndex) {
+            var label = legend.labels[classIndex];
+            label =  (legend.units) ? label + " " + legend.units : label;
             var $row = $("<div></div>")
                 .addClass("wv-palettes-class-detail")
                 .attr("data-class-index", classIndex);
@@ -149,7 +151,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
                     .addClass("wv-palettes-class-label")
                     .attr("data-index", index)
                     .attr("data-class-index", classIndex)
-                    .html(legend.labels[classIndex] + " " + legend.units));
+                    .html(label));
             $detailPanel.append($row);
         });
         $panel.tooltip("option", "content", $detailPanel.html());
@@ -181,11 +183,12 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         _.each(legends, function(legend, index) {
             var min =  legend.minLabel || _.first(legend.labels);
             var max =  legend.maxLabel || _.last(legend.labels);
-            var units = legend.units;
+            min = (legend.units) ? min + " " + legend.units : min;
+            max = (legend.units) ? max + " " + legend.units : max;
             $(selector + " [data-index='" + index + "'] .wv-palettes-min")
-                .html(min + " " + unit);
+                .html(min);
             $(selector + " [data-index='" + index + "'] .wv-palettes-max")
-                .html(max + " " + unit);
+                .html(max);
             var title = legend.title || "&nbsp;";
 
             if (legends.length === 1 ){
@@ -216,11 +219,11 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
 
         var color = legend.colors[colorIndex];
         var label = legend.tooltips[colorIndex];
-        var unit = legend.units;
+        label = (legend.units) ? label + " " + legend.units : label;
        
         $colorbar.tooltip("option", "content",
             "<span class='wv-palettes-color-box' style='background: " +
-            wv.util.hexToRGBA(color) + "'>" + "</span>" + label + " " + units);
+            wv.util.hexToRGBA(color) + "'>" + "</span>" + label);
     };
 
     var highlightClass = function() {
