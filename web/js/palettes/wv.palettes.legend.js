@@ -149,7 +149,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
                     .addClass("wv-palettes-class-label")
                     .attr("data-index", index)
                     .attr("data-class-index", classIndex)
-                    .html(legend.labels[classIndex]));
+                    .html(legend.labels[classIndex] + " " + legend.units));
             $detailPanel.append($row);
         });
         $panel.tooltip("option", "content", $detailPanel.html());
@@ -179,10 +179,13 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         var legends = model.getLegends(layer.id, index);
         var entries = model.get(layer.id, index).entries;
         _.each(legends, function(legend, index) {
-            var min =  legend.minLabel || _.first(entries.labels);
-            var max =  legend.maxLabel || _.last(entries.labels);
-            $(selector + " [data-index='" + index + "'] .wv-palettes-min").html(min);
-            $(selector + " [data-index='" + index + "'] .wv-palettes-max").html(max);
+            var min =  legend.minLabel || _.first(legend.labels);
+            var max =  legend.maxLabel || _.last(legend.labels);
+            var units = legend.units;
+            $(selector + " [data-index='" + index + "'] .wv-palettes-min")
+                .html(min + " " + unit);
+            $(selector + " [data-index='" + index + "'] .wv-palettes-max")
+                .html(max + " " + unit);
             var title = legend.title || "&nbsp;";
 
             if (legends.length === 1 ){
@@ -212,10 +215,12 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         }
 
         var color = legend.colors[colorIndex];
-        var label = legend.labels[colorIndex] || entry.labels[colorIndex];
+        var label = legend.tooltips[colorIndex];
+        var unit = legend.units;
+       
         $colorbar.tooltip("option", "content",
             "<span class='wv-palettes-color-box' style='background: " +
-            wv.util.hexToRGBA(color) + "'>" + "</span>" + label);
+            wv.util.hexToRGBA(color) + "'>" + "</span>" + label + " " + units);
     };
 
     var highlightClass = function() {

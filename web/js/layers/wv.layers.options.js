@@ -264,8 +264,8 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         min = min || palette.min || 0;
         max = max || palette.max || legend.labels.length - 1;
 
-        var minLabel = legend.labels[min];
-        var maxLabel = legend.labels[max];
+        var minLabel = legend.labels[min] + " " + legend.units;
+        var maxLabel = legend.labels[max] + " " + legend.units;
         $("#wv-layers-options-dialog .wv-label-range-min").html(minLabel);
         $("#wv-layers-options-dialog .wv-label-range-max").html(maxLabel);
     };

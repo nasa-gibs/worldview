@@ -62,6 +62,7 @@ def process_entries(colormap):
     colors = []
     labels = []
     values = []
+    tooltips = []
 
     color_format = "{0:02x}{1:02x}{2:02x}{3:02x}"
     for entry in entries:
@@ -70,6 +71,7 @@ def process_entries(colormap):
         if a == 0:
             continue
         colors += [color_format.format(int(r), int(g), int(b), a)]
+        tooltips += entry["@tooltip"]
         if "Legend" in colormap:
             legend = match_legend(entry, legends)
             if "@label" in legend:
@@ -102,6 +104,7 @@ def process_entries(colormap):
         },
         "legend": {
             "labels": labels,
+            "tooltips": tooltips,
             "colors": colors,
             "type": map_type
         }
@@ -132,16 +135,13 @@ def process_file(file):
         result["title"] = colormap["@title"]
         result["entries"]["title"] = colormap["@title"]
         result["legend"]["title"] = colormap["@title"]
-        if ("Legend" in colormap) and ("@minLabel" in colormap["Legend"]):
-            result["legend"]["minLabel"] = colormap["Legend"]["@minLabel"]
-            result["entries"]["minLabel"] = colormap["Legend"]["@minLabel"]
-        elif "@minLabel" in colormap["Entries"]:
-            result["legend"]["minLabel"] = colormap["Entries"]["@minLabel"]
-        if ("Legend" in colormap) and ("@maxLabel" in colormap["Legend"]):
-            result["legend"]["maxLabel"] = colormap["Legend"]["@maxLabel"]
-            result["entries"]["maxLabel"] = colormap["Legend"]["@maxLabel"]
-        elif "@maxLabel" in colormap["Entries"]:
-            result["legend"]["maxLabel"] = colormap["Entries"]["@maxLabel"]
+        if "Legend" in colormap:
+            if "@minLabel" in colormap["Legend"]):
+                result["legend"]["minLabel"] = colormap["Legend"]["@minLabel"]
+                result["entries"]["minLabel"] = colormap["Legend"]["@minLabel"]
+            if "@maxLabel" in colormap["Legend"]:
+                result["legend"]["maxLabel"] = colormap["Legend"]["@maxLabel"]
+                result["entries"]["maxLabel"] = colormap["Legend"]["@maxLabel"]
         if "@units" in colormap:
             result["legend"]["units"] = colormap["@units"]
         maps += [result]
