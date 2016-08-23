@@ -152,7 +152,7 @@ $(function() {
 
         elapsed("ui");
         // Create widgets
-        ui.anim = wv.anim.ui(models.date, ui.map);
+        ui.anim = wv.anim.ui(models, ui);
         ui.proj = wv.proj.ui(models, config);
         ui.sidebar = wv.layers.sidebar(models, config);
         ui.activeLayers = wv.layers.active(models, ui, config);

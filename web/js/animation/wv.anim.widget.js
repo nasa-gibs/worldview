@@ -24,8 +24,11 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
         var $animateButton = $('#animate-button');
         var Widget = widgetFactory({
             onPushPlay: self.onPressPlay,
+            onPushLoop: self.onPressLoop,
+            onPushPause: self.onPressPause,
+            looping: model.rangeState.loop,
             onDateChange: self.dateUpdate,
-            label: 'Frames Per Second',
+            sliderLabel: 'Frames Per Second',
             startDate: new Date(model.rangeState.startDate),
             endDate: new Date(model.rangeState.endDate)
         });
@@ -34,26 +37,48 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
 
         self.$widgetCase = $('#wv-animation-widget');
         $animateButton.on('click', self.toggleAnimationWidget);
-        model.events.on('change', self.update)
+        model.events.on('change', self.update);
     };
     self.update = function() {
+        var state = model.rangeState;
         self.reactComponent.setState({
-            startDate: new Date(model.rangeState.startDate),
-            endDate: new Date(model.rangeState.endDate)
+            startDate: new Date(state.startDate),
+            endDate: new Date(state.endDate),
+            playing: state.playing
         });
+        model.rangeState.playIndex = null;
     }
     self.dateUpdate = function(startDate, endDate) {
         var state = model.rangeState;
         state.startDate = wv.util.toISOStringDate(startDate) || 0;
         state.endDate = wv.util.toISOStringDate(endDate);
-        models.events.trigger('change');
+        model.events.trigger('change');
     }
     self.toggleAnimationWidget = function() {
         return self.$widgetCase.toggleClass('wv-active');
     };
-    self.onPressPlay = function(args) {
-        console.log(args)
+    self.onPressPlay = function() {
+        model.rangeState.playing = true;
+        model.events.trigger('play');
     };
+    self.onRateChange = function(speed) {
+        model.rangeState.speed = speed;
+        model.events.trigger('change');
+    }
+    self.onPressPause = function() {
+        var state = model.rangeState;
+        state.playing = false;
+        model.events.trigger('change');
+    }
+    /*
+     * adjust state when loop is pressed
+     */
+    self.onPressLoop = function(loop) {
+      var state = model.rangeState;
+      state.loop = loop;
+      model.events.trigger('change');
+
+    }
     self.init();
     return self;
 }

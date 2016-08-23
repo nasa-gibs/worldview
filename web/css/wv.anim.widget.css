@@ -1,11 +1,11 @@
 #wv-animation-widget {
     width: 330px;
     border-radius: 8px;
-    height: 50px;
+    height: 100px;
     background: #212121;
     position: absolute;
     transform: translateX(-50%);
-    top: -80px;
+    top: -130px;
     left: 50%;
     display: none;
 }
@@ -34,13 +34,52 @@
     left: 50%;
     top: 50%;
 }
-
+#wv-animation-widget a .wv-animation-widget-icon.fa-retweet {
+    font-size: 34px;
+}
+#wv-animation-widget .active .wv-animation-widget-icon.fa-retweet {
+    color: #f4f5f5;
+    opacity: 0.7;
+}
 #wv-animation-widget div .wv-slider-label {
     font-size: 10px;
     color: #fff;
     display: block;
     text-align: center;
 }
+#wv-animation-widget .thruLabel {
+    position: absolute;
+    left: 0;
+    right: 0;
+    color: #fff;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    bottom: 22px;
+}
+#wv-animation-widget .wv-date-selector-widget {
+    display: inline-block;
+}
+#wv-animation-widget .wv-date-selector-widget:nth-child(1){ 
+    margin-right: 105px;
+}
+#wv-animation-widget .wv-date-selector-widget svg {
+    margin: 0 auto;
+}
+#wv-animation-widget .wv-date-selector-widget input {
+    height: inherit;
+    text-align: center;
+}
+#wv-animation-widget .wv-date-selector-widget .input-wrapper:nth-child(1){
+    max-width: 40px;
+}
+#wv-animation-widget .wv-date-selector-widget .input-wrapper:nth-child(2){
+    max-width: 35px;
+}
+#wv-animation-widget .wv-date-selector-widget .input-wrapper:nth-child(3){
+    max-width: 25px;
+}
+
 /*
  * Slider styles
  *

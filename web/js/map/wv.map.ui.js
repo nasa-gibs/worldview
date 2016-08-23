@@ -18,7 +18,7 @@ wv.map = wv.map || {};
 wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
     var id = "wv-map";
     var selector = "#" + id;
-    var cache = new Cache(100); // Save layers from days visited
+    var cache = new Cache(1000); // Save layers from days visited
     var animationDuration = 250;
     var self = {};
     var rotation = new Rotation(self, models);
@@ -184,7 +184,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
             }
         });
         removeGraticule();
-        //cache.clear();
+        cache.clear();
     };
     /*
      * get layers from models obj
@@ -329,6 +329,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
                 return;
             }
             var index = findLayerIndex(def);
+
             self.selected.getLayers().setAt(index, createLayer(def));
         });
         updateLayerVisibilities();
@@ -374,17 +375,16 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
      * @returns {void}
      */
     self.preload = function(date) {
-        var layers = models.layers.get({
-            renderable: true,
-            dynamic: true
-        });
+        var layers = models.layers.get();
         _.each(layers, function(def) {
             var key = layerKey(def, {date: date});
             var layer = cache.getItem(key);
             if ( !layer ) {
                 layer = createLayer(def, {date: date});
+                console.log(new ol.renderer.canvas.TileLayer(layer));
             }
         });
+        
     };
 
     /*
@@ -437,6 +437,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
     var createLayer = function(def, options) {
         options = options || {};
         var key = layerKey(def, options);
+
         var layer = cache.getItem(key);
         if ( !layer ) {
             var proj = models.proj.selected;

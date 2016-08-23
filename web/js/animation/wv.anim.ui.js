@@ -8,8 +8,11 @@
  */
 var wv = wv || {};
 wv.anim = wv.anim || {};
-wv.anim.ui = wv.anim.ui || function(model, ui) { 
+wv.anim.ui = wv.anim.ui || function(models, ui) { 
     var self = {};
+    var timer;
+    var dateModel = models.date;
+    var animModel = models.anim;
     self.delay =  500;
     self.direction = "forward";
     self.interval = "day";
@@ -21,8 +24,10 @@ wv.anim.ui = wv.anim.ui || function(model, ui) {
     self.initDate = undefined;
     self.endDate = undefined;
     self.events = wv.util.events();
-    var timer;
 
+    self.init = function() {
+        animModel.events.on('play', self.onPushedPlay);
+    }
     self.play = function(direction) {
        if ( self.active && direction !== self.direction ) {
            self.stop();
@@ -33,9 +38,55 @@ wv.anim.ui = wv.anim.ui || function(model, ui) {
        self.active = true;
        prepareFrame();
     };
-
     self.forward = function() {
        self.play("forward");
+    };
+    self.onPushedPlay = function() {
+        var state;
+        var endDate;
+        var dateBeingProcessed;
+        var dateArray;
+        var fps;
+
+        dateArray = [];
+        state = animModel.rangeState;
+        endDate = new Date(state.endDate);
+        dateBeingProcessed  = new Date(state.startDate);
+
+        while(dateBeingProcessed <= endDate) {
+            dateBeingProcessed = wv.util.dateAdd(dateBeingProcessed, 'day', 1);
+            var date = new Date(dateBeingProcessed);
+            ui.map.preload(date);
+            dateArray.push(date);
+        }
+        if(dateArray.length > 1) {
+            self.playDateArray(dateArray, fps);
+        }
+    };
+    self.checkShouldLoop = function(arra, fps, interval) {
+        if(animModel.rangeState.loop) {
+            self.playDateArray(arra, fps)
+        } else {
+            animModel.rangeState.playing = false;
+            animModel.events.trigger('change');
+        }
+    }
+    self.playDateArray = function(arra, fps) {
+        var len = arra.length;
+        var state = animModel.rangeState;
+        var i = state.playIndex || 0;
+        var interval = setInterval(function() {
+            if(i >= len) {
+                clearInterval(interval);
+                self.checkShouldLoop(arra, fps)
+            }
+            if(!animModel.rangeState.playing) {
+                clearInterval(interval);
+                state.playIndex = i;
+            }
+            dateModel.select(arra[i]);
+            i++;
+        }, 300);
     };
 
     self.reverse = function() {
@@ -56,20 +107,21 @@ wv.anim.ui = wv.anim.ui || function(model, ui) {
        }
        var amount = ( self.direction === "forward" ) ?
                self.delta : -self.delta;
-       var newDate = wv.util.dateAdd(model.selected, self.interval, amount);
-       ui.preload(newDate);
+       var newDate = wv.util.dateAdd(dateModel.selected, self.interval, amount);
+       ui.map.preload(newDate);
        timer = setTimeout(function() {
            advance(newDate);
        }, self.delay);
     };
 
     var advance = function(newDate) {
-       var updated = model.select(newDate);
+       var updated = dateModel.select(newDate);
        if ( !updated ) {
            self.stop();
        } else {
            prepareFrame();
        }
     };
+    self.init();
     return self;
 }

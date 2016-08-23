@@ -63,7 +63,7 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
             onDragStop: self.updateRange
         };
         model.events.on('timeline-change', self.update);
-        model.events.on('', self.update)
+        model.events.on('change', self.update)
       self.render(self.options);
     };
     self.render = function(options) {

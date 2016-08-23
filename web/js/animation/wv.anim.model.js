@@ -23,7 +23,7 @@ wv.anim.model = wv.anim.model || function(models, config) {
        active: false,
        speed: 10,
        loop: false,
-       reverse: false,
+       reverse: false
     };
 
     self.load = function(state, errors) {
@@ -42,6 +42,10 @@ wv.anim.model = wv.anim.model || function(models, config) {
             updatedState[prop.id] = prop.value;
         });
         self.animationState = updatedState;
+    };
+    
+    self.animate = function() {
+        
     }
 
     //update animation fields, set animation settings into an object
