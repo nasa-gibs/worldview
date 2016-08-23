@@ -44,17 +44,20 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
 
         if ( config.features.customPalettes ) {
             if ( models.palettes.allowed(layer.id) &&
-                 (models.palettes.getLegends(layer.id).length < 2) &&
-                 (models.palettes.get(layer.id).legend.type !== "classification") ) {
-                if ( models.palettes.getLegends(layer.id).length > 1 ) {
-                    renderLegendButtons($dialog);
-                }
+                 (models.palettes.getLegends(layer.id).length < 2) ){
+                //TODO: Dual Colormap options
+                /*if ( models.palettes.getLegends(layer.id).length > 1 ) {
+                  renderLegendButtons($dialog);
+                  }*/
                 var legend = models.palettes.getLegend(layer.id, index);
-                if (( legend.type === "continuous" ) ||
-                    (legend.type === "discrete") ){
+                if ( ( legend.type === "continuous" ) ||
+                     (legend.type === "discrete") ) {
                     renderRange($dialog);
+                    renderPaletteSelector($dialog);
                 }
-                renderPaletteSelector($dialog);
+                else if (models.palettes.getDefaultLegend(layer.id, index).colors.length === 1 ) {
+                    renderPaletteSelector($dialog);
+                }
             }
         }
         var names = models.layers.getTitles(layer.id);
@@ -410,16 +413,15 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
     var customLegend = function(id) {
         var source = models.palettes.getDefaultLegend(layer.id, index);
         var target = models.palettes.getCustom(id);
-        var targetType = ( target.colors.length === 1 ) ? "single": "continuous";
+        var targetType = ( target.colors.length === 1 ) ? "classification": "continuous";
 
-        if ( ( source.type === "continuous" && targetType === "continuous" ) ||
-             ( source.type === "discrete" && targetType === "discrete" ) ){
+        if ( ( source.type === "continuous"  && targetType === "continuous" ) ||
+             ( source.type === "discrete" && targetType === "continuous" ) ) {
             var translated = wv.palettes.translate(source.colors,
                     target.colors);
             return selectorItemScale(translated, id, target.name);
         }
-        if ( ( source.type === "continuous" && targetType === "continuous" ) ||
-             ( source.type === "discrete" && targetType === "discrete" ) ){
+        if ( source.type === "classification" && targetType === "classification" ) {
             return selectorItemSingle(target, id, target.name);
         }
     };
