@@ -56,10 +56,14 @@ def process_entries(colormap):
     map_type = colormap["Legend"]["@type"]
     legends = to_list(colormap["Legend"]["LegendEntry"])
     colors = []
-    labels = []
     values = []
     tooltips = []
-
+    transparent_map = "true"
+    for entry in entries:
+        if entry["@transparent"] == "false":
+            transparent_map = "false"
+    if (transparent_map == "true"):
+        return "transparent"
     color_format = "{0:02x}{1:02x}{2:02x}{3:02x}"
     for entry in entries:
         r,g,b = entry["@rgb"].split(",")
@@ -67,12 +71,8 @@ def process_entries(colormap):
         if a == 0:
             continue
         colors += [color_format.format(int(r), int(g), int(b), a)]
-
         legend = match_legend(entry, legends)
-        if "@label" in legend:
-            labels += [legend["@label"]]
         tooltips += [legend["@tooltip"]]
-
         if (map_type == "continuous") or (map_type == "discrete"):
             items = re.sub(r"[\(\)\[\]]", "", entry["@value"]).split(",")
             try:
@@ -93,10 +93,8 @@ def process_entries(colormap):
         "entries": {
             "type": map_type,
             "colors": colors,
-            "labels": labels
         },
         "legend": {
-            "labels": labels,
             "tooltips": tooltips,
             "colors": colors,
             "type": map_type
@@ -121,9 +119,9 @@ def process_file(file):
     colormaps = to_list(document["ColorMaps"]["ColorMap"])
     maps = []
     for colormap in colormaps:
-        if colormap["@title"] == "No Data":
-            continue
         result = process_entries(colormap)
+        if result == "transparent":
+            continue
         result["title"] = colormap["@title"]
         result["entries"]["title"] = colormap["@title"]
         result["legend"]["title"] = colormap["@title"]
