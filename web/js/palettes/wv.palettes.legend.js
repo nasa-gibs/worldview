@@ -136,7 +136,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         });
         var $detailPanel = $("<div></div>");
         _.each(legend.colors, function(color, classIndex) {
-            var label = legend.labels[classIndex];
+            var label = legend.tooltips[classIndex];
             label =  (legend.units) ? label + " " + legend.units : label;
             var $row = $("<div></div>")
                 .addClass("wv-palettes-class-detail")
