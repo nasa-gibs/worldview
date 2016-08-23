@@ -245,7 +245,7 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         var palette = models.palettes.get(layer.id, index);
         var imin = ( _.isUndefined(palette.min) ) ? 0 : palette.min;
         var imax = ( _.isUndefined(palette.max) ) ?
-                palette.entries.labels.length - 1 : palette.max;
+                palette.legend.tooltips.length - 1 : palette.max;
         current = [parseFloat($range.val()[0]), parseFloat($range.val()[1])];
         if ( !_.isEqual(current, [imin, imax]) ) {
             $range.val([imin, imax]);
@@ -262,9 +262,9 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         var palette = models.palettes.get(layer.id, index);
         var legend = models.palettes.getLegend(layer.id, index);
         min = min || palette.min || 0;
-        max = max || palette.max || legend.labels.length - 1;
-        var minLabel = ( legend.units ) ? legend.labels[min] + " " + legend.units : legend.labels[min];
-        var maxLabel = ( legend.units ) ? legend.labels[max] + " " + legend.units : legend.labels[max];
+        max = max || palette.max || legend.tooltips.length - 1;
+        var minLabel = ( legend.units ) ? legend.tooltips[min] + " " + legend.units : legend.tooltips[min];
+        var maxLabel = ( legend.units ) ? legend.tooltips[max] + " " + legend.units : legend.tooltips[max];
         $("#wv-layers-options-dialog .wv-label-range-min").html(minLabel);
         $("#wv-layers-options-dialog .wv-label-range-max").html(maxLabel);
     };

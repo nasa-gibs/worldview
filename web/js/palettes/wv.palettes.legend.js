@@ -181,8 +181,8 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         var legends = model.getLegends(layer.id, index);
         var entries = model.get(layer.id, index).entries;
         _.each(legends, function(legend, index) {
-            var min =  legend.minLabel || _.first(legend.labels);
-            var max =  legend.maxLabel || _.last(legend.labels);
+            var min =  legend.minLabel || _.first(legend.tooltips);
+            var max =  legend.maxLabel || _.last(legend.tooltips);
             min = (legend.units) ? min + " " + legend.units : min;
             max = (legend.units) ? max + " " + legend.units : max;
             $(selector + " [data-index='" + index + "'] .wv-palettes-min")
@@ -190,8 +190,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
             $(selector + " [data-index='" + index + "'] .wv-palettes-max")
                 .html(max);
             var title = legend.title || "&nbsp;";
-
-            if (legends.length === 1 ){
+            if ( legends.length === 1) {
                 $(selector + " [data-index='" + index + "'] .wv-palettes-title").hide();
             }
             else{

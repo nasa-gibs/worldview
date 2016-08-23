@@ -454,13 +454,14 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
         var active = self.active[layerId].maps;
         var lookup = {};
         _.each(active, function(palette, index) {
+            oldLegend = palette.legend;
             entries = palette.entries;
             legend = {
                 colors: [],
-                labels: entries.labels,
-                values: entries.values,
-                minLabel: entries.minLabel,
-                maxLabel: entries.maxLabel,
+                minLabel: oldLegend.minLabel,
+                maxLabel: oldLegend.maxLabel,
+                tooltips: oldLegend.tooltips,
+                units: oldLegend.units,
                 type: entries.type,
                 title: entries.title
             };
