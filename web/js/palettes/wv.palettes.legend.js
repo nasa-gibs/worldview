@@ -88,7 +88,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
                 .addClass("wv-palettes-title");
 
         $container.prepend($title);
-        $ranges.append($max).append($min);
+        $ranges.append($min).append($max);
         $container.append($ranges);
 
         $colorbar.on("mousemove", showUnitHover);

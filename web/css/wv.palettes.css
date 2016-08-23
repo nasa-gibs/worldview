@@ -55,8 +55,9 @@
 
 .bank div.wv-palettes-ranges {
     margin-top: -3px;
-    width: 100%;
+    width: auto;
     position: relative;
+    overflow:auto;
 }
 
 .wv-palettes-min, .wv-palettes-title, .wv-palettes-max{
@@ -76,11 +77,14 @@
 }
 .bank div.wv-palettes-min {
     max-width: 112px;
+    width:auto;
+    float:left;
 }
 .bank div.wv-palettes-max {
     float:right;
     text-align:right;
     max-width: 112px;
+    width:auto;
 }
 
 /* FIXME: Too specific */
