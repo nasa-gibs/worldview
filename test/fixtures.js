@@ -86,8 +86,12 @@ fixtures.config = function() { return {
                     entries: {
                         type: "scale",
                         colors: [fixtures.green, fixtures.yellow, fixtures.red],
-                        labels: ["0", "1", "2"],
                         values: [0, 1, 2]
+                    },
+                    legend: {
+                        tooltips: ["0", "1", "2"],
+                        minLabel: "0",
+                        maxLabel: "2"
                     }
                 }]
             },
@@ -97,8 +101,12 @@ fixtures.config = function() { return {
                     entries: {
                         type: "scale",
                         colors: [fixtures.green, fixtures.yellow, fixtures.red],
-                        labels: ["0", "1", "2"],
                         values: [0, 1, 2]
+                    },
+                    legend: {
+                        tooltips: ["0", "1", "2"],
+                        minLabel: "0",
+                        maxLabel: "2"
                     }
                 }]
             }

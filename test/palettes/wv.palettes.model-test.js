@@ -25,7 +25,7 @@ buster.testCase("wv.palettes.model", function() {
         models.palettes.events.on("set-custom", function(layerId) {
             var palette = models.palettes.get(layerId);
             var colors = palette.legend.colors;
-            var labels = palette.legend.labels;
+            var labels = palette.legend.tooltips;
             buster.assert.equals(colors[0], fixtures.light_blue);
             buster.assert.equals(colors[1], fixtures.blue);
             buster.assert.equals(colors[2], fixtures.dark_blue);
@@ -97,7 +97,7 @@ buster.testCase("wv.palettes.model", function() {
 
         var palette = models.palettes.get("terra-aod");
         buster.assert.equals(palette.entries.colors[0], fixtures.green);
-        buster.assert.equals(palette.entries.labels[0], "0");
+        buster.assert.equals(palette.legend.tooltips[0], "0");
 
         buster.assert.calledWith(models.palettes.events.trigger, "clear-custom");
         buster.assert.calledWith(models.palettes.events.trigger, "change");
