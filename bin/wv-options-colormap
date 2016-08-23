@@ -125,9 +125,6 @@ def process_file(file):
         if colormap["@title"] == "No Data":
             continue
         result = process_entries(colormap)
-        if result["entries"]["type"] == "special":
-            print "special"
-            continue
         result["title"] = colormap["@title"]
         result["entries"]["title"] = colormap["@title"]
         result["legend"]["title"] = colormap["@title"]
