@@ -53,7 +53,6 @@ def match_legend(entry, legends):
 
 def process_entries(colormap):
     entries = to_list(colormap["Entries"]["ColorMapEntry"])
-    #TODO: Legend checking is all over the place
     map_type = colormap["Legend"]["@type"]
     legends = to_list(colormap["Legend"]["LegendEntry"])
     colors = []
