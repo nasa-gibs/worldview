@@ -54,11 +54,8 @@ def match_legend(entry, legends):
 def process_entries(colormap):
     entries = to_list(colormap["Entries"]["ColorMapEntry"])
     #TODO: Legend checking is all over the place
-    if "Legend" in colormap:
-        map_type = colormap["Legend"]["@type"]
-        legends = to_list(colormap["Legend"]["LegendEntry"])
-    else:
-        map_type = "special"
+    map_type = colormap["Legend"]["@type"]
+    legends = to_list(colormap["Legend"]["LegendEntry"])
     colors = []
     labels = []
     values = []
@@ -71,15 +68,12 @@ def process_entries(colormap):
         if a == 0:
             continue
         colors += [color_format.format(int(r), int(g), int(b), a)]
-        if "Legend" in colormap:
-            legend = match_legend(entry, legends)
-            if "@label" in legend:
-                labels += [legend["@label"]]
-            elif "@label" in entry:
-                labels += [entry["@label"]]
-            tooltips += [legend["@tooltip"]]
-        elif "@label" in entry:
-            labels += [entry["@label"]]
+
+        legend = match_legend(entry, legends)
+        if "@label" in legend:
+            labels += [legend["@label"]]
+        tooltips += [legend["@tooltip"]]
+
         if (map_type == "continuous") or (map_type == "discrete"):
             items = re.sub(r"[\(\)\[\]]", "", entry["@value"]).split(",")
             try:
@@ -114,7 +108,6 @@ def process_entries(colormap):
 
     return result
 
-
 def process_file(file):
     input_file = os.path.join(root, file)
     id = os.path.splitext(os.path.basename(input_file))[0]
@@ -129,19 +122,19 @@ def process_file(file):
     colormaps = to_list(document["ColorMaps"]["ColorMap"])
     maps = []
     for colormap in colormaps:
+        if colormap["@title"] == "No Data":
+            continue
         result = process_entries(colormap)
         if result["entries"]["type"] == "special":
+            print "special"
             continue
         result["title"] = colormap["@title"]
         result["entries"]["title"] = colormap["@title"]
         result["legend"]["title"] = colormap["@title"]
-        if "Legend" in colormap:
-            if "@minLabel" in colormap["Legend"]:
-                result["legend"]["minLabel"] = colormap["Legend"]["@minLabel"]
-                result["entries"]["minLabel"] = colormap["Legend"]["@minLabel"]
-            if "@maxLabel" in colormap["Legend"]:
+        if "@minLabel" in colormap["Legend"]:
+            result["legend"]["minLabel"] = colormap["Legend"]["@minLabel"]
+        if "@maxLabel" in colormap["Legend"]:
                 result["legend"]["maxLabel"] = colormap["Legend"]["@maxLabel"]
-                result["entries"]["maxLabel"] = colormap["Legend"]["@maxLabel"]
         if "@units" in colormap:
             result["legend"]["units"] = colormap["@units"]
         maps += [result]
