@@ -425,22 +425,26 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
     var useLookup = function(layerId) {
         var use = false;
         var active = self.active[layerId].maps;
+
         _.each(active, function(palette, index) {
             if ( palette.custom ) {
                 use = true;
                 return false;
             }
+            console.log(palette);
             //FIXME: palette.min and rendered.values point to inexisting objs
             var rendered = self.getRendered(layerId, index);
-            if ( palette.min <= 0 ) {
-                delete palette.min;
-            }
-            if ( palette.max >= rendered.entries.values.length ) {
-                delete palette.max;
-            }
-            if ( !_.isUndefined(palette.min) || !_.isUndefined(palette.max) ) {
-                use = true;
-                return false;
+            if (palette.type !== 'classification') {
+                if ( palette.min <= 0 ) {
+                    delete palette.min;
+                }
+                if ( palette.max >= rendered.entries.values.length ) {
+                    delete palette.max;
+                }
+                if ( !_.isUndefined(palette.min) || !_.isUndefined(palette.max) ) {
+                    use = true;
+                    return false;
+                }
             }
         });
         return use;
