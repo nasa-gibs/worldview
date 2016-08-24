@@ -23,6 +23,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
     var model = spec.models.palettes;
     var layer = spec.layer;
     var loaded = false;
+    var rendered = false;
 
     var self = {};
 
@@ -64,7 +65,6 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
                 renderClasses($legendPanel, legend, index);
             }
         });
-        rendered = true;
         self.update();
     };
 
@@ -154,7 +154,10 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
                     .html(label));
             $detailPanel.append($row);
         });
-        $panel.tooltip("option", "content", $detailPanel.html());
+        if( !rendered ) {
+            $panel.tooltip("option", "content", $detailPanel.html());
+            rendered = true;
+        }
     };
 
     self.update = function() {
