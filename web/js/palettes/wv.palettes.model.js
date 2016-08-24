@@ -431,7 +431,7 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
                 use = true;
                 return false;
             }
-            console.log(palette);
+
             //FIXME: palette.min and rendered.values point to inexisting objs
             var rendered = self.getRendered(layerId, index);
             if (palette.type !== 'classification') {
