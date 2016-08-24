@@ -1,13 +1,14 @@
 #wv-animation-widget {
     width: 330px;
     border-radius: 8px;
-    height: 100px;
+    height: 125px;
     background: #212121;
     position: absolute;
     transform: translateX(-50%);
-    top: -130px;
+    top: -160px;
     left: 50%;
     display: none;
+    color: #fff;
 }
 #wv-animation-widget.wv-active {
     display: block;
@@ -16,7 +17,12 @@
     display: inline-block;
     margin: 7px 0 0 10px;
 }
-
+#wv-animation-widget .wv-animation-widget-header {
+    display: block;
+    text-align: center;
+    margin-bottom: 7px;
+    text-transform: capitalize;
+}
 #wv-animation-widget .wv-icon-case {
     display: inline-block;
     height: 35px;

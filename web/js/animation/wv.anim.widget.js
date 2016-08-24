@@ -16,6 +16,7 @@ var wv = wv || {};
 wv.anim = wv.anim || {};
 
 wv.anim.widget = wv.anim.widget || function(models, config, ui) {
+    var zooms = ['yearly', 'monthly', 'daily']
     var self = {};
     var timeline = ui.timeline;
     var model = models.anim;
@@ -27,8 +28,11 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
             onPushLoop: self.onPressLoop,
             onPushPause: self.onPressPause,
             looping: model.rangeState.loop,
+            header: 'Animate Map in ' + zooms[timeline.config.currentZoom - 1] + ' Increments', // config.currentZoom is a number: 1,2,3
             onDateChange: self.dateUpdate,
             sliderLabel: 'Frames Per Second',
+            sliderSpeed: model.rangeState.speed || 0.16,
+            onSlide: self.onRateChange,
             startDate: new Date(model.rangeState.startDate),
             endDate: new Date(model.rangeState.endDate)
         });
@@ -38,13 +42,16 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
         self.$widgetCase = $('#wv-animation-widget');
         $animateButton.on('click', self.toggleAnimationWidget);
         model.events.on('change', self.update);
+        model.events.on('timeline-change', self.update);
+
     };
     self.update = function() {
         var state = model.rangeState;
         self.reactComponent.setState({
             startDate: new Date(state.startDate),
             endDate: new Date(state.endDate),
-            playing: state.playing
+            playing: state.playing,
+            header: 'Animate Map in ' + zooms[timeline.config.currentZoom - 1] + ' Increments' // config.currentZoom is a number: 1,2,3
         });
         model.rangeState.playIndex = null;
     }
@@ -62,7 +69,7 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
         model.events.trigger('play');
     };
     self.onRateChange = function(speed) {
-        model.rangeState.speed = speed;
+        model.rangeState.speed = speed / 60;
         model.events.trigger('change');
     }
     self.onPressPause = function() {

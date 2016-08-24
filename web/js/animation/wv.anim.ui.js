@@ -52,7 +52,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         state = animModel.rangeState;
         endDate = new Date(state.endDate);
         dateBeingProcessed  = new Date(state.startDate);
-
+        fps = 1000 / (state.speed * 60);
         while(dateBeingProcessed <= endDate) {
             dateBeingProcessed = wv.util.dateAdd(dateBeingProcessed, 'day', 1);
             var date = new Date(dateBeingProcessed);
@@ -72,21 +72,28 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         }
     }
     self.playDateArray = function(arra, fps) {
+        var interval;
         var len = arra.length;
         var state = animModel.rangeState;
-        var i = state.playIndex || 0;
-        var interval = setInterval(function() {
+        var i = 0;
+
+        if(state.playIndex) {
+          i = state.playIndex;
+          state.playIndex = null;
+        }
+        interval = setInterval(function() {
             if(i >= len) {
                 clearInterval(interval);
                 self.checkShouldLoop(arra, fps)
-            }
-            if(!animModel.rangeState.playing) {
+                return
+            } else if(!animModel.rangeState.playing) {
                 clearInterval(interval);
                 state.playIndex = i;
+                return
             }
             dateModel.select(arra[i]);
             i++;
-        }, 300);
+        }, fps);
     };
 
     self.reverse = function() {
@@ -94,7 +101,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     };
 
     self.stop = function() {
-       if ( timer ) {
+       if (timer) {
            clearTimeout(timer);
            timer = null;
        }
