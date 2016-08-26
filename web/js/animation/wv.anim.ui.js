@@ -45,25 +45,42 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         var state;
         var endDate;
         var dateBeingProcessed;
-        var dateArray;
         var fps;
 
-        dateArray = [];
         state = animModel.rangeState;
         endDate = new Date(state.endDate);
         dateBeingProcessed  = new Date(state.startDate);
-        fps = 1000 / (state.speed * 60);
+        fps = 1000 / state.speed;
+        self.preload(dateBeingProcessed ,endDate)
+        // while(dateBeingProcessed <= endDate) {
+        //     dateBeingProcessed = wv.util.dateAdd(dateBeingProcessed, 'day', 1);
+        //     var date = new Date(dateBeingProcessed);
+        //     ui.map.preload(date);
+        //     dateArray.push(date);
+        // }
+
+    };
+    self.preload = function(dateBeingProcessed, endDate) {
+        var dateArray = [];
+        var loadedArray = [];
+        var tileLoaded = function(day) {
+            loadedArray.push(day);
+            if(dateArray.length > 1 && animModel.rangeState.playing != true) {
+              if(loadedArray.length > 4)
+                self.playDateArray(dateArray, fps);
+            }
+        }
         while(dateBeingProcessed <= endDate) {
             dateBeingProcessed = wv.util.dateAdd(dateBeingProcessed, 'day', 1);
             var date = new Date(dateBeingProcessed);
-            ui.map.preload(date);
             dateArray.push(date);
+            ui.map.preload(date, tileLoaded);
         }
-        if(dateArray.length > 1) {
-            self.playDateArray(dateArray, fps);
-        }
-    };
-    self.checkShouldLoop = function(arra, fps, interval) {
+
+
+    }
+    self.checkShouldLoop = function(arra) {
+        var fps = 1000 / animModel.rangeState.speed;
         if(animModel.rangeState.loop) {
             self.playDateArray(arra, fps)
         } else {
@@ -84,7 +101,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         interval = setInterval(function() {
             if(i >= len) {
                 clearInterval(interval);
-                self.checkShouldLoop(arra, fps)
+                self.checkShouldLoop(arra);
                 return
             } else if(!animModel.rangeState.playing) {
                 clearInterval(interval);

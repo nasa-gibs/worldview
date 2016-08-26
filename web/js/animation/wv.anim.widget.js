@@ -31,7 +31,7 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
             header: 'Animate Map in ' + zooms[timeline.config.currentZoom - 1] + ' Increments', // config.currentZoom is a number: 1,2,3
             onDateChange: self.dateUpdate,
             sliderLabel: 'Frames Per Second',
-            sliderSpeed: model.rangeState.speed || 0.16,
+            sliderSpeed: 10,
             onSlide: self.onRateChange,
             startDate: new Date(model.rangeState.startDate),
             endDate: new Date(model.rangeState.endDate)
@@ -69,7 +69,7 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
         model.events.trigger('play');
     };
     self.onRateChange = function(speed) {
-        model.rangeState.speed = speed / 60;
+        model.rangeState.speed = speed;
         model.events.trigger('change');
     }
     self.onPressPause = function() {

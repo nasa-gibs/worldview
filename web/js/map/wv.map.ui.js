@@ -374,19 +374,79 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
      *
      * @returns {void}
      */
-    self.preload = function(date) {
+    self.preload = function(date, callback) {
         var layers = models.layers.get();
+
+
         _.each(layers, function(def) {
-            var key = layerKey(def, {date: date});
-            var layer = cache.getItem(key);
+            var key;
+            var layer;
+            var x;
+            var y;
+            var tileImage;
+            var tileSource;
+            var image;
+            var renderer;
+            var tileGrid;
+            var viewState;
+            var projection;
+            var currentZ;
+            var renderer;
+            var frameState;
+            var extent;
+            var pixelRatio;
+
+            key = layerKey(def, {date: date});
+            layer = cache.getItem(key);
+
             if ( !layer ) {
+                layers = models.layers.get();
+                frameState = self.selected.frameState_;
+                extent = frameState.extent
+                pixelRatio = frameState.pixelRatio;
                 layer = createLayer(def, {date: date});
-                console.log(new ol.renderer.canvas.TileLayer(layer));
+                renderer = new ol.renderer.canvas.TileLayer(layer);
+                viewState = frameState.viewState;
+                projection = viewState.projection;
+                tileSource = layer.getSource();
+                tileGrid = tileSource.getTileGridForProjection(projection);
+                currentZ = tileGrid.getZForResolution(viewState.resolution, renderer.zDirection);
+                tileRange = tileGrid.getTileRangeForExtentAndZ(extent, currentZ);
+
+                for (x = tileRange.minX; x <= tileRange.maxX; ++x) {
+                    for (y = tileRange.minY; y <= tileRange.maxY; ++y) {
+                        tile = tileSource.getTile(currentZ, x, y, pixelRatio, projection);
+                        image = new Image();
+                        image.src = tile.src_;
+                        image.onload = function() {
+                            imageArra.push(image);
+                            if(imageArra.length === layers.length) {
+                                callback(date);
+                            }
+                        }
+                    }
+                }
+
+            } else {
+                imageArra.push(' ');
+                if(imageArra.length === layers.length) {
+                    callback(date);
+                }
             }
         });
-        
     };
-
+    self.getTilePyramid = function(layer, frameState, extent) {
+        var tileSource = layer.getSource();
+        var tileGrid = tileSource.getTileGridForProjection(projection);
+        var viewState = frameState.viewState;
+        var projection = viewState.projection;
+        var center = viewState.center;
+        var pixelRatio = frameState.pixelRatio;
+        // var extent = frameState.layerStatesArray[0].extent;
+        var currentZ = tileGrid.getZForResolution(viewState.resolution, this.zDirection);
+        var tileResolution = tileGrid.getResolution(currentZ);
+        var tile, tileRange, tileResolution, x, y, z;
+    };
     /*
      * Get a layer object from id
      *
