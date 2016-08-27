@@ -50,6 +50,8 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
             ["VIIRS_SNPP_CorrectedReflectance_TrueColor", false],
             ["MODIS_Fires_Terra", true],
             ["MODIS_Fires_Aqua", false],
+            ["Reference_Features", true],
+            ["Reference_Labels", true],
             ["VIIRS_SNPP_Fires_375m_Day", false],
             ["VIIRS_SNPP_Fires_375m_Night", false]
         ],
@@ -57,10 +59,14 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
             ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
             ["MODIS_Terra_CorrectedReflectance_TrueColor", true],
             ["VIIRS_SNPP_CorrectedReflectance_TrueColor", false],
+            ["Reference_Features", true],
+            ["Reference_Labels", true],
             ["MODIS_Aqua_Land_Surface_Temp_Day", false],
             ["MODIS_Terra_Land_Surface_Temp_Day", true]
         ],
         Floods: [
+            ["Reference_Features", true],
+            ["Reference_Labels", true],
             ["MODIS_Aqua_SurfaceReflectance_Bands121", false],
             ["MODIS_Terra_SurfaceReflectance_Bands121", true]
         ],
@@ -72,10 +78,14 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
             ["AIRS_Prata_SO2_Index_Night", false],
             ["MODIS_Fires_Terra", true],
             ["MODIS_Fires_Aqua", false],
+            ["Reference_Features", true],
+            ["Reference_Labels", true],
             ["VIIRS_SNPP_Fires_375m_Day", false],
             ["VIIRS_SNPP_Fires_375m_Night", false]
         ],
         Default: [
+            ["Reference_Features", true],
+            ["Reference_Labels", true],
             ["MODIS_Terra_CorrectedReflectance_TrueColor", true],
             ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
             ["VIIRS_SNPP_CorrectedReflectance_TrueColor", false]
