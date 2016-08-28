@@ -151,14 +151,41 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
                 curResolution / 0.002197265625 : curResolution / 256.0;
 
             // Find the closest match of resolution within the available values
-            var possibleResolutions = [0.125, 0.25, 0.5, 1, 2, 4, 20, 40];
+            var possibleResolutions = (models.proj.selected.id == "geographic") ?
+                [0.125, 0.25, 0.5, 1, 2, 4, 20, 40] :
+                [1, 2, 4, 20, 40];
             var bestDiff = Infinity;
+            var bestIdx = -1;
             var currDiff = 0;
             for(var i = 0; i < possibleResolutions.length; i++) {
                 currDiff = Math.abs(possibleResolutions[i] - resolutionEstimate);
                 if(currDiff < bestDiff){
                     resolution = possibleResolutions[i];
                     bestDiff = currDiff;
+                    bestIdx = i;
+                }
+            }
+
+            // Bump up resolution in certain cases where default is too low
+            if (bestIdx > 0)
+            {
+                if (models.proj.selected.id == "geographic") {
+                    switch (curZoom) {
+                        case 3:
+                        case 4:
+                        case 6:
+                        case 7:
+                            resolution = possibleResolutions[bestIdx-1];
+                    }
+                }
+                else {
+                    switch (curZoom) {
+                        case 1:
+                        case 2:
+                        case 4:
+                        case 5:
+                            resolution = possibleResolutions[bestIdx-1];
+                    }
                 }
             }
         }
