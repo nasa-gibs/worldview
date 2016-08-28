@@ -54,7 +54,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                 resize();
             }
         });
-        
+
         ui.map.selected.getView().on("change:resolution", onZoomChange);
     };
 
@@ -63,7 +63,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         var $container = $(self.selector);
         var $addBtn = $("#layers-add");
         $container.empty();
-        
+
         $addBtn.button();
 
 
@@ -115,7 +115,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             renderLayer($container, group, layer);
         });
 
-        
+
         //$contain.append($layers);
 
         $parent.append($container);
@@ -145,7 +145,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         $layer.append($("<div></div>")
                       .addClass('zot')
                       .append('<b>!</b>'));
-        
+
         if ( !layer.visible ) {
             $visibleButton
                 .attr("title", "Show Layer")
@@ -184,7 +184,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         var $removeImage = $("<i></i>");
 
         $removeButton.append($removeImage);
-        
+
 
         var $editButton = $("<a></a>")
             .attr("data-layer", layer.id)
@@ -321,7 +321,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         }
 
         sizeProducts();
-        
+
     };
 
     var removeLayer = function(event) {
@@ -341,7 +341,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
     var onLayerAdded = function(layer) {
         var $container = $("#" + layer.group);
-        
+
         renderLayer($container, groups[layer.group], layer, "top");
         if ( layer.palette ) {
             renderLegendCanvas(layer);
@@ -421,13 +421,17 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
         var sources = config.sources;
         var proj = models.proj.selected.id;
-        
+
+        // Account for offset between the map's top zoom level and the
+        // lowest-resolution TileMatrix in polar layers
+        var zoomOffset = ((proj == "arctic") || (proj == "antarctic")) ? 1 : 0;
+
         var matrixSet = layer.projections[proj].matrixSet;
         if(matrixSet !== undefined){
             var source = layer.projections[proj].source;
             var zoomLimit = sources[source]
                 .matrixSets[matrixSet]
-                .resolutions.length - 1;
+                .resolutions.length - 1 + zoomOffset;
 
             var $zot = $layer.find('div.zot');
             if(zoom > zoomLimit) {
@@ -454,7 +458,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     };
 
     var onZoomChange = function(layers) {
-        
+
         _.each(groups, function(group) {
             _.each(model.get({ group: group.id }), function(layer) {
                 var $layer = $('#products li.productsitem[data-layer="' +
