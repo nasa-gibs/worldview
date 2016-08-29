@@ -192,6 +192,11 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
             wv.util.giveMonth(eventDate) + " " +
             eventDate.getUTCDate();
 
+        if (eventDate.getUTCFullYear() !== wv.util.today().getUTCFullYear())  {
+            dateString += ", " + eventDate.getUTCFullYear();
+        }
+
+
         var $item = $("<li></li>")
             .addClass("selectorItem")
             .addClass("item")

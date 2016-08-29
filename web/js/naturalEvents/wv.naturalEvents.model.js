@@ -50,6 +50,8 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
             ["VIIRS_SNPP_CorrectedReflectance_TrueColor", false],
             ["MODIS_Fires_Terra", true],
             ["MODIS_Fires_Aqua", false],
+            ["Reference_Features", true],
+            ["Reference_Labels", true],
             ["VIIRS_SNPP_Fires_375m_Day", false],
             ["VIIRS_SNPP_Fires_375m_Night", false]
         ],
@@ -57,10 +59,14 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
             ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
             ["MODIS_Terra_CorrectedReflectance_TrueColor", true],
             ["VIIRS_SNPP_CorrectedReflectance_TrueColor", false],
+            ["Reference_Features", true],
+            ["Reference_Labels", true],
             ["MODIS_Aqua_Land_Surface_Temp_Day", false],
             ["MODIS_Terra_Land_Surface_Temp_Day", true]
         ],
         Floods: [
+            ["Reference_Features", true],
+            ["Reference_Labels", true],
             ["MODIS_Aqua_SurfaceReflectance_Bands121", false],
             ["MODIS_Terra_SurfaceReflectance_Bands121", true]
         ],
@@ -72,10 +78,14 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
             ["AIRS_Prata_SO2_Index_Night", false],
             ["MODIS_Fires_Terra", true],
             ["MODIS_Fires_Aqua", false],
+            ["Reference_Features", true],
+            ["Reference_Labels", true],
             ["VIIRS_SNPP_Fires_375m_Day", false],
             ["VIIRS_SNPP_Fires_375m_Night", false]
         ],
         Default: [
+            ["Reference_Features", true],
+            ["Reference_Labels", true],
             ["MODIS_Terra_CorrectedReflectance_TrueColor", true],
             ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
             ["VIIRS_SNPP_CorrectedReflectance_TrueColor", false]
@@ -126,8 +136,7 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
         } else {
             eventItem = event.geometry[0];
         }
-        eventDate = wv.util.parseTimestampUTC(eventItem.date);
-        models.date.select(eventDate);
+
 
         category = "Default";
         categories = event.category;
@@ -162,6 +171,27 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
                 models.layers.add(id, { visible: visible });
             }
         });
+
+        // If an event is a Wildfire and the event date isn't "today", select
+        // the following day to greatly improve the chance of the satellite
+        // seeing the event
+        //
+        // NOTE: there is a risk that if the fire happened "yesterday" and
+        // the satellite imagery is not yet available for "today", this
+        // functionality may do more harm than good
+        eventDate = wv.util.parseTimestampUTC(eventItem.date);
+        var eventDateISOString = wv.util.toISOStringDate(eventDate);
+        var todayDateISOString = wv.util.toISOStringDate(wv.util.today());
+        var eventCategoryName = getEventCategoryName();
+        if ((eventDateISOString !== todayDateISOString) &&
+            ((eventCategoryName !== null) && (eventCategoryName == "Wildfires"))) {
+            var eventDatePlusOne =
+                wv.util.dateAdd(wv.util.parseDateUTC(eventItem.date), "day", 1);
+            models.date.select(eventDatePlusOne);
+        }
+        else {
+            models.date.select(eventDate);
+        }
 
         if ( eventItem.type === "Point" ) {
             goTo(method, eventItem.coordinates);
@@ -212,15 +242,7 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
                     .setCenter(location);
 
                 // Retrieve event category name, if possible
-                var eventCategoryName = null;
-                if ((lastIndex != -1) && (self.data !== null) && (self.data[lastIndex] !== null)) {
-                  var eventCategory = self.data[lastIndex].category;
-                  if (eventCategory.length > 0)
-                  {
-                    eventCategory = eventCategory[0];
-                    eventCategoryName = eventCategory["#text"];
-                  }
-                }
+                var eventCategoryName = getEventCategoryName();
 
                 // If an event is a Wildfire, zoom in more
                 if ((eventCategoryName !== null) && (eventCategoryName == "Wildfires")) {
@@ -287,6 +309,20 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
         queryTypes();
         queryEvents();
         querySources();
+    };
+
+    // Retrieve event category name, if possible;  otherwise returns null
+    var getEventCategoryName = function() {
+        var eventCategoryName = null;
+        if ((lastIndex != -1) && (self.data !== null) && (self.data[lastIndex] !== null)) {
+            var eventCategory = self.data[lastIndex].category;
+            if (eventCategory.length > 0)
+            {
+                eventCategory = eventCategory[0];
+                eventCategoryName = eventCategory["#text"];
+            }
+        }
+        return eventCategoryName;
     };
 
     init();
