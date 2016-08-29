@@ -16,7 +16,6 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
 
     var self = {};
 
-    var BASE_URL = "http://map2.vis.earthdata.nasa.gov/imagegen/";
     var container;
     var alignTo = config.alignTo;
     var containerId = "imagedownload";
@@ -25,6 +24,7 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
     var resolution = "1";
     var format = "image/jpeg";
     var worldfile = "false";
+    var lastZoom = -1;
 
     var host, path;
 
@@ -124,12 +124,73 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
         $("#wv-image-download-button").button();
         $(".ui-dialog").zIndex(600);
 
+        // Remove higher resolution options from polar views since no higher
+        // resolution polar layers currenly exist
         if ( models.proj.selected.id !== "geographic" ) {
              $("#wv-image-format [value='image/kmz']").remove();
              $("#wv-image-resolution [value='0.5']").remove();
              $("#wv-image-resolution [value='0.25']").remove();
              $("#wv-image-resolution [value='0.125']").remove();
         }
+
+        // Auto-set default resolution to map's current zoom level
+        var curZoom = wvx.ui.map.selected.getView().getZoom();
+
+        // Don't do anything if the user hasn't changed zoom levels; we want to
+        // preserve their existing settings
+        if (curZoom != lastZoom)
+        {
+            lastZoom = curZoom;
+            var nZoomLevels = models.proj.selected.resolutions.length;
+            var curResolution = (curZoom >= nZoomLevels) ?
+                models.proj.selected.resolutions[nZoomLevels-1] :
+                models.proj.selected.resolutions[curZoom];
+
+            // Estimate the option value used by "wv-image-resolution"
+            var resolutionEstimate = (models.proj.selected.id == "geographic") ?
+                curResolution / 0.002197265625 : curResolution / 256.0;
+
+            // Find the closest match of resolution within the available values
+            var possibleResolutions = (models.proj.selected.id == "geographic") ?
+                [0.125, 0.25, 0.5, 1, 2, 4, 20, 40] :
+                [1, 2, 4, 20, 40];
+            var bestDiff = Infinity;
+            var bestIdx = -1;
+            var currDiff = 0;
+            for(var i = 0; i < possibleResolutions.length; i++) {
+                currDiff = Math.abs(possibleResolutions[i] - resolutionEstimate);
+                if(currDiff < bestDiff){
+                    resolution = possibleResolutions[i];
+                    bestDiff = currDiff;
+                    bestIdx = i;
+                }
+            }
+
+            // Bump up resolution in certain cases where default is too low
+            if (bestIdx > 0)
+            {
+                if (models.proj.selected.id == "geographic") {
+                    switch (curZoom) {
+                        case 3:
+                        case 4:
+                        case 6:
+                        case 7:
+                            resolution = possibleResolutions[bestIdx-1];
+                    }
+                }
+                else {
+                    switch (curZoom) {
+                        case 1:
+                        case 2:
+                        case 4:
+                        case 5:
+                            resolution = possibleResolutions[bestIdx-1];
+                    }
+                }
+            }
+        }
+
+
         $("#wv-image-format").change(function() {
             format = $("#wv-image-format option:checked").val();
             update(coords);
@@ -180,7 +241,7 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
                 reverse: true,
                 renderable: true
             });
-            // NOTE: This need to be changed back to the projection model
+            // NOTE: This needs to be changed back to the projection model
             // when the backfill removes the old projection.
             var epsg = ( models.proj.change ) ? models.proj.change.epsg :
                     models.proj.selected.epsg;
