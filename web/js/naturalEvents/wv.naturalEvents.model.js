@@ -214,9 +214,17 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
             source: map.getView().getCenter(),
             start: start
         });
+
+        // use this to set proper zoom/res
+
+        // For bounce, if zoom is too high, it bounces "in" instead of "out";
+        // force it to zoom out by starting at zoom 4
+        var bounceZoom = (zoom >= 8) ? 4 : zoom-2;
+        if (bounceZoom < 0) { bounceZoom = 0; }
+
         var bounce = ol.animation.bounce({
             duration: duration,
-            resolution: models.proj.selected.resolutions[zoom-2],
+            resolution: models.proj.selected.resolutions[bounceZoom],
             start: start
         });
         var zoomTo = ol.animation.zoom({
@@ -244,9 +252,11 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
                 // Retrieve event category name, if possible
                 var eventCategoryName = getEventCategoryName();
 
-                // If an event is a Wildfire, zoom in more
+                // If an event is a Wildfire or Volcano, zoom in more
                 if ((eventCategoryName !== null) && (eventCategoryName == "Wildfires")) {
-                  map.getView().setZoom(7);
+                  map.getView().setZoom(8);
+                } else if (eventCategoryName == "Volcanoes") {
+                  map.getView().setZoom(6);
                 } else {
                   map.getView().setZoom(5);
                 }
