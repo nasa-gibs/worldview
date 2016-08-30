@@ -86,10 +86,11 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
 
         var $longmessage = 'There are a variety of factors as to why you may not be seeing an event in Worldview at the moment.' +
             '<ul>' +
-            '<li>Satellite overpass time and the event occurrence time may not coincide.</li>' +
-            '<li>Cloud cover may obscure the event.</li><li>The time it takes for an event to appear in the imagery, you may have to wait a day or two for an event to be visible. Try and scroll through the days to see an event’s progression.</li>' +
+            '<li>Satellite overpass may have occurred before the event. Check out subsequent days or try a different satellite/sensor which has a different overpass time.</li>' +
+            '<li>Cloud cover may obscure the event.</li>' +
+            '<li>Some events don’t appear on the day that they are reported, you may have to wait a day or two for an event to become visible. Try and scroll through the days to see an event’s progression and/or change the satellite/sensor. NOTE: Wildfire events are currently set to automatically display the next day, as fire events often do not appear in the satellite imagery on the day they are reported.</li>' +
             '<li>The resolution of the imagery may be too coarse to see an event.</li>' +
-            '<li>There are swath data gaps between some of the imagery layers, and an event may have occurred in the data gap.</li>' +
+            '<li>There are normal swath data gaps in some of the imagery layers due to way the satellite orbits the Earth, and an event may have occurred in the data gap.</li>' +
             '</ul>' +
             'This is currently an experimental feature and we are working closely with the provider of these events, the <a href="http://eonet.sci.gsfc.nasa.gov/" target="_blank">Earth Observatory Natural Event Tracker</a>, to refine this listing to only show events that are visible with our satellite imagery.';
 
@@ -148,10 +149,11 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
         var headerMsg = "<h3 class='wv-data-unavailable-header'>Why can’t I see an event?</h3>";
         var bodyMsg = 'There are a variety of factors as to why you may not be seeing an event in Worldview at the moment.' +
             '<ul>' +
-            '<li>Satellite overpass time and the event occurrence time may not coincide.</li>' +
-            '<li>Cloud cover may obscure the event.</li><li>The time it takes for an event to appear in the imagery, you may have to wait a day or two for an event to be visible. Try and scroll through the days to see an event’s progression.</li>' +
+            '<li>Satellite overpass may have occurred before the event. Check out subsequent days or try a different satellite/sensor which has a different overpass time.</li>' +
+            '<li>Cloud cover may obscure the event.</li>' +
+            '<li>Some events don’t appear on the day that they are reported, you may have to wait a day or two for an event to become visible. Try and scroll through the days to see an event’s progression and/or change the satellite/sensor. NOTE: Wildfire events are currently set to automatically display the next day, as fire events often do not appear in the satellite imagery on the day they are reported.</li>' +
             '<li>The resolution of the imagery may be too coarse to see an event.</li>' +
-            '<li>There are swath data gaps between some of the imagery layers, and an event may have occurred in the data gap.</li>' +
+            '<li>There are normal swath data gaps in some of the imagery layers due to way the satellite orbits the Earth, and an event may have occurred in the data gap.</li>' +
             '</ul>' +
             'This is currently an experimental feature and we are working closely with the provider of these events, the <a href="http://eonet.sci.gsfc.nasa.gov/" target="_blank">Earth Observatory Natural Event Tracker</a>, to refine this listing to only show events that are visible with our satellite imagery.';
 
