@@ -15,7 +15,7 @@ wv.link = wv.link || {};
 wv.link.model = wv.link.model || function(config) {
 
     var self = {};
-    var DEBUG_SHORTEN_LINK = "http://1.usa.gov/1iKIZ4j";
+    var DEBUG_SHORTEN_LINK = "http://go.nasa.gov/1iKIZ4j";
     var ENCODING_EXCEPTIONS = [
         { match: new RegExp("%2C", "g"), replace: "," },
         { match: new RegExp("%3B", "g"), replace: ";" },
