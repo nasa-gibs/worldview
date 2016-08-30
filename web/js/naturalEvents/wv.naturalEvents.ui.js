@@ -182,7 +182,10 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
     };
 
     var refreshEvent = function($content, event, index) {
-        if (event.category[0]['-domain'] === 'Floods') {
+        if ((event.category[0]['-domain'] === 'Floods') ||
+            (event.category[0]['-domain'] === 'Earthquakes') ||
+            (event.category[0]['-domain'] === 'Drought') ||
+            (event.category[0]['-domain'] === 'Landslides')){
             return;
         }
         var geoms = toArray(event.geometry);
