@@ -19,11 +19,14 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     self.delta = 1;
     self.active = false;
     self.loop = false;
+    self.fullLoaded = false;
+    self.loadedLength = 0;
     self.paused = false;
     self.doAnimation = false;
     self.initDate = undefined;
     self.endDate = undefined;
     self.events = wv.util.events();
+    self.animateArray= [];
 
     self.init = function() {
         animModel.events.on('play', self.onPushedPlay);
@@ -44,40 +47,62 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     self.onPushedPlay = function() {
         var state;
         var endDate;
-        var dateBeingProcessed;
+        var startDate;
         var fps;
 
         state = animModel.rangeState;
         endDate = new Date(state.endDate);
-        dateBeingProcessed  = new Date(state.startDate);
+        startDate  = new Date(state.startDate);
         fps = 1000 / state.speed;
-        self.preload(dateBeingProcessed ,endDate)
-        // while(dateBeingProcessed <= endDate) {
-        //     dateBeingProcessed = wv.util.dateAdd(dateBeingProcessed, 'day', 1);
-        //     var date = new Date(dateBeingProcessed);
-        //     ui.map.preload(date);
-        //     dateArray.push(date);
-        // }
+        self.preload(startDate, endDate, fps);
 
     };
-    self.preload = function(dateBeingProcessed, endDate) {
+    self.preload = function(dateBeingProcessed, endDate, fps) {
         var dateArray = [];
-        var loadedArray = [];
-        var tileLoaded = function(day) {
-            loadedArray.push(day);
-            if(dateArray.length > 1 && animModel.rangeState.playing != true) {
-              if(loadedArray.length > 4)
-                self.playDateArray(dateArray, fps);
+        self.playing = false;
+        var chunkedArray= [];
+        var i = 1;
+        var date;
+        var queueLength = 5;
+        self.loadedLength = queueLength;
+        if(!self.fullLoaded) {
+            /*
+             * a callback function that
+             * triggers the animation to play
+             *
+             * @function tileLoaded
+             *
+             */
+            var tileLoaded = function() {
+                var len;
+                if(chunkedArray[i]) {
+                    len = chunkedArray[i].length;
+                    ui.map.preloadArrayOfDates(chunkedArray[i], tileLoaded);
+                    self.loadedLength = self.loadedLength + len;
+                    
+                    if(i == chunkedArray.length - 1) {
+                        self.fullLoaded = true;
+                        self.animateArray = dateArray;
+                    }
+                    i++;
+                }
+                if(!self.playing) {
+                    self.playing = true;
+                    self.playDateArray(dateArray, fps);
+                }
             }
+            while(dateBeingProcessed <= endDate) {
+                dateBeingProcessed = wv.util.dateAdd(dateBeingProcessed, 'day', 1);
+                date = new Date(dateBeingProcessed);
+                dateArray.push(date);
+            }
+        
+            chunkedArray = _.chunk(dateArray, queueLength);
+            ui.map.preloadArrayOfDates(chunkedArray[0], tileLoaded);
+        } else {
+            self.playDateArray(self.animateArray, fps);
         }
-        while(dateBeingProcessed <= endDate) {
-            dateBeingProcessed = wv.util.dateAdd(dateBeingProcessed, 'day', 1);
-            var date = new Date(dateBeingProcessed);
-            dateArray.push(date);
-            ui.map.preload(date, tileLoaded);
-        }
-
-
+        
     }
     self.checkShouldLoop = function(arra) {
         var fps = 1000 / animModel.rangeState.speed;
@@ -93,7 +118,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         var len = arra.length;
         var state = animModel.rangeState;
         var i = 0;
-
+        
         if(state.playIndex) {
           i = state.playIndex;
           state.playIndex = null;
@@ -103,8 +128,9 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
                 clearInterval(interval);
                 self.checkShouldLoop(arra);
                 return
-            } else if(!animModel.rangeState.playing) {
+            } else if(!animModel.rangeState.playing || i >= self.loadedLength) {
                 clearInterval(interval);
+                self.playing = false;
                 state.playIndex = i;
                 return
             }
