@@ -9,7 +9,7 @@ Visit Worldview at
 
 This tool from [NASA's](http://nasa.gov) [EOSDIS](https://earthdata.nasa.gov)
 provides the capability to interactively browse global, full-resolution
-satellite imagery and then download the underlying data. Most of the 100+
+satellite imagery and then download the underlying data. Most of the 200+
 available products are updated within three hours of observation, essentially
 showing the entire Earth as it looks "right now". This supports time-critical
 application areas such as wildfire management, air quality measurements, and
@@ -31,11 +31,21 @@ services.
 This code was originally developed at NASA/Goddard Space Flight Center for
 the Earth Science Data and Information System (ESDIS) project.
 
-Copyright &copy; 2013 - 2015 United States Government as represented by the
+Copyright &copy; 2013 - 2016 United States Government as represented by the
 Administrator of the National Aeronautics and Space Administration.
 All Rights Reserved.
 
 Licensed under the [NASA Open Source Agreement, Version 1.3](LICENSE.md).
+
+## Contributing
+
+We'd be quite excited if you'd like to contribute to Worldview! Whether it's finding bugs, adding new features, fixing anything broken, or improving documentation, get started by submitting an issue or pull request!
+
+Please see our [Roadmap](https://github.com/nasa-gibs/worldview/wiki/Worldview-Roadmap) for a list of features currently in progress or planned in the reasonably near future.  We're also working to synchronize our (currently internal) sprint planning and issue tracking systems with GitHub.  
+
+To get your instance of Worldview running, follow the [Installation](https://github.com/nasa-gibs/worldview#installation) guide below or the [Manual Setup](https://github.com/nasa-gibs/worldview/blob/master/doc/manual_setup.md) instructions.
+
+Thanks for considering contributing and making our planet easier to explore!
 
 ## Installation
 
