@@ -62,6 +62,7 @@
     margin-right: auto;
     text-align: center;
     bottom: 22px;
+    z-index: 0;
 }
 #wv-animation-widget .wv-date-selector-widget {
     display: inline-block;
@@ -75,6 +76,10 @@
 #wv-animation-widget .wv-date-selector-widget input {
     height: inherit;
     text-align: center;
+}
+#wv-animation-widget .wv-date-selector-widget .input-wrapper {
+  z-index: 99;
+  position: relative;
 }
 #wv-animation-widget .wv-date-selector-widget .input-wrapper:nth-child(1){
     max-width: 40px;
