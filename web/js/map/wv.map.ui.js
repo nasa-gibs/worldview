@@ -435,9 +435,6 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
                                             callback();
                                         }
                                     });
-                                    tileSource.on('tileloaderror', function(event) {
-                                        console.log(this);
-                                    });
                                 }
                             }
                         }

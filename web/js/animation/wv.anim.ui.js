@@ -13,23 +13,37 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     var timer;
     var dateModel = models.date;
     var animModel = models.anim;
+    var queueLength = 5;
+    var animateArray;
+    var map = ui.map.selected;
     self.delay =  500;
     self.direction = "forward";
     self.interval = "day";
     self.delta = 1;
     self.active = false;
-    self.loop = false;
-    self.fullLoaded = false;
-    self.loadedLength = 0;
-    self.paused = false;
-    self.doAnimation = false;
-    self.initDate = undefined;
-    self.endDate = undefined;
     self.events = wv.util.events();
-    self.animateArray= [];
+    self.state = {
+        loadedLength: 0,
+        fullyLoaded: false,
+        playing: false,
+        playIndex: 0
+    };
+
+
 
     self.init = function() {
         animModel.events.on('play', self.onPushedPlay);
+        animModel.events.on('datechange', self.refreshState);
+        map.getView().on('moveend', self.refreshState);
+
+    }
+    self.refreshState = function() {
+        self.state = {
+            loadedLength: 0,
+            fullyLoaded: false,
+            playing: false,
+            playIndex: 0
+        };
     }
     self.play = function(direction) {
        if ( self.active && direction !== self.direction ) {
@@ -59,13 +73,13 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     };
     self.preload = function(dateBeingProcessed, endDate, fps) {
         var dateArray = [];
-        self.playing = false;
         var chunkedArray= [];
         var i = 1;
         var date;
-        var queueLength = 5;
-        self.loadedLength = queueLength;
-        if(!self.fullLoaded) {
+        var thisState = self.state;
+
+        if(!thisState.fullyLoaded) {
+          animateArray = [];
             /*
              * a callback function that
              * triggers the animation to play
@@ -75,20 +89,24 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
              */
             var tileLoaded = function() {
                 var len;
+                if(i == 1) {
+                  thisState.loadedLength = queueLength;
+                }
                 if(chunkedArray[i]) {
                     len = chunkedArray[i].length;
                     ui.map.preloadArrayOfDates(chunkedArray[i], tileLoaded);
-                    self.loadedLength = self.loadedLength + len;
-                    
-                    if(i == chunkedArray.length - 1) {
-                        self.fullLoaded = true;
-                        self.animateArray = dateArray;
+                    thisState.loadedLength = thisState.loadedLength + len;                    
+                    if(i === chunkedArray.length - 1) {
+                        self.state.fullyLoaded = true;
+                        animateArray = dateArray;
                     }
                     i++;
                 }
-                if(!self.playing) {
-                    self.playing = true;
-                    self.playDateArray(dateArray, fps);
+                if(!thisState.playing) {
+                    thisState.playing = true;
+                    setTimeout(function() {
+                        self.playDateArray(dateArray, fps);
+                    }, 300);
                 }
             }
             while(dateBeingProcessed <= endDate) {
@@ -96,11 +114,10 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
                 date = new Date(dateBeingProcessed);
                 dateArray.push(date);
             }
-        
             chunkedArray = _.chunk(dateArray, queueLength);
             ui.map.preloadArrayOfDates(chunkedArray[0], tileLoaded);
         } else {
-            self.playDateArray(self.animateArray, fps);
+            self.playDateArray(animateArray, fps);
         }
         
     }
@@ -116,22 +133,24 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     self.playDateArray = function(arra, fps) {
         var interval;
         var len = arra.length;
-        var state = animModel.rangeState;
         var i = 0;
+        var thisState = self.state;
+        var playIndex = self.state.playIndex;
         
-        if(state.playIndex) {
-          i = state.playIndex;
-          state.playIndex = null;
+        if(playIndex) {
+          i = playIndex;
+          playIndex = null;
         }
         interval = setInterval(function() {
             if(i >= len) {
                 clearInterval(interval);
+                thisState.playIndex = null;
                 self.checkShouldLoop(arra);
                 return
-            } else if(!animModel.rangeState.playing || i >= self.loadedLength) {
+            } else if(!animModel.rangeState.playing || i >= thisState.loadedLength) {
                 clearInterval(interval);
-                self.playing = false;
-                state.playIndex = i;
+                thisState.playing = false;
+                thisState. playIndex = i;
                 return
             }
             dateModel.select(arra[i]);
