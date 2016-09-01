@@ -34,13 +34,16 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
             sliderSpeed: 10,
             onSlide: self.onRateChange,
             startDate: new Date(model.rangeState.startDate),
-            endDate: new Date(model.rangeState.endDate)
+            endDate: new Date(model.rangeState.endDate),
+            minDate: models.date.minDate(),
+            maxDate: models.date.maxDate()
         });
         //mount react component
         self.reactComponent = ReactDOM.render(Widget, $('#wv-animation-widet-case')[0]);
 
         self.$widgetCase = $('#wv-animation-widget');
         $animateButton.on('click', self.toggleAnimationWidget);
+        model.rangeState.speed = 10;
         model.events.on('change', self.update);
         model.events.on('timeline-change', self.update);
 
@@ -56,10 +59,10 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
         model.rangeState.playIndex = null;
     }
     self.dateUpdate = function(startDate, endDate) {
-        var state = model.rangeState;
-        state.startDate = wv.util.toISOStringDate(startDate) || 0;
-        state.endDate = wv.util.toISOStringDate(endDate);
+        model.rangeState.startDate = wv.util.toISOStringDate(startDate) || 0;
+        model.rangeState.endDate = wv.util.toISOStringDate(endDate);
         model.events.trigger('change');
+        model.events.trigger('datechange');
     }
     self.toggleAnimationWidget = function() {
         return self.$widgetCase.toggleClass('wv-active');
