@@ -664,6 +664,16 @@ wv.util = (function(self) {
         }
     };
 
+    self.toArray = function(value) {
+        if ( !value ) {
+            return [];
+        }
+        if ( value.constructor !== Array ) {
+            value = [value];
+        }
+        return value;
+    };
+
     return self;
 
 })(wv.util || {});

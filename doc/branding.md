@@ -41,7 +41,7 @@ To add a logo, replace the following file with an image that is 247 pixels by
 
 To create an "About" page, edit the following file:
 
-    optoins/brands/pages/about.html
+    options/brands/pages/about.html
 
 ## Rebuilding
 

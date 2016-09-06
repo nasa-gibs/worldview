@@ -512,7 +512,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
             style: 'default'
         };
         if ( models.palettes.isActive(def.id) ) {
-            var lookup = models.palettes.get(def.id).lookup;
+            var lookup = models.palettes.getLookup(def.id);
             sourceOptions.tileClass = ol.wv.LookupImageTile.factory(lookup);
         }
         var layer = new ol.layer.Tile({
