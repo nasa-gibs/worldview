@@ -465,7 +465,8 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
                 tooltips: oldLegend.tooltips,
                 units: oldLegend.units,
                 type: entries.type,
-                title: entries.title
+                title: entries.title,
+                id: oldLegend.id
             };
             var source = entries.colors;
             var values = entries.values;
