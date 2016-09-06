@@ -504,6 +504,16 @@ wv.util = (function(self) {
           }
         return hex(r) + hex(g) + hex(b) + 'ff';
     };
+    self.hexColorDelta = function (hex1, hex2) { 
+        var r1 = parseInt(hex1.substring(0, 2), 16);
+        var g1 = parseInt(hex1.substring(2, 4), 16);
+        var b1 = parseInt(hex1.substring(4, 6), 16);
+        var r2 = parseInt(hex2.substring(0, 2), 16);
+        var g2 = parseInt(hex2.substring(2, 4), 16);
+        var b2 = parseInt(hex2.substring(4, 6), 16);
+        // calculate differences in 3D Space
+        return Math.sqrt(Math.pow((r1 - r2), 2) + Math.pow((g1 - g2), 2) + Math.pow((b1 - b2),2));
+    }
 
     /**
      * Submits an AJAX request or retreives the result from the cache.
