@@ -81,6 +81,8 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
 
         var $runningDataPointBar = $("<div></div>")
             .addClass("wv-running-bar");
+        var $runningDataPointLabel = $("<span></span>")
+            .addClass("wv-running-label");
 
 
         var $ranges = $("<div></div>")
@@ -95,7 +97,8 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         $container.prepend($title);
         $ranges
             .append($min)
-            .append($max);
+            .append($max)
+            .append($runningDataPointLabel);
         $container
             .append($ranges)
             .append($runningDataPointBar);
@@ -121,6 +124,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
                 .attr("data-index", index)
                 .attr("title", "X");
         $legendPanel
+            .attr("id", legend.id)
             .append($panel)
             .append($runningDataPointLabel);
 
