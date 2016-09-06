@@ -513,8 +513,7 @@ wv.util = (function(self) {
         var b2 = parseInt(hex2.substring(4, 6), 16);
         // calculate differences in 3D Space
         return Math.sqrt(Math.pow((r1 - r2), 2) + Math.pow((g1 - g2), 2) + Math.pow((b1 - b2),2));
-    }
-
+    };
     /**
      * Submits an AJAX request or retreives the result from the cache.
      *
