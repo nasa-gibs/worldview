@@ -51,7 +51,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
         // }
 
         for(var i = 0, len = legend.colors.length; i < len; i++)  {
-              if(wv.util.hexColorDelta(legend.colors[i], hex) < 3) { // If the two colors are close
+              if(wv.util.hexColorDelta(legend.colors[i], hex) < 5) { // If the two colors are close
                 return {
                     label: legend.tooltips[i] + ' ' + units,
                     len: len,
