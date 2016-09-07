@@ -10,9 +10,6 @@
     display: none;
     color: #fff;
 }
-#wv-animation-widget.wv-active {
-    display: block;
-}
 #wv-animation-widget > a, #wv-animation-widget > div {
     display: inline-block;
     margin: 7px 0 0 10px;
@@ -89,6 +86,16 @@
 }
 #wv-animation-widget .wv-date-selector-widget .input-wrapper:nth-child(3){
     max-width: 25px;
+}
+/*
+ * 
+ */
+#wv-rangeselector-case {
+    display: none;
+}
+.wv-anim-active #wv-rangeselector-case,
+.wv-anim-active #wv-animation-widget {
+    display: block;
 }
 
 /*
