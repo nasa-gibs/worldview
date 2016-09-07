@@ -21,12 +21,14 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
     var timeline = ui.timeline;
     var model = models.anim;
     var widgetFactory = React.createFactory(Animate.AnimationWidget);
+    var $timelineFooter;
     self.init = function() {
         var $animateButton = $('#animate-button');
         var Widget = widgetFactory({
             onPushPlay: self.onPressPlay,
             onPushLoop: self.onPressLoop,
             onPushPause: self.onPressPause,
+            onPushGIF: self.onPressGIF,
             looping: model.rangeState.loop,
             header: 'Animate Map in ' + zooms[timeline.config.currentZoom - 1] + ' Increments', // config.currentZoom is a number: 1,2,3
             onDateChange: self.dateUpdate,
@@ -41,7 +43,7 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
         //mount react component
         self.reactComponent = ReactDOM.render(Widget, $('#wv-animation-widet-case')[0]);
 
-        self.$widgetCase = $('#wv-animation-widget');
+        $timelineFooter = $('#timeline-footer');
         $animateButton.on('click', self.toggleAnimationWidget);
         model.rangeState.speed = 10;
         model.events.on('change', self.update);
@@ -65,7 +67,7 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
         model.events.trigger('datechange');
     }
     self.toggleAnimationWidget = function() {
-        return self.$widgetCase.toggleClass('wv-active');
+        return $timelineFooter.toggleClass('wv-anim-active');
     };
     self.onPressPlay = function() {
         model.rangeState.playing = true;
@@ -84,10 +86,12 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
      * adjust state when loop is pressed
      */
     self.onPressLoop = function(loop) {
-      var state = model.rangeState;
-      state.loop = loop;
-      model.events.trigger('change');
-
+        var state = model.rangeState;
+        state.loop = loop;
+        model.events.trigger('change');
+    }
+    self.onPressGIF = function() {
+        model.events.trigger('gif-click');
     }
     self.init();
     return self;
