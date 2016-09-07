@@ -960,7 +960,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
             .mouseout(function(){
                 $('#' + mapId).hide();
             })
-            .mousemove(_.throttle(onMouseMove, 100));
+            .mousemove(_.throttle(onMouseMove, 300));
     };
 
     /*
