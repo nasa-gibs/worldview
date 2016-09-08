@@ -24,12 +24,14 @@ buster.testCase("wv.palettes.model", function() {
     self["Set a custom palette"] = function(done) {
         models.palettes.events.on("set-custom", function(layerId) {
             var palette = models.palettes.get(layerId);
-            buster.assert.equals(palette.scale.colors[0], fixtures.light_blue);
-            buster.assert.equals(palette.scale.colors[1], fixtures.blue);
-            buster.assert.equals(palette.scale.colors[2], fixtures.dark_blue);
-            buster.assert.equals(palette.scale.labels[0], "0");
-            buster.assert.equals(palette.scale.labels[1], "1");
-            buster.assert.equals(palette.scale.labels[2], "2");
+            var colors = palette.legend.colors;
+            var labels = palette.legend.tooltips;
+            buster.assert.equals(colors[0], fixtures.light_blue);
+            buster.assert.equals(colors[1], fixtures.blue);
+            buster.assert.equals(colors[2], fixtures.dark_blue);
+            buster.assert.equals(labels[0], "0");
+            buster.assert.equals(labels[1], "1");
+            buster.assert.equals(labels[2], "2");
             done();
         });
         models.layers.add("terra-aod");
@@ -44,25 +46,28 @@ buster.testCase("wv.palettes.model", function() {
         models.layers.add("terra-aod");
         models.palettes.setCustom("terra-aod", "blue-1");
         var palette = models.palettes.get("terra-aod");
-        buster.assert.equals(palette.scale.colors[0], "1");
-        buster.assert.equals(palette.scale.colors[1], "3");
-        buster.assert.equals(palette.scale.colors[2], "5");
+        buster.assert.equals(palette.legend.colors[0], "1");
+        buster.assert.equals(palette.legend.colors[1], "3");
+        buster.assert.equals(palette.legend.colors[2], "5");
     };
 
     self["Palette expands color range"] = function() {
-        config.palettes.rendered["terra-aod"].scale.colors = [
+
+        config.palettes.rendered["terra-aod"].maps[0].entries.colors = [
             "1", "2", "3", "4", "5", "6"
         ];
         models = fixtures.models(config);
         models.layers.add("terra-aod");
         models.palettes.setCustom("terra-aod", "blue-1");
         var palette = models.palettes.get("terra-aod");
-        buster.assert.equals(palette.scale.colors[0], fixtures.light_blue);
-        buster.assert.equals(palette.scale.colors[1], fixtures.light_blue);
-        buster.assert.equals(palette.scale.colors[2], fixtures.blue);
-        buster.assert.equals(palette.scale.colors[3], fixtures.blue);
-        buster.assert.equals(palette.scale.colors[4], fixtures.dark_blue);
-        buster.assert.equals(palette.scale.colors[5], fixtures.dark_blue);
+        var colors = palette.legend.colors;
+
+        buster.assert.equals(colors[0], fixtures.light_blue);
+        buster.assert.equals(colors[1], fixtures.light_blue);
+        buster.assert.equals(colors[2], fixtures.blue);
+        buster.assert.equals(colors[3], fixtures.blue);
+        buster.assert.equals(colors[4], fixtures.dark_blue);
+        buster.assert.equals(colors[5], fixtures.dark_blue);
     };
 
     self["Exception setting a custom palette when no layer exists"] = function() {
@@ -91,8 +96,8 @@ buster.testCase("wv.palettes.model", function() {
         models.palettes.clearCustom("terra-aod");
 
         var palette = models.palettes.get("terra-aod");
-        buster.assert.equals(palette.scale.colors[0], fixtures.green);
-        buster.assert.equals(palette.scale.labels[0], "0");
+        buster.assert.equals(palette.entries.colors[0], fixtures.green);
+        buster.assert.equals(palette.legend.tooltips[0], "0");
 
         buster.assert.calledWith(models.palettes.events.trigger, "clear-custom");
         buster.assert.calledWith(models.palettes.events.trigger, "change");
@@ -107,9 +112,9 @@ buster.testCase("wv.palettes.model", function() {
         var palette = models.palettes.get("terra-aod");
         buster.assert.equals(palette.min, 1);
         buster.assert(_.isUndefined(palette.max));
-        buster.assert.equals(palette.scale.colors[0], "00000000");
-        buster.assert.equals(palette.scale.colors[1], fixtures.yellow);
-        buster.assert.equals(palette.scale.colors[2], fixtures.red);
+        buster.assert.equals(palette.legend.colors[0], "00000000");
+        buster.assert.equals(palette.legend.colors[1], fixtures.yellow);
+        buster.assert.equals(palette.legend.colors[2], fixtures.red);
 
         buster.assert.calledWith(models.palettes.events.trigger, "range");
         buster.assert.calledWith(models.palettes.events.trigger, "change");
@@ -124,9 +129,9 @@ buster.testCase("wv.palettes.model", function() {
         var palette = models.palettes.get("terra-aod");
         buster.assert.equals(palette.max, 1);
         buster.assert(_.isUndefined(palette.min));
-        buster.assert.equals(palette.scale.colors[0], fixtures.green);
-        buster.assert.equals(palette.scale.colors[1], fixtures.yellow);
-        buster.assert.equals(palette.scale.colors[2], "00000000");
+        buster.assert.equals(palette.legend.colors[0], fixtures.green);
+        buster.assert.equals(palette.legend.colors[1], fixtures.yellow);
+        buster.assert.equals(palette.legend.colors[2], "00000000");
 
         buster.assert.calledWith(models.palettes.events.trigger, "range");
         buster.assert.calledWith(models.palettes.events.trigger, "change");

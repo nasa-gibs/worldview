@@ -158,7 +158,7 @@ $(function() {
         ui.activeLayers = wv.layers.active(models, ui, config);
         ui.addModal = wv.layers.modal(models, ui, config);
 
-        if ( config.startDate ) {
+        function timelineInit() {
             ui.timeline = wv.date.timeline(models, config, ui);
             ui.timeline.data = wv.date.timeline.data(models, config, ui);
             ui.timeline.zoom = wv.date.timeline.zoom(models, config, ui);
@@ -171,8 +171,14 @@ $(function() {
             ui.anim.widget = wv.anim.widget(models, config, ui);
 
             ui.dateLabel = wv.date.label(models);
+        }
+        if (config.startDate) {
+            if(!wv.util.browser.small) { // If mobile device, do not build timeline 
+                timelineInit();
+            }
             ui.dateWheels = wv.date.wheels(models, config);
         }
+
         ui.rubberband = wv.image.rubberband(models, ui, config);
         ui.image = wv.image.panel(models, ui, config);
         if ( config.features.dataDownload ) {
@@ -189,8 +195,11 @@ $(function() {
 
         //FIXME: Old hack
         $(window).resize(function() {
-          if ($(window).width() < 720) {
+          if (wv.util.browser.small) {
             $('#productsHoldertabs li.first a').trigger('click');
+          }
+          if(!ui.timeline) {
+            timelineInit();
           }
         });
 
@@ -247,12 +256,15 @@ $(function() {
         });
 
         if ( layersRemoved > 0 ) {
+            // Remove for now until new GIBS has settled down.
+            /*
             wv.ui.notify(
                 "Incomplete configuration<br><br>" +
                 layersRemoved + " layer(s) were removed<br><br>" +
                 "Contact us at " +
                 "<a href='mailto:@MAIL@'>" +
                 "@MAIL@</a>");
+            */
         }
     };
 

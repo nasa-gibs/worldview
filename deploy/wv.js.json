@@ -1,7 +1,7 @@
 {
     "wv.js": [
-
-        "webjs/ol.wv/ol.wv.lookupimagetile.js",
+        "web/ext/map/openlayers-3.17.1.wv1/ol-debug.js",
+        "web/js/ol.wv/ol.wv.lookupimagetile.js",
 
         "web/js/edsc.js",
         "web/js/edsc/coordinate.js",

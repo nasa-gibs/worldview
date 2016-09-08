@@ -168,17 +168,18 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
         $activeTab.append($activeLink);
         $tabs.append($activeTab);
 
-        var $eventsTab = $("<li></li>")
-            .addClass("layerPicker")
-            .addClass("second")
-            .attr("data-tab", "events");
-        var $eventsLink = $("<a></a>")
-            .attr("href", "#wv-events")
-            .addClass("tab")
-            .html(HTML_TAB_EVENTS_UNSELECTED);
-        $eventsTab.append($eventsLink);
-        $tabs.append($eventsTab);
-
+        if ( config.features.naturalEvents ){
+            var $eventsTab = $("<li></li>")
+                .addClass("layerPicker")
+                .addClass("second")
+                .attr("data-tab", "events");
+            var $eventsLink = $("<a></a>")
+                .attr("href", "#wv-events")
+                .addClass("tab")
+                .html(HTML_TAB_EVENTS_UNSELECTED);
+            $eventsTab.append($eventsLink);
+            $tabs.append($eventsTab);
+        }
         if ( config.features.dataDownload ) {
             var $downloadTab = $("<li></li>")
                 .addClass("layerPicker")

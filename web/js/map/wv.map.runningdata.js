@@ -38,10 +38,25 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
      *
      * @return {object}
      */
-    self.getDataLabel = function(scale, hex) {
-        for(var i = 0, len = scale.colors.length; i < len; i++)  {
-            if(scale.colors[i] === hex) {
-                return {label:scale.labels[i], len: len, index:i};
+    self.getDataLabel = function(legend, hex) {
+        var units = legend.units || '';
+        // for(var i = 0, len = legend.colors.length; i < len; i++)  {
+        //     if(legend.colors[i] === hex) {
+        //         return {
+        //             label: legend.tooltips[i] + ' ' + units,
+        //             len: len,
+        //             index:i
+        //         };
+        //     }
+        // }
+
+        for(var i = 0, len = legend.colors.length; i < len; i++)  {
+              if(wv.util.hexColorDelta(legend.colors[i], hex) < 5) { // If the two colors are close
+                return {
+                    label: legend.tooltips[i] + ' ' + units,
+                    len: len,
+                    index:i
+                };
             }
         }
         return undefined;
@@ -84,7 +99,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
      *
      */
     self.getPalette = function(id) {
-        return $('#' + id + '_palette');
+        return $('#' + id);
     };
 
     /*
@@ -146,29 +161,33 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
      */
     self.newPoint = function(coords, map) {
         self.activeLayers = [];
-
         map.forEachLayerAtPixel(coords, function(layer, data){
             var hex;
             var palette;
             var paletteInfo;
+            var legend;
             if(layer.wv.def.palette){
-                palette = models.palettes.get(layer.wv.id);
-                if(palette) {
-                    hex = wv.util.rgbaToHex(data[0], data[1], data[2]);
-                    if(palette.scale) {
-                        paletteInfo = self.getDataLabel(palette.scale, hex);
-                        if(paletteInfo) {
-                            self.setLayerValue(layer.wv.id, paletteInfo);
+                legends = models.palettes.getLegends(layer.wv.id);
+                _.each(legends, function(legend){
+                    if(legend) {
+                        hex = wv.util.rgbaToHex(data[0], data[1], data[2], data[3]);
+                        if(legend.type === 'continuous') {
+                            paletteInfo = self.getDataLabel(legend, hex);
+                            if(paletteInfo) {
+                                self.setLayerValue(legend.id, paletteInfo);
+                                self.activeLayers.push(legend.id);
+                            }
+                        } else if(legend.type === 'classification') {
+                            paletteInfo = self.getDataLabel(legend, hex);
+                            if(paletteInfo) {
+                                self.setCategoryValue(legend.id, paletteInfo);
+                                self.activeLayers.push(legend.id);
+                            }
                         }
-                    } else if(palette.classes) {
-                        paletteInfo = self.getDataLabel(palette.classes, hex);
-                        if(paletteInfo) {
-                            self.setCategoryValue(palette.id +'_palette', paletteInfo);
-                        }
+                        
                     }
-                    self.activeLayers.push(layer.wv.id +'_palette');
-                }
-              }
+                });
+            }
         });
         if(self.oldLayers.length) {
             self.updateRunners(self.LayersToRemove(self.oldLayers, self.activeLayers));
@@ -222,8 +241,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
         squareWidth = 15;
 
         $categoryPaletteCase = $('#' + id);
-        
-        $colorSquare = $categoryPaletteCase.find("[data-index='" + data.index + "']");
+        $colorSquare = $categoryPaletteCase.find("[data-class-index='" + data.index + "']");
         $paletteLabel = $categoryPaletteCase.find('.wv-running-category-label');
 
         $caseWidth = $categoryPaletteCase.width();

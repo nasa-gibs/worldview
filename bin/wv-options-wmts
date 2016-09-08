@@ -50,6 +50,7 @@ if not os.path.exists(output_dir):
 
 entries = config["wv-options-wmts"]
 skip = []
+# Looks like this is for a list of layers needed to be skipped from the GC
 if "skip" in config:
     skip = config["skip"]
 
@@ -70,6 +71,7 @@ def to_list(val):
 def process_layer(gc_layer, wv_layers, colormaps):
     id = gc_layer["ows:Identifier"]
     if id in skip:
+        print "%s: skipping" % id
         raise SkipException(id)
 
     wv_layers[id] = {}
@@ -118,13 +120,16 @@ def process_layer(gc_layer, wv_layers, colormaps):
             global total_warning_count
             total_warning_count += 1
         else:
-            # FIXME: Assumes that there is only one metdata element
-            colormap_link = gc_layer["ows:Metadata"]["@xlink:href"]
-            colormap_file = os.path.basename(colormap_link)
-            colormap_id = os.path.splitext(colormap_file)[0]
-            wv_layer["palette"] = {
-                "id": colormap_id
-            }
+            for item in gc_layer["ows:Metadata"]:
+                schema_version = item["@xlink:role"]
+
+                if schema_version == "http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.2":
+                    colormap_link = item["@xlink:href"]
+                    colormap_file = os.path.basename(colormap_link)
+                    colormap_id = os.path.splitext(colormap_file)[0]
+                    wv_layer["palette"] = {
+                        "id": colormap_id
+                    }
 
 def process_entry(entry, colormaps):
     layer_count = 0

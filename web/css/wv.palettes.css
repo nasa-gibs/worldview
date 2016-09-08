@@ -45,31 +45,58 @@
     vertical-align: middle;
 }
 
-.bank div .wv-palette {
+.bank div.wv-palette {
+    padding-bottom: 3px;
+}
+
+.bank div.wv-palettes-legend {
     margin-top: 5px;
+    position: relative;
 }
 
-.wv-palettes-ranges {
-    margin-top: -6px;
-    width: 100%;
-    min-height: 16px;
+.bank div.wv-palettes-ranges {
+    margin-top: -3px;
+    width: auto;
+    position: relative;
+    overflow: auto;
+    height: 10px;
 }
-
-.wv-palettes-min, .wv-palettes-max , .wv-running-label, .wv-running-category-label {
-    font-size:0.8em;
-    white-space:nowrap;
-    max-width: 112px;
+.wv-palettes-min,
+.wv-palettes-max,
+.wv-palettes-title,
+.wv-running-category-label,
+.wv-running-label {
+    font-size:0.7em;
+}
+.wv-palettes-min,
+.wv-palettes-title,
+.wv-palettes-max {
+    white-space: nowrap;
     overflow: hidden;
     display: inline-block;
     text-overflow: ellipsis;
 }
-
-.layer-hidden .wv-palettes-min, .layer-hidden .wv-palettes-max{
+.layer-hidden .wv-palettes-min,
+.layer-hidden .wv-palettes-max,
+.layer-hidden .wv-palettes-title{
     color:#999;
+    font-size:0.7em;
 }
-.wv-palettes-max {
-    position: absolute;
-    right: 0;
+.bank div.wv-palettes-title {
+    margin: 0 auto;
+    width: 100%;
+    text-align: center;
+}
+.bank div.wv-palettes-min {
+    max-width: 112px;
+    width:auto;
+    float:left;
+}
+.bank div.wv-palettes-max {
+    float:right;
+    text-align:right;
+    max-width: 112px;
+    width:auto;
 }
 
 /* FIXME: Too specific */
@@ -80,7 +107,7 @@
     position: relative;
 }
 /* 
- * Running data styles
+ * Running data specific styles
  */
 .bank div .wv-palettes-panel .wv-running-label,
 .bank div .wv-palettes-panel .wv-running-bar {
@@ -98,7 +125,7 @@
 }
 
 .bank div .wv-palettes-panel .wv-running-bar {
-    top: 1px;
+    bottom: 10px;
     width: 1px;
     height: 10px;
     background: #000;
@@ -127,16 +154,16 @@
     border-bottom: 4px solid #dedede;
 }
 
-.bank div .wv-palettes-panel.wv-running .wv-palettes-min,
-.bank div .wv-palettes-panel.wv-running .wv-palettes-max {
+.bank div .wv-palettes-panel .wv-running .wv-palettes-min,
+.bank div .wv-palettes-panel .wv-running .wv-palettes-max {
     display: none;
 }
 
 .bank div .wv-palettes-panel.wv-running .wv-running-category-label {
     visibility: visible;
 }
-.bank div .wv-palettes-panel.wv-running .wv-running-label,
-.bank div .wv-palettes-panel.wv-running .wv-running-bar {
+.bank div .wv-palettes-panel .wv-running .wv-running-label,
+.bank div .wv-palettes-panel .wv-running .wv-running-bar {
     visibility: visible;
 }
 
@@ -207,4 +234,9 @@
 
 #wv-layers-options-dialog .noUi-target {
     margin: 10px 10px 10px 15px;
+}
+
+.wv-legend-buttons {
+    width: 100%;
+    text-align: center;
 }
