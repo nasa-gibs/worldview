@@ -118,8 +118,8 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
         removeSearch();
 
-        if( projection === 'geographic' ) {
-
+        if( projection === 'geographic' && config.categories ) {
+            console.log('categories');
             $allLayers.hide();
             drawCategories();
         }
@@ -385,40 +385,43 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         _.each( config.layerOrder, function( layerId ) {
 
             var current = config.layers[layerId];
-
-            var $layerItem = $( '<li></li>' )
-                .attr('id', 'layer-flat-' + current.id )
-                .attr("data-layer", encodeURIComponent(current.id))
-                .addClass('layers-all-layer')
-                .click( function( e ){
-                    $( this ).find('input#' + encodeURIComponent(current.id))
-                        .iCheck('toggle');
-                });
-
-            var $layerTitle = $( '<h3></h3>' )
-                .text( current.title );
-
-            var $layerSubtitle = $('<h5></h5>')
-                .append( current.subtitle );
-
-            var $checkbox = $("<input></input>")
-                .attr("id", encodeURIComponent(current.id))
-                .attr("value", current.id)
-                .attr("type", "checkbox")
-                .attr("data-layer", current.id)
-                .on('ifChecked', addLayer)
-                .on('ifUnchecked', removeLayer);
-
-            if ( _.find(model.active, {id: current.id}) ) {
-                $checkbox.attr("checked", "checked");
+            if ( !current ) {
+                console.warn("In layer order but not defined", layerId);
             }
+            else {
+                var $layerItem = $( '<li></li>' )
+                    .attr('id', 'layer-flat-' + current.id )
+                    .attr("data-layer", encodeURIComponent(current.id))
+                    .addClass('layers-all-layer')
+                    .click( function( e ){
+                        $( this ).find('input#' + encodeURIComponent(current.id))
+                            .iCheck('toggle');
+                    });
 
-            $layerItem.append( $checkbox );
-            $layerItem.append( $layerTitle );
-            $layerItem.append( $layerSubtitle );
-            
+                var $layerTitle = $( '<h3></h3>' )
+                    .text( current.title );
 
-            $fullLayerList.append( $layerItem );
+                var $layerSubtitle = $('<h5></h5>')
+                    .append( current.subtitle );
+
+                var $checkbox = $("<input></input>")
+                    .attr("id", encodeURIComponent(current.id))
+                    .attr("value", current.id)
+                    .attr("type", "checkbox")
+                    .attr("data-layer", current.id)
+                    .on('ifChecked', addLayer)
+                    .on('ifUnchecked', removeLayer);
+
+                if ( _.find(model.active, {id: current.id}) ) {
+                    $checkbox.attr("checked", "checked");
+                }
+
+                $layerItem.append( $checkbox );
+                $layerItem.append( $layerTitle );
+                $layerItem.append( $layerSubtitle );
+
+                $fullLayerList.append( $layerItem );
+            }
 
         });
 
@@ -809,7 +812,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         else{
             searchBool = false;
 
-            if (models.proj.selected.id === 'geographic'){
+            if (models.proj.selected.id === 'geographic' && config.categories){
                 $allLayers.hide();
                 $categories.show().isotope();
                 $nav.show();
