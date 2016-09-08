@@ -119,7 +119,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         removeSearch();
 
         if( projection === 'geographic' && config.categories ) {
-            console.log('categories');
             $allLayers.hide();
             drawCategories();
         }
