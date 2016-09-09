@@ -17,19 +17,28 @@ wv.anim = wv.anim || {};
 
 wv.anim.gif = wv.anim.gif || function(models, config, ui) {
     var self = {};
+    var animCoords = null;
     var $cropee = $("#wv-map");
     var jcropAPI = null;
     var coords = null;
     var animCoords = null;
     var previousCoords = null;
+    var animModel = models.anim;
+    var modalWidth = 200; 
     var GRATICLE_WARNING =
         "The graticule layer cannot be used to take a snapshot. Would you " +
         "like to hide this layer?";
 
     var ROTATE_WARNING = "Image may not be downloaded when rotated. Would you like to reset rotation?";
+    
 
+    self.init = function() {
+        models.anim.events.on('gif-click', setImageCoords);
+    };
 
-    var createGif = function() {
+    self.createGIF = function() {
+        var interval = animModel.rangeState.speed / 1000;
+
         $progress = $("<progress />") //display progress for GIF creation
             .attr("id", "wv-gif-progress");
 
@@ -83,12 +92,11 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             return str;
         }
     };
-    self.getGif = function(startDate, endDate, delta, interval) {
+    self.getGif = function() {
         var layers;
         //check for rotation, changed palettes, and graticule layers and ask for reset if so
         
         //ui.anim.stop(); Add this
-        
         layers = models.layers.get({renderable: true});
         if (models.palettes.inUse()) {
             wv.ui.ask({
@@ -97,7 +105,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
                 onOk: function() {
                     previousPalettes = models.palettes.active;
                     models.palettes.clear();
-                    self.getGif(startDate, endDate, delta, interval);
+                    self.getGif();
                 }
             });
             return;
@@ -120,12 +128,12 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
                 onOk: function() {
                     resetRotation();
                     //Let rotation finish before image download can occur
-                    self.getGif(startDate, endDate, delta, interval);
+                    self.getGif();
                 }
             });
             return;
         }
-        setImageCoords();
+        self.createGIF();
     };
     var formImageURL = function() {
         //Gather all data to get the image
@@ -160,8 +168,19 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
         return wv.util.format("http://map2.vis.earthdata.nasa.gov/image-download?{1}&extent={2}&epsg={3}&layers={4}&opacities={5}&worldfile=false&format=image/jpeg&width={6}&height={7}", "TIME={1}", lonlat1[0]+","+lonlat1[1]+","+lonlat2[0]+","+lonlat2[1], epsg, layers.join(","), opacities.join(","), imgWidth, imgHeight);
     };
     var getImageArray = function (startDate, endDate) {
+        var to;
         var url = formImageURL();
         var a = [];
+        var delta = ui.anim.returnNumberInterval();
+        var fromDate = new Date(startDate);
+        var toDate = new Date(endDate);
+        var jStart = wv.util.parseDateUTC(fromDate.getUTCFullYear() + "-01-01");
+        var jDate = "00" + (1 + Math.ceil(toDate.getTime() - jStart) / 86400000);
+        var from = fromDate.getUTCFullYear() + (jDate).substr((jDate.length) - 3);
+
+                    jStart = wv.util.parseDateUTC(toDate.getUTCFullYear() + "-01-01");
+                    jDate = "00" + (1 + Math.ceil((toDate.getTime() - jStart) / 86400000));
+                    to = toDate.getUTCFullYear() + (jDate).substr((jDate.length) - 3);
         for(var i = parseInt(from); i <= parseInt(to); ) { //Convert to integer first. change i manually
             a.push(wv.util.format(url, i));
             //if the interval is in two years, take it to account
@@ -178,6 +197,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             else
                 i += delta;
         }
+        console.log(a)
         return a;
     };
     var resetRotation = function() {
@@ -248,13 +268,98 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             });
         }
     }
+    var calcSize = function(c) {
+        var lonlat1 = ui.map.selected.getCoordinateFromPixel([Math.floor(c.x), Math.floor(c.y2)]),
+            lonlat2 = ui.map.selected.getCoordinateFromPixel([Math.floor(c.x2), Math.floor(c.y)]);
+
+        var conversionFactor = models.proj.selected.id === "geographic" ? 0.002197 : 256, res = calcRes(0);
+
+        var imgWidth = Math.round((Math.abs(lonlat2[0] - lonlat1[0]) / conversionFactor) / Number(res)),
+            imgHeight = Math.round((Math.abs(lonlat2[1] - lonlat1[1]) / conversionFactor) / Number(res));
+
+        return ((imgWidth * imgHeight * 24) / 8388608).toFixed(2);
+    };
+    var removeCrop = function() {
+        $("#wv-map").insertAfter('#productsHolder'); //retain map element before disabling jcrop
+        animCoords = undefined;
+        jcropAPI.destroy();
+    };
+    self.getSelectorDialog = function() {
+        var $dialogBox;
+        var dialog =
+            "<div class='gifDialog'>" + 
+                "<div class='content'>" +
+                    "Press the Submit Icon to create an" +
+                    "animation from " +
+                    "<b>" +
+                        animModel.rangeState.startDate +
+                    "</b>" +
+                    " to " +
+                    "<b>" +
+                        animModel.rangeState.endDate +
+                    "</b>" +
+                    " a rate of " +
+                        animModel.rangeState.speed +
+                    " frames per second" +
+
+
+                "</div>" +
+            "</div>";
+
+
+        $dialogBox = wv.ui.getDialog();
+        $dialogBox.html(dialog);
+        $dialogBox.dialog({
+            dialogClass: "wv-panel wv-image",
+            title: "Generate GIF",
+            height: 160,
+            width: modalWidth,
+            show: { effect: "slide", direction: "down" },
+            position: {
+                my: "left top",
+                at: "left bottom+10",
+                of: $(".jcrop-tracker")
+            },
+
+            close: function(event) {
+                $("#wv-map").insertAfter('#productsHolder'); //retain map element before disabling jcrop
+                jcropAPI.destroy();
+            }
+        });
+        return $dialogBox;
+    };
+    var setDialogMargin = function($dialog, width) {
+        var margin = (width - modalWidth) / 2;
+        if($dialog) {
+            $dialog.parent().position({
+                my: "left top",
+                at: "left+" + margin + " bottom+10",
+                of: $(".jcrop-tracker")
+            });
+        }
+    };
+    var setIconFontSize = function($el, width) {
+        var fs = Math.abs(width / 4);
+        if(!$el)
+            return
+        if(fs <= 30) {
+            fs = 30;
+        };
+        $el.css('font-size', fs);
+    };
     var setImageCoords = function() {
+        var starterWidth;
+        var $dlButton;
+        var $dialog;
         //Set JCrop selection
         if(previousCoords === null || previousCoords === undefined)
             previousCoords = [($(window).width()/2)-100,($(window).height()/2)-100,($(window).width()/2)+100,($(window).height()/2)+100];
         else
             previousCoords = [previousCoords.x, previousCoords.y, previousCoords.x2, previousCoords.y2];
 
+        
+        
+        starterWidth = previousCoords[0] - previousCoords[2];
         //Start the image cropping. Show the dialog
         $("#wv-map").Jcrop({
             bgColor:     'black',
@@ -267,26 +372,48 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
                 $("#wv-gif-height").html((c.h));
             },
             onChange: function(c) { //Update gif size and image size in MB
+                var modalLeftMargin;
                 animCoords = c;
+
                 if(c.h !== 0 && c.w !== 0) //don't save coordinates if empty selection
                     previousCoords = c;
                 var dataSize = calcSize(c);
-
                 //Update the gif selection dialog
-                $("#wv-gif-width").html((c.w)); $("#wv-gif-height").html((c.h)); $("#wv-gif-size").html(dataSize + " MB");
+                $("#wv-gif-width").html((c.w));
+                $("#wv-gif-height").html((c.h));
+                $("#wv-gif-size").html(dataSize + " MB");
 
-                if(dataSize > 250) //disable GIF generation if GIF would be too large
+                if(dataSize > 250) {//disable GIF generation if GIF would be too large
                     $("#wv-gif-button").button("disable");
-                else
+                } else {
                     $("#wv-gif-button").button("enable");
+                }
+                setDialogMargin($dialog, c.w);
+                setIconFontSize($dlButton, c.w);
             },
             onRelease: function(c) {
                 removeCrop();
-                $dialog.dialog("close");
+                if($dialog) {
+                    wv.ui.close();
+                }
             }
         }, function() {
+            var $tracker;
+            $dlButton =    "<div class='wv-dl-gif-bt-case'>" +
+                                "<i class='fa fa-check-square'>" +
+                            "</div>";
             jcropAPI = this;
+            $dialog = self.getSelectorDialog();
+            setDialogMargin($dialog, starterWidth);
+            $tracker = this.ui.selection.find('.jcrop-tracker');
+            $tracker.append($dlButton);
+            $dlButton = $('.wv-dl-gif-bt-case i');
+            setIconFontSize($dlButton, starterWidth);
+            $dlButton.on('click', self.getGif);
+
+
         });
     };
+    self.init();
     return self;
 }

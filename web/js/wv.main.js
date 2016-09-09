@@ -169,6 +169,7 @@ $(function() {
             ui.timeline.input = wv.date.timeline.input(models, config, ui);
             ui.anim.rangeselect = wv.anim.rangeselect(models, config, ui); // SETS STATE: NEEDS TO LOAD BEFORE ANIMATION WIDGET
             ui.anim.widget = wv.anim.widget(models, config, ui);
+            ui.anim.gif = wv.anim.gif(models, config, ui);
 
             ui.dateLabel = wv.date.label(models);
         }

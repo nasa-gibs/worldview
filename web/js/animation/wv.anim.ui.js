@@ -16,6 +16,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     var queueLength = 5;
     var animateArray;
     var map = ui.map.selected;
+    var zooms = ['year', 'month', 'day']
     self.delay =  500;
     self.direction = "forward";
     self.interval = "day";
@@ -35,7 +36,6 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         animModel.events.on('play', self.onPushedPlay);
         animModel.events.on('datechange', self.refreshState);
         map.getView().on('moveend', self.refreshState);
-
     }
     self.refreshState = function() {
         self.state = {
@@ -71,12 +71,26 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         self.preload(startDate, endDate, fps);
 
     };
+    self.getInterval = function() {
+      return zooms[ui.timeline.config.currentZoom - 1];
+    };
+    //Determine interval for updating date
+    self.returnNumberInterval = function() {
+        var interval = self.getInterval();
+        if (interval === 'month')
+            return 30;
+        else if (interval === 'year')
+            return 365;
+        else
+            return 1;
+    };
     self.preload = function(dateBeingProcessed, endDate, fps) {
         var dateArray = [];
         var chunkedArray= [];
         var i = 1;
         var date;
         var thisState = self.state;
+        var timeline = ui.timeline;
 
         if(!thisState.fullyLoaded) {
           animateArray = [];
@@ -110,7 +124,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
                 }
             }
             while(dateBeingProcessed <= endDate) {
-                dateBeingProcessed = wv.util.dateAdd(dateBeingProcessed, 'day', 1);
+                dateBeingProcessed = wv.util.dateAdd(dateBeingProcessed, zooms[timeline.config.currentZoom - 1], 1);
                 date = new Date(dateBeingProcessed);
                 dateArray.push(date);
             }
