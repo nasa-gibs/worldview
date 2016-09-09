@@ -87,9 +87,6 @@
 #wv-animation-widget .wv-date-selector-widget .input-wrapper:nth-child(3){
     max-width: 25px;
 }
-/*
- * 
- */
 #wv-rangeselector-case {
     display: none;
 }
@@ -97,11 +94,30 @@
 .wv-anim-active #wv-animation-widget {
     display: block;
 }
+/*
+ * Gif Styles
+ */
+.jcrop-tracker .wv-dl-gif-bt-case {
+    width: inherit;
+    position: relative;
+    height: inherit;
+}
+.jcrop-tracker .wv-dl-gif-bt-case i {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    color: #295f92;
+    position: absolute;
+}
+.jcrop-tracker .wv-dl-gif-bt-case i:hover {
+    color: #f4f5f5;
+    cursor: pointer;
+}
 
 /*
  * Slider styles
  *
- * modified from https://github.com/davidchin/react-input-range
+ * copied and modified from https://github.com/davidchin/react-input-range
  */
 .InputRange-slider {
   -webkit-appearance: none;
@@ -181,4 +197,4 @@
   margin-bottom: 4px;
   height: 1rem;
   position: relative;
-  width: 152px; }
+  width: 152px;}
