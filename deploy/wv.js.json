@@ -1,6 +1,10 @@
 {
     "wv.js": [
         "web/ext/map/openlayers-3.17.1.wv1/ol-debug.js",
+        "node_modules/react/dist/react.js",
+        "node_modules/react-dom/dist/react-dom.js",
+        "node_modules/lodash/lodash.js",
+
         "web/js/ol.wv/ol.wv.lookupimagetile.js",
 
         "web/js/edsc.js",
@@ -27,8 +31,13 @@
         "web/js/proj/wv.proj.model.js",
         "web/js/proj/wv.proj.ui.js",
 
+        "web/js/animation/wv.anim.js",
+        "web/js/animation/wv.anim.gif.js",
+        "web/js/animation/wv.anim.model.js",
+        "web/js/animation/wv.anim.rangeselect.js",
+        "web/js/animation/wv.anim.widget.js",
+
         "web/js/date/wv.date.js",
-        "web/js/date/wv.date.anim.js",
         "web/js/date/wv.date.model.js",
         "web/js/date/wv.date.sliders.js",
         "web/js/date/wv.date.label.js",
