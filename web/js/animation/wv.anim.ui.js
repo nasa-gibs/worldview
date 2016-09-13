@@ -16,7 +16,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     var queueLength = 5;
     var animateArray;
     var map = ui.map.selected;
-    var zooms = ['year', 'month', 'day']
+    var zooms = ['year', 'month', 'day'];
     self.delay =  500;
     self.direction = "forward";
     self.interval = "day";
@@ -36,7 +36,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         animModel.events.on('play', self.onPushedPlay);
         animModel.events.on('datechange', self.refreshState);
         map.getView().on('moveend', self.refreshState);
-    }
+    };
     self.refreshState = function() {
         self.state = {
             loadedLength: 0,
@@ -44,7 +44,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
             playing: false,
             playIndex: 0
         };
-    }
+    };
     self.play = function(direction) {
        if ( self.active && direction !== self.direction ) {
            self.stop();
@@ -122,7 +122,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
                         self.playDateArray(dateArray, fps);
                     }, 300);
                 }
-            }
+            };
             while(dateBeingProcessed <= endDate) {
                 dateBeingProcessed = wv.util.dateAdd(dateBeingProcessed, zooms[timeline.config.currentZoom - 1], 1);
                 date = new Date(dateBeingProcessed);
@@ -134,16 +134,16 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
             self.playDateArray(animateArray, fps);
         }
         
-    }
+    };
     self.checkShouldLoop = function(arra) {
         var fps = 1000 / animModel.rangeState.speed;
         if(animModel.rangeState.loop) {
-            self.playDateArray(arra, fps)
+            self.playDateArray(arra, fps);
         } else {
             animModel.rangeState.playing = false;
             animModel.events.trigger('change');
         }
-    }
+    };
     self.playDateArray = function(arra, fps) {
         var interval;
         var len = arra.length;
@@ -160,12 +160,12 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
                 clearInterval(interval);
                 thisState.playIndex = null;
                 self.checkShouldLoop(arra);
-                return
+                return;
             } else if(!animModel.rangeState.playing || i >= thisState.loadedLength) {
                 clearInterval(interval);
                 thisState.playing = false;
                 thisState. playIndex = i;
-                return
+                return;
             }
             dateModel.select(arra[i]);
             i++;
@@ -207,4 +207,4 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     };
     self.init();
     return self;
-}
+};

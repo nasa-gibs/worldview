@@ -36,6 +36,6 @@
             });
             state.a = astate;
         }
-    }
+    };
     return self;
  })(wv.anim || {});

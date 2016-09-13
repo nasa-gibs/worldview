@@ -33,7 +33,7 @@ wv.anim.model = wv.anim.model || function(models, config) {
 
             attributes.forEach(function(attr) {
                self.rangeState[attr.id] = attr.value;
-            })
+            });
         }
     };
     self.add = function(arra) {
@@ -46,7 +46,7 @@ wv.anim.model = wv.anim.model || function(models, config) {
     
     self.animate = function() {
         
-    }
+    };
 
     //update animation fields, set animation settings into an object
     self.save = function(state) {
@@ -73,4 +73,4 @@ wv.anim.model = wv.anim.model || function(models, config) {
         state.a.push(newState);
     };
     return self;
-}
+};
