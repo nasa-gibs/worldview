@@ -19,10 +19,11 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
     var self = {};
     var model;
     var timeline = ui.timeline;
-    var widgetOptions = ui.anim.options
+    var widgetOptions = ui.anim.options;
     var rangeSelectionFactory = React.createFactory(Animate.RangeSelector); 
     var $mountLocation = $('#wv-rangeselector-case')[0];
     var reactGlobal = {};
+    var $footer =  $('#timeline-footer');
 
     ui.anim.rangeOptions = ui.anim.rangeOptions || {};
 
@@ -45,14 +46,14 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
             endLocation = self.getLocationFromStringDate(model.rangeState.endDate);
         } else {
             startLocation = animEndLocation - 100;
-            endLocation = animEndLocation
+            endLocation = animEndLocation;
             self.updateRange(startLocation, endLocation);
         }
 
         self.options = {
             startLocation: startLocation, // or zero
             endLocation: endLocation,
-            max: timeline.x(timeline.data.end()),
+            max: self.getMaxWidth(),
             startColor: '#40a9db',
             endColor: '#295f92',
             rangeColor: '#45bdff',
@@ -63,32 +64,41 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
             onDragStop: self.updateRange
         };
         model.events.on('timeline-change', self.update);
-        model.events.on('change', self.update)
+        model.events.on('change', self.update);
       self.render(self.options);
     };
     self.render = function(options) {
         self.reactComponent = ReactDOM.render(rangeSelectionFactory(options), $mountLocation);
-    }
+    };
     self.getLocationFromStringDate = function(date) {
         return timeline.x(new Date(date));
-    }
+    };
     self.showDateOnDrag = function(firstLocation, secondLocation) {
         var date = timeline.x.invert(firstLocation);
-        timeline.pick.hoverDate(date)
-
-    }
+        timeline.pick.hoverDate(date);
+    };
     self.update = function() { // being called from timeline.config.js
         var props = self.updateOptions();
         self.reactComponent.setState(props);
+    };
+    self.getMaxWidth = function() {
+        var $elWidth = $footer.width();
+        var $dataWidth = timeline.x(timeline.data.end());
+        if($elWidth > $dataWidth) {
+            return $dataWidth;
+        }
+        return $elWidth;
     }
     self.updateOptions = function() {
+        var max;
         var state = model.rangeState;
         var props = {};
         props.startLocation = self.getLocationFromStringDate(state.startDate);
         props.endLocation = self.getLocationFromStringDate(state.endDate);
-        props.max = timeline.x(timeline.data.end());
+        props.max = self.getMaxWidth();
+
         return props;
-    }
+    };
     self.updateRange = function(startLocation, EndLocation) {
         var startDate = timeline.x.invert(startLocation);
         var endDate = timeline.x.invert(EndLocation);
@@ -98,8 +108,7 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
 
         timeline.ticks.label.remove();
         model.events.trigger('change');
-    }
-
+    };
     self.init();
     return self;
-}
+};

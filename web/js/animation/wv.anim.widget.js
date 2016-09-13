@@ -16,7 +16,7 @@ var wv = wv || {};
 wv.anim = wv.anim || {};
 
 wv.anim.widget = wv.anim.widget || function(models, config, ui) {
-    var zooms = ['yearly', 'monthly', 'daily']
+    var zooms = ['yearly', 'monthly', 'daily'];
     var self = {};
     var timeline = ui.timeline;
     var model = models.anim;
@@ -59,13 +59,13 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
             header: 'Animate Map in ' + zooms[timeline.config.currentZoom - 1] + ' Increments' // config.currentZoom is a number: 1,2,3
         });
         model.rangeState.playIndex = null;
-    }
+    };
     self.dateUpdate = function(startDate, endDate) {
         model.rangeState.startDate = wv.util.toISOStringDate(startDate) || 0;
         model.rangeState.endDate = wv.util.toISOStringDate(endDate);
         model.events.trigger('change');
         model.events.trigger('datechange');
-    }
+    };
     self.toggleAnimationWidget = function() {
         return $timelineFooter.toggleClass('wv-anim-active');
     };
@@ -76,12 +76,12 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
     self.onRateChange = function(speed) {
         model.rangeState.speed = speed;
         model.events.trigger('change');
-    }
+    };
     self.onPressPause = function() {
         var state = model.rangeState;
         state.playing = false;
         model.events.trigger('change');
-    }
+    };
     /*
      * adjust state when loop is pressed
      */
@@ -89,10 +89,10 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
         var state = model.rangeState;
         state.loop = loop;
         model.events.trigger('change');
-    }
+    };
     self.onPressGIF = function() {
         model.events.trigger('gif-click');
-    }
+    };
     self.init();
     return self;
-}
+};
