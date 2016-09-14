@@ -17,7 +17,6 @@ wv.anim = wv.anim || {};
 
 wv.anim.gif = wv.anim.gif || function(models, config, ui) {
     var self = {};
-    var animCoords = null;
     var $cropee = $("#wv-map");
     var jcropAPI = null;
     var coords = null;
@@ -25,6 +24,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
     var previousCoords = null;
     var animModel = models.anim;
     var modalWidth = 200; 
+    var $progress;
     var GRATICLE_WARNING =
         "The graticule layer cannot be used to take a snapshot. Would you " +
         "like to hide this layer?";
@@ -37,7 +37,12 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
     };
 
     self.createGIF = function() {
-        var interval = animModel.rangeState.speed / 1000;
+        var stateObj = animModel.rangeState;
+        var interval = stateObj.speed;
+        var startDate = stateObj.startDate;
+        var endDate = stateObj.endDate;
+        var shootGIFafterImageLoad;
+
 
         $progress = $("<progress />") //display progress for GIF creation
             .attr("id", "wv-gif-progress");
@@ -47,13 +52,12 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             width: 300,
             height: 100
         });
-
         gifshot.createGIF({
-            gifWidth: animCoords.w,
-            gifHeight: animCoords.h,
-            images: getImageArray(startDate, endDate),
-            interval: interval,
-            progressCallback: function(captureProgress) {
+            'gifWidth': animCoords.w,
+            'gifHeight': animCoords.h,
+            'images': getImageArray(startDate, endDate),
+            'interval': interval / 10,
+            'progressCallback': function(captureProgress) {
                 $progress.parent().dialog("option", "title", "Creating GIF..."); //set dialog title
                 $progress.attr("value", captureProgress); //before value set, it is in indeterminate state
             }
@@ -165,39 +169,21 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             }
         });
 
-        return wv.util.format("http://map2.vis.earthdata.nasa.gov/image-download?{1}&extent={2}&epsg={3}&layers={4}&opacities={5}&worldfile=false&format=image/jpeg&width={6}&height={7}", "TIME={1}", lonlat1[0]+","+lonlat1[1]+","+lonlat2[0]+","+lonlat2[1], epsg, layers.join(","), opacities.join(","), imgWidth, imgHeight);
+        return wv.util.format("http://uat.gibs.earthdata.nasa.gov/image-download?{1}&extent={2}&epsg={3}&layers={4}&opacities={5}&worldfile=false&format=image/jpeg&width={6}&height={7}", "TIME={1}", lonlat1[0]+","+lonlat1[1]+","+lonlat2[0]+","+lonlat2[1], epsg, layers.join(","), opacities.join(","), imgWidth, imgHeight);
     };
+
     var getImageArray = function (startDate, endDate) {
-        var to;
         var url = formImageURL();
         var a = [];
-        var delta = ui.anim.returnNumberInterval();
         var fromDate = new Date(startDate);
         var toDate = new Date(endDate);
-        var jStart = wv.util.parseDateUTC(fromDate.getUTCFullYear() + "-01-01");
-        var jDate = "00" + (1 + Math.ceil(toDate.getTime() - jStart) / 86400000);
-        var from = fromDate.getUTCFullYear() + (jDate).substr((jDate.length) - 3);
+        var current = fromDate;
 
-                    jStart = wv.util.parseDateUTC(toDate.getUTCFullYear() + "-01-01");
-                    jDate = "00" + (1 + Math.ceil((toDate.getTime() - jStart) / 86400000));
-                    to = toDate.getUTCFullYear() + (jDate).substr((jDate.length) - 3);
-        for(var i = parseInt(from); i <= parseInt(to); ) { //Convert to integer first. change i manually
-            a.push(wv.util.format(url, i));
-            //if the interval is in two years, take it to account
-            if(delta > 1) { //30 or 365
-                var test = Number(i.toString().substring(4));
-                if(test + delta > 365) { //correct set number of day for the next year
-                    test = delta - (365 - test);
-                    var zeros = test < 10 ? "00" : ((test < 100) ? "0" : "");
-                    i = parseInt( (Number((i.toString().substring(0, 4))) + 1) + zeros + test.toString());
-                } else
-                    i += delta;
-            } else if(i.toString().indexOf("365") !== -1)
-                i = parseInt( (Number((i.toString().substring(0, 4))) + 1) + "001");
-            else
-                i += delta;
+        while(current <= toDate) {
+            var src = wv.util.format(url, wv.util.toISOStringDate(current));
+            a.push(src);
+            current = wv.util.dateAdd(current, ui.anim.getInterval(), 1);
         }
-        console.log(a)
         return a;
     };
     var resetRotation = function() {
@@ -209,7 +195,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
         ui.map.updateRotation();
     };
     var onGifComplete = function (obj) { //callback function for when image is finished
-        if (!obj.error) {
+        if (obj.error === false) {
             $progress.remove();
             var animatedImage = document.createElement('img');
             animatedImage.setAttribute("style", "padding: 10px 0px");
@@ -231,7 +217,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             var blob = new Blob(byteArrays, {type: "image/gif"});
             var blobURL = URL.createObjectURL(blob); //supported in Chrome and FF
             animatedImage.src = blobURL;
-            var dlURL = wv.util.format("nasa-worldview-{1}-to-{2}.gif", wv.util.toISOStringDate(ui.timeline.input.fromDate), wv.util.toISOStringDate(ui.timeline.input.toDate));
+            var dlURL = wv.util.format("nasa-worldview-{1}-to-{2}.gif", animModel.rangeState.startDate, animModel.rangeState.startDate);
 
             //Create download link and apply button CSS
             var $download = $("<a><span class=ui-button-text>Download</span></a>")
@@ -267,7 +253,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
                 }
             });
         }
-    }
+    };
     var calcSize = function(c) {
         var lonlat1 = ui.map.selected.getCoordinateFromPixel([Math.floor(c.x), Math.floor(c.y2)]),
             lonlat2 = ui.map.selected.getCoordinateFromPixel([Math.floor(c.x2), Math.floor(c.y)]);
@@ -341,10 +327,10 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
     var setIconFontSize = function($el, width) {
         var fs = Math.abs(width / 4);
         if(!$el)
-            return
+            return;
         if(fs <= 30) {
             fs = 30;
-        };
+        }
         $el.css('font-size', fs);
     };
     var setImageCoords = function() {
@@ -416,4 +402,4 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
     };
     self.init();
     return self;
-}
+};
