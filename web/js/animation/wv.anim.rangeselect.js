@@ -39,7 +39,7 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
 
         model = models.anim || {};
         model.rangeState = model.rangeState || {};
-        model.rangeState.state = model.rangeState.state || 'on';
+        model.rangeState.state = model.rangeState.state || 'off';
 
         if(model.rangeState.startDate) {
             startLocation = self.getLocationFromStringDate(model.rangeState.startDate);

@@ -191,7 +191,6 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
        var amount = ( self.direction === "forward" ) ?
                self.delta : -self.delta;
        var newDate = wv.util.dateAdd(dateModel.selected, self.interval, amount);
-       ui.map.preload(newDate);
        timer = setTimeout(function() {
            advance(newDate);
        }, self.delay);

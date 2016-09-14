@@ -23,6 +23,7 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
     var widgetFactory = React.createFactory(Animate.AnimationWidget);
     var $timelineFooter;
     self.init = function() {
+        var speed = Number(model.rangeState.speed) || 5;
         var $animateButton = $('#animate-button');
         var Widget = widgetFactory({
             onPushPlay: self.onPressPlay,
@@ -33,7 +34,7 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
             header: 'Animate Map in ' + zooms[timeline.config.currentZoom - 1] + ' Increments', // config.currentZoom is a number: 1,2,3
             onDateChange: self.dateUpdate,
             sliderLabel: 'Frames Per Second',
-            sliderSpeed: 10,
+            sliderSpeed: speed,
             onSlide: self.onRateChange,
             startDate: new Date(model.rangeState.startDate),
             endDate: new Date(model.rangeState.endDate),
@@ -45,7 +46,11 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
 
         $timelineFooter = $('#timeline-footer');
         $animateButton.on('click', self.toggleAnimationWidget);
-        model.rangeState.speed = 10;
+        if(model.rangeState.state === 'on') {
+            $timelineFooter.toggleClass('wv-anim-active');
+        }
+        model.rangeState.speed = speed;
+        model.events.trigger('change');
         model.events.on('change', self.update);
         model.events.on('timeline-change', self.update);
 
@@ -67,6 +72,8 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
         model.events.trigger('datechange');
     };
     self.toggleAnimationWidget = function() {
+        model.toggleActive(); // sets anim state to on or off
+        model.events.trigger('change');
         return $timelineFooter.toggleClass('wv-anim-active');
     };
     self.onPressPlay = function() {

@@ -27,13 +27,22 @@ wv.anim.model = wv.anim.model || function(models, config) {
     };
 
     self.load = function(state, errors) {
+        //is running twice on page load?????
+        //console.log('loading');
         if(state.a) {
             self.rangeState = self.rangeState || {};
+            self.rangeState.state = 'on';
             attributes = state.a.attributes;
-
             attributes.forEach(function(attr) {
-               self.rangeState[attr.id] = attr.value;
+                self.rangeState[attr.id] = attr.value;
             });
+        }
+    };
+    self.toggleActive = function() {
+        if(self.rangeState.state === 'off') {
+            self.rangeState.state = 'on';
+        } else {
+            self.rangeState.state = 'off';
         }
     };
     self.add = function(arra) {
@@ -61,15 +70,19 @@ wv.anim.model = wv.anim.model || function(models, config) {
         newState.attributes = [];
 
         newState.attributes.push(
-          {
-            id:'startDate',
-            value: rangeState.startDate
-          },
-          {
-            id:'endDate',
-            value: rangeState.endDate
-          }
-          );
+            {
+                id:'startDate',
+                value: rangeState.startDate
+            },
+            {
+                id:'endDate',
+                value: rangeState.endDate
+            },
+            {
+                id:'speed',
+                value: rangeState.speed
+            }
+        );
         state.a.push(newState);
     };
     return self;
