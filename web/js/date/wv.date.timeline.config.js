@@ -16,6 +16,7 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
     var tl = ui.timeline;
     var animModel= models.anim;
     var model = models.date;
+    var zoomLevel = model.selectedZoom;
 
     self.zoom = function(level, event){
 
@@ -516,7 +517,7 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
 
         tl.pick.update();
         tl.pick.checkLocation();
-        tl.data.set();
+        model.selectedZoom = level;
 
     };
 
@@ -536,7 +537,6 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
             $('.zoom-btn').removeClass("zoom-btn-selected");
             $(this).addClass("zoom-btn-selected");
             self.zoom(1);
-
             animModel.events.trigger('timeline-change');
         });
         d3.select("#zoom-months").on("click",function(d){
@@ -549,12 +549,11 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
             $('.zoom-btn').removeClass("zoom-btn-selected");
             $(this).addClass("zoom-btn-selected");
             self.zoom(3);
-
             animModel.events.trigger('timeline-change');
 
         });
         //Default zoom
-        self.zoom(3);
+        self.zoom(zoomLevel);
         tl.setClip(); //fix for firefox svg overflow
     };
 
