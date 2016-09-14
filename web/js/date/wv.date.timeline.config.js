@@ -16,7 +16,7 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
     var tl = ui.timeline;
     var animModel= models.anim;
     var model = models.date;
-    var zoomLevel = model.selectedZoom;
+    var zoomLevel = model.selectedZoom || 3;
 
     self.zoom = function(level, event){
 
