@@ -60,8 +60,7 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
             rangeOpacity: 0.3,
             pinWidth: 5,
             height: 45,
-            onDrag: self.showDateOnDrag,
-            onDragStop: self.updateRange
+            onDrag: self.updateRange
         };
         model.events.on('timeline-change', self.update);
         model.events.on('change', self.update);
@@ -72,10 +71,6 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
     };
     self.getLocationFromStringDate = function(date) {
         return timeline.x(new Date(date));
-    };
-    self.showDateOnDrag = function(firstLocation, secondLocation) {
-        var date = timeline.x.invert(firstLocation);
-        timeline.pick.hoverDate(date);
     };
     self.update = function() { // being called from timeline.config.js
         var props = self.updateOptions();
@@ -88,7 +83,7 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
             return $dataWidth;
         }
         return $elWidth;
-    }
+    };
     self.updateOptions = function() {
         var max;
         var state = model.rangeState;
@@ -105,8 +100,6 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
         var state = model.rangeState;
         state.startDate = wv.util.toISOStringDate(startDate) || 0;
         state.endDate = wv.util.toISOStringDate(endDate);
-
-        timeline.ticks.label.remove();
         model.events.trigger('change');
     };
     self.init();
