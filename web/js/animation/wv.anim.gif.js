@@ -198,7 +198,6 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
         if (obj.error === false) {
             $progress.remove();
             var animatedImage = document.createElement('img');
-            animatedImage.setAttribute("style", "padding: 10px 0px");
 
             //Create a blob out of the image's base64 encoding because Chrome can't handle large data URIs, taken from:
             //http://stackoverflow.com/questions/16761927/aw-snap-when-data-uri-is-too-large
@@ -231,20 +230,60 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             var $imgSize = $("<label></label>")
                 .html("<span> Estimated Size: " + (blob.size / 1024).toFixed() + " KB</span>");
 
+            var $catalog =         
+                "<div class='gif-results-dialog' style='height: " + animCoords.h + "px ' >" + 
+                    "<div>" +
+                        "<div><b>" +
+                            "Size: " + 
+                        "</b></div>" +
+                        "<div>" +
+                            (blob.size / 1024).toFixed() + " KB" +
+                        "</div>" +
+                    "</div>" +
+                    "<div>" +
+                        "<div><b>" +
+                            "Speed: " + 
+                        "</b></div>" +
+                        "<div>" +
+                            animModel.rangeState.speed + " fps" +
+                        "</div>" +
+
+                    "</div>" +
+                    "<div>" +
+                        "<div><b>" +
+                            "Date Range: " + 
+                        "</b></div>" +
+                        "<div>" +
+                            animModel.rangeState.startDate +
+                        "</div>" +
+                        "<div>" +
+                            " - " +
+                        "</div>" +
+                        "<div>" +
+                            animModel.rangeState.endDate +
+                        "</div>" +
+                    "</div>" +
+                "</div>";
+            var $dialogBodyCase = $("<div></div>");
+            $dialogBodyCase.addClass('gif-results-dialog-case');
+            $dialogBodyCase.css('padding', '10px 0');
+            $dialogBodyCase.append(animatedImage);
+            $dialogBodyCase.append($catalog);
             //calculate the offset of the dialog position based on image size to display it properly
             //only height needs to be adjusted to center the dialog
             var pos_width = animCoords.w * 1 / window.innerWidth, pos_height = animCoords.h * 50 / window.innerHeight;
             var at_string = "center-" + pos_width.toFixed() + "% center-" + pos_height.toFixed() + "%";
 
             //Create a dialog over the view and place the image there
-            var $imgDialog = wv.ui.getDialog().append(animatedImage).append($download).append($imgSize);
+            var $imgDialog = wv.ui.getDialog().append($dialogBodyCase).append($download);
             $imgDialog.dialog({
                 dialogClass: "wv-panel",
-                title: "View Animation",
-                width: animCoords.w + 32,
+                title: "Your Gif",
+                width: animCoords.w + 198,
                 close: function() {
-                    animCoords = undefined;
+                    animCoords = null;
                     $imgDialog.find("img").remove();
+                    $('#timeline-footer').toggleClass('wv-anim-active');
                 },
                 position: { //based on image size
                     my: "center center",
@@ -273,7 +312,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
     self.getSelectorDialog = function() {
         var $dialogBox;
         var dialog =
-            "<div class='gifDialog'>" + 
+            "<div class='gif-dialog'>" + 
                 "<div class='content'>" +
                     "Press the Submit Icon to create an" +
                     "animation from " +
@@ -287,8 +326,6 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
                     " a rate of " +
                         animModel.rangeState.speed +
                     " frames per second" +
-
-
                 "</div>" +
             "</div>";
 
@@ -389,6 +426,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
                                 "<i class='fa fa-check-square'>" +
                             "</div>";
             jcropAPI = this;
+            $('#timeline-footer').toggleClass('wv-anim-active');
             $dialog = self.getSelectorDialog();
             setDialogMargin($dialog, starterWidth);
             $tracker = this.ui.selection.find('.jcrop-tracker');

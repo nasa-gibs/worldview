@@ -97,6 +97,34 @@
 /*
  * Gif Styles
  */
+gif-dialog {}
+.gif-dialog .content {
+    line-height: 15px;
+}
+.gif-results-dialog-case {}
+    .gif-results-dialog-case img, 
+    .gif-results-dialog-case .gif-results-dialog {
+        display: inline-block;
+    }
+    .gif-results-dialog-case .gif-results-dialog {
+        background: #fff;
+        text-align: center;
+        color: #444;
+        vertical-align: top;
+        margin-left: 10px;
+        -moz-border-radius: 6px; 
+        border-radius: 6px;
+        font-size: 12px;
+        width: 162px;
+    }
+    .gif-results-dialog-case .gif-results-dialog b {
+        line-height: 30px;
+        color: #000;
+        font-size: 15px;
+    } 
+ /*
+  * Jcrop Styles
+  */
 .jcrop-tracker .wv-dl-gif-bt-case {
     width: inherit;
     position: relative;
@@ -113,6 +141,10 @@
     color: #f4f5f5;
     cursor: pointer;
 }
+/*
+ * Animation GIF Styles
+ */
+
 
 /*
  * Slider styles
