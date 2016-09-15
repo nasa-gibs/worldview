@@ -45,7 +45,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
 
 
         $progress = $("<progress />") //display progress for GIF creation
-            .attr("id", "wv-gif-progress");
+            .attr("class", "wv-gif-progress");
 
         wv.ui.getDialog().append($progress).dialog({ //dialog for progress
             title: "Downloading images...",
@@ -56,7 +56,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             'gifWidth': animCoords.w,
             'gifHeight': animCoords.h,
             'images': getImageArray(startDate, endDate),
-            'interval': interval / 10,
+            'interval': 1 / interval,
             'progressCallback': function(captureProgress) {
                 $progress.parent().dialog("option", "title", "Creating GIF..."); //set dialog title
                 $progress.attr("value", captureProgress); //before value set, it is in indeterminate state
@@ -184,7 +184,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             a.push(src);
             current = wv.util.dateAdd(current, ui.anim.getInterval(), 1);
         }
-        for(var i = 0, 
+        for(var i = 0,
             len = animModel.rangeState.speed / 2, // get a half seconds worth of frames
             lastSrc = a.length - 1;
             i < len; i++) {

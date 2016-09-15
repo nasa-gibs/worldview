@@ -50,7 +50,7 @@
     display: block;
     text-align: center;
 }
-#wv-animation-widget .thruLabel {
+#wv-animation-widget .thru-label {
     position: absolute;
     left: 0;
     right: 0;
@@ -121,7 +121,10 @@ gif-dialog {}
         line-height: 30px;
         color: #000;
         font-size: 15px;
-    } 
+    }
+.wv-gif-progress {
+    width: 100%;
+}
  /*
   * Jcrop Styles
   */
