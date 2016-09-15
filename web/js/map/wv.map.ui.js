@@ -404,7 +404,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
         extent = map.getView().calculateExtent(map.getSize());
 
         _.each(dateArray, function(date) {
-            index++
+            index++;
 
             _.each(layers, function(def) {
                 var key;
@@ -420,26 +420,17 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
                     tileSource = layer.getSource();
                     tileGrid = tileSource.getTileGridForProjection(projection);
                     currentZ = tileGrid.getZForResolution(viewState.resolution, renderer.zDirection);
-                    tileRange = tileGrid.getTileRangeForExtentAndZ(extent, currentZ);
-
-                    for (var x = tileRange.minX; x <= tileRange.maxX; ++x) {
-                        if(x >= 0) {
-                            for (var y = tileRange.minY; y <= tileRange.maxY; ++y) {
-                                if(y < 0) {
-                                    tile = tileSource.getTile(currentZ, x, y, pixelRatio, projection);
-                                    tile.load();
-                                    ++loadingCount;
-                                    tileSource.on('tileloadend', function(e) {
-                                        --loadingCount;
-                                        if(loadingCount == 0) {
-                                            callback();
-                                        }
-                                    });
-                                }
+                    tileGrid.forEachTileCoord(extent, currentZ, function(tileCoord) {
+                        tile = tileSource.getTile(tileCoord[0], tileCoord[1], tileCoord[2], pixelRatio, projection);
+                        tile.load();
+                        ++loadingCount;
+                        tileSource.on('tileloadend', function(e) {
+                            --loadingCount;
+                            if(loadingCount === 0) {
+                                callback();
                             }
-                        }
-                    }
-
+                        });
+                    });
                 } else {
                   if(len == index && loadingCount === 0) {
                     callback();
