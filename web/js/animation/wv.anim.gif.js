@@ -184,6 +184,12 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             a.push(src);
             current = wv.util.dateAdd(current, ui.anim.getInterval(), 1);
         }
+        for(var i = 0, 
+            len = animModel.rangeState.speed / 2, // get a half seconds worth of frames
+            lastSrc = a.length - 1;
+            i < len; i++) {
+            a.push(a[lastSrc]);
+        }
         return a;
     };
     var resetRotation = function() {
@@ -416,15 +422,17 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             },
             onRelease: function(c) {
                 removeCrop();
+                $('#timeline-footer').toggleClass('wv-anim-active');
                 if($dialog) {
                     wv.ui.close();
                 }
             }
         }, function() {
             var $tracker;
-            $dlButton =    "<div class='wv-dl-gif-bt-case'>" +
-                                "<i class='fa fa-check-square'>" +
-                            "</div>";
+            $dlButton =
+                        "<div class='wv-dl-gif-bt-case'>" +
+                            "<i class='fa fa-check-square'>" +
+                        "</div>";
             jcropAPI = this;
             $('#timeline-footer').toggleClass('wv-anim-active');
             $dialog = self.getSelectorDialog();
