@@ -8,7 +8,7 @@
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
-
+// jshint unused:true
 var wv = wv || {};
 wv.map = wv.map || {};
 
@@ -199,7 +199,6 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
      */
     var reloadLayers = function(map) {
         map = map || self.selected;
-        var proj = models.proj.selected;
         clearLayers(map);
 
         var defs = models.layers.get({reverse: true});
@@ -374,11 +373,8 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
      *
      * @returns {void}
      */
-    self.preloadArrayOfDates = function(dateArray, callback) {
-        var tileImage;
+    self.promiseDay = function(date) {
         var tileSource;
-        var image;
-        var renderer;
         var tileGrid;
         var viewState;
         var projection;
@@ -388,13 +384,8 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
         var pixelRatio;
         var layers;
         var map;
-        var loadingCount;
-        var len;
-        var index;
+        var promiseArray;
 
-        index = 0;
-        len = dateArray.length;
-        loadingCount = 0;
         layers = models.layers.get();
         map = self.selected;
         frameState = self.selected.frameState_;
@@ -403,17 +394,14 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
         projection = viewState.projection;
         extent = map.getView().calculateExtent(map.getSize());
 
-        _.each(dateArray, function(date) {
-            index++;
+        promiseArray = layers.map(function(def){
+            var key;
+            var layer;
+            var renderer;
 
-            _.each(layers, function(def) {
-                var key;
-                var layer;
-                var renderer;
-                
-                key = layerKey(def, {date: date});
-                layer = cache.getItem(key);
-
+            key = layerKey(def, {date: date});
+            layer = cache.getItem(key);
+            return new Promise(function(resolve,reject){
                 if(!layer) {
                     layer = createLayer(def, {date: date});
                     renderer = new ol.renderer.canvas.TileLayer(layer);
@@ -423,22 +411,20 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
                     tileGrid.forEachTileCoord(extent, currentZ, function(tileCoord) {
                         tile = tileSource.getTile(tileCoord[0], tileCoord[1], tileCoord[2], pixelRatio, projection);
                         tile.load();
-                        ++loadingCount;
-                        tileSource.on('tileloadend', function(e) {
-                            --loadingCount;
-                            if(loadingCount === 0) {
-                                callback();
-                            }
+                        tileSource.on('tileloadend', function() {
+                            resolve('success');
                         });
+                        tileSource.on('tileloaderror', function() {
+                            reject();
+                        });
+                        
                     });
                 } else {
-                  if(len == index && loadingCount === 0) {
-                    callback();
-                  }
-
+                    resolve('success-already');
                 }
             });
         });
+         return Promise.all(promiseArray);
     };
     /*
      * Get a layer object from id

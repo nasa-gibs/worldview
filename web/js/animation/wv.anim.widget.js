@@ -63,11 +63,11 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
             playing: state.playing,
             header: 'Animate Map in ' + zooms[timeline.config.currentZoom - 1] + ' Increments' // config.currentZoom is a number: 1,2,3
         });
-        model.rangeState.playIndex = null;
     };
     self.dateUpdate = function(startDate, endDate) {
         model.rangeState.startDate = wv.util.toISOStringDate(startDate) || 0;
         model.rangeState.endDate = wv.util.toISOStringDate(endDate);
+        model.rangeState.playing = false;
         model.events.trigger('change');
         model.events.trigger('datechange');
     };

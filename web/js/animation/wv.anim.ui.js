@@ -13,31 +13,30 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     var timer;
     var dateModel = models.date;
     var animModel = models.anim;
-    var queueLength = 5;
+    var queueLength = 20;
     var animateArray;
     var map = ui.map.selected;
     var zooms = ['year', 'month', 'day'];
+    var queue = new Queue(5, queueLength);
+    var preloadedArray;
+    var dateArray;
     self.delay =  500;
     self.direction = "forward";
     self.interval = "day";
     self.delta = 1;
     self.active = false;
     self.events = wv.util.events();
-    self.state = {
-        loadedLength: 0,
-        fullyLoaded: false,
-        playing: false,
-        playIndex: 0
-    };
-
-
 
     self.init = function() {
+        self.refreshState();
         animModel.events.on('play', self.onPushedPlay);
         animModel.events.on('datechange', self.refreshState);
+        animModel.events.on('timeline-change', self.refreshState);
         map.getView().on('moveend', self.refreshState);
     };
     self.refreshState = function() {
+        preloadedArray = [];
+        dateArray = [];
         self.state = {
             loadedLength: 0,
             fullyLoaded: false,
@@ -45,133 +44,129 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
             playIndex: 0
         };
     };
-    self.play = function(direction) {
-       if ( self.active && direction !== self.direction ) {
-           self.stop();
-       } else if ( self.active ) {
-           return;
-       }
-       self.direction = direction || self.direction;
-       self.active = true;
-       prepareFrame();
-    };
-    self.forward = function() {
-       self.play("forward");
-    };
     self.onPushedPlay = function() {
         var state;
         var endDate;
         var startDate;
-        var fps;
 
         state = animModel.rangeState;
         endDate = new Date(state.endDate);
         startDate  = new Date(state.startDate);
-        fps = 1000 / state.speed;
-        self.preload(startDate, endDate, fps);
+
+        if(!dateArray[0]) {
+            dateArray = self.getDateArray(startDate, endDate);
+        }
+        self.checkShouldPlay();
+        self.checkQueue(queueLength, self.state.playIndex);
 
     };
     self.getInterval = function() {
-      return zooms[ui.timeline.config.currentZoom - 1];
+        return zooms[ui.timeline.config.currentZoom - 1];
     };
-    //Determine interval for updating date
-    self.returnNumberInterval = function() {
-        var interval = self.getInterval();
-        if (interval === 'month')
-            return 30;
-        else if (interval === 'year')
-            return 365;
-        else
-            return 1;
-    };
-    self.preload = function(dateBeingProcessed, endDate, fps) {
-        var dateArray = [];
-        var chunkedArray= [];
-        var i = 1;
-        var date;
-        var thisState = self.state;
-        var timeline = ui.timeline;
+    self.getDateArray = function(dateBeingProcessed, endDate) {
+        var arra = [];
 
-        if(!thisState.fullyLoaded) {
-          animateArray = [];
-            /*
-             * a callback function that
-             * triggers the animation to play
-             *
-             * @function tileLoaded
-             *
-             */
-            var tileLoaded = function() {
-                var len;
-                if(i == 1) {
-                  thisState.loadedLength = queueLength;
-                }
-                if(chunkedArray[i]) {
-                    len = chunkedArray[i].length;
-                    ui.map.preloadArrayOfDates(chunkedArray[i], tileLoaded);
-                    thisState.loadedLength = thisState.loadedLength + len;                    
-                    if(i === chunkedArray.length - 1) {
-                        self.state.fullyLoaded = true;
-                        animateArray = dateArray;
-                    }
-                    i++;
-                }
-                if(!thisState.playing) {
-                    thisState.playing = true;
-                    setTimeout(function() {
-                        self.playDateArray(dateArray, fps);
-                    }, 300);
-                }
-            };
-            while(dateBeingProcessed <= endDate) {
-                dateBeingProcessed = wv.util.dateAdd(dateBeingProcessed, zooms[timeline.config.currentZoom - 1], 1);
-                date = new Date(dateBeingProcessed);
-                dateArray.push(date);
-            }
-            chunkedArray = _.chunk(dateArray, queueLength);
-            ui.map.preloadArrayOfDates(chunkedArray[0], tileLoaded);
-        } else {
-            self.playDateArray(animateArray, fps);
+        while(dateBeingProcessed <= endDate) {
+            dateBeingProcessed = wv.util.dateAdd(dateBeingProcessed, self.getInterval(), 1);
+            date = new Date(dateBeingProcessed);
+            arra.push(date);
         }
-        
+        return arra;
+    };
+    self.addDate = function(date) {
+        queue.add(function () {
+            return ui.map.promiseDay(date);
+        })
+        .then(function() {
+            preloadedArray.push(' ');
+            self.checkQueue(queueLength, self.state.playIndex);
+            self.checkShouldPlay();
+        });
+    };
+    self.checkQueue = function(bufferLength,  index) {
+        var alreadyLoaded;
+        var inQueue;
+        var loading;
+        var totalQueuedOrInQueue;
+        var i;
+
+        i = 0;
+        alreadyLoaded = preloadedArray.length;
+        inQueue = queue.getQueueLength(); // added to queue but hasn't been requested
+        loading = queue.getPendingLength(); // currently loading
+        totalQueuedOrInQueue = alreadyLoaded + inQueue + loading;
+
+        if(totalQueuedOrInQueue === 0) {
+            while(i < bufferLength) {
+                self.addDate(dateArray[i]);
+                i++;
+            }
+            return;
+        }
+        if(dateArray[totalQueuedOrInQueue] && totalQueuedOrInQueue < index + bufferLength) {
+            i = totalQueuedOrInQueue;
+            while(i < index + bufferLength) {
+                if(!dateArray[i]) {
+                    return;
+                }
+                self.addDate(dateArray[i]);
+                i++;
+            }
+            return;
+        }
     };
     self.checkShouldLoop = function(arra) {
         var fps = 1000 / animModel.rangeState.speed;
         if(animModel.rangeState.loop) {
             self.playDateArray(arra, fps);
         } else {
+            self.state.playing = false;
             animModel.rangeState.playing = false;
             animModel.events.trigger('change');
+        }
+    };
+    self.checkShouldPlay = function() {
+        var dateArraLength = dateArray.length;
+        var index = self.state.playIndex;
+        var fps = 1000 / animModel.rangeState.speed;
+        if(self.state.playing || !animModel.rangeState.playing) {
+            return false;
+        }
+        if(preloadedArray[this.state.playIndex + queueLength - 1]) {
+            self.state.playing = true;
+            return self.playDateArray(dateArray, fps);
+        }
+        if(index !== dateArraLength && preloadedArray[index]) {
+            self.state.playing = true;
+            return self.playDateArray(dateArray, fps);
         }
     };
     self.playDateArray = function(arra, fps) {
         var interval;
         var len = arra.length;
-        var i = 0;
-        var thisState = self.state;
         var playIndex = self.state.playIndex;
-        
-        if(playIndex) {
-          i = playIndex;
-          playIndex = null;
-        }
+
         interval = setInterval(function() {
-            if(i >= len) {
+            if(playIndex >= len) {
                 clearInterval(interval);
-                thisState.playIndex = null;
+                self.state.playIndex = 0;
                 self.checkShouldLoop(arra);
                 return;
-            } else if(!animModel.rangeState.playing || i >= thisState.loadedLength) {
+            } else if(!animModel.rangeState.playing || playIndex >= preloadedArray.length) {
                 clearInterval(interval);
-                thisState.playing = false;
-                thisState. playIndex = i;
+                self.state.playing = false;
+                self.state.playIndex = playIndex;
                 return;
             }
-            dateModel.select(arra[i]);
-            i++;
+            dateModel.select(arra[playIndex]);
+            self.checkQueue(queueLength, playIndex);
+            playIndex++;
         }, fps);
     };
 
+    self.forward = function() {
+       self.play("forward");
+    };
     self.reverse = function() {
        self.play("reverse");
     };
@@ -189,7 +184,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
            return;
        }
        var amount = ( self.direction === "forward" ) ?
-               self.delta : -self.delta;
+            self.delta : -self.delta;
        var newDate = wv.util.dateAdd(dateModel.selected, self.interval, amount);
        timer = setTimeout(function() {
            advance(newDate);
@@ -203,6 +198,16 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
        } else {
            prepareFrame();
        }
+    };
+    self.play = function(direction) {
+       if ( self.active && direction !== self.direction ) {
+           self.stop();
+       } else if ( self.active ) {
+           return;
+       }
+       self.direction = direction || self.direction;
+       self.active = true;
+       prepareFrame();
     };
     self.init();
     return self;

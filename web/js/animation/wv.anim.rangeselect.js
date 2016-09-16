@@ -32,7 +32,7 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
         var EndLocation;
         var pick = d3.select('#guitarpick');
         var pickWidth = pick.node().getBoundingClientRect().width;
-        var animEndLocation = (d3.transform(pick.attr("transform")).translate[0] - (pickWidth/2)); // getting guitar pick location
+        var animEndLocation = (d3.transform(pick.attr("transform")).translate[0] - (pickWidth / 2)); // getting guitar pick location
         var ticHeight = $('.end-tick').height();
         var $animateButton = $('#animate-button');
         var options;
@@ -100,7 +100,9 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
         var state = model.rangeState;
         state.startDate = wv.util.toISOStringDate(startDate) || 0;
         state.endDate = wv.util.toISOStringDate(endDate);
+        model.rangeState.playing = false;
         model.events.trigger('change');
+        model.events.trigger('datechange');
     };
     self.init();
     return self;
