@@ -30,6 +30,8 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     self.init = function() {
         self.refreshState();
         animModel.events.on('play', self.onPushedPlay);
+
+        animModel.events.on('gif-click', self.refreshState);
         animModel.events.on('datechange', self.refreshState);
         animModel.events.on('timeline-change', self.refreshState);
         map.getView().on('moveend', self.refreshState);
