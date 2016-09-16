@@ -9,6 +9,7 @@
     "test": "grunt test lint"
   },
   "devDependencies": {
+    "bluebird": "^3.4.6",
     "buster": "0.7.12",
     "gifshot": "^0.3.2",
     "grunt": "0.4.x",
@@ -34,6 +35,7 @@
     "lodash": "^4.15.0",
     "moment": "2.13.x",
     "phantomjs": "2.1.x",
+    "promise-queue": "^2.2.3",
     "react": "^15.3.1",
     "react-dom": "^15.3.1"
   }
