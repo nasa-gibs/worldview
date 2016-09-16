@@ -424,7 +424,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
                 }
             });
         });
-         return Promise.all(promiseArray);
+        return Promise.all(promiseArray);
     };
     /*
      * Get a layer object from id
