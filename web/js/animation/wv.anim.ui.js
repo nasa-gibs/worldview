@@ -17,7 +17,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     var animateArray;
     var map = ui.map.selected;
     var zooms = ['year', 'month', 'day'];
-    var queue = new Queue(5, queueLength);
+    var queue = new Queue(5, 20);
     var preloadedArray;
     var dateArray;
     self.delay =  500;
@@ -151,10 +151,9 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         var interval;
         var len = arra.length;
         var playIndex = self.state.playIndex;
-
-        interval = setInterval(function() {
+        var player = function() {
             if(playIndex >= len) {
-                clearInterval(interval);
+                // clearInterval(interval);
                 self.state.playIndex = 0;
                 self.checkShouldLoop(arra);
                 return;
@@ -167,7 +166,9 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
             dateModel.select(arra[playIndex]);
             self.checkQueue(queueLength, playIndex);
             playIndex++;
-        }, fps);
+            interval = setTimeout(player, 1000 / animModel.rangeState.speed);
+        };
+        interval = setTimeout(player, fps);
     };
 
     self.forward = function() {
