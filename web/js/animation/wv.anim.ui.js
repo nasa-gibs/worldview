@@ -13,7 +13,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     var timer;
     var dateModel = models.date;
     var animModel = models.anim;
-    var queueLength = 20;
+    var queueLength = 10;
     var animateArray;
     var map = ui.map.selected;
     var zooms = ['year', 'month', 'day'];
@@ -33,7 +33,8 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
 
         animModel.events.on('gif-click', self.refreshState);
         animModel.events.on('datechange', self.refreshState);
-        animModel.events.on('timeline-change', self.refreshState);
+        animModel.events.on('zoom-change', self.refreshState);
+        models.proj.events.on("select", self.refreshState);
         map.getView().on('moveend', self.refreshState);
     };
     self.refreshState = function() {
@@ -92,14 +93,17 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         var totalQueuedOrInQueue;
         var i;
 
-        i = 0;
         alreadyLoaded = preloadedArray.length;
         inQueue = queue.getQueueLength(); // added to queue but hasn't been requested
         loading = queue.getPendingLength(); // currently loading
         totalQueuedOrInQueue = alreadyLoaded + inQueue + loading;
 
         if(totalQueuedOrInQueue === 0) {
+            i = 0;
             while(i < bufferLength) {
+                if(!dateArray[i]) {
+                    return;
+                }
                 self.addDate(dateArray[i]);
                 i++;
             }
@@ -134,11 +138,11 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         if(self.state.playing || !animModel.rangeState.playing) {
             return false;
         }
-        if(preloadedArray[this.state.playIndex + queueLength - 1]) {
+        if(preloadedArray[index + queueLength - 1]) {
             self.state.playing = true;
             return self.playDateArray(dateArray, fps);
         }
-        if(index !== dateArraLength && preloadedArray[index]) {
+        if(index !== dateArraLength && preloadedArray.length === dateArraLength) {
             self.state.playing = true;
             return self.playDateArray(dateArray, fps);
         }
