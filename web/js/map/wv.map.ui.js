@@ -365,7 +365,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
      * Checks the cache to see if a layer has already 
      * been stored
      *
-     * @method preload
+     * @method promiseDay
      * @static
      *
      * @param {object} date - Date of data to be displayed
@@ -392,8 +392,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
         pixelRatio = frameState.pixelRatio;
         viewState = frameState.viewState;
         projection = viewState.projection;
-        extent = map.getView().calculateExtent(map.getSize());
-
+        extent = models.proj.selected.maxExtent;
         promiseArray = layers.map(function(def){
             var key;
             var layer;
@@ -401,7 +400,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
 
             key = layerKey(def, {date: date});
             layer = cache.getItem(key);
-            return new Promise(function(resolve,reject){
+            return new Promise(function(resolve, reject){
                 if(!layer) {
                     layer = createLayer(def, {date: date});
                     renderer = new ol.renderer.canvas.TileLayer(layer);
@@ -415,9 +414,8 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
                             resolve('success');
                         });
                         tileSource.on('tileloaderror', function() {
-                            reject();
+                            reject('No response at this URL');
                         });
-                        
                     });
                 } else {
                     resolve('success-already');
