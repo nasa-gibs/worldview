@@ -46,9 +46,13 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
 
         $timelineFooter = $('#timeline-footer');
         $animateButton.on('click', self.toggleAnimationWidget);
-        if(model.rangeState.state === 'on') {
+        if(model.rangeState.state === 'on') { // show animation widget if active in permalink
             $timelineFooter.toggleClass('wv-anim-active');
         }
+        $('.wv-date-selector-widget input').on('keydown', function(e){
+            // A bit of a hack
+            e.stopPropagation(); // needed to correct event bubbling between react and Docuement
+        });
         model.rangeState.speed = speed;
         model.events.trigger('change');
         model.events.on('change', self.update);
