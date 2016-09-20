@@ -25,10 +25,14 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
 
     var tl = ui.timeline;
     var model = models.date;
-
+    var timer;
     var self = {};
-
-    var timer, rollingDate;
+    var rollingDate;
+    self.direction = "forward";
+    self.interval = "day";
+    self.delta = 1;
+    self.active = false;
+    self.delay = 500;
 
     var $incrementBtn = $("#right-arrow-group");
     var $decrementBtn = $("#left-arrow-group");
@@ -40,10 +44,53 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             animateForward("day");
         }
         else{
-            animateEnd();
+            self.stop();
         }
     };
+    self.forward = function() {
+       self.play("forward");
+    };
+    self.reverse = function() {
+       self.play("reverse");
+    };
 
+    self.stop = function() {
+        if (timer) {
+            clearTimeout(timer);
+        }
+        timer = null;
+        self.active = false;
+    };
+    var prepareFrame = function() {
+       if ( !self.active ) {
+           return;
+       }
+       var amount = ( self.direction === "forward" ) ?
+            self.delta : -self.delta;
+       var newDate = wv.util.dateAdd(model.selected, self.interval, amount);
+       timer = setTimeout(function() {
+           advance(newDate);
+       }, self.delay);
+    };
+
+    var advance = function(newDate) {
+       var updated = model.select(newDate);
+       if (!updated) {
+           self.stop();
+       } else {
+           prepareFrame();
+       }
+    };
+    self.play = function(direction) {
+       if ( self.active && direction !== self.direction ) {
+           self.stop();
+       } else if ( self.active ) {
+           return;
+       }
+       self.direction = direction || self.direction;
+       self.active = true;
+       prepareFrame();
+    };
     var reversePrevDay = function(){ //FIXME: Limit animation correctly
          var prevDay = new Date(new Date(model.selected)
                                .setUTCDate(model.selected.getUTCDate()-1));
@@ -51,30 +98,26 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             animateReverse("day");
         }
         else{
-            animateEnd();
+            self.stop();
         }
     };
 
     var animateForward = function(interval) {
-        if ( ui.anim.active ) {
+        if ( self.active ) {
             return;
         }
         models.date.add(interval, 1);
-        ui.anim.interval = interval;
-        ui.anim.play("forward");
+        self.interval = interval;
+        self.play("forward");
     };
 
     var animateReverse = function(interval) {
-        if ( ui.anim.active ) {
+        if ( self.active ) {
             return;
         }
         models.date.add(interval, -1);
-        ui.anim.interval = interval;
-        ui.anim.play("reverse");
-    };
-
-    var animateEnd = function() {
-        ui.anim.stop();
+        self.interval = interval;
+        self.play("reverse");
     };
 
     var roll = function(dataInterval, amt) {
@@ -256,17 +299,17 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 e.preventDefault();
                 forwardNextDay();
             })
-            .mouseup(animateEnd);
+            .mouseup(self.stop);
 
         $decrementBtn
             .mousedown(function(e) {
                 e.preventDefault();
                 reversePrevDay();
             })
-            .mouseup(animateEnd);
+            .mouseup(self.stop);
 
         $(document)
-            .mouseout(animateEnd)
+            .mouseout(self.stop)
             .keydown(function(event) {
                 switch ( event.keyCode ) {
                     case wv.util.key.LEFT:
@@ -287,7 +330,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 switch ( event.keyCode ) {
                     case wv.util.key.LEFT:
                     case wv.util.key.RIGHT:
-                        animateEnd();
+                        self.stop();
                         event.preventDefault();
                         break;
                 }

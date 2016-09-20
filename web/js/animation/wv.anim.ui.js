@@ -10,7 +10,6 @@ var wv = wv || {};
 wv.anim = wv.anim || {};
 wv.anim.ui = wv.anim.ui || function(models, ui) { 
     var self = {};
-    var timer;
     var dateModel = models.date;
     var animModel = models.anim;
     var queueLength = 10;
@@ -20,11 +19,6 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     var queue = new Queue(5, 20);
     var preloadedArray;
     var dateArray;
-    self.delay =  500;
-    self.direction = "forward";
-    self.interval = "day";
-    self.delta = 1;
-    self.active = false;
     self.events = wv.util.events();
 
     self.init = function() {
@@ -169,52 +163,6 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
             interval = setTimeout(player, 1000 / animModel.rangeState.speed);
         };
         interval = setTimeout(player, fps);
-    };
-
-    self.forward = function() {
-       self.play("forward");
-    };
-    self.reverse = function() {
-       self.play("reverse");
-    };
-
-    self.stop = function() {
-       if (timer) {
-           clearTimeout(timer);
-           timer = null;
-       }
-       self.active = false;
-    };
-
-    var prepareFrame = function() {
-       if ( !self.active ) {
-           return;
-       }
-       var amount = ( self.direction === "forward" ) ?
-            self.delta : -self.delta;
-       var newDate = wv.util.dateAdd(dateModel.selected, self.interval, amount);
-       timer = setTimeout(function() {
-           advance(newDate);
-       }, self.delay);
-    };
-
-    var advance = function(newDate) {
-       var updated = dateModel.select(newDate);
-       if ( !updated ) {
-           self.stop();
-       } else {
-           prepareFrame();
-       }
-    };
-    self.play = function(direction) {
-       if ( self.active && direction !== self.direction ) {
-           self.stop();
-       } else if ( self.active ) {
-           return;
-       }
-       self.direction = direction || self.direction;
-       self.active = true;
-       prepareFrame();
     };
     self.init();
     return self;
