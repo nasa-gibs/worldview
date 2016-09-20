@@ -18,7 +18,7 @@ wv.map = wv.map || {};
 wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
     var id = "wv-map";
     var selector = "#" + id;
-    var cache = new Cache(1000); // Save layers from days visited
+    var cache = new Cache(100); // Save layers from days visited
     var animationDuration = 250;
     var self = {};
     var rotation = new Rotation(self, models);
@@ -359,11 +359,13 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
         });
         reloadLayers();
     };
-
+    self.getExtent = function(extent1, extent2) {
+        return ol.extent.getIntersection(extent1, extent2);
+    };
     /*
-     * Loaded the layers that are needed for anyone data.
+     * Loaded the layers that are needed for any one date.
      * Checks the cache to see if a layer has already 
-     * been stored
+     * been added to cache.
      *
      * @method promiseDay
      * @static
@@ -371,7 +373,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
      * @param {object} date - Date of data to be displayed
      * on the map.
      *
-     * @returns {void}
+     * @returns {object} Promise.all
      */
     self.promiseDay = function(date) {
         var tileSource;
@@ -392,7 +394,10 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
         pixelRatio = frameState.pixelRatio;
         viewState = frameState.viewState;
         projection = viewState.projection;
-        extent = models.proj.selected.maxExtent;
+        extent = self.getExtent(
+            models.proj.selected.maxExtent, //max
+            map.getView().calculateExtent(map.getSize()) //window view
+        );
         promiseArray = layers.map(function(def){
             var key;
             var layer;
@@ -400,29 +405,52 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
 
             key = layerKey(def, {date: date});
             layer = cache.getItem(key);
-            return new Promise(function(resolve, reject){
-                if(!layer) {
-                    layer = createLayer(def, {date: date});
-                    renderer = new ol.renderer.canvas.TileLayer(layer);
-                    tileSource = layer.getSource();
-                    tileGrid = tileSource.getTileGridForProjection(projection);
-                    currentZ = tileGrid.getZForResolution(viewState.resolution, renderer.zDirection);
-                    tileGrid.forEachTileCoord(extent, currentZ, function(tileCoord) {
-                        tile = tileSource.getTile(tileCoord[0], tileCoord[1], tileCoord[2], pixelRatio, projection);
-                        tile.load();
-                        tileSource.on('tileloadend', function() {
-                            resolve('success');
-                        });
-                        tileSource.on('tileloaderror', function() {
-                            reject('No response at this URL');
-                        });
-                    });
-                } else {
-                    resolve('success-already');
-                }
+            if(!layer) {
+                layer = createLayer(def, {date: date});
+            }
+            renderer = new ol.renderer.canvas.TileLayer(layer);
+            tileSource = layer.getSource();
+            tileGrid = tileSource.getTileGridForProjection(projection);
+            currentZ = tileGrid.getZForResolution(viewState.resolution, renderer.zDirection);
+            tileGrid.forEachTileCoord(extent, currentZ, function(tileCoord) {
+                return self.promiseTile(tileSource, tileCoord, pixelRatio, projection);
             });
         });
         return Promise.all(promiseArray);
+    };
+    /*
+     * Creates a promise for an individual tile. 
+     *
+     * @method promiseTile
+     * @static
+     *
+     * @param {object} date - Date of data to be displayed
+     * on the map.
+     *
+     * @returns {Object} Promise
+     */
+    self.promiseTile = function(tileSource, tileCoord, pixelRatio, projection) {
+        return new Promise(function(resolve, reject)    {
+            tile = tileSource.getTile(tileCoord[0], tileCoord[1], tileCoord[2], pixelRatio, projection);
+            tile.load();
+            /*
+             * Resolves or rejects the promise when
+             * a tile is loaded or and error occurs
+             *
+             * @function onTileLoad
+             */
+            var onTileLoad = function(e) {
+                if(e.type === "tileloadend") {
+                    resolve();
+                } else {
+                    reject();
+                }
+                tileSource.un('tileloadend', onTileLoad);
+                tileSource.un('tileloaderror', onTileLoad);// remove event listeners from memory
+            };
+            tileSource.on('tileloadend', onTileLoad);
+            tileSource.on('tileloaderror', onTileLoad);
+        });
     };
     /*
      * Get a layer object from id
