@@ -24,12 +24,11 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     self.init = function() {
         self.refreshState();
         animModel.events.on('play', self.onPushedPlay);
-
         animModel.events.on('gif-click', self.refreshState);
         animModel.events.on('datechange', self.refreshState);
         animModel.events.on('zoom-change', self.refreshState);
         models.proj.events.on("select", self.refreshState);
-        map.getView().on('moveend', self.refreshState);
+        map.on('moveend', self.refreshState);
     };
     self.refreshState = function() {
         preloadedArray = [];
@@ -40,6 +39,8 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
             playing: false,
             playIndex: 0
         };
+        animModel.rangeState.playing = false;
+        animModel.events.trigger('change');
     };
     self.onPushedPlay = function() {
         var state;
