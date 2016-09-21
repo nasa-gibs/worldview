@@ -402,55 +402,43 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
             var key;
             var layer;
             var renderer;
+            var i = 0;
 
+            i = 0;
             key = layerKey(def, {date: date});
             layer = cache.getItem(key);
-            if(!layer) {
-                layer = createLayer(def, {date: date});
+            if(layer) {
+                cache.removeItem(key);
             }
-            renderer = new ol.renderer.canvas.TileLayer(layer);
-            tileSource = layer.getSource();
-            tileGrid = tileSource.getTileGridForProjection(projection);
-            currentZ = tileGrid.getZForResolution(viewState.resolution, renderer.zDirection);
-            tileGrid.forEachTileCoord(extent, currentZ, function(tileCoord) {
-                return self.promiseTile(tileSource, tileCoord, pixelRatio, projection);
+            return new Promise(function(resolve, reject){
+                    layer = createLayer(def, {date: date});
+                    renderer = new ol.renderer.canvas.TileLayer(layer);
+                    tileSource = layer.getSource();
+                    tileGrid = tileSource.getTileGridForProjection(projection);
+                    currentZ = tileGrid.getZForResolution(viewState.resolution, renderer.zDirection);
+                    tileGrid.forEachTileCoord(extent, currentZ, function(tileCoord) {
+                        tile = tileSource.getTile(tileCoord[0], tileCoord[1], tileCoord[2], pixelRatio, projection);
+                        tile.load();
+                        var loader = function(e) {
+                            if(e.type === 'tileloadend') {
+                                --i;
+                                if(i === 0) {
+                                    resolve();
+                                }
+                            } else {
+                                reject(new Error('No response at this URL'));
+                            }
+                            this.un('tileloadend',loader); // remove event listeners from memory
+                            this.un('tileloaderror', loader);
+                        };
+                        tileSource.on('tileloadend',loader);
+                        tileSource.on('tileloaderror', loader);
+                        ++i;
+                    });
+
             });
         });
         return Promise.all(promiseArray);
-    };
-    /*
-     * Creates a promise for an individual tile. 
-     *
-     * @method promiseTile
-     * @static
-     *
-     * @param {object} date - Date of data to be displayed
-     * on the map.
-     *
-     * @returns {Object} Promise
-     */
-    self.promiseTile = function(tileSource, tileCoord, pixelRatio, projection) {
-        return new Promise(function(resolve, reject)    {
-            tile = tileSource.getTile(tileCoord[0], tileCoord[1], tileCoord[2], pixelRatio, projection);
-            tile.load();
-            /*
-             * Resolves or rejects the promise when
-             * a tile is loaded or and error occurs
-             *
-             * @function onTileLoad
-             */
-            var onTileLoad = function(e) {
-                if(e.type === "tileloadend") {
-                    resolve();
-                } else {
-                    reject();
-                }
-                tileSource.un('tileloadend', onTileLoad);
-                tileSource.un('tileloaderror', onTileLoad);// remove event listeners from memory
-            };
-            tileSource.on('tileloadend', onTileLoad);
-            tileSource.on('tileloaderror', onTileLoad);
-        });
     };
     /*
      * Get a layer object from id
