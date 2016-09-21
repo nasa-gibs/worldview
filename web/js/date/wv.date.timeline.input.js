@@ -311,6 +311,9 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         $(document)
             .mouseout(self.stop)
             .keydown(function(event) {
+                if ( event.target.nodeName === "INPUT" ) {
+                    return;
+                }
                 switch ( event.keyCode ) {
                     case wv.util.key.LEFT:
                         animateReverse("day");
@@ -324,9 +327,6 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
                 }
             })
             .keyup(function(event) {
-                if ( event.target.nodeName === "INPUT" ) {
-                    return;
-                }
                 switch ( event.keyCode ) {
                     case wv.util.key.LEFT:
                     case wv.util.key.RIGHT:
