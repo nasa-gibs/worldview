@@ -48,10 +48,11 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             .attr("class", "wv-gif-progress");
 
         wv.ui.getDialog().append($progress).dialog({ //dialog for progress
-            title: "Downloading images...",
+            title: "Creating GIF...",
             width: 300,
             height: 100
         });
+        $progress.attr("value", 0);
         gifshot.createGIF({
             'gifWidth': animCoords.w,
             'gifHeight': animCoords.h,
