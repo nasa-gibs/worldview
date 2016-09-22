@@ -29,8 +29,9 @@ wv.anim.model = wv.anim.model || function(models, config) {
     self.load = function(state, errors) {
         //is running twice on page load?????
         //console.log('loading');
+        self.rangeState = self.rangeState || {};
+        self.rangeState.playing = false;
         if(state.a) {
-            self.rangeState = self.rangeState || {};
             self.rangeState.state = 'on';
             attributes = state.a.attributes;
             attributes.forEach(function(attr) {
