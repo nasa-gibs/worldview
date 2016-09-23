@@ -46,6 +46,7 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
 
         $timelineFooter = $('#timeline-footer');
         $animateButton.on('click', self.toggleAnimationWidget);
+        $('#wv-animation-widet .wv-close').on('click', self.toggleAnimationWidget);
         if(model.rangeState.state === 'on') { // show animation widget if active in permalink
             $timelineFooter.toggleClass('wv-anim-active');
         }

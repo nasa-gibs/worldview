@@ -94,6 +94,15 @@
 .wv-anim-active #wv-animation-widget {
     display: block;
 }
+.wv-animation-widget i.wv-close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+.wv-animation-widget i.wv-close:hover {
+    color: #999999;
+    cursor: pointer;
+}
 /*
  * Gif Styles
  */
