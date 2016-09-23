@@ -907,6 +907,9 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
         var $coordBtn;
         var $coordWrapper;
         var coordinateFormat;
+        var hoverThrottle;
+
+
         // var timer = null;
         // var isIntervalSet = false;
         
@@ -1008,13 +1011,15 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
             dataRunner.newPoint(pixelValue, map);
         }
         $(map.getViewport())
-            .mouseover(function(){
+            .mouseover(function(e){
                 $('#' + mapId).show();
             })
-            .mouseout(function(){
+            .mouseout(function()    {
                 $('#' + mapId).hide();
+                hoverThrottle.cancel();
+                dataRunner.clearAll();
             })
-            .mousemove(_.throttle(onMouseMove, 300));
+            .mousemove(hoverThrottle = _.throttle(onMouseMove, 300));
     };
 
     /*

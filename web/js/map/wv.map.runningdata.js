@@ -212,6 +212,9 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
         $paletteCase.removeClass('wv-running');
         $palette.removeClass('wv-running');
     };
+    self.clearAll = function() {
+        $('.wv-running').removeClass('wv-running');
+    }
     /*
      * Add running-data component to palette for
      * category layers
