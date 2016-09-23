@@ -60,7 +60,8 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
             rangeOpacity: 0.3,
             pinWidth: 5,
             height: 45,
-            onDrag: self.updateRange
+            onDrag: self.updateRange,
+            onRangeClick: self.onRangeClick
         };
         model.events.on('timeline-change', self.update);
         model.events.on('change', self.update);
@@ -94,6 +95,10 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
 
         return props;
     };
+    self.onRangeClick = function(offsetX) {
+        var date = timeline.x.invert(offsetX)
+        models.date.select(date);
+    }
     self.updateRange = function(startLocation, EndLocation) {
         var startDate = timeline.x.invert(startLocation);
         var endDate = timeline.x.invert(EndLocation);
