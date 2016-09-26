@@ -12,11 +12,11 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     var self = {};
     var dateModel = models.date;
     var animModel = models.anim;
-    var queueLength = 10;
+    var queueLength = 5;
     var animateArray;
     var map = ui.map.selected;
     var zooms = ['year', 'month', 'day'];
-    var queue = new Queue(5, 20);
+    var queue = new Queue(5, queueLength);
     var preloadedArray;
     var dateArray;
     self.events = wv.util.events();
@@ -28,6 +28,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         animModel.events.on('datechange', self.refreshState);
         animModel.events.on('zoom-change', self.refreshState);
         models.proj.events.on("select", self.refreshState);
+        models.layers.events.on('change', self.refreshState);
         map.on('moveend', self.refreshState);
     };
     self.refreshState = function() {
