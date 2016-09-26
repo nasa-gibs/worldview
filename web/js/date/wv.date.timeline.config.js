@@ -518,6 +518,8 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
         tl.pick.update();
         tl.pick.checkLocation();
         model.selectedZoom = level;
+        animModel.events.trigger('timeline-change');
+        animModel.events.trigger('zoom-change');
 
     };
 
@@ -537,22 +539,17 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
             $('.zoom-btn').removeClass("zoom-btn-selected");
             $(this).addClass("zoom-btn-selected");
             self.zoom(1);
-            animModel.events.trigger('timeline-change');
-            animModel.events.trigger('zoom-change');
         });
         d3.select("#zoom-months").on("click",function(d){
             $('.zoom-btn').removeClass("zoom-btn-selected");
             $(this).addClass("zoom-btn-selected");
             self.zoom(2);
-            animModel.events.trigger('timeline-change');
-            animModel.events.trigger('zoom-change');
+
         });
         d3.select("#zoom-days").on("click",function(d){
             $('.zoom-btn').removeClass("zoom-btn-selected");
             $(this).addClass("zoom-btn-selected");
             self.zoom(3);
-            animModel.events.trigger('timeline-change');
-            animModel.events.trigger('zoom-change');
         });
         //Default zoom
         self.zoom(zoomLevel);
