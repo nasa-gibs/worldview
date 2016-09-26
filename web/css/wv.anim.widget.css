@@ -234,7 +234,9 @@ gif-dialog {}
   top: 50%; }
 
 .InputRange-track--active {
-  background: #3f51b5; }
+/*  background: #3f51b5; 
+*/
+}
 
 .InputRange {
   cursor: pointer;
