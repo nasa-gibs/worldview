@@ -96,9 +96,9 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
         return props;
     };
     self.onRangeClick = function(offsetX) {
-        var date = timeline.x.invert(offsetX)
+        var date = timeline.x.invert(offsetX);
         models.date.select(date);
-    }
+    };
     self.updateRange = function(startLocation, EndLocation) {
         var startDate = timeline.x.invert(startLocation);
         var endDate = timeline.x.invert(EndLocation);

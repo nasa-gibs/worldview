@@ -12,13 +12,14 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     var self = {};
     var dateModel = models.date;
     var animModel = models.anim;
-    var queueLength = 5;
+    var queueLength = 10;
     var animateArray;
     var map = ui.map.selected;
     var zooms = ['year', 'month', 'day'];
     var queue = new Queue(5, queueLength);
-    var preloadedArray;
-    var dateArray;
+    var preload = new Cache(100);
+    var preloadArray;
+    var inQueue;
     self.events = wv.util.events();
 
     self.init = function() {
@@ -32,13 +33,12 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         map.on('moveend', self.refreshState);
     };
     self.refreshState = function() {
-        preloadedArray = [];
-        dateArray = [];
+        preloadArray = [];
+        preload.clear();
+        inQueue = {};
         self.state = {
-            loadedLength: 0,
-            fullyLoaded: false,
             playing: false,
-            playIndex: 0
+            playIndex: animModel.rangeState.startDate
         };
         animModel.rangeState.playing = false;
         animModel.events.trigger('change');
@@ -52,11 +52,9 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         endDate = new Date(state.endDate);
         startDate  = new Date(state.startDate);
 
-        if(!dateArray[0]) {
-            dateArray = self.getDateArray(startDate, endDate);
-        }
-        self.checkShouldPlay();
         self.checkQueue(queueLength, self.state.playIndex);
+        self.checkShouldPlay();
+        
 
     };
     self.getInterval = function() {
@@ -72,99 +70,153 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         }
         return arra;
     };
+    self.nextDate = function(date) {
+        return new Date(wv.util.dateAdd(date, self.getInterval(), 1));
+    };
     self.addDate = function(date) {
+        console.log(date)
+        self.addToInQueue(date);
         queue.add(function () {
+            
             return ui.map.promiseDay(date);
         })
-        .then(function() {
-            preloadedArray.push(' ');
+        .then(function(date) {
+            self.addDateToCache(date);
             self.checkQueue(queueLength, self.state.playIndex);
             self.checkShouldPlay();
+            self.shiftCache();
         });
     };
-    self.checkQueue = function(bufferLength,  index) {
-        var alreadyLoaded;
-        var inQueue;
-        var loading;
-        var totalQueuedOrInQueue;
-        var i;
-
-        alreadyLoaded = preloadedArray.length;
-        inQueue = queue.getQueueLength(); // added to queue but hasn't been requested
-        loading = queue.getPendingLength(); // currently loading
-        totalQueuedOrInQueue = alreadyLoaded + inQueue + loading;
-
-        if(totalQueuedOrInQueue === 0) {
-            i = 0;
-            while(i < bufferLength) {
-                if(!dateArray[i]) {
-                    return;
-                }
-                self.addDate(dateArray[i]);
-                i++;
-            }
-            return;
+    self.addToInQueue = function(date) {
+        var strDate = wv.util.toISOStringDate(date);
+        inQueue[strDate] = date;
+        preloadArray.push(strDate);
+    };
+    self.addDateToCache = function(date) {
+        var strDate = wv.util.toISOStringDate(date);
+        preload.setItem(strDate, date);
+        delete inQueue[strDate]; 
+    };
+    self.shiftCache = function() {
+        var key;
+        if(preload.getItem(preloadArray[0]) &&
+           preload.size() + 1 >= queueLength  &&
+           new Date(self.state.playIndex) > new Date(preloadArray[0])) {
+            key = preloadArray.shift();
+            preload.removeItem(key);
         }
-        if(dateArray[totalQueuedOrInQueue] && totalQueuedOrInQueue < index + bufferLength) {
-            i = totalQueuedOrInQueue;
-            while(i < index + bufferLength) {
-                if(!dateArray[i]) {
-                    return;
-                }
-                self.addDate(dateArray[i]);
-                i++;
+
+    };
+    self.checkQueue = function(bufferLength, index) {
+        var date;
+        var currentDate;
+        var startDate = new Date(animModel.rangeState.startDate);
+        var endDate = new Date(animModel.rangeState.endDate);
+        var lastToQueue;
+        var nextDate;
+        var nextDateStr;
+        var pending;
+        var waiting;
+        var processing;
+        
+        pending = queue.getQueueLength();
+        waiting = queue.getPendingLength();
+        processing = pending + waiting;
+        if(!animModel.rangeState.playing) {
+            return self.refreshState;
+        }
+
+        currentDate = new Date(index);
+        lastToQueue = self.getLastBufferDateStr(new Date(currentDate), startDate, endDate);
+        if(!preloadArray[0] && !inQueue[index]) {
+            while(currentDate <= new Date(lastToQueue)) {
+                self.addDate(currentDate);
+                currentDate = self.nextDate(currentDate);
             }
-            return;
+        } else if (!preloadArray[lastToQueue] &&
+                   !inQueue[lastToQueue] ) {// if last preload date doesn't exist
+              nextDate = self.getNextBufferDate(currentDate, startDate, endDate);
+              nextDateStr = wv.util.toISOStringDate(nextDate);
+
+              if(!inQueue[nextDateStr] &&
+                 !preloadArray.length + processing - 2 <= queueLength &&
+                 !preload.getItem(nextDateStr)) {
+                  self.addDate(nextDate);
+            }
         }
     };
-    self.checkShouldLoop = function(arra) {
-        var fps = 1000 / animModel.rangeState.speed;
+    self.getNextBufferDate = function(currentDate, startDate, endDate) {
+        var lastInBuffer = new Date(preloadArray[preloadArray.length - 1]);
+        if(lastInBuffer >= endDate) {
+            return self.nextDate(startDate);
+        }
+        return self.nextDate(lastInBuffer);
+    };
+    self.getLastBufferDateStr = function(currentDate, startDate, endDate) {
+        var day = currentDate;
+        var loop = animModel.rangeState.loop;
+        var i = 0; 
+        while(i <= queueLength) {
+            if(day > endDate) {
+                if(!loop) {
+                    return wv.util.toISOStringDate(endDate);
+                }
+                day = startDate;
+            }
+            day = self.nextDate(day);
+            i++;
+        }
+        return wv.util.toISOStringDate(day);
+    };
+    self.checkShouldLoop = function() {
         if(animModel.rangeState.loop) {
-            self.playDateArray(arra, fps);
-        } else {
+            self.state.playIndex = animModel.rangeState.startDate;
+            self.checkQueue(queueLength, self.state.playIndex);
             self.state.playing = false;
-            animModel.rangeState.playing = false;
+            self.checkShouldPlay();
+        } else {
+            self.refreshState();
             animModel.events.trigger('change');
         }
     };
     self.checkShouldPlay = function() {
-        var dateArraLength = dateArray.length;
-        var index = self.state.playIndex;
+        var currentDate = new Date(self.state.playIndex);
         var fps = 1000 / animModel.rangeState.speed;
+        var endDate = new Date(animModel.rangeState.endDate);
+        var startDate = new Date(animModel.rangeState.startDate);
         if(self.state.playing || !animModel.rangeState.playing) {
             return false;
         }
-        if(preloadedArray[index + queueLength - 1]) {
+        console.log(preload.size())
+        if(preload.getItem(self.getLastBufferDateStr(currentDate, startDate, endDate))) {
             self.state.playing = true;
-            return self.playDateArray(dateArray, fps);
-        }
-        if(index !== dateArraLength && preloadedArray.length === dateArraLength) {
-            self.state.playing = true;
-            return self.playDateArray(dateArray, fps);
+            return self.playDateArray(self.state.playIndex);
         }
     };
-    self.playDateArray = function(arra, fps) {
+    self.playDateArray = function(index) {
         var interval;
-        var len = arra.length;
-        var playIndex = self.state.playIndex;
+        var playIndex = index;
+        var endDate = new Date(animModel.rangeState.endDate);
         var player = function() {
-            if(playIndex >= len) {
-                // clearInterval(interval);
-                self.state.playIndex = 0;
-                self.checkShouldLoop(arra);
-                return;
-            } else if(!animModel.rangeState.playing || playIndex >= preloadedArray.length) {
+           if(!animModel.rangeState.playing || !preload.getItem(playIndex)) {
                 clearInterval(interval);
                 self.state.playing = false;
                 self.state.playIndex = playIndex;
                 return;
             }
-            dateModel.select(arra[playIndex]);
+            dateModel.select(new Date(playIndex));
+            self.state.playIndex = playIndex;
             self.checkQueue(queueLength, playIndex);
-            playIndex++;
+            playIndex = wv.util.toISOStringDate(self.nextDate(new Date(playIndex)));
+            if(new Date(playIndex) > endDate) {
+                // clearInterval(interval);
+                self.state.playIndex = null;
+                self.checkShouldLoop();
+                return;
+            }
             interval = setTimeout(player, 1000 / animModel.rangeState.speed);
         };
-        interval = setTimeout(player, fps);
+        interval = setTimeout(player, animModel.rangeState.speed);
     };
     self.init();
     return self;
