@@ -12,15 +12,16 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     var self = {};
     var dateModel = models.date;
     var animModel = models.anim;
-    var queueLength = 10;
+    var queueLength = 5;
     var animateArray;
     var map = ui.map.selected;
     var zooms = ['year', 'month', 'day'];
-    var queue = new Queue(5, queueLength);
+    var queue = new Queue(5, Infinity);
     var preload = new Cache(100);
     var preloadArray;
     var inQueue;
     self.events = wv.util.events();
+    var pastDates;
 
     self.init = function() {
         self.refreshState();
@@ -35,6 +36,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     self.refreshState = function() {
         preloadArray = [];
         preload.clear();
+        pastDates = {};
         inQueue = {};
         self.state = {
             playing: false,
@@ -74,17 +76,15 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         return new Date(wv.util.dateAdd(date, self.getInterval(), 1));
     };
     self.addDate = function(date) {
-        console.log(date)
         self.addToInQueue(date);
         queue.add(function () {
-            
             return ui.map.promiseDay(date);
         })
         .then(function(date) {
             self.addDateToCache(date);
+            self.shiftCache();
             self.checkQueue(queueLength, self.state.playIndex);
             self.checkShouldPlay();
-            self.shiftCache();
         });
     };
     self.addToInQueue = function(date) {
@@ -100,12 +100,12 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     self.shiftCache = function() {
         var key;
         if(preload.getItem(preloadArray[0]) &&
-           preload.size() + 1 >= queueLength  &&
-           new Date(self.state.playIndex) > new Date(preloadArray[0])) {
+           preload.size() >= queueLength  &&
+           pastDates[preloadArray[0]]) {
             key = preloadArray.shift();
             preload.removeItem(key);
+            delete pastDates[key];
         }
-
     };
     self.checkQueue = function(bufferLength, index) {
         var date;
@@ -125,55 +125,58 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         if(!animModel.rangeState.playing) {
             return self.refreshState;
         }
-
         currentDate = new Date(index);
         lastToQueue = self.getLastBufferDateStr(new Date(currentDate), startDate, endDate);
-        if(!preloadArray[0] && !inQueue[index]) {
+                if(!preloadArray[0] && !inQueue[index]) {
             while(currentDate <= new Date(lastToQueue)) {
                 self.addDate(currentDate);
                 currentDate = self.nextDate(currentDate);
             }
-        } else if (!preloadArray[lastToQueue] &&
+        } else if (!preload[lastToQueue] &&
                    !inQueue[lastToQueue] ) {// if last preload date doesn't exist
               nextDate = self.getNextBufferDate(currentDate, startDate, endDate);
               nextDateStr = wv.util.toISOStringDate(nextDate);
-
               if(!inQueue[nextDateStr] &&
-                 !preloadArray.length + processing - 2 <= queueLength &&
-                 !preload.getItem(nextDateStr)) {
+                 preloadArray.length < bufferLength &&
+                 !preload.getItem(nextDateStr) &&
+                 nextDate <= endDate &&
+                 nextDate >= startDate) {
                   self.addDate(nextDate);
             }
         }
     };
     self.getNextBufferDate = function(currentDate, startDate, endDate) {
         var lastInBuffer = new Date(preloadArray[preloadArray.length - 1]);
-        if(lastInBuffer >= endDate) {
-            return self.nextDate(startDate);
+        var nextDate = self.nextDate(lastInBuffer);
+        if(lastInBuffer >= endDate || self.nextDate(lastInBuffer) > endDate) {
+            return startDate;
         }
         return self.nextDate(lastInBuffer);
     };
     self.getLastBufferDateStr = function(currentDate, startDate, endDate) {
         var day = currentDate;
         var loop = animModel.rangeState.loop;
-        var i = 0; 
-        while(i <= queueLength) {
+        var i = 1; 
+        while(i < queueLength) {
             if(day > endDate) {
                 if(!loop) {
-                    return wv.util.toISOStringDate(endDate);
+                    return wv.util.toISOStringDate(wv.util.dateAdd(day, self.getInterval(), -1));
                 }
                 day = startDate;
+            } else {
+                day = self.nextDate(day);
             }
-            day = self.nextDate(day);
             i++;
         }
         return wv.util.toISOStringDate(day);
     };
     self.checkShouldLoop = function() {
         if(animModel.rangeState.loop) {
-            self.state.playIndex = animModel.rangeState.startDate;
-            self.checkQueue(queueLength, self.state.playIndex);
-            self.state.playing = false;
-            self.checkShouldPlay();
+            setTimeout( function() {
+                self.shiftCache();
+                self.checkShouldPlay();
+                self.checkQueue(queueLength,self.state.playIndex);
+            }, 1000 / animModel.rangeState.speed);
         } else {
             self.refreshState();
             animModel.events.trigger('change');
@@ -187,17 +190,20 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         if(self.state.playing || !animModel.rangeState.playing) {
             return false;
         }
-        console.log(preload.size())
         if(preload.getItem(self.getLastBufferDateStr(currentDate, startDate, endDate))) {
             self.state.playing = true;
             return self.playDateArray(self.state.playIndex);
         }
+        self.shiftCache();
+        self.checkQueue(queueLength,self.state.playIndex);
     };
     self.playDateArray = function(index) {
         var interval;
         var playIndex = index;
         var endDate = new Date(animModel.rangeState.endDate);
         var player = function() {
+            self.shiftCache();
+            self.checkQueue(queueLength, playIndex);
            if(!animModel.rangeState.playing || !preload.getItem(playIndex)) {
                 clearInterval(interval);
                 self.state.playing = false;
@@ -205,12 +211,13 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
                 return;
             }
             dateModel.select(new Date(playIndex));
+            pastDates[playIndex] = new Date(playIndex); // played record
             self.state.playIndex = playIndex;
-            self.checkQueue(queueLength, playIndex);
             playIndex = wv.util.toISOStringDate(self.nextDate(new Date(playIndex)));
             if(new Date(playIndex) > endDate) {
-                // clearInterval(interval);
-                self.state.playIndex = null;
+                clearInterval(interval);
+                self.state.playIndex = animModel.rangeState.startDate;
+                self.state.playing = false;
                 self.checkShouldLoop();
                 return;
             }
