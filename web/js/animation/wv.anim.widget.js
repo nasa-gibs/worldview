@@ -39,14 +39,15 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
             startDate: new Date(model.rangeState.startDate),
             endDate: new Date(model.rangeState.endDate),
             minDate: models.date.minDate(),
-            maxDate: models.date.maxDate()
+            maxDate: models.date.maxDate(),
+            onClose: self.toggleAnimationWidget
+
         });
         //mount react component
         self.reactComponent = ReactDOM.render(Widget, $('#wv-animation-widet-case')[0]);
 
         $timelineFooter = $('#timeline-footer');
         $animateButton.on('click', self.toggleAnimationWidget);
-        $('#wv-animation-widet .wv-close').on('click', self.toggleAnimationWidget);
         if(model.rangeState.state === 'on') { // show animation widget if active in permalink
             $timelineFooter.toggleClass('wv-anim-active');
         }
