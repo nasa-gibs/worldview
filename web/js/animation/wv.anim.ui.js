@@ -187,11 +187,9 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     };
     self.checkShouldLoop = function() {
         if(animModel.rangeState.loop) {
-            setTimeout( function() {
-                self.shiftCache();
-                self.checkShouldPlay();
-                self.checkQueue(queueLength,self.state.playIndex);
-            }, 1000 / animModel.rangeState.speed);
+            self.shiftCache();
+            self.checkShouldPlay();
+            self.checkQueue(queueLength,self.state.playIndex);
         } else {
             self.refreshState();
             animModel.events.trigger('change');
