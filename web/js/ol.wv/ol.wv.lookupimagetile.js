@@ -42,7 +42,7 @@ ol.wv.LookupImageTile.prototype.load = function() {
     if ( this.state === ol.Tile.State.IDLE ) {
         this.state = ol.Tile.State.LOADING;
         var that = this;
-        this.image_.addEventListener("load", function() {
+        var onImageLoad =  function(e) {
             that.canvas_ = document.createElement("canvas");
             that.canvas_.width = that.image_.width;
             that.canvas_.height = that.image_.height;
@@ -61,19 +61,20 @@ ol.wv.LookupImageTile.prototype.load = function() {
                 var target = that.lookup_[source];
 
                 if ( target ) {
-                    pixels[i + 0] = target["r"];
-                    pixels[i + 1] = target["g"];
-                    pixels[i + 2] = target["b"];
-                    pixels[i + 3] = target["a"];
+                    pixels[i + 0] = target.r;
+                    pixels[i + 1] = target.g;
+                    pixels[i + 2] = target.b;
+                    pixels[i + 3] = target.a;
                 }
             }
             g.putImageData(imageData, 0, 0);
             that.state = ol.Tile.State.LOADED;
             that.changed();
-        });
+            that.image_.removeEventListener("load", onImageLoad);
+        };
         this.image_.src = this.src_;
-    };
-
+        this.image_.addEventListener("load", onImageLoad);
+    }
 };
 
 /**
