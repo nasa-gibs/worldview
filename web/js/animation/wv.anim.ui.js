@@ -35,31 +35,37 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         map.on('moveend', self.refreshState);
     };
     self.refreshState = function() {
+        wv.ui.indicator._hide();
         preloadArray = [];
         preload.clear();
         pastDates = {};
         inQueue = {};
         self.state = {
             playing: false,
-            playIndex: animModel.rangeState.startDate
+            playIndex: self.getStartDate()
         };
         animModel.rangeState.playing = false;
         animModel.events.trigger('change');
-        wv.ui.indicator._hide();
     };
-    self.onPushedPlay = function() {
+    self.getStartDate = function() {
         var state;
         var endDate;
         var startDate;
+        var currentDate;
 
         state = animModel.rangeState;
         endDate = new Date(state.endDate);
-        startDate  = new Date(state.startDate);
+        startDate  = new Date(state.startDate); 
+        currentDate = dateModel.selected;
+        if(currentDate > startDate && self.nextDate(currentDate) < endDate) {
+            return wv.util.toISOStringDate(self.nextDate(currentDate));
+        }
+        return wv.util.toISOStringDate(startDate);
 
+    };
+    self.onPushedPlay = function() {
         self.checkQueue(queueLength, self.state.playIndex);
         self.checkShouldPlay();
-        
-
     };
     self.getInterval = function() {
         return zooms[ui.timeline.config.currentZoom - 1];
@@ -134,7 +140,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
                 self.addDate(currentDate);
                 currentDate = self.nextDate(currentDate);
             }
-            loader = wv.ui.indicator.loading();
+            wv.ui.indicator.loading();
 
         } else if (!preload[lastToQueue] &&
                    !inQueue[lastToQueue] ) {// if last preload date doesn't exist
@@ -213,7 +219,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
                 clearInterval(interval);
                 self.state.playing = false;
                 self.state.playIndex = playIndex;
-                if(!preload.getItem(playIndex)) {
+                if(!preload.getItem(playIndex) && animModel.rangeState.playing) { // Still playing, add loader
                     wv.ui.indicator.loading();
                 }
                 return;
