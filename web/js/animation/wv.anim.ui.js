@@ -32,7 +32,13 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         animModel.events.on('zoom-change', self.refreshState);
         models.proj.events.on("select", self.refreshState);
         models.layers.events.on('change', self.refreshState);
+        models.date.events.on("select", self.dateChange);
         map.on('moveend', self.refreshState);
+    };
+    self.dateChange = function() {
+        if(!self.state.playing) {
+            self.refreshState();
+        }
     };
     self.refreshState = function() {
         wv.ui.indicator._hide();
@@ -52,7 +58,6 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         var endDate;
         var startDate;
         var currentDate;
-
         state = animModel.rangeState;
         endDate = new Date(state.endDate);
         startDate  = new Date(state.startDate); 

@@ -127,7 +127,7 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
       d = d3.select(tl.zoom.current.pick.hoveredTick[0][0]).data()[0];
       tl.ticks.label.remove();
       tl.ticks.normal.hover.call(tickBg,d);
-    }
+    };
 
     var updateChanges = function(d){
         prevChange = tl.zoom.current.pick.prevChange(d);
