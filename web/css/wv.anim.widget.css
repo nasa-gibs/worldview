@@ -106,9 +106,12 @@
 /*
  * Gif Styles
  */
-gif-dialog {}
+.gif-dialog {}
 .gif-dialog .content {
     line-height: 15px;
+}
+.gif-dialog .ui-button {
+    margin-top: 5px;
 }
 .gif-results-dialog-case {
     text-transform: capitalize;
