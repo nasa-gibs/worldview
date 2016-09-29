@@ -152,11 +152,11 @@ $(function() {
 
         elapsed("ui");
         // Create widgets
-        ui.anim = wv.anim.ui(models, ui);
         ui.proj = wv.proj.ui(models, config);
         ui.sidebar = wv.layers.sidebar(models, config);
         ui.activeLayers = wv.layers.active(models, ui, config);
         ui.addModal = wv.layers.modal(models, ui, config);
+
 
         function timelineInit() {
             ui.timeline = wv.date.timeline(models, config, ui);
@@ -167,6 +167,7 @@ $(function() {
             ui.timeline.pan = wv.date.timeline.pan(models, config, ui);
             ui.timeline.config = wv.date.timeline.config(models, config, ui);
             ui.timeline.input = wv.date.timeline.input(models, config, ui);
+            ui.anim = wv.anim.ui(models, ui);
             ui.anim.rangeselect = wv.anim.rangeselect(models, config, ui); // SETS STATE: NEEDS TO LOAD BEFORE ANIMATION WIDGET
             ui.anim.widget = wv.anim.widget(models, config, ui);
             ui.anim.gif = wv.anim.gif(models, config, ui);
