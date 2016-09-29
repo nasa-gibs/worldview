@@ -10,9 +10,10 @@ var wv = wv || {};
 wv.anim = wv.anim || {};
 wv.anim.ui = wv.anim.ui || function(models, ui) { 
     var self = {};
+    self.events = wv.util.events();
     var dateModel = models.date;
     var animModel = models.anim;
-    var queueLength = 5;
+    var queueLength = 10;
     var animateArray;
     var map = ui.map.selected;
     var zooms = ['year', 'month', 'day'];
@@ -20,8 +21,8 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     var preload = new Cache(100);
     var preloadArray;
     var inQueue;
-    self.events = wv.util.events();
     var pastDates;
+    var loader;
 
     self.init = function() {
         self.refreshState();
@@ -44,6 +45,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         };
         animModel.rangeState.playing = false;
         animModel.events.trigger('change');
+        wv.ui.indicator._hide();
     };
     self.onPushedPlay = function() {
         var state;
@@ -127,11 +129,13 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         }
         currentDate = new Date(index);
         lastToQueue = self.getLastBufferDateStr(new Date(currentDate), startDate, endDate);
-                if(!preloadArray[0] && !inQueue[index]) {
+        if(!preloadArray[0] && !inQueue[index]) {
             while(currentDate <= new Date(lastToQueue)) {
                 self.addDate(currentDate);
                 currentDate = self.nextDate(currentDate);
             }
+            loader = wv.ui.indicator.loading();
+
         } else if (!preload[lastToQueue] &&
                    !inQueue[lastToQueue] ) {// if last preload date doesn't exist
               nextDate = self.getNextBufferDate(currentDate, startDate, endDate);
@@ -192,6 +196,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         }
         if(preload.getItem(self.getLastBufferDateStr(currentDate, startDate, endDate))) {
             self.state.playing = true;
+            wv.ui.indicator._hide();
             return self.playDateArray(self.state.playIndex);
         }
         self.shiftCache();
@@ -208,6 +213,9 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
                 clearInterval(interval);
                 self.state.playing = false;
                 self.state.playIndex = playIndex;
+                if(!preload.getItem(playIndex)) {
+                    wv.ui.indicator.loading();
+                }
                 return;
             }
             dateModel.select(new Date(playIndex));
