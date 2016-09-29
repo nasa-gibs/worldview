@@ -238,7 +238,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
                 .html("<span> Estimated Size: " + (blob.size / 1024).toFixed() + " KB</span>");
 
             var $catalog =         
-                "<div class='gif-results-dialog' style='height: " + animCoords.h + "px ' >" + 
+                "<div class='gif-results-dialog' style='height: " + animCoords.h + "px; min-height: 210px;' >" + 
                     "<div>" +
                         "<div><b>" +
                             "Size: " + 
