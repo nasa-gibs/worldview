@@ -270,6 +270,15 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
                             animModel.rangeState.endDate +
                         "</div>" +
                     "</div>" +
+                    "<div>" +
+                        "<div><b>" +
+                            "Increments: " + 
+                        "</b></div>" +
+                        "<div>" +
+                            ui.anim.widget.getIncrements() +
+                        "</div>" +
+
+                    "</div>" +
                 "</div>";
             var $dialogBodyCase = $("<div></div>");
             $dialogBodyCase.addClass('gif-results-dialog-case');
