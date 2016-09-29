@@ -23,7 +23,6 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
     var animCoords = null;
     var previousCoords = null;
     var animModel = models.anim;
-    var modalWidth = 200; 
     var $progress;
     var GRATICLE_WARNING =
         "The graticule layer cannot be used to take a snapshot. Would you " +
@@ -325,13 +324,13 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
         animCoords = undefined;
         jcropAPI.destroy();
     };
-    self.getSelectorDialog = function() {
+    self.getSelectorDialog = function(width) {
         var $dialogBox;
+        var $createButton;
+        var $dialog =$("<div class='gif-dialog'></div>");
         var dialog =
-            "<div class='gif-dialog'>" + 
-                "<div class='content'>" +
-                    "Press the Submit Icon to create an" +
-                    "animation from " +
+                "<div class='content'>"  +
+                    "create an animation from " +
                     "<b>" +
                         animModel.rangeState.startDate +
                     "</b>" +
@@ -339,20 +338,27 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
                     "<b>" +
                         animModel.rangeState.endDate +
                     "</b>" +
-                    " a rate of " +
+                    " at a rate of " +
                         animModel.rangeState.speed +
                     " frames per second" +
-                "</div>" +
-            "</div>";
-
-
+                "</div>";
+        $createButton = $("<a><span class=ui-button-text>Create Gif</span></a>")
+            .attr("type", "button")
+            .attr("role", "button")
+            .attr("class", "ui-button ui-widget ui-state-default ui-button-text-only")
+            .hover(function() {$(this).addClass("ui-state-hover");}, function() {$(this).removeClass("ui-state-hover");});
+        $dialog.html(dialog).append($createButton);
+        $createButton.on('click', self.getGif);
         $dialogBox = wv.ui.getDialog();
-        $dialogBox.html(dialog);
+        $dialogBox.html($dialog);
+        $dialogBox.css({paddingBottom: '10px'});
         $dialogBox.dialog({
             dialogClass: "wv-panel wv-image",
             title: "Generate GIF",
-            height: 160,
-            width: modalWidth,
+            height: 'auto',
+            width: width,
+            minHeight: 40,
+            resizable: false,
             show: { effect: "slide", direction: "down" },
             position: {
                 my: "left top",
@@ -367,12 +373,14 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
         });
         return $dialogBox;
     };
-    var setDialogMargin = function($dialog, width) {
-        var margin = (width - modalWidth) / 2;
+    var setDialogWidth = function($dialog, width) {
+        var $parent;
         if($dialog) {
-            $dialog.parent().position({
+            $parent = $dialog.parent();
+            $parent.width(width);
+            $parent.position({
                 my: "left top",
-                at: "left+" + margin + " bottom+10",
+                at: "left bottom+10",
                 of: $(".jcrop-tracker")
             });
         }
@@ -427,7 +435,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
                 } else {
                     $("#wv-gif-button").button("enable");
                 }
-                setDialogMargin($dialog, c.w);
+                setDialogWidth($dialog, c.w);
                 setIconFontSize($dlButton, c.w);
             },
             onRelease: function(c) {
@@ -446,7 +454,6 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             jcropAPI = this;
             $('#timeline-footer').toggleClass('wv-anim-active');
             $dialog = self.getSelectorDialog();
-            setDialogMargin($dialog, starterWidth);
             $tracker = this.ui.selection.find('.jcrop-tracker');
             $tracker.append($dlButton);
             $dlButton = $('.wv-dl-gif-bt-case i');
