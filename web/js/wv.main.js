@@ -167,10 +167,11 @@ $(function() {
             ui.timeline.pan = wv.date.timeline.pan(models, config, ui);
             ui.timeline.config = wv.date.timeline.config(models, config, ui);
             ui.timeline.input = wv.date.timeline.input(models, config, ui);
-            ui.anim = wv.anim.ui(models, ui);
+            ui.anim = {}; 
             ui.anim.rangeselect = wv.anim.rangeselect(models, config, ui); // SETS STATE: NEEDS TO LOAD BEFORE ANIMATION WIDGET
             ui.anim.widget = wv.anim.widget(models, config, ui);
             ui.anim.gif = wv.anim.gif(models, config, ui);
+            ui.anim.ui = wv.anim.ui(models, ui);
 
             ui.dateLabel = wv.date.label(models);
         }
