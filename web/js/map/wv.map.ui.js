@@ -388,7 +388,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
         var map;
         var promiseArray;
 
-        layers = models.layers.get();
+        layers = self.getActiveLayersWithData(date);
         map = self.selected;
         frameState = self.selected.frameState_;
         pixelRatio = frameState.pixelRatio;
@@ -443,6 +443,17 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
                 resolve(date);
             });
         });
+    };
+    self.getActiveLayersWithData = function(date) {
+        var layers;
+        var arra = [];
+        layers = models.layers.get();
+        _.each(layers, function(layer) {
+            if(layer.visible && new Date(layer.startDate > date)) {
+                arra.push(layer);
+            }
+        });
+        return arra;
     };
     /*
      * Get a layer object from id
