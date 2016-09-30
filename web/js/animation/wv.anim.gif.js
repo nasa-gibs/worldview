@@ -182,7 +182,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
         while(current <= toDate) {
             var src = wv.util.format(url, wv.util.toISOStringDate(current));
             a.push(src);
-            current = wv.util.dateAdd(current, ui.anim.getInterval(), 1);
+            current = wv.util.dateAdd(current, ui.anim.ui.getInterval(), 1);
         }
         for(var i = 0,
             len = animModel.rangeState.speed / 2, // get a half seconds worth of frames

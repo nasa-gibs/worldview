@@ -260,6 +260,9 @@ wv.util = (function(self) {
         var lastDay = new Date(Date.UTC(y, m + 1, 0));
         return lastDay.getUTCDate();
     };
+    self.objectLength = function(obj) {
+        return Object.keys(obj).length;
+    }
 
     /**
      * Returns the day of week for the given date object
