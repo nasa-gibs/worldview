@@ -206,7 +206,11 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     self.setNewDate = function(date, newDate) {
       var interval = self.getInterval();
       var day = date.getDate();
+      var newDateDay = newDate.getDate();
       var month = date.getMonth();
+      if(day > newDateDay) {
+          newDate = self.nextDate(newDate);
+      }
       if(interval === 'month') {
           return new Date(newDate.setUTCDate(day + 1));
       } else if(interval === 'year') {
