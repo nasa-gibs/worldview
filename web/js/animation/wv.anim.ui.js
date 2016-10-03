@@ -13,7 +13,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     self.events = wv.util.events();
     var dateModel = models.date;
     var animModel = models.anim;
-    var queueLength = 10;
+    var queueLength = 3;
     var animateArray;
     var map = ui.map.selected;
     var zooms = ['year', 'month', 'day'];
@@ -116,12 +116,13 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         var startDate = wv.util.parseDateUTC(animModel.rangeState.startDate);
         var endDate = wv.util.parseDateUTC(animModel.rangeState.endDate);
         var loop = animModel.rangeState.loop;
-        var lastToQueue
+        var lastToQueue;
         if(!animModel.rangeState.playing) {
             return self.refreshState();
         }
         currentDate = wv.util.parseDateUTC(index);
         lastToQueue = self.getLastBufferDateStr(currentDate, startDate, endDate);
+
         if(!preloadArray[0] && !inQueue[index]) {
             self.initialPreload(currentDate, startDate, endDate, lastToQueue);
         } else if (!preload[lastToQueue] && !inQueue[lastToQueue] ) {// if last preload date doesn't exist
@@ -141,7 +142,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
             }
         }
         wv.ui.indicator.loading();
-    }
+    };
     self.addItemToQueue = function(currentDate, startDate, endDate) {
         var nextDate = self.getNextBufferDate(currentDate, startDate, endDate);
         var nextDateStr = wv.util.toISOStringDate(nextDate);
@@ -152,7 +153,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
            nextDate >= startDate) {
             self.addDate(nextDate);
       }
-    }
+    };
     self.getNextBufferDate = function(currentDate, startDate, endDate) {
         var lastInBuffer = wv.util.parseDateUTC(preloadArray[preloadArray.length - 1]);
         var nextDate = self.nextDate(lastInBuffer);
@@ -166,24 +167,26 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         var loop = animModel.rangeState.loop;
         var i = 1; 
         while(i < queueLength) {
-            if(day > endDate) {
+            if(self.nextDate(day) > endDate) {
                 if(!loop) {
                     return wv.util.toISOStringDate(wv.util.dateAdd(day, self.getInterval(), -1));
                 }
                 day = self.setNewDate(day, startDate);
+
             } else {
                 day = self.nextDate(day);
             }
-
             i++;
         }
+
         return wv.util.toISOStringDate(day);
     };
-    self.checkShouldLoop = function() {
+    self.checkShouldLoop = function(playIndexJSDate) {
         if(animModel.rangeState.loop) {
             self.shiftCache();
+            self.state.playIndex = wv.util.toISOStringDate(self.setNewDate(playIndexJSDate, new Date(animModel.rangeState.startDate)));
             self.checkShouldPlay();
-            self.checkQueue(queueLength,self.state.playIndex);
+            //self.checkQueue(queueLength,self.state.playIndex);
         } else {
             self.refreshState();
         }
@@ -196,6 +199,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         if(self.state.playing || !animModel.rangeState.playing) {
             return false;
         }
+
         if(preload[self.getLastBufferDateStr(currentDate, startDate, endDate)]) {
             self.state.playing = true;
             wv.ui.indicator._hide();
@@ -204,26 +208,26 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         self.shiftCache();
     };
     self.setNewDate = function(date, newDate) {
-      var interval = self.getInterval();
-      var day = date.getDate();
-      var newDateDay = newDate.getDate();
-      var month = date.getMonth();
-      if(day > newDateDay) {
-          newDate = self.nextDate(newDate);
-      }
-      if(interval === 'month') {
-          return new Date(newDate.setUTCDate(day + 1));
-      } else if(interval === 'year') {
-          newDate.setUTCDate(month);
-          return new Date(newDate.setUTCDate(day + 1));
-      } else {
-          return newDate;
-      }
-
-    }
+        var interval = self.getInterval();
+        var day = date.getDate() + 1;
+        var newDateDay = newDate.getDate();
+        var month = date.getMonth();
+        if(day < newDateDay) {
+            newDate = self.nextDate(newDate);
+        }
+        if(interval === 'month') {
+            return new Date(newDate.setUTCDate(day));
+        } else if(interval === 'year') {
+            newDate.setUTCDate(month);
+            return new Date(newDate.setUTCDate(day ));
+        } else {
+            return newDate;
+        }
+    };
     self.playDateArray = function(index) {
         var interval;
         var playIndex = index;
+        var playIndexJSDate;
         var endDate = wv.util.parseDateUTC(animModel.rangeState.endDate);
         var player = function() {
             self.shiftCache();
@@ -241,12 +245,12 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
             dateModel.select(wv.util.parseDateUTC(playIndex));
             pastDates[playIndex] = wv.util.parseDateUTC(playIndex); // played record
             self.state.playIndex = playIndex;
-            playIndex = wv.util.toISOStringDate(self.nextDate(wv.util.parseDateUTC(playIndex)));
-            if(wv.util.parseDateUTC(playIndex) > endDate) {
+            playIndex = wv.util.toISOStringDate(self.nextDate(new Date(playIndex)));
+            playIndexJSDate = new Date(playIndex);
+            if(playIndexJSDate > endDate) {
                 clearInterval(interval);
-                self.state.playIndex = animModel.rangeState.startDate;
                 self.state.playing = false;
-                self.checkShouldLoop();
+                self.checkShouldLoop(playIndexJSDate);
                 return;
             }
             interval = setTimeout(player, 1000 / animModel.rangeState.speed);
