@@ -203,7 +203,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         if(preload[self.getLastBufferDateStr(currentDate, startDate, endDate)]) {
             self.state.playing = true;
             wv.ui.indicator._hide();
-            return self.playDateArray(self.state.playIndex);
+            return self.animate(self.state.playIndex);
         }
         self.shiftCache();
     };
@@ -224,7 +224,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
             return newDate;
         }
     };
-    self.playDateArray = function(index) {
+    self.animate = function(index) {
         var interval;
         var playIndex = index;
         var playIndexJSDate;
