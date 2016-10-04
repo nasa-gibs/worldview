@@ -410,31 +410,32 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
             if(layer) {
                 cache.removeItem(key);
             }
+            layer = createLayer(def, {date: date});
             return new Promise(function(resolve, reject){
-                    layer = createLayer(def, {date: date});
-                    renderer = new ol.renderer.canvas.TileLayer(layer);
-                    tileSource = layer.getSource();
-                    tileGrid = tileSource.getTileGridForProjection(projection);
-                    currentZ = tileGrid.getZForResolution(viewState.resolution, renderer.zDirection);
-                    tileGrid.forEachTileCoord(extent, currentZ, function(tileCoord) {
-                        tile = tileSource.getTile(tileCoord[0], tileCoord[1], tileCoord[2], pixelRatio, projection);
-                        tile.load();
-                        var loader = function(e) {
-                            if(e.type === 'tileloadend') {
-                                --i;
-                                if(i === 0) {
-                                    resolve();
-                                }
-                            } else {
-                                reject(new Error('No response at this URL'));
+
+                renderer = new ol.renderer.canvas.TileLayer(layer);
+                tileSource = layer.getSource();
+                tileGrid = tileSource.getTileGridForProjection(projection);
+                currentZ = tileGrid.getZForResolution(viewState.resolution, renderer.zDirection);
+                tileGrid.forEachTileCoord(extent, currentZ, function(tileCoord) {
+                    tile = tileSource.getTile(tileCoord[0], tileCoord[1], tileCoord[2], pixelRatio, projection);
+                    tile.load();
+                    var loader = function(e) {
+                        if(e.type === 'tileloadend') {
+                            --i;
+                            if(i === 0) {
+                                resolve();
                             }
-                            this.un('tileloadend',loader); // remove event listeners from memory
-                            this.un('tileloaderror', loader);
-                        };
-                        tileSource.on('tileloadend',loader);
-                        tileSource.on('tileloaderror', loader);
-                        ++i;
-                    });
+                        } else {
+                            reject(new Error('No response at this URL'));
+                        }
+                        this.un('tileloadend',loader); // remove event listeners from memory
+                        this.un('tileloaderror', loader);
+                    };
+                    tileSource.on('tileloadend',loader);
+                    tileSource.on('tileloaderror', loader);
+                    ++i;
+                });
 
             });
         });
@@ -454,6 +455,12 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
             }
         });
         return arra;
+    };
+    self.getCustomLayerTimeout = function(layer) {
+        if(models.palettes.isActive(layer.id)) {
+            return 200;
+        }
+        return 0;
     };
     /*
      * Get a layer object from id
