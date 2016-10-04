@@ -30,7 +30,6 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
 
     var ROTATE_WARNING = "Image may not be downloaded when rotated. Would you like to reset rotation?";
     
-
     self.init = function() {
         models.anim.events.on('gif-click', setImageCoords);
     };
@@ -232,9 +231,6 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
                 .attr("href", blobURL)
                 .attr("class", "ui-button ui-widget ui-state-default ui-button-text-only")
                 .hover(function() {$(this).addClass("ui-state-hover");}, function() {$(this).removeClass("ui-state-hover");});
-
-            var $imgSize = $("<label></label>")
-                .html("<span> Estimated Size: " + (blob.size / 1024).toFixed() + " KB</span>");
 
             var $catalog =         
                 "<div class='gif-results-dialog' style='height: " + animCoords.h + "px; min-height: 210px;' >" + 
