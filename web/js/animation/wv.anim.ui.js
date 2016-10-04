@@ -13,7 +13,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     self.events = wv.util.events();
     var dateModel = models.date;
     var animModel = models.anim;
-    var queueLength = 3;
+    var queueLength = 5;
     var animateArray;
     var map = ui.map.selected;
     var zooms = ['year', 'month', 'day'];
@@ -146,13 +146,15 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     self.addItemToQueue = function(currentDate, startDate, endDate) {
         var nextDate = self.getNextBufferDate(currentDate, startDate, endDate);
         var nextDateStr = wv.util.toISOStringDate(nextDate);
+
         if(!inQueue[nextDateStr] &&
-           preloadArray.length < queueLength &&
+           preloadArray.length <= queueLength &&
            !preload[nextDateStr] &&
            nextDate <= endDate &&
            nextDate >= startDate) {
             self.addDate(nextDate);
-      }
+            self.checkQueue(queueLength, self.state.playIndex);
+        }
     };
     self.getNextBufferDate = function(currentDate, startDate, endDate) {
         var lastInBuffer = wv.util.parseDateUTC(preloadArray[preloadArray.length - 1]);
@@ -186,7 +188,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
             self.shiftCache();
             self.state.playIndex = wv.util.toISOStringDate(self.setNewDate(playIndexJSDate, new Date(animModel.rangeState.startDate)));
             self.checkShouldPlay();
-            //self.checkQueue(queueLength,self.state.playIndex);
+            self.checkQueue(queueLength,self.state.playIndex);
         } else {
             self.refreshState();
         }
@@ -232,16 +234,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         var player = function() {
             self.shiftCache();
             self.checkQueue(queueLength, playIndex);
-           if(!animModel.rangeState.playing || !preload[playIndex]) {
-                clearInterval(interval);
-                self.state.playing = false;
-                if(!preload[playIndex] && animModel.rangeState.playing) { // Still playing, add loader
-                    wv.ui.indicator.loading();
-                } else {
-                    self.refreshState();
-                }
-                return;
-            }
+
             dateModel.select(wv.util.parseDateUTC(playIndex));
             pastDates[playIndex] = wv.util.parseDateUTC(playIndex); // played record
             self.state.playIndex = playIndex;
@@ -253,6 +246,19 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
                 self.checkShouldLoop(playIndexJSDate);
                 return;
             }
+            if(!animModel.rangeState.playing || !preload[playIndex]) {
+                clearInterval(interval);
+                self.state.playing = false;
+                if(!preload[playIndex] && animModel.rangeState.playing) {// Still playing, add loader
+                    wv.ui.indicator.loading();
+                    self.checkQueue(queueLength, self.state.playIndex);
+                } else {
+                    self.refreshState();
+                }
+                return;
+            }
+
+            self.checkQueue(queueLength, self.state.playIndex);
             interval = setTimeout(player, 1000 / animModel.rangeState.speed);
         };
         interval = setTimeout(player, animModel.rangeState.speed);
