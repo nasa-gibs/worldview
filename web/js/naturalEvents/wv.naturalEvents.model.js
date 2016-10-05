@@ -64,6 +64,13 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
             ["MODIS_Aqua_Land_Surface_Temp_Day", false],
             ["MODIS_Terra_Land_Surface_Temp_Day", true]
         ],
+        "Severe Storms": [
+            ["Reference_Features", true],
+            ["Reference_Labels", true],
+            ["VIIRS_SNPP_CorrectedReflectance_TrueColor", true],
+            ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
+            ["MODIS_Terra_CorrectedReflectance_TrueColor", false]
+        ],
         Floods: [
             ["Reference_Features", true],
             ["Reference_Labels", true],
