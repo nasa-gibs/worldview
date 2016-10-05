@@ -13,7 +13,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     self.events = wv.util.events();
     var dateModel = models.date;
     var animModel = models.anim;
-    var queueLength = 5;
+    var queueLength = 10;
     var animateArray;
     var map = ui.map.selected;
     var zooms = ['year', 'month', 'day'];
@@ -48,7 +48,8 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         inQueue = {};
         self.state = {
             playing: false,
-            playIndex: self.getStartDate()
+            playIndex: self.getStartDate(),
+            supportingCustomLayers: self.hasCustomLayers()
         };
         animModel.rangeState.playing = false;
         animModel.events.trigger('change');
@@ -110,6 +111,10 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
             delete pastDates[key];
         }
     };
+    self.clearCache = function() {
+        preload = {};
+        preloadArray = [];
+    };
     self.checkQueue = function(bufferLength, index) {
         var date;
         var currentDate;
@@ -117,6 +122,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         var endDate = wv.util.parseDateUTC(animModel.rangeState.endDate);
         var loop = animModel.rangeState.loop;
         var lastToQueue;
+        var nextDate;
         if(!animModel.rangeState.playing) {
             return self.refreshState();
         }
@@ -125,8 +131,37 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
 
         if(!preloadArray[0] && !inQueue[index]) {
             self.initialPreload(currentDate, startDate, endDate, lastToQueue);
-        } else if (!preload[lastToQueue] && !inQueue[lastToQueue] ) {// if last preload date doesn't exist
+        } else if (!preload[lastToQueue] && !inQueue[lastToQueue] && !self.state.supportingCustomLayers) {// if last preload date doesn't exist
             self.addItemToQueue(currentDate, startDate, endDate);
+        } else if(self.state.supportingCustomLayers && preloadArray[0]) {
+            self.customQueuer(currentDate, startDate, endDate);
+        }
+
+    };
+    self.hasCustomLayers = function() {
+        var layer;
+        var layers = models.layers.get();
+
+        for(var i = 0, len = layers; i < layers.length; i++) {
+            layer = layers[i];
+            if(!_.isEmpty(models.palettes.isActive(layer.id)) && layer.visible) {
+                return true;
+            }
+        }
+        return false;
+    };
+    self.customQueuer = function(currentDate, startDate, endDate) {
+        var nextDateStr;
+        var nextDate = self.nextDate(currentDate);
+        if(nextDate > endDate) {
+            nextDate = self.setNewDate(nextDate, startDate);
+        }
+
+        nextDateStr = wv.util.toISOStringDate(nextDate);
+
+        if(!preload[nextDateStr] && !inQueue[nextDateStr] && !self.state.playing) {
+            self.clearCache();
+            self.checkQueue(queueLength, self.state.playIndex);
         }
     };
     self.initialPreload = function(currentDate, startDate, endDate, lastToQueue) {
@@ -135,6 +170,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
             self.addDate(day);
             day = self.getNextBufferDate(day, startDate, endDate);
             if(wv.util.toISOStringDate(day) === lastToQueue) {
+                self.addDate(day);
                 return wv.ui.indicator.loading();
             } else if(wv.util.toISOStringDate(day) === wv.util.toISOStringDate(currentDate)) {
                 queueLength = i;
@@ -169,7 +205,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         var loop = animModel.rangeState.loop;
         var i = 1; 
         while(i < queueLength) {
-            if(self.nextDate(day) > endDate) {
+            if(self.nextDate(day) >= endDate) {
                 if(!loop) {
                     return wv.util.toISOStringDate(wv.util.dateAdd(day, self.getInterval(), -1));
                 }
@@ -180,7 +216,6 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
             }
             i++;
         }
-
         return wv.util.toISOStringDate(day);
     };
     self.checkShouldLoop = function(playIndexJSDate) {
@@ -203,11 +238,22 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         }
 
         if(preload[self.getLastBufferDateStr(currentDate, startDate, endDate)]) {
-            self.state.playing = true;
-            wv.ui.indicator._hide();
-            return self.animate(self.state.playIndex);
+            self.play(self.state.playIndex);
+            return;
+        }
+        if(self.state.supportingCustomLayers &&
+           preload[self.state.playIndex] &&
+           _.isEmpty(inQueue)) {
+            self.play(self.state.playIndex);
+            return;
         }
         self.shiftCache();
+    };
+    self.play = function(index) {
+        self.state.playing = true;
+        wv.ui.indicator._hide();
+        self.animate(index);
+        return;
     };
     self.setNewDate = function(date, newDate) {
         var interval = self.getInterval();
@@ -251,6 +297,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
                 self.state.playing = false;
                 if(!preload[playIndex] && animModel.rangeState.playing) {// Still playing, add loader
                     wv.ui.indicator.loading();
+                    self.shiftCache();
                     self.checkQueue(queueLength, self.state.playIndex);
                 } else {
                     self.refreshState();
