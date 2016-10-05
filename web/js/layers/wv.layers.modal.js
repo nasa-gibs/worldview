@@ -774,8 +774,10 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         var names = models.layers.getTitles(layer.id);
         $.each(terms, function(index, term) {
             filtered = !names.title.toLowerCase().contains(term) &&
-                       !names.subtitle.toLowerCase().contains(term) &&
-                       !names.tags.toLowerCase().contains(term);
+                !names.subtitle.toLowerCase().contains(term) &&
+                !names.tags.toLowerCase().contains(term) &&
+                !config.layers[layer.id].id.toLowerCase().contains(term);
+            
             if ( filtered ) {
                 return false;
             }
