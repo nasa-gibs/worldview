@@ -205,7 +205,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         var loop = animModel.rangeState.loop;
         var i = 1; 
         while(i < queueLength) {
-            if(self.nextDate(day) >= endDate) {
+            if(self.nextDate(day) > endDate) {
                 if(!loop) {
                     return wv.util.toISOStringDate(wv.util.dateAdd(day, self.getInterval(), -1));
                 }
