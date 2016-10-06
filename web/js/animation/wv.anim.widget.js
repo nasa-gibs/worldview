@@ -31,7 +31,8 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
             onPushPause: self.onPressPause,
             onPushGIF: self.onPressGIF,
             looping: model.rangeState.loop,
-            header: 'Animate Map in ' + self.getIncrements() + ' Increments', // config.currentZoom is a number: 1,2,3
+            increment: self.getIncrements(), // config.currentZoom is a number: 1,2,3
+            incrementArray: _.without(zooms, self.getIncrements()), // array of zooms without current zoom
             onDateChange: self.dateUpdate,
             sliderLabel: 'Frames Per Second',
             sliderSpeed: speed,
@@ -67,7 +68,8 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
             startDate: new Date(state.startDate),
             endDate: new Date(state.endDate),
             playing: state.playing,
-            header: 'Animate Map in ' + self.getIncrements() + ' Increments' // config.currentZoom is a number: 1,2,3
+            increment: self.getIncrements(), // config.currentZoom is a number: 1,2,3
+            incrementArray: _.without(zooms, self.getIncrements()) // array of zooms without current zoom
         });
     };
     self.getIncrements = function() {
