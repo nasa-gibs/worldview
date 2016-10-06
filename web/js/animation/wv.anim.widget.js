@@ -36,6 +36,7 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
             onDateChange: self.dateUpdate,
             sliderLabel: 'Frames Per Second',
             sliderSpeed: speed,
+            onZoomSelect: self.onZoomSelect,
             onSlide: self.onRateChange,
             startDate: new Date(model.rangeState.startDate),
             endDate: new Date(model.rangeState.endDate),
@@ -75,6 +76,11 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
     self.getIncrements = function() {
         return zooms[timeline.config.currentZoom - 1];
     };
+    self.onZoomSelect = function(increment) {
+        var zoomLevel = _.indexOf(zoom, increment);
+        return tl.config.zoom(zoomLevel);
+         
+    }
     self.dateUpdate = function(startDate, endDate) {
         model.rangeState.startDate = wv.util.toISOStringDate(startDate) || 0;
         model.rangeState.endDate = wv.util.toISOStringDate(endDate);
