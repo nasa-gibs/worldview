@@ -1,0 +1,19 @@
+.wv-tooltip-case {
+	display: inline-block;
+	position: relative;
+}
+	.wv-tooltip-case span {
+		z-index: 2;
+		cursor: pointer;
+	}
+	.wv-tooltip-case .wv-tooltip {
+		visibility: hidden;
+		position: absolute;
+		background: #212121;
+	}
+	.wv-tooltip-case .wv-tooltip:after {
+		left: 50%;
+		-webkit-border-radius: 3px;
+		-moz-border-radius: 3px;
+		border-radius: 3px;
+	}
