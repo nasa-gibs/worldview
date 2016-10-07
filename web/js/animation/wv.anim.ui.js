@@ -207,7 +207,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         while(i < queueLength) {
             if(self.nextDate(day) > endDate) {
                 if(!loop) {
-                    return wv.util.toISOStringDate(wv.util.dateAdd(day, self.getInterval(), -1));
+                    return wv.util.toISOStringDate(day);
                 }
                 day = self.setNewDate(day, startDate);
 
