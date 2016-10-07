@@ -62,6 +62,13 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
         model.events.on('change', self.update);
         model.events.on('timeline-change', self.update);
 
+        //hack for react bug https://github.com/facebook/react/issues/1920
+        $('.wv-date-selector-widget input').keydown(function(e) {
+            if(e.keyCode == 13 || e.keyCode == 9) {
+                e.preventDefault();
+            }
+        });
+
     };
     self.update = function() {
         var state = model.rangeState;
