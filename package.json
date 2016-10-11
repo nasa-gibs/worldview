@@ -38,6 +38,7 @@
     "phantomjs": "2.1.x",
     "promise-queue": "^2.2.3",
     "react": "^15.3.1",
-    "react-dom": "^15.3.1"
+    "react-dom": "^15.3.1",
+    "worldview-timeline-components": "*"
   }
 }
