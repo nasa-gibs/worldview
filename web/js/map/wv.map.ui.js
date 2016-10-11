@@ -278,6 +278,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
             self.selected.getLayers().insertAt(mapIndex, createLayer(def));
         }
         updateLayerVisibilities();
+        self.events.trigger('added-layer');
     };
     /*
      *Initiates the adding of a layer or Graticule
@@ -427,8 +428,8 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
                                 resolve();
                             }
                         } else {
-                            // reject(new Error('No response at this URL'));
-                            resolve();// some gibs data is not accurate and rejecting this will break the animation if tile doesn't exist
+                             reject(new Error('No response at this URL'));
+                            //resolve();// some gibs data is not accurate and rejecting this will break the animation if tile doesn't exist
                         }
                         this.un('tileloadend',loader); // remove event listeners from memory
                         this.un('tileloaderror', loader);
