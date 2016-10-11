@@ -31,9 +31,10 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         animModel.events.on('datechange', self.refreshState);
         animModel.events.on('zoom-change', self.refreshState);
         models.proj.events.on("select", self.refreshState);
-        models.layers.events.on('change', self.refreshState);
         models.date.events.on("select", self.dateChange);
-        map.on('moveend', self.refreshState);
+        models.palettes.events.on('update', self.refreshState);
+        ui.map.events.on('added-layer', self.refreshState);
+        //map.on('moveend', self.refreshState);
     };
     self.dateChange = function() {
         if(!self.state.playing) {
@@ -41,7 +42,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         }
     };
     self.refreshState = function() {
-        wv.ui.indicator._hide();
+        wv.ui.indicator._hide(loader);
         preloadArray = [];
         preload = {};
         pastDates = {};
@@ -171,13 +172,15 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
             day = self.getNextBufferDate(day, startDate, endDate);
             if(wv.util.toISOStringDate(day) === lastToQueue) {
                 self.addDate(day);
-                return wv.ui.indicator.loading();
+                loader = wv.ui.indicator.loading();
+                return 
             } else if(wv.util.toISOStringDate(day) === wv.util.toISOStringDate(currentDate)) {
                 queueLength = i;
-                return wv.ui.indicator.loading();
+                loader = wv.ui.indicator.loading();
+                return;
             }
         }
-        wv.ui.indicator.loading();
+        loader = wv.ui.indicator.loading();
     };
     self.addItemToQueue = function(currentDate, startDate, endDate) {
         var nextDate = self.getNextBufferDate(currentDate, startDate, endDate);
@@ -251,7 +254,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     };
     self.play = function(index) {
         self.state.playing = true;
-        wv.ui.indicator._hide();
+        wv.ui.indicator._hide(loader);
         self.animate(index);
         return;
     };
@@ -296,7 +299,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
                 clearInterval(interval);
                 self.state.playing = false;
                 if(!preload[playIndex] && animModel.rangeState.playing) {// Still playing, add loader
-                    wv.ui.indicator.loading();
+                    loader = wv.ui.indicator.loading();
                     self.shiftCache();
                     self.checkQueue(queueLength, self.state.playIndex);
                 } else {
