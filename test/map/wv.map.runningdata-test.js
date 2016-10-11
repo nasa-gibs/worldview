@@ -19,7 +19,8 @@ buster.testCase("wv.map.runningdata", {
     "1.0: Get Label from Palette object": function() {
         var scale = { 
           colors: ["fbd1fbff", "a605b0ff", "1e00eaff"],
-          labels: ["40 – 40.4 ppb", "40.4 – 50 ppb", "50 – 60 ppb"]
+          tooltips: ["40 – 40.4", "40.4 – 50", "50 – 60"],
+          units: 'ppb'
         };
         var value = this.runner.getDataLabel(scale, "1e00eaff");
         buster.assert.equals(value.label, "50 – 60 ppb");
