@@ -20,7 +20,7 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
     var self = {};
     var timeline = ui.timeline;
     var model = models.anim;
-    var widgetFactory = React.createFactory(Animate.AnimationWidget);
+    var widgetFactory = React.createFactory(WVTC.AnimationWidget);
     var $timelineFooter;
     self.init = function() {
         var speed = Number(model.rangeState.speed) || 5;
