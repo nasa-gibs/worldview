@@ -8,7 +8,6 @@
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
-// jshint unused:true
 var wv = wv || {};
 wv.map = wv.map || {};
 

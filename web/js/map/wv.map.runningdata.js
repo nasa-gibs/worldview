@@ -214,7 +214,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
     };
     self.clearAll = function() {
         $('.wv-running').removeClass('wv-running');
-    }
+    };
     /*
      * Add running-data component to palette for
      * category layers

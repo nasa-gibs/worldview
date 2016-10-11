@@ -262,7 +262,7 @@ wv.util = (function(self) {
     };
     self.objectLength = function(obj) {
         return Object.keys(obj).length;
-    }
+    };
 
     /**
      * Returns the day of week for the given date object

@@ -173,7 +173,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
             if(wv.util.toISOStringDate(day) === lastToQueue) {
                 self.addDate(day);
                 loader = wv.ui.indicator.loading();
-                return 
+                return;
             } else if(wv.util.toISOStringDate(day) === wv.util.toISOStringDate(currentDate)) {
                 queueLength = i;
                 loader = wv.ui.indicator.loading();

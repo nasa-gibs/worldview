@@ -86,7 +86,7 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
     self.onZoomSelect = function(increment) {
         var zoomLevel = _.indexOf(zooms, increment);
         return timeline.config.zoom(zoomLevel + 1);
-    }
+    };
     self.dateUpdate = function(startDate, endDate) {
         model.rangeState.startDate = wv.util.toISOStringDate(startDate) || 0;
         model.rangeState.endDate = wv.util.toISOStringDate(endDate);
