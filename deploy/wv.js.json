@@ -6,6 +6,7 @@
         "node_modules/lodash/lodash.js",
         "node_modules/bluebird/js/browser/bluebird.js",
         "node_modules/promise-queue/lib/index.js",
+        "node_modules/worldview-timeline-components/browser/wvtc.js"
 
         "web/js/ol.wv/ol.wv.lookupimagetile.js",
 
