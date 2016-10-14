@@ -32,6 +32,7 @@
 	}
 	.wv-tooltip-case .wv-tooltip ul li:hover {
 		cursor: pointer;
+		color: #a1bbd4;
 	}
 	.wv-tooltip-case .wv-tooltip ul li + li	{
 		margin-top: 5px;
