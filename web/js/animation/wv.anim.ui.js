@@ -255,7 +255,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     };
     self.play = function(index) {
         self.state.playing = true;
-        wv.ui.indicator._hide(loader);
+        wv.ui.indicator.hide(loader);
         self.animate(index);
         return;
     };
