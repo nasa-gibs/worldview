@@ -1031,7 +1031,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
             if(models.anim.rangeState.playing || mapIsbeingDragged) {
                 return;
             }
-            dataRunner.newPoint(pixelValue, map);
+            //dataRunner.newPoint(pixelValue, map);
         }
         $(map.getViewport())
             .mouseover(function(e){
