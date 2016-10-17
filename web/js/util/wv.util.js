@@ -211,7 +211,19 @@ wv.util = (function(self) {
         var parts = time.split(".")[0].split(":");
         return parts[0] + ":" + parts[1];
     };
-
+    /**
+     * Calculates percent of date between two other dates
+     *
+     * @method toISOStringTimeHM
+     * @static
+     * @param current {Date} current date
+     * @param start {Date} start date
+     * @param end {Date} end date
+     * @return {number} decimal percent
+     */
+    self.getDatePercent = function(current, start, end) {
+        return Math.round((current - start) / (end - start));
+    };
     /**
      * Sets a date to UTC midnight.
      *
