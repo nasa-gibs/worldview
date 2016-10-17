@@ -40,21 +40,24 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
         var startDate = stateObj.startDate;
         var endDate = stateObj.endDate;
         var shootGIFafterImageLoad;
-
-
+        var imageArra;
         $progress = $("<progress />") //display progress for GIF creation
             .attr("class", "wv-gif-progress");
 
         wv.ui.getDialog().append($progress).dialog({ //dialog for progress
-            title: "Creating GIF...",
+            title: "Collecting Images...",
             width: 300,
             height: 100
         });
         $progress.attr("value", 0);
+        imageArra = getImageArray(startDate, endDate, $progress);
+        if(!imageArra) {
+            return;
+        }
         gifshot.createGIF({
             'gifWidth': animCoords.w,
             'gifHeight': animCoords.h,
-            'images': getImageArray(startDate, endDate),
+            'images': imageArra,
             'interval': 1 / interval,
             'progressCallback': function(captureProgress) {
                 $progress.parent().dialog("option", "title", "Creating GIF..."); //set dialog title
@@ -177,11 +180,18 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
         var fromDate = new Date(startDate);
         var toDate = new Date(endDate);
         var current = fromDate;
+        var j = 0;
 
         while(current <= toDate) {
+            j++;
             var src = wv.util.format(url, wv.util.toISOStringDate(current));
             a.push(src);
             current = wv.util.dateAdd(current, ui.anim.ui.getInterval(), 1);
+            if(j > 40) { // too many frame
+                showUnavailableReason();
+                return false;
+            }
+
         }
         for(var i = 0,
             len = animModel.rangeState.speed / 2, // get a half seconds worth of frames
@@ -190,6 +200,13 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             a.push(a[lastSrc]);
         }
         return a;
+    };
+
+    var showUnavailableReason = function() {
+        var headerMsg = "<h3 class='wv-data-unavailable-header'>GIF Not Available</h3>";
+        var bodyMsg = 'Too many frames were selected. Please request less than 40 frames if you would like to generate a GIF';
+
+        wv.ui.notify(headerMsg + bodyMsg, "Notice", 600);
     };
     var resetRotation = function() {
         ui.map.selected.beforeRender(ol.animation.rotate({
