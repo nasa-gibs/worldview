@@ -125,7 +125,7 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
     };
     self.onDataActivate = function() {
         $animateButton.addClass('wv-disabled-button');
-        $animateButton.prop('title', 'Animation feature does not work while data download feature is activated');
+        $animateButton.prop('title', 'Animation feature is deactivated when data download feature is active');
     };
     self.onDataDeactivate = function() {
         $animateButton.removeClass('wv-disabled-button');
