@@ -37,6 +37,9 @@
     left: 50%;
     top: 50%;
 }
+#wv-animation-widget a .wv-animation-widget-icon:hover {
+    color: #ccc;
+}
 #wv-animation-widget a .wv-animation-widget-icon.fa-retweet {
     font-size: 34px;
 }
