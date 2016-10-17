@@ -22,9 +22,9 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
     var model = models.anim;
     var widgetFactory = React.createFactory(WVTC.AnimationWidget);
     var $timelineFooter;
+    var $animateButton;
     self.init = function() {
         var speed = Number(model.rangeState.speed) || 5;
-        var $animateButton = $('#animate-button');
         var Widget = widgetFactory({
             onPushPlay: self.onPressPlay,
             onPushLoop: self.onPressLoop,
@@ -46,6 +46,7 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
 
         });
         //mount react component
+        $animateButton = $('#animate-button');
         self.reactComponent = ReactDOM.render(Widget, $('#wv-animation-widet-case')[0]);
 
         $timelineFooter = $('#timeline-footer');
@@ -61,6 +62,13 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
         model.events.trigger('change');
         model.events.on('change', self.update);
         model.events.on('timeline-change', self.update);
+        models.data.events.on('activate', function() {
+            self.toggleAnimationWidget();
+            self.onDataActivate();
+        });
+        models.data.events.on('deactivate', function() {
+            self.onDataDeactivate();
+        });
 
         //hack for react bug https://github.com/facebook/react/issues/1920
         $('.wv-date-selector-widget input').keydown(function(e) {
@@ -95,6 +103,9 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
         model.events.trigger('datechange');
     };
     self.toggleAnimationWidget = function() {
+        if(model.rangeState.state === 'off' && models.data.active) {
+            return; // Keep animation off when data-download is active.
+        }
         model.toggleActive(); // sets anim state to on or off
         model.events.trigger('change');
         return $timelineFooter.toggleClass('wv-anim-active');
@@ -111,6 +122,14 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
         var state = model.rangeState;
         state.playing = false;
         model.events.trigger('change');
+    };
+    self.onDataActivate = function() {
+        $animateButton.addClass('wv-disabled-button');
+        $animateButton.prop('title', 'Animation feature does not work while data download feature is activated');
+    };
+    self.onDataDeactivate = function() {
+        $animateButton.removeClass('wv-disabled-button');
+        $animateButton.prop('title', 'Setup animation');
     };
     /*
      * adjust state when loop is pressed

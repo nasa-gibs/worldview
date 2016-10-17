@@ -33,12 +33,8 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         models.proj.events.on("select", self.refreshState);
         models.date.events.on("select", self.dateChange);
         models.palettes.events.on('update', self.refreshState);
-        ui.map.events.on('added-layer', function() {
-            /* timeout set because another add-layer event was being 
-               triggered after
-            */
-            setTimeout(function(){self.refreshState();}, 500); 
-        });
+        models.data.events.on('activate', self.refreshState);
+        ui.map.events.on('added-layer', self.refreshState); 
         //map.on('moveend', self.refreshState);
     };
     self.dateChange = function() {
@@ -47,7 +43,6 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         }
     };
     self.refreshState = function() {
-        wv.ui.indicator._hide(loader);
         preloadArray = [];
         preload = {};
         pastDates = {};
@@ -59,6 +54,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         };
         animModel.rangeState.playing = false;
         animModel.events.trigger('change');
+        wv.ui.indicator.hide(loader);
     };
     self.getStartDate = function() {
         var state;
