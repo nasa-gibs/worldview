@@ -278,12 +278,12 @@ g.plot rect.data-bar-invisible{
 #timeline-header,#timeline-footer,#timeline-zoom,#timeline-hide{
     float:left;
 }
-#timeline-header .wv-animate {
+#timeline-header .animate-button .wv-animate {
     color: #fff;
     font-size: 2.5em;
     margin: 12px 0 0 2px;
 }
-#timeline-header .wv-animate:hover {
+#timeline-header .animate-button:hover .wv-animate{
     color: #1a1a1a;
 }
 #timeline-footer{
