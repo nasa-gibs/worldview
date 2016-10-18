@@ -30,7 +30,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         animModel.events.on('gif-click', self.refreshState);
         animModel.events.on('datechange', self.refreshState);
         animModel.events.on('zoom-change', self.refreshState);
-
+        animModel.events.on('toggle-widget', self.refreshState);
         models.proj.events.on("select", self.refreshState);
         models.date.events.on("select", self.dateChange);
         models.palettes.events.on('update', self.refreshState);

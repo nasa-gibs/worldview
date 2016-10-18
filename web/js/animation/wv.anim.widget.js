@@ -56,7 +56,7 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
         }
         $('.wv-date-selector-widget input').on('keydown', function(e){
             // A bit of a hack
-            e.stopPropagation(); // needed to correct event bubbling between react and Docuement
+            e.stopPropagation(); // needed to correct event bubbling between react and Document
         });
         model.rangeState.speed = speed;
         model.events.trigger('change');
@@ -108,6 +108,7 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
         }
         model.toggleActive(); // sets anim state to on or off
         model.events.trigger('change');
+        model.events.trigger('toggle-widget');
         return $timelineFooter.toggleClass('wv-anim-active');
     };
     self.onPressPlay = function() {
