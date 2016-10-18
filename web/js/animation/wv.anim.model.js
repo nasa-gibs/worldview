@@ -82,6 +82,10 @@ wv.anim.model = wv.anim.model || function(models, config) {
             {
                 id:'speed',
                 value: rangeState.speed
+            },
+            {
+                id:'loop',
+                value: rangeState.loop
             }
         );
         state.a.push(newState);
