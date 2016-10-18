@@ -56,6 +56,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         animModel.rangeState.playing = false;
         animModel.events.trigger('change');
         wv.ui.indicator.hide(loader);
+        wv.ui.indicator._hide(loader);
     };
     self.getStartDate = function() {
         var state;
@@ -282,6 +283,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     self.play = function(index) {
         self.state.playing = true;
         wv.ui.indicator.hide(loader);
+        wv.ui.indicator._hide(loader);
         self.animate(index);
         return;
     };
