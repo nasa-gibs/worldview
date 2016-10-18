@@ -21,7 +21,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
     var animationDuration = 250;
     var self = {};
     var rotation = new Rotation(self, models);
-    var dataRunner = new DataRunner(models);
+    //var dataRunner = new DataRunner(models);
     var mapIsbeingDragged = false;
     var hiDPI = ol.has.DEVICE_PIXEL_RATIO > 1;
     var pixelRatio = hiDPI ? 2 : 1;
@@ -1040,7 +1040,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
             .mouseout(function()    {
                 $('#' + mapId).hide();
                 hoverThrottle.cancel();
-                dataRunner.clearAll();
+                //dataRunner.clearAll();
             })
             .mousemove(hoverThrottle = _.throttle(onMouseMove, 300));
     };
