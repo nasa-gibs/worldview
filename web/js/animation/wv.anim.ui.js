@@ -30,11 +30,12 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         animModel.events.on('gif-click', self.refreshState);
         animModel.events.on('datechange', self.refreshState);
         animModel.events.on('zoom-change', self.refreshState);
+
         models.proj.events.on("select", self.refreshState);
         models.date.events.on("select", self.dateChange);
         models.palettes.events.on('update', self.refreshState);
         models.data.events.on('activate', self.refreshState);
-        ui.map.events.on('added-layer', self.refreshState); 
+        ui.map.events.on('added-layer', self.refreshState);
         //map.on('moveend', self.refreshState);
     };
     self.dateChange = function() {
@@ -106,12 +107,36 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     self.shiftCache = function() {
         var key;
         if(preload[preloadArray[0]] &&
-           wv.util.objectLength(preload) >= queueLength  &&
-           pastDates[preloadArray[0]]) {
+           wv.util.objectLength(preload) > queueLength + (queueLength / 2) + 1 &&
+           pastDates[preloadArray[0]] &&
+           self.isInToPlayGroup(preloadArray[0])) {
             key = preloadArray.shift();
             delete preload[key];
             delete pastDates[key];
         }
+    };
+    self.isInToPlayGroup = function(testDate) {
+        var loop = animModel.rangeState.loop;
+        var i = 0;
+        var day = new Date(self.state.playIndex);
+        var startDate = new Date(animModel.rangeState.startDate);
+        var endDate = new Date(animModel.rangeState.endDate);
+        var jsTestDate = new Date(testDate);
+        while(i < queueLength) {
+            if(self.nextDate(day) > endDate) {
+                if(!loop) {
+                    return false;
+                }
+                day = self.setNewDate(day, startDate);
+            } else {
+                day = self.nextDate(day);
+            }
+            if(day.valueOf() == jsTestDate.valueOf()) {
+                return true;
+            }
+            i++;
+        }
+        return false;
     };
     self.clearCache = function() {
         preload = {};
@@ -188,7 +213,6 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         var nextDateStr = wv.util.toISOStringDate(nextDate);
 
         if(!inQueue[nextDateStr] &&
-           preloadArray.length <= queueLength &&
            !preload[nextDateStr] &&
            nextDate <= endDate &&
            nextDate >= startDate) {
