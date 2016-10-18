@@ -250,8 +250,10 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         if(animModel.rangeState.loop) {
             self.shiftCache();
             self.state.playIndex = wv.util.toISOStringDate(self.setNewDate(playIndexJSDate, new Date(animModel.rangeState.startDate)));
-            self.checkShouldPlay();
-            self.checkQueue(queueLength,self.state.playIndex);
+            setTimeout( function() {
+                self.checkShouldPlay();
+                self.checkQueue(queueLength,self.state.playIndex);
+            }, 1000);
         } else {
             self.refreshState();
         }
