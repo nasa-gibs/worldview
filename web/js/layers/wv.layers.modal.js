@@ -164,7 +164,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         //Begin Measurement Level
         _.each( category.measurements, function( measurement, measurementName ) {
 
-	    var current = config.measurements[measurement];
+            var current = config.measurements[measurement];
 
             var $measurementHeader = $( '<div></div>' )
                 .attr('id', 'accordion-' + category.id + '-' + current.id );
@@ -555,12 +555,12 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                         setCategoryOverflow(category, $measurements);
                     }
 
-		    if (config.measurements[measurement] === undefined){
-			throw new Error("Error: Measurement '" + measurement +
-					"' stated in category '" +
-					category.title + "' does not exist " +
-				       "in measurement list!");
-		    }
+                if (config.measurements[measurement] === undefined){
+                    throw new Error("Error: Measurement '" + measurement +
+                                        "' stated in category '" +
+                                        category.title + "' does not exist " +
+                                        "in measurement list!");
+                }
                     var current = config.measurements[measurement];
                     var $measurement = $( '<a></a>' )
                         .attr( 'data-category', category.id )
