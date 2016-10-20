@@ -554,6 +554,13 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     if(index > 5){
                         setCategoryOverflow(category, $measurements);
                     }
+
+                if (config.measurements[measurement] === undefined){
+                    throw new Error("Error: Measurement '" + measurement +
+                                        "' stated in category '" +
+                                        category.title + "' does not exist " +
+                                        "in measurement list!");
+                }
                     var current = config.measurements[measurement];
                     var $measurement = $( '<a></a>' )
                         .attr( 'data-category', category.id )
@@ -774,8 +781,10 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         var names = models.layers.getTitles(layer.id);
         $.each(terms, function(index, term) {
             filtered = !names.title.toLowerCase().contains(term) &&
-                       !names.subtitle.toLowerCase().contains(term) &&
-                       !names.tags.toLowerCase().contains(term);
+                !names.subtitle.toLowerCase().contains(term) &&
+                !names.tags.toLowerCase().contains(term) &&
+                !config.layers[layer.id].id.toLowerCase().contains(term);
+            
             if ( filtered ) {
                 return false;
             }

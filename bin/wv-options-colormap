@@ -46,6 +46,8 @@ def to_list(v):
 def match_legend(entry, legends):
     try:
         for legend in legends:
+            if "@id" not in legend:
+                raise KeyError("No legend IDs")
             if legend["@id"] == entry["@ref"]:
                 return legend
     except ValueError as e:
@@ -53,7 +55,10 @@ def match_legend(entry, legends):
 
 def process_entries(colormap):
     entries = to_list(colormap["Entries"]["ColorMapEntry"])
-    map_type = colormap["Legend"]["@type"]
+    if "Legend" not in colormap:
+        raise KeyError("No Legend")
+    else:
+        map_type = colormap["Legend"]["@type"]
     legends = to_list(colormap["Legend"]["LegendEntry"])
     colors = []
     values = []
@@ -72,6 +77,8 @@ def process_entries(colormap):
             continue
         colors += [color_format.format(int(r), int(g), int(b), a)]
         legend = match_legend(entry, legends)
+        if "@tooltip" not in legend:
+            raise KeyError("No tooltips in legend")
         tooltips += [legend["@tooltip"]]
         if (map_type == "continuous") or (map_type == "discrete"):
             items = re.sub(r"[\(\)\[\]]", "", entry["@value"]).split(",")

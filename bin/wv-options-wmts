@@ -121,9 +121,11 @@ def process_layer(gc_layer, wv_layers, colormaps):
             total_warning_count += 1
         else:
             for item in gc_layer["ows:Metadata"]:
+                if "@xlink:role" not in item:
+                    raise KeyError("No xlink:role")
                 schema_version = item["@xlink:role"]
 
-                if schema_version == "http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.2":
+                if schema_version == "http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3":
                     colormap_link = item["@xlink:href"]
                     colormap_file = os.path.basename(colormap_link)
                     colormap_id = os.path.splitext(colormap_file)[0]
