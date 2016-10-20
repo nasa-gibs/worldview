@@ -56,6 +56,8 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
             max: self.getMaxWidth(),
             startColor: '#40a9db',
             endColor: '#295f92',
+            startTriangleColor: '#fff',
+            endTriangleColor: '#4b7aab',
             rangeColor: '#45bdff',
             rangeOpacity: 0.3,
             pinWidth: 5,
