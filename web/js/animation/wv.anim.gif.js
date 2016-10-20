@@ -306,7 +306,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             var $imgDialog = wv.ui.getDialog().append($dialogBodyCase).append($download);
             $imgDialog.dialog({
                 dialogClass: "wv-panel",
-                title: "Your Gif",
+                title: "Your GIF",
                 width: animCoords.w + 198,
                 close: function() {
                     animCoords = null;
@@ -355,7 +355,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
                         animModel.rangeState.speed +
                     " frames per second" +
                 "</div>";
-        $createButton = $("<a><span class=ui-button-text>Create Gif</span></a>")
+        $createButton = $("<a><span class=ui-button-text>Create GIF</span></a>")
             .attr("type", "button")
             .attr("role", "button")
             .attr("class", "ui-button ui-widget ui-state-default ui-button-text-only")
