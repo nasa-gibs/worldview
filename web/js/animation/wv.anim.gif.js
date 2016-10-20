@@ -74,7 +74,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
         if(isGeographic)
             res = zoom_res[Math.floor((ui.map.selected.getView().getZoom()/2))];
         else
-            res = zoom_res[Math.floor((ui.map.selected.getView().getZoom() + 2 /2))];
+            res = zoom_res[Math.floor(((ui.map.selected.getView().getZoom() + 2) / 2))];
 
         if(mode === 0)
             return res;
