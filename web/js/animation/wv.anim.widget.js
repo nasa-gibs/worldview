@@ -43,7 +43,6 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
             minDate: models.date.minDate(),
             maxDate: models.date.maxDate(),
             onClose: self.toggleAnimationWidget
-
         });
         //mount react component
         $animateButton = $('#animate-button');
@@ -76,7 +75,36 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
                 e.preventDefault();
             }
         });
-
+        // Space bar event listener
+        $(window).keypress(function(e) {
+            if ((e.keyCode === 0 || // space click mozilla
+                e.keyCode === 32) && // space click
+                !$( "#layer-modal" ).dialog( "isOpen" )) {//layer selector is not open
+                e.preventDefault();
+                self.onSpaceBar();
+            }
+        });
+    };
+    /*
+     * Determines whether to play
+     * animation or pause animation
+     *
+     * @method onSpaceBar
+     * @static
+     *
+     * @returns {void}
+     *
+     */
+    self.onSpaceBar = function() {
+        if(model.rangeState.state === 'on') {
+            if(model.rangeState.playing) {
+                self.onPressPause();
+                return;
+            }
+            self.onPressPlay();
+            self.update();
+            return;
+        }
     };
     self.update = function() {
         var state = model.rangeState;
