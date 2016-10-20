@@ -14,7 +14,9 @@ wv.date.timeline = wv.date.timeline || {};
 wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui) {
     var self = {};
     var tl = ui.timeline;
+    var animModel= models.anim;
     var model = models.date;
+    var zoomLevel = model.selectedZoom || 3;
 
     self.zoom = function(level, event){
 
@@ -515,6 +517,9 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
 
         tl.pick.update();
         tl.pick.checkLocation();
+        model.selectedZoom = level;
+        animModel.events.trigger('timeline-change');
+        animModel.events.trigger('zoom-change');
 
     };
 
@@ -539,15 +544,15 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
             $('.zoom-btn').removeClass("zoom-btn-selected");
             $(this).addClass("zoom-btn-selected");
             self.zoom(2);
+
         });
         d3.select("#zoom-days").on("click",function(d){
             $('.zoom-btn').removeClass("zoom-btn-selected");
             $(this).addClass("zoom-btn-selected");
             self.zoom(3);
-
         });
         //Default zoom
-        self.zoom(3);
+        self.zoom(zoomLevel);
         tl.setClip(); //fix for firefox svg overflow
     };
 

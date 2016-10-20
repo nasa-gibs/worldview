@@ -86,14 +86,19 @@ wv.date.model = wv.date.model || function(config, spec) {
 
     self.save = function(state) {
         state.t = self.selected.toISOString().split("T")[0];
+        if(self.selectedZoom) {
+            state.z = self.selectedZoom.toString();
+        }
     };
 
     self.load = function(state) {
         if ( state.t ) {
             self.select(state.t);
         }
+        if(state.z) {
+            self.selectedZoom = Number(state.z);
+        }
     };
-
     init();
     return self;
 

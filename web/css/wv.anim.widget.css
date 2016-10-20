@@ -1,0 +1,253 @@
+#wv-animation-widget {
+    width: 330px;
+    border-radius: 8px;
+    height: 125px;
+    background: #212121;
+    position: absolute;
+    transform: translateX(-50%);
+    top: -160px;
+    left: 50%;
+    display: none;
+    color: #fff;
+}
+#wv-animation-widget > a, #wv-animation-widget > div {
+    display: inline-block;
+    margin: 7px 0 0 10px;
+}
+#wv-animation-widget .wv-animation-widget-header {
+    display: block;
+    text-align: center;
+    margin-bottom: 7px;
+    text-transform: capitalize;
+}
+#wv-animation-widget .wv-icon-case {
+    display: inline-block;
+    height: 35px;
+    width: 42px;
+    background: #295f92;
+    position: relative;
+    border-radius: 5px;
+}
+#wv-animation-widget a .wv-animation-widget-icon {
+    font-size: 28px;
+    color: #fff;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+}
+#wv-animation-widget a .wv-animation-widget-icon:hover {
+    color: #ccc;
+}
+#wv-animation-widget a .wv-animation-widget-icon.fa-retweet {
+    font-size: 34px;
+}
+#wv-animation-widget .active .wv-animation-widget-icon.fa-retweet {
+    color: #f4f5f5;
+    opacity: 0.7;
+}
+#wv-animation-widget div .wv-slider-label {
+    font-size: 10px;
+    color: #fff;
+    display: block;
+    text-align: center;
+}
+#wv-animation-widget .thru-label {
+    position: absolute;
+    left: 0;
+    right: 0;
+    color: #fff;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    bottom: 22px;
+    z-index: 0;
+}
+#wv-animation-widget .wv-date-selector-widget {
+    display: inline-block;
+}
+#wv-animation-widget .wv-date-selector-widget:nth-child(1){ 
+    margin-right: 105px;
+}
+#wv-animation-widget .wv-date-selector-widget svg {
+    margin: 0 auto;
+}
+#wv-animation-widget .wv-date-selector-widget input {
+    height: inherit;
+    text-align: center;
+}
+#wv-animation-widget .wv-date-selector-widget .input-wrapper {
+  z-index: 99;
+  position: relative;
+}
+#wv-animation-widget .wv-date-selector-widget .input-wrapper:nth-child(1){
+    max-width: 40px;
+}
+#wv-animation-widget .wv-date-selector-widget .input-wrapper:nth-child(2){
+    max-width: 35px;
+}
+#wv-animation-widget .wv-date-selector-widget .input-wrapper:nth-child(3){
+    max-width: 25px;
+}
+#wv-rangeselector-case {
+    display: none;
+}
+.wv-anim-active #wv-rangeselector-case,
+.wv-anim-active #wv-animation-widget {
+    display: block;
+}
+.wv-animation-widget i.wv-close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+.wv-animation-widget i.wv-close:hover {
+    color: #999999;
+    cursor: pointer;
+}
+/*
+ * Gif Styles
+ */
+.gif-dialog {}
+.gif-dialog .content {
+    line-height: 15px;
+}
+.gif-dialog .ui-button {
+    margin-top: 5px;
+}
+.gif-results-dialog-case {
+    text-transform: capitalize;
+}
+    .gif-results-dialog-case img, 
+    .gif-results-dialog-case .gif-results-dialog {
+        display: inline-block;
+    }
+    .gif-results-dialog-case .gif-results-dialog {
+        background: #fff;
+        text-align: center;
+        color: #444;
+        vertical-align: top;
+        margin-left: 10px;
+        -moz-border-radius: 6px; 
+        border-radius: 6px;
+        font-size: 12px;
+        width: 162px;
+    }
+    .gif-results-dialog-case .gif-results-dialog b {
+        line-height: 30px;
+        color: #000;
+        font-size: 15px;
+    }
+.wv-gif-progress {
+    width: 100%;
+}
+ /*
+  * Jcrop Styles
+  */
+.jcrop-tracker .wv-dl-gif-bt-case {
+    width: inherit;
+    position: relative;
+    height: inherit;
+}
+.jcrop-tracker .wv-dl-gif-bt-case i {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    color: #295f92;
+    position: absolute;
+}
+.jcrop-tracker .wv-dl-gif-bt-case i:hover {
+    color: #f4f5f5;
+    cursor: pointer;
+}
+/*
+ * Animation GIF Styles
+ */
+
+
+/*
+ * Slider styles
+ *
+ * copied and modified from https://github.com/davidchin/react-input-range
+ */
+.InputRange-slider {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background: #3f51b5;
+  border: 1px solid #3f51b5;
+  border-radius: 100%;
+  cursor: pointer;
+  display: block;
+  height: 1rem;
+  margin-left: -0.5rem;
+  margin-top: -0.65rem;
+  outline: none;
+  position: absolute;
+  top: 50%;
+  transition: -webkit-transform 0.3s ease-out, box-shadow 0.3s ease-out;
+  transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+  width: 1rem; }
+  .InputRange-slider:active {
+    -webkit-transform: scale(1.3);
+            transform: scale(1.3); }
+  .InputRange-slider:focus {
+    box-shadow: 0 0 0 5px rgba(63, 81, 181, 0.2); }
+  .InputRange.is-disabled .InputRange-slider {
+    background: #cccccc;
+    border: 1px solid #cccccc;
+    box-shadow: none;
+    -webkit-transform: none;
+            transform: none; }
+
+.InputRange-sliderContainer {
+  transition: left 0.3s ease-out; }
+
+.InputRange-label {
+  color: #aaaaaa;
+  font-family: "Helvetica Neue", san-serif;
+  font-size: 0.8rem;
+  white-space: nowrap; }
+
+.InputRange-label--min,
+.InputRange-label--max {
+  display: none;
+}
+.InputRange-label--value {
+  position: absolute;
+  top: -1.8rem; }
+
+.InputRange-labelContainer {
+  left: -50%;
+  position: relative; }
+  .InputRange-label--max .InputRange-labelContainer {
+    left: 50%; }
+
+.InputRange-track {
+  background: #eeeeee;
+  border-radius: 0.3rem;
+  display: block;
+  height: 0.3rem;
+  position: relative;
+  transition: left 0.3s ease-out, width 0.3s ease-out; }
+  .InputRange.is-disabled .InputRange-track {
+    background: #eeeeee; }
+
+.InputRange-track--container {
+  left: 0;
+  margin-top: -0.15rem;
+  position: absolute;
+  right: 0;
+  top: 50%; }
+
+.InputRange-track--active {
+/*  background: #3f51b5; 
+*/
+}
+
+.InputRange {
+  cursor: pointer;
+  margin-bottom: 4px;
+  height: 1rem;
+  position: relative;
+  width: 152px;}

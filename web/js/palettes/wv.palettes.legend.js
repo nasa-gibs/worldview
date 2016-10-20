@@ -52,14 +52,14 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         var palette = config.palettes.rendered[paletteId];
 
         var $legendPanel = $("<div></div>")
-                .addClass("wv-palettes-panel")
-                .attr("data-layer", layer.id);
+            .addClass("wv-palettes-panel")
+            .attr("data-layer", layer.id);
         $parent.append($legendPanel);
         var legends = model.getLegends(layer.id);
         _.each(legends, function(legend, index) {
             if ( (legend.type === "continuous") ||
                  (legend.type === "discrete") ) {
-                renderScale($legendPanel, legend, index);
+                renderScale($legendPanel, legend, index, layer.id);
             }
             if ( legend.type === "classification" ) {
                 renderClasses($legendPanel, legend, index);
@@ -68,15 +68,22 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         self.update();
     };
 
-    var renderScale = function($legendPanel, legend, index) {
+    var renderScale = function($legendPanel, legend, index, layerId) {
         $container = $("<div></div>")
             .addClass("wv-palettes-legend")
             .attr("data-index", index);
         $colorbar = $("<canvas></canvas>")
                 .addClass("wv-palettes-colorbar")
+                .attr("id", legend.id)
                 .attr("data-index", index)
                 .attr("title", "X");
         $container.append($colorbar);
+
+        var $runningDataPointBar = $("<div></div>")
+            .addClass("wv-running-bar");
+        var $runningDataPointLabel = $("<span></span>")
+            .addClass("wv-running-label");
+
 
         var $ranges = $("<div></div>")
                 .addClass("wv-palettes-ranges");
@@ -88,8 +95,13 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
                 .addClass("wv-palettes-title");
 
         $container.prepend($title);
-        $ranges.append($min).append($max);
-        $container.append($ranges);
+        $ranges
+            .append($min)
+            .append($max)
+            .append($runningDataPointLabel);
+        $container
+            .append($ranges)
+            .append($runningDataPointBar);
 
         $colorbar.on("mousemove", showUnitHover);
         $colorbar.tooltip({
@@ -103,14 +115,18 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         wv.palettes.colorbar(selector + " " +
             "[data-index='" + index + "'] canvas", legend.colors);
     };
-
     var renderClasses = function($legendPanel, legend, index) {
+        var $runningDataPointLabel = $("<span></span>")
+            .addClass("wv-running-category-label");
         var $panel = $("<div></div>")
                 .addClass("wv-palettes-legend")
                 .addClass("wv-palettes-classes")
                 .attr("data-index", index)
                 .attr("title", "X");
-        $legendPanel.append($panel);
+        $legendPanel
+            .attr("id", legend.id)
+            .append($panel)
+            .append($runningDataPointLabel);
 
         $panel.tooltip({
             position: {

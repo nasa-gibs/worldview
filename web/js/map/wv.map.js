@@ -12,12 +12,31 @@
 var wv = wv || {};
 wv.map = wv.map || {};
 
+/*
+ * @Class
+ */
 wv.map = (function(self) {
 
     self.CRS_WGS_84 = "EPSG:4326";
 
     self.CRS_WGS_84_QUERY_EXTENT = [-180, -60, 180, 60];
 
+    /*
+     * Checks to see if an extents string is found. If it exist
+     * then it is changed from a string to an array which is then
+     * made a global object.
+     *
+     * @method parse
+     * @static
+     *
+     * @param {string} extents string
+     *
+     * @param {obj} Error
+     *
+     * @returns {void}
+     *
+     * @todo would benefit by returning the array instead of attaching it to a global var
+     */
     self.parse = function(state, errors) {
         // 1.1 support
         if ( state.map ) {
@@ -132,11 +151,39 @@ wv.map = (function(self) {
         }
     };
 
+    /**
+     * Gets the layer object by the name
+     *
+     * @method getLayerByName
+     * @static
+     *
+     * @param map {object} open layer map object
+     *
+     * @param name {string} name of layer object to return
+     *
+     * @return {obj} Layer object
+     * 
+     */
     self.getLayerByName = function(map, name) {
         var layers = map.getLayers().getArray();
         return _.find(layers, { "wvname": name });
     };
 
+    /**
+     * Checks if a polygon's coordinate length is within a set distance
+     *
+     * @method isPolygonValid
+     * @static
+     *
+     * @param polygon {object} Geometry of a polygon
+     *
+     * @param maxDistance {number} max length of a polygon
+     *
+     * @return {boolean}
+     *
+     * @todo relocate this utility function
+     * 
+     */
     self.isPolygonValid = function(polygon, maxDistance) {
         var outerRing = polygon.getLinearRing(0);
         var points = outerRing.getCoordinates();
@@ -150,6 +197,26 @@ wv.map = (function(self) {
         return true;
     };
 
+    /**
+     * Switches the x coordinate values of Polygon
+     * exterior linestring to in the right coordinate value.
+     *  -- Reason --
+     * when the coordinate of the linestring
+     * crosses the antimeridian(180 degrees away from the
+     * prime meridian), the value of x  goes from 180 to 
+     * -180. It needs to be 181.
+     *
+     * @method adjustAntiMeridian
+     * @static
+     *
+     * @param polygon {object} GeoJSON poylgon geomtry Object
+     *
+     * @param adjustSign {number} a value of 1 or -1
+     *
+     * @return {obj} Adjusted GeoJSON poylgon geomtry Object
+     *
+     * @todo relocate this utility function
+     */
     self.adjustAntiMeridian = function(polygon, adjustSign) {
         var outerRing = polygon.getLinearRing(0);
         var points = outerRing.getCoordinates().slice();
@@ -165,15 +232,60 @@ wv.map = (function(self) {
         return new ol.geom.Polygon([points]);
     };
 
+    /**
+     * Gets distance between two (x,y) points
+     *
+     * @method distance2D
+     * @static
+     *
+     * @param p1 {number} First Point
+     *
+     * @param p2 {number} second point
+     *
+     * @return {number} length of distance
+     *
+     * @todo relocate this utility function
+     * 
+     */
     self.distance2D = function(p1, p2) {
         return Math.sqrt(Math.pow(p1[0] - p2[0], 2) +
                         (Math.pow(p1[1] - p2[1], 2)));
     };
 
+    /**
+     * Gets distance between two values on the same axis
+     *
+     * @method distanceX
+     * @static
+     *
+     * @param p1 {number} First Point
+     *
+     * @param p1 {number} Second Point
+     *
+     * @return {number} distance between value one 
+     *
+     * @todo relocate this utility function
+     * 
+     */
     self.distanceX = function(p1, p2) {
         return Math.abs(p2 - p1);
     };
 
+    /**
+     * Gets distance between two values on the same axis
+     *
+     * @method distanceX
+     * @static
+     *
+     * @param p1 {number} First Point
+     *
+     * @param p1 {number} Second Point
+     *
+     * @return {number} distance between value one 
+     *
+     * @todo relocate this utility function
+     * 
+     */    
     self.interpolate2D = function(p1, p2, amount) {
         var distX = p2[0] - p1[0];
         var distY = p2[1] - p1[1];
@@ -184,8 +296,20 @@ wv.map = (function(self) {
         return [interpX, interpY];
     };
 
-    // If multipolygon, return a list of the polygons. If polygon, return
-    // the single item in a list
+    /**
+     * If the geometry has a multipolygon list. This method returns
+     * a single multipolygon list object
+     *
+     * @method toPolys
+     * @static
+     *
+     * @param geom {object} GeoJSON geomtry Object
+     *
+     * @return {object} GeoJSON multipolygon list object
+     *
+     * @todo relocate this utility function
+     * 
+     */  
     self.toPolys = function(geom) {
         if ( geom.getPolygons ) {
             return geom.getPolygons();

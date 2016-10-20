@@ -70,7 +70,8 @@ $(function() {
             wv.layers.parse,
             wv.date.parse,
             wv.map.parse,
-            wv.palettes.parse
+            wv.palettes.parse,
+            wv.anim.parse
         ];
         if ( config.features.dataDownload ) {
             parsers.push(wv.data.parse);
@@ -119,16 +120,18 @@ $(function() {
         models.date     = wv.date.model(config, { initial: initialDate });
         models.map      = wv.map.model(models, config);
         models.link     = wv.link.model(config);
+        models.anim     = wv.anim.model(models, config);
         models.link
             .register(models.proj)
             .register(models.layers)
             .register(models.date)
             .register(models.palettes)
-            .register(models.map);
+            .register(models.map)
+            .register(models.anim);
         models.link.load(state);
 
         // HACK: Map needs to be created before the data download model
-        ui.map = wv.map.ui(models, config);
+        ui.map = wv.map.ui(models, config, wv.map.rotate, wv.map.runningdata);
         if ( config.features.dataDownload ) {
             models.data = wv.data.model(models, config);
         }
@@ -149,13 +152,11 @@ $(function() {
 
         elapsed("ui");
         // Create widgets
-        ui.anim = wv.date.anim(models.date, ui.map, {
-            debug: parameters.debug === "anim"
-        });
         ui.proj = wv.proj.ui(models, config);
         ui.sidebar = wv.layers.sidebar(models, config);
         ui.activeLayers = wv.layers.active(models, ui, config);
         ui.addModal = wv.layers.modal(models, ui, config);
+
 
         function timelineInit() {
             ui.timeline = wv.date.timeline(models, config, ui);
@@ -166,6 +167,12 @@ $(function() {
             ui.timeline.pan = wv.date.timeline.pan(models, config, ui);
             ui.timeline.config = wv.date.timeline.config(models, config, ui);
             ui.timeline.input = wv.date.timeline.input(models, config, ui);
+            ui.anim = {}; 
+            ui.anim.rangeselect = wv.anim.rangeselect(models, config, ui); // SETS STATE: NEEDS TO LOAD BEFORE ANIMATION WIDGET
+            ui.anim.widget = wv.anim.widget(models, config, ui);
+            ui.anim.gif = wv.anim.gif(models, config, ui);
+            ui.anim.ui = wv.anim.ui(models, ui);
+
             ui.dateLabel = wv.date.label(models);
         }
         if (config.startDate) {

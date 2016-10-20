@@ -211,7 +211,19 @@ wv.util = (function(self) {
         var parts = time.split(".")[0].split(":");
         return parts[0] + ":" + parts[1];
     };
-
+    /**
+     * Calculates percent of date between two other dates
+     *
+     * @method toISOStringTimeHM
+     * @static
+     * @param current {Date} current date
+     * @param start {Date} start date
+     * @param end {Date} end date
+     * @return {number} decimal percent
+     */
+    self.getDatePercent = function(current, start, end) {
+        return Math.round((current - start) / (end - start));
+    };
     /**
      * Sets a date to UTC midnight.
      *
@@ -259,6 +271,9 @@ wv.util = (function(self) {
         }
         var lastDay = new Date(Date.UTC(y, m + 1, 0));
         return lastDay.getUTCDate();
+    };
+    self.objectLength = function(obj) {
+        return Object.keys(obj).length;
     };
 
     /**
@@ -497,7 +512,23 @@ wv.util = (function(self) {
             parseInt(str.substring(4, 6), 16) + "," +
             parseInt(str.substring(6, 8), 16) + ")";
     };
-
+    self.rgbaToHex = function(r, g, b) {
+      function hex(c) {
+          var strHex = c.toString(16);
+              return strHex.length == 1 ? "0" + strHex : strHex;
+          }
+        return hex(r) + hex(g) + hex(b) + 'ff';
+    };
+    self.hexColorDelta = function (hex1, hex2) { 
+        var r1 = parseInt(hex1.substring(0, 2), 16);
+        var g1 = parseInt(hex1.substring(2, 4), 16);
+        var b1 = parseInt(hex1.substring(4, 6), 16);
+        var r2 = parseInt(hex2.substring(0, 2), 16);
+        var g2 = parseInt(hex2.substring(2, 4), 16);
+        var b2 = parseInt(hex2.substring(4, 6), 16);
+        // calculate differences in 3D Space
+        return Math.sqrt(Math.pow((r1 - r2), 2) + Math.pow((g1 - g2), 2) + Math.pow((b1 - b2),2));
+    };
     /**
      * Submits an AJAX request or retreives the result from the cache.
      *
@@ -656,7 +687,17 @@ wv.util = (function(self) {
                 coord[0].toFixed(4) + "&deg;";
         }
     };
-
+    //allows simple printf functionality with strings
+    //arguments array contains all args passed. String must be formatted so that first replacement starts with "{1}"
+    //usage example: wv.util.format("{1}{2}",'World','view')
+    self.format = function() {
+        var formatted = arguments[0];
+        for (var i = 1; i < arguments.length; i++) {
+            var regexp = new RegExp('\\{'+i+'\\}', 'gi');
+            formatted = formatted.replace(regexp, arguments[i]);
+        }
+        return formatted;
+    };
     self.toArray = function(value) {
         if ( !value ) {
             return [];

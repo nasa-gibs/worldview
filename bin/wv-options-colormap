@@ -132,6 +132,7 @@ def process_file(file):
         result["title"] = colormap["@title"]
         result["entries"]["title"] = colormap["@title"]
         result["legend"]["title"] = colormap["@title"]
+        result["legend"]["id"] = id + "_" + str(len(maps)) + "_legend"
         if "@minLabel" in colormap["Legend"]:
             result["legend"]["minLabel"] = colormap["Legend"]["@minLabel"]
         if "@maxLabel" in colormap["Legend"]:

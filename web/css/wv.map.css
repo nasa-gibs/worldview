@@ -28,6 +28,14 @@
     z-index:10000;
 }
 
+    .wv-map-zoom.ui-button-click-prevent {
+        pointer-events: none;
+    }
+
+    .wv-map-zoom.ui-button-click-prevent i {
+        opacity: 0.4;
+    }
+
 .wv-map-zoom .ui-button-text{
     padding:1em;
 }

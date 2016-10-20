@@ -88,18 +88,25 @@
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.layers.modal.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.layers.options.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.timeline.css">
+    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.anim.widget.css">
+    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.dateselector.css">
+    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.tooltip.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.mobile.css">
                       <link type="text/css" rel="Stylesheet" href="pages/css/wv.document.css">
 
 
     <!-- External libraries =============================================== -->
-    <!-- link.dev  -->      <script type="text/javascript" src="ext/main/lodash-2.4.1/lodash.js"></script>
-    <!-- link.prod --> <!-- <script type="text/javascript" src="ext/main/lodash-2.4.1/lodash.min.js"></script> -->
+    <!-- link.dev  -->      <script type="text/javascript" src="../node_modules/react/dist/react.js"></script>
+    <!-- link.dev  -->      <script type="text/javascript" src="../node_modules/react-dom/dist/react-dom.js"></script>
+    <!-- link.dev  -->      <script type="text/javascript" src="../node_modules/worldview-timeline-components/browser/wvtc.js"></script>
+    <!-- link.dev  -->      <script type="text/javascript" src="../node_modules/lodash/lodash.js"></script>
+    <!-- link.dev  -->      <script type="text/javascript" src="../node_modules/gifshot/build/gifshot.js"></script>
+    <!-- link.dev  -->      <script type="text/javascript" src="../node_modules/bluebird/js/browser/bluebird.js"></script>
+    <!-- link.dev  -->      <script type="text/javascript" src="../node_modules/promise-queue/lib/index.js"></script>
+    <!-- link.dev  -->      <script type="text/javascript" src="../node_modules/openlayers/dist/ol-debug.js"></script>
 
     <!-- link.dev  -->      <script type="text/javascript" src="ext/main/jquery-2.1.4/jquery.js"></script>
     <!-- link.prod --> <!-- <script type="text/javascript" src="ext/main/jquery-2.1.4/jquery.min.js"></script> -->
-
-                            <script type="text/javascript" src="ext/main/jquery.migrate-1.2.1/jquery-migrate.min.js"></script>
 
     <!-- link.dev  -->      <script type="text/javascript" src="ext/main/jscache-gitba01cdc/cache.js"></script>
     <!-- link.prod --> <!-- <script type="text/javascript" src="ext/main/jscache-gitba01cdc/cache.min.js"></script> -->
@@ -127,7 +134,6 @@
     <!-- link.dev  -->      <script type="text/javascript" src="ext/image/jcrop-0.9.12/jquery.Jcrop.js"></script>
     <!-- link.prod --> <!-- <script type="text/javascript" src="ext/image/jcrop-0.9.12/jquery.Jcrop.min.js"></script> -->
 
-    <!-- link.dev  -->      <script type="text/javascript" src="ext/map/openlayers-3.17.1.wv1/ol-debug.js"></script>
  
 
                             <script type="text/javascript" src="ext/ui/noUiSlider-6.1.10/jquery.nouislider.min.js"></script>
@@ -171,8 +177,14 @@
     <!-- link.dev --> <script type="text/javascript" src="js/proj/wv.proj.model.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/proj/wv.proj.ui.js"></script>
 
+    <!-- link.dev --> <script type="text/javascript" src="js/animation/wv.anim.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/animation/wv.anim.gif.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/animation/wv.anim.ui.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/animation/wv.anim.model.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/animation/wv.anim.rangeselect.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/animation/wv.anim.widget.js"></script>
+
     <!-- link.dev --> <script type="text/javascript" src="js/date/wv.date.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/date/wv.date.anim.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/date/wv.date.model.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/date/wv.date.label.js"></script>
 
@@ -215,8 +227,10 @@
     
     <!-- link.dev --> <script type="text/javascript" src="js/map/wv.map.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/map/wv.map.model.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/map/wv.map.rotate.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/map/wv.map.runningdata.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/map/wv.map.ui.js"></script>
-
+    
     <!-- link.dev --> <script type="text/javascript" src="js/link/wv.link.model.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/link/wv.link.ui.js"></script>
 
@@ -265,7 +279,7 @@
                             <path d="M 12.5,0 25,8 0,8 z" class="uparrow"></path>
                           </svg>
                         </div>
-                      <input type="text" size="4" maxlength="4" class="button-input-group" id="year-input-group" tabindex="2" onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.keyCode == 13 || event.keyCode == 9 || event.keyCode == 8" />
+                      <input type="text" size="4" maxlength="4" class="button-input-group" id="year-input-group" tabindex="2" />
                         <div class="date-arrows date-arrow-down" data-interval="year" data-value="-1">
                           <svg width="25" height="8">
                             <path d="M 12.5,0 25,8 0,8 z" class="downarrow"></path>
@@ -313,9 +327,13 @@
                             class="arrow"></path>
                         </svg>
                     </div>
+                    <div class="button-action-group animate-button" id="animate-button" title="Setup animation">
+                        <i id="wv-animate" class="fa fa-video-camera wv-animate"></i>
+                    </div>
+
                 </div> <!--/timeline-header-->
                 <div id="timeline-footer">
-
+                    <div id="wv-animation-widet-case"> </div>
                 </div><!--/timeline-footer-->
                 <div id="timeline-zoom">
                   <!--<a class="zoom-btn" id="zoom-weeks">Weeks</a>-->

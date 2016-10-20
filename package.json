@@ -9,13 +9,15 @@
         "test": "grunt test lint"
     },
     "devDependencies": {
+        "bluebird": "^3.4.6",
         "buster": "0.7.12",
+        "gifshot": "^0.3.2",
         "grunt": "0.4.x",
         "grunt-buster": "0.4.x",
         "grunt-contrib-clean": "0.5.x",
-        "grunt-contrib-concat": "0.3.x",
         "grunt-contrib-coffee": "0.13.x",
         "grunt-contrib-compress": "0.5.x",
+        "grunt-contrib-concat": "0.3.x",
         "grunt-contrib-copy": "0.6.x",
         "grunt-contrib-csslint": "0.2.x",
         "grunt-contrib-cssmin": "0.7.x",
@@ -29,8 +31,15 @@
         "grunt-mkdir": "0.1.x",
         "grunt-rename": "0.1.x",
         "grunt-text-replace": "0.4.x",
-        "phantomjs": "2.1.x",
         "jshint": "2.9.x",
-        "moment": "2.13.x"
+        "lodash": "^4.15.0",
+        "moment": "2.13.x",
+        "openlayers": "^3.18.2",
+        "phantomjs": "2.1.x",
+        "promise-queue": "^2.2.3",
+        "react": "^15.3.1",
+        "react-dom": "^15.3.1",
+        "worldview-timeline-components": "*"
     }
 }
+

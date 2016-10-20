@@ -125,7 +125,6 @@ g.plot rect.data-bar-invisible{
 }
 #timeline-header{
     margin-top:2px;
-    width:250px;
 }
 #timeline-header .input-wrapper{
     background: transparent;
@@ -278,6 +277,21 @@ g.plot rect.data-bar-invisible{
 }
 #timeline-header,#timeline-footer,#timeline-zoom,#timeline-hide{
     float:left;
+}
+#timeline-header .animate-button .wv-animate {
+    color: #fff;
+    font-size: 2.5em;
+    margin: 12px 0 0 2px;
+}
+#timeline-header .animate-button:hover .wv-animate {
+    color: #1a1a1a;
+}
+#timeline-header .animate-button.wv-disabled-button {
+    cursor: auto;
+    background: rgba(40,40,40,0.9);
+}
+#timeline-header .animate-button.wv-disabled-button .wv-animate {
+    color: #ccc;
 }
 #timeline-footer{
     height:65px;

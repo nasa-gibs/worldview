@@ -26,6 +26,9 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
         "The graticule layer cannot be used to take a snapshot. Would you " +
         "like to hide this layer?";
 
+    var    ROTATE_WARNING = "Image may not be downloaded when rotated. Would you like to reset rotation?";
+
+
     var containerId = "wv-image-button";
     var container;
     var selector = "#" + containerId;
@@ -89,8 +92,16 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                 if ( state === "on" ) {
                     toggle();
                 }
+                document.activeElement.blur();
             });
             draw();
+        };
+        var resetRotation = function() {
+            ui.map.selected.beforeRender(ol.animation.rotate({
+                duration: 400,
+                rotation: ui.map.selected.getView().getRotation()
+            }));
+            ui.map.selected.getView().rotate(0);
         };
 
         var disablePalettes = function() {
@@ -135,7 +146,18 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                 });
                 return;
             }
-            toggleOn();
+            //Don't toggle area select UI for downloading image if image rotated
+            if(ui.map.selected.getView().getRotation() === 0.0)
+                toggleOn();
+            else
+                wv.ui.ask({
+                    header: "Reset rotation?",
+                    message: ROTATE_WARNING,
+                    onOk: function() {
+                        resetRotation();
+                        setTimeout(toggle, 500); //Let rotation finish before image download can occur
+                    }
+                });
         }
         else {
             state = "off";

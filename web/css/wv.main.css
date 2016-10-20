@@ -208,6 +208,7 @@ div.horizontalContainer {
 
 .ui-dialog {
     padding: 0;
+    z-index: 600;
 }
 
 .ui-dialog .ui-dialog-content {
