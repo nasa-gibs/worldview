@@ -52,22 +52,31 @@
     display: block;
     text-align: center;
 }
+#wv-animation-widget .wv-anim-dates-case {
+    height: 48px;
+    width: 100%;
+    position: relative;
+    margin: 0;
+}
 #wv-animation-widget .thru-label {
     position: absolute;
-    left: 0;
-    right: 0;
+    transform: translate(-50%, 0);
     color: #fff;
-    margin-left: auto;
-    margin-right: auto;
+    left: 50%;
     text-align: center;
-    bottom: 22px;
+    bottom: 16px;
     z-index: 0;
 }
 #wv-animation-widget .wv-date-selector-widget {
     display: inline-block;
+    position: absolute;
+    top: 6px;
 }
-#wv-animation-widget .wv-date-selector-widget:nth-child(1){ 
-    margin-right: 105px;
+#wv-animation-widget .wv-anim-dates-case .wv-date-selector-widget:nth-child(1) {
+    left: 5px;
+}
+#wv-animation-widget .wv-anim-dates-case .wv-date-selector-widget:nth-child(3) {
+    right: 8px;
 }
 #wv-animation-widget .wv-date-selector-widget svg {
     margin: 0 auto;
@@ -78,7 +87,8 @@
 }
 #wv-animation-widget .wv-date-selector-widget .input-wrapper {
   z-index: 99;
-  position: relative;
+  text-align: center;
+  margin: 0 1px;
 }
 #wv-animation-widget .wv-date-selector-widget .input-wrapper:nth-child(1){
     max-width: 40px;
