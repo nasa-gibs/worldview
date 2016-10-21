@@ -22,7 +22,7 @@
         "grunt-contrib-csslint": "0.2.x",
         "grunt-contrib-cssmin": "0.7.x",
         "grunt-contrib-jshint": "0.8.x",
-        "grunt-contrib-uglify": "0.6.x",
+        "grunt-contrib-uglify": "2.0.x",
         "grunt-exec": "0.4.x",
         "grunt-git-rev-parse": "0.1.x",
         "grunt-line-remover": "0.0.x",

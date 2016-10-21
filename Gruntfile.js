@@ -514,6 +514,7 @@ module.exports = function(grunt) {
             report: {
                 options: {
                     reporter: "checkstyle",
+
                 },
                 files: {
                     src: [
@@ -526,10 +527,16 @@ module.exports = function(grunt) {
 
         uglify: {
             // Minifiy the concatenated Worldview JavaScript file.
+            options: {
+                banner: banner,
+                compress: {
+                    drop_console: true,
+                    drop_debugger: true,
+                    unused: true
+                }
+            },
             wv_js: {
-                options: {
-                    banner: banner
-                },
+
                 files: {
                     "build/worldview/web/js/wv.js": [
                         "build/worldview/web/js/wv.js"
