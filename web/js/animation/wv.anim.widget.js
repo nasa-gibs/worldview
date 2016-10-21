@@ -87,7 +87,8 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
         });
         // Space bar event listener
         $(window).keypress(function(e) {
-            if (e.keyCode === 32 && // space click
+            if ((e.keyCode == 32 ||
+                 e.charCode == 32 ) && // space click
                 !$( "#layer-modal" ).dialog( "isOpen" )) {//layer selector is not open
                 e.preventDefault();
                 self.onSpaceBar();
