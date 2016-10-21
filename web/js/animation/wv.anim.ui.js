@@ -295,11 +295,14 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         if(day < newDateDay) {
             newDate = self.nextDate(newDate);
         }
+        if(interval !== 'day' || day > 27) {
+            day = 27;
+        }
         if(interval === 'month') {
             return new Date(newDate.setUTCDate(day));
         } else if(interval === 'year') {
             newDate.setUTCDate(month);
-            return new Date(newDate.setUTCDate(day ));
+            return new Date(newDate.setUTCDate(day));
         } else {
             return newDate;
         }
