@@ -480,7 +480,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             var $tracker;
             $dlButton =
                         "<div class='wv-dl-gif-bt-case'>" +
-                            "<i class='fa fa-arrow-circle-o-down'>" +
+                            "<i class='fa fa-download'>" +
                         "</div>";
             jcropAPI = this;
             $('#timeline-footer').toggleClass('wv-anim-active');
