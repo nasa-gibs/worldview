@@ -28,7 +28,11 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
     var GRATICLE_WARNING =
         "The graticule layer cannot be used to take a snapshot. Would you " +
         "like to hide this layer?";
-
+    var PALETTE_WARNING =
+        "One or more layers on the map have been modified (changed palette, " +
+        "thresholds, etc.). These modifications cannot be used to take a " +
+        "snapshot. Would you like to temporarily revert to the original " +
+        "layer(s)?";
     var ROTATE_WARNING = "Image may not be downloaded when rotated. Would you like to reset rotation?";
     
     self.init = function() {
