@@ -24,6 +24,8 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
     var $mountLocation = $('#wv-rangeselector-case')[0];
     var reactGlobal = {};
     var $footer =  $('#timeline-footer');
+    var $header = $('#timeline-header');
+    var $timeline = $('#timeline');
 
     ui.anim.rangeOptions = ui.anim.rangeOptions || {};
 
@@ -72,6 +74,9 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
     self.render = function(options) {
         self.reactComponent = ReactDOM.render(rangeSelectionFactory(options), $mountLocation);
     };
+    self.getHeaderOffset = function() {
+        return $header.width() + Number($timeline.css('left').replace("px", "")) + Number($footer.css('margin-left').replace("px", ""));
+    };
     self.getLocationFromStringDate = function(date) {
         return timeline.x(new Date(date));
     };
@@ -97,7 +102,9 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
 
         return props;
     };
-    self.onRangeClick = function(offsetX) {
+    self.onRangeClick = function(e) {
+        var headerOffset = self.getHeaderOffset();
+        var offsetX  = (e.pageX - headerOffset);
         var date = timeline.x.invert(offsetX);
         models.date.select(date);
     };
