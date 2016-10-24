@@ -23,7 +23,8 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
     var animCoords = null;
     var previousCoords = null;
     var animModel = models.anim;
-    var $progress;
+    var $progress;// progress bar
+    var progressing = false; //if progress bar has started
     var GRATICLE_WARNING =
         "The graticule layer cannot be used to take a snapshot. Would you " +
         "like to hide this layer?";
@@ -41,28 +42,40 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
         var endDate = stateObj.endDate;
         var shootGIFafterImageLoad;
         var imageArra;
-        $progress = $("<progress />") //display progress for GIF creation
-            .attr("class", "wv-gif-progress");
+        var loader;
 
-        wv.ui.getDialog().append($progress).dialog({ //dialog for progress
-            title: "Collecting Images...",
-            width: 300,
-            height: 100
-        });
-        $progress.attr("value", 0);
+        loader = wv.ui.indicator.loading();
+        var buildProgressBar = function() {
+            $progress = $("<progress />") //display progress for GIF creation
+                .attr("class", "wv-gif-progress");
+            wv.ui.getDialog().append($progress).dialog({ //dialog for progress
+                title: "Collecting Images...",
+                width: 300,
+                height: 100
+            });
+            $progress.attr("value", 0);
+        };
+        var onGifProgress = function(captureProgress) {
+            if(!progressing) {
+                buildProgressBar();
+                progressing = true;
+                wv.ui.indicator.hide(loader);
+            }
+            $progress.parent().dialog("option", "title", "Creating GIF..."); //set dialog title
+            $progress.attr("value", captureProgress); //before value set, it is in indeterminate state
+        };
+
         imageArra = getImageArray(startDate, endDate, $progress);
-        if(!imageArra) {
+        if(!imageArra) {// won't be true if there are too mant frames
             return;
         }
+
         gifshot.createGIF({
             'gifWidth': animCoords.w,
             'gifHeight': animCoords.h,
             'images': imageArra,
             'interval': 1 / interval,
-            'progressCallback': function(captureProgress) {
-                $progress.parent().dialog("option", "title", "Creating GIF..."); //set dialog title
-                $progress.attr("value", captureProgress); //before value set, it is in indeterminate state
-            }
+            'progressCallback': onGifProgress
         }, onGifComplete);
     };
     var calcRes = function(mode) { //return either multiplier or string resolution
@@ -219,6 +232,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
     var onGifComplete = function (obj) { //callback function for when image is finished
         if (obj.error === false) {
             $progress.remove();
+            progressing = false;
             var animatedImage = document.createElement('img');
 
             //Create a blob out of the image's base64 encoding because Chrome can't handle large data URIs, taken from:
