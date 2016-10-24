@@ -292,9 +292,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         var day = date.getDate() + 1;
         var newDateDay = newDate.getDate();
         var month = date.getMonth();
-        if(day < newDateDay) {
-            newDate = self.nextDate(newDate);
-        }
+
         if(interval !== 'day' || day > 27) {
             day = 27;
         }
