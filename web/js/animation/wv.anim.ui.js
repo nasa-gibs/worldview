@@ -303,18 +303,17 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     };
     self.setNewDate = function(date, newDate) {
         var interval = self.getInterval();
-        var day = date.getDate() + 1;
-        var newDateDay = newDate.getDate();
-        var month = date.getMonth();
-
+        var newDateDay = newDate.getDate() + 1;
         if(interval !== 'day') {
-            day = 1;
+            if(newDateDay > 27) {
+                newDateDay = 27;
+            }
+            newDate.setUTCDate(newDateDay);
         }
         if(interval === 'month') {
-            return new Date(newDate.setUTCDate(day));
+            return new Date(newDate);
         } else if(interval === 'year') {
-            newDate.setUTCDate(month);
-            return new Date(newDate.setUTCDate(day));
+            return new Date(newDate);
         } else {
             return newDate;
         }
