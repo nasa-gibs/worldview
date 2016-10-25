@@ -34,7 +34,7 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
      *
      */
     self.init = function() {
-        var speed = Number(model.rangeState.speed) || 5;
+        var speed = Number(model.rangeState.speed) || 3;
         var Widget = widgetFactory({
             onPushPlay: self.onPressPlay,
             onPushLoop: self.onPressLoop,
