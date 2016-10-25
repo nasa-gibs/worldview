@@ -13,7 +13,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     self.events = wv.util.events();
     var dateModel = models.date;
     var animModel = models.anim;
-    var queueLength = 10;
+    var queueLength;
     var animateArray;
     var map = ui.map.selected;
     var zooms = ['year', 'month', 'day'];
@@ -48,6 +48,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         preload = {};
         pastDates = {};
         inQueue = {};
+        queueLength = 10;
         self.state = {
             playing: false,
             playIndex: self.getStartDate(),
@@ -194,7 +195,8 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     };
     self.initialPreload = function(currentDate, startDate, endDate, lastToQueue) {
         var day = currentDate;
-        for(var i = 0; i < queueLength; i++ ) {
+        queueLength = self.getQueueLength(startDate, endDate);
+        for(var i = 0; i < queueLength; i++) {
             self.addDate(day);
             day = self.getNextBufferDate(day, startDate, endDate);
             if(wv.util.toISOStringDate(day) === lastToQueue) {
@@ -208,6 +210,18 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
             }
         }
         loader = wv.ui.indicator.loading();
+    };
+    self.getQueueLength= function(startDate, endDate) {
+        var day = startDate;
+        var i = 0;
+        while(i < queueLength) {
+            i++;
+            day = self.nextDate(day);
+            if(day >= endDate){
+                return i;
+            }
+        }
+        return i;
     };
     self.addItemToQueue = function(currentDate, startDate, endDate) {
         var nextDate = self.getNextBufferDate(currentDate, startDate, endDate);
@@ -293,8 +307,8 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         var newDateDay = newDate.getDate();
         var month = date.getMonth();
 
-        if(interval !== 'day' || day > 27) {
-            day = 27;
+        if(interval !== 'day') {
+            day = 1;
         }
         if(interval === 'month') {
             return new Date(newDate.setUTCDate(day));
