@@ -28,7 +28,16 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
     var $timeline = $('#timeline');
 
     ui.anim.rangeOptions = ui.anim.rangeOptions || {};
-
+    /*
+     * set listeners and initiates
+     * widget
+     * 
+     * @method init
+     * @static
+     *
+     * @returns {void}
+     *
+     */
     self.init = function() {
         var startLocation;
         var EndLocation;
@@ -71,19 +80,73 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
         model.events.on('change', self.update);
       self.render(self.options);
     };
+
+    /*
+     * renders react rangeselector component
+     * 
+     * @method render
+     * @static
+     *
+     * @param options {object}
+     * @returns {void}
+     *
+     */
     self.render = function(options) {
         self.reactComponent = ReactDOM.render(rangeSelectionFactory(options), $mountLocation);
     };
+
+    /*
+     * calculates offset of timeline
+     * 
+     * @method getHeaderOffset
+     * @static
+     *
+     * @returns {number} OffsetX
+     *
+     */
     self.getHeaderOffset = function() {
         return $header.width() + Number($timeline.css('left').replace("px", "")) + Number($footer.css('margin-left').replace("px", ""));
     };
+
+    /*
+     * calculates offset of date
+     * on timeline
+     * 
+     * @method getLocationFromStringDate
+     * @static
+     *
+     * @param date {string} date string 
+     * @returns {number} OffsetX
+     *
+     */
     self.getLocationFromStringDate = function(date) {
         return timeline.x(new Date(date));
     };
+
+    /*
+     * updates react component state
+     *
+     * @method update
+     * @static
+     *
+     * @param date {string} date string 
+     * @returns {void}
+     *
+     */
     self.update = function() { // being called from timeline.config.js
         var props = self.updateOptions();
         self.reactComponent.setState(props);
     };
+
+    /*
+     * returns max width of timeline
+     *
+     * @method getMaxWidth
+     * @static
+     *
+     * @returns {number} max width
+     *
+     */
     self.getMaxWidth = function() {
         var $elWidth = $footer.width();
         var $dataWidth = timeline.x(timeline.data.end());
@@ -92,6 +155,16 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
         }
         return $elWidth;
     };
+
+    /*
+     * Gets prop updates
+     *
+     * @method updateOptions
+     * @static
+     *
+     * @returns {object} props
+     *
+     */
     self.updateOptions = function() {
         var max;
         var state = model.rangeState;
@@ -102,12 +175,40 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
 
         return props;
     };
+
+    /*
+     * Handles click on widget:
+     *  switches current date to 
+     *  date clicked
+     *
+     * @method onRangeClick
+     * @static
+     *
+     * @param e {object} native event object
+     *
+     * @returns {object} props
+     *
+     */
     self.onRangeClick = function(e) {
         var headerOffset = self.getHeaderOffset();
         var offsetX  = (e.pageX - headerOffset);
         var date = timeline.x.invert(offsetX);
         models.date.select(date);
     };
+
+    /*
+     * Updates start and end dates and triggers
+     * change events
+     *
+     * @method updateRange
+     * @static
+     *
+     * @param startLocation {number} offsetX
+     * @param EndLocation {number} offsetX
+     *
+     * @returns {object} props
+     *
+     */
     self.updateRange = function(startLocation, EndLocation) {
         var startDate = timeline.x.invert(startLocation);
         var endDate = timeline.x.invert(EndLocation);

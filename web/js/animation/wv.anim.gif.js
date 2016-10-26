@@ -35,10 +35,31 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
         "layer(s)?";
     var ROTATE_WARNING = "Image may not be downloaded when rotated. Would you like to reset rotation?";
     
+    /*
+     * sets listeners
+     *
+     * 
+     * @method init
+     * @static
+     *
+     * @returns {void}
+     *
+     */
     self.init = function() {
         models.anim.events.on('gif-click', setImageCoords);
     };
 
+    /*
+     * Uses, frameUrl array and gifShot
+     * Library to create GIF
+     *
+     * 
+     * @method createGIF
+     * @static
+     *
+     * @returns {void}
+     *
+     */
     self.createGIF = function() {
         var stateObj = animModel.rangeState;
         var interval = stateObj.speed;
@@ -82,6 +103,18 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             'progressCallback': onGifProgress
         }, onGifComplete);
     };
+
+    /*
+     * Calculates resolution of frame based
+     * on zoom and projection
+     *
+     * 
+     * @func calcRes
+     * @private
+     *
+     * @returns {void}
+     *
+     */
     var calcRes = function(mode) { //return either multiplier or string resolution
         //geographic has 10 zoom levels from 0 to 9, polar projections have 8 from 0 to 7
         var isGeographic = models.proj.selected.id === "geographic";
@@ -115,6 +148,17 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             return str;
         }
     };
+
+    /*
+     * checks if rotation, changed palettes, or graticules
+     * are active and ask to reset if any are active
+     * 
+     * @method getGif
+     * @static
+     *
+     * @returns {void}
+     *
+     */
     self.getGif = function() {
         var layers;
         //check for rotation, changed palettes, and graticule layers and ask for reset if so
@@ -158,6 +202,17 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
         }
         self.createGIF();
     };
+
+    /*
+     * checks if rotation, changed palettes, or graticules
+     * are active and ask to reset if any are active
+     * 
+     * @method getGif
+     * @private
+     *
+     * @returns {void}
+     *
+     */
     var formImageURL = function() {
         //Gather all data to get the image
         var proj = models.proj.selected.id,
@@ -191,6 +246,18 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
         return wv.util.format("https://gibs.earthdata.nasa.gov/image-download?{1}&extent={2}&epsg={3}&layers={4}&opacities={5}&worldfile=false&format=image/jpeg&width={6}&height={7}", "TIME={1}", lonlat1[0]+","+lonlat1[1]+","+lonlat2[0]+","+lonlat2[1], epsg, layers.join(","), opacities.join(","), imgWidth, imgHeight);
     };
 
+
+    /*
+     * loops through dates and created image
+     * download urls and pushs them to an
+     * array
+     * 
+     * @method getImageArray
+     * @private
+     *
+     * @returns {array} array of jpg urls
+     *
+     */
     var getImageArray = function (startDate, endDate) {
         var url = formImageURL();
         var a = [];
@@ -219,12 +286,33 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
         return a;
     };
 
+    /*
+     * Thows an alert notifies the user
+     * that too many frames were selected
+     * 
+     * @method showUnavailableReason
+     * @private
+     *
+     * @returns {void}
+     *
+     */
     var showUnavailableReason = function() {
         var headerMsg = "<h3 class='wv-data-unavailable-header'>GIF Not Available</h3>";
         var bodyMsg = 'Too many frames were selected. Please request less than 40 frames if you would like to generate a GIF';
 
         wv.ui.notify(headerMsg + bodyMsg, "Notice", 600);
     };
+
+    /*
+     * resets map rotation to
+     * zero degrees
+     * 
+     * @method resetRotation
+     * @private
+     *
+     * @returns {void}
+     *
+     */
     var resetRotation = function() {
         ui.map.selected.beforeRender(ol.animation.rotate({
             duration: 400,
@@ -232,6 +320,19 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
         }));
         ui.map.selected.getView().rotate(0);
     };
+
+    /*
+     * Handles GIF generater conpletion
+     * 
+     * @method onGifComplete
+     * @callback
+     *
+     * @param obj {object} gifShot GIF-complete
+     *  object
+     *
+     * @returns {void}
+     *
+     */
     var onGifComplete = function (obj) { //callback function for when image is finished
         if (obj.error === false) {
             $progress.remove();
@@ -338,6 +439,19 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             });
         }
     };
+
+    /*
+     * uses resolution and dimension to 
+     * calculates size of selected area
+     * 
+     * @method calcSize
+     * @private
+     *
+     * @param c {object} dimension object
+     *
+     * @returns {number} Size of frame
+     *
+     */
     var calcSize = function(c) {
         var lonlat1 = ui.map.selected.getCoordinateFromPixel([Math.floor(c.x), Math.floor(c.y2)]),
             lonlat2 = ui.map.selected.getCoordinateFromPixel([Math.floor(c.x2), Math.floor(c.y)]);
@@ -349,11 +463,35 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
 
         return ((imgWidth * imgHeight * 24) / 8388608).toFixed(2);
     };
+
+    /*
+     * removes jquery JCrop 
+     * 
+     * @method removeCrop
+     * @private
+     *
+     * @param c {object} dimension object
+     *
+     * @returns {void}
+     *
+     */
     var removeCrop = function() {
         $("#wv-map").insertAfter('#productsHolder'); //retain map element before disabling jcrop
         animCoords = undefined;
         jcropAPI.destroy();
     };
+
+    /*
+     * Builds selector dialog
+     * 
+     * @method getSelectorDialog
+     * @private
+     *
+     * @param width {number}
+     *
+     * @returns {JQuery} Selector diaglog element
+     *
+     */
     self.getSelectorDialog = function(width) {
         var $dialogBox;
         var $createButton;
@@ -403,6 +541,19 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
         });
         return $dialogBox;
     };
+
+    /*
+     * Sets diaglog width && location
+     * 
+     * @method setDialogWidth
+     * @private
+     *
+     * @param $dialog {Jquery} dialog
+     * @param width {number} JCrop selector width
+     *
+     * @returns {void}
+     *
+     */
     var setDialogWidth = function($dialog, width) {
         var $parent;
         if($dialog) {
@@ -415,6 +566,19 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             });
         }
     };
+
+    /*
+     * Adjusts download icon size
+     * 
+     * @method setIconFontSize
+     * @private
+     *
+     * @param $el {Jquery} icon element
+     * @param width {number} JCrop selector width
+     *
+     * @returns {void}
+     *
+     */
     var setIconFontSize = function($el, width) {
         var fs = Math.abs(width / 4);
         if(!$el)
@@ -424,6 +588,17 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
         }
         $el.css('font-size', fs);
     };
+
+    /*
+     * Initializes and sets callbacks for
+     *  Jcrop selector
+     * 
+     * @method setImageCoords
+     * @private
+     *
+     * @returns {void}
+     *
+     */
     var setImageCoords = function() {
         var starterWidth;
         var $dlButton;

@@ -24,6 +24,16 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     var pastDates;
     var loader;
 
+    /*
+     * sets listeners
+     *
+     * 
+     * @method init
+     * @static
+     *
+     * @returns {void}
+     *
+     */
     self.init = function() {
         self.refreshState();
         animModel.events.on('play', self.onPushedPlay);
@@ -38,11 +48,35 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         ui.map.events.on('added-layer', self.refreshState);
         //map.on('moveend', self.refreshState);
     };
+
+    /*
+     * If there is a change of date
+     * and the animiation is not playing
+     * the amin.ui states will be refreshed
+     * 
+     * @method dateChange
+     * @static
+     *
+     * @returns {void}
+     *
+     */
     self.dateChange = function() {
         if(!self.state.playing) {
             self.refreshState();
         }
     };
+
+    /*
+     * Resets amin.ui object
+     * and variable states
+     *
+     * @method refreshState
+     * @static
+     *
+     * @returns {void}
+     *
+     */
+
     self.refreshState = function() {
         preloadArray = [];
         preload = {};
@@ -59,6 +93,18 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         wv.ui.indicator.hide(loader);
         wv.ui.indicator._hide(loader);
     };
+    /*
+     * Determines whether to start at
+     * current date or to start at the 
+     * selected start date
+     *
+     * @method getStartDate
+     * @static
+     *
+     * @returns {string} ISO string Date
+     *
+     */
+
     self.getStartDate = function() {
         var state;
         var endDate;
@@ -74,16 +120,62 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         return wv.util.toISOStringDate(startDate);
 
     };
+
+    /*
+     * Handles a play click event 
+     *
+     * @method onPushedPlay
+     * @static
+     *
+     * @returns {void}
+     *
+     */
     self.onPushedPlay = function() {
         self.checkQueue(queueLength, self.state.playIndex);
         self.checkShouldPlay();
     };
+
+    /*
+     * retrieves the current timeline zoom
+     *
+     * @method getInterval
+     * @static
+     *
+     * @returns {string} Zoom increment
+     *
+     */
     self.getInterval = function() {
         return zooms[ui.timeline.config.currentZoom - 1];
     };
+
+    /*
+     * Gets next date based on current
+     * increments
+     *
+     * @method nextDate
+     * @static
+     *
+     * @param date {object} JS date obj
+     *
+     * @returns {object} JS Date
+     *
+     */
     self.nextDate = function(date) {
         return wv.util.dateAdd(date, self.getInterval(), 1);
     };
+
+    /*
+     * Gets next date based on current
+     * increments
+     *
+     * @method nextDate
+     * @static
+     *
+     * @param date {object} JS date obj
+     *
+     * @returns {object} JS Date
+     *
+     */
     self.addDate = function(date) {
         self.addToInQueue(date);
         queue.add(function () {
@@ -96,16 +188,55 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
             self.checkShouldPlay();
         });
     };
+
+    /*
+     * Add date to loading Queue
+     * obj
+     *
+     * @method addToInQueue
+     * @static
+     *
+     * @param date {object} JS date obj
+     *
+     * @returns {void}
+     *
+     */
     self.addToInQueue = function(date) {
         var strDate = wv.util.toISOStringDate(date);
         inQueue[strDate] = date;
         preloadArray.push(strDate);
     };
+
+    /*
+     * removes date from inQueue obj
+     * and adds it to the preloaded
+     * obj
+     *
+     * @method addDateToCache
+     * @static
+     *
+     * @param date {object} JS date obj
+     *
+     * @returns {void}
+     *
+     */
     self.addDateToCache = function(date) {
         var strDate = wv.util.toISOStringDate(date);
         preload[strDate] = date;
         delete inQueue[strDate]; 
     };
+
+    /*
+     * removes item from cache after it has 
+     * been played and quelimit reached
+     *
+     *
+     * @method shiftCache
+     * @static
+     *
+     * @returns {void}
+     *
+     */
     self.shiftCache = function() {
         var key;
         if(preload[preloadArray[0]] &&
@@ -117,6 +248,21 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
             delete pastDates[key];
         }
     };
+
+    /*
+     * checks if this date is in array of
+     * dates that need to play in future
+     * within buffer length
+     *
+     *
+     * @method isInToPlayGroup
+     * @static
+     *
+     * @param testDate {string} JS date string
+     *
+     * @returns {boolean}
+     *
+     */
     self.isInToPlayGroup = function(testDate) {
         var loop = animModel.rangeState.loop;
         var i = 0;
@@ -140,10 +286,34 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         }
         return false;
     };
+
+    /*
+     * Clears precache
+     *
+     * @method clearCache
+     * @static
+     *
+     *
+     * @returns {void}
+     *
+     */
     self.clearCache = function() {
         preload = {};
         preloadArray = [];
     };
+
+    /*
+     * Determines what dates should
+     * be queued
+     *
+     * @method checkQueue
+     * @static
+     *
+     * @param bufferLength {number} JS date string
+     * @param index {string} Date string
+     * @returns {void}
+     *
+     */
     self.checkQueue = function(bufferLength, index) {
         var date;
         var currentDate;
@@ -165,8 +335,18 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         } else if(self.state.supportingCustomLayers && preloadArray[0]) {
             self.customQueuer(currentDate, startDate, endDate);
         }
-
     };
+
+    /*
+     * Checks to see if custom layers are
+     * active
+     *
+     * @method hasCustomLayers
+     * @static
+     *
+     * @returns {boolean}
+     *
+     */
     self.hasCustomLayers = function() {
         var layer;
         var layers = models.layers.get();
@@ -179,6 +359,21 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         }
         return false;
     };
+
+    /*
+     * Custom date queuer created for
+     * custom colormaps
+     *
+     * @method customQueuer
+     * @static
+     *
+     * @param currentDate {object} JS date
+     * @param startDate {object} JS date
+     * @param endDate {object} JS date
+     *
+     * @returns {void}
+     *
+     */
     self.customQueuer = function(currentDate, startDate, endDate) {
         var nextDateStr;
         var nextDate = self.nextDate(currentDate);
@@ -193,6 +388,21 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
             self.checkQueue(queueLength, self.state.playIndex);
         }
     };
+
+    /*
+     * adds dates to precache queuer
+     *
+     * @method initialPreload
+     * @static
+     *
+     * @param currentDate {object} JS date
+     * @param startDate {object} JS date
+     * @param endDate {object} JS date
+     * @param lastToQueue {string} date String
+     *
+     * @returns {void}
+     *
+     */
     self.initialPreload = function(currentDate, startDate, endDate, lastToQueue) {
         var day = currentDate;
         queueLength = self.getQueueLength(startDate, endDate);
@@ -211,6 +421,21 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         }
         loader = wv.ui.indicator.loading();
     };
+
+    /*
+     * calculates buffer length if
+     * date array length is less than
+     * default queueLength
+     *
+     * @method getQueueLength
+     * @static
+     *
+     * @param startDate {object} JS date
+     * @param endDate {object} JS date
+     *
+     * @returns {number} new buffer length
+     *
+     */
     self.getQueueLength= function(startDate, endDate) {
         var day = startDate;
         var i = 0;
@@ -223,6 +448,20 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         }
         return i;
     };
+
+    /*
+     * Verifies that date is 
+     * valid and adds it to queuer
+     *
+     * @method addItemToQueue
+     * @static
+     *
+     * @param startDate {object} JS date
+     * @param endDate {object} JS date
+     *
+     * @returns {void}
+     *
+     */
     self.addItemToQueue = function(currentDate, startDate, endDate) {
         var nextDate = self.getNextBufferDate(currentDate, startDate, endDate);
         var nextDateStr = wv.util.toISOStringDate(nextDate);
@@ -235,6 +474,21 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
             self.checkQueue(queueLength, self.state.playIndex);
         }
     };
+
+    /*
+     * gets next date to add to
+     * queue
+     *
+     * @method addItemToQueue
+     * @static
+     *
+     * @param currentDate {object} JS date
+     * @param startDate {object} JS date
+     * @param endDate {object} JS date
+     *
+     * @returns {object} JS Date
+     *
+     */
     self.getNextBufferDate = function(currentDate, startDate, endDate) {
         var lastInBuffer = wv.util.parseDateUTC(preloadArray[preloadArray.length - 1]);
         var nextDate = self.nextDate(lastInBuffer);
@@ -243,6 +497,21 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         }
         return self.nextDate(lastInBuffer);
     };
+
+    /*
+     * Gets the last date that should be added
+     * to the queuer
+     *
+     * @method getLastBufferDateStr
+     * @static
+     *
+     * @param currentDate {object} JS date
+     * @param startDate {object} JS date
+     * @param endDate {object} JS date
+     *
+     * @returns {string} Date string
+     *
+     */
     self.getLastBufferDateStr = function(currentDate, startDate, endDate) {
         var day = currentDate;
         var loop = animModel.rangeState.loop;
@@ -261,6 +530,20 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         }
         return wv.util.toISOStringDate(day);
     };
+
+    /*
+     * Gets the last date that should be added
+     * to the queuer
+     *
+     * @method checkShouldLoop
+     * @static
+     *
+     * @param playIndexJSDate {object} JS date
+     *  that is currently being shown
+     *
+     * @returns {void}
+     *
+     */
     self.checkShouldLoop = function(playIndexJSDate) {
         if(animModel.rangeState.loop) {
             self.shiftCache();
@@ -273,6 +556,20 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
             self.refreshState();
         }
     };
+
+    /*
+     * Gets the last date that should be added
+     * to the queuer
+     *
+     * @method checkShouldLoop
+     * @static
+     *
+     * @param playIndexJSDate {object} JS date
+     *  that is currently being shown
+     *
+     * @returns {void}
+     *
+     */
     self.checkShouldPlay = function() {
         var currentDate = wv.util.parseDateUTC(self.state.playIndex);
         var fps = 1000 / animModel.rangeState.speed;
@@ -294,6 +591,19 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         }
         self.shiftCache();
     };
+
+    /*
+     * removes loader and starts the
+     * animation
+     *
+     * @method play
+     * @static
+     *
+     * @param index {string} date string
+     *
+     * @returns {void}
+     *
+     */
     self.play = function(index) {
         self.state.playing = true;
         wv.ui.indicator.hide(loader);
@@ -301,6 +611,20 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         self.animate(index);
         return;
     };
+
+    /*
+     * Gets date to start on when animation
+     * is being looped
+     *
+     * @method setNewDate
+     * @static
+     *
+     * @param date {number} JS Date
+     * @param newDate {number} JS Date
+     *
+     * @returns {void}
+     *
+     */
     self.setNewDate = function(date, newDate) {
         var interval = self.getInterval();
         var newDateDay = newDate.getDate() + 1;
@@ -318,6 +642,18 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
             return newDate;
         }
     };
+
+    /*
+     * function that loops through frames
+     * at a specified time interval
+     *
+     * @method animate
+     * @static
+     *
+     * @param index {string} Date string
+     * @returns {void}
+     *
+     */
     self.animate = function(index) {
         var interval;
         var playIndex = index;

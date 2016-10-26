@@ -26,6 +26,18 @@ wv.anim.model = wv.anim.model || function(models, config) {
        reverse: false
     };
 
+    /*
+     * Pulls state.a from permalink
+     * on page load
+     * 
+     * @method load
+     * @static
+     *
+     * @param state {object} state object
+     * @param errors {object} error object
+     * @returns {void}
+     *
+     */
     self.load = function(state, errors) {
         //is running twice on page load?????
         //console.log('loading');
@@ -39,6 +51,17 @@ wv.anim.model = wv.anim.model || function(models, config) {
             });
         }
     };
+
+    /*
+     * Toggles state object between
+     * on and off
+     * 
+     * @method toggleActive
+     * @static
+     *
+     * @returns {void}
+     *
+     */
     self.toggleActive = function() {
         if(self.rangeState.state === 'off') {
             self.rangeState.state = 'on';
@@ -46,6 +69,17 @@ wv.anim.model = wv.anim.model || function(models, config) {
             self.rangeState.state = 'off';
         }
     };
+
+    /*
+     * saves animation state to permalink
+     * 
+     * @method save
+     * @static
+     *
+     * @returns {void}
+     *
+     */
+
     self.add = function(arra) {
         var updatedState = _.clone(self.state);
         arra.forEach(function(prop) {
@@ -53,12 +87,16 @@ wv.anim.model = wv.anim.model || function(models, config) {
         });
         self.animationState = updatedState;
     };
-    
-    self.animate = function() {
-        
-    };
 
-    //update animation fields, set animation settings into an object
+    /*
+     * saves animation state to permalink
+     * 
+     * @method save
+     * @static
+     *
+     * @returns {void}
+     *
+     */
     self.save = function(state) {
         var activeState;
         var playStates;
