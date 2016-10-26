@@ -150,8 +150,8 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
                 message: ROTATE_WARNING,
                 onOk: function() {
                     resetRotation();
-                    //Let rotation finish before image download can occur
-                    self.getGif();
+                    //Let rotation finish before reselecting can occur
+                    setImageCoords();
                 }
             });
             return;
@@ -231,7 +231,6 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             rotation: ui.map.selected.getView().getRotation()
         }));
         ui.map.selected.getView().rotate(0);
-        ui.map.updateRotation();
     };
     var onGifComplete = function (obj) { //callback function for when image is finished
         if (obj.error === false) {
