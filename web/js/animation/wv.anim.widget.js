@@ -203,6 +203,15 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
      *
      */
     self.toggleAnimationWidget = function() {
+        // If timeline is hidden, pressing
+        // the anim icon will open the
+        // timeline and the anim widget
+        if($timelineFooter.is(":hidden") && !models.data.active) {
+            ui.timeline.toggle(); //toggle
+            if(model.rangeState.state === 'on') { // activate anim if not already
+                return;
+            }
+        }
         if(model.rangeState.state === 'off' && models.data.active) {
             return; // Keep animation off when data-download is active.
         }
