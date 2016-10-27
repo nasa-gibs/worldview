@@ -1016,7 +1016,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
             var coords;
             var pixelValue;
             var pixels;
-
+            if($(e.relatedTarget).hasClass('map-coord')) return;
             pixels =  [e.pageX,e.pageY];
             coords = map.getCoordinateFromPixel(pixels);
 
@@ -1035,9 +1035,11 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
         }
         $(map.getViewport())
             .mouseover(function(e){
+                if($(e.relatedTarget).hasClass('map-coord')) return;
                 $('#' + mapId).show();
             })
-            .mouseout(function()    {
+            .mouseout(function(e)    {
+                if($(e.relatedTarget).hasClass('map-coord')) return;
                 $('#' + mapId).hide();
                 hoverThrottle.cancel();
                 //dataRunner.clearAll();
