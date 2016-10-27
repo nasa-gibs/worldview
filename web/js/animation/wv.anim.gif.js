@@ -499,7 +499,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
         var $dialog =$("<div class='gif-dialog'></div>");
         var dialog =
                 "<div class='content'>"  +
-                    "create an animation from " +
+                    "Create an animation from " +
                     "<b>" +
                         animModel.rangeState.startDate +
                     "</b>" +
