@@ -426,6 +426,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
                 dialogClass: "wv-panel",
                 title: "Your GIF",
                 width: animCoords.w + 198,
+                resizable: false,
                 close: function() {
                     animCoords = null;
                     $imgDialog.find("img").remove();
