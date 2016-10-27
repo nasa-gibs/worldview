@@ -215,9 +215,9 @@
   transition: left 0.3s ease-out; }
 
 .InputRange-label {
-  color: #aaaaaa;
+  color: #ffffff;
   font-family: "Helvetica Neue", san-serif;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   white-space: nowrap; }
 
 .InputRange-label--min,
