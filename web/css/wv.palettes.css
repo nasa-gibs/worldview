@@ -29,7 +29,7 @@
     color: #000000;
     margin-bottom: 1px;
 }
-
+ 
 .wv-palette-selector-row label {
     margin-left: 10px;
 }
@@ -58,7 +58,7 @@
     margin-top: -3px;
     width: auto;
     position: relative;
-    overflow: auto;
+    overflow: hidden;
     height: 10px;
 }
 .wv-palettes-min,
