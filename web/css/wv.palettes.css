@@ -46,7 +46,7 @@
 }
 
 .bank div.wv-palette {
-    padding-bottom: 3px;
+    padding-bottom: 2px;
 }
 
 .bank div.wv-palettes-legend {
@@ -59,7 +59,7 @@
     width: auto;
     position: relative;
     overflow: hidden;
-    height: 10px;
+    height: 12px;
 }
 .wv-palettes-min,
 .wv-palettes-max,
@@ -176,7 +176,7 @@
 }
 
 .bank div.wv-palettes-classes {
-    padding-bottom: 19px;
+    padding-bottom: 6px;
 }
 .bank .wv-running div.wv-palettes-classes .wv-palettes-class.wv-active {
     opacity: 1;
