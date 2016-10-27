@@ -9,6 +9,7 @@
         "test": "grunt test lint"
     },
     "devDependencies": {
+        "babel-polyfill": "^6.16.0",
         "bluebird": "^3.4.6",
         "buster": "0.7.12",
         "gifshot": "^0.3.2",
