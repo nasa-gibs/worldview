@@ -201,7 +201,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
         drawContainers();
 
         $('#timeline-footer').css('margin-left','10px');
-        $('#timeline-footer').css('margin-right',self.margin.right-1 + 'px');
+        $('#timeline-footer').css('margin-right',(self.margin.right + self.margin.left)-14 + 'px');
 
         self.x = d3.time.scale.utc();
 
