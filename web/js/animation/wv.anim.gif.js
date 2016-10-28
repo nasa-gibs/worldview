@@ -356,7 +356,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             var blob = new Blob(byteArrays, {type: "image/gif"});
             var blobURL = URL.createObjectURL(blob); //supported in Chrome and FF
             animatedImage.src = blobURL;
-            var dlURL = wv.util.format("nasa-worldview-{1}-to-{2}.gif", animModel.rangeState.startDate, animModel.rangeState.startDate);
+            var dlURL = wv.util.format("nasa-worldview-{1}-to-{2}.gif", animModel.rangeState.startDate, animModel.rangeState.endDate);
 
             //Create download link and apply button CSS
             var $download = $("<a><span class=ui-button-text>Download</span></a>")
