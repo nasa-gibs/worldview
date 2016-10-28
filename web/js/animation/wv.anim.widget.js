@@ -211,6 +211,10 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
             if(model.rangeState.state === 'on') { // activate anim if not already
                 return;
             }
+            setTimeout(function() {
+                model.events.trigger('change');
+                model.events.trigger('toggle-widget');
+            }, 500);
         }
         if(model.rangeState.state === 'off' && models.data.active) {
             return; // Keep animation off when data-download is active.
@@ -218,6 +222,7 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
         model.toggleActive(); // sets anim state to on or off
         model.events.trigger('change');
         model.events.trigger('toggle-widget');
+
         return $timelineFooter.toggleClass('wv-anim-active');
     };
 
