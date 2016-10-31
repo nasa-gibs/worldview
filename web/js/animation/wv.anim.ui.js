@@ -406,6 +406,12 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     self.initialPreload = function(currentDate, startDate, endDate, lastToQueue) {
         var day = currentDate;
         queueLength = self.getQueueLength(startDate, endDate);
+        if(queueLength <= 1) { // if only one frame done play just move to that date
+            dateModel.select(startDate);
+            animModel.rangeState.playing = false;
+            setTimeout(function() {self.refreshState();}, 100);
+            return;
+        }
         for(var i = 0; i < queueLength; i++) {
             self.addDate(day);
             day = self.getNextBufferDate(day, startDate, endDate);
@@ -442,7 +448,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         while(i < queueLength) {
             i++;
             day = self.nextDate(day);
-            if(day >= endDate){
+            if(day > endDate){
                 return i;
             }
         }
