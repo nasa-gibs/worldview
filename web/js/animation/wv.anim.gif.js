@@ -24,6 +24,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
     var previousCoords = null;
     var animModel = models.anim;
     var $progress;// progress bar
+    var loader;
     var progressing = false; //if progress bar has started
     var GRATICLE_WARNING =
         "The graticule layer cannot be used to take a snapshot. Would you " +
@@ -67,7 +68,6 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
         var endDate = stateObj.endDate;
         var shootGIFafterImageLoad;
         var imageArra;
-        var loader;
 
         loader = wv.ui.indicator.loading();
         var buildProgressBar = function() {
@@ -273,6 +273,8 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             current = wv.util.dateAdd(current, ui.anim.ui.getInterval(), 1);
             if(j > 40) { // too many frame
                 showUnavailableReason();
+                wv.ui.indicator.hide(loader);
+
                 return false;
             }
 
@@ -299,8 +301,10 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
     var showUnavailableReason = function() {
         var headerMsg = "<h3 class='wv-data-unavailable-header'>GIF Not Available</h3>";
         var bodyMsg = 'Too many frames were selected. Please request less than 40 frames if you would like to generate a GIF';
-
-        wv.ui.notify(headerMsg + bodyMsg, "Notice", 600);
+        callback = function() {
+            $('#timeline-footer').toggleClass('wv-anim-active');
+        };
+        wv.ui.notify(headerMsg + bodyMsg, "Notice", 600, callback);
     };
 
     /*

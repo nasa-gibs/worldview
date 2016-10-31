@@ -59,7 +59,7 @@ wv.ui = (function(self) {
      *
      * @param [title="Notice"] {string} Title for the dialog box.
      */
-    self.notify = function(message, title, width) {
+    self.notify = function(message, title, width, callback) {
         var $dialog = self.getDialog();
         title = title || "Notice";
         width = width || 300;
@@ -70,7 +70,11 @@ wv.ui = (function(self) {
             width: width,
             minHeight: 1,
             height: "auto"
+        }).on("dialogclose", function() {
+            callback();
         });
+
+
     };
 
     /**
