@@ -406,7 +406,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     self.initialPreload = function(currentDate, startDate, endDate, lastToQueue) {
         var day = currentDate;
         queueLength = self.getQueueLength(startDate, endDate);
-        if(queueLength <= 1) { // if only one frame done play just move to that date
+        if(queueLength <= 1) { // if only one frame will play just move to that date
             dateModel.select(startDate);
             animModel.rangeState.playing = false;
             setTimeout(function() {self.refreshState();}, 100);
