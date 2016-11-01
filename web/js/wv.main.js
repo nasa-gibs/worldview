@@ -128,7 +128,6 @@ $(function() {
             .register(models.palettes)
             .register(models.map)
             .register(models.anim);
-        models.link.load(state);
 
         // HACK: Map needs to be created before the data download model
         ui.map = wv.map.ui(models, config, wv.map.rotate, wv.map.runningdata);
