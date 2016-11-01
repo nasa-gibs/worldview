@@ -23,6 +23,7 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
     var widgetFactory = React.createFactory(WVTC.AnimationWidget);
     var $timelineFooter;
     var $animateButton;
+    var dataModel;
     /*
      * set listeners and initiate
      * widget
@@ -70,14 +71,20 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
         model.rangeState.speed = speed;
         model.events.trigger('change');
         model.events.on('change', self.update);
-        model.events.on('timeline-change', self.update);
-        models.data.events.on('activate', function() {
-            self.toggleAnimationWidget();
-            self.onDataActivate();
-        });
-        models.data.events.on('deactivate', function() {
-            self.onDataDeactivate();
-        });
+        models.date.events.on('timeline-change', self.update);
+        if(models.data) {
+            dataModel = models.data;
+            models.data.events.on('activate', function() {
+                self.toggleAnimationWidget();
+                self.onDataActivate();
+            });
+            models.data.events.on('deactivate', function() {
+                self.onDataDeactivate();
+            });
+        } else {
+            dataModel = {};
+            dataModel.active = false;
+        }
 
         //hack for react bug https://github.com/facebook/react/issues/1920
         $('.wv-date-selector-widget input').keydown(function(e) {
@@ -206,7 +213,7 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
         // If timeline is hidden, pressing
         // the anim icon will open the
         // timeline and the anim widget
-        if($timelineFooter.is(":hidden") && !models.data.active) {
+        if($timelineFooter.is(":hidden") && !dataModel.active) {
             ui.timeline.toggle(); //toggle
             if(model.rangeState.state === 'on') { // activate anim if not already
                 return;
@@ -216,7 +223,7 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
                 model.events.trigger('toggle-widget');
             }, 500);
         }
-        if(model.rangeState.state === 'off' && models.data.active) {
+        if(model.rangeState.state === 'off' && dataModel.active) {
             return; // Keep animation off when data-download is active.
         }
         model.toggleActive(); // sets anim state to on or off
