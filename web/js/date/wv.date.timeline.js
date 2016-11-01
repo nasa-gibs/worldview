@@ -197,11 +197,17 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     };
 
     var init = function(){
-        
+        var $timelineFooter = $('#timeline-footer');
         drawContainers();
 
-        $('#timeline-footer').css('margin-left','10px');
-        $('#timeline-footer').css('margin-right',(self.margin.right + self.margin.left)-14 + 'px');
+        if(!models.anim) {// Hack: margin if anim is present
+            $('#animate-button').hide();
+            $timelineFooter.css('margin-left',self.margin.left-1 + 'px');
+            $timelineFooter.css('margin-right',self.margin.right-1 + 'px');
+        } else {
+            $timelineFooter.css('margin-left','10px');
+            $timelineFooter.css('margin-right',(self.margin.right + self.margin.left)-14 + 'px');
+        }
 
         self.x = d3.time.scale.utc();
 

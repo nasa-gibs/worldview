@@ -39,13 +39,21 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         animModel.events.on('play', self.onPushedPlay);
         animModel.events.on('gif-click', self.refreshState);
         animModel.events.on('datechange', self.refreshState);
-        animModel.events.on('zoom-change', self.refreshState);
         animModel.events.on('toggle-widget', self.refreshState);
-        models.proj.events.on("select", self.refreshState);
-        models.date.events.on("select", self.dateChange);
-        models.palettes.events.on('update', self.refreshState);
-        models.data.events.on('activate', self.refreshState);
-        ui.map.events.on('added-layer', self.refreshState);
+        if(models.proj) {
+            models.proj.events.on("select", self.refreshState);
+        }
+        if(models.palettes) {
+            models.palettes.events.on('update', self.refreshState);
+        }
+        if(models.data) {
+            models.data.events.on('activate', self.refreshState);
+            models.date.events.on('zoom-change', self.refreshState);
+            models.date.events.on("select", self.dateChange);
+        }
+        if(ui.map) {
+            ui.map.events.on('added-layer', self.refreshState);
+        }
         //map.on('moveend', self.refreshState);
     };
 
