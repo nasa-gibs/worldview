@@ -242,7 +242,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         if(preload[preloadArray[0]] &&
            wv.util.objectLength(preload) > queueLength + (queueLength / 2) + 1 &&
            pastDates[preloadArray[0]] &&
-           self.isInToPlayGroup(preloadArray[0])) {
+           !self.isInToPlayGroup(preloadArray[0])) {
             key = preloadArray.shift();
             delete preload[key];
             delete pastDates[key];
