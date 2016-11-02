@@ -215,6 +215,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
      */
     var formImageURL = function() {
         //Gather all data to get the image
+        var host, path;
         var proj = models.proj.selected.id,
             products = models.layers.get({
                 reverse: true,
@@ -222,7 +223,6 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             }),
             epsg = ( models.proj.change ) ? models.proj.change.epsg : models.proj.selected.epsg,
             opacities = [], layers = [];
-
         var lonlat1 = ui.map.selected.getCoordinateFromPixel([Math.floor(animCoords.x), Math.floor(animCoords.y2)]);
         var lonlat2 = ui.map.selected.getCoordinateFromPixel([Math.floor(animCoords.x2), Math.floor(animCoords.y)]);
 
@@ -230,7 +230,13 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
 
         var imgWidth = Math.round((Math.abs(lonlat2[0] - lonlat1[0]) / conversionFactor) / Number(res)),
             imgHeight = Math.round((Math.abs(lonlat2[1] - lonlat1[1]) / conversionFactor) / Number(res));
-
+         if ( config.features.imageDownload ) {
+            host = config.features.imageDownload.host;
+            path = config.parameters.imagegen || config.features.imageDownload.path;
+        } else {
+            host = 'https://gibs.earthdata.nasa.gov';
+            path = 'image-download'
+        }
         _(products).each( function(product){
             opacities.push( ( _.isUndefined(product.opacity) ) ? 1: product.opacity );
         });
@@ -242,8 +248,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
                 layers.push(layer.id);
             }
         });
-
-        return wv.util.format("https://gibs.earthdata.nasa.gov/image-download?{1}&extent={2}&epsg={3}&layers={4}&opacities={5}&worldfile=false&format=image/jpeg&width={6}&height={7}", "TIME={1}", lonlat1[0]+","+lonlat1[1]+","+lonlat2[0]+","+lonlat2[1], epsg, layers.join(","), opacities.join(","), imgWidth, imgHeight);
+        return wv.util.format(host + '/' + path + "?{1}&extent={2}&epsg={3}&layers={4}&opacities={5}&worldfile=false&format=image/jpeg&width={6}&height={7}", "TIME={1}", lonlat1[0]+","+lonlat1[1]+","+lonlat2[0]+","+lonlat2[1], epsg, layers.join(","), opacities.join(","), imgWidth, imgHeight);
     };
 
 
