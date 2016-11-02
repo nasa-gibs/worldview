@@ -70,8 +70,11 @@ wv.ui = (function(self) {
             width: width,
             minHeight: 1,
             height: "auto"
-        }).on("dialogclose", function() {
-            callback();
+        }).on('dialogclose', function() {
+            $(this).off('dialogclose');
+            if(callback) {
+                callback();
+            }
         });
 
 
