@@ -128,6 +128,7 @@ $(function() {
             .register(models.palettes)
             .register(models.map)
             .register(models.anim);
+        models.link.load(state);
 
         // HACK: Map needs to be created before the data download model
         ui.map = wv.map.ui(models, config, wv.map.rotate, wv.map.runningdata);
@@ -143,7 +144,7 @@ $(function() {
         }
         // HACK: Map needs permalink state loaded before starting. But
         // data download now needs it too.
-        models.link.load(state);
+        models.link.load(state); // needs to be loaded twice
 
         if ( config.features.arcticProjectionChange ) {
             models.proj.change = wv.proj.change(models, config);
