@@ -35,26 +35,10 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
      *
      */
     self.init = function() {
-        var speed = Number(model.rangeState.speed) || 3;
-        var Widget = widgetFactory({
-            onPushPlay: self.onPressPlay,
-            onPushLoop: self.onPressLoop,
-            onPushPause: self.onPressPause,
-            onPushGIF: self.onPressGIF,
-            looping: model.rangeState.loop,
-            increment: self.getIncrements(), // config.currentZoom is a number: 1,2,3
-            incrementArray: _.without(zooms, self.getIncrements()), // array of zooms without current zoom
-            onDateChange: self.dateUpdate,
-            sliderLabel: 'Frames Per Second',
-            sliderSpeed: speed,
-            onZoomSelect: self.onZoomSelect,
-            onSlide: self.onRateChange,
-            startDate: new Date(model.rangeState.startDate),
-            endDate: new Date(model.rangeState.endDate),
-            minDate: models.date.minDate(),
-            maxDate: models.date.maxDate(),
-            onClose: self.toggleAnimationWidget
-        });
+        var speed;
+        var Widget;
+
+        Widget = self.initWidget();
         //mount react component
         $animateButton = $('#animate-button');
         self.reactComponent = ReactDOM.render(Widget, $('#wv-animation-widet-case')[0]);
@@ -68,17 +52,16 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
             // A bit of a hack
             e.stopPropagation(); // needed to correct event bubbling between react and Document
         });
-        model.rangeState.speed = speed;
         model.events.trigger('change');
         model.events.on('change', self.update);
         models.date.events.on('timeline-change', self.update);
         if(models.data) {
             dataModel = models.data;
-            models.data.events.on('activate', function() {
+            dataModel.events.on('activate', function() {
                 self.toggleAnimationWidget();
                 self.onDataActivate();
             });
-            models.data.events.on('deactivate', function() {
+            dataModel.events.on('deactivate', function() {
                 self.onDataDeactivate();
             });
         } else {
@@ -100,6 +83,39 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
                 e.preventDefault();
                 self.onSpaceBar();
             }
+        });
+    };
+
+    /*
+     * Widget initializer
+     * passes initial props
+     *
+     * @method initWidget
+     * @static
+     *
+     * @returns {void}
+     *
+     */
+    self.initWidget = function() {
+        var rangeState = model.rangeState;
+        return widgetFactory({
+            onPushPlay: self.onPressPlay,
+            onPushLoop: self.onPressLoop,
+            onPushPause: self.onPressPause,
+            onPushGIF: self.onPressGIF,
+            looping: model.rangeState.loop,
+            increment: self.getIncrements(), // config.currentZoom is a number: 1,2,3
+            incrementArray: _.without(zooms, self.getIncrements()), // array of zooms without current zoom
+            onDateChange: self.dateUpdate,
+            sliderLabel: 'Frames Per Second',
+            sliderSpeed: rangeState.speed,
+            onZoomSelect: self.onZoomSelect,
+            onSlide: self.onRateChange,
+            startDate: new Date(rangeState.startDate),
+            endDate: new Date(rangeState.endDate),
+            minDate: models.date.minDate(),
+            maxDate: models.date.maxDate(),
+            onClose: self.toggleAnimationWidget
         });
     };
     /*
@@ -213,6 +229,10 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
         // If timeline is hidden, pressing
         // the anim icon will open the
         // timeline and the anim widget
+        if(model.rangeState.state === null) { // widget hasn't been clicked before
+            model.rangeState.state = 'off';
+            self.makeDateGuess();
+        }
         if($timelineFooter.is(":hidden") && !dataModel.active) {
             ui.timeline.toggle(); //toggle
             if(model.rangeState.state === 'on') { // activate anim if not already
@@ -233,6 +253,22 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
         return $timelineFooter.toggleClass('wv-anim-active');
     };
 
+    self.makeDateGuess = function() {
+        var start;
+        var end;
+        var currentDate = new Date(models.date.selected);
+        var interval = ui.anim.ui.getInterval();
+        var day = wv.util.dateAdd(currentDate, interval, 7);
+        var today = new Date();
+
+        if(day > today) {
+            model.rangeState.endDate = wv.util.toISOStringDate(currentDate);
+            model.rangeState.startDate = wv.util.toISOStringDate(wv.util.dateAdd(currentDate, interval, -7));
+        } else {
+            model.rangeState.startDate = wv.util.toISOStringDate(currentDate);
+            model.rangeState.endDate = wv.util.toISOStringDate(wv.util.dateAdd(currentDate, interval, 7));     
+        }
+    };
     /*
      * Press play button event handler
      *

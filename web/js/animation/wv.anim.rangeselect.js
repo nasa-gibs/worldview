@@ -39,18 +39,55 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
      *
      */
     self.init = function() {
+        var $animateButton = $('#animate-button');
+        var options;
+
+        self.setDefaults();
+        self.render();
+        models.date.events.on('timeline-change', self.update);
+        model.events.on('change', self.update);
+    };
+
+    /*
+     * Sets default state for animation
+     * feature
+     *
+     * @method setDefaults
+     * @static
+     *
+     * @returns {void}
+     *
+     */
+    self.setDefaults = function() {
+        /*
+         * Set some defaults
+         */
+        var rangeState;
+
+        model = models.anim || {};
+        model.rangeState = model.rangeState || {};
+        rangeState = model.rangeState;
+        rangeState.state = rangeState.state || null;
+        rangeState.loop = rangeState.loop || false;
+        rangeState.speed = rangeState.speed || 3;
+    };
+    /*
+     * renders react rangeselector component
+     *
+     * @method render
+     * @static
+     *
+     * @returns {void}
+     *
+     */
+    self.render = function() {
+        var options;
         var startLocation;
         var EndLocation;
         var pick = d3.select('#guitarpick');
         var pickWidth = pick.node().getBoundingClientRect().width;
-        var animEndLocation = (d3.transform(pick.attr("transform")).translate[0] - (pickWidth / 2)); // getting guitar pick location
         var ticHeight = $('.end-tick').height();
-        var $animateButton = $('#animate-button');
-        var options;
-
-        model = models.anim || {};
-        model.rangeState = model.rangeState || {};
-        model.rangeState.state = model.rangeState.state || 'off';
+        var animEndLocation = (d3.transform(pick.attr("transform")).translate[0] - (pickWidth / 2)); // getting guitar pick location
 
         if(model.rangeState.startDate) {
             startLocation = self.getLocationFromStringDate(model.rangeState.startDate);
@@ -61,7 +98,7 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
             self.updateRange(startLocation, endLocation);
         }
 
-        self.options = {
+        options = {
             startLocation: startLocation, // or zero
             endLocation: endLocation,
             max: self.getMaxWidth(),
@@ -76,22 +113,6 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
             onDrag: self.updateRange,
             onRangeClick: self.onRangeClick
         };
-        models.date.events.on('timeline-change', self.update);
-        model.events.on('change', self.update);
-      self.render(self.options);
-    };
-
-    /*
-     * renders react rangeselector component
-     * 
-     * @method render
-     * @static
-     *
-     * @param options {object}
-     * @returns {void}
-     *
-     */
-    self.render = function(options) {
         self.reactComponent = ReactDOM.render(rangeSelectionFactory(options), $mountLocation);
     };
 
