@@ -9,7 +9,7 @@
  * All Rights Reserved.
  */
 
-var fs = require("fs")
+var fs = require("fs");
 var moment = require("moment");
 
 // Build date shown in the About box
