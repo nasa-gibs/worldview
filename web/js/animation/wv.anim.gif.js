@@ -235,7 +235,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             path = config.parameters.imagegen || config.features.imageDownload.path;
         } else {
             host = 'https://gibs.earthdata.nasa.gov';
-            path = 'image-download'
+            path = 'image-download';
         }
         _(products).each( function(product){
             opacities.push( ( _.isUndefined(product.opacity) ) ? 1: product.opacity );
