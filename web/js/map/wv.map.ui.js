@@ -821,6 +821,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
         map.getView().on("change:center", updateExtent);
         map.getView().on("change:resolution", updateExtent);
         map.getView().on("change:rotation", rotation.updateRotation);
+        mobileRotation.on('change', rotation.updateRotation);
         map.on('pointerdrag', function() {
             mapIsbeingDragged = true;
         });
