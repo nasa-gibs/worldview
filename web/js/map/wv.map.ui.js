@@ -777,7 +777,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
                 enableRotation: true
             }),
             target: id,
-            renderer: ["canvas", "dom"],
+            renderer: ["canvas"],
             logo: false,
             controls: [
                 scaleMetric,

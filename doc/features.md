@@ -5,7 +5,7 @@ to enable the feature if desired.
 
 ## Data Download
 
-The data download feature requires a CGI script to execute queries to ECHO
+The data download feature requires a CGI script to execute queries to CMR
 on behalf of Worldview. For this reason, it is not enabled by default.
 If you understand the implications of this feature and wish to enable it,
 edit the ``options/features.json`` file and change to:

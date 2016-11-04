@@ -88,7 +88,7 @@ The ``config/wv.json/layerOrder.json`` file must be updated to include the new l
 - **tags**: Additional text used for matching this layer when searching in the add layers tab. This allows Aerosol Optical Depth layers to match when "aod" is typed in
 - **noTransition**: For WMTS layers only, if set to *true*, the map will not display lower-resolution tiles while loading.
 - **transition**: For WMS layers only, if set to *true*, the map will display lower-resolution tiles while loading.
-- **product**: Identifier of the product to use when searching ECHO to download data. This feature is currently undocumented.
+- **product**: Identifier of the product to use when searching the Common Metadata Repository (CMR) to download data. See the [Data Download documentation](data_download.md) for more information.
 
 To display a color palette legend, a *palette* object should exist with the following properties:
 
