@@ -15,8 +15,7 @@ example follows below:
             "name": "MODIS/Aqua Aerosol 5-Min L2 Swath 10km",
             "handler": "AquaSwathMultiDay",
             "query": {
-                "shortName": "MYD04_L2",
-                "dataCenterId": ["LAADS", "LANCEMODIS"]
+                "shortName": "MYD04_L2"
             },
             "nrt": {
                 "by": "value",
@@ -71,10 +70,10 @@ The available options are:
 * `shortName`: Short name used to identify this product. If more than one
 short name is required, for example, `AIRIBRAD` and `AIRIBRAD_NRT`, a list
 can be provided.
-* `dataCenterId`: Data center that provides this product. If more than one
-data center is required, for example, `NSIDC_ECS` and `LANCEMODIS`, a list
-can be provided. This parameter was used to speed up queries but appears
-to no longer be necessary.
+* `dataCenterId`: Deprecated. Data center that provides this product. If more than
+one data center is required, for example, `NSIDC_ECS` and `LANCEMODIS`, a list
+can be provided. This parameter was used to speed up queries but now has the
+opposite effect and can break certain queries.
 * `dayNightFlag`: The value of the day/night flag, usually either `DAY` or
 `NIGHT`. Note that a granule that is both day and night is set to `BOTH`
 which isn't currently handled. Some products may populate this field with
