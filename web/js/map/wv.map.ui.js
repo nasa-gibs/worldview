@@ -820,7 +820,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
         // Set event listeners for changes on the map view (when rotated, zoomed, panned)
         map.getView().on("change:center", updateExtent);
         map.getView().on("change:resolution", updateExtent);
-        map.getView().on("change:rotation", rotation.updateRotation);
+        map.getView().on("change:rotation", _.throttle(rotation.updateRotation, 300));
         map.on('pointerdrag', function() {
             self.mapIsbeingDragged = true;
         });
