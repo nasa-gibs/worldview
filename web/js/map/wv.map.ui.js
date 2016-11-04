@@ -22,7 +22,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
     var self = {};
     var rotation = new Rotation(self, models);
     //var dataRunner = new DataRunner(models);
-    var mapIsbeingDragged = false;
+    self.mapIsbeingDragged = false;
     var hiDPI = ol.has.DEVICE_PIXEL_RATIO > 1;
     var pixelRatio = hiDPI ? 2 : 1;
 
@@ -822,10 +822,12 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
         map.getView().on("change:resolution", updateExtent);
         map.getView().on("change:rotation", rotation.updateRotation);
         map.on('pointerdrag', function() {
-            mapIsbeingDragged = true;
+            self.mapIsbeingDragged = true;
         });
-        map.on('moveend', function() {
-            mapIsbeingDragged = false;
+        map.on('moveend', function(e) {
+            setTimeout(function(){
+                self.mapIsbeingDragged = false;
+            }, 200);
         });
 
         return map;
@@ -1028,7 +1030,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
             });
 
             // setting a limit on running-data retrievel
-            if( mapIsbeingDragged) {
+            if( self.mapIsbeingDragged) {
                 return;
             }
             if( models.anim ) {
