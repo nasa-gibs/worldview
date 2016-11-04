@@ -20,8 +20,10 @@ import sys
 from urllib2 import Request, urlopen, HTTPError
 
 granule_endpoint = "".join(
-  ["https://api.echo.nasa.gov/catalog-rest/echo_catalog/",
-   "granules/search.json?client_id=worldview"])
+  ["https://cmr.earthdata.nasa.gov/search/",
+   "concepts/search.json?"])
+#  ["https://api.echo.nasa.gov/catalog-rest/echo_catalog/",
+#   "granules/search.json?client_id=worldview"])
 collection_endpoint = "".join(
   ["https://api.echo.nasa.gov/catalog-rest/echo_catalog/",
    "datasets.json?"])
@@ -129,7 +131,7 @@ def aql_date(t):
   Returns:
   - XML string fragment containing a Date element.
   """
-  return "<Date YYYY='%s' MM='%s' DD='%s' HH='%s' MI='%s' SS='%s'/>" % (
+  return "<Date YYYY=\"%s\" MM=\"%s\" DD=\"%s\" HH=\"%s\" MI=\"%s\" SS=\"%s\"/>" % (
     t.year, t.month, t.day, t.hour, t.minute, t.second
   )
 
@@ -150,11 +152,9 @@ def create_xml(fields):
   """
 
   # It isn't necessary to have the official prolog and DOCTYPE
-  xml = ["<?xml version='1.0' encoding='UTF-8' ?>"]
-  xml = ['<!DOCTYPE query PUBLIC "-//ECHO CatalogService (v10)//EN" '
-         '"http://api.echo.nasa.gov/echo/dtd/IIMSAQLQueryLanguage.dtd">']
+  xml = ["<?xml version=\"1.0\" encoding=\"UTF-8\"?>"]
 
-  xml += ["<query>", "<for value='granules'/>"]
+  xml += ["<query>", "<for value=\"granules\"/>"]
 
   xml += ["<dataCenterId>"]
   if "dataCenterId" in fields:
@@ -185,7 +185,7 @@ def create_xml(fields):
 
   if "dayNightFlag" in fields:
     xml += ["<granuleCondition>"]
-    xml += ["<dayNightFlag value='%s'/>" % fields["dayNightFlag"].value]
+    xml += ["<dayNightFlag value=\"%s\"/>" % fields["dayNightFlag"].value]
     xml += ["</granuleCondition>"]
 
   xml += ["</where>"]
