@@ -1028,8 +1028,13 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
             });
 
             // setting a limit on running-data retrievel
-            if(models.anim.rangeState.playing || mapIsbeingDragged) {
+            if( mapIsbeingDragged) {
                 return;
+            }
+            if( models.anim ) {
+                if(models.anim.rangeState.playing) {
+                    return; // don't get running data if map is animating
+                }
             }
             //dataRunner.newPoint(pixelValue, map);
         }

@@ -23,6 +23,7 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
     var widgetFactory = React.createFactory(WVTC.AnimationWidget);
     var $timelineFooter;
     var $animateButton;
+    var dataModel;
     /*
      * set listeners and initiate
      * widget
@@ -34,26 +35,10 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
      *
      */
     self.init = function() {
-        var speed = Number(model.rangeState.speed) || 3;
-        var Widget = widgetFactory({
-            onPushPlay: self.onPressPlay,
-            onPushLoop: self.onPressLoop,
-            onPushPause: self.onPressPause,
-            onPushGIF: self.onPressGIF,
-            looping: model.rangeState.loop,
-            increment: self.getIncrements(), // config.currentZoom is a number: 1,2,3
-            incrementArray: _.without(zooms, self.getIncrements()), // array of zooms without current zoom
-            onDateChange: self.dateUpdate,
-            sliderLabel: 'Frames Per Second',
-            sliderSpeed: speed,
-            onZoomSelect: self.onZoomSelect,
-            onSlide: self.onRateChange,
-            startDate: new Date(model.rangeState.startDate),
-            endDate: new Date(model.rangeState.endDate),
-            minDate: models.date.minDate(),
-            maxDate: models.date.maxDate(),
-            onClose: self.toggleAnimationWidget
-        });
+        var speed;
+        var Widget;
+
+        Widget = self.initWidget();
         //mount react component
         $animateButton = $('#animate-button');
         self.reactComponent = ReactDOM.render(Widget, $('#wv-animation-widet-case')[0]);
@@ -67,17 +52,22 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
             // A bit of a hack
             e.stopPropagation(); // needed to correct event bubbling between react and Document
         });
-        model.rangeState.speed = speed;
         model.events.trigger('change');
         model.events.on('change', self.update);
-        model.events.on('timeline-change', self.update);
-        models.data.events.on('activate', function() {
-            self.toggleAnimationWidget();
-            self.onDataActivate();
-        });
-        models.data.events.on('deactivate', function() {
-            self.onDataDeactivate();
-        });
+        models.date.events.on('timeline-change', self.update);
+        if(models.data) {
+            dataModel = models.data;
+            dataModel.events.on('activate', function() {
+                self.toggleAnimationWidget();
+                self.onDataActivate();
+            });
+            dataModel.events.on('deactivate', function() {
+                self.onDataDeactivate();
+            });
+        } else {
+            dataModel = {};
+            dataModel.active = false;
+        }
 
         //hack for react bug https://github.com/facebook/react/issues/1920
         $('.wv-date-selector-widget input').keydown(function(e) {
@@ -93,6 +83,39 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
                 e.preventDefault();
                 self.onSpaceBar();
             }
+        });
+    };
+
+    /*
+     * Widget initializer
+     * passes initial props
+     *
+     * @method initWidget
+     * @static
+     *
+     * @returns {void}
+     *
+     */
+    self.initWidget = function() {
+        var rangeState = model.rangeState;
+        return widgetFactory({
+            onPushPlay: self.onPressPlay,
+            onPushLoop: self.onPressLoop,
+            onPushPause: self.onPressPause,
+            onPushGIF: self.onPressGIF,
+            looping: model.rangeState.loop,
+            increment: self.getIncrements(), // config.currentZoom is a number: 1,2,3
+            incrementArray: _.without(zooms, self.getIncrements()), // array of zooms without current zoom
+            onDateChange: self.dateUpdate,
+            sliderLabel: 'Frames Per Second',
+            sliderSpeed: rangeState.speed,
+            onZoomSelect: self.onZoomSelect,
+            onSlide: self.onRateChange,
+            startDate: new Date(rangeState.startDate),
+            endDate: new Date(rangeState.endDate),
+            minDate: models.date.minDate(),
+            maxDate: models.date.maxDate(),
+            onClose: self.toggleAnimationWidget
         });
     };
     /*
@@ -206,7 +229,11 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
         // If timeline is hidden, pressing
         // the anim icon will open the
         // timeline and the anim widget
-        if($timelineFooter.is(":hidden") && !models.data.active) {
+        if(model.rangeState.state === null) { // widget hasn't been clicked before
+            model.rangeState.state = 'off';
+            self.makeDateGuess();
+        }
+        if($timelineFooter.is(":hidden") && !dataModel.active) {
             ui.timeline.toggle(); //toggle
             if(model.rangeState.state === 'on') { // activate anim if not already
                 return;
@@ -216,7 +243,7 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
                 model.events.trigger('toggle-widget');
             }, 500);
         }
-        if(model.rangeState.state === 'off' && models.data.active) {
+        if(model.rangeState.state === 'off' && dataModel.active) {
             return; // Keep animation off when data-download is active.
         }
         model.toggleActive(); // sets anim state to on or off
@@ -226,6 +253,22 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
         return $timelineFooter.toggleClass('wv-anim-active');
     };
 
+    self.makeDateGuess = function() {
+        var start;
+        var end;
+        var currentDate = new Date(models.date.selected);
+        var interval = ui.anim.ui.getInterval();
+        var day = wv.util.dateAdd(currentDate, interval, 7);
+        var today = new Date();
+
+        if(day > today) {
+            model.rangeState.endDate = wv.util.toISOStringDate(currentDate);
+            model.rangeState.startDate = wv.util.toISOStringDate(wv.util.dateAdd(currentDate, interval, -7));
+        } else {
+            model.rangeState.startDate = wv.util.toISOStringDate(currentDate);
+            model.rangeState.endDate = wv.util.toISOStringDate(wv.util.dateAdd(currentDate, interval, 7));     
+        }
+    };
     /*
      * Press play button event handler
      *

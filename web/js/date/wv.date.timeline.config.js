@@ -14,7 +14,6 @@ wv.date.timeline = wv.date.timeline || {};
 wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui) {
     var self = {};
     var tl = ui.timeline;
-    var animModel= models.anim;
     var model = models.date;
     var zoomLevel = model.selectedZoom || 3;
 
@@ -518,9 +517,8 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
         tl.pick.update();
         tl.pick.checkLocation();
         model.selectedZoom = level;
-        animModel.events.trigger('timeline-change');
-        animModel.events.trigger('zoom-change');
-
+        model.events.trigger('zoom-change');
+        model.events.trigger('timeline-change');
     };
 
     //Draw ticks based on zoom level

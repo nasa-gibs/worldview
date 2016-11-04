@@ -60,7 +60,7 @@ wv.anim.model = wv.anim.model || function(models, config) {
             }
         }
         if(state.av) {
-            self.rangeState.speed = state.av;
+            self.rangeState.speed = Number(state.av);
         }
         if(state.al) {
             self.rangeState.loop = Boolean(state.al);
