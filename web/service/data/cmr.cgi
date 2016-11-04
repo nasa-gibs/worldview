@@ -22,11 +22,9 @@ from urllib2 import Request, urlopen, HTTPError
 granule_endpoint = "".join(
   ["https://cmr.earthdata.nasa.gov/search/",
    "concepts/search.json?"])
-#  ["https://api.echo.nasa.gov/catalog-rest/echo_catalog/",
-#   "granules/search.json?client_id=worldview"])
 collection_endpoint = "".join(
-  ["https://api.echo.nasa.gov/catalog-rest/echo_catalog/",
-   "datasets.json?"])
+  ["https://cmr.earthdata.nasa.gov/search/",
+   "collections.json?"])
 
 class RequestError(Exception):
   """
