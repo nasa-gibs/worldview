@@ -25,7 +25,10 @@ wv.data.results.antiMeridianMulti = function(maxDistance) {
 
     self.process = function(meta, granule) {
         var geom = granule.geometry[wv.map.CRS_WGS_84];
-        if ( !wv.map.isPolygonValid(geom, maxDistance) ) {
+        // Semi-hack of ensuring geometry isn't a MultiPolygon since
+        // isPolygonValid can't handle it; addresses WV-1574
+        if ((!(geom instanceof ol.geom.MultiPolygon)) &&
+            (!wv.map.isPolygonValid(geom, maxDistance) )) {
             var geomEast = wv.map.adjustAntiMeridian(geom, 1);
             var geomWest = wv.map.adjustAntiMeridian(geom, -1);
             var centroidEast = geomEast.getInteriorPoint();
@@ -725,7 +728,11 @@ wv.data.results.timeFilter = function(spec) {
         var geom = granule.geometry[wv.map.CRS_WGS_84];
         var time = wv.util.parseTimestampUTC(granule.time_start);
         time.setUTCMinutes(time.getUTCMinutes() + timeOffset);
-        if ( !wv.map.isPolygonValid(geom, maxDistance) ) {
+
+        // Semi-hack of ensuring geometry isn't a MultiPolygon since
+        // isPolygonValid can't handle it; addresses WV-1574
+        if ((!(geom instanceof ol.geom.MultiPolygon)) &&
+            (!wv.map.isPolygonValid(geom, maxDistance))) {
             var adjustSign = ( time < eastZone ) ? 1 : -1;
             geom =
                 wv.map.adjustAntiMeridian(geom, adjustSign);
