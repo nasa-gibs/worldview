@@ -16,11 +16,44 @@ wv.map = wv.map || {};
  * @Class
  */
 wv.map.runningdata = wv.map.runningdata || function(models) {
-    var self = this;
+    var self;
+    var $productsBox;
+    var productsBoxHeight;
+    var productsBoxTop;
+    var productsBoxBottom;
+
+    self = this;
+
+
     self.layers = [];
     self.prePixelData = [];
     self.pixel  = null;
     self.oldLayers = [];
+
+
+    self.init = function() {
+        $productsBox = $('#products');
+        productsBoxHeight = $productsBox.height();
+        productsBoxTop = $productsBox.scrollTop();
+        productsBoxBottom = productsBoxTop + productsBoxHeight;
+        models.layers.events.on('change', function() { //when layers are added or removed
+            //hacky timeout that allows onchange changes to render
+            setTimeout(function() {
+                productsBoxHeight = $productsBox.height();
+                productsBoxBottom = productsBoxTop + productsBoxHeight;
+            }, 300);
+        });
+
+        /*
+         * A scroll event listener that updates
+         * the location of scroller
+         */
+        $productsBox.on('scroll', function() {
+            productsBoxTop = $productsBox.scrollTop();
+            productsBoxBottom = productsBoxTop + productsBoxHeight;
+
+        });
+    };
 
     /*
      * Retrieves the label, length and index of
@@ -86,6 +119,31 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
             return (location - (labelWidth / 2));
         }
     };
+
+    /*
+     * Determine is layer legend is Visible
+     *
+     * @method layerIsInView
+     *
+     * @param {String} Layers Id
+     *
+     * @return {Boolean} legend is visible
+     *
+     */
+     var layerIsInView = function(layerID) {
+        var elTop;
+        var elBottom;
+        var $case = $(".productsitem[data-layer='" + layerID +"']");
+        if($case[0]) {
+            elTop = $case[0].offsetTop;
+            elBottom = elTop + $case.height();
+            if((elTop >= productsBoxTop && elTop <= productsBoxBottom) ||
+               (elBottom >= productsBoxTop && elBottom <= productsBoxBottom)) {
+                return true;
+            }
+        }
+        return false;
+     };
 
     /*
      * Gets the point in which to place the running
@@ -166,8 +224,13 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
             var palette;
             var paletteInfo;
             var legend;
-            if(layer.wv.def.palette){
-                legends = models.palettes.getLegends(layer.wv.id);
+            var layerId;
+            if(layer.wv.def.palette) {
+                layerId = layer.wv.id;
+                if(!layerIsInView(layerId)) {
+                    return;
+                }
+                legends = models.palettes.getLegends(layerId);
                 _.each(legends, function(legend){
                     if(legend) {
                         hex = wv.util.rgbaToHex(data[0], data[1], data[2], data[3]);
@@ -324,4 +387,5 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
             }
         }
     };
+    self.init();
 };
