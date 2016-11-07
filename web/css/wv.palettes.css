@@ -125,9 +125,9 @@
 }
 
 .bank div .wv-palettes-panel .wv-running-bar {
-    bottom: 10px;
+    top: 0;
     width: 1px;
-    height: 10px;
+    height: 12px;
     background: #000;
 }
 .bank div .wv-palettes-panel .wv-running-bar:before,
@@ -140,14 +140,14 @@
     line-height: 0;
 }
 .bank div .wv-palettes-panel .wv-running-bar:before {
-    top: 5px;
+    top: 6px;
     left: -5px;
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
     border-bottom: 5.5px solid #000;
 }
 .bank div .wv-palettes-panel .wv-running-bar:after {
-    top: 6px;
+    top: 7px;
     left: -4px;
     border-left: 4px solid transparent;
     border-right: 4px solid transparent;
