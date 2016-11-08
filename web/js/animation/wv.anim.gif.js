@@ -447,6 +447,14 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
                     of: window
                 }
             });
+        } else {
+            var headerMsg = "<h3 class='wv-data-unavailable-header'>GIF Not Available</h3>";
+            var bodyMsg = 'One or more of the frames requested was unable to be processed';
+            wv.ui.indicator.hide(loader);
+            callback = function() {
+                $('#timeline-footer').toggleClass('wv-anim-active');
+            };
+            wv.ui.notify(headerMsg + bodyMsg, "Notice", 600, callback);
         }
     };
 
