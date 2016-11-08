@@ -99,6 +99,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             'gifWidth': animCoords.w,
             'gifHeight': animCoords.h,
             'images': imageArra,
+            'fontColor' : '#000',
             'interval': 1 / interval,
             'progressCallback': onGifProgress
         }, onGifComplete);
@@ -270,11 +271,14 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
         var toDate = new Date(endDate);
         var current = fromDate;
         var j = 0;
+        var src;
+        var strDate;
 
         while(current <= toDate) {
             j++;
-            var src = wv.util.format(url, wv.util.toISOStringDate(current));
-            a.push(src);
+            strDate = wv.util.toISOStringDate(current);
+            src = wv.util.format(url, strDate);
+            a.push({src: src, text: strDate});
             current = wv.util.dateAdd(current, ui.anim.ui.getInterval(), 1);
             if(j > 40) { // too many frame
                 showUnavailableReason();
@@ -288,7 +292,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             len = animModel.rangeState.speed / 2, // get a half seconds worth of frames
             lastSrc = a.length - 1;
             i < len; i++) {
-            a.push(a[lastSrc]);
+            a.push({src: src, text: strDate});
         }
         return a;
     };
