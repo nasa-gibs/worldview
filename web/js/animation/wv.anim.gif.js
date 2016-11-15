@@ -105,7 +105,8 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             'stroke': {
                 'color': '#000',
                 'pixels': 2
-            }
+            },
+            'pause' : 1
         }, onGifComplete);
     };
 
@@ -219,15 +220,13 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
      * @returns {array} array of layer ids
      *
      */
-    var getLayersForDay = function(products, date, proj) {
+    var getLayers = function(products, proj) {
         var layers = [];
         _.each(products, function(layer) {
-            if(layer.visible && new Date(layer.startDate > date)) {
-                if ( layer.projections[proj].layer ) {
-                    layers.push(layer.projections[proj].layer);
-                } else {
-                    layers.push(layer.id);
-                }
+            if ( layer.projections[proj].layer ) {
+                layers.push(layer.projections[proj].layer);
+            } else {
+                layers.push(layer.id);
             }
         });
         return layers;
@@ -241,8 +240,18 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
      * @returns {array} array of layer objects
      *
      */
-    var getProducts = function() {
-        return models.layers.get({reverse: true, renderable: true });
+    var getProducts = function(date) {
+        var layers = [];
+        var products = models.layers.get({reverse: true, renderable: true });
+        _.each(products, function(layer) {
+            if(layer.endDate) {
+                if(date > new Date(layer.endDate)) return;
+            }
+            if(layer.visible && new Date(layer.startDate) < date) {
+                layers.push(layer);
+            }
+        });
+        return layers;
     };
 
     /*
@@ -335,26 +344,22 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
 
         while(current <= toDate) {
             j++;
-            opacities = getOpacities(products);
             strDate = wv.util.toISOStringDate(current);
-            layers = getLayersForDay(products, current, proj);
+            products = getProducts(current);
+
+            layers = getLayers(products, proj);
+            opacities = getOpacities(products);
             url = wv.util.format(host + '/' + path + "?{1}&extent={2}&epsg={3}&layers={4}&opacities={5}&worldfile=false&format=image/jpeg&width={6}&height={7}", "TIME={1}", lonlat[0][0]+","+lonlat[0][1]+","+lonlat[1][0]+","+lonlat[1][1], epsg, layers.join(","), opacities.join(","), dimensions[0], dimensions[1]);
             src = wv.util.format(url, strDate);
             a.push({src: src, text: strDate});
             current = wv.util.dateAdd(current, ui.anim.ui.getInterval(), 1);
-            if(j > 40) { // too many frame
+            if(j > 40) { // too many frames
                 showUnavailableReason();
                 wv.ui.indicator.hide(loader);
 
                 return false;
             }
 
-        }
-        for(var i = 0,
-            len = animModel.rangeState.speed / 2, // get a half seconds worth of frames
-            lastSrc = a.length - 1;
-            i < len; i++) {
-            a.push({src: src, text: strDate});
         }
         return a;
     };
