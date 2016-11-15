@@ -12,7 +12,6 @@
         "babel-polyfill": "^6.16.0",
         "bluebird": "^3.4.6",
         "buster": "0.7.12",
-        "gifshot": "^0.3.2",
         "grunt": "0.4.x",
         "grunt-buster": "0.4.x",
         "grunt-contrib-clean": "0.5.x",

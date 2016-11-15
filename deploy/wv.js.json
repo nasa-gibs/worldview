@@ -5,7 +5,6 @@
         "node_modules/react/dist/react.js",
         "node_modules/react-dom/dist/react-dom.js",
         "node_modules/lodash/lodash.js",
-        "node_modules/gifshot/build/gifshot.js",
         "node_modules/bluebird/js/browser/bluebird.js",
         "node_modules/promise-queue/lib/index.js",
         "node_modules/worldview-timeline-components/browser/wvtc.js",
