@@ -25,6 +25,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
     var animModel = models.anim;
     var $progress;// progress bar
     var loader;
+    var showDates = true;// show date stamp
     var progressing = false; //if progress bar has started
     var GRATICLE_WARNING =
         "The graticule layer cannot be used to take a snapshot. Would you " +
@@ -351,7 +352,11 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             opacities = getOpacities(products);
             url = wv.util.format(host + '/' + path + "?{1}&extent={2}&epsg={3}&layers={4}&opacities={5}&worldfile=false&format=image/jpeg&width={6}&height={7}", "TIME={1}", lonlat[0][0]+","+lonlat[0][1]+","+lonlat[1][0]+","+lonlat[1][1], epsg, layers.join(","), opacities.join(","), dimensions[0], dimensions[1]);
             src = wv.util.format(url, strDate);
-            a.push({src: src, text: strDate});
+            if(showDates) {
+                a.push({src: src, text: strDate});
+            } else {
+                a.push(src);
+            }
             current = wv.util.dateAdd(current, ui.anim.ui.getInterval(), 1);
             if(j > 40) { // too many frames
                 showUnavailableReason();
@@ -584,7 +589,9 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
     self.getSelectorDialog = function(width) {
         var $dialogBox;
         var $createButton;
+        var $footer;
         var $dialog =$("<div class='gif-dialog'></div>");
+        var $checkBox;
         var dialog =
                 "<div class='content'>"  +
                     "Create an animation from " +
@@ -604,7 +611,13 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             .attr("role", "button")
             .attr("class", "ui-button ui-widget ui-state-default ui-button-text-only")
             .hover(function() {$(this).addClass("ui-state-hover");}, function() {$(this).removeClass("ui-state-hover");});
-        $dialog.html(dialog).append($createButton);
+        $checkBox = $("<div class='wv-checkbox-date'><label for='checkbox-date'><input type='checkbox' title='Check box to remove dates from Animating GIF' name='checkbox-date' class='checkbox-date-input' id='checkbox-date-input'>Include Date Stamps</label></div>");
+        $footer = $('<div></div>');
+        $footer.append($createButton).append($checkBox);
+        $dialog.html(dialog).append($footer);
+        // init Checkbox state and listeners
+        initCheckBox($checkBox);
+
         $createButton.on('click', self.getGif);
         $dialogBox = wv.ui.getDialog();
         $dialogBox.html($dialog);
@@ -615,6 +628,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             height: 'auto',
             width: width,
             minHeight: 40,
+            minWidth: 287,
             resizable: false,
             show: { effect: "slide", direction: "down" },
             position: {
@@ -624,11 +638,68 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             },
 
             close: function(event) {
+                destoryCheckboxListeners($checkBox);
                 $("#wv-map").insertAfter('#productsHolder'); //retain map element before disabling jcrop
                 jcropAPI.destroy();
             }
         });
         return $dialogBox;
+    };
+
+    /*
+     * Inits iCheck default
+     * to enable Gif-date-stamp
+     * toggling
+     *
+     * @method initCheckBox
+     * @private
+     *
+     * @param $checkBox {Jquery} checkbox
+     *
+     * @returns {void}
+     *
+     */
+    var initCheckBox = function($checkBox) {
+        $checkBox.iCheck({
+            checkboxClass: 'icheckbox_square-red'
+        });
+        $checkBox.iCheck('check');
+        showDates = true;
+        $checkBox.on('ifChecked', onchecked);
+        $checkBox.on('ifUnchecked', onchecked);
+    };
+    /*
+     * checkBox event handler
+     *
+     * @method onchecked
+     * @private
+     *
+     * @param e {Jquery} event object
+     *
+     * @returns {void}
+     *
+     */
+    var onchecked = function(e) {
+        if(e.type === 'ifUnchecked' ) {
+            showDates = false;
+        } else {
+            showDates = true;
+        }
+    };
+    /*
+     * checkBox event listener destroyer
+     *
+     * @method destoryCheckboxListeners
+     * @private
+     *
+     * @param $checkBox {Jquery} checkbox
+     *
+     * @returns {void}
+     *
+     */
+    var destoryCheckboxListeners = function($checkBox) {
+        $checkBox.off('ifChecked', onchecked);
+        $checkBox.off('ifUnchecked', onchecked);
     };
 
     /*
@@ -645,6 +716,9 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
      */
     var setDialogWidth = function($dialog, width) {
         var $parent;
+        if(width < 287) {
+            width = 287;
+        }
         if($dialog) {
             $parent = $dialog.parent();
             $parent.width(width);
