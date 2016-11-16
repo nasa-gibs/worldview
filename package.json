@@ -1,6 +1,6 @@
 {
-    "version": "1.3.0",
-    "release": "2",
+    "version": "1.3.1",
+    "release": "1",
     "repository": {
         "type": "git",
         "url": "https://github.com/nasa-gibs/worldview.git"
@@ -12,7 +12,6 @@
         "babel-polyfill": "^6.16.0",
         "bluebird": "^3.4.6",
         "buster": "0.7.12",
-        "gifshot": "^0.3.2",
         "grunt": "0.4.x",
         "grunt-buster": "0.4.x",
         "grunt-contrib-clean": "0.5.x",

@@ -157,6 +157,10 @@
 .wv-gif-progress {
     width: 100%;
 }
+.wv-checkbox-date {
+    display:inline;
+    position: relative;
+}
  /*
   * Jcrop Styles
   */
@@ -170,7 +174,7 @@
     top: 50%;
     transform: translate(-50%,-50%);
     -webkit-transform: translate(-50%, -50%);
-    color: #295f92;
+    color: #d54e21;
     position: absolute;
 }
 .jcrop-tracker .wv-dl-gif-bt-case i:hover {

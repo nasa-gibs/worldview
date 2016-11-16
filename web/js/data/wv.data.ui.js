@@ -61,7 +61,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
 
     self.render = function() {
         var $footer = $("#productsHolder footer");
-        
+
         var $container = $(self.selector).empty()
             .addClass(self.id + "list")
             .addClass("bank");
@@ -187,7 +187,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
         $(self.selector).css("max-height", maxHeight);
 
         var childrenHeight = $('#wv-datacontent').outerHeight(true);
-        
+
         if((maxHeight <= childrenHeight)) {
             $("#wv-data").css('height', maxHeight)
                 .css('padding-right', '10px');
@@ -645,7 +645,16 @@ wv.data.ui.downloadListPanel = function(config, model) {
             // repeated in all granules for that product. If so, we want to
             // bump that up to product level instead of at the granule level.
             $.each(granule.links, function(index, link) {
-                if ( link.rel !== cmr.REL_DATA && link.rel !== cmr.REL_BROWSE ) {
+                // Formerly relied on metadata being correctly marked as data
+                // via the cmr.REL_DATA constant;  unfortunately this wasn't
+                // the case in practice so the following workaround was
+                // implemented to check the link's file extension to see if
+                // it looks like a data file
+                var hrefExt = link.href.toLowerCase().split(".").slice(-1);
+                if ( hrefExt && hrefExt.length > 0) { hrefExt = hrefExt[0]; }
+                if ((cmr.DATA_EXTS.indexOf(hrefExt) === -1 &&
+                     link.rel !== cmr.REL_BROWSE ) ||
+                     link.rel === cmr.REL_METADATA) {
                     if ( !product.counts[link.href]  ) {
                         product.counts[link.href] = 1;
                     } else {
@@ -715,11 +724,21 @@ wv.data.ui.downloadListPanel = function(config, model) {
     };
 
     var reformatLink = function(link) {
-        // For title, take it if found, otherwise, use the basename of the
-        // URI
+        // For title, take it if found, otherwise, use the basename of the URI
+        var titleVal = link.title;
+        if (!link.title) {
+            titleVal = link.href.split("/").slice(-1);
+
+            // Handle special case where link is a directory which ends with
+            // a '/'
+            if (titleVal && titleVal.length && titleVal[0] === "") {
+                titleVal = link.href;
+            }
+        }
+
         return {
             href: link.href,
-            title: ( link.title ) ? link.title : link.href.split("/").slice(-1),
+            title: titleVal,
             data: ( link.rel === cmr.REL_DATA )
         };
     };

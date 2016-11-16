@@ -206,7 +206,9 @@ wv.data.cmr.mockClient = function(suffix) {
 };
 
 wv.data.cmr.REL_DATA = "http://esipfed.org/ns/fedsearch/1.1/data#";
+wv.data.cmr.REL_METADATA = "http://esipfed.org/ns/fedsearch/1.1/metadata#";
 wv.data.cmr.REL_BROWSE = "http://esipfed.org/ns/fedsearch/1.1/browse#";
+wv.data.cmr.DATA_EXTS = ["hdf", "he5", "h5", "hdf5", "nc", "bz2"];
 
 wv.data.cmr.roundTime = function(timeString) {
     var time = wv.util.parseTimestampUTC(timeString);
