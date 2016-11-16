@@ -25,6 +25,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
     var animModel = models.anim;
     var $progress;// progress bar
     var loader;
+    var showDates = true;// show date stamp
     var progressing = false; //if progress bar has started
     var GRATICLE_WARNING =
         "The graticule layer cannot be used to take a snapshot. Would you " +
@@ -99,8 +100,14 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             'gifWidth': animCoords.w,
             'gifHeight': animCoords.h,
             'images': imageArra,
+            'fontColor' : '#fff',
             'interval': 1 / interval,
-            'progressCallback': onGifProgress
+            'progressCallback': onGifProgress,
+            'stroke': {
+                'color': '#000',
+                'pixels': 2
+            },
+            'pause' : 1
         }, onGifComplete);
     };
 
@@ -204,43 +211,18 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
     };
 
     /*
-     * checks if rotation, changed palettes, or graticules
-     * are active and ask to reset if any are active
-     * 
-     * @method getGif
+     * Retieves avtive layers by day
+     *
+     * @method getLayersForDay
      * @private
      *
-     * @returns {void}
+     * @param {array} array of layers
+     *
+     * @returns {array} array of layer ids
      *
      */
-    var formImageURL = function() {
-        //Gather all data to get the image
-        var host, path;
-        var proj = models.proj.selected.id,
-            products = models.layers.get({
-                reverse: true,
-                renderable: true
-            }),
-            epsg = ( models.proj.change ) ? models.proj.change.epsg : models.proj.selected.epsg,
-            opacities = [], layers = [];
-        var lonlat1 = ui.map.selected.getCoordinateFromPixel([Math.floor(animCoords.x), Math.floor(animCoords.y2)]);
-        var lonlat2 = ui.map.selected.getCoordinateFromPixel([Math.floor(animCoords.x2), Math.floor(animCoords.y)]);
-
-        var conversionFactor = proj === "geographic" ? 0.002197 : 256, res = calcRes(0);
-
-        var imgWidth = Math.round((Math.abs(lonlat2[0] - lonlat1[0]) / conversionFactor) / Number(res)),
-            imgHeight = Math.round((Math.abs(lonlat2[1] - lonlat1[1]) / conversionFactor) / Number(res));
-         if ( config.features.imageDownload ) {
-            host = config.features.imageDownload.host;
-            path = config.parameters.imagegen || config.features.imageDownload.path;
-        } else {
-            host = 'https://gibs.earthdata.nasa.gov';
-            path = 'image-download';
-        }
-        _(products).each( function(product){
-            opacities.push( ( _.isUndefined(product.opacity) ) ? 1: product.opacity );
-        });
-
+    var getLayers = function(products, proj) {
+        var layers = [];
         _.each(products, function(layer) {
             if ( layer.projections[proj].layer ) {
                 layers.push(layer.projections[proj].layer);
@@ -248,15 +230,86 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
                 layers.push(layer.id);
             }
         });
-        return wv.util.format(host + '/' + path + "?{1}&extent={2}&epsg={3}&layers={4}&opacities={5}&worldfile=false&format=image/jpeg&width={6}&height={7}", "TIME={1}", lonlat1[0]+","+lonlat1[1]+","+lonlat2[0]+","+lonlat2[1], epsg, layers.join(","), opacities.join(","), imgWidth, imgHeight);
+        return layers;
+    };
+    /*
+     * retrieves renderable layers
+     *
+     * @method getProducts
+     * @private
+     *
+     * @returns {array} array of layer objects
+     *
+     */
+    var getProducts = function(date) {
+        var layers = [];
+        var products = models.layers.get({reverse: true, renderable: true });
+        _.each(products, function(layer) {
+            if(layer.endDate) {
+                if(date > new Date(layer.endDate)) return;
+            }
+            if(layer.visible && new Date(layer.startDate) < date) {
+                layers.push(layer);
+            }
+        });
+        return layers;
     };
 
+    /*
+     * Retieves opacities from palettes
+     *
+     * @method getOpacities
+     * @private
+     *
+     * @param {array} array of layers
+     *
+     * @returns {array} array of opacities
+     *
+     */
+    var getOpacities = function(products) {
+        var opacities = [];
+        _.each(products, function(product) {
+            opacities.push( ( _.isUndefined(product.opacity) ) ? 1: product.opacity );
+        });
+        return opacities;
+    };
 
+    /*
+     * Retieves coordinates from pixel
+     *
+     * @method getCoords
+     * @private
+     *
+     * @returns {array} array of coords
+     *
+     */
+    var getCoords = function() {
+        return  [ui.map.selected.getCoordinateFromPixel([Math.floor(animCoords.x), Math.floor(animCoords.y2)]),
+            ui.map.selected.getCoordinateFromPixel([Math.floor(animCoords.x2), Math.floor(animCoords.y)])];
+    };
+    /*
+     * Dimenions from zoom & projection
+     *
+     * @method getDimensions
+     * @private
+     *
+     * @returns {array} array with dimensions
+     *
+     */
+    var getDimensions = function(lonlat, proj) {
+
+        var conversionFactor = proj === "geographic" ? 0.002197 : 256;
+        var res = calcRes(0);
+        return [
+            Math.round((Math.abs(lonlat[1][0] - lonlat[0][0]) / conversionFactor) / Number(res)),// width
+            Math.round((Math.abs(lonlat[1][1] - lonlat[0][1]) / conversionFactor) / Number(res))// height
+        ];
+    };
     /*
      * loops through dates and created image
      * download urls and pushs them to an
      * array
-     * 
+     *
      * @method getImageArray
      * @private
      *
@@ -264,31 +317,54 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
      *
      */
     var getImageArray = function (startDate, endDate) {
-        var url = formImageURL();
+        var url;
         var a = [];
         var fromDate = new Date(startDate);
         var toDate = new Date(endDate);
         var current = fromDate;
+        var host;
+        var path;
         var j = 0;
+        var src;
+        var strDate;
+        var lonlat = getCoords();
+        var proj = models.proj.selected.id;
+        var dimensions = getDimensions(lonlat, proj);
+        var opacities;
+        var epsg = ( models.proj.change ) ? models.proj.change.epsg : models.proj.selected.epsg;
+        var products = getProducts();
+
+
+        if ( config.features.imageDownload ) {
+            host = config.features.imageDownload.host;
+            path = config.parameters.imagegen || config.features.imageDownload.path;
+        } else {
+            host = 'https://gibs.earthdata.nasa.gov';
+            path = 'image-download';
+        }
 
         while(current <= toDate) {
             j++;
-            var src = wv.util.format(url, wv.util.toISOStringDate(current));
-            a.push(src);
+            strDate = wv.util.toISOStringDate(current);
+            products = getProducts(current);
+
+            layers = getLayers(products, proj);
+            opacities = getOpacities(products);
+            url = wv.util.format(host + '/' + path + "?{1}&extent={2}&epsg={3}&layers={4}&opacities={5}&worldfile=false&format=image/jpeg&width={6}&height={7}", "TIME={1}", lonlat[0][0]+","+lonlat[0][1]+","+lonlat[1][0]+","+lonlat[1][1], epsg, layers.join(","), opacities.join(","), dimensions[0], dimensions[1]);
+            src = wv.util.format(url, strDate);
+            if(showDates) {
+                a.push({src: src, text: strDate});
+            } else {
+                a.push(src);
+            }
             current = wv.util.dateAdd(current, ui.anim.ui.getInterval(), 1);
-            if(j > 40) { // too many frame
+            if(j > 40) { // too many frames
                 showUnavailableReason();
                 wv.ui.indicator.hide(loader);
 
                 return false;
             }
 
-        }
-        for(var i = 0,
-            len = animModel.rangeState.speed / 2, // get a half seconds worth of frames
-            lastSrc = a.length - 1;
-            i < len; i++) {
-            a.push(a[lastSrc]);
         }
         return a;
     };
@@ -447,6 +523,14 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
                     of: window
                 }
             });
+        } else {
+            var headerMsg = "<h3 class='wv-data-unavailable-header'>GIF Not Available</h3>";
+            var bodyMsg = 'One or more of the frames requested was unable to be processed';
+            wv.ui.indicator.hide(loader);
+            callback = function() {
+                $('#timeline-footer').toggleClass('wv-anim-active');
+            };
+            wv.ui.notify(headerMsg + bodyMsg, "Notice", 600, callback);
         }
     };
 
@@ -505,7 +589,9 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
     self.getSelectorDialog = function(width) {
         var $dialogBox;
         var $createButton;
+        var $footer;
         var $dialog =$("<div class='gif-dialog'></div>");
+        var $checkBox;
         var dialog =
                 "<div class='content'>"  +
                     "Create an animation from " +
@@ -525,7 +611,13 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             .attr("role", "button")
             .attr("class", "ui-button ui-widget ui-state-default ui-button-text-only")
             .hover(function() {$(this).addClass("ui-state-hover");}, function() {$(this).removeClass("ui-state-hover");});
-        $dialog.html(dialog).append($createButton);
+        $checkBox = $("<div class='wv-checkbox-date'><label for='checkbox-date'><input type='checkbox' title='Check box to remove dates from Animating GIF' name='checkbox-date' class='checkbox-date-input' id='checkbox-date-input'>Include Date Stamps</label></div>");
+        $footer = $('<div></div>');
+        $footer.append($createButton).append($checkBox);
+        $dialog.html(dialog).append($footer);
+        // init Checkbox state and listeners
+        initCheckBox($checkBox);
+
         $createButton.on('click', self.getGif);
         $dialogBox = wv.ui.getDialog();
         $dialogBox.html($dialog);
@@ -536,6 +628,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             height: 'auto',
             width: width,
             minHeight: 40,
+            minWidth: 287,
             resizable: false,
             show: { effect: "slide", direction: "down" },
             position: {
@@ -545,11 +638,68 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             },
 
             close: function(event) {
+                destoryCheckboxListeners($checkBox);
                 $("#wv-map").insertAfter('#productsHolder'); //retain map element before disabling jcrop
                 jcropAPI.destroy();
             }
         });
         return $dialogBox;
+    };
+
+    /*
+     * Inits iCheck default
+     * to enable Gif-date-stamp
+     * toggling
+     *
+     * @method initCheckBox
+     * @private
+     *
+     * @param $checkBox {Jquery} checkbox
+     *
+     * @returns {void}
+     *
+     */
+    var initCheckBox = function($checkBox) {
+        $checkBox.iCheck({
+            checkboxClass: 'icheckbox_square-red'
+        });
+        $checkBox.iCheck('check');
+        showDates = true;
+        $checkBox.on('ifChecked', onchecked);
+        $checkBox.on('ifUnchecked', onchecked);
+    };
+    /*
+     * checkBox event handler
+     *
+     * @method onchecked
+     * @private
+     *
+     * @param e {Jquery} event object
+     *
+     * @returns {void}
+     *
+     */
+    var onchecked = function(e) {
+        if(e.type === 'ifUnchecked' ) {
+            showDates = false;
+        } else {
+            showDates = true;
+        }
+    };
+    /*
+     * checkBox event listener destroyer
+     *
+     * @method destoryCheckboxListeners
+     * @private
+     *
+     * @param $checkBox {Jquery} checkbox
+     *
+     * @returns {void}
+     *
+     */
+    var destoryCheckboxListeners = function($checkBox) {
+        $checkBox.off('ifChecked', onchecked);
+        $checkBox.off('ifUnchecked', onchecked);
     };
 
     /*
@@ -566,6 +716,9 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
      */
     var setDialogWidth = function($dialog, width) {
         var $parent;
+        if(width < 287) {
+            width = 287;
+        }
         if($dialog) {
             $parent = $dialog.parent();
             $parent.width(width);
