@@ -147,6 +147,27 @@ module.exports = function(grunt) {
                 }
             },
 
+            ext: {
+                files: [{
+                    expand: true, cwd: ".",
+                    overwrite: true,
+                    src: [
+                        "node_modules/babel-polyfill",
+                        "node_modules/react",
+                        "node_modules/react-dom",
+                        "node_modules/worldview-timeline-components",
+                        "node_modules/lodash",
+                        "node_modules/bluebird",
+                        "node_modules/promise-queue",
+                        "node_modules/openlayers"
+                    ],
+                    dest: "web/ext",
+                }],
+                options: {
+                    mode: true
+                }
+            },
+
             release: {
                 files: [{
                     expand: true, cwd: "build/worldview-debug",
@@ -653,6 +674,7 @@ module.exports = function(grunt) {
         "replace:apache"
     ]);
 
+    grunt.registerTask("update",["copy:ext"]);
     grunt.registerTask("check", ["lint", "test"]);
     grunt.registerTask("clean", ["remove:build"]);
     grunt.registerTask("distclean", ["remove:build", "remove:dist"]);
