@@ -52,6 +52,60 @@ def match_legend(entry, legends):
                 return legend
     except ValueError as e:
         raise ValueError("Invalid reference: %s" % entry["@ref"])
+def get_extreme(array, extreme):
+    if(extreme == "max"):
+        if "+INF" in array:
+            return 'infinity'
+        else:
+            return max(array)
+    else:
+        if "-INF" in array:
+            return "neg-infinity"
+        else:
+            return min(array)
+def apply_tooltip(tooltip, tooltip_arra, index_arra):
+    for index in index_arra:
+        tooltip_arra[index] = tooltip.decode("utf-8")
+    return tooltip_arra
+
+def replace_duplicates(duplicates, tooltip_arra, entries):
+    dup_color_list = list(set(duplicates)) #remove duplicates in array
+    for n, color in enumerate(dup_color_list):
+        min_arra = []
+        max_arra = []
+        index_arra = []
+        for index, entry in enumerate(entries):
+            if(color == entry["@rgb"]):
+                # get min
+                value = entry['@value'].encode('ascii','ignore')
+                value = value.split(',')
+                if(len(value) > 1):
+                    value[0] = value[0].replace("[", "")
+                    min_arra += [value[0]]
+                    # get max
+                    value[1] = value[1].replace(")", "")
+                    max_arra += [value[1]]
+                    # add index
+                else:
+                    min_arra += [value[0]]
+                    max_arra += [value[0]]
+                index_arra += [index]
+        # get max and min values
+        max_value = get_extreme(max_arra, "max")
+        min_value = get_extreme(min_arra, "min")
+        sep = ' - '
+        # handle infinity values
+        if(max_value == "infinity" or min_value == "neg-infinity"):
+            if(min_value == "neg-infinity"):
+                tooltip = '< ' + max_value
+            else:
+                tooltip = '>= ' + min_value
+        # normal cases
+        else:
+            tooltip = min_value + sep + max_value
+        tooltip_arra =  apply_tooltip(tooltip, tooltip_arra, index_arra)
+
+    return tooltip_arra
 
 def process_entries(colormap):
     entries = to_list(colormap["Entries"]["ColorMapEntry"])
@@ -63,6 +117,7 @@ def process_entries(colormap):
     colors = []
     values = []
     tooltips = []
+    matches = []
     transparent_map = "true"
     for entry in entries:
         if entry["@transparent"] == "false":
@@ -70,7 +125,7 @@ def process_entries(colormap):
     if (transparent_map == "true"):
         return "transparent"
     color_format = "{0:02x}{1:02x}{2:02x}{3:02x}"
-    for entry in entries:
+    for index, entry in enumerate(entries):
         r,g,b = entry["@rgb"].split(",")
         a = 0 if entry.get("@transparent", "false") == "true" else 255
         if a == 0:
@@ -79,7 +134,13 @@ def process_entries(colormap):
         legend = match_legend(entry, legends)
         if "@tooltip" not in legend:
             raise KeyError("No tooltips in legend")
-        tooltips += [legend["@tooltip"]]
+        tooltip = legend["@tooltip"]
+        if (index < len(entries) and entries[index-1] and map_type == "continuous"):
+            if (entry["@rgb"] == entries[index-1]["@rgb"]):
+                if (map_type == "continuous"):
+                    matches += [entry["@rgb"]]
+        tooltips += [tooltip]
+            
         if (map_type == "continuous") or (map_type == "discrete"):
             items = re.sub(r"[\(\)\[\]]", "", entry["@value"]).split(",")
             try:
@@ -94,6 +155,8 @@ def process_entries(colormap):
                 values += [new_items]
             except ValueError as e:
                 raise ValueError("Invalid value: %s" % entry["@value"])
+    if (len(matches) > 0 and len(tooltips) > 0):
+        tooltips = replace_duplicates(matches, tooltips, entries)
 
     result = {
         "type": map_type,
@@ -136,7 +199,7 @@ def process_file(file):
         if "@minLabel" in colormap["Legend"]:
             result["legend"]["minLabel"] = colormap["Legend"]["@minLabel"]
         if "@maxLabel" in colormap["Legend"]:
-                result["legend"]["maxLabel"] = colormap["Legend"]["@maxLabel"]
+            result["legend"]["maxLabel"] = colormap["Legend"]["@maxLabel"]
         if "@units" in colormap:
             result["legend"]["units"] = colormap["@units"]
         maps += [result]
