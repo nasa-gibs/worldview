@@ -681,5 +681,5 @@ module.exports = function(grunt) {
     grunt.registerTask("lint", ["jshint:console"]);
     grunt.registerTask("test", ["buster:console"]);
 
-    grunt.registerTask("default", ["build", "config", "site"]);
+    grunt.registerTask("default", ["copy:ext", "build", "config", "site"]);
 };
