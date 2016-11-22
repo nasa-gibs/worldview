@@ -108,9 +108,11 @@ def replace_duplicates(duplicates, tooltip_list, entries):
                 tooltip = '< ' + max_value
             else:
                 tooltip = '>= ' + min_value
-        # normal cases
+        # zero range delta
         elif min_value == max_value:
             tooltip = min_value
+        # two different none-infinity values
+        # in range
         else:
             tooltip = min_value + sep + max_value
 
