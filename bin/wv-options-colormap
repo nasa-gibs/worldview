@@ -52,6 +52,9 @@ def match_legend(entry, legends):
                 return legend
     except ValueError as e:
         raise ValueError("Invalid reference: %s" % entry["@ref"])
+
+# function returns a max or
+# min value from a list
 def get_extreme(extreme_list, extreme):
     if(extreme == "max"):
         if "+INF" in extreme_list:
@@ -63,14 +66,19 @@ def get_extreme(extreme_list, extreme):
             return "neg-infinity"
         else:
             return min(extreme_list)
+
+# Adds tooltip string to selected
+# indexes that need to be replace.
 def apply_tooltip(tooltip, tooltip_list, index_list):
     for index in index_list:
-        tooltip_list[index] = tooltip.decode("utf-8")
+        tooltip_list[index] = tooltip.decode("utf-8") # make unicode
     return tooltip_list
 
+# to combines data values of corresponding
+# colors
 def replace_duplicates(duplicates, tooltip_list, entries):
-    dup_color_list = list(set(duplicates)) #remove duplicates in array
-    for n, color in enumerate(dup_color_list):
+    dup_color_list = list(set(duplicates)) #removes array duplicates
+    for n, color in enumerate(dup_color_list): # loops through duplicate colors
         min_list = []
         max_list = []
         index_list = []
@@ -81,14 +89,14 @@ def replace_duplicates(duplicates, tooltip_list, entries):
                 value = value.split(',')
                 if(len(value) > 1):
                     value[0] = value[0].replace("[", "")
-                    min_list += [value[0]]
+                    min_list += [value[0]] # adds value to min array
                     # get max
                     value[1] = value[1].replace(")", "")
-                    max_list += [value[1]]
+                    max_list += [value[1]] # adds value to max array
                     # add index
                 else:
-                    min_list += [value[0]]
-                    max_list += [value[0]]
+                    min_list += [value[0]] # adds value to min array
+                    max_list += [value[0]] # adds value to max array
                 index_list += [index]
         # get max and min values
         max_value = get_extreme(max_list, "max")
