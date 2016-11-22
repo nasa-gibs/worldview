@@ -109,8 +109,11 @@ def replace_duplicates(duplicates, tooltip_list, entries):
             else:
                 tooltip = '>= ' + min_value
         # normal cases
+        elif min_value == max_value:
+            tooltip = min_value
         else:
             tooltip = min_value + sep + max_value
+
         tooltip_list =  apply_tooltip(tooltip, tooltip_list, index_list)
 
     return tooltip_list
@@ -143,7 +146,7 @@ def process_entries(colormap):
         if "@tooltip" not in legend:
             raise KeyError("No tooltips in legend")
         tooltip = legend["@tooltip"]
-        if (index < len(entries) and entries[index-1] and map_type == "continuous"):
+        if (index > 0):
             if (entry["@rgb"] == entries[index-1]["@rgb"]):
                 if (map_type == "continuous"):
                     matches += [entry["@rgb"]]
