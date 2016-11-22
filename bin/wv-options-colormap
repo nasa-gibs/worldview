@@ -52,28 +52,28 @@ def match_legend(entry, legends):
                 return legend
     except ValueError as e:
         raise ValueError("Invalid reference: %s" % entry["@ref"])
-def get_extreme(array, extreme):
+def get_extreme(extreme_list, extreme):
     if(extreme == "max"):
-        if "+INF" in array:
+        if "+INF" in extreme_list:
             return 'infinity'
         else:
-            return max(array)
+            return max(extreme_list)
     else:
-        if "-INF" in array:
+        if "-INF" in extreme_list:
             return "neg-infinity"
         else:
-            return min(array)
-def apply_tooltip(tooltip, tooltip_arra, index_arra):
-    for index in index_arra:
-        tooltip_arra[index] = tooltip.decode("utf-8")
-    return tooltip_arra
+            return min(extreme_list)
+def apply_tooltip(tooltip, tooltip_list, index_list):
+    for index in index_list:
+        tooltip_list[index] = tooltip.decode("utf-8")
+    return tooltip_list
 
-def replace_duplicates(duplicates, tooltip_arra, entries):
+def replace_duplicates(duplicates, tooltip_list, entries):
     dup_color_list = list(set(duplicates)) #remove duplicates in array
     for n, color in enumerate(dup_color_list):
-        min_arra = []
-        max_arra = []
-        index_arra = []
+        min_list = []
+        max_list = []
+        index_list = []
         for index, entry in enumerate(entries):
             if(color == entry["@rgb"]):
                 # get min
@@ -81,18 +81,18 @@ def replace_duplicates(duplicates, tooltip_arra, entries):
                 value = value.split(',')
                 if(len(value) > 1):
                     value[0] = value[0].replace("[", "")
-                    min_arra += [value[0]]
+                    min_list += [value[0]]
                     # get max
                     value[1] = value[1].replace(")", "")
-                    max_arra += [value[1]]
+                    max_list += [value[1]]
                     # add index
                 else:
-                    min_arra += [value[0]]
-                    max_arra += [value[0]]
-                index_arra += [index]
+                    min_list += [value[0]]
+                    max_list += [value[0]]
+                index_list += [index]
         # get max and min values
-        max_value = get_extreme(max_arra, "max")
-        min_value = get_extreme(min_arra, "min")
+        max_value = get_extreme(max_list, "max")
+        min_value = get_extreme(min_list, "min")
         sep = ' - '
         # handle infinity values
         if(max_value == "infinity" or min_value == "neg-infinity"):
@@ -103,9 +103,9 @@ def replace_duplicates(duplicates, tooltip_arra, entries):
         # normal cases
         else:
             tooltip = min_value + sep + max_value
-        tooltip_arra =  apply_tooltip(tooltip, tooltip_arra, index_arra)
+        tooltip_list =  apply_tooltip(tooltip, tooltip_list, index_list)
 
-    return tooltip_arra
+    return tooltip_list
 
 def process_entries(colormap):
     entries = to_list(colormap["Entries"]["ColorMapEntry"])
