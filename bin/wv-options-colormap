@@ -150,7 +150,7 @@ def process_entries(colormap):
         tooltip = legend["@tooltip"]
         if (index > 0):
             if (entry["@rgb"] == entries[index-1]["@rgb"]):
-                if (map_type == "continuous"):
+                if (map_type == "continuous") or (map_type == "discrete"):
                     matches += [entry["@rgb"]]
         tooltips += [tooltip]
             
