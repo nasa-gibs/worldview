@@ -152,14 +152,14 @@ module.exports = function(grunt) {
                     expand: true, cwd: ".",
                     overwrite: true,
                     src: [
-                        "node_modules/babel-polyfill",
-                        "node_modules/react",
-                        "node_modules/react-dom",
-                        "node_modules/worldview-timeline-components",
-                        "node_modules/lodash",
-                        "node_modules/bluebird",
-                        "node_modules/promise-queue",
-                        "node_modules/openlayers"
+                        "node_modules/babel-polyfill/**",
+                        "node_modules/react/**",
+                        "node_modules/react-dom/**",
+                        "node_modules/worldview-timeline-components/**",
+                        "node_modules/lodash/**",
+                        "node_modules/bluebird/**",
+                        "node_modules/promise-queue/**",
+                        "node_modules/openlayers/**"
                     ],
                     dest: "web/ext",
                 }],
