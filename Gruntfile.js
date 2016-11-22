@@ -152,14 +152,14 @@ module.exports = function(grunt) {
                     expand: true, cwd: ".",
                     overwrite: true,
                     src: [
-                        "node_modules/babel-polyfill/**",
-                        "node_modules/react/**",
-                        "node_modules/react-dom/**",
-                        "node_modules/worldview-timeline-components/**",
-                        "node_modules/lodash/**",
-                        "node_modules/bluebird/**",
-                        "node_modules/promise-queue/**",
-                        "node_modules/openlayers/**"
+                        "node_modules/babel-polyfill/dist/polyfill.js",
+                        "node_modules/react/dist/react.js",
+                        "node_modules/react-dom/dist/react-dom.js",
+                        "node_modules/worldview-timeline-components/browser/wvtc.js",
+                        "node_modules/lodash/lodash.js",
+                        "node_modules/bluebird/js/browser/bluebird.js",
+                        "node_modules/promise-queue/lib/index.js",
+                        "node_modules/openlayers/dist/ol-debug.js"
                     ],
                     dest: "web/ext",
                 }],
@@ -416,6 +416,9 @@ module.exports = function(grunt) {
                 "!build/worldview-debug/web/js/wv.js",
                 "!build/worldview-debug/web/css/bulkDownload.css",
                 "!build/worldview-debug/web/ext/**/*"
+            ],
+            modules: [
+                "web/ext/node_modules/**"
             ],
             config_src: [
                 "web/config/**/*"
@@ -674,12 +677,12 @@ module.exports = function(grunt) {
         "replace:apache"
     ]);
 
-    grunt.registerTask("update",["copy:ext"]);
+    grunt.registerTask("update",["remove:modules", "copy:ext"]);
     grunt.registerTask("check", ["lint", "test"]);
     grunt.registerTask("clean", ["remove:build"]);
     grunt.registerTask("distclean", ["remove:build", "remove:dist"]);
     grunt.registerTask("lint", ["jshint:console"]);
     grunt.registerTask("test", ["buster:console"]);
 
-    grunt.registerTask("default", ["copy:ext", "build", "config", "site"]);
+    grunt.registerTask("default", ["update", "build", "config", "site"]);
 };
