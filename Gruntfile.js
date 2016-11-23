@@ -64,7 +64,35 @@ module.exports = function(grunt) {
                 }
             }
         },
+        nightwatch: {
+            options: {
+                // task options
 
+                src_folders: ["e2e"],
+                standalone: true,
+                // download settings
+                jar_version: '2.53.0',
+                server_path: "node_modules/selenium-server-standalone-jar/jar/selenium-server-standalone-2.47.1.jar",
+                test_settings: {
+                    firefox: {
+                        "desiredCapabilities": {
+                            "browserName": "firefox"
+                        },
+                         "cli_args" : {
+                            "webdriver.gecko.driver" : "node_modules/geckodriver/bin/geckodriver"
+                        }
+                    },
+                    chrome: {
+                        "desiredCapabilities": {
+                            "browserName": "chrome"
+                        },
+                         "cli_args" : {
+                            "webdriver.chrome.driver" : "node_modules/chromedriver/lib/chromedriver/chromedriver"
+                        }
+                    }
+                }
+            }
+        },
         coffee: {
             build: {
                 expand: true,
@@ -589,6 +617,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-mkdir");
     grunt.loadNpmTasks("grunt-text-replace");
     grunt.loadNpmTasks("grunt-rename");
+    grunt.loadNpmTasks('grunt-nightwatch');
 
     // Lets use "clean" as a target instead of the name of the task
     grunt.renameTask("clean", "remove");
@@ -646,7 +675,7 @@ module.exports = function(grunt) {
         "copy:dist_config_versioned"
     ]);
 
-    grunt.registerTask("fetch", ["exec:fetch"])
+    grunt.registerTask("fetch", ["exec:fetch"]);
 
     grunt.registerTask("site", [
         "load_branding",
@@ -683,6 +712,9 @@ module.exports = function(grunt) {
     grunt.registerTask("distclean", ["remove:build", "remove:dist"]);
     grunt.registerTask("lint", ["jshint:console"]);
     grunt.registerTask("test", ["buster:console"]);
+    grunt.registerTask("chrome-tests", ["nightwatch:chrome"]);
+    grunt.registerTask("firefox-tests", ["nightwatch:firefox"]);
+    grunt.registerTask("e2e", ["firefox-tests", "chrome-tests"]);
 
     grunt.registerTask("default", ["update", "build", "config", "site"]);
 };

@@ -12,6 +12,7 @@
         "babel-polyfill": "^6.16.0",
         "bluebird": "^3.4.6",
         "buster": "0.7.12",
+        "geckodriver": "^1.2.0",
         "grunt": "0.4.x",
         "grunt-buster": "0.4.x",
         "grunt-contrib-clean": "0.5.x",
@@ -29,17 +30,19 @@
         "grunt-markdown": "0.7.x",
         "grunt-minjson": "0.4.x",
         "grunt-mkdir": "0.1.x",
+        "grunt-nightwatch": "^0.5.4",
         "grunt-rename": "0.1.x",
         "grunt-text-replace": "0.4.x",
         "jshint": "2.9.x",
         "lodash": "^4.15.0",
         "moment": "2.13.x",
+        "nightwatch": "^0.9.9",
         "openlayers": "3.19.x",
         "phantomjs": "2.1.x",
         "promise-queue": "^2.2.3",
         "react": "^15.3.1",
         "react-dom": "^15.3.1",
+        "selenium-server-standalone-jar": "2.47.1",
         "worldview-timeline-components": "*"
     }
 }
-
