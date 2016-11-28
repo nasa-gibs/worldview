@@ -1,42 +1,49 @@
 module.exports = {
     'Animation tests' : function (browser) {
-        var previousDay, newDay;
+        var startDay, newDay;
         browser
             .url('https://worldview.sit.earthdata.nasa.gov/')
             .pause(1000);
         browser.waitForElementVisible('#skipTour', 1000, function (el) {
             browser.click('#skipTour');
             /*
-             * check to see up animation is shown
-             * on Click
+             * check to see if animation widget is visible
+             * after Icon is clicked
              */
             browser.expect.element('.wv-animation-widget-header').to.not.be.visible;
-            console.log('animate icon clicked');
             browser.click('#animate-button');
             browser.pause(1000);
             browser.expect.element('.wv-animation-widget-header').to.be.visible;
             /*
-             * check to see up animation is shown
-             * on Click
+             * Verify that date selectors adjust when
+             * animation draggers are dragged
              */
-            browser.expect.element('#wv-timeline-range-selector:first-child polygon').to.be.visible;
-            console.log('moving dragger');
-            browser.pause(1000);
-            // previousDay = browser.getValue('.wv-anim-dates-case:first-child #day-input-group', function(res) {
-            //     console.log(res)
-            //     return res.value;
-            // });
+            browser.getValue('.wv-anim-dates-case .wv-date-selector-widget:first-child #day-input-group',function(result){
+                startDay = result.value;
+                browser
+                    .useCss()
+                    .moveToElement('#wv-timeline-range-selector:first-child polygon',  1,  1)
+                    .mouseButtonDown(0)
+                    .moveTo(null,  -40,  0)
+                    .mouseButtonUp(0)
+                    .pause(100);
+                browser.getValue('.wv-anim-dates-case .wv-date-selector-widget:first-child #day-input-group',function(result){
+                    newDay = result.value;
+                    // startDay != newDay
+                    this.assert.notEqual(startDay, newDay);
+                });
+            });
+
+            /*
+             * Verify that timeline zoom changes on tooltip click
+             */
             browser
                 .useCss()
-                .moveToElement('#wv-timeline-range-selector:first-child polygon',  1,  1)
-                .mouseButtonDown(0)
-                .moveTo(null,  -40,  0)
-                .mouseButtonUp(0);
-            // newDay = browser.getValue('.wv-anim-dates-case:first-child #day-input-group', function(res) {
-            //     return res.value;
-            // });
-            //this.assert.ok(newDay != previousDay, 'make sure day string changed');
-            browser.pause(5000)
+                .moveToElement('.wv-tooltip-case:first-child',  1,  1)
+                .click('.wv-tooltip #yearly')
+                .pause(1000);
+            // Check if correct timeline zoom is selected
+            browser.expect.element('#zoom-years.depth-1').to.be.present;
         });
         browser.end();
     }
