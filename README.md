@@ -56,6 +56,8 @@ directions in [Manual Setup](doc/manual_setup.md)
 *Notes:* This has only been tested on Mac OS X and Windows 8.1. Let us know if this works in
 other environments.
 
+*Also note:* As documented in [this issue](https://github.com/nasa-gibs/worldview/issues/73), there may be a problem with using Vagrant 1.8.7 and above.  The current workaround is to downgrade to Vagrant 1.8.6, though we are working to find a better fix.
+
 Install the following:
 
 * [VirtualBox](https://www.virtualbox.org)
