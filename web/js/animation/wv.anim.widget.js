@@ -44,7 +44,10 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
         self.reactComponent = ReactDOM.render(Widget, $('#wv-animation-widet-case')[0]);
 
         $timelineFooter = $('#timeline-footer');
-        $animateButton.on('click', self.toggleAnimationWidget);
+        $animateButton.on('click', function() {
+            WVTC.GA.event('Animation', 'Click', 'Animation Icon');
+            self.toggleAnimationWidget();
+        });
         if(model.rangeState.state === 'on') { // show animation widget if active in permalink
             $timelineFooter.toggleClass('wv-anim-active');
         }

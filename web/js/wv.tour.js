@@ -155,6 +155,7 @@ wv.tour = wv.tour || function(models, ui, config) {
         var onStop = function(index, tip, button) {
             //console.log(index, tip, button);
             setTourState();
+            WVTC.GA.event('Tour', 'Click', 'Post Tour View', index + 1);
             if(index == 5 && button !== "previous") {
                 endTour();
             }
@@ -167,7 +168,7 @@ wv.tour = wv.tour || function(models, ui, config) {
             e.stopPropagation();
             $(".ui-dialog-content").dialog("close");
             initTourState();
-
+            WVTC.GA.event('Tour', 'Click', 'Take Tour');
             $('#joyRideTipContent').joyride({
                 adjustForPhone:false,
                 bordered:true,

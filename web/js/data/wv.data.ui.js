@@ -360,6 +360,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
     };
 
     var showDownloadList = function() {
+        WVTC.GA.event('Data Download', 'Click', 'Download Button');
         if ( selectionListPanel ) {
             selectionListPanel.setVisible(false);
         }
