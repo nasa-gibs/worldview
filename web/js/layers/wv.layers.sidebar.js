@@ -246,6 +246,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
             $footerBtns.find("button").hide();
             $("#layers-add").show();
         } else if ( tab === "events" ) {
+            WVC.GA.event('Natural Events', 'Click', 'Events Tab');
             $('.ui-tabs-nav')
                   .removeClass('firstselected')
                   .addClass('secondselected')
