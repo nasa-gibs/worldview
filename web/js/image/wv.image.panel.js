@@ -346,7 +346,7 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
 
 
             $("#wv-image-download-button").unbind('click').click(function() {
-                WVTC.GA.event('Image Download', 'Click', 'Download');
+                WVC.GA.event('Image Download', 'Click', 'Download');
                 wv.util.metrics('lc='+encodeURIComponent(dlURL+"&worldfile="+imgWorldfile+"&format="+imgFormat+"&width="+imgWidth+"&height="+imgHeight) );
                 window.open(dlURL+"&worldfile="+imgWorldfile+"&format="+imgFormat+"&width="+imgWidth+"&height="+imgHeight,"_blank");
             });

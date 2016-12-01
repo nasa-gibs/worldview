@@ -155,7 +155,7 @@ module.exports = function(grunt) {
                         "node_modules/babel-polyfill/dist/polyfill.js",
                         "node_modules/react/dist/react.js",
                         "node_modules/react-dom/dist/react-dom.js",
-                        "node_modules/worldview-timeline-components/browser/wvtc.js",
+                        "node_modules/worldview-components/browser/wvc.js",
                         "node_modules/lodash/lodash.js",
                         "node_modules/bluebird/js/browser/bluebird.js",
                         "node_modules/promise-queue/lib/index.js",

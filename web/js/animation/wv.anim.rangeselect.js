@@ -20,7 +20,7 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
     var model;
     var timeline = ui.timeline;
     var widgetOptions = ui.anim.options;
-    var rangeSelectionFactory = React.createFactory(WVTC.RangeSelector); 
+    var rangeSelectionFactory = React.createFactory(WVC.RangeSelector);
     var $mountLocation = $('#wv-rangeselector-case')[0];
     var reactGlobal = {};
     var $footer =  $('#timeline-footer');

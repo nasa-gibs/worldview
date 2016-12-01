@@ -20,7 +20,7 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
     var self = {};
     var timeline = ui.timeline;
     var model = models.anim;
-    var widgetFactory = React.createFactory(WVTC.AnimationWidget);
+    var widgetFactory = React.createFactory(WVC.AnimationWidget);
     var $timelineFooter;
     var $animateButton;
     var dataModel;
@@ -45,7 +45,7 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
 
         $timelineFooter = $('#timeline-footer');
         $animateButton.on('click', function() {
-            WVTC.GA.event('Animation', 'Click', 'Animation Icon');
+            WVC.GA.event('Animation', 'Click', 'Animation Icon');
             self.toggleAnimationWidget();
         });
         if(model.rangeState.state === 'on') { // show animation widget if active in permalink

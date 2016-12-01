@@ -169,7 +169,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
         });
         $(self.selector + "content li").click(function() {
             var dataIndex = $(this).attr("data-index");
-            WVTC.GA.event('Natural Events', 'Click', 'Event');
+            WVC.GA.event('Natural Events', 'Click', 'Event');
             showEvent(dataIndex);
             $(self.selector + "content li").removeClass('item-selected');
             $(this).addClass('item-selected');
@@ -181,7 +181,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
         $(self.selector + "content a.date").click(function(event) {
             var dataIndex = $(this).attr("data-index");
             showEvent(dataIndex, $(this).attr("data-date-index"));
-            WVTC.GA.event('Natural Events', 'Click', 'Event');
+            WVC.GA.event('Natural Events', 'Click', 'Event');
             event.stopPropagation();
         });
         resize();

@@ -207,7 +207,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             });
             return;
         }
-        WVTC.GA.event('Animation', 'Click', 'Create GIF');
+        WVC.GA.event('Animation', 'Click', 'Create GIF');
         self.createGIF();
     };
 
@@ -454,7 +454,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
                 .attr("class", "ui-button ui-widget ui-state-default ui-button-text-only")
                 .hover(function() {$(this).addClass("ui-state-hover");}, function() {$(this).removeClass("ui-state-hover");})
                 .click(function() {
-                    WVTC.GA.event('Animation', 'Download', 'GIF', downloadSize);
+                    WVC.GA.event('Animation', 'Download', 'GIF', downloadSize);
                 });
 
             var $catalog =         
