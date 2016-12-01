@@ -43,12 +43,12 @@ module.exports = function(grunt) {
     // CSS files
     var banner = grunt.file.read("deploy/banner.txt");
 
-	//Platform specific command for find
-	var findCmd;
-	if(process.platform === 'win32')
-		findCmd = ";" //cygwin find doesn't really work in Windows compared to CentOS
-	else
-		findCmd = "find build -type d -empty -delete";
+    //Platform specific command for find
+    var findCmd;
+    if(process.platform === 'win32')
+	findCmd = ";" //cygwin find doesn't really work in Windows compared to CentOS
+    else
+	findCmd = "find build -type d -empty -delete";
 
     grunt.initConfig({
 
@@ -136,6 +136,7 @@ module.exports = function(grunt) {
                         "web/**",
                         "*",
                         "web/**/.htaccess",
+			"!node_modules/**",
                         "!web/brand/**",
                         "!web/config/**",
                         "!web/var/**"
@@ -459,7 +460,7 @@ module.exports = function(grunt) {
             },
 
             // Remove all development links <!-- link.dev --> and uncomment
-            // all the release links <1-- link.prod -->
+            // all the release links <!-- link.prod -->
             links: {
                 src: [
                    "build/**/web/index.html",
