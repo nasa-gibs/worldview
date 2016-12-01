@@ -130,7 +130,9 @@ $(function() {
             .register(models.palettes)
             .register(models.map);
         models.link.load(state);
-
+        if(config.features.googleAnalytics) {
+            WVTC.GA.init(config.features.googleAnalytics.id); // Insert google tracking
+        }
         // HACK: Map needs to be created before the data download model
         ui.map = wv.map.ui(models, config, wv.map.rotate, wv.map.runningdata);
         if ( config.features.animation ) {

@@ -207,6 +207,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             });
             return;
         }
+        WVTC.GA.event('Animation', 'Click', 'Create GIF');
         self.createGIF();
     };
 
@@ -442,6 +443,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             var blobURL = URL.createObjectURL(blob); //supported in Chrome and FF
             animatedImage.src = blobURL;
             var dlURL = wv.util.format("nasa-worldview-{1}-to-{2}.gif", animModel.rangeState.startDate, animModel.rangeState.endDate);
+            var downloadSize = (blob.size / 1024).toFixed();
 
             //Create download link and apply button CSS
             var $download = $("<a><span class=ui-button-text>Download</span></a>")
@@ -450,7 +452,10 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
                 .attr("download", dlURL)
                 .attr("href", blobURL)
                 .attr("class", "ui-button ui-widget ui-state-default ui-button-text-only")
-                .hover(function() {$(this).addClass("ui-state-hover");}, function() {$(this).removeClass("ui-state-hover");});
+                .hover(function() {$(this).addClass("ui-state-hover");}, function() {$(this).removeClass("ui-state-hover");})
+                .click(function() {
+                    WVTC.GA.event('Animation', 'Download', 'GIF', downloadSize);
+                });
 
             var $catalog =         
                 "<div class='gif-results-dialog' style='height: " + animCoords.h + "px; min-height: 210px;' >" + 
@@ -459,7 +464,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
                             "Size: " + 
                         "</b></div>" +
                         "<div>" +
-                            (blob.size / 1024).toFixed() + " KB" +
+                            downloadSize + " KB" +
                         "</div>" +
                     "</div>" +
                     "<div>" +
