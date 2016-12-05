@@ -71,12 +71,15 @@ module.exports = function(grunt) {
                 src_folders: ["e2e"],
                 standalone: true,
                 // download settings
-                jar_version: '2.53.0',
-                server_path: "node_modules/selenium-server-standalone-jar/jar/selenium-server-standalone-2.47.1.jar",
+                jar_version: '3.0.1',
+                selenium_port: 4444,
+                server_path: "node_modules/selenium-server-standalone-jar/jar/selenium-server-standalone-3.0.1.jar",
                 test_settings: {
                     firefox: {
                         "desiredCapabilities": {
-                            "browserName": "firefox"
+                            "browserName": "firefox",
+                            "marionette": true,
+                            "javascriptEnabled": true
                         },
                          "cli_args" : {
                             "webdriver.gecko.driver" : "node_modules/geckodriver/bin/geckodriver"
