@@ -17,4 +17,4 @@ npm-debug.log
 # Nightwatch stuff
 reports
 selenium-debug.log
-selenium-server-standalone-2.53.0.jar
+*.jar
