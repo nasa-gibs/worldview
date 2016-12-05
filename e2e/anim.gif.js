@@ -17,7 +17,7 @@ module.exports = {
             // Click on GIF icon
             browser.click('.fa-file-video-o.wv-animation-widget-icon');
             // Wait for GIF selection to appear
-            browser.waitForElementVisible('.wv-dl-gif-bt-case', 1000, function(el) {
+            browser.waitForElementVisible('.fa-download', 1000, function(el) {
                 // Initiate download
                 browser.click('.fa-download');
                 // wait for GIF to be created
