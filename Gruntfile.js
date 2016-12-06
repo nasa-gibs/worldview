@@ -79,8 +79,13 @@ module.exports = function(grunt) {
             // Combine all the Worldview JavaScript files into one file.
             js: {
                 src: js["wv.js"],
-                dest: "build/worldview-debug/web/js/wv.js",
+                dest: "build/worldview-debug/web/js/wv.js"
             },
+	    // Combine all the Openlayers JavaScript files into one file.
+	    oljs: {
+		src: js["ol.js"],
+		dest: "build/worldview-debug/web/js/ol.js"
+	    },
             // Combine all the Worldview CSS files into one file.
             css: {
                 src: css,
@@ -154,11 +159,17 @@ module.exports = function(grunt) {
                     overwrite: true,
                     src: [
                         "node_modules/babel-polyfill/dist/polyfill.js",
+			"node_modules/babel-polyfill/dist/polyfill.min.js",
                         "node_modules/react/dist/react.js",
+			"node_modules/react/dist/react.min.js",
                         "node_modules/react-dom/dist/react-dom.js",
+			"node_modules/react-dom/dist/react-dom.min.js",
                         "node_modules/worldview-components/browser/wvc.js",
+			"node_modules/worldview-components/browser/wvc.min.js",
                         "node_modules/lodash/lodash.js",
+			"node_modules/lodash/lodash.min.js",
                         "node_modules/bluebird/js/browser/bluebird.js",
+			"node_modules/bluebird/js/browser/bluebird.min.js",
                         "node_modules/promise-queue/lib/index.js",
                         "node_modules/openlayers/dist/ol-debug.js"
                     ],
@@ -415,6 +426,7 @@ module.exports = function(grunt) {
                 "build/worldview-debug/web/**/*.js",
                 "!build/worldview-debug/web/css/wv.css",
                 "!build/worldview-debug/web/js/wv.js",
+		"!build/worldview-debug/web/js/ol.js",
                 "!build/worldview-debug/web/css/bulkDownload.css",
                 "!build/worldview-debug/web/ext/**/*"
             ],
@@ -555,8 +567,8 @@ module.exports = function(grunt) {
             options: {
                 banner: banner,
                 compress: {
-                    drop_console: true,
-                    drop_debugger: true,
+                    //drop_console: true,
+                    //drop_debugger: true,
                     unused: true
                 }
             },
@@ -567,7 +579,14 @@ module.exports = function(grunt) {
                         "build/worldview/web/js/wv.js"
                     ]
                 }
-            }
+            },
+	    ol_js: {
+		files: {
+		    "build/worldview/web/js/ol.js": [
+			"build/worldview/web/js/ol.js"
+		    ]
+		}
+	    }
         },
 
     });

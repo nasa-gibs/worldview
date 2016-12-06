@@ -1,15 +1,7 @@
 {
     "wv.js": [
-        "node_modules/babel-polyfill/dist/polyfill.js",
-        "node_modules/openlayers/dist/ol-debug.js",
-        "node_modules/react/dist/react.js",
-        "node_modules/react-dom/dist/react-dom.js",
-        "node_modules/lodash/lodash.js",
-        "node_modules/bluebird/js/browser/bluebird.js",
-        "node_modules/promise-queue/lib/index.js",
-        "node_modules/worldview-components/browser/wvc.js",
 
-        "web/js/ol.wv/ol.wv.lookupimagetile.js",
+        "node_modules/promise-queue/lib/index.js",
 
         "web/js/edsc.js",
         "web/js/edsc/coordinate.js",
@@ -97,5 +89,9 @@
         "web/js/wv.tour.js",
         "web/js/wv.debug.js",
         "web/js/wv.main.js"
+    ],
+    "ol.js": [
+	"node_modules/openlayers/dist/ol-debug.js",
+	"web/js/ol.wv/ol.wv.lookupimagetile.js"
     ]
 }
