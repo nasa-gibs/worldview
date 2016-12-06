@@ -62,7 +62,7 @@ can be uploaded and unpacked to a web server.
 
 Open httpd.conf
 ```bash
-vi /etc/apache2/httpd.conf
+sudo vi /etc/apache2/httpd.conf
 ```
 Make sure the following modules are enabled:
 ```bash
@@ -77,7 +77,7 @@ LoadModule cgid_module modules/mod_cgid.so
 ### Example Apache User Configuration
 To access apache user config:
 ```bash
-vi /etc/apache2/users/Your-User-Name.conf
+sudo vi /etc/apache2/users/Your-User-Name.conf
 ```
 ```bash
 Adjust the configuration:
@@ -89,7 +89,7 @@ Adjust the configuration:
 ```
 Restart Apache:
 ```bash
-apachectl restart
+sudo apachectl restart
 ```
 
 ## Windows

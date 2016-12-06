@@ -43,12 +43,12 @@ module.exports = function(grunt) {
     // CSS files
     var banner = grunt.file.read("deploy/banner.txt");
 
-	//Platform specific command for find
-	var findCmd;
-	if(process.platform === 'win32')
-		findCmd = ";" //cygwin find doesn't really work in Windows compared to CentOS
-	else
-		findCmd = "find build -type d -empty -delete";
+    //Platform specific command for find
+    var findCmd;
+    if(process.platform === 'win32')
+	findCmd = ";" //cygwin find doesn't really work in Windows compared to CentOS
+    else
+	findCmd = "find build -type d -empty -delete";
 
     grunt.initConfig({
 
@@ -136,11 +136,33 @@ module.exports = function(grunt) {
                         "web/**",
                         "*",
                         "web/**/.htaccess",
+			"!node_modules/**",
                         "!web/brand/**",
                         "!web/config/**",
                         "!web/var/**"
                     ],
                     dest: "build/worldview-debug",
+                }],
+                options: {
+                    mode: true
+                }
+            },
+
+            ext: {
+                files: [{
+                    expand: true, cwd: ".",
+                    overwrite: true,
+                    src: [
+                        "node_modules/babel-polyfill/dist/polyfill.js",
+                        "node_modules/react/dist/react.js",
+                        "node_modules/react-dom/dist/react-dom.js",
+                        "node_modules/worldview-components/browser/wvc.js",
+                        "node_modules/lodash/lodash.js",
+                        "node_modules/bluebird/js/browser/bluebird.js",
+                        "node_modules/promise-queue/lib/index.js",
+                        "node_modules/openlayers/dist/ol-debug.js"
+                    ],
+                    dest: "web/ext",
                 }],
                 options: {
                     mode: true
@@ -396,6 +418,9 @@ module.exports = function(grunt) {
                 "!build/worldview-debug/web/css/bulkDownload.css",
                 "!build/worldview-debug/web/ext/**/*"
             ],
+            modules: [
+                "web/ext/node_modules/**"
+            ],
             config_src: [
                 "web/config/**/*"
             ],
@@ -435,7 +460,7 @@ module.exports = function(grunt) {
             },
 
             // Remove all development links <!-- link.dev --> and uncomment
-            // all the release links <1-- link.prod -->
+            // all the release links <!-- link.prod -->
             links: {
                 src: [
                    "build/**/web/index.html",
@@ -653,11 +678,12 @@ module.exports = function(grunt) {
         "replace:apache"
     ]);
 
+    grunt.registerTask("update",["remove:modules", "copy:ext"]);
     grunt.registerTask("check", ["lint", "test"]);
     grunt.registerTask("clean", ["remove:build"]);
     grunt.registerTask("distclean", ["remove:build", "remove:dist"]);
     grunt.registerTask("lint", ["jshint:console"]);
     grunt.registerTask("test", ["buster:console"]);
 
-    grunt.registerTask("default", ["build", "config", "site"]);
+    grunt.registerTask("default", ["update", "build", "config", "site"]);
 };

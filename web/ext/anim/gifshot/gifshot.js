@@ -1246,12 +1246,18 @@ existingImages = function (obj) {
           tempImage.text = image.text;
         }
         tempImage.onerror = function (e) {
-          var obj;
+          var error;
           --imagesLength;
           if (imagesLength === 0) {
-            obj = {};
-            obj.error = 'None of the requested images was capable of being retrieved';
-            return callback(obj);
+            error = {};
+            error.error = 'None of the requested images was capable of being retrieved';
+            return callback(error);
+          }
+          if (loadedImagesLength === imagesLength) {
+            if (obj.options.pause) {
+              addPauseFrames(obj.options);
+            }
+            addLoadedImagesToGif();
           }
         };
         tempImage.onload = function (e) {

@@ -43,6 +43,10 @@ We'd be quite excited if you'd like to contribute to Worldview! Whether it's fin
 
 Please see our [Roadmap](https://github.com/nasa-gibs/worldview/wiki/Worldview-Roadmap) for a list of features currently in progress or planned in the reasonably near future.  We're also working to synchronize our (currently internal) sprint planning and issue tracking systems with GitHub.  
 
+Here are the tickets we are currently working on: 
+[![Stories in Ready](https://badge.waffle.io/nasa-gibs/worldview.svg?label=ready&title=Ready)](http://waffle.io/nasa-gibs/worldview)
+[![Stories in In Progress](https://badge.waffle.io/nasa-gibs/worldview.svg?label=in progress&title=In Progress)](http://waffle.io/nasa-gibs/worldview)
+
 To get your instance of Worldview running, follow the [Installation](https://github.com/nasa-gibs/worldview#installation) guide below or the [Manual Setup](https://github.com/nasa-gibs/worldview/blob/master/doc/manual_setup.md) instructions.
 
 Thanks for considering contributing and making our planet easier to explore!
@@ -55,6 +59,8 @@ directions in [Manual Setup](doc/manual_setup.md)
 
 *Notes:* This has only been tested on Mac OS X and Windows 8.1. Let us know if this works in
 other environments.
+
+*Also note:* As documented in [this issue](https://github.com/nasa-gibs/worldview/issues/73), there may be a problem with using Vagrant 1.8.7 and above.  The current workaround is to downgrade to Vagrant 1.8.6, though we are working to find a better fix.
 
 Install the following:
 

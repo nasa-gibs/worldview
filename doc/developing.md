@@ -54,6 +54,12 @@ brand directory.
 
 These additional grunt targets are available.
 
+### Sync runtime node modules
+
+Any new update to runtime npm modules, by such means as 'npm install', 'npm update', or a version change in package.json will need to be synced to the web directory:
+
+    grunt update
+
 ### Branding
 
 Any changes to the brading directories need to be applied to the source

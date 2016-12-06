@@ -168,7 +168,8 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
             refreshEvent($content, event, index);
         });
         $(self.selector + "content li").click(function() {
-            showEvent($(this).attr("data-index"));
+            var dataIndex = $(this).attr("data-index");
+            showEvent(dataIndex);
             $(self.selector + "content li").removeClass('item-selected');
             $(this).addClass('item-selected');
             if (wv.util.browser.small){
@@ -177,7 +178,8 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
             notify();
         });
         $(self.selector + "content a.date").click(function(event) {
-            showEvent($(this).attr("data-index"), $(this).attr("data-date-index"));
+            var dataIndex = $(this).attr("data-index");
+            showEvent(dataIndex, $(this).attr("data-date-index"));
             event.stopPropagation();
         });
         resize();

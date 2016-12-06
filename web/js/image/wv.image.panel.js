@@ -342,14 +342,14 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
                 $("#wv-image-width").html((imgWidth));
                 $("#wv-image-height").html((imgHeight));
                 $("#wv-image-size").html(icon + imgFilesize + " MB");
-                })
-             .change();
+            }).change();
 
 
-              $("#wv-image-download-button").unbind('click').click(function(){
-                 wv.util.metrics('lc='+encodeURIComponent(dlURL+"&worldfile="+imgWorldfile+"&format="+imgFormat+"&width="+imgWidth+"&height="+imgHeight) );
-                 window.open(dlURL+"&worldfile="+imgWorldfile+"&format="+imgFormat+"&width="+imgWidth+"&height="+imgHeight,"_blank");
-              });
+            $("#wv-image-download-button").unbind('click').click(function() {
+                WVC.GA.event('Image Download', 'Click', 'Download');
+                wv.util.metrics('lc='+encodeURIComponent(dlURL+"&worldfile="+imgWorldfile+"&format="+imgFormat+"&width="+imgWidth+"&height="+imgHeight) );
+                window.open(dlURL+"&worldfile="+imgWorldfile+"&format="+imgFormat+"&width="+imgWidth+"&height="+imgHeight,"_blank");
+            });
         } catch ( cause ) {
             wv.util.error(cause);
         }

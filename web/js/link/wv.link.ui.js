@@ -38,6 +38,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
             text: false
         }).click(function() {
             var checked = $("#wv-link-button-check").prop("checked");
+            WVC.GA.event('Link', 'Click', 'Share link Button');
             if ( checked ) {
                 self.show();
             } else {
@@ -111,6 +112,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
             var checked = $("#wv-link-shorten-check").prop("checked");
             if ( checked ) {
                 var promise = models.link.shorten();
+                WVC.GA.event('Link', 'Check', 'Shorten');
                 $("#permalink_content").val("Please wait...");
                 promise.done(function(result) {
                     if ( result.status_code === 200 ) {
@@ -123,6 +125,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
                 });
             } else {
                 $('#permalink_content').val(models.link.get());
+                WVC.GA.event('Link', 'Check', 'Lengthen');
             }
             $('#permalink_content').focus();
             $('#permalink_content').select();

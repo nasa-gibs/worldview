@@ -1,3 +1,4 @@
+# coding: utf-8
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
@@ -5,12 +6,11 @@
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box = "matyunin/centos7"
+  config.vm.box = "bkyoung/centos7"
   config.vm.provision :shell, path: "etc/dev/vm.bootstrap"
   config.vm.hostname = "worldview"
   config.vm.network "forwarded_port", guest: 80, host: 8182
-
   config.vm.provider "virtualbox" do |vb|
-      vb.name = "worldview"
+    vb.name = "worldview"
   end
 end
