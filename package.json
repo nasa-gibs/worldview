@@ -39,7 +39,7 @@
         "promise-queue": "^2.2.3",
         "react": "^15.3.1",
         "react-dom": "^15.3.1",
-        "worldview-components": "1.0.1"
+        "worldview-components": "1.0.2"
     }
 }
 
