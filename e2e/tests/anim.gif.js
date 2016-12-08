@@ -2,7 +2,7 @@ module.exports = {
     'Animation GIF tests' : function (browser) {
         var startDay, newDay;
         browser
-            .url('http://go.nasa.gov/2fEDNUd')
+            .url(browser.globals.url + '?p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Labels(hidden),Reference_Features(hidden),Coastlines&t=2016-11-28&z=1&v=-209.109375,-63.421875,148.078125,69.890625&ab=on&as=2013-11-21&ae=2016-11-28&av=3&al=false')
             .pause(1000);
         /*
          * Should not show Tour

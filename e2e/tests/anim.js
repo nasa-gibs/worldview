@@ -2,7 +2,7 @@ module.exports = {
     'Animation tests' : function (browser) {
         var startDay, newDay;
         browser
-            .url('https://worldview.sit.earthdata.nasa.gov/')
+            .url(browser.globals.url)
             .pause(1000);
         browser.waitForElementVisible('#skipTour', 1000, function (el) {
             browser.click('#skipTour');

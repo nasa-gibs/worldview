@@ -67,11 +67,11 @@ module.exports = function(grunt) {
         nightwatch: {
             options: {
                 // task options
-
-                src_folders: ["e2e"],
+                src_folders: ["./e2e/tests"],
                 standalone: true,
                 // download settings
                 jar_version: '3.0.1',
+                globals_path: "./e2e/globals.js",
                 selenium_port: 4444,
                 server_path: "node_modules/selenium-server-standalone-jar/jar/selenium-server-standalone-3.0.1.jar",
                 test_settings: {
