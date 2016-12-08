@@ -315,7 +315,8 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
                 })
                 .on('mouseup',function(){
                     clearTimeout(cancelClick);
-                    if(clicked){
+                    if(!ui.map.mapIsbeingDragged &&
+		       clicked) {
                         d = d3.select(this.parentNode).data()[0];
                         self.boundary.click.call(this,d);
                     }

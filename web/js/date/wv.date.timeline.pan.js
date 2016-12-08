@@ -24,7 +24,7 @@ wv.date.timeline = wv.date.timeline || {};
 wv.date.timeline.pan = wv.date.timeline.pan || function(models, config, ui) {
 
     var tl = ui.timeline;
-    var model = models.date;    
+    var model = models.date;
     var self = {};
 
     self.xPosition = tl.axisZoom.translate()[0];
