@@ -1,6 +1,5 @@
 module.exports = {
     'Animation tests' : function (browser) {
-        var startDay, newDay;
         browser
             .url(browser.globals.url)
             .pause(1000);
