@@ -119,13 +119,13 @@
 }
 
 .bank div .wv-palettes-panel .wv-running-category-label {
-    bottom: 2px;
+    bottom: 1px;
     position: absolute;
     visibility: hidden;
 }
 
 .bank div .wv-palettes-panel .wv-running-bar {
-    top: 0;
+    bottom: 11px;
     width: 1px;
     height: 12px;
     background: #000;
@@ -176,7 +176,7 @@
 }
 
 .bank div.wv-palettes-classes {
-    padding-bottom: 6px;
+    padding-bottom: 16px;
 }
 .bank .wv-running div.wv-palettes-classes .wv-palettes-class.wv-active {
     opacity: 1;
