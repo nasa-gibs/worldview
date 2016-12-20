@@ -769,7 +769,6 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
             view: new ol.View({
                 maxResolution: proj.resolutions[0],
                 projection: ol.proj.get(proj.crs),
-                extent: proj.maxExtent,
                 center: proj.startCenter,
                 rotation: proj.id === "geographic" ? 0.0 : models.map.rotation,
                 zoom: proj.startZoom,
@@ -1016,16 +1015,14 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
             });
         function onMouseMove(e) {
             var coords;
-            var pixelValue;
             var pixels;
+            var pixels = map.getEventPixel(e.originalEvent);
             if($(e.relatedTarget).hasClass('map-coord') ||
                 $(e.relatedTarget).hasClass('coord-btn')) {
                  return;
             }
-            pixels =  [e.pageX,e.pageY];
             coords = map.getCoordinateFromPixel(pixels);
 
-            pixelValue = [pixels[0] * pixelRatio, pixels[1] * pixelRatio];
             $('#' + mapId).show();
             $('#' + mapId + ' span.map-coord').each(function(){
                 var format = $(this).attr('data-format');
@@ -1041,7 +1038,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
                     return; // don't get running data if map is animating
                 }
             }
-            dataRunner.newPoint(pixelValue, map);
+            dataRunner.newPoint(pixels, map);
         }
         $(map.getViewport())
             .mouseover(function(e){
