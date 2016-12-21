@@ -22,10 +22,11 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
     var self = {};
     var rotation = new Rotation(self, models);
     var dataRunner = new DataRunner(models);
-    self.mapIsbeingDragged = false;
     var hiDPI = ol.has.DEVICE_PIXEL_RATIO > 1;
     var pixelRatio = hiDPI ? 2 : 1;
 
+    self.mapIsbeingDragged = false;
+    self.mapIsbeingZoomed = false;
     self.proj = {}; // One map for each projection
     self.selected = null; // The map for the selected projection
     self.events = wv.util.events();
@@ -823,9 +824,17 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
         map.on('pointerdrag', function() {
             self.mapIsbeingDragged = true;
         });
+        map.getView().on('propertychange', function(e) {
+            switch (e.key) {
+                case 'resolution':
+                    self.mapIsbeingZoomed = true;
+                    break;
+            }
+        });
         map.on('moveend', function(e) {
-            setTimeout(function(){
+            setTimeout(function() {
                 self.mapIsbeingDragged = false;
+                self.mapIsbeingZoomed = false;
             }, 200);
         });
 
@@ -1016,11 +1025,16 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
         function onMouseMove(e) {
             var coords;
             var pixels;
-            var pixels = map.getEventPixel(e.originalEvent);
+            // if mobile return
+            if(wv.util.browser.small) {
+                return;
+            }
+            // if over coords return
             if($(e.relatedTarget).hasClass('map-coord') ||
                 $(e.relatedTarget).hasClass('coord-btn')) {
                  return;
             }
+            pixels = map.getEventPixel(e.originalEvent);
             coords = map.getCoordinateFromPixel(pixels);
 
             $('#' + mapId).show();
