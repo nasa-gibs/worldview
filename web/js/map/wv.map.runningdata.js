@@ -361,7 +361,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
 
 
         $paletteLabel.text(data.label);
-        labelWidth = $paletteLabel.width();
+        labelWidth = wv.util.getTextWidth(data.label, 'Lucida Sans');
 
         labelMargin = self.getLabelMarginLeft(labelWidth, $paletteWidth, location);
 
