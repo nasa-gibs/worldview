@@ -113,7 +113,7 @@
 .bank div .wv-palettes-panel .wv-running-bar {
     visibility: hidden;
     position: absolute;
-    transition-property: margin-left;
+    transition-property: left;
     transition-duration: 100ms, 100ms;
     transition-delay: 0s, 0s;
 }
