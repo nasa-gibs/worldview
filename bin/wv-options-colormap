@@ -45,11 +45,13 @@ def to_list(v):
 
 def match_legend(entry, legends):
     try:
+        matched = "false"
         for legend in legends:
             if "@id" not in legend:
                 raise KeyError("No legend IDs")
             if legend["@id"] == entry["@ref"]:
-                return legend
+                matched = legend
+        return matched
     except ValueError as e:
         raise ValueError("Invalid reference: %s" % entry["@ref"])
 
@@ -72,12 +74,14 @@ def process_entries(colormap):
         return "transparent"
     color_format = "{0:02x}{1:02x}{2:02x}{3:02x}"
     for entry in entries:
+        legend = match_legend(entry, legends)
+        if (legend == "false"):
+            continue
         r,g,b = entry["@rgb"].split(",")
         a = 0 if entry.get("@transparent", "false") == "true" else 255
         if a == 0:
             continue
         colors += [color_format.format(int(r), int(g), int(b), a)]
-        legend = match_legend(entry, legends)
         if "@tooltip" not in legend:
             raise KeyError("No tooltips in legend")
         tooltips += [legend["@tooltip"]]
