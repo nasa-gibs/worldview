@@ -38,7 +38,6 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
                 if ( !loaded ) {
                     loaded = true;
                     render();
-                    self.update();
                     if ( spec.onLoad ) {
                         spec.onLoad();
                     }
