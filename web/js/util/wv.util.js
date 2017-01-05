@@ -144,7 +144,20 @@ wv.util = (function(self) {
     self.parseTimestampUTC = function(str) {
         return self.parseDateUTC(str);
     };
-
+    /**
+     * Gets a pixel RGBA value from Canvas
+     *
+     * @method getCanvasPixelData
+     * @static
+     * @param canvas {Object} DOM canvas Element
+     * @param x {Number} X value on canvas
+     * @return y {Number} Y value on canvas
+     * @return {Object} Canvas image data.
+     */
+    self.getCanvasPixelData = function(canvas, x, y) {
+        var context = canvas.getContext("2d");
+        return context.getImageData(x, y, 1, 1).data;
+    };
     /**
      * Parses a UTC ISO 8601 date.
      *

@@ -112,7 +112,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
      */
     self.getLabelMarginLeft = function(labelWidth, caseWidth, location) {
         if(location + (labelWidth / 2) > caseWidth) {
-            return (caseWidth - labelWidth);
+            return (caseWidth - labelWidth) - 2;
         } else if (location - (labelWidth / 2) < 0) {
             return 0;
         } else {
@@ -222,7 +222,6 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
         map.forEachLayerAtPixel(coords, function(layer, data){
             var hex;
             var palette;
-            var paletteInfo;
             var legend;
             var layerId;
             if(layer.wv.def.palette) {
@@ -231,31 +230,80 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
                     return;
                 }
                 legends = models.palettes.getLegends(layerId);
+                hex = wv.util.rgbaToHex(data[0], data[1], data[2], data[3]);
                 _.each(legends, function(legend){
                     if(legend) {
-                        hex = wv.util.rgbaToHex(data[0], data[1], data[2], data[3]);
-                        if(legend.type === 'continuous') {
-                            paletteInfo = self.getDataLabel(legend, hex);
-                            if(paletteInfo) {
-                                self.setLayerValue(legend.id, paletteInfo);
-                                self.activeLayers.push(legend.id);
-                            }
-                        } else if(legend.type === 'classification') {
-                            paletteInfo = self.getDataLabel(legend, hex);
-                            if(paletteInfo) {
-                                self.setCategoryValue(legend.id, paletteInfo);
-                                self.activeLayers.push(legend.id);
-                            }
-                        }
+                        self.createRunnerFromLegend(legend, hex);
                         
                     }
                 });
             }
         });
+        self.update();
+    };
+    /*
+     * Update array of current
+     * active palettes
+     *
+     * @method update
+     *
+     * @return {Void}
+     *
+     */
+    self.update = function() {
         if(self.oldLayers.length) {
             self.updateRunners(self.LayersToRemove(self.oldLayers, self.activeLayers));
         }
         self.oldLayers = self.activeLayers;
+
+    };
+    /*
+     * Initiates new legend
+     *
+     * @method newLegend
+     *
+     * @param {Array} legends - tooltip data
+     *
+     * @param {String} hex - color
+     *
+     * @return {Void}
+     *
+     */
+    self.newLegend = function(legends, hex) {
+        self.activeLayers = [legends.id];
+        $productsBox.addClass('active-lengend');
+        self.createRunnerFromLegend(legends, hex);
+        self.update();
+    };
+
+    /*
+     * Compare old and new arrays to determine which Layers need to be
+     * removed
+     *
+     * @method LayersToRemove
+     *
+     * @param {Array} coords - Array of coordinate values
+     *
+     * @param {Object} map - OpenLayers Map Object
+     *
+     * @return {Void}
+     *
+     */
+    self.createRunnerFromLegend = function(legend, hex) {
+        var paletteInfo;
+        if(legend.type === 'continuous') {
+            paletteInfo = self.getDataLabel(legend, hex);
+            if(paletteInfo) {
+                self.setLayerValue(legend.id, paletteInfo);
+                self.activeLayers.push(legend.id);
+            }
+        } else if(legend.type === 'classification') {
+            paletteInfo = self.getDataLabel(legend, hex);
+            if(paletteInfo) {
+                self.setCategoryValue(legend.id, paletteInfo);
+                self.activeLayers.push(legend.id);
+            }
+        }
     };
 
     /*
@@ -276,6 +324,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
         $palette.removeClass('wv-running');
     };
     self.clearAll = function() {
+        $productsBox.removeClass('active-lengend');
         $('.wv-running').removeClass('wv-running');
     };
     /*
@@ -313,7 +362,8 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
         $caseWidth = $categoryPaletteCase.width();
 
         $paletteLabel.text(data.label);
-        $labelWidth = $paletteLabel.width();
+        $labelWidth = wv.util.getTextWidth(data.label, 'Lucida Sans');
+
         location = ((marginLeft + squareWidth) * data.index);
         labelMargin = self.getLabelMarginLeft($labelWidth, $caseWidth, location);
 
@@ -362,7 +412,6 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
 
         $paletteLabel.text(data.label);
         labelWidth = wv.util.getTextWidth(data.label, 'Lucida Sans');
-
         labelMargin = self.getLabelMarginLeft(labelWidth, $paletteWidth, location);
 
         $paletteLabel.attr('style', 'left:' + Math.round(labelMargin) + 'px;');

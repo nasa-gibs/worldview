@@ -20,8 +20,8 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
     var cache = new Cache(400); // Save layers from days visited
     var animationDuration = 250;
     var self = {};
-    var rotation = new Rotation(self, models);
-    var dataRunner = new DataRunner(models);
+    var rotation = self.rotate = new Rotation(self, models);
+    var dataRunner = self.runningdata = new DataRunner(models);
     var hiDPI = ol.has.DEVICE_PIXEL_RATIO > 1;
     var pixelRatio = hiDPI ? 2 : 1;
 

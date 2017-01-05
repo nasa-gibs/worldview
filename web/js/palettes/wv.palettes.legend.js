@@ -21,6 +21,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
     var config = spec.config;
     var models = spec.models;
     var model = spec.models.palettes;
+    var ui = spec.ui;
     var layer = spec.layer;
     var loaded = false;
     var rendered = false;
@@ -75,8 +76,11 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         $colorbar = $("<canvas></canvas>")
                 .addClass("wv-palettes-colorbar")
                 .attr("id", legend.id)
-                .attr("data-index", index)
-                .attr("title", "X");
+                .attr("data-index", index);
+        //set fixed canvas dimensions
+        $colorbar[0].width =  230;
+        $colorbar[0].height = 12;
+
         $container.append($colorbar);
 
         var $runningDataPointBar = $("<div></div>")
@@ -93,7 +97,6 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
                 .addClass("wv-palettes-max");
         var $title = $("<div></div>")
                 .addClass("wv-palettes-title");
-
         $container.prepend($title);
         $ranges
             .append($min)
@@ -104,13 +107,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
             .append($runningDataPointBar);
 
         $colorbar.on("mousemove", showUnitHover);
-        $colorbar.tooltip({
-            position: {
-                my: "left middle",
-                at: "right+30 middle",
-                of: $colorbar
-            }
-        });
+        $colorbar.on("mouseout", hideUnitsOnMouseOut);
         $legendPanel.append($container);
         wv.palettes.colorbar(selector + " " +
             "[data-index='" + index + "'] canvas", legend.colors);
@@ -121,34 +118,30 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         var $panel = $("<div></div>")
                 .addClass("wv-palettes-legend")
                 .addClass("wv-palettes-classes")
-                .attr("data-index", index)
-                .attr("title", "X");
+                .attr("data-index", index);
         $legendPanel
             .attr("id", legend.id)
             .append($panel)
             .append($runningDataPointLabel);
 
-        $panel.tooltip({
-            position: {
-                my: "left middle",
-                at: "right+30 middle",
-                of: $panel
-            },
-            content: "X"
-        });
     };
 
     var updateClasses = function(legend, index) {
         var $panel = $(selector + " [data-index='" + index + "']");
         $panel.empty();
         _.each(legend.colors, function(color, classIndex) {
-            $panel.append($("<span></span>")
+            var $colorBox;
+            $colorBox = $("<span></span>")
                 .attr("data-index", index)
                 .attr("data-class-index", classIndex)
+                .attr("data-hex", color)
                 .addClass("wv-palettes-class")
                 .html("&nbsp;")
                 .css("background-color", wv.util.hexToRGB(color))
-                .hover(highlightClass, unhighlightClass));
+                .hover(highlightClass, unhighlightClass);
+            $panel.append($colorBox);
+            $colorBox.on('mouseenter', showClassUnitHover);
+            $colorBox.on('mouseout', hideUnitsOnMouseOut);
         });
         var $detailPanel = $("<div></div>");
         _.each(legend.colors, function(color, classIndex) {
@@ -157,13 +150,13 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
             var $row = $("<div></div>")
                 .addClass("wv-palettes-class-detail")
                 .attr("data-class-index", classIndex);
+            $colorBox = 
             $row.append(
                 $("<span></span>")
                     .addClass("wv-palettes-class")
                     .html("&nbsp;")
                     .css("background-color", wv.util.hexToRGB(color)))
-            .append(
-                $("<span></span>")
+            .append($("<span></span>")
                     .addClass("wv-palettes-class-label")
                     .attr("data-index", index)
                     .attr("data-class-index", classIndex)
@@ -171,7 +164,6 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
             $detailPanel.append($row);
         });
         if( !rendered ) {
-            $panel.tooltip("option", "content", $detailPanel.html());
             rendered = true;
         }
     };
@@ -217,32 +209,64 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
             }
         });
     };
-
-    var showUnitHover = function(event) {
+    /**
+     * get color from canvas bar and
+     * send it to data processing
+     *
+     * @method showUnitHover
+     * @static
+     * @param {MouseEvent} e
+     * @return {void}
+     */
+    var showUnitHover = function(e) {
+        var rgba;
+        var pos;
+        var x;
+        var y;
+        var id;
+        var legends;
         if ( !loaded ) {
             return;
         }
-        var index = _.parseInt($(this).attr("data-index"));
-        var legend = model.getLegend(layer.id, index);
-        var entry = model.get(layer.id, index).entries;
-        var $colorbar = $(this);
-        var x = event.pageX - $colorbar.offset().left;
-        var width = $colorbar.width();
-        var percent = x / width;
-        var bins = legend.colors.length;
-        var colorIndex = Math.floor(bins * percent);
-        if (colorIndex >= bins) {
-            colorIndex = bins - 1;
-        }
-
-        var color = legend.colors[colorIndex];
-        var label = legend.tooltips[colorIndex];
-        label = (legend.units) ? label + " " + legend.units : label;
-       
-        $colorbar.tooltip("option", "content",
-            "<span class='wv-palettes-color-box' style='background: " +
-            wv.util.hexToRGBA(color) + "'>" + "</span>" + label);
+        legends = model.getLegends(layer.id)[0];
+        offset = $(this).offset();
+        x = e.pageX - offset.left;
+        y = e.pageY - offset.top;
+        rgba = wv.util.getCanvasPixelData(this, x, y);
+        hex = wv.util.rgbaToHex(rgba[0], rgba[1], rgba[2]);
+        ui.map.runningdata.newLegend(legends, hex);
     };
+
+    /**
+     * get color from data attr and
+     * send it to data processing and
+     * render legend
+     *
+     * @method showClassUnitHover
+     * @static
+     * @param {MouseEvent} e
+     * @return {void}
+     */
+    var showClassUnitHover = function(e) {
+        var hex = $(this).data('hex');
+        var legends = model.getLegends(layer.id)[0];
+        ui.map.runningdata.newLegend(legends, hex);
+    };
+
+    /**
+     * get color from data attr and
+     * send it to data processing and
+     * render legend
+     *
+     * @method showClassUnitHover
+     * @static
+     * @param {MouseEvent} e
+     * @return {void}
+     */
+    var hideUnitsOnMouseOut = function() {
+        ui.map.runningdata.clearAll();
+    };
+
 
     var highlightClass = function() {
         legendIndex = $(this).attr("data-index");
