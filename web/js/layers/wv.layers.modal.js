@@ -197,7 +197,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     .attr( 'id', current.id + '-' + source.id );
 
                 //Metadata
-               
+
                 var $sourceMeta = $( '<div></div>' )
                     .addClass('source-metadata');
 
