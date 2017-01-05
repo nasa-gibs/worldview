@@ -104,7 +104,6 @@ def process_layer(gc_layer, wv_layers, colormaps):
                     else:
                         startDate = times[0].replace('T', ' ').replace('Z','')
                         endDate = times[1].replace('T', ' ').replace('Z','')
-                        print "Start Date %s" % startDate
                         start_date = min(start_date,
                             datetime.strptime(startDate, "%Y-%m-%d %H:%M:%S"))
                         end_date = max(end_date,
@@ -114,7 +113,6 @@ def process_layer(gc_layer, wv_layers, colormaps):
                     wv_layer["startDate"] = start_date.strftime("%Y-%m-%d")
                     if end_date != datetime.min:
                         wv_layer["endDate"] = end_date.strftime("%Y-%m-%d")
-
             except ValueError:
                 raise
                 raise Exception("Invalid time: {0}".format(range))
