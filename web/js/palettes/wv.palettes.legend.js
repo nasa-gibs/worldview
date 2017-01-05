@@ -78,7 +78,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
                 .attr("id", legend.id)
                 .attr("data-index", index);
         //set fixed canvas dimensions
-        $colorbar[0].width =  230;
+        $colorbar[0].width =  235;
         $colorbar[0].height = 12;
 
         $container.append($colorbar);
