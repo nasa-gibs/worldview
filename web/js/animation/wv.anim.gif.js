@@ -70,11 +70,10 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
         var shootGIFafterImageLoad;
         var imageArra;
         var stamp;
-        var icon = $('#wv-logo').css('background-image');
+        var build;
 
-        stamp = new Image();
         loader = wv.ui.indicator.loading();
-        stamp.onload = function() {
+        build = function(stamp) {
             var buildProgressBar = function() {
                 $progress = $("<progress />") //display progress for GIF creation
                     .attr("class", "wv-gif-progress");
@@ -120,9 +119,10 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
                 'pause' : 1
             }, onGifComplete);
         };
+        stamp = new Image();
+        stamp.onload = function() {build(stamp);};
+        stamp.onerror = function() {build(null);};
         stamp.src = 'brand/images/wv-icon-w-shadow.png';
-
-
     };
 
     /*
