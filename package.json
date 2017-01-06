@@ -35,6 +35,7 @@
         "lodash": "^4.15.0",
         "moment": "2.13.x",
         "openlayers": "3.19.x",
+        "gifshot": "https://github.com/nasa-gibs/gifshot/archive/4.2.0.tar.gz",
         "phantomjs": "2.1.x",
         "promise-queue": "^2.2.3",
         "react": "^15.3.1",
