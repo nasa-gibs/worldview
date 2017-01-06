@@ -69,46 +69,60 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
         var endDate = stateObj.endDate;
         var shootGIFafterImageLoad;
         var imageArra;
+        var stamp;
+        var build;
 
         loader = wv.ui.indicator.loading();
-        var buildProgressBar = function() {
-            $progress = $("<progress />") //display progress for GIF creation
-                .attr("class", "wv-gif-progress");
-            wv.ui.getDialog().append($progress).dialog({ //dialog for progress
-                title: "Collecting Images...",
-                width: 300,
-                height: 100
-            });
-            $progress.attr("value", 0);
-        };
-        var onGifProgress = function(captureProgress) {
-            if(!progressing) {
-                buildProgressBar();
-                progressing = true;
-                wv.ui.indicator.hide(loader);
+        build = function(stamp) {
+            var buildProgressBar = function() {
+                $progress = $("<progress />") //display progress for GIF creation
+                    .attr("class", "wv-gif-progress");
+                wv.ui.getDialog().append($progress).dialog({ //dialog for progress
+                    title: "Collecting Images...",
+                    width: 300,
+                    height: 100
+                });
+                $progress.attr("value", 0);
+            };
+            var onGifProgress = function(captureProgress) {
+                if(!progressing) {
+                    buildProgressBar();
+                    progressing = true;
+                    wv.ui.indicator.hide(loader);
+                }
+                $progress.parent().dialog("option", "title", "Creating GIF..."); //set dialog title
+                $progress.attr("value", captureProgress); //before value set, it is in indeterminate state
+            };
+
+            imageArra = getImageArray(startDate, endDate, $progress);
+            if(!imageArra) {// won't be true if there are too mant frames
+                return;
             }
-            $progress.parent().dialog("option", "title", "Creating GIF..."); //set dialog title
-            $progress.attr("value", captureProgress); //before value set, it is in indeterminate state
+
+            gifshot.createGIF({
+                'gifWidth': animCoords.w,
+                'gifHeight': animCoords.h,
+                'images': imageArra,
+                'stamp': stamp,
+                'textAlign': 'right',
+                'textBaseline': 'top',
+                'fontColor' : '#fff',
+                'fontWeight': 'lighter',
+                'fontFamily': 'Helvetica Neue',
+                'fontSize': '16px',
+                'interval': 1 / interval,
+                'progressCallback': onGifProgress,
+                'stroke': {
+                    'color': '#000',
+                    'pixels': 1.7
+                },
+                'pause' : 1
+            }, onGifComplete);
         };
-
-        imageArra = getImageArray(startDate, endDate, $progress);
-        if(!imageArra) {// won't be true if there are too mant frames
-            return;
-        }
-
-        gifshot.createGIF({
-            'gifWidth': animCoords.w,
-            'gifHeight': animCoords.h,
-            'images': imageArra,
-            'fontColor' : '#fff',
-            'interval': 1 / interval,
-            'progressCallback': onGifProgress,
-            'stroke': {
-                'color': '#000',
-                'pixels': 2
-            },
-            'pause' : 1
-        }, onGifComplete);
+        stamp = new Image();
+        stamp.onload = function() {build(stamp);};
+        stamp.onerror = function() {build(null);};
+        stamp.src = 'brand/images/wv-icon-w-shadow.png';
     };
 
     /*
