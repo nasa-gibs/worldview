@@ -143,7 +143,8 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
         //Map the zoom level from 0-9 / 0-7 to an index from 0-4
         var zoom_res = [40, 20, 4, 2, 1], str, res;
         if(isGeographic)
-            res = zoom_res[Math.floor((ui.map.selected.getView().getZoom()/2))];
+            res = zoom_res[Math.floor(ui.map.selected.getView().getZoom() / 2)];
+
         else
             res = zoom_res[Math.floor(((ui.map.selected.getView().getZoom() + 2) / 2))];
 
@@ -166,6 +167,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
                 default:
                     str = "10km";
             }
+
             return str;
         }
     };
@@ -264,6 +266,8 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
                 if(date > new Date(layer.endDate)) return;
             }
             if(layer.visible && new Date(layer.startDate) < date) {
+                layers.push(layer);
+            } else if(!layer.startDate) {
                 layers.push(layer);
             }
         });
