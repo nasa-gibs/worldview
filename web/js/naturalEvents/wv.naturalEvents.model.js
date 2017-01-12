@@ -31,6 +31,7 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
     };
     self.EVENT_QUERY_RESULTS = "queryResults";
     self.EVENT_SELECT = "select";
+    self.apiURL = config.features.naturalEvents.host;
     var querySuccessFlag = false;
     var lastIndex = -1;
     var lastDateIndex = -1;
@@ -43,81 +44,28 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
      */
     self.events = wv.util.events();
 
-    var layerLists = {
-        Wildfires: [
-            ["MODIS_Terra_CorrectedReflectance_TrueColor", true],
-            ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
-            ["VIIRS_SNPP_CorrectedReflectance_TrueColor", false],
-            ["MODIS_Fires_Terra", true],
-            ["MODIS_Fires_Aqua", false],
-            ["Reference_Features", true],
-            ["Reference_Labels", true],
-            ["VIIRS_SNPP_Fires_375m_Day", false],
-            ["VIIRS_SNPP_Fires_375m_Night", false]
-        ],
-        "Temperature Extremes": [
-            ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
-            ["MODIS_Terra_CorrectedReflectance_TrueColor", true],
-            ["VIIRS_SNPP_CorrectedReflectance_TrueColor", false],
-            ["Reference_Features", true],
-            ["Reference_Labels", true],
-            ["MODIS_Aqua_Land_Surface_Temp_Day", false],
-            ["MODIS_Terra_Land_Surface_Temp_Day", true]
-        ],
-        "Severe Storms": [
-            ["Reference_Features", true],
-            ["Reference_Labels", true],
-            ["VIIRS_SNPP_CorrectedReflectance_TrueColor", true],
-            ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
-            ["MODIS_Terra_CorrectedReflectance_TrueColor", false]
-        ],
-        Floods: [
-            ["Reference_Features", true],
-            ["Reference_Labels", true],
-            ["MODIS_Aqua_SurfaceReflectance_Bands121", false],
-            ["MODIS_Terra_SurfaceReflectance_Bands121", true]
-        ],
-        Volcanoes: [
-            ["MODIS_Terra_CorrectedReflectance_TrueColor", true],
-            ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
-            ["VIIRS_SNPP_CorrectedReflectance_TrueColor", false],
-            ["AIRS_Prata_SO2_Index_Day", true],
-            ["AIRS_Prata_SO2_Index_Night", false],
-            ["MODIS_Fires_Terra", true],
-            ["MODIS_Fires_Aqua", false],
-            ["Reference_Features", true],
-            ["Reference_Labels", true],
-            ["VIIRS_SNPP_Fires_375m_Day", false],
-            ["VIIRS_SNPP_Fires_375m_Night", false]
-        ],
-        Default: [
-            ["Reference_Features", true],
-            ["Reference_Labels", true],
-            ["MODIS_Terra_CorrectedReflectance_TrueColor", true],
-            ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
-            ["VIIRS_SNPP_CorrectedReflectance_TrueColor", false]
-        ]
-    };
+    var layerLists = config.naturalEvents.layers;
+    self.ignored = config.naturalEvents.skip || [];
 
     self.data = {};
 
     var init = function() {
-        //self.events.on( "queryResults", onQueryResults );
+        self.events.on( "queryResults", onQueryResults );
         //self.events.on( "select", onSelect );
         self.query();
     };
-    /* TODO: Reuse permalinks when we have historical events
+    // TODO: Reuse permalinks when we have historical events
     var onQueryResults = function(){
-        if ( self.data && self.sources && self.types) {
+        if ( self.data ) {
             querySuccessFlag = true;
-            models.link.register(self);
-            models.link.load(self);
+            //models.link.register(self);
+            //models.link.load(self);
         }
     };
     var onSelect = function(){
         self.save();
     };
-    */
+
     self.select = function(index, dateIndex) {
 
         if ( index === lastIndex && lastDateIndex === dateIndex ) {
@@ -131,28 +79,28 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
         lastIndex = index;
         lastDateIndex = lastDateIndex;
 
-        if(models.proj.selected.id !=='geographic'){
+        if(models.proj.selected.id !=='geographic') {
             models.proj.select('geographic');
         }
         self.selected = index;
         event = self.data[index];
 
         eventItem = null;
-        if ( event.geometry.length > 1 ) {
-            eventItem = event.geometry[dateIndex || 0];
+        if ( event.geometries.length > 1 ) {
+            eventItem = event.geometries[dateIndex || 0];
         } else {
-            eventItem = event.geometry[0];
+            eventItem = event.geometries[0];
         }
 
 
         category = "Default";
-        categories = event.category;
+        categories = event.categories;
         if ( categories.constructor !== Array ) {
             categories = [categories];
         }
         _.each(categories, function(c) {
-            if ( layerLists[c["#text"]] ) {
-                category = c["#text"];
+            if ( layerLists[c["title"]] ) {
+                category = c["title"];
                 return;
             }
         });
@@ -199,11 +147,10 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
         else {
             models.date.select(eventDate);
         }
-
         if ( eventItem.type === "Point" ) {
             goTo(method, eventItem.coordinates);
-        } else if ( eventItem.type === "Polygon" && eventItem.coordinates.length == 5 ) {
-            c = eventItem.coordinates;
+        } else if ( eventItem.type === "Polygon" && eventItem.coordinates[0].length == 5 ) {
+            c = eventItem.coordinates[0];
             var extent = [c[0][0], c[0][1], c[2][0], c[2][1]];
             goTo(method, extent);
         }
@@ -299,25 +246,25 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
     */
 
     var queryEvents = function(callback) {
-        var url = "https://eonet.sci.gsfc.nasa.gov/api/v1/events";
+        var url = self.apiURL + "/events";
         $.getJSON(url, function(data) {
-            self.data = data.item;
+            self.data = data.events;
             self.events.trigger('queryResults');
         });
     };
 
     var queryTypes = function(callback) {
-        var url = "https://eonet.sci.gsfc.nasa.gov/api/v1/types";
+        var url = self.apiURL + "/categories";
         $.getJSON(url, function(data) {
-            self.types = data.item;
+            self.types = data.categories;
             self.events.trigger('queryResults');
         });
     };
 
     var querySources = function(callback) {
-        var url = "https://eonet.sci.gsfc.nasa.gov/api/v1/sources";
+        var url = self.apiURL + "/sources";
         $.getJSON(url, function(data) {
-            self.sources = data.item;
+            self.sources = data.sources;
             self.events.trigger('queryResults');
         });
     };
@@ -332,7 +279,7 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
     var getEventCategoryName = function() {
         var eventCategoryName = null;
         if ((lastIndex != -1) && (self.data !== null) && (self.data[lastIndex] !== null)) {
-            var eventCategory = self.data[lastIndex].category;
+            var eventCategory = self.data[lastIndex].categories;
             if (eventCategory.length > 0)
             {
                 eventCategory = eventCategory[0];
