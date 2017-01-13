@@ -170,8 +170,8 @@ module.exports = function(grunt) {
 			"node_modules/lodash/lodash.min.js",
                         "node_modules/bluebird/js/browser/bluebird.js",
 			"node_modules/bluebird/js/browser/bluebird.min.js",
-                        "node_modules/gifshot/demo/gifshot.custom.js",
-                       "node_modules/gifshot/demo/gifshot.custom.min.js",
+                        "node_modules/gifshot/build/custom/gifshot.custom.js",
+                       "node_modules/gifshot/build/custom/gifshot.custom.min.js",
                         "node_modules/promise-queue/lib/index.js",
                         "node_modules/openlayers/dist/ol-debug.js"
                     ],
