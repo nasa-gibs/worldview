@@ -1,5 +1,5 @@
-build
-dist
+/build
+/dist
 /node_modules
 python
 .project
