@@ -189,10 +189,10 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
     };
 
     var refreshEvent = function($content, event, index) {
-        if ((event.categories[0]['title'] === 'Floods') ||
-            (event.categories[0]['title'] === 'Earthquakes') ||
-            (event.categories[0]['title'] === 'Drought') ||
-            (event.categories[0]['title'] === 'Landslides')) {
+        if ((event.categories[0].title === 'Floods') ||
+            (event.categories[0].title === 'Earthquakes') ||
+            (event.categories[0].title === 'Drought') ||
+            (event.categories[0].title === 'Landslides')) {
             return;
         }
         var geoms = toArray(event.geometries);

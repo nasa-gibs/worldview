@@ -99,8 +99,8 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
             categories = [categories];
         }
         _.each(categories, function(c) {
-            if ( layerLists[c["title"]] ) {
-                category = c["title"];
+            if ( layerLists[c.title] ) {
+                category = c.title;
                 return;
             }
         });
