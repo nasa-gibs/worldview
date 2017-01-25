@@ -4,9 +4,12 @@
  * This code was originally developed at NASA/Goddard Space Flight Center for
  * the Earth Science Data and Information System (ESDIS) project.
  *
- * Copyright (C) 2013 - 2014 United States Government as represented by the
+ * Copyright (C) 2013 - 2016 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
+ *
+ * Licensed under the NASA Open Source Agreement, Version 1.3
+ * http://opensource.gsfc.nasa.gov/nosa.php
  */
 var wv = wv || {};
 wv.map = wv.map || {};
@@ -14,14 +17,17 @@ wv.map = wv.map || {};
 /*
  * @Class
  */
-wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
+wv.map.ui = wv.map.ui || function(models, config, components) {
     var id = "wv-map";
     var selector = "#" + id;
     var cache = new Cache(400); // Save layers from days visited
     var animationDuration = 250;
     var self = {};
-    var rotation = new Rotation(self, models);
-    //var dataRunner = new DataRunner(models);
+    var rotation = new components.Rotation(self, models);
+    var layerBuilder = components.Layerbuilder(models, config, cache);
+    var layerKey = layerBuilder.layerKey;
+    var createLayer = layerBuilder.createLayer;
+    //var dataRunner = new components.Runningdata(models);
     self.mapIsbeingDragged = false;
     var hiDPI = ol.has.DEVICE_PIXEL_RATIO > 1;
     var pixelRatio = hiDPI ? 2 : 1;
@@ -41,7 +47,6 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
         if ( config.parameters.mockMap ) {
             return;
         }
-
         // NOTE: iOS sometimes bombs if this is _.each instead. In that case,
         // it is possible that config.projections somehow becomes array-like.
         _.forOwn(config.projections, function(proj) {
@@ -498,213 +503,6 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
     };
 
     /*
-     * Create a new OpenLayers Layer
-     *
-     * @method createLayer
-     * @static
-     *
-     * @param {object} def - Layer Specs
-     * 
-     * @param {object} options - Layer options
-     *
-     *
-     * @returns {object} OpenLayers layer
-     */
-    var createLayer = function(def, options) {
-        var date, key, proj, layer, layerNext, layerPrior;
-        options = options || {};
-        key = layerKey(def, options);
-        proj = models.proj.selected;
-        layer = cache.getItem(key);
-        if ( !layer ) {
-            def = _.cloneDeep(def);
-            _.merge(def, def.projections[proj.id]);
-            if ( def.type === "wmts" ) {
-                layer = createLayerWMTS(def, options);
-                if(proj.id === 'geographic') {
-                    layerNext = createLayerWMTS(def, options, 1);
-                    layerPrior = createLayerWMTS(def, options, -1);
-                    layer = new ol.layer.Group({
-                        layers: [layer, layerNext, layerPrior]
-                    });
-                }
-
-            } else if ( def.type === "wms" ) {
-                layer = createLayerWMS(def, options);
-                if(proj.id === 'geographic') {
-
-                    layerNext = createLayerWMS(def, options, 1);
-                    layerPrior = createLayerWMS(def, options, -1);
-                    layer = new ol.layer.Group({
-                        layers: [layer, layerNext, layerPrior]
-                    });
-                }
-            } else {
-                throw new Error("Unknown layer type: " + def.type);
-            }
-            date = options.date || models.date.selected;
-            layer.wv = {
-                id: def.id,
-                key: key,
-                date: wv.util.toISOStringDate(date),
-                proj: proj.id,
-                def: def
-            };
-            cache.setItem(key, layer);
-            layer.setVisible(false);
-        }
-        layer.setOpacity(def.opacity || 1.0);
-        return layer;
-    };
-
-    /*
-     * Create a new WMTS Layer
-     *
-     * @method createLayerWMTS
-     * @static
-     *
-     * @param {object} def - Layer Specs
-     * 
-     * @param {object} options - Layer options
-     *
-     *
-     * @returns {object} OpenLayers WMTS layer
-     */
-    var createLayerWMTS = function(def, options, day) {
-        var proj, source, matrixSet, matrixIds, extra,
-            date, extent, start;
-        proj = models.proj.selected;
-        source = config.sources[def.source];
-        extent = proj.maxExtent;
-        start = [proj.maxExtent[0], proj.maxExtent[3]];
-        if ( !source ) {
-            throw new Error(def.id + ": Invalid source: " + def.source);
-        }
-        matrixSet = source.matrixSets[def.matrixSet];
-        if ( !matrixSet ) {
-            throw new Error(def.id + ": Undefined matrix set: " + def.matrixSet);
-        }
-        matrixIds = [];
-        _.each(matrixSet.resolutions, function(resolution, index) {
-            matrixIds.push(index);
-        });
-        extra = "";
-        if(day) {
-            if(day === 1){
-                extent = [-250, -90, -180, 90];
-                start = [-540,90];
-            } else {
-                extent = [180, -90, 250, 90];
-                start = [180,90];
-            }
-        }
-        if ( def.period === "daily" ) {
-            date = options.date || models.date.selected;
-            if(day) {
-                date = wv.util.dateAdd(date, 'day', day);
-            }
-            extra = "?TIME=" + wv.util.toISOStringDate(date);
-        }
-        var sourceOptions = {
-            url: source.url + extra,
-            layer: def.layer || def.id,
-            crossOrigin: "anonymous",
-            format: def.format,
-            matrixSet: matrixSet.id,
-            tileGrid: new ol.tilegrid.WMTS({
-                origin: start,
-                resolutions: matrixSet.resolutions,
-                matrixIds: matrixIds,
-                tileSize: matrixSet.tileSize[0],
-            }),
-            wrapX: false,
-            style: 'default'
-        };
-        if ( models.palettes.isActive(def.id) ) {
-            var lookup = models.palettes.getLookup(def.id);
-            sourceOptions.tileClass = ol.wv.LookupImageTile.factory(lookup);
-        }
-        var layer = new ol.layer.Tile({
-            extent: extent,
-            source: new ol.source.WMTS(sourceOptions),
-        });
-        return layer;
-    };
-
-    /*
-     * Create a new WMS Layer
-     *
-     * @method createLayerWMTS
-     * @static
-     *
-     * @param {object} def - Layer Specs
-     * 
-     * @param {object} options - Layer options
-     *
-     *
-     * @returns {object} OpenLayers WMS layer
-     */
-    var createLayerWMS = function(def, options, day) {
-        var proj, source, matrixSet, matrixIds, extra, transparent,
-            date, extent, start, bbox, res;
-        proj = models.proj.selected;
-        source = config.sources[def.source];
-        extent = proj.maxExtent;
-        start = [proj.maxExtent[0], proj.maxExtent[3]];
-        res = proj.resolutions;
-        if ( !source )
-            throw new Error(def.id + ": Invalid source: " + def.source);
-
-        transparent = ( def.format === "image/png" );
-        if(proj.id === "geographic") {
-            res = [0.28125, 0.140625, 0.0703125, 0.03515625, 0.017578125, 0.0087890625, 0.00439453125, 0.002197265625, 0.0010986328125, 0.00054931640625, 0.00027465820313];   
-        }
-        if(day) {
-            if(day === 1){
-                extent = [-250, -90, -180, 90];
-                start = [-540,90];
-            } else {
-                extent = [180, -90, 250, 90];
-                start = [180,90];
-            }
-        }
-        parameters = {
-            LAYERS: def.layer || def.id,
-            FORMAT: def.format,
-            TRANSPARENT: transparent,
-            VERSION: "1.1.1"
-        };
-        if ( def.styles )
-            parameters.STYLES = def.styles;
-
-        extra = "";
-
-        if ( def.period === "daily" ) {
-            date = options.date || models.date.selected;
-            if(day) {
-                date = wv.util.dateAdd(date, 'day', day);
-            }
-            extra = "?TIME=" + wv.util.toISOStringDate(date);
-        }
-        var layer = new ol.layer.Tile({
-            extent: extent,
-            source: new ol.source.TileWMS({
-                url: source.url + extra,
-                wrapX: true,
-                style: 'default',
-                crossOrigin: "anonymous",
-                params: parameters,
-                tileGrid: new ol.tilegrid.TileGrid({
-                    origin: start,
-                    resolutions: res
-                })
-
-            })
-        });
-        return layer;
-    };
-
-    /*
      * Checks a layer's properties to deterimine if 
      * it is a graticule
      * 
@@ -1140,35 +938,6 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
             }));
             map.getView().setZoom(zoom + amount);
         };
-    };
-
-    /*
-     * Create a layer key
-     *
-     * @function layerKey
-     * @static
-     *
-     * @param {Object} def - Layer properties
-     *
-     * @param {number} options - Layer options
-     *
-     * @returns {object} layer key Object
-     */
-    var layerKey = function(def, options) {
-        var layerId = def.id;
-        var projId = models.proj.selected.id;
-        var date;
-        if ( options.date ) {
-            date = wv.util.toISOStringDate(options.date);
-        } else {
-            date = wv.util.toISOStringDate(models.date.selected);
-        }
-        var dateId = ( def.period === "daily" ) ? date : "";
-        var palette = "";
-        if ( models.palettes.isActive(def.id) ) {
-            palette = models.palettes.key(def.id);
-        }
-        return [layerId, projId, dateId, palette].join(":");
     };
 
     init();
