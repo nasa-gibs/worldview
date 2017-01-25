@@ -511,22 +511,38 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
      * @returns {object} OpenLayers layer
      */
     var createLayer = function(def, options) {
+        var date, key, proj, layer, layerNext, layerPrior;
         options = options || {};
-        var key = layerKey(def, options);
-
-        var layer = cache.getItem(key);
+        key = layerKey(def, options);
+        proj = models.proj.selected;
+        layer = cache.getItem(key);
         if ( !layer ) {
-            var proj = models.proj.selected;
             def = _.cloneDeep(def);
             _.merge(def, def.projections[proj.id]);
             if ( def.type === "wmts" ) {
                 layer = createLayerWMTS(def, options);
+                if(proj.id === 'geographic') {
+                    layerNext = createLayerWMTS(def, options, 1);
+                    layerPrior = createLayerWMTS(def, options, -1);
+                    layer = new ol.layer.Group({
+                        layers: [layer, layerNext, layerPrior]
+                    });
+                }
+
             } else if ( def.type === "wms" ) {
                 layer = createLayerWMS(def, options);
+                if(proj.id === 'geographic') {
+
+                    layerNext = createLayerWMS(def, options, 1);
+                    layerPrior = createLayerWMS(def, options, -1);
+                    layer = new ol.layer.Group({
+                        layers: [layer, layerNext, layerPrior]
+                    });
+                }
             } else {
                 throw new Error("Unknown layer type: " + def.type);
             }
-            var date = options.date || models.date.selected;
+            date = options.date || models.date.selected;
             layer.wv = {
                 id: def.id,
                 key: key,
@@ -554,23 +570,39 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
      *
      * @returns {object} OpenLayers WMTS layer
      */
-    var createLayerWMTS = function(def, options) {
-        var proj = models.proj.selected;
-        var source = config.sources[def.source];
+    var createLayerWMTS = function(def, options, day) {
+        var proj, source, matrixSet, matrixIds, extra,
+            date, extent, start;
+        proj = models.proj.selected;
+        source = config.sources[def.source];
+        extent = proj.maxExtent;
+        start = [proj.maxExtent[0], proj.maxExtent[3]];
         if ( !source ) {
             throw new Error(def.id + ": Invalid source: " + def.source);
         }
-        var matrixSet = source.matrixSets[def.matrixSet];
+        matrixSet = source.matrixSets[def.matrixSet];
         if ( !matrixSet ) {
             throw new Error(def.id + ": Undefined matrix set: " + def.matrixSet);
         }
-        var matrixIds = [];
+        matrixIds = [];
         _.each(matrixSet.resolutions, function(resolution, index) {
             matrixIds.push(index);
         });
-        var extra = "";
+        extra = "";
+        if(day) {
+            if(day === 1){
+                extent = [-250, -90, -180, 90];
+                start = [-540,90];
+            } else {
+                extent = [180, -90, 250, 90];
+                start = [180,90];
+            }
+        }
         if ( def.period === "daily" ) {
-            var date = options.date || models.date.selected;
+            date = options.date || models.date.selected;
+            if(day) {
+                date = wv.util.dateAdd(date, 'day', day);
+            }
             extra = "?TIME=" + wv.util.toISOStringDate(date);
         }
         var sourceOptions = {
@@ -580,7 +612,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
             format: def.format,
             matrixSet: matrixSet.id,
             tileGrid: new ol.tilegrid.WMTS({
-                origin: [proj.maxExtent[0], proj.maxExtent[3]],
+                origin: start,
                 resolutions: matrixSet.resolutions,
                 matrixIds: matrixIds,
                 tileSize: matrixSet.tileSize[0],
@@ -593,8 +625,8 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
             sourceOptions.tileClass = ol.wv.LookupImageTile.factory(lookup);
         }
         var layer = new ol.layer.Tile({
-            extent: proj.maxExtent,
-            source: new ol.source.WMTS(sourceOptions)
+            extent: extent,
+            source: new ol.source.WMTS(sourceOptions),
         });
         return layer;
     };
@@ -612,14 +644,31 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
      *
      * @returns {object} OpenLayers WMS layer
      */
-    var createLayerWMS = function(def, options) {
-        var proj = models.proj.selected;
-        var source = config.sources[def.source];
+    var createLayerWMS = function(def, options, day) {
+        var proj, source, matrixSet, matrixIds, extra, transparent,
+            date, extent, start, bbox, res;
+        proj = models.proj.selected;
+        source = config.sources[def.source];
+        extent = proj.maxExtent;
+        start = [proj.maxExtent[0], proj.maxExtent[3]];
+        res = proj.resolutions;
         if ( !source )
             throw new Error(def.id + ": Invalid source: " + def.source);
 
-        var transparent = ( def.format === "image/png" );
-        var parameters = {
+        transparent = ( def.format === "image/png" );
+        if(proj.id === "geographic") {
+            res = [0.28125, 0.140625, 0.0703125, 0.03515625, 0.017578125, 0.0087890625, 0.00439453125, 0.002197265625, 0.0010986328125, 0.00054931640625, 0.00027465820313];   
+        }
+        if(day) {
+            if(day === 1){
+                extent = [-250, -90, -180, 90];
+                start = [-540,90];
+            } else {
+                extent = [180, -90, 250, 90];
+                start = [180,90];
+            }
+        }
+        parameters = {
             LAYERS: def.layer || def.id,
             FORMAT: def.format,
             TRANSPARENT: transparent,
@@ -628,21 +677,28 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
         if ( def.styles )
             parameters.STYLES = def.styles;
 
-        var extra = "";
+        extra = "";
+
         if ( def.period === "daily" ) {
-            var date = options.date || models.date.selected;
+            date = options.date || models.date.selected;
+            if(day) {
+                date = wv.util.dateAdd(date, 'day', day);
+            }
             extra = "?TIME=" + wv.util.toISOStringDate(date);
         }
         var layer = new ol.layer.Tile({
-            extent: proj.maxExtent,
+            extent: extent,
             source: new ol.source.TileWMS({
                 url: source.url + extra,
+                wrapX: true,
+                style: 'default',
                 crossOrigin: "anonymous",
                 params: parameters,
                 tileGrid: new ol.tilegrid.TileGrid({
-                    origin: [proj.maxExtent[0], proj.maxExtent[3]],
-                    resolutions: proj.resolutions
+                    origin: start,
+                    resolutions: res
                 })
+
             })
         });
         return layer;
@@ -769,7 +825,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
             view: new ol.View({
                 maxResolution: proj.resolutions[0],
                 projection: ol.proj.get(proj.crs),
-                extent: proj.maxExtent,
+                extent: proj.id === "geographic" ? [-250, -90, 250, 90] : proj.maxExtent,
                 center: proj.startCenter,
                 rotation: proj.id === "geographic" ? 0.0 : models.map.rotation,
                 zoom: proj.startZoom,
