@@ -1,4 +1,17 @@
 /*
+ * NASA Worldview
+ *
+ * This code was originally developed at NASA/Goddard Space Flight Center for
+ * the Earth Science Data and Information System (ESDIS) project.
+ *
+ * Copyright (C) 2013 - 2014 United States Government as represented by the
+ * Administrator of the National Aeronautics and Space Administration.
+ * All Rights Reserved.
+ */
+var wv = wv || {};
+wv.map = wv.map || {};
+
+/*
  * @Class
  */
 wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache) {
@@ -27,7 +40,7 @@ wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache) {
             _.merge(def, def.projections[proj.id]);
             if ( def.type === "wmts" ) {
                 layer = createLayerWMTS(def, options);
-                if(proj.id === 'geographic') {
+                if(proj.id === 'geographic' && def.wraps === true) {
                     layerNext = createLayerWMTS(def, options, 1);
                     layerPrior = createLayerWMTS(def, options, -1);
                     layer = new ol.layer.Group({
@@ -37,7 +50,7 @@ wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache) {
 
             } else if ( def.type === "wms" ) {
                 layer = createLayerWMS(def, options);
-                if(proj.id === 'geographic') {
+                if(proj.id === 'geographic' && def.wraps === true) {
 
                     layerNext = createLayerWMS(def, options, 1);
                     layerPrior = createLayerWMS(def, options, -1);
