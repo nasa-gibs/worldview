@@ -261,9 +261,11 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
         // the satellite imagery is not yet available for "today", this
         // functionality may do more harm than good
         eventDate = wv.util.parseTimestampUTC(eventItem.date);
+
         var eventDateISOString = wv.util.toISOStringDate(eventDate);
         var todayDateISOString = wv.util.toISOStringDate(wv.util.today());
-        var eventCategoryName = model.getEventCategoryName(index, dateIndex);
+        var eventCategoryName = event.categories[0].title || null; 
+
         if ((eventDateISOString !== todayDateISOString) &&
             ((eventCategoryName !== null) && (eventCategoryName == "Wildfires"))) {
             var eventDatePlusOne =

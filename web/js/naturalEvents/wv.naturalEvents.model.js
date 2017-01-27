@@ -119,20 +119,6 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
         querySources();
     };
 
-    // Retrieve event category name, if possible;  otherwise returns null
-    var getEventCategoryName = function() {
-        var eventCategoryName = null;
-        if ((lastIndex != -1) && (self.data !== null) && (self.data[lastIndex] !== null)) {
-            var eventCategory = self.data[lastIndex].categories;
-            if (eventCategory.length > 0)
-            {
-                eventCategory = eventCategory[0];
-                eventCategoryName = eventCategory["#text"];
-            }
-        }
-        return eventCategoryName;
-    };
-
     init();
     return self;
 };
