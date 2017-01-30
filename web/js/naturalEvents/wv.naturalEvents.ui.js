@@ -20,6 +20,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
     var data;
     self.selector = "#wv-events";
     self.id = "wv-events";
+    var map = ui.map.selected;
 
     //Local storage may not be a good idea because they'll never see it again
     //wv.util.localStorage('notified') || false;
@@ -30,7 +31,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
     var $notification;
 
     var init = function() {
-        //model.events.on("select", onSelect);
+        model.events.on("select", onSelect);
         model.events.on( "queryResults", onQueryResults );
         ui.sidebar.events.on("select", function(tab) {
             if ( tab === "events" ) {
@@ -42,6 +43,9 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
         });
         $(window).resize(resize);
         render();
+
+    };
+    var onSelect = function(){
 
     };
     var onQueryResults = function(){
@@ -81,31 +85,11 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
         var $messageWrapper = $('<div></div>')
             .click( function(e){
                 showNotificationHelp();
-                //showLargeNotification();
             });
-
-        var $altMessage = $('<span></span>')
-            .text("Why can’t I see an event?")
-            .addClass('notify-message-alt').hide();
-
-        var $longmessage = 'There are a variety of factors as to why you may not be seeing an event in Worldview at the moment.' +
-            '<ul>' +
-            '<li>Satellite overpass may have occurred before the event. Check out subsequent days or try a different satellite/sensor which has a different overpass time.</li>' +
-            '<li>Cloud cover may obscure the event.</li>' +
-            '<li>Some events don’t appear on the day that they are reported, you may have to wait a day or two for an event to become visible. Try and scroll through the days to see an event’s progression and/or change the satellite/sensor. NOTE: Wildfire events are currently set to automatically display the next day, as fire events often do not appear in the satellite imagery on the day they are reported.</li>' +
-            '<li>The resolution of the imagery may be too coarse to see an event.</li>' +
-            '<li>There are normal swath data gaps in some of the imagery layers due to way the satellite orbits the Earth, and an event may have occurred in the data gap.</li>' +
-            '</ul>' +
-            'This is currently an experimental feature and we are working closely with the provider of these events, the <a href="http://eonet.sci.gsfc.nasa.gov/" target="_blank">Earth Observatory Natural Event Tracker</a>, to refine this listing to only show events that are visible with our satellite imagery.';
-
-        var $longWrapper = $('<div></div>')
-            .addClass('notify-message-body')
-            .hide();
 
         $messageWrapper
             .append($icon)
-            .append($message)
-            .append($altMessage);
+            .append($message);
 
         var $close = $('<i></i>')
             .addClass('fa fa-times fa-1x')
@@ -116,7 +100,6 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
         $notification = $('<div></div>')
             .append( $close )
             .append( $messageWrapper )
-            .append( $longWrapper )
             .dialog({
                 autoOpen: false,
                 resizable: false,
@@ -139,12 +122,6 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
             });
         //**************************************
 
-    };
-    var showLargeNotification = function(){
-        $('.notify-message').hide();
-        $('.notify-message-alt').show();
-
-        $('.notify-message-long').show();
     };
     var showNotificationHelp = function(){
         var headerMsg = "<h3 class='wv-data-unavailable-header'>Why can’t I see an event?</h3>";
@@ -275,82 +252,23 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
         else {
             models.date.select(eventDate);
         }
+
+        // If an event is a Wildfire or Volcano, zoom in more
+        if ((eventCategoryName !== null) && (eventCategoryName == "Wildfires")) {
+            zoomLevel = 8;
+        } else if (eventCategoryName == "Volcanoes") {
+            zoomLevel = 6;
+        }
+        var callback = function(){
+            wv.naturalEvents.map(eventItem.coordinates, map);
+        };
         if ( eventItem.type === "Point" ) {
-            goTo(method, eventItem.coordinates);
+            ui.map.animate.move(method, eventItem.coordinates, zoomLevel, callback);
         } else if ( eventItem.type === "Polygon" && eventItem.coordinates[0].length == 5 ) {
             c = eventItem.coordinates[0];
             var extent = [c[0][0], c[0][1], c[2][0], c[2][1]];
-            goTo(method, extent);
+            ui.map.animate.move(method, extent, zoomLevel, callback);
         }
-    };
-
-    var goTo = function(method, location) {
-
-        var map = ui.map.selected;
-        var zoom = map.getView().getZoom();//3;
-        var duration = ( method == "fly" ) ? 5000 : 1000;
-        var wait = ( method == "fly" ) ? 1000 : 1;
-        var start = +new Date();
-        wv.naturalEvents.map(location, map, config);
-        console.log(location);
-        var pan = ol.animation.pan({
-            duration: duration,
-            source: map.getView().getCenter(),
-            start: start
-        });
-
-        // use this to set proper zoom/res
-
-        // For bounce, if zoom is too high, it bounces "in" instead of "out";
-        // force it to zoom out by starting at zoom 4
-        var bounceZoom = (zoom >= 8) ? 4 : zoom-2;
-        if (bounceZoom < 0) { bounceZoom = 0; }
-
-        var bounce = ol.animation.bounce({
-            duration: duration,
-            resolution: models.proj.selected.resolutions[bounceZoom],
-            start: start
-        });
-        var zoomTo = ol.animation.zoom({
-            duration: duration,
-            resolution: models.proj.selected.resolutions[zoom],
-            start: start
-        });
-        //HAX
-        if(zoom < 4){
-            method = 'zoom';
-        }
-
-        setTimeout(function() {
-            if ( method === "fly" ) {
-                map.beforeRender(pan, bounce);
-            } else if ( method === 'zoom' ) {
-                map.beforeRender(pan, zoomTo);
-            } else {
-                map.beforeRender(pan);
-            }
-            if ( location.length == 2 ) {
-                map.getView()
-                    .setCenter(location);
-
-                // Retrieve event category name, if possible
-                var eventCategoryName = getEventCategoryName();
-
-                // If an event is a Wildfire or Volcano, zoom in more
-                if ((eventCategoryName !== null) && (eventCategoryName == "Wildfires")) {
-                  map.getView().setZoom(8);
-                } else if (eventCategoryName == "Volcanoes") {
-                  map.getView().setZoom(6);
-                } else {
-                  map.getView().setZoom(5);
-                }
-
-            } else {
-                map.getView().fit(location, map.getSize());
-                if(map.getView().getZoom() > 8)
-                    map.getView().setZoom(8);
-            }
-        }, wait);
     };
 
     var refreshEvent = function($content, event, index) {

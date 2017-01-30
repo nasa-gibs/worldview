@@ -12,7 +12,7 @@
 var wv = wv || {};
 wv.naturalEvents = wv.naturalEvents || {};
 
-wv.naturalEvents.map = wv.naturalEvents.map || function(location, map, config) {
+wv.naturalEvents.map = wv.naturalEvents.map || function(location, map) {
 
     var self = {};
 
