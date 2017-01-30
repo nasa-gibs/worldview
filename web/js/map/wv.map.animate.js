@@ -99,8 +99,7 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
         }, wait);
     };
 
-    
     init();
     return self;
 
-}
+};
