@@ -137,7 +137,8 @@ $(function() {
         var mapComponents = {
             Rotation: wv.map.rotate,
             Runningdata: wv.map.runningdata,
-            Layerbuilder: wv.map.layerbuilder
+            Layerbuilder: wv.map.layerbuilder,
+            Dateline: wv.map.datelinebuilder
         };
         ui.map = wv.map.ui(models, config, mapComponents);
         if ( config.features.animation ) {

@@ -25,8 +25,10 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
     var self = {};
     var rotation = new components.Rotation(self, models);
     var layerBuilder = components.Layerbuilder(models, config, cache);
+    var dateline = components.Dateline();
     var layerKey = layerBuilder.layerKey;
     var createLayer = layerBuilder.createLayer;
+
     //var dataRunner = new components.Runningdata(models);
     self.mapIsbeingDragged = false;
     var hiDPI = ol.has.DEVICE_PIXEL_RATIO > 1;
@@ -594,8 +596,11 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
      * @returns {object} OpenLayers Map Object
      */
     var createMap = function(proj) {
-        var id = "wv-map-" + proj.id;
-        var $map = $("<div></div>")
+        var id, $map, scaleMetric, scaleImperial, rotateInteraction,
+            map, mobileRotation, lineSvgs;
+
+        id = "wv-map-" + proj.id;
+        $map = $("<div></div>")
             .attr("id", id)
             .attr("data-proj", proj.id)
             .addClass("wv-map")
@@ -603,23 +608,24 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
         $(selector).append($map);
 
         //Create two specific controls
-        var scaleMetric = new ol.control.ScaleLine({
+        scaleMetric = new ol.control.ScaleLine({
             className: "wv-map-scale-metric",
             units: "metric"
         });
-        var scaleImperial = new ol.control.ScaleLine({
+        scaleImperial = new ol.control.ScaleLine({
             className: "wv-map-scale-imperial",
             units: "imperial"
         });
 
-        var rotateInteraction = new ol.interaction.DragRotate({
+        rotateInteraction = new ol.interaction.DragRotate({
             condition: ol.events.condition.altKeyOnly,
             duration: animationDuration
-        }), mobileRotation = new ol.interaction.PinchRotate({
+        });
+        mobileRotation = new ol.interaction.PinchRotate({
             duration: animationDuration
         });
 
-        var map = new ol.Map({
+        map = new ol.Map({
             view: new ol.View({
                 maxResolution: proj.resolutions[0],
                 projection: ol.proj.get(proj.crs),
@@ -669,6 +675,8 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
             rotation.init(map, proj.id);
             map.addInteraction(rotateInteraction);
             map.addInteraction(mobileRotation);
+        } else {
+            lineSvgs = dateline.init(self, map, models.date.selected);
         }
 
         // Set event listeners for changes on the map view (when rotated, zoomed, panned)
@@ -677,16 +685,16 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
         map.getView().on("change:rotation", _.throttle(rotation.updateRotation, 300));
         map.on('pointerdrag', function() {
             self.mapIsbeingDragged = true;
+            self.events.trigger('drag');
         });
         map.on('moveend', function(e) {
+            self.events.trigger('moveend');
             setTimeout(function(){
                 self.mapIsbeingDragged = false;
             }, 200);
         });
-
         return map;
     };
-
     /*
      * Creates map zoom buttons
      * 
