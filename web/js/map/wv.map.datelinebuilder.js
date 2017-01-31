@@ -24,16 +24,16 @@ wv.map.datelinebuilder = wv.map.ui || function(models, config) {
 
 	self.init = function(Parent, olMap, date) {
 		map = olMap;
-    	drawDatelines(map, date);
+        drawDatelines(map, date);
 
-    	Parent.events.on('moveend', function() {
+        Parent.events.on('moveend', function() {
             toggleLineOpactiy('0.7');
 			position(map);
 
-    	});
-    	Parent.events.on('drag', function() {
+        });
+        Parent.events.on('drag', function() {
 			position(map);
-    	});
+        });
         Parent.events.on('movestart', function() {
             toggleLineOpactiy('0');
         });
@@ -57,10 +57,10 @@ wv.map.datelinebuilder = wv.map.ui || function(models, config) {
         line2.setAttribute('opacity', opacity);
     };
     var drawText = function(date) {
-    	var leftText, rightText, svg;
+        var leftText, rightText, svg;
 
-    	svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    	leftText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        leftText = document.createElementNS("http://www.w3.org/2000/svg", "text");
         rightText = document.createElementNS("http://www.w3.org/2000/svg", "text");
         svg.setAttribute('style','transform: translate(-100px,0);');
         svg.setAttribute('class', 'dateline-text');
@@ -164,14 +164,14 @@ wv.map.datelinebuilder = wv.map.ui || function(models, config) {
 		} else {
 			bottomY = map.getPixelFromCoordinate([extent[2], -90])[1];
 		}
-    	height = Math.abs(bottomY - topY);
-    	halfHeight = Math.round(height / 2);
-    	halfStart = map.getCoordinateFromPixel([extent[2], halfHeight])[1];
+        height = Math.abs(bottomY - topY);
+        halfHeight = Math.round(height / 2);
+        halfStart = map.getCoordinateFromPixel([extent[2], halfHeight])[1];
 
-    	overlay1.setPosition([-180, startY]);
-    	overlay2.setPosition([180,  startY]);
+        overlay1.setPosition([-180, startY]);
+        overlay2.setPosition([180,  startY]);
 
-    	update(height);
+        update(height);
     };
     var drawOverlay = function(coordinate, el) {
         var overlay = new ol.Overlay({
