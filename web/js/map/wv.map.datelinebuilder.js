@@ -27,11 +27,16 @@ wv.map.datelinebuilder = wv.map.ui || function(models, config) {
     	drawDatelines(map, date);
 
     	Parent.events.on('moveend', function() {
+            toggleLineOpactiy('0.7');
 			position(map);
+
     	});
     	Parent.events.on('drag', function() {
 			position(map);
     	});
+        Parent.events.on('movestart', function() {
+            toggleLineOpactiy('0');
+        });
     };
 
     var drawLines = function(classes, map) {
@@ -46,6 +51,10 @@ wv.map.datelinebuilder = wv.map.ui || function(models, config) {
         svg.setAttribute('class', classes);
 
         return [svg, line];
+    };
+    var toggleLineOpactiy = function(opacity) {
+        line1.setAttribute('opacity', opacity);
+        line2.setAttribute('opacity', opacity);
     };
     var drawText = function(date) {
     	var leftText, rightText, svg;
@@ -74,7 +83,7 @@ wv.map.datelinebuilder = wv.map.ui || function(models, config) {
         svgEl.setAttribute('y1', '0');
         svgEl.setAttribute('y2', '0');
         svgEl.setAttribute('stroke-width', '3');
-        svgEl.setAttribute('stroke-dasharray', '10, 5');
+        svgEl.setAttribute('stroke-dasharray', '5, 5');
         svgEl.setAttribute('stroke', 'white');
         svgEl.setAttribute('opacity', '0.7');
     };
@@ -83,7 +92,7 @@ wv.map.datelinebuilder = wv.map.ui || function(models, config) {
         svgEl.setAttribute('x', x);
         svgEl.setAttribute('fill', 'white');
         svgEl.setAttribute('stroke', 'black');
-        svgEl.setAttribute('stroke-width', '0.5');
+        svgEl.setAttribute('stroke-width', '0.75');
     };
     var drawDatelines = function(map, date) {
         var $obj1, $obj2, viewport, defaultCoord,  textSvg1, textSvg2,
@@ -124,7 +133,7 @@ wv.map.datelinebuilder = wv.map.ui || function(models, config) {
             overlay.setPosition([lineX, coords[1]]);
 		});
         lineSVG.addEventListener("mouseout", function( event ) {
-            line.setAttribute('stroke-dasharray', '10, 5');
+            line.setAttribute('stroke-dasharray', '5, 5');
             line.setAttribute('opacity', '0.7');
             textSVG.setAttribute('class', 'dateline-text hidden');
         });
@@ -166,7 +175,8 @@ wv.map.datelinebuilder = wv.map.ui || function(models, config) {
     };
     var drawOverlay = function(coordinate, el) {
         var overlay = new ol.Overlay({
-            element: el
+            element: el,
+            stopEvent: false
         });
         overlay.setPosition(coordinate);
         return overlay;

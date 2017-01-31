@@ -765,7 +765,10 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
             }
         };
 
-        map.getView().on("change:resolution", onZoomChange);
+        map.getView().on("change:resolution", function () {
+            onZoomChange();
+            self.events.trigger('movestart');
+        });
         onZoomChange();
     };
 
