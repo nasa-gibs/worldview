@@ -79,7 +79,7 @@ opposite effect and can break certain queries.
 which isn't currently handled. Some products may populate this field with
 `UNSPECIFIED`
 * `collection`: Set to `true` when using the `CollectionList` handler for
-when no granules exst.
+when no granules exist.
 
 If two queries need to be executed to obtain NRT and non-NRT products when
 using the `MODISMix` handler, the query is specified in the following manner:
@@ -139,7 +139,7 @@ Not used at the moment.
 ##### DividePolygon
 
 For polygons that cross the anti-meridian, normalize and create a mutlipolygon
-with a polygon on each side. Uses code provided by the Earthdata Search Client.
+with a polygon on each side. Uses code provided by the Earthdata Search client.
 
 ##### ExtentFilter
 
@@ -228,7 +228,7 @@ Add a field to the granule result with the name of the product.
 Mark granules as requring URS access depending on the following `urs`
 configuration parameters.
 
-*FIXME*: Code an almost copy-and-paste from TagNRT, maybe consoldate this?
+*FIXME*: Code an almost copy-and-paste from TagNRT, maybe consolidate this?
 
 * `by`: Determine if this requires URS by `value`, `regex`, or `constant`
 * `field`: The field value to check against
