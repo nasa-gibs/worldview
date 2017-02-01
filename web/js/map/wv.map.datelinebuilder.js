@@ -37,6 +37,12 @@ wv.map.datelinebuilder = wv.map.ui || function(models, config) {
         Parent.events.on('movestart', function() {
             toggleLineOpactiy('0');
         });
+        Parent.events.on('selecting', function() {
+            toggleLineOpactiy(0);
+        });
+        Parent.events.on('selectiondone', function() {
+            toggleLineOpactiy(0.5);
+        });
     };
 
     var drawLines = function(classes, map) {

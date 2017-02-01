@@ -14,8 +14,14 @@ wv.map = wv.map || {};
 /*
  * @Class
  */
-wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache) {
+wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache, Parent) {
 	var self = {};
+    var map;
+    self.init = function(Parent) {
+        self.extentLayers = [];
+        Parent.events.on('selecting', hideWrap);
+        Parent.events.on('selectiondone', showWrap);
+    };
     /*
      * Create a new OpenLayers Layer
      *
@@ -30,7 +36,9 @@ wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache) {
      * @returns {object} OpenLayers layer
      */
     self.createLayer = function(def, options) {
-        var date, key, proj, layer, layerNext, layerPrior;
+        var date, key, proj, layer, layerNext, layerPrior, group;
+
+        group = null;
         options = options || {};
         key = self.layerKey(def, options);
         proj = models.proj.selected;
@@ -67,7 +75,7 @@ wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache) {
                 key: key,
                 date: wv.util.toISOStringDate(date),
                 proj: proj.id,
-                def: def
+                def: def,
             };
             cache.setItem(key, layer);
             layer.setVisible(false);
@@ -249,5 +257,38 @@ wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache) {
         });
         return layer;
     };
+    var hideWrap = function() {
+        var layer;
+        var key;
+        var layers;
+
+        layers = models.layers.active;
+
+        for(var i = 0, len = layers.length; i < len; i++) {
+            layer = layers[i];
+            if(layer.wraps && layer.visible) {
+                key = self.layerKey(layer, {date: models.date.selected});
+                layer = cache.getItem(key);
+                layer.setExtent([-180, -90, 180, 90]);
+            }
+        }
+    };
+    var showWrap = function() {
+        var layer;
+        var layers;
+        var key;
+
+        layers = models.layers.active;
+        for(var i = 0, len = layers.length; i < len; i++) {
+
+            layer = layers[i];
+            if(layer.wraps && layer.visible) {
+                key = self.layerKey(layer, {date: models.date.selected});
+                layer = cache.getItem(key);
+                layer.setExtent([-250, -90, 250, 90]);
+            }
+        }
+    };
+    self.init(Parent);
     return self;
 };

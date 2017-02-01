@@ -24,10 +24,10 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
     var animationDuration = 250;
     var self = {};
     var rotation = new components.Rotation(self, models);
-    var layerBuilder = components.Layerbuilder(models, config, cache);
+    var layerBuilder;
     var dateline = components.Dateline();
-    var layerKey = layerBuilder.layerKey;
-    var createLayer = layerBuilder.createLayer;
+    var layerKey;
+    var createLayer;
 
     //var dataRunner = new components.Runningdata(models);
     self.mapIsbeingDragged = false;
@@ -37,6 +37,9 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
     self.proj = {}; // One map for each projection
     self.selected = null; // The map for the selected projection
     self.events = wv.util.events();
+    layerBuilder = self.layerBuilder = components.Layerbuilder(models, config, cache, self);
+    layerKey = layerBuilder.layerKey;
+    createLayer = layerBuilder.createLayer;
     /*
      * Sets up map listeners
      *
