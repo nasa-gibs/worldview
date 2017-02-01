@@ -46,7 +46,6 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
 
     self.layers = config.naturalEvents.layers;
     self.ignored = config.naturalEvents.skip || [];
-
     self.data = {};
 
     var init = function() {
@@ -54,11 +53,26 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
         //self.events.on( "select", onSelect );
         self.query();
     };
-    // TODO: Reuse permalinks when we have historical events
+
     var onQueryResults = function(){
         if ( self.data ) {
             querySuccessFlag = true;
-            
+
+            // prune the events of types we don't want
+            var pruned = [];
+            _.each( self.data.events, function( event ) {
+                // this is assuming there is ever only one category per event.
+                // may need to be updated if any events have multiple categories
+                if ( !self.ignored.includes( event.categories[0].title ) ) {
+                    // make a usuable css class from category name
+                    event.categories[0].css = event.categories[0].title
+                        .toLowerCase()
+                        .replace(' ', '-');
+                    pruned.push( event );
+                }
+            });
+            self.data.events = pruned;
+            // TODO: Reuse permalinks when we have historical events
             //models.link.register(self);
             //models.link.load(self);
         }
@@ -101,7 +115,7 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
         var url = self.apiURL + "/categories";
         $.getJSON(url, function(data) {
             self.data.types = data.categories;
-            self.events.trigger('queryResults');
+            //self.events.trigger('queryResults');
         });
     };
 
@@ -109,7 +123,7 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
         var url = self.apiURL + "/sources";
         $.getJSON(url, function(data) {
             self.data.sources = data.sources;
-            self.events.trigger('queryResults');
+            //self.events.trigger('queryResults');
         });
     };
 

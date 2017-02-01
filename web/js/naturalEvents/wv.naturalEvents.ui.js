@@ -195,7 +195,6 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
             eventItem = event.geometries[0];
         }
 
-
         category = "Default";
         categories = event.categories;
         if ( categories.constructor !== Array ) {
@@ -272,12 +271,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
     };
 
     var refreshEvent = function($content, event, index) {
-        if ((event.categories[0].title === 'Floods') ||
-            (event.categories[0].title === 'Earthquakes') ||
-            (event.categories[0].title === 'Drought') ||
-            (event.categories[0].title === 'Landslides')) {
-            return;
-        }
+
         var geoms = toArray(event.geometries);
         eventDate = wv.util.parseDateUTC(geoms[0].date);
 
@@ -292,6 +286,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
         var $item = $("<li></li>")
             .addClass("selectorItem")
             .addClass("item")
+            .addClass(event.categories[0].css)
             .attr("data-index", index);
         var $title = $("<h4></h4>")
             .addClass("title")
@@ -301,7 +296,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
             .html(event.description)
             .hide();
         var $mapMarker = $("<i></i>")
-            .addClass('fa fa-map-marker fa-2x');
+            .addClass('map-marker');
 
         var $dates = $("<ul></ul>").addClass("dates").hide();
         if ( event.geometries.length > 1 ) {
