@@ -28,6 +28,7 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
     var dateline = components.Dateline();
     var layerKey;
     var createLayer;
+    var precache = components.Precache(models, config, cache, self);
 
     //var dataRunner = new components.Runningdata(models);
     self.mapIsbeingDragged = false;
@@ -38,8 +39,10 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
     self.selected = null; // The map for the selected projection
     self.events = wv.util.events();
     layerBuilder = self.layerBuilder = components.Layerbuilder(models, config, cache, self);
-    layerKey = layerBuilder.layerKey;
-    createLayer = layerBuilder.createLayer;
+    layerKey = self.layerKey = layerBuilder.layerKey;
+    createLayer = self.createLayer =layerBuilder.createLayer;
+    self.promiseDay = precache.promiseDay;
+
     /*
      * Sets up map listeners
      *
@@ -369,9 +372,6 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
         });
         reloadLayers();
     };
-    self.getExtent = function(extent1, extent2) {
-        return ol.extent.getIntersection(extent1, extent2);
-    };
     /*
      * Loaded the layers that are needed for any one date.
      * Checks the cache to see if a layer has already 
@@ -385,88 +385,77 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
      *
      * @returns {object} Promise.all
      */
-    self.promiseDay = function(date) {
-        var tileSource;
-        var tileGrid;
-        var viewState;
-        var projection;
-        var currentZ;
-        var frameState;
-        var extent;
-        var pixelRatio;
-        var layers;
-        var map;
-        var promiseArray;
+    // self.promiseDay = function(date) {
+    //     var tileSource;
+    //     var tileGrid;
+    //     var viewState;
+    //     var projection;
+    //     var currentZ;
+    //     var frameState;
+    //     var extent;
+    //     var pixelRatio;
+    //     var layers;
+    //     var map;
+    //     var promiseArray;
 
-        layers = self.getActiveLayersWithData(date);
-        map = self.selected;
-        frameState = self.selected.frameState_;
-        pixelRatio = frameState.pixelRatio;
-        viewState = frameState.viewState;
-        projection = viewState.projection;
-        extent = self.getExtent(
-            models.proj.selected.maxExtent, //max
-            map.getView().calculateExtent(map.getSize()) //window view
-        );
-        promiseArray = layers.map(function(def){
-            var key;
-            var layer;
-            var renderer;
-            var i = 0;
+    //     layers = self.getActiveLayersWithData(date);
+    //     map = self.selected;
+    //     frameState = self.selected.frameState_;
+    //     pixelRatio = frameState.pixelRatio;
+    //     viewState = frameState.viewState;
+    //     projection = viewState.projection;
+    //     extent = self.getExtent(
+    //         models.proj.selected.maxExtent, //max
+    //         map.getView().calculateExtent(map.getSize()) //window view
+    //     );
+    //     promiseArray = layers.map(function(def){
+    //         var key;
+    //         var layer;
+    //         var renderer;
+    //         var i = 0;
 
-            i = 0;
-            key = layerKey(def, {date: date});
-            layer = cache.getItem(key);
-            if(layer) {
-                cache.removeItem(key);
-            }
-            layer = createLayer(def, {date: date});
-            return new Promise(function(resolve, reject){
+    //         i = 0;
+    //         key = layerKey(def, {date: date});
+    //         layer = cache.getItem(key);
+    //         if(layer) {
+    //             cache.removeItem(key);
+    //         }
+    //         layer = createLayer(def, {date: date});
+    //         return new Promise(function(resolve, reject){
 
-                renderer = new ol.renderer.canvas.TileLayer(layer);
-                tileSource = layer.getSource();
-                tileGrid = tileSource.getTileGridForProjection(projection);
-                currentZ = tileGrid.getZForResolution(viewState.resolution, renderer.zDirection);
-                tileGrid.forEachTileCoord(extent, currentZ, function(tileCoord) {
-                    tile = tileSource.getTile(tileCoord[0], tileCoord[1], tileCoord[2], pixelRatio, projection);
-                    tile.load();
-                    var loader = function(e) {
-                        if(e.type === 'tileloadend') {
-                            --i;
-                            if(i === 0) {
-                                resolve();
-                            }
-                        } else {
-                             reject(new Error('No response at this URL'));
-                            //resolve();// some gibs data is not accurate and rejecting this will break the animation if tile doesn't exist
-                        }
-                        this.un('tileloadend',loader); // remove event listeners from memory
-                        this.un('tileloaderror', loader);
-                    };
-                    tileSource.on('tileloadend',loader);
-                    tileSource.on('tileloaderror', loader);
-                    ++i;
-                });
+    //             renderer = new ol.renderer.canvas.TileLayer(layer);
+    //             tileSource = layer.getSource();
+    //             tileGrid = tileSource.getTileGridForProjection(projection);
+    //             currentZ = tileGrid.getZForResolution(viewState.resolution, renderer.zDirection);
+    //             tileGrid.forEachTileCoord(extent, currentZ, function(tileCoord) {
+    //                 tile = tileSource.getTile(tileCoord[0], tileCoord[1], tileCoord[2], pixelRatio, projection);
+    //                 tile.load();
+    //                 var loader = function(e) {
+    //                     if(e.type === 'tileloadend') {
+    //                         --i;
+    //                         if(i === 0) {
+    //                             resolve();
+    //                         }
+    //                     } else {
+    //                          reject(new Error('No response at this URL'));
+    //                         //resolve();// some gibs data is not accurate and rejecting this will break the animation if tile doesn't exist
+    //                     }
+    //                     this.un('tileloadend',loader); // remove event listeners from memory
+    //                     this.un('tileloaderror', loader);
+    //                 };
+    //                 tileSource.on('tileloadend',loader);
+    //                 tileSource.on('tileloaderror', loader);
+    //                 ++i;
+    //             });
 
-            });
-        });
-        return new Promise( function(resolve) {
-            Promise.all(promiseArray).then(function() {
-                resolve(date);
-            });
-        });
-    };
-    self.getActiveLayersWithData = function(date) {
-        var layers;
-        var arra = [];
-        layers = models.layers.get();
-        _.each(layers, function(layer) {
-            if(layer.visible && new Date(layer.startDate > date)) {
-                arra.push(layer);
-            }
-        });
-        return arra;
-    };
+    //         });
+    //     });
+    //     return new Promise( function(resolve) {
+    //         Promise.all(promiseArray).then(function() {
+    //             resolve(date);
+    //         });
+    //     });
+    // };
     self.getCustomLayerTimeout = function(layer) {
         if(models.palettes.isActive(layer.id)) {
             return 200;
