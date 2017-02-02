@@ -90,6 +90,7 @@
 #wv-animation-widget .wv-date-selector-widget input {
     height: inherit;
     text-align: center;
+    width: 100%;
 }
 #wv-animation-widget .wv-date-selector-widget .input-wrapper {
   z-index: 99;
@@ -238,7 +239,7 @@
   position: absolute;
   top: -1.8rem; }
 
-.input-range__label-container{
+.input-range__label-container {
   left: -50%;
   position: relative; }
   .input-range__label--max .input-range__label-container {
