@@ -44,10 +44,6 @@ wv.map.precachetile = wv.map.precachetile || function(models, config, cache, par
         frameState = parent.selected.frameState_;
         pixelRatio = frameState.pixelRatio;
         viewState = frameState.viewState;
-        // extent = getExtent(
-        //     projExtent, //max
-        //     map.getView().calculateExtent(map.getSize()) //window view
-        // );
         promiseArray = layers.map(function(def) {
             var key;
             var layer;
@@ -61,30 +57,12 @@ wv.map.precachetile = wv.map.precachetile || function(models, config, cache, par
                 cache.removeItem(key);
             }
             layer = parent.createLayer(def, {date: date});
-            return new Promise(function(resolve, reject){
-                var layers, layerPromiseArray;
-                layers = layer.values_.layers;
-                if(layer.values_.layers) {
-                    layers = layer.getLayers().getArray();
-                    layerPromiseArray = layers.map(function(layer) {
-                        extent = calculateExtent(layer.getExtent(), map.getView().calculateExtent(map.getSize()));
-                        return new Promise( function(resolve, reject) {
-                            promiseTileLayer(layer, resolve, reject, extent, viewState, pixelRatio);
-                        });
-                    });
-                    Promise.all(layerPromiseArray).then(function() {
-                        resolve(date);
-                    });
+            return promiseLayerGroup(layer, extent, viewState, pixelRatio, map)
 
-                } else {
-                    promiseTileLayer(layer, resolve, reject, extent, viewState, pixelRatio);
-                }
-
-            });
 
         });
         return new Promise( function(resolve) {
-            Promise.all(promiseArray).then(function() {
+            Promise.all(promiseArray).then(function(yo) {
                 resolve(date);
             });
         });
@@ -100,73 +78,79 @@ wv.map.precachetile = wv.map.precachetile || function(models, config, cache, par
         });
         return arra;
     };
-    var calculateExtent = function(extent, viewportExtent) {
 
-        
+    var calculateExtent = function(extent, viewportExtent) {
         if(extent[1] < -180) {
-            // extent = getExtent(extent, viewportExtent);
-            // console.log(extent)
+            extent = getExtent(viewportExtent, extent);
             extent[1] = extent[1] + 360;
             extent[3] = extent[3] + 360;
-            
         } else if(extent[1] > 180) {
-            //extent = getExtent(extent, viewportExtent);
+            extent = getExtent(viewportExtent, extent);
             extent[1] = extent[1] - 360;
             extent[3] = extent[3] - 360;
-            
         } else {
             extent = getExtent(extent, viewportExtent);
-
         }
-        //console.log(viewportExtent, extent)
-        return extent;
-    };
-    var getsmallestExtent = function(extent, viewportExtent) {
-        if(viewportExtent[0] > extent[0]) {
-            extent[0] = viewportExtent[0];
-        }
-        if(viewportExtent[1] > extent[1]) {
-            extent[1] = viewportExtent[0];
-        }
-        if(viewportExtent[2] > extent[2]) {
-            extent[2] = viewportExtent[2];
-        }
-        if(viewportExtent[3] > extent[3]) {
-            extent[3] = viewportExtent[3];
+        if(!isFinite(extent[0])) {
+            return null;
         }
         return extent;
     };
     var getExtent = function(extent1, extent2) {
         return ol.extent.getIntersection(extent1, extent2);
     };
-    var promiseTileLayer = function(layer, resolve, reject, extent, viewState, pixelRatio) {
+    var promiseLayerGroup = function(layer, extent, viewState, pixelRatio, map) {
+        return new Promise(function(resolve, reject){
+            var layers, layerPromiseArray;
+            layers = layer.values_.layers;
+            if(layer.values_.layers) {
+                layers = layer.getLayers().getArray();
+            } else {
+                layers = [layer];
+            }
+            layerPromiseArray = layers.map(function(layer) {
+                extent = calculateExtent(layer.getExtent(), map.getView().calculateExtent(map.getSize()));
+                return promiseTileLayer(layer, extent, viewState, pixelRatio);
+            });
+            Promise.all(layerPromiseArray).then(function(yo) {
+                resolve('reslove layer group');
+            });
+        });
+    }
+    var promiseTileLayer = function(layer, extent, viewState, pixelRatio) {
         var renderer, tileSource, currentZ, i, tileGrid, projection;
-        projection = viewState.projection
-        i = 0;
-        renderer = new ol.renderer.canvas.TileLayer(layer);
-        tileSource = layer.getSource();
-        tileGrid = tileSource.getTileGridForProjection(projection);
-        currentZ = tileGrid.getZForResolution(viewState.resolution, renderer.zDirection);
-        tileGrid.forEachTileCoord(extent, currentZ, function(tileCoord) {
-            var tile;
-            tile = tileSource.getTile(tileCoord[0], tileCoord[1], tileCoord[2], pixelRatio, projection);
-            tile.load();
-            var loader = function(e) {
-                if(e.type === 'tileloadend') {
-                    --i;
-                    if(i === 0) {
-                        resolve();
+
+        return new Promise( function(resolve, reject) {
+            if(!extent) {
+                resolve('reslove tile layer');
+            }
+            projection = viewState.projection
+            i = 0;
+            renderer = new ol.renderer.canvas.TileLayer(layer);
+            tileSource = layer.getSource();
+            tileGrid = tileSource.getTileGridForProjection(projection);
+            currentZ = tileGrid.getZForResolution(viewState.resolution, renderer.zDirection);
+            tileGrid.forEachTileCoord(extent, currentZ, function(tileCoord) {
+                var tile;
+                tile = tileSource.getTile(tileCoord[0], tileCoord[1], tileCoord[2], pixelRatio, projection);
+                tile.load();
+                var loader = function(e) {
+                    if(e.type === 'tileloadend') {
+                        --i;
+                        if(i === 0) {
+                            resolve();
+                        }
+                    } else {
+                         reject(new Error('No response at this URL'));
+                        //resolve();// some gibs data is not accurate and rejecting this will break the animation if tile doesn't exist
                     }
-                } else {
-                     reject(new Error('No response at this URL'));
-                    //resolve();// some gibs data is not accurate and rejecting this will break the animation if tile doesn't exist
-                }
-                this.un('tileloadend',loader); // remove event listeners from memory
-                this.un('tileloaderror', loader);
-            };
-            tileSource.on('tileloadend',loader);
-            tileSource.on('tileloaderror', loader);
-            ++i;
+                    this.un('tileloadend',loader); // remove event listeners from memory
+                    this.un('tileloaderror', loader);
+                };
+                tileSource.on('tileloadend',loader);
+                tileSource.on('tileloaderror', loader);
+                ++i;
+            });
         });
     };
     return self;
