@@ -20,85 +20,117 @@ wv.map = wv.map || {};
  */
 wv.map.datelinebuilder = wv.map.ui || function(models, config) {
 	var self = {};
-	var line1, line2, map, overlay1, overlay2, svg1, svg2;
+	var line1, line2, hiddenLine1, hiddenLine2, map, overlay1, overlay2, svg1, svg2, moving, lineBeingHovered;
 
 	self.init = function(Parent, olMap, date) {
 		map = olMap;
         drawDatelines(map, date);
 
         Parent.events.on('moveend', function() {
-            toggleLineOpactiy('0.5');
+            if(lineBeingHovered) {
+                toggleLineOpactiy(lineBeingHovered, '0.5');
+            }
 			position(map);
-
         });
         Parent.events.on('drag', function() {
 			position(map);
         });
         Parent.events.on('movestart', function() {
-            toggleLineOpactiy('0');
-        });
-        Parent.events.on('selecting', function() {
-            toggleLineOpactiy(0);
-        });
-        Parent.events.on('selectiondone', function() {
-            toggleLineOpactiy(0.5);
+            if(lineBeingHovered) {
+                toggleLineOpactiy(lineBeingHovered, '0');
+            }
         });
     };
 
     var drawLines = function(classes, map) {
-        var svg, line;
+        var svg, line, hiddenLine;
         svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         line = document.createElementNS("http://www.w3.org/2000/svg","line");
-        svg.setAttribute('width', '8');
+        hiddenLine = document.createElementNS("http://www.w3.org/2000/svg","line");
+        svg.setAttribute('width', '10');
+        svg.setAttribute('style', 'padding: 0 40px 0 40px; transform: translateX(-43px);');
 
-        setLineDefaults(line);
-
+        setLineDefaults(line, 6);
+        setHiddenLineDefaults(hiddenLine, 6);
         svg.appendChild(line);
+        svg.appendChild(hiddenLine);
         svg.setAttribute('class', classes);
 
-        return [svg, line];
+        return [svg, line, hiddenLine];
     };
-    var toggleLineOpactiy = function(opacity) {
-        line1.setAttribute('opacity', opacity);
-        line2.setAttribute('opacity', opacity);
+    var toggleLineOpactiy = function(svgEL, opacity) {
+        svgEL.setAttribute('opacity', opacity);
     };
     var drawText = function(date) {
-        var leftText, rightText, svg;
+        var leftText, rightText, svg, rightBG, leftBG, x1, x2, textWidth, textHeight, recRadius;
+
+        x1 = 45;
+        x2 = 155;
+        textWidth = 80;
+        textHeight = 20;
+        recRadius = 3;
 
         svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         leftText = document.createElementNS("http://www.w3.org/2000/svg", "text");
         rightText = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        svg.setAttribute('style','transform: translate(-100px,0);');
+        rightBG = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        leftBG = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+
+        rightBG.setAttribute('fill','rgba(40,40,40,0.5)');
+        leftBG.setAttribute('fill','rgba(40,40,40,0.5)');
+        rightBG.setAttribute('width', textWidth);
+        leftBG.setAttribute('width', textWidth);
+        rightBG.setAttribute('height', textHeight);
+        leftBG.setAttribute('height', textHeight);
+        rightBG.setAttribute('x', x2);
+        leftBG.setAttribute('x', x1);
+        rightBG.setAttribute('rx', recRadius);
+        leftBG.setAttribute('ry', recRadius);
+
+        svg.setAttribute('style','transform: translate(-140px,0);');
         svg.setAttribute('class', 'dateline-text');
-        svg.setAttribute('width', '200');
+        svg.setAttribute('width', '300');
         svg.setAttribute('class', 'dateline-text hidden');
-        leftText.append(document.createTextNode(wv.util.toISOStringDate(wv.util.dateAdd(date, 'day', 1))));
-        rightText.append(document.createTextNode(wv.util.toISOStringDate(date)));
+        svg.appendChild(leftBG);
+        svg.appendChild(rightBG);
+        leftText.appendChild(document.createTextNode(wv.util.toISOStringDate(wv.util.dateAdd(date, 'day', 1))));
+        rightText.appendChild(document.createTextNode(wv.util.toISOStringDate(date)));
 
-        setTextDefaults(rightText, 115);
-        setTextDefaults(leftText, 15);
+        setTextDefaults(rightText, x2 + 3);
+        setTextDefaults(leftText, x1 + 3);
 
-		svg.appendChild(rightText);
-		svg.appendChild(leftText);
+        svg.appendChild(rightText);
+        svg.appendChild(leftText);
 
-		return svg;
+        return svg;
     };
-    var setLineDefaults = function(svgEl) {
-        svgEl.setAttribute('x1', '0');
-        svgEl.setAttribute('x2', '0');
+    var setLineDefaults = function(svgEl, strokeWidth) {
+        var offset = strokeWidth / 2;
+        svgEl.setAttribute('x1', offset);
+        svgEl.setAttribute('x2', offset);
         svgEl.setAttribute('y1', '0');
         svgEl.setAttribute('y2', '0');
-        svgEl.setAttribute('stroke-width', '5');
+        svgEl.setAttribute('opacity', '0');
+        svgEl.setAttribute('stroke-width', strokeWidth);
         svgEl.setAttribute('stroke-dasharray', '10, 5');
         svgEl.setAttribute('stroke', 'white');
-        svgEl.setAttribute('opacity', '0.5');
+    };
+    var setHiddenLineDefaults = function(svgEl, strokeWidth) {
+        var offset = strokeWidth / 2;
+        svgEl.setAttribute('x1', offset);
+        svgEl.setAttribute('x2', offset);
+        svgEl.setAttribute('y1', '0');
+        svgEl.setAttribute('y2', '0');
+        svgEl.setAttribute('opacity', '0');
+        svgEl.setAttribute('stroke-width', strokeWidth);
+        svgEl.setAttribute('stroke', 'white');
+
     };
     var setTextDefaults = function(svgEl, x) {
-        svgEl.setAttribute('y', 10);
+        svgEl.setAttribute('y', 14);
         svgEl.setAttribute('x', x);
         svgEl.setAttribute('fill', 'white');
-        svgEl.setAttribute('stroke', 'black');
-        svgEl.setAttribute('stroke-width', '0.75');
+        svgEl.setAttribute('opacity', '0.7');
     };
     var drawDatelines = function(map, date) {
         var $obj1, $obj2, viewport, defaultCoord,  textSvg1, textSvg2,
@@ -111,6 +143,8 @@ wv.map.datelinebuilder = wv.map.ui || function(models, config) {
         line2 = obj2[1];
         svg1 = obj1[0];
         svg2 = obj2[0];
+        hiddenLine1 = obj1[2];
+        hiddenLine2 = obj2[2];
         textSvg1 = drawText(date);
         textSvg2 = drawText(wv.util.dateAdd(date, 'day', -1));
         textOverlay1 = drawOverlay(defaultCoord, textSvg1);
@@ -118,34 +152,37 @@ wv.map.datelinebuilder = wv.map.ui || function(models, config) {
         overlay1 = drawOverlay(defaultCoord, obj1[0]);
         overlay2 = drawOverlay(defaultCoord, obj2[0]);
 
-
         map.addOverlay(overlay1);
         map.addOverlay(overlay2);
         map.addOverlay(textOverlay1);
         map.addOverlay(textOverlay2);
 
-        setListeners(svg1, textSvg1, textOverlay1, -180);
-        setListeners(svg2, textSvg2, textOverlay2, 180);
+        setListeners(svg1, textSvg1, textOverlay1, -180, hiddenLine1);
+        setListeners(svg2, textSvg2, textOverlay2, 180, hiddenLine2);
     };
-    var setListeners = function(lineSVG, textSVG, overlay, lineX) {
+    var setListeners = function(lineSVG, textSVG, overlay, lineX, hidden) {
         var line = lineSVG.childNodes[0];
         var pixels, coords;
         lineSVG.addEventListener("mouseover", function(e) {
             pixels =  [e.pageX,e.pageY];
             coords = map.getCoordinateFromPixel(pixels);
-            line.setAttribute('stroke-dasharray', 'none');
-            line.setAttribute('opacity', '1');
-            textSVG.setAttribute('class', 'dateline-text');
+            line.setAttribute('opacity', '0.5');
             overlay.setPosition([lineX, coords[1]]);
-		});
+            lineBeingHovered = line;
+        });
         lineSVG.addEventListener("mousemove", function(e) {
             pixels =  [e.pageX,e.pageY];
             coords = map.getCoordinateFromPixel(pixels);
             overlay.setPosition([lineX, coords[1]]);
         });
         lineSVG.addEventListener("mouseout", function( event ) {
-            line.setAttribute('stroke-dasharray', '5, 5');
-            line.setAttribute('opacity', '0.5');
+            line.setAttribute('opacity', '0');
+            lineBeingHovered = false;
+        });
+        hidden.addEventListener("mouseover", function(e) {
+            textSVG.setAttribute('class', 'dateline-text');
+        });
+        hidden.addEventListener("mouseout", function(e) {
             textSVG.setAttribute('class', 'dateline-text hidden');
         });
     };
@@ -175,7 +212,7 @@ wv.map.datelinebuilder = wv.map.ui || function(models, config) {
 		} else {
 			bottomY = map.getPixelFromCoordinate([extent[2], -90])[1];
 		}
-        height = Math.abs(bottomY - topY);
+        height = Math.round(Math.abs(bottomY - topY));
         halfHeight = Math.round(height / 2);
         halfStart = map.getCoordinateFromPixel([extent[2], halfHeight])[1];
 
@@ -192,11 +229,13 @@ wv.map.datelinebuilder = wv.map.ui || function(models, config) {
         overlay.setPosition(coordinate);
         return overlay;
     };
-	var update = function(height) {
-		line1.setAttribute('y2', height);
-		line2.setAttribute('y2', height);
-		svg1.setAttribute('height', height);
-		svg2.setAttribute('height', height);
+    var update = function(height) {
+        line1.setAttribute('y2', height);
+        line2.setAttribute('y2', height);
+        hiddenLine1.setAttribute('y2', height);
+        hiddenLine2.setAttribute('y2', height);
+        svg1.setAttribute('height', height);
+        svg2.setAttribute('height', height);
     };
     return self;
 };

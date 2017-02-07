@@ -57,9 +57,7 @@ wv.map.precachetile = wv.map.precachetile || function(models, config, cache, par
                 cache.removeItem(key);
             }
             layer = parent.createLayer(def, {date: date});
-            return promiseLayerGroup(layer, extent, viewState, pixelRatio, map)
-
-
+            return promiseLayerGroup(layer, extent, viewState, pixelRatio, map);
         });
         return new Promise( function(resolve) {
             Promise.all(promiseArray).then(function(yo) {
@@ -116,7 +114,7 @@ wv.map.precachetile = wv.map.precachetile || function(models, config, cache, par
                 resolve('reslove layer group');
             });
         });
-    }
+    };
     var promiseTileLayer = function(layer, extent, viewState, pixelRatio) {
         var renderer, tileSource, currentZ, i, tileGrid, projection;
 
@@ -124,7 +122,7 @@ wv.map.precachetile = wv.map.precachetile || function(models, config, cache, par
             if(!extent) {
                 resolve('reslove tile layer');
             }
-            projection = viewState.projection
+            projection = viewState.projection;
             i = 0;
             renderer = new ol.renderer.canvas.TileLayer(layer);
             tileSource = layer.getSource();
