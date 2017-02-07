@@ -78,6 +78,7 @@
         "web/js/map/wv.map.runningdata.js",
         "web/js/map/wv.map.rotate.js",
         "web/js/map/wv.map.layerbuilder.js",
+        "web/js/map/wv.map.precachetile.js",
         "web/js/map/wv.map.datelinebuilder.js",
         "web/js/map/wv.map.ui.js",
 
