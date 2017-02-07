@@ -52,13 +52,13 @@ wv.naturalEvents.map = wv.naturalEvents.map || function(models, maps, config) {
     var fillStyle = function(feature){
         return [new ol.style.Style({
             fill: new ol.style.Fill({
-                color: [255, 255, 255, .1]
+                color: [255, 255, 255, 0.1]
             }),
             stroke: new ol.style.Stroke({
-                color: [212, 85, 0, .8],
+                color: [212, 85, 0, 0.8],
                 width: 2
             })
-        })]
+        })];
     };
     var onSelect = function(){
 

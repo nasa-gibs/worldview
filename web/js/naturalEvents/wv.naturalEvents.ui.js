@@ -369,7 +369,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
         $("#wv-eventscontent .subtitle").hide();
         $("#wv-eventscontent .dates").hide();
         resize();
-    }
+    };
     var notify = function( text ) {
 
         var message = text || 'Events may not be visible at all times.  Read more...';
