@@ -12,15 +12,16 @@
 var wv = wv || {};
 wv.naturalEvents = wv.naturalEvents || {};
 
-wv.naturalEvents.map = wv.naturalEvents.map || function(location, map) {
+wv.naturalEvents.map = wv.naturalEvents.map || function(models, maps, config) {
 
     var self = {};
 
-    vectorLayer = null;
+    var vectorLayer = null;
+    var map = null;
+    self.current = null;
 
     var init = function() {
-        model.events
-            .on("select", onSelect);
+
     };
     var getButtonDimensions = function() {
         var zoom = map.getView().getZoom();
@@ -48,32 +49,73 @@ wv.naturalEvents.map = wv.naturalEvents.map || function(location, map) {
             })
         })];
     };
+    var fillStyle = function(feature){
+        return [new ol.style.Style({
+            fill: new ol.style.Fill({
+                color: [255, 255, 255, .1]
+            }),
+            stroke: new ol.style.Stroke({
+                color: [212, 85, 0, .8],
+                width: 2
+            })
+        })]
+    };
     var onSelect = function(){
 
+    };
+
+    self.draw = function(location) {
+
+        //loads current map
+        if (!map) {
+            map = maps.selected;
+        }
+
+        //remove any existing location first
         map.removeLayer(vectorLayer);
 
+        //Polygon or point?
+        var style, geoms;
+        if (location[0].length > 2){
+            geoms = new ol.geom.Polygon(location);
+            style = fillStyle;
+        }
+        else {
+            geoms = new ol.geom.Point(location);
+            style = buttonStyle;
+        }
         var iconFeature = new ol.Feature({
-            geometry: new ol.geom.Point(location),
+            geometry: geoms,
             name: 'NaturalEvent',
             population: 4000,
             rainfall: 500
         });
 
-        iconFeature.setStyle(buttonStyle);
+        iconFeature.setStyle(style);
 
         var vectorSource = new ol.source.Vector({
             features: [iconFeature],
             wrapX: false
         });
 
-        var vectorLayer = new ol.layer.Vector({
+        vectorLayer = new ol.layer.Vector({
             source: vectorSource
         });
+
         map.addLayer(vectorLayer);
+
+        //save last selected location
+        self.current = location;
 
     };
 
-    onSelect();
+    var dispose = function(){
+        map.removeLayer(vectorLayer);
+    };
+    //make dispose available to naturalEvents.ui
+    self.dispose = dispose;
+
+    init();
     return self;
 
 };

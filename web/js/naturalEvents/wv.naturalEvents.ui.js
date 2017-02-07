@@ -5,7 +5,7 @@
  * This code was originally developed at NASA/Goddard Space Flight Center for
  * the Earth Science Data and Information System (ESDIS) project.
  *
- * Copyright (C) 2013 - 2014 United States Government as represented by the
+ * Copyright (C) 2013 - 2017 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
@@ -18,9 +18,13 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
     var self = {};
     var model = models.naturalEvents;
     var data;
+    var zoomLevel;
     self.selector = "#wv-events";
     self.id = "wv-events";
+    var maps = ui.map;
     var map = ui.map.selected;
+    //load naturalEvents.map
+    var mapController = wv.naturalEvents.map(models, maps, config);
 
     //Local storage may not be a good idea because they'll never see it again
     //wv.util.localStorage('notified') || false;
@@ -36,9 +40,12 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
         ui.sidebar.events.on("select", function(tab) {
             if ( tab === "events" ) {
                 resize();
+                if (mapController.current) {
+                    mapController.draw(mapController.current);
+                }
             }
             else {
-
+                mapController.dispose();
             }
         });
         $(window).resize(resize);
@@ -149,7 +156,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
         });
 
         // Bind click event to each event
-        $(self.selector + "content li").click(function() {
+        $(self.selector + "content li").toggle( function() {
             var dataIndex = $(this).attr("data-index");
             showEvent(dataIndex);
             $(self.selector + "content li").removeClass('item-selected');
@@ -158,6 +165,11 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
                 ui.sidebar.collapseNow();
             }
             notify();
+        }, function(){
+            $(self.selector + "content li").removeClass('item-selected');
+            hideEvent();
+            mapController.dispose();
+            mapController.current = null;
         });
 
         //Bind click event to each date contained in events with dates
@@ -259,7 +271,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
             zoomLevel = 6;
         }
         var callback = function(){
-            wv.naturalEvents.map(eventItem.coordinates, map);
+            mapController.draw(eventItem.coordinates);
         };
         if ( eventItem.type === "Point" ) {
             ui.map.animate.move(method, eventItem.coordinates, zoomLevel, callback);
@@ -353,6 +365,11 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
         self.select(index, dateIndex);
 
     };
+    var hideEvent = function() {
+        $("#wv-eventscontent .subtitle").hide();
+        $("#wv-eventscontent .dates").hide();
+        resize();
+    }
     var notify = function( text ) {
 
         var message = text || 'Events may not be visible at all times.  Read more...';
