@@ -537,7 +537,7 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
             view: new ol.View({
                 maxResolution: proj.resolutions[0],
                 projection: ol.proj.get(proj.crs),
-                extent: proj.id === "geographic" ? [-250, -90, 250, 90] : proj.maxExtent,
+                extent: proj.maxExtent,
                 center: proj.startCenter,
                 rotation: proj.id === "geographic" ? 0.0 : models.map.rotation,
                 zoom: proj.startZoom,
