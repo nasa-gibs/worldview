@@ -164,7 +164,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                      .attr("title", "Show Layer")
                      .attr("data-action", "show")
                      .parent()
-                     .addClass("layer-hidden")
+                     .addClass("layer-hidden");
              } else {
                  $visibleButton
                      .attr("title", "Hide Layer")
