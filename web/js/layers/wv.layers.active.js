@@ -76,10 +76,10 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         });
 
         $(self.selector).undelegate(".close" ,'click');
-        $(self.selector).undelegate(".hideReg" ,'click');
+        $(self.selector).undelegate(".layer-enabled" ,'click');
 
         $(self.selector).delegate(".close" ,'click', removeLayer);
-        $(self.selector).delegate(".hideReg" ,'click', toggleVisibility);
+        $(self.selector).delegate(".layer-enabled" ,'click', toggleVisibility);
 
         $("#" + self.id + " ul.category").sortable({
             items: "li:not(.head)",
@@ -145,32 +145,37 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         $visibleButton.append($visibleImage);
         $layer.append($visibleButton);
 
-        if ( (models.date.selected < new Date(layer.startDate)) ||
-             (models.date.selected > new Date(layer.endDate)) ){
-            $layer.addClass('disabled');
-            $layer.addClass('layer-hidden');
+        if ( !model.available(layer.id) ){
+            $layer
+                .removeClass('layer-visible')
+                .addClass('disabled')
+                .addClass('layer-hidden');
             $visibleButton
                 .attr("title", "No data on selected date for this layer");
         }
 
         else {
-            $layer.append($("<div></div>")
-                          .addClass('zot')
-                          .append('<b>!</b>'));
-            if ( !layer.visible ) {
-                $visibleButton
-                    .attr("title", "Show Layer")
-                    .attr("data-action", "show")
-                    .parent()
-                    .addClass("layer-hidden");
-            } else {
-                $visibleButton
-                    .attr("title", "Hide Layer")
-                    .attr("data-action", "hide")
-                    .parent()
-                    .addClass("layer-visible");
-            }
+            $layer
+                .removeClass('disabled')
+                .addClass('layer-enabled')
+                .removeClass('layer-hidden');
+             if ( !layer.visible ) {
+                 $visibleButton
+                     .attr("title", "Show Layer")
+                     .attr("data-action", "show")
+                     .parent()
+                     .addClass("layer-hidden")
+             } else {
+                 $visibleButton
+                     .attr("title", "Hide Layer")
+                     .attr("data-action", "hide")
+                     .parent()
+                     .addClass("layer-visible");
+             }
         }
+        $layer.append($("<div></div>")
+                      .addClass('zot')
+                      .append('<b>!</b>'));
 
         checkZots($layer, layer);
 
@@ -428,7 +433,16 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         ui.map.selected.getView().on("change:resolution", onZoomChange);
         setTimeout(render, 1);
     };
-
+    var onZoomChange = function(layers) {
+        
+        _.each(groups, function(group) {
+            _.each(model.get({ group: group.id }), function(layer) {
+                var $layer = $('#products li.productsitem[data-layer="' +
+                               layer.id + '"]');
+                checkZots( $layer, layer );
+            });
+        });
+    };
     var onDateChange = function() {
         // Timeout prevents redraw artifacts
         // setTimeout(render, 1);
@@ -442,19 +456,21 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
                 var $visibleButton = $('#' + "hide" + encodeURIComponent(layer.id) );
 
-                if ( (models.date.selected < new Date(layer.startDate) ) ||
-                     (models.date.selected > new Date(layer.endDate) ) ){
-                    $layer.removeClass('layer-visible');
-                    $layer.addClass('disabled');
-                    $layer.addClass('layer-hidden');
+                if ( !model.available( layer.id ) ) {
+                    $layer
+                        .removeClass('layer-visible')
+                        .removeClass('layer-enabled')
+                        .addClass('disabled')
+                        .addClass('layer-hidden');
                     $visibleButton
                         .attr("title", "No data on selected date for this layer");
-                    $layer.undelegate(".hideReg" ,'click');
                 }
                 else {
-                    $layer.removeClass('disabled');
-                    $layer.removeClass('layer-hidden');
-                    $layer.delegate(".hideReg" ,'click', toggleVisibility);
+                    $layer
+                        .removeClass('layer-visible')
+                        .removeClass('disabled')
+                        .addClass('layer-enabled')
+                        .removeClass('layer-hidden');
                     if ( !layer.visible ) {
                         $visibleButton
                             .attr("title", "Show Layer")
@@ -469,6 +485,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                             .addClass("layer-visible");
                     }
                 }
+                checkZots($layer, layer);
             });
         });
     };
@@ -509,17 +526,6 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                 }
             }
         }
-    };
-
-    var onZoomChange = function(layers) {
-        
-        _.each(groups, function(group) {
-            _.each(model.get({ group: group.id }), function(layer) {
-                var $layer = $('#products li.productsitem[data-layer="' +
-                               layer.id + '"]');
-                checkZots( $layer, layer );
-            });
-        });
     };
 
     init();
