@@ -356,13 +356,12 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
 
     var showEvent = function(index, dateIndex) {
 
+        self.select(index, dateIndex);
         $("#wv-eventscontent .subtitle").hide();
         $("#wv-eventscontent .dates").hide();
         $("#wv-eventscontent [data-index='" + index + "'] .subtitle").show();
         $("#wv-eventscontent [data-index='" + index + "'] .dates").show();
         resize();
-
-        self.select(index, dateIndex);
 
     };
     var hideEvent = function() {

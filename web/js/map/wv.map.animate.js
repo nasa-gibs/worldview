@@ -20,6 +20,7 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
     var self = {};
 
     var map = ui.map.selected;
+    var lastLocation;
 
     var init = function(){
 
@@ -38,25 +39,30 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
      */
     self.move = function(method, location, zoomLevel, callback) {
 
+        var start = lastLocation || map.getView().getCenter();
+
+        //Determine zoom and pan levels depending on distance to new point
+        //var distance = ol.sphere.ESPG4326.haversineDistance(start, location);
+
         var currentZoom = map.getView().getZoom();
         var newZoom = zoomLevel || 5;
         
         var duration = ( method == "fly" ) ? 5000 : 1000;
         var wait = ( method == "fly" ) ? 1000 : 1;
 
-        var start = +new Date();
+        var startTime = +new Date();
 
         var pan = ol.animation.pan({
             duration: duration,
             source: map.getView().getCenter(),
-            start: start
+            start: startTime
         });
 
         // use this to set proper zoom/res
 
-        // For bounce, if zoom is too high, it bounces "in" instead of "out";
+        // For bounce, if zoom is too high, it bounces "in" insteade of "out";
         // force it to zoom out by starting at zoom 4
-        var bounceZoom = (currentZoom >= 8) ? 4 : currentZoom - 2;
+        var bounceZoom = (currentZoom >= 8) ? 4 : currentZoom - 3;
         if (bounceZoom < 0) {
             bounceZoom = 0;
         }
@@ -64,12 +70,12 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
         var bounce = ol.animation.bounce({
             duration: duration,
             resolution: models.proj.selected.resolutions[bounceZoom],
-            start: start
+            start: startTime
         });
         var zoomTo = ol.animation.zoom({
             duration: duration,
             resolution: models.proj.selected.resolutions[currentZoom],
-            start: start
+            start: startTime
         });
         //If the zoom level is far out enough then it should start with a 'zoom'
         if(currentZoom < 4) {
@@ -88,7 +94,7 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
                 map.getView()
                     .setCenter(location);
 
-                map.getView().setZoom(zoomLevel);
+                map.getView().setZoom(newZoom);
 
             } else {
                 map.getView().fit(location, map.getSize());
@@ -97,6 +103,8 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
             }
             callback();
         }, wait);
+
+        lastLocation = location;
     };
 
     init();
