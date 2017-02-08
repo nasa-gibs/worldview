@@ -716,9 +716,6 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
         map = map || self.selected;
         mapId = 'coords-' + proj.id;
         extent = proj.maxExtent;
-        if(proj.wrapExtent) {
-            extent = proj.wrapExtent;
-        }
 
         $mousePosition = $('<div></div>')
             .attr("id", mapId)
