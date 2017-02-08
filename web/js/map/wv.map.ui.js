@@ -706,6 +706,7 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
         var $coordWrapper;
         var coordinateFormat;
         var hoverThrottle;
+        var extent;
 
 
         // var timer = null;
@@ -714,6 +715,10 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
         $map = $("#" + map.getTarget());
         map = map || self.selected;
         mapId = 'coords-' + proj.id;
+        extent = proj.maxExtent;
+        if(proj.wrapExtent) {
+            extent = proj.wrapExtent;
+        }
 
         $mousePosition = $('<div></div>')
             .attr("id", mapId)
@@ -730,14 +735,15 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
          *
          * @returns {void}
          */
-        coordinateFormat = function(source, format) {
-            if ( !source ) {
-                return "";
-            }
-            var target = ol.proj.transform(source, proj.crs, "EPSG:4326");
-            var crs = ( models.proj.change ) ? models.proj.change.crs
-                : models.proj.selected.crs;
+        coordinateFormat = function(source, format, outsideExtent) {
 
+            var target, crs;
+            crs = ( models.proj.change ) ? models.proj.change.crs
+                : models.proj.selected.crs;
+            if(outsideExtent) {
+                return crs;
+            }
+            target = ol.proj.transform(source, proj.crs, "EPSG:4326");
             return wv.util.formatCoordinate(target, format) + " " + crs;
         };
 
@@ -791,18 +797,31 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
             var coords;
             var pixelValue;
             var pixels;
+            var outside;
+
             if($(e.relatedTarget).hasClass('map-coord') ||
                 $(e.relatedTarget).hasClass('coord-btn')) {
                  return;
             }
             pixels =  [e.pageX,e.pageY];
             coords = map.getCoordinateFromPixel(pixels);
+            if(!ol.extent.containsCoordinate(extent, coords)) {
+                outside = true;
+            }
+
+            if(Math.abs(coords[0]) > 180 ) {
+                if(coords[0] > 0) {
+                    coords[0] = coords[0] - 360;
+                } else {
+                    coords[0] = coords[0] + 360;
+                }
+            }
 
             pixelValue = [pixels[0] * pixelRatio, pixels[1] * pixelRatio];
             $('#' + mapId).show();
             $('#' + mapId + ' span.map-coord').each(function(){
                 var format = $(this).attr('data-format');
-                $(this).html(coordinateFormat(coords, format));
+                $(this).html(coordinateFormat(coords, format, outside));
             });
 
             // setting a limit on running-data retrievel
