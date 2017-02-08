@@ -74,8 +74,6 @@ wv.ui = (function(self) {
             width: width,
             minHeight: 1,
             height: "auto",
-            resizable: false,
-            draggable: false,
             show: {
                 effect: "fade",
                 duration: 400
@@ -83,8 +81,7 @@ wv.ui = (function(self) {
             hide: {
                 effect: "fade",
                 duration: 200
-            },
-            dialogClass: 'no-titlebar notify-alert'
+            }
         }).on('dialogclose', function() {
             $(this).off('dialogclose');
             if(callback) {
