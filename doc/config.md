@@ -172,7 +172,7 @@ To automatically fetch configuration information from the GetCapabilities docume
 - **from**: The URL to fetch the GetCapabilities document
 - **to**: Name of the temporary file used to store the GetCapabilities document.
 
-Now add an object to the *wv-optoins-wmts* object with the following properties:
+Now add an object to the *wv-options-wmts* object with the following properties:
 
 - **source**: The identifier of the source that corresponds to this endpoint.
 - **from**: The name of the temporary file used int he *wv-options-fetch* object.
