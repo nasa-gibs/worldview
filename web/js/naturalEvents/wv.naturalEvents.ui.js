@@ -308,7 +308,8 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
             .html(event.description)
             .hide();
         var $mapMarker = $("<i></i>")
-            .addClass('map-marker');
+            .addClass('map-marker')
+            .attr('title', event.categories[0].title);
 
         var $dates = $("<ul></ul>").addClass("dates").hide();
         if ( event.geometries.length > 1 ) {
