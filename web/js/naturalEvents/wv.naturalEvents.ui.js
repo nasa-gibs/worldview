@@ -60,7 +60,6 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
         //FIXME: this if check needs to be reworked
         if ( model.data ) {
             data = model.data.events;
-            console.log('refreshed');
             self.refresh();
         }
     };
