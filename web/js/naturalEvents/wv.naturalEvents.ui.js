@@ -46,6 +46,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
             }
             else {
                 mapController.dispose();
+                $notification.dialog('close');
             }
         });
         $(window).resize(resize);
@@ -156,7 +157,11 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
         });
 
         // Bind click event to each event
+        var $current;
         $(self.selector + "content li").toggle( function() {
+            if ($current) {
+                $current.click();
+            }
             var dataIndex = $(this).attr("data-index");
             showEvent(dataIndex);
             $(self.selector + "content li").removeClass('item-selected');
@@ -165,11 +170,13 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
                 ui.sidebar.collapseNow();
             }
             notify();
-        }, function(){
+            $current = $(this);
+        }, function() {
             $(self.selector + "content li").removeClass('item-selected');
             hideEvent();
             mapController.dispose();
             mapController.current = null;
+            $current = null;
         });
 
         //Bind click event to each date contained in events with dates
