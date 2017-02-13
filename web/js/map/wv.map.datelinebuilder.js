@@ -11,7 +11,7 @@
  * Licensed under the NASA Open Source Agreement, Version 1.3
  * http://opensource.gsfc.nasa.gov/nosa.php
  */
- /*eslint no-unused-vars: "error"*/
+ /* jshint undef: true, unused: true */
 var wv = wv || {};
 wv.map = wv.map || {};
 
@@ -20,174 +20,155 @@ wv.map = wv.map || {};
  */
 wv.map.datelinebuilder = wv.map.ui || function(models, config) {
 	var self = {};
-	var line1, line2, hiddenLine1, hiddenLine2, map, overlay1, overlay2, svg1, svg2, moving, lineBeingHovered;
+	var map, overlay1, overlay2, lineBeingHovered, textFactory, lineFactory, textOverlay1, textOverlay2,
+        lineLeft, lineRight, textLeft, textRight;
 
 	self.init = function(Parent, olMap, date) {
+        var height, y, dimensions;
 		map = olMap;
+        lineFactory = React.createFactory(WVC.DateLine);
+        textFactory = React.createFactory(WVC.LineText);
         drawDatelines(map, date);
 
         Parent.events.on('moveend', function() {
-            if(lineBeingHovered) {
-                toggleLineOpactiy(lineBeingHovered, '0.5');
-            }
-			position(map);
+            updateLineVisibility(true);
+			dimensions = position(map);
+            update(dimensions);
         });
         Parent.events.on('drag', function() {
-			position(map);
+            updateLineVisibility(false);
         });
         Parent.events.on('movestart', function() {
-            if(lineBeingHovered) {
-                toggleLineOpactiy(lineBeingHovered, '0');
-            }
+            updateLineVisibility(false);
         });
     };
 
-    var drawLines = function(classes, map) {
-        var svg, line, hiddenLine;
-        svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-        line = document.createElementNS("http://www.w3.org/2000/svg","line");
-        hiddenLine = document.createElementNS("http://www.w3.org/2000/svg","line");
-        svg.setAttribute('width', '10');
-        svg.setAttribute('style', 'padding: 0 40px 0 40px; transform: translateX(-43px);');
-
-        setLineDefaults(line, 6);
-        setHiddenLineDefaults(hiddenLine, 6);
-        svg.appendChild(line);
-        svg.appendChild(hiddenLine);
-        svg.setAttribute('class', classes);
-
-        return [svg, line, hiddenLine];
+    /*
+     * Add Props to React Compents that creates
+     *  a hoverable line SVG
+     *
+     * @method setLineDefaults
+     * @static
+     *
+     * @param {object} Factory - React component Factory
+     * @param {number} height - Lenght of line
+     * @param {number} lineX - x coord value
+     * @param {object} overlay - OL overlay
+     * @param {object} reactCase - Dom El in which to render component
+     * @param {object} tooltip - OL overlay that is associated with this widget
+     *
+     * @returns {object} React Component
+     */
+    var setLineDefaults = function(Factory, height, lineX, overlay, reactCase, tooltip) {
+        var props = {
+            height: height,
+            lineOver: onHover,
+            lineOut: onMouseOut,
+            lineX: lineX,
+            overlay: overlay,
+            tooltip: tooltip
+        };
+        return ReactDOM.render(initWidget(Factory, props), reactCase);
     };
-    var toggleLineOpactiy = function(svgEL, opacity) {
-        svgEL.setAttribute('opacity', opacity);
+
+    /*
+     * Add Props to React Compents that creates an
+     *  SVG text component
+     *
+     * @method setTextDefaults
+     * @static
+     *
+     * @param {object} Factory - React component Factory
+     * @param {object} reactCase - Dom El in which to render component
+     * @param {object} date - JS date object
+     *
+     * @returns {object} React Component
+     */
+    var setTextDefaults = function(Factory, reactCase, date) {
+        var props = {
+            dateLeft: wv.util.toISOStringDate(wv.util.dateAdd(date, 'day', 1)),
+            dateRight: wv.util.toISOStringDate(date)
+        };
+        return ReactDOM.render(initWidget(Factory, props), reactCase);
     };
-    var drawText = function(date) {
-        var leftText, rightText, svg, rightBG, leftBG, x1, x2, textWidth, textHeight, recRadius;
 
-        x1 = 45;
-        x2 = 155;
-        textWidth = 80;
-        textHeight = 20;
-        recRadius = 3;
-
-        svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-        leftText = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        rightText = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        rightBG = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-        leftBG = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-
-        rightBG.setAttribute('fill','rgba(40,40,40,0.5)');
-        leftBG.setAttribute('fill','rgba(40,40,40,0.5)');
-        rightBG.setAttribute('width', textWidth);
-        leftBG.setAttribute('width', textWidth);
-        rightBG.setAttribute('height', textHeight);
-        leftBG.setAttribute('height', textHeight);
-        rightBG.setAttribute('x', x2);
-        leftBG.setAttribute('x', x1);
-        rightBG.setAttribute('rx', recRadius);
-        leftBG.setAttribute('ry', recRadius);
-
-        svg.setAttribute('style','transform: translate(-140px,0);');
-        svg.setAttribute('class', 'dateline-text');
-        svg.setAttribute('width', '300');
-        svg.setAttribute('class', 'dateline-text hidden');
-        svg.appendChild(leftBG);
-        svg.appendChild(rightBG);
-        leftText.appendChild(document.createTextNode(wv.util.toISOStringDate(wv.util.dateAdd(date, 'day', 1))));
-        rightText.appendChild(document.createTextNode(wv.util.toISOStringDate(date)));
-
-        setTextDefaults(rightText, x2 + 3);
-        setTextDefaults(leftText, x1 + 3);
-
-        svg.appendChild(rightText);
-        svg.appendChild(leftText);
-
-        return svg;
+    /*
+     * Creates new instance of react component
+     *
+     * @method initWidget
+     * @static
+     *
+     * @param {object} Factory - React component Factory
+     * @param {object} props - component props
+     *
+     * @returns {object} React Component
+     */
+    var initWidget = function(Factory, props) {
+        return Factory(props);
     };
-    var setLineDefaults = function(svgEl, strokeWidth) {
-        var offset = strokeWidth / 2;
-        svgEl.setAttribute('x1', offset);
-        svgEl.setAttribute('x2', offset);
-        svgEl.setAttribute('y1', '0');
-        svgEl.setAttribute('y2', '0');
-        svgEl.setAttribute('opacity', '0');
-        svgEl.setAttribute('stroke-width', strokeWidth);
-        svgEl.setAttribute('stroke-dasharray', '10, 5');
-        svgEl.setAttribute('stroke', 'white');
-    };
-    var setHiddenLineDefaults = function(svgEl, strokeWidth) {
-        var offset = strokeWidth / 2;
-        svgEl.setAttribute('x1', offset);
-        svgEl.setAttribute('x2', offset);
-        svgEl.setAttribute('y1', '0');
-        svgEl.setAttribute('y2', '0');
-        svgEl.setAttribute('opacity', '0');
-        svgEl.setAttribute('stroke-width', strokeWidth);
-        svgEl.setAttribute('stroke', 'white');
 
+    /*
+     * Updates active state of line Components
+     *
+     * @method updateLineVisibility
+     * @static
+     *
+     * @param {boolean} boo - component deactivation boolean
+     *
+     * @returns {void}
+     */
+    var updateLineVisibility = function(boo) {
+        var state = {active: boo};
+        lineRight.setState(state);
+        lineLeft.setState(state);
     };
-    var setTextDefaults = function(svgEl, x) {
-        svgEl.setAttribute('y', 14);
-        svgEl.setAttribute('x', x);
-        svgEl.setAttribute('fill', 'white');
-        svgEl.setAttribute('opacity', '0.7');
-    };
+
+    /*
+     * constructs dateline components
+     *
+     * @method drawDatelines
+     * @static
+     *
+     * @param {boolean} boo - component deactivation boolean
+     *
+     * @returns {void}
+     */
     var drawDatelines = function(map, date) {
-        var $obj1, $obj2, viewport, defaultCoord,  textSvg1, textSvg2,
-			textOverlay1, textOverlay2;
+        var height, leftLineCase, rightLineCase, leftTextCase, rightTextCase;
+        
+        leftLineCase = document.createElement("div");
+        rightLineCase = document.createElement("div");
+        leftTextCase = document.createElement("div");
+        rightTextCase = document.createElement("div");
+        height = 0;
 
-        defaultCoord = [-180, 90];
-        obj1 = drawLines('dateline_left dateline');
-        obj2 = drawLines('dateline_right dateline');
-        line1 = obj1[1];
-        line2 = obj2[1];
-        svg1 = obj1[0];
-        svg2 = obj2[0];
-        hiddenLine1 = obj1[2];
-        hiddenLine2 = obj2[2];
-        textSvg1 = drawText(date);
-        textSvg2 = drawText(wv.util.dateAdd(date, 'day', -1));
-        textOverlay1 = drawOverlay(defaultCoord, textSvg1);
-        textOverlay2 = drawOverlay(defaultCoord, textSvg2);
-        overlay1 = drawOverlay(defaultCoord, obj1[0]);
-        overlay2 = drawOverlay(defaultCoord, obj2[0]);
+        overlay1 = drawOverlay([-180, 90], leftLineCase);
+        overlay2 = drawOverlay([180, 90], rightLineCase);
+        textOverlay1 = drawOverlay([-180, 90], leftTextCase);
+        textOverlay2 = drawOverlay([180, 90], rightTextCase);
 
         map.addOverlay(overlay1);
         map.addOverlay(overlay2);
         map.addOverlay(textOverlay1);
         map.addOverlay(textOverlay2);
 
-        setListeners(svg1, textSvg1, textOverlay1, -180, hiddenLine1);
-        setListeners(svg2, textSvg2, textOverlay2, 180, hiddenLine2);
+        textLeft = setTextDefaults(textFactory, leftTextCase, date);
+        textRight = setTextDefaults(textFactory, rightTextCase, wv.util.dateAdd(date, 'day', -1));
+        lineLeft = setLineDefaults(lineFactory, height, -180, textOverlay1, leftLineCase, textLeft);
+        lineRight = setLineDefaults(lineFactory, height, 180, textOverlay2, rightLineCase, textRight);
     };
-    var setListeners = function(lineSVG, textSVG, overlay, lineX, hidden) {
-        var line = lineSVG.childNodes[0];
-        var pixels, coords;
-        lineSVG.addEventListener("mouseover", function(e) {
-            pixels =  [e.pageX,e.pageY];
-            coords = map.getCoordinateFromPixel(pixels);
-            line.setAttribute('opacity', '0.5');
-            overlay.setPosition([lineX, coords[1]]);
-            lineBeingHovered = line;
-        });
-        lineSVG.addEventListener("mousemove", function(e) {
-            pixels =  [e.pageX,e.pageY];
-            coords = map.getCoordinateFromPixel(pixels);
-            overlay.setPosition([lineX, coords[1]]);
-        });
-        lineSVG.addEventListener("mouseout", function( event ) {
-            line.setAttribute('opacity', '0');
-            lineBeingHovered = false;
-        });
-        hidden.addEventListener("mouseover", function(e) {
-            textSVG.setAttribute('class', 'dateline-text');
-        });
-        hidden.addEventListener("mouseout", function(e) {
-            textSVG.setAttribute('class', 'dateline-text hidden');
-        });
+
+    var onHover = function(pixels, overlay, lineX, tooltip) {
+        var coords;
+        coords = map.getCoordinateFromPixel(pixels);
+        overlay.setPosition([lineX, coords[1]]);
+        tooltip.setState({active: true});
+    };
+    var onMouseOut = function(tooltip) {
+        tooltip.setState({active: false});
     };
     var position = function(map) {
-        var extent, top, topY, bottomY, bottom, height, startY, ninetyDegreePixel, topExtent, bottomExtent, halfHeight, halfStart;
+        var extent, top, topY, bottomY, bottom, height, startY, topExtent, bottomExtent;
 
         if(map.getSize()[0] === 0) {
             return;
@@ -213,13 +194,15 @@ wv.map.datelinebuilder = wv.map.ui || function(models, config) {
 			bottomY = map.getPixelFromCoordinate([extent[2], -90])[1];
 		}
         height = Math.round(Math.abs(bottomY - topY));
-        halfHeight = Math.round(height / 2);
-        halfStart = map.getCoordinateFromPixel([extent[2], halfHeight])[1];
 
-        overlay1.setPosition([-180, startY]);
-        overlay2.setPosition([180,  startY]);
-
-        update(height);
+        return [height, startY];
+    };
+    var update = function(dimensions) {
+        var state = {height: dimensions[0]};
+        lineRight.setState(state);
+        lineLeft.setState(state);
+        overlay1.setPosition([-180, dimensions[1]]);
+        overlay2.setPosition([180, dimensions[1]]);
     };
     var drawOverlay = function(coordinate, el) {
         var overlay = new ol.Overlay({
@@ -229,13 +212,6 @@ wv.map.datelinebuilder = wv.map.ui || function(models, config) {
         overlay.setPosition(coordinate);
         return overlay;
     };
-    var update = function(height) {
-        line1.setAttribute('y2', height);
-        line2.setAttribute('y2', height);
-        hiddenLine1.setAttribute('y2', height);
-        hiddenLine2.setAttribute('y2', height);
-        svg1.setAttribute('height', height);
-        svg2.setAttribute('height', height);
-    };
+
     return self;
 };
