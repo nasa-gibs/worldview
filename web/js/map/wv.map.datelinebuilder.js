@@ -41,6 +41,9 @@ wv.map.datelinebuilder = wv.map.ui || function(models, config) {
         Parent.events.on('movestart', function() {
             updateLineVisibility(false);
         });
+        models.date.events.on('select', function() {
+            updateDate(models.date.selected)
+        });
     };
 
     /*
@@ -166,6 +169,20 @@ wv.map.datelinebuilder = wv.map.ui || function(models, config) {
     };
     var onMouseOut = function(tooltip) {
         tooltip.setState({active: false});
+    };
+    var updateDate = function(date) {
+        var leftState, rightState;
+        leftState = {
+            dateLeft: wv.util.toISOStringDate(wv.util.dateAdd(date, 'day', 1)),
+            dateRight: wv.util.toISOStringDate(date)
+        };
+        rightState = {
+            dateLeft: wv.util.toISOStringDate(date),
+            dateRight: wv.util.toISOStringDate(wv.util.dateAdd(date, 'day', -1))
+        };
+        textLeft.setState(leftState);
+        textRight.setState(rightState);
+
     };
     var position = function(map) {
         var extent, top, topY, bottomY, bottom, height, startY, topExtent, bottomExtent;

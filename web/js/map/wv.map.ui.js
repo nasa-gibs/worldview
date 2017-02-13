@@ -25,7 +25,7 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
     var self = {};
     var rotation = new components.Rotation(self, models);
     var layerBuilder;
-    var dateline = components.Dateline();
+    var dateline = components.Dateline(models, config);
     var layerKey;
     var createLayer;
     var precache = components.Precache(models, config, cache, self);
@@ -350,7 +350,7 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
     /*
      * Update layers for the correct Date
      *
-     * @method updateDate
+     * @method updateLookup
      * @static
      *
      *
