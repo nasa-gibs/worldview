@@ -200,7 +200,7 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
     };
 
     var getMaxValue = function(v) {
-        return ( v.length ) ? v[1]: v;
+        return ( v.length ) ? v[v.length-1]: v;
     };
 
     self.save = function(state) {

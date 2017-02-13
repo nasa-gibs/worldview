@@ -37,7 +37,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
 
             }
         });
-
+        $(window).resize(resize);
         render();
 
     };
@@ -135,9 +135,6 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
             });
         //**************************************
 
-        $(window).resize(resize);
-
-        self.refresh();
     };
     var showLargeNotification = function(){
         $('.notify-message').hide();
@@ -164,9 +161,13 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
         var $content = $(self.selector + "content");
 
         $content = $(self.selector + "content").empty();
+
+        // iterate through events
         _.each(data, function(event, index) {
             refreshEvent($content, event, index);
         });
+
+        // Bind click event to each event
         $(self.selector + "content li").click(function() {
             var dataIndex = $(this).attr("data-index");
             showEvent(dataIndex);
@@ -177,6 +178,8 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
             }
             notify();
         });
+
+        //Bind click event to each date contained in events with dates
         $(self.selector + "content a.date").click(function(event) {
             var dataIndex = $(this).attr("data-index");
             showEvent(dataIndex, $(this).attr("data-date-index"));
@@ -186,13 +189,13 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
     };
 
     var refreshEvent = function($content, event, index) {
-        if ((event.category[0]['-domain'] === 'Floods') ||
-            (event.category[0]['-domain'] === 'Earthquakes') ||
-            (event.category[0]['-domain'] === 'Drought') ||
-            (event.category[0]['-domain'] === 'Landslides')){
+        if ((event.categories[0].title === 'Floods') ||
+            (event.categories[0].title === 'Earthquakes') ||
+            (event.categories[0].title === 'Drought') ||
+            (event.categories[0].title === 'Landslides')) {
             return;
         }
-        var geoms = toArray(event.geometry);
+        var geoms = toArray(event.geometries);
         eventDate = wv.util.parseDateUTC(geoms[0].date);
 
         dateString = wv.util.giveWeekDay(eventDate) + ", " +
@@ -219,9 +222,9 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
             .addClass('fa fa-map-marker fa-2x');
 
         var $dates = $("<ul></ul>").addClass("dates").hide();
-        if ( event.geometry.length > 1 ) {
+        if ( event.geometries.length > 1 ) {
             var lastDate;
-            _.each(event.geometry, function(geometry, dateIndex) {
+            _.each(event.geometries, function(geometry, dateIndex) {
                 date = geometry.date.split(/T/)[0];
                 if (date === lastDate){
                     return;
@@ -237,7 +240,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
         }
 
         $item.append($mapMarker).append($title).append($subtitle).append($dates);
-        var references = toArray(event.reference);
+        var references = toArray(event.sources);
         if ( references.length > 0 ) {
             items = [];
             _.each(references, function(reference) {
