@@ -16,11 +16,44 @@ wv.map = wv.map || {};
  * @Class
  */
 wv.map.runningdata = wv.map.runningdata || function(models) {
-    var self = this;
+    var self;
+    var $productsBox;
+    var productsBoxHeight;
+    var productsBoxTop;
+    var productsBoxBottom;
+
+    self = this;
+
+
     self.layers = [];
     self.prePixelData = [];
     self.pixel  = null;
     self.oldLayers = [];
+
+
+    self.init = function() {
+        $productsBox = $('#products');
+        productsBoxHeight = $productsBox.height();
+        productsBoxTop = $productsBox.scrollTop();
+        productsBoxBottom = productsBoxTop + productsBoxHeight;
+        models.layers.events.on('change', function() { //when layers are added or removed
+            //hacky timeout that allows onchange changes to render
+            setTimeout(function() {
+                productsBoxHeight = $productsBox.height();
+                productsBoxBottom = productsBoxTop + productsBoxHeight;
+            }, 300);
+        });
+
+        /*
+         * A scroll event listener that updates
+         * the location of scroller
+         */
+        $productsBox.on('scroll', function() {
+            productsBoxTop = $productsBox.scrollTop();
+            productsBoxBottom = productsBoxTop + productsBoxHeight;
+
+        });
+    };
 
     /*
      * Retrieves the label, length and index of
@@ -79,13 +112,38 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
      */
     self.getLabelMarginLeft = function(labelWidth, caseWidth, location) {
         if(location + (labelWidth / 2) > caseWidth) {
-            return (caseWidth - labelWidth);
+            return (caseWidth - labelWidth) - 2;
         } else if (location - (labelWidth / 2) < 0) {
             return 0;
         } else {
             return (location - (labelWidth / 2));
         }
     };
+
+    /*
+     * Determine is layer legend is Visible
+     *
+     * @method layerIsInView
+     *
+     * @param {String} Layers Id
+     *
+     * @return {Boolean} legend is visible
+     *
+     */
+     var layerIsInView = function(layerID) {
+        var elTop;
+        var elBottom;
+        var $case = $(".productsitem[data-layer='" + layerID +"']");
+        if($case[0]) {
+            elTop = $case[0].offsetTop;
+            elBottom = elTop + $case.height();
+            if((elTop >= productsBoxTop && elTop <= productsBoxBottom) ||
+               (elBottom >= productsBoxTop && elBottom <= productsBoxBottom)) {
+                return true;
+            }
+        }
+        return false;
+     };
 
     /*
      * Gets the point in which to place the running
@@ -164,35 +222,88 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
         map.forEachLayerAtPixel(coords, function(layer, data){
             var hex;
             var palette;
-            var paletteInfo;
             var legend;
-            if(layer.wv.def.palette){
-                legends = models.palettes.getLegends(layer.wv.id);
+            var layerId;
+            if(layer.wv.def.palette) {
+                layerId = layer.wv.id;
+                if(!layerIsInView(layerId)) {
+                    return;
+                }
+                legends = models.palettes.getLegends(layerId);
+                hex = wv.util.rgbaToHex(data[0], data[1], data[2], data[3]);
                 _.each(legends, function(legend){
                     if(legend) {
-                        hex = wv.util.rgbaToHex(data[0], data[1], data[2], data[3]);
-                        if(legend.type === 'continuous') {
-                            paletteInfo = self.getDataLabel(legend, hex);
-                            if(paletteInfo) {
-                                self.setLayerValue(legend.id, paletteInfo);
-                                self.activeLayers.push(legend.id);
-                            }
-                        } else if(legend.type === 'classification') {
-                            paletteInfo = self.getDataLabel(legend, hex);
-                            if(paletteInfo) {
-                                self.setCategoryValue(legend.id, paletteInfo);
-                                self.activeLayers.push(legend.id);
-                            }
-                        }
+                        self.createRunnerFromLegend(legend, hex);
                         
                     }
                 });
             }
         });
+        self.update();
+    };
+    /*
+     * Update array of current
+     * active palettes
+     *
+     * @method update
+     *
+     * @return {Void}
+     *
+     */
+    self.update = function() {
         if(self.oldLayers.length) {
             self.updateRunners(self.LayersToRemove(self.oldLayers, self.activeLayers));
         }
         self.oldLayers = self.activeLayers;
+
+    };
+    /*
+     * Initiates new legend
+     *
+     * @method newLegend
+     *
+     * @param {Array} legends - tooltip data
+     *
+     * @param {String} hex - color
+     *
+     * @return {Void}
+     *
+     */
+    self.newLegend = function(legends, hex) {
+        self.activeLayers = [legends.id];
+        $productsBox.addClass('active-lengend');
+        self.createRunnerFromLegend(legends, hex);
+        self.update();
+    };
+
+    /*
+     * Compare old and new arrays to determine which Layers need to be
+     * removed
+     *
+     * @method LayersToRemove
+     *
+     * @param {Array} coords - Array of coordinate values
+     *
+     * @param {Object} map - OpenLayers Map Object
+     *
+     * @return {Void}
+     *
+     */
+    self.createRunnerFromLegend = function(legend, hex) {
+        var paletteInfo;
+        if(legend.type === 'continuous') {
+            paletteInfo = self.getDataLabel(legend, hex);
+            if(paletteInfo) {
+                self.setLayerValue(legend.id, paletteInfo);
+                self.activeLayers.push(legend.id);
+            }
+        } else if(legend.type === 'classification') {
+            paletteInfo = self.getDataLabel(legend, hex);
+            if(paletteInfo) {
+                self.setCategoryValue(legend.id, paletteInfo);
+                self.activeLayers.push(legend.id);
+            }
+        }
     };
 
     /*
@@ -213,6 +324,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
         $palette.removeClass('wv-running');
     };
     self.clearAll = function() {
+        $productsBox.removeClass('active-lengend');
         $('.wv-running').removeClass('wv-running');
     };
     /*
@@ -250,7 +362,8 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
         $caseWidth = $categoryPaletteCase.width();
 
         $paletteLabel.text(data.label);
-        $labelWidth = $paletteLabel.width();
+        $labelWidth = wv.util.getTextWidth(data.label, 'Lucida Sans');
+
         location = ((marginLeft + squareWidth) * data.index);
         labelMargin = self.getLabelMarginLeft($labelWidth, $caseWidth, location);
 
@@ -298,8 +411,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
 
 
         $paletteLabel.text(data.label);
-        labelWidth = $paletteLabel.width();
-
+        labelWidth = wv.util.getTextWidth(data.label, 'Lucida Sans');
         labelMargin = self.getLabelMarginLeft(labelWidth, $paletteWidth, location);
 
         $paletteLabel.attr('style', 'left:' + Math.round(labelMargin) + 'px;');
@@ -324,4 +436,5 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
             }
         }
     };
+    self.init();
 };

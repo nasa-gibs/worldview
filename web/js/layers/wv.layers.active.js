@@ -258,6 +258,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             config: config,
             models: models,
             layer: layer,
+            ui: ui
             //onLoad: //adjustCategoryHeights
         });
     };

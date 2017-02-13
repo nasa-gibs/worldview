@@ -30,11 +30,12 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
     var createLayer;
     var precache = components.Precache(models, config, cache, self);
 
-    //var dataRunner = new components.Runningdata(models);
-    self.mapIsbeingDragged = false;
+    var dataRunner = self.runningdata = new components.Runningdata(models);
     var hiDPI = ol.has.DEVICE_PIXEL_RATIO > 1;
     var pixelRatio = hiDPI ? 2 : 1;
 
+    self.mapIsbeingDragged = false;
+    self.mapIsbeingZoomed = false;
     self.proj = {}; // One map for each projection
     self.selected = null; // The map for the selected projection
     self.events = wv.util.events();
@@ -537,7 +538,6 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
             view: new ol.View({
                 maxResolution: proj.resolutions[0],
                 projection: ol.proj.get(proj.crs),
-                extent: proj.maxExtent,
                 center: proj.startCenter,
                 rotation: proj.id === "geographic" ? 0.0 : models.map.rotation,
                 zoom: proj.startZoom,
@@ -595,10 +595,22 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
             self.mapIsbeingDragged = true;
             self.events.trigger('drag');
         });
+        map.getView().on('propertychange', function(e) {
+            switch (e.key) {
+                case 'resolution':
+                    self.mapIsbeingZoomed = true;
+                    break;
+            }
+        });
         map.on('moveend', function(e) {
+<<<<<<< HEAD
             self.events.trigger('moveend');
             setTimeout(function(){
+=======
+            setTimeout(function() {
+>>>>>>> palette-replacement
                 self.mapIsbeingDragged = false;
+                self.mapIsbeingZoomed = false;
             }, 200);
         });
         return map;
@@ -792,15 +804,19 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
             });
         function onMouseMove(e) {
             var coords;
-            var pixelValue;
             var pixels;
             var outside;
 
+            // if mobile return
+            if(wv.util.browser.small) {
+                return;
+            }
+            // if over coords return
             if($(e.relatedTarget).hasClass('map-coord') ||
                 $(e.relatedTarget).hasClass('coord-btn')) {
                  return;
             }
-            pixels =  [e.pageX,e.pageY];
+            pixels = map.getEventPixel(e.originalEvent);
             coords = map.getCoordinateFromPixel(pixels);
             if(!ol.extent.containsCoordinate(extent, coords)) {
                 outside = true;
@@ -814,7 +830,6 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
                 }
             }
 
-            pixelValue = [pixels[0] * pixelRatio, pixels[1] * pixelRatio];
             $('#' + mapId).show();
             $('#' + mapId + ' span.map-coord').each(function(){
                 var format = $(this).attr('data-format');
@@ -830,7 +845,7 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
                     return; // don't get running data if map is animating
                 }
             }
-            //dataRunner.newPoint(pixelValue, map);
+            dataRunner.newPoint(pixels, map);
         }
         $(map.getViewport())
             .mouseover(function(e){
@@ -847,7 +862,7 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
                 }
                 $('#' + mapId).hide();
                 hoverThrottle.cancel();
-                //dataRunner.clearAll();
+                dataRunner.clearAll();
             })
             .mousemove(hoverThrottle = _.throttle(onMouseMove, 300));
     };
