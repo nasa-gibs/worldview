@@ -603,12 +603,8 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
             }
         });
         map.on('moveend', function(e) {
-<<<<<<< HEAD
             self.events.trigger('moveend');
             setTimeout(function(){
-=======
-            setTimeout(function() {
->>>>>>> palette-replacement
                 self.mapIsbeingDragged = false;
                 self.mapIsbeingZoomed = false;
             }, 200);
