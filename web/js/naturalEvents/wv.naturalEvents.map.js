@@ -21,6 +21,9 @@ wv.naturalEvents.map = wv.naturalEvents.map || function(models, maps, config) {
     self.current = null;
 
     var init = function() {
+        if (!map) {
+            map = maps.selected;
+        }
 
     };
     var getButtonDimensions = function() {
@@ -67,9 +70,6 @@ wv.naturalEvents.map = wv.naturalEvents.map || function(models, maps, config) {
     self.draw = function(location) {
 
         //loads current map
-        if (!map) {
-            map = maps.selected;
-        }
 
         //remove any existing location first
         map.removeLayer(vectorLayer);
