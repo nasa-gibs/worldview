@@ -5,7 +5,7 @@
  * This code was originally developed at NASA/Goddard Space Flight Center for
  * the Earth Science Data and Information System (ESDIS) project.
  *
- * Copyright (C) 2013 - 2014 United States Government as represented by the
+ * Copyright (C) 2013 - 2017 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
@@ -18,33 +18,48 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
     var self = {};
     var model = models.naturalEvents;
     var data;
+    var zoomLevel;
     self.selector = "#wv-events";
     self.id = "wv-events";
+    var maps = ui.map;
+    var map = ui.map.selected;
+    //load naturalEvents.map
+    var mapController = wv.naturalEvents.map(models, maps, config);
 
     //Local storage may not be a good idea because they'll never see it again
     //wv.util.localStorage('notified') || false;
     var notified = false;
+    var lastIndex = -1;
+    var lastDateIndex = -1;
+
     var $notification;
 
     var init = function() {
-        //model.events.on("select", onSelect);
+        model.events.on("select", onSelect);
         model.events.on( "queryResults", onQueryResults );
         ui.sidebar.events.on("select", function(tab) {
             if ( tab === "events" ) {
                 resize();
+                if (mapController.current) {
+                    mapController.draw(mapController.current);
+                }
             }
             else {
-
+                mapController.dispose();
+                $notification.dialog('close');
             }
         });
         $(window).resize(resize);
         render();
 
     };
+    var onSelect = function(){
+
+    };
     var onQueryResults = function(){
         //FIXME: this if check needs to be reworked
-        if ( model.data && model.sources && model.types ) {
-            data = model.data;
+        if ( model.data ) {
+            data = model.data.events;
             self.refresh();
         }
     };
@@ -77,31 +92,11 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
         var $messageWrapper = $('<div></div>')
             .click( function(e){
                 showNotificationHelp();
-                //showLargeNotification();
             });
-
-        var $altMessage = $('<span></span>')
-            .text("Why can’t I see an event?")
-            .addClass('notify-message-alt').hide();
-
-        var $longmessage = 'There are a variety of factors as to why you may not be seeing an event in Worldview at the moment.' +
-            '<ul>' +
-            '<li>Satellite overpass may have occurred before the event. Check out subsequent days or try a different satellite/sensor which has a different overpass time.</li>' +
-            '<li>Cloud cover may obscure the event.</li>' +
-            '<li>Some events don’t appear on the day that they are reported, you may have to wait a day or two for an event to become visible. Try and scroll through the days to see an event’s progression and/or change the satellite/sensor. NOTE: Wildfire events are currently set to automatically display the next day, as fire events often do not appear in the satellite imagery on the day they are reported.</li>' +
-            '<li>The resolution of the imagery may be too coarse to see an event.</li>' +
-            '<li>There are normal swath data gaps in some of the imagery layers due to way the satellite orbits the Earth, and an event may have occurred in the data gap.</li>' +
-            '</ul>' +
-            'This is currently an experimental feature and we are working closely with the provider of these events, the <a href="http://eonet.sci.gsfc.nasa.gov/" target="_blank">Earth Observatory Natural Event Tracker</a>, to refine this listing to only show events that are visible with our satellite imagery.';
-
-        var $longWrapper = $('<div></div>')
-            .addClass('notify-message-body')
-            .hide();
 
         $messageWrapper
             .append($icon)
-            .append($message)
-            .append($altMessage);
+            .append($message);
 
         var $close = $('<i></i>')
             .addClass('fa fa-times fa-1x')
@@ -112,7 +107,6 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
         $notification = $('<div></div>')
             .append( $close )
             .append( $messageWrapper )
-            .append( $longWrapper )
             .dialog({
                 autoOpen: false,
                 resizable: false,
@@ -135,12 +129,6 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
             });
         //**************************************
 
-    };
-    var showLargeNotification = function(){
-        $('.notify-message').hide();
-        $('.notify-message-alt').show();
-
-        $('.notify-message-long').show();
     };
     var showNotificationHelp = function(){
         var headerMsg = "<h3 class='wv-data-unavailable-header'>Why can’t I see an event?</h3>";
@@ -168,7 +156,11 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
         });
 
         // Bind click event to each event
-        $(self.selector + "content li").click(function() {
+        var $current;
+        $(self.selector + "content li").toggle( function() {
+            if ($current) {
+                $current.click();
+            }
             var dataIndex = $(this).attr("data-index");
             showEvent(dataIndex);
             $(self.selector + "content li").removeClass('item-selected');
@@ -177,6 +169,13 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
                 ui.sidebar.collapseNow();
             }
             notify();
+            $current = $(this);
+        }, function() {
+            $(self.selector + "content li").removeClass('item-selected');
+            hideEvent();
+            mapController.dispose();
+            mapController.current = null;
+            $current = null;
         });
 
         //Bind click event to each date contained in events with dates
@@ -188,13 +187,109 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
         resize();
     };
 
-    var refreshEvent = function($content, event, index) {
-        if ((event.categories[0].title === 'Floods') ||
-            (event.categories[0].title === 'Earthquakes') ||
-            (event.categories[0].title === 'Drought') ||
-            (event.categories[0].title === 'Landslides')) {
+    self.select = function(index, dateIndex) {
+
+        if ( index === lastIndex && lastDateIndex === dateIndex ) {
             return;
         }
+
+        var method = "fly";
+        if ( index == lastIndex && dateIndex != lastDateIndex ) {
+            method = "pan";
+        }
+        lastIndex = index;
+        lastDateIndex = lastDateIndex;
+
+        if(models.proj.selected.id !=='geographic') {
+            models.proj.select('geographic');
+        }
+        self.selected = index;
+        event = model.data.events[index];
+
+        eventItem = null;
+        if ( event.geometries.length > 1 ) {
+            eventItem = event.geometries[dateIndex || 0];
+        } else {
+            eventItem = event.geometries[0];
+        }
+
+        category = "Default";
+        categories = event.categories;
+        if ( categories.constructor !== Array ) {
+            categories = [categories];
+        }
+        _.each(categories, function(c) {
+            if ( model.layers[c.title] ) {
+                category = c.title;
+                return;
+            }
+        });
+
+        layers = model.layers[category];
+        if ( !layers ) {
+            layers = model.layers.Default;
+        }
+
+        // Turn off all layers in list first
+        _.each(models.layers.active, function(layer){
+            models.layers.setVisibility( layer.id, false );
+        });
+
+        // Turn on or add new layers
+        _.each(layers, function(layer) {
+            var id = layer[0];
+            var visible = layer[1];
+            if( models.layers.exists( id ) ) {
+                models.layers.setVisibility( id, visible );
+            }
+            else{
+                models.layers.add(id, { visible: visible });
+            }
+        });
+
+        // If an event is a Wildfire and the event date isn't "today", select
+        // the following day to greatly improve the chance of the satellite
+        // seeing the event
+        //
+        // NOTE: there is a risk that if the fire happened "yesterday" and
+        // the satellite imagery is not yet available for "today", this
+        // functionality may do more harm than good
+        eventDate = wv.util.parseTimestampUTC(eventItem.date);
+
+        var eventDateISOString = wv.util.toISOStringDate(eventDate);
+        var todayDateISOString = wv.util.toISOStringDate(wv.util.today());
+        var eventCategoryName = event.categories[0].title || null; 
+
+        if ((eventDateISOString !== todayDateISOString) &&
+            ((eventCategoryName !== null) && (eventCategoryName == "Wildfires"))) {
+            var eventDatePlusOne =
+                wv.util.dateAdd(wv.util.parseDateUTC(eventItem.date), "day", 1);
+            models.date.select(eventDatePlusOne);
+        }
+        else {
+            models.date.select(eventDate);
+        }
+
+        // If an event is a Wildfire or Volcano, zoom in more
+        if ((eventCategoryName !== null) && (eventCategoryName == "Wildfires")) {
+            zoomLevel = 8;
+        } else if (eventCategoryName == "Volcanoes") {
+            zoomLevel = 6;
+        }
+        var callback = function(){
+            mapController.draw(eventItem.coordinates);
+        };
+        if ( eventItem.type === "Point" ) {
+            ui.map.animate.move(method, eventItem.coordinates, zoomLevel, callback);
+        } else if ( eventItem.type === "Polygon" && eventItem.coordinates[0].length == 5 ) {
+            c = eventItem.coordinates[0];
+            var extent = [c[0][0], c[0][1], c[2][0], c[2][1]];
+            ui.map.animate.move(method, extent, zoomLevel, callback);
+        }
+    };
+
+    var refreshEvent = function($content, event, index) {
+
         var geoms = toArray(event.geometries);
         eventDate = wv.util.parseDateUTC(geoms[0].date);
 
@@ -206,10 +301,10 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
             dateString += ", " + eventDate.getUTCFullYear();
         }
 
-
         var $item = $("<li></li>")
             .addClass("selectorItem")
             .addClass("item")
+            .addClass(event.categories[0].css)
             .attr("data-index", index);
         var $title = $("<h4></h4>")
             .addClass("title")
@@ -219,7 +314,8 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
             .html(event.description)
             .hide();
         var $mapMarker = $("<i></i>")
-            .addClass('fa fa-map-marker fa-2x');
+            .addClass('map-marker')
+            .attr('title', event.categories[0].title);
 
         var $dates = $("<ul></ul>").addClass("dates").hide();
         if ( event.geometries.length > 1 ) {
@@ -244,7 +340,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
         if ( references.length > 0 ) {
             items = [];
             _.each(references, function(reference) {
-                var source = _.find(model.sources, { id: reference.id });
+                var source = _.find(model.data.sources, { id: reference.id });
                 if ( reference.url ) {
                     items.push("<a target='event' href='" + reference.url + "'>" +
                                "<i class='fa fa-external-link fa-1'></i>" +
@@ -267,14 +363,18 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
 
     var showEvent = function(index, dateIndex) {
 
+        self.select(index, dateIndex);
         $("#wv-eventscontent .subtitle").hide();
         $("#wv-eventscontent .dates").hide();
         $("#wv-eventscontent [data-index='" + index + "'] .subtitle").show();
         $("#wv-eventscontent [data-index='" + index + "'] .dates").show();
         resize();
 
-        model.select(index, dateIndex);
-
+    };
+    var hideEvent = function() {
+        $("#wv-eventscontent .subtitle").hide();
+        $("#wv-eventscontent .dates").hide();
+        resize();
     };
     var notify = function( text ) {
 

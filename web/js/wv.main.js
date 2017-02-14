@@ -142,6 +142,7 @@ $(function() {
             Precache: wv.map.precachetile
         };
         ui.map = wv.map.ui(models, config, mapComponents);
+        ui.map.animate = wv.map.animate(models, config, ui);
         if ( config.features.animation ) {
             models.anim = wv.anim.model(models, config);
             models.link.register(models.anim);
