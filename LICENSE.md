@@ -3,7 +3,7 @@
 This code was originally developed at NASA/Goddard Space Flight Center for
 the Earth Science Data and Information System (ESDIS) project.
 
-Copyright (C) 2013 - 2015 United States Government as represented by the
+Copyright (C) 2013 - 2017 United States Government as represented by the
 Administrator of the National Aeronautics and Space Administration.
 All Rights Reserved.
 
@@ -131,7 +131,7 @@ customarily used for software exchange.
 **B.** Each Recipient must ensure that the following copyright notice appears
 prominently in the Subject Software:
 
-    Copyright (C) 2012-2014 United States Government
+    Copyright (C) 2012-2017 United States Government
     as represented by the Administrator of the
     National Aeronautics and Space Administration.
     All Rights Reserved.
