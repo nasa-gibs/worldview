@@ -34,7 +34,7 @@
         "jshint": "2.9.x",
         "lodash": "^4.15.0",
         "moment": "2.13.x",
-        "openlayers": "3.19.x",
+        "openlayers": "4.0.x",
         "gifshot": "https://github.com/nasa-gibs/gifshot/archive/4.2.0.tar.gz",
         "openlayers": "3.20.x",
         "phantomjs": "2.1.x",
