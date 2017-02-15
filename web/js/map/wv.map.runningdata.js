@@ -219,11 +219,14 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
      */
     self.newPoint = function(coords, map) {
         self.activeLayers = [];
-        map.forEachLayerAtPixel(coords, function(layer, data){
+        map.forEachLayerAtPixel(coords, function(layer, data)   {
             var hex;
             var palette;
             var legend;
             var layerId;
+            if(!layer.wv) {
+                return;
+            }
             if(layer.wv.def.palette) {
                 layerId = layer.wv.id;
                 if(!layerIsInView(layerId)) {
