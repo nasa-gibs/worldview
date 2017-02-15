@@ -20,11 +20,11 @@ wv.map = wv.map || {};
  */
 wv.map.datelinebuilder = wv.map.ui || function(models, config) {
 	var self = {};
-	var map, overlay1, overlay2, lineBeingHovered, textFactory, lineFactory, textOverlay1, textOverlay2,
+	var map, overlay1, overlay2, textFactory, lineFactory, textOverlay1, textOverlay2,
         lineLeft, lineRight, textLeft, textRight;
 
 	self.init = function(Parent, olMap, date) {
-        var height, y, dimensions;
+        var dimensions;
 		map = olMap;
         lineFactory = React.createFactory(WVC.DateLine);
         textFactory = React.createFactory(WVC.LineText);
@@ -42,7 +42,7 @@ wv.map.datelinebuilder = wv.map.ui || function(models, config) {
             updateLineVisibility(false);
         });
         models.date.events.on('select', function() {
-            updateDate(models.date.selected)
+            updateDate(models.date.selected);
         });
     };
 
