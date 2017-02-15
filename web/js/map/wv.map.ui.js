@@ -836,6 +836,9 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
             if( self.mapIsbeingDragged) {
                 return;
             }
+            if(models.naturalEvents.active || models.data.active) {
+                return;
+            }
             if( models.anim ) {
                 if(models.anim.rangeState.playing) {
                     return; // don't get running data if map is animating

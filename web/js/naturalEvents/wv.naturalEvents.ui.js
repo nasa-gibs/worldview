@@ -39,12 +39,14 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
         model.events.on( "queryResults", onQueryResults );
         ui.sidebar.events.on("select", function(tab) {
             if ( tab === "events" ) {
+                model.active = true;
                 resize();
                 if (mapController.current) {
                     mapController.draw(mapController.current);
                 }
             }
             else {
+                model.active = false;
                 mapController.dispose();
                 $notification.dialog('close');
             }
