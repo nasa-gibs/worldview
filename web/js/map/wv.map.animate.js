@@ -38,13 +38,13 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
      * @returns {void}
      */
     self.move = function(method, location, zoomLevel, callback) {
-        var start, currentZoom, newZoom, duration, wait, startTime, pan, bounceZoom, bounce, view, zoomTo;
+        var start, currentZoom, newZoom, duration, wait, startTime, pan, bounceZoom, view, zoomTo, needsToZoomOut, flyParams;
         
         start = lastLocation || map.getView().getCenter();
 
         //Determine zoom and pan levels depending on distance to new point
         //var distance = ol.sphere.ESPG4326.haversineDistance(start, location);
-
+        
         currentZoom = map.getView().getZoom();
         newZoom = zoomLevel || 5;
         
@@ -53,10 +53,6 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
 
 
         view = map.getView();
-        // pan = view.animate({
-        //     duration: duration,
-        // });
-
         // use this to set proper zoom/res
 
         // For bounce, if zoom is too high, it bounces "in" insteade of "out";
@@ -69,40 +65,53 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
         if(currentZoom < 4) {
             method = 'zoom';
         }
-
         setTimeout(function() {
             if ( method === "fly" ) {
-                view.animate({
-                    duration: duration,
-                    resolution: models.proj.selected.resolutions[bounceZoom],
-                },
-                {
-                    duration: duration,
-                    center: location,
-                    zoom: newZoom
-            });
+                fly(view, duration, location, newZoom);
+                bounce(view, duration, bounceZoom, newZoom);    
             } else if ( method === 'zoom' ) {
-                view.animate({
-                    duration: duration,
-                    zoom: models.proj.selected.resolutions[currentZoom]
-                },
-                {
-                    duration: duration,
-                    center: location,
-                    zoom: newZoom
-            });
+                fly(view, duration, location, newZoom);
+                zoom(view, duration, newZoom);
+                
             } else {
-                view.animate({
-                    duration: duration,
-                    center: location,
-                    zoom: newZoom
-                });
+                fly(view, duration, location, newZoom, 0);
             }
-
             callback();
         }, wait);
 
         lastLocation = location;
+    };
+    var zoom = function(view, duration, newZoom) {
+        view.animate({
+            duration: duration,
+            zoom: newZoom
+        });
+    };
+    var bounce = function(view, duration, bounceZoom, newZoom) {
+        view.animate({
+          zoom: bounceZoom,
+          duration: duration / 2
+        }, {
+          zoom: newZoom,
+          duration: duration / 2
+        });
+    };
+    var fly = function(view, duration, location) {
+        if(location.length > 2) {
+            fitToBox(view, duration, location);
+        } else {
+            goToNewLocal(view, duration, location);
+        }
+    };
+    var goToNewLocal = function(view, duration, location) {
+        view.animate({
+            duration: duration,
+            center: location
+        });
+    };
+
+    var fitToBox = function(view, duration, extent) {
+        view.fit(extent, {duration: duration});
     };
 
     init();
