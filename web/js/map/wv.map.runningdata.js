@@ -368,8 +368,9 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
         $labelWidth = wv.util.getTextWidth(data.label, 'Lucida Sans');
 
         location = ((marginLeft + squareWidth) * data.index);
-        labelMargin = self.getLabelMarginLeft($labelWidth, $caseWidth, location);
-
+        if(location < 5) {
+            location = 5;
+        }
         $paletteLabel.attr('style', 'left:' + Math.round(location) + 'px;'); 
         $categoryPaletteCase.addClass('wv-running');
         $categoryPaletteCase.find('.wv-active').removeClass('wv-active');
