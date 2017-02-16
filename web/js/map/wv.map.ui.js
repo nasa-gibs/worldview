@@ -880,12 +880,12 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
      */
     var zoomAction = function(map, amount) {
         return function() {
-            var zoom = map.getView().getZoom();
-            map.beforeRender(ol.animation.zoom({
-                resolution: map.getView().getResolution(),
+            var view = map.getView();
+            var zoom = view.getZoom();
+            view.animate({
+                zoom: zoom + amount,
                 duration: animationDuration
-            }));
-            map.getView().setZoom(zoom + amount);
+            });
         };
     };
 
