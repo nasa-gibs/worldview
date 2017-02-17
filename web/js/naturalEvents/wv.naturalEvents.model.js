@@ -50,7 +50,6 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
 
     var init = function() {
         self.events.on( "queryResults", onQueryResults );
-        //self.events.on( "select", onSelect );
         self.query();
     };
 
@@ -77,19 +76,15 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
             //models.link.load(self);
         }
     };
-    var onSelect = function(){
-        self.save();
-    };
 
     self.save = function(state) {
         if ( self.active ){
-            state.events = self.selected;
+            state.e = 't';
         }
     };
 
     self.load = function(state) {
-        var eventsTab = state.events;
-        if ( eventsTab ) {
+        if (state.e == 't') {
             models.wv.events.on("startup", function() {
                 wvx.ui.sidebar.selectTab("events");
             });

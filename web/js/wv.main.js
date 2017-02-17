@@ -78,7 +78,6 @@ $(function() {
         if ( config.features.animation ) {
             parsers.push(wv.anim.parse);
         }
-
         _.each(parsers, function(parser) {
             parser(state, errors, config);
         });
@@ -155,7 +154,7 @@ $(function() {
         }
         if ( config.features.naturalEvents ) {
             models.naturalEvents = wv.naturalEvents.model(models, config);
-            //models.link.register(models.naturalEvents);
+            models.link.register(models.naturalEvents);
         }
         // HACK: Map needs permalink state loaded before starting. But
         // data download now needs it too.

@@ -35,7 +35,6 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
     var $notification;
 
     var init = function() {
-        model.events.on("select", onSelect);
         model.events.on( "queryResults", onQueryResults );
         ui.sidebar.events.on("select", function(tab) {
             if ( tab === "events" ) {
@@ -50,12 +49,10 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
                 mapController.dispose();
                 $notification.dialog('close');
             }
+            model.events.trigger('change');
         });
         $(window).resize(resize);
         render();
-
-    };
-    var onSelect = function(){
 
     };
     var onQueryResults = function(){
