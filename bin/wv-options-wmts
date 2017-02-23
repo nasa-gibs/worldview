@@ -17,6 +17,7 @@ import os
 import sys
 import urllib2 as urllib
 import xmltodict
+import isodate
 
 prog = os.path.basename(__file__)
 base_dir = os.path.join(os.path.dirname(__file__), "..")
@@ -68,6 +69,10 @@ class SkipException(Exception):
 def to_list(val):
     return [val] if not hasattr(val, 'reverse') else val
 
+def determine_end_date(key, date):
+    # Add duration to end date
+    return date + isodate.parse_duration(key)
+
 def process_layer(gc_layer, wv_layers, colormaps):
     id = gc_layer["ows:Identifier"]
     if id in skip:
@@ -101,6 +106,8 @@ def process_layer(gc_layer, wv_layers, colormaps):
                             datetime.strptime(times[0], "%Y-%m-%d"))
                         end_date = max(end_date,
                             datetime.strptime(times[1], "%Y-%m-%d"))
+                        if times[2] != "P1D":
+                            end_date = determine_end_date(times[2], end_date)
                     else:
                         startDate = times[0].replace('T', ' ').replace('Z','')
                         endDate = times[1].replace('T', ' ').replace('Z','')
@@ -108,6 +115,7 @@ def process_layer(gc_layer, wv_layers, colormaps):
                             datetime.strptime(startDate, "%Y-%m-%d %H:%M:%S"))
                         end_date = max(end_date,
                             datetime.strptime(endDate, "%Y-%m-%d %H:%M:%S"))
+
                     # This will need to be updates to include subdaily values
                     # when granule support is in
                     wv_layer["startDate"] = start_date.strftime("%Y-%m-%d")
