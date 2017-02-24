@@ -48,7 +48,7 @@ wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache, Par
             _.merge(def, def.projections[proj.id]);
             if ( def.type === "wmts" ) {
                 layer = createLayerWMTS(def, options);
-                if(proj.id === 'geographic' && def.datewraps === true) {
+                if(proj.id === 'geographic' && def.wrapadjacentdays === true) {
                     layerNext = createLayerWMTS(def, options, 1);
                     layerPrior = createLayerWMTS(def, options, -1);
                     layer = new ol.layer.Group({
@@ -58,7 +58,7 @@ wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache, Par
 
             } else if ( def.type === "wms" ) {
                 layer = createLayerWMS(def, options);
-                if(proj.id === 'geographic' && def.datewraps === true) {
+                if(proj.id === 'geographic' && def.wrapadjacentdays === true) {
 
                     layerNext = createLayerWMS(def, options, 1);
                     layerPrior = createLayerWMS(def, options, -1);
@@ -266,7 +266,7 @@ wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache, Par
 
         for(var i = 0, len = layers.length; i < len; i++) {
             layer = layers[i];
-            if(layer.datewraps && layer.visible) {
+            if(layer.wrapadjacentdays && layer.visible) {
                 key = self.layerKey(layer, {date: models.date.selected});
                 layer = cache.getItem(key);
                 layer.setExtent([-180, -90, 180, 90]);
@@ -282,7 +282,7 @@ wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache, Par
         for(var i = 0, len = layers.length; i < len; i++) {
 
             layer = layers[i];
-            if(layer.datewraps && layer.visible) {
+            if(layer.wrapadjacentdays && layer.visible) {
                 key = self.layerKey(layer, {date: models.date.selected});
                 layer = cache.getItem(key);
                 layer.setExtent([-250, -90, 250, 90]);
