@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
   echo "installing npm dependencies"
   npm install
   echo "setting up Python environment"
