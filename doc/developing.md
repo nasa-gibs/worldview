@@ -21,6 +21,11 @@ If there are some CSS or JavaScript files that must be available in
 non-concatenated form, add exceptions in the ``remove:source`` task in
 ``Gruntfile.js``
 
+## Syncing with remote branch
+Update packages that may have been adjusted since your last pull
+
+     grunt update-packages
+
 ## Naming and Versioning
 
 The ``options.json`` file contains the name, version, and release number
