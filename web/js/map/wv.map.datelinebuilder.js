@@ -11,7 +11,6 @@
  * Licensed under the NASA Open Source Agreement, Version 1.3
  * http://opensource.gsfc.nasa.gov/nosa.php
  */
- /* jshint undef: true, unused: true */
 var wv = wv || {};
 wv.map = wv.map || {};
 
@@ -22,7 +21,19 @@ wv.map.datelinebuilder = wv.map.ui || function(models, config) {
 	var self = {};
 	var map, overlay1, overlay2, textFactory, lineFactory, textOverlay1, textOverlay2,
         lineLeft, lineRight, textLeft, textRight;
-
+    /*
+     * Sets globals and event listeners
+     *
+     * @method init
+     * @static
+     *
+     * @param {object} Parent - Map class that we are listeing to
+            Note: this is an antipattern - should be adjusted
+     * @param {Object} olMap - OL map object
+     * @param {Object} date - JS date Object
+     *
+     * @returns {object} React Component
+     */
 	self.init = function(Parent, olMap, date) {
         var dimensions;
 		map = olMap;
@@ -51,7 +62,7 @@ wv.map.datelinebuilder = wv.map.ui || function(models, config) {
      *  a hoverable line SVG
      *
      * @method setLineDefaults
-     * @static
+     * @private
      *
      * @param {object} Factory - React component Factory
      * @param {number} height - Lenght of line
@@ -79,7 +90,7 @@ wv.map.datelinebuilder = wv.map.ui || function(models, config) {
      *  SVG text component
      *
      * @method setTextDefaults
-     * @static
+     * @private
      *
      * @param {object} Factory - React component Factory
      * @param {object} reactCase - Dom El in which to render component
@@ -114,7 +125,7 @@ wv.map.datelinebuilder = wv.map.ui || function(models, config) {
      * Updates active state of line Components
      *
      * @method updateLineVisibility
-     * @static
+     * @private
      *
      * @param {boolean} boo - component deactivation boolean
      *
@@ -130,7 +141,7 @@ wv.map.datelinebuilder = wv.map.ui || function(models, config) {
      * constructs dateline components
      *
      * @method drawDatelines
-     * @static
+     * @private
      *
      * @param {boolean} boo - component deactivation boolean
      *
@@ -161,15 +172,51 @@ wv.map.datelinebuilder = wv.map.ui || function(models, config) {
         lineRight = setLineDefaults(lineFactory, height, 180, textOverlay2, rightLineCase, textRight);
     };
 
+    /*
+     * relocates and shows tooltip on line hover
+     *
+     * @method onHover
+     * @private
+     *
+     * @param {Array} pixels - pixel array
+     * @param {Object} overlay - OL overlay that contains react tooltip
+     * @param {Number} lineX - X coordinate of line
+     * @param {Object} tooltip - React tooltip that displays line date-info
+     *
+     * @returns {void}
+     */
     var onHover = function(pixels, overlay, lineX, tooltip) {
         var coords;
         coords = map.getCoordinateFromPixel(pixels);
         overlay.setPosition([lineX, coords[1]]);
         tooltip.setState({active: true});
     };
+
+    /*
+     * Hides tooltip when mouse is no longer hovering over
+     * line
+     *
+     * @method onMouseOut
+     * @private
+     *
+     * @param {Object} tooltip - React tooltip that displays line date-info
+     *
+     * @returns {void}
+     */
     var onMouseOut = function(tooltip) {
         tooltip.setState({active: false});
     };
+
+    /*
+     * Updates react tooltip components with correct date
+     *
+     * @method updateDate
+     * @private
+     *
+     * @param {Object} date - JS date object
+     *
+     * @returns {void}
+     */
     var updateDate = function(date) {
         var leftState, rightState;
         leftState = {
@@ -184,6 +231,17 @@ wv.map.datelinebuilder = wv.map.ui || function(models, config) {
         textRight.setState(rightState);
 
     };
+
+    /*
+     * Calculates the height and y-position of the line
+     *
+     * @method position
+     * @private
+     *
+     * @param {Object} map - OL map object
+     *
+     * @returns {void}
+     */
     var position = function(map) {
         var extent, top, topY, bottomY, bottom, height, startY, topExtent, bottomExtent;
 
@@ -214,6 +272,17 @@ wv.map.datelinebuilder = wv.map.ui || function(models, config) {
 
         return [height, startY];
     };
+
+    /*
+     * Calculates the height and y-position of the line
+     *
+     * @method update
+     * @private
+     *
+     * @param {Array} dimensions - Array containing height and y-axis values
+     *
+     * @returns {void}
+     */
     var update = function(dimensions) {
         var state = {height: dimensions[0]};
         lineRight.setState(state);
@@ -221,6 +290,18 @@ wv.map.datelinebuilder = wv.map.ui || function(models, config) {
         overlay1.setPosition([-180, dimensions[1]]);
         overlay2.setPosition([180, dimensions[1]]);
     };
+
+    /*
+     * Calculates the height and y-position of the line
+     *
+     * @method drawOverlay
+     * @private
+     *
+     * @param {Array} coodinate
+     * @param {Object} el - DOM object to be append to overlay
+     *
+     * @returns {void}
+     */
     var drawOverlay = function(coordinate, el) {
         var overlay = new ol.Overlay({
             element: el,
