@@ -67,14 +67,13 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
         }
         setTimeout(function() {
             if ( method === "fly" ) {
-                fly(view, duration, location, newZoom);
-                bounce(view, duration, bounceZoom, newZoom);    
+                bounce(view, duration, bounceZoom, newZoom);
+                fly(view, duration, location, newZoom, map);
             } else if ( method === 'zoom' ) {
-                fly(view, duration, location, newZoom);
                 zoom(view, duration, newZoom);
-                
+                fly(view, duration, location, newZoom, map);
             } else {
-                fly(view, duration, location, newZoom, 0);
+                fly(view, duration, location, newZoom, map);
             }
             callback();
         }, wait);
@@ -96,9 +95,9 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
           duration: duration / 2
         });
     };
-    var fly = function(view, duration, location) {
+    var fly = function(view, duration, location, map) {
         if(location.length > 2) {
-            fitToBox(view, duration, location);
+            fitToBox(view, duration, location, map);
         } else {
             goToNewLocal(view, duration, location);
         }
@@ -111,7 +110,7 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
     };
 
     var fitToBox = function(view, duration, extent) {
-        view.fit(extent, {duration: duration});
+        view.fit(extent, map.getSize(), {duration: duration});
     };
 
     init();
