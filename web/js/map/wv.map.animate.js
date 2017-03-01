@@ -80,12 +80,38 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
 
         lastLocation = location;
     };
+    /*
+     * Zooms in to next event location
+     *
+     * @method zoom
+     * @private
+     *
+     * @param {object} view - OL view Object
+     * @param {number} duration - time of map animation
+     * @param {Object} newZoom - Zoom level at the end of animation
+     *
+     * @returns {void}
+     */
     var zoom = function(view, duration, newZoom) {
         view.animate({
             duration: duration,
             zoom: newZoom
         });
     };
+    /*
+     * A method that zooms of a current zoom level and then
+     *  back down into the zoom level of the next event
+     *
+     * @method bouce
+     * @private
+     *
+     * @param {object} view - OL view Object
+     * @param {number} duration - time of map animation
+     * @param {array} bounceZoom - Outmost zoom level of animation
+     * @param {Object} newZoom - Zoom level at the end of animation
+     *
+     * @returns {void}
+     */
     var bounce = function(view, duration, bounceZoom, newZoom) {
         view.animate({
           zoom: bounceZoom,
@@ -95,6 +121,22 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
           duration: duration / 2
         });
     };
+
+    /*
+     * Determines whether event provides a bounding box
+     *  or a coord and triggers the method that will take
+     *  the user to that location
+     *
+     * @method fly
+     * @private
+     *
+     * @param {object} view - OL view Object
+     * @param {number} duration - time of map animation
+     * @param {array} location - Coordinates of Event
+     * @param {Object} map - OL map object
+     *
+     * @returns {void}
+     */
     var fly = function(view, duration, location, map) {
         if(location.length > 2) {
             fitToBox(view, duration, location, map);
@@ -102,6 +144,19 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
             goToNewLocal(view, duration, location);
         }
     };
+
+    /*
+     * Animates in direction of new coordinates
+     *
+     * @method goToNewLocal
+     * @private
+     *
+     * @param {object} view - OL view Object
+     * @param {number} duration - time of map animation
+     * @param {array} location - Coordinates of Event
+     *
+     * @returns {void}
+     */
     var goToNewLocal = function(view, duration, location) {
         view.animate({
             duration: duration,
@@ -109,6 +164,18 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
         });
     };
 
+    /*
+     * Animates to Bounding Box
+     *
+     * @method setLineDefaults
+     * @private
+     *
+     * @param {object} view - OL view Object
+     * @param {number} duration - time of map animation
+     * @param {array} extent - Bounding box of event
+     *
+     * @returns {void}
+     */
     var fitToBox = function(view, duration, extent) {
         view.fit(extent, map.getSize(), {duration: duration});
     };
