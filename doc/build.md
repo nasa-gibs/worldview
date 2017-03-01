@@ -1,6 +1,6 @@
 # Build
 
-There are three build major processes involved proir to deployment.
+There are three build major processes involved prior to deployment.
 
 ## Worldview Master
 
