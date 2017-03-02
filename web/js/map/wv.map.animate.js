@@ -68,12 +68,12 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
         setTimeout(function() {
             if ( method === "fly" ) {
                 bounce(view, duration, bounceZoom, newZoom);
-                fly(view, duration, location, newZoom, map);
+                fly(view, duration, location, newZoom);
             } else if ( method === 'zoom' ) {
                 zoom(view, duration, newZoom);
-                fly(view, duration, location, newZoom, map);
+                fly(view, duration, location, newZoom);
             } else {
-                fly(view, duration, location, newZoom, map);
+                fly(view, duration, location, newZoom);
             }
             callback();
         }, wait);
@@ -133,11 +133,10 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
      * @param {object} view - OL view Object
      * @param {number} duration - time of map animation
      * @param {array} location - Coordinates of Event
-     * @param {Object} map - OL map object
      *
      * @returns {void}
      */
-    var fly = function(view, duration, location, map) {
+    var fly = function(view, duration, location) {
         if(location.length > 2) {
             fitToBox(view, duration, location, map);
         } else {
@@ -177,7 +176,7 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
      * @returns {void}
      */
     var fitToBox = function(view, duration, extent) {
-        view.fit(extent, map.getSize(), {duration: duration});
+        view.fit(extent, {size: map.getSize(), duration: duration});
     };
 
     init();
