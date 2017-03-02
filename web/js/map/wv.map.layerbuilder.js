@@ -36,7 +36,7 @@ wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache, Par
      * @returns {object} OpenLayers layer
      */
     self.createLayer = function(def, options) {
-        var date, key, proj, layer, layerNext, layerPrior, group;
+        var date, key, proj, layer, layerNext, layerPrior, group, attributes;
 
         group = null;
         options = options || {};
@@ -44,6 +44,14 @@ wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache, Par
         proj = models.proj.selected;
         layer = cache.getItem(key);
         if ( !layer ) {
+            date = options.date || models.date.selected;
+            attributes = {
+                id: def.id,
+                key: key,
+                date: wv.util.toISOStringDate(date),
+                proj: proj.id,
+                def: def,
+            };
             def = _.cloneDeep(def);
             _.merge(def, def.projections[proj.id]);
             if ( def.type === "wmts" ) {
@@ -51,6 +59,11 @@ wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache, Par
                 if(proj.id === 'geographic' && def.wrapadjacentdays === true) {
                     layerNext = createLayerWMTS(def, options, 1);
                     layerPrior = createLayerWMTS(def, options, -1);
+
+                    layer.wv = attributes;
+                    layerPrior.wv = attributes;
+                    layerNext.wv = attributes;
+
                     layer = new ol.layer.Group({
                         layers: [layer, layerNext, layerPrior]
                     });
@@ -62,6 +75,11 @@ wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache, Par
 
                     layerNext = createLayerWMS(def, options, 1);
                     layerPrior = createLayerWMS(def, options, -1);
+
+                    layer.wv = attributes;
+                    layerPrior.wv = attributes;
+                    layerNext.wv = attributes;
+
                     layer = new ol.layer.Group({
                         layers: [layer, layerNext, layerPrior]
                     });
@@ -69,14 +87,7 @@ wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache, Par
             } else {
                 throw new Error("Unknown layer type: " + def.type);
             }
-            date = options.date || models.date.selected;
-            layer.wv = {
-                id: def.id,
-                key: key,
-                date: wv.util.toISOStringDate(date),
-                proj: proj.id,
-                def: def,
-            };
+            layer.wv = attributes;
             cache.setItem(key, layer);
             layer.setVisible(false);
         }
