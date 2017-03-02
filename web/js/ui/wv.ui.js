@@ -63,12 +63,13 @@ wv.ui = (function(self) {
         var $dialog = self.getDialog();
         title = title || "Notice";
         width = width || 300;
-        var $close = $('<i></i>')
-            .addClass('fa fa-times fa-1x')
-            .click(function(e){
-                $(this).dialog( 'close' );
-        });
-        message = $(message).append($close);
+        // var $close = $('<i></i>')
+        //     .addClass('fa fa-times fa-1x')
+        //     .click(function(e){
+        //         $(this).dialog( 'close' );
+        // });
+        // debugger
+        //message = $(message).append($close);
         $dialog.html(message).dialog({
             title: title,
             width: width,
