@@ -20,7 +20,7 @@ wv.map = wv.map || {};
 wv.map.datelinebuilder = wv.map.ui || function(models, config) {
 	var self = {};
 	var map, overlay1, overlay2, textFactory, lineFactory, textOverlay1, textOverlay2,
-        lineLeft, lineRight, textLeft, textRight;
+        lineLeft, lineRight, textLeft, textRight, proj;
     /*
      * Sets globals and event listeners
      *
@@ -40,23 +40,38 @@ wv.map.datelinebuilder = wv.map.ui || function(models, config) {
         lineFactory = React.createFactory(WVC.DateLine);
         textFactory = React.createFactory(WVC.LineText);
         drawDatelines(map, date);
+        proj = models.proj.selected.id;
 
         Parent.events.on('moveend', function() {
+            if(!isGeoProjection())
+                return;
             updateLineVisibility(true);
 			dimensions = position(map);
             update(dimensions);
         });
         Parent.events.on('drag', function() {
+            if(!isGeoProjection())
+                return;
             updateLineVisibility(false);
         });
         Parent.events.on('movestart', function() {
+            if(!isGeoProjection())
+                return;
             updateLineVisibility(false);
         });
         models.date.events.on('select', function() {
             updateDate(models.date.selected);
         });
+        models.proj.events.on('select', function() {
+            proj = models.proj.selected.id;
+        });
     };
-
+    var isGeoProjection = function() {
+        if(proj === 'geographic') {
+            return true;
+        }
+        return false;
+    };
     /*
      * Add Props to React Compents that creates
      *  a hoverable line SVG
@@ -269,7 +284,6 @@ wv.map.datelinebuilder = wv.map.ui || function(models, config) {
 			bottomY = map.getPixelFromCoordinate([extent[2], -90])[1];
 		}
         height = Math.round(Math.abs(bottomY - topY));
-
         return [height, startY];
     };
 
