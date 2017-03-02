@@ -833,7 +833,7 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
             });
 
             // setting a limit on running-data retrievel
-            if( self.mapIsbeingDragged || outside) {
+            if( self.mapIsbeingDragged) {
                 return;
             }
             if(models.naturalEvents.active || models.data.active) {
