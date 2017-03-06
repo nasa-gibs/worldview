@@ -38,10 +38,10 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
      * @returns {void}
      */
     self.move = function(method, location, zoomLevel, callback) {
-        var start, currentZoom, newZoom, duration, wait, startTime, pan, bounceZoom, view, zoomTo, needsToZoomOut, flyParams;
+        var start, currentZoom, newZoom, duration, resolution, wait, startTime, pan, bounceZoom, view, zoomTo, needsToZoomOut, flyParams, size, padding;
         
         start = lastLocation || map.getView().getCenter();
-
+        resolution = undefined;
         //Determine zoom and pan levels depending on distance to new point
         //var distance = ol.sphere.ESPG4326.haversineDistance(start, location);
         
@@ -50,9 +50,15 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
         
         duration = ( method == "fly" ) ? 5000 : 1000;
         wait = ( method == "fly" ) ? 1000 : 1;
-
-
         view = map.getView();
+        if(location.length > 2) {
+            size = map.getSize();
+            padding = 200;
+            resolution = view.getResolutionForExtent(location, [size[0] - (2 * padding), size[1] - (2 * padding)]);
+            location = ol.extent.getCenter(location);
+            newZoom = undefined;
+        }
+
         // use this to set proper zoom/res
 
         // For bounce, if zoom is too high, it bounces "in" insteade of "out";
@@ -67,10 +73,10 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
         }
         setTimeout(function() {
             if ( method === "fly" ) {
-                bounce(view, duration, bounceZoom, newZoom);
+                bounce(view, duration, bounceZoom, newZoom, resolution);
                 fly(view, duration, location, newZoom);
             } else if ( method === 'zoom' ) {
-                zoom(view, duration, newZoom);
+                zoom(view, duration, newZoom, resolution);
                 fly(view, duration, location, newZoom);
             } else {
                 fly(view, duration, location, newZoom);
@@ -92,10 +98,11 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
      *
      * @returns {void}
      */
-    var zoom = function(view, duration, newZoom) {
+    var zoom = function(view, duration, newZoom, resolution) {
         view.animate({
             duration: duration,
-            zoom: newZoom
+            zoom: newZoom,
+            resolution: resolution
         });
     };
     /*
@@ -112,20 +119,19 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
      *
      * @returns {void}
      */
-    var bounce = function(view, duration, bounceZoom, newZoom) {
+    var bounce = function(view, duration, bounceZoom, newZoom, resolution) {
         view.animate({
           zoom: bounceZoom,
           duration: duration / 2
         }, {
           zoom: newZoom,
+          resolution: resolution,
           duration: duration / 2
         });
     };
 
     /*
-     * Determines whether event provides a bounding box
-     *  or a coord and triggers the method that will take
-     *  the user to that location
+     * Animates in direction of new coordinates
      *
      * @method fly
      * @private
@@ -137,46 +143,10 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
      * @returns {void}
      */
     var fly = function(view, duration, location) {
-        if(location.length > 2) {
-            fitToBox(view, duration, location, map);
-        } else {
-            goToNewLocal(view, duration, location);
-        }
-    };
-
-    /*
-     * Animates in direction of new coordinates
-     *
-     * @method goToNewLocal
-     * @private
-     *
-     * @param {object} view - OL view Object
-     * @param {number} duration - time of map animation
-     * @param {array} location - Coordinates of Event
-     *
-     * @returns {void}
-     */
-    var goToNewLocal = function(view, duration, location) {
         view.animate({
             duration: duration,
             center: location
         });
-    };
-
-    /*
-     * Animates to Bounding Box
-     *
-     * @method setLineDefaults
-     * @private
-     *
-     * @param {object} view - OL view Object
-     * @param {number} duration - time of map animation
-     * @param {array} extent - Bounding box of event
-     *
-     * @returns {void}
-     */
-    var fitToBox = function(view, duration, extent) {
-        view.fit(extent, {size: map.getSize(), duration: duration});
     };
 
     init();
