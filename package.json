@@ -36,7 +36,6 @@
         "moment": "2.13.x",
         "openlayers": "4.0.1",
         "gifshot": "https://github.com/nasa-gibs/gifshot/archive/4.2.0.tar.gz",
-        "openlayers": "3.20.x",
         "phantomjs": "2.1.x",
         "promise-queue": "^2.2.3",
         "react": "^15.3.1",
