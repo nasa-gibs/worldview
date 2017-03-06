@@ -17,4 +17,5 @@ BASE_DIR=$(dirname "$0")
 ( \
     cd $BASE_DIR; virtualenv python ; python/bin/pip install \
     xmltodict \
+    isodate \
 )

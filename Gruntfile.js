@@ -313,6 +313,13 @@ module.exports = function(grunt) {
             fetch: {
                 command: "PATH=python/bin:${PATH} FETCH_GC=1 bin/wv-options-build " + env
             },
+            node_packages: {
+                command: 'npm update'
+            },
+
+            python_packages: {
+                command: 'virtualenv python && python/bin/pip install xmltodict isodate'
+            },
 
             rpmbuild: {
                 command: 'rpmbuild --define "_topdir $PWD/build/rpmbuild" ' +
@@ -668,7 +675,7 @@ module.exports = function(grunt) {
         "copy:dist_config_versioned"
     ]);
 
-    grunt.registerTask("fetch", ["exec:fetch"])
+    grunt.registerTask("fetch", ["exec:fetch"]);
 
     grunt.registerTask("site", [
         "load_branding",
@@ -700,11 +707,12 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask("update",["remove:modules", "copy:ext"]);
+    grunt.registerTask("update-packages",["exec:python_packages", "exec:node_packages", "update"]);
     grunt.registerTask("check", ["lint", "test"]);
     grunt.registerTask("clean", ["remove:build"]);
     grunt.registerTask("distclean", ["remove:build", "remove:dist"]);
     grunt.registerTask("lint", ["jshint:console"]);
     grunt.registerTask("test", ["buster:console"]);
 
-    grunt.registerTask("default", ["update", "build", "config", "site"]);
+    grunt.registerTask("default", ["python_packages", "update", "build", "config", "site"]);
 };

@@ -40,13 +40,6 @@ libraries installed in a local directory:
 sudo easy_install virtualenv==1.10.1
 ```
 
-Setup a virtualenv and install dependencies:
-
-```bash
-virtualenv python
-python/bin/pip install xmltodict
-```
-
 Start the build with:
 
 ```bash
