@@ -39,8 +39,8 @@ ol.wv.LookupImageTile.prototype.getImage = function(opt_context) {
 
 ol.wv.LookupImageTile.prototype.load = function() {
 
-    if ( this.state === ol.Tile.State.IDLE ) {
-        this.state = ol.Tile.State.LOADING;
+    if ( this.state === ol.TileState.IDLE ) {
+        this.state = ol.TileState.LOADING;
         var that = this;
         var onImageLoad =  function(e) {
             that.canvas_ = document.createElement("canvas");
@@ -68,7 +68,7 @@ ol.wv.LookupImageTile.prototype.load = function() {
                 }
             }
             g.putImageData(imageData, 0, 0);
-            that.state = ol.Tile.State.LOADED;
+            that.state = ol.TileState.LOADED;
             that.changed();
             that.image_.removeEventListener("load", onImageLoad);
         };
