@@ -10,11 +10,18 @@
  */
 
 buster.testCase("wv.map.runningdata", {
-
+    models: null,
     errors: null,
 
     setUp: function() {
-      this.runner = new wv.map.runningdata();
+      models = {
+          layers: {
+              events: {
+                on: this.stub()
+              }
+          }
+      };
+      this.runner = new wv.map.runningdata(models);
     },
     "1.0: Get Label from Palette object": function() {
         var scale = { 

@@ -98,6 +98,31 @@
     color: red;
 }
 
+/******************** Categories *************************/
+
+#wv-events li i.map-marker {
+    background: url('../images/natural-events/other.svg');
+    height:26px;
+    width:26px;
+}
+#wv-events li.volcanoes i.map-marker{
+    background: url('../images/natural-events/volcano.svg');
+}
+#wv-events li.dust-and-haze i.map-marker{
+    background: url('../images/natural-events/sandstorm.svg');
+}
+#wv-events li.severe-storms i.map-marker{
+    background: url('../images/natural-events/weather.svg');
+}
+#wv-events li.wildfires i.map-marker{
+    background: url('../images/natural-events/fire.svg');
+}
+#wv-events li.manmade i.map-marker{
+    background: url('../images/natural-events/manmade.svg');
+}
+
+/*********************************************************/
+
 /******************** Notifications **********************/
 
 .notify-alert {

@@ -34,7 +34,7 @@
     -o-box-sizing:border-box;
     padding:5px 0 0 0;
     position:relative;
-    padding-right:.2em;
+    border:1px solid transparent;
 }
 
 #productsHolder ul#overlays{

@@ -78,7 +78,6 @@ $(function() {
         if ( config.features.animation ) {
             parsers.push(wv.anim.parse);
         }
-
         _.each(parsers, function(parser) {
             parser(state, errors, config);
         });
@@ -134,7 +133,15 @@ $(function() {
             WVC.GA.init(config.features.googleAnalytics.id); // Insert google tracking
         }
         // HACK: Map needs to be created before the data download model
-        ui.map = wv.map.ui(models, config, wv.map.rotate, wv.map.runningdata);
+        var mapComponents = {
+            Rotation: wv.map.rotate,
+            Runningdata: wv.map.runningdata,
+            Layerbuilder: wv.map.layerbuilder,
+            Dateline: wv.map.datelinebuilder,
+            Precache: wv.map.precachetile
+        };
+        ui.map = wv.map.ui(models, config, mapComponents);
+        ui.map.animate = wv.map.animate(models, config, ui);
         if ( config.features.animation ) {
             models.anim = wv.anim.model(models, config);
             models.link.register(models.anim);
@@ -147,7 +154,7 @@ $(function() {
         }
         if ( config.features.naturalEvents ) {
             models.naturalEvents = wv.naturalEvents.model(models, config);
-            //models.link.register(models.naturalEvents);
+            models.link.register(models.naturalEvents);
         }
         // HACK: Map needs permalink state loaded before starting. But
         // data download now needs it too.

@@ -55,6 +55,9 @@ wv.map.model = wv.map.model || function(models, config) {
             var proj = models.proj.selected;
             var extent = state.v;
             var maxExtent = proj.maxExtent;
+            if(proj.id === "geographic") {
+                proj.wrapExtent = maxExtent = [-250, -90, 250, 90];
+            }
             if ( ol.extent.intersects(extent, maxExtent) ) {
                 self.extent = state.v;
             } else {

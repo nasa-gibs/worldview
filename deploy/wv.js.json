@@ -75,15 +75,21 @@
 
         "web/js/map/wv.map.js",
         "web/js/map/wv.map.model.js",
-        "web/js/map/wv.map.ui.js",
+
+        "web/js/map/wv.map.animate.js",
         "web/js/map/wv.map.runningdata.js",
         "web/js/map/wv.map.rotate.js",
+        "web/js/map/wv.map.layerbuilder.js",
+        "web/js/map/wv.map.precachetile.js",
+        "web/js/map/wv.map.datelinebuilder.js",
+        "web/js/map/wv.map.ui.js",
 
         "web/js/link/wv.link.model.js",
         "web/js/link/wv.link.ui.js",
 
         "web/js/naturalEvents/wv.naturalEvents.model.js",
         "web/js/naturalEvents/wv.naturalEvents.ui.js",
+        "web/js/naturalEvents/wv.naturalEvents.map.js",
 
         "web/js/wv.feedback.js",
         "web/js/wv.tour.js",
