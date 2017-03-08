@@ -66,7 +66,7 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
                     // make a usuable css class from category name
                     event.categories[0].css = event.categories[0].title
                         .toLowerCase()
-                        .replace(' ', '-');
+                        .split(' ').join('-');
                     pruned.push( event );
                 }
             });
