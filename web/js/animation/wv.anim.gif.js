@@ -596,6 +596,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
         $("#wv-map").insertAfter('#productsHolder'); //retain map element before disabling jcrop
         animCoords = undefined;
         jcropAPI.destroy();
+        ui.map.events.trigger('selectiondone');
     };
 
     /*
@@ -664,6 +665,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
                 destoryCheckboxListeners($checkBox);
                 $("#wv-map").insertAfter('#productsHolder'); //retain map element before disabling jcrop
                 jcropAPI.destroy();
+                ui.map.events.trigger('selectiondone');
             }
         });
         return $dialogBox;
@@ -796,7 +798,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             previousCoords = [previousCoords.x, previousCoords.y, previousCoords.x2, previousCoords.y2];
 
         
-        
+        ui.map.events.trigger('selecting');
         starterWidth = previousCoords[0] - previousCoords[2];
         //Start the image cropping. Show the dialog
         $("#wv-map").Jcrop({

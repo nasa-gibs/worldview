@@ -134,7 +134,14 @@ $(function() {
             WVC.GA.init(config.features.googleAnalytics.id); // Insert google tracking
         }
         // HACK: Map needs to be created before the data download model
-        ui.map = wv.map.ui(models, config, wv.map.rotate, wv.map.runningdata);
+        var mapComponents = {
+            Rotation: wv.map.rotate,
+            Runningdata: wv.map.runningdata,
+            Layerbuilder: wv.map.layerbuilder,
+            Dateline: wv.map.datelinebuilder,
+            Precache: wv.map.precachetile
+        };
+        ui.map = wv.map.ui(models, config, mapComponents);
         if ( config.features.animation ) {
             models.anim = wv.anim.model(models, config);
             models.link.register(models.anim);

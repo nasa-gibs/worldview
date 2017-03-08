@@ -4,9 +4,12 @@
  * This code was originally developed at NASA/Goddard Space Flight Center for
  * the Earth Science Data and Information System (ESDIS) project.
  *
- * Copyright (C) 2013 - 2014 United States Government as represented by the
+ * Copyright (C) 2013 - 2016 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
+ *
+ * Licensed under the NASA Open Source Agreement, Version 1.3
+ * http://opensource.gsfc.nasa.gov/nosa.php
  */
 var wv = wv || {};
 wv.map = wv.map || {};
@@ -14,14 +17,20 @@ wv.map = wv.map || {};
 /*
  * @Class
  */
-wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
+wv.map.ui = wv.map.ui || function(models, config, components) {
     var id = "wv-map";
     var selector = "#" + id;
     var cache = new Cache(400); // Save layers from days visited
     var animationDuration = 250;
     var self = {};
-    var rotation = new Rotation(self, models);
-    //var dataRunner = new DataRunner(models);
+    var rotation = new components.Rotation(self, models);
+    var layerBuilder;
+    var dateline = components.Dateline(models, config);
+    var layerKey;
+    var createLayer;
+    var precache = components.Precache(models, config, cache, self);
+
+    //var dataRunner = new components.Runningdata(models);
     self.mapIsbeingDragged = false;
     var hiDPI = ol.has.DEVICE_PIXEL_RATIO > 1;
     var pixelRatio = hiDPI ? 2 : 1;
@@ -29,6 +38,11 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
     self.proj = {}; // One map for each projection
     self.selected = null; // The map for the selected projection
     self.events = wv.util.events();
+    layerBuilder = self.layerBuilder = components.Layerbuilder(models, config, cache, self);
+    layerKey = self.layerKey = layerBuilder.layerKey;
+    createLayer = self.createLayer =layerBuilder.createLayer;
+    self.promiseDay = precache.promiseDay;
+
     /*
      * Sets up map listeners
      *
@@ -41,7 +55,6 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
         if ( config.parameters.mockMap ) {
             return;
         }
-
         // NOTE: iOS sometimes bombs if this is _.each instead. In that case,
         // it is possible that config.projections somehow becomes array-like.
         _.forOwn(config.projections, function(proj) {
@@ -337,7 +350,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
     /*
      * Update layers for the correct Date
      *
-     * @method updateDate
+     * @method updateLookup
      * @static
      *
      *
@@ -358,104 +371,6 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
             return false;
         });
         reloadLayers();
-    };
-    self.getExtent = function(extent1, extent2) {
-        return ol.extent.getIntersection(extent1, extent2);
-    };
-    /*
-     * Loaded the layers that are needed for any one date.
-     * Checks the cache to see if a layer has already 
-     * been added to cache.
-     *
-     * @method promiseDay
-     * @static
-     *
-     * @param {object} date - Date of data to be displayed
-     * on the map.
-     *
-     * @returns {object} Promise.all
-     */
-    self.promiseDay = function(date) {
-        var tileSource;
-        var tileGrid;
-        var viewState;
-        var projection;
-        var currentZ;
-        var frameState;
-        var extent;
-        var pixelRatio;
-        var layers;
-        var map;
-        var promiseArray;
-
-        layers = self.getActiveLayersWithData(date);
-        map = self.selected;
-        frameState = self.selected.frameState_;
-        pixelRatio = frameState.pixelRatio;
-        viewState = frameState.viewState;
-        projection = viewState.projection;
-        extent = self.getExtent(
-            models.proj.selected.maxExtent, //max
-            map.getView().calculateExtent(map.getSize()) //window view
-        );
-        promiseArray = layers.map(function(def){
-            var key;
-            var layer;
-            var renderer;
-            var i = 0;
-
-            i = 0;
-            key = layerKey(def, {date: date});
-            layer = cache.getItem(key);
-            if(layer) {
-                cache.removeItem(key);
-            }
-            layer = createLayer(def, {date: date});
-            return new Promise(function(resolve, reject){
-
-                renderer = new ol.renderer.canvas.TileLayer(layer);
-                tileSource = layer.getSource();
-                tileGrid = tileSource.getTileGridForProjection(projection);
-                currentZ = tileGrid.getZForResolution(viewState.resolution, renderer.zDirection);
-                tileGrid.forEachTileCoord(extent, currentZ, function(tileCoord) {
-                    tile = tileSource.getTile(tileCoord[0], tileCoord[1], tileCoord[2], pixelRatio, projection);
-                    tile.load();
-                    var loader = function(e) {
-                        if(e.type === 'tileloadend') {
-                            --i;
-                            if(i === 0) {
-                                resolve();
-                            }
-                        } else {
-                             reject(new Error('No response at this URL'));
-                            //resolve();// some gibs data is not accurate and rejecting this will break the animation if tile doesn't exist
-                        }
-                        this.un('tileloadend',loader); // remove event listeners from memory
-                        this.un('tileloaderror', loader);
-                    };
-                    tileSource.on('tileloadend',loader);
-                    tileSource.on('tileloaderror', loader);
-                    ++i;
-                });
-
-            });
-        });
-        return new Promise( function(resolve) {
-            Promise.all(promiseArray).then(function() {
-                resolve(date);
-            });
-        });
-    };
-    self.getActiveLayersWithData = function(date) {
-        var layers;
-        var arra = [];
-        layers = models.layers.get();
-        _.each(layers, function(layer) {
-            if(layer.visible && new Date(layer.startDate > date)) {
-                arra.push(layer);
-            }
-        });
-        return arra;
     };
     self.getCustomLayerTimeout = function(layer) {
         if(models.palettes.isActive(layer.id)) {
@@ -494,157 +409,6 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
     var findLayerIndex = function(def) {
         var layers = self.selected.getLayers().getArray();
         var layer = _.findIndex(layers, { wv: { id: def.id } });
-        return layer;
-    };
-
-    /*
-     * Create a new OpenLayers Layer
-     *
-     * @method createLayer
-     * @static
-     *
-     * @param {object} def - Layer Specs
-     * 
-     * @param {object} options - Layer options
-     *
-     *
-     * @returns {object} OpenLayers layer
-     */
-    var createLayer = function(def, options) {
-        options = options || {};
-        var key = layerKey(def, options);
-
-        var layer = cache.getItem(key);
-        if ( !layer ) {
-            var proj = models.proj.selected;
-            def = _.cloneDeep(def);
-            _.merge(def, def.projections[proj.id]);
-            if ( def.type === "wmts" ) {
-                layer = createLayerWMTS(def, options);
-            } else if ( def.type === "wms" ) {
-                layer = createLayerWMS(def, options);
-            } else {
-                throw new Error("Unknown layer type: " + def.type);
-            }
-            var date = options.date || models.date.selected;
-            layer.wv = {
-                id: def.id,
-                key: key,
-                date: wv.util.toISOStringDate(date),
-                proj: proj.id,
-                def: def
-            };
-            cache.setItem(key, layer);
-            layer.setVisible(false);
-        }
-        layer.setOpacity(def.opacity || 1.0);
-        return layer;
-    };
-
-    /*
-     * Create a new WMTS Layer
-     *
-     * @method createLayerWMTS
-     * @static
-     *
-     * @param {object} def - Layer Specs
-     * 
-     * @param {object} options - Layer options
-     *
-     *
-     * @returns {object} OpenLayers WMTS layer
-     */
-    var createLayerWMTS = function(def, options) {
-        var proj = models.proj.selected;
-        var source = config.sources[def.source];
-        if ( !source ) {
-            throw new Error(def.id + ": Invalid source: " + def.source);
-        }
-        var matrixSet = source.matrixSets[def.matrixSet];
-        if ( !matrixSet ) {
-            throw new Error(def.id + ": Undefined matrix set: " + def.matrixSet);
-        }
-        var matrixIds = [];
-        _.each(matrixSet.resolutions, function(resolution, index) {
-            matrixIds.push(index);
-        });
-        var extra = "";
-        if ( def.period === "daily" ) {
-            var date = options.date || models.date.selected;
-            extra = "?TIME=" + wv.util.toISOStringDate(date);
-        }
-        var sourceOptions = {
-            url: source.url + extra,
-            layer: def.layer || def.id,
-            crossOrigin: "anonymous",
-            format: def.format,
-            matrixSet: matrixSet.id,
-            tileGrid: new ol.tilegrid.WMTS({
-                origin: [proj.maxExtent[0], proj.maxExtent[3]],
-                resolutions: matrixSet.resolutions,
-                matrixIds: matrixIds,
-                tileSize: matrixSet.tileSize[0],
-            }),
-            wrapX: false,
-            style: 'default'
-        };
-        if ( models.palettes.isActive(def.id) ) {
-            var lookup = models.palettes.getLookup(def.id);
-            sourceOptions.tileClass = ol.wv.LookupImageTile.factory(lookup);
-        }
-        var layer = new ol.layer.Tile({
-            extent: proj.maxExtent,
-            source: new ol.source.WMTS(sourceOptions)
-        });
-        return layer;
-    };
-
-    /*
-     * Create a new WMS Layer
-     *
-     * @method createLayerWMTS
-     * @static
-     *
-     * @param {object} def - Layer Specs
-     * 
-     * @param {object} options - Layer options
-     *
-     *
-     * @returns {object} OpenLayers WMS layer
-     */
-    var createLayerWMS = function(def, options) {
-        var proj = models.proj.selected;
-        var source = config.sources[def.source];
-        if ( !source )
-            throw new Error(def.id + ": Invalid source: " + def.source);
-
-        var transparent = ( def.format === "image/png" );
-        var parameters = {
-            LAYERS: def.layer || def.id,
-            FORMAT: def.format,
-            TRANSPARENT: transparent,
-            VERSION: "1.1.1"
-        };
-        if ( def.styles )
-            parameters.STYLES = def.styles;
-
-        var extra = "";
-        if ( def.period === "daily" ) {
-            var date = options.date || models.date.selected;
-            extra = "?TIME=" + wv.util.toISOStringDate(date);
-        }
-        var layer = new ol.layer.Tile({
-            extent: proj.maxExtent,
-            source: new ol.source.TileWMS({
-                url: source.url + extra,
-                crossOrigin: "anonymous",
-                params: parameters,
-                tileGrid: new ol.tilegrid.TileGrid({
-                    origin: [proj.maxExtent[0], proj.maxExtent[3]],
-                    resolutions: proj.resolutions
-                })
-            })
-        });
         return layer;
     };
 
@@ -740,8 +504,11 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
      * @returns {object} OpenLayers Map Object
      */
     var createMap = function(proj) {
-        var id = "wv-map-" + proj.id;
-        var $map = $("<div></div>")
+        var id, $map, scaleMetric, scaleImperial, rotateInteraction,
+            map, mobileRotation, lineSvgs;
+
+        id = "wv-map-" + proj.id;
+        $map = $("<div></div>")
             .attr("id", id)
             .attr("data-proj", proj.id)
             .addClass("wv-map")
@@ -749,23 +516,24 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
         $(selector).append($map);
 
         //Create two specific controls
-        var scaleMetric = new ol.control.ScaleLine({
+        scaleMetric = new ol.control.ScaleLine({
             className: "wv-map-scale-metric",
             units: "metric"
         });
-        var scaleImperial = new ol.control.ScaleLine({
+        scaleImperial = new ol.control.ScaleLine({
             className: "wv-map-scale-imperial",
             units: "imperial"
         });
 
-        var rotateInteraction = new ol.interaction.DragRotate({
+        rotateInteraction = new ol.interaction.DragRotate({
             condition: ol.events.condition.altKeyOnly,
             duration: animationDuration
-        }), mobileRotation = new ol.interaction.PinchRotate({
+        });
+        mobileRotation = new ol.interaction.PinchRotate({
             duration: animationDuration
         });
 
-        var map = new ol.Map({
+        map = new ol.Map({
             view: new ol.View({
                 maxResolution: proj.resolutions[0],
                 projection: ol.proj.get(proj.crs),
@@ -815,6 +583,8 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
             rotation.init(map, proj.id);
             map.addInteraction(rotateInteraction);
             map.addInteraction(mobileRotation);
+        } else {
+            lineSvgs = dateline.init(self, map, models.date.selected);
         }
 
         // Set event listeners for changes on the map view (when rotated, zoomed, panned)
@@ -823,16 +593,16 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
         map.getView().on("change:rotation", _.throttle(rotation.updateRotation, 300));
         map.on('pointerdrag', function() {
             self.mapIsbeingDragged = true;
+            self.events.trigger('drag');
         });
         map.on('moveend', function(e) {
+            self.events.trigger('moveend');
             setTimeout(function(){
                 self.mapIsbeingDragged = false;
             }, 200);
         });
-
         return map;
     };
-
     /*
      * Creates map zoom buttons
      * 
@@ -903,7 +673,10 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
             }
         };
 
-        map.getView().on("change:resolution", onZoomChange);
+        map.getView().on("change:resolution", function () {
+            onZoomChange();
+            self.events.trigger('movestart');
+        });
         onZoomChange();
     };
 
@@ -933,6 +706,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
         var $coordWrapper;
         var coordinateFormat;
         var hoverThrottle;
+        var extent;
 
 
         // var timer = null;
@@ -941,6 +715,7 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
         $map = $("#" + map.getTarget());
         map = map || self.selected;
         mapId = 'coords-' + proj.id;
+        extent = proj.maxExtent;
 
         $mousePosition = $('<div></div>')
             .attr("id", mapId)
@@ -957,14 +732,15 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
          *
          * @returns {void}
          */
-        coordinateFormat = function(source, format) {
-            if ( !source ) {
-                return "";
-            }
-            var target = ol.proj.transform(source, proj.crs, "EPSG:4326");
-            var crs = ( models.proj.change ) ? models.proj.change.crs
-                : models.proj.selected.crs;
+        coordinateFormat = function(source, format, outsideExtent) {
 
+            var target, crs;
+            crs = ( models.proj.change ) ? models.proj.change.crs
+                : models.proj.selected.crs;
+            if(outsideExtent) {
+                return crs;
+            }
+            target = ol.proj.transform(source, proj.crs, "EPSG:4326");
             return wv.util.formatCoordinate(target, format) + " " + crs;
         };
 
@@ -1018,18 +794,31 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
             var coords;
             var pixelValue;
             var pixels;
+            var outside;
+
             if($(e.relatedTarget).hasClass('map-coord') ||
                 $(e.relatedTarget).hasClass('coord-btn')) {
                  return;
             }
             pixels =  [e.pageX,e.pageY];
             coords = map.getCoordinateFromPixel(pixels);
+            if(!ol.extent.containsCoordinate(extent, coords)) {
+                outside = true;
+            }
+
+            if(Math.abs(coords[0]) > 180 ) {
+                if(coords[0] > 0) {
+                    coords[0] = coords[0] - 360;
+                } else {
+                    coords[0] = coords[0] + 360;
+                }
+            }
 
             pixelValue = [pixels[0] * pixelRatio, pixels[1] * pixelRatio];
             $('#' + mapId).show();
             $('#' + mapId + ' span.map-coord').each(function(){
                 var format = $(this).attr('data-format');
-                $(this).html(coordinateFormat(coords, format));
+                $(this).html(coordinateFormat(coords, format, outside));
             });
 
             // setting a limit on running-data retrievel
@@ -1084,35 +873,6 @@ wv.map.ui = wv.map.ui || function(models, config, Rotation, DataRunner) {
             }));
             map.getView().setZoom(zoom + amount);
         };
-    };
-
-    /*
-     * Create a layer key
-     *
-     * @function layerKey
-     * @static
-     *
-     * @param {Object} def - Layer properties
-     *
-     * @param {number} options - Layer options
-     *
-     * @returns {object} layer key Object
-     */
-    var layerKey = function(def, options) {
-        var layerId = def.id;
-        var projId = models.proj.selected.id;
-        var date;
-        if ( options.date ) {
-            date = wv.util.toISOStringDate(options.date);
-        } else {
-            date = wv.util.toISOStringDate(models.date.selected);
-        }
-        var dateId = ( def.period === "daily" ) ? date : "";
-        var palette = "";
-        if ( models.palettes.isActive(def.id) ) {
-            palette = models.palettes.key(def.id);
-        }
-        return [layerId, projId, dateId, palette].join(":");
     };
 
     init();
