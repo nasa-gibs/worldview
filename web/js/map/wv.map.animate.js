@@ -38,10 +38,9 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
      * @returns {void}
      */
     self.move = function(method, location, zoomLevel, callback) {
-        var start, currentZoom, newZoom, duration, resolution, wait, startTime, pan, bounceZoom, view, zoomTo, needsToZoomOut, flyParams, size, padding;
+        var start, currentZoom, newZoom, duration, wait, startTime, pan, bounceZoom, view, zoomTo, needsToZoomOut, flyParams;
         
         start = lastLocation || map.getView().getCenter();
-        resolution = undefined;
         //Determine zoom and pan levels depending on distance to new point
         //var distance = ol.sphere.ESPG4326.haversineDistance(start, location);
         
@@ -52,11 +51,7 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
         wait = ( method == "fly" ) ? 1000 : 1;
         view = map.getView();
         if(location.length > 2) {
-            size = map.getSize();
-            padding = 200;
-            resolution = view.getResolutionForExtent(location, [size[0] - (2 * padding), size[1] - (2 * padding)]);
             location = ol.extent.getCenter(location);
-            newZoom = undefined;
         }
 
         // use this to set proper zoom/res
@@ -73,10 +68,10 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
         }
         setTimeout(function() {
             if ( method === "fly" ) {
-                bounce(view, duration, bounceZoom, newZoom, resolution);
+                bounce(view, duration, bounceZoom, newZoom);
                 fly(view, duration, location, newZoom);
             } else if ( method === 'zoom' ) {
-                zoom(view, duration, newZoom, resolution);
+                zoom(view, duration, newZoom);
                 fly(view, duration, location, newZoom);
             } else {
                 fly(view, duration, location, newZoom);
@@ -98,11 +93,10 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
      *
      * @returns {void}
      */
-    var zoom = function(view, duration, newZoom, resolution) {
+    var zoom = function(view, duration, newZoom) {
         view.animate({
             duration: duration,
             zoom: newZoom,
-            resolution: resolution
         });
     };
     /*
@@ -119,13 +113,12 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
      *
      * @returns {void}
      */
-    var bounce = function(view, duration, bounceZoom, newZoom, resolution) {
+    var bounce = function(view, duration, bounceZoom, newZoom) {
         view.animate({
           zoom: bounceZoom,
           duration: duration / 2
         }, {
           zoom: newZoom,
-          resolution: resolution,
           duration: duration / 2
         });
     };
