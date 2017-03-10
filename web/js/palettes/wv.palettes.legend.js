@@ -105,23 +105,25 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
             .append($ranges)
             .append($runningDataPointBar);
 
-        $colorbar.on("mousemove", showUnitHover);
+        $colorbar.on("mousemove", function(e) {
+            showUnitHover(e, index);
+        });
         $colorbar.on("mouseout", hideUnitsOnMouseOut);
         $legendPanel.append($container);
         wv.palettes.colorbar(selector + " " +
             "[data-index='" + index + "'] canvas", legend.colors);
     };
     var renderClasses = function($legendPanel, legend, index) {
-        var $runningDataPointLabel = $("<span></span>")
-            .addClass("wv-running-category-label");
+        // var $runningDataPointLabel = $("<span></span>")
+        //     .addClass("wv-running-category-label");
         var $panel = $("<div></div>")
                 .addClass("wv-palettes-legend")
                 .addClass("wv-palettes-classes")
+                //.append($runningDataPointLabel)
                 .attr("data-index", index);
         $legendPanel
             .attr("id", legend.id)
-            .append($panel)
-            .append($runningDataPointLabel);
+            .append($panel);
 
     };
 
@@ -130,6 +132,8 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         $panel.empty();
         _.each(legend.colors, function(color, classIndex) {
             var $colorBox;
+            var $runningDataPointLabel = $("<span></span>")
+                .addClass("wv-running-category-label");
             $colorBox = $("<span></span>")
                 .attr("data-index", index)
                 .attr("data-class-index", classIndex)
@@ -139,6 +143,8 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
                 .css("background-color", wv.util.hexToRGB(color))
                 .hover(highlightClass, unhighlightClass);
             $panel.append($colorBox);
+            $panel.append($runningDataPointLabel);
+            //Calls running data
             $colorBox.on('mouseenter', showClassUnitHover);
             $colorBox.on('mouseout', hideUnitsOnMouseOut);
         });
@@ -217,7 +223,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
      * @param {MouseEvent} e
      * @return {void}
      */
-    var showUnitHover = function(e) {
+    var showUnitHover = function(e, index) {
         var rgba;
         var pos;
         var x;
@@ -227,11 +233,11 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
         if ( !loaded ) {
             return;
         }
-        legends = model.getLegends(layer.id)[0];
-        offset = $(this).offset();
+        legends = model.getLegends(layer.id)[index];
+        offset = $(e.currentTarget).offset();
         x = e.pageX - offset.left;
         y = e.pageY - offset.top;
-        rgba = wv.util.getCanvasPixelData(this, x, y);
+        rgba = wv.util.getCanvasPixelData(e.currentTarget, x, y);
         hex = wv.util.rgbaToHex(rgba[0], rgba[1], rgba[2]);
         ui.map.runningdata.newLegend(legends, hex);
     };
