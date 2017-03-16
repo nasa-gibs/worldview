@@ -358,7 +358,9 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
     var removeLayer = function(event) {
         var layerId = $(event.target).attr("data-layer");
-        model.remove(layerId);
+        setTimeout(function() {
+            model.remove(layerId);
+        }, 50);
     };
 
     var onLayerRemoved = function(layer) {
