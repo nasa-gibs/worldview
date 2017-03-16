@@ -341,7 +341,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
             _.each(references, function(reference) {
                 var source = _.find(model.data.sources, { id: reference.id });
                 if ( reference.url ) {
-                    items.push("<a target='event' href='" + reference.url + "'>" +
+                    items.push("<a target='event' class='natural-event-link' href='" + reference.url + "'>" +
                                "<i class='fa fa-external-link fa-1'></i>" +
                         source.title + "</a>");
                 } else {
@@ -352,6 +352,9 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
         }
 
         $content.append($item);
+        $('.natural-event-link').click(function(e) {
+            e.stopPropagation();
+        });
     };
 
     var eventList = function(events) {
