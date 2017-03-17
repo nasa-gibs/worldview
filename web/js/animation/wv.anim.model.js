@@ -39,6 +39,7 @@ wv.anim.model = wv.anim.model || function(models, config) {
      *
      */
     self.load = function(state, errors) {
+        console.log(state)
         self.rangeState = self.rangeState || {};
         // self.rangeState.playing = false;
         // if(state.a) {

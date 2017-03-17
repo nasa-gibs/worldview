@@ -206,7 +206,7 @@ $(function() {
             ui.data.render();
         }
         if ( config.features.naturalEvents ) {
-            ui.naturalEvents = wv.naturalEvents.ui(models, ui, config);
+            ui.naturalEvents = wv.naturalEvents.ui(models, ui, config, wv.naturalEvents.request(models, ui, config));
         }
         ui.link = wv.link.ui(models, config);
         ui.tour = wv.tour(models, ui, config);

@@ -13,7 +13,7 @@
 var wv = wv || {};
 wv.naturalEvents = wv.naturalEvents || {};
 
-wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
+wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, request) {
 
     var self = {};
     var model = models.naturalEvents;
@@ -35,17 +35,17 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
     var $notification;
 
     var init = function() {
-        model.events.on( "queryResults", onQueryResults );
+        request.events.on( "queryResults", onQueryResults );
         ui.sidebar.events.on("select", function(tab) {
             if ( tab === "events" ) {
-                model.active = true;
+                request.active = true;
                 resize();
                 if (mapController.current) {
                     mapController.draw(mapController.current);
                 }
             }
             else {
-                model.active = false;
+                request.active = false;
                 mapController.dispose();
                 $notification.dialog('close');
             }
@@ -57,8 +57,8 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
     };
     var onQueryResults = function(){
         //FIXME: this if check needs to be reworked
-        if ( model.data ) {
-            data = model.data.events;
+        if ( request.data ) {
+            data = request.events;
             self.refresh();
         }
     };
@@ -203,7 +203,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
             models.proj.select('geographic');
         }
         self.selected = index;
-        event = model.data.events[index];
+        event = request.events[index];
 
         eventItem = null;
         if ( event.geometries.length > 1 ) {
@@ -218,31 +218,31 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config) {
             categories = [categories];
         }
         _.each(categories, function(c) {
-            if ( model.layers[c.title] ) {
+            if ( request.layers[c.title] ) {
                 category = c.title;
                 return;
             }
         });
 
-        layers = model.layers[category];
+        layers = request.layers[category];
         if ( !layers ) {
-            layers = model.layers.Default;
+            layers = request.layers.Default;
         }
 
         // Turn off all layers in list first
-        _.each(models.layers.active, function(layer){
-            models.layers.setVisibility( layer.id, false );
+        _.each(request.layers.active, function(layer){
+            request.layers.setVisibility( layer.id, false );
         });
 
         // Turn on or add new layers
         _.each(layers, function(layer) {
             var id = layer[0];
             var visible = layer[1];
-            if( models.layers.exists( id ) ) {
-                models.layers.setVisibility( id, visible );
+            if( request.layers.exists( id ) ) {
+                request.layers.setVisibility( id, visible );
             }
             else{
-                models.layers.add(id, { visible: visible });
+                request.layers.add(id, { visible: visible });
             }
         });
 
