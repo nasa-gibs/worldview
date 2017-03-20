@@ -58,7 +58,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     var onQueryResults = function(){
         //FIXME: this if check needs to be reworked
         if ( request.data ) {
-            data = request.events;
+            data = request.data.events;
             self.refresh();
         }
     };
@@ -148,7 +148,6 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
         var $content = $(self.selector + "content");
 
         $content = $(self.selector + "content").empty();
-
         // iterate through events
         _.each(data, function(event, index) {
             refreshEvent($content, event, index);
@@ -203,7 +202,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
             models.proj.select('geographic');
         }
         self.selected = index;
-        event = request.events[index];
+        event = request.data.events[index];
 
         eventItem = null;
         if ( event.geometries.length > 1 ) {
@@ -339,7 +338,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
         if ( references.length > 0 ) {
             items = [];
             _.each(references, function(reference) {
-                var source = _.find(model.data.sources, { id: reference.id });
+                var source = _.find(request.data.sources, { id: reference.id });
                 if ( reference.url ) {
                     items.push("<a target='event' class='natural-event-link' href='" + reference.url + "'>" +
                                "<i class='fa fa-external-link fa-1'></i>" +

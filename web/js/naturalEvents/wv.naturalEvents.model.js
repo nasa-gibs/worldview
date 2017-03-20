@@ -30,11 +30,6 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
         time: null
     };
 
-    self.EVENT_QUERY_RESULTS = "queryResults";
-    self.EVENT_SELECT = "select";
-
-    self.apiURL = config.features.naturalEvents.host;
-    var querySuccessFlag = false;
     /**
      * Handler for events fired by this class.
      *
@@ -43,12 +38,6 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
      * @type Events
      */
     self.events = wv.util.events();
-
-    self.layers = config.naturalEvents.layers;
-    self.ignored = config.naturalEvents.skip || [];
-    self.data = {};
-
-
 
     self.save = function(state) {
         if ( self.active ){
