@@ -57,8 +57,8 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     };
     var onQueryResults = function(){
         //FIXME: this if check needs to be reworked
-        if ( request.data ) {
-            data = request.data.events;
+        if ( model.data ) {
+            data = model.data.events;
             self.refresh();
         }
     };
@@ -202,7 +202,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
             models.proj.select('geographic');
         }
         self.selected = index;
-        event = request.data.events[index];
+        event = model.data.events[index];
 
         eventItem = null;
         if ( event.geometries.length > 1 ) {
@@ -217,31 +217,31 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
             categories = [categories];
         }
         _.each(categories, function(c) {
-            if ( request.layers[c.title] ) {
+            if ( model.layers[c.title] ) {
                 category = c.title;
                 return;
             }
         });
 
-        layers = request.layers[category];
+        layers = model.layers[category];
         if ( !layers ) {
-            layers = request.layers.Default;
+            layers = model.layers.Default;
         }
 
         // Turn off all layers in list first
-        _.each(request.layers.active, function(layer){
-            request.layers.setVisibility( layer.id, false );
+        _.each(models.layers.active, function(layer){
+            models.layers.setVisibility( layer.id, false );
         });
 
         // Turn on or add new layers
         _.each(layers, function(layer) {
             var id = layer[0];
             var visible = layer[1];
-            if( request.layers.exists( id ) ) {
-                request.layers.setVisibility( id, visible );
+            if( models.layers.exists( id ) ) {
+                models.layers.setVisibility( id, visible );
             }
             else{
-                request.layers.add(id, { visible: visible });
+                models.layers.add(id, { visible: visible });
             }
         });
 
@@ -338,7 +338,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
         if ( references.length > 0 ) {
             items = [];
             _.each(references, function(reference) {
-                var source = _.find(request.data.sources, { id: reference.id });
+                var source = _.find(model.data.sources, { id: reference.id });
                 if ( reference.url ) {
                     items.push("<a target='event' class='natural-event-link' href='" + reference.url + "'>" +
                                "<i class='fa fa-external-link fa-1'></i>" +

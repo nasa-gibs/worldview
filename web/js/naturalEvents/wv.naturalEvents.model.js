@@ -23,6 +23,7 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
     var self = {};
     self.selected = null;
     self.active = false;
+    self.layers = config.naturalEvents.layers;
     var state = {
         layersString: null,
         projection: null,

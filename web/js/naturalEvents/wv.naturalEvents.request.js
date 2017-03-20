@@ -26,10 +26,9 @@ wv.naturalEvents.request = wv.naturalEvents.request || function(models, ui, conf
 
     self.apiURL = config.features.naturalEvents.host;
     var querySuccessFlag = false;
-    self.layers = config.naturalEvents.layers;
-    console.log(self.layers)
+    var model = models.naturalEvents;
     self.ignored = config.naturalEvents.skip || [];
-    self.data = {};
+    model.data = {};
 
     var init = function() {
         self.events.on( "queryResults", onQueryResults );
@@ -37,12 +36,12 @@ wv.naturalEvents.request = wv.naturalEvents.request || function(models, ui, conf
     };
 
     var onQueryResults = function(){
-        if ( self.data ) {
+        if ( model.data ) {
             querySuccessFlag = true;
 
             // prune the events of types we don't want
             var pruned = [];
-            _.each( self.data.events, function( event ) {
+            _.each( model.data.events, function( event ) {
                 // this is assuming there is ever only one category per event.
                 // may need to be updated if any events have multiple categories
                 if ( !self.ignored.includes( event.categories[0].title ) ) {
@@ -53,7 +52,7 @@ wv.naturalEvents.request = wv.naturalEvents.request || function(models, ui, conf
                     pruned.push( event );
                 }
             });
-            self.data.events = pruned;
+            model.data.events = pruned;
             // TODO: Reuse permalinks when we have historical events
             //models.link.register(self);
             //models.link.load(self);
@@ -64,7 +63,7 @@ wv.naturalEvents.request = wv.naturalEvents.request || function(models, ui, conf
     var queryEvents = function(callback) {
         var url = self.apiURL + "/events";
         $.getJSON(url, function(data) {
-            self.data.events = data.events;
+            model.data.events = data.events;
             self.events.trigger('queryResults');
         });
     };
@@ -72,7 +71,7 @@ wv.naturalEvents.request = wv.naturalEvents.request || function(models, ui, conf
     var queryTypes = function(callback) {
         var url = self.apiURL + "/categories";
         $.getJSON(url, function(data) {
-            self.data.types = data.categories;
+            model.data.types = data.categories;
             //self.events.trigger('queryResults');
         });
     };
@@ -80,7 +79,7 @@ wv.naturalEvents.request = wv.naturalEvents.request || function(models, ui, conf
     var querySources = function(callback) {
         var url = self.apiURL + "/sources";
         $.getJSON(url, function(data) {
-            self.data.sources = data.sources;
+            model.data.sources = data.sources;
             //self.events.trigger('queryResults');
         });
     };
