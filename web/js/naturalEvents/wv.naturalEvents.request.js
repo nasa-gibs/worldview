@@ -27,6 +27,7 @@ wv.naturalEvents.request = wv.naturalEvents.request || function(models, ui, conf
     self.apiURL = config.features.naturalEvents.host;
     var querySuccessFlag = false;
     self.layers = config.naturalEvents.layers;
+    console.log(self.layers)
     self.ignored = config.naturalEvents.skip || [];
     self.data = {};
 
@@ -65,7 +66,6 @@ wv.naturalEvents.request = wv.naturalEvents.request || function(models, ui, conf
         $.getJSON(url, function(data) {
             self.data.events = data.events;
             self.events.trigger('queryResults');
-            console.log('results')
         });
     };
 
