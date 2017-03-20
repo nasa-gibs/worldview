@@ -91,4 +91,4 @@ wv.naturalEvents.request = wv.naturalEvents.request || function(models, ui, conf
     };
     init();
     return self;
-}
+};
