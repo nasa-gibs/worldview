@@ -14,3 +14,7 @@ options
 \#*
 npm-debug.log
 .vagrant
+# Nightwatch stuff
+reports
+selenium-debug.log
+*.jar

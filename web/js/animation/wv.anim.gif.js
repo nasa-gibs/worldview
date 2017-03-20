@@ -531,7 +531,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
             //Create a dialog over the view and place the image there
             var $imgDialog = wv.ui.getDialog().append($dialogBodyCase).append($download);
             $imgDialog.dialog({
-                dialogClass: "wv-panel",
+                dialogClass: "wv-panel wv-gif-results",
                 title: "Your GIF",
                 width: animCoords.w + 198,
                 resizable: false,

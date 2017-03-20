@@ -294,7 +294,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
      */
     self.createRunnerFromLegend = function(legend, hex) {
         var paletteInfo;
-        if(legend.type === 'continuous' || 'discrete') {
+        if(legend.type === 'continuous' || legend.type === 'discrete') {
             paletteInfo = self.getDataLabel(legend, hex);
             if(paletteInfo) {
                 self.setLayerValue(legend.id, paletteInfo);
