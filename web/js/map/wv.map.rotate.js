@@ -116,11 +116,10 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
             label: Number(models.map.rotation * (180/Math.PI)).toFixed()
         }).mousedown(function() { //reset rotation
             clearInterval(self.intervalId); //stop repeating rotation on mobile
-            map.beforeRender(ol.animation.rotate({
+            map.getView().animate({
                 duration: 500,
-                rotation: map.getView().getRotation()
-            }));
-            map.getView().rotate(0);
+                rotation: 0
+            });
 
             $resetButton.button("option", "label", "0");
         });
@@ -191,17 +190,12 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
      *
      * @returns {void}
      */
-    this.rotate = function( amount, duration, map) {
+    this.rotate = function(amount, duration, map) {
         
         var currentDeg = (map.getView().getRotation() * (180.0 / Math.PI));
-        if(Math.abs(currentDeg) <= 342 ) { 
-            map.beforeRender(ol.animation.rotate({
-                duration: 10,
-                rotation: map.getView().getRotation()
-            }));
-        } else if(Math.abs(currentDeg) === 360){
+        if(Math.abs(currentDeg) === 360){
             map.getView().setRotation(0);
-        } else {
+        } else if(Math.abs(currentDeg) >= 360) {
             var newNadVal = ((360 - Math.abs(currentDeg)) * (Math.PI/180));
             if(currentDeg < 0) {
                 map.getView().setRotation(newNadVal);
@@ -209,7 +203,10 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
                 map.getView().setRotation(-newNadVal);
             }
         }
-        map.getView().rotate(map.getView().getRotation() - (Math.PI / amount));
+        map.getView().animate({
+            rotation: map.getView().getRotation() - (Math.PI / amount),
+            duration: duration,
+        });
     };
 };
 
