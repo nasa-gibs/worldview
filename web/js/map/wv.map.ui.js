@@ -533,7 +533,6 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
         mobileRotation = new ol.interaction.PinchRotate({
             duration: animationDuration
         });
-
         map = new ol.Map({
             view: new ol.View({
                 maxResolution: proj.resolutions[0],
@@ -543,7 +542,7 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
                 zoom: proj.startZoom,
                 maxZoom: proj.numZoomLevels,
                 enableRotation: true,
-                extent: proj.id === "geographic" ? [-250, -90, 250, 90] : [-180, -90, 180, 90],
+                extent: proj.id === "geographic" ? [-250, -90, 250, 90] : proj.maxExtent,
             }),
             target: id,
             renderer: ["canvas"],
