@@ -542,7 +542,8 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
                 rotation: proj.id === "geographic" ? 0.0 : models.map.rotation,
                 zoom: proj.startZoom,
                 maxZoom: proj.numZoomLevels,
-                enableRotation: true
+                enableRotation: true,
+                extent: proj.id === "geographic" ? [-250, -90, 250, 90] : [-180, -90, 180, 90],
             }),
             target: id,
             renderer: ["canvas"],
