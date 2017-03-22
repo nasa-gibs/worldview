@@ -79,7 +79,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         $(self.selector).undelegate(".layer-enabled" ,'click');
 
         $(self.selector).delegate(".close" ,'click', removeLayer);
-        $(self.selector).delegate(".layer-enabled" ,'click', toggleVisibility);
+        $(self.selector).delegate(".hideReg" ,'click', toggleVisibility);
 
         $("#" + self.id + " ul.category").sortable({
             items: "li:not(.head)",
@@ -221,7 +221,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             .attr("data-layer", layer.id)
             .attr("title", "Layer options for " + names.title)
             .addClass("wv-layers-options");
-        wv.ui.mouse.click($editButton, toggleOptionsPanel);
+        $editButton.on('click', toggleOptionsPanel);
         if ( wv.util.browser.small ) {
             $editButton.hide();
         }
@@ -260,7 +260,8 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         }
     };
 
-    var toggleOptionsPanel = function() {
+    var toggleOptionsPanel = function(e) {
+        e.stopPropagation();
         var $d = $("#wv-layers-options-dialog");
         var thisLayerId = $(this).attr("data-layer");
         var thisLayer = config.layers[thisLayerId];
@@ -384,11 +385,11 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     };
 
     var toggleVisibility = function(event) {
-        var $target = $(event.target);
-        if ( $target.attr("data-action") === "show" ) {
-            model.setVisibility($target.attr("data-layer"), true);
+        var $action = $(this).find('.hideReg');
+        if ( $(this).attr("data-action") === "show" ) {
+            model.setVisibility($(this).attr("data-layer"), true);
         } else {
-            model.setVisibility($target.attr("data-layer"), false);
+            model.setVisibility($(this).attr("data-layer"), false);
         }
     };
 
