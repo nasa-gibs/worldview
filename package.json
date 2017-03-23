@@ -12,6 +12,8 @@
         "babel-polyfill": "^6.16.0",
         "bluebird": "^3.4.6",
         "buster": "0.7.12",
+        "chromedriver": "2.25.1",
+        "geckodriver": "1.2.0",
         "grunt": "0.4.x",
         "grunt-buster": "0.4.x",
         "grunt-contrib-clean": "1.0.x",
@@ -29,18 +31,20 @@
         "grunt-markdown": "0.7.x",
         "grunt-minjson": "0.4.x",
         "grunt-mkdir": "0.1.x",
+        "grunt-nightwatch": "^0.5.4",
         "grunt-rename": "0.1.x",
         "grunt-text-replace": "0.4.x",
         "jshint": "2.9.x",
         "lodash": "^4.15.0",
         "moment": "2.13.x",
-        "openlayers": "3.19.x",
+        "openlayers": "4.0.1",
         "gifshot": "https://github.com/nasa-gibs/gifshot/archive/4.2.0.tar.gz",
+        "nightwatch": "^0.9.9",
         "phantomjs": "2.1.x",
         "promise-queue": "^2.2.3",
         "react": "^15.3.1",
         "react-dom": "^15.3.1",
-        "worldview-components": "1.1.0"
+        "worldview-components": "1.2.0",
+        "selenium-server-standalone-jar": "3.0.1"
     }
 }
-

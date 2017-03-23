@@ -98,6 +98,43 @@
     color: red;
 }
 
+/******************** Categories *************************/
+
+#wv-events li i.map-marker {
+    background: url('../images/natural-events/event-other.svg');
+    height:26px;
+    width:26px;
+}
+#wv-events li.volcanoes i.map-marker{
+    background: url('../images/natural-events/event-volcano.svg');
+}
+#wv-events li.dust-and-haze i.map-marker{
+    background: url('../images/natural-events/event-sandstorm.svg');
+}
+#wv-events li.severe-storms i.map-marker{
+    background: url('../images/natural-events/event-weather.svg');
+}
+#wv-events li.wildfires i.map-marker{
+    background: url('../images/natural-events/event-fire.svg');
+}
+#wv-events li.manmade i.map-marker{
+    background: url('../images/natural-events/event-manmade.svg');
+}
+#wv-events li.sea-and-lake-ice i.map-marker{
+    background: url('../images/natural-events/event-sea-ice.svg');
+}
+#wv-events li.snow i.map-marker{
+    background: url('../images/natural-events/event-snow.svg');
+}
+#wv-events li.water-color i.map-marker{
+    background: url('../images/natural-events/event-water-color.svg');
+}
+#wv-events li.icebergs i.map-marker{
+    background: url('../images/natural-events/event-iceberg.svg');
+}
+
+/*********************************************************/
+
 /******************** Notifications **********************/
 
 .notify-alert {

@@ -78,7 +78,8 @@
 }
 .layer-hidden .wv-palettes-min,
 .layer-hidden .wv-palettes-max,
-.layer-hidden .wv-palettes-title{
+.layer-hidden .wv-palettes-title,
+.layer-hidden .wv-running-label {
     color:#999;
     font-size:0.7em;
 }
@@ -113,21 +114,21 @@
 .bank div .wv-palettes-panel .wv-running-bar {
     visibility: hidden;
     position: absolute;
-    transition-property: margin-left;
+    transition-property: left;
     transition-duration: 100ms, 100ms;
     transition-delay: 0s, 0s;
 }
 
 .bank div .wv-palettes-panel .wv-running-category-label {
-    bottom: 2px;
+    bottom: 1px;
     position: absolute;
     visibility: hidden;
 }
 
 .bank div .wv-palettes-panel .wv-running-bar {
-    bottom: 10px;
+    bottom: 11px;
     width: 1px;
-    height: 10px;
+    height: 12px;
     background: #000;
 }
 .bank div .wv-palettes-panel .wv-running-bar:before,
@@ -140,14 +141,14 @@
     line-height: 0;
 }
 .bank div .wv-palettes-panel .wv-running-bar:before {
-    top: 5px;
+    top: 6px;
     left: -5px;
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
     border-bottom: 5.5px solid #000;
 }
 .bank div .wv-palettes-panel .wv-running-bar:after {
-    top: 6px;
+    top: 7px;
     left: -4px;
     border-left: 4px solid transparent;
     border-right: 4px solid transparent;
@@ -162,11 +163,13 @@
 .bank div .wv-palettes-panel.wv-running .wv-running-category-label {
     visibility: visible;
 }
-.bank div .wv-palettes-panel .wv-running .wv-running-label,
-.bank div .wv-palettes-panel .wv-running .wv-running-bar {
+.bank .wv-palettes-panel .wv-running .wv-running-label,
+.bank .wv-palettes-panel .wv-running .wv-running-bar {
     visibility: visible;
 }
-
+.active-lengend .wv-palettes-panel .wv-running .wv-running-bar {
+    visibility: hidden;
+}
 /* FIXME: Too specific */
 .bank div .wv-palettes-colorbar {
     width: 100%;
@@ -176,7 +179,7 @@
 }
 
 .bank div.wv-palettes-classes {
-    padding-bottom: 6px;
+    padding-bottom: 16px;
 }
 .bank .wv-running div.wv-palettes-classes .wv-palettes-class.wv-active {
     opacity: 1;
@@ -208,14 +211,14 @@
     text-decoration: underline;
 }
 
-.bank div .wv-palettes-colorbar[data-type='single'] {
+/*.bank div .wv-palettes-colorbar[data-type='single'] {
     width: 10px;
 }
-
+*/
 /* FIXME: Too specific */
-.bank div .wv-palettes-colorbar:hover {
+/*.bank div .wv-palettes-colorbar:hover {
     border: 1px solid #404040;
-}
+}*/
 
 #palette-selector-dialog .product-description {
     margin-bottom: 10px;

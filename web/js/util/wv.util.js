@@ -21,7 +21,7 @@ var wv = wv || {};
  * @static
  */
 wv.util = (function(self) {
-
+    var canvas = null;
     // Needed anymore?
     self.LAYER_GROUPS = {
         baselayers: {
@@ -144,7 +144,20 @@ wv.util = (function(self) {
     self.parseTimestampUTC = function(str) {
         return self.parseDateUTC(str);
     };
-
+    /**
+     * Gets a pixel RGBA value from Canvas
+     *
+     * @method getCanvasPixelData
+     * @static
+     * @param canvas {Object} DOM canvas Element
+     * @param x {Number} X value on canvas
+     * @return y {Number} Y value on canvas
+     * @return {Object} Canvas image data.
+     */
+    self.getCanvasPixelData = function(canvas, x, y) {
+        var context = canvas.getContext("2d");
+        return context.getImageData(x, y, 1, 1).data;
+    };
     /**
      * Parses a UTC ISO 8601 date.
      *
@@ -185,7 +198,22 @@ wv.util = (function(self) {
         }
         return date;
     };
-
+    /**
+     * Uses canvas.measureText to compute and return the width of the given text of given font in pixels.
+     *
+     * @param {String} text The text to be rendered.
+     * @param {String} font The css font descriptor that text is to be rendered with (e.g. "bold 14px verdana").
+     *
+     * @see http://stackoverflow.com/questions/118241/calculate-text-width-with-javascript/21015393#21015393
+     */
+    self.getTextWidth = function(text, font) {
+        // re-use canvas object for better performance
+        canvas = canvas || document.createElement("canvas");
+        var context = canvas.getContext("2d");
+        context.font = font;
+        var metrics = context.measureText(text);
+        return metrics.width;
+    };
     /**
      * Converts a date into an ISO string with only the date portion.
      *

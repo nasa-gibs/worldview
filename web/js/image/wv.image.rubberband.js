@@ -165,6 +165,8 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
             $cropee
                 .insertAfter('#productsHolder');
             jcropAPI.destroy();
+
+            ui.map.events.trigger('selectiondone');
             if (previousPalettes) {
                 models.palettes.restore(previousPalettes);
                 previousPalettes = null;
@@ -206,7 +208,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                 });
 
         jcropAPI = $cropee.data('Jcrop');
-
+        ui.map.events.trigger('selecting');
         if(coords) {
             jcropAPI.setSelect([coords.x, coords.y,coords.x2,coords.y2]);
         }

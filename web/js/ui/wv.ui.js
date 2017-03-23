@@ -63,22 +63,50 @@ wv.ui = (function(self) {
         var $dialog = self.getDialog();
         title = title || "Notice";
         width = width || 300;
+        // var $close = $('<i></i>')
+        //     .addClass('fa fa-times fa-1x')
+        //     .click(function(e){
+        //         $(this).dialog( 'close' );
+        // });
+        // debugger
+        //message = $(message).append($close);
         $dialog.html(message).dialog({
             title: title,
-            show: { effect: "fade" },
-            hide: { effect: "fade" },
             width: width,
             minHeight: 1,
-            height: "auto"
+            height: "auto",
+            show: {
+                effect: "fade",
+                duration: 400
+            },
+            hide: {
+                effect: "fade",
+                duration: 200
+            }
         }).on('dialogclose', function() {
             $(this).off('dialogclose');
             if(callback) {
                 callback();
             }
         });
-
-
     };
+
+    /**
+     * Displays a non-obtrusive message to the end user in the top right.
+     *
+     * @method notify
+     * @static
+     *
+     * @param {string} message The message to display to the user.
+     *
+     * @param [title="Notice"] {string} Title for the dialog box.
+     */
+     self.notify.small = function(title, link, width, callback){
+
+         var $dialog = self.getDialog();
+         title = title || "Notice";
+         width = width || 200;
+     };
 
     /**
      * Asks the end user a yes or no question in a dialog box.
