@@ -386,6 +386,8 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
     var toggleVisibility = function(event) {
         var $action = $(this).find('.hideReg');
+        if($(this).parent().hasClass('disabled'))
+            return;
         if ( $(this).attr("data-action") === "show" ) {
             model.setVisibility($(this).attr("data-layer"), true);
         } else {
