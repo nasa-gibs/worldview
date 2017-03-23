@@ -75,11 +75,11 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             renderGroup($container, group);
         });
 
-        $(self.selector).undelegate(".close" ,'click');
-        $(self.selector).undelegate(".layer-enabled" ,'click');
+        $(self.selector + ' .close').off('click');
+        $(self.selector + ' .hideReg').off('click');
 
-        $(self.selector).delegate(".close" ,'click', removeLayer);
-        $(self.selector).delegate(".hideReg" ,'click', toggleVisibility);
+        $(self.selector + ' .close').on('click', removeLayer);
+        $(self.selector + " .hideReg").on('click', toggleVisibility);
 
         $("#" + self.id + " ul.category").sortable({
             items: "li:not(.head)",
@@ -125,7 +125,6 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     };
 
     var renderLayer = function($parent, group, layer, top) {
-
         var $layer = $("<li></li>")
             .attr("id", group.id + "-" + encodeURIComponent(layer.id))
             .addClass(self.id + "item")
@@ -135,7 +134,8 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         var $visibleButton = $("<a></a>")
             .addClass("hdanchor hide hideReg bank-item-img")
             .attr("id", "hide" + encodeURIComponent(layer.id))
-            .attr("data-layer", layer.id);
+            .attr("data-layer", layer.id)
+            .on('click', toggleVisibility);
 
         var $visibleImage = $("<i></i>")
             .on('click', function(){
@@ -211,7 +211,8 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             .attr("id", "close" + group.id + encodeURIComponent(layer.id))
             .addClass("button close bank-item-img")
             .attr("data-layer", layer.id)
-            .attr("title", "Remove Layer");
+            .attr("title", "Remove Layer")
+            .on('click', removeLayer);
         var $removeImage = $("<i></i>");
 
         $removeButton.append($removeImage);
@@ -416,7 +417,6 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     };
 
     var onLayerVisibility = function(layer, visible) {
-
         var $element = $(".hideReg[data-layer='" + layer.id + "']");
         //if ($element.parent().hasClass('disabled'))
         //    return;
