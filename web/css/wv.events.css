@@ -120,8 +120,11 @@
 #wv-events li.manmade i.map-marker{
     background: url('../images/natural-events/event-manmade.svg');
 }
+/* sea-and-lake-ice and icebergs are currently one category
+ * and we are temp using the Iceberg icons
+ */
 #wv-events li.sea-and-lake-ice i.map-marker{
-    background: url('../images/natural-events/event-sea-ice.svg');
+    background: url('../images/natural-events/event-iceberg.svg');
 }
 #wv-events li.snow i.map-marker{
     background: url('../images/natural-events/event-snow.svg');
