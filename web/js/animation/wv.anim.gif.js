@@ -418,11 +418,10 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
      *
      */
     var resetRotation = function() {
-        ui.map.selected.beforeRender(ol.animation.rotate({
+        ui.map.selected.getView().animate({
             duration: 400,
-            rotation: ui.map.selected.getView().getRotation()
-        }));
-        ui.map.selected.getView().rotate(0);
+            rotation: 0
+        });
     };
 
     /*
@@ -596,7 +595,8 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
         $("#wv-map").insertAfter('#productsHolder'); //retain map element before disabling jcrop
         animCoords = undefined;
         jcropAPI.destroy();
-        ui.map.events.trigger('selectiondone');
+        if(models.proj.selected.id === "geographic")
+            ui.map.events.trigger('selectiondone');
     };
 
     /*
@@ -665,7 +665,8 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
                 destoryCheckboxListeners($checkBox);
                 $("#wv-map").insertAfter('#productsHolder'); //retain map element before disabling jcrop
                 jcropAPI.destroy();
-                ui.map.events.trigger('selectiondone');
+                if(models.proj.selected.id === "geographic")
+                    ui.map.events.trigger('selectiondone');
             }
         });
         return $dialogBox;
@@ -797,8 +798,8 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
         else
             previousCoords = [previousCoords.x, previousCoords.y, previousCoords.x2, previousCoords.y2];
 
-        
-        ui.map.events.trigger('selecting');
+        if(models.proj.selected.id === "geographic")
+            ui.map.events.trigger('selecting');
         starterWidth = previousCoords[0] - previousCoords[2];
         //Start the image cropping. Show the dialog
         $("#wv-map").Jcrop({

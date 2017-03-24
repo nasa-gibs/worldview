@@ -82,7 +82,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
 
     var toggle = function(){
         var checked = $("#wv-image-button-check").prop("checked");
-
+        var geographic = models.proj.selected.id === "geographic";
         //Enables UI to select an area on the map while darkening the view
         var toggleOn = function() {
             state = "on";
@@ -97,11 +97,10 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
             draw();
         };
         var resetRotation = function() {
-            ui.map.selected.beforeRender(ol.animation.rotate({
+            ui.map.selected.getView().animate({
+                rotation: 0,
                 duration: 400,
-                rotation: ui.map.selected.getView().getRotation()
-            }));
-            ui.map.selected.getView().rotate(0);
+            });
         };
 
         var disablePalettes = function() {
@@ -116,10 +115,8 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
             models.layers.setVisibility("Graticule", false);
             toggle();
         };
-
         if(state == "off") {
             var layers = models.layers.get({renderable: true});
-            var geographic = models.proj.selected.id === "geographic";
             var on = true;
             if ( _.find(layers, {id: "Graticule"}) && geographic ) {
                 wv.ui.ask({
@@ -165,8 +162,8 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
             $cropee
                 .insertAfter('#productsHolder');
             jcropAPI.destroy();
-
-            ui.map.events.trigger('selectiondone');
+            if(geographic)
+                ui.map.events.trigger('selectiondone');//Should be a changed to a image event
             if (previousPalettes) {
                 models.palettes.restore(previousPalettes);
                 previousPalettes = null;
@@ -208,7 +205,8 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
                 });
 
         jcropAPI = $cropee.data('Jcrop');
-        ui.map.events.trigger('selecting');
+        if(models.proj.selected.id === "geographic")
+            ui.map.events.trigger('selecting');//Should be a changed to a image event
         if(coords) {
             jcropAPI.setSelect([coords.x, coords.y,coords.x2,coords.y2]);
         }
