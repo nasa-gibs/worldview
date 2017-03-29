@@ -55,7 +55,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
             window.history.replaceState("", "@OFFICIAL_NAME@",
                     "?" + models.link.toQueryString());
         }
-    }, 250, {trailing: true});
+    }, 2000, {leading: true, trailing: true});
 
     self.show = function() {
         var $dialog = wv.ui.getDialog();
