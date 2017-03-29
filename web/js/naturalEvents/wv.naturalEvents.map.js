@@ -67,10 +67,9 @@ wv.naturalEvents.map = wv.naturalEvents.map || function(models, maps, config) {
 
     };
 
-    self.draw = function(location) {
-
+    self.draw = function(location, currentMap) {
         //loads current map
-
+        map = maps.selected;
         //remove any existing location first
         map.removeLayer(vectorLayer);
 

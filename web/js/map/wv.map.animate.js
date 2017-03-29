@@ -19,7 +19,6 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
     var model = models.map;
     var self = {};
 
-    var map = ui.map.selected;
     var lastLocation;
 
     var init = function(){
@@ -38,8 +37,9 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
      * @returns {void}
      */
     self.move = function(method, location, zoomLevel, callback) {
-        var start, currentZoom, newZoom, duration, wait, startTime, pan, bounceZoom, view, zoomTo, needsToZoomOut, flyParams;
+        var start, currentZoom, newZoom, duration, wait, startTime, pan, bounceZoom, view, zoomTo, needsToZoomOut, flyParams, map;
         
+        map = ui.map.selected;
         start = lastLocation || map.getView().getCenter();
         //Determine zoom and pan levels depending on distance to new point
         //var distance = ol.sphere.ESPG4326.haversineDistance(start, location);
