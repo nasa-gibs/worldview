@@ -112,11 +112,11 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
      */
     self.getLabelMarginLeft = function(labelWidth, caseWidth, location) {
         if(location + (labelWidth / 2) > caseWidth) {
-            return (caseWidth - labelWidth) - 2;
+            return (caseWidth - labelWidth) - 5;
         } else if (location - (labelWidth / 2) < 0) {
             return 0;
         } else {
-            return (location - (labelWidth / 2));
+            return (location - ((labelWidth / 2) + 5));
         }
     };
 
@@ -149,7 +149,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
      * Gets the point in which to place the running
      * data value label  
      *
-     * @method getLabelMarginLeft
+     * @method getPalette
      *
      * @param {String} id - Palette id
      *
