@@ -17,6 +17,7 @@ wv.map = wv.map || {};
  */
 wv.map.rotate = wv.map.rotate || function(ui, models, map) {
     this.evts = wv.util.events();
+    var model = models.map;
     this.intervalId = null;
     var self = this;
 
@@ -140,8 +141,8 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
         radians = view.getRotation();
         deg = radians * (180.0 / Math.PI);
         models.map.rotation = radians;
-        window.history.replaceState("", "@OFFICIAL_NAME@","?" + models.link.toQueryString());
         self.setResetButton(deg);
+        model.update();
     };
 
 
