@@ -1,5 +1,6 @@
 #wv-link input[type='text'] {
     width: 100%;
+    cursor: text;
 }
 
 #wv-link-shorten {
