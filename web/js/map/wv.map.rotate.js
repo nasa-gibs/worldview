@@ -137,13 +137,14 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
      */
     this.updateRotation = function() {
         var deg, radians, view;
+
         view = ui.selected.getView();
         radians = view.getRotation();
-        deg = radians * (180.0 / Math.PI);
         models.map.rotation = radians;
-        self.setResetButton(deg);
-        model.update();
+        self.setResetButton(radians);
+        model.update(view.get);
     };
+
 
 
     /*
@@ -157,8 +158,9 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
      *
      * @returns {void}
      */
-    this.setResetButton = function(deg) {
+    this.setResetButton = function(radians) {
         var button = $(".wv-map-reset-rotation");
+        var deg = radians * (180.0 / Math.PI);
         //Set reset button content
         button.button("option", "label", Number(deg).toFixed());
         switch (true) {

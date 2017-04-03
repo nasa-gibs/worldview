@@ -103,7 +103,7 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
 
         //Update the rotation buttons if polar projection to display correct value
         if(models.proj.selected.id !== "geographic")
-            rotation.updateRotation();
+            rotation.setResetButton(models.map.rotation);
 
         // If the browser was resized, the inactive map was not notified of
         // the event. Force the update no matter what and reposition the center
@@ -125,7 +125,7 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
                 extent = models.map.getLeadingExtent();
             }
             if ( extent ) {
-                map.getView().fit(extent, map.getSize());
+                map.getView().fit(extent);
             }
         }
         updateExtent();
@@ -506,7 +506,7 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
      */
     var createMap = function(proj) {
         var id, $map, scaleMetric, scaleImperial, rotateInteraction,
-            map, mobileRotation, lineSvgs;
+            map, mobileRotation, lineSvgs, resolution;
 
         id = "wv-map-" + proj.id;
         $map = $("<div></div>")
@@ -590,7 +590,7 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
         // Set event listeners for changes on the map view (when rotated, zoomed, panned)
         map.getView().on("change:center", updateExtent);
         map.getView().on("change:resolution", updateExtent);
-        map.getView().on("change:rotation", _.throttle(rotation.updateRotation, 300));
+        map.getView().on("change:rotation", _.throttle(onRotate, 300));
         map.on('pointerdrag', function() {
             self.mapIsbeingDragged = true;
             self.events.trigger('drag');
@@ -687,7 +687,10 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
         });
         onZoomChange();
     };
-
+    var onRotate = function() {
+        rotation.updateRotation();
+        updateExtent();
+    };
     /*
      * Creates map events based on mouse position
      * 

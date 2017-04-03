@@ -23,6 +23,7 @@ wv.map.model = wv.map.model || function(models, config) {
 
     self.extent = null;
     self.events = wv.util.events();
+    self.rotation = 0;
     /*
      * Emits update event
      *
@@ -55,6 +56,7 @@ wv.map.model = wv.map.model || function(models, config) {
             var proj = models.proj.selected;
             var extent = state.v;
             var maxExtent = proj.maxExtent;
+
             if(proj.id === "geographic") {
                 proj.wrapExtent = maxExtent = [-250, -90, 250, 90];
             }
