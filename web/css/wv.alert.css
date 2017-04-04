@@ -1,0 +1,30 @@
+.wv-alert {
+	z-index: 2000;
+	position: relative;
+}
+	.wv-alert .wv-alert-case {}
+	.wv-alert .wv-alert-case h4 {
+		color: black;
+	}
+	.wv-alert .wv-alert-case .wv-alert-header {
+		
+	}
+	.wv-alert .wv-alert-case .wv-alert-icon-case {
+		height: 40px;
+		width: 40px;]
+		display: inline-block;
+	}
+	.wv-alert .wv-alert-case .wv-alert-header i {
+	    text-align: center;
+    	vertical-align: bottom;
+    }
+	.wv-alert .wv-alert-case i.wvc-alert-close {
+		position: absolute;
+		right: 2px;
+		top: 2px;
+		color: black;
+	}
+	.wv-alert .wv-alert-case .alert {
+		background: #f4e7a8;
+		color: #b89e18;
+	}
