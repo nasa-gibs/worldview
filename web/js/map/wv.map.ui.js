@@ -125,7 +125,7 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
                 extent = models.map.getLeadingExtent();
             }
             if ( extent ) {
-                map.getView().fit(extent);
+                map.getView().fit(extent, {nearest: true});
             }
         }
         updateExtent();

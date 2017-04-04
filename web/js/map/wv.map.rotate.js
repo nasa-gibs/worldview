@@ -142,7 +142,6 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
         radians = view.getRotation();
         models.map.rotation = radians;
         self.setResetButton(radians);
-        model.update(view.get);
     };
 
 
