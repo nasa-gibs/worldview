@@ -19,12 +19,9 @@ import shutil
 import sys
 from urllib2 import Request, urlopen, HTTPError
 
-granule_endpoint = "".join(
+cmr_endpoint = "".join(
   ["https://cmr.earthdata.nasa.gov/search/",
    "concepts/search.json?"])
-collection_endpoint = "".join(
-  ["https://cmr.earthdata.nasa.gov/search/",
-   "collections.json?"])
 
 class RequestError(Exception):
   """
@@ -135,7 +132,7 @@ def aql_date(t):
 
 
 def create_query_string(fields):
-  return "short_name=" + fields["shortName"].value
+  return "short_name=" + fields["shortName"].value 
 
 
 def create_xml(fields):
@@ -185,6 +182,60 @@ def create_xml(fields):
     xml += ["<granuleCondition>"]
     xml += ["<dayNightFlag value=\"%s\"/>" % fields["dayNightFlag"].value]
     xml += ["</granuleCondition>"]
+
+  xml += ["</where>"]
+  xml += ["</query>"]
+
+  return "\n".join(xml)
+
+
+def create_xml_for_collection(fields):
+  """
+  Creates an XML document given the provided CGI fields for collections
+
+  Parameters:
+  - fields: CGI fields to use a parameters for the CMR query
+
+  Returns:
+  - AQL XML document for the CMR query request as a string.
+  """
+
+  # It isn't necessary to have the official prolog and DOCTYPE
+  xml = ["<?xml version=\"1.0\" encoding=\"UTF-8\"?>"]
+
+  xml += ["<query>", "<for value=\"collections\"/>"]
+
+  xml += ["<dataCenterId>"]
+  if "dataCenterId" in fields:
+    xml += aql_list(fields.getlist("dataCenterId"))
+  else:
+    xml += ["<all/>"]
+  xml += ["</dataCenterId>"]
+
+  xml += ["<where>"]
+
+  xml += ["<collectionCondition>", "<shortName>"]
+  xml += aql_list(fields.getlist("shortName"))
+  xml += ["</shortName>", "</collectionCondition>"]
+
+  if "startTime" in fields or "endTime" in fields:
+    xml += ["<collectionCondition>", "<temporal>"]
+
+  if "startTime" in fields:
+    try:
+      start_time = datetime.strptime(fields["startTime"].value, "%Y%m%d%H%M%S%f")
+      xml += ["<startDate>", aql_date(start_time), "</startDate>"]
+    except ValueError:
+      raise RequestError("Invalid startTime: " + fields["startTime"].value)
+  if "endTime" in fields:
+    try:
+      end_time = datetime.strptime(fields["endTime"].value, "%Y%m%d%H%M%S%f")
+      xml += ["<stopDate>", aql_date(end_time), "</stopDate>"]
+    except ValueError:
+      raise RequestError("Invalid endTime: " + fields["endTime"].value)
+  
+  if "startTime" in fields or "endTime" in fields:
+    xml += ["</temporal>", "</collectionCondition>"]
 
   xml += ["</where>"]
   xml += ["</query>"]
@@ -257,19 +308,20 @@ def process_request(options):
       raise RequestError("Missing parameter: %s" % required_field)
 
   xml = None
-  if "collection" not in fields:
+
+  if "collection" in fields:
+    xml = create_xml_for_collection(fields)
+  else:
     xml = create_xml(fields)
 
-    if options.xml:
-      print xml
-    query_url = granule_endpoint
-  else:
-    query_url = collection_endpoint + create_query_string(fields)
-
+  if options.xml:
+    print xml
+  
   if options.url:
-    print query_url
+    print cmr_endpoint
+
   if not options.no_query:
-    query_cmr(query_url, options, xml)
+    query_cmr(cmr_endpoint, options, xml)
 
 
 def parse_options():
