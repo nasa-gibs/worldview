@@ -42,6 +42,10 @@ yesterday, and tomorrow appear together on the same map.
 * `CollectionList`: Does not display any information on the map and presents a
 list. Use this for collections that do not have granules and only have
 a collection level entry.
+* `CollectionMix`: Handles layers which only have collection-level metadata
+and have different collections based on the currently-selected date.  Uses
+"science" and "nrt" query flags to distinguish between "old" and "new"
+collections, respectively.
 * `DailyAMSRE`: Displays a single entry for a daily AMSR-E product. Since the
 metadata is too exact, this omits granules that happen to contain on a very
 small fraction of the day.
@@ -205,8 +209,8 @@ parameters:
 * `field`: The field value to check against
 * `value`: Field value must equal this exactly.
 * `regex`: Field value must match this regular expression.
-* `handler`: If the handler for this product is `MODISMix`, the handler that
-should be used for the NRT query, for example, `TerraSwathMultiDay`.
+* `handler`: If the handler for this product is `MODISMix` or `CollectionMix`, the
+handler that should be used for the NRT query, for example, `TerraSwathMultiDay`.
 
 Example:
 
