@@ -4,7 +4,7 @@
         display:block;
         float:left;
         left: 0;
-        
+
         min-width:238px;
         width:100%;
         height:100%;
@@ -15,7 +15,7 @@
         top:0; z-index: 10100;
     }
     #productsHolder footer {
-        
+
     }
     .bank {
         height:96%;
@@ -36,7 +36,7 @@
     }
 
     #wv-logo {
-        background: url("../brand/images/wv-logo-mobile.png?v=@BUILD_NONCE@") no-repeat center rgba(40, 40, 40, 0.85);
+        background: url("../brand/images/wv-logo-mobile.svg?v=@BUILD_NONCE@") no-repeat center rgba(40, 40, 40, 0.85);
         height: 42px;
         width: 56px;
         padding: 5px;

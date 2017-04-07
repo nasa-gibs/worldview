@@ -114,7 +114,7 @@ div.horizontalContainer {
 }
 
 #wv-logo {
-    background: url('../brand/images/wv-logo.png?v=@BUILD_NONCE@') no-repeat center rgba(40,40,40,0.85);
+    background: url('../brand/images/wv-logo.svg?v=@BUILD_NONCE@') no-repeat center rgba(40,40,40,0.85);
     width: 286px;
     height:55px;
     padding:5px 0;
