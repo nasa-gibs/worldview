@@ -815,7 +815,16 @@ wv.data.results.transform = function(projection) {
         var projGeom = geom.clone()
                 .transform(wv.map.CRS_WGS_84, projection);
         granule.geometry[projection] = projGeom;
-        granule.centroid[projection] = projGeom.getInteriorPoint();
+
+        if (projGeom instanceof ol.geom.Polygon) {
+            granule.centroid[projection] = projGeom.getInteriorPoint();
+        }
+        else {
+            // Assuming that projGeom is a ol.geom.MultiPolygon
+            granule.centroid[projection] =
+                projGeom.getInteriorPoints().getPoint(0);
+        }
+
         return granule;
     };
 
