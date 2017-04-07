@@ -21,6 +21,7 @@ wv.data.handler.getByName = function(name) {
     var map = {
         "AquaSwathMultiDay":    wv.data.handler.aquaSwathMultiDay,
         "CollectionList":       wv.data.handler.collectionList,
+        "CollectionMix":        wv.data.handler.collectionMix,
         "List":                 wv.data.handler.list,
         "DailyGranuleList":     wv.data.handler.dailyGranuleList,
         "DailyAMSRE":           wv.data.handler.dailyAMSRE,
@@ -228,6 +229,67 @@ wv.data.handler.collectionList = function(config, model, spec) {
         return chain.process(results);
     };
 
+    return self;
+};
+
+wv.data.handler.collectionMix = function(config, model, spec) {
+
+    var self = wv.data.handler.base(config, model);
+    var nrtHandler;
+    var scienceHandler;
+
+    var init = function() {
+        var productConfig = config.products[model.selectedProduct];
+
+        var nrtHandlerName = productConfig.nrt.handler;
+        var nrtHandlerFactory =
+                wv.data.handler.getByName(nrtHandlerName);
+        nrtHandler = nrtHandlerFactory(config, model, spec);
+
+        var scienceHandlerName = productConfig.science.handler;
+        var scienceHandlerFactory =
+                wv.data.handler.getByName(scienceHandlerName);
+        scienceHandler = scienceHandlerFactory(config, model, spec);
+    };
+
+    self._submit = function() {
+
+        var nrtQueryOptions = {
+            time: model.time,
+            startTimeDelta: nrtHandler.startTimeDelta,
+            endTimeDelta: nrtHandler.endTimeDelta,
+            data: config.products[model.selectedProduct].query.nrt
+        };
+        var nrt = self.cmr.submit(nrtQueryOptions);
+
+        var scienceQueryOptions = {
+            time: model.time,
+            data: config.products[model.selectedProduct].query.science
+        };
+        var science = self.cmr.submit(scienceQueryOptions);
+
+        return wv.util.ajaxJoin([
+            { item: "nrt",      promise: nrt },
+            { item: "science",  promise: science }
+        ]);
+    };
+
+    self._processResults = function(data) {
+        var useNRT = false;
+        if ( data.nrt.length > 0 && data.science.length > 0 ) {
+            useNRT = ( model.prefer === "nrt" );
+        } else {
+            useNRT = ( data.nrt.length > 0 );
+        }
+
+        if ( useNRT ) {
+            return nrtHandler._processResults(data.nrt);
+        } else {
+            return scienceHandler._processResults(data.science);
+        }
+    };
+
+    init();
     return self;
 };
 
@@ -559,4 +621,3 @@ wv.data.handler.halfOrbit = function(config, model, spec) {
     init();
     return self;
 };
-
