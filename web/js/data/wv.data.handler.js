@@ -389,12 +389,14 @@ wv.data.handler.dailyAMSRE = function(config, model, spec) {
 };
 
 wv.data.handler.modisGrid = function(config, model, spec) {
-    var self = wv.data.handler.base(config);
+    var self = wv.data.handler.base(config, model);
 
     self._submit = function() {
         var crs = model.crs.replace(/:/, "_");
 
         var queryOptions = {
+            startTimeDelta: 180,
+            endTimeDelta: -180,
             time: model.time,
             data: config.products[model.selectedProduct].query
         };
