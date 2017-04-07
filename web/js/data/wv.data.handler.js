@@ -299,6 +299,8 @@ wv.data.handler.list = function(config, model, spec) {
 
     self._submit = function(queryData) {
         var queryOptions = {
+            startTimeDelta: 1,
+            endTimeDelta: -1,
             time: model.time,
             data: queryData
         };
@@ -395,8 +397,8 @@ wv.data.handler.modisGrid = function(config, model, spec) {
         var crs = model.crs.replace(/:/, "_");
 
         var queryOptions = {
-            startTimeDelta: 180,
-            endTimeDelta: -180,
+            startTimeDelta: 1,
+            endTimeDelta: -1,
             time: model.time,
             data: config.products[model.selectedProduct].query
         };
