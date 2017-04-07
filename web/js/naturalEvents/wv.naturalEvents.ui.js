@@ -57,7 +57,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     };
     var onQueryResults = function(){
         //FIXME: this if check needs to be reworked
-        if ( model.data ) {
+        if ( model.data.sources ) {
             data = model.data.events;
             self.refresh();
         }
@@ -186,12 +186,12 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     };
 
     self.select = function(index, dateIndex) {
-
+        var event, method;
         if ( index === lastIndex && lastDateIndex === dateIndex ) {
             return;
         }
 
-        var method = "fly";
+        method = "fly";
         if ( index == lastIndex && dateIndex != lastDateIndex ) {
             method = "pan";
         }
