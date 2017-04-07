@@ -133,8 +133,9 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
              $("#wv-image-resolution [value='0.125']").remove();
         }
 
-        // Auto-set default resolution to map's current zoom level
-        var curZoom = wvx.ui.map.selected.getView().getZoom();
+        // Auto-set default resolution to map's current zoom level; round it
+        // for incremental zoom steps
+        var curZoom = Math.round(wvx.ui.map.selected.getView().getZoom());
 
         // Don't do anything if the user hasn't changed zoom levels; we want to
         // preserve their existing settings
