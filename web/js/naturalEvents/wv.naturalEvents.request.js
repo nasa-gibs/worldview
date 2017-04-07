@@ -36,7 +36,7 @@ wv.naturalEvents.request = wv.naturalEvents.request || function(models, ui, conf
     };
 
     var onQueryResults = function(){
-        if ( model.data ) {
+        if ( model.data.sources && model.data.types && model.data.events) {
             querySuccessFlag = true;
 
             // prune the events of types we don't want
@@ -72,7 +72,7 @@ wv.naturalEvents.request = wv.naturalEvents.request || function(models, ui, conf
         var url = self.apiURL + "/categories";
         $.getJSON(url, function(data) {
             model.data.types = data.categories;
-            //self.events.trigger('queryResults');
+            self.events.trigger('queryResults');
         });
     };
 
@@ -80,7 +80,7 @@ wv.naturalEvents.request = wv.naturalEvents.request || function(models, ui, conf
         var url = self.apiURL + "/sources";
         $.getJSON(url, function(data) {
             model.data.sources = data.sources;
-            //self.events.trigger('queryResults');
+            self.events.trigger('queryResults');
         });
     };
 
