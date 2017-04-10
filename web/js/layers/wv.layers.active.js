@@ -144,7 +144,6 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
         $visibleButton.append($visibleImage);
         $layer.append($visibleButton);
-
         if ( !model.available(layer.id) ){
             $layer
                 .removeClass('layer-visible')
@@ -176,19 +175,20 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         $layer.append($("<div></div>")
                       .addClass('zot')
                       .append('<b>!</b>'));
-
-        if ( !layer.visible ) {
-            $visibleButton
-                .attr("title", "Show Layer")
-                .attr("data-action", "show")
-                .parent()
-                .addClass("layer-hidden");
-        } else {
-            $visibleButton
-                .attr("title", "Hide Layer")
-                .attr("data-action", "hide")
-                .parent()
-                .addClass("layer-visible");
+        if(model.available(layer.id)) {
+            if ( !layer.visible ) {
+                $visibleButton
+                    .attr("title", "Show Layer")
+                    .attr("data-action", "show")
+                    .parent()
+                    .addClass("layer-hidden");
+            } else {
+                $visibleButton
+                    .attr("title", "Hide Layer")
+                    .attr("data-action", "hide")
+                    .parent()
+                    .addClass("layer-visible");
+            }
         }
 
         checkZots($layer, layer);
