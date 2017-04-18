@@ -5,6 +5,8 @@
 Visit Worldview at
 [https://worldview.earthdata.nasa.gov](https://worldview.earthdata.nasa.gov)
 
+**We're hiring! If you're interested in joining our team, we're looking for a [Javascript Web Developer](https://www.ssaihq.com/employment/careers/Careers.aspx?adata=EG8FfWFUTsrjoBu9rAXRJa%2flnn%2fS1bDbU2WqXYiLCC0Q4BLQzr3LEKS%2bUp%2bNdoDQVLZOGagcvG%2f25E7Qk01zyxF0zIcYdce00orz95xFrmZd1aAoZmvdv5499dCV1RowoxrvKXgdJ6ZQZ9ECkz9KEHaC%2f0xNpGwTCB11NbAGPAdvfU1%2fA9Ckl4m%2fWK8x7js0OA%3d%3d)!**
+
 ## About
 
 This tool from [NASA's](http://nasa.gov) [EOSDIS](https://earthdata.nasa.gov)
@@ -45,7 +47,7 @@ Please see our [Roadmap](https://github.com/nasa-gibs/worldview/wiki/Worldview-R
 
 Here are the tickets we are currently working on: 
 [![Stories in Ready](https://badge.waffle.io/nasa-gibs/worldview.svg?label=ready&title=Ready)](http://waffle.io/nasa-gibs/worldview)
-[![Stories in In Progress](https://badge.waffle.io/nasa-gibs/worldview.svg?label=in progress&title=In Progress)](http://waffle.io/nasa-gibs/worldview)
+[![Stories in In Progress](https://badge.waffle.io/nasa-gibs/worldview.svg?label=in%20progress&title=In%20Progress)](http://waffle.io/nasa-gibs/worldview)
 
 To get your instance of Worldview running, follow the [Installation](https://github.com/nasa-gibs/worldview#installation) guide below or the [Manual Setup](https://github.com/nasa-gibs/worldview/blob/master/doc/manual_setup.md) instructions.
 
