@@ -24,7 +24,7 @@ wv.data.cmr.client = wv.data.cmr.client || function(spec) {
     var ns = wv.data.cmr.client;
 
     var ajaxOptions = {
-        url: wv.brand.url("service/data/cmr.cgi"),
+        url: "https://cmr.earthdata.nasa.gov/search/",
         traditional: true,
         dataType: "json",
         timeout: QUERY_TIMEOUT
@@ -40,8 +40,12 @@ wv.data.cmr.client = wv.data.cmr.client || function(spec) {
         var queryParameters = $.extend(true, {}, ajaxOptions, parameters);
         var startTimeDelta = parameters.startTimeDelta || 0;
         var endTimeDelta = parameters.endTimeDelta || 0;
-
         var t = parameters.time;
+        var searchType = 'granules.json';
+        if(parameters.search) {
+            searchType = parameters.search;
+        }
+        queryParameters.url += searchType;
         if ( t ) {
             var startTime = new Date(Date.UTC(
                 t.getUTCFullYear(), t.getUTCMonth(), t.getUTCDate(),
@@ -52,10 +56,12 @@ wv.data.cmr.client = wv.data.cmr.client || function(spec) {
                 23, 59 + endTimeDelta, 59
             ));
 
-            queryParameters.data.startTime =
-                    wv.util.toCompactTimestamp(startTime);
-            queryParameters.data.endTime = wv.util.toCompactTimestamp(endTime);
+            startTime = startTime.toISOString();
+            endTime = endTime.toISOString();
+
+            queryParameters.url += '?temporal=' + startTime + ',' + endTime;
         }
+        queryParameters.url += '&pageSize=1000';
 
         var deferred = $.Deferred();
         var metrics = "ev=data-download&" + $.param(queryParameters.data, true);
