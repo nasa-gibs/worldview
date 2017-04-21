@@ -58,10 +58,10 @@ wv.data.cmr.client = wv.data.cmr.client || function(spec) {
 
             startTime = startTime.toISOString();
             endTime = endTime.toISOString();
+            queryParameters.data.temporal = startTime + ',' + endTime;
 
-            queryParameters.url += '?temporal=' + startTime + ',' + endTime;
         }
-        queryParameters.url += '&pageSize=1000';
+        queryParameters.data.pageSize = '1000';
 
         var deferred = $.Deferred();
         var metrics = "ev=data-download&" + $.param(queryParameters.data, true);
