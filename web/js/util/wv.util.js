@@ -270,13 +270,20 @@ wv.util = (function(self) {
     };
 
     self.dateAdd = function(date, interval, amount) {
+        var month, maxDay, year;
         var newDate = new Date(date.getTime());
         switch ( interval ) {
             case "day":
                 newDate.setUTCDate(newDate.getUTCDate() + amount);
                 break;
             case "month":
-                newDate.setUTCMonth(newDate.getUTCMonth() + amount);
+                year = newDate.getUTCFullYear();
+                month = newDate.getUTCMonth();
+                maxDay = new Date(year, month + amount + 1, 0).getUTCDate();
+                if(maxDay <= date.getUTCDate()) {
+                    newDate.setUTCDate(maxDay);
+                }
+                newDate.setUTCMonth(month + amount);
                 break;
             case "year":
                 newDate.setUTCFullYear(newDate.getUTCFullYear() + amount);
@@ -286,7 +293,6 @@ wv.util = (function(self) {
         }
         return newDate;
     };
-
     self.daysInMonth = function(d) {
         var y;
         var m;
