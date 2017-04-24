@@ -62,11 +62,6 @@ other environments.
 
 *Also note:* As documented in [this issue](https://github.com/nasa-gibs/worldview/issues/73), there may be a problem with using Vagrant 1.8.7 and above.  The current workaround is to downgrade to Vagrant 1.8.6, though we are working to find a better fix.
 
-Install the following:
-
-* [VirtualBox](https://www.virtualbox.org)
-* [Vagrant](https://www.vagrantup.com)
-
 Clone this repository:
 
 ```bash
@@ -83,22 +78,19 @@ git clone https://github.com/nasa-gibs/worldview-options-eosdis.git options
 # Or a blank repository with only Corrected Reflectance and no branding
 git clone https://github.com/nasa-gibs/worldview-options-template.git options
 ```
-
-Build the virtual machine with:
-
+Run local node server
 ```bash
-vagrant up (or 'vagrant up --provision' if you already built it previously)
+npm install
+grunt
+npm start
 ```
 
 After the command finishes, Worldview should be ready and available at
 one of the following:
 
 ```bash
-# Official EOSDIS configurations
-http://localhost:8182/worldview
-
-# Blank repository
-http://localhost:8182/example-map
+Go to
+http://localhost:3000
 ```
 
 ## Other Information
