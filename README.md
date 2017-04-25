@@ -78,20 +78,33 @@ git clone https://github.com/nasa-gibs/worldview-options-eosdis.git options
 # Or a blank repository with only Corrected Reflectance and no branding
 git clone https://github.com/nasa-gibs/worldview-options-template.git options
 ```
+Install dependencies
+```bash
+# install local version of grunt
+
+sudo npm install --global grunt-cli
+```
+
+```bash
+# install virtualenv to keep additional libraries installed in a local directory: 
+
+sudo easy_install virtualenv==1.10.1
+```
+
 Run local node server
 ```bash
 npm install
 grunt
 npm start
 ```
-
-After the command finishes, Worldview should be ready and available at
-one of the following:
+# Worldview should be available at
 
 ```bash
-Go to
+
 http://localhost:3000
 ```
+A node server will continue running until you end the session.
+You can end the session by pressing `control-X`
 
 ## Other Information
 
