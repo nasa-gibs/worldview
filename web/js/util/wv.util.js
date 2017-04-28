@@ -612,7 +612,13 @@ wv.util = (function(self) {
             localStorage.setItem(property, value);
         }
     };
-
+    self.isInLocalStorage = function(property) {
+        return localStorage.getItem(property);
+    };
+    self.localStorageValueMatches = function(property, value) {
+        var oldValue = localStorage.getItem(property);
+        return oldValue === value;
+    };
     /**
      * Wraps a function in a try/catch block that invokes wv.util.error
      * if an exception is thrown.

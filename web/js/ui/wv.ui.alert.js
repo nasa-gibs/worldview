@@ -19,45 +19,106 @@ wv.ui = wv.ui || {};
  */ 
 wv.ui.alert = wv.ui.alert || function(models, url) {                                                                                 
     var self = {};
-    var alertReactFactory = React.createFactory(WVC.Alert);
-    var mountCase;                                                                                                              
+    var mountCase;
+    var mainNotification;
+    var updateAlert;
+    var mainIcon;
+    var secondaryNotification;
+    var message;
+
+    var classes = {
+        alert: 'fa-bolt',
+        message: 'fa-gift',
+        outage: 'fa-exclamation-circle'
+    };
     var init = function() {
-    	var notifications, reactComponent, options, p;
-    	mountCase = document.getElementById('wv-alert');
+    	var reactComponent, options, p, alertUser;
+    	$mainIcon = $('#wv-info-button i')[0];
         p = wv.util.get(url);
         p.then(function(response) {
-        	var obj = JSON.parse(response);
+            var obj, notifications, alert;
+        	
+            alert = false;
+            obj = JSON.parse(response);
         	notifications = obj.notifications;
         	// Loop through notifications and create react Alert components
-        	for(var i = 0, len = notifications.length; i < len; i++) {
-        		var mountDiv = createAlertDiv(mountCase, 'wv-alert-case', i);
-        		options = initReactComponent(notifications[i]);
-        		reactComponent = renderReactComponent(options, mountDiv);
+        	for(var i = 0, len = notifications.length, item; i < len; i++) {
+                item = notifications[i];
+        		alertUser = objectAlreadySeen(item);
+                if(alertUser) {
+                    alert = true;
+                }
+                setNotifications(item);
         	}
         }, function(error) {
         	console.warn(error);
         });
-    };  
-    var initReactComponent = function(response) {
-		return {
-			header: response.notification_type,
-			content: response.message,
-			onclose: closeAlert
-		};
     };
-    var createAlertDiv = function(parent, id, index) {
-    	var div = document.createElement('div');
-    	div.id = id + '_' + index;
-    	div.className = id;
-    	parent.appendChild(div);
-    	return div;
+    var objectAlreadySeen = function(obj) {
+        var fieldExists, fieldValueMatches, type, idString;
+
+        type = obj.notification_type;
+        idString = obj.id.toString();
+        fieldExists = wv.util.isInLocalStorage(type);
+        fieldValueMatches = false;
+
+        if(fieldExists) {
+            fieldValueMatches = wv.util.localStorageValueMatches(type, idString);
+        }
+        return fieldValueMatches;
     };
-    var renderReactComponent = function(options, mountLocation) {
-    	console.log(options, mountLocation);
-		return ReactDOM.render(alertReactFactory(options), mountLocation);
+
+    var setNotifications = function(obj) {
+        var arraLength, message, alert, outage, type;
+
+        type = obj.notification_type;
+        
+        if(type === 'message') {
+            updateAlert = true;
+            if(!mainNotification) {
+                mainNotification = 'message';
+            }
+            
+        } else if(type === 'alert') {
+            if(mainNotification !== 'outage') {
+                mainNotification = 'alert';
+            }
+        } else {
+            mainNotification = 'outage';
+        }
     };
-    var closeAlert = function(e) {
-    	console.log(e);
+    var setSecondaryIcons = function(obj) {
+        var type;
+
+        type = obj.notification_type;
+        
+        if(type === 'message') {
+            updateAlert = true;
+            if(!mainNotification) {
+                mainNotification = 'message';
+            }
+            
+        } else if(type === 'alert') {
+            alertUser(obj);
+            if(mainNotification !== 'outage') {
+                mainNotification = 'alert';
+            }
+        } else {
+            mainNotification = 'outage';
+        }
+    };
+    var initViewAdjusts = function() {
+        updateMainIcon();
+    };
+    var updateMainIcon = function() {
+        mainIcon.class = 'fa fa-2x ' + classes[mainNotification];
+    };
+    self.getAlert = function() {
+        if(classes[mainNotification]) {
+            return $("<li><a><i class='ui-icon fa fa-fw " + classes[mainNotification] + "'></i>Notifications</a></li>");
+        } else  {
+            return null;
+        }
     };
 
     init();
