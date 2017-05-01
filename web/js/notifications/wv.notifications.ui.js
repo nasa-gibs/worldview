@@ -12,12 +12,12 @@
  * http://opensource.gsfc.nasa.gov/nosa.php                                                                                             
  */                                                                                                                                     
 var wv = wv || {};                                                                                                                      
-wv.ui = wv.ui || {};                                                                                                                    
+wv.notifications = wv.notifications || {};                                                                                                                    
     
 /*  
  * @Class
  */ 
-wv.ui.alert = wv.ui.alert || function(models, url) {                                                                                 
+wv.notifications.ui = wv.notifications.ui || function(models, url) {                                                                                 
     var self = {};
     var mountCase;
     var mainNotification;
@@ -25,6 +25,15 @@ wv.ui.alert = wv.ui.alert || function(models, url) {
     var mainIcon;
     var secondaryNotification;
     var message;
+    var sortedNotifications;
+
+    var activeNotifications = [];
+    var activeMessage;
+
+    self.events = wv.util.events();
+    self.infoIconActive = false;
+    self.notifyIconActive = false;
+    self.messageIconActive = false;
 
     var classes = {
         alert: 'fa-bolt',
@@ -32,27 +41,49 @@ wv.ui.alert = wv.ui.alert || function(models, url) {
         outage: 'fa-exclamation-circle'
     };
     var init = function() {
-    	var reactComponent, options, p, alertUser;
-    	$mainIcon = $('#wv-info-button i')[0];
+        var reactComponent, options, p, alertUser;
+        mainIcon = $('#wv-info-button i')[0];
+        console.log(url)
         p = wv.util.get(url);
         p.then(function(response) {
             var obj, notifications, alert;
-        	
-            alert = false;
             obj = JSON.parse(response);
-        	notifications = obj.notifications;
-        	// Loop through notifications and create react Alert components
-        	for(var i = 0, len = notifications.length, item; i < len; i++) {
-                item = notifications[i];
-        		alertUser = objectAlreadySeen(item);
-                if(alertUser) {
-                    alert = true;
-                }
-                setNotifications(item);
-        	}
+
+            notifications = obj.notifications;
+            sortedNotifications = separateByType(notifications);
+            setGlobals(sortedNotifications);
+
+
+            // Loop through notifications and create react Alert components
+            // for(var i = 0, len = notifications.length, item; i < len; i++) {
+         //        item = notifications[i];
+            //  alertUser = objectAlreadySeen(item);
+         //        if(alertUser) {
+         //            alert = true;
+         //        }
+         //        setNotifications(item);
+            // }
         }, function(error) {
-        	console.warn(error);
+            console.warn(error);
         });
+    };
+    var setGlobals = function(sortedNotifications){
+        var message, outage, alert;
+        message = sortedNotifications.messages[0];
+        outage = sortedNotifications.outage[0];
+        alert = sortedNotifications.alert[0];
+
+        if(!objectAlreadySeen(message)) {
+            mainNotification = 'message'
+            activeMessage = message.id;
+        } else if(!objectAlreadySeen(alert)) {
+            mainNotification = 'alert';
+            activeNotifications.push(alert.id);
+        } else if(!objectAlreadySeen(outage)) {
+            mainNotification = 'outage';
+            activeNotifications.push(outage.id);
+        }
+
     };
     var objectAlreadySeen = function(obj) {
         var fieldExists, fieldValueMatches, type, idString;
@@ -67,7 +98,9 @@ wv.ui.alert = wv.ui.alert || function(models, url) {
         }
         return fieldValueMatches;
     };
+    var handleAlertsAndOutages = function(arra) {
 
+    };
     var setNotifications = function(obj) {
         var arraLength, message, alert, outage, type;
 
@@ -87,25 +120,31 @@ wv.ui.alert = wv.ui.alert || function(models, url) {
             mainNotification = 'outage';
         }
     };
-    var setSecondaryIcons = function(obj) {
-        var type;
+    var separateByType = function(obj) {
+        var messages = [], alerts = [], outages = [], type, subObj;
+        for(var i = 0, len = obj.length; i < len; i++) {
+            subObj = obj[i];
+            type = subObj.notification_type;
 
-        type = obj.notification_type;
-        
-        if(type === 'message') {
-            updateAlert = true;
-            if(!mainNotification) {
-                mainNotification = 'message';
+            if(type === 'message') {
+                messages.push(subObj);
+            } else if(type === 'alert') {
+                alerts.push(subObj);
+            } else {
+                outages.push(subObj);
             }
-            
-        } else if(type === 'alert') {
-            alertUser(obj);
-            if(mainNotification !== 'outage') {
-                mainNotification = 'alert';
-            }
-        } else {
-            mainNotification = 'outage';
         }
+        return {
+            messages: orderByDate(messages),
+            alerts: orderByDate(alerts),
+            outages: orderByDate(outages)
+        };
+    };
+    var orderByDate = function(obj) {
+        obj.sort(function(a, b) {
+            return a.created_at - b.created_at;
+        });
+        return obj;
     };
     var initViewAdjusts = function() {
         updateMainIcon();
@@ -113,13 +152,40 @@ wv.ui.alert = wv.ui.alert || function(models, url) {
     var updateMainIcon = function() {
         mainIcon.class = 'fa fa-2x ' + classes[mainNotification];
     };
-    self.getAlert = function() {
+    self.getMessage = function() {
         if(classes[mainNotification]) {
             return $("<li><a><i class='ui-icon fa fa-fw " + classes[mainNotification] + "'></i>Notifications</a></li>");
         } else  {
             return null;
         }
     };
+    self.getMessage = function() {
+        var 
+    };
+    self.getAlert = function() {
+        var $notifyMenuItem;
+        if(classes[mainNotification]) {
+            $notifyMenuItem = $("<li><a><i class='ui-icon fa fa-fw active" + classes[mainNotification] + "'></i>Notifications</a></li>");
+            self.infoIconActive = true;
+            self.notifyIconActive = true;
+
+            $notifyMenuItem.on('click', deactivateNotify);
+            return $notifyMenuItem;
+        } else {
+            $notifyMenuItem = $("<li><a><i class='ui-icon fa fa-fw fa-bolt'></i>Notifications</a></li>");
+            return $notifyMenuItem;
+        }
+    };
+    var deactivateNotify = function(e) {
+        this.className = 'ui-icon fa fa-fw fa-bolt';
+        self.infoIconActive = true;
+        self.notifyIconActive = true;
+        if(self.messageIconActive) {
+            mainNotification = alert;
+        }
+        updateMainIcon();
+    };
+
 
     init();
     return self;
