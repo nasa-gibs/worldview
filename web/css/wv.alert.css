@@ -1,68 +1,41 @@
-.wv-alert {
-    z-index: 2000;
-    position: relative;
+#wv-info-button {
+     -webkit-transition: background 1s;
+    transition: background 500;
 }
-    .wv-alert .wv-alert-case {
-        position: relative;
+    #wv-info-button.exclamation-circle {
+        background: #b3292b
     }
-    .wv-alert .wv-alert-case .wv-alert-header {
-        display: flex;
+    #wv-info-button.bolt {
+        background: #e5c937
     }
-    .wv-alert .wv-alert-case .wv-alert-icon-case {
-        height: 56px;
-        width: 56px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: white;
-        order: 1;
-        padding: 4px 0;
-	}
-    .wv-alert .wv-alert-case .wv-alert-text-case {
-        padding: 4px 0;
-        width: 100%;
-        display: flex;
-        order: 2;
-        align-items: center;
+    #wv-info-button.gift {
+        background: #40a9db
     }
-    .wv-alert .wv-alert-case h4 {
-        color: black;
-        margin: 0 20px;
-        max-height: 54px;
-        overflow: scroll;
-        line-height: 1.3;
-	}
-    .wv-alert .wv-alert-case .wv-alert-icon-case i {
-        text-align: center;
-        font-size: 35px;
+.ui-menu-item {}
+    .ui-menu-item.exclamation-circle {
+        background: #b3292b
     }
-    .wv-alert .wv-alert-case i.wvc-alert-close {
-        position: absolute;
-        right: 4px;
-        top: 4px;
-        color: #000;
-        font-size: 15px;
-        cursor: pointer;
+    .ui-menu-item..bolt {
+        background: #e5c937
     }
-
-	/* Styling for specific notification types */
-
-    .wv-alert .wv-alert-case .alert {
-        background: #f4e7a8;
+    .ui-menu-item.gift {
+        background: #40a9db
     }
-        .wv-alert .wv-alert-case .alert .wv-alert-icon-case {
-            background: #e5c937;
-        }
-    .wv-alert .wv-alert-case .message {
-        background: #d6eaf7;
+.wv-notify-modal {}
+    .wv-notify-modal h2 {
+        font-size: 18px;
+        font-family: "Lucida Sans", "Arial", Sans-Serif;
+        font-weight: bold;
+        color: #eee;
+        margin: .75em 0;
     }
-        .wv-alert .wv-alert-case .message .wv-alert-icon-case {
-            background: #2276ac;
-
-        }
-    .wv-alert .wv-alert-case .outage {
-        background: #e4b8b9;
+    .wv-notify-modal p {
+        font-family: "helvetica",sans-serif;
+        font-size: 16px;
+        line-height: 22px;
+        margin-bottom: 10px;
     }
-        .wv-alert .wv-alert-case .outage .wv-alert-icon-case {
-            background: #963a3b;
-        }
+.wv-dialog .wv-notify-modal ul li{
+        list-style-type: none;
+        border-bottom: 1px solid #404040;
+    }
