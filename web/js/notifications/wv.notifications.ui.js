@@ -19,16 +19,14 @@ wv.notifications = wv.notifications || {};
  */ 
 wv.notifications.ui = wv.notifications.ui || function(models, url) {                                                                                 
     var self = {};
-    var mountCase;
     var mainNotification;
-    var updateAlert;
     var mainIcon;
+    var iconCase;
     var secondaryNotification;
-    var message;
     var sortedNotifications;
 
-    var activeNotifications = [];
-    var activeMessage;
+    var activeNotifications = {};
+    var activeMessageId;
 
     self.events = wv.util.events();
     self.infoIconActive = false;
@@ -36,14 +34,14 @@ wv.notifications.ui = wv.notifications.ui || function(models, url) {
     self.messageIconActive = false;
 
     var classes = {
-        alert: 'fa-bolt',
-        message: 'fa-gift',
-        outage: 'fa-exclamation-circle'
+        alert: 'bolt',
+        message: 'gift',
+        outage: 'exclamation-circle'
     };
     var init = function() {
         var reactComponent, options, p, alertUser;
         mainIcon = $('#wv-info-button i')[0];
-        console.log(url)
+        iconCase = $('#wv-info-button')[0];
         p = wv.util.get(url);
         p.then(function(response) {
             var obj, notifications, alert;
@@ -52,17 +50,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, url) {
             notifications = obj.notifications;
             sortedNotifications = separateByType(notifications);
             setGlobals(sortedNotifications);
-
-
-            // Loop through notifications and create react Alert components
-            // for(var i = 0, len = notifications.length, item; i < len; i++) {
-         //        item = notifications[i];
-            //  alertUser = objectAlreadySeen(item);
-         //        if(alertUser) {
-         //            alert = true;
-         //        }
-         //        setNotifications(item);
-            // }
+            updateMainIcon();
         }, function(error) {
             console.warn(error);
         });
@@ -70,18 +58,20 @@ wv.notifications.ui = wv.notifications.ui || function(models, url) {
     var setGlobals = function(sortedNotifications){
         var message, outage, alert;
         message = sortedNotifications.messages[0];
-        outage = sortedNotifications.outage[0];
-        alert = sortedNotifications.alert[0];
+        outage = sortedNotifications.outages[0];
+        alert = sortedNotifications.alerts[0];
 
         if(!objectAlreadySeen(message)) {
-            mainNotification = 'message'
-            activeMessage = message.id;
-        } else if(!objectAlreadySeen(alert)) {
+            mainNotification = 'message';
+            activeMessageId = message.id;
+        } 
+        if(!objectAlreadySeen(alert)) {
             mainNotification = 'alert';
-            activeNotifications.push(alert.id);
-        } else if(!objectAlreadySeen(outage)) {
+            activeNotifications.alert = alert.id;
+        }
+        if(!objectAlreadySeen(outage)) {
             mainNotification = 'outage';
-            activeNotifications.push(outage.id);
+            activeNotifications.outage = outage.id;
         }
 
     };
@@ -98,28 +88,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, url) {
         }
         return fieldValueMatches;
     };
-    var handleAlertsAndOutages = function(arra) {
 
-    };
-    var setNotifications = function(obj) {
-        var arraLength, message, alert, outage, type;
-
-        type = obj.notification_type;
-        
-        if(type === 'message') {
-            updateAlert = true;
-            if(!mainNotification) {
-                mainNotification = 'message';
-            }
-            
-        } else if(type === 'alert') {
-            if(mainNotification !== 'outage') {
-                mainNotification = 'alert';
-            }
-        } else {
-            mainNotification = 'outage';
-        }
-    };
     var separateByType = function(obj) {
         var messages = [], alerts = [], outages = [], type, subObj;
         for(var i = 0, len = obj.length; i < len; i++) {
@@ -150,40 +119,92 @@ wv.notifications.ui = wv.notifications.ui || function(models, url) {
         updateMainIcon();
     };
     var updateMainIcon = function() {
-        mainIcon.class = 'fa fa-2x ' + classes[mainNotification];
-    };
-    self.getMessage = function() {
-        if(classes[mainNotification]) {
-            return $("<li><a><i class='ui-icon fa fa-fw " + classes[mainNotification] + "'></i>Notifications</a></li>");
-        } else  {
-            return null;
+        if(mainNotification) {
+            mainIcon.className = 'fa fa-2x fa-' + classes[mainNotification];
+            iconCase.className = 'wv-toolbar-button ' + classes[mainNotification];
+        } else {
+            mainIcon.className = 'fa fa-2x fa-info-circle';
+            iconCase.className = 'wv-toolbar-button';
         }
     };
-    self.getMessage = function() {
-        var 
+    self.getMessages = function() {
+        var $message;
+        if(activeMessageId) {
+            $message = $("<li class='gift'><a><i class='ui-icon fa fa-fw fa-gift active'></i>Notifications</a></li>");
+            $message.on('click', deactivateMessage);
+            self.messageIconActive = true;
+            return $message;
+        } else  {
+            return $("<li><a><i class='ui-icon fa fa-fw fa-gift'></i>What's New</a></li>");
+        }
     };
+
     self.getAlert = function() {
         var $notifyMenuItem;
-        if(classes[mainNotification]) {
-            $notifyMenuItem = $("<li><a><i class='ui-icon fa fa-fw active" + classes[mainNotification] + "'></i>Notifications</a></li>");
+        if(!_.isEmpty(activeNotifications)) {
+            $notifyMenuItem = $("<li class='" + classes[mainNotification] + "'><a><i class='ui-icon fa fa-fw active fa-" + classes[mainNotification] + "'></i>Notifications</a></li>");
             self.infoIconActive = true;
             self.notifyIconActive = true;
 
-            $notifyMenuItem.on('click', deactivateNotify);
+            $notifyMenuItem.on('click', notify);
             return $notifyMenuItem;
         } else {
             $notifyMenuItem = $("<li><a><i class='ui-icon fa fa-fw fa-bolt'></i>Notifications</a></li>");
+            $notifyMenuItem.on('click', notify);
             return $notifyMenuItem;
         }
     };
-    var deactivateNotify = function(e) {
-        this.className = 'ui-icon fa fa-fw fa-bolt';
-        self.infoIconActive = true;
-        self.notifyIconActive = true;
-        if(self.messageIconActive) {
-            mainNotification = alert;
+    var deactivateMessage = function(e) {
+        this.className = 'ui-icon fa fa-fw fa-gift';
+        self.messageIconActive = false;
+        wv.util.localStorage('message', activeMessageId);
+        activeMessageId = null;
+        if(mainNotification === 'message') {
+            mainNotification = null;
         }
         updateMainIcon();
+    };
+    var notify = function(e) {
+        this.className = 'ui-icon fa fa-fw fa-bolt';
+        self.infoIconActive = false;
+        self.notifyIconActive = false;
+        mainNotification = null;
+        createNotifyDialog();
+        if(activeNotifications.outage) {
+            wv.util.localStorage('outage', activeNotifications.outage);
+        }
+        if(activeNotifications.alert) {
+             wv.util.localStorage('alert', activeNotifications.alert);
+        }
+        activeNotifications = {};
+        if(self.messageIconActive) {
+            mainNotification = 'message';
+        }
+        updateMainIcon();
+    };
+    var createNotifyDialog = function() {
+        var $dialog;
+        var $notifyContent = $('<div class="wv-notify-modal"></div>');
+
+        $notifyContent.append(create$block(sortedNotifications.outages, 'Outage'));
+        $notifyContent.append(create$block(sortedNotifications.alerts, 'Alert'));
+        $dialog = wv.ui.getDialog().append($notifyContent);
+        $dialog.dialog({
+            title: "Notifications",
+            width: 625,
+            height: 525,
+            show: { effect: "fade" },
+            hide: { effect: "fade" }
+        });
+    };
+    var create$block = function(arra, title) {
+        var $li, $ul = $('<ul></ul>');
+
+        for(var i = 0, len = arra.length; i < len; i++) {
+            $li = $("<li><div><h2>" + title + "</h2><p>" + arra[i].message +"</p></div></li>");
+            $ul.append($li);
+        }
+        return $ul;
     };
 
 
