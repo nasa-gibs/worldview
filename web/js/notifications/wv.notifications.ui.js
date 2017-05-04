@@ -130,7 +130,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, url) {
     self.getMessages = function() {
         var $message;
         if(activeMessageId) {
-            $message = $("<li class='gift'><a><i class='ui-icon fa fa-fw fa-gift active'></i>Notifications</a></li>");
+            $message = $("<li class='gift'><a><i class='ui-icon fa fa-fw fa-gift active'></i>What's new</a></li>");
             $message.on('click', deactivateMessage);
             self.messageIconActive = true;
             return $message;
