@@ -18,7 +18,6 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     var self = {};
     var model = models.naturalEvents;
     var data;
-    var zoomLevel;
     self.selector = "#wv-events";
     self.id = "wv-events";
     var maps = ui.map;
@@ -186,7 +185,8 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     };
 
     self.select = function(index, dateIndex) {
-        var event, method;
+        var event, method, zoomLevel;
+
         if ( index === lastIndex && lastDateIndex === dateIndex ) {
             return;
         }
