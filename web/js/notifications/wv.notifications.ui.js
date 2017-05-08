@@ -17,17 +17,19 @@ wv.notifications = wv.notifications || {};
 /*  
  * @Class
  */ 
-wv.notifications.ui = wv.notifications.ui || function(models, url) {                                                                                 
+wv.notifications.ui = wv.notifications.ui || function(models, config) {
     var self = {};
     var mainNotification;
     var mainIcon;
     var iconCase;
     var secondaryNotification;
-    var sortedNotifications;
+    var sortedNotifications = {};
 
     var activeNotifications = {};
     var activeMessageId;
+    var url;
 
+    url = config.features.alert.url;
     self.events = wv.util.events();
     self.infoIconActive = false;
     self.notifyIconActive = false;
@@ -61,15 +63,15 @@ wv.notifications.ui = wv.notifications.ui || function(models, url) {
         outage = sortedNotifications.outages[0];
         alert = sortedNotifications.alerts[0];
 
-        if(!objectAlreadySeen(message)) {
+        if(message && !objectAlreadySeen(message)) {
             mainNotification = 'message';
             activeMessageId = message.id;
         } 
-        if(!objectAlreadySeen(alert)) {
+        if(alert && !objectAlreadySeen(alert)) {
             mainNotification = 'alert';
             activeNotifications.alert = alert.id;
         }
-        if(!objectAlreadySeen(outage)) {
+        if(outage && !objectAlreadySeen(outage)) {
             mainNotification = 'outage';
             activeNotifications.outage = outage.id;
         }
@@ -129,13 +131,20 @@ wv.notifications.ui = wv.notifications.ui || function(models, url) {
     };
     self.getMessages = function() {
         var $message;
+        if(!sortedNotifications.messages) {
+            return null;
+        }
         if(activeMessageId) {
-            $message = $("<li class='gift'><a><i class='ui-icon fa fa-fw fa-gift active'></i>What's new</a></li>");
+            $message = $("<li class='gift'><a><i class='ui-icon fa fa-fw fa-gift active'></i>What's New</a></li>");
             $message.on('click', deactivateMessage);
             self.messageIconActive = true;
             return $message;
-        } else  {
-            return $("<li><a><i class='ui-icon fa fa-fw fa-gift'></i>What's New</a></li>");
+        } else if(sortedNotifications.messages[0])  {
+            $message = $("<li><a><i class='ui-icon fa fa-fw fa-gift'></i>What's New</a></li>");
+            $message.on('click', deactivateMessage);
+            return $message;
+        } else{
+            return null;
         }
     };
 
@@ -148,17 +157,25 @@ wv.notifications.ui = wv.notifications.ui || function(models, url) {
 
             $notifyMenuItem.on('click', notify);
             return $notifyMenuItem;
-        } else {
+        } else if(!_.isEmpty(sortedNotifications.alerts) || !_.isEmpty(sortedNotifications.outages)) {
             $notifyMenuItem = $("<li><a><i class='ui-icon fa fa-fw fa-bolt'></i>Notifications</a></li>");
             $notifyMenuItem.on('click', notify);
             return $notifyMenuItem;
+        } else {
+            return null;
         }
     };
     var deactivateMessage = function(e) {
+        var messages;
         this.className = 'ui-icon fa fa-fw fa-gift';
         self.messageIconActive = false;
         wv.util.localStorage('message', activeMessageId);
         activeMessageId = null;
+
+        messages = sortedNotifications.messages[0];
+        if(messages) {
+            create$whatsNew(messages, 'Latest Release');
+        }
         if(mainNotification === 'message') {
             mainNotification = null;
         }
@@ -183,16 +200,25 @@ wv.notifications.ui = wv.notifications.ui || function(models, url) {
         updateMainIcon();
     };
     var createNotifyDialog = function() {
-        var $dialog;
+        var $dialog, width, height;
         var $notifyContent = $('<div class="wv-notify-modal"></div>');
-
+        if(!sortedNotifications.alerts && !sortedNotifications.outages) {
+            return null;
+        }
+        width =  625;
+        height = 525;
+        if ( wv.util.browser.small || wv.util.browser.touchDevice ) {
+            width = $(window).width();
+            height = $(window).height();
+        }
         $notifyContent.append(create$block(sortedNotifications.outages, 'Outage'));
         $notifyContent.append(create$block(sortedNotifications.alerts, 'Alert'));
         $dialog = wv.ui.getDialog().append($notifyContent);
+
         $dialog.dialog({
             title: "Notifications",
-            width: 625,
-            height: 525,
+            width: width,
+            height: height,
             show: { effect: "fade" },
             hide: { effect: "fade" }
         });
@@ -206,7 +232,27 @@ wv.notifications.ui = wv.notifications.ui || function(models, url) {
         }
         return $ul;
     };
-
+    var create$whatsNew = function(obj, title) {
+        var $dialog, width, height, $notifyContent, releasePageUrl;
+        releasePageUrl = config.features.alert.releases || "https://github.com/nasa-gibs/worldview/releases";
+        width =  625;
+        height = 525;
+        if ( wv.util.browser.small || wv.util.browser.touchDevice ) {
+            width = $(window).width();
+            height = $(window).height();
+        }
+        $notifyContent = $("<div class='wv-notify-modal'><div><h2>" + title + "</h2><p>" + obj.message +"</p></div></div>");
+        $footer = $('<div class="wv-notify-footer"><p> Check out our <a target="_blank" href="' + releasePageUrl + '">release page</a> for a complete list of new additions.</p></div>');
+        $notifyContent.append($footer);
+        $dialog = wv.ui.getDialog().append($notifyContent);
+        $dialog.dialog({
+            title: "What's New",
+            width: width,
+            height: height,
+            show: { effect: "fade" },
+            hide: { effect: "fade" }
+        });
+    };
 
     init();
     return self;
