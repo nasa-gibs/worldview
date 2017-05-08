@@ -71,11 +71,11 @@ wv.ui.info = wv.ui.info || (function(ui, config) {
         if ( config.features.tour ) {
             $menuItems.append($tour);
         }
+        $menuItems.append($source);
+        $menuItems.append($about);
         if ( config.features.whatsNew ) {
             $menuItems.append($new);
         }
-        $menuItems.append($source);
-        $menuItems.append($about);
         if($alerts) {
             $menuItems.append($alerts);
         }
