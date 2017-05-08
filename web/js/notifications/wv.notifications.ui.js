@@ -206,7 +206,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
             return null;
         }
         width =  625;
-        height = 525;
+        height = "auto";
         if ( wv.util.browser.small || wv.util.browser.touchDevice ) {
             width = $(window).width();
             height = $(window).height();
@@ -219,36 +219,41 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
             title: "Notifications",
             width: width,
             height: height,
+            maxHeight: 525,
             show: { effect: "fade" },
             hide: { effect: "fade" }
         });
     };
     var create$block = function(arra, title) {
-        var $li, $ul = $('<ul></ul>');
+        var $li, date, $ul = $('<ul></ul>');
 
         for(var i = 0, len = arra.length; i < len; i++) {
-            $li = $("<li><div><h2>" + title + "</h2><p>" + arra[i].message +"</p></div></li>");
+            date = new Date(arra[i].created_at);
+            date = date.getDate()+ " " + wv.util.giveMonth(date) + " " + date.getFullYear();
+            $li = $("<li><div><h2>" + title + "<span> Posted "+ date + "</span></h2><p>" + arra[i].message +"</p></div></li>");
             $ul.append($li);
         }
         return $ul;
     };
     var create$whatsNew = function(obj, title) {
         var $dialog, width, height, $notifyContent, releasePageUrl;
+
         releasePageUrl = config.features.alert.releases || "https://github.com/nasa-gibs/worldview/releases";
         width =  625;
-        height = 525;
+        height = "auto";
         if ( wv.util.browser.small || wv.util.browser.touchDevice ) {
             width = $(window).width();
             height = $(window).height();
         }
-        $notifyContent = $("<div class='wv-notify-modal'><div><h2>" + title + "</h2><p>" + obj.message +"</p></div></div>");
-        $footer = $('<div class="wv-notify-footer"><p> Check out our <a target="_blank" href="' + releasePageUrl + '">release page</a> for a complete list of new additions.</p></div>');
+        $notifyContent = $("<div class='wv-notify-modal'><div><h2>" + title + "<span> Posted "+ date + "</span></h2><p>" + obj.message +"</p></div></div>");
+        $footer = $('<div class="wv-notify-footer"><p> Check out our <a target="_blank" href="' + releasePageUrl + '">release notes</a> for a complete list of new additions.</p></div>');
         $notifyContent.append($footer);
         $dialog = wv.ui.getDialog().append($notifyContent);
         $dialog.dialog({
             title: "What's New",
             width: width,
             height: height,
+            maxHeight: 525,
             show: { effect: "fade" },
             hide: { effect: "fade" }
         });
