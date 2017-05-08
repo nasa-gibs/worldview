@@ -349,7 +349,7 @@ module.exports = function(grunt) {
             },
 
             python_packages: {
-                command: 'virtualenv python && python/bin/pip install xmltodict isodate'
+                command: 'virtualenv python && pip install xmltodict isodate'
             },
 
             rpmbuild: {
