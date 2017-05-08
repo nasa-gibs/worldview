@@ -17,7 +17,7 @@ wv.map = wv.map || {};
 /*
  * @Class
  */
-wv.map.datelinebuilder = wv.map.ui || function(models, config) {
+wv.map.datelinebuilder = wv.map.datelinebuilder || function(models, config) {
 	var self = {};
 	var map, overlay1, overlay2, textFactory, lineFactory, textOverlay1, textOverlay2,
         lineLeft, lineRight, textLeft, textRight, proj;
