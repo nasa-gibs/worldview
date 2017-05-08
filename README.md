@@ -104,7 +104,7 @@ npm start
 http://localhost:3000
 ```
 A node server will continue running until you end the session.
-You can end the session by pressing `control-X`
+You can end the session by pressing `control-C`
 
 ## Other Information
 
