@@ -61,6 +61,8 @@
         "web/js/image/wv.image.rubberband.js",
         "web/js/image/wv.image.panel.js",
 
+        "web/js/notifications/wv.notifications.ui.js",
+
         "web/js/palettes/wv.palettes.js",
         "web/js/palettes/wv.palettes.legend.js",
         "web/js/palettes/wv.palettes.model.js",
