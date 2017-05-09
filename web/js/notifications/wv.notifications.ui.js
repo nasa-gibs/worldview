@@ -118,7 +118,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
         fieldValueMatches = false;
 
         if(fieldExists) {
-            fieldValueMatches = wv.util.localStorageValueMatches(type, idString);
+            fieldValueMatches = localStorageValueMatches(type, idString);
         }
         return fieldValueMatches;
     };
@@ -318,8 +318,8 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
         }
         dimensions = getModalDimensions();
 
-        $notifyContent.append(create$block(sortedNotifications.outages, 'Outage'));
-        $notifyContent.append(create$block(sortedNotifications.alerts, 'Alert'));
+        $notifyContent.append(create$block(sortedNotifications.outages, 'outage'));
+        $notifyContent.append(create$block(sortedNotifications.alerts, 'alert'));
         $dialog = wv.ui.getDialog().append($notifyContent);
 
         $dialog.dialog({
@@ -364,15 +364,24 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
      * @returns {Object} Jquery ul element
      */
     var create$block = function(arra, title) {
-        var $li, date, $ul = $('<ul></ul>');
+        var $li, date, activeClass, $ul = $('<ul></ul>');
 
         for(var i = 0, len = arra.length; i < len; i++) {
+            activeClass = '';
+            if(activeNotifications[title] && i === 0) {
+                activeClass = title;
+            }
             date = new Date(arra[i].created_at);
             date = date.getDate()+ " " + wv.util.giveMonth(date) + " " + date.getFullYear();
-            $li = $("<li><div><h2>" + title + "<span> Posted "+ date + "</span></h2><p>" + arra[i].message +"</p></div></li>");
+            $li = $("<li><div class='" + activeClass + "'><h2> <i class='fa fa-" + classes[title] + "'/> " + title + "<span> Posted "+ date + "</span></h2><p>" + arra[i].message +"</p></div></li>");
             $ul.append($li);
         }
         return $ul;
+    };
+
+    var localStorageValueMatches = function(property, value) {
+        var oldValue = localStorage.getItem(property);
+        return oldValue === value;
     };
 
     /*

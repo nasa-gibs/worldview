@@ -21,13 +21,22 @@
     .ui-menu-item.gift {
         background: #40a9db
     }
-.wv-notify-modal {}
+.wv-notify-modal {
+    padding:0 20px;
+}
     .wv-notify-modal h2 {
+        text-transform: capitalize;
         font-size: 18px;
         font-family: "Lucida Sans", "Arial", Sans-Serif;
         font-weight: bold;
         color: #eee;
-        margin: .75em 0;
+        padding: .75em 10px;
+    }
+    .wv-notify-modal .outage h2 {
+        background: rgba(179, 41, 43, .3);
+    }
+    .wv-notify-modal .alert h2 {
+        background: rgba(229, 201, 55, .3);
     }
     .wv-notify-modal h2 span {
         font-size: 13px;
@@ -38,9 +47,14 @@
         font-family: "helvetica",sans-serif;
         font-size: 16px;
         line-height: 22px;
-        margin-bottom: 10px;
+        margin: 10px 20px;
     }
-.wv-dialog .wv-notify-modal ul li{
-        list-style-type: none;
-        border-bottom: 1px solid #404040;
-    }
+.wv-dialog .wv-notify-modal ul {
+    margin: 0;
+    padding: 0;
+}
+.wv-dialog .wv-notify-modal ul li {
+    list-style-type: none;
+    border-bottom: 1px solid #404040;
+    margin: 0;
+}
