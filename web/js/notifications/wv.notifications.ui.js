@@ -40,6 +40,16 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
         message: 'gift',
         outage: 'exclamation-circle'
     };
+    /*
+     * Sets global vars, initiates API request
+     *  and triggers dom adjustments based on request
+     *  results
+     *
+     * @function init
+     * @private
+     *
+     * @returns {void}
+     */
     var init = function() {
         var reactComponent, options, p, alertUser;
         mainIcon = $('#wv-info-button i')[0];
@@ -47,8 +57,8 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
         p = wv.util.get(url);
         p.then(function(response) {
             var obj, notifications, alert;
-            obj = JSON.parse(response);
 
+            obj = JSON.parse(response);
             notifications = obj.notifications;
             sortedNotifications = separateByType(notifications);
             setGlobals(sortedNotifications);
@@ -57,6 +67,17 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
             console.warn(error);
         });
     };
+    /*
+     * Sets active state global values
+     *
+     * @function setGlobals
+     * @private
+     *
+     * @param {object} sortedNotifications - object that
+     *  contains categorized notifications
+     *
+     * @returns {void}
+     */
     var setGlobals = function(sortedNotifications){
         var message, outage, alert;
         message = sortedNotifications.messages[0];
@@ -75,8 +96,19 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
             mainNotification = 'outage';
             activeNotifications.outage = outage.id;
         }
-
     };
+
+    /*
+     * Determines if most recent notification has already
+     *  been seen
+     *
+     * @function objectAlreadySeen
+     * @private
+     *
+     * @param {object} obj - object from API array
+     *
+     * @returns {void}
+     */
     var objectAlreadySeen = function(obj) {
         var fieldExists, fieldValueMatches, type, idString;
 
@@ -91,6 +123,16 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
         return fieldValueMatches;
     };
 
+    /*
+     * Categorizes the returned array
+     *
+     * @function separateByType
+     * @private
+     *
+     * @param {object} obj - array from API
+     *
+     * @returns {void}
+     */
     var separateByType = function(obj) {
         var messages = [], alerts = [], outages = [], type, subObj;
         for(var i = 0, len = obj.length; i < len; i++) {
@@ -111,15 +153,32 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
             outages: orderByDate(outages)
         };
     };
+
+    /*
+     * Organizes array by date created
+     *
+     * @function orderByDate
+     * @private
+     *
+     * @param {object} obj - array
+     *
+     * @returns {void}
+     */
     var orderByDate = function(obj) {
         obj.sort(function(a, b) {
             return a.created_at - b.created_at;
         });
         return obj;
     };
-    var initViewAdjusts = function() {
-        updateMainIcon();
-    };
+
+    /*
+     * Manipulates the Info Icon's class name
+     *
+     * @function updateMainIcon
+     * @private
+     *
+     * @returns {void}
+     */
     var updateMainIcon = function() {
         if(mainNotification) {
             mainIcon.className = 'fa fa-2x fa-' + classes[mainNotification];
@@ -129,6 +188,16 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
             iconCase.className = 'wv-toolbar-button';
         }
     };
+
+    /*
+     * Creates a message menu item and attaches
+     *  event listeners to the element
+     *
+     * @function getMessages
+     * @static
+     *
+     * @returns {object} a jquery element
+     */
     self.getMessages = function() {
         var $message;
         if(!sortedNotifications.messages) {
@@ -148,6 +217,15 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
         }
     };
 
+    /*
+     * Creates a notification menu item and attaches
+     *  event listeners to the element
+     *
+     * @function getAlert
+     * @static
+     *
+     * @returns {object} a jquery element
+     */
     self.getAlert = function() {
         var $notifyMenuItem;
         if(!_.isEmpty(activeNotifications)) {
@@ -165,6 +243,17 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
             return null;
         }
     };
+
+    /*
+     * Adds API element to localstorage,
+     *  deactives message active state,
+     *  and updates the info icon
+     *
+     * @function deactivateMessage
+     * @private
+     *
+     * @returns {void}
+     */
     var deactivateMessage = function(e) {
         var messages;
         this.className = 'ui-icon fa fa-fw fa-gift';
@@ -181,6 +270,17 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
         }
         updateMainIcon();
     };
+
+    /*
+     * Adds API element to localstorage,
+     *  deactives notification active states,
+     *  and updates the info icon
+     *
+     * @function notify
+     * @private
+     *
+     * @returns {void}
+     */
     var notify = function(e) {
         this.className = 'ui-icon fa fa-fw fa-bolt';
         self.infoIconActive = false;
@@ -199,31 +299,70 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
         }
         updateMainIcon();
     };
+
+    /*
+     * Adds API element to localstorage,
+     *  deactives notification active states,
+     *  and updates the info icon
+     *
+     * @function createNotifyDialog
+     * @private
+     *
+     * @returns {void}
+     */
     var createNotifyDialog = function() {
-        var $dialog, width, height;
+        var $dialog, dimensions;
         var $notifyContent = $('<div class="wv-notify-modal"></div>');
         if(!sortedNotifications.alerts && !sortedNotifications.outages) {
             return null;
         }
-        width =  625;
-        height = "auto";
-        if ( wv.util.browser.small || wv.util.browser.touchDevice ) {
-            width = $(window).width();
-            height = $(window).height();
-        }
+        dimensions = getModalDimensions();
+
         $notifyContent.append(create$block(sortedNotifications.outages, 'Outage'));
         $notifyContent.append(create$block(sortedNotifications.alerts, 'Alert'));
         $dialog = wv.ui.getDialog().append($notifyContent);
 
         $dialog.dialog({
             title: "Notifications",
-            width: width,
-            height: height,
+            width: dimensions[0],
+            height: dimensions[1],
             maxHeight: 525,
             show: { effect: "fade" },
             hide: { effect: "fade" }
         });
     };
+
+    /*
+     * Gets proper size for modal
+     *
+     * @function createNotifyDialog
+     * @private
+     *
+     * @returns {Object} Dimension array
+     */
+    var getModalDimensions = function() {
+        var dimensions;
+
+        width =  625;
+        height = "auto";
+        if ( wv.util.browser.small || wv.util.browser.touchDevice ) {
+            width = $(window).width();
+            height = $(window).height();
+        }
+        return [width, height];
+    };
+
+    /*
+     * Creates a Feed of Jquery list items
+     *
+     * @function create$block
+     * @private
+     *
+     * @param {Object} arra - array of objects
+     * @param {string} title - title
+     *
+     * @returns {Object} Jquery ul element
+     */
     var create$block = function(arra, title) {
         var $li, date, $ul = $('<ul></ul>');
 
@@ -235,24 +374,33 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
         }
         return $ul;
     };
-    var create$whatsNew = function(obj, title) {
-        var $dialog, width, height, $notifyContent, releasePageUrl;
 
+    /*
+     * Creates a Feed containing most recent message
+     *
+     * @function create$whatsNew
+     * @private
+     *
+     * @param {Object} most recent message API object
+     * @param {string} title - title
+     *
+     * @returns {void}
+     */
+    var create$whatsNew = function(obj, title) {
+        var $dialog, width, height, $notifyContent, releasePageUrl, date;
+
+        date = new Date(obj.created_at);
+        date = date.getDate()+ " " + wv.util.giveMonth(date) + " " + date.getFullYear();
         releasePageUrl = config.features.alert.releases || "https://github.com/nasa-gibs/worldview/releases";
-        width =  625;
-        height = "auto";
-        if ( wv.util.browser.small || wv.util.browser.touchDevice ) {
-            width = $(window).width();
-            height = $(window).height();
-        }
+        dimensions = getModalDimensions();
         $notifyContent = $("<div class='wv-notify-modal'><div><h2>" + title + "<span> Posted "+ date + "</span></h2><p>" + obj.message +"</p></div></div>");
         $footer = $('<div class="wv-notify-footer"><p> Check out our <a target="_blank" href="' + releasePageUrl + '">release notes</a> for a complete list of new additions.</p></div>');
         $notifyContent.append($footer);
         $dialog = wv.ui.getDialog().append($notifyContent);
         $dialog.dialog({
             title: "What's New",
-            width: width,
-            height: height,
+            width: dimensions[0],
+            height: dimensions[1],
             maxHeight: 525,
             show: { effect: "fade" },
             hide: { effect: "fade" }
