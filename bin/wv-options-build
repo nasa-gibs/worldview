@@ -41,7 +41,7 @@ rm -rf "$BUILD_DIR" "$DEST_DIR"
 mkdir -p "$BUILD_DIR" "$DEST_DIR"
 
 cp -r "$SRC_DIR"/common/* "$BUILD_DIR"
-rsync -a "$SRC_DIR/$ENV"/* "$BUILD_DIR"
+cp -r "$SRC_DIR/$ENV"/* "$BUILD_DIR"
 
 mkdir -p "$DEST_DIR/config"
 mkdir -p "$BUILD_DIR/colormaps"
