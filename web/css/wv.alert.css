@@ -41,13 +41,14 @@
     .wv-notify-modal h2 span {
         font-size: 13px;
         font-weight: 100;
+        margin-left: 5px;
         color: #999;
     }
     .wv-notify-modal p {
         font-family: "helvetica",sans-serif;
         font-size: 16px;
         line-height: 22px;
-        margin: 10px 20px;
+        margin: 10px 10px;
     }
 .wv-dialog .wv-notify-modal ul {
     margin: 0;
