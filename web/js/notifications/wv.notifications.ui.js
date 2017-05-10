@@ -377,7 +377,18 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
         }
         return $ul;
     };
-
+    /*
+     * Checks to see if id or smaller #id
+     *   is in localstorage
+     *
+     * @function localStorageValueMatches
+     * @private
+     *
+     * @param {String} property - name of category type
+     * @param {string} value - id of notification
+     *
+     * @returns {Boolean}
+     */
     var localStorageValueMatches = function(property, value) {
         var oldValue = localStorage.getItem(property);
         return value <= oldValue;
