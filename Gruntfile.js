@@ -49,7 +49,7 @@ module.exports = function(grunt) {
 	findCmd = ";" //cygwin find doesn't really work in Windows compared to CentOS
     else
 	findCmd = "find build -type d -empty -delete";
-	
+
 	// Platform specific location for Python
 	var pythonPath;
 	if(process.platform === 'win32') {
@@ -358,7 +358,7 @@ module.exports = function(grunt) {
             },
 
             python_packages: {
-                command: "virtualenv python && bash -c \"PATH=" + pythonPath + ":\"${PATH}\" pip install xmltodict isodate"
+                command: 'virtualenv python && bash -c \"PATH=' + pythonPath + ':${PATH} pip install xmltodict isodate\"'
             },
 
             rpmbuild: {
