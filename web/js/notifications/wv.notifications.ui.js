@@ -166,7 +166,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
      */
     var orderByDate = function(obj) {
         obj.sort(function(a, b) {
-            return a.created_at - b.created_at;
+            return new Date(b.created_at) - new Date(a.created_at);
         });
         return obj;
     };
@@ -365,7 +365,6 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
      */
     var create$block = function(arra, title) {
         var $li, date, activeClass, $ul = $('<ul></ul>');
-
         for(var i = 0, len = arra.length; i < len; i++) {
             activeClass = '';
             if(activeNotifications[title] && i === 0) {
@@ -381,7 +380,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
 
     var localStorageValueMatches = function(property, value) {
         var oldValue = localStorage.getItem(property);
-        return oldValue === value;
+        return value <= oldValue;
     };
 
     /*
