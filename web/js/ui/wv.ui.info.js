@@ -90,6 +90,21 @@ wv.ui.info = wv.ui.info || (function(ui, config) {
         });
         $menuItems.hide();
 
+        $about.click(function() {
+            if ( wv.util.browser.small || wv.util.browser.touchDevice ) {
+                window.open("brand/pages/about.html?v=@BUILD_NONCE@", "_blank");
+            } else {
+                wv.ui.getDialog().dialog({
+                    title: "About",
+                    width: 625,
+                    height: 525,
+                    show: { effect: "fade" },
+                    hide: { effect: "fade" }
+                })
+                .load("brand/pages/about.html?v=@BUILD_NONCE@ #page")
+                .addClass("wv-opaque");
+            }
+        });
         $source.click( function( e ){
             window.open("https://github.com/nasa-gibs/worldview", "_blank");
         });
