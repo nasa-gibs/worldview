@@ -45,7 +45,7 @@ Please see our [Roadmap](https://github.com/nasa-gibs/worldview/wiki/Worldview-R
 
 Here are the tickets we are currently working on: 
 [![Stories in Ready](https://badge.waffle.io/nasa-gibs/worldview.svg?label=ready&title=Ready)](http://waffle.io/nasa-gibs/worldview)
-[![Stories in In Progress](https://badge.waffle.io/nasa-gibs/worldview.svg?label=in progress&title=In Progress)](http://waffle.io/nasa-gibs/worldview)
+[![Stories in In Progress](https://badge.waffle.io/nasa-gibs/worldview.svg?label=in%20progress&title=In%20Progress)](http://waffle.io/nasa-gibs/worldview)
 
 To get your instance of Worldview running, follow the [Installation](https://github.com/nasa-gibs/worldview#installation) guide below.
 
@@ -60,8 +60,9 @@ to serve the app locally.  If you prefer to use Apache, follow the directions in
 There are currently installation issues under Linux.
 
 Prerequisites:
-* [Node.js](https://nodejs.org/)
-* Python 2.7.x
+- [Node.js](https://nodejs.org/)
+- Python 2.7.x
+
 
 Clone this repository:
 
@@ -79,16 +80,14 @@ git clone https://github.com/nasa-gibs/worldview-options-eosdis.git options
 # Or a blank repository with only Corrected Reflectance and no branding
 git clone https://github.com/nasa-gibs/worldview-options-template.git options
 ```
-Install dependencies (NOTE for Windows users: omit the "sudo" part of the following commands as it isn't available):
+Install dependencies (NOTE for Windows users: omit the "sudo" part of the following commands as it [isn't available](https://stackoverflow.com/questions/22527668/sudo-command-not-found-on-cygwin)):
 ```bash
 # install local version of grunt
-
 sudo npm install --global grunt-cli
 ```
 
 ```bash
 # install virtualenv to keep additional libraries installed in a local directory: 
-
 sudo easy_install virtualenv==1.10.1
 ```
 
