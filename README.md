@@ -47,20 +47,21 @@ Here are the tickets we are currently working on:
 [![Stories in Ready](https://badge.waffle.io/nasa-gibs/worldview.svg?label=ready&title=Ready)](http://waffle.io/nasa-gibs/worldview)
 [![Stories in In Progress](https://badge.waffle.io/nasa-gibs/worldview.svg?label=in progress&title=In Progress)](http://waffle.io/nasa-gibs/worldview)
 
-To get your instance of Worldview running, follow the [Installation](https://github.com/nasa-gibs/worldview#installation) guide below or the [Manual Setup](https://github.com/nasa-gibs/worldview/blob/master/doc/manual_setup.md) instructions.
+To get your instance of Worldview running, follow the [Installation](https://github.com/nasa-gibs/worldview#installation) guide below.
 
 Thanks for considering contributing and making our planet easier to explore!
 
 ## Installation
 
-These instructions install a development version of Worldview using a virtual
-machine. If you prefer to install locally on your computer, follow the
-directions in [Manual Setup](doc/manual_setup.md)
+These instructions install a development version of Worldview using [Node.js](https://nodejs.org/)
+to serve the app locally.  If you prefer to use Apache, follow the directions in [Setup Using Apache](doc/apache_setup.md).
 
-*Notes:* This has only been tested on Mac OS X and Windows 8.1. Let us know if this works in
-other environments.
+*Note:* This has been demonstrated to work on Windows 7 and 10 (as tested with [mingw64](http://mingw-w64.org/)) and Mac OS X.
+There are currently installation issues under Linux.
 
-*Also note:* As documented in [this issue](https://github.com/nasa-gibs/worldview/issues/73), there may be a problem with using Vagrant 1.8.7 and above.  The current workaround is to downgrade to Vagrant 1.8.6, though we are working to find a better fix.
+Prerequisites:
+* [Node.js](https://nodejs.org/)
+* Python 2.7.x
 
 Clone this repository:
 
@@ -78,7 +79,7 @@ git clone https://github.com/nasa-gibs/worldview-options-eosdis.git options
 # Or a blank repository with only Corrected Reflectance and no branding
 git clone https://github.com/nasa-gibs/worldview-options-template.git options
 ```
-Install dependencies
+Install dependencies (NOTE for Windows users: omit the "sudo" part of the following commands as it isn't available):
 ```bash
 # install local version of grunt
 
@@ -91,7 +92,7 @@ sudo npm install --global grunt-cli
 sudo easy_install virtualenv==1.10.1
 ```
 
-Run local node server
+Run local node server:
 ```bash
 npm install
 grunt
@@ -108,7 +109,7 @@ You can end the session by pressing `control-C`
 
 ## Other Information
 
-* [Manual Setup](doc/manual_setup.md)
+* [Alternate Installation using Apache](doc/apache_setup.md)
 * [Branding](doc/branding.md)
 * [Optional Features](doc/features.md)
 * [Development Notes](doc/developing.md)
