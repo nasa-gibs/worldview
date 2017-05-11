@@ -618,7 +618,9 @@ wv.util = (function(self) {
             localStorage.setItem(property, value);
         }
     };
-
+    self.isInLocalStorage = function(property) {
+        return localStorage.getItem(property);
+    };
     /**
      * Wraps a function in a try/catch block that invokes wv.util.error
      * if an exception is thrown.
@@ -635,7 +637,42 @@ wv.util = (function(self) {
             }
         };
     };
+    /**
+     * Http request using promises
+     * http://www.html5rocks.com/en/tutorials/es6/promises/#toc-promisifying-xmlhttprequest
+     *
+     * @method get
+     * @param {url} func the function to wrap
+     * @return {object} Promise
+     */
+    self.get = function(url) {
+        // Return a new promise.
+        return new Promise(function(resolve, reject) {
+            // Do the usual XHR stuff
+            var req = new XMLHttpRequest();
+            req.open('GET', url);
 
+            req.onload = function() {
+                // This is called even on 404 etc
+                // so check the status
+                if (req.status == 200) {
+                    // Resolve the promise with the response text
+                    resolve(req.response);
+                }
+                else {
+                    // Otherwise reject with the status text
+                    // which will hopefully be a meaningful error
+                    reject(Error(req.statusText));
+                }
+            };
+            // Handle network errors
+            req.onerror = function() {
+                reject(Error("Network Error"));
+            };
+            // Make the request
+            req.send();
+        });
+    };
     // FIXME: Should be replaced with $.when
     self.ajaxJoin = function(calls) {
 
