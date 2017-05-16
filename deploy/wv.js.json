@@ -21,6 +21,7 @@
         "web/js/ui/wv.ui.mouse.js",
         "web/js/ui/wv.ui.indicator.js",
         "web/js/ui/wv.ui.info.js",
+        "web/js/map/wv.map.ui.js",
 
         "web/js/proj/wv.proj.js",
         "web/js/proj/wv.proj.change.js",
@@ -59,6 +60,8 @@
 
         "web/js/image/wv.image.rubberband.js",
         "web/js/image/wv.image.panel.js",
+
+        "web/js/notifications/wv.notifications.ui.js",
 
         "web/js/palettes/wv.palettes.js",
         "web/js/palettes/wv.palettes.legend.js",

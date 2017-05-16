@@ -47,30 +47,45 @@ wv.ui.info = wv.ui.info || (function(ui, config) {
 
     var show = function() {
         var $menu = wv.ui.getMenu().attr("id", "wv-info-menu");
+        var $alerts, $new;
+        var whatsNewUrl = "https://github.com/nasa-gibs/worldview/releases";
         var $menuItems = $("<ul></ul>");
         var $feedback = $("<li><a class='feedback'><i class='ui-icon fa fa-envelope fa-fw'></i>Send Feedback</a></li>");
         var $tour = $("<li><a><i class='ui-icon fa fa-truck fa-fw'></i>Start Tour</a></li>");
-        var $new = $("<li><a><i class='ui-icon fa fa-flag fa-fw'></i>What's New</a></li>");
         var $about = $("<li><a><i class='ui-icon fa fa-file fa-fw'></i>About</a></li>");
         var $source = $("<li><a><i class='ui-icon fa fa-code fa-fw'></i>Source</a></li>");
 
+        if(config.features.alert) {
+            $alerts = ui.alert.getAlert();
+            $new = ui.alert.getMessages();
+            if(config.features.alert.releases) {
+                whatsNewUrl = config.features.alert.releases;
+            }
+        }
+        if(!$new) {
+            $new = $("<li><a target='_blank' href='" + whatsNewUrl + "'><i class='ui-icon fa fa-flag fa-fw'></i>What's New</a></li>");
+        }
         if ( config.features.feedback ) {
             $menuItems.append($feedback);
         }
         if ( config.features.tour ) {
             $menuItems.append($tour);
         }
+        $menuItems.append($source);
+        $menuItems.append($about);
         if ( config.features.whatsNew ) {
             $menuItems.append($new);
         }
-        $menuItems.append($source);
+        if($alerts) {
+            $menuItems.append($alerts);
+        }
         $menuItems.append($about);
         $menu.append($menuItems);
 
         $menuItems.menu();
         wv.ui.positionMenu($menuItems, {
             my: "left top",
-            at: "left bottom+5",
+            at: "left bottom + 5",
             of: $label
         });
         $menuItems.hide();
@@ -90,28 +105,11 @@ wv.ui.info = wv.ui.info || (function(ui, config) {
                 .addClass("wv-opaque");
             }
         });
-
         $source.click( function( e ){
             window.open("https://github.com/nasa-gibs/worldview", "_blank");
         });
 
         wv.feedback.decorate($feedback.find("a"));
-
-        $new.click(function() {
-            if ( wv.util.browser.small || wv.util.browser.touchDevice ) {
-                window.open("brand/pages/new.html?v=@BUILD_NONCE@", "_blank");
-            } else {
-                wv.ui.getDialog().dialog({
-                    title: "What's New",
-                    width: 625,
-                    height: 525,
-                    show: { effect: "fade" },
-                    hide: { effect: "fade" }
-                })
-                .load("brand/pages/new.html?v=@BUILD_NONCE@ #page")
-                .addClass("wv-opaque");
-            }
-        });
 
         $tour.click(function() {
             ui.tour.start();

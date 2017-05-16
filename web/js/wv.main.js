@@ -211,6 +211,10 @@ $(function() {
         ui.link = wv.link.ui(models, config);
         ui.tour = wv.tour(models, ui, config);
         ui.info = wv.ui.info(ui, config);
+        if(config.features.alert){
+            ui.alert = wv.notifications.ui(ui, config);
+        }
+
 
         //FIXME: Old hack
         $(window).resize(function() {
