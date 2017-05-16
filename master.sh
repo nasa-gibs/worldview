@@ -1,14 +1,33 @@
-#!/bin/bash  
+#!/bin/bash
   echo "installing npm dependencies"
-  npm install
+  if ! npm install ; then
+    echo "ERROR: \"npm install\" failed" &>2
+    exit 1
+  fi
   echo "setting up Python environment"
-  ./wv-python
+  if ! ./wv-python ; then
+    echo "ERROR: \"./wv-python\" failed" &>2
+    exit 1
+  fi
   echo "Cleaning dist"
-  grunt distclean
+  if ! grunt distclean ; then
+    echo "ERROR: \"grunt distclean\" failed" &>2
+    exit 1
+  fi
   echo "Generating build"
-  grunt build
+  if ! grunt build ; then
+    echo "ERROR: \"grunt build\" failed" &>2
+    exit 1
+  fi
   echo "starting lint report.  Results in lint-results.xml"
   grunt jshint:report | ./bin/filter-test-report > lint-results.xml
-  grunt lint
+  if ! grunt lint ; then
+    echo "ERROR: \"grunt test\" failed" &>2
+    exit 1
+  fi
   echo "executing unit tests.  Results in test-results.xml"
   grunt buster:report | ./bin/filter-test-report > test-results.xml
+  if ! grunt test ; then
+    echo "ERROR: \"grunt test\" failed" &>2
+    exit 1
+  fi

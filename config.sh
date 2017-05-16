@@ -1,11 +1,26 @@
 #!/bin/bash
   echo "installing npm dependencies"
-  npm install
+  if ! npm install ; then
+    echo "ERROR: \"npm install\" failed" &>2
+    exit 1
+  fi
   echo "setting up Python environment"
-  ./wv-python
+  if ! ./wv-python ; then
+    echo "ERROR: \"./wv-python\" failed" &>2
+    exit 1
+  fi
   echo "Cleaning dist"
-  grunt distclean
+  if ! grunt distclean ; then
+    echo "ERROR: \"grunt distclean\" failed" &>2
+    exit 1
+  fi
   echo "Fetching GetCapabilities"
-  grunt fetch
+  if ! grunt fetch ; then
+    echo "ERROR: \"grunt fetch\" failed" &>2
+    exit 1
+  fi
   echo "Generating Configuration"
-  grunt config
+  if ! grunt config ; then
+    echo "ERROR: \"grunt config\" failed" &>2
+    exit 1
+  fi
