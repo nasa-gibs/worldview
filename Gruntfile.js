@@ -50,6 +50,15 @@ module.exports = function(grunt) {
     else
 	findCmd = "find build -type d -empty -delete";
 
+	// Platform specific location for Python
+	var pythonPath;
+	if(process.platform === 'win32') {
+		pythonPath = "python/Scripts"
+	}
+	else {
+		pythonPath = "python/bin"
+	}
+
     grunt.initConfig({
 
         pkg: pkg,
@@ -331,7 +340,7 @@ module.exports = function(grunt) {
 
         exec: {
             config: {
-                command: "PATH=python/bin:${PATH} bin/wv-options-build " + env
+                command:"bash -c \"PATH=" + pythonPath + ":\"${PATH}\" bin/wv-options-build \"" + env
             },
 
             // After removing JavaScript and CSS files that are no longer
@@ -342,14 +351,14 @@ module.exports = function(grunt) {
             },
 
             fetch: {
-                command: "PATH=python/bin:${PATH} FETCH_GC=1 bin/wv-options-build " + env
+                command: "bash -c \"PATH=" + pythonPath + ":\"${PATH}\" FETCH_GC=1 bin/wv-options-build \"" + env
             },
             node_packages: {
                 command: 'npm update'
             },
 
             python_packages: {
-                command: 'virtualenv python && python/bin/pip install xmltodict isodate'
+                command: 'virtualenv python && bash -c \"PATH=' + pythonPath + ':${PATH} pip install xmltodict isodate\"'
             },
 
             rpmbuild: {
@@ -358,7 +367,7 @@ module.exports = function(grunt) {
             },
 
             tar_config: {
-                command: "tar cjCf build dist/worldview-config.tar.bz2 " +
+                command: "tar -C build -cjf dist/worldview-config.tar.bz2 " +
                             "options"
             },
 
