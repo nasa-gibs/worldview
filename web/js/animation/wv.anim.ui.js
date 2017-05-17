@@ -530,6 +530,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
         var day = currentDate;
         var loop = animModel.rangeState.loop;
         var i = 1; 
+
         while(i < queueLength) {
             if(self.nextDate(day) > endDate) {
                 if(!loop) {
@@ -640,21 +641,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
      *
      */
     self.setNewDate = function(date, newDate) {
-        var interval = self.getInterval();
-        var newDateDay = newDate.getDate() + 1;
-        if(interval !== 'day') {
-            if(newDateDay > 27) {
-                newDateDay = 27;
-            }
-            newDate.setUTCDate(newDateDay);
-        }
-        if(interval === 'month') {
-            return new Date(newDate);
-        } else if(interval === 'year') {
-            return new Date(newDate);
-        } else {
-            return newDate;
-        }
+        return newDate;
     };
 
     /*
