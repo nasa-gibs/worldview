@@ -99,7 +99,7 @@ npm install
 grunt
 npm start
 ```
-# Worldview should be available at
+Worldview should be available at
 
 ```bash
 
