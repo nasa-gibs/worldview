@@ -48,7 +48,6 @@ wv.data.handler.base = function(config, model) {
 
     var init = function() {
         var ns = wv.data.handler.base;
-
         if ( !ns.cmr ) {
             if ( config.parameters.mockCMR ) {
                 ns.cmr = wv.data.cmr.mockClient(
@@ -85,7 +84,6 @@ wv.data.handler.base = function(config, model) {
                     return;
                 }
                 var results = self._processResults(data);
-                //console.log(results);
                 self.events.trigger("results", results);
             } catch ( error ) {
                 self.events.trigger("error", "exception", error);
@@ -202,7 +200,8 @@ wv.data.handler.collectionList = function(config, model, spec) {
 
     self._submit = function(queryData) {
         var queryOptions = {
-            data: queryData
+            data: queryData,
+            search: 'collections.json'
         };
 
         return self.cmr.submit(queryOptions);

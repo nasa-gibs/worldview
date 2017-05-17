@@ -1,4 +1,4 @@
-# Manual Setup
+# Worldview installation using Apache
 
 Download and install [Node.js](http://nodejs.org/) using the instructions on
 their site.
