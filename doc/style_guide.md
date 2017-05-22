@@ -48,7 +48,3 @@ is being done in the commit.
 * when you submit a pull request you should make sure that there are no conflicts
 * Upon submission of a pull request, a member or members of the Worldview development team will review the code.
 * The request will then either be merged, declined, or an adjustment to the code will be requested.
-
-## Deployment
-
-Deployment is
