@@ -45,7 +45,7 @@ We'd be quite excited if you'd like to contribute to Worldview! Whether it's fin
 
 Please see our [Roadmap](https://github.com/nasa-gibs/worldview/wiki/Worldview-Roadmap) for a list of features currently in progress or planned in the reasonably near future.  We're also working to synchronize our (currently internal) sprint planning and issue tracking systems with GitHub.  
 
-Here are the tickets we are currently working on: 
+Here are the tickets we are currently working on:
 [![Stories in Ready](https://badge.waffle.io/nasa-gibs/worldview.svg?label=ready&title=Ready)](http://waffle.io/nasa-gibs/worldview)
 [![Stories in In Progress](https://badge.waffle.io/nasa-gibs/worldview.svg?label=in%20progress&title=In%20Progress)](http://waffle.io/nasa-gibs/worldview)
 
@@ -63,6 +63,7 @@ to serve the app locally.  If you prefer to use Apache, follow the directions in
 Prerequisites:
 - [Node.js](https://nodejs.org/)  
   - *Note to Ubuntu users:* After installing Node.js, ensure that it is available as `node` on the command line.  If not, [see here](https://github.com/nasa-gibs/worldview/issues/249#issuecomment-302172817) for more information.
+- Windows users: .NET Framework 2.0 or Visual Studio 2005 or newer installed. Git Bash must be used in order to run bash commands.
 - Python 2.7.x
 
 
@@ -89,7 +90,7 @@ sudo npm install --global grunt-cli
 ```
 
 ```bash
-# install virtualenv to keep additional libraries installed in a local directory: 
+# install virtualenv to keep additional libraries installed in a local directory:
 sudo easy_install virtualenv==1.10.1
 ```
 
