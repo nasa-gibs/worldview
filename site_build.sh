@@ -29,7 +29,7 @@
     exit 1
   fi
   echo "Generating rpm via 'grunt rpm-only'"
-  if ! rpm-only ; then
+  if ! grunt rpm-only ; then
     echo "ERROR: \"grunt rpm-only\" failed" &>2
     exit 1
   fi
