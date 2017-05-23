@@ -256,7 +256,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
 
         var eventDateISOString = wv.util.toISOStringDate(eventDate);
         var todayDateISOString = wv.util.toISOStringDate(wv.util.today());
-        var eventCategoryName = event.categories[0].title || null; 
+        var eventCategoryName = event.categories[0].title || null;
 
         if ((eventDateISOString !== todayDateISOString) &&
             ((eventCategoryName !== null) && (eventCategoryName == "Wildfires"))) {
@@ -288,7 +288,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
 
     var refreshEvent = function($content, event, index) {
 
-        var geoms = toArray(event.geometries);
+        var geoms = toArray(event.geometries).reverse();
         eventDate = wv.util.parseDateUTC(geoms[0].date);
 
         dateString = wv.util.giveWeekDay(eventDate) + ", " +
