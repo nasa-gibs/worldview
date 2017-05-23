@@ -11,6 +11,26 @@
 
 var fs = require("fs");
 var moment = require("moment");
+var nodeModuleFiles = [
+    "node_modules/babel-polyfill/dist/polyfill.js",
+    "node_modules/babel-polyfill/dist/polyfill.min.js",
+    "node_modules/react/dist/react.js",
+    "node_modules/react/dist/react.min.js",
+    "node_modules/react-dom/dist/react-dom.js",
+    "node_modules/react-dom/dist/react-dom.min.js",
+    "node_modules/worldview-components/browser/wvc.js",
+    "node_modules/worldview-components/browser/wvc.min.js",
+    "node_modules/lodash/lodash.js",
+    "node_modules/lodash/lodash.min.js",
+    "node_modules/bluebird/js/browser/bluebird.js",
+    "node_modules/bluebird/js/browser/bluebird.min.js",
+    "node_modules/gifshot/build/custom/gifshot.custom.js",
+    "node_modules/gifshot/build/custom/gifshot.custom.min.js",
+    "node_modules/promise-queue/lib/index.js",
+    "node_modules/openlayers/dist/ol-debug.js",
+    "node_modules/font-awesome/css/font-awesome.min.css",
+    "node_modules/font-awesome/fonts/*"
+    ];
 
 // Build date shown in the About box
 var buildTimestamp = moment.utc().format("MMMM DD, YYYY [-] HH:mm [UTC]");
@@ -46,17 +66,17 @@ module.exports = function(grunt) {
     //Platform specific command for find
     var findCmd;
     if(process.platform === 'win32')
-	findCmd = ";" //cygwin find doesn't really work in Windows compared to CentOS
+	findCmd = ";"; //cygwin find doesn't really work in Windows compared to CentOS
     else
 	findCmd = "find build -type d -empty -delete";
 
 	// Platform specific location for Python
 	var pythonPath;
 	if(process.platform === 'win32') {
-		pythonPath = "python/Scripts"
+		pythonPath = "python/Scripts";
 	}
 	else {
-		pythonPath = "python/bin"
+		pythonPath = "python/bin";
 	}
 
     grunt.initConfig({
@@ -197,26 +217,7 @@ module.exports = function(grunt) {
                 files: [{
                     expand: true, cwd: ".",
                     overwrite: true,
-                    src: [
-                        "node_modules/babel-polyfill/dist/polyfill.js",
-			"node_modules/babel-polyfill/dist/polyfill.min.js",
-                        "node_modules/react/dist/react.js",
-			"node_modules/react/dist/react.min.js",
-                        "node_modules/react-dom/dist/react-dom.js",
-			"node_modules/react-dom/dist/react-dom.min.js",
-                        "node_modules/worldview-components/browser/wvc.js",
-			"node_modules/worldview-components/browser/wvc.min.js",
-                        "node_modules/lodash/lodash.js",
-			"node_modules/lodash/lodash.min.js",
-                        "node_modules/bluebird/js/browser/bluebird.js",
-			"node_modules/bluebird/js/browser/bluebird.min.js",
-                        "node_modules/gifshot/build/custom/gifshot.custom.js",
-                       "node_modules/gifshot/build/custom/gifshot.custom.min.js",
-                        "node_modules/promise-queue/lib/index.js",
-                        "node_modules/openlayers/dist/ol-debug.js",
-                        "node_modules/font-awesome/css/font-awesome.min.css",
-                        "node_modules/font-awesome/fonts/*"
-                    ],
+                    src: nodeModuleFiles,
                     dest: "web/ext",
                 }],
                 options: {
@@ -593,7 +594,12 @@ module.exports = function(grunt) {
                 }]
             },
         },
-
+        watch: {
+            scripts: {
+                files: nodeModuleFiles,
+                tasks: ['update'],
+            },
+        },
         jshint: {
             console: [
                 "web/js/**/wv.*.js",
@@ -612,7 +618,6 @@ module.exports = function(grunt) {
                 }
             }
         },
-
         uglify: {
             // Minifiy the concatenated Worldview JavaScript file.
             options: {
@@ -631,13 +636,13 @@ module.exports = function(grunt) {
                     ]
                 }
             },
-	    ol_js: {
-		files: {
-		    "build/worldview/web/js/ol.js": [
-			"build/worldview/web/js/ol.js"
-		    ]
-		}
-	    }
+            ol_js: {
+                files: {
+                    "build/worldview/web/js/ol.js": [
+                    "build/worldview/web/js/ol.js"
+                    ]
+                }
+            }
         },
 
     });
@@ -652,6 +657,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-contrib-cssmin");
     grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-contrib-uglify");
+    grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks("grunt-line-remover");
     grunt.loadNpmTasks("grunt-exec");
     grunt.loadNpmTasks("grunt-git-rev-parse");
@@ -661,6 +667,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-text-replace");
     grunt.loadNpmTasks("grunt-rename");
     grunt.loadNpmTasks('grunt-nightwatch');
+
 
     // Lets use "clean" as a target instead of the name of the task
     grunt.renameTask("clean", "remove");
