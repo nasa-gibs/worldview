@@ -287,28 +287,27 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     };
 
     var refreshEvent = function($content, event, index) {
-
         var eventCategoryID = event.categories[0].id || null;
-
-        // If an event is an IceBerg (15) or Volcanoes (12), then sort by newest events first
-        // TODO: For events that may not have data available today, check for today's date and use geoms.pop(); before reversing order to remove today's (incomplete) data.
-           var geoms = toArray(event.geometries);
-
+        var geoms = toArray(event.geometries);
 
         eventDate = wv.util.parseDateUTC(geoms[0].date);
 
-        var eventDateISOString = wv.util.toISOStringDate(eventDate);
-        var todayDateISOString = wv.util.toISOStringDate(wv.util.today());
+        // Check if an event is an Severe Storms (10)
+        if(eventCategoryID == 10) {
+            var geomsLatestGeom = geoms[geoms.length - 1];
+            var geomsLatestDate = wv.util.parseDateUTC(geomsLatestGeom.date);
+            var eventDateISOString = wv.util.toISOStringDate(geomsLatestDate);
+            var todayDateISOString = wv.util.toISOStringDate(wv.util.today());
 
-        // If an event is an IceBerg (15) or Volcanoes (12), then sort by newest events first
-        // Alternatively, remove this check to reverse sort all data and only perform date check on certain categories.
-        if(eventCategoryID == 15 || eventCategoryID == 12) {
+            // Sort by latest dates first
             geoms.reverse();
-
-            // If the latest date is equal to today, then remove that date as it might have incomplete data.
+            // If the latest date is equal to today,
+            // then remove that date as it might have incomplete data.
             if(eventDateISOString == todayDateISOString) {
                 geoms.shift();
             }
+        } else {
+            geoms.reverse();
         }
 
 

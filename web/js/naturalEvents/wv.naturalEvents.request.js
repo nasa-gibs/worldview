@@ -24,7 +24,6 @@ wv.naturalEvents.request = wv.naturalEvents.request || function(models, ui, conf
     self.EVENT_QUERY_RESULTS = "queryResults";
     self.EVENT_SELECT = "select";
 
-    // Set URL to http://localhost:3000/mock for testing data.
     self.apiURL = config.features.naturalEvents.host;
     var querySuccessFlag = false;
     var model = models.naturalEvents;
@@ -60,7 +59,7 @@ wv.naturalEvents.request = wv.naturalEvents.request || function(models, ui, conf
         }
     };
 
-    // Point url to test_file.json to pull in mock data.
+
     var queryEvents = function(callback) {
         var url = self.apiURL + "/events";
         $.getJSON(url, function(data) {
