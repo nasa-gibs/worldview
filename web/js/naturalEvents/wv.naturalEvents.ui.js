@@ -288,26 +288,23 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
 
     var refreshEvent = function($content, event, index) {
         var eventCategoryID = event.categories[0].id || null;
-        var geoms = toArray(event.geometries);
+        // Sort by latest dates first
+        var geoms = toArray(event.geometries).reverse();
 
         eventDate = wv.util.parseDateUTC(geoms[0].date);
 
         // Check if an event is an Severe Storms (10)
         if(eventCategoryID == 10) {
-            var geomsLatestGeom = geoms[geoms.length - 1];
+            var geomsLatestGeom = geoms[0];
             var geomsLatestDate = wv.util.parseDateUTC(geomsLatestGeom.date);
             var eventDateISOString = wv.util.toISOStringDate(geomsLatestDate);
             var todayDateISOString = wv.util.toISOStringDate(wv.util.today());
 
-            // Sort by latest dates first
-            geoms.reverse();
             // If the latest date is equal to today,
             // then remove that date as it might have incomplete data.
             if(eventDateISOString == todayDateISOString) {
                 geoms.shift();
             }
-        } else {
-            geoms.reverse();
         }
 
 
