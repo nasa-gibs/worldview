@@ -14,11 +14,6 @@
     echo "ERROR: \"grunt distclean\" failed" &>2
     exit 1
   fi
-  echo "relocation node_module dependencies"
-  if ! grunt update ; then
-    echo "ERROR: \"grunt update\" failed" &>2
-    exit 1
-  fi
   echo "Generating build"
   if ! grunt build ; then
     echo "ERROR: \"grunt build\" failed" &>2

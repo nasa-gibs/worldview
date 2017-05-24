@@ -14,11 +14,6 @@
     echo "ERROR: \"grunt distclean\" failed" &>2
     exit 1
   fi
-  echo "relocation node_module dependencies"
-  if ! grunt update ; then
-    echo "ERROR: \"grunt update\" failed" &>2
-    exit 1
-  fi
   echo "Fetching GetCapabilities"
   if ! grunt fetch ; then
     echo "ERROR: \"grunt fetch\" failed" &>2
