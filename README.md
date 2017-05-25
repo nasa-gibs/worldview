@@ -58,12 +58,12 @@ Thanks for considering contributing and making our planet easier to explore!
 These instructions install a development version of Worldview using [Node.js](https://nodejs.org/)
 to serve the app locally.  If you prefer to use Apache, follow the directions in [Setup Using Apache](doc/apache_setup.md).
 
-*Note:* This has been demonstrated to work on Windows 7 and 10 (as tested with [mingw64](http://mingw-w64.org/)), Mac OS X, and Ubuntu.
+*Note:* This has been demonstrated to work on Windows 7 and 10 (as tested with [mingw-w64](http://mingw-w64.org/)), Mac OS X, and Ubuntu.
 
 Prerequisites:
 - [Node.js](https://nodejs.org/)  
   - *Note to Ubuntu users:* After installing Node.js, ensure that it is available as `node` on the command line.  If not, [see here](https://github.com/nasa-gibs/worldview/issues/249#issuecomment-302172817) for more information.
-- Windows users: .NET Framework 2.0 or Visual Studio 2005 or newer installed. Git Bash must be used in order to run bash commands.
+- Windows users: .NET Framework 2.0 or Visual Studio 2005 or newer installed. Git Bash, mingw-w64 bash, or a similar shell must be used in order to run bash commands.
 - Python 2.7.x
 
 
