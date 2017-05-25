@@ -7,3 +7,37 @@
     margin-top: 15px;
     width: 100%;
 }
+#social-share {
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-around;
+}
+
+#social-share [class*="fa fa-"] {
+    background-color: #000;
+    border-radius: 50%;
+    color: #fff;
+    display: inline-block;
+    height: 48px;
+    line-height: 48px;
+    margin: auto 10px;
+    width: 48px;
+    font-size: 24px;
+    text-align: center;
+}
+
+#social-share .fa-facebook {
+    background-color: #3b5998;
+}
+
+#social-share .fa-twitter {
+    background-color: #00aced;
+}
+
+#social-share .fa-google-plus {
+    background-color: #d34836;
+}
+
+#social-share .fa-envelope {
+    background-color: #505050;
+}

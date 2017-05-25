@@ -69,30 +69,32 @@ wv.link.ui = wv.link.ui || function(models, config) {
         }
         item += "</div>";
 
-        // social sharing
-        var baselink = 'https://worldview.earthdata.nasa.gov/';
+        // Social Sharing
+        var baseLink = window.location.href;
+        var baseEncodedLink = encodeURIComponent(baseLink);
+        var shareMessage = encodeURIComponent('Check out this view on NASA\'s Worldview! ');
+        shareMessage = shareMessage.replace(/'/g, '%27');
+
         var fbAppId = 'yourFacebookAppId';
-        var fbMessage = "Share this on facebook!";
+        var fbDisplay = 'popup';
+        var fbRedirectUri = "https%3A%2F%2Fdevelopers.facebook.com%2Ftools%2Fexplorer";
 
-        item += "<div id='social-share'>";
-            // Facebook
-            // https://www.facebook.com/dialog/feed?app_id=yourFacebookAppId&display=popup&caption=React%20Social!&link=https%3A%2F%2Fgithub.com%2Folahol%2Freact-social%2F&picture=&redirect_uri=https%3A%2F%2Fwww.facebook.com%2F
-            // https://www.facebook.com/dialog/feed?
-            // app_id=145634995501895
-            // &display=popup&amp;caption=An%20example%20caption
-            // &link=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2F
-            // &redirect_uri=https://developers.facebook.com/tools/explorer
-            item += "<a class='' href='' target='' title='Share via Facebook!'><i class='fa fa-facebook-square'></i></a>";
+        item += "<div id='social-share'><div id='social-message'></div><div class='social'>";
+        // Facebook
+        // https://developers.facebook.com/docs/sharing/reference/share-dialog#redirect
+        item += "<a class='icon-link fa fa-facebook fa-2x' href='https://www.facebook.com/dialog/share?app_id=" + fbAppId + "&display=" + fbDisplay + "&href=" + baseEncodedLink + "&redirect_uri=" + fbRedirectUri + "' target='_blank' title='Share via Facebook!'></a>";
 
-            // Twitter
-            item += "<a class='' href='' target='' title='Share via Twitter!'><i class='fa fa-twitter-square'></i></a>";
+        // Twitter
+        // https://dev.twitter.com/web/tweet-button/parameters#web-intent-example
+        item += "<a class='icon-link fa fa-twitter fa-2x' href='https://twitter.com/intent/tweet?text=" + shareMessage + baseLink + "' target='_blank' title='Share via Twitter!'></a>";
 
-            // Google Plus
-            item += "<a class='' href='' target='' title='Share via Google Plus!'><i class='fa fa-google-plus-square'></i></a>";
+        // Google Plus
+        // https://developers.google.com/+/web/share/#sharelink-endpoint
+        item += "<a class='icon-link fa fa-google-plus fa-2x' href='https://plus.google.com/share?url=" + baseEncodedLink + "' target='' title='Share via Google Plus!'></a>";
 
-            // Email
-            item += "<a class='' href='' target='' title='Share via Email!'><i class='fa fa-envelope-square'></i></a>";
-        item += "</div>";
+        // Email
+        item += "<a class='icon-link fa fa-envelope fa-2x' href='mailto:?subject=" + baseEncodedLink + "body=" + "' target='' title='Share via Email!'></a>";
+        item += "</div></div>";
 
         $dialog.html(item).iCheck({checkboxClass: 'icheckbox_square-grey'});
 
@@ -165,50 +167,6 @@ wv.link.ui = wv.link.ui || function(models, config) {
         };
 
         $("#wv-link-shorten-check").prop("checked", false);
-
-        // function ShareInit() {
-        //
-        //     class ShareApp extends React.Component {
-        //         render() {
-        //
-        //             return React.createElement('div', {},
-        //             // facebook
-        //             // https://www.facebook.com/dialog/feed?app_id=yourFacebookAppId&display=popup&caption=React%20Social!&link=https%3A%2F%2Fgithub.com%2Folahol%2Freact-social%2F&picture=&redirect_uri=https%3A%2F%2Fwww.facebook.com%2F
-        //             // https://www.facebook.com/dialog/feed?
-        //             // app_id=145634995501895
-        //             // &display=popup&amp;caption=An%20example%20caption
-        //             // &link=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2F
-        //             // &redirect_uri=https://developers.facebook.com/tools/explorer
-        //
-        //             React.createElement("a", {href: this.props.link, title: "Share via Facebook"},
-        //                 React.createElement("i", {className: "fa fa-facebook-square"})
-        //             ),
-        //
-        //             // twitter
-        //             // https://twitter.com/intent/tweet?text=React%20Social!%20https%3A%2F%2Fgithub.com%2Folahol%2Freact-social%2F
-        //             React.createElement("a", {href: this.props.link, title: "Share via Facebook"},
-        //                 React.createElement("i", {className: "fa fa-twitter-square"})
-        //             ),
-        //
-        //             // google plus
-        //             React.createElement("a", {href: this.props.link, title: "Share via Facebook"},
-        //                 React.createElement("i", {className: "fa fa-google-plus-square"})
-        //             ),
-        //
-        //             // email
-        //             React.createElement("a", {href: this.props.link, title: "Share via Facebook"},
-        //                 React.createElement("i", {className: "fa fa-envelope-square"})
-        //             ));
-        //         }
-        //     }
-        //
-        //     ReactDOM.render(React.createElement(ShareApp,
-        //         {link: 'https://worldview.earthdata.nasa.gov/'},
-        //         {facebookAppId: "yourFacebookAppId"},
-        //         {message: "React Social!"}),
-        //     $('#wv-link-shorten')[0]);
-        // }
-        // ShareInit();
 
     };
 
