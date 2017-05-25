@@ -140,6 +140,65 @@ wv.link.ui = wv.link.ui || function(models, config) {
 
         $("#wv-link-shorten-check").prop("checked", false);
 
+        function ShareInit() {
+
+            class ShareApp extends React.Component {
+                render() {
+
+                    return React.createElement('div', {},
+                    // facebook
+                    // https://www.facebook.com/dialog/feed?app_id=yourFacebookAppId&display=popup&caption=React%20Social!&link=https%3A%2F%2Fgithub.com%2Folahol%2Freact-social%2F&picture=&redirect_uri=https%3A%2F%2Fwww.facebook.com%2F
+                    // https://www.facebook.com/dialog/feed?
+                    // app_id=145634995501895
+                    // &display=popup&amp;caption=An%20example%20caption
+                    // &link=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2F
+                    // &redirect_uri=https://developers.facebook.com/tools/explorer
+
+                    React.createElement("a", {href: `${this.props.link}`, title: "Share via Facebook"},
+                        React.createElement("i", {className: "fa fa-facebook-square"})
+                    ),
+
+                    // twitter
+                    // https://twitter.com/intent/tweet?text=React%20Social!%20https%3A%2F%2Fgithub.com%2Folahol%2Freact-social%2F
+                    React.createElement("a", {href: `${this.props.link}`, title: "Share via Facebook"},
+                        React.createElement("i", {className: "fa fa-twitter-square"})
+                    ),
+
+                    // google plus
+                    React.createElement("a", {href: `${this.props.link}`, title: "Share via Facebook"},
+                        React.createElement("i", {className: "fa fa-google-plus-square"})
+                    ),
+
+                    // email
+                    React.createElement("a", {href: `${this.props.link}`, title: "Share via Facebook"},
+                        React.createElement("i", {className: "fa fa-envelope-square"})
+                    ));
+                }
+            }
+
+            // JSX code
+            // render: function () {
+            //     var link = "https://github.com/olahol/react-social/",
+            //         facebookAppId = "yourFacebookAppId",
+            //         message = "React Social!";
+            //
+            //     return (
+            //       <div>
+            //         <FacebookButton title="Share via Facebook" message={message} appId={facebookAppId} url={link} element="a" className="">
+            //             <i className="fa fa-facebook-square"/>
+            //         </FacebookButton>
+            //     </div>
+            //     );
+            // }
+
+            ReactDOM.render(React.createElement(ShareApp,
+                {link: 'https://github.com/olahol/react-social/'},
+                {facebookAppId: "yourFacebookAppId"},
+                {message: "React Social!"}),
+            $('#wv-link-shorten')[0]);
+        }
+        ShareInit();
+
     };
 
     init();
