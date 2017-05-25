@@ -72,7 +72,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
         // Social Sharing
         var baseLink = window.location.href;
         var baseEncodedLink = encodeURIComponent(baseLink);
-        var shareMessage = encodeURIComponent('Check out this view on NASA\'s Worldview! ');
+        var shareMessage = encodeURIComponent('Check out what I found in NASA\'s Worldview! ');
         shareMessage = shareMessage.replace(/'/g, '%27');
 
         var fbAppId = 'yourFacebookAppId';
@@ -86,14 +86,14 @@ wv.link.ui = wv.link.ui || function(models, config) {
 
         // Twitter
         // https://dev.twitter.com/web/tweet-button/parameters#web-intent-example
-        item += "<a class='icon-link fa fa-twitter fa-2x' href='https://twitter.com/intent/tweet?text=" + shareMessage + baseLink + "' target='_blank' title='Share via Twitter!'></a>";
+        item += "<a class='icon-link fa fa-twitter fa-2x' href='https://twitter.com/intent/tweet?text=" + shareMessage + "' target='_blank' title='Share via Twitter!'></a>";
 
         // Google Plus
         // https://developers.google.com/+/web/share/#sharelink-endpoint
-        item += "<a class='icon-link fa fa-google-plus fa-2x' href='https://plus.google.com/share?url=" + baseEncodedLink + "' target='' title='Share via Google Plus!'></a>";
+        item += "<a class='icon-link fa fa-google-plus fa-2x' href='https://plus.google.com/share?url=" + baseEncodedLink + "' target='_blank' title='Share via Google Plus!'></a>";
 
         // Email
-        item += "<a class='icon-link fa fa-envelope fa-2x' href='mailto:?subject=" + baseEncodedLink + "body=" + "' target='' title='Share via Email!'></a>";
+        item += "<a class='icon-link fa fa-envelope fa-2x' href='mailto:?subject=" + shareMessage + "body=" + baseEncodedLink + "' target='_self' title='Share via Email!'></a>";
         item += "</div></div>";
 
         $dialog.html(item).iCheck({checkboxClass: 'icheckbox_square-grey'});
