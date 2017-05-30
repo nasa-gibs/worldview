@@ -5,6 +5,12 @@
 	"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/sources",
 	"sources": [
 		{
+			"id": "TEST",
+			"title": "Test Source",
+			"source": "http://www.example.com/",
+			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events?source=TEST"
+		},
+		{
 			"id": "AU_BOM",
 			"title": "Australia Bureau of Meteorology",
 			"source": "http://www.bom.gov.au/",

@@ -295,17 +295,23 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
 
         // Check if an event is an Severe Storms (10)
         if(eventCategoryID == 10) {
-            var geomsLatestGeom = geoms[0];
-            var geomsLatestDate = wv.util.parseDateUTC(geomsLatestGeom.date);
-            var eventDateISOString = wv.util.toISOStringDate(geomsLatestDate);
-            var todayDateISOString = wv.util.toISOStringDate(wv.util.today());
+            var geomsDates = geoms[0].date;
+            var datesFound = 0;
 
-            // Remove all items in the multi-day array matching today's date
-            geoms = geoms.filter(function(e) {
-                return e !== todayDateISOString;
-            });
+            // Find all events date in the geoms object matching today's date
+            for(var i = 0; i < geoms.length; i++) {
+                var testeventDate = geoms[i].date;
+                var geomsLatestDate = wv.util.parseDateUTC(testeventDate);
+                var eventDateISOString = wv.util.toISOStringDate(geomsLatestDate);
+                var todayDateISOString = wv.util.toISOStringDate(wv.util.today());
+                if (eventDateISOString == todayDateISOString) {
+                    datesFound++;
+                }
+            }
+            // remove the dates found that match today's date.
+            geoms.splice(0, datesFound);
+
         }
-
 
         dateString = wv.util.giveWeekDay(eventDate) + ", " +
             wv.util.giveMonth(eventDate) + " " +

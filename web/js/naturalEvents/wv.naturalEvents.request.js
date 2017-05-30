@@ -59,9 +59,19 @@ wv.naturalEvents.request = wv.naturalEvents.request || function(models, ui, conf
         }
     };
 
+    function getURLParameter(name) {
+        return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
+    }
+    var mockEventsDate = getURLParameter('mockEvents');
+    var mockCategoriesDate = getURLParameter('mockCategories');
+    var mockSourcesDate = getURLParameter('mockSources');
 
     var queryEvents = function(callback) {
         var url = self.apiURL + "/events";
+        var mockEventsParam = 'mockEvents=' + mockEventsDate;
+        if (window.location.search.indexOf(mockEventsParam) > -1) {
+            url = "../../mock/events_data.json-" + mockEventsDate;
+        }
         $.getJSON(url, function(data) {
             model.data.events = data.events;
             self.events.trigger('queryResults');
@@ -70,6 +80,10 @@ wv.naturalEvents.request = wv.naturalEvents.request || function(models, ui, conf
 
     var queryTypes = function(callback) {
         var url = self.apiURL + "/categories";
+        var mockCategoriesParam = 'mockCategories=' + mockCategoriesDate;
+        if (window.location.search.indexOf(mockCategoriesParam) > -1) {
+            url = "../../mock/categories_data.json-" + mockCategoriesDate;
+        }
         $.getJSON(url, function(data) {
             model.data.types = data.categories;
             self.events.trigger('queryResults');
@@ -78,6 +92,10 @@ wv.naturalEvents.request = wv.naturalEvents.request || function(models, ui, conf
 
     var querySources = function(callback) {
         var url = self.apiURL + "/sources";
+        var mockSourcesParam = 'mockSources=' + mockSourcesDate;
+        if (window.location.search.indexOf(mockSourcesParam) > -1) {
+            url = "../../mock/sources_data.json-" + mockSourcesDate;
+        }
         $.getJSON(url, function(data) {
             model.data.sources = data.sources;
             self.events.trigger('queryResults');

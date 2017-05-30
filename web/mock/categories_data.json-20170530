@@ -94,6 +94,13 @@
 			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/categories/8",
 			"description": "Wildfires includes all nature of fire, including forest and plains fires, as well as urban and industrial fire events. Fires may be naturally caused or manmade.",
 			"layers": "http://eonet.sci.gsfc.nasa.gov/api/v2/layers/8"
+		},
+		{
+			"id": 99,
+			"title": "Testing",
+			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/categories/99",
+			"description": "This is strictly for testing and can be used in conjunction with other test data files.",
+			"layers": "http://eonet.sci.gsfc.nasa.gov/api/v2/layers/99"
 		}
 	]
 }
