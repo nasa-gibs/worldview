@@ -16,6 +16,10 @@
     color:#d54e21;
     background: transparent;
 }
+
+.map-item-list li.item .incomplete-date {
+    cursor: default;
+}
 .map-item-list li.item h4 {
     font-size:0.85em;
     color:#ccc;
@@ -54,6 +58,11 @@
     position: relative;
     padding-left: 15px;
 }
+
+#wv-events li.item .dates a.date.active {
+    font-weight: bold;
+}
+
 #wv-events .map-item-list li.item p a i.fa-external-link {
     margin: 0;
     position: absolute;
