@@ -300,11 +300,10 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
             var eventDateISOString = wv.util.toISOStringDate(geomsLatestDate);
             var todayDateISOString = wv.util.toISOStringDate(wv.util.today());
 
-            // If the latest date is equal to today,
-            // then remove that date as it might have incomplete data.
-            if(eventDateISOString == todayDateISOString) {
-                geoms.shift();
-            }
+            // Remove all items in the multi-day array matching today's date
+            geoms = geoms.filter(function(e) {
+                return e !== todayDateISOString;
+            });
         }
 
 
