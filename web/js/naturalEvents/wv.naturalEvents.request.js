@@ -70,7 +70,7 @@ wv.naturalEvents.request = wv.naturalEvents.request || function(models, ui, conf
         var url = self.apiURL + "/events";
         var mockEventsParam = 'mockEvents=' + mockEventsDate;
         if (window.location.search.indexOf(mockEventsParam) > -1) {
-            url = "../../mock/events_data.json-" + mockEventsDate;
+            url = "mock/events_data.json-" + mockEventsDate;
         }
         $.getJSON(url, function(data) {
             model.data.events = data.events;
@@ -82,7 +82,7 @@ wv.naturalEvents.request = wv.naturalEvents.request || function(models, ui, conf
         var url = self.apiURL + "/categories";
         var mockCategoriesParam = 'mockCategories=' + mockCategoriesDate;
         if (window.location.search.indexOf(mockCategoriesParam) > -1) {
-            url = "../../mock/categories_data.json-" + mockCategoriesDate;
+            url = "mock/categories_data.json-" + mockCategoriesDate;
         }
         $.getJSON(url, function(data) {
             model.data.types = data.categories;
@@ -94,7 +94,7 @@ wv.naturalEvents.request = wv.naturalEvents.request || function(models, ui, conf
         var url = self.apiURL + "/sources";
         var mockSourcesParam = 'mockSources=' + mockSourcesDate;
         if (window.location.search.indexOf(mockSourcesParam) > -1) {
-            url = "../../mock/sources_data.json-" + mockSourcesDate;
+            url = "mock/sources_data.json-" + mockSourcesDate;
         }
         $.getJSON(url, function(data) {
             model.data.sources = data.sources;
