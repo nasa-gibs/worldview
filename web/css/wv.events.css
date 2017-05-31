@@ -17,9 +17,6 @@
     background: transparent;
 }
 
-.map-item-list li.item .incomplete-date {
-    cursor: default;
-}
 .map-item-list li.item h4 {
     font-size:0.85em;
     color:#ccc;
@@ -59,7 +56,7 @@
     padding-left: 15px;
 }
 
-#wv-events li.item .dates a.date.active {
+#wv-events li.item ul li.dates a.active {
     font-weight: bold;
 }
 

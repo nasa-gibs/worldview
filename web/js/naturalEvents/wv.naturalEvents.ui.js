@@ -159,9 +159,14 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
                 $current.click();
             }
             var dataIndex = $(this).attr("data-index");
-            showEvent(dataIndex);
+            if ($(this).find("ul li.dates a").first().hasClass("date-today")) {
+                var newID = $(self.selector + "content ul li.dates").next().children("a").attr("data-date-index");
+                showEvent(dataIndex, newID);
+            } else {
+                showEvent(dataIndex);
+            }
             $(self.selector + "content li").removeClass('item-selected');
-            $(self.selector + "content a.date").removeClass('active');
+            $(self.selector + "content ul li.dates a").removeClass('active');
             $(this).addClass('item-selected');
             if (wv.util.browser.small){
                 ui.sidebar.collapseNow();
@@ -170,7 +175,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
             $current = $(this);
         }, function() {
             $(self.selector + "content li").removeClass('item-selected');
-            $(self.selector + "content a.date").removeClass('active');
+            $(self.selector + "content ul li.dates a").removeClass('active');
             hideEvent();
             mapController.dispose();
             mapController.current = null;
@@ -178,20 +183,15 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
         });
 
         $(self.selector + "content li").click( function() {
-            $(this).find("ul li.dates:first a.date").addClass('active');    
+            $(this).find("ul li.dates a.date").first().addClass('active');
         });
 
         //Bind click event to each date contained in events with dates
-        $(self.selector + "content a.date").click(function(event) {
+        $(self.selector + "content ul li.dates a").click(function(event) {
             var dataIndex = $(this).attr("data-index");
             showEvent(dataIndex, $(this).attr("data-date-index"));
-            $(self.selector + "content a.date").not(this).removeClass('active');
+            $(self.selector + "content ul li.dates a").not(this).removeClass('active');
             $(this).addClass('active');
-            event.stopPropagation();
-        });
-
-        $(".incomplete-date span").click(function(event) {
-            console.log('clicked');
             event.stopPropagation();
         });
 
@@ -332,63 +332,35 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
             .attr('title', event.categories[0].title);
 
         var $dates = $("<ul></ul>").addClass("dates").hide();
-        // Check if an event is an Severe Storms (10)
-        if(eventCategoryID == 10) {
-            var latestDate = geoms[0].date;
-            var datesFound = 0;
-
-            // Find all events date in the geoms object matching today's date
-            for(var i = 0; i < geoms.length; i++) {
-                var getEventDate = geoms[i].date;
-                var geomsLatestDate = wv.util.parseDateUTC(getEventDate);
-                var eventDateISOString = wv.util.toISOStringDate(geomsLatestDate);
-                var todayDateISOString = wv.util.toISOStringDate(wv.util.today());
-                if (eventDateISOString == todayDateISOString) {
-                    datesFound++;
-                }
-            }
-
-            // Store today's events
-            var eventsRemoved = geoms.splice(0, datesFound);
-
-            // Append today's events to top
-            if ( eventsRemoved.length > 1 ) {
-                console.log(eventsRemoved);
-                _.each(eventsRemoved, function(geometry, dateIndex) {
-
-                    date = geometry.date.split(/T/)[0];
-                    if (date === lastDate){
-                        return;
-                    }
-
-                    $date = $("<span></span>")
-                        .addClass("date")
-                        // .attr("data-date-index", dateIndex)
-                        // .attr("data-index", index)
-                        .html(date);
-
-                    $dates.append($("<li class='incomplete-date'></li>").append($date));
-                    lastDate = date;
-                });
-            }
-        }
 
         if ( event.geometries.length > 1 ) {
             var lastDate;
             var eventIndex = 0;
             _.each(event.geometries, function(geometry, dateIndex) {
                 eventIndex++;
-
                 date = geometry.date.split(/T/)[0];
+                var todayDateISOString = wv.util.toISOStringDate(wv.util.today());
+
                 if (date === lastDate){
                     return;
                 }
+                // Check first multi-day event
                 if(eventIndex == 1) {
-                    $date = $("<a></a>")
-                        .addClass("date active")
-                        .attr("data-date-index", dateIndex)
-                        .attr("data-index", index)
-                        .html(date);
+                    //If it's date is today and it is a Severe Storm, mark it
+                    //and don't make it active.
+                    if ((date === todayDateISOString) && (eventCategoryID == 10)) {
+                        $date = $("<a></a>")
+                            .addClass("date-today")
+                            .attr("data-date-index", dateIndex)
+                            .attr("data-index", index)
+                            .html(date);
+                    } else {
+                        $date = $("<a></a>")
+                            .addClass("date active")
+                            .attr("data-date-index", dateIndex)
+                            .attr("data-index", index)
+                            .html(date);
+                    }
                 } else {
                     $date = $("<a></a>")
                         .addClass("date")
