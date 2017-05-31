@@ -160,8 +160,8 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
             }
             var dataIndex = $(this).attr("data-index");
             if ($(this).find("ul li.dates a").first().hasClass("date-today")) {
-                var newID = $(self.selector + "content ul li.dates").next().children("a").attr("data-date-index");
-                showEvent(dataIndex, newID);
+                var nextID = $(self.selector + "content ul li.dates").next().children("a").attr("data-date-index");
+                showEvent(dataIndex, nextID);
             } else {
                 showEvent(dataIndex);
             }
@@ -188,11 +188,11 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
 
         //Bind click event to each date contained in events with dates
         $(self.selector + "content ul li.dates a").click(function(event) {
+            event.stopPropagation();
             var dataIndex = $(this).attr("data-index");
             showEvent(dataIndex, $(this).attr("data-date-index"));
             $(self.selector + "content ul li.dates a").not(this).removeClass('active');
             $(this).addClass('active');
-            event.stopPropagation();
         });
 
         resize();
@@ -344,29 +344,22 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
                 if (date === lastDate){
                     return;
                 }
+
+                $date = $("<a></a>")
+                    .addClass("date")
+                    .attr("data-date-index", dateIndex)
+                    .attr("data-index", index)
+                    .html(date);
+
                 // Check first multi-day event
                 if(eventIndex == 1) {
-                    //If it's date is today and it is a Severe Storm, mark it
-                    //and don't make it active.
+                    // If it's date is today and it is a Severe Storm, mark it
+                    // and don't make it active.
                     if ((date === todayDateISOString) && (eventCategoryID == 10)) {
-                        $date = $("<a></a>")
-                            .addClass("date-today")
-                            .attr("data-date-index", dateIndex)
-                            .attr("data-index", index)
-                            .html(date);
+                        $date.removeClass("date").addClass("date-today");
                     } else {
-                        $date = $("<a></a>")
-                            .addClass("date active")
-                            .attr("data-date-index", dateIndex)
-                            .attr("data-index", index)
-                            .html(date);
+                        $date.addClass("active");
                     }
-                } else {
-                    $date = $("<a></a>")
-                        .addClass("date")
-                        .attr("data-date-index", dateIndex)
-                        .attr("data-index", index)
-                        .html(date);
                 }
                 $dates.append($("<li class='dates'></li>").append($date));
                 lastDate = date;
