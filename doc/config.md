@@ -89,7 +89,7 @@ The ``config/wv.json/layerOrder.json`` file must be updated to include the new l
 - **noTransition**: For WMTS layers only, if set to *true*, the map will not display lower-resolution tiles while loading.
 - **transition**: For WMS layers only, if set to *true*, the map will display lower-resolution tiles while loading.
 - **product**: Identifier of the product to use when searching the Common Metadata Repository (CMR) to download data. See the [Data Download documentation](data_download.md) for more information.
-- **style**: For WMTS layers only, this sets the WMTS "style" parameter accordingly; defaults to `default` if not set.
+- **style**: For WMTS layers only, this sets the WMTS `style` parameter accordingly; defaults to `default` if not set.
 - **matrixIds**: For WMTS layers only, this is an array of labels used for the `TileMatrix` parameter at each zoom level; defaults to `[0, 1, 2, ...]` if not set.
 
 To display a color palette legend, a *palette* object should exist with the following properties:
