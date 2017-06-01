@@ -232,11 +232,34 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
         $editButton.append($gearIcon);
 
+        var $sourceMeta = $( '<div></div>' )
+            .addClass('source-metadata');
+
+        var $showMore = $('<div></div>')
+            .addClass('metadata-more');
+
         var $mainLayerDiv = $('<div></div>')
             .addClass('layer-main')
             .attr("data-layer", layer.id)
             .append($('<h4></h4>').html(names.title).attr('title',names.title))
             .append($('<p></p>').html(names.subtitle));
+
+            // if( source.description ) {
+            // TODO: Pass the description parameter where modis/Aersol is
+                $.get('config/metadata/' + 'modis/Aerosol' + '.html')
+                    .success(function(data) {
+                        $sourceMeta.html(data);
+                        $mainLayerDiv.append( $sourceMeta );
+
+                        $sourceMeta.find('a')
+                            .attr('target','_blank');
+                        //More than a thousand chars add show more widget
+                        if ( $sourceMeta.text().length > 1000 ) {
+                            $sourceMeta.addClass('overflow')
+                                .after($showMore);
+                        }
+                    });
+            // }
 
         $layer.hover(function(){
             d3.select('#timeline-footer svg g.plot rect[data-layer="'+ layer.id +'"]')
@@ -454,7 +477,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         setTimeout(render, 1);
     };
     var onZoomChange = function(layers) {
-        
+
         _.each(groups, function(group) {
             _.each(model.get({ group: group.id }), function(layer) {
                 var $layer = $('#products li.productsitem[data-layer="' +
