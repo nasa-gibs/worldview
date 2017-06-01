@@ -81,16 +81,33 @@ wv.link.ui = wv.link.ui || function(models, config) {
         item += "<div id='social-share'>";
 
         // Facebook: https://developers.facebook.com/docs/sharing/reference/share-dialog#redirect
-        item += "<a id='fb-share' class='icon-link fa fa-facebook fa-2x' href='https://www.facebook.com/dialog/share?app_id=" + fbAppId + "&href=" + defaultLink + "&redirect_uri=" + fbRedirectUri + "&display=popup' target='_blank' title='Share via Facebook!'></a>";
+        item += "<a id='fb-share' class='icon-link fa fa-facebook fa-2x' href='https://www.facebook.com/dialog/share?";
+        item += "app_id=" + fbAppId;
+        item += "&href=" + defaultLink;
+        item += "&redirect_uri=" + fbRedirectUri;
+        item += "&display=popup' ";
+        item += "target='_blank' ";
+        item += "title='Share via Facebook!'></a>";
 
         // Twitter: https://dev.twitter.com/web/tweet-button/parameters#web-intent-example
-        item += "<a id='tw-share' class='icon-link fa fa-twitter fa-2x' href='https://twitter.com/intent/tweet?url=" + defaultLink + "&text=" + twMessage + "%20-' target='_blank' title='Share via Twitter!'></a>";
+        item += "<a id='tw-share' class='icon-link fa fa-twitter fa-2x' href='https://twitter.com/intent/tweet?";
+        item += "url=" + defaultLink;
+        item += "&text=" + twMessage + "%20-' ";
+        item += "target='_blank' ";
+        item += "title='Share via Twitter!'></a>";
 
         // Google Plus: https://developers.google.com/+/web/share/#sharelink-endpoint
-        item += "<a id='gp-share' class='icon-link fa fa-google-plus fa-2x' href='https://plus.google.com/share?url=" + defaultLink + "' target='_blank' title='Share via Google Plus!'></a>";
+        item += "<a id='gp-share' class='icon-link fa fa-google-plus fa-2x' href='https://plus.google.com/share?";
+        item += "url=" + defaultLink + " ";
+        item += "'target='_blank' ";
+        item += "title='Share via Google Plus!'></a>";
 
         // Email
-        item += "<a id='email-share' class='icon-link fa fa-envelope fa-2x' href='mailto:?subject=" + emailMessage + "&body=" + emailMessage + "%20-%20" + defaultLink + "' target='_self' title='Share via Email!'></a>";
+        item += "<a id='email-share' class='icon-link fa fa-envelope fa-2x' href='mailto:?";
+        item += "subject=" + emailMessage;
+        item += "&body=" + emailMessage + "%20-%20" + defaultLink + " '";
+        item += "target='_self' ";
+        item += "title='Share via Email!'></a>";
         item += "</div>";
 
         $dialog.html(item).iCheck({checkboxClass: 'icheckbox_square-grey'});
