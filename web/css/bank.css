@@ -186,6 +186,10 @@ a.atexpand {
     clear:both;
     float:none;
 }
+.bank .layer-metadata.overflow {
+    height: 40px;
+    overflow: hidden;
+}
 img.bank-item-img {
     display:block;
 }

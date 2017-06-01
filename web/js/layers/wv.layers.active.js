@@ -232,30 +232,36 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
         $editButton.append($gearIcon);
 
-        var $sourceMeta = $( '<div></div>' )
-            .addClass('source-metadata');
-
-        var $showMore = $('<div></div>')
-            .addClass('metadata-more');
-
         var $mainLayerDiv = $('<div></div>')
             .addClass('layer-main')
             .attr("data-layer", layer.id)
             .append($('<h4></h4>').html(names.title).attr('title',names.title))
             .append($('<p></p>').html(names.subtitle));
 
-            // if( source.description ) {
+        var $layerMeta = $( '<div></div>' )
+            .addClass('layer-metadata');
+
+        var $layerMetaTitle = $( '<a>Layer Description</a>' )
+            .addClass('layer-metadata-title')
+            .on('click', function() {
+                $(this).next('.layer-metadata').toggleClass('overflow');
+            });
+
+        var $showMore = $('<div></div>')
+            .addClass('metadata-more');
+
+            // if( layer.description ) {
             // TODO: Pass the description parameter where modis/Aersol is
                 $.get('config/metadata/' + 'modis/Aerosol' + '.html')
                     .success(function(data) {
-                        $sourceMeta.html(data);
-                        $mainLayerDiv.append( $sourceMeta );
+                        $layerMeta.html(data);
+                        $mainLayerDiv.append( $layerMetaTitle ).append( $layerMeta );
 
-                        $sourceMeta.find('a')
+                        $layerMeta.find('a')
                             .attr('target','_blank');
                         //More than a thousand chars add show more widget
-                        if ( $sourceMeta.text().length > 1000 ) {
-                            $sourceMeta.addClass('overflow')
+                        if ( $layerMeta.text().length > 1000 ) {
+                            $layerMeta.addClass('overflow')
                                 .after($showMore);
                         }
                     });
