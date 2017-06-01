@@ -343,7 +343,7 @@ module.exports = function(grunt) {
 
         exec: {
             config: {
-                command: "PATH=python/bin:${PATH} bin/wv-options-build " + env
+                command:"bash -c \"PATH=" + pythonPath + ":\"${PATH}\" bin/wv-options-build \"" + env
             },
 
             // After removing JavaScript and CSS files that are no longer
@@ -354,14 +354,14 @@ module.exports = function(grunt) {
             },
 
             fetch: {
-                command: "PATH=python/bin:${PATH} FETCH_GC=1 bin/wv-options-build " + env
+                command: "bash -c \"PATH=" + pythonPath + ":\"${PATH}\" FETCH_GC=1 bin/wv-options-build \"" + env
             },
             node_packages: {
                 command: 'npm update'
             },
 
             python_packages: {
-                command: 'PATH=python/bin:${PATH} virtualenv python && PATH=python/bin:${PATH} pip install xmltodict isodate'
+                command: 'virtualenv python && bash -c \"PATH=' + pythonPath + ':${PATH} pip install xmltodict isodate\"'
             },
 
             rpmbuild: {
