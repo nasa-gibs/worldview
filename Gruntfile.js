@@ -343,7 +343,7 @@ module.exports = function(grunt) {
 
         exec: {
             config: {
-                command:"bash -c \"PATH=" + pythonPath + ":\"${PATH}\" bin/wv-options-build \"" + env
+                command: "PATH=python/bin:${PATH} bin/wv-options-build " + env
             },
 
             // After removing JavaScript and CSS files that are no longer
@@ -354,7 +354,7 @@ module.exports = function(grunt) {
             },
 
             fetch: {
-                command: "bash -c \"PATH=" + pythonPath + ":\"${PATH}\" FETCH_GC=1 bin/wv-options-build \"" + env
+                command: "PATH=python/bin:${PATH} FETCH_GC=1 bin/wv-options-build " + env
             },
             node_packages: {
                 command: 'npm update'
