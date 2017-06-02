@@ -207,7 +207,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
         var names = models.layers.getTitles(layer.id);
 
-         var $removeButton = $("<a></a>")
+        var $removeButton = $("<a></a>")
             .attr("id", "close" + group.id + encodeURIComponent(layer.id))
             .addClass("button close bank-item-img")
             .attr("data-layer", layer.id)
@@ -217,6 +217,19 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
         $removeButton.append($removeImage);
 
+        var $infoButton = $("<a></a>")
+            .attr("data-layer", layer.id)
+            .attr("title", "Layer description for " + names.title)
+            .addClass("wv-layers-info");
+        $infoButton.on('click', toggleInfoPanel);
+        if ( wv.util.browser.small ) {
+            $infoButton.hide();
+        }
+
+        var $infoIcon = $("<i></i>")
+        .addClass("fa fa-info-circle wv-layers-info-icon");
+
+        $infoButton.append($infoIcon);
 
         var $editButton = $("<a></a>")
             .attr("data-layer", layer.id)
@@ -238,6 +251,34 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             .append($('<h4></h4>').html(names.title).attr('title',names.title))
             .append($('<p></p>').html(names.subtitle));
 
+        $layer.hover(function(){
+            d3.select('#timeline-footer svg g.plot rect[data-layer="'+ layer.id +'"]')
+                .classed('data-bar-hovered',true);
+
+        },function(){
+            d3.select('#timeline-footer svg g.plot rect[data-layer="'+ layer.id +'"]')
+                .classed('data-bar-hovered',false);
+        });
+        $mainLayerDiv.prepend($infoButton);
+        $mainLayerDiv.prepend($editButton);
+        $mainLayerDiv.prepend($removeButton);
+        $layer.append($mainLayerDiv);
+
+        if ( layer.palette ) {
+            renderLegend($layer.find('.layer-main'), group, layer);
+        }
+        if ( top ) {
+            $parent.prepend($layer);
+        } else {
+            $parent.append($layer);
+        }
+    };
+
+    var toggleInfoPanel = function(e) {
+        e.stopPropagation();
+        var $d = $("#wv-layers-options-dialog");
+        var thisLayerId = $(this).attr("data-layer");
+        var thisLayer = config.layers[thisLayerId];
         var $layerMeta = $( '<div></div>' )
             .addClass('layer-metadata');
 
@@ -250,43 +291,13 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         var $showMore = $('<div></div>')
             .addClass('metadata-more');
 
-            // if( layer.description ) {
-            // TODO: Pass the description parameter where modis/Aersol is
-                $.get('config/metadata/' + 'modis/Aerosol' + '.html')
-                    .success(function(data) {
-                        $layerMeta.html(data);
-                        $mainLayerDiv.append( $layerMetaTitle ).append( $layerMeta );
-
-                        $layerMeta.find('a')
-                            .attr('target','_blank');
-                        //More than a thousand chars add show more widget
-                        if ( $layerMeta.text().length > 1000 ) {
-                            $layerMeta.addClass('overflow')
-                                .after($showMore);
-                        }
-                    });
-            // }
-
-        $layer.hover(function(){
-            d3.select('#timeline-footer svg g.plot rect[data-layer="'+ layer.id +'"]')
-                .classed('data-bar-hovered',true);
-
-        },function(){
-            d3.select('#timeline-footer svg g.plot rect[data-layer="'+ layer.id +'"]')
-                .classed('data-bar-hovered',false);
-        });
-
-        $mainLayerDiv.prepend($editButton);
-        $mainLayerDiv.prepend($removeButton);
-        $layer.append($mainLayerDiv);
-
-        if ( layer.palette ) {
-            renderLegend($layer.find('.layer-main'), group, layer);
-        }
-        if ( top ) {
-            $parent.prepend($layer);
+        if ( $d.length === 0 ) {
+            wv.layers.info(config, models, thisLayer);
+        } else if ( $d.attr("data-layer") !== thisLayerId ) {
+            wv.ui.closeDialog();
+            wv.layers.info(config, models, thisLayer);
         } else {
-            $parent.append($layer);
+            wv.ui.closeDialog();
         }
     };
 
@@ -379,8 +390,11 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         // If on a mobile device, use the native scroll bars
         if ( !wv.util.browser.small ) {
             $(".wv-layers-options").show();
+            $(".wv-layers-info").show();
         } else {
             $(".wv-layers-options").hide();
+            $(".wv-layers-info").hide();
+            wv.ui.closeDialog();
         }
 
         sizeProducts();

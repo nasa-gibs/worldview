@@ -265,15 +265,23 @@ img.hideReg {
 .productsitem.layer-hidden a.hdanchor.hideReg:hover i{
     background-position:-63px 0;
 }
-.productsitem a.wv-layers-options{
+.productsitem a.wv-layers-options,
+.productsitem a.wv-layers-info{
     position:relative;
     width:20px;
     height:20px;
     float:right;
 }
-.productsitem a.wv-layers-options:hover{
+.productsitem a.wv-layers-options:hover,
+.productsitem a.wv-layers-info:hover{
     background:#fff;
 }
+.wv-layers-info-icon {
+    font-size: 15px;
+    margin-top: 2px;
+    margin-left: 4px;
+}
+
 i.wv-layers-options-icon{
     background: url('../images/wv.layers/show-hide.png?v=@BUILD_NONCE@') no-repeat 0 -24px;
     width: 12px;
