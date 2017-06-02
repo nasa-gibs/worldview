@@ -75,7 +75,6 @@ wv.link.ui = wv.link.ui || function(models, config) {
         emailMessage = emailMessage.replace(/'/g, '%27');
         var twMessage = encodeURIComponent('Check out what I found in #NASAWorldview');
         var fbAppId = '121285908450463';
-        var fbRedirectUri = "https%3A%2F%2Fdevelopers.facebook.com%2Ftools%2Fexplorer";
         var twitterHashTag = encodeURIComponent('#NASAWorldview');
 
         item += "<div id='social-share'>";
@@ -84,7 +83,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
         item += "<a id='fb-share' class='icon-link fa fa-facebook fa-2x' href='https://www.facebook.com/dialog/share?" +
             "app_id=" + fbAppId +
             "&href=" + defaultLink +
-            "&redirect_uri=" + fbRedirectUri +
+            "&redirect_uri=" + defaultLink +
             "&display=popup' " +
             "target='_blank' " +
             "title='Share via Facebook!'></a>";
@@ -164,7 +163,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
                     fbLink.setAttribute("href", "https://www.facebook.com/dialog/share?" +
                         "app_id=" + fbAppId +
                         "&href=" + fullEncodedLink +
-                        "&redirect_uri=" + fbRedirectUri +
+                        "&redirect_uri=" + fullEncodedLink +
                         "&display=popup"
                     );
 
