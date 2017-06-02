@@ -74,7 +74,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
         var emailMessage = encodeURIComponent('Check out what I found in NASA\'s Worldview!');
         emailMessage = emailMessage.replace(/'/g, '%27');
         var twMessage = encodeURIComponent('Check out what I found in #NASAWorldview');
-        var fbAppId = 'yourFacebookAppId';
+        var fbAppId = '121285908450463';
         var fbRedirectUri = "https%3A%2F%2Fdevelopers.facebook.com%2Ftools%2Fexplorer";
         var twitterHashTag = encodeURIComponent('#NASAWorldview');
 
