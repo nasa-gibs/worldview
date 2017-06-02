@@ -152,11 +152,11 @@ wv.link.ui = wv.link.ui || function(models, config) {
         // When an icon-link is clicked, replace the URL with short link.
         $(".icon-link").on("click", function() {
             var fullEncodedLink = encodeURIComponent(models.link.get());
-            var promise = models.link.shorten();
-            promise.done(function(result) {
-                if ( result.status_code === 200 ) {
-                    var shortLink = result.data.url;
-                    var shortEncodedLink = encodeURIComponent(shortLink);
+            // var promise = models.link.shorten();
+            // promise.done(function(result) {
+                // if ( result.status_code === 200 ) {
+                    // var shortLink = result.data.url;
+                    // var shortEncodedLink = encodeURIComponent(shortLink);
 
                     // TODO: Replace fullEncodedLink with shortEncodedLink when deployed to master
                     // Set Facebook
@@ -187,13 +187,13 @@ wv.link.ui = wv.link.ui || function(models, config) {
                         "subject=" + emailMessage +
                         "&body=" + emailMessage + "%20-%20" + fullEncodedLink
                     );
-                    return false;
-                } else {
-                    error(result.status_code, result.status_txt);
-                }
-            }).fail(function(jqXHR, textStatus, errorThrown) {
-                error(textStatus, errorThrown);
-            });
+                    // return false;
+                // } else {
+                //     error(result.status_code, result.status_txt);
+                // }
+            // }).fail(function(jqXHR, textStatus, errorThrown) {
+            //     error(textStatus, errorThrown);
+            // });
         });
 
         //$("#wv-link-shorten-check").button();
