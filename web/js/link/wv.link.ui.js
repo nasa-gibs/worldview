@@ -82,32 +82,32 @@ wv.link.ui = wv.link.ui || function(models, config) {
 
         // Facebook: https://developers.facebook.com/docs/sharing/reference/share-dialog#redirect
         item += "<a id='fb-share' class='icon-link fa fa-facebook fa-2x' href='https://www.facebook.com/dialog/share?" +
-        "app_id=" + fbAppId +
-        "&href=" + defaultLink +
-        "&redirect_uri=" + fbRedirectUri +
-        "&display=popup' " +
-        "target='_blank' " +
-        "title='Share via Facebook!'></a>";
+            "app_id=" + fbAppId +
+            "&href=" + defaultLink +
+            "&redirect_uri=" + fbRedirectUri +
+            "&display=popup' " +
+            "target='_blank' " +
+            "title='Share via Facebook!'></a>";
 
         // Twitter: https://dev.twitter.com/web/tweet-button/parameters#web-intent-example
         item += "<a id='tw-share' class='icon-link fa fa-twitter fa-2x' href='https://twitter.com/intent/tweet?" +
-        "url=" + defaultLink +
-        "&text=" + twMessage + "%20-' " +
-        "target='_blank' " +
-        "title='Share via Twitter!'></a>";
+            "url=" + defaultLink +
+            "&text=" + twMessage + "%20-' " +
+            "target='_blank' " +
+            "title='Share via Twitter!'></a>";
 
         // Google Plus: https://developers.google.com/+/web/share/#sharelink-endpoint
         item += "<a id='gp-share' class='icon-link fa fa-google-plus fa-2x' href='https://plus.google.com/share?" +
-        "url=" + defaultLink + " '" +
-        "target='_blank' " +
-        "title='Share via Google Plus!'></a>";
+            "url=" + defaultLink + " '" +
+            "target='_blank' " +
+            "title='Share via Google Plus!'></a>";
 
         // Email
         item += "<a id='email-share' class='icon-link fa fa-envelope fa-2x' href='mailto:?" +
-        "subject=" + emailMessage +
-        "&body=" + emailMessage + "%20-%20" + defaultLink + " '" +
-        "target='_self' " +
-        "title='Share via Email!'></a>";
+            "subject=" + emailMessage +
+            "&body=" + emailMessage + "%20-%20" + defaultLink + " '" +
+            "target='_self' " +
+            "title='Share via Email!'></a>";
 
         item += "</div>";
 
@@ -149,20 +149,21 @@ wv.link.ui = wv.link.ui || function(models, config) {
         $('#permalink_content').val(models.link.get());
         $dialog.dialog("open");
         setTimeout(updateLink, 500);
-
         // When an icon-link is clicked, replace the URL with short link.
         $(".icon-link").on("click", function() {
+            var fullEncodedLink = encodeURIComponent(models.link.get());
             var promise = models.link.shorten();
             promise.done(function(result) {
                 if ( result.status_code === 200 ) {
                     var shortLink = result.data.url;
                     var shortEncodedLink = encodeURIComponent(shortLink);
 
+                    // TODO: Replace fullEncodedLink with shortEncodedLink when deployed to master
                     // Set Facebook
                     var fbLink = document.getElementById("fb-share");
                     fbLink.setAttribute("href", "https://www.facebook.com/dialog/share?" +
                         "app_id=" + fbAppId +
-                        "&href=" + shortEncodedLink +
+                        "&href=" + fullEncodedLink +
                         "&redirect_uri=" + fbRedirectUri +
                         "&display=popup"
                     );
@@ -170,21 +171,21 @@ wv.link.ui = wv.link.ui || function(models, config) {
                     // Set Twitter
                     var twLink = document.getElementById("tw-share");
                     twLink.setAttribute("href", "https://twitter.com/intent/tweet?" +
-                        "url=" + shortEncodedLink +
+                        "url=" + fullEncodedLink +
                         "&text=" + twMessage + "%20-"
                     );
 
                     // Set Google Plus
                     var gpLink = document.getElementById("gp-share");
                     gpLink.setAttribute("href", "https://plus.google.com/share?" +
-                        "url=" + shortEncodedLink
+                        "url=" + fullEncodedLink
                     );
 
                     // Set Email
                     var emailLink = document.getElementById("email-share");
                     emailLink.setAttribute("href", "mailto:?" +
                         "subject=" + emailMessage +
-                        "&body=" + emailMessage + "%20-%20" + shortEncodedLink
+                        "&body=" + emailMessage + "%20-%20" + fullEncodedLink
                     );
                     return false;
                 } else {
