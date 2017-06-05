@@ -29,7 +29,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
             .attr("title", "Share this map");
         var $icon = $("<i></i>")
             .addClass("fa")
-            .addClass("fa-link")
+            .addClass("fa-share-square-o")
             .addClass("fa-2x");
         $label.append($icon);
         $(selector).append($label);
@@ -68,6 +68,48 @@ wv.link.ui = wv.link.ui || function(models, config) {
                 "</div>";
         }
         item += "</div>";
+
+        // Social Sharing
+        var defaultLink = encodeURIComponent('http://worldview.earthdata.nasa.gov');
+        var emailMessage = encodeURIComponent('Check out what I found in NASA\'s Worldview!');
+        emailMessage = emailMessage.replace(/'/g, '%27');
+        var twMessage = encodeURIComponent('Check out what I found in #NASAWorldview');
+        var fbAppId = '121285908450463';
+        var twitterHashTag = encodeURIComponent('#NASAWorldview');
+
+        item += "<div id='social-share'>";
+
+        // Facebook: https://developers.facebook.com/docs/sharing/reference/share-dialog#redirect
+        item += "<a id='fb-share' class='icon-link fa fa-facebook fa-2x' href='https://www.facebook.com/dialog/share?" +
+            "app_id=" + fbAppId +
+            "&href=" + defaultLink +
+            "&redirect_uri=" + defaultLink +
+            "&display=popup' " +
+            "target='_blank' " +
+            "title='Share via Facebook!'></a>";
+
+        // Twitter: https://dev.twitter.com/web/tweet-button/parameters#web-intent-example
+        item += "<a id='tw-share' class='icon-link fa fa-twitter fa-2x' href='https://twitter.com/intent/tweet?" +
+            "url=" + defaultLink +
+            "&text=" + twMessage + "%20-' " +
+            "target='_blank' " +
+            "title='Share via Twitter!'></a>";
+
+        // Google Plus: https://developers.google.com/+/web/share/#sharelink-endpoint
+        item += "<a id='gp-share' class='icon-link fa fa-google-plus fa-2x' href='https://plus.google.com/share?" +
+            "url=" + defaultLink + " '" +
+            "target='_blank' " +
+            "title='Share via Google Plus!'></a>";
+
+        // Email
+        item += "<a id='email-share' class='icon-link fa fa-envelope fa-2x' href='mailto:?" +
+            "subject=" + emailMessage +
+            "&body=" + emailMessage + "%20-%20" + defaultLink + " '" +
+            "target='_self' " +
+            "title='Share via Email!'></a>";
+
+        item += "</div>";
+
         $dialog.html(item).iCheck({checkboxClass: 'icheckbox_square-grey'});
 
         // If selected during the animation, the cursor will go to the
@@ -106,6 +148,52 @@ wv.link.ui = wv.link.ui || function(models, config) {
         $('#permalink_content').val(models.link.get());
         $dialog.dialog("open");
         setTimeout(updateLink, 500);
+        // When an icon-link is clicked, replace the URL with short link.
+        $(".icon-link").on("click", function() {
+            var fullEncodedLink = encodeURIComponent(models.link.get());
+            // var promise = models.link.shorten();
+            // promise.done(function(result) {
+                // if ( result.status_code === 200 ) {
+                    // var shortLink = result.data.url;
+                    // var shortEncodedLink = encodeURIComponent(shortLink);
+
+                    // TODO: Replace fullEncodedLink with shortEncodedLink when deployed to master
+                    // Set Facebook
+                    var fbLink = document.getElementById("fb-share");
+                    fbLink.setAttribute("href", "https://www.facebook.com/dialog/share?" +
+                        "app_id=" + fbAppId +
+                        "&href=" + fullEncodedLink +
+                        "&redirect_uri=" + fullEncodedLink +
+                        "&display=popup"
+                    );
+
+                    // Set Twitter
+                    var twLink = document.getElementById("tw-share");
+                    twLink.setAttribute("href", "https://twitter.com/intent/tweet?" +
+                        "url=" + fullEncodedLink +
+                        "&text=" + twMessage + "%20-"
+                    );
+
+                    // Set Google Plus
+                    var gpLink = document.getElementById("gp-share");
+                    gpLink.setAttribute("href", "https://plus.google.com/share?" +
+                        "url=" + fullEncodedLink
+                    );
+
+                    // Set Email
+                    var emailLink = document.getElementById("email-share");
+                    emailLink.setAttribute("href", "mailto:?" +
+                        "subject=" + emailMessage +
+                        "&body=" + emailMessage + "%20-%20" + fullEncodedLink
+                    );
+                    // return false;
+                // } else {
+                //     error(result.status_code, result.status_txt);
+                // }
+            // }).fail(function(jqXHR, textStatus, errorThrown) {
+            //     error(textStatus, errorThrown);
+            // });
+        });
 
         //$("#wv-link-shorten-check").button();
         $("#wv-link-shorten-check").on("ifChanged", function() {
