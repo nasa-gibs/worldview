@@ -70,6 +70,23 @@ wv.layers.info = wv.layers.info || function(config, models, layer) {
         wv.ui.closeDialog();
     };
 
+    // TODO: Check if layer.id is in measurements.[name].sources.settings[layer.id],
+    // if it is, show that sources.description
+    // console.log(config);
+    // console.log(layer.id);
+
+    _.each(config.measurements, function( name, nameKey ) {
+        var current = config.measurements;
+        _.each(name, function( source, sourceKey ) {
+            // console.log(name);
+            if(name.sources) { console.log(name.sources); }
+            _.each(source, function( setting, settingKey ) {
+                // console.log(setting);
+            });
+        });
+    });
+
+    // TODO output the sources.description here. layer.metadata is incomplete.
     var renderDescription = function($dialog) {
         if( layer.metadata ) {
             $.get('config/metadata/' + layer.metadata + '.html')
