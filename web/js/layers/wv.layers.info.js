@@ -17,7 +17,7 @@ wv.layers.info = wv.layers.info || function(config, models, layer) {
     //TODO: Add this information into the DialogBox
     var $d = $("#wv-layers-options-dialog");
     var $layerMeta = $( '<div></div>' )
-        .addClass('layer-metadata');
+        .addClass('layer-metadata source-metadata');
 
     var $layerMetaTitle = $( '<a>Layer Description</a>' )
         .addClass('layer-metadata-title')
@@ -71,23 +71,14 @@ wv.layers.info = wv.layers.info || function(config, models, layer) {
     };
 
     var renderDescription = function($dialog) {
-        // if( layer.description ) {
-        // TODO: Pass the description parameter where modis/Aersol is
-            $.get('config/metadata/' + 'modis/Aerosol' + '.html')
+        if( layer.metadata ) {
+            $.get('config/metadata/' + layer.metadata + '.html')
                 .success(function(data) {
                     $layerMeta.html(data);
-                    $dialog.append('<div id="tos_top"></div>');
                     $dialog.append( $layerMeta );
-                    //
-                    // $layerMeta.find('a')
-                    //     .attr('target','_blank');
-                    // //More than a thousand chars add show more widget
-                    // if ( $layerMeta.text().length > 1000 ) {
-                    //     $layerMeta.addClass('overflow')
-                    //         .after($showMore);
-                    // }
-                });
-        // }
+                }
+            );
+        }
     };
 
     var onLayerRemoved = function(removedLayer) {

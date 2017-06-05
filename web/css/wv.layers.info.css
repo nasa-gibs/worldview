@@ -9,5 +9,10 @@
  * All Rights Reserved.
  */
 
-.layer-metadata {
+.bank li.item a.wv-layers-info {
+    color: #000;
+}
+
+.bank li.layer-hidden a.wv-layers-info {
+    color: #999;
 }
