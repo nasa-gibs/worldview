@@ -148,51 +148,66 @@ wv.link.ui = wv.link.ui || function(models, config) {
         $('#permalink_content').val(models.link.get());
         $dialog.dialog("open");
         setTimeout(updateLink, 500);
-        // When an icon-link is clicked, replace the URL with short link.
+        // When an icon-link is clicked, replace the URL with current encoded link.
         $(".icon-link").on("click", function() {
             var fullEncodedLink = encodeURIComponent(models.link.get());
-            // var promise = models.link.shorten();
-            // promise.done(function(result) {
-                // if ( result.status_code === 200 ) {
-                    // var shortLink = result.data.url;
-                    // var shortEncodedLink = encodeURIComponent(shortLink);
+            var promise = models.link.shorten();
 
-                    // TODO: Replace fullEncodedLink with shortEncodedLink when deployed to master
-                    // Set Facebook
-                    var fbLink = document.getElementById("fb-share");
-                    fbLink.setAttribute("href", "https://www.facebook.com/dialog/share?" +
-                        "app_id=" + fbAppId +
-                        "&href=" + fullEncodedLink +
-                        "&redirect_uri=" + fullEncodedLink +
-                        "&display=popup"
-                    );
+            // Set Facebook
+            var fbLink = document.getElementById("fb-share");
+            fbLink.setAttribute("href", "https://www.facebook.com/dialog/share?" +
+                "app_id=" + fbAppId +
+                "&href=" + fullEncodedLink +
+                "&redirect_uri=" + fullEncodedLink +
+                "&display=popup"
+            );
+
+            // Set Twitter
+            var twLink = document.getElementById("tw-share");
+            twLink.setAttribute("href", "https://twitter.com/intent/tweet?" +
+                "url=" + fullEncodedLink +
+                "&text=" + twMessage + "%20-"
+            );
+
+            // Set Google Plus
+            var gpLink = document.getElementById("gp-share");
+            gpLink.setAttribute("href", "https://plus.google.com/share?" +
+                "url=" + fullEncodedLink
+            );
+
+            // Set Email
+            var emailLink = document.getElementById("email-share");
+            emailLink.setAttribute("href", "mailto:?" +
+                "subject=" + emailMessage +
+                "&body=" + emailMessage + "%20-%20" + fullEncodedLink
+            );
+
+            // If a short link can be generated, replace the full link.
+            promise.done(function(result) {
+                if ( result.status_code === 200 ) {
+                    var shortLink = result.data.url;
+                    var shortEncodedLink = encodeURIComponent(shortLink);
 
                     // Set Twitter
                     var twLink = document.getElementById("tw-share");
                     twLink.setAttribute("href", "https://twitter.com/intent/tweet?" +
-                        "url=" + fullEncodedLink +
+                        "url=" + shortLink +
                         "&text=" + twMessage + "%20-"
-                    );
-
-                    // Set Google Plus
-                    var gpLink = document.getElementById("gp-share");
-                    gpLink.setAttribute("href", "https://plus.google.com/share?" +
-                        "url=" + fullEncodedLink
                     );
 
                     // Set Email
                     var emailLink = document.getElementById("email-share");
                     emailLink.setAttribute("href", "mailto:?" +
                         "subject=" + emailMessage +
-                        "&body=" + emailMessage + "%20-%20" + fullEncodedLink
+                        "&body=" + emailMessage + "%20-%20" + shortLink
                     );
-                    // return false;
-                // } else {
-                //     error(result.status_code, result.status_txt);
-                // }
-            // }).fail(function(jqXHR, textStatus, errorThrown) {
-            //     error(textStatus, errorThrown);
-            // });
+                    return false;
+                } else {
+                    error(result.status_code, result.status_txt);
+                }
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                error(textStatus, errorThrown);
+            });
         });
 
         //$("#wv-link-shorten-check").button();
