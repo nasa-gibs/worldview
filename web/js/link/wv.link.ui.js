@@ -94,6 +94,9 @@ wv.link.ui = wv.link.ui || function(models, config) {
             "target='_blank' " +
             "title='Share via Twitter!'></a>";
 
+        // TODO: Replace Google+ with reddit
+        // https://www.reddit.com/r/nasa/submit?url=[URL]&title=[TITLE]
+        
         // Google Plus: https://developers.google.com/+/web/share/#sharelink-endpoint
         item += "<a id='gp-share' class='icon-link fa fa-google-plus fa-2x' href='https://plus.google.com/share?" +
             "url=" + defaultLink + " '" +
