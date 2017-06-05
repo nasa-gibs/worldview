@@ -50,11 +50,17 @@ wv.layers.info = wv.layers.info || function(config, models, layer) {
             title: names.title,
             show: { effect: "slide", direction: "left" },
             width: 300,
-            height: "auto",
+            height: 300,
             position: {
                 my: "left top",
                 at: "right+5 top",
                 of: $("#products")
+            },
+            // Wait for the dialog box to load, then force scroll to top
+            open : function () {
+                $(this).parent().promise().done(function () {
+                    $('.ui-dialog-content').scrollTop('0');
+                });
             },
             close: dispose
         });
@@ -70,6 +76,7 @@ wv.layers.info = wv.layers.info || function(config, models, layer) {
             $.get('config/metadata/' + 'modis/Aerosol' + '.html')
                 .success(function(data) {
                     $layerMeta.html(data);
+                    $dialog.append('<div id="tos_top"></div>');
                     $dialog.append( $layerMeta );
                     //
                     // $layerMeta.find('a')
