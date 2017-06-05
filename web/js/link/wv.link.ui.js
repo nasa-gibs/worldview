@@ -71,11 +71,10 @@ wv.link.ui = wv.link.ui || function(models, config) {
 
         // Social Sharing
         var defaultLink = encodeURIComponent('http://worldview.earthdata.nasa.gov');
-        var emailMessage = encodeURIComponent('Check out what I found in NASA\'s Worldview!');
-        emailMessage = emailMessage.replace(/'/g, '%27');
-        var twMessage = encodeURIComponent('Check out what I found in #NASAWorldview');
         var fbAppId = '121285908450463';
+        var twMessage = encodeURIComponent('Check out what I found in #NASAWorldview');
         var twitterHashTag = encodeURIComponent('#NASAWorldview');
+        var emailMessage = encodeURIComponent('Check out what I found in NASA\'s Worldview!').replace(/'/g, '%27');
 
         item += "<div id='social-share'>";
 
@@ -189,17 +188,15 @@ wv.link.ui = wv.link.ui || function(models, config) {
                     var shortEncodedLink = encodeURIComponent(shortLink);
 
                     // Set Twitter
-                    var twLink = document.getElementById("tw-share");
                     twLink.setAttribute("href", "https://twitter.com/intent/tweet?" +
-                        "url=" + shortLink +
+                        "url=" + shortEncodedLink +
                         "&text=" + twMessage + "%20-"
                     );
 
                     // Set Email
-                    var emailLink = document.getElementById("email-share");
                     emailLink.setAttribute("href", "mailto:?" +
                         "subject=" + emailMessage +
-                        "&body=" + emailMessage + "%20-%20" + shortLink
+                        "&body=" + emailMessage + "%20-%20" + shortEncodedLink
                     );
                     return false;
                 } else {
