@@ -14,7 +14,10 @@ wv.layers = wv.layers || {};
 
 wv.layers.info = wv.layers.info || function(config, models, layer) {
 
-    //TODO: Add this information into the DialogBox
+    var $dialog;
+    var self = {};
+    var canvas;
+    var description;
     var $d = $("#wv-layers-options-dialog");
     var $layerMeta = $( '<div></div>' )
         .addClass('layer-metadata source-metadata');
@@ -27,11 +30,6 @@ wv.layers.info = wv.layers.info || function(config, models, layer) {
 
     var $showMore = $('<div></div>')
         .addClass('metadata-more');
-
-    var $dialog;
-    var self = {};
-    var canvas;
-    var description;
 
     var init = function() {
         loaded();

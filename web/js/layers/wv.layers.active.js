@@ -229,7 +229,16 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         var $infoIcon = $("<i></i>")
         .addClass("fa fa-info-circle wv-layers-info-icon");
 
-        $infoButton.append($infoIcon);
+        // Only output a info button if there is a description.
+        _.each(config.measurements, function( measurement, measurementKey ) {
+            _.each(measurement.sources, function( source, sourceKey ) {
+                _.each(source.settings, function( setting, settingKey ) {
+                    if(layer.id == setting && source.description.length > 1) {
+                        $infoButton.append($infoIcon);
+                    }
+                });
+            });
+        });
 
         var $editButton = $("<a></a>")
             .attr("data-layer", layer.id)
