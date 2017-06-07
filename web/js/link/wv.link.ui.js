@@ -72,9 +72,8 @@ wv.link.ui = wv.link.ui || function(models, config) {
         // Social Sharing
         var defaultLink = encodeURIComponent('http://worldview.earthdata.nasa.gov');
         var fbAppId = '121285908450463';
+        var shareMessage = encodeURIComponent('Check out what I found in NASA\'s Worldview!').replace(/'/g, '%27');
         var twMessage = encodeURIComponent('Check out what I found in #NASAWorldview');
-        var twitterHashTag = encodeURIComponent('#NASAWorldview');
-        var emailMessage = encodeURIComponent('Check out what I found in NASA\'s Worldview!').replace(/'/g, '%27');
 
         item += "<div id='social-share'>";
 
@@ -96,17 +95,22 @@ wv.link.ui = wv.link.ui || function(models, config) {
 
         // TODO: Replace Google+ with reddit
         // https://www.reddit.com/r/nasa/submit?url=[URL]&title=[TITLE]
-        
-        // Google Plus: https://developers.google.com/+/web/share/#sharelink-endpoint
-        item += "<a id='gp-share' class='icon-link fa fa-google-plus fa-2x' href='https://plus.google.com/share?" +
-            "url=" + defaultLink + " '" +
+        item += "<a id='rd-share' class='icon-link fa fa-reddit fa-2x' href='https://www.reddit.com/r/nasa/submit?" +
+            "url=" + defaultLink +
+            "&title=" + shareMessage + "' " +
             "target='_blank' " +
-            "title='Share via Google Plus!'></a>";
+            "title='Share on Reddit!'></a>";
+
+        // Google Plus: https://developers.google.com/+/web/share/#sharelink-endpoint
+        // item += "<a id='gp-share' class='icon-link fa fa-google-plus fa-2x' href='https://plus.google.com/share?" +
+        //     "url=" + defaultLink + "' " +
+        //     "target='_blank' " +
+        //     "title='Share via Google Plus!'></a>";
 
         // Email
         item += "<a id='email-share' class='icon-link fa fa-envelope fa-2x' href='mailto:?" +
-            "subject=" + emailMessage +
-            "&body=" + emailMessage + "%20-%20" + defaultLink + " '" +
+            "subject=" + shareMessage +
+            "&body=" + shareMessage + "%20-%20" + defaultLink + "' " +
             "target='_self' " +
             "title='Share via Email!'></a>";
 
@@ -171,6 +175,13 @@ wv.link.ui = wv.link.ui || function(models, config) {
                 "&text=" + twMessage + "%20-"
             );
 
+            // Set Reddit
+            var rdLink = document.getElementById("rd-share");
+            rdLink.setAttribute("href", "https://www.reddit.com/r/nasa/submit?" +
+                "url=" + fullEncodedLink +
+                "&title=" + shareMessage
+            );
+
             // Set Google Plus
             var gpLink = document.getElementById("gp-share");
             gpLink.setAttribute("href", "https://plus.google.com/share?" +
@@ -180,8 +191,8 @@ wv.link.ui = wv.link.ui || function(models, config) {
             // Set Email
             var emailLink = document.getElementById("email-share");
             emailLink.setAttribute("href", "mailto:?" +
-                "subject=" + emailMessage +
-                "&body=" + emailMessage + "%20-%20" + fullEncodedLink
+                "subject=" + shareMessage +
+                "&body=" + shareMessage + "%20-%20" + fullEncodedLink
             );
 
             // If a short link can be generated, replace the full link.
@@ -198,15 +209,11 @@ wv.link.ui = wv.link.ui || function(models, config) {
 
                     // Set Email
                     emailLink.setAttribute("href", "mailto:?" +
-                        "subject=" + emailMessage +
-                        "&body=" + emailMessage + "%20-%20" + shortEncodedLink
+                        "subject=" + shareMessage +
+                        "&body=" + shareMessage + "%20-%20" + shortEncodedLink
                     );
                     return false;
-                } else {
-                    error(result.status_code, result.status_txt);
                 }
-            }).fail(function(jqXHR, textStatus, errorThrown) {
-                error(textStatus, errorThrown);
             });
         });
 
