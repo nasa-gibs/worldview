@@ -16,20 +16,7 @@ wv.layers.info = wv.layers.info || function(config, models, layer) {
 
     var $dialog;
     var self = {};
-    var canvas;
     var description;
-    var $d = $("#wv-layers-options-dialog");
-    var $layerMeta = $( '<div></div>' )
-        .addClass('layer-metadata source-metadata');
-
-    var $layerMetaTitle = $( '<a>Layer Description</a>' )
-        .addClass('layer-metadata-title')
-        .on('click', function() {
-            $(this).next('.layer-metadata').toggleClass('overflow');
-        });
-
-    var $showMore = $('<div></div>')
-        .addClass('metadata-more');
 
     var init = function() {
         loaded();
@@ -66,6 +53,7 @@ wv.layers.info = wv.layers.info || function(config, models, layer) {
     };
 
     var dispose = function() {
+        $dialog = null;
         wv.ui.closeDialog();
     };
 
@@ -82,6 +70,11 @@ wv.layers.info = wv.layers.info || function(config, models, layer) {
     });
 
     var renderDescription = function($dialog) {
+        var $layerMeta = $('<div></div>')
+            .addClass('layer-metadata source-metadata');
+        var $layerMetaTitle = $('<a>Layer Description</a>')
+            .addClass('layer-metadata-title');
+
         if( description ) {
             $.get('config/metadata/' + description + '.html')
                 .success(function(data) {

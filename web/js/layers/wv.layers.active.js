@@ -229,16 +229,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         var $infoIcon = $("<i></i>")
         .addClass("fa fa-info-circle wv-layers-info-icon");
 
-        // Only output a info button if there is a description.
-        _.each(config.measurements, function( measurement, measurementKey ) {
-            _.each(measurement.sources, function( source, sourceKey ) {
-                _.each(source.settings, function( setting, settingKey ) {
-                    if(layer.id == setting && source.description.length > 1) {
-                        $infoButton.append($infoIcon);
-                    }
-                });
-            });
-        });
+        $infoButton.append($infoIcon);
 
         var $editButton = $("<a></a>")
             .attr("data-layer", layer.id)
@@ -268,7 +259,18 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             d3.select('#timeline-footer svg g.plot rect[data-layer="'+ layer.id +'"]')
                 .classed('data-bar-hovered',false);
         });
-        $mainLayerDiv.prepend($infoButton);
+
+        // Only output a info button if there is a description.
+        _.each(config.measurements, function( measurement, measurementKey ) {
+            _.each(measurement.sources, function( source, sourceKey ) {
+                _.each(source.settings, function( setting, settingKey ) {
+                    if(layer.id == setting && source.description.length > 1) {
+                        $mainLayerDiv.prepend($infoButton);
+                    }
+                });
+            });
+        });
+
         $mainLayerDiv.prepend($editButton);
         $mainLayerDiv.prepend($removeButton);
         $layer.append($mainLayerDiv);
@@ -285,7 +287,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
     var toggleInfoPanel = function(e) {
         e.stopPropagation();
-        var $d = $("#wv-layers-options-dialog");
+        var $i = $("#wv-layers-info-dialog");
         var thisLayerId = $(this).attr("data-layer");
         var thisLayer = config.layers[thisLayerId];
         var $layerMeta = $( '<div></div>' )
@@ -300,9 +302,9 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         var $showMore = $('<div></div>')
             .addClass('metadata-more');
 
-        if ( $d.length === 0 ) {
+        if ( $i.length === 0 ) {
             wv.layers.info(config, models, thisLayer);
-        } else if ( $d.attr("data-layer") !== thisLayerId ) {
+        } else if ( $i.attr("data-layer") !== thisLayerId ) {
             wv.ui.closeDialog();
             wv.layers.info(config, models, thisLayer);
         } else {
