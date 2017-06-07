@@ -393,11 +393,9 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     .attr("data-layer", encodeURIComponent(current.id))
                     .addClass('layers-all-layer');
 
-                var $moreInfo = $('<button></button>')
-                    .addClass('more-info');
-
-                var $moreInfoIcon = $('<span></span>')
-                    .addClass('fa fa-info');
+                var $moreInfo = $('<div></div>')
+                    .addClass('more-info hidden')
+                    .text('A very long description goes in this block!');
 
                 var $layerTitle = $( '<h3></h3>' )
                     .text( current.title );
@@ -417,13 +415,39 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     $checkbox.attr("checked", "checked");
                 }
 
-                $moreInfo.append($moreInfoIcon);
-                $layerItem.append( $moreInfo );
+                //Metadata
+                //TODO: Output the real description in the $sourceMeta
+                var $sourceMeta = $( '<div></div>' )
+                    .addClass('source-metadata hidden')
+                    .text('A lot of description text will be in this area.');
+
+                var $showMore = $('<div></div>')
+                    .addClass('metadata-more');
+
+                var $moreElps = $('<span></span>')
+                    .addClass('ellipsis')
+                    .text('...');
+
+                $showMore.append( $moreElps );
+
+                $showMore.toggle( function(e){
+                    $sourceMeta.removeClass('hidden');
+                    $moreElps.text('^').addClass('up');
+                    redoScrollbar();
+                }, function(e){
+                    $sourceMeta.addClass('hidden');
+                    $moreElps.text('...').removeClass('up');
+                    redoScrollbar();
+                });
+
                 $layerItem.append( $checkbox );
                 $layerItem.append( $layerTitle );
                 $layerItem.append( $layerSubtitle );
+                $layerItem.append( $sourceMeta );
+                $layerItem.append( $showMore );
 
                 $fullLayerList.append( $layerItem );
+
             }
 
         });

@@ -274,24 +274,6 @@
 #selected-category{
     color: #ddd;
 }
-#layers-all .more-info {
-    position: absolute;
-    left: 16px;
-    font-size: 20px;
-    font-weight: bold;
-    line-height: 6px;
-    height: 22px;
-    width: 22px;
-    padding: 0;
-}
-
-#layers-all .more-info:hover {
-    cursor: pointer;
-}
-
-#layers-all .more-info .fa {
-    font-family: 'FontAwesome';
-}
 
 #layers-all .layers-all-layer {
     padding: .5em .5em .5em .7em;
@@ -318,7 +300,7 @@
 }
 #selected-category .ui-accordion .ui-accordion-icons,
 #layers-all .layers-all-layer {
-    padding-left:56px;
+    padding-left:1.2em;
 }
 #selected-category .ui-accordion-header-icon,
 #layers-all .layers-all-layer .layers-all-layer-icon {
@@ -415,6 +397,10 @@
     border-top: 2px solid #d54e21;
     margin-top:7px;
 }
+#layers-all .source-metadata {
+    border-top-width: 1px;
+    color: #ddd;
+}
 .source-metadata h1{
     color: #ddd;
     font-weight:bold;
@@ -454,16 +440,23 @@
 #selected-category .ui-tabs-panel .source-metadata.overflow{
     height:100px;
 }
+#layers-all .metadata-more,
 #selected-category .ui-tabs-panel .metadata-more{
     display:block;
     height:20px;
     line-height:20px;
     border-top: 1px solid #D54E21;
 }
+#layers-all .metadata-more{
+    height:8px;
+    margin-top:4px;
+}
+#layers-all .metadata-more:hover,
 #selected-category .ui-tabs-panel .metadata-more:hover{
     background:rgba(255,255,255,0.3);
     cursor: pointer;
 }
+#layers-all .metadata-more .ellipsis,
 #selected-category .ui-tabs-panel .metadata-more .ellipsis {
     display: block;
     height: 12px;
@@ -476,6 +469,7 @@
     text-align: center;
     font-weight: bold;
 }
+#layers-all .metadata-more .ellipsis.up,
 #selected-category .ui-tabs-panel .metadata-more .ellipsis.up {
     font-size:1em;
     line-height:1em;
