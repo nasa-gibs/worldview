@@ -20,7 +20,6 @@
     display: inline-block;
     height: 48px;
     line-height: 48px;
-    margin: auto 10px;
     width: 48px;
     font-size: 24px;
     text-align: center;
@@ -32,6 +31,23 @@
 
 #social-share .fa-twitter {
     background-color: #00aced;
+}
+
+#social-share .fa-reddit {
+    position: relative;
+    color: #FF5700;
+    background-color: #fff;
+    font-size: 48px;
+    height: 46px;
+    width: 46px;
+    margin-left: 1px;
+}
+
+#social-share .fa-reddit:before {
+    border-radius: 50%;
+    position: absolute;
+    left: -1px;
+    top: 0;
 }
 
 #social-share .fa-google-plus {
