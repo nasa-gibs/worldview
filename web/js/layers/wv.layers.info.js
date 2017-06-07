@@ -31,6 +31,7 @@ wv.layers.info = wv.layers.info || function(config, models, layer) {
     var $dialog;
     var self = {};
     var canvas;
+    var description;
 
     var init = function() {
         loaded();
@@ -70,26 +71,21 @@ wv.layers.info = wv.layers.info || function(config, models, layer) {
         wv.ui.closeDialog();
     };
 
-    // TODO: Check if layer.id is in measurements.[name].sources.settings[layer.id],
-    // if it is, show that sources.description
-    // console.log(config);
-    // console.log(layer.id);
-
-    _.each(config.measurements, function( name, nameKey ) {
-        var current = config.measurements;
-        _.each(name, function( source, sourceKey ) {
-            // console.log(name);
-            if(name.sources) { console.log(name.sources); }
-            _.each(source, function( setting, settingKey ) {
-                // console.log(setting);
+    // Check if this layer.id is in measurements.[name].sources.settings,
+    // if it is, set the description for this layer.
+    _.each(config.measurements, function( measurement, measurementKey ) {
+        _.each(measurement.sources, function( source, sourceKey ) {
+            _.each(source.settings, function( setting, settingKey ) {
+                if(layer.id == setting) {
+                    description = source.description;
+                }
             });
         });
     });
 
-    // TODO output the sources.description here. layer.metadata is incomplete.
     var renderDescription = function($dialog) {
-        if( layer.metadata ) {
-            $.get('config/metadata/' + layer.metadata + '.html')
+        if( description ) {
+            $.get('config/metadata/' + description + '.html')
                 .success(function(data) {
                     $layerMeta.html(data);
                     $dialog.append( $layerMeta );
