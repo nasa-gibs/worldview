@@ -710,10 +710,12 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 redo();
 
                 if( $categories.data('isotope') ) {
-                    $categories.isotope();
+                    $categories.isotope()
+                        .on('layoutComplete',
+                            function( event, laidOutItems ) {
+                                redoScrollbar();
+                            });
                 }
-
-                redoScrollbar();
 
                 $( ".ui-widget-overlay" ).click( function( e ) {
                     $( self.selector ).dialog( "close" );
