@@ -93,13 +93,13 @@ wv.link.ui = wv.link.ui || function(models, config) {
             "target='_blank' " +
             "title='Share via Twitter!'></a>";
 
-        // TODO: Replace Google+ with reddit
+        // Reddit
         // https://www.reddit.com/r/nasa/submit?url=[URL]&title=[TITLE]
         item += "<a id='rd-share' class='icon-link fa fa-reddit fa-2x' href='https://www.reddit.com/r/nasa/submit?" +
             "url=" + defaultLink +
             "&title=" + shareMessage + "' " +
             "target='_blank' " +
-            "title='Share on Reddit!'></a>";
+            "title='Share via Reddit!'></a>";
 
         // Google Plus: https://developers.google.com/+/web/share/#sharelink-endpoint
         // item += "<a id='gp-share' class='icon-link fa fa-google-plus fa-2x' href='https://plus.google.com/share?" +
@@ -183,10 +183,10 @@ wv.link.ui = wv.link.ui || function(models, config) {
             );
 
             // Set Google Plus
-            var gpLink = document.getElementById("gp-share");
-            gpLink.setAttribute("href", "https://plus.google.com/share?" +
-                "url=" + fullEncodedLink
-            );
+            // var gpLink = document.getElementById("gp-share");
+            // gpLink.setAttribute("href", "https://plus.google.com/share?" +
+            //     "url=" + fullEncodedLink
+            // );
 
             // Set Email
             var emailLink = document.getElementById("email-share");
