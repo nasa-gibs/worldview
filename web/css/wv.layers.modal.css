@@ -9,7 +9,7 @@
 .layer-modal, .layer-modal.ui-dialog{
     background:rgb(220,220,220);
     z-index:10200;
-    
+
 }
 .layer-modal div, .layer-modal span,
 .layer-modal p, .layer-modal div,
@@ -203,7 +203,7 @@
 .layer-category h3 {
     font-size:20px;
     line-height:20px;
-    
+
 }
 .layer-category h3 a{
     display:block;
@@ -211,7 +211,7 @@
     line-height:20px;
     padding:10px;
     color:#fff;
-    
+
 }
 .layer-category h3 a:hover{
     background:rgba(255,255,255,0.6);
@@ -231,7 +231,7 @@
     text-overflow:ellipsis;
     overflow: hidden;
     box-sizing:border-box;
-    -moz-box-sizing:border-box;               
+    -moz-box-sizing:border-box;
     -webkit-box-sizing:border-box;
     -o-box-sizing:border-box;
 }
@@ -274,6 +274,11 @@
 #selected-category{
     color: #ddd;
 }
+#layers-all .more-info {
+    position: absolute;
+    left: 16px;
+}
+
 #layers-all .layers-all-layer {
     padding: .5em .5em .5em .7em;
 }
@@ -303,7 +308,7 @@
 }
 #selected-category .ui-accordion .ui-accordion-icons,
 #layers-all .layers-all-layer {
-    padding-left:1.2em;
+    padding-left:56px;
 }
 #selected-category .ui-accordion-header-icon,
 #layers-all .layers-all-layer .layers-all-layer-icon {
@@ -466,7 +471,7 @@
     line-height:1em;
 }
 #selected-category .ui-tabs-panel .ui-buttonset{
-    
+
 }
 #selected-category .ui-tabs-panel li.measurement-settings-item iCheck-checkbox,
 #selected-category .ui-tabs-panel li.measurement-settings-item label,
