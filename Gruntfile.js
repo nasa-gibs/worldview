@@ -29,7 +29,12 @@ var nodeModuleFiles = [
     "node_modules/promise-queue/lib/index.js",
     "node_modules/openlayers/dist/ol-debug.js",
     "node_modules/font-awesome/css/font-awesome.min.css",
-    "node_modules/font-awesome/fonts/*"
+    "node_modules/font-awesome/fonts/*",
+    "node_modules/isotope-layout/dist/*",
+    "node_modules/isotope-packery/packery-mode.pkgd.js",
+    "node_modules/isotope-packery/packery-mode.pkgd.min.js",
+    "node_modules/perfect-scrollbar/dist/js/*",
+    "node_modules/perfect-scrollbar/dist/css/*"
     ];
 
 // Build date shown in the About box

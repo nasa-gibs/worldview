@@ -16,10 +16,10 @@
     position:relative;
 }
 /* perfect scrollbars */
-#wv-palette-selector .ps-scrollbar-y-rail{
+#wv-palette-selector .ps__scrollbar-y-rail{
     background-color: transparent;
 }
-#wv-palette-selector .ps-scrollbar-y {
+#wv-palette-selector .ps__scrollbar-y {
     background:#ccc;
 }
 .wv-palette-selector-row {

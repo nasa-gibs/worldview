@@ -49,6 +49,8 @@
         "react": "^15.3.1",
         "react-dom": "^15.3.1",
         "worldview-components": "1.2.0",
-        "selenium-server-standalone-jar": "3.0.1"
+        "selenium-server-standalone-jar": "3.0.1",
+        "isotope-layout": "3.0.x",
+        "perfect-scrollbar": "0.7.x"
     }
 }
