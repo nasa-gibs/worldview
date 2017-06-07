@@ -279,23 +279,23 @@
     left: 16px;
 }
 
+#layers-all .more-info:hover {
+    cursor: pointer;
+}
+
 #layers-all .layers-all-layer {
     padding: .5em .5em .5em .7em;
 }
 #selected-category .ui-accordion-header,
 #layers-all .layers-all-layer {
+    position: relative;
     border:0;
     margin-top:5px;
-    cursor:pointer;
 }
 #selected-category .ui-accordion-header,
 #selected-category .ui-state-focus,
 #layers-all .layers-all-layer {
     background:rgba(0, 0, 0, 0.85);
-}
-#selected-category .ui-accordion-header:hover,
-#layers-all .layers-all-layer:hover{
-    background: rgba(0, 0, 0, 0.75);
 }
 
 #selected-category .ui-state-active,

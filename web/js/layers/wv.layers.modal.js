@@ -391,11 +391,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 var $layerItem = $( '<li></li>' )
                     .attr('id', 'layer-flat-' + current.id )
                     .attr("data-layer", encodeURIComponent(current.id))
-                    .addClass('layers-all-layer')
-                    .click( function( e ){
-                        $( this ).find('input#' + encodeURIComponent(current.id))
-                            .iCheck('toggle');
-                    });
+                    .addClass('layers-all-layer');
 
                 var $moreInfo = $('<button>+</button>')
                     .addClass('more-info');
