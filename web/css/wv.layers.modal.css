@@ -277,10 +277,20 @@
 #layers-all .more-info {
     position: absolute;
     left: 16px;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 6px;
+    height: 22px;
+    width: 22px;
+    padding: 0;
 }
 
 #layers-all .more-info:hover {
     cursor: pointer;
+}
+
+#layers-all .more-info .fa {
+    font-family: 'FontAwesome';
 }
 
 #layers-all .layers-all-layer {

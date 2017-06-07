@@ -393,8 +393,11 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     .attr("data-layer", encodeURIComponent(current.id))
                     .addClass('layers-all-layer');
 
-                var $moreInfo = $('<button>+</button>')
+                var $moreInfo = $('<button></button>')
                     .addClass('more-info');
+
+                var $moreInfoIcon = $('<span></span>')
+                    .addClass('fa fa-info');
 
                 var $layerTitle = $( '<h3></h3>' )
                     .text( current.title );
@@ -414,6 +417,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     $checkbox.attr("checked", "checked");
                 }
 
+                $moreInfo.append($moreInfoIcon);
                 $layerItem.append( $moreInfo );
                 $layerItem.append( $checkbox );
                 $layerItem.append( $layerTitle );
