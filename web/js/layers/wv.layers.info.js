@@ -16,7 +16,7 @@ wv.layers.info = wv.layers.info || function(config, models, layer) {
 
     var $dialog;
     var self = {};
-    var description;
+    var description = models.layers.getDescriptions(layer.id);
 
     var init = function() {
         loaded();
@@ -31,6 +31,7 @@ wv.layers.info = wv.layers.info || function(config, models, layer) {
 
 
         var names = models.layers.getTitles(layer.id);
+
         $dialog.dialog({
             dialogClass: "wv-panel",
             title: names.title,

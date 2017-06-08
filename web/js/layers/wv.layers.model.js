@@ -75,6 +75,24 @@ wv.layers.model = wv.layers.model || function(models, config) {
         return { title: title, subtitle: subtitle, tags: tags };
     };
 
+    self.getDescriptions = function(layerId) {
+        var description;
+        if ( config.layers[layerId] ) {
+            _.each(config.measurements, function( measurement, measurementKey ) {
+                _.each(measurement.sources, function( source, sourceKey ) {
+                    _.each(source.settings, function( setting, settingKey ) {
+                        if(config.layers[layerId].id == setting) {
+                            description = source.description;
+                        }
+                    });
+                });
+            });
+        }
+        var forLayer = config.layers[layerId];
+        description = description || forLayer.description || "";
+        return { description: description };
+    };
+
     self.available = function(id) {
         var range = self.dateRange({layer: id});
         var date = models.date.selected;
