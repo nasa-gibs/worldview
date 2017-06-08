@@ -16,7 +16,7 @@ wv.layers.info = wv.layers.info || function(config, models, layer) {
 
     var $dialog;
     var self = {};
-    var description = models.layers.getDescriptions(layer.id);
+    var description;
 
     var init = function() {
         loaded();
@@ -58,26 +58,14 @@ wv.layers.info = wv.layers.info || function(config, models, layer) {
         wv.ui.closeDialog();
     };
 
-    // Check if this layer.id is in measurements.[name].sources.settings,
-    // if it is, set the description for this layer.
-    _.each(config.measurements, function( measurement, measurementKey ) {
-        _.each(measurement.sources, function( source, sourceKey ) {
-            _.each(source.settings, function( setting, settingKey ) {
-                if(layer.id == setting) {
-                    description = source.description;
-                }
-            });
-        });
-    });
-
     var renderDescription = function($dialog) {
         var $layerMeta = $('<div></div>')
             .addClass('layer-metadata source-metadata');
         var $layerMetaTitle = $('<a>Layer Description</a>')
             .addClass('layer-metadata-title');
 
-        if( description ) {
-            $.get('config/metadata/' + description + '.html')
+        if( layer.description ) {
+            $.get('config/metadata/' + layer.description + '.html')
                 .success(function(data) {
                     $layerMeta.html(data);
                     $dialog.append( $layerMeta );

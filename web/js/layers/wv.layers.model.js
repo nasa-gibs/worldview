@@ -29,6 +29,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
 
     var init = function() {
         self.reset();
+        self.addDescriptions();
     };
 
     self.reset = function() {
@@ -75,22 +76,22 @@ wv.layers.model = wv.layers.model || function(models, config) {
         return { title: title, subtitle: subtitle, tags: tags };
     };
 
-    self.getDescriptions = function(layerId) {
+    self.addDescriptions = function() {
+        var thisSetting;
         var description;
-        if ( config.layers[layerId] ) {
-            _.each(config.measurements, function( measurement, measurementKey ) {
-                _.each(measurement.sources, function( source, sourceKey ) {
-                    _.each(source.settings, function( setting, settingKey ) {
-                        if(config.layers[layerId].id == setting) {
-                            description = source.description;
+        _.each(config.measurements, function( measurement, measurementKey ) {
+            _.each(measurement.sources, function( source, sourceKey ) {
+                _.each(source.settings, function( setting, settingKey ) {
+                    thisSetting = setting;
+                    description = source.description;
+                    _.each(config.layers, function (layer, layerKey) {
+                        if(layer.id == thisSetting) {
+                            layer.description = description || "";
                         }
                     });
                 });
             });
-        }
-        var forLayer = config.layers[layerId];
-        description = description || forLayer.description || "";
-        return { description: description };
+        });
     };
 
     self.available = function(id) {
