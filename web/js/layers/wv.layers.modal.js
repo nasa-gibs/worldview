@@ -418,8 +418,10 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 //Metadata
                 //TODO: Output the real description in the $sourceMeta
                 var $sourceMeta = $( '<div></div>' )
-                    .addClass('source-metadata hidden')
-                    .text('A lot of description text will be in this area.');
+                    .addClass('source-metadata hidden');
+                //     .text('A lot of description text will be in this area.');
+
+                var description;
 
                 var $showMore = $('<div></div>')
                     .addClass('metadata-more');
@@ -443,7 +445,25 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 $layerItem.append( $checkbox );
                 $layerItem.append( $layerTitle );
                 $layerItem.append( $layerSubtitle );
-                $layerItem.append( $sourceMeta );
+                _.each(config.measurements, function( measurement, measurementKey ) {
+                    _.each(measurement.sources, function( source, sourceKey ) {
+                        _.each(source.settings, function( setting, settingKey ) {
+                            if(current == setting) {
+                                description = source.description;
+                            }
+                        });
+                    });
+                });
+
+
+                if( description ) {
+                    $.get('config/metadata/' + description + '.html')
+                        .success(function(data) {
+                            $sourceMeta.html(data);
+                            $layerItem.append( $sourceMeta );
+                        }
+                    );
+                }
                 $layerItem.append( $showMore );
 
                 $fullLayerList.append( $layerItem );
