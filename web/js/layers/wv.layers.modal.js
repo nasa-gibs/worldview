@@ -393,10 +393,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     .attr("data-layer", encodeURIComponent(current.id))
                     .addClass('layers-all-layer');
 
-                var $moreInfo = $('<div></div>')
-                    .addClass('more-info hidden')
-                    .text('A very long description goes in this block!');
-
                 var $layerTitle = $( '<h3></h3>' )
                     .text( current.title );
 
@@ -416,12 +412,8 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 }
 
                 //Metadata
-                //TODO: Output the real description in the $sourceMeta
                 var $sourceMeta = $( '<div></div>' )
                     .addClass('source-metadata hidden');
-                //     .text('A lot of description text will be in this area.');
-
-                var description;
 
                 var $showMore = $('<div></div>')
                     .addClass('metadata-more');
@@ -453,9 +445,9 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                             $layerItem.append( $sourceMeta );
                         }
                     );
+                    $layerItem.append( $showMore );
                 }
 
-                $layerItem.append( $showMore );
                 $fullLayerList.append( $layerItem );
 
             }
