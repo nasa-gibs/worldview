@@ -416,8 +416,8 @@
     font-weight: bold;
     margin-bottom: 5px;
 }
+#layers-all .source-metadata p,
 #selected-category .ui-tabs-panel p {
-    font-style: italics;
     margin-bottom: 15px;
 }
 #selected-category .ui-tabs-panel p,
@@ -430,12 +430,17 @@
 #selected-category .ui-tabs-panel .source-metadata{
     overflow:hidden;
 }
+
+#layers-all .source-metadata p,
+#layers-all .source-metadata a,
 #selected-category .ui-tabs-panel .source-metadata p,
 #selected-category .ui-tabs-panel .source-metadata a{
     font-family: open_sans_light;
     font-size: 13px;
     line-height:14px;
-
+}
+#layers-all .source-metadata p {
+    color: #bbb;
 }
 #selected-category .ui-tabs-panel .source-metadata.overflow{
     height:100px;

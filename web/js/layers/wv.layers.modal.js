@@ -443,9 +443,9 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                         .success(function(data) {
                             $sourceMeta.html(data);
                             $layerItem.append( $sourceMeta );
+                            $layerItem.append( $showMore );
                         }
                     );
-                    $layerItem.append( $showMore );
                 }
 
                 $fullLayerList.append( $layerItem );
