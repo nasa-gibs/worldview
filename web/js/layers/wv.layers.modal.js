@@ -445,27 +445,17 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 $layerItem.append( $checkbox );
                 $layerItem.append( $layerTitle );
                 $layerItem.append( $layerSubtitle );
-                _.each(config.measurements, function( measurement, measurementKey ) {
-                    _.each(measurement.sources, function( source, sourceKey ) {
-                        _.each(source.settings, function( setting, settingKey ) {
-                            if(current == setting) {
-                                description = source.description;
-                            }
-                        });
-                    });
-                });
 
-
-                if( description ) {
-                    $.get('config/metadata/' + description + '.html')
+                if( current.description ) {
+                    $.get('config/metadata/' + current.description + '.html')
                         .success(function(data) {
                             $sourceMeta.html(data);
                             $layerItem.append( $sourceMeta );
                         }
                     );
                 }
-                $layerItem.append( $showMore );
 
+                $layerItem.append( $showMore );
                 $fullLayerList.append( $layerItem );
 
             }

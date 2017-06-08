@@ -29,6 +29,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
 
     var init = function() {
         self.reset();
+        self.addDescriptions();
     };
 
     self.reset = function() {
@@ -73,6 +74,24 @@ wv.layers.model = wv.layers.model || function(models, config) {
         subtitle = subtitle || forLayer.subtitle || "";
         tags = tags || forLayer.tags || "";
         return { title: title, subtitle: subtitle, tags: tags };
+    };
+
+    self.addDescriptions = function() {
+        var thisSetting;
+        var description;
+        _.each(config.measurements, function( measurement, measurementKey ) {
+            _.each(measurement.sources, function( source, sourceKey ) {
+                _.each(source.settings, function( setting, settingKey ) {
+                    thisSetting = setting;
+                    description = source.description;
+                    _.each(config.layers, function (layer, layerKey) {
+                        if(layer.id == thisSetting) {
+                            layer.description = description || "";
+                        }
+                    });
+                });
+            });
+        });
     };
 
     self.available = function(id) {
