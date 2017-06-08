@@ -193,18 +193,6 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
         checkZots($layer, layer);
 
-        if ( config.parameters.metadata && layer.metadata ) {
-            var $metadataButton = $("<i></i>")
-                .addClass("fa")
-                .addClass("fa-info-circle")
-                .addClass("fa-1x")
-                .addClass("wv-layers-metadata-button")
-                .click(function() {
-                    wv.layers.metadata(layer);
-                });
-            $layer.append($metadataButton);
-        }
-
         var names = models.layers.getTitles(layer.id);
 
         var $removeButton = $("<a></a>")
