@@ -416,6 +416,17 @@
     font-weight: bold;
     margin-bottom: 5px;
 }
+
+.layers-all-layer .fa {
+    color: #ddd;
+    font-family: FontAwesome !important;
+    margin-left: 8px;
+    font-size: 14px;
+}
+.layers-all-layer .fa:hover {
+    cursor: pointer;
+}
+
 #layers-all .source-metadata p,
 #selected-category .ui-tabs-panel p {
     margin-bottom: 15px;

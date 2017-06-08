@@ -415,27 +415,32 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 var $sourceMeta = $( '<div></div>' )
                     .addClass('source-metadata hidden');
 
-                var $showMore = $('<div></div>')
-                    .addClass('metadata-more');
+                var $showMore = $('<span></span>')
+                    .addClass('fa fa-info-circle');
+
+                var $moreTab = $('<div></div>')
+                .addClass('metadata-more');
 
                 var $moreElps = $('<span></span>')
-                    .addClass('ellipsis')
-                    .text('...');
+                    .addClass('ellipsis up')
+                    .text('^');
 
-                $showMore.append( $moreElps );
+                $moreTab.append( $moreElps );
 
-                $showMore.toggle( function(e){
+                //FIXME: This method still requires double-click.
+                $showMore.add($moreTab).toggle( function(e){
                     $sourceMeta.removeClass('hidden');
-                    $moreElps.text('^').addClass('up');
                     redoScrollbar();
                 }, function(e){
                     $sourceMeta.addClass('hidden');
-                    $moreElps.text('...').removeClass('up');
                     redoScrollbar();
                 });
 
                 $layerItem.append( $checkbox );
                 $layerItem.append( $layerTitle );
+                if( current.description ) {
+                    $layerTitle.append( $showMore );
+                }
                 $layerItem.append( $layerSubtitle );
 
                 if( current.description ) {
@@ -443,7 +448,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                         .success(function(data) {
                             $sourceMeta.html(data);
                             $layerItem.append( $sourceMeta );
-                            $layerItem.append( $showMore );
+                            $sourceMeta.append( $moreTab );
                         }
                     );
                 }
