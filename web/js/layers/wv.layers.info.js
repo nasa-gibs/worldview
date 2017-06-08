@@ -16,7 +16,6 @@ wv.layers.info = wv.layers.info || function(config, models, layer) {
 
     var $dialog;
     var self = {};
-    var description;
 
     var init = function() {
         loaded();
