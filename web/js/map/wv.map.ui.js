@@ -839,7 +839,9 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
             if( self.mapIsbeingDragged || wv.util.browser.small) {
                 return;
             }
-            if(typeof models.naturalEvents == 'undefined' || models.naturalEvents.active || models.data.active) {
+            if(typeof models.naturalEvents == 'undefined' ||
+              typeof models.data == 'undefined' ||
+              models.naturalEvents.active || models.data.active) {
                 return;
             }
             if( models.anim ) {
