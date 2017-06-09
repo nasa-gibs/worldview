@@ -427,12 +427,11 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
                 $moreTab.append( $moreElps );
 
-                //FIXME: This method still requires double-click.
                 $showMore.add($moreTab).toggle( function(e){
-                    $sourceMeta.removeClass('hidden');
+                    $sourceMeta.toggleClass('hidden');
                     redoScrollbar();
                 }, function(e){
-                    $sourceMeta.addClass('hidden');
+                    $sourceMeta.toggleClass('hidden');
                     redoScrollbar();
                 });
 
