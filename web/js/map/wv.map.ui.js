@@ -62,7 +62,7 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
             var map = createMap(proj);
             self.proj[proj.id] = map;
         });
-        
+
         models.proj.events.on("select", function() {
             updateProjection();
         });
@@ -261,7 +261,7 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
      *
      * @param {object} def - layer Specs
      *
-     * @param {number} value - number value 
+     * @param {number} value - number value
      *
      * @returns {void}
      */
@@ -414,15 +414,15 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
     };
 
     /*
-     * Checks a layer's properties to deterimine if 
+     * Checks a layer's properties to deterimine if
      * it is a graticule
-     * 
+     *
      *
      * @method isGraticule
      * @static
      *
      * @param def {object} Layer Specs
-     * 
+     *
      *
      * @returns {boolean}
      */
@@ -435,11 +435,11 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
     /*
      * Adds a graticule to the OpenLayers Map
      * if a graticule does not already exist
-     * 
+     *
      *
      * @method addGraticule
      * @static
-     * 
+     *
      *
      * @returns {void}
      */
@@ -460,7 +460,7 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
     /*
      * Adds a graticule to the OpenLayers Map
      * if a graticule does not already exist
-     * 
+     *
      *
      * @method removeGraticule
      * @static
@@ -480,13 +480,13 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
 
     /*
      * Updates the extents of OpenLayers map
-     * 
+     *
      *
      * @method updateExtent
      * @static
      *
      * @returns {void}
-     */    
+     */
     var updateExtent = function() {
         var map = self.selected;
         models.map.update(map.getView().calculateExtent(map.getSize()));
@@ -494,7 +494,7 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
     };
     /*
      * Updates the extents of OpenLayers map
-     * 
+     *
      *
      * @method updateExtent
      * @static
@@ -613,7 +613,7 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
     };
     /*
      * Creates map zoom buttons
-     * 
+     *
      *
      * @method createZoomButtons
      * @static
@@ -658,8 +658,8 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
 
         /*
          * Sets zoom buttons as active or inactive based
-         * on the zoom level 
-         * 
+         * on the zoom level
+         *
          * @funct onZoomChange
          * @static
          *
@@ -693,7 +693,7 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
     };
     /*
      * Creates map events based on mouse position
-     * 
+     *
      *
      * @method createMousePosSel
      * @static
@@ -722,7 +722,7 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
 
         // var timer = null;
         // var isIntervalSet = false;
-        
+
         $map = $("#" + map.getTarget());
         map = map || self.selected;
         mapId = 'coords-' + proj.id;
@@ -839,7 +839,7 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
             if( self.mapIsbeingDragged || wv.util.browser.small) {
                 return;
             }
-            if(models.naturalEvents.active || models.data.active) {
+            if(typeof models.naturalEvents == 'undefined' || models.naturalEvents.active || models.data.active) {
                 return;
             }
             if( models.anim ) {
@@ -870,7 +870,7 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
     };
 
     /*
-     * Setting a zoom action 
+     * Setting a zoom action
      *
      * @function zoomAction
      * @static
@@ -896,4 +896,3 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
     return self;
 
 };
-
