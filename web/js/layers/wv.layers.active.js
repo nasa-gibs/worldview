@@ -209,7 +209,13 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             .attr("data-layer", layer.id)
             .attr("title", "Layer description for " + names.title)
             .addClass("wv-layers-info");
-        $infoButton.on('click', toggleInfoPanel);
+        if(layer.description.length < 1) {
+            $infoButton
+                .addClass("disabled")
+                .attr("title", "No layer description");
+        } else {
+            $infoButton.on('click', toggleInfoPanel);
+        }
         if ( wv.util.browser.small ) {
             $infoButton.hide();
         }
@@ -248,17 +254,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                 .classed('data-bar-hovered',false);
         });
 
-        // Only output a info button if there is a description.
-        _.each(config.measurements, function( measurement, measurementKey ) {
-            _.each(measurement.sources, function( source, sourceKey ) {
-                _.each(source.settings, function( setting, settingKey ) {
-                    if(layer.id == setting && source.description.length > 1) {
-                        $mainLayerDiv.prepend($infoButton);
-                    }
-                });
-            });
-        });
-
+        $mainLayerDiv.prepend($infoButton);
         $mainLayerDiv.prepend($editButton);
         $mainLayerDiv.prepend($removeButton);
         $layer.append($mainLayerDiv);
