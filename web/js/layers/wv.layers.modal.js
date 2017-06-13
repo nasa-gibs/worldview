@@ -166,20 +166,24 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         var projection = models.proj.selected.id;
         var modalType = getURLParameter('modalView');
         var modalView = 'modalView=' + modalType;
+        var crumbtext;
 
         // If URL parameter is set, draw that type of modal view.
         if ((window.location.search.indexOf(modalView) > -1) && modalType == 'categories') {
+            crumbText = 'Categories';
             drawCategories();
         } else if ((window.location.search.indexOf(modalView) > -1) && modalType == 'measurements') {
+            crumbText = 'Measurements';
             drawAllMeasurements();
         } else if ((window.location.search.indexOf(modalView) > -1) && modalType == 'layers') {
+            crumbText = 'Layers';
             drawAllLayers();
         // Else set the default views per projection.
         } else if(projection == 'geographic') {
-            // Draw categories view by default.
+            crumbText = 'Categories';
             drawCategories();
-        } else { // arctic or antarctic projections
-            // Draw measurements view by default.
+        } else {
+            crumbText = 'Measurements';
             drawAllMeasurements();
         }
     };
@@ -208,7 +212,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                         hasSetting = 'TRUE';
                     }
                 });
-
 
                 if(hasSetting == 'TRUE') {
                     if(category.placement){
@@ -569,7 +572,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
         //Create breadcrumb crumbs
         var $homeCrumb = $( '<a></a>' )
-            .text('Categories')
+            .text(crumbText)
             .attr( 'alt', 'categories' )
             .attr( 'title', 'Back to Layer Categories')
             .click( drawDefaultPage );
@@ -674,13 +677,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
         if( searchBool ) {
 
-            var crumbText;
-            if( models.proj.selected.id !== 'geographic' ){
-                crumbText = 'Layers';
-            }
-            else {
-                crumbText = 'Categories';
-            }
             var $homeCrumb = $( '<a></a>' )
                 .text( crumbText )
                 .attr( 'alt', crumbText )
