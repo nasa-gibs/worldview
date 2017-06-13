@@ -109,11 +109,11 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
     };
 
-    var getSetting = function(theSetting) {
+    var getSetting = function(measurement) {
         var result = null;
-        if(theSetting instanceof Array) {
-            for(var i = 0; i < theSetting.length; i++) {
-                result = getSetting(theSetting[i]);
+        if(measurement instanceof Array) {
+            for(var i = 0; i < measurement.length; i++) {
+                result = getSetting(measurement[i]);
                 if (result) {
                     break;
                 }
@@ -121,15 +121,15 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         }
         else
         {
-            for(var prop in theSetting) {
+            for(var prop in measurement) {
                 if(prop == 'settings') {
                     for (var x = 0; x < prop.length; x += 1) {
-                        var setting = theSetting[prop][x];
+                        var setting = measurement[prop][x];
                         return setting;
                     }
                 }
-                if(theSetting[prop] instanceof Object || theSetting[prop] instanceof Array) {
-                    result = getSetting(theSetting[prop]);
+                if(measurement[prop] instanceof Object || measurement[prop] instanceof Array) {
+                    result = getSetting(measurement[prop]);
                     if (result) {
                         break;
                     }
