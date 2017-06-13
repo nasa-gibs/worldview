@@ -107,7 +107,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     function getURLParameter(name) {
         return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
     }
-    //This draws the default page, depending on projection
+    // This draws the default page, depending on projection
     // and hides the breadcrumb, and sets the search back to normal
     // and updates the scrollbar.
     var removeSearch = function(){
@@ -118,41 +118,8 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         $( '#layer-search label.search-icon' ).removeClass('search-on').off('click');
     };
     var drawDefaultPage = function( e ) {
-        var projection = models.proj.selected.id;
-        var modalType = getURLParameter('modalView');
-        var modalView = 'modalView=' + modalType;
-
         removeSearch();
-        if ((window.location.search.indexOf(modalView) > -1) && modalType == 'categories') {
-            drawCategories();
-        } else if ((window.location.search.indexOf(modalView) > -1) && modalType == 'measurements') {
-           drawAllMeasurements();
-        } else if ((window.location.search.indexOf(modalView) > -1) && modalType == 'layers') {
-            drawAllLayers();
-        } else {
-            //TODO: drawModal(projection), drawMeasurements(projection), etc.
-            if( config.categories ) {
-                $allLayers.hide();
-                drawModal();
-            }
-        }
-        redoScrollbar();
-
-    };
-    var showDefaultPage = function( e ){
-        var projection = models.proj.selected.id;
-        removeSearch();
-
-        if( projection === 'geographic' ) {
-            $allLayers.hide();
-            $categories.show().isotope();
-            $nav.show();
-        }
-        else {
-            // filter();
-            drawModal();
-        }
-
+        drawModal();
         redoScrollbar();
     };
     var resize = function(){
@@ -171,6 +138,8 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         //Begin Measurement Level
         _.each( category.measurements, function( measurement, measurementName ) {
             var current = config.measurements[measurement];
+
+            // Check if measurements has settings with the same projection.
             var measurementHasSetting;
             _.each( current.sources, function( source, souceName ) {
                 _.each( source.settings, function( setting ) {
@@ -379,7 +348,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             .text('Categories')
             .attr( 'alt', 'categories' )
             .attr( 'title', 'Back to Layer Categories')
-            .click( showDefaultPage );
+            .click( drawDefaultPage );
 
         $breadcrumb.append( $homeCrumb )
             .append('<b> / ' + category.title + '</b>' );
@@ -398,6 +367,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
     };
 
+    // Show all the measurments within the legacy-all category
     var drawAllMeasurements = function() {
         _.each( config.categories, function( metaCategory, metaCategoryName ) {
             _.each(config.categories[metaCategoryName], function( category, name ) {
@@ -408,6 +378,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         });
     };
 
+    // TODO: Filter layers by settings with projections equal to current projection.
     var drawAllLayers = function() {
 
         $allLayers.empty();
@@ -491,7 +462,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 .text( crumbText )
                 .attr( 'alt', crumbText )
                 .attr( 'title', 'Back to ' + crumbText )
-                .click( showDefaultPage );
+                .click( drawDefaultPage );
 
             $breadcrumb.append( $homeCrumb )
                 .append('<b> / Search Results</b>' );
@@ -500,7 +471,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             $( '#layers-search-input' ).show();
 
             $( 'label.search-icon' ).addClass( 'search-on' );
-            $( 'label.search-on' ).click( showDefaultPage );
+            $( 'label.search-on' ).click( drawDefaultPage );
 
             $breadcrumb.show();
 
@@ -708,10 +679,21 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     };
     var drawModal = function(){
         var projection = models.proj.selected.id;
-        if(projection == 'geographic') {
+        var modalType = getURLParameter('modalView');
+        var modalView = 'modalView=' + modalType;
+
+        // If URL parameter is set, draw that type of modal view.
+        if ((window.location.search.indexOf(modalView) > -1) && modalType == 'categories') {
+            drawCategories();
+        } else if ((window.location.search.indexOf(modalView) > -1) && modalType == 'measurements') {
+            drawAllMeasurements();
+        } else if ((window.location.search.indexOf(modalView) > -1) && modalType == 'layers') {
+            drawAllLayers();
+        // Else set the default views per projection.
+        } else if(projection == 'geographic') {
             // Draw categories view by default.
             drawCategories();
-        } else { // arctic or antarctice projections
+        } else { // arctic or antarctic projections
             // Draw measurements view by default.
             drawAllMeasurements();
         }
@@ -900,6 +882,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         else{
             searchBool = false;
 
+            // TODO: Change this so that drawModal is called.
             if (models.proj.selected.id === 'geographic' && config.categories){
                 $allLayers.hide();
                 $categories.show().isotope();
