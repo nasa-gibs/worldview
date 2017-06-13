@@ -169,15 +169,21 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         var crumbtext;
 
         // If URL parameter is set, draw that type of modal view.
-        if ((window.location.search.indexOf(modalView) > -1) && modalType == 'categories') {
-            crumbText = 'Categories';
-            drawCategories();
-        } else if ((window.location.search.indexOf(modalView) > -1) && modalType == 'measurements') {
-            crumbText = 'Measurements';
-            drawAllMeasurements();
-        } else if ((window.location.search.indexOf(modalView) > -1) && modalType == 'layers') {
-            crumbText = 'Layers';
-            drawAllLayers();
+        if (window.location.search.indexOf(modalView) > -1) {
+            if(modalType == 'categories') {
+                console.warn("Add layers view changed to Categories");
+                crumbText = 'Categories';
+                drawCategories();
+            }
+            else if (modalType == 'measurements') {
+                console.warn("Add layers view changed to Measurements");
+                crumbText = 'Measurements';
+                drawAllMeasurements();
+            } else if (modalType == 'layers') {
+                console.warn("Add layers view changed to Layers");
+                crumbText = 'Layers';
+                drawAllLayers();
+            }
         // Else set the default views per projection.
         } else if(projection == 'geographic') {
             crumbText = 'Categories';
