@@ -109,6 +109,36 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
     };
 
+    var getSetting = function(theSetting) {
+        var result = null;
+        if(theSetting instanceof Array) {
+            for(var i = 0; i < theSetting.length; i++) {
+                result = getSetting(theSetting[i]);
+                if (result) {
+                    break;
+                }
+            }
+        }
+        else
+        {
+            for(var prop in theSetting) {
+                if(prop == 'settings') {
+                    for (var x = 0; x < prop.length; x += 1) {
+                        var setting = theSetting[prop][x];
+                        return setting;
+                    }
+                }
+                if(theSetting[prop] instanceof Object || theSetting[prop] instanceof Array) {
+                    result = getSetting(theSetting[prop]);
+                    if (result) {
+                        break;
+                    }
+                }
+            }
+        }
+        return result;
+    };
+
     // This draws the default page, depending on projection
     // and hides the breadcrumb, and sets the search back to normal
     // and updates the scrollbar.
@@ -166,24 +196,21 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
             _.each(config.categories[metaCategoryName], function( category, name ) {
                 var sortNumber;
-
                 // Check if categories have settings with the same projection.
-                var categoryHasSetting;
+                var hasSetting;
                 _.each( category.measurements, function( measurement, index ) {
                     var projection = models.proj.selected.id;
                     var current = config.measurements[measurement];
-                    _.each( current.sources, function( source, souceName ) {
-                        _.each( source.settings, function( setting ) {
-                            var layer = config.layers[setting];
-                            var proj = layer.projections;
-                            if(layer.id == setting && Object.keys(proj).indexOf(projection) > -1) {
-                                categoryHasSetting = 'TRUE';
-                            }
-                        });
-                    });
+                    var currentId = getSetting(current);
+                    var layer = config.layers[currentId];
+                    var proj = layer.projections;
+                    if(currentId == layer.id && Object.keys(proj).indexOf(projection) > -1) {
+                        hasSetting = 'TRUE';
+                    }
                 });
 
-                if(categoryHasSetting == 'TRUE') {
+
+                if(hasSetting == 'TRUE') {
                     if(category.placement){
                         if (category.placement === 'first'){
                             sortNumber = 1;
@@ -195,7 +222,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     else sortNumber = 2;
                     var $category = $( '<div></div>' )
                         .attr('data-sort', sortNumber)
-                        .addClass( 'layer-category layer-category-' + cssName(metaCategoryName) )
+                        .addClass( 'layer-category layer-category-' + interestCssName(metaCategoryName) )
                         .attr( 'id', category.id );
                     if(category.image){
                         $category
@@ -225,19 +252,17 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     _.each( category.measurements, function( measurement, index ) {
                         var projection = models.proj.selected.id;
                         var current = config.measurements[measurement];
+                        var currentId = getSetting(current);
+                        var layer = config.layers[currentId];
+                        var proj = layer.projections;
 
                         // Check if measurements have settings with the same projection.
-                        var measurementHasSetting;
-                        _.each( current.sources, function( source, souceName ) {
-                            _.each( source.settings, function( setting ) {
-                                var layer = config.layers[setting];
-                                var proj = layer.projections;
-                                if(layer.id == setting && Object.keys(proj).indexOf(projection) > -1) {
-                                    measurementHasSetting = 'TRUE';
-                                }
-                            });
-                        });
-                        if(measurementHasSetting == 'TRUE') {
+                        var hasSetting;
+                        if(currentId == layer.id && Object.keys(proj).indexOf(projection) > -1) {
+                            hasSetting = 'TRUE';
+                        }
+
+                        if(hasSetting == 'TRUE') {
                             $i++;
 
                             if($i > 6){
@@ -282,24 +307,24 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
             var $filterButton = $( '<input />' )
                 .attr( 'type', 'radio')
-                .text( replaceIfScientific( metaCategoryName ) );
+                .text( interestLabelName( metaCategoryName ) );
 
             var $label = $( '<label></label>' )
-                .text( replaceIfScientific( metaCategoryName ) );
+                .text( interestLabelName( metaCategoryName ) );
 
             $filterButton
-                .attr( 'id', 'button-filter-' + cssName( metaCategoryName ) )
-                .attr( 'data-filter', cssName( metaCategoryName ) )
+                .attr( 'id', 'button-filter-' + interestCssName( metaCategoryName ) )
+                .attr( 'data-filter', interestCssName( metaCategoryName ) )
                 .click( function( e ) {
                     $categories.isotope({
-                        filter: '.layer-category-' + cssName( metaCategoryName )
+                        filter: '.layer-category-' + interestCssName( metaCategoryName )
                     });
                     $nav.find('.ui-button').removeClass( 'nav-selected' );
                     $("label[for=" + $(this).attr("id") + "]")
                         .addClass('nav-selected');
                 });
 
-            $label.attr('for', 'button-filter-' + cssName( metaCategoryName ) );
+            $label.attr('for', 'button-filter-' + interestCssName( metaCategoryName ) );
 
             $nav.append( $filterButton );
             $nav.append( $label );
@@ -338,20 +363,17 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         //Begin Measurement Level
         _.each( category.measurements, function( measurement, measurementName ) {
             var current = config.measurements[measurement];
+            var currentId = getSetting(current);
+            var layer = config.layers[currentId];
+            var proj = layer.projections;
 
             // Check if measurements have settings with the same projection.
-            var measurementHasSetting;
-            _.each( current.sources, function( source, souceName ) {
-                _.each( source.settings, function( setting ) {
-                    var layer = config.layers[setting];
-                    var proj = layer.projections;
-                    if(layer.id == setting && Object.keys(proj).indexOf(projection) > -1) {
-                        measurementHasSetting = 'TRUE';
-                    }
-                });
-            });
+            var hasSetting;
+            if(currentId == layer.id && Object.keys(proj).indexOf(projection) > -1) {
+                hasSetting = 'TRUE';
+            }
 
-            if(measurementHasSetting == 'TRUE') {
+            if(hasSetting == 'TRUE') {
                 var $measurementHeader = $( '<div></div>' )
                     .attr('id', 'accordion-' + category.id + '-' + current.id );
 
@@ -371,16 +393,16 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 _.each( current.sources, function( source, souceName ) {
 
                     // Check if sources have settings with the same projection.
-                    var sourceHasSetting;
+                    var hasSetting;
                     _.each( source.settings, function( setting ) {
                         var layer = config.layers[setting];
                         var proj = layer.projections;
                         if(layer.id == setting && Object.keys(proj).indexOf(projection) > -1) {
-                            sourceHasSetting = 'TRUE';
+                            hasSetting = 'TRUE';
                         }
                     });
 
-                    if(sourceHasSetting == 'TRUE') {
+                    if(hasSetting == 'TRUE') {
                         var $sourceTab = $( '<li></li>' );
 
                         var $sourceLink = $( '<a></a>' )
@@ -679,15 +701,14 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         }
     };
 
-    // TODO: Rename these 2 functions, combine functionality
-    var cssName = function(name){
+    var interestCssName = function(name){
         if ( name === 'hazards and disasters' ) {
             return 'legacy';
         }
         else return name;
     };
 
-    var replaceIfScientific = function(name){
+    var interestLabelName = function(name){
         if(name === 'scientific'){
             return 'science disciplines';
         }
@@ -714,7 +735,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     var addLayer = function(event) {
         event.stopPropagation();
         model.add( decodeURIComponent( $( this ).val() ) );
-
     };
 
     var removeLayer = function(event) {
@@ -867,7 +887,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         return filtered;
     };
 
-    // Increase throttle time for mobile performance?
     var runSearch = _.throttle( function() {
         var search = searchTerms();
 
