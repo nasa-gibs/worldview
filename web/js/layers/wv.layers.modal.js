@@ -70,6 +70,20 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     var $breadcrumb = $('<nav></nav>')
         .attr( 'id', 'category-breadcrumb' );
 
+    var checkModalView = function(){
+        var modalType = getURLParameter('modalView');
+        var modalView = 'modalView=' + modalType;
+        if (window.location.search.indexOf(modalView) > -1) {
+            if(modalType == 'categories') {
+                console.warn("'Add Layers' view changed to Categories");
+            } else if (modalType == 'measurements') {
+                console.warn("'Add Layers' view changed to Measurements");
+            } else if (modalType == 'layers') {
+                console.warn("'Add Layers' view changed to Layers");
+            }
+        }
+    };
+
     var setModalSize = function(){
         var availableWidth = $( window ).width() - ( $( window ).width() * 0.15 );
         sizeMultiplier = Math.floor( availableWidth / gridItemWidth );
@@ -99,11 +113,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     var redoScrollbar = function(){
         $( '#layer-modal-main' ).perfectScrollbar('update');
     };
-
-    // TODO: Remove this if not being used...
-    // var filterProjection = function(layer) {
-    //     return config.layers[layer].projections[models.proj.selected.id];
-    // };
 
     var getURLParameter = function(name) {
         return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
@@ -171,17 +180,14 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         // If URL parameter is set, draw that type of modal view.
         if (window.location.search.indexOf(modalView) > -1) {
             if(modalType == 'categories') {
-                console.warn("Add layers view changed to Categories");
                 crumbText = 'Categories';
                 drawCategories();
             }
             else if (modalType == 'measurements') {
-                console.warn("Add layers view changed to Measurements");
                 crumbText = 'Measurements';
                 drawAllMeasurements();
             } else if (modalType == 'layers') {
-                console.warn("Add layers view changed to Layers");
-                crumbText = 'Layers';
+                crumbText = 'All Layers';
                 drawAllLayers();
             }
         // Else set the default views per projection.
@@ -767,6 +773,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     };
 
     var render = function(){
+        checkModalView();
         setModalSize();
 
         $( '#layer-modal-main' )
