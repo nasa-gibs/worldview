@@ -104,9 +104,10 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         return config.layers[layer].projections[models.proj.selected.id];
     };
 
-    function getURLParameter(name) {
+    var getURLParameter = function(name) {
         return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
-    }
+    };
+
     // This draws the default page, depending on projection
     // and hides the breadcrumb, and sets the search back to normal
     // and updates the scrollbar.
@@ -117,11 +118,13 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         $( '#layers-search-input' ).val('');
         $( '#layer-search label.search-icon' ).removeClass('search-on').off('click');
     };
+
     var drawDefaultPage = function( e ) {
         removeSearch();
         drawModal();
         redoScrollbar();
     };
+
     var resize = function(){
         if( $( self.selector ).dialog( "isOpen" ) ) {
             redo();
