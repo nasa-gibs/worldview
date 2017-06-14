@@ -171,7 +171,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             crumbText = 'Categories';
             drawCategories();
         } else if (config.parameters.modalView == 'measurements') {
-            crumbText = 'Measurements';
+            crumbText = 'All Measurements';
             drawAllMeasurements();
         } else if (config.parameters.modalView == 'layers') {
             crumbText = 'All Layers';
@@ -182,7 +182,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             crumbText = 'Categories';
             drawCategories();
         } else {
-            crumbText = 'Measurements';
+            crumbText = 'All Measurements';
             drawAllMeasurements();
         }
     };
@@ -298,6 +298,8 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     $categoryOpaque.append( $measurements );
 
                     $categories.append( $category );
+
+                    $breadcrumb.show();
 
                 }
 
@@ -564,7 +566,8 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
         $selectedCategory.append( $categoryList );
 
-        //Create breadcrumb crumbs
+        // Create breadcrumb crumbs but do not show by default, only show within
+        // drawCategories and searching
         var $homeCrumb = $( '<a></a>' )
             .text(crumbText)
             .attr( 'alt', 'categories' )
@@ -584,7 +587,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         $selectedCategory.show();
         redoScrollbar();
         $selectedCategory.iCheck({checkboxClass: 'icheckbox_square-red'});
-        $breadcrumb.show();
 
     };
 
