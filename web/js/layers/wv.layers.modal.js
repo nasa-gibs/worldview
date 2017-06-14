@@ -34,6 +34,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     var $selectedCategory = $(self.selector + " #selected-category");
     var $allLayers = $(self.selector + " #layers-all");
     var gridItemWidth = 320; //with of grid item + spacing
+    var projection = models.proj.selected.id;
     var modalHeight;
     var sizeMultiplier;
     var searchBool;
@@ -127,9 +128,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     break;
                 }
             }
-        }
-        else
-        {
+        } else {
             for(var prop in measurement) {
                 if(prop == 'settings') {
                     for (var x = 0; x < prop.length; x += 1) {
@@ -172,7 +171,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     };
 
     var drawModal = function(){
-        var projection = models.proj.selected.id;
+        projection = models.proj.selected.id;
         var modalType = getURLParameter('modalView');
         var modalView = 'modalView=' + modalType;
         var crumbtext;
@@ -182,8 +181,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             if(modalType == 'categories') {
                 crumbText = 'Categories';
                 drawCategories();
-            }
-            else if (modalType == 'measurements') {
+            } else if (modalType == 'measurements') {
                 crumbText = 'Measurements';
                 drawAllMeasurements();
             } else if (modalType == 'layers') {
@@ -212,15 +210,15 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
             _.each(config.categories[metaCategoryName], function( category, name ) {
                 var sortNumber;
+
                 // Check if categories have settings with the same projection.
                 var hasSetting;
                 _.each( category.measurements, function( measurement, index ) {
-                    var projection = models.proj.selected.id;
                     var current = config.measurements[measurement];
                     var currentId = getSetting(current);
                     var layer = config.layers[currentId];
-                    var proj = layer.projections;
-                    if(currentId == layer.id && Object.keys(proj).indexOf(projection) > -1) {
+
+                    if(currentId == layer.id && Object.keys(layer.projections).indexOf(projection) > -1) {
                         hasSetting = 'TRUE';
                     }
                 });
@@ -265,15 +263,13 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     var $measurements = $('<ul></ul>');
                     $i = 0;
                     _.each( category.measurements, function( measurement, index ) {
-                        var projection = models.proj.selected.id;
                         var current = config.measurements[measurement];
                         var currentId = getSetting(current);
                         var layer = config.layers[currentId];
-                        var proj = layer.projections;
 
                         // Check if measurements have settings with the same projection.
                         var hasSetting;
-                        if(currentId == layer.id && Object.keys(proj).indexOf(projection) > -1) {
+                        if(currentId == layer.id && Object.keys(layer.projections).indexOf(projection) > -1) {
                             hasSetting = 'TRUE';
                         }
 
@@ -369,7 +365,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     };
 
     var drawMeasurements = function(category, selectedMeasurement, selectedIndex){
-        var projection = models.proj.selected.id;
         $selectedCategory.empty();
         $breadcrumb.empty();
         var $categoryList = $( '<div></div>' )
@@ -380,11 +375,10 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             var current = config.measurements[measurement];
             var currentId = getSetting(current);
             var layer = config.layers[currentId];
-            var proj = layer.projections;
 
             // Check if measurements have settings with the same projection.
             var hasSetting;
-            if(currentId == layer.id && Object.keys(proj).indexOf(projection) > -1) {
+            if(currentId == layer.id && Object.keys(layer.projections).indexOf(projection) > -1) {
                 hasSetting = 'TRUE';
             }
 
@@ -411,8 +405,8 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     var hasSetting;
                     _.each( source.settings, function( setting ) {
                         var layer = config.layers[setting];
-                        var proj = layer.projections;
-                        if(layer.id == setting && Object.keys(proj).indexOf(projection) > -1) {
+
+                        if(layer.id == setting && Object.keys(layer.projections).indexOf(projection) > -1) {
                             hasSetting = 'TRUE';
                         }
                     });
@@ -479,12 +473,10 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                             .attr('id', source.id + '-orbit-tracks');
 
                         _.each( source.settings, function( setting ) {
-
                             var layer = config.layers[setting];
-                            var proj = layer.projections;
 
                             // If a setting matches the current projection, then output it.
-                            if(layer.id == setting && Object.keys(proj).indexOf(projection) > -1) {
+                            if(layer.id == setting && Object.keys(layer.projections).indexOf(projection) > -1) {
 
                                 var $wrapper = $('<li></li>')
                                     .attr('data-layer', encodeURIComponent(layer.id) )
@@ -539,7 +531,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                                 });
                             }
                         });
-
+                        //End setting level
                         $sourceContent.append( $sourceSettings );
 
                         if($sourceOrbits.children().length > 0){
@@ -576,6 +568,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 redoScrollbar();
             }
         });
+
         if( selectedMeasurement ) {
             $categoryList.accordion( "option", "active", selectedIndex);
         }
@@ -626,7 +619,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             .attr( 'id', 'flat-layer-list' );
 
         _.each( config.layerOrder, function( layerId ) {
-            var projection = models.proj.selected.id;
+
             var current = config.layers[layerId];
 
             //Check if layer is equal to the current projection, then output
@@ -684,11 +677,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         // Create breadcrumb crumbs
         $breadcrumb.empty();
 
-        // If this is not the geographic projection, All layers are always drawn
-        // and filtered, so thats the default page. Dont show breadcrumb
-
         if( searchBool ) {
-
             var $homeCrumb = $( '<a></a>' )
                 .text( crumbText )
                 .attr( 'alt', crumbText )
@@ -705,7 +694,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             $( 'label.search-on' ).click( drawDefaultPage );
 
             $breadcrumb.show();
-
         }
     };
 
