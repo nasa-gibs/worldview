@@ -4,7 +4,7 @@
  * This code was originally developed at NASA/Goddard Space Flight Center for
  * the Earth Science Data and Information System (ESDIS) project.
  *
- * Copyright (C) 2013 United States Government as represented by the
+ * Copyright (C) 2013-2017 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
@@ -41,7 +41,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     //Visible Layers
     var visible = {};
 
-    var init = function(){
+    var init = function() {
         _.each(config.layers, function(layer) {
             visible[layer.id] = true;
         });
@@ -82,6 +82,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         return this.get(0).scrollHeight > this.height();
     };
 
+    //Update modal size
     var redo = function(){
         setModalSize();
 
@@ -113,23 +114,28 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         $( '#layers-search-input' ).val('');
         $( '#layer-search label.search-icon' ).removeClass('search-on').off('click');
     };
+    //Render default view
     var drawDefaultPage = function( e ) {
         var projection = models.proj.selected.id;
 
         removeSearch();
 
+        //Check to see if the config has categories?
         if( projection === 'geographic' && config.categories ) {
             $allLayers.hide();
             drawCategories();
         }
         else {
+            //Draw products, not categories/measurements
             drawAllLayers();
+            //Show all products (because nothing is in search)
             filter();
         }
 
         redoScrollbar();
 
     };
+    //Return to default view
     var showDefaultPage = function( e ){
         var projection = models.proj.selected.id;
 
@@ -138,11 +144,14 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         if( projection === 'geographic' ) {
 
             $allLayers.hide();
+            //show already rendered categories/measurements
+            //and update isotope
             $categories.show().isotope();
             $nav.show();
-
+            
         }
         else {
+            //Show all products (because nothing is in search)
             filter();
         }
 
@@ -657,6 +666,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                           wv.util.jqueryEscape(layer.id) + "']");
         $element.iCheck("uncheck");
     };
+    //Blur input if on mobile
     var unfocusInput = function(){
         if(!wv.util.browser.small){
             $('#layers-search-input').focus();
@@ -666,6 +676,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             $('#layer-modal-main').focus();
         }
     };
+    //Initial render
     var render = function(){
 
         setModalSize();
@@ -689,6 +700,22 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             } )
             .append( "<i></i>" );
 
+        $search.append( $searchBtn )
+            .append( $searchInput );
+
+        $header.append( $search );
+
+        var $closeButton = $('<div></div>')
+            .attr('id', 'layers-modal-close')
+            .click( function( e ) {
+                $( self.selector ).dialog( "close" );
+            })
+            .append('<i></i>');
+        
+        $header.append ( $closeButton );
+
+        //Create dialog/modal
+        //TODO: move to general dialog creator (wv.ui)
         $( self.selector ).dialog({
             autoOpen: false,
             resizable: false,
@@ -709,18 +736,22 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             open: function( event, ui ) {
                 redo();
 
+                //Check for isotope
                 if( $categories.data('isotope') ) {
+                    //Update isotope
                     $categories.isotope()
                         .on('layoutComplete',
                             function( event, laidOutItems ) {
+                                //Update scrollbar sizing
                                 redoScrollbar();
                             });
                 }
-
+                //Bind click outside modal as close
                 $( ".ui-widget-overlay" ).click( function( e ) {
                     $( self.selector ).dialog( "close" );
                 } );
 
+                //FIXME: Mobile keyboard needs to disappear,
                 //fade in time for show is 400 above, so after that
                 setTimeout(unfocusInput, 410);
 
@@ -729,21 +760,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 $( ".ui-widget-overlay" ).unbind( "click" );
             }
         });
-        
-        
-        $search.append( $searchBtn )
-            .append( $searchInput );
-
-        $header.append( $search );
-
-        var $closeButton = $('<div></div>')
-            .attr('id', 'layers-modal-close')
-            .click( function( e ) {
-                $( self.selector ).dialog( "close" );
-            })
-            .append('<i></i>');
-        
-        $header.append ( $closeButton );
 
         //$(self.selector + "select").on('change', filter);
         $searchInput.keyup( filter );
@@ -757,95 +773,8 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         return terms;
     };
 
-    var filterAreaOfInterest = function(layerId) {
-        if ( !config.aoi ) {
-            return false;
-        }
-        var aoi = $(self.selector + "select").val();
-        if ( aoi === "All" ) {
-            return false;
-        }
-        return $.inArray(layerId, config.aoi[aoi].baselayers) < 0 &&
-               $.inArray(layerId, config.aoi[aoi].overlays) < 0;
-    };
 
-    //Similar name to another var above
-    var filterProjections = function(layer) {
-        return !layer.projections[models.proj.selected.id];
-    };
 
-    var filterSearch = function(layer, terms) {
-        var search = $(self.selector + "search").val();
-        if ( search === "" ) {
-            return false;
-        }
-        var filtered = false;
-        var names = models.layers.getTitles(layer.id);
-        $.each(terms, function(index, term) {
-            filtered = !names.title.toLowerCase().contains(term) &&
-                !names.subtitle.toLowerCase().contains(term) &&
-                !names.tags.toLowerCase().contains(term) &&
-                !config.layers[layer.id].id.toLowerCase().contains(term);
-            
-            if ( filtered ) {
-                return false;
-            }
-        });
-        return filtered;
-    };
-    var runSearch = _.throttle( function() {
-        var search = searchTerms();
-
-        $.each(config.layers, function(layerId, layer) {            
-
-            var fproj = filterProjections(layer);
-            var fterms = filterSearch(layer, search);
-
-            var filtered = fproj || fterms;
-
-            visible[layer.id] = !filtered;
-
-            var display = filtered ? "none": "block";
-            var selector = "#flat-layer-list li[data-layer='" +
-                wv.util.jqueryEscape(layerId) + "']";
-            $(selector).css("display", display);
-        });
-
-        redoScrollbar();
-    }, 250, { trailing: true });
-
-    var filter = function( e ) {
-
-        if( $( '#layers-search-input' ).val().length !== 0 ) {
-            searchBool = true;
-        }
-        else{
-            searchBool = false;
-
-            if (models.proj.selected.id === 'geographic' && config.categories){
-                $allLayers.hide();
-                $categories.show().isotope();
-                $nav.show();
-            }
-            else{
-                drawAllLayers();
-            }
-            removeSearch();
-        }
-        // Ran on every keystroke in search
-        if( searchBool ) {
-            if( ( $allLayers.css('display') === 'none' ) ||
-                ( $breadcrumb.css('display') === 'none') ) {
-                drawAllLayers();
-            }
-            runSearch();
-        }
-        //Opening state for non-geographic projections
-        else if( ( searchBool === false ) &&
-                 ( models.proj.selected.id !== 'geographic' ) ) {
-            runSearch();
-        }
-    };
 
     init();
     return self;
