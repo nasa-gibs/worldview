@@ -74,9 +74,9 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     var checkModalView = function(){
         if(config.parameters.modalView == 'categories') {
             console.warn("'Add Layers' view changed to Categories");
-        } else if (modalType == 'measurements') {
+        } else if (config.parameters.modalView == 'measurements') {
             console.warn("'Add Layers' view changed to Measurements");
-        } else if (modalType == 'layers') {
+        } else if (config.parameters.modalView == 'layers') {
             console.warn("'Add Layers' view changed to Layers");
         }
     };
@@ -208,11 +208,11 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     var layer = config.layers[currentId];
 
                     if(currentId == layer.id && Object.keys(layer.projections).indexOf(projection) > -1) {
-                        hasSetting = 'TRUE';
+                        hasSetting = true;
                     }
                 });
 
-                if(hasSetting == 'TRUE') {
+                if(hasSetting === true) {
                     if(category.placement){
                         if (category.placement === 'first'){
                             sortNumber = 1;
@@ -259,10 +259,10 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                         // Check if measurements have settings with the same projection.
                         var hasSetting;
                         if(currentId == layer.id && Object.keys(layer.projections).indexOf(projection) > -1) {
-                            hasSetting = 'TRUE';
+                            hasSetting = true;
                         }
 
-                        if(hasSetting == 'TRUE') {
+                        if(hasSetting === true) {
                             $i++;
 
                             if($i > 6){
@@ -368,10 +368,10 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             // Check if measurements have settings with the same projection.
             var hasSetting;
             if(currentId == layer.id && Object.keys(layer.projections).indexOf(projection) > -1) {
-                hasSetting = 'TRUE';
+                hasSetting = true;
             }
 
-            if(hasSetting == 'TRUE') {
+            if(hasSetting === true) {
                 var $measurementHeader = $( '<div></div>' )
                     .attr('id', 'accordion-' + category.id + '-' + current.id );
 
@@ -396,11 +396,11 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                         var layer = config.layers[setting];
 
                         if(layer.id == setting && Object.keys(layer.projections).indexOf(projection) > -1) {
-                            hasSetting = 'TRUE';
+                            hasSetting = true;
                         }
                     });
 
-                    if(hasSetting == 'TRUE') {
+                    if(hasSetting === true) {
                         var $sourceTab = $( '<li></li>' );
 
                         var $sourceLink = $( '<a></a>' )
