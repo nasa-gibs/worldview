@@ -59,47 +59,36 @@ wv.naturalEvents.request = wv.naturalEvents.request || function(models, ui, conf
         }
     };
 
-    var queryEvents = function(callback) {
-        var url = self.apiURL + "/events";
+    self.query = function() {
+        var eventsUrl = self.apiURL + "/events";
+        var categoriesUrl = self.apiURL + "/categories";
+        var sourcesUrl = self.apiURL + "/sources";
         if (config.parameters.mockEvents) {
             console.warn("Using mock events data: " + config.parameters.mockEvents);
-            url = "mock/events_data.json-" + config.parameters.mockEvents;
+            eventsUrl = "mock/events_data.json-" + config.parameters.mockEvents;
         }
-        $.getJSON(url, function(data) {
+        if (config.parameters.mockCategories) {
+            console.warn("Using mock categories data: " + config.parameters.mockEvents);
+            categoriesUrl = "mock/categories_data.json-" + config.parameters.mockCategories;
+        }
+        if (config.parameters.mockSources) {
+            console.warn("Using mock sources data: " + config.parameters.mockEvents);
+            sourcesUrl = "mock/sources_data.json-" + config.parameters.mockSources;
+        }
+        $.getJSON(eventsUrl, function(data) {
             model.data.events = data.events;
             self.events.trigger('queryResults');
         });
-    };
-
-    var queryTypes = function(callback) {
-        var url = self.apiURL + "/categories";
-        if (config.parameters.mockCategories) {
-            console.warn("Using mock categories data: " + config.parameters.mockEvents);
-            url = "mock/categories_data.json-" + config.parameters.mockCategories;
-        }
-        $.getJSON(url, function(data) {
+        $.getJSON(categoriesUrl, function(data) {
             model.data.types = data.categories;
             self.events.trigger('queryResults');
         });
-    };
-
-    var querySources = function(callback) {
-        var url = self.apiURL + "/sources";
-        if (config.parameters.mockSources) {
-            console.warn("Using mock sources data: " + config.parameters.mockEvents);
-            url = "mock/sources_data.json-" + config.parameters.mockSources;
-        }
-        $.getJSON(url, function(data) {
+        $.getJSON(sourcesUrl, function(data) {
             model.data.sources = data.sources;
             self.events.trigger('queryResults');
         });
     };
 
-    self.query = function(callback) {
-        queryTypes();
-        queryEvents();
-        querySources();
-    };
     init();
     return self;
 };
