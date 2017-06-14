@@ -72,16 +72,12 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         .attr( 'id', 'category-breadcrumb' );
 
     var checkModalView = function(){
-        var modalType = getURLParameter('modalView');
-        var modalView = 'modalView=' + modalType;
-        if (window.location.search.indexOf(modalView) > -1) {
-            if(modalType == 'categories') {
-                console.warn("'Add Layers' view changed to Categories");
-            } else if (modalType == 'measurements') {
-                console.warn("'Add Layers' view changed to Measurements");
-            } else if (modalType == 'layers') {
-                console.warn("'Add Layers' view changed to Layers");
-            }
+        if(config.parameters.modalView == 'categories') {
+            console.warn("'Add Layers' view changed to Categories");
+        } else if (modalType == 'measurements') {
+            console.warn("'Add Layers' view changed to Measurements");
+        } else if (modalType == 'layers') {
+            console.warn("'Add Layers' view changed to Layers");
         }
     };
 
@@ -113,10 +109,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
     var redoScrollbar = function(){
         $( '#layer-modal-main' ).perfectScrollbar('update');
-    };
-
-    var getURLParameter = function(name) {
-        return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
     };
 
     var getSetting = function(measurement) {
@@ -172,22 +164,19 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
     var drawModal = function(){
         projection = models.proj.selected.id;
-        var modalType = getURLParameter('modalView');
-        var modalView = 'modalView=' + modalType;
         var crumbtext;
 
         // If URL parameter is set, draw that type of modal view.
-        if (window.location.search.indexOf(modalView) > -1) {
-            if(modalType == 'categories') {
-                crumbText = 'Categories';
-                drawCategories();
-            } else if (modalType == 'measurements') {
-                crumbText = 'Measurements';
-                drawAllMeasurements();
-            } else if (modalType == 'layers') {
-                crumbText = 'All Layers';
-                drawAllLayers();
-            }
+        if(config.parameters.modalView == 'categories') {
+            crumbText = 'Categories';
+            drawCategories();
+        } else if (config.parameters.modalView == 'measurements') {
+            crumbText = 'Measurements';
+            drawAllMeasurements();
+        } else if (config.parameters.modalView == 'layers') {
+            crumbText = 'All Layers';
+            drawAllLayers();
+
         // Else set the default views per projection.
         } else if(projection == 'geographic') {
             crumbText = 'Categories';
