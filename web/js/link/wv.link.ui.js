@@ -17,10 +17,23 @@ wv.link.ui = wv.link.ui || function(models, config) {
     var self = {};
     var id = "wv-link-button";
     var selector = "#" + id;
+    var widgetFactory = React.createFactory(WVC.Share);
+    var widgetCreate = React.createElement(WVC.Share);
+
+    var dialogCreate = React.createElement(WVC.Dialog);
     var $button;
     var $label;
 
     var init = function() {
+
+        self.reactComponent = ReactDOM.render(dialogCreate, $('#wv-dialog-button')[0]);
+
+        var Widget;
+        Widget = self.initWidget();
+        //mount react component
+        self.reactComponent = ReactDOM.render(widgetCreate, $('#wv-share-button')[0]);
+
+
         $button = $("<input></input>")
             .attr("type", "checkbox")
             .attr("id", "wv-link-button-check");
@@ -49,6 +62,12 @@ wv.link.ui = wv.link.ui || function(models, config) {
         models.link.events.on("update", replaceHistoryState);
     };
 
+    // NOTE: Not being used yet... until I set variables within react component
+    self.initWidget = function() {
+        return widgetFactory({
+        });
+    };
+
     //Calls toQueryString to fetch updated state and returns URL
     var replaceHistoryState = _.throttle(function() {
         if ( wv.util.browser.history ) {
@@ -58,6 +77,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
     }, 2000, {leading: true, trailing: true});
 
     self.show = function() {
+
         var $dialog = wv.ui.getDialog();
         var item =  "<div id='wv-link' >" +
             "<input type='text' value='' name='permalink_content' id='permalink_content' readonly/>";
@@ -130,7 +150,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
         models.link.events.on("update", updateLink);
 
         $dialog.dialog({
-            dialogClass: "wv-panel",
+            dialogClass: "wv-panel wv-link-panel",
             title: "Copy this link to share:",
             show: { effect: "slide", direction: "up" },
             width: 300,
