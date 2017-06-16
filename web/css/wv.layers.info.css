@@ -9,19 +9,19 @@
  * All Rights Reserved.
  */
 
-.bank .item .wv-layers-info {
+.bank li.item a.wv-layers-info {
     color: #333;
 }
-.bank .item .wv-layers-info.disabled {
+.bank li.item a.wv-layers-info.disabled {
     color: #aaa;
 }
-.bank .item .wv-layers-info.disabled:hover {
+.bank li.item a.wv-layers-info.disabled:hover {
     cursor: no-drop;
     background-color: transparent;
 }
-.bank .layer-hidden .wv-layers-info {
+.bank li.layer-hidden a.wv-layers-info {
     color: #999;
 }
-.bank .layer-hidden .wv-layers-info.disabled {
+.bank li.layer-hidden a.wv-layers-info.disabled {
     color: #666;
 }

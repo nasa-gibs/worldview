@@ -22,15 +22,15 @@ wv.layers.info = wv.layers.info || function(config, models, layer) {
     };
 
     var loaded = function(custom) {
+        var names;
+
         $dialog = wv.ui.getDialog();
         $dialog
             .attr("id", "wv-layers-info-dialog")
             .attr("data-layer", layer.id);
         renderDescription($dialog);
 
-
-        var names = models.layers.getTitles(layer.id);
-
+        names = models.layers.getTitles(layer.id);
         $dialog.dialog({
             dialogClass: "wv-panel",
             title: names.title,
