@@ -159,8 +159,14 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
                 $current.click();
             }
             var dataIndex = $(this).attr("data-index");
-            showEvent(dataIndex);
+            if ($(this).find("ul li.dates a").first().hasClass("date-today")) {
+                var nextID = $(self.selector + "content ul li.dates").next().children("a").attr("data-date-index");
+                showEvent(dataIndex, nextID);
+            } else {
+                showEvent(dataIndex);
+            }
             $(self.selector + "content li").removeClass('item-selected');
+            $(self.selector + "content ul li.dates a").removeClass('active');
             $(this).addClass('item-selected');
             if (wv.util.browser.small){
                 ui.sidebar.collapseNow();
@@ -169,18 +175,26 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
             $current = $(this);
         }, function() {
             $(self.selector + "content li").removeClass('item-selected');
+            $(self.selector + "content ul li.dates a").removeClass('active');
             hideEvent();
             mapController.dispose();
             mapController.current = null;
             $current = null;
         });
 
+        $(self.selector + "content li").click( function() {
+            $(this).find("ul li.dates a.date").first().addClass('active');
+        });
+
         //Bind click event to each date contained in events with dates
-        $(self.selector + "content a.date").click(function(event) {
+        $(self.selector + "content ul li.dates a").click(function(event) {
+            event.stopPropagation();
             var dataIndex = $(this).attr("data-index");
             showEvent(dataIndex, $(this).attr("data-date-index"));
-            event.stopPropagation();
+            $(self.selector + "content ul li.dates a").not(this).removeClass('active');
+            $(this).addClass('active');
         });
+
         resize();
     };
 
@@ -256,7 +270,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
 
         var eventDateISOString = wv.util.toISOStringDate(eventDate);
         var todayDateISOString = wv.util.toISOStringDate(wv.util.today());
-        var eventCategoryName = event.categories[0].title || null; 
+        var eventCategoryName = event.categories[0].title || null;
 
         if ((eventDateISOString !== todayDateISOString) &&
             ((eventCategoryName !== null) && (eventCategoryName == "Wildfires"))) {
@@ -287,8 +301,10 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     };
 
     var refreshEvent = function($content, event, index) {
+        var eventCategoryID = event.categories[0].id || null;
+        // Sort by latest dates first
+        var geoms = toArray(event.geometries).reverse();
 
-        var geoms = toArray(event.geometries);
         eventDate = wv.util.parseDateUTC(geoms[0].date);
 
         dateString = wv.util.giveWeekDay(eventDate) + ", " +
@@ -316,18 +332,35 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
             .attr('title', event.categories[0].title);
 
         var $dates = $("<ul></ul>").addClass("dates").hide();
+
         if ( event.geometries.length > 1 ) {
             var lastDate;
+            var eventIndex = 0;
             _.each(event.geometries, function(geometry, dateIndex) {
+                eventIndex++;
                 date = geometry.date.split(/T/)[0];
+                var todayDateISOString = wv.util.toISOStringDate(wv.util.today());
+
                 if (date === lastDate){
                     return;
                 }
+
                 $date = $("<a></a>")
                     .addClass("date")
                     .attr("data-date-index", dateIndex)
                     .attr("data-index", index)
                     .html(date);
+
+                // Check first multi-day event
+                if(eventIndex == 1) {
+                    // If it's date is today and it is a Severe Storm, mark it
+                    // and don't make it active.
+                    if ((date === todayDateISOString) && (eventCategoryID == 10)) {
+                        $date.removeClass("date").addClass("date-today");
+                    } else {
+                        $date.addClass("active");
+                    }
+                }
                 $dates.append($("<li class='dates'></li>").append($date));
                 lastDate = date;
             });
