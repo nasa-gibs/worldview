@@ -17,13 +17,10 @@ wv.link.ui = wv.link.ui || function(models, config) {
     var self = {};
     var id = "wv-link-button";
     var selector = "#" + id;
-    var widgetCreate = React.createElement(WVC.Share);
 
     var widgetFactory = React.createFactory(WVC.Dialog);
-    // var dialogCreate = React.createElement(WVC.Dialog);
 
     var updateLink  = function() {
-      // this.props.updates(this.state.models.link.get());
         $('#permalink_content').val(models.link.get());
         $("#wv-link-shorten-check").iCheck("uncheck");
         $('#permalink_content').focus();
@@ -31,6 +28,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
     };
 
     var init = function() {
+      var getLink;
       var Widget;
 
       $button = $("<input></input>")
@@ -63,17 +61,14 @@ wv.link.ui = wv.link.ui || function(models, config) {
 
     self.show = function() {
       Widget = self.initWidget();
-      self.reactComponent = ReactDOM.render(Widget, $('#wv-share-button')[0]);
+      self.reactComponent = ReactDOM.render(Widget, $('#share-modal')[0]);
     };
 
     self.initWidget = function() {
+        getLink = models.link.get();
         return widgetFactory({
-            urlShortening: config.features.urlShortening,
-            config: config,
+            configs: config,
             models: models,
-            updateLink: updateLink(),
-            getModelsLink: models.link.get(),
-            shortenModelsLink: models.link.shorten()
         });
     };
 
