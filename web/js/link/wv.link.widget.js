@@ -21,49 +21,57 @@ wv.link.ui = wv.link.ui || function(models, config) {
 
     var widgetFactory = React.createFactory(WVC.Dialog);
     // var dialogCreate = React.createElement(WVC.Dialog);
-    var init = function() {
 
-        // self.reactComponent = ReactDOM.render(dialogCreate, $('#wv-dialog-button')[0]);
-
-        var Widget;
-        Widget = self.initWidget();
-        //mount react component
-        self.reactComponent = ReactDOM.render(Widget, $('#wv-share-button')[0]);
-
-        $button = $("<input></input>")
-            .attr("type", "checkbox")
-            .attr("id", "wv-link-button-check");
-        $label = $("<label></label>")
-            .attr("for", "wv-link-button-check")
-            .attr("title", "Share this map");
-        var $icon = $("<i></i>")
-            .addClass("fa")
-            .addClass("fa-share-square-o")
-            .addClass("fa-2x");
-        $label.append($icon);
-        $(selector).append($label);
-        $(selector).append($button);
-        $button.button({
-            text: false
-        }).click(function() {
-            var checked = $("#wv-link-button-check").prop("checked");
-            WVC.GA.event('Link', 'Click', 'Share link Button');
-            if ( checked ) {
-                self.show();
-            } else {
-                wv.ui.closeDialog();
-            }
-        });
-
-        models.link.events.on("update", replaceHistoryState);
+    var updateLink  = function() {
+      // this.props.updates(this.state.models.link.get());
+        $('#permalink_content').val(models.link.get());
+        $("#wv-link-shorten-check").iCheck("uncheck");
+        $('#permalink_content').focus();
+        $('#permalink_content').select();
     };
 
-    // NOTE: Not being used yet... until I set variables within react component
+    var init = function() {
+      var Widget;
+
+      $button = $("<input></input>")
+          .attr("type", "checkbox")
+          .attr("id", "wv-link-button-check");
+      $label = $("<label></label>")
+          .attr("for", "wv-link-button-check")
+          .attr("title", "Share this map");
+      var $icon = $("<i></i>")
+          .addClass("fa")
+          .addClass("fa-share-square-o")
+          .addClass("fa-2x");
+      $label.append($icon);
+      $(selector).append($label);
+      $(selector).append($button);
+      $button.button({
+          text: false
+      }).click(function() {
+          var checked = $("#wv-link-button-check").prop("checked");
+          WVC.GA.event('Link', 'Click', 'Share link Button');
+          if ( checked ) {
+              self.show();
+          } else {
+              wv.ui.closeDialog();
+          }
+      });
+
+      models.link.events.on("update", replaceHistoryState);
+    };
+
+    self.show = function() {
+      Widget = self.initWidget();
+      self.reactComponent = ReactDOM.render(Widget, $('#wv-share-button')[0]);
+    };
+
     self.initWidget = function() {
         return widgetFactory({
             urlShortening: config.features.urlShortening,
             config: config,
             models: models,
+            updateLink: updateLink(),
             getModelsLink: models.link.get(),
             shortenModelsLink: models.link.shorten()
         });
