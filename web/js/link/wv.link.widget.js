@@ -20,13 +20,6 @@ wv.link.ui = wv.link.ui || function(models, config) {
 
     var widgetFactory = React.createFactory(WVC.Dialog);
 
-    var updateLink  = function() {
-        $('#permalink_content').val(models.link.get());
-        $("#wv-link-shorten-check").iCheck("uncheck");
-        $('#permalink_content').focus();
-        $('#permalink_content').select();
-    };
-
     var init = function() {
       var getLink;
       var Widget;
