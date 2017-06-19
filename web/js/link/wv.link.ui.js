@@ -17,10 +17,6 @@ wv.link.ui = wv.link.ui || function(models, config) {
     var self = {};
     var id = "wv-link-button";
     var selector = "#" + id;
-<<<<<<< HEAD
-=======
-
->>>>>>> dde60e5baf96d593f0953161270f54ac3c66c997
     var widgetFactory = React.createFactory(WVC.Dialog);
 
     var init = function() {
