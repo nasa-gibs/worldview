@@ -18,7 +18,7 @@
 #timeline-footer text{
     font-size:14px;
     font-weight:normal;
-    font-family:‘Lucida Console’, Monaco, monospace;
+    font-family:'Lucida Console', 'Monaco', monospace;
     font-style:normal;
     font-variant:normal;
     font-stretch:normal;
@@ -149,7 +149,7 @@ g.plot rect.data-bar-invisible{
     font-size:24px;
     background:transparent;
     border:0px;
-    font-family:‘Lucida Console’, Monaco, monospace;
+    font-family:'Lucida Console', 'Monaco', monospace;
     vertical-align:middle;
     box-sizing:border-box;
     -moz-box-sizing:border-box;
@@ -345,7 +345,7 @@ g.plot rect.data-bar-invisible{
     cursor:pointer;
     text-transform:uppercase;
     text-align:center;
-    font-family:‘Lucida Console’, Monaco, monospace;
+    font-family:'Lucida Console', 'Monaco', monospace;
 }
 #timeline-zoom a.zoom-btn.depth-1{
     color:#ffffff;

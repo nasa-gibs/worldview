@@ -9,13 +9,13 @@
 .layer-modal, .layer-modal.ui-dialog{
     background:rgb(220,220,220);
     z-index:10200;
-    
+
 }
 .layer-modal div, .layer-modal span,
 .layer-modal p, .layer-modal div,
 .layer-modal h1, .layer-modal h2,
 .layer-modal h3, .layer-modal h4 {
-    font-family:open_sans_light;
+    font-family: open_sans_light;
     font-weight:300;
     color:#383838;
 }
@@ -203,7 +203,7 @@
 .layer-category h3 {
     font-size:20px;
     line-height:20px;
-    
+
 }
 .layer-category h3 a{
     display:block;
@@ -211,7 +211,7 @@
     line-height:20px;
     padding:10px;
     color:#fff;
-    
+
 }
 .layer-category h3 a:hover{
     background:rgba(255,255,255,0.6);
@@ -231,7 +231,7 @@
     text-overflow:ellipsis;
     overflow: hidden;
     box-sizing:border-box;
-    -moz-box-sizing:border-box;               
+    -moz-box-sizing:border-box;
     -webkit-box-sizing:border-box;
     -o-box-sizing:border-box;
 }
@@ -259,7 +259,7 @@
 #category-breadcrumb{
     height:30px;
     line-height:30px;
-    font-family:open_sans_light;
+    font-family: open_sans_light;
     font-size:16px;
     color:#000;
     /*font-style:italic;*/
@@ -377,7 +377,7 @@
     -o-box-sizing: border-box;
     padding: 0.5em 0.5em;
     width:150px;
-    font-family:open_sans_light;
+    font-family: open_sans_light;
     font-size:13px;
     text-align:left;
     font-weight:300;
@@ -466,7 +466,7 @@
     line-height:1em;
 }
 #selected-category .ui-tabs-panel .ui-buttonset{
-    
+
 }
 #selected-category .ui-tabs-panel li.measurement-settings-item iCheck-checkbox,
 #selected-category .ui-tabs-panel li.measurement-settings-item label,
