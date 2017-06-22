@@ -393,6 +393,14 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     .attr("data-layer", encodeURIComponent(current.id))
                     .addClass('layers-all-layer');
 
+
+                var $layerHeader = $('<div></div>')
+                  .addClass('layers-all-header')
+                  .click(function(e) {
+                    $(this).find('input#' + encodeURIComponent(current.id))
+                    .iCheck('toggle');
+                  });
+
                 var $layerTitle = $( '<h3></h3>' )
                     .text( current.title );
 
@@ -435,12 +443,13 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     redoScrollbar();
                 });
 
-                $layerItem.append( $checkbox );
-                $layerItem.append( $layerTitle );
+                $layerItem.append( $layerHeader );
+                $layerHeader.append( $checkbox );
+                $layerHeader.append( $layerTitle );
                 if( current.description ) {
                     $layerTitle.append( $showMore );
                 }
-                $layerItem.append( $layerSubtitle );
+                $layerHeader.append( $layerSubtitle );
 
                 if( current.description ) {
                     $.get('config/metadata/' + current.description + '.html')
