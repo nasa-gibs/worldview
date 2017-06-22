@@ -20,7 +20,6 @@ wv.link.ui = wv.link.ui || function(models, config) {
   var widgetFactory = React.createFactory(WVC.Share);
 
   var init = function() {
-    var getLink;
     var Widget;
 
     $button = $("<input></input>")
@@ -50,14 +49,120 @@ wv.link.ui = wv.link.ui || function(models, config) {
   };
 
   self.show = function() {
+
+    var $dialog = wv.ui.getDialog();
+    var getLink = encodeURIComponent(models.link.get());
+    var shareMessage = encodeURIComponent('Check out what I found in NASA Worldview!');
+    var twMessage = encodeURIComponent('Check out what I found in #NASAWorldview -');
+    var emailBody = encodeURIComponent(shareMessage + " - " + getLink);
+
     Widget = self.initWidget();
-    self.reactComponent = ReactDOM.render(Widget, $('#share-modal')[0]);
+
+    // Render Dialog Box Content
+    self.reactComponent = ReactDOM.render(Widget, $dialog[0]);
+
+    // When an icon-link is clicked, replace the URL with current encoded link.
+    $(".icon-link").on("click", function() {
+      var promise = models.link.shorten();
+      getLink = encodeURIComponent(models.link.get());
+      emailBody = encodeURIComponent(shareMessage + " - " + getLink);
+
+      document.getElementById("fb-share").setAttribute("href", "https://www.facebook.com/dialog/share?" + "app_id=" + '121285908450463' + "&href=" + getLink + "&redirect_uri=" + getLink + "&display=popup");
+      document.getElementById("tw-share").setAttribute("href", "https://twitter.com/intent/tweet?" + "url=" + getLink + "&text=" + twMessage);
+      document.getElementById("rd-share").setAttribute("href", "https://www.reddit.com/r/nasa/submit?" + "url=" + getLink + "&title=" + shareMessage);
+      document.getElementById("email-share").setAttribute("href", "mailto:?" + "subject=" + shareMessage + "&body=" + emailBody);
+
+      // If a short link can be generated, replace the full link.
+      promise.done(function(result) {
+        if (result.status_code === 200) {
+          getLink = encodeURIComponent(result.data.url);
+          emailBody = shareMessage + "%20-%20" + getLink;
+
+          document.getElementById("tw-share").setAttribute("href", "https://twitter.com/intent/tweet?" + "url=" + getLink + "&text=" + twMessage);
+          document.getElementById("email-share").setAttribute("href", "mailto:?" + "subject=" + shareMessage + "&body=" + emailBody);
+          return false;
+        }
+      });
+    });
+
+    // If selected during the animation, the cursor will go to the
+    // end of the input box
+    var updateLink = function() {
+      $('#permalink_content').val(models.link.get());
+      $("#wv-link-shorten-check").prop('checked', false);
+      $('#permalink_content').focus();
+      $('#permalink_content').select();
+    };
+
+    models.link.events.on("update", updateLink);
+
+    $dialog.dialog({
+      dialogClass: "wv-panel wv-link-panel",
+      title: "Copy this link to share:",
+      show: {
+        effect: "slide",
+        direction: "up"
+      },
+      width: 300,
+      height: "auto",
+      minHeight: 10,
+      draggable: false,
+      resizable: false,
+      autoOpen: false
+    }).on("dialogclose", function() {
+      $("#wv-link-button-check").prop("checked", false);
+      $button.button("refresh");
+      models.link.events.off("update", updateLink);
+    });
+    wv.ui.positionDialog($dialog, {
+      my: "left top",
+      at: "left bottom+5",
+      of: $label
+    });
+    $(".ui-dialog").zIndex(600);
+
+    $('#permalink_content').val(models.link.get());
+    $dialog.dialog("open");
+    setTimeout(updateLink, 500);
+
+    $("#wv-link-shorten-check").change(function(){
+      var checked = $("#wv-link-shorten-check").prop("checked");
+      if (checked) {
+        var promise = models.link.shorten();
+        WVC.GA.event('Link', 'Check', 'Shorten');
+        $("#permalink_content").val("Please wait...");
+        promise.done(function(result) {
+          if (result.status_code === 200) {
+            $('#permalink_content').val(result.data.url);
+          } else {
+            error(result.status_code, result.status_txt);
+          }
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+          error(textStatus, errorThrown);
+        });
+        $('#permalink_content').focus();
+        $('#permalink_content').select();
+      } else {
+        $('#permalink_content').val(models.link.get());
+        WVC.GA.event('Link', 'Check', 'Lengthen');
+        $('#permalink_content').focus();
+        $('#permalink_content').select();
+      }
+    });
+
+    var error = function() {
+      console.warn("Unable to shorten URL");
+      console.warn.apply(console, arguments);
+      wv.ui.notify("Unable to shorten the permalink at this time. " +
+        "Please try again later.");
+    };
+
+    $("#wv-link-shorten-check").prop("checked", false);
   };
 
   self.initWidget = function() {
-    getLink = models.link.get();
     return widgetFactory({
-      configs: config,
+      configs: config.features.urlShortening,
       models: models,
     });
   };
