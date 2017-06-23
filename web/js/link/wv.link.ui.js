@@ -161,9 +161,11 @@ wv.link.ui = wv.link.ui || function(models, config) {
   };
 
   self.initWidget = function() {
+    // Check if URL Shortening is enabled in the config file.
+    // TODO: Move this to wv-components so it can be accessed there.
+    var urlShortening = config.features.urlShortening;
     return widgetFactory({
-      configs: config.features.urlShortening,
-      models: models,
+      urlShortening: urlShortening,
     });
   };
 
