@@ -65,7 +65,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
     $(".icon-link").on("click", function() {
       var promise = models.link.shorten();
       getLink = encodeURIComponent(models.link.get());
-      emailBody = encodeURIComponent(shareMessage + " - " + getLink);
+      emailBody = shareMessage + "%20-%20" + getLink;
 
       document.getElementById("fb-share").setAttribute("href", "https://www.facebook.com/dialog/share?" + "app_id=" + '121285908450463' + "&href=" + getLink + "&redirect_uri=" + getLink + "&display=popup");
       document.getElementById("tw-share").setAttribute("href", "https://twitter.com/intent/tweet?" + "url=" + getLink + "&text=" + twMessage);
