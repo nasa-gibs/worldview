@@ -1,4 +1,6 @@
 # Testing
+Note: Some of the parameters below may no longer be functional. Please contact us if you have any issues at support@earthdata.nasa.gov.
+
 Append the following parameters to the URL to test using mock data.
 
 ## Permalinks
