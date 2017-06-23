@@ -1,6 +1,8 @@
 # Testing
 Note: Some of the parameters below may no longer be functional. Please contact us if you have any issues at support@earthdata.nasa.gov.
 
+To run unit tests using Grunt, see the [Grunt Targets](https://github.com/nasa-gibs/worldview/blob/9781bcc3c177338bf3043f59c1ebe1a9d8ae4355/doc/developing.md#unit-tests) documentation
+
 Append the following parameters to the URL to test using mock data.
 
 ## Permalinks
