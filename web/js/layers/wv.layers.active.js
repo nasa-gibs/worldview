@@ -209,7 +209,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             .attr("data-layer", layer.id)
             .attr("title", "Layer description for " + names.title)
             .addClass("wv-layers-info");
-        if(layer.description.length < 1) {
+        if(!layer.description) {
             $infoButton
                 .addClass("disabled")
                 .attr("title", "No layer description");
