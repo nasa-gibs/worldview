@@ -61,30 +61,6 @@ wv.link.ui = wv.link.ui || function(models, config) {
     // Render Dialog Box Content
     self.reactComponent = ReactDOM.render(Widget, $dialog[0]);
 
-    // When an icon-link is clicked, replace the URL with current encoded link.
-    $(".icon-link").on("click", function() {
-      var promise = models.link.shorten();
-      getLink = encodeURIComponent(models.link.get());
-      emailBody = shareMessage + "%20-%20" + getLink;
-
-      document.getElementById("fb-share").setAttribute("href", "https://www.facebook.com/dialog/share?" + "app_id=" + '121285908450463' + "&href=" + getLink + "&redirect_uri=" + getLink + "&display=popup");
-      document.getElementById("tw-share").setAttribute("href", "https://twitter.com/intent/tweet?" + "url=" + getLink + "&text=" + twMessage);
-      document.getElementById("rd-share").setAttribute("href", "https://www.reddit.com/r/nasa/submit?" + "url=" + getLink + "&title=" + shareMessage);
-      document.getElementById("email-share").setAttribute("href", "mailto:?" + "subject=" + shareMessage + "&body=" + emailBody);
-
-      // If a short link can be generated, replace the full link.
-      promise.done(function(result) {
-        if (result.status_code === 200) {
-          getLink = encodeURIComponent(result.data.url);
-          emailBody = shareMessage + "%20-%20" + getLink;
-
-          document.getElementById("tw-share").setAttribute("href", "https://twitter.com/intent/tweet?" + "url=" + getLink + "&text=" + twMessage);
-          document.getElementById("email-share").setAttribute("href", "mailto:?" + "subject=" + shareMessage + "&body=" + emailBody);
-          return false;
-        }
-      });
-    });
-
     // If selected during the animation, the cursor will go to the
     // end of the input box
     var updateLink = function() {
