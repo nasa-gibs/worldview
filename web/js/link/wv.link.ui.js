@@ -51,11 +51,6 @@ wv.link.ui = wv.link.ui || function(models, config) {
   self.show = function() {
 
     var $dialog = wv.ui.getDialog();
-    var getLink = encodeURIComponent(models.link.get());
-    var shareMessage = encodeURIComponent('Check out what I found in NASA Worldview!');
-    var twMessage = encodeURIComponent('Check out what I found in #NASAWorldview -');
-    var emailBody = encodeURIComponent(shareMessage + " - " + getLink);
-
     Widget = self.initWidget();
 
     // Render Dialog Box Content
