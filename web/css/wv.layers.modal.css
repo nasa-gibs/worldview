@@ -323,7 +323,7 @@
     font-size:20px;
     line-height:100%;
     position: relative;
-    padding-top: .5em;
+    padding-top: .3em;
     display: inline-block;
 }
 @media (min-width:753px) {
@@ -429,7 +429,7 @@
 }
 @media (min-width: 753px) {
   .layers-all-layer .layers-all-header .fa {
-    padding: 14px 18px 16px;
+    padding: 10px 18px 16px;
     top: 0;
     right: 0;
     margin-top: 0;
