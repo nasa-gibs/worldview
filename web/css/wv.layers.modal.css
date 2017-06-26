@@ -278,7 +278,13 @@
   padding-bottom: .5em;
 }
 #layers-all .layers-all-header {
-    padding: .5em .5em 0 0;
+    padding: 0 .5em 0 0;
+    overflow: hidden;
+}
+#layers-all .layers-all-title-wrap {
+    position: relative;
+    display: block;
+    margin-right: 50px;
 }
 #selected-category .ui-accordion-header,
 #layers-all .layers-all-layer {
@@ -328,7 +334,15 @@
     color:#ddd;
     font-size:20px;
     line-height:100%;
-    margin-right:50px;
+    position: relative;
+    padding-top: .5em;
+    display: inline-block;
+}
+@media (min-width:753px) {
+  #selected-category .ui-accordion-header h3,
+  #layers-all .layers-all-layer h3 {
+    padding-right: 40px;
+  }
 }
 #selected-category .ui-accordion-header h5,
 #layers-all .layers-all-layer h5{
@@ -338,7 +352,6 @@
     font-weight:300;
     margin-top:3px;
     font-style: italic;
-    margin-right: 50px;
 }
 #selected-category .ui-accordion-content{
     padding: .5em 1.2em;
@@ -420,12 +433,26 @@
     margin-bottom: 5px;
 }
 
-.layers-all-layer .fa {
-    color: #ddd;
-    font-family: FontAwesome !important;
-    margin-left: 8px;
-    font-size: 14px;
+.layers-all-layer .layers-all-header .fa {
+  color: #ddd;
+  font-family: FontAwesome;
+  margin-left: 0;
+  font-size: 14px;
+  padding: 12px 16px 12px;
+  position: absolute;
+  margin-left: -8px;
+  margin-top: -8px;
 }
+@media (min-width: 753px) {
+  .layers-all-layer .layers-all-header .fa {
+    padding: 14px 18px 16px;
+    top: 0;
+    right: 0;
+    margin-top: 0;
+    margin-left: 0;
+  }
+}
+
 .layers-all-layer .fa:hover {
     cursor: pointer;
 }
@@ -519,6 +546,7 @@
 
 #layers-all .iCheck-checkbox {
     float: right;
+    margin-top: .5em;
 }
 /*lazy code to put scrollbar in the right place*/
 

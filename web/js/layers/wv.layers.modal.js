@@ -401,6 +401,9 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     .iCheck('toggle');
                   });
 
+                var $layerTitleWrap = $( '<div></div>' )
+                    .addClass('layers-all-title-wrap');
+
                 var $layerTitle = $( '<h3></h3>' )
                     .text( current.title );
 
@@ -427,7 +430,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     .addClass('fa fa-info-circle');
 
                 var $moreTab = $('<div></div>')
-                .addClass('metadata-more');
+                    .addClass('metadata-more');
 
                 var $moreElps = $('<span></span>')
                     .addClass('ellipsis up')
@@ -445,11 +448,12 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
                 $layerItem.append( $layerHeader );
                 $layerHeader.append( $checkbox );
-                $layerHeader.append( $layerTitle );
+                $layerHeader.append( $layerTitleWrap );
+                $layerTitleWrap.append( $layerTitle );
                 if( current.description ) {
-                    $layerTitle.append( $showMore );
+                  $layerTitle.append( $showMore );
                 }
-                $layerHeader.append( $layerSubtitle );
+                $layerTitleWrap.append( $layerSubtitle );
 
                 if( current.description ) {
                     $.get('config/metadata/' + current.description + '.html')
