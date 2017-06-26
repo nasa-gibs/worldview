@@ -117,6 +117,7 @@ You can end the session by pressing `control-C`
 * [Optional Features](doc/features.md)
 * [Development Notes](doc/developing.md)
 * [Configuration](doc/config.md)
+* [Testing](doc/testing.md)
 * [Third-Party Library Use](THIRD_PARTY.md)
 
 
