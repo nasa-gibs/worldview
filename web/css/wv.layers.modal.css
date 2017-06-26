@@ -173,7 +173,6 @@
     overflow:auto;
     position:relative;
 }
-
 .stamp {
     cursor:pointer;
     position:absolute
@@ -181,7 +180,6 @@
 #layer-categories{
     height:100%;
 }
-
 .layer-category {
     cursor:pointer;
     background-color:rgba(0,0,0,0.75);
@@ -190,20 +188,13 @@
     overflow:hidden;
     margin-bottom: 10px;
 }
-
 .layer-category .category-background-cover{
     min-height:230px;
     background:rgba(0,0,0,0.4);
 }
-
-.layer-category:hover,
-.stamp:hover {
-
-}
 .layer-category h3 {
     font-size:20px;
     line-height:20px;
-
 }
 .layer-category h3 a{
     display:block;
@@ -211,7 +202,6 @@
     line-height:20px;
     padding:10px;
     color:#fff;
-
 }
 .layer-category h3 a:hover{
     background:rgba(255,255,255,0.6);
@@ -270,7 +260,6 @@
 #category-breadcrumb a:link {
     color: blue;
 }
-
 #selected-category{
     color: #ddd;
 }
@@ -297,7 +286,6 @@
 #layers-all .layers-all-layer {
     background:rgba(0, 0, 0, 0.85);
 }
-
 #selected-category .ui-state-active,
 #selected-category .ui-state-active:hover,
 #selected-category .ui-accordion-content{
@@ -356,7 +344,6 @@
 #selected-category .ui-accordion-content{
     padding: .5em 1.2em;
 }
-
 /*Override jqueryUI hover class*/
 #selected-category .ui-widget-content .ui-state-hover{
     background:none;
@@ -401,7 +388,6 @@
 #selected-category .ui-tabs .ui-tabs-nav li.ui-tabs-active a{
     color:#000;
 }
-
 #selected-category .ui-tabs-panel{
     margin-left:160px;
     color:#ddd;
@@ -422,7 +408,7 @@
     font-weight:bold;
     font-size: 14px;
     line-height: 14px;
-    margin: 15px 0px 5px;
+    margin: 15px 0 5px;
 }
 .source-metadata h1:first-child{
     margin-top:0;
@@ -432,11 +418,9 @@
     font-weight: bold;
     margin-bottom: 5px;
 }
-
 .layers-all-layer .layers-all-header .fa {
   color: #ddd;
   font-family: FontAwesome;
-  margin-left: 0;
   font-size: 14px;
   padding: 12px 16px 12px;
   position: absolute;
@@ -452,11 +436,9 @@
     margin-left: 0;
   }
 }
-
 .layers-all-layer .fa:hover {
     cursor: pointer;
 }
-
 #layers-all .source-metadata p,
 #selected-category .ui-tabs-panel p {
     margin-bottom: 15px;
