@@ -59,22 +59,22 @@ wv.link.ui = wv.link.ui || function(models, config) {
 
     // Facebook: https://developers.facebook.com/docs/sharing/reference/share-dialog#redirect
     var facebookUrlParams = function(appId, href, redirectUri, display) {
-      return 'https://www.facebook.com/dialog/share?' + $.param({ appId: appId, href: href, redirectUri: redirectUri, display: display });
+      return "https://www.facebook.com/dialog/share?" + "app_id=" + encodeURIComponent(appId) + "&href=" + encodeURIComponent(href) + "&redirect_uri=" + encodeURIComponent(redirectUri) + "&display=" + display;
     };
 
     // Twitter: https://dev.twitter.com/web/tweet-button/parameters#web-intent-example
     var twitterUrlParams = function(url, text) {
-      return 'https://twitter.com/intent/tweet?' + $.param({ url: url, text: text });
+      return "https://twitter.com/intent/tweet?" + "url=" + encodeURIComponent(url) + "&text=" + encodeURIComponent(text);
     };
 
     // Reddit: https://www.reddit.com/r/nasa/submit?url=[URL]&title=[TITLE]
     var redditUrlParams = function(url, title) {
-      return 'https://www.reddit.com/r/nasa/submit?' + $.param({ url: url, title: title });
+      return "https://www.reddit.com/r/nasa/submit?" + "url=" + encodeURIComponent(url) + "&title=" + encodeURIComponent(title);
     };
 
     // Email: mailto:?subject=[SUBJECT]&body=[BODY]
     var emailUrlParams = function(subject, body) {
-      return 'mailto:?' + $.param({ subject: subject, body: body });
+      return "mailto:?" + "subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
     };
 
     self.show = function() {
@@ -109,7 +109,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
             if (result.status_code === 200) {
               getLink = result.data.url;
               emailBody = shareMessage + " - " + getLink;
-
+              console.log(emailBody);
               document.getElementById("tw-share").setAttribute("href", twitterUrlParams(getLink, twMessage));
               document.getElementById("email-share").setAttribute("href", emailUrlParams(shareMessage, emailBody));
               return false;
