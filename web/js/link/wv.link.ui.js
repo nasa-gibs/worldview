@@ -96,38 +96,6 @@ wv.link.ui = wv.link.ui || function(models, config) {
     $dialog.dialog("open");
     setTimeout(updateLink, 500);
 
-    $("#wv-link-shorten-check").change(function(){
-      var checked = $("#wv-link-shorten-check").prop("checked");
-      if (checked) {
-        var promise = models.link.shorten();
-        WVC.GA.event('Link', 'Check', 'Shorten');
-        $("#permalink_content").val("Please wait...");
-        promise.done(function(result) {
-          if (result.status_code === 200) {
-            $('#permalink_content').val(result.data.url);
-          } else {
-            error(result.status_code, result.status_txt);
-          }
-        }).fail(function(jqXHR, textStatus, errorThrown) {
-          error(textStatus, errorThrown);
-        });
-        $('#permalink_content').focus();
-        $('#permalink_content').select();
-      } else {
-        $('#permalink_content').val(models.link.get());
-        WVC.GA.event('Link', 'Check', 'Lengthen');
-        $('#permalink_content').focus();
-        $('#permalink_content').select();
-      }
-    });
-
-    var error = function() {
-      console.warn("Unable to shorten URL");
-      console.warn.apply(console, arguments);
-      wv.ui.notify("Unable to shorten the permalink at this time. " +
-        "Please try again later.");
-    };
-
     $("#wv-link-shorten-check").prop("checked", false);
   };
 
