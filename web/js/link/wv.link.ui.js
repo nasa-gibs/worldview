@@ -51,10 +51,39 @@ wv.link.ui = wv.link.ui || function(models, config) {
   self.show = function() {
 
     var $dialog = wv.ui.getDialog();
+    var getLink = encodeURIComponent(models.link.get());
+    var shareMessage = encodeURIComponent('Check out what I found in NASA Worldview!');
+    var twMessage = encodeURIComponent('Check out what I found in #NASAWorldview -');
+    var emailBody = encodeURIComponent(shareMessage + " - " + getLink);
+
     Widget = self.initWidget();
 
     // Render Dialog Box Content
     self.reactComponent = ReactDOM.render(Widget, $dialog[0]);
+
+    // When an icon-link is clicked, replace the URL with current encoded link.
+    $(".icon-link").on("click", function() {
+      var promise = models.link.shorten();
+      getLink = encodeURIComponent(models.link.get());
+      emailBody = shareMessage + "%20-%20" + getLink;
+
+      document.getElementById("fb-share").setAttribute("href", "https://www.facebook.com/dialog/share?" + "app_id=" + '121285908450463' + "&href=" + getLink + "&redirect_uri=" + getLink + "&display=popup");
+      document.getElementById("tw-share").setAttribute("href", "https://twitter.com/intent/tweet?" + "url=" + getLink + "&text=" + twMessage);
+      document.getElementById("rd-share").setAttribute("href", "https://www.reddit.com/r/nasa/submit?" + "url=" + getLink + "&title=" + shareMessage);
+      document.getElementById("email-share").setAttribute("href", "mailto:?" + "subject=" + shareMessage + "&body=" + emailBody);
+
+      // If a short link can be generated, replace the full link.
+      promise.done(function(result) {
+        if (result.status_code === 200) {
+          getLink = encodeURIComponent(result.data.url);
+          emailBody = shareMessage + "%20-%20" + getLink;
+
+          document.getElementById("tw-share").setAttribute("href", "https://twitter.com/intent/tweet?" + "url=" + getLink + "&text=" + twMessage);
+          document.getElementById("email-share").setAttribute("href", "mailto:?" + "subject=" + shareMessage + "&body=" + emailBody);
+          return false;
+        }
+      });
+    });
 
     // If selected during the animation, the cursor will go to the
     // end of the input box
@@ -100,11 +129,8 @@ wv.link.ui = wv.link.ui || function(models, config) {
   };
 
   self.initWidget = function() {
-    // Check if URL Shortening is enabled in the config file.
-    // TODO: Move this to wv-components so it can be accessed there.
-    var urlShortening = config.features.urlShortening;
     return widgetFactory({
-      urlShortening: urlShortening,
+      // Add features here to be passed to WVC.Link
     });
   };
 
