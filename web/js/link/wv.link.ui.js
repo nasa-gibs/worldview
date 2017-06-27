@@ -186,7 +186,8 @@ wv.link.ui = wv.link.ui || function(models, config) {
       fbLink: fbLink,
       twLink: twLink,
       rdLink: rdLink,
-      emailLink: emailLink
+      emailLink: emailLink,
+      urlShortener: config.features.urlShortening
     });
   };
 
