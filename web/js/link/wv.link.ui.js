@@ -47,7 +47,6 @@ wv.link.ui = wv.link.ui || function(models, config) {
         });
 
         models.link.events.on("update", replaceHistoryState);
-        console.log(WVC.Link);
     };
 
     //Calls toQueryString to fetch updated state and returns URL
@@ -58,18 +57,36 @@ wv.link.ui = wv.link.ui || function(models, config) {
         }
     }, 2000, {leading: true, trailing: true});
 
+    // Facebook: https://developers.facebook.com/docs/sharing/reference/share-dialog#redirect
+    var facebookUrlParams = function(appId, href, redirectUri, display) {
+      return 'https://www.facebook.com/dialog/share?' + $.param({ appId: appId, href: href, redirectUri: redirectUri, display: display });
+    };
+
+    // Twitter: https://dev.twitter.com/web/tweet-button/parameters#web-intent-example
+    var twitterUrlParams = function(url, text) {
+      return 'https://twitter.com/intent/tweet?' + $.param({ url: url, text: text });
+    };
+
+    // Reddit: https://www.reddit.com/r/nasa/submit?url=[URL]&title=[TITLE]
+    var redditUrlParams = function(url, title) {
+      return 'https://www.reddit.com/r/nasa/submit?' + $.param({ url: url, title: title });
+    };
+
+    // Email: mailto:?subject=[SUBJECT]&body=[BODY]
+    var emailUrlParams = function(subject, body) {
+      return 'mailto:?' + $.param({ subject: subject, body: body });
+    };
+
     self.show = function() {
         var $dialog = wv.ui.getDialog();
-        var getLink = encodeURIComponent(models.link.get());
-        var shareMessage = encodeURIComponent('Check out what I found in NASA Worldview!');
-        var twMessage = encodeURIComponent('Check out what I found in #NASAWorldview -');
-        var emailBody = encodeURIComponent(shareMessage + " - " + getLink);
-
-        fbLink = "https://www.facebook.com/dialog/share?" + "app_id=" + '121285908450463' + "&href=" + getLink + "&redirect_uri=" + getLink + "&display=popup";
-        twLink = "https://twitter.com/intent/tweet?" + "url=" + getLink + "&text=" + twMessage;
-        rdLink = "https://www.reddit.com/r/nasa/submit?" + "url=" + getLink + "&title=" + shareMessage;
-        emailLink = "mailto:?" + "subject=" + shareMessage + "&body=" + emailBody;
-
+        var getLink = models.link.get();
+        var shareMessage = 'Check out what I found in NASA Worldview!';
+        var twMessage = 'Check out what I found in #NASAWorldview -';
+        var emailBody = shareMessage + " - " + getLink;
+        fbLink = facebookUrlParams('121285908450463', getLink, getLink, 'popup');
+        txLink = twitterUrlParams(getLink, twMessage);
+        rdLink = redditUrlParams(getLink, shareMessage);
+        emailLink = emailUrlParams(shareMessage, emailBody);
         Widget = self.initWidget();
 
         // Render Dialog Box Content
@@ -79,32 +96,25 @@ wv.link.ui = wv.link.ui || function(models, config) {
         // When an icon-link is clicked, replace the URL with current encoded link.
         $(".icon-link").on("click", function() {
           var promise = models.link.shorten();
-          getLink = encodeURIComponent(models.link.get());
-          emailBody = shareMessage + "%20-%20" + getLink;
+          getLink = models.link.get();
+          emailBody = shareMessage + " - " + getLink;
 
-          // this needs to be a setState (an update function) which fires on this click
-          // fbLink = "https://www.facebook.com/dialog/share?" + "app_id=" + '121285908450463' + "&href=" + getLink + "&redirect_uri=" + getLink + "&display=popup";
-          // twLink = "https://twitter.com/intent/tweet?" + "url=" + getLink + "&text=" + twMessage;
-          // rdLink = "https://www.reddit.com/r/nasa/submit?" + "url=" + getLink + "&title=" + shareMessage;
-          // emailLink = "mailto:?" + "subject=" + shareMessage + "&body=" + emailBody;
-
-          document.getElementById("fb-share").setAttribute("href", "https://www.facebook.com/dialog/share?" + "app_id=" + '121285908450463' + "&href=" + getLink + "&redirect_uri=" + getLink + "&display=popup");
-          document.getElementById("tw-share").setAttribute("href", "https://twitter.com/intent/tweet?" + "url=" + getLink + "&text=" + twMessage);
-          document.getElementById("rd-share").setAttribute("href", "https://www.reddit.com/r/nasa/submit?" + "url=" + getLink + "&title=" + shareMessage);
-          document.getElementById("email-share").setAttribute("href", "mailto:?" + "subject=" + shareMessage + "&body=" + emailBody);
+          document.getElementById("fb-share").setAttribute("href", facebookUrlParams('121285908450463', getLink, getLink, 'popup'));
+          document.getElementById("tw-share").setAttribute("href", twitterUrlParams(getLink, twMessage));
+          document.getElementById("rd-share").setAttribute("href", redditUrlParams(getLink, shareMessage));
+          document.getElementById("email-share").setAttribute("href", emailUrlParams(shareMessage, emailBody));
 
           // If a short link can be generated, replace the full link.
           promise.done(function(result) {
             if (result.status_code === 200) {
-              getLink = encodeURIComponent(result.data.url);
-              emailBody = shareMessage + "%20-%20" + getLink;
+              getLink = result.data.url;
+              emailBody = shareMessage + " - " + getLink;
 
-              document.getElementById("tw-share").setAttribute("href", "https://twitter.com/intent/tweet?" + "url=" + getLink + "&text=" + twMessage);
-              document.getElementById("email-share").setAttribute("href", "mailto:?" + "subject=" + shareMessage + "&body=" + emailBody);
+              document.getElementById("tw-share").setAttribute("href", twitterUrlParams(getLink, twMessage));
+              document.getElementById("email-share").setAttribute("href", emailUrlParams(shareMessage, emailBody));
               return false;
             }
           });
-          return fbLink, twLink, rdLink, emailLink;
         });
 
         // If selected during the animation, the cursor will go to the
@@ -149,7 +159,6 @@ wv.link.ui = wv.link.ui || function(models, config) {
 
         // $("#wv-link-shorten-check").button();
         $("#wv-link-shorten-check").on("change", function() {
-          console.log('changed');
             var checked = $("#wv-link-shorten-check").prop("checked");
             if ( checked ) {
                 var promise = models.link.shorten();
