@@ -61,6 +61,7 @@ Make sure the following modules are enabled:
 ```bash
 LoadModule expires_module libexec/mod_expires.so
 LoadModule php5_module modules/libphp5.so
+LoadModule deflate_module libexec/apache2/mod_deflate.so
 ```
 For data download to function, CGI scripts must be executable. To do that, enable the mod_cgid module in the httpd.conf file.
 ```bash
