@@ -83,31 +83,30 @@ wv.link.ui = wv.link.ui || function(models, config) {
     // Render Dialog Box Content
     self.reactComponent = ReactDOM.render(Widget, $dialog[0]);
 
-    // clickUpdate();
     var setLink = function(fbLink, twLink, rdLink, emailLink, callback) {
       var promise = models.link.shorten();
       var shareMessage = 'Check out what I found in NASA Worldview!';
       var twMessage = 'Check out what I found in #NASAWorldview -';
       var emailBody = shareMessage + " - " + models.link.get();
 
-      var fbLinks = facebookUrlParams('121285908450463', models.link.get(), models.link.get(), 'popup');
-      var twLinks = twitterUrlParams(models.link.get(), twMessage);
-      var rdLinks = redditUrlParams(models.link.get(), shareMessage);
-      var emailLinks = emailUrlParams(shareMessage, emailBody);
+      var fb = facebookUrlParams('121285908450463', models.link.get(), models.link.get(), 'popup');
+      var tw = twitterUrlParams(models.link.get(), twMessage);
+      var rd = redditUrlParams(models.link.get(), shareMessage);
+      var email = emailUrlParams(shareMessage, emailBody);
 
       // If a short link can be generated, replace the full link.
       promise.done(function(result) {
         if (result.status_code === 200) {
           emailBody = shareMessage + " - " + result.data.url;
 
-          twLink = twitterUrlParams(result.data.url, twMessage);
-          emLink = emailUrlParams(shareMessage, emailBody);
+          tw = twitterUrlParams(result.data.url, twMessage);
+          email = emailUrlParams(shareMessage, emailBody);
           return false;
         }
       }).fail(function() {
         console.warn("Unable to shorten URL, full link generated.");
       });
-      callback(fbLinks, twLinks, rdLinks, emailLinks);
+      callback(fb, tw, rd, email);
     };
 
     setLink(fbLink, twLink, rdLink, emailLink, self.reactComponent.updateLinkState);
