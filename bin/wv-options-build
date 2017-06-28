@@ -48,8 +48,6 @@ else
     cp -r "$SRC_DIR/$ENV"/* "$BUILD_DIR"
 fi
 
-cp -r "$SRC_DIR/$ENV"/* "$BUILD_DIR"
-
 mkdir -p "$DEST_DIR/config"
 mkdir -p "$BUILD_DIR/colormaps"
 
