@@ -18,7 +18,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
   var id = "wv-link-button";
   var selector = "#" + id;
   var $button, $label;
-  var fbLink, twLink, rdLink, emailLink;
+  var setLink, fbLink, twLink, rdLink, emailLink;
   var widgetFactory = React.createFactory(WVC.Link);
 
   var init = function() {
@@ -83,7 +83,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
     // Render Dialog Box Content
     self.reactComponent = ReactDOM.render(Widget, $dialog[0]);
 
-    var setLink = function(fbLink, twLink, rdLink, emailLink, callback) {
+    setLink = function(fbLink, twLink, rdLink, emailLink, callback) {
       var promise = models.link.shorten();
       var shareMessage = 'Check out what I found in NASA Worldview!';
       var twMessage = 'Check out what I found in #NASAWorldview -';
@@ -193,13 +193,15 @@ wv.link.ui = wv.link.ui || function(models, config) {
 
   };
 
+  self.clickFunction = function() {
+    setLink(fbLink, twLink, rdLink, emailLink, self.reactComponent.updateLinkState);
+    // run the setLink function in WV to update the state
+  };
+
   self.initWidget = function() {
     return widgetFactory({
-      fbLink: fbLink,
-      twLink: twLink,
-      rdLink: rdLink,
-      emailLink: emailLink,
-      urlShortener: config.features.urlShortening
+      urlShortener: config.features.urlShortening,
+      clickFunction: self.clickFunction
     });
   };
 
