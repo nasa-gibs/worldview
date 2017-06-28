@@ -5,16 +5,19 @@
         "type": "git",
         "url": "https://github.com/nasa-gibs/worldview.git"
     },
+    "engines": {
+        "node": "6.8.1"
+    },
     "scripts": {
         "test": "grunt test lint",
         "start": "node ./bin/www"
     },
     "devDependencies": {
-        "babel-polyfill": "^6.16.0",
-        "bluebird": "^3.4.6",
+        "babel-polyfill": "6.16.0",
+        "bluebird": "3.4.6",
         "buster": "0.7.12",
         "chromedriver": "2.25.1",
-        "express": "^4.15.2",
+        "express": "4.15.2",
         "font-awesome": "4.7.0",
         "geckodriver": "1.2.0",
         "grunt": "0.4.x",
@@ -39,15 +42,15 @@
         "grunt-rename": "0.1.x",
         "grunt-text-replace": "0.4.x",
         "jshint": "2.9.x",
-        "lodash": "^4.15.0",
+        "lodash": "4.15.0",
         "moment": "2.13.x",
         "openlayers": "4.0.1",
         "gifshot": "https://github.com/nasa-gibs/gifshot/archive/4.2.0.tar.gz",
         "nightwatch": "^0.9.9",
         "phantomjs": "2.1.x",
-        "promise-queue": "^2.2.3",
-        "react": "^15.3.1",
-        "react-dom": "^15.3.1",
+        "promise-queue": "2.2.3",
+        "react": "15.3.1",
+        "react-dom": "15.3.1",
         "worldview-components": "1.2.0",
         "selenium-server-standalone-jar": "3.0.1"
     }

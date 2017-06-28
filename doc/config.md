@@ -138,8 +138,8 @@ Modify the JSON document, ``config/wv.json/sources.json``. There is a *sources* 
 For WMTS layers that cannot be configured with a GetCapabilities document, a *matrixSets* object must exist that contains an object for each matrix set, keyed by the matrix set identifier.
 
 - **id**: The identifier for this matrix set.
-- **maxResolution**: The maximum resolution of this of this matrix tile set as defined in the OpenLayers 2 documentation. This property might be deprecated in the future as it can be obtained from the *resolutions* property.
-- **resolutions**: Array of resolutions for each zoom level as defined in the OpenLayers 2 documentation.
+- **maxResolution**: The maximum resolution of this of this matrix tile set as defined in the [OpenLayers 2 documentation](http://dev.openlayers.org/docs/files/OpenLayers/Layer-js.html#OpenLayers.Layer.maxResolution). This property might be deprecated in the future as it can be obtained from the *resolutions* property.
+- **resolutions**: Array of resolutions for each zoom level as defined in the [OpenLayers 2 documentation](http://dev.openlayers.org/docs/files/OpenLayers/Layer-js.html#OpenLayers.Layer.maxResolution).
 - **tileSize**: Array of pixel dimensions for each tile. Example *[512, 512]*
 
 ### Full Example

@@ -257,13 +257,15 @@ wv.data.handler.collectionMix = function(config, model, spec) {
             time: model.time,
             startTimeDelta: nrtHandler.startTimeDelta,
             endTimeDelta: nrtHandler.endTimeDelta,
-            data: config.products[model.selectedProduct].query.nrt
+            data: config.products[model.selectedProduct].query.nrt,
+            search: 'collections.json'
         };
         var nrt = self.cmr.submit(nrtQueryOptions);
 
         var scienceQueryOptions = {
             time: model.time,
-            data: config.products[model.selectedProduct].query.science
+            data: config.products[model.selectedProduct].query.science,
+            search: 'collections.json'
         };
         var science = self.cmr.submit(scienceQueryOptions);
 

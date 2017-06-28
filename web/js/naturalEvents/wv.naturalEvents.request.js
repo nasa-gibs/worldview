@@ -59,36 +59,48 @@ wv.naturalEvents.request = wv.naturalEvents.request || function(models, ui, conf
         }
     };
 
-
-    var queryEvents = function(callback) {
+    var queryEvents = function() {
         var url = self.apiURL + "/events";
+        if (config.parameters.mockEvents) {
+            console.warn("Using mock events data: " + config.parameters.mockEvents);
+            url = "mock/events_data.json-" + config.parameters.mockEvents;
+        }
         $.getJSON(url, function(data) {
             model.data.events = data.events;
             self.events.trigger('queryResults');
         });
     };
 
-    var queryTypes = function(callback) {
+    var queryTypes = function() {
         var url = self.apiURL + "/categories";
+        if (config.parameters.mockCategories) {
+            console.warn("Using mock categories data: " + config.parameters.mockEvents);
+            url = "mock/categories_data.json-" + config.parameters.mockCategories;
+        }
         $.getJSON(url, function(data) {
             model.data.types = data.categories;
             self.events.trigger('queryResults');
         });
     };
 
-    var querySources = function(callback) {
+    var querySources = function() {
         var url = self.apiURL + "/sources";
+        if (config.parameters.mockSources) {
+            console.warn("Using mock sources data: " + config.parameters.mockEvents);
+            url = "mock/sources_data.json-" + config.parameters.mockSources;
+        }
         $.getJSON(url, function(data) {
             model.data.sources = data.sources;
             self.events.trigger('queryResults');
         });
     };
 
-    self.query = function(callback) {
+    self.query = function() {
         queryTypes();
         queryEvents();
         querySources();
     };
+
     init();
     return self;
 };
