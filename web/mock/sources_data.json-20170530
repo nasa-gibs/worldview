@@ -1,0 +1,128 @@
+
+{
+	"title": "EONET Event Sources",
+	"description": "List of all the available event sources in the EONET system",
+	"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/sources",
+	"sources": [
+		{
+			"id": "TEST",
+			"title": "Test Source",
+			"source": "http://www.example.com/",
+			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events?source=TEST"
+		},
+		{
+			"id": "AU_BOM",
+			"title": "Australia Bureau of Meteorology",
+			"source": "http://www.bom.gov.au/",
+			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events?source=AU_BOM"
+		},
+		{
+			"id": "BCWILDFIRE",
+			"title": "British Columbia Wildfire Service",
+			"source": "http://bcwildfire.ca/",
+			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events?source=BCWILDFIRE"
+		},
+		{
+			"id": "CALFIRE",
+			"title": "California Department of Forestry and Fire Protection",
+			"source": "http://www.calfire.ca.gov/",
+			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events?source=CALFIRE"
+		},
+		{
+			"id": "CEMS",
+			"title": "Copernicus Emergency Management Service",
+			"source": "http://emergency.copernicus.eu/",
+			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events?source=CEMS"
+		},
+		{
+			"id": "EO",
+			"title": "Earth Observatory",
+			"source": "http://earthobservatory.nasa.gov/",
+			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events?source=EO"
+		},
+		{
+			"id": "GDACS",
+			"title": "Global Disaster Alert and Coordination System",
+			"source": "http://www.gdacs.org/",
+			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events?source=GDACS"
+		},
+		{
+			"id": "GLIDE",
+			"title": "GLobal IDEntifier Number (GLIDE)",
+			"source": "http://www.glidenumber.net/",
+			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events?source=GLIDE"
+		},
+		{
+			"id": "InciWeb",
+			"title": "InciWeb",
+			"source": "http://inciweb.nwcg.gov/",
+			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events?source=InciWeb"
+		},
+		{
+			"id": "IDC",
+			"title": "International Charter on Space and Major Disasters",
+			"source": "https://www.disasterscharter.org/",
+			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events?source=IDC"
+		},
+		{
+			"id": "MRR",
+			"title": "LANCE Rapid Response",
+			"source": "https://lance.modaps.eosdis.nasa.gov/cgi-bin/imagery/gallery.cgi",
+			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events?source=MRR"
+		},
+		{
+			"id": "NASA_ESRS",
+			"title": "NASA Earth Science and Remote Sensing Unit",
+			"source": "https://eol.jsc.nasa.gov/ESRS/",
+			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events?source=NASA_ESRS"
+		},
+		{
+			"id": "PDC",
+			"title": "Pacific Disaster Center",
+			"source": "http://www.pdc.org/",
+			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events?source=PDC"
+		},
+		{
+			"id": "ReliefWeb",
+			"title": "ReliefWeb",
+			"source": "http://reliefweb.int/",
+			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events?source=ReliefWeb"
+		},
+		{
+			"id": "SIVolcano",
+			"title": "Smithsonian Institution Global Volcanism Program",
+			"source": "http://www.volcano.si.edu/",
+			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events?source=SIVolcano"
+		},
+		{
+			"id": "NATICE",
+			"title": "U.S. National Ice Center",
+			"source": "http://www.natice.noaa.gov/Main_Products.htm",
+			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events?source=NATICE"
+		},
+		{
+			"id": "UNISYS",
+			"title": "Unisys Weather",
+			"source": "http://weather.unisys.com/hurricane/",
+			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events?source=UNISYS"
+		},
+		{
+			"id": "USGS_CMT",
+			"title": "USGS Emergency Operations Collection Management Tool",
+			"source": "https://cmt.usgs.gov/",
+			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events?source=USGS_CMT"
+		},
+		{
+			"id": "HDDS",
+			"title": "USGS Hazards Data Distribution System",
+			"source": "https://hddsexplorer.usgs.gov/",
+			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events?source=HDDS"
+		},
+		{
+			"id": "DFES_WA",
+			"title": "Western Australia Department of Fire and Emergency Services",
+			"source": "https://www.dfes.wa.gov.au/",
+			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events?source=DFES_WA"
+		}
+	]
+}
