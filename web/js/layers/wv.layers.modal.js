@@ -168,10 +168,10 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       crumbText = 'Categories';
       drawCategories();
     } else if (config.parameters.modalView == 'measurements') {
-      crumbText = 'All Measurements';
+      crumbText = 'Measurements';
       drawAllMeasurements();
     } else if (config.parameters.modalView == 'layers') {
-      crumbText = 'All Layers';
+      crumbText = 'Layers';
       drawAllLayers();
 
       // Else set the default views per projection.
