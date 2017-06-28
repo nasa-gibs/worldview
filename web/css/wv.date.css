@@ -188,7 +188,7 @@ div.ui-slider {
     bottom: 85px;
     border: none;
     text-shadow: none;
-    font-family: "Lucida Sans", "Arial", "sans serif";
+    font-family: 'Lucida Sans', 'Arial', sans-serif;
     color: white;
     background-color: rgba(40, 40, 40, 0.85);
     text-align: center;
