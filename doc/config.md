@@ -135,7 +135,7 @@ First, layers must be added to `config/wv.json/layers` and `config/wv.json/layer
 
 - Fetch GIBS GetCapabilities with `grunt fetch`. This gets the latest layer information and colormaps from GIBS.
 - Add new layer(s)
-  - Follow New Layers information above to create JSON file in `config/wv.json/layers`.
+  - Follow [New Layers](https://github.com/nasa-gibs/worldview/blob/master/doc/config.md#new-layers) above to create JSON file in `config/wv.json/layers`.
 - Add to Measurements
   - Add to relevant measurement or create a new JSON file in `config/wv.json/measurements`.
 - Add to Categories
