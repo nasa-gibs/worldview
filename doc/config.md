@@ -128,12 +128,12 @@ To display a color palette legend, a *palette* object should exist with the foll
     }
 }
 ```
-# Adding Layers to Worldview and the Product Picker
-New layers in the Global Imagery Browse Services (GIBS) can be added to Worldview using the following instructions.
+## Adding Layers to Worldview and the Product Picker
+New layers in the Global Imagery Browse Services (GIBS) can be added to Worldview via the options repository using the following instructions.
 
 First, layers must be added to `config/wv.json/layers` and `config/wv.json/layerOrder.json`. Then they must be added to the `config/wv.json/measurements` and `config/wv.json/categories` folders so that they will be categorized in the Product Picker. Lastly, if the layers have descriptions these can be added in `config/metadata` and if they are available in the Common Metadata Repository (CMR), data download may be enabled for those layers.
 
-- Fetch GIBS getCapabilities in the Worldview repository with `grunt fetch`. This gets the latest layer information and colormaps from GIBS.
+- Fetch GIBS GetCapabilities with `grunt fetch`. This gets the latest layer information and colormaps from GIBS.
 - Add new layer(s)
   - Follow New Layers information above to create JSON file in `config/wv.json/layers`.
 - Add to Measurements
