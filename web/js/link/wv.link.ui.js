@@ -104,6 +104,8 @@ wv.link.ui = wv.link.ui || function(models, config) {
           document.getElementById("email-share").setAttribute("href", emailUrlParams(shareMessage, emailBody));
           return false;
         }
+      }).fail(function() {
+        console.warn("Unable to shorten URL, full link generated.");
       });
     });
 
