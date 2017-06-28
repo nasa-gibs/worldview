@@ -73,41 +73,44 @@ wv.link.ui = wv.link.ui || function(models, config) {
 
   self.show = function() {
     var $dialog = wv.ui.getDialog();
-    var shareMessage = 'Check out what I found in NASA Worldview!';
-    var twMessage = 'Check out what I found in #NASAWorldview -';
-    var emailBody = shareMessage + " - " + models.link.get();
-    fbLink = facebookUrlParams('121285908450463', models.link.get(), models.link.get(), 'popup');
-    txLink = twitterUrlParams(models.link.get(), twMessage);
-    rdLink = redditUrlParams(models.link.get(), shareMessage);
-    emailLink = emailUrlParams(shareMessage, emailBody);
+    var dialogWidth = '300';
+    if ( wv.util.browser.small ) {
+      dialogWidth = '242';
+    }
+
     Widget = self.initWidget();
 
     // Render Dialog Box Content
     self.reactComponent = ReactDOM.render(Widget, $dialog[0]);
 
-    // When an icon-link is clicked, replace the URL with current encoded link.
-    $(".icon-link").on("click", function() {
+    // clickUpdate();
+    var setLink = function(fbLink, twLink, rdLink, emailLink, callback) {
       var promise = models.link.shorten();
-      emailBody = shareMessage + " - " + models.link.get();
+      var shareMessage = 'Check out what I found in NASA Worldview!';
+      var twMessage = 'Check out what I found in #NASAWorldview -';
+      var emailBody = shareMessage + " - " + models.link.get();
 
-      document.getElementById("fb-share").setAttribute("href", facebookUrlParams('121285908450463', models.link.get(), models.link.get(), 'popup'));
-      document.getElementById("tw-share").setAttribute("href", twitterUrlParams(models.link.get(), twMessage));
-      document.getElementById("rd-share").setAttribute("href", redditUrlParams(models.link.get(), shareMessage));
-      document.getElementById("email-share").setAttribute("href", emailUrlParams(shareMessage, emailBody));
+      var fbLinks = facebookUrlParams('121285908450463', models.link.get(), models.link.get(), 'popup');
+      var twLinks = twitterUrlParams(models.link.get(), twMessage);
+      var rdLinks = redditUrlParams(models.link.get(), shareMessage);
+      var emailLinks = emailUrlParams(shareMessage, emailBody);
 
       // If a short link can be generated, replace the full link.
       promise.done(function(result) {
         if (result.status_code === 200) {
           emailBody = shareMessage + " - " + result.data.url;
 
-          document.getElementById("tw-share").setAttribute("href", twitterUrlParams(result.data.url, twMessage));
-          document.getElementById("email-share").setAttribute("href", emailUrlParams(shareMessage, emailBody));
+          twLink = twitterUrlParams(result.data.url, twMessage);
+          emLink = emailUrlParams(shareMessage, emailBody);
           return false;
         }
       }).fail(function() {
         console.warn("Unable to shorten URL, full link generated.");
       });
-    });
+      callback(fbLinks, twLinks, rdLinks, emailLinks);
+    };
+
+    setLink(fbLink, twLink, rdLink, emailLink, self.reactComponent.updateLinkState);
 
     // If selected during the animation, the cursor will go to the
     // end of the input box
@@ -127,7 +130,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
         effect: "slide",
         direction: "up"
       },
-      width: 300,
+      width: dialogWidth,
       height: "auto",
       minHeight: 10,
       draggable: false,
@@ -138,11 +141,19 @@ wv.link.ui = wv.link.ui || function(models, config) {
       $button.button("refresh");
       models.link.events.off("update", updateLink);
     });
-    wv.ui.positionDialog($dialog, {
-      my: "left top",
-      at: "left bottom+5",
-      of: $label
-    });
+    if ( wv.util.browser.small ) {
+      wv.ui.positionDialog($dialog, {
+          my: "left top",
+          at: "left+58 bottom+5",
+          of: "#wv-toolbar"
+      });
+    }else {
+      wv.ui.positionDialog($dialog, {
+          my: "left top",
+          at: "left bottom+5",
+          of: $label
+      });
+    }
     $(".ui-dialog").zIndex(600);
 
     $('#permalink_content').val(models.link.get());
