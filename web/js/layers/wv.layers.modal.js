@@ -461,6 +461,8 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                             $sourceMeta.html(data);
                             $layerItem.append( $sourceMeta );
                             $sourceMeta.append( $moreTab );
+                            $sourceMeta.find('a')
+                                .attr('target','_blank');
                         }
                     );
                 }
