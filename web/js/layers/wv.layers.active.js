@@ -221,7 +221,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         }
 
         var $infoIcon = $("<i></i>")
-        .addClass("fa fa-info-circle wv-layers-info-icon");
+        .addClass("fa fa-info wv-layers-info-icon");
 
         $infoButton.append($infoIcon);
 
