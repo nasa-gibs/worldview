@@ -68,6 +68,8 @@ wv.layers.info = wv.layers.info || function(config, models, layer) {
                 .success(function(data) {
                     $layerMeta.html(data);
                     $dialog.append( $layerMeta );
+                    $layerMeta.find('a')
+                        .attr('target','_blank');
                 }
             );
         }
