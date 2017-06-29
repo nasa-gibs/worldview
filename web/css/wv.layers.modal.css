@@ -173,7 +173,6 @@
     overflow:auto;
     position:relative;
 }
-
 .stamp {
     cursor:pointer;
     position:absolute
@@ -181,7 +180,6 @@
 #layer-categories{
     height:100%;
 }
-
 .layer-category {
     cursor:pointer;
     background-color:rgba(0,0,0,0.75);
@@ -190,15 +188,9 @@
     overflow:hidden;
     margin-bottom: 10px;
 }
-
 .layer-category .category-background-cover{
     min-height:230px;
     background:rgba(0,0,0,0.4);
-}
-
-.layer-category:hover,
-.stamp:hover {
-
 }
 .layer-category h3 {
     font-size:20px;
@@ -270,29 +262,32 @@
 #category-breadcrumb a:link {
     color: blue;
 }
-
 #selected-category{
     color: #ddd;
 }
 #layers-all .layers-all-layer {
-    padding: .5em .5em .5em .7em;
+  padding-bottom: .5em;
+}
+#layers-all .layers-all-header {
+    padding: 0 .5em 0 0;
+    overflow: hidden;
+}
+#layers-all .layers-all-title-wrap {
+    position: relative;
+    display: block;
+    margin-right: 50px;
 }
 #selected-category .ui-accordion-header,
 #layers-all .layers-all-layer {
+    position: relative;
     border:0;
     margin-top:5px;
-    cursor:pointer;
 }
 #selected-category .ui-accordion-header,
 #selected-category .ui-state-focus,
 #layers-all .layers-all-layer {
     background:rgba(0, 0, 0, 0.85);
 }
-#selected-category .ui-accordion-header:hover,
-#layers-all .layers-all-layer:hover{
-    background: rgba(0, 0, 0, 0.75);
-}
-
 #selected-category .ui-state-active,
 #selected-category .ui-state-active:hover,
 #selected-category .ui-accordion-content{
@@ -329,7 +324,15 @@
     color:#ddd;
     font-size:20px;
     line-height:100%;
-    margin-right:50px;
+    position: relative;
+    padding-top: .3em;
+    display: inline-block;
+}
+@media (min-width:753px) {
+  #selected-category .ui-accordion-header h3,
+  #layers-all .layers-all-layer h3 {
+    padding-right: 40px;
+  }
 }
 #selected-category .ui-accordion-header h5,
 #layers-all .layers-all-layer h5{
@@ -339,12 +342,10 @@
     font-weight:300;
     margin-top:3px;
     font-style: italic;
-    margin-right: 50px;
 }
 #selected-category .ui-accordion-content{
     padding: .5em 1.2em;
 }
-
 /*Override jqueryUI hover class*/
 #selected-category .ui-widget-content .ui-state-hover{
     background:none;
@@ -389,7 +390,6 @@
 #selected-category .ui-tabs .ui-tabs-nav li.ui-tabs-active a{
     color:#000;
 }
-
 #selected-category .ui-tabs-panel{
     margin-left:160px;
     color:#ddd;
@@ -400,12 +400,17 @@
     border-top: 2px solid #d54e21;
     margin-top:7px;
 }
+#layers-all .source-metadata {
+    border-top-width: 1px;
+    color: #ddd;
+    padding-right: 1.2em;
+}
 .source-metadata h1{
     color: #ddd;
     font-weight:bold;
     font-size: 14px;
     line-height: 14px;
-    margin: 15px 0px 5px;
+    margin: 15px 0 5px;
 }
 .source-metadata h1:first-child{
     margin-top:0;
@@ -415,8 +420,29 @@
     font-weight: bold;
     margin-bottom: 5px;
 }
+.layers-all-layer .layers-all-header .fa {
+  color: #ddd;
+  font-family: FontAwesome;
+  font-size: 14px;
+  padding: 12px 16px 12px;
+  position: absolute;
+  margin-left: -8px;
+  margin-top: -8px;
+}
+@media (min-width: 753px) {
+  .layers-all-layer .layers-all-header .fa {
+    padding: 10px 18px 16px;
+    top: 0;
+    right: 0;
+    margin-top: 0;
+    margin-left: 0;
+  }
+}
+.layers-all-layer .fa:hover {
+    cursor: pointer;
+}
+#layers-all .source-metadata p,
 #selected-category .ui-tabs-panel p {
-    font-style: italics;
     margin-bottom: 15px;
 }
 #selected-category .ui-tabs-panel p,
@@ -429,26 +455,38 @@
 #selected-category .ui-tabs-panel .source-metadata{
     overflow:hidden;
 }
+
+#layers-all .source-metadata p,
+#layers-all .source-metadata a,
 #selected-category .ui-tabs-panel .source-metadata p,
 #selected-category .ui-tabs-panel .source-metadata a{
     font-family: open_sans_light;
     font-size: 13px;
     line-height:14px;
-
+}
+#layers-all .source-metadata p {
+    color: #bbb;
 }
 #selected-category .ui-tabs-panel .source-metadata.overflow{
     height:100px;
 }
+#layers-all .metadata-more,
 #selected-category .ui-tabs-panel .metadata-more{
     display:block;
     height:20px;
     line-height:20px;
     border-top: 1px solid #D54E21;
 }
+#layers-all .metadata-more{
+    height:8px;
+    margin-top:4px;
+}
+#layers-all .metadata-more:hover,
 #selected-category .ui-tabs-panel .metadata-more:hover{
     background:rgba(255,255,255,0.3);
     cursor: pointer;
 }
+#layers-all .metadata-more .ellipsis,
 #selected-category .ui-tabs-panel .metadata-more .ellipsis {
     display: block;
     height: 12px;
@@ -461,6 +499,7 @@
     text-align: center;
     font-weight: bold;
 }
+#layers-all .metadata-more .ellipsis.up,
 #selected-category .ui-tabs-panel .metadata-more .ellipsis.up {
     font-size:1em;
     line-height:1em;
@@ -491,6 +530,7 @@
 
 #layers-all .iCheck-checkbox {
     float: right;
+    margin-top: .5em;
 }
 /*lazy code to put scrollbar in the right place*/
 

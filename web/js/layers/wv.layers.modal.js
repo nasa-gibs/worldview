@@ -65,7 +65,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     //Create container for 'by interest' filters buttons
     var $nav = $('<nav></nav>')
         .attr( 'id', 'categories-nav' );
-    
+
     //Create container for breadcrumb
     var $breadcrumb = $('<nav></nav>')
         .attr( 'id', 'category-breadcrumb' );
@@ -89,7 +89,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             height: modalHeight,
             width: gridItemWidth * sizeMultiplier + 10,
         });
-        
+
         $( '#layer-modal-main' ).css( 'height', modalHeight - 40 )
             .perfectScrollbar('update');
 
@@ -252,7 +252,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                         .attr('data-layer', encodeURIComponent(layer.id) )
                         .attr( 'value', encodeURIComponent( layer.id ) )
                         .addClass('measurement-settings-item');
-                        
+
                     var $setting = $( '<input></input>' )
                         .attr( 'type', 'checkbox' )
                         .addClass( 'settings-check')
@@ -315,7 +315,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
                 //$sourceContent.append( $addButton, $removeButton );
                 $measurementContent.append( $sourceContent );
-                
+
 
             });
             //End source level
@@ -326,10 +326,10 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
             $categoryList.append( $measurementHeader );
             $categoryList.append( $measurementContent );
-            
+
         });
         //End measurement level
-        
+
 
         $categoryList.accordion({
             collapsible: true,
@@ -367,7 +367,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         redoScrollbar();
         $selectedCategory.iCheck({checkboxClass: 'icheckbox_square-red'});
         $breadcrumb.show();
-        
+
     };
 
     var drawAllLayers = function() {
@@ -391,11 +391,18 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 var $layerItem = $( '<li></li>' )
                     .attr('id', 'layer-flat-' + current.id )
                     .attr("data-layer", encodeURIComponent(current.id))
-                    .addClass('layers-all-layer')
-                    .click( function( e ){
-                        $( this ).find('input#' + encodeURIComponent(current.id))
-                            .iCheck('toggle');
-                    });
+                    .addClass('layers-all-layer');
+
+
+                var $layerHeader = $('<div></div>')
+                  .addClass('layers-all-header')
+                  .click(function(e) {
+                    $(this).find('input#' + encodeURIComponent(current.id))
+                    .iCheck('toggle');
+                  });
+
+                var $layerTitleWrap = $( '<div></div>' )
+                    .addClass('layers-all-title-wrap');
 
                 var $layerTitle = $( '<h3></h3>' )
                     .text( current.title );
@@ -415,11 +422,53 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     $checkbox.attr("checked", "checked");
                 }
 
-                $layerItem.append( $checkbox );
-                $layerItem.append( $layerTitle );
-                $layerItem.append( $layerSubtitle );
+                //Metadata
+                var $sourceMeta = $( '<div></div>' )
+                    .addClass('source-metadata hidden');
+
+                var $showMore = $('<span></span>')
+                    .addClass('fa fa-info-circle');
+
+                var $moreTab = $('<div></div>')
+                    .addClass('metadata-more');
+
+                var $moreElps = $('<span></span>')
+                    .addClass('ellipsis up')
+                    .text('^');
+
+                $moreTab.append( $moreElps );
+
+                $showMore.add($moreTab).toggle( function(e){
+                    $sourceMeta.toggleClass('hidden');
+                    redoScrollbar();
+                }, function(e){
+                    $sourceMeta.toggleClass('hidden');
+                    redoScrollbar();
+                });
+
+                $layerItem.append( $layerHeader );
+                $layerHeader.append( $checkbox );
+                $layerHeader.append( $layerTitleWrap );
+                $layerTitleWrap.append( $layerTitle );
+                if( current.description ) {
+                  $layerTitle.append( $showMore );
+                }
+                $layerTitleWrap.append( $layerSubtitle );
+
+                if( current.description ) {
+                    $.get('config/metadata/' + current.description + '.html')
+                        .success(function(data) {
+                            $sourceMeta.html(data);
+                            $layerItem.append( $sourceMeta );
+                            $sourceMeta.append( $moreTab );
+                            $sourceMeta.find('a')
+                                .attr('target','_blank');
+                        }
+                    );
+                }
 
                 $fullLayerList.append( $layerItem );
+
             }
 
         });
@@ -544,7 +593,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     .click( function( e ) {
                         drawMeasurements( category );
                     });
-                
+
                 $categoryTitle.append( $categoryLink );
                 $categoryOpaque.append( $categoryTitle );
 
@@ -581,7 +630,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 });
 
                 $categoryOpaque.append( $measurements );
-                
+
                 $categories.append( $category );
 
             });
@@ -615,7 +664,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             $nav.buttonset();
             $nav.show();
         });
-        
+
         $categories.isotope( {
             itemSelector: '.layer-category',
             //stamp: '.stamp',
@@ -634,7 +683,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         $('#layer-modal-main').prepend( $nav );
 
         $('label[for=button-filter-legacy]').addClass('nav-selected');
-        
+
     };
     var addLayer = function(event) {
         event.stopPropagation();
@@ -651,7 +700,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                           wv.util.jqueryEscape(layer.id) + "']");
         $element.iCheck("check");
     };
-    
+
     var onLayerRemoved = function(layer) {
         var $element = $( self.selector + " [data-layer='" +
                           wv.util.jqueryEscape(layer.id) + "']");
@@ -727,8 +776,8 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 $( ".ui-widget-overlay" ).unbind( "click" );
             }
         });
-        
-        
+
+
         $search.append( $searchBtn )
             .append( $searchInput );
 
@@ -740,7 +789,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 $( self.selector ).dialog( "close" );
             })
             .append('<i></i>');
-        
+
         $header.append ( $closeButton );
 
         //$(self.selector + "select").on('change', filter);
@@ -784,7 +833,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 !names.subtitle.toLowerCase().contains(term) &&
                 !names.tags.toLowerCase().contains(term) &&
                 !config.layers[layer.id].id.toLowerCase().contains(term);
-            
+
             if ( filtered ) {
                 return false;
             }
@@ -794,7 +843,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     var runSearch = _.throttle( function() {
         var search = searchTerms();
 
-        $.each(config.layers, function(layerId, layer) {            
+        $.each(config.layers, function(layerId, layer) {
 
             var fproj = filterProjections(layer);
             var fterms = filterSearch(layer, search);
