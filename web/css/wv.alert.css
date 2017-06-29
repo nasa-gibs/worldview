@@ -27,7 +27,7 @@
     .wv-notify-modal h2 {
         text-transform: capitalize;
         font-size: 18px;
-        font-family: "Lucida Sans", "Arial", Sans-Serif;
+        font-family: 'Lucida Sans', 'Arial', Sans-Serif;
         font-weight: bold;
         color: #eee;
         padding: .75em 10px;
@@ -45,7 +45,7 @@
         color: #999;
     }
     .wv-notify-modal p {
-        font-family: "helvetica",sans-serif;
+        font-family: 'Helvetica', sans-serif;
         font-size: 16px;
         line-height: 22px;
         margin: 10px 10px;

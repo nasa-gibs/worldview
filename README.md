@@ -63,6 +63,7 @@ to serve the app locally.  If you prefer to use Apache, follow the directions in
 Prerequisites:
 - [Node.js](https://nodejs.org/)  
   - *Note to Ubuntu users:* After installing Node.js, ensure that it is available as `node` on the command line.  If not, [see here](https://github.com/nasa-gibs/worldview/issues/249#issuecomment-302172817) for more information.
+  - A later version of Node (>v6) is required and is not available on some distributions.  To make sure you have a later version, [visit the Node download page](https://nodejs.org/en/download/)
 - Windows users: .NET Framework 2.0 or Visual Studio 2005 or newer installed. Git Bash, mingw-w64 bash, or a similar shell must be used in order to run bash commands.
 - Python 2.7.x
 
@@ -116,6 +117,7 @@ You can end the session by pressing `control-C`
 * [Optional Features](doc/features.md)
 * [Development Notes](doc/developing.md)
 * [Configuration](doc/config.md)
+* [Testing](doc/testing.md)
 * [Third-Party Library Use](THIRD_PARTY.md)
 
 
