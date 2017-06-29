@@ -59,6 +59,7 @@ output_file = args[1]
 conf = {}
 file_count = 0
 for root, dirs, files in os.walk(input_dir):
+    dirs.sort()
     for file in sorted(files):
         try:
             if not file.endswith(".json"):

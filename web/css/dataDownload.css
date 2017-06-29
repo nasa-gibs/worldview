@@ -8,7 +8,7 @@
 }
 
 #wv-data-selection li {
-    font: 100 12px/12px "Lucida Sans",Monaco,Arial;
+    font: 100 12px/12px 'Lucida Sans', 'Monaco', Arial;
     margin-top: 3px;
     display: list-item;
     list-style-type: none;

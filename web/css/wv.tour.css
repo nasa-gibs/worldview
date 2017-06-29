@@ -26,7 +26,7 @@ body {
 
 .tour h3 {
     color: rgb(38, 43, 49);
-    font: 18px "Gill Sans", sans-serif;
+    font: 18px 'Gill Sans', sans-serif;
     font-weight: 400;
     text-decoration: none;
     margin-bottom: 1em;
@@ -91,7 +91,7 @@ p.splash span.highlight {
 }
 
 button.takeTour {
-    font: 400 12.8px/18px helvetica,sans-serif;
+    font: 400 12.8px/18px 'Helvetica', sans-serif;
     border:1px solid #d7dada;
     -webkit-border-radius: 6px;
     -moz-border-radius: 6px;
@@ -124,7 +124,7 @@ button.takeTour:hover {
 }
 
 button.skipTour {
-    font: 400 12.8px/18px helvetica,sans-serif;
+    font: 400 12.8px/18px 'Helvetica', sans-serif;
     border: 1px solid #d7dada;
     -webkit-border-radius: 6px;
     -moz-border-radius: 6px;
@@ -164,18 +164,18 @@ button.skipTour:hover {
 
 .tour p {
     color:rgb(38, 43, 49);
-    font: 100 12.8px/16px helvetica,sans-serif;
+    font: 100 12.8px/16px 'Helvetica', sans-serif;
 }
 .joyride-content-wrapper{
     padding-bottom:0px;
 }
 
 .joyride-prev-tip {
-    font: 100 12.8px/16px helvetica,sans-serif;
+    font: 100 12.8px/16px 'Helvetica', sans-serif;
 }
 
 .joyride-next-tip {
-    font: 100 12.8px/16px helvetica,sans-serif;
+    font: 100 12.8px/16px 'Helvetica', sans-serif;
 }
 
 .tour span.highlight {
@@ -268,7 +268,7 @@ button.done:hover {
 .tour li {
     margin-left: 1.5em;
     display: list-item;
-    font:100 12.8px/16px helvetica,sans-serif;
+    font:100 12.8px/16px 'Helvetica', sans-serif;
 }
 
 /* CSS-only modal
@@ -331,7 +331,7 @@ table.splash td.splash-info {
 p.wv-tour-page-count {
     text-align: right;
     margin-top: 7px;
-    font: 100 12.8px/16px helvetica,sans-serif;
+    font: 100 12.8px/16px 'Helvetica', sans-serif;
 }
 
 .wv-tour-visible-icon {
