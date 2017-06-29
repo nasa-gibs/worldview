@@ -193,21 +193,9 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
         checkZots($layer, layer);
 
-        if ( config.parameters.metadata && layer.metadata ) {
-            var $metadataButton = $("<i></i>")
-                .addClass("fa")
-                .addClass("fa-info-circle")
-                .addClass("fa-1x")
-                .addClass("wv-layers-metadata-button")
-                .click(function() {
-                    wv.layers.metadata(layer);
-                });
-            $layer.append($metadataButton);
-        }
-
         var names = models.layers.getTitles(layer.id);
 
-         var $removeButton = $("<a></a>")
+        var $removeButton = $("<a></a>")
             .attr("id", "close" + group.id + encodeURIComponent(layer.id))
             .addClass("button close bank-item-img")
             .attr("data-layer", layer.id)
@@ -217,6 +205,25 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
         $removeButton.append($removeImage);
 
+        var $infoButton = $("<a></a>")
+            .attr("data-layer", layer.id)
+            .attr("title", "Layer description for " + names.title)
+            .addClass("wv-layers-info");
+        if(!layer.description) {
+            $infoButton
+                .addClass("disabled")
+                .attr("title", "No layer description");
+        } else {
+            $infoButton.on('click', toggleInfoPanel);
+        }
+        if ( wv.util.browser.small ) {
+            $infoButton.hide();
+        }
+
+        var $infoIcon = $("<i></i>")
+        .addClass("fa fa-info wv-layers-info-icon");
+
+        $infoButton.append($infoIcon);
 
         var $editButton = $("<a></a>")
             .attr("data-layer", layer.id)
@@ -247,6 +254,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
                 .classed('data-bar-hovered',false);
         });
 
+        $mainLayerDiv.prepend($infoButton);
         $mainLayerDiv.prepend($editButton);
         $mainLayerDiv.prepend($removeButton);
         $layer.append($mainLayerDiv);
@@ -258,6 +266,33 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             $parent.prepend($layer);
         } else {
             $parent.append($layer);
+        }
+    };
+
+    var toggleInfoPanel = function(e) {
+        e.stopPropagation();
+        var $i = $("#wv-layers-info-dialog");
+        var thisLayerId = $(this).attr("data-layer");
+        var thisLayer = config.layers[thisLayerId];
+        var $layerMeta = $( '<div></div>' )
+            .addClass('layer-metadata');
+
+        var $layerMetaTitle = $( '<a>Layer Description</a>' )
+            .addClass('layer-metadata-title')
+            .on('click', function() {
+                $(this).next('.layer-metadata').toggleClass('overflow');
+            });
+
+        var $showMore = $('<div></div>')
+            .addClass('metadata-more');
+
+        if ( $i.length === 0 ) {
+            wv.layers.info(config, models, thisLayer);
+        } else if ( $i.attr("data-layer") !== thisLayerId ) {
+            wv.ui.closeDialog();
+            wv.layers.info(config, models, thisLayer);
+        } else {
+            wv.ui.closeDialog();
         }
     };
 
@@ -350,8 +385,11 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         // If on a mobile device, use the native scroll bars
         if ( !wv.util.browser.small ) {
             $(".wv-layers-options").show();
+            $(".wv-layers-info").show();
         } else {
             $(".wv-layers-options").hide();
+            $(".wv-layers-info").hide();
+            wv.ui.closeDialog();
         }
 
         sizeProducts();
@@ -454,7 +492,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         setTimeout(render, 1);
     };
     var onZoomChange = function(layers) {
-        
+
         _.each(groups, function(group) {
             _.each(model.get({ group: group.id }), function(layer) {
                 var $layer = $('#products li.productsitem[data-layer="' +

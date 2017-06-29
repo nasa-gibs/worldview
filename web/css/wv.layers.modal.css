@@ -400,12 +400,16 @@
     border-top: 2px solid #d54e21;
     margin-top:7px;
 }
+.layer-metadata {
+  margin-top: 0;
+}
 .source-metadata h1{
     color: #ddd;
     font-weight:bold;
     font-size: 14px;
     line-height: 14px;
     margin: 15px 0px 5px;
+    font-family: "Lucida Sans", "Arial", Sans-Serif;
 }
 .source-metadata h1:first-child{
     margin-top:0;
@@ -416,7 +420,6 @@
     margin-bottom: 5px;
 }
 #selected-category .ui-tabs-panel p {
-    font-style: italics;
     margin-bottom: 15px;
 }
 #selected-category .ui-tabs-panel p,
@@ -430,11 +433,13 @@
     overflow:hidden;
 }
 #selected-category .ui-tabs-panel .source-metadata p,
-#selected-category .ui-tabs-panel .source-metadata a{
+#selected-category .ui-tabs-panel .source-metadata a,
+.layer-metadata p,
+.layer-metadata a {
     font-family: open_sans_light;
     font-size: 13px;
     line-height:14px;
-
+    margin-bottom: 15px;
 }
 #selected-category .ui-tabs-panel .source-metadata.overflow{
     height:100px;

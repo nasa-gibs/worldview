@@ -33,11 +33,30 @@ wv.layers.model = wv.layers.model || function(models, config) {
 
     self.reset = function() {
         self.clear();
+        self.addDescriptions();
         if ( config.defaults && config.defaults.startingLayers ) {
             _.each(config.defaults.startingLayers, function(start) {
                 self.add(start.id, start);
             });
         }
+    };
+
+    self.addDescriptions = function() {
+        var thisSetting;
+        var description;
+        _.each(config.measurements, function( measurement, measurementKey ) {
+            _.each(measurement.sources, function( source, sourceKey ) {
+                _.each(source.settings, function( setting, settingKey ) {
+                    thisSetting = setting;
+                    description = source.description;
+                    _.each(config.layers, function (layer, layerKey) {
+                        if(layer.id == thisSetting) {
+                            layer.description = description || "";
+                        }
+                    });
+                });
+            });
+        });
     };
 
     self.get = function(spec) {
