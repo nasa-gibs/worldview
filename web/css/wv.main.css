@@ -17,7 +17,7 @@ html,body, div, ul, li, p, h1, h2, h3, h4, h5, h6 {
     display:block;
     margin:0;
     padding:0;
-    font: 100 13px/13px "Lucida Sans", "Arial", Sans-Serif;
+    font: 100 13px/13px 'Lucida Sans', 'Arial', sans-serif;
 }
 
 html, body {
@@ -94,7 +94,7 @@ div.horizontalContainer {
 #imgFileSize {color:#D99694;}
 
 #transition ul {
-    font: 10px "Gill Sans", sans-serif;
+    font: 10px 'Gill Sans', sans-serif;
     text-align: center;
 }
 

@@ -15,7 +15,7 @@
 .layer-modal p, .layer-modal div,
 .layer-modal h1, .layer-modal h2,
 .layer-modal h3, .layer-modal h4 {
-    font-family:open_sans_light;
+    font-family: open_sans_light;
     font-weight:300;
     color:#383838;
 }
@@ -251,7 +251,7 @@
 #category-breadcrumb{
     height:30px;
     line-height:30px;
-    font-family:open_sans_light;
+    font-family: open_sans_light;
     font-size:16px;
     color:#000;
     /*font-style:italic;*/
@@ -378,7 +378,7 @@
     -o-box-sizing: border-box;
     padding: 0.5em 0.5em;
     width:150px;
-    font-family:open_sans_light;
+    font-family: open_sans_light;
     font-size:13px;
     text-align:left;
     font-weight:300;

@@ -135,7 +135,7 @@
 .gif-results-dialog-case {
     text-transform: capitalize;
 }
-    .gif-results-dialog-case img, 
+    .gif-results-dialog-case img,
     .gif-results-dialog-case .gif-results-dialog {
         display: inline-block;
     }
@@ -145,7 +145,7 @@
         color: #444;
         vertical-align: top;
         margin-left: 10px;
-        -moz-border-radius: 6px; 
+        -moz-border-radius: 6px;
         border-radius: 6px;
         font-size: 12px;
         width: 162px;
@@ -227,7 +227,7 @@
 
 .input-range__label {
   color: #ffffff;
-  font-family: "Helvetica Neue", san-serif;
+  font-family: 'Helvetica Neue', san-serif;
   font-size: 0.9rem;
   white-space: nowrap; }
 
@@ -263,7 +263,7 @@
   top: 50%; }
 
 .input-range__track--active {
-/*  background: #3f51b5; 
+/*  background: #3f51b5;
 */
 }
 
