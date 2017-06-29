@@ -35,7 +35,7 @@ wv.layers.info = wv.layers.info || function(config, models, layer) {
             dialogClass: "wv-panel",
             title: names.title,
             show: { effect: "slide", direction: "left" },
-            width: 300,
+            width: 450,
             height: 300,
             position: {
                 my: "left top",
