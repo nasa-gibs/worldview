@@ -108,34 +108,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     $('#layer-modal-main').perfectScrollbar('update');
   };
 
-  var getSetting = function(measurement) {
-    var result = null;
-    if (measurement instanceof Array) {
-      for (var i = 0; i < measurement.length; i++) {
-        result = getSetting(measurement[i]);
-        if (result) {
-          break;
-        }
-      }
-    } else {
-      for (var prop in measurement) {
-        if (prop == 'settings') {
-          for (var x = 0; x < prop.length; x += 1) {
-            var setting = measurement[prop][x];
-            return setting;
-          }
-        }
-        if (measurement[prop]instanceof Object || measurement[prop]instanceof Array) {
-          result = getSetting(measurement[prop]);
-          if (result) {
-            break;
-          }
-        }
-      }
-    }
-    return result;
-  };
-
   // This draws the default page, depending on projection
   // and hides the breadcrumb, and sets the search back to normal
   // and updates the scrollbar.
@@ -198,18 +170,22 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         var sortNumber;
 
         // Check if categories have settings with the same projection.
-        var hasSetting;
-        _.each(category.measurements, function(measurement, index) {
-          var current = config.measurements[measurement];
-          var currentId = getSetting(current);
-          var layer = config.layers[currentId];
-
-          if (currentId == layer.id && Object.keys(layer.projections).indexOf(projection) > -1) {
-            hasSetting = true;
-          }
+        var categoryHasSetting;
+        _.each( category.measurements, function( measurement, index ) {
+            var projection = models.proj.selected.id;
+            var current = config.measurements[measurement];
+            _.each( current.sources, function( source, souceName ) {
+                _.each( source.settings, function( setting ) {
+                    var layer = config.layers[setting];
+                    var proj = layer.projections;
+                    if(layer.id == setting && Object.keys(proj).indexOf(projection) > -1) {
+                        categoryHasSetting = true;
+                    }
+                });
+            });
         });
 
-        if (hasSetting === true) {
+        if (categoryHasSetting === true) {
           if (category.placement) {
             if (category.placement === 'first') {
               sortNumber = 1;
@@ -239,17 +215,20 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
           var $measurements = $('<ul></ul>');
           $i = 0;
           _.each(category.measurements, function(measurement, index) {
+            var projection = models.proj.selected.id;
             var current = config.measurements[measurement];
-            var currentId = getSetting(current);
-            var layer = config.layers[currentId];
-
             // Check if measurements have settings with the same projection.
-            var hasSetting;
-            if (currentId == layer.id && Object.keys(layer.projections).indexOf(projection) > -1) {
-              hasSetting = true;
-            }
-
-            if (hasSetting === true) {
+            var measurementHasSetting;
+            _.each( current.sources, function( source, souceName ) {
+                _.each( source.settings, function( setting ) {
+                    var layer = config.layers[setting];
+                    var proj = layer.projections;
+                    if(layer.id == setting && Object.keys(proj).indexOf(projection) > -1) {
+                        measurementHasSetting = true;
+                    }
+                });
+            });
+            if(measurementHasSetting === true) {
               $i++;
 
               if ($i > 6) {
@@ -335,18 +314,22 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     var $categoryList = $('<div></div>').attr('id', category.id + '-list');
 
     //Begin Measurement Level
-    _.each(category.measurements, function(measurement, measurementName) {
-      var current = config.measurements[measurement];
-      var currentId = getSetting(current);
-      var layer = config.layers[currentId];
+    _.each( category.measurements, function( measurement, measurementName ) {
+        var current = config.measurements[measurement];
 
-      // Check if measurements have settings with the same projection.
-      var hasSetting;
-      if (currentId == layer.id && Object.keys(layer.projections).indexOf(projection) > -1) {
-        hasSetting = true;
-      }
+        // Check if measurements have settings with the same projection.
+        var measurementHasSetting;
+        _.each( current.sources, function( source, souceName ) {
+            _.each( source.settings, function( setting ) {
+                var layer = config.layers[setting];
+                var proj = layer.projections;
+                if(layer.id == setting && Object.keys(proj).indexOf(projection) > -1) {
+                    measurementHasSetting = true;
+                }
+            });
+        });
 
-      if (hasSetting === true) {
+      if (measurementHasSetting === true) {
         var $measurementHeader = $('<div></div>').attr('id', 'accordion-' + category.id + '-' + current.id);
 
         var $measurementTitle = $('<h3></h3>').text(current.title);
@@ -360,19 +343,19 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         $measurementContent.append($sourceTabs);
 
         //Begin source level
-        _.each(current.sources, function(source, souceName) {
+        _.each( current.sources, function( source, souceName ) {
 
-          // Check if sources have settings with the same projection.
-          var hasSetting;
-          _.each(source.settings, function(setting) {
-            var layer = config.layers[setting];
+            // Check if sources have settings with the same projection.
+            var sourceHasSetting;
+            _.each( source.settings, function( setting ) {
+                var layer = config.layers[setting];
+                var proj = layer.projections;
+                if(layer.id == setting && Object.keys(proj).indexOf(projection) > -1) {
+                    sourceHasSetting = true;
+                }
+            });
 
-            if (layer.id == setting && Object.keys(layer.projections).indexOf(projection) > -1) {
-              hasSetting = true;
-            }
-          });
-
-          if (hasSetting === true) {
+            if(sourceHasSetting === true) {
             var $sourceTab = $('<li></li>');
 
             var $sourceLink = $('<a></a>').text(source.title).attr('href', '#' + current.id + '-' + source.id);
@@ -553,25 +536,86 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         if (!current) {
           console.warn("In layer order but not defined", layerId);
         } else {
-          var $layerItem = $('<li></li>').attr('id', 'layer-flat-' + current.id).attr("data-layer", encodeURIComponent(current.id)).addClass('layers-all-layer').click(function(e) {
-            $(this).find('input#' + encodeURIComponent(current.id)).iCheck('toggle');
-          });
+          var $layerItem = $( '<li></li>' )
+              .attr('id', 'layer-flat-' + current.id )
+              .attr("data-layer", encodeURIComponent(current.id))
+              .addClass('layers-all-layer');
 
-          var $layerTitle = $('<h3></h3>').text(current.title);
 
-          var $layerSubtitle = $('<h5></h5>').append(current.subtitle);
+          var $layerHeader = $('<div></div>')
+            .addClass('layers-all-header')
+            .click(function(e) {
+              $(this).find('input#' + encodeURIComponent(current.id))
+              .iCheck('toggle');
+            });
 
-          var $checkbox = $("<input></input>").attr("id", encodeURIComponent(current.id)).attr("value", current.id).attr("type", "checkbox").attr("data-layer", current.id).on('ifChecked', addLayer).on('ifUnchecked', removeLayer);
+          var $layerTitleWrap = $( '<div></div>' )
+              .addClass('layers-all-title-wrap');
 
-          if (_.find(model.active, {id: current.id})) {
-            $checkbox.attr("checked", "checked");
+          var $layerTitle = $( '<h3></h3>' )
+              .text( current.title );
+
+          var $layerSubtitle = $('<h5></h5>')
+              .append( current.subtitle );
+
+          var $checkbox = $("<input></input>")
+              .attr("id", encodeURIComponent(current.id))
+              .attr("value", current.id)
+              .attr("type", "checkbox")
+              .attr("data-layer", current.id)
+              .on('ifChecked', addLayer)
+              .on('ifUnchecked', removeLayer);
+
+          if ( _.find(model.active, {id: current.id}) ) {
+              $checkbox.attr("checked", "checked");
           }
 
-          $layerItem.append($checkbox);
-          $layerItem.append($layerTitle);
-          $layerItem.append($layerSubtitle);
+          //Metadata
+          var $sourceMeta = $( '<div></div>' )
+              .addClass('source-metadata hidden');
 
-          $fullLayerList.append($layerItem);
+          var $showMore = $('<span></span>')
+              .addClass('fa fa-info-circle');
+
+          var $moreTab = $('<div></div>')
+              .addClass('metadata-more');
+
+          var $moreElps = $('<span></span>')
+              .addClass('ellipsis up')
+              .text('^');
+
+          $moreTab.append( $moreElps );
+
+          $showMore.add($moreTab).toggle( function(e){
+              $sourceMeta.toggleClass('hidden');
+              redoScrollbar();
+          }, function(e){
+              $sourceMeta.toggleClass('hidden');
+              redoScrollbar();
+          });
+
+          $layerItem.append( $layerHeader );
+          $layerHeader.append( $checkbox );
+          $layerHeader.append( $layerTitleWrap );
+          $layerTitleWrap.append( $layerTitle );
+          if( current.description ) {
+            $layerTitle.append( $showMore );
+          }
+          $layerTitleWrap.append( $layerSubtitle );
+
+          if( current.description ) {
+              $.get('config/metadata/' + current.description + '.html')
+                  .success(function(data) {
+                      $sourceMeta.html(data);
+                      $layerItem.append( $sourceMeta );
+                      $sourceMeta.append( $moreTab );
+                      $sourceMeta.find('a')
+                          .attr('target','_blank');
+                  }
+              );
+          }
+
+          $fullLayerList.append( $layerItem );
         }
       }
     });

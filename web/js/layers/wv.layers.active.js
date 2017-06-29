@@ -193,18 +193,6 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
         checkZots($layer, layer);
 
-        if ( config.parameters.metadata && layer.metadata ) {
-            var $metadataButton = $("<i></i>")
-                .addClass("fa")
-                .addClass("fa-info-circle")
-                .addClass("fa-1x")
-                .addClass("wv-layers-metadata-button")
-                .click(function() {
-                    wv.layers.metadata(layer);
-                });
-            $layer.append($metadataButton);
-        }
-
         var names = models.layers.getTitles(layer.id);
 
          var $removeButton = $("<a></a>")
@@ -454,7 +442,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         setTimeout(render, 1);
     };
     var onZoomChange = function(layers) {
-        
+
         _.each(groups, function(group) {
             _.each(model.get({ group: group.id }), function(layer) {
                 var $layer = $('#products li.productsitem[data-layer="' +
