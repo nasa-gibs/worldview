@@ -18,7 +18,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
   var id = "wv-link-button";
   var selector = "#" + id;
   var $button, $label;
-  var setLink, fbLink, twLink, rdLink, emailLink;
+  var fbLink, twLink, rdLink, emailLink;
   var widgetFactory = React.createFactory(WVC.Link);
 
   var init = function() {
@@ -71,6 +71,32 @@ wv.link.ui = wv.link.ui || function(models, config) {
     return "mailto:?" + "subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
   };
 
+  self.setLink = function(fbLink, twLink, rdLink, emailLink, callback) {
+    var promise = models.link.shorten();
+    var shareMessage = 'Check out what I found in NASA Worldview!';
+    var twMessage = 'Check out what I found in #NASAWorldview -';
+    var emailBody = shareMessage + " - " + models.link.get();
+
+    var fb = facebookUrlParams('121285908450463', models.link.get(), models.link.get(), 'popup');
+    var tw = twitterUrlParams(models.link.get(), twMessage);
+    var rd = redditUrlParams(models.link.get(), shareMessage);
+    var email = emailUrlParams(shareMessage, emailBody);
+
+    // If a short link can be generated, replace the full link.
+    promise.done(function(result) {
+      if (result.status_code === 200) {
+        emailBody = shareMessage + " - " + result.data.url;
+
+        tw = twitterUrlParams(result.data.url, twMessage);
+        email = emailUrlParams(shareMessage, emailBody);
+        return false;
+      }
+    }).fail(function() {
+      console.warn("Unable to shorten URL, full link generated.");
+    });
+    callback(fb, tw, rd, email);
+  };
+
   self.show = function() {
     var $dialog = wv.ui.getDialog();
     var dialogWidth = '300';
@@ -83,33 +109,8 @@ wv.link.ui = wv.link.ui || function(models, config) {
     // Render Dialog Box Content
     self.reactComponent = ReactDOM.render(Widget, $dialog[0]);
 
-    setLink = function(fbLink, twLink, rdLink, emailLink, callback) {
-      var promise = models.link.shorten();
-      var shareMessage = 'Check out what I found in NASA Worldview!';
-      var twMessage = 'Check out what I found in #NASAWorldview -';
-      var emailBody = shareMessage + " - " + models.link.get();
-
-      var fb = facebookUrlParams('121285908450463', models.link.get(), models.link.get(), 'popup');
-      var tw = twitterUrlParams(models.link.get(), twMessage);
-      var rd = redditUrlParams(models.link.get(), shareMessage);
-      var email = emailUrlParams(shareMessage, emailBody);
-
-      // If a short link can be generated, replace the full link.
-      promise.done(function(result) {
-        if (result.status_code === 200) {
-          emailBody = shareMessage + " - " + result.data.url;
-
-          tw = twitterUrlParams(result.data.url, twMessage);
-          email = emailUrlParams(shareMessage, emailBody);
-          return false;
-        }
-      }).fail(function() {
-        console.warn("Unable to shorten URL, full link generated.");
-      });
-      callback(fb, tw, rd, email);
-    };
-
-    setLink(fbLink, twLink, rdLink, emailLink, self.reactComponent.updateLinkState);
+    // Update react link states when dialog is shown.
+    self.setLink(fbLink, twLink, rdLink, emailLink, self.reactComponent.updateLinkState);
 
     // If selected during the animation, the cursor will go to the
     // end of the input box
@@ -190,12 +191,18 @@ wv.link.ui = wv.link.ui || function(models, config) {
     };
 
     $("#wv-link-shorten-check").prop("checked", false);
-
   };
 
+  // Update react link states when share buttons are clicked.
   self.clickFunction = function() {
-    setLink(fbLink, twLink, rdLink, emailLink, self.reactComponent.updateLinkState);
-    // run the setLink function in WV to update the state
+    self.setLink(fbLink, twLink, rdLink, emailLink, self.reactComponent.updateLinkState);
+    var replaceLink = function() {
+      $('#permalink_content').val(models.link.get());
+      $("#wv-link-shorten-check").iCheck("uncheck");
+      $('#permalink_content').focus();
+      $('#permalink_content').select();
+    };
+    setTimeout(replaceLink, 10);
   };
 
   self.initWidget = function() {
