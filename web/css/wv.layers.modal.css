@@ -410,7 +410,8 @@
     font-weight:bold;
     font-size: 14px;
     line-height: 14px;
-    margin: 15px 0 5px;
+    margin: 15px 0px 5px;
+    font-family: "Lucida Sans", "Arial", Sans-Serif;
 }
 .source-metadata h1:first-child{
     margin-top:0;
@@ -459,13 +460,19 @@
 #layers-all .source-metadata p,
 #layers-all .source-metadata a,
 #selected-category .ui-tabs-panel .source-metadata p,
-#selected-category .ui-tabs-panel .source-metadata a{
+#selected-category .ui-tabs-panel .source-metadata a,
+.layer-metadata p,
+.layer-metadata a {
     font-family: open_sans_light;
     font-size: 13px;
     line-height:14px;
+<<<<<<< HEAD
 }
 #layers-all .source-metadata p {
     color: #bbb;
+=======
+    margin-bottom: 15px;
+>>>>>>> f13706dd26f020e97241a69017dfc130ef59d6b4
 }
 #selected-category .ui-tabs-panel .source-metadata.overflow{
     height:100px;

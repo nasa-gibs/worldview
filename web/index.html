@@ -88,6 +88,7 @@
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.sidebar.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.layers.modal.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.layers.options.css">
+    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.layers.info.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.timeline.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.anim.widget.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.dateselector.css">
@@ -224,6 +225,7 @@
     <!-- link.dev --> <script type="text/javascript" src="js/layers/wv.layers.active.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/layers/wv.layers.modal.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/layers/wv.layers.options.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/layers/wv.layers.info.js"></script>
 
     <!-- link.dev --> <script type="text/javascript" src="js/image/wv.image.rubberband.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/image/wv.image.panel.js"></script>
@@ -266,16 +268,15 @@
 </head>
 
 <body>
-    </div>
     <div data-role="page" id="app">
         <div data-role="content">
 
-                <ul id="wv-toolbar">
-                    <li id="wv-link-button" class="wv-toolbar-button"></li>
-                    <li id="wv-proj-button" class="wv-toolbar-button"></li>
-                    <li id="wv-image-button" class="wv-toolbar-button"></li>
-                    <li id="wv-info-button" class="wv-toolbar-button"></li>
-                </ul>
+            <ul id="wv-toolbar">
+                <li id="wv-link-button" class="wv-toolbar-button"></li>
+                <li id="wv-proj-button" class="wv-toolbar-button"></li>
+                <li id="wv-image-button" class="wv-toolbar-button"></li>
+                <li id="wv-info-button" class="wv-toolbar-button"></li>
+            </ul>
 
             <div id="wv-logo"></div>
             <section id="productsHolder">
@@ -376,9 +377,7 @@
         </div>
     </div>
     <section id="layer-modal">
-      <header>
-
-      </header>
+      <header></header>
       <div id="layer-modal-main">
         <div id="layer-categories">
 
@@ -390,9 +389,7 @@
 
         </div>
       </div>
-      <footer>
-
-      </footer>
+      <footer></footer>
     </section>
     <div id="wv-tour-content"></div>
     <div id="wv-image-top" class="wv-image-coords"></div>
