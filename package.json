@@ -10,7 +10,8 @@
     },
     "scripts": {
         "test": "grunt test lint",
-        "start": "node ./bin/www"
+        "start": "node ./bin/www",
+        "preinstall": "node version-check.js"
     },
     "devDependencies": {
         "babel-polyfill": "6.16.0",
