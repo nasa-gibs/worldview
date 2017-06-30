@@ -405,6 +405,9 @@
     color: #ddd;
     padding-right: 1.2em;
 }
+.layer-metadata {
+  margin-top: 0;
+}
 .source-metadata h1{
     color: #ddd;
     font-weight:bold;
@@ -466,13 +469,11 @@
     font-family: open_sans_light;
     font-size: 13px;
     line-height:14px;
-<<<<<<< HEAD
-}
-#layers-all .source-metadata p {
-    color: #bbb;
-=======
     margin-bottom: 15px;
->>>>>>> f13706dd26f020e97241a69017dfc130ef59d6b4
+}
+#layers-all .source-metadata p,
+.layer-metadata p {
+    color: #bbb;
 }
 #selected-category .ui-tabs-panel .source-metadata.overflow{
     height:100px;
