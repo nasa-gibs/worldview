@@ -29,7 +29,7 @@ wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache, Par
      * @static
      *
      * @param {object} def - Layer Specs
-     * 
+     *
      * @param {object} options - Layer options
      *
      *
@@ -129,7 +129,7 @@ wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache, Par
      * @static
      *
      * @param {object} def - Layer Specs
-     * 
+     *
      * @param {object} options - Layer options
      *
      *
@@ -203,7 +203,7 @@ wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache, Par
      * @static
      *
      * @param {object} def - Layer Specs
-     * 
+     *
      * @param {object} options - Layer options
      *
      *
@@ -222,7 +222,7 @@ wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache, Par
 
         transparent = ( def.format === "image/png" );
         if(proj.id === "geographic") {
-            res = [0.28125, 0.140625, 0.0703125, 0.03515625, 0.017578125, 0.0087890625, 0.00439453125, 0.002197265625, 0.0010986328125, 0.00054931640625, 0.00027465820313];   
+            res = [0.28125, 0.140625, 0.0703125, 0.03515625, 0.017578125, 0.0087890625, 0.00439453125, 0.002197265625, 0.0010986328125, 0.00054931640625, 0.00027465820313];
         }
         if(day) {
             if(day === 1){
@@ -251,20 +251,24 @@ wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache, Par
             }
             extra = "?TIME=" + wv.util.toISOStringDate(date);
         }
+				var sourceOptions = {
+					url: source.url + extra,
+					wrapX: true,
+					style: 'default',
+					crossOrigin: "anonymous",
+					params: parameters,
+					tileGrid: new ol.tilegrid.TileGrid({
+							origin: start,
+							resolutions: res
+					})
+        };
+				if ( models.palettes.isActive(def.id) ) {
+            var lookup = models.palettes.getLookup(def.id);
+            sourceOptions.tileClass = ol.wv.LookupImageTile.factory(lookup);
+        }
         var layer = new ol.layer.Tile({
             extent: extent,
-            source: new ol.source.TileWMS({
-                url: source.url + extra,
-                wrapX: true,
-                style: 'default',
-                crossOrigin: "anonymous",
-                params: parameters,
-                tileGrid: new ol.tilegrid.TileGrid({
-                    origin: start,
-                    resolutions: res
-                })
-
-            })
+						source: new ol.source.TileWMS(sourceOptions),
         });
         return layer;
     };
