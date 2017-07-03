@@ -151,9 +151,9 @@ wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache, Par
         }
 		if ("undefined" === typeof def.matrixIds) {
 			matrixIds = [];
-	        _.each(matrixSet.resolutions, function(resolution, index) {
-	            matrixIds.push(index);
-	        });
+			_.each(matrixSet.resolutions, function(resolution, index) {
+				matrixIds.push(index);
+			});
 		}
 		else {
 			matrixIds = def.matrixIds;
