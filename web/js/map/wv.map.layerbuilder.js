@@ -149,19 +149,19 @@ wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache, Par
         if ( !matrixSet ) {
             throw new Error(def.id + ": Undefined matrix set: " + def.matrixSet);
         }
-				if ("undefined" === typeof def.matrixIds) {
-					matrixIds = [];
+		if ("undefined" === typeof def.matrixIds) {
+			matrixIds = [];
 	        _.each(matrixSet.resolutions, function(resolution, index) {
 	            matrixIds.push(index);
 	        });
-				}
-				else {
-					matrixIds = def.matrixIds;
-				}
+		}
+		else {
+			matrixIds = def.matrixIds;
+		}
 
         extra = "";
 
-				if(day) {
+		if(day) {
             if(day === 1){
                 extent = [-250, -90, -180, 90];
                 start = [-540,90];
@@ -170,16 +170,6 @@ wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache, Par
                 start = [180,90];
             }
         }
-
-				// FIXME: use maxExtent or similar instead
-				// FIXME again: this block is currently only caught with
-				// gpw-v4-population-count_2020 in order to adjust the origin
-				if ("undefined" !== typeof def.extent) {
-					extent = def.extent;
-					start = [-180.0, 166.2144661912999];
-
-					// for GIBS, the origin is [-180,90], extent is [-180, -90, 180, 90]
-				}
 
         if ( def.period === "daily" ) {
             date = options.date || models.date.selected;
