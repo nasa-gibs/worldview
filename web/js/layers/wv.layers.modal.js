@@ -38,7 +38,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     var sizeMultiplier;
     var searchBool;
 
-    //Visible Layers
+    // Visible Layers
     var visible = {};
 
     var init = function(){
@@ -46,13 +46,13 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             visible[layer.id] = true;
         });
         model.events
-        //FIXME: on "add" needs to be present without trying to add a product
+        // FIXME: on "add" needs to be present without trying to add a product
         // multiple times
             //.on("add", onLayerAdded)
             .on("remove", onLayerRemoved);
         models.proj.events.on("select", drawDefaultPage );
 
-        //Create tiles
+        // Create tiles
         render();
 
         $addBtn.click(function(e){
@@ -62,11 +62,11 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         $(window).resize(resize);
     };
 
-    //Create container for 'by interest' filters buttons
+    // Create container for 'by interest' filters buttons
     var $nav = $('<nav></nav>')
         .attr( 'id', 'categories-nav' );
 
-    //Create container for breadcrumb
+    // Create container for breadcrumb
     var $breadcrumb = $('<nav></nav>')
         .attr( 'id', 'category-breadcrumb' );
 
@@ -103,7 +103,8 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     var filterProjection = function(layer) {
         return config.layers[layer].projections[models.proj.selected.id];
     };
-    //This draws the default page, depending on projection
+
+    // This draws the default page, depending on projection
     // and hides the breadcrumb, and sets the search back to normal
     // and updates the scrollbar.
     var removeSearch = function(){
@@ -113,6 +114,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         $( '#layers-search-input' ).val('');
         $( '#layer-search label.search-icon' ).removeClass('search-on').off('click');
     };
+
     var drawDefaultPage = function( e ) {
         var projection = models.proj.selected.id;
 
@@ -130,6 +132,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         redoScrollbar();
 
     };
+
     var showDefaultPage = function( e ){
         var projection = models.proj.selected.id;
 
@@ -148,11 +151,13 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
         redoScrollbar();
     };
+
     var resize = function(){
         if( $( self.selector ).dialog( "isOpen" ) ) {
             redo();
         }
     };
+
     var drawMeasurements = function(category, selectedMeasurement, selectedIndex){
 
         $selectedCategory.empty();
@@ -161,7 +166,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         var $categoryList = $( '<div></div>' )
             .attr( 'id', category.id + '-list' );
 
-        //Begin Measurement Level
+        // Begin Measurement Level
         _.each( category.measurements, function( measurement, measurementName ) {
 
             var current = config.measurements[measurement];
@@ -181,7 +186,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
             $measurementContent.append( $sourceTabs );
 
-            //Begin source level
+            // Begin source level
             _.each( current.sources, function( source, souceName ) {
 
                 var $sourceTab = $( '<li></li>' );
@@ -196,7 +201,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 var $sourceContent = $( '<div></div>' )
                     .attr( 'id', current.id + '-' + source.id );
 
-                //Metadata
+                // Metadata
 
                 var $sourceMeta = $( '<div></div>' )
                     .addClass('source-metadata');
@@ -220,7 +225,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     redoScrollbar();
                 });
 
-                //Simple test to see if theres a link to some metadata
+                // Simple test to see if theres a link to some metadata
                 if( source.description ) {
                     $.get('config/metadata/' + source.description + '.html')
                         .success(function(data) {
@@ -229,7 +234,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
                             $sourceMeta.find('a')
                                 .attr('target','_blank');
-                            //More than a thousand chars add show more widget
+                            // More than a thousand chars add show more widget
                             if ( $sourceMeta.text().length > 1000 ) {
                                 $sourceMeta.addClass('overflow')
                                     .after($showMore);
@@ -274,7 +279,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     $wrapper.append( $setting )
                         .append( $label );
 
-                    //If this is an orbit track.... put it in the orbit track list
+                    // If this is an orbit track.... put it in the orbit track list
                     if(layer.title.indexOf("Orbital Track") !== -1){
                         var orbitTitle;
                         // The following complex if statement is a placeholder
@@ -313,12 +318,12 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     $sourceContent.append( $sourceOrbits );
                 }
 
-                //$sourceContent.append( $addButton, $removeButton );
+                // $sourceContent.append( $addButton, $removeButton );
                 $measurementContent.append( $sourceContent );
 
 
             });
-            //End source level
+            // End source level
             $measurementContent.tabs();
 
             $measurementHeader.append( $measurementTitle );
@@ -328,8 +333,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             $categoryList.append( $measurementContent );
 
         });
-        //End measurement level
-
+        // End measurement level
 
         $categoryList.accordion({
             collapsible: true,
@@ -346,7 +350,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
         $selectedCategory.append( $categoryList );
 
-        //Create breadcrumb crumbs
+        // Create breadcrumb crumbs
         var $homeCrumb = $( '<a></a>' )
             .text('Categories')
             .attr( 'alt', 'categories' )
@@ -358,7 +362,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         $selectedCategory.prepend( $breadcrumb );
         $('#layers-search-input').show();
 
-        //Switch navs
+        // Switch navs
         $categories.hide();
         $nav.hide();
         $allLayers.hide();
@@ -370,8 +374,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
     };
 
-    var drawAllLayers = function() {
-
+    var eachLayer = function() {
         $allLayers.empty();
         if( $categories.data('isotope') && models.proj.selected.id !== 'geographic' ) {
             $categories.isotope('destroy');
@@ -473,7 +476,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
         });
 
-
         $allLayers.append( $fullLayerList );
 
         $selectedCategory.hide();
@@ -483,13 +485,13 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
         $allLayers.iCheck( { checkboxClass: 'icheckbox_square-red' } );
 
-        //Create breadcrumb crumbs
+        // Create breadcrumb crumbs
         $breadcrumb.empty();
+    }
 
-
-        //If this is not the geographic projection, All layers are always drawn
-        // and filtered, so thats the default page. Dont show breadcrumb
-
+    // If this is not the geographic projection, All layers are always drawn
+    // and filtered, so thats the default page. Dont show breadcrumb
+    var checkSearch = function() {
         if( searchBool ) {
 
             var crumbText;
@@ -517,6 +519,11 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             $breadcrumb.show();
 
         }
+    }
+
+    var drawAllLayers = function() {
+        eachLayer();
+        checkSearch();
     };
 
     var cssName = function(name){
@@ -532,6 +539,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         }
         else return name;
     };
+
     var setCategoryOverflow = function(category, $measurements){
         var $dotContinueItem = $('<li></li>')
             .addClass('layer-category-item');
@@ -547,6 +555,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         $dotContinueItem.append( $dotContinueLink );
         $measurements.append( $dotContinueItem );
     };
+
     var drawCategories = function(){
 
         $categories.empty();
@@ -685,6 +694,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         $('label[for=button-filter-legacy]').addClass('nav-selected');
 
     };
+
     var addLayer = function(event) {
         event.stopPropagation();
         model.add( decodeURIComponent( $( this ).val() ) );
@@ -695,6 +705,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         event.stopPropagation();
         model.remove( decodeURIComponent( $( this ).val() ) );
     };
+
     var onLayerAdded = function(layer) {
         var $element = $( self.selector + " [data-layer='" +
                           wv.util.jqueryEscape(layer.id) + "']");
@@ -706,6 +717,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                           wv.util.jqueryEscape(layer.id) + "']");
         $element.iCheck("uncheck");
     };
+
     var unfocusInput = function(){
         if(!wv.util.browser.small){
             $('#layers-search-input').focus();
@@ -715,6 +727,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             $('#layer-modal-main').focus();
         }
     };
+
     var render = function(){
 
         setModalSize();
@@ -816,7 +829,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                $.inArray(layerId, config.aoi[aoi].overlays) < 0;
     };
 
-    //Similar name to another var above
+    // Similar name to another var above
     var filterProjections = function(layer) {
         return !layer.projections[models.proj.selected.id];
     };
@@ -840,6 +853,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         });
         return filtered;
     };
+
     var runSearch = _.throttle( function() {
         var search = searchTerms();
 
