@@ -128,6 +128,26 @@ To display a color palette legend, a *palette* object should exist with the foll
     }
 }
 ```
+## Adding Layers to Worldview and the Product Picker
+New layers in the Global Imagery Browse Services (GIBS) can be added to Worldview via the options repository using the following instructions.
+
+First, layers must be added to `config/wv.json/layers` and `config/wv.json/layerOrder.json`. Then they must be added to the `config/wv.json/measurements` and `config/wv.json/categories` folders so that they will be categorized in the Product Picker. Lastly, if the layers have descriptions these can be added in `config/metadata` and if they are available in the Common Metadata Repository (CMR), data download may be enabled for those layers.
+
+- Fetch GIBS GetCapabilities with `grunt fetch`. This gets the latest layer information and colormaps from GIBS.
+- Add new layer(s)
+  - Follow [New Layers](https://github.com/nasa-gibs/worldview/blob/master/doc/config.md#new-layers) above to create JSON file in `config/wv.json/layers`.
+- Add to Measurements
+  - Add to relevant measurement or create a new JSON file in `config/wv.json/measurements`.
+- Add to Categories
+  - Add to relevant category (legacy (a.k.a. hazards and disasters) and scientific) or create a new JSON file in the relevant category in `config/wv.json/categories`.
+- Add to Layer Order
+  - Add to `config/wv.json/layerOrder.json`.
+- Add layer to Image Download
+  - *Contact GIBS team to add layers to Image Download*
+- Add Layer descriptions/metadata, if it exists
+  - Create .md file in `config/metadata`. The *description* (i.e. layer description/metadata) identifier has to be added to the corresponding measurement JSON file.
+- Add Data Download for product, if it exists
+  - Refer to [Data Download](https://github.com/nasa-gibs/worldview/blob/master/doc/data_download.md) and create JSON file in `config/wv.json/products`. The *product* identifier has to be added to the corresponding layer JSON file.
 
 ## New Map Sources
 
@@ -138,8 +158,8 @@ Modify the JSON document, ``config/wv.json/sources.json``. There is a *sources* 
 For WMTS layers that cannot be configured with a GetCapabilities document, a *matrixSets* object must exist that contains an object for each matrix set, keyed by the matrix set identifier.
 
 - **id**: The identifier for this matrix set.
-- **maxResolution**: The maximum resolution of this of this matrix tile set as defined in the OpenLayers 2 documentation. This property might be deprecated in the future as it can be obtained from the *resolutions* property.
-- **resolutions**: Array of resolutions for each zoom level as defined in the OpenLayers 2 documentation.
+- **maxResolution**: The maximum resolution of this of this matrix tile set as defined in the [OpenLayers 2 documentation](http://dev.openlayers.org/docs/files/OpenLayers/Layer-js.html#OpenLayers.Layer.maxResolution). This property might be deprecated in the future as it can be obtained from the *resolutions* property.
+- **resolutions**: Array of resolutions for each zoom level as defined in the [OpenLayers 2 documentation](http://dev.openlayers.org/docs/files/OpenLayers/Layer-js.html#OpenLayers.Layer.maxResolution).
 - **tileSize**: Array of pixel dimensions for each tile. Example *[512, 512]*
 
 ### Full Example
