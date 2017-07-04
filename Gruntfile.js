@@ -326,6 +326,18 @@ module.exports = function(grunt) {
             }
         },
 
+        postcss: {
+            options: {
+                map: false,
+                processors: [
+                    require('autoprefixer')
+                ]
+            },
+            dist: {
+                src: 'web/css/*.css'
+            }
+        },
+
         cssmin: {
             // Minifiy the concatenated Worldview CSS file.
             wv_css: {
@@ -664,6 +676,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-markdown");
     grunt.loadNpmTasks("grunt-minjson");
     grunt.loadNpmTasks("grunt-mkdir");
+    grunt.loadNpmTasks('grunt-postcss');
     grunt.loadNpmTasks("grunt-text-replace");
     grunt.loadNpmTasks("grunt-rename");
     grunt.loadNpmTasks('grunt-nightwatch');
@@ -702,6 +715,7 @@ module.exports = function(grunt) {
         "exec:empty",
         "copy:release",
         "uglify",
+        "postcss",
         "cssmin",
         "replace:links",
         "lineremover",
