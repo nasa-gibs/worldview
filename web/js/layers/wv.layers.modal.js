@@ -29,8 +29,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     var $addBtn = $('#layers-add');
     var $header = $(self.selector + ' header');
     var $categories = $(' #layer-categories ');
-    //var $categoriesNav = $(' #categories-nav ');
-
     var $selectedCategory = $(self.selector + " #selected-category");
     var $allLayers = $(self.selector + " #layers-all");
     var gridItemWidth = 320; //with of grid item + spacing
@@ -181,7 +179,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     // If this is not the geographic projection, All layers are always drawn
     // and filtered, so thats the default page. Dont show breadcrumb
     var checkSearch = function() {
-        console.log(searchBool);
         if (searchBool) {
             var crumbText;
             if (models.proj.selected.id !== 'geographic') {
@@ -208,7 +205,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 .click(showDefaultPage);
 
             $breadcrumb.show();
-
         }
     };
 
@@ -245,11 +241,11 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     };
 
     /**
-     * var allLayers - Draw all layers within the current projection.
+     * var eachLayer - Draw all layers within the current projection.
      *
      * @return {type}  description
      */
-    var allLayers = function() {
+    var eachLayer = function() {
         $allLayers.empty();
         if ($categories.data('isotope') && models.proj.selected.id !== 'geographic') {
             $categories.isotope('destroy');
@@ -361,7 +357,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     * @return {type}
     */
     var drawAllLayers = function() {
-        allLayers();
+        eachLayer();
         $breadcrumb.empty();
         checkSearch();
 
@@ -371,126 +367,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         $allLayers.show();
         $allLayers.iCheck({
             checkboxClass: 'icheckbox_square-red'
-        });
-    };
-
-    /**
-     * var allMeasurements - Draws each of the current category's measurements
-     *
-     * @param  {type} categories Each of the projetion's categories
-     * @return {type}
-     */
-    var allMeasurements = function(categories) {
-        _.each(categories, function(metaCategory, metaCategoryName) {
-
-            _.each(categories[metaCategoryName], function(category, name) {
-                var sortNumber;
-
-                if (category.placement) {
-                    if (category.placement === 'first') {
-                        sortNumber = 1;
-                    } else if (category.placement === 'last') {
-                        sortNumber = 3;
-                    }
-                } else {
-                    sortNumber = 2;
-                }
-                var $category = $('<div></div>')
-                    .attr('data-sort', sortNumber)
-                    .addClass('layer-category layer-category-' + cssName(metaCategoryName))
-                    .attr('id', category.id);
-
-                if (category.image) {
-                    $category.css('background-image', 'url("images/wv.layers/categories/' + category.image + '")');
-                }
-
-                var $categoryOpaque = $('<div></div>')
-                    .addClass('category-background-cover');
-
-                $category.append($categoryOpaque);
-
-                var $categoryTitle = $('<h3></h3>');
-
-                var $categoryLink = $('<a></a>')
-                    .text(category.title)
-                    .attr('alt', category.title)
-                    .addClass('layer-category-name')
-                    .click(function(e) {
-                        drawMeasurements(category);
-                    });
-
-                $categoryTitle.append($categoryLink);
-                $categoryOpaque.append($categoryTitle);
-
-                var $measurements = $('<ul></ul>');
-
-                // Within each category window, link to the measurments
-                _.each(category.measurements, function(measurement, index) {
-                    var current = config.measurements[measurement];
-                    var $measurement = $('<a></a>')
-                        .attr('data-category', category.id)
-                        .attr('data-measurement', current.id)
-                        .attr('title', category.title + ' - ' + current.title)
-                        .text(current.title);
-
-                    // If there are more than 5 cateogories, add an ellipsis link
-                    if (index > 5) {
-                        setCategoryOverflow(category, $measurements);
-                    }
-
-                    // If the current category measurement isn't in the config's
-                    // measurement list, throw an error.
-                    if (config.measurements[measurement] === undefined) {
-                        throw new Error("Error: Measurement '" + measurement + "' stated in category '" + category.title + "' does not exist " + "in measurement list!");
-                    }
-
-                    $measurement.click(function(e) {
-                        drawMeasurements(category, current.id, index);
-                    });
-
-                    var $measurementItem = $('<li></li>')
-                        .addClass('layer-category-item');
-
-                    $measurementItem.append($measurement);
-
-                    $measurements.append($measurementItem);
-                });
-
-                $categoryOpaque.append($measurements);
-
-                $categories.append($category);
-
-            });
-
-            $categories.show();
-
-            var $filterButton = $('<input />')
-                .attr('type', 'radio')
-                .text(replaceIfScientific(metaCategoryName));
-
-            var $label = $('<label></label>')
-                .text(replaceIfScientific(metaCategoryName));
-
-            $filterButton.attr('id', 'button-filter-' + cssName(metaCategoryName))
-                .attr('data-filter', cssName(metaCategoryName))
-                .click(function(e) {
-                    $categories.isotope({
-                        filter: '.layer-category-' + cssName(metaCategoryName)
-                    });
-                    $nav.find('.ui-button')
-                        .removeClass('nav-selected');
-                    $("label[for=" + $(this)
-                            .attr("id") + "]")
-                        .addClass('nav-selected');
-                });
-
-            $label.attr('for', 'button-filter-' + cssName(metaCategoryName));
-
-            $nav.append($filterButton);
-            $nav.append($label);
-            //Create radiobuttons with filter buttons
-            $nav.buttonset();
-            $nav.show();
         });
     };
 
@@ -721,7 +597,139 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     };
 
     /**
-     * var drawCategories - Draws all the projection's categories
+     * var listCategories - Creates the category background images and list the
+     * measurements with an overflow if there are more than 6.
+     *
+     * @param  {type} metaCategoryName description
+     * @param  {type} category         description
+     * @param  {type} name             description
+     * @return {type}                  description
+     */
+    var listCategories = function(metaCategoryName, category, name) {
+        var sortNumber;
+
+        if (category.placement) {
+            if (category.placement === 'first') {
+                sortNumber = 1;
+            } else if (category.placement === 'last') {
+                sortNumber = 3;
+            }
+        } else {
+            sortNumber = 2;
+        }
+        var $category = $('<div></div>')
+            .attr('data-sort', sortNumber)
+            .addClass('layer-category layer-category-' + cssName(metaCategoryName))
+            .attr('id', category.id);
+
+        if (category.image) {
+            $category.css('background-image', 'url("images/wv.layers/categories/' + category.image + '")');
+        }
+
+        var $categoryOpaque = $('<div></div>')
+            .addClass('category-background-cover');
+
+        $category.append($categoryOpaque);
+
+        var $categoryTitle = $('<h3></h3>');
+
+        var $categoryLink = $('<a></a>')
+            .text(category.title)
+            .attr('alt', category.title)
+            .addClass('layer-category-name')
+            .click(function(e) {
+                drawMeasurements(category);
+            });
+
+        $categoryTitle.append($categoryLink);
+        $categoryOpaque.append($categoryTitle);
+
+        var $measurements = $('<ul></ul>');
+
+        // Within each category window, link to the measurments
+        _.each(category.measurements, function(measurement, index) {
+            var current = config.measurements[measurement];
+            var $measurement = $('<a></a>')
+                .attr('data-category', category.id)
+                .attr('data-measurement', current.id)
+                .attr('title', category.title + ' - ' + current.title)
+                .text(current.title);
+
+            // If there are more than 5 cateogories, add an ellipsis link
+            if (index > 5) {
+                setCategoryOverflow(category, $measurements);
+            }
+
+            // If the current category measurement isn't in the config's
+            // measurement list, throw an error.
+            if (config.measurements[measurement] === undefined) {
+                throw new Error("Error: Measurement '" + measurement + "' stated in category '" + category.title + "' does not exist " + "in measurement list!");
+            }
+
+            $measurement.click(function(e) {
+                drawMeasurements(category, current.id, index);
+            });
+
+            var $measurementItem = $('<li></li>')
+                .addClass('layer-category-item');
+
+            $measurementItem.append($measurement);
+
+            $measurements.append($measurementItem);
+        });
+
+        $categoryOpaque.append($measurements);
+
+        $categories.append($category);
+    };
+
+    /**
+     * var eachCategory - Draws each of the current category blocks
+     *
+     * @param  {type} categories Each of the projetion's categories
+     * @return {type}
+     */
+    var eachCategory = function(categories) {
+        _.each(categories, function(metaCategory, metaCategoryName) {
+
+            _.each(categories[metaCategoryName], function(category, name) {
+                listCategories(metaCategoryName, category, name);
+            });
+
+            $categories.show();
+
+            var $filterButton = $('<input />')
+                .attr('type', 'radio')
+                .text(replaceIfScientific(metaCategoryName));
+
+            var $label = $('<label></label>')
+                .text(replaceIfScientific(metaCategoryName));
+
+            $filterButton.attr('id', 'button-filter-' + cssName(metaCategoryName))
+                .attr('data-filter', cssName(metaCategoryName))
+                .click(function(e) {
+                    $categories.isotope({
+                        filter: '.layer-category-' + cssName(metaCategoryName)
+                    });
+                    $nav.find('.ui-button')
+                        .removeClass('nav-selected');
+                    $("label[for=" + $(this)
+                            .attr("id") + "]")
+                        .addClass('nav-selected');
+                });
+
+            $label.attr('for', 'button-filter-' + cssName(metaCategoryName));
+
+            $nav.append($filterButton);
+            $nav.append($label);
+            //Create radiobuttons with filter buttons
+            $nav.buttonset();
+            $nav.show();
+        });
+    };
+
+    /**
+     * var drawCategories - Create the main category modal window
      *
      * @return {type}
      */
@@ -734,8 +742,8 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
         $nav.empty();
 
-        // Draw eachMeasurement based on the config categories
-        allMeasurements(config.categories);
+        // Draw each cateforyMeasurement based on the config categories
+        eachCategory(config.categories);
 
         $categories.isotope({
             itemSelector: '.layer-category',
