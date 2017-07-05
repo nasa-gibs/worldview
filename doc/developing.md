@@ -72,6 +72,11 @@ tree to take effect:
 
     grunt brand
 
+### Edit Libraries and sync changes on save
+
+Make edits to node_modules that are [npm linked](https://docs.npmjs.com/cli/link) and have them relocate to the web directory automatically.
+
+    grunt watch
 
 ### Configuration
 

@@ -89,6 +89,8 @@ The ``config/wv.json/layerOrder.json`` file must be updated to include the new l
 - **noTransition**: For WMTS layers only, if set to *true*, the map will not display lower-resolution tiles while loading.
 - **transition**: For WMS layers only, if set to *true*, the map will display lower-resolution tiles while loading.
 - **product**: Identifier of the product to use when searching the Common Metadata Repository (CMR) to download data. See the [Data Download documentation](data_download.md) for more information.
+- **style**: For WMTS layers only, this sets the WMTS `style` parameter accordingly; defaults to `default` if not set.
+- **matrixIds**: For WMTS layers only, this is an array of labels used for the `TileMatrix` parameter at each zoom level; defaults to `[0, 1, 2, ...]` if not set.
 
 To display a color palette legend, a *palette* object should exist with the following properties:
 
@@ -128,6 +130,26 @@ To display a color palette legend, a *palette* object should exist with the foll
     }
 }
 ```
+## Adding Layers to Worldview and the Product Picker
+New layers in the Global Imagery Browse Services (GIBS) can be added to Worldview via the options repository using the following instructions.
+
+First, layers must be added to `config/wv.json/layers` and `config/wv.json/layerOrder.json`. Then they must be added to the `config/wv.json/measurements` and `config/wv.json/categories` folders so that they will be categorized in the Product Picker. Lastly, if the layers have descriptions these can be added in `config/metadata` and if they are available in the Common Metadata Repository (CMR), data download may be enabled for those layers.
+
+- Fetch GIBS GetCapabilities with `grunt fetch`. This gets the latest layer information and colormaps from GIBS.
+- Add new layer(s)
+  - Follow [New Layers](https://github.com/nasa-gibs/worldview/blob/master/doc/config.md#new-layers) above to create JSON file in `config/wv.json/layers`.
+- Add to Measurements
+  - Add to relevant measurement or create a new JSON file in `config/wv.json/measurements`.
+- Add to Categories
+  - Add to relevant category (legacy (a.k.a. hazards and disasters) and scientific) or create a new JSON file in the relevant category in `config/wv.json/categories`.
+- Add to Layer Order
+  - Add to `config/wv.json/layerOrder.json`.
+- Add layer to Image Download
+  - *Contact GIBS team to add layers to Image Download*
+- Add Layer descriptions/metadata, if it exists
+  - Create .md file in `config/metadata`. The *description* (i.e. layer description/metadata) identifier has to be added to the corresponding measurement JSON file.
+- Add Data Download for product, if it exists
+  - Refer to [Data Download](https://github.com/nasa-gibs/worldview/blob/master/doc/data_download.md) and create JSON file in `config/wv.json/products`. The *product* identifier has to be added to the corresponding layer JSON file.
 
 ## New Map Sources
 
