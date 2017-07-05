@@ -474,6 +474,11 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 _.each(source.settings, function(setting) {
                     var layer = config.layers[setting];
 
+                    if (typeof layer === 'undefined') {
+                      console.log("Warning: skipping undefined layer: ", setting);
+                      return;
+                    }
+
                     var $wrapper = $('<li></li>')
                         .attr('data-layer', encodeURIComponent(layer.id))
                         .attr('value', encodeURIComponent(layer.id))
