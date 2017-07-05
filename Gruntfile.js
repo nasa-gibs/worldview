@@ -135,6 +135,18 @@ module.exports = function(grunt) {
             }
         },
 
+        postcss: {
+            options: {
+                map: false,
+                processors: [
+                    require('autoprefixer')
+                ]
+            },
+            dist: {
+                src: 'web/css/*.css'
+            }
+        },
+
         concat: {
             // Combine all the Worldview JavaScript files into one file.
             js: {
@@ -323,18 +335,6 @@ module.exports = function(grunt) {
                 options: {
                     mode: true
                 }
-            }
-        },
-
-        postcss: {
-            options: {
-                map: false,
-                processors: [
-                    require('autoprefixer')
-                ]
-            },
-            dist: {
-                src: 'web/css/*.css'
             }
         },
 
