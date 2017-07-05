@@ -262,7 +262,7 @@ wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache, Par
 							resolutions: res
 					})
         };
-				if ( models.palettes.isActive(def.id) ) {
+		if ( models.palettes.isActive(def.id) ) {
             var lookup = models.palettes.getLookup(def.id);
             sourceOptions.tileClass = ol.wv.LookupImageTile.factory(lookup);
         }
