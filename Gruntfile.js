@@ -135,7 +135,7 @@ module.exports = function(grunt) {
             }
         },
 
-        postcss: {
+        autoprefix: {
             options: {
                 map: false,
                 processors: [
@@ -684,6 +684,7 @@ module.exports = function(grunt) {
 
     // Lets use "clean" as a target instead of the name of the task
     grunt.renameTask("clean", "remove");
+    grunt.renameTask("postcss", "autoprefix");
 
     grunt.registerTask("load_branding", "Load branding", function() {
         var brand = grunt.file.readJSON("build/options/brand.json");
@@ -715,7 +716,7 @@ module.exports = function(grunt) {
         "exec:empty",
         "copy:release",
         "uglify",
-        "postcss",
+        "autoprefix",
         "cssmin",
         "replace:links",
         "lineremover",
