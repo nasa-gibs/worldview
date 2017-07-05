@@ -121,7 +121,7 @@ $(function() {
         models.date     = wv.date.model(config, { initial: initialDate });
         models.map      = wv.map.model(models, config);
         models.link     = wv.link.model(config);
-        
+
         models.link
             .register(models.proj)
             .register(models.layers)
@@ -182,7 +182,7 @@ $(function() {
             ui.timeline.config = wv.date.timeline.config(models, config, ui);
             ui.timeline.input = wv.date.timeline.input(models, config, ui);
             if ( config.features.animation ) {
-                ui.anim = {}; 
+                ui.anim = {};
                 ui.anim.rangeselect = wv.anim.rangeselect(models, config, ui); // SETS STATE: NEEDS TO LOAD BEFORE ANIMATION WIDGET
                 ui.anim.widget = wv.anim.widget(models, config, ui);
                 ui.anim.gif = wv.anim.gif(models, config, ui);
@@ -192,7 +192,7 @@ $(function() {
             ui.dateLabel = wv.date.label(models);
         }
         if (config.startDate) {
-            if(!wv.util.browser.small) { // If mobile device, do not build timeline 
+            if(!wv.util.browser.small) { // If mobile device, do not build timeline
                 timelineInit();
             }
             ui.dateWheels = wv.date.wheels(models, config);
@@ -320,4 +320,3 @@ $(function() {
     wv.util.wrap(main)();
 
 });
-
