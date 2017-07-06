@@ -37,6 +37,8 @@ wv.layers.info = wv.layers.info || function(config, models, layer) {
             show: { effect: "slide", direction: "left" },
             width: 450,
             height: 300,
+            resizable: false,
+            draggable: false,
             position: {
                 my: "left top",
                 at: "right+5 top",
@@ -50,6 +52,7 @@ wv.layers.info = wv.layers.info || function(config, models, layer) {
             },
             close: dispose
         });
+        $("#wv-layers-info-dialog").perfectScrollbar();
     };
 
     var dispose = function() {
