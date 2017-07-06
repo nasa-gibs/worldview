@@ -21,7 +21,6 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
     var self = {};
     var mainNotification;
     var mainIcon;
-    var iconCase;
     var secondaryNotification;
     var sortedNotifications = {};
 
@@ -29,7 +28,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
     var activeMessageId;
     var url;
 
-    url = config.features.alert.url;
+    url = "https://status.earthdata.nasa.gov/api/v1/notifications?domain=https%3A%2F%2Fworldview.uat.earthdata.nasa.gov";
     self.events = wv.util.events();
     self.infoIconActive = false;
     self.notifyIconActive = false;
@@ -52,8 +51,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
      */
     var init = function() {
         var reactComponent, options, p, alertUser;
-        mainIcon = $('#wv-info-button i')[0];
-        iconCase = $('#wv-info-button')[0];
+        $mainIcon = $('#wv-info-button label');
         p = wv.util.get(url);
         p.then(function(response) {
             var obj, notifications, alert;
@@ -78,24 +76,115 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
      *
      * @returns {void}
      */
-    var setGlobals = function(sortedNotifications){
-        var message, outage, alert;
+    // var getPriority = function(sortedNotifications){
+    //     var messages, outages, alerts, count, alertsAndOutages,
+    //         alertCount, outageCount;
+        
+    //     alertsAndOutages = 0;
+    //     count = 0;
+
+    //     message = sortedNotifications.messages[0];
+    //     outage = sortedNotifications.outages[0];
+    //     alert = sortedNotifications.alerts[0];
+
+    //     if(messages.length && !objectAlreadySeen(message)) {
+    //         mainNotification = 'message';
+    //         activeMessageId = message.created_at;
+    //     } 
+    //     if(alerts.length && !objectAlreadySeen(alert)) {
+    //         mainNotification = 'alert';
+    //         activeNotifications.alert = alert.created_at;
+    //     }
+    //     if(outages.length && !objectAlreadySeen(outage)) {
+    //         mainNotification = 'outage';
+    //         activeNotifications.outage = outage.created_at;
+    //     }
+    // };
+    var getPriority = function() {
+        var priority;
+
+        priority = null;
         message = sortedNotifications.messages[0];
         outage = sortedNotifications.outages[0];
         alert = sortedNotifications.alerts[0];
 
         if(message && !objectAlreadySeen(message)) {
-            mainNotification = 'message';
-            activeMessageId = message.id;
+            priority = 'message';
+            activeMessageId = message.created_at;
         } 
         if(alert && !objectAlreadySeen(alert)) {
-            mainNotification = 'alert';
-            activeNotifications.alert = alert.id;
+            priority = 'alert';
+            activeNotifications.alert = alert.created_at;
         }
         if(outage && !objectAlreadySeen(outage)) {
-            mainNotification = 'outage';
-            activeNotifications.outage = outage.id;
+            priority = 'outage';
+            activeNotifications.outage = outage.created_at;
         }
+    };
+    var getCounts = function() {
+        var  alertCount, outageCount;
+        //
+        mainNotification = 'message';
+        activeMessageId = messages[0].created_at;
+        count =+ getNumberOfTypeNotseen('message', sortedNotifications.messages);
+
+        alertCount = getNumberOfTypeNotseen('alert', sortedNotifications.alerts); // Number of alerts not yet seen
+        count =+ alertCount;
+        alertsAndOutages =+ alertCount;
+
+        outageCount = getNumberOfTypeNotseen('alert', sortedNotifications.outages); // Number of alerts not yet seen
+        count =+ outageCount;
+        alertsAndOutages =+ outageCount;
+
+        return {messageCount:alertCount, alertCount:alertsAndOutages};
+    };
+    /**
+     * @return {void}
+     */
+    var update = function() {
+        var alerts, messages, counts, type;
+
+        counts = getCounts();
+        alertCount = counts.alertCount;
+        messageCount = counts.messageCount;
+
+        type = getPriority(); 
+
+        if(!priority) {
+            return;
+        }
+        updateMainIcon(type, alertCount + messageCount);
+        updateMessagesIcon(type, messageCount);
+        updateAlertsIcon(type, alertCount);
+    };
+
+    /*
+     * Determines the number of status of this type
+     * that the user is yet to see
+     *
+     * @function getNumberOfTypeNotseen
+     * @private
+     *
+     * @param {string} type - Status type
+     * @param {object} arra - array of status of one type
+     * 
+     * @returns {Number} count - number of unseen messages
+     *  in LocalStorage
+     */
+    var getNumberOfTypeNotseen = function(type, arra) {
+        var storageItem = wv.util.isInLocalStorage(type);
+        var count = 1;
+        if(!storageItem) {
+            return count;
+        }
+        for(var i = 0, len = arra.length; i < len; i++) {
+            if(storageItem <= arra[i].created_at) {
+                count++;
+            } else {
+                return count;
+            }
+        }
+        return count;
     };
 
     /*
@@ -179,13 +268,12 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
      *
      * @returns {void}
      */
-    var updateMainIcon = function() {
-        if(mainNotification) {
-            mainIcon.className = 'fa fa-2x fa-' + classes[mainNotification];
-            iconCase.className = 'wv-toolbar-button ' + classes[mainNotification];
+    var updateMainIcon = function(type, numberOfAlerts) {
+        mainIcon.setAttribute('data-content', numberOfAlerts);
+        if(type) {
+            mainIcon.className = 'wv-toolbar-button wv-status-' + type;
         } else {
-            mainIcon.className = 'fa fa-2x fa-info-circle';
-            iconCase.className = 'wv-toolbar-button';
+            mainIcon.className = 'wv-toolbar-button';
         }
     };
 
@@ -391,7 +479,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
      */
     var localStorageValueMatches = function(property, value) {
         var oldValue = localStorage.getItem(property);
-        return value <= oldValue;
+        return new Date(value) <= new Date(oldValue);
     };
 
     /*
