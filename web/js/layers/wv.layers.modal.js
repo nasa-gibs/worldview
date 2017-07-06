@@ -35,6 +35,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     var $allLayers = $(self.selector + " #layers-all");
     var gridItemWidth = 320; //with of grid item + spacing
     var projection = models.proj.selected.id;
+    var layerList = React.createFactory(WVC.LayerList);
     var modalHeight;
     var sizeMultiplier;
     var searchBool;
@@ -602,14 +603,23 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         });
     };
 
+    self.readySearch = function(){
+        return layerList({
+            onClick: function(){},
+            layerArray: config.layerOrder,
+            configFile: config
+        });
+    };
     // TODO: Filter layers by settings with projections equal to current projection.
     var drawAllLayers = function() {
+        var layerWidget;
 
         $allLayers.empty();
+        layerWidget = self.readySearch();
 
-        var $fullLayerList = $( '<ul></ul>' )
-            .attr( 'id', 'flat-layer-list' );
+        ReactDOM.render(layerWidget, $allLayers[0]);
 
+        /*
         _.each( config.layerOrder, function( layerId ) {
 
             var current = config.layers[layerId];
@@ -620,6 +630,14 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     console.warn("In layer order but not defined", layerId);
                 }
                 else {
+                    layerComponent = components({
+                        layerId: encodeURIComponent(current.id),
+                        onClick: function(e){console.log('test')},
+                        title: current.title,
+                        subtitle: current.subtitle
+                    });
+
+                    /*
                     var $layerItem = $( '<li></li>' )
                         .attr('id', 'layer-flat-' + current.id )
                         .attr("data-layer", encodeURIComponent(current.id))
@@ -645,6 +663,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
                     if ( _.find(model.active, {id: current.id}) ) {
                         $checkbox.attr("checked", "checked");
+
                     }
 
                     $layerItem.append( $checkbox );
@@ -656,15 +675,15 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             }
         });
 
+        */
 
-        $allLayers.append( $fullLayerList );
 
         $selectedCategory.hide();
         $categories.hide();
         $nav.hide();
         $allLayers.show();
 
-        $allLayers.iCheck( { checkboxClass: 'icheckbox_square-red' } );
+        //$allLayers.iCheck( { checkboxClass: 'icheckbox_square-red' } );
 
         // Create breadcrumb crumbs
         $breadcrumb.empty();
