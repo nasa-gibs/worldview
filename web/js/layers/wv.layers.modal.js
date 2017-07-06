@@ -855,20 +855,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             }
         });
 
-        $search.append( $searchBtn )
-            .append( $searchInput );
-
-        $header.append( $search );
-
-        var $closeButton = $('<div></div>')
-            .attr('id', 'layers-modal-close')
-            .click( function( e ) {
-                $( self.selector ).dialog( "close" );
-            })
-            .append('<i></i>');
-
-        $header.append ( $closeButton );
-
         //$(self.selector + "select").on('change', filter);
         $searchInput.keyup( filter );
 
