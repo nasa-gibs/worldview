@@ -67,6 +67,8 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
             show: { effect: "slide", direction: "left" },
             width: 300,
             height: "auto",
+            resizable: false,
+            draggable: false,
             position: {
                 my: "left top",
                 at: "right+5 top",
