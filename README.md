@@ -64,8 +64,27 @@ Prerequisites:
 - [Node.js](https://nodejs.org/)  
   - *Note to Ubuntu users:* After installing Node.js, ensure that it is available as `node` on the command line.  If not, [see here](https://github.com/nasa-gibs/worldview/issues/249#issuecomment-302172817) for more information.
   - A later version of Node (>v6) is required and is not available on some distributions.  To make sure you have a later version, [visit the Node download page](https://nodejs.org/en/download/)
-- Windows users: .NET Framework 2.0 or Visual Studio 2005 or newer installed. Git Bash, mingw-w64 bash, or a similar shell must be used in order to run bash commands.
-- Python 2.7.x
+- Windows users:
+  - Git Bash, mingw-w64 bash, or a similar shell must be used in order to run bash commands.
+  - .NET Framework 2.0 or Visual Studio 2005 or newer installed with Visual C++ compilers.  
+  It is HIGHLY recommended you install the Windows Build Tools npm package to ensure the correct compilers have been installed.  
+  To install this package:
+  ```
+  # run in administrator privileged command prompt window
+  npm install --global --production windows-build-tools
+  ```
+  - Python 2.7.x (included with Windows Build Tools)
+  - Python path added to Windows environmental variables (to use within cmd.exe and powershell)  
+  To add environmental variables:
+    - Right-click the Windows icon in bottom-left corner of the screen.
+    - Click System, click Advanced System Settings, click Environmental Variables.
+    - Highlight the Path row and click edit.
+    - Each path is seperated with a semicolon ";"
+    - Add your python directory path here.\*  
+   \*Windows Build Tools includes python, the included python path is:  
+   `%USERPROFILE%\.windows-build-tools\python27`  
+   Otherwise the path is most likely:
+   `C:\Python27`
 
 
 Clone this repository:
