@@ -4,10 +4,13 @@ import isodate
 def to_list(val):
     return [val] if not hasattr(val, 'reverse') else val
 
+# Add duration to end date using
+# ISO 8601 duration keys
 def determine_end_date(key, date):
-    # Add duration to end date
     return date + isodate.parse_duration(key)
 
+# This method takes a layer and a temporal
+# value and tranlates it to start and end dates
 def process_temporal(wv_layer, value):
     try:
         ranges = to_list(value)
