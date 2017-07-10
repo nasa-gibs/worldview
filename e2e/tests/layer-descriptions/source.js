@@ -13,6 +13,12 @@ module.exports = {
         // TODO: Change to explicitly click the Aerosol Optical Layers
         browser.click('#layer-categories #air-quality .layer-category-item:first-child').pause(500);
 
+        // In Aerosol Optical Depth measurement view, click "Terra/MODIS" source, check if visible &
+        // has a meta description.
+        browser.click('xpath', "//a[contains(@class, 'ui-tabs-anchor') and text()='Terra/MODIS']")
+        browser.expect.element('#aerosol-optical-depth-terra-modis').to.be.visible;
+        browser.expect.element('#aerosol-optical-depth-terra-modis .source-metadata').to.be.present;
+
       });
     });
     browser.end();
