@@ -4,9 +4,7 @@ module.exports = {
     browser.waitForElementVisible('#skipTour', 10000, function(el) {
       browser.click('#skipTour');
 
-      /*
-       * Check to see if 'Add Layers' Butto is present and click to open it
-       */
+      // Check to see if 'Add Layers' Button is present and click to open it
       browser.expect.element('#layers-add').to.be.present;
       browser.click('#layers-add').pause(500);
       browser.waitForElementVisible('#layers-search-input', 5000, function(el) {
@@ -15,15 +13,15 @@ module.exports = {
         browser.waitForElementVisible('#layer-flat-VIIRS_SNPP_CorrectedReflectance_TrueColor', 5000, function(el) {
           browser.expect.element('#layer-flat-VIIRS_SNPP_CorrectedReflectance_TrueColor').to.be.present;
 
-          // Click the description icon and check if css hidden class has been removed (to expose description).
+          // Click the info icon and check if css hidden class has been removed (to expose description).
           browser.click('#layer-flat-VIIRS_SNPP_CorrectedReflectance_TrueColor .fa-info-circle').pause(500);
           browser.assert.cssClassNotPresent('#layer-flat-VIIRS_SNPP_CorrectedReflectance_TrueColor .source-metadata', 'hidden');
 
-          // Click the description icon and check if css hidden class has been added (to hide description).
+          // Click the info icon and check if css hidden class has been added (to hide description).
           browser.click('#layer-flat-VIIRS_SNPP_CorrectedReflectance_TrueColor .fa-info-circle').pause(500);
           browser.assert.cssClassPresent('#layer-flat-VIIRS_SNPP_CorrectedReflectance_TrueColor .source-metadata', 'hidden');
 
-          // Click the description icon, check if no hidden class is present and element is visible.
+          // Click the info icon, check if no hidden class is present and element is visible.
           browser.click('#layer-flat-VIIRS_SNPP_CorrectedReflectance_TrueColor .fa-info-circle').pause(500);
           browser.assert.cssClassNotPresent('#layer-flat-VIIRS_SNPP_CorrectedReflectance_TrueColor .source-metadata', 'hidden');
           browser.expect.element('#layer-flat-VIIRS_SNPP_CorrectedReflectance_TrueColor .source-metadata').to.be.visible;

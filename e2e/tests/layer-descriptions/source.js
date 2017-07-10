@@ -4,9 +4,16 @@ module.exports = {
     browser.waitForElementVisible('#skipTour', 10000, function (el) {
       browser.click('#skipTour');
 
-      // Check the 'Add Layers' Categories / All / Aerosol Optical Depth / Terra/MODIS
-      // for the presence of a description box.
+      // Check to see if 'Add Layers' Button is present and click to open it
+      browser.expect.element('#layers-add').to.be.present;
+      browser.click('#layers-add').pause(500);
+      browser.waitForElementVisible('#layer-modal-main', 5000, function(el) {
 
+        // Click the first layer category under Air Quality category.
+        // TODO: Change to explicitly click the Aerosol Optical Layers
+        browser.click('#layer-categories #air-quality .layer-category-item:first-child').pause(500);
+
+      });
     });
     browser.end();
   }
