@@ -10,8 +10,13 @@
  */
 @font-face {
     font-family: open_sans_light;
-    src: local(open_sans_light), url('../font/OpenSans-Light.ttf') format('opentype');
+    src: local(open_sans_light), url('../font/OpenSans-Light.ttf') format('truetype');
     font-weight:300;
+}
+@font-face {
+    font-family: open_sans_regular;
+    src: local(open_sans_regulat), url('../font/OpenSans-Regular.ttf') format('truetype');
+    font-weight:400;
 }
 html,body, div, ul, li, p, h1, h2, h3, h4, h5, h6 {
     display:block;
