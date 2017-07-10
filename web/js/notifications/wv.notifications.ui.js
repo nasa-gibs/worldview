@@ -51,7 +51,8 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
      */
     var init = function() {
         var reactComponent, options, p, alertUser;
-        $mainIcon = $('#wv-info-button label');
+        mainIcon = $('#wv-info-button')[0];
+        mainIconLabel = $('#wv-info-button label')[0];
         p = wv.util.get(url);
         p.then(function(response) {
             var obj, notifications, alert;
@@ -59,8 +60,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
             obj = JSON.parse(response);
             notifications = obj.notifications;
             sortedNotifications = separateByType(notifications);
-            setGlobals(sortedNotifications);
-            updateMainIcon();
+            update(sortedNotifications);
         }, function(error) {
             console.warn(error);
         });
@@ -76,33 +76,8 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
      *
      * @returns {void}
      */
-    // var getPriority = function(sortedNotifications){
-    //     var messages, outages, alerts, count, alertsAndOutages,
-    //         alertCount, outageCount;
-        
-    //     alertsAndOutages = 0;
-    //     count = 0;
-
-    //     message = sortedNotifications.messages[0];
-    //     outage = sortedNotifications.outages[0];
-    //     alert = sortedNotifications.alerts[0];
-
-    //     if(messages.length && !objectAlreadySeen(message)) {
-    //         mainNotification = 'message';
-    //         activeMessageId = message.created_at;
-    //     } 
-    //     if(alerts.length && !objectAlreadySeen(alert)) {
-    //         mainNotification = 'alert';
-    //         activeNotifications.alert = alert.created_at;
-    //     }
-    //     if(outages.length && !objectAlreadySeen(outage)) {
-    //         mainNotification = 'outage';
-    //         activeNotifications.outage = outage.created_at;
-    //     }
-    // };
-    var getPriority = function() {
+    var getPriority = function(sortedNotifications) {
         var priority;
-
         priority = null;
         message = sortedNotifications.messages[0];
         outage = sortedNotifications.outages[0];
@@ -110,52 +85,43 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
 
         if(message && !objectAlreadySeen(message)) {
             priority = 'message';
+            mainNotification = 'message';
             activeMessageId = message.created_at;
         } 
         if(alert && !objectAlreadySeen(alert)) {
             priority = 'alert';
+            mainNotification = 'alert';
             activeNotifications.alert = alert.created_at;
         }
         if(outage && !objectAlreadySeen(outage)) {
             priority = 'outage';
+            mainNotification = 'outage';
             activeNotifications.outage = outage.created_at;
         }
+        return priority;
     };
     var getCounts = function() {
-        var  alertCount, outageCount;
-        //
-        mainNotification = 'message';
-        activeMessageId = messages[0].created_at;
-        count =+ getNumberOfTypeNotseen('message', sortedNotifications.messages);
+        var outageCount, messageCount, alertsAndOutages;
 
-        alertCount = getNumberOfTypeNotseen('alert', sortedNotifications.alerts); // Number of alerts not yet seen
-        count =+ alertCount;
-        alertsAndOutages =+ alertCount;
+        messageCount = getNumberOfTypeNotseen('message', sortedNotifications.messages);
 
-        outageCount = getNumberOfTypeNotseen('alert', sortedNotifications.outages); // Number of alerts not yet seen
-        count =+ outageCount;
-        alertsAndOutages =+ outageCount;
+        alertsAndOutages = getNumberOfTypeNotseen('alert', sortedNotifications.alerts); // Number of alerts not yet seen
+        outageCount = getNumberOfTypeNotseen('outage', sortedNotifications.outages); // Number of outages not yet seen
 
-        return {messageCount:alertCount, alertCount:alertsAndOutages};
+        alertsAndOutages = alertsAndOutages + outageCount;
+
+        return {messageCount:messageCount, alertCount:alertsAndOutages};
     };
     /**
      * @return {void}
      */
     var update = function() {
-        var alerts, messages, counts, type;
-
+        var alertCount, messageCount, counts, priority;
         counts = getCounts();
         alertCount = counts.alertCount;
         messageCount = counts.messageCount;
-
-        type = getPriority(); 
-
-        if(!priority) {
-            return;
-        }
-        updateMainIcon(type, alertCount + messageCount);
-        updateMessagesIcon(type, messageCount);
-        updateAlertsIcon(type, alertCount);
+        priority = getPriority(sortedNotifications); 
+        updateMainIcon(priority, alertCount + messageCount);
     };
 
     /*
@@ -173,12 +139,15 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
      */
     var getNumberOfTypeNotseen = function(type, arra) {
         var storageItem = wv.util.isInLocalStorage(type);
-        var count = 1;
+        var count, len;
+
+        len = arra.length;
+        count = 0;
         if(!storageItem) {
-            return count;
+            return len;
         }
-        for(var i = 0, len = arra.length; i < len; i++) {
-            if(storageItem <= arra[i].created_at) {
+        for(var i = 0; i < len; i++) {
+            if(new Date(storageItem) < new Date(arra[i].created_at)) {
                 count++;
             } else {
                 return count;
@@ -269,14 +238,13 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
      * @returns {void}
      */
     var updateMainIcon = function(type, numberOfAlerts) {
-        mainIcon.setAttribute('data-content', numberOfAlerts);
+        mainIconLabel.setAttribute('data-content', numberOfAlerts);
         if(type) {
             mainIcon.className = 'wv-toolbar-button wv-status-' + type;
         } else {
-            mainIcon.className = 'wv-toolbar-button';
+            mainIcon.className = 'wv-toolbar-button wv-status-hide';
         }
     };
-
     /*
      * Creates a message menu item and attaches
      *  event listeners to the element
@@ -287,21 +255,22 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
      * @returns {object} a jquery element
      */
     self.getMessages = function() {
-        var $message;
-        if(!sortedNotifications.messages) {
+        var $message, messageNumber, messages;
+
+        messages = sortedNotifications.messages;
+        if(!messages[0]) {
             return null;
         }
         if(activeMessageId) {
-            $message = $("<li class='gift'><a><i class='ui-icon fa fa-fw fa-gift active'></i>What's New</a></li>");
+            messageNumber = getNumberOfTypeNotseen('message', messages);
+            $message = $("<li class='gift'><a data-content='" + messageNumber + "'><i class='ui-icon fa fa-fw fa-gift active'></i>What's New</a></li>");
             $message.on('click', deactivateMessage);
             self.messageIconActive = true;
             return $message;
-        } else if(sortedNotifications.messages[0])  {
+        } else {
             $message = $("<li><a><i class='ui-icon fa fa-fw fa-gift'></i>What's New</a></li>");
             $message.on('click', deactivateMessage);
             return $message;
-        } else{
-            return null;
         }
     };
 
@@ -315,15 +284,20 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
      * @returns {object} a jquery element
      */
     self.getAlert = function() {
-        var $notifyMenuItem;
+        var $notifyMenuItem, alertsNumber, outageNumber, count;
+
         if(!_.isEmpty(activeNotifications)) {
-            $notifyMenuItem = $("<li class='" + classes[mainNotification] + "'><a><i class='ui-icon fa fa-fw active fa-" + classes[mainNotification] + "'></i>Notifications</a></li>");
+            alertsNumber = getNumberOfTypeNotseen('alert', sortedNotifications.alerts);
+            outageNumber = getNumberOfTypeNotseen('outage', sortedNotifications.outages);
+            count = outageNumber + alertsNumber;
+
+            $notifyMenuItem = $("<li class='" + classes[mainNotification] + "'><a data-content='" + count + "'><i class='ui-icon fa fa-fw active fa-" + classes[mainNotification] + "'></i>Notifications</a></li>");
             self.infoIconActive = true;
             self.notifyIconActive = true;
 
             $notifyMenuItem.on('click', notify);
             return $notifyMenuItem;
-        } else if(!_.isEmpty(sortedNotifications.alerts) || !_.isEmpty(sortedNotifications.outages)) {
+        } else if(sortedNotifications.alerts[0] || sortedNotifications.outages[0]) {
             $notifyMenuItem = $("<li><a><i class='ui-icon fa fa-fw fa-bolt'></i>Notifications</a></li>");
             $notifyMenuItem.on('click', notify);
             return $notifyMenuItem;
@@ -356,7 +330,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
         if(mainNotification === 'message') {
             mainNotification = null;
         }
-        updateMainIcon();
+        update();
     };
 
     /*
@@ -385,7 +359,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
         if(self.messageIconActive) {
             mainNotification = 'message';
         }
-        updateMainIcon();
+        update();
     };
 
     /*
