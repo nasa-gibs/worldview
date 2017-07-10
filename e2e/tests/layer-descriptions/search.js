@@ -6,7 +6,15 @@ module.exports = {
         browser.waitForElementVisible('#skipTour', 10000, function (el) {
             browser.click('#skipTour');
 
-            // Check the 'Add Layers' search layer for a description
+            /*
+             * Check to see if 'Add Layers' Butto is present and click
+             */
+            browser.expect.element('#layers-add').to.be.present;
+            browser.click('#layers-add').pause(1000);
+            // Corrected Reflectance (True Color) should have descrition
+            browser.setValue('#layers-search-input', 'Corrected Reflectance (True Color)').pause(5000);
+            browser.expect.element('#layer-flat-VIIRS_SNPP_CorrectedReflectance_TrueColor').to.be.present;
+            browser.click('#layer-flat-VIIRS_SNPP_CorrectedReflectance_TrueColor .fa-info-circle').pause(1000);
 
         });
         browser.end();
