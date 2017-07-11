@@ -15,9 +15,9 @@
 .layer-modal p, .layer-modal div,
 .layer-modal h1, .layer-modal h2,
 .layer-modal h3, .layer-modal h4 {
-    font-family: open_sans_light, Arial, sans-serif;
-    font-weight:300;
-    color:#383838;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    color: #383838;
 }
 
 .layer-modal .ui-dialog-titlebar{
@@ -82,7 +82,8 @@
     height: 40px;
     line-height:40px;
     font-size: 28px;
-    font-family: open_sans_light, Arial, sans-serif;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
     padding:0 10px;
     position:absolute;
     left:35px;
@@ -251,7 +252,8 @@
 #category-breadcrumb{
     height:30px;
     line-height:30px;
-    font-family: open_sans_light, Arial, sans-serif;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
     font-size:16px;
     color:#000;
     /*font-style:italic;*/
@@ -378,7 +380,7 @@
     -o-box-sizing: border-box;
     padding: 0.5em 0.5em;
     width:150px;
-    font-family: open_sans_light, Arial, sans-serif;
+    font-family: 'Open Sans', sans-serif;
     font-size:13px;
     text-align:left;
     font-weight:300;
@@ -452,8 +454,8 @@
 #selected-category .ui-tabs-panel p,
 #selected-category .ui-tabs-panel span {
     font-size: 11px;
-    font-family: open_sans_regular, Arial, sans-serif;
-    font-weight: 300;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
     color: #bbb;
 }
 #selected-category .ui-tabs-panel .source-metadata{
@@ -466,14 +468,17 @@
 #selected-category .ui-tabs-panel .source-metadata a,
 .layer-metadata p,
 .layer-metadata a {
-    font-family: open_sans_regular, Arial, sans-serif;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
     font-size: 13px;
     line-height:14px;
     margin-bottom: 15px;
 }
-#layers-all .source-metadata p,
+#layers-all .source-metadata p {
+  color: #bbb;
+}
 .layer-metadata p {
-    color: #eee;
+    color: #ccc;
 }
 #selected-category .ui-tabs-panel .source-metadata.overflow{
     height:100px;
