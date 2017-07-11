@@ -2,7 +2,6 @@
     background: transparent;
     border: 1px solid transparent;
     vertical-align:middle;
-    -moz-box-sizing:border-box;
     box-sizing:border-box;
     -webkit-box-sizing:border-box;
 }
@@ -28,6 +27,9 @@
     padding:0;
 }
 @media all{
+    .wv-date-selector-widget input::-moz-selection{
+
+    }
     .wv-date-selector-widget input::selection{
 
     }
@@ -103,11 +105,10 @@
 
 }
 .wv-date-selector-widget .date-arrow-down{
-    -moz-transform: scaleY(-1);
-    -o-transform: scaleY(-1);
     -webkit-transform: scaleY(-1);
     transform: scaleY(-1);
-    filter: FlipV;
+    -webkit-filter: FlipV;
+            filter: FlipV;
     -ms-filter: "FlipV";
 }
 .wv-date-selector-widget>.button-action-group:hover,.wv-date-selector-widget .date-arrows:hover{
@@ -126,13 +127,12 @@
     margin-left: -12px;
 }
 .wv-date-selector-widget #left-arrow-group{
-     -moz-transform: scaleX(-1);
-    -o-transform: scaleX(-1);
     -webkit-transform: scaleX(-1);
     transform: scaleX(-1);
 }
 .wv-date-selector-widget #left-arrow-group svg{
-    filter: FlipH;
+    -webkit-filter: FlipH;
+            filter: FlipH;
     -ms-filter: "FlipH";
 }
 .wv-date-selector-widget>.button-action-group:hover .arrow{

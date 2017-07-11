@@ -145,7 +145,6 @@
         color: #444;
         vertical-align: top;
         margin-left: 10px;
-        -moz-border-radius: 6px;
         border-radius: 6px;
         font-size: 12px;
         width: 162px;
@@ -208,21 +207,27 @@
   position: absolute;
   top: 50%;
   transition: -webkit-transform 0.3s ease-out, box-shadow 0.3s ease-out;
+  -webkit-transition: -webkit-transform 0.3s ease-out, -webkit-box-shadow 0.3s ease-out;
+  transition: -webkit-transform 0.3s ease-out, -webkit-box-shadow 0.3s ease-out;
   transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+  transition: transform 0.3s ease-out, box-shadow 0.3s ease-out, -webkit-transform 0.3s ease-out, -webkit-box-shadow 0.3s ease-out;
   width: 1rem; }
   .input-range__slider:active {
     -webkit-transform: scale(1.3);
             transform: scale(1.3); }
   .input-range__slider:focus {
-    box-shadow: 0 0 0 5px rgba(63, 81, 181, 0.2); }
+    -webkit-box-shadow: 0 0 0 5px rgba(63, 81, 181, 0.2);
+            box-shadow: 0 0 0 5px rgba(63, 81, 181, 0.2); }
   .InputRange.is-disabled .input-range__slider {
     background: #cccccc;
     border: 1px solid #cccccc;
-    box-shadow: none;
+    -webkit-box-shadow: none;
+            box-shadow: none;
     -webkit-transform: none;
             transform: none; }
 
 .input-range__slider-container {
+  -webkit-transition: left 0.3s ease-out;
   transition: left 0.3s ease-out; }
 
 .input-range__label {
@@ -251,6 +256,7 @@
   display: block;
   height: 0.2rem;
   position: relative;
+  -webkit-transition: left 0.3s ease-out, width 0.3s ease-out;
   transition: left 0.3s ease-out, width 0.3s ease-out; }
   .InputRange.is-disabled .input-range__track {
     background: #eeeeee; }

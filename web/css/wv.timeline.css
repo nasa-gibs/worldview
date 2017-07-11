@@ -26,7 +26,9 @@
     line-height:125%;
     letter-spacing:0px;
     word-spacing:0px;
-    writing-mode:lr-tb;
+    -webkit-writing-mode:lr-tb;
+        -ms-writing-mode:lr-tb;
+            writing-mode:lr-tb;
     text-anchor:start;
     fill-opacity:1;
     stroke:none;
@@ -130,7 +132,6 @@ g.plot rect.data-bar-invisible{
     background: transparent;
     border: 1px solid transparent;
     vertical-align:middle;
-    -moz-box-sizing:border-box;
     box-sizing:border-box;
     -webkit-box-sizing:border-box;
 }
@@ -157,6 +158,9 @@ g.plot rect.data-bar-invisible{
     padding:0;
 }
 @media all{
+    #timeline-header input::-moz-selection{
+
+    }
     #timeline-header input::selection{
 
     }
@@ -232,11 +236,10 @@ g.plot rect.data-bar-invisible{
 
 }
 #timeline-header .date-arrow-down{
-    -moz-transform: scaleY(-1);
-    -o-transform: scaleY(-1);
     -webkit-transform: scaleY(-1);
     transform: scaleY(-1);
-    filter: FlipV;
+    -webkit-filter: FlipV;
+            filter: FlipV;
     -ms-filter: "FlipV";
 }
 #timeline-header>.button-action-group:hover,#timeline-header .date-arrows:hover{
@@ -255,13 +258,12 @@ g.plot rect.data-bar-invisible{
     margin-left: -12px;
 }
 #timeline-header #left-arrow-group{
-     -moz-transform: scaleX(-1);
-    -o-transform: scaleX(-1);
     -webkit-transform: scaleX(-1);
     transform: scaleX(-1);
 }
 #timeline-header #left-arrow-group svg{
-    filter: FlipH;
+    -webkit-filter: FlipH;
+            filter: FlipH;
     -ms-filter: "FlipH";
 }
 #timeline-header>.button-action-group:hover .arrow{
@@ -382,7 +384,8 @@ g.plot rect.data-bar-invisible{
 
 #guitarpick{
     cursor:pointer;
-    clip-path:url(#guitarpick-boundary);
+    -webkit-clip-path:url(#guitarpick-boundary);
+            clip-path:url(#guitarpick-boundary);
 }
 #guitarpick path{
     fill:#cccccc;

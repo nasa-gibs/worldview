@@ -75,7 +75,6 @@
 #layer-search input {
     background: none;
     border: 0;
-    -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     -o-box-sizing: border-box;
     box-sizing: border-box;
@@ -513,8 +512,6 @@
     -moz-border-radius:0;
     -o-border-radius:0;
     -webkit-transition: none;
-    -moz-transition: none;
-    -o-transition: none;
     transition: none;
     opacity:1;
 }

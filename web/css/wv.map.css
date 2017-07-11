@@ -186,7 +186,8 @@ and (orientation : landscape) {
     margin-left:5px;
     cursor:pointer;
     padding:1px;
-    box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+            box-sizing:border-box;
 }
 .wv-coords-map div.coord-btn:hover{
     background-image:none;
