@@ -14,17 +14,6 @@ a.accordionToggler {
     width: 30px;
     background: none no-repeat scroll left;
 }
-a.arrow {
-    float:right;
-    border-radius: 0 10px 10px 0;
-    -moz-border-radius: 0 10px 10px 0;
-    -webkit-border-radius: 0 10px 10px 0;
-    text-decoration:none;
-    color:#fff;
-    position:relative;
-    letter-spacing:2px;
-    font-family: 'Gill Sans', 'Helvetica', sans-serif;
-}
 a.staticLayers {
   float:left;
   left:10px;
