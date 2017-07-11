@@ -8,44 +8,12 @@
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
-@font-face {
-    font-family: 'Open Sans';
-    font-style: normal;
-    font-weight: 300;
-    src: url('../font/OpenSans/Light/OpenSans-Light.eot'); /* IE9 Compat Modes */
-    src: local('Open Sans Light'), local('OpenSans-Light'),
-         url('../font/OpenSans/Light/OpenSans-Light.eot?#iefix') format('embedded-opentype'), /* IE Compat Modes */
-         url('../font/OpenSans/Light/OpenSans-Light.woff2') format('woff2'), /* Super Modern Browsers */
-         url('../font/OpenSans/Light/OpenSans-Light.woff') format('woff'), /* Pretty Modern Browsers */
-         url('../font/OpenSans/Light/OpenSans-Light.ttf') format('truetype'); /* Safari, Android, iOS */
-}
-@font-face {
-    font-family: 'Open Sans';
-    font-style: normal;
-    font-weight: 400;
-    src: url('../font/OpenSans/Light/OpenSans-Regular.eot'); /* IE9 Compat Modes */
-    src: local('Open Sans Regular'), local('OpenSans-Regular'),
-         url('../font/OpenSans/Light/OpenSans-Regular.eot?#iefix') format('embedded-opentype'), /* IE Compat Modes */
-         url('../font/OpenSans/Regular/OpenSans-Regular.woff2') format('woff2'), /* Super Modern Browsers */
-         url('../font/OpenSans/Regular/OpenSans-Regular.woff') format('woff'), /* Pretty Modern Browsers */
-         url('../font/OpenSans/Regular/OpenSans-Regular.ttf') format('truetype'); /* Safari, Android, iOS */
-}
-@font-face {
-    font-family: 'Roboto Mono';
-    font-style: normal;
-    font-weight: 400;
-    src: url('../fonts/roboto-mono-v4-latin-regular.eot'); /* IE9 Compat Modes */
-    src: local('Roboto Mono'), local('RobotoMono-Regular'),
-         url('../fonts/roboto-mono-v4-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-         url('../fonts/roboto-mono-v4-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
-         url('../fonts/roboto-mono-v4-latin-regular.woff') format('woff'), /* Modern Browsers */
-         url('../fonts/roboto-mono-v4-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
-}
+
 html,body, div, ul, li, p, h1, h2, h3, h4, h5, h6 {
     display:block;
     margin:0;
     padding:0;
-    font: 100 13px/13px 'Lucida Sans', 'Arial', sans-serif;
+    font: 400 13px/13px 'Open Sans', sans-serif;
 }
 
 html, body {
@@ -60,8 +28,6 @@ body {
 }
 
 div {display:block;}
-h1, h2, h3, h4, h5, h6 { font-weight:400; }
-
 
 #info_drop { border:none; margin: 0;}
 #info_drop div.hidden a {display:block; color:#fff; font-weight:100; line-height:1em; font-size: 11px; width:70px; padding: 2px 5px; text-align:right; text-decoration:none;}
@@ -98,8 +64,6 @@ div.horizontalContainer {
     /*border-bottom: 1px solid #000;*/
 }
 
-
-
 #banner img.logo {padding:11px 5px;}
 #banner ul {float:right; }
 #banner ul li {display:block; float:right; margin:3px 3px; line-height:0; }
@@ -122,7 +86,7 @@ div.horizontalContainer {
 #imgFileSize {color:#D99694;}
 
 #transition ul {
-    font: 10px 'Gill Sans', sans-serif;
+    font: 10px 'Open Sans', sans-serif;
     text-align: center;
 }
 

@@ -414,9 +414,9 @@
     color: #ddd;
     font-weight:bold;
     font-size: 14px;
-    line-height: 14px;
+    line-height: 18px;
     margin: 15px 0px 5px;
-    font-family: "Lucida Sans", "Arial", Sans-Serif;
+    font-family: 'Open Sans', Sans-Serif;
 }
 .source-metadata h1:first-child{
     margin-top:0;
