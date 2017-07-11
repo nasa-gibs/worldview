@@ -20,8 +20,8 @@ wv.proj = wv.proj || {};
  */
 wv.proj.change = wv.proj.change || function(models) {
 
-    var PROJECTION_CHANGE_DATE = new Date(Date.UTC(2013, 05, 06));
-    var EARLIEST_CHANGE_DATE = new Date(Date.UTC(2011, 10, 01));
+    var PROJECTION_CHANGE_DATE = new Date(Date.UTC(2013, 5, 6));
+    var EARLIEST_CHANGE_DATE = new Date(Date.UTC(2012, 11, 31));
     var DO_NOT_SHOW_AGAIN = "arcticProjectionChangeNotification";
     var notified = false;
     var polarVisited = 0;
@@ -90,28 +90,32 @@ wv.proj.change = wv.proj.change || function(models) {
     var notify = function() {
         notified = true;
         var message = [
-            "On " + wv.util.toISOStringDate(PROJECTION_CHANGE_DATE) +
-            " the polar projections for some layers changed as follows:" ,
+            "From 2013-01-01 to 2013-06-05, imagery in the polar projections",
+            " are different than the other dates as follows:",
             "<br/><br/>",
-            "The <b>Arctic projection</b> changed from Arctic Polar ",
-            "Stereographic (EPSG:3995, \"Greenwich down\") to NSIDC Polar ",
-            "Stereographic North (EPSG:3413, \"Greenland down\"). ",
-            "Coastlines and Graticule in the older projection ",
-            "can be found in the Add Layer tab by searching for \"EPSG:3995\". ",
+            "The <b>Arctic projection</b> is in Arctic Polar ",
+            "Stereographic (EPSG:3995, \"Greenwich down\") rather than NSIDC ",
+            " Polar Stereographic North (EPSG:3413, \"Greenland down\"). ",
+            "Coastlines and Graticule for this time range ",
+            "can be found in the Add Layer tab by searching for ",
+            " \"EPSG:3995\". Note that the image snapshot tool will not work ",
+            "for Arctic imagery during this time range.",
             "<br/><br/>" +
 
-            "The <b>Antarctic projection</b> changed from being projected onto ",
-            "a sphere with radius of 6371007.181 meters to being projected ",
-            "onto the WGS84 ellipsoid. The projection is now the correct ",
-            "Antarctic Polar Stereographic (EPSG:3031). This change results ",
-            "in a shift of the imagery that ranges up to tens of kilometers, ",
-            "depending on the location.",
+            "The <b>Antarctic projection</b> is a sphere with radius of ",
+            "6371007.181 meters during these dates rather than being ",
+            "projected onto the WGS84 ",
+            " ellipsoid. For all other dates, the projection is now the ",
+            "correct Antarctic Polar Stereographic (EPSG:3031). This change ",
+            "results in a shift of the imagery that ranges up to tens of ",
+            "kilometers, depending on the location.",
             "<br/><br/>",
 
-			"Imagery before this transition date will eventually be ",
-			"reprocessed to be consistent with the imagery after it. In ",
-            "addition, the \"Population Density\" layer can no longer be ",
-            "displayed properly in the older projection.",
+			"Imagery during this time range will be reprocessed during winter ",
+            "2017-18 to be made consistent with all other imagery. In the ",
+            "meantime, imagery will continue to be back-processed to the ",
+            "start of the Terra and Aqua missions in 2000 and 2002, ",
+            "respectively.",
             "<br/><br/>",
 
             "Thanks for your patience as we improve and expand our ",
