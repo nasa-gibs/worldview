@@ -471,9 +471,11 @@
     line-height:14px;
     margin-bottom: 15px;
 }
-#layers-all .source-metadata p,
+#layers-all .source-metadata p {
+  color: #bbb;
+}
 .layer-metadata p {
-    color: #eee;
+    color: #ccc;
 }
 #selected-category .ui-tabs-panel .source-metadata.overflow{
     height:100px;
