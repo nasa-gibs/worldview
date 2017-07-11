@@ -92,48 +92,48 @@ p.splash span.highlight {
 
 button.takeTour {
     font: 400 12.8px/18px 'Helvetica', sans-serif;
-    border:1px solid #d7dada;
+    border: 0;
     border-radius: 6px;
     padding: 10px 10px 10px 10px;
     text-align: center;
     color: #000000;
     background-color: #f4f5f5;
     background-image: -webkit-gradient(linear, left top, left bottom, from(#f4f5f5), to(#dfdddd));
-    background-image: linear-gradient(top, #f4f5f5, #dfdddd);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#f4f5f5, endColorstr=#dfdddd);
+    background-image: linear-gradient(to bottom, #f4f5f5, #dfdddd);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#f4f5f5, endColorstr=#dfdddd);
     width:110px;
     height:40px;
     margin-right: 10px;
 }
 
 button.takeTour:hover {
-    border:1px solid #bfc4c4;
-    background-color: #d9dddd;
     color: #000000;
-    background-image: -webkit-gradient(linear, left top, left bottom, from(top), color-stop(#d9dddd), to(#c6c3c3));
-    background-image: linear-gradient(top, #d9dddd, #c6c3c3);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#d9dddd, endColorstr=#c6c3c3);
+    background-color: #d9dddd;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#d9dddd), to(#c6c3c3));
+    background-image: linear-gradient(to bottom, #d9dddd, #c6c3c3);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#d9dddd, endColorstr=#c6c3c3);
+    cursor: pointer;
 }
 
 button.skipTour {
     font: 400 12.8px/18px 'Helvetica', sans-serif;
-    border: 1px solid #d7dada;
+    border: 0;
     border-radius: 6px;
     padding: 10px 10px 10px 10px;
     text-align: center;
     color: #000000;
     background-color: #f4f5f5;
     background-image: -webkit-gradient(linear, left top, left bottom, from(#f4f5f5), to(#dfdddd));
-    background-image: linear-gradient(top, #f4f5f5, #dfdddd);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#f4f5f5, endColorstr=#dfdddd);
+    background-image: linear-gradient(to bottom, #f4f5f5, #dfdddd);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#f4f5f5, endColorstr=#dfdddd);
     width: 110px;
     height: 40px;
     margin-left: 10px;
 }
 
 button.skipTour:hover {
-    border: 1px solid #bfc4c4;
-    background-color: #d9dddd;
     color: #000000;
-    background-image: -webkit-gradient(linear, left top, left bottom, from(top), color-stop(#d9dddd), to(#c6c3c3));
-    background-image: linear-gradient(top, #d9dddd, #c6c3c3);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#d9dddd, endColorstr=#c6c3c3);
+    background-color: #d9dddd;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#d9dddd), to(#c6c3c3));
+    background-image: linear-gradient(to bottom, #d9dddd, #c6c3c3);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#d9dddd, endColorstr=#c6c3c3);
+    cursor: pointer;
 }
 
 /* tour panels */
@@ -167,47 +167,47 @@ button.skipTour:hover {
 }
 
 button.repeatTour {
-    border: 1px solid #d7dada;
+    border: 0;
     border-radius: 6px;
     padding: 10px 10px 10px 10px;
     text-align: center;
     color: #000000;
     background-color: #f4f5f5;
     background-image: -webkit-gradient(linear, left top, left bottom, from(#f4f5f5), to(#dfdddd));
-    background-image: linear-gradient(top, #f4f5f5, #dfdddd);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#f4f5f5, endColorstr=#dfdddd);
+    background-image: linear-gradient(to bottom, #f4f5f5, #dfdddd);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#f4f5f5, endColorstr=#dfdddd);
     width: 110px;
     height: 40px;
     margin-right: 10px;
 }
 
 button.repeatTour:hover {
-    border: 1px solid #bfc4c4;
-    background-color: #d9dddd;
     color: #000000;
-    background-image: -webkit-gradient(linear, left top, left bottom, from(top), color-stop(#d9dddd), to(#c6c3c3));
-    background-image: linear-gradient(top, #d9dddd, #c6c3c3);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#d9dddd, endColorstr=#c6c3c3);
+    background-color: #d9dddd;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#d9dddd), to(#c6c3c3));
+    background-image: linear-gradient(to bottom, #d9dddd, #c6c3c3);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#d9dddd, endColorstr=#c6c3c3);
+    cursor: pointer;
 }
 
 button.done {
-    border: 1px solid #d7dada;
+    border: 0;
     border-radius: 6px;
     padding: 10px 10px 10px 10px;
     text-align: center;
     color: #000000;
     background-color: #f4f5f5;
     background-image: -webkit-gradient(linear, left top, left bottom, from(#f4f5f5), to(#dfdddd));
-    background-image: linear-gradient(top, #f4f5f5, #dfdddd);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#f4f5f5, endColorstr=#dfdddd);
+    background-image: linear-gradient(to bottom, #f4f5f5, #dfdddd);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#f4f5f5, endColorstr=#dfdddd);
     width: 110px;
     height: 40px;
     margin-left: 10px;
 }
 
 button.done:hover {
-    border: 1px solid #bfc4c4;
     background-color: #d9dddd;
     color: #000000;
-    background-image: -webkit-gradient(linear, left top, left bottom, from(top), color-stop(#d9dddd), to(#c6c3c3));
-    background-image: linear-gradient(top, #d9dddd, #c6c3c3);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#d9dddd, endColorstr=#c6c3c3);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#d9dddd), to(#c6c3c3));
+    background-image: linear-gradient(to bottom, #d9dddd, #c6c3c3);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#d9dddd, endColorstr=#c6c3c3);
+    cursor: pointer;
 }
 
 .toolbarTip {
