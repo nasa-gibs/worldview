@@ -7,20 +7,21 @@
     #wv-info-button label::before {
         content: attr(data-content) '';
         display: block;
-        width: 15px;
-        height: 15px;
-        -moz-border-radius: 7.5px;
-        -webkit-border-radius: 7.5px;
-        border-radius: 7.5px;
+        width: 20px;
+        height: 20px;
+        -moz-border-radius: 50%;
+        -webkit-border-radius: 50%;
+        border-radius: 50%;
         background-color: #69b6d5;
         position: absolute;
         right: -5px;
-        font-size: 12px;
+        top: -5px;
+        font-size: 14px;
         text-align: center;
-        line-height: 1.25;
+        line-height: 1.45;
     }
     #wv-info-button.wv-status-outage label::before{
-        background: #b3292b;
+        background: #ff1a1e;
     }
     #wv-info-button.wv-status-alert label::before{
         background: #e5c937;
@@ -42,16 +43,16 @@
         width: 15px;
         height: 15px;
         line-height: 1.25;
-        -moz-border-radius: 7.5px;
-        -webkit-border-radius: 7.5px;
-        border-radius: 7.5px;
+        -moz-border-radius: 50%;
+        -webkit-border-radius: 50%;
+        border-radius: 50%;
         position: absolute;
         font-size: 12px;
         right: 10px;
     }
     .ui-menu-item.exclamation-circle {}
         .ui-menu-item.exclamation-circle a::before {
-            background: #b3292b;
+            background: #ff1a1e;
         }
         .ui-menu-item.bolt a::before {
             background: #e5c937;
