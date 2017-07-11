@@ -28,7 +28,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
     var activeMessageId;
     var url;
 
-    url = "https://status.earthdata.nasa.gov/api/v1/notifications?domain=https%3A%2F%2Fworldview.uat.earthdata.nasa.gov";
+    url = config.features.alert.url;
     self.events = wv.util.events();
     self.infoIconActive = false;
     self.notifyIconActive = false;
@@ -171,7 +171,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
         var fieldExists, fieldValueMatches, type, idString;
 
         type = obj.notification_type;
-        idString = obj.id.toString();
+        idString = obj.created_at.toString();
         fieldExists = wv.util.isInLocalStorage(type);
         fieldValueMatches = false;
 
@@ -255,20 +255,24 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
      * @returns {object} a jquery element
      */
     self.getMessages = function() {
-        var $message, messageNumber, messages;
+        var $message, messageNumber, messages, hide;
 
+        hide = '';
         messages = sortedNotifications.messages;
         if(!messages[0]) {
             return null;
         }
         if(activeMessageId) {
             messageNumber = getNumberOfTypeNotseen('message', messages);
-            $message = $("<li class='gift'><a data-content='" + messageNumber + "'><i class='ui-icon fa fa-fw fa-gift active'></i>What's New</a></li>");
+            if(messageNumber === 0) {
+                hide = 'wv-status-hide'; // hides number value when === zero
+            }
+            $message = $("<li class='gift'><a class='" + hide + "' data-content='" + messageNumber + "'><i class='ui-icon fa fa-fw fa-gift active'></i>What's New</a></li>");
             $message.on('click', deactivateMessage);
             self.messageIconActive = true;
             return $message;
         } else {
-            $message = $("<li><a><i class='ui-icon fa fa-fw fa-gift'></i>What's New</a></li>");
+            $message = $("<li><a class='wv-status-hide'><i class='ui-icon fa fa-fw fa-gift'></i>What's New</a></li>");
             $message.on('click', deactivateMessage);
             return $message;
         }
@@ -284,21 +288,23 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
      * @returns {object} a jquery element
      */
     self.getAlert = function() {
-        var $notifyMenuItem, alertsNumber, outageNumber, count;
+        var $notifyMenuItem, alertsNumber, outageNumber, count, hide;
 
         if(!_.isEmpty(activeNotifications)) {
             alertsNumber = getNumberOfTypeNotseen('alert', sortedNotifications.alerts);
             outageNumber = getNumberOfTypeNotseen('outage', sortedNotifications.outages);
             count = outageNumber + alertsNumber;
-
-            $notifyMenuItem = $("<li class='" + classes[mainNotification] + "'><a data-content='" + count + "'><i class='ui-icon fa fa-fw active fa-" + classes[mainNotification] + "'></i>Notifications</a></li>");
+            if(count === 0) {
+                hide = 'wv-status-hide'; // hides number value when === zero
+            }
+            $notifyMenuItem = $("<li class='" + classes[mainNotification] + "'><a class='" + hide + "' data-content='" + count + "'><i class='ui-icon fa fa-fw active fa-" + classes[mainNotification] + "'></i>Notifications</a></li>");
             self.infoIconActive = true;
             self.notifyIconActive = true;
 
             $notifyMenuItem.on('click', notify);
             return $notifyMenuItem;
         } else if(sortedNotifications.alerts[0] || sortedNotifications.outages[0]) {
-            $notifyMenuItem = $("<li><a><i class='ui-icon fa fa-fw fa-bolt'></i>Notifications</a></li>");
+            $notifyMenuItem = $("<li><a class='wv-status-hide'><i class='ui-icon fa fa-fw fa-bolt'></i>Notifications</a></li>");
             $notifyMenuItem.on('click', notify);
             return $notifyMenuItem;
         } else {
