@@ -15,12 +15,15 @@
         background-color: #69b6d5;
         position: absolute;
         right: -5px;
+        font-size: 12px;
+        text-align: center;
+        line-height: 1.25;
     }
     #wv-info-button.wv-status-outage label::before{
-        background: #b3292b
+        background: #b3292b;
     }
     #wv-info-button.wv-status-alert label::before{
-        background: #e5c937
+        background: #e5c937;
     }
     #wv-info-button.wv-status-message label::before{
         background: #40a9db;
@@ -32,30 +35,32 @@
     position: relative;
 }
     .ui-menu-item a::before {
-        content: '';
+        content: attr(data-content) '';
         text-align: center;
         font-weight: bold;
         display: block;
         width: 15px;
         height: 15px;
+        line-height: 1.25;
         -moz-border-radius: 7.5px;
         -webkit-border-radius: 7.5px;
         border-radius: 7.5px;
         position: absolute;
-        right: -5px;
+        font-size: 12px;
+        right: 10px;
     }
     .ui-menu-item.exclamation-circle {}
         .ui-menu-item.exclamation-circle a::before {
-            content: attr(data-content) '';
             background: #b3292b;
         }
         .ui-menu-item.bolt a::before {
-            content: attr(data-content) '';
             background: #e5c937;
         }
         .ui-menu-item.gift a::before {
-            content: attr(data-content);
             background: #40a9db;
+        }
+        .ui-menu-item a.wv-status-hide::before{
+            display: none;
         }
 .wv-notify-modal {
     padding:0 20px;
