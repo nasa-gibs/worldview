@@ -607,7 +607,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         return layerList({
             onClick: function(){},
             layerArray: config.layerOrder,
-            configFile: config
+            layers: config.layers
         });
     };
     // TODO: Filter layers by settings with projections equal to current projection.
