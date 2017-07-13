@@ -193,7 +193,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 .click(showDefaultPage);
 
             $breadcrumb.append($homeCrumb)
-                .append('<b> / Search Results</b>');
+                .append('<span> / Search Results</span>');
 
             $allLayers.prepend($breadcrumb);
             $('#layers-search-input')
@@ -582,7 +582,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             .click(showDefaultPage);
 
         $breadcrumb.append($homeCrumb)
-            .append('<b> / ' + category.title + '</b>');
+            .append('<span> / ' + category.title + '</span>');
         $selectedCategory.prepend($breadcrumb);
         $('#layers-search-input')
             .show();
