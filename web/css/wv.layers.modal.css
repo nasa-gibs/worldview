@@ -133,6 +133,11 @@
     line-height: 30px;
     padding: 1px 15px;
 }
+#layer-modal #category-breadcrumb span {
+  font-weight: 400;
+  margin-left: 0;
+  padding: 0;
+}
 #layers-modal-close{
     position: relative;
     display: inline-block;
