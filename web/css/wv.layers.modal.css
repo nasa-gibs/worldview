@@ -415,11 +415,11 @@
     font-weight:bold;
     font-size: 14px;
     line-height: 18px;
-    margin: 15px 0px 5px;
+    margin: 16px 0px 6px;
     font-family: 'Open Sans', Sans-Serif;
 }
 .source-metadata h1:first-child{
-    margin-top:0;
+    margin-top: 4px;
 }
 .source-metadata h2{
     color: #ddd;
@@ -471,7 +471,7 @@
     font-family: 'Open Sans', sans-serif;
     font-weight: 400;
     font-size: 13px;
-    line-height:14px;
+    line-height:16px;
     margin-bottom: 15px;
 }
 #layers-all .source-metadata p {
