@@ -716,7 +716,6 @@ module.exports = function(grunt) {
         "exec:empty",
         "copy:release",
         "uglify",
-        "autoprefix",
         "cssmin",
         "replace:links",
         "lineremover",
