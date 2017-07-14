@@ -158,7 +158,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
           at: "left+58 bottom+5",
           of: "#wv-toolbar"
       });
-    }else {
+    } else {
       wv.ui.positionDialog($dialog, {
           my: "left top",
           at: "left bottom+5",
