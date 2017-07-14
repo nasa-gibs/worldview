@@ -99,6 +99,15 @@ wv.link.ui = wv.link.ui || function(models, config) {
 
   self.show = function() {
     var $dialog = wv.ui.getDialog();
+    var item =  "<div id='wv-link' >" +
+        "<input type='text' value='' name='permalink_content' id='permalink_content' readonly/>";
+    if ( config.features.urlShortening ) {
+        item += "<span autofocus></span><div id='wv-link-shorten'>" +
+            "<input type='checkbox' value='' id='wv-link-shorten-check' />" +
+            "<label id='wv-link-shorten-label' for='wv-link-shorten-check'>Shorten this link</label>" +
+            "</div>";
+    }
+    item += "</div>";
     var dialogWidth = '300';
     if ( wv.util.browser.small ) {
       dialogWidth = '242';
@@ -158,6 +167,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
 
     $('#permalink_content').val(models.link.get());
     $dialog.dialog("open");
+    $dialog.on( "dialogcreate", $dialog.prepend(item) );
     setTimeout(updateLink, 500);
 
     $("#wv-link-shorten-check").on("change", function() {
@@ -207,7 +217,6 @@ wv.link.ui = wv.link.ui || function(models, config) {
 
   self.initWidget = function() {
     return widgetFactory({
-      urlShortener: config.features.urlShortening,
       clickFunction: self.clickFunction
     });
   };
