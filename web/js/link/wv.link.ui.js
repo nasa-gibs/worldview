@@ -145,7 +145,9 @@ wv.link.ui = wv.link.ui || function(models, config) {
       draggable: false,
       resizable: false,
       autoOpen: false
-    }).on("dialogclose", function() {
+    }).on("dialogcreate",
+      $dialog.prepend(item)
+    ).on("dialogclose", function() {
       $("#wv-link-button-check").prop("checked", false);
       $button.button("refresh");
       models.link.events.off("update", updateLink);
@@ -167,7 +169,6 @@ wv.link.ui = wv.link.ui || function(models, config) {
 
     $('#permalink_content').val(models.link.get());
     $dialog.dialog("open");
-    $dialog.on( "dialogcreate", $dialog.prepend(item) );
     setTimeout(updateLink, 500);
 
     $("#wv-link-shorten-check").on("change", function() {
