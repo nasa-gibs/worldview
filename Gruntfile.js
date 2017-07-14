@@ -769,5 +769,5 @@ module.exports = function(grunt) {
     grunt.registerTask("firefox-tests", ["nightwatch:firefox"]);
     grunt.registerTask("e2e", ["firefox-tests", "chrome-tests"]);
 
-    grunt.registerTask("default", ["update-packages", "update", "build", "config", "site"]);
+    grunt.registerTask("default", ["fetch", "update-packages", "update", "build", "config", "site"]);
 };
