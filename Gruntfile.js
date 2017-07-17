@@ -605,8 +605,7 @@ module.exports = function(grunt) {
         eslint: {
             options: {
                 configFile: ".eslintrc",
-                format: "checkstyle",
-                silent: true
+                format: "stylish"
             },
             src: [
                 "web/js/**/wv.*.js",

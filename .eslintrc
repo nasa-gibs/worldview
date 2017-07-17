@@ -4,7 +4,14 @@
     "browser": true,
     "node": true
   },
-  "parser": "esprima",
+  "parserOptions": {
+      "ecmaVersion": 5,
+      "sourceType": "script",
+      "ecmaFeatures": {
+          "jsx": false
+      }
+  },
   "rules": {
+      "semi": [2, "always"]
   }
 }
