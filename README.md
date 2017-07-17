@@ -5,7 +5,6 @@
 Visit Worldview at
 [https://worldview.earthdata.nasa.gov](https://worldview.earthdata.nasa.gov)
 
-**We're hiring! If you're interested in joining our team, we're looking for a [Javascript Web Developer](https://www.ssaihq.com/employment/careers/Careers.aspx?adata=EG8FfWFUTsrjoBu9rAXRJa%2flnn%2fS1bDbU2WqXYiLCC0Q4BLQzr3LEKS%2bUp%2bNdoDQVLZOGagcvG%2f25E7Qk01zyxF0zIcYdce00orz95xFrmZd1aAoZmvdv5499dCV1RowoxrvKXgdJ6ZQZ9ECkz9KEHaC%2f0xNpGwTCB11NbAGPAdvfU1%2fA9Ckl4m%2fWK8x7js0OA%3d%3d)!**
 
 ## About
 
