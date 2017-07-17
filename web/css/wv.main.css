@@ -29,6 +29,20 @@ body {
 
 div {display:block;}
 
+sup, sub {
+    vertical-align: baseline;
+    position: relative;
+    top: -0.4em;
+}
+
+sup {
+    line-height: 0;
+}
+
+sub {
+    top: 0.4em;
+}
+
 #info_drop { border:none; margin: 0;}
 #info_drop div.hidden a {display:block; color:#fff; font-weight:100; line-height:1em; font-size: 11px; width:70px; padding: 2px 5px; text-align:right; text-decoration:none;}
 #info_drop div.hidden a:hover {background: rgba(38,43,49,0.45); }
