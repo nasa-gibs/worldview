@@ -612,24 +612,6 @@ module.exports = function(grunt) {
                 "test/**/*.js",
             ]
         },
-        jshint: {
-            console: [
-                "web/js/**/wv.*.js",
-                "test/**/*.js",
-            ],
-            report: {
-                options: {
-                    reporter: "checkstyle",
-
-                },
-                files: {
-                    src: [
-                        "web/js/**/wv.*.js",
-                        "test/**/*.js",
-                    ]
-                }
-            }
-        },
         uglify: {
             // Minifiy the concatenated Worldview JavaScript file.
             options: {
@@ -668,7 +650,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-contrib-csslint");
     grunt.loadNpmTasks("grunt-contrib-cssmin");
     grunt.loadNpmTasks("gruntify-eslint");
-    grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-contrib-uglify");
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks("grunt-line-remover");
@@ -775,7 +756,6 @@ module.exports = function(grunt) {
     grunt.registerTask("clean", ["remove:build"]);
     grunt.registerTask("distclean", ["remove:build", "remove:dist"]);
     grunt.registerTask("lint", ["eslint"]);
-    // grunt.registerTask("lint", ["jshint:console"]);
     grunt.registerTask("test", ["buster:console"]);
     grunt.registerTask("chrome-tests", ["nightwatch:chrome"]);
     grunt.registerTask("firefox-tests", ["nightwatch:firefox"]);
