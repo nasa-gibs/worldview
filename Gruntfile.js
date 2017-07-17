@@ -143,11 +143,11 @@ module.exports = function(grunt) {
                 src: js["wv.js"],
                 dest: "build/worldview-debug/web/js/wv.js"
             },
-	    // Combine all the Openlayers JavaScript files into one file.
-	    oljs: {
-		src: js["ol.js"],
-		dest: "build/worldview-debug/web/js/ol.js"
-	    },
+	          // Combine all the Openlayers JavaScript files into one file.
+  	        oljs: {
+  		        src: js["ol.js"],
+  		        dest: "build/worldview-debug/web/js/ol.js"
+  	        },
             // Combine all the Worldview CSS files into one file.
             css: {
                 src: css,
@@ -203,7 +203,7 @@ module.exports = function(grunt) {
                         "web/**",
                         "*",
                         "web/**/.htaccess",
-			"!node_modules/**",
+                        "!node_modules/**",
                         "!web/brand/**",
                         "!web/config/**",
                         "!web/var/**"
@@ -602,6 +602,17 @@ module.exports = function(grunt) {
                 tasks: ['update'],
             },
         },
+        eslint: {
+            options: {
+                configFile: ".eslintrc",
+                format: "checkstyle",
+                silent: true
+            },
+            src: [
+                "web/js/**/wv.*.js",
+                "test/**/*.js",
+            ]
+        },
         jshint: {
             console: [
                 "web/js/**/wv.*.js",
@@ -657,6 +668,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-contrib-csslint");
     grunt.loadNpmTasks("grunt-contrib-cssmin");
+    grunt.loadNpmTasks("gruntify-eslint");
     grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-contrib-uglify");
     grunt.loadNpmTasks('grunt-contrib-watch');
@@ -763,7 +775,8 @@ module.exports = function(grunt) {
     grunt.registerTask("check", ["lint", "test"]);
     grunt.registerTask("clean", ["remove:build"]);
     grunt.registerTask("distclean", ["remove:build", "remove:dist"]);
-    grunt.registerTask("lint", ["jshint:console"]);
+    grunt.registerTask("lint", ["eslint"]);
+    // grunt.registerTask("lint", ["jshint:console"]);
     grunt.registerTask("test", ["buster:console"]);
     grunt.registerTask("chrome-tests", ["nightwatch:chrome"]);
     grunt.registerTask("firefox-tests", ["nightwatch:firefox"]);
