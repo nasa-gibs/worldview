@@ -45,6 +45,9 @@ is being done in the commit.
 
 ### Pull Request
 
-* when you submit a pull request you should make sure that there are no conflicts
+* Before making a pull request, look through the [current issues](https://github.com/nasa-gibs/worldview/issues) to see if your issue / feature has been reported.
+* If your issue / feature has not been reported, create a new issue.
+* When you submit a pull request you should make sure that there are no conflicts
+* Reference the issue # in the pull request by writing "Connects to #000"
 * Upon submission of a pull request, a member or members of the Worldview development team will review the code.
 * The request will then either be merged, declined, or an adjustment to the code will be requested.
