@@ -12,6 +12,7 @@
       }
   },
   "rules": {
-      "semi": [2, "always"]
+      "strict": 0,
+      "semi": [2, "always"],
   }
 }
