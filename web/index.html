@@ -38,6 +38,11 @@
     <meta http-equiv="Cache-control" content="no-store">
     <meta http-equiv="Pragma" content="no-cache">
 
+    <!-- open graph for social sharing -->
+    <meta property="og:title" content="EOSDIS Worldview">
+    <meta property="og:image" content="images/preview.png" />
+    <meta property="og:description" content="NASA's Worldview Application">
+
     <!-- CSS resources ==================================================== -->
 
     <link type="text/css" rel="Stylesheet" href="ext/node_modules/font-awesome/css/font-awesome.min.css">
@@ -396,5 +401,34 @@
     <div id="wv-image-right" class="wv-image-coords"></div>
     <div id="wv-image-bottom" class="wv-image-coords"></div>
     <div id="wv-image-left" class="wv-image-coords"></div>
+
+    <style>
+      /*.backdrop {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+        z-index: 9998;
+        background: rgba(0, 0, 0, 0.3);
+      }*/
+    </style>
+
+    <div class="backdrop"></div>
+
+    <style>
+      /*.modal {
+        width: 300px;
+        height: 300px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-top: -150px;
+        margin-left: -150px;
+        z-index: 9999;
+        background: yellow;
+      }*/
+    </style>
+
 </body>
 </html>

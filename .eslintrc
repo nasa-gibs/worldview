@@ -1,0 +1,18 @@
+
+{
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "parserOptions": {
+      "ecmaVersion": 5,
+      "sourceType": "script",
+      "ecmaFeatures": {
+          "jsx": false
+      }
+  },
+  "rules": {
+      "strict": 0,
+      "semi": [2, "always"],
+  }
+}

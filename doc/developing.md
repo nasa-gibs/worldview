@@ -89,6 +89,15 @@ an edit, issue the following command:
     grunt config
 
 
+### Autoprefix CSS
+
+Parse all CSS files and automatically add vendor prefixes to CSS rules using values from Can I Use.
+
+Run autoprefix with the following:
+
+    grunt autoprefix
+
+
 ### Linting
 
 Check for common errors in the JavaScript and CSS files with:
