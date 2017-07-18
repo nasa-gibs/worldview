@@ -1,6 +1,11 @@
-#wv-link input[type='text'] {
+.wv-link input[type='text'] {
     width: 100%;
     cursor: text;
+}
+
+.wv-link {
+    border-bottom: 1px solid #555;
+    padding-bottom: 12px;
 }
 
 #wv-link-shorten {
@@ -8,7 +13,7 @@
     width: 100%;
 }
 #social-share {
-    padding-top: 20px;
+    padding-top: 12px;
     display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
