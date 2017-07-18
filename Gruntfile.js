@@ -137,6 +137,18 @@ module.exports = function(grunt) {
             }
         },
 
+        autoprefix: {
+            options: {
+                map: false,
+                processors: [
+                    require('autoprefixer')
+                ]
+            },
+            dist: {
+                src: 'web/css/*.css'
+            }
+        },
+
         concat: {
             // Combine all the Worldview JavaScript files into one file.
             js: {
@@ -658,6 +670,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-markdown");
     grunt.loadNpmTasks("grunt-minjson");
     grunt.loadNpmTasks("grunt-mkdir");
+    grunt.loadNpmTasks('grunt-postcss');
     grunt.loadNpmTasks("grunt-text-replace");
     grunt.loadNpmTasks("grunt-rename");
     grunt.loadNpmTasks('grunt-nightwatch');
@@ -665,6 +678,7 @@ module.exports = function(grunt) {
 
     // Lets use "clean" as a target instead of the name of the task
     grunt.renameTask("clean", "remove");
+    grunt.renameTask("postcss", "autoprefix");
 
     grunt.registerTask("load_branding", "Load branding", function() {
         var brand = grunt.file.readJSON("build/options/brand.json");

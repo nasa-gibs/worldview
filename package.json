@@ -14,6 +14,7 @@
         "preinstall": "node version-check.js"
     },
     "devDependencies": {
+        "autoprefixer": "7.1.1",
         "babel-polyfill": "6.16.0",
         "bluebird": "3.4.6",
         "buster": "0.7.12",
@@ -39,6 +40,7 @@
         "grunt-minjson": "0.4.x",
         "grunt-mkdir": "0.1.x",
         "grunt-nightwatch": "^0.5.4",
+        "grunt-postcss": "^0.8.0",
         "grunt-rename": "0.1.x",
         "grunt-text-replace": "0.4.x",
         "gruntify-eslint": "^4.0.0",

@@ -54,7 +54,8 @@ a.staticLayers:hover {
 a.atcollapse {
     background: 50% 50% no-repeat url("../images/angle-double-up.png");
     border-radius:0;
-    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
     border-right: 0;
     padding: 10px;
 }
