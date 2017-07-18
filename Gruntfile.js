@@ -107,6 +107,7 @@ module.exports = function(grunt) {
                     firefox: {
                         "desiredCapabilities": {
                             "browserName": "firefox",
+                            // "marionette": false, - Windows users
                             "marionette": true,
                             "javascriptEnabled": true
                         },
@@ -119,6 +120,7 @@ module.exports = function(grunt) {
                             "browserName": "chrome"
                         },
                          "cli_args" : {
+                            // "webdriver.chrome.driver" : "node_modules/chromedriver/lib/chromedriver/chromedriver.exe" - Windows users
                             "webdriver.chrome.driver" : "node_modules/chromedriver/lib/chromedriver/chromedriver"
                         }
                     }

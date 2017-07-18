@@ -15,7 +15,7 @@
 .layer-modal p, .layer-modal div,
 .layer-modal h1, .layer-modal h2,
 .layer-modal h3, .layer-modal h4 {
-    font-family: open_sans_light;
+    font-family: open_sans_light, Arial, sans-serif;
     font-weight:300;
     color:#383838;
 }
@@ -82,7 +82,7 @@
     height: 40px;
     line-height:40px;
     font-size: 28px;
-    font-family: open_sans_light;
+    font-family: open_sans_light, Arial, sans-serif;
     padding:0 10px;
     position:absolute;
     left:35px;
@@ -251,7 +251,7 @@
 #category-breadcrumb{
     height:30px;
     line-height:30px;
-    font-family: open_sans_light;
+    font-family: open_sans_light, Arial, sans-serif;
     font-size:16px;
     color:#000;
     /*font-style:italic;*/
@@ -275,7 +275,8 @@
 #layers-all .layers-all-title-wrap {
     position: relative;
     display: block;
-    margin-right: 50px;
+    margin-right: 66px;
+    padding-top: .5em;
 }
 #selected-category .ui-accordion-header,
 #layers-all .layers-all-layer {
@@ -325,8 +326,7 @@
     font-size:20px;
     line-height:100%;
     position: relative;
-    padding-top: .3em;
-    display: inline-block;
+    display: inline;
 }
 @media (min-width:753px) {
   #selected-category .ui-accordion-header h3,
@@ -378,7 +378,7 @@
     -o-box-sizing: border-box;
     padding: 0.5em 0.5em;
     width:150px;
-    font-family: open_sans_light;
+    font-family: open_sans_light, Arial, sans-serif;
     font-size:13px;
     text-align:left;
     font-weight:300;
@@ -405,12 +405,16 @@
     color: #ddd;
     padding-right: 1.2em;
 }
+.layer-metadata {
+  margin-top: 0;
+}
 .source-metadata h1{
     color: #ddd;
     font-weight:bold;
     font-size: 14px;
     line-height: 14px;
-    margin: 15px 0 5px;
+    margin: 15px 0px 5px;
+    font-family: "Lucida Sans", "Arial", Sans-Serif;
 }
 .source-metadata h1:first-child{
     margin-top:0;
@@ -432,9 +436,9 @@
 @media (min-width: 753px) {
   .layers-all-layer .layers-all-header .fa {
     padding: 10px 18px 16px;
-    top: 0;
+    top: auto;
     right: 0;
-    margin-top: 0;
+    margin-top: -6px;
     margin-left: 0;
   }
 }
@@ -448,7 +452,7 @@
 #selected-category .ui-tabs-panel p,
 #selected-category .ui-tabs-panel span {
     font-size: 11px;
-    font-family: open_sans_light;
+    font-family: open_sans_regular, Arial, sans-serif;
     font-weight: 300;
     color: #bbb;
 }
@@ -459,13 +463,19 @@
 #layers-all .source-metadata p,
 #layers-all .source-metadata a,
 #selected-category .ui-tabs-panel .source-metadata p,
-#selected-category .ui-tabs-panel .source-metadata a{
-    font-family: open_sans_light;
+#selected-category .ui-tabs-panel .source-metadata a,
+.layer-metadata p,
+.layer-metadata a {
+    font-family: open_sans_regular, Arial, sans-serif;
     font-size: 13px;
     line-height:14px;
+    margin-bottom: 15px;
 }
 #layers-all .source-metadata p {
-    color: #bbb;
+  color: #bbb;
+}
+.layer-metadata p {
+    color: #ccc;
 }
 #selected-category .ui-tabs-panel .source-metadata.overflow{
     height:100px;

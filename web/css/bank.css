@@ -186,6 +186,10 @@ a.atexpand {
     clear:both;
     float:none;
 }
+.bank .layer-metadata.overflow {
+    height: 40px;
+    overflow: hidden;
+}
 img.bank-item-img {
     display:block;
 }
@@ -261,15 +265,28 @@ img.hideReg {
 .productsitem.layer-hidden a.hdanchor.hideReg:hover i{
     background-position:-63px 0;
 }
-.productsitem a.wv-layers-options{
+.productsitem a.wv-layers-options,
+.productsitem a.wv-layers-info{
     position:relative;
     width:20px;
     height:20px;
     float:right;
 }
-.productsitem a.wv-layers-options:hover{
+.productsitem a.wv-layers-options:hover,
+.productsitem a.wv-layers-info:hover{
     background:#fff;
 }
+.wv-layers-info-icon {
+    font-size: 11px;
+    border: 1px solid #333;
+    width: 12px;
+    height: 11px;
+    text-align: center;
+    border-radius: 50%;
+    padding-top: 1px;
+    margin-top: 3px;
+}
+
 i.wv-layers-options-icon{
     background: url('../images/wv.layers/show-hide.png?v=@BUILD_NONCE@') no-repeat 0 -24px;
     width: 12px;
