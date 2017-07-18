@@ -99,7 +99,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
 
   self.show = function() {
     var $dialog = wv.ui.getDialog();
-    var item =  "<div id='wv-link' >" +
+    var item =  "<div id='wv-link' class='wv-link'>" +
         "<input type='text' value='' name='permalink_content' id='permalink_content' readonly/>";
     if ( config.features.urlShortening ) {
         item += "<span autofocus></span><div id='wv-link-shorten'>" +
