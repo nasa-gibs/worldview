@@ -34,10 +34,11 @@ body {
 
 .tour .ui-dialog-content {
     background: #AFB5C4;
+    padding-top: 8px;
 }
 
 .tour .ui-dialog-titlebar {
-    font-size: 18px;
+    font-size: 20px;
     line-height: 24px;
     background: #AFB5C4;
     color: rgb(38, 43, 49);
@@ -81,10 +82,11 @@ p.splash {
     color: rgb(38, 43, 49);
 }
 
-p.splashwelcome {
+.splashwelcome {
     color: rgb(38, 43, 49);
     text-align: left;
     font-size: 14px;
+    padding: 0 10px;
 }
 
 p.splash span.highlight {
