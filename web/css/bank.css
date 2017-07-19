@@ -148,13 +148,14 @@ a.atexpand {
 /* HACK : End */
 
 .bank li.item h4 {
-    font-size:0.85em;
-    padding:0 3px;
+    font-size: 0.90em;
+    line-height: 14px;
+    padding: 3px;
 }
 .bank li.item p {
-    padding:0 3px;
+    padding:0 3px 6px;
     color:#222;
-    font-size:0.78em;
+    font-size:0.80em;
     font-style:italic;
 }
 .bank li.item span.palette {
