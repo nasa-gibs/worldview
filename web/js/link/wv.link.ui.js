@@ -205,15 +205,20 @@ wv.link.ui = wv.link.ui || function(models, config) {
   };
 
   // Update react link states when share buttons are clicked.
+  // Prepare link and then click to ensure shortener promise has ran.
   self.clickFunction = function() {
-    self.setLink(fbLink, twLink, rdLink, emailLink, self.reactComponent.updateLinkState);
-    var replaceLink = function() {
-      $('#permalink_content').val(models.link.get());
-      $("#wv-link-shorten-check").iCheck("uncheck");
-      $('#permalink_content').focus();
-      $('#permalink_content').select();
-    };
-    setTimeout(replaceLink, 10);
+    var linkReady;
+    var waitUntil = Date.now() + 200;
+    while (Date.now() < waitUntil) {
+      if (!linkReady) {
+        linkReady = true;
+        self.setLink(fbLink, twLink, rdLink, emailLink, self.reactComponent.updateLinkState);
+        $('#permalink_content').val(models.link.get());
+        $("#wv-link-shorten-check").iCheck("uncheck");
+        $('#permalink_content').focus();
+        $('#permalink_content').select();
+      }
+    }
   };
 
   self.initWidget = function() {
