@@ -26,7 +26,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
         "The graticule layer cannot be used to take a snapshot. Would you " +
         "like to hide this layer?";
 
-    var    ROTATE_WARNING = "Image may not be downloaded when rotated. Would you like to reset rotation?";
+    var ROTATE_WARNING = "Image may not be downloaded when rotated. Would you like to reset rotation?";
 
 
     var containerId = "wv-image-button";
