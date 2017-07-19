@@ -84,6 +84,8 @@ wv.link.ui = wv.link.ui || function(models, config) {
       if (result.status_code === 200) {
         emailBody = shareMessage + " - " + result.data.url;
         shortLink = result.data.url;
+
+        callback(fb, tw, rd, email);
       }
     }).fail(function() {
       console.warn("Unable to shorten URL, full link generated.");
