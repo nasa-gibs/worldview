@@ -72,28 +72,28 @@ wv.link.ui = wv.link.ui || function(models, config) {
   };
 
   self.setLink = function(fbLink, twLink, rdLink, emailLink, callback) {
+    var fb, tw, rd, email;
     var promise = models.link.shorten();
     var shareMessage = 'Check out what I found in NASA Worldview!';
     var twMessage = 'Check out what I found in #NASAWorldview -';
     var emailBody = shareMessage + " - " + models.link.get();
-
-    var fb = facebookUrlParams('121285908450463', models.link.get(), models.link.get(), 'popup');
-    var tw = twitterUrlParams(models.link.get(), twMessage);
-    var rd = redditUrlParams(models.link.get(), shareMessage);
-    var email = emailUrlParams(shareMessage, emailBody);
+    var shortLink = models.link.get();
 
     // If a short link can be generated, replace the full link.
     promise.done(function(result) {
       if (result.status_code === 200) {
         emailBody = shareMessage + " - " + result.data.url;
-
-        tw = twitterUrlParams(result.data.url, twMessage);
-        email = emailUrlParams(shareMessage, emailBody);
-        return false;
+        shortLink = result.data.url;
       }
     }).fail(function() {
       console.warn("Unable to shorten URL, full link generated.");
     });
+
+    fb = facebookUrlParams('121285908450463', models.link.get(), models.link.get(), 'popup');
+    tw = twitterUrlParams(shortLink, twMessage);
+    rd = redditUrlParams(models.link.get(), shareMessage);
+    email = emailUrlParams(shareMessage, emailBody);
+
     callback(fb, tw, rd, email);
   };
 
