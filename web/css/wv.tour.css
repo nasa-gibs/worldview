@@ -27,7 +27,8 @@
 }
 
 .tour .ui-dialog-titlebar {
-    font-size: 16px;
+    font-size: 18px;
+    line-height: 24px;
     background: #AFB5C4;
     color: rgb(38, 43, 49);
     border: 0;
