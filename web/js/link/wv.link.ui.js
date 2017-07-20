@@ -130,6 +130,12 @@ wv.link.ui = wv.link.ui || function(models, config) {
     // Render Dialog Box Content
     self.reactComponent = ReactDOM.render(Widget, $dialog[0]);
 
+    var throttleShareLinks = _.throttle(function() {
+        self.setShareLinks(self.updateShareLink);
+      }, 2000, {
+        leading: true,
+        trailing: true
+      });
     // If selected during the animation, the cursor will go to the
     // end of the input box
     var updateLink = function() {
@@ -137,7 +143,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
       $("#wv-link-shorten-check").iCheck("uncheck");
       $('#permalink_content').focus();
       $('#permalink_content').select();
-      self.setShareLinks(self.updateShareLink);
+      throttleShareLinks();
     };
 
     models.link.events.on("update", updateLink);
