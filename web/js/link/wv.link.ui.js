@@ -84,7 +84,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
   };
   var openSocial = function(href, type) {
     if(type === 'email') {
-      window.location(href);
+      window.location.assign(href);
     } else {
       window.open(href, '_blank');
     }
