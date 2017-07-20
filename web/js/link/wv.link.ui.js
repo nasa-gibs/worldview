@@ -18,7 +18,6 @@ wv.link.ui = wv.link.ui || function(models, config) {
   var id = "wv-link-button";
   var selector = "#" + id;
   var $button, $label;
-  var fbLink, twLink, rdLink, emailLink;
   var widgetFactory = React.createFactory(WVC.Share);
 
   var init = function() {
@@ -70,7 +69,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
     return "mailto:?" + "subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
   };
 
-  self.setShareLinks = function(fbLink, twLink, rdLink, emailLink, callback) {
+  self.setShareLinks = function(callback) {
     var promise = models.link.shorten();
     var shareMessage = 'Check out what I found in NASA Worldview!';
     var twMessage = 'Check out what I found in #NASAWorldview -';
@@ -131,9 +130,6 @@ wv.link.ui = wv.link.ui || function(models, config) {
     // Render Dialog Box Content
     self.reactComponent = ReactDOM.render(Widget, $dialog[0]);
 
-    // Update react link states when dialog is shown.
-    self.setShareLinks(fbLink, twLink, rdLink, emailLink, self.updateShareLink);
-
     // If selected during the animation, the cursor will go to the
     // end of the input box
     var updateLink = function() {
@@ -141,6 +137,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
       $("#wv-link-shorten-check").iCheck("uncheck");
       $('#permalink_content').focus();
       $('#permalink_content').select();
+      self.setShareLinks(self.updateShareLink);
     };
 
     models.link.events.on("update", updateLink);
@@ -217,21 +214,8 @@ wv.link.ui = wv.link.ui || function(models, config) {
     $("#wv-link-shorten-check").prop("checked", false);
   };
 
-  // Update react link states when share buttons are clicked.
-  // Prepare link and then click to ensure shortener promise has ran.
   self.clickFunction = function() {
-    var linkReady;
-    var waitUntil = Date.now() + 200;
-    while (Date.now() < waitUntil) {
-      if (!linkReady) {
-        linkReady = true;
-        self.setShareLinks(fbLink, twLink, rdLink, emailLink, self.updateShareLink);
-        $('#permalink_content').val(models.link.get());
-        $("#wv-link-shorten-check").iCheck("uncheck");
-        $('#permalink_content').focus();
-        $('#permalink_content').select();
-      }
-    }
+      // Used to add actions when share buttons are clicked.
   };
 
   self.initWidget = function() {
