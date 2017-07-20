@@ -38,12 +38,6 @@ wv.link.ui = wv.link.ui || function(models, config) {
       }
     });
     models.link.events.on("update", replaceHistoryState);
-    WVC.Share.defaultProps = {
-    	fbLink: '#',
-    	twLink: '#',
-    	rdLink: '#',
-    	emailLink: '#',
-    };
   };
 
   //Calls toQueryString to fetch updated state and returns URL
@@ -239,7 +233,11 @@ wv.link.ui = wv.link.ui || function(models, config) {
 
   self.initWidget = function() {
     return widgetFactory({
-      clickFunction: self.clickFunction
+      clickFunction: self.clickFunction,
+      fbLink: '#',
+    	twLink: '#',
+    	rdLink: '#',
+    	emailLink: '#'
     });
   };
 
