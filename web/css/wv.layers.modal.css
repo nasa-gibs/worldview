@@ -200,7 +200,7 @@
 .layer-category h3 {
     font-size:20px;
     line-height:20px;
-
+    font-weight: bold;
 }
 .layer-category h3 a{
     display:block;
