@@ -186,7 +186,24 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
         var left = offset.left + parseInt($("#"+alignTo.id).css("width")) - parseInt($("#"+id).css("width"));
         $("#"+id).css("left",left+"px");
     };
-
+    /*
+     * Retieves opacities from palettes
+     *
+     * @method getOpacities
+     * @private
+     *
+     * @param {array} array of layers
+     *
+     * @returns {array} array of opacities
+     *
+     */
+    var getOpacities = function(products) {
+        var opacities = [];
+        _.each(products, function(product) {
+            opacities.push( ( _.isUndefined(product.opacity) ) ? 1: product.opacity );
+        });
+        return opacities;
+    };
 
     var update = function(c){
         try {
@@ -207,12 +224,7 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
                     models.proj.selected.epsg;
 
             // get layer transparencies (opacities)
-            var opacities = [];
-            _(products).each( function(product){
-                      opacities.push( ( _.isUndefined(product.opacity) ) ? 1: product.opacity );
-            });
-
-            //console.log("EPSG: " + epsg);
+            opacities = getOpacities(products);
 
             var px = pixels;
             var x1 = px.x; var y1= px.y; var x2 = px.x2; var y2=px.y2;
