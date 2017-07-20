@@ -19,7 +19,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
   var selector = "#" + id;
   var $button, $label;
   var fbLink, twLink, rdLink, emailLink;
-  var widgetFactory = React.createFactory(WVC.Link);
+  var widgetFactory = React.createFactory(WVC.Share);
 
   var init = function() {
     $button = $("<input></input>").attr("type", "checkbox").attr("id", "wv-link-button-check");
@@ -37,8 +37,13 @@ wv.link.ui = wv.link.ui || function(models, config) {
         wv.ui.closeDialog();
       }
     });
-
     models.link.events.on("update", replaceHistoryState);
+    WVC.Share.defaultProps = {
+    	fbLink: '#',
+    	twLink: '#',
+    	rdLink: '#',
+    	emailLink: '#',
+    };
   };
 
   //Calls toQueryString to fetch updated state and returns URL
@@ -71,7 +76,16 @@ wv.link.ui = wv.link.ui || function(models, config) {
     return "mailto:?" + "subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
   };
 
-  self.setLink = function(fbLink, twLink, rdLink, emailLink, callback) {
+  self.updateShareLink = function(fbLink, twLink, rdLink, emailLink, callback) {
+    self.reactComponent.setState({
+      fbLink : fbLink,
+      twLink : twLink,
+      rdLink : rdLink,
+      emailLink : emailLink
+    });
+  };
+
+  self.setShareLinks = function(fbLink, twLink, rdLink, emailLink, callback) {
     var fb, tw, rd, email;
     var promise = models.link.shorten();
     var shareMessage = 'Check out what I found in NASA Worldview!';
@@ -121,7 +135,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
     self.reactComponent = ReactDOM.render(Widget, $dialog[0]);
 
     // Update react link states when dialog is shown.
-    self.setLink(fbLink, twLink, rdLink, emailLink, self.reactComponent.updateLinkState);
+    self.setShareLinks(fbLink, twLink, rdLink, emailLink, self.updateShareLink);
 
     // If selected during the animation, the cursor will go to the
     // end of the input box
@@ -214,7 +228,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
     while (Date.now() < waitUntil) {
       if (!linkReady) {
         linkReady = true;
-        self.setLink(fbLink, twLink, rdLink, emailLink, self.reactComponent.updateLinkState);
+        self.setShareLinks(fbLink, twLink, rdLink, emailLink, self.updateShareLink);
         $('#permalink_content').val(models.link.get());
         $("#wv-link-shorten-check").iCheck("uncheck");
         $('#permalink_content').focus();
