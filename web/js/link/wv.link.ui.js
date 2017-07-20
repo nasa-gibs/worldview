@@ -19,7 +19,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
   var selector = "#" + id;
   var $button, $label;
   var fbLink, twLink, rdLink, emailLink;
-  var widgetFactory = React.createFactory(WVC.Link);
+  var widgetFactory = React.createFactory(WVC.Share);
 
   var init = function() {
     $button = $("<input></input>").attr("type", "checkbox").attr("id", "wv-link-button-check");
@@ -37,7 +37,6 @@ wv.link.ui = wv.link.ui || function(models, config) {
         wv.ui.closeDialog();
       }
     });
-
     models.link.events.on("update", replaceHistoryState);
   };
 
@@ -71,19 +70,27 @@ wv.link.ui = wv.link.ui || function(models, config) {
     return "mailto:?" + "subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
   };
 
-  self.setLink = function(fbLink, twLink, rdLink, emailLink, callback) {
-    var fb, tw, rd, email;
+  self.setShareLinks = function(fbLink, twLink, rdLink, emailLink, callback) {
     var promise = models.link.shorten();
     var shareMessage = 'Check out what I found in NASA Worldview!';
     var twMessage = 'Check out what I found in #NASAWorldview -';
     var emailBody = shareMessage + " - " + models.link.get();
     var shortLink = models.link.get();
 
+    var fb = facebookUrlParams('121285908450463', models.link.get(), models.link.get(), 'popup');
+    var tw = twitterUrlParams(shortLink, twMessage);
+    var rd = redditUrlParams(models.link.get(), shareMessage);
+    var email = emailUrlParams(shareMessage, emailBody);
+
     // If a short link can be generated, replace the full link.
     promise.done(function(result) {
       if (result.status_code === 200) {
         emailBody = shareMessage + " - " + result.data.url;
         shortLink = result.data.url;
+        fb = facebookUrlParams('121285908450463', models.link.get(), models.link.get(), 'popup');
+        tw = twitterUrlParams(shortLink, twMessage);
+        rd = redditUrlParams(models.link.get(), shareMessage);
+        email = emailUrlParams(shareMessage, emailBody);
 
         callback(fb, tw, rd, email);
       }
@@ -91,12 +98,16 @@ wv.link.ui = wv.link.ui || function(models, config) {
       console.warn("Unable to shorten URL, full link generated.");
     });
 
-    fb = facebookUrlParams('121285908450463', models.link.get(), models.link.get(), 'popup');
-    tw = twitterUrlParams(shortLink, twMessage);
-    rd = redditUrlParams(models.link.get(), shareMessage);
-    email = emailUrlParams(shareMessage, emailBody);
-
     callback(fb, tw, rd, email);
+  };
+
+  self.updateShareLink = function(fbLink, twLink, rdLink, emailLink, callback) {
+    self.reactComponent.setState({
+      fbLink : fbLink,
+      twLink : twLink,
+      rdLink : rdLink,
+      emailLink : emailLink
+    });
   };
 
   self.show = function() {
@@ -121,7 +132,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
     self.reactComponent = ReactDOM.render(Widget, $dialog[0]);
 
     // Update react link states when dialog is shown.
-    self.setLink(fbLink, twLink, rdLink, emailLink, self.reactComponent.updateLinkState);
+    self.setShareLinks(fbLink, twLink, rdLink, emailLink, self.updateShareLink);
 
     // If selected during the animation, the cursor will go to the
     // end of the input box
@@ -214,7 +225,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
     while (Date.now() < waitUntil) {
       if (!linkReady) {
         linkReady = true;
-        self.setLink(fbLink, twLink, rdLink, emailLink, self.reactComponent.updateLinkState);
+        self.setShareLinks(fbLink, twLink, rdLink, emailLink, self.updateShareLink);
         $('#permalink_content').val(models.link.get());
         $("#wv-link-shorten-check").iCheck("uncheck");
         $('#permalink_content').focus();
@@ -225,7 +236,11 @@ wv.link.ui = wv.link.ui || function(models, config) {
 
   self.initWidget = function() {
     return widgetFactory({
-      clickFunction: self.clickFunction
+      clickFunction: self.clickFunction,
+      fbLink: '#',
+    	twLink: '#',
+    	rdLink: '#',
+    	emailLink: '#'
     });
   };
 
