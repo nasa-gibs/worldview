@@ -76,18 +76,20 @@ table {
     border-spacing: 0;
 }
 
-sup, sub {
-    vertical-align: baseline;
-    position: relative;
-    top: -0.4em;
-}
-
+sub,
 sup {
-    line-height: 0;
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
 }
 
 sub {
-    top: 0.4em;
+  bottom: -0.25em;
+}
+
+sup {
+  top: -0.5em;
 }
 
 #info_drop { border:none; margin: 0;}

@@ -151,7 +151,7 @@ a.atexpand {
 .bank li.item h4 {
     font-size: 0.90em;
     line-height: 14px;
-    padding: 3px;
+    padding: 3px 3px 0;
 }
 .bank li.item p {
     padding:0 3px 6px;

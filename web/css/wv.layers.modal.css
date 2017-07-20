@@ -200,7 +200,6 @@
 .layer-category h3 {
     font-size:20px;
     line-height:20px;
-    font-weight: bold;
 }
 .layer-category h3 a{
     display:block;
@@ -208,10 +207,10 @@
     line-height:20px;
     padding:10px;
     color:#fff;
-
+    background: rgba(51,51,51,0.6);
 }
 .layer-category h3 a:hover{
-    background:rgba(255,255,255,0.6);
+    background: rgba(255,255,255,0.6);
 }
 .layer-category ul {
 
