@@ -69,35 +69,48 @@ wv.link.ui = wv.link.ui || function(models, config) {
     return "mailto:?" + "subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
   };
 
-  self.setShareLinks = function(callback) {
-    var promise = models.link.shorten();
+  var getSharelink = function(type, url) {
     var shareMessage = 'Check out what I found in NASA Worldview!';
     var twMessage = 'Check out what I found in #NASAWorldview -';
-    var emailBody = shareMessage + " - " + models.link.get();
-    var shortLink = models.link.get();
+    var emailBody = shareMessage + " - " + url;
 
-    var fb = facebookUrlParams('121285908450463', models.link.get(), models.link.get(), 'popup');
-    var tw = twitterUrlParams(shortLink, twMessage);
-    var rd = redditUrlParams(models.link.get(), shareMessage);
-    var email = emailUrlParams(shareMessage, emailBody);
+    switch(type) {
+      case 'twitter': return twitterUrlParams(url, twMessage);
+      case 'facebook': return facebookUrlParams('121285908450463', url, url, 'popup');
+      case 'reddit': return redditUrlParams(url, shareMessage);
+      case 'email': return emailUrlParams(shareMessage, emailBody);
+    }
+    return undefined;
+  };
+  var openSocial = function(href, type) {
+    if(type === 'email') {
+      window.location(href);
+    } else {
+      window.open(href, '_blank');
+    }
+  };
+  var clickFunction = function(type) {
+    var href;
+    var shareLink = models.link.get();
+    var promise = models.link.shorten();
 
     // If a short link can be generated, replace the full link.
-    promise.done(function(result) {
-      if (result.status_code === 200) {
-        emailBody = shareMessage + " - " + result.data.url;
-        shortLink = result.data.url;
-        fb = facebookUrlParams('121285908450463', models.link.get(), models.link.get(), 'popup');
-        tw = twitterUrlParams(shortLink, twMessage);
-        rd = redditUrlParams(models.link.get(), shareMessage);
-        email = emailUrlParams(shareMessage, emailBody);
-
-        callback(fb, tw, rd, email);
-      }
-    }).fail(function() {
-      console.warn("Unable to shorten URL, full link generated.");
-    });
-
-    callback(fb, tw, rd, email);
+    if(type === 'twitter' || type === 'email') {
+      promise.done(function(result) {
+        if (result.status_code === 200) {
+          emailBody = shareMessage + " - " + result.data.url;
+          href = getSharelink(type, result.data.url);
+          openSocial(href, type);
+        }
+      }).fail(function() {
+        href = getSharelink(type, shareLink);
+        openSocial(href, type);
+        console.warn("Unable to shorten URL, full link generated.");
+      });
+    } else {
+      href = getSharelink(type, shareLink);
+      openSocial(href, type);
+    }
   };
 
   self.updateShareLink = function(fbLink, twLink, rdLink, emailLink, callback) {
@@ -130,12 +143,6 @@ wv.link.ui = wv.link.ui || function(models, config) {
     // Render Dialog Box Content
     self.reactComponent = ReactDOM.render(Widget, $dialog[0]);
 
-    var throttleShareLinks = _.throttle(function() {
-        self.setShareLinks(self.updateShareLink);
-      }, 2000, {
-        leading: true,
-        trailing: true
-      });
     // If selected during the animation, the cursor will go to the
     // end of the input box
     var updateLink = function() {
@@ -143,7 +150,6 @@ wv.link.ui = wv.link.ui || function(models, config) {
       $("#wv-link-shorten-check").iCheck("uncheck");
       $('#permalink_content').focus();
       $('#permalink_content').select();
-      throttleShareLinks();
     };
 
     models.link.events.on("update", updateLink);
@@ -220,13 +226,9 @@ wv.link.ui = wv.link.ui || function(models, config) {
     $("#wv-link-shorten-check").prop("checked", false);
   };
 
-  self.clickFunction = function() {
-      // Used to add actions when share buttons are clicked.
-  };
-
   self.initWidget = function() {
     return widgetFactory({
-      clickFunction: self.clickFunction,
+      clickFunction: clickFunction,
       fbLink: '#',
     	twLink: '#',
     	rdLink: '#',
