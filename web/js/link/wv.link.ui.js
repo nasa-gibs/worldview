@@ -18,7 +18,6 @@ wv.link.ui = wv.link.ui || function(models, config) {
   var id = "wv-link-button";
   var selector = "#" + id;
   var $button, $label;
-  var fbLink, twLink, rdLink, emailLink;
   var widgetFactory = React.createFactory(WVC.Share);
 
   var init = function() {
@@ -70,7 +69,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
     return "mailto:?" + "subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
   };
 
-  self.setShareLinks = function(fbLink, twLink, rdLink, emailLink, callback) {
+  self.setShareLinks = function(callback) {
     var promise = models.link.shorten();
     var shareMessage = 'Check out what I found in NASA Worldview!';
     var twMessage = 'Check out what I found in #NASAWorldview -';
@@ -138,7 +137,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
       $("#wv-link-shorten-check").iCheck("uncheck");
       $('#permalink_content').focus();
       $('#permalink_content').select();
-      self.setShareLinks(fbLink, twLink, rdLink, emailLink, self.updateShareLink);
+      self.setShareLinks(self.updateShareLink);
     };
 
     models.link.events.on("update", updateLink);
