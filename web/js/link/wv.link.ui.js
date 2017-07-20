@@ -98,7 +98,6 @@ wv.link.ui = wv.link.ui || function(models, config) {
     if(type === 'twitter' || type === 'email') {
       promise.done(function(result) {
         if (result.status_code === 200) {
-          emailBody = shareMessage + " - " + result.data.url;
           href = getSharelink(type, result.data.url);
           openSocial(href, type);
         }
@@ -113,14 +112,14 @@ wv.link.ui = wv.link.ui || function(models, config) {
     }
   };
 
-  self.updateShareLink = function(fbLink, twLink, rdLink, emailLink, callback) {
-    self.reactComponent.setState({
-      fbLink : fbLink,
-      twLink : twLink,
-      rdLink : rdLink,
-      emailLink : emailLink
-    });
-  };
+  // self.updateShareLink = function(fbLink, twLink, rdLink, emailLink) {
+  //   self.reactComponent.setState({
+  //     fbLink : fbLink,
+  //     twLink : twLink,
+  //     rdLink : rdLink,
+  //     emailLink : emailLink
+  //   });
+  // };
 
   self.show = function() {
     var $dialog = wv.ui.getDialog();
