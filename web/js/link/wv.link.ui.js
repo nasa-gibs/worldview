@@ -82,44 +82,35 @@ wv.link.ui = wv.link.ui || function(models, config) {
     }
     return undefined;
   };
-  var openSocial = function(href, type) {
-    if(type === 'email') {
-      window.location.assign(href);
-    } else {
-      window.open(href, '_blank');
-    }
+  var openPromisedSocial = function(url, win) {
+    win.location.assign(url);
   };
   var clickFunction = function(type) {
-    var href;
+    var href, win;
     var shareLink = models.link.get();
     var promise = models.link.shorten();
 
     // If a short link can be generated, replace the full link.
     if(type === 'twitter' || type === 'email') {
+      win = window;
+      if(type === 'twitter') {
+        win = window.open('', '_blank');
+      }
       promise.done(function(result) {
         if (result.status_code === 200) {
           href = getSharelink(type, result.data.url);
-          openSocial(href, type);
+          openPromisedSocial(href, win);
         }
       }).fail(function() {
         href = getSharelink(type, shareLink);
-        openSocial(href, type);
+        openPromisedSocial(href, win);
         console.warn("Unable to shorten URL, full link generated.");
       });
     } else {
       href = getSharelink(type, shareLink);
-      openSocial(href, type);
+      window.open(href, '_blank');
     }
   };
-
-  // self.updateShareLink = function(fbLink, twLink, rdLink, emailLink) {
-  //   self.reactComponent.setState({
-  //     fbLink : fbLink,
-  //     twLink : twLink,
-  //     rdLink : rdLink,
-  //     emailLink : emailLink
-  //   });
-  // };
 
   self.show = function() {
     var $dialog = wv.ui.getDialog();
