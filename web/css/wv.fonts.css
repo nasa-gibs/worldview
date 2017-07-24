@@ -59,27 +59,27 @@
 }
 /* Open Sans Bold */
 @font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: bold;
-  src: url("../font/OpenSans/Bold/OpenSans-Bold.eot"); /* IE9 Compat Modes */
-  src: local('Open Sans Bold'), local('OpenSans-Bold'),
-       url("../font/OpenSans/Bold/OpenSans-Bold.eot?#iefix") format("embedded-opentype"), /* IE Compat Modes */
-       url("../font/OpenSans/Bold/OpenSans-Bold.woff2") format("woff2"), /* Super Modern Browsers */
-       url("../font/OpenSans/Bold/OpenSans-Bold.woff") format("woff"), /* Pretty Modern Browsers */
-       url("../font/OpenSans/Bold/OpenSans-Bold.ttf") format("truetype"); /* Safari, Android, iOS */
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: bold;
+    src: url("../font/OpenSans/Bold/OpenSans-Bold.eot"); /* IE9 Compat Modes */
+    src: local('Open Sans Bold'), local('OpenSans-Bold'),
+         url("../font/OpenSans/Bold/OpenSans-Bold.eot?#iefix") format("embedded-opentype"), /* IE Compat Modes */
+         url("../font/OpenSans/Bold/OpenSans-Bold.woff2") format("woff2"), /* Super Modern Browsers */
+         url("../font/OpenSans/Bold/OpenSans-Bold.woff") format("woff"), /* Pretty Modern Browsers */
+         url("../font/OpenSans/Bold/OpenSans-Bold.ttf") format("truetype"); /* Safari, Android, iOS */
 }
 /* Open Sans Bold Italic */
 @font-face {
-  font-family: 'Open Sans';
-  font-style: italic;
-  font-weight: bold;
-  src: url("../font/OpenSans/BoldItalic/OpenSans-BoldItalic.eot"); /* IE9 Compat Modes */
-  src: local('Open Sans Bold Italic'), local('OpenSans-BoldItalic'),
-       url("../font/OpenSans/BoldItalic/OpenSans-BoldItalic.eot?#iefix") format("embedded-opentype"), /* IE Compat Modes */
-       url("../font/OpenSans/BoldItalic/OpenSans-BoldItalic.woff2") format("woff2"), /* Super Modern Browsers */
-       url("../font/OpenSans/BoldItalic/OpenSans-BoldItalic.woff") format("woff"), /* Pretty Modern Browsers */
-       url("../font/OpenSans/BoldItalic/OpenSans-BoldItalic.ttf") format("truetype"); /* Safari, Android, iOS */
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: bold;
+    src: url("../font/OpenSans/BoldItalic/OpenSans-BoldItalic.eot"); /* IE9 Compat Modes */
+    src: local('Open Sans Bold Italic'), local('OpenSans-BoldItalic'),
+         url("../font/OpenSans/BoldItalic/OpenSans-BoldItalic.eot?#iefix") format("embedded-opentype"), /* IE Compat Modes */
+         url("../font/OpenSans/BoldItalic/OpenSans-BoldItalic.woff2") format("woff2"), /* Super Modern Browsers */
+         url("../font/OpenSans/BoldItalic/OpenSans-BoldItalic.woff") format("woff"), /* Pretty Modern Browsers */
+         url("../font/OpenSans/BoldItalic/OpenSans-BoldItalic.ttf") format("truetype"); /* Safari, Android, iOS */
 }
 @font-face {
     font-family: 'Roboto Mono';
