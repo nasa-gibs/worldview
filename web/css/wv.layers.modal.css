@@ -216,7 +216,7 @@
 
 }
 .layer-category li{
-
+    list-style: none;
 }
 .layer-category li a{
     display:block;
@@ -523,6 +523,11 @@
 #selected-category .ui-tabs-panel .ui-buttonset{
 
 }
+
+#selected-category .ui-tabs-panel li {
+    list-style: none;
+}
+
 #selected-category .ui-tabs-panel li.measurement-settings-item iCheck-checkbox,
 #selected-category .ui-tabs-panel li.measurement-settings-item label,
 #selected-category .ui-tabs-panel li.measurement-settings-item
