@@ -1,4 +1,3 @@
-
 #wv-data{
     position: relative;
 }
@@ -165,23 +164,6 @@
     margin-left: 47px;
     color: #fffbe7;
 }
-
-/*
-#wv-data-selection-notice .text a {
-    color: #444;
-}
-
-#wv-data-selection-notice .text a:hover {
-    color: #24d;
-}
-*/
-
-/*
-#DataDownload_GranuleList .button {
-    width: 16px;
-    height: 16px;
-}
-*/
 
 #wv-data-list table {
     width: 100%;

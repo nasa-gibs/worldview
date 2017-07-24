@@ -1,8 +1,6 @@
-
 *:focus {
     outline: 0;
 }
-
 
 /************************Timeline****************************/
 #timeline{
@@ -108,14 +106,6 @@ g.plot rect.data-bar {
     fill:#4e5e87;
     stroke:transparent;
     stroke-width:1px;
-
-    /*    stroke:#ccc;
-
-    stroke-width:2px;
-    stroke-linecap:round;
-    stroke-linejoin:miter;
-    stroke-opacity:0.8;
-*/
     pointer-events:none;
 }
 g.plot rect.data-bar-hovered{
@@ -206,7 +196,6 @@ g.plot rect.data-bar-invisible{
   vertical-align:middle;
   position:relative;
 }
-
 
 #timeline-header .button-action-group svg path{
     fill:#fff;
@@ -310,8 +299,6 @@ g.plot rect.data-bar-invisible{
 }
 
 /* Timeline svg classes */
-
-
 .x.axis path, .x.axis line {
     fill: none;
     stroke: #ffffff;
