@@ -1,4 +1,18 @@
 ExpiresActive On
-ExpiresDefault A0
-Header set Cache-Control "no-cache, must-revalidate, public"
-Header set Pragma "no-cache"
+<FilesMatch index.html>
+   ExpiresDefault A0
+   Header set Cache-Control "no-cache, no-store, must-revalidate"
+   Header set Pragma "no-cache"
+</FilesMatch>
+
+AddOutputFilterByType DEFLATE text/html
+AddOutputFilterByType DEFLATE text/css
+AddOutputFilterByType DEFLATE text/javascript
+AddOutputFilterByType DEFLATE application/javascript
+AddOutputFilterByType DEFLATE application/json
+
+AddType application/vnd.ms-fontobject .eot
+AddType application/font-woff .woff
+AddType application/x-font-truetype .ttf
+AddType image/svg+xml .svg
+AddType application/x-font-opentype .otf

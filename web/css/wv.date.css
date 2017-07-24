@@ -73,7 +73,6 @@ div.datespan {
     width: 11.78%;
     height: 100px;
     float: left;
-    -moz-box-shadow: 0 0 5px 5px #111;
     -webkit-box-shadow: 0 0 5px 5px #111;
     box-shadow: 0 0 5px 5px #111;
     margin: 20px 0 0 2.5% !important;
@@ -113,12 +112,8 @@ input.ui-slider-input {
 }
 
 .slider {/*background: rgba(45,50,55,.75);*/
-    margin-bottom: 0px; /*box-shadow: 0px 0px 4px 1px #bbb;*/
-    background: -moz-linear-gradient(top,  rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.8) 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.6)), color-stop(50%,rgba(0,0,0,0.7)), color-stop(100%,rgba(0,0,0,0.8))); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.7) 50%,rgba(0,0,0,0.8) 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top,  rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.7) 50%,rgba(0,0,0,0.8) 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.7) 50%,rgba(0,0,0,0.8) 100%); /* IE10+ */
+    margin-bottom: 0px; /*box-shadow: 0px 0px 4px 1px #bbb;*/ /* FF3.6+ */ /* Chrome,Safari4+ */ /* Chrome10+,Safari5.1+ */ /* Opera 11.10+ */ /* IE10+ */
+    background: -webkit-gradient(linear,  left top, left bottom,  from(rgba(0,0,0,0.6)),color-stop(50%, rgba(0,0,0,0.7)),to(rgba(0,0,0,0.8)));
     background: linear-gradient(to bottom,  rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.7) 50%,rgba(0,0,0,0.8) 100%); /* W3C */
     height: 23px;
     cursor: pointer;
@@ -200,11 +195,13 @@ a.ui-btn {
 }
 
 a.ui-shadow {
-    box-shadow: none;
+    -webkit-box-shadow: none;
+            box-shadow: none;
 }
 
 a.ui-btn-up-c {
-    box-shadow: none;
+    -webkit-box-shadow: none;
+            box-shadow: none;
 }
 
 #mapdiv {

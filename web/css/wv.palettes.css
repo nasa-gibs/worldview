@@ -107,9 +107,12 @@
 .bank div .wv-palettes-panel .wv-running-bar {
     visibility: hidden;
     position: absolute;
+    -webkit-transition-property: left;
     transition-property: left;
-    transition-duration: 100ms, 100ms;
-    transition-delay: 0s, 0s;
+    -webkit-transition-duration: 100ms, 100ms;
+            transition-duration: 100ms, 100ms;
+    -webkit-transition-delay: 0s, 0s;
+            transition-delay: 0s, 0s;
 }
 .bank div .wv-palettes-panel .wv-running-category-label {
     bottom: 1px;

@@ -97,7 +97,6 @@ wv.link.model = wv.link.model || function(config) {
             return $.Deferred().resolve(shortenCache[link]);
         }
         if ( /localhost/.test(link) ) {
-            console.warn("Cannot shorten localhost, using", DEBUG_SHORTEN_LINK);
             return $.Deferred().resolve({
                 status_code: 200,
                 data: {

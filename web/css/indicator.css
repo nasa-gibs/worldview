@@ -16,7 +16,8 @@
     z-index: 10000;
     background: #262b31;
     color: #ffffff;
-    box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+            box-sizing:border-box;
     width: 250px;
     height: 52px;
     line-height:52px;
