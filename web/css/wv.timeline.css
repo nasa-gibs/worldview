@@ -1,8 +1,6 @@
-
 *:focus {
     outline: 0;
 }
-
 
 /************************Timeline****************************/
 #timeline{
@@ -18,7 +16,7 @@
 #timeline-footer text{
     font-size:14px;
     font-weight:normal;
-    font-family:'Lucida Console', 'Monaco', monospace;
+    font-family:'Roboto Mono', monospace;
     font-style:normal;
     font-variant:normal;
     font-stretch:normal;
@@ -108,14 +106,6 @@ g.plot rect.data-bar {
     fill:#4e5e87;
     stroke:transparent;
     stroke-width:1px;
-
-    /*    stroke:#ccc;
-
-    stroke-width:2px;
-    stroke-linecap:round;
-    stroke-linejoin:miter;
-    stroke-opacity:0.8;
-*/
     pointer-events:none;
 }
 g.plot rect.data-bar-hovered{
@@ -150,7 +140,7 @@ g.plot rect.data-bar-invisible{
     font-size:24px;
     background:transparent;
     border:0px;
-    font-family:'Lucida Console', 'Monaco', monospace;
+    font-family:'Roboto Mono', monospace;
     vertical-align:middle;
     box-sizing:border-box;
     -moz-box-sizing:border-box;
@@ -206,7 +196,6 @@ g.plot rect.data-bar-invisible{
   vertical-align:middle;
   position:relative;
 }
-
 
 #timeline-header .button-action-group svg path{
     fill:#fff;
@@ -310,8 +299,6 @@ g.plot rect.data-bar-invisible{
 }
 
 /* Timeline svg classes */
-
-
 .x.axis path, .x.axis line {
     fill: none;
     stroke: #ffffff;
@@ -347,7 +334,7 @@ g.plot rect.data-bar-invisible{
     cursor:pointer;
     text-transform:uppercase;
     text-align:center;
-    font-family:'Lucida Console', 'Monaco', monospace;
+    font-family:'Roboto Mono', monospace;
 }
 #timeline-zoom a.zoom-btn.depth-1{
     color:#ffffff;

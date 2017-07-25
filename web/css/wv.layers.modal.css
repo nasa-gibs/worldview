@@ -15,9 +15,9 @@
 .layer-modal p, .layer-modal div,
 .layer-modal h1, .layer-modal h2,
 .layer-modal h3, .layer-modal h4 {
-    font-family: open_sans_light, Arial, sans-serif;
-    font-weight:300;
-    color:#383838;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    color: #383838;
 }
 
 .layer-modal .ui-dialog-titlebar{
@@ -81,7 +81,8 @@
     height: 40px;
     line-height:40px;
     font-size: 28px;
-    font-family: open_sans_light, Arial, sans-serif;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
     padding:0 10px;
     position:absolute;
     left:35px;
@@ -130,6 +131,11 @@
     height: 30px;
     line-height: 30px;
     padding: 1px 15px;
+}
+#layer-modal #category-breadcrumb span {
+  font-weight: 400;
+  margin-left: 0;
+  padding: 0;
 }
 #layers-modal-close{
     position: relative;
@@ -194,7 +200,6 @@
 .layer-category h3 {
     font-size:20px;
     line-height:20px;
-
 }
 .layer-category h3 a{
     display:block;
@@ -202,16 +207,16 @@
     line-height:20px;
     padding:10px;
     color:#fff;
-
+    background: rgba(51,51,51,0.6);
 }
 .layer-category h3 a:hover{
-    background:rgba(255,255,255,0.6);
+    background: rgba(255,255,255,0.6);
 }
 .layer-category ul {
 
 }
 .layer-category li{
-
+    list-style: none;
 }
 .layer-category li a{
     display:block;
@@ -250,7 +255,8 @@
 #category-breadcrumb{
     height:30px;
     line-height:30px;
-    font-family: open_sans_light, Arial, sans-serif;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
     font-size:16px;
     color:#000;
     /*font-style:italic;*/
@@ -338,7 +344,7 @@
     color:#888;
     font-size:12px;
     line-height:100%;
-    font-weight:300;
+    font-weight:400;
     margin-top:3px;
     font-style: italic;
 }
@@ -377,7 +383,7 @@
     -o-box-sizing: border-box;
     padding: 0.5em 0.5em;
     width:150px;
-    font-family: open_sans_light, Arial, sans-serif;
+    font-family: 'Open Sans', sans-serif;
     font-size:13px;
     text-align:left;
     font-weight:300;
@@ -411,12 +417,12 @@
     color: #ddd;
     font-weight:bold;
     font-size: 14px;
-    line-height: 14px;
-    margin: 15px 0px 5px;
-    font-family: "Lucida Sans", "Arial", Sans-Serif;
+    line-height: 18px;
+    margin: 16px 0px 6px;
+    font-family: 'Open Sans', Sans-Serif;
 }
 .source-metadata h1:first-child{
-    margin-top:0;
+    margin-top: 4px;
 }
 .source-metadata h2{
     color: #ddd;
@@ -451,8 +457,8 @@
 #selected-category .ui-tabs-panel p,
 #selected-category .ui-tabs-panel span {
     font-size: 11px;
-    font-family: open_sans_regular, Arial, sans-serif;
-    font-weight: 300;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
     color: #bbb;
 }
 #selected-category .ui-tabs-panel .source-metadata{
@@ -465,9 +471,10 @@
 #selected-category .ui-tabs-panel .source-metadata a,
 .layer-metadata p,
 .layer-metadata a {
-    font-family: open_sans_regular, Arial, sans-serif;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
     font-size: 13px;
-    line-height:14px;
+    line-height:16px;
     margin-bottom: 15px;
 }
 #layers-all .source-metadata p {
@@ -516,6 +523,11 @@
 #selected-category .ui-tabs-panel .ui-buttonset{
 
 }
+
+#selected-category .ui-tabs-panel li {
+    list-style: none;
+}
+
 #selected-category .ui-tabs-panel li.measurement-settings-item iCheck-checkbox,
 #selected-category .ui-tabs-panel li.measurement-settings-item label,
 #selected-category .ui-tabs-panel li.measurement-settings-item

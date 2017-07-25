@@ -8,21 +8,35 @@
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
-@font-face {
-    font-family: open_sans_light;
-    src: local(open_sans_light), url('../font/OpenSans-Light.ttf') format('truetype');
-    font-weight:300;
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
 }
-@font-face {
-    font-family: open_sans_regular;
-    src: local(open_sans_regulat), url('../font/OpenSans-Regular.ttf') format('truetype');
-    font-weight:400;
+
+/* This needs reworked */
+html, body, div, ul, li, p, h1, h2, h3, h4, h5, h6 {
+    font: 400 13px/13px 'Open Sans', sans-serif;
 }
-html,body, div, ul, li, p, h1, h2, h3, h4, h5, h6 {
-    display:block;
-    margin:0;
-    padding:0;
-    font: 100 13px/13px 'Lucida Sans', 'Arial', sans-serif;
+
+ul, li, p, h1, h2, h3, h4, h5, h6 {
+    letter-spacing: 0.3px;
 }
 
 html, body {
@@ -31,14 +45,52 @@ html, body {
     overflow: hidden;
 }
 
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+
 body {
+    line-height: 1;
     min-width: 320px;
     background: #000000;
 }
 
-div {display:block;}
-h1, h2, h3, h4, h5, h6 { font-weight:400; }
+nav ul {
+    list-style: none;
+}
 
+blockquote, q {
+    quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: '';
+    content: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+sup {
+  top: -0.5em;
+}
 
 #info_drop { border:none; margin: 0;}
 #info_drop div.hidden a {display:block; color:#fff; font-weight:100; line-height:1em; font-size: 11px; width:70px; padding: 2px 5px; text-align:right; text-decoration:none;}
@@ -75,8 +127,6 @@ div.horizontalContainer {
     /*border-bottom: 1px solid #000;*/
 }
 
-
-
 #banner img.logo {padding:11px 5px;}
 #banner ul {float:right; }
 #banner ul li {display:block; float:right; margin:3px 3px; line-height:0; }
@@ -99,7 +149,7 @@ div.horizontalContainer {
 #imgFileSize {color:#D99694;}
 
 #transition ul {
-    font: 10px 'Gill Sans', sans-serif;
+    font: 10px 'Open Sans', sans-serif;
     text-align: center;
 }
 
