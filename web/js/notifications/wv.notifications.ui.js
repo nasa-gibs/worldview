@@ -10,10 +10,11 @@
  *
  * Licensed under the NASA Open Source Agreement, Version 1.3                                                                           
  * http://opensource.gsfc.nasa.gov/nosa.php                                                                                             
- */                                                                                                                                     
+ */
+
 var wv = wv || {};                                                                                                                      
-wv.notifications = wv.notifications || {};                                                                                                                    
-    
+wv.notifications = wv.notifications || {};
+
 /*  
  * @Class
  */ 
@@ -21,14 +22,20 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
     var self = {};
     var mainNotification;
     var mainIcon;
+    var mainIconLabel;
     var secondaryNotification;
     var sortedNotifications = {};
 
     var activeNotifications = {};
     var activeMessageId;
     var url;
+    var alertBlockExists;
+    var messageBlockExists;
+
 
     url = config.features.alert.url;
+    messageBlockExists = false;
+    alertBlockExists = false;
     self.events = wv.util.events();
     self.infoIconActive = false;
     self.notifyIconActive = false;
@@ -77,11 +84,14 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
      * @returns {void}
      */
     var getPriority = function(sortedNotifications) {
-        var priority;
+        var priority, message, outage, alert;
         priority = null;
         message = sortedNotifications.messages[0];
         outage = sortedNotifications.outages[0];
         alert = sortedNotifications.alerts[0];
+        if(outage || outage) {
+            alertBlockExists = true;
+        }
 
         if(message && !objectAlreadySeen(message)) {
             priority = 'message';
@@ -259,7 +269,8 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
 
         hide = '';
         messages = sortedNotifications.messages;
-        if(!messages[0]) {
+
+        if(!messageBlockExists) {
             return null;
         }
         if(activeMessageId) {
@@ -303,7 +314,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
 
             $notifyMenuItem.on('click', notify);
             return $notifyMenuItem;
-        } else if(sortedNotifications.alerts[0] || sortedNotifications.outages[0]) {
+        } else if(alertBlockExists) {
             $notifyMenuItem = $("<li><a class='wv-status-hide'><i class='ui-icon fa fa-fw fa-bolt'></i>Notifications</a></li>");
             $notifyMenuItem.on('click', notify);
             return $notifyMenuItem;
@@ -409,7 +420,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
      * @returns {Object} Dimension array
      */
     var getModalDimensions = function() {
-        var dimensions;
+        var width, height;
 
         width =  625;
         height = "auto";
@@ -477,7 +488,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
      * @returns {void}
      */
     var create$whatsNew = function(obj, title) {
-        var $dialog, width, height, $notifyContent, releasePageUrl, date;
+        var $dialog, width, height, $notifyContent, releasePageUrl, date, dimensions;
 
         date = new Date(obj.created_at);
         date = date.getDate()+ " " + wv.util.giveMonth(date) + " " + date.getFullYear();
