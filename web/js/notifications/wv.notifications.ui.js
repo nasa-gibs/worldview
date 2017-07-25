@@ -432,10 +432,13 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
      * @returns {Object} Jquery ul element
      */
     var create$block = function(arra, title) {
-        var $li, date, activeClass, $ul = $('<ul></ul>');
+        var $li, date, numNotSeen, activeClass, $ul = $('<ul></ul>');
+
+        numNotSeen = getNumberOfTypeNotseen(title, sortedNotifications[title + 's']);
+
         for(var i = 0, len = arra.length; i < len; i++) {
             activeClass = '';
-            if(activeNotifications[title] && i === 0) {
+            if(activeNotifications[title] && i < numNotSeen) {
                 activeClass = title;
             }
             date = new Date(arra[i].created_at);
