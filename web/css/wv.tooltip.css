@@ -29,7 +29,7 @@
   		background-color: hsla(0, 0%, 20%, 0.9);
   		color: #fff;
   		padding: 5px 10px;
-			list-style: none;
+		list-style: none;
 	}
 	.wv-tooltip-case .wv-tooltip ul li:hover {
 		cursor: pointer;
