@@ -63,9 +63,7 @@
         .ui-menu-item a.wv-status-hide::before{
             display: none;
         }
-.wv-notify-modal {
-    padding:0 20px;
-}
+.wv-notify-modal {}
     .wv-notify-modal h2 {
         text-transform: capitalize;
         font-size: 18px;
