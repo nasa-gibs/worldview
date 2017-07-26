@@ -569,7 +569,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             var $zot = $layer.find('div.zot');
             if(zoom > zoomLimit) {
                 $zot.attr('title', 'Layer is overzoomed by ' +
-                    Math.round((zoom - zoomLimit) * 100) / 100 + 'x zoom levels'
+                    Math.round((zoom - zoomLimit) * 100) / 100 + 'x its maximum zoom level'
                 );
 
                 if( !( $layer.hasClass('layer-hidden') ) &&
@@ -583,7 +583,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
             }
             else {
                 $zot.attr('title', 'Layer is overzoomed by ' +
-                    Math.round((zoom - zoomLimit) * 100) / 100 + 'x zoom levels'
+                    Math.round((zoom - zoomLimit) * 100) / 100 + 'x its maximum zoom level'
                 );
                 if ( $layer.hasClass('zotted')) {
                     $layer.removeClass('zotted');
