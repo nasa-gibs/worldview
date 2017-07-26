@@ -305,6 +305,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
             alertsNumber = getNumberOfTypeNotseen('alert', sortedNotifications.alerts);
             outageNumber = getNumberOfTypeNotseen('outage', sortedNotifications.outages);
             count = outageNumber + alertsNumber;
+            hide = '';
             if(count === 0) {
                 hide = 'wv-status-hide'; // hides number value when === zero
             }
