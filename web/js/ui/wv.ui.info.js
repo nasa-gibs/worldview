@@ -46,7 +46,8 @@ wv.ui.info = wv.ui.info || (function(ui, config) {
     });
 
     var show = function() {
-        var $menu = wv.ui.getMenu().attr("id", "wv-info-menu");
+        var $menu = wv.ui.getMenu()
+            .attr('id', 'wv-info-menu');
         var $alerts, $new;
         var whatsNewUrl = "https://github.com/nasa-gibs/worldview/releases";
         var $menuItems = $("<ul></ul>");

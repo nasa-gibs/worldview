@@ -10,10 +10,11 @@
  *
  * Licensed under the NASA Open Source Agreement, Version 1.3                                                                           
  * http://opensource.gsfc.nasa.gov/nosa.php                                                                                             
- */                                                                                                                                     
+ */
+
 var wv = wv || {};                                                                                                                      
-wv.notifications = wv.notifications || {};                                                                                                                    
-    
+wv.notifications = wv.notifications || {};
+
 /*  
  * @Class
  */ 
@@ -21,15 +22,20 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
     var self = {};
     var mainNotification;
     var mainIcon;
-    var iconCase;
+    var mainIconLabel;
     var secondaryNotification;
     var sortedNotifications = {};
 
     var activeNotifications = {};
     var activeMessageId;
     var url;
+    var alertBlockExists;
+    var messageBlockExists;
+
 
     url = config.features.alert.url;
+    messageBlockExists = false;
+    alertBlockExists = false;
     self.events = wv.util.events();
     self.infoIconActive = false;
     self.notifyIconActive = false;
@@ -52,8 +58,8 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
      */
     var init = function() {
         var reactComponent, options, p, alertUser;
-        mainIcon = $('#wv-info-button i')[0];
-        iconCase = $('#wv-info-button')[0];
+        mainIcon = $('#wv-info-button')[0];
+        mainIconLabel = $('#wv-info-button label')[0];
         p = wv.util.get(url);
         p.then(function(response) {
             var obj, notifications, alert;
@@ -61,8 +67,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
             obj = JSON.parse(response);
             notifications = obj.notifications;
             sortedNotifications = separateByType(notifications);
-            setGlobals(sortedNotifications);
-            updateMainIcon();
+            update(sortedNotifications);
         }, function(error) {
             console.warn(error);
         });
@@ -78,24 +83,87 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
      *
      * @returns {void}
      */
-    var setGlobals = function(sortedNotifications){
-        var message, outage, alert;
+    var getPriority = function(sortedNotifications) {
+        var priority, message, outage, alert;
+        priority = null;
         message = sortedNotifications.messages[0];
         outage = sortedNotifications.outages[0];
         alert = sortedNotifications.alerts[0];
+        if(outage || outage) {
+            alertBlockExists = true;
+        }
 
         if(message && !objectAlreadySeen(message)) {
+            priority = 'message';
             mainNotification = 'message';
-            activeMessageId = message.id;
+            activeMessageId = message.created_at;
         } 
         if(alert && !objectAlreadySeen(alert)) {
+            priority = 'alert';
             mainNotification = 'alert';
-            activeNotifications.alert = alert.id;
+            activeNotifications.alert = alert.created_at;
         }
         if(outage && !objectAlreadySeen(outage)) {
+            priority = 'outage';
             mainNotification = 'outage';
-            activeNotifications.outage = outage.id;
+            activeNotifications.outage = outage.created_at;
         }
+        return priority;
+    };
+    var getCounts = function() {
+        var outageCount, messageCount, alertsAndOutages;
+
+        messageCount = getNumberOfTypeNotseen('message', sortedNotifications.messages);
+
+        alertsAndOutages = getNumberOfTypeNotseen('alert', sortedNotifications.alerts); // Number of alerts not yet seen
+        outageCount = getNumberOfTypeNotseen('outage', sortedNotifications.outages); // Number of outages not yet seen
+
+        alertsAndOutages = alertsAndOutages + outageCount;
+
+        return {messageCount:messageCount, alertCount:alertsAndOutages};
+    };
+    /**
+     * @return {void}
+     */
+    var update = function() {
+        var alertCount, messageCount, counts, priority;
+        counts = getCounts();
+        alertCount = counts.alertCount;
+        messageCount = counts.messageCount;
+        priority = getPriority(sortedNotifications); 
+        updateMainIcon(priority, alertCount + messageCount);
+    };
+
+    /*
+     * Determines the number of status of this type
+     * that the user is yet to see
+     *
+     * @function getNumberOfTypeNotseen
+     * @private
+     *
+     * @param {string} type - Status type
+     * @param {object} arra - array of status of one type
+     * 
+     * @returns {Number} count - number of unseen messages
+     *  in LocalStorage
+     */
+    var getNumberOfTypeNotseen = function(type, arra) {
+        var storageItem = wv.util.isInLocalStorage(type);
+        var count, len;
+
+        len = arra.length;
+        count = 0;
+        if(!storageItem) {
+            return len;
+        }
+        for(var i = 0; i < len; i++) {
+            if(new Date(storageItem) < new Date(arra[i].created_at)) {
+                count++;
+            } else {
+                return count;
+            }
+        }
+        return count;
     };
 
     /*
@@ -113,7 +181,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
         var fieldExists, fieldValueMatches, type, idString;
 
         type = obj.notification_type;
-        idString = obj.id.toString();
+        idString = obj.created_at.toString();
         fieldExists = wv.util.isInLocalStorage(type);
         fieldValueMatches = false;
 
@@ -179,16 +247,14 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
      *
      * @returns {void}
      */
-    var updateMainIcon = function() {
-        if(mainNotification) {
-            mainIcon.className = 'fa fa-2x fa-' + classes[mainNotification];
-            iconCase.className = 'wv-toolbar-button ' + classes[mainNotification];
+    var updateMainIcon = function(type, numberOfAlerts) {
+        mainIconLabel.setAttribute('data-content', numberOfAlerts);
+        if(type) {
+            mainIcon.className = 'wv-toolbar-button wv-status-' + type;
         } else {
-            mainIcon.className = 'fa fa-2x fa-info-circle';
-            iconCase.className = 'wv-toolbar-button';
+            mainIcon.className = 'wv-toolbar-button wv-status-hide';
         }
     };
-
     /*
      * Creates a message menu item and attaches
      *  event listeners to the element
@@ -199,21 +265,27 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
      * @returns {object} a jquery element
      */
     self.getMessages = function() {
-        var $message;
-        if(!sortedNotifications.messages) {
+        var $message, messageNumber, messages, hide;
+
+        hide = '';
+        messages = sortedNotifications.messages;
+
+        if(!messageBlockExists) {
             return null;
         }
         if(activeMessageId) {
-            $message = $("<li class='gift'><a><i class='ui-icon fa fa-fw fa-gift active'></i>What's New</a></li>");
+            messageNumber = getNumberOfTypeNotseen('message', messages);
+            if(messageNumber === 0) {
+                hide = 'wv-status-hide'; // hides number value when === zero
+            }
+            $message = $("<li class='gift'><a class='" + hide + "' data-content='" + messageNumber + "'><i class='ui-icon fa fa-fw fa-gift active'></i>What's New</a></li>");
             $message.on('click', deactivateMessage);
             self.messageIconActive = true;
             return $message;
-        } else if(sortedNotifications.messages[0])  {
-            $message = $("<li><a><i class='ui-icon fa fa-fw fa-gift'></i>What's New</a></li>");
+        } else {
+            $message = $("<li><a class='wv-status-hide'><i class='ui-icon fa fa-fw fa-gift'></i>What's New</a></li>");
             $message.on('click', deactivateMessage);
             return $message;
-        } else{
-            return null;
         }
     };
 
@@ -227,16 +299,24 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
      * @returns {object} a jquery element
      */
     self.getAlert = function() {
-        var $notifyMenuItem;
+        var $notifyMenuItem, alertsNumber, outageNumber, count, hide;
+
         if(!_.isEmpty(activeNotifications)) {
-            $notifyMenuItem = $("<li class='" + classes[mainNotification] + "'><a><i class='ui-icon fa fa-fw active fa-" + classes[mainNotification] + "'></i>Notifications</a></li>");
+            alertsNumber = getNumberOfTypeNotseen('alert', sortedNotifications.alerts);
+            outageNumber = getNumberOfTypeNotseen('outage', sortedNotifications.outages);
+            count = outageNumber + alertsNumber;
+            hide = '';
+            if(count === 0) {
+                hide = 'wv-status-hide'; // hides number value when === zero
+            }
+            $notifyMenuItem = $("<li class='" + classes[mainNotification] + "'><a class='" + hide + "' data-content='" + count + "'><i class='ui-icon fa fa-fw active fa-" + classes[mainNotification] + "'></i>Notifications</a></li>");
             self.infoIconActive = true;
             self.notifyIconActive = true;
 
             $notifyMenuItem.on('click', notify);
             return $notifyMenuItem;
-        } else if(!_.isEmpty(sortedNotifications.alerts) || !_.isEmpty(sortedNotifications.outages)) {
-            $notifyMenuItem = $("<li><a><i class='ui-icon fa fa-fw fa-bolt'></i>Notifications</a></li>");
+        } else if(alertBlockExists) {
+            $notifyMenuItem = $("<li><a class='wv-status-hide'><i class='ui-icon fa fa-fw fa-bolt'></i>Notifications</a></li>");
             $notifyMenuItem.on('click', notify);
             return $notifyMenuItem;
         } else {
@@ -268,7 +348,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
         if(mainNotification === 'message') {
             mainNotification = null;
         }
-        updateMainIcon();
+        update();
     };
 
     /*
@@ -297,7 +377,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
         if(self.messageIconActive) {
             mainNotification = 'message';
         }
-        updateMainIcon();
+        update();
     };
 
     /*
@@ -341,7 +421,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
      * @returns {Object} Dimension array
      */
     var getModalDimensions = function() {
-        var dimensions;
+        var width, height;
 
         width =  625;
         height = "auto";
@@ -364,10 +444,13 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
      * @returns {Object} Jquery ul element
      */
     var create$block = function(arra, title) {
-        var $li, date, activeClass, $ul = $('<ul></ul>');
+        var $li, date, numNotSeen, activeClass, $ul = $('<ul></ul>');
+
+        numNotSeen = getNumberOfTypeNotseen(title, sortedNotifications[title + 's']);
+
         for(var i = 0, len = arra.length; i < len; i++) {
             activeClass = '';
-            if(activeNotifications[title] && i === 0) {
+            if(activeNotifications[title] && i < numNotSeen) {
                 activeClass = title;
             }
             date = new Date(arra[i].created_at);
@@ -391,7 +474,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
      */
     var localStorageValueMatches = function(property, value) {
         var oldValue = localStorage.getItem(property);
-        return value <= oldValue;
+        return new Date(value) <= new Date(oldValue);
     };
 
     /*
@@ -406,7 +489,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
      * @returns {void}
      */
     var create$whatsNew = function(obj, title) {
-        var $dialog, width, height, $notifyContent, releasePageUrl, date;
+        var $dialog, width, height, $notifyContent, releasePageUrl, date, dimensions;
 
         date = new Date(obj.created_at);
         date = date.getDate()+ " " + wv.util.giveMonth(date) + " " + date.getFullYear();
