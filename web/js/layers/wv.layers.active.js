@@ -551,7 +551,6 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     var checkZots = function($layer, layer) {
         var map = ui.map;
         var zoom = map.selected.getView().getZoom();
-
         var sources = config.sources;
         var proj = models.proj.selected.id;
 
@@ -560,30 +559,33 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         var zoomOffset = ((proj == "arctic") || (proj == "antarctic")) ? 1 : 0;
 
         var matrixSet = layer.projections[proj].matrixSet;
+
+
         if(matrixSet !== undefined){
             var source = layer.projections[proj].source;
             var zoomLimit = sources[source]
                 .matrixSets[matrixSet]
                 .resolutions.length - 1 + zoomOffset;
-
             var $zot = $layer.find('div.zot');
             if(zoom > zoomLimit) {
                 $zot.attr('title', 'Layer is overzoomed by ' +
-                          (zoom - zoomLimit) * 100 + '%' );
+                    Math.round((zoom - zoomLimit) * 100) / 100 + 'x zoom levels'
+                );
 
                 if( !( $layer.hasClass('layer-hidden') ) &&
-                    !( $layer.hasClass('zotted') ) ) {
+                    !( $layer.hasClass('zotted'))) {
                     $layer.addClass('zotted');
                 }
                 else if( ( $layer.hasClass('layer-hidden') ) &&
-                         ( $layer.hasClass('zotted') ) ) {
+                         ( $layer.hasClass('zotted'))) {
                     $layer.removeClass('zotted');
                 }
             }
             else {
-                $zot.attr('title', 'Layer is zoomed by ' +
-                          (zoom - zoomLimit) * 100 + '%' );
-                if ( $layer.hasClass('zotted')  ) {
+                $zot.attr('title', 'Layer is overzoomed by ' +
+                    Math.round((zoom - zoomLimit) * 100) / 100 + 'x zoom levels'
+                );
+                if ( $layer.hasClass('zotted')) {
                     $layer.removeClass('zotted');
                 }
             }
